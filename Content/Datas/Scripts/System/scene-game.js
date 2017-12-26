@@ -27,8 +27,8 @@
 *   Abstract class for the game stack.
 *   @property {ReactionInterpreter[]} reactionInterpreters The reaction
 *   interpreters for parallel reactions.
-*   @property {EventCommand[]} parallelCommands Commands that are still running without
-*   blocking any other command.
+*   @property {EventCommand[]} parallelCommands Commands that are still running
+*   without blocking any other command.
 *   @property {function} [callBackAfterLoading=null] A function to call after
 *   loading completed. The function should be put to null after all the stuff
 *   done.
@@ -98,11 +98,8 @@ SceneGame.prototype = {
         for (i = 0, l = this.parallelCommands.length; i < l; i++){
             var previousCommand = this.parallelCommands[i].currentCommand;
             var command = this.parallelCommands[i].updateCommand();
-            var a = 1;
-            a = 1;
-            if (previousCommand !== command){
+            if (previousCommand !== command)
                 endingCommands.unshift(i);
-            }
         }
 
         for (i = 0, l = endingCommands.length; i < l; i++){

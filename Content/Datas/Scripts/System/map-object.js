@@ -57,7 +57,7 @@ function MapObject(system, position) {
     this.width = 1;
     this.height = 1;
     this.frameDuration = 150;
-    this.moving = 0;
+    this.moving = false;
     this.frameTick = 0;
     this.isHero = false;
     this.isInScene = false;
@@ -308,7 +308,6 @@ MapObject.prototype = {
         if (this.orientation !== orientation)
             this.updateUVs();
 
-        //this.moving = 100;
         this.moving = true;
 
         // Add to moving objects
@@ -471,12 +470,10 @@ MapObject.prototype = {
                 this.mesh.position.set(this.position.x,
                                        this.position.y + offset,
                                        this.position.z);
-                //this.moving -= $elapsedTime;
                 this.moving = false;
             }
             else {
                 this.frame = 0;
-                //this.moving = 0;
 
                 // Update angle
                 if (this.currentState.setWithCamera)
