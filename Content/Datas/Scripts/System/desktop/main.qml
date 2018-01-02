@@ -204,7 +204,25 @@ Window {
     // -------------------------------------------------------
 
     Canvas {
-      id: canvas
-      anchors.fill: parent
+        id: canvas
+        anchors.fill: parent
+    }
+
+    // -------------------------------------------------------
+    // Pictures rendering
+    // -------------------------------------------------------
+
+    Canvas {
+        id: canvasRendering
+        width: 4096
+        height: 4096
+        visible: false
+
+        onImageLoaded: {
+            for (var i = 0, l = Game.$picturesLoading.length; i < l; i++) {
+                if (Game.$picturesLoading[i].check())
+                    break;
+            }
+        }
     }
 }

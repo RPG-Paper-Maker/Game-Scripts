@@ -56,8 +56,13 @@ function SystemPicture(){
 SystemPicture.getFolder = function(kind, isBR){
     var folder = isBR ? RPM.PATH_BR
                       : $ROOT_DIRECTORY;
+    var folderLocal = isBR ? RPM.PATH_BR.substring(8, RPM.PATH_BR.length)
+                           : $ROOT_DIRECTORY_LOCAL;
+    var dir = SystemPicture.getLocalFolder(kind);
+    var path = folder + dir;
+    var pathLocal = folderLocal + dir;
 
-    return folder + SystemPicture.getLocalFolder(kind);
+    return [path, pathLocal];
 };
 
 // -------------------------------------------------------
@@ -106,9 +111,11 @@ SystemPicture.prototype = {
     *   @param {PictureKind} kind The kind of picture.
     *   @returns {string}
     */
-    getPath: function(kind){
-        var folder = SystemPicture.getFolder(kind, this.isBR);
+    getPath: function(kind) {
+        var paths = SystemPicture.getFolder(kind, this.isBR);
+        paths[0] += "/" + this.name;
+        paths[1] += "/" + this.name;
 
-        return folder + "/" + this.name;
+        return paths;
     }
 }

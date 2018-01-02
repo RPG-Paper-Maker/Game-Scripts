@@ -91,6 +91,11 @@ var $lastUpdateTime = new Date().getTime();
 *   @type {number[]} */
 var $keysPressed = new Array;
 
+/** The list of all the pictures to check for loading
+*   .
+*   @type {Pictures2D[]} */
+var $picturesLoading = new Array;
+
 /** The number of files that still needs to be loaded asynchonously.
 *   @type {number} */
 var $filesToLoad = 0;
@@ -112,6 +117,10 @@ var $fontName = "sans-serif";
 /** The canvas managing HUD.
 *   @type {Canvas} */
 var $canvasHUD;
+
+/** The canvas managing rendering pictures.
+*   @type {Canvas} */
+var $canvasRendering;
 
 /** Indicates if the hero is blocked by an event.
 *   @type {boolean} */

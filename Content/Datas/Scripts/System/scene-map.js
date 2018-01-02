@@ -260,8 +260,9 @@ SceneMap.prototype = {
         var textureLoader = new THREE.TextureLoader();
 
         // Tileset
-        this.textureTileset = this.loadTexture(textureLoader,
-                                               this.mapInfos.tileset.getPath());
+        this.textureTileset =
+             this.loadTexture(textureLoader, this.mapInfos.tileset.getPath(),
+                              PictureKind.Tileset);
 
         // Characters
         this.loadPictures(PictureKind.Characters, "texturesCharacters",
@@ -285,13 +286,13 @@ SceneMap.prototype = {
         var pictures = $datasGame.pictures.list[pictureKind];
         var l = pictures.length;
         var textures = new Array(l);
-        var path;
+        var paths;
 
         textures[0] = this.loadTextureEmpty();
         for (var i = 1; i < l; i++){
-            path = $datasGame.pictures.list[pictureKind][i]
+            paths = $datasGame.pictures.list[pictureKind][i]
                 .getPath(pictureKind);
-            textures[i] = this.loadTexture(textureLoader, path);
+            textures[i] = this.loadTexture(textureLoader, paths, pictureKind);
         }
 
         this[texturesName] = textures;
@@ -313,14 +314,14 @@ SceneMap.prototype = {
         var specialsIDs = this.mapInfos.tileset[specialField];
         var id, i, l = specials.length;
         var textures = new Array(l);
-        var path, special;
+        var paths, special;
 
         for (i = 0, l = specialsIDs.length; i < l; i++){
             id = specialsIDs[i];
             special = specials[id];
-            path = $datasGame.pictures.list[pictureKind][special.pictureID]
+            paths = $datasGame.pictures.list[pictureKind][special.pictureID]
                 .getPath(pictureKind);
-            textures[id] = this.loadTexture(textureLoader, path);
+            textures[id] = this.loadTexture(textureLoader, paths, pictureKind);
         }
 
         this[texturesName] = textures;
@@ -333,19 +334,28 @@ SceneMap.prototype = {
     *   @param {string} path The path of the texture.
     *   @retuns {THREE.MeshBasicMaterial}
     */
-    loadTexture: function(textureLoader, path){
+    loadTexture: function(textureLoader, paths, pictureKind) {
         $filesToLoad++;
-        var texture = textureLoader.load(path,
-            function(t){
-                $loadedFiles++;
-            },
-            function (t) {
+        var path = paths[0];
+        var pathLocal = paths[1];
+        var texture;
 
-            },
-            function (t) {
-                RPM.showErrorMessage("Could not load " + path);
-            }
-        );
+        if (pictureKind === PictureKind.Walls) {
+            texture = new THREE.Texture();
+            this.loadTextureWall(texture, pathLocal);
+        }
+        else {
+            texture = textureLoader.load(path,
+                function(t){
+                    $loadedFiles++;
+                },
+                function (t) {},
+                function (t) {
+                    RPM.showErrorMessage("Could not load " + path);
+                }
+            );
+        }
+
         texture.magFilter = THREE.NearestFilter;
         texture.minFilter = THREE.NearestFilter;
         texture.flipY = false;
@@ -358,6 +368,37 @@ SceneMap.prototype = {
             shading: THREE.FlatShading,
             alphaTest: 0.5,
             overdraw: 0.5
+        });
+    },
+
+    // -------------------------------------------------------
+
+    /** Load a wall texture.
+    *   @param {THREE.Texture} texture The final texture reference.
+    *   @param {string} pathLocal The path of the texture.
+    */
+    loadTextureWall: function(texture, pathLocal) {
+        var picture = new Picture2D(pathLocal, function() {
+            var context = $canvasRendering.getContext("2d");
+            var img = context.createImageData(pathLocal);
+            context.clearRect(0, 0, $canvasRendering.width,
+                              $canvasRendering.height);
+            $canvasRendering.width = img.width + $SQUARE_SIZE;
+            $canvasRendering.height = img.height;
+            context.drawImage(pathLocal, 0, 0);
+            var left = context.getImageData(0, 0, $SQUARE_SIZE / 2, img.height);
+            var right = context.getImageData(img.width - ($SQUARE_SIZE / 2), 0,
+                                             $SQUARE_SIZE / 2, img.height);
+            context.drawImage(left, img.width, 0);
+            context.drawImage(right, img.width + ($SQUARE_SIZE / 2), 0);
+            var image = new Image();
+            image.addEventListener('load', function() {
+                texture.image = image;
+                texture.needsUpdate = true;
+                picture.destroy();
+                $loadedFiles++;
+            }, false);
+            image.src = $canvasRendering.toDataURL();
         });
     },
 

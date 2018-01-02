@@ -26,6 +26,8 @@ Qt.include("qrc:/three.js")
 *   @constant */
 var $ROOT_DIRECTORY = "file:";
 
+var $ROOT_DIRECTORY_LOCAL = "../../../../../";
+
 /** Indicates if this application is a desktop one.
 *   @type {boolean}
 *   @default true
