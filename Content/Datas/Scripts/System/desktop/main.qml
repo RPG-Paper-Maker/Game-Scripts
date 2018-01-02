@@ -22,7 +22,7 @@ import QtCanvas3D 1.1
 import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.1
 
-import "qmlUtilities.js" as Game
+import "qrc:/qmlUtilities.js" as Game
 
 // -------------------------------------------------------
 //
@@ -53,6 +53,7 @@ Window {
         setX(Screen.width / 2 - width / 2);
         setY(Screen.height / 2 - height / 2);
         Game.$canvasHUD = canvas;
+        Game.$canvasRendering = canvasRendering;
     }
 
     function showError(e){

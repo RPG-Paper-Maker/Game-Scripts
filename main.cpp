@@ -41,6 +41,6 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
     // Loading main.qml
-    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    engine.load(QUrl(QStringLiteral("Content/Datas/Scripts/System/desktop/main.qml")));
     return app.exec();
 }

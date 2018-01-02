@@ -17,6 +17,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
+    Content/Datas/Scripts/System/desktop/main.qml \
     Content/Datas/Scripts/System/desktop/includes.js \
     Content/Datas/Scripts/System/main.js \
     Content/Datas/Scripts/System/battler.js \
@@ -105,7 +106,8 @@ DISTFILES += \
     Content/Datas/Scripts/System/datas-special-elements.js \
     Content/Datas/Scripts/System/map-element.js \
     Content/Datas/Scripts/System/floor.js \
-    Content/Datas/Scripts/System/rpm.js
+    Content/Datas/Scripts/System/rpm.js \
+    Content/Datas/Scripts/System/picture2d.js
 
 RESOURCES += \
     qml.qrc
