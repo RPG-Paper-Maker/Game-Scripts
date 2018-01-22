@@ -1,6 +1,7 @@
-## Folders description
+# Game Scripts
 
-* **docs** : Documentation generated with JSDoc.
-* **Content** : All the folders to copy inside the build folder after compilation.
-* **Content/Datas** : All the logic informations about the game.
-* **Content/Pictures** : All the graphics used in the game.
+This repository contains all the system scripts used for the games generated. The scripts can be found here:
+    
+    Content/Datas/Scripts/System
+    
+This repo is independant and there is all the needed stuff to test any feature linked to the games.
