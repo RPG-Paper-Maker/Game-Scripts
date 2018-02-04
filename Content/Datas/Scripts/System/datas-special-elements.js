@@ -27,6 +27,8 @@
 *   All the special elements datas.
 *   @property {SystemWall[]} walls List of all the walls of the game
 *   according to ID.
+*   @property {SystemAutotile[]} autotiles List of all the autotiles of the game
+*    according to ID.
 */
 function DatasSpecialElements(){
     this.read();
@@ -38,18 +40,28 @@ DatasSpecialElements.prototype = {
     */
     read: function(){
         RPM.openFile(this, RPM.FILE_SPECIAL_ELEMENTS, true, function(res){
-            var json, jsonWalls, jsonWall;
-            var wall;
+            var json, jsonAutotiles, jsonAutotile, jsonWalls, jsonWall;
+            var autotile, wall;
             var i, l, id;
 
             json = JSON.parse(res);
+
+            // Autotiles
+            jsonAutotiles = json.autotiles;
+            l = jsonAutotiles.length;
+            this.autotiles = new Array(l+1);
+            for (i = 0; i < l; i++){
+                jsonAutotile = jsonAutotiles[i];
+                id = jsonAutotile.id;
+                autotile = new SystemAutotile();
+                autotile.readJSON(jsonAutotile);
+                this.autotiles[id] = autotile;
+            }
 
             // Walls
             jsonWalls = json.walls;
             l = jsonWalls.length;
             this.walls = new Array(l+1);
-
-            // Sorting all the weapons according to the ID
             for (i = 0; i < l; i++){
                 jsonWall = jsonWalls[i];
                 id = jsonWall.id;

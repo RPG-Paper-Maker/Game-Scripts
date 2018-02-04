@@ -107,7 +107,10 @@ DISTFILES += \
     Content/Datas/Scripts/System/map-element.js \
     Content/Datas/Scripts/System/floor.js \
     Content/Datas/Scripts/System/rpm.js \
-    Content/Datas/Scripts/System/picture2d.js
+    Content/Datas/Scripts/System/picture2d.js \
+    Content/Datas/Scripts/System/land.js \
+    Content/Datas/Scripts/System/system-autotile.js \
+    Content/Datas/Scripts/System/texture-autotile.js
 
 RESOURCES += \
     qml.qrc

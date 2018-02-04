@@ -19,31 +19,24 @@
 
 // -------------------------------------------------------
 //
-//  CLASS Floor
+//  CLASS SystemAutotile
 //
 // -------------------------------------------------------
 
 /** @class
-*   A floor in the map.
-*   @property {number[]} texture Texture rect of the floor.
+*   An autotile configuration.
+*   @property {number} picutreID The picture ID of the autotile.
 */
-function Floor() {
-    Land.call(this);
+function SystemAutotile(){
+
 }
 
-Floor.prototype = {
+SystemAutotile.prototype = {
 
-    /** Read the JSON associated to the floor.
+    /** Read the JSON associated to the autotile.
     *   @param {Object} json Json object describing the object.
     */
-    read: function(json) {
-        Land.prototype.read.call(this, json);
-    },
-
-    /** Update the geometry associated to this floor.
-    *   @returns {THREE.Geometry}
-    */
-    updateGeometry: function(geometry, position, width, height, i) {
-        Land.prototype.updateGeometry.call(this,geometry, position, width, height, i);
+    readJSON: function(json){
+        this.pictureID = json.pic;
     }
 }
