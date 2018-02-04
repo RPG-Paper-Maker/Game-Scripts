@@ -69,6 +69,7 @@ function MapPortion(realX, realY, realZ){
     this.realY = realY;
     this.realZ = realZ;
     this.staticFloorsMesh = null;
+    this.staticAutotilesMesh = new Array;
     this.staticSpritesList = new Array;
     this.objectsList = new Array;
     this.faceSpritesList = new Array;
@@ -94,6 +95,7 @@ MapPortion.prototype = {
     */
     readLands: function(json){
         this.readFloors(json.floors);
+        this.readAutotiles(json.autotiles);
     },
 
     // -------------------------------------------------------
@@ -120,6 +122,57 @@ MapPortion.prototype = {
         // Creating the plane
         this.staticFloorsMesh = new THREE.Mesh(geometry, material);
         $currentMap.scene.add(this.staticFloorsMesh);
+    },
+
+    // -------------------------------------------------------
+
+    /** Read the JSON associated to the autotiles in the portion.
+    *   @param {Object} json Json object describing the object.
+    */
+    readAutotiles: function(json){
+        if (!json)
+            return;
+
+        var jsonAutotile;
+        var autotile, autotiles, textureAutotile, texture = null;
+        var i, l, index, autotilesLength = $currentMap.texturesAutotiles.length;
+
+        // Create autotiles according to the textures
+        for (i = 0; i < autotilesLength; i++) {
+            this.staticAutotilesMesh.push(
+                 new Autotiles($currentMap.texturesAutotiles[i]));
+        }
+
+        // Read and update geometry
+        for (i = 0, l = json.length; i < l; i++) {
+            jsonAutotile = json[i];
+            autotile = new Autotile;
+            autotile.read(jsonAutotile.v);
+
+            index = 0;
+            for (; index < autotilesLength; index++) {
+
+                textureAutotile = $currentMap.texturesAutotiles[index];
+                if (textureAutotile.isInTexture(autotile.autotileID,
+                                                autotile.texture))
+                {
+                    texture = textureAutotile;
+                    autotiles = this.staticAutotilesMesh[index];
+                    break;
+                }
+            }
+
+            if (texture !== null && texture.texture !== null)
+                autotiles.updateGeometry(jsonAutotile.k, autotile);
+        }
+
+        // Update all the geometry uvs and put it in the scene
+        for (i = 0, l = this.staticAutotilesMesh.length; i < l; i++) {
+            autotiles = this.staticAutotilesMesh[i];
+            autotiles.uvsNeedUpdate = true;
+            autotiles.createMesh();
+            $currentMap.scene.add(autotiles.mesh);
+        }
     },
 
     // -------------------------------------------------------

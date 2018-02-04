@@ -528,7 +528,6 @@ SceneMap.prototype = {
             texture.needsUpdate = true;
             $loadedFiles++;
         }, false);
-        console.log($canvasRendering.toDataURL());
         image.src = $canvasRendering.toDataURL();
 
         textureAutotile.texture = this.createMaterial(texture);

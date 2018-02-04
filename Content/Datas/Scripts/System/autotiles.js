@@ -26,8 +26,14 @@
 /** @class
 *   Autotiles with the same textures.
 */
-function Autotiles() {
-
+function Autotiles(texture) {
+    this.texture = texture;
+    this.width = texture.texture.map.image.width;
+    this.height = texture.texture.map.image.height;
+    this.geometry = new THREE.Geometry();
+    this.geometry.faceVertexUvs[0] = [];
+    this.index = 0;
+    this.mesh = null;
 }
 
 Autotiles.COUNT_LIST = 5;
@@ -61,12 +67,16 @@ Autotiles.autotileBorder = {
 
 Autotiles.prototype = {
 
-    /** Read the JSON associated to the map portion.
-    *   @param {Object} json Json object describing the object.
-    *   @param {boolean} isMapHero Indicates if this map is where the hero is
-    *   at the beginning of the game.
+    /** Update the geometry of the autotiles according to an autotile.
     */
-    read: function(json){
+    updateGeometry : function(position, autotile) {
+        autotile.updateGeometry(this.geometry, this.texture, position,
+                                this.width, this.height, this.index++);
+    },
 
+    /** Create a mesh with material and geometry.
+    */
+    createMesh : function() {
+        this.mesh = new THREE.Mesh(this.geometry, this.texture.texture);
     }
 }

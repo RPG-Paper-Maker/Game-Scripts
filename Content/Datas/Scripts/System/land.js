@@ -55,30 +55,26 @@ Land.prototype = {
     /** Update the geometry associated to this land.
     *   @returns {THREE.Geometry}
     */
-    updateGeometry: function(geometry, position, width, height, i) {
+    updateGeometry: function(geometry, position, width, height, x, y, w, h, i) {
         var localPosition = RPM.positionToBorderVector3(position);
-        var x = localPosition.x;
+        var a = localPosition.x;
         var yLayerOffset = RPM.positionLayer(position) * 0.05;
         if (!this.up)
             yLayerOffset *= -1;
-        var y = localPosition.y + yLayerOffset;
-        var z = localPosition.z;
-        var l = $SQUARE_SIZE;
-        var w = 1.0;
-        var h = $SQUARE_SIZE;
+        var b = localPosition.y + yLayerOffset;
+        var c = localPosition.z;
 
-        geometry.vertices.push(new THREE.Vector3(x, y, z));
-        geometry.vertices.push(new THREE.Vector3(x + l, y, z));
-        geometry.vertices.push(new THREE.Vector3(x + l, y, z + h));
-        geometry.vertices.push(new THREE.Vector3(x, y, z + h));
+        // Vertices
+        geometry.vertices.push(new THREE.Vector3(a, b, c));
+        geometry.vertices.push(new THREE.Vector3(a + $SQUARE_SIZE, b, c));
+        geometry.vertices.push(new THREE.Vector3(a + $SQUARE_SIZE, b,
+                                                 c + $SQUARE_SIZE));
+        geometry.vertices.push(new THREE.Vector3(a, b, c + $SQUARE_SIZE));
         var j = i * 4;
         geometry.faces.push(new THREE.Face3(j, j + 1, j + 2));
         geometry.faces.push(new THREE.Face3(j, j + 2, j + 3));
 
-        x = (this.texture[0] * $SQUARE_SIZE) / width;
-        y = (this.texture[1] * $SQUARE_SIZE) / height;
-        w = (this.texture[2] * $SQUARE_SIZE) / width;
-        h = (this.texture[3] * $SQUARE_SIZE) / height;
+        // Texture
         var coefX = 0.1 / width;
         var coefY = 0.1 / height;
         x += coefX;

@@ -19,37 +19,40 @@
 
 // -------------------------------------------------------
 //
-//  CLASS Floor
+//  CLASS Autotile
 //
 // -------------------------------------------------------
 
 /** @class
 *   @extends Land
-*   A floor in the map.
+*   An autotile in the map.
 */
-function Floor() {
+function Autotile() {
     Land.call(this);
 }
 
-Floor.prototype = {
+Autotile.prototype = {
 
-    /** Read the JSON associated to the floor.
+    /** Read the JSON associated to the autotile.
     *   @param {Object} json Json object describing the object.
     */
     read: function(json) {
         Land.prototype.read.call(this, json);
+
+        this.autotileID = json.id;
+        this.tileID = json.tid;
     },
 
-    /** Update the geometry associated to this floor.
+    /** Update the geometry associated to this land.
     *   @returns {THREE.Geometry}
     */
-    updateGeometry: function(geometry, position, width, height, i) {
+    updateGeometry: function(geometry, texture, position, width, height, i) {
         var x = (this.texture[0] * $SQUARE_SIZE) / width;
         var y = (this.texture[1] * $SQUARE_SIZE) / height;
         var w = (this.texture[2] * $SQUARE_SIZE) / width;
         var h = (this.texture[3] * $SQUARE_SIZE) / height;
 
-        Land.prototype.updateGeometry.call(this,geometry, position, width,
+        Land.prototype.updateGeometry.call(this, geometry, position, width,
                                            height, x, y, w, h, i);
     }
 }
