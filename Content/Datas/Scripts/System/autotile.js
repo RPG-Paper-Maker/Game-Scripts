@@ -47,10 +47,14 @@ Autotile.prototype = {
     *   @returns {THREE.Geometry}
     */
     updateGeometry: function(geometry, texture, position, width, height, i) {
-        var x = (this.texture[0] * $SQUARE_SIZE) / width;
-        var y = (this.texture[1] * $SQUARE_SIZE) / height;
-        var w = (this.texture[2] * $SQUARE_SIZE) / width;
-        var h = (this.texture[3] * $SQUARE_SIZE) / height;
+        var xTile = this.tileID % 64;
+        var yTile = Math.floor(this.tileID / 64) +
+                (10 * texture.getOffset(this.autotileID, this.texture));
+
+        var x = (xTile * $SQUARE_SIZE) / width;
+        var y = (yTile * $SQUARE_SIZE) / height;
+        var w = $SQUARE_SIZE / width;
+        var h = $SQUARE_SIZE / height;
 
         Land.prototype.updateGeometry.call(this, geometry, position, width,
                                            height, x, y, w, h, i);
