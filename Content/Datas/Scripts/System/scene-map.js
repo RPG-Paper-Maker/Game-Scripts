@@ -254,15 +254,12 @@ SceneMap.prototype = {
     /** Load all the textures of the map.
     */
     loadTextures: function(){
-        var textureLoader = new THREE.TextureLoader();
+        this.textureLoader = new THREE.TextureLoader();
         this.textureTileset =
-             this.loadTexture(textureLoader, this.mapInfos.tileset.getPath(),
+             this.loadTexture(this.mapInfos.tileset.getPath(),
                               PictureKind.Tileset);
-        this.loadPictures(PictureKind.Characters, "texturesCharacters",
-                                 textureLoader);
+        this.loadPictures(PictureKind.Characters, "texturesCharacters");
         this.loadAutotiles();
-        this.loadSpecialTextures(PictureKind.Walls, "texturesWalls", "walls",
-                                 textureLoader);
     },
 
     // -------------------------------------------------------
@@ -270,9 +267,8 @@ SceneMap.prototype = {
     /** Load pictures.
     *   @param {PictureKind} pictureKind The picure kind.
     *   @param {string} texturesName The field name textures.
-    *   @param {THREE.TextureLoader} textureLoader The texture loader.
     */
-    loadPictures: function(pictureKind, texturesName, textureLoader){
+    loadPictures: function(pictureKind, texturesName){
         var pictures = $datasGame.pictures.list[pictureKind];
         var l = pictures.length;
         var textures = new Array(l);
@@ -282,7 +278,7 @@ SceneMap.prototype = {
         for (var i = 1; i < l; i++){
             paths = $datasGame.pictures.list[pictureKind][i]
                 .getPath(pictureKind);
-            textures[i] = this.loadTexture(textureLoader, paths, pictureKind);
+            textures[i] = this.loadTexture(paths, pictureKind);
         }
 
         this[texturesName] = textures;
@@ -295,10 +291,8 @@ SceneMap.prototype = {
     *   textures.
     *   @param {string} texturesName The field name textures.
     *   @param {string} specialField The field name for special.
-    *   @param {THREE.TextureLoader} textureLoader The texture loader.
     */
-    loadSpecialTextures: function(pictureKind, texturesName, specialField,
-                                  textureLoader)
+    loadSpecialTextures: function(pictureKind, texturesName, specialField)
     {
         var specials = $datasGame.specialElements[specialField];
         var specialsIDs = this.mapInfos.tileset[specialField];
@@ -311,7 +305,7 @@ SceneMap.prototype = {
             special = specials[id];
             paths = $datasGame.pictures.list[pictureKind][special.pictureID]
                 .getPath(pictureKind);
-            textures[id] = this.loadTexture(textureLoader, paths, pictureKind);
+            textures[id] = this.loadTexture(paths, pictureKind);
         }
 
         this[texturesName] = textures;
@@ -320,11 +314,10 @@ SceneMap.prototype = {
     // -------------------------------------------------------
 
     /** Load a texture.
-    *   @param {THREE.TextureLoader} textureLoader The texture loader.
     *   @param {string} path The path of the texture.
     *   @retuns {THREE.MeshBasicMaterial}
     */
-    loadTexture: function(textureLoader, paths, pictureKind) {
+    loadTexture: function(paths, pictureKind) {
         $filesToLoad++;
         var path = paths[0];
         var pathLocal = paths[1];
@@ -335,7 +328,7 @@ SceneMap.prototype = {
             this.loadTextureWall(texture, pathLocal);
         }
         else {
-            texture = textureLoader.load(path,
+            texture = this.textureLoader.load(path,
                 function(t){
                     $loadedFiles++;
                 },
@@ -387,17 +380,30 @@ SceneMap.prototype = {
                 that.callBackAfterLoading = callback;
             }
             else {
-                // ...
+                if (offset > 0) {
+                    that.updateTextureAutotile(textureAutotile, texture);
+                    offset = 0;
+                    that.callBackAfterLoading = callback;
+                }
 
                 // Destroy all the loaded images
                 Picture2D.destroyAll();
 
                 // Finished loading textures
-                that.callBackAfterLoading = that.initializeObjects;
+                that.callBackAfterLoading = that.loadWalls;
             }
         }
 
         callback.call(this);
+    },
+
+    // -------------------------------------------------------
+
+    /** Load all the walls.
+    */
+    loadWalls: function(){
+        this.loadSpecialTextures(PictureKind.Walls, "texturesWalls", "walls");
+        this.callBackAfterLoading = this.initializeObjects;
     },
 
     // -------------------------------------------------------
@@ -433,17 +439,7 @@ SceneMap.prototype = {
                 textureAutotile.addToList(id, point);
                 offset++;
                 if (offset === 6) {
-                    var image = new Image();
-                    $filesToLoad++;
-                    image.addEventListener('load', function() {
-                        texture.image = image;
-                        texture.needsUpdate = true;
-                        $loadedFiles++;
-                    }, false);
-                    image.src = $canvasRendering.toDataURL();
-
-                    textureAutotile.texture = that.createMaterial(texture);
-                    that.texturesAutotiles.push(textureAutotile);
+                    that.updateTextureAutotile(textureAutotile, texture);
                     texture = new THREE.Texture();
                     context.clearRect(0, 0, $canvasRendering.width,
                                       $canvasRendering.height);
@@ -471,7 +467,72 @@ SceneMap.prototype = {
     /** Paint the picture in texture.
     */
     paintPictureAutotile: function(context, pathLocal, img, offset, point) {
-        context.drawImage(pathLocal, 0, 0);
+        var count, lA, lB, lC, lD, row = -1;
+        var offsetX = point[0] * 2 * $SQUARE_SIZE;
+        var offsetY = point[1] * 3 * $SQUARE_SIZE;
+        var sDiv = $SQUARE_SIZE / 2;
+        var y = offset * Autotiles.COUNT_LIST * 2;
+
+        for (var a = 0; a < Autotiles.COUNT_LIST; a++) {
+            lA = Autotiles.autotileBorder[Autotiles.listA[a]];
+            count = 0;
+            row++;
+            for (var b = 0; b < Autotiles.COUNT_LIST; b++) {
+                lB = Autotiles.autotileBorder[Autotiles.listB[b]];
+                for (var c = 0; c < Autotiles.COUNT_LIST; c++) {
+                    lC = Autotiles.autotileBorder[Autotiles.listC[c]];
+                    for (var d = 0; d < Autotiles.COUNT_LIST; d++) {
+                        lD = Autotiles.autotileBorder[Autotiles.listD[d]];
+
+                        // Draw
+                        context.drawImage(pathLocal, (lA % 4 * sDiv) + offsetX,
+                                          (Math.floor(lA / 4) * sDiv) + offsetY,
+                                          sDiv, sDiv, count * $SQUARE_SIZE,
+                                          (row + y) * $SQUARE_SIZE, sDiv, sDiv);
+                        context.drawImage(pathLocal, (lB % 4 * sDiv) + offsetX,
+                                          (Math.floor(lB / 4) * sDiv) + offsetY,
+                                          sDiv, sDiv,
+                                          count * $SQUARE_SIZE + sDiv,
+                                          (row + y) * $SQUARE_SIZE, sDiv, sDiv);
+                        context.drawImage(pathLocal, (lC % 4 * sDiv) + offsetX,
+                                          (Math.floor(lC / 4) * sDiv) + offsetY,
+                                          sDiv, sDiv, count * $SQUARE_SIZE,
+                                          (row + y) * $SQUARE_SIZE + sDiv,
+                                          sDiv, sDiv);
+                        context.drawImage(pathLocal, (lD % 4 * sDiv) + offsetX,
+                                          (Math.floor(lD / 4) * sDiv) + offsetY,
+                                          sDiv, sDiv,
+                                          count * $SQUARE_SIZE + sDiv,
+                                          (row + y) * $SQUARE_SIZE + sDiv,
+                                          sDiv, sDiv);
+                        count++;
+                        if (count === 64) {
+                            count = 0;
+                            row++;
+                        }
+                    }
+                }
+            }
+        }
+    },
+
+    // -------------------------------------------------------
+
+    /** Update texture of a TextureAutotile.
+    */
+    updateTextureAutotile: function(textureAutotile, texture) {
+        var image = new Image();
+        $filesToLoad++;
+        image.addEventListener('load', function() {
+            texture.image = image;
+            texture.needsUpdate = true;
+            $loadedFiles++;
+        }, false);
+        console.log($canvasRendering.toDataURL());
+        image.src = $canvasRendering.toDataURL();
+
+        textureAutotile.texture = this.createMaterial(texture);
+        this.texturesAutotiles.push(textureAutotile);
     },
 
     // -------------------------------------------------------

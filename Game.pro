@@ -110,7 +110,8 @@ DISTFILES += \
     Content/Datas/Scripts/System/picture2d.js \
     Content/Datas/Scripts/System/land.js \
     Content/Datas/Scripts/System/system-autotile.js \
-    Content/Datas/Scripts/System/texture-autotile.js
+    Content/Datas/Scripts/System/texture-autotile.js \
+    Content/Datas/Scripts/System/autotiles.js
 
 RESOURCES += \
     qml.qrc
