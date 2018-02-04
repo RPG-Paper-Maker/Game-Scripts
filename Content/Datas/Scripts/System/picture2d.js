@@ -45,6 +45,11 @@ function Picture2D(path, callback, x, y, w, h) {
     $canvasRendering.loadImage(path);
 }
 
+Picture2D.destroyAll = function() {
+    for (var i = $picturesLoaded.length - 1; i >= 0; i--)
+        $picturesLoaded[i].destroy();
+};
+
 Picture2D.prototype = {
 
     setX: function(x) {
@@ -74,6 +79,7 @@ Picture2D.prototype = {
     check: function() {
         if ($canvasRendering.isImageLoaded(this.path)) {
             $picturesLoading.splice($picturesLoading.indexOf(this), 1);
+            $picturesLoaded.unshift(this);
             this.callback.call(this);
 
             return true;
@@ -86,5 +92,6 @@ Picture2D.prototype = {
 
     destroy: function() {
         $canvasRendering.unloadImage(this.path);
+        $picturesLoaded.splice($picturesLoaded.indexOf(this), 1);
     }
 }

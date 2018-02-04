@@ -211,9 +211,8 @@ SceneMap.prototype = {
                 jsonObject = json[i];
                 this.allObjects[jsonObject.id] = jsonObject.p;
             }
+            this.callBackAfterLoading = this.initializePortions;
         });
-
-        this.callBackAfterLoading = this.initializePortions;
     },
 
     // -------------------------------------------------------
@@ -255,24 +254,15 @@ SceneMap.prototype = {
     /** Load all the textures of the map.
     */
     loadTextures: function(){
-
-        // Load textures
         var textureLoader = new THREE.TextureLoader();
-
-        // Tileset
         this.textureTileset =
              this.loadTexture(textureLoader, this.mapInfos.tileset.getPath(),
                               PictureKind.Tileset);
-
-        // Characters
         this.loadPictures(PictureKind.Characters, "texturesCharacters",
                                  textureLoader);
-
-        // Walls
+        this.loadAutotiles();
         this.loadSpecialTextures(PictureKind.Walls, "texturesWalls", "walls",
                                  textureLoader);
-
-        this.callBackAfterLoading = this.initializeObjects;
     },
 
     // -------------------------------------------------------
@@ -356,19 +346,132 @@ SceneMap.prototype = {
             );
         }
 
-        texture.magFilter = THREE.NearestFilter;
-        texture.minFilter = THREE.NearestFilter;
-        texture.flipY = false;
+        return this.createMaterial(texture);
+    },
 
-        return new THREE.MeshBasicMaterial(
-        {
-            map: texture,
-            transparent: true,
-            side: THREE.DoubleSide,
-            shading: THREE.FlatShading,
-            alphaTest: 0.5,
-            overdraw: 0.5
-        });
+    // -------------------------------------------------------
+
+    /** Load all the autotiles with reduced files.
+    */
+    loadAutotiles: function(){
+        var autotiles = $datasGame.specialElements.autotiles;
+        var autotilesIDs = this.mapInfos.tileset.autotiles;
+        var id, i = 0, l = autotiles.length, offset = 0;
+        var result = null, paths, autotile, textureAutotile = null, that = this;
+        var texture = new THREE.Texture();
+        var context = $canvasRendering.getContext("2d");
+        context.clearRect(0, 0, $canvasRendering.width,
+                          $canvasRendering.height);
+        $canvasRendering.width = 64 * $SQUARE_SIZE;
+        $canvasRendering.height = $MAX_PICTURE_SIZE;
+        this.texturesAutotiles = new Array;
+
+        var callback = function() {
+            if (i < autotilesIDs.length) {
+                if (result !== null) {
+                    if (result.length < 3) {
+                        that.callBackAfterLoading = callback;
+                        return;
+                    }
+                    textureAutotile = result[0];
+                    texture = result[1];
+                    offset = result[2];
+                }
+                id = autotilesIDs[i];
+                autotile = autotiles[id];
+                paths = $datasGame.pictures.list[PictureKind.Autotiles]
+                        [autotile.pictureID].getPath(PictureKind.Autotiles);
+                result = this.loadTextureAutotile(
+                          textureAutotile, texture, context, paths, offset, id);
+                i++;
+                that.callBackAfterLoading = callback;
+            }
+            else {
+                // ...
+
+                // Destroy all the loaded images
+                Picture2D.destroyAll();
+
+                // Finished loading textures
+                that.callBackAfterLoading = that.initializeObjects;
+            }
+        }
+
+        callback.call(this);
+    },
+
+    // -------------------------------------------------------
+
+    /** Load an autotile ID and add it to context rendering.
+    */
+    loadTextureAutotile: function(textureAutotile, texture, context, paths,
+                                  offset, id)
+    {
+        $filesToLoad++;
+        var path = paths[0];
+        var pathLocal = paths[1];
+        var that = this;
+        var result = new Array;
+
+        var callback = function() {
+            $loadedFiles++;
+            var point, img = context.createImageData(pathLocal);
+            var width = (img.width / 2) / $SQUARE_SIZE;
+            var height = (img.height / 3) / $SQUARE_SIZE;
+            var size = width * height;
+
+            for (var i = 0; i < size; i++) {
+                point = [i % width, Math.floor(i / width)];
+
+                if (offset === 0 && textureAutotile === null) {
+                    textureAutotile = new TextureAutotile();
+                    textureAutotile.setBegin(id, point);
+                }
+                that.paintPictureAutotile(context, pathLocal, img, offset,
+                                          point);
+                textureAutotile.setEnd(id, point);
+                textureAutotile.addToList(id, point);
+                offset++;
+                if (offset === 6) {
+                    var image = new Image();
+                    $filesToLoad++;
+                    image.addEventListener('load', function() {
+                        texture.image = image;
+                        texture.needsUpdate = true;
+                        $loadedFiles++;
+                    }, false);
+                    image.src = $canvasRendering.toDataURL();
+
+                    textureAutotile.texture = that.createMaterial(texture);
+                    that.texturesAutotiles.push(textureAutotile);
+                    texture = new THREE.Texture();
+                    context.clearRect(0, 0, $canvasRendering.width,
+                                      $canvasRendering.height);
+                    textureAutotile = null;
+                    offset = 0;
+                }
+            }
+
+            result.push(textureAutotile);
+            result.push(texture);
+            result.push(offset);
+        };
+
+
+        if ($canvasRendering.isImageLoaded(pathLocal))
+            callback.call(this);
+        else
+            var picture = new Picture2D(pathLocal, callback);
+
+        return result;
+    },
+
+    // -------------------------------------------------------
+
+    /** Paint the picture in texture.
+    */
+    paintPictureAutotile: function(context, pathLocal, img, offset, point) {
+        context.drawImage(pathLocal, 0, 0);
     },
 
     // -------------------------------------------------------
@@ -410,6 +513,27 @@ SceneMap.prototype = {
     loadTextureEmpty: function(){
         return new THREE.MeshBasicMaterial(
         {
+            transparent: true,
+            side: THREE.DoubleSide,
+            shading: THREE.FlatShading,
+            alphaTest: 0.5,
+            overdraw: 0.5
+        });
+    },
+
+    // -------------------------------------------------------
+
+    /** Create a material from texture.
+    *   @retuns {THREE.MeshBasicMaterial}
+    */
+    createMaterial: function(texture){
+        texture.magFilter = THREE.NearestFilter;
+        texture.minFilter = THREE.NearestFilter;
+        texture.flipY = false;
+
+        return new THREE.MeshBasicMaterial(
+        {
+            map: texture,
             transparent: true,
             side: THREE.DoubleSide,
             shading: THREE.FlatShading,

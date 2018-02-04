@@ -62,9 +62,13 @@ var $PORTIONS_RAY_FAR = 0;
 
 /** Defines the size (in squares) of a portion in a map.
 *   @constant
-*   @type {number}
-*   @default 16 */
+*   @type {number} */
 var $PORTION_SIZE = 16;
+
+/** Defines the max size in px of a picture (limited for efficient canvas).
+*   @constant
+*   @type {number} */
+var $MAX_PICTURE_SIZE = 4096;
 
 /** Defines the number of frames for an animation.
 *   @type {number} */
@@ -95,6 +99,11 @@ var $keysPressed = new Array;
 *   .
 *   @type {Pictures2D[]} */
 var $picturesLoading = new Array;
+
+/** The list of all the pictures loaded
+*   .
+*   @type {Pictures2D[]} */
+var $picturesLoaded = new Array;
 
 /** The number of files that still needs to be loaded asynchonously.
 *   @type {number} */

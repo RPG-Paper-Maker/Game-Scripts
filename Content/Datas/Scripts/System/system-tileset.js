@@ -39,9 +39,14 @@ SystemTileset.prototype = {
     */
     readJSON: function(json){
         var i, l;
-        var jsonWalls = json.walls;
+        var jsonAutotiles = json.auto, jsonWalls = json.walls;
 
         this.picture = $datasGame.pictures.list[PictureKind.Tilesets][json.pic];
+
+        l = jsonAutotiles.length;
+        this.autotiles = new Array(l);
+        for (i = 0; i < l; i++)
+            this.autotiles[i] = jsonAutotiles[i].id;
 
         l = jsonWalls.length;
         this.walls = new Array(l);

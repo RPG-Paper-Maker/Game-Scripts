@@ -175,7 +175,11 @@ Window {
                             Game.$renderer.render(
                                         Game.$loadingScene,
                                         Game.$currentMap.camera.threeCamera);
-                            callback.call(Game.$gameStack.top());
+                            if (callback) {
+                                Game.$gameStack.top().callBackAfterLoading =
+                                        undefined;
+                                callback.call(Game.$gameStack.top());
+                            }
                         }
                     }
                     else

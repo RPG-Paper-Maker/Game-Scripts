@@ -34,6 +34,7 @@
 */
 function TextureAutotile(){
     this.list = new Array;
+    this.texture = null;
 }
 
 TextureAutotile.prototype = {
@@ -53,7 +54,7 @@ TextureAutotile.prototype = {
     *   @param {number} id The ending texture ID.
     *   @param {number[]} point The ending texture point offset.
     */
-    setBegin: function(id, point){
+    setEnd: function(id, point){
         this.endID = id;
         this.endPoint = point;
     },
@@ -96,8 +97,8 @@ TextureAutotile.prototype = {
     */
     isInTexture: function(id, rect){
         if (id >= this.beginID && id <= this.endID) {
-            if (id == this.beginID) {
-                if (id == this.endID) {
+            if (id === this.beginID) {
+                if (id === this.endID) {
                     return this.isSup(rect, this.beginPoint) &&
                            this.isInf(rect, this.endPoint);
                 }
