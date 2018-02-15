@@ -403,7 +403,7 @@ SceneMap.prototype = {
     */
     loadWalls: function(){
         this.loadSpecialTextures(PictureKind.Walls, "texturesWalls", "walls");
-        this.callBackAfterLoading = this.initializeObjects;
+        this.callBackAfterLoading = this.loadCollisions;
     },
 
     // -------------------------------------------------------
@@ -600,6 +600,14 @@ SceneMap.prototype = {
             alphaTest: 0.5,
             overdraw: 0.5
         });
+    },
+
+    // -------------------------------------------------------
+
+    loadCollisions: function() {
+        this.mapInfos.tileset.readCollisions(this.textureTileset.map.image);
+
+        this.callBackAfterLoading = this.initializeObjects();
     },
 
     // -------------------------------------------------------
