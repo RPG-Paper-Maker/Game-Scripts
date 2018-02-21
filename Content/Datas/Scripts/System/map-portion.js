@@ -65,14 +65,37 @@ Object.freeze(ElementMapKind);
 *   @param {number} realZ The real z portion.
 */
 function MapPortion(realX, realY, realZ){
+    var i, l;
+
     this.realX = realX;
     this.realY = realY;
     this.realZ = realZ;
     this.staticFloorsMesh = null;
+    l = $PORTION_SIZE * $PORTION_SIZE;
+    this.boundingBoxesLands = new Array($PORTION_SIZE * $PORTION_SIZE);
+    for (i = 0; i < l; i++) {
+        this.boundingBoxesLands[i] = new Array;
+    }
     this.staticAutotilesMesh = new Array;
     this.staticSpritesList = new Array;
     this.objectsList = new Array;
     this.faceSpritesList = new Array;
+}
+
+MapPortion.checkCollisionRay = function(positionBefore, positionAfter, object) {
+    var portion, mapPortion;
+    var direction = new THREE.Vector3();
+    direction.subVectors(positionAfter, positionBefore).normalize();
+    var ray = new THREE.Ray(positionBefore, direction);
+    portion = $currentMap.getLocalPortion(RPM.getPortion(positionBefore));
+    mapPortion = $currentMap.getMapPortionByPortion(portion);
+
+    var position = RPM.getPosition(positionAfter);
+    if (mapPortion.checkCollision(position, positionBefore, positionAfter,
+                                  object, direction))
+        return true;
+
+    return false;
 }
 
 MapPortion.prototype = {
@@ -104,6 +127,8 @@ MapPortion.prototype = {
     *   @param {Object} json Json object describing the object.
     */
     readFloors: function(json){
+        var jsonFloor, floor, collision, objCollision, position, boundingBox;
+        var tilesetCollisions = $currentMap.mapInfos.tileset.collisions;
         var material = $currentMap.textureTileset;
         var width = material.map.image.width;
         var height = material.map.image.height;
@@ -111,10 +136,21 @@ MapPortion.prototype = {
         geometry.faceVertexUvs[0] = [];
 
         for (var i = 0, length = json.length; i < length; i++){
-            var jsonFloor = json[i];
-            var floor = new Floor();
+            jsonFloor = json[i];
+            position = jsonFloor.k;
+            floor = new Floor();
             floor.read(jsonFloor.v);
-            floor.updateGeometry(geometry, jsonFloor.k, width, height, i);
+            boundingBox = floor.updateGeometry(geometry, position, width,
+                                               height, i);
+            if (boundingBox !== null) {
+                objCollision = {
+                    "p": position,
+                    "b": boundingBox
+                }
+                this.boundingBoxesLands[RPM.positionJSONToIndex(position)]
+                .unshift(objCollision);
+                $currentMap.scene.add(boundingBox);
+            }
         }
 
         geometry.uvsNeedUpdate = true;
@@ -445,5 +481,83 @@ MapPortion.prototype = {
 
         for (i = 0, l = this.objectsList.length; i < l; i++)
             this.objectsList[i].update(angle);
+    },
+
+    // -------------------------------------------------------
+
+    /** Check if there is a collision at this position.
+    *   @returns {boolean}
+    */
+    checkCollision: function(position, positionBefore, positionAfter, object,
+                             direction)
+    {
+        if (this.checkLandsCollision(position, positionBefore, positionAfter,
+                                     object, direction))
+        {
+            return true;
+        }
+
+        return false;
+    },
+
+    // -------------------------------------------------------
+
+    /** Check if there is a collision with floors at this position.
+    *   @returns {boolean}
+    */
+    checkLandsCollision: function(position, positionBefore, positionAfter,
+                                  object, direction)
+    {
+        var index = RPM.positionToIndex(position);
+        var lands = this.boundingBoxesLands[RPM.positionToIndex(position)];
+        var i, l, objCollision, positionCollision, boundingBox;
+
+        if (lands !== null) {
+            for (i = 0, l = lands.length; i < l; i++) {
+                objCollision = lands[i];
+                positionCollision = objCollision.p;
+                if (positionCollision[0] === position[0] &&
+                    positionCollision[3] === position[2])
+                {
+                    boundingBox = objCollision.b;
+                    if (this.checkIntersectionObject(position, positionBefore,
+                                                     positionAfter, boundingBox,
+                                                     object, direction))
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }
+            }
+        }
+
+        return false;
+    },
+
+    // -------------------------------------------------------
+
+    /** Check intersection between ray and an object.
+    *   @returns {boolean}
+    */
+    checkIntersectionObject: function(position, positionBefore, positionAfter,
+                                      boundingBox, object, direction)
+    {
+        //var objectVertices = object.children[0].geometry.vertices;
+        var objectVertices = object.geometry.vertices;
+        var p = new THREE.Vector3(), ray = new THREE.Raycaster();
+        var collisionResults;
+        for (var i = 0, l = objectVertices.length; i < l; i++) {
+            p.set(positionBefore.x ,
+                  positionBefore.y ,
+                  positionBefore.z );
+            ray.set(p, direction);
+            collisionResults = ray.intersectObject(boundingBox, true);
+            if (collisionResults.length > 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

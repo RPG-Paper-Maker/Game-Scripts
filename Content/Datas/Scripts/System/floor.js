@@ -49,7 +49,7 @@ Floor.prototype = {
         var w = (this.texture[2] * $SQUARE_SIZE) / width;
         var h = (this.texture[3] * $SQUARE_SIZE) / height;
 
-        Land.prototype.updateGeometry.call(this,geometry, position, width,
-                                           height, x, y, w, h, i);
+        return Land.prototype.updateGeometry.call(
+                    this, geometry, position, width, height, x, y, w, h, i);
     }
 }

@@ -26,6 +26,8 @@
 /** @class
 *   A tileset of the game.
 *   @property {SystemPicture} picture The picture used for this tileset.
+*   @property {number} width
+*   @property {number} height
 *   @property {number[]} autotiles All the IDs of used autotiles for this
 *   tileset.
 *   @property {number[]} walls All the IDs of used walls for this tileset.
@@ -78,12 +80,12 @@ SystemTileset.prototype = {
     readCollisions: function(image){
         var i, j, l, w, h, index, collision;
         var jsonTab, jsonKey, jsonVal;
-        w = Math.floor(image.width / $SQUARE_SIZE);
-        h = Math.floor(image.height / $SQUARE_SIZE);
+        this.width = Math.floor(image.width / $SQUARE_SIZE);
+        this.height = Math.floor(image.height / $SQUARE_SIZE);
 
         // Initialize
-        this.collisions = new Array(w * h);
-        for (i = 0; i < w * h; i++)
+        this.collisions = new Array(this.width * this.height);
+        for (i = 0; i < this.width * this.height; i++)
             this.collisions[i] = null;
 
         // Insert collision
@@ -91,12 +93,20 @@ SystemTileset.prototype = {
             jsonTab = this.jsonCollisions[i];
             jsonKey = jsonTab.k;
             jsonVal = jsonTab.v;
-            index = jsonKey[0] + (jsonKey[1] * w);
+            index = jsonKey[0] + (jsonKey[1] * this.width);
             collision = new CollisionSquare;
             collision.readJSON(jsonVal);
             this.collisions[index] = collision;
         }
 
         this.jsonCollisions = null;
+    },
+
+    // -------------------------------------------------------
+
+    /** Get a specific collision square according to texture.
+    */
+    getCollisionAt: function(texture) {
+        return this.collisions[texture[0] + texture[1] * this.width];
     }
 }

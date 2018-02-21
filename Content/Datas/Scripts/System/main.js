@@ -179,6 +179,11 @@ var $loadingScene = new THREE.Scene();
 *   @type {MessageDialog} */
 var $DIALOG_ERROR = null;
 
+/** A material invisible used for collisions.
+*   @type {THREE.MeshBasicMaterial} */
+var $INVISIBLE_MATERIAL = new THREE.MeshBasicMaterial();
+$INVISIBLE_MATERIAL.visible = false;
+
 // -------------------------------------------------------
 //  GLOBAL FUNCTIONS
 // -------------------------------------------------------

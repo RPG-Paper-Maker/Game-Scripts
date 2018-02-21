@@ -50,6 +50,8 @@ function MapObject(system, position) {
     this.system = system;
     this.position = position;
     this.mesh = null;
+    this.meshBoundingBox = null;
+    this.boundingBox = null;
     this.speed = 1.0;
     this.frame = 0;
     this.orientationEye = Orientation.South;
@@ -196,10 +198,17 @@ MapObject.prototype = {
             this.mesh.position.set(this.position.x,
                                    this.position.y,
                                    this.position.z);
+            this.boundingBox = new THREE.Object3D();
+            this.meshBoundingBox = this.mesh.clone();
+            this.meshBoundingBox.material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
+            this.boundingBox.add(this.meshBoundingBox);
             this.updateUVs();
         }
-        else
+        else {
             this.mesh = null;
+            this.boundingBox = null;
+            this.meshBoundingBox = null;
+        }
 
         // Add to the scene
         this.addToScene();
@@ -274,6 +283,13 @@ MapObject.prototype = {
             break;
         default:
             break;
+        }
+
+        // Collision
+        if (MapPortion.checkCollisionRay(this.position, position,
+                                         this.meshBoundingBox))
+        {
+            position = this.position;
         }
 
         return position;
@@ -408,6 +424,7 @@ MapObject.prototype = {
     addToScene: function(){
         if (!this.isInScene && this.mesh !== null) {
             $currentMap.scene.add(this.mesh);
+            $currentMap.scene.add(this.meshBoundingBox);
             this.isInScene = true;
         }
     },
@@ -417,6 +434,7 @@ MapObject.prototype = {
     removeFromScene: function(){
         if (this.isInScene) {
             $currentMap.scene.remove(this.mesh);
+            $currentMap.scene.remove(this.meshBoundingBox);
             this.isInScene = false;
         }
     },
@@ -470,6 +488,8 @@ MapObject.prototype = {
                 this.mesh.position.set(this.position.x,
                                        this.position.y + offset,
                                        this.position.z);
+                this.meshBoundingBox.position.set(
+                         this.position.x, this.position.y, this.position.z);
                 this.moving = false;
             }
             else {
@@ -541,9 +561,13 @@ MapObject.prototype = {
         if (this.currentState.graphicKind !== ElementMapKind.None){
             this.mesh.material =
                  $currentMap.texturesCharacters[this.currentState.graphicID];
+            this.meshBoundingBox.material =
+                 new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
         }
         else{
             this.mesh = null;
+            this.boundingBox = null;
+            this.meshBoundingBox = null;
         }
     }
 }

@@ -499,6 +499,29 @@ RPM.generateMapName = function(id){
 
 // -------------------------------------------------------
 
+/** Transform a json position to index position on X/Z axis.
+*   @static
+*   @param {number[]} position The json position.
+*   @returns {number}
+*/
+RPM.positionJSONToIndex = function(position){
+    return position[0] + position[3] * $PORTION_SIZE;
+}
+
+// -------------------------------------------------------
+
+/** Transform a quare position to index position on X/Z axis.
+*   @static
+*   @param {number[]} position The json position.
+*   @returns {number}
+*/
+RPM.positionToIndex = function(position){
+    return (position[0] % $PORTION_SIZE) + (position[2] % $PORTION_SIZE) *
+            $PORTION_SIZE;
+}
+
+// -------------------------------------------------------
+
 /** Transform a json position to a THREE.Vector3.
 *   @static
 *   @param {number[]} position The json position.
@@ -703,12 +726,23 @@ RPM.sin = function(w){
 
 // -------------------------------------------------------
 
-RPM.getPortion = function(position ){
+RPM.getPortion = function(position){
+    var p = RPM.getPosition(position);
     return [
-        Math.floor(Math.floor((position.x + 1) / $SQUARE_SIZE) / $PORTION_SIZE),
-        Math.floor(Math.floor((position.y + 1) / $SQUARE_SIZE) / $PORTION_SIZE),
-        Math.floor(Math.floor((position.z + 1) / $SQUARE_SIZE) / $PORTION_SIZE)
+        Math.floor(p[0] / $PORTION_SIZE),
+        Math.floor(p[1] / $PORTION_SIZE),
+        Math.floor(p[2] / $PORTION_SIZE)
     ]
+}
+
+// -------------------------------------------------------
+
+RPM.getPosition = function(position){
+    return [
+        Math.floor((position.x + 1) / $SQUARE_SIZE),
+        Math.floor((position.y + 1) / $SQUARE_SIZE),
+        Math.floor((position.z + 1) / $SQUARE_SIZE)
+    ];
 }
 
 // -------------------------------------------------------
@@ -718,6 +752,8 @@ RPM.arePortionEquals= function(portion1, portion2) {
             portion1[2] === portion2[2]);
 }
 
+// -------------------------------------------------------
+
 /** Show an error.
 *   @static
 *   @param {Error} error The error message.
@@ -726,6 +762,8 @@ RPM.showError = function(e){
     var txt = e.fileName + " - line: " + e.lineNumber + " -> " + e.message;
     RPM.showErrorMessage(txt);
 }
+
+// -------------------------------------------------------
 
 /** Show an error message.
 *   @static
@@ -739,6 +777,8 @@ RPM.showErrorMessage = function(error){
     else
         console.log(error);
 }
+
+// -------------------------------------------------------
 
 /** Give a modulo without negative value.
 *   @static

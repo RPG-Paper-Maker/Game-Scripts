@@ -91,5 +91,48 @@ Land.prototype = {
             new THREE.Vector2(x + w, y + h),
             new THREE.Vector2(x, y + h)
         ]);
+
+        // Collision
+        var collision = $currentMap.mapInfos.tileset.getCollisionAt(
+                    this.texture);
+        var boundingBox = null;
+        if (collision !== null) {
+            var rect = collision.rect;
+            if (rect !== null) {
+                var gb = new THREE.Geometry();
+                var xC = a + rect[0] - 1;
+                var yC = c + rect[1] - 1;
+                var widthC = rect[2] + 2;
+                var heightC = rect[3] + 2;
+                var offsetH = 1;
+                gb.vertices.push(new THREE.Vector3(0, 0, 0));
+                gb.vertices.push(new THREE.Vector3(widthC, 0, 0));
+                gb.vertices.push(new THREE.Vector3(widthC, 0, heightC));
+                gb.vertices.push(new THREE.Vector3(0, 0, heightC));
+                gb.vertices.push(new THREE.Vector3(0, offsetH, 0));
+                gb.vertices.push(new THREE.Vector3(widthC, offsetH, 0));
+                gb.vertices.push(new THREE.Vector3(widthC, offsetH, heightC));
+                gb.vertices.push(new THREE.Vector3(0, offsetH, heightC));
+                gb.faces.push(new THREE.Face3(0, 1, 2));
+                gb.faces.push(new THREE.Face3(0, 2, 3));
+                gb.faces.push(new THREE.Face3(5, 4, 0));
+                gb.faces.push(new THREE.Face3(5, 0, 1));
+                gb.faces.push(new THREE.Face3(6, 5, 1));
+                gb.faces.push(new THREE.Face3(6, 1, 2));
+                gb.faces.push(new THREE.Face3(7, 6, 2));
+                gb.faces.push(new THREE.Face3(7, 2, 3));
+                gb.faces.push(new THREE.Face3(4, 7, 3));
+                gb.faces.push(new THREE.Face3(4, 3, 0));
+                gb.faces.push(new THREE.Face3(4, 5, 6));
+                gb.faces.push(new THREE.Face3(4, 6, 7));
+                gb.computeFaceNormals();
+                boundingBox = new THREE.Mesh(gb, $INVISIBLE_MATERIAL);
+                boundingBox.position.set(xC, b, yC);
+            }
+        }
+
+
+
+        return boundingBox;
     }
 }

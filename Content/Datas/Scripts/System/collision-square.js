@@ -32,7 +32,7 @@
 *   @property {boolean} bot
 */
 function CollisionSquare(){
-    this.rect = [0, 0, 100, 100];
+    this.rect = [0, 0, $SQUARE_SIZE, $SQUARE_SIZE];
     this.left = true;
     this.right = true;
     this.top = true;
@@ -51,8 +51,18 @@ CollisionSquare.prototype = {
         var top = json.t;
         var bot = json.b;
 
-        if (typeof rect !== 'undefined')
-            this.rect = rect;
+        if (typeof rect !== 'undefined') {
+            if (rect === null)
+                this.rect = null;
+            else {
+                this.rect = [
+                    Math.floor(rect[0] * $SQUARE_SIZE / 100),
+                    Math.floor(rect[1] * $SQUARE_SIZE / 100),
+                    Math.floor(rect[2] * $SQUARE_SIZE / 100),
+                    Math.floor(rect[3] * $SQUARE_SIZE / 100)
+                ];
+            }
+        }
         if (typeof left !== 'undefined')
             this.left = left;
         if (typeof right !== 'undefined')
