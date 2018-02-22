@@ -183,6 +183,7 @@ var $DIALOG_ERROR = null;
 *   @type {THREE.MeshBasicMaterial} */
 var $INVISIBLE_MATERIAL = new THREE.MeshBasicMaterial();
 $INVISIBLE_MATERIAL.visible = false;
+$INVISIBLE_MATERIAL.side = THREE.DoubleSide;
 
 // -------------------------------------------------------
 //  GLOBAL FUNCTIONS

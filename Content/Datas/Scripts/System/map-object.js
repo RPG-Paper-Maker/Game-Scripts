@@ -51,7 +51,6 @@ function MapObject(system, position) {
     this.position = position;
     this.mesh = null;
     this.meshBoundingBox = null;
-    this.boundingBox = null;
     this.speed = 1.0;
     this.frame = 0;
     this.orientationEye = Orientation.South;
@@ -198,15 +197,12 @@ MapObject.prototype = {
             this.mesh.position.set(this.position.x,
                                    this.position.y,
                                    this.position.z);
-            this.boundingBox = new THREE.Object3D();
-            this.meshBoundingBox = this.mesh.clone();
-            this.meshBoundingBox.material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
-            this.boundingBox.add(this.meshBoundingBox);
+            this.meshBoundingBox = new THREE.Mesh(this.mesh.geometry.clone(),
+                                                  $INVISIBLE_MATERIAL);
             this.updateUVs();
         }
         else {
             this.mesh = null;
-            this.boundingBox = null;
             this.meshBoundingBox = null;
         }
 
@@ -566,7 +562,6 @@ MapObject.prototype = {
         }
         else{
             this.mesh = null;
-            this.boundingBox = null;
             this.meshBoundingBox = null;
         }
     }

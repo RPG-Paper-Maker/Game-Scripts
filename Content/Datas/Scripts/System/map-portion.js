@@ -90,12 +90,11 @@ MapPortion.checkCollisionRay = function(positionBefore, positionAfter, object) {
     portion = $currentMap.getLocalPortion(RPM.getPortion(positionBefore));
     mapPortion = $currentMap.getMapPortionByPortion(portion);
 
-    var position = RPM.getPosition(positionAfter);
-    if (mapPortion.checkCollision(position, positionBefore, positionAfter,
-                                  object, direction))
-        return true;
-
-    return false;
+    var jpositionBefore = RPM.getPosition(positionBefore);
+    var jpositionAfter = RPM.getPosition(positionAfter);
+    return (mapPortion.checkCollision(jpositionBefore, jpositionAfter,
+                                      positionBefore, positionAfter, object,
+                                      direction));
 }
 
 MapPortion.prototype = {
@@ -140,16 +139,13 @@ MapPortion.prototype = {
             position = jsonFloor.k;
             floor = new Floor();
             floor.read(jsonFloor.v);
-            boundingBox = floor.updateGeometry(geometry, position, width,
+            objCollision = floor.updateGeometry(geometry, position, width,
                                                height, i);
-            if (boundingBox !== null) {
-                objCollision = {
-                    "p": position,
-                    "b": boundingBox
-                }
+            if (objCollision !== null) {
                 this.boundingBoxesLands[RPM.positionJSONToIndex(position)]
                 .unshift(objCollision);
-                $currentMap.scene.add(boundingBox);
+                if (objCollision.b !== null)
+                    $currentMap.scene.add(objCollision.b);
             }
         }
 
@@ -488,11 +484,12 @@ MapPortion.prototype = {
     /** Check if there is a collision at this position.
     *   @returns {boolean}
     */
-    checkCollision: function(position, positionBefore, positionAfter, object,
-                             direction)
+    checkCollision: function(jpositionBefore, jpositionAfter, positionBefore,
+                             positionAfter, object, direction)
     {
-        if (this.checkLandsCollision(position, positionBefore, positionAfter,
-                                     object, direction))
+        if (this.checkLandsCollision(jpositionBefore, jpositionAfter,
+                                     positionBefore, positionAfter, object,
+                                     direction))
         {
             return true;
         }
@@ -505,29 +502,49 @@ MapPortion.prototype = {
     /** Check if there is a collision with floors at this position.
     *   @returns {boolean}
     */
-    checkLandsCollision: function(position, positionBefore, positionAfter,
-                                  object, direction)
+    checkLandsCollision: function(jpositionBefore, jpositionAfter,
+                                  positionBefore, positionAfter, object,
+                                  direction)
     {
-        var index = RPM.positionToIndex(position);
-        var lands = this.boundingBoxesLands[RPM.positionToIndex(position)];
-        var i, l, objCollision, positionCollision, boundingBox;
+        var lands = this.boundingBoxesLands[
+                    RPM.positionToIndex(jpositionAfter)];
+        var i, l, objCollision, positionCollision, boundingBox, collision;
 
         if (lands !== null) {
             for (i = 0, l = lands.length; i < l; i++) {
                 objCollision = lands[i];
                 positionCollision = objCollision.p;
-                if (positionCollision[0] === position[0] &&
-                    positionCollision[3] === position[2])
+                if (positionCollision[0] === jpositionAfter[0] &&
+                    positionCollision[3] === jpositionAfter[2])
                 {
                     boundingBox = objCollision.b;
-                    if (this.checkIntersectionObject(position, positionBefore,
+                    collision = objCollision.c;
+                    if (this.checkIntersectionObject(positionBefore,
                                                      positionAfter, boundingBox,
-                                                     object, direction))
+                                                     object, direction) ||
+                        this.checkDirections(jpositionBefore, jpositionAfter,
+                                             collision, direction))
                     {
                         return true;
                     }
-
-                    return false;
+                }
+            }
+        }
+        lands = this.boundingBoxesLands[RPM.positionToIndex(jpositionBefore)];
+        if (lands !== null) {
+            for (i = 0, l = lands.length; i < l; i++) {
+                objCollision = lands[i];
+                positionCollision = objCollision.p;
+                if (positionCollision[0] === jpositionBefore[0] &&
+                    positionCollision[3] === jpositionBefore[2])
+                {
+                     collision = objCollision.c;
+                     if (this.checkDirectionsInside(
+                                 jpositionBefore, jpositionAfter, collision,
+                                 direction))
+                     {
+                         return true;
+                     }
                 }
             }
         }
@@ -540,22 +557,112 @@ MapPortion.prototype = {
     /** Check intersection between ray and an object.
     *   @returns {boolean}
     */
-    checkIntersectionObject: function(position, positionBefore, positionAfter,
+    checkIntersectionObject: function(positionBefore, positionAfter,
                                       boundingBox, object, direction)
     {
-        //var objectVertices = object.children[0].geometry.vertices;
+        if (boundingBox === null)
+            return false;
+
         var objectVertices = object.geometry.vertices;
+        var boundingBoxVertices = boundingBox.geometry.vertices;
         var p = new THREE.Vector3(), ray = new THREE.Raycaster();
         var collisionResults;
-        for (var i = 0, l = objectVertices.length; i < l; i++) {
-            p.set(positionBefore.x ,
-                  positionBefore.y ,
-                  positionBefore.z );
+        var simpleTest = false;
+        var i, j, l, ll;
+        for (i = 0, l = objectVertices.length; i < l; i++) {
+            p.set(positionBefore.x + objectVertices[i].x,
+                  positionBefore.y + objectVertices[i].y,
+                  positionBefore.z + objectVertices[i].z);
             ray.set(p, direction);
             collisionResults = ray.intersectObject(boundingBox, true);
             if (collisionResults.length > 0) {
+                var invertDirection = direction.clone();
+                invertDirection.negate();
+                for (j = 0, ll = objectVertices.length; j < ll; j++) {
+                    p.set(positionAfter.x + objectVertices[j].x,
+                          positionAfter.y + objectVertices[j].y,
+                          positionAfter.z + objectVertices[j].z);
+                    ray.set(p, invertDirection);
+                    collisionResults = ray.intersectObject(boundingBox, true);
+                    if (collisionResults.length > 0)
+                        return true;
+                }
+                return false;
+            }
+        }
+        object.position.set(positionAfter.x, positionAfter.y, positionAfter.z);
+        object.updateMatrixWorld();
+        for (j = 0, ll = boundingBoxVertices.length; j < ll; j++) {
+            p.set(boundingBox.position.x + boundingBoxVertices[j].x,
+                  boundingBox.position.y + boundingBoxVertices[j].y,
+                  boundingBox.position.z + boundingBoxVertices[j].z);
+            ray.set(p, direction);
+            collisionResults = ray.intersectObject(object, true);
+            if (collisionResults.length > 0) {
+                object.position.set(positionBefore.x, positionBefore.y,
+                                    positionBefore.z);
+                object.updateMatrixWorld();
                 return true;
             }
+        }
+        object.position.set(positionBefore.x, positionBefore.y,
+                            positionBefore.z);
+        object.updateMatrixWorld();
+
+        return false;
+    },
+
+    // -------------------------------------------------------
+
+    /** Check directions.
+    *   @returns {boolean}
+    */
+    checkDirections: function(jpositionBefore, jpositionAfter, collision,
+                              direction)
+    {
+        if (collision === null)
+            return false;
+
+        if (jpositionBefore[0] !== jpositionAfter[0] ||
+            jpositionBefore[1] !== jpositionAfter[1] ||
+            jpositionBefore[2] !== jpositionAfter[2])
+        {
+            if (direction.x > 0)
+                return !collision.left;
+            if (direction.x < 0)
+                return !collision.right;
+            if (direction.z > 0)
+                return !collision.top;
+            if (direction.z < 0)
+                return !collision.bot;
+        }
+
+        return false;
+    },
+
+    // -------------------------------------------------------
+
+    /** Check directions.
+    *   @returns {boolean}
+    */
+    checkDirectionsInside: function(jpositionBefore, jpositionAfter, collision,
+                                    direction)
+    {
+        if (collision === null)
+            return false;
+
+        if (jpositionBefore[0] !== jpositionAfter[0] ||
+            jpositionBefore[1] !== jpositionAfter[1] ||
+            jpositionBefore[2] !== jpositionAfter[2])
+        {
+            if (direction.x > 0)
+                return !collision.right;
+            if (direction.x < 0)
+                return !collision.left;
+            if (direction.z > 0)
+                return !collision.bot;
+            if (direction.z < 0)
+                return !collision.top;
         }
 
         return false;

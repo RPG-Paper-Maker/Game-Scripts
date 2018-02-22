@@ -71,5 +71,9 @@ CollisionSquare.prototype = {
             this.top = top;
         if (typeof bot !== 'undefined')
             this.bot = bot;
+    },
+
+    hasAllDirections: function(){
+        return this.left && this.right && this.top && this.bot;
     }
 }

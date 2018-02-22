@@ -63,6 +63,7 @@ Land.prototype = {
             yLayerOffset *= -1;
         var b = localPosition.y + yLayerOffset;
         var c = localPosition.z;
+        var objCollision = null;
 
         // Vertices
         geometry.vertices.push(new THREE.Vector3(a, b, c));
@@ -95,9 +96,16 @@ Land.prototype = {
         // Collision
         var collision = $currentMap.mapInfos.tileset.getCollisionAt(
                     this.texture);
-        var boundingBox = null;
         if (collision !== null) {
             var rect = collision.rect;
+
+            if (!collision.hasAllDirections()) {
+                objCollision = {
+                    "p": position,
+                    "b": null,
+                    "c": collision
+                }
+            }
             if (rect !== null) {
                 var gb = new THREE.Geometry();
                 var xC = a + rect[0] - 1;
@@ -126,13 +134,18 @@ Land.prototype = {
                 gb.faces.push(new THREE.Face3(4, 5, 6));
                 gb.faces.push(new THREE.Face3(4, 6, 7));
                 gb.computeFaceNormals();
-                boundingBox = new THREE.Mesh(gb, $INVISIBLE_MATERIAL);
+                var boundingBox = new THREE.Mesh(gb, $INVISIBLE_MATERIAL);
                 boundingBox.position.set(xC, b, yC);
+                objCollision = {
+                    "p": position,
+                    "b": boundingBox,
+                    "c": null
+                }
             }
         }
 
 
 
-        return boundingBox;
+        return objCollision;
     }
 }
