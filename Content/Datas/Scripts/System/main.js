@@ -191,9 +191,9 @@ $INVISIBLE_MATERIAL.side = THREE.DoubleSide;
 
 /** A bounding box used for lands collisions.
 *   @type {THREE.Mesh} */
-var $BB_LAND = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1),
-                              new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true, side: THREE.DoubleSide } ));
-$BB_LAND.previousScale = [1, 1, 1];
+var $BB_BOX = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1),
+                             $INVISIBLE_MATERIAL);
+$BB_BOX.previousScale = [1, 1, 1];
 
 // -------------------------------------------------------
 //  GLOBAL FUNCTIONS

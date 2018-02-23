@@ -107,6 +107,34 @@ SystemTileset.prototype = {
     /** Get a specific collision square according to texture.
     */
     getCollisionAt: function(texture) {
-        return this.collisions[texture[0] + texture[1] * this.width];
-    }
+        return this.getCollisionAtPos(texture[0], texture[1]);
+    },
+
+    // -------------------------------------------------------
+
+    /** Get a specific collision square according to texture.
+    */
+    getCollisionAtPos: function(x, y) {
+        return this.collisions[x + y * this.width];
+    },
+
+    // -------------------------------------------------------
+
+    /** Get a specific collision square according to texture.
+    */
+    getSquaresForTexture: function(texture) {
+        var i, l, w = texture[2], h = texture[3];
+        var square;
+        l = w * h;
+        var squares = new Array(l);
+        for (i = 0; i < l; i++) {
+            square = this.getCollisionAtPos(texture[0] + (i % w),
+                                            texture[1] + (i / w));
+            if (square === null)
+                squares[i] = null;
+            else
+                squares[i] = square.rect;
+        }
+        return CollisionSquare.unionSquares(squares, l, w, h);
+    },
 }

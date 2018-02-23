@@ -71,15 +71,18 @@ function MapPortion(realX, realY, realZ){
     this.realY = realY;
     this.realZ = realZ;
     this.staticFloorsMesh = null;
+    this.staticSpritesMesh = null;
     l = $PORTION_SIZE * $PORTION_SIZE;
     this.boundingBoxesLands = new Array($PORTION_SIZE * $PORTION_SIZE);
+    this.boundingBoxesSprites = new Array($PORTION_SIZE * $PORTION_SIZE);
     for (i = 0; i < l; i++) {
         this.boundingBoxesLands[i] = new Array;
+        this.boundingBoxesSprites[i] = new Array;
     }
     this.staticAutotilesMesh = new Array;
-    this.staticSpritesList = new Array;
     this.objectsList = new Array;
     this.faceSpritesList = new Array;
+    this.staticWallsList = new Array;
 }
 
 MapPortion.checkCollisionRay = function(positionBefore, positionAfter, object) {
@@ -221,22 +224,40 @@ MapPortion.prototype = {
     *   @param {Object} json Json object describing the object.
     */
     readSpritesGlobals: function(json){
+        var localPosition, plane;
         var material = $currentMap.textureTileset;
+        var staticGeometry = new THREE.Geometry(), geometry;
+        staticGeometry.faceVertexUvs[0] = [];
 
-        for (var i = 0, l = json.length; i < l; i++){
+        var c = 0;
+        for (var i = 0, l = json.length; i < l; i++) {
             var s = json[i];
             var position = s.k;
             var ss = s.v;
             var sprite = new Sprite();
             sprite.read(ss);
-            var plane = this.getSpriteMesh(position, material, sprite);
-            if (sprite.kind === ElementMapKind.SpritesFace)
+            localPosition = RPM.positionToVector3(position);
+            if (sprite.kind === ElementMapKind.SpritesFace) {
+                geometry = sprite.createGeometry(material.map.image.width,
+                                                 material.map.image.height,
+                                                 position);
+                plane = new THREE.Mesh(geometry, material);
+                plane.position.set(localPosition.x, localPosition.y,
+                                   localPosition.z);
                 this.faceSpritesList.push(plane);
-            else
-                this.staticSpritesList.push(plane);
-
-            $gameStack.top().scene.add(plane);
+                $currentMap.scene.add(plane);
+            }
+            else {
+                sprite.updateGeometry(staticGeometry, material.map.image.width,
+                                      material.map.image.height, position, c,
+                                      localPosition);
+                c += 4;
+            }
         }
+
+        staticGeometry.uvsNeedUpdate = true;
+        this.staticSpritesMesh = new THREE.Mesh(staticGeometry, material);
+        $currentMap.scene.add(this.staticSpritesMesh);
     },
 
     // -------------------------------------------------------
@@ -292,7 +313,7 @@ MapPortion.prototype = {
                 geometry = obj.geometry;
                 geometry.uvsNeedUpdate = true;
                 mesh = new THREE.Mesh(geometry, obj.material);
-                this.staticSpritesList.push(mesh);
+                this.staticWallsList.push(mesh);
                 $gameStack.top().scene.add(mesh);
             }
         }
@@ -384,10 +405,11 @@ MapPortion.prototype = {
 
         // Static stuff
         $currentMap.scene.remove(this.staticFloorsMesh);
-        for (i = 0, l = this.staticSpritesList.length; i < l; i++)
-            $currentMap.scene.remove(this.staticSpritesList[i]);
+        $currentMap.scene.remove(this.staticSpritesMesh);
         for (i = 0, l = this.faceSpritesList.length; i < l; i++)
             $currentMap.scene.remove(this.faceSpritesList[i]);
+        for (i = 0, l = this.staticWallsList.length; i < l; i++)
+            $currentMap.scene.remove(this.staticWallsList[i]);
 
         // Objects
         for (i = 0, l = this.objectsList.length; i < l; i++)
@@ -564,12 +586,12 @@ MapPortion.prototype = {
         var objectVertices = object.geometry.vertices;
 
         // Apply geometry transforms to bounding box
-        $BB_LAND.position.set(boundingBox[0], boundingBox[1], boundingBox[2]);
-        $BB_LAND.geometry.scale(boundingBox[3] / $BB_LAND.previousScale[0], 1,
-                           boundingBox[4] / $BB_LAND.previousScale[2]);
-        $BB_LAND.previousScale = [boundingBox[3], 1, boundingBox[4]];
-        $BB_LAND.updateMatrixWorld();
-        var boundingBoxVertices = $BB_LAND.geometry.vertices;
+        $BB_BOX.position.set(boundingBox[0], boundingBox[1], boundingBox[2]);
+        $BB_BOX.geometry.scale(boundingBox[3] / $BB_BOX.previousScale[0], 1,
+                           boundingBox[4] / $BB_BOX.previousScale[2]);
+        $BB_BOX.previousScale = [boundingBox[3], 1, boundingBox[4]];
+        $BB_BOX.updateMatrixWorld();
+        var boundingBoxVertices = $BB_BOX.geometry.vertices;
 
         var p = new THREE.Vector3(), ray = new THREE.Raycaster();
         var collisionResults;
@@ -580,7 +602,7 @@ MapPortion.prototype = {
                   positionBefore.y + objectVertices[i].y,
                   positionBefore.z + objectVertices[i].z);
             ray.set(p, direction);
-            collisionResults = ray.intersectObject($BB_LAND, true);
+            collisionResults = ray.intersectObject($BB_BOX, true);
             if (collisionResults.length > 0) {
                 var invertDirection = direction.clone();
                 invertDirection.negate();
@@ -589,7 +611,7 @@ MapPortion.prototype = {
                           positionAfter.y + objectVertices[j].y,
                           positionAfter.z + objectVertices[j].z);
                     ray.set(p, invertDirection);
-                    collisionResults = ray.intersectObject($BB_LAND, true);
+                    collisionResults = ray.intersectObject($BB_BOX, true);
                     if (collisionResults.length > 0)
                         return true;
                 }

@@ -39,6 +39,91 @@ function CollisionSquare(){
     this.bot = true;
 }
 
+CollisionSquare.unionSquares = function(squares, l, w, h) {
+    var boolGrid = new Array(l), result = new Array;
+    var i, j, k, kk, a, b, c, m, tempW, tempH;
+    var square;
+
+    for (j = 0; j < h; j++) {
+        k = j * w;
+        for (i = 0; i < w; i++) {
+            square = squares[i + k];
+            if (square !== null) {
+                if (square[0] === 0 || square[1] === 0 ||
+                    square[0] + square[0] === $SQUARE_SIZE ||
+                    square[1] + square[1] === $SQUARE_SIZE)
+                {
+                    boolGrid[i + k] = true;
+                }
+                else {
+                    square[0] = square[0] + $SQUARE_SIZE * i;
+                    square[1] = square[1] + $SQUARE_SIZE * j;
+                    result.unshift(square);
+                    boolGrid[i + k] = false;
+                }
+            }
+            else
+                boolGrid[i + k] = false;
+        }
+    }
+    for (j = 0; j < h; j++) {
+        k = j * w;
+        for (i = 0; i < w; i++) {
+            if (boolGrid[i + k]) {
+                square = squares[i + k];
+                square[0] = square[0] + $SQUARE_SIZE * i;
+                square[1] = square[1] + $SQUARE_SIZE * j;
+                boolGrid[i + k] = false;
+                tempW = -1;
+                for (a = i +1; a < w && tempW === -1; a++) {
+                    c = false;
+                    if (boolGrid[a + k]) {
+                        if (squares[a + k - 1][0] + squares[a + k - 1][2] ===
+                            $SQUARE_SIZE && squares[a + k][0] === 0)
+                        {
+                            if (squares[a + k][1] === squares[a + k - 1][1] &&
+                                squares[a + k][3] === squares[a + k - 1][3])
+                            {
+                                c = true;
+                                boolGrid[a + k] = false;
+                                square[2] = square[2] + squares[a + k][2];
+                            }
+                        }
+                    }
+                    if (!c || a + 1 >= w)
+                        tempW = a - i + (c ? 1 : 0);
+                }
+                tempH = -1;
+                for (b = j +1; b < h && tempH === -1; b++) {
+                    kk = b * w;
+                    c = true;
+                    for (a = i; a < i + tempW; a++) {
+                        if (!(boolGrid[a + kk] && tab[a + kk - w][1] +
+                              tab[a + kk - w][3] === $SQUARE_SIZE &&
+                              tab[a + kk][1] === 0 && tab[a + kk][0] ===
+                              tab[a + kk - w][0] && tab[a + kk][2] ===
+                              tab[a + kk - w][2]))
+                        {
+                            c = 0;
+                        }
+                    }
+                    if (c) {
+                        for (m = i; m < i + tempW; m++)
+                            boolGrid[m + kk] = 0;
+                        square[3] = square[3] + tab[i + kk][3];
+                    }
+                    if (!c || b + 1 >= h)
+                        tempH = b - j + (c ? 1 : 0);
+                }
+
+                result.unshift(square);
+            }
+        }
+    }
+
+    return result;
+}
+
 CollisionSquare.prototype = {
 
     /** Read the JSON associated to the collision square.

@@ -51,7 +51,7 @@ function SceneMap(id){
     this.currentPortion = RPM.getPortion($game.hero.position);
 
     // Adding meshes for collision
-    this.scene.add($BB_LAND);
+    this.scene.add($BB_BOX);
 
     this.callBackAfterLoading = this.loadTextures;
 }
@@ -826,10 +826,11 @@ SceneMap.prototype = {
             var objects = $game.mapsDatas[this.id][x][y][z];
             var movedObjects = objects.min;
             var movedObject;
-            for (var p = 0, l = movedObjects.length; p < l; p++)
+            var p, l;
+            for (p = 0, l = movedObjects.length; p < l; p++)
                 movedObjects[p].update(angle);
             movedObjects = objects.mout;
-            for (var p = 0, l = movedObjects.length; p < l; p++)
+            for (p = 0, l = movedObjects.length; p < l; p++)
                 movedObjects[p].update(angle);
 
             // Update face sprites

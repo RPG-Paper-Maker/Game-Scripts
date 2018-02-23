@@ -104,14 +104,12 @@ Sprite.prototype = {
             this.front = front;
     },
 
-    /** Create the geometry associated to this sprite.
-    *   @param {number} width The texture total width.
-    *   @param {number} height The texture total height.
-    *   @param {number[]} position The position of the sprite.
+    /** Update the geometry associated to this land.
     *   @returns {THREE.Geometry}
     */
-    createGeometry: function(width, height, position) {
-        var geometry = new THREE.Geometry();
+    updateGeometry: function(geometry, width, height, position, c,
+                             localPosition)
+    {
         var vecA = new THREE.Vector3(-0.5, 1.0, 0.0),
             vecB = new THREE.Vector3(0.5, 1.0, 0.0),
             vecC = new THREE.Vector3(0.5, 0.0, 0.0),
@@ -119,13 +117,21 @@ Sprite.prototype = {
             center = new THREE.Vector3(),
             size = new THREE.Vector3(this.textureRect[2] * $SQUARE_SIZE,
                                      this.textureRect[3] * $SQUARE_SIZE, 1.0);
-        var x, y, w, h, c = 0, coefX, coefY;
+        var x, y, w, h, coefX, coefY;
         var texFaceA, texFaceB;
 
+        // For static sprites
         MapElement.prototype.scale.call(this, vecA, vecB, vecC, vecD, center,
                                         position, size, this.kind);
         Sprite.rotateSprite(vecA, vecB, vecC, vecD, center,
                             RPM.positionAngle(position));
+        if (localPosition !== null) {
+            vecA.add(localPosition);
+            vecB.add(localPosition);
+            vecC.add(localPosition);
+            vecD.add(localPosition);
+            center.add(localPosition);
+        }
 
         // Getting UV coordinates
         x = (this.textureRect[0] * $SQUARE_SIZE) / width;
@@ -150,7 +156,6 @@ Sprite.prototype = {
             new THREE.Vector2(x+w,y+h),
             new THREE.Vector2(x,y+h)
         ];
-        geometry.faceVertexUvs[0] = [];
 
         // Simple sprite
         var vecSimpleA = vecA.clone(),
@@ -201,7 +206,18 @@ Sprite.prototype = {
                                                      texFaceB, c);
             }
         }
+    },
 
+    /** Create the geometry associated to this sprite.
+    *   @param {number} width The texture total width.
+    *   @param {number} height The texture total height.
+    *   @param {number[]} position The position of the sprite.
+    *   @returns {THREE.Geometry}
+    */
+    createGeometry: function(width, height, position) {
+        var geometry = new THREE.Geometry();
+        geometry.faceVertexUvs[0] = [];
+        this.updateGeometry(geometry, width, height, position, 0, null);
         geometry.uvsNeedUpdate = true;
 
         return geometry;
