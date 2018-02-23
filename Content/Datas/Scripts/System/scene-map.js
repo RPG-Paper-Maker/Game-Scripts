@@ -49,6 +49,10 @@ function SceneMap(id){
     this.orientation = this.camera.getMapOrientation();
     this.readMapInfos();
     this.currentPortion = RPM.getPortion($game.hero.position);
+
+    // Adding meshes for collision
+    this.scene.add($BB_LAND);
+
     this.callBackAfterLoading = this.loadTextures;
 }
 

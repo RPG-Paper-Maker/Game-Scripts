@@ -144,8 +144,6 @@ MapPortion.prototype = {
             if (objCollision !== null) {
                 this.boundingBoxesLands[RPM.positionJSONToIndex(position)]
                 .unshift(objCollision);
-                if (objCollision.b !== null)
-                    $currentMap.scene.add(objCollision.b);
             }
         }
 
@@ -564,7 +562,15 @@ MapPortion.prototype = {
             return false;
 
         var objectVertices = object.geometry.vertices;
-        var boundingBoxVertices = boundingBox.geometry.vertices;
+
+        // Apply geometry transforms to bounding box
+        $BB_LAND.position.set(boundingBox[0], boundingBox[1], boundingBox[2]);
+        $BB_LAND.geometry.scale(boundingBox[3] / $BB_LAND.previousScale[0], 1,
+                           boundingBox[4] / $BB_LAND.previousScale[2]);
+        $BB_LAND.previousScale = [boundingBox[3], 1, boundingBox[4]];
+        $BB_LAND.updateMatrixWorld();
+        var boundingBoxVertices = $BB_LAND.geometry.vertices;
+
         var p = new THREE.Vector3(), ray = new THREE.Raycaster();
         var collisionResults;
         var simpleTest = false;
@@ -574,7 +580,7 @@ MapPortion.prototype = {
                   positionBefore.y + objectVertices[i].y,
                   positionBefore.z + objectVertices[i].z);
             ray.set(p, direction);
-            collisionResults = ray.intersectObject(boundingBox, true);
+            collisionResults = ray.intersectObject($BB_LAND, true);
             if (collisionResults.length > 0) {
                 var invertDirection = direction.clone();
                 invertDirection.negate();
@@ -583,7 +589,7 @@ MapPortion.prototype = {
                           positionAfter.y + objectVertices[j].y,
                           positionAfter.z + objectVertices[j].z);
                     ray.set(p, invertDirection);
-                    collisionResults = ray.intersectObject(boundingBox, true);
+                    collisionResults = ray.intersectObject($BB_LAND, true);
                     if (collisionResults.length > 0)
                         return true;
                 }
@@ -593,9 +599,9 @@ MapPortion.prototype = {
         object.position.set(positionAfter.x, positionAfter.y, positionAfter.z);
         object.updateMatrixWorld();
         for (j = 0, ll = boundingBoxVertices.length; j < ll; j++) {
-            p.set(boundingBox.position.x + boundingBoxVertices[j].x,
-                  boundingBox.position.y + boundingBoxVertices[j].y,
-                  boundingBox.position.z + boundingBoxVertices[j].z);
+            p.set(boundingBox[0] + boundingBoxVertices[j].x,
+                  boundingBox[1] + boundingBoxVertices[j].y,
+                  boundingBox[2] + boundingBoxVertices[j].z);
             ray.set(p, direction);
             collisionResults = ray.intersectObject(object, true);
             if (collisionResults.length > 0) {

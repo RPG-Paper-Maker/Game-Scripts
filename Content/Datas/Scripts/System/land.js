@@ -107,6 +107,7 @@ Land.prototype = {
                 }
             }
             if (rect !== null) {
+                /*
                 var gb = new THREE.Geometry();
                 var xC = a + rect[0] - 1;
                 var yC = c + rect[1] - 1;
@@ -136,9 +137,16 @@ Land.prototype = {
                 gb.computeFaceNormals();
                 var boundingBox = new THREE.Mesh(gb, $INVISIBLE_MATERIAL);
                 boundingBox.position.set(xC, b, yC);
+                */
                 objCollision = {
                     "p": position,
-                    "b": boundingBox,
+                    "b": [
+                        a + rect[0] + $SQUARE_SIZE / 2,
+                        b + 0.5,
+                        c + rect[1] + $SQUARE_SIZE / 2,
+                        rect[2] + 2,
+                        rect[3] + 2
+                    ],
                     "c": null
                 }
             }
