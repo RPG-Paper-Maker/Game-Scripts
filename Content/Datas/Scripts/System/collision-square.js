@@ -42,7 +42,7 @@ function CollisionSquare(){
 CollisionSquare.unionSquares = function(squares, l, w, h) {
     var boolGrid = new Array(l), result = new Array;
     var i, j, k, kk, a, b, c, m, tempW, tempH;
-    var square;
+    var square, s;
 
     for (j = 0; j < h; j++) {
         k = j * w;
@@ -50,8 +50,8 @@ CollisionSquare.unionSquares = function(squares, l, w, h) {
             square = squares[i + k];
             if (square !== null) {
                 if (square[0] === 0 || square[1] === 0 ||
-                    square[0] + square[0] === $SQUARE_SIZE ||
-                    square[1] + square[1] === $SQUARE_SIZE)
+                    square[0] + square[2] === $SQUARE_SIZE ||
+                    square[1] + square[3] === $SQUARE_SIZE)
                 {
                     boolGrid[i + k] = true;
                 }
@@ -70,7 +70,8 @@ CollisionSquare.unionSquares = function(squares, l, w, h) {
         k = j * w;
         for (i = 0; i < w; i++) {
             if (boolGrid[i + k]) {
-                square = squares[i + k];
+                s = squares[i + k];
+                square = [s[0], s[1], s[2], s[3]];
                 square[0] = square[0] + $SQUARE_SIZE * i;
                 square[1] = square[1] + $SQUARE_SIZE * j;
                 boolGrid[i + k] = false;
@@ -98,19 +99,19 @@ CollisionSquare.unionSquares = function(squares, l, w, h) {
                     kk = b * w;
                     c = true;
                     for (a = i; a < i + tempW; a++) {
-                        if (!(boolGrid[a + kk] && tab[a + kk - w][1] +
-                              tab[a + kk - w][3] === $SQUARE_SIZE &&
-                              tab[a + kk][1] === 0 && tab[a + kk][0] ===
-                              tab[a + kk - w][0] && tab[a + kk][2] ===
-                              tab[a + kk - w][2]))
+                        if (!(boolGrid[a + kk] && squares[a + kk - w][1] +
+                              squares[a + kk - w][3] === $SQUARE_SIZE &&
+                              squares[a + kk][1] === 0 && squares[a + kk][0] ===
+                              squares[a + kk - w][0] && squares[a + kk][2] ===
+                              squares[a + kk - w][2]))
                         {
-                            c = 0;
+                            c = false;
                         }
                     }
                     if (c) {
                         for (m = i; m < i + tempW; m++)
                             boolGrid[m + kk] = 0;
-                        square[3] = square[3] + tab[i + kk][3];
+                        square[3] = square[3] + squares[i + kk][3];
                     }
                     if (!c || b + 1 >= h)
                         tempH = b - j + (c ? 1 : 0);

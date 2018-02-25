@@ -128,13 +128,16 @@ SystemTileset.prototype = {
         l = w * h;
         var squares = new Array(l);
         for (i = 0; i < l; i++) {
+            var a = texture[0] + (i % w);
+            var b = texture[1] + (i / w);
             square = this.getCollisionAtPos(texture[0] + (i % w),
-                                            texture[1] + (i / w));
+                                            texture[1] + Math.floor(i / w));
             if (square === null)
                 squares[i] = null;
             else
                 squares[i] = square.rect;
         }
+
         return CollisionSquare.unionSquares(squares, l, w, h);
     },
 }

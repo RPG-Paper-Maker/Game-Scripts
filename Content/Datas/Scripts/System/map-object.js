@@ -191,7 +191,7 @@ MapObject.prototype = {
             this.height = material.map.image.height / $SQUARE_SIZE / $FRAMES;
             var sprite = new Sprite(this.currentState.graphicKind,
                                     [0, 0, this.width, this.height]);
-            var geometry = sprite.createGeometry(this.width, this.height,
+            var geometry = sprite.createGeometry(this.width, this.height, false,
                                                  this.position);
             this.mesh = new THREE.Mesh(geometry, material);
             this.mesh.position.set(this.position.x,

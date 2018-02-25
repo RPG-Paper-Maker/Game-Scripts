@@ -107,7 +107,7 @@ Sprite.prototype = {
     /** Update the geometry associated to this land.
     *   @returns {THREE.Geometry}
     */
-    updateGeometry: function(geometry, width, height, position, c,
+    updateGeometry: function(geometry, width, height, position, c, tileset,
                              localPosition)
     {
         var vecA = new THREE.Vector3(-0.5, 1.0, 0.0),
@@ -156,6 +156,20 @@ Sprite.prototype = {
             new THREE.Vector2(x+w,y+h),
             new THREE.Vector2(x,y+h)
         ];
+
+        // Collision
+
+        var objCollision = null;
+        if (tileset) {
+            var collisions = $currentMap.mapInfos.tileset.getSquaresForTexture(
+                        this.textureRect);
+            if (collisions.length > 0) {
+                objCollision = {
+                    "p": position,
+                    "c": collisions
+                }
+            }
+        }
 
         // Simple sprite
         var vecSimpleA = vecA.clone(),
@@ -206,6 +220,8 @@ Sprite.prototype = {
                                                      texFaceB, c);
             }
         }
+
+        return [c, objCollision];
     },
 
     /** Create the geometry associated to this sprite.
@@ -214,10 +230,11 @@ Sprite.prototype = {
     *   @param {number[]} position The position of the sprite.
     *   @returns {THREE.Geometry}
     */
-    createGeometry: function(width, height, position) {
+    createGeometry: function(width, height, tileset, position) {
         var geometry = new THREE.Geometry();
         geometry.faceVertexUvs[0] = [];
-        this.updateGeometry(geometry, width, height, position, 0, null);
+        this.updateGeometry(geometry, width, height, position, 0, tileset,
+                            null);
         geometry.uvsNeedUpdate = true;
 
         return geometry;

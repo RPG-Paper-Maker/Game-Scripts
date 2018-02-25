@@ -505,7 +505,8 @@ RPM.generateMapName = function(id){
 *   @returns {number}
 */
 RPM.positionJSONToIndex = function(position){
-    return position[0] + position[3] * $PORTION_SIZE;
+    return (position[0] % $PORTION_SIZE) + (position[3] % $PORTION_SIZE)
+            * $PORTION_SIZE;
 }
 
 // -------------------------------------------------------

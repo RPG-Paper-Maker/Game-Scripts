@@ -90,14 +90,25 @@ MapPortion.checkCollisionRay = function(positionBefore, positionAfter, object) {
     var direction = new THREE.Vector3();
     direction.subVectors(positionAfter, positionBefore).normalize();
     var ray = new THREE.Ray(positionBefore, direction);
-    portion = $currentMap.getLocalPortion(RPM.getPortion(positionBefore));
+    portion = $currentMap.getLocalPortion(RPM.getPortion(positionAfter));
     mapPortion = $currentMap.getMapPortionByPortion(portion);
-
     var jpositionBefore = RPM.getPosition(positionBefore);
     var jpositionAfter = RPM.getPosition(positionAfter);
-    return (mapPortion.checkCollision(jpositionBefore, jpositionAfter,
-                                      positionBefore, positionAfter, object,
-                                      direction));
+
+    // Check collision outside
+    if (mapPortion.checkCollision(jpositionBefore, jpositionAfter,
+                                  positionBefore, positionAfter, object,
+                                  direction))
+    {
+        return true;
+    }
+
+    // Check collision inside
+    portion = $currentMap.getLocalPortion(RPM.getPortion(positionAfter));
+    mapPortion = $currentMap.getMapPortionByPortion(portion);
+
+    return mapPortion.checkLandsCollisionInside(jpositionBefore, jpositionAfter,
+                                                direction);
 }
 
 MapPortion.prototype = {
@@ -224,23 +235,24 @@ MapPortion.prototype = {
     *   @param {Object} json Json object describing the object.
     */
     readSpritesGlobals: function(json){
-        var localPosition, plane;
+        var localPosition, plane, s, position, ss, sprite, objCollision, result;
         var material = $currentMap.textureTileset;
+        var i, c = 0, l;
         var staticGeometry = new THREE.Geometry(), geometry;
         staticGeometry.faceVertexUvs[0] = [];
 
-        var c = 0;
-        for (var i = 0, l = json.length; i < l; i++) {
-            var s = json[i];
-            var position = s.k;
-            var ss = s.v;
-            var sprite = new Sprite();
+        for (i = 0, l = json.length; i < l; i++) {
+            s = json[i];
+            position = s.k;
+            ss = s.v;
+            sprite = new Sprite();
             sprite.read(ss);
             localPosition = RPM.positionToVector3(position);
             if (sprite.kind === ElementMapKind.SpritesFace) {
+                objCollision = null;
                 geometry = sprite.createGeometry(material.map.image.width,
                                                  material.map.image.height,
-                                                 position);
+                                                 true, position);
                 plane = new THREE.Mesh(geometry, material);
                 plane.position.set(localPosition.x, localPosition.y,
                                    localPosition.z);
@@ -248,10 +260,12 @@ MapPortion.prototype = {
                 $currentMap.scene.add(plane);
             }
             else {
-                sprite.updateGeometry(staticGeometry, material.map.image.width,
-                                      material.map.image.height, position, c,
-                                      localPosition);
-                c += 4;
+                result = sprite.updateGeometry(
+                                staticGeometry, material.map.image.width,
+                                material.map.image.height, position, c, true,
+                                localPosition);
+                c = result[0];
+                objCollision = result[1];
             }
         }
 
@@ -385,7 +399,7 @@ MapPortion.prototype = {
         var localPosition = RPM.positionToVector3(position);
         var geometry = sprite.createGeometry(material.map.image.width,
                                              material.map.image.height,
-                                             position);
+                                             false, position);
         var plane = new THREE.Mesh(geometry, material);
         plane.position.set(localPosition.x,
                            localPosition.y,
@@ -550,7 +564,22 @@ MapPortion.prototype = {
                 }
             }
         }
-        lands = this.boundingBoxesLands[RPM.positionToIndex(jpositionBefore)];
+
+        return false;
+    },
+
+    // -------------------------------------------------------
+
+    /** Check if there is a collision with floors at this position.
+    *   @returns {boolean}
+    */
+    checkLandsCollisionInside: function(jpositionBefore, jpositionAfter,
+                                        direction)
+    {
+        var lands = this.boundingBoxesLands[
+                    RPM.positionToIndex(jpositionBefore)];
+        var i, l, objCollision, positionCollision, collision;
+
         if (lands !== null) {
             for (i = 0, l = lands.length; i < l; i++) {
                 objCollision = lands[i];
@@ -615,7 +644,6 @@ MapPortion.prototype = {
                     if (collisionResults.length > 0)
                         return true;
                 }
-                return false;
             }
         }
         object.position.set(positionAfter.x, positionAfter.y, positionAfter.z);
