@@ -103,7 +103,7 @@ Window {
                 }
 
                 if (!event.isAutoRepeat){
-                    Game.$keysPressed.unshift(key);
+                    Game.$keysPressed.push(key);
                     if (!Game.RPM.isLoading())
                         Game.onKeyPressed(key);
                 }

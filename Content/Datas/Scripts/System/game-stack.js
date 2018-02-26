@@ -37,7 +37,7 @@ GameStack.prototype = {
     *   @param {SceneGame} scene The scene to push.
     */
     push: function(scene) {
-        this.content.unshift(scene);
+        this.content.push(scene);
     },
 
     // -------------------------------------------------------
@@ -46,7 +46,7 @@ GameStack.prototype = {
     *   @returns {SceneGame} The last scene that is removed.
     */
     pop: function() {
-        return this.content.shift();
+        return this.content.pop();
     },
 
     // -------------------------------------------------------
@@ -79,7 +79,7 @@ GameStack.prototype = {
     *   @returns {SceneGame}
     */
     top: function() {
-        return this.at(0);
+        return this.at(this.content.length - 1);
     },
 
     // -------------------------------------------------------
@@ -88,7 +88,7 @@ GameStack.prototype = {
     *   @returns {SceneGame}
     */
     bot: function() {
-        return this.at(this.content.length - 1);
+        return this.at(0);
     },
 
     // -------------------------------------------------------

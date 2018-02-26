@@ -157,7 +157,7 @@ MapPortion.prototype = {
                                                height, i);
             if (objCollision !== null) {
                 this.boundingBoxesLands[RPM.positionJSONToIndex(position)]
-                .unshift(objCollision);
+                .push(objCollision);
             }
         }
 
@@ -375,7 +375,7 @@ MapPortion.prototype = {
                                              localPosition.z);
                 var mapObject = new MapObject(object, position);
                 mapObject.changeState();
-                this.objectsList.unshift(mapObject);
+                this.objectsList.push(mapObject);
             }
         }
 

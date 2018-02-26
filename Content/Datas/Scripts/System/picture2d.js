@@ -41,7 +41,7 @@ function Picture2D(path, callback, x, y, w, h) {
     this.path = path;
     this.callback = callback;
 
-    $picturesLoading.unshift(this);
+    $picturesLoading.push(this);
     $canvasRendering.loadImage(path);
 }
 
@@ -79,7 +79,7 @@ Picture2D.prototype = {
     check: function() {
         if ($canvasRendering.isImageLoaded(this.path)) {
             $picturesLoading.splice($picturesLoading.indexOf(this), 1);
-            $picturesLoaded.unshift(this);
+            $picturesLoaded.push(this);
             this.callback.call(this);
 
             return true;

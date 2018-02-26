@@ -374,7 +374,7 @@ MapObject.prototype = {
                    [originalPortion[0]][originalPortion[1]][originalPortion[2]];
             movedObjects = objects.m;
             if (movedObjects.indexOf(this) === -1) {
-                movedObjects.unshift(this);
+                movedObjects.push(this);
                 localPortion = $currentMap.getLocalPortion(originalPortion);
                 mapPortion = $currentMap.getMapPortionByPortion(localPortion);
                 movedObjects = mapPortion.objectsList;
@@ -401,10 +401,10 @@ MapObject.prototype = {
                 originalPortion[1] !== afterPortion[1] ||
                 originalPortion[2] !== afterPortion[2])
             {
-                objects.mout.unshift(this);
+                objects.mout.push(this);
             }
             else
-                objects.min.unshift(this);
+                objects.min.push(this);
         }
 
         // Add or remove from scene

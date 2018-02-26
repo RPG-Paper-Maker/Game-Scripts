@@ -58,7 +58,7 @@ CollisionSquare.unionSquares = function(squares, l, w, h) {
                 else {
                     square[0] = square[0] + $SQUARE_SIZE * i;
                     square[1] = square[1] + $SQUARE_SIZE * j;
-                    result.unshift(square);
+                    result.push(square);
                     boolGrid[i + k] = false;
                 }
             }
@@ -117,7 +117,7 @@ CollisionSquare.unionSquares = function(squares, l, w, h) {
                         tempH = b - j + (c ? 1 : 0);
                 }
 
-                result.unshift(square);
+                result.push(square);
             }
         }
     }

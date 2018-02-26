@@ -248,7 +248,7 @@ EventCommandChangeState.addState = function(portionDatas, index, state){
     var states = portionDatas.s[index];
 
     if (states.indexOf(state) === -1)
-        states.unshift(state);
+        states.push(state);
 
     EventCommandChangeState.removeFromDatas(portionDatas, index, states);
 }
@@ -316,8 +316,8 @@ EventCommandChangeState.prototype = {
         var indexState = portionDatas.si.indexOf(object.system.id);
         if (indexState === -1){
             indexState = 0;
-            portionDatas.si.unshift(object.system.id);
-            portionDatas.s.unshift([1]);
+            portionDatas.si.push(object.system.id);
+            portionDatas.s.push([1]);
         }
 
         switch(this.operationKind){
