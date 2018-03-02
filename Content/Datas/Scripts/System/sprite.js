@@ -117,7 +117,7 @@ Sprite.prototype = {
             center = new THREE.Vector3(),
             size = new THREE.Vector3(this.textureRect[2] * $SQUARE_SIZE,
                                      this.textureRect[3] * $SQUARE_SIZE, 1.0);
-        var x, y, w, h, coefX, coefY;
+        var x, y, w, h, i, l, coefX, coefY;
         var texFaceA, texFaceB;
 
         // For static sprites
@@ -158,16 +158,21 @@ Sprite.prototype = {
         ];
 
         // Collision
-
-        var objCollision = null;
+        var objCollision = [];
         if (tileset) {
             var collisions = $currentMap.mapInfos.tileset.getSquaresForTexture(
                         this.textureRect);
-            if (collisions.length > 0) {
-                objCollision = {
+            var rect;
+            l = collisions.length;
+            for (i = 0; i < l; i++) {
+                rect = collisions[i];
+                objCollision.push({
                     "p": position,
-                    "c": collisions
-                }
+                    "r": rect,
+                    "w": Math.floor(width / ($SQUARE_SIZE * 2)),
+                    "h": Math.floor(height / ($SQUARE_SIZE * 2)),
+                    "k": this.kind === ElementMapKind.SpritesFix
+                });
             }
         }
 

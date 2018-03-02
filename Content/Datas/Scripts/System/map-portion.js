@@ -236,8 +236,9 @@ MapPortion.prototype = {
     */
     readSpritesGlobals: function(json){
         var localPosition, plane, s, position, ss, sprite, objCollision, result;
+        var collisions, positionPlus;
         var material = $currentMap.textureTileset;
-        var i, c = 0, l;
+        var i, c = 0, l, j, ll, a, b;
         var staticGeometry = new THREE.Geometry(), geometry;
         staticGeometry.faceVertexUvs[0] = [];
 
@@ -265,7 +266,27 @@ MapPortion.prototype = {
                                 material.map.image.height, position, c, true,
                                 localPosition);
                 c = result[0];
-                objCollision = result[1];
+                collisions = result[1];
+                for (j = 0, ll = collisions.length; j < ll; j++) {
+                    objCollision = collisions[j];
+                    for (a = -objCollision.w; a <= objCollision.w; a++)
+                    {
+                        for (b = -objCollision.h; b < objCollision.h;
+                             b++)
+                        {
+                            positionPlus = [
+                                position[0] + a,
+                                position[1],
+                                position[3] + b
+                            ];
+                            if ($currentMap.isInMap(positionPlus)) {
+                                this.boundingBoxesSprites[
+                                    RPM.positionToIndex(positionPlus)
+                                ] = objCollision;
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -547,20 +568,15 @@ MapPortion.prototype = {
         if (lands !== null) {
             for (i = 0, l = lands.length; i < l; i++) {
                 objCollision = lands[i];
-                positionCollision = objCollision.p;
-                if (positionCollision[0] === jpositionAfter[0] &&
-                    positionCollision[3] === jpositionAfter[2])
+                boundingBox = objCollision.b;
+                collision = objCollision.c;
+                if (this.checkIntersectionObject(positionBefore,
+                                                 positionAfter, boundingBox,
+                                                 object, direction) ||
+                    this.checkDirections(jpositionBefore, jpositionAfter,
+                                         collision, direction))
                 {
-                    boundingBox = objCollision.b;
-                    collision = objCollision.c;
-                    if (this.checkIntersectionObject(positionBefore,
-                                                     positionAfter, boundingBox,
-                                                     object, direction) ||
-                        this.checkDirections(jpositionBefore, jpositionAfter,
-                                             collision, direction))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
         }
@@ -583,17 +599,12 @@ MapPortion.prototype = {
         if (lands !== null) {
             for (i = 0, l = lands.length; i < l; i++) {
                 objCollision = lands[i];
-                positionCollision = objCollision.p;
-                if (positionCollision[0] === jpositionBefore[0] &&
-                    positionCollision[3] === jpositionBefore[2])
+                collision = objCollision.c;
+                if (this.checkDirectionsInside(
+                         jpositionBefore, jpositionAfter, collision,
+                         direction))
                 {
-                     collision = objCollision.c;
-                     if (this.checkDirectionsInside(
-                                 jpositionBefore, jpositionAfter, collision,
-                                 direction))
-                     {
-                         return true;
-                     }
+                    return true;
                 }
             }
         }
