@@ -189,11 +189,18 @@ $INVISIBLE_MATERIAL.side = THREE.DoubleSide;
 //  BOUNDING BOXES
 // -------------------------------------------------------
 
-/** A bounding box used for lands collisions.
+/** A bounding box used for boxes collisions.
 *   @type {THREE.Mesh} */
 var $BB_BOX = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1),
                              $INVISIBLE_MATERIAL);
+
+/** A bounding box used for cylinders collisions.
+*   @type {THREE.Mesh} */
+var $BB_CYLINDER = new THREE.Mesh(new THREE.CylinderGeometry(1, 1, 1, 8),
+                                  $INVISIBLE_MATERIAL);
+
 $BB_BOX.previousScale = [1, 1, 1];
+$BB_CYLINDER.previousScale = [1, 1, 1];
 
 // -------------------------------------------------------
 //  GLOBAL FUNCTIONS

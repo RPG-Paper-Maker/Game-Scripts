@@ -164,22 +164,27 @@ Sprite.prototype = {
         if (tileset) {
             var collisions = $currentMap.mapInfos.tileset.getSquaresForTexture(
                         this.textureRect);
+            w = Math.floor(this.textureRect[2] / 2);
+            h = Math.floor(this.textureRect[3] / 2);
             var rect;
             l = collisions.length;
             for (i = 0; i < l; i++) {
                 rect = collisions[i];
                 objCollision.push({
-                    "p": position,
-                    "b": [
-                        localPosition.x + rect[0],
-                        localPosition.y + rect[1] + rect[3] / 2,
+                    p: position,
+                    b: [
+                        localPosition.x - Math.floor((this.textureRect[2] *
+                            $SQUARE_SIZE - rect[0]) / 2) +
+                            Math.floor((rect[2] + 2) / 2) + 1,
+                        localPosition.y + Math.floor((this.textureRect[3] *
+                            $SQUARE_SIZE - rect[1]) / 2),
                         localPosition.z,
                         rect[2] + 2,
                         rect[3] + 2
                     ],
-                    "w": Math.floor(rect[2] / ($SQUARE_SIZE * 2)),
-                    "h": Math.floor(rect[3] / ($SQUARE_SIZE * 2)),
-                    "k": this.kind === ElementMapKind.SpritesFix
+                    w: w,
+                    h: h,
+                    k: this.kind === ElementMapKind.SpritesFix
                 });
             }
         }

@@ -239,7 +239,7 @@ MapPortion.prototype = {
         var localPosition, plane, s, position, ss, sprite, objCollision, result;
         var collisions, positionPlus;
         var material = $currentMap.textureTileset;
-        var i, c = 0, l, j, ll, a, b;
+        var i, count = 0, l, j, ll, a, b, c;
         var staticGeometry = new THREE.Geometry(), geometry;
         staticGeometry.faceVertexUvs[0] = [];
 
@@ -264,26 +264,30 @@ MapPortion.prototype = {
             else {
                 result = sprite.updateGeometry(
                                 staticGeometry, material.map.image.width,
-                                material.map.image.height, position, c, true,
-                                localPosition);
-                c = result[0];
+                                material.map.image.height, position, count,
+                                true, localPosition);
+                count = result[0];
                 collisions = result[1];
                 for (j = 0, ll = collisions.length; j < ll; j++) {
                     objCollision = collisions[j];
                     for (a = -objCollision.w; a <= objCollision.w; a++)
                     {
-                        for (b = -objCollision.h; b < objCollision.h;
+                        for (b = -objCollision.h; b <= objCollision.h;
                              b++)
                         {
-                            positionPlus = [
-                                position[0] + a,
-                                position[1],
-                                position[3] + b
-                            ];
-                            if ($currentMap.isInMap(positionPlus)) {
-                                this.boundingBoxesSprites[
-                                    RPM.positionToIndex(positionPlus)
-                                ].push(objCollision);
+                            for (c = -objCollision.w; c <= objCollision.w;
+                                 c++)
+                            {
+                                positionPlus = [
+                                    position[0] + a,
+                                    position[1] + b,
+                                    position[3] + c
+                                ];
+                                if ($currentMap.isInMap(positionPlus)) {
+                                    this.boundingBoxesSprites[
+                                        RPM.positionToIndex(positionPlus)
+                                    ].push(objCollision);
+                                }
                             }
                         }
                     }
@@ -763,15 +767,15 @@ MapPortion.prototype = {
     {
         var sprites = this.boundingBoxesSprites[
                       RPM.positionToIndex(jpositionAfter)];
-        var i, l, objCollision, positionCollision, boundingBox, collision;
+        var i, l, objCollision, positionCollision, collision;
 
         if (sprites !== null) {
             for (i = 0, l = sprites.length; i < l; i++) {
                 objCollision = sprites[i];
-                boundingBox = objCollision.b;
                 if (this.checkIntersectionSprite(positionBefore,
-                                                 positionAfter, boundingBox,
-                                                 object, direction))
+                                                 positionAfter, objCollision.b,
+                                                 object, direction,
+                                                 objCollision.k))
                 {
                     return true;
                 }
@@ -787,22 +791,39 @@ MapPortion.prototype = {
     *   @returns {boolean}
     */
     checkIntersectionSprite: function(positionBefore, positionAfter,
-                                      boundingBox, object, direction)
+                                      boundingBox, object, direction, fix)
     {
         if (boundingBox === null)
             return false;
+        var bb;
 
         // Apply geometry transforms to bounding box
-        $BB_BOX.position.set(boundingBox[0], boundingBox[1], boundingBox[2]);
-        $BB_BOX.geometry.scale(boundingBox[3] / $BB_BOX.previousScale[0],
-                               boundingBox[4] / $BB_BOX.previousScale[1],
-                               1 / $BB_BOX.previousScale[2]);
-        $BB_BOX.previousScale = [boundingBox[3], boundingBox[4], 1];
-        $BB_BOX.updateMatrixWorld();
+        if (fix) {
+            $BB_BOX.position.set(boundingBox[0], boundingBox[1],
+                                 boundingBox[2]);
+            $BB_BOX.geometry.scale(boundingBox[3] / $BB_BOX.previousScale[0],
+                                   boundingBox[4] / $BB_BOX.previousScale[1],
+                                   1 / $BB_BOX.previousScale[2]);
+            $BB_BOX.previousScale = [boundingBox[3], boundingBox[4], 1];
+            $BB_BOX.updateMatrixWorld();
+            bb = $BB_BOX;
+        }
+        else {
+            var size = Math.floor(boundingBox[3] / 2);
+            $BB_CYLINDER.position.set(boundingBox[0], boundingBox[1],
+                                      boundingBox[2]);
+            $BB_CYLINDER.geometry.scale(
+                        size / $BB_CYLINDER.previousScale[0],
+                        boundingBox[4] / $BB_CYLINDER.previousScale[1],
+                        size / $BB_CYLINDER.previousScale[2]);
+            $BB_CYLINDER.previousScale = [size, boundingBox[4], size];
+            $BB_CYLINDER.updateMatrixWorld();
+            bb = $BB_CYLINDER;
+        }
 
         return this.checkIntersectionObject(
                     positionBefore, positionAfter, object, boundingBox,
                     direction, object.geometry.vertices,
-                    $BB_BOX.geometry.vertices, $BB_BOX);
+                    bb.geometry.vertices, bb);
     },
 }
