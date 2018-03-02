@@ -122,6 +122,7 @@ MapPortion.prototype = {
         this.readLands(json.lands);
         this.readSprites(json.sprites);
         this.readObjects(json.objs.list, isMapHero);
+        this.overflow = json.overflow;
     },
 
     // -------------------------------------------------------
@@ -282,7 +283,7 @@ MapPortion.prototype = {
                             if ($currentMap.isInMap(positionPlus)) {
                                 this.boundingBoxesSprites[
                                     RPM.positionToIndex(positionPlus)
-                                ] = objCollision;
+                                ].push(objCollision);
                             }
                         }
                     }
@@ -544,7 +545,10 @@ MapPortion.prototype = {
     {
         if (this.checkLandsCollision(jpositionBefore, jpositionAfter,
                                      positionBefore, positionAfter, object,
-                                     direction))
+                                     direction) ||
+            this.checkSpritesCollision(jpositionBefore, jpositionAfter,
+                                       positionBefore, positionAfter, object,
+                                       direction))
         {
             return true;
         }
@@ -570,9 +574,9 @@ MapPortion.prototype = {
                 objCollision = lands[i];
                 boundingBox = objCollision.b;
                 collision = objCollision.c;
-                if (this.checkIntersectionObject(positionBefore,
-                                                 positionAfter, boundingBox,
-                                                 object, direction) ||
+                if (this.checkIntersectionLand(positionBefore,
+                                               positionAfter, boundingBox,
+                                               object, direction) ||
                     this.checkDirections(jpositionBefore, jpositionAfter,
                                          collision, direction))
                 {
@@ -617,22 +621,10 @@ MapPortion.prototype = {
     /** Check intersection between ray and an object.
     *   @returns {boolean}
     */
-    checkIntersectionObject: function(positionBefore, positionAfter,
-                                      boundingBox, object, direction)
+    checkIntersectionObject: function(positionBefore, positionAfter, object,
+                                      boundingBox, direction, objectVertices,
+                                      boundingBoxVertices, box)
     {
-        if (boundingBox === null)
-            return false;
-
-        var objectVertices = object.geometry.vertices;
-
-        // Apply geometry transforms to bounding box
-        $BB_BOX.position.set(boundingBox[0], boundingBox[1], boundingBox[2]);
-        $BB_BOX.geometry.scale(boundingBox[3] / $BB_BOX.previousScale[0], 1,
-                           boundingBox[4] / $BB_BOX.previousScale[2]);
-        $BB_BOX.previousScale = [boundingBox[3], 1, boundingBox[4]];
-        $BB_BOX.updateMatrixWorld();
-        var boundingBoxVertices = $BB_BOX.geometry.vertices;
-
         var p = new THREE.Vector3(), ray = new THREE.Raycaster();
         var collisionResults;
         var simpleTest = false;
@@ -642,7 +634,7 @@ MapPortion.prototype = {
                   positionBefore.y + objectVertices[i].y,
                   positionBefore.z + objectVertices[i].z);
             ray.set(p, direction);
-            collisionResults = ray.intersectObject($BB_BOX, true);
+            collisionResults = ray.intersectObject(box, true);
             if (collisionResults.length > 0) {
                 var invertDirection = direction.clone();
                 invertDirection.negate();
@@ -651,7 +643,7 @@ MapPortion.prototype = {
                           positionAfter.y + objectVertices[j].y,
                           positionAfter.z + objectVertices[j].z);
                     ray.set(p, invertDirection);
-                    collisionResults = ray.intersectObject($BB_BOX, true);
+                    collisionResults = ray.intersectObject(box, true);
                     if (collisionResults.length > 0)
                         return true;
                 }
@@ -677,6 +669,31 @@ MapPortion.prototype = {
         object.updateMatrixWorld();
 
         return false;
+    },
+
+    // -------------------------------------------------------
+
+    /** Check intersection between ray and an object.
+    *   @returns {boolean}
+    */
+    checkIntersectionLand: function(positionBefore, positionAfter,
+                                    boundingBox, object, direction)
+    {
+        if (boundingBox === null)
+            return false;
+
+        // Apply geometry transforms to bounding box
+        $BB_BOX.position.set(boundingBox[0], boundingBox[1], boundingBox[2]);
+        $BB_BOX.geometry.scale(boundingBox[3] / $BB_BOX.previousScale[0],
+                               1 / $BB_BOX.previousScale[1],
+                               boundingBox[4] / $BB_BOX.previousScale[2]);
+        $BB_BOX.previousScale = [boundingBox[3], 1, boundingBox[4]];
+        $BB_BOX.updateMatrixWorld();
+
+        return this.checkIntersectionObject(
+                    positionBefore, positionAfter, object, boundingBox,
+                    direction, object.geometry.vertices,
+                    $BB_BOX.geometry.vertices, $BB_BOX);
     },
 
     // -------------------------------------------------------
@@ -733,5 +750,59 @@ MapPortion.prototype = {
         }
 
         return false;
-    }
+    },
+
+    // -------------------------------------------------------
+
+    /** Check if there is a collision with sprites at this position.
+    *   @returns {boolean}
+    */
+    checkSpritesCollision: function(jpositionBefore, jpositionAfter,
+                                    positionBefore, positionAfter, object,
+                                    direction)
+    {
+        var sprites = this.boundingBoxesSprites[
+                      RPM.positionToIndex(jpositionAfter)];
+        var i, l, objCollision, positionCollision, boundingBox, collision;
+
+        if (sprites !== null) {
+            for (i = 0, l = sprites.length; i < l; i++) {
+                objCollision = sprites[i];
+                boundingBox = objCollision.b;
+                if (this.checkIntersectionSprite(positionBefore,
+                                                 positionAfter, boundingBox,
+                                                 object, direction))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    },
+
+    // -------------------------------------------------------
+
+    /** Check intersection between ray and an object.
+    *   @returns {boolean}
+    */
+    checkIntersectionSprite: function(positionBefore, positionAfter,
+                                      boundingBox, object, direction)
+    {
+        if (boundingBox === null)
+            return false;
+
+        // Apply geometry transforms to bounding box
+        $BB_BOX.position.set(boundingBox[0], boundingBox[1], boundingBox[2]);
+        $BB_BOX.geometry.scale(boundingBox[3] / $BB_BOX.previousScale[0],
+                               boundingBox[4] / $BB_BOX.previousScale[1],
+                               1 / $BB_BOX.previousScale[2]);
+        $BB_BOX.previousScale = [boundingBox[3], boundingBox[4], 1];
+        $BB_BOX.updateMatrixWorld();
+
+        return this.checkIntersectionObject(
+                    positionBefore, positionAfter, object, boundingBox,
+                    direction, object.geometry.vertices,
+                    $BB_BOX.geometry.vertices, $BB_BOX);
+    },
 }

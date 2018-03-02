@@ -132,6 +132,8 @@ Sprite.prototype = {
             vecD.add(localPosition);
             center.add(localPosition);
         }
+        else
+            localPosition = RPM.positionToVector3(position);
 
         // Getting UV coordinates
         x = (this.textureRect[0] * $SQUARE_SIZE) / width;
@@ -168,9 +170,15 @@ Sprite.prototype = {
                 rect = collisions[i];
                 objCollision.push({
                     "p": position,
-                    "r": rect,
-                    "w": Math.floor(width / ($SQUARE_SIZE * 2)),
-                    "h": Math.floor(height / ($SQUARE_SIZE * 2)),
+                    "b": [
+                        localPosition.x + rect[0],
+                        localPosition.y + rect[1] + rect[3] / 2,
+                        localPosition.z,
+                        rect[2] + 2,
+                        rect[3] + 2
+                    ],
+                    "w": Math.floor(rect[2] / ($SQUARE_SIZE * 2)),
+                    "h": Math.floor(rect[3] / ($SQUARE_SIZE * 2)),
                     "k": this.kind === ElementMapKind.SpritesFix
                 });
             }
