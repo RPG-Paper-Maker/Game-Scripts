@@ -142,10 +142,10 @@ CollisionSquare.prototype = {
                 this.rect = null;
             else {
                 this.rect = [
-                    Math.floor(rect[0] * $SQUARE_SIZE / 100),
-                    Math.floor(rect[1] * $SQUARE_SIZE / 100),
-                    Math.floor(rect[2] * $SQUARE_SIZE / 100),
-                    Math.floor(rect[3] * $SQUARE_SIZE / 100)
+                    Math.round(rect[0] * $SQUARE_SIZE / 100),
+                    Math.round(rect[1] * $SQUARE_SIZE / 100),
+                    Math.round(rect[2] * $SQUARE_SIZE / 100),
+                    Math.round(rect[3] * $SQUARE_SIZE / 100)
                 ];
             }
         }

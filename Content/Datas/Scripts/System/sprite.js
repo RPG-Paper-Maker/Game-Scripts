@@ -117,7 +117,7 @@ Sprite.prototype = {
             center = new THREE.Vector3(),
             size = new THREE.Vector3(this.textureRect[2] * $SQUARE_SIZE,
                                      this.textureRect[3] * $SQUARE_SIZE, 1.0);
-        var x, y, w, h, i, l, coefX, coefY;
+        var x, y, w, h, i, l, coefX, coefY, rect;
         var texFaceA, texFaceB;
 
         // For static sprites
@@ -132,8 +132,12 @@ Sprite.prototype = {
             vecD.add(localPosition);
             center.add(localPosition);
         }
-        else
-            localPosition = RPM.positionToVector3(position);
+        else {
+            if (tileset)
+                localPosition = RPM.positionToVector3(position);
+            else
+                localPosition = new THREE.Vector3();
+        }
 
         // Getting UV coordinates
         x = (this.textureRect[0] * $SQUARE_SIZE) / width;
@@ -161,21 +165,19 @@ Sprite.prototype = {
 
         // Collision
         var objCollision = [];
+        w = Math.floor(this.textureRect[2] / 2);
+        h = Math.floor(this.textureRect[3] / 2);
         if (tileset) {
             var collisions = $currentMap.mapInfos.tileset.getSquaresForTexture(
                         this.textureRect);
-            w = Math.floor(this.textureRect[2] / 2);
-            h = Math.floor(this.textureRect[3] / 2);
-            var rect;
             l = collisions.length;
             for (i = 0; i < l; i++) {
                 rect = collisions[i];
                 objCollision.push({
                     p: position,
                     b: [
-                        localPosition.x - Math.floor((this.textureRect[2] *
-                            $SQUARE_SIZE - rect[0]) / 2) +
-                            Math.floor((rect[2] + 2) / 2) + 1,
+                        localPosition.x + (this.textureRect[2] * $SQUARE_SIZE) -
+                            rect[2] - (rect[0] * 2),
                         localPosition.y + Math.floor((this.textureRect[3] *
                             $SQUARE_SIZE - rect[1]) / 2),
                         localPosition.z,
@@ -187,6 +189,24 @@ Sprite.prototype = {
                     k: this.kind === ElementMapKind.SpritesFix
                 });
             }
+        }
+        else {
+            rect = [0, 0, 32, 32];
+            objCollision.push({
+                p: position,
+                b: [
+                    localPosition.x + (this.textureRect[2] * $SQUARE_SIZE) -
+                        rect[2] - (rect[0] * 2),
+                    localPosition.y + Math.floor((this.textureRect[3] *
+                        $SQUARE_SIZE - rect[1]) / 2),
+                    localPosition.z,
+                    rect[2] + 2,
+                    rect[3] + 2
+                ],
+                w: w,
+                h: h,
+                k: this.kind === ElementMapKind.SpritesFix
+            });
         }
 
         // Simple sprite
@@ -250,11 +270,12 @@ Sprite.prototype = {
     */
     createGeometry: function(width, height, tileset, position) {
         var geometry = new THREE.Geometry();
+        var objCollision;
         geometry.faceVertexUvs[0] = [];
-        this.updateGeometry(geometry, width, height, position, 0, tileset,
-                            null);
+        objCollision = this.updateGeometry(geometry, width, height, position, 0,
+                                           tileset, null);
         geometry.uvsNeedUpdate = true;
 
-        return geometry;
+        return [geometry, objCollision];
     }
 }

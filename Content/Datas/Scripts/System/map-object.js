@@ -51,6 +51,7 @@ function MapObject(system, position) {
     this.position = position;
     this.mesh = null;
     this.meshBoundingBox = null;
+    this.boundingBoxSettings = null;
     this.speed = 1.0;
     this.frame = 0;
     this.orientationEye = Orientation.South;
@@ -191,19 +192,26 @@ MapObject.prototype = {
             this.height = material.map.image.height / $SQUARE_SIZE / $FRAMES;
             var sprite = new Sprite(this.currentState.graphicKind,
                                     [0, 0, this.width, this.height]);
-            var geometry = sprite.createGeometry(this.width, this.height, false,
-                                                 this.position);
+            var geometry, objCollision, result, boundingBox;
+            result = sprite.createGeometry(this.width, this.height, false,
+                                           this.position);
+            geometry = result[0];
+            objCollision = result[1];
             this.mesh = new THREE.Mesh(geometry, material);
             this.mesh.position.set(this.position.x,
                                    this.position.y,
                                    this.position.z);
-            this.meshBoundingBox = new THREE.Mesh(this.mesh.geometry.clone(),
-                                                  $INVISIBLE_MATERIAL);
+            this.meshBoundingBox = MapPortion.createCylinder();
+            boundingBox = objCollision[1][0].b;
+            MapPortion.applyCylinderTransforms(this.meshBoundingBox,
+                                               boundingBox);
+            this.boundingBoxSettings = boundingBox;
             this.updateUVs();
         }
         else {
             this.mesh = null;
             this.meshBoundingBox = null;
+            this.boundingBoxSettings = null;
         }
 
         // Add to the scene
@@ -282,14 +290,30 @@ MapObject.prototype = {
         }
 
         // Collision
-        if (MapPortion.checkCollisionRay(this.position, position,
-                                         this.meshBoundingBox))
+        if (this.meshBoundingBox !== null &&
+            MapPortion.checkCollisionRay(this.position, position, this))
         {
             position = this.position;
         }
 
         return position;
     },
+
+    // -------------------------------------------------------
+
+    /** Only updates the bounding box mesh position.
+    *   @param {THREE.Vector3} position Position to update.
+    */
+    updateBBPosition: function(position) {
+        if (this.meshBoundingBox !== null) {
+            this.meshBoundingBox.position.set(
+                     position.x + this.boundingBoxSettings[0],
+                     position.y + this.boundingBoxSettings[1],
+                     position.z + this.boundingBoxSettings[2]);
+        }
+    },
+
+    // -------------------------------------------------------
 
     /** Move the object (one step).
     *   @param {Orientation} orientation Where to move.
@@ -484,8 +508,7 @@ MapObject.prototype = {
                 this.mesh.position.set(this.position.x,
                                        this.position.y + offset,
                                        this.position.z);
-                this.meshBoundingBox.position.set(
-                         this.position.x, this.position.y, this.position.z);
+                this.updateBBPosition(this.position);
                 this.moving = false;
             }
             else {
@@ -557,8 +580,6 @@ MapObject.prototype = {
         if (this.currentState.graphicKind !== ElementMapKind.None){
             this.mesh.material =
                  $currentMap.texturesCharacters[this.currentState.graphicID];
-            this.meshBoundingBox.material =
-                 new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
         }
         else{
             this.mesh = null;
