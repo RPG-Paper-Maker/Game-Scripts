@@ -175,14 +175,15 @@ Sprite.prototype = {
                 rect = collisions[i];
                 objCollision.push({
                     p: position,
+                    l: localPosition,
                     b: [
                         localPosition.x + (this.textureRect[2] * $SQUARE_SIZE) -
                             rect[2] - (rect[0] * 2),
                         localPosition.y + Math.floor((this.textureRect[3] *
                             $SQUARE_SIZE - rect[1]) / 2),
                         localPosition.z,
-                        rect[2] + 2,
-                        rect[3] + 2
+                        rect[2],
+                        rect[3]
                     ],
                     w: w,
                     h: h,
@@ -191,17 +192,18 @@ Sprite.prototype = {
             }
         }
         else {
-            rect = [0, 0, 32, 32];
+            rect = [9, 0, 14, 32];
             objCollision.push({
                 p: position,
+                l: localPosition,
                 b: [
                     localPosition.x + (this.textureRect[2] * $SQUARE_SIZE) -
                         rect[2] - (rect[0] * 2),
                     localPosition.y + Math.floor((this.textureRect[3] *
                         $SQUARE_SIZE - rect[1]) / 2),
                     localPosition.z,
-                    rect[2] + 2,
-                    rect[3] + 2
+                    rect[2],
+                    rect[3]
                 ],
                 w: w,
                 h: h,

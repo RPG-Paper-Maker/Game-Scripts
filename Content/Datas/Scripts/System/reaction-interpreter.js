@@ -69,10 +69,7 @@ ReactionInterpreter.prototype = {
     *   @returns {boolean}
     */
     isFinished: function(){
-        if (this.currentCommand === null)
-            return true;
-
-        return false;
+        return (this.currentCommand === null)
     },
 
     // -------------------------------------------------------
@@ -83,8 +80,9 @@ ReactionInterpreter.prototype = {
         var directNode = true;
 
         while (directNode){
+            if (this.isFinished())
+                return;
 
-            // Parallel command
             if (this.currentCommand.data.parallel){
                 var interpreter = new ReactionInterpreter(this.currentSender,
                                                           this.currentReaction,
@@ -92,7 +90,7 @@ ReactionInterpreter.prototype = {
                                                           this.currentState,
                                                           this.currentCommand);
                 interpreter.currentCommandState.parallel = true;
-                $currentMap.parallelCommands.push(interpreter);
+                $currentMap.parallelCommands.unshift(interpreter);
             }
 
             var new_command = this.updateCommand();

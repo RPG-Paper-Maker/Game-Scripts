@@ -100,23 +100,35 @@ Land.prototype = {
             var rect = collision.rect;
 
             if (!collision.hasAllDirections()) {
+                if (rect === null) {
+                    rect = [
+                        a  + $SQUARE_SIZE / 2,
+                        b + 0.5,
+                        c + $SQUARE_SIZE / 2,
+                        $SQUARE_SIZE,
+                        $SQUARE_SIZE
+                    ]
+                }
+
                 objCollision = {
-                    "p": position,
-                    "b": null,
-                    "c": collision
+                    p: position,
+                    l: localPosition,
+                    b: rect,
+                    c: collision
                 }
             }
-            if (rect !== null) {
+            else if (rect !== null) {
                 objCollision = {
-                    "p": position,
-                    "b": [
+                    p: position,
+                    l: localPosition,
+                    b: [
                         a + rect[0] + $SQUARE_SIZE / 2,
                         b + 0.5,
                         c + rect[1] + $SQUARE_SIZE / 2,
-                        rect[2] + 2,
-                        rect[3] + 2
+                        rect[2],
+                        rect[3]
                     ],
-                    "c": null
+                    c: null
                 }
             }
         }

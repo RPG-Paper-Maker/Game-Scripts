@@ -192,7 +192,7 @@ MapObject.prototype = {
             this.height = material.map.image.height / $SQUARE_SIZE / $FRAMES;
             var sprite = new Sprite(this.currentState.graphicKind,
                                     [0, 0, this.width, this.height]);
-            var geometry, objCollision, result, boundingBox;
+            var geometry, objCollision, result, collisions;
             result = sprite.createGeometry(this.width, this.height, false,
                                            this.position);
             geometry = result[0];
@@ -202,10 +202,10 @@ MapObject.prototype = {
                                    this.position.y,
                                    this.position.z);
             this.meshBoundingBox = MapPortion.createCylinder();
-            boundingBox = objCollision[1][0].b;
+            collisions = objCollision[1][0];
             MapPortion.applyCylinderTransforms(this.meshBoundingBox,
-                                               boundingBox);
-            this.boundingBoxSettings = boundingBox;
+                                               collisions.b);
+            this.boundingBoxSettings = collisions;
             this.updateUVs();
         }
         else {
@@ -307,9 +307,9 @@ MapObject.prototype = {
     updateBBPosition: function(position) {
         if (this.meshBoundingBox !== null) {
             this.meshBoundingBox.position.set(
-                     position.x + this.boundingBoxSettings[0],
-                     position.y + this.boundingBoxSettings[1],
-                     position.z + this.boundingBoxSettings[2]);
+                     position.x + this.boundingBoxSettings.b[0],
+                     position.y + this.boundingBoxSettings.b[1],
+                     position.z + this.boundingBoxSettings.b[2]);
         }
     },
 
