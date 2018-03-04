@@ -89,17 +89,6 @@ MapPortion.checkCollisionRay = function(positionBefore, positionAfter, object) {
     var i, j, k;
     var startI, endI, startJ, endJ, startK, endK;
     var positionAfterPlus = new THREE.Vector3();
-    object.updateBBPosition(positionAfter);
-    object.meshBoundingBox.updateMatrixWorld();
-    var objectBB = new THREE.Sphere(
-                new THREE.Vector3(
-                    object.meshBoundingBox.position.x,
-                    object.meshBoundingBox.position.y -
-                        Math.floor(object.boundingBoxSettings.b[4] / 2),
-                    object.meshBoundingBox.position.z),
-                Math.floor(object.boundingBoxSettings.b[3] / 2));
-    object.updateBBPosition(positionBefore);
-    object.meshBoundingBox.updateMatrixWorld();
     var testedCollisions = new Array;
 
     // Squares to inspect according to the direction of the object
@@ -153,8 +142,7 @@ MapPortion.checkCollisionRay = function(positionBefore, positionAfter, object) {
                                               ],
                                               positionBefore,
                                               positionAfter, object,
-                                              direction, objectBB,
-                                              testedCollisions))
+                                              direction, testedCollisions))
                 {
                     return true;
                 }
@@ -172,26 +160,78 @@ MapPortion.checkCollisionRay = function(positionBefore, positionAfter, object) {
 
 // -------------------------------------------------------
 
-MapPortion.applyBoxTransforms = function(box, boundingBox) {
-    box.position.set(boundingBox[0], boundingBox[1], boundingBox[2]);
-    box.geometry.scale(boundingBox[3] / box.previousScale[0],
-                       boundingBox[4] / box.previousScale[1],
+MapPortion.applyBoxLandTransforms = function(box, boundingBox) {
+
+    // Cancel previous geometry transforms
+    box.geometry.translate(-box.previousTranslate[0],
+                           -box.previousTranslate[1],
+                           -box.previousTranslate[2]);
+    box.geometry.scale(1 / box.previousScale[0],
+                       1 / box.previousScale[1],
                        1 / box.previousScale[2]);
-    box.previousScale = [boundingBox[3], boundingBox[4], 1];
+
+    // Update to the new ones
+    box.geometry.scale(boundingBox[3], 1, boundingBox[4]);
+    box.geometry.translate(boundingBox[0], boundingBox[1], boundingBox[2]);
+
+    // Register previous transforms to current
+    box.previousTranslate = [boundingBox[0], boundingBox[1], boundingBox[2]];
+    box.previousScale = [boundingBox[3], 1, boundingBox[4]];
+
+    // Update geometry now
     box.updateMatrixWorld();
 }
 
 // -------------------------------------------------------
 
-MapPortion.applyCylinderTransforms = function(cylinder, boundingBox) {
+MapPortion.applyBoxSpriteTransforms = function(box, boundingBox) {
+
+    // Cancel previous geometry transforms
+    box.geometry.translate(-box.previousTranslate[0],
+                           -box.previousTranslate[1],
+                           -box.previousTranslate[2]);
+    box.geometry.scale(1 / box.previousScale[0],
+                       1 / box.previousScale[1],
+                       1 / box.previousScale[2]);
+
+    // Update to the new ones
+    box.geometry.scale(boundingBox[3], boundingBox[4], 1);
+    box.geometry.translate(boundingBox[0], boundingBox[1], boundingBox[2]);
+
+    // Register previous transforms to current
+    box.previousTranslate = [boundingBox[0], boundingBox[1], boundingBox[2]];
+    box.previousScale = [boundingBox[3], boundingBox[4], 1];
+
+    // Update geometry now
+    box.updateMatrixWorld();
+}
+
+// -------------------------------------------------------
+
+MapPortion.applyOrientedBoxTransforms = function(box, boundingBox) {
     var size = Math.floor(boundingBox[3] / Math.sqrt(2));
-    cylinder.position.set(boundingBox[0], boundingBox[1],
-                         boundingBox[2]);
-    cylinder.geometry.scale(size / cylinder.previousScale[0],
-                           boundingBox[4] / cylinder.previousScale[1],
-                           size / cylinder.previousScale[2]);
-    cylinder.previousScale = [size, boundingBox[4], size];
-    cylinder.updateMatrixWorld();
+
+    // Cancel previous geometry transforms
+    box.geometry.translate(-box.previousTranslate[0],
+                           -box.previousTranslate[1],
+                           -box.previousTranslate[2]);
+
+    box.geometry.rotateY(-Math.PI / 4);
+    box.geometry.scale(1 / box.previousScale[0],
+                       1 / box.previousScale[1],
+                       1 / box.previousScale[2]);
+
+    // Update to the new ones
+    box.geometry.scale(size, boundingBox[4], size);
+    box.geometry.rotateY(Math.PI / 4);
+    box.geometry.translate(boundingBox[0], boundingBox[1], boundingBox[2]);
+
+    // Register previous transforms to current
+    box.previousTranslate = [boundingBox[0], boundingBox[1], boundingBox[2]];
+    box.previousScale = [size, boundingBox[4], size];
+
+    // Update geometry now
+    box.updateMatrixWorld();
 }
 
 // -------------------------------------------------------
@@ -199,6 +239,7 @@ MapPortion.applyCylinderTransforms = function(cylinder, boundingBox) {
 MapPortion.createBox = function() {
     var box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1),
                              $INVISIBLE_MATERIAL);
+    box.previousTranslate = [0, 0, 0];
     box.previousScale = [1, 1, 1];
 
     return box;
@@ -206,13 +247,14 @@ MapPortion.createBox = function() {
 
 // -------------------------------------------------------
 
-MapPortion.createCylinder = function() {
-    var cylinder = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1),
-                                  $INVISIBLE_MATERIAL);
-    cylinder.previousScale = [1, 1, 1];
-    cylinder.geometry.rotateY(Math.PI / 4);
+MapPortion.createOrientedBox = function() {
+    var box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1),
+                             $INVISIBLE_MATERIAL);
+    box.previousTranslate = [0, 0, 0];
+    box.previousScale = [1, 1, 1];
+    box.geometry.rotateY(Math.PI / 4);
 
-    return cylinder;
+    return box;
 }
 
 // -------------------------------------------------------
@@ -652,14 +694,13 @@ MapPortion.prototype = {
     *   @returns {boolean}
     */
     checkCollision: function(jpositionBefore, jpositionAfter, positionBefore,
-                             positionAfter, object, direction, objectBB,
-                             testedCollisions)
+                             positionAfter, object, direction, testedCollisions)
     {
         if (this.checkLandsCollision(jpositionBefore, jpositionAfter,
                                      positionBefore, positionAfter, object,
-                                     direction, objectBB, testedCollisions) ||
-            this.checkSpritesCollision(jpositionAfter, objectBB,
-                                       testedCollisions))
+                                     direction, testedCollisions) ||
+            this.checkSpritesCollision(jpositionAfter, testedCollisions,
+                                       object))
         {
             return true;
         }
@@ -674,7 +715,7 @@ MapPortion.prototype = {
     */
     checkLandsCollision: function(jpositionBefore, jpositionAfter,
                                   positionBefore, positionAfter, object,
-                                  direction, objectBB, testedCollisions)
+                                  direction, testedCollisions)
     {
         var lands = this.boundingBoxesLands[
                     RPM.positionToIndex(jpositionAfter)];
@@ -689,10 +730,10 @@ MapPortion.prototype = {
                     collision = objCollision.c;
 
                     if (this.checkIntersectionLand(collision, boundingBox,
-                                                   objectBB) ||
+                                                   object) ||
                         this.checkDirections(jpositionBefore, jpositionAfter,
                                              collision, boundingBox, direction,
-                                             objectBB))
+                                             object))
                     {
                         return true;
                     }
@@ -736,28 +777,14 @@ MapPortion.prototype = {
     /** Check intersection between ray and an object.
     *   @returns {boolean}
     */
-    checkIntersectionObject: function(box, objectBB) {
-        return objectBB.intersectsBox(new THREE.Box3().setFromObject(box));
-    },
-
-    // -------------------------------------------------------
-
-    /** Check intersection between ray and an object.
-    *   @returns {boolean}
-    */
-    checkIntersectionLand: function(collision, boundingBox, objectBB) {
+    checkIntersectionLand: function(collision, boundingBox, object) {
         if (collision !== null)
             return false;
 
-        // Apply geometry transforms to bounding box
-        $BB_BOX.position.set(boundingBox[0], boundingBox[1], boundingBox[2]);
-        $BB_BOX.geometry.scale(boundingBox[3] / $BB_BOX.previousScale[0],
-                               1 / $BB_BOX.previousScale[1],
-                               boundingBox[4] / $BB_BOX.previousScale[2]);
-        $BB_BOX.previousScale = [boundingBox[3], 1, boundingBox[4]];
-        $BB_BOX.updateMatrixWorld();
+        MapPortion.applyBoxLandTransforms($BB_BOX, boundingBox);
 
-        return this.checkIntersectionObject($BB_BOX, objectBB);
+        return CollisionsUtilities.obbVSobb(object.meshBoundingBox.geometry,
+                                            $BB_BOX.geometry);
     },
 
     // -------------------------------------------------------
@@ -766,7 +793,7 @@ MapPortion.prototype = {
     *   @returns {boolean}
     */
     checkDirections: function(jpositionBefore, jpositionAfter, collision,
-                              boundingBox, direction, objectBB)
+                              boundingBox, direction, object)
     {
         if (collision === null)
             return false;
@@ -775,7 +802,7 @@ MapPortion.prototype = {
             jpositionBefore[1] !== jpositionAfter[1] ||
             jpositionBefore[2] !== jpositionAfter[2])
         {
-            if (this.checkIntersectionLand(null, boundingBox, objectBB)) {
+            if (this.checkIntersectionLand(null, boundingBox, object)) {
                 if (direction.x > 0)
                     return !collision.left;
                 if (direction.x < 0)
@@ -823,7 +850,7 @@ MapPortion.prototype = {
     /** Check if there is a collision with sprites at this position.
     *   @returns {boolean}
     */
-    checkSpritesCollision: function(jpositionAfter, objectBB, testedCollisions)
+    checkSpritesCollision: function(jpositionAfter, testedCollisions, object)
     {
         var sprites = this.boundingBoxesSprites[
                       RPM.positionToIndex(jpositionAfter)];
@@ -836,7 +863,7 @@ MapPortion.prototype = {
                     testedCollisions.push(objCollision);
 
                     if (this.checkIntersectionSprite(objCollision.b,
-                                                     objCollision.k, objectBB))
+                                                     objCollision.k, object))
                     {
                         return true;
                     }
@@ -852,29 +879,19 @@ MapPortion.prototype = {
     /** Check intersection between ray and an object.
     *   @returns {boolean}
     */
-    checkIntersectionSprite: function(boundingBox, fix, objectBB) {
+    checkIntersectionSprite: function(boundingBox, fix, object) {
         if (boundingBox === null)
             return false;
 
-        // Apply geometry transforms to bounding box
         if (fix) {
-            $BB_BOX.position.set(boundingBox[0], boundingBox[1],
-                                 boundingBox[2]);
-            $BB_BOX.geometry.scale(boundingBox[3] / $BB_BOX.previousScale[0],
-                                   boundingBox[4] / $BB_BOX.previousScale[1],
-                                   1 / $BB_BOX.previousScale[2]);
-            $BB_BOX.previousScale = [boundingBox[3], boundingBox[4], 1];
-            $BB_BOX.updateMatrixWorld();
-
-            return this.checkIntersectionObject($BB_BOX, objectBB);
+            MapPortion.applyBoxSpriteTransforms($BB_BOX, boundingBox);
+            return CollisionsUtilities.obbVSobb(object.meshBoundingBox.geometry,
+                                                $BB_BOX.geometry);
         }
         else {
-            return objectBB.intersectsSphere(
-                        new THREE.Sphere(new THREE.Vector3(
-                            boundingBox[0],
-                            boundingBox[1] - Math.floor(boundingBox[4] / 2),
-                            boundingBox[2]),
-                        Math.floor(boundingBox[3] / 2)));
+            MapPortion.applyOrientedBoxTransforms($BB_ORIENTED_BOX, boundingBox);
+            return CollisionsUtilities.obbVSobb(object.meshBoundingBox.geometry,
+                                                $BB_ORIENTED_BOX.geometry);
         }
     },
 }

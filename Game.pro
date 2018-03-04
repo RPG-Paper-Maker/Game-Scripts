@@ -113,7 +113,8 @@ DISTFILES += \
     Content/Datas/Scripts/System/texture-autotile.js \
     Content/Datas/Scripts/System/autotiles.js \
     Content/Datas/Scripts/System/autotile.js \
-    Content/Datas/Scripts/System/collision-square.js
+    Content/Datas/Scripts/System/collision-square.js \
+    Content/Datas/Scripts/System/collisions-utilities.js
 
 RESOURCES += \
     qml.qrc

@@ -201,9 +201,9 @@ MapObject.prototype = {
             this.mesh.position.set(this.position.x,
                                    this.position.y,
                                    this.position.z);
-            this.meshBoundingBox = MapPortion.createCylinder();
+            this.meshBoundingBox = MapPortion.createOrientedBox();
             collisions = objCollision[1][0];
-            MapPortion.applyCylinderTransforms(this.meshBoundingBox,
+            MapPortion.applyOrientedBoxTransforms(this.meshBoundingBox,
                                                collisions.b);
             this.boundingBoxSettings = collisions;
             this.updateUVs();
@@ -290,11 +290,15 @@ MapObject.prototype = {
         }
 
         // Collision
+        this.updateBBPosition(position);
+        this.meshBoundingBox.updateMatrixWorld();
         if (this.meshBoundingBox !== null &&
             MapPortion.checkCollisionRay(this.position, position, this))
         {
             position = this.position;
         }
+        this.updateBBPosition(this.position);
+        this.meshBoundingBox.updateMatrixWorld();
 
         return position;
     },
@@ -306,10 +310,14 @@ MapObject.prototype = {
     */
     updateBBPosition: function(position) {
         if (this.meshBoundingBox !== null) {
-            this.meshBoundingBox.position.set(
-                     position.x + this.boundingBoxSettings.b[0],
-                     position.y + this.boundingBoxSettings.b[1],
-                     position.z + this.boundingBoxSettings.b[2]);
+            MapPortion.applyOrientedBoxTransforms(
+                this.meshBoundingBox, [
+                    position.x + this.boundingBoxSettings.b[0],
+                    position.y + this.boundingBoxSettings.b[1],
+                    position.z + this.boundingBoxSettings.b[2],
+                    this.boundingBoxSettings.b[3],
+                    this.boundingBoxSettings.b[4],
+                ]);
         }
     },
 

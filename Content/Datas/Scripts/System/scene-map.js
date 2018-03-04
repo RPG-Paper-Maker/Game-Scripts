@@ -52,7 +52,7 @@ function SceneMap(id){
 
     // Adding meshes for collision
     this.scene.add($BB_BOX);
-    this.scene.add($BB_CYLINDER);
+    this.scene.add($BB_ORIENTED_BOX);
 
     this.callBackAfterLoading = this.loadTextures;
 }
