@@ -46,7 +46,6 @@ SystemTileset.prototype = {
     readJSON: function(json){
         var i, l;
         var jsonAutotiles = json.auto, jsonWalls = json.walls;
-        var jsonCollisions = json.collisions;
 
         this.picture = $datasGame.pictures.list[PictureKind.Tilesets][json.pic];
 
@@ -59,9 +58,6 @@ SystemTileset.prototype = {
         this.walls = new Array(l);
         for (i = 0; i < l; i++)
             this.walls[i] = jsonWalls[i].id;
-
-        // Collisions
-        this.jsonCollisions = json.collisions;
     },
 
     // -------------------------------------------------------
@@ -71,73 +67,5 @@ SystemTileset.prototype = {
     */
     getPath: function(){
         return this.picture.getPath(PictureKind.Tilesets);
-    },
-
-    // -------------------------------------------------------
-
-    /** Read collisions according to image size.
-    */
-    readCollisions: function(image){
-        var i, j, l, w, h, index, collision;
-        var jsonTab, jsonKey, jsonVal;
-        this.width = Math.floor(image.width / $SQUARE_SIZE);
-        this.height = Math.floor(image.height / $SQUARE_SIZE);
-
-        // Initialize
-        this.collisions = new Array(this.width * this.height);
-        for (i = 0; i < this.width * this.height; i++)
-            this.collisions[i] = null;
-
-        // Insert collision
-        for (i = 0, l = this.jsonCollisions.length; i < l ; i++) {
-            jsonTab = this.jsonCollisions[i];
-            jsonKey = jsonTab.k;
-            jsonVal = jsonTab.v;
-            index = jsonKey[0] + (jsonKey[1] * this.width);
-            collision = new CollisionSquare;
-            collision.readJSON(jsonVal);
-            this.collisions[index] = collision;
-        }
-
-        this.jsonCollisions = null;
-    },
-
-    // -------------------------------------------------------
-
-    /** Get a specific collision square according to texture.
-    */
-    getCollisionAt: function(texture) {
-        return this.getCollisionAtPos(texture[0], texture[1]);
-    },
-
-    // -------------------------------------------------------
-
-    /** Get a specific collision square according to texture.
-    */
-    getCollisionAtPos: function(x, y) {
-        return this.collisions[x + y * this.width];
-    },
-
-    // -------------------------------------------------------
-
-    /** Get a specific collision square according to texture.
-    */
-    getSquaresForTexture: function(texture) {
-        var i, l, w = texture[2], h = texture[3];
-        var square;
-        l = w * h;
-        var squares = new Array(l);
-        for (i = 0; i < l; i++) {
-            var a = texture[0] + (i % w);
-            var b = texture[1] + (i / w);
-            square = this.getCollisionAtPos(texture[0] + (i % w),
-                                            texture[1] + Math.floor(i / w));
-            if (square === null)
-                squares[i] = null;
-            else
-                squares[i] = square.rect;
-        }
-
-        return CollisionSquare.unionSquares(squares, l, w, h);
-    },
+    }
 }

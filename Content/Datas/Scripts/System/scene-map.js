@@ -610,7 +610,8 @@ SceneMap.prototype = {
     // -------------------------------------------------------
 
     loadCollisions: function() {
-        this.mapInfos.tileset.readCollisions(this.textureTileset.map.image);
+        this.mapInfos.tileset.picture.readCollisions(
+                 this.textureTileset.map.image);
 
         this.callBackAfterLoading = this.initializeObjects();
     },

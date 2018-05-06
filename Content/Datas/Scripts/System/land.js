@@ -94,7 +94,7 @@ Land.prototype = {
         ]);
 
         // Collision
-        var collision = $currentMap.mapInfos.tileset.getCollisionAt(
+        var collision = $currentMap.mapInfos.tileset.picture.getCollisionAt(
                     this.texture);
         if (collision !== null) {
             var rect = collision.rect;

@@ -154,7 +154,8 @@ MapPortion.checkCollisionRay = function(positionBefore, positionAfter, object) {
     portion = $currentMap.getLocalPortion(RPM.getPortion(positionAfter));
     mapPortion = $currentMap.getMapPortionByPortion(portion);
 
-    return mapPortion.checkLandsCollisionInside(jpositionBefore, jpositionAfter,
+    return mapPortion === null ? true :
+           mapPortion.checkLandsCollisionInside(jpositionBefore, jpositionAfter,
                                                 direction);
 }
 
@@ -290,7 +291,7 @@ MapPortion.prototype = {
     */
     readFloors: function(json){
         var jsonFloor, floor, collision, objCollision, position, boundingBox;
-        var tilesetCollisions = $currentMap.mapInfos.tileset.collisions;
+        var tilesetCollisions = $currentMap.mapInfos.tileset.picture.collisions;
         var material = $currentMap.textureTileset;
         var width = material.map.image.width;
         var height = material.map.image.height;
