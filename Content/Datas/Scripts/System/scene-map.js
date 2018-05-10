@@ -49,6 +49,7 @@ function SceneMap(id){
     this.orientation = this.camera.getMapOrientation();
     this.readMapInfos();
     this.currentPortion = RPM.getPortion($game.hero.position);
+    this.collisions = new Array;
 
     // Adding meshes for collision
     this.scene.add($BB_BOX);
@@ -610,8 +611,21 @@ SceneMap.prototype = {
     // -------------------------------------------------------
 
     loadCollisions: function() {
+        var i, j, l;
+
+        // Tileset
         this.mapInfos.tileset.picture.readCollisions(
                  this.textureTileset.map.image);
+
+        // Characters
+        var pictures = $datasGame.pictures.list[PictureKind.Characters];
+        l = pictures.length;
+        this.collisions[PictureKind.Characters] = new Array(l);
+        for (i = 1; i < l; i++){
+            pictures[i].readCollisions(this.texturesCharacters[i].map.image);
+            this.collisions[PictureKind.Characters][i] = pictures[i]
+                  .getSquaresForStates(this.texturesCharacters[i].map.image);
+        }
 
         this.callBackAfterLoading = this.initializeObjects();
     },

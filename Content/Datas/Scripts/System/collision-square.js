@@ -130,7 +130,7 @@ CollisionSquare.prototype = {
     /** Read the JSON associated to the collision square.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json){
+    readJSON: function(json) {
         var rect = json.rec;
         var left = json.l;
         var right = json.r;
@@ -159,7 +159,24 @@ CollisionSquare.prototype = {
             this.bot = bot;
     },
 
-    hasAllDirections: function(){
+    // -------------------------------------------------------
+
+    hasAllDirections: function() {
         return this.left && this.right && this.top && this.bot;
+    },
+
+    // -------------------------------------------------------
+
+    copyWithOffset: function(x, y) {
+        var copy = new CollisionSquare();
+        copy.rect = [this.rect[0] + (x * $SQUARE_SIZE),
+                     this.rect[1] + (y * $SQUARE_SIZE),
+                     this.rect[2], this.rect[3]];
+        copy.left = this.left;
+        copy.right = this.right;
+        copy.top = this.top;
+        copy.bot = this.bot;
+
+        return copy;
     }
 }

@@ -189,12 +189,14 @@ MapObject.prototype = {
                                 $currentMap.camera.getMapOrientation() - 2, 4);
             this.updateOrientation();
             this.width = material.map.image.width / $SQUARE_SIZE / $FRAMES;
-            this.height = material.map.image.height / $SQUARE_SIZE / $FRAMES;
+            this.height = material.map.image.height / $SQUARE_SIZE / 4;
             var sprite = new Sprite(this.currentState.graphicKind,
                                     [0, 0, this.width, this.height]);
             var geometry, objCollision, result, collisions;
-            result = sprite.createGeometry(this.width, this.height, false,
-                                           this.position);
+            result = sprite.createGeometry(
+                        this.width, this.height, false,
+                        $datasGame.pictures.list[PictureKind.Characters]
+                        [this.currentState.graphicID], this.position);
             geometry = result[0];
             objCollision = result[1];
             this.mesh = new THREE.Mesh(geometry, material);
@@ -204,7 +206,7 @@ MapObject.prototype = {
             this.meshBoundingBox = MapPortion.createOrientedBox();
             collisions = objCollision[1][0];
             MapPortion.applyOrientedBoxTransforms(this.meshBoundingBox,
-                                               collisions.b);
+                                                  collisions.b);
             this.boundingBoxSettings = collisions;
             this.updateUVs();
         }

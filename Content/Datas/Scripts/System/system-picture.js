@@ -130,10 +130,12 @@ SystemPicture.prototype = {
     /** Read collisions according to image size.
     */
     readCollisions: function(image) {
-        var i, j, l, w, h, index, collision;
+        var i, j, k, l, w, h, index, collision;
         var jsonTab, jsonKey, jsonVal;
         this.width = Math.floor(image.width / $SQUARE_SIZE);
         this.height = Math.floor(image.height / $SQUARE_SIZE);
+        w = this.width / $FRAMES;
+        h = this.height / 4;
 
         // Initialize
         this.collisions = new Array(this.width * this.height);
@@ -149,6 +151,16 @@ SystemPicture.prototype = {
             collision = new CollisionSquare;
             collision.readJSON(jsonVal);
             this.collisions[index] = collision;
+
+            if (this.collisionsRepeat) {
+                for (j = 0; j < $FRAMES; j++) {
+                    for (k = 0; k < 4; k++) {
+                        this.collisions[(jsonKey[0] + (j * w)) + ((jsonKey[1] +
+                                        (k * h)) * this.width)] =
+                             collision.copyWithOffset(j * w, k * h);
+                    }
+                }
+            }
         }
 
         this.jsonCollisions = null;
@@ -180,8 +192,6 @@ SystemPicture.prototype = {
         l = w * h;
         var squares = new Array(l);
         for (i = 0; i < l; i++) {
-            var a = texture[0] + (i % w);
-            var b = texture[1] + (i / w);
             square = this.getCollisionAtPos(texture[0] + (i % w),
                                             texture[1] + Math.floor(i / w));
             if (square === null)
@@ -191,5 +201,25 @@ SystemPicture.prototype = {
         }
 
         return CollisionSquare.unionSquares(squares, l, w, h);
+    },
+
+    // -------------------------------------------------------
+
+    /** Get a specific collision square according to texture.
+    */
+    getSquaresForStates: function(image) {
+        var w = image.width / $SQUARE_SIZE / $FRAMES;
+        var h = image.height / $SQUARE_SIZE / 4;
+        var states = new Array($FRAMES * 4);
+        var i, j;
+
+        for (i = 0; i < $FRAMES; i++) {
+            for (j = 0; j < 4; j++) {
+                states[i + (j * $FRAMES)] = this.getSquaresForTexture(
+                                                    [i * w, j * h, w, h]);
+            }
+        }
+
+        return states;
     }
 }

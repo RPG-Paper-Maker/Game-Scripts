@@ -400,9 +400,11 @@ MapPortion.prototype = {
             sprite.read(ss);
             localPosition = RPM.positionToVector3(position);
             if (sprite.kind === ElementMapKind.SpritesFace) {
-                result = sprite.createGeometry(material.map.image.width,
-                                               material.map.image.height,
-                                               true, position);
+                result = sprite.createGeometry(
+                            material.map.image.width,
+                            material.map.image.height,
+                            true, $currentMap.mapInfos.tileset.picture,
+                            position);
                 geometry = result[0];
                 collisions = result[1][1];
                 plane = new THREE.Mesh(geometry, material);
@@ -413,9 +415,10 @@ MapPortion.prototype = {
             }
             else {
                 result = sprite.updateGeometry(
-                                staticGeometry, material.map.image.width,
-                                material.map.image.height, position, count,
-                                true, localPosition);
+                            staticGeometry, material.map.image.width,
+                            material.map.image.height, position, count,
+                            true, $currentMap.mapInfos.tileset.picture,
+                            localPosition);
                 count = result[0];
                 collisions = result[1];
             }
@@ -562,26 +565,6 @@ MapPortion.prototype = {
         objects = datas.mout;
         for (i = 0, l = objects.length; i < l; i++)
             objects[i].addToScene();
-    },
-
-    // -------------------------------------------------------
-
-    /** Get the THREE mesh for a sprite.
-    *   @param {number[]} position The position of the mesh.
-    *   @param {Three.material} material The material used for this mesh.
-    *   @param {Sprite} sprite The sprite.
-    */
-    getSpriteMesh: function(position, material, sprite){
-        var localPosition = RPM.positionToVector3(position);
-        var geometry = sprite.createGeometry(material.map.image.width,
-                                             material.map.image.height,
-                                             false, position)[0];
-        var plane = new THREE.Mesh(geometry, material);
-        plane.position.set(localPosition.x,
-                           localPosition.y,
-                           localPosition.z);
-
-        return plane;
     },
 
     // -------------------------------------------------------
