@@ -403,8 +403,7 @@ MapPortion.prototype = {
                 result = sprite.createGeometry(
                             material.map.image.width,
                             material.map.image.height,
-                            true, $currentMap.mapInfos.tileset.picture,
-                            position);
+                            true, position);
                 geometry = result[0];
                 collisions = result[1][1];
                 plane = new THREE.Mesh(geometry, material);
@@ -417,8 +416,7 @@ MapPortion.prototype = {
                 result = sprite.updateGeometry(
                             staticGeometry, material.map.image.width,
                             material.map.image.height, position, count,
-                            true, $currentMap.mapInfos.tileset.picture,
-                            localPosition);
+                            true, localPosition);
                 count = result[0];
                 collisions = result[1];
             }

@@ -156,8 +156,8 @@ SystemPicture.prototype = {
                 for (j = 0; j < $FRAMES; j++) {
                     for (k = 0; k < 4; k++) {
                         this.collisions[(jsonKey[0] + (j * w)) + ((jsonKey[1] +
-                                        (k * h)) * this.width)] =
-                             collision.copyWithOffset(j * w, k * h);
+                        (k * h)) * this.width)] = collision.copyWithOffset(
+                             j * w, k * h);
                     }
                 }
             }
@@ -216,7 +216,7 @@ SystemPicture.prototype = {
         for (i = 0; i < $FRAMES; i++) {
             for (j = 0; j < 4; j++) {
                 states[i + (j * $FRAMES)] = this.getSquaresForTexture(
-                                                    [i * w, j * h, w, h]);
+                    [i * w, j * h, w, h]);
             }
         }
 

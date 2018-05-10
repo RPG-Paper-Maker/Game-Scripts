@@ -192,22 +192,20 @@ MapObject.prototype = {
             this.height = material.map.image.height / $SQUARE_SIZE / 4;
             var sprite = new Sprite(this.currentState.graphicKind,
                                     [0, 0, this.width, this.height]);
-            var geometry, objCollision, result, collisions;
-            result = sprite.createGeometry(
-                        this.width, this.height, false,
-                        $datasGame.pictures.list[PictureKind.Characters]
-                        [this.currentState.graphicID], this.position);
+            var geometry, objCollision, result;
+            result = sprite.createGeometry(this.width, this.height, false,
+                                           this.position);
             geometry = result[0];
             objCollision = result[1];
             this.mesh = new THREE.Mesh(geometry, material);
             this.mesh.position.set(this.position.x,
                                    this.position.y,
                                    this.position.z);
-            this.meshBoundingBox = MapPortion.createOrientedBox();
-            collisions = objCollision[1][0];
-            MapPortion.applyOrientedBoxTransforms(this.meshBoundingBox,
-                                                  collisions.b);
-            this.boundingBoxSettings = collisions;
+            if (this.currentState.graphicKind === ElementMapKind.SpritesFace)
+            this.meshBoundingBox =
+                (this.currentState.graphicKind === ElementMapKind.SpritesFace) ?
+                     MapPortion.createOrientedBox() : MapPortion.createBox();
+            this.boundingBoxSettings = objCollision[1][0];
             this.updateUVs();
         }
         else {
@@ -294,11 +292,21 @@ MapObject.prototype = {
         // Collision
         this.updateBBPosition(position);
         this.meshBoundingBox.updateMatrixWorld();
-        if (this.meshBoundingBox !== null &&
-            MapPortion.checkCollisionRay(this.position, position, this))
-        {
-            position = this.position;
+        if (this.meshBoundingBox !== null) {
+            var collisionSquares = $currentMap.collisions
+                [PictureKind.Characters][this.currentState.graphicID]
+                [this.getStateIndex()];
+            for (var i = 0, l = collisionSquares.length; i < l; i++) {
+                this.boundingBoxSettings.b = CollisionSquare.getBB(
+                    collisionSquares[i], this.width, this.height);
+                this.updateBBPosition(position);
+                if (MapPortion.checkCollisionRay(this.position, position, this))
+                {
+                    position = this.position;
+                }
+            }
         }
+
         this.updateBBPosition(this.position);
         this.meshBoundingBox.updateMatrixWorld();
 
@@ -311,7 +319,9 @@ MapObject.prototype = {
     *   @param {THREE.Vector3} position Position to update.
     */
     updateBBPosition: function(position) {
-        if (this.meshBoundingBox !== null) {
+        if (this.meshBoundingBox !== null &&
+            this.boundingBoxSettings.b !== null)
+        {
             MapPortion.applyOrientedBoxTransforms(
                 this.meshBoundingBox, [
                     position.x + this.boundingBoxSettings.b[0],
@@ -595,5 +605,11 @@ MapObject.prototype = {
             this.mesh = null;
             this.meshBoundingBox = null;
         }
+    },
+
+    // -------------------------------------------------------
+
+    getStateIndex: function() {
+        return this.frame + (this.orientation * this.width);
     }
 }

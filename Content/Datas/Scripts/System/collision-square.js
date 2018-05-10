@@ -37,6 +37,7 @@ function CollisionSquare(){
     this.right = true;
     this.top = true;
     this.bot = true;
+    this.bb = null;
 }
 
 CollisionSquare.unionSquares = function(squares, l, w, h) {
@@ -123,6 +124,13 @@ CollisionSquare.unionSquares = function(squares, l, w, h) {
     }
 
     return result;
+}
+
+CollisionSquare.getBB = function(rect, w, h) {
+    return [
+        (w * $SQUARE_SIZE) - rect[2] - (rect[0] * 2),
+        Math.floor((h * $SQUARE_SIZE - rect[1]) / 2), 0, rect[2], rect[3]
+    ];
 }
 
 CollisionSquare.prototype = {

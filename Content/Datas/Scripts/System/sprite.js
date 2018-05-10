@@ -108,7 +108,7 @@ Sprite.prototype = {
     *   @returns {THREE.Geometry}
     */
     updateGeometry: function(geometry, width, height, position, c, tileset,
-                             picture, localPosition)
+                             localPosition)
     {
         var vecA = new THREE.Vector3(-0.5, 1.0, 0.0),
             vecB = new THREE.Vector3(0.5, 1.0, 0.0),
@@ -164,26 +164,37 @@ Sprite.prototype = {
         ];
 
         // Collision
-        var objCollision = [];
+        var objCollision = new Array;
         w = Math.floor(this.textureRect[2] / 2);
         h = Math.floor(this.textureRect[3] / 2);
 
-        var collisions = picture.getSquaresForTexture(this.textureRect);
-        l = collisions.length;
-        for (i = 0; i < l; i++) {
-            rect = collisions[i];
+        if (tileset) {
+            var collisions = $currentMap.mapInfos.tileset.picture
+                             .getSquaresForTexture(this.textureRect);
+            l = collisions.length;
+            for (i = 0; i < l; i++) {
+                rect = collisions[i];
+                objCollision.push({
+                    p: position,
+                    l: localPosition,
+                    b: [
+                        localPosition.x + (this.textureRect[2] * $SQUARE_SIZE) -
+                            rect[2] - (rect[0] * 2),
+                        localPosition.y + Math.floor((this.textureRect[3] *
+                            $SQUARE_SIZE - rect[1]) / 2),
+                        localPosition.z,
+                        rect[2],
+                        rect[3]
+                    ],
+                    w: w,
+                    h: h,
+                    k: this.kind === ElementMapKind.SpritesFix
+                });
+            }
+        }
+        else {
             objCollision.push({
-                p: position,
-                l: localPosition,
-                b: [
-                    localPosition.x + (this.textureRect[2] * $SQUARE_SIZE) -
-                        rect[2] - (rect[0] * 2),
-                    localPosition.y + Math.floor((this.textureRect[3] *
-                        $SQUARE_SIZE - rect[1]) / 2),
-                    localPosition.z,
-                    rect[2],
-                    rect[3]
-                ],
+                b: null,
                 w: w,
                 h: h,
                 k: this.kind === ElementMapKind.SpritesFix
@@ -249,12 +260,12 @@ Sprite.prototype = {
     *   @param {number[]} position The position of the sprite.
     *   @returns {THREE.Geometry}
     */
-    createGeometry: function(width, height, tileset, picture, position) {
+    createGeometry: function(width, height, tileset, position) {
         var geometry = new THREE.Geometry();
         var objCollision;
         geometry.faceVertexUvs[0] = [];
         objCollision = this.updateGeometry(geometry, width, height, position, 0,
-                                           tileset, picture, null);
+                                           tileset, null);
         geometry.uvsNeedUpdate = true;
 
         return [geometry, objCollision];
