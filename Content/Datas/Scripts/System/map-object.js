@@ -201,10 +201,9 @@ MapObject.prototype = {
             this.mesh.position.set(this.position.x,
                                    this.position.y,
                                    this.position.z);
-            if (this.currentState.graphicKind === ElementMapKind.SpritesFace)
             this.meshBoundingBox =
-                (this.currentState.graphicKind === ElementMapKind.SpritesFace) ?
-                     MapPortion.createOrientedBox() : MapPortion.createBox();
+                (this.currentState.graphicKind === ElementMapKind.SpritesFix) ?
+                     MapPortion.createBox() : MapPortion.createOrientedBox();
             this.boundingBoxSettings = objCollision[1][0];
             this.updateUVs();
         }
@@ -240,7 +239,7 @@ MapObject.prototype = {
                                          this.position.z);
 
         // The speed depends on the time elapsed since the last update
-        var xPlus, zPlus, xAbs, zAbs, res;
+        var xPlus, zPlus, xAbs, zAbs, res, i, l;
         var w = $currentMap.mapInfos.length * $SQUARE_SIZE;
         var h = $currentMap.mapInfos.width * $SQUARE_SIZE;
 
@@ -296,17 +295,20 @@ MapObject.prototype = {
             var collisionSquares = $currentMap.collisions
                 [PictureKind.Characters][this.currentState.graphicID]
                 [this.getStateIndex()];
-            for (var i = 0, l = collisionSquares.length; i < l; i++) {
+
+            for (i = 0, l = collisionSquares.length; i < l; i++) {
                 this.boundingBoxSettings.b = CollisionSquare.getBB(
                     collisionSquares[i], this.width, this.height);
                 this.updateBBPosition(position);
                 if (MapPortion.checkCollisionRay(this.position, position, this))
                 {
                     position = this.position;
+                    break;
                 }
             }
+            if (l === 0)
+                this.boundingBoxSettings.b = null;
         }
-
         this.updateBBPosition(this.position);
         this.meshBoundingBox.updateMatrixWorld();
 
@@ -319,17 +321,39 @@ MapObject.prototype = {
     *   @param {THREE.Vector3} position Position to update.
     */
     updateBBPosition: function(position) {
-        if (this.meshBoundingBox !== null &&
-            this.boundingBoxSettings.b !== null)
-        {
-            MapPortion.applyOrientedBoxTransforms(
-                this.meshBoundingBox, [
-                    position.x + this.boundingBoxSettings.b[0],
-                    position.y + this.boundingBoxSettings.b[1],
-                    position.z + this.boundingBoxSettings.b[2],
-                    this.boundingBoxSettings.b[3],
-                    this.boundingBoxSettings.b[4],
-                ]);
+        if (this.meshBoundingBox !== null) {
+            if (this.currentState.graphicKind === ElementMapKind.SpritesFix) {
+                if (this.boundingBoxSettings.b === null) {
+                    MapPortion.applyBoxSpriteTransforms(this.meshBoundingBox,
+                                                        [0, 0, 0, 2, 2]);
+                }
+                else {
+                    MapPortion.applyBoxSpriteTransforms(
+                        this.meshBoundingBox, [
+                            position.x + this.boundingBoxSettings.b[0],
+                            position.y + this.boundingBoxSettings.b[1],
+                            position.z + this.boundingBoxSettings.b[2],
+                            this.boundingBoxSettings.b[3],
+                            this.boundingBoxSettings.b[4],
+                        ]);
+                }
+            }
+            else {
+                if (this.boundingBoxSettings.b === null) {
+                    MapPortion.applyOrientedBoxTransforms(this.meshBoundingBox,
+                                                          [0, 0, 0, 2, 2]);
+                }
+                else {
+                    MapPortion.applyOrientedBoxTransforms(
+                        this.meshBoundingBox, [
+                            position.x + this.boundingBoxSettings.b[0],
+                            position.y + this.boundingBoxSettings.b[1],
+                            position.z + this.boundingBoxSettings.b[2],
+                            this.boundingBoxSettings.b[3],
+                            this.boundingBoxSettings.b[4],
+                        ]);
+                }
+            }
         }
     },
 
@@ -610,6 +634,6 @@ MapObject.prototype = {
     // -------------------------------------------------------
 
     getStateIndex: function() {
-        return this.frame + (this.orientation * this.width);
+        return this.frame + (this.orientation * $FRAMES);
     }
 }

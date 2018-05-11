@@ -156,8 +156,7 @@ SystemPicture.prototype = {
                 for (j = 0; j < $FRAMES; j++) {
                     for (k = 0; k < 4; k++) {
                         this.collisions[(jsonKey[0] + (j * w)) + ((jsonKey[1] +
-                        (k * h)) * this.width)] = collision.copyWithOffset(
-                             j * w, k * h);
+                        (k * h)) * this.width)] = collision;
                     }
                 }
             }

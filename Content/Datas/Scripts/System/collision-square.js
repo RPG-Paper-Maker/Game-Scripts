@@ -128,8 +128,8 @@ CollisionSquare.unionSquares = function(squares, l, w, h) {
 
 CollisionSquare.getBB = function(rect, w, h) {
     return [
-        (w * $SQUARE_SIZE) - rect[2] - (rect[0] * 2),
-        Math.floor((h * $SQUARE_SIZE - rect[1]) / 2), 0, rect[2], rect[3]
+        (rect[0] - ((w * $SQUARE_SIZE) - rect[0] - rect[2])) / 2,
+        (h * $SQUARE_SIZE) - rect[1] - (rect[3] / 2), 0, rect[2], rect[3]
     ];
 }
 
@@ -171,20 +171,5 @@ CollisionSquare.prototype = {
 
     hasAllDirections: function() {
         return this.left && this.right && this.top && this.bot;
-    },
-
-    // -------------------------------------------------------
-
-    copyWithOffset: function(x, y) {
-        var copy = new CollisionSquare();
-        copy.rect = [this.rect[0] + (x * $SQUARE_SIZE),
-                     this.rect[1] + (y * $SQUARE_SIZE),
-                     this.rect[2], this.rect[3]];
-        copy.left = this.left;
-        copy.right = this.right;
-        copy.top = this.top;
-        copy.bot = this.bot;
-
-        return copy;
     }
 }
