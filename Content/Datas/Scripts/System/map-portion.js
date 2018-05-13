@@ -167,7 +167,7 @@ MapPortion.applyBoxLandTransforms = function(box, boundingBox) {
     box.geometry.translate(-box.previousTranslate[0],
                            -box.previousTranslate[1],
                            -box.previousTranslate[2]);
-    box.geometry.rotateY(-box.previousRotate);
+    box.geometry.rotateY(-box.previousRotate * Math.PI / 180.0);
     box.geometry.scale(1 / box.previousScale[0],
                        1 / box.previousScale[1],
                        1 / box.previousScale[2]);
@@ -193,14 +193,14 @@ MapPortion.applyBoxSpriteTransforms = function(box, boundingBox) {
     box.geometry.translate(-box.previousTranslate[0],
                            -box.previousTranslate[1],
                            -box.previousTranslate[2]);
-    box.geometry.rotateY(-box.previousRotate);
+    box.geometry.rotateY(-box.previousRotate * Math.PI / 180.0);
     box.geometry.scale(1 / box.previousScale[0],
                        1 / box.previousScale[1],
                        1 / box.previousScale[2]);
 
     // Update to the new ones
     box.geometry.scale(boundingBox[3], boundingBox[4], 1);
-    box.geometry.rotateY(boundingBox[5]);
+    box.geometry.rotateY(boundingBox[5] * Math.PI / 180.0);
     box.geometry.translate(boundingBox[0], boundingBox[1], boundingBox[2]);
 
     // Register previous transforms to current
@@ -447,7 +447,7 @@ MapPortion.prototype = {
     *   @param {Object} json Json object describing the object.
     */
     readSpritesWalls: function(json) {
-        var i, l, wallsIds, count, a, b, c;
+        var i, l, wallsIds, count;
         var hash, geometry, material, obj, mesh, result, collisions;
         wallsIds = $currentMap.texturesWalls.length;
         hash = new Array(wallsIds);
@@ -482,12 +482,11 @@ MapPortion.prototype = {
                 count = obj.c;
             }
 
-            /*
             result = sprite.updateGeometry(geometry, position,
                                           material.map.image.width,
                                           material.map.image.height, count);
             obj.c = result[0];
-            collisions = result[1];*/
+            this.updateCollisionSprite(result[1], position);
         }
 
         for (i = 0; i < wallsIds; i++) {

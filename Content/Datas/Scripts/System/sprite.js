@@ -189,8 +189,7 @@ Sprite.prototype = {
                     ],
                     w: w,
                     h: h,
-                    k: this.kind === ElementMapKind.SpritesFix,
-                    a: 0
+                    k: this.kind === ElementMapKind.SpritesFix
                 });
             }
         }
@@ -200,8 +199,7 @@ Sprite.prototype = {
                 b: null,
                 w: w,
                 h: h,
-                k: this.kind === ElementMapKind.SpritesFix,
-                a: 0
+                k: this.kind === ElementMapKind.SpritesFix
             });
         }
 

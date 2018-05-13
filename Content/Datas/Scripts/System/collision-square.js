@@ -111,8 +111,9 @@ CollisionSquare.unionSquares = function(squares, l, w, h) {
                     }
                     if (c) {
                         for (m = i; m < i + tempW; m++)
-                            boolGrid[m + kk] = 0;
+                            boolGrid[m + kk] = false;
                         square[3] = square[3] + squares[i + kk][3];
+                        boolGrid[i + kk] = false;
                     }
                     if (!c || b + 1 >= h)
                         tempH = b - j + (c ? 1 : 0);

@@ -206,6 +206,48 @@ SystemPicture.prototype = {
 
     // -------------------------------------------------------
 
+    /** Get a specific collision for wall.
+    */
+    getSquaresForWall: function(texture) {
+        var i, l, w = texture[2], h = texture[3], x, y;
+        var square, leftSquare, rightSquare, fusion;
+        l = w * h;
+        var squares = new Array(l);
+        for (i = 0; i < l; i++) {
+            x = texture[0] + (i % w);
+            y = texture[1] + Math.floor(i / w);
+
+            if (x === 3) {
+                leftSquare = this.getCollisionAtPos(0, y);
+                rightSquare = this.getCollisionAtPos(2, y);
+
+                if (leftSquare === null && rightSquare === null) {
+                    squares[i] = null;
+                }
+                else if (leftSquare === null || rightSquare === null) {
+                    if (leftSquare === null)
+                        square = rightSquare;
+                    else
+                        square = leftSquare;
+                    squares[i] = square.rect;
+                }
+                else
+                    squares[i] = [0, 0, $SQUARE_SIZE, $SQUARE_SIZE];
+            }
+            else {
+                square = this.getCollisionAtPos(x, y);
+                if (square === null)
+                    squares[i] = null;
+                else
+                    squares[i] = square.rect;
+            }
+        }
+
+        return CollisionSquare.unionSquares(squares, l, w, h);
+    },
+
+    // -------------------------------------------------------
+
     /** Get a specific collision square according to texture.
     */
     getSquaresForTexture: function(texture) {
@@ -214,8 +256,8 @@ SystemPicture.prototype = {
         l = w * h;
         var squares = new Array(l);
         for (i = 0; i < l; i++) {
-            square = this.getCollisionAtPos(texture[0] + (i % w),
-                                            texture[1] + Math.floor(i / w));
+            square = this.getCollisionAtPos(texture[0] + (i % w), texture[1] +
+                     Math.floor(i / w));
             if (square === null)
                 squares[i] = null;
             else
