@@ -357,7 +357,7 @@ SceneMap.prototype = {
         var autotilesIDs = this.mapInfos.tileset.autotiles;
         var id, i = 0, l = autotiles.length, offset = 0;
         var result = null, paths, autotile, textureAutotile = null, that = this;
-        var texture = new THREE.Texture();
+        var texture = new THREE.Texture(), picture;
         var context = $canvasRendering.getContext("2d");
         context.clearRect(0, 0, $canvasRendering.width,
                           $canvasRendering.height);
@@ -378,10 +378,12 @@ SceneMap.prototype = {
                 }
                 id = autotilesIDs[i];
                 autotile = autotiles[id];
-                paths = $datasGame.pictures.list[PictureKind.Autotiles]
-                        [autotile.pictureID].getPath(PictureKind.Autotiles);
-                result = this.loadTextureAutotile(
-                          textureAutotile, texture, context, paths, offset, id);
+                picture = $datasGame.pictures.list[PictureKind.Autotiles]
+                            [autotile.pictureID];
+                paths = picture.getPath(PictureKind.Autotiles);
+                result = this.loadTextureAutotile(textureAutotile, texture,
+                                                  picture, context, paths,
+                                                  offset, id);
                 i++;
                 that.callBackAfterLoading = callback;
             }
@@ -416,8 +418,8 @@ SceneMap.prototype = {
 
     /** Load an autotile ID and add it to context rendering.
     */
-    loadTextureAutotile: function(textureAutotile, texture, context, paths,
-                                  offset, id)
+    loadTextureAutotile: function(textureAutotile, texture, pic, context,
+                                  paths, offset, id)
     {
         $filesToLoad++;
         var path = paths[0];
@@ -431,6 +433,10 @@ SceneMap.prototype = {
             var width = (img.width / 2) / $SQUARE_SIZE;
             var height = (img.height / 3) / $SQUARE_SIZE;
             var size = width * height;
+
+            // Update picture width and height for collisions settings
+            pic.width = width;
+            pic.height = height;
 
             for (var i = 0; i < size; i++) {
                 point = [i % width, Math.floor(i / width)];
@@ -611,20 +617,35 @@ SceneMap.prototype = {
     // -------------------------------------------------------
 
     loadCollisions: function() {
-        var i, j, l;
+        var pictures, list, image, p;
+        var i, j, l, max;
 
         // Tileset
-        this.mapInfos.tileset.picture.readCollisions(
-                 this.textureTileset.map.image);
+        this.mapInfos.tileset.picture.readCollisionsImage(
+            this.textureTileset.map.image);
 
         // Characters
-        var pictures = $datasGame.pictures.list[PictureKind.Characters];
+        pictures = $datasGame.pictures.list[PictureKind.Characters];
         l = pictures.length;
         this.collisions[PictureKind.Characters] = new Array(l);
-        for (i = 1; i < l; i++){
-            pictures[i].readCollisions(this.texturesCharacters[i].map.image);
-            this.collisions[PictureKind.Characters][i] = pictures[i]
-                  .getSquaresForStates(this.texturesCharacters[i].map.image);
+        for (i = 1; i < l; i++) {
+            image = this.texturesCharacters[i].map.image;
+            p = pictures[i];
+            p.readCollisionsImage(image);
+            this.collisions[PictureKind.Characters][i] = p.getSquaresForStates(
+                image);
+        }
+
+        // Autotiles
+        list = this.mapInfos.tileset.autotiles;
+        pictures = $datasGame.pictures.list[PictureKind.Autotiles];
+        this.collisions[PictureKind.Autotiles] = RPM.fillNullList(
+            RPM.getMaxID(list) + 1);
+        for (i = 0, l = list.length; i < l; i++) {
+            p = pictures[list[i]];
+            p.readCollisions();
+            this.collisions[PictureKind.Autotiles][list[i]] =
+                p.getSquaresByIndex();
         }
 
         this.callBackAfterLoading = this.initializeObjects();

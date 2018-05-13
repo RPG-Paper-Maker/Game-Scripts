@@ -791,3 +791,36 @@ RPM.mod = function(x, m) {
 
     return r < 0 ? r + m : r;
 }
+
+// -------------------------------------------------------
+
+/** Get the list max ID.
+*   @static
+*   @param {number[]} list A list containing only IDs.
+*/
+RPM.getMaxID = function(list) {
+    var max = 0;
+
+    for (var i = 0, l = list.length; i < l; i++) {
+        if (list[i] > max)
+            max = list[i];
+    }
+
+    return max;
+}
+
+// -------------------------------------------------------
+
+/** Create a new array list initialed with null everywhere.
+*   @static
+*   @param {number} size The list size.
+*/
+RPM.fillNullList = function(size) {
+    var list = new Array(size);
+
+    for (var i = 0; i < size; i++) {
+        list[i] = null;
+    }
+
+    return list;
+}

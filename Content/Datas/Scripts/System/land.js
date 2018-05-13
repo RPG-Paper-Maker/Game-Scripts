@@ -52,10 +52,19 @@ Land.prototype = {
             this.up = up;
     },
 
+    /** Return the rect index.
+    *   @returns {number}
+    */
+    getIndex: function(width) {
+        return this.texture[0] + (this.texture[1] * width);
+    },
+
     /** Update the geometry associated to this land.
     *   @returns {THREE.Geometry}
     */
-    updateGeometry: function(geometry, position, width, height, x, y, w, h, i) {
+    updateGeometry: function(geometry, collision, position, width, height, x, y,
+                             w, h, i)
+    {
         var localPosition = RPM.positionToBorderVector3(position);
         var a = localPosition.x;
         var yLayerOffset = RPM.positionLayer(position) * 0.05;
@@ -94,8 +103,6 @@ Land.prototype = {
         ]);
 
         // Collision
-        var collision = $currentMap.mapInfos.tileset.picture.getCollisionAt(
-                    this.texture);
         if (collision !== null) {
             var rect = collision.rect;
 

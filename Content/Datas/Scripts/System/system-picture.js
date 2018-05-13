@@ -129,11 +129,21 @@ SystemPicture.prototype = {
 
     /** Read collisions according to image size.
     */
-    readCollisions: function(image) {
-        var i, j, k, l, w, h, index, collision;
-        var jsonTab, jsonKey, jsonVal;
+    readCollisionsImage: function(image) {
         this.width = Math.floor(image.width / $SQUARE_SIZE);
         this.height = Math.floor(image.height / $SQUARE_SIZE);
+
+        this.readCollisions();
+    },
+
+    // -------------------------------------------------------
+
+    /** Read collisions. We assume that this.width and this.height had been
+    *   edited.
+    */
+    readCollisions: function() {
+        var i, j, k, l, w, h, index, collision;
+        var jsonTab, jsonKey, jsonVal;
         w = this.width / $FRAMES;
         h = this.height / 4;
 
@@ -179,6 +189,28 @@ SystemPicture.prototype = {
     */
     getCollisionAtPos: function(x, y) {
         return this.collisions[x + y * this.width];
+    },
+
+    // -------------------------------------------------------
+
+    /** Get a specific collision square for all indexes.
+    */
+    getSquaresByIndex: function() {
+        var i, j, index;
+        var square;
+        var squares = new Array(this.width * this.height);
+        for (i = 0; i < this.width; i++) {
+            for (j = 0; j < this.height; j++) {
+                square = this.getCollisionAtPos(i, j);
+                index = i + (j * this.width);
+                if (square === null)
+                    squares[index] = null;
+                else
+                    squares[index] = square;
+            }
+        }
+
+        return squares;
     },
 
     // -------------------------------------------------------

@@ -328,8 +328,9 @@ MapPortion.prototype = {
             return;
 
         var jsonAutotile;
-        var autotile, autotiles, textureAutotile, texture = null;
+        var autotile, autotiles, textureAutotile, texture = null, objCollision;
         var i, l, index, autotilesLength = $currentMap.texturesAutotiles.length;
+        var position;
 
         // Create autotiles according to the textures
         for (i = 0; i < autotilesLength; i++) {
@@ -340,6 +341,7 @@ MapPortion.prototype = {
         // Read and update geometry
         for (i = 0, l = json.length; i < l; i++) {
             jsonAutotile = json[i];
+            position = jsonAutotile.k;
             autotile = new Autotile;
             autotile.read(jsonAutotile.v);
 
@@ -356,8 +358,13 @@ MapPortion.prototype = {
                 }
             }
 
-            if (texture !== null && texture.texture !== null)
-                autotiles.updateGeometry(jsonAutotile.k, autotile);
+            if (texture !== null && texture.texture !== null) {
+                objCollision = autotiles.updateGeometry(position, autotile);
+                if (objCollision !== null) {
+                    this.boundingBoxesLands[RPM.positionJSONToIndex(position)]
+                    .push(objCollision);
+                }
+            }
         }
 
         // Update all the geometry uvs and put it in the scene

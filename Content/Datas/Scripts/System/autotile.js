@@ -56,7 +56,9 @@ Autotile.prototype = {
         var w = $SQUARE_SIZE / width;
         var h = $SQUARE_SIZE / height;
 
-        return Land.prototype.updateGeometry.call(
-                    this, geometry, position, width, height, x, y, w, h, i);
+        return Land.prototype.updateGeometry.call(this, geometry,
+            $currentMap.collisions[PictureKind.Autotiles][this.autotileID]
+            [Land.prototype.getIndex.call(this, width / $SQUARE_SIZE / 2)],
+            position, width, height, x, y, w, h, i);
     }
 }

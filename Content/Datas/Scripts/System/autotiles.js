@@ -70,8 +70,8 @@ Autotiles.prototype = {
     /** Update the geometry of the autotiles according to an autotile.
     */
     updateGeometry : function(position, autotile) {
-        autotile.updateGeometry(this.geometry, this.texture, position,
-                                this.width, this.height, this.index++);
+        return autotile.updateGeometry(this.geometry, this.texture, position,
+            this.width, this.height, this.index++);
     },
 
     /** Create a mesh with material and geometry.
