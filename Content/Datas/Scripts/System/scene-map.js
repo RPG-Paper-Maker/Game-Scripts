@@ -263,7 +263,8 @@ SceneMap.prototype = {
         this.textureLoader = new THREE.TextureLoader();
         this.textureTileset =
              this.loadTexture(this.mapInfos.tileset.getPath(),
-                              PictureKind.Tileset);
+                              PictureKind.Tileset,
+                              this.mapInfos.tileset.picture);
         this.loadPictures(PictureKind.Characters, "texturesCharacters");
         this.loadAutotiles();
     },
@@ -275,16 +276,16 @@ SceneMap.prototype = {
     *   @param {string} texturesName The field name textures.
     */
     loadPictures: function(pictureKind, texturesName){
-        var pictures = $datasGame.pictures.list[pictureKind];
+        var pictures = $datasGame.pictures.list[pictureKind], picture;
         var l = pictures.length;
         var textures = new Array(l);
         var paths;
 
         textures[0] = this.loadTextureEmpty();
         for (var i = 1; i < l; i++){
-            paths = $datasGame.pictures.list[pictureKind][i]
-                .getPath(pictureKind);
-            textures[i] = this.loadTexture(paths, pictureKind);
+            picture = pictures[i];
+            paths = picture.getPath(pictureKind);
+            textures[i] = this.loadTexture(paths, pictureKind, picture);
         }
 
         this[texturesName] = textures;
@@ -304,14 +305,14 @@ SceneMap.prototype = {
         var specialsIDs = this.mapInfos.tileset[specialField];
         var id, i, l = specials.length;
         var textures = new Array(l);
-        var paths, special;
+        var paths, special, picture;
 
         for (i = 0, l = specialsIDs.length; i < l; i++){
             id = specialsIDs[i];
             special = specials[id];
-            paths = $datasGame.pictures.list[pictureKind][special.pictureID]
-                .getPath(pictureKind);
-            textures[id] = this.loadTexture(paths, pictureKind);
+            picture = $datasGame.pictures.list[pictureKind][special.pictureID];
+            paths = picture.getPath(pictureKind);
+            textures[id] = this.loadTexture(paths, pictureKind, picture);
         }
 
         this[texturesName] = textures;
@@ -323,7 +324,7 @@ SceneMap.prototype = {
     *   @param {string} path The path of the texture.
     *   @retuns {THREE.MeshBasicMaterial}
     */
-    loadTexture: function(paths, pictureKind) {
+    loadTexture: function(paths, pictureKind, picture) {
         $filesToLoad++;
         var path = paths[0];
         var pathLocal = paths[1];
@@ -331,7 +332,7 @@ SceneMap.prototype = {
 
         if (pictureKind === PictureKind.Walls) {
             texture = new THREE.Texture();
-            this.loadTextureWall(texture, pathLocal);
+            this.loadTextureWall(texture, pathLocal, picture);
         }
         else {
             texture = this.textureLoader.load(path,
@@ -418,7 +419,7 @@ SceneMap.prototype = {
 
     /** Load an autotile ID and add it to context rendering.
     */
-    loadTextureAutotile: function(textureAutotile, texture, pic, context,
+    loadTextureAutotile: function(textureAutotile, texture, picture, context,
                                   paths, offset, id)
     {
         $filesToLoad++;
@@ -435,8 +436,8 @@ SceneMap.prototype = {
             var size = width * height;
 
             // Update picture width and height for collisions settings
-            pic.width = width;
-            pic.height = height;
+            picture.width = width;
+            picture.height = height;
 
             for (var i = 0; i < size; i++) {
                 point = [i % width, Math.floor(i / width)];
@@ -469,7 +470,7 @@ SceneMap.prototype = {
         if ($canvasRendering.isImageLoaded(pathLocal))
             callback.call(this);
         else
-            var picture = new Picture2D(pathLocal, callback);
+            var pic = new Picture2D(pathLocal, callback);
 
         return result;
     },
@@ -552,10 +553,15 @@ SceneMap.prototype = {
     *   @param {THREE.Texture} texture The final texture reference.
     *   @param {string} pathLocal The path of the texture.
     */
-    loadTextureWall: function(texture, pathLocal) {
-        var picture = new Picture2D(pathLocal, function() {
+    loadTextureWall: function(texture, pathLocal, picture) {
+        var pic = new Picture2D(pathLocal, function() {
             var context = $canvasRendering.getContext("2d");
             var img = context.createImageData(pathLocal);
+
+            // Update picture infos for collisions
+            picture.width = img.width / $SQUARE_SIZE;
+            picture.height = img.height / $SQUARE_SIZE;
+
             context.clearRect(0, 0, $canvasRendering.width,
                               $canvasRendering.height);
             $canvasRendering.width = img.width + $SQUARE_SIZE;
@@ -570,7 +576,7 @@ SceneMap.prototype = {
             image.addEventListener('load', function() {
                 texture.image = image;
                 texture.needsUpdate = true;
-                picture.destroy();
+                pic.destroy();
                 $loadedFiles++;
             }, false);
             image.src = $canvasRendering.toDataURL();
@@ -617,8 +623,8 @@ SceneMap.prototype = {
     // -------------------------------------------------------
 
     loadCollisions: function() {
-        var pictures, list, image, p;
-        var i, j, l, max;
+        var pictures, list, image;
+        var i, l, p;
 
         // Tileset
         this.mapInfos.tileset.picture.readCollisionsImage(
@@ -639,14 +645,14 @@ SceneMap.prototype = {
         // Autotiles
         list = this.mapInfos.tileset.autotiles;
         pictures = $datasGame.pictures.list[PictureKind.Autotiles];
-        this.collisions[PictureKind.Autotiles] = RPM.fillNullList(
-            RPM.getMaxID(list) + 1);
-        for (i = 0, l = list.length; i < l; i++) {
-            p = pictures[list[i]];
-            p.readCollisions();
-            this.collisions[PictureKind.Autotiles][list[i]] =
-                p.getSquaresByIndex();
-        }
+        for (i = 0, l = list.length; i < l; i++)
+            pictures[list[i]].readCollisions();
+
+        // Walls
+        list = this.mapInfos.tileset.walls;
+        pictures = $datasGame.pictures.list[PictureKind.Walls];
+        for (i = 0, l = list.length; i < l; i++)
+            pictures[list[i]].readCollisions();
 
         this.callBackAfterLoading = this.initializeObjects();
     },

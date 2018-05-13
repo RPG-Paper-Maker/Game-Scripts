@@ -142,6 +142,9 @@ SystemPicture.prototype = {
     *   edited.
     */
     readCollisions: function() {
+        if (!this.jsonCollisions)
+            return;
+
         var i, j, k, l, w, h, index, collision;
         var jsonTab, jsonKey, jsonVal;
         w = this.width / $FRAMES;
@@ -191,26 +194,14 @@ SystemPicture.prototype = {
         return this.collisions[x + y * this.width];
     },
 
+
     // -------------------------------------------------------
 
-    /** Get a specific collision square for all indexes.
+    /** Get a specific collision square according to index.
     */
-    getSquaresByIndex: function() {
-        var i, j, index;
-        var square;
-        var squares = new Array(this.width * this.height);
-        for (i = 0; i < this.width; i++) {
-            for (j = 0; j < this.height; j++) {
-                square = this.getCollisionAtPos(i, j);
-                index = i + (j * this.width);
-                if (square === null)
-                    squares[index] = null;
-                else
-                    squares[index] = square;
-            }
-        }
-
-        return squares;
+    getCollisionAtIndex: function(index) {
+        return this.getCollisionAtPos(index % this.width,
+                                      Math.floor(index / this.width));
     },
 
     // -------------------------------------------------------

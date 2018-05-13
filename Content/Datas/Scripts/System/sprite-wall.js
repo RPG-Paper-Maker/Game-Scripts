@@ -70,8 +70,9 @@ SpriteWall.prototype = {
             vecC = new THREE.Vector3(0.5, 0.0, 0.0),
             vecD = new THREE.Vector3(-0.5, 0.0, 0.0),
             center = new THREE.Vector3(),
-            size = new THREE.Vector3($SQUARE_SIZE, height, 0);
-        var x, y, w, h, coefX, coefY;
+            size = new THREE.Vector3($SQUARE_SIZE, height, 0),
+            angle = RPM.positionAngle(position);
+        var x, y, w, h, coefX, coefY, rect, textureRect;
         var texFaceA, texFaceB;
         var localPosition = RPM.positionToVector3(position);
 
@@ -89,8 +90,9 @@ SpriteWall.prototype = {
         center.add(localPosition);
 
         // Getting UV coordinates
-        x = (this.kind * $SQUARE_SIZE) / width;
-        y = 0;
+        textureRect = [this.kind, 0, 1, height / $SQUARE_SIZE];
+        x = (textureRect[0] * $SQUARE_SIZE) / width;
+        y = textureRect[1];
         w = $SQUARE_SIZE / width;
         h = 1.0;
         coefX = 0.1 / width;
@@ -111,11 +113,35 @@ SpriteWall.prototype = {
             new THREE.Vector2(x+w,y+h),
             new THREE.Vector2(x,y+h)
         ];
-        Sprite.rotateSprite(vecA, vecB, vecC, vecD, center,
-                            RPM.positionAngle(position));
+
+        // Collision
+        var objCollision = new Array;
+        var collisions = $datasGame.pictures.list[PictureKind.Walls][this.id]
+            .getSquaresForTexture(textureRect);
+        l = collisions.length;
+        for (i = 0; i < l; i++) {
+            rect = collisions[i];
+            objCollision.push({
+                p: position,
+                l: localPosition,
+                b: [
+                    localPosition.x,
+                    localPosition.y,
+                    localPosition.z,
+                    rect[2],
+                    rect[3]
+                ],
+                w: 0,
+                h: textureRect[3],
+                k: true,
+                a: angle
+            });
+        }
+
+        Sprite.rotateSprite(vecA, vecB, vecC, vecD, center, angle);
         c = Sprite.addStaticSpriteToGeometry(geometry, vecA, vecB, vecC, vecD,
                                              texFaceA, texFaceB, c);
 
-        return c;
+        return [c, objCollision];
     }
 }

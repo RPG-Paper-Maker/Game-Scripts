@@ -184,20 +184,24 @@ Sprite.prototype = {
                             $SQUARE_SIZE - rect[1]) / 2),
                         localPosition.z,
                         rect[2],
-                        rect[3]
+                        rect[3],
+                        0
                     ],
                     w: w,
                     h: h,
-                    k: this.kind === ElementMapKind.SpritesFix
+                    k: this.kind === ElementMapKind.SpritesFix,
+                    a: 0
                 });
             }
         }
+        // Character
         else {
             objCollision.push({
                 b: null,
                 w: w,
                 h: h,
-                k: this.kind === ElementMapKind.SpritesFix
+                k: this.kind === ElementMapKind.SpritesFix,
+                a: 0
             });
         }
 

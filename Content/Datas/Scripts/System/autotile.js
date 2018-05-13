@@ -50,15 +50,14 @@ Autotile.prototype = {
         var xTile = this.tileID % 64;
         var yTile = Math.floor(this.tileID / 64) +
                 (10 * texture.getOffset(this.autotileID, this.texture));
-
         var x = (xTile * $SQUARE_SIZE) / width;
         var y = (yTile * $SQUARE_SIZE) / height;
         var w = $SQUARE_SIZE / width;
         var h = $SQUARE_SIZE / height;
 
         return Land.prototype.updateGeometry.call(this, geometry,
-            $currentMap.collisions[PictureKind.Autotiles][this.autotileID]
-            [Land.prototype.getIndex.call(this, width / $SQUARE_SIZE / 2)],
-            position, width, height, x, y, w, h, i);
+            $datasGame.pictures.list[PictureKind.Autotiles][this.autotileID]
+            .getCollisionAtIndex(Land.prototype.getIndex.call(this, width /
+            $SQUARE_SIZE / 2)), position, width, height, x, y, w, h, i);
     }
 }

@@ -167,6 +167,7 @@ MapPortion.applyBoxLandTransforms = function(box, boundingBox) {
     box.geometry.translate(-box.previousTranslate[0],
                            -box.previousTranslate[1],
                            -box.previousTranslate[2]);
+    box.geometry.rotateY(-box.previousRotate);
     box.geometry.scale(1 / box.previousScale[0],
                        1 / box.previousScale[1],
                        1 / box.previousScale[2]);
@@ -177,6 +178,7 @@ MapPortion.applyBoxLandTransforms = function(box, boundingBox) {
 
     // Register previous transforms to current
     box.previousTranslate = [boundingBox[0], boundingBox[1], boundingBox[2]];
+    box.previousRotate = 0;
     box.previousScale = [boundingBox[3], 1, boundingBox[4]];
 
     // Update geometry now
@@ -191,16 +193,19 @@ MapPortion.applyBoxSpriteTransforms = function(box, boundingBox) {
     box.geometry.translate(-box.previousTranslate[0],
                            -box.previousTranslate[1],
                            -box.previousTranslate[2]);
+    box.geometry.rotateY(-box.previousRotate);
     box.geometry.scale(1 / box.previousScale[0],
                        1 / box.previousScale[1],
                        1 / box.previousScale[2]);
 
     // Update to the new ones
     box.geometry.scale(boundingBox[3], boundingBox[4], 1);
+    box.geometry.rotateY(boundingBox[5]);
     box.geometry.translate(boundingBox[0], boundingBox[1], boundingBox[2]);
 
     // Register previous transforms to current
     box.previousTranslate = [boundingBox[0], boundingBox[1], boundingBox[2]];
+    box.previousRotate = boundingBox[5];
     box.previousScale = [boundingBox[3], boundingBox[4], 1];
 
     // Update geometry now
@@ -241,6 +246,7 @@ MapPortion.createBox = function() {
     var box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1),
                              $INVISIBLE_MATERIAL);
     box.previousTranslate = [0, 0, 0];
+    box.previousRotate = 0;
     box.previousScale = [1, 1, 1];
 
     return box;
@@ -392,10 +398,10 @@ MapPortion.prototype = {
     *   @param {Object} json Json object describing the object.
     */
     readSpritesGlobals: function(json){
-        var localPosition, plane, s, position, ss, sprite, objCollision, result;
+        var localPosition, plane, s, position, ss, sprite, result;
         var collisions, positionPlus;
         var material = $currentMap.textureTileset;
-        var i, count = 0, l, j, ll, a, b, c, z;
+        var i, count = 0, l;
         var staticGeometry = new THREE.Geometry(), geometry;
         staticGeometry.faceVertexUvs[0] = [];
 
@@ -427,30 +433,7 @@ MapPortion.prototype = {
                 count = result[0];
                 collisions = result[1];
             }
-            for (j = 0, ll = collisions.length; j < ll; j++) {
-                objCollision = collisions[j];
-                for (a = -objCollision.w; a <= objCollision.w; a++)
-                {
-                    for (b = -objCollision.h; b <= objCollision.h;
-                         b++)
-                    {
-                        z = objCollision.k ? 0 : objCollision.w;
-                        for (c = -z; c <= z; c++)
-                        {
-                            positionPlus = [
-                                position[0] + a,
-                                position[1] + b,
-                                position[3] + c
-                            ];
-                            if ($currentMap.isInMap(positionPlus)) {
-                                this.boundingBoxesSprites[
-                                    RPM.positionToIndex(positionPlus)
-                                ].push(objCollision);
-                            }
-                        }
-                    }
-                }
-            }
+            this.updateCollisionSprite(collisions, position);
         }
 
         staticGeometry.uvsNeedUpdate = true;
@@ -464,8 +447,8 @@ MapPortion.prototype = {
     *   @param {Object} json Json object describing the object.
     */
     readSpritesWalls: function(json) {
-        var i, l, wallsIds, c;
-        var hash, geometry, material, obj, mesh;
+        var i, l, wallsIds, count, a, b, c;
+        var hash, geometry, material, obj, mesh, result, collisions;
         wallsIds = $currentMap.texturesWalls.length;
         hash = new Array(wallsIds);
         for (i = 0; i < wallsIds; i++)
@@ -481,28 +464,30 @@ MapPortion.prototype = {
             sprite.read(ss);
 
             // Constructing the geometry
-
             obj = hash[sprite.id];
             if (obj === null) {
                 obj = {};
                 geometry = new THREE.Geometry();
                 geometry.faceVertexUvs[0] = [];
                 material = $currentMap.texturesWalls[sprite.id];
-                c = 0;
+                count = 0;
                 obj.geometry = geometry;
                 obj.material = material;
-                obj.c = c;
+                obj.c = count;
                 hash[sprite.id] = obj;
             }
             else {
                 geometry = obj.geometry;
                 material = obj.material;
-                c = obj.c;
+                count = obj.c;
             }
 
-            obj.c = sprite.updateGeometry(geometry, position,
+            /*
+            result = sprite.updateGeometry(geometry, position,
                                           material.map.image.width,
-                                          material.map.image.height, c);
+                                          material.map.image.height, count);
+            obj.c = result[0];
+            collisions = result[1];*/
         }
 
         for (i = 0; i < wallsIds; i++) {
@@ -675,6 +660,43 @@ MapPortion.prototype = {
 
         for (i = 0, l = this.objectsList.length; i < l; i++)
             this.objectsList[i].update(angle);
+    },
+
+    // -------------------------------------------------------
+
+    /** Update the face sprites orientation.
+    *   @param {number} angle The angle on the Y axis.
+    */
+    updateCollisionSprite: function(collisions, position) {
+        var objCollision, positionPlus, z;
+
+        for (var i = 0, l = collisions.length; i < l; i++) {
+            objCollision = collisions[i];
+            for (var a = -objCollision.w; a <= objCollision.w; a++)
+            {
+                for (var b = -objCollision.h; b <= objCollision.h; b++)
+                {
+                    if (objCollision.k) {
+                        var e = 0;
+                        e = 0;
+                    }
+
+                    z = objCollision.k ? 0 : objCollision.w;
+                    for (var c = -z; c <= z; c++)
+                    {
+                        positionPlus = [
+                            position[0] + a,
+                            position[1] + b,
+                            position[3] + c
+                        ];
+                        if ($currentMap.isInMap(positionPlus)) {
+                            this.boundingBoxesSprites[RPM.positionToIndex(
+                                positionPlus)].push(objCollision);
+                        }
+                    }
+                }
+            }
+        }
     },
 
     // -------------------------------------------------------
