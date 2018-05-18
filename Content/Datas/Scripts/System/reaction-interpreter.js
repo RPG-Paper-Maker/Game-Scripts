@@ -80,9 +80,6 @@ ReactionInterpreter.prototype = {
         var directNode = true;
 
         while (directNode){
-            if (this.isFinished())
-                return;
-
             if (this.currentCommand.data.parallel){
                 var interpreter = new ReactionInterpreter(this.currentSender,
                                                           this.currentReaction,
@@ -90,7 +87,7 @@ ReactionInterpreter.prototype = {
                                                           this.currentState,
                                                           this.currentCommand);
                 interpreter.currentCommandState.parallel = true;
-                $currentMap.parallelCommands.unshift(interpreter);
+                $currentMap.parallelCommands.push(interpreter);
             }
 
             var new_command = this.updateCommand();

@@ -132,11 +132,11 @@ SceneGame.prototype = {
             }
 
 
-            if (!excecuted){
+            if (!excecuted) {
                 reactionInterpreter = new ReactionInterpreter(sender,
                                                               reaction, object,
                                                               state);
-                this.reactionInterpreters.unshift(reactionInterpreter);
+                this.reactionInterpreters.push(reactionInterpreter);
             }
         }
     },

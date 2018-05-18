@@ -150,6 +150,9 @@ MapPortion.checkCollisionRay = function(positionBefore, positionAfter, object) {
         }
     }
 
+    // Check collision with other objects
+    this.checkObjectsCollision(object);
+
     // Check collision inside
     portion = $currentMap.getLocalPortion(RPM.getPortion(positionAfter));
     mapPortion = $currentMap.getMapPortionByPortion(portion);
@@ -510,8 +513,8 @@ MapPortion.prototype = {
     */
     readObjects: function(json, isMapHero){
         var datas, objects, index, i, l, j, ll;
-        datas = $game.mapsDatas
-                [$currentMap.id][this.realX][this.realY][this.realZ];
+        datas = $currentMap.getObjectsAtPortion(this.realX, this.realY,
+                                                this.realZ);
         objects = datas.m;
         ll = objects.length;
 
@@ -706,16 +709,11 @@ MapPortion.prototype = {
     checkCollision: function(jpositionBefore, jpositionAfter, positionBefore,
                              positionAfter, object, direction, testedCollisions)
     {
-        if (this.checkLandsCollision(jpositionBefore, jpositionAfter,
+        return (this.checkLandsCollision(jpositionBefore, jpositionAfter,
                                      positionBefore, positionAfter, object,
                                      direction, testedCollisions) ||
-            this.checkSpritesCollision(jpositionAfter, testedCollisions,
-                                       object))
-        {
-            return true;
-        }
-
-        return false;
+                this.checkSpritesCollision(jpositionAfter, testedCollisions,
+                                           object));
     },
 
     // -------------------------------------------------------
@@ -904,4 +902,31 @@ MapPortion.prototype = {
                                                 $BB_ORIENTED_BOX.geometry);
         }
     },
+
+    // -------------------------------------------------------
+
+    /** Check collision with objects.
+    *   @returns {boolean}
+    */
+    checkObjectsCollision: function(object) {
+        var datas = $currentMap.getObjectsAtPortion(this.realX, this.realY,
+                                                    this.realZ);
+
+        return this.checkObjectsCollisionList(this.objectsList, object) ||
+               this.checkObjectsCollisionList(datas.min, object) ||
+               this.checkObjectsCollisionList(datas.mout, object);
+    },
+
+    // -------------------------------------------------------
+
+    /** Check collision with objects.
+    *   @returns {boolean}
+    */
+    checkObjectsCollisionList: function(list, object) {
+        for (var i = 0, l = list.length; i < l; i++) {
+
+        }
+
+        return false;
+    }
 }

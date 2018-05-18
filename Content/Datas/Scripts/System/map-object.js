@@ -317,6 +317,12 @@ MapObject.prototype = {
 
     // -------------------------------------------------------
 
+    checkCollisionObject: function(object) {
+
+    },
+
+    // -------------------------------------------------------
+
     /** Only updates the bounding box mesh position.
     *   @param {THREE.Vector3} position Position to update.
     */

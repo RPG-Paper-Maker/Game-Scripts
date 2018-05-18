@@ -257,6 +257,15 @@ SceneMap.prototype = {
 
     // -------------------------------------------------------
 
+    /** Get the objects at a specific portion.
+    */
+    getObjectsAtPortion: function(i, j, k){
+        return $game.mapsDatas[this.id][i][j][k];
+    },
+
+
+    // -------------------------------------------------------
+
     /** Load all the textures of the map.
     */
     loadTextures: function(){
