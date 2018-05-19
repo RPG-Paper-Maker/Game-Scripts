@@ -150,16 +150,15 @@ MapPortion.checkCollisionRay = function(positionBefore, positionAfter, object) {
         }
     }
 
-    // Check collision with other objects
-    this.checkObjectsCollision(object);
-
-    // Check collision inside
+    // Check collision inside & with other objects
     portion = $currentMap.getLocalPortion(RPM.getPortion(positionAfter));
     mapPortion = $currentMap.getMapPortionByPortion(portion);
 
+
     return mapPortion === null ? true :
            mapPortion.checkLandsCollisionInside(jpositionBefore, jpositionAfter,
-                                                direction);
+                                                direction) ||
+           mapPortion.checkObjectsCollision(object, positionAfter);
 }
 
 // -------------------------------------------------------
@@ -908,13 +907,14 @@ MapPortion.prototype = {
     /** Check collision with objects.
     *   @returns {boolean}
     */
-    checkObjectsCollision: function(object) {
+    checkObjectsCollision: function(object, position) {
         var datas = $currentMap.getObjectsAtPortion(this.realX, this.realY,
                                                     this.realZ);
 
-        return this.checkObjectsCollisionList(this.objectsList, object) ||
-               this.checkObjectsCollisionList(datas.min, object) ||
-               this.checkObjectsCollisionList(datas.mout, object);
+        return this.checkObjectsCollisionList(this.objectsList, object,
+                                              position) ||
+               this.checkObjectsCollisionList(datas.min, object, position) ||
+               this.checkObjectsCollisionList(datas.mout, object, position);
     },
 
     // -------------------------------------------------------
@@ -922,9 +922,16 @@ MapPortion.prototype = {
     /** Check collision with objects.
     *   @returns {boolean}
     */
-    checkObjectsCollisionList: function(list, object) {
-        for (var i = 0, l = list.length; i < l; i++) {
+    checkObjectsCollisionList: function(list, object, position) {
+        var obj;
 
+        for (var i = 0, l = list.length; i < l; i++) {
+            obj = list[i];
+            if (true && obj !== object) {
+                test = true;
+                if (object.checkCollisionObject(obj, position))
+                    return true;
+            }
         }
 
         return false;

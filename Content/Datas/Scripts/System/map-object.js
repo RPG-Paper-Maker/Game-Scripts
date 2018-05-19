@@ -289,36 +289,59 @@ MapObject.prototype = {
         }
 
         // Collision
-        this.updateBBPosition(position);
-        this.meshBoundingBox.updateMatrixWorld();
-        if (this.meshBoundingBox !== null) {
-            var collisionSquares = $currentMap.collisions
-                [PictureKind.Characters][this.currentState.graphicID]
-                [this.getStateIndex()];
-
-            for (i = 0, l = collisionSquares.length; i < l; i++) {
-                this.boundingBoxSettings.b = CollisionSquare.getBB(
-                    collisionSquares[i], this.width, this.height);
-                this.updateBBPosition(position);
-                if (MapPortion.checkCollisionRay(this.position, position, this))
-                {
-                    position = this.position;
-                    break;
-                }
+        this.checkSquares(position, function() {
+            if (MapPortion.checkCollisionRay(this.position, position, this)) {
+                position = this.position;
+                return true;
             }
-            if (l === 0)
-                this.boundingBoxSettings.b = null;
-        }
-        this.updateBBPosition(this.position);
-        this.meshBoundingBox.updateMatrixWorld();
+            return false;
+        });
 
         return position;
     },
 
     // -------------------------------------------------------
 
-    checkCollisionObject: function(object) {
+    checkCollisionObject: function(object, position) {
+        var heroObject = this;
+        return this.checkSquares(position, function() {
+            return (object.checkSquares(object.position, function() {
+                return CollisionsUtilities.obbVSobb(
+                       heroObject.meshBoundingBox.geometry,
+                       object.meshBoundingBox.geometry);
+            }));
+        });
+    },
 
+    // -------------------------------------------------------
+
+    checkSquares: function(position, callback) {
+        var test = false;
+
+        if (this.meshBoundingBox !== null) {
+            this.updateBBPosition(position);
+            this.meshBoundingBox.updateMatrixWorld();
+            var collisionSquares = $currentMap.collisions
+                [PictureKind.Characters][this.currentState.graphicID]
+                [this.getStateIndex()];
+            var i, l;
+
+            for (i = 0, l = collisionSquares.length; i < l; i++) {
+                this.boundingBoxSettings.b = CollisionSquare.getBB(
+                    collisionSquares[i], this.width, this.height);
+                this.updateBBPosition(position);
+                if (callback.call(this, position)) {
+                    test = true;
+                    break;
+                }
+            }
+            if (l === 0)
+                this.boundingBoxSettings.b = null;
+            this.updateBBPosition(this.position);
+            this.meshBoundingBox.updateMatrixWorld();
+        }
+
+        return test;
     },
 
     // -------------------------------------------------------
