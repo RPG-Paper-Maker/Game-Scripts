@@ -142,8 +142,7 @@ MapPortion.checkCollisionRay = function(positionBefore, positionAfter, object) {
                                               ],
                                               positionBefore,
                                               positionAfter, object,
-                                              direction, testedCollisions))
-                {
+                                              direction, testedCollisions)) {
                     return true;
                 }
             }
@@ -151,14 +150,27 @@ MapPortion.checkCollisionRay = function(positionBefore, positionAfter, object) {
     }
 
     // Check collision inside & with other objects
-    portion = $currentMap.getLocalPortion(RPM.getPortion(positionAfter));
-    mapPortion = $currentMap.getMapPortionByPortion(portion);
+    if (object !== $game.hero && object.checkCollisionObject($game.hero,
+                                                             positionAfter)) {
+        return true;
+    }
 
+    portion = $currentMap.getLocalPortion(RPM.getPortion(positionAfter));
+    for (i = 0; i < 2; i++) {
+        for (j = 0; j < 2; j++) {
+            mapPortion = $currentMap.getMapPortionByPortion([portion[0] + i,
+                portion[1], portion[2] + j]);
+            if (mapPortion !== null &&
+                mapPortion.checkObjectsCollision(object, positionAfter)) {
+                return true;
+            }
+        }
+    }
+    mapPortion = $currentMap.getMapPortionByPortion(portion);
 
     return mapPortion === null ? true :
            mapPortion.checkLandsCollisionInside(jpositionBefore, jpositionAfter,
-                                                direction) ||
-           mapPortion.checkObjectsCollision(object, positionAfter);
+                                                direction);
 }
 
 // -------------------------------------------------------
@@ -740,8 +752,7 @@ MapPortion.prototype = {
                                                    object) ||
                         this.checkDirections(jpositionBefore, jpositionAfter,
                                              collision, boundingBox, direction,
-                                             object))
-                    {
+                                             object)) {
                         return true;
                     }
                 }
@@ -769,8 +780,7 @@ MapPortion.prototype = {
                 collision = objCollision.c;
                 if (this.checkDirectionsInside(
                          jpositionBefore, jpositionAfter, collision,
-                         direction))
-                {
+                         direction)) {
                     return true;
                 }
             }
@@ -870,8 +880,7 @@ MapPortion.prototype = {
                     testedCollisions.push(objCollision);
 
                     if (this.checkIntersectionSprite(objCollision.b,
-                                                     objCollision.k, object))
-                    {
+                                                     objCollision.k, object)) {
                         return true;
                     }
                 }
@@ -916,9 +925,7 @@ MapPortion.prototype = {
         return this.checkObjectsCollisionList(this.objectsList, object,
                                               position) ||
                this.checkObjectsCollisionList(datas.min, object, position) ||
-               this.checkObjectsCollisionList(datas.mout, object, position) ||
-               (object !== $game.hero &&
-                object.checkCollisionObject($game.hero, position));
+               this.checkObjectsCollisionList(datas.mout, object, position);
     },
 
     // -------------------------------------------------------
