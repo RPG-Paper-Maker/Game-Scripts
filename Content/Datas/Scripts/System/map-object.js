@@ -422,9 +422,10 @@ MapObject.prototype = {
         this.removeMoveTemp();
 
         // Set position
-        var distance = Math.min(limit, this.speed * MapObject.SPEED_NORMAL *
+        var normalDistance = Math.min(limit, this.speed * MapObject.SPEED_NORMAL *
                                 $averageElapsedTime * $SQUARE_SIZE);
-        var position = this.getFuturPosition(orientation, distance, angle);
+        var position = this.getFuturPosition(orientation, normalDistance, angle);
+        var distance = (position === this.position) ? 0 : normalDistance;
         if (isCameraOrientation) {
             orientation = RPM.mod(orientation +
                                 $currentMap.camera.getMapOrientation() - 2, 4);
@@ -444,7 +445,7 @@ MapObject.prototype = {
         // Add to moving objects
         this.addMoveTemp();
 
-        return distance;
+        return [distance, normalDistance];
     },
 
     // -------------------------------------------------------

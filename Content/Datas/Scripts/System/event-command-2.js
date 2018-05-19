@@ -803,6 +803,7 @@ EventCommandMoveObject.prototype = {
             parallel: this.isWaitEnd,
             index: 0,
             distance: 0,
+            normalDistance: 0,
             position: null
         }
     },
@@ -827,12 +828,13 @@ EventCommandMoveObject.prototype = {
                                                             angle);
         }
 
-        currentState.distance += object.move(orientation, $SQUARE_SIZE -
-                                             currentState.distance, angle,
-                                             this.isCameraOrientation);
-
-        if (!square || (square && currentState.distance >= $SQUARE_SIZE)){
-            if (square)
+        var distances = object.move(orientation, $SQUARE_SIZE -
+                                    currentState.distance, angle,
+                                    this.isCameraOrientation);
+        currentState.distance += distances[0];
+        currentState.normalDistance += distances[1];
+        if (!square || (square && currentState.normalDistance >= $SQUARE_SIZE)){
+            if (square && currentState.distance === currentState.normalDistance)
                 object.position = currentState.position;
 
             return true;
@@ -906,6 +908,7 @@ EventCommandMoveObject.prototype = {
 
             if (finished) {
                 currentState.distance = 0;
+                currentState.normalDistance = 0;
                 currentState.index = currentState.index + 1;
                 currentState.position = null;
             }

@@ -916,7 +916,9 @@ MapPortion.prototype = {
         return this.checkObjectsCollisionList(this.objectsList, object,
                                               position) ||
                this.checkObjectsCollisionList(datas.min, object, position) ||
-               this.checkObjectsCollisionList(datas.mout, object, position);
+               this.checkObjectsCollisionList(datas.mout, object, position) ||
+               (object !== $game.hero &&
+                object.checkCollisionObject($game.hero, position));
     },
 
     // -------------------------------------------------------
