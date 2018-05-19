@@ -51,6 +51,7 @@ function MapObject(system, position) {
     this.position = position;
     this.mesh = null;
     this.meshBoundingBox = null;
+    this.currentBoundingBox = null;
     this.boundingBoxSettings = null;
     this.speed = 1.0;
     this.frame = 0;
@@ -179,6 +180,7 @@ MapObject.prototype = {
         // Update mesh
         var material =
                 $currentMap.texturesCharacters[this.currentState.graphicID];
+        this.meshBoundingBox = new Array;
         if (this.currentState !== null &&
             this.currentState.graphicKind !== ElementMapKind.None &&
             typeof material.map !== 'undefined')
@@ -201,15 +203,12 @@ MapObject.prototype = {
             this.mesh.position.set(this.position.x,
                                    this.position.y,
                                    this.position.z);
-            this.meshBoundingBox =
-                (this.currentState.graphicKind === ElementMapKind.SpritesFix) ?
-                     MapPortion.createBox() : MapPortion.createOrientedBox();
             this.boundingBoxSettings = objCollision[1][0];
+            this.updateBB(this.position);
             this.updateUVs();
         }
         else {
             this.mesh = null;
-            this.meshBoundingBox = null;
             this.boundingBoxSettings = null;
         }
 
@@ -289,13 +288,15 @@ MapObject.prototype = {
         }
 
         // Collision
-        this.checkSquares(position, function() {
+        this.updateBBPosition(position);
+        for (i = 0, l = this.meshBoundingBox.length; i < l; i++) {
+            this.currentBoundingBox = this.meshBoundingBox[i];
             if (MapPortion.checkCollisionRay(this.position, position, this)) {
                 position = this.position;
-                return true;
+                break;
             }
-            return false;
-        });
+        }
+        this.updateBBPosition(this.position);
 
         return position;
     },
@@ -303,45 +304,78 @@ MapObject.prototype = {
     // -------------------------------------------------------
 
     checkCollisionObject: function(object, position) {
-        var heroObject = this;
-        return this.checkSquares(position, function() {
-            return (object.checkSquares(object.position, function() {
-                return CollisionsUtilities.obbVSobb(
-                       heroObject.meshBoundingBox.geometry,
-                       object.meshBoundingBox.geometry);
-            }));
-        });
+        for (var i = 0, l = this.meshBoundingBox.length; i < l; i++) {
+            for (var j = 0, ll = object.meshBoundingBox.length; j < ll; j++) {
+                if (CollisionsUtilities.obbVSobb(
+                            this.meshBoundingBox[i].geometry,
+                            object.meshBoundingBox[j].geometry))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     },
 
     // -------------------------------------------------------
 
-    checkSquares: function(position, callback) {
-        var test = false;
+    isInRect: function(object) {
+        var la, lb, ra, rb, ba, bb, ta, tb;
+        la = this.position.x - (this.width * $SQUARE_SIZE / 2);
+        lb = object.position.x - (this.width * $SQUARE_SIZE / 2);
+        ra = this.position.x + (this.width * $SQUARE_SIZE / 2);
+        rb = object.position.x + (this.width * $SQUARE_SIZE / 2);
+        ba = this.position.z + (this.width * $SQUARE_SIZE / 2);
+        bb = object.position.z + (this.width * $SQUARE_SIZE / 2);
+        ta = this.position.z - (this.width * $SQUARE_SIZE / 2);
+        tb = object.position.z - (this.width * $SQUARE_SIZE / 2);
 
-        if (this.meshBoundingBox !== null) {
-            this.updateBBPosition(position);
-            this.meshBoundingBox.updateMatrixWorld();
-            var collisionSquares = $currentMap.collisions
-                [PictureKind.Characters][this.currentState.graphicID]
-                [this.getStateIndex()];
-            var i, l;
+        return (la < rb && ra > lb && ta < bb && ba > tb);
+    },
 
-            for (i = 0, l = collisionSquares.length; i < l; i++) {
-                this.boundingBoxSettings.b = CollisionSquare.getBB(
-                    collisionSquares[i], this.width, this.height);
-                this.updateBBPosition(position);
-                if (callback.call(this, position)) {
-                    test = true;
-                    break;
-                }
+    // -------------------------------------------------------
+
+    /** Only updates the bounding box mesh position.
+    *   @param {THREE.Vector3} position Position to update.
+    */
+    updateBB: function(position) {
+        this.boundingBoxSettings.squares = $currentMap.collisions
+            [PictureKind.Characters][this.currentState.graphicID]
+            [this.getStateIndex()];
+        this.boundingBoxSettings.b = new Array;
+        var i, l, box;
+        this.removeBBFromScene();
+
+        for (i = 0, l = this.boundingBoxSettings.squares.length; i < l; i++) {
+            this.boundingBoxSettings.b.push(CollisionSquare.getBB(
+                this.boundingBoxSettings.squares[i], this.width, this.height));
+            if (this.currentState.graphicKind === ElementMapKind.SpritesFix) {
+                box = MapPortion.createBox();
+                MapPortion.applyBoxSpriteTransforms(
+                    box, [
+                        position.x + this.boundingBoxSettings.b[i][0],
+                        position.y + this.boundingBoxSettings.b[i][1],
+                        position.z + this.boundingBoxSettings.b[i][2],
+                        this.boundingBoxSettings.b[i][3],
+                        this.boundingBoxSettings.b[i][4],
+                    ]);
             }
-            if (l === 0)
-                this.boundingBoxSettings.b = null;
-            this.updateBBPosition(this.position);
-            this.meshBoundingBox.updateMatrixWorld();
+            else {
+                box = MapPortion.createOrientedBox();
+                MapPortion.applyOrientedBoxTransforms(
+                    box, [
+                        position.x + this.boundingBoxSettings.b[i][0],
+                        position.y + this.boundingBoxSettings.b[i][1],
+                        position.z + this.boundingBoxSettings.b[i][2],
+                        this.boundingBoxSettings.b[i][3],
+                        this.boundingBoxSettings.b[i][4],
+                    ]);
+            }
+            this.meshBoundingBox.push(box);
         }
 
-        return test;
+        this.addBBToScene();
     },
 
     // -------------------------------------------------------
@@ -350,38 +384,26 @@ MapObject.prototype = {
     *   @param {THREE.Vector3} position Position to update.
     */
     updateBBPosition: function(position) {
-        if (this.meshBoundingBox !== null) {
+        for (var i = 0, l = this.meshBoundingBox.length; i < l; i++) {
             if (this.currentState.graphicKind === ElementMapKind.SpritesFix) {
-                if (this.boundingBoxSettings.b === null) {
-                    MapPortion.applyBoxSpriteTransforms(this.meshBoundingBox,
-                                                        [0, 0, 0, 2, 2]);
-                }
-                else {
-                    MapPortion.applyBoxSpriteTransforms(
-                        this.meshBoundingBox, [
-                            position.x + this.boundingBoxSettings.b[0],
-                            position.y + this.boundingBoxSettings.b[1],
-                            position.z + this.boundingBoxSettings.b[2],
-                            this.boundingBoxSettings.b[3],
-                            this.boundingBoxSettings.b[4],
-                        ]);
-                }
+                MapPortion.applyBoxSpriteTransforms(
+                    this.meshBoundingBox[i], [
+                        position.x + this.boundingBoxSettings.b[i][0],
+                        position.y + this.boundingBoxSettings.b[i][1],
+                        position.z + this.boundingBoxSettings.b[i][2],
+                        this.boundingBoxSettings.b[i][3],
+                        this.boundingBoxSettings.b[i][4],
+                    ]);
             }
             else {
-                if (this.boundingBoxSettings.b === null) {
-                    MapPortion.applyOrientedBoxTransforms(this.meshBoundingBox,
-                                                          [0, 0, 0, 2, 2]);
-                }
-                else {
-                    MapPortion.applyOrientedBoxTransforms(
-                        this.meshBoundingBox, [
-                            position.x + this.boundingBoxSettings.b[0],
-                            position.y + this.boundingBoxSettings.b[1],
-                            position.z + this.boundingBoxSettings.b[2],
-                            this.boundingBoxSettings.b[3],
-                            this.boundingBoxSettings.b[4],
-                        ]);
-                }
+                MapPortion.applyOrientedBoxTransforms(
+                    this.meshBoundingBox[i], [
+                        position.x + this.boundingBoxSettings.b[i][0],
+                        position.y + this.boundingBoxSettings.b[i][1],
+                        position.z + this.boundingBoxSettings.b[i][2],
+                        this.boundingBoxSettings.b[i][3],
+                        this.boundingBoxSettings.b[i][4],
+                    ]);
             }
         }
     },
@@ -517,9 +539,15 @@ MapObject.prototype = {
     addToScene: function(){
         if (!this.isInScene && this.mesh !== null) {
             $currentMap.scene.add(this.mesh);
-            $currentMap.scene.add(this.meshBoundingBox);
             this.isInScene = true;
         }
+    },
+
+    // -------------------------------------------------------
+
+    addBBToScene: function() {
+        for (var i = 0, l = this.meshBoundingBox.length; i < l; i++)
+            $currentMap.scene.add(this.meshBoundingBox[i]);
     },
 
     // -------------------------------------------------------
@@ -527,9 +555,17 @@ MapObject.prototype = {
     removeFromScene: function(){
         if (this.isInScene) {
             $currentMap.scene.remove(this.mesh);
-            $currentMap.scene.remove(this.meshBoundingBox);
+            this.removeBBFromScene();
             this.isInScene = false;
         }
+    },
+
+    // -------------------------------------------------------
+
+    removeBBFromScene: function() {
+        for (var i = 0, l = this.meshBoundingBox.length; i < l; i++)
+            $currentMap.scene.remove(this.meshBoundingBox[i]);
+        this.meshBoundingBox = new Array;
     },
 
     // -------------------------------------------------------
@@ -581,7 +617,7 @@ MapObject.prototype = {
                 this.mesh.position.set(this.position.x,
                                        this.position.y + offset,
                                        this.position.z);
-                this.updateBBPosition(this.position);
+                //this.updateBBPosition(this.position);
                 this.moving = false;
             }
             else {
@@ -654,10 +690,8 @@ MapObject.prototype = {
             this.mesh.material =
                  $currentMap.texturesCharacters[this.currentState.graphicID];
         }
-        else{
+        else
             this.mesh = null;
-            this.meshBoundingBox = null;
-        }
     },
 
     // -------------------------------------------------------

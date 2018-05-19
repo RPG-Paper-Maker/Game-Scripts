@@ -790,7 +790,7 @@ MapPortion.prototype = {
 
         MapPortion.applyBoxLandTransforms($BB_BOX, boundingBox);
 
-        return CollisionsUtilities.obbVSobb(object.meshBoundingBox.geometry,
+        return CollisionsUtilities.obbVSobb(object.currentBoundingBox.geometry,
                                             $BB_BOX.geometry);
     },
 
@@ -892,13 +892,15 @@ MapPortion.prototype = {
 
         if (fix) {
             MapPortion.applyBoxSpriteTransforms($BB_BOX, boundingBox);
-            return CollisionsUtilities.obbVSobb(object.meshBoundingBox.geometry,
-                                                $BB_BOX.geometry);
+            return CollisionsUtilities.obbVSobb(
+                   object.currentBoundingBox.geometry, $BB_BOX.geometry);
         }
         else {
-            MapPortion.applyOrientedBoxTransforms($BB_ORIENTED_BOX, boundingBox);
-            return CollisionsUtilities.obbVSobb(object.meshBoundingBox.geometry,
-                                                $BB_ORIENTED_BOX.geometry);
+            MapPortion.applyOrientedBoxTransforms($BB_ORIENTED_BOX,
+                                                  boundingBox);
+            return CollisionsUtilities.obbVSobb(
+                   object.currentBoundingBox.geometry,
+                   $BB_ORIENTED_BOX.geometry);
         }
     },
 
@@ -927,8 +929,7 @@ MapPortion.prototype = {
 
         for (var i = 0, l = list.length; i < l; i++) {
             obj = list[i];
-            if (true && obj !== object) {
-                test = true;
+            if (obj !== object && object.isInRect(obj)) {
                 if (object.checkCollisionObject(obj, position))
                     return true;
             }
