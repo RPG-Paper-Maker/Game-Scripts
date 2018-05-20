@@ -63,6 +63,14 @@ DatasSystem.prototype = {
             this.idObjectStartHero = json.idObjHero;
             this.getModelHero();
 
+            // Debug
+            this.showBB = (typeof json.bb !== 'undefined');
+            if (this.showBB) {
+                $BB_MATERIAL.color.setHex(0xff0000);
+                $BB_MATERIAL.wireframe = true;
+                $BB_MATERIAL.visible = true;
+            }
+
             // Currencies
             var jsonCurrencies = json.currencies;
             l = jsonCurrencies.length;

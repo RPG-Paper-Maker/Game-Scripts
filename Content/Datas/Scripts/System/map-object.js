@@ -547,8 +547,10 @@ MapObject.prototype = {
     // -------------------------------------------------------
 
     addBBToScene: function() {
-        for (var i = 0, l = this.meshBoundingBox.length; i < l; i++)
-            $currentMap.scene.add(this.meshBoundingBox[i]);
+        if ($datasGame.system.showBB) {
+            for (var i = 0, l = this.meshBoundingBox.length; i < l; i++)
+                $currentMap.scene.add(this.meshBoundingBox[i]);
+        }
     },
 
     // -------------------------------------------------------
@@ -564,8 +566,11 @@ MapObject.prototype = {
     // -------------------------------------------------------
 
     removeBBFromScene: function() {
-        for (var i = 0, l = this.meshBoundingBox.length; i < l; i++)
-            $currentMap.scene.remove(this.meshBoundingBox[i]);
+        if ($datasGame.system.showBB) {
+            for (var i = 0, l = this.meshBoundingBox.length; i < l; i++)
+                $currentMap.scene.remove(this.meshBoundingBox[i]);
+        }
+
         this.meshBoundingBox = new Array;
     },
 

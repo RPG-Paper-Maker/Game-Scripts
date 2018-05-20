@@ -52,8 +52,10 @@ function SceneMap(id){
     this.collisions = new Array;
 
     // Adding meshes for collision
-    this.scene.add($BB_BOX);
-    this.scene.add($BB_ORIENTED_BOX);
+    if ($datasGame.system.showBB) {
+        this.scene.add($BB_BOX);
+        this.scene.add($BB_ORIENTED_BOX);
+    }
 
     this.callBackAfterLoading = this.loadTextures;
 }

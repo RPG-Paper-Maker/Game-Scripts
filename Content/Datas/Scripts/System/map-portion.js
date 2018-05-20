@@ -257,8 +257,7 @@ MapPortion.applyOrientedBoxTransforms = function(box, boundingBox) {
 // -------------------------------------------------------
 
 MapPortion.createBox = function() {
-    var box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1),
-                             $INVISIBLE_MATERIAL);
+    var box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), $BB_MATERIAL);
     box.previousTranslate = [0, 0, 0];
     box.previousRotate = 0;
     box.previousScale = [1, 1, 1];
@@ -269,8 +268,7 @@ MapPortion.createBox = function() {
 // -------------------------------------------------------
 
 MapPortion.createOrientedBox = function() {
-    var box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1),
-                             $INVISIBLE_MATERIAL);
+    var box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), $BB_MATERIAL);
     box.previousTranslate = [0, 0, 0];
     box.previousScale = [1, 1, 1];
     box.geometry.rotateY(Math.PI / 4);

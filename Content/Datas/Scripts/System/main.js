@@ -181,9 +181,8 @@ var $DIALOG_ERROR = null;
 
 /** A material invisible used for collisions.
 *   @type {THREE.MeshBasicMaterial} */
-var $INVISIBLE_MATERIAL = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe: true});
-//var $INVISIBLE_MATERIAL = new THREE.MeshBasicMaterial();
-//$INVISIBLE_MATERIAL.visible = false;
+var $BB_MATERIAL = new THREE.MeshBasicMaterial();
+$BB_MATERIAL.visible = false;
 
 // -------------------------------------------------------
 //  BOUNDING BOXES
