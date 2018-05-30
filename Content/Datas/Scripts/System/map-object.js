@@ -181,8 +181,7 @@ MapObject.prototype = {
         var material =
                 $currentMap.texturesCharacters[this.currentState.graphicID];
         this.meshBoundingBox = new Array;
-        if (this.currentState !== null &&
-            this.currentState.graphicKind !== ElementMapKind.None &&
+        if (this.currentState !== null && !this.isNone() &&
             typeof material.map !== 'undefined')
         {
             this.frame = this.currentState.indexX;
@@ -591,9 +590,10 @@ MapObject.prototype = {
             var reactions = this.system.getReactions(isSystem, idEvent,
                                                      states[i], parameters);
 
-            for (j = 0, ll = reactions.length; j < ll; j++)
+            for (j = 0, ll = reactions.length; j < ll; j++) {
                 SceneGame.prototype.addReaction.call($gameStack.top(), sender,
                                                      reactions[j], this, state);
+            }
         }
     },
 
@@ -666,9 +666,7 @@ MapObject.prototype = {
     /** Update the UVs coordinates according to frame and orientation.
     */
     updateUVs: function(){
-        if (this.mesh !== null &&
-            this.currentState.graphicKind !== ElementMapKind.None)
-        {
+        if (this.mesh !== null && !this.isNone()) {
             var textureWidth = this.mesh.material.map.image.width;
             var textureHeight = this.mesh.material.map.image.height;
             var w = this.width * $SQUARE_SIZE / textureWidth;
@@ -692,7 +690,7 @@ MapObject.prototype = {
     /** Update the material.
     */
     updateMaterial: function(){
-        if (this.currentState.graphicKind !== ElementMapKind.None){
+        if (!this.isNone()){
             this.mesh.material =
                  $currentMap.texturesCharacters[this.currentState.graphicID];
         }
@@ -704,5 +702,12 @@ MapObject.prototype = {
 
     getStateIndex: function() {
         return this.frame + (this.orientation * $FRAMES);
+    },
+
+    // -------------------------------------------------------
+
+    isNone: function() {
+        return this.currentState.graphicKind === ElementMapKind.None ||
+               this.currentState.graphicID === -1;
     }
 }

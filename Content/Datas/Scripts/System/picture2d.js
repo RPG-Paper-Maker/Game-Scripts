@@ -45,11 +45,6 @@ function Picture2D(path, callback, x, y, w, h) {
     $canvasRendering.loadImage(path);
 }
 
-Picture2D.destroyAll = function() {
-    for (var i = $picturesLoaded.length - 1; i >= 0; i--)
-        $picturesLoaded[i].destroy();
-};
-
 Picture2D.prototype = {
 
     setX: function(x) {
@@ -86,12 +81,5 @@ Picture2D.prototype = {
         }
 
         return false;
-    },
-
-    // -------------------------------------------------------
-
-    destroy: function() {
-        $canvasRendering.unloadImage(this.path);
-        $picturesLoaded.splice($picturesLoaded.indexOf(this), 1);
     }
 }

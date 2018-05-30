@@ -88,6 +88,7 @@ SceneMap.prototype = {
     /** Read the map infos file.
     */
     readMapInfos: function(){
+        $filesToLoad++;
         RPM.openFile(this, RPM.FILE_MAPS + this.mapName +
                        RPM.FILE_MAP_INFOS, true, function(res)
         {
@@ -101,6 +102,7 @@ SceneMap.prototype = {
                 depth: json.d,
                 tileset : $datasGame.tilesets.list[json.tileset]
             };
+            $loadedFiles++;
 
             // Now that we have map dimensions, we can initialize object portion
             if (!$game.mapsDatas.hasOwnProperty(this.id))
@@ -406,9 +408,6 @@ SceneMap.prototype = {
                     that.callBackAfterLoading = callback;
                 }
 
-                // Destroy all the loaded images
-                Picture2D.destroyAll();
-
                 // Finished loading textures
                 that.callBackAfterLoading = that.loadWalls;
             }
@@ -565,7 +564,7 @@ SceneMap.prototype = {
     *   @param {string} pathLocal The path of the texture.
     */
     loadTextureWall: function(texture, pathLocal, picture) {
-        var pic = new Picture2D(pathLocal, function() {
+        var callback = function() {
             var context = $canvasRendering.getContext("2d");
             var img = context.createImageData(pathLocal);
 
@@ -587,11 +586,16 @@ SceneMap.prototype = {
             image.addEventListener('load', function() {
                 texture.image = image;
                 texture.needsUpdate = true;
-                pic.destroy();
                 $loadedFiles++;
             }, false);
             image.src = $canvasRendering.toDataURL();
-        });
+        };
+
+
+        if ($canvasRendering.isImageLoaded(pathLocal))
+            callback.call(this);
+        else
+            var pic = new Picture2D(pathLocal, callback);
     },
 
     // -------------------------------------------------------

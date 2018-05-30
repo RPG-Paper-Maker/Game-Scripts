@@ -123,12 +123,13 @@ SystemObject.prototype = {
         var i, j, l, ll, test;
         var reactions = [];
         var events = this.events[idEvent];
-        var event;
+        var event, reaction;
 
         if (typeof events !== 'undefined'){
             for (i = 0, l = events.length; i < l; i++){
                 test = true;
                 event = events[i];
+
                 for (j = 1, ll = parameters.length; j < ll; j++){
                     if (!event.parameters[j].value.isEqual(parameters[j])){
                         test = false;
@@ -136,8 +137,11 @@ SystemObject.prototype = {
                     }
                 }
 
-                if (test)
-                    reactions.push(events[i].reactions[state]);
+                if (test) {
+                    reaction = events[i].reactions[state];
+                    if (reaction)
+                        reactions.push(reaction);
+                }
             }
         }
 

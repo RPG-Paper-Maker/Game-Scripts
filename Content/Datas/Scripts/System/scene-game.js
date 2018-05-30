@@ -76,9 +76,11 @@ SceneGame.prototype = {
         for (i = 0, l = this.reactionInterpreters.length; i < l; i++){
             interpreter = this.reactionInterpreters[i];
             interpreter.update();
-            if (interpreter.isFinished()) {
+            if (interpreter.isFinished())
                 endingReactions.unshift(i);
-            }
+            // If changed map, STOP
+            if ($currentMap.callBackAfterLoading !== null)
+                return;
         }
 
         // Deleting finished reactions
