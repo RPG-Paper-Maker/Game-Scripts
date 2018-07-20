@@ -44,6 +44,7 @@
 */
 function DatasGame(){
     this.pictures = new DatasPictures();
+    this.songs = new DatasSongs();
     this.commonEvents = new DatasCommonEvents();
     this.items = new DatasItems();
     this.skills = new DatasSkills();

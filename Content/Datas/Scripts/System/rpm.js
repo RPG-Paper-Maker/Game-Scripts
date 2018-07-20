@@ -317,6 +317,7 @@ RPM.FILE_MAPS = RPM.PATH_DATAS + "Maps/";
 RPM.FILE_MAP_INFOS = "/infos.json";
 RPM.FILE_MAP_OBJECTS = "/objects.json";
 RPM.FILE_PICTURES_DATAS = RPM.PATH_DATAS + "pictures.json";
+RPM.FILE_SONGS_DATAS = RPM.PATH_DATAS + "songs.json";
 RPM.FILE_COMMON_EVENTS = RPM.PATH_DATAS + "commonEvents.json";
 RPM.FILE_ITEMS = RPM.PATH_DATAS + "items.json";
 RPM.FILE_SKILLS = RPM.PATH_DATAS + "skills.json";
@@ -344,6 +345,11 @@ RPM.PATH_CHARACTERS = RPM.PATH_TEXTURES2D + "Characters";
 RPM.PATH_RELIEFS = RPM.PATH_TEXTURES2D + "Reliefs";
 RPM.PATH_TILESETS = RPM.PATH_TEXTURES2D + "Tilesets";
 RPM.PATH_WALLS = RPM.PATH_TEXTURES2D + "Walls";
+RPM.PATH_SONGS = "Content/Songs/";
+RPM.PATH_MUSICS = RPM.PATH_SONGS + "Musics";
+RPM.PATH_BACKGROUND_SOUNDS = RPM.PATH_SONGS + "BackgroundSounds";
+RPM.PATH_SOUNDS = RPM.PATH_SONGS + "Sounds";
+RPM.PATH_MUSIC_EFFECTS = RPM.PATH_SONGS + "MusicEffects";
 
 // -------------------------------------------------------
 //  FUNCTIONS

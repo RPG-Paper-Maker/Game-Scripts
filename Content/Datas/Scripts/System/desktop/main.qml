@@ -21,6 +21,7 @@ import QtQuick 2.4
 import QtCanvas3D 1.1
 import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.1
+import QtMultimedia 5.8
 
 import "qrc:/qmlUtilities.js" as Game
 
@@ -78,6 +79,16 @@ Window {
         onTriggered: {
             Game.RPM.updateTimer();
         }
+    }
+
+    Audio {
+        id: musicPlayer;
+        playlist: Playlist {}
+    }
+
+    Audio {
+        id: backgroundsoundPlayer;
+        playlist: Playlist {}
     }
 
     property double startTime: new Date().getTime()
@@ -151,6 +162,8 @@ Window {
                 Game.$canvasHeight = canvas3d.height;
                 Game.$windowX = Game.$canvasWidth / Game.$SCREEN_X;
                 Game.$windowY = Game.$canvasHeight / Game.$SCREEN_Y;
+                Game.$musicPlayer = musicPlayer;
+                Game.$backgroundsoundPlayer = backgroundsoundPlayer;
                 Game.initialize();
                 Game.initializeGL(canvas3d);
             }
