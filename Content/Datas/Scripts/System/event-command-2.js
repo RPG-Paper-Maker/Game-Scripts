@@ -1162,3 +1162,79 @@ EventCommandMoveCamera.prototype = {
     onKeyPressedAndRepeat: function(currentState, key){},
     drawHUD: function(currentState, context){}
 }
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandPlayMusic
+//
+// -------------------------------------------------------
+
+/** @class
+*   An event command for playing a music.
+*   @property {boolean} isDirectNode Indicates if this node is directly
+*   going to the next node (takes only one frame).
+*/
+
+function EventCommandPlayMusic(command){
+    this.json = command;
+    this.isDirectNode = true;
+    this.parallel = false;
+}
+
+// -------------------------------------------------------
+
+EventCommandPlayMusic.parsePlaySong = function(that, kind, command) {
+    var i = 0;
+
+    var isIDprimitive = command[i++] === 1;
+    var k = command[i++];
+    var v = command[i++];
+    var idValue = SystemValue.createValue(k, v);
+    var id = SystemValue.createNumber(command[i++]);
+    that.song = $datasGame.songs.get(kind,
+                                     (isIDprimitive ? idValue : id).getValue());
+    k = command[i++];
+    v = command[i++];
+    that.volume = SystemValue.createValue(k, v);
+    that.isStart = command[i++] === 1;
+    k = command[i++];
+    v = command[i++];
+    that.start = SystemValue.createValue(k, v);
+    that.isEnd = command[i++] === 1;
+    k = command[i++];
+    v = command[i++];
+    that.end = SystemValue.createValue(k, v);
+};
+
+// -------------------------------------------------------
+
+EventCommandPlayMusic.prototype = {
+    initialize: function(){ return null; },
+
+    // -------------------------------------------------------
+
+    /** Update and check if the event is finished.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The current object reacting.
+    *   @param {number} state The state ID.
+    *   @returns {number} The number of node to pass.
+    */
+
+    update: function(currentState, object, state){
+        EventCommandPlayMusic.parsePlaySong(this, SongKind.Music, this.json);
+        $musicPlayer.source = this.song.getPath(SongKind.Music);
+        $musicPlayer.volume = this.volume.getValue() / 100;
+        $musicPlayer.play();
+
+        return 1;
+    },
+
+    // -------------------------------------------------------
+
+
+    onKeyPressed: function(currentState, key){},
+    onKeyReleased: function(currentState, key){},
+    onKeyPressedRepeat: function(currentState, key){ return true; },
+    onKeyPressedAndRepeat: function(currentState, key){},
+    drawHUD: function(currentState, context){}
+}

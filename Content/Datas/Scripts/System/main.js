@@ -184,6 +184,14 @@ var $DIALOG_ERROR = null;
 var $BB_MATERIAL = new THREE.MeshBasicMaterial();
 $BB_MATERIAL.visible = false;
 
+/** The media player for music.
+*   @type {MediaPlayer} */
+var $musicPlayer;
+
+/** The media player for background sound.
+*   @type {MediaPlayer} */
+var $backgroundsoundPlayer;
+
 // -------------------------------------------------------
 //  BOUNDING BOXES
 // -------------------------------------------------------

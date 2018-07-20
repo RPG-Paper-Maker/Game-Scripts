@@ -46,7 +46,13 @@ var EventCommandKind = {
     TeleportObject: 20,
     MoveObject: 21,
     Wait: 22,
-    MoveCamera: 23
+    MoveCamera: 23,
+    PlayMusic: 24,
+    StopMusic: 25,
+    PlayBackgroundSound: 26,
+    StopBackgroundSound: 27,
+    PlaySound: 28,
+    PlayMusicEffect: 29
 };
 Object.freeze(EventCommandKind);
 

@@ -119,6 +119,18 @@ SystemObjectReaction.prototype = {
                 return new EventCommandWait(command);
             case EventCommandKind.MoveCamera:
                 return new EventCommandMoveCamera(command);
+            case EventCommandKind.PlayMusic:
+                return new EventCommandPlayMusic(command);
+            case EventCommandKind.StopMusic:
+                return new EventCommandStopMusic(command);
+            case EventCommandKind.PlayBackgroundSound:
+                return new EventCommandPlayBackgroundSound(command);
+            case EventCommandKind.StopBackgroundSound:
+                return new EventCommandStopBackgroundSound(command);
+            case EventCommandKind.PlaySound:
+                return new EventCommandPlaySound(command);
+            case EventCommandKind.PlayMusicEffect:
+                return new EventCommandPlayMusicEffect(command);
             default:
                 return null;
         }
