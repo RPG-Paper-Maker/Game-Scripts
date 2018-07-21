@@ -116,7 +116,8 @@ DISTFILES += \
     Content/Datas/Scripts/System/collision-square.js \
     Content/Datas/Scripts/System/collisions-utilities.js \
     Content/Datas/Scripts/System/datas-songs.js \
-    Content/Datas/Scripts/System/system-song.js
+    Content/Datas/Scripts/System/system-song.js \
+    Content/Datas/Scripts/System/songs-manager.js
 
 RESOURCES += \
     qml.qrc

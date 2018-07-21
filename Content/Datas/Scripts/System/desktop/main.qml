@@ -91,6 +91,26 @@ Window {
         playlist: Playlist {}
     }
 
+    SoundEffect {
+        id: playSound1;
+    }
+
+    SoundEffect {
+        id: playSound2;
+    }
+
+    SoundEffect {
+        id: playSound3;
+    }
+
+    SoundEffect {
+        id: playSound4;
+    }
+
+    SoundEffect {
+        id: playSound5;
+    }
+
     property double startTime: new Date().getTime()
 
     // -------------------------------------------------------
@@ -123,6 +143,7 @@ Window {
                 var t = new Date().getTime();
                 if (t - startTime >= 50){
                     startTime = t;
+                    Game.$songsManager.playSound(1);
                     if (!Game.RPM.isLoading())
                         Game.onKeyPressedAndRepeat(key);
                 }
@@ -162,8 +183,9 @@ Window {
                 Game.$canvasHeight = canvas3d.height;
                 Game.$windowX = Game.$canvasWidth / Game.$SCREEN_X;
                 Game.$windowY = Game.$canvasHeight / Game.$SCREEN_Y;
-                Game.$musicPlayer = musicPlayer;
-                Game.$backgroundsoundPlayer = backgroundsoundPlayer;
+                Game.$songsManager = new Game.SongsManager(
+                    musicPlayer, backgroundsoundPlayer, [playSound1, playSound2,
+                    playSound3, playSound4, playSound5]);
                 Game.initialize();
                 Game.initializeGL(canvas3d);
             }

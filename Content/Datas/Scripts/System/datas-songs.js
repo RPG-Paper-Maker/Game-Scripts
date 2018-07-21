@@ -75,6 +75,7 @@ DatasSongs.prototype = {
                 }
 
                 this.list[k] = list;
+                $songsManager.addSongs(k, list);
             }
         });
     },
