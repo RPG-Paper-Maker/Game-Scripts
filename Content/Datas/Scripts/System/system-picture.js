@@ -54,8 +54,7 @@ function SystemPicture(){
 *   @returns {string}
 */
 SystemPicture.getFolder = function(kind, isBR){
-    var folder = isBR ? RPM.PATH_BR
-                      : $ROOT_DIRECTORY;
+    var folder = isBR ? RPM.PATH_BR : $ROOT_DIRECTORY;
     var folderLocal = isBR ? RPM.PATH_BR : $ROOT_DIRECTORY_LOCAL;
     var dir = SystemPicture.getLocalFolder(kind);
     var path = folder + dir;

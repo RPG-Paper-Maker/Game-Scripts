@@ -51,10 +51,13 @@ function SystemSong(){
 *   @returns {string}
 */
 SystemSong.getFolder = function(kind, isBR){
-    var folder = isBR ? RPM.PATH_BR : $ROOT_DIRECTORY_LOCAL;
+    var folder = isBR ? RPM.PATH_BR : $ROOT_DIRECTORY;
+    var folderLocal = isBR ? RPM.PATH_BR : $ROOT_DIRECTORY_LOCAL;
     var dir = SystemSong.getLocalFolder(kind);
+    var path = folder + dir;
+    var pathLocal = folderLocal + dir;
 
-    return folder + dir;
+    return [path, pathLocal];
 };
 
 // -------------------------------------------------------
@@ -99,6 +102,10 @@ SystemSong.prototype = {
     *   @returns {string}
     */
     getPath: function(kind) {
-        return SystemSong.getFolder(kind, this.isBR) + "/" + this.name;
+        var paths = SystemSong.getFolder(kind, this.isBR);
+        paths[0] += "/" + this.name;
+        paths[1] += "/" + this.name;
+
+        return paths;
     }
 }

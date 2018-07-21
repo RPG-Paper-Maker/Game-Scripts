@@ -83,12 +83,16 @@ Window {
 
     Audio {
         id: musicPlayer;
-        playlist: Playlist {}
+        playlist: Playlist {
+            playbackMode: Playlist.CurrentItemInLoop;
+        }
     }
 
     Audio {
         id: backgroundsoundPlayer;
-        playlist: Playlist {}
+        playlist: Playlist {
+            playbackMode: Playlist.CurrentItemInLoop;
+        }
     }
 
     SoundEffect {
@@ -143,7 +147,6 @@ Window {
                 var t = new Date().getTime();
                 if (t - startTime >= 50){
                     startTime = t;
-                    Game.$songsManager.playSound(1);
                     if (!Game.RPM.isLoading())
                         Game.onKeyPressedAndRepeat(key);
                 }

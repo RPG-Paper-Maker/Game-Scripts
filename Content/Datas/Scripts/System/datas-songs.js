@@ -29,7 +29,7 @@
 *   according to ID and SongKind.
 */
 function DatasSongs(){
-    this.read();
+
 }
 
 DatasSongs.prototype = {

@@ -253,6 +253,9 @@ function resizeGL(canvas){
 */
 function update(){
 
+    // Update songs manager
+    $songsManager.update();
+
     // Repeat keypress as long as not blocking
     var continuePressed = true;
     for (var i = 0, l = $keysPressed.length; i < l; i++){

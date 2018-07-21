@@ -1191,19 +1191,20 @@ EventCommandPlayMusic.parsePlaySong = function(that, kind, command) {
     var v = command[i++];
     var idValue = SystemValue.createValue(k, v);
     var id = SystemValue.createNumber(command[i++]);
-    that.song = $datasGame.songs.get(kind,
-                                     (isIDprimitive ? idValue : id).getValue());
+    that.songID = isIDprimitive ? idValue : id;
     k = command[i++];
     v = command[i++];
     that.volume = SystemValue.createValue(k, v);
-    that.isStart = command[i++] === 1;
+    var isStart = command[i++] === 1;
     k = command[i++];
     v = command[i++];
-    that.start = SystemValue.createValue(k, v);
-    that.isEnd = command[i++] === 1;
+    var start = SystemValue.createValue(k, v);
+    that.start = isStart ? start : null;
+    var isEnd = command[i++] === 1;
     k = command[i++];
     v = command[i++];
-    that.end = SystemValue.createValue(k, v);
+    var end = SystemValue.createValue(k, v);
+    that.end = isEnd ? end : null;
 };
 
 // -------------------------------------------------------
@@ -1222,9 +1223,9 @@ EventCommandPlayMusic.prototype = {
 
     update: function(currentState, object, state){
         EventCommandPlayMusic.parsePlaySong(this, SongKind.Music, this.json);
-        $musicPlayer.source = this.song.getPath(SongKind.Music);
-        $musicPlayer.volume = this.volume.getValue() / 100;
-        $musicPlayer.play();
+        $songsManager.playSong(SongKind.Music, this.songID.getValue(),
+            this.volume.getValue() / 100, this.start.getValue(),
+            this.end.getValue());
 
         return 1;
     },

@@ -31,6 +31,16 @@ function SongsManager(musicPlayer, backgroundPlayer, soundsPlayers) {
     this.backgroundSounds = backgroundPlayer;
     this.sounds = soundsPlayers;
     this.soundIndex = 0;
+
+    var l = RPM.countFields(SongKind) - 1;
+    this.starts = new Array(l);
+    this.starts[SongKind.Music] = null;
+    this.starts[SongKind.BackgroundSound] = null;
+    this.starts[SongKind.MusicEffect] = null;
+    this.ends = new Array(l);
+    this.ends[SongKind.Music] = null;
+    this.ends[SongKind.BackgroundSound] = null;
+    this.ends[SongKind.MusicEffect] = null;
 }
 
 SongsManager.prototype = {
@@ -65,9 +75,33 @@ SongsManager.prototype = {
         var paths = new Array(l + 1);
         for (i = 0; i < l; i++) {
             song = songs[i];
-            paths[song.id === -1 ? 0 : song.id] = song.getPath(kind);
+            paths[song.id === -1 ? 0 : song.id] = song.getPath(kind)[0];
         }
         player.playlist.addItems(paths);
+    },
+
+    // -------------------------------------------------------
+
+    /** Play a song.
+    *   @param {SongKind} kind The kind of song to add.
+    *   @param {number} id The id of the song.
+    */
+    playSong: function(kind, id, volume, start, end) {
+        var player = this.getPlayer(kind);
+        if (!player)
+            return;
+
+        player.volume = volume;
+        this.starts[kind] = start * 1000;
+        this.ends[kind] = end * 1000;
+        if (id === -1) {
+            player.stop();
+        }
+        else {
+            player.playlist.currentIndex = id;
+            player.seek(this.starts[kind]);
+            player.play();
+        }
     },
 
     // -------------------------------------------------------
@@ -78,9 +112,30 @@ SongsManager.prototype = {
     playSound: function(id) {
         var player = this.sounds[this.soundIndex++];
         player.source = $datasGame.songs.list[SongKind.Sound][id]
-            .getPath(SongKind.Sound);
+            .getPath(SongKind.Sound)[0];
         player.play();
         if (this.soundIndex === 5)
             this.soundIndex = 0;
+    },
+
+    // -------------------------------------------------------
+
+    /** Update songs positions or other stuffs.
+    */
+    updateByKind: function(kind) {
+        var player = this.getPlayer(kind);
+        if (player.playbackState === Audio.PlayingState) {
+            if (this.ends[kind] && player.position >= this.ends[kind]) {
+                player.seek(this.starts[kind]);
+            }
+        }
+    },
+
+    // -------------------------------------------------------
+
+    /** Update songs positions or other stuffs.
+    */
+    update: function() {
+        this.updateByKind(SongKind.Music);
     }
 }

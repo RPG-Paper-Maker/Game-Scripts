@@ -82,6 +82,9 @@ DatasSystem.prototype = {
                 currency.readJSON(jsonCurrency);
                 this.currencies[id] = currency;
             }
+
+            // read song now that BR path is loaded
+            $datasGame.songs.read();
         });
     },
 
