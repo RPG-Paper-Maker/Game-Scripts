@@ -1259,8 +1259,8 @@ EventCommandPlayMusic.prototype = {
 
 function EventCommandStopMusic(command){
     EventCommandStopMusic.parseStopSong(this, command);
-    this.isDirectNode = false;
-    this.parallel = false;
+    this.isDirectNode = true;
+    this.parallel = true;
 }
 
 // -------------------------------------------------------
@@ -1285,6 +1285,7 @@ EventCommandStopMusic.prototype = {
 
     initialize: function(){
         return {
+            parallel: false,
             time: new Date().getTime()
         };
     },
@@ -1299,8 +1300,9 @@ EventCommandStopMusic.prototype = {
     */
 
     update: function(currentState, object, state){
-        return EventCommandStopMusic.stopSong(this, SongKind.Music,
+        var stopped = EventCommandStopMusic.stopSong(this, SongKind.Music,
             currentState.time);
+        return currentState.parallel ? stopped : 1;
     },
 
     // -------------------------------------------------------
@@ -1371,13 +1373,14 @@ EventCommandPlayBackgroundSound.prototype = {
 function EventCommandStopBackgroundSound(command){
     EventCommandStopMusic.parseStopSong(this, command);
     this.isDirectNode = false;
-    this.parallel = false;
+    this.parallel = true;
 }
 
 EventCommandStopBackgroundSound.prototype = {
 
     initialize: function(){
         return {
+            parallel: false,
             time: new Date().getTime()
         };
     },
@@ -1392,8 +1395,9 @@ EventCommandStopBackgroundSound.prototype = {
     */
 
     update: function(currentState, object, state){
-        return EventCommandStopMusic.stopSong(this, SongKind.BackgroundSound,
-            currentState.time);
+        var stopped = EventCommandStopMusic.stopSong(this,
+            SongKind.BackgroundSound, currentState.time);
+        return currentState.parallel ? stopped : 1;
     },
 
     // -------------------------------------------------------
@@ -1467,13 +1471,14 @@ EventCommandPlaySound.prototype = {
 function EventCommandPlayMusicEffect(command){
     EventCommandPlayMusic.parsePlaySong(this, command);
     this.isDirectNode = true;
-    this.parallel = false;
+    this.parallel = true;
 }
 
 EventCommandPlayMusicEffect.prototype = {
 
     initialize: function(){
         return {
+            parallel: false,
             timeStop: new Date().getTime()
         };
     },
@@ -1488,8 +1493,9 @@ EventCommandPlayMusicEffect.prototype = {
     */
 
     update: function(currentState, object, state){
-        return $songsManager.playMusicEffect(this.songID.getValue(),
-            this.volume.getValue() / 100, currentState);
+        var played = $songsManager.playMusicEffect(this.songID.getValue(),
+            this.volume.getValue() / 100, currentState) ? 1 : 0;
+        return currentState.parallel ? played : 1;
     },
 
     // -------------------------------------------------------
