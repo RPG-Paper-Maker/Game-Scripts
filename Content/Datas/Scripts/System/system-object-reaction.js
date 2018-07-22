@@ -129,8 +129,9 @@ SystemObjectReaction.prototype = {
                 return new EventCommandStopBackgroundSound(command);
             case EventCommandKind.PlaySound:
                 return new EventCommandPlaySound(command);
+                /*
             case EventCommandKind.PlayMusicEffect:
-                return new EventCommandPlayMusicEffect(command);
+                return new EventCommandPlayMusicEffect(command);*/
             default:
                 return null;
         }

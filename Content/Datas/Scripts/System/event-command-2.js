@@ -1176,14 +1176,15 @@ EventCommandMoveCamera.prototype = {
 */
 
 function EventCommandPlayMusic(command){
-    this.json = command;
+    EventCommandPlayMusic.parsePlaySong(this, command);
+
     this.isDirectNode = true;
     this.parallel = false;
 }
 
 // -------------------------------------------------------
 
-EventCommandPlayMusic.parsePlaySong = function(that, kind, command) {
+EventCommandPlayMusic.parsePlaySong = function(that, command) {
     var i = 0;
 
     var isIDprimitive = command[i++] === 1;
@@ -1209,7 +1210,18 @@ EventCommandPlayMusic.parsePlaySong = function(that, kind, command) {
 
 // -------------------------------------------------------
 
+EventCommandPlayMusic.playSong = function(that, kind) {
+    $songsManager.playSong(kind, that.songID.getValue(),
+        that.volume.getValue() / 100, that.start ? that.start.getValue() : null,
+        that.end ? that.end.getValue() : null);
+
+    return 1;
+};
+
+// -------------------------------------------------------
+
 EventCommandPlayMusic.prototype = {
+
     initialize: function(){ return null; },
 
     // -------------------------------------------------------
@@ -1222,16 +1234,219 @@ EventCommandPlayMusic.prototype = {
     */
 
     update: function(currentState, object, state){
-        EventCommandPlayMusic.parsePlaySong(this, SongKind.Music, this.json);
-        $songsManager.playSong(SongKind.Music, this.songID.getValue(),
-            this.volume.getValue() / 100, this.start.getValue(),
-            this.end.getValue());
+        return EventCommandPlayMusic.playSong(this, SongKind.Music);
+    },
+
+    // -------------------------------------------------------
+
+    onKeyPressed: function(currentState, key){},
+    onKeyReleased: function(currentState, key){},
+    onKeyPressedRepeat: function(currentState, key){ return true; },
+    onKeyPressedAndRepeat: function(currentState, key){},
+    drawHUD: function(currentState, context){}
+}
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandStopMusic
+//
+// -------------------------------------------------------
+
+/** @class
+*   An event command for stopping the music.
+*   @property {boolean} isDirectNode Indicates if this node is directly
+*   going to the next node (takes only one frame).
+*/
+
+function EventCommandStopMusic(command){
+    EventCommandStopMusic.parseStopSong(this, command);
+
+    this.isDirectNode = false;
+    this.parallel = false;
+}
+
+// -------------------------------------------------------
+
+EventCommandStopMusic.parseStopSong = function(that, command) {
+    var i = 0;
+
+    var k = command[i++];
+    var v = command[i++];
+    that.seconds = SystemValue.createValue(k, v);
+};
+
+// -------------------------------------------------------
+
+EventCommandStopMusic.stopSong = function(that, kind, time) {
+    return $songsManager.stopSong(kind, time, that.seconds.getValue()) ? 1 : 0;
+};
+
+// -------------------------------------------------------
+
+EventCommandStopMusic.prototype = {
+
+    initialize: function(){
+        return {
+            time: new Date().getTime()
+        };
+    },
+
+    // -------------------------------------------------------
+
+    /** Update and check if the event is finished.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The current object reacting.
+    *   @param {number} state The state ID.
+    *   @returns {number} The number of node to pass.
+    */
+
+    update: function(currentState, object, state){
+        return EventCommandStopMusic.stopSong(this, SongKind.Music,
+            currentState.time);
+    },
+
+    // -------------------------------------------------------
+
+    onKeyPressed: function(currentState, key){},
+    onKeyReleased: function(currentState, key){},
+    onKeyPressedRepeat: function(currentState, key){ return true; },
+    onKeyPressedAndRepeat: function(currentState, key){},
+    drawHUD: function(currentState, context){}
+}
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandPlayBackgroundSound
+//
+// -------------------------------------------------------
+
+/** @class
+*   An event command for playing a backgroundsound.
+*   @property {boolean} isDirectNode Indicates if this node is directly
+*   going to the next node (takes only one frame).
+*/
+
+function EventCommandPlayBackgroundSound(command){
+    EventCommandPlayMusic.parsePlaySong(this, command);
+    this.isDirectNode = true;
+    this.parallel = false;
+}
+
+EventCommandPlayBackgroundSound.prototype = {
+
+    initialize: function(){ return null; },
+
+    // -------------------------------------------------------
+
+    /** Update and check if the event is finished.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The current object reacting.
+    *   @param {number} state The state ID.
+    *   @returns {number} The number of node to pass.
+    */
+
+    update: function(currentState, object, state){
+        return EventCommandPlayMusic.playSong(this, SongKind.BackgroundSound);
+    },
+
+    // -------------------------------------------------------
+
+    onKeyPressed: function(currentState, key){},
+    onKeyReleased: function(currentState, key){},
+    onKeyPressedRepeat: function(currentState, key){ return true; },
+    onKeyPressedAndRepeat: function(currentState, key){},
+    drawHUD: function(currentState, context){}
+}
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandStopBackgroundSound
+//
+// -------------------------------------------------------
+
+/** @class
+*   An event command for stopping the background sound.
+*   @property {boolean} isDirectNode Indicates if this node is directly
+*   going to the next node (takes only one frame).
+*/
+
+function EventCommandStopBackgroundSound(command){
+    EventCommandStopMusic.parseStopSong(this, command);
+
+    this.isDirectNode = false;
+    this.parallel = false;
+}
+
+EventCommandStopBackgroundSound.prototype = {
+
+    initialize: function(){
+        return {
+            time: new Date().getTime()
+        };
+    },
+
+    // -------------------------------------------------------
+
+    /** Update and check if the event is finished.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The current object reacting.
+    *   @param {number} state The state ID.
+    *   @returns {number} The number of node to pass.
+    */
+
+    update: function(currentState, object, state){
+        return EventCommandStopMusic.stopSong(this, SongKind.BackgroundSound,
+            currentState.time);
+    },
+
+    // -------------------------------------------------------
+
+    onKeyPressed: function(currentState, key){},
+    onKeyReleased: function(currentState, key){},
+    onKeyPressedRepeat: function(currentState, key){ return true; },
+    onKeyPressedAndRepeat: function(currentState, key){},
+    drawHUD: function(currentState, context){}
+}
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandSound
+//
+// -------------------------------------------------------
+
+/** @class
+*   An event command for playing a backgroundsound.
+*   @property {boolean} isDirectNode Indicates if this node is directly
+*   going to the next node (takes only one frame).
+*/
+
+function EventCommandPlaySound(command){
+    EventCommandPlayMusic.parsePlaySong(this, command);
+    this.isDirectNode = true;
+    this.parallel = false;
+}
+
+EventCommandPlaySound.prototype = {
+
+    initialize: function(){ return null; },
+
+    // -------------------------------------------------------
+
+    /** Update and check if the event is finished.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The current object reacting.
+    *   @param {number} state The state ID.
+    *   @returns {number} The number of node to pass.
+    */
+
+    update: function(currentState, object, state){
+        $songsManager.playSound(this.songID.getValue(),
+            this.volume.getValue() / 100);
 
         return 1;
     },
 
     // -------------------------------------------------------
-
 
     onKeyPressed: function(currentState, key){},
     onKeyReleased: function(currentState, key){},

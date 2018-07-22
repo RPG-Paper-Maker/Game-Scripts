@@ -33,6 +33,10 @@ function SongsManager(musicPlayer, backgroundPlayer, soundsPlayers) {
     this.soundIndex = 0;
 
     var l = RPM.countFields(SongKind) - 1;
+    this.volumes = new Array(l);
+    this.volumes[SongKind.Music] = 0;
+    this.volumes[SongKind.BackgroundSound] = 0;
+    this.volumes[SongKind.MusicEffect] = 0;
     this.starts = new Array(l);
     this.starts[SongKind.Music] = null;
     this.starts[SongKind.BackgroundSound] = null;
@@ -91,6 +95,7 @@ SongsManager.prototype = {
         if (!player)
             return;
 
+        this.volumes[kind] = volume;
         player.volume = volume;
         this.starts[kind] = start * 1000;
         this.ends[kind] = end * 1000;
@@ -106,11 +111,40 @@ SongsManager.prototype = {
 
     // -------------------------------------------------------
 
+    /** Stop a song.
+    *   @param {SongKind} kind The kind of song to add.
+    *   @param {number} time The date seconds value in the first call of stop.
+    *   @param {number} seconds The seconds needed for entirely stop the song.
+    *   @returns {boolean} Indicates if the song is stopped.
+    */
+    stopSong: function(kind, time, seconds) {
+        var player = this.getPlayer(kind);
+        if (!player)
+            return true;
+
+        var current = new Date().getTime();
+        var ellapsedTime = current - time;
+
+        if (ellapsedTime >= (seconds * 1000)) {
+            player.volume = 0;
+            player.stop();
+        }
+        else {
+            player.volume = (this.volumes[kind] * (100 - ((ellapsedTime /
+                (seconds * 1000)) * 100))) / 100;
+        }
+
+        return player.volume === 0;
+    },
+
+    // -------------------------------------------------------
+
     /** Play a sound.
     *   @param {number} id The id of the song.
     */
-    playSound: function(id) {
+    playSound: function(id, volume) {
         var player = this.sounds[this.soundIndex++];
+        player.volume = volume;
         player.source = $datasGame.songs.list[SongKind.Sound][id]
             .getPath(SongKind.Sound)[0];
         player.play();
@@ -137,5 +171,7 @@ SongsManager.prototype = {
     */
     update: function() {
         this.updateByKind(SongKind.Music);
+        this.updateByKind(SongKind.BackgroundSound);
+        //this.updateByKind(SongKind.MusicEffect);
     }
 }
