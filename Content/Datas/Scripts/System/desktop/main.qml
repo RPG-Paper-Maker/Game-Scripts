@@ -95,6 +95,13 @@ Window {
         }
     }
 
+    Audio {
+        id: musicEffectPlayer;
+        playlist: Playlist {
+            playbackMode: Playlist.CurrentItemOnce;
+        }
+    }
+
     SoundEffect {
         id: playSound1;
     }
@@ -187,8 +194,9 @@ Window {
                 Game.$windowX = Game.$canvasWidth / Game.$SCREEN_X;
                 Game.$windowY = Game.$canvasHeight / Game.$SCREEN_Y;
                 Game.$songsManager = new Game.SongsManager(
-                    musicPlayer, backgroundsoundPlayer, [playSound1, playSound2,
-                    playSound3, playSound4, playSound5]);
+                    musicPlayer, backgroundsoundPlayer, musicEffectPlayer,
+                    [playSound1, playSound2, playSound3, playSound4,
+                    playSound5]);
                 Game.initialize();
                 Game.initializeGL(canvas3d);
             }

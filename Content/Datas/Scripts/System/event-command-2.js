@@ -1177,7 +1177,6 @@ EventCommandMoveCamera.prototype = {
 
 function EventCommandPlayMusic(command){
     EventCommandPlayMusic.parsePlaySong(this, command);
-
     this.isDirectNode = true;
     this.parallel = false;
 }
@@ -1260,7 +1259,6 @@ EventCommandPlayMusic.prototype = {
 
 function EventCommandStopMusic(command){
     EventCommandStopMusic.parseStopSong(this, command);
-
     this.isDirectNode = false;
     this.parallel = false;
 }
@@ -1372,7 +1370,6 @@ EventCommandPlayBackgroundSound.prototype = {
 
 function EventCommandStopBackgroundSound(command){
     EventCommandStopMusic.parseStopSong(this, command);
-
     this.isDirectNode = false;
     this.parallel = false;
 }
@@ -1410,7 +1407,7 @@ EventCommandStopBackgroundSound.prototype = {
 
 // -------------------------------------------------------
 //
-//  CLASS EventCommandSound
+//  CLASS EventCommandPlaySound
 //
 // -------------------------------------------------------
 
@@ -1444,6 +1441,55 @@ EventCommandPlaySound.prototype = {
             this.volume.getValue() / 100);
 
         return 1;
+    },
+
+    // -------------------------------------------------------
+
+    onKeyPressed: function(currentState, key){},
+    onKeyReleased: function(currentState, key){},
+    onKeyPressedRepeat: function(currentState, key){ return true; },
+    onKeyPressedAndRepeat: function(currentState, key){},
+    drawHUD: function(currentState, context){}
+}
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandPlayMusicEffect
+//
+// -------------------------------------------------------
+
+/** @class
+*   An event command for playing a music effect.
+*   @property {boolean} isDirectNode Indicates if this node is directly
+*   going to the next node (takes only one frame).
+*/
+
+function EventCommandPlayMusicEffect(command){
+    EventCommandPlayMusic.parsePlaySong(this, command);
+    this.isDirectNode = true;
+    this.parallel = false;
+}
+
+EventCommandPlayMusicEffect.prototype = {
+
+    initialize: function(){
+        return {
+            timeStop: new Date().getTime()
+        };
+    },
+
+    // -------------------------------------------------------
+
+    /** Update and check if the event is finished.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The current object reacting.
+    *   @param {number} state The state ID.
+    *   @returns {number} The number of node to pass.
+    */
+
+    update: function(currentState, object, state){
+        return $songsManager.playMusicEffect(this.songID.getValue(),
+            this.volume.getValue() / 100, currentState);
     },
 
     // -------------------------------------------------------

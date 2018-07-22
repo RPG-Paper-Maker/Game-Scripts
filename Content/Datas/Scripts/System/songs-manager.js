@@ -26,11 +26,15 @@
 /** @class
 *   The manager for songs.
 */
-function SongsManager(musicPlayer, backgroundPlayer, soundsPlayers) {
+function SongsManager(musicPlayer, backgroundPlayer, musicEffects,
+                      soundsPlayers)
+{
     this.musics = musicPlayer;
     this.backgroundSounds = backgroundPlayer;
+    this.musicEffects = musicEffects;
     this.sounds = soundsPlayers;
     this.soundIndex = 0;
+    this.musicEffectStep = 0;
 
     var l = RPM.countFields(SongKind) - 1;
     this.volumes = new Array(l);
@@ -59,6 +63,8 @@ SongsManager.prototype = {
             return this.musics;
         case SongKind.BackgroundSound:
             return this.backgroundSounds;
+        case SongKind.MusicEffect:
+            return this.musicEffects;
         default:
             return null;
         }
@@ -112,12 +118,14 @@ SongsManager.prototype = {
     // -------------------------------------------------------
 
     /** Stop a song.
-    *   @param {SongKind} kind The kind of song to add.
+    *   @param {SongKind} kind The kind of song to stop.
     *   @param {number} time The date seconds value in the first call of stop.
     *   @param {number} seconds The seconds needed for entirely stop the song.
+    *   @param {boolean} pause Indicates if the song needs to be paused instead
+    *   of stoppped.
     *   @returns {boolean} Indicates if the song is stopped.
     */
-    stopSong: function(kind, time, seconds) {
+    stopSong: function(kind, time, seconds, pause) {
         var player = this.getPlayer(kind);
         if (!player)
             return true;
@@ -127,20 +135,54 @@ SongsManager.prototype = {
 
         if (ellapsedTime >= (seconds * 1000)) {
             player.volume = 0;
-            player.stop();
+            if (pause) {
+                player.pause();
+            }
+            else {
+                player.stop();
+            }
+            return true;
         }
         else {
             player.volume = (this.volumes[kind] * (100 - ((ellapsedTime /
                 (seconds * 1000)) * 100))) / 100;
+            return false;
         }
+    },
 
-        return player.volume === 0;
+    // -------------------------------------------------------
+
+    /** Unpause a song.
+    *   @param {SongKind} kind The kind of song to unpause.
+    *   @param {number} time The date seconds value in the first call of
+    *   unpause.
+    *   @param {number} seconds The seconds needed for entirely play the song.
+    *   @returns {boolean} Indicates if the song is played with all volume.
+    */
+    unpauseSong: function(kind, time, seconds) {
+        var player = this.getPlayer(kind);
+        if (!player)
+            return true;
+
+        var current = new Date().getTime();
+        var ellapsedTime = current - time;
+
+        if (ellapsedTime >= (seconds * 1000)) {
+            player.volume = this.volumes[kind];
+            return true;
+        }
+        else {
+            player.volume = this.volumes[kind] * (ellapsedTime /
+                (seconds * 1000));
+            return false;
+        }
     },
 
     // -------------------------------------------------------
 
     /** Play a sound.
-    *   @param {number} id The id of the song.
+    *   @param {number} id The id of the sound.
+    *   @param {number} volume The volume of the sound.
     */
     playSound: function(id, volume) {
         var player = this.sounds[this.soundIndex++];
@@ -150,6 +192,43 @@ SongsManager.prototype = {
         player.play();
         if (this.soundIndex === 5)
             this.soundIndex = 0;
+    },
+
+    // -------------------------------------------------------
+
+    /** Play a music effect.
+    *   @param {number} id The id of the sound.
+    *   @param {number} volume The volume of the sound.
+    */
+    playMusicEffect: function(id, volume, currentState) {
+        if (this.musicEffectStep === 0) {
+            this.playSong(SongKind.MusicEffect, id, volume, null, null);
+            this.musicEffectStep++;
+        }
+        if (this.musicEffectStep === 1) {
+            if (this.stopSong(SongKind.Music, currentState.timeStop, 0.5,
+                              true))
+            {
+                this.musicEffectStep++;
+            }
+        }
+        if (this.musicEffectStep === 2) {
+            if (this.musicEffects.playbackState === Audio.StoppedState) {
+                this.musics.play();
+                currentState.timePlay = new Date().getTime();
+                this.musicEffectStep++;
+            }
+        }
+        if (this.musicEffectStep === 3) {
+            if (this.unpauseSong(SongKind.Music, currentState.timePlay,
+                                 0.5))
+            {
+                this.musicEffectStep = 0;
+                return true;
+            }
+        }
+
+        return false;
     },
 
     // -------------------------------------------------------
@@ -172,6 +251,5 @@ SongsManager.prototype = {
     update: function() {
         this.updateByKind(SongKind.Music);
         this.updateByKind(SongKind.BackgroundSound);
-        //this.updateByKind(SongKind.MusicEffect);
     }
 }
