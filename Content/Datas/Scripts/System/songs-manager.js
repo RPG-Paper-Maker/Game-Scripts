@@ -185,6 +185,9 @@ SongsManager.prototype = {
     *   @param {number} volume The volume of the sound.
     */
     playSound: function(id, volume) {
+        if (id === -1)
+            return;
+
         var player = this.sounds[this.soundIndex++];
         player.volume = volume;
         player.source = $datasGame.songs.list[SongKind.Sound][id]
@@ -201,6 +204,9 @@ SongsManager.prototype = {
     *   @param {number} volume The volume of the sound.
     */
     playMusicEffect: function(id, volume, currentState) {
+        if (id === -1)
+            return;
+
         if (this.musicEffectStep === 0) {
             this.playSong(SongKind.MusicEffect, id, volume, null, null);
             this.musicEffectStep++;
