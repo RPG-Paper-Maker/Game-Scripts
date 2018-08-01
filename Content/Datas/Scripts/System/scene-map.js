@@ -89,19 +89,12 @@ SceneMap.prototype = {
     */
     readMapInfos: function(){
         $filesToLoad++;
+        this.mapInfos = new MapInfos();
         RPM.openFile(this, RPM.FILE_MAPS + this.mapName +
                        RPM.FILE_MAP_INFOS, true, function(res)
         {
             var json = JSON.parse(res);
-
-            this.mapInfos = {
-                name: json.name,
-                length: json.l,
-                width: json.w,
-                height: json.h,
-                depth: json.d,
-                tileset : $datasGame.tilesets.list[json.tileset]
-            };
+            this.mapInfos.read(json);
             $loadedFiles++;
 
             // Now that we have map dimensions, we can initialize object portion
@@ -119,6 +112,10 @@ SceneMap.prototype = {
 
         // Hero initialize
         $game.hero.changeState();
+
+        // Start music and backgroudn sound
+        this.mapInfos.music.update();
+        this.mapInfos.backgroundSound.update();
 
         // End callback
         this.callBackAfterLoading = null;
