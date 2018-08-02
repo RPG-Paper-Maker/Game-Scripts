@@ -114,8 +114,10 @@ SceneMap.prototype = {
         $game.hero.changeState();
 
         // Start music and backgroudn sound
-        this.mapInfos.music.update();
-        this.mapInfos.backgroundSound.update();
+        if (this.mapInfos.music)
+            this.mapInfos.music.update();
+        if (this.mapInfos.backgroundSound)
+            this.mapInfos.backgroundSound.update();
 
         // End callback
         this.callBackAfterLoading = null;
