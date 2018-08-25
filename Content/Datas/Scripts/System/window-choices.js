@@ -54,7 +54,7 @@ function WindowChoices(orientation, x, y, w, h, nbItemsMax, listContents,
         this.listWindows[i].bordersOpacity = 0;
 
     // Create a main window containing all this sub-windows choices
-    this.windowMain = new WindowBox(this.x, this.y, this.w, this.h);
+    this.windowMain = new WindowBox(x, y, w, h);
 }
 
 WindowChoices.prototype = {
