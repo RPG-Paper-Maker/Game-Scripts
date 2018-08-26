@@ -152,6 +152,7 @@ MapObject.prototype = {
     /** Update the current state (graphics to display). Also update the mesh.
     */
     changeState: function(){
+        var angle = this.mesh ? this.mesh.rotation.y : 0;
 
         // Remove previous mesh
         this.removeFromScene();
@@ -186,8 +187,6 @@ MapObject.prototype = {
         {
             this.frame = this.currentState.indexX;
             this.orientationEye = this.currentState.indexY;
-            this.orientationEye = RPM.mod(this.orientationEye +
-                                $currentMap.camera.getMapOrientation() - 2, 4);
             this.updateOrientation();
             this.width = material.map.image.width / $SQUARE_SIZE / $FRAMES;
             this.height = material.map.image.height / $SQUARE_SIZE / 4;
@@ -205,6 +204,7 @@ MapObject.prototype = {
             this.boundingBoxSettings = objCollision[1][0];
             this.updateBB(this.position);
             this.updateUVs();
+            this.updateAngle(angle);
         }
         else {
             this.mesh = null;
