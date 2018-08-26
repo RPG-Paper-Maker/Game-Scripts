@@ -315,7 +315,7 @@ EventCommandChangeState.prototype = {
                 [portion[0]][portion[1]][portion[2]];
         var indexState = portionDatas.si.indexOf(object.system.id);
         if (indexState === -1){
-            indexState = 0;
+            indexState = portionDatas.si.length;
             portionDatas.si.push(object.system.id);
             portionDatas.s.push([1]);
         }
