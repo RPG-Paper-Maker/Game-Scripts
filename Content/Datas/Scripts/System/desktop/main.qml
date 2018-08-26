@@ -138,24 +138,26 @@ Window {
 
         Keys.onPressed: {
             try{
-                var key = event.key;
+                if (!Game.RPM.isLoading() &&
+                    !Game.$gameStack.top().callBackAfterLoading)
+                {
+                    var key = event.key;
 
-                if (key === Qt.Key_F12){
-                    Game.quit();
-                }
+                    if (key === Qt.Key_F12){
+                        Game.quit();
+                    }
 
-                if (!event.isAutoRepeat){
-                    Game.$keysPressed.push(key);
-                    if (!Game.RPM.isLoading())
+                    if (!event.isAutoRepeat){
+                        Game.$keysPressed.push(key);
                         Game.onKeyPressed(key);
-                }
+                    }
 
-                // Wait 50 ms for a slower update
-                var t = new Date().getTime();
-                if (t - startTime >= 50){
-                    startTime = t;
-                    if (!Game.RPM.isLoading())
+                    // Wait 50 ms for a slower update
+                    var t = new Date().getTime();
+                    if (t - startTime >= 50){
+                        startTime = t;
                         Game.onKeyPressedAndRepeat(key);
+                    }
                 }
             }
             catch (e){
@@ -165,12 +167,17 @@ Window {
 
         Keys.onReleased: {
             try{
-                if (event.isAutoRepeat) return;
-                var key = event.key;
-                Game.$keysPressed.splice(Game.$keysPressed.indexOf(key), 1);
-
-                if (!Game.RPM.isLoading())
+                if (!Game.RPM.isLoading() &&
+                    !Game.$gameStack.top().callBackAfterLoading)
+                {
+                    if (event.isAutoRepeat) return;
+                    var key = event.key;
+                    Game.$keysPressed.splice(Game.$keysPressed.indexOf(key), 1);
                     Game.onKeyReleased(key);
+                }
+                else {
+                    Game.$keysPressed = [];
+                }
             }
             catch (e){
                 showError(e);
