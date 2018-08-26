@@ -627,7 +627,7 @@ MapObject.prototype = {
                 this.moving = false;
             }
             else {
-                this.frame = 0;
+                this.frame = this.currentState.indexX;
 
                 // Update angle
                 if (this.currentState.setWithCamera)
