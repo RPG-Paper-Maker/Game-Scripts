@@ -494,13 +494,12 @@ EventCommandSendEvent.sendEventObjects = function(
 
         if (idTarget !== -1) {
             posObject = object.position;
-            detection = (posObject.x >= pos.x - ($SQUARE_SIZE / 2) &&
-                         posObject.x <= pos.x + ($SQUARE_SIZE / 2) &&
+            detection = (posObject.x >= pos.x - $SQUARE_SIZE + 1 &&
+                         posObject.x <= pos.x + $SQUARE_SIZE - 1 &&
                          posObject.y >= pos.y &&
                          posObject.y <= pos.y + $SQUARE_SIZE &&
-                         posObject.z >= pos.z - $SQUARE_SIZE  -
-                                ($SQUARE_SIZE / 2) &&
-                         posObject.z <= pos.z + ($SQUARE_SIZE / 2));
+                         posObject.z >= pos.z - $SQUARE_SIZE + 1 &&
+                         posObject.z <= pos.z + $SQUARE_SIZE - 1);
             if (!detection)
                 continue;
         }
