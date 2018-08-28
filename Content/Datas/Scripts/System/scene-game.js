@@ -46,6 +46,12 @@ SceneGame.prototype = {
     update: function() {
         var i, l;
 
+        // Check diagonal moves
+        for (i = 0, l = this.reactionInterpreters.length; i < l; i++)
+            this.reactionInterpreters[i].updateObjectMoveState();
+        for (i = 0, l = this.parallelCommands.length; i < l; i++)
+            this.parallelCommands[i].updateObjectMoveState();
+
         // Parallel reactions
         SceneGame.prototype.updateInterpreters.call(this);
 

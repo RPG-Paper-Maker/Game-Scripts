@@ -851,8 +851,8 @@ EventCommandMoveObject.prototype = {
     *   @param {Object} parameters The parameters.
     */
     moveNorth: function(currentState, object, parameters){
-        return this.move(currentState, object, parameters.square,
-                         Orientation.North);
+        return currentState ? this.move(currentState, object, parameters.square,
+            Orientation.North) : Orientation.North;
     },
 
     // -------------------------------------------------------
@@ -863,8 +863,8 @@ EventCommandMoveObject.prototype = {
     *   @param {Object} parameters The parameters.
     */
     moveSouth: function(currentState, object, parameters){
-        return this.move(currentState, object, parameters.square,
-                         Orientation.South);
+        return currentState ? this.move(currentState, object, parameters.square,
+            Orientation.South) : Orientation.South;
     },
 
     // -------------------------------------------------------
@@ -875,8 +875,8 @@ EventCommandMoveObject.prototype = {
     *   @param {Object} parameters The parameters.
     */
     moveWest: function(currentState, object, parameters){
-        return this.move(currentState, object, parameters.square,
-                         Orientation.West);
+        return currentState ? this.move(currentState, object, parameters.square,
+            Orientation.West) : Orientation.West;
     },
 
     // -------------------------------------------------------
@@ -887,8 +887,8 @@ EventCommandMoveObject.prototype = {
     *   @param {Object} parameters The parameters.
     */
     moveEast: function(currentState, object, parameters){
-        return this.move(currentState, object, parameters.square,
-                         Orientation.East);
+        return currentState ? this.move(currentState, object, parameters.square,
+            Orientation.East) : Orientation.East;
     },
 
     // -------------------------------------------------------
@@ -900,7 +900,6 @@ EventCommandMoveObject.prototype = {
     *   @returns {number} The number of node to pass.
     */
     update: function(currentState, object, state){
-
         if (currentState.parallel) {
             var finished = this.moves[currentState.index].call(
                         this, currentState, object,
@@ -917,6 +916,12 @@ EventCommandMoveObject.prototype = {
         }
 
         return 1;
+    },
+
+    // -------------------------------------------------------
+
+    getCurrentOrientation: function(currentState) {
+        return this.moves[currentState.index].call(this);
     },
 
     // -------------------------------------------------------

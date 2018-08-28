@@ -61,6 +61,8 @@ function MapObject(system, position) {
     this.height = 1;
     this.frameDuration = 150;
     this.moving = false;
+    this.movingHorizontal = null;
+    this.movingVertical = null;
     this.frameTick = 0;
     this.isHero = false;
     this.isInScene = false;
@@ -421,8 +423,11 @@ MapObject.prototype = {
         this.removeMoveTemp();
 
         // Set position
-        var normalDistance = Math.min(limit, this.speed * MapObject.SPEED_NORMAL *
-                                $averageElapsedTime * $SQUARE_SIZE);
+        var speed = this.speed * MapObject.SPEED_NORMAL * $averageElapsedTime *
+            $SQUARE_SIZE;
+        if (this.movingVertical !== null && this.movingHorizontal !== null)
+            speed *= Math.SQRT1_2;
+        var normalDistance = Math.min(limit, speed);
         var position = this.getFuturPosition(orientation, normalDistance, angle);
         var distance = (position === this.position) ? 0 : normalDistance;
         if (isCameraOrientation) {
@@ -625,6 +630,8 @@ MapObject.prototype = {
                                        this.position.z);
                 //this.updateBBPosition(this.position);
                 this.moving = false;
+                this.movingVertical = null;
+                this.movingHorizontal = null;
             }
             else {
                 this.frame = this.currentState.indexX;
@@ -639,6 +646,23 @@ MapObject.prototype = {
             // Update mesh
             if (frame !== this.frame || orientation !== this.orientation)
                 this.updateUVs();
+        }
+    },
+
+    // -------------------------------------------------------
+
+    /** Update the move states to know if diagonal move is needed.
+    */
+    updateMoveStates: function(orientation) {
+        switch (orientation) {
+        case Orientation.South:
+        case Orientation.North:
+            this.movingVertical = orientation;
+            break;
+        case Orientation.West:
+        case Orientation.East:
+            this.movingHorizontal = orientation;
+            break;
         }
     },
 

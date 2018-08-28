@@ -204,6 +204,17 @@ ReactionInterpreter.prototype = {
 
     // -------------------------------------------------------
 
+    /**
+    */
+    updateObjectMoveState: function() {
+        if (this.currentCommand.data instanceof EventCommandMoveObject) {
+            this.currentMapObject.updateMoveStates(this.currentCommand.data.
+                getCurrentOrientation(this.currentCommandState));
+        }
+    },
+
+    // -------------------------------------------------------
+
     /** First key press handle for the current command.
     *   @param {number} key The key ID pressed.
     */
