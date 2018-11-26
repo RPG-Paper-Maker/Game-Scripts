@@ -34,7 +34,7 @@
 *   @param {number} d The camera distance.
 *   @param {number} h The camera height.
 */
-function Camera(d, h, v){
+function Camera(d, h, v, target){
     this.threeCamera = new THREE.PerspectiveCamera(45,
                                                    $canvasWidth / $canvasHeight,
                                                    1, 100000);
@@ -43,7 +43,7 @@ function Camera(d, h, v){
     this.horizontalAngle = h;
     this.verticalAngle = v;
     this.verticalRight = true;
-    this.target = $game.hero;
+    this.target = target;
     this.targetPosition = new THREE.Vector3();
     this.targetOffset = new THREE.Vector3();
 }
@@ -85,7 +85,7 @@ Camera.prototype = {
 
     updateTargetPosition: function() {
         this.targetPosition =
-             $game.hero.position.clone().add(this.targetOffset);
+             this.target.position.clone().add(this.targetOffset);
     },
 
     updateCameraPosition: function() {

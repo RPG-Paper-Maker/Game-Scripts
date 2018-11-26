@@ -118,7 +118,8 @@ DISTFILES += \
     Content/Datas/Scripts/System/datas-songs.js \
     Content/Datas/Scripts/System/system-song.js \
     Content/Datas/Scripts/System/songs-manager.js \
-    Content/Datas/Scripts/System/map-infos.js
+    Content/Datas/Scripts/System/map-infos.js \
+    Content/Datas/Scripts/System/system-battle-map.js
 
 RESOURCES += \
     qml.qrc

@@ -220,8 +220,11 @@ Window {
                                 Game.$gameStack.top().callBackAfterLoading;
                         if (callback === null) {
                             Game.update();
-                            Game.draw3D(canvas3d);
-                            Game.drawHUD(canvas);
+                            callback = Game.$gameStack.top().callBackAfterLoading;
+                            if (callback === null) {
+                                Game.draw3D(canvas3d);
+                                Game.drawHUD(canvas);
+                            }
                             canvas.requestPaint();
                         }
                         else {

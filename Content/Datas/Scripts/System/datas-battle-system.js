@@ -123,6 +123,18 @@ DatasBattleSystem.prototype = {
                 this.battleCommandsOrder[i] = jsonBattleCommand.s;
             }
 
+            // Battle maps
+            var jsonBattleMaps = json.battleMaps;
+            l = jsonBattleMaps.length;
+            this.battleMaps = new Array(l+1);
+            for (i = 0; i < l; i++){
+                var jsonBattleMap = jsonBattleMaps[i];
+                id = jsonBattleMap.id;
+                var battleMap = new SystemBattleMap();
+                battleMap.readJSON(jsonBattleMap);
+                this.battleMaps[id] = battleMap;
+            }
+
             // Ids of specific statistics
             this.idLevelStatistic = json.lv;
             this.idExpStatistic = json.xp;

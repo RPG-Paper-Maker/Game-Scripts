@@ -37,18 +37,20 @@
 *   of the map.
 *   @param {number} id The ID of the map.
 */
-function SceneMap(id){
+function SceneMap(id, isBattleMap){
     SceneGame.call(this);
 
     $currentMap = this;
     this.id = id;
+    this.isBattleMap = isBattleMap;
     this.mapName = RPM.generateMapName(id);
     this.scene = new THREE.Scene();
-    this.camera = new Camera(250, -90, 55);
+    this.camera = new Camera(250, -90, 55, isBattleMap ? $game.heroBattle :
+        $game.hero);
     this.camera.update();
     this.orientation = this.camera.getMapOrientation();
     this.readMapInfos();
-    this.currentPortion = RPM.getPortion($game.hero.position);
+    this.currentPortion = RPM.getPortion(this.getHeroPosition());
     this.collisions = new Array;
 
     // Adding meshes for collision
@@ -85,6 +87,12 @@ SceneMap.getGlobalPortion = function(position) {
 
 SceneMap.prototype = {
 
+    /** Get the hero position according to battle map
+    */
+    getHeroPosition: function() {
+        return this.isBattleMap ? $game.heroBattle.position : $game.hero.position;
+    },
+
     /** Read the map infos file.
     */
     readMapInfos: function(){
@@ -111,13 +119,15 @@ SceneMap.prototype = {
         this.loadPortions();
 
         // Hero initialize
-        $game.hero.changeState();
+        if (!this.isBattleMap) {
+            $game.hero.changeState();
 
-        // Start music and backgroudn sound
-        if (this.mapInfos.music)
-            this.mapInfos.music.update();
-        if (this.mapInfos.backgroundSound)
-            this.mapInfos.backgroundSound.update();
+            // Start music and background sound
+            if (this.mapInfos.music)
+                this.mapInfos.music.update();
+            if (this.mapInfos.backgroundSound)
+                this.mapInfos.backgroundSound.update();
+        }
 
         // End callback
         this.callBackAfterLoading = null;
@@ -126,7 +136,7 @@ SceneMap.prototype = {
     // -------------------------------------------------------
 
     loadPortions: function(){
-        this.currentPortion = RPM.getPortion($game.hero.position);
+        this.currentPortion = RPM.getPortion(this.getHeroPosition());
 
         var limit = this.getMapPortionLimit();
         this.mapPortions = new Array(this.getMapPortionTotalSize());
@@ -758,7 +768,7 @@ SceneMap.prototype = {
     // -------------------------------------------------------
 
     updateMovingPortions: function() {
-        var newPortion = RPM.getPortion($game.hero.position);
+        var newPortion = RPM.getPortion(this.getHeroPosition());
 
         if (!RPM.arePortionEquals(newPortion, this.currentPortion)){
             this.updateMovingPortionsEastWest(newPortion);
@@ -877,28 +887,30 @@ SceneMap.prototype = {
         this.camera.threeCamera.getWorldDirection(vector);
         var angle = Math.atan2(vector.x,vector.z) + (180 * Math.PI / 180.0);
 
-        // Update the objects
-        $game.hero.update(angle);
-        this.updatePortions(this, function(x, y, z, i, j, k) {
-            var objects = $game.mapsDatas[this.id][x][y][z];
-            var movedObjects = objects.min;
-            var movedObject;
-            var p, l;
-            for (p = 0, l = movedObjects.length; p < l; p++)
-                movedObjects[p].update(angle);
-            movedObjects = objects.mout;
-            for (p = 0, l = movedObjects.length; p < l; p++)
-                movedObjects[p].update(angle);
+        if (!this.isBattleMap) {
+            // Update the objects
+            $game.hero.update(angle);
+            this.updatePortions(this, function(x, y, z, i, j, k) {
+                var objects = $game.mapsDatas[this.id][x][y][z];
+                var movedObjects = objects.min;
+                var movedObject;
+                var p, l;
+                for (p = 0, l = movedObjects.length; p < l; p++)
+                    movedObjects[p].update(angle);
+                movedObjects = objects.mout;
+                for (p = 0, l = movedObjects.length; p < l; p++)
+                    movedObjects[p].update(angle);
 
-            // Update face sprites
-            var mapPortion = this.getMapPortion(i, j, k);
+                // Update face sprites
+                var mapPortion = this.getMapPortion(i, j, k);
 
-            if (mapPortion !== null)
-                mapPortion.updateFaceSprites(angle);
-        });
+                if (mapPortion !== null)
+                    mapPortion.updateFaceSprites(angle);
+            });
 
-        // Update
-        SceneGame.prototype.update.call(this);
+            // Update
+            SceneGame.prototype.update.call(this);
+        }
     },
 
     // -------------------------------------------------------

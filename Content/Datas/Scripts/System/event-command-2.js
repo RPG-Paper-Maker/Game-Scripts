@@ -35,11 +35,69 @@
 *   @param {JSON} command Direct JSON command to parse.
 */
 function EventCommandStartBattle(command){
-    this.canEscape = command[0] === 1;
-    this.canGameOver = command[1] === 1;
-    command.shift();
-    command.shift();
-    this.command = command;
+    var i = 0, type, k, v;
+
+    this.battleMapID = null;
+    this.idMap = null;
+    this.x = null;
+    this.y = null;
+    this.yPlus = null;
+    this.z = null;
+
+    // Options
+    this.canEscape = command[i++] === 1;
+    this.canGameOver = command[i++] === 1;
+
+    // Troop
+    type = command[i++];
+    switch(type){
+    case 0: // Existing troop ID
+        k = command[i++];
+        v = command[i++];
+        this.troopID = SystemValue.createValue(k, v);
+        break;
+    case 1: // If random troop in map properties
+        // TODO
+    }
+
+    // Battle map
+    type = command[i++];
+    switch(type){
+    case 0: // Existing battle map ID
+        k = command[i++];
+        v = command[i++];
+        this.battleMapID = SystemValue.createValue(k, v);
+        break;
+    case 1: // Select
+        this.idMap = SystemValue.createNumber(command[i++]);
+        this.x = SystemValue.createNumber(command[i++]);
+        this.y = SystemValue.createNumber(command[i++]);
+        this.yPlus = SystemValue.createNumber(command[i++]);
+        this.z = SystemValue.createNumber(command[i++]);
+        break;
+    case 2: // Numbers
+        k = command[i++];
+        v = command[i++];
+        this.idMap = SystemValue.createValue(k, v);
+        k = command[i++];
+        v = command[i++];
+        this.x = SystemValue.createValue(k, v);
+        k = command[i++];
+        v = command[i++];
+        this.y = SystemValue.createValue(k, v);
+        k = command[i++];
+        v = command[i++];
+        this.yPlus = SystemValue.createValue(k, v);
+        k = command[i++];
+        v = command[i++];
+        this.z = SystemValue.createValue(k, v);
+        break;
+    }
+
+    // Transition
+    this.transitionStart = command[i++];
+    this.transitionEnd = command[i++];
+
     this.isDirectNode = false;
     this.parallel = false;
 }
@@ -66,30 +124,18 @@ EventCommandStartBattle.prototype = {
     update: function(currentState, object, state){
 
         // Initializing battle
-        if (currentState.sceneBattle === null){
-            var i = 0;
-            var type = this.command[i++];
-
-            // Getting the troop ID
-            var troopId;
-            switch(type){
-            case 0: // If only selecting a troop ID with comboBox
-                troopId = this.command[i++];
-                break;
-            case 1: // If only selecting a troop ID with variable or constant
-                var varConstType = this.command[i++];
-                var varConstVal = this.command[i++];
-                troopId =
-                        (varConstType === 0) ? $game.listVariables[varConstVal]
-                                             : varConstVal;
-                break;
-            case 2: // If random troop in map properties
-                // TODO
-            }
+        if (currentState.sceneBattle === null) {
+            var battleMap = (this.battleMapID === null) ? new SystemBattleMap(
+                this.idMap.getValue(), [this.x.getValue(), this.y.getValue(),
+                this.yPlus.getValue(), this.z.getValue()]) : $datasGame
+                .battleSystem.battleMaps[this.battleMapID.getValue()];
+            $game.heroBattle = {
+                position: RPM.positionToVector3(battleMap.position)
+            };
 
             // Defining the battle state instance
-            var sceneBattle = new SceneBattle(troopId, this.canGameOver,
-                                              this.canEscape);
+            var sceneBattle = new SceneBattle(this.troopID.getValue(),
+                this.canGameOver, this.canEscape, battleMap);
              // Keep instance of battle state for results
             currentState.sceneBattle = sceneBattle;
             $gameStack.push(sceneBattle);
@@ -100,7 +146,7 @@ EventCommandStartBattle.prototype = {
         // After the battle...
         var result = 1;
         // If there are not game overs, go to win/lose nodes
-        if (!this.canGameOver){
+        if (!this.canGameOver) {
             if (!currentState.sceneBattle.winning)
                 result = 2;
         }
