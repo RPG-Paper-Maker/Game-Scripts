@@ -171,9 +171,9 @@ var $renderer;
 *   @type {Game} */
 var $game = null;
 
-/** The 3D scene used for loading screen.
-*   @type {THREE.Scene} */
-var $loadingScene = new THREE.Scene();
+/** The scene used for loading screen.
+*   @type {SceneLoading} */
+var $loadingScene;
 
 /** The dialog for displaying errors.
 *   @type {MessageDialog} */
@@ -209,6 +209,7 @@ var $BB_ORIENTED_BOX = MapPortion.createOrientedBox();
 function initialize(){
     $datasGame = new DatasGame();
     $gameStack = new GameStack();
+    $loadingScene = new SceneLoading();
 }
 
 // -------------------------------------------------------
@@ -219,12 +220,13 @@ function initialize(){
 function initializeGL(canvas){
 
     // Create the renderer
-    if ($DESKTOP)
+    if ($DESKTOP) {
         $renderer = new THREE.Canvas3DRenderer({
                                                    canvas: canvas,
                                                    devicePixelRatio:
                                                    canvas.devicePixelRatio
                                                });
+    }
     else{
         $renderer = new THREE.WebGLRenderer();
         $renderer.autoClear = false;
@@ -325,7 +327,7 @@ function draw3D(canvas){
 /** Draw HUD for the current stack.
 *   @param {Canvas} canvas The HUD canvas.
 */
-function drawHUD(canvas){
+function drawHUD(canvas, loading){
 
     // Initialize context
     var context = canvas.getContext('2d');
@@ -335,5 +337,10 @@ function drawHUD(canvas){
     context.imageSmoothingEnabled = false;
 
     // Draw current stack
-    $gameStack.drawHUD(context);
+    if (loading) {
+        $loadingScene.drawHUD(context);
+    }
+    else {
+        $gameStack.drawHUD(context);
+    }
 }

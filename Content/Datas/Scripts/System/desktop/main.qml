@@ -216,21 +216,23 @@ Window {
             try{
                 if (!Game.RPM.isLoading()) {
                     if (!Game.$gameStack.isEmpty()) {
-                        var callback =
-                                Game.$gameStack.top().callBackAfterLoading;
+                        var callback = Game.$gameStack.top()
+                            .callBackAfterLoading;
                         if (callback === null) {
                             Game.update();
                             callback = Game.$gameStack.top().callBackAfterLoading;
                             if (callback === null) {
                                 Game.draw3D(canvas3d);
-                                Game.drawHUD(canvas);
+                                Game.drawHUD(canvas, false);
                             }
                             canvas.requestPaint();
                         }
                         else {
-                            Game.$renderer.render(
-                                        Game.$loadingScene,
-                                        Game.$currentMap.camera.threeCamera);
+                            if (!Game.$gameStack.top().isBattleMap) {
+                                Game.$renderer.clear();
+                                Game.drawHUD(canvas, true);
+                                canvas.requestPaint();
+                            }
                             if (callback) {
                                 Game.$gameStack.top().callBackAfterLoading =
                                         undefined;
