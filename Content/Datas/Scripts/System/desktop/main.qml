@@ -240,8 +240,14 @@ Window {
                             }
                         }
                     }
-                    else
-                        Game.$gameStack.pushTitleScreen();
+                    else {
+                        if ($dataGame.callbacks.length === 0) {
+                            Game.$gameStack.pushTitleScreen();
+                        }
+                        else {
+                            $dataGame.updateLoadings();
+                        }
+                    }
                 }
             }
             catch (e) {

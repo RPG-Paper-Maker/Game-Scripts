@@ -830,3 +830,63 @@ RPM.fillNullList = function(size) {
 
     return list;
 }
+
+// -------------------------------------------------------
+
+/** Load a texture.
+*   @param {string} path The path of the texture.
+*   @retuns {THREE.MeshBasicMaterial}
+*/
+RPM.loadTexture = function(paths, pictureKind, picture) {
+    $filesToLoad++;
+    var path = paths[0];
+    var pathLocal = paths[1];
+    var texture = $textureLoader.load(path,
+        function(t){
+            $loadedFiles++;
+        },
+        function (t) {},
+        function (t) {
+            RPM.showErrorMessage("Could not load " + path);
+        }
+    );
+
+    return RPM.createMaterial(texture);
+};
+
+// -------------------------------------------------------
+
+/** Load a texture empty.
+*   @retuns {THREE.MeshBasicMaterial}
+*/
+RPM.loadTextureEmpty = function(){
+    return new THREE.MeshBasicMaterial(
+    {
+        transparent: true,
+        side: THREE.DoubleSide,
+        shading: THREE.FlatShading,
+        alphaTest: 0.5,
+        overdraw: 0.5
+    });
+};
+
+// -------------------------------------------------------
+
+/** Create a material from texture.
+*   @retuns {THREE.MeshBasicMaterial}
+*/
+RPM.createMaterial = function(texture){
+    texture.magFilter = THREE.NearestFilter;
+    texture.minFilter = THREE.NearestFilter;
+    texture.flipY = false;
+
+    return new THREE.MeshBasicMaterial(
+    {
+        map: texture,
+        transparent: true,
+        side: THREE.DoubleSide,
+        shading: THREE.FlatShading,
+        alphaTest: 0.5,
+        overdraw: 0.5
+    });
+};

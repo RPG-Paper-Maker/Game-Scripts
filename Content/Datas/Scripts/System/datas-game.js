@@ -43,6 +43,7 @@
 *   @property {DatasKeyBoard} keyBoard KeyBoard datas.
 */
 function DatasGame(){
+    this.updated = false;
     this.pictures = new DatasPictures();
     this.songs = new DatasSongs();
     this.commonEvents = new DatasCommonEvents();
@@ -77,5 +78,13 @@ DatasGame.prototype = {
             this.variablesNumbers =
                  json.length * DatasGame.VARIABLES_PER_PAGE + 1;
         });
+    },
+
+    updateLoadings: function() {
+        var callback;
+        for (var i = 0, l = this.callbacks; i < l; i++) {
+            callback = this.callbacks[i];
+            callback.callback(callback.context);
+        }
     }
 }

@@ -188,6 +188,10 @@ $BB_MATERIAL.visible = false;
 *   @type {SongsManager} */
 var $songsManager;
 
+/** The texture loader.
+*   @type {THREE.TextureLoader} */
+var $textureLoader = new THREE.TextureLoader();
+
 // -------------------------------------------------------
 //  BOUNDING BOXES
 // -------------------------------------------------------

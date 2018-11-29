@@ -39,17 +39,56 @@ DatasTilesets.prototype = {
     read: function(){
         RPM.openFile(this, RPM.FILE_TILESETS_DATAS, true, function(res){
             var json = JSON.parse(res).list;
-            var i, l = json.length;
+            var i, l = json.length, idString, tileset;
             this.list = new Array(l+1);
+            this.autotiles = {};
+            this.walls = {};
 
             // Sorting all the tilesets according to the ID
             for (i = 0; i < l; i++){
                 var jsonTileset = json[i];
                 var id = jsonTileset.id;
-                var tileset = new SystemTileset();
+                tileset = new SystemTileset();
                 tileset.readJSON(jsonTileset);
                 this.list[id] = tileset;
+
+                // Autotiles and walls
+                idString = tileset.getAutotilesString();
+                if (!this.autotiles.hasOwnProperty(idString)) {
+                    this.autotiles[idString] = tileset;
+                    tileset.loadAutotiles();
+                }
+                idString = tileset.getWallsString();
+                if (!this.walls.hasOwnProperty(idString)) {
+                    this.walls[idString] = tileset;
+                    tileset.loadWalls();
+                }
             }
+
+            // Load characters textures
+            this.loadPictures(PictureKind.Characters, "texturesCharacters");
         });
+    },
+
+    // -------------------------------------------------------
+
+    /** Load pictures.
+    *   @param {PictureKind} pictureKind The picure kind.
+    *   @param {string} texturesName The field name textures.
+    */
+    loadPictures: function(pictureKind, texturesName){
+        var pictures = $datasGame.pictures.list[pictureKind], picture;
+        var l = pictures.length;
+        var textures = new Array(l);
+        var paths;
+
+        textures[0] = RPM.loadTextureEmpty();
+        for (var i = 1; i < l; i++){
+            picture = pictures[i];
+            paths = picture.getPath(pictureKind);
+            textures[i] = RPM.loadTexture(paths, pictureKind, picture);
+        }
+
+        this[texturesName] = textures;
     }
 }
