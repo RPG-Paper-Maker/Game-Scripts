@@ -29,6 +29,7 @@
 */
 function GameStack(){
     this.content = [];
+    this.displayingContent = false;
 }
 
 GameStack.prototype = {

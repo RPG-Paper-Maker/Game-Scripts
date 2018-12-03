@@ -35,8 +35,7 @@
 *   according to the position on the texture.
 */
 function SystemTileset(){
-    this.callBackAutotiles = null;
-    this.callBackWalls = null;
+    this.callback = null;
     this.collisions = null;
 }
 
@@ -151,7 +150,7 @@ SystemTileset.prototype = {
             if (i < autotilesIDs.length) {
                 if (result !== null) {
                     if (result.length < 3) {
-                        that.callBackAfterLoading = callback;
+                        that.callback = callback;
                         return;
                     }
                     textureAutotile = result[0];
@@ -167,17 +166,17 @@ SystemTileset.prototype = {
                                                   picture, context, paths,
                                                   offset, id);
                 i++;
-                that.callBackAfterLoading = callback;
+                that.callback = callback;
             }
             else {
                 if (offset > 0) {
                     that.updateTextureAutotile(textureAutotile, texture);
                     offset = 0;
-                    that.callBackAfterLoading = callback;
+                    that.callback = callback;
                 }
 
                 // Finished loading textures
-                that.callBackAfterLoading = that.loadWalls;
+                that.callback = null;
             }
         }
 
@@ -190,7 +189,6 @@ SystemTileset.prototype = {
     */
     loadWalls: function(){
         this.loadSpecialTextures(PictureKind.Walls, "texturesWalls", "walls");
-        this.callBackAfterLoading = this.loadCollisions;
     },
 
     // -------------------------------------------------------
@@ -321,7 +319,7 @@ SystemTileset.prototype = {
         }, false);
         image.src = $canvasRendering.toDataURL();
 
-        textureAutotile.texture = this.createMaterial(texture);
+        textureAutotile.texture = RPM.createMaterial(texture);
         this.texturesAutotiles.push(textureAutotile);
     },
 
@@ -358,7 +356,6 @@ SystemTileset.prototype = {
             }, false);
             image.src = $canvasRendering.toDataURL();
         };
-
 
         if ($canvasRendering.isImageLoaded(pathLocal))
             callback.call(this);

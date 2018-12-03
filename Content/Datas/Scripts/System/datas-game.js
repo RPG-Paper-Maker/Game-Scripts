@@ -43,8 +43,8 @@
 *   @property {DatasKeyBoard} keyBoard KeyBoard datas.
 */
 function DatasGame(){
-    this.updated = false;
-    this.pictures = new DatasPictures();
+    this.tilesets = new DatasTilesets();
+    this.pictures = new DatasPictures(this.tilesets, DatasTilesets.prototype.read);
     this.songs = new DatasSongs();
     this.commonEvents = new DatasCommonEvents();
     this.items = new DatasItems();
@@ -53,7 +53,6 @@ function DatasGame(){
     this.armors = new DatasArmors();
     this.classes = new DatasClasses();
     this.specialElements = new DatasSpecialElements();
-    this.tilesets = new DatasTilesets();
     this.heroes = new DatasHeroes();
     this.monsters = new DatasMonsters();
     this.troops = new DatasTroops();
@@ -61,6 +60,7 @@ function DatasGame(){
     this.battleSystem = new DatasBattleSystem();
     this.keyBoard = new DatasKeyBoard();
     this.readSettings();
+    this.loaded = false;
 }
 
 DatasGame.VARIABLES_PER_PAGE = 25;
@@ -81,10 +81,18 @@ DatasGame.prototype = {
     },
 
     updateLoadings: function() {
-        var callback;
-        for (var i = 0, l = this.callbacks; i < l; i++) {
-            callback = this.callbacks[i];
-            callback.callback(callback.context);
+        if (this.tilesets.loading) {
+            var tileset;
+            for (var i = this.tilesets.loading.length - 1; i >= 0; i--) {
+                tileset = this.tilesets.loading[i];
+                if (tileset.callback !== null) {
+                    tileset.callback.call(tileset);
+                }
+                else {
+                    this.tilesets.loading.splice(i, 1);
+                }
+            }
+            this.loaded = this.tilesets.loading.length === 0;
         }
     }
 }

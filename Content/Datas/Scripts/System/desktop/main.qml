@@ -138,7 +138,11 @@ Window {
 
         Keys.onPressed: {
             try{
-                if (!Game.RPM.isLoading() &&
+                if (!Game.$datasGame.loaded) {
+                    return;
+                }
+
+                if (!Game.RPM.isLoading() && Game.$gameStack.displayingContent &&
                     !Game.$gameStack.top().callBackAfterLoading)
                 {
                     var key = event.key;
@@ -167,7 +171,11 @@ Window {
 
         Keys.onReleased: {
             try{
-                if (!Game.RPM.isLoading() &&
+                if (!Game.$datasGame.loaded) {
+                    return;
+                }
+
+                if (!Game.RPM.isLoading() && Game.$gameStack.displayingContent &&
                     !Game.$gameStack.top().callBackAfterLoading)
                 {
                     if (event.isAutoRepeat) return;
@@ -214,10 +222,19 @@ Window {
 
         onPaintGL: {
             try{
+                // Loading datas game
+                if (!Game.$datasGame.loaded) {
+                    Game.$datasGame.updateLoadings();
+                    Game.$renderer.clear();
+                    Game.drawHUD(canvas, true);
+                    canvas.requestPaint();
+                    return;
+                }
+
                 if (!Game.RPM.isLoading()) {
                     if (!Game.$gameStack.isEmpty()) {
-                        var callback = Game.$gameStack.top()
-                            .callBackAfterLoading;
+                        // Callbacks
+                        var callback = Game.$gameStack.top().callBackAfterLoading;
                         if (callback === null) {
                             Game.update();
                             callback = Game.$gameStack.top().callBackAfterLoading;
@@ -241,12 +258,7 @@ Window {
                         }
                     }
                     else {
-                        if ($dataGame.callbacks.length === 0) {
-                            Game.$gameStack.pushTitleScreen();
-                        }
-                        else {
-                            $dataGame.updateLoadings();
-                        }
+                        Game.$gameStack.pushTitleScreen();
                     }
                 }
             }

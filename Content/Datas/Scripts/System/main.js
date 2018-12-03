@@ -347,4 +347,5 @@ function drawHUD(canvas, loading){
     else {
         $gameStack.drawHUD(context);
     }
+    $gameStack.displayingContent = !loading;
 }

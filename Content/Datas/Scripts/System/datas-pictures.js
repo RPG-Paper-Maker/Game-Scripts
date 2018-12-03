@@ -28,15 +28,15 @@
 *   @property {Object[]} list List of all the pictures of the game
 *   according to ID and PictureKind.
 */
-function DatasPictures(){
-    this.read();
+function DatasPictures(context, callback){
+    this.read(context, callback);
 }
 
 DatasPictures.prototype = {
 
     /** Read the JSON file associated to pictures.
     */
-    read: function(){
+    read: function(context, callback){
         RPM.openFile(this, RPM.FILE_PICTURES_DATAS, true, function(res){
             var json = JSON.parse(res).list;
             var i, j, l, ll, lll;
@@ -76,6 +76,8 @@ DatasPictures.prototype = {
 
                 this.list[k] = list;
             }
+
+            callback.call(context);
         });
     },
 
