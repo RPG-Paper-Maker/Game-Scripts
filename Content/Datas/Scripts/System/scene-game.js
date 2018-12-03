@@ -139,7 +139,6 @@ SceneGame.prototype = {
                 }
             }
 
-
             if (!excecuted) {
                 reactionInterpreter = new ReactionInterpreter(sender,
                                                               reaction, object,

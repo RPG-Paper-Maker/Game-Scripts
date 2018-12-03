@@ -33,7 +33,7 @@ SceneBattle.prototype.initializeStep2 = function(){
     this.windowTopInformations.content = new GraphicText("Attack");
     this.time = new Date().getTime();
     var damages = 3;
-    if (this.attackingGroup === CharacterKind.Monster) damages += 20;
+    if (this.attackingGroup === CharacterKind.Hero) damages += 20;
     l = this.targets.length;
     this.textsDamages = new Array(l);
     for (i = 0; i < l; i++){

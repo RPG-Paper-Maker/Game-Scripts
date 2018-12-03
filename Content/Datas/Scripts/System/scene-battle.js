@@ -149,8 +149,9 @@ SceneBattle.prototype.gameOver = function(){
     if (this.canGameOver){
         quit(); // TODO
     }
-    else
-        $gameStack.pop();
+    else {
+        this.endBattle();
+    }
 };
 
 // -------------------------------------------------------
@@ -159,7 +160,17 @@ SceneBattle.prototype.gameOver = function(){
 */
 SceneBattle.prototype.win = function(){
     this.winning = true;
+    this.endBattle();
+};
+
+// -------------------------------------------------------
+
+/** Win the battle.
+*/
+SceneBattle.prototype.endBattle = function(){
+    $currentMap.closeMap();
     $gameStack.pop();
+    $currentMap = $gameStack.top();
 };
 
 // -------------------------------------------------------
