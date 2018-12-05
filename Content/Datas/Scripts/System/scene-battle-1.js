@@ -199,17 +199,10 @@ SceneBattle.prototype.onKeyPressedAndRepeatStep1 = function(key){
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.draw3DStep1 = function(canvas){
-
-};
-
-// -------------------------------------------------------
-
 SceneBattle.prototype.drawHUDStep1 = function(context){
     this.windowTopInformations.draw(context);
 
     // Draw battlers
-    this.drawBattlers(context);
     this.windowCharacterInformations.draw(context);
 
     this.arrowSelection.draw(context);

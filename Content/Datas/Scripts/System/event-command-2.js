@@ -127,7 +127,7 @@ EventCommandStartBattle.prototype = {
         if (currentState.sceneBattle === null) {
             var battleMap = (this.battleMapID === null) ? new SystemBattleMap(
                 this.idMap.getValue(), [this.x.getValue(), this.y.getValue(),
-                this.yPlus.getValue(), this.z.getValue()]) : $datasGame
+                this.yPlus.getValue(), this.z.getValue(), 0]) : $datasGame
                 .battleSystem.battleMaps[this.battleMapID.getValue()];
             $game.heroBattle = {
                 position: RPM.positionToVector3(battleMap.position)

@@ -38,7 +38,11 @@ SystemHero.prototype = {
     *   @param {Object} json Json object describing the object.
     */
     readJSON: function(json){
+        var bid = json.bid;
+        if (typeof bid === 'undefined') bid = -1;
+
         this.name = json.names[1];
         this.idClass = json.class;
+        this.idBattler = bid;
     }
 }

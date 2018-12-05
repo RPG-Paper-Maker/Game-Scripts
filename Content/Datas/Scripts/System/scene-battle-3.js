@@ -70,15 +70,6 @@ SceneBattle.prototype.onKeyPressedAndRepeatStep3 = function(key){
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.draw3DStep3 = function(canvas){
-
-};
-
-// -------------------------------------------------------
-
 SceneBattle.prototype.drawHUDStep3 = function(context){
     this.windowTopInformations.draw(context);
-
-    // Draw battlers
-    this.drawBattlers(context);
 };

@@ -100,17 +100,8 @@ SceneBattle.prototype.onKeyPressedAndRepeatStep2 = function(key){
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.draw3DStep2 = function(canvas){
-
-};
-
-// -------------------------------------------------------
-
 SceneBattle.prototype.drawHUDStep2 = function(context){
     this.windowTopInformations.draw(context);
-
-    // Draw battlers
-    this.drawBattlers(context);
 
     // Draw damages
     var i, l = this.textsDamages.length;

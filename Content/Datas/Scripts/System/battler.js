@@ -34,18 +34,72 @@
 *   @param {number} w Coords of battler.
 *   @param {number} h Coords of battler.
 */
-function Battler(character, x, y, w, h){
+function Battler(character, position, x, y, w, h){
     this.character = character;
     this.rect = new WindowBox(x, y, w, h);
     this.active = true;
+    this.frame = 0;
+    this.step = 0;
+    this.width = 1;
+    this.height = 1;
+    this.position = position;
+
+    var idBattler = $datasGame.getHeroesMonsters(character.k).list[character.id]
+        .idBattler;
+    if (idBattler === -1) {
+        this.mesh = null;
+    }
+    else {
+        var material = $datasGame.tilesets.texturesBattlers[idBattler];
+        this.width = material.map.image.width / $SQUARE_SIZE / $FRAMES;
+        this.height = material.map.image.height / $SQUARE_SIZE / 7;
+        var sprite = new Sprite(ElementMapKind.SpritesFace, [0, 0, this.width,
+            this.height]);
+        var geometry = sprite.createGeometry(this.width, this.height, false,
+            this.position)[0];
+        this.mesh = new THREE.Mesh(geometry, material);
+        this.mesh.position.set(position.x, position.y, position.z);
+        this.updateUVs();
+    }
 }
 
 Battler.prototype = {
 
-    /** Draw the battler.
-    *   @param {Context} context The canvas context.
+    addToScene: function(){
+        if (this.mesh !== null) {
+            $currentMap.scene.add(this.mesh);
+        }
+    },
+
+    // -------------------------------------------------------
+
+    removeFromScene: function(){
+        if (this.mesh !== null) {
+            $currentMap.scene.remove(this.mesh);
+        }
+    },
+
+    // -------------------------------------------------------
+
+    /** Update the UVs coordinates according to frame and orientation.
     */
-    draw: function(context){
-        this.rect.draw(context);
+    updateUVs: function(){
+        if (this.mesh !== null) {
+            var textureWidth = this.mesh.material.map.image.width;
+            var textureHeight = this.mesh.material.map.image.height;
+            var w = this.width * $SQUARE_SIZE / textureWidth;
+            var h = this.height * $SQUARE_SIZE / textureHeight;
+            var x = this.frame * w;
+            var y = this.step * h;
+
+            // Update geometry
+            this.mesh.geometry.faceVertexUvs[0][0][0].set(x, y);
+            this.mesh.geometry.faceVertexUvs[0][0][1].set(x + w, y);
+            this.mesh.geometry.faceVertexUvs[0][0][2].set(x + w, y + h);
+            this.mesh.geometry.faceVertexUvs[0][1][0].set(x, y);
+            this.mesh.geometry.faceVertexUvs[0][1][1].set(x + w, y + h);
+            this.mesh.geometry.faceVertexUvs[0][1][2].set(x, y + h);
+            this.mesh.geometry.uvsNeedUpdate = true;
+        }
     }
 }

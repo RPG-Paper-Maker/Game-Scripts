@@ -30,7 +30,8 @@ var PictureKind = {
     Characters: 4,
     Reliefs: 5,
     Tilesets: 6,
-    Walls: 7
+    Walls: 7,
+    Battlers: 8
 };
 Object.freeze(PictureKind);
 
@@ -86,6 +87,8 @@ SystemPicture.getLocalFolder = function(kind){
         return RPM.PATH_TILESETS;
     case PictureKind.Walls:
         return RPM.PATH_WALLS;
+    case PictureKind.Battlers:
+        return RPM.PATH_BATTLERS;
     }
 
     return "";

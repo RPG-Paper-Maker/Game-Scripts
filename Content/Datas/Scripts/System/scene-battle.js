@@ -60,6 +60,8 @@
 
 function SceneBattle(troopID, canGameOver, canEscape, battleMap) {
     SceneMap.call(this, battleMap.idMap, true);
+    this.camera.distance = 140;
+    this.camera.verticalAngle = 60;
     this.step = 0;
     this.troopID = troopID;
     this.canGameOver = canGameOver;
@@ -168,6 +170,14 @@ SceneBattle.prototype.win = function(){
 /** Win the battle.
 */
 SceneBattle.prototype.endBattle = function(){
+    var i, l;
+
+    // Heroes
+    l = $game.teamHeroes.length;
+    for (i = 0; i < l; i++) {
+        this.battlers[CharacterKind.Hero][i].removeFromScene();
+    }
+
     $currentMap.closeMap();
     $gameStack.pop();
     $currentMap = $gameStack.top();
@@ -292,41 +302,8 @@ SceneBattle.prototype.onKeyPressedAndRepeat = function(key){
 
 // -------------------------------------------------------
 
-/** Draw all the battlers.
-*   @param {Canvas.Context} context The canvas context.
-*/
-SceneBattle.prototype.drawBattlers = function(context){
-    var i, l;
-
-    for (i = 0, l = this.battlers[CharacterKind.Hero].length; i < l; i++)
-    {
-        if (!this.battlers[CharacterKind.Hero][i].character.isDead())
-            this.battlers[CharacterKind.Hero][i].draw(context);
-    }
-    for (i = 0, l = this.battlers[CharacterKind.Monster].length; i < l; i++)
-    {
-        if (!this.battlers[CharacterKind.Monster][i].character.isDead())
-            this.battlers[CharacterKind.Monster][i].draw(context);
-    }
-};
-
-// -------------------------------------------------------
-
 SceneBattle.prototype.draw3D = function(canvas){
     SceneMap.prototype.draw3D.call(this, canvas);
-
-    switch(this.step){
-    case 0:
-        this.draw3DStep0(canvas); break;
-    case 1:
-        this.draw3DStep1(canvas); break;
-    case 2:
-        this.draw3DStep2(canvas); break;
-    case 3:
-        this.draw3DStep3(canvas); break;
-    case 4:
-        this.draw3DStep4(canvas); break;
-    }
 };
 
 // -------------------------------------------------------

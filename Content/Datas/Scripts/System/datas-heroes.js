@@ -29,7 +29,7 @@
 *   to ID.
 */
 function DatasHeroes(){
-    this.read();
+
 }
 
 DatasHeroes.prototype = {

@@ -27,7 +27,7 @@
 // -------------------------------------------------------
 
 SceneBattle.prototype.initializeStep0 = function(){
-    var i, l;
+    var i, l, battler, position;
     this.winning = false;
     this.distanceCenterAlly = 75;
     this.kindSelection = CharacterKind.Hero;
@@ -40,10 +40,12 @@ SceneBattle.prototype.initializeStep0 = function(){
     // Heroes
     l = $game.teamHeroes.length;
     this.battlers[CharacterKind.Hero] = new Array(l);
-    for (i = 0; i < l; i++){
-        this.battlers[CharacterKind.Hero][i] =
-             new Battler($game.teamHeroes[i], centerX + this.distanceCenterAlly
-                         + (i*30),centerY + (i*50),32,32);
+    for (i = 0; i < l; i++) {
+        position = new THREE.Vector3($game.heroBattle.position.x + $SQUARE_SIZE + (i * $SQUARE_SIZE), $game.heroBattle.position.y, $game.heroBattle.position.z + (i * $SQUARE_SIZE));
+        battler = new Battler($game.teamHeroes[i], position,
+            centerX + this.distanceCenterAlly + (i*30), centerY + (i*50),32,32);
+        battler.addToScene();
+        this.battlers[CharacterKind.Hero][i] = battler;
     }
 
     // Ennemies
@@ -110,14 +112,6 @@ SceneBattle.prototype.onKeyPressedAndRepeatStep0 = function(key){
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.draw3DStep0 = function(canvas){
-
-};
-
-// -------------------------------------------------------
-
 SceneBattle.prototype.drawHUDStep0 = function(context){
 
-    // Draw battlers
-    this.drawBattlers(context);
 };

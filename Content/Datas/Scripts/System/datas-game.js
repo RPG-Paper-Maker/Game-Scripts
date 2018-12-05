@@ -44,7 +44,6 @@
 */
 function DatasGame(){
     this.tilesets = new DatasTilesets();
-    this.pictures = new DatasPictures(this.tilesets, DatasTilesets.prototype.read);
     this.songs = new DatasSongs();
     this.commonEvents = new DatasCommonEvents();
     this.items = new DatasItems();
@@ -59,6 +58,7 @@ function DatasGame(){
     this.system = new DatasSystem();
     this.battleSystem = new DatasBattleSystem();
     this.keyBoard = new DatasKeyBoard();
+    this.pictures = new DatasPictures(this, DatasGame.prototype.readAfterPictures);
     this.readSettings();
     this.loaded = false;
 }
@@ -80,6 +80,12 @@ DatasGame.prototype = {
         });
     },
 
+    readAfterPictures: function() {
+        this.tilesets.read();
+        this.heroes.read();
+        this.monsters.read();
+    },
+
     updateLoadings: function() {
         if (this.tilesets.loading) {
             var tileset;
@@ -94,5 +100,9 @@ DatasGame.prototype = {
             }
             this.loaded = this.tilesets.loading.length === 0;
         }
+    },
+
+    getHeroesMonsters: function(kind) {
+        return (kind === CharacterKind.Hero) ? this.heroes : this.monsters;
     }
 }

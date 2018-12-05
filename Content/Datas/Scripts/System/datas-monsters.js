@@ -29,7 +29,7 @@
 *   according to ID.
 */
 function DatasMonsters(){
-    this.read();
+
 }
 
 DatasMonsters.prototype = {

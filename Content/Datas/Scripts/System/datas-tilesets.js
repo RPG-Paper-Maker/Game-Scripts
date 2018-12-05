@@ -69,6 +69,7 @@ DatasTilesets.prototype = {
 
             // Load characters textures
             this.loadPictures(PictureKind.Characters, "texturesCharacters");
+            this.loadPictures(PictureKind.Battlers, "texturesBattlers");
         });
     },
 
