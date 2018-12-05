@@ -43,6 +43,8 @@ function Battler(character, position, x, y, w, h){
     this.width = 1;
     this.height = 1;
     this.position = position;
+    this.frameDuration = 300;
+    this.frameTick = 0;
 
     var idBattler = $datasGame.getHeroesMonsters(character.k).list[character.id]
         .idBattler;
@@ -64,6 +66,22 @@ function Battler(character, position, x, y, w, h){
 }
 
 Battler.prototype = {
+
+    update: function() {
+        if (this.mesh !== null) {
+            var frame = this.frame;
+            this.frameTick += $elapsedTime;
+            if (this.frameTick >= this.frameDuration){
+                this.frame = (this.frame + 1) % $FRAMES;
+                this.frameTick = 0;
+            }
+            if (frame !== this.frame) {
+                this.updateUVs();
+            }
+        }
+    },
+
+    // -------------------------------------------------------
 
     addToScene: function(){
         if (this.mesh !== null) {

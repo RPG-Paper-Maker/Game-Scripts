@@ -41,7 +41,9 @@ SceneBattle.prototype.initializeStep0 = function(){
     l = $game.teamHeroes.length;
     this.battlers[CharacterKind.Hero] = new Array(l);
     for (i = 0; i < l; i++) {
-        position = new THREE.Vector3($game.heroBattle.position.x + $SQUARE_SIZE + (i * $SQUARE_SIZE), $game.heroBattle.position.y, $game.heroBattle.position.z + (i * $SQUARE_SIZE));
+        position = new THREE.Vector3($game.heroBattle.position.x + $SQUARE_SIZE
+            + (i * $SQUARE_SIZE), $game.heroBattle.position.y, $game.heroBattle
+            .position.z + (i * $SQUARE_SIZE));
         battler = new Battler($game.teamHeroes[i], position,
             centerX + this.distanceCenterAlly + (i*30), centerY + (i*50),32,32);
         battler.addToScene();

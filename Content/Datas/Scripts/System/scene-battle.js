@@ -216,7 +216,15 @@ SceneBattle.prototype.initialize = function(){
 // -------------------------------------------------------
 
 SceneBattle.prototype.update = function(){
+    var i, l;
+
     SceneMap.prototype.update.call(this);
+
+    // Heroes
+    l = this.battlers[CharacterKind.Hero].length;
+    for (i = 0; i < l; i++) {
+        this.battlers[CharacterKind.Hero][i].update();
+    }
 
     switch(this.step){
     case 0:
