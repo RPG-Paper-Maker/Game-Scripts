@@ -67,6 +67,9 @@ function SceneBattle(troopID, canGameOver, canEscape, battleMap) {
     this.canGameOver = canGameOver;
     this.canEscape = canEscape;
     this.initialize();
+    this.cameraStep = 0;
+    this.cameraTick = 0.05;
+    this.cameraOffset = 3;
 }
 
 SceneBattle.prototype = Object.create(SceneMap.prototype);
@@ -229,6 +232,51 @@ SceneBattle.prototype.update = function(){
     battlers = this.battlers[CharacterKind.Monster];
     for (i = 0, l = battlers.length; i < l; i++) {
         battlers[i].update();
+    }
+
+    // Camera temp code for moving
+    switch (this.cameraStep) {
+    case 0:
+        this.camera.distance -= this.cameraTick;
+        this.camera.targetOffset.x += this.cameraTick;
+        if (this.camera.distance <= 180 - this.cameraOffset) {
+            this.camera.distance = 180 - this.cameraOffset;
+            this.camera.targetOffset.x = this.cameraOffset;
+            this.cameraStep = 1;
+        }
+        break;
+    case 1:
+        this.camera.distance += this.cameraTick;
+        if (this.camera.distance >= 180 + this.cameraOffset) {
+            this.camera.distance = 180 + this.cameraOffset;
+            this.cameraStep = 2;
+        }
+        break;
+    case 2:
+        this.camera.distance -= this.cameraTick;
+        this.camera.targetOffset.x -= this.cameraTick;
+        if (this.camera.distance <= 180 - this.cameraOffset) {
+            this.camera.distance = 180 - this.cameraOffset;
+            this.camera.targetOffset.x = -this.cameraOffset;
+            this.cameraStep = 3;
+        }
+        break;
+    case 3:
+        this.camera.distance += this.cameraTick;
+        if (this.camera.distance >= 180 + this.cameraOffset) {
+            this.camera.distance = 180 + this.cameraOffset;
+            this.cameraStep = 4;
+        }
+        break;
+    case 4:
+        this.camera.distance -= this.cameraTick;
+        this.camera.targetOffset.x += this.cameraTick;
+        if (this.camera.distance <= 180) {
+            this.camera.distance = 180;
+            this.camera.targetOffset.x = 0;
+            this.cameraStep = 0;
+        }
+        break;
     }
 
     switch(this.step){
