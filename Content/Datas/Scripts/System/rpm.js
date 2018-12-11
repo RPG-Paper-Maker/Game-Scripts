@@ -834,6 +834,18 @@ RPM.fillNullList = function(size) {
 
 // -------------------------------------------------------
 
+/** Create a random number between min and max.
+*   @static
+*   @param {number} min
+*   @param {number} max
+*/
+
+RPM.random = function(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+// -------------------------------------------------------
+
 /** Load a texture.
 *   @param {string} path The path of the texture.
 *   @retuns {THREE.MeshBasicMaterial}

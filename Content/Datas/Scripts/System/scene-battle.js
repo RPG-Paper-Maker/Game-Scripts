@@ -216,14 +216,19 @@ SceneBattle.prototype.initialize = function(){
 // -------------------------------------------------------
 
 SceneBattle.prototype.update = function(){
-    var i, l;
+    var i, l, battlers;
 
     SceneMap.prototype.update.call(this);
 
     // Heroes
-    l = this.battlers[CharacterKind.Hero].length;
-    for (i = 0; i < l; i++) {
-        this.battlers[CharacterKind.Hero][i].update();
+    battlers = this.battlers[CharacterKind.Hero];
+    for (i = 0, l = battlers.length; i < l; i++) {
+        battlers[i].update();
+    }
+    // Ennemies
+    battlers = this.battlers[CharacterKind.Monster];
+    for (i = 0, l = battlers.length; i < l; i++) {
+        battlers[i].update();
     }
 
     switch(this.step){

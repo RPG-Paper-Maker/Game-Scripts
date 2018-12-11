@@ -43,7 +43,7 @@ function Battler(character, position, x, y, w, h){
     this.width = 1;
     this.height = 1;
     this.position = position;
-    this.frameDuration = 300;
+    this.frameDuration = RPM.random(250, 300)
     this.frameTick = 0;
 
     var idBattler = $datasGame.getHeroesMonsters(character.k).list[character.id]
@@ -61,6 +61,9 @@ function Battler(character, position, x, y, w, h){
             this.position)[0];
         this.mesh = new THREE.Mesh(geometry, material);
         this.mesh.position.set(position.x, position.y, position.z);
+        if (character.k === CharacterKind.Monster) {
+            this.mesh.scale.set(-1, 1, 1);
+        }
         this.updateUVs();
     }
 }
