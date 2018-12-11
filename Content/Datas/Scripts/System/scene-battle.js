@@ -60,7 +60,7 @@
 
 function SceneBattle(troopID, canGameOver, canEscape, battleMap) {
     SceneMap.call(this, battleMap.idMap, true);
-    this.camera.distance = 140;
+    this.camera.distance = 180;
     this.camera.verticalAngle = 60;
     this.step = 0;
     this.troopID = troopID;
