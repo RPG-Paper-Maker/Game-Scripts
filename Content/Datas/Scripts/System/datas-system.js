@@ -71,6 +71,18 @@ DatasSystem.prototype = {
                 $BB_MATERIAL.visible = true;
             }
 
+            // Colors
+            var jsonColors = json.colors;
+            l = jsonColors.length;
+            this.colors = new Array(l + 1);
+            for (i = 0; i < l; i++){
+                var jsonColor = jsonColors[i];
+                var id = jsonColor.id;
+                var color = new SystemColor();
+                color.readJSON(jsonColor);
+                this.colors[id] = color;
+            }
+
             // Currencies
             var jsonCurrencies = json.currencies;
             l = jsonCurrencies.length;

@@ -19,40 +19,35 @@
 
 // -------------------------------------------------------
 //
-//  CLASS MapInfos
+//  CLASS SystemColor
 //
 // -------------------------------------------------------
 
 /** @class
-*   The properties of a map.
+*   An color of the game.
 */
-function MapInfos() {
+function SystemColor() {
 
 }
 
-MapInfos.prototype = {
+SystemColor.prototype = {
 
-    /** Read the JSON associated to the map infos.
+    /** Read the JSON associated to the element.
     *   @param {Object} json Json object describing the object.
     */
-    read: function(json, map, callback) {
-        this.name = json.name;
-        this.length = json.l;
-        this.width = json.w;
-        this.height = json.h;
-        this.depth = json.d;
-        this.tileset = $datasGame.tilesets.list[json.tileset];
-        this.music = json.music ? new EventCommandPlayMusic(json.music.command)
-            : null;
-        this.backgroundSound = json.bgs ? new EventCommandPlayBackgroundSound(
-            json.bgs.command) : null;
-        this.backgroundColorID = new SystemValue();
-        this.backgroundColorID.read(json.sky);
-        this.updateBackgroundColor();
+    readJSON: function(json) {
+        this.red = json.r;
+        this.green = json.g;
+        this.blue = json.b;
+        this.alpha = json.a / 255;
+
+        this.color = new THREE.Color("rgb(" + this.red + ", " + this.green +
+            ", " + this.blue + ")");
     },
 
-    updateBackgroundColor: function() {
-        this.backgroundColor = $datasGame.system.colors[this.backgroundColorID
-            .getValue()];
+    // -------------------------------------------------------
+
+    getHex: function() {
+        return this.color.getHex();
     }
 }

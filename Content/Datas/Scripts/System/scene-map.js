@@ -525,6 +525,9 @@ SceneMap.prototype = {
     // -------------------------------------------------------
 
     update: function(){
+        this.mapInfos.updateBackgroundColor();
+        $renderer.setClearColor(this.mapInfos.backgroundColor.getHex(), this
+            .mapInfos.backgroundColor.alpha);
         this.updateMovingPortions();
 
         // Update camera

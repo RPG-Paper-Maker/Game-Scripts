@@ -120,7 +120,8 @@ DISTFILES += \
     Content/Datas/Scripts/System/songs-manager.js \
     Content/Datas/Scripts/System/map-infos.js \
     Content/Datas/Scripts/System/system-battle-map.js \
-    Content/Datas/Scripts/System/scene-loading.js
+    Content/Datas/Scripts/System/scene-loading.js \
+    Content/Datas/Scripts/System/system-color.js
 
 RESOURCES += \
     qml.qrc

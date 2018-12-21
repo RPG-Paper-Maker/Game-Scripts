@@ -903,3 +903,9 @@ RPM.createMaterial = function(texture){
         overdraw: 0.5
     });
 };
+
+// -------------------------------------------------------
+
+RPM.updateBackgroundColor = function(color) {
+    $renderer.setClearColor(color.getHex(), color.alpha);
+}
