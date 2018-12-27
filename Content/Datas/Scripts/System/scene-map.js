@@ -644,6 +644,7 @@ SceneMap.prototype = {
     // -------------------------------------------------------
 
     draw3D: function(canvas){
+        console.log(this.camera.distance);
         $renderer.render(this.scene, this.camera.threeCamera);
     },
 

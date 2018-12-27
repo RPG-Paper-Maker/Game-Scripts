@@ -32,8 +32,17 @@ SceneBattle.prototype.initializeStep4 = function(){
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.updateStep4 = function(){
-    if (new Date().getTime() - this.time >= 1000){
+SceneBattle.prototype.updateStep4 = function() {
+    if (new Date().getTime() - this.time >= 1000) {
+        if (this.transitionEnd === 2) {
+            this.camera.distance -= 5;
+            if (this.camera.distance <= 10) {
+                this.camera.distance = 10;
+            } else {
+                return;
+            }
+        }
+
         this.win();
     }
 };

@@ -1,4 +1,4 @@
-/*
+﻿/*
     RPG Paper Maker Copyright (C) 2017 Marie Laporte
 
     This file is part of RPG Paper Maker.
@@ -109,7 +109,12 @@ EventCommandStartBattle.prototype = {
     */
     initialize: function(){
         return {
-            sceneBattle: null
+            mapScene: null,
+            sceneBattle: null,
+            transitionStart: null,
+            transitionEnd: null,
+            distanceMap: 0,
+
         };
     },
 
@@ -125,6 +130,7 @@ EventCommandStartBattle.prototype = {
 
         // Initializing battle
         if (currentState.sceneBattle === null) {
+            currentState.distanceMap = $currentMap.camera.distance;
             var battleMap = (this.battleMapID === null) ? new SystemBattleMap(
                 this.idMap.getValue(), [this.x.getValue(), this.y.getValue(),
                 this.yPlus.getValue(), this.z.getValue(), 0]) : $datasGame
@@ -135,20 +141,44 @@ EventCommandStartBattle.prototype = {
 
             // Defining the battle state instance
             var sceneBattle = new SceneBattle(this.troopID.getValue(),
-                this.canGameOver, this.canEscape, battleMap);
+                this.canGameOver, this.canEscape, battleMap,
+                this.transitionStart, this.transitionEnd);
              // Keep instance of battle state for results
             currentState.sceneBattle = sceneBattle;
-            $gameStack.push(sceneBattle);
+            currentState.transitionStart = this.transitionStart !== 0;
+            currentState.transitionEnd = this.transitionEnd !== 0;
+            currentState.mapScene = $gameStack.top();
+            //if (!currentState.transitionStart) {
+                $gameStack.push(sceneBattle);
+            //}
 
             return 0; // Stay on this command as soon as we are in battle state
         }
 
+        // Transition
+
         // After the battle...
+        if (currentState.transitionEnd !== null) {
+            if (this.transitionEnd === 2) {
+                currentState.mapScene.camera.distance += 5;
+                if (currentState.mapScene.camera.distance >= currentState
+                    .distanceMap)
+                {
+                    currentState.mapScene.camera.distance = currentState
+                        .distanceMap;
+                    currentState.transitionEnd = null;
+                }
+            }
+            return 0;
+        }
+
+
         var result = 1;
         // If there are not game overs, go to win/lose nodes
         if (!this.canGameOver) {
-            if (!currentState.sceneBattle.winning)
+            if (!currentState.sceneBattle.winning) {
                 result = 2;
+            }
         }
 
         return result;

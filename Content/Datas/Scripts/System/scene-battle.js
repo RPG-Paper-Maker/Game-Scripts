@@ -58,18 +58,33 @@
 *   @property {GraphicText} textsDamages List of all the damages to display.
 */
 
-function SceneBattle(troopID, canGameOver, canEscape, battleMap) {
+function SceneBattle(troopID, canGameOver, canEscape, battleMap, transitionStart,
+    transitionEnd)
+{
     SceneMap.call(this, battleMap.idMap, true);
+
+    this.transitionStart = transitionStart;
+    this.transitionEnd = transitionEnd;
+    this.transition = false;
     this.camera.distance = 180;
     this.camera.verticalAngle = 60;
     this.step = 0;
     this.troopID = troopID;
     this.canGameOver = canGameOver;
     this.canEscape = canEscape;
+    this.sceneMap = $gameStack.top();
     this.initialize();
+
+    // Camera settings
     this.cameraStep = 0;
     this.cameraTick = 0.05;
     this.cameraOffset = 3;
+    this.cameraON = transitionStart !== 2;
+    if (!this.cameraON) {
+        this.camera.distance = 0;
+        this.transition = true;
+    }
+    this.camera.update();
 }
 
 SceneBattle.prototype = Object.create(SceneMap.prototype);
@@ -221,6 +236,17 @@ SceneBattle.prototype.initialize = function(){
 SceneBattle.prototype.update = function(){
     var i, l, battlers;
 
+    // Transition zoom
+    if (this.transition) {
+        this.sceneMap.camera.distance -= 5;
+        if (this.sceneMap.camera.distance <= 10) {
+            this.sceneMap.camera.distance = 10;
+            this.transition = false;
+        }
+        this.sceneMap.camera.update();
+        return;
+    }
+
     SceneMap.prototype.update.call(this);
 
     // Heroes
@@ -235,51 +261,59 @@ SceneBattle.prototype.update = function(){
     }
 
     // Camera temp code for moving
-    switch (this.cameraStep) {
-    case 0:
-        this.camera.distance -= this.cameraTick;
-        this.camera.targetOffset.x += this.cameraTick;
-        if (this.camera.distance <= 180 - this.cameraOffset) {
-            this.camera.distance = 180 - this.cameraOffset;
-            this.camera.targetOffset.x = this.cameraOffset;
-            this.cameraStep = 1;
+    if (this.cameraON) {
+        switch (this.cameraStep) {
+        case 0:
+            this.camera.distance -= this.cameraTick;
+            this.camera.targetOffset.x += this.cameraTick;
+            if (this.camera.distance <= 180 - this.cameraOffset) {
+                this.camera.distance = 180 - this.cameraOffset;
+                this.camera.targetOffset.x = this.cameraOffset;
+                this.cameraStep = 1;
+            }
+            break;
+        case 1:
+            this.camera.distance += this.cameraTick;
+            if (this.camera.distance >= 180 + this.cameraOffset) {
+                this.camera.distance = 180 + this.cameraOffset;
+                this.cameraStep = 2;
+            }
+            break;
+        case 2:
+            this.camera.distance -= this.cameraTick;
+            this.camera.targetOffset.x -= this.cameraTick;
+            if (this.camera.distance <= 180 - this.cameraOffset) {
+                this.camera.distance = 180 - this.cameraOffset;
+                this.camera.targetOffset.x = -this.cameraOffset;
+                this.cameraStep = 3;
+            }
+            break;
+        case 3:
+            this.camera.distance += this.cameraTick;
+            if (this.camera.distance >= 180 + this.cameraOffset) {
+                this.camera.distance = 180 + this.cameraOffset;
+                this.cameraStep = 4;
+            }
+            break;
+        case 4:
+            this.camera.distance -= this.cameraTick;
+            this.camera.targetOffset.x += this.cameraTick;
+            if (this.camera.distance <= 180) {
+                this.camera.distance = 180;
+                this.camera.targetOffset.x = 0;
+                this.cameraStep = 0;
+            }
+            break;
         }
-        break;
-    case 1:
-        this.camera.distance += this.cameraTick;
-        if (this.camera.distance >= 180 + this.cameraOffset) {
-            this.camera.distance = 180 + this.cameraOffset;
-            this.cameraStep = 2;
-        }
-        break;
-    case 2:
-        this.camera.distance -= this.cameraTick;
-        this.camera.targetOffset.x -= this.cameraTick;
-        if (this.camera.distance <= 180 - this.cameraOffset) {
-            this.camera.distance = 180 - this.cameraOffset;
-            this.camera.targetOffset.x = -this.cameraOffset;
-            this.cameraStep = 3;
-        }
-        break;
-    case 3:
-        this.camera.distance += this.cameraTick;
-        if (this.camera.distance >= 180 + this.cameraOffset) {
-            this.camera.distance = 180 + this.cameraOffset;
-            this.cameraStep = 4;
-        }
-        break;
-    case 4:
-        this.camera.distance -= this.cameraTick;
-        this.camera.targetOffset.x += this.cameraTick;
-        if (this.camera.distance <= 180) {
+    } else { // Transition zoom
+        this.camera.distance += 5;
+        if (this.camera.distance >= 180) {
             this.camera.distance = 180;
-            this.camera.targetOffset.x = 0;
-            this.cameraStep = 0;
+            this.cameraON = true;
         }
-        break;
     }
 
-    switch(this.step){
+    switch(this.step) {
     case 0:
         this.updateStep0(); break;
     case 1:
@@ -364,7 +398,11 @@ SceneBattle.prototype.onKeyPressedAndRepeat = function(key){
 // -------------------------------------------------------
 
 SceneBattle.prototype.draw3D = function(canvas){
-    SceneMap.prototype.draw3D.call(this, canvas);
+    if (this.transition) {
+        this.sceneMap.draw3D(canvas);
+    } else {
+        SceneMap.prototype.draw3D.call(this, canvas);
+    }
 };
 
 // -------------------------------------------------------
