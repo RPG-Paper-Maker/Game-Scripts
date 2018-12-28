@@ -88,7 +88,31 @@ SceneBattle.prototype.initializeStep0 = function(){
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.updateStep0 = function(){
+SceneBattle.prototype.updateStep0 = function() {
+
+    // Transition fade
+    if (this.transitionColor) {
+        this.transitionColorAlpha += SceneBattle.TRANSITION_COLOR_VALUE;
+        if (this.transitionColorAlpha >= 1) {
+            this.transitionColorAlpha = 1;
+            this.transitionColor = false;
+            this.timeTransition = new Date().getTime();
+        }
+        return;
+    }
+    if (this.transitionStart === 1 && new Date().getTime() - this.timeTransition
+        < SceneBattle.TRANSITION_COLOR_END_WAIT)
+    {
+        return;
+    }
+    if (this.transitionStart === 1 && this.transitionColorAlpha > 0) {
+        this.transitionColorAlpha -= SceneBattle.TRANSITION_COLOR_VALUE;
+        if (this.transitionColorAlpha <= 0) {
+            this.transitionColorAlpha = 0;
+        }
+        return;
+    }
+
     this.changeStep(1);
 };
 
@@ -118,6 +142,11 @@ SceneBattle.prototype.onKeyPressedAndRepeatStep0 = function(key){
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.drawHUDStep0 = function(context){
-
+SceneBattle.prototype.drawHUDStep0 = function(context) {
+    if (this.transitionStart === 1) {
+        context.fillStyle = "rgba(" + this.transitionStartColor.red + "," +
+            this.transitionStartColor.green + "," + this.transitionStartColor
+            .blue + "," + this.transitionColorAlpha + ")";
+        context.fillRect(0, 0, $canvasWidth, $canvasHeight);
+    }
 };

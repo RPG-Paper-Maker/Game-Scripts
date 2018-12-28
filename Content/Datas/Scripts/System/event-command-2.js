@@ -96,7 +96,17 @@ function EventCommandStartBattle(command){
 
     // Transition
     this.transitionStart = command[i++];
+    if (this.transitionStart === 1) {
+        k = command[i++];
+        v = command[i++];
+        this.transitionStartColor = SystemValue.createValue(k, v);
+    }
     this.transitionEnd = command[i++];
+    if (this.transitionEnd === 1) {
+        k = command[i++];
+        v = command[i++];
+        this.transitionEndColor = SystemValue.createValue(k, v);
+    }
 
     this.isDirectNode = false;
     this.parallel = false;
@@ -110,11 +120,7 @@ EventCommandStartBattle.prototype = {
     initialize: function(){
         return {
             mapScene: null,
-            sceneBattle: null,
-            transitionStart: null,
-            transitionEnd: null,
-            distanceMap: 0,
-
+            sceneBattle: null
         };
     },
 
@@ -142,20 +148,18 @@ EventCommandStartBattle.prototype = {
             // Defining the battle state instance
             var sceneBattle = new SceneBattle(this.troopID.getValue(),
                 this.canGameOver, this.canEscape, battleMap,
-                this.transitionStart, this.transitionEnd);
+                this.transitionStart, this.transitionEnd, this
+                .transitionStartColor ? $datasGame.system.colors[this
+                .transitionStartColor.getValue()] : null, this.transitionEndColor
+                ? $datasGame.system.colors[this.transitionEndColor.getValue()] :
+                null);
              // Keep instance of battle state for results
             currentState.sceneBattle = sceneBattle;
-            currentState.transitionStart = this.transitionStart !== 0;
-            currentState.transitionEnd = this.transitionEnd !== 0;
             currentState.mapScene = $gameStack.top();
-            //if (!currentState.transitionStart) {
-                $gameStack.push(sceneBattle);
-            //}
+            $gameStack.push(sceneBattle);
 
             return 0; // Stay on this command as soon as we are in battle state
         }
-
-        // Transition
 
         // After the battle...
         if (currentState.transitionEnd !== null) {
@@ -168,10 +172,9 @@ EventCommandStartBattle.prototype = {
                         .distanceMap;
                     currentState.transitionEnd = null;
                 }
+                return 0;
             }
-            return 0;
         }
-
 
         var result = 1;
         // If there are not game overs, go to win/lose nodes

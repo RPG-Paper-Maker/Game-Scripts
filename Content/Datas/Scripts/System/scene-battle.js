@@ -59,13 +59,17 @@
 */
 
 function SceneBattle(troopID, canGameOver, canEscape, battleMap, transitionStart,
-    transitionEnd)
+    transitionEnd, transitionStartColor, transitionEndColor)
 {
     SceneMap.call(this, battleMap.idMap, true);
 
     this.transitionStart = transitionStart;
     this.transitionEnd = transitionEnd;
     this.transition = false;
+    this.transitionStartColor = transitionStartColor;
+    this.transitionEndColor = transitionEndColor;
+    this.transitionColorAlpha = 0;
+    this.transitionColor = transitionStart === 1;
     this.camera.distance = 180;
     this.camera.verticalAngle = 60;
     this.step = 0;
@@ -88,6 +92,9 @@ function SceneBattle(troopID, canGameOver, canEscape, battleMap, transitionStart
 }
 
 SceneBattle.prototype = Object.create(SceneMap.prototype);
+
+SceneBattle.TRANSITION_COLOR_VALUE = 0.1;
+SceneBattle.TRANSITION_COLOR_END_WAIT = 500;
 
 /** Make the attacking group all actives.
 */
@@ -398,7 +405,7 @@ SceneBattle.prototype.onKeyPressedAndRepeat = function(key){
 // -------------------------------------------------------
 
 SceneBattle.prototype.draw3D = function(canvas){
-    if (this.transition) {
+    if (this.transition || this.transitionColor) {
         this.sceneMap.draw3D(canvas);
     } else {
         SceneMap.prototype.draw3D.call(this, canvas);
@@ -407,7 +414,7 @@ SceneBattle.prototype.draw3D = function(canvas){
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.drawHUD = function(context){
+SceneBattle.prototype.drawHUD = function(context) {
     switch(this.step){
     case 0:
         this.drawHUDStep0(context); break;

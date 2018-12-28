@@ -34,11 +34,38 @@ SceneBattle.prototype.initializeStep4 = function(){
 
 SceneBattle.prototype.updateStep4 = function() {
     if (new Date().getTime() - this.time >= 1000) {
+
+        // Transition zoom
         if (this.transitionEnd === 2) {
             this.camera.distance -= 5;
             if (this.camera.distance <= 10) {
                 this.camera.distance = 10;
             } else {
+                return;
+            }
+        }
+
+        // Transition fade
+        if (this.transitionEnd === 1) {
+            if (!this.transitionColor) {
+                this.transitionColorAlpha += SceneBattle.TRANSITION_COLOR_VALUE;
+                if (this.transitionColorAlpha >= 1) {
+                    this.transitionColorAlpha = 1;
+                    this.transitionColor = true;
+                    this.timeTransition = new Date().getTime();
+                }
+                return;
+            }
+            if (new Date().getTime() - this.timeTransition < SceneBattle
+                .TRANSITION_COLOR_END_WAIT)
+            {
+                return;
+            }
+            if (this.transitionColorAlpha > 0) {
+                this.transitionColorAlpha -= SceneBattle.TRANSITION_COLOR_VALUE;
+                if (this.transitionColorAlpha <= 0) {
+                    this.transitionColorAlpha = 0;
+                }
                 return;
             }
         }
@@ -73,6 +100,16 @@ SceneBattle.prototype.onKeyPressedAndRepeatStep4 = function(key){
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.drawHUDStep4 = function(context){
-    this.windowTopInformations.draw(context);
+SceneBattle.prototype.drawHUDStep4 = function(context) {
+    if (!this.transition && !this.transitionColor) {
+         this.windowTopInformations.draw(context);
+    }
+
+    // Transition fade
+    if (this.transitionEnd === 1) {
+        context.fillStyle = "rgba(" + this.transitionEndColor.red + "," +
+            this.transitionEndColor.green + "," + this.transitionEndColor.blue +
+            "," + this.transitionColorAlpha + ")";
+        context.fillRect(0, 0, $canvasWidth, $canvasHeight);
+    }
 };
