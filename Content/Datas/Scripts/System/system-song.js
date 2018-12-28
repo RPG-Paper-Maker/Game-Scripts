@@ -17,20 +17,6 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
-*   Enum for the different songs kind.
-*   @enum {number}
-*   @readonly
-*/
-var SongKind = {
-    None: 0,
-    Music: 1,
-    BackgroundSound: 2,
-    Sound: 3,
-    MusicEffect: 4
-};
-Object.freeze(SongKind);
-
 // -------------------------------------------------------
 //
 //  CLASS SystemSong

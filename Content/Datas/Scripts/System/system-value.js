@@ -17,27 +17,6 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/** Enum for the different primitive values kind.
-*   @enum {number}
-*   @readonly
-*/
-var PrimitiveValueKind = {
-    None: 0,
-    Anything: 1,
-    Default: 2,
-    Number: 3,
-    Variable: 4,
-    Parameter: 5,
-    Property: 6,
-    DataBase: 7,
-    Message: 8,
-    Script: 9,
-    Switch: 10,
-    KeyBoard: 11,
-    NumberDouble: 12
-};
-Object.freeze(PrimitiveValueKind);
-
 // -------------------------------------------------------
 //
 //  CLASS SystemValue

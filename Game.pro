@@ -121,7 +121,8 @@ DISTFILES += \
     Content/Datas/Scripts/System/map-infos.js \
     Content/Datas/Scripts/System/system-battle-map.js \
     Content/Datas/Scripts/System/scene-loading.js \
-    Content/Datas/Scripts/System/system-color.js
+    Content/Datas/Scripts/System/system-color.js \
+    Content/Datas/Scripts/System/enums.js
 
 RESOURCES += \
     qml.qrc

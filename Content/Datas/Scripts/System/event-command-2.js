@@ -777,25 +777,6 @@ EventCommandTeleportObject.prototype = {
 }
 
 // -------------------------------------------------------
-//
-//  CLASS EventCommandMoveObject
-//
-// -------------------------------------------------------
-
-/**
-*   Enum for the different command moves kind.
-*   @enum {number}
-*   @readonly
-*/
-var CommandMoveKind = {
-    MoveNorth: 0,
-    MoveSouth: 1,
-    MoveWest: 2,
-    MoveEast: 3
-}
-Object.freeze(CommandMoveKind);
-
-// -------------------------------------------------------
 
 /** @class
 *   An event command for moving object.

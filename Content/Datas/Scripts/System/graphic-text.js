@@ -17,18 +17,6 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
-*   Enum for the different aligns kind.
-*   @enum {string}
-*   @readonly
-*/
-var Align = {
-    Left: "left",
-    Right: "right",
-    Center: "center"
-}
-Object.freeze(Align);
-
 // -------------------------------------------------------
 //
 //  CLASS GraphicText : Bitmap

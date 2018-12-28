@@ -17,19 +17,6 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
-*   Enum for the different sprite walls kind.
-*   @enum {number}
-*   @readonly
-*/
-var SpriteWallKind = {
-    Left: 0,
-    Middle: 1,
-    Right: 2,
-    LeftRight: 3
-};
-Object.freeze(SpriteWallKind);
-
 // -------------------------------------------------------
 //
 //  CLASS SpriteWall

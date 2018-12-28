@@ -17,17 +17,6 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
-*   Enum for the different window orientations.
-*   @enum {number}
-*   @readonly
-*/
-var OrientationWindow = {
-    Vertical: 0,
-    Horizontal: 1
-};
-Object.freeze(OrientationWindow);
-
 // -------------------------------------------------------
 //
 //  CLASS WindowTabs : Bitmap

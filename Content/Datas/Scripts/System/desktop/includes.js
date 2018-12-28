@@ -1,3 +1,4 @@
+Qt.include("../enums.js")
 Qt.include("../rpm.js")
 Qt.include("../texture-autotile.js")
 Qt.include("../datas-game.js")

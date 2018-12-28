@@ -17,24 +17,6 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
-*   Enum for the different pictures kind.
-*   @enum {number}
-*   @readonly
-*/
-var PictureKind = {
-    None: 0,
-    Bars: 1,
-    Icons: 2,
-    Autotiles: 3,
-    Characters: 4,
-    Reliefs: 5,
-    Tilesets: 6,
-    Walls: 7,
-    Battlers: 8
-};
-Object.freeze(PictureKind);
-
 // -------------------------------------------------------
 //
 //  CLASS SystemPicture

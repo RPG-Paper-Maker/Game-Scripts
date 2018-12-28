@@ -17,20 +17,6 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
-*   Enum for the different orientations kind.
-*   @enum {string}
-*   @readonly
-*/
-var Orientation = {
-    South: 0,
-    West: 1,
-    North: 2,
-    East: 3,
-    None: 4
-}
-Object.freeze(Orientation);
-
 // -------------------------------------------------------
 //
 //  CLASS MapObject

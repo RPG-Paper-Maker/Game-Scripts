@@ -17,42 +17,6 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
-*   Enum for the different items kind.
-*   @enum {number}
-*   @readonly
-*/
-var ItemKind = {
-     Item: 0,
-     Weapon: 1,
-     Armor: 2
-};
-Object.freeze(ItemKind);
-
-/**
-*   Enum for the different players kind.
-*   @enum {number}
-*   @readonly
-*/
-var CharacterKind = {
-    Hero: 0,
-    Monster: 1
-}
-
-Object.freeze(CharacterKind);
-
-/**
-*   Enum for the different groups kind.
-*   @enum {number}
-*   @readonly
-*/
-var GroupKind = {
-    Team: 0,
-    Reserve: 1,
-    Hidden: 2
-}
-Object.freeze(GroupKind);
-
 // -------------------------------------------------------
 //
 //  CLASS Game

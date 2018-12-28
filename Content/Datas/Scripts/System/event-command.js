@@ -17,45 +17,6 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
-*   Enum for the different event commands kind.
-*   @enum {number}
-*   @readonly
-*/
-var EventCommandKind = {
-    None: 0,
-    ShowText: 1,
-    ChangeVariables: 2,
-    EndGame: 3,
-    While: 4,
-    EndWhile: 5,
-    WhileBreak: 6,
-    InputNumber: 7,
-    If: 8,
-    Else: 9,
-    EndIf: 10,
-    OpenMainMenu: 11,
-    OpenSavesMenu: 12,
-    ModifyInventory: 13,
-    ModifyTeam: 14,
-    StartBattle: 15,
-    IfWin: 16,
-    IfLose: 17,
-    ChangeState: 18,
-    SendEvent: 19,
-    TeleportObject: 20,
-    MoveObject: 21,
-    Wait: 22,
-    MoveCamera: 23,
-    PlayMusic: 24,
-    StopMusic: 25,
-    PlayBackgroundSound: 26,
-    StopBackgroundSound: 27,
-    PlaySound: 28,
-    PlayMusicEffect: 29
-};
-Object.freeze(EventCommandKind);
-
 // -------------------------------------------------------
 //
 //  CLASS EventCommandShowText
