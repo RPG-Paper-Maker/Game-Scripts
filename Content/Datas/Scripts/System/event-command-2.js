@@ -132,11 +132,10 @@ EventCommandStartBattle.prototype = {
     *   @param {number} state The state ID.
     *   @returns {number} The number of node to pass.
     */
-    update: function(currentState, object, state){
+    update: function(currentState, object, state) {
 
         // Initializing battle
         if (currentState.sceneBattle === null) {
-            currentState.distanceMap = $currentMap.camera.distance;
             var battleMap = (this.battleMapID === null) ? new SystemBattleMap(
                 this.idMap.getValue(), [this.x.getValue(), this.y.getValue(),
                 this.yPlus.getValue(), this.z.getValue(), 0]) : $datasGame
@@ -148,32 +147,17 @@ EventCommandStartBattle.prototype = {
             // Defining the battle state instance
             var sceneBattle = new SceneBattle(this.troopID.getValue(),
                 this.canGameOver, this.canEscape, battleMap,
-                this.transitionStart, this.transitionEnd, this
-                .transitionStartColor ? $datasGame.system.colors[this
-                .transitionStartColor.getValue()] : null, this.transitionEndColor
-                ? $datasGame.system.colors[this.transitionEndColor.getValue()] :
-                null);
+                this.transitionStart, this.transitionEnd, $currentMap.camera
+                .distance, this.transitionStartColor ? $datasGame.system.colors
+                [this.transitionStartColor.getValue()] : null, this
+                .transitionEndColor ? $datasGame.system.colors[this
+                .transitionEndColor.getValue()] : null);
              // Keep instance of battle state for results
             currentState.sceneBattle = sceneBattle;
             currentState.mapScene = $gameStack.top();
             $gameStack.push(sceneBattle);
 
             return 0; // Stay on this command as soon as we are in battle state
-        }
-
-        // After the battle...
-        if (currentState.transitionEnd !== null) {
-            if (this.transitionEnd === 2) {
-                currentState.mapScene.camera.distance += 5;
-                if (currentState.mapScene.camera.distance >= currentState
-                    .distanceMap)
-                {
-                    currentState.mapScene.camera.distance = currentState
-                        .distanceMap;
-                    currentState.transitionEnd = null;
-                }
-                return 0;
-            }
         }
 
         var result = 1;

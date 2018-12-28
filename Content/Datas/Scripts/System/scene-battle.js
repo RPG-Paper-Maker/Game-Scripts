@@ -59,17 +59,18 @@
 */
 
 function SceneBattle(troopID, canGameOver, canEscape, battleMap, transitionStart,
-    transitionEnd, transitionStartColor, transitionEndColor)
+    transitionEnd, cameraDistance, transitionStartColor, transitionEndColor)
 {
     SceneMap.call(this, battleMap.idMap, true);
 
     this.transitionStart = transitionStart;
     this.transitionEnd = transitionEnd;
-    this.transition = false;
+    this.transitionZoom = false;
     this.transitionStartColor = transitionStartColor;
     this.transitionEndColor = transitionEndColor;
     this.transitionColorAlpha = 0;
     this.transitionColor = transitionStart === 1;
+    this.cameraDistance = cameraDistance;
     this.camera.distance = 180;
     this.camera.verticalAngle = 60;
     this.step = 0;
@@ -85,8 +86,8 @@ function SceneBattle(troopID, canGameOver, canEscape, battleMap, transitionStart
     this.cameraOffset = 3;
     this.cameraON = transitionStart !== 2;
     if (!this.cameraON) {
-        this.camera.distance = 0;
-        this.transition = true;
+        this.camera.distance = 10;
+        this.transitionZoom = true;
     }
     this.camera.update();
 }
@@ -95,6 +96,7 @@ SceneBattle.prototype = Object.create(SceneMap.prototype);
 
 SceneBattle.TRANSITION_COLOR_VALUE = 0.1;
 SceneBattle.TRANSITION_COLOR_END_WAIT = 500;
+SceneBattle.TIME_END_WAIT = 1000;
 
 /** Make the attacking group all actives.
 */
@@ -243,17 +245,6 @@ SceneBattle.prototype.initialize = function(){
 SceneBattle.prototype.update = function(){
     var i, l, battlers;
 
-    // Transition zoom
-    if (this.transition) {
-        this.sceneMap.camera.distance -= 5;
-        if (this.sceneMap.camera.distance <= 10) {
-            this.sceneMap.camera.distance = 10;
-            this.transition = false;
-        }
-        this.sceneMap.camera.update();
-        return;
-    }
-
     SceneMap.prototype.update.call(this);
 
     // Heroes
@@ -311,12 +302,6 @@ SceneBattle.prototype.update = function(){
                 this.cameraStep = 0;
             }
             break;
-        }
-    } else { // Transition zoom
-        this.camera.distance += 5;
-        if (this.camera.distance >= 180) {
-            this.camera.distance = 180;
-            this.cameraON = true;
         }
     }
 
@@ -405,7 +390,7 @@ SceneBattle.prototype.onKeyPressedAndRepeat = function(key){
 // -------------------------------------------------------
 
 SceneBattle.prototype.draw3D = function(canvas){
-    if (this.transition || this.transitionColor) {
+    if (this.transitionZoom || this.transitionColor) {
         this.sceneMap.draw3D(canvas);
     } else {
         SceneMap.prototype.draw3D.call(this, canvas);

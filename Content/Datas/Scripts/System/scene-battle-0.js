@@ -91,26 +91,50 @@ SceneBattle.prototype.initializeStep0 = function(){
 SceneBattle.prototype.updateStep0 = function() {
 
     // Transition fade
-    if (this.transitionColor) {
-        this.transitionColorAlpha += SceneBattle.TRANSITION_COLOR_VALUE;
-        if (this.transitionColorAlpha >= 1) {
-            this.transitionColorAlpha = 1;
-            this.transitionColor = false;
-            this.timeTransition = new Date().getTime();
+    if (this.transitionStart === 1) {
+        if (this.transitionColor) {
+            this.transitionColorAlpha += SceneBattle.TRANSITION_COLOR_VALUE;
+            if (this.transitionColorAlpha >= 1) {
+                this.transitionColorAlpha = 1;
+                this.transitionColor = false;
+                this.timeTransition = new Date().getTime();
+            }
+            return;
         }
-        return;
-    }
-    if (this.transitionStart === 1 && new Date().getTime() - this.timeTransition
-        < SceneBattle.TRANSITION_COLOR_END_WAIT)
-    {
-        return;
-    }
-    if (this.transitionStart === 1 && this.transitionColorAlpha > 0) {
-        this.transitionColorAlpha -= SceneBattle.TRANSITION_COLOR_VALUE;
-        if (this.transitionColorAlpha <= 0) {
-            this.transitionColorAlpha = 0;
+        if (new Date().getTime() - this.timeTransition < SceneBattle
+            .TRANSITION_COLOR_END_WAIT)
+        {
+            return;
         }
-        return;
+        if (this.transitionColorAlpha > 0) {
+            this.transitionColorAlpha -= SceneBattle.TRANSITION_COLOR_VALUE;
+            if (this.transitionColorAlpha <= 0) {
+                this.transitionColorAlpha = 0;
+            }
+            return;
+        }
+    }
+
+    // Transition zoom
+    if (this.transitionStart === 2) {
+        if (this.transitionZoom) {
+            this.sceneMap.camera.distance -= 5;
+            if (this.sceneMap.camera.distance <= 10) {
+                this.sceneMap.camera.distance = 10;
+                this.transitionZoom = false;
+            }
+            this.sceneMap.camera.update();
+            return;
+        }
+        if (this.camera.distance < 180) {
+            this.camera.distance += 5;
+            if (this.camera.distance >= 180) {
+                this.camera.distance = 180;
+                this.cameraON = true;
+            } else {
+                return;
+            }
+        }
     }
 
     this.changeStep(1);

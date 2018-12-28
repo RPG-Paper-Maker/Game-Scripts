@@ -33,15 +33,26 @@ SceneBattle.prototype.initializeStep4 = function(){
 // -------------------------------------------------------
 
 SceneBattle.prototype.updateStep4 = function() {
-    if (new Date().getTime() - this.time >= 1000) {
+    if (new Date().getTime() - this.time >= SceneBattle.TIME_END_WAIT) {
 
         // Transition zoom
         if (this.transitionEnd === 2) {
-            this.camera.distance -= 5;
-            if (this.camera.distance <= 10) {
-                this.camera.distance = 10;
-            } else {
+            if (!this.transitionZoom) {
+                this.camera.distance -= 5;
+                if (this.camera.distance <= 10) {
+                    this.camera.distance = 10;
+                    this.transitionZoom = true;
+                }
                 return;
+            }
+            if (this.sceneMap.camera.distance < this.cameraDistance) {
+                this.sceneMap.camera.distance += 5;
+                this.sceneMap.camera.update();
+                if (this.sceneMap.camera.distance >= this.cameraDistance) {
+                    this.sceneMap.camera.distance = this.cameraDistance;
+                } else {
+                    return;
+                }
             }
         }
 
@@ -101,7 +112,7 @@ SceneBattle.prototype.onKeyPressedAndRepeatStep4 = function(key){
 // -------------------------------------------------------
 
 SceneBattle.prototype.drawHUDStep4 = function(context) {
-    if (!this.transition && !this.transitionColor) {
+    if (new Date().getTime() - this.time < SceneBattle.TIME_END_WAIT) {
          this.windowTopInformations.draw(context);
     }
 
