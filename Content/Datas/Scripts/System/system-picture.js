@@ -71,6 +71,8 @@ SystemPicture.getLocalFolder = function(kind){
         return RPM.PATH_WALLS;
     case PictureKind.Battlers:
         return RPM.PATH_BATTLERS;
+    case PictureKind.Facesets:
+        return RPM.PATH_FACESETS;
     }
 
     return "";

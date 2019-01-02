@@ -69,7 +69,7 @@ SceneBattle.prototype.initializeStep0 = function(){
     }
 
     this.windowTopInformations = new WindowBox(0,20,$SCREEN_X, 30);
-    var w = 200, h = 100;
+    var w = 300, h = 100;
     this.windowCharacterInformations = new WindowBox($SCREEN_X - w,
                                                      $SCREEN_Y - h, w, h, null,
                                                      [10,10,10,10]);

@@ -202,7 +202,7 @@ SceneBattle.prototype.onKeyPressedAndRepeatStep1 = function(key){
 SceneBattle.prototype.drawHUDStep1 = function(context){
     this.windowTopInformations.draw(context);
 
-    // Draw battlers
+    // Draw heroes window informations
     this.windowCharacterInformations.draw(context);
 
     this.arrowSelection.draw(context);

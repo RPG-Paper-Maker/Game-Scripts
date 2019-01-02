@@ -158,7 +158,8 @@ var PictureKind = {
     Reliefs: 5,
     Tilesets: 6,
     Walls: 7,
-    Battlers: 8
+    Battlers: 8,
+    Facesets: 9
 };
 Object.freeze(PictureKind);
 
