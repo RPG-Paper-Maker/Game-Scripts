@@ -299,8 +299,9 @@ Window {
         visible: false
 
         onImageLoaded: {
+            var context = canvasRendering.getContext('2d');
             for (var i = 0, l = Game.$picturesLoading.length; i < l; i++) {
-                if (Game.$picturesLoading[i].check())
+                if (Game.$picturesLoading[i].check(context))
                     break;
             }
         }

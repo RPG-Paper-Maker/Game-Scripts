@@ -47,24 +47,9 @@ function WindowBox(x, y, w, h, content, padding) {
     if (typeof content === 'undefined') content = null;
     if (typeof padding === 'undefined') padding = [0,0,0,0];
 
-    // Setting content dimensions
-    this.contentDimension = [
-        x + padding[0],
-        y + padding[1],
-        w - (2*padding[2]),
-        h - (2*padding[3])
-    ];
-
-    // Adjusting dimensions
-    this.windowDimension = [
-        RPM.getScreenX(x),
-        RPM.getScreenY(y),
-        RPM.getScreenX(w),
-        RPM.getScreenY(h)
-    ];
-
     this.padding = padding;
     this.content = content;
+    this.updateDimensions();
     this.bordersOpacity = 1;
     this.backgroundOpacity = 1;
     this.backgroundColor = "grey";
@@ -72,26 +57,49 @@ function WindowBox(x, y, w, h, content, padding) {
 
 WindowBox.prototype = {
 
+    updateDimensions: function() {
+
+        // Setting content dimensions
+        this.contentDimension = [
+            this.x + this.padding[0],
+            this.y + this.padding[1],
+            this.w - (2 * this.padding[2]),
+            this.h - (2 * this.padding[3])
+        ];
+
+        // Adjusting dimensions
+        this.windowDimension = [
+            RPM.getScreenX(this.x),
+            RPM.getScreenY(this.y),
+            RPM.getScreenX(this.w),
+            RPM.getScreenY(this.h)
+        ];
+    },
+
     setX: function(x){
         Bitmap.prototype.setX.call(this, x);
+        this.updateDimensions();
     },
 
     // -------------------------------------------------------
 
     setY: function(y){
         Bitmap.prototype.setY.call(this, y);
+        this.updateDimensions();
     },
 
     // -------------------------------------------------------
 
     setW: function(w){
         Bitmap.prototype.setW.call(this, w);
+        this.updateDimensions();
     },
 
     // -------------------------------------------------------
 
     setH: function(h){
         Bitmap.prototype.setH.call(this, h);
+        this.updateDimensions();
     },
 
     // -------------------------------------------------------

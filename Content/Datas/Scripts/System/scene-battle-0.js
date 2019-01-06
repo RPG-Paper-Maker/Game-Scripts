@@ -35,39 +35,53 @@ SceneBattle.prototype.initializeStep0 = function(){
     var centerY = $SCREEN_Y / 2 - 125;
     this.selectedUserIndex = 0;
     this.selectedTargetIndex = 0;
-    this.battlers = new Array(2);
 
-    // Heroes
+    // Battlers and graphics
+    this.battlers = new Array(2);
+    this.graphicPlayers = new Array(2);
     l = $game.teamHeroes.length;
     this.battlers[CharacterKind.Hero] = new Array(l);
+    this.graphicPlayers[CharacterKind.Hero] = new Array(l);
     for (i = 0; i < l; i++) {
+        // Battlers
         position = new THREE.Vector3($game.heroBattle.position.x + (2 *
-            $SQUARE_SIZE) + (i * $SQUARE_SIZE / 2), $game.heroBattle.position.y,
-            $game.heroBattle.position.z + (i * $SQUARE_SIZE));
+            $SQUARE_SIZE) + (i * $SQUARE_SIZE / 2), $game.heroBattle
+            .position.y, $game.heroBattle.position.z - $SQUARE_SIZE + (i *
+            $SQUARE_SIZE));
         battler = new Battler($game.teamHeroes[i], position, centerX +
             this.distanceCenterAlly + (i*30), centerY + (i*50),32,32);
         battler.addToScene();
         this.battlers[CharacterKind.Hero][i] = battler;
-    }
 
-    // Ennemies
+        // Graphic player
+        this.graphicPlayers[CharacterKind.Hero][i] = new GraphicPlayer(battler
+            .character, false);
+    }
     var troop = $datasGame.troops.list[this.troopID];
     l = troop.list.length;
     this.battlers[CharacterKind.Monster] = new Array(l);
+    this.graphicPlayers[CharacterKind.Monster] = new Array(l);
     for (i = 0; i < l; i++){
+        // Battlers
         var enemy = troop.list[i];
         position = new THREE.Vector3($game.heroBattle.position.x - (2 *
-            $SQUARE_SIZE) + (i * $SQUARE_SIZE / 2), $game.heroBattle.position.y,
-            $game.heroBattle.position.z + (i * $SQUARE_SIZE));
-        var instancied = new GamePlayer(CharacterKind.Monster, enemy.id,
-                                        $game.charactersInstances++, []);
+            $SQUARE_SIZE) + (i * $SQUARE_SIZE * 3 / 4), $game.heroBattle
+            .position.y, $game.heroBattle.position.z - $SQUARE_SIZE + (i *
+            $SQUARE_SIZE));
+        var instancied = new GamePlayer(CharacterKind.Monster, enemy.id, $game
+            .charactersInstances++, []);
         instancied.instanciate(enemy.level);
         battler = new Battler(instancied, position, centerX - this.distanceCenterAlly - 32,
                              centerY, 32, 32);
         battler.addToScene();
         this.battlers[CharacterKind.Monster][i] = battler;
+
+        // Graphic player
+        this.graphicPlayers[CharacterKind.Monster][i] = new GraphicPlayer(battler
+            .character, true);
     }
 
+    // Informations
     this.windowTopInformations = new WindowBox(0,20,$SCREEN_X, 30);
     var w = 300, h = 100;
     this.windowCharacterInformations = new WindowBox($SCREEN_X - w,

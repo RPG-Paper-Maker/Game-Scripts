@@ -36,9 +36,12 @@
 *   @property {number} maxStatNamesLength The max length of the stats for each column.
 *   @param {GamePlayer} gamePlayer The current selected player.
 */
-function GraphicPlayer(gamePlayer){
-    var character, cl, levelStat;
+function GraphicPlayer(gamePlayer, reverse) {
+    var character, cl, levelStat, id, statistic, textName, text, c, txt;
     var context;
+
+    this.gamePlayer = gamePlayer;
+    this.reverse = reverse;
 
     // Informations
     character = gamePlayer.getCharacterInformations();
@@ -57,34 +60,88 @@ function GraphicPlayer(gamePlayer){
     this.listStatsNames = [];
     this.listStats = [];
     this.maxStatNamesLength = 0;
-    var i, j = 0, l = $datasGame.battleSystem.statisticsOrder.length;
+    this.maxStatLength = 0;
+    var i, l = $datasGame.battleSystem.statisticsOrder.length;
     for (i = 0; i < l; i++){
-        var id = $datasGame.battleSystem.statisticsOrder[i];
-        if (id !== $datasGame.battleSystem.idLevelStatistic &&
-            id !== $datasGame.battleSystem.idExpStatistic)
+        id = $datasGame.battleSystem.statisticsOrder[i];
+        if (id !== $datasGame.battleSystem.idLevelStatistic && id !== $datasGame
+            .battleSystem.idExpStatistic)
         {
-            var statistic = $datasGame.battleSystem.statistics[id];
+            statistic = $datasGame.battleSystem.statistics[id];
 
             // Only display bars
             if (!statistic.isFix){
-                var textName = new GraphicText(statistic.name + ":",
-                                               Align.Left);
+                textName = new GraphicText(statistic.name + ":", Align.Left);
                 context.font = textName.font;
                 textName.updateContextFont(context);
-                var c = context.measureText(textName.text).width;
-                if (c > this.maxStatNamesLength) this.maxStatNamesLength = c;
+                c = context.measureText(textName.text).width;
+                if (c > this.maxStatNamesLength) {
+                    this.maxStatNamesLength = c;
+                }
                 this.listStatsNames.push(textName);
-                var txt = "" + gamePlayer[statistic.abbreviation];
+                txt = "" + gamePlayer[statistic.abbreviation];
                 if (!statistic.isFix)
                     txt += "/" + gamePlayer["max" + statistic.abbreviation];
-                this.listStats.push(new GraphicText(txt, Align.Left));
-                j++;
+                text = new GraphicText(txt, Align.Left);
+                c = context.measureText(text.text).width;
+                if (c > this.maxStatNamesLength) {
+                    this.maxStatLength = c;
+                }
+                this.listStats.push(text);
             }
         }
     }
+
+    // Faceset
+    this.faceset = Picture2D.createImage($datasGame.pictures.get(PictureKind
+        .Facesets, character.idFaceset), PictureKind.Facesets, function() {
+        if (reverse) {
+            this.setLeft();
+        } else {
+            this.setRight();
+        }
+        this.setBot();
+    });
+    this.faceset.reverse = reverse;
 }
 
 GraphicPlayer.prototype = {
+
+    update: function() {
+        var character, cl, levelStat, id, statistic, txt;
+
+        // Informations
+        character = this.gamePlayer.getCharacterInformations();
+        cl = $datasGame.classes.list[character.idClass];
+        levelStat = $datasGame.battleSystem.getLevelStatistic();
+
+        // All the graphics
+        this.graphicName.text = character.name;
+        this.graphicClass.text = cl.name;
+        this.graphicLevelName.text = levelStat.name;
+        this.graphicLevel.text = "" + this.gamePlayer[levelStat.abbreviation];
+
+        // Adding stats
+        var i, j = 0, l = $datasGame.battleSystem.statisticsOrder.length;
+        for (i = 0; i < l; i++) {
+            id = $datasGame.battleSystem.statisticsOrder[i];
+            if (id !== $datasGame.battleSystem.idLevelStatistic && id !==
+                $datasGame.battleSystem.idExpStatistic)
+            {
+                statistic = $datasGame.battleSystem.statistics[id];
+
+                // Only display bars
+                if (!statistic.isFix){
+                    txt = "" + this.gamePlayer[statistic.abbreviation];
+                    if (!statistic.isFix) {
+                        txt += "/" + this.gamePlayer["max" + statistic
+                            .abbreviation];
+                    }
+                    this.listStats[j++].text = txt;
+                }
+            }
+        }
+    },
 
     /** Drawing the player in choice box in the main menu.
     *   @param {Canvas.Context} context The canvas context.
@@ -119,29 +176,39 @@ GraphicPlayer.prototype = {
     *   @param {number} h The height dimention to draw graphic.
     */
     drawInformations: function(context, x, y, w, h){
-        var yName, xLevelName, xLevel, yStats, xStat, yStat;
+        var yName, xLevelName, xLevel, yStats, xStat, yStat, wName, wLevelName,
+            wLevel, wStats, wStat, firstLineLength, xOffset;
+
+        // Measure widths
+        wName = context.measureText(this.graphicName.text).width;
+        wLevelName = context.measureText(this.graphicLevelName.text).width;
+        wLevel = context.measureText(this.graphicLevelName.text).width;
+        xLevelName = x + wName + 10;
+        xLevel = xLevelName + wLevelName;
+        firstLineLength = xLevel + context.measureText(this.graphicLevel.text)
+            .width;
+        xOffset = this.reverse ? w - Math.max(firstLineLength, this
+            .maxStatNamesLength + 10 + this.maxStatLength) : 0;
 
         yName = y + 10;
-        this.graphicName.draw(context, x, yName, 0, 0);
+        this.graphicName.draw(context, x + xOffset, yName, 0, 0);
         this.graphicName.updateContextFont(context);
-        xLevelName = x +
-                context.measureText(this.graphicName.text).width + 10;
-        this.graphicLevelName.draw(context, xLevelName, yName, 0, 0);
+        this.graphicLevelName.draw(context, xLevelName + xOffset, yName, 0, 0);
         this.graphicLevelName.updateContextFont(context);
-        xLevel = xLevelName +
-                context.measureText(this.graphicLevelName.text).width;
-        this.graphicLevel.draw(context, xLevel, yName, 0, 0);
+        this.graphicLevel.draw(context, xLevel + xOffset, yName, 0, 0);
         yStats = yName + 20;
 
         // Stats
         var i, l = this.listStatsNames.length;
         for (i = 0; i < l; i++){
-            xStat = x;
+            xStat = x + xOffset;
             yStat = yStats + (i*20);
             this.listStatsNames[i].draw(context, xStat, yStat, 0, 0);
-            this.listStats[i].draw(context,
-                                   xStat + this.maxStatNamesLength + 10,
-                                   yStat, 0, 0);
+            this.listStats[i].draw(context, xStat + this.maxStatNamesLength +
+                10, yStat, 0, 0);
         }
+
+        // Faceset
+        this.faceset.draw(context);
     }
 }

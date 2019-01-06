@@ -43,7 +43,7 @@ function Battler(character, position, x, y, w, h){
     this.width = 1;
     this.height = 1;
     this.position = position;
-    this.frameDuration = RPM.random(250, 300)
+    this.frameDuration = RPM.random(250, 300);
     this.frameTick = 0;
 
     var idBattler = $datasGame.getHeroesMonsters(character.k).list[character.id]

@@ -43,10 +43,10 @@ function Bitmap(x, y, w, h){
     if (typeof w === 'undefined') w = 0;
     if (typeof h === 'undefined') h = 0;
 
-    this.setX(x);
-    this.setY(y);
-    this.setW(w);
-    this.setH(h);
+    Bitmap.prototype.setX.call(this, x);
+    Bitmap.prototype.setY.call(this, y);
+    Bitmap.prototype.setW.call(this, w);
+    Bitmap.prototype.setH.call(this, h);
 }
 
 Bitmap.prototype = {
@@ -83,6 +83,38 @@ Bitmap.prototype = {
     */
     setH: function(h){
         this.h = RPM.getScreenY(h);
+    },
+
+    // -------------------------------------------------------
+
+    /** Set the position to the top.
+    */
+    setLeft: function() {
+        this.x = 0;
+    },
+
+    // -------------------------------------------------------
+
+    /** Set the position to the top.
+    */
+    setTop: function() {
+        this.y = 0;
+    },
+
+    // -------------------------------------------------------
+
+    /** Set the position to the top.
+    */
+    setRight: function() {
+        this.x = $SCREEN_X - this.w;
+    },
+
+    // -------------------------------------------------------
+
+    /** Set the position to the top.
+    */
+    setBot: function() {
+        this.y = $SCREEN_Y - this.h;
     },
 
     // -------------------------------------------------------

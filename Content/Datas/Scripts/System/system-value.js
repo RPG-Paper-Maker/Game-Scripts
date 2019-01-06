@@ -86,10 +86,6 @@ SystemValue.prototype = {
     *   @param {Object} json Json object describing the object.
     */
     read: function(json){
-        if (!json) {
-            console.log("a")
-        }
-
         this.kind = json.k;
         this.value = json.v;
     },

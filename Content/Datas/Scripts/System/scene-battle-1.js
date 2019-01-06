@@ -44,6 +44,7 @@ SceneBattle.prototype.initializeStep1 = function(){
     }
     if (this.subStep === 0) this.selectedUserIndex = index;
     else this.selectedTargetIndex = index;
+    this.windowCharacterInformations.setX($SCREEN_X - 300);
     this.moveArrow();
 };
 
@@ -92,11 +93,9 @@ SceneBattle.prototype.moveArrow = function(){
          [dim[0] + (dim[2]/2) - 3,dim[1] + dim[3] + 10,6,6];
 
     // Updating window informations
-    this.windowCharacterInformations.content =
-         new GraphicPlayer(this.battlers
-                           [this.kindSelection]
-                           [this.selectedUserTargetIndex()]
-                           .character);
+    this.windowCharacterInformations.content = this.graphicPlayers[this
+        .kindSelection][this.selectedUserTargetIndex()];
+    this.windowCharacterInformations.content.update();
 };
 
 // -------------------------------------------------------
@@ -133,6 +132,7 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key){
             this.user = this.battlers[CharacterKind.Hero]
                         [this.selectedUserIndex];
             this.kindSelection = CharacterKind.Monster;
+            this.windowCharacterInformations.setX(0);
             this.moveArrow();
             this.subStep = 2;
         }

@@ -40,46 +40,74 @@ function Picture2D(path, callback, x, y, w, h) {
 
     this.path = path;
     this.callback = callback;
+    this.checked = false;
 
     $picturesLoading.push(this);
     $canvasRendering.loadImage(path);
 }
 
-Picture2D.prototype = {
+// -------------------------------------------------------
 
-    setX: function(x) {
-        Bitmap.prototype.setX.call(this, x);
-    },
-
-    // -------------------------------------------------------
-
-    setY: function(y) {
-        Bitmap.prototype.setY.call(this, y);
-    },
-
-    // -------------------------------------------------------
-
-    setW: function(w) {
-        Bitmap.prototype.setW.call(this, w);
-    },
-
-    // -------------------------------------------------------
-
-    setH: function(h) {
-        Bitmap.prototype.setH.call(this, h);
-    },
-
-    // -------------------------------------------------------
-
-    check: function() {
-        if ($canvasRendering.isImageLoaded(this.path)) {
-            $picturesLoading.splice($picturesLoading.indexOf(this), 1);
-            $picturesLoaded.push(this);
-            this.callback.call(this);
-
-            return true;
-        }
-
-        return false;
-    }
+Picture2D.createImage = function(image, kind, callback, x, y, w, h) {
+    return new Picture2D(image.getPath(kind)[1], callback, x, y, w, h);
 }
+
+// -------------------------------------------------------
+
+Picture2D.prototype = Object.create(Bitmap.prototype);
+
+// -------------------------------------------------------
+
+Picture2D.prototype.check = function(context) {
+    if ($canvasRendering.isImageLoaded(this.path)) {
+        $picturesLoading.splice($picturesLoading.indexOf(this), 1);
+        $picturesLoaded.push(this);
+        this.image = context.createImageData(this.path);
+        this.w = this.image.width;
+        this.h = this.image.height;
+
+        if (this.callback) {
+            this.callback.call(this);
+        }
+        this.checked = true;
+
+        return true;
+    }
+
+    return false;
+};
+
+// -------------------------------------------------------
+
+Picture2D.prototype.destroy = function() {
+    $canvasRendering.unloadImage(this.path);
+};
+
+// -------------------------------------------------------
+
+Picture2D.prototype.draw = function(context, x, y, w, h) {
+    if (!this.checked) {
+        this.check(context);
+    }
+
+    // Default values
+    if (typeof x === 'undefined') x = this.x;
+    if (typeof y === 'undefined') y = this.y;
+    if (typeof w === 'undefined') w = this.w;
+    if (typeof h === 'undefined') h = this.h;
+
+    x = RPM.getScreenX(x);
+    y = RPM.getScreenY(y);
+    w = RPM.getScreenX(w);
+    h = RPM.getScreenY(h);
+
+    // Draw the image
+    if (this.reverse) {
+        context.save();
+        context.scale(-1,1);
+        context.drawImage(this.path, -x - w, y, w, h);
+        context.restore();
+    } else {
+        context.drawImage(this.path, x, y, w, h);
+    }
+};
