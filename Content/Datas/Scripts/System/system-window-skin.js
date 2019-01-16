@@ -46,6 +46,7 @@ SystemWindowSkin.prototype = {
         this.borderTop = json.t;
         this.borderBot = json.b;
         this.background = json.back;
+        this.backgroundSelection = json.backs;
         this.backgroundRepeat = json.backr;
         this.arrowEndMessage = json.aem;
         this.arrowTargetSelection = json.ats;
@@ -74,6 +75,30 @@ SystemWindowSkin.prototype = {
         }
 
         context.drawImage(this.picture.path, r[0], r[1], r[2], r[3], x, y, w, h);
+    },
+
+    // -------------------------------------------------------
+
+    drawBoxBackground: function(background, context, rect) {
+        if (this.backgroundRepeat) {
+            var x, y, w, h, l, m;
+            for (x = rect[0] + this.borderTopLeft[2], l = rect[0] + rect[2] -
+                 this.borderTopRight[2] - 1; x < l; x += background[2])
+            {
+                for (y = rect[1] + this.borderTopLeft[3], m = rect[1] + rect[3]
+                     - this.borderBotLeft[3] - 1; y < m; y += background[3])
+                {
+                    w = x + background[2] < l ? background[2] : l - x + 1;
+                    h = y + background[3] < m ? background[3] : m - y + 1;
+                    this.drawBoxElement(context, background, x, y, w, h);
+                }
+            }
+        } else {
+            this.drawBoxElement(context, background, rect[0] + this
+                .borderTopLeft[2], rect[1] + this.borderTopLeft[3], rect[2] -
+                this.borderTopLeft[2] - this.borderBotRight[2], rect[3] - this
+                .borderTopLeft[3] - this.borderBotRight[3]);
+        }
     },
 
     // -------------------------------------------------------
@@ -137,32 +162,9 @@ SystemWindowSkin.prototype = {
         }
 
         // Background
-        if (this.backgroundRepeat) {
-            for (x = rect[0] + this.borderTopLeft[2], l = rect[0] + rect[2] -
-                 this.borderTopRight[2] - 1; x < l; x += this.background[2])
-            {
-                for (y = rect[1] + this.borderTopLeft[3], m = rect[1] + rect[3]
-                     - this.borderBotLeft[3] - 1; y < m; y += this.background[3])
-                {
-                    w = x + this.background[2] < l ? this.background[2] : l - x
-                        + 1;
-                    h = y + this.background[3] < m ? this.background[3] : m - y
-                        + 1;
-                    this.drawBoxElement(context, this.background, x, y, w, h);
-                }
-            }
-        } else {
-            this.drawBoxElement(context, this.background, rect[0] + this
-                .borderTopLeft[2], rect[1] + this.borderTopLeft[3]);
-        }
-
-        // Selection
+        this.drawBoxBackground(this.background, context, rect);
         if (selected) {
-            context.fillStyle = "rgba(255, 255, 255, 0.5)";
-            context.fillRect(rect[0] + this.borderTopLeft[2], rect[1] + this
-                .borderTopRight[3], rect[2] - this.borderTopLeft[2] - this
-                .borderBotRight[2], rect[3] - this.borderTopLeft[3] - this
-                .borderBotRight[3]);
+            this.drawBoxBackground(this.backgroundSelection, context, rect);
         }
     }
 }
