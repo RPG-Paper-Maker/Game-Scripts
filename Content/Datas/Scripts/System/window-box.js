@@ -31,7 +31,6 @@
 *   inside the window.
 *   @property {number[]} padding Padding of the box.
 *   @property {number[]} contentDimension Dimension of content.
-*   @property {string} backgroundColor The color of the background.
 *   @param {number} x The x coords.
 *   @param {number} y The y coords.
 *   @param {number} w The w coords.
@@ -52,7 +51,7 @@ function WindowBox(x, y, w, h, content, padding) {
     this.updateDimensions();
     this.bordersOpacity = 1;
     this.backgroundOpacity = 1;
-    this.backgroundColor = "grey";
+    this.selected = false;
 }
 
 WindowBox.prototype = {
@@ -115,12 +114,8 @@ WindowBox.prototype = {
         if (typeof isChoice === 'undefined') isChoice = false;
 
         // Draw box
-        context.fillStyle = this.backgroundColor;
-        context.fillRect(this.windowDimension[0],
-                         this.windowDimension[1],
-                         this.windowDimension[2],
-                         this.windowDimension[3]
-        );
+        $datasGame.system.getWindowSkin().drawBox(context, this.windowDimension,
+            this.selected);
 
         // Draw content
         if (this.content !== null){

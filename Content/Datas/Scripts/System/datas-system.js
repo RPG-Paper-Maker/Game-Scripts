@@ -46,7 +46,7 @@ DatasSystem.prototype = {
         RPM.openFile(this, RPM.FILE_SYSTEM, true, function(res){
             var json = JSON.parse(res);
             var jsonItemsTypes = json.itemsTypes;
-            var i, l = jsonItemsTypes.length;
+            var i, l = jsonItemsTypes.length, id;
             this.itemsTypes = new Array(l+1);
             for (i = 0; i < l; i++)
                 this.itemsTypes[jsonItemsTypes[i].id] = jsonItemsTypes[i].name;
@@ -77,7 +77,7 @@ DatasSystem.prototype = {
             this.colors = new Array(l + 1);
             for (i = 0; i < l; i++){
                 var jsonColor = jsonColors[i];
-                var id = jsonColor.id;
+                id = jsonColor.id;
                 var color = new SystemColor();
                 color.readJSON(jsonColor);
                 this.colors[id] = color;
@@ -89,11 +89,24 @@ DatasSystem.prototype = {
             this.currencies = new Array(l + 1);
             for (i = 0; i < l; i++){
                 var jsonCurrency = jsonCurrencies[i];
-                var id = jsonCurrency.id;
+                id = jsonCurrency.id;
                 var currency = new SystemCurrency();
                 currency.readJSON(jsonCurrency);
                 this.currencies[id] = currency;
             }
+
+            // WindowSkins
+            var jsonWindowSkins = json.wskins;
+            l = jsonWindowSkins.length;
+            this.windowSkins = new Array(l + 1);
+            for (i = 0; i < l; i++){
+                var jsonWindowSkin = jsonWindowSkins[i];
+                id = jsonWindowSkin.id;
+                var windowSkin = new SystemWindowSkin();
+                windowSkin.readJSON(jsonWindowSkin);
+                this.windowSkins[id] = windowSkin;
+            }
+            this.idWindowSkin = json.wskin;
 
             // read song now that BR path is loaded
             $datasGame.songs.read();
@@ -144,6 +157,14 @@ DatasSystem.prototype = {
 
     // -------------------------------------------------------
 
+    loadWindowSkins: function() {
+        for (var i = 1, l = this.windowSkins.length; i < l; i++) {
+            this.windowSkins[i].updatePicture();
+        }
+    },
+
+    // -------------------------------------------------------
+
     /** Get the default array currencies for a default game.
     *   @returns {number[]}
     */
@@ -155,5 +176,11 @@ DatasSystem.prototype = {
             list[i] = 0;
 
         return list;
+    },
+
+    // -------------------------------------------------------
+
+    getWindowSkin: function() {
+        return this.windowSkins[this.idWindowSkin];
     }
 }

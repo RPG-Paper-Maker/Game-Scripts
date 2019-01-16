@@ -84,6 +84,7 @@ DatasGame.prototype = {
         this.tilesets.read();
         this.heroes.read();
         this.monsters.read();
+        this.system.loadWindowSkins();
     },
 
     updateLoadings: function() {

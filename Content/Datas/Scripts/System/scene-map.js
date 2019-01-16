@@ -555,7 +555,7 @@ SceneMap.prototype = {
                 // Update face sprites
                 var mapPortion = this.getMapPortion(i, j, k);
 
-                if (mapPortion !== null)
+                if (mapPortion)
                     mapPortion.updateFaceSprites(angle);
             });
 

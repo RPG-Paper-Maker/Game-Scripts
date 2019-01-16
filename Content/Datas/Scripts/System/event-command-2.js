@@ -530,7 +530,7 @@ EventCommandSendEvent.sendEventDetection = function(
 
         // Static
         var mapPortion = $currentMap.getMapPortion(i, j, k);
-        if (mapPortion !== null) {
+        if (mapPortion) {
             EventCommandSendEvent.sendEventObjects(mapPortion.objectsList,
                                                   objects, sender, idTarget,
                                                   isSystem, idEvent,

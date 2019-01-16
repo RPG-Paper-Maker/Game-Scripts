@@ -341,6 +341,7 @@ RPM.PATH_TEXTURES2D = RPM.PATH_PICTURES + "/Textures2D/";
 RPM.PATH_BARS = RPM.PATH_HUD + "Bars";
 RPM.PATH_FACESETS = RPM.PATH_HUD + "Facesets";
 RPM.PATH_ICONS = RPM.PATH_HUD + "Icons";
+RPM.PATH_WINDOW_SKINS = RPM.PATH_HUD + "WindowSkins";
 RPM.PATH_AUTOTILES = RPM.PATH_TEXTURES2D + "Autotiles";
 RPM.PATH_CHARACTERS = RPM.PATH_TEXTURES2D + "Characters";
 RPM.PATH_RELIEFS = RPM.PATH_TEXTURES2D + "Reliefs";
@@ -407,9 +408,7 @@ RPM.saveFile = function(url, obj){
 *   @returns {boolean}
 */
 RPM.isLoading = function(){
-    var a = $filesToLoad;
-    var b = $loadedFiles;
-    if ($filesToLoad === $loadedFiles){
+    if ($filesToLoad === $loadedFiles) {
         $filesToLoad = 0;
         $loadedFiles = 0;
         return false;
@@ -910,3 +909,20 @@ RPM.createMaterial = function(texture){
 RPM.updateBackgroundColor = function(color) {
     $renderer.setClearColor(color.getHex(), color.alpha);
 }
+
+// -------------------------------------------------------
+
+RPM.toScreenPosition = function(vector, camera)
+{
+    var widthHalf = 0.5 * $canvasWidth;
+    var heightHalf = 0.5 * $canvasHeight;
+    vector.project(camera);
+    var x = ( vector.x * widthHalf ) + widthHalf;
+    var y = - ( vector.y * heightHalf ) + heightHalf;
+
+    return {
+        x: x,
+        y: y
+    };
+
+};

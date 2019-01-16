@@ -207,8 +207,7 @@ SceneMenu.prototype = {
 
                     // Change background color
                     this.windowChoicesTeam.listWindows[this.selectedOrder]
-                    .backgroundColor =
-                     this.windowChoicesTeam.unselectedBackgroundColor;
+                        .selected = false;
                     this.selectedOrder = -1;
                     this.windowChoicesTeam
                     .select(this.windowChoicesTeam.currentSelectedIndex);

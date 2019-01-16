@@ -33,10 +33,6 @@
 *   excecute when pressed.
 *   @property {WindowBox[]} listWindows List of all the windows to display.
 *   @property {number} currentSelectedIndex The current selected index.
-*   @property {string} unselectedBackgroundColor The backgorund color of
-*   unselected item.
-*   @property {string} selectedBackgroundColor The backgorund color of selected
-*   item.
 *   @param {OrientationWindow} orientation The orientation of the window.
 *   @param {number} x The x coords.
 *   @param {number} y The y coords.
@@ -79,8 +75,6 @@ function WindowTabs(orientation, x, y, w, h, nbItemsMax, listContents,
     this.choiceWidth = w;
     this.choiceHeight = h;
     this.currentSelectedIndex = currentSelectedIndex;
-    this.unselectedBackgroundColor = "grey";
-    this.selectedBackgroundColor = "silver";
     this.space = space;
 
     // If no callBacks, adapt by creating a null content for each box
@@ -108,9 +102,8 @@ function WindowTabs(orientation, x, y, w, h, nbItemsMax, listContents,
         }
     }
 
-    if (currentSelectedIndex !== -1){
-        this.listWindows[currentSelectedIndex].backgroundColor
-             = this.selectedBackgroundColor;
+    if (currentSelectedIndex !== -1) {
+        this.listWindows[currentSelectedIndex].selected = true;
     }
 }
 
@@ -184,8 +177,7 @@ WindowTabs.prototype = {
     */
     unselect: function(){
         if (this.currentSelectedIndex !== -1){
-            this.listWindows[this.currentSelectedIndex].backgroundColor
-                 = this.unselectedBackgroundColor;
+            this.listWindows[this.currentSelectedIndex].selected = false;
             this.currentSelectedIndex = -1;
         }
     },
@@ -197,8 +189,7 @@ WindowTabs.prototype = {
     */
     select: function(i){
         this.currentSelectedIndex = i;
-        this.listWindows[this.currentSelectedIndex].backgroundColor
-             = this.selectedBackgroundColor;
+        this.listWindows[this.currentSelectedIndex].selected = true;
     },
 
     // -------------------------------------------------------
@@ -254,8 +245,7 @@ WindowTabs.prototype = {
     *   @returns {boolean} false if the other keys are blocked after it.
     */
     onKeyPressedAndRepeat: function(key){
-        this.listWindows[this.currentSelectedIndex].backgroundColor
-             = this.unselectedBackgroundColor;
+        this.listWindows[this.currentSelectedIndex].selected = false;
 
         if (this.orientation === OrientationWindow.Vertical){
             if (DatasKeyBoard.isKeyEqual(key,
