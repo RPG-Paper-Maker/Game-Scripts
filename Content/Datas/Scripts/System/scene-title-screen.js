@@ -120,7 +120,7 @@ SceneTitleScreen.prototype = {
 
     // -------------------------------------------------------
 
-    drawHUD: function(context){
-        this.windowChoicesCommands.draw(context);
+    drawHUD: function(){
+        this.windowChoicesCommands.draw();
     }
 }

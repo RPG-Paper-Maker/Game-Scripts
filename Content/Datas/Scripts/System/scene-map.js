@@ -649,7 +649,7 @@ SceneMap.prototype = {
 
     // -------------------------------------------------------
 
-    drawHUD: function(context){
-        SceneGame.prototype.drawHUD.call(this, context);
+    drawHUD: function(){
+        SceneGame.prototype.drawHUD.call(this);
     }
 }

@@ -39,6 +39,7 @@ GameStack.prototype = {
     */
     push: function(scene) {
         this.content.push(scene);
+        $requestPaintHUD = true;
     },
 
     // -------------------------------------------------------
@@ -47,6 +48,7 @@ GameStack.prototype = {
     *   @returns {SceneGame} The last scene that is removed.
     */
     pop: function() {
+        $requestPaintHUD = true;
         return this.content.pop();
     },
 
@@ -181,10 +183,10 @@ GameStack.prototype = {
     // -------------------------------------------------------
 
     /** Draw HUD for the current stack.
-    *   @param {Canvas.Context} context The canvas context.
     */
-    drawHUD: function(context){
-        if (!this.isEmpty())
-            this.top().drawHUD(context);
+    drawHUD: function() {
+        if (!this.isEmpty()) {
+            this.top().drawHUD();
+        }
     }
 }

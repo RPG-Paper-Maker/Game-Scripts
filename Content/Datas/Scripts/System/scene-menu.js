@@ -42,6 +42,7 @@ function SceneMenu() {
 
     // Initializing order index
     this.selectedOrder = -1;
+    this.time = $game.playTime;
 
     // Initializing the left menu commands (texts and actions)
     menuCommands = [
@@ -70,7 +71,7 @@ function SceneMenu() {
         graphicsHeroes[i] = new GraphicPlayer($game.teamHeroes[i]);
 
     // Initializing play time widget
-    this.textPlayTime = new GraphicText("");
+    this.textPlayTime = new GraphicText(RPM.getStringDate(this.time));
 
     // All the windows
     this.windowChoicesCommands =
@@ -144,7 +145,9 @@ SceneMenu.prototype = {
      // -------------------------------------------------------
 
     update: function(){
-        this.textPlayTime.text = RPM.getStringDate($game.playTime);
+        if ($game.playTime !== this.time) {
+            this.textPlayTime.setText(RPM.getStringDate($game.playTime));
+        }
     },
 
     // -------------------------------------------------------
@@ -250,16 +253,18 @@ SceneMenu.prototype = {
 
     // -------------------------------------------------------
 
-    drawHUD: function(context){
+    drawHUD: function() {
 
         // Draw the local map behind
-        $currentMap.drawHUD(context);
+        $currentMap.drawHUD();
 
         // Draw the windows
-        this.windowChoicesCommands.draw(context);
-        this.windowChoicesTeam.draw(context);
+        this.windowChoicesCommands.draw();
+        this.windowChoicesTeam.draw();
 
         // Draw play time
-        this.textPlayTime.draw(context, 90, $SCREEN_Y -40,70,20);
+        this.textPlayTime.draw(90, $SCREEN_Y -40,70,20);
+
+        this.HUDsaved = true;
     }
 }

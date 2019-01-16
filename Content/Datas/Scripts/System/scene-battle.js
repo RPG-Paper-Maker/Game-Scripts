@@ -238,6 +238,7 @@ SceneBattle.prototype.initialize = function(){
     case 4:
         this.initializeStep4(); break;
     }
+    $requestPaintHUD = true;
 };
 
 // -------------------------------------------------------
@@ -399,17 +400,17 @@ SceneBattle.prototype.draw3D = function(canvas){
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.drawHUD = function(context) {
+SceneBattle.prototype.drawHUD = function() {
     switch(this.step){
     case 0:
-        this.drawHUDStep0(context); break;
+        this.drawHUDStep0(); break;
     case 1:
-        this.drawHUDStep1(context); break;
+        this.drawHUDStep1(); break;
     case 2:
-        this.drawHUDStep2(context); break;
+        this.drawHUDStep2(); break;
     case 3:
-        this.drawHUDStep3(context); break;
+        this.drawHUDStep3(); break;
     case 4:
-        this.drawHUDStep4(context); break;
+        this.drawHUDStep4(); break;
     }
 };

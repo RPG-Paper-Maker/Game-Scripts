@@ -140,9 +140,9 @@ WindowChoices.prototype = {
     /** Draw the windows
     *   @param {Canvas.Context} context The canvas context.
     */
-    draw: function(context){
-        this.windowMain.draw(context);
+    draw: function(){
+        this.windowMain.draw();
 
-        WindowTabs.prototype.draw.call(this, context);
+        WindowTabs.prototype.draw.call(this);
     }
 }

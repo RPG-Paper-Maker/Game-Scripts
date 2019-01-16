@@ -215,13 +215,12 @@ SceneGame.prototype = {
     // -------------------------------------------------------
 
     /** Draw HUD.
-    *   @param {Canvas.Context} context The canvas context.
     */
-    drawHUD: function(context) {
+    drawHUD: function() {
         var i, l;
 
         for (i = 0, l = this.reactionInterpreters.length; i < l; i++){
-            this.reactionInterpreters[i].drawHUD(context);
+            this.reactionInterpreters[i].drawHUD();
         }
     }
 }

@@ -208,6 +208,7 @@ Window {
                 Game.$canvasHeight = canvas3d.height;
                 Game.$windowX = Game.$canvasWidth / Game.$SCREEN_X;
                 Game.$windowY = Game.$canvasHeight / Game.$SCREEN_Y;
+                Game.$context = canvas.getContext('2d');
                 Game.$songsManager = new Game.SongsManager(
                     musicPlayer, backgroundsoundPlayer, musicEffectPlayer,
                     [playSound1, playSound2, playSound3, playSound4,
@@ -226,7 +227,7 @@ Window {
                 if (!Game.$datasGame.loaded) {
                     Game.$datasGame.updateLoadings();
                     Game.$renderer.clear();
-                    Game.drawHUD(canvas, true);
+                    Game.drawHUD(true);
                     canvas.requestPaint();
                     return;
                 }
@@ -240,14 +241,14 @@ Window {
                             callback = Game.$gameStack.top().callBackAfterLoading;
                             if (callback === null) {
                                 Game.draw3D(canvas3d);
-                                Game.drawHUD(canvas, false);
+                                Game.drawHUD(false);
                             }
                             canvas.requestPaint();
                         }
                         else {
                             if (!Game.$gameStack.top().isBattleMap) {
                                 Game.$renderer.clear();
-                                Game.drawHUD(canvas, true);
+                                Game.drawHUD(true);
                                 canvas.requestPaint();
                             }
                             if (callback) {
@@ -299,9 +300,8 @@ Window {
         visible: false
 
         onImageLoaded: {
-            var context = canvasRendering.getContext('2d');
             for (var i = 0, l = Game.$picturesLoading.length; i < l; i++) {
-                if (Game.$picturesLoading[i].check(context))
+                if (Game.$picturesLoading[i].check())
                     break;
             }
         }

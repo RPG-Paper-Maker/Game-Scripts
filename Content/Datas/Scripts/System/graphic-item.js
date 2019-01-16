@@ -47,25 +47,23 @@ function GraphicItem(gameItem, nbItem){
 GraphicItem.prototype = {
 
     /** Drawing the item in choice box.
-    *   @param {Canvas.Context} context The canvas context.
     *   @param {number} x The x position to draw graphic.
     *   @param {number} y The y position to draw graphic.
     *   @param {number} w The width dimention to draw graphic.
     *   @param {number} h The height dimention to draw graphic.
     */
-    draw: function(context, x, y, w, h){
-        this.graphicName.draw(context, x, y, w, h);
-        this.graphicNb.draw(context, x, y, w, h);
+    draw: function(x, y, w, h){
+        this.graphicName.draw(x, y, w, h);
+        this.graphicNb.draw(x, y, w, h);
     },
 
     /** Drawing the item description.
-    *   @param {Canvas.Context} context The canvas context.
     *   @param {number} x The x position to draw graphic.
     *   @param {number} y The y position to draw graphic.
     *   @param {number} w The width dimention to draw graphic.
     *   @param {number} h The height dimention to draw graphic.
     */
-    drawInformations: function(context, x, y, w, h){
-        this.graphicName.draw(context, x + 30, y + 5, 100, 25);
+    drawInformations: function(x, y, w, h){
+        this.graphicName.draw(x + 30, y + 5, 100, 25);
     }
 }

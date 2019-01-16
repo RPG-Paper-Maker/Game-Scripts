@@ -100,14 +100,13 @@ SceneBattle.prototype.onKeyPressedAndRepeatStep2 = function(key){
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.drawHUDStep2 = function(context){
-    this.windowTopInformations.draw(context);
+SceneBattle.prototype.drawHUDStep2 = function(){
+    this.windowTopInformations.draw();
 
     // Draw damages
     var i, l = this.textsDamages.length;
     for (i = 0; i < l; i++){
         var dim = this.textsDamages[i][1].rect.contentDimension;
-        this.textsDamages[i][0].draw(context, dim[0], dim[1] - 30,
-                                     dim[2], dim[3]);
+        this.textsDamages[i][0].draw(dim[0], dim[1] - 30,  dim[2], dim[3]);
     }
 };

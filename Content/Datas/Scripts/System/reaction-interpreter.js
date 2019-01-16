@@ -60,6 +60,7 @@ function ReactionInterpreter(sender, reaction, object, state, command){
     this.currentState = state;
     this.currentCommand = command;
     this.currentCommandState = this.currentCommand.data.initialize();
+    $requestPaintHUD = true;
 }
 
 ReactionInterpreter.prototype = {
@@ -92,6 +93,7 @@ ReactionInterpreter.prototype = {
 
             var new_command = this.updateCommand();
             if (new_command !== this.currentCommand){
+                $requestPaintHUD = true;
                 this.currentCommand = new_command;
                 if (this.currentCommand !== null){
                     this.currentCommandState =
@@ -259,7 +261,7 @@ ReactionInterpreter.prototype = {
     /** Draw HUD for the current command.
     *   @param {Canvas.Context} context The canvas context.
     */
-    drawHUD: function(context){
-        this.currentCommand.data.drawHUD(this.currentCommandState, context);
+    drawHUD: function(){
+        this.currentCommand.data.drawHUD(this.currentCommandState);
     }
 }

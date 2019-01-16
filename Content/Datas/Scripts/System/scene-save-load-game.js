@@ -146,10 +146,10 @@ SceneSaveLoadGame.prototype = {
 
     // -------------------------------------------------------
 
-    drawHUD: function(context){
-        this.windowTop.draw(context);
-        this.windowChoicesSlots.draw(context);
-        this.windowInformations.draw(context);
-        this.windowBot.draw(context);
+    drawHUD: function(){
+        this.windowTop.draw();
+        this.windowChoicesSlots.draw();
+        this.windowInformations.draw();
+        this.windowBot.draw();
     }
 }

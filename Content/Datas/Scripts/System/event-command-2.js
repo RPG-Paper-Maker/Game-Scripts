@@ -177,7 +177,7 @@ EventCommandStartBattle.prototype = {
     onKeyReleased: function(currentState, key){},
     onKeyPressedRepeat: function(currentState, key){ return true; },
     onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
+    drawHUD: function(currentState){}
 }
 
 // -------------------------------------------------------
@@ -225,7 +225,7 @@ EventCommandIfWin.prototype = {
     onKeyReleased: function(currentState, key){},
     onKeyPressedRepeat: function(currentState, key){ return true; },
     onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
+    drawHUD: function(currentState){}
 }
 
 // -------------------------------------------------------
@@ -273,7 +273,7 @@ EventCommandIfLose.prototype = {
     onKeyReleased: function(currentState, key){},
     onKeyPressedRepeat: function(currentState, key){ return true; },
     onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
+    drawHUD: function(currentState){}
 }
 
 // -------------------------------------------------------
@@ -410,7 +410,7 @@ EventCommandChangeState.prototype = {
     onKeyReleased: function(currentState, key){},
     onKeyPressedRepeat: function(currentState, key){ return true; },
     onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
+    drawHUD: function(currentState){}
 }
 
 // -------------------------------------------------------
@@ -603,7 +603,7 @@ EventCommandSendEvent.prototype = {
     onKeyReleased: function(currentState, key){},
     onKeyPressedRepeat: function(currentState, key){ return true; },
     onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
+    drawHUD: function(currentState){}
 }
 
 // -------------------------------------------------------
@@ -773,7 +773,7 @@ EventCommandTeleportObject.prototype = {
     onKeyReleased: function(currentState, key){},
     onKeyPressedRepeat: function(currentState, key){ return true; },
     onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
+    drawHUD: function(currentState){}
 }
 
 // -------------------------------------------------------
@@ -973,7 +973,7 @@ EventCommandMoveObject.prototype = {
     onKeyReleased: function(currentState, key){},
     onKeyPressedRepeat: function(currentState, key){ return true; },
     onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
+    drawHUD: function(currentState){}
 }
 
 // -------------------------------------------------------
@@ -1026,7 +1026,7 @@ EventCommandWait.prototype = {
     onKeyReleased: function(currentState, key){},
     onKeyPressedRepeat: function(currentState, key){ return true; },
     onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
+    drawHUD: function(currentState){}
 }
 
 // -------------------------------------------------------
@@ -1208,7 +1208,7 @@ EventCommandMoveCamera.prototype = {
     onKeyReleased: function(currentState, key){},
     onKeyPressedRepeat: function(currentState, key){ return true; },
     onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
+    drawHUD: function(currentState){}
 }
 
 // -------------------------------------------------------
@@ -1290,7 +1290,7 @@ EventCommandPlayMusic.prototype = {
     onKeyReleased: function(currentState, key){},
     onKeyPressedRepeat: function(currentState, key){ return true; },
     onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
+    drawHUD: function(currentState){}
 }
 
 // -------------------------------------------------------
@@ -1359,7 +1359,7 @@ EventCommandStopMusic.prototype = {
     onKeyReleased: function(currentState, key){},
     onKeyPressedRepeat: function(currentState, key){ return true; },
     onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
+    drawHUD: function(currentState){}
 }
 
 // -------------------------------------------------------
@@ -1403,7 +1403,7 @@ EventCommandPlayBackgroundSound.prototype = {
     onKeyReleased: function(currentState, key){},
     onKeyPressedRepeat: function(currentState, key){ return true; },
     onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
+    drawHUD: function(currentState){}
 }
 
 // -------------------------------------------------------
@@ -1454,7 +1454,7 @@ EventCommandStopBackgroundSound.prototype = {
     onKeyReleased: function(currentState, key){},
     onKeyPressedRepeat: function(currentState, key){ return true; },
     onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
+    drawHUD: function(currentState){}
 }
 
 // -------------------------------------------------------
@@ -1501,7 +1501,7 @@ EventCommandPlaySound.prototype = {
     onKeyReleased: function(currentState, key){},
     onKeyPressedRepeat: function(currentState, key){ return true; },
     onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
+    drawHUD: function(currentState){}
 }
 
 // -------------------------------------------------------
@@ -1552,5 +1552,5 @@ EventCommandPlayMusicEffect.prototype = {
     onKeyReleased: function(currentState, key){},
     onKeyPressedRepeat: function(currentState, key){ return true; },
     onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
+    drawHUD: function(currentState){}
 }

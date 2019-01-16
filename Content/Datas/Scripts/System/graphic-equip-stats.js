@@ -41,14 +41,13 @@
 */
 function GraphicEquipStats(gamePlayer, newValues){
     var character, statistic;
-    var context, graphicName, graphicValue;
+    var graphicName, graphicValue;
     var i, j, l, id, c, maxLength, maxLengthValue, txt;
 
     character = gamePlayer.getCharacterInformations();
     this.isChanging = newValues.length !== 0;
 
     // All the graphics
-    context = $canvasHUD.getContext('2d');
     this.listStatsNames = new Array;
     this.listStats = new Array;
     this.listNewStats = new Array;
@@ -65,9 +64,9 @@ function GraphicEquipStats(gamePlayer, newValues){
 
             // Name of the stat
             graphicName = new GraphicText(statistic.name + ":", Align.Left);
-            context.font = graphicName.font;
-            graphicName.updateContextFont(context);
-            c = context.measureText(graphicName.text).width;
+            $context.font = graphicName.font;
+            graphicName.updateContextFont();
+            c = $context.measureText(graphicName.text).width;
             if (c > maxLength)
                 maxLength = c;
             this.listStatsNames.push(graphicName);
@@ -76,9 +75,9 @@ function GraphicEquipStats(gamePlayer, newValues){
             txt = statistic.isFix ? gamePlayer[statistic.abbreviation]
                                   : gamePlayer["max" + statistic.abbreviation];
             graphicValue = new GraphicText(txt, Align.Left);
-            context.font = graphicValue.font;
-            graphicValue.updateContextFont(context);
-            c = context.measureText(graphicValue.text).width;
+            $context.font = graphicValue.font;
+            graphicValue.updateContextFont();
+            c = $context.measureText(graphicValue.text).width;
             if (c > maxLengthValue)
                 maxLengthValue = c;
             this.listStats.push(graphicValue);
@@ -104,21 +103,20 @@ function GraphicEquipStats(gamePlayer, newValues){
 
     // Arrow
     this.graphicArrow = new GraphicText("->", Align.Left);
-    context.font = this.graphicArrow.font;
-    this.graphicArrow.updateContextFont(context);
-    this.arrowLength = context.measureText(this.graphicArrow.text).width;
+    $context.font = this.graphicArrow.font;
+    this.graphicArrow.updateContextFont();
+    this.arrowLength = $context.measureText(this.graphicArrow.text).width;
 }
 
 GraphicEquipStats.prototype = {
 
     /** Drawing the statistics modifications.
-    *   @param {Canvas.Context} context The canvas context.
     *   @param {number} x The x position to draw graphic.
     *   @param {number} y The y position to draw graphic.
     *   @param {number} w The width dimention to draw graphic.
     *   @param {number} h The height dimention to draw graphic.
     */
-    drawInformations: function(context, x, y, w, h){
+    drawInformations: function(x, y, w, h){
         var xStats, yStats, yStat, xStat;
         var i, l;
 
@@ -127,15 +125,15 @@ GraphicEquipStats.prototype = {
         l = this.listStatsNames.length;
         for (i = 0; i < l; i++){
             yStat = yStats + (i*20);
-            this.listStatsNames[i].draw(context, xStats, yStat, 0, 0);
+            this.listStatsNames[i].draw(xStats, yStat, 0, 0);
             xStat = xStats + this.nameLength + 10;
-            this.listStats[i].draw(context, xStat, yStat, 0, 0);
+            this.listStats[i].draw(xStat, yStat, 0, 0);
 
             if (this.isChanging){
                 xStat += this.valueLength + 10;
-                this.graphicArrow.draw(context, xStat, yStat, 0, 0);
+                this.graphicArrow.draw(xStat, yStat, 0, 0);
                 xStat += this.arrowLength + 20;
-                this.listNewStats[i].draw(context, xStat, yStat, 0, 0);
+                this.listNewStats[i].draw(xStat, yStat, 0, 0);
             }
         }
     }

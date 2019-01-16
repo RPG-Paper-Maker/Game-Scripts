@@ -103,6 +103,7 @@ SceneBattle.prototype.initializeStep0 = function(){
 // -------------------------------------------------------
 
 SceneBattle.prototype.updateStep0 = function() {
+    $requestPaintHUD = true;
 
     // Transition fade
     if (this.transitionStart === 1) {
@@ -180,11 +181,11 @@ SceneBattle.prototype.onKeyPressedAndRepeatStep0 = function(key){
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.drawHUDStep0 = function(context) {
+SceneBattle.prototype.drawHUDStep0 = function() {
     if (this.transitionStart === 1) {
-        context.fillStyle = "rgba(" + this.transitionStartColor.red + "," +
+        $context.fillStyle = "rgba(" + this.transitionStartColor.red + "," +
             this.transitionStartColor.green + "," + this.transitionStartColor
             .blue + "," + this.transitionColorAlpha + ")";
-        context.fillRect(0, 0, $canvasWidth, $canvasHeight);
+        $context.fillRect(0, 0, $canvasWidth, $canvasHeight);
     }
 };

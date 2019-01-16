@@ -74,7 +74,7 @@ SceneLoading.prototype = {
 
     // -------------------------------------------------------
 
-    drawHUD: function(context){
-        this.text.draw(context);
+    drawHUD: function() {
+        this.text.draw();
     }
 }

@@ -34,6 +34,7 @@ SceneBattle.prototype.initializeStep4 = function(){
 
 SceneBattle.prototype.updateStep4 = function() {
     if (new Date().getTime() - this.time >= SceneBattle.TIME_END_WAIT) {
+        $requestPaintHUD = true;
 
         // Transition zoom
         if (this.transitionEnd === 2) {
@@ -111,16 +112,16 @@ SceneBattle.prototype.onKeyPressedAndRepeatStep4 = function(key){
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.drawHUDStep4 = function(context) {
+SceneBattle.prototype.drawHUDStep4 = function() {
     if (new Date().getTime() - this.time < SceneBattle.TIME_END_WAIT) {
-         this.windowTopInformations.draw(context);
+         this.windowTopInformations.draw();
     }
 
     // Transition fade
     if (this.transitionEnd === 1) {
-        context.fillStyle = "rgba(" + this.transitionEndColor.red + "," +
+        $context.fillStyle = "rgba(" + this.transitionEndColor.red + "," +
             this.transitionEndColor.green + "," + this.transitionEndColor.blue +
             "," + this.transitionColorAlpha + ")";
-        context.fillRect(0, 0, $canvasWidth, $canvasHeight);
+        $context.fillRect(0, 0, $canvasWidth, $canvasHeight);
     }
 };

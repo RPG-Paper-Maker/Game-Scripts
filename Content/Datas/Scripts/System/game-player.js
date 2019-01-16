@@ -57,7 +57,6 @@ function GamePlayer(kind, id, instanceId, skills){
 *   @returns {number}
 */
 GamePlayer.getEquipmentLength = function(){
-    var context = $canvasHUD.getContext('2d');
 
     // Adding equipments
     var i, l = $datasGame.battleSystem.equipments.length - 1;
@@ -65,8 +64,8 @@ GamePlayer.getEquipmentLength = function(){
     for (i = 0; i < l; i++){
         var text = new GraphicText($datasGame.battleSystem.equipments[i+1],
                                    Align.Left);
-        text.updateContextFont(context);
-        var c = context.measureText(text.text).width;
+        text.updateContextFont();
+        var c = $context.measureText(text.text).width;
         if (c > maxLength) maxLength = c;
     }
 

@@ -90,7 +90,7 @@ SceneLoadGame.prototype = {
 
     // -------------------------------------------------------
 
-    drawHUD: function(context){
-        SceneSaveLoadGame.prototype.drawHUD.call(this, context);
+    drawHUD: function(){
+        SceneSaveLoadGame.prototype.drawHUD.call(this);
     }
 }

@@ -39,9 +39,8 @@
 *   @property {number} listLength The max length of the stats for each column.
 *   @param {GamePlayer} gamePlayer The current selected player.
 */
-function GraphicPlayerDescription(gamePlayer){
+function GraphicPlayerDescription(gamePlayer) {
     var character, cl, levelStat;
-    var context;
     var i, j, l, c, maxLength, txt;
     var statistic, graphicName;
 
@@ -59,7 +58,6 @@ function GraphicPlayerDescription(gamePlayer){
                                         Align.Left);
 
     // Adding stats
-    context = $canvasHUD.getContext('2d');
     this.listStatsNames = new Array;
     this.listStats = new Array;
     this.listLength = new Array;
@@ -74,9 +72,9 @@ function GraphicPlayerDescription(gamePlayer){
         {
             statistic = $datasGame.battleSystem.statistics[id];
             graphicName = new GraphicText(statistic.name + ":", Align.Left);
-            context.font = graphicName.font;
-            graphicName.updateContextFont(context);
-            c = context.measureText(graphicName.text).width;
+            $context.font = graphicName.font;
+            graphicName.updateContextFont();
+            c = $context.measureText(graphicName.text).width;
             if (c > maxLength) maxLength = c;
             if (j%7 === 6){
                 this.listLength.push(maxLength);
@@ -97,38 +95,36 @@ function GraphicPlayerDescription(gamePlayer){
 GraphicPlayerDescription.prototype = {
 
     /** Drawing the player in choice box.
-    *   @param {Canvas.Context} context The canvas context.
     *   @param {number} x The x position to draw graphic.
     *   @param {number} y The y position to draw graphic.
     *   @param {number} w The width dimention to draw graphic.
     *   @param {number} h The height dimention to draw graphic.
     */
-    draw: function(context, x, y, w, h){
-        this.graphicNameCenter.draw(context, x, y, w, h);
+    draw: function(x, y, w, h){
+        this.graphicNameCenter.draw(x, y, w, h);
     },
 
     /** Drawing the player description.
-    *   @param {Canvas.Context} context The canvas context.
     *   @param {number} x The x position to draw graphic.
     *   @param {number} y The y position to draw graphic.
     *   @param {number} w The width dimention to draw graphic.
     *   @param {number} h The height dimention to draw graphic.
     */
-    drawInformations: function(context, x, y, w, h){
+    drawInformations: function(x, y, w, h){
         var yName, xLevelName, xLevel, yClass, yStats, xStat, yStat;
         var i, l;
 
         yName = y + 10;
-        this.graphicName.draw(context, x, yName, 0, 0);
-        this.graphicName.updateContextFont(context);
-        xLevelName = x + context.measureText(this.graphicName.text).width + 10;
-        this.graphicLevelName.draw(context, xLevelName, yName, 0, 0);
-        this.graphicLevelName.updateContextFont(context);
-        xLevel = xLevelName +
-                context.measureText(this.graphicLevelName.text).width;
-        this.graphicLevel.draw(context, xLevel, yName, 0, 0);
+        this.graphicName.draw(x, yName, 0, 0);
+        this.graphicName.updateContextFont();
+        xLevelName = x + $context.measureText(this.graphicName.text).width + 10;
+        this.graphicLevelName.draw(xLevelName, yName, 0, 0);
+        this.graphicLevelName.updateContextFont();
+        xLevel = xLevelName + $context.measureText(this.graphicLevelName.text)
+            .width;
+        this.graphicLevel.draw(xLevel, yName, 0, 0);
         yClass = yName + 20;
-        this.graphicClass.draw(context, x, yClass, 0, 0);
+        this.graphicClass.draw(x, yClass, 0, 0);
         yStats = yClass + 50;
 
         // Stats
@@ -136,10 +132,9 @@ GraphicPlayerDescription.prototype = {
         for (i = 0; i < l; i++){
             xStat = x + (Math.floor(i/7)*200);
             yStat = yStats + ((i%7)*30);
-            this.listStatsNames[i].draw(context, xStat, yStat, 0, 0);
-            this.listStats[i].draw(context, xStat +
-                                   this.listLength[Math.floor(i/7)] + 10,
-                                   yStat, 0, 0);
+            this.listStatsNames[i].draw(xStat, yStat, 0, 0);
+            this.listStats[i].draw(xStat + this.listLength[Math.floor(i/7)] + 10
+                , yStat, 0, 0);
         }
     }
 }

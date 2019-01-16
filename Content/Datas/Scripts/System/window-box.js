@@ -108,19 +108,19 @@ WindowBox.prototype = {
     *   @param {boolean} [isChoice=false] - Indicate if this window box is used
     *   for a window choices.
     */
-    draw: function(context, isChoice){
+    draw: function(isChoice){
 
         // Default values
         if (typeof isChoice === 'undefined') isChoice = false;
 
         // Draw box
-        $datasGame.system.getWindowSkin().drawBox(context, this.windowDimension,
-            this.selected);
+        $datasGame.system.getWindowSkin().drawBox(this.windowDimension, this
+            .selected);
 
         // Draw content
         if (this.content !== null){
             if (isChoice){
-                this.content.draw(context,
+                this.content.draw(
                      this.contentDimension[0],
                      this.contentDimension[1],
                      this.contentDimension[2],
@@ -128,7 +128,7 @@ WindowBox.prototype = {
                 );
             }
             else{
-                this.content.drawInformations(context,
+                this.content.drawInformations(
                      this.contentDimension[0],
                      this.contentDimension[1],
                      this.contentDimension[2],

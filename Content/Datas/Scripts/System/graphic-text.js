@@ -87,12 +87,20 @@ GraphicText.prototype = {
         Bitmap.prototype.setCoords.call(this, x, y, w, h);
     },
 
+    // -------------------------------------------------------
+
+    setText: function(text) {
+        if (this.text !== text) {
+            this.text = text;
+            $requestPaintHUD = true;
+        }
+    },
+
     /** Update the context font (without window resizing). This function is
     *   used before a context.measureText.
-    *   @param {Canvas.Context} context The canvas context.
     */
-    updateContextFont: function(context){
-        context.font = this.fontWithoutResize;
+    updateContextFont: function(){
+        $context.font = this.fontWithoutResize;
     },
 
     // -------------------------------------------------------
@@ -104,7 +112,7 @@ GraphicText.prototype = {
     *   @param {number} w The width dimention to draw graphic.
     *   @param {number} h The height dimention to draw graphic.
     */
-    draw: function(context, x, y, w, h){
+    draw: function(x, y, w, h) {
 
         // Default values
         if (typeof x === 'undefined') x = this.x;
@@ -118,9 +126,9 @@ GraphicText.prototype = {
         h = RPM.getScreenY(h);
 
         // Set context options
-        context.fillStyle = "white";
-        context.font = this.font;
-        context.textAlign = this.align;
+        $context.fillStyle = "white";
+        $context.font = this.font;
+        $context.textAlign = this.align;
 
         // Correcting x and y according to alignment
         y += (h / 2) + (this.fontSize / 3);
@@ -132,19 +140,18 @@ GraphicText.prototype = {
         }
 
         // Drawinf the text
-        context.fillText(this.text, x, y);
+        $context.fillText(this.text, x, y);
     },
 
     // -------------------------------------------------------
 
     /** Drawing the text in choice box.
-    *   @param {Canvas.Context} context The canvas context.
     *   @param {number} x The x position to draw graphic.
     *   @param {number} y The y position to draw graphic.
     *   @param {number} w The width dimention to draw graphic.
     *   @param {number} h The height dimention to draw graphic.
     */
-    drawInformations: function(context, x, y, w, h){
-        this.draw(context, x, y, w, h);
+    drawInformations: function(x, y, w, h){
+        this.draw(x, y, w, h);
     }
 }

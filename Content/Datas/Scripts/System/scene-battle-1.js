@@ -96,6 +96,7 @@ SceneBattle.prototype.moveArrow = function(){
     this.windowCharacterInformations.content = this.graphicPlayers[this
         .kindSelection][this.selectedUserTargetIndex()];
     this.windowCharacterInformations.content.update();
+    $requestPaintHUD = true;
 };
 
 // -------------------------------------------------------
@@ -123,6 +124,7 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key){
                                      $datasGame.keyBoard.menuControls.Action))
         {
             this.subStep = 1;
+            $requestPaintHUD = true;
         }
         break;
     case 1:
@@ -199,14 +201,14 @@ SceneBattle.prototype.onKeyPressedAndRepeatStep1 = function(key){
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.drawHUDStep1 = function(context){
-    this.windowTopInformations.draw(context);
+SceneBattle.prototype.drawHUDStep1 = function() {
+    this.windowTopInformations.draw();
 
     // Draw heroes window informations
-    this.windowCharacterInformations.draw(context);
+    this.windowCharacterInformations.draw();
 
-    this.arrowSelection.draw(context);
+    this.arrowSelection.draw();
     if (this.subStep === 1){
-        this.windowChoicesBattleCommands.draw(context);
+        this.windowChoicesBattleCommands.draw();
     }
 };

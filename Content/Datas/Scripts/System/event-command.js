@@ -86,10 +86,9 @@ EventCommandShowText.prototype = {
 
     /** Draw the dialog box.
     *   @param {Object} currentState The current state of the event.
-    *   @param {Canvas.Context} context The context of the canvas.
     */
-    drawHUD: function(currentState, context){
-        this.window.draw(context);
+    drawHUD: function(currentState) {
+        this.window.draw();
     }
 }
 
@@ -157,7 +156,7 @@ EventCommandChangeVariables.prototype = {
     onKeyReleased: function(currentState, key){},
     onKeyPressedRepeat: function(currentState, key){ return true; },
     onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
+    drawHUD: function(currentState){}
 }
 
 // -------------------------------------------------------
@@ -197,7 +196,7 @@ EventCommandEndGame.prototype = {
     onKeyReleased: function(currentState, key){},
     onKeyPressedRepeat: function(currentState, key){ return true; },
     onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
+    drawHUD: function(currentState){}
 }
 
 // -------------------------------------------------------
@@ -238,7 +237,7 @@ EventCommandWhile.prototype = {
     onKeyReleased: function(currentState, key){},
     onKeyPressedRepeat: function(currentState, key){ return true; },
     onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
+    drawHUD: function(currentState){}
 }
 
 // -------------------------------------------------------
@@ -276,7 +275,7 @@ EventCommandWhileBreak.prototype = {
     onKeyReleased: function(currentState, key){},
     onKeyPressedRepeat: function(currentState, key){ return true; },
     onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
+    drawHUD: function(currentState){}
 }
 
 // -------------------------------------------------------
@@ -350,11 +349,10 @@ EventCommandInputNumber.prototype = {
 
     /** Draw number entered.
     *   @param {Object} currentState The current state of the event.
-    *   @param {Canvas.Context} context The context of the canvas.
     */
-    drawHUD: function(currentState, context){
-        context.fillText(currentState.entered, $canvasWidth / 2,
-                         $canvasHeight / 2);
+    drawHUD: function(currentState){
+        $context.fillText(currentState.entered, $canvasWidth / 2, $canvasHeight
+            / 2);
     }
 }
 
@@ -442,7 +440,7 @@ EventCommandIf.prototype = {
     onKeyReleased: function(currentState, key){},
     onKeyPressedRepeat: function(currentState, key){ return true; },
     onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
+    drawHUD: function(currentState){}
 }
 
 // -------------------------------------------------------
@@ -491,7 +489,7 @@ EventCommandElse.prototype = {
     onKeyReleased: function(currentState, key){},
     onKeyPressedRepeat: function(currentState, key){ return true; },
     onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
+    drawHUD: function(currentState){}
 }
 
 // -------------------------------------------------------
@@ -545,7 +543,7 @@ EventCommandOpenMainMenu.prototype = {
     onKeyReleased: function(currentState, key){},
     onKeyPressedRepeat: function(currentState, key){ return true; },
     onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
+    drawHUD: function(currentState){}
 }
 
 // -------------------------------------------------------
@@ -599,7 +597,7 @@ EventCommandOpenSavesMenu.prototype = {
     onKeyReleased: function(currentState, key){},
     onKeyPressedRepeat: function(currentState, key){ return true; },
     onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
+    drawHUD: function(currentState){}
 }
 
 // -------------------------------------------------------
@@ -772,7 +770,7 @@ EventCommandModifyInventory.prototype = {
     onKeyReleased: function(currentState, key){},
     onKeyPressedRepeat: function(currentState, key){ return true; },
     onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
+    drawHUD: function(currentState){}
 }
 
 // -------------------------------------------------------
@@ -902,5 +900,5 @@ EventCommandModifyTeam.prototype = {
     onKeyReleased: function(currentState, key){},
     onKeyPressedRepeat: function(currentState, key){ return true; },
     onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
+    drawHUD: function(currentState){}
 }

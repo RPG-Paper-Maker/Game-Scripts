@@ -209,6 +209,7 @@ WindowTabs.prototype = {
             this.currentSelectedIndex--;
         else if (this.currentSelectedIndex === 0)
             this.currentSelectedIndex = this.listWindows.length - 1;
+        $requestPaintHUD = true;
     },
 
     // -------------------------------------------------------
@@ -220,6 +221,7 @@ WindowTabs.prototype = {
             this.currentSelectedIndex++;
         else if (this.currentSelectedIndex === this.listWindows.length - 1)
             this.currentSelectedIndex = 0;
+        $requestPaintHUD = true;
     },
 
     // -------------------------------------------------------
@@ -244,7 +246,7 @@ WindowTabs.prototype = {
     *   @param {number} key The key ID pressed.
     *   @returns {boolean} false if the other keys are blocked after it.
     */
-    onKeyPressedAndRepeat: function(key){
+    onKeyPressedAndRepeat: function(key) {
         this.listWindows[this.currentSelectedIndex].selected = false;
 
         if (this.orientation === OrientationWindow.Vertical){
@@ -283,8 +285,8 @@ WindowTabs.prototype = {
     /** Draw the windows
     *   @param {Canvas.Context} context The canvas context.
     */
-    draw: function(context){
+    draw: function(){
         for (var i = 0, l = this.listWindows.length; i < l; i++)
-            this.listWindows[i].draw(context, true);
+            this.listWindows[i].draw(true);
     }
 }

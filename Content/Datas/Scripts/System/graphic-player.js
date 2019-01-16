@@ -116,10 +116,10 @@ GraphicPlayer.prototype = {
         levelStat = $datasGame.battleSystem.getLevelStatistic();
 
         // All the graphics
-        this.graphicName.text = character.name;
-        this.graphicClass.text = cl.name;
-        this.graphicLevelName.text = levelStat.name;
-        this.graphicLevel.text = "" + this.gamePlayer[levelStat.abbreviation];
+        this.graphicName.setText(character.name);
+        this.graphicClass.setText(cl.name);
+        this.graphicLevelName.setText(levelStat.name);
+        this.graphicLevel.setText("" + this.gamePlayer[levelStat.abbreviation]);
 
         // Adding stats
         var i, j = 0, l = $datasGame.battleSystem.statisticsOrder.length;
@@ -137,65 +137,63 @@ GraphicPlayer.prototype = {
                         txt += "/" + this.gamePlayer["max" + statistic
                             .abbreviation];
                     }
-                    this.listStats[j++].text = txt;
+                    this.listStats[j++].setText(txt);
                 }
             }
         }
     },
 
     /** Drawing the player in choice box in the main menu.
-    *   @param {Canvas.Context} context The canvas context.
     *   @param {number} x The x position to draw graphic.
     *   @param {number} y The y position to draw graphic.
     *   @param {number} w The width dimention to draw graphic.
     *   @param {number} h The height dimention to draw graphic.
     */
-    draw: function(context, x, y, w, h){
+    draw: function(x, y, w, h) {
         var xCharacter, yName, xLevelName, xLevel, yClass;
 
         xCharacter = x + 80;
         yName = y + 20;
-        this.graphicName.draw(context, xCharacter, yName, 0, 0);
-        this.graphicName.updateContextFont(context);
-        xLevelName = xCharacter +
-                context.measureText(this.graphicName.text).width + 10;
-        this.graphicLevelName.draw(context, xLevelName, yName, 0, 0);
-        this.graphicLevelName.updateContextFont(context);
-        xLevel = xLevelName +
-                context.measureText(this.graphicLevelName.text).width;
-        this.graphicLevel.draw(context, xLevel, yName, 0, 0);
+        this.graphicName.draw(xCharacter, yName, 0, 0);
+        this.graphicName.updateContextFont();
+        xLevelName = xCharacter + $context.measureText(this.graphicName.text)
+            .width + 10;
+        this.graphicLevelName.draw(xLevelName, yName, 0, 0);
+        this.graphicLevelName.updateContextFont();
+        xLevel = xLevelName + $context.measureText(this.graphicLevelName.text)
+            .width;
+        this.graphicLevel.draw(xLevel, yName, 0, 0);
         yClass = yName + 20;
-        this.graphicClass.draw(context, xCharacter, yClass, 0, 0);
+        this.graphicClass.draw(xCharacter, yClass, 0, 0);
     },
 
     /** Drawing the player informations in battles.
-    *   @param {Canvas.Context} context The canvas context.
     *   @param {number} x The x position to draw graphic.
     *   @param {number} y The y position to draw graphic.
     *   @param {number} w The width dimention to draw graphic.
     *   @param {number} h The height dimention to draw graphic.
     */
-    drawInformations: function(context, x, y, w, h){
+    drawInformations: function(x, y, w, h) {
         var yName, xLevelName, xLevel, yStats, xStat, yStat, wName, wLevelName,
             wLevel, wStats, wStat, firstLineLength, xOffset;
 
         // Measure widths
-        wName = context.measureText(this.graphicName.text).width;
-        wLevelName = context.measureText(this.graphicLevelName.text).width;
-        wLevel = context.measureText(this.graphicLevelName.text).width;
+        wName = $context.measureText(this.graphicName.text).width;
+        wLevelName = $context.measureText(this.graphicLevelName.text).width;
+        wLevel = $context.measureText(this.graphicLevelName.text).width;
         xLevelName = x + wName + 10;
         xLevel = xLevelName + wLevelName;
-        firstLineLength = xLevel + context.measureText(this.graphicLevel.text)
+        firstLineLength = xLevel + $context.measureText(this.graphicLevel.text)
             .width;
         xOffset = this.reverse ? w - Math.max(firstLineLength, this
             .maxStatNamesLength + 10 + this.maxStatLength) : 0;
 
         yName = y + 10;
-        this.graphicName.draw(context, x + xOffset, yName, 0, 0);
-        this.graphicName.updateContextFont(context);
-        this.graphicLevelName.draw(context, xLevelName + xOffset, yName, 0, 0);
-        this.graphicLevelName.updateContextFont(context);
-        this.graphicLevel.draw(context, xLevel + xOffset, yName, 0, 0);
+        this.graphicName.draw(x + xOffset, yName, 0, 0);
+        this.graphicName.updateContextFont();
+        this.graphicLevelName.draw(xLevelName + xOffset, yName, 0, 0);
+        this.graphicLevelName.updateContextFont();
+        this.graphicLevel.draw(xLevel + xOffset, yName, 0, 0);
         yStats = yName + 20;
 
         // Stats
@@ -203,12 +201,12 @@ GraphicPlayer.prototype = {
         for (i = 0; i < l; i++){
             xStat = x + xOffset;
             yStat = yStats + (i*20);
-            this.listStatsNames[i].draw(context, xStat, yStat, 0, 0);
-            this.listStats[i].draw(context, xStat + this.maxStatNamesLength +
+            this.listStatsNames[i].draw(xStat, yStat, 0, 0);
+            this.listStats[i].draw(xStat + this.maxStatNamesLength +
                 10, yStat, 0, 0);
         }
 
         // Faceset
-        this.faceset.draw(context);
+        this.faceset.draw();
     }
 }

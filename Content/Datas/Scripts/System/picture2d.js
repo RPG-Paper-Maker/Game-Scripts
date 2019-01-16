@@ -58,8 +58,9 @@ Picture2D.prototype = Object.create(Bitmap.prototype);
 
 // -------------------------------------------------------
 
-Picture2D.prototype.check = function(context) {
+Picture2D.prototype.check = function() {
     if ($canvasRendering.isImageLoaded(this.path)) {
+        var context = $canvasRendering.getContext('2d');
         $picturesLoading.splice($picturesLoading.indexOf(this), 1);
         $picturesLoaded.push(this);
         this.image = context.createImageData(this.path);
@@ -85,9 +86,9 @@ Picture2D.prototype.destroy = function() {
 
 // -------------------------------------------------------
 
-Picture2D.prototype.draw = function(context, x, y, w, h) {
+Picture2D.prototype.draw = function(x, y, w, h) {
     if (!this.checked) {
-        this.check(context);
+        this.check();
     }
 
     // Default values
@@ -103,11 +104,11 @@ Picture2D.prototype.draw = function(context, x, y, w, h) {
 
     // Draw the image
     if (this.reverse) {
-        context.save();
-        context.scale(-1,1);
-        context.drawImage(this.path, -x - w, y, w, h);
-        context.restore();
+        $context.save();
+        $context.scale(-1,1);
+        $context.drawImage(this.path, -x - w, y, w, h);
+        $context.restore();
     } else {
-        context.drawImage(this.path, x, y, w, h);
+        $context.drawImage(this.path, x, y, w, h);
     }
 };

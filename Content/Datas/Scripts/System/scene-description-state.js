@@ -106,14 +106,14 @@ SceneDescriptionState.prototype = {
 
     // -------------------------------------------------------
 
-    drawHUD: function(context){
+    drawHUD: function(){
 
         // Draw the local map behind
-        $currentMap.drawHUD(context);
+        $currentMap.drawHUD();
 
         // Draw the menu
-        this.windowTop.draw(context);
-        this.windowChoicesTabs.draw(context);
-        this.windowInformations.draw(context);
+        this.windowTop.draw();
+        this.windowChoicesTabs.draw();
+        this.windowInformations.draw();
     }
 }

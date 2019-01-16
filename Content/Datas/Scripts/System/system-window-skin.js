@@ -66,7 +66,7 @@ SystemWindowSkin.prototype = {
 
     // -------------------------------------------------------
 
-    drawBoxElement: function(context, r, x, y, w, h) {
+    drawBoxElement: function(r, x, y, w, h) {
         if (!w) {
             w = r[2];
         }
@@ -74,12 +74,12 @@ SystemWindowSkin.prototype = {
             h = r[3];
         }
 
-        context.drawImage(this.picture.path, r[0], r[1], r[2], r[3], x, y, w, h);
+        $context.drawImage(this.picture.path, r[0], r[1], r[2], r[3], x, y, w, h);
     },
 
     // -------------------------------------------------------
 
-    drawBoxBackground: function(background, context, rect) {
+    drawBoxBackground: function(background, rect) {
         if (this.backgroundRepeat) {
             var x, y, w, h, l, m;
             for (x = rect[0] + this.borderTopLeft[2], l = rect[0] + rect[2] -
@@ -90,11 +90,11 @@ SystemWindowSkin.prototype = {
                 {
                     w = x + background[2] < l ? background[2] : l - x + 1;
                     h = y + background[3] < m ? background[3] : m - y + 1;
-                    this.drawBoxElement(context, background, x, y, w, h);
+                    this.drawBoxElement(background, x, y, w, h);
                 }
             }
         } else {
-            this.drawBoxElement(context, background, rect[0] + this
+            this.drawBoxElement(background, rect[0] + this
                 .borderTopLeft[2], rect[1] + this.borderTopLeft[3], rect[2] -
                 this.borderTopLeft[2] - this.borderBotRight[2], rect[3] - this
                 .borderTopLeft[3] - this.borderBotRight[3]);
@@ -103,16 +103,16 @@ SystemWindowSkin.prototype = {
 
     // -------------------------------------------------------
 
-    drawBox: function(context, rect, selected) {
+    drawBox: function(rect, selected) {
         var x, y, w, h, l, m;
 
         // Corners
-        this.drawBoxElement(context, this.borderTopLeft, rect[0], rect[1]);
-        this.drawBoxElement(context, this.borderTopRight, rect[0] + rect[2] -
+        this.drawBoxElement(this.borderTopLeft, rect[0], rect[1]);
+        this.drawBoxElement(this.borderTopRight, rect[0] + rect[2] -
             this.borderTopRight[2], rect[1]);
-        this.drawBoxElement(context, this.borderBotLeft, rect[0], rect[1] +
+        this.drawBoxElement(this.borderBotLeft, rect[0], rect[1] +
             rect[3] - this.borderBotLeft[3]);
-        this.drawBoxElement(context, this.borderBotRight, rect[0] + rect[2] -
+        this.drawBoxElement(this.borderBotRight, rect[0] + rect[2] -
             this.borderBotRight[2], rect[1] + rect[3] - this.borderBotRight[3]);
 
         // Borders
@@ -121,9 +121,9 @@ SystemWindowSkin.prototype = {
              this.borderBotLeft[3] - 1; y < l; y += this.borderLeft[3])
         {
             if (y + this.borderLeft[3] < l) {
-                this.drawBoxElement(context, this.borderLeft, x, y);
+                this.drawBoxElement(this.borderLeft, x, y);
             } else {
-                this.drawBoxElement(context, this.borderLeft, x, y, this
+                this.drawBoxElement(this.borderLeft, x, y, this
                     .borderLeft[2], l - y + 1);
             }
         }
@@ -132,9 +132,9 @@ SystemWindowSkin.prototype = {
              this.borderBotLeft[3] - 1; y < l; y += this.borderRight[3])
         {
             if (y + this.borderRight[3] < l) {
-                this.drawBoxElement(context, this.borderRight, x, y);
+                this.drawBoxElement(this.borderRight, x, y);
             } else {
-                this.drawBoxElement(context, this.borderRight, x, y, this
+                this.drawBoxElement(this.borderRight, x, y, this
                     .borderRight[2], l - y + 1);
             }
         }
@@ -143,9 +143,9 @@ SystemWindowSkin.prototype = {
              this.borderTopRight[2] - 1; x < l; x += this.borderTop[2])
         {
             if (x + this.borderTop[2] < l) {
-                this.drawBoxElement(context, this.borderTop, x, y);
+                this.drawBoxElement(this.borderTop, x, y);
             } else {
-                this.drawBoxElement(context, this.borderTop, x, y, l - x + 1,
+                this.drawBoxElement(this.borderTop, x, y, l - x + 1,
                     this.borderTop[3]);
             }
         }
@@ -154,17 +154,17 @@ SystemWindowSkin.prototype = {
              this.borderBotRight[2] - 1; x < l; x += this.borderBot[2])
         {
             if (x + this.borderBot[2] < l) {
-                this.drawBoxElement(context, this.borderBot, x, y);
+                this.drawBoxElement(this.borderBot, x, y);
             } else {
-                this.drawBoxElement(context, this.borderBot, x, y, l - x + 1,
+                this.drawBoxElement(this.borderBot, x, y, l - x + 1,
                     this.borderBot[3]);
             }
         }
 
         // Background
-        this.drawBoxBackground(this.background, context, rect);
+        this.drawBoxBackground(this.background, rect);
         if (selected) {
-            this.drawBoxBackground(this.backgroundSelection, context, rect);
+            this.drawBoxBackground(this.backgroundSelection, rect);
         }
     }
 }

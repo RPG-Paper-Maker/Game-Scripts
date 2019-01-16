@@ -192,6 +192,12 @@ var $songsManager;
 *   @type {THREE.TextureLoader} */
 var $textureLoader = new THREE.TextureLoader();
 
+/** The context used for drawing HUD.
+*   @type {Canvas2D} */
+var $context;
+
+var $requestPaintHUD = true;
+
 // -------------------------------------------------------
 //  BOUNDING BOXES
 // -------------------------------------------------------
@@ -331,21 +337,20 @@ function draw3D(canvas){
 /** Draw HUD for the current stack.
 *   @param {Canvas} canvas The HUD canvas.
 */
-function drawHUD(canvas, loading){
+function drawHUD(loading) {
 
-    // Initialize context
-    var context = canvas.getContext('2d');
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    context.lineWidth = 1;
-    context.webkitImageSmoothingEnabled = false;
-    context.imageSmoothingEnabled = false;
-
-    // Draw current stack
-    if (loading) {
-        $loadingScene.drawHUD(context);
-    }
-    else {
-        $gameStack.drawHUD(context);
+    if ($requestPaintHUD) {
+        $context.clearRect(0, 0, $canvasWidth, $canvasHeight);
+        $context.lineWidth = 1;
+        $context.webkitImageSmoothingEnabled = false;
+        $context.imageSmoothingEnabled = false;
+        if (loading) {
+            $loadingScene.drawHUD();
+        }
+        else {
+            $gameStack.drawHUD();
+        }
     }
     $gameStack.displayingContent = !loading;
+    $requestPaintHUD = false;
 }
