@@ -914,15 +914,14 @@ RPM.updateBackgroundColor = function(color) {
 
 RPM.toScreenPosition = function(vector, camera)
 {
-    var widthHalf = 0.5 * $canvasWidth;
-    var heightHalf = 0.5 * $canvasHeight;
-    vector.project(camera);
-    var x = ( vector.x * widthHalf ) + widthHalf;
-    var y = - ( vector.y * heightHalf ) + heightHalf;
+    var widthHalf = $canvasWidth / 2;
+    var heightHalf = $canvasHeight / 2;
+    var position = vector.clone();
+    camera.updateMatrixWorld(true);
+    position.project(camera);
 
     return {
-        x: x,
-        y: y
+        x: (position.x * widthHalf) + widthHalf,
+        y: - (position.y * heightHalf) + heightHalf
     };
-
 };

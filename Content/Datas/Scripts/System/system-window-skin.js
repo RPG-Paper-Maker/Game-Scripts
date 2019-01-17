@@ -166,5 +166,20 @@ SystemWindowSkin.prototype = {
         if (selected) {
             this.drawBoxBackground(this.backgroundSelection, rect);
         }
+    },
+
+    // -------------------------------------------------------
+
+    drawArrow: function(frame, x, y) {
+        var width = this.arrowTargetSelection[2] / $FRAMES;
+        $context.drawImage(this.picture.path, this.arrowTargetSelection[0] +
+            (frame * width), this.arrowTargetSelection[1], width, this
+            .arrowTargetSelection[3], x - (width / 2), y, width, this.arrowTargetSelection[3]);
+    },
+
+    // -------------------------------------------------------
+
+    drawDamages: function(damage, x, y) {
+
     }
 }

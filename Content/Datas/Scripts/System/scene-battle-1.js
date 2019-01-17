@@ -46,6 +46,8 @@ SceneBattle.prototype.initializeStep1 = function(){
     else this.selectedTargetIndex = index;
     this.windowCharacterInformations.setX($SCREEN_X - 300);
     this.moveArrow();
+    this.battlers[this.kindSelection][this.selectedUserTargetIndex()]
+        .updateArrowPosition(this.camera);
 };
 
 // -------------------------------------------------------
@@ -53,7 +55,7 @@ SceneBattle.prototype.initializeStep1 = function(){
 /** Return the index of the array after going up.
 *   @returns {number}
 */
-SceneBattle.prototype.indexArrowUp = function(){
+SceneBattle.prototype.indexArrowUp = function() {
     var index = this.selectedUserTargetIndex();
     do {
         if (index > 0)
@@ -70,7 +72,7 @@ SceneBattle.prototype.indexArrowUp = function(){
 /** Return the index of the array after going down.
 *   @returns {number}
 */
-SceneBattle.prototype.indexArrowDown = function(){
+SceneBattle.prototype.indexArrowDown = function() {
     var index = this.selectedUserTargetIndex();
     do {
         if (index < (this.battlers[this.kindSelection].length - 1))
@@ -86,11 +88,7 @@ SceneBattle.prototype.indexArrowDown = function(){
 
 /** Move the arrow.
 */
-SceneBattle.prototype.moveArrow = function(){
-    var dim = this.battlers[this.kindSelection][this.selectedUserTargetIndex()]
-              .rect.windowDimension;
-    this.arrowSelection.windowDimension =
-         [dim[0] + (dim[2]/2) - 3,dim[1] + dim[3] + 10,6,6];
+SceneBattle.prototype.moveArrow = function() {
 
     // Updating window informations
     this.windowCharacterInformations.content = this.graphicPlayers[this
@@ -124,6 +122,8 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key){
                                      $datasGame.keyBoard.menuControls.Action))
         {
             this.subStep = 1;
+            this.user = this.battlers[CharacterKind.Hero][this.selectedUserIndex];
+            this.user.selected = true;
             $requestPaintHUD = true;
         }
         break;
@@ -131,8 +131,6 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key){
         if (DatasKeyBoard.isKeyEqual(key,
                                      $datasGame.keyBoard.menuControls.Action))
         {
-            this.user = this.battlers[CharacterKind.Hero]
-                        [this.selectedUserIndex];
             this.kindSelection = CharacterKind.Monster;
             this.windowCharacterInformations.setX(0);
             this.moveArrow();
@@ -207,8 +205,12 @@ SceneBattle.prototype.drawHUDStep1 = function() {
     // Draw heroes window informations
     this.windowCharacterInformations.draw();
 
-    this.arrowSelection.draw();
-    if (this.subStep === 1){
+    // Arrows
+    this.battlers[this.kindSelection][this.selectedUserTargetIndex()]
+        .drawArrow();
+
+    // Commands
+    if (this.subStep === 1) {
         this.windowChoicesBattleCommands.draw();
     }
 };

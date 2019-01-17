@@ -78,7 +78,6 @@ function SceneBattle(troopID, canGameOver, canEscape, battleMap, transitionStart
     this.canGameOver = canGameOver;
     this.canEscape = canEscape;
     this.sceneMap = $gameStack.top();
-    this.initialize();
 
     // Camera settings
     this.cameraStep = 0;
@@ -90,6 +89,8 @@ function SceneBattle(troopID, canGameOver, canEscape, battleMap, transitionStart
         this.transitionZoom = true;
     }
     this.camera.update();
+
+    this.initialize();
 }
 
 SceneBattle.TRANSITION_COLOR_VALUE = 0.1;

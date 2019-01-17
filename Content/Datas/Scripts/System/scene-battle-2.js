@@ -33,7 +33,6 @@ SceneBattle.prototype.initializeStep2 = function(){
     this.windowTopInformations.content = new GraphicText("Attack");
     this.time = new Date().getTime();
     var damages = 3;
-    //if (this.attackingGroup === CharacterKind.Hero) damages += 5;
     l = this.targets.length;
     this.textsDamages = new Array(l);
     for (i = 0; i < l; i++){
@@ -48,8 +47,9 @@ SceneBattle.prototype.initializeStep2 = function(){
 // -------------------------------------------------------
 
 SceneBattle.prototype.updateStep2 = function(){
-    if (new Date().getTime() - this.time >= 1000){
+    if (new Date().getTime() - this.time >= 1000) {
         this.user.active = false;
+        this.user.selected = false;
 
         // Testing end of battle
         if (this.isWin())
@@ -64,12 +64,12 @@ SceneBattle.prototype.updateStep2 = function(){
                     this.changeStep(3); // Attack of ennemies
                 else
                     this.changeStep(1); // Attack of heroes
-            }
-            else
+            } else {
                 if (this.attackingGroup === CharacterKind.Hero)
                     this.changeStep(1); // Attack of heroes
                 else
                     this.changeStep(3); // Attack of ennemies
+            }
         }
     }
 };
@@ -106,7 +106,7 @@ SceneBattle.prototype.drawHUDStep2 = function(){
     // Draw damages
     var i, l = this.textsDamages.length;
     for (i = 0; i < l; i++){
-        var dim = this.textsDamages[i][1].rect.contentDimension;
-        this.textsDamages[i][0].draw(dim[0], dim[1] - 30,  dim[2], dim[3]);
+        var pos = this.textsDamages[i][1].damagePosition;
+        this.textsDamages[i][0].draw(pos.x, pos.y, 16, 16);
     }
 };

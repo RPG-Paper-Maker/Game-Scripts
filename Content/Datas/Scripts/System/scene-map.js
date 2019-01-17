@@ -131,6 +131,7 @@ SceneMap.prototype = {
 
         // End callback
         this.callBackAfterLoading = null;
+        $requestPaintHUD = true;
     },
 
     // -------------------------------------------------------

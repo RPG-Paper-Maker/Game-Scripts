@@ -1,4 +1,4 @@
-/*
+﻿/*
     RPG Paper Maker Copyright (C) 2017 Marie Laporte
 
     This file is part of RPG Paper Maker.
@@ -29,14 +29,11 @@
 *   @property {Player} character The character properties.
 *   @property {boolean} active Indicate if the battler already attacked or not.
 *   @param {Player} character The character properties.
-*   @param {number} x Coords of battler.
-*   @param {number} y Coords of battler.
-*   @param {number} w Coords of battler.
-*   @param {number} h Coords of battler.
 */
-function Battler(character, position, x, y, w, h){
+function Battler(character, position, camera) {
     this.character = character;
-    this.rect = new WindowBox(x, y, w, h);
+    this.arrowPosition = RPM.toScreenPosition(position, camera.threeCamera);
+    this.damagePosition = RPM.toScreenPosition(position, camera.threeCamera);
     this.active = true;
     this.frame = 0;
     this.step = 0;
@@ -45,6 +42,11 @@ function Battler(character, position, x, y, w, h){
     this.position = position;
     this.frameDuration = RPM.random(250, 300);
     this.frameTick = 0;
+    this.frameArrow = 0;
+    this.frameArrowDuration = 125;
+    this.frameArrowTick = 0;
+    this.position = position;
+    this.selected = false;
 
     var idBattler = $datasGame.getHeroesMonsters(character.k).list[character.id]
         .idBattler;
@@ -61,6 +63,8 @@ function Battler(character, position, x, y, w, h){
             this.position)[0];
         this.mesh = new THREE.Mesh(geometry, material);
         this.mesh.position.set(position.x, position.y, position.z);
+        this.upPosition = new THREE.Vector3(position.x, position.y + (this
+            .height * $SQUARE_SIZE), position.z);
         if (character.k === CharacterKind.Monster) {
             this.mesh.scale.set(-1, 1, 1);
         }
@@ -68,10 +72,34 @@ function Battler(character, position, x, y, w, h){
     }
 }
 
+Battler.OFFSET_SELECTED = -10;
+
 Battler.prototype = {
 
     update: function() {
         if (this.mesh !== null) {
+            var newX;
+
+            // Moving selected
+            if (this.selected) {
+                newX = this.mesh.position.x - 1;
+                if (newX <= Battler.OFFSET_SELECTED + this.position.x) {
+                    newX = Battler.OFFSET_SELECTED + this.position.x;
+                }
+            } else {
+                newX = this.mesh.position.x + 1;
+                if (newX >= this.position.x) {
+                    newX = this.position.x;
+                }
+            }
+            if (this.mesh.position.x !== newX) {
+                this.mesh.position.setX(newX);
+                this.upPosition.setX(newX);
+                this.updateArrowPosition($currentMap.camera);
+                $requestPaintHUD = true;
+            }
+
+            // Update frame
             var frame = this.frame;
             this.frameTick += $elapsedTime;
             if (this.frameTick >= this.frameDuration){
@@ -81,7 +109,28 @@ Battler.prototype = {
             if (frame !== this.frame) {
                 this.updateUVs();
             }
+
+            // Update arrow
+            this.frameArrowTick += $elapsedTime;
+            if (this.frameArrowTick >= this.frameArrowDuration) {
+                this.frameArrow = (this.frameArrow + 1) % $FRAMES;
+                this.frameArrowTick = 0;
+                this.arrowPosition = RPM.toScreenPosition(this.mesh.position,
+                    $currentMap.camera.threeCamera);
+                $requestPaintHUD = true;
+            }
+
+            // Update damages
+            this.damagePosition = RPM.toScreenPosition(this.upPosition,
+                $currentMap.camera.threeCamera);
         }
+    },
+
+    // -------------------------------------------------------
+
+    updateArrowPosition: function(camera) {
+        this.arrowPosition = RPM.toScreenPosition(this.mesh.position, camera
+            .threeCamera);
     },
 
     // -------------------------------------------------------
@@ -122,5 +171,18 @@ Battler.prototype = {
             this.mesh.geometry.faceVertexUvs[0][1][2].set(x, y + h);
             this.mesh.geometry.uvsNeedUpdate = true;
         }
+    },
+
+    // -------------------------------------------------------
+
+    drawArrow: function() {
+        $datasGame.system.getWindowSkin().drawArrow(this.frameArrow, this
+            .arrowPosition.x, this.arrowPosition.y);
+    },
+
+    // -------------------------------------------------------
+
+    drawDamages: function(damage, x, y) {
+        $datasGame.system.getWindowSkin().drawDamage(damage, x, y);
     }
 }

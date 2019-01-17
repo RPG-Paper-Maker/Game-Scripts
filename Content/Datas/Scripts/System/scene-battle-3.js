@@ -21,11 +21,11 @@
 //
 //  CLASS SceneBattle
 //
-//  Step 3 : Enemy attack
+//  Step 3 : Enemy attack (IA)
 //
 // -------------------------------------------------------
 
-SceneBattle.prototype.initializeStep3 = function(){
+SceneBattle.prototype.initializeStep3 = function() {
     var i = 0;
     this.windowTopInformations.content = null;
     this.attackingGroup = CharacterKind.Monster;
@@ -35,13 +35,15 @@ SceneBattle.prototype.initializeStep3 = function(){
     } while(!this.isDefined(CharacterKind.Monster, i-1));
 
     this.targets = [this.battlers[CharacterKind.Hero][0]];
-    this.changeStep(2);
+    this.time = new Date().getTime();
 };
 
 // -------------------------------------------------------
 
 SceneBattle.prototype.updateStep3 = function(){
-
+    if (new Date().getTime() - this.time >= 1000) {
+        this.changeStep(2);
+    }
 };
 
 // -------------------------------------------------------
