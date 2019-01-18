@@ -36,13 +36,17 @@ SceneBattle.prototype.initializeStep3 = function() {
 
     this.targets = [this.battlers[CharacterKind.Hero][0]];
     this.time = new Date().getTime();
+    this.timeEnemyAttack = new Date().getTime();
 };
 
 // -------------------------------------------------------
 
 SceneBattle.prototype.updateStep3 = function(){
-    if (new Date().getTime() - this.time >= 1000) {
-        this.changeStep(2);
+    if (new Date().getTime() - this.time >= 500) {
+        this.user.selected = true;
+        if (new Date().getTime() - this.timeEnemyAttack >= 1000) {
+            this.changeStep(2);
+        }
     }
 };
 

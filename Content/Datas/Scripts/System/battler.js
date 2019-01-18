@@ -72,7 +72,7 @@ function Battler(character, position, camera) {
     }
 }
 
-Battler.OFFSET_SELECTED = -10;
+Battler.OFFSET_SELECTED = 10;
 
 Battler.prototype = {
 
@@ -81,15 +81,29 @@ Battler.prototype = {
             var newX;
 
             // Moving selected
-            if (this.selected) {
-                newX = this.mesh.position.x - 1;
-                if (newX <= Battler.OFFSET_SELECTED + this.position.x) {
-                    newX = Battler.OFFSET_SELECTED + this.position.x;
+            if (this.character.k === CharacterKind.Hero) {
+                if (this.selected) {
+                    newX = this.mesh.position.x - 1;
+                    if (newX <= -Battler.OFFSET_SELECTED + this.position.x) {
+                        newX = -Battler.OFFSET_SELECTED + this.position.x;
+                    }
+                } else {
+                    newX = this.mesh.position.x + 1;
+                    if (newX >= this.position.x) {
+                        newX = this.position.x;
+                    }
                 }
-            } else {
-                newX = this.mesh.position.x + 1;
-                if (newX >= this.position.x) {
-                    newX = this.position.x;
+            } else if (this.character.k === CharacterKind.Monster) {
+                if (this.selected) {
+                    newX = this.mesh.position.x + 1;
+                    if (newX >= Battler.OFFSET_SELECTED + this.position.x) {
+                        newX = Battler.OFFSET_SELECTED + this.position.x;
+                    }
+                } else {
+                    newX = this.mesh.position.x - 1;
+                    if (newX <= this.position.x) {
+                        newX = this.position.x;
+                    }
                 }
             }
             if (this.mesh.position.x !== newX) {

@@ -32,7 +32,7 @@ SceneBattle.prototype.initializeStep2 = function(){
     var i, l;
     this.windowTopInformations.content = new GraphicText("Attack");
     this.time = new Date().getTime();
-    var damages = 3;
+    var damages = 1;
     l = this.targets.length;
     this.textsDamages = new Array(l);
     for (i = 0; i < l; i++){
@@ -46,29 +46,31 @@ SceneBattle.prototype.initializeStep2 = function(){
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.updateStep2 = function(){
+SceneBattle.prototype.updateStep2 = function() {
     if (new Date().getTime() - this.time >= 1000) {
         this.user.active = false;
         this.user.selected = false;
 
         // Testing end of battle
-        if (this.isWin())
+        if (this.isWin()) {
             this.changeStep(4);
-        else if (this.isLose())
+        } else if (this.isLose()) {
             this.gameOver();
-        else{
+        } else {
             // Testing end of turn
-            if (this.isEndTurn()){
+            if (this.isEndTurn()) {
                 this.activeGroup();
-                if (this.attackingGroup === CharacterKind.Hero)
+                if (this.attackingGroup === CharacterKind.Hero) {
                     this.changeStep(3); // Attack of ennemies
-                else
+                } else {
                     this.changeStep(1); // Attack of heroes
+                }
             } else {
-                if (this.attackingGroup === CharacterKind.Hero)
+                if (this.attackingGroup === CharacterKind.Hero) {
                     this.changeStep(1); // Attack of heroes
-                else
+                } else {
                     this.changeStep(3); // Attack of ennemies
+                }
             }
         }
     }
