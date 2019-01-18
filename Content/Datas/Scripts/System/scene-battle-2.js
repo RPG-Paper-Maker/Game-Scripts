@@ -48,7 +48,7 @@ SceneBattle.prototype.initializeStep2 = function(){
 
 SceneBattle.prototype.updateStep2 = function() {
     if (new Date().getTime() - this.time >= 1000) {
-        this.user.active = false;
+        this.user.setActive(false);
         this.user.selected = false;
 
         // Testing end of battle

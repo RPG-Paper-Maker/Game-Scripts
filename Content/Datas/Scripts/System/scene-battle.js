@@ -104,7 +104,7 @@ SceneBattle.prototype = Object.create(SceneMap.prototype);
 SceneBattle.prototype.activeGroup = function(){
     var i, l;
     for (i = 0, l = this.battlers[this.attackingGroup].length; i < l; i++){
-        this.battlers[this.attackingGroup][i].active = true;
+        this.battlers[this.attackingGroup][i].setActive(true);
     }
 };
 

@@ -54,7 +54,12 @@ function Battler(character, position, camera) {
         this.mesh = null;
     }
     else {
-        var material = $datasGame.tilesets.texturesBattlers[idBattler];
+        // Copy original material because there will be individual color changes
+        var originalMaterial = $datasGame.tilesets.texturesBattlers[idBattler];
+        var material = originalMaterial.clone();
+        material.map = originalMaterial.map.clone();
+        material.map.needsUpdate = true;
+
         this.width = material.map.image.width / $SQUARE_SIZE / $FRAMES;
         this.height = material.map.image.height / $SQUARE_SIZE / 7;
         var sprite = new Sprite(ElementMapKind.SpritesFace, [0, 0, this.width,
@@ -75,6 +80,15 @@ function Battler(character, position, camera) {
 Battler.OFFSET_SELECTED = 10;
 
 Battler.prototype = {
+
+    setActive: function(active) {
+        this.active = active;
+        if (active) {
+            this.mesh.material.color.setRGB(1, 1, 1);
+        } else {
+            this.mesh.material.color.setRGB(0.5, 0.5, 0.5);
+        }
+    },
 
     update: function() {
         if (this.mesh !== null) {
