@@ -105,16 +105,16 @@ Bitmap.prototype = {
 
     /** Set the position to the top.
     */
-    setRight: function() {
-        this.x = $SCREEN_X - this.w;
+    setRight: function(offset) {
+        this.x = $SCREEN_X - this.w - (offset ? offset : 0);
     },
 
     // -------------------------------------------------------
 
     /** Set the position to the top.
     */
-    setBot: function() {
-        this.y = $SCREEN_Y - this.h;
+    setBot: function(offset) {
+        this.y = $SCREEN_Y - this.h - (offset ? offset : 0);
     },
 
     // -------------------------------------------------------

@@ -100,7 +100,7 @@ function GraphicPlayer(gamePlayer, reverse) {
         } else {
             this.setRight();
         }
-        this.setBot();
+        this.setBot($datasGame.system.getWindowSkin().borderBotRight[3]);
     });
     this.faceset.reverse = reverse;
 }

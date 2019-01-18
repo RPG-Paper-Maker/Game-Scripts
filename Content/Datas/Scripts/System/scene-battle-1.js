@@ -103,8 +103,8 @@ SceneBattle.prototype.moveArrow = function() {
 *   @returns {number}
 */
 SceneBattle.prototype.selectedUserTargetIndex = function(){
-    return (this.subStep === 0) ? this.selectedUserIndex
-                                : this.selectedTargetIndex;
+    return (this.subStep === 2) ? this.selectedTargetIndex : this
+        .selectedUserIndex;
 };
 
 // -------------------------------------------------------
@@ -115,11 +115,11 @@ SceneBattle.prototype.updateStep1 = function(){
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.onKeyPressedStep1 = function(key){
+SceneBattle.prototype.onKeyPressedStep1 = function(key) {
     switch (this.subStep){
     case 0:
-        if (DatasKeyBoard.isKeyEqual(key,
-                                     $datasGame.keyBoard.menuControls.Action))
+        if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
+            .Action))
         {
             this.subStep = 1;
             this.user = this.battlers[CharacterKind.Hero][this.selectedUserIndex];
@@ -128,22 +128,34 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key){
         }
         break;
     case 1:
-        if (DatasKeyBoard.isKeyEqual(key,
-                                     $datasGame.keyBoard.menuControls.Action))
+        if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
+            .Action))
         {
+            this.subStep = 2;
             this.kindSelection = CharacterKind.Monster;
             this.windowCharacterInformations.setX(0);
             this.moveArrow();
-            this.subStep = 2;
+        } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
+            .menuControls.Cancel))
+        {
+            this.subStep = 0;
+            this.user.selected = false;
         }
         break;
     case 2:
-        if (DatasKeyBoard.isKeyEqual(key,
-                                     $datasGame.keyBoard.menuControls.Action))
+        if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
+            .Action))
         {
-            this.targets.push(this.battlers[this.kindSelection]
-                              [this.selectedUserTargetIndex()]);
+            this.targets.push(this.battlers[this.kindSelection][this
+                .selectedUserTargetIndex()]);
             this.changeStep(2);
+        } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
+            .menuControls.Cancel))
+        {
+            this.subStep = 1;
+            this.kindSelection = CharacterKind.Hero;
+            this.windowCharacterInformations.setX($SCREEN_X - 300);
+            this.moveArrow();
         }
         break;
     }
@@ -168,18 +180,14 @@ SceneBattle.prototype.onKeyPressedAndRepeatStep1 = function(key){
     switch (this.subStep){
     case 0:
     case 2:
-        if (DatasKeyBoard.isKeyEqual(key,
-                                     $datasGame.keyBoard.menuControls.Up) ||
-            DatasKeyBoard.isKeyEqual(key,
-                                     $datasGame.keyBoard.menuControls.Left))
+        if (DatasKeyBoard.isKeyEqual(key,$datasGame.keyBoard.menuControls.Up) ||
+            DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls.Left))
         {
             index = this.indexArrowUp();
         }
         else if
-        (DatasKeyBoard.isKeyEqual(key,
-                                  $datasGame.keyBoard.menuControls.Down) ||
-         DatasKeyBoard.isKeyEqual(key,
-                                  $datasGame.keyBoard.menuControls.Right))
+        (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls.Down) ||
+         DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls.Right))
         {
             index = this.indexArrowDown();
         }
