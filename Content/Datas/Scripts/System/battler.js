@@ -90,6 +90,18 @@ Battler.prototype = {
         }
     },
 
+    // -------------------------------------------------------
+
+    updateDead: function() {
+        if (this.character.isDead()) {
+            this.mesh.material.opacity = 0.5;
+        } else {
+            this.mesh.material.opacity = 1;
+        }
+    },
+
+    // -------------------------------------------------------
+
     update: function() {
         if (this.mesh !== null) {
             var newX;
@@ -130,7 +142,8 @@ Battler.prototype = {
             // Update frame
             var frame = this.frame;
             this.frameTick += $elapsedTime;
-            if (this.frameTick >= this.frameDuration){
+            if (!this.character.isDead() && this.frameTick >= this.frameDuration)
+            {
                 this.frame = (this.frame + 1) % $FRAMES;
                 this.frameTick = 0;
             }

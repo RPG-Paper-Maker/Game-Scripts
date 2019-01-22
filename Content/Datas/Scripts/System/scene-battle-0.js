@@ -62,7 +62,7 @@ SceneBattle.prototype.initializeStep0 = function(){
         // Battlers
         var enemy = troop.list[i];
         position = new THREE.Vector3($game.heroBattle.position.x - (2 *
-            $SQUARE_SIZE) + (i * $SQUARE_SIZE * 3 / 4), $game.heroBattle
+            $SQUARE_SIZE) - (i * $SQUARE_SIZE * 3 / 4), $game.heroBattle
             .position.y, $game.heroBattle.position.z - $SQUARE_SIZE + (i *
             $SQUARE_SIZE));
         var instancied = new GamePlayer(CharacterKind.Monster, enemy.id, $game

@@ -50,6 +50,12 @@ SceneBattle.prototype.updateStep2 = function() {
         this.user.setActive(false);
         this.user.selected = false;
 
+        // Target and user test death
+        this.user.updateDead();
+        for (var i = 0, l = this.targets.length; i < l; i++) {
+            this.targets[i].updateDead();
+        }
+
         // Testing end of battle
         if (this.isWin()) {
             this.activeGroup();

@@ -31,23 +31,32 @@
 SceneBattle.prototype.initializeStep1 = function(){
     this.windowTopInformations.content = new GraphicText("Select an ally");
     this.selectedUserIndex = 0;
-    this.selectedTargetIndex = 0;
     this.kindSelection = CharacterKind.Hero;
     this.attackingGroup = CharacterKind.Hero;
     this.targets = [];
     var index = this.selectedUserTargetIndex();
-    while (!this.isDefined(this.kindSelection, index)){
-        if (index < (this.battlers[this.kindSelection].length - 1))
-            index++;
-        else if (index === (this.battlers[this.kindSelection].length - 1))
-            index = 0;
-    }
-    if (this.subStep === 0) this.selectedUserIndex = index;
-    else this.selectedTargetIndex = index;
+    this.selectedUserIndex = this.selectFirstIndex(CharacterKind.Hero, this
+        .selectedUserIndex);
+    this.selectedTargetIndex = this.selectFirstIndex(CharacterKind.Monster, this
+        .selectedTargetIndex);
     this.windowCharacterInformations.setX($SCREEN_X - 300);
     this.moveArrow();
     this.battlers[this.kindSelection][this.selectedUserTargetIndex()]
         .updateArrowPosition(this.camera);
+};
+
+// -------------------------------------------------------
+
+SceneBattle.prototype.selectFirstIndex = function(kind, index) {
+    while (!this.isDefined(kind, index)) {
+        if (index < (this.battlers[kind].length - 1)) {
+            index++;
+        } else if (index === (this.battlers[kind].length - 1)) {
+            index = 0;
+        }
+    }
+
+    return index;
 };
 
 // -------------------------------------------------------
