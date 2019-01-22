@@ -66,7 +66,7 @@ SystemWindowSkin.prototype = {
 
     // -------------------------------------------------------
 
-    drawBoxElement: function(r, x, y, w, h) {
+    drawElement: function(r, x, y, w, h) {
         if (!w) {
             w = r[2];
         }
@@ -90,11 +90,11 @@ SystemWindowSkin.prototype = {
                 {
                     w = x + background[2] < l ? background[2] : l - x + 1;
                     h = y + background[3] < m ? background[3] : m - y + 1;
-                    this.drawBoxElement(background, x, y, w, h);
+                    this.drawElement(background, x, y, w, h);
                 }
             }
         } else {
-            this.drawBoxElement(background, rect[0] + this
+            this.drawElement(background, rect[0] + this
                 .borderTopLeft[2], rect[1] + this.borderTopLeft[3], rect[2] -
                 this.borderTopLeft[2] - this.borderBotRight[2], rect[3] - this
                 .borderTopLeft[3] - this.borderBotRight[3]);
@@ -107,12 +107,12 @@ SystemWindowSkin.prototype = {
         var x, y, w, h, l, m;
 
         // Corners
-        this.drawBoxElement(this.borderTopLeft, rect[0], rect[1]);
-        this.drawBoxElement(this.borderTopRight, rect[0] + rect[2] -
+        this.drawElement(this.borderTopLeft, rect[0], rect[1]);
+        this.drawElement(this.borderTopRight, rect[0] + rect[2] -
             this.borderTopRight[2], rect[1]);
-        this.drawBoxElement(this.borderBotLeft, rect[0], rect[1] +
+        this.drawElement(this.borderBotLeft, rect[0], rect[1] +
             rect[3] - this.borderBotLeft[3]);
-        this.drawBoxElement(this.borderBotRight, rect[0] + rect[2] -
+        this.drawElement(this.borderBotRight, rect[0] + rect[2] -
             this.borderBotRight[2], rect[1] + rect[3] - this.borderBotRight[3]);
 
         // Borders
@@ -121,9 +121,9 @@ SystemWindowSkin.prototype = {
              this.borderBotLeft[3] - 1; y < l; y += this.borderLeft[3])
         {
             if (y + this.borderLeft[3] < l) {
-                this.drawBoxElement(this.borderLeft, x, y);
+                this.drawElement(this.borderLeft, x, y);
             } else {
-                this.drawBoxElement(this.borderLeft, x, y, this
+                this.drawElement(this.borderLeft, x, y, this
                     .borderLeft[2], l - y + 1);
             }
         }
@@ -132,9 +132,9 @@ SystemWindowSkin.prototype = {
              this.borderBotLeft[3] - 1; y < l; y += this.borderRight[3])
         {
             if (y + this.borderRight[3] < l) {
-                this.drawBoxElement(this.borderRight, x, y);
+                this.drawElement(this.borderRight, x, y);
             } else {
-                this.drawBoxElement(this.borderRight, x, y, this
+                this.drawElement(this.borderRight, x, y, this
                     .borderRight[2], l - y + 1);
             }
         }
@@ -143,9 +143,9 @@ SystemWindowSkin.prototype = {
              this.borderTopRight[2] - 1; x < l; x += this.borderTop[2])
         {
             if (x + this.borderTop[2] < l) {
-                this.drawBoxElement(this.borderTop, x, y);
+                this.drawElement(this.borderTop, x, y);
             } else {
-                this.drawBoxElement(this.borderTop, x, y, l - x + 1,
+                this.drawElement(this.borderTop, x, y, l - x + 1,
                     this.borderTop[3]);
             }
         }
@@ -154,9 +154,9 @@ SystemWindowSkin.prototype = {
              this.borderBotRight[2] - 1; x < l; x += this.borderBot[2])
         {
             if (x + this.borderBot[2] < l) {
-                this.drawBoxElement(this.borderBot, x, y);
+                this.drawElement(this.borderBot, x, y);
             } else {
-                this.drawBoxElement(this.borderBot, x, y, l - x + 1,
+                this.drawElement(this.borderBot, x, y, l - x + 1,
                     this.borderBot[3]);
             }
         }
@@ -190,7 +190,28 @@ SystemWindowSkin.prototype = {
 
     // -------------------------------------------------------
 
-    drawDamages: function(damage, x, y) {
+    drawDamagesNumber: function(damage, x, y, rect) {
+        var digits = ("" + damage).split("").map(Number);
+        var width = rect[2] / 10;
+        var height = rect[3];
+        for (var i = 0, l = digits.length; i < l; i++) {
+            $context.drawImage(this.picture.path, rect[0] + (digits[i] * width),
+                rect[1], width, height, x + ((i - (l / 2)) * (width + 1)), y,
+                width, height);
+        }
+    },
 
+    // -------------------------------------------------------
+
+    drawDamages: function(damage, x, y, isCrit, isMiss) {
+        if (isMiss) {
+            this.drawElement(this.textMiss, x - this.textMiss[2] / 2, y);
+        } else if (damage < 0) {
+            this.drawDamagesNumber(damage, x, y, this.textHeal);
+        } else if (isCrit) {
+            this.drawDamagesNumber(damage, x, y, this.textCritical);
+        } else {
+            this.drawDamagesNumber(damage, x, y, this.textNormal);
+        }
     }
 }

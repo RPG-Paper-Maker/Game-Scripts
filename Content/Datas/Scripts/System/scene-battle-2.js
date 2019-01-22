@@ -32,15 +32,14 @@ SceneBattle.prototype.initializeStep2 = function(){
     var i, l;
     this.windowTopInformations.content = new GraphicText("Attack");
     this.time = new Date().getTime();
-    var damages = 1;
+    var damages = 3;
     l = this.targets.length;
     this.textsDamages = new Array(l);
     for (i = 0; i < l; i++){
         var t = this.targets[i].character;
         t.hp -= damages;
         if (t.hp < 0) t.hp = 0;
-        this.textsDamages[i] = [new GraphicText(damages.toString()),
-                                this.targets[i]];
+        this.textsDamages[i] = [damages, this.targets[i]];
     }
 };
 
@@ -53,6 +52,7 @@ SceneBattle.prototype.updateStep2 = function() {
 
         // Testing end of battle
         if (this.isWin()) {
+            this.activeGroup();
             this.changeStep(4);
         } else if (this.isLose()) {
             this.gameOver();
@@ -107,8 +107,10 @@ SceneBattle.prototype.drawHUDStep2 = function(){
 
     // Draw damages
     var i, l = this.textsDamages.length;
+    var target, pos, damage;
     for (i = 0; i < l; i++){
-        var pos = this.textsDamages[i][1].damagePosition;
-        this.textsDamages[i][0].draw(pos.x, pos.y, 16, 16);
+        damage = this.textsDamages[i][0];
+        target = this.textsDamages[i][1];
+        target.drawDamages(damage, false, false);
     }
 };

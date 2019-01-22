@@ -210,7 +210,8 @@ Battler.prototype = {
 
     // -------------------------------------------------------
 
-    drawDamages: function(damage, x, y) {
-        $datasGame.system.getWindowSkin().drawDamage(damage, x, y);
+    drawDamages: function(damage, isCrit, isMiss) {
+        $datasGame.system.getWindowSkin().drawDamages(damage, this
+            .damagePosition.x, this.damagePosition.y, isCrit, isMiss);
     }
 }
