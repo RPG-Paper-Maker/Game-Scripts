@@ -45,7 +45,10 @@ EventCommandShowText.prototype = {
     */
     initialize: function(){
         return {
-            clicked: false
+            clicked: false,
+            frame: 0,
+            frameTick: 0,
+            frameDuration: 150
         }
     },
 
@@ -60,6 +63,12 @@ EventCommandShowText.prototype = {
     update: function(currentState, object, state){
         if (currentState.clicked)
             return 1;
+        currentState.frameTick += $elapsedTime;
+        if (currentState.frameTick >= currentState.frameDuration) {
+            currentState.frame = (currentState.frame + 1) % $FRAMES;
+            currentState.frameTick = 0;
+            $requestPaintHUD = true;
+        }
 
         return 0;
     },
@@ -89,6 +98,9 @@ EventCommandShowText.prototype = {
     */
     drawHUD: function(currentState) {
         this.window.draw();
+
+        $datasGame.system.getWindowSkin().drawArrowMessage(currentState.frame,
+            $SCREEN_X / 2, $SCREEN_Y - 40);
     }
 }
 

@@ -204,7 +204,7 @@ Battler.prototype = {
     // -------------------------------------------------------
 
     drawArrow: function() {
-        $datasGame.system.getWindowSkin().drawArrow(this.frameArrow, this
+        $datasGame.system.getWindowSkin().drawArrowTarget(this.frameArrow, this
             .arrowPosition.x, this.arrowPosition.y);
     },
 

@@ -170,11 +170,22 @@ SystemWindowSkin.prototype = {
 
     // -------------------------------------------------------
 
-    drawArrow: function(frame, x, y) {
+    drawArrowTarget: function(frame, x, y) {
         var width = this.arrowTargetSelection[2] / $FRAMES;
         $context.drawImage(this.picture.path, this.arrowTargetSelection[0] +
             (frame * width), this.arrowTargetSelection[1], width, this
-            .arrowTargetSelection[3], x - (width / 2), y, width, this.arrowTargetSelection[3]);
+            .arrowTargetSelection[3], x - (width / 2), y, width, this
+            .arrowTargetSelection[3]);
+    },
+
+    // -------------------------------------------------------
+
+    drawArrowMessage: function(frame, x, y) {
+        var width = this.arrowEndMessage[2] / $FRAMES;
+        $context.drawImage(this.picture.path, this.arrowEndMessage[0] +
+            (frame * width), this.arrowEndMessage[1], width, this
+            .arrowEndMessage[3], x - (width / 2), y, width, this.arrowEndMessage
+            [3]);
     },
 
     // -------------------------------------------------------
