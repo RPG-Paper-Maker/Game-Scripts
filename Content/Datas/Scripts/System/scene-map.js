@@ -106,8 +106,7 @@ SceneMap.prototype = {
             $loadedFiles++;
 
             // Now that we have map dimensions, we can initialize object portion
-            if (!$game.mapsDatas.hasOwnProperty(this.id))
-                this.initializePortionsObjects();
+            this.initializePortionsObjects();
         });
     },
 
@@ -240,6 +239,9 @@ SceneMap.prototype = {
     /** All the objects moved or/and with changed states.
     */
     initializePortionsObjects: function(){
+        var mapsDatas = $game.mapsDatas[this.id];
+        var datas = null;
+
         var l = Math.ceil(this.mapInfos.length / $PORTION_SIZE);
         var w = Math.ceil(this.mapInfos.width / $PORTION_SIZE);
         var h = Math.ceil(this.mapInfos.height / $PORTION_SIZE) +
@@ -247,20 +249,26 @@ SceneMap.prototype = {
 
         var objectsPortions = new Array(l);
         for (var i = 0; i < l; i++){
-            objectsPortions[i] = new Array(w);
+            objectsPortions[i] = new Array(h);
             for (var j = 0; j < h; j++){
-                objectsPortions[i][j] = new Array(h);
+                objectsPortions[i][j] = new Array(w);
                 for (var k = 0; k < w; k++){
+                    datas = (mapsDatas) ? mapsDatas[i][j][k] : null;
                     objectsPortions[i][j][k] =
                     {
-                        min: [], // All the moved objects that are in this
-                                 // portion
-                        mout: [],// All the moved objects that are from another
-                                 // portion
-                        m: [],   // All the moved objects that are from this
-                                 // portion
-                        si: [],  // Ids of the objects that have modified states
-                        s: []    // States of the objects according to id
+                        min: datas && datas.min ? datas.min : [],
+                            // All the moved objects that are in this
+                            // portion
+                        mout: datas && datas.mout ? datas.mout : [],
+                            // All the moved objects that are from another
+                            // portion
+                        m: datas && datas.m ? datas.m : [],
+                            // All the moved objects that are from this
+                            // portion
+                        si: datas && datas.si ? datas.si : [],
+                            // Ids of the objects that have modified states
+                        s: datas && datas.s ? datas.s : []
+                            // States of the objects according to id
                     };
                 }
             }
@@ -525,7 +533,7 @@ SceneMap.prototype = {
 
     // -------------------------------------------------------
 
-    update: function(){
+    update: function() {
         this.mapInfos.updateBackgroundColor();
         $renderer.setClearColor(this.mapInfos.backgroundColor.getHex(), this
             .mapInfos.backgroundColor.alpha);

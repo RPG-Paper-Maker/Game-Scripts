@@ -559,7 +559,6 @@ EventCommandSendEvent.sendEventObjects = function(
             posObject = object.position;
             detection = (posObject.x >= pos.x - $SQUARE_SIZE + 1 &&
                          posObject.x <= pos.x + $SQUARE_SIZE - 1 &&
-                         posObject.y >= pos.y &&
                          posObject.y <= pos.y + $SQUARE_SIZE &&
                          posObject.z >= pos.z - $SQUARE_SIZE + 1 &&
                          posObject.z <= pos.z + $SQUARE_SIZE - 1);

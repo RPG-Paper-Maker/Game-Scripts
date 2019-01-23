@@ -149,4 +149,3 @@ win32{
     export(copyBR.commands)
     QMAKE_EXTRA_TARGETS += first copyBR
 }
-

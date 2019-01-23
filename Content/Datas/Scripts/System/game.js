@@ -181,12 +181,13 @@ Game.prototype = {
                 inst: this.charactersInstances,
                 vars: this.variables,
                 currentMapId: this.currentMapId,
-                heroPosition: [this.hero.mesh.position.x,
-                               this.hero.mesh.position.y,
-                               this.hero.mesh.position.z],
+                heroPosition: [this.hero.position.x,
+                               this.hero.position.y,
+                               this.hero.position.z],
                 heroStates: this.heroStates,
                 mapsDatas : this.getCompressedMapsDatas()
             };
+
             RPM.saveFile(RPM.FILE_SAVE, jsonList);
         });
     },
@@ -194,8 +195,42 @@ Game.prototype = {
     /** Get a compressed version of mapsDatas (don't retain meshs).
     *   @returns {Object}
     */
-    getCompressedMapsDatas: function(){
-        var obj = {};
+    getCompressedMapsDatas: function() {
+        var obj = {}, i, j, k, l = Object.keys(this.mapsDatas).length, w, h, id,
+            datas, inf, objPortion;
+        for (id in this.mapsDatas) {
+            objPortion = new Array(l);
+            l = this.mapsDatas[id].length;
+            h = this.mapsDatas[id][0].length;
+            w = this.mapsDatas[id][0][0].length;
+            for (i = 0; i < l; i++) {
+                objPortion[i] = new Array(h);
+                for (j = 0; j < h; j++) {
+                    objPortion[i][j] = new Array(w);
+                    for (k = 0; k < w; k++) {
+                        inf = {};
+                        datas = this.mapsDatas[id][i][j][k];
+                        if (datas.min.length) {
+                            inf.min = datas.min;
+                        }
+                        if (datas.mout.length) {
+                            inf.mout = datas.mout;
+                        }
+                        if (datas.m.length) {
+                            inf.m = datas.m;
+                        }
+                        if (datas.si.length) {
+                            inf.si = datas.si;
+                        }
+                        if (datas.s.length) {
+                            inf.s = datas.s;
+                        }
+                        objPortion[i][j][k] = inf;
+                    }
+                }
+            }
+            obj[id] = objPortion;
+        }
 
         return obj;
     }
