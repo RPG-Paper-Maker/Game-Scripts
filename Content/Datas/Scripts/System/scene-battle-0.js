@@ -108,6 +108,7 @@ SceneBattle.prototype.updateStep0 = function() {
                 this.transitionColorAlpha = 1;
                 this.transitionColor = false;
                 this.timeTransition = new Date().getTime();
+                this.updateBackgroundColor();
             }
             return;
         }
@@ -132,6 +133,7 @@ SceneBattle.prototype.updateStep0 = function() {
             if (this.sceneMap.camera.distance <= 10) {
                 this.sceneMap.camera.distance = 10;
                 this.transitionZoom = false;
+                this.updateBackgroundColor();
             }
             this.sceneMap.camera.update();
             return;

@@ -87,6 +87,12 @@ GameStack.prototype = {
 
     // -------------------------------------------------------
 
+    topMinusOne: function() {
+        return this.at(this.content.length - 2);
+    },
+
+    // -------------------------------------------------------
+
     /** Get the scene on the bottom of the stack.
     *   @returns {SceneGame}
     */

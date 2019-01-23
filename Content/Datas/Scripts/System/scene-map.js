@@ -93,6 +93,13 @@ SceneMap.prototype = {
         return this.isBattleMap ? $game.heroBattle.position : $game.hero.position;
     },
 
+    // -------------------------------------------------------
+
+    updateBackgroundColor: function() {
+        this.mapInfos.updateBackgroundColor();
+        RPM.updateBackgroundColor(this.mapInfos.backgroundColor);
+    },
+
     /** Read the map infos file.
     */
     readMapInfos: function(){
@@ -126,6 +133,9 @@ SceneMap.prototype = {
                 this.mapInfos.music.update();
             if (this.mapInfos.backgroundSound)
                 this.mapInfos.backgroundSound.update();
+
+            // Background color update
+            this.updateBackgroundColor();
         }
 
         // End callback
@@ -534,9 +544,6 @@ SceneMap.prototype = {
     // -------------------------------------------------------
 
     update: function() {
-        this.mapInfos.updateBackgroundColor();
-        $renderer.setClearColor(this.mapInfos.backgroundColor.getHex(), this
-            .mapInfos.backgroundColor.alpha);
         this.updateMovingPortions();
 
         // Update camera

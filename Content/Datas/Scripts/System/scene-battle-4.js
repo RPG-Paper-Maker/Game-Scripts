@@ -43,6 +43,7 @@ SceneBattle.prototype.updateStep4 = function() {
                 if (this.camera.distance <= 10) {
                     this.camera.distance = 10;
                     this.transitionZoom = true;
+                    $gameStack.topMinusOne().updateBackgroundColor();
                 }
                 return;
             }
@@ -65,6 +66,7 @@ SceneBattle.prototype.updateStep4 = function() {
                     this.transitionColorAlpha = 1;
                     this.transitionColor = true;
                     this.timeTransition = new Date().getTime();
+                    $gameStack.topMinusOne().updateBackgroundColor();
                 }
                 return;
             }
