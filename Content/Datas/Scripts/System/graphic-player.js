@@ -103,6 +103,13 @@ function GraphicPlayer(gamePlayer, reverse) {
         this.setBot($datasGame.system.getWindowSkin().borderBotRight[3]);
     });
     this.faceset.reverse = reverse;
+
+    // Battler
+    this.battler = Picture2D.createImage($datasGame.pictures.get(PictureKind
+        .Battlers, character.idBattler), PictureKind.Battlers);
+    this.battlerFrame = 0;
+    this.battlerFrameTick = 0;
+    this.battlerFrameDuration = 250;
 }
 
 GraphicPlayer.prototype = {
@@ -140,6 +147,77 @@ GraphicPlayer.prototype = {
                     this.listStats[j++].setText(txt);
                 }
             }
+        }
+    },
+
+    // -------------------------------------------------------
+
+    initializeCharacter: function() {
+        this.graphicName.updateFontSize(RPM.MEDIUM_FONT_SIZE);
+        this.graphicLevelName.updateFontSize(RPM.MEDIUM_FONT_SIZE);
+        this.graphicLevel.updateFontSize(RPM.MEDIUM_FONT_SIZE);
+        var i, l = this.listStatsNames.length;
+        for (i = 0; i < l; i++){
+            this.listStatsNames[i].updateFontSize(RPM.SMALL_FONT_SIZE);
+            this.listStats[i].updateFontSize(RPM.SMALL_FONT_SIZE);
+        }
+    },
+
+    // -------------------------------------------------------
+
+    updateBattler: function() {
+        var frame = this.battlerFrame;
+        this.battlerFrameTick += $elapsedTime;
+        if (this.battlerFrameTick >= this.battlerFrameDuration) {
+            this.battlerFrame = (this.battlerFrame + 1) % $FRAMES;
+            this.battlerFrameTick = 0;
+        }
+        if (frame !== this.battlerFrame) {
+            $requestPaintHUD = true;
+        }
+    },
+
+    // -------------------------------------------------------
+
+    drawCharacter: function(x, y, w, h) {
+        var yName, xLevelName, xLevel, yStats, xStat, yStat, wName, wLevelName,
+            wLevel, wStats, wStat, firstLineLength, xOffset, fontSize, coef,
+            wBattler, hBattler;
+
+        // Measure widths
+        $context.font = this.graphicName.font;
+        wName = $context.measureText(this.graphicName.text).width;
+        wLevelName = $context.measureText(this.graphicLevelName.text).width;
+        wLevel = $context.measureText(this.graphicLevelName.text).width;
+        xLevelName = x + wName + 10;
+        xLevel = xLevelName + wLevelName;
+        firstLineLength = xLevel + $context.measureText(this.graphicLevel.text)
+            .width;
+
+        // Battler
+        yName = y + 100;
+        coef = RPM.BASIC_SQUARE_SIZE / $SQUARE_SIZE;
+        wBattler = this.battler.w / $FRAMES;
+        hBattler = this.battler.h / RPM.BATLLER_STEPS;
+        this.battler.draw(x, yName - (hBattler * coef) - 15, wBattler * coef,
+            hBattler * coef, this.battlerFrame * wBattler, 0, wBattler,
+            hBattler);
+
+        // Stats
+        this.graphicName.draw(x, yName, 0, 0);
+        this.graphicName.updateContextFont();
+        this.graphicLevelName.draw(xLevelName, yName, 0, 0);
+        this.graphicLevelName.updateContextFont();
+        this.graphicLevel.draw(xLevel, yName, 0, 0);
+        this.graphicLevel.updateContextFont();
+        yStats = yName + 15;
+        var i, l = this.listStatsNames.length;
+        for (i = 0; i < l; i++) {
+            xStat = x;
+            yStat = yStats + (i * 15);
+            this.listStatsNames[i].draw(xStat, yStat, 0, 0);
+            this.listStats[i].draw(xStat + this.maxStatNamesLength +
+                10, yStat, 0, 0);
         }
     },
 

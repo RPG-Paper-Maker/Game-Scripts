@@ -340,6 +340,7 @@ function draw3D(canvas){
 function drawHUD(loading) {
 
     if ($requestPaintHUD) {
+        $requestPaintHUD = false;
         $context.clearRect(0, 0, $canvasWidth, $canvasHeight);
         $context.lineWidth = 1;
         $context.webkitImageSmoothingEnabled = false;
@@ -352,5 +353,4 @@ function drawHUD(loading) {
         }
     }
     $gameStack.displayingContent = !loading;
-    $requestPaintHUD = false;
 }

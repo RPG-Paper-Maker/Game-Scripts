@@ -40,7 +40,7 @@ function SceneLoadGame() {
 SceneLoadGame.prototype = {
 
     update: function(){
-
+        SceneSaveLoadGame.prototype.update.call(this);
     },
 
     // -------------------------------------------------------
@@ -52,9 +52,8 @@ SceneLoadGame.prototype = {
         if (DatasKeyBoard.isKeyEqual(key,
                                      $datasGame.keyBoard.menuControls.Action))
         {
-            $game = this.gamesDatas
-                    [this.windowChoicesSlots.currentSelectedIndex];
-            if ($game !== null){
+            $game = this.windowChoicesSlots.getCurrentContent().game;
+            if (!$game.isNull) {
 
                 // Pop load and title screen from the stack
                 $gameStack.pop()

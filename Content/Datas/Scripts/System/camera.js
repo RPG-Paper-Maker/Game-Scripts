@@ -39,7 +39,7 @@ function Camera(d, h, v, target){
                                                    $canvasWidth / $canvasHeight,
                                                    1, 100000);
 
-    this.distance = d * ($SQUARE_SIZE / 32);
+    this.distance = d * ($SQUARE_SIZE / RPM.BASIC_SQUARE_SIZE);
     this.horizontalAngle = h;
     this.verticalAngle = v;
     this.verticalRight = true;

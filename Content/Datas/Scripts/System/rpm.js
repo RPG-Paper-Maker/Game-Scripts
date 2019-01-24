@@ -354,6 +354,11 @@ RPM.PATH_BACKGROUND_SOUNDS = RPM.PATH_SONGS + "BackgroundSounds";
 RPM.PATH_SOUNDS = RPM.PATH_SONGS + "Sounds";
 RPM.PATH_MUSIC_EFFECTS = RPM.PATH_SONGS + "MusicEffects";
 
+RPM.SMALL_FONT_SIZE = 8;
+RPM.MEDIUM_FONT_SIZE = 10;
+RPM.BASIC_SQUARE_SIZE = 32;
+RPM.BATLLER_STEPS = 7;
+
 // -------------------------------------------------------
 //  FUNCTIONS
 // -------------------------------------------------------

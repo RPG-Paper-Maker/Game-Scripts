@@ -71,6 +71,7 @@ Picture2D.prototype.check = function() {
             this.callback.call(this);
         }
         this.checked = true;
+        $requestPaintHUD = true;
 
         return true;
     }
@@ -86,7 +87,7 @@ Picture2D.prototype.destroy = function() {
 
 // -------------------------------------------------------
 
-Picture2D.prototype.draw = function(x, y, w, h) {
+Picture2D.prototype.draw = function(x, y, w, h, sx, sy, sw, sh) {
     if (!this.checked) {
         this.check();
     }
@@ -96,6 +97,14 @@ Picture2D.prototype.draw = function(x, y, w, h) {
     if (typeof y === 'undefined') y = this.y;
     if (typeof w === 'undefined') w = this.w;
     if (typeof h === 'undefined') h = this.h;
+    if (typeof sx === 'undefined') sx = 0;
+    if (typeof sy === 'undefined') sy = 0;
+    if (typeof sw === 'undefined') sw = this.w;
+    if (typeof sh === 'undefined') sh = this.h;
+
+    if (sw <= 0 || sh <= 0) {
+        return;
+    }
 
     x = RPM.getScreenX(x);
     y = RPM.getScreenY(y);
@@ -106,9 +115,9 @@ Picture2D.prototype.draw = function(x, y, w, h) {
     if (this.reverse) {
         $context.save();
         $context.scale(-1,1);
-        $context.drawImage(this.path, -x - w, y, w, h);
+        $context.drawImage(this.path, sx, sy, sw, sh, -x - w, y, w, h);
         $context.restore();
     } else {
-        $context.drawImage(this.path, x, y, w, h);
+        $context.drawImage(this.path, sx, sy, sw, sh, x, y, w, h);
     }
 };

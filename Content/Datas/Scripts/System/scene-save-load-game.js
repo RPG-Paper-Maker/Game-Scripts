@@ -49,19 +49,26 @@ SceneSaveLoadGame.prototype = {
     /** Initialize all the windows graphics.
     */
     initializeWindows: function(){
-        var commands = [
-            new GraphicText("Slot 1"),
-            new GraphicText("Slot 2"),
-            new GraphicText("Slot 3"),
-            new GraphicText("Slot 4")
-        ];
+        var games = [];
+        for (var i = 0; i < 4; i++) {
+            games.push(SceneSaveLoadGame.prototype.getEmptyGame(i))
+        }
 
         this.windowTop = new WindowBox(20, 20, $SCREEN_X - 40, 30);
-        this.windowChoicesSlots =
-             new WindowChoices(OrientationWindow.Vertical, 20, 100, 150, 50, 4,
-                               commands, []);
-        this.windowInformations = new WindowBox(190, 100, 430, 300);
+        this.windowChoicesSlots = new WindowChoices(OrientationWindow.Vertical,
+            10, 100, 100, 50, 4, games, []);
+        this.windowInformations = new WindowBox(120, 100, 500, 300, null, [20,
+            20, 20, 20]);
         this.windowBot = new WindowBox(20, $SCREEN_Y - 50, $SCREEN_X - 40, 30);
+    },
+
+    // -------------------------------------------------------
+
+    getEmptyGame: function(i) {
+        return {
+            currentSlot: i + 1,
+            isNull: true
+        };
     },
 
     // -------------------------------------------------------
@@ -81,24 +88,30 @@ SceneSaveLoadGame.prototype = {
                 if (json !== null){
                     game = new Game();
                     game.read(j + 1, json);
-                    var l = this.initializeNonEmpty;
-                    SceneSaveLoadGame.prototype.initializeNonEmpty.call(this,
-                                                                        game);
+                } else {
+                    game = {
+                        currentSlot: j + 1,
+                        isNull: true
+                    };
                 }
+                SceneSaveLoadGame.prototype.initializeGame.call(this, game);
             }
+
+            this.windowChoicesSlots.setContents(this.gamesDatas);
         });
     },
 
     // -------------------------------------------------------
 
-    /** Initialize a non empty game displaying.
+    /** Initialize a game displaying.
     */
-    initializeNonEmpty: function(game){
-        this.gamesDatas[game.currentSlot-1] = game;
+    initializeGame: function(game){
+        this.gamesDatas[game.currentSlot-1] = new GraphicSave(game);
+
         if (game.currentSlot-1 === this.windowChoicesSlots.currentSelectedIndex)
         {
-            SceneSaveLoadGame.prototype.updateInformations.call(
-                        this, game.currentSlot -1);
+            SceneSaveLoadGame.prototype.updateInformations.call(this, game
+                .currentSlot -1);
         }
     },
 
@@ -116,11 +129,14 @@ SceneSaveLoadGame.prototype = {
     /** Update the information to display inside the save informations.
     */
     updateInformations: function(i){
-        if (this.gamesDatas[i] === null){
-            this.windowInformations.content = new GraphicText("empty");
-        }
-        else{
-            this.windowInformations.content = new GraphicText("not empty");
+        this.windowInformations.content = this.gamesDatas[i];
+    },
+
+    // -------------------------------------------------------
+
+    update: function() {
+        if (!this.windowInformations.content.game.isNull) {
+            this.windowInformations.content.update();
         }
     },
 

@@ -40,7 +40,7 @@ function SceneSaveGame() {
 SceneSaveGame.prototype = {
 
     update: function(){
-
+        SceneSaveLoadGame.prototype.update.call(this);
     },
 
     // -------------------------------------------------------

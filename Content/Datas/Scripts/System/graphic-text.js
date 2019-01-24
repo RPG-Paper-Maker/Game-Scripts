@@ -51,10 +51,8 @@ function GraphicText(text, align, fontSize, fontName, x, y, w, h){
     this.align = align;
 
     // Font
-    this.fontWithoutResize = RPM.createFont(fontSize, fontName);
-    fontSize = RPM.getScreenXY(fontSize);
-    this.font = RPM.createFont(fontSize, fontName);
-    this.fontSize = fontSize;
+    this.fontName = fontName;
+    this.updateFontSize(fontSize);
 }
 
 GraphicText.prototype = {
@@ -101,6 +99,15 @@ GraphicText.prototype = {
     */
     updateContextFont: function(){
         $context.font = this.fontWithoutResize;
+    },
+
+    // -------------------------------------------------------
+
+    updateFontSize: function(fontSize) {
+        this.fontSize = fontSize;
+        this.fontWithoutResize = RPM.createFont(fontSize, this.fontName);
+        fontSize = RPM.getScreenXY(fontSize);
+        this.font = RPM.createFont(fontSize, this.fontName);
     },
 
     // -------------------------------------------------------
