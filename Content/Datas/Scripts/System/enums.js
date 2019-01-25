@@ -209,3 +209,21 @@ var OrientationWindow = {
     Horizontal: 1
 };
 Object.freeze(OrientationWindow);
+
+/**
+*   Enum for the different battler steps.
+*   @enum {number}
+*   @readonly
+*/
+var BattlerStep = {
+    Normal: 0,
+    Attack: 1,
+    Skill: 2,
+    Item: 3,
+    Escape: 4,
+    Defense: 5,
+    Attacked: 6,
+    Victory: 7,
+    Dead: 8
+};
+Object.freeze(BattlerStep);

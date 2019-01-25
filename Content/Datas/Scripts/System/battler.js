@@ -35,8 +35,11 @@ function Battler(character, position, camera) {
     this.arrowPosition = RPM.toScreenPosition(position, camera.threeCamera);
     this.damagePosition = RPM.toScreenPosition(position, camera.threeCamera);
     this.active = true;
+    this.attackingFrame = 0;
+    this.attackingFrameTick = 0;
+    this.attackingFrameDuration = 350;
     this.frame = 0;
-    this.step = 0;
+    this.step = BattlerStep.Normal;
     this.width = 1;
     this.height = 1;
     this.position = position;
@@ -93,11 +96,26 @@ Battler.prototype = {
 
     // -------------------------------------------------------
 
+    setAttacking: function() {
+        this.attackingFrame = 0;
+        this.step = BattlerStep.Attack;
+        this.updateUVs();
+    },
+
+    // -------------------------------------------------------
+
+    isAttacking: function() {
+        return this.step === BattlerStep.Attack && this.attackingFrame !== 3;
+    },
+
+    // -------------------------------------------------------
+
     updateDead: function() {
-        if (this.character.isDead()) {
-            this.mesh.material.opacity = 0.5;
-        } else {
-            this.mesh.material.opacity = 1;
+        var step = this.character.isDead() ? BattlerStep.Dead : BattlerStep
+            .Normal;
+        if (step !== this.step) {
+            this.step = step;
+            this.updateUVs();
         }
     },
 
@@ -105,45 +123,59 @@ Battler.prototype = {
 
     update: function() {
         if (this.mesh !== null) {
-            var newX;
+            this.updateSelected();
+            this.updateFrame();
+            this.updateArrow();
+            this.updateDamages();
+            this.updateAttacking();
+        }
+    },
 
-            // Moving selected
-            if (this.character.k === CharacterKind.Hero) {
-                if (this.selected) {
-                    newX = this.mesh.position.x - 1;
-                    if (newX <= -Battler.OFFSET_SELECTED + this.position.x) {
-                        newX = -Battler.OFFSET_SELECTED + this.position.x;
-                    }
-                } else {
-                    newX = this.mesh.position.x + 1;
-                    if (newX >= this.position.x) {
-                        newX = this.position.x;
-                    }
+    // -------------------------------------------------------
+
+    updateSelected: function() {
+        var newX;
+
+        if (this.character.k === CharacterKind.Hero) {
+            if (this.selected) {
+                newX = this.mesh.position.x - 1;
+                if (newX <= -Battler.OFFSET_SELECTED + this.position.x) {
+                    newX = -Battler.OFFSET_SELECTED + this.position.x;
                 }
-            } else if (this.character.k === CharacterKind.Monster) {
-                if (this.selected) {
-                    newX = this.mesh.position.x + 1;
-                    if (newX >= Battler.OFFSET_SELECTED + this.position.x) {
-                        newX = Battler.OFFSET_SELECTED + this.position.x;
-                    }
-                } else {
-                    newX = this.mesh.position.x - 1;
-                    if (newX <= this.position.x) {
-                        newX = this.position.x;
-                    }
+            } else {
+                newX = this.mesh.position.x + 1;
+                if (newX >= this.position.x) {
+                    newX = this.position.x;
                 }
             }
-            if (this.mesh.position.x !== newX) {
-                this.mesh.position.setX(newX);
-                this.upPosition.setX(newX);
-                this.updateArrowPosition($currentMap.camera);
-                $requestPaintHUD = true;
+        } else if (this.character.k === CharacterKind.Monster) {
+            if (this.selected) {
+                newX = this.mesh.position.x + 1;
+                if (newX >= Battler.OFFSET_SELECTED + this.position.x) {
+                    newX = Battler.OFFSET_SELECTED + this.position.x;
+                }
+            } else {
+                newX = this.mesh.position.x - 1;
+                if (newX <= this.position.x) {
+                    newX = this.position.x;
+                }
             }
+        }
+        if (this.mesh.position.x !== newX) {
+            this.mesh.position.setX(newX);
+            this.upPosition.setX(newX);
+            this.updateArrowPosition($currentMap.camera);
+            $requestPaintHUD = true;
+        }
+    },
 
-            // Update frame
+    // -------------------------------------------------------
+
+    updateFrame: function() {
+        if (!this.character.isDead() && !this.attacking) {
             var frame = this.frame;
             this.frameTick += $elapsedTime;
-            if (!this.character.isDead() && this.frameTick >= this.frameDuration)
+            if (this.frameTick >= this.frameDuration)
             {
                 this.frame = (this.frame + 1) % $FRAMES;
                 this.frameTick = 0;
@@ -151,20 +183,45 @@ Battler.prototype = {
             if (frame !== this.frame) {
                 this.updateUVs();
             }
+        }
+    },
 
-            // Update arrow
-            this.frameArrowTick += $elapsedTime;
-            if (this.frameArrowTick >= this.frameArrowDuration) {
-                this.frameArrow = (this.frameArrow + 1) % $FRAMES;
-                this.frameArrowTick = 0;
-                this.arrowPosition = RPM.toScreenPosition(this.mesh.position,
-                    $currentMap.camera.threeCamera);
-                $requestPaintHUD = true;
+    // -------------------------------------------------------
+
+    updateArrow: function() {
+        this.frameArrowTick += $elapsedTime;
+        if (this.frameArrowTick >= this.frameArrowDuration) {
+            this.frameArrow = (this.frameArrow + 1) % $FRAMES;
+            this.frameArrowTick = 0;
+            this.arrowPosition = RPM.toScreenPosition(this.mesh.position,
+                $currentMap.camera.threeCamera);
+            $requestPaintHUD = true;
+        }
+    },
+
+    // -------------------------------------------------------
+
+    updateDamages: function() {
+        this.damagePosition = RPM.toScreenPosition(this.upPosition,
+            $currentMap.camera.threeCamera);
+    },
+
+    // -------------------------------------------------------
+
+    updateAttacking: function() {
+        var frame = this.attackingFrame;
+        this.attackingFrameTick += $elapsedTime;
+        if (this.attackingFrameTick >= this.attackingFrameDuration) {
+            this.attackingFrame = (this.attackingFrame + 1) % $FRAMES;
+            this.attackingFrameTick = 0;
+        }
+
+        if (frame !== this.attackingFrame) {
+            if (this.attackingFrame === 0) {
+                this.step = BattlerStep.Normal;
             }
 
-            // Update damages
-            this.damagePosition = RPM.toScreenPosition(this.upPosition,
-                $currentMap.camera.threeCamera);
+            this.updateUVs();
         }
     },
 
@@ -199,9 +256,17 @@ Battler.prototype = {
         if (this.mesh !== null) {
             var textureWidth = this.mesh.material.map.image.width;
             var textureHeight = this.mesh.material.map.image.height;
+            var frame = 0;
+            switch (this.step) {
+            case BattlerStep.Normal:
+                frame = this.frame; break;
+            case BattlerStep.Attack:
+                frame = this.attackingFrame; break;
+            }
+
             var w = this.width * $SQUARE_SIZE / textureWidth;
             var h = this.height * $SQUARE_SIZE / textureHeight;
-            var x = this.frame * w;
+            var x = frame * w;
             var y = this.step * h;
 
             // Update geometry

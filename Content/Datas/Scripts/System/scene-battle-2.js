@@ -41,12 +41,13 @@ SceneBattle.prototype.initializeStep2 = function(){
         if (t.hp < 0) t.hp = 0;
         this.textsDamages[i] = [damages, this.targets[i]];
     }
+    this.user.setAttacking();
 };
 
 // -------------------------------------------------------
 
 SceneBattle.prototype.updateStep2 = function() {
-    if (new Date().getTime() - this.time >= 1000) {
+    if (new Date().getTime() - this.time >= 2000) {
         this.user.setActive(false);
         this.user.selected = false;
 
@@ -112,11 +113,13 @@ SceneBattle.prototype.drawHUDStep2 = function(){
     this.windowTopInformations.draw();
 
     // Draw damages
-    var i, l = this.textsDamages.length;
-    var target, pos, damage;
-    for (i = 0; i < l; i++){
-        damage = this.textsDamages[i][0];
-        target = this.textsDamages[i][1];
-        target.drawDamages(damage, false, false);
+    if (!this.user.isAttacking()) {
+        var i, l = this.textsDamages.length;
+        var target, pos, damage;
+        for (i = 0; i < l; i++){
+            damage = this.textsDamages[i][0];
+            target = this.textsDamages[i][1];
+            target.drawDamages(damage, false, false);
+        }
     }
 };

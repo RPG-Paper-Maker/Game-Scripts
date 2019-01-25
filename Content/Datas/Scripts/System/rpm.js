@@ -357,7 +357,7 @@ RPM.PATH_MUSIC_EFFECTS = RPM.PATH_SONGS + "MusicEffects";
 RPM.SMALL_FONT_SIZE = 8;
 RPM.MEDIUM_FONT_SIZE = 10;
 RPM.BASIC_SQUARE_SIZE = 32;
-RPM.BATLLER_STEPS = 7;
+RPM.BATLLER_STEPS = 9;
 
 // -------------------------------------------------------
 //  FUNCTIONS
