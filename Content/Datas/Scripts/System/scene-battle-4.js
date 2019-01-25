@@ -27,6 +27,13 @@
 
 SceneBattle.prototype.initializeStep4 = function(){
     this.windowTopInformations.content = new GraphicText("End, well done!");
+
+    // Heroes
+    var i, l = $game.teamHeroes.length;
+    for (i = 0; i < l; i++) {
+        this.battlers[CharacterKind.Hero][i].setVictory();
+    }
+
     this.time = new Date().getTime();
 };
 

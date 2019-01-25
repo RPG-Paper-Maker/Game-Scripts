@@ -110,6 +110,14 @@ Battler.prototype = {
 
     // -------------------------------------------------------
 
+    setVictory: function() {
+        this.frame = 0;
+        this.step = BattlerStep.Victory;
+        this.updateUVs();
+    },
+
+    // -------------------------------------------------------
+
     updateDead: function(attacked) {
         var step = BattlerStep.Normal;
 
@@ -215,19 +223,21 @@ Battler.prototype = {
     // -------------------------------------------------------
 
     updateAttacking: function() {
-        var frame = this.attackingFrame;
-        this.attackingFrameTick += $elapsedTime;
-        if (this.attackingFrameTick >= this.attackingFrameDuration) {
-            this.attackingFrame = (this.attackingFrame + 1) % $FRAMES;
-            this.attackingFrameTick = 0;
-        }
-
-        if (frame !== this.attackingFrame) {
-            if (this.attackingFrame === 0) {
-                this.step = BattlerStep.Normal;
+        if (this.step === BattlerStep.Attack) {
+            var frame = this.attackingFrame;
+            this.attackingFrameTick += $elapsedTime;
+            if (this.attackingFrameTick >= this.attackingFrameDuration) {
+                this.attackingFrame = (this.attackingFrame + 1) % $FRAMES;
+                this.attackingFrameTick = 0;
             }
 
-            this.updateUVs();
+            if (frame !== this.attackingFrame) {
+                if (this.attackingFrame === 0) {
+                    this.step = BattlerStep.Normal;
+                }
+
+                this.updateUVs();
+            }
         }
     },
 
@@ -265,6 +275,7 @@ Battler.prototype = {
             var frame = 0;
             switch (this.step) {
             case BattlerStep.Normal:
+            case BattlerStep.Victory:
                 frame = this.frame; break;
             case BattlerStep.Attack:
                 frame = this.attackingFrame; break;
