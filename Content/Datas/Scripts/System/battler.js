@@ -104,22 +104,21 @@ Battler.prototype = {
 
     // -------------------------------------------------------
 
-    setAttacked: function() {
-        this.step = BattlerStep.Attacked;
-        this.updateUVs();
-    },
-
-    // -------------------------------------------------------
-
     isAttacking: function() {
         return this.step === BattlerStep.Attack && this.attackingFrame !== 3;
     },
 
     // -------------------------------------------------------
 
-    updateDead: function() {
-        var step = this.character.isDead() ? BattlerStep.Dead : BattlerStep
-            .Normal;
+    updateDead: function(attacked) {
+        var step = BattlerStep.Normal;
+
+        if (this.character.isDead()) {
+            step = BattlerStep.Dead;
+        } else if (attacked) {
+            step = BattlerStep.Attacked;
+        }
+
         if (step !== this.step) {
             this.step = step;
             this.updateUVs();

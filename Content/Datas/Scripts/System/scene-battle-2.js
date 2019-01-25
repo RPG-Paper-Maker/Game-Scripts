@@ -33,6 +33,7 @@ SceneBattle.prototype.initializeStep2 = function(){
     this.windowTopInformations.content = new GraphicText("Attack");
     this.time = new Date().getTime();
     var damages = 3;
+
     l = this.targets.length;
     this.textsDamages = new Array(l);
     for (i = 0; i < l; i++){
@@ -51,7 +52,7 @@ SceneBattle.prototype.updateStep2 = function() {
 
     if (!this.user.isAttacking()) {
         for (i = 0, l = this.targets.length; i < l; i++) {
-            this.targets[i].setAttacked();
+            this.targets[i].updateDead(true);
         }
     }
 
@@ -60,9 +61,9 @@ SceneBattle.prototype.updateStep2 = function() {
         this.user.selected = false;
 
         // Target and user test death
-        this.user.updateDead();
+        this.user.updateDead(false);
         for (i = 0, l = this.targets.length; i < l; i++) {
-            this.targets[i].updateDead();
+            this.targets[i].updateDead(false);
         }
 
         // Testing end of battle
