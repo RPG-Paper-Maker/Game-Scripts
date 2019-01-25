@@ -47,13 +47,21 @@ SceneBattle.prototype.initializeStep2 = function(){
 // -------------------------------------------------------
 
 SceneBattle.prototype.updateStep2 = function() {
+    var i, l;
+
+    if (!this.user.isAttacking()) {
+        for (i = 0, l = this.targets.length; i < l; i++) {
+            this.targets[i].setAttacked();
+        }
+    }
+
     if (new Date().getTime() - this.time >= 2000) {
         this.user.setActive(false);
         this.user.selected = false;
 
         // Target and user test death
         this.user.updateDead();
-        for (var i = 0, l = this.targets.length; i < l; i++) {
+        for (i = 0, l = this.targets.length; i < l; i++) {
             this.targets[i].updateDead();
         }
 

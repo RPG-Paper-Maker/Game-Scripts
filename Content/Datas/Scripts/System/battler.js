@@ -104,6 +104,13 @@ Battler.prototype = {
 
     // -------------------------------------------------------
 
+    setAttacked: function() {
+        this.step = BattlerStep.Attacked;
+        this.updateUVs();
+    },
+
+    // -------------------------------------------------------
+
     isAttacking: function() {
         return this.step === BattlerStep.Attack && this.attackingFrame !== 3;
     },
