@@ -39,13 +39,16 @@ SystemClass.prototype = {
     */
     readJSON: function(json){
         this.name = json.name;
-        this.experienceBase = json.eB;
-        this.experienceInflation = json.eI;
-        this.initialLevel = json.iniL;
-        this.finalLevel = json.mxL;
+        this.initialLevel = json.iniL ? json.iniL : -1;
+        this.finalLevel = json.mxL ? json.mxL : -1;
+        this.experienceBase = json.eB ? json.eB : -1;
+        this.experienceInflation = json.eI ? json.eI : -1;
 
         // Statistic progression
         var jsonStatisticsProgression = json.stats;
+        if (!jsonStatisticsProgression) {
+            jsonStatisticsProgression = [];
+        }
         var i, l = jsonStatisticsProgression.length;
         this.statisticsProgression = new Array(l);
         for (i = 0; i < l; i++){
@@ -56,6 +59,9 @@ SystemClass.prototype = {
 
         // Skills
         var jsonClassSkills = json.skills;
+        if (!jsonClassSkills) {
+            jsonClassSkills = [];
+        }
         l = jsonClassSkills.length;
         this.skills = new Array(l);
         for (i = 0; i < l; i++){
@@ -63,5 +69,43 @@ SystemClass.prototype = {
             classSkill.readJSON(jsonClassSkills[i]);
             this.skills[i] = classSkill;
         }
+    },
+
+    // -------------------------------------------------------
+
+    getProperty: function(prop, upClass) {
+        return upClass[prop] === -1 ? this[prop] : upClass[prop];
+    },
+
+    // -------------------------------------------------------
+
+    getStatisticsProgression: function(upClass) {
+        var list = [], i, l, checked;
+        for (i = 0, l = this.statisticsProgression.length; i < l; i++) {
+            list.push(this.statisticsProgression[i]);
+        }
+        for (i = 0, l = upClass.statisticsProgression.length; i < l; i++) {
+            checked = false;
+            for (j = 0, ll = this.statisticsProgression.length; j < ll; j++) {
+                if (upClass.statisticsProgression[i].id === this
+                    .statisticsProgression[j].id)
+                {
+                    list[i] = upClass.statisticsProgression[j];
+                    checked = true;
+                    break;
+                }
+            }
+            if (!checked) {
+                list.push(upClass.statisticsProgression[i]);
+            }
+        }
+
+        return list;
+    },
+
+    // -------------------------------------------------------
+
+    getSkills: function(upClass) {
+        return this.skills.concat(upClass.skills);
     }
 }

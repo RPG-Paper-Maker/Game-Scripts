@@ -38,10 +38,37 @@ SystemHero.prototype = {
     *   @param {Object} json Json object describing the object.
     */
     readJSON: function(json){
-
         this.name = json.names[1];
         this.idClass = json.class;
         this.idBattler = typeof json.bid === 'undefined' ? -1 : json.bid;
         this.idFaceset = typeof json.fid === 'undefined' ? -1 : json.fid;
+        this.classInherit = new SystemClass();
+        this.classInherit.readJSON(json.ci);
+    },
+
+    // -------------------------------------------------------
+
+    getProperty: function(prop) {
+        return $datasGame.classes.list[this.idBattler].getProperty(prop,
+            this.classInherit);
+    },
+
+    // -------------------------------------------------------
+
+    createExpList: function() {
+        var finalLevel = this.getProperty("finalLevel");
+        var experienceBase = this.getProperty("experienceBase");
+        var experienceInflation = this.getProperty("experienceInflation");
+        var expList = new Array(finalLevel + 1);
+        var pow, i;
+
+        pow = 2.4 + experienceInflation / 100;
+        expList[1] = 0;
+        for (i = 2; i <= finalLevel; i++) {
+            expList[i] = expList[i - 1] + Math.floor(experienceBase * (Math.pow(
+                i + 3, pow) / Math.pow(5, pow)));
+        }
+
+        return expList;
     }
 }

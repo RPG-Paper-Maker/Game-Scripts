@@ -43,6 +43,7 @@ function GamePlayer(kind, id, instanceId, skills){
     this.k = kind;
     this.id = id;
     this.instid = instanceId;
+    var character = this.getCharacterInformations();
 
     var i, l = skills.length;
     this.sk = new Array(l);
@@ -50,6 +51,9 @@ function GamePlayer(kind, id, instanceId, skills){
         var skill = skills[i];
         this.sk[i] = new GameSkill(skill.id);
     }
+
+    // Experience list
+    this.expList = character.createExpList();
 }
 
 /** Get the max size of equipment kind names.
@@ -138,7 +142,7 @@ GamePlayer.prototype = {
     /** Instanciate a character in a particular level.
     *   @param {number} level The level of the new character.
     */
-    instanciate: function(level){
+    instanciate: function(level) {
         var i, j, l;
 
         // Skills
@@ -165,8 +169,10 @@ GamePlayer.prototype = {
 
             if (i === $datasGame.battleSystem.idLevelStatistic)
                 this[statistic.abbreviation] = cl.initialLevel;
-            else if (i === $datasGame.battleSystem.idExpStatistic){
-                this["max" + statistic.abbreviation] = 0; // TODO
+            else if (i === $datasGame.battleSystem.idExpStatistic) {
+                this[statistic.abbreviation] = this.expList[cl.initialLevel];
+                this["max" + statistic.abbreviation] = this.expList[cl
+                    .initialLevel + 1];
             }
             else{
                 for (j = 0; j < ll; j++){
