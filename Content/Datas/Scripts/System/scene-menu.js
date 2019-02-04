@@ -84,7 +84,7 @@ function SceneMenu() {
 
 }
 
-SceneMenu.nbItemsToDisplay = 14;
+SceneMenu.nbItemsToDisplay = 12;
 
 SceneMenu.prototype = {
 
@@ -147,6 +147,11 @@ SceneMenu.prototype = {
     update: function(){
         if ($game.playTime !== this.time) {
             this.textPlayTime.setText(RPM.getStringDate($game.playTime));
+        }
+        for (var i = 0, l = this.windowChoicesTeam.listWindows.length; i < l;
+             i++)
+        {
+            this.windowChoicesTeam.listWindows[i].content.updateBattler();
         }
     },
 

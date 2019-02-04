@@ -49,16 +49,13 @@ function SceneMenuInventory() {
     // All the windows
     this.windowTop = new WindowBox(20, 20, 200, 30,
                                    new GraphicText("Inventory"));
-    this.windowChoicesTabs =
-         new WindowTabs(OrientationWindow.Horizontal, 5, 60, 105, 25, 6,
-                        menuKind, null);
-    this.windowChoicesList =
-         new WindowChoices(OrientationWindow.Vertical, 20, 100, 200, 25,
-                           SceneMenu.nbItemsToDisplay,
-                           new Array(SceneMenu.nbItemsToDisplay),
-                           null, [5,5,5,5]);
-    this.windowInformations =
-         new WindowBox(240, 100, 360, 200);
+    this.windowChoicesTabs = new WindowTabs(OrientationWindow.Horizontal, 5, 60,
+        105, RPM.SMALL_SLOT_HEIGHT, 6, menuKind, null);
+    this.windowChoicesList = new WindowChoices(OrientationWindow.Vertical, 20,
+        100, 200, RPM.SMALL_SLOT_HEIGHT, SceneMenu.nbItemsToDisplay, new Array(
+        SceneMenu.nbItemsToDisplay), null, [10, 5, 10, 5]);
+    this.windowInformations = new WindowBox(240, 100, 360, 200, null, RPM
+        .HUGE_PADDING_BOX);
 
     // Update for changing tab
     this.updateForTab();

@@ -180,6 +180,7 @@ WindowTabs.prototype = {
             this.listWindows[this.currentSelectedIndex].selected = false;
             this.currentSelectedIndex = -1;
         }
+        $requestPaintHUD = true;
     },
 
     // -------------------------------------------------------
@@ -190,6 +191,7 @@ WindowTabs.prototype = {
     select: function(i){
         this.currentSelectedIndex = i;
         this.listWindows[this.currentSelectedIndex].selected = true;
+        $requestPaintHUD = true;
     },
 
     // -------------------------------------------------------
@@ -234,8 +236,9 @@ WindowTabs.prototype = {
                                      $datasGame.keyBoard.menuControls.Action))
         {
             var callback = this.listCallBacks[this.currentSelectedIndex];
-            if (callback !== null)
+            if (callback !== null) {
                 callback.call(base);
+            }
         }
     },
 

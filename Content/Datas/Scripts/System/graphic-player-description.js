@@ -40,7 +40,7 @@
 *   @param {GamePlayer} gamePlayer The current selected player.
 */
 function GraphicPlayerDescription(gamePlayer) {
-    var character, cl, levelStat;
+    var character, cl, levelStat, expStat;
     var i, j, l, c, maxLength, txt;
     var statistic, graphicName;
 
@@ -48,14 +48,19 @@ function GraphicPlayerDescription(gamePlayer) {
     character = gamePlayer.getCharacterInformations();
     cl = $datasGame.classes.list[character.idClass];
     levelStat = $datasGame.battleSystem.getLevelStatistic();
+    expStat = $datasGame.battleSystem.getExpStatistic();
 
     // All the graphics
     this.graphicNameCenter = new GraphicText(character.name, Align.Center);
     this.graphicName = new GraphicText(character.name, Align.Left);
-    this.graphicClass = new GraphicText(cl.name, Align.Left, 10);
+    this.graphicClass = new GraphicText(cl.name, Align.Left, RPM.MEDIUM_FONT_SIZE);
     this.graphicLevelName = new GraphicText(levelStat.name, Align.Left);
     this.graphicLevel = new GraphicText("" + gamePlayer[levelStat.abbreviation],
-                                        Align.Left);
+        Align.Left);
+    this.graphicExpName = new GraphicText(expStat.name, Align.Left, RPM
+        .MEDIUM_FONT_SIZE);
+    this.graphicExp = new GraphicText("" + gamePlayer.getBarAbbreviation(expStat),
+        Align.Left, RPM.MEDIUM_FONT_SIZE);
 
     // Adding stats
     this.listStatsNames = new Array;
@@ -83,16 +88,34 @@ function GraphicPlayerDescription(gamePlayer) {
             this.listStatsNames.push(graphicName);
             txt = "" + gamePlayer[statistic.abbreviation];
             if (!statistic.isFix)
-                txt += "/" + gamePlayer["max" + statistic.abbreviation];
+                txt += "/" + gamePlayer[statistic.getMaxAbbreviation()];
             this.listStats.push(new GraphicText(txt, Align.Left));
             j++;
         }
     }
-
     this.listLength.push(maxLength);
+
+    // Battler
+    this.battler = Picture2D.createImage($datasGame.pictures.get(PictureKind
+        .Battlers, character.idBattler), PictureKind.Battlers);
+    this.battlerFrame = 0;
+    this.battlerFrameTick = 0;
+    this.battlerFrameDuration = 250;
 }
 
 GraphicPlayerDescription.prototype = {
+
+    updateBattler: function() {
+        var frame = this.battlerFrame;
+        this.battlerFrameTick += $elapsedTime;
+        if (this.battlerFrameTick >= this.battlerFrameDuration) {
+            this.battlerFrame = (this.battlerFrame + 1) % $FRAMES;
+            this.battlerFrameTick = 0;
+        }
+        if (frame !== this.battlerFrame) {
+            $requestPaintHUD = true;
+        }
+    },
 
     /** Drawing the player in choice box.
     *   @param {number} x The x position to draw graphic.
@@ -111,21 +134,39 @@ GraphicPlayerDescription.prototype = {
     *   @param {number} h The height dimention to draw graphic.
     */
     drawInformations: function(x, y, w, h){
-        var yName, xLevelName, xLevel, yClass, yStats, xStat, yStat;
+        var xCharacter, yName, xLevelName, xLevel, yClass, xExp, yExp, yStats,
+            xStat, yStat, coef, wBattler, hBattler;
         var i, l;
+        xCharacter = x + 80;
+        yName = y + 20;
+        coef = RPM.BASIC_SQUARE_SIZE / $SQUARE_SIZE;
+        wBattler = this.battler.w / $FRAMES;
+        hBattler = this.battler.h / RPM.BATLLER_STEPS;
 
+        // Battler
+        this.battler.draw(x + (80 - (wBattler * coef)) / 2, y + 80 - (hBattler *
+            coef) - 15, wBattler * coef, hBattler * coef, this.battlerFrame *
+            wBattler, 0, wBattler, hBattler);
+
+        // Name, level, exp
         yName = y + 10;
-        this.graphicName.draw(x, yName, 0, 0);
+        this.graphicName.draw(xCharacter, yName, 0, 0);
         this.graphicName.updateContextFont();
-        xLevelName = x + $context.measureText(this.graphicName.text).width + 10;
+        xLevelName = xCharacter + $context.measureText(this.graphicName.text)
+            .width + 10;
         this.graphicLevelName.draw(xLevelName, yName, 0, 0);
         this.graphicLevelName.updateContextFont();
         xLevel = xLevelName + $context.measureText(this.graphicLevelName.text)
             .width;
         this.graphicLevel.draw(xLevel, yName, 0, 0);
         yClass = yName + 20;
-        this.graphicClass.draw(x, yClass, 0, 0);
-        yStats = yClass + 50;
+        this.graphicClass.draw(xCharacter, yClass, 0, 0);
+        yExp = yClass + 20;
+        this.graphicExpName.draw(xCharacter, yExp, 0, 0);
+        xExp = xCharacter + $context.measureText(this.graphicExpName.text).width
+            + 10;
+        this.graphicExp.draw(xExp, yExp, 0, 0);
+        yStats = yExp + 30;
 
         // Stats
         l = this.listStatsNames.length;

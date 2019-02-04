@@ -45,9 +45,9 @@ function SceneDescriptionState() {
     // All the windows
     this.windowTop = new WindowBox(20, 20, 200, 30, new GraphicText("State"));
     this.windowChoicesTabs = new WindowTabs(OrientationWindow.Horizontal, 50,
-                                            60, 110, 25, 4, listHeroes, null);
-    this.windowInformations = new WindowBox(20, 100, 600, 340, null,
-                                            [30,30,30,30]);
+        60, 110, RPM.SMALL_SLOT_HEIGHT, 4, listHeroes, null);
+    this.windowInformations = new WindowBox(20, 100, 600, 340, null, RPM
+        .HUGE_PADDING_BOX);
     this.synchronize();
 }
 
@@ -63,7 +63,7 @@ SceneDescriptionState.prototype = {
     // -------------------------------------------------------
 
     update: function(){
-
+        this.windowInformations.content.updateBattler();
     },
 
     // -------------------------------------------------------

@@ -43,5 +43,11 @@ SystemStatistic.prototype = {
         this.name = json.names[1];
         this.abbreviation = json.abr;
         this.isFix = json.fix;
+    },
+
+    // -------------------------------------------------------
+
+    getMaxAbbreviation: function() {
+        return "max" + this.abbreviation;
     }
 }

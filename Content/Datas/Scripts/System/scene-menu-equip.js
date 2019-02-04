@@ -53,19 +53,17 @@ function SceneMenuEquip() {
 
     // All the windows
     this.windowTop = new WindowBox(20, 20, 200, 30, new GraphicText("Equip"));
-    this.windowChoicesTabs =
-         new WindowTabs(OrientationWindow.Horizontal, 50, 60, 110, 25, 4,
-                        listHeroes, null);
-    this.windowChoicesEquipment =
-         new WindowChoices(OrientationWindow.Vertical, 20, 100, 290, 25,
-                           nbEquipments, new Array(nbEquipments), null,
-                           [5,5,5,5]);
-    this.windowChoicesList =
-         new WindowChoices(OrientationWindow.Vertical, 20,
-                           100 + (nbEquipments + 1) * 25, 290, 25,
-                           nbEquipChoice, new Array(nbEquipChoice), null,
-                               [5,5,5,5], 0, -1);
-    this.windowInformations = new WindowBox(330,100,285,350);
+    this.windowChoicesTabs = new WindowTabs(OrientationWindow.Horizontal, 50,
+        60, 110, RPM.SMALL_SLOT_HEIGHT, 4, listHeroes, null);
+    this.windowChoicesEquipment = new WindowChoices(OrientationWindow.Vertical,
+        20, 100, 290, RPM.SMALL_SLOT_HEIGHT, nbEquipments, new Array(
+        nbEquipments), null, [10, 5, 10, 5]);
+    this.windowChoicesList = new WindowChoices(OrientationWindow.Vertical, 20,
+        100 + (nbEquipments + 1) * RPM.SMALL_SLOT_HEIGHT, 290, RPM
+        .SMALL_SLOT_HEIGHT, nbEquipChoice, new Array(nbEquipChoice), null, [10,
+        5, 10, 5], 0, -1);
+    this.windowInformations = new WindowBox(330, 100, 285, 350, null, RPM
+        .HUGE_PADDING_BOX);
 
     // Updates
     this.updateForTab();

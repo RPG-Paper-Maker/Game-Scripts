@@ -37,7 +37,7 @@
 *   @param {GamePlayer} gamePlayer The current selected player.
 */
 function GraphicPlayer(gamePlayer, reverse) {
-    var character, cl, levelStat, id, statistic, textName, text, c, txt;
+    var character, cl, levelStat, expStat, id, statistic, textName, text, c, txt;
     var context;
 
     this.gamePlayer = gamePlayer;
@@ -47,13 +47,18 @@ function GraphicPlayer(gamePlayer, reverse) {
     character = gamePlayer.getCharacterInformations();
     cl = $datasGame.classes.list[character.idClass];
     levelStat = $datasGame.battleSystem.getLevelStatistic();
+    expStat = $datasGame.battleSystem.getExpStatistic();
 
     // All the graphics
     this.graphicName = new GraphicText(character.name, Align.Left);
     this.graphicClass = new GraphicText(cl.name, Align.Left, 10);
     this.graphicLevelName = new GraphicText(levelStat.name, Align.Left);
     this.graphicLevel = new GraphicText("" + gamePlayer[levelStat.abbreviation],
-                                        Align.Left);
+        Align.Left);
+    this.graphicExpName = new GraphicText(expStat.name, Align.Left, RPM
+        .MEDIUM_FONT_SIZE);
+    this.graphicExp = new GraphicText(gamePlayer.getBarAbbreviation(expStat),
+        Align.Left, RPM.MEDIUM_FONT_SIZE);
 
     // Adding stats
     context = $canvasHUD.getContext('2d');
@@ -81,7 +86,7 @@ function GraphicPlayer(gamePlayer, reverse) {
                 this.listStatsNames.push(textName);
                 txt = "" + gamePlayer[statistic.abbreviation];
                 if (!statistic.isFix)
-                    txt += "/" + gamePlayer["max" + statistic.abbreviation];
+                    txt += "/" + gamePlayer[statistic.getMaxAbbreviation()];
                 text = new GraphicText(txt, Align.Left);
                 c = context.measureText(text.text).width;
                 if (c > this.maxStatNamesLength) {
@@ -228,10 +233,20 @@ GraphicPlayer.prototype = {
     *   @param {number} h The height dimention to draw graphic.
     */
     draw: function(x, y, w, h) {
-        var xCharacter, yName, xLevelName, xLevel, yClass;
-
+        var xCharacter, yName, xLevelName, xLevel, yClass, coef, wBattler,
+            hBattler, xExp, yExp;
         xCharacter = x + 80;
         yName = y + 20;
+        coef = RPM.BASIC_SQUARE_SIZE / $SQUARE_SIZE;
+        wBattler = this.battler.w / $FRAMES;
+        hBattler = this.battler.h / RPM.BATLLER_STEPS;
+
+        // Battler
+        this.battler.draw(x + (80 - (wBattler * coef)) / 2, y + h - (hBattler *
+            coef) - 15, wBattler * coef, hBattler * coef, this.battlerFrame *
+            wBattler, 0, wBattler, hBattler);
+
+        // Stats
         this.graphicName.draw(xCharacter, yName, 0, 0);
         this.graphicName.updateContextFont();
         xLevelName = xCharacter + $context.measureText(this.graphicName.text)
@@ -243,6 +258,11 @@ GraphicPlayer.prototype = {
         this.graphicLevel.draw(xLevel, yName, 0, 0);
         yClass = yName + 20;
         this.graphicClass.draw(xCharacter, yClass, 0, 0);
+        yExp = yClass + 20;
+        this.graphicExpName.draw(xCharacter, yExp, 0, 0);
+        xExp = xCharacter + $context.measureText(this.graphicExpName.text).width
+            + 10;
+        this.graphicExp.draw(xExp, yExp, 0, 0);
     },
 
     /** Drawing the player informations in battles.

@@ -198,6 +198,12 @@ GamePlayer.prototype = {
 
     // -------------------------------------------------------
 
+    getBarAbbreviation: function(stat) {
+        return this[stat.abbreviation] + " / " + this[stat.getMaxAbbreviation()];
+    },
+
+    // -------------------------------------------------------
+
     /** Read the JSON associated to the character and items.
     *   @param {object} json Json object describing the character.
     *   @param {Object} items Json object describing the items.
