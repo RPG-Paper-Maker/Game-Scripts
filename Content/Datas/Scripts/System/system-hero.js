@@ -55,18 +55,28 @@ SystemHero.prototype = {
 
     // -------------------------------------------------------
 
+    getExperienceTable: function() {
+        return $datasGame.classes.list[this.idBattler].getExperienceTable(this
+            .classInherit);
+    },
+
+    // -------------------------------------------------------
+
     createExpList: function() {
         var finalLevel = this.getProperty("finalLevel");
         var experienceBase = this.getProperty("experienceBase");
         var experienceInflation = this.getProperty("experienceInflation");
+        var experienceTable = this.getExperienceTable();
         var expList = new Array(finalLevel + 1);
         var pow, i;
 
+        // Basis
         pow = 2.4 + experienceInflation / 100;
         expList[1] = 0;
         for (i = 2; i <= finalLevel; i++) {
-            expList[i] = expList[i - 1] + Math.floor(experienceBase * (Math.pow(
-                i + 3, pow) / Math.pow(5, pow)));
+            expList[i] = expList[i - 1] + (experienceTable[i - 1] ?
+                experienceTable[i - 1] : (Math.floor(experienceBase * (Math.pow(
+                i + 3, pow) / Math.pow(5, pow)))));
         }
 
         return expList;

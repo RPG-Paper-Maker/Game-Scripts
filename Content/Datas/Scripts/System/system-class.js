@@ -43,13 +43,22 @@ SystemClass.prototype = {
         this.finalLevel = json.mxL ? json.mxL : -1;
         this.experienceBase = json.eB ? json.eB : -1;
         this.experienceInflation = json.eI ? json.eI : -1;
+        this.experienceTable = {};
+        var jsonExperienceTable = json.eT;
+        var i, l;
+        if (jsonExperienceTable) {
+            for (i = 0, l = jsonExperienceTable.length; i < l; i++) {
+                this.experienceTable[jsonExperienceTable[i]["k"]] =
+                    jsonExperienceTable[i]["v"];
+            }
+        }
 
         // Statistic progression
         var jsonStatisticsProgression = json.stats;
         if (!jsonStatisticsProgression) {
             jsonStatisticsProgression = [];
         }
-        var i, l = jsonStatisticsProgression.length;
+        l = jsonStatisticsProgression.length;
         this.statisticsProgression = new Array(l);
         for (i = 0; i < l; i++){
             var statisticProgression = new SystemStatisticProgression();
@@ -75,6 +84,20 @@ SystemClass.prototype = {
 
     getProperty: function(prop, upClass) {
         return upClass[prop] === -1 ? this[prop] : upClass[prop];
+    },
+
+    // -------------------------------------------------------
+
+    getExperienceTable: function(upClass) {
+        var list = {}, i, l, level;
+        for (level in this.experienceTable) {
+            list[level] = this.experienceTable[level];
+        }
+        for (level in upClass.experienceTable) {
+            list[level] = upClass.experienceTable[level];
+        }
+
+        return list;
     },
 
     // -------------------------------------------------------
