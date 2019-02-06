@@ -124,7 +124,8 @@ DISTFILES += \
     Content/Datas/Scripts/System/system-color.js \
     Content/Datas/Scripts/System/enums.js \
     Content/Datas/Scripts/System/system-window-skin.js \
-    Content/Datas/Scripts/System/graphic-save.js
+    Content/Datas/Scripts/System/graphic-save.js \
+    Content/Datas/Scripts/System/system-progression-table.js
 
 RESOURCES += \
     qml.qrc

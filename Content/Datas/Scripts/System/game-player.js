@@ -249,5 +249,17 @@ GamePlayer.prototype = {
         }
 
         return null;
+    },
+
+    // -------------------------------------------------------
+
+    getCurrentLevel: function() {
+        return this[$datasGame.battleSystem.getLevelStatistic().abbreviation];
+    },
+
+    // -------------------------------------------------------
+
+    getRewardExperience: function() {
+        return this.character.getRewardExperience(this.getCurrentLevel());
     }
 }

@@ -48,8 +48,8 @@ SystemClass.prototype = {
         var i, l;
         if (jsonExperienceTable) {
             for (i = 0, l = jsonExperienceTable.length; i < l; i++) {
-                this.experienceTable[jsonExperienceTable[i]["k"]] =
-                    jsonExperienceTable[i]["v"];
+                this.experienceTable[jsonExperienceTable[i].k] =
+                    jsonExperienceTable[i].v;
             }
         }
 

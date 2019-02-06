@@ -32,3 +32,17 @@ function SystemMonster(){
 }
 
 SystemMonster.prototype = Object.create(SystemHero.prototype);
+
+SystemMonster.prototype.readJSON = function(json) {
+    SystemHero.prototype.readJSON.call(this, json);
+
+    this.rewards = {
+        xp: new SystemProgressionTable()
+    }
+    this.rewards.xp.readJSON(json.xp);
+}
+
+
+SystemMonster.prototype.getRewardExperience = function(level) {
+    return this.rewards.xp.getProgressionAtLevel(level);
+}
