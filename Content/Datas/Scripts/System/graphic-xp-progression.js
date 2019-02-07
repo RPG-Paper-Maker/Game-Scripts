@@ -19,30 +19,35 @@
 
 // -------------------------------------------------------
 //
-//  CLASS SystemMonster : SystemHero
+//  CLASS GraphicXPProgression
 //
 // -------------------------------------------------------
 
 /** @class
-*   A monster of the game.
-*   @extends SystemHero
+*   The graphic displaying all the progression for each character.
 */
-function SystemMonster(){
-    SystemHero.call(this);
-}
+function GraphicXPProgression() {
+    var i, l, player;
 
-SystemMonster.prototype = Object.create(SystemHero.prototype);
-
-SystemMonster.prototype.readJSON = function(json) {
-    SystemHero.prototype.readJSON.call(this, json);
-
-    this.rewards = {
-        xp: new SystemProgressionTable(this.getProperty("finalLevel"))
+    l = $game.teamHeroes.length
+    this.graphicCharacters = new Array(l);
+    for (i = 0; i < l; i++) {
+        player = new GraphicPlayer($game.teamHeroes[i]);
+        this.graphicCharacters[i] = player;
     }
-    this.rewards.xp.readJSON(json.xp);
 }
 
+GraphicXPProgression.prototype = {
 
-SystemMonster.prototype.getRewardExperience = function(level) {
-    return this.rewards.xp.getProgressionAtLevel(level);
+    /** Drawing the progression.
+    *   @param {number} x The x position to draw graphic.
+    *   @param {number} y The y position to draw graphic.
+    *   @param {number} w The width dimention to draw graphic.
+    *   @param {number} h The height dimention to draw graphic.
+    */
+    drawInformations: function(x, y, w, h){
+        for (var i = 0, l = this.graphicCharacters.length; i < l; i++) {
+            this.graphicCharacters[i].draw(x, y + (i * 90), w, 85);
+        }
+    }
 }

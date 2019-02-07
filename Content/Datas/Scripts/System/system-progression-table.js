@@ -26,8 +26,8 @@
 /** @class
 *   A progression table
 */
-function SystemProgressionTable() {
-
+function SystemProgressionTable(finalLevel) {
+    this.finalLevel = finalLevel;
 }
 
 SystemProgressionTable.prototype = {
@@ -61,26 +61,26 @@ SystemProgressionTable.prototype = {
         }
 
         // Check according to equation
-        var x = level + 1;
+        var x = level - 1;
         switch (this.equation) {
         case 0:
-            return easingLinear(x);
+            return this.easingLinear(x);
         case -1:
-            return easingQuadraticIn(x);
+            return this.easingQuadraticIn(x);
         case 1:
-            return easingQuadraticOut(x);
+            return this.easingQuadraticOut(x);
         case -2:
-            return easingCubicIn(x);
+            return this.easingCubicIn(x);
         case 2:
-            return easingCubicOut(x);
+            return this.easingCubicOut(x);
         case -3:
-            return easingQuarticIn(x);
+            return this.easingQuarticIn(x);
         case 3:
-            return easingQuarticOut(x);
+            return this.easingQuarticOut(x);
         case -4:
-            return easingQuinticIn(x);
+            return this.easingQuinticIn(x);
         case 4:
-            return easingQuinticOut(x);
+            return this.easingQuinticOut(x);
         default:
             return 0;
         }

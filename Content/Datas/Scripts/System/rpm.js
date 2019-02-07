@@ -359,6 +359,7 @@ RPM.MEDIUM_FONT_SIZE = 10;
 RPM.BASIC_SQUARE_SIZE = 32;
 RPM.BATLLER_STEPS = 9;
 RPM.SMALL_SLOT_HEIGHT = 30;
+RPM.SMALL_PADDING_BOX = [10, 10, 10, 10];
 RPM.HUGE_PADDING_BOX = [30, 30, 30, 30];
 
 // -------------------------------------------------------

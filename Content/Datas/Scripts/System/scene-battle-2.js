@@ -32,7 +32,7 @@ SceneBattle.prototype.initializeStep2 = function(){
     var i, l;
     this.windowTopInformations.content = new GraphicText("Attack");
     this.time = new Date().getTime();
-    var damages = 3;
+    var damages = 5;
 
     l = this.targets.length;
     this.textsDamages = new Array(l);

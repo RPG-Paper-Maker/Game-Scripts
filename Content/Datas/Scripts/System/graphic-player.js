@@ -226,6 +226,8 @@ GraphicPlayer.prototype = {
         }
     },
 
+    // -------------------------------------------------------
+
     /** Drawing the player in choice box in the main menu.
     *   @param {number} x The x position to draw graphic.
     *   @param {number} y The y position to draw graphic.
@@ -256,9 +258,9 @@ GraphicPlayer.prototype = {
         xLevel = xLevelName + $context.measureText(this.graphicLevelName.text)
             .width;
         this.graphicLevel.draw(xLevel, yName, 0, 0);
-        yClass = yName + 20;
+        yClass = yName + 15;
         this.graphicClass.draw(xCharacter, yClass, 0, 0);
-        yExp = yClass + 20;
+        yExp = yClass + 29;
         this.graphicExpName.draw(xCharacter, yExp, 0, 0);
         xExp = xCharacter + $context.measureText(this.graphicExpName.text).width
             + 10;

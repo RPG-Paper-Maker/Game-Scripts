@@ -43,7 +43,7 @@ function GamePlayer(kind, id, instanceId, skills){
     this.k = kind;
     this.id = id;
     this.instid = instanceId;
-    var character = this.getCharacterInformations();
+    this.character = this.getCharacterInformations();
 
     var i, l = skills.length;
     this.sk = new Array(l);
@@ -53,7 +53,7 @@ function GamePlayer(kind, id, instanceId, skills){
     }
 
     // Experience list
-    this.expList = character.createExpList();
+    this.expList = this.character.createExpList();
 }
 
 /** Get the max size of equipment kind names.

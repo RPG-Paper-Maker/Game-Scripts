@@ -22,25 +22,71 @@
 //  CLASS SceneBattle
 //
 //  Step 4 : End of battle
+//      SubStep 0 : Victory message
+//      SubStep 1 : Experience update
+//      SubStep 2 : Level up
+//      SubStep 3 : End transition
 //
 // -------------------------------------------------------
 
 SceneBattle.prototype.initializeStep4 = function(){
-    this.windowTopInformations.content = new GraphicText("End, well done!");
+    var i, l;
+    this.windowTopInformations.content = new GraphicText("Victory!");
 
     // Heroes
-    var i, l = $game.teamHeroes.length;
-    for (i = 0; i < l; i++) {
+    for (i = 0, l = $game.teamHeroes.length; i < l; i++) {
         this.battlers[CharacterKind.Hero][i].setVictory();
     }
 
+    // Check rewards
+    this.xp = 0;
+    for (i = 0, l = this.battlers[CharacterKind.Monster].length; i < l; i++) {
+        this.xp += this.battlers[CharacterKind.Monster][i].character
+            .getRewardExperience();
+    }
+
     this.time = new Date().getTime();
+    this.remainingXP = 0;
+    this.remainingTimeXP = SceneBattle.TIME_PROGRESSION_XP;
+};
+
+// -------------------------------------------------------
+
+SceneBattle.prototype.updateTeamXP = function(xp) {
+    /*
+    for (i = 0, l = $game.teamHeroes.length; i < l; i++) {
+        this.battlers[CharacterKind.Hero][i].setVictory();
+    }
+    */
 };
 
 // -------------------------------------------------------
 
 SceneBattle.prototype.updateStep4 = function() {
-    if (new Date().getTime() - this.time >= SceneBattle.TIME_END_WAIT) {
+    switch (this.subStep) {
+    case 0:
+        if (new Date().getTime() - this.time >= SceneBattle.TIME_END_WAIT) {
+            this.time = new Date().getTime();
+            this.windowTopInformations.content = new GraphicText($datasGame
+                .battleSystem.getExpStatistic().name + ": " + this.xp);
+            $requestPaintHUD = true;
+            this.subStep = 1;
+        }
+        break;
+    case 1:
+        var timeTick = new Date().getTime() - this.time;
+        if (timeTick < this.remainingTimeXP)
+        {
+            this.updateTeamXP(timeTick / SceneBattle.TIME_PROGRESSION_XP);
+        } else {
+            this.subStep = 3;
+        }
+
+        break;
+    case 2:
+        this.subStep = 3;
+        break;
+    case 3:
         $requestPaintHUD = true;
 
         // Transition zoom
@@ -92,6 +138,7 @@ SceneBattle.prototype.updateStep4 = function() {
         }
 
         this.win();
+        break;
     }
 };
 
@@ -122,15 +169,26 @@ SceneBattle.prototype.onKeyPressedAndRepeatStep4 = function(key){
 // -------------------------------------------------------
 
 SceneBattle.prototype.drawHUDStep4 = function() {
-    if (new Date().getTime() - this.time < SceneBattle.TIME_END_WAIT) {
-         this.windowTopInformations.draw();
+    if (this.subStep !== 3) {
+        this.windowTopInformations.draw();
     }
 
-    // Transition fade
-    if (this.transitionEnd === 1) {
-        $context.fillStyle = "rgba(" + this.transitionEndColor.red + "," +
-            this.transitionEndColor.green + "," + this.transitionEndColor.blue +
-            "," + this.transitionColorAlpha + ")";
-        $context.fillRect(0, 0, $canvasWidth, $canvasHeight);
+    switch (this.subStep) {
+    case 0:
+        break;
+    case 1:
+        this.windowExperienceProgression.draw();
+        break;
+    case 2:
+        break;
+    case 3:
+        // Transition fade
+        if (this.transitionEnd === 1) {
+            $context.fillStyle = "rgba(" + this.transitionEndColor.red + "," +
+                this.transitionEndColor.green + "," + this.transitionEndColor.blue +
+                "," + this.transitionColorAlpha + ")";
+            $context.fillRect(0, 0, $canvasWidth, $canvasHeight);
+        }
+        break;
     }
 };

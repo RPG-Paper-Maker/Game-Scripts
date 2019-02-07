@@ -82,7 +82,7 @@ SceneBattle.prototype.initializeStep0 = function(){
     var w = 300, h = 100;
     this.windowCharacterInformations = new WindowBox($SCREEN_X - w,
                                                      $SCREEN_Y - h, w, h, null,
-                                                     [10,10,10,10]);
+                                                     RPM.SMALL_PADDING_BOX);
     l = $datasGame.battleSystem.battleCommandsOrder.length;
     var list = new Array(l)
     for (i = 0; i < l; i++){
@@ -93,6 +93,11 @@ SceneBattle.prototype.initializeStep0 = function(){
          new WindowChoices(OrientationWindow.Vertical, 20,
                            $SCREEN_Y - 20 - (l*30),
                            150, 30, 4, list, null);
+
+    // End windows
+    this.windowExperienceProgression = new WindowBox(10, 80, 300, (90 * $game
+        .teamHeroes.length) + RPM.SMALL_PADDING_BOX[2] + RPM
+        .SMALL_PADDING_BOX[3], new GraphicXPProgression(), RPM.SMALL_PADDING_BOX);
 };
 
 // -------------------------------------------------------
