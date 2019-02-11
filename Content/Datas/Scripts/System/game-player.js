@@ -54,6 +54,8 @@ function GamePlayer(kind, id, instanceId, skills){
 
     // Experience list
     this.expList = this.character.createExpList();
+
+    this.levelingUp = false;
 }
 
 /** Get the max size of equipment kind names.
@@ -259,7 +261,93 @@ GamePlayer.prototype = {
 
     // -------------------------------------------------------
 
+    levelUp: function() {
+        this[$datasGame.battleSystem.getLevelStatistic().abbreviation]++;
+
+        // TODO
+    },
+
+    // -------------------------------------------------------
+
     getRewardExperience: function() {
         return this.character.getRewardExperience(this.getCurrentLevel());
+    },
+
+    // -------------------------------------------------------
+
+    updateRemainingXP: function(fullTime) {
+        var current = this[$datasGame.battleSystem.getExpStatistic()
+            .abbreviation];
+        var max = this[$datasGame.battleSystem.getExpStatistic()
+            .getMaxAbbreviation()];
+        var xpForLvl = max - current;
+        var dif = this.totalRemainingXP - xpForLvl;
+
+        this.remainingXP = (dif > 0) ? xpForLvl : this.totalRemainingXP;
+        this.totalRemainingXP -= this.remainingXP;
+        this.timeXP = new Date().getTime();
+        this.totalTimeXP = Math.floor(this.remainingXP / (max - this.expList[this
+            .getCurrentLevel()]) * fullTime);
+        this.obtainedXP = 0;
+    },
+
+    // -------------------------------------------------------
+
+    updateExperience: function() {
+        var xpAbbreviation = $datasGame.battleSystem.getExpStatistic()
+            .abbreviation;
+        var maxXPAbbreviation = $datasGame.battleSystem.getExpStatistic()
+            .getMaxAbbreviation();
+        var maxXP = this[maxXPAbbreviation];
+        var tick = new Date().getTime() - this.timeXP;
+        if (tick >= this.totalTimeXP) {
+            this[xpAbbreviation] = this[xpAbbreviation] + this.remainingXP -
+                this.obtainedXP;
+            this.remainingXP = 0;
+            this.obtainedXP = 0;
+        } else {
+            var xp = Math.floor((tick / this.totalTimeXP * this.remainingXP)) -
+                this.obtainedXP;
+            this.obtainedXP += xp;
+            this[xpAbbreviation] += xp;
+        }
+        var dif = this[xpAbbreviation] - maxXP;
+        if (dif >= 0) {
+            var newMaxXP = this.expList[this.getCurrentLevel() + 2];
+            if (newMaxXP) { // Go to next level
+                this[maxXPAbbreviation] = newMaxXP;
+                this.levelUp();
+            } else { // If max level
+
+            }
+            this[xpAbbreviation] = maxXP;
+            this.remainingXP = 0;
+            this.obtainedXP = 0;
+
+            return newMaxXP;
+        }
+
+        return false;
+    },
+
+    // -------------------------------------------------------
+
+    pauseExperience: function() {
+        this.totalTimeXP -= new Date().getTime() - this.timeXP;
+        if (this.totalTimeXP < 0) {
+            this.totalTimeXP = 0;
+        }
+    },
+
+    // -------------------------------------------------------
+
+    unpauseExperience: function() {
+        this.timeXP = new Date().getTime();
+    },
+
+    // -------------------------------------------------------
+
+    isExperienceUpdated: function() {
+        return this.totalRemainingXP === 0 && this.remainingXP === 0;
     }
 }

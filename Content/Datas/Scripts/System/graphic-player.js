@@ -115,6 +115,9 @@ function GraphicPlayer(gamePlayer, reverse) {
     this.battlerFrame = 0;
     this.battlerFrameTick = 0;
     this.battlerFrameDuration = 250;
+
+    // Level up
+    this.graphicLevelUp = new GraphicText("Level up!", Align.Left);
 }
 
 GraphicPlayer.prototype = {
@@ -153,6 +156,15 @@ GraphicPlayer.prototype = {
                 }
             }
         }
+    },
+
+    // -------------------------------------------------------
+
+    updateExperience: function() {
+        this.graphicLevel.setText(this.gamePlayer[$datasGame.battleSystem
+            .getLevelStatistic().abbreviation]);
+        this.graphicExp.setText(this.gamePlayer.getBarAbbreviation($datasGame
+            .battleSystem.getExpStatistic()));
     },
 
     // -------------------------------------------------------
@@ -236,7 +248,7 @@ GraphicPlayer.prototype = {
     */
     draw: function(x, y, w, h) {
         var xCharacter, yName, xLevelName, xLevel, yClass, coef, wBattler,
-            hBattler, xExp, yExp;
+            hBattler, xExp, yExp, xLevelUp;
         xCharacter = x + 80;
         yName = y + 20;
         coef = RPM.BASIC_SQUARE_SIZE / $SQUARE_SIZE;
@@ -258,6 +270,14 @@ GraphicPlayer.prototype = {
         xLevel = xLevelName + $context.measureText(this.graphicLevelName.text)
             .width;
         this.graphicLevel.draw(xLevel, yName, 0, 0);
+
+        // Level up
+        if (this.gamePlayer.levelingUp) {
+            xLevelUp = xLevel + $context.measureText(this.graphicLevel.text)
+                .width;
+            this.graphicLevelUp.draw(xLevelUp, yName, 0, 0);
+        }
+
         yClass = yName + 15;
         this.graphicClass.draw(xCharacter, yClass, 0, 0);
         yExp = yClass + 29;

@@ -30,7 +30,7 @@
 // -------------------------------------------------------
 
 SceneBattle.prototype.initializeStep4 = function(){
-    var i, l;
+    var i, l, character;
     this.windowTopInformations.content = new GraphicText("Victory!");
 
     // Heroes
@@ -44,20 +44,61 @@ SceneBattle.prototype.initializeStep4 = function(){
         this.xp += this.battlers[CharacterKind.Monster][i].character
             .getRewardExperience();
     }
+    for (i = 0, l = $game.teamHeroes.length; i < l; i++) {
+        this.battlers[CharacterKind.Hero][i].character.totalRemainingXP = this.xp;
+    }
 
     this.time = new Date().getTime();
-    this.remainingXP = 0;
-    this.remainingTimeXP = SceneBattle.TIME_PROGRESSION_XP;
+    this.finishedXP = false;
+    this.user = null;
+    this.priorityIndex = 0;
 };
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.updateTeamXP = function(xp) {
-    /*
-    for (i = 0, l = $game.teamHeroes.length; i < l; i++) {
-        this.battlers[CharacterKind.Hero][i].setVictory();
+SceneBattle.prototype.updateTeamXP = function() {
+    var i, l, character;
+    this.finishedXP = true;
+    for (i = this.priorityIndex, l = $game.teamHeroes.length; i < l; i++) {
+        character = this.battlers[CharacterKind.Hero][i].character;
+        if (!character.isExperienceUpdated()) {
+            if (character.updateExperience()) { // Level up
+                this.user = character;
+                this.user.levelingUp = true;
+                this.finishedXP = false;
+                this.windowExperienceProgression.content.updateExperience();
+                this.priorityIndex = i + 1 % $game.teamHeroes.length;
+                this.pauseTeamXP();
+                this.finishedXP = false;
+                this.subStep = 2;
+                return;
+            }
+            this.finishedXP = false;
+        }
     }
-    */
+
+    if (!this.finishedXP) {
+        this.windowExperienceProgression.content.updateExperience();
+    }
+    this.priorityIndex = 0;
+};
+
+// -------------------------------------------------------
+
+SceneBattle.prototype.pauseTeamXP = function() {
+    for (var i = 0, l = $game.teamHeroes.length; i < l; i++) {
+        this.battlers[CharacterKind.Hero][i].character.pauseExperience();
+    }
+
+};
+
+// -------------------------------------------------------
+
+SceneBattle.prototype.unpauseTeamXP = function() {
+    for (var i = 0, l = $game.teamHeroes.length; i < l; i++) {
+        this.battlers[CharacterKind.Hero][i].character.unpauseExperience();
+    }
+    this.user.updateRemainingXP(SceneBattle.TIME_PROGRESSION_XP);
 };
 
 // -------------------------------------------------------
@@ -69,22 +110,19 @@ SceneBattle.prototype.updateStep4 = function() {
             this.time = new Date().getTime();
             this.windowTopInformations.content = new GraphicText($datasGame
                 .battleSystem.getExpStatistic().name + ": " + this.xp);
+            for (var i = 0, l = $game.teamHeroes.length; i < l; i++) {
+                this.battlers[CharacterKind.Hero][i].character.updateRemainingXP(
+                    SceneBattle.TIME_PROGRESSION_XP);
+            }
             $requestPaintHUD = true;
             this.subStep = 1;
         }
         break;
     case 1:
-        var timeTick = new Date().getTime() - this.time;
-        if (timeTick < this.remainingTimeXP)
-        {
-            this.updateTeamXP(timeTick / SceneBattle.TIME_PROGRESSION_XP);
-        } else {
-            this.subStep = 3;
-        }
-
+        this.updateTeamXP();
+        $requestPaintHUD = true;
         break;
     case 2:
-        this.subStep = 3;
         break;
     case 3:
         $requestPaintHUD = true;
@@ -145,7 +183,26 @@ SceneBattle.prototype.updateStep4 = function() {
 // -------------------------------------------------------
 
 SceneBattle.prototype.onKeyPressedStep4 = function(key){
-
+    switch (this.subStep) {
+    case 1:
+        if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
+            .Action))
+        {
+            if (this.finishedXP) {
+                this.subStep = 3;
+            }
+        }
+        break;
+    case 2:
+        if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
+            .Action))
+        {
+            this.user.levelingUp = false;
+            this.unpauseTeamXP();
+            this.subStep = 1;
+        }
+        break;
+    }
 };
 
 // -------------------------------------------------------
@@ -180,6 +237,7 @@ SceneBattle.prototype.drawHUDStep4 = function() {
         this.windowExperienceProgression.draw();
         break;
     case 2:
+        this.windowExperienceProgression.draw();
         break;
     case 3:
         // Transition fade
