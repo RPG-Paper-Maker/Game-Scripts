@@ -276,18 +276,24 @@ GamePlayer.prototype = {
     // -------------------------------------------------------
 
     updateRemainingXP: function(fullTime) {
-        var current = this[$datasGame.battleSystem.getExpStatistic()
-            .abbreviation];
-        var max = this[$datasGame.battleSystem.getExpStatistic()
-            .getMaxAbbreviation()];
-        var xpForLvl = max - current;
-        var dif = this.totalRemainingXP - xpForLvl;
+        if (this.getCurrentLevel() < this.expList.length - 1) {
+            var current = this[$datasGame.battleSystem.getExpStatistic()
+                .abbreviation];
+            var max = this[$datasGame.battleSystem.getExpStatistic()
+                .getMaxAbbreviation()];
+            var xpForLvl = max - current;
+            var dif = this.totalRemainingXP - xpForLvl;
 
-        this.remainingXP = (dif > 0) ? xpForLvl : this.totalRemainingXP;
-        this.totalRemainingXP -= this.remainingXP;
+            this.remainingXP = (dif > 0) ? xpForLvl : this.totalRemainingXP;
+            this.totalRemainingXP -= this.remainingXP;
+            this.totalTimeXP = Math.floor(this.remainingXP / (max - this.expList[this
+                .getCurrentLevel()]) * fullTime);
+        } else {
+            this.remainingXP = 0;
+            this.totalRemainingXP = 0;
+            this.totalTimeXP = 0;
+        }
         this.timeXP = new Date().getTime();
-        this.totalTimeXP = Math.floor(this.remainingXP / (max - this.expList[this
-            .getCurrentLevel()]) * fullTime);
         this.obtainedXP = 0;
     },
 
@@ -314,17 +320,20 @@ GamePlayer.prototype = {
         var dif = this[xpAbbreviation] - maxXP;
         if (dif >= 0) {
             var newMaxXP = this.expList[this.getCurrentLevel() + 2];
+            var leveledUp = false;
             if (newMaxXP) { // Go to next level
                 this[maxXPAbbreviation] = newMaxXP;
                 this.levelUp();
-            } else { // If max level
-
+                leveledUp = true;
+            } else if (this.getCurrentLevel() < this.expList.length - 1) {
+                this.levelUp();
+                leveledUp = true;
             }
             this[xpAbbreviation] = maxXP;
             this.remainingXP = 0;
             this.obtainedXP = 0;
 
-            return newMaxXP;
+            return leveledUp;
         }
 
         return false;
