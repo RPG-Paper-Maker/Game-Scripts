@@ -316,6 +316,9 @@ GamePlayer.prototype = {
                 this.obtainedXP;
             this.obtainedXP += xp;
             this[xpAbbreviation] += xp;
+            if (xp < 0) {
+                var a = 0;
+            }
         }
         var dif = this[xpAbbreviation] - maxXP;
         if (dif >= 0) {
@@ -346,6 +349,7 @@ GamePlayer.prototype = {
         if (this.totalTimeXP < 0) {
             this.totalTimeXP = 0;
         }
+        this.obtainedXP = 0;
     },
 
     // -------------------------------------------------------
