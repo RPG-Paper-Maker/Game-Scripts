@@ -286,8 +286,8 @@ GamePlayer.prototype = {
 
             this.remainingXP = (dif > 0) ? xpForLvl : this.totalRemainingXP;
             this.totalRemainingXP -= this.remainingXP;
-            this.totalTimeXP = Math.floor(this.remainingXP / (max - this.expList[this
-                .getCurrentLevel()]) * fullTime);
+            this.totalTimeXP = Math.floor(this.remainingXP / (max - this.expList
+                [this.getCurrentLevel()]) * fullTime);
         } else {
             this.remainingXP = 0;
             this.totalRemainingXP = 0;
@@ -299,12 +299,9 @@ GamePlayer.prototype = {
 
     // -------------------------------------------------------
 
-    updateExperience: function() {
+    updateObtainedExperience: function() {
         var xpAbbreviation = $datasGame.battleSystem.getExpStatistic()
             .abbreviation;
-        var maxXPAbbreviation = $datasGame.battleSystem.getExpStatistic()
-            .getMaxAbbreviation();
-        var maxXP = this[maxXPAbbreviation];
         var tick = new Date().getTime() - this.timeXP;
         if (tick >= this.totalTimeXP) {
             this[xpAbbreviation] = this[xpAbbreviation] + this.remainingXP -
@@ -316,10 +313,18 @@ GamePlayer.prototype = {
                 this.obtainedXP;
             this.obtainedXP += xp;
             this[xpAbbreviation] += xp;
-            if (xp < 0) {
-                var a = 0;
-            }
         }
+    },
+
+    // -------------------------------------------------------
+
+    updateExperience: function() {
+        var xpAbbreviation = $datasGame.battleSystem.getExpStatistic()
+            .abbreviation;
+        var maxXPAbbreviation = $datasGame.battleSystem.getExpStatistic()
+            .getMaxAbbreviation();
+        var maxXP = this[maxXPAbbreviation];
+        this.updateObtainedExperience();
         var dif = this[xpAbbreviation] - maxXP;
         if (dif >= 0) {
             var newMaxXP = this.expList[this.getCurrentLevel() + 2];
@@ -340,6 +345,12 @@ GamePlayer.prototype = {
         }
 
         return false;
+    },
+
+    // -------------------------------------------------------
+
+    passExperience: function() {
+        this.timeXP = this.totalTimeXP;
     },
 
     // -------------------------------------------------------

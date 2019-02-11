@@ -77,9 +77,7 @@ SceneBattle.prototype.updateTeamXP = function() {
         }
     }
 
-    if (!this.finishedXP) {
-        this.windowExperienceProgression.content.updateExperience();
-    }
+    this.windowExperienceProgression.content.updateExperience();
     this.priorityIndex = 0;
 };
 
@@ -190,6 +188,12 @@ SceneBattle.prototype.onKeyPressedStep4 = function(key){
         {
             if (this.finishedXP) {
                 this.subStep = 3;
+            } else { // Pass xp
+                for (var i = 0, l = $game.teamHeroes.length; i < l; i++) {
+                    var character = this.battlers[CharacterKind.Hero][i].character;
+                    character.passExperience();
+                    character.updateObtainedExperience();
+                }
             }
         }
         break;
