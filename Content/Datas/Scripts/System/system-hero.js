@@ -49,15 +49,29 @@ SystemHero.prototype = {
     // -------------------------------------------------------
 
     getProperty: function(prop) {
-        return $datasGame.classes.list[this.idBattler].getProperty(prop,
+        var lol = $datasGame.classes;
+        return $datasGame.classes.list[this.idClass].getProperty(prop,
             this.classInherit);
     },
 
     // -------------------------------------------------------
 
     getExperienceTable: function() {
-        return $datasGame.classes.list[this.idBattler].getExperienceTable(this
+        return $datasGame.classes.list[this.idClass].getExperienceTable(this
             .classInherit);
+    },
+
+    // -------------------------------------------------------
+
+    getStatisticsProgression: function() {
+        return $datasGame.classes.list[this.idClass].getStatisticsProgression(
+            this.classInherit);
+    },
+
+    // -------------------------------------------------------
+
+    getSkills: function(upClass) {
+        return $datasGame.classes.list[this.idClass].getSkills(this.classInherit);
     },
 
     // -------------------------------------------------------

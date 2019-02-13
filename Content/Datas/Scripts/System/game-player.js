@@ -145,48 +145,62 @@ GamePlayer.prototype = {
     *   @param {number} level The level of the new character.
     */
     instanciate: function(level) {
-        var i, j, l;
+        var skills, skill, statistics, statistic, statisticsProgression,
+            statisticProgression, nonFixStatistics;
+        var i, j, l, ll;
 
         // Skills
         this.sk = [];
-        var character = $datasGame.heroes.list[this.id];
-        var skills = $datasGame.classes.list[character.idClass].skills;
-        for (i = 0, l = skills.length; i < l; i++){
-            var skill = skills[i];
-            if (skill.level > level) break;
-
+        skills = this.character.getSkills();
+        for (i = 0, l = skills.length; i < l; i++) {
+            skill = skills[i];
+            if (skill.level > level) {
+                break;
+            }
             this.sk.push(new GameSkill(skill.id));
         }
 
         // Stats
-        l = $datasGame.battleSystem.statistics.length;
-        character = this.getCharacterInformations();
-        var cl = $datasGame.classes.list[character.idClass];
-        var ll = cl.statisticsProgression.length;
-        for (i = 1; i < l; i++){
-            var statistic = $datasGame.battleSystem.statistics[i];
-            this[statistic.abbreviation] = 0;
-            if (!statistic.isFix)
-                this["max" + statistic.abbreviation] = 0;
+        statistics = $datasGame.battleSystem.statistics;
+        statisticsProgression = this.character.getStatisticsProgression();
+        nonFixStatistics = new Array;
+        for (i = 1, l = statistics.length; i < l; i++) {
+            statistic = statistics[i];
 
-            if (i === $datasGame.battleSystem.idLevelStatistic)
-                this[statistic.abbreviation] = cl.initialLevel;
-            else if (i === $datasGame.battleSystem.idExpStatistic) {
-                this[statistic.abbreviation] = this.expList[cl.initialLevel];
-                this["max" + statistic.abbreviation] = this.expList[cl
-                    .initialLevel + 1];
-            }
-            else{
-                for (j = 0; j < ll; j++){
-                    var statProgress = cl.statisticsProgression[j];
-                    if (statProgress.id === i){
-                        this[statistic.abbreviation] =
-                                                     statProgress.initialValue;
-                        if (!statistic.isFix)
-                            this["max" + statistic.abbreviation] =
-                                                     statProgress.initialValue;
+            // Default value
+            this.initStatValue(statistic, 0);
+
+            if (i === $datasGame.battleSystem.idLevelStatistic) {
+                // Level
+                this[statistic.abbreviation] = level;
+            } else if (i === $datasGame.battleSystem.idExpStatistic) {
+                // Experience
+                this[statistic.abbreviation] = this.expList[level];
+                this[statistic.getMaxAbbreviation()] = this.expList
+                    [level + 1];
+            } else {
+                // Other stats
+                for (j = 0, ll = statisticsProgression.length; j < ll; j++) {
+                    statisticProgression = statisticsProgression[j];
+                    if (statisticProgression.id === i) {
+                        if (!statisticProgression.isFix) {
+                            nonFixStatistics.push(statisticProgression);
+                        } else {
+                            this.initStatValue(statistic, statisticProgression
+                                .getValueAtLevel(level, this));
+                        }
+                        break;
                     }
                 }
+            }
+        }
+
+        // Update formulas statistics
+        for (i = 0, l = nonFixStatistics.length; i < l; i++) {
+            for (j = 0; j < l; j++) {
+                statisticProgression = nonFixStatistics[j];
+                this.initStatValue(statistics[statisticProgression.id],
+                    statisticProgression.getValueAtLevel(level, this));
             }
         }
 
@@ -195,6 +209,69 @@ GamePlayer.prototype = {
         this.equip = new Array(l);
         for (i = 1; i < l; i++){
             this.equip[i] = null;
+        }
+    },
+
+    // -------------------------------------------------------
+
+    initStatValue: function(statistic, value) {
+        this[statistic.abbreviation] = value
+        if (!statistic.isFix) {
+            this[statistic.getMaxAbbreviation()] = value;
+        }
+    },
+
+    // -------------------------------------------------------
+
+    updateStatValue: function(statistic, value, before) {
+        var abr = statistic.isFix ? statistic.abbreviation : statistic
+            .getMaxAbbreviation();
+        if (!before) {
+            this[statistic.getBeforeAbbreviation()] = this[abr];
+        }
+        this[abr] = value
+    },
+
+    // -------------------------------------------------------
+
+    updateAllStatsValues: function() {
+        var skills, skill, statistics, statistic, statisticsProgression,
+            statisticProgression, nonFixStatistics, value, level;
+        var i, j, l, ll;
+
+        // Fix values : equipment influence etc
+        level = this.getCurrentLevel();
+        statistics = $datasGame.battleSystem.statistics;
+        statisticsProgression = this.character.getStatisticsProgression();
+        nonFixStatistics = new Array;
+        for (i = 1, l = statistics.length; i < l; i++) {
+            statistic = statistics[i];
+
+            if (i !== $datasGame.battleSystem.idLevelStatistic & i !==
+                $datasGame.battleSystem.idExpStatistic)
+            {
+                for (j = 0, ll = statisticsProgression.length; j < ll; j++) {
+                    statisticProgression = statisticsProgression[j];
+                    if (statisticProgression.id === i) {
+                        if (!statisticProgression.isFix) {
+                            nonFixStatistics.push(statisticProgression);
+                        } else {
+                            this.updateStatValue(statistic, statisticProgression
+                                .getValueAtLevel(level, this));
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Update formulas statistics
+        for (i = 0, l = nonFixStatistics.length; i < l; i++) {
+            for (j = 0; j < l; j++) {
+                statisticProgression = nonFixStatistics[j];
+                this.updateStatValue(statistics[statisticProgression.id],
+                    statisticProgression.getValueAtLevel(level, this));
+            }
         }
     },
 
@@ -264,7 +341,8 @@ GamePlayer.prototype = {
     levelUp: function() {
         this[$datasGame.battleSystem.getLevelStatistic().abbreviation]++;
 
-        // TODO
+        // Update statistics
+        this.updateAllStatsValues();
     },
 
     // -------------------------------------------------------

@@ -38,9 +38,27 @@ SystemStatisticProgression.prototype = {
     /** Read the JSON associated to the statistic progression.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json){
-        this.initialValue = json.i;
-        this.finalValue = json.f;
+    readJSON: function(json) {
         this.id = json.id;
+        this.maxValue = new SystemValue();
+        this.maxValue.read(json.m);
+        this.isFix = json["if"];
+        if (this.isFix) {
+            this.table = new SystemProgressionTable();
+            this.table.readJSON(json.t);
+            this.random = new SystemValue();
+            this.random.read(json.r);
+        } else {
+            this.formula = new SystemValue();
+            this.formula.read(json.f);
+        }
+    },
+
+    // -------------------------------------------------------
+
+    getValueAtLevel: function(level, user) {
+        return this.isFix ? this.table.getProgressionAtLevel(level, user.character
+            .getProperty("finalLevel")) : new Function("u", "return " + this
+            .formula.getValue())(user);
     }
 }

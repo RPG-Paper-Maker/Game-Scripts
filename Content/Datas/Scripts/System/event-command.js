@@ -799,7 +799,29 @@ EventCommandModifyInventory.prototype = {
 *   @param {JSON} command Direct JSON command to parse.
 */
 function EventCommandModifyTeam(command){
-    this.command = command;
+    var i = 0, k, v;
+
+    this.addingKind = command[i++];
+
+    switch (this.addingKind){
+    case 0: // If create new instance
+        k = command[i++];
+        v = command[i++];
+        this.instanceLevel = SystemValue.createValue(k, v);
+        this.instanceTeam = command[i++];
+        this.stockVariableId = command[i++];
+        this.instanceKind = command[i++];
+        this.instanceId = command[i++];
+        break;
+    case 1:
+        this.addRemoveKind = command[i++];
+        k = command[i++];
+        v = command[i++];
+        this.addRemoveID = SystemValue.createValue(k, v);
+        this.addRemoveTeam = this.command[i++];
+        break;
+    }
+
     this.isDirectNode = true;
     this.parallel = false;
 }
@@ -813,7 +835,7 @@ function EventCommandModifyTeam(command){
 *   instantiate ID.
 */
 EventCommandModifyTeam.instanciateTeam = function(where, type, id, level,
-                                                  stockId)
+    stockId)
 {
 
     // Stock the instanciation id in a variable
@@ -834,14 +856,16 @@ EventCommandModifyTeam.instanciateTeam = function(where, type, id, level,
 
 EventCommandModifyTeam.prototype = {
 
-    initialize: function(){ return null; },
+    initialize: function() {
+        return null;
+    },
 
     /** Add or remove a character in a group.
     *   @param {CharacterKind} kind The type of character to instanciate.
     *   @param {number} id The ID of the character to instanciate.
     *   @param {GroupKind} where In which group we should instanciate.
     */
-    addRemove: function(kind, id, where){
+    addRemove: function(kind, id, where) {
         // Serching for the id
         var groups = [$game.teamHeroes, $game.reserveHeroes,
                       $game.hiddenHeroes];
@@ -875,31 +899,15 @@ EventCommandModifyTeam.prototype = {
     *   @returns {number} The number of node to pass.
     */
     update: function(currentState, object, state){
-
-        // Parsing
-        var i = 0;
-        var addingKind = this.command[i++];
-
-        switch (addingKind){
-        case 0: // If create new instance
-            var instanceLevel = this.command[i++];
-            var instanceTeam = this.command[i++];
-            var stockVariableId = this.command[i++];
-            var instanceKind = this.command[i++];
-            var instanceId = this.command[i++];
-            EventCommandModifyTeam.instanciateTeam(
-                        instanceTeam, instanceKind, instanceId, instanceLevel,
-                        stockVariableId);
+        switch (this.addingKind) {
+        case 0:
+            EventCommandModifyTeam.instanciateTeam(this.instanceTeam, this
+                .instanceKind, this.instanceId, this.instanceLevel.getValue(),
+                this.stockVariableId);
             break;
         case 1:
-            var addRemoveKind = this.command[i++];
-            var varConstType = this.command[i++];
-            var compare = this.command[i++];
-            var addRemoveId =
-                    (varConstType === 0) ? $game.variables[compare]
-                                         : compare;
-            var addRemoveTeam = this.command[i++];
-            this.addRemove(addRemoveKind, addRemoveId, addRemoveTeam);
+            this.addRemove(this.addRemoveKind, this.addRemoveId.getValue(), this
+                .addRemoveTeam);
             break;
         }
 

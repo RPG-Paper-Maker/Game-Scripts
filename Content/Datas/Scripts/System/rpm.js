@@ -896,7 +896,7 @@ RPM.loadTextureEmpty = function(){
 /** Create a material from texture.
 *   @retuns {THREE.MeshBasicMaterial}
 */
-RPM.createMaterial = function(texture){
+RPM.createMaterial = function(texture) {
     texture.magFilter = THREE.NearestFilter;
     texture.minFilter = THREE.NearestFilter;
     texture.flipY = false;
@@ -920,8 +920,7 @@ RPM.updateBackgroundColor = function(color) {
 
 // -------------------------------------------------------
 
-RPM.toScreenPosition = function(vector, camera)
-{
+RPM.toScreenPosition = function(vector, camera) {
     var widthHalf = $canvasWidth / 2;
     var heightHalf = $canvasHeight / 2;
     var position = vector.clone();
@@ -932,4 +931,12 @@ RPM.toScreenPosition = function(vector, camera)
         x: (position.x * widthHalf) + widthHalf,
         y: - (position.y * heightHalf) + heightHalf
     };
+};
+
+// -------------------------------------------------------
+
+RPM.variance = function(value, variance) {
+    var v = Math.round(value * variance / 100);
+
+    return RPM.random(value - v, value + v);
 };
