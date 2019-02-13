@@ -56,6 +56,7 @@ function GamePlayer(kind, id, instanceId, skills){
     this.expList = this.character.createExpList();
 
     this.levelingUp = false;
+    this.testedLevelUp = true;
 }
 
 /** Get the max size of equipment kind names.
@@ -392,6 +393,7 @@ GamePlayer.prototype = {
             this.obtainedXP += xp;
             this[xpAbbreviation] += xp;
         }
+        this.testedLevelUp = false;
     },
 
     // -------------------------------------------------------
@@ -403,6 +405,7 @@ GamePlayer.prototype = {
             .getMaxAbbreviation();
         var maxXP = this[maxXPAbbreviation];
         this.updateObtainedExperience();
+        this.testedLevelUp = true;
         var dif = this[xpAbbreviation] - maxXP;
         if (dif >= 0) {
             var newMaxXP = this.expList[this.getCurrentLevel() + 2];
@@ -450,6 +453,7 @@ GamePlayer.prototype = {
     // -------------------------------------------------------
 
     isExperienceUpdated: function() {
-        return this.totalRemainingXP === 0 && this.remainingXP === 0;
+        return this.testedLevelUp && this.totalRemainingXP === 0 && this
+            .remainingXP === 0;
     }
 }
