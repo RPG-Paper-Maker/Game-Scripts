@@ -39,7 +39,7 @@
 *   @param {number} w The w coords of the text.
 *   @param {number} h The h coords of the text.
 */
-function GraphicText(text, align, fontSize, fontName, x, y, w, h){
+function GraphicText(text, align, fontSize, fontName, x, y, w, h, color) {
     Bitmap.call(this, x, y, w, h);
 
     // Default values
@@ -49,6 +49,7 @@ function GraphicText(text, align, fontSize, fontName, x, y, w, h){
 
     this.text = text;
     this.align = align;
+    this.color = color;
 
     // Font
     this.fontName = fontName;
@@ -133,7 +134,10 @@ GraphicText.prototype = {
         h = RPM.getScreenY(h);
 
         // Set context options
-        $context.fillStyle = "white";
+        var l = RPM.COLOR_WHITE;
+        var a = (this.color ? this.color : RPM.COLOR_WHITE)
+        var b = (this.color ? this.color : RPM.COLOR_WHITE).rgb;
+        $context.fillStyle = (this.color ? this.color : RPM.COLOR_WHITE).rgb;
         $context.font = this.font;
         $context.textAlign = this.align;
 

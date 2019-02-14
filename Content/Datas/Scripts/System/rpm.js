@@ -354,6 +354,10 @@ RPM.PATH_BACKGROUND_SOUNDS = RPM.PATH_SONGS + "BackgroundSounds";
 RPM.PATH_SOUNDS = RPM.PATH_SONGS + "Sounds";
 RPM.PATH_MUSIC_EFFECTS = RPM.PATH_SONGS + "MusicEffects";
 
+// -------------------------------------------------------
+//  CONSTANTS
+// -------------------------------------------------------
+
 RPM.SMALL_FONT_SIZE = 8;
 RPM.MEDIUM_FONT_SIZE = 10;
 RPM.BASIC_SQUARE_SIZE = 32;
@@ -361,6 +365,15 @@ RPM.BATLLER_STEPS = 9;
 RPM.SMALL_SLOT_HEIGHT = 30;
 RPM.SMALL_PADDING_BOX = [10, 10, 10, 10];
 RPM.HUGE_PADDING_BOX = [30, 30, 30, 30];
+
+// -------------------------------------------------------
+//  COLORS
+// -------------------------------------------------------
+
+RPM.COLOR_GREEN = SystemColor.createColor(25, 214, 25);
+RPM.COLOR_RED = SystemColor.createColor(216, 33, 17);
+RPM.COLOR_WHITE = SystemColor.createColor(255, 255, 255);
+RPM.COLOR_BLACK = SystemColor.createColor(0, 0, 0);
 
 // -------------------------------------------------------
 //  FUNCTIONS

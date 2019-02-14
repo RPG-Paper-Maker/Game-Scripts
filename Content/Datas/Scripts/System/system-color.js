@@ -30,19 +30,34 @@ function SystemColor() {
 
 }
 
+SystemColor.createColor = function(r, g, b, a) {
+    var color = new SystemColor();
+    color.initialize(r, g, b, a);
+    return color;
+}
+
 SystemColor.prototype = {
+
+    initialize: function(r, g, b, a) {
+        // Default values
+        if (typeof a === 'undefined') a = 255;
+
+        this.red = r;
+        this.green = g;
+        this.blue = b;
+        this.alpha = a / 255;
+
+        this.rgb = "rgb(" + this.red + ", " + this.green + ", " + this.blue + ")";
+        this.color = new THREE.Color(this.rgb);
+    },
+
+    // -------------------------------------------------------
 
     /** Read the JSON associated to the element.
     *   @param {Object} json Json object describing the object.
     */
     readJSON: function(json) {
-        this.red = json.r;
-        this.green = json.g;
-        this.blue = json.b;
-        this.alpha = json.a / 255;
-
-        this.color = new THREE.Color("rgb(" + this.red + ", " + this.green +
-            ", " + this.blue + ")");
+        this.initialize(json.r, json.g, json.b, json.a);
     },
 
     // -------------------------------------------------------
