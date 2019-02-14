@@ -57,7 +57,7 @@ SceneBattle.prototype.initializeStep4 = function(){
 // -------------------------------------------------------
 
 SceneBattle.prototype.updateTeamXP = function() {
-    var i, l, character;
+    var i, l, character, y, h;
     this.finishedXP = true;
     for (i = this.priorityIndex, l = $game.teamHeroes.length; i < l; i++) {
         character = this.battlers[CharacterKind.Hero][i].character;
@@ -70,6 +70,17 @@ SceneBattle.prototype.updateTeamXP = function() {
                 this.priorityIndex = i + 1 % $game.teamHeroes.length;
                 this.pauseTeamXP();
                 this.finishedXP = false;
+                this.user.stepLevelUp = 0;
+                this.windowStatisticProgression.content = new
+                    GraphicStatisticProgression(this.user);
+                y = 90 + (i * 90);
+                h = this.windowStatisticProgression.content.getHeight() + RPM
+                    .HUGE_PADDING_BOX[0] + RPM.HUGE_PADDING_BOX[2];
+                if (y + h > $canvasHeight - 10) {
+                    y = $canvasHeight - h - 10;
+                }
+                this.windowStatisticProgression.setY(y);
+                this.windowStatisticProgression.setH(h);
                 this.subStep = 2;
                 return;
             }
@@ -201,9 +212,16 @@ SceneBattle.prototype.onKeyPressedStep4 = function(key){
         if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
             .Action))
         {
-            this.user.levelingUp = false;
-            this.unpauseTeamXP();
-            this.subStep = 1;
+            if (this.user.stepLevelUp === 0) {
+                this.user.stepLevelUp = 1;
+                this.windowStatisticProgression.content
+                    .updateStatisticProgression();
+            } else {
+                this.user.levelingUp = false;
+                this.unpauseTeamXP();
+                this.subStep = 1;
+            }
+            $requestPaintHUD = true;
         }
         break;
     }
@@ -242,6 +260,7 @@ SceneBattle.prototype.drawHUDStep4 = function() {
         break;
     case 2:
         this.windowExperienceProgression.draw();
+        this.windowStatisticProgression.draw();
         break;
     case 3:
         // Transition fade

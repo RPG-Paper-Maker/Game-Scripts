@@ -134,9 +134,6 @@ GraphicText.prototype = {
         h = RPM.getScreenY(h);
 
         // Set context options
-        var l = RPM.COLOR_WHITE;
-        var a = (this.color ? this.color : RPM.COLOR_WHITE)
-        var b = (this.color ? this.color : RPM.COLOR_WHITE).rgb;
         $context.fillStyle = (this.color ? this.color : RPM.COLOR_WHITE).rgb;
         $context.font = this.font;
         $context.textAlign = this.align;

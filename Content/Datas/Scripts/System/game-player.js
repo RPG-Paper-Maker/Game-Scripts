@@ -166,6 +166,9 @@ GamePlayer.prototype = {
         statisticsProgression = this.character.getStatisticsProgression();
         nonFixStatistics = new Array;
         for (i = 1, l = statistics.length; i < l; i++) {
+            this[statistics[i].getBeforeAbbreviation()] = undefined;
+        }
+        for (i = 1, l = statistics.length; i < l; i++) {
             statistic = statistics[i];
 
             // Default value
@@ -224,10 +227,10 @@ GamePlayer.prototype = {
 
     // -------------------------------------------------------
 
-    updateStatValue: function(statistic, value, before) {
+    updateStatValue: function(statistic, value) {
         var abr = statistic.isFix ? statistic.abbreviation : statistic
             .getMaxAbbreviation();
-        if (!before) {
+        if (typeof this[statistic.getBeforeAbbreviation()] === 'undefined') {
             this[statistic.getBeforeAbbreviation()] = this[abr];
         }
         this[abr] = value
@@ -245,6 +248,9 @@ GamePlayer.prototype = {
         statistics = $datasGame.battleSystem.statistics;
         statisticsProgression = this.character.getStatisticsProgression();
         nonFixStatistics = new Array;
+        for (i = 1, l = statistics.length; i < l; i++) {
+            this[statistics[i].getBeforeAbbreviation()] = undefined;
+        }
         for (i = 1, l = statistics.length; i < l; i++) {
             statistic = statistics[i];
 

@@ -98,6 +98,8 @@ SceneBattle.prototype.initializeStep0 = function(){
     this.windowExperienceProgression = new WindowBox(10, 80, 300, (90 * $game
         .teamHeroes.length) + RPM.SMALL_PADDING_BOX[2] + RPM
         .SMALL_PADDING_BOX[3], new GraphicXPProgression(), RPM.SMALL_PADDING_BOX);
+    this.windowStatisticProgression = new WindowBox(250, 90, 380, 200, null,
+        RPM.HUGE_PADDING_BOX);
 };
 
 // -------------------------------------------------------

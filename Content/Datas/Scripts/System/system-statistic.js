@@ -55,5 +55,11 @@ SystemStatistic.prototype = {
 
     getBeforeAbbreviation: function() {
         return "before" + this.abbreviation;
+    },
+
+    // -------------------------------------------------------
+
+    getAbbreviationNext: function() {
+        return this.isFix ? this.abbreviation : this.getMaxAbbreviation();
     }
 }

@@ -45,6 +45,7 @@ function GraphicPlayerDescription(gamePlayer) {
     var statistic, graphicName;
 
     // Informations
+    this.gamePlayer = gamePlayer;
     character = gamePlayer.getCharacterInformations();
     cl = $datasGame.classes.list[character.idClass];
     levelStat = $datasGame.battleSystem.getLevelStatistic();
@@ -105,6 +106,84 @@ function GraphicPlayerDescription(gamePlayer) {
 
 GraphicPlayerDescription.prototype = {
 
+    initializeStatisticProgression: function() {
+        var i, l, id, statistic, value, txt, graphic;
+
+        this.listStatsProgression = new Array;
+        for (i = 0, l = $datasGame.battleSystem.statisticsOrder.length; i < l;
+             i++)
+        {
+            id = $datasGame.battleSystem.statisticsOrder[i];
+            if (id !== $datasGame.battleSystem.idLevelStatistic &&
+                id !== $datasGame.battleSystem.idExpStatistic)
+            {
+                statistic = $datasGame.battleSystem.statistics[id];
+                if (value > 0) {
+                    txt = "+";
+                } else if (value < 0) {
+                    txt = "-";
+                } else {
+                    txt = "";
+                }
+                value = this.gamePlayer[statistic.abbreviation] - this
+                    .gamePlayer[statistic.getBeforeAbbreviation()];
+                graphic = new GraphicText(txt + value, Align.Left);
+                if (value > 0) {
+                    graphic.color = RPM.COLOR_GREEN;
+                } else if (value < 0) {
+                    graphic.color = RPM.COLOR_RED;
+                }
+                this.listStatsProgression.push(graphic);
+            }
+        }
+    },
+
+    // -------------------------------------------------------
+
+    updateStatisticProgression: function() {
+        var i, l, c, id, statistic, txt, graphicName;
+
+        this.listStatsNames = new Array;
+        this.listStats = new Array;
+        this.maxLength = 0;
+        for (i = 0, l = $datasGame.battleSystem.statisticsOrder.length; i < l;
+             i++)
+        {
+            id = $datasGame.battleSystem.statisticsOrder[i];
+            if (id !== $datasGame.battleSystem.idLevelStatistic &&
+                id !== $datasGame.battleSystem.idExpStatistic)
+            {
+                statistic = $datasGame.battleSystem.statistics[id];
+                graphicName = new GraphicText(statistic.name + ":", Align.Left);
+                $context.font = graphicName.font;
+                graphicName.updateContextFont();
+                c = $context.measureText(graphicName.text).width;
+                if (c > this.maxLength) {
+                    this.maxLength = c;
+                }
+                this.listStatsNames.push(graphicName);
+                txt = "";
+                if (this.gamePlayer.stepLevelUp === 0) {
+                    txt += statistic.isFix ? this.gamePlayer[statistic
+                        .getBeforeAbbreviation()] : this.gamePlayer[statistic
+                        .abbreviation];
+                    if (!statistic.isFix) {
+                        txt += "/" + this.gamePlayer[statistic
+                            .getBeforeAbbreviation()];
+                    }
+                    txt += " -> ";
+                }
+                txt += "" + this.gamePlayer[statistic.abbreviation];
+                if (!statistic.isFix) {
+                    txt += "/" + this.gamePlayer[statistic.getMaxAbbreviation()];
+                }
+                this.listStats.push(new GraphicText(txt, Align.Left));
+            }
+        }
+    },
+
+    // -------------------------------------------------------
+
     updateBattler: function() {
         var frame = this.battlerFrame;
         this.battlerFrameTick += $elapsedTime;
@@ -114,6 +193,17 @@ GraphicPlayerDescription.prototype = {
         }
         if (frame !== this.battlerFrame) {
             $requestPaintHUD = true;
+        }
+    },
+
+    // -------------------------------------------------------
+
+    drawStatisticProgression: function(x, y, w, h) {
+        var i, l;
+
+        for (i = 0, l = this.listStatsNames.length; i < l; i++) {
+            this.listStatsNames[i].draw(x, y * 30, 0, 0);
+            this.listStats[i].draw(x + this.maxLength + 10 , i * 30, 0, 0);
         }
     },
 

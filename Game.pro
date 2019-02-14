@@ -126,7 +126,8 @@ DISTFILES += \
     Content/Datas/Scripts/System/system-window-skin.js \
     Content/Datas/Scripts/System/graphic-save.js \
     Content/Datas/Scripts/System/system-progression-table.js \
-    Content/Datas/Scripts/System/graphic-xp-progression.js
+    Content/Datas/Scripts/System/graphic-xp-progression.js \
+    Content/Datas/Scripts/System/graphic-statistic-progression.js
 
 RESOURCES += \
     qml.qrc

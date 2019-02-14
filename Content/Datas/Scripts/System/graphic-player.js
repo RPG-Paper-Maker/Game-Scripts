@@ -274,7 +274,7 @@ GraphicPlayer.prototype = {
         // Level up
         if (this.gamePlayer.levelingUp) {
             xLevelUp = xLevel + $context.measureText(this.graphicLevel.text)
-                .width;
+                .width + 10;
             this.graphicLevelUp.draw(xLevelUp, yName, 0, 0);
         }
 
