@@ -139,6 +139,10 @@ DatasBattleSystem.prototype = {
             this.idLevelStatistic = json.lv;
             this.idExpStatistic = json.xp;
 
+            // Formulas
+            this.formulaIsDead = new SystemValue();
+            this.formulaIsDead.read(json.fisdead);
+
             // Musics
             this.battleMusic = EventCommand.getEventCommand(json.bmusic);
             this.battleLevelUp = EventCommand.getEventCommand(json.blevelup);

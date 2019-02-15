@@ -953,3 +953,9 @@ RPM.variance = function(value, variance) {
 
     return RPM.random(value - v, value + v);
 };
+
+// -------------------------------------------------------
+
+RPM.evaluateFormula = function(formula, user, target) {
+    return new Function("u", "t", "return " + formula)(user, target);
+};

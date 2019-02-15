@@ -136,8 +136,8 @@ GamePlayer.prototype = {
     *   @returns {boolean}
     */
     isDead: function(){
-        var b = (this.hp === 0); // Will be a script
-        return b;
+        return RPM.evaluateFormula($datasGame.battleSystem.formulaIsDead
+            .getValue(), this, null);
     },
 
     // -------------------------------------------------------
