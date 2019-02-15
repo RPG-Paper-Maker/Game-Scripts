@@ -1228,6 +1228,11 @@ function EventCommandPlayMusic(command){
     this.parallel = false;
 }
 
+EventCommandPlayMusic.previousMusicStopped = null;
+EventCommandPlayMusic.previousMusic = null;
+EventCommandPlayMusic.currentPlayingMusic = null;
+EventCommandPlayMusic.previousMusicStoppedTime = 0;
+
 // -------------------------------------------------------
 
 EventCommandPlayMusic.parsePlaySong = function(that, command) {
@@ -1256,12 +1261,45 @@ EventCommandPlayMusic.parsePlaySong = function(that, command) {
 
 // -------------------------------------------------------
 
-EventCommandPlayMusic.playSong = function(that, kind) {
-    $songsManager.playSong(kind, that.songID.getValue(),
-        that.volume.getValue() / 100, that.start ? that.start.getValue() : null,
-        that.end ? that.end.getValue() : null);
+EventCommandPlayMusic.playSong = function(that, kind, previous, start, volume) {
+    if (typeof start === 'undefined') {
+        start = that.start ? that.start.getValue() : null;
+    }
+    if (typeof volume === 'undefined') {
+        volume = that.volume.getValue() / 100;
+    }
+
+    // If same music ID and same
+    if (EventCommandPlayMusic.currentPlayingMusic !== null && that.songID
+        .getValue() === EventCommandPlayMusic.currentPlayingMusic.songID
+        .getValue() && start === EventCommandPlayMusic.currentPlayingMusic.start
+        .getValue())
+    {
+        return 1;
+    }
+
+    if (kind === SongKind.Music) {
+        if (previous) {
+            EventCommandPlayMusic.previousMusicStoppedTime = $songsManager
+                .getPlayer(kind).position / 1000;
+            EventCommandPlayMusic.previousMusicStopped = EventCommandPlayMusic
+                        .currentPlayingMusic;
+        }
+        EventCommandPlayMusic.previousMusic = EventCommandPlayMusic
+            .currentPlayingMusic;
+        EventCommandPlayMusic.currentPlayingMusic = that;
+    }
+
+    $songsManager.playSong(kind, that.songID.getValue(), volume, start, that.end
+        ? that.end.getValue() : null);
 
     return 1;
+};
+
+// -------------------------------------------------------
+
+EventCommandPlayMusic.updateSongVolume = function(that, volume) {
+
 };
 
 // -------------------------------------------------------
@@ -1480,6 +1518,13 @@ EventCommandPlaySound.prototype = {
 
     // -------------------------------------------------------
 
+    play: function() {
+        $songsManager.playSound(this.songID.getValue(), this.volume.getValue() /
+            100);
+    },
+
+    // -------------------------------------------------------
+
     /** Update and check if the event is finished.
     *   @param {Object} currentState The current state of the event.
     *   @param {MapObject} object The current object reacting.
@@ -1488,9 +1533,7 @@ EventCommandPlaySound.prototype = {
     */
 
     update: function(currentState, object, state){
-        $songsManager.playSound(this.songID.getValue(),
-            this.volume.getValue() / 100);
-
+        this.play();
         return 1;
     },
 
@@ -1541,8 +1584,9 @@ EventCommandPlayMusicEffect.prototype = {
 
     update: function(currentState, object, state){
         var played = $songsManager.playMusicEffect(this.songID.getValue(),
-            this.volume.getValue() / 100, currentState) ? 1 : 0;
-        return currentState.parallel ? played : 1;
+            this.volume.getValue() / 100, currentState);
+        currentState.end = played;
+        return currentState.parallel ? (played ? 1 : 0) : 1;
     },
 
     // -------------------------------------------------------

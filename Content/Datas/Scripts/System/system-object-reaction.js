@@ -60,79 +60,9 @@ SystemObjectReaction.prototype = {
     */
     readChildrenJSON: function(jsonCommands, commands){
         for (var j = 0, ll = jsonCommands.length; j < ll; j++){
-            var node = commands.add(
-                        this.getEventCommand(jsonCommands[j].command,
-                                             jsonCommands[j].kind))
+            var node = commands.add(EventCommand.getEventCommand(jsonCommands[j]));
             if (jsonCommands[j].hasOwnProperty("children"))
                 this.readChildrenJSON(jsonCommands[j].children, node);
-        }
-    },
-
-    // -------------------------------------------------------
-
-    /** Get a new Event Command object.
-    *   @param {string[]} command Description of the command.
-    *   @param {EventCommandKind} kind The kind of command.
-    *   @returns {EventCommand}
-    */
-    getEventCommand: function(command, kind){
-        switch(kind) {
-            case EventCommandKind.ShowText:
-                return new EventCommandShowText(command);
-            case EventCommandKind.ChangeVariables:
-                return new EventCommandChangeVariables(command);
-            case EventCommandKind.EndGame:
-                return new EventCommandEndGame(command);
-            case EventCommandKind.While:
-                return new EventCommandWhile(command);
-            case EventCommandKind.WhileBreak:
-                return new EventCommandWhileBreak(command);
-            case EventCommandKind.InputNumber:
-                return new EventCommandInputNumber(command);
-            case EventCommandKind.If:
-                return new EventCommandIf(command);
-            case EventCommandKind.Else:
-                return new EventCommandElse(command);
-            case EventCommandKind.OpenMainMenu:
-                return new EventCommandOpenMainMenu(command);
-            case EventCommandKind.OpenSavesMenu:
-                return new EventCommandOpenSavesMenu(command);
-            case EventCommandKind.ModifyInventory:
-                return new EventCommandModifyInventory(command);
-            case EventCommandKind.ModifyTeam:
-                return new EventCommandModifyTeam(command);
-            case EventCommandKind.StartBattle:
-                return new EventCommandStartBattle(command);
-            case EventCommandKind.IfWin:
-                return new EventCommandIfWin(command);
-            case EventCommandKind.IfLose:
-                return new EventCommandIfLose(command);
-            case EventCommandKind.ChangeState:
-                return new EventCommandChangeState(command);
-            case EventCommandKind.SendEvent:
-                return new EventCommandSendEvent(command);
-            case EventCommandKind.TeleportObject:
-                return new EventCommandTeleportObject(command);
-            case EventCommandKind.MoveObject:
-                return new EventCommandMoveObject(command);
-            case EventCommandKind.Wait:
-                return new EventCommandWait(command);
-            case EventCommandKind.MoveCamera:
-                return new EventCommandMoveCamera(command);
-            case EventCommandKind.PlayMusic:
-                return new EventCommandPlayMusic(command);
-            case EventCommandKind.StopMusic:
-                return new EventCommandStopMusic(command);
-            case EventCommandKind.PlayBackgroundSound:
-                return new EventCommandPlayBackgroundSound(command);
-            case EventCommandKind.StopBackgroundSound:
-                return new EventCommandStopBackgroundSound(command);
-            case EventCommandKind.PlaySound:
-                return new EventCommandPlaySound(command);
-            case EventCommandKind.PlayMusicEffect:
-                return new EventCommandPlayMusicEffect(command);
-            default:
-                return null;
         }
     },
 

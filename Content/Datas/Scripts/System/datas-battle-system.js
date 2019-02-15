@@ -138,6 +138,11 @@ DatasBattleSystem.prototype = {
             // Ids of specific statistics
             this.idLevelStatistic = json.lv;
             this.idExpStatistic = json.xp;
+
+            // Musics
+            this.battleMusic = EventCommand.getEventCommand(json.bmusic);
+            this.battleLevelUp = EventCommand.getEventCommand(json.blevelup);
+            this.battleVictory = EventCommand.getEventCommand(json.bvictory);
         });
     },
 

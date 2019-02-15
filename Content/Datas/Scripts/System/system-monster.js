@@ -44,6 +44,6 @@ SystemMonster.prototype.readJSON = function(json) {
 
 
 SystemMonster.prototype.getRewardExperience = function(level) {
-    return this.rewards.xp.getProgressionAtLevel(level, this.getProperty(
+    return this.rewards.xp.getProgressionAt(level, this.getProperty(
         "finalLevel"));
 }

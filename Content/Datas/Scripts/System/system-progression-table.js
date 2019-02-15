@@ -30,7 +30,27 @@ function SystemProgressionTable() {
 
 }
 
+SystemProgressionTable.createProgression = function(i, f, equation) {
+    var progression = new SystemProgressionTable();
+    progression.initialize(i, f, equation);
+    return progression;
+};
+
 SystemProgressionTable.prototype = {
+
+    initialize: function(i, f, equation) {
+        if (typeof i === 'number') {
+            i = SystemValue.createNumber(i);
+        }
+        if (typeof f === 'number') {
+            f = SystemValue.createNumber(f);
+        }
+
+        this.initialValue = i;
+        this.finalValue = f;
+        this.equation = equation;
+        this.table = [];
+    },
 
     /** Read the JSON associated to the picture.
     *   @param {Object} json Json object describing the object.
@@ -53,9 +73,9 @@ SystemProgressionTable.prototype = {
 
     // -------------------------------------------------------
 
-    getProgressionAtLevel: function(level, finalLevel) {
+    getProgressionAt: function(current, f) {
         // Check if specific value
-        var table = this.table[level];
+        var table = this.table[current];
         if (table) {
             return table;
         }
@@ -63,10 +83,10 @@ SystemProgressionTable.prototype = {
         // Update change and duration
         this.start = this.initialValue.getValue();
         this.change = this.finalValue.getValue() - this.initialValue.getValue();
-        this.duration = finalLevel - 1;
+        this.duration = f - 1;
 
         // Check according to equation
-        var x = level - 1;
+        var x = current - 1;
         switch (this.equation) {
         case 0:
             return this.easingLinear(x);

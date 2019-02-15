@@ -94,9 +94,11 @@ function SceneBattle(troopID, canGameOver, canEscape, battleMap, transitionStart
 }
 
 SceneBattle.TRANSITION_COLOR_VALUE = 0.1;
-SceneBattle.TRANSITION_COLOR_END_WAIT = 500;
+SceneBattle.TRANSITION_COLOR_END_WAIT = 600;
 SceneBattle.TIME_END_WAIT = 1000;
 SceneBattle.TIME_PROGRESSION_XP = 3000;
+SceneBattle.TIME_LINEAR_MUSIC_END = 500;
+SceneBattle.TIME_LINEAR_MUSIC_START = 500;
 
 SceneBattle.prototype = Object.create(SceneMap.prototype);
 

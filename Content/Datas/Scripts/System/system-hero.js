@@ -49,7 +49,6 @@ SystemHero.prototype = {
     // -------------------------------------------------------
 
     getProperty: function(prop) {
-        var lol = $datasGame.classes;
         return $datasGame.classes.list[this.idClass].getProperty(prop,
             this.classInherit);
     },

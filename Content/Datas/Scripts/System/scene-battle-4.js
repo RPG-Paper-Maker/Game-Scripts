@@ -52,6 +52,10 @@ SceneBattle.prototype.initializeStep4 = function(){
     this.finishedXP = false;
     this.user = null;
     this.priorityIndex = 0;
+
+    // Music
+    EventCommandPlayMusic.playSong($datasGame.battleSystem.battleVictory,
+        SongKind.Music);
 };
 
 // -------------------------------------------------------
@@ -81,6 +85,7 @@ SceneBattle.prototype.updateTeamXP = function() {
                 }
                 this.windowStatisticProgression.setY(y);
                 this.windowStatisticProgression.setH(h);
+                $datasGame.battleSystem.battleLevelUp.play();
                 this.subStep = 2;
                 return;
             }
@@ -112,6 +117,16 @@ SceneBattle.prototype.unpauseTeamXP = function() {
 
 // -------------------------------------------------------
 
+SceneBattle.prototype.playMapMusic = function()  {
+    EventCommandPlayMusic.playSong(EventCommandPlayMusic.previousMusicStopped,
+        SongKind.Music, EventCommandPlayMusic.previousMusicStoppedTime, false,
+        0);
+    $songsManager.initializeProgressionMusic(0, EventCommandPlayMusic
+        .previousMusicStopped.volume, 0, SceneBattle.TIME_LINEAR_MUSIC_START);
+}
+
+// -------------------------------------------------------
+
 SceneBattle.prototype.updateStep4 = function() {
     switch (this.subStep) {
     case 0:
@@ -135,6 +150,9 @@ SceneBattle.prototype.updateStep4 = function() {
         break;
     case 3:
         $requestPaintHUD = true;
+        if ($songsManager.updateProgressionMusic() && this.transitionEnded) {
+            this.win();
+        }
 
         // Transition zoom
         if (this.transitionEnd === 2) {
@@ -144,6 +162,7 @@ SceneBattle.prototype.updateStep4 = function() {
                     this.camera.distance = 10;
                     this.transitionZoom = true;
                     $gameStack.topMinusOne().updateBackgroundColor();
+                    this.playMapMusic();
                 }
                 return;
             }
@@ -174,7 +193,13 @@ SceneBattle.prototype.updateStep4 = function() {
                 .TRANSITION_COLOR_END_WAIT)
             {
                 return;
+            } else {
+                if (this.timeTransition !== -1) {
+                    this.timeTransition = -1;
+                    this.playMapMusic();
+                }
             }
+
             if (this.transitionColorAlpha > 0) {
                 this.transitionColorAlpha -= SceneBattle.TRANSITION_COLOR_VALUE;
                 if (this.transitionColorAlpha <= 0) {
@@ -184,7 +209,7 @@ SceneBattle.prototype.updateStep4 = function() {
             }
         }
 
-        this.win();
+        this.transitionEnded = true;
         break;
     }
 };
@@ -198,6 +223,10 @@ SceneBattle.prototype.onKeyPressedStep4 = function(key){
             .Action))
         {
             if (this.finishedXP) {
+                this.transitionEnded = false;
+                $songsManager.initializeProgressionMusic(EventCommandPlayMusic
+                    .currentPlayingMusic.volume, 0, 0, SceneBattle
+                    .TIME_LINEAR_MUSIC_END);
                 this.subStep = 3;
             } else { // Pass xp
                 for (var i = 0, l = $game.teamHeroes.length; i < l; i++) {

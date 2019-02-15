@@ -100,6 +100,10 @@ SceneBattle.prototype.initializeStep0 = function(){
         .SMALL_PADDING_BOX[3], new GraphicXPProgression(), RPM.SMALL_PADDING_BOX);
     this.windowStatisticProgression = new WindowBox(250, 90, 380, 200, null,
         RPM.HUGE_PADDING_BOX);
+
+    // Music
+    EventCommandPlayMusic.playSong($datasGame.battleSystem.battleMusic, SongKind
+        .Music, true);
 };
 
 // -------------------------------------------------------

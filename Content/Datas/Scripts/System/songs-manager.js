@@ -49,6 +49,8 @@ function SongsManager(musicPlayer, backgroundPlayer, musicEffects,
     this.ends[SongKind.Music] = null;
     this.ends[SongKind.BackgroundSound] = null;
     this.ends[SongKind.MusicEffect] = null;
+
+    this.progressionMusic = null;
 }
 
 SongsManager.prototype = {
@@ -204,8 +206,8 @@ SongsManager.prototype = {
     *   @param {number} volume The volume of the sound.
     */
     playMusicEffect: function(id, volume, currentState) {
-        if (id === -1)
-            return;
+        if (id === -1 || currentState.end)
+            return true;
 
         if (this.musicEffectStep === 0) {
             this.playSong(SongKind.MusicEffect, id, volume, null, null);
@@ -257,5 +259,34 @@ SongsManager.prototype = {
     update: function() {
         this.updateByKind(SongKind.Music);
         this.updateByKind(SongKind.BackgroundSound);
+    },
+
+    // -------------------------------------------------------
+
+    initializeProgressionMusic: function(i, f, equation, end) {
+        this.progressionMusic = SystemProgressionTable.createProgression(i, f,
+            equation);
+        this.progressionTime = new Date().getTime();
+        this.progressionEnd = end;
+    },
+
+    // -------------------------------------------------------
+
+    updateProgressionMusic: function() {
+        if (this.progressionEnd > 0) {
+            var tick = new Date().getTime() - this.progressionTime;
+            if (tick >= this.progressionEnd) {
+                this.progressionEnd = 0;
+                return true;
+            } else {
+                this.musics.volume = this.progressionMusic.getProgressionAt(
+                    tick, this.progressionEnd) / 100;
+                this.musics.play();
+            }
+
+            return false;
+        }
+
+        return true;
     }
 }
