@@ -19,24 +19,23 @@
 
 // -------------------------------------------------------
 //
-//  CLASS SystemCurrency
+//  CLASS SystemIcon
 //
 // -------------------------------------------------------
 
 /** @class
-*   A currency of the game.
-*   @property {string} name The name of the currency.
 */
-function SystemCurrency() {
-    SystemIcon.call(this);
+function SystemIcon() {
+
 }
 
-SystemCurrency.prototype = {
+SystemIcon.prototype = {
 
     /** Read the JSON associated to the currency.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json){
-        SystemIcon.prototype.readJSON.call(this, json);
+    readJSON: function(json) {
+        this.name = json.names[1];
+        this.pictureID = json.pid;
     }
 }
