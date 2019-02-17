@@ -39,14 +39,8 @@ function GraphicRewardsTop(xp, currencies) {
     // Currencies
     this.currencies = [];
     for (id in currencies) {
-        currency = {};
-        currency.icon = Picture2D.createImage($datasGame.pictures.getIcon(id),
-            PictureKind.Icons);
-        currency.value = new GraphicText("" + currencies[id], Align.Left);
-        $context.font = currency.value.font;
-        currency.value.updateContextFont();
-        currency.length = $context.measureText(currency.value.text).width;
-        this.currencies.push(currency);
+        this.currencies.push(new GraphicTextIcon("" + currencies[id], id, Align
+            .Left, Align.Left));
     }
 }
 
@@ -56,7 +50,7 @@ GraphicRewardsTop.prototype = {
         var i, l;
 
         for (i = 0, l = this.currencies.length; i < l; i++) {
-            this.currencies[i].icon.check();
+            this.currencies[i].checkIcon();
         }
     },
 
@@ -75,8 +69,7 @@ GraphicRewardsTop.prototype = {
         offsetWidth = this.graphicXPLength + 10;
         for (i = 0, l = this.currencies.length; i < l; i++) {
             currency = this.currencies[i];
-            offsetWidth += currency.icon.w + currency.length + (i < l - 1
-                ? 10 : 0);
+            offsetWidth += currency.getWidth() + (i < l - 1 ? 10 : 0);
         }
         offsetWidth = ((w - offsetWidth) / 2);
 
@@ -87,10 +80,8 @@ GraphicRewardsTop.prototype = {
         // Currencies
         for (i = 0, l = this.currencies.length; i < l; i++) {
             currency = this.currencies[i];
-            currency.icon.draw(x + offsetWidth, y);
-            offsetWidth += currency.icon.w;
-            currency.value.draw(x + offsetWidth, y, w, h);
-            offsetWidth += currency.length + 10;
+            currency.draw(x + offsetWidth, y, w, h);
+            offsetWidth += currency.getWidth() + 10;
         }
     }
 }

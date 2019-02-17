@@ -66,6 +66,12 @@ GraphicTextIcon.prototype = {
 
     // -------------------------------------------------------
 
+    getWidth: function() {
+        return this.textIcon.icon.w + this.textIcon.length;
+    },
+
+    // -------------------------------------------------------
+
     /** Drawing the content.
     *   @param {number} x The x position to draw graphic.
     *   @param {number} y The y position to draw graphic.
@@ -97,14 +103,14 @@ GraphicTextIcon.prototype = {
         }
 
         // Draw according to side
-        if (this.side === Align.left) {
-            this.textIcon.icon.draw(x + offset, y - (iconHeight / 2));
+        if (this.side === Align.Left) {
+            this.textIcon.icon.draw(x + offset, y - (iconHeight / 2) + (h / 2));
             offset += iconWidth;
             this.textIcon.text.draw(x + offset, y, w, h);
         } else if (this.side === Align.Right) {
             this.textIcon.text.draw(x + offset, y, w, h);
             offset += this.textIcon.length;
-            this.textIcon.icon.draw(x + offset, y - (iconHeight / 2));
+            this.textIcon.icon.draw(x + offset, y - (iconHeight / 2) + (h / 2));
         }
     }
 }
