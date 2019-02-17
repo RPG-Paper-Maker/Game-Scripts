@@ -172,8 +172,9 @@ DatasSystem.prototype = {
         var i, l = this.currencies.length;
         var list = new Array(l);
 
-        for (i = 0; i < l; i++)
+        for (i = 1; i < l; i++) {
             list[i] = 0;
+        }
 
         return list;
     },

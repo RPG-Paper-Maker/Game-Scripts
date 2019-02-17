@@ -129,7 +129,9 @@ DISTFILES += \
     Content/Datas/Scripts/System/graphic-xp-progression.js \
     Content/Datas/Scripts/System/graphic-statistic-progression.js \
     Content/Datas/Scripts/System/system-icon.js \
-    Content/Datas/Scripts/System/graphic-rewards-top.js
+    Content/Datas/Scripts/System/graphic-rewards-top.js \
+    Content/Datas/Scripts/System/graphic-time-currencies.js \
+    Content/Datas/Scripts/System/graphic-text-icon.js
 
 RESOURCES += \
     qml.qrc

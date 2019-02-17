@@ -30,7 +30,7 @@
 // -------------------------------------------------------
 
 SceneBattle.prototype.initializeStep4 = function(){
-    var i, l, battler;
+    var i, l, battler, id;
     this.windowTopInformations.content = new GraphicText("Victory!");
 
     // Heroes
@@ -42,6 +42,11 @@ SceneBattle.prototype.initializeStep4 = function(){
 
     // Check in order to have the right icons size quickly
     this.graphicRewardTop.checkIcons();
+
+    // Get rewards
+    for (id in this.currencies) {
+        $game.currencies[id] += this.currencies[id];
+    }
 
     // Time progression settings
     this.time = new Date().getTime();

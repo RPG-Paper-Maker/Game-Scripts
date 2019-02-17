@@ -42,7 +42,6 @@ function SceneMenu() {
 
     // Initializing order index
     this.selectedOrder = -1;
-    this.time = $game.playTime;
 
     // Initializing the left menu commands (texts and actions)
     menuCommands = [
@@ -67,21 +66,19 @@ function SceneMenu() {
     // Initializing graphics for displaying heroes informations
     nbHeroes = $game.teamHeroes.length;
     graphicsHeroes = new Array(nbHeroes);
-    for (i = 0; i < nbHeroes; i++)
+    for (i = 0; i < nbHeroes; i++) {
         graphicsHeroes[i] = new GraphicPlayer($game.teamHeroes[i]);
-
-    // Initializing play time widget
-    this.textPlayTime = new GraphicText(RPM.getStringDate(this.time));
+    }
 
     // All the windows
-    this.windowChoicesCommands =
-         new WindowChoices(OrientationWindow.Vertical, 20, 20, 150, 50,
-                           menuCommands.length, menuCommands,
-                           menuCommandsActions);
-    this.windowChoicesTeam =
-         new WindowTabs(OrientationWindow.Vertical, 190, 20, 430, 95, 4,
-                        graphicsHeroes, null, [5,5,5,5], 15, -1);
-
+    this.windowChoicesCommands = new WindowChoices(OrientationWindow.Vertical,
+        20, 20, 150, RPM.MEDIUM_SLOT_HEIGHT, menuCommands.length, menuCommands,
+        menuCommandsActions);
+    this.windowChoicesTeam = new WindowTabs(OrientationWindow.Vertical, 190, 20,
+        430, 95, 4, graphicsHeroes, null, [5,5,5,5], 15, -1);
+    this.windowTimeCurrencies = new WindowBox(20, 0, 150, 0, new
+        GraphicTimeCurrencies(), RPM.HUGE_PADDING_BOX);
+    this.windowTimeCurrencies.contentLoaded = false;
 }
 
 SceneMenu.nbItemsToDisplay = 12;
@@ -144,13 +141,22 @@ SceneMenu.prototype = {
 
      // -------------------------------------------------------
 
-    update: function(){
-        if ($game.playTime !== this.time) {
-            this.textPlayTime.setText(RPM.getStringDate($game.playTime));
-        }
-        for (var i = 0, l = this.windowChoicesTeam.listWindows.length; i < l;
-             i++)
+    update: function() {
+        var i, l, w;
+
+        if (!this.windowTimeCurrencies.contentLoaded && this
+            .windowTimeCurrencies.content.isLoaded())
         {
+            w = this.windowTimeCurrencies.content.height + this
+                .windowTimeCurrencies.padding[1] + this.windowTimeCurrencies
+                .padding[3];
+            this.windowTimeCurrencies.setY($SCREEN_Y - 20 - w);
+            this.windowTimeCurrencies.setH(w);
+            this.windowTimeCurrencies.contentLoaded = true;
+        }
+
+        this.windowTimeCurrencies.content.update();
+        for (i = 0, l = this.windowChoicesTeam.listWindows.length; i < l; i++) {
             this.windowChoicesTeam.listWindows[i].content.updateBattler();
         }
     },
@@ -259,17 +265,16 @@ SceneMenu.prototype = {
     // -------------------------------------------------------
 
     drawHUD: function() {
+        if (this.windowTimeCurrencies.contentLoaded) {
+            // Draw the local map behind
+            $currentMap.drawHUD();
 
-        // Draw the local map behind
-        $currentMap.drawHUD();
+            // Draw the windows
+            this.windowChoicesCommands.draw();
+            this.windowChoicesTeam.draw();
 
-        // Draw the windows
-        this.windowChoicesCommands.draw();
-        this.windowChoicesTeam.draw();
-
-        // Draw play time
-        this.textPlayTime.draw(90, $SCREEN_Y -40,70,20);
-
-        this.HUDsaved = true;
+            // Draw play time and currencies
+            this.windowTimeCurrencies.draw();
+        }
     }
 }

@@ -52,6 +52,7 @@ function WindowBox(x, y, w, h, content, padding) {
     this.bordersOpacity = 1;
     this.backgroundOpacity = 1;
     this.selected = false;
+    this.contentLoaded = true;
 }
 
 WindowBox.prototype = {
@@ -109,31 +110,32 @@ WindowBox.prototype = {
     *   for a window choices.
     */
     draw: function(isChoice){
+        if (this.contentLoaded) {
+            // Default values
+            if (typeof isChoice === 'undefined') isChoice = false;
 
-        // Default values
-        if (typeof isChoice === 'undefined') isChoice = false;
+            // Draw box
+            $datasGame.system.getWindowSkin().drawBox(this.windowDimension, this
+                .selected);
 
-        // Draw box
-        $datasGame.system.getWindowSkin().drawBox(this.windowDimension, this
-            .selected);
-
-        // Draw content
-        if (this.content !== null){
-            if (isChoice){
-                this.content.draw(
-                     this.contentDimension[0],
-                     this.contentDimension[1],
-                     this.contentDimension[2],
-                     this.contentDimension[3]
-                );
-            }
-            else{
-                this.content.drawInformations(
-                     this.contentDimension[0],
-                     this.contentDimension[1],
-                     this.contentDimension[2],
-                     this.contentDimension[3]
-                );
+            // Draw content
+            if (this.content !== null){
+                if (isChoice){
+                    this.content.draw(
+                         this.contentDimension[0],
+                         this.contentDimension[1],
+                         this.contentDimension[2],
+                         this.contentDimension[3]
+                    );
+                }
+                else{
+                    this.content.drawInformations(
+                         this.contentDimension[0],
+                         this.contentDimension[1],
+                         this.contentDimension[2],
+                         this.contentDimension[3]
+                    );
+                }
             }
         }
     }

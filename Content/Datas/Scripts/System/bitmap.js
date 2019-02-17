@@ -56,6 +56,7 @@ Bitmap.prototype = {
     */
     setX: function(x){
         this.x = RPM.getScreenX(x);
+        $requestPaintHUD = true;
     },
 
     // -------------------------------------------------------
@@ -65,6 +66,7 @@ Bitmap.prototype = {
     */
     setY: function(y){
         this.y = RPM.getScreenY(y);
+        $requestPaintHUD = true;
     },
 
     // -------------------------------------------------------
@@ -74,6 +76,7 @@ Bitmap.prototype = {
     */
     setW: function(w){
         this.w = RPM.getScreenX(w);
+        $requestPaintHUD = true;
     },
 
     // -------------------------------------------------------
@@ -83,6 +86,7 @@ Bitmap.prototype = {
     */
     setH: function(h){
         this.h = RPM.getScreenY(h);
+        $requestPaintHUD = true;
     },
 
     // -------------------------------------------------------
@@ -91,6 +95,7 @@ Bitmap.prototype = {
     */
     setLeft: function() {
         this.x = 0;
+        $requestPaintHUD = true;
     },
 
     // -------------------------------------------------------
@@ -99,6 +104,7 @@ Bitmap.prototype = {
     */
     setTop: function() {
         this.y = 0;
+        $requestPaintHUD = true;
     },
 
     // -------------------------------------------------------
@@ -107,6 +113,7 @@ Bitmap.prototype = {
     */
     setRight: function(offset) {
         this.x = $SCREEN_X - this.w - (offset ? offset : 0);
+        $requestPaintHUD = true;
     },
 
     // -------------------------------------------------------
@@ -115,6 +122,7 @@ Bitmap.prototype = {
     */
     setBot: function(offset) {
         this.y = $SCREEN_Y - this.h - (offset ? offset : 0);
+        $requestPaintHUD = true;
     },
 
     // -------------------------------------------------------
