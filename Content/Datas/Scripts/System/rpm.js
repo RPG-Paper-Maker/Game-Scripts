@@ -365,6 +365,7 @@ RPM.BATLLER_STEPS = 9;
 RPM.SMALL_SLOT_HEIGHT = 30;
 RPM.SMALL_PADDING_BOX = [10, 10, 10, 10];
 RPM.HUGE_PADDING_BOX = [30, 30, 30, 30];
+RPM.SMALL_SLOT_PADDING = [10, 5, 10, 5];
 
 // -------------------------------------------------------
 //  COLORS

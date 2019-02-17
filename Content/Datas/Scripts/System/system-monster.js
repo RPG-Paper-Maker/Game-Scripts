@@ -33,17 +33,44 @@ function SystemMonster(){
 
 SystemMonster.prototype = Object.create(SystemHero.prototype);
 
+// -------------------------------------------------------
+
 SystemMonster.prototype.readJSON = function(json) {
     SystemHero.prototype.readJSON.call(this, json);
+    var i, hash, currenciesLength, jsonCurrencies, progression;
 
+    jsonCurrencies = json.cur;
+    currenciesLength = jsonCurrencies.length;
     this.rewards = {
-        xp: new SystemProgressionTable(this.getProperty("finalLevel"))
+        xp: new SystemProgressionTable(this.getProperty("finalLevel")),
+        currencies: new Array(currenciesLength)
     }
     this.rewards.xp.readJSON(json.xp);
+    for (i = 0; i < currenciesLength; i++) {
+        hash = jsonCurrencies[i];
+        progression = new SystemProgressionTable(hash.k);
+        progression.readJSON(hash.v);
+        this.rewards.currencies[i] = progression;
+    }
 }
 
+// -------------------------------------------------------
 
 SystemMonster.prototype.getRewardExperience = function(level) {
     return this.rewards.xp.getProgressionAt(level, this.getProperty(
         "finalLevel"));
+}
+
+// -------------------------------------------------------
+
+SystemMonster.prototype.getRewardCurrencies = function(level) {
+    var i, l, currencies, progression;
+    currencies = {};
+    for (i = 0, l = this.rewards.currencies.length; i < l; i++) {
+        progression = this.rewards.currencies[i];
+        currencies[progression.id] = progression.getProgressionAt(level, this
+            .getProperty("finalLevel"));
+    }
+
+    return currencies;
 }

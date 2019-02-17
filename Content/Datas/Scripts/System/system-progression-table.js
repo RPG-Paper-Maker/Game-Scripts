@@ -26,8 +26,10 @@
 /** @class
 *   A progression table
 */
-function SystemProgressionTable() {
-
+function SystemProgressionTable(id) {
+    if (id) {
+        this.id = id;
+    }
 }
 
 SystemProgressionTable.createProgression = function(i, f, equation) {

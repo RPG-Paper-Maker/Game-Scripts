@@ -57,7 +57,7 @@ function SceneMenuEquip() {
         60, 110, RPM.SMALL_SLOT_HEIGHT, 4, listHeroes, null);
     this.windowChoicesEquipment = new WindowChoices(OrientationWindow.Vertical,
         20, 100, 290, RPM.SMALL_SLOT_HEIGHT, nbEquipments, new Array(
-        nbEquipments), null, [10, 5, 10, 5]);
+        nbEquipments), null, RPM.SMALL_SLOT_PADDING);
     this.windowChoicesList = new WindowChoices(OrientationWindow.Vertical, 20,
         100 + (nbEquipments + 1) * RPM.SMALL_SLOT_HEIGHT, 290, RPM
         .SMALL_SLOT_HEIGHT, nbEquipChoice, new Array(nbEquipChoice), null, [10,

@@ -78,7 +78,8 @@ SceneBattle.prototype.initializeStep0 = function(){
     }
 
     // Informations
-    this.windowTopInformations = new WindowBox(0,20,$SCREEN_X, 30);
+    this.windowTopInformations = new WindowBox(0, 20 , $SCREEN_X, RPM
+        .SMALL_SLOT_HEIGHT, null, RPM.SMALL_SLOT_PADDING);
     var w = 300, h = 100;
     this.windowCharacterInformations = new WindowBox($SCREEN_X - w,
                                                      $SCREEN_Y - h, w, h, null,
@@ -104,6 +105,33 @@ SceneBattle.prototype.initializeStep0 = function(){
     // Music
     EventCommandPlayMusic.playSong($datasGame.battleSystem.battleMusic, SongKind
         .Music, true);
+
+    this.prepareRewards();
+};
+
+// -------------------------------------------------------
+
+SceneBattle.prototype.prepareRewards = function() {
+    var i, l, character, currencies, id;
+
+    // Experience and currencies
+    this.xp = 0;
+    this.currencies = {};
+    for (i = 0, l = this.battlers[CharacterKind.Monster].length; i < l; i++) {
+        character = this.battlers[CharacterKind.Monster][i].character;
+        this.xp += character.getRewardExperience();
+        currencies = character.getRewardCurrencies();
+        for (id in currencies) {
+            if (this.currencies.hasOwnProperty(id)) {
+                this.currencies[id] += currencies[id];
+            } else {
+                this.currencies[id] = currencies[id];
+            }
+        }
+    }
+
+    // Prepare graphics
+    this.graphicRewardTop = new GraphicRewardsTop(this.xp, this.currencies);
 };
 
 // -------------------------------------------------------

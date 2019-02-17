@@ -53,7 +53,7 @@ function SceneMenuInventory() {
         105, RPM.SMALL_SLOT_HEIGHT, 6, menuKind, null);
     this.windowChoicesList = new WindowChoices(OrientationWindow.Vertical, 20,
         100, 200, RPM.SMALL_SLOT_HEIGHT, SceneMenu.nbItemsToDisplay, new Array(
-        SceneMenu.nbItemsToDisplay), null, [10, 5, 10, 5]);
+        SceneMenu.nbItemsToDisplay), null, RPM.SMALL_SLOT_PADDING);
     this.windowInformations = new WindowBox(240, 100, 360, 200, null, RPM
         .HUGE_PADDING_BOX);
 

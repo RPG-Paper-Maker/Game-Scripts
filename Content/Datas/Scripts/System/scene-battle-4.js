@@ -30,24 +30,20 @@
 // -------------------------------------------------------
 
 SceneBattle.prototype.initializeStep4 = function(){
-    var i, l, character;
+    var i, l, battler;
     this.windowTopInformations.content = new GraphicText("Victory!");
 
     // Heroes
     for (i = 0, l = $game.teamHeroes.length; i < l; i++) {
-        this.battlers[CharacterKind.Hero][i].setVictory();
+        battler = this.battlers[CharacterKind.Hero][i];
+        battler.setVictory();
+        battler.character.totalRemainingXP = this.xp;
     }
 
-    // Check rewards
-    this.xp = 0;
-    for (i = 0, l = this.battlers[CharacterKind.Monster].length; i < l; i++) {
-        this.xp += this.battlers[CharacterKind.Monster][i].character
-            .getRewardExperience();
-    }
-    for (i = 0, l = $game.teamHeroes.length; i < l; i++) {
-        this.battlers[CharacterKind.Hero][i].character.totalRemainingXP = this.xp;
-    }
+    // Check in order to have the right icons size quickly
+    this.graphicRewardTop.checkIcons();
 
+    // Time progression settings
     this.time = new Date().getTime();
     this.finishedXP = false;
     this.user = null;
@@ -132,8 +128,7 @@ SceneBattle.prototype.updateStep4 = function() {
     case 0:
         if (new Date().getTime() - this.time >= SceneBattle.TIME_END_WAIT) {
             this.time = new Date().getTime();
-            this.windowTopInformations.content = new GraphicText($datasGame
-                .battleSystem.getExpStatistic().name + ": " + this.xp);
+            this.windowTopInformations.content = this.graphicRewardTop;
             for (var i = 0, l = $game.teamHeroes.length; i < l; i++) {
                 this.battlers[CharacterKind.Hero][i].character.updateRemainingXP(
                     SceneBattle.TIME_PROGRESSION_XP);
