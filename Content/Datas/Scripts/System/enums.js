@@ -227,3 +227,15 @@ var BattlerStep = {
     Dead: 8
 };
 Object.freeze(BattlerStep);
+
+/**
+*   Enum for the different loots kind.
+*   @enum {number}
+*   @readonly
+*/
+var LootKind = {
+    Item: 0,
+    Weapon: 1,
+    Armor: 2
+};
+Object.freeze(LootKind);

@@ -94,7 +94,7 @@ Game.prototype = {
         this.items = new Array(l);
         for (i = 0; i < l; i++){
             var itemJson = itemsJson[i];
-            this.items[i] = new Item(itemJson.k, itemJson.id, itemJson.nb);
+            this.items[i] = new GameItem(itemJson.k, itemJson.id, itemJson.nb);
         }
 
         // Currencies

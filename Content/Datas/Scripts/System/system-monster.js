@@ -37,20 +37,35 @@ SystemMonster.prototype = Object.create(SystemHero.prototype);
 
 SystemMonster.prototype.readJSON = function(json) {
     SystemHero.prototype.readJSON.call(this, json);
-    var i, hash, currenciesLength, jsonCurrencies, progression;
+    var i, hash, currenciesLength, jsonCurrencies, progression, jsonLoots,
+        lootsLength, loot;
 
     jsonCurrencies = json.cur;
     currenciesLength = jsonCurrencies.length;
+    jsonLoots = json.loots;
+    lootsLength = jsonLoots.length;
     this.rewards = {
         xp: new SystemProgressionTable(this.getProperty("finalLevel")),
-        currencies: new Array(currenciesLength)
+        currencies: new Array(currenciesLength),
+        loots: new Array(lootsLength)
     }
+
+    // Experience
     this.rewards.xp.readJSON(json.xp);
+
+    // Currencies
     for (i = 0; i < currenciesLength; i++) {
         hash = jsonCurrencies[i];
         progression = new SystemProgressionTable(hash.k);
         progression.readJSON(hash.v);
         this.rewards.currencies[i] = progression;
+    }
+
+    // Loots
+    for (i = 0; i < lootsLength; i++) {
+        loot = new SystemLoot();
+        loot.readJSON(jsonLoots[i]);
+        this.rewards.loots[i] = loot;
     }
 }
 
@@ -73,4 +88,29 @@ SystemMonster.prototype.getRewardCurrencies = function(level) {
     }
 
     return currencies;
+}
+
+// -------------------------------------------------------
+
+SystemMonster.prototype.getRewardLoots = function(level) {
+    var i, l, loots, loot, list;
+
+    list = new Array(3);
+    list[LootKind.Item] = {};
+    list[LootKind.Weapon] = {};
+    list[LootKind.Armor] = {};
+
+    for (i = 0, l = this.rewards.loots.length; i < l; i++) {
+        loot = this.rewards.loots[i].currenLoot(level);
+        if (loot !== null) {
+            loots = list[loot.k];
+            if (loots.hasOwnProperty(loot.id)) {
+                loots[loot.id] += loot.nb;
+            } else {
+                loots[loot.id] = loot.nb;
+            }
+        }
+    }
+
+    return list;
 }

@@ -366,6 +366,12 @@ GamePlayer.prototype = {
 
     // -------------------------------------------------------
 
+    getRewardLoots: function() {
+        return this.character.getRewardLoots(this.getCurrentLevel());
+    },
+
+    // -------------------------------------------------------
+
     updateRemainingXP: function(fullTime) {
         if (this.getCurrentLevel() < this.expList.length - 1) {
             var current = this[$datasGame.battleSystem.getExpStatistic()

@@ -27,7 +27,7 @@
 // -------------------------------------------------------
 
 SceneBattle.prototype.initializeStep0 = function(){
-    var i, l, battler, position;
+    var i, l, battler, position, w, h;
     this.winning = false;
     this.distanceCenterAlly = 75;
     this.kindSelection = CharacterKind.Hero;
@@ -80,7 +80,8 @@ SceneBattle.prototype.initializeStep0 = function(){
     // Informations
     this.windowTopInformations = new WindowBox(0, 20 , $SCREEN_X, RPM
         .SMALL_SLOT_HEIGHT, null, RPM.SMALL_SLOT_PADDING);
-    var w = 300, h = 100;
+    w = 300;
+    h = 100;
     this.windowCharacterInformations = new WindowBox($SCREEN_X - w,
                                                      $SCREEN_Y - h, w, h, null,
                                                      RPM.SMALL_PADDING_BOX);
@@ -95,28 +96,40 @@ SceneBattle.prototype.initializeStep0 = function(){
                            $SCREEN_Y - 20 - (l*30),
                            150, 30, 4, list, null);
 
+    // Music
+    EventCommandPlayMusic.playSong($datasGame.battleSystem.battleMusic, SongKind
+        .Music, true);
+
+    // Rewards
+    this.prepareRewards();
+
     // End windows
     this.windowExperienceProgression = new WindowBox(10, 80, 300, (90 * $game
         .teamHeroes.length) + RPM.SMALL_PADDING_BOX[2] + RPM
         .SMALL_PADDING_BOX[3], new GraphicXPProgression(), RPM.SMALL_PADDING_BOX);
     this.windowStatisticProgression = new WindowBox(250, 90, 380, 200, null,
         RPM.HUGE_PADDING_BOX);
-
-    // Music
-    EventCommandPlayMusic.playSong($datasGame.battleSystem.battleMusic, SongKind
-        .Music, true);
-
-    this.prepareRewards();
+    w = 200 + RPM.SMALL_PADDING_BOX[0] + RPM.SMALL_PADDING_BOX[2];
+    h = this.lootsNumber * 30 + RPM.SMALL_PADDING_BOX[1] + RPM.SMALL_PADDING_BOX
+        [3];
+    this.windowLoots = new WindowBox($SCREEN_X - 20 - w, $SCREEN_Y - 20 - h, w,
+        h, new GraphicLoots(this.loots, this.lootsNumber), RPM
+        .SMALL_PADDING_BOX);
 };
 
 // -------------------------------------------------------
 
 SceneBattle.prototype.prepareRewards = function() {
-    var i, l, character, currencies, id;
+    var i, j, l, ll, character, currencies, id, loots, list;
 
-    // Experience and currencies
+    // Experience + currencies + loots
     this.xp = 0;
     this.currencies = {};
+    this.loots = [];
+    this.loots[LootKind.Item] = {};
+    this.loots[LootKind.Weapon] = {};
+    this.loots[LootKind.Armor] = {};
+    this.lootsNumber = 0;
     for (i = 0, l = this.battlers[CharacterKind.Monster].length; i < l; i++) {
         character = this.battlers[CharacterKind.Monster][i].character;
         this.xp += character.getRewardExperience();
@@ -127,6 +140,23 @@ SceneBattle.prototype.prepareRewards = function() {
             } else {
                 this.currencies[id] = currencies[id];
             }
+        }
+        list = character.getRewardLoots();
+        for (j = 0, ll = list.length; j < ll; j++) {
+            loots = list[j];
+            for (id in loots) {
+                if (this.loots[j].hasOwnProperty(id)) {
+                    this.loots[j][id] += loots[id];
+                } else {
+                    this.loots[j][id] = loots[id];
+                    this.lootsNumber++;
+                }
+            }
+        }
+    }
+    for (i = 0, l = this.loots.length; i < l; i++) {
+        for (id in this.loots[i]) {
+            this.loots[i][id] = new GameItem(i, id, this.loots[i][id]);
         }
     }
 

@@ -698,8 +698,17 @@ EventCommandOpenSavesMenu.prototype = {
 *   @property {JSON} command Direct JSON command to parse.
 *   @param {JSON} command Direct JSON command to parse.
 */
-function EventCommandModifyInventory(command){
-    this.command = command;
+function EventCommandModifyInventory(command) {
+    var i, k, v;
+
+    i = 0;
+    this.itemKind = command[i++];
+    this.itemId = command[i++];
+    this.operation = command[i++];
+    k = command[i++];
+    v = command[i++];
+    this.value = new SystemValue(k, v);
+
     this.isDirectNode = true;
     this.parallel = false;
 }
@@ -707,108 +716,6 @@ function EventCommandModifyInventory(command){
 EventCommandModifyInventory.prototype = {
 
     initialize: function(){ return null; },
-
-    /** Modify items only if already in inventory
-    *   @param {ItemKind} kind The kind of item.
-    *   @param {number} id ID of the item.
-    *   @param {number} nb Number of item to modify.
-    *   @param {function} callback callback function for action.
-    *   @returns {boolean} Indicates if the item is already inside the
-    *   inventory.
-    */
-    modifyItems: function(kind, id, nb, callback){
-        var i, l = $game.items.length;
-        for (i = 0; i < l; i++){
-            var item = $game.items[i];
-            if (item.k === kind && item.id === id){
-
-                // If the item already is in the inventory...
-                callback.call(this, item, i);
-                return true;
-            }
-        }
-
-        return false;
-    },
-
-    // -------------------------------------------------------
-
-    /** Modify the number of the item.
-    *   @param {ItemKind} kind The kind of item.
-    *   @param {number} id ID of the item.
-    *   @param {number} nb Number of item to modify.
-    */
-    equalItems: function(kind, id, nb){
-        var alreadyInInventory = this.modifyItems(kind, id, nb,
-                                                  function(item,index){
-                                                      item.nb = nb;
-                                                  });
-        if (!alreadyInInventory)
-            $game.items.push(new Item(kind,id,nb));
-    },
-
-    // -------------------------------------------------------
-
-    /** Add the number of the item.
-    *   @param {ItemKind} kind The kind of item.
-    *   @param {number} id ID of the item.
-    *   @param {number} nb Number of item to modify.
-    */
-    addItems: function(kind, id, nb){
-        var alreadyInInventory = this.modifyItems(kind, id, nb,
-                                                  function(item,index){
-                                                      item.nb += nb;
-                                                  });
-        if (!alreadyInInventory)
-            $game.items.push(new GameItem(kind, id, nb));
-    },
-
-    // -------------------------------------------------------
-
-    /** Remove the number of the item.
-    *   @param {ItemKind} kind The kind of item.
-    *   @param {number} id ID of the item.
-    *   @param {number} nb Number of item to modify.
-    */
-    removeItems: function(kind, id, nb){
-        var alreadyInInventory = this.modifyItems(kind, id, nb,
-        function(item,index){
-            item.nb -= nb;
-            if (item.nb <= 0)
-                $game.items.splice(index, 1);
-        });
-    },
-
-    // -------------------------------------------------------
-
-    /** Multiply the number of the item.
-    *   @param {ItemKind} kind The kind of item.
-    *   @param {number} id ID of the item.
-    *   @param {number} nb Number of item to modify.
-    */
-    multItems: function(kind, id, nb){
-        this.modifyItems(kind, id, nb, function(item,index){ item.nb *= nb; });
-    },
-
-    // -------------------------------------------------------
-
-    /** Modify the number of the item.
-    *   @param {ItemKind} kind The kind of item.
-    *   @param {number} id ID of the item.
-    *   @param {number} nb Number of item to modify.
-    */
-    divItems: function(kind, id, nb){
-        this.modifyItems(kind, id, nb, function(item,index){ item.nb /= nb; });
-    },
-
-    /** Modulo the number of the item.
-    *   @param {ItemKind} kind The kind of item.
-    *   @param {number} id ID of the item.
-    *   @param {number} nb Number of item to modify.
-    */
-    moduloItems: function(kind, id, nb){
-        this.modifyItems(kind, id, nb, function(item,index){ item.nb %= nb; });
-    },
 
     // -------------------------------------------------------
 
@@ -818,32 +725,23 @@ EventCommandModifyInventory.prototype = {
     *   @param {number} state The state ID.
     *   @returns {number} The number of node to pass.
     */
-    update: function(currentState, object, state){
-
-        // Parsing
-        var i = 0;
-        var itemKind = this.command[i++];
-        var itemId = this.command[i++];
-        var operation = this.command[i++];
-        var varConstType = this.command[i++];
-        var compare = this.command[i++];
-        var value = (varConstType === 0) ? $datasGame.variables[compare]
-                                         : compare;
+    update: function(currentState, object, state) {
+        var item = new GameItem(this.itemKind, this.itemId, this.value.getValue());
 
         // Doing the coresponding operation
-        switch(operation){
+        switch(this.operation){
         case 0:
-            this.equalItems(itemKind, itemId, value); break;
+            item.equalItems(); break;
         case 1:
-            this.addItems(itemKind, itemId, value); break;
+            item.addItems(); break;
         case 2:
-            this.removeItems(itemKind, itemId, value); break;
+            item.removeItems(); break;
         case 3:
-            this.multItems(itemKind, itemId, value); break;
+            item.multItems(); break;
         case 4:
-            this.divItems(itemKind, itemId, value); break;
+            item.divItems(); break;
         case 5:
-            this.moduloItems(itemKind, itemId, value); break;
+            item.moduloItems(); break;
         }
 
         return 1;

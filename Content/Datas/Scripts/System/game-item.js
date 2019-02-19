@@ -54,5 +54,91 @@ GameItem.prototype = {
         }
 
         return null;
-    }
+    },
+
+    /** Modify items only if already in inventory
+    *   @param {function} callback callback function for action.
+    *   @returns {boolean} Indicates if the item is already inside the
+    *   inventory.
+    */
+    modifyItems: function(callback) {
+        var i, l = $game.items.length;
+        for (i = 0; i < l; i++){
+            var item = $game.items[i];
+            if (item.k === this.k && item.id === this.id) {
+                // If the item already is in the inventory...
+                callback.call(this, item, i);
+                return true;
+            }
+        }
+
+        return false;
+    },
+
+    // -------------------------------------------------------
+
+    /** Modify the number of the item.
+    */
+    equalItems: function() {
+        var alreadyInInventory = this.modifyItems(function(item, index) {
+                item.nb = this.nb;
+            });
+        if (!alreadyInInventory) {
+            $game.items.push(this);
+        }
+    },
+
+    // -------------------------------------------------------
+
+    /** Add the number of the item.
+    */
+    addItems: function() {
+        var alreadyInInventory = this.modifyItems(function(item, index) {
+                item.nb += this.nb;
+            });
+        if (!alreadyInInventory) {
+            $game.items.push(this);
+        }
+    },
+
+    // -------------------------------------------------------
+
+    /** Remove the number of the item.
+    */
+    removeItems: function() {
+        var alreadyInInventory = this.modifyItems(function(item, index) {
+                item.nb -= this.nb;
+                if (item.nb <= 0) {
+                    $game.items.splice(index, 1);
+                }
+            });
+    },
+
+    // -------------------------------------------------------
+
+    /** Multiply the number of the item.
+    */
+    multItems: function() {
+        this.modifyItems(function(item, index) {
+                item.nb *= this.nb;
+            });
+    },
+
+    // -------------------------------------------------------
+
+    /** Modify the number of the item.
+    */
+    divItems: function() {
+        this.modifyItems(function(item, index) {
+                item.nb /= this.nb;
+            });
+    },
+
+    /** Modulo the number of the item.
+    */
+    moduloItems: function() {
+        this.modifyItems(function(item, index) {
+                item.nb %= this.nb;
+            });
+    },
 }

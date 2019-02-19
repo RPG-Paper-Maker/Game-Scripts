@@ -47,6 +47,11 @@ SceneBattle.prototype.initializeStep4 = function(){
     for (id in this.currencies) {
         $game.currencies[id] += this.currencies[id];
     }
+    for (i = 0, l = this.loots.length; i < l; i++) {
+        for (id in this.loots[i]) {
+            this.loots[i][id].addItems();
+        }
+    }
 
     // Time progression settings
     this.time = new Date().getTime();
@@ -279,16 +284,12 @@ SceneBattle.prototype.onKeyPressedAndRepeatStep4 = function(key){
 SceneBattle.prototype.drawHUDStep4 = function() {
     if (this.subStep !== 3) {
         this.windowTopInformations.draw();
+        this.windowExperienceProgression.draw();
+        this.windowLoots.draw();
     }
 
     switch (this.subStep) {
-    case 0:
-        break;
-    case 1:
-        this.windowExperienceProgression.draw();
-        break;
     case 2:
-        this.windowExperienceProgression.draw();
         this.windowStatisticProgression.draw();
         break;
     case 3:
