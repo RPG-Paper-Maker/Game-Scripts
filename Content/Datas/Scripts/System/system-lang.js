@@ -19,20 +19,22 @@
 
 // -------------------------------------------------------
 //
-//  CLASS SystemSkill
+//  CLASS SystemLang
 //
 // -------------------------------------------------------
 
 /** @class
-*   A skill of the game.
-*   @property {string} name The name of the skill.
 */
-function SystemSkill(){
-    SystemLang.call(this);
+function SystemLang() {
+
 }
 
-SystemSkill.prototype = Object.create(SystemLang.prototype);
+SystemLang.prototype = {
 
-SystemSkill.prototype.readJSON = function(json) {
-    SystemLang.prototype.readJSON.call(this, json);
+    /** Read the JSON associated to the lang.
+    *   @param {Object} json Json object describing the object.
+    */
+    readJSON: function(json){
+        this.name = json.names[1];
+    }
 }

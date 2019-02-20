@@ -133,7 +133,8 @@ DISTFILES += \
     Content/Datas/Scripts/System/graphic-time-currencies.js \
     Content/Datas/Scripts/System/graphic-text-icon.js \
     Content/Datas/Scripts/System/system-loot.js \
-    Content/Datas/Scripts/System/graphic-loots.js
+    Content/Datas/Scripts/System/graphic-loots.js \
+    Content/Datas/Scripts/System/system-lang.js
 
 RESOURCES += \
     qml.qrc

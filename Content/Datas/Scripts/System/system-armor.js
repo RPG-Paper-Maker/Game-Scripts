@@ -28,26 +28,22 @@
 *   @property {string} name The name of the armor.
 *   @property {number} idType The kind of armor (ID).
 */
-function SystemArmor(){
+function SystemArmor() {
 
 }
 
-SystemArmor.prototype = {
+SystemArmor.prototype = Object.create(SystemItem.prototype);
 
-    /** Read the JSON associated to the armor.
-    *   @param {Object} json Json object describing the object.
-    */
-    readJSON: function(json){
-        this.name = json.names[1];
-        this.idType = json.k;
-    },
+// -------------------------------------------------------
 
-    // -------------------------------------------------------
+SystemArmor.prototype.readJSON = function(json) {
+    SystemItem.prototype.readJSON.call(this, json);
 
-    /** Get the type of this armor.
-    *   @returns {SystemWeaponArmorKind}
-    */
-    getType: function(){
-        return $datasGame.battleSystem.armorsKind[this.idType];
-    }
+    this.idType = json.k;
+}
+
+// -------------------------------------------------------
+
+SystemArmor.prototype.getType = function() {
+    return $datasGame.battleSystem.armorsKind[this.idType];
 }

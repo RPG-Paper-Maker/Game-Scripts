@@ -33,14 +33,13 @@ function SystemItem(){
 
 }
 
-SystemItem.prototype = {
+SystemItem.prototype = Object.create(SystemSkill.prototype);
 
-    /** Read the JSON associated to the item.
-    *   @param {Object} json Json object describing the object.
-    */
-    readJSON: function(json){
-        this.name = json.name;
-        this.idType = json.t;
-        this.consumable = json.cons;
-    }
+// -------------------------------------------------------
+
+SystemItem.prototype.readJSON = function(json) {
+    SystemSkill.prototype.readJSON.call(this, json);
+
+    this.idType = json.t;
+    this.consumable = json.cons;
 }

@@ -29,22 +29,23 @@
 *   A weapon of the game.
 *   @extends SystemArmor
 */
-function SystemWeapon(){
+function SystemWeapon() {
     SystemArmor.call(this);
 }
 
-SystemWeapon.prototype = {
 
-    /** Read the JSON associated to the weapon.
-    *   @param {Object} json Json object describing the object.
-    */
-    readJSON: function(json){
-        SystemArmor.prototype.readJSON.call(this, json);
-    },
+SystemWeapon.prototype = Object.create(SystemArmor.prototype);
 
-    // -------------------------------------------------------
+// -------------------------------------------------------
 
-    getType: function(){
-        return $datasGame.battleSystem.weaponsKind[this.idType];
-    }
+SystemWeapon.prototype.readJSON = function(json) {
+    SystemArmor.prototype.readJSON.call(this, json);
+
+    this.idType = json.k;
+}
+
+// -------------------------------------------------------
+
+SystemWeapon.prototype.getType = function() {
+    return $datasGame.battleSystem.weaponsKind[this.idType];
 }
