@@ -100,68 +100,12 @@ SceneBattle.prototype.initializeStep0 = function(){
     EventCommandPlayMusic.playSong($datasGame.battleSystem.battleMusic, SongKind
         .Music, true);
 
-    // Rewards
-    this.prepareRewards();
-
     // End windows
     this.windowExperienceProgression = new WindowBox(10, 80, 300, (90 * $game
         .teamHeroes.length) + RPM.SMALL_PADDING_BOX[2] + RPM
         .SMALL_PADDING_BOX[3], new GraphicXPProgression(), RPM.SMALL_PADDING_BOX);
     this.windowStatisticProgression = new WindowBox(250, 90, 380, 200, null,
         RPM.HUGE_PADDING_BOX);
-    w = 200 + RPM.SMALL_PADDING_BOX[0] + RPM.SMALL_PADDING_BOX[2];
-    h = this.lootsNumber * 30 + RPM.SMALL_PADDING_BOX[1] + RPM.SMALL_PADDING_BOX
-        [3];
-    this.windowLoots = new WindowBox($SCREEN_X - 20 - w, $SCREEN_Y - 20 - h, w,
-        h, new GraphicLoots(this.loots, this.lootsNumber), RPM
-        .SMALL_PADDING_BOX);
-};
-
-// -------------------------------------------------------
-
-SceneBattle.prototype.prepareRewards = function() {
-    var i, j, l, ll, character, currencies, id, loots, list;
-
-    // Experience + currencies + loots
-    this.xp = 0;
-    this.currencies = {};
-    this.loots = [];
-    this.loots[LootKind.Item] = {};
-    this.loots[LootKind.Weapon] = {};
-    this.loots[LootKind.Armor] = {};
-    this.lootsNumber = 0;
-    for (i = 0, l = this.battlers[CharacterKind.Monster].length; i < l; i++) {
-        character = this.battlers[CharacterKind.Monster][i].character;
-        this.xp += character.getRewardExperience();
-        currencies = character.getRewardCurrencies();
-        for (id in currencies) {
-            if (this.currencies.hasOwnProperty(id)) {
-                this.currencies[id] += currencies[id];
-            } else {
-                this.currencies[id] = currencies[id];
-            }
-        }
-        list = character.getRewardLoots();
-        for (j = 0, ll = list.length; j < ll; j++) {
-            loots = list[j];
-            for (id in loots) {
-                if (this.loots[j].hasOwnProperty(id)) {
-                    this.loots[j][id] += loots[id];
-                } else {
-                    this.loots[j][id] = loots[id];
-                    this.lootsNumber++;
-                }
-            }
-        }
-    }
-    for (i = 0, l = this.loots.length; i < l; i++) {
-        for (id in this.loots[i]) {
-            this.loots[i][id] = new GameItem(i, id, this.loots[i][id]);
-        }
-    }
-
-    // Prepare graphics
-    this.graphicRewardTop = new GraphicRewardsTop(this.xp, this.currencies);
 };
 
 // -------------------------------------------------------

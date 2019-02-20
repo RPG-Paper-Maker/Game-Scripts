@@ -40,8 +40,9 @@ SystemLoot.prototype = {
     *   @param {Object} json Json object describing the object.
     */
     readJSON: function(json) {
-        this.id = json.id;
         this.kind = json.k;
+        this.lootID = new SystemValue();
+        this.lootID.read(json.lid);
         this.number = new SystemValue();
         this.number.read(json.n);
         this.probability = new SystemValue();
@@ -78,6 +79,7 @@ SystemLoot.prototype = {
         }
 
         // Result
-        return number > 0 ? new GameItem(this.kind, this.id, number) : null;
+        return number > 0 ? new GameItem(this.kind, this.lootID.getValue(),
+            number) : null;
     }
 }
