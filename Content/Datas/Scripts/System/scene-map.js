@@ -129,10 +129,8 @@ SceneMap.prototype = {
             $game.hero.changeState();
 
             // Start music and background sound
-            if (this.mapInfos.music)
-                this.mapInfos.music.update();
-            if (this.mapInfos.backgroundSound)
-                this.mapInfos.backgroundSound.update();
+            this.mapInfos.music.playSong();
+            this.mapInfos.backgroundSound.playSong();
 
             // Background color update
             this.updateBackgroundColor();

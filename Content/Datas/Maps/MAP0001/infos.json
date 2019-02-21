@@ -1,1 +1,1 @@
-{"d":0,"h":16,"id":1,"isky":true,"l":50,"music":{"command":[0,3,0,3,3,100,0,12,0,0,12,0],"kind":24},"names":{"1":"MAP0001"},"ofsprites":[],"sky":{"k":7,"v":3},"tileset":1,"w":50}
+{"d":0,"h":16,"id":1,"isky":true,"l":50,"music":{"e":{"k":12,"v":0},"id":3,"ie":false,"is":false,"name":"Field1.mp3","s":{"k":12,"v":0},"v":{"k":3,"v":100}},"names":{"1":"MAP0001"},"ofsprites":[],"sky":{"k":7,"v":3},"tileset":1,"w":50,"bgs":{"e":{"k":12,"v":0},"id":-1,"ie":false,"is":false,"name":"<None>","s":{"k":12,"v":0},"v":{"k":3,"v":100}}}

@@ -42,10 +42,10 @@ MapInfos.prototype = {
         this.height = json.h;
         this.depth = json.d;
         this.tileset = $datasGame.tilesets.list[json.tileset];
-        this.music = json.music ? new EventCommandPlayMusic(json.music.command)
-            : null;
-        this.backgroundSound = json.bgs ? new EventCommandPlayBackgroundSound(
-            json.bgs.command) : null;
+        this.music = new SystemPlaySong(SongKind.Music);
+        this.music.readJSON(json.music);
+        this.backgroundSound = new SystemPlaySong(SongKind.BackgroundSound);
+        this.backgroundSound.readJSON(json.bgs);
         this.backgroundColorID = new SystemValue();
         this.backgroundColorID.read(json.sky);
         this.updateBackgroundColor();

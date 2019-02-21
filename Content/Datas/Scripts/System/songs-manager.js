@@ -99,6 +99,10 @@ SongsManager.prototype = {
     *   @param {number} id The id of the song.
     */
     playSong: function(kind, id, volume, start, end) {
+        if (id < 1) {
+            return;
+        }
+
         var player = this.getPlayer(kind);
         if (!player)
             return;

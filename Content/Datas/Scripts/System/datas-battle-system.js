@@ -144,9 +144,12 @@ DatasBattleSystem.prototype = {
             this.formulaIsDead.read(json.fisdead);
 
             // Musics
-            this.battleMusic = EventCommand.getEventCommand(json.bmusic);
-            this.battleLevelUp = EventCommand.getEventCommand(json.blevelup);
-            this.battleVictory = EventCommand.getEventCommand(json.bvictory);
+            this.battleMusic = new SystemPlaySong(SongKind.Music);
+            this.battleMusic.readJSON(json.bmusic);
+            this.battleLevelUp = new SystemPlaySong(SongKind.Soun);
+            this.battleLevelUp.readJSON(json.blevelup);
+            this.battleVictory = new SystemPlaySong(SongKind.Music);
+            this.battleVictory.readJSON(json.bvictory);
         });
     },
 

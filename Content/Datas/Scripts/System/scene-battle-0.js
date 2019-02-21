@@ -97,8 +97,7 @@ SceneBattle.prototype.initializeStep0 = function(){
                            150, 30, 4, list, null);
 
     // Music
-    EventCommandPlayMusic.playSong($datasGame.battleSystem.battleMusic, SongKind
-        .Music, true);
+    $datasGame.battleSystem.battleMusic.playSong(true);
 
     // End windows
     this.windowExperienceProgression = new WindowBox(10, 80, 300, (90 * $game

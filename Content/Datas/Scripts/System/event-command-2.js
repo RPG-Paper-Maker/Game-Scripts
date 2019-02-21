@@ -1222,20 +1222,15 @@ EventCommandMoveCamera.prototype = {
 *   going to the next node (takes only one frame).
 */
 
-function EventCommandPlayMusic(command){
-    EventCommandPlayMusic.parsePlaySong(this, command);
+function EventCommandPlayMusic(command) {
+    EventCommandPlayMusic.parsePlaySong(this, command, SongKind.Music);
     this.isDirectNode = true;
     this.parallel = false;
 }
 
-EventCommandPlayMusic.previousMusicStopped = null;
-EventCommandPlayMusic.previousMusic = null;
-EventCommandPlayMusic.currentPlayingMusic = null;
-EventCommandPlayMusic.previousMusicStoppedTime = 0;
-
 // -------------------------------------------------------
 
-EventCommandPlayMusic.parsePlaySong = function(that, command) {
+EventCommandPlayMusic.parsePlaySong = function(that, command, kind) {
     var i = 0;
 
     var isIDprimitive = command[i++] === 1;
@@ -1243,70 +1238,32 @@ EventCommandPlayMusic.parsePlaySong = function(that, command) {
     var v = command[i++];
     var idValue = SystemValue.createValue(k, v);
     var id = SystemValue.createNumber(command[i++]);
-    that.songID = isIDprimitive ? idValue : id;
+    var songID = isIDprimitive ? idValue : id;
     k = command[i++];
     v = command[i++];
-    that.volume = SystemValue.createValue(k, v);
+    var volume = SystemValue.createValue(k, v);
     var isStart = command[i++] === 1;
     k = command[i++];
     v = command[i++];
     var start = SystemValue.createValue(k, v);
-    that.start = isStart ? start : null;
+    start = isStart ? start : null;
     var isEnd = command[i++] === 1;
     k = command[i++];
     v = command[i++];
     var end = SystemValue.createValue(k, v);
-    that.end = isEnd ? end : null;
-};
+    end = isEnd ? end : null;
 
-// -------------------------------------------------------
-
-EventCommandPlayMusic.playSong = function(that, kind, previous, start, volume) {
-    if (typeof start === 'undefined') {
-        start = that.start ? that.start.getValue() : null;
-    }
-    if (typeof volume === 'undefined') {
-        volume = that.volume.getValue() / 100;
-    }
-
-    // If same music ID and same
-    if (EventCommandPlayMusic.currentPlayingMusic !== null && that.songID
-        .getValue() === EventCommandPlayMusic.currentPlayingMusic.songID
-        .getValue() && start === EventCommandPlayMusic.currentPlayingMusic.start
-        .getValue())
-    {
-        return 1;
-    }
-
-    if (kind === SongKind.Music) {
-        if (previous) {
-            EventCommandPlayMusic.previousMusicStoppedTime = $songsManager
-                .getPlayer(kind).position / 1000;
-            EventCommandPlayMusic.previousMusicStopped = EventCommandPlayMusic
-                        .currentPlayingMusic;
-        }
-        EventCommandPlayMusic.previousMusic = EventCommandPlayMusic
-            .currentPlayingMusic;
-        EventCommandPlayMusic.currentPlayingMusic = that;
-    }
-
-    $songsManager.playSong(kind, that.songID.getValue(), volume, start, that.end
-        ? that.end.getValue() : null);
-
-    return 1;
-};
-
-// -------------------------------------------------------
-
-EventCommandPlayMusic.updateSongVolume = function(that, volume) {
-
+    that.song = new SystemPlaySong(kind);
+    that.song.updateValues(songID, volume, isStart, start, isEnd, end);
 };
 
 // -------------------------------------------------------
 
 EventCommandPlayMusic.prototype = {
 
-    initialize: function(){ return null; },
+    initialize: function(){
+        return this.song.initialize();
+    },
 
     // -------------------------------------------------------
 
@@ -1318,7 +1275,7 @@ EventCommandPlayMusic.prototype = {
     */
 
     update: function(currentState, object, state){
-        return EventCommandPlayMusic.playSong(this, SongKind.Music);
+        return this.song.playSong();
     },
 
     // -------------------------------------------------------
@@ -1412,14 +1369,16 @@ EventCommandStopMusic.prototype = {
 */
 
 function EventCommandPlayBackgroundSound(command){
-    EventCommandPlayMusic.parsePlaySong(this, command);
+    EventCommandPlayMusic.parsePlaySong(this, command, SongKind.BackgroundSound);
     this.isDirectNode = true;
     this.parallel = false;
 }
 
 EventCommandPlayBackgroundSound.prototype = {
 
-    initialize: function(){ return null; },
+    initialize: function(){
+        return this.song.initialize();
+    },
 
     // -------------------------------------------------------
 
@@ -1431,7 +1390,7 @@ EventCommandPlayBackgroundSound.prototype = {
     */
 
     update: function(currentState, object, state){
-        return EventCommandPlayMusic.playSong(this, SongKind.BackgroundSound);
+        return this.song.playSong();
     },
 
     // -------------------------------------------------------
@@ -1455,7 +1414,7 @@ EventCommandPlayBackgroundSound.prototype = {
 *   going to the next node (takes only one frame).
 */
 
-function EventCommandStopBackgroundSound(command){
+function EventCommandStopBackgroundSound(command) {
     EventCommandStopMusic.parseStopSong(this, command);
     this.isDirectNode = false;
     this.parallel = true;
@@ -1507,20 +1466,21 @@ EventCommandStopBackgroundSound.prototype = {
 */
 
 function EventCommandPlaySound(command){
-    EventCommandPlayMusic.parsePlaySong(this, command);
+    EventCommandPlayMusic.parsePlaySong(this, command, SongKind.Sound);
     this.isDirectNode = true;
     this.parallel = false;
 }
 
 EventCommandPlaySound.prototype = {
 
-    initialize: function(){ return null; },
+    initialize: function(){
+        return this.song.initialize();
+    },
 
     // -------------------------------------------------------
 
     play: function() {
-        $songsManager.playSound(this.songID.getValue(), this.volume.getValue() /
-            100);
+        return this.song.playSound();
     },
 
     // -------------------------------------------------------
@@ -1559,7 +1519,7 @@ EventCommandPlaySound.prototype = {
 */
 
 function EventCommandPlayMusicEffect(command){
-    EventCommandPlayMusic.parsePlaySong(this, command);
+    EventCommandPlayMusic.parsePlaySong(this, command, SongKind.MusicEffect);
     this.isDirectNode = true;
     this.parallel = true;
 }
@@ -1567,10 +1527,7 @@ function EventCommandPlayMusicEffect(command){
 EventCommandPlayMusicEffect.prototype = {
 
     initialize: function(){
-        return {
-            parallel: false,
-            timeStop: new Date().getTime()
-        };
+        return this.song.initialize();
     },
 
     // -------------------------------------------------------
@@ -1583,10 +1540,7 @@ EventCommandPlayMusicEffect.prototype = {
     */
 
     update: function(currentState, object, state){
-        var played = $songsManager.playMusicEffect(this.songID.getValue(),
-            this.volume.getValue() / 100, currentState);
-        currentState.end = played;
-        return currentState.parallel ? (played ? 1 : 0) : 1;
+        return this.song.playMusicEffect(currentState);
     },
 
     // -------------------------------------------------------

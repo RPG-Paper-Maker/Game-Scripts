@@ -58,8 +58,7 @@ SceneBattle.prototype.initializeStep4 = function(){
     this.priorityIndex = 0;
 
     // Music
-    EventCommandPlayMusic.playSong($datasGame.battleSystem.battleVictory,
-        SongKind.Music);
+    $datasGame.battleSystem.battleVictory.playSong();
 
     // Windows
     w = 200 + RPM.SMALL_PADDING_BOX[0] + RPM.SMALL_PADDING_BOX[2];
@@ -145,7 +144,7 @@ SceneBattle.prototype.updateTeamXP = function() {
                 }
                 this.windowStatisticProgression.setY(y);
                 this.windowStatisticProgression.setH(h);
-                $datasGame.battleSystem.battleLevelUp.play();
+                $datasGame.battleSystem.battleLevelUp.playSound();
                 this.subStep = 2;
                 return;
             }
@@ -178,10 +177,9 @@ SceneBattle.prototype.unpauseTeamXP = function() {
 // -------------------------------------------------------
 
 SceneBattle.prototype.playMapMusic = function()  {
-    EventCommandPlayMusic.playSong(EventCommandPlayMusic.previousMusicStopped,
-        SongKind.Music, EventCommandPlayMusic.previousMusicStoppedTime, false,
-        0);
-    $songsManager.initializeProgressionMusic(0, EventCommandPlayMusic
+    SystemPlaySong.previousMusicStopped.playSong(SystemPlaySong
+        .previousMusicStoppedTime, false, 0);
+    $songsManager.initializeProgressionMusic(0, SystemPlaySong
         .previousMusicStopped.volume, 0, SceneBattle.TIME_LINEAR_MUSIC_START);
 }
 
@@ -283,7 +281,7 @@ SceneBattle.prototype.onKeyPressedStep4 = function(key){
         {
             if (this.finishedXP) {
                 this.transitionEnded = false;
-                $songsManager.initializeProgressionMusic(EventCommandPlayMusic
+                $songsManager.initializeProgressionMusic(SystemPlaySong
                     .currentPlayingMusic.volume, 0, 0, SceneBattle
                     .TIME_LINEAR_MUSIC_END);
                 this.subStep = 3;
