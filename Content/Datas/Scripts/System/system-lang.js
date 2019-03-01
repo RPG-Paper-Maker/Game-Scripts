@@ -34,7 +34,13 @@ SystemLang.prototype = {
     /** Read the JSON associated to the lang.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json){
-        this.name = json.names[1];
+    readJSON: function(json) {
+        var names = json.names;
+
+        if (names) {
+            this.name = names[1];
+        } else {
+            this.name = json[1];
+        }
     }
 }

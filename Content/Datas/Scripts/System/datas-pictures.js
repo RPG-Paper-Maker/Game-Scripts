@@ -94,7 +94,6 @@ DatasPictures.prototype = {
     // -------------------------------------------------------
 
     getIcon: function(id) {
-        return this.get(PictureKind.Icons, $datasGame.system.currencies[id]
-            .pictureID);
+        return this.get(PictureKind.Icons, id);
     }
 }

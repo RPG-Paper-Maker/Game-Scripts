@@ -33,21 +33,18 @@ function SystemCost() {
 // -------------------------------------------------------
 
 SystemCost.prototype.readJSON = function(json) {
-    this.kind = json.k;
+    this.kind = json.k ? json.k : DamagesKind.Stat;
 
     switch (this.kind) {
     case DamagesKind.Stat:
-        this.statisticID = new SystemValue();
-        this.statisticID.read(json.sid);
+        this.statisticID = SystemValue.readOrDefaultDatabase(json.sid);
         break;
     case DamagesKind.Currency:
-        this.currencyID = new SystemValue();
-        this.currencyID.read(json.cid);
+        this.currencyID = SystemValue.readOrDefaultDatabase(json.cid);
         break;
     case DamagesKind.Variable:
-        this.variableID = json.vid;
+        this.variableID = json.vid ? json.vid : 1;
         break;
     }
-    this.valueFormula = new SystemValue();
-    this.valueFormula.read(json.vf);
+    this.valueFormula = SystemValue.readOrDefaultMessage(json.vf);
 }

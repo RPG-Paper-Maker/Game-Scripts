@@ -28,11 +28,11 @@
 *   @property {string} name The name of the skill.
 */
 function SystemSkill(){
-    SystemLang.call(this);
+    SystemCommonSkillItem.call(this);
 }
 
-SystemSkill.prototype = Object.create(SystemLang.prototype);
+SystemSkill.prototype = Object.create(SystemCommonSkillItem.prototype);
 
 SystemSkill.prototype.readJSON = function(json) {
-    SystemLang.prototype.readJSON.call(this, json);
+    SystemCommonSkillItem.prototype.readJSON.call(this, json);
 }

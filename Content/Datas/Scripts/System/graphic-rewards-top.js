@@ -39,8 +39,8 @@ function GraphicRewardsTop(xp, currencies) {
     // Currencies
     this.currencies = [];
     for (id in currencies) {
-        this.currencies.push(new GraphicTextIcon("" + currencies[id], id, Align
-            .Left, Align.Left));
+        this.currencies.push(new GraphicTextIcon("" + currencies[id], $datasGame
+            .system.currencies[id].pictureID, Align.Left, Align.Left));
     }
 }
 

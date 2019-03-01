@@ -32,14 +32,12 @@ function SystemArmor() {
 
 }
 
-SystemArmor.prototype = Object.create(SystemItem.prototype);
+SystemArmor.prototype = Object.create(SystemCommonSkillItem.prototype);
 
 // -------------------------------------------------------
 
 SystemArmor.prototype.readJSON = function(json) {
-    SystemItem.prototype.readJSON.call(this, json);
-
-    this.idType = json.k;
+    SystemCommonSkillItem.prototype.readJSON.call(this, json);
 }
 
 // -------------------------------------------------------

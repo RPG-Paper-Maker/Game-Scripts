@@ -33,65 +33,55 @@ function SystemCaracteristic() {
 // -------------------------------------------------------
 
 SystemCaracteristic.prototype.readJSON = function(json) {
-    this.kind = json.k;
+    this.kind = json.k ? json.k : CaracteristicKind.IncreaseDecrease;
 
     switch (this.kind) {
-    case CaractericticKind.IncreaseDecrease:
-        this.isIncreaseDecrease = json.iid;
-        this.increaseDecreaseKind = json.idk;
+    case CaracteristicKind.IncreaseDecrease:
+        this.isIncreaseDecrease = json.iid ? json.iid : true;
+        this.increaseDecreaseKind = json.idk ? json.idk : IncreaseDecreaseKind
+            .StatValue;
         switch (this.increaseDecreaseKind) {
         case IncreaseDecreaseKind.StatValue:
-            this.statisticValueID = new SystemValue();
-            this.statisticValueID.read(json.svid);
+            this.statisticValueID = SystemValue.readOrDefaultDatabase(json.svid);
             break;
         case IncreaseDecreaseKind.ElementRes:
-            this.elementResID = new SystemValue();
-            this.elementResID.read(json.erid);
+            this.elementResID = SystemValue.readOrDefaultDatabase(json.erid);
             break;
         case IncreaseDecreaseKind.StatusRes:
-            this.statusResID = new SystemValue();
-            this.statusResID.read(json.strid);
+            this.statusResID = SystemValue.readOrDefaultDatabase(json.strid);
             break;
         case IncreaseDecreaseKind.CurrencyGain:
-            this.currencyGainID = new SystemValue();
-            this.currencyGainID.read(json.cgid);
+            this.currencyGainID = SystemValue.readOrDefaultDatabase(json.cgid);
             break;
         case IncreaseDecreaseKind.SkillCost:
-            this.skillCostID = new SystemValue();
-            this.skillcostID.read(json.scid);
-            this.isAllSkillCost = json.iasc;
+            this.skillCostID = SystemValue.readOrDefaultDatabase(json.scid);
+            this.isAllSkillCost = json.iasc ? json.iasc : true;
             break;
         case IncreaseDecreaseKind.Variable:
-            this.variableID = json.vid;
+            this.variableID = json.vid ? json.vid : 1;
             break;
         }
-        this.operation = json.o;
-        this.value = new SystemValue();
-        this.value.read(json.v);
-        this.unit = json.u;
+        this.operation = json.o ? json.o : true;
+        this.value = SystemValue.readOrDefaultMessage(json.v);
+        this.unit = json.u ? json.u : true;
         break;
-    case CaractericticKind.Script:
-        this.script = new SystemValue();
-        this.script.read(json.s);
+    case CaracteristicKind.Script:
+        this.script = SystemValue.readOrDefaultMessage(json.s);
         break;
-    case CaractericticKind.AllowForbidEquip:
-        this.isAllowEquip = json.iae;
-        this.isAllowEquipWeapon = json.iaew;
-        this.equipWeaponTypeID = new SystemValue();
-        this.equipWeaponTypeID.read(json.ewtid);
-        this.equipArmorTypeID = new SystemValue();
-        this.equipArmorTypeID.read(json.eatid);
+    case CaracteristicKind.AllowForbidEquip:
+        this.isAllowEquip = json.iae ? json.iae : true;
+        this.isAllowEquipWeapon = json.iaew ? json.iaew : true;
+        this.equipWeaponTypeID = SystemValue.readOrDefaultDatabase(json.ewtid);
+        this.equipArmorTypeID = SystemValue.readOrDefaultDatabase(json.eatid);
         break;
-    case CaractericticKind.AllowForbidChange:
-        this.isAllowChangeEquipment = json.iace;
-        this.changeEquipmentID = new SystemValue();
-        this.changeEquipmentID.read(json.ceid);
+    case CaracteristicKind.AllowForbidChange:
+        this.isAllowChangeEquipment = json.iace ? json.iace : true;
+        this.changeEquipmentID = SystemValue.readOrDefaultDatabase(json.ceid);
         break;
-    case CaractericticKind.BeginEquipment:
-        this.beginEquipmentID = new SystemValue();
-        this.beginEquipmentID.read(json.beid);
-        this.isBeginWeapon = json.ibw;
-        this.beginWeaponArmorID = json.bwaid;
+    case CaracteristicKind.BeginEquipment:
+        this.beginEquipmentID = SystemValue.readOrDefaultDatabase(json.beid);
+        this.isBeginWeapon = json.ibw ? json.ibw : true;
+        this.beginWeaponArmorID = SystemValue.readOrDefaultDatabase(json.bwaid);
         break;
     }
 }

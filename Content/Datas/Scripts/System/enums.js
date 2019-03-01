@@ -312,3 +312,31 @@ var IncreaseDecreaseKind = {
     Variable: 6
 };
 Object.freeze(IncreaseDecreaseKind);
+
+/**
+*   Enum for the different target kind.
+*   @enum {number}
+*   @readonly
+*/
+var TargetKind = {
+    None: 0,
+    User: 1,
+    Enemy: 2,
+    Ally: 3,
+    AllEnemies: 4,
+    AllAllies: 5
+};
+Object.freeze(TargetKind);
+
+/**
+*   Enum for the different available kind.
+*   @enum {number}
+*   @readonly
+*/
+var AvailableKind = {
+    Battle: 0,
+    MainMenu: 1,
+    Always: 2,
+    Never: 3
+};
+Object.freeze(AvailableKind);

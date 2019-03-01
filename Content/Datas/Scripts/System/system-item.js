@@ -33,13 +33,10 @@ function SystemItem(){
 
 }
 
-SystemItem.prototype = Object.create(SystemSkill.prototype);
+SystemItem.prototype = Object.create(SystemCommonSkillItem.prototype);
 
 // -------------------------------------------------------
 
 SystemItem.prototype.readJSON = function(json) {
-    SystemSkill.prototype.readJSON.call(this, json);
-
-    this.idType = json.t;
-    this.consumable = json.cons;
+    SystemCommonSkillItem.prototype.readJSON.call(this, json);
 }

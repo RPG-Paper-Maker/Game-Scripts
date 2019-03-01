@@ -38,10 +38,24 @@ SystemPlaySong.previousMusicStoppedTime = 0;
 
 SystemPlaySong.prototype = {
 
+    setDefault: function() {
+        this.songID = SystemValue.createNumber(-1);
+        this.volume = SystemValue.createNumber(100);
+        this.isStart = false;
+        this.isEnd = false;
+    },
+
+    // -------------------------------------------------------
+
     /** Read the JSON associated to the play song.
     *   @param {Object} json Json object describing the object.
     */
     readJSON: function(json) {
+        if (!json) {
+            this.setDefault();
+            return;
+        }
+
         // Parse
         var id = json.id;
         var isSelectedByID = json.isbi;

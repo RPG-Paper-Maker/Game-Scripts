@@ -30,18 +30,16 @@
 *   @extends SystemArmor
 */
 function SystemWeapon() {
-    SystemArmor.call(this);
+    SystemCommonSkillItem.call(this);
 }
 
 
-SystemWeapon.prototype = Object.create(SystemArmor.prototype);
+SystemWeapon.prototype = Object.create(SystemCommonSkillItem.prototype);
 
 // -------------------------------------------------------
 
 SystemWeapon.prototype.readJSON = function(json) {
-    SystemArmor.prototype.readJSON.call(this, json);
-
-    this.idType = json.k;
+    SystemCommonSkillItem.prototype.readJSON.call(this, json);
 }
 
 // -------------------------------------------------------

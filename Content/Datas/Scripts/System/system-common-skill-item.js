@@ -38,48 +38,53 @@ SystemCommonSkillItem.prototype.readJSON = function(json) {
     var jsonCosts, jsonEffects, jsonCaracteristics, cost, effect, caracteristic;
     var i, l;
 
-    this.type = json.t;
-    this.consumable = json.con;
-    this.oneHand = json.oh;
+    this.type = json.t ? json.t : 1;
+    this.consumable = json.con ? json.con : false;
+    this.oneHand = json.oh ? json.oh : true;
     this.description = new SystemLang();
     this.description.readJSON(json.d);
-    this.targetKind = json.tk;
-    this.targetConditionFormula = new SystemValue();
-    this.targetConditionFormula.read(json.tcf);
-    this.conditionFormula = new SystemValue();
-    this.conditionFormula.read(json.cf);
-    this.availableKind = json.ak;
+    this.targetKind = json.tk ? json.tk : TargetKind.None;
+    this.targetConditionFormula = SystemValue.readOrNone(json.tcf);
+    this.conditionFormula = SystemValue.readOrNone(json.cf);
+    this.availableKind = json.ak ? json.ak : AvailableKind.Never;
     this.sound = new SystemPlaySong(SongKind.sound);
     this.sound.readJSON(json.s);
-    this.animationUserID = new SystemValue();
-    this.animationUserID.read(json.auid);
-    this.animationTargeyID = new SystemValue();
-    this.animationTargetID.read(json.atid);
-    this.price = new SystemValue();
-    this.price.read(json.p);
+    this.animationUserID = SystemValue.readOrNone(json.auid);
+    this.animationTargetID = SystemValue.readOrNone(json.atid);
+    this.price = SystemValue.readOrDefaultNumber(json.p, 0);
 
     jsonCosts = json.cos;
-    l = jsonCosts.length;
+    l = jsonCosts ? jsonCosts.length : 0;
     this.costs = new Array(l);
     for (i = 0; i < l; i++) {
         cost = new SystemCost();
-        cost.read(jsonCosts[i]);
+        cost.readJSON(jsonCosts[i]);
         this.costs[i] = cost;
     }
     jsonEffects = json.e;
-    l = jsonEffects.length;
+    l = jsonEffects ? jsonEffects.length : 0;
     this.effects = new Array(l);
     for (i = 0; i < l; i++) {
         effect = new SystemEffect();
-        effect.read(jsonEffects[i]);
+        effect.readJSON(jsonEffects[i]);
         this.effects[i] = effect;
     }
     jsonCaracteristics = json.car;
-    l = jsonCaracteristics.length;
+    l = jsonCaracteristics ? jsonCaracteristics.length : 0;
     this.caracteristics = new Array(l);
     for (i = 0; i < l; i++) {
         caracteristic = new SystemCaracteristic();
-        caracteristic.read(jsonCaracteristics[i]);
+        caracteristic.readJSON(jsonCaracteristics[i]);
         this.caracteristics[i] = caracteristic;
+    }
+}
+
+// -------------------------------------------------------
+
+SystemCommonSkillItem.prototype.useInBattle = function() {
+    var i, l;
+
+    for (i = 0, l = this.effects.length; i < l; i++) {
+        this.effects[i].execute();
     }
 }

@@ -45,6 +45,17 @@ SystemValue.createValue = function(k, v){
     return value;
 }
 
+
+// -------------------------------------------------------
+
+/** Create a none value.
+*   @static
+*   @returns {SystemValue}
+*/
+SystemValue.createNone = function(){
+    return SystemValue.createValue(PrimitiveValueKind.None, null);
+}
+
 // -------------------------------------------------------
 
 /** Create a new value number.
@@ -76,6 +87,55 @@ SystemValue.createKeyBoard = function(k){
 */
 SystemValue.createSwitch = function(b){
     return SystemValue.createValue(PrimitiveValueKind.Switch, b);
+}
+
+// -------------------------------------------------------
+
+SystemValue.readOrDefaultNumber = function(json, number) {
+    if (json) {
+        var value = new SystemValue();
+        value.read(json);
+        return value;
+    }
+
+    return SystemValue.createNumber(number);
+}
+
+// -------------------------------------------------------
+
+SystemValue.readOrDefaultDatabase = function(json) {
+    if (json) {
+        var value = new SystemValue();
+        value.read(json);
+        return value;
+    }
+
+    return SystemValue.createValue(PrimitiveValueKind.Database, 1);
+}
+
+// -------------------------------------------------------
+
+SystemValue.readOrDefaultMessage = function(json, message) {
+    if (json) {
+        var value = new SystemValue();
+        value.read(json);
+        return value;
+    }
+
+    return SystemValue.createValue(PrimitiveValueKind.Message, message ? message
+        : "");
+}
+
+// -------------------------------------------------------
+
+SystemValue.readOrNone = function(json) {
+    if (json) {
+        var value = new SystemValue();
+        value.read(json);
+        return value;
+    }
+
+    return SystemValue.createNone();
 }
 
 // -------------------------------------------------------

@@ -142,6 +142,7 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
         if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
             .Action))
         {
+
             this.windowChoicesBattleCommands.onKeyPressed(key, this
                 .windowChoicesBattleCommands.getCurrentContent().skill);
             switch (this.battleCommandKind) {

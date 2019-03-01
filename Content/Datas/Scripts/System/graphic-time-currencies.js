@@ -34,8 +34,9 @@ function GraphicTimeCurrencies() {
     // Currencies
     this.currencies = [];
     for (id in $game.currencies) {
-        this.currencies.push(new GraphicTextIcon("" + $game.currencies[id], id,
-            Align.Right, Align.Right));
+        this.currencies.push(new GraphicTextIcon("" + $game.currencies[id],
+            $datasGame.system.currencies[id].pictureID, Align.Right, Align
+            .Right));
     }
 
     // Time
