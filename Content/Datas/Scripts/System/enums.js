@@ -241,6 +241,34 @@ var LootKind = {
 Object.freeze(LootKind);
 
 /**
+*   Enum for the different damages kind.
+*   @enum {number}
+*   @readonly
+*/
+var DamagesKind = {
+    Stat: 0,
+    Currency: 1,
+    Variable: 2
+};
+Object.freeze(DamagesKind);
+
+/**
+*   Enum for the different effect kind.
+*   @enum {number}
+*   @readonly
+*/
+var EffectKind = {
+    Damages: 0,
+    Status: 1,
+    AddRemoveSkill: 2,
+    PerformSkill: 3,
+    CommonReaction: 4,
+    SpecialActions: 5,
+    Script: 6
+};
+Object.freeze(EffectKind);
+
+/**
 *   Enum for the different effect special action kind.
 *   @enum {number}
 *   @readonly
@@ -254,3 +282,33 @@ var EffectSpecialActionKind = {
     EndTurn: 4
 };
 Object.freeze(EffectSpecialActionKind);
+
+/**
+*   Enum for the different caracteristic kind.
+*   @enum {number}
+*   @readonly
+*/
+var CaracteristicKind = {
+    IncreaseDecrease: 0,
+    Script: 1,
+    AllowForbidEquip: 2,
+    AllowForbidChange: 3,
+    BeginEquipment: 4
+};
+Object.freeze(CaracteristicKind);
+
+/**
+*   Enum for the different increase / decrease kind.
+*   @enum {number}
+*   @readonly
+*/
+var IncreaseDecreaseKind = {
+    StatValue: 0,
+    ElementRes: 1,
+    StatusRes: 2,
+    ExperienceGain: 3,
+    CurrencyGain: 4,
+    SkillCost: 5,
+    Variable: 6
+};
+Object.freeze(IncreaseDecreaseKind);
