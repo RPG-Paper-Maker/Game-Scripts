@@ -33,6 +33,7 @@ SceneBattle.prototype.initializeStep0 = function(){
     this.kindSelection = CharacterKind.Hero;
     this.selectedUserIndex = 0;
     this.selectedTargetIndex = 0;
+    this.battleCommandKind = EffectSpecialActionKind.None;
 
     // Battlers and graphics
     this.battlers = new Array(2);
@@ -86,15 +87,19 @@ SceneBattle.prototype.initializeStep0 = function(){
                                                      $SCREEN_Y - h, w, h, null,
                                                      RPM.SMALL_PADDING_BOX);
     l = $datasGame.battleSystem.battleCommandsOrder.length;
-    var list = new Array(l)
+    var listContent = new Array(l);
+    var listCallbacks = new Array(l);
+    var skill;
     for (i = 0; i < l; i++){
-        var idSkill = $datasGame.battleSystem.battleCommandsOrder[i];
-        list[i] = new GraphicText($datasGame.skills.list[idSkill].name);
+        skill = $datasGame.skills.list[$datasGame.battleSystem
+            .battleCommandsOrder[i]];
+        listContent[i] = new GraphicTextIcon(skill.name, skill.pictureID);
+        listContent[i].skill = skill;
+        listCallbacks[i] = SystemCommonSkillItem.prototype.useInBattle;
     }
-    this.windowChoicesBattleCommands =
-         new WindowChoices(OrientationWindow.Vertical, 20,
-                           $SCREEN_Y - 20 - (l*30),
-                           150, 30, 4, list, null);
+    this.windowChoicesBattleCommands = new WindowChoices(OrientationWindow
+        .Vertical, 20, $SCREEN_Y - 20 - (l*30), 150, 30, 4, listContent,
+        listCallbacks);
 
     // Music
     $datasGame.battleSystem.battleMusic.playSong(true);

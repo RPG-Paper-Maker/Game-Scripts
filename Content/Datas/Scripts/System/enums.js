@@ -239,3 +239,18 @@ var LootKind = {
     Armor: 2
 };
 Object.freeze(LootKind);
+
+/**
+*   Enum for the different effect special action kind.
+*   @enum {number}
+*   @readonly
+*/
+var EffectSpecialActionKind = {
+    None: -1,
+    ApplyWeapons: 0,
+    OpenSkills: 1,
+    OpenItems: 2,
+    Escape: 3,
+    EndTurn: 4
+};
+Object.freeze(EffectSpecialActionKind);

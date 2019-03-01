@@ -25,6 +25,8 @@
 //      SubStep 0 : Selection of an ally
 //      SubStep 1 : Selection of a command
 //      SubStep 2 : selection of an ally/enemy for a command
+//      SubStep 3 : selection of a skill
+//      SubStep 4 : selection of an item
 //
 // -------------------------------------------------------
 
@@ -140,15 +142,24 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
         if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
             .Action))
         {
-            this.subStep = 2;
-            this.kindSelection = CharacterKind.Monster;
-            this.windowCharacterInformations.setX(0);
-            this.moveArrow();
+            this.windowChoicesBattleCommands.onKeyPressed(key, this
+                .windowChoicesBattleCommands.getCurrentContent().skill);
+            switch (this.battleCommandKind) {
+            case EffectSpecialActionKind.ApplyWeapons:
+                this.subStep = 2;
+                this.kindSelection = CharacterKind.Monster;
+                this.windowCharacterInformations.setX(0);
+                this.moveArrow();
+                break;
+            }
         } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
             .menuControls.Cancel))
         {
-            this.subStep = 0;
-            this.user.selected = false;
+            switch (this.battleCommandKind) {
+            case EffectSpecialActionKind.ApplyWeapons:
+                this.subStep = 0;
+                this.user.selected = false;
+            }
         }
         break;
     case 2:

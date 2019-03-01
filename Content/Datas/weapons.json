@@ -1,1 +1,1 @@
-{"weapons":[{"id":1,"k":1,"names":{"1":"Wooden sword"}},{"id":2,"k":2,"names":{"1":"Wooden axe"}}]}
+{"weapons":[{"d":{"1":"A sword used for beginners."},"e":[{"df":{"k":8,"v":"u.atk"},"dsid":{"k":7,"v":3},"dvf":{"k":8,"v":"1"},"id":-1,"idv":true,"name":""}],"id":1,"names":{"1":"Wooden sword"},"p":{"k":3,"v":40},"pid":1,"tk":2},{"d":{"1":"An axe used for beginners."},"e":[{"df":{"k":8,"v":"u.atk"},"dsid":{"k":7,"v":3},"dvf":{"k":8,"v":"1"},"id":-1,"idv":true,"name":""}],"id":2,"names":{"1":"Wooden axe"},"oh":false,"p":{"k":3,"v":50},"pid":1,"t":2,"tk":2}]}
