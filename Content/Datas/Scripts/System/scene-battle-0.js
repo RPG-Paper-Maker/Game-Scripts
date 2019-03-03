@@ -34,6 +34,8 @@ SceneBattle.prototype.initializeStep0 = function(){
     this.selectedUserIndex = 0;
     this.selectedTargetIndex = 0;
     this.battleCommandKind = EffectSpecialActionKind.None;
+    this.targets = [];
+    this.damages = [];
 
     // Battlers and graphics
     this.battlers = new Array(2);

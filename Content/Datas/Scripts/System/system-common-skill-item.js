@@ -85,6 +85,6 @@ SystemCommonSkillItem.prototype.useInBattle = function() {
     var i, l;
 
     for (i = 0, l = this.effects.length; i < l; i++) {
-        this.effects[i].execute();
+        this.effects[i].executeInBattle();
     }
 }

@@ -707,7 +707,7 @@ function EventCommandModifyInventory(command) {
     this.operation = command[i++];
     k = command[i++];
     v = command[i++];
-    this.value = new SystemValue(k, v);
+    this.value = SystemValue.createValue(k, v);
 
     this.isDirectNode = true;
     this.parallel = false;

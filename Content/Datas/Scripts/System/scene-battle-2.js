@@ -28,26 +28,48 @@
 //
 // -------------------------------------------------------
 
-SceneBattle.prototype.initializeStep2 = function(){
-    var i, l;
+SceneBattle.prototype.initializeStep2 = function() {
+    var equipments, gameItem, weapon, effects;
+    var i, j, l, ll;
     this.windowTopInformations.content = new GraphicText("Attack");
     this.time = new Date().getTime();
-    var damages = 5;
 
-    l = this.targets.length;
-    this.textsDamages = new Array(l);
-    for (i = 0; i < l; i++){
-        var t = this.targets[i].character;
-        t.hp -= damages;
-        if (t.hp < 0) t.hp = 0;
-        this.textsDamages[i] = [damages, this.targets[i]];
+    this.damages = [];
+    this.effects = [];
+    switch (this.battleCommandKind) {
+    case EffectSpecialActionKind.ApplyWeapons:
+        equipments = this.user.character.equip;
+        for (i = 0, l = equipments.length; i < l; i++) {
+            gameItem = equipments[i];
+            if (gameItem && gameItem.k === ItemKind.Weapon) {
+                weapon = gameItem.getItemInformations();
+                for (j = 0, ll = weapon.effects.length; j < ll; j++) {
+                    this.effects.push(weapon.effects[j]);
+                }
+            }
+        }
+
+        break;
     }
+    this.currentEffectIndex = 0;
+    if (this.effects.length === 0) {
+        effects = this.windowChoicesBattleCommands.getCurrentContent().skill
+            .effects;
+        for (i = 1, l = effects.length; i < l; i++) {
+            this.effects.push(effects[i]);
+        }
+    }
+    if (this.effects.length > 0) {
+        this.effects[this.currentEffectIndex].executeInBattle();
+    }
+
     this.user.setAttacking();
 };
 
 // -------------------------------------------------------
 
 SceneBattle.prototype.updateStep2 = function() {
+    var isAnotherEffect;
     var i, l;
 
     if (!this.user.isAttacking()) {
@@ -57,8 +79,16 @@ SceneBattle.prototype.updateStep2 = function() {
     }
 
     if (new Date().getTime() - this.time >= 2000) {
-        this.user.setActive(false);
-        this.user.selected = false;
+        this.currentEffectIndex++;
+        isAnotherEffect = this.currentEffectIndex < this.effects.length;
+        if (isAnotherEffect) {
+            this.time = new Date().getTime();
+            this.effects[this.currentEffectIndex].executeInBattle();
+            $requestPaintHUD = true;
+        } else {
+            this.user.setActive(false);
+            this.user.selected = false;
+        }
 
         // Target and user test death
         this.user.updateDead(false);
@@ -73,6 +103,10 @@ SceneBattle.prototype.updateStep2 = function() {
         } else if (this.isLose()) {
             this.gameOver();
         } else {
+            if (isAnotherEffect) {
+                return;
+            }
+
             // Testing end of turn
             if (this.isEndTurn()) {
                 this.activeGroup();
@@ -123,12 +157,11 @@ SceneBattle.prototype.drawHUDStep2 = function(){
 
     // Draw damages
     if (!this.user.isAttacking()) {
-        var i, l = this.textsDamages.length;
+        var i, l = this.damages.length;
         var target, pos, damage;
         for (i = 0; i < l; i++){
-            damage = this.textsDamages[i][0];
-            target = this.textsDamages[i][1];
-            target.drawDamages(damage, false, false);
+            damage = this.damages[i];
+            this.targets[i].drawDamages(damage[0], damage[1], damage[2]);
         }
     }
 };

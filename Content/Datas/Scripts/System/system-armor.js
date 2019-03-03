@@ -43,5 +43,5 @@ SystemArmor.prototype.readJSON = function(json) {
 // -------------------------------------------------------
 
 SystemArmor.prototype.getType = function() {
-    return $datasGame.battleSystem.armorsKind[this.idType];
+    return $datasGame.battleSystem.armorsKind[this.type];
 }

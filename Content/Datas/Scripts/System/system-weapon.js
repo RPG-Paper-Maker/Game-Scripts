@@ -45,5 +45,5 @@ SystemWeapon.prototype.readJSON = function(json) {
 // -------------------------------------------------------
 
 SystemWeapon.prototype.getType = function() {
-    return $datasGame.battleSystem.weaponsKind[this.idType];
+    return $datasGame.battleSystem.weaponsKind[this.type];
 }

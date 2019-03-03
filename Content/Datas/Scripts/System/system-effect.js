@@ -90,15 +90,71 @@ SystemEffect.prototype.readJSON = function(json) {
 
 // -------------------------------------------------------
 
-SystemEffect.prototype.execute = function(json) {
+SystemEffect.prototype.executeInBattle = function() {
+    var user = $currentMap.user.character;
+    var targets = $currentMap.targets;
+    var i, l, target;
+
     switch (this.kind) {
     case EffectKind.Damages:
-        switch (this.damageKind) {
-        case DamagesKind.Stat:
-            break;
-        case DamagesKind.Currency:
-            break;
-        case DamagesKind.Variable:
+        var damage, miss, crit, element, variance, critical, precision, random;
+        for (i = 0, l = targets.length; i < l; i++) {
+            damage = 0;
+            miss = false;
+            crit = false;
+            target = targets[i].character;
+            if (this.isDamagePrecision) {
+                precision = RPM.evaluateFormula(this.damagePrecisionFormula
+                    .getValue(), user, target);
+                random = RPM.random(0, 100);
+                if (precision > random) {
+                    damage = null;
+                    miss = true;
+                }
+            }
+            if (damage !== null) {
+                damage = RPM.evaluateFormula(this.damageFormula.getValue(), user
+                    , target);
+                if (this.isDamageVariance) {
+                    variance = Math.round(damage * RPM.evaluateFormula(this
+                        .damageVarianceFormula.getValue(), user, target) / 100);
+                    damage = RPM.random(damage - variance, damage + variance);
+                }
+                if (this.isDamageElement) {
+                    element = this.damageElementID.getValue();
+                    // TODO
+                }
+                if (this.isDamageCritical) {
+                    critical = RPM.evaluateFormula(this.damageCriticalFormula
+                        .getValue(), user, target);
+                    random = RPM.random(0, 100);
+                    if (critical <= random) {
+                        damage = damage * 2; // TODO Should be script
+                        crit = true;
+                    }
+                }
+            }
+
+            $currentMap.damages[i] = [damage, crit, miss];
+            switch (this.damageKind) {
+            case DamagesKind.Stat:
+                var abbreviation = $datasGame.battleSystem.statistics[this
+                    .damageStatisticID.getValue()].abbreviation;
+                target[abbreviation] -= damage;
+                if (target[abbreviation] < 0) { // Script ?
+                    target[abbreviation] = 0;
+                }
+                break;
+            case DamagesKind.Currency:
+                var currencyID = this.damageCurrencyID.getValue();
+                if (target.k === CharacterKind.Hero) {
+                    $game.currencies[currencyID] -= damage;
+                }
+                break;
+            case DamagesKind.Variable:
+                $game.variables[this.damageVariableID] -= damage;
+                break;
+            }
             break;
         }
         break;
