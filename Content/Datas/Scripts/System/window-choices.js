@@ -49,12 +49,14 @@ function WindowChoices(orientation, x, y, w, h, nbItemsMax, listContents,
 
     var i, l;
 
+    /*
     // Set all the windows borders opacity to 0
     for (i = 0, l = this.listWindows.length; i < l; i++)
         this.listWindows[i].bordersOpacity = 0;
 
     // Create a main window containing all this sub-windows choices
     this.windowMain = new WindowBox(x, y, w, h);
+    */
 }
 
 WindowChoices.prototype = {
@@ -105,6 +107,10 @@ WindowChoices.prototype = {
         WindowTabs.prototype.setContents.call(this, contents);
     },
 
+    setContentsCallbacks: function(contents, callbacks) {
+        WindowTabs.prototype.setContentsCallbacks.call(this, contents, callbacks);
+    },
+
     // -------------------------------------------------------
 
     unselect: function(){
@@ -141,7 +147,7 @@ WindowChoices.prototype = {
     *   @param {Canvas.Context} context The canvas context.
     */
     draw: function(){
-        this.windowMain.draw();
+        //this.windowMain.draw();
 
         WindowTabs.prototype.draw.call(this);
     }

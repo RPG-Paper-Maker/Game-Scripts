@@ -55,6 +55,7 @@ Bitmap.prototype = {
     *   @param {number} x The x value.
     */
     setX: function(x){
+        this.oX = x;
         this.x = RPM.getScreenX(x);
         $requestPaintHUD = true;
     },
@@ -65,6 +66,7 @@ Bitmap.prototype = {
     *   @param {number} y The y value.
     */
     setY: function(y){
+        this.oY = y;
         this.y = RPM.getScreenY(y);
         $requestPaintHUD = true;
     },
@@ -75,6 +77,7 @@ Bitmap.prototype = {
     *   @param {number} w The w value.
     */
     setW: function(w){
+        this.oW = w;
         this.w = RPM.getScreenX(w);
         $requestPaintHUD = true;
     },
@@ -85,6 +88,7 @@ Bitmap.prototype = {
     *   @param {number} h The h value.
     */
     setH: function(h){
+        this.oH = h;
         this.h = RPM.getScreenY(h);
         $requestPaintHUD = true;
     },
@@ -94,6 +98,7 @@ Bitmap.prototype = {
     /** Set the position to the top.
     */
     setLeft: function() {
+        this.oX = 0;
         this.x = 0;
         $requestPaintHUD = true;
     },
@@ -103,6 +108,7 @@ Bitmap.prototype = {
     /** Set the position to the top.
     */
     setTop: function() {
+        this.oY = 0;
         this.y = 0;
         $requestPaintHUD = true;
     },
@@ -112,7 +118,8 @@ Bitmap.prototype = {
     /** Set the position to the top.
     */
     setRight: function(offset) {
-        this.x = $SCREEN_X - this.w - (offset ? offset : 0);
+        this.oX = $SCREEN_X - this.oW - (offset ? offset : 0);
+        this.x = $canvasWidth - this.w - (offset ? offset : 0);
         $requestPaintHUD = true;
     },
 
@@ -121,7 +128,8 @@ Bitmap.prototype = {
     /** Set the position to the top.
     */
     setBot: function(offset) {
-        this.y = $SCREEN_Y - this.h - (offset ? offset : 0);
+        this.oY = $SCREEN_Y - this.oH - (offset ? offset : 0);
+        this.y = $canvasHeight - this.h - (offset ? offset : 0);
         $requestPaintHUD = true;
     },
 

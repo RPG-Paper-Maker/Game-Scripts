@@ -56,58 +56,71 @@ function WindowTabs(orientation, x, y, w, h, nbItemsMax, listContents,
     if (typeof space === 'undefined') space = 0;
     if (typeof currentSelectedIndex === 'undefined') currentSelectedIndex = 0;
 
-    // Getting the main box size
-    var boxWidth, boxHeight;
-    var totalNb = listContents.length;
-    var size = totalNb < nbItemsMax ? totalNb : nbItemsMax;
-    if (orientation === OrientationWindow.Horizontal){
-        boxWidth = (w + space) * size - space;
-        boxHeight = h;
-    }
-    else{
-        boxWidth = w;
-        boxHeight = (h + space) * size - space;
-    }
-
-    Bitmap.call(this, x, y, boxWidth, boxHeight);
+    Bitmap.call(this, x, y, w, h);
 
     this.orientation = orientation;
     this.choiceWidth = w;
     this.choiceHeight = h;
     this.currentSelectedIndex = currentSelectedIndex;
+    this.offsetSelectedIndex = 0;
     this.space = space;
+    this.listContents = listContents;
+    this.nbItemsMax = nbItemsMax;
+    this.padding = padding;
 
-    // If no callBacks, adapt by creating a null content for each box
-    var i, l = listContents.length;
-    if (listCallBacks === null){
-        this.listCallBacks = new Array(l);
-        for (i = 0; i < l; i++)
-            this.listCallBacks[i] = null;
-    }
-    else
-         this.listCallBacks = listCallBacks;
-
-    // Create a new windowBox for each choice and according to the orientation
-    this.listWindows = new Array(l);
-    for (i = 0; i < l; i++){
-        if (orientation === OrientationWindow.Horizontal){
-            this.listWindows[i] =
-                 new WindowBox(x + (i * w) + (i * space), y, w, h,
-                               listContents[i], padding);
-        }
-        else{
-            this.listWindows[i] =
-                 new WindowBox(x, y + (i * h) + (i * space), w, h,
-                               listContents[i], padding);
-        }
-    }
-
-    if (currentSelectedIndex !== -1) {
-        this.listWindows[currentSelectedIndex].selected = true;
-    }
+    WindowTabs.prototype.setContentsCallbacks.call(this, listContents,
+        listCallBacks);
 }
 
 WindowTabs.prototype = {
+
+    updateContentSize: function() {
+        // Getting the main box size
+        var boxWidth, boxHeight;
+        var totalNb = this.listContents.length;
+        this.size = totalNb > this.nbItemsMax ? this.nbItemsMax : totalNb;
+        if (this.orientation === OrientationWindow.Horizontal) {
+            boxWidth = (this.choiceWidth + this.space) * this.size - this.space;
+            boxHeight = this.choiceHeight;
+        }
+        else {
+            boxWidth = this.choiceWidth;
+            boxHeight = (this.choiceHeight + this.space) * this.size - this.space;
+        }
+        this.setW(boxWidth);
+        this.setH(boxHeight);
+
+        // Create a new windowBox for each choice and according to the orientation
+        this.listWindows = new Array(totalNb);
+        for (var i = 0; i < totalNb; i++) {
+            if (this.orientation === OrientationWindow.Horizontal) {
+                this.listWindows[i] = new WindowBox(this.oX + (i * this
+                    .choiceWidth) + (i * this.space), this.oY, this.choiceWidth,
+                    this.choiceHeight, this.listContents[i], this.padding);
+            } else {
+                this.listWindows[i] = new WindowBox(this.oX, this.oY + (i * this
+                    .choiceHeight) + (i * this.space), this.choiceWidth, this
+                    .choiceHeight, this.listContents[i], this.padding);
+            }
+        }
+
+        if (this.size > 0) {
+            if (this.currentSelectedIndex >= this.size) {
+                this.currentSelectedIndex = 0;
+                this.offsetSelectedIndex = 0;
+            }
+            if (this.currentSelectedIndex !== -1) {
+                this.listWindows[this.currentSelectedIndex].selected = true;
+            }
+        } else {
+            this.currentSelectedIndex = -1;
+            this.offsetSelectedIndex = 0;
+        }
+
+        $requestPaintHUD = true;
+    },
+
+    // -------------------------------------------------------
 
     setX: function(x){
         Bitmap.prototype.setX.call(this, x);
@@ -137,8 +150,8 @@ WindowTabs.prototype = {
     *   @returns {Object}
     */
     getCurrentContent: function(){
-        return WindowTabs.prototype.getContent.call(this,
-                                                    this.currentSelectedIndex);
+        return WindowTabs.prototype.getContent.call(this, this
+            .currentSelectedIndex);
     },
 
     // -------------------------------------------------------
@@ -147,8 +160,9 @@ WindowTabs.prototype = {
     *   @param {number} i The index.
     *   @returns {Object}
     */
-    getContent: function(i){
-        return this.listWindows[i].content;
+    getContent: function(i) {
+        var window = this.listWindows[i];
+        return window ? window.content : null;
     },
 
     // -------------------------------------------------------
@@ -166,9 +180,40 @@ WindowTabs.prototype = {
     /** Set all the contents.
     *   @param {Object[]} contents All the contents.
     */
-    setContents: function(contents){
-        for (var i = 0, l = this.listWindows.length; i < l; i++)
+    setContents: function(contents) {
+        for (var i = 0, l = this.listWindows.length; i < l; i++) {
             WindowTabs.prototype.setContent.call(this, i, contents[i]);
+        }
+    },
+
+    // -------------------------------------------------------
+
+    /** Set all the contents.
+    *   @param {Object[]} contents All the contents.
+    */
+    setCallbacks: function(callbacks) {
+        if (callbacks === null) {
+            var i, l;
+            this.listCallBacks = new Array(l);
+            for (i = 0, l = this.listContents.length; i < l; i++)
+                this.listCallBacks[i] = null;
+        } else {
+             this.listCallBacks = callbacks;
+        }
+    },
+
+
+    // -------------------------------------------------------
+
+    /** Set all the contents.
+    *   @param {Object[]} contents All the contents.
+    */
+    setContentsCallbacks: function(contents, callbacks) {
+        var i, l;
+
+        this.listContents = contents;
+        WindowTabs.prototype.updateContentSize.call(this);
+        WindowTabs.prototype.setCallbacks.call(this, callbacks);
     },
 
     // -------------------------------------------------------
@@ -176,9 +221,10 @@ WindowTabs.prototype = {
     /** Unselect a choice.
     */
     unselect: function(){
-        if (this.currentSelectedIndex !== -1){
+        if (this.currentSelectedIndex !== -1) {
             this.listWindows[this.currentSelectedIndex].selected = false;
             this.currentSelectedIndex = -1;
+            this.offsetSelectedIndex = 0;
         }
         $requestPaintHUD = true;
     },
@@ -188,7 +234,7 @@ WindowTabs.prototype = {
     /** Select a choice.
     *   @param {number} i The index of the choice.
     */
-    select: function(i){
+    select: function(i) {
         this.currentSelectedIndex = i;
         this.listWindows[this.currentSelectedIndex].selected = true;
         $requestPaintHUD = true;
@@ -207,10 +253,15 @@ WindowTabs.prototype = {
     /** When going up.
     */
     goUp: function(){
-        if (this.currentSelectedIndex > 0)
+        if (this.currentSelectedIndex > 0) {
             this.currentSelectedIndex--;
-        else if (this.currentSelectedIndex === 0)
+            if (this.offsetSelectedIndex > 0) {
+                this.offsetSelectedIndex--;
+            }
+        } else if (this.currentSelectedIndex === 0) {
             this.currentSelectedIndex = this.listWindows.length - 1;
+            this.offsetSelectedIndex = this.size - 1;
+        }
         $requestPaintHUD = true;
     },
 
@@ -219,10 +270,17 @@ WindowTabs.prototype = {
     /** When going down.
     */
     goDown: function(){
-        if (this.currentSelectedIndex < this.listWindows.length - 1)
+        if (this.currentSelectedIndex < this.listWindows.length - 1 && this
+            .currentSelectedIndex >= 0) {
             this.currentSelectedIndex++;
-        else if (this.currentSelectedIndex === this.listWindows.length - 1)
+            if (this.offsetSelectedIndex < this.size - 1) {
+                this.offsetSelectedIndex++;
+            }
+        }
+        else if (this.currentSelectedIndex === this.listWindows.length - 1) {
             this.currentSelectedIndex = 0;
+            this.offsetSelectedIndex = 0;
+        }
         $requestPaintHUD = true;
     },
 
@@ -232,12 +290,14 @@ WindowTabs.prototype = {
     *   @param {number} key The key ID pressed.
     */
     onKeyPressed: function(key, base){
-        if (DatasKeyBoard.isKeyEqual(key,
-                                     $datasGame.keyBoard.menuControls.Action))
-        {
-            var callback = this.listCallBacks[this.currentSelectedIndex];
-            if (callback !== null) {
-                callback.call(base);
+        if (this.currenSelectedIndex !== -1) {
+            if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
+                .Action))
+            {
+                var callback = this.listCallBacks[this.currentSelectedIndex];
+                if (callback !== null) {
+                    callback.call(base);
+                }
             }
         }
     },
@@ -250,37 +310,34 @@ WindowTabs.prototype = {
     *   @returns {boolean} false if the other keys are blocked after it.
     */
     onKeyPressedAndRepeat: function(key) {
-        this.listWindows[this.currentSelectedIndex].selected = false;
+        if (this.currentSelectedIndex !== -1) {
+            this.listWindows[this.currentSelectedIndex].selected = false;
 
-        if (this.orientation === OrientationWindow.Vertical){
-            if (DatasKeyBoard.isKeyEqual(key,
-                                         $datasGame.keyBoard.menuControls.Down))
-            {
-                WindowTabs.prototype.goDown.call(this);
+            if (this.orientation === OrientationWindow.Vertical) {
+                if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
+                    .menuControls.Down))
+                {
+                    WindowTabs.prototype.goDown.call(this);
+                } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
+                    .menuControls.Up))
+                {
+                    WindowTabs.prototype.goUp.call(this);
+                }
+            } else {
+                if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
+                    .menuControls.Right))
+                {
+                    WindowTabs.prototype.goDown.call(this);
+                }
+                else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
+                    .menuControls.Left))
+                {
+                    WindowTabs.prototype.goUp.call(this);
+                }
             }
-            else if (DatasKeyBoard.isKeyEqual(key,
-                                              $datasGame.keyBoard.menuControls
-                                              .Up))
-            {
-                WindowTabs.prototype.goUp.call(this);
-            }
-        }
-        else{
-            if (DatasKeyBoard.isKeyEqual(key,
-                                         $datasGame.keyBoard.menuControls
-                                         .Right))
-            {
-                WindowTabs.prototype.goDown.call(this);
-            }
-            else if (DatasKeyBoard.isKeyEqual(key,
-                                              $datasGame.keyBoard.menuControls
-                                              .Left))
-            {
-                WindowTabs.prototype.goUp.call(this);
-            }
-        }
 
-        WindowTabs.prototype.selectCurrent.call(this);
+            WindowTabs.prototype.selectCurrent.call(this);
+        }
     },
 
     // -------------------------------------------------------
@@ -288,8 +345,14 @@ WindowTabs.prototype = {
     /** Draw the windows
     *   @param {Canvas.Context} context The canvas context.
     */
-    draw: function(){
-        for (var i = 0, l = this.listWindows.length; i < l; i++)
-            this.listWindows[i].draw(true);
+    draw: function() {
+        var i, index, offset;
+
+        offset = this.currentSelectedIndex === -1 ? -1 : this.offsetSelectedIndex;
+        for (i = 0; i < this.size; i++) {
+            index = i + this.currentSelectedIndex - offset;
+            this.listWindows[index].draw(true, this.listWindows[i].windowDimension,
+                this.listWindows[i].contentDimension);
+        }
     }
 }

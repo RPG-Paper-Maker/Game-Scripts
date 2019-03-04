@@ -109,31 +109,39 @@ WindowBox.prototype = {
     *   @param {boolean} [isChoice=false] - Indicate if this window box is used
     *   for a window choices.
     */
-    draw: function(isChoice){
+    draw: function(isChoice, windowDimension, contentDimension) {
         if (this.contentLoaded) {
             // Default values
-            if (typeof isChoice === 'undefined') isChoice = false;
+            if (typeof isChoice === 'undefined') {
+                isChoice = false;
+            }
+            if (typeof windowDimension === 'undefined') {
+                windowDimension = this.windowDimension;
+            }
+            if (typeof contentDimension === 'undefined') {
+                contentDimension = this.contentDimension;
+            }
 
             // Draw box
-            $datasGame.system.getWindowSkin().drawBox(this.windowDimension, this
+            $datasGame.system.getWindowSkin().drawBox(windowDimension, this
                 .selected);
 
             // Draw content
             if (this.content !== null){
                 if (isChoice){
                     this.content.draw(
-                         this.contentDimension[0],
-                         this.contentDimension[1],
-                         this.contentDimension[2],
-                         this.contentDimension[3]
+                         contentDimension[0],
+                         contentDimension[1],
+                         contentDimension[2],
+                         contentDimension[3]
                     );
                 }
                 else{
                     this.content.drawInformations(
-                         this.contentDimension[0],
-                         this.contentDimension[1],
-                         this.contentDimension[2],
-                         this.contentDimension[3]
+                         contentDimension[0],
+                         contentDimension[1],
+                         contentDimension[2],
+                         contentDimension[3]
                     );
                 }
             }

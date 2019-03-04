@@ -127,7 +127,9 @@ SceneBattle.prototype.updateStep1 = function(){
 // -------------------------------------------------------
 
 SceneBattle.prototype.onKeyPressedStep1 = function(key) {
-    switch (this.subStep){
+    var i, l;
+
+    switch (this.subStep) {
     case 0:
         if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
             .Action))
@@ -151,6 +153,25 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
                 this.kindSelection = CharacterKind.Monster;
                 this.windowCharacterInformations.setX(0);
                 this.moveArrow();
+                break;
+            case EffectSpecialActionKind.OpenSkills:
+                var skills = this.user.character.sk;
+                var list, ownedSkill, availableKind;
+
+                // Get the first skills of the hero
+                list = [];
+                for (i = 0, l = skills.length; i < l; i++) {
+                    availableKind = $datasGame.skills.list[ownedSkill.id]
+                        .availableKind;
+                    if (availableKind === AvailableKind.Always || availableKind
+                        === AvailableKind.Battle)
+                    {
+                        list.push(new GraphicSkill(ownedSkill));
+                    }
+                }
+
+                // Update the list
+                this.windowChoicesList.setContents(list);
                 break;
             }
         } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard

@@ -52,8 +52,8 @@ function SceneMenuInventory() {
     this.windowChoicesTabs = new WindowTabs(OrientationWindow.Horizontal, 5, 60,
         105, RPM.SMALL_SLOT_HEIGHT, 6, menuKind, null);
     this.windowChoicesList = new WindowChoices(OrientationWindow.Vertical, 20,
-        100, 200, RPM.SMALL_SLOT_HEIGHT, SceneMenu.nbItemsToDisplay, new Array(
-        SceneMenu.nbItemsToDisplay), null, RPM.SMALL_SLOT_PADDING);
+        100, 200, RPM.SMALL_SLOT_HEIGHT, SceneMenu.nbItemsToDisplay, [], null,
+        RPM.SMALL_SLOT_PADDING);
     this.windowInformations = new WindowBox(240, 100, 360, 200, null, RPM
         .HUGE_PADDING_BOX);
 
@@ -77,12 +77,12 @@ SceneMenuInventory.prototype = {
     /** Update tab.
     */
     updateForTab: function(){
-        var i, j, list = new Array(SceneMenu.nbItemsToDisplay);
+        var i, list;
         var indexTab = this.windowChoicesTabs.currentSelectedIndex;
         var nbItems = $game.items.length;
 
-        // Get the first items of the inventory
-        for (i = 0, j = 0; i < nbItems && j < SceneMenu.nbItemsToDisplay; i++){
+        list = [];
+        for (i = 0; i < nbItems; i++){
             var ownedItem = $game.items[i];
             var item = $datasGame.items.list[ownedItem.id];
             if (indexTab === 0 ||
@@ -95,27 +95,27 @@ SceneMenuInventory.prototype = {
                 (indexTab === 4 && ownedItem.k === ItemKind.Weapon) ||
                 (indexTab === 5 && ownedItem.k === ItemKind.Armor))
             {
-                list[j] = new GraphicItem(ownedItem);
-                j++;
+                list.push(new GraphicItem(ownedItem));
             }
         }
 
-        for (; j < SceneMenu.nbItemsToDisplay; j++)
-            list[j] = new GraphicText("");
-
-        // Update the list
-        this.windowChoicesList.setContents(list);
+        this.windowChoicesList.setContentsCallbacks(list);
+        if (list.length > 0) {
+            this.windowChoicesList.currentSelectedIndex = 0;
+        } else {
+            this.windowChoicesList.currentSelectedIndex = -1;
+        }
     },
 
     // -------------------------------------------------------
 
-    update: function(){
+    update: function() {
 
     },
 
     // -------------------------------------------------------
 
-    onKeyPressed: function(key){
+    onKeyPressed: function(key) {
         if (DatasKeyBoard.isKeyEqual(key,
                                      $datasGame.keyBoard.menuControls.Cancel) ||
             DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.MainMenu))
@@ -126,25 +126,25 @@ SceneMenuInventory.prototype = {
 
     // -------------------------------------------------------
 
-    onKeyReleased: function(key){
+    onKeyReleased: function(key) {
 
     },
 
     // -------------------------------------------------------
 
-    onKeyPressedRepeat: function(key){
+    onKeyPressedRepeat: function(key) {
 
     },
 
     // -------------------------------------------------------
 
-    onKeyPressedAndRepeat: function(key){
-
+    onKeyPressedAndRepeat: function(key) {
         // Tab
         var indexTab = this.windowChoicesTabs.currentSelectedIndex;
         this.windowChoicesTabs.onKeyPressedAndRepeat(key);
-        if (indexTab !== this.windowChoicesTabs.currentSelectedIndex)
+        if (indexTab !== this.windowChoicesTabs.currentSelectedIndex) {
             this.updateForTab();
+        }
 
         // List
         this.windowChoicesList.onKeyPressedAndRepeat(key);
