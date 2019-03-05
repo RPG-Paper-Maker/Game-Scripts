@@ -25,8 +25,6 @@
 //      SubStep 0 : Selection of an ally
 //      SubStep 1 : Selection of a command
 //      SubStep 2 : selection of an ally/enemy for a command
-//      SubStep 3 : selection of a skill
-//      SubStep 4 : selection of an item
 //
 // -------------------------------------------------------
 
@@ -46,6 +44,32 @@ SceneBattle.prototype.initializeStep1 = function(){
     this.moveArrow();
     this.battlers[this.kindSelection][this.selectedUserTargetIndex()]
         .updateArrowPosition(this.camera);
+};
+
+// -------------------------------------------------------
+
+SceneBattle.prototype.registerLastCommandIndex = function() {
+    this.user.lastCommandIndex = this.windowChoicesBattleCommands
+        .currentSelectedIndex;
+    this.user.lastCommandOffset = this.windowChoicesBattleCommands
+        .offsetSelectedIndex;
+};
+
+// -------------------------------------------------------
+
+SceneBattle.prototype.registerLastSkillIndex = function() {
+    this.user.lastSkillIndex = this.windowChoicesSkills.currentSelectedIndex;
+    this.user.lastSkillOffset = this.windowChoicesSkills.offsetSelectedIndex;
+};
+
+
+// -------------------------------------------------------
+
+SceneBattle.prototype.selectTarget = function() {
+    this.subStep = 2;
+    this.kindSelection = CharacterKind.Monster;
+    this.windowCharacterInformations.setX(0);
+    this.moveArrow();
 };
 
 // -------------------------------------------------------
@@ -138,6 +162,9 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
             this.subStep = 1;
             this.user = this.battlers[CharacterKind.Hero][this.selectedUserIndex];
             this.user.selected = true;
+            this.windowChoicesBattleCommands.select(this.user.lastCommandIndex);
+            this.windowChoicesBattleCommands.offsetSelectedIndex = this.user
+                .lastCommandOffset;
             $requestPaintHUD = true;
         }
         break;
@@ -145,15 +172,21 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
         if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
             .Action))
         {
-
+            switch (this.battleCommandKind) {
+            case EffectSpecialActionKind.OpenSkills:
+                this.selectTarget();
+                this.registerLastSkillIndex();
+                return;
+            default:
+                break;
+            }
             this.windowChoicesBattleCommands.onKeyPressed(key, this
                 .windowChoicesBattleCommands.getCurrentContent().skill);
             switch (this.battleCommandKind) {
             case EffectSpecialActionKind.ApplyWeapons:
-                this.subStep = 2;
-                this.kindSelection = CharacterKind.Monster;
-                this.windowCharacterInformations.setX(0);
-                this.moveArrow();
+                this.selectTarget();
+                this.attackSkill = this.windowChoicesBattleCommands
+                    .getCurrentContent().skill;
                 break;
             case EffectSpecialActionKind.OpenSkills:
                 var skills = this.user.character.sk;
@@ -176,15 +209,22 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
                     .getCurrentContent();
                 break;
             }
+            this.registerLastCommandIndex();
         } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
             .menuControls.Cancel))
         {
             switch (this.battleCommandKind) {
-            case EffectSpecialActionKind.ApplyWeapons:
+            case EffectSpecialActionKind.OpenSkills:
+                this.registerLastSkillIndex();
+                break;
+            default:
                 this.subStep = 0;
                 this.user.selected = false;
-                this.battleCommandKind = EffectSpecialActionKind.None;
+                this.registerLastCommandIndex();
+                this.windowChoicesBattleCommands.unselect();
+                break;
             }
+            this.battleCommandKind = EffectSpecialActionKind.None;
         }
         break;
     case 2:
@@ -193,6 +233,7 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
         {
             this.targets.push(this.battlers[this.kindSelection][this
                 .selectedUserTargetIndex()]);
+            this.windowChoicesBattleCommands.unselect();
             this.changeStep(2);
         } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
             .menuControls.Cancel))

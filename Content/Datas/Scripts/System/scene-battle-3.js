@@ -34,9 +34,12 @@ SceneBattle.prototype.initializeStep3 = function() {
         i++;
     } while(!this.isDefined(CharacterKind.Monster, i-1));
 
-    this.targets = [this.battlers[CharacterKind.Hero][0]];
+    this.targets = [this.battlers[CharacterKind.Hero][RPM.random(0, this
+        .battlers[CharacterKind.Hero].length - 1)]];
     this.time = new Date().getTime();
     this.timeEnemyAttack = new Date().getTime();
+    this.battleCommandKind = EffectSpecialActionKind.ApplyWeapons;
+    this.attackSkill = $datasGame.skills.list[1];
 };
 
 // -------------------------------------------------------

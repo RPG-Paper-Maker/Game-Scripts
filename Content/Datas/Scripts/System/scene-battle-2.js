@@ -29,9 +29,20 @@
 // -------------------------------------------------------
 
 SceneBattle.prototype.initializeStep2 = function() {
-    var equipments, gameItem, weapon, effects;
+    var equipments, gameItem, weapon, effects, informationText;
     var i, j, l, ll;
-    this.windowTopInformations.content = new GraphicText("Attack");
+
+    switch (this.battleCommandKind) {
+    case EffectSpecialActionKind.ApplyWeapons:
+        informationText = this.attackSkill.name;
+        break;
+    case EffectSpecialActionKind.OpenSkills:
+        informationText = this.windowChoicesSkills.getCurrentContent().skill
+            .name;
+        break;
+    }
+    this.windowTopInformations.content = new GraphicText(informationText);
+
     this.time = new Date().getTime();
 
     this.damages = [];
@@ -48,17 +59,19 @@ SceneBattle.prototype.initializeStep2 = function() {
                 }
             }
         }
-
+        if (this.effects.length === 0) {
+            effects = this.attackSkill.effects;
+            for (i = 1, l = effects.length; i < l; i++) {
+                this.effects.push(effects[i]);
+            }
+        }
+        break;
+    case EffectSpecialActionKind.OpenSkills:
+        this.effects = this.windowChoicesSkills.getCurrentContent().skill
+            .effects;
         break;
     }
     this.currentEffectIndex = 0;
-    if (this.effects.length === 0) {
-        effects = this.windowChoicesBattleCommands.getCurrentContent().skill
-            .effects;
-        for (i = 1, l = effects.length; i < l; i++) {
-            this.effects.push(effects[i]);
-        }
-    }
     if (this.effects.length > 0) {
         this.effects[this.currentEffectIndex].executeInBattle();
     }

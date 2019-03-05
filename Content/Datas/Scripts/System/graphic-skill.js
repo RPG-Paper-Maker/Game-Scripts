@@ -29,11 +29,10 @@
 *   @param {GameSkill} gameSkill The current selected skill.
 */
 function GraphicSkill(gameSkill){
-    var skill;
-    skill = $datasGame.skills.list[gameSkill.id];
+    this.skill = $datasGame.skills.list[gameSkill.id];
 
     // All the graphics
-    this.graphicName = new GraphicText(skill.name, Align.Left);
+    this.graphicName = new GraphicText(this.skill.name, Align.Left);
 }
 
 GraphicSkill.prototype = {

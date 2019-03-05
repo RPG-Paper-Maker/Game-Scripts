@@ -105,8 +105,8 @@ SceneBattle.prototype.initializeStep0 = function(){
     this.windowChoicesSkills = new WindowChoices(OrientationWindow.Vertical, 25,
         100, 200, RPM.SMALL_SLOT_HEIGHT, 6, [], null,
         RPM.SMALL_SLOT_PADDING);
-    this.windowSkillDescription = new WindowBox($SCREEN_X - 385, 100, 360, 200, null, RPM
-                                                .HUGE_PADDING_BOX);
+    this.windowSkillDescription = new WindowBox($SCREEN_X - 385, 100, 360, 200,
+        null, RPM.HUGE_PADDING_BOX);
 
     // Music
     $datasGame.battleSystem.battleMusic.playSong(true);
