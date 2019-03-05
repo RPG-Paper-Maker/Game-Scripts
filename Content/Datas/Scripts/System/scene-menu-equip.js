@@ -60,8 +60,8 @@ function SceneMenuEquip() {
         nbEquipments), null, RPM.SMALL_SLOT_PADDING);
     this.windowChoicesList = new WindowChoices(OrientationWindow.Vertical, 20,
         100 + (nbEquipments + 1) * RPM.SMALL_SLOT_HEIGHT, 290, RPM
-        .SMALL_SLOT_HEIGHT, nbEquipChoice, new Array(nbEquipChoice), null, [10,
-        5, 10, 5], 0, -1);
+        .SMALL_SLOT_HEIGHT, nbEquipChoice, [], null, RPM.SMALL_SLOT_PADDING, 0,
+        -1);
     this.windowInformations = new WindowBox(330, 100, 285, 350, null, RPM
         .HUGE_PADDING_BOX);
 
@@ -103,25 +103,19 @@ SceneMenuEquip.prototype = {
     /** Update the equipment list.
     */
     updateEquipmentList: function(){
-        var idEquipment, nb, i, j, l, c, ll, k, lll, nbItem;
+        var idEquipment, nb, i, l, c, ll, k, lll, nbItem;
         var list, type, systemItem, item, character;
 
         idEquipment = $datasGame.battleSystem.equipmentsOrder
                 [this.windowChoicesEquipment.currentSelectedIndex];
         nb = this.windowChoicesList.listWindows.length;
-        list = new Array(nb);
-
-        // Remove
-        list[0] = new GraphicText("[Remove]", Align.Left);
-
-        j = 1;
-        l = $game.items.length;
-        for (i = 0; i < l; i++){
+        list = [new GraphicText("[Remove]", Align.Left)];
+        for (i = 0, l = $game.items.length; i < l; i++){
             item = $game.items[i];
-            if (item.k !== ItemKind.Item){
+            if (item.k !== ItemKind.Item) {
                 systemItem = item.getItemInformations();
                 type = systemItem.getType();
-                if (type.equipments[idEquipment]){
+                if (type.equipments[idEquipment]) {
 
                     // Correct the number according to equiped items
                     nbItem = item.nb;
@@ -129,24 +123,20 @@ SceneMenuEquip.prototype = {
                     for (c = 0; c < ll; c++){
                         character = $game.teamHeroes[c];
                         lll = character.equip.length;
-                        for (k = 0; k < lll; k++){
+                        for (k = 0; k < lll; k++) {
                             if (item === character.equip[k]) nbItem--;
                         }
                     }
 
                     if (nbItem > 0){
-                        list[j] = new GraphicItem(item, nbItem);
-                        j++;
+                        list.push(new GraphicItem(item, nbItem));
                     }
                 }
             }
         }
-        for (; j < nb; j++){
-            list[j] = null;
-        }
 
         // Set contents
-        this.windowChoicesList.setContents(list);
+        this.windowChoicesList.setContentsCallbacks(list, null, -1);
     },
 
     // -------------------------------------------------------

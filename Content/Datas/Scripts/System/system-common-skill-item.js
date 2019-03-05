@@ -38,15 +38,16 @@ SystemCommonSkillItem.prototype.readJSON = function(json) {
     var jsonCosts, jsonEffects, jsonCaracteristics, cost, effect, caracteristic;
     var i, l;
 
-    this.type = json.t ? json.t : 1;
-    this.consumable = json.con ? json.con : false;
-    this.oneHand = json.oh ? json.oh : true;
+    this.type = typeof json.t !== 'undefined' ? json.t : 1;
+    this.consumable = typeof json.con !== 'undefined' ? json.con : false;
+    this.oneHand = typeof json.oh !== 'undefined' ? json.oh : true;
     this.description = new SystemLang();
     this.description.readJSON(json.d);
-    this.targetKind = json.tk ? json.tk : TargetKind.None;
+    this.targetKind = typeof json.tk !== 'undefined' ? json.tk : TargetKind.None;
     this.targetConditionFormula = SystemValue.readOrNone(json.tcf);
     this.conditionFormula = SystemValue.readOrNone(json.cf);
-    this.availableKind = json.ak ? json.ak : AvailableKind.Never;
+    this.availableKind = typeof json.ak !== 'undefined' ? json.ak : AvailableKind
+        .Never;
     this.sound = new SystemPlaySong(SongKind.sound);
     this.sound.readJSON(json.s);
     this.animationUserID = SystemValue.readOrNone(json.auid);

@@ -48,8 +48,8 @@ function SceneMenuSkills() {
     this.windowChoicesTabs = new WindowTabs(OrientationWindow.Horizontal, 50,
         60, 110, RPM.SMALL_SLOT_HEIGHT, 4, listHeroes, null);
     this.windowChoicesList = new WindowChoices(OrientationWindow.Vertical, 20,
-        100, 200, RPM.SMALL_SLOT_HEIGHT, SceneMenu.nbItemsToDisplay, new Array(
-        SceneMenu.nbItemsToDisplay), null, RPM.SMALL_SLOT_PADDING);
+        100, 200, RPM.SMALL_SLOT_HEIGHT, SceneMenu.nbItemsToDisplay, [], null,
+        RPM.SMALL_SLOT_PADDING);
     this.windowInformations = new WindowBox(240, 100, 360, 200, null, RPM
         .HUGE_PADDING_BOX);
 
@@ -73,23 +73,19 @@ SceneMenuSkills.prototype = {
     /** Update tab.
     */
     updateForTab: function(){
-        var i, j, list = new Array(SceneMenu.nbItemsToDisplay);
+        var i, l;
         var indexTab = this.windowChoicesTabs.currentSelectedIndex;
         var skills = $game.teamHeroes[indexTab].sk;
-        var l = skills.length;
+        var list;
 
         // Get the first skills of the hero
-        for (i = 0, j = 0; i < l && j < SceneMenu.nbItemsToDisplay; i++){
-            var ownedSkill = skills[i];
-            list[j] = new GraphicSkill(ownedSkill);
-            j++;
+        list = [];
+        for (i = 0, l = skills.length; i < l; i++) {
+            list.push(new GraphicSkill(skills[i]));
         }
 
-        for (; j < SceneMenu.nbItemsToDisplay; j++)
-            list[j] = new GraphicText("");
-
         // Update the list
-        this.windowChoicesList.setContents(list);
+        this.windowChoicesList.setContentsCallbacks(list);
     },
 
     // -------------------------------------------------------

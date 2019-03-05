@@ -35,6 +35,7 @@ function SceneMenuInventory() {
     SceneGame.call(this);
 
     var menuKind;
+    var i, l;
 
     // Initializing the top menu for item kinds
     menuKind = [
@@ -56,6 +57,9 @@ function SceneMenuInventory() {
         RPM.SMALL_SLOT_PADDING);
     this.windowInformations = new WindowBox(240, 100, 360, 200, null, RPM
         .HUGE_PADDING_BOX);
+    this.windowEmpty = new WindowBox(10, 100, $SCREEN_X - 20, RPM
+        .SMALL_SLOT_HEIGHT, new GraphicText("Empty"), RPM.SMALL_SLOT_PADDING);
+    l = menuKind.length;
 
     // Update for changing tab
     this.updateForTab();
@@ -100,11 +104,6 @@ SceneMenuInventory.prototype = {
         }
 
         this.windowChoicesList.setContentsCallbacks(list);
-        if (list.length > 0) {
-            this.windowChoicesList.currentSelectedIndex = 0;
-        } else {
-            this.windowChoicesList.currentSelectedIndex = -1;
-        }
     },
 
     // -------------------------------------------------------
@@ -169,6 +168,10 @@ SceneMenuInventory.prototype = {
         this.windowTop.draw(context);
         this.windowChoicesTabs.draw(context);
         this.windowChoicesList.draw(context);
-        this.windowInformations.draw(context);
+        if (this.windowChoicesList.listWindows.length > 0) {
+            this.windowInformations.draw(context);
+        } else {
+            this.windowEmpty.draw(context);
+        }
     }
 }

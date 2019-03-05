@@ -33,13 +33,15 @@ function SystemCaracteristic() {
 // -------------------------------------------------------
 
 SystemCaracteristic.prototype.readJSON = function(json) {
-    this.kind = json.k ? json.k : CaracteristicKind.IncreaseDecrease;
+    this.kind = typeof json.k !== 'undefined' ? json.k : CaracteristicKind
+        .IncreaseDecrease;
 
     switch (this.kind) {
     case CaracteristicKind.IncreaseDecrease:
-        this.isIncreaseDecrease = json.iid ? json.iid : true;
-        this.increaseDecreaseKind = json.idk ? json.idk : IncreaseDecreaseKind
-            .StatValue;
+        this.isIncreaseDecrease = typeof json.iid !== 'undefined' ? json.iid :
+            true;
+        this.increaseDecreaseKind = typeof json.idk !== 'undefined' ? json.idk :
+            IncreaseDecreaseKind.StatValue;
         switch (this.increaseDecreaseKind) {
         case IncreaseDecreaseKind.StatValue:
             this.statisticValueID = SystemValue.readOrDefaultDatabase(json.svid);
@@ -55,32 +57,34 @@ SystemCaracteristic.prototype.readJSON = function(json) {
             break;
         case IncreaseDecreaseKind.SkillCost:
             this.skillCostID = SystemValue.readOrDefaultDatabase(json.scid);
-            this.isAllSkillCost = json.iasc ? json.iasc : true;
+            this.isAllSkillCost = typeof json.iasc !== 'undefined' ? json.iasc :
+                true;
             break;
         case IncreaseDecreaseKind.Variable:
-            this.variableID = json.vid ? json.vid : 1;
+            this.variableID = typeof json.vid !== 'undefined' ? json.vid : 1;
             break;
         }
-        this.operation = json.o ? json.o : true;
+        this.operation = typeof json.o !== 'undefined' ? json.o : true;
         this.value = SystemValue.readOrDefaultMessage(json.v);
-        this.unit = json.u ? json.u : true;
+        this.unit = typeof json.u !== 'undefined' ? json.u : true;
         break;
     case CaracteristicKind.Script:
         this.script = SystemValue.readOrDefaultMessage(json.s);
         break;
     case CaracteristicKind.AllowForbidEquip:
-        this.isAllowEquip = json.iae ? json.iae : true;
-        this.isAllowEquipWeapon = json.iaew ? json.iaew : true;
+        this.isAllowEquip = typeof json.iae !== 'undefined' ? json.iae : true;
+        this.isAllowEquipWeapon = typeof json.iaew ? json.iaew : true;
         this.equipWeaponTypeID = SystemValue.readOrDefaultDatabase(json.ewtid);
         this.equipArmorTypeID = SystemValue.readOrDefaultDatabase(json.eatid);
         break;
     case CaracteristicKind.AllowForbidChange:
-        this.isAllowChangeEquipment = json.iace ? json.iace : true;
+        this.isAllowChangeEquipment = typeof json.iace !== 'undefined' ? json
+            .iace : true;
         this.changeEquipmentID = SystemValue.readOrDefaultDatabase(json.ceid);
         break;
     case CaracteristicKind.BeginEquipment:
         this.beginEquipmentID = SystemValue.readOrDefaultDatabase(json.beid);
-        this.isBeginWeapon = json.ibw ? json.ibw : true;
+        this.isBeginWeapon = typeof json.ibw !== 'undefined' ? json.ibw : true;
         this.beginWeaponArmorID = SystemValue.readOrDefaultDatabase(json.bwaid);
         break;
     }

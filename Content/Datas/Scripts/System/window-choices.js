@@ -107,8 +107,9 @@ WindowChoices.prototype = {
         WindowTabs.prototype.setContents.call(this, contents);
     },
 
-    setContentsCallbacks: function(contents, callbacks) {
-        WindowTabs.prototype.setContentsCallbacks.call(this, contents, callbacks);
+    setContentsCallbacks: function(contents, callbacks, currentSelectedIndex) {
+        WindowTabs.prototype.setContentsCallbacks.call(this, contents, callbacks
+            , currentSelectedIndex);
     },
 
     // -------------------------------------------------------

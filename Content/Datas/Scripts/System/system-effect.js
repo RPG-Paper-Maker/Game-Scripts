@@ -33,11 +33,12 @@ function SystemEffect() {
 // -------------------------------------------------------
 
 SystemEffect.prototype.readJSON = function(json) {
-    this.kind = json.k ? json.k : EffectKind.Damages;
+    this.kind = typeof json.k !== 'undefined' ? json.k : EffectKind.Damages;
 
     switch (this.kind) {
     case EffectKind.Damages:
-        this.damageKind = json.dk ? json.dk : DamagesKind.Stat;
+        this.damageKind = typeof json.dk !== 'undefined' ? json.dk : DamagesKind
+            .Stat;
         switch (this.damageKind) {
         case DamagesKind.Stat:
             this.damageStatisticID = SystemValue.readOrDefaultDatabase(json.dsid);
@@ -46,30 +47,35 @@ SystemEffect.prototype.readJSON = function(json) {
             this.damageCurrencyID = SystemValue.readOrDefaultDatabase(json.dcid);
             break;
         case DamagesKind.Variable:
-            this.damageVariableID = json.dvid ? json.dvid : 1;
+            this.damageVariableID = typeof json.dvid !== 'undefined' ? json.dvid
+                : 1;
             break;
         }
         this.damageFormula = SystemValue.readOrDefaultMessage(json.df);
-        this.isDamageElement = json.ide ? json.ide : false;
+        this.isDamageElement = typeof json.ide !== 'undefined' ? json.ide :
+            false;
         this.damageElementID = SystemValue.readOrDefaultDatabase(json.deid);
-        this.isDamageVariance = json.idv ? json.idv : false;
+        this.isDamageVariance = typeof json.idv !== 'undefined' ? json.idv :
+            false;
         this.damageVarianceFormula = SystemValue.readOrDefaultMessage(json.dvf,
             "0");
-        this.isDamageCritical = json.idc ? json.idc : false;
+        this.isDamageCritical = typeof json.idc !== 'undefined' ? json.idc :
+            false;
         this.damageCriticalFormula = SystemValue.readOrDefaultMessage(json.dcf,
             "0");
-        this.isDamagePrecision = json.idp ? json.idp : false;
+        this.isDamagePrecision = typeof json.idp !== 'undefined' ? json.idp :
+            false;
         this.damagePrecisionFormula = SystemValue.readOrDefaultMessage(json.dpf,
             "100");
         break;
     case EffectKind.Status:
-        this.isAddStatus = json.iast ? json.iast : true;
+        this.isAddStatus = typeof json.iast !== 'undefined' ? json.iast : true;
         this.statusID = SystemValue.readOrDefaultDatabase(json.sid);
         this.statusPrecisionFormula = SystemValue.readOrDefaultMessage(json.spf,
             "100");
         break;
     case EffectKind.AddRemoveSkill:
-        this.isAddSkill = json.iask ? json.iask : true;
+        this.isAddSkill = typeof json.iask !== 'undefined' ? json.iask : true;
         this.addSkillID = SystemValue.readOrDefaultDatabase(json.asid);
         break;
     case EffectKind.PerformSkill:
@@ -79,8 +85,8 @@ SystemEffect.prototype.readJSON = function(json) {
         this.commonReactionID = SystemValue.readOrDefaultDatabase(json.crid);
         break;
     case EffectKind.SpecialActions:
-        this.specialActionKind = json.sak ? json.sak : EffectSpecialActionKind
-            .ApplyWeapons;
+        this.specialActionKind = typeof json.sak !== 'undefined' ? json.sak :
+            EffectSpecialActionKind.ApplyWeapons;
         break;
     case EffectKind.Script:
         this.scriptFormula = SystemValue.readOrDefaultMessage(json.sf);

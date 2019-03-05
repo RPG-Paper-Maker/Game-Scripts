@@ -33,7 +33,7 @@ function SystemCost() {
 // -------------------------------------------------------
 
 SystemCost.prototype.readJSON = function(json) {
-    this.kind = json.k ? json.k : DamagesKind.Stat;
+    this.kind = typeof json.k !== 'undefined' ? json.k : DamagesKind.Stat;
 
     switch (this.kind) {
     case DamagesKind.Stat:
@@ -43,7 +43,7 @@ SystemCost.prototype.readJSON = function(json) {
         this.currencyID = SystemValue.readOrDefaultDatabase(json.cid);
         break;
     case DamagesKind.Variable:
-        this.variableID = json.vid ? json.vid : 1;
+        this.variableID = typeof json.vid !== 'undefined' ? json.vid : 1;
         break;
     }
     this.valueFormula = SystemValue.readOrDefaultMessage(json.vf);

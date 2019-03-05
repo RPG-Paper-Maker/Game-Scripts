@@ -69,12 +69,16 @@ function WindowTabs(orientation, x, y, w, h, nbItemsMax, listContents,
     this.padding = padding;
 
     WindowTabs.prototype.setContentsCallbacks.call(this, listContents,
-        listCallBacks);
+        listCallBacks, currentSelectedIndex);
 }
 
 WindowTabs.prototype = {
 
-    updateContentSize: function() {
+    updateContentSize: function(currentSelectedIndex) {
+        if (typeof currentSelectedIndex === 'undefined') {
+            currentSelectedIndex = 0;
+        }
+
         // Getting the main box size
         var boxWidth, boxHeight;
         var totalNb = this.listContents.length;
@@ -105,17 +109,14 @@ WindowTabs.prototype = {
         }
 
         if (this.size > 0) {
-            if (this.currentSelectedIndex >= this.size) {
-                this.currentSelectedIndex = 0;
-                this.offsetSelectedIndex = 0;
-            }
+            this.currentSelectedIndex = currentSelectedIndex;
             if (this.currentSelectedIndex !== -1) {
                 this.listWindows[this.currentSelectedIndex].selected = true;
             }
         } else {
             this.currentSelectedIndex = -1;
-            this.offsetSelectedIndex = 0;
         }
+        this.offsetSelectedIndex = 0;
 
         $requestPaintHUD = true;
     },
@@ -208,11 +209,11 @@ WindowTabs.prototype = {
     /** Set all the contents.
     *   @param {Object[]} contents All the contents.
     */
-    setContentsCallbacks: function(contents, callbacks) {
+    setContentsCallbacks: function(contents, callbacks, currentSelectedIndex) {
         var i, l;
 
         this.listContents = contents;
-        WindowTabs.prototype.updateContentSize.call(this);
+        WindowTabs.prototype.updateContentSize.call(this, currentSelectedIndex);
         WindowTabs.prototype.setCallbacks.call(this, callbacks);
     },
 

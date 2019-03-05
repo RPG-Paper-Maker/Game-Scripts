@@ -31,6 +31,7 @@
 // -------------------------------------------------------
 
 SceneBattle.prototype.initializeStep1 = function(){
+    this.battleCommandKind = EffectSpecialActionKind.None;
     this.windowTopInformations.content = new GraphicText("Select an ally");
     this.selectedUserIndex = 0;
     this.kindSelection = CharacterKind.Hero;
@@ -157,10 +158,9 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
             case EffectSpecialActionKind.OpenSkills:
                 var skills = this.user.character.sk;
                 var list, ownedSkill, availableKind;
-
-                // Get the first skills of the hero
                 list = [];
                 for (i = 0, l = skills.length; i < l; i++) {
+                    ownedSkill = skills[i];
                     availableKind = $datasGame.skills.list[ownedSkill.id]
                         .availableKind;
                     if (availableKind === AvailableKind.Always || availableKind
@@ -171,7 +171,9 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
                 }
 
                 // Update the list
-                this.windowChoicesList.setContents(list);
+                this.windowChoicesSkills.setContentsCallbacks(list);
+                this.windowSkillDescription.content = this.windowChoicesSkills
+                    .getCurrentContent();
                 break;
             }
         } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
@@ -181,6 +183,7 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
             case EffectSpecialActionKind.ApplyWeapons:
                 this.subStep = 0;
                 this.user.selected = false;
+                this.battleCommandKind = EffectSpecialActionKind.None;
             }
         }
         break;
@@ -242,7 +245,16 @@ SceneBattle.prototype.onKeyPressedAndRepeatStep1 = function(key){
 
         break;
     case 1:
-        this.windowChoicesBattleCommands.onKeyPressedAndRepeat(key);
+        switch (this.battleCommandKind) {
+        case EffectSpecialActionKind.OpenSkills:
+            this.windowChoicesSkills.onKeyPressedAndRepeat(key);
+            this.windowSkillDescription.content = this.windowChoicesSkills
+                .getCurrentContent();
+            break;
+        default:
+            this.windowChoicesBattleCommands.onKeyPressedAndRepeat(key);
+            break;
+        }
         break;
     }
 };
@@ -262,5 +274,9 @@ SceneBattle.prototype.drawHUDStep1 = function() {
     // Commands
     if (this.subStep === 1) {
         this.windowChoicesBattleCommands.draw();
+        if (this.battleCommandKind === EffectSpecialActionKind.OpenSkills) {
+            this.windowChoicesSkills.draw();
+            this.windowSkillDescription.draw();
+        }
     }
 };
