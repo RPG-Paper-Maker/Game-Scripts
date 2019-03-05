@@ -251,6 +251,10 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
                     this.battleCommandKind = EffectSpecialActionKind.None;
                 }
                 break;
+            case EffectSpecialActionKind.Escape:
+                this.step = 4;
+                this.subStep = 3;
+                return;
             default:
                 break;
             }
