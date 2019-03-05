@@ -40,6 +40,10 @@ SceneBattle.prototype.initializeStep2 = function() {
         informationText = this.windowChoicesSkills.getCurrentContent().skill
             .name;
         break;
+    case EffectSpecialActionKind.OpenItems:
+        informationText = this.windowChoicesItems.getCurrentContent().item
+            .name;
+        break;
     }
     this.windowTopInformations.content = new GraphicText(informationText);
 
@@ -69,6 +73,11 @@ SceneBattle.prototype.initializeStep2 = function() {
     case EffectSpecialActionKind.OpenSkills:
         this.effects = this.windowChoicesSkills.getCurrentContent().skill
             .effects;
+        break;
+    case EffectSpecialActionKind.OpenItems:
+        var graphic = this.windowChoicesItems.getCurrentContent();
+        this.effects = graphic.item.effects;
+        $game.useItem(graphic.gameItem);
         break;
     }
     this.currentEffectIndex = 0;

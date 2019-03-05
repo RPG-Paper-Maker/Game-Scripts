@@ -44,6 +44,21 @@ SceneBattle.prototype.initializeStep1 = function(){
     this.moveArrow();
     this.battlers[this.kindSelection][this.selectedUserTargetIndex()]
         .updateArrowPosition(this.camera);
+    this.listSkills = [];
+    this.listItems = [];
+
+    // Items
+    var ownedItem, item;
+    for (var i = 0, l = $game.items.length; i < l; i++) {
+        ownedItem = $game.items[i];
+        item = $datasGame.items.list[ownedItem.id];
+        if (ownedItem.k === ItemKind.Item && item.consumable) {
+            this.listItems.push(new GraphicItem(ownedItem));
+        }
+    }
+    this.windowChoicesItems.setContentsCallbacks(this.listItems);
+    this.windowItemDescription.content = this.windowChoicesItems
+        .getCurrentContent();
 };
 
 // -------------------------------------------------------
@@ -62,6 +77,12 @@ SceneBattle.prototype.registerLastSkillIndex = function() {
     this.user.lastSkillOffset = this.windowChoicesSkills.offsetSelectedIndex;
 };
 
+// -------------------------------------------------------
+
+SceneBattle.prototype.registerLastItemIndex = function() {
+    this.user.lastItemIndex = this.windowChoicesItems.currentSelectedIndex;
+    this.user.lastItemOffset = this.windowChoicesItems.offsetSelectedIndex;
+};
 
 // -------------------------------------------------------
 
@@ -162,9 +183,37 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
             this.subStep = 1;
             this.user = this.battlers[CharacterKind.Hero][this.selectedUserIndex];
             this.user.selected = true;
+            this.windowChoicesBattleCommands.unselect();
             this.windowChoicesBattleCommands.select(this.user.lastCommandIndex);
             this.windowChoicesBattleCommands.offsetSelectedIndex = this.user
                 .lastCommandOffset;
+
+            // Update skills list
+            var skills = this.user.character.sk;
+            var ownedSkill, availableKind;
+            this.listSkills = [];
+            for (i = 0, l = skills.length; i < l; i++) {
+                ownedSkill = skills[i];
+                availableKind = $datasGame.skills.list[ownedSkill.id]
+                    .availableKind;
+                if (availableKind === AvailableKind.Always || availableKind
+                    === AvailableKind.Battle)
+                {
+                    this.listSkills.push(new GraphicSkill(ownedSkill));
+                }
+            }
+            this.windowChoicesSkills.setContentsCallbacks(this.listSkills);
+            this.windowSkillDescription.content = this.windowChoicesSkills
+                .getCurrentContent();
+            this.windowChoicesSkills.unselect();
+            this.windowChoicesSkills.offsetSelectedIndex = this.user
+                .lastSkillOffset;
+            this.windowChoicesSkills.select(this.user.lastSkillIndex);
+            this.windowChoicesItems.unselect();
+            this.windowChoicesItems.offsetSelectedIndex = this.user
+                .lastItemOffset;
+            this.windowChoicesItems.select(this.user.lastItemIndex);
+
             $requestPaintHUD = true;
         }
         break;
@@ -176,6 +225,10 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
             case EffectSpecialActionKind.OpenSkills:
                 this.selectTarget();
                 this.registerLastSkillIndex();
+                return;
+            case EffectSpecialActionKind.OpenItems:
+                this.selectTarget();
+                this.registerLastItemIndex();
                 return;
             default:
                 break;
@@ -189,24 +242,16 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
                     .getCurrentContent().skill;
                 break;
             case EffectSpecialActionKind.OpenSkills:
-                var skills = this.user.character.sk;
-                var list, ownedSkill, availableKind;
-                list = [];
-                for (i = 0, l = skills.length; i < l; i++) {
-                    ownedSkill = skills[i];
-                    availableKind = $datasGame.skills.list[ownedSkill.id]
-                        .availableKind;
-                    if (availableKind === AvailableKind.Always || availableKind
-                        === AvailableKind.Battle)
-                    {
-                        list.push(new GraphicSkill(ownedSkill));
-                    }
+                if (this.listSkills.length === 0) {
+                    this.battleCommandKind = EffectSpecialActionKind.None;
                 }
-
-                // Update the list
-                this.windowChoicesSkills.setContentsCallbacks(list);
-                this.windowSkillDescription.content = this.windowChoicesSkills
-                    .getCurrentContent();
+                break;
+            case EffectSpecialActionKind.OpenItems:
+                if (this.listItems.length === 0) {
+                    this.battleCommandKind = EffectSpecialActionKind.None;
+                }
+                break;
+            default:
                 break;
             }
             this.registerLastCommandIndex();
@@ -217,11 +262,13 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
             case EffectSpecialActionKind.OpenSkills:
                 this.registerLastSkillIndex();
                 break;
+            case EffectSpecialActionKind.OpenItems:
+                this.registerLastItemIndex();
+                break;
             default:
                 this.subStep = 0;
                 this.user.selected = false;
                 this.registerLastCommandIndex();
-                this.windowChoicesBattleCommands.unselect();
                 break;
             }
             this.battleCommandKind = EffectSpecialActionKind.None;
@@ -292,6 +339,11 @@ SceneBattle.prototype.onKeyPressedAndRepeatStep1 = function(key){
             this.windowSkillDescription.content = this.windowChoicesSkills
                 .getCurrentContent();
             break;
+        case EffectSpecialActionKind.OpenItems:
+            this.windowChoicesItems.onKeyPressedAndRepeat(key);
+            this.windowItemDescription.content = this.windowChoicesItems
+                .getCurrentContent();
+            break;
         default:
             this.windowChoicesBattleCommands.onKeyPressedAndRepeat(key);
             break;
@@ -315,9 +367,15 @@ SceneBattle.prototype.drawHUDStep1 = function() {
     // Commands
     if (this.subStep === 1) {
         this.windowChoicesBattleCommands.draw();
-        if (this.battleCommandKind === EffectSpecialActionKind.OpenSkills) {
+        switch (this.battleCommandKind) {
+        case EffectSpecialActionKind.OpenSkills:
             this.windowChoicesSkills.draw();
             this.windowSkillDescription.draw();
+            break;
+        case EffectSpecialActionKind.OpenItems:
+            this.windowChoicesItems.draw();
+            this.windowItemDescription.draw();
+            break;
         }
     }
 };

@@ -78,6 +78,15 @@ Game.prototype = {
 
     // -------------------------------------------------------
 
+    useItem: function(gameItem) {
+        var q = gameItem.use();
+        if (!q) {
+            this.items.splice(this.items.indexOf(gameItem), 1);
+        }
+    },
+
+    // -------------------------------------------------------
+
     /** Read a game file.
     *   @param {number} slot The number of the slot to load.
     *   @param {Object} json json Json object describing the object.

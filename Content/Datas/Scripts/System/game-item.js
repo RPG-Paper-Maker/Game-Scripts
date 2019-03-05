@@ -134,6 +134,8 @@ GameItem.prototype = {
             });
     },
 
+    // -------------------------------------------------------
+
     /** Modulo the number of the item.
     */
     moduloItems: function() {
@@ -141,4 +143,12 @@ GameItem.prototype = {
                 item.nb %= this.nb;
             });
     },
+
+    // -------------------------------------------------------
+
+    use: function() {
+        this.nb--;
+
+        return this.nb > 0;
+    }
 }

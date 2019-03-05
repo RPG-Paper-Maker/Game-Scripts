@@ -54,6 +54,8 @@ function Battler(character, position, camera) {
     this.lastCommandOffset = 0;
     this.lastSkillIndex = 0;
     this.lastSkillOffset = 0;
+    this.lastItemIndex = 0;
+    this.lastItemOffset = 0;
 
     var idBattler = $datasGame.getHeroesMonsters(character.k).list[character.id]
         .idBattler;

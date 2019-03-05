@@ -222,12 +222,12 @@ WindowTabs.prototype = {
     /** Unselect a choice.
     */
     unselect: function(){
-        if (this.currentSelectedIndex !== -1) {
+        if (this.currentSelectedIndex !== -1 && this.listWindows.length > 0) {
             this.listWindows[this.currentSelectedIndex].selected = false;
             this.currentSelectedIndex = -1;
             this.offsetSelectedIndex = 0;
+            $requestPaintHUD = true;
         }
-        $requestPaintHUD = true;
     },
 
     // -------------------------------------------------------
@@ -236,9 +236,16 @@ WindowTabs.prototype = {
     *   @param {number} i The index of the choice.
     */
     select: function(i) {
-        this.currentSelectedIndex = i;
-        this.listWindows[this.currentSelectedIndex].selected = true;
-        $requestPaintHUD = true;
+        if (this.listWindows.length > 0) {
+            if (i >= this.listWindows.length) {
+                i = this.listWindows.length - 1;
+                this.offsetSelectedIndex = this.size - 1;
+            }
+
+            this.currentSelectedIndex = i;
+            this.listWindows[this.currentSelectedIndex].selected = true;
+            $requestPaintHUD = true;
+        }
     },
 
     // -------------------------------------------------------

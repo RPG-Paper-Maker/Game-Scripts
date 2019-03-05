@@ -31,13 +31,11 @@
 *   @param {number} nbItem The number of occurence of the selected item.
 */
 function GraphicItem(gameItem, nbItem){
-    var item;
-    this.content = gameItem;
-
-    item = gameItem.getItemInformations();
+    this.gameItem = gameItem;
+    this.item = gameItem.getItemInformations();
 
     // All the graphics
-    this.graphicName = new GraphicText(item.name, Align.Left);
+    this.graphicName = new GraphicText(this.item.name, Align.Left);
     this.graphicNb = new GraphicText("x" + (typeof nbItem === 'undefined'
                                             ? gameItem.nb
                                             : nbItem),
