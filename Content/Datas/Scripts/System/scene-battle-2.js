@@ -44,6 +44,9 @@ SceneBattle.prototype.initializeStep2 = function() {
         informationText = this.windowChoicesItems.getCurrentContent().item
             .name;
         break;
+    default:
+        informationText = "";
+        break;
     }
     this.windowTopInformations.content = new GraphicText(informationText);
 
@@ -79,6 +82,15 @@ SceneBattle.prototype.initializeStep2 = function() {
         this.effects = graphic.item.effects;
         $game.useItem(graphic.gameItem);
         break;
+    case EffectSpecialActionKind.EndTurn:
+        var user;
+        this.time -= SceneBattle.TIME_ACTION_ANIMATION;
+        for (i = 0, l = this.battlers[CharacterKind.Hero].length; i < l; i++) {
+            user = this.battlers[CharacterKind.Hero][i];
+            user.setActive(false);
+            user.selected = false;
+        }
+        break;
     }
     this.currentEffectIndex = 0;
     if (this.effects.length > 0) {
@@ -100,7 +112,7 @@ SceneBattle.prototype.updateStep2 = function() {
         }
     }
 
-    if (new Date().getTime() - this.time >= 2000) {
+    if (new Date().getTime() - this.time >= SceneBattle.TIME_ACTION_ANIMATION) {
         this.currentEffectIndex++;
         isAnotherEffect = this.currentEffectIndex < this.effects.length;
         if (isAnotherEffect) {

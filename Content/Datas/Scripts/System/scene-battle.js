@@ -99,6 +99,7 @@ SceneBattle.TIME_END_WAIT = 1000;
 SceneBattle.TIME_PROGRESSION_XP = 3000;
 SceneBattle.TIME_LINEAR_MUSIC_END = 500;
 SceneBattle.TIME_LINEAR_MUSIC_START = 500;
+SceneBattle.TIME_ACTION_ANIMATION = 2000;
 
 SceneBattle.prototype = Object.create(SceneMap.prototype);
 

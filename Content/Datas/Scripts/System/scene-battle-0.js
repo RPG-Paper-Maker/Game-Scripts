@@ -100,7 +100,7 @@ SceneBattle.prototype.initializeStep0 = function(){
         listCallbacks[i] = SystemCommonSkillItem.prototype.useInBattle;
     }
     this.windowChoicesBattleCommands = new WindowChoices(OrientationWindow
-        .Vertical, 20, $SCREEN_Y - 20 - (l*30), 150, 30, 4, listContent,
+        .Vertical, 20, $SCREEN_Y - 20 - (l*30), 150, 30, 6, listContent,
         listCallbacks, RPM.SMALL_SLOT_PADDING);
     this.windowChoicesSkills = new WindowChoices(OrientationWindow.Vertical, 25,
         100, 200, RPM.SMALL_SLOT_HEIGHT, 6, [], null,

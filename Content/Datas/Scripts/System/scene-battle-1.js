@@ -255,6 +255,10 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
                 this.step = 4;
                 this.subStep = 3;
                 return;
+            case EffectSpecialActionKind.EndTurn:
+                this.windowChoicesBattleCommands.unselect();
+                this.changeStep(2);
+                return;
             default:
                 break;
             }

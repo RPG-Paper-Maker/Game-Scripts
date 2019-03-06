@@ -42,7 +42,9 @@ SystemCommonSkillItem.prototype.readJSON = function(json) {
     this.consumable = typeof json.con !== 'undefined' ? json.con : false;
     this.oneHand = typeof json.oh !== 'undefined' ? json.oh : true;
     this.description = new SystemLang();
-    this.description.readJSON(json.d);
+    if (json.d) {
+        this.description.readJSON(json.d);
+    }
     this.targetKind = typeof json.tk !== 'undefined' ? json.tk : TargetKind.None;
     this.targetConditionFormula = SystemValue.readOrNone(json.tcf);
     this.conditionFormula = SystemValue.readOrNone(json.cf);
