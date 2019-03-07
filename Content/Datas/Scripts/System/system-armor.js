@@ -29,7 +29,9 @@
 *   @property {number} idType The kind of armor (ID).
 */
 function SystemArmor() {
+    SystemCommonSkillItem.call(this);
 
+    this.hasEffect = false;
 }
 
 SystemArmor.prototype = Object.create(SystemCommonSkillItem.prototype);

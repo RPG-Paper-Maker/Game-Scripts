@@ -179,3 +179,79 @@ SystemEffect.prototype.executeInBattle = function() {
         break;
     }
 }
+
+// -------------------------------------------------------
+
+SystemEffect.prototype.toString = function() {
+    var user, target, result;
+    var i, l;
+
+    user = $currentMap.user ? ($currentMap.isBattleMap ? $currentMap.user
+        .character : $currentMap.user) : GamePlayer.getTemporaryPlayer();
+    target = $currentMap.targets && $currentMap.targets.length > 0 ? $currentMap
+        .targets[$currentMap.selectedUserTargetIndex()] : GamePlayer
+        .getTemporaryPlayer();
+    switch (this.kind) {
+    case EffectKind.Damages:
+        var damage, variance, min, max, precision, critical, temp, options,
+            damageName;
+        damage = RPM.evaluateFormula(this.damageFormula.getValue(), user, target);
+        if (damage === 0) {
+            return "";
+        }
+        precision = 100;
+        critical = 0;
+        variance = 0;
+        if (this.isDamageVariance) {
+            variance = Math.round(damage * RPM.evaluateFormula(this
+                .damageVarianceFormula.getValue(), user, target) / 100);
+        }
+        min = damage - variance;
+        max = damage + variance;
+        if (damage < 0) {
+            temp = min;
+            min = -max;
+            max = -temp;
+        }
+        options = [];
+        if (this.isDamagePrecision) {
+            precision = RPM.evaluateFormula(this.damagePrecisionFormula
+                .getValue(), user, target);
+            options.push("precision: " + precision + "%");
+        }
+        if (this.isDamageCritical) {
+            critical = RPM.evaluateFormula(this.damageCriticalFormula
+                .getValue(), user, target);
+            options.push("critical: " + critical + "%");
+        }
+        damageName = "";
+        switch (this.damageKind) {
+        case DamagesKind.Stat:
+            damageName = $datasGame.battleSystem.statistics[this
+                .damageStatisticID.getValue()].name;
+            break;
+        case DamagesKind.Currency:
+            damageName = $datasGame.system.currencies[this.damageCurrencyID
+                .getValue()].name;
+            break;
+        case DamagesKind.Variable:
+            damageName = $datasGame.variablesNames[this.damageVariableID];
+            break;
+        }
+        return (damage > 0 ? "Damage" : "Heal") + " " + damageName + ": " + (min
+            === max ? min : min + " - " + max) + (options.length > 0 ? " [" +
+            options.join(" - ") +  "]" : "");
+    case EffectKind.Status:
+        return (this.isAddStatus ? "Add" : "Remove") + " " + " [precision: " +
+            RPM.evaluateFormula(this.statusPrecisionFormula.getValue(), user,
+            target) + "%]";
+    case EffectKind.AddRemoveSkill:
+        return (this.isAddSkill ? "Add" : "Remove") + " skill " + $datasGame
+            .skills.list[this.addSkillID.getValue()].name;
+    case EffectKind.PerformSkill:
+        return "Perform skill " + $datasGame.skills.list[this.performSkillID
+            .getValue()].name;
+    default:
+        return "";
+    }
+}

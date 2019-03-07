@@ -26,7 +26,7 @@
 /** @class
 *   The graphic displaying all currencies and play time in scene menu.
 */
-function GraphicTextIcon(text, iconID, side, align) {
+function GraphicTextIcon(text, iconID, side, align, space) {
     // Default values
     if (typeof side === 'undefined') {
         side = Align.Left;
@@ -34,8 +34,12 @@ function GraphicTextIcon(text, iconID, side, align) {
     if (typeof align === 'undefined') {
         align = Align.Left;
     }
+    if (typeof space === 'undefined') {
+        space = RPM.MEDIUM_SPACE;
+    }
     this.side = side;
     this.align = align;
+    this.space = space;
 
     this.textIcon = {};
     this.textIcon.icon = Picture2D.createImage($datasGame.pictures.getIcon(
@@ -67,7 +71,7 @@ GraphicTextIcon.prototype = {
     // -------------------------------------------------------
 
     getWidth: function() {
-        return this.textIcon.icon.w + this.textIcon.length;
+        return this.textIcon.icon.w + this.space + this.textIcon.length;
     },
 
     // -------------------------------------------------------
@@ -95,21 +99,21 @@ GraphicTextIcon.prototype = {
             offset = 0;
             break;
         case Align.Right:
-            offset = w - iconWidth - this.textIcon.length;
+            offset = w - this.getWidth();
             break;
         case Align.Center:
-            offset = (w - iconWidth - this.textIcon.length) / 2;
+            offset = (w - this.getWidth()) / 2;
             break;
         }
 
         // Draw according to side
         if (this.side === Align.Left) {
             this.textIcon.icon.draw(x + offset, y - (iconHeight / 2) + (h / 2));
-            offset += iconWidth;
+            offset += iconWidth + this.space;
             this.textIcon.text.draw(x + offset, y, w, h);
         } else if (this.side === Align.Right) {
             this.textIcon.text.draw(x + offset, y, w, h);
-            offset += this.textIcon.length;
+            offset += this.textIcon.length + this.space;
             this.textIcon.icon.draw(x + offset, y - (iconHeight / 2) + (h / 2));
         }
     }

@@ -48,8 +48,11 @@ DatasSystem.prototype = {
             var jsonItemsTypes = json.itemsTypes;
             var i, l = jsonItemsTypes.length, id;
             this.itemsTypes = new Array(l+1);
-            for (i = 0; i < l; i++)
-                this.itemsTypes[jsonItemsTypes[i].id] = jsonItemsTypes[i].name;
+            for (i = 0; i < l; i++) {
+                this.itemsTypes[jsonItemsTypes[i].id] = {
+                    name: jsonItemsTypes[i].name
+                };
+            }
 
             $SQUARE_SIZE = json.ss;
             $PORTIONS_RAY_NEAR = json.pr;

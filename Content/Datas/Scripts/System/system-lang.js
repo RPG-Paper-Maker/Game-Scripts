@@ -35,10 +35,6 @@ SystemLang.prototype = {
     *   @param {Object} json Json object describing the object.
     */
     readJSON: function(json) {
-        if (!json) {
-            var a = 0;
-        }
-
         var names = json.names;
 
         if (names) {

@@ -75,7 +75,8 @@ SceneMenuSkills.prototype = {
     updateForTab: function(){
         var i, l;
         var indexTab = this.windowChoicesTabs.currentSelectedIndex;
-        var skills = $game.teamHeroes[indexTab].sk;
+        $currentMap.user = $game.teamHeroes[indexTab];
+        var skills = $currentMap.user.sk;
         var list;
 
         // Get the first skills of the hero
@@ -101,6 +102,7 @@ SceneMenuSkills.prototype = {
                                      $datasGame.keyBoard.menuControls.Cancel) ||
             DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.MainMenu))
         {
+            $currentMap.user = null;
             $gameStack.pop();
         }
     },

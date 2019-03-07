@@ -364,6 +364,8 @@ RPM.BASIC_SQUARE_SIZE = 32;
 RPM.BATLLER_STEPS = 9;
 RPM.SMALL_SLOT_HEIGHT = 30;
 RPM.MEDIUM_SLOT_HEIGHT = 40;
+RPM.MEDIUM_SPACE = 5;
+RPM.LARGE_SPACE = 10;
 RPM.SMALL_PADDING_BOX = [10, 10, 10, 10];
 RPM.MEDIUM_PADDING_BOX = [20, 20, 20, 20];
 RPM.HUGE_PADDING_BOX = [30, 30, 30, 30];
@@ -961,4 +963,16 @@ RPM.variance = function(value, variance) {
 
 RPM.evaluateFormula = function(formula, user, target) {
     return new Function("u", "t", "return " + formula)(user, target);
+};
+
+// -------------------------------------------------------
+
+RPM.formulaContainsUser = function(formula) {
+    return formula.contains("u");
+};
+
+// -------------------------------------------------------
+
+RPM.formulaContainsTarget = function(formula) {
+    return formula.contains("t");
 };

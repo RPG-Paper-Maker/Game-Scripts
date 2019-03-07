@@ -29,10 +29,30 @@
 */
 function SystemSkill(){
     SystemCommonSkillItem.call(this);
+
+    this.hasType = false;
 }
 
 SystemSkill.prototype = Object.create(SystemCommonSkillItem.prototype);
 
+// -------------------------------------------------------
+
 SystemSkill.prototype.readJSON = function(json) {
     SystemCommonSkillItem.prototype.readJSON.call(this, json);
+}
+
+// -------------------------------------------------------
+
+SystemSkill.prototype.getCostString = function() {
+    var i, l, result;
+
+    result = "";
+    for (i = 0, l = this.costs.length; i < l; i++) {
+        result += this.costs[i].toString();
+        if (i === l - 1) {
+            result += " ";
+        }
+    }
+
+    return result;
 }

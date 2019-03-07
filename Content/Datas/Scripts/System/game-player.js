@@ -39,24 +39,26 @@
 *   @param {GameSkill[]} sk List of all the learned skills.
 *   @param {GameItem[]} equip List of the equiped weapons/armors.
 */
-function GamePlayer(kind, id, instanceId, skills){
-    this.k = kind;
-    this.id = id;
-    this.instid = instanceId;
-    this.character = this.getCharacterInformations();
+function GamePlayer(kind, id, instanceId, skills) {
+    if (typeof kind !== 'undefined') {
+        this.k = kind;
+        this.id = id;
+        this.instid = instanceId;
+        this.character = this.getCharacterInformations();
 
-    var i, l = skills.length;
-    this.sk = new Array(l);
-    for (i = 0; i < l; i++){
-        var skill = skills[i];
-        this.sk[i] = new GameSkill(skill.id);
+        var i, l = skills.length;
+        this.sk = new Array(l);
+        for (i = 0; i < l; i++){
+            var skill = skills[i];
+            this.sk[i] = new GameSkill(skill.id);
+        }
+
+        // Experience list
+        this.expList = this.character.createExpList();
+
+        this.levelingUp = false;
+        this.testedLevelUp = true;
     }
-
-    // Experience list
-    this.expList = this.character.createExpList();
-
-    this.levelingUp = false;
-    this.testedLevelUp = true;
 }
 
 /** Get the max size of equipment kind names.
@@ -78,6 +80,21 @@ GamePlayer.getEquipmentLength = function(){
 
     return maxLength;
 }
+
+// -------------------------------------------------------
+
+GamePlayer.getTemporaryPlayer = function() {
+    var player, statistics;
+    var i, l;
+
+    player = new GamePlayer();
+    statistics = $datasGame.battleSystem.statistics;
+    for (i = 1, l = statistics.length; i < l; i++) {
+        player.initStatValue(statistics[i], 0);
+    }
+
+    return player;
+};
 
 // -------------------------------------------------------
 

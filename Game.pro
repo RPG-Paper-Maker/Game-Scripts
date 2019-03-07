@@ -139,7 +139,8 @@ DISTFILES += \
     Content/Datas/Scripts/System/system-common-skill-item.js \
     Content/Datas/Scripts/System/system-cost.js \
     Content/Datas/Scripts/System/system-effect.js \
-    Content/Datas/Scripts/System/system-caracteristic.js
+    Content/Datas/Scripts/System/system-caracteristic.js \
+    Content/Datas/Scripts/System/graphic-skill-item.js
 
 RESOURCES += \
     qml.qrc

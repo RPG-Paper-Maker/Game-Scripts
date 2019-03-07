@@ -74,9 +74,17 @@ DatasGame.prototype = {
 
         RPM.openFile(this, RPM.FILE_VARIABLES, true, function(res){
             var json = JSON.parse(res).variables;
+            var i, j, l, ll, variable;
 
             this.variablesNumbers =
                  json.length * DatasGame.VARIABLES_PER_PAGE + 1;
+            this.variablesNames = new Array(this.variablesNumbers);
+            for (i = 0, l = json.length; i < l; i++) {
+                for (j = 0, ll = DatasGame.VARIABLES_PER_PAGE; j < ll; j++) {
+                    variable = json[i].list[j];
+                    this.variablesNames[variable.id] = variable.name;
+                }
+            }
         });
     },
 

@@ -29,8 +29,8 @@
 *   @property {number} idType The id of the item's type.
 *   @property {boolean} consumable Indicate if the item is consumable.
 */
-function SystemItem(){
-
+function SystemItem() {
+    SystemCommonSkillItem.call(this);
 }
 
 SystemItem.prototype = Object.create(SystemCommonSkillItem.prototype);
@@ -39,4 +39,10 @@ SystemItem.prototype = Object.create(SystemCommonSkillItem.prototype);
 
 SystemItem.prototype.readJSON = function(json) {
     SystemCommonSkillItem.prototype.readJSON.call(this, json);
+}
+
+// -------------------------------------------------------
+
+SystemItem.prototype.getType = function() {
+    return $datasGame.system.itemsTypes[this.type];
 }

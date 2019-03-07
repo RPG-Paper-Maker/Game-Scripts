@@ -35,11 +35,10 @@ function GraphicItem(gameItem, nbItem){
     this.item = gameItem.getItemInformations();
 
     // All the graphics
-    this.graphicName = new GraphicText(this.item.name, Align.Left);
-    this.graphicNb = new GraphicText("x" + (typeof nbItem === 'undefined'
-                                            ? gameItem.nb
-                                            : nbItem),
-                                     Align.Right);
+    this.graphicName = new GraphicTextIcon(this.item.name, this.item.pictureID);
+    this.graphicNb = new GraphicText("x" + (typeof nbItem === 'undefined' ?
+        gameItem.nb : nbItem), Align.Right);
+    this.graphicInformations = new GraphicSkillItem(this.item);
 }
 
 GraphicItem.prototype = {
@@ -50,7 +49,7 @@ GraphicItem.prototype = {
     *   @param {number} w The width dimention to draw graphic.
     *   @param {number} h The height dimention to draw graphic.
     */
-    draw: function(x, y, w, h){
+    draw: function(x, y, w, h) {
         this.graphicName.draw(x, y, w, h);
         this.graphicNb.draw(x, y, w, h);
     },
@@ -61,7 +60,8 @@ GraphicItem.prototype = {
     *   @param {number} w The width dimention to draw graphic.
     *   @param {number} h The height dimention to draw graphic.
     */
-    drawInformations: function(x, y, w, h){
-        this.graphicName.draw(x + 30, y + 5, 100, 25);
+    drawInformations: function(x, y, w, h) {
+        this.graphicInformations.drawInformations(x, y, w, h);
+        this.graphicNb.draw(x, y, w, 0);
     }
 }

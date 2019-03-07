@@ -27,6 +27,9 @@
 */
 function SystemCommonSkillItem() {
     SystemIcon.call(this);
+
+    this.hasType = true;
+    this.hasTargetKind = true;
 }
 
 SystemCommonSkillItem.prototype = Object.create(SystemIcon.prototype);
@@ -90,4 +93,25 @@ SystemCommonSkillItem.prototype.useInBattle = function() {
     for (i = 0, l = this.effects.length; i < l; i++) {
         this.effects[i].executeInBattle();
     }
+}
+
+// -------------------------------------------------------
+
+SystemCommonSkillItem.prototype.getTargetKindString = function() {
+    switch (this.targetKind) {
+    case TargetKind.None:
+        return "None";
+    case TargetKind.User:
+        return "The user";
+    case TargetKind.Enemy:
+        return "An enemy";
+    case TargetKind.Ally:
+        return "An ally";
+    case TargetKind.AllEnemies:
+        return "All enemies";
+    case TargetKind.AllAllies:
+        return "All allies";
+    }
+
+    return "";
 }

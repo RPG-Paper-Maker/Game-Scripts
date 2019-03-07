@@ -48,3 +48,26 @@ SystemCost.prototype.readJSON = function(json) {
     }
     this.valueFormula = SystemValue.readOrDefaultMessage(json.vf);
 }
+
+// -------------------------------------------------------
+
+SystemCost.prototype.toString = function() {
+    var result, user;
+
+    result = RPM.evaluateFormula(this.valueFormula.getValue(), $currentMap.user)
+        + " ";
+    switch (this.kind) {
+    case DamagesKind.Stat:
+        result += $datasGame.battleSystem.statistics[this.statisticID.getValue()
+            ].name;
+        break;
+    case DamagesKind.Currency:
+        result += $datasGame.system.currencies[this.currencyID.getValue()].name;
+        break;
+    case DamagesKind.Variable:
+        result += $datasGame.variablesNames[this.variableID];
+        break;
+    }
+
+    return result;
+}

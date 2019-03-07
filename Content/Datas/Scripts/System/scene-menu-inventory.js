@@ -41,8 +41,8 @@ function SceneMenuInventory() {
     menuKind = [
         new GraphicText("All"),
         new GraphicText("Consumables"),
-        new GraphicText($datasGame.system.itemsTypes[1]),
-        new GraphicText($datasGame.system.itemsTypes[2]),
+        new GraphicText($datasGame.system.itemsTypes[1].name),
+        new GraphicText($datasGame.system.itemsTypes[2].name),
         new GraphicText("Weapons"),
         new GraphicText("Armors")
     ];
