@@ -25,7 +25,7 @@
 
 /** @class
 */
-function GraphicUserSkillItem(skillItem) {
+function GraphicUserSkillItem() {
     var player;
 
     this.graphicCharacters = new Array;
@@ -34,11 +34,29 @@ function GraphicUserSkillItem(skillItem) {
         player.initializeCharacter(true);
         this.graphicCharacters.push(player);
     }
-    this.indexArrow = 0;
-    $currentMap.targets = [$game.teamHeroes[this.indexArrow]];
+    this.setAll(false);
 }
 
 GraphicUserSkillItem.prototype = {
+
+    setAll: function(b) {
+        this.all = b;
+
+        if (b) {
+            var i, l;
+
+            l = $game.teamHeroes.length;
+            $currentMap.targets = new Array(l);
+            for (i = 0; i < l; i++) {
+                $currentMap.targets[i] = $game.teamHeroes[i];
+            }
+        } else {
+            this.indexArrow = 0;
+            $currentMap.targets = [$game.teamHeroes[this.indexArrow]];
+        }
+    },
+
+    // -------------------------------------------------------
 
     update: function() {
         for (var i = 0, l = this.graphicCharacters.length; i < l; i++) {
@@ -69,9 +87,11 @@ GraphicUserSkillItem.prototype = {
     // -------------------------------------------------------
 
     moveArrow: function(index) {
-        this.indexArrow = RPM.mod(index, this.graphicCharacters.length);
-        $currentMap.targets = [$game.teamHeroes[this.indexArrow]];
-        $requestPaintHUD = true;
+        if (!this.isAll) {
+            this.indexArrow = RPM.mod(index, this.graphicCharacters.length);
+            $currentMap.targets = [$game.teamHeroes[this.indexArrow]];
+            $requestPaintHUD = true;
+        }
     },
 
     // -------------------------------------------------------
@@ -87,6 +107,15 @@ GraphicUserSkillItem.prototype = {
         }
     },
 
+    // -------------------------------------------------------
+
+    drawArrowAtIndex: function(index, x, y, h) {
+        $datasGame.system.getWindowSkin().drawArrowTarget(this.graphicCharacters
+            [index].battlerFrame, x + 32 + (index * 85), y + h - 20);
+    },
+
+    // -------------------------------------------------------
+
     /** Drawing the save informations.
     *   @param {number} x The x position to draw graphic.
     *   @param {number} y The y position to draw graphic.
@@ -100,8 +129,12 @@ GraphicUserSkillItem.prototype = {
             this.graphicCharacters[i].drawCharacter(x + 5 + (i * 85), y - 32, w,
                 h);
         }
-        $datasGame.system.getWindowSkin().drawArrowTarget(this.graphicCharacters
-            [this.indexArrow].battlerFrame, x + 32 + (this.indexArrow * 85), y +
-            h - 20);
+        if (this.all) {
+            for (i = 0; i < l; i++) {
+                this.drawArrowAtIndex(i, x, y, h);
+            }
+        } else {
+            this.drawArrowAtIndex(this.indexArrow, x, y, h);
+        }
     }
 }

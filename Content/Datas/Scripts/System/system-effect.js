@@ -97,11 +97,12 @@ SystemEffect.prototype.readJSON = function(json) {
 // -------------------------------------------------------
 
 SystemEffect.prototype.execute = function(returnIsDoingSomething) {
-    var user, targets, target;
+    var user, targets, target, result;
     var i, l;
     user = $currentMap.user ? ($currentMap.isBattleMap ? $currentMap.user
         .character : $currentMap.user) : GamePlayer.getTemporaryPlayer();
     targets = $currentMap.targets;
+    result = false;
 
     switch (this.kind) {
     case EffectKind.Damages:
@@ -162,7 +163,7 @@ SystemEffect.prototype.execute = function(returnIsDoingSomething) {
                     target[abbreviation] = Math.min(target[abbreviation], max);
                 }
                 if (returnIsDoingSomething) {
-                    return beforeStat !== max && damage !== 0;
+                    result = result || (beforeStat !== max && damage !== 0);
                 }
                 break;
             case DamagesKind.Currency:
@@ -183,21 +184,29 @@ SystemEffect.prototype.execute = function(returnIsDoingSomething) {
             }
             break;
         }
-        return true;
+        if (!returnIsDoingSomething) {
+            result = true;
+        }
+        break;
     case EffectKind.Status:
-        return true;
+        if (!returnIsDoingSomething) {
+            result = true;
+        }
+        break;
     case EffectKind.AddRemoveSkill:
-        return false;
+        break;
     case EffectKind.PerformSkill:
-        return false;
+        break;
     case EffectKind.CommonReaction:
-        return false;
+        break;
     case EffectKind.SpecialActions:
         $currentMap.battleCommandKind = this.specialActionKind;
-        return false;
+        break;
     case EffectKind.Script:
-        return false;
+        break;
     }
+
+    return result;
 }
 
 // -------------------------------------------------------

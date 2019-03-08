@@ -136,8 +136,19 @@ SceneMenuInventory.prototype = {
             if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
                 .Action))
             {
-                if (this.windowInformations.content.item.consumable) {
+                var targetKind, availableKind;
+
+                targetKind = this.windowInformations.content.item.targetKind;
+                availableKind = this.windowInformations.content.item
+                    .availableKind;
+                if (this.windowInformations.content.item.consumable && (
+                    targetKind === TargetKind.Ally || targetKind === TargetKind
+                    .AllAllies) && (availableKind === AvailableKind.Always ||
+                    availableKind === AvailableKind.MainMenu))
+                {
                     this.substep = 1;
+                    this.windowBoxUseItem.content.setAll(targetKind ===
+                        TargetKind.AllAllies);
                     $requestPaintHUD = true;
                 }
             } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
