@@ -59,6 +59,12 @@ SystemStatistic.prototype = {
 
     // -------------------------------------------------------
 
+    getBonusAbbreviation: function() {
+        return "bonus" + this.abbreviation;
+    },
+
+    // -------------------------------------------------------
+
     getAbbreviationNext: function() {
         return this.isFix ? this.abbreviation : this.getMaxAbbreviation();
     }

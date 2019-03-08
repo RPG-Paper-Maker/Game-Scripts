@@ -39,15 +39,19 @@
 *   display inside the window.
 *   @param {number[]} [padding=[0,0,0,0]] - Padding of the box.
 */
-function WindowBox(x, y, w, h, content, padding) {
+function WindowBox(x, y, w, h, content, padding, limitContent) {
     Bitmap.call(this, x, y, w, h);
 
     // Default values
     if (typeof content === 'undefined') content = null;
     if (typeof padding === 'undefined') padding = [0,0,0,0];
+    if (typeof limitContent === 'undefined') {
+        limitContent = true;
+    }
 
     this.padding = padding;
     this.content = content;
+    this.limitContent = limitContent;
     this.updateDimensions();
     this.bordersOpacity = 1;
     this.backgroundOpacity = 1;
@@ -127,12 +131,14 @@ WindowBox.prototype = {
                 .selected);
 
             // Draw content
-            if (this.content !== null){
-                $context.save();
-                $context.beginPath();
-                $context.rect(windowDimension[0], windowDimension[1],
-                    windowDimension[2], windowDimension[3]);
-                $context.clip();
+            if (this.content !== null) {
+                if (this.limitContent) {
+                    $context.save();
+                    $context.beginPath();
+                    $context.rect(windowDimension[0], windowDimension[1],
+                        windowDimension[2], windowDimension[3]);
+                    $context.clip();
+                }
                 if (isChoice){
                     this.content.draw(
                          contentDimension[0],
@@ -149,7 +155,9 @@ WindowBox.prototype = {
                          contentDimension[3]
                     );
                 }
-                $context.restore();
+                if (this.limitContent) {
+                    $context.restore();
+                }
             }
         }
     }

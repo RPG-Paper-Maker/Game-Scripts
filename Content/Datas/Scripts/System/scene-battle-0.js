@@ -85,9 +85,8 @@ SceneBattle.prototype.initializeStep0 = function(){
         .SMALL_SLOT_HEIGHT, null, RPM.SMALL_SLOT_PADDING);
     w = 300;
     h = 100;
-    this.windowCharacterInformations = new WindowBox($SCREEN_X - w,
-                                                     $SCREEN_Y - h, w, h, null,
-                                                     RPM.SMALL_PADDING_BOX);
+    this.windowCharacterInformations = new WindowBox($SCREEN_X - w, $SCREEN_Y -
+        h, w, h, null, RPM.SMALL_PADDING_BOX, false);
     l = $datasGame.battleSystem.battleCommandsOrder.length;
     var listContent = new Array(l);
     var listCallbacks = new Array(l);

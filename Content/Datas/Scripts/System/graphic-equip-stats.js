@@ -85,12 +85,8 @@ function GraphicEquipStats(gamePlayer, newValues){
             if (this.isChanging){
 
                 // New values
-                txt = statistic.isFix ? (gamePlayer[statistic.abbreviation]
-                                         + newValues[id]) :
-                                        (gamePlayer["max" +
-                                                    statistic.abbreviation]
-                                         + newValues[id]);
-                this.listNewStats.push(new GraphicText(txt, Align.left));
+                this.listNewStats.push(new GraphicText("" + newValues[id], Align
+                    .left));
             }
 
             j++;

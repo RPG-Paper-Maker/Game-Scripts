@@ -56,9 +56,9 @@ SystemStatisticProgression.prototype = {
 
     // -------------------------------------------------------
 
-    getValueAtLevel: function(level, user) {
-        return this.isFix ? this.table.getProgressionAt(level, user.character
-            .getProperty("finalLevel")) : RPM.evaluateFormula(this.formula
-            .getValue(), user, null);
+    getValueAtLevel: function(level, user, maxLevel) {
+        return this.isFix ? this.table.getProgressionAt(level, typeof maxLevel
+             === 'undefined' ? user.character.getProperty("finalLevel") :
+             maxLevel) : RPM.evaluateFormula(this.formula.getValue(), user, null);
     }
 }

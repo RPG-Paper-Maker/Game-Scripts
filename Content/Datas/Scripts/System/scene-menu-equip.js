@@ -144,27 +144,96 @@ SceneMenuEquip.prototype = {
     /** Update the informations to display for equipment stats.
     */
     updateInformations: function(){
-        var list;
-        if (this.selectedEquipment === -1)
-            list = [];
-        else{
-            var item = this.windowChoicesList.getCurrentContent();
+        var statistics, statistic, caracteristics, caracteristic, result,
+            gamePlayer, statisticsProgression, statisticProgression, base,
+            equipIndex, item, idEquipment, previewPlayer;
+        var i, j, k, l, ll;
 
-            if (item === null)
-                list = [];
-            else{
-                var i, l = $datasGame.battleSystem.statistics.length;
-                list = new Array(l);
-                for (i = 1; i < l; i++){
-                    list[i] = 0;
+        gamePlayer = $game.teamHeroes[this.windowChoicesTabs
+            .currentSelectedIndex];
+        if (this.selectedEquipment === -1)
+            this.list = [];
+        else{
+            item = this.windowChoicesList.getCurrentContent();
+
+            if (item === null) {
+                this.list = [];
+            } else {
+                equipIndex = this.windowChoicesEquipment.currentSelectedIndex;
+                statistics = $datasGame.battleSystem.statistics;
+                this.list = new Array(l);
+                this.bonus = new Array(l);
+                for (i = 1, l = statistics.length; i < l; i++) {
+                    this.list[i] = null;
+                    this.bonus[i] = null;
+                }
+                for (k = 1, ll = gamePlayer.equip.length; k < ll; k++) {
+                    idEquipment = $datasGame.battleSystem.equipmentsOrder
+                            [this.windowChoicesEquipment.currentSelectedIndex];
+                    if (k === idEquipment) {
+                        if (!item.item) {
+                            continue;
+                        }
+                        caracteristics = item.item.caracteristics;
+                    } else {
+                        if (gamePlayer.equip[k] === null) {
+                            continue;
+                        }
+                        caracteristics = gamePlayer.equip[k]
+                            .getItemInformations().caracteristics;
+                    }
+                    if (caracteristics) {
+                        for (i = 1, l = caracteristics.length; i < l; i++) {
+                            caracteristic = caracteristics[i];
+                            result = caracteristic.getNewStatValue(gamePlayer);
+                            if (result !== null) {
+                                if (this.list[result[0]] === null) {
+                                    statistic = statistics[result[0]];
+                                    base = gamePlayer[statistic
+                                        .getAbbreviationNext()] - gamePlayer[
+                                        statistic.getBonusAbbreviation()];
+                                    this.list[result[0]] = caracteristic
+                                        .operation ? 0 : base;
+                                    this.bonus[result[0]] = caracteristic
+                                        .operation ? -base : 0;
+                                }
+                                this.list[result[0]] += result[1];
+                                this.bonus[result[0]] += result[1];
+                            }
+                        }
+                    }
+                }
+
+                // Same values for not changed stats
+                for (i = 1, l = statistics.length; i < l; i++) {
+                    if (this.list[i] === null) {
+                        this.list[i] = gamePlayer[statistics[i]
+                            .getAbbreviationNext()];
+                    }
+                }
+
+                // Update formulas statistics
+                statisticsProgression = gamePlayer.character
+                    .getStatisticsProgression();
+                previewPlayer = GamePlayer.getTemporaryPlayer(this.list);
+                for (i = 0, l = statisticsProgression.length; i < l; i++) {
+                    for (j = 0; j < l; j++) {
+                        statisticProgression = statisticsProgression[j];
+                        this.list[statisticProgression.id] =
+                            statisticProgression.getValueAtLevel(previewPlayer
+                            .getCurrentLevel(), previewPlayer, gamePlayer
+                            .character.getProperty("finalLevel")) + this.bonus[
+                            statisticProgression.id];
+                        previewPlayer.initStatValue(statistics[
+                            statisticProgression.id], this.list[
+                            statisticProgression.id])
+                    }
                 }
             }
         }
 
-        this.windowInformations.content =
-             new GraphicEquipStats(
-                 $game.teamHeroes[this.windowChoicesTabs.currentSelectedIndex],
-                 list);
+        this.windowInformations.content = new GraphicEquipStats(gamePlayer, this
+            .list);
     },
 
     /** Remove the equipment of the character.
@@ -175,6 +244,7 @@ SceneMenuEquip.prototype = {
         var id = $datasGame.battleSystem.equipmentsOrder
                 [this.windowChoicesEquipment.currentSelectedIndex];
         character.equip[id] = null;
+        this.updateStats();
     },
 
     // -------------------------------------------------------
@@ -184,10 +254,18 @@ SceneMenuEquip.prototype = {
     equip: function(){
         var index = this.windowChoicesTabs.currentSelectedIndex;
         var character = $game.teamHeroes[index];
-        var item = this.windowChoicesList.getCurrentContent().content;
+        var item = this.windowChoicesList.getCurrentContent().gameItem;
         var id = $datasGame.battleSystem.equipmentsOrder
                 [this.windowChoicesEquipment.currentSelectedIndex];
         character.equip[id] = item;
+        this.updateStats();
+    },
+
+    // -------------------------------------------------------
+
+    updateStats: function() {
+        $game.teamHeroes[this.windowChoicesTabs.currentSelectedIndex]
+            .updateEquipmentStats(this.list, this.bonus);
     },
 
     // -------------------------------------------------------

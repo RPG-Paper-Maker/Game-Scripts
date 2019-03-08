@@ -89,6 +89,37 @@ SystemCaracteristic.prototype.readJSON = function(json) {
         break;
     }
 }
+
+// -------------------------------------------------------
+
+SystemCaracteristic.prototype.getNewStatValue = function(gamePlayer) {
+    var statID, stat, value, baseStatValue;
+
+    switch (this.kind) {
+    case CaracteristicKind.IncreaseDecrease:
+        switch (this.increaseDecreaseKind) {
+        case IncreaseDecreaseKind.StatValue:
+            statID = this.statisticValueID.getValue();
+            stat = $datasGame.battleSystem.statistics[statID];
+            break;
+        default:
+            return null;
+        }
+        value = this.value.getValue() * (this.isIncreaseDecrease ? 1 : - 1);
+        baseStatValue = gamePlayer[stat.getAbbreviationNext()] - gamePlayer[
+            stat.getBonusAbbreviation()];
+        if (this.operation) {
+            value = this.unit ? baseStatValue * Math.round(baseStatValue * value
+                / 100) : baseStatValue * value;
+        } else {
+            value = this.unit ? Math.round(baseStatValue * value / 100) : value;
+        }
+        return [statID, value];
+    default:
+        return null;
+    }
+}
+
 // -------------------------------------------------------
 
 SystemCaracteristic.prototype.toString = function() {
@@ -135,7 +166,7 @@ SystemCaracteristic.prototype.toString = function() {
             break;
         }
         result += " ";
-        sign = this.isIncreaseDescreaseKind ? 1 : -1;
+        sign = this.isIncreaseDecrease ? 1 : -1;
         value = this.value.getValue();
         sign *= Math.sign(value);
         if (this.operation) {

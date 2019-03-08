@@ -41,16 +41,26 @@
 */
 function GamePlayer(kind, id, instanceId, skills) {
     if (typeof kind !== 'undefined') {
+        var i, l;
+
         this.k = kind;
         this.id = id;
         this.instid = instanceId;
         this.character = this.getCharacterInformations();
 
-        var i, l = skills.length;
+        // Skills
+        l = skills.length;
         this.sk = new Array(l);
         for (i = 0; i < l; i++){
             var skill = skills[i];
             this.sk[i] = new GameSkill(skill.id);
+        }
+
+        // Equip
+        l = $datasGame.battleSystem.equipments.length;
+        this.equip = new Array(l);
+        for (i = 1; i < l; i++) {
+            this.equip[i] = null;
         }
 
         // Experience list
@@ -83,14 +93,14 @@ GamePlayer.getEquipmentLength = function(){
 
 // -------------------------------------------------------
 
-GamePlayer.getTemporaryPlayer = function() {
+GamePlayer.getTemporaryPlayer = function(values) {
     var player, statistics;
     var i, l;
 
     player = new GamePlayer();
     statistics = $datasGame.battleSystem.statistics;
     for (i = 1, l = statistics.length; i < l; i++) {
-        player.initStatValue(statistics[i], 0);
+        player.initStatValue(statistics[i], values ? values[i] : 0);
     }
 
     return player;
@@ -190,6 +200,7 @@ GamePlayer.prototype = {
 
             // Default value
             this.initStatValue(statistic, 0);
+            this[statistic.getBonusAbbreviation()] = 0;
 
             if (i === $datasGame.battleSystem.idLevelStatistic) {
                 // Level
@@ -224,19 +235,39 @@ GamePlayer.prototype = {
                     statisticProgression.getValueAtLevel(level, this));
             }
         }
+    },
 
-        // Equip
-        l = $datasGame.battleSystem.equipments.length;
-        this.equip = new Array(l);
-        for (i = 1; i < l; i++){
-            this.equip[i] = null;
+    // -------------------------------------------------------
+
+    updateEquipmentStats: function(list, bonus) {
+        var statistics, statistic, value;
+        var i, l;
+
+        if (list && bonus) {
+            statistics = $datasGame.battleSystem.statistics;
+            for (i = 1, l = statistics.length; i < l; i++) {
+                statistic = statistics[i];
+                value = list[i];
+                if (statistic.isFix) {
+                    this[statistic.abbreviation] = value;
+                } else {
+                    this[statistic.getMaxAbbreviation()] = value;
+                    if (this[statistic.abbreviation] > this[statistic
+                        .getMaxAbbreviation()])
+                    {
+                        this[statistic.abbreviation] = this[statistic
+                            .getMaxAbbreviation()];
+                    }
+                }
+                this[statistic.getBonusAbbreviation()] = bonus[i];
+            }
         }
     },
 
     // -------------------------------------------------------
 
     initStatValue: function(statistic, value) {
-        this[statistic.abbreviation] = value
+        this[statistic.abbreviation] = value;
         if (!statistic.isFix) {
             this[statistic.getMaxAbbreviation()] = value;
         }
@@ -281,7 +312,8 @@ GamePlayer.prototype = {
                             nonFixStatistics.push(statisticProgression);
                         } else {
                             this.updateStatValue(statistic, statisticProgression
-                                .getValueAtLevel(level, this));
+                                .getValueAtLevel(level, this) + this[statistic
+                                .getBonusAbbreviation()]);
                         }
                         break;
                     }
@@ -293,8 +325,10 @@ GamePlayer.prototype = {
         for (i = 0, l = nonFixStatistics.length; i < l; i++) {
             for (j = 0; j < l; j++) {
                 statisticProgression = nonFixStatistics[j];
-                this.updateStatValue(statistics[statisticProgression.id],
-                    statisticProgression.getValueAtLevel(level, this));
+                statistic = statistics[statisticProgression.id];
+                this.updateStatValue(statistic, statisticProgression
+                    .getValueAtLevel(level, this) + this[statistic
+                    .getBonusAbbreviation()]);
             }
         }
     },
