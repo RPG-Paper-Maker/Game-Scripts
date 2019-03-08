@@ -107,7 +107,11 @@ Game.prototype = {
         }
 
         // Currencies
-        this.currencies = json.cur;
+        l = json.cur.length;
+        this.currencies = new Array(l);
+        for (i = 1; i < l; i++) {
+            this.currencies[i] = json.cur[i];
+        }
 
         // Heroes
         var heroesJson = json.th;
@@ -219,22 +223,24 @@ Game.prototype = {
                     for (k = 0; k < w; k++) {
                         inf = {};
                         datas = this.mapsDatas[id][i][j][k];
-                        if (datas.min.length) {
-                            inf.min = datas.min;
+                        if (datas) {
+                            if (datas.min && datas.min.length) {
+                                inf.min = datas.min;
+                            }
+                            if (datas.mout && datas.mout.length) {
+                                inf.mout = datas.mout;
+                            }
+                            if (datas.m && datas.m.length) {
+                                inf.m = datas.m;
+                            }
+                            if (datas.si && datas.si.length) {
+                                inf.si = datas.si;
+                            }
+                            if (datas.s && datas.s.length) {
+                                inf.s = datas.s;
+                            }
                         }
-                        if (datas.mout.length) {
-                            inf.mout = datas.mout;
-                        }
-                        if (datas.m.length) {
-                            inf.m = datas.m;
-                        }
-                        if (datas.si.length) {
-                            inf.si = datas.si;
-                        }
-                        if (datas.s.length) {
-                            inf.s = datas.s;
-                        }
-                        objPortion[i][j][k] = inf;
+                        objPortion[i][j][k] = datas ? inf : null;
                     }
                 }
             }

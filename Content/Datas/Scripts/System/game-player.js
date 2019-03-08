@@ -134,11 +134,14 @@ GamePlayer.prototype = {
         var list = new Array(l);
         for (i = 0; i < l; i++){
             var statistic = $datasGame.battleSystem.statistics[i+1];
-            if (statistic.isFix)
-                list[i] = this[statistic.abbreviation];
-            else
+            if (statistic.isFix) {
                 list[i] = [this[statistic.abbreviation],
-                           this["max"+statistic.abbreviation]];
+                           this[statistic.getBonusAbbreviation()]];
+            } else {
+                list[i] = [this[statistic.abbreviation],
+                           this[statistic.getBonusAbbreviation()],
+                           this[statistic.getMaxAbbreviation()]];
+            }
         }
         return list;
     },
@@ -239,28 +242,105 @@ GamePlayer.prototype = {
 
     // -------------------------------------------------------
 
-    updateEquipmentStats: function(list, bonus) {
-        var statistics, statistic, value;
-        var i, l;
+    getEquipmentStatsAndBonus: function(item, idEquipment) {
+        var statistics, list, bonus, caracteristics, caracteristic, result,
+            statistic, base, statisticsProgression, previewPlayer,
+            statisticProgression;
+        var i, j, k, l, ll;
 
-        if (list && bonus) {
-            statistics = $datasGame.battleSystem.statistics;
-            for (i = 1, l = statistics.length; i < l; i++) {
-                statistic = statistics[i];
-                value = list[i];
-                if (statistic.isFix) {
-                    this[statistic.abbreviation] = value;
-                } else {
-                    this[statistic.getMaxAbbreviation()] = value;
-                    if (this[statistic.abbreviation] > this[statistic
-                        .getMaxAbbreviation()])
-                    {
-                        this[statistic.abbreviation] = this[statistic
-                            .getMaxAbbreviation()];
+        statistics = $datasGame.battleSystem.statistics;
+        l = statistics.length
+        list = new Array(l);
+        bonus = new Array(l);
+        for (i = 1; i < l; i++) {
+            list[i] = null;
+            bonus[i] = null;
+        }
+        for (k = 1, ll = this.equip.length; k < ll; k++) {
+            if (k === idEquipment) {
+                if (!item) {
+                    continue;
+                }
+                caracteristics = item.caracteristics;
+            } else {
+                if (this.equip[k] === null) {
+                    continue;
+                }
+                caracteristics = this.equip[k].getItemInformations()
+                    .caracteristics;
+            }
+            if (caracteristics) {
+                for (i = 1, l = caracteristics.length; i < l; i++) {
+                    caracteristic = caracteristics[i];
+                    result = caracteristic.getNewStatValue(this);
+                    if (result !== null) {
+                        if (list[result[0]] === null) {
+                            statistic = statistics[result[0]];
+                            base = this[statistic.getAbbreviationNext()] - this[
+                                statistic.getBonusAbbreviation()];
+                            list[result[0]] = caracteristic.operation ? 0 : base;
+                            bonus[result[0]] = caracteristic.operation ? -base :
+                                0;
+                        }
+                        list[result[0]] += result[1];
+                        bonus[result[0]] += result[1];
                     }
                 }
-                this[statistic.getBonusAbbreviation()] = bonus[i];
             }
+        }
+
+        // Same values for not changed stats
+        for (i = 1, l = statistics.length; i < l; i++) {
+            if (list[i] === null) {
+                list[i] = this[statistics[i].getAbbreviationNext()];
+            }
+        }
+
+        // Update formulas statistics
+        statisticsProgression = this.character.getStatisticsProgression();
+        previewPlayer = GamePlayer.getTemporaryPlayer(list);
+        for (i = 0, l = statisticsProgression.length; i < l; i++) {
+            for (j = 0; j < l; j++) {
+                statisticProgression = statisticsProgression[j];
+                list[statisticProgression.id] = statisticProgression
+                    .getValueAtLevel(this.getCurrentLevel(),
+                    previewPlayer, this.character.getProperty("finalLevel"
+                    )) + bonus[statisticProgression.id];
+                previewPlayer.initStatValue(statistics[statisticProgression.id],
+                    list[statisticProgression.id]);
+            }
+        }
+
+        return [list, bonus];
+    },
+
+    // -------------------------------------------------------
+
+    updateEquipmentStats: function(list, bonus) {
+        var statistics, statistic, value, result, equipments;
+        var i, l;
+
+        if (!list || !bonus) {
+            result = this.getEquipmentStatsAndBonus();
+            list = result[0];
+            bonus = result[1];
+        }
+        statistics = $datasGame.battleSystem.statistics;
+        for (i = 1, l = statistics.length; i < l; i++) {
+            statistic = statistics[i];
+            value = list[i];
+            if (statistic.isFix) {
+                this[statistic.abbreviation] = value;
+            } else {
+                this[statistic.getMaxAbbreviation()] = value;
+                if (this[statistic.abbreviation] > this[statistic
+                    .getMaxAbbreviation()])
+                {
+                    this[statistic.abbreviation] = this[statistic
+                        .getMaxAbbreviation()];
+                }
+            }
+            this[statistic.getBonusAbbreviation()] = bonus[i];
         }
     },
 
@@ -281,7 +361,8 @@ GamePlayer.prototype = {
         if (typeof this[statistic.getBeforeAbbreviation()] === 'undefined') {
             this[statistic.getBeforeAbbreviation()] = this[abr];
         }
-        this[abr] = value
+        this[abr] = value;
+        this[statistic.getBonusAbbreviation()] = 0;
     },
 
     // -------------------------------------------------------
@@ -312,8 +393,7 @@ GamePlayer.prototype = {
                             nonFixStatistics.push(statisticProgression);
                         } else {
                             this.updateStatValue(statistic, statisticProgression
-                                .getValueAtLevel(level, this) + this[statistic
-                                .getBonusAbbreviation()]);
+                                .getValueAtLevel(level, this));
                         }
                         break;
                     }
@@ -327,10 +407,11 @@ GamePlayer.prototype = {
                 statisticProgression = nonFixStatistics[j];
                 statistic = statistics[statisticProgression.id];
                 this.updateStatValue(statistic, statisticProgression
-                    .getValueAtLevel(level, this) + this[statistic
-                    .getBonusAbbreviation()]);
+                    .getValueAtLevel(level, this));
             }
         }
+
+        this.updateEquipmentStats();
     },
 
     // -------------------------------------------------------
@@ -353,12 +434,10 @@ GamePlayer.prototype = {
         for (i = 1; i < l; i++){
             var statistic = $datasGame.battleSystem.statistics[i];
             var value = jsonStats[i-1];
-            if (statistic.isFix){
-                this[statistic.abbreviation] = value;
-            }
-            else{
-                this[statistic.abbreviation] = value[0];
-                this["max"+statistic.abbreviation] = value[1];
+            this[statistic.abbreviation] = value[0];
+            this[statistic.getBonusAbbreviation()] = value[1];
+            if (!statistic.isFix){
+                this[statistic.getMaxAbbreviation()] = value[2];
             }
         }
 
@@ -370,6 +449,7 @@ GamePlayer.prototype = {
             if (typeof item === 'undefined') item = null;
             this.equip[i] = item;
         }
+        this.updateEquipmentStats();
     },
 
     // -------------------------------------------------------

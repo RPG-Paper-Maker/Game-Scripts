@@ -159,6 +159,11 @@ SceneMenuEquip.prototype = {
             if (item === null) {
                 this.list = [];
             } else {
+                gamePlayer.getEquipmentStatsAndBonus(item.item, $datasGame
+                    .battleSystem.equipmentsOrder[this.windowChoicesEquipment
+                    .currentSelectedIndex]);
+
+
                 equipIndex = this.windowChoicesEquipment.currentSelectedIndex;
                 statistics = $datasGame.battleSystem.statistics;
                 this.list = new Array(l);
