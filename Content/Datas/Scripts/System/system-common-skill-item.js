@@ -87,12 +87,15 @@ SystemCommonSkillItem.prototype.readJSON = function(json) {
 
 // -------------------------------------------------------
 
-SystemCommonSkillItem.prototype.useInBattle = function() {
-    var i, l;
+SystemCommonSkillItem.prototype.use = function() {
+    var i, l, isDoingSomething;
 
+    isDoingSomething = false;
     for (i = 0, l = this.effects.length; i < l; i++) {
-        this.effects[i].executeInBattle();
+        isDoingSomething = isDoingSomething || this.effects[i].execute(true);
     }
+
+    return isDoingSomething;
 }
 
 // -------------------------------------------------------

@@ -59,9 +59,19 @@ function SceneMenuInventory() {
         .HUGE_PADDING_BOX);
     this.windowEmpty = new WindowBox(10, 100, $SCREEN_X - 20, RPM
         .SMALL_SLOT_HEIGHT, new GraphicText("Empty"), RPM.SMALL_SLOT_PADDING);
+    this.windowBoxUseItem = new WindowBox(240, 320, 360, 140, new
+        GraphicUserSkillItem(), RPM.SMALL_PADDING_BOX);
     l = menuKind.length;
+    this.positionChoice = new Array(l);
+    for (i = 0; i < l; i++) {
+        this.positionChoice[i] = {
+            index: 0,
+            offset: 0
+        };
+    }
 
     // Update for changing tab
+    this.substep = 0;
     this.updateForTab();
 
     this.synchronize();
@@ -104,22 +114,61 @@ SceneMenuInventory.prototype = {
         }
 
         this.windowChoicesList.setContentsCallbacks(list);
+        this.windowChoicesList.unselect();
+        this.windowChoicesList.offsetSelectedIndex = this.positionChoice[
+            indexTab].offset;
+        this.windowChoicesList.select(this.positionChoice[indexTab].index);
     },
 
     // -------------------------------------------------------
 
     update: function() {
-
+        if (this.windowChoicesList.currentSelectedIndex !== -1) {
+            this.windowBoxUseItem.update();
+        }
     },
 
     // -------------------------------------------------------
 
     onKeyPressed: function(key) {
-        if (DatasKeyBoard.isKeyEqual(key,
-                                     $datasGame.keyBoard.menuControls.Cancel) ||
-            DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.MainMenu))
-        {
-            $gameStack.pop();
+        switch (this.substep) {
+        case 0:
+            if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
+                .Action))
+            {
+                if (this.windowInformations.content.item.consumable) {
+                    this.substep = 1;
+                    $requestPaintHUD = true;
+                }
+            } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
+                .menuControls.Cancel) || DatasKeyBoard.isKeyEqual(key,
+                $datasGame.keyBoard.MainMenu))
+            {
+                $gameStack.pop();
+            }
+            break;
+        case 1:
+            if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
+                .Action))
+            {
+                if (this.windowInformations.content.item.use()) {
+                    $game.useItem(this.windowInformations.content.gameItem);
+                    if (this.windowInformations.content.gameItem.nb > 0) {
+                        this.windowInformations.content.updateNb();
+                    } else {
+                        this.updateForTab();
+                    }
+                    this.windowBoxUseItem.content.updateStats();
+                    $requestPaintHUD = true;
+                }
+            } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
+                .menuControls.Cancel) || DatasKeyBoard.isKeyEqual(key,
+                $datasGame.keyBoard.MainMenu))
+            {
+                this.substep = 0;
+                $requestPaintHUD = true;
+            }
+            break;
         }
     },
 
@@ -138,15 +187,28 @@ SceneMenuInventory.prototype = {
     // -------------------------------------------------------
 
     onKeyPressedAndRepeat: function(key) {
-        // Tab
-        var indexTab = this.windowChoicesTabs.currentSelectedIndex;
-        this.windowChoicesTabs.onKeyPressedAndRepeat(key);
-        if (indexTab !== this.windowChoicesTabs.currentSelectedIndex) {
-            this.updateForTab();
-        }
+        switch (this.substep) {
+        case 0:
+            var position;
 
-        // List
-        this.windowChoicesList.onKeyPressedAndRepeat(key);
+            // Tab
+            var indexTab = this.windowChoicesTabs.currentSelectedIndex;
+            this.windowChoicesTabs.onKeyPressedAndRepeat(key);
+            if (indexTab !== this.windowChoicesTabs.currentSelectedIndex) {
+                this.updateForTab();
+            }
+
+            // List
+            this.windowChoicesList.onKeyPressedAndRepeat(key);
+            position = this.positionChoice[this.windowChoicesTabs
+                .currentSelectedIndex];
+            position.index = this.windowChoicesList.currentSelectedIndex;
+            position.offset = this.windowChoicesList.offsetSelectedIndex;
+            break;
+        case 1:
+            this.windowBoxUseItem.content.onKeyPressedAndRepeat(key);
+            break;
+        }
 
         this.synchronize();
     },
@@ -165,13 +227,16 @@ SceneMenuInventory.prototype = {
         $currentMap.drawHUD(context);
 
         // Draw the menu
-        this.windowTop.draw(context);
-        this.windowChoicesTabs.draw(context);
-        this.windowChoicesList.draw(context);
+        this.windowTop.draw();
+        this.windowChoicesTabs.draw();
+        this.windowChoicesList.draw();
         if (this.windowChoicesList.listWindows.length > 0) {
-            this.windowInformations.draw(context);
+            this.windowInformations.draw();
+            if (this.substep === 1) {
+                this.windowBoxUseItem.draw();
+            }
         } else {
-            this.windowEmpty.draw(context);
+            this.windowEmpty.draw();
         }
     }
 }

@@ -106,6 +106,12 @@ WindowBox.prototype = {
         this.updateDimensions();
     },
 
+    update: function() {
+        if (this.content !== null) {
+            this.content.update();
+        }
+    },
+
     // -------------------------------------------------------
 
     /** Draw the window

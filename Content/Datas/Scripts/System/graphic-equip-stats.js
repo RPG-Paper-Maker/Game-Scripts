@@ -72,8 +72,10 @@ function GraphicEquipStats(gamePlayer, newValues){
             this.listStatsNames.push(graphicName);
 
             // Value of the stat
-            txt = statistic.isFix ? gamePlayer[statistic.abbreviation]
-                                  : gamePlayer["max" + statistic.abbreviation];
+            txt = gamePlayer[statistic.abbreviation];
+            if (!statistic.isFix) {
+               txt += "/" + gamePlayer[statistic.getMaxAbbreviation()];
+            }
             graphicValue = new GraphicText(txt, Align.Left);
             $context.font = graphicValue.font;
             graphicValue.updateContextFont();
@@ -82,11 +84,15 @@ function GraphicEquipStats(gamePlayer, newValues){
                 maxLengthValue = c;
             this.listStats.push(graphicValue);
 
-            if (this.isChanging){
-
-                // New values
-                this.listNewStats.push(new GraphicText("" + newValues[id], Align
-                    .left));
+            if (this.isChanging) {
+                txt = newValues[id];
+                if (statistic.isFix) {
+                    txt = newValues[id];
+                } else {
+                    txt = Math.min(gamePlayer[statistic.abbreviation], newValues
+                        [id]) + "/" + newValues[id];
+                }
+                this.listNewStats.push(new GraphicText(txt, Align.left));
             }
 
             j++;

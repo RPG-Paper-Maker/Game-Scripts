@@ -127,9 +127,13 @@ SystemCaracteristic.prototype.toString = function() {
 
     user = $currentMap.user ? ($currentMap.isBattleMap ? $currentMap.user
         .character : $currentMap.user) : GamePlayer.getTemporaryPlayer();
+    /*
     target = $currentMap.targets && $currentMap.targets.length > 0 ? $currentMap
         .targets[$currentMap.selectedUserTargetIndex()] : GamePlayer
         .getTemporaryPlayer();
+    */
+    target = GamePlayer.getTemporaryPlayer();
+
     result = "";
     switch (this.kind) {
     case CaracteristicKind.IncreaseDecrease:

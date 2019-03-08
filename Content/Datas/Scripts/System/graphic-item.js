@@ -43,6 +43,12 @@ function GraphicItem(gameItem, nbItem){
 
 GraphicItem.prototype = {
 
+    updateNb: function() {
+        this.graphicNb.setText("x" + this.gameItem.nb);
+    },
+
+    // -------------------------------------------------------
+
     /** Drawing the item in choice box.
     *   @param {number} x The x position to draw graphic.
     *   @param {number} y The y position to draw graphic.

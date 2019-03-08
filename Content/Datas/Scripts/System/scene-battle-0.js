@@ -96,7 +96,7 @@ SceneBattle.prototype.initializeStep0 = function(){
             .battleCommandsOrder[i]];
         listContent[i] = new GraphicTextIcon(skill.name, skill.pictureID);
         listContent[i].skill = skill;
-        listCallbacks[i] = SystemCommonSkillItem.prototype.useInBattle;
+        listCallbacks[i] = SystemCommonSkillItem.prototype.use;
     }
     this.windowChoicesBattleCommands = new WindowChoices(OrientationWindow
         .Vertical, 20, $SCREEN_Y - 20 - (l*30), 150, 30, 6, listContent,

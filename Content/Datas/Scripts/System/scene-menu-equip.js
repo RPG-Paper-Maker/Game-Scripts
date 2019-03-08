@@ -63,7 +63,7 @@ function SceneMenuEquip() {
         .SMALL_SLOT_HEIGHT, nbEquipChoice, [], null, RPM.SMALL_SLOT_PADDING, 0,
         -1);
     this.windowInformations = new WindowBox(330, 100, 285, 350, null, RPM
-        .HUGE_PADDING_BOX);
+        .SMALL_PADDING_BOX);
 
     // Updates
     this.updateForTab();
@@ -144,9 +144,7 @@ SceneMenuEquip.prototype = {
     /** Update the informations to display for equipment stats.
     */
     updateInformations: function(){
-        var statistics, statistic, caracteristics, caracteristic, result,
-            gamePlayer, statisticsProgression, statisticProgression, base,
-            equipIndex, item, idEquipment, previewPlayer;
+        var result, gamePlayer, item;
         var i, j, k, l, ll;
 
         gamePlayer = $game.teamHeroes[this.windowChoicesTabs
@@ -159,81 +157,11 @@ SceneMenuEquip.prototype = {
             if (item === null) {
                 this.list = [];
             } else {
-                gamePlayer.getEquipmentStatsAndBonus(item.item, $datasGame
-                    .battleSystem.equipmentsOrder[this.windowChoicesEquipment
-                    .currentSelectedIndex]);
-
-
-                equipIndex = this.windowChoicesEquipment.currentSelectedIndex;
-                statistics = $datasGame.battleSystem.statistics;
-                this.list = new Array(l);
-                this.bonus = new Array(l);
-                for (i = 1, l = statistics.length; i < l; i++) {
-                    this.list[i] = null;
-                    this.bonus[i] = null;
-                }
-                for (k = 1, ll = gamePlayer.equip.length; k < ll; k++) {
-                    idEquipment = $datasGame.battleSystem.equipmentsOrder
-                            [this.windowChoicesEquipment.currentSelectedIndex];
-                    if (k === idEquipment) {
-                        if (!item.item) {
-                            continue;
-                        }
-                        caracteristics = item.item.caracteristics;
-                    } else {
-                        if (gamePlayer.equip[k] === null) {
-                            continue;
-                        }
-                        caracteristics = gamePlayer.equip[k]
-                            .getItemInformations().caracteristics;
-                    }
-                    if (caracteristics) {
-                        for (i = 1, l = caracteristics.length; i < l; i++) {
-                            caracteristic = caracteristics[i];
-                            result = caracteristic.getNewStatValue(gamePlayer);
-                            if (result !== null) {
-                                if (this.list[result[0]] === null) {
-                                    statistic = statistics[result[0]];
-                                    base = gamePlayer[statistic
-                                        .getAbbreviationNext()] - gamePlayer[
-                                        statistic.getBonusAbbreviation()];
-                                    this.list[result[0]] = caracteristic
-                                        .operation ? 0 : base;
-                                    this.bonus[result[0]] = caracteristic
-                                        .operation ? -base : 0;
-                                }
-                                this.list[result[0]] += result[1];
-                                this.bonus[result[0]] += result[1];
-                            }
-                        }
-                    }
-                }
-
-                // Same values for not changed stats
-                for (i = 1, l = statistics.length; i < l; i++) {
-                    if (this.list[i] === null) {
-                        this.list[i] = gamePlayer[statistics[i]
-                            .getAbbreviationNext()];
-                    }
-                }
-
-                // Update formulas statistics
-                statisticsProgression = gamePlayer.character
-                    .getStatisticsProgression();
-                previewPlayer = GamePlayer.getTemporaryPlayer(this.list);
-                for (i = 0, l = statisticsProgression.length; i < l; i++) {
-                    for (j = 0; j < l; j++) {
-                        statisticProgression = statisticsProgression[j];
-                        this.list[statisticProgression.id] =
-                            statisticProgression.getValueAtLevel(previewPlayer
-                            .getCurrentLevel(), previewPlayer, gamePlayer
-                            .character.getProperty("finalLevel")) + this.bonus[
-                            statisticProgression.id];
-                        previewPlayer.initStatValue(statistics[
-                            statisticProgression.id], this.list[
-                            statisticProgression.id])
-                    }
-                }
+                result = gamePlayer.getEquipmentStatsAndBonus(item.item,
+                    $datasGame.battleSystem.equipmentsOrder[this
+                    .windowChoicesEquipment.currentSelectedIndex]);
+                this.list = result[0];
+                this.bonus = result[1];
             }
         }
 

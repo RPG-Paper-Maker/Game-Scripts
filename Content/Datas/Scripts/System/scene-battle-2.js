@@ -97,7 +97,7 @@ SceneBattle.prototype.initializeStep2 = function() {
     }
     this.currentEffectIndex = 0;
     if (this.effects.length > 0) {
-        this.effects[this.currentEffectIndex].executeInBattle();
+        this.effects[this.currentEffectIndex].execute();
     }
 };
 
@@ -119,7 +119,7 @@ SceneBattle.prototype.updateStep2 = function() {
         for (l = this.effects.length; this.currentEffectIndex < l; this
             .currentEffectIndex++)
         {
-            if (this.effects[this.currentEffectIndex].executeInBattle()) {
+            if (this.effects[this.currentEffectIndex].execute()) {
                 break;
             }
         }

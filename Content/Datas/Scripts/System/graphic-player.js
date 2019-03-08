@@ -118,6 +118,8 @@ function GraphicPlayer(gamePlayer, reverse) {
 
     // Level up
     this.graphicLevelUp = new GraphicText("Level up!", Align.Left);
+
+    this.displayNameLevel = true;
 }
 
 GraphicPlayer.prototype = {
@@ -169,7 +171,11 @@ GraphicPlayer.prototype = {
 
     // -------------------------------------------------------
 
-    initializeCharacter: function() {
+    initializeCharacter: function(noDisplayNameLevel) {
+        if (noDisplayNameLevel) {
+            this.displayNameLevel = false;
+        }
+
         this.graphicName.updateFontSize(RPM.MEDIUM_FONT_SIZE);
         this.graphicLevelName.updateFontSize(RPM.MEDIUM_FONT_SIZE);
         this.graphicLevel.updateFontSize(RPM.MEDIUM_FONT_SIZE);
@@ -221,17 +227,20 @@ GraphicPlayer.prototype = {
             hBattler);
 
         // Stats
-        this.graphicName.draw(x, yName, 0, 0);
-        this.graphicName.updateContextFont();
-        this.graphicLevelName.draw(xLevelName, yName, 0, 0);
-        this.graphicLevelName.updateContextFont();
-        this.graphicLevel.draw(xLevel, yName, 0, 0);
-        this.graphicLevel.updateContextFont();
-        yStats = yName + 15;
+        yStats = yName;
+        if (this.displayNameLevel) {
+            this.graphicName.draw(x, yName, 0, 0);
+            this.graphicName.updateContextFont();
+            this.graphicLevelName.draw(xLevelName, yName, 0, 0);
+            this.graphicLevelName.updateContextFont();
+            this.graphicLevel.draw(xLevel, yName, 0, 0);
+            this.graphicLevel.updateContextFont();
+            yStats += 15;
+        }
         var i, l = this.listStatsNames.length;
         for (i = 0; i < l; i++) {
             xStat = x;
-            yStat = yStats + (i * 15);
+            yStat = yStats + (i * 12);
             this.listStatsNames[i].draw(xStat, yStat, 0, 0);
             this.listStats[i].draw(xStat + this.maxStatNamesLength +
                 10, yStat, 0, 0);

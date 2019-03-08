@@ -96,10 +96,12 @@ SystemEffect.prototype.readJSON = function(json) {
 
 // -------------------------------------------------------
 
-SystemEffect.prototype.executeInBattle = function() {
-    var user = $currentMap.user.character;
-    var targets = $currentMap.targets;
-    var i, l, target;
+SystemEffect.prototype.execute = function(returnIsDoingSomething) {
+    var user, targets, target;
+    var i, l;
+    user = $currentMap.user ? ($currentMap.isBattleMap ? $currentMap.user
+        .character : $currentMap.user) : GamePlayer.getTemporaryPlayer();
+    targets = $currentMap.targets;
 
     switch (this.kind) {
     case EffectKind.Damages:
@@ -108,7 +110,7 @@ SystemEffect.prototype.executeInBattle = function() {
             damage = 0;
             miss = false;
             crit = false;
-            target = targets[i].character;
+            target = $currentMap.isBattleMap ? targets[i].character : targets[i];
             if (this.isDamagePrecision) {
                 precision = RPM.evaluateFormula(this.damagePrecisionFormula
                     .getValue(), user, target);
@@ -141,14 +143,26 @@ SystemEffect.prototype.executeInBattle = function() {
                 }
             }
 
-            $currentMap.damages[i] = [damage, crit, miss];
+            if ($currentMap.isBattleMap) {
+                $currentMap.damages[i] = [damage, crit, miss];
+            }
+
             switch (this.damageKind) {
             case DamagesKind.Stat:
-                var abbreviation = $datasGame.battleSystem.statistics[this
-                    .damageStatisticID.getValue()].abbreviation;
+                var stat = $datasGame.battleSystem.statistics[this
+                    .damageStatisticID.getValue()];
+                var abbreviation = stat.abbreviation;
+                var beforeStat = target[abbreviation];
+                var max = target[stat.getMaxAbbreviation()];
                 target[abbreviation] -= damage;
                 if (target[abbreviation] < 0) {
                     target[abbreviation] = 0;
+                }
+                if (!stat.isFix) {
+                    target[abbreviation] = Math.min(target[abbreviation], max);
+                }
+                if (returnIsDoingSomething) {
+                    return beforeStat !== max && damage !== 0;
                 }
                 break;
             case DamagesKind.Currency:
@@ -194,9 +208,14 @@ SystemEffect.prototype.toString = function() {
 
     user = $currentMap.user ? ($currentMap.isBattleMap ? $currentMap.user
         .character : $currentMap.user) : GamePlayer.getTemporaryPlayer();
-    target = $currentMap.targets && $currentMap.targets.length > 0 ? $currentMap
-        .targets[$currentMap.selectedUserTargetIndex()] : GamePlayer
+    /*
+    target = $currentMap.targets && $currentMap.targets.length > 0 ? (
+        $currentMap.isBattleMap ? $currentMap.targets[$currentMap
+        .selectedUserTargetIndex()] : $currentMap.target) : GamePlayer
         .getTemporaryPlayer();
+    */
+    target = GamePlayer.getTemporaryPlayer();
+
     switch (this.kind) {
     case EffectKind.Damages:
         var damage, variance, min, max, precision, critical, temp, options,
