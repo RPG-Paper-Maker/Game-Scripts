@@ -110,8 +110,41 @@ Battler.prototype = {
 
     // -------------------------------------------------------
 
+    isStepAttacking: function() {
+        return this.step === BattlerStep.Attack || this.step === BattlerStep
+            .Skill || this.step === BattlerStep.Item || this.step ===
+            BattlerStep.Escape;
+    },
+
+    // -------------------------------------------------------
+
     isAttacking: function() {
-        return this.step === BattlerStep.Attack && this.attackingFrame !== 3;
+        return this.isStepAttacking() && this.attackingFrame !== $FRAMES -1;
+    },
+
+    // -------------------------------------------------------
+
+    setUsingSkill: function() {
+        this.attackingFrame = 0;
+        this.step = BattlerStep.Skill;
+        this.updateUVs();
+    },
+
+    // -------------------------------------------------------
+
+    setUsingItem: function() {
+        this.attackingFrame = 0;
+        this.step = BattlerStep.Item;
+        this.updateUVs();
+    },
+
+
+    // -------------------------------------------------------
+
+    setEscaping: function() {
+        this.attackingFrame = 0;
+        this.step = BattlerStep.Escape;
+        this.updateUVs();
     },
 
     // -------------------------------------------------------
@@ -229,7 +262,7 @@ Battler.prototype = {
     // -------------------------------------------------------
 
     updateAttacking: function() {
-        if (this.step === BattlerStep.Attack) {
+        if (this.isStepAttacking()) {
             var frame = this.attackingFrame;
             this.attackingFrameTick += $elapsedTime;
             if (this.attackingFrameTick >= this.attackingFrameDuration) {
@@ -284,6 +317,9 @@ Battler.prototype = {
             case BattlerStep.Victory:
                 frame = this.frame; break;
             case BattlerStep.Attack:
+            case BattlerStep.Skill:
+            case BattlerStep.Item:
+            case BattlerStep.Escape:
                 frame = this.attackingFrame; break;
             }
 

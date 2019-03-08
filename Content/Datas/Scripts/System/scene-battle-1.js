@@ -254,6 +254,11 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
             case EffectSpecialActionKind.Escape:
                 this.step = 4;
                 this.subStep = 3;
+                for (i = 0, l = this.battlers[CharacterKind.Hero].length; i < l;
+                     i++)
+                {
+                    this.battlers[CharacterKind.Hero][i].setEscaping();
+                }
                 return;
             case EffectSpecialActionKind.EndTurn:
                 this.windowChoicesBattleCommands.unselect();

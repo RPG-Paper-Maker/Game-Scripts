@@ -147,7 +147,7 @@ SystemEffect.prototype.executeInBattle = function() {
                 var abbreviation = $datasGame.battleSystem.statistics[this
                     .damageStatisticID.getValue()].abbreviation;
                 target[abbreviation] -= damage;
-                if (target[abbreviation] < 0) { // Script ?
+                if (target[abbreviation] < 0) {
                     target[abbreviation] = 0;
                 }
                 break;
@@ -155,28 +155,34 @@ SystemEffect.prototype.executeInBattle = function() {
                 var currencyID = this.damageCurrencyID.getValue();
                 if (target.k === CharacterKind.Hero) {
                     $game.currencies[currencyID] -= damage;
+                    if ($game.currencies[currencyID] < 0) {
+                        $game.currencies[currencyID] = 0;
+                    }
                 }
                 break;
             case DamagesKind.Variable:
                 $game.variables[this.damageVariableID] -= damage;
+                if ($game.variables[this.damageVariableID] < 0) {
+                    $game.variables[this.damageVariableID] = 0;
+                }
                 break;
             }
             break;
         }
-        break;
+        return true;
     case EffectKind.Status:
-        break;
+        return true;
     case EffectKind.AddRemoveSkill:
-        break;
+        return false;
     case EffectKind.PerformSkill:
-        break;
+        return false;
     case EffectKind.CommonReaction:
-        break;
+        return false;
     case EffectKind.SpecialActions:
         $currentMap.battleCommandKind = this.specialActionKind;
-        break;
+        return false;
     case EffectKind.Script:
-        break;
+        return false;
     }
 }
 

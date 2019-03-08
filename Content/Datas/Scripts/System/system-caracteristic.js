@@ -65,7 +65,7 @@ SystemCaracteristic.prototype.readJSON = function(json) {
             break;
         }
         this.operation = typeof json.o !== 'undefined' ? json.o : true;
-        this.value = SystemValue.readOrDefaultMessage(json.v);
+        this.value = SystemValue.readOrDefaultNumber(json.v);
         this.unit = typeof json.u !== 'undefined' ? json.u : true;
         break;
     case CaracteristicKind.Script:
@@ -88,4 +88,79 @@ SystemCaracteristic.prototype.readJSON = function(json) {
         this.beginWeaponArmorID = SystemValue.readOrDefaultDatabase(json.bwaid);
         break;
     }
+}
+// -------------------------------------------------------
+
+SystemCaracteristic.prototype.toString = function() {
+    var user, target, result;
+
+    user = $currentMap.user ? ($currentMap.isBattleMap ? $currentMap.user
+        .character : $currentMap.user) : GamePlayer.getTemporaryPlayer();
+    target = $currentMap.targets && $currentMap.targets.length > 0 ? $currentMap
+        .targets[$currentMap.selectedUserTargetIndex()] : GamePlayer
+        .getTemporaryPlayer();
+    result = "";
+    switch (this.kind) {
+    case CaracteristicKind.IncreaseDecrease:
+        var sign, value;
+
+        switch (this.increaseDecreaseKind) {
+        case IncreaseDecreaseKind.StatValue:
+            result += $datasGame.battleSystem.statistics[RPM.evaluateFormula(
+                this.statisticValueID.getValue(), user, target)].name;
+            break;
+        case IncreaseDecreaseKind.ElementRes:
+            result += $datasGame.battleSystem.elements[this.elementResID
+                .getValue()].name + " res.";
+            break;
+        case IncreaseDecreaseKind.StatusRes:
+            break;
+        case IncreaseDecreaseKind.ExperienceGain:
+            result += $datasGame.battleSystem.getExpStatistic().name + " gain";
+            break;
+        case IncreaseDecreaseKind.CurrencyGain:
+            result += $datasGame.system.currencies[this.currencyGainID
+                .getValue()].name + " gain";
+            break;
+        case IncreaseDecreaseKind.SkillCost:
+            if (this.isAllSkillCost) {
+                result += "All skills cost";
+            } else {
+                result += $datasGame.skills.list[this.skillCostID.getValue()]
+                    .name + " skill cost";
+            }
+            break;
+        case IncreaseDecreaseKind.Variable:
+            result += $datasGame.variablesNames[this.variableID];
+            break;
+        }
+        result += " ";
+        sign = this.isIncreaseDescreaseKind ? 1 : -1;
+        value = this.value.getValue();
+        sign *= Math.sign(value);
+        if (this.operation) {
+            result += "x";
+            if (sign === -1) {
+                result += "-";
+            }
+        } else {
+            if (sign === 1) {
+                result += "+";
+            } else if (sign === -1) {
+                result += "-";
+            }
+        }
+        result += Math.abs(value);
+        if (this.unit) {
+            result += "%";
+        }
+        break;
+    case CaracteristicKind.Script:
+    case CaracteristicKind.AllowForbidEquip:
+    case CaracteristicKind.AllowForbidChange:
+    case CaracteristicKind.BeginEquipment:
+        break;
+    }
+
+    return result;
 }

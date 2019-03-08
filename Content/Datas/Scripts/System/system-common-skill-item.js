@@ -57,7 +57,7 @@ SystemCommonSkillItem.prototype.readJSON = function(json) {
     this.sound.readJSON(json.s);
     this.animationUserID = SystemValue.readOrNone(json.auid);
     this.animationTargetID = SystemValue.readOrNone(json.atid);
-    this.price = SystemValue.readOrDefaultNumber(json.p, 0);
+    this.price = SystemValue.readOrDefaultNumber(json.p);
 
     jsonCosts = json.cos;
     l = jsonCosts ? jsonCosts.length : 0;

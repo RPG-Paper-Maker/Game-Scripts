@@ -128,6 +128,11 @@ WindowBox.prototype = {
 
             // Draw content
             if (this.content !== null){
+                $context.save();
+                $context.beginPath();
+                $context.rect(windowDimension[0], windowDimension[1],
+                    windowDimension[2], windowDimension[3]);
+                $context.clip();
                 if (isChoice){
                     this.content.draw(
                          contentDimension[0],
@@ -144,6 +149,7 @@ WindowBox.prototype = {
                          contentDimension[3]
                     );
                 }
+                $context.restore();
             }
         }
     }

@@ -54,8 +54,9 @@ SystemCost.prototype.readJSON = function(json) {
 SystemCost.prototype.toString = function() {
     var result, user;
 
-    result = RPM.evaluateFormula(this.valueFormula.getValue(), $currentMap.user)
-        + " ";
+    user = $currentMap.user ? ($currentMap.isBattleMap ? $currentMap.user
+        .character : $currentMap.user) : GamePlayer.getTemporaryPlayer();
+    result = RPM.evaluateFormula(this.valueFormula.getValue(), user) + " ";
     switch (this.kind) {
     case DamagesKind.Stat:
         result += $datasGame.battleSystem.statistics[this.statisticID.getValue()

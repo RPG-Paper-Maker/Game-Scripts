@@ -92,6 +92,10 @@ SystemValue.createSwitch = function(b){
 // -------------------------------------------------------
 
 SystemValue.readOrDefaultNumber = function(json, number) {
+    if (typeof number === 'undefined') {
+        number = 0;
+    }
+
     if (json) {
         var value = new SystemValue();
         value.read(json);

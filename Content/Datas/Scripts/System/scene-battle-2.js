@@ -72,15 +72,18 @@ SceneBattle.prototype.initializeStep2 = function() {
                 this.effects.push(effects[i]);
             }
         }
+        this.user.setAttacking();
         break;
     case EffectSpecialActionKind.OpenSkills:
         this.effects = this.windowChoicesSkills.getCurrentContent().skill
             .effects;
+        this.user.setUsingSkill();
         break;
     case EffectSpecialActionKind.OpenItems:
         var graphic = this.windowChoicesItems.getCurrentContent();
         this.effects = graphic.item.effects;
         $game.useItem(graphic.gameItem);
+        this.user.setUsingItem();
         break;
     case EffectSpecialActionKind.EndTurn:
         var user;
@@ -96,14 +99,12 @@ SceneBattle.prototype.initializeStep2 = function() {
     if (this.effects.length > 0) {
         this.effects[this.currentEffectIndex].executeInBattle();
     }
-
-    this.user.setAttacking();
 };
 
 // -------------------------------------------------------
 
 SceneBattle.prototype.updateStep2 = function() {
-    var isAnotherEffect;
+    var isAnotherEffect, animate;
     var i, l;
 
     if (!this.user.isAttacking()) {
@@ -113,12 +114,21 @@ SceneBattle.prototype.updateStep2 = function() {
     }
 
     if (new Date().getTime() - this.time >= SceneBattle.TIME_ACTION_ANIMATION) {
+        $requestPaintHUD = true;
         this.currentEffectIndex++;
+        for (l = this.effects.length; this.currentEffectIndex < l; this
+            .currentEffectIndex++)
+        {
+            if (this.effects[this.currentEffectIndex].executeInBattle()) {
+                break;
+            }
+        }
+
         isAnotherEffect = this.currentEffectIndex < this.effects.length;
+
         if (isAnotherEffect) {
-            this.time = new Date().getTime();
-            this.effects[this.currentEffectIndex].executeInBattle();
-            $requestPaintHUD = true;
+            this.time = new Date().getTime() - (SceneBattle
+                .TIME_ACTION_ANIMATION / 2);
         } else {
             this.user.setActive(false);
             this.user.selected = false;
