@@ -54,8 +54,10 @@ SceneBattle.prototype.initializeStep0 = function(){
         this.battlers[CharacterKind.Hero][i] = battler;
 
         // Graphic player
-        this.graphicPlayers[CharacterKind.Hero][i] = new GraphicPlayer(battler
-            .character, false);
+        this.graphicPlayers[CharacterKind.Hero][i] = {
+            user: new GraphicPlayer(battler.character, false),
+            target: new GraphicPlayer(battler.character, true)
+        };
     }
     var troop = $datasGame.troops.list[this.troopID];
     l = troop.list.length;
@@ -76,8 +78,9 @@ SceneBattle.prototype.initializeStep0 = function(){
         this.battlers[CharacterKind.Monster][i] = battler;
 
         // Graphic player
-        this.graphicPlayers[CharacterKind.Monster][i] = new GraphicPlayer(battler
-            .character, true);
+        this.graphicPlayers[CharacterKind.Monster][i] = {
+            target: new GraphicPlayer(battler.character, true)
+        };
     }
 
     // Informations
@@ -85,8 +88,10 @@ SceneBattle.prototype.initializeStep0 = function(){
         .SMALL_SLOT_HEIGHT, null, RPM.SMALL_SLOT_PADDING);
     w = 300;
     h = 100;
-    this.windowCharacterInformations = new WindowBox($SCREEN_X - w, $SCREEN_Y -
+    this.windowUserInformations = new WindowBox($SCREEN_X - w, $SCREEN_Y -
         h, w, h, null, RPM.SMALL_PADDING_BOX, false);
+    this.windowTargetInformations = new WindowBox(0, $SCREEN_Y - h, w, h, null,
+        RPM.SMALL_PADDING_BOX, false);
     l = $datasGame.battleSystem.battleCommandsOrder.length;
     var listContent = new Array(l);
     var listCallbacks = new Array(l);

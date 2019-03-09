@@ -124,6 +124,18 @@ function GraphicPlayer(gamePlayer, reverse) {
 
 GraphicPlayer.prototype = {
 
+    updateReverse: function(reverse) {
+        if (reverse) {
+            this.faceset.setLeft();
+        } else {
+            this.faceset.setRight();
+        }
+        this.faceset.reverse = reverse;
+        this.reverse = reverse;
+    },
+
+    // -------------------------------------------------------
+
     update: function() {
         var character, cl, levelStat, id, statistic, txt;
 

@@ -31,16 +31,13 @@
 SceneBattle.prototype.initializeStep1 = function(){
     this.battleCommandKind = EffectSpecialActionKind.None;
     this.windowTopInformations.content = new GraphicText("Select an ally");
-    this.selectedUserIndex = 0;
+    this.selectedUserIndex = this.selectFirstIndex(CharacterKind.Hero, 0);
     this.kindSelection = CharacterKind.Hero;
     this.attackingGroup = CharacterKind.Hero;
+    this.userTarget = false;
+    this.all = false;
     this.targets = [];
     var index = this.selectedUserTargetIndex();
-    this.selectedUserIndex = this.selectFirstIndex(CharacterKind.Hero, this
-        .selectedUserIndex);
-    this.selectedTargetIndex = this.selectFirstIndex(CharacterKind.Monster, this
-        .selectedTargetIndex);
-    this.windowCharacterInformations.setX($SCREEN_X - 300);
     this.moveArrow();
     this.battlers[this.kindSelection][this.selectedUserTargetIndex()]
         .updateArrowPosition(this.camera);
@@ -86,10 +83,35 @@ SceneBattle.prototype.registerLastItemIndex = function() {
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.selectTarget = function() {
+SceneBattle.prototype.selectTarget = function(targetKind) {
     this.subStep = 2;
-    this.kindSelection = CharacterKind.Monster;
-    this.windowCharacterInformations.setX(0);
+
+    switch (targetKind) {
+    case TargetKind.User:
+        this.kindSelection = CharacterKind.Hero;
+        this.userTarget = true;
+        this.selectedTargetIndex = this.battlers[this.kindSelection].indexOf(
+            this.user);
+        break;
+    case TargetKind.Enemy:
+        this.kindSelection = CharacterKind.Monster;
+        break;
+    case TargetKind.Ally:
+        this.kindSelection = CharacterKind.Hero;
+        break;
+    case TargetKind.AllEnemies:
+        this.kindSelection = CharacterKind.Monster;
+        this.all = true;
+        break;
+    case TargetKind.AllAllies:
+        this.kindSelection = CharacterKind.Hero;
+        this.all = true;
+        break;
+    }
+    this.selectedUserIndex = this.selectFirstIndex(CharacterKind.Hero,
+        this.selectedUserIndex);
+    this.selectedTargetIndex = this.selectFirstIndex(this.kindSelection, 0);
+
     this.moveArrow();
 };
 
@@ -146,11 +168,15 @@ SceneBattle.prototype.indexArrowDown = function() {
 /** Move the arrow.
 */
 SceneBattle.prototype.moveArrow = function() {
+    var window, graphics;
 
     // Updating window informations
-    this.windowCharacterInformations.content = this.graphicPlayers[this
-        .kindSelection][this.selectedUserTargetIndex()];
-    this.windowCharacterInformations.content.update();
+    window = this.subStep === 2 ? this.windowTargetInformations : this
+        .windowUserInformations;
+    graphics = this.graphicPlayers[this.kindSelection][this
+        .selectedUserTargetIndex()];
+    window.content = this.subStep === 2 ? graphics.target : graphics.user;
+    window.content.update();
     $requestPaintHUD = true;
 };
 
@@ -223,11 +249,13 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
         {
             switch (this.battleCommandKind) {
             case EffectSpecialActionKind.OpenSkills:
-                this.selectTarget();
+                this.selectTarget(this.windowSkillDescription.content.skill
+                    .targetKind);
                 this.registerLastSkillIndex();
                 return;
             case EffectSpecialActionKind.OpenItems:
-                this.selectTarget();
+                this.selectTarget(this.windowItemDescription.content.item
+                    .targetKind);
                 this.registerLastItemIndex();
                 return;
             default:
@@ -237,9 +265,26 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
                 .windowChoicesBattleCommands.getCurrentContent().skill);
             switch (this.battleCommandKind) {
             case EffectSpecialActionKind.ApplyWeapons:
-                this.selectTarget();
+                var targetKind, equipments, gameItem
+
+                // Check weapon targetKind
                 this.attackSkill = this.windowChoicesBattleCommands
                     .getCurrentContent().skill;
+                targetKind = null;
+                equipments = this.user.character.equip;
+                for (i = 0, l = equipments.length; i < l; i++) {
+                    gameItem = equipments[i];
+                    if (gameItem && gameItem.k === ItemKind.Weapon) {
+                        targetKind = gameItem.getItemInformations().targetKind;
+                        break;
+                    }
+                }
+                // If no weapon
+                if (targetKind === null) {
+                    targetKind = this.attackSkill.targetKind;
+                }
+
+                this.selectTarget(targetKind);
                 break;
             case EffectSpecialActionKind.OpenSkills:
                 if (this.listSkills.length === 0) {
@@ -291,8 +336,16 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
         if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
             .Action))
         {
-            this.targets.push(this.battlers[this.kindSelection][this
-                .selectedUserTargetIndex()]);
+            if (this.all) {
+                for (i = 0, l = this.battlers[this.kindSelection].length; i < l;
+                    i++)
+                {
+                    this.targets.push(this.battlers[this.kindSelection][i]);
+                }
+            } else {
+                this.targets.push(this.battlers[this.kindSelection][this
+                    .selectedUserTargetIndex()]);
+            }
             this.windowChoicesBattleCommands.unselect();
             this.changeStep(2);
         } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
@@ -300,7 +353,8 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
         {
             this.subStep = 1;
             this.kindSelection = CharacterKind.Hero;
-            this.windowCharacterInformations.setX($SCREEN_X - 300);
+            this.userTarget = false;
+            this.all = false;
             this.moveArrow();
         }
         break;
@@ -326,16 +380,18 @@ SceneBattle.prototype.onKeyPressedAndRepeatStep1 = function(key){
     switch (this.subStep){
     case 0:
     case 2:
-        if (DatasKeyBoard.isKeyEqual(key,$datasGame.keyBoard.menuControls.Up) ||
-            DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls.Left))
-        {
-            index = this.indexArrowUp();
-        }
-        else if
-        (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls.Down) ||
-         DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls.Right))
-        {
-            index = this.indexArrowDown();
+        if (!this.userTarget) {
+            if (DatasKeyBoard.isKeyEqual(key,$datasGame.keyBoard.menuControls.Up) ||
+                DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls.Left))
+            {
+                index = this.indexArrowUp();
+            }
+            else if
+            (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls.Down) ||
+             DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls.Right))
+            {
+                index = this.indexArrowDown();
+            }
         }
 
         if (this.subStep === 0)
@@ -368,15 +424,25 @@ SceneBattle.prototype.onKeyPressedAndRepeatStep1 = function(key){
 // -------------------------------------------------------
 
 SceneBattle.prototype.drawHUDStep1 = function() {
+    var i, l;
+
     this.windowTopInformations.draw();
 
     // Draw heroes window informations
-    this.windowCharacterInformations.draw();
+    this.windowUserInformations.draw();
+    if (this.subStep === 2) {
+        this.windowTargetInformations.draw();
+    }
 
     // Arrows
-    this.battlers[this.kindSelection][this.selectedUserTargetIndex()]
-        .drawArrow();
-
+    if (this.all) {
+        for (i = 0, l = this.battlers[this.kindSelection].length; i < l; i++) {
+            this.battlers[this.kindSelection][i].drawArrow();
+        }
+    } else {
+        this.battlers[this.kindSelection][this.selectedUserTargetIndex()]
+            .drawArrow();
+    }
     // Commands
     if (this.subStep === 1) {
         this.windowChoicesBattleCommands.draw();

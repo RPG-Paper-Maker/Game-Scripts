@@ -107,7 +107,9 @@ SystemEffect.prototype.execute = function(returnIsDoingSomething) {
     switch (this.kind) {
     case EffectKind.Damages:
         var damage, miss, crit, element, variance, critical, precision, random;
-        for (i = 0, l = targets.length; i < l; i++) {
+        l = targets.length;
+        $currentMap.damages = new Array(l);
+        for (i = 0; i < l; i++) {
             damage = 0;
             miss = false;
             crit = false;
@@ -182,7 +184,6 @@ SystemEffect.prototype.execute = function(returnIsDoingSomething) {
                 }
                 break;
             }
-            break;
         }
         if (!returnIsDoingSomething) {
             result = true;
