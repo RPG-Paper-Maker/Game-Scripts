@@ -51,12 +51,64 @@ SystemCost.prototype.readJSON = function(json) {
 
 // -------------------------------------------------------
 
-SystemCost.prototype.toString = function() {
-    var result, user;
+SystemCost.prototype.use = function() {
+    var user, target, value, currentValue;
 
     user = $currentMap.user ? ($currentMap.isBattleMap ? $currentMap.user
         .character : $currentMap.user) : GamePlayer.getTemporaryPlayer();
-    result = RPM.evaluateFormula(this.valueFormula.getValue(), user) + " ";
+    target = GamePlayer.getTemporaryPlayer();
+    value = RPM.evaluateFormula(this.valueFormula.getValue(), user, target);
+
+    switch (this.kind) {
+    case DamagesKind.Stat:
+        user[$datasGame.battleSystem.statistics[this.statisticID.getValue()]
+            .abbreviation] -= value;
+        break;
+    case DamagesKind.Currency:
+        $game.currencies[this.currencyID.getValue()] -= value;
+        break;
+    case DamagesKind.Variable:
+        $game.variables[this.variableID] -= value;
+        break;
+    }
+}
+
+// -------------------------------------------------------
+
+SystemCost.prototype.isPossible = function() {
+    var user, target, value, currentValue;
+
+    user = $currentMap.user ? ($currentMap.isBattleMap ? $currentMap.user
+        .character : $currentMap.user) : GamePlayer.getTemporaryPlayer();
+    target = GamePlayer.getTemporaryPlayer();
+    value = RPM.evaluateFormula(this.valueFormula.getValue(), user, target);
+
+    switch (this.kind) {
+    case DamagesKind.Stat:
+        currentValue = user[$datasGame.battleSystem.statistics[this.statisticID
+            .getValue()].abbreviation];
+        break;
+    case DamagesKind.Currency:
+        currentValue = $game.currencies[this.currencyID.getValue()];
+        break;
+    case DamagesKind.Variable:
+        currentValue = $game.variables[this.variableID];
+        break;
+    }
+
+    return (currentValue - value >= 0);
+}
+
+// -------------------------------------------------------
+
+SystemCost.prototype.toString = function() {
+    var result, user, target;
+
+    user = $currentMap.user ? ($currentMap.isBattleMap ? $currentMap.user
+        .character : $currentMap.user) : GamePlayer.getTemporaryPlayer();
+    target = GamePlayer.getTemporaryPlayer();
+    result = RPM.evaluateFormula(this.valueFormula.getValue(), user, target) +
+        " ";
     switch (this.kind) {
     case DamagesKind.Stat:
         result += $datasGame.battleSystem.statistics[this.statisticID.getValue()

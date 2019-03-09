@@ -249,9 +249,13 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
         {
             switch (this.battleCommandKind) {
             case EffectSpecialActionKind.OpenSkills:
-                this.selectTarget(this.windowSkillDescription.content.skill
-                    .targetKind);
-                this.registerLastSkillIndex();
+                if (this.windowChoicesSkills.getCurrentContent().skill
+                    .isPossible())
+                {
+                    this.selectTarget(this.windowSkillDescription.content.skill
+                        .targetKind);
+                    this.registerLastSkillIndex();
+                }
                 return;
             case EffectSpecialActionKind.OpenItems:
                 this.selectTarget(this.windowItemDescription.content.item

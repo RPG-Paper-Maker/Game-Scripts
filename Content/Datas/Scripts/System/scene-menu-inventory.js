@@ -162,7 +162,9 @@ SceneMenuInventory.prototype = {
             if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
                 .Action))
             {
-                if (this.windowInformations.content.item.use()) {
+                if (this.windowInformations.content.item.isPossible() && this
+                    .windowInformations.content.item.use())
+                {
                     $game.useItem(this.windowInformations.content.gameItem);
                     if (this.windowInformations.content.gameItem.nb > 0) {
                         this.windowInformations.content.updateNb();

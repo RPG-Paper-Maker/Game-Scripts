@@ -96,9 +96,10 @@ SystemEffect.prototype.readJSON = function(json) {
 
 // -------------------------------------------------------
 
-SystemEffect.prototype.execute = function(returnIsDoingSomething) {
+SystemEffect.prototype.execute = function() {
     var user, targets, target, result;
     var i, l;
+
     user = $currentMap.user ? ($currentMap.isBattleMap ? $currentMap.user
         .character : $currentMap.user) : GamePlayer.getTemporaryPlayer();
     targets = $currentMap.targets;
@@ -106,7 +107,9 @@ SystemEffect.prototype.execute = function(returnIsDoingSomething) {
 
     switch (this.kind) {
     case EffectKind.Damages:
-        var damage, miss, crit, element, variance, critical, precision, random;
+        var damage, miss, crit, element, variance, critical, precision, random,
+            before;
+
         l = targets.length;
         $currentMap.damages = new Array(l);
         for (i = 0; i < l; i++) {
@@ -155,8 +158,9 @@ SystemEffect.prototype.execute = function(returnIsDoingSomething) {
                 var stat = $datasGame.battleSystem.statistics[this
                     .damageStatisticID.getValue()];
                 var abbreviation = stat.abbreviation;
-                var beforeStat = target[abbreviation];
                 var max = target[stat.getMaxAbbreviation()];
+
+                before = target[abbreviation];
                 target[abbreviation] -= damage;
                 if (target[abbreviation] < 0) {
                     target[abbreviation] = 0;
@@ -164,35 +168,33 @@ SystemEffect.prototype.execute = function(returnIsDoingSomething) {
                 if (!stat.isFix) {
                     target[abbreviation] = Math.min(target[abbreviation], max);
                 }
-                if (returnIsDoingSomething) {
-                    result = result || (beforeStat !== max && damage !== 0);
-                }
+                result = result || (before !== max && damage !== 0);
                 break;
             case DamagesKind.Currency:
                 var currencyID = this.damageCurrencyID.getValue();
                 if (target.k === CharacterKind.Hero) {
+                    before = $game.currencies[currencyID];
                     $game.currencies[currencyID] -= damage;
                     if ($game.currencies[currencyID] < 0) {
                         $game.currencies[currencyID] = 0;
                     }
-                }
+                    result = result || (before !== $game.currencies[currencyID]
+                        && damage !== 0);
+                }    
                 break;
             case DamagesKind.Variable:
+                before = $game.variables[this.damageVariableID];
                 $game.variables[this.damageVariableID] -= damage;
                 if ($game.variables[this.damageVariableID] < 0) {
                     $game.variables[this.damageVariableID] = 0;
                 }
+                result = result || (before !== $game.variables[this
+                    .damageVariableID] && damage !== 0);
                 break;
             }
         }
-        if (!returnIsDoingSomething) {
-            result = true;
-        }
         break;
     case EffectKind.Status:
-        if (!returnIsDoingSomething) {
-            result = true;
-        }
         break;
     case EffectKind.AddRemoveSkill:
         break;
@@ -208,6 +210,12 @@ SystemEffect.prototype.execute = function(returnIsDoingSomething) {
     }
 
     return result;
+}
+
+// -------------------------------------------------------
+
+SystemEffect.prototype.isAnimated = function() {
+    return this.kind === EffectKind.Damages || this.kind === EffectKind.Status;
 }
 
 // -------------------------------------------------------

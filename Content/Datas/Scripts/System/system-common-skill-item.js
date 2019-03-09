@@ -92,10 +92,39 @@ SystemCommonSkillItem.prototype.use = function() {
 
     isDoingSomething = false;
     for (i = 0, l = this.effects.length; i < l; i++) {
-        isDoingSomething = isDoingSomething || this.effects[i].execute(true);
+        isDoingSomething = isDoingSomething || this.effects[i].execute();
+    }
+    if (isDoingSomething) {
+        for (i = 0, l = this.costs.length; i < l; i++) {
+            this.costs[i].use();
+        }
     }
 
     return isDoingSomething;
+}
+
+// -------------------------------------------------------
+
+SystemCommonSkillItem.prototype.cost = function() {
+    var i, l;
+
+    for (i = 0, l = this.costs.length; i < l; i++) {
+        this.costs[i].use();
+    }
+}
+
+// -------------------------------------------------------
+
+SystemCommonSkillItem.prototype.isPossible = function() {
+    var i, l;
+
+    for (i = 0, l = this.costs.length; i < l; i++) {
+        if (!this.costs[i].isPossible()) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 // -------------------------------------------------------

@@ -126,7 +126,8 @@ SceneMenuSkills.prototype = {
                 targetKind = this.windowInformations.content.skill.targetKind;
                 availableKind = this.windowInformations.content.skill
                     .availableKind;
-                if ((targetKind === TargetKind.Ally || targetKind === TargetKind
+                if (this.windowInformations.content.skill.isPossible() && (
+                    targetKind === TargetKind.Ally || targetKind === TargetKind
                     .AllAllies) && (availableKind === AvailableKind.Always ||
                     availableKind === AvailableKind.MainMenu))
                 {
@@ -149,6 +150,9 @@ SceneMenuSkills.prototype = {
             {
                 if (this.windowInformations.content.skill.use()) {
                     this.windowBoxUseSkill.content.updateStats();
+                    if (!this.windowInformations.content.skill.isPossible()) {
+                        this.substep = 0;
+                    }
                     $requestPaintHUD = true;
                 }
             } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard

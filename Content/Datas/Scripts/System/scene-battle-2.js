@@ -77,6 +77,7 @@ SceneBattle.prototype.initializeStep2 = function() {
     case EffectSpecialActionKind.OpenSkills:
         this.effects = this.windowChoicesSkills.getCurrentContent().skill
             .effects;
+        this.windowChoicesSkills.getCurrentContent().skill.cost();
         this.user.setUsingSkill();
         break;
     case EffectSpecialActionKind.OpenItems:
@@ -119,7 +120,8 @@ SceneBattle.prototype.updateStep2 = function() {
         for (l = this.effects.length; this.currentEffectIndex < l; this
             .currentEffectIndex++)
         {
-            if (this.effects[this.currentEffectIndex].execute()) {
+            this.effects[this.currentEffectIndex].execute()
+            if (this.effects[this.currentEffectIndex].isAnimated()) {
                 break;
             }
         }
