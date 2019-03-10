@@ -270,7 +270,7 @@ GamePlayer.prototype = {
                     .caracteristics;
             }
             if (caracteristics) {
-                for (i = 1, l = caracteristics.length; i < l; i++) {
+                for (i = 0, l = caracteristics.length; i < l; i++) {
                     caracteristic = caracteristics[i];
                     result = caracteristic.getNewStatValue(this);
                     if (result !== null) {

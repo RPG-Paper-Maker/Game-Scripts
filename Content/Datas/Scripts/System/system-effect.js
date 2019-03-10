@@ -142,8 +142,10 @@ SystemEffect.prototype.execute = function() {
                     critical = RPM.evaluateFormula(this.damageCriticalFormula
                         .getValue(), user, target);
                     random = RPM.random(0, 100);
-                    if (critical <= random) {
-                        damage = damage * 2; // TODO Should be script
+                    if (random <= critical) {
+                        damage = RPM.evaluateFormula(RPM.evaluateFormula(
+                            $datasGame.battleSystem.formulaCrit.getValue(),
+                            user, target, damage));
                         crit = true;
                     }
                 }

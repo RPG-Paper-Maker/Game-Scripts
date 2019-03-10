@@ -49,7 +49,10 @@ SceneBattle.prototype.initializeStep1 = function(){
     for (var i = 0, l = $game.items.length; i < l; i++) {
         ownedItem = $game.items[i];
         item = $datasGame.items.list[ownedItem.id];
-        if (ownedItem.k === ItemKind.Item && item.consumable) {
+        if (ownedItem.k === ItemKind.Item && item.consumable && (item
+            .avaialableKind === AvailableKind.Battle || item.availableKind ===
+            AvailableKind.Always))
+        {
             this.listItems.push(new GraphicItem(ownedItem));
         }
     }
@@ -110,8 +113,9 @@ SceneBattle.prototype.selectTarget = function(targetKind) {
     }
     this.selectedUserIndex = this.selectFirstIndex(CharacterKind.Hero,
         this.selectedUserIndex);
-    this.selectedTargetIndex = this.selectFirstIndex(this.kindSelection, 0);
-
+    if (!this.userTarget) {
+        this.selectedTargetIndex = this.selectFirstIndex(this.kindSelection, 0);
+    }
     this.moveArrow();
 };
 
@@ -141,7 +145,7 @@ SceneBattle.prototype.indexArrowUp = function() {
             index--;
         else if (index === 0)
             index = this.battlers[this.kindSelection].length - 1;
-    } while (!this.isDefined(this.kindSelection, index));
+    } while (!this.isDefined(this.kindSelection, index, this.subStep === 2));
 
     return index;
 };
@@ -158,7 +162,7 @@ SceneBattle.prototype.indexArrowDown = function() {
             index++;
         else if (index === (this.battlers[this.kindSelection].length - 1))
             index = 0;
-    } while (!this.isDefined(this.kindSelection, index));
+    } while (!this.isDefined(this.kindSelection, index, this.subStep === 2));
 
     return index;
 };

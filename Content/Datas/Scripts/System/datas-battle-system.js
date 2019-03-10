@@ -142,6 +142,7 @@ DatasBattleSystem.prototype = {
             // Formulas
             this.formulaIsDead = new SystemValue();
             this.formulaIsDead.read(json.fisdead);
+            this.formulaCrit = SystemValue.readOrDefaultMessage(json.fc);
 
             // Musics
             this.battleMusic = new SystemPlaySong(SongKind.Music);

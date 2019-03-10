@@ -157,7 +157,7 @@ Battler.prototype = {
 
     // -------------------------------------------------------
 
-    updateDead: function(attacked) {
+    updateDead: function(attacked, user) {
         var step = BattlerStep.Normal;
 
         if (this.character.isDead()) {
@@ -165,8 +165,8 @@ Battler.prototype = {
         } else if (attacked) {
             step = BattlerStep.Attacked;
         }
-
-        if (step !== this.step) {
+        if (this.step !== step && (user !== this || step === BattlerStep.Dead))
+        {
             this.step = step;
             this.updateUVs();
         }

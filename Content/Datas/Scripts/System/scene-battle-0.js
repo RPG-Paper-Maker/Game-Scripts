@@ -99,6 +99,7 @@ SceneBattle.prototype.initializeStep0 = function(){
     for (i = 0; i < l; i++){
         skill = $datasGame.skills.list[$datasGame.battleSystem
             .battleCommandsOrder[i]];
+
         listContent[i] = new GraphicTextIcon(skill.name, skill.pictureID);
         listContent[i].skill = skill;
         listCallbacks[i] = SystemCommonSkillItem.prototype.use;

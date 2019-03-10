@@ -961,8 +961,9 @@ RPM.variance = function(value, variance) {
 
 // -------------------------------------------------------
 
-RPM.evaluateFormula = function(formula, user, target) {
-    return new Function("u", "t", "return " + formula)(user, target);
+RPM.evaluateFormula = function(formula, user, target, damage) {
+    return new Function("u", "t", "damage", "return " + formula)(user, target,
+        damage);
 };
 
 // -------------------------------------------------------

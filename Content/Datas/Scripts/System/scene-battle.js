@@ -119,8 +119,8 @@ SceneBattle.prototype.activeGroup = function(){
 *   @param {number} index Index in the group.
 *   @returns {boolean}
 */
-SceneBattle.prototype.isDefined = function(kind, index){
-    return (this.battlers[kind][index].active &&
+SceneBattle.prototype.isDefined = function(kind, index, target) {
+    return ((target || this.battlers[kind][index].active) &&
             !this.battlers[kind][index].character.isDead())
 };
 
