@@ -160,7 +160,8 @@ var PictureKind = {
     Walls: 7,
     Battlers: 8,
     Facesets: 9,
-    WindowSkins: 10
+    WindowSkins: 10,
+    TitleScreen: 11
 };
 Object.freeze(PictureKind);
 

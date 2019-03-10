@@ -46,17 +46,25 @@ function SceneTitleScreen() {
         SceneTitleScreen.prototype.exit
     ];
 
+    // Creating pictures
+    this.pictureLogo = Picture2D.createImageWithID($datasGame
+        .titlescreenGameover.titleLogoID, PictureKind.TitleScreen, null);
+    this.pictureBackground = Picture2D.createImageWithID($datasGame
+        .titlescreenGameover.titleBackgroundID, PictureKind.TitleScreen);
+
     // Windows
-    this.windowChoicesCommands =
-         new WindowChoices(OrientationWindow.Vertical, $SCREEN_X/2 - 100, 200,
-                           200, 50, 3, commands, commandsActions);
+    this.windowChoicesCommands = new WindowChoices(OrientationWindow.Vertical,
+        $SCREEN_X / 2 - 100, 300, 200, 50, 3, commands, commandsActions);
+
+    // Play title screen song
+    $datasGame.titlescreenGameover.titleMusic.playSong();
 }
 
 SceneTitleScreen.prototype = {
 
     /** Callback function for starting a new game.
     */
-    startNewGame: function(){
+    startNewGame: function() {
 
         // Create a new game
         $game = new Game();
@@ -70,7 +78,7 @@ SceneTitleScreen.prototype = {
 
     /** Callback function for loading an existing game.
     */
-    loadGame: function(){
+    loadGame: function() {
         $gameStack.push(new SceneLoadGame());
     },
 
@@ -78,49 +86,51 @@ SceneTitleScreen.prototype = {
 
     /** Callback function for closing the window.
     */
-    exit: function(){
+    exit: function() {
         quit();
     },
 
     // -------------------------------------------------------
 
-    update: function(){
+    update: function() {
 
     },
 
     // -------------------------------------------------------
 
-    onKeyPressed: function(key){
+    onKeyPressed: function(key) {
         this.windowChoicesCommands.onKeyPressed(key);
     },
 
     // -------------------------------------------------------
 
-    onKeyReleased: function(key){
+    onKeyReleased: function(key) {
 
     },
 
     // -------------------------------------------------------
 
-    onKeyPressedRepeat: function(key){
+    onKeyPressedRepeat: function(key) {
 
     },
 
     // -------------------------------------------------------
 
-    onKeyPressedAndRepeat: function(key){
+    onKeyPressedAndRepeat: function(key) {
         this.windowChoicesCommands.onKeyPressedAndRepeat(key);
     },
 
     // -------------------------------------------------------
 
-    draw3D: function(canvas){
+    draw3D: function(canvas) {
 
     },
 
     // -------------------------------------------------------
 
-    drawHUD: function(){
+    drawHUD: function() {
+        this.pictureBackground.draw();
+        this.pictureLogo.draw();
         this.windowChoicesCommands.draw();
     }
 }

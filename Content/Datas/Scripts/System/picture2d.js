@@ -54,6 +54,13 @@ Picture2D.createImage = function(image, kind, callback, x, y, w, h) {
 
 // -------------------------------------------------------
 
+Picture2D.createImageWithID = function(id, kind, callback, x, y, w, h) {
+    return Picture2D.createImage($datasGame.pictures.get(kind, id), kind,
+        callback, x, y, w, h);
+}
+
+// -------------------------------------------------------
+
 Picture2D.prototype = Object.create(Bitmap.prototype);
 
 // -------------------------------------------------------

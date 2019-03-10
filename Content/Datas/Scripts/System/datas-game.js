@@ -57,6 +57,7 @@ function DatasGame(){
     this.troops = new DatasTroops();
     this.system = new DatasSystem();
     this.battleSystem = new DatasBattleSystem();
+    this.titlescreenGameover = new DatasTitlescreenGameover();
     this.keyBoard = new DatasKeyBoard();
     this.pictures = new DatasPictures(this, DatasGame.prototype.readAfterPictures);
     this.readSettings();
