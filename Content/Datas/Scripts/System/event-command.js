@@ -190,8 +190,35 @@ EventCommandShowText.prototype = {
 *   @property {JSON} command Direct JSON command to parse.
 *   @param {JSON} command Direct JSON command to parse.
 */
-function EventCommandChangeVariables(command){
-    this.command = command;
+function EventCommandChangeVariables(command) {
+    var iterator, k, v;
+
+    iterator = {
+        i: 2
+    }
+
+    // Selection
+    this.selection = command[1];
+    this.nbSelection = 1;
+    if (command[0] === 1) {
+        this.nbSelection = command[iterator.i++] - this.selection;
+    }
+
+    // Operation
+    this.operation = command[iterator.i++];
+
+    // Value
+    this.valueKind = command[iterator.i++];
+    switch (this.valueKind) {
+    case 0: // Number
+        this.valueNumber = SystemValue.createValueCommand(command, iterator);
+        break;
+    case 1: // Random number
+        this.valueRandomA = SystemValue.createValueCommand(command, iterator);
+        this.valueRandomB = SystemValue.createValueCommand(command, iterator);
+        break;
+    }
+
     this.isDirectNode = true;
     this.parallel = false;
 }
@@ -206,32 +233,26 @@ EventCommandChangeVariables.prototype = {
     *   @param {number} state The state ID.
     *   @returns {number} The number of node to pass.
     */
-    update: function(currentState, object, state){
+    update: function(currentState, object, state) {
+        var value, randomA, randomB;
+        var i, l;
 
-        // Parsing
-        var i = 2;
-        var selection = this.command[1];
-        var nbSelection = 1;
-        if (this.command[0] === 1) nbSelection = this.command[i++] - selection;
-        var operation = this.command[i++];
-        var value = 0;
-        var valueType = this.command[i++];
-        switch(valueType){
-            case 0: // Random number
-                var range1 = this.command[i++];
-                var range2 = this.command[i++];
-                value = parseInt(Math.random() * (range2-range1+1) + range1);
-                break;
+        switch (this.valueKind) {
+        case 0: // Number
+            value = this.valueNumber.getValue();
+            break;
+        case 1: // Random number
+            randomA = this.valueRandomA.getValue();
+            randomB = this.valueRandomB.getValue();
+            value = RPM.random(randomA, randomB);
+            break;
         }
 
-        // Changing variable(s)
-        for (i = 0; i < nbSelection; i++){
-            $game.variables[selection + i] =
-                   $operators_numbers[operation]($game.variables[selection + i],
-                                                 value);
+        for (i = 0, l = this.nbSelection; i < l; i++) {
+            $game.variables[this.selection + i] = $operators_numbers[this
+                .operation]($game.variables[this.selection + i], value);
         }
 
-        // End of command
         return 1;
     },
 

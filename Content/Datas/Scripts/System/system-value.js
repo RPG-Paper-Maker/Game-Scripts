@@ -45,6 +45,16 @@ SystemValue.createValue = function(k, v){
     return value;
 }
 
+// -------------------------------------------------------
+
+SystemValue.createValueCommand = function(command, iterator) {
+    var k, v;
+
+    k = command[iterator.i++];
+    v = command[iterator.i++];
+
+    return SystemValue.createValue(k, v);
+}
 
 // -------------------------------------------------------
 
