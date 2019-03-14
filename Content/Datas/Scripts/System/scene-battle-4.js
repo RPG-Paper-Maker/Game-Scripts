@@ -177,10 +177,9 @@ SceneBattle.prototype.unpauseTeamXP = function() {
 // -------------------------------------------------------
 
 SceneBattle.prototype.playMapMusic = function()  {
-    SystemPlaySong.previousMusicStopped.playSong(SystemPlaySong
-        .previousMusicStoppedTime, false, 0);
-    $songsManager.initializeProgressionMusic(0, SystemPlaySong
-        .previousMusicStopped.volume, 0, SceneBattle.TIME_LINEAR_MUSIC_START);
+    SceneBattle.musicMap.playSong(SceneBattle.musicMapTime, 0);
+    $songsManager.initializeProgressionMusic(0, SceneBattle.musicMap.volume, 0,
+        SceneBattle.TIME_LINEAR_MUSIC_START);
 }
 
 // -------------------------------------------------------
@@ -207,7 +206,7 @@ SceneBattle.prototype.updateStep4 = function() {
         break;
     case 3:
         $requestPaintHUD = true;
-        if ($songsManager.isProgressionEnd && this.transitionEnded) {
+        if ($songsManager.isProgressionMusicEnd && this.transitionEnded) {
             this.win();
         }
 

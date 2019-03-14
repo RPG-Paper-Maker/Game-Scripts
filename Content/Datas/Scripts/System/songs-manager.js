@@ -36,6 +36,7 @@ function SongsManager(musicPlayer, backgroundPlayer, musicEffects,
     this.soundIndex = 0;
     this.musicEffectStep = 0;
     this.isProgressionMusicEnd = true;
+    this.isMusicNone = true;
 
     var l = RPM.countFields(SongKind) - 1;
     this.volumes = new Array(l);
@@ -101,13 +102,21 @@ SongsManager.prototype = {
     */
     playSong: function(kind, id, volume, start, end) {
         if (id < 1) {
-            if (kind === SongKind.Music) {
+            switch (kind) {
+            case SongKind.Music:
                 this.stopMusic(0);
-            } else if (kind === SongKind.BackgroundSound) {
-
+                break;
+            case SongKind.BackgroundSound:
+                break;
             }
-
             return;
+        }
+        switch (kind) {
+        case SongKind.Music:
+            this.isMusicNone = false;
+            break;
+        case SongKind.BackgroundSound:
+            break;
         }
 
         var player = this.getPlayer(kind);
@@ -276,6 +285,7 @@ SongsManager.prototype = {
     // -------------------------------------------------------
 
     stopMusic: function(time) {
+        this.isMusicNone = true;
         this.initializeProgressionMusic(this.musics.volume, 0, 0, time);
     },
 
@@ -300,7 +310,11 @@ SongsManager.prototype = {
             }
             this.musics.volume = this.progressionMusic.getProgressionAt(
                 tick, this.progressionMusicEnd) / 100;
-            this.musics.play();
+            if (this.musics.volume === 0) {
+                this.musics.stop();
+            } else if (!this.isMusicNone) {
+                this.musics.play();
+            }
         }
     }
 }

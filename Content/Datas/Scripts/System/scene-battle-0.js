@@ -119,7 +119,10 @@ SceneBattle.prototype.initializeStep0 = function(){
         null, RPM.HUGE_PADDING_BOX);
 
     // Music
-    $datasGame.battleSystem.battleMusic.playSong(true);
+    SceneBattle.musicMap = SystemPlaySong.currentPlayingMusic;
+    SceneBattle.musicMapTime = $songsManager.getPlayer(SongKind.Music).position
+        / 1000;
+    $datasGame.battleSystem.battleMusic.playSong();
 
     // End windows
     this.windowExperienceProgression = new WindowBox(10, 80, 300, (90 * $game

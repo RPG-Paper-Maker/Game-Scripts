@@ -29,10 +29,8 @@ function SystemPlaySong(kind) {
     this.kind = kind;
 }
 
-SystemPlaySong.previousMusicStopped = null;
 SystemPlaySong.previousMusic = null;
 SystemPlaySong.currentPlayingMusic = null;
-SystemPlaySong.previousMusicStoppedTime = 0;
 
 // -------------------------------------------------------
 
@@ -106,7 +104,7 @@ SystemPlaySong.prototype = {
 
     // -------------------------------------------------------
 
-    playSong: function(previous, start, volume) {
+    playSong: function(start, volume) {
         if (typeof start === 'undefined') {
             start = this.start ? this.start.getValue() : null;
         }
@@ -124,12 +122,6 @@ SystemPlaySong.prototype = {
         }
 
         if (this.kind === SongKind.Music) {
-            if (previous) {
-                SystemPlaySong.previousMusicStoppedTime = $songsManager
-                    .getPlayer(this.kind).position / 1000;
-                SystemPlaySong.previousMusicStopped = SystemPlaySong
-                    .currentPlayingMusic;
-            }
             SystemPlaySong.previousMusic = SystemPlaySong.currentPlayingMusic;
             SystemPlaySong.currentPlayingMusic = this;
         }
