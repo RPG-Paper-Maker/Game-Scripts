@@ -35,6 +35,7 @@ function SongsManager(musicPlayer, backgroundPlayer, musicEffects,
     this.sounds = soundsPlayers;
     this.soundIndex = 0;
     this.musicEffectStep = 0;
+    this.isProgressionMusicEnd = true;
 
     var l = RPM.countFields(SongKind) - 1;
     this.volumes = new Array(l);
@@ -100,6 +101,12 @@ SongsManager.prototype = {
     */
     playSong: function(kind, id, volume, start, end) {
         if (id < 1) {
+            if (kind === SongKind.Music) {
+                this.stopMusic(0);
+            } else if (kind === SongKind.BackgroundSound) {
+
+            }
+
             return;
         }
 
@@ -263,6 +270,13 @@ SongsManager.prototype = {
     update: function() {
         this.updateByKind(SongKind.Music);
         this.updateByKind(SongKind.BackgroundSound);
+        this.updateProgressionMusic();
+    },
+
+    // -------------------------------------------------------
+
+    stopMusic: function(time) {
+        this.initializeProgressionMusic(this.musics.volume, 0, 0, time);
     },
 
     // -------------------------------------------------------
@@ -270,27 +284,23 @@ SongsManager.prototype = {
     initializeProgressionMusic: function(i, f, equation, end) {
         this.progressionMusic = SystemProgressionTable.createProgression(i, f,
             equation);
-        this.progressionTime = new Date().getTime();
-        this.progressionEnd = end;
+        this.progressionMusicTime = new Date().getTime();
+        this.progressionMusicEnd = end;
+        this.isProgressionMusicEnd = false;
     },
 
     // -------------------------------------------------------
 
     updateProgressionMusic: function() {
-        if (this.progressionEnd > 0) {
-            var tick = new Date().getTime() - this.progressionTime;
-            if (tick >= this.progressionEnd) {
-                this.progressionEnd = 0;
-                return true;
-            } else {
-                this.musics.volume = this.progressionMusic.getProgressionAt(
-                    tick, this.progressionEnd) / 100;
-                this.musics.play();
+        if (!this.isProgressionMusicEnd) {
+            var tick = new Date().getTime() - this.progressionMusicTime;
+            if (tick >= this.progressionMusicEnd) {
+                tick = this.progressionMusicEnd;
+                this.isProgressionMusicEnd = true;
             }
-
-            return false;
+            this.musics.volume = this.progressionMusic.getProgressionAt(
+                tick, this.progressionMusicEnd) / 100;
+            this.musics.play();
         }
-
-        return true;
     }
 }

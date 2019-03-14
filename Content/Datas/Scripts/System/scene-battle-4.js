@@ -207,7 +207,7 @@ SceneBattle.prototype.updateStep4 = function() {
         break;
     case 3:
         $requestPaintHUD = true;
-        if ($songsManager.updateProgressionMusic() && this.transitionEnded) {
+        if ($songsManager.isProgressionEnd && this.transitionEnded) {
             this.win();
         }
 
