@@ -300,8 +300,7 @@ SceneMap.prototype = {
     */
     loadTextures: function(){
         var tileset = this.mapInfos.tileset;
-        this.textureTileset = RPM.loadTexture(tileset.getPath(),
-            PictureKind.Tileset, tileset.picture);
+        this.textureTileset = RPM.loadTexture(tileset.getPath(), tileset.picture);
         this.texturesAutotiles = $datasGame.tilesets.getTexturesAutotiles(tileset);
         this.texturesWalls = $datasGame.tilesets.getTexturesWalls(tileset);
         this.texturesCharacters = $datasGame.tilesets.texturesCharacters;

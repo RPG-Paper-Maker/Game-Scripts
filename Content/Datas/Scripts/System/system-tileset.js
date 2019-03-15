@@ -117,14 +117,29 @@ SystemTileset.prototype = {
         var specialsIDs = this[specialField];
         var id, i, l = specials.length;
         var textures = new Array(l);
-        var paths, special, picture;
+        var paths, special, pic, callback, that;
+
+        // Set callback
+        switch (pictureKind) {
+        case PictureKind.Walls:
+            that = this;
+            callback = function(pathLocal, picture) {
+                var texture = new THREE.Texture();
+                that.loadTextureWall(texture, pathLocal, picture);
+                return texture;
+            }
+            break;
+        default:
+            callback = null;
+            break;
+        }
 
         for (i = 0, l = specialsIDs.length; i < l; i++){
             id = specialsIDs[i];
             special = specials[id];
-            picture = $datasGame.pictures.list[pictureKind][special.pictureID];
-            paths = picture.getPath(pictureKind);
-            textures[id] = RPM.loadTexture(paths, pictureKind, picture);
+            pic = $datasGame.pictures.list[pictureKind][special.pictureID];
+            paths = pic.getPath(pictureKind);
+            textures[id] = RPM.loadTexture(paths, pic, callback);
         }
 
         this[texturesName] = textures;
@@ -176,7 +191,7 @@ SystemTileset.prototype = {
                 }
 
                 // Finished loading textures
-                that.callback = null;
+                that.callback = that.loadWalls;
             }
         }
 
@@ -189,6 +204,7 @@ SystemTileset.prototype = {
     */
     loadWalls: function(){
         this.loadSpecialTextures(PictureKind.Walls, "texturesWalls", "walls");
+        this.callback = null;
     },
 
     // -------------------------------------------------------

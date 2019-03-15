@@ -878,19 +878,25 @@ RPM.random = function(min, max) {
 *   @param {string} path The path of the texture.
 *   @retuns {THREE.MeshBasicMaterial}
 */
-RPM.loadTexture = function(paths, pictureKind, picture) {
+RPM.loadTexture = function(paths, picture, callback) {
     $filesToLoad++;
     var path = paths[0];
     var pathLocal = paths[1];
-    var texture = $textureLoader.load(path,
-        function(t){
-            $loadedFiles++;
-        },
-        function (t) {},
-        function (t) {
-            RPM.showErrorMessage("Could not load " + path);
-        }
-    );
+    var texture;
+
+    if (callback) {
+        texture = callback.call(this, pathLocal, picture);
+    } else {
+        texture = $textureLoader.load(path,
+            function(t){
+                $loadedFiles++;
+            },
+            function (t) {},
+            function (t) {
+                RPM.showErrorMessage("Could not load " + path);
+            }
+        );
+    }
 
     return RPM.createMaterial(texture);
 };

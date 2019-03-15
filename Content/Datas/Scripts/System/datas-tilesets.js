@@ -89,7 +89,7 @@ DatasTilesets.prototype = {
         for (var i = 1; i < l; i++){
             picture = pictures[i];
             paths = picture.getPath(pictureKind);
-            textures[i] = RPM.loadTexture(paths, pictureKind, picture);
+            textures[i] = RPM.loadTexture(paths, picture);
         }
 
         this[texturesName] = textures;
