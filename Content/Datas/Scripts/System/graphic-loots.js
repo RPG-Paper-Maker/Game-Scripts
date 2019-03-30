@@ -1,10 +1,11 @@
 /*
     RPG Paper Maker Copyright (C) 2017-2019 Marie Laporte
 
-    This file is part of RPG Paper Maker.
+    Commercial license for commercial use of your games:
+        https://creativecommons.org/licenses/by-nc/4.0/.
 
-    RPG Paper Maker is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
+    See more information here: http://rpg-paper-maker.com/index.php/downloads.
+    
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
