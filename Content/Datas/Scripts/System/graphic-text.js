@@ -113,10 +113,10 @@ GraphicText.prototype = {
     draw: function(x, y, w, h) {
 
         // Default values
-        if (typeof x === 'undefined') x = this.x;
-        if (typeof y === 'undefined') y = this.y;
-        if (typeof w === 'undefined') w = this.w;
-        if (typeof h === 'undefined') h = this.h;
+        if (typeof x === 'undefined') x = this.oX;
+        if (typeof y === 'undefined') y = this.oY;
+        if (typeof w === 'undefined') w = this.oW;
+        if (typeof h === 'undefined') h = this.oH;
 
         x = RPM.getScreenX(x);
         y = RPM.getScreenY(y);
@@ -129,7 +129,7 @@ GraphicText.prototype = {
         $context.textAlign = this.align;
 
         // Correcting x and y according to alignment
-        y += (h / 2) + (this.fontSize / 3);
+        y += (h / 2) + (RPM.getScreenY(this.fontSize) / 3);
         switch(this.align){
         case Align.Right:
             x += w; break;

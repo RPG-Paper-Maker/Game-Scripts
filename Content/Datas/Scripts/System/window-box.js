@@ -55,18 +55,18 @@ WindowBox.prototype = {
 
         // Setting content dimensions
         this.contentDimension = [
-            this.x + this.padding[0],
-            this.y + this.padding[1],
-            this.w - (2 * this.padding[2]),
-            this.h - (2 * this.padding[3])
+            this.oX + this.padding[0],
+            this.oY + this.padding[1],
+            this.oW - (2 * this.padding[2]),
+            this.oH - (2 * this.padding[3])
         ];
 
         // Adjusting dimensions
         this.windowDimension = [
-            RPM.getScreenX(this.x),
-            RPM.getScreenY(this.y),
-            RPM.getScreenX(this.w),
-            RPM.getScreenY(this.h)
+            RPM.getScreenX(this.oX),
+            RPM.getScreenY(this.oY),
+            RPM.getScreenX(this.oW),
+            RPM.getScreenY(this.oH)
         ];
     },
 

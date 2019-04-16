@@ -32,8 +32,8 @@ Window {
     title: qsTr("Game")
     //visibility: "FullScreen"
 
-    width: 640
-    height: 480
+    width: 800
+    height: 600
     maximumHeight: height
     maximumWidth: width
     minimumHeight: height

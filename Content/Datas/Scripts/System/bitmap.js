@@ -108,9 +108,8 @@ Bitmap.prototype = {
     /** Set the position to the top.
     */
     setRight: function(offset) {
-        this.oX = $SCREEN_X - this.oW - (offset ? offset : 0);
-        this.x = $canvasWidth - this.w - (offset ? offset : 0);
-        $requestPaintHUD = true;
+        Bitmap.prototype.setX.call(this, $SCREEN_X - this.oW - (offset ? offset
+            : 0));
     },
 
     // -------------------------------------------------------
@@ -118,9 +117,8 @@ Bitmap.prototype = {
     /** Set the position to the top.
     */
     setBot: function(offset) {
-        this.oY = $SCREEN_Y - this.oH - (offset ? offset : 0);
-        this.y = $canvasHeight - this.h - (offset ? offset : 0);
-        $requestPaintHUD = true;
+        Bitmap.prototype.setY.call(this, $SCREEN_Y - this.oH - (offset ? offset
+            : 0));
     },
 
     // -------------------------------------------------------

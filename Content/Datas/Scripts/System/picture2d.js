@@ -61,8 +61,8 @@ Picture2D.prototype.check = function() {
         $picturesLoading.splice($picturesLoading.indexOf(this), 1);
         $picturesLoaded.push(this);
         this.image = context.createImageData(this.path);
-        this.w = this.image.width;
-        this.h = this.image.height;
+        Bitmap.prototype.setW.call(this, this.image.width);
+        Bitmap.prototype.setH.call(this, this.image.height);
 
         if (this.callback) {
             this.callback.call(this);
@@ -90,28 +90,39 @@ Picture2D.prototype.draw = function(x, y, w, h, sx, sy, sw, sh) {
     }
 
     // Default values
-    if (typeof x === 'undefined') x = this.x;
-    if (typeof y === 'undefined') y = this.y;
-    if (typeof w === 'undefined') w = this.w;
-    if (typeof h === 'undefined') h = this.h;
+    if (typeof x === 'undefined') {
+        x = this.x;
+    } else {
+        x = RPM.getScreenX(x);
+    }
+    if (typeof y === 'undefined') {
+        y = this.y;
+    } else {
+        y = RPM.getScreenY(y);
+    }
+    if (typeof w === 'undefined') {
+        w = this.w;
+    } else {
+        w = RPM.getScreenX(w);
+    }
+    if (typeof h === 'undefined') {
+        h = this.h;
+    } else {
+        h = RPM.getScreenX(h);
+    }
     if (typeof sx === 'undefined') sx = 0;
     if (typeof sy === 'undefined') sy = 0;
-    if (typeof sw === 'undefined') sw = this.w;
-    if (typeof sh === 'undefined') sh = this.h;
+    if (typeof sw === 'undefined') sw = this.oW;
+    if (typeof sh === 'undefined') sh = this.oH;
 
     if (sw <= 0 || sh <= 0) {
         return;
     }
 
-    x = RPM.getScreenX(x);
-    y = RPM.getScreenY(y);
-    w = RPM.getScreenX(w);
-    h = RPM.getScreenY(h);
-
     // Draw the image
     if (this.reverse) {
         $context.save();
-        $context.scale(-1,1);
+        $context.scale(-1, 1);
         $context.drawImage(this.path, sx, sy, sw, sh, -x - w, y, w, h);
         $context.restore();
     } else {

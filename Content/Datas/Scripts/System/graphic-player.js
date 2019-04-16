@@ -263,8 +263,8 @@ GraphicPlayer.prototype = {
         xCharacter = x + 80;
         yName = y + 20;
         coef = RPM.BASIC_SQUARE_SIZE / $SQUARE_SIZE;
-        wBattler = this.battler.w / $FRAMES;
-        hBattler = this.battler.h / RPM.BATLLER_STEPS;
+        wBattler = this.battler.oW / $FRAMES;
+        hBattler = this.battler.oH / RPM.BATLLER_STEPS;
 
         // Battler
         this.battler.draw(x + (80 - (wBattler * coef)) / 2, y + h - (hBattler *
