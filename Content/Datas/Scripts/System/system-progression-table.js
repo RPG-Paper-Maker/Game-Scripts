@@ -65,9 +65,14 @@ SystemProgressionTable.prototype = {
 
     // -------------------------------------------------------
 
-    getProgressionAt: function(current, f) {
+    getProgressionAt: function(current, f, decimal) {
+        if (typeof decimal === 'undefined') {
+            decimal = false;
+        }
+
         // Check if specific value
         var table = this.table[current];
+        var result;
         if (table) {
             return table;
         }
@@ -81,53 +86,59 @@ SystemProgressionTable.prototype = {
         var x = current - 1;
         switch (this.equation) {
         case 0:
-            return this.easingLinear(x);
+            result = this.easingLinear(x); break;
         case -1:
-            return this.easingQuadraticIn(x);
+            result = this.easingQuadraticIn(x); break;
         case 1:
-            return this.easingQuadraticOut(x);
+            result = this.easingQuadraticOut(x); break;
         case -2:
-            return this.easingCubicIn(x);
+            result = this.easingCubicIn(x); break;
         case 2:
-            return this.easingCubicOut(x);
+            result = this.easingCubicOut(x); break;
         case -3:
-            return this.easingQuarticIn(x);
+            result = this.easingQuarticIn(x); break;
         case 3:
-            return this.easingQuarticOut(x);
+            result = this.easingQuarticOut(x); break;
         case -4:
-            return this.easingQuinticIn(x);
+            result = this.easingQuinticIn(x); break;
         case 4:
-            return this.easingQuinticOut(x);
+            result = this.easingQuinticOut(x); break;
         default:
-            return 0;
+            result = 0; break;
         }
+
+        if (!decimal) {
+            result = Math.floor(result);
+        }
+
+        return result;
     },
 
     // -------------------------------------------------------
 
     easingLinear: function(x) {
-        return Math.floor(this.change * x / this.duration + this.start);
+        return this.change * x / this.duration + this.start;
     },
 
     // -------------------------------------------------------
 
     easingQuadraticIn: function(x) {
         x /= this.duration;
-        return Math.floor(this.change * x * x + this.start);
+        return this.change * x * x + this.start;
     },
 
     // -------------------------------------------------------
 
     easingQuadraticOut: function(x) {
         x /= this.duration;
-        return Math.floor(-this.change * x * (x - 2) + this.start);
+        return -this.change * x * (x - 2) + this.start;
     },
 
     // -------------------------------------------------------
 
     easingCubicIn: function(x) {
         x /= this.duration;
-        return Math.floor(this.change * x * x * x + this.start);
+        return this.change * x * x * x + this.start;
     },
 
     // -------------------------------------------------------
@@ -135,14 +146,14 @@ SystemProgressionTable.prototype = {
     easingCubicOut: function(x) {
         x /= this.duration;
         x--;
-        return Math.floor(this.change * (x * x * x + 1) + this.start);
+        return this.change * (x * x * x + 1) + this.start;
     },
 
     // -------------------------------------------------------
 
     easingQuarticIn: function(x) {
         x /= this.duration;
-        return Math.floor(this.change * x * x * x * x + this.start);
+        return this.change * x * x * x * x + this.start;
     },
 
     // -------------------------------------------------------
@@ -150,14 +161,14 @@ SystemProgressionTable.prototype = {
     easingQuarticOut: function(x) {
         x /= this.duration;
         x--;
-        return Math.floor(-this.change * (x * x * x * x - 1) + this.start);
+        return -this.change * (x * x * x * x - 1) + this.start;
     },
 
     // -------------------------------------------------------
 
     easingQuinticIn: function(x) {
         x /= this.duration;
-        return Math.floor(this.change * x * x * x * x * x + this.start);
+        return this.change * x * x * x * x * x + this.start;
     },
 
     // -------------------------------------------------------
@@ -165,6 +176,6 @@ SystemProgressionTable.prototype = {
     easingQuinticOut: function(x) {
         x /= this.duration;
         x--;
-        return Math.floor(this.change * (x * x * x * x * x + 1) + this.start);
+        return this.change * (x * x * x * x * x + 1) + this.start;
     }
 }

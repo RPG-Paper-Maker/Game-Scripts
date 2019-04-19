@@ -36,7 +36,7 @@ SceneBattle.prototype.initializeStep3 = function() {
 
 SceneBattle.prototype.updateStep3 = function(){
     if (new Date().getTime() - this.time >= 500) {
-        this.user.selected = true;
+        this.user.setSelected(true);
         if (new Date().getTime() - this.timeEnemyAttack >= 1000) {
             this.changeStep(2);
         }

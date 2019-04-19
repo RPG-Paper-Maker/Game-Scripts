@@ -46,10 +46,14 @@ function Battler(character, position, camera) {
     this.lastSkillOffset = 0;
     this.lastItemIndex = 0;
     this.lastItemOffset = 0;
-    this.progressionFront = SystemProgressionTable.createProgression(this
+    this.progressionAllyFront = SystemProgressionTable.createProgression(this
         .position.x, this.position.x - Battler.OFFSET_SELECTED, 0);
-    this.progressionBack = SystemProgressionTable.createProgression(this.
+    this.progressionAllyBack = SystemProgressionTable.createProgression(this.
         position.x - Battler.OFFSET_SELECTED, this.position.x, 0);
+    this.progressionEnemyFront = SystemProgressionTable.createProgression(this
+        .position.x, this.position.x + Battler.OFFSET_SELECTED, 0);
+    this.progressionEnemyBack = SystemProgressionTable.createProgression(this.
+        position.x + Battler.OFFSET_SELECTED, this.position.x, 0);
     this.timerMove = 0;
 
     var idBattler = $datasGame.getHeroesMonsters(character.k).list[character.id]
@@ -83,8 +87,16 @@ function Battler(character, position, camera) {
 }
 
 Battler.OFFSET_SELECTED = 10;
+Battler.TIME_MOVE = 200;
 
 Battler.prototype = {
+
+    setSelected: function(selected) {
+        this.selected = selected;
+        this.timerMove = new Date().getTime();
+    },
+
+    // -------------------------------------------------------
 
     setActive: function(active) {
         this.active = active;
@@ -181,32 +193,20 @@ Battler.prototype = {
     // -------------------------------------------------------
 
     updateSelected: function() {
-        var newX;
+        var newX, progression, time;
 
+        newX = this.mesh.position.x;
         if (this.character.k === CharacterKind.Hero) {
-            if (this.selected) {
-                newX = this.mesh.position.x - 1;
-                if (newX <= -Battler.OFFSET_SELECTED + this.position.x) {
-                    newX = -Battler.OFFSET_SELECTED + this.position.x;
-                }
-            } else {
-                newX = this.mesh.position.x + 1;
-                if (newX >= this.position.x) {
-                    newX = this.position.x;
-                }
-            }
+            progression = this.selected ? this.progressionAllyFront : this
+                .progressionAllyBack;
         } else if (this.character.k === CharacterKind.Monster) {
-            if (this.selected) {
-                newX = this.mesh.position.x + 1;
-                if (newX >= Battler.OFFSET_SELECTED + this.position.x) {
-                    newX = Battler.OFFSET_SELECTED + this.position.x;
-                }
-            } else {
-                newX = this.mesh.position.x - 1;
-                if (newX <= this.position.x) {
-                    newX = this.position.x;
-                }
-            }
+            progression = this.selected ? this.progressionEnemyFront : this
+                .progressionEnemyBack;
+        }
+
+        time = new Date().getTime() - this.timerMove;
+        if (time <= Battler.TIME_MOVE) {
+            newX = progression.getProgressionAt(time, Battler.TIME_MOVE, true);
         }
         if (this.mesh.position.x !== newX) {
             this.mesh.position.setX(newX);

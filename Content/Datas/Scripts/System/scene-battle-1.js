@@ -202,7 +202,7 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
         {
             this.subStep = 1;
             this.user = this.battlers[CharacterKind.Hero][this.selectedUserIndex];
-            this.user.selected = true;
+            this.user.setSelected(true);
             this.windowChoicesBattleCommands.unselect();
             this.windowChoicesBattleCommands.select(this.user.lastCommandIndex);
             this.windowChoicesBattleCommands.offsetSelectedIndex = this.user
@@ -323,7 +323,7 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
                 break;
             default:
                 this.subStep = 0;
-                this.user.selected = false;
+                this.user.setSelected(false);
                 this.registerLastCommandIndex();
                 break;
             }

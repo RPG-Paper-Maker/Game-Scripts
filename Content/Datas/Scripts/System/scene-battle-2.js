@@ -82,7 +82,7 @@ SceneBattle.prototype.initializeStep2 = function() {
         for (i = 0, l = this.battlers[CharacterKind.Hero].length; i < l; i++) {
             user = this.battlers[CharacterKind.Hero][i];
             user.setActive(false);
-            user.selected = false;
+            user.setSelected(false);
         }
         break;
     }
@@ -124,7 +124,7 @@ SceneBattle.prototype.updateStep2 = function() {
                 .TIME_ACTION_ANIMATION / 2);
         } else {
             this.user.setActive(false);
-            this.user.selected = false;
+            this.user.setSelected(false);
         }
 
         // Target and user test death
