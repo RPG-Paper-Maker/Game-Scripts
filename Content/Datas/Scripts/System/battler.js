@@ -46,6 +46,11 @@ function Battler(character, position, camera) {
     this.lastSkillOffset = 0;
     this.lastItemIndex = 0;
     this.lastItemOffset = 0;
+    this.progressionFront = SystemProgressionTable.createProgression(this
+        .position.x, this.position.x - Battler.OFFSET_SELECTED, 0);
+    this.progressionBack = SystemProgressionTable.createProgression(this.
+        position.x - Battler.OFFSET_SELECTED, this.position.x, 0);
+    this.timerMove = 0;
 
     var idBattler = $datasGame.getHeroesMonsters(character.k).list[character.id]
         .idBattler;

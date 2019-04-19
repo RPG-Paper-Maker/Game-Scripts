@@ -187,8 +187,8 @@ Window {
         onInitializeGL: {
             try{
                 Game.$DIALOG_ERROR = dialogError;
-                Game.$canvasWidth = $SCREEN_X;
-                Game.$canvasHeight = $SCREEN_Y;
+                Game.$canvasWidth = Game.$SCREEN_X;
+                Game.$canvasHeight = Game.$SCREEN_Y;
                 Game.$windowX = 1;
                 Game.$windowY = 1;
                 Game.$context = canvas.getContext('2d');

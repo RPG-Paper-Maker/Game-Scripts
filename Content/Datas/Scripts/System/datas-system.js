@@ -44,6 +44,11 @@ DatasSystem.prototype = {
                 };
             }
 
+            // Project name
+            this.projectName = new SystemLang();
+            this.projectName.readJSON(json.pn);
+            $window.title = this.projectName.name;
+
             // Screen resolution
             w = json.sw;
             h = json.sh;
@@ -59,8 +64,8 @@ DatasSystem.prototype = {
             $window.height = h;
             $window.maximumHeight = h;
             $window.minimumHeight = h;
-            $window.setX(Screen.width / 2 - w / 2);
-            $window.setY(Screen.height / 2 - h / 2);
+            $window.setX($screenWidth / 2 - w / 2);
+            $window.setY($screenHeight / 2 - h / 2);
             $canvasHUD.width = w;
             $canvasHUD.height = h;
             $canvas3D.width = w;
