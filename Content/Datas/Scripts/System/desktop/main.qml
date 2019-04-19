@@ -30,21 +30,14 @@ import "qrc:/qmlUtilities.js" as Game
 Window {
     id: window
     title: qsTr("Game")
-    //visibility: "FullScreen"
-
-    width: 1280
-    height: 720
-    maximumHeight: height
-    maximumWidth: width
-    minimumHeight: height
-    minimumWidth: width
-
     visible: true
     Component.onCompleted: {
-        setX(Screen.width / 2 - width / 2);
-        setY(Screen.height / 2 - height / 2);
+        Game.$window = window;
         Game.$canvasHUD = canvas;
+        Game.$canvas3D = canvas3d;
         Game.$canvasRendering = canvasRendering;
+        Game.$screenWidth = Screen.width;
+        Game.$screenHeight = Screen.height;
     }
 
     function showError(e){
@@ -194,10 +187,10 @@ Window {
         onInitializeGL: {
             try{
                 Game.$DIALOG_ERROR = dialogError;
-                Game.$canvasWidth = canvas3d.width;
-                Game.$canvasHeight = canvas3d.height;
-                Game.$windowX = Game.$canvasWidth / Game.$SCREEN_X;
-                Game.$windowY = Game.$canvasHeight / Game.$SCREEN_Y;
+                Game.$canvasWidth = $SCREEN_X;
+                Game.$canvasHeight = $SCREEN_Y;
+                Game.$windowX = 1;
+                Game.$windowY = 1;
                 Game.$context = canvas.getContext('2d');
                 Game.$songsManager = new Game.SongsManager(
                     musicPlayer, backgroundsoundPlayer, musicEffectPlayer,
@@ -260,8 +253,6 @@ Window {
 
         onResizeGL: {
             try{
-                Game.$canvasWidth = canvas3d.width;
-                Game.$canvasHeight = canvas3d.height;
                 Game.resizeGL(canvas3d);
             }
             catch (e){

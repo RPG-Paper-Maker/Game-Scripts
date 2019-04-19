@@ -107,6 +107,12 @@ GraphicText.prototype = {
 
     // -------------------------------------------------------
 
+    updateFont: function() {
+        this.updateFontSize(this.fontSize);
+    },
+
+    // -------------------------------------------------------
+
     /** Drawing the text in choice box.
     *   @param {Canvas.Context} context The canvas context.
     *   @param {number} x The x position to draw graphic.

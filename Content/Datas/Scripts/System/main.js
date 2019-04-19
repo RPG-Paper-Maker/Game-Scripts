@@ -20,6 +20,10 @@
 //  GLOBAL VARIABLES
 // -------------------------------------------------------
 
+/** The main window.
+*   @type {Window} */
+var $window;
+
 /** The game stack containing all the different scenes of the game.
 *   @type {GameStack} */
 var $gameStack;
@@ -117,6 +121,10 @@ var $fontName = "sans-serif";
 *   @type {Canvas} */
 var $canvasHUD;
 
+/** The canvas managing 3D.
+*   @type {Canvas} */
+var $canvas3D;
+
 /** The canvas managing rendering pictures.
 *   @type {Canvas} */
 var $canvasRendering;
@@ -136,6 +144,14 @@ var $canvasWidth;
 /** The height of the window.
 *   @type {number} */
 var $canvasHeight;
+
+/** The width of the screen.
+*   @type {number} */
+var $screenWidth;
+
+/** The height of the screen.
+*   @type {number} */
+var $screenHeight;
 
 /** Coefficient of window width (for resizing HUD).
 *   @type {number} */
@@ -241,11 +257,11 @@ function initializeGL(canvas){
 *   @param {Canvas} canvas The 3D canvas.
 */
 function resizeGL(canvas){
+    $renderer.setSize($canvasWidth, $canvasHeight);
     var camera = $gameStack.camera;
     if (typeof camera !== 'undefined'){
         camera.threeCamera.aspect = $canvasWidth / $canvasHeight;
         camera.threeCamera.updateProjectionMatrix();
-        $renderer.setSize($canvasWidth, $canvasHeight);
     }
 }
 

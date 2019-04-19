@@ -36,7 +36,7 @@ DatasSystem.prototype = {
         RPM.openFile(this, RPM.FILE_SYSTEM, true, function(res){
             var json = JSON.parse(res);
             var jsonItemsTypes = json.itemsTypes;
-            var i, l = jsonItemsTypes.length, id;
+            var i, l = jsonItemsTypes.length, id, w, h, isScreenWindow;
             this.itemsTypes = new Array(l+1);
             for (i = 0; i < l; i++) {
                 this.itemsTypes[jsonItemsTypes[i].id] = {
@@ -44,6 +44,38 @@ DatasSystem.prototype = {
                 };
             }
 
+            // Screen resolution
+            w = json.sw;
+            h = json.sh;
+            isScreenWindow = json.isw;
+            if (!isScreenWindow) {
+                $window.visibility = "FullScreen";
+                w = $screenWidth;
+                h = $screenHeight;
+            }
+            $window.width = w;
+            $window.maximumWidth = w;
+            $window.minimumWidth = w;
+            $window.height = h;
+            $window.maximumHeight = h;
+            $window.minimumHeight = h;
+            $window.setX(Screen.width / 2 - w / 2);
+            $window.setY(Screen.height / 2 - h / 2);
+            $canvasHUD.width = w;
+            $canvasHUD.height = h;
+            $canvas3D.width = w;
+            $canvas3D.height = h;
+            $canvasWidth = w;
+            $canvasHeight = h;
+            $windowX = $canvasWidth / $SCREEN_X;
+            $windowY = $canvasHeight / $SCREEN_Y;
+            $context.width = w;
+            $context.height = h;
+            resizeGL($canvas3D);
+            $loadingScene.text.updateFont();
+            $requestPaintHUD = true;
+
+            // Other numbers
             $SQUARE_SIZE = json.ss;
             $PORTIONS_RAY_NEAR = json.pr;
             $FRAMES = json.frames;
