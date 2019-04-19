@@ -88,6 +88,10 @@ GraphicText.prototype = {
     /** Update the context font (without window resizing). This function is
     *   used before a context.measureText.
     */
+    updateContextFontReal: function(){
+        $context.font = this.font;
+    },
+
     updateContextFont: function(){
         $context.font = this.fontWithoutResize;
     },

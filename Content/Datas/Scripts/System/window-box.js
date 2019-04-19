@@ -63,10 +63,10 @@ WindowBox.prototype = {
 
         // Adjusting dimensions
         this.windowDimension = [
-            RPM.getScreenX(this.oX),
-            RPM.getScreenY(this.oY),
-            RPM.getScreenX(this.oW),
-            RPM.getScreenY(this.oH)
+            this.oX,
+            this.oY,
+            this.oW,
+            this.oH
         ];
     },
 
@@ -131,8 +131,7 @@ WindowBox.prototype = {
                 if (this.limitContent) {
                     $context.save();
                     $context.beginPath();
-                    $context.rect(windowDimension[0], windowDimension[1],
-                        windowDimension[2], windowDimension[3]);
+                    $context.rect(this.x, this.y, this.w, this.h);
                     $context.clip();
                 }
                 if (isChoice){

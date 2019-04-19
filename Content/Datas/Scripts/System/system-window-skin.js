@@ -64,7 +64,7 @@ SystemWindowSkin.prototype = {
             h = r[3];
         }
 
-        $context.drawImage(this.picture.path, r[0], r[1], r[2], r[3], x, y, w, h);
+        this.picture.draw(x, y, w, h, r[0], r[1], r[2], r[3]);
     },
 
     // -------------------------------------------------------
@@ -160,22 +160,21 @@ SystemWindowSkin.prototype = {
 
     // -------------------------------------------------------
 
-    drawArrowTarget: function(frame, x, y) {
+    drawArrowTarget: function(frame, x, y, positionResize) {
         var width = this.arrowTargetSelection[2] / $FRAMES;
-        $context.drawImage(this.picture.path, this.arrowTargetSelection[0] +
-            (frame * width), this.arrowTargetSelection[1], width, this
-            .arrowTargetSelection[3], x - (width / 2), y, width, this
-            .arrowTargetSelection[3]);
+        this.picture.draw(x - (width / 2), y, width, this.arrowTargetSelection
+            [3],this.arrowTargetSelection[0] + (frame * width), this
+            .arrowTargetSelection[1], width, this.arrowTargetSelection[3],
+            positionResize);
     },
 
     // -------------------------------------------------------
 
     drawArrowMessage: function(frame, x, y) {
         var width = this.arrowEndMessage[2] / $FRAMES;
-        $context.drawImage(this.picture.path, this.arrowEndMessage[0] +
-            (frame * width), this.arrowEndMessage[1], width, this
-            .arrowEndMessage[3], x - (width / 2), y, width, this.arrowEndMessage
-            [3]);
+        this.picture.draw(x - (width / 2), y, width, this.arrowEndMessage[3],
+            this.arrowEndMessage[0] + (frame * width), this.arrowEndMessage[1],
+            width, this.arrowEndMessage[3]);
     },
 
     // -------------------------------------------------------
@@ -185,9 +184,9 @@ SystemWindowSkin.prototype = {
         var width = rect[2] / 10;
         var height = rect[3];
         for (var i = 0, l = digits.length; i < l; i++) {
-            $context.drawImage(this.picture.path, rect[0] + (digits[i] * width),
-                rect[1], width, height, x + ((i - (l / 2)) * (width + 1)), y,
-                width, height);
+            this.picture.draw(x + ((i - (l / 2)) * (width + 1)), y, width,
+                height, rect[0] + (digits[i] * width), rect[1], width, height,
+                false);
         }
     },
 

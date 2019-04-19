@@ -128,7 +128,6 @@ Battler.prototype = {
         this.updateUVs();
     },
 
-
     // -------------------------------------------------------
 
     setEscaping: function() {
@@ -333,7 +332,7 @@ Battler.prototype = {
 
     drawArrow: function() {
         $datasGame.system.getWindowSkin().drawArrowTarget(this.frameArrow, this
-            .arrowPosition.x, this.arrowPosition.y);
+            .arrowPosition.x, this.arrowPosition.y, false);
     },
 
     // -------------------------------------------------------

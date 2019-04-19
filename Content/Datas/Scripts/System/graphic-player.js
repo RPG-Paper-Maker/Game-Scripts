@@ -222,8 +222,8 @@ GraphicPlayer.prototype = {
         // Battler
         yName = y + 100;
         coef = RPM.BASIC_SQUARE_SIZE / $SQUARE_SIZE;
-        wBattler = this.battler.w / $FRAMES;
-        hBattler = this.battler.h / RPM.BATLLER_STEPS;
+        wBattler = this.battler.oW / $FRAMES;
+        hBattler = this.battler.oH / RPM.BATLLER_STEPS;
         this.battler.draw(x, yName - (hBattler * coef) - 15, wBattler * coef,
             hBattler * coef, this.battlerFrame * wBattler, 0, wBattler,
             hBattler);
@@ -309,6 +309,9 @@ GraphicPlayer.prototype = {
             wLevel, wStats, wStat, firstLineLength, xOffset;
 
         // Measure widths
+        this.graphicName.updateContextFontReal();
+        this.graphicLevelName.updateContextFontReal();
+        this.graphicLevel.updateContextFontReal();
         wName = $context.measureText(this.graphicName.text).width;
         wLevelName = $context.measureText(this.graphicLevelName.text).width;
         wLevel = $context.measureText(this.graphicLevelName.text).width;

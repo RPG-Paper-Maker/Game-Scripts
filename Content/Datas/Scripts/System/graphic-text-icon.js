@@ -55,13 +55,13 @@ GraphicTextIcon.prototype = {
     // -------------------------------------------------------
 
     getMaxHeight: function() {
-        return Math.max(this.textIcon.text.fontSize, this.textIcon.icon.h);
+        return Math.max(this.textIcon.text.fontSize, this.textIcon.icon.oH);
     },
 
     // -------------------------------------------------------
 
     getWidth: function() {
-        return this.textIcon.icon.w + this.space + this.textIcon.length;
+        return this.textIcon.icon.oW + this.space + this.textIcon.length;
     },
 
     // -------------------------------------------------------
@@ -74,8 +74,8 @@ GraphicTextIcon.prototype = {
     */
     draw: function(x, y, w, h) {
         var iconWidth, iconHeight, offset, heightMax;
-        iconWidth = this.textIcon.icon.w;
-        iconHeight = this.textIcon.icon.h;
+        iconWidth = this.textIcon.icon.oW;
+        iconHeight = this.textIcon.icon.oH;
 
         // If icon not loaded, pass
         if (!iconWidth) {

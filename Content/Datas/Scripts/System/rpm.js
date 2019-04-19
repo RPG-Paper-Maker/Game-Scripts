@@ -640,7 +640,7 @@ RPM.positionAngle = function(position) {
 *   @returns {number}
 */
 RPM.getScreenX = function(x) {
-    return Math.round(RPM.getDoubleScreenX(x));
+    return Math.ceil(RPM.getDoubleScreenX(x));
 }
 
 // -------------------------------------------------------
@@ -651,7 +651,7 @@ RPM.getScreenX = function(x) {
 *   @returns {number}
 */
 RPM.getScreenY = function(y) {
-    return Math.round(RPM.getDoubleScreenY(y));
+    return Math.ceil(RPM.getDoubleScreenY(y));
 }
 
 // -------------------------------------------------------
@@ -663,7 +663,7 @@ RPM.getScreenY = function(y) {
 */
 
 RPM.getScreenXY = function(xy) {
-    return Math.round(($windowX + $windowY) / 2 * xy);
+    return Math.ceil(($windowX + $windowY) / 2 * xy);
 }
 
 // -------------------------------------------------------

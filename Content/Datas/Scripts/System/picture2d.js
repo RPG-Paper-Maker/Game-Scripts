@@ -84,21 +84,29 @@ Picture2D.prototype.destroy = function() {
 
 // -------------------------------------------------------
 
-Picture2D.prototype.draw = function(x, y, w, h, sx, sy, sw, sh) {
+Picture2D.prototype.draw = function(x, y, w, h, sx, sy, sw, sh, positionResize)
+{
     if (!this.checked) {
         this.check();
     }
 
     // Default values
+    if (typeof positionResize === 'undefined') {
+        positionResize = true;
+    }
     if (typeof x === 'undefined') {
         x = this.x;
     } else {
-        x = RPM.getScreenX(x);
+        if (positionResize) {
+            x = RPM.getScreenX(x);
+        }
     }
     if (typeof y === 'undefined') {
         y = this.y;
     } else {
-        y = RPM.getScreenY(y);
+        if (positionResize) {
+            y = RPM.getScreenY(y);
+        }
     }
     if (typeof w === 'undefined') {
         w = this.w;
@@ -108,7 +116,7 @@ Picture2D.prototype.draw = function(x, y, w, h, sx, sy, sw, sh) {
     if (typeof h === 'undefined') {
         h = this.h;
     } else {
-        h = RPM.getScreenX(h);
+        h = RPM.getScreenY(h);
     }
     if (typeof sx === 'undefined') sx = 0;
     if (typeof sy === 'undefined') sy = 0;
