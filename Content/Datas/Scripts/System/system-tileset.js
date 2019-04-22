@@ -213,8 +213,8 @@ SystemTileset.prototype = {
         var callback = function() {
             $loadedFiles++;
             var point, img = context.createImageData(pathLocal);
-            var width = (img.width / 2) / $SQUARE_SIZE;
-            var height = (img.height / 3) / $SQUARE_SIZE;
+            var width = Math.floor((img.width / 2) / $SQUARE_SIZE);
+            var height = Math.floor((img.height / 3) / $SQUARE_SIZE);
             var size = width * height;
 
             // Update picture width and height for collisions settings
@@ -265,7 +265,7 @@ SystemTileset.prototype = {
         var count, lA, lB, lC, lD, row = -1;
         var offsetX = point[0] * 2 * $SQUARE_SIZE;
         var offsetY = point[1] * 3 * $SQUARE_SIZE;
-        var sDiv = $SQUARE_SIZE / 2;
+        var sDiv = Math.floor($SQUARE_SIZE / 2);
         var y = offset * Autotiles.COUNT_LIST * 2;
 
         for (var a = 0; a < Autotiles.COUNT_LIST; a++) {
@@ -341,19 +341,20 @@ SystemTileset.prototype = {
             var img = context.createImageData(pathLocal);
 
             // Update picture infos for collisions
-            picture.width = img.width / $SQUARE_SIZE;
-            picture.height = img.height / $SQUARE_SIZE;
+            picture.width = Math.floor(img.width / $SQUARE_SIZE);
+            picture.height = Math.floor(img.height / $SQUARE_SIZE);
 
             context.clearRect(0, 0, $canvasRendering.width,
                               $canvasRendering.height);
             $canvasRendering.width = img.width + $SQUARE_SIZE;
             $canvasRendering.height = img.height;
             context.drawImage(pathLocal, 0, 0);
-            var left = context.getImageData(0, 0, $SQUARE_SIZE / 2, img.height);
-            var right = context.getImageData(img.width - ($SQUARE_SIZE / 2), 0,
-                                             $SQUARE_SIZE / 2, img.height);
+            var left = context.getImageData(0, 0, Math.floor($SQUARE_SIZE / 2),
+                img.height);
+            var right = context.getImageData(img.width - Math.floor(
+                $SQUARE_SIZE / 2), 0, Math.floor($SQUARE_SIZE / 2), img.height);
             context.drawImage(left, img.width, 0);
-            context.drawImage(right, img.width + ($SQUARE_SIZE / 2), 0);
+            context.drawImage(right, img.width + Math.floor($SQUARE_SIZE / 2), 0);
             var image = new Image();
             image.addEventListener('load', function() {
                 texture.image = image;

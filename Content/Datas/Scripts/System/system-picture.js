@@ -216,10 +216,10 @@ SystemPicture.prototype = {
             }
             else {
                 square = this.getCollisionAtPos(x, y);
-                if (square === null)
-                    squares[i] = null;
-                else
+                if (square)
                     squares[i] = square.rect;
+                else
+                    squares[i] = null;
             }
         }
 
@@ -238,10 +238,10 @@ SystemPicture.prototype = {
         for (i = 0; i < l; i++) {
             square = this.getCollisionAtPos(texture[0] + (i % w), texture[1] +
                      Math.floor(i / w));
-            if (square === null)
-                squares[i] = null;
-            else
+            if (square)
                 squares[i] = square.rect;
+            else
+                squares[i] = null;
         }
 
         return CollisionSquare.unionSquares(squares, l, w, h);
@@ -252,8 +252,8 @@ SystemPicture.prototype = {
     /** Get a specific collision square according to texture.
     */
     getSquaresForStates: function(image) {
-        var w = image.width / $SQUARE_SIZE / $FRAMES;
-        var h = image.height / $SQUARE_SIZE / 4;
+        var w = Math.floor(image.width / $SQUARE_SIZE / $FRAMES);
+        var h = Math.floor(image.height / $SQUARE_SIZE / 4);
         var states = new Array($FRAMES * 4);
         var i, j;
 

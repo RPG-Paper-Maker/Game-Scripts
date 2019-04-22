@@ -166,8 +166,9 @@ MapObject.prototype = {
             this.frame = this.currentState.indexX;
             this.orientationEye = this.currentState.indexY;
             this.updateOrientation();
-            this.width = material.map.image.width / $SQUARE_SIZE / $FRAMES;
-            this.height = material.map.image.height / $SQUARE_SIZE / 4;
+            this.width = Math.floor(material.map.image.width / $SQUARE_SIZE /
+                $FRAMES);
+            this.height = Math.floor(material.map.image.height / $SQUARE_SIZE / 4);
             var sprite = new Sprite(this.currentState.graphicKind,
                                     [0, 0, this.width, this.height]);
             var geometry, objCollision, result;
@@ -299,14 +300,14 @@ MapObject.prototype = {
 
     isInRect: function(object) {
         var la, lb, ra, rb, ba, bb, ta, tb;
-        la = this.position.x - (this.width * $SQUARE_SIZE / 2);
-        lb = object.position.x - (this.width * $SQUARE_SIZE / 2);
-        ra = this.position.x + (this.width * $SQUARE_SIZE / 2);
-        rb = object.position.x + (this.width * $SQUARE_SIZE / 2);
-        ba = this.position.z + (this.width * $SQUARE_SIZE / 2);
-        bb = object.position.z + (this.width * $SQUARE_SIZE / 2);
-        ta = this.position.z - (this.width * $SQUARE_SIZE / 2);
-        tb = object.position.z - (this.width * $SQUARE_SIZE / 2);
+        la = this.position.x - Math.floor(this.width * $SQUARE_SIZE / 2);
+        lb = object.position.x - Math.floor(this.width * $SQUARE_SIZE / 2);
+        ra = this.position.x + Math.floor(this.width * $SQUARE_SIZE / 2);
+        rb = object.position.x + Math.floor(this.width * $SQUARE_SIZE / 2);
+        ba = this.position.z + Math.floor(this.width * $SQUARE_SIZE / 2);
+        bb = object.position.z + Math.floor(this.width * $SQUARE_SIZE / 2);
+        ta = this.position.z - Math.floor(this.width * $SQUARE_SIZE / 2);
+        tb = object.position.z - Math.floor(this.width * $SQUARE_SIZE / 2);
 
         return (la < rb && ra > lb && ta < bb && ba > tb);
     },

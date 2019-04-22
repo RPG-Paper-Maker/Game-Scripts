@@ -67,7 +67,7 @@ SpriteWall.prototype = {
         center.add(localPosition);
 
         // Getting UV coordinates
-        textureRect = [this.kind, 0, 1, height / $SQUARE_SIZE];
+        textureRect = [this.kind, 0, 1, Math.floor(height / $SQUARE_SIZE)];
         x = (textureRect[0] * $SQUARE_SIZE) / width;
         y = textureRect[1];
         w = $SQUARE_SIZE / width;
@@ -93,7 +93,6 @@ SpriteWall.prototype = {
 
         // Collision
         var objCollision = new Array;
-        var lol = $datasGame.pictures.list[PictureKind.Walls];
 
         var collisions = $datasGame.pictures.list[PictureKind.Walls][this.id]
             .getSquaresForWall(textureRect);
