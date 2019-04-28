@@ -441,6 +441,7 @@ MapObject.prototype = {
 
         // Set position
         this.position.set(position.x, position.y, position.z);
+        this.updateBBPosition(position);
         this.moving = true;
 
         // Add to moving objects
