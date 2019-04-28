@@ -701,12 +701,6 @@ EventCommandTeleportObject.prototype = {
                             this.z.getValue()
                         ]
                     );
-
-                    // Center
-                    currentState.position.setX(
-                                currentState.position.x + ($SQUARE_SIZE / 2));
-                    currentState.position.setZ(
-                                currentState.position.z + ($SQUARE_SIZE / 2));
                 }
                 else {
                     var objectIDPosition = this.objectIDPosition.getValue();
