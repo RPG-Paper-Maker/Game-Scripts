@@ -98,7 +98,8 @@ function EventCommandShowText(command){
     this.isDirectNode = false;
     this.parallel = false;
     this.window = new WindowBox(10, $SCREEN_Y - 10 - 150, $SCREEN_X - 20, 150,
-                                new GraphicText(this.message));
+        new GraphicText(this.message, Align.Left), RPM.DIALOG_PADDING_BOX);
+    this.window.content.verticalAlign = Align.Left;
 }
 
 EventCommandShowText.prototype = {

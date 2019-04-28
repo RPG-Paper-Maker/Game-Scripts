@@ -361,6 +361,7 @@ RPM.LARGE_SPACE = 10;
 RPM.SMALL_PADDING_BOX = [10, 10, 10, 10];
 RPM.MEDIUM_PADDING_BOX = [20, 20, 20, 20];
 RPM.HUGE_PADDING_BOX = [30, 30, 30, 30];
+RPM.DIALOG_PADDING_BOX = [30, 50, 30, 50];
 RPM.SMALL_SLOT_PADDING = [10, 5, 10, 5];
 
 // -------------------------------------------------------

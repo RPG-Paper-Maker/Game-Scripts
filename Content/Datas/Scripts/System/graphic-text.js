@@ -29,17 +29,21 @@
 *   @param {number} w The w coords of the text.
 *   @param {number} h The h coords of the text.
 */
-function GraphicText(text, align, fontSize, fontName, x, y, w, h, color) {
+function GraphicText(text, align, fontSize, fontName, x, y, w, h, color,
+    verticalAlign)
+{
     Bitmap.call(this, x, y, w, h);
 
     // Default values
     if (typeof align === 'undefined') align = Align.Center;
     if (typeof fontSize === 'undefined') fontSize = $fontSize;
     if (typeof fontName === 'undefined') fontName = $fontName;
+    if (typeof verticalAlign === 'undefined') verticalAlign = Align.Center;
 
     this.text = text;
     this.align = align;
     this.color = color;
+    this.verticalAlign = verticalAlign;
 
     // Font
     this.fontName = fontName;
@@ -121,6 +125,8 @@ GraphicText.prototype = {
     *   @param {number} h The height dimention to draw graphic.
     */
     draw: function(x, y, w, h) {
+        var lineHeight, lines;
+        var i, l;
 
         // Default values
         if (typeof x === 'undefined') x = this.oX;
@@ -139,16 +145,27 @@ GraphicText.prototype = {
         $context.textAlign = this.align;
 
         // Correcting x and y according to alignment
-        y += (h / 2) + (RPM.getScreenY(this.fontSize) / 3);
-        switch(this.align){
+        switch(this.align) {
         case Align.Right:
             x += w; break;
         case Align.Center:
             x += (w / 2); break;
         }
+        y += RPM.getScreenY(this.fontSize) / 3;
+        switch(this.verticalAlign) {
+        case Align.Right:
+            y += h; break;
+        case Align.Center:
+            y += (h / 2); break;
+        }
 
-        // Drawinf the text
-        $context.fillText(this.text, x, y);
+        // Drawing the text
+        lineHeight = this.fontSize * 2;
+        lines = this.text.split("\n");
+        for (i = 0, l = lines.length; i < l; ++i) {
+            $context.fillText(lines[i], x, y);
+            y += lineHeight;
+        }
     },
 
     // -------------------------------------------------------
