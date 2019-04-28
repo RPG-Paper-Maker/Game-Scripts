@@ -201,6 +201,7 @@ Game.prototype = {
     getCompressedMapsDatas: function() {
         var obj = {}, i, j, k, l = Object.keys(this.mapsDatas).length, w, h, id,
             datas, inf, objPortion;
+        /*
         for (id in this.mapsDatas) {
             objPortion = new Array(l);
             l = this.mapsDatas[id].length;
@@ -236,6 +237,7 @@ Game.prototype = {
             }
             obj[id] = objPortion;
         }
+        */
 
         return obj;
     }
