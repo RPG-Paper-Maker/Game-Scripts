@@ -133,11 +133,13 @@ SceneMap.prototype = {
 
     // -------------------------------------------------------
 
-    loadPortions: function(){
+    loadPortions: function(noNewPortion) {
         this.currentPortion = RPM.getPortion(this.getHeroPosition());
 
         var limit = this.getMapPortionLimit();
-        this.mapPortions = new Array(this.getMapPortionTotalSize());
+        if (!noNewPortion) {
+            this.mapPortions = new Array(this.getMapPortionTotalSize());
+        }
         for (var i = -limit; i <= limit; i++) {
             for (var j = -limit; j <= limit; j++) {
                 for (var k = -limit; k <= limit; k++) {
@@ -369,6 +371,11 @@ SceneMap.prototype = {
 
     setMapPortion: function(x, y, z, mapPortion) {
         var index = this.getPortionIndex(x, y, z);
+        var currentMapPortion = this.mapPortions[index];
+        if (currentMapPortion) {
+            currentMapPortion.cleanAll();
+        }
+
         this.mapPortions[index] = mapPortion;
     },
 

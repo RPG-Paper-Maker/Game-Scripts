@@ -730,7 +730,7 @@ EventCommandTeleportObject.prototype = {
                             $gameStack.replace(new SceneMap(id));
                         }
                         else {
-                            $currentMap.loadPortions();
+                            $currentMap.loadPortions(true);
                         }
                     }
                 }
