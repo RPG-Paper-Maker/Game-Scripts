@@ -49,8 +49,12 @@ SystemObjectState.prototype = {
         this.id = json.id;
         this.graphicID = json.gid;
         this.graphicKind = json.gk;
-        this.indexX = json.x;
-        this.indexY = json.y;
+        if (this.graphicID === 0) {
+            this.rectTileset = json.rt;
+        } else {
+            this.indexX = json.x;
+            this.indexY = json.y;
+        }
         this.moveAnimation = json.move;
         this.stopAnimation = json.stop;
         this.climbAnimation = json.climb;

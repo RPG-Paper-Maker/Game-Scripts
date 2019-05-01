@@ -28,9 +28,10 @@ function SystemParameter(){
 SystemParameter.readParameters = function(json){
     var i, l;
     var jsonParameters = json.p;
-    l = jsonParameters.length;
+
+    l = jsonParameters ? jsonParameters.length : 0;
     var parameters = new Array(l+1);
-    for (i = 0, l = jsonParameters.length; i < l; i++){
+    for (i = 0; i < l; i++){
         var jsonParameter = jsonParameters[i];
         var parameter = new SystemParameter();
         parameter.readJSON(jsonParameter);

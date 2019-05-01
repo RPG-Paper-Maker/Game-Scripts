@@ -38,6 +38,7 @@ SystemTileset.prototype = {
         var i, l;
         var jsonAutotiles = json.auto, jsonWalls = json.walls;
 
+        this.id = json.id;
         this.picture = $datasGame.pictures.list[PictureKind.Tilesets][json.pic];
 
         // Special elements

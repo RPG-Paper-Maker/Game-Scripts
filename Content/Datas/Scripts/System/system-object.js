@@ -44,7 +44,7 @@ SystemObject.prototype = {
 
             // States
             var states = inheritedObject.states;
-            l = states.length;
+            l = states ? states.length : 0;
             for (i = 0; i < l; i++){
                 this.states.push(states[i]);
             }
@@ -63,7 +63,7 @@ SystemObject.prototype = {
 
         // States
         jsonStates = json.states;
-        l = jsonStates.length;
+        l = jsonStates ? jsonStates.length : 0;
         for (i = 0; i < l; i++){
             jsonState = jsonStates[i];
             id = jsonState.id;
@@ -78,7 +78,7 @@ SystemObject.prototype = {
 
         // Events
         jsonEvents = json.events;
-        l = jsonEvents.length;
+        l = jsonEvents ? jsonEvents.length : 0;
         for (i = 0; i < l; i++){
             jsonEvent = jsonEvents[i];
             var event = new SystemObjectEvent();

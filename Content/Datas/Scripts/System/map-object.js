@@ -131,6 +131,7 @@ MapObject.prototype = {
     */
     changeState: function(){
         var angle = this.mesh ? this.mesh.rotation.y : 0;
+        var x, y;
 
         // Remove previous mesh
         this.removeFromScene();
@@ -157,8 +158,9 @@ MapObject.prototype = {
         }
 
         // Update mesh
-        var material =
-                $currentMap.texturesCharacters[this.currentState.graphicID];
+        var material = this.currentState.graphicID === 0 ? $currentMap
+            .textureTileset : $currentMap.texturesCharacters[this.currentState
+            .graphicID];
         this.meshBoundingBox = new Array;
         if (this.currentState !== null && !this.isNone() &&
             typeof material.map !== 'undefined')
@@ -166,11 +168,23 @@ MapObject.prototype = {
             this.frame = this.currentState.indexX;
             this.orientationEye = this.currentState.indexY;
             this.updateOrientation();
-            this.width = Math.floor(material.map.image.width / $SQUARE_SIZE /
-                $FRAMES);
-            this.height = Math.floor(material.map.image.height / $SQUARE_SIZE / 4);
+
+            if (this.currentState.graphicID === 0) {
+                x = this.currentState.rectTileset[0];
+                y = this.currentState.rectTileset[1];
+                this.width = this.currentState.rectTileset[2];
+                this.height = this.currentState.rectTileset[3];
+            } else {
+                x = 0;
+                y = 0;
+                this.width = Math.floor(material.map.image.width / $SQUARE_SIZE /
+                    $FRAMES);
+                this.height = Math.floor(material.map.image.height /
+                    $SQUARE_SIZE / 4);
+            }
+
             var sprite = new Sprite(this.currentState.graphicKind,
-                                    [0, 0, this.width, this.height]);
+                                    [x, y, this.width, this.height]);
             var geometry, objCollision, result;
             result = sprite.createGeometry(this.width, this.height, false,
                                            this.position);
@@ -181,6 +195,11 @@ MapObject.prototype = {
                                    this.position.y,
                                    this.position.z);
             this.boundingBoxSettings = objCollision[1][0];
+            if (this.currentState.graphicID === 0) {
+                this.boundingBoxSettings.squares = $currentMap.mapInfos.tileset
+                    .picture.getSquaresForTexture(this.currentState.rectTileset);
+            }
+
             this.updateBB(this.position);
             this.updateUVs();
             this.updateAngle(angle);
@@ -318,9 +337,12 @@ MapObject.prototype = {
     *   @param {THREE.Vector3} position Position to update.
     */
     updateBB: function(position) {
-        this.boundingBoxSettings.squares = $currentMap.collisions
-            [PictureKind.Characters][this.currentState.graphicID]
-            [this.getStateIndex()];
+        if (this.currentState.graphicID !== 0) {
+            this.boundingBoxSettings.squares = $currentMap.collisions
+                [PictureKind.Characters][this.currentState.graphicID]
+                [this.getStateIndex()];
+        }
+
         this.boundingBoxSettings.b = new Array;
         var i, l, box;
         this.removeBBFromScene();
@@ -669,12 +691,22 @@ MapObject.prototype = {
     */
     updateUVs: function(){
         if (this.mesh !== null && !this.isNone()) {
-            var textureWidth = this.mesh.material.map.image.width;
-            var textureHeight = this.mesh.material.map.image.height;
-            var w = this.width * $SQUARE_SIZE / textureWidth;
-            var h = this.height * $SQUARE_SIZE / textureHeight;
-            var x = this.frame * w;
-            var y = this.orientation * h;
+            var textureWidth, textureHeight;
+            var x, y, w, h;
+
+            textureWidth = this.mesh.material.map.image.width;
+            textureHeight = this.mesh.material.map.image.height;
+            if (this.currentState.graphicID === 0) {
+                w = this.width * $SQUARE_SIZE / textureWidth;
+                h = this.height * $SQUARE_SIZE / textureHeight;
+                x = this.currentState.rectTileset[0] * $SQUARE_SIZE / textureWidth;
+                y = this.currentState.rectTileset[1] * $SQUARE_SIZE / textureHeight;
+            } else {
+                w = this.width * $SQUARE_SIZE / textureWidth;
+                h = this.height * $SQUARE_SIZE / textureHeight;
+                x = this.frame * w;
+                y = this.orientation * h;
+            }
 
             // Update geometry
             this.mesh.geometry.faceVertexUvs[0][0][0].set(x, y);
@@ -693,11 +725,12 @@ MapObject.prototype = {
     */
     updateMaterial: function(){
         if (!this.isNone()){
-            this.mesh.material =
-                 $currentMap.texturesCharacters[this.currentState.graphicID];
-        }
-        else
+            this.mesh.material = this.currentState.graphicID === 0 ?
+                $currentMap.textureTileset : $currentMap.texturesCharacters[
+                this.currentState.graphicID];
+        } else {
             this.mesh = null;
+        }
     },
 
     // -------------------------------------------------------

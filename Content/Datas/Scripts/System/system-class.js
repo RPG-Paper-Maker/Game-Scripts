@@ -91,7 +91,7 @@ SystemClass.prototype.getExperienceTable = function(upClass) {
 // -------------------------------------------------------
 
 SystemClass.prototype.getStatisticsProgression = function(upClass) {
-    var list = [], i, l, checked;
+    var list = [], i, j, l, ll, checked;
     for (i = 0, l = this.statisticsProgression.length; i < l; i++) {
         list.push(this.statisticsProgression[i]);
     }
