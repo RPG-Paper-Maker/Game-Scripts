@@ -233,7 +233,7 @@ GamePlayer.prototype = {
     // -------------------------------------------------------
 
     getEquipmentStatsAndBonus: function(item, idEquipment) {
-        var statistics, list, bonus, caracteristics, caracteristic, result,
+        var statistics, list, bonus, characteristics, characteristic, result,
             statistic, base, statisticsProgression, previewPlayer,
             statisticProgression;
         var i, j, k, l, ll;
@@ -251,25 +251,25 @@ GamePlayer.prototype = {
                 if (!item) {
                     continue;
                 }
-                caracteristics = item.caracteristics;
+                characteristics = item.characteristics;
             } else {
                 if (this.equip[k] === null) {
                     continue;
                 }
-                caracteristics = this.equip[k].getItemInformations()
-                    .caracteristics;
+                characteristics = this.equip[k].getItemInformations()
+                    .characteristics;
             }
-            if (caracteristics) {
-                for (i = 0, l = caracteristics.length; i < l; i++) {
-                    caracteristic = caracteristics[i];
-                    result = caracteristic.getNewStatValue(this);
+            if (characteristics) {
+                for (i = 0, l = characteristics.length; i < l; i++) {
+                    characteristic = characteristics[i];
+                    result = characteristic.getNewStatValue(this);
                     if (result !== null) {
                         if (list[result[0]] === null) {
                             statistic = statistics[result[0]];
                             base = this[statistic.getAbbreviationNext()] - this[
                                 statistic.getBonusAbbreviation()];
-                            list[result[0]] = caracteristic.operation ? 0 : base;
-                            bonus[result[0]] = caracteristic.operation ? -base :
+                            list[result[0]] = characteristic.operation ? 0 : base;
+                            bonus[result[0]] = characteristic.operation ? -base :
                                 0;
                         }
                         list[result[0]] += result[1];

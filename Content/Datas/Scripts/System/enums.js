@@ -294,18 +294,18 @@ var EffectSpecialActionKind = {
 Object.freeze(EffectSpecialActionKind);
 
 /**
-*   Enum for the different caracteristic kind.
+*   Enum for the different characteristic kind.
 *   @enum {number}
 *   @readonly
 */
-var CaracteristicKind = {
+var CharacteristicKind = {
     IncreaseDecrease: 0,
     Script: 1,
     AllowForbidEquip: 2,
     AllowForbidChange: 3,
     BeginEquipment: 4
 };
-Object.freeze(CaracteristicKind);
+Object.freeze(CharacteristicKind);
 
 /**
 *   Enum for the different increase / decrease kind.

@@ -39,11 +39,11 @@ function GraphicSkillItem(skillItem) {
                 .MEDIUM_FONT_SIZE));
         }
     }
-    this.graphicCaracteristics = [];
-    for (i = 0, l = this.skillItem.caracteristics.length; i < l; i++) {
-        txt = this.skillItem.caracteristics[i].toString();
+    this.graphicCharacteristics = [];
+    for (i = 0, l = this.skillItem.characteristics.length; i < l; i++) {
+        txt = this.skillItem.characteristics[i].toString();
         if (txt) {
-            this.graphicCaracteristics.push(new GraphicText(txt, Align.Left, RPM
+            this.graphicCharacteristics.push(new GraphicText(txt, Align.Left, RPM
                 .MEDIUM_FONT_SIZE));
         }
     }
@@ -80,8 +80,8 @@ GraphicSkillItem.prototype = {
             offsetY += graphic.fontSize + RPM.MEDIUM_SPACE;
         }
         offsetY += RPM.LARGE_SPACE;
-        for (i = 0, l = this.graphicCaracteristics.length; i < l; i++) {
-            graphic = this.graphicCaracteristics[i];
+        for (i = 0, l = this.graphicCharacteristics.length; i < l; i++) {
+            graphic = this.graphicCharacteristics[i];
             graphic.draw(x, y + offsetY, w, 0);
             offsetY += graphic.fontSize + RPM.MEDIUM_SPACE;
         }

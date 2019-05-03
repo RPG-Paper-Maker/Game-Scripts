@@ -28,7 +28,7 @@ SystemCommonSkillItem.prototype = Object.create(SystemIcon.prototype);
 
 SystemCommonSkillItem.prototype.readJSON = function(json) {
     SystemIcon.prototype.readJSON.call(this, json);
-    var jsonCosts, jsonEffects, jsonCaracteristics, cost, effect, caracteristic;
+    var jsonCosts, jsonEffects, jsonCharacteristics, cost, effect, characteristic;
     var i, l;
 
     this.type = typeof json.t !== 'undefined' ? json.t : 1;
@@ -65,13 +65,13 @@ SystemCommonSkillItem.prototype.readJSON = function(json) {
         effect.readJSON(jsonEffects[i]);
         this.effects[i] = effect;
     }
-    jsonCaracteristics = json.car;
-    l = jsonCaracteristics ? jsonCaracteristics.length : 0;
-    this.caracteristics = new Array(l);
+    jsonCharacteristics = json.car;
+    l = jsonCharacteristics ? jsonCharacteristics.length : 0;
+    this.characteristics = new Array(l);
     for (i = 0; i < l; i++) {
-        caracteristic = new SystemCaracteristic();
-        caracteristic.readJSON(jsonCaracteristics[i]);
-        this.caracteristics[i] = caracteristic;
+        characteristic = new SystemCharacteristic();
+        characteristic.readJSON(jsonCharacteristics[i]);
+        this.characteristics[i] = characteristic;
     }
 }
 

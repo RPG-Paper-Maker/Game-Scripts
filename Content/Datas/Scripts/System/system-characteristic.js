@@ -14,20 +14,20 @@
 // -------------------------------------------------------
 
 /** @class
-*   A caracteristic of a common skill item.
+*   A characteristic of a common skill item.
 */
-function SystemCaracteristic() {
+function SystemCharacteristic() {
 
 }
 
 // -------------------------------------------------------
 
-SystemCaracteristic.prototype.readJSON = function(json) {
-    this.kind = typeof json.k !== 'undefined' ? json.k : CaracteristicKind
+SystemCharacteristic.prototype.readJSON = function(json) {
+    this.kind = typeof json.k !== 'undefined' ? json.k : CharacteristicKind
         .IncreaseDecrease;
 
     switch (this.kind) {
-    case CaracteristicKind.IncreaseDecrease:
+    case CharacteristicKind.IncreaseDecrease:
         this.isIncreaseDecrease = typeof json.iid !== 'undefined' ? json.iid :
             true;
         this.increaseDecreaseKind = typeof json.idk !== 'undefined' ? json.idk :
@@ -58,21 +58,21 @@ SystemCaracteristic.prototype.readJSON = function(json) {
         this.value = SystemValue.readOrDefaultNumber(json.v);
         this.unit = typeof json.u !== 'undefined' ? json.u : true;
         break;
-    case CaracteristicKind.Script:
+    case CharacteristicKind.Script:
         this.script = SystemValue.readOrDefaultMessage(json.s);
         break;
-    case CaracteristicKind.AllowForbidEquip:
+    case CharacteristicKind.AllowForbidEquip:
         this.isAllowEquip = typeof json.iae !== 'undefined' ? json.iae : true;
         this.isAllowEquipWeapon = typeof json.iaew ? json.iaew : true;
         this.equipWeaponTypeID = SystemValue.readOrDefaultDatabase(json.ewtid);
         this.equipArmorTypeID = SystemValue.readOrDefaultDatabase(json.eatid);
         break;
-    case CaracteristicKind.AllowForbidChange:
+    case CharacteristicKind.AllowForbidChange:
         this.isAllowChangeEquipment = typeof json.iace !== 'undefined' ? json
             .iace : true;
         this.changeEquipmentID = SystemValue.readOrDefaultDatabase(json.ceid);
         break;
-    case CaracteristicKind.BeginEquipment:
+    case CharacteristicKind.BeginEquipment:
         this.beginEquipmentID = SystemValue.readOrDefaultDatabase(json.beid);
         this.isBeginWeapon = typeof json.ibw !== 'undefined' ? json.ibw : true;
         this.beginWeaponArmorID = SystemValue.readOrDefaultDatabase(json.bwaid);
@@ -82,11 +82,11 @@ SystemCaracteristic.prototype.readJSON = function(json) {
 
 // -------------------------------------------------------
 
-SystemCaracteristic.prototype.getNewStatValue = function(gamePlayer) {
+SystemCharacteristic.prototype.getNewStatValue = function(gamePlayer) {
     var statID, stat, value, baseStatValue;
 
     switch (this.kind) {
-    case CaracteristicKind.IncreaseDecrease:
+    case CharacteristicKind.IncreaseDecrease:
         switch (this.increaseDecreaseKind) {
         case IncreaseDecreaseKind.StatValue:
             statID = this.statisticValueID.getValue();
@@ -112,7 +112,7 @@ SystemCaracteristic.prototype.getNewStatValue = function(gamePlayer) {
 
 // -------------------------------------------------------
 
-SystemCaracteristic.prototype.toString = function() {
+SystemCharacteristic.prototype.toString = function() {
     var user, target, result;
 
     user = $currentMap.user ? ($currentMap.isBattleMap ? $currentMap.user
@@ -126,7 +126,7 @@ SystemCaracteristic.prototype.toString = function() {
 
     result = "";
     switch (this.kind) {
-    case CaracteristicKind.IncreaseDecrease:
+    case CharacteristicKind.IncreaseDecrease:
         var sign, value;
 
         switch (this.increaseDecreaseKind) {
@@ -180,10 +180,10 @@ SystemCaracteristic.prototype.toString = function() {
             result += "%";
         }
         break;
-    case CaracteristicKind.Script:
-    case CaracteristicKind.AllowForbidEquip:
-    case CaracteristicKind.AllowForbidChange:
-    case CaracteristicKind.BeginEquipment:
+    case CharacteristicKind.Script:
+    case CharacteristicKind.AllowForbidEquip:
+    case CharacteristicKind.AllowForbidChange:
+    case CharacteristicKind.BeginEquipment:
         break;
     }
 

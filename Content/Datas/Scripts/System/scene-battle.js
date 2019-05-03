@@ -40,7 +40,7 @@
 *   @property {WindowBox} windowTopInformations The window on top that shows
 *   specific informations.
 *   @property {WindowBox} windowCharacterInformations The window on bot that
-*   shows caracteristics informations.
+*   shows characteristics informations.
 *   @property {WindowChoice} windowChoicesBattleCommands The window for battle
 *   commands.
 *   @property {WindowBox} arrowSelection The arrow used to select
