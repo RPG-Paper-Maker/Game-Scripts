@@ -62,7 +62,7 @@ function GraphicEquipStats(gamePlayer, newValues){
             this.listStatsNames.push(graphicName);
 
             // Value of the stat
-            txt = gamePlayer[statistic.abbreviation];
+            txt = "" + gamePlayer[statistic.abbreviation];
             if (!statistic.isFix) {
                txt += "/" + gamePlayer[statistic.getMaxAbbreviation()];
             }
@@ -77,7 +77,7 @@ function GraphicEquipStats(gamePlayer, newValues){
             if (this.isChanging) {
                 txt = newValues[id];
                 if (statistic.isFix) {
-                    txt = newValues[id];
+                    txt = "" + newValues[id];
                 } else {
                     txt = Math.min(gamePlayer[statistic.abbreviation], newValues
                         [id]) + "/" + newValues[id];

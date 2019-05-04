@@ -337,6 +337,11 @@ GamePlayer.prototype = {
     // -------------------------------------------------------
 
     initStatValue: function(statistic, value) {
+        if (!statistic) {
+            var a = 1;
+            a = 1;
+        }
+
         this[statistic.abbreviation] = value;
         if (!statistic.isFix) {
             this[statistic.getMaxAbbreviation()] = value;
