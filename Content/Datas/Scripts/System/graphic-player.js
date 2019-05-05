@@ -165,9 +165,9 @@ GraphicPlayer.prototype = {
     // -------------------------------------------------------
 
     updateExperience: function() {
-        this.graphicLevel.setText(this.gamePlayer[$datasGame.battleSystem
+        this.graphicLevel.setText("" + this.gamePlayer[$datasGame.battleSystem
             .getLevelStatistic().abbreviation]);
-        this.graphicExp.setText(this.gamePlayer.getBarAbbreviation($datasGame
+        this.graphicExp.setText("" + this.gamePlayer.getBarAbbreviation($datasGame
             .battleSystem.getExpStatistic()));
     },
 

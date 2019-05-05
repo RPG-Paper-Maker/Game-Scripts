@@ -297,6 +297,10 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
             case EffectSpecialActionKind.Escape:
                 this.step = 4;
                 this.subStep = 3;
+                this.transitionEnded = false;
+                $songsManager.initializeProgressionMusic(SystemPlaySong
+                    .currentPlayingMusic.volume, 0, 0, SceneBattle
+                    .TIME_LINEAR_MUSIC_END);
                 for (i = 0, l = this.battlers[CharacterKind.Hero].length; i < l;
                      i++)
                 {
