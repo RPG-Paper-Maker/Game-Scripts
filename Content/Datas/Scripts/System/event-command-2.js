@@ -715,30 +715,25 @@ EventCommandTeleportObject.prototype = {
             }
 
             if (currentState.position !== null){
-
-                // If needs teleport hero in another map
-                if (this.idMap !== null){
-                    var id = this.idMap.getValue();
-
-                    // If hero set the current map
-                    if (objectID === 0 ||
-                        (objectID === -1 && object.isHero))
-                    {
-                        $game.hero.position = currentState.position;
-                        if ($currentMap.id !== id) {
-                            $currentMap.closeMap();
-                            $gameStack.replace(new SceneMap(id));
-                        }
-                        else {
-                            $currentMap.loadPortions(true);
-                        }
-                    }
-                }
-
                 // Teleport
                 MapObject.updateObjectWithID(object, objectID, this,
                                              function(moved)
                 {
+                    // If needs teleport hero in another map
+                    if (this.idMap !== null){
+                        var id = this.idMap.getValue();
+
+                        // If hero set the current map
+                        if (moved.isHero) {
+                            $game.hero.position = currentState.position;
+                            if ($currentMap.id !== id) {
+                                $currentMap.closeMap();
+                                $gameStack.replace(new SceneMap(id));
+                            } else {
+                                $currentMap.loadPortions(true);
+                            }
+                        }
+                    }
                     moved.teleport(currentState.position);
                     currentState.teleported = true;
                 });
@@ -830,7 +825,10 @@ EventCommandMoveObject.prototype = {
             index: 0,
             distance: 0,
             normalDistance: 0,
-            position: null
+            position: null,
+            waitingPosition: false,
+            moved: false,
+            object: null
         }
     },
 
@@ -927,18 +925,36 @@ EventCommandMoveObject.prototype = {
     */
     update: function(currentState, object, state){
         if (currentState.parallel) {
-            var finished = this.moves[currentState.index].call(
-                        this, currentState, object,
-                        this.parameters[currentState.index]);
+            if (!currentState.waitingObject) {
+                var objectID = this.objectID.getValue();
 
-            if (finished) {
-                currentState.distance = 0;
-                currentState.normalDistance = 0;
-                currentState.index = currentState.index + 1;
-                currentState.position = null;
+                if (objectID === 0 || (object.isHero && objectID === -1)) {
+                    currentState.object = $game.hero;
+                } else {
+                    MapObject.updateObjectWithID(object, objectID, this, function(
+                        moved)
+                    {
+                        currentState.object = moved;
+                    });
+                }
+                currentState.waitingObject = true;
+            }
+            if (currentState.object !== null) {
+                var finished = this.moves[currentState.index].call(this,
+                    currentState, currentState.object, this.parameters[
+                    currentState.index]);
+
+                if (finished) {
+                    currentState.distance = 0;
+                    currentState.normalDistance = 0;
+                    currentState.index = currentState.index + 1;
+                    currentState.position = null;
+                }
+
+                return (this.moves[currentState.index] == null) ? 1 : 0;
             }
 
-            return (this.moves[currentState.index] == null) ? 1 : 0;
+            return 0;
         }
 
         return 1;

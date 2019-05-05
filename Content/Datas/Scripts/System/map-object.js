@@ -93,11 +93,10 @@ MapObject.updateObjectWithID = function(object, objectID, base, callback){
         }
 
         // If not moving, search directly in portion
-        if ($currentMap.isInPortionRay(localPortion)){
-            mapPortion = $currentMap.mapPortions[localPortion[0]]
-                                                [localPortion[1]]
-                                                [localPortion[2]];
+        if ($currentMap.isInPortion(localPortion)) {
+            mapPortion = $currentMap.getMapPortionByPortion(localPortion);
             objects = mapPortion.objectsList;
+
             for (i = 0, l = objects.length; i < l; i++){
                 if (objects[i].system.id === objectID){
                     moved = objects[i];
@@ -105,7 +104,11 @@ MapObject.updateObjectWithID = function(object, objectID, base, callback){
                 }
             }
 
-            callback.call(base, moved);
+            if (moved === null) {
+                callback.call(base, $game.hero);
+            } else {
+                callback.call(base, moved);
+            }
         }
         // Load the file if not already in temp
         else{
@@ -118,7 +121,12 @@ MapObject.updateObjectWithID = function(object, objectID, base, callback){
                                             globalPortion[1],
                                             globalPortion[2]);
                 moved = mapPortion.getObjFromID(json.objs.sprites, objectID);
-                callback.call(base, moved);
+
+               if (moved === null) {
+                   callback.call(base, $game.hero);
+               } else {
+                   callback.call(base, moved);
+               }
             });
         }
         break;
