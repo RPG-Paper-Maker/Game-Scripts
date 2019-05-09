@@ -128,6 +128,10 @@ SceneMenuInventory.prototype = {
             {
                 var targetKind, availableKind;
 
+                if (this.windowInformations.content === null) {
+                    return;
+                }
+
                 targetKind = this.windowInformations.content.item.targetKind;
                 availableKind = this.windowInformations.content.item
                     .availableKind;

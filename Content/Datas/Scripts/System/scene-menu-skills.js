@@ -113,6 +113,10 @@ SceneMenuSkills.prototype = {
             {
                 var targetKind, availableKind;
 
+                if (this.windowInformations.content === null) {
+                    return;
+                }
+
                 targetKind = this.windowInformations.content.skill.targetKind;
                 availableKind = this.windowInformations.content.skill
                     .availableKind;
