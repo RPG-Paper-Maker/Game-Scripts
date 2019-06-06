@@ -209,7 +209,7 @@ SceneMap.prototype = {
     // -------------------------------------------------------
 
     setPortion: function(i, j, k, m, n, o) {
-        this.setMapPortion(i, j, k, this.getMapPortion(m, n, o));
+        this.setMapPortion(i, j, k, this.getMapPortion(m, n, o), true);
     },
 
     // -------------------------------------------------------
@@ -369,10 +369,10 @@ SceneMap.prototype = {
 
     // -------------------------------------------------------
 
-    setMapPortion: function(x, y, z, mapPortion) {
+    setMapPortion: function(x, y, z, mapPortion, move) {
         var index = this.getPortionIndex(x, y, z);
         var currentMapPortion = this.mapPortions[index];
-        if (currentMapPortion) {
+        if (currentMapPortion && !move) {
             currentMapPortion.cleanAll();
         }
 
