@@ -163,13 +163,13 @@ SceneMap.prototype = {
     *   @param {number} z The local z portion.
     */
     loadPortion: function(realX, realY, realZ, x, y, z, wait) {
-        var lx = Math.floor((this.mapInfos.length - 1) / $PORTION_SIZE);
-        var ly = Math.floor((this.mapInfos.depth + this.mapInfos.height - 1) /
-                $PORTION_SIZE);
-        var lz = Math.floor((this.mapInfos.width - 1) / $PORTION_SIZE);
+        var lx = Math.ceil(this.mapInfos.length / $PORTION_SIZE);
+        var lz = Math.ceil(this.mapInfos.width / $PORTION_SIZE);
+        var ld = Math.ceil(this.mapInfos.depth / $PORTION_SIZE);
+        var lh = Math.ceil(this.mapInfos.height / $PORTION_SIZE);
 
-        if (realX >= 0 && realX <= lx && realY >= 0 && realY <= ly &&
-            realZ >= 0 && realZ <= lz)
+        if (realX >= 0 && realX < lx && realY >= -ld && realY < lh &&
+            realZ >= 0 && realZ < lz)
         {
             var fileName = SceneMap.getPortionName(realX, realY, realZ);
             RPM.openFile(this, RPM.FILE_MAPS + this.mapName + "/" +
@@ -244,13 +244,13 @@ SceneMap.prototype = {
 
         var l = Math.ceil(this.mapInfos.length / $PORTION_SIZE);
         var w = Math.ceil(this.mapInfos.width / $PORTION_SIZE);
-        var h = Math.ceil(this.mapInfos.height / $PORTION_SIZE) +
-                Math.ceil(this.mapInfos.depth / $PORTION_SIZE);
+        var d = Math.ceil(this.mapInfos.depth / $PORTION_SIZE);
+        var h = Math.ceil(this.mapInfos.height / $PORTION_SIZE);
 
         var objectsPortions = new Array(l);
         for (var i = 0; i < l; i++){
             objectsPortions[i] = new Array(h);
-            for (var j = 0; j < h; j++){
+            for (var j = -d; j < h; j++){
                 objectsPortions[i][j] = new Array(w);
                 for (var k = 0; k < w; k++){
                     datas = (mapsDatas) ? mapsDatas[i][j][k] : null;
@@ -512,12 +512,12 @@ SceneMap.prototype = {
         var i, j, k;
         var l = Math.ceil(this.mapInfos.length / $PORTION_SIZE);
         var w = Math.ceil(this.mapInfos.width / $PORTION_SIZE);
-        var h = Math.ceil(this.mapInfos.height / $PORTION_SIZE) +
-                Math.ceil(this.mapInfos.depth / $PORTION_SIZE);
+        var d = Math.ceil(this.mapInfos.depth / $PORTION_SIZE);
+        var h = Math.ceil(this.mapInfos.height / $PORTION_SIZE);
 
         var objectsPortions = $game.mapsDatas[this.id];
         for (i = 0; i < l; i++){
-            for (j = 0; j < h; j++){
+            for (j = -d; j < h; j++){
                 for (k = 0; k < w; k++){
                     var portion = objectsPortions[i][j][k];
                     portion.mr = [];
@@ -579,18 +579,20 @@ SceneMap.prototype = {
     updatePortions: function(base, callback) {
         var limit = this.getMapPortionLimit();
         var i, j, k, p, l, x, y, z;
-        var lx = Math.floor((this.mapInfos.length - 1) / $PORTION_SIZE);
-        var ly = Math.floor((this.mapInfos.depth + this.mapInfos.height - 1) /
-                $PORTION_SIZE);
-        var lz = Math.floor((this.mapInfos.width - 1) / $PORTION_SIZE);
+
+        var lx = Math.ceil(this.mapInfos.length / $PORTION_SIZE);
+        var lz = Math.ceil(this.mapInfos.width / $PORTION_SIZE);
+        var ld = Math.ceil(this.mapInfos.depth / $PORTION_SIZE);
+        var lh = Math.ceil(this.mapInfos.height / $PORTION_SIZE);
+
         for (i = -limit; i <= limit; i++) {
             for (j = -limit; j <= limit; j++) {
                 for (k = -limit; k <= limit; k++) {
                     x = this.currentPortion[0] + i;
                     y = this.currentPortion[1] + j;
                     z = this.currentPortion[2] + k;
-                    if (x >= 0 && x <= lx && y >= 0 && y <= ly && z >= 0 &&
-                        z <= lz)
+                    if (x >= 0 && x < lx && y >= -ld && y < lh && z >= 0 &&
+                        z < lz)
                     {
                         callback.call(base, x, y, z, i, j, k);
                     }

@@ -82,7 +82,8 @@ DatasSystem.prototype = {
 
             // Other numbers
             $SQUARE_SIZE = json.ss;
-            $PORTIONS_RAY_NEAR = json.pr;
+            //$PORTIONS_RAY_NEAR = json.pr;
+            $PORTIONS_RAY_NEAR = 3;
             $FRAMES = json.frames;
 
             // Path BR
