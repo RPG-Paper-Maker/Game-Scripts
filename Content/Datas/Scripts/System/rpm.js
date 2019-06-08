@@ -531,8 +531,9 @@ RPM.generateMapName = function(id){
 *   @returns {number}
 */
 RPM.positionJSONToIndex = function(position){
-    return (position[0] % $PORTION_SIZE) + (position[3] % $PORTION_SIZE)
-            * $PORTION_SIZE;
+    return (position[0] % $PORTION_SIZE) + (RPM.mod(position[1], $PORTION_SIZE) *
+        $PORTION_SIZE) + ((position[3] % $PORTION_SIZE) * $PORTION_SIZE *
+        $PORTION_SIZE);
 }
 
 // -------------------------------------------------------
@@ -543,8 +544,9 @@ RPM.positionJSONToIndex = function(position){
 *   @returns {number}
 */
 RPM.positionToIndex = function(position){
-    return (position[0] % $PORTION_SIZE) + (position[2] % $PORTION_SIZE) *
-            $PORTION_SIZE;
+    return (position[0] % $PORTION_SIZE) + (RPM.mod(position[1], $PORTION_SIZE) *
+        $PORTION_SIZE) + ((position[2] % $PORTION_SIZE) * $PORTION_SIZE *
+        $PORTION_SIZE);
 }
 
 // -------------------------------------------------------

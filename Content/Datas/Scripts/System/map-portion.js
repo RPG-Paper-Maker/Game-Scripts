@@ -36,9 +36,10 @@ function MapPortion(realX, realY, realZ){
     this.realZ = realZ;
     this.staticFloorsMesh = null;
     this.staticSpritesMesh = null;
-    l = $PORTION_SIZE * $PORTION_SIZE;
-    this.boundingBoxesLands = new Array($PORTION_SIZE * $PORTION_SIZE);
-    this.boundingBoxesSprites = new Array($PORTION_SIZE * $PORTION_SIZE);
+    l = $PORTION_SIZE * $PORTION_SIZE * $PORTION_SIZE;
+    this.squareNonEmpty = new Array(l);
+    this.boundingBoxesLands = new Array(l);
+    this.boundingBoxesSprites = new Array(l);
     for (i = 0; i < l; i++) {
         this.boundingBoxesLands[i] = new Array;
         this.boundingBoxesSprites[i] = new Array;
@@ -285,6 +286,7 @@ MapPortion.prototype = {
         var width = material.map.image.width;
         var height = material.map.image.height;
         var geometry = new THREE.Geometry();
+        var index;
         geometry.faceVertexUvs[0] = [];
 
         for (var i = 0, length = json.length; i < length; i++){
@@ -294,10 +296,11 @@ MapPortion.prototype = {
             floor.read(jsonFloor.v);
             objCollision = floor.updateGeometry(geometry, position, width,
                                                height, i);
+            index = RPM.positionJSONToIndex(position);
             if (objCollision !== null) {
-                this.boundingBoxesLands[RPM.positionJSONToIndex(position)]
-                .push(objCollision);
+                this.boundingBoxesLands[index].push(objCollision);
             }
+            this.squareNonEmpty[index] = true;
         }
 
         geometry.uvsNeedUpdate = true;
@@ -319,7 +322,7 @@ MapPortion.prototype = {
         var jsonAutotile;
         var autotile, autotiles, textureAutotile, texture = null, objCollision;
         var i, l, index, autotilesLength = $currentMap.texturesAutotiles.length;
-        var position;
+        var position, indexPos;
 
         // Create autotiles according to the textures
         for (i = 0; i < autotilesLength; i++) {
@@ -333,6 +336,7 @@ MapPortion.prototype = {
             position = jsonAutotile.k;
             autotile = new Autotile;
             autotile.read(jsonAutotile.v);
+            indexPos = RPM.positionJSONToIndex(position);
 
             index = 0;
             for (; index < autotilesLength; index++) {
@@ -350,10 +354,10 @@ MapPortion.prototype = {
             if (texture !== null && texture.texture !== null) {
                 objCollision = autotiles.updateGeometry(position, autotile);
                 if (objCollision !== null) {
-                    this.boundingBoxesLands[RPM.positionJSONToIndex(position)]
-                    .push(objCollision);
+                    this.boundingBoxesLands[indexPos].push(objCollision);
                 }
             }
+            this.squareNonEmpty[indexPos] = true;
         }
 
         // Update all the geometry uvs and put it in the scene
@@ -705,10 +709,18 @@ MapPortion.prototype = {
                                   positionBefore, positionAfter, object,
                                   direction, testedCollisions)
     {
-        var lands = this.boundingBoxesLands[
-                    RPM.positionToIndex(jpositionAfter)];
-        var i, l, objCollision, positionCollision, boundingBox, collision;
+        var objCollision, positionCollision, boundingBox, collision, lands;
+        var i, l, index;
 
+        index = RPM.positionToIndex(jpositionAfter);
+        if (!this.squareNonEmpty[index]) {
+            return this.checkIntersectionLand(null, [(jpositionAfter[0] *
+                $SQUARE_SIZE) + ($SQUARE_SIZE / 2), (jpositionAfter[1] *
+                $SQUARE_SIZE) + 0.5, (jpositionAfter[2] * $SQUARE_SIZE) + (
+                $SQUARE_SIZE / 2), $SQUARE_SIZE, $SQUARE_SIZE, 0], object);
+        }
+
+        lands = this.boundingBoxesLands[index];
         if (lands !== null) {
             for (i = 0, l = lands.length; i < l; i++) {
                 objCollision = lands[i];
