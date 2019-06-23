@@ -308,6 +308,7 @@ RPM.FILE_MAP_INFOS = "/infos.json";
 RPM.FILE_MAP_OBJECTS = "/objects.json";
 RPM.FILE_PICTURES_DATAS = RPM.PATH_DATAS + "pictures.json";
 RPM.FILE_SONGS_DATAS = RPM.PATH_DATAS + "songs.json";
+RPM.FILE_SHAPES_DATAS = RPM.PATH_DATAS + "shapes.json";
 RPM.FILE_COMMON_EVENTS = RPM.PATH_DATAS + "commonEvents.json";
 RPM.FILE_ITEMS = RPM.PATH_DATAS + "items.json";
 RPM.FILE_SKILLS = RPM.PATH_DATAS + "skills.json";
@@ -340,11 +341,16 @@ RPM.PATH_RELIEFS = RPM.PATH_TEXTURES2D + "Reliefs";
 RPM.PATH_TILESETS = RPM.PATH_TEXTURES2D + "Tilesets";
 RPM.PATH_WALLS = RPM.PATH_TEXTURES2D + "Walls";
 RPM.PATH_BATTLERS = RPM.PATH_TEXTURES2D + "Battlers";
+RPM.PATH_OBJECTS_3D = RPM.PATH_TEXTURES2D + "Objects3D";
 RPM.PATH_SONGS = "Content/Songs/";
 RPM.PATH_MUSICS = RPM.PATH_SONGS + "Musics";
 RPM.PATH_BACKGROUND_SOUNDS = RPM.PATH_SONGS + "BackgroundSounds";
 RPM.PATH_SOUNDS = RPM.PATH_SONGS + "Sounds";
 RPM.PATH_MUSIC_EFFECTS = RPM.PATH_SONGS + "MusicEffects";
+RPM.PATH_SHAPES = "Content/Shapes/";
+RPM.PATH_OBJ = RPM.PATH_SHAPES + "OBJ";
+RPM.PATH_MTL = RPM.PATH_SHAPES + "MTL";
+RPM.PATH_OBJ_COLLISIONS = RPM.PATH_SHAPES + "Collisions";
 
 // -------------------------------------------------------
 //  CONSTANTS
@@ -710,7 +716,7 @@ RPM.getSquare = function(x) {
 *   @static
 *   @returns {number}
 */
-RPM.countFields = function count(obj) {
+RPM.countFields = function (obj) {
     if (obj.__count__ !== undefined) { // Old FF
         return obj.__count__;
     }

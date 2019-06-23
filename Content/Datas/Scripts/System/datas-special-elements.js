@@ -30,8 +30,9 @@ DatasSpecialElements.prototype = {
     */
     read: function(){
         RPM.openFile(this, RPM.FILE_SPECIAL_ELEMENTS, true, function(res){
-            var json, jsonAutotiles, jsonAutotile, jsonWalls, jsonWall;
-            var autotile, wall;
+            var json, jsonAutotiles, jsonAutotile, jsonWalls, jsonWall,
+                jsonObjects, jsonObject;
+            var autotile, wall, object;
             var i, l, id;
 
             json = JSON.parse(res);
@@ -58,6 +59,18 @@ DatasSpecialElements.prototype = {
                 wall = new SystemWall();
                 wall.readJSON(jsonWall);
                 this.walls[id] = wall;
+            }
+
+            // Objects 3D
+            jsonObjects = json.o;
+            l = jsonObjects.length;
+            this.objects = new Array(l + 1);
+            for (i = 0; i < l; i++) {
+                jsonObject = jsonObjects[i];
+                id = jsonObject.id;
+                object = new SystemObject3D();
+                object.readJSON(jsonObject);
+                this.objects[id] = object;
             }
         });
     }

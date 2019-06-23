@@ -48,6 +48,7 @@ function MapPortion(realX, realY, realZ){
     this.objectsList = new Array;
     this.faceSpritesList = new Array;
     this.staticWallsList = new Array;
+    this.staticObjects3DList = new Array;
 }
 
 // -------------------------------------------------------
@@ -260,6 +261,9 @@ MapPortion.prototype = {
     read: function(json, isMapHero){
         this.readLands(json.lands);
         this.readSprites(json.sprites);
+        if (json.objs3d) {
+            this.readObjects3D(json.objs3d);
+        }
         this.readObjects(json.objs.list, isMapHero);
         this.overflow = json.overflow;
     },
@@ -490,6 +494,81 @@ MapPortion.prototype = {
 
     // -------------------------------------------------------
 
+    /** Read the JSON associated to the objects 3D in the portion.
+    *   @param {Object} json Json object describing the object.
+    */
+    readObjects3D: function(json) {
+        var i, l, objectsIds, count, o, position, v, obj3D, jsonAll, datas;
+        var hash, geometry, material, obj, mesh, result, collisions;
+
+        jsonAll = json.a;
+        objectsIds = $currentMap.texturesObjects3D.length;
+        hash = new Array(objectsIds);
+        for (i = 1; i <= objectsIds; i++) {
+            hash[i] = null;
+        }
+        for (i = 0, l = jsonAll.length; i < l; i++) {
+
+            // Getting object 3D
+            o = jsonAll[i];
+            position = o.k;
+            v = o.v;
+            datas = $datasGame.specialElements.objects[v.did];
+            switch (datas.shapeKind) {
+            case ShapeKind.Box:
+                obj3D = new Object3DBox();
+                break;
+            case ShapeKind.Sphere:
+                break;
+            case ShapeKind.Cylinder:
+                break;
+            case ShapeKind.Cone:
+                break;
+            case ShapeKind.Capsule:
+                break;
+            case ShapeKind.Custom:
+                obj3D = new Object3DBox();
+                break;
+            }
+            obj3D.read(v, datas);
+
+            // Constructing the geometry
+            obj = hash[obj3D.id];
+            if (obj === null) {
+                obj = {};
+                geometry = new THREE.Geometry();
+                geometry.faceVertexUvs[0] = [];
+                material = $currentMap.texturesObjects3D[obj3D.datas.pictureID];
+                count = 0;
+                obj.geometry = geometry;
+                obj.material = material;
+                obj.c = count;
+                hash[obj3D.id] = obj;
+            }
+            else {
+                geometry = obj.geometry;
+                material = obj.material;
+                count = obj.c;
+            }
+
+            result = obj3D.updateGeometry(geometry, position, count);
+            obj.c = result[0];
+        }
+
+        for (i = 1; i <= objectsIds; i++) {
+            obj = hash[i];
+            if (obj !== null) {
+                geometry = obj.geometry;
+                geometry.uvsNeedUpdate = true;
+                mesh = new THREE.Mesh(geometry, obj.material);
+                this.staticObjects3DList.push(mesh);
+                $gameStack.top().scene.add(mesh);
+            }
+        }
+    },
+
+    // -------------------------------------------------------
+
     /** Read the JSON associated to the objects in the portion.
     *   @param {Object} json Json object describing the object.
     *   @param {boolean} isMapHero Indicates if this map is where the hero is
@@ -559,6 +638,8 @@ MapPortion.prototype = {
             $currentMap.scene.remove(this.faceSpritesList[i]);
         for (i = 0, l = this.staticWallsList.length; i < l; i++)
             $currentMap.scene.remove(this.staticWallsList[i]);
+        for (i = 0, l = this.staticObjects3DList.length; i < l; i++)
+            $currentMap.scene.remove(this.staticObjects3DList[i]);
 
         // Objects
         for (i = 0, l = this.objectsList.length; i < l; i++)

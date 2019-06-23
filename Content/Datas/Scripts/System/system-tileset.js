@@ -36,20 +36,30 @@ SystemTileset.prototype = {
     */
     readJSON: function(json){
         var i, l;
-        var jsonAutotiles = json.auto, jsonWalls = json.walls;
+        var jsonAutotiles, jsonWalls, jsonObjects3D;
 
         this.id = json.id;
         this.picture = $datasGame.pictures.list[PictureKind.Tilesets][json.pic];
 
         // Special elements
+        jsonAutotiles = json.auto;
         l = jsonAutotiles.length;
         this.autotiles = new Array(l);
-        for (i = 0; i < l; i++)
+        for (i = 0; i < l; i++) {
             this.autotiles[i] = jsonAutotiles[i].id;
+        }
+        jsonWalls = json.walls;
         l = jsonWalls.length;
         this.walls = new Array(l);
-        for (i = 0; i < l; i++)
+        for (i = 0; i < l; i++) {
             this.walls[i] = jsonWalls[i].id;
+        }
+        jsonObjects3D = json.objs;
+        l = jsonObjects3D.length;
+        this.objects = new Array(l);
+        for (i = 0; i < l; i++) {
+            this.objects[i] = jsonObjects3D[i].id;
+        }
     },
 
     // -------------------------------------------------------

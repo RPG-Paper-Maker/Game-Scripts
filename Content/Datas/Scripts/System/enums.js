@@ -170,7 +170,8 @@ var PictureKind = {
     Battlers: 8,
     Facesets: 9,
     WindowSkins: 10,
-    TitleScreen: 11
+    TitleScreen: 11,
+    Objects3D: 12
 };
 Object.freeze(PictureKind);
 
@@ -350,3 +351,44 @@ var AvailableKind = {
     Never: 3
 };
 Object.freeze(AvailableKind);
+
+/**
+*   Enum for the different shape kind.
+*   @enum {number}
+*   @readonly
+*/
+var ShapeKind = {
+    Box: 0,
+    Sphere: 1,
+    Cylinder: 2,
+    Cone: 3,
+    Capsule: 4,
+    Custom: 5
+};
+Object.freeze(ShapeKind);
+
+/**
+*   Enum for the different custom shape kind.
+*   @enum {number}
+*   @readonly
+*/
+var CustomShapeKind = {
+    None: 0,
+    OBJ: 1,
+    MTL: 2,
+    Collisions: 3
+};
+Object.freeze(CustomShapeKind);
+
+/**
+*   Enum for the different object collision kind.
+*   @enum {number}
+*   @readonly
+*/
+var ObjectCollisionKind = {
+    None: 0,
+    Perfect: 1,
+    Simplified: 2,
+    Custom: 3
+};
+Object.freeze(ObjectCollisionKind);

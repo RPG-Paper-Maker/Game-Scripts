@@ -34,6 +34,7 @@
 */
 function DatasGame(){
     this.tilesets = new DatasTilesets();
+    this.shapes = new DatasShapes();
     this.songs = new DatasSongs();
     this.commonEvents = new DatasCommonEvents();
     this.items = new DatasItems();

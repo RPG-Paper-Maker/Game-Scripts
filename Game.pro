@@ -142,7 +142,11 @@ DISTFILES += \
     Content/Datas/Scripts/System/graphic-skill-item.js \
     Content/Datas/Scripts/System/graphic-use-skill-item.js \
     Content/Datas/Scripts/System/datas-titlescreen-gameover.js \
-    Content/Datas/Scripts/System/system-characteristic.js
+    Content/Datas/Scripts/System/system-characteristic.js \
+    Content/Datas/Scripts/System/system-object-3d.js \
+    Content/Datas/Scripts/System/datas-shapes.js \
+    Content/Datas/Scripts/System/system-shape.js \
+    Content/Datas/Scripts/System/object-3d-box.js
 
 RESOURCES += \
     qml.qrc

@@ -43,7 +43,7 @@ DatasTilesets.prototype = {
                 tileset.readJSON(jsonTileset);
                 this.list[id] = tileset;
 
-                // Autotiles and walls
+                // Autotiles, walls
                 idString = tileset.getAutotilesString();
                 if (!this.autotiles.hasOwnProperty(idString)) {
                     this.autotiles[idString] = tileset;
@@ -60,6 +60,7 @@ DatasTilesets.prototype = {
             // Load characters textures
             this.loadPictures(PictureKind.Characters, "texturesCharacters");
             this.loadPictures(PictureKind.Battlers, "texturesBattlers");
+            this.loadPictures(PictureKind.Objects3D, "texturesObjects3D");
         });
     },
 

@@ -67,6 +67,8 @@ SystemPicture.getLocalFolder = function(kind){
         return RPM.PATH_WINDOW_SKINS;
     case PictureKind.TitleScreen:
         return RPM.PATH_TITLE_SCREEN;
+    case PictureKind.Objects3D:
+        return RPM.PATH_OBJECTS_3D;
     }
 
     return "";
