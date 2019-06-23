@@ -8,6 +8,7 @@
 */
 
 Qt.include("qrc:/three.js")
+Qt.include("qrc:/Loaders/objLoader.js")
 
 /** The list of all the keys that are currently pressed (for multi-key
 *   handling).

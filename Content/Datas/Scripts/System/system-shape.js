@@ -69,6 +69,21 @@ SystemShape.prototype = {
 
     // -------------------------------------------------------
 
+    loadObjectCustom: function() {
+        var that;
+
+        that = this;
+        $filesToLoad++;
+        RPM.OBJ_LOADER.load(this.getPath(CustomShapeKind.OBJ)[0], function(
+            geometry)
+        {
+            that.geometry = geometry;
+            $loadedFiles++;
+        });
+    },
+
+    // -------------------------------------------------------
+
     /** Get the absolute path associated to this picture.
     *   @param {PictureKind} kind The kind of picture.
     *   @returns {string}

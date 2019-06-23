@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>three.js</file>
         <file>qmlUtilities.js</file>
+        <file>Loaders/objLoader.js</file>
     </qresource>
 </RCC>

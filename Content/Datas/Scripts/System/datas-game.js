@@ -34,7 +34,6 @@
 */
 function DatasGame(){
     this.tilesets = new DatasTilesets();
-    this.shapes = new DatasShapes();
     this.songs = new DatasSongs();
     this.commonEvents = new DatasCommonEvents();
     this.items = new DatasItems();
@@ -42,7 +41,6 @@ function DatasGame(){
     this.weapons = new DatasWeapons();
     this.armors = new DatasArmors();
     this.classes = new DatasClasses();
-    this.specialElements = new DatasSpecialElements();
     this.heroes = new DatasHeroes();
     this.monsters = new DatasMonsters();
     this.troops = new DatasTroops();
@@ -50,6 +48,8 @@ function DatasGame(){
     this.battleSystem = new DatasBattleSystem();
     this.titlescreenGameover = new DatasTitlescreenGameover();
     this.keyBoard = new DatasKeyBoard();
+    this.shapes = new DatasShapes();
+    this.specialElements = new DatasSpecialElements();
     this.pictures = new DatasPictures(this, DatasGame.prototype.readAfterPictures);
     this.readSettings();
     this.loaded = false;

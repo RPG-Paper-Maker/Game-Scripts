@@ -527,7 +527,7 @@ MapPortion.prototype = {
             case ShapeKind.Capsule:
                 break;
             case ShapeKind.Custom:
-                obj3D = new Object3DBox();
+                obj3D = new Object3DCustom();
                 break;
             }
             obj3D.read(v, datas);

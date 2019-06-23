@@ -146,7 +146,8 @@ DISTFILES += \
     Content/Datas/Scripts/System/system-object-3d.js \
     Content/Datas/Scripts/System/datas-shapes.js \
     Content/Datas/Scripts/System/system-shape.js \
-    Content/Datas/Scripts/System/object-3d-box.js
+    Content/Datas/Scripts/System/object-3d-box.js \
+    Content/Datas/Scripts/System/object-3d-custom.js
 
 RESOURCES += \
     qml.qrc
