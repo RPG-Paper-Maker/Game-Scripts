@@ -27,6 +27,6 @@ SystemAutotile.prototype = {
     *   @param {Object} json Json object describing the object.
     */
     readJSON: function(json){
-        this.pictureID = json.pic;
+        this.pictureID = typeof json.pic === 'undefined' ? -1 : json.pic;
     }
 }
