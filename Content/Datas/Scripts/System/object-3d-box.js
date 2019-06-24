@@ -127,17 +127,18 @@ Object3DBox.prototype = {
     */
     updateGeometry: function(geometry, position, c) {
         var i, l, vecA, vecB, vecC, vecD, faceA, faceB, localPosition, size,
-            textures, w, h, d, totalX, totalY, texA, texB, texC, texD;
+            textures, w, h, d, totalX, totalY, texA, texB, texC, texD,
+            objCollision, ws, hs, ds;
 
         localPosition = RPM.positionToVector3(position);
         size = this.datas.getSizeVector();
+        w = this.datas.widthPixels();
+        h = this.datas.heightPixels();
+        d = this.datas.depthPixels();
 
         // Textures
         textures = Object3DBox.TEXTURES_VALUES.slice(0);
         if (!this.datas.stretch) {
-            w = this.datas.widthPixels();
-            h = this.datas.heightPixels();
-            d = this.datas.depthPixels();
             totalX = (d * 2) + (w * 2);
             totalY = (d * 2) + h;
             textures[1] = d / totalX;
@@ -179,6 +180,32 @@ Object3DBox.prototype = {
                 vecD, faceA, faceB, c);
         }
 
-        return [c];
+        // Collisions
+        objCollision = new Array;
+        if (this.datas.collisionKind === ObjectCollisionKind.Perfect) {
+            ws = this.datas.width();
+            hs = this.datas.height();
+            ds = this.datas.depth();
+
+            objCollision.push({
+                p: position,
+                l: localPosition,
+                b: [
+                    localPosition.x + Math.floor(w / 2),
+                    localPosition.y + Math.floor(h / 2),
+                    localPosition.z + Math.floor(d / 2),
+                    w,
+                    h,
+                    d,
+                    0
+                ],
+                w: Math.floor(ws / 2),
+                h: Math.floor(hs / 2),
+                d: Math.floor(ds / 2),
+                k: true
+            });
+        }
+
+        return [c, objCollision];
     }
 }

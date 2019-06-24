@@ -104,6 +104,7 @@ Land.prototype = {
                         c + $SQUARE_SIZE / 2,
                         $SQUARE_SIZE,
                         $SQUARE_SIZE,
+                        1,
                         0
                     ]
                 }
@@ -125,6 +126,7 @@ Land.prototype = {
                         c + rect[1] + $SQUARE_SIZE / 2,
                         rect[2],
                         rect[3],
+                        1,
                         0
                     ],
                     c: null

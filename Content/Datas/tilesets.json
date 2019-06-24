@@ -1,1 +1,1 @@
-{"list":[{"auto":[{"id":1,"name":"General"}],"id":1,"name":"Plains","objs":[{"id":1,"name":"House"},{"id":2,"name":"a"},{"id":3,"name":"b"}],"pic":1,"relief":[],"walls":[]}]}
+{"list":[{"auto":[{"id":1,"name":"General"}],"id":1,"name":"Plains","objs":[{"id":1,"name":"House"},{"id":2,"name":"Cupboard"},{"id":3,"name":"Chest"},{"id":4,"name":"Table"},{"id":5,"name":"Fridge"}],"pic":1,"relief":[],"walls":[{"id":1,"name":"Inside1"}]}]}

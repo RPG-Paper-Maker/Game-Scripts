@@ -36,7 +36,8 @@ Object3DCustom.prototype = {
     */
     updateGeometry: function(geometry, position, c) {
         var i, j, l, vecA, vecB, vecC, face, localPosition, size,
-            modelGeometry, vertices, uvs;
+            modelGeometry, vertices, uvs, objCollision, obj, w, h, d,
+            minPos;
 
         localPosition = RPM.positionToVector3(position);
         modelGeometry = $datasGame.shapes.get(CustomShapeKind.OBJ, this.datas
@@ -64,6 +65,34 @@ Object3DCustom.prototype = {
             c += 3;
         }
 
-        return [c];
+        // Collisions
+        objCollision = new Array;
+        if (this.datas.collisionKind === ObjectCollisionKind.Simplified) {
+            obj = this.datas.getObj().geometry;
+            w = obj.w;
+            h = obj.h;
+            d = obj.d;
+            minPos = obj.minVertex;
+
+            objCollision.push({
+                p: position,
+                l: localPosition,
+                b: [
+                    localPosition.x + minPos.x + (w / 2),
+                    localPosition.y + minPos.y + (h / 2),
+                    localPosition.z + minPos.z + (d / 2),
+                    w,
+                    h,
+                    d,
+                    0
+                ],
+                w: Math.ceil(w / 2 / $SQUARE_SIZE),
+                h: Math.ceil(h / 2 / $SQUARE_SIZE),
+                d: Math.ceil(d / 2 / $SQUARE_SIZE),
+                k: true
+            });
+        }
+
+        return [c, objCollision];
     }
 }

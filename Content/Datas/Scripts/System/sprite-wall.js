@@ -109,6 +109,7 @@ SpriteWall.prototype = {
                     localPosition.z,
                     rect[2],
                     rect[3],
+                    1,
                     angle
                 ],
                 w: 0,

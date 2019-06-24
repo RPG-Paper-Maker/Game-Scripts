@@ -67,8 +67,32 @@ SystemObject3D.prototype = {
 
     // -------------------------------------------------------
 
+    width: function() {
+        return this.widthSquare + (this.widthPixel > 0 ? 1 : 0);
+    },
+
+    // -------------------------------------------------------
+
+    height: function() {
+        return this.heightSquare + (this.heightPixel > 0 ? 1 : 0);
+    },
+
+    // -------------------------------------------------------
+
+    depth: function() {
+        return this.depthSquare + (this.depthPixel > 0 ? 1 : 0);
+    },
+
+    // -------------------------------------------------------
+
     getSizeVector: function() {
         return new THREE.Vector3(this.widthPixels(), this.heightPixels(), this
             .depthPixels());
+    },
+
+    // -------------------------------------------------------
+
+    getObj: function() {
+        return $datasGame.shapes.get(CustomShapeKind.OBJ, this.objID);
     }
 }

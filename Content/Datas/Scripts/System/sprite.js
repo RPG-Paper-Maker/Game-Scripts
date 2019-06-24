@@ -175,6 +175,7 @@ Sprite.prototype = {
                         localPosition.z,
                         rect[2],
                         rect[3],
+                        1,
                         0
                     ],
                     w: w,

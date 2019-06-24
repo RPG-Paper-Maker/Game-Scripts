@@ -49,6 +49,10 @@ THREE.OBJLoader.prototype = {
         var uvs = [];
         var v = [];
         var t = [];
+        var minVertex = new THREE.Vector3();
+        var maxVertex = new THREE.Vector3();
+        var firstVertex = true;
+        var temp3D;
 
 		// v float float float
 		var vertex_pattern = /^v\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/;
@@ -97,9 +101,33 @@ THREE.OBJLoader.prototype = {
 			} else if ( ( result = vertex_pattern.exec( line ) ) !== null ) {
 
 				// ["v 1.0 2.0 3.0", "1.0", "2.0", "3.0"]
-
-                v.push(new THREE.Vector3(parseFloat(result[1]),
-                    parseFloat(result[2]), parseFloat(result[3])));
+                temp3D = new THREE.Vector3(parseFloat(result[1]), parseFloat(
+                    result[2]), parseFloat(result[3]));
+                v.push(temp3D);
+                if (firstVertex) {
+                    minVertex = temp3D.clone();
+                    maxVertex = temp3D.clone();
+                    firstVertex = false;
+                } else {
+                    if (temp3D.x < minVertex.x) {
+                        minVertex.setX(temp3D.x);
+                    }
+                    if (temp3D.y < minVertex.y) {
+                        minVertex.setY(temp3D.y);
+                    }
+                    if (temp3D.z < minVertex.z) {
+                        minVertex.setZ(temp3D.z);
+                    }
+                    if (temp3D.x > maxVertex.x) {
+                        maxVertex.setX(temp3D.x);
+                    }
+                    if (temp3D.y > maxVertex.y) {
+                        maxVertex.setY(temp3D.y);
+                    }
+                    if (temp3D.z > maxVertex.z) {
+                        maxVertex.setZ(temp3D.z);
+                    }
+                }
 
 			} else if ( ( result = normal_pattern.exec( line ) ) !== null ) {
 
@@ -185,6 +213,11 @@ THREE.OBJLoader.prototype = {
         */
         object.vertices = vertices;
         object.uvs = uvs;
+        object.minVertex = minVertex;
+        object.maxVertex = maxVertex;
+        object.w = maxVertex.x - minVertex.x;
+        object.h = maxVertex.y - minVertex.y;
+        object.d = maxVertex.z - minVertex.z;
 
         return object;
 

@@ -40,9 +40,11 @@ function MapPortion(realX, realY, realZ){
     this.squareNonEmpty = new Array(l);
     this.boundingBoxesLands = new Array(l);
     this.boundingBoxesSprites = new Array(l);
+    this.boundingBoxesObjects3D = new Array(l);
     for (i = 0; i < l; i++) {
         this.boundingBoxesLands[i] = new Array;
         this.boundingBoxesSprites[i] = new Array;
+        this.boundingBoxesObjects3D[i] = new Array;
     }
     this.staticAutotilesMesh = new Array;
     this.objectsList = new Array;
@@ -186,14 +188,14 @@ MapPortion.applyBoxSpriteTransforms = function(box, boundingBox) {
                        1 / box.previousScale[2]);
 
     // Update to the new ones
-    box.geometry.scale(boundingBox[3], boundingBox[4], 1);
-    box.geometry.rotateY(boundingBox[5] * Math.PI / 180.0);
+    box.geometry.scale(boundingBox[3], boundingBox[4], boundingBox[5]);
+    box.geometry.rotateY(boundingBox[6] * Math.PI / 180.0);
     box.geometry.translate(boundingBox[0], boundingBox[1], boundingBox[2]);
 
     // Register previous transforms to current
     box.previousTranslate = [boundingBox[0], boundingBox[1], boundingBox[2]];
-    box.previousRotate = boundingBox[5];
-    box.previousScale = [boundingBox[3], boundingBox[4], 1];
+    box.previousRotate = boundingBox[6];
+    box.previousScale = [boundingBox[3], boundingBox[4], boundingBox[5]];
 
     // Update geometry now
     box.updateMatrixWorld();
@@ -553,6 +555,7 @@ MapPortion.prototype = {
 
             result = obj3D.updateGeometry(geometry, position, count);
             obj.c = result[0];
+            this.updateCollisionObject3D(result[1], position);
         }
 
         for (i = 1; i <= objectsIds; i++) {
@@ -743,11 +746,6 @@ MapPortion.prototype = {
             {
                 for (var b = -objCollision.h; b <= objCollision.h; b++)
                 {
-                    if (objCollision.k) {
-                        var e = 0;
-                        e = 0;
-                    }
-
                     z = objCollision.k ? 0 : objCollision.w;
                     for (var c = -z; c <= z; c++)
                     {
@@ -768,6 +766,31 @@ MapPortion.prototype = {
 
     // -------------------------------------------------------
 
+    updateCollisionObject3D: function(collisions, position) {
+        var objCollision, positionPlus, z;
+
+        for (var i = 0, l = collisions.length; i < l; i++) {
+            objCollision = collisions[i];
+            for (var a = -objCollision.w; a <= objCollision.w; a++) {
+                for (var b = -objCollision.h; b <= objCollision.h; b++) {
+                    for (var c = -objCollision.d; c <= objCollision.h; c++) {
+                        positionPlus = [
+                            position[0] + a,
+                            position[1] + b,
+                            position[3] + c
+                        ];
+                        if ($currentMap.isInMap(positionPlus)) {
+                            this.boundingBoxesObjects3D[RPM.positionToIndex(
+                                positionPlus)].push(objCollision);
+                        }
+                    }
+                }
+            }
+        }
+    },
+
+    // -------------------------------------------------------
+
     /** Check if there is a collision at this position.
     *   @returns {boolean}
     */
@@ -778,6 +801,8 @@ MapPortion.prototype = {
                                      positionBefore, positionAfter, object,
                                      direction, testedCollisions) ||
                 this.checkSpritesCollision(jpositionAfter, testedCollisions,
+                                           object) ||
+                this.checkObjects3DCollision(jpositionAfter, testedCollisions,
                                            object));
     },
 
@@ -973,6 +998,36 @@ MapPortion.prototype = {
                    object.currentBoundingBox.geometry,
                    $BB_ORIENTED_BOX.geometry);
         }
+    },
+
+    // -------------------------------------------------------
+
+    /** Check if there is a collision with sprites at this position.
+    *   @returns {boolean}
+    */
+    checkObjects3DCollision: function(jpositionAfter, testedCollisions, object)
+    {
+        var objects3D;
+        var i, l, objCollision;
+
+        objects3D = this.boundingBoxesObjects3D[RPM.positionToIndex(
+            jpositionAfter)];
+        if (objects3D !== null) {
+            for (i = 0, l = objects3D.length; i < l; i++) {
+                objCollision = objects3D[i];
+                if (testedCollisions.indexOf(objCollision) === -1) {
+                    testedCollisions.push(objCollision);
+
+                    if (this.checkIntersectionSprite(objCollision.b,
+                        objCollision.k, object))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     },
 
     // -------------------------------------------------------
