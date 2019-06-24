@@ -44,6 +44,7 @@ SystemObject3D.prototype = {
         this.heightPixel = typeof json.hp === 'undefined' ? 0 : json.hp;
         this.depthSquare = typeof json.ds === 'undefined' ? 1 : json.ds;
         this.depthPixel = typeof json.dp === 'undefined' ? 0 : json.dp;
+        this.stretch = typeof json.st === 'undefined' ? false : json.st;
     },
 
     // -------------------------------------------------------

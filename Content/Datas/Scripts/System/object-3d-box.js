@@ -62,40 +62,44 @@ Object3DBox.NB_VERTICES = 24;
 
 Object3DBox.TEXTURES = [
     // Front
-    new THREE.Vector2(0.25, 0.333333333333333),
-    new THREE.Vector2(0.5, 0.333333333333333),
-    new THREE.Vector2(0.5, 0.666666666666666),
-    new THREE.Vector2(0.25, 0.666666666666666),
+    [1, 5],
+    [2, 5],
+    [2, 6],
+    [1, 6],
 
     // Back
-    new THREE.Vector2(0.75, 0.333333333333333),
-    new THREE.Vector2(1.0, 0.333333333333333),
-    new THREE.Vector2(1.0, 0.666666666666666),
-    new THREE.Vector2(0.75, 0.666666666666666),
+    [3, 5],
+    [4, 5],
+    [4, 6],
+    [3, 6],
 
     // Left
-    new THREE.Vector2(0.0, 0.333333333333333),
-    new THREE.Vector2(0.25, 0.333333333333333),
-    new THREE.Vector2(0.25, 0.666666666666666),
-    new THREE.Vector2(0.0, 0.666666666666666),
+    [0, 5],
+    [1, 5],
+    [1, 6],
+    [0, 6],
 
     // Right
-    new THREE.Vector2(0.5, 0.333333333333333),
-    new THREE.Vector2(0.75, 0.333333333333333),
-    new THREE.Vector2(0.75, 0.666666666666666),
-    new THREE.Vector2(0.5, 0.666666666666666),
+    [2, 5],
+    [3, 5],
+    [3, 6],
+    [2, 6],
 
     // Bottom
-    new THREE.Vector2(0.25, 0.666666666666666),
-    new THREE.Vector2(0.5, 0.666666666666666),
-    new THREE.Vector2(0.5, 1.0),
-    new THREE.Vector2(0.25, 1.0),
+    [1, 6],
+    [2, 6],
+    [2, 7],
+    [1, 7],
 
     // Top
-    new THREE.Vector2(0.25, 0.0),
-    new THREE.Vector2(0.5, 0.0),
-    new THREE.Vector2(0.5, 0.333333333333333),
-    new THREE.Vector2(0.25, 0.333333333333333)
+    [1, 0],
+    [2, 0],
+    [2, 5],
+    [1, 5]
+];
+
+Object3DBox.TEXTURES_VALUES = [
+    0.0, 0.25, 0.5, 0.75, 1.0, 0.333333333333333, 0.666666666666666, 1.0
 ];
 
 Object3DBox.INDEXES = [
@@ -122,10 +126,28 @@ Object3DBox.prototype = {
     *   @return {number}
     */
     updateGeometry: function(geometry, position, c) {
-        var i, l, vecA, vecB, vecC, vecD, faceA, faceB, localPosition, size;
+        var i, l, vecA, vecB, vecC, vecD, faceA, faceB, localPosition, size,
+            textures, w, h, d, totalX, totalY, texA, texB, texC, texD;
 
         localPosition = RPM.positionToVector3(position);
         size = this.datas.getSizeVector();
+
+        // Textures
+        textures = Object3DBox.TEXTURES_VALUES.slice(0);
+        if (!this.datas.stretch) {
+            w = this.datas.widthPixels();
+            h = this.datas.heightPixels();
+            d = this.datas.depthPixels();
+            totalX = (d * 2) + (w * 2);
+            totalY = (d * 2) + h;
+            textures[1] = d / totalX;
+            textures[2] = (d + w) / totalX;
+            textures[3] = ((2 * d) + w) / totalX;
+            textures[5] = d / totalY;
+            textures[6] = (d + h) / totalY;
+        }
+
+        // Vertices + faces / indexes
         for (i = 0; i < Object3DBox.NB_VERTICES; i += 4) {
             vecA = Object3DBox.VERTICES[i].clone();
             vecB = Object3DBox.VERTICES[i + 1].clone();
@@ -139,15 +161,19 @@ Object3DBox.prototype = {
             vecB.add(localPosition);
             vecC.add(localPosition);
             vecD.add(localPosition);
+            texA = Object3DBox.TEXTURES[i];
+            texB = Object3DBox.TEXTURES[i + 1];
+            texC = Object3DBox.TEXTURES[i + 2];
+            texD = Object3DBox.TEXTURES[i + 3];
             faceA = [
-                Object3DBox.TEXTURES[i],
-                Object3DBox.TEXTURES[i + 1],
-                Object3DBox.TEXTURES[i + 2]
+                new THREE.Vector2(textures[texA[0]], textures[texA[1]]),
+                new THREE.Vector2(textures[texB[0]], textures[texB[1]]),
+                new THREE.Vector2(textures[texC[0]], textures[texC[1]])
             ];
             faceB = [
-                Object3DBox.TEXTURES[i],
-                Object3DBox.TEXTURES[i + 2],
-                Object3DBox.TEXTURES[i + 3]
+                new THREE.Vector2(textures[texA[0]], textures[texA[1]]),
+                new THREE.Vector2(textures[texC[0]], textures[texC[1]]),
+                new THREE.Vector2(textures[texD[0]], textures[texD[1]])
             ];
             c = Sprite.addStaticSpriteToGeometry(geometry, vecA, vecB, vecC,
                 vecD, faceA, faceB, c);
