@@ -37,18 +37,23 @@ Object3DCustom.prototype = {
     updateGeometry: function(geometry, position, c) {
         var i, j, l, vecA, vecB, vecC, face, localPosition, size,
             modelGeometry, vertices, uvs, objCollision, obj, w, h, d,
-            minPos;
+            minPos, scale, scaleVec;
 
         localPosition = RPM.positionToVector3(position);
         modelGeometry = $datasGame.shapes.get(CustomShapeKind.OBJ, this.datas
             .objID).geometry;
         vertices = modelGeometry.vertices;
         uvs = modelGeometry.uvs;
+        scale = this.datas.scale;
+        scaleVec = new THREE.Vector3(scale, scale, scale);
         l = modelGeometry.vertices.length;
         for (i = 0, j = 0; i < l; i += 3) {
             vecA = vertices[i].clone();
             vecB = vertices[i + 1].clone();
             vecC = vertices[i + 2].clone();
+            vecA.multiply(scaleVec);
+            vecB.multiply(scaleVec);
+            vecC.multiply(scaleVec);
             vecA.add(localPosition);
             vecB.add(localPosition);
             vecC.add(localPosition);
@@ -69,10 +74,11 @@ Object3DCustom.prototype = {
         objCollision = new Array;
         if (this.datas.collisionKind === ObjectCollisionKind.Simplified) {
             obj = this.datas.getObj().geometry;
-            w = obj.w;
-            h = obj.h;
-            d = obj.d;
-            minPos = obj.minVertex;
+            w = obj.w * scale;
+            h = obj.h * scale;
+            d = obj.d * scale;
+            minPos = obj.minVertex.clone();
+            minPos.multiply(scaleVec);
 
             objCollision.push({
                 p: position,
