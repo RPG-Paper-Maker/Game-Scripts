@@ -128,10 +128,17 @@ Object3DBox.prototype = {
     updateGeometry: function(geometry, position, c) {
         var i, l, vecA, vecB, vecC, vecD, faceA, faceB, localPosition, size,
             textures, w, h, d, totalX, totalY, texA, texB, texC, texD,
-            objCollision, ws, hs, ds;
+            objCollision, ws, hs, ds, coef;
 
+        coef = 0.01;
         localPosition = RPM.positionToVector3(position);
+        localPosition.setX(localPosition.x + coef);
+        localPosition.setY(localPosition.y + coef);
+        localPosition.setZ(localPosition.z + coef);
         size = this.datas.getSizeVector();
+        size.setX(size.x - (2 * coef));
+        size.setY(size.y - (2 * coef));
+        size.setZ(size.z - (2 * coef));
         w = this.datas.widthPixels();
         h = this.datas.heightPixels();
         d = this.datas.depthPixels();
