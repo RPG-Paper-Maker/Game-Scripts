@@ -50,19 +50,22 @@ SystemObject3D.prototype = {
     // -------------------------------------------------------
 
     widthPixels: function() {
-        return this.widthSquare * $SQUARE_SIZE + this.widthPixel;
+        return (this.widthSquare * $SQUARE_SIZE) + (this.widthPixel *
+            $SQUARE_SIZE / 100);
     },
 
     // -------------------------------------------------------
 
     heightPixels: function() {
-        return this.heightSquare * $SQUARE_SIZE + this.heightPixel;
+        return (this.heightSquare * $SQUARE_SIZE) + (this.heightPixel *
+            $SQUARE_SIZE / 100);
     },
 
     // -------------------------------------------------------
 
     depthPixels: function() {
-        return this.depthSquare * $SQUARE_SIZE + this.depthPixel;
+        return (this.depthSquare * $SQUARE_SIZE) + (this.depthPixel *
+            $SQUARE_SIZE / 100);
     },
 
     // -------------------------------------------------------
