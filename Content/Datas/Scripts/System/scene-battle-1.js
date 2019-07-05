@@ -179,15 +179,15 @@ SceneBattle.prototype.moveArrow = function() {
 /** Return the index of the target.
 *   @returns {number}
 */
-SceneBattle.prototype.selectedUserTargetIndex = function(){
+SceneBattle.prototype.selectedUserTargetIndex = function() {
     return (this.subStep === 2) ? this.selectedTargetIndex : this
         .selectedUserIndex;
 };
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.updateStep1 = function(){
-
+SceneBattle.prototype.updateStep1 = function() {
+    // NOTHIN TO UPDATE
 };
 
 // -------------------------------------------------------
@@ -200,167 +200,191 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
         if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
             .Action))
         {
-            this.subStep = 1;
-            this.user = this.battlers[CharacterKind.Hero][this.selectedUserIndex];
-            this.user.setSelected(true);
-            this.windowChoicesBattleCommands.unselect();
-            this.windowChoicesBattleCommands.select(this.user.lastCommandIndex);
-            this.windowChoicesBattleCommands.offsetSelectedIndex = this.user
-                .lastCommandOffset;
-
-            // Update skills list
-            var skills = this.user.character.sk;
-            var ownedSkill, availableKind;
-            this.listSkills = [];
-            for (i = 0, l = skills.length; i < l; i++) {
-                ownedSkill = skills[i];
-                availableKind = $datasGame.skills.list[ownedSkill.id]
-                    .availableKind;
-                if (availableKind === AvailableKind.Always || availableKind
-                    === AvailableKind.Battle)
-                {
-                    this.listSkills.push(new GraphicSkill(ownedSkill));
-                }
-            }
-            this.windowChoicesSkills.setContentsCallbacks(this.listSkills);
-            this.windowSkillDescription.content = this.windowChoicesSkills
-                .getCurrentContent();
-            this.windowChoicesSkills.unselect();
-            this.windowChoicesSkills.offsetSelectedIndex = this.user
-                .lastSkillOffset;
-            this.windowChoicesSkills.select(this.user.lastSkillIndex);
-            this.windowChoicesItems.unselect();
-            this.windowChoicesItems.offsetSelectedIndex = this.user
-                .lastItemOffset;
-            this.windowChoicesItems.select(this.user.lastItemIndex);
-
-            $requestPaintHUD = true;
+            this.onAllySelected();
         }
         break;
     case 1:
         if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
             .Action))
         {
-            switch (this.battleCommandKind) {
-            case EffectSpecialActionKind.OpenSkills:
-                if (this.windowChoicesSkills.getCurrentContent().skill
-                    .isPossible())
-                {
-                    this.selectTarget(this.windowSkillDescription.content.skill
-                        .targetKind);
-                    this.registerLastSkillIndex();
-                }
-                return;
-            case EffectSpecialActionKind.OpenItems:
-                this.selectTarget(this.windowItemDescription.content.item
-                    .targetKind);
-                this.registerLastItemIndex();
-                return;
-            default:
-                break;
-            }
-            this.windowChoicesBattleCommands.onKeyPressed(key, this
-                .windowChoicesBattleCommands.getCurrentContent().skill);
-            switch (this.battleCommandKind) {
-            case EffectSpecialActionKind.ApplyWeapons:
-                var targetKind, equipments, gameItem
-
-                // Check weapon targetKind
-                this.attackSkill = this.windowChoicesBattleCommands
-                    .getCurrentContent().skill;
-                targetKind = null;
-                equipments = this.user.character.equip;
-                for (i = 0, l = equipments.length; i < l; i++) {
-                    gameItem = equipments[i];
-                    if (gameItem && gameItem.k === ItemKind.Weapon) {
-                        targetKind = gameItem.getItemInformations().targetKind;
-                        break;
-                    }
-                }
-                // If no weapon
-                if (targetKind === null) {
-                    targetKind = this.attackSkill.targetKind;
-                }
-
-                this.selectTarget(targetKind);
-                break;
-            case EffectSpecialActionKind.OpenSkills:
-                if (this.listSkills.length === 0) {
-                    this.battleCommandKind = EffectSpecialActionKind.None;
-                }
-                break;
-            case EffectSpecialActionKind.OpenItems:
-                if (this.listItems.length === 0) {
-                    this.battleCommandKind = EffectSpecialActionKind.None;
-                }
-                break;
-            case EffectSpecialActionKind.Escape:
-                this.step = 4;
-                this.subStep = 3;
-                this.transitionEnded = false;
-                $songsManager.initializeProgressionMusic(SystemPlaySong
-                    .currentPlayingMusic.volume, 0, 0, SceneBattle
-                    .TIME_LINEAR_MUSIC_END);
-                for (i = 0, l = this.battlers[CharacterKind.Hero].length; i < l;
-                     i++)
-                {
-                    this.battlers[CharacterKind.Hero][i].setEscaping();
-                }
-                return;
-            case EffectSpecialActionKind.EndTurn:
-                this.windowChoicesBattleCommands.unselect();
-                this.changeStep(2);
-                return;
-            default:
-                break;
-            }
-            this.registerLastCommandIndex();
+            this.onCommandSelected(key);
         } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
             .menuControls.Cancel))
         {
-            switch (this.battleCommandKind) {
-            case EffectSpecialActionKind.OpenSkills:
-                this.registerLastSkillIndex();
-                break;
-            case EffectSpecialActionKind.OpenItems:
-                this.registerLastItemIndex();
-                break;
-            default:
-                this.subStep = 0;
-                this.user.setSelected(false);
-                this.registerLastCommandIndex();
-                break;
-            }
-            this.battleCommandKind = EffectSpecialActionKind.None;
+            this.onAllyUnselected();
         }
         break;
     case 2:
         if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
             .Action))
         {
-            if (this.all) {
-                for (i = 0, l = this.battlers[this.kindSelection].length; i < l;
-                    i++)
-                {
-                    this.targets.push(this.battlers[this.kindSelection][i]);
-                }
-            } else {
-                this.targets.push(this.battlers[this.kindSelection][this
-                    .selectedUserTargetIndex()]);
-            }
-            this.windowChoicesBattleCommands.unselect();
-            this.changeStep(2);
+            this.onTargetsSelected();
         } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
             .menuControls.Cancel))
         {
-            this.subStep = 1;
-            this.kindSelection = CharacterKind.Hero;
-            this.userTarget = false;
-            this.all = false;
-            this.moveArrow();
+            this.onTargetsUnselected();
         }
         break;
     }
+};
+
+// -------------------------------------------------------
+
+SceneBattle.prototype.onAllySelected = function() {
+    var i, l;
+
+    this.subStep = 1;
+    this.user = this.battlers[CharacterKind.Hero][this.selectedUserIndex];
+    this.user.setSelected(true);
+    this.windowChoicesBattleCommands.unselect();
+    this.windowChoicesBattleCommands.select(this.user.lastCommandIndex);
+    this.windowChoicesBattleCommands.offsetSelectedIndex = this.user
+        .lastCommandOffset;
+
+    // Update skills list
+    var skills = this.user.character.sk;
+    var ownedSkill, availableKind;
+    this.listSkills = [];
+    for (i = 0, l = skills.length; i < l; i++) {
+        ownedSkill = skills[i];
+        availableKind = $datasGame.skills.list[ownedSkill.id]
+            .availableKind;
+        if (availableKind === AvailableKind.Always || availableKind
+            === AvailableKind.Battle)
+        {
+            this.listSkills.push(new GraphicSkill(ownedSkill));
+        }
+    }
+    this.windowChoicesSkills.setContentsCallbacks(this.listSkills);
+    this.windowSkillDescription.content = this.windowChoicesSkills
+        .getCurrentContent();
+    this.windowChoicesSkills.unselect();
+    this.windowChoicesSkills.offsetSelectedIndex = this.user.lastSkillOffset;
+    this.windowChoicesSkills.select(this.user.lastSkillIndex);
+    this.windowChoicesItems.unselect();
+    this.windowChoicesItems.offsetSelectedIndex = this.user.lastItemOffset;
+    this.windowChoicesItems.select(this.user.lastItemIndex);
+
+    $requestPaintHUD = true;
+};
+
+// -------------------------------------------------------
+
+SceneBattle.prototype.onAllyUnselected = function() {
+    switch (this.battleCommandKind) {
+    case EffectSpecialActionKind.OpenSkills:
+        this.registerLastSkillIndex();
+        break;
+    case EffectSpecialActionKind.OpenItems:
+        this.registerLastItemIndex();
+        break;
+    default:
+        this.subStep = 0;
+        this.user.setSelected(false);
+        this.registerLastCommandIndex();
+        break;
+    }
+    this.battleCommandKind = EffectSpecialActionKind.None;
+};
+
+// -------------------------------------------------------
+
+SceneBattle.prototype.onCommandSelected = function(key) {
+    var i, l;
+
+    switch (this.battleCommandKind) {
+    case EffectSpecialActionKind.OpenSkills:
+        if (this.windowChoicesSkills.getCurrentContent().skill.isPossible()) {
+            this.selectTarget(this.windowSkillDescription.content.skill
+                .targetKind);
+            this.registerLastSkillIndex();
+        }
+        return;
+    case EffectSpecialActionKind.OpenItems:
+        this.selectTarget(this.windowItemDescription.content.item.targetKind);
+        this.registerLastItemIndex();
+        return;
+    default:
+        break;
+    }
+    this.windowChoicesBattleCommands.onKeyPressed(key, this
+        .windowChoicesBattleCommands.getCurrentContent().skill);
+    switch (this.battleCommandKind) {
+    case EffectSpecialActionKind.ApplyWeapons:
+        var targetKind, equipments, gameItem;
+
+        // Check weapon targetKind
+        this.attackSkill = this.windowChoicesBattleCommands.getCurrentContent()
+            .skill;
+        targetKind = null;
+        equipments = this.user.character.equip;
+        for (i = 0, l = equipments.length; i < l; i++) {
+            gameItem = equipments[i];
+            if (gameItem && gameItem.k === ItemKind.Weapon) {
+                targetKind = gameItem.getItemInformations().targetKind;
+                break;
+            }
+        }
+        // If no weapon
+        if (targetKind === null) {
+            targetKind = this.attackSkill.targetKind;
+        }
+        this.selectTarget(targetKind);
+        break;
+    case EffectSpecialActionKind.OpenSkills:
+        if (this.listSkills.length === 0) {
+            this.battleCommandKind = EffectSpecialActionKind.None;
+        }
+        break;
+    case EffectSpecialActionKind.OpenItems:
+        if (this.listItems.length === 0) {
+            this.battleCommandKind = EffectSpecialActionKind.None;
+        }
+        break;
+    case EffectSpecialActionKind.Escape:
+        this.step = 4;
+        this.subStep = 3;
+        this.transitionEnded = false;
+        $songsManager.initializeProgressionMusic(SystemPlaySong
+            .currentPlayingMusic.volume, 0, 0, SceneBattle
+            .TIME_LINEAR_MUSIC_END);
+        for (i = 0, l = this.battlers[CharacterKind.Hero].length; i < l; i++) {
+            this.battlers[CharacterKind.Hero][i].setEscaping();
+        }
+        return;
+    case EffectSpecialActionKind.EndTurn:
+        this.windowChoicesBattleCommands.unselect();
+        this.changeStep(2);
+        return;
+    default:
+        break;
+    }
+    this.registerLastCommandIndex();
+};
+
+// -------------------------------------------------------
+
+SceneBattle.prototype.onTargetsSelected = function() {
+    if (this.all) {
+        for (i = 0, l = this.battlers[this.kindSelection].length; i < l; i++) {
+            this.targets.push(this.battlers[this.kindSelection][i]);
+        }
+    } else {
+        this.targets.push(this.battlers[this.kindSelection][this
+            .selectedUserTargetIndex()]);
+    }
+    this.windowChoicesBattleCommands.unselect();
+    this.changeStep(2);
+};
+
+// -------------------------------------------------------
+
+SceneBattle.prototype.onTargetsUnselected = function() {
+    this.subStep = 1;
+    this.kindSelection = CharacterKind.Hero;
+    this.userTarget = false;
+    this.all = false;
+    this.moveArrow();
 };
 
 // -------------------------------------------------------
@@ -379,27 +403,28 @@ SceneBattle.prototype.onKeyPressedRepeatStep1 = function(key){
 
 SceneBattle.prototype.onKeyPressedAndRepeatStep1 = function(key){
     var index = this.selectedUserTargetIndex();
-    switch (this.subStep){
+    switch (this.subStep) {
     case 0:
     case 2:
         if (!this.userTarget) {
-            if (DatasKeyBoard.isKeyEqual(key,$datasGame.keyBoard.menuControls.Up) ||
-                DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls.Left))
+            if (DatasKeyBoard.isKeyEqual(key,$datasGame.keyBoard.menuControls.Up
+                ) || DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
+                .menuControls.Left))
             {
                 index = this.indexArrowUp();
-            }
-            else if
-            (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls.Down) ||
-             DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls.Right))
+            } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
+                .menuControls.Down) || DatasKeyBoard.isKeyEqual(key, $datasGame
+                .keyBoard.menuControls.Right))
             {
                 index = this.indexArrowDown();
             }
         }
 
-        if (this.subStep === 0)
+        if (this.subStep === 0) {
             this.selectedUserIndex = index;
-        else
+        } else {
             this.selectedTargetIndex = index;
+        }
         this.moveArrow();
 
         break;

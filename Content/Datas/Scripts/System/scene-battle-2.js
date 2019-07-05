@@ -19,8 +19,7 @@
 // -------------------------------------------------------
 
 SceneBattle.prototype.initializeStep2 = function() {
-    var equipments, gameItem, weapon, effects, informationText;
-    var i, j, l, ll;
+    var i, j, l, ll, equipments, gameItem, weapon, effects, informationText;
 
     switch (this.battleCommandKind) {
     case EffectSpecialActionKind.ApplyWeapons:
@@ -39,9 +38,7 @@ SceneBattle.prototype.initializeStep2 = function() {
         break;
     }
     this.windowTopInformations.content = new GraphicText(informationText);
-
     this.time = new Date().getTime();
-
     this.damages = [];
     this.effects = [];
     switch (this.battleCommandKind) {
@@ -95,8 +92,7 @@ SceneBattle.prototype.initializeStep2 = function() {
 // -------------------------------------------------------
 
 SceneBattle.prototype.updateStep2 = function() {
-    var isAnotherEffect, animate, damage;
-    var i, l;
+    var i, l, isAnotherEffect, damage;
 
     if (!this.user.isAttacking()) {
         for (i = 0, l = this.targets.length; i < l; i++) {
@@ -194,9 +190,9 @@ SceneBattle.prototype.drawHUDStep2 = function(){
 
     // Draw damages
     if (!this.user.isAttacking()) {
-        var i, l = this.damages.length;
-        var target, pos, damage;
-        for (i = 0; i < l; i++){
+        var i, l, damage;
+
+        for (i = 0, l = this.damages.length; i < l; i++) {
             damage = this.damages[i];
             this.targets[i].drawDamages(damage[0], damage[1], damage[2]);
         }

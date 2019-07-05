@@ -15,74 +15,67 @@
 
 /** @class
 *   A scene for battling.
+*   @ SceneGame
 *   @extends SceneGame
 *   @property {boolean} winning Boolean indicating whether the player won the
-*                       battle or not.
-*   @property {number} troopID Current troop the allies are fighting.
+*       battle or not.
+*   @property {number} troopID Current troop that the allies are fighting.
 *   @property {boolean} canEscape Boolean indicating if the player can escape
-*                       this battle.
+*       this battle.
 *   @property {boolean} canGameOver Boolean indicating if there a win/lose node
-*                       or not.
+*       or not.
+*   @property {SceneMap} battleMap The current scene used for battle map.
+*   @property {MapTransitionKind} transitionStart The kind of transition for 
+*       the battle start.
+*   @property {MapTransitionKind} transitionEnd The kind of transition for 
+*       the battle end.
+*   @property {boolean} transitionZoom Boolean used for knowing when to zoom
+*       in or out.
 *   @property {CharacterKind} kindSelection Indicating which group is currently
-*                             selected.
+*       selected.
 *   @property {CharacterKind} attackingGroup Indicating which group is currently
-*                             attacking.
-*   @property {number} step Step of the battle.
-*   @property {number} subStep Sub-step of the battle (usefull for menus or
-*                              other sub-steps).
+*       attacking.
+*   @property {number} step Main step of the battle.
+*   @property {number} subStep Sub step of the battle (used for menus or
+*       other sub-steps).
 *   @property {number} selectedUserIndex Index of the selected user.
 *   @property {number} distanceCenterAlly The distance between the center of map
-*                      battle and ally.
+*       battle and ally.
 *   @property {number} time A chronometer.
 *   @property {Player[]} targets List of all the current targets.
 *   @property {Array.<Array.<Player>>} battlers Battlers of all the
-*                                      allies/enemies.
+*       allies/enemies.
 *   @property {WindowBox} windowTopInformations The window on top that shows
-*   specific informations.
+*       specific informations.
 *   @property {WindowBox} windowCharacterInformations The window on bot that
-*   shows characteristics informations.
+*       shows characteristics informations.
 *   @property {WindowChoice} windowChoicesBattleCommands The window for battle
-*   commands.
+*       commands.
 *   @property {WindowBox} arrowSelection The arrow used to select
-*   allies/ennemies.
+*       allies/ennemies.
 *   @property {GraphicText} textsDamages List of all the damages to display.
 */
 
-function SceneBattle(troopID, canGameOver, canEscape, battleMap, transitionStart,
-    transitionEnd, cameraDistance, transitionStartColor, transitionEndColor)
+function SceneBattle(troopID, canGameOver, canEscape, battleMap, transitionStart
+    , transitionEnd, cameraDistance, transitionStartColor, transitionEndColor)
 {
     SceneMap.call(this, battleMap.idMap, true);
 
-    this.transitionStart = transitionStart;
-    this.transitionEnd = transitionEnd;
-    this.transitionZoom = false;
-    this.transitionStartColor = transitionStartColor;
-    this.transitionEndColor = transitionEndColor;
-    this.transitionColorAlpha = 0;
-    this.transitionColor = transitionStart === 1;
-    this.cameraDistance = cameraDistance;
-    this.camera.distance = 180;
-    this.camera.verticalAngle = 60;
-    this.step = 0;
     this.troopID = troopID;
     this.canGameOver = canGameOver;
     this.canEscape = canEscape;
-    this.sceneMap = $gameStack.top();
+    this.transitionStart = transitionStart;
+    this.transitionEnd = transitionEnd;
+    this.cameraDistance = cameraDistance;
+    this.transitionStartColor = transitionStartColor;
+    this.transitionEndColor = transitionEndColor;
+    this.transitionColor = transitionStart === MapTransitionKind.Fade;
 
-    // Camera settings
-    this.cameraStep = 0;
-    this.cameraTick = 0.05;
-    this.cameraOffset = 3;
-    this.cameraON = transitionStart !== 2;
-    if (!this.cameraON) {
-        this.camera.distance = 10;
-        this.transitionZoom = true;
-    }
-    this.camera.update();
-
-    this.initialize();
+    this.initializeCamera(transitionStart);
+    this.initializeBattle();
 }
 
+SceneBattle.TRANSITION_ZOOM_UDPATE = 5;
 SceneBattle.TRANSITION_COLOR_VALUE = 0.1;
 SceneBattle.TRANSITION_COLOR_END_WAIT = 600;
 SceneBattle.TIME_END_WAIT = 1000;
@@ -90,14 +83,74 @@ SceneBattle.TIME_PROGRESSION_XP = 3000;
 SceneBattle.TIME_LINEAR_MUSIC_END = 500;
 SceneBattle.TIME_LINEAR_MUSIC_START = 500;
 SceneBattle.TIME_ACTION_ANIMATION = 2000;
+SceneBattle.CAMERA_DISTANCE = 180;
+SceneBattle.VERTICAL_ANGLE = 60;
+SceneBattle.CAMERA_TICK = 0.05;
+SceneBattle.CAMERA_OFFSET = 3;
+SceneBattle.START_CAMERA_DISTANCE = 10;
+SceneBattle.WINDOW_PROFILE_WIDTH = 300;
+SceneBattle.WINDOW_PROFILE_HEIGHT = 100;
+SceneBattle.COMMANDS_NUMBER = 6;
+SceneBattle.WINDOW_COMMANDS_WIDTH = 150;
+SceneBattle.WINDOW_COMMANDS_SELECT_X = 25;
+SceneBattle.WINDOW_COMMANDS_SELECT_Y = 100;
+SceneBattle.WINDOW_COMMANDS_SELECT_WIDTH = 200;
+SceneBattle.WINDOW_DESCRIPTIONS_X = 385;
+SceneBattle.WINDOW_DESCRIPTIONS_Y = 100;
+SceneBattle.WINDOW_DESCRIPTIONS_WIDTH = 360;
+SceneBattle.WINDOW_DESCRIPTIONS_HEIGHT = 200;
+SceneBattle.WINDOW_EXPERIENCE_X = 10;
+SceneBattle.WINDOW_EXPERIENCE_Y = 80;
+SceneBattle.WINDOW_EXPERIENCE_WIDTH = 300;
+SceneBattle.WINDOW_EXPERIENCE_HEIGHT = 90;
+SceneBattle.WINDOW_STATS_X = 250;
+SceneBattle.WINDOW_STATS_Y = 90;
+SceneBattle.WINDOW_STATS_WIDTH = 380;
+SceneBattle.WINDOW_STATS_HEIGHT = 200;
 
 SceneBattle.prototype = Object.create(SceneMap.prototype);
 
+// -------------------------------------------------------
+
+/** Initialize and correct some camera settings for the battle start.
+*   @param {MapTransitionKind} transitionStart The kind of transition for 
+*       the battle start.
+*/
+SceneBattle.prototype.initializeCamera = function(transitionStart) {
+    this.camera.distance = SceneBattle.CAMERA_DISTANCE;
+    this.camera.verticalAngle = SceneBattle.VERTICAL_ANGLE;
+    this.cameraStep = 0;
+    this.cameraTick = SceneBattle.CAMERA_TICK;
+    this.cameraOffset = SceneBattle.CAMERA_OFFSET;
+    this.cameraON = transitionStart !== MapTransitionKind.Zoom;
+    this.transitionZoom = false;
+    if (!this.cameraON) {
+        this.camera.distance = SceneBattle.START_CAMERA_DISTANCE;
+        this.transitionZoom = true;
+    }
+    this.camera.update();
+};
+
+// -------------------------------------------------------
+
+/** Initialize the battle. Only called at the beginning of the battle. 
+*/
+SceneBattle.prototype.initializeBattle = function() {
+    this.transitionColorAlpha = 0;
+    this.step = 0;
+    this.sceneMap = $gameStack.top();
+
+    this.initialize();
+};
+
+// -------------------------------------------------------
+
 /** Make the attacking group all actives.
 */
-SceneBattle.prototype.activeGroup = function(){
+SceneBattle.prototype.activeGroup = function() {
     var i, l;
-    for (i = 0, l = this.battlers[this.attackingGroup].length; i < l; i++){
+
+    for (i = 0, l = this.battlers[this.attackingGroup].length; i < l; i++) {
         this.battlers[this.attackingGroup][i].setActive(true);
     }
 };
@@ -110,8 +163,8 @@ SceneBattle.prototype.activeGroup = function(){
 *   @returns {boolean}
 */
 SceneBattle.prototype.isDefined = function(kind, index, target) {
-    return ((target || this.battlers[kind][index].active) &&
-            !this.battlers[kind][index].character.isDead())
+    return ((target || this.battlers[kind][index].active) && !this.battlers
+        [kind][index].character.isDead())
 };
 
 // -------------------------------------------------------
@@ -119,12 +172,13 @@ SceneBattle.prototype.isDefined = function(kind, index, target) {
 /** Check if all the heroes or enemies are inactive.
 *   @returns {boolean}
 */
-SceneBattle.prototype.isEndTurn = function(){
+SceneBattle.prototype.isEndTurn = function() {
     var i, l;
 
-    for (i = 0, l = this.battlers[this.attackingGroup].length; i < l; i++){
-        if (this.isDefined(this.attackingGroup, i))
+    for (i = 0, l = this.battlers[this.attackingGroup].length; i < l; i++) {
+        if (this.isDefined(this.attackingGroup, i)) {
             return false;
+        }
     }
 
     return true;
@@ -136,12 +190,13 @@ SceneBattle.prototype.isEndTurn = function(){
 *   @param {CharacterKind} group Kind of player.
 *   @returns {boolean}
 */
-SceneBattle.prototype.isGroupDead = function(group){
+SceneBattle.prototype.isGroupDead = function(group) {
     var i, l;
 
-    for (i = 0, l = this.battlers[group].length; i < l; i++){
-        if (!this.battlers[group][i].character.isDead())
+    for (i = 0, l = this.battlers[group].length; i < l; i++) {
+        if (!this.battlers[group][i].character.isDead()) {
             return false;
+        }
     }
 
     return true;
@@ -152,7 +207,7 @@ SceneBattle.prototype.isGroupDead = function(group){
 /** Check if all the enemies are dead.
 *   @returns {boolean}
 */
-SceneBattle.prototype.isWin = function(){
+SceneBattle.prototype.isWin = function() {
     return this.isGroupDead(CharacterKind.Monster);
 };
 
@@ -161,7 +216,7 @@ SceneBattle.prototype.isWin = function(){
 /** Check if all the heroes are dead.
 *   @returns {boolean}
 */
-SceneBattle.prototype.isLose = function(){
+SceneBattle.prototype.isLose = function() {
     return this.isGroupDead(CharacterKind.Hero);
 };
 
@@ -169,11 +224,10 @@ SceneBattle.prototype.isLose = function(){
 
 /** Transition to game over scene.
 */
-SceneBattle.prototype.gameOver = function(){
-    if (this.canGameOver){
+SceneBattle.prototype.gameOver = function() {
+    if (this.canGameOver) {
         quit(); // TODO
-    }
-    else {
+    } else {
         this.endBattle();
     }
 };
@@ -182,7 +236,7 @@ SceneBattle.prototype.gameOver = function(){
 
 /** Win the battle.
 */
-SceneBattle.prototype.win = function(){
+SceneBattle.prototype.win = function() {
     this.winning = true;
     this.endBattle();
 };
@@ -191,7 +245,7 @@ SceneBattle.prototype.win = function(){
 
 /** Win the battle.
 */
-SceneBattle.prototype.endBattle = function(){
+SceneBattle.prototype.endBattle = function() {
     var i, l;
 
     // Heroes
@@ -210,7 +264,7 @@ SceneBattle.prototype.endBattle = function(){
 /** Change the step of the battle.
 *   @param {number} i Step of the battle.
 */
-SceneBattle.prototype.changeStep = function(i){
+SceneBattle.prototype.changeStep = function(i) {
     this.step = i;
     this.subStep = 0;
     this.initialize();
@@ -220,8 +274,8 @@ SceneBattle.prototype.changeStep = function(i){
 
 /** Initialize the current step.
 */
-SceneBattle.prototype.initialize = function(){
-    switch(this.step){
+SceneBattle.prototype.initialize = function() {
+    switch (this.step) {
     case 0:
         this.initializeStep0(); break;
     case 1:
@@ -238,7 +292,7 @@ SceneBattle.prototype.initialize = function(){
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.update = function(){
+SceneBattle.prototype.update = function() {
     var i, l, battlers;
 
     SceneMap.prototype.update.call(this);
@@ -255,51 +309,7 @@ SceneBattle.prototype.update = function(){
     }
 
     // Camera temp code for moving
-    if (this.cameraON) {
-        switch (this.cameraStep) {
-        case 0:
-            this.camera.distance -= this.cameraTick;
-            this.camera.targetOffset.x += this.cameraTick;
-            if (this.camera.distance <= 180 - this.cameraOffset) {
-                this.camera.distance = 180 - this.cameraOffset;
-                this.camera.targetOffset.x = this.cameraOffset;
-                this.cameraStep = 1;
-            }
-            break;
-        case 1:
-            this.camera.distance += this.cameraTick;
-            if (this.camera.distance >= 180 + this.cameraOffset) {
-                this.camera.distance = 180 + this.cameraOffset;
-                this.cameraStep = 2;
-            }
-            break;
-        case 2:
-            this.camera.distance -= this.cameraTick;
-            this.camera.targetOffset.x -= this.cameraTick;
-            if (this.camera.distance <= 180 - this.cameraOffset) {
-                this.camera.distance = 180 - this.cameraOffset;
-                this.camera.targetOffset.x = -this.cameraOffset;
-                this.cameraStep = 3;
-            }
-            break;
-        case 3:
-            this.camera.distance += this.cameraTick;
-            if (this.camera.distance >= 180 + this.cameraOffset) {
-                this.camera.distance = 180 + this.cameraOffset;
-                this.cameraStep = 4;
-            }
-            break;
-        case 4:
-            this.camera.distance -= this.cameraTick;
-            this.camera.targetOffset.x += this.cameraTick;
-            if (this.camera.distance <= 180) {
-                this.camera.distance = 180;
-                this.camera.targetOffset.x = 0;
-                this.cameraStep = 0;
-            }
-            break;
-        }
-    }
+    this.moveStandardCamera();
 
     switch(this.step) {
     case 0:
@@ -317,8 +327,72 @@ SceneBattle.prototype.update = function(){
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.onKeyPressed = function(key){
-    switch(this.step){
+/** Do camera standard moves.
+*/
+SceneBattle.prototype.moveStandardCamera = function() {
+    if (this.cameraON) {
+        switch (this.cameraStep) {
+        case 0:
+            this.camera.distance -= this.cameraTick;
+            this.camera.targetOffset.x += this.cameraTick;
+            if (this.camera.distance <= SceneBattle.CAMERA_DISTANCE - this
+                .cameraOffset) 
+            {
+                this.camera.distance = SceneBattle.CAMERA_DISTANCE - this
+                    .cameraOffset;
+                this.camera.targetOffset.x = this.cameraOffset;
+                this.cameraStep = 1;
+            }
+            break;
+        case 1:
+            this.camera.distance += this.cameraTick;
+            if (this.camera.distance >= SceneBattle.CAMERA_DISTANCE + this
+                .cameraOffset) 
+            {
+                this.camera.distance = SceneBattle.CAMERA_DISTANCE + this
+                    .cameraOffset;
+                this.cameraStep = 2;
+            }
+            break;
+        case 2:
+            this.camera.distance -= this.cameraTick;
+            this.camera.targetOffset.x -= this.cameraTick;
+            if (this.camera.distance <= SceneBattle.CAMERA_DISTANCE - this
+                .cameraOffset) 
+            {
+                this.camera.distance = SceneBattle.CAMERA_DISTANCE - this
+                    .cameraOffset;
+                this.camera.targetOffset.x = -this.cameraOffset;
+                this.cameraStep = 3;
+            }
+            break;
+        case 3:
+            this.camera.distance += this.cameraTick;
+            if (this.camera.distance >= SceneBattle.CAMERA_DISTANCE + this
+                .cameraOffset) 
+            {
+                this.camera.distance = SceneBattle.CAMERA_DISTANCE + this
+                    .cameraOffset;
+                this.cameraStep = 4;
+            }
+            break;
+        case 4:
+            this.camera.distance -= this.cameraTick;
+            this.camera.targetOffset.x += this.cameraTick;
+            if (this.camera.distance <= SceneBattle.CAMERA_DISTANCE) {
+                this.camera.distance = SceneBattle.CAMERA_DISTANCE;
+                this.camera.targetOffset.x = 0;
+                this.cameraStep = 0;
+            }
+            break;
+        }
+    }
+};
+
+// -------------------------------------------------------
+
+SceneBattle.prototype.onKeyPressed = function(key) {
+    switch (this.step) {
     case 0:
         this.onKeyPressedStep0(key); break;
     case 1:
@@ -334,8 +408,8 @@ SceneBattle.prototype.onKeyPressed = function(key){
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.onKeyReleased = function(key){
-    switch(this.step){
+SceneBattle.prototype.onKeyReleased = function(key) {
+    switch (this.step) {
     case 0:
         this.onKeyReleasedStep0(key); break;
     case 1:
@@ -351,8 +425,8 @@ SceneBattle.prototype.onKeyReleased = function(key){
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.onKeyPressedRepeat = function(key){
-    switch(this.step){
+SceneBattle.prototype.onKeyPressedRepeat = function(key) {
+    switch (this.step) {
     case 0:
         this.onKeyPressedRepeatStep0(key); break;
     case 1:
@@ -368,8 +442,8 @@ SceneBattle.prototype.onKeyPressedRepeat = function(key){
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.onKeyPressedAndRepeat = function(key){
-    switch(this.step){
+SceneBattle.prototype.onKeyPressedAndRepeat = function(key) {
+    switch (this.step) {
     case 0:
         this.onKeyPressedAndRepeatStep0(key); break;
     case 1:
@@ -385,7 +459,7 @@ SceneBattle.prototype.onKeyPressedAndRepeat = function(key){
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.draw3D = function(canvas){
+SceneBattle.prototype.draw3D = function(canvas) {
     if (this.transitionZoom || this.transitionColor) {
         this.sceneMap.draw3D(canvas);
     } else {
@@ -396,7 +470,7 @@ SceneBattle.prototype.draw3D = function(canvas){
 // -------------------------------------------------------
 
 SceneBattle.prototype.drawHUD = function() {
-    switch(this.step){
+    switch (this.step) {
     case 0:
         this.drawHUDStep0(); break;
     case 1:

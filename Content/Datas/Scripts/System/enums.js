@@ -392,3 +392,15 @@ var ObjectCollisionKind = {
     Custom: 3
 };
 Object.freeze(ObjectCollisionKind);
+
+/**
+*   Enum for the map transitions.
+*   @enum {number}
+*   @readonly
+*/
+var MapTransitionKind = {
+    None: 0,
+    Fade: 1,
+    Zoom: 2
+};
+Object.freeze(MapTransitionKind);

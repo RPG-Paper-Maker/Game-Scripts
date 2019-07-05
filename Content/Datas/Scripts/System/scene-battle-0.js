@@ -16,29 +16,39 @@
 //
 // -------------------------------------------------------
 
-SceneBattle.prototype.initializeStep0 = function(){
-    var i, l, battler, position, w, h;
+SceneBattle.prototype.initializeStep0 = function() {
     this.winning = false;
-    this.distanceCenterAlly = 75;
     this.kindSelection = CharacterKind.Hero;
     this.selectedUserIndex = 0;
     this.selectedTargetIndex = 0;
     this.battleCommandKind = EffectSpecialActionKind.None;
     this.targets = [];
     this.damages = [];
-
-    // Battlers and graphics
     this.battlers = new Array(2);
     this.graphicPlayers = new Array(2);
+
+    this.initializeAlliesBattlers();
+    this.initializeEnemiesBattlers();
+    this.initializeInformations();
+    this.initializeWindowCommands();
+    this.initializeMusics();
+    this.initializeWindowsEnd();
+};
+
+// -------------------------------------------------------
+
+SceneBattle.prototype.initializeAlliesBattlers = function() {
+    var i, l, position, battler;
+
     l = $game.teamHeroes.length;
     this.battlers[CharacterKind.Hero] = new Array(l);
     this.graphicPlayers[CharacterKind.Hero] = new Array(l);
     for (i = 0; i < l; i++) {
+
         // Battlers
         position = new THREE.Vector3($game.heroBattle.position.x + (2 *
-            $SQUARE_SIZE) + (i * $SQUARE_SIZE / 2), $game.heroBattle
-            .position.y, $game.heroBattle.position.z - $SQUARE_SIZE + (i *
-            $SQUARE_SIZE));
+            $SQUARE_SIZE) + (i * $SQUARE_SIZE / 2), $game.heroBattle.position.y, 
+            $game.heroBattle.position.z - $SQUARE_SIZE + (i * $SQUARE_SIZE));
         battler = new Battler($game.teamHeroes[i], position, this.camera);
         battler.addToScene();
         this.battlers[CharacterKind.Hero][i] = battler;
@@ -49,18 +59,26 @@ SceneBattle.prototype.initializeStep0 = function(){
             target: new GraphicPlayer(battler.character, true)
         };
     }
-    var troop = $datasGame.troops.list[this.troopID];
+};
+
+// -------------------------------------------------------
+
+SceneBattle.prototype.initializeEnemiesBattlers = function() {
+    var i, l, troop, enemy, position, instancied, battler;
+
+    troop = $datasGame.troops.list[this.troopID];
     l = troop.list.length;
     this.battlers[CharacterKind.Monster] = new Array(l);
     this.graphicPlayers[CharacterKind.Monster] = new Array(l);
-    for (i = 0; i < l; i++){
+    for (i = 0; i < l; i++) {
+
         // Battlers
-        var enemy = troop.list[i];
+        enemy = troop.list[i];
         position = new THREE.Vector3($game.heroBattle.position.x - (2 *
             $SQUARE_SIZE) - (i * $SQUARE_SIZE * 3 / 4), $game.heroBattle
             .position.y, $game.heroBattle.position.z - $SQUARE_SIZE + (i *
             $SQUARE_SIZE));
-        var instancied = new GamePlayer(CharacterKind.Monster, enemy.id, $game
+        instancied = new GamePlayer(CharacterKind.Monster, enemy.id, $game
             .charactersInstances++, []);
         instancied.instanciate(enemy.level);
         battler = new Battler(instancied, position, this.camera);
@@ -72,54 +90,83 @@ SceneBattle.prototype.initializeStep0 = function(){
             target: new GraphicPlayer(battler.character, true)
         };
     }
+};
 
-    // Informations
-    this.windowTopInformations = new WindowBox(0, 20 , $SCREEN_X, RPM
+// -------------------------------------------------------
+
+SceneBattle.prototype.initializeInformations = function() {
+    this.windowTopInformations = new WindowBox(0, RPM.HUGE_SPACE, $SCREEN_X, RPM
         .SMALL_SLOT_HEIGHT, null, RPM.SMALL_SLOT_PADDING);
-    w = 300;
-    h = 100;
-    this.windowUserInformations = new WindowBox($SCREEN_X - w, $SCREEN_Y -
-        h, w, h, null, RPM.SMALL_PADDING_BOX, false);
-    this.windowTargetInformations = new WindowBox(0, $SCREEN_Y - h, w, h, null,
-        RPM.SMALL_PADDING_BOX, false);
+    this.windowUserInformations = new WindowBox($SCREEN_X - SceneBattle
+        .WINDOW_PROFILE_WIDTH, $SCREEN_Y - SceneBattle.WINDOW_PROFILE_HEIGHT,
+        SceneBattle.WINDOW_PROFILE_WIDTH, SceneBattle.WINDOW_PROFILE_HEIGHT, 
+        null, RPM.SMALL_PADDING_BOX, false);
+    this.windowTargetInformations = new WindowBox(0, $SCREEN_Y - SceneBattle
+        .WINDOW_PROFILE_HEIGHT, SceneBattle.WINDOW_PROFILE_WIDTH, SceneBattle
+        .WINDOW_PROFILE_HEIGHT, null, RPM.SMALL_PADDING_BOX, false);
+};
+
+// -------------------------------------------------------
+
+SceneBattle.prototype.initializeWindowCommands = function() {
+    var i, l, listContent, listCallbacks, skill;
+
     l = $datasGame.battleSystem.battleCommandsOrder.length;
-    var listContent = new Array(l);
-    var listCallbacks = new Array(l);
-    var skill;
-    for (i = 0; i < l; i++){
+    listContent = new Array(l);
+    listCallbacks = new Array(l);
+    for (i = 0; i < l; i++) {
         skill = $datasGame.skills.list[$datasGame.battleSystem
             .battleCommandsOrder[i]];
-
         listContent[i] = new GraphicTextIcon(skill.name, skill.pictureID);
         listContent[i].skill = skill;
         listCallbacks[i] = SystemCommonSkillItem.prototype.use;
     }
     this.windowChoicesBattleCommands = new WindowChoices(OrientationWindow
-        .Vertical, 20, $SCREEN_Y - 20 - (l*30), 150, 30, 6, listContent,
+        .Vertical, RPM.HUGE_SPACE, $SCREEN_Y - RPM.HUGE_SPACE - (l * RPM
+        .SMALL_SLOT_HEIGHT), SceneBattle.WINDOW_COMMANDS_WIDTH, RPM
+        .SMALL_SLOT_HEIGHT, SceneBattle.COMMANDS_NUMBER, listContent, 
         listCallbacks, RPM.SMALL_SLOT_PADDING);
-    this.windowChoicesSkills = new WindowChoices(OrientationWindow.Vertical, 25,
-        100, 200, RPM.SMALL_SLOT_HEIGHT, 6, [], null,
-        RPM.SMALL_SLOT_PADDING);
-    this.windowSkillDescription = new WindowBox($SCREEN_X - 385, 100, 360, 200,
-        null, RPM.HUGE_PADDING_BOX);
-    this.windowChoicesItems = new WindowChoices(OrientationWindow.Vertical, 25,
-        100, 200, RPM.SMALL_SLOT_HEIGHT, 6, [], null,
-        RPM.SMALL_SLOT_PADDING);
-    this.windowItemDescription = new WindowBox($SCREEN_X - 385, 100, 360, 200,
-        null, RPM.HUGE_PADDING_BOX);
+    this.windowChoicesSkills = new WindowChoices(OrientationWindow.Vertical, 
+        SceneBattle.WINDOW_COMMANDS_SELECT_X, SceneBattle
+        .WINDOW_COMMANDS_SELECT_Y, SceneBattle.WINDOW_COMMANDS_SELECT_WIDTH, RPM
+        .SMALL_SLOT_HEIGHT, SceneBattle.COMMANDS_NUMBER, [], null, RPM
+        .SMALL_SLOT_PADDING);
+    this.windowSkillDescription = new WindowBox($SCREEN_X - SceneBattle
+        .WINDOW_DESCRIPTIONS_X, SceneBattle.WINDOW_DESCRIPTIONS_Y, SceneBattle
+        .WINDOW_DESCRIPTIONS_WIDTH, SceneBattle.WINDOW_DESCRIPTIONS_HEIGHT, null
+        , RPM.HUGE_PADDING_BOX);
+    this.windowChoicesItems = new WindowChoices(OrientationWindow.Vertical, 
+        SceneBattle.WINDOW_COMMANDS_SELECT_X, SceneBattle
+        .WINDOW_COMMANDS_SELECT_Y, SceneBattle.WINDOW_COMMANDS_SELECT_WIDTH, RPM
+        .SMALL_SLOT_HEIGHT, SceneBattle.COMMANDS_NUMBER, [], null, RPM
+        .SMALL_SLOT_PADDING);
+    this.windowItemDescription = new WindowBox($SCREEN_X - SceneBattle
+        .WINDOW_DESCRIPTIONS_X, SceneBattle.WINDOW_DESCRIPTIONS_Y, SceneBattle
+        .WINDOW_DESCRIPTIONS_WIDTH, SceneBattle.WINDOW_DESCRIPTIONS_HEIGHT, null
+        , RPM.HUGE_PADDING_BOX);
+};
 
-    // Music
+// -------------------------------------------------------
+
+SceneBattle.prototype.initializeMusics = function() {
     SceneBattle.musicMap = SystemPlaySong.currentPlayingMusic;
     SceneBattle.musicMapTime = $songsManager.getPlayer(SongKind.Music).position
-        / 1000;
+        / RPM.ONE_SECOND_MILLI;
     $datasGame.battleSystem.battleMusic.playSong();
+};
 
-    // End windows
-    this.windowExperienceProgression = new WindowBox(10, 80, 300, (90 * $game
-        .teamHeroes.length) + RPM.SMALL_PADDING_BOX[2] + RPM
-        .SMALL_PADDING_BOX[3], new GraphicXPProgression(), RPM.SMALL_PADDING_BOX);
-    this.windowStatisticProgression = new WindowBox(250, 90, 380, 200, null,
-        RPM.HUGE_PADDING_BOX);
+
+// -------------------------------------------------------
+
+SceneBattle.prototype.initializeWindowsEnd = function() {
+    this.windowExperienceProgression = new WindowBox(SceneBattle
+        .WINDOW_EXPERIENCE_X, SceneBattle.WINDOW_EXPERIENCE_Y, SceneBattle
+        .WINDOW_EXPERIENCE_WIDTH, (SceneBattle.WINDOW_EXPERIENCE_HEIGHT * $game
+        .teamHeroes.length) + RPM.SMALL_PADDING_BOX[2] + RPM.SMALL_PADDING_BOX
+        [3], new GraphicXPProgression(), RPM.SMALL_PADDING_BOX);
+    this.windowStatisticProgression = new WindowBox(SceneBattle.WINDOW_STATS_X, 
+        SceneBattle.WINDOW_STATS_Y, SceneBattle.WINDOW_STATS_WIDTH, SceneBattle
+        .WINDOW_STATS_HEIGHT, null, RPM.HUGE_PADDING_BOX);
 };
 
 // -------------------------------------------------------
@@ -127,8 +174,14 @@ SceneBattle.prototype.initializeStep0 = function(){
 SceneBattle.prototype.updateStep0 = function() {
     $requestPaintHUD = true;
 
-    // Transition fade
-    if (this.transitionStart === 1) {
+    this.updateTransitionStartFade();
+    this.updateTransitionStartZoom();
+};
+
+// -------------------------------------------------------
+
+SceneBattle.prototype.updateTransitionStartFade = function() {
+    if (this.transitionStart === MapTransitionKind.Fade) {
         if (this.transitionColor) {
             this.transitionColorAlpha += SceneBattle.TRANSITION_COLOR_VALUE;
             if (this.transitionColorAlpha >= 1) {
@@ -151,32 +204,40 @@ SceneBattle.prototype.updateStep0 = function() {
             }
             return;
         }
-    }
 
-    // Transition zoom
-    if (this.transitionStart === 2) {
+        this.changeStep(1);
+    }
+};
+
+// -------------------------------------------------------
+
+SceneBattle.prototype.updateTransitionStartZoom = function() {
+    if (this.transitionStart === MapTransitionKind.Zoom) {
         if (this.transitionZoom) {
-            this.sceneMap.camera.distance -= 5;
-            if (this.sceneMap.camera.distance <= 10) {
-                this.sceneMap.camera.distance = 10;
+            this.sceneMap.camera.distance -= SceneBattle.TRANSITION_ZOOM_UDPATE;
+            if (this.sceneMap.camera.distance <= SceneBattle
+                .START_CAMERA_DISTANCE) 
+            {
+                this.sceneMap.camera.distance = SceneBattle
+                    .START_CAMERA_DISTANCE;
                 this.transitionZoom = false;
                 this.updateBackgroundColor();
             }
             this.sceneMap.camera.update();
             return;
         }
-        if (this.camera.distance < 180) {
-            this.camera.distance += 5;
-            if (this.camera.distance >= 180) {
-                this.camera.distance = 180;
+        if (this.camera.distance < SceneBattle.CAMERA_DISTANCE) {
+            this.camera.distance += SceneBattle.TRANSITION_ZOOM_UDPATE;
+            if (this.camera.distance >= SceneBattle.CAMERA_DISTANCE) {
+                this.camera.distance = SceneBattle.CAMERA_DISTANCE;
                 this.cameraON = true;
             } else {
                 return;
             }
         }
-    }
 
-    this.changeStep(1);
+        this.changeStep(1);
+    }
 };
 
 // -------------------------------------------------------
@@ -207,9 +268,11 @@ SceneBattle.prototype.onKeyPressedAndRepeatStep0 = function(key){
 
 SceneBattle.prototype.drawHUDStep0 = function() {
     if (this.transitionStart === 1) {
-        $context.fillStyle = "rgba(" + this.transitionStartColor.red + "," +
-            this.transitionStartColor.green + "," + this.transitionStartColor
-            .blue + "," + this.transitionColorAlpha + ")";
+        $context.fillStyle = RPM.STRING_RGBA + RPM.STRING_PARENTHESIS_LEFT + 
+            this.transitionStartColor.red + RPM.STRING_COMA + this
+            .transitionStartColor.green + RPM.STRING_COMA + this
+            .transitionStartColor.blue + RPM.STRING_COMA + this
+            .transitionColorAlpha + RPM.STRING_PARENTHESIS_RIGHT;
         $context.fillRect(0, 0, $canvasWidth, $canvasHeight);
     }
 };

@@ -16,20 +16,32 @@
 // -------------------------------------------------------
 
 SceneBattle.prototype.initializeStep3 = function() {
-    var i = 0;
+    var i;
+
     this.windowTopInformations.content = null;
     this.attackingGroup = CharacterKind.Monster;
-    do{
+
+    // Define which monster will attack
+    i = 0;
+    do {
         this.user = this.battlers[CharacterKind.Monster][i];
         i++;
-    } while(!this.isDefined(CharacterKind.Monster, i-1));
+    } while (!this.isDefined(CharacterKind.Monster, i - 1));
 
-    this.targets = [this.battlers[CharacterKind.Hero][RPM.random(0, this
-        .battlers[CharacterKind.Hero].length - 1)]];
+    // Define targets
+    this.defineTargets();
+        
     this.time = new Date().getTime();
     this.timeEnemyAttack = new Date().getTime();
     this.battleCommandKind = EffectSpecialActionKind.ApplyWeapons;
     this.attackSkill = $datasGame.skills.list[1];
+};
+
+// -------------------------------------------------------
+
+SceneBattle.prototype.defineTargets = function() {
+    this.targets = [this.battlers[CharacterKind.Hero][RPM.random(0, this
+        .battlers[CharacterKind.Hero].length - 1)]];
 };
 
 // -------------------------------------------------------
