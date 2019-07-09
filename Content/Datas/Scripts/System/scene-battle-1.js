@@ -365,6 +365,8 @@ SceneBattle.prototype.onCommandSelected = function(key) {
 // -------------------------------------------------------
 
 SceneBattle.prototype.onTargetsSelected = function() {
+    var i, l;
+
     if (this.all) {
         for (i = 0, l = this.battlers[this.kindSelection].length; i < l; i++) {
             this.targets.push(this.battlers[this.kindSelection][i]);
