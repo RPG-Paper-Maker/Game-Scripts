@@ -211,6 +211,17 @@ SystemPicture.prototype = {
                         square = rightSquare;
                     else
                         square = leftSquare;
+
+                    if (!square) {
+                        RPM.showErrorMessage("Your wall image " + this.name +
+                            " is not using a correct template. Your image "
+                            + "should be this size: WIDTH: 3 * SQUARE_SIZE, "
+                            + "HEIGHT: as you wish. There should be left wall, "
+                            + "middle wall, and right wall for the 3 width "
+                            + "squares.");
+                        return;
+                    }
+
                     squares[i] = square.rect;
                 }
                 else

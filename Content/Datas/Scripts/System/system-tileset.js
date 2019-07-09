@@ -27,6 +27,8 @@
 function SystemTileset(){
     this.callback = null;
     this.collisions = null;
+    this.ownsAutotiles = false;
+    this.ownsWalls = false;
 }
 
 SystemTileset.prototype = {
@@ -148,9 +150,21 @@ SystemTileset.prototype = {
 
     // -------------------------------------------------------
 
+    loadSpecials: function() {
+        if (!this.ownsAutotiles) {
+            this.loadAutotiles();
+        } else {
+            if (!this.ownsWalls) {
+                this.loadWalls();
+            }
+        }
+    },
+
+    // -------------------------------------------------------
+
     /** Load all the autotiles with reduced files.
     */
-    loadAutotiles: function(){
+    loadAutotiles: function() {
         var autotiles = $datasGame.specialElements.autotiles;
         var autotilesIDs = this.autotiles;
         var id, i = 0, l = autotiles.length, offset = 0;
@@ -192,7 +206,11 @@ SystemTileset.prototype = {
                 }
 
                 // Finished loading textures
-                that.callback = that.loadWalls;
+                if (!that.ownsWalls) {
+                    that.callback = that.loadWalls;
+                } else {
+                    that.callback = null;
+                }
             }
         }
 
@@ -203,7 +221,7 @@ SystemTileset.prototype = {
 
     /** Load all the walls.
     */
-    loadWalls: function(){
+    loadWalls: function() {
         this.loadSpecialTextures(PictureKind.Walls, "texturesWalls", "walls");
         this.callback = null;
     },

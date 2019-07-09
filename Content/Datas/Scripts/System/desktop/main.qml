@@ -41,9 +41,12 @@ Window {
     }
 
     function showError(e){
+        Game.RPM.showError(e);
+        /*
         dialogError.text = e.fileName + " - line: " + e.lineNumber + " -> " +
                 e.message;
         dialogError.open();
+        */
     }
 
     MessageDialog {
@@ -281,9 +284,8 @@ Window {
         visible: false
 
         onImageLoaded: {
-            for (var i = 0, l = Game.$picturesLoading.length; i < l; i++) {
-                if (Game.$picturesLoading[i].check())
-                    break;
+            for (var i = Game.$picturesLoading.length - 1; i >= 0; i--) {
+                Game.$picturesLoading[i].check();
             }
         }
     }

@@ -45,16 +45,20 @@ DatasTilesets.prototype = {
 
                 // Autotiles, walls
                 idString = tileset.getAutotilesString();
-                if (!this.autotiles.hasOwnProperty(idString)) {
+                tileset.ownsAutotiles = this.autotiles.hasOwnProperty(idString);
+                if (!tileset.ownsAutotiles) {
                     this.autotiles[idString] = tileset;
-                    this.loading.push(tileset);
-                    tileset.loadAutotiles();
                 }
                 idString = tileset.getWallsString();
-                if (!this.walls.hasOwnProperty(idString)) {
+                tileset.ownsWalls = this.walls.hasOwnProperty(idString);
+                if (!tileset.ownsWalls) {
                     this.walls[idString] = tileset;
-                    tileset.loadWalls();
                 }
+                if (!tileset.ownsAutotiles || !tileset.ownsWalls) {
+                    this.loading.push(tileset);
+                }
+
+                tileset.loadSpecials();
             }
 
             // Load characters textures

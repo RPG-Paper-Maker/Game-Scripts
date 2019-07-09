@@ -817,12 +817,14 @@ RPM.showError = function(e){
 *   @param {string} error The error message.
 */
 RPM.showErrorMessage = function(error){
-    if ($DIALOG_ERROR !== null){
-        $DIALOG_ERROR.text = error;
-        $DIALOG_ERROR.open();
-    }
-    else
+    if ($DIALOG_ERROR !== null) {
+        if (!$DIALOG_ERROR.text) {
+            $DIALOG_ERROR.text = error;
+            $DIALOG_ERROR.open();
+        }
+    } else {
         console.log(error);
+    }
 }
 
 // -------------------------------------------------------
