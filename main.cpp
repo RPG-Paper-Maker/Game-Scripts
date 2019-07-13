@@ -1,10 +1,12 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Marie Laporte
+    RPG Paper Maker Copyright (C) 2017-2019 Wano
 
-    Commercial license for commercial use of your games:
-        https://creativecommons.org/licenses/by-nc/4.0/.
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
 
-    See more information here: http://rpg-paper-maker.com/index.php/downloads.
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
 */
 
 #include <QGuiApplication>
