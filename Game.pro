@@ -22,6 +22,7 @@ DISTFILES += \
     Content/Datas/Scripts/System/main.js \
     Content/Datas/Scripts/System/battler.js \
     Content/Datas/Scripts/System/camera.js \
+    Content/Datas/Scripts/System/mountain.js \
     Content/Datas/Scripts/System/sprite.js \
     Content/Datas/Scripts/System/bitmap.js \
     Content/Datas/Scripts/System/scene-game.js \
@@ -110,7 +111,6 @@ DISTFILES += \
     Content/Datas/Scripts/System/rpm.js \
     Content/Datas/Scripts/System/picture2d.js \
     Content/Datas/Scripts/System/land.js \
-    Content/Datas/Scripts/System/autotiles.js \
     Content/Datas/Scripts/System/autotile.js \
     Content/Datas/Scripts/System/collision-square.js \
     Content/Datas/Scripts/System/collisions-utilities.js \

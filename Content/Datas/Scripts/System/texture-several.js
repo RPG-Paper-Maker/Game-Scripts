@@ -58,7 +58,11 @@ TextureSeveral.prototype = {
     *   @param {number[]} rect
     *   @param {number[]} point
     */
-    isSup: function(rect, point){
+    isSup: function(rect, point) {
+        if (!rect) {
+            return true;
+        }
+
         if (rect[1] > point[1])
             return true;
         else if (rect[1] === point[1])
@@ -73,7 +77,11 @@ TextureSeveral.prototype = {
     *   @param {number[]} rect
     *   @param {number[]} point
     */
-    isInf: function(rect, point){
+    isInf: function(rect, point) {
+        if (!rect) {
+            return true;
+        }
+
         if (rect[1] < point[1])
             return true;
         else if (rect[1] === point[1])
@@ -122,14 +130,17 @@ TextureSeveral.prototype = {
     *   @param {number} id
     *   @param {number[]} rect
     */
-    getOffset: function(id, rect){
-        var pair, point;
+    getOffset: function(id, rect) {
+        var i, l, pair, point;
 
-        for (var i = 0, l = this.list.length; i < l; i++) {
+        for (i = 0, l = this.list.length; i < l; i++) {
             pair = this.list[i];
             point = pair[1];
-            if (id === pair[0] && point[0] === rect[0] && point[1] === rect[1])
+            if (id === pair[0] && (rect === null || (point[0] === rect[0] &&
+                point[1] === rect[1])))
+            {
                 return i;
+            }
         }
 
         return -1;

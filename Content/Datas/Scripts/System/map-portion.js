@@ -42,13 +42,16 @@ function MapPortion(realX, realY, realZ){
     this.squareNonEmpty = new Array(l);
     this.boundingBoxesLands = new Array(l);
     this.boundingBoxesSprites = new Array(l);
+    this.boundingBoxesMountains = new Array(l);
     this.boundingBoxesObjects3D = new Array(l);
     for (i = 0; i < l; i++) {
         this.boundingBoxesLands[i] = new Array;
         this.boundingBoxesSprites[i] = new Array;
+        this.boundingBoxesMountains[i] = new Array;
         this.boundingBoxesObjects3D[i] = new Array;
     }
-    this.staticAutotilesMesh = new Array;
+    this.staticAutotilesList = new Array;
+    this.staticMountainsList = new Array;
     this.objectsList = new Array;
     this.faceSpritesList = new Array;
     this.staticWallsList = new Array;
@@ -265,6 +268,9 @@ MapPortion.prototype = {
     read: function(json, isMapHero){
         this.readLands(json.lands);
         this.readSprites(json.sprites);
+        if (json.moun) {
+            this.readMountains(json.moun);
+        }
         if (json.objs3d) {
             this.readObjects3D(json.objs3d);
         }
@@ -334,7 +340,7 @@ MapPortion.prototype = {
 
         // Create autotiles according to the textures
         for (i = 0; i < autotilesLength; i++) {
-            this.staticAutotilesMesh.push(
+            this.staticAutotilesList.push(
                  new Autotiles($currentMap.texturesAutotiles[i]));
         }
 
@@ -354,7 +360,7 @@ MapPortion.prototype = {
                                                 autotile.texture))
                 {
                     texture = textureAutotile;
-                    autotiles = this.staticAutotilesMesh[index];
+                    autotiles = this.staticAutotilesList[index];
                     break;
                 }
             }
@@ -369,8 +375,8 @@ MapPortion.prototype = {
         }
 
         // Update all the geometry uvs and put it in the scene
-        for (i = 0, l = this.staticAutotilesMesh.length; i < l; i++) {
-            autotiles = this.staticAutotilesMesh[i];
+        for (i = 0, l = this.staticAutotilesList.length; i < l; i++) {
+            autotiles = this.staticAutotilesList[i];
             autotiles.uvsNeedUpdate = true;
             autotiles.createMesh();
             $currentMap.scene.add(autotiles.mesh);
@@ -493,6 +499,66 @@ MapPortion.prototype = {
                 this.staticWallsList.push(mesh);
                 $gameStack.top().scene.add(mesh);
             }
+        }
+    },
+
+    // -------------------------------------------------------
+
+    /** Read the JSON associated to the mountains in the portion.
+    *   @param {Object} json Json object describing the object.
+    */
+    readMountains: function(json) {
+        if (!json)
+            return;
+
+        var i, l, jsonAll, jsonOverflow, jsonMountain, mountain, mountains,
+            textureMountain, texture, objCollision, index, mountainsLength,
+            position, indexPos, geometry;
+
+        texture = null;
+        mountainsLength = $currentMap.texturesMountains.length;
+        jsonAll = json.a;
+        jsonOverflow = json.o;
+
+        // Create mountains according to the textures
+        for (i = 0; i < mountainsLength; i++) {
+            this.staticMountainsList.push(new Mountains($currentMap
+                .texturesMountains[i]));
+        }
+
+        // Read and update geometry
+        for (i = 0, l = jsonAll.length; i < l; i++) {
+            jsonMountain = jsonAll[i];
+            position = jsonMountain.k;
+            mountain = new Mountain;
+            mountain.read(jsonMountain.v);
+            indexPos = RPM.positionJSONToIndex(position);
+
+            index = 0;
+            for (; index < mountainsLength; index++) {
+
+                textureMountain = $currentMap.texturesMountains[index];
+                if (textureMountain.isInTexture(mountain.mountainID)) {
+                    texture = textureMountain;
+                    mountains = this.staticMountainsList[index];
+                    break;
+                }
+            }
+
+            if (texture !== null && texture.texture !== null) {
+                objCollision = mountains.updateGeometry(position, mountain);
+                if (objCollision !== null) {
+                    this.boundingBoxesMountains[indexPos].push(objCollision);
+                }
+            }
+        }
+
+        // Update all the geometry uvs and put it in the scene
+        for (i = 0, l = this.staticMountainsList.length; i < l; i++) {
+            mountains = this.staticMountainsList[i];
+            mountains.uvsNeedUpdate = true;
+            mountains.createMesh();
+            $currentMap.scene.add(mountains.mesh);
         }
     },
 
@@ -631,32 +697,44 @@ MapPortion.prototype = {
 
     /** Remove all the objects from the scene.
     */
-    cleanAll: function(){
+    cleanAll: function() {
         var i, l, datas, objects, object, index;
-        datas = $game.mapsDatas
-                [$currentMap.id][this.realX][this.realY][this.realZ];
+        datas = $game.mapsDatas[$currentMap.id][this.realX][this.realY][this
+            .realZ];
 
         // Static stuff
         $currentMap.scene.remove(this.staticFloorsMesh);
         $currentMap.scene.remove(this.staticSpritesMesh);
-        for (i = 0, l = this.faceSpritesList.length; i < l; i++)
+        for (i = 0, l = this.faceSpritesList.length; i < l; i++) {
             $currentMap.scene.remove(this.faceSpritesList[i]);
-        for (i = 0, l = this.staticWallsList.length; i < l; i++)
+        }
+        for (i = 0, l = this.staticWallsList.length; i < l; i++) {
             $currentMap.scene.remove(this.staticWallsList[i]);
-        for (i = 0, l = this.staticObjects3DList.length; i < l; i++)
+        }
+        for (i = 0, l = this.staticAutotilesList.length; i < l; i++) {
+            $currentMap.scene.remove(this.staticAutotilesList[i].mesh);
+        }
+        for (i = 0, l = this.staticMountainsList.length; i < l; i++) {
+            $currentMap.scene.remove(this.staticMountainsList[i].mesh);
+        }
+        for (i = 0, l = this.staticObjects3DList.length; i < l; i++) {
             $currentMap.scene.remove(this.staticObjects3DList[i]);
+        }
 
         // Objects
-        for (i = 0, l = this.objectsList.length; i < l; i++)
+        for (i = 0, l = this.objectsList.length; i < l; i++) {
             $currentMap.scene.remove(this.objectsList[i].mesh);
+        }
 
         // Remove moved objects from the scene
         objects = datas.min;
-        for (i = 0, l = objects.length; i < l; i++)
+        for (i = 0, l = objects.length; i < l; i++) {
             objects[i].removeFromScene();
+        }
         objects = datas.mout;
-        for (i = 0, l = objects.length; i < l; i++)
+        for (i = 0, l = objects.length; i < l; i++) {
             objects[i].removeFromScene();
+        }
     },
 
     // -------------------------------------------------------
