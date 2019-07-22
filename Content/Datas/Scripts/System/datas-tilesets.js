@@ -35,6 +35,7 @@ DatasTilesets.prototype = {
             this.list = new Array(l+1);
             this.autotiles = {};
             this.walls = {};
+            this.mountains = {};
             this.loading = [];
 
             // Sorting all the tilesets according to the ID
@@ -51,12 +52,19 @@ DatasTilesets.prototype = {
                 if (!tileset.ownsAutotiles) {
                     this.autotiles[idString] = tileset;
                 }
+                idString = tileset.getMountainsString();
+                tileset.ownsMountains = this.mountains.hasOwnProperty(idString);
+                if (!tileset.ownsMountains) {
+                    this.mountains[idString] = tileset;
+                }
                 idString = tileset.getWallsString();
                 tileset.ownsWalls = this.walls.hasOwnProperty(idString);
                 if (!tileset.ownsWalls) {
                     this.walls[idString] = tileset;
                 }
-                if (!tileset.ownsAutotiles || !tileset.ownsWalls) {
+                if (!tileset.ownsAutotiles || !tileset.ownsMountains ||!tileset
+                    .ownsWalls)
+                {
                     this.loading.push(tileset);
                 }
 
@@ -94,8 +102,14 @@ DatasTilesets.prototype = {
 
     // -------------------------------------------------------
 
-    getTexturesAutotiles: function(tileset){
+    getTexturesAutotiles: function(tileset) {
         return this.autotiles[tileset.getAutotilesString()].texturesAutotiles;
+    },
+
+    // -------------------------------------------------------
+
+    getTexturesMountains: function(tileset) {
+        return this.mountains[tileset.getMountainsString()].texturesMountains;
     },
 
     // -------------------------------------------------------

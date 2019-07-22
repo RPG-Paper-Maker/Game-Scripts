@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 Qt.include("../enums.js")
-Qt.include("../texture-autotile.js")
+Qt.include("../texture-several.js")
 Qt.include("../datas-game.js")
 Qt.include("../datas-pictures.js")
 Qt.include("../datas-songs.js")
@@ -53,8 +53,7 @@ Qt.include("../system-item.js")
 Qt.include("../system-armor.js")
 Qt.include("../system-weapon.js")
 Qt.include("../system-class.js")
-Qt.include("../system-autotile.js")
-Qt.include("../system-wall.js")
+Qt.include("../system-special-element.js")
 Qt.include("../system-object-3d.js")
 Qt.include("../system-tileset.js")
 Qt.include("../system-statistic-progression.js")

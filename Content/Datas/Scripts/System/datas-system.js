@@ -87,6 +87,10 @@ DatasSystem.prototype = {
             //$PORTIONS_RAY_NEAR = json.pr;
             $PORTIONS_RAY_NEAR = 3;
             $FRAMES = json.frames;
+            this.mountainCollisionHeight = SystemValue.readOrDefaultNumber(json
+                .mch, 8);
+            this.mountainCollisionAngle = SystemValue.readOrDefaultNumberDouble(
+                json.mca, 45);
 
             // Path BR
             RPM.PATH_BR = "file:///" + json.pathBR + "/";

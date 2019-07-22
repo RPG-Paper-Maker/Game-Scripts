@@ -1,1 +1,1 @@
-{"list":[{"auto":[{"id":1,"name":"General"}],"id":1,"name":"Plains","objs":[],"pic":1,"relief":[],"walls":[]}]}
+{"list":[{"auto":[{"id":1,"name":"General"}],"id":1,"moun":[{"id":1,"name":"grass"},{"id":2,"name":""},{"id":3,"name":""}],"name":"Plains","objs":[],"pic":1,"walls":[]}]}

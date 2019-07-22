@@ -166,7 +166,7 @@ var PictureKind = {
     Icons: 2,
     Autotiles: 3,
     Characters: 4,
-    Reliefs: 5,
+    Mountains: 5,
     Tilesets: 6,
     Walls: 7,
     Battlers: 8,

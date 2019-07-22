@@ -29,12 +29,13 @@ SystemObject3D.prototype = {
     *   @param {Object} json Json object describing the object.
     */
     readJSON: function(json) {
+        SystemSpecialElement.prototype.readJSON.call(this, json);
+
         this.id = json.id;
         this.shapeKind = typeof json.sk === 'undefined' ? ShapeKind.Box : json
             .sk;
         this.objID = typeof json.oid === 'undefined' ? -1 : json.oid;
         this.mtlID = typeof json.mid === 'undefined' ? -1 : json.mid;
-        this.pictureID = typeof json.pic === 'undefined' ? -1 : json.pic;
         this.collisionKind = typeof json.ck === 'undefined' ?
             ObjectCollisionKind.None : json.ck;
         this.collisionCustomID = typeof json.ccid === 'undefined' ? -1 : json

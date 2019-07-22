@@ -11,12 +11,12 @@
 
 // -------------------------------------------------------
 //
-//  CLASS TextureAutotile
+//  CLASS TextureSeveral
 //
 // -------------------------------------------------------
 
 /** @class
-*   A texture autotile in a single file.
+*   Several textures in a single file.
 *   @property {THREE.Material} texture The generated texture.
 *   @property {number} beginID The begining texture ID.
 *   @property {number[]} beginPoint The begining texture point offset.
@@ -24,12 +24,13 @@
 *   @property {number[]} endPoint The ending texture point offset.
 *   @property {number[][]} list List of each offset point.
 */
-function TextureAutotile(){
+
+function TextureSeveral(){
     this.list = new Array;
     this.texture = null;
 }
 
-TextureAutotile.prototype = {
+TextureSeveral.prototype = {
 
     /** Set the begining texture.
     *   @param {number} id The begining texture ID.

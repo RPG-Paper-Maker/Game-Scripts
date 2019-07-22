@@ -26,6 +26,8 @@ DISTFILES += \
     Content/Datas/Scripts/System/bitmap.js \
     Content/Datas/Scripts/System/scene-game.js \
     Content/Datas/Scripts/System/scene-title-screen.js \
+    Content/Datas/Scripts/System/system-special-element.js \
+    Content/Datas/Scripts/System/texture-several.js \
     Content/Datas/Scripts/System/window-box.js \
     Content/Datas/Scripts/System/window-choices.js \
     Content/Datas/Scripts/System/game-stack.js \
@@ -102,15 +104,12 @@ DISTFILES += \
     Content/Datas/Scripts/System/system-tileset.js \
     Content/Datas/Scripts/System/datas-pictures.js \
     Content/Datas/Scripts/System/sprite-wall.js \
-    Content/Datas/Scripts/System/system-wall.js \
     Content/Datas/Scripts/System/datas-special-elements.js \
     Content/Datas/Scripts/System/map-element.js \
     Content/Datas/Scripts/System/floor.js \
     Content/Datas/Scripts/System/rpm.js \
     Content/Datas/Scripts/System/picture2d.js \
     Content/Datas/Scripts/System/land.js \
-    Content/Datas/Scripts/System/system-autotile.js \
-    Content/Datas/Scripts/System/texture-autotile.js \
     Content/Datas/Scripts/System/autotiles.js \
     Content/Datas/Scripts/System/autotile.js \
     Content/Datas/Scripts/System/collision-square.js \

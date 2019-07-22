@@ -71,6 +71,17 @@ SystemValue.createNumber = function(n){
 
 // -------------------------------------------------------
 
+/** Create a new value number.
+*   @static
+*   @property {number} n The number.
+*   @returns {SystemValue}
+*/
+SystemValue.createNumberDouble = function(n){
+    return SystemValue.createValue(PrimitiveValueKind.NumberDouble, n);
+}
+
+// -------------------------------------------------------
+
 /** Create a new value keyBoard.
 *   @static
 *   @property {number} k The key number.
@@ -105,6 +116,22 @@ SystemValue.readOrDefaultNumber = function(json, number) {
     }
 
     return SystemValue.createNumber(number);
+}
+
+// -------------------------------------------------------
+
+SystemValue.readOrDefaultNumberDouble = function(json, number) {
+    if (typeof number === 'undefined') {
+        number = 0;
+    }
+
+    if (json) {
+        var value = new SystemValue();
+        value.read(json);
+        return value;
+    }
+
+    return SystemValue.createNumberDouble(number);
 }
 
 // -------------------------------------------------------

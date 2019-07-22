@@ -297,6 +297,7 @@ SceneMap.prototype = {
         this.textureTileset = RPM.loadTexture(tileset.getPath(), tileset.picture);
         this.texturesAutotiles = $datasGame.tilesets.getTexturesAutotiles(tileset);
         this.texturesWalls = $datasGame.tilesets.getTexturesWalls(tileset);
+        this.texturesMountains = $datasGame.tilesets.getTexturesMountains(tileset);
         this.texturesObjects3D = $datasGame.tilesets.texturesObjects3D;
         this.texturesCharacters = $datasGame.tilesets.texturesCharacters;
 

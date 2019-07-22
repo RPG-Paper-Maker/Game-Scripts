@@ -11,21 +11,21 @@
 
 // -------------------------------------------------------
 //
-//  CLASS SystemWall
+//  CLASS SystemSpecialElement
 //
 // -------------------------------------------------------
 
 /** @class
-*   A tileset of the game.
+*   A special element (autotile, wall, object3D, mountain) of the game.
 *   @property {number} picutreID The picture ID of the wall.
 */
-function SystemWall(){
+function SystemSpecialElement() {
 
 }
 
-SystemWall.prototype = {
+SystemSpecialElement.prototype = {
 
-    /** Read the JSON associated to the wall.
+    /** Read the JSON associated to the special element.
     *   @param {Object} json Json object describing the object.
     */
     readJSON: function(json){

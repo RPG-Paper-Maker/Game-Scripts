@@ -17,12 +17,12 @@
 
 /** @class
 *   All the special elements datas.
-*   @property {SystemWall[]} walls List of all the walls of the game
+*   @property {SystemSpecialElement[]} walls List of all the walls of the game
 *   according to ID.
-*   @property {SystemAutotile[]} autotiles List of all the autotiles of the game
+*   @property {SystemSpecialElement[]} autotiles List of all the autotiles of the game
 *    according to ID.
 */
-function DatasSpecialElements(){
+function DatasSpecialElements() {
     this.read();
 }
 
@@ -32,46 +32,57 @@ DatasSpecialElements.prototype = {
     */
     read: function(){
         RPM.openFile(this, RPM.FILE_SPECIAL_ELEMENTS, true, function(res){
-            var json, jsonAutotiles, jsonAutotile, jsonWalls, jsonWall,
-                jsonObjects, jsonObject;
-            var autotile, wall, object;
+            var json, jsonSpecials, jsonSpecial;
+            var autotile, wall, mountain, object;
             var i, l, id;
 
             json = JSON.parse(res);
 
             // Autotiles
-            jsonAutotiles = json.autotiles;
-            l = jsonAutotiles.length;
+            jsonSpecials = json.autotiles;
+            l = jsonSpecials.length;
             this.autotiles = new Array(l+1);
             for (i = 0; i < l; i++){
-                jsonAutotile = jsonAutotiles[i];
-                id = jsonAutotile.id;
-                autotile = new SystemAutotile();
-                autotile.readJSON(jsonAutotile);
+                jsonSpecial = jsonSpecials[i];
+                id = jsonSpecial.id;
+                autotile = new SystemSpecialElement();
+                autotile.readJSON(jsonSpecial);
                 this.autotiles[id] = autotile;
             }
 
             // Walls
-            jsonWalls = json.walls;
-            l = jsonWalls.length;
+            jsonSpecials = json.walls;
+            l = jsonSpecials.length;
             this.walls = new Array(l+1);
             for (i = 0; i < l; i++){
-                jsonWall = jsonWalls[i];
-                id = jsonWall.id;
-                wall = new SystemWall();
-                wall.readJSON(jsonWall);
+                jsonSpecial = jsonSpecials[i];
+                id = jsonSpecial.id;
+                wall = new SystemSpecialElement();
+                wall.readJSON(jsonSpecial);
                 this.walls[id] = wall;
             }
 
+            // Mountains
+            jsonSpecials = json.o;
+            l = jsonSpecials.length;
+            this.mountains = new Array(l + 1);
+            for (i = 0; i < l; i++) {
+                jsonSpecial = jsonSpecials[i];
+                id = jsonSpecial.id;
+                object = new SystemSpecialElement();
+                object.readJSON(jsonSpecial);
+                this.mountains[id] = object;
+            }
+
             // Objects 3D
-            jsonObjects = json.o;
-            l = jsonObjects.length;
+            jsonSpecials = json.o;
+            l = jsonSpecials.length;
             this.objects = new Array(l + 1);
             for (i = 0; i < l; i++) {
-                jsonObject = jsonObjects[i];
-                id = jsonObject.id;
+                jsonSpecial = jsonSpecials[i];
+                id = jsonSpecial.id;
                 object = new SystemObject3D();
-                object.readJSON(jsonObject);
+                object.readJSON(jsonSpecial);
                 this.objects[id] = object;
             }
         });
