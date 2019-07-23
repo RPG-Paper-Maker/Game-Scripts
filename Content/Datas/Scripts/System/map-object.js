@@ -245,7 +245,7 @@ MapObject.prototype = {
                                          this.position.z);
 
         // The speed depends on the time elapsed since the last update
-        var xPlus, zPlus, xAbs, zAbs, res, i, l;
+        var xPlus, zPlus, xAbs, zAbs, res, i, l, blocked;
         var w = $currentMap.mapInfos.length * $SQUARE_SIZE;
         var h = $currentMap.mapInfos.width * $SQUARE_SIZE;
         var result, yMountain;
@@ -297,12 +297,13 @@ MapObject.prototype = {
 
         // Collision
         this.updateBBPosition(position);
-        yMountain = position.y
+        yMountain = null;
+        blocked = false;
         for (i = 0, l = this.meshBoundingBox.length; i < l; i++) {
             this.currentBoundingBox = this.meshBoundingBox[i];
             result = MapPortion.checkCollisionRay(this.position, position, this);
             if (result[0]) {
-                yMountain = this.position.y;
+                blocked = true;
                 position = this.position;
                 break;
             }
@@ -310,7 +311,21 @@ MapObject.prototype = {
                 yMountain = result[1];
             }
         }
-        position.setY(yMountain);
+        // If not blocked and possible Y up/down, check if there is no collision
+        // on top
+        if (!blocked && yMountain !== null) {
+            position.setY(yMountain);
+            for (i = 0, l = this.meshBoundingBox.length; i < l; i++) {
+                this.currentBoundingBox = this.meshBoundingBox[i];
+                result = MapPortion.checkCollisionRay(this.position, position,
+                    this);
+                if (result[0]) {
+                    position = this.position;
+                    break;
+                }
+            }
+        }
+
         this.updateBBPosition(this.position);
 
         return position;

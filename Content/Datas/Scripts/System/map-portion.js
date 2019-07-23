@@ -76,7 +76,7 @@ MapPortion.checkCollisionRay = function(positionBefore, positionAfter, object) {
     var startI, endI, startJ, endJ, startK, endK;
     var positionAfterPlus = new THREE.Vector3();
     var testedCollisions = new Array;
-    var result, yMountain, floors, maxY, limitY, temp;
+    var result, yMountain, floors, maxY, limitY, temp, block;
 
     yMountain = null;
 
@@ -113,6 +113,7 @@ MapPortion.checkCollisionRay = function(positionBefore, positionAfter, object) {
     endJ = 0;
 
     // Check collision outside
+    block = false;
     for (i = startI; i <= endI; i++) {
         for (j = startJ; j <= endJ; j++) {
             for (k = startK; k <= endK; k++) {
@@ -128,13 +129,18 @@ MapPortion.checkCollisionRay = function(positionBefore, positionAfter, object) {
                         jpositionAfter[2] + k], positionBefore, positionAfter,
                         object, direction, testedCollisions);
                     if (result[0]) {
-                        return result;
+                        block = true;
                     } else if (result[1] !== null) {
-                        yMountain = result[1];
+                        if (yMountain === null || yMountain < result[1]) {
+                            yMountain = result[1];
+                        }
                     }
                 }
             }
         }
+    }
+    if (block && (yMountain === null)) {
+        return [true, null];
     }
 
     // Check collision inside & with other objects
@@ -191,6 +197,7 @@ MapPortion.checkCollisionRay = function(positionBefore, positionAfter, object) {
             }
         }
 
+        // Check lands inside collisions
         return [mapPortion.checkLandsCollisionInside(jpositionBefore,
             jpositionAfter, direction), yMountain];
     }
@@ -892,13 +899,13 @@ MapPortion.prototype = {
     // -------------------------------------------------------
 
     updateCollision: function(boundingBoxes, collisions, position, side) {
-        var objCollision, positionPlus, z;
+        var i, l, a, b, c, objCollision, positionPlus, objCollisionPlus;
 
-        for (var i = 0, l = collisions.length; i < l; i++) {
+        for (i = 0, l = collisions.length; i < l; i++) {
             objCollision = collisions[i];
-            for (var a = -objCollision.w; a <= objCollision.w; a++) {
-                for (var b = -objCollision.h; b <= objCollision.h; b++) {
-                    for (var c = -objCollision.d; c <= objCollision.d; c++) {
+            for (a = -objCollision.w; a <= objCollision.w; a++) {
+                for (b = -objCollision.h; b <= objCollision.h; b++) {
+                    for (c = -objCollision.d; c <= objCollision.d; c++) {
                         positionPlus = [
                             position[0] + a,
                             position[1] + b,
@@ -906,14 +913,17 @@ MapPortion.prototype = {
                         ];
                         if ($currentMap.isInMap(positionPlus)) {
                             if (side) {
-                                objCollision.left = a < 0;
-                                objCollision.right = a > 0;
-                                objCollision.top = c < 0;
-                                objCollision.bot = c > 0;
+                                objCollisionPlus = Object.create(objCollision);
+                                objCollisionPlus.left = a < 0;
+                                objCollisionPlus.right = a > 0;
+                                objCollisionPlus.top = c < 0;
+                                objCollisionPlus.bot = c > 0;
+                            } else {
+                                objCollisionPlus = objCollision;
                             }
 
                             boundingBoxes[RPM.positionToIndex(positionPlus)]
-                                .push(objCollision);
+                                .push(objCollisionPlus);
                         }
                     }
                 }
@@ -1180,11 +1190,12 @@ MapPortion.prototype = {
     checkMountainsCollision: function(jpositionAfter, positionAfter,
         testedCollisions, object)
     {
-        var i, l, mountains, objCollision, result, yMountain;
+        var i, l, mountains, objCollision, result, yMountain, block;
 
         yMountain = null;
         mountains = this.boundingBoxesMountains[RPM.positionToIndex(
             jpositionAfter)];
+        block = false;
         if (mountains !== null) {
             for (i = 0, l = mountains.length; i < l; i++) {
                 objCollision = mountains[i];
@@ -1193,56 +1204,174 @@ MapPortion.prototype = {
                     result = this.checkMountainCollision(jpositionAfter,
                         positionAfter, objCollision, object);
                     if (result[0]) {
-                        return result;
+                        if (result[1] === null) {
+                            return result;
+                        } else {
+                            block = true;
+                        }
                     } else if (result[1] !== null) {
-                        yMountain = result[1];
+                        if (yMountain === null || yMountain < result[1]) {
+                            yMountain = result[1];
+                        }
                     }
                 }
             }
         }
 
-        return [false, yMountain]; // Collision + newY
+        return [block && (yMountain === null), yMountain];
     },
 
     // -------------------------------------------------------
 
     checkMountainCollision: function(jpositionAfter, positionAfter, objCollision
         , object) {
-        var point, result, x, y, z;
+        var point, result, x, y, z, w, h, plane, ray, pA, pB, pC, ptA, ptB, ptC,
+            newPosition, mountain;
 
         point = new THREE.Vector2(positionAfter.x, positionAfter.z);
         x = objCollision.l.x;
         y = objCollision.l.y;
         z = objCollision.l.z;
+        w = objCollision.rw;
+        h = objCollision.rh;
+        mountain = objCollision.t;
 
-        // if w = 0, check height
-        if (objCollision.rw === 0) {
-            if (positionAfter.y >= y && positionAfter.y < (y + objCollision.rh)
-                && CollisionsUtilities.isPointOnRectangle(point, x, x +
-                $SQUARE_SIZE, z, z + $SQUARE_SIZE))
-            {
-                return ((y + objCollision.rh) <= (positionAfter.y + $datasGame.system
-                .mountainCollisionHeight.getValue())) ? [false, y + objCollision.rh] : [true, null];
+        if (positionAfter.y >= y && positionAfter.y <= (y + objCollision.rh)) {
+            // if w = 0, check height
+            if (objCollision.rw === 0) {
+                if (CollisionsUtilities.isPointOnRectangle(point, x, x +
+                    $SQUARE_SIZE, z, z + $SQUARE_SIZE))
+                {
+                    return ((y + objCollision.rh) <= (positionAfter.y +
+                        $datasGame.system.mountainCollisionHeight.getValue())) ?
+                        [false, y + objCollision.rh] : [true, null];
+                }
+            } else { // if w > 0, go like a slope
+                // Create a plane and ray for calculatin intersection
+                plane = new THREE.Plane();
+                ray = new THREE.Ray(new THREE.Vector3(positionAfter.x, y,
+                    positionAfter.z), new THREE.Vector3(0, 1, 0));
+                newPosition = new THREE.Vector3();
+
+                // Get coplanar points according to side
+                if (objCollision.left && !mountain.left) {
+                    if (objCollision.top && !mountain.top) {
+                        ptA = new THREE.Vector2(x - w, z);
+                        ptB = new THREE.Vector2(x, z);
+                        ptC = new THREE.Vector2(x, z - w);
+                        if (CollisionsUtilities.isPointOnTriangle(point, ptA,
+                            ptB, ptC))
+                        {
+                            pA = new THREE.Vector3(ptA.x, y, ptA.y);
+                            pB = new THREE.Vector3(ptB.x, y + h, ptB.y);
+                            pC = new THREE.Vector3(ptC.x, y, ptC.y);
+                        } else {
+                            return [false, null];
+                        }
+                    } else if (objCollision.bot && !mountain.bot) {
+                        ptA = new THREE.Vector2(x - w, z + $SQUARE_SIZE);
+                        ptB = new THREE.Vector2(x, z + $SQUARE_SIZE);
+                        ptC = new THREE.Vector2(x, z + $SQUARE_SIZE + w);
+                        if (CollisionsUtilities.isPointOnTriangle(point, ptA,
+                            ptB, ptC))
+                        {
+                            pA = new THREE.Vector3(ptA.x, y, ptA.y);
+                            pB = new THREE.Vector3(ptB.x, y + h, ptB.y);
+                            pC = new THREE.Vector3(ptC.x, y, ptC.y);
+                        } else {
+                            return [false, null];
+                        }
+                    } else {
+                        if (CollisionsUtilities.isPointOnRectangle(point, x - w,
+                            x, z, z + $SQUARE_SIZE))
+                        {
+                            pA = new THREE.Vector3(x - w, y, z);
+                            pB = new THREE.Vector3(x, y + h, z);
+                            pC = new THREE.Vector3(x, y + h, z + $SQUARE_SIZE);
+                        } else {
+                            return [false, null];
+                        }
+                    }
+                } else if (objCollision.right && !mountain.right) {
+                    if (objCollision.top && !mountain.top) {
+                        ptA = new THREE.Vector2(x + $SQUARE_SIZE, z - w);
+                        ptB = new THREE.Vector2(x + $SQUARE_SIZE, z);
+                        ptC = new THREE.Vector2(x + $SQUARE_SIZE + w, z);
+                        if (CollisionsUtilities.isPointOnTriangle(point, ptA,
+                            ptB, ptC))
+                        {
+                            pA = new THREE.Vector3(ptA.x, y, ptA.y);
+                            pB = new THREE.Vector3(ptB.x, y + h, ptB.y);
+                            pC = new THREE.Vector3(ptC.x, y, ptC.y);
+                        } else {
+                            return [false, null];
+                        }
+                    } else if (objCollision.bot && !mountain.bot) {
+                        ptA = new THREE.Vector2(x + $SQUARE_SIZE, z +
+                            $SQUARE_SIZE + w);
+                        ptB = new THREE.Vector2(x + $SQUARE_SIZE, z +
+                            $SQUARE_SIZE);
+                        ptC = new THREE.Vector2(x + $SQUARE_SIZE + w, z +
+                            $SQUARE_SIZE);
+                        if (CollisionsUtilities.isPointOnTriangle(point, ptA,
+                            ptB, ptC))
+                        {
+                            pA = new THREE.Vector3(ptA.x, y, ptA.y);
+                            pB = new THREE.Vector3(ptB.x, y + h, ptB.y);
+                            pC = new THREE.Vector3(ptC.x, y, ptC.y);
+                        } else {
+                            return [false, null];
+                        }
+                    } else {
+                        if (CollisionsUtilities.isPointOnRectangle(point, x +
+                            $SQUARE_SIZE, x + $SQUARE_SIZE + w, z, z +
+                            $SQUARE_SIZE))
+                        {
+                            pA = new THREE.Vector3(x + $SQUARE_SIZE, y + h, z +
+                                $SQUARE_SIZE);
+                            pB = new THREE.Vector3(x + $SQUARE_SIZE, y + h, z);
+                            pC = new THREE.Vector3(x + $SQUARE_SIZE + w, y, z);
+                        } else {
+                            return [false, null];
+                        }
+                    }
+                } else {
+                    if (objCollision.top && !mountain.top) {
+                        if (CollisionsUtilities.isPointOnRectangle(point, x, x +
+                            $SQUARE_SIZE, z - w, z))
+                        {
+                            pA = new THREE.Vector3(x, y + h, z);
+                            pB = new THREE.Vector3(x, y, z - w);
+                            pC = new THREE.Vector3(x + $SQUARE_SIZE, y, z - w);
+                        } else {
+                            return [false, null];
+                        }
+                    } else if (objCollision.bot && !mountain.bot) {
+                        if (CollisionsUtilities.isPointOnRectangle(point, x, x +
+                            $SQUARE_SIZE, z + $SQUARE_SIZE, z + $SQUARE_SIZE + w))
+                        {
+                            pA = new THREE.Vector3(x + $SQUARE_SIZE, y, z +
+                                $SQUARE_SIZE + w);
+                            pB = new THREE.Vector3(x, y, z + $SQUARE_SIZE + w);
+                            pC = new THREE.Vector3(x, y + h, z + $SQUARE_SIZE);
+                        } else {
+                            return [false, null];
+                        }
+                    } else {
+                        return [false, null];
+                    }
+                }
+
+                // get the intersection point for updating mountain y
+                plane.setFromCoplanarPoints(pA, pB, pC);
+                ray.intersectPlane(plane, newPosition);
+
+                return [Math.abs(newPosition.y - positionAfter.y) > $datasGame
+                    .system.mountainCollisionHeight.getValue(), newPosition.y];
             }
         }
 
-        /*
-        if (objCollision.left) {
-            if (objCollision.top) {
 
-            } else if (objCollision.bot) {
-
-            } else {
-                result = CollisionsUtilities.isPointOnRectangle(point, objCollision.l.x,
-                    objCollision.l.x + objCollision.b[3], objCollision.l.z, objCollision.l.z + $SQUARE_SIZE);
-                console.log(result);
-
-                return [false, null];
-            }
-        } else {
-            return [false, null];
-        }
-        */
 
         return [false, null];
     },

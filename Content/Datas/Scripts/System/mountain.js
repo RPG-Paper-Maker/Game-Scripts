@@ -352,11 +352,12 @@ Mountain.prototype = {
                     wp,
                     0
                 ],
-                w: Math.floor(this.getTotalSquaresWidth() / 2),
-                h: Math.floor(this.getTotalSquaresHeight(position[2]) / 2),
-                d: Math.floor(this.getTotalSquaresWidth() / 2),
+                w: this.getTotalSquaresWidth(),
+                h: this.getTotalSquaresHeight(position[2]),
+                d: this.getTotalSquaresWidth(),
                 rw: this.getWidthTotalPixels(),
                 rh: this.getHeightTotalPixels(),
+                t: this,
                 k: true
             }
         ];

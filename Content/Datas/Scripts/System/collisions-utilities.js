@@ -24,6 +24,28 @@ function CollisionsUtilities(){
 
 // -------------------------------------------------------
 
+CollisionsUtilities.isPointOnRectangle = function(p, x1, x2, y1, y2) {
+    return p.x >= x1 && p.x <= x2 && p.y >= y1 && p.y <= y2;
+}
+
+// -------------------------------------------------------
+
+CollisionsUtilities.isPointOnTriangle = function(p, p0, p1, p2) {
+    var a, sign, s, t;
+
+    a = 1/2 * (-p1.y * p2.x + p0.y * (-p1.x + p2.x) + p0.x * (p1.y - p2.y) + p1
+        .x * p2.y);
+    sign = a < 0 ? -1 : 1;
+    s = (p0.y * p2.x - p0.x * p2.y + (p2.y - p0.y) * p.x + (p0.x - p2.x) * p.y)
+        * sign;
+    t = (p0.x * p1.y - p0.y * p1.x + (p0.y - p1.y) * p.x + (p1.x - p0.x) * p.y)
+        * sign;
+
+    return s > 0 && t > 0 && (s + t) < 2 * a * sign;
+}
+
+// -------------------------------------------------------
+
 CollisionsUtilities.orthogonalProjection = function(u, v) {
     var lu = u.length();
     var lv = v.length();
