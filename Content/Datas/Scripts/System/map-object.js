@@ -248,6 +248,7 @@ MapObject.prototype = {
         var xPlus, zPlus, xAbs, zAbs, res, i, l;
         var w = $currentMap.mapInfos.length * $SQUARE_SIZE;
         var h = $currentMap.mapInfos.width * $SQUARE_SIZE;
+        var result, yMountain;
 
         switch (orientation){
         case Orientation.South:
@@ -296,13 +297,20 @@ MapObject.prototype = {
 
         // Collision
         this.updateBBPosition(position);
+        yMountain = position.y
         for (i = 0, l = this.meshBoundingBox.length; i < l; i++) {
             this.currentBoundingBox = this.meshBoundingBox[i];
-            if (MapPortion.checkCollisionRay(this.position, position, this)) {
+            result = MapPortion.checkCollisionRay(this.position, position, this);
+            if (result[0]) {
+                yMountain = this.position.y;
                 position = this.position;
                 break;
             }
+            if (result[1] !== null) {
+                yMountain = result[1];
+            }
         }
+        position.setY(yMountain);
         this.updateBBPosition(this.position);
 
         return position;

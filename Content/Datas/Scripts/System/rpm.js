@@ -564,7 +564,7 @@ RPM.positionJSONToIndex = function(position){
 *   @param {number[]} position The json position.
 *   @returns {number}
 */
-RPM.positionToIndex = function(position){
+RPM.positionToIndex = function(position) {
     return (position[0] % $PORTION_SIZE) + (RPM.mod(position[1], $PORTION_SIZE) *
         $PORTION_SIZE) + ((position[2] % $PORTION_SIZE) * $PORTION_SIZE *
         $PORTION_SIZE);
@@ -598,6 +598,17 @@ RPM.positionToBorderVector3 = function(position){
                 (position[1] * $SQUARE_SIZE) +
                 (position[2] * $SQUARE_SIZE / 100),
                 position[3] * $SQUARE_SIZE);
+}
+
+// -------------------------------------------------------
+
+/** Get the complete number of Y of a position.
+*   @static
+*   @param {number[]} position The json position.
+*   @returns {number}
+*/
+RPM.positionTotalY = function(position){
+    return (position[1] * $SQUARE_SIZE) + (position[2] * $SQUARE_SIZE / 100);
 }
 
 // -------------------------------------------------------
@@ -789,9 +800,9 @@ RPM.getPortion = function(position){
 
 RPM.getPosition = function(position){
     return [
-        Math.floor((position.x + 1) / $SQUARE_SIZE),
-        Math.floor((position.y + 1) / $SQUARE_SIZE),
-        Math.floor((position.z + 1) / $SQUARE_SIZE)
+        Math.floor(position.x / $SQUARE_SIZE),
+        Math.floor(position.y / $SQUARE_SIZE),
+        Math.floor(position.z / $SQUARE_SIZE)
     ];
 }
 

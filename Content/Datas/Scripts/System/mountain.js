@@ -63,8 +63,8 @@ Mountain.prototype = {
     // -------------------------------------------------------
 
     getTotalSquaresHeight: function(yPlus) {
-        return this.heightSquares + (this.getHeightOnlyPixelsPlus() + yPlus > 0 ? 1
-            : 0);
+        return this.heightSquares + (this.getHeightOnlyPixelsPlus() + yPlus > 0
+            ? 1 : 0);
     },
 
     // -------------------------------------------------------
@@ -283,7 +283,7 @@ Mountain.prototype = {
     updateGeometry: function(geometry, texture, position, c) {
         var localPosition, center, vecFrontA, vecBackA, vecFrontB, vecBackB,
             width, height, wp, hp, yOffset, w, faceHeight, xLeft, xRight, yTop,
-            yBot, zFront, zBack;
+            yBot, zFront, zBack, objCollision;
 
         // General configurations
         yOffset = texture.getOffset(this.mountainID, null) * 4 * $SQUARE_SIZE;
@@ -295,7 +295,7 @@ Mountain.prototype = {
         w = $SQUARE_SIZE / width;
         localPosition = RPM.positionToBorderVector3(position);
         center = new THREE.Vector3(localPosition.x + ($SQUARE_SIZE / 2),
-            localPosition.y + ($SQUARE_SIZE / 2), localPosition.z + (
+            localPosition.y + (hp / 2), localPosition.z + (
             $SQUARE_SIZE / 2));
         xLeft = localPosition.x;
         xRight = localPosition.x + $SQUARE_SIZE;
@@ -337,91 +337,29 @@ Mountain.prototype = {
                 geometry, c);
         }
 
-        /*
-
-        coef = 0.01;
-        localPosition = RPM.positionToVector3(position);
-        localPosition.setX(localPosition.x + coef);
-        localPosition.setY(localPosition.y + coef);
-        localPosition.setZ(localPosition.z + coef);
-        size = this.datas.getSizeVector();
-        size.setX(size.x - (2 * coef));
-        size.setY(size.y - (2 * coef));
-        size.setZ(size.z - (2 * coef));
-        w = this.datas.widthPixels();
-        h = this.datas.heightPixels();
-        d = this.datas.depthPixels();
-
-        // Textures
-        textures = Object3DBox.TEXTURES_VALUES.slice(0);
-        if (!this.datas.stretch) {
-            totalX = (d * 2) + (w * 2);
-            totalY = (d * 2) + h;
-            textures[1] = d / totalX;
-            textures[2] = (d + w) / totalX;
-            textures[3] = ((2 * d) + w) / totalX;
-            textures[5] = d / totalY;
-            textures[6] = (d + h) / totalY;
-        }
-
-        // Vertices + faces / indexes
-        for (i = 0; i < Object3DBox.NB_VERTICES; i += 4) {
-            vecA = Object3DBox.VERTICES[i].clone();
-            vecB = Object3DBox.VERTICES[i + 1].clone();
-            vecC = Object3DBox.VERTICES[i + 2].clone();
-            vecD = Object3DBox.VERTICES[i + 3].clone();
-            vecA.multiply(size);
-            vecB.multiply(size);
-            vecC.multiply(size);
-            vecD.multiply(size);
-            vecA.add(localPosition);
-            vecB.add(localPosition);
-            vecC.add(localPosition);
-            vecD.add(localPosition);
-            texA = Object3DBox.TEXTURES[i];
-            texB = Object3DBox.TEXTURES[i + 1];
-            texC = Object3DBox.TEXTURES[i + 2];
-            texD = Object3DBox.TEXTURES[i + 3];
-            faceA = [
-                new THREE.Vector2(textures[texA[0]], textures[texA[1]]),
-                new THREE.Vector2(textures[texB[0]], textures[texB[1]]),
-                new THREE.Vector2(textures[texC[0]], textures[texC[1]])
-            ];
-            faceB = [
-                new THREE.Vector2(textures[texA[0]], textures[texA[1]]),
-                new THREE.Vector2(textures[texC[0]], textures[texC[1]]),
-                new THREE.Vector2(textures[texD[0]], textures[texD[1]])
-            ];
-            c = Sprite.addStaticSpriteToGeometry(geometry, vecA, vecB, vecC,
-                vecD, faceA, faceB, c);
-        }
-
         // Collisions
-        objCollision = new Array;
-        if (this.datas.collisionKind === ObjectCollisionKind.Perfect) {
-            ws = this.datas.width();
-            hs = this.datas.height();
-            ds = this.datas.depth();
-
-            objCollision.push({
+        wp = wp * 2 + $SQUARE_SIZE;
+        objCollision = [
+            {
                 p: position,
                 l: localPosition,
                 b: [
-                    localPosition.x + Math.floor(w / 2),
-                    localPosition.y + Math.floor(h / 2),
-                    localPosition.z + Math.floor(d / 2),
-                    w,
-                    h,
-                    d,
+                    center.x,
+                    center.y,
+                    center.z,
+                    wp,
+                    hp,
+                    wp,
                     0
                 ],
-                w: Math.floor(ws / 2),
-                h: Math.floor(hs / 2),
-                d: Math.floor(ds / 2),
+                w: Math.floor(this.getTotalSquaresWidth() / 2),
+                h: Math.floor(this.getTotalSquaresHeight(position[2]) / 2),
+                d: Math.floor(this.getTotalSquaresWidth() / 2),
+                rw: this.getWidthTotalPixels(),
+                rh: this.getHeightTotalPixels(),
                 k: true
-            });
-        }*/
-        var objCollision = new Array;
+            }
+        ];
 
         return [c, objCollision];
     }
