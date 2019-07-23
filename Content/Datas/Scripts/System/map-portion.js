@@ -1362,6 +1362,13 @@ MapPortion.prototype = {
                     }
                 }
 
+                // If angle limit, block
+                if (mountain.angle > $datasGame.system.mountainCollisionAngle
+                    .getValue())
+                {
+                    return [true, null];
+                }
+
                 // get the intersection point for updating mountain y
                 plane.setFromCoplanarPoints(pA, pB, pC);
                 ray.intersectPlane(plane, newPosition);

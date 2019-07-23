@@ -50,7 +50,7 @@ Mountain.prototype = {
 
         // Calculate angle
         width = this.getWidthTotalPixels();
-        this.angle = width === 0 ? 90 : Math.atan(this.getHeightTotalPixels /
+        this.angle = width === 0 ? 90 : Math.atan(this.getHeightTotalPixels() /
             width) * 180 / Math.PI;
     },
 
