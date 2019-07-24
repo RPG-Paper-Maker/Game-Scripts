@@ -62,6 +62,7 @@ function MapPortion(realX, realY, realZ) {
     this.faceSpritesList = new Array;
     this.staticWallsList = new Array;
     this.staticObjects3DList = new Array;
+    this.overflowMountains = new Array;
 }
 
 // -------------------------------------------------------
@@ -563,14 +564,13 @@ MapPortion.prototype = {
         if (!json)
             return;
 
-        var i, l, jsonAll, jsonOverflow, jsonMountain, mountain, mountains,
-            textureMountain, texture, objCollision, index, mountainsLength,
-            position, indexPos, geometry;
+        var i, l, jsonAll, jsonMountain, mountain, mountains, textureMountain,
+            texture, objCollision, index, mountainsLength, position, indexPos,
+            geometry;
 
         texture = null;
         mountainsLength = $currentMap.texturesMountains.length;
         jsonAll = json.a;
-        jsonOverflow = json.o;
 
         // Create mountains according to the textures
         for (i = 0; i < mountainsLength; i++) {
@@ -611,6 +611,9 @@ MapPortion.prototype = {
             mountains.createMesh();
             $currentMap.scene.add(mountains.mesh);
         }
+
+        // Handle overflow
+        this.overflowMountains = json.o;
     },
 
     // -------------------------------------------------------
@@ -886,7 +889,9 @@ MapPortion.prototype = {
                             position[1] + b,
                             position[3] + c
                         ];
-                        if ($currentMap.isInMap(positionPlus)) {
+                        if ($currentMap.isInMap(positionPlus) && this
+                            .isPositionIn(positionPlus))
+                        {
                             this.boundingBoxesSprites[RPM.positionToIndex(
                                 positionPlus)].push(objCollision);
                         }
@@ -911,9 +916,12 @@ MapPortion.prototype = {
                             position[1] + b,
                             position[3] + c
                         ];
-                        if ($currentMap.isInMap(positionPlus)) {
+                        if ($currentMap.isInMap(positionPlus) && this
+                            .isPositionIn(positionPlus))
+                        {
                             if (side) {
-                                objCollisionPlus = Object.create(objCollision);
+                                objCollisionPlus = {};
+                                objCollisionPlus = Object.assign(objCollisionPlus, objCollision);
                                 objCollisionPlus.left = a < 0;
                                 objCollisionPlus.right = a > 0;
                                 objCollisionPlus.top = c < 0;
@@ -933,9 +941,52 @@ MapPortion.prototype = {
 
     // -------------------------------------------------------
 
+    getObjectCollisionAt: function(positionSource, positionTarget, kind) {
+        var i, l, objCollision, index, a, c, result, collisions, w;
+
+        result = new Array;
+        switch (kind) {
+        case ElementMapKind.Mountains:
+            a = positionTarget[0] - positionSource[0];
+            c = positionTarget[2] - positionSource[3];
+            collisions = this.boundingBoxesMountains[RPM.positionJSONToIndex(
+                positionSource)];
+            for (i = 0, l = collisions.length; i < l; i++) {
+                w = collisions[i].w;
+                if (a >= -w && a <= w && c >= -w && c <= w) {
+                    objCollision = {};
+                    objCollision = Object.assign(objCollision, collisions[i]);
+                    objCollision.left = a < 0;
+                    objCollision.right = a > 0;
+                    objCollision.top = c < 0;
+                    objCollision.bot = c > 0;
+                    objCollision.a = a;
+                    objCollision.c = c;
+                    result.push(objCollision);
+                }
+            }
+
+            break;
+        default:
+            break;
+        }
+
+        return result;
+    },
+
+    // -------------------------------------------------------
+
     addToNonEmpty: function(position) {
-        this.squareNonEmpty[position[0] % $PORTION_SIZE][position[3] % $PORTION_SIZE].push(RPM.positionTotalY(
-            position));
+        this.squareNonEmpty[position[0] % $PORTION_SIZE][position[3] %
+            $PORTION_SIZE].push(RPM.positionTotalY(position));
+    },
+
+    // -------------------------------------------------------
+
+    isPositionIn: function(position) {
+        return this.realX === Math.floor(position[0] / $PORTION_SIZE) && this
+            .realY === Math.floor(position[1] / $PORTION_SIZE) && this.realZ ===
+            Math.floor(position[2] / $PORTION_SIZE);
     },
 
     // -------------------------------------------------------
@@ -1190,7 +1241,8 @@ MapPortion.prototype = {
     checkMountainsCollision: function(jpositionAfter, positionAfter,
         testedCollisions, object)
     {
-        var i, l, mountains, objCollision, result, yMountain, block;
+        var i, j, l, ll, mountains, result, yMountain, block, overflow,
+            positionOverflow, mapPortion, objCollision;
 
         yMountain = null;
         mountains = this.boundingBoxesMountains[RPM.positionToIndex(
@@ -1198,22 +1250,31 @@ MapPortion.prototype = {
         block = false;
         if (mountains !== null) {
             for (i = 0, l = mountains.length; i < l; i++) {
-                objCollision = mountains[i];
-                if (testedCollisions.indexOf(objCollision) === -1) {
-                    testedCollisions.push(objCollision);
-                    result = this.checkMountainCollision(jpositionAfter,
-                        positionAfter, objCollision, object);
-                    if (result[0]) {
-                        if (result[1] === null) {
-                            return result;
-                        } else {
-                            block = true;
-                        }
-                    } else if (result[1] !== null) {
-                        if (yMountain === null || yMountain < result[1]) {
-                            yMountain = result[1];
-                        }
-                    }
+                result = this.checkMountainCollision(jpositionAfter,
+                    positionAfter, testedCollisions, object, mountains[i],
+                    yMountain, block);
+                if (result[0]) {
+                    return [result[1], result[2]];
+                } else {
+                    block = result[1];
+                    yMountain = result[2];
+                }
+            }
+        }
+        for (i = 0, l = this.overflowMountains.length; i < l; i++) {
+            positionOverflow = this.overflowMountains[i];
+            mapPortion = $currentMap.getMapPortionByPosition(positionOverflow);
+            objCollision = mapPortion.getObjectCollisionAt(positionOverflow,
+                jpositionAfter, ElementMapKind.Mountains);
+            for (j = 0, ll = objCollision.length; j < ll; j++) {
+                result = this.checkMountainCollision(jpositionAfter,
+                    positionAfter, testedCollisions, object, objCollision[j],
+                    yMountain, block, true);
+                if (result[0]) {
+                    return [result[1], result[2]];
+                } else {
+                    block = result[1];
+                    yMountain = result[2];
                 }
             }
         }
@@ -1223,8 +1284,38 @@ MapPortion.prototype = {
 
     // -------------------------------------------------------
 
-    checkMountainCollision: function(jpositionAfter, positionAfter, objCollision
-        , object) {
+    /** Check if there is a collision with mountains at this position.
+    *   @returns {boolean}
+    */
+    checkMountainCollision: function(jpositionAfter, positionAfter,
+        testedCollisions, object, objCollision, yMountain, block, lol)
+    {
+        var result;
+
+        if (testedCollisions.indexOf(objCollision) === -1) {
+            testedCollisions.push(objCollision);
+            result = this.checkIntersectionMountain(jpositionAfter,
+                positionAfter, objCollision, object, lol);
+            if (result[0]) {
+                if (result[1] === null) {
+                    return [true, result[0], result[1]];
+                } else {
+                    block = true;
+                }
+            } else if (result[1] !== null) {
+                if (yMountain === null || yMountain < result[1]) {
+                    yMountain = result[1];
+                }
+            }
+        }
+
+        return [false, block, yMountain]
+    },
+
+    // -------------------------------------------------------
+
+    checkIntersectionMountain: function(jpositionAfter, positionAfter,
+        objCollision, object, lol) {
         var point, result, x, y, z, w, h, plane, ray, pA, pB, pC, ptA, ptB, ptC,
             newPosition, mountain;
 

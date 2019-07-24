@@ -357,6 +357,13 @@ SceneMap.prototype = {
 
     // -------------------------------------------------------
 
+    getMapPortionByPosition: function(position) {
+        return this.getMapPortionByPortion(this.getLocalPortion(SceneMap
+            .getGlobalPortion(position)));
+    },
+
+    // -------------------------------------------------------
+
     getBrutMapPortion: function(index) {
         return this.mapPortions[index];
     },

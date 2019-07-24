@@ -88,7 +88,7 @@ DatasSystem.prototype = {
             $PORTIONS_RAY_NEAR = 3;
             $FRAMES = json.frames;
             this.mountainCollisionHeight = SystemValue.readOrDefaultNumber(json
-                .mch, 8);
+                .mch, 4);
             this.mountainCollisionAngle = SystemValue.readOrDefaultNumberDouble(
                 json.mca, 45);
 

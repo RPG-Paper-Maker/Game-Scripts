@@ -138,7 +138,9 @@ var ElementMapKind = {
     SpritesDouble: 6,
     SpritesQuadra: 7,
     SpritesWall: 8,
-    Object: 9
+    Object: 9,
+    Object3D: 10,
+    Mountains: 11
 };
 Object.freeze(ElementMapKind);
 
