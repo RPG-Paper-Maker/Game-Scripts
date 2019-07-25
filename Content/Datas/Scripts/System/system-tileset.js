@@ -174,7 +174,7 @@ SystemTileset.prototype = {
             if (!this.ownsMountains) {
                 this.loadMountains();
             } else {
-                if (this.ownsWalls) {
+                if (!this.ownsWalls) {
                     this.loadWalls();
                 }
             }
@@ -205,16 +205,16 @@ SystemTileset.prototype = {
         this.texturesAutotiles = new Array;
 
         callback = function() {
-            if (i < autotilesIDs.length) {
-                if (result !== null) {
-                    if (result.length < 3) {
-                        that.callback = callback;
-                        return;
-                    }
-                    textureAutotile = result[0];
-                    texture = result[1];
-                    offset = result[2];
+            if (result !== null) {
+                if (result.length < 3) {
+                    that.callback = callback;
+                    return;
                 }
+                textureAutotile = result[0];
+                texture = result[1];
+                offset = result[2];
+            }
+            if (i < autotilesIDs.length) {
                 id = autotilesIDs[i];
                 autotile = autotiles[id];
                 picture = $datasGame.pictures.list[PictureKind.Autotiles][
@@ -458,16 +458,16 @@ SystemTileset.prototype = {
         this.texturesMountains = new Array;
 
         callback = function() {
-            if (i < mountainsIDs.length) {
-                if (result !== null) {
-                    if (result.length < 3) {
-                        that.callback = callback;
-                        return;
-                    }
-                    textureMountain = result[0];
-                    texture = result[1];
-                    offset = result[2];
+            if (result !== null) {
+                if (result.length < 3) {
+                    that.callback = callback;
+                    return;
                 }
+                textureMountain = result[0];
+                texture = result[1];
+                offset = result[2];
+            }
+            if (i < mountainsIDs.length) {
                 id = mountainsIDs[i];
                 mountain = mountains[id];
                 picture = $datasGame.pictures.list[PictureKind.Mountains][
