@@ -65,8 +65,8 @@ Autotile.prototype = {
 */
 function Autotiles(texture) {
     this.texture = texture;
-    this.width = texture.texture.map.image.width;
-    this.height = texture.texture.map.image.height;
+    this.width = texture.map ? texture.texture.map.image.width : null;
+    this.height = texture.map ? texture.texture.map.image.height : null;
     this.geometry = new THREE.Geometry();
     this.geometry.faceVertexUvs[0] = [];
     this.index = 0;
@@ -107,8 +107,9 @@ Autotiles.prototype = {
     /** Update the geometry of the autotiles according to an autotile.
     */
     updateGeometry : function(position, autotile) {
-        return autotile.updateGeometry(this.geometry, this.texture, position,
-            this.width, this.height, this.index++);
+        return this.width === null ? null : autotile.updateGeometry(this
+            .geometry, this.texture, position, this.width, this.height, this
+            .index++);
     },
 
     /** Create a mesh with material and geometry.

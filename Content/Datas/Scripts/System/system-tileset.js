@@ -157,9 +157,17 @@ SystemTileset.prototype = {
         for (i = 0, l = specialsIDs.length; i < l; i++){
             id = specialsIDs[i];
             special = specials[id];
-            pic = $datasGame.pictures.list[pictureKind][special.pictureID];
-            paths = pic.getPath(pictureKind);
-            textures[id] = RPM.loadTexture(paths, pic, callback);
+            if (special) {
+                pic = $datasGame.pictures.list[pictureKind][special.pictureID];
+                if (pic) {
+                    paths = pic.getPath(pictureKind);
+                    textures[id] = RPM.loadTexture(paths, pic, callback);
+                } else {
+                    textures[id] = RPM.loadTextureEmpty();
+                }
+            } else {
+                textures[id] = RPM.loadTextureEmpty();
+            }
         }
 
         this[texturesName] = textures;
@@ -217,11 +225,20 @@ SystemTileset.prototype = {
             if (i < autotilesIDs.length) {
                 id = autotilesIDs[i];
                 autotile = autotiles[id];
-                picture = $datasGame.pictures.list[PictureKind.Autotiles][
-                    autotile.pictureID];
-                paths = picture.getPath(PictureKind.Autotiles);
-                result = this.loadTextureAutotile(textureAutotile, texture,
-                    picture, context, paths, offset, id);
+                if (autotile) {
+                    picture = $datasGame.pictures.list[PictureKind.Autotiles][
+                        autotile.pictureID];
+                    if (picture) {
+                        paths = picture.getPath(PictureKind.Autotiles);
+                        result = this.loadTextureAutotile(textureAutotile,
+                            texture, picture, context, paths, offset, id);
+                    } else {
+                        result = null;
+                    }
+                } else {
+                    result = null;
+                }
+
                 i++;
                 that.callback = callback;
             }
@@ -470,11 +487,14 @@ SystemTileset.prototype = {
             if (i < mountainsIDs.length) {
                 id = mountainsIDs[i];
                 mountain = mountains[id];
-                picture = $datasGame.pictures.list[PictureKind.Mountains][
-                    mountain.pictureID];
-                paths = picture.getPath(PictureKind.Mountains);
+                if (mountain) {
+                    picture = $datasGame.pictures.list[PictureKind.Mountains][
+                        mountain.pictureID];
+                } else {
+                    picture = null;
+                }
                 result = this.loadTextureMountain(textureMountain, texture,
-                    picture, context, paths, offset, id);
+                    picture, context, offset, id);
                 i++;
                 that.callback = callback;
             }
@@ -502,27 +522,34 @@ SystemTileset.prototype = {
     /** Load a mountain ID and add it to context rendering.
     */
     loadTextureMountain: function(textureMountain, texture, picture, context,
-        paths, offset, id)
+        offset, id)
     {
-        var i, path, pathLocal, that, result, callback, point, img, width,
+        var i, paths, path, pathLocal, that, result, callback, point, img, width,
             height, size, pic;
 
         $filesToLoad++;
-        path = paths[0];
-        pathLocal = paths[1];
+        if (picture) {
+            paths = picture.getPath(PictureKind.Mountains);
+            path = paths[0];
+            pathLocal = paths[1];
+        }
         that = this;
         result = new Array;
 
         callback = function() {
             $loadedFiles++;
-            img = context.createImageData(pathLocal);
-            width = Math.floor((img.width / 3) / $SQUARE_SIZE);
-            height = Math.floor((img.height / 3) / $SQUARE_SIZE);
-            size = width * height;
+            if (picture) {
+                img = context.createImageData(pathLocal);
+            }
+            width = 3;
+            height = 3;
+            size = 9;
 
             // Update picture width and height for collisions settings
-            picture.width = width;
-            picture.height = height;
+            if (picture) {
+                picture.width = width;
+                picture.height = height;
+            }
 
             for (var i = 0; i < size; i++) {
                 point = [i % width, Math.floor(i / width)];
@@ -531,8 +558,11 @@ SystemTileset.prototype = {
                     textureMountain = new TextureSeveral();
                     textureMountain.setBegin(id, point);
                 }
-                that.paintPictureMountain(context, pathLocal, img, offset,
-                    point);
+                if (picture) {
+                    that.paintPictureMountain(context, pathLocal, img, offset,
+                        point);
+                }
+
                 textureMountain.setEnd(id, point);
                 textureMountain.addToList(id, point);
                 offset++;
@@ -551,8 +581,7 @@ SystemTileset.prototype = {
             result.push(offset);
         };
 
-
-        if ($canvasRendering.isImageLoaded(pathLocal)) {
+        if (!picture || $canvasRendering.isImageLoaded(pathLocal)) {
             callback.call(this);
         } else {
             pic = new Picture2D(pathLocal, callback);

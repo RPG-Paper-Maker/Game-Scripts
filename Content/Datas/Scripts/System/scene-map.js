@@ -321,22 +321,40 @@ SceneMap.prototype = {
         for (i = 1; i < l; i++) {
             image = this.texturesCharacters[i].map.image;
             p = pictures[i];
-            p.readCollisionsImage(image);
-            this.collisions[PictureKind.Characters][i] = p.getSquaresForStates(
-                image);
+            if (p) {
+                p.readCollisionsImage(image);
+                this.collisions[PictureKind.Characters][i] = p.getSquaresForStates(
+                    image);
+            } else {
+                this.collisions[PictureKind.Characters][i] = null;
+            }
         }
 
         // Autotiles
         list = this.mapInfos.tileset.autotiles;
         pictures = $datasGame.pictures.list[PictureKind.Autotiles];
-        for (i = 0, l = list.length; i < l; i++)
-            pictures[list[i]].readCollisions();
+        for (i = 0, l = list.length; i < l; i++) {
+            p = $datasGame.specialElements.autotiles[list[i]];
+            if (p) {
+                p = pictures[p.pictureID];
+                if (p) {
+                    p.readCollisions();
+                }
+            }
+        }
 
         // Walls
         list = this.mapInfos.tileset.walls;
         pictures = $datasGame.pictures.list[PictureKind.Walls];
-        for (i = 0, l = list.length; i < l; i++)
-            pictures[list[i]].readCollisions();
+        for (i = 0, l = list.length; i < l; i++) {
+            p = $datasGame.specialElements.walls[list[i]];
+            if (p) {
+                p = pictures[p.pictureID];
+                if (p) {
+                    p.readCollisions();
+                }
+            }
+        }
 
         this.callBackAfterLoading = this.initializeObjects();
     },

@@ -63,7 +63,7 @@ DatasSpecialElements.prototype = {
             }
 
             // Mountains
-            jsonSpecials = json.o;
+            jsonSpecials = json.m;
             l = jsonSpecials.length;
             this.mountains = new Array(l + 1);
             for (i = 0; i < l; i++) {

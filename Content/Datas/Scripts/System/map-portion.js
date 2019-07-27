@@ -536,11 +536,12 @@ MapPortion.prototype = {
                 count = obj.c;
             }
 
-            result = sprite.updateGeometry(geometry, position,
-                                          material.map.image.width,
-                                          material.map.image.height, count);
-            obj.c = result[0];
-            this.updateCollisionSprite(result[1], position);
+            if (material.map) {
+                result = sprite.updateGeometry(geometry, position, material.map
+                    .image.width, material.map.image.height, count);
+                obj.c = result[0];
+                this.updateCollisionSprite(result[1], position);
+            }
         }
 
         for (i = 0; i < wallsIds; i++) {
