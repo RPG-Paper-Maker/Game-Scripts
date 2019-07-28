@@ -78,7 +78,7 @@ SystemTileset.prototype = {
     *   @returns {string}
     */
     getPath: function() {
-        return this.picture.getPath(PictureKind.Tilesets);
+        return this.picture ? this.picture.getPath(PictureKind.Tilesets) : null;
     },
 
     // -------------------------------------------------------

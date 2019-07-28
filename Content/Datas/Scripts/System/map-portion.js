@@ -348,10 +348,9 @@ MapPortion.prototype = {
     */
     readFloors: function(json){
         var jsonFloor, floor, collision, objCollision, position, boundingBox;
-        var tilesetCollisions = $currentMap.mapInfos.tileset.picture.collisions;
         var material = $currentMap.textureTileset;
-        var width = material.map.image.width;
-        var height = material.map.image.height;
+        var width = material.map ? material.map.image.width : 0;
+        var height = material.map ? material.map.image.height : 0;
         var geometry = new THREE.Geometry();
         var index;
         geometry.faceVertexUvs[0] = [];
@@ -362,7 +361,7 @@ MapPortion.prototype = {
             floor = new Floor();
             floor.read(jsonFloor.v);
             objCollision = floor.updateGeometry(geometry, position, width,
-                                               height, i);
+                height, i);
             index = RPM.positionJSONToIndex(position);
             if (objCollision !== null) {
                 this.boundingBoxesLands[index].push(objCollision);

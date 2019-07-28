@@ -93,8 +93,16 @@ DatasTilesets.prototype = {
         textures[0] = RPM.loadTextureEmpty();
         for (var i = 1; i < l; i++){
             picture = pictures[i];
-            paths = picture.getPath(pictureKind);
-            textures[i] = RPM.loadTexture(paths, picture);
+            if (picture) {
+                paths = picture.getPath(pictureKind);
+                if (paths) {
+                    textures[i] = RPM.loadTexture(paths, picture);
+                } else {
+                    textures[i] = RPM.loadTextureEmpty();
+                }
+            } else {
+                textures[i] = RPM.loadTextureEmpty();
+            }
         }
 
         this[texturesName] = textures;

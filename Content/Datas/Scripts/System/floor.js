@@ -36,6 +36,10 @@ Floor.prototype = {
     *   @returns {THREE.Geometry}
     */
     updateGeometry: function(geometry, position, width, height, i) {
+        if (width === 0 || height === 0) {
+            return null;
+        }
+
         var x = (this.texture[0] * $SQUARE_SIZE) / width;
         var y = (this.texture[1] * $SQUARE_SIZE) / height;
         var w = (this.texture[2] * $SQUARE_SIZE) / width;

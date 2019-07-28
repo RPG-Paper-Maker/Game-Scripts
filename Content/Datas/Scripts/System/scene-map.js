@@ -293,8 +293,12 @@ SceneMap.prototype = {
     /** Load all the textures of the map.
     */
     loadTextures: function(){
-        var tileset = this.mapInfos.tileset;
-        this.textureTileset = RPM.loadTexture(tileset.getPath(), tileset.picture);
+        var tileset, paths;
+
+        tileset = this.mapInfos.tileset;
+        paths = tileset.getPath();
+        this.textureTileset = paths ? RPM.loadTexture(paths, tileset.picture) :
+            RPM.loadTextureEmpty();
         this.texturesAutotiles = $datasGame.tilesets.getTexturesAutotiles(tileset);
         this.texturesWalls = $datasGame.tilesets.getTexturesWalls(tileset);
         this.texturesMountains = $datasGame.tilesets.getTexturesMountains(tileset);
@@ -311,8 +315,10 @@ SceneMap.prototype = {
         var i, l, p;
 
         // Tileset
-        this.mapInfos.tileset.picture.readCollisionsImage(
-            this.textureTileset.map.image);
+        if (this.mapInfos.tileset.picture && this.textureTileset.map) {
+            this.mapInfos.tileset.picture.readCollisionsImage(this
+                .textureTileset.map.image);
+        }
 
         // Characters
         pictures = $datasGame.pictures.list[PictureKind.Characters];
