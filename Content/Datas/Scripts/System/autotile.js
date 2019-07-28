@@ -46,11 +46,14 @@ Autotile.prototype = {
         var y = (yTile * $SQUARE_SIZE) / height;
         var w = $SQUARE_SIZE / width;
         var h = $SQUARE_SIZE / height;
+        var autotile = $datasGame.specialElements.autotiles[this.autotileID];
+        var picture = autotile ? $datasGame.pictures.list[PictureKind.Autotiles]
+            [autotile.pictureID] : null;
+        var collison = picture ? picture.getCollisionAtIndex(Land.prototype
+            .getIndex.call(this, width / $SQUARE_SIZE / 2)) : null;
 
-        return Land.prototype.updateGeometry.call(this, geometry,
-            $datasGame.pictures.list[PictureKind.Autotiles][this.autotileID]
-            .getCollisionAtIndex(Land.prototype.getIndex.call(this, width /
-            $SQUARE_SIZE / 2)), position, width, height, x, y, w, h, i);
+        return Land.prototype.updateGeometry.call(this, geometry, collison,
+            position, width, height, x, y, w, h, i);
     }
 }
 
@@ -65,8 +68,8 @@ Autotile.prototype = {
 */
 function Autotiles(texture) {
     this.texture = texture;
-    this.width = texture.map ? texture.texture.map.image.width : null;
-    this.height = texture.map ? texture.texture.map.image.height : null;
+    this.width = texture.texture.map ? texture.texture.map.image.width : 0;
+    this.height = texture.texture.map ? texture.texture.map.image.height : 0;
     this.geometry = new THREE.Geometry();
     this.geometry.faceVertexUvs[0] = [];
     this.index = 0;
@@ -107,9 +110,9 @@ Autotiles.prototype = {
     /** Update the geometry of the autotiles according to an autotile.
     */
     updateGeometry : function(position, autotile) {
-        return this.width === null ? null : autotile.updateGeometry(this
-            .geometry, this.texture, position, this.width, this.height, this
-            .index++);
+        return this.width === null || this.height === 0 ? null : autotile
+            .updateGeometry(this.geometry, this.texture, position, this.width,
+            this.height, this.index++);
     },
 
     /** Create a mesh with material and geometry.

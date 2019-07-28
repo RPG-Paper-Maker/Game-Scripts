@@ -222,7 +222,7 @@ SystemTileset.prototype = {
                 texture = result[1];
                 offset = result[2];
             }
-            if (i < autotilesIDs.length) {
+            if (i < l) {
                 id = autotilesIDs[i];
                 autotile = autotiles[id];
                 if (autotile) {
@@ -241,8 +241,7 @@ SystemTileset.prototype = {
 
                 i++;
                 that.callback = callback;
-            }
-            else {
+            } else {
                 if (offset > 0) {
                     that.updateTextureAutotile(textureAutotile, texture);
                     offset = 0;
