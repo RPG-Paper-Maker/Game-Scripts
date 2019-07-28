@@ -403,13 +403,13 @@ MapPortion.prototype = {
             autotile = new Autotile;
             autotile.read(jsonAutotile.v);
             indexPos = RPM.positionJSONToIndex(position);
-
             index = 0;
+            texture = null;
             for (; index < autotilesLength; index++) {
 
                 textureAutotile = $currentMap.texturesAutotiles[index];
-                if (textureAutotile.isInTexture(autotile.autotileID,
-                                                autotile.texture))
+                if (textureAutotile.isInTexture(autotile.autotileID, autotile
+                    .texture))
                 {
                     texture = textureAutotile;
                     autotiles = this.staticAutotilesList[index];
