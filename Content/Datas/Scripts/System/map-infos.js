@@ -33,7 +33,13 @@ MapInfos.prototype = {
         this.width = json.w;
         this.height = json.h;
         this.depth = json.d;
+
+        // Tileset: if not existing, by default select the first one
         this.tileset = $datasGame.tilesets.list[json.tileset];
+        if (!this.tileset) {
+            this.tileset = $datasGame.tilesets.list[1];
+        }
+
         this.music = new SystemPlaySong(SongKind.Music);
         this.music.readJSON(json.music);
         this.backgroundSound = new SystemPlaySong(SongKind.BackgroundSound);
