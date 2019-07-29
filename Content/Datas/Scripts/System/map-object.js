@@ -141,7 +141,7 @@ MapObject.prototype = {
     */
     changeState: function(){
         var angle = this.mesh ? this.mesh.rotation.y : 0;
-        var x, y;
+        var x, y, picture;
 
         // Remove previous mesh
         this.removeFromScene();
@@ -172,8 +172,8 @@ MapObject.prototype = {
             .textureTileset : $currentMap.texturesCharacters[this.currentState
             .graphicID];
         this.meshBoundingBox = new Array;
-        if (this.currentState !== null && !this.isNone() &&
-            typeof material.map !== 'undefined')
+        if (this.currentState !== null && !this.isNone() && material && material
+            .map)
         {
             this.frame = this.currentState.indexX;
             this.orientationEye = this.currentState.indexY;
@@ -206,8 +206,9 @@ MapObject.prototype = {
                                    this.position.z);
             this.boundingBoxSettings = objCollision[1][0];
             if (this.currentState.graphicID === 0) {
-                this.boundingBoxSettings.squares = $currentMap.mapInfos.tileset
-                    .picture.getSquaresForTexture(this.currentState.rectTileset);
+                picture = $currentMap.mapInfos.tileset.picture;
+                this.boundingBoxSettings.squares = picture ? picture
+                    .getSquaresForTexture(this.currentState.rectTileset) : [];
             }
 
             this.updateBB(this.position);
@@ -727,28 +728,32 @@ MapObject.prototype = {
             var textureWidth, textureHeight;
             var x, y, w, h;
 
-            textureWidth = this.mesh.material.map.image.width;
-            textureHeight = this.mesh.material.map.image.height;
-            if (this.currentState.graphicID === 0) {
-                w = this.width * $SQUARE_SIZE / textureWidth;
-                h = this.height * $SQUARE_SIZE / textureHeight;
-                x = this.currentState.rectTileset[0] * $SQUARE_SIZE / textureWidth;
-                y = this.currentState.rectTileset[1] * $SQUARE_SIZE / textureHeight;
-            } else {
-                w = this.width * $SQUARE_SIZE / textureWidth;
-                h = this.height * $SQUARE_SIZE / textureHeight;
-                x = this.frame * w;
-                y = this.orientation * h;
-            }
+            if (this.mesh.material && this.mesh.material.map) {
+                textureWidth = this.mesh.material.map.image.width;
+                textureHeight = this.mesh.material.map.image.height;
+                if (this.currentState.graphicID === 0) {
+                    w = this.width * $SQUARE_SIZE / textureWidth;
+                    h = this.height * $SQUARE_SIZE / textureHeight;
+                    x = this.currentState.rectTileset[0] * $SQUARE_SIZE /
+                        textureWidth;
+                    y = this.currentState.rectTileset[1] * $SQUARE_SIZE /
+                        textureHeight;
+                } else {
+                    w = this.width * $SQUARE_SIZE / textureWidth;
+                    h = this.height * $SQUARE_SIZE / textureHeight;
+                    x = this.frame * w;
+                    y = this.orientation * h;
+                }
 
-            // Update geometry
-            this.mesh.geometry.faceVertexUvs[0][0][0].set(x, y);
-            this.mesh.geometry.faceVertexUvs[0][0][1].set(x + w, y);
-            this.mesh.geometry.faceVertexUvs[0][0][2].set(x + w, y + h);
-            this.mesh.geometry.faceVertexUvs[0][1][0].set(x, y);
-            this.mesh.geometry.faceVertexUvs[0][1][1].set(x + w, y + h);
-            this.mesh.geometry.faceVertexUvs[0][1][2].set(x, y + h);
-            this.mesh.geometry.uvsNeedUpdate = true;
+                // Update geometry
+                this.mesh.geometry.faceVertexUvs[0][0][0].set(x, y);
+                this.mesh.geometry.faceVertexUvs[0][0][1].set(x + w, y);
+                this.mesh.geometry.faceVertexUvs[0][0][2].set(x + w, y + h);
+                this.mesh.geometry.faceVertexUvs[0][1][0].set(x, y);
+                this.mesh.geometry.faceVertexUvs[0][1][1].set(x + w, y + h);
+                this.mesh.geometry.faceVertexUvs[0][1][2].set(x, y + h);
+                this.mesh.geometry.uvsNeedUpdate = true;
+            }
         }
     },
 

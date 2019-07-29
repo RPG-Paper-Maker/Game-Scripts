@@ -458,35 +458,37 @@ MapPortion.prototype = {
         var staticGeometry = new THREE.Geometry(), geometry;
         staticGeometry.faceVertexUvs[0] = [];
 
-        for (i = 0, l = json.length; i < l; i++) {
-            s = json[i];
-            position = s.k;
-            ss = s.v;
-            sprite = new Sprite();
-            sprite.read(ss);
-            localPosition = RPM.positionToVector3(position);
-            if (sprite.kind === ElementMapKind.SpritesFace) {
-                result = sprite.createGeometry(
-                            material.map.image.width,
-                            material.map.image.height,
-                            true, position);
-                geometry = result[0];
-                collisions = result[1][1];
-                plane = new THREE.Mesh(geometry, material);
-                plane.position.set(localPosition.x, localPosition.y,
-                                   localPosition.z);
-                this.faceSpritesList.push(plane);
-                $currentMap.scene.add(plane);
+        if (material && material.map) {
+            for (i = 0, l = json.length; i < l; i++) {
+                s = json[i];
+                position = s.k;
+                ss = s.v;
+                sprite = new Sprite();
+                sprite.read(ss);
+                localPosition = RPM.positionToVector3(position);
+                if (sprite.kind === ElementMapKind.SpritesFace) {
+                    result = sprite.createGeometry(
+                                material.map.image.width,
+                                material.map.image.height,
+                                true, position);
+                    geometry = result[0];
+                    collisions = result[1][1];
+                    plane = new THREE.Mesh(geometry, material);
+                    plane.position.set(localPosition.x, localPosition.y,
+                                       localPosition.z);
+                    this.faceSpritesList.push(plane);
+                    $currentMap.scene.add(plane);
+                }
+                else {
+                    result = sprite.updateGeometry(
+                                staticGeometry, material.map.image.width,
+                                material.map.image.height, position, count,
+                                true, localPosition);
+                    count = result[0];
+                    collisions = result[1];
+                }
+                this.updateCollisionSprite(collisions, position);
             }
-            else {
-                result = sprite.updateGeometry(
-                            staticGeometry, material.map.image.width,
-                            material.map.image.height, position, count,
-                            true, localPosition);
-                count = result[0];
-                collisions = result[1];
-            }
-            this.updateCollisionSprite(collisions, position);
         }
 
         staticGeometry.uvsNeedUpdate = true;
