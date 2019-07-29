@@ -640,47 +640,55 @@ MapPortion.prototype = {
             position = o.k;
             v = o.v;
             datas = $datasGame.specialElements.objects[v.did];
-            switch (datas.shapeKind) {
-            case ShapeKind.Box:
-                obj3D = new Object3DBox();
-                break;
-            case ShapeKind.Sphere:
-                break;
-            case ShapeKind.Cylinder:
-                break;
-            case ShapeKind.Cone:
-                break;
-            case ShapeKind.Capsule:
-                break;
-            case ShapeKind.Custom:
-                obj3D = new Object3DCustom();
-                break;
-            }
-            obj3D.read(v, datas);
 
-            // Constructing the geometry
-            obj = hash[obj3D.id];
-            if (obj === null) {
-                obj = {};
-                geometry = new THREE.Geometry();
-                geometry.faceVertexUvs[0] = [];
-                material = $currentMap.texturesObjects3D[obj3D.datas.pictureID];
-                count = 0;
-                obj.geometry = geometry;
-                obj.material = material;
-                obj.c = count;
-                hash[obj3D.id] = obj;
-            }
-            else {
-                geometry = obj.geometry;
-                material = obj.material;
-                count = obj.c;
-            }
+            if (datas) {
+                switch (datas.shapeKind) {
+                case ShapeKind.Box:
+                    obj3D = new Object3DBox();
+                    break;
+                case ShapeKind.Sphere:
+                    break;
+                case ShapeKind.Cylinder:
+                    break;
+                case ShapeKind.Cone:
+                    break;
+                case ShapeKind.Capsule:
+                    break;
+                case ShapeKind.Custom:
+                    obj3D = new Object3DCustom();
+                    break;
+                }
+                obj3D.read(v, datas);
 
-            result = obj3D.updateGeometry(geometry, position, count);
-            obj.c = result[0];
-            this.updateCollision(this.boundingBoxesObjects3D, result[1],
-                position);
+                // Constructing the geometry
+                obj = hash[obj3D.id];
+                if (typeof obj !== 'undefined') {
+                    if (obj === null) {
+                        obj = {};
+                        geometry = new THREE.Geometry();
+                        geometry.faceVertexUvs[0] = [];
+                        material = $currentMap.texturesObjects3D[obj3D.datas
+                            .pictureID];
+                        count = 0;
+                        obj.geometry = geometry;
+                        obj.material = material;
+                        obj.c = count;
+                        hash[obj3D.id] = obj;
+                    }
+                    else {
+                        geometry = obj.geometry;
+                        material = obj.material;
+                        count = obj.c;
+                    }
+
+                    if (material && material.map) {
+                        result = obj3D.updateGeometry(geometry, position, count);
+                        obj.c = result[0];
+                        this.updateCollision(this.boundingBoxesObjects3D, result[1],
+                            position);
+                    }
+                }
+            }
         }
 
         for (i = 1; i <= objectsIds; i++) {

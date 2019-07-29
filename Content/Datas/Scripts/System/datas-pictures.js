@@ -56,15 +56,17 @@ DatasPictures.prototype = {
                 list = new Array(lll + 1);
                 for (j = 0; j < lll + 1 + (k === PictureKind.Characters ? 1 : 0); j++){
                     jsonPicture = jsonList[j];
-                    id = jsonPicture.id;
-                    var picture = new SystemPicture();
-                    picture.readJSON(jsonPicture);
+                    if (jsonPicture) {
+                        id = jsonPicture.id;
+                        var picture = new SystemPicture();
+                        picture.readJSON(jsonPicture);
 
-                    if (id !== 0) {
-                        if (id === -1)
-                            id = 0;
+                        if (id !== 0) {
+                            if (id === -1)
+                                id = 0;
 
-                        list[id] = picture;
+                            list[id] = picture;
+                        }
                     }
                 }
 
