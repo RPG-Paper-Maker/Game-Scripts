@@ -92,6 +92,15 @@ DatasGame.prototype = {
     updateLoadings: function() {
         if (this.tilesets.loading) {
             var tileset;
+            tileset = this.tilesets.loading[0];
+            if (tileset.callback !== null) {
+                tileset.callback.call(tileset);
+            } else {
+                this.tilesets.loading.splice(0, 1);
+            }
+
+            /*
+            var tileset;
             for (var i = this.tilesets.loading.length - 1; i >= 0; i--) {
                 tileset = this.tilesets.loading[i];
                 if (tileset.callback !== null) {
@@ -100,7 +109,7 @@ DatasGame.prototype = {
                 else {
                     this.tilesets.loading.splice(i, 1);
                 }
-            }
+            }*/
             this.loaded = this.tilesets.loading.length === 0;
         }
     },

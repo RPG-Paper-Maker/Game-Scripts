@@ -68,7 +68,7 @@ DatasTilesets.prototype = {
                     this.loading.push(tileset);
                 }
 
-                tileset.loadSpecials();
+                tileset.callback = tileset.loadSpecials;
             }
 
             // Load characters textures

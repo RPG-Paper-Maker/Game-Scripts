@@ -312,7 +312,7 @@ SystemTileset.prototype = {
                 textureAutotile.setEnd(id, point);
                 textureAutotile.addToList(id, point);
                 offset++;
-                if (offset === 6) {
+                if (offset === that.getMaxAutotilesOffsetTexture()) {
                     that.updateTextureAutotile(textureAutotile, texture);
                     texture = new THREE.Texture();
                     context.clearRect(0, 0, $canvasRendering.width,
@@ -655,5 +655,11 @@ SystemTileset.prototype = {
 
     getMaxMountainOffsetTexture: function() {
         return Math.floor($MAX_PICTURE_SIZE / (4 * $SQUARE_SIZE));
+    },
+
+    // -------------------------------------------------------
+
+    getMaxAutotilesOffsetTexture: function() {
+        return Math.floor($MAX_PICTURE_SIZE / (9 * $SQUARE_SIZE));
     }
 }
