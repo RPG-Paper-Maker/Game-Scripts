@@ -51,7 +51,7 @@ SpriteWall.prototype = {
             center = new THREE.Vector3(),
             size = new THREE.Vector3($SQUARE_SIZE, height, 0),
             angle = RPM.positionAngle(position);
-        var i, l, x, y, w, h, coefX, coefY, rect, textureRect;
+        var i, l, x, y, w, h, coefX, coefY, rect, textureRect, wall, picture;
         var texFaceA, texFaceB;
         var localPosition = RPM.positionToVector3(position);
 
@@ -95,11 +95,15 @@ SpriteWall.prototype = {
 
         // Collision
         var objCollision = new Array;
-
-        var collisions = $datasGame.pictures.list[PictureKind.Walls][this.id]
-            .getSquaresForWall(textureRect);
-        l = collisions.length;
-        for (i = 0; i < l; i++) {
+        var collisions = new Array;
+        wall = $datasGame.specialElements.walls[this.id];
+        if (wall) {
+            picture = $datasGame.pictures.list[PictureKind.Walls][wall.pictureID];
+            if (picture) {
+                collisions = picture.getSquaresForWall(textureRect);
+            }
+        }
+        for (i = 0, l = collisions.length; i < l; i++) {
             rect = collisions[i];
             objCollision.push({
                 p: position,

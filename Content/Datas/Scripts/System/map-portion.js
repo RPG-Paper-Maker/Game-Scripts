@@ -518,28 +518,30 @@ MapPortion.prototype = {
 
             // Constructing the geometry
             obj = hash[sprite.id];
-            if (obj === null) {
-                obj = {};
-                geometry = new THREE.Geometry();
-                geometry.faceVertexUvs[0] = [];
-                material = $currentMap.texturesWalls[sprite.id];
-                count = 0;
-                obj.geometry = geometry;
-                obj.material = material;
-                obj.c = count;
-                hash[sprite.id] = obj;
-            }
-            else {
-                geometry = obj.geometry;
-                material = obj.material;
-                count = obj.c;
-            }
+            // If ID exists in this tileset
+            if (typeof obj !== 'undefined') {
+                if (obj === null) {
+                    obj = {};
+                    geometry = new THREE.Geometry();
+                    geometry.faceVertexUvs[0] = [];
+                    material = $currentMap.texturesWalls[sprite.id];
+                    count = 0;
+                    obj.geometry = geometry;
+                    obj.material = material;
+                    obj.c = count;
+                    hash[sprite.id] = obj;
+                } else {
+                    geometry = obj.geometry;
+                    material = obj.material;
+                    count = obj.c;
+                }
 
-            if (material.map) {
-                result = sprite.updateGeometry(geometry, position, material.map
-                    .image.width, material.map.image.height, count);
-                obj.c = result[0];
-                this.updateCollisionSprite(result[1], position);
+                if (material && material.map) {
+                    result = sprite.updateGeometry(geometry, position, material
+                        .map.image.width, material.map.image.height, count);
+                    obj.c = result[0];
+                    this.updateCollisionSprite(result[1], position);
+                }
             }
         }
 
