@@ -1,1 +1,0 @@
-{"states":[{"after":{"events":[{"id":1,"name":"Hero action","p":[],"r":{"1":{"bh":true,"c":[]}},"sys":false}],"hId":-1,"id":2,"name":"OBJ0002","states":[{"cam":true,"climb":false,"dir":false,"gid":2,"gk":4,"id":1,"move":true,"name":"Normal","pix":true,"pos":false,"stop":false,"through":false,"x":0,"y":0}]},"afterT":9,"before":{},"beforeT":0,"pos":[3,1,0,3,0]}]}

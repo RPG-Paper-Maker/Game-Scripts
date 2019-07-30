@@ -162,7 +162,7 @@ Sprite.prototype = {
 
         if (tileset) {
             var collisions = $currentMap.mapInfos.tileset.picture
-                             .getSquaresForTexture(this.textureRect);
+                .getSquaresForTexture(this.textureRect);
             l = collisions.length;
             for (i = 0; i < l; i++) {
                 rect = collisions[i];
@@ -170,10 +170,12 @@ Sprite.prototype = {
                     p: position,
                     l: localPosition,
                     b: [
-                        localPosition.x + (this.textureRect[2] * $SQUARE_SIZE) -
-                            rect[2] - (rect[0] * 2),
-                        localPosition.y + Math.floor((this.textureRect[3] *
-                            $SQUARE_SIZE - rect[1]) / 2),
+                        (localPosition.x - (Math.floor(this.textureRect[2] / 2)
+                            * $SQUARE_SIZE)) - ((this.textureRect[2] % 2) * Math
+                            .round($SQUARE_SIZE / 2)) + rect[0] + Math.round(
+                            rect[2] / 2),
+                        localPosition.y + (this.textureRect[3] * $SQUARE_SIZE) -
+                            rect[1] - Math.round(rect[3] / 2),
                         localPosition.z,
                         rect[2],
                         rect[3],

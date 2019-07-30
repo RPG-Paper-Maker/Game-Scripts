@@ -34,7 +34,7 @@ function CollisionSquare(){
 
 CollisionSquare.unionSquares = function(squares, l, w, h) {
     var boolGrid = new Array(l), result = new Array;
-    var i, j, k, kk, a, b, c, m, tempW, tempH;
+    var i, j, k, kk, a, b, c, m, tempW, tempH, temp;
     var square, s;
 
     for (j = 0; j < h; j++) {
@@ -47,8 +47,7 @@ CollisionSquare.unionSquares = function(squares, l, w, h) {
                     square[1] + square[3] === $SQUARE_SIZE)
                 {
                     boolGrid[i + k] = true;
-                }
-                else {
+                } else {
                     square[0] = square[0] + $SQUARE_SIZE * i;
                     square[1] = square[1] + $SQUARE_SIZE * j;
                     result.push(square);
@@ -102,9 +101,17 @@ CollisionSquare.unionSquares = function(squares, l, w, h) {
                         }
                     }
                     if (c) {
-                        for (m = i; m < i + tempW; m++)
+                        for (m = i; m < i + tempW; m++) {
                             boolGrid[m + kk] = false;
-                        square[3] = square[3] + squares[i + kk][3];
+                        }
+                        temp = squares[i + kk];
+                        if (temp === null) {
+                            temp = 0;
+                        } else {
+                            temp = temp[3];
+                        }
+
+                        square[3] = square[3] + temp;
                         boolGrid[i + kk] = false;
                     }
                     if (!c || b + 1 >= h)
