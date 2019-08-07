@@ -93,6 +93,12 @@ Mountain.prototype = {
 
     // -------------------------------------------------------
 
+    getSystem: function() {
+        return $datasGame.specialElements.mountains[this.mountainID];
+    },
+
+    // -------------------------------------------------------
+
     drawEntireFaces: function(left, right, angle, center, width, height, w,
         faceHeight, wp, xLeft, xRight, yTop, yBot, zFront, zBack, yOffset,
         vecFrontA, vecBackA, vecFrontB, vecBackB, geometry, count)

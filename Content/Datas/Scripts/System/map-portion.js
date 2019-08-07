@@ -1329,15 +1329,17 @@ MapPortion.prototype = {
     checkIntersectionMountain: function(jpositionAfter, positionAfter,
         objCollision, object, lol) {
         var point, result, x, y, z, w, h, plane, ray, pA, pB, pC, ptA, ptB, ptC,
-            newPosition, mountain;
+            newPosition, mountain, forceAlways, forceNever;
 
+        mountain = objCollision.t;
+        forceAlways = mountain.getSystem().forceAlways();
+        forceNever = mountain.getSystem().forceNever();
         point = new THREE.Vector2(positionAfter.x, positionAfter.z);
         x = objCollision.l.x;
         y = objCollision.l.y;
         z = objCollision.l.z;
         w = objCollision.rw;
         h = objCollision.rh;
-        mountain = objCollision.t;
 
         if (positionAfter.y >= y && positionAfter.y <= (y + objCollision.rh)) {
             // if w = 0, check height
@@ -1345,9 +1347,10 @@ MapPortion.prototype = {
                 if (CollisionsUtilities.isPointOnRectangle(point, x, x +
                     $SQUARE_SIZE, z, z + $SQUARE_SIZE))
                 {
-                    return ((y + objCollision.rh) <= (positionAfter.y +
-                        $datasGame.system.mountainCollisionHeight.getValue())) ?
-                        [false, y + objCollision.rh] : [true, null];
+                    return forceAlways || -(!forceNever && ((y + objCollision.rh
+                        ) <= (positionAfter.y + $datasGame.system
+                        .mountainCollisionHeight.getValue()))) ? [false, y +
+                        objCollision.rh] : [true, null];
                 }
             } else { // if w > 0, go like a slope
                 // Create a plane and ray for calculatin intersection
@@ -1466,8 +1469,8 @@ MapPortion.prototype = {
                 }
 
                 // If angle limit, block
-                if (mountain.angle > $datasGame.system.mountainCollisionAngle
-                    .getValue())
+                if (forceNever || (!forceAlways && mountain.angle > $datasGame
+                    .system.mountainCollisionAngle.getValue()))
                 {
                     return [true, null];
                 }
@@ -1476,8 +1479,9 @@ MapPortion.prototype = {
                 plane.setFromCoplanarPoints(pA, pB, pC);
                 ray.intersectPlane(plane, newPosition);
 
-                return [Math.abs(newPosition.y - positionAfter.y) > $datasGame
-                    .system.mountainCollisionHeight.getValue(), newPosition.y];
+                return [!forceAlways && (Math.abs(newPosition.y - positionAfter
+                    .y) > $datasGame.system.mountainCollisionHeight.getValue()),
+                    newPosition.y];
             }
         }
 

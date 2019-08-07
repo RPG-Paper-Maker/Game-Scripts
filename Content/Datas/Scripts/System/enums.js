@@ -408,3 +408,15 @@ var MapTransitionKind = {
     Zoom: 2
 };
 Object.freeze(MapTransitionKind);
+
+/**
+*   Enum for the map transitions.
+*   @enum {number}
+*   @readonly
+*/
+var MountainCollisionKind = {
+    Default: 0,
+    Always: 1,
+    Never: 2
+};
+Object.freeze(MountainCollisionKind);

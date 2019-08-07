@@ -69,7 +69,7 @@ DatasSpecialElements.prototype = {
             for (i = 0; i < l; i++) {
                 jsonSpecial = jsonSpecials[i];
                 id = jsonSpecial.id;
-                object = new SystemSpecialElement();
+                object = new SystemMountain();
                 object.readJSON(jsonSpecial);
                 this.mountains[id] = object;
             }
