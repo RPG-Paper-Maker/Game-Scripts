@@ -44,6 +44,7 @@ function MapObject(system, position) {
     this.frameTick = 0;
     this.isHero = false;
     this.isInScene = false;
+    this.receivedOneEvent = false;
 }
 
 /** Normal speed coef.
@@ -175,7 +176,8 @@ MapObject.prototype = {
         if (this.currentState !== null && !this.isNone() && material && material
             .map)
         {
-            this.frame = this.currentState.indexX;
+            this.frame = this.currentState.indexX >= $FRAMES ? $FRAMES - 1 :
+                this.currentState.indexX;
             this.orientationEye = this.currentState.indexY;
             this.updateOrientation();
 
@@ -621,17 +623,27 @@ MapObject.prototype = {
     *   @param {SystemParameter[]} parameters List of all the parameters.
     *   @param {numbers[]} states List of all the current states of the object.
     */
-    receiveEvent: function(sender, isSystem, idEvent, parameters, states){
+    receiveEvent: function(sender, isSystem, idEvent, parameters, states) {
+        // Option only one event per frame
+        if (this.system.eventFrame && this.receivedOneEvent) {
+            return;
+        }
+
         var i, j, l, ll;
 
         for (i = 0, l = states.length; i < l; i++){
             var state = states[i];
             var reactions = this.system.getReactions(isSystem, idEvent,
-                                                     states[i], parameters);
+                states[i], parameters);
 
             for (j = 0, ll = reactions.length; j < ll; j++) {
                 SceneGame.prototype.addReaction.call($gameStack.top(), sender,
                                                      reactions[j], this, state);
+                this.receivedOneEvent = true;
+                if (this.system.eventFrame) {
+                    return;
+                }
+
             }
         }
     },
@@ -681,6 +693,8 @@ MapObject.prototype = {
             if (frame !== this.frame || orientation !== this.orientation)
                 this.updateUVs();
         }
+
+        this.receivedOneEvent = false;
     },
 
     // -------------------------------------------------------
@@ -741,7 +755,7 @@ MapObject.prototype = {
                 } else {
                     w = this.width * $SQUARE_SIZE / textureWidth;
                     h = this.height * $SQUARE_SIZE / textureHeight;
-                    x = this.frame * w;
+                    x = (this.frame >= $FRAMES ? $FRAMES - 1 : this.frame) * w;
                     y = this.orientation * h;
                 }
 

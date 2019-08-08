@@ -37,12 +37,16 @@ SystemObject.prototype = {
         var jsonStates, jsonState, jsonEvents, jsonEvent;
 
         this.id = json.id;
+        this.eventFrame = json.ooepf;
         this.states = new Array;
         this.events = {};
 
         hId = json.hId;
         if (hId !== -1){
             var inheritedObject = $datasGame.commonEvents.commonObjects[hId];
+
+            // Only one event per frame inheritance is a priority
+            this.eventFrame = inheritedObject.eventFrame;
 
             // States
             var states = inheritedObject.states;
