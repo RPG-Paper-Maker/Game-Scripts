@@ -34,15 +34,17 @@ SystemObject.prototype = {
     */
     readJSON: function(json){
         var i, j, l, ll, id, hId;
-        var jsonStates, jsonState, jsonEvents, jsonEvent;
+        var jsonStates, jsonState, jsonProperties, jsonProperty, jsonEvents,
+            jsonEvent, prop;
 
         this.id = json.id;
         this.eventFrame = json.ooepf;
-        this.states = new Array;
+        this.states = [];
+        this.properties = [];
         this.events = {};
 
         hId = json.hId;
-        if (hId !== -1){
+        if (hId !== -1) {
             var inheritedObject = $datasGame.commonEvents.commonObjects[hId];
 
             // Only one event per frame inheritance is a priority
@@ -53,6 +55,14 @@ SystemObject.prototype = {
             l = states ? states.length : 0;
             for (i = 0; i < l; i++){
                 this.states.push(states[i]);
+            }
+
+            // Properties
+            var properties = inheritedObject.properties;
+            l = properties ? properties.length : 0;
+            for (i = 0; i < l; i++){
+                prop = properties[i];
+                this.properties[prop.id] = prop;
             }
 
             // Events
@@ -80,6 +90,16 @@ SystemObject.prototype = {
             var state = new SystemObjectState();
             state.readJSON(jsonState);
             this.states[j] = state;
+        }
+
+        // Properties
+        jsonProperties = json.p;
+        l = jsonProperties ? jsonProperties.length : 0;
+        for (i = 0; i < l; i++) {
+            jsonProperty = jsonProperties[i];
+            prop = new SystemProperty();
+            prop.readJSON(jsonProperty);
+            this.properties[prop.id] = prop;
         }
 
         // Events

@@ -643,7 +643,6 @@ MapObject.prototype = {
                 if (this.system.eventFrame) {
                     return;
                 }
-
             }
         }
     },
