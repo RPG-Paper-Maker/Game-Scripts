@@ -283,10 +283,13 @@ EventCommandIfLose.prototype = {
 *   @param {JSON} command Direct JSON command to parse.
 */
 function EventCommandChangeState(command){
+    var i, k, v;
 
     // Parsing
-    var i = 1;
-    this.idState = command[i++];
+    i = 0;
+    k = command[i++];
+    v = command[i++];
+    this.idState = SystemValue.createValue(k, v);
     this.operationKind = command[i++];
 
     this.isDirectNode = true;
@@ -379,15 +382,15 @@ EventCommandChangeState.prototype = {
         case 0: // Replacing
             EventCommandChangeState.removeAll(portionDatas, indexState);
             EventCommandChangeState.addState(portionDatas, indexState,
-                                             this.idState);
+                                             this.idState.getValue());
             break;
         case 1: // Adding
             EventCommandChangeState.addState(portionDatas, indexState,
-                                             this.idState);
+                                             this.idState.getValue());
             break;
         case 2: // Deleting
             EventCommandChangeState.removeState(portionDatas, indexState,
-                                                this.idState);
+                                                this.idState.getValue());
             break;
         }
 
@@ -1546,6 +1549,54 @@ EventCommandPlayMusicEffect.prototype = {
     },
 
     // -------------------------------------------------------
+
+    onKeyPressed: function(currentState, key){},
+    onKeyReleased: function(currentState, key){},
+    onKeyPressedRepeat: function(currentState, key){ return true; },
+    onKeyPressedAndRepeat: function(currentState, key){},
+    drawHUD: function(currentState){}
+}
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandChangeProperty
+//
+// -------------------------------------------------------
+
+/** @class
+*   An event command for changing a property value.
+*   @param {JSON} command Direct JSON command to parse.
+*/
+function EventCommandChangeProperty(command) {
+    var i, k, v;
+
+    // Parsing
+    i = 0;
+    k = command[i++];
+    v = command[i++];
+    this.propertyID = SystemValue.createValue(k, v);
+    this.operationKind = command[i++];
+    k = command[i++];
+    v = command[i++];
+    this.newValue = SystemValue.createValue(k, v);
+
+    this.isDirectNode = true;
+    this.parallel = false;
+}
+
+EventCommandChangeProperty.prototype = {
+
+    initialize: function(){ return null; },
+
+    update: function(currentState, object, state) {
+        var propertyID;
+
+        propertyID = this.propertyID.getValue();
+        object.properties[propertyID] = $operators_numbers[this.operationKind](
+            object.properties[propertyID], this.newValue.getValue());
+
+        return 1;
+    },
 
     onKeyPressed: function(currentState, key){},
     onKeyReleased: function(currentState, key){},

@@ -77,6 +77,8 @@ EventCommand.getEventCommand = function(json) {
             return new EventCommandPlaySound(command);
         case EventCommandKind.PlayMusicEffect:
             return new EventCommandPlayMusicEffect(command);
+        case EventCommandKind.ChangeProperty:
+            return new EventCommandChangeProperty(command);
         default:
             return null;
     }
@@ -468,10 +470,24 @@ EventCommandInputNumber.prototype = {
 *   @property {boolean} hasElse Boolean indicating if there an else node or not.
 *   @property {JSON} command Direct JSON command to parse.
 */
-function EventCommandIf(command){
-    this.hasElse = command[0] === 1;
-    command.shift();
-    this.command = command;
+function EventCommandIf(command) {
+    var i, k, v;
+
+    // Parsing
+    i = 0;
+    this.hasElse = command[i++] === 1;
+    this.kind = command[i++];
+    switch (this.kind) {
+    case 0: // Variable / Param / Prop
+        k = command[i++];
+        v = command[i++];
+        this.variableParamProp = SystemValue.createValue(k, v);
+        this.variableParamPropOperationKind = command[i++];
+        k = command[i++];
+        v = command[i++];
+        this.variableParamPropValue = SystemValue.createValue(k, v);
+    }
+
     this.isDirectNode = true;
     this.parallel = false;
 }
@@ -480,37 +496,6 @@ EventCommandIf.prototype = {
 
     initialize: function(){ return null; },
 
-    getBool: function(){
-
-        // Parsing
-        var i = 0;
-        var page = this.command[i++];
-        switch (page){
-        case 0:
-            return this.getBoolVariable(i);
-        }
-
-        return false;
-    },
-
-    getBoolSwitch: function(i){
-        var idSwitch = this.command[i++];
-        var value = (this.command[i++] === 0);
-        return $datasGame.listSwitches[idSwitch] === value;
-    },
-
-    getBoolVariable: function(i){
-        var idVar = this.command[i++];
-        var operation = this.command[i++];
-        var varConstType = this.command[i++];
-        var compare = this.command[i++];
-
-        var value = (varConstType === 0) ? $game.variables[compare]
-                                         : compare;
-        return $operators_compare[operation]($game.variables[idVar],
-                                             value);
-    },
-
     /** Check where to go according to the condition.
     *   @param {Object} currentState The current state of the event.
     *   @param {MapObject} object The current object reacting.
@@ -518,10 +503,20 @@ EventCommandIf.prototype = {
     *   @returns {number} The number of node to pass.
     */
     update: function(currentState, object, state){
-        var result = this.getBool();
+        var result;
 
-        if (result) return -1;
-        else return 1 + (this.hasElse ? 0 : 1);
+        switch (this.kind) {
+        case 0: // Variable / Param / Prop
+            result = $operators_compare[this.variableParamPropOperationKind](
+                this.variableParamProp.getValue(), this.variableParamPropValue
+                .getValue())
+        }
+
+        if (result) {
+            return -1;
+        } else {
+            return 1 + (this.hasElse ? 0 : 1);
+        }
     },
 
     // -------------------------------------------------------

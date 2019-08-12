@@ -60,9 +60,8 @@ SystemObject.prototype = {
             // Properties
             var properties = inheritedObject.properties;
             l = properties ? properties.length : 0;
-            for (i = 0; i < l; i++){
-                prop = properties[i];
-                this.properties[prop.id] = prop;
+            for (i = 0; i < l; i++) {
+                this.properties.push(properties[i]);
             }
 
             // Events
@@ -99,7 +98,12 @@ SystemObject.prototype = {
             jsonProperty = jsonProperties[i];
             prop = new SystemProperty();
             prop.readJSON(jsonProperty);
-            this.properties[prop.id] = prop;
+            id = prop.id;
+            for (j = 0, ll = this.properties.length; j < ll; j++) {
+                if (this.properties[j].id === id)
+                    break;
+            }
+            this.properties[j] = prop;
         }
 
         // Events

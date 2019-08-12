@@ -45,6 +45,7 @@ function MapObject(system, position) {
     this.isHero = false;
     this.isInScene = false;
     this.receivedOneEvent = false;
+    this.initializeProperties();
 }
 
 /** Normal speed coef.
@@ -137,6 +138,16 @@ MapObject.updateObjectWithID = function(object, objectID, base, callback){
 }
 
 MapObject.prototype = {
+
+    initializeProperties: function() {
+        var i, l, prop;
+
+        this.properties = [];
+        for (i = 0, l = this.system.properties.length; i < l; i++) {
+            prop = this.system.properties[i];
+            this.properties[prop.id] = prop.initialValue.getValue();
+        }
+    },
 
     /** Update the current state (graphics to display). Also update the mesh.
     */
@@ -638,7 +649,7 @@ MapObject.prototype = {
 
             for (j = 0, ll = reactions.length; j < ll; j++) {
                 SceneGame.prototype.addReaction.call($gameStack.top(), sender,
-                                                     reactions[j], this, state);
+                    reactions[j], this, state, parameters);
                 this.receivedOneEvent = true;
                 if (this.system.eventFrame) {
                     return;

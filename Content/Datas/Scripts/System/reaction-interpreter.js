@@ -40,9 +40,12 @@
 *   one per state).
 *   @param {MapObject} object Current map object.
 *   @param {number} state Current state of map object reaction.
+*   @param {SystemParameter[]} parameters All the parameters coming with
+*   this reaction.
 */
-function ReactionInterpreter(sender, reaction, object, state, command){
-
+function ReactionInterpreter(sender, reaction, object, state, parameters,
+    command)
+{
     // Default values
     if (typeof command === 'undefined') command = reaction.getFirstCommand();
 
@@ -50,6 +53,7 @@ function ReactionInterpreter(sender, reaction, object, state, command){
     this.currentReaction = reaction;
     this.currentMapObject = object;
     this.currentState = state;
+    this.currentParameters = parameters;
     this.currentCommand = command;
     this.currentCommandState = this.currentCommand.data.initialize();
     $requestPaintHUD = true;
@@ -78,6 +82,7 @@ ReactionInterpreter.prototype = {
                                                           this.currentReaction,
                                                           this.currentMapObject,
                                                           this.currentState,
+                                                          this.currentParameters,
                                                           this.currentCommand);
                 interpreter.currentCommandState.parallel = true;
                 $currentMap.parallelCommands.push(interpreter);
@@ -106,6 +111,10 @@ ReactionInterpreter.prototype = {
     *   @returns {Node}
     */
     updateCommand: function(){
+
+        // Update global variables for getValue()
+        $currentObject = this.currentMapObject;
+        $currentParameters = this.currentParameters;
 
         // Update can return different type of values :
         var result = this.currentCommand.data.update(this.currentCommandState,

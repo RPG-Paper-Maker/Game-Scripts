@@ -206,6 +206,10 @@ var $context;
 
 var $requestPaintHUD = true;
 
+var $currentObject = null;
+
+var $currentParameters = null;
+
 // -------------------------------------------------------
 //  BOUNDING BOXES
 // -------------------------------------------------------

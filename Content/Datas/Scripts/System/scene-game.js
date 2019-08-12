@@ -114,8 +114,10 @@ SceneGame.prototype = {
     *   @param {SystemReaction} reaction The reaction to add.
     *   @param {MapObject} object The object reacting.
     *   @param {number} state The state ID.
+    *   @param {SystemParameter[]} parameters All the parameters coming with
+    *   this reaction.
     */
-    addReaction: function(sender, reaction, object, state){
+    addReaction: function(sender, reaction, object, state, parameters) {
         if (reaction.getFirstCommand() !== null){
             var reactionInterpreter;
 
@@ -132,9 +134,8 @@ SceneGame.prototype = {
             }
 
             if (!excecuted) {
-                reactionInterpreter = new ReactionInterpreter(sender,
-                                                              reaction, object,
-                                                              state);
+                reactionInterpreter = new ReactionInterpreter(sender, reaction,
+                    object, state, parameters);
                 this.reactionInterpreters.push(reactionInterpreter);
             }
         }

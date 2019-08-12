@@ -57,7 +57,8 @@ var EventCommandKind = {
     PlayBackgroundSound: 26,
     StopBackgroundSound: 27,
     PlaySound: 28,
-    PlayMusicEffect: 29
+    PlayMusicEffect: 29,
+    ChangeProperty: 30
 };
 Object.freeze(EventCommandKind);
 
