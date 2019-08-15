@@ -43,7 +43,7 @@
 *   @param {SystemParameter[]} parameters All the parameters coming with
 *   this reaction.
 */
-function ReactionInterpreter(sender, reaction, object, state, parameters,
+function ReactionInterpreter(sender, reaction, object, state, parameters, event,
     command)
 {
     // Default values
@@ -56,6 +56,7 @@ function ReactionInterpreter(sender, reaction, object, state, parameters,
     this.currentParameters = parameters;
     this.currentCommand = command;
     this.currentCommandState = this.currentCommand.data.initialize();
+    this.currentTimeState = event;
     $requestPaintHUD = true;
 }
 
@@ -67,6 +68,14 @@ ReactionInterpreter.prototype = {
     */
     isFinished: function(){
         return (this.currentCommand === null)
+    },
+
+    // -------------------------------------------------------
+
+    updateCurrentTime: function() {
+        if (this.currentTimeState) {
+            this.currentTimeState[1] = new Date().getTime();
+        }
     },
 
     // -------------------------------------------------------
@@ -83,6 +92,7 @@ ReactionInterpreter.prototype = {
                                                           this.currentMapObject,
                                                           this.currentState,
                                                           this.currentParameters,
+                                                          this.currentTimeState,
                                                           this.currentCommand);
                 interpreter.currentCommandState.parallel = true;
                 $currentMap.parallelCommands.push(interpreter);

@@ -46,6 +46,7 @@ function MapObject(system, position) {
     this.isInScene = false;
     this.receivedOneEvent = false;
     this.initializeProperties();
+    this.initializeTimeEvents();
 }
 
 /** Normal speed coef.
@@ -149,9 +150,49 @@ MapObject.prototype = {
         }
     },
 
+    initializeTimeEvents: function() {
+        var i, l, event;
+
+        l = this.system.timeEvents.length;
+        this.timeEventsEllapsed = new Array(l);
+        for (i = 0; i < l; i++) {
+            event = this.system.timeEvents[i];
+            this.timeEventsEllapsed[i] = [event, new Date().getTime()];
+        }
+    },
+
+    updateTimeEvents: function() {
+        var i, l, events, event, interval, repeat, timeEllapsed, removeList;
+
+        removeList = [];
+        for (i = 0, l = this.timeEventsEllapsed.length; i < l; i++) {
+            events = this.timeEventsEllapsed[i];
+            event = events[0];
+            timeEllapsed = events[1];
+            interval = event.parameters[1].value;
+            if (new Date().getTime() - timeEllapsed >= interval.getValue()) {
+                repeat = event.parameters[2].value;
+                if (this.receiveEvent(this, true, 1, [null, interval, repeat],
+                    this.states, events))
+                {
+                    if (!repeat.getValue()) {
+                        removeList.push(i);
+                    }
+                } else {
+                    return;
+                }
+            }
+        }
+
+        // Remove useless no repeat events
+        for (i = removeList.length - 1; i >= 0; i--) {
+            this.timeEventsEllapsed.splice(removeList[i], 1);
+        }
+    },
+
     /** Update the current state (graphics to display). Also update the mesh.
     */
-    changeState: function(){
+    changeState: function() {
         var angle = this.mesh ? this.mesh.rotation.y : 0;
         var x, y, picture;
 
@@ -159,21 +200,20 @@ MapObject.prototype = {
         this.removeFromScene();
 
         // Updating the current state
-        var states;
         if (this.isHero)
-            states = $game.heroStates;
+            this.states = $game.heroStates;
         else {
             var portion = SceneMap.getGlobalPortion(
                         $currentMap.allObjects[this.system.id]);
             var portionDatas = $game.mapsDatas[$currentMap.id]
                     [portion[0]][portion[1]][portion[2]];
             var indexState = portionDatas.si.indexOf(this.system.id);
-            states = (indexState === -1) ? [1] : portionDatas.s[indexState];
+            this.states = (indexState === -1) ? [1] : portionDatas.s[indexState];
         }
         this.currentState = null;
         for (var i = this.system.states.length - 1; i >= 0; i--){
             var state = this.system.states[i];
-            if (states.indexOf(state.id) !== -1){
+            if (this.states.indexOf(state.id) !== -1){
                 this.currentState = state;
                 break;
             }
@@ -634,14 +674,16 @@ MapObject.prototype = {
     *   @param {SystemParameter[]} parameters List of all the parameters.
     *   @param {numbers[]} states List of all the current states of the object.
     */
-    receiveEvent: function(sender, isSystem, idEvent, parameters, states) {
+    receiveEvent: function(sender, isSystem, idEvent, parameters, states, event)
+    {
         // Option only one event per frame
         if (this.system.eventFrame && this.receivedOneEvent) {
-            return;
+            return false;
         }
 
-        var i, j, l, ll;
+        var i, j, l, ll, test;
 
+        test = false;
         for (i = 0, l = states.length; i < l; i++){
             var state = states[i];
             var reactions = this.system.getReactions(isSystem, idEvent,
@@ -649,21 +691,25 @@ MapObject.prototype = {
 
             for (j = 0, ll = reactions.length; j < ll; j++) {
                 SceneGame.prototype.addReaction.call($gameStack.top(), sender,
-                    reactions[j], this, state, parameters);
+                    reactions[j], this, state, parameters, event);
                 this.receivedOneEvent = true;
+                test = true;
                 if (this.system.eventFrame) {
-                    return;
+                    return true;
                 }
             }
         }
+
+        return test;
     },
 
     // -------------------------------------------------------
 
     /** Update the object graphics.
     */
-    update: function(angle){
-        if (this.mesh !== null){
+    update: function(angle) {
+        // Graphic updates
+        if (this.mesh !== null) {
             var frame = this.frame;
             var orientation = this.orientation;
 
@@ -704,7 +750,9 @@ MapObject.prototype = {
                 this.updateUVs();
         }
 
+        // Time events
         this.receivedOneEvent = false;
+        this.updateTimeEvents();
     },
 
     // -------------------------------------------------------

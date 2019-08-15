@@ -114,7 +114,7 @@ SystemObject.prototype = {
             var event = new SystemObjectEvent();
             event.readJSON(jsonEvent);
 
-            if (this.events.hasOwnProperty(event.idEvent)){
+            if (this.events.hasOwnProperty(event.idEvent)) {
                 var list = this.events[event.idEvent];
                 for (j = 0, ll = list.length; j < ll; j++){
                     if (list[j].isEqual(event))
@@ -129,6 +129,27 @@ SystemObject.prototype = {
             else
                 this.events[event.idEvent] = [event];
         }
+
+        this.timeEvents = this.getTimeEvents();
+    },
+
+    // -------------------------------------------------------
+
+    getTimeEvents: function() {
+        var i, l, list, completeList, event;
+
+        completeList = this.events[1];
+        list = [];
+        if (completeList) {
+            for (i = 0, l = completeList.length; i < l; i++) {
+                event = completeList[i];
+                if (event.isSystem) {
+                    list.push(event);
+                }
+            }
+        }
+
+        return list;
     },
 
     // -------------------------------------------------------

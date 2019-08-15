@@ -227,6 +227,6 @@ SystemValue.prototype = {
                         this.value, $datasGame.keyBoard.list[value.value]);
         }
 
-        return this.value === value.value;
+        return this.getValue() === value.getValue();
     }
 }
