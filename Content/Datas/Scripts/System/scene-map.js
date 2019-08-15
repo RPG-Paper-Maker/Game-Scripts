@@ -612,6 +612,8 @@ SceneMap.prototype = {
         var angle = Math.atan2(vector.x,vector.z) + (180 * Math.PI / 180.0);
 
         if (!this.isBattleMap) {
+            this.mapInfos.startupObject.update();
+
             // Update the objects
             $game.hero.update(angle);
             this.updatePortions(this, function(x, y, z, i, j, k) {

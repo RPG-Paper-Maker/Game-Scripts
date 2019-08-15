@@ -356,6 +356,27 @@ EventCommandChangeState.removeFromDatas = function(portionDatas, index, states){
     }
 }
 
+// -------------------------------------------------------
+
+EventCommandChangeState.addStateSpecial = function(states, state) {
+    if (states.indexOf(state) === -1) {
+        states.push(state);
+    }
+}
+
+// -------------------------------------------------------
+
+EventCommandChangeState.removeStateSpecial = function(states, state) {
+    var indexState;
+
+    indexState = states.indexOf(state);
+    if (states.indexOf(state) !== -1) {
+        states.splice(indexState, 1);
+    }
+}
+
+// -------------------------------------------------------
+
 EventCommandChangeState.prototype = {
 
     initialize: function(){ return null; },
@@ -366,32 +387,58 @@ EventCommandChangeState.prototype = {
     *   @param {number} state The state ID.
     *   @returns {number} The number of node to pass.
     */
-    update: function(currentState, object, state){
-        var portion =
-            SceneMap.getGlobalPortion($currentMap.allObjects[object.system.id]);
-        var portionDatas = $game.mapsDatas[$currentMap.id]
-                [portion[0]][portion[1]][portion[2]];
-        var indexState = portionDatas.si.indexOf(object.system.id);
-        if (indexState === -1){
-            indexState = portionDatas.si.length;
-            portionDatas.si.push(object.system.id);
-            portionDatas.s.push([1]);
-        }
+    update: function(currentState, object, state) {
+        if (object.isHero || object.isStartup) {
+            var states = (object.isHero ? $game.heroStates : $game
+                .startupStates)[$currentMap.id];
+            switch (this.operationKind) {
+            case 0: // Replacing
+                if (object.isHero) {
+                    $game.heroStates[$currentMap.id] = [];
+                } else {
+                    $game.startupStates[$currentMap.id] = [];
+                }
+                states = (object.isHero ? $game.heroStates : $game.startupStates
+                    )[$currentMap.id];
+                EventCommandChangeState.addStateSpecial(states, this.idState
+                    .getValue());
+                break;
+            case 1: // Adding
+                EventCommandChangeState.addStateSpecial(states, this.idState
+                    .getValue());
+                break;
+            case 2: // Deleting
+                EventCommandChangeState.removeStateSpecial(states, this.idState
+                    .getValue());
+                break;
+            }
+        } else {
+            var portion = SceneMap.getGlobalPortion($currentMap.allObjects[object
+                .system.id]);
+            var portionDatas = $game.mapsDatas[$currentMap.id][portion[0]][portion[
+                1]][portion[2]];
+            var indexState = portionDatas.si.indexOf(object.system.id);
+            if (indexState === -1){
+                indexState = portionDatas.si.length;
+                portionDatas.si.push(object.system.id);
+                portionDatas.s.push([1]);
+            }
 
-        switch(this.operationKind){
-        case 0: // Replacing
-            EventCommandChangeState.removeAll(portionDatas, indexState);
-            EventCommandChangeState.addState(portionDatas, indexState,
-                                             this.idState.getValue());
-            break;
-        case 1: // Adding
-            EventCommandChangeState.addState(portionDatas, indexState,
-                                             this.idState.getValue());
-            break;
-        case 2: // Deleting
-            EventCommandChangeState.removeState(portionDatas, indexState,
-                                                this.idState.getValue());
-            break;
+            switch (this.operationKind) {
+            case 0: // Replacing
+                EventCommandChangeState.removeAll(portionDatas, indexState);
+                EventCommandChangeState.addState(portionDatas, indexState,
+                                                 this.idState.getValue());
+                break;
+            case 1: // Adding
+                EventCommandChangeState.addState(portionDatas, indexState,
+                                                 this.idState.getValue());
+                break;
+            case 2: // Deleting
+                EventCommandChangeState.removeState(portionDatas, indexState,
+                                                    this.idState.getValue());
+                break;
+            }
         }
 
         object.changeState();

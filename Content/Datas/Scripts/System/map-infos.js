@@ -28,6 +28,7 @@ MapInfos.prototype = {
     *   @param {Object} json Json object describing the object.
     */
     read: function(json, map, callback) {
+        this.id = json.id;
         this.name = json.name;
         this.length = json.l;
         this.width = json.w;
@@ -47,6 +48,11 @@ MapInfos.prototype = {
         this.backgroundColorID = new SystemValue();
         this.backgroundColorID.read(json.sky);
         this.updateBackgroundColor();
+        var startupReactions = new SystemObject();
+        startupReactions.readJSON(json.io);
+        this.startupObject = new MapObject(startupReactions);
+        this.startupObject.isStartup = true;
+        this.startupObject.changeState();
     },
 
     updateBackgroundColor: function() {

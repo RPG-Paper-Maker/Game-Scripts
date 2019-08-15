@@ -53,6 +53,7 @@ Game.prototype = {
         this.initializeVariables();
         this.currentMapId = $datasGame.system.idMapStartHero;
         this.heroStates = [1];
+        this.startupStates = {};
         EventCommandModifyTeam.instanciateTeam(GroupKind.Team,
                                                CharacterKind.Hero, 1, 1, 1);
         this.mapsDatas = {};
@@ -145,6 +146,7 @@ Game.prototype = {
                                positionHero[1],
                                positionHero[2]);
         this.heroStates = json.heroStates;
+        this.startupStates = json.startS;
         this.readMapsDatas(json.mapsDatas);
     },
 
@@ -190,6 +192,7 @@ Game.prototype = {
                                this.hero.position.y,
                                this.hero.position.z],
                 heroStates: this.heroStates,
+                startS: this.startupStates,
                 mapsDatas : this.getCompressedMapsDatas()
             };
 

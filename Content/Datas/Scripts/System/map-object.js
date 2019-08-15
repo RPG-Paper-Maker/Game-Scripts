@@ -43,6 +43,7 @@ function MapObject(system, position) {
     this.movingVertical = null;
     this.frameTick = 0;
     this.isHero = false;
+    this.isStartup = false;
     this.isInScene = false;
     this.receivedOneEvent = false;
     this.initializeProperties();
@@ -200,9 +201,14 @@ MapObject.prototype = {
         this.removeFromScene();
 
         // Updating the current state
-        if (this.isHero)
+        if (this.isHero) {
             this.states = $game.heroStates;
-        else {
+        } else if (this.isStartup) {
+            if (!$game.startupStates.hasOwnProperty($currentMap.id)) {
+                $game.startupStates[$currentMap.id] = [1];
+            }
+            this.states = $game.startupStates[$currentMap.id];
+        } else {
             var portion = SceneMap.getGlobalPortion(
                         $currentMap.allObjects[this.system.id]);
             var portionDatas = $game.mapsDatas[$currentMap.id]
@@ -220,6 +226,9 @@ MapObject.prototype = {
         }
 
         // Update mesh
+        if (this.isStartup) {
+            return;
+        }
         var material = this.currentState.graphicID === 0 ? $currentMap
             .textureTileset : $currentMap.texturesCharacters[this.currentState
             .graphicID];
