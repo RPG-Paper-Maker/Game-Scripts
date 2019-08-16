@@ -49,7 +49,7 @@ MapInfos.prototype = {
         this.backgroundColorID.read(json.sky);
         this.updateBackgroundColor();
         var startupReactions = new SystemObject();
-        startupReactions.readJSON(json.io);
+        startupReactions.readJSON(json.so);
         this.startupObject = new MapObject(startupReactions);
         this.startupObject.isStartup = true;
         this.startupObject.changeState();
