@@ -59,25 +59,26 @@
 */
 
 function SceneBattle(troopID, canGameOver, canEscape, battleMap, transitionStart
-    , transitionEnd, cameraDistance, transitionStartColor, transitionEndColor)
+    , transitionEnd, transitionStartColor, transitionEndColor)
 {
     SceneMap.call(this, battleMap.idMap, true);
 
     this.troopID = troopID;
     this.canGameOver = canGameOver;
     this.canEscape = canEscape;
+    this.sysBattleMap = battleMap;
     this.transitionStart = transitionStart;
     this.transitionEnd = transitionEnd;
-    this.cameraDistance = cameraDistance;
     this.transitionStartColor = transitionStartColor;
     this.transitionEndColor = transitionEndColor;
     this.transitionColor = transitionStart === MapTransitionKind.Fade;
-
-    this.initializeCamera(transitionStart);
-    this.initializeBattle();
+    this.transitionColorAlpha = 0;
+    this.step = 0;
+    this.sceneMap = $gameStack.top();
+    this.sceneMapCameraDistance = this.sceneMap.camera.distance;
 }
 
-SceneBattle.TRANSITION_ZOOM_UDPATE = 5;
+SceneBattle.TRANSITION_ZOOM_TIME = 500;
 SceneBattle.TRANSITION_COLOR_VALUE = 0.1;
 SceneBattle.TRANSITION_COLOR_END_WAIT = 600;
 SceneBattle.TIME_END_WAIT = 1000;
@@ -85,8 +86,6 @@ SceneBattle.TIME_PROGRESSION_XP = 3000;
 SceneBattle.TIME_LINEAR_MUSIC_END = 500;
 SceneBattle.TIME_LINEAR_MUSIC_START = 500;
 SceneBattle.TIME_ACTION_ANIMATION = 2000;
-SceneBattle.CAMERA_DISTANCE = 180;
-SceneBattle.VERTICAL_ANGLE = 60;
 SceneBattle.CAMERA_TICK = 0.05;
 SceneBattle.CAMERA_OFFSET = 3;
 SceneBattle.START_CAMERA_DISTANCE = 10;
@@ -115,34 +114,21 @@ SceneBattle.prototype = Object.create(SceneMap.prototype);
 // -------------------------------------------------------
 
 /** Initialize and correct some camera settings for the battle start.
-*   @param {MapTransitionKind} transitionStart The kind of transition for 
-*       the battle start.
 */
-SceneBattle.prototype.initializeCamera = function(transitionStart) {
-    this.camera.distance = SceneBattle.CAMERA_DISTANCE;
-    this.camera.verticalAngle = SceneBattle.VERTICAL_ANGLE;
+SceneBattle.prototype.initializeCamera = function() {
+    this.camera = new Camera($datasGame.system.cameraProperties[this
+        .sysBattleMap.cameraPropertiesID.getValue()], $game.heroBattle);
     this.cameraStep = 0;
     this.cameraTick = SceneBattle.CAMERA_TICK;
     this.cameraOffset = SceneBattle.CAMERA_OFFSET;
-    this.cameraON = transitionStart !== MapTransitionKind.Zoom;
+    this.cameraON = this.transitionStart !== MapTransitionKind.Zoom;
+    this.cameraDistance = this.camera.distance;
     this.transitionZoom = false;
     if (!this.cameraON) {
         this.camera.distance = SceneBattle.START_CAMERA_DISTANCE;
         this.transitionZoom = true;
     }
     this.camera.update();
-};
-
-// -------------------------------------------------------
-
-/** Initialize the battle. Only called at the beginning of the battle. 
-*/
-SceneBattle.prototype.initializeBattle = function() {
-    this.transitionColorAlpha = 0;
-    this.step = 0;
-    this.sceneMap = $gameStack.top();
-
-    this.initialize();
 };
 
 // -------------------------------------------------------
@@ -337,10 +323,10 @@ SceneBattle.prototype.moveStandardCamera = function() {
         case 0:
             this.camera.distance -= this.cameraTick;
             this.camera.targetOffset.x += this.cameraTick;
-            if (this.camera.distance <= SceneBattle.CAMERA_DISTANCE - this
+            if (this.camera.distance <= this.cameraDistance - this
                 .cameraOffset) 
             {
-                this.camera.distance = SceneBattle.CAMERA_DISTANCE - this
+                this.camera.distance = this.cameraDistance - this
                     .cameraOffset;
                 this.camera.targetOffset.x = this.cameraOffset;
                 this.cameraStep = 1;
@@ -348,10 +334,10 @@ SceneBattle.prototype.moveStandardCamera = function() {
             break;
         case 1:
             this.camera.distance += this.cameraTick;
-            if (this.camera.distance >= SceneBattle.CAMERA_DISTANCE + this
+            if (this.camera.distance >= this.cameraDistance + this
                 .cameraOffset) 
             {
-                this.camera.distance = SceneBattle.CAMERA_DISTANCE + this
+                this.camera.distance = this.cameraDistance + this
                     .cameraOffset;
                 this.cameraStep = 2;
             }
@@ -359,10 +345,10 @@ SceneBattle.prototype.moveStandardCamera = function() {
         case 2:
             this.camera.distance -= this.cameraTick;
             this.camera.targetOffset.x -= this.cameraTick;
-            if (this.camera.distance <= SceneBattle.CAMERA_DISTANCE - this
+            if (this.camera.distance <= this.cameraDistance - this
                 .cameraOffset) 
             {
-                this.camera.distance = SceneBattle.CAMERA_DISTANCE - this
+                this.camera.distance = this.cameraDistance - this
                     .cameraOffset;
                 this.camera.targetOffset.x = -this.cameraOffset;
                 this.cameraStep = 3;
@@ -370,10 +356,10 @@ SceneBattle.prototype.moveStandardCamera = function() {
             break;
         case 3:
             this.camera.distance += this.cameraTick;
-            if (this.camera.distance >= SceneBattle.CAMERA_DISTANCE + this
+            if (this.camera.distance >= this.cameraDistance + this
                 .cameraOffset) 
             {
-                this.camera.distance = SceneBattle.CAMERA_DISTANCE + this
+                this.camera.distance = this.cameraDistance + this
                     .cameraOffset;
                 this.cameraStep = 4;
             }
@@ -381,8 +367,8 @@ SceneBattle.prototype.moveStandardCamera = function() {
         case 4:
             this.camera.distance -= this.cameraTick;
             this.camera.targetOffset.x += this.cameraTick;
-            if (this.camera.distance <= SceneBattle.CAMERA_DISTANCE) {
-                this.camera.distance = SceneBattle.CAMERA_DISTANCE;
+            if (this.camera.distance <= this.cameraDistance) {
+                this.camera.distance = this.cameraDistance;
                 this.camera.targetOffset.x = 0;
                 this.cameraStep = 0;
             }

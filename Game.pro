@@ -27,6 +27,7 @@ DISTFILES += \
     Content/Datas/Scripts/System/bitmap.js \
     Content/Datas/Scripts/System/scene-game.js \
     Content/Datas/Scripts/System/scene-title-screen.js \
+    Content/Datas/Scripts/System/system-camera-properties.js \
     Content/Datas/Scripts/System/system-mountain.js \
     Content/Datas/Scripts/System/system-property.js \
     Content/Datas/Scripts/System/system-special-element.js \

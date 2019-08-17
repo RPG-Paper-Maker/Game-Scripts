@@ -37,10 +37,6 @@ function SceneMap(id, isBattleMap){
     this.isBattleMap = isBattleMap;
     this.mapName = RPM.generateMapName(id);
     this.scene = new THREE.Scene();
-    this.camera = new Camera(250, -90, 55, isBattleMap ? $game.heroBattle :
-        $game.hero);
-    this.camera.update();
-    this.orientation = this.camera.getMapOrientation();
     this.readMapInfos();
     this.currentPortion = RPM.getPortion(this.getHeroPosition());
     this.collisions = new Array;
@@ -97,12 +93,27 @@ SceneMap.prototype = {
     readMapInfos: function(){
         $filesToLoad++;
         this.mapInfos = new MapInfos();
-        RPM.openFile(this, RPM.FILE_MAPS + this.mapName +
-                       RPM.FILE_MAP_INFOS, true, function(res)
+        RPM.openFile(this, RPM.FILE_MAPS + this.mapName + RPM.FILE_MAP_INFOS,
+            true, function(res)
         {
             var json = JSON.parse(res);
             this.mapInfos.read(json);
             $loadedFiles++;
+
+            // Camera initialization
+            if (this.isBattleMap) {
+                this.initializeCamera();
+            } else {
+                this.camera = new Camera(this.mapInfos.cameraProperties, $game
+                    .hero);
+                this.camera.update();
+            }
+            this.orientation = this.camera.getMapOrientation();
+
+            // Initialize battle
+            if (this.isBattleMap) {
+                this.initialize();
+            }
 
             // Now that we have map dimensions, we can initialize object portion
             this.initializePortionsObjects();

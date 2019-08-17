@@ -129,9 +129,10 @@ EventCommandStartBattle.prototype = {
         // Initializing battle
         if (currentState.sceneBattle === null) {
             var battleMap = (this.battleMapID === null) ? new SystemBattleMap(
-                this.idMap.getValue(), [this.x.getValue(), this.y.getValue(),
-                this.yPlus.getValue(), this.z.getValue(), 0]) : $datasGame
-                .battleSystem.battleMaps[this.battleMapID.getValue()];
+                $datasGame.system.cameraProperties[1], this.idMap.getValue(), [
+                this.x.getValue(), this.y.getValue(), this.yPlus.getValue(),
+                this.z.getValue(), 0]) : $datasGame.battleSystem.battleMaps[this
+                .battleMapID.getValue()];
             $game.heroBattle = {
                 position: RPM.positionToVector3(battleMap.position)
             };
@@ -139,8 +140,8 @@ EventCommandStartBattle.prototype = {
             // Defining the battle state instance
             var sceneBattle = new SceneBattle(this.troopID.getValue(),
                 this.canGameOver, this.canEscape, battleMap,
-                this.transitionStart, this.transitionEnd, $currentMap.camera
-                .distance, this.transitionStartColor ? $datasGame.system.colors
+                this.transitionStart, this.transitionEnd, this
+                .transitionStartColor ? $datasGame.system.colors
                 [this.transitionStartColor.getValue()] : null, this
                 .transitionEndColor ? $datasGame.system.colors[this
                 .transitionEndColor.getValue()] : null);

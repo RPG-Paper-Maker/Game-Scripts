@@ -26,18 +26,9 @@
 *   @param {number} d The camera distance.
 *   @param {number} h The camera height.
 */
-function Camera(d, h, v, target){
-    this.threeCamera = new THREE.PerspectiveCamera(45,
-                                                   $canvasWidth / $canvasHeight,
-                                                   1, 100000);
-
-    this.distance = d * ($SQUARE_SIZE / RPM.BASIC_SQUARE_SIZE);
-    this.horizontalAngle = h;
-    this.verticalAngle = v;
-    this.verticalRight = true;
+function Camera(cameraProperties, target) {
+    cameraProperties.initializeCamera(this);
     this.target = target;
-    this.targetPosition = new THREE.Vector3();
-    this.targetOffset = new THREE.Vector3();
 }
 
 Camera.prototype = {

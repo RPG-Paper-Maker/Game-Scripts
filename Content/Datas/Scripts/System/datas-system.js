@@ -39,6 +39,7 @@ DatasSystem.prototype = {
             var json = JSON.parse(res);
             var jsonItemsTypes = json.itemsTypes;
             var i, l = jsonItemsTypes.length, id, w, h, isScreenWindow;
+            var jsonList, jsonElement, element;
             this.itemsTypes = new Array(l+1);
             for (i = 0; i < l; i++) {
                 this.itemsTypes[jsonItemsTypes[i].id] = {
@@ -144,6 +145,18 @@ DatasSystem.prototype = {
                 this.windowSkins[id] = windowSkin;
             }
             this.idWindowSkin = json.wskin;
+
+            // CameraProperties
+            jsonList = json.cp;
+            l = jsonList.length;
+            this.cameraProperties = new Array(l + 1);
+            for (i = 0; i < l; i++) {
+                jsonElement = jsonList[i];
+                id = jsonElement.id;
+                element = new SystemCameraProperties();
+                element.readJSON(jsonElement);
+                this.cameraProperties[jsonElement.id] = element;
+            }
 
             // read song now that BR path is loaded
             $datasGame.songs.read();

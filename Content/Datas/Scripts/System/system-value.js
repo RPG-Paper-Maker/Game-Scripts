@@ -109,7 +109,7 @@ SystemValue.readOrDefaultNumber = function(json, number) {
         number = 0;
     }
 
-    if (json) {
+    if (typeof json !== 'undefined') {
         var value = new SystemValue();
         value.read(json);
         return value;
@@ -125,7 +125,7 @@ SystemValue.readOrDefaultNumberDouble = function(json, number) {
         number = 0;
     }
 
-    if (json) {
+    if (typeof json !== 'undefined') {
         var value = new SystemValue();
         value.read(json);
         return value;
@@ -137,7 +137,7 @@ SystemValue.readOrDefaultNumberDouble = function(json, number) {
 // -------------------------------------------------------
 
 SystemValue.readOrDefaultDatabase = function(json) {
-    if (json) {
+    if (typeof json !== 'undefined') {
         var value = new SystemValue();
         value.read(json);
         return value;

@@ -28,6 +28,7 @@ SceneBattle.prototype.initializeStep0 = function() {
     this.damages = [];
     this.battlers = new Array(2);
     this.graphicPlayers = new Array(2);
+    this.time = new Date().getTime();
 
     this.initializeAlliesBattlers();
     this.initializeEnemiesBattlers();
@@ -215,8 +216,14 @@ SceneBattle.prototype.updateTransitionStartFade = function() {
 
 SceneBattle.prototype.updateTransitionStartZoom = function() {
     if (this.transitionStart === MapTransitionKind.Zoom) {
+        var offset;
+
         if (this.transitionZoom) {
-            this.sceneMap.camera.distance -= SceneBattle.TRANSITION_ZOOM_UDPATE;
+            offset = SceneBattle.START_CAMERA_DISTANCE / this
+                .sceneMapCameraDistance * SceneBattle.TRANSITION_ZOOM_TIME;
+            this.sceneMap.camera.distance = (1 - (((new Date().getTime() - this
+                .time) - offset) / (SceneBattle.TRANSITION_ZOOM_TIME - offset)))
+                * this.sceneMapCameraDistance;
             if (this.sceneMap.camera.distance <= SceneBattle
                 .START_CAMERA_DISTANCE) 
             {
@@ -224,14 +231,19 @@ SceneBattle.prototype.updateTransitionStartZoom = function() {
                     .START_CAMERA_DISTANCE;
                 this.transitionZoom = false;
                 this.updateBackgroundColor();
+                this.time = new Date().getTime();
             }
             this.sceneMap.camera.update();
             return;
         }
-        if (this.camera.distance < SceneBattle.CAMERA_DISTANCE) {
-            this.camera.distance += SceneBattle.TRANSITION_ZOOM_UDPATE;
-            if (this.camera.distance >= SceneBattle.CAMERA_DISTANCE) {
-                this.camera.distance = SceneBattle.CAMERA_DISTANCE;
+        if (this.camera.distance < this.cameraDistance) {
+            offset = SceneBattle.START_CAMERA_DISTANCE / this.cameraDistance *
+                SceneBattle.TRANSITION_ZOOM_TIME;
+            this.camera.distance = (((new Date().getTime() - this.time) - offset
+                ) / (SceneBattle.TRANSITION_ZOOM_TIME - offset)) * this
+                .cameraDistance;
+            if (this.camera.distance >= this.cameraDistance) {
+                this.camera.distance = this.cameraDistance;
                 this.cameraON = true;
             } else {
                 return;

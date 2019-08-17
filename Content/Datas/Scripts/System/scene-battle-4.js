@@ -204,24 +204,38 @@ SceneBattle.prototype.updateStep4 = function() {
 
         // Transition zoom
         if (this.transitionEnd === 2) {
+            var offset;
+
             if (!this.transitionZoom) {
-                this.camera.distance -= 5;
-                if (this.camera.distance <= 10) {
-                    this.camera.distance = 10;
+                offset = SceneBattle.START_CAMERA_DISTANCE / this.cameraDistance
+                    * SceneBattle.TRANSITION_ZOOM_TIME;
+                this.camera.distance = (1 - (((new Date().getTime() - this
+                    .time) - offset) / (SceneBattle.TRANSITION_ZOOM_TIME -
+                    offset))) * this.cameraDistance;
+                if (this.camera.distance <= SceneBattle.START_CAMERA_DISTANCE) {
+                    this.camera.distance = SceneBattle.START_CAMERA_DISTANCE;
                     this.transitionZoom = true;
                     $gameStack.topMinusOne().updateBackgroundColor();
                     this.playMapMusic();
+                    this.time = new Date().getTime();
                 }
+                this.camera.update();
                 return;
             }
-            if (this.sceneMap.camera.distance < this.cameraDistance) {
-                this.sceneMap.camera.distance += 5;
-                this.sceneMap.camera.update();
-                if (this.sceneMap.camera.distance >= this.cameraDistance) {
-                    this.sceneMap.camera.distance = this.cameraDistance;
+            if (this.sceneMap.camera.distance < this.sceneMapCameraDistance) {
+                offset = SceneBattle.START_CAMERA_DISTANCE / this
+                    .sceneMapCameraDistance * SceneBattle.TRANSITION_ZOOM_TIME;
+                this.sceneMap.camera.distance = (((new Date().getTime() - this
+                    .time) - offset) / (SceneBattle.TRANSITION_ZOOM_TIME -
+                    offset)) * this.sceneMapCameraDistance;
+                if (this.sceneMap.camera.distance >= this.sceneMapCameraDistance)
+                {
+                    this.sceneMap.camera.distance = this.sceneMapCameraDistance;
                 } else {
+                    this.sceneMap.camera.update();
                     return;
                 }
+                this.sceneMap.camera.update();
             }
         }
 
@@ -276,6 +290,7 @@ SceneBattle.prototype.onKeyPressedStep4 = function(key){
                     .currentPlayingMusic.volume, 0, 0, SceneBattle
                     .TIME_LINEAR_MUSIC_END);
                 this.subStep = 3;
+                this.time = new Date().getTime();
             } else { // Pass xp
                 for (var i = 0, l = $game.teamHeroes.length; i < l; i++) {
                     var character = this.battlers[CharacterKind.Hero][i].character;
