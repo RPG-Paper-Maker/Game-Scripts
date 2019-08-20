@@ -396,7 +396,7 @@ MapObject.prototype = {
 
     // -------------------------------------------------------
 
-    checkCollisionObject: function(object, position) {
+    checkCollisionObject: function(object) {
         for (var i = 0, l = this.meshBoundingBox.length; i < l; i++) {
             for (var j = 0, ll = object.meshBoundingBox.length; j < ll; j++) {
                 if (CollisionsUtilities.obbVSobb(
@@ -405,6 +405,20 @@ MapObject.prototype = {
                 {
                     return true;
                 }
+            }
+        }
+
+        return false;
+    },
+
+    // -------------------------------------------------------
+
+    checkCollisionDetection: function() {
+        for (var i = 0, l = this.meshBoundingBox.length; i < l; i++) {
+            if (CollisionsUtilities.obbVSobb(this.meshBoundingBox[i].geometry,
+                $BB_BOX.geometry))
+            {
+                return true;
             }
         }
 

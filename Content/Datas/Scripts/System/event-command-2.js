@@ -481,6 +481,7 @@ function EventCommandSendEvent(command) {
     j = 0;
     l = command.length;
     this.targetKind = command[i++];
+    this.senderNoReceiver = false;
     switch (this.targetKind) {
     case 1:
     case 2:
@@ -530,7 +531,8 @@ function EventCommandSendEvent(command) {
 *   @param {SystemParameter[]} parameters List of all the parameters.
 */
 EventCommandSendEvent.sendEvent = function(sender, targetKind, idTarget,
-                                           isSystem, idEvent, parameters)
+                                           isSystem, idEvent, parameters,
+                                           senderNoReceiver)
 {
     switch (targetKind){
 
@@ -541,7 +543,7 @@ EventCommandSendEvent.sendEvent = function(sender, targetKind, idTarget,
 
     case 1: // Send to detection
         EventCommandSendEvent.sendEventDetection(
-            sender, idTarget, isSystem, idEvent, parameters);
+            sender, idTarget, isSystem, idEvent, parameters, senderNoReceiver);
         break;
 
     case 2: // Send to a particular object
@@ -560,7 +562,7 @@ EventCommandSendEvent.sendEvent = function(sender, targetKind, idTarget,
 // -------------------------------------------------------
 
 EventCommandSendEvent.sendEventDetection = function(
-    sender, idTarget, isSystem, idEvent, parameters)
+    sender, idTarget, isSystem, idEvent, parameters, senderNoReceiver)
 {
     var objects;
 
@@ -570,10 +572,10 @@ EventCommandSendEvent.sendEventDetection = function(
         // Moved objects
         EventCommandSendEvent.sendEventObjects(objects.min, objects,
                                               sender, idTarget, isSystem,
-                                              idEvent, parameters);
+                                              idEvent, parameters, senderNoReceiver);
         EventCommandSendEvent.sendEventObjects(objects.mout, objects, sender,
                                               idTarget, isSystem, idEvent,
-                                              parameters);
+                                              parameters, senderNoReceiver);
 
         // Static
         var mapPortion = $currentMap.getMapPortion(i, j, k);
@@ -581,36 +583,49 @@ EventCommandSendEvent.sendEventDetection = function(
             EventCommandSendEvent.sendEventObjects(mapPortion.objectsList,
                                                   objects, sender, idTarget,
                                                   isSystem, idEvent,
-                                                  parameters);
+                                                  parameters, senderNoReceiver);
         }
     });
 
     // And the hero!
-    $game.hero.receiveEvent(sender, isSystem, idEvent, parameters,
-                            $game.heroStates);
+    if (!senderNoReceiver || sender !== $game.hero) {
+        if (idTarget !== -1) {
+            // Check according to detection model
+            if (!$datasGame.system.detections[idTarget].checkCollision(sender,
+                $game.hero))
+            {
+                return;
+            }
+        }
+
+        $game.hero.receiveEvent(sender, isSystem, idEvent, parameters, $game
+            .heroStates);
+    }
 }
 
 // -------------------------------------------------------
 
 EventCommandSendEvent.sendEventObjects = function(
-    objects, portionDatas, sender, idTarget, isSystem, idEvent, parameters)
+    objects, portionDatas, sender, idTarget, isSystem, idEvent, parameters, senderNoReceiver)
 {
-    var i, l, object, states, indexState, posObject, detection, pos;
+    var i, l, object, states, indexState, posObject, test, detection, pos,
+        boundingBox;
     if (sender !== null)
         pos = sender.position;
 
     for (i = 0, l = objects.length; i < l; i++) {
         object = objects[i];
+        if (senderNoReceiver && sender === object) {
+            continue;
+        }
 
         if (idTarget !== -1) {
-            posObject = object.position;
-            detection = (posObject.x >= pos.x - $SQUARE_SIZE + 1 &&
-                         posObject.x <= pos.x + $SQUARE_SIZE - 1 &&
-                         posObject.y <= pos.y + $SQUARE_SIZE &&
-                         posObject.z >= pos.z - $SQUARE_SIZE + 1 &&
-                         posObject.z <= pos.z + $SQUARE_SIZE - 1);
-            if (!detection)
+            // Check according to detection model
+            if (!$datasGame.system.detections[idTarget].checkCollision(sender,
+                object))
+            {
                 continue;
+            }
         }
 
         // Get states
@@ -637,7 +652,8 @@ EventCommandSendEvent.prototype = {
     */
     update: function(currentState, object, state){
         EventCommandSendEvent.sendEvent(object, this.targetKind, this.idTarget
-            .getValue(), this.isSystem, this.eventId, this.parameters);
+            .getValue(), this.isSystem, this.eventId, this.parameters, this
+            .senderNoReceiver);
 
         return 1;
     },

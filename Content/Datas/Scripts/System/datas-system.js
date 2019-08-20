@@ -158,6 +158,18 @@ DatasSystem.prototype = {
                 this.cameraProperties[jsonElement.id] = element;
             }
 
+            // Detections
+            jsonList = json.d;
+            l = jsonList.length;
+            this.detections = new Array(l + 1);
+            for (i = 0; i < l; i++) {
+                jsonElement = jsonList[i];
+                id = jsonElement.id;
+                element = new SystemDetection();
+                element.readJSON(jsonElement);
+                this.detections[jsonElement.id] = element;
+            }
+
             // read song now that BR path is loaded
             $datasGame.songs.read();
         });

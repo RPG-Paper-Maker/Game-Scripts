@@ -687,7 +687,7 @@ SceneMap.prototype = {
                                             [null,
                                             SystemValue.createNumber(key),
                                             SystemValue.createSwitch(false),
-                                            SystemValue.createSwitch(false)]);
+                                            SystemValue.createSwitch(false)], true);
         }
 
         SceneGame.prototype.onKeyPressed.call(this, key);
@@ -707,7 +707,7 @@ SceneMap.prototype = {
                                             [null,
                                             SystemValue.createNumber(key),
                                             SystemValue.createSwitch(true),
-                                            SystemValue.createSwitch(true)]);
+                                            SystemValue.createSwitch(true)], true);
         }
 
         var block = SceneGame.prototype.onKeyPressedRepeat.call(this, key);
@@ -723,7 +723,7 @@ SceneMap.prototype = {
                                             [null,
                                             SystemValue.createNumber(key),
                                             SystemValue.createSwitch(true),
-                                            SystemValue.createSwitch(false)]);
+                                            SystemValue.createSwitch(false)], true);
         }
 
         SceneGame.prototype.onKeyPressedAndRepeat.call(this, key);

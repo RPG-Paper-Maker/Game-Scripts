@@ -197,11 +197,6 @@ SystemValue.prototype = {
         case PrimitiveValueKind.Variable:
             return $game.variables[this.value];
         case PrimitiveValueKind.Parameter:
-            if (!$currentParameters[this.value]) {
-                var loll = $currentParameters;
-                console.log("");
-            }
-
             return $currentParameters[this.value].getValue();
         case PrimitiveValueKind.Property:
             return $currentObject.properties[this.value];
@@ -224,12 +219,15 @@ SystemValue.prototype = {
         {
             return DatasKeyBoard.isKeyEqual(
                         value.value, $datasGame.keyBoard.list[this.value]);
-        }
-        else if (value.kind === PrimitiveValueKind.KeyBoard &&
+        } else if (value.kind === PrimitiveValueKind.KeyBoard &&
                  this.kind !== PrimitiveValueKind.KeyBoard)
         {
             return DatasKeyBoard.isKeyEqual(
                         this.value, $datasGame.keyBoard.list[value.value]);
+        } else if (this.kind === PrimitiveValueKind.Anything || value.kind ===
+            PrimitiveValueKind.Anything)
+        {
+            return true;
         }
 
         return this.getValue() === value.getValue();
