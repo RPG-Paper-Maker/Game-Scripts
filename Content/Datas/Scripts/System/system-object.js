@@ -171,17 +171,19 @@ SystemObject.prototype = {
                 test = true;
                 event = events[i];
 
-                for (j = 1, ll = parameters.length; j < ll; j++){
-                    if (!event.parameters[j].value.isEqual(parameters[j])){
-                        test = false;
-                        break;
+                if (event.isSystem === isSystem) {
+                    for (j = 1, ll = parameters.length; j < ll; j++){
+                        if (!event.parameters[j].value.isEqual(parameters[j])) {
+                            test = false;
+                            break;
+                        }
                     }
-                }
 
-                if (test) {
-                    reaction = events[i].reactions[state];
-                    if (reaction)
-                        reactions.push(reaction);
+                    if (test) {
+                        reaction = events[i].reactions[state];
+                        if (reaction)
+                            reactions.push(reaction);
+                    }
                 }
             }
         }

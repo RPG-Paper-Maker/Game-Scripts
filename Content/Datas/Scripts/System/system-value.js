@@ -197,6 +197,11 @@ SystemValue.prototype = {
         case PrimitiveValueKind.Variable:
             return $game.variables[this.value];
         case PrimitiveValueKind.Parameter:
+            if (!$currentParameters[this.value]) {
+                var loll = $currentParameters;
+                console.log("");
+            }
+
             return $currentParameters[this.value].getValue();
         case PrimitiveValueKind.Property:
             return $currentObject.properties[this.value];

@@ -473,39 +473,43 @@ EventCommandChangeState.prototype = {
 *   @property {SystemParameter[]} parameters List of all the parameters.
 *   @param {JSON} command Direct JSON command to parse.
 */
-function EventCommandSendEvent(command){
+function EventCommandSendEvent(command) {
+    var i, j, l, k, v;
 
     // Target
-    var i = 0, j = 0;
-    var l = command.length;
+    i = 0;
+    j = 0;
+    l = command.length;
     this.targetKind = command[i++];
-    switch(this.targetKind){
+    switch (this.targetKind) {
     case 1:
     case 2:
-        this.idTarget = command[i++];
+        k = command[i++];
+        v = command[i++];
+        this.idTarget = SystemValue.createValue(k, v);
+        this.senderNoReceiver = command[i++] === "1";
         break;
     }
 
     this.isSystem = command[i++] === "1";
     this.eventId = command[i++];
 
-
     // Parameters
     var events = this.isSystem ? $datasGame.commonEvents.eventsSystem :
                                  $datasGame.commonEvents.eventsUser;
     var parameters = events[this.eventId].parameters;
     this.parameters = [];
-    while (i < l){
-        var paramId = command[i++];
-        var k = command[i++];
-        var v = command[i++];
+    while (i < l) {
+        var paramID = command[i++];
+        k = command[i++];
+        v = command[i++];
         var parameter = SystemValue.createValue(k, v);
 
         // If default value
         if (parameter.kind === 2)
             parameter = parameters[j].value;
 
-        this.parameters.push(parameter);
+        this.parameters[paramID] = parameter;
         i++;
         j++;
     }
@@ -537,7 +541,7 @@ EventCommandSendEvent.sendEvent = function(sender, targetKind, idTarget,
 
     case 1: // Send to detection
         EventCommandSendEvent.sendEventDetection(
-            sender, 1, isSystem, idEvent, parameters);
+            sender, idTarget, isSystem, idEvent, parameters);
         break;
 
     case 2: // Send to a particular object
@@ -632,9 +636,8 @@ EventCommandSendEvent.prototype = {
     *   @returns {number} The number of node to pass.
     */
     update: function(currentState, object, state){
-        EventCommandSendEvent.sendEvent(object, this.targetKind, this.idTarget,
-                                        this.isSystem, this.eventId,
-                                        this.parameters);
+        EventCommandSendEvent.sendEvent(object, this.targetKind, this.idTarget
+            .getValue(), this.isSystem, this.eventId, this.parameters);
 
         return 1;
     },
