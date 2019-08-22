@@ -38,11 +38,11 @@ function SceneTitleScreen() {
         SceneTitleScreen.prototype.exit
     ];
 
-    // Creating pictures
-    this.pictureLogo = Picture2D.createImageWithID($datasGame
-        .titlescreenGameover.titleLogoID, PictureKind.TitleScreen, null);
-    this.pictureBackground = Picture2D.createImageWithID($datasGame
-        .titlescreenGameover.titleBackgroundID, PictureKind.TitleScreen);
+    // Creating background
+    if ($datasGame.titlescreenGameover.isTitleBackgroundImage) {
+        this.pictureBackground = Picture2D.createImageWithID($datasGame
+            .titlescreenGameover.titleBackgroundImageID, PictureKind.TitleScreen);
+    }
 
     // Windows
     this.windowChoicesCommands = new WindowChoices(OrientationWindow.Vertical,
@@ -121,8 +121,10 @@ SceneTitleScreen.prototype = {
     // -------------------------------------------------------
 
     drawHUD: function() {
-        this.pictureBackground.draw();
-        this.pictureLogo.draw();
+        if ($datasGame.titlescreenGameover.isTitleBackgroundImage) {
+            this.pictureBackground.draw();
+        }
+
         this.windowChoicesCommands.draw();
     }
 }

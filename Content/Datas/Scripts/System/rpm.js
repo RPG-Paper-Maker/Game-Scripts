@@ -378,6 +378,7 @@ RPM.STRING_RGBA = "rgba";
 RPM.STRING_PARENTHESIS_LEFT = "(";
 RPM.STRING_PARENTHESIS_RIGHT = ")";
 RPM.STRING_COMA = ",";
+RPM.UNDEFINED = 'undefined';
 
 // -------------------------------------------------------
 //  COLORS
@@ -1011,4 +1012,10 @@ RPM.formulaContainsUser = function(formula) {
 
 RPM.formulaContainsTarget = function(formula) {
     return formula.contains("t");
+};
+
+// -------------------------------------------------------
+
+RPM.jsonDefault = function(json, defaultValue) {
+    return typeof json === RPM.UNDEFINED ? defaultValue : json;
 };
