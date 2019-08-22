@@ -17,6 +17,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
+    Content/Datas/Scripts/System/datas-videos.js \
     Content/Datas/Scripts/System/desktop/main.qml \
     Content/Datas/Scripts/System/desktop/includes.js \
     Content/Datas/Scripts/System/main.js \
@@ -32,6 +33,7 @@ DISTFILES += \
     Content/Datas/Scripts/System/system-mountain.js \
     Content/Datas/Scripts/System/system-property.js \
     Content/Datas/Scripts/System/system-special-element.js \
+    Content/Datas/Scripts/System/system-video.js \
     Content/Datas/Scripts/System/texture-several.js \
     Content/Datas/Scripts/System/window-box.js \
     Content/Datas/Scripts/System/window-choices.js \

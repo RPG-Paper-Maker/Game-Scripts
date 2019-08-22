@@ -131,6 +131,10 @@ var $canvas3D;
 *   @type {Canvas} */
 var $canvasRendering;
 
+/** The canvas managing videos.
+*   @type {Video} */
+var $canvasVideos;
+
 /** Indicates if the hero is blocked by an event.
 *   @type {boolean} */
 var $blockingHero = false;

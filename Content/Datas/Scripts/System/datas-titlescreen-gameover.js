@@ -31,6 +31,7 @@ DatasTitlescreenGameover.prototype.read = function() {
         // Title screen
         this.isTitleBackgroundImage = RPM.jsonDefault(json.itbi, true);
         this.titleBackgroundImageID = RPM.jsonDefault(json.tb, 1);
+        this.titleBackgroundVideoID = RPM.jsonDefault(json.tbv, 1);
         this.titleMusic = new SystemPlaySong(SongKind.Music);
         this.titleMusic.readJSON(json.tm);
     });

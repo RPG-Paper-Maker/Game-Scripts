@@ -53,6 +53,7 @@ function DatasGame(){
     this.shapes = new DatasShapes();
     this.specialElements = new DatasSpecialElements();
     this.pictures = new DatasPictures(this, DatasGame.prototype.readAfterPictures);
+    this.videos = new DatasVideos();
     this.readSettings();
     this.loaded = false;
 }

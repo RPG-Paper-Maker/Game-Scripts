@@ -42,6 +42,11 @@ function SceneTitleScreen() {
     if ($datasGame.titlescreenGameover.isTitleBackgroundImage) {
         this.pictureBackground = Picture2D.createImageWithID($datasGame
             .titlescreenGameover.titleBackgroundImageID, PictureKind.TitleScreen);
+    } else {
+
+        $canvasVideos.source = $datasGame.videos.list[$datasGame
+            .titlescreenGameover.titleBackgroundVideoID].getPath()[1];
+        $canvasVideos.play();
     }
 
     // Windows
@@ -57,6 +62,10 @@ SceneTitleScreen.prototype = {
     /** Callback function for starting a new game.
     */
     startNewGame: function() {
+        // Stop video if existing
+        if (!$datasGame.titlescreenGameover.isTitleBackgroundVideo) {
+            $canvasVideos.stop();
+        }
 
         // Create a new game
         $game = new Game();

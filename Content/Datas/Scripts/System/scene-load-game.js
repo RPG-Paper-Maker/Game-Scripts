@@ -46,6 +46,10 @@ SceneLoadGame.prototype = {
         {
             $game = this.windowChoicesSlots.getCurrentContent().game;
             if (!$game.isNull) {
+                // Stop video if existing
+                if (!$datasGame.titlescreenGameover.isTitleBackgroundVideo) {
+                    $canvasVideos.stop();
+                }
 
                 // Pop load and title screen from the stack
                 $gameStack.pop()

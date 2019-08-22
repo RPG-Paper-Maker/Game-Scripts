@@ -29,6 +29,7 @@ import "qrc:/qmlUtilities.js" as Game
 // -------------------------------------------------------
 // Main Window
 // -------------------------------------------------------
+
 Window {
     id: window
     title: qsTr("Game")
@@ -201,6 +202,7 @@ Window {
                     musicPlayer, backgroundsoundPlayer, musicEffectPlayer,
                     [playSound1, playSound2, playSound3, playSound4,
                     playSound5]);
+                Game.$canvasVideos = video;
                 Game.initialize();
                 Game.initializeGL(canvas3d);
             }
@@ -264,6 +266,16 @@ Window {
                 showError(e);
             }
         }
+    }
+
+    // -------------------------------------------------------
+    // Video player
+    // -------------------------------------------------------
+
+    Video {
+        id: video
+        anchors.fill: parent
+        focus: true
     }
 
     // -------------------------------------------------------
