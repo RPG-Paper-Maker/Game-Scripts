@@ -33,6 +33,7 @@ DISTFILES += \
     Content/Datas/Scripts/System/system-mountain.js \
     Content/Datas/Scripts/System/system-property.js \
     Content/Datas/Scripts/System/system-special-element.js \
+    Content/Datas/Scripts/System/system-title-command.js \
     Content/Datas/Scripts/System/system-video.js \
     Content/Datas/Scripts/System/texture-several.js \
     Content/Datas/Scripts/System/window-box.js \

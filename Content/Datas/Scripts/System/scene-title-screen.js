@@ -22,21 +22,9 @@
 *   choosing a command.
 */
 function SceneTitleScreen() {
+    var commandsNb;
+
     SceneGame.call(this);
-
-    var commands, commandsActions;
-
-    // Initializing commands (texts and actions)
-    commands = [
-        new GraphicText("New game"),
-        new GraphicText("Load game"),
-        new GraphicText("Exit")
-    ];
-    commandsActions = [
-        SceneTitleScreen.prototype.startNewGame,
-        SceneTitleScreen.prototype.loadGame,
-        SceneTitleScreen.prototype.exit
-    ];
 
     // Creating background
     if ($datasGame.titlescreenGameover.isTitleBackgroundImage) {
@@ -50,48 +38,18 @@ function SceneTitleScreen() {
     }
 
     // Windows
+    commandsNb = $datasGame.titlescreenGameover.titleCommands.length;
     this.windowChoicesCommands = new WindowChoices(OrientationWindow.Vertical,
-        $SCREEN_X / 2 - 100, 300, 200, 50, 3, commands, commandsActions);
+        $SCREEN_X / 2 - (RPM.MEDIUM_SLOT_WIDTH / 2), $SCREEN_Y - RPM.HUGE_SPACE
+        - (commandsNb * RPM.MEDIUM_SLOT_HEIGHT), RPM.MEDIUM_SLOT_WIDTH,
+        RPM.MEDIUM_SLOT_HEIGHT, commandsNb, $datasGame.titlescreenGameover
+        .getCommandsNames(), $datasGame.titlescreenGameover.getCommandsActions());
 
     // Play title screen song
     $datasGame.titlescreenGameover.titleMusic.playSong();
 }
 
 SceneTitleScreen.prototype = {
-
-    /** Callback function for starting a new game.
-    */
-    startNewGame: function() {
-        // Stop video if existing
-        if (!$datasGame.titlescreenGameover.isTitleBackgroundVideo) {
-            $canvasVideos.stop();
-        }
-
-        // Create a new game
-        $game = new Game();
-        $game.initializeDefault();
-
-        // Add local map to stack
-        $gameStack.replace(new SceneMap($datasGame.system.idMapStartHero));
-    },
-
-    // -------------------------------------------------------
-
-    /** Callback function for loading an existing game.
-    */
-    loadGame: function() {
-        $gameStack.push(new SceneLoadGame());
-    },
-
-    // -------------------------------------------------------
-
-    /** Callback function for closing the window.
-    */
-    exit: function() {
-        quit();
-    },
-
-    // -------------------------------------------------------
 
     update: function() {
 
@@ -100,7 +58,8 @@ SceneTitleScreen.prototype = {
     // -------------------------------------------------------
 
     onKeyPressed: function(key) {
-        this.windowChoicesCommands.onKeyPressed(key);
+        this.windowChoicesCommands.onKeyPressed(key, this.windowChoicesCommands
+            .getCurrentContent().datas);
     },
 
     // -------------------------------------------------------

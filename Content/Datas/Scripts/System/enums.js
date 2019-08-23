@@ -421,3 +421,17 @@ var MountainCollisionKind = {
     Never: 2
 };
 Object.freeze(MountainCollisionKind);
+
+/**
+*   Enum for the title commands.
+*   @enum {number}
+*   @readonly
+*/
+var TitleCommandKind = {
+    NewGame: 0,
+    LoadGame: 1,
+    Options: 2,
+    Exit: 3,
+    Script: 4
+};
+Object.freeze(TitleCommandKind);

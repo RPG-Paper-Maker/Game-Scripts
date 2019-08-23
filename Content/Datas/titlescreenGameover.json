@@ -1,1 +1,1 @@
-{"itbi":false,"tbv":1,"tm":{"id":1,"ie":false,"is":false,"name":"Theme1.mp3","v":{"k":3,"v":100}}}
+{"tb":1,"tc":[{"id":-1,"names":{"1":"New game"}},{"id":-1,"k":1,"names":{"1":"Load game"}},{"id":-1,"k":2,"names":{"1":"Options"}},{"id":-1,"k":3,"names":{"1":"Exit"}},{"id":-1,"k":4,"names":{"1":"customscript"},"s":"console.log(\"script\")"}],"tm":{"id":1,"ie":false,"is":false,"name":"Theme1.mp3","v":{"k":3,"v":100}}}

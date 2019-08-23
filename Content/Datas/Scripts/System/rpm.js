@@ -366,6 +366,7 @@ RPM.MEDIUM_FONT_SIZE = 10;
 RPM.BASIC_SQUARE_SIZE = 32;
 RPM.BATLLER_STEPS = 9;
 RPM.SMALL_SLOT_HEIGHT = 30;
+RPM.MEDIUM_SLOT_WIDTH = 200;
 RPM.MEDIUM_SLOT_HEIGHT = 40;
 RPM.MEDIUM_SPACE = 5;
 RPM.LARGE_SPACE = 10;
@@ -1002,6 +1003,12 @@ RPM.variance = function(value, variance) {
 RPM.evaluateFormula = function(formula, user, target, damage) {
     return new Function("u", "t", "damage", "return " + formula)(user, target,
         damage);
+};
+
+// -------------------------------------------------------
+
+RPM.evaluateScript = function(script) {
+    new Function(script)();
 };
 
 // -------------------------------------------------------
