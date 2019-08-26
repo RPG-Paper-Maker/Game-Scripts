@@ -28,6 +28,7 @@ DISTFILES += \
     Content/Datas/Scripts/System/mountain.js \
     Content/Datas/Scripts/System/scene-keyboard-assign.js \
     Content/Datas/Scripts/System/scene-title-settings.js \
+    Content/Datas/Scripts/System/settings.js \
     Content/Datas/Scripts/System/sprite.js \
     Content/Datas/Scripts/System/bitmap.js \
     Content/Datas/Scripts/System/scene-game.js \

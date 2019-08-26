@@ -214,7 +214,7 @@ Window {
         onPaintGL: {
             try{
                 // Loading datas game
-                if (!Game.$datasGame.loaded) {
+                if (Game.$datasGame && !Game.$datasGame.loaded) {
                     Game.$datasGame.updateLoadings();
                     Game.$renderer.clear();
                     Game.drawHUD(true);

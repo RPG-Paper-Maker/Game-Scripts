@@ -38,6 +38,10 @@ var $currentMap;
 *   @type {DatasGame} */
 var $datasGame;
 
+/** All the settings.
+*   @type {Settings} */
+var $settings;
+
 /** Defines the size (in pixels) of a square in a map.
 *   @constant
 *   @type {number} */
@@ -233,7 +237,7 @@ var $BB_ORIENTED_BOX = MapPortion.createOrientedBox();
 /** Initialize the game stack and datas.
 */
 function initialize(){
-    $datasGame = new DatasGame();
+    $settings = new Settings();
     $gameStack = new GameStack();
     $loadingScene = new SceneLoading();
 }

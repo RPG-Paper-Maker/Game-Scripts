@@ -152,31 +152,31 @@ var $operators_numbers =
 *   The key events.
 */
 var KeyEvent = {
-    DOM_VK_CANCEL: 3,
-    DOM_VK_HELP: 6,
-    DOM_VK_BACK_SPACE: 8,
-    DOM_VK_TAB: 9,
-    DOM_VK_CLEAR: 12,
-    DOM_VK_RETURN: 13,
-    DOM_VK_ENTER: 14,
-    DOM_VK_SHIFT: 16,
-    DOM_VK_CONTROL: 17,
-    DOM_VK_ALT: 18,
-    DOM_VK_PAUSE: 19,
-    DOM_VK_CAPS_LOCK: 20,
-    DOM_VK_ESCAPE: 27,
+    DOM_VK_CANCEL: $DESKTOP ? 0 : 3,
+    DOM_VK_HELP: $DESKTOP ? 0 : 6,
+    DOM_VK_BACK_SPACE: $DESKTOP ? 16777219 : 8,
+    DOM_VK_TAB: $DESKTOP ? 16777217 : 9,
+    DOM_VK_CLEAR: $DESKTOP ? 0 : 12,
+    DOM_VK_RETURN: $DESKTOP ? 16777220 : 13,
+    DOM_VK_ENTER: $DESKTOP ? 16777221 : 14,
+    DOM_VK_SHIFT: $DESKTOP ? 16777248 : 16,
+    DOM_VK_CONTROL: $DESKTOP ? 16777249 : 17,
+    DOM_VK_ALT: $DESKTOP ? 16777251 : 18,
+    DOM_VK_PAUSE: $DESKTOP ? 16777224 : 19,
+    DOM_VK_CAPS_LOCK: $DESKTOP ? 16777252 : 20,
+    DOM_VK_ESCAPE: $DESKTOP ? 16777216 : 27,
     DOM_VK_SPACE: 32,
-    DOM_VK_PAGE_UP: 33,
-    DOM_VK_PAGE_DOWN: 34,
-    DOM_VK_END: 35,
-    DOM_VK_HOME: 36,
-    DOM_VK_LEFT: 37,
-    DOM_VK_UP: 38,
-    DOM_VK_RIGHT: 39,
-    DOM_VK_DOWN: 40,
-    DOM_VK_PRINTSCREEN: 44,
-    DOM_VK_INSERT: 45,
-    DOM_VK_DELETE: 46,
+    DOM_VK_PAGE_UP: $DESKTOP ? 16777238 : 33,
+    DOM_VK_PAGE_DOWN: $DESKTOP ? 16777239 : 34,
+    DOM_VK_END: $DESKTOP ? 16777233 : 35,
+    DOM_VK_HOME: $DESKTOP ? 16777250 : 36,
+    DOM_VK_LEFT: $DESKTOP ? 16777234 : 37,
+    DOM_VK_UP: $DESKTOP ? 16777235 : 38,
+    DOM_VK_RIGHT: $DESKTOP ? 16777236 : 39,
+    DOM_VK_DOWN: $DESKTOP ? 16777237 : 40,
+    DOM_VK_PRINTSCREEN: $DESKTOP ? 0 : 44,
+    DOM_VK_INSERT: $DESKTOP ? 16777222 : 45,
+    DOM_VK_DELETE: $DESKTOP ? 16777223 : 46,
     DOM_VK_0: 48,
     DOM_VK_1: 49,
     DOM_VK_2: 50,
@@ -215,7 +215,6 @@ var KeyEvent = {
     DOM_VK_X: 88,
     DOM_VK_Y: 89,
     DOM_VK_Z: 90,
-    DOM_VK_CONTEXT_MENU: 93,
     DOM_VK_NUMPAD0: 96,
     DOM_VK_NUMPAD1: 97,
     DOM_VK_NUMPAD2: 98,
@@ -226,47 +225,80 @@ var KeyEvent = {
     DOM_VK_NUMPAD7: 103,
     DOM_VK_NUMPAD8: 104,
     DOM_VK_NUMPAD9: 105,
-    DOM_VK_MULTIPLY: 106,
-    DOM_VK_ADD: 107,
-    DOM_VK_SEPARATOR: 108,
-    DOM_VK_SUBTRACT: 109,
-    DOM_VK_DECIMAL: 110,
-    DOM_VK_DIVIDE: 111,
-    DOM_VK_F1: 112,
-    DOM_VK_F2: 113,
-    DOM_VK_F3: 114,
-    DOM_VK_F4: 115,
-    DOM_VK_F5: 116,
-    DOM_VK_F6: 117,
-    DOM_VK_F7: 118,
-    DOM_VK_F8: 119,
-    DOM_VK_F9: 120,
-    DOM_VK_F10: 121,
-    DOM_VK_F11: 122,
-    DOM_VK_F12: 123,
-    DOM_VK_F13: 124,
-    DOM_VK_F14: 125,
-    DOM_VK_F15: 126,
-    DOM_VK_F16: 127,
-    DOM_VK_F17: 128,
-    DOM_VK_F18: 129,
-    DOM_VK_F19: 130,
-    DOM_VK_F20: 131,
-    DOM_VK_F21: 132,
-    DOM_VK_F22: 133,
-    DOM_VK_F23: 134,
-    DOM_VK_F24: 135,
-    DOM_VK_NUM_LOCK: 144,
-    DOM_VK_SCROLL_LOCK: 145,
-    DOM_VK_COMMA: 188,
-    DOM_VK_PERIOD: 190,
-    DOM_VK_SLASH: 191,
-    DOM_VK_BACK_QUOTE: 192,
-    DOM_VK_OPEN_BRACKET: 219,
-    DOM_VK_BACK_SLASH: 220,
-    DOM_VK_CLOSE_BRACKET: 221,
-    DOM_VK_QUOTE: 222,
-    DOM_VK_META: 224,
+    DOM_VK_MULTIPLY: $DESKTOP ? 42 : 106,
+    DOM_VK_ADD: $DESKTOP ? 43 : 107,
+    DOM_VK_SEPARATOR: $DESKTOP ? 124 : 108,
+    DOM_VK_SUBTRACT: $DESKTOP ? 45 : 109,
+    DOM_VK_DECIMAL: $DESKTOP ? 16777223 : 110,
+    DOM_VK_DIVIDE: $DESKTOP ? 47 : 111,
+    DOM_VK_F1: $DESKTOP ? 16777264 : 112,
+    DOM_VK_F2: $DESKTOP ? 16777265 : 113,
+    DOM_VK_F3: $DESKTOP ? 16777266 : 114,
+    DOM_VK_F4: $DESKTOP ? 16777267 : 115,
+    DOM_VK_F5: $DESKTOP ? 16777268 : 116,
+    DOM_VK_F6: $DESKTOP ? 16777269 : 117,
+    DOM_VK_F7: $DESKTOP ? 16777270 : 118,
+    DOM_VK_F8: $DESKTOP ? 16777271 : 119,
+    DOM_VK_F9: $DESKTOP ? 16777272 : 120,
+    DOM_VK_F10: $DESKTOP ? 16777273 : 121,
+    DOM_VK_F11: $DESKTOP ? 16777274 : 122,
+    DOM_VK_F12: $DESKTOP ? 16777275 : 123,
+    DOM_VK_F13: $DESKTOP ? 16777276 : 124,
+    DOM_VK_F14: $DESKTOP ? 16777277 : 125,
+    DOM_VK_F15: $DESKTOP ? 16777278 : 126,
+    DOM_VK_F16: $DESKTOP ? 16777279 : 127,
+    DOM_VK_F17: $DESKTOP ? 16777280 : 128,
+    DOM_VK_F18: $DESKTOP ? 16777281 : 129,
+    DOM_VK_F19: $DESKTOP ? 16777282 : 130,
+    DOM_VK_F20: $DESKTOP ? 16777283 : 131,
+    DOM_VK_F21: $DESKTOP ? 16777284 : 132,
+    DOM_VK_F22: $DESKTOP ? 16777285 : 133,
+    DOM_VK_F23: $DESKTOP ? 16777286 : 134,
+    DOM_VK_F24: $DESKTOP ? 16777287 : 135,
+    DOM_VK_NUM_LOCK: $DESKTOP ? 16777253 : 144,
+    DOM_VK_SCROLL_LOCK: $DESKTOP ? 0 : 145,
+    DOM_VK_COMMA: $DESKTOP ? 44 : 188,
+    DOM_VK_PERIOD: $DESKTOP ? 0 : 190,
+    DOM_VK_SLASH: $DESKTOP ? 47 : 191,
+    DOM_VK_BACK_QUOTE: $DESKTOP ? 96 : 192,
+    DOM_VK_OPEN_BRACKET: $DESKTOP ? 91 : 219,
+    DOM_VK_BACK_SLASH: $DESKTOP ? 92 : 220,
+    DOM_VK_CLOSE_BRACKET: $DESKTOP ? 93 : 221,
+    DOM_VK_QUOTE: $DESKTOP ? 34 : 222,
+    DOM_VK_META: $DESKTOP ? 0 : 224,
+    SQUARE: 178,
+    AMPERSAND: 38,
+    E_ACCENT_RIGHT: 201,
+    TILDE: 126,
+    HASH: 35,
+    APOSTROPHE: 39,
+    LEFT_PARENTHESIS: 40,
+    LEFT_BRACES: 123,
+    RIGHT_BRACES: 126,
+    E_ACCENT_LEFT: 200,
+    UNDERSCORE: 95,
+    C_UNDER: 199,
+    CARAT: 94,
+    A_ACCENT: 192,
+    AT: 64,
+    RIGHT_PARENTHESIS: 41,
+    DEGREE: 176,
+    TREMA: 16781911,
+    CARAT_2: 16781906,
+    POUND: 163,
+    DOLLAR: 36,
+    YEN: 164,
+    U_GRAVE: 217,
+    PERCENT: 37,
+    MU: 924,
+    QUESTION: 63,
+    POINT: 46,
+    COLON: 58,
+    SECTION_SIGN: 167,
+    EXCLAMATION: 33,
+    ALT_GR: 16781571,
+    LESS_THAN: 60,
+    GREATER_THAN: 62,
 
     /** Check if the pressed key is a PAD number.
     *   @param {number} key The key ID.
@@ -339,13 +371,10 @@ var KeyEvent = {
             case KeyEvent.DOM_VK_ENTER:
                 return "ENTER";
             case KeyEvent.DOM_VK_SHIFT:
-            case 16777248:
                 return "SHIFT";
             case KeyEvent.DOM_VK_CONTROL:
-            case 16777249:
                 return "CTRL";
             case KeyEvent.DOM_VK_ALT:
-            case 16777251:
                 return "ALT";
             case KeyEvent.DOM_VK_PAUSE:
                 return "PAUSE";
@@ -364,16 +393,12 @@ var KeyEvent = {
             case KeyEvent.DOM_VK_HOME:
                 return "HOME";
             case KeyEvent.DOM_VK_LEFT:
-            case 16777234:
                 return "LEFT";
             case KeyEvent.DOM_VK_UP:
-            case 16777235:
                 return "UP";
             case KeyEvent.DOM_VK_RIGHT:
-            case 16777236:
                 return "RIGHT";
             case KeyEvent.DOM_VK_DOWN:
-            case 16777237:
                 return "DOWN";
             case KeyEvent.DOM_VK_PRINTSCREEN:
                 return "PRINTSCREEN";
@@ -390,15 +415,15 @@ var KeyEvent = {
             case KeyEvent.DOM_VK_MULTIPLY:
                 return "*";
             case KeyEvent.DOM_VK_ADD:
-                return "ADD";
+                return "+";
             case KeyEvent.DOM_VK_SEPARATOR:
-                return "SEPARATOR";
+                return "|";
             case KeyEvent.DOM_VK_SUBTRACT:
-                return "SUBSTRACT";
+                return "-";
             case KeyEvent.DOM_VK_DECIMAL:
-                return "DECIMAL";
+                return ".";
             case KeyEvent.DOM_VK_DIVIDE:
-                return "DIVIDE";
+                return "/";
             case KeyEvent.DOM_VK_F1:
                 return "F1";
             case KeyEvent.DOM_VK_F2:
@@ -460,17 +485,83 @@ var KeyEvent = {
             case KeyEvent.DOM_VK_BACK_QUOTE:
                 return "`";
             case KeyEvent.DOM_VK_OPEN_BRACKET:
-                return "{";
+                return "[";
             case KeyEvent.DOM_VK_BACK_SLASH:
-                return "BACKSLASH";
+                return "\\";
             case KeyEvent.DOM_VK_CLOSE_BRACKET:
-                return "}";
+                return "]";
             case KeyEvent.DOM_VK_QUOTE:
                 return '"';
             case KeyEvent.DOM_VK_META:
                 return "META";
+            case KeyEvent.SQUARE:
+                return "²";
+            case KeyEvent.AMPERSAND:
+                return "&";
+            case KeyEvent.E_ACCENT_RIGHT:
+                return "É";
+            case KeyEvent.TILDE:
+                return "~";
+            case KeyEvent.HASH:
+                return "#"
+            case KeyEvent.APOSTROPHE:
+                return "'";
+            case KeyEvent.LEFT_PARENTHESIS:
+                return "(";
+            case KeyEvent.LEFT_BRACES:
+                return "{";
+            case KeyEvent.RIGHT_BRACES:
+                return "}";
+            case KeyEvent.E_ACCENT_LEFT:
+                return "È";
+            case KeyEvent.UNDERSCORE:
+                return "_";
+            case KeyEvent.C_UNDER:
+                return "ç";
+            case KeyEvent.CARAT:
+                return "^";
+            case KeyEvent.A_ACCENT:
+                return "À";
+            case KeyEvent.AT:
+                return "@";
+            case KeyEvent.RIGHT_PARENTHESIS:
+                return ")";
+            case KeyEvent.DEGREE:
+                return "°";
+            case KeyEvent.TREMA:
+                return "¨";
+            case KeyEvent.CARAT_2:
+                return "^";
+            case KeyEvent.POUND:
+                return "£";
+            case KeyEvent.DOLLAR:
+                return "$";
+            case KeyEvent.YEN:
+                return "¤";
+            case KeyEvent.U_GRAVE:
+                return "ù";
+            case KeyEvent.PERCENT:
+                return "%";
+            case KeyEvent.MU:
+                return "µ";
+            case KeyEvent.QUESTION:
+                return "?";
+            case KeyEvent.POINT:
+                return ".";
+            case KeyEvent.COLON:
+                return ":";
+            case KeyEvent.SECTION_SIGN:
+                return "§";
+            case KeyEvent.EXCLAMATION:
+                return "!"
+            case KeyEvent.ALT_GR:
+                return "ALT GR";
+            case KeyEvent.LESS_THAN:
+                return "<";
+            case KeyEvent.GREATER_THAN:
+                return ">";
             }
-            return "" + key;
+            return "? [ID=" + key + "]";
         }
 
         return text;

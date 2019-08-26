@@ -59,6 +59,8 @@ SceneKeyboardAssign.WINDOW_PRESS_HEIGHT = 200;
 SceneKeyboardAssign.MAX_WAIT_TIME_FIRST = 3000;
 SceneKeyboardAssign.MAX_WAIT_TIME = 1000;
 
+// -------------------------------------------------------
+
 SceneKeyboardAssign.prototype = {
 
     update: function() {
@@ -72,6 +74,9 @@ SceneKeyboardAssign.prototype = {
                 if (this.currentSC.length === 0) {
                     this.windowChoicesMain.getCurrentContent().updateShort(this
                         .originalSC);
+                } else {
+                    $settings.updateKeyboard(this.windowChoicesMain
+                        .getCurrentContent().kb.id, this.currentSC);
                 }
 
                 $requestPaintHUD = true;

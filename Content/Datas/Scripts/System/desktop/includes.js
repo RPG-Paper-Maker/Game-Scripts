@@ -10,6 +10,7 @@
 */
 Qt.include("../enums.js")
 Qt.include("../texture-several.js")
+Qt.include("../settings.js")
 Qt.include("../datas-game.js")
 Qt.include("../datas-pictures.js")
 Qt.include("../datas-videos.js")

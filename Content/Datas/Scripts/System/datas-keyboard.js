@@ -54,8 +54,10 @@ DatasKeyBoard.prototype = {
     /** Read the JSON file associated to keyboard.
     */
     read: function(){
-        RPM.openFile(this, RPM.FILE_KEYBOARD, true, function(res){
-            var json = JSON.parse(res);
+        RPM.openFile(this, RPM.FILE_KEYBOARD, true, function(res) {
+            var json, sc;
+
+            json = JSON.parse(res);
 
             // Shortcuts
             var jsonList = json.list;
@@ -68,6 +70,10 @@ DatasKeyBoard.prototype = {
                 var abbreviation = jsonKey.abr;
                 var key = new SystemKeyBoard();
                 key.readJSON(jsonKey);
+                sc = $settings.kb[id];
+                if (sc) {
+                    key.sc = sc;
+                }
                 this.list[id] = key;
                 this.listOrdered[i] = key;
                 this[abbreviation] = key;

@@ -31,6 +31,7 @@ SystemKeyBoard.prototype = {
     readJSON: function(json) {
         SystemLang.prototype.readJSON.call(this, json);
 
+        this.id = json.id;
         this.sc = json.sc;
     },
 
