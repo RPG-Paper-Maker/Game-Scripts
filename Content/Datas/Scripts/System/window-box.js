@@ -131,7 +131,7 @@ WindowBox.prototype = {
 
             // Draw content
             if (this.content !== null) {
-                if (this.limitContent) {
+                if (!isChoice && this.limitContent) {
                     $context.save();
                     $context.beginPath();
                     $context.rect(this.x, this.y, this.w, this.h);
