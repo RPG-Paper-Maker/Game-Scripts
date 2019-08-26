@@ -95,61 +95,64 @@ SystemWindowSkin.prototype = {
 
     // -------------------------------------------------------
 
-    drawBox: function(rect, selected) {
+    drawBox: function(rect, selected, bordersVisible) {
         var x, y, w, h, l, m;
 
-        // Corners
-        this.drawElement(this.borderTopLeft, rect[0], rect[1]);
-        this.drawElement(this.borderTopRight, rect[0] + rect[2] -
-            this.borderTopRight[2], rect[1]);
-        this.drawElement(this.borderBotLeft, rect[0], rect[1] +
-            rect[3] - this.borderBotLeft[3]);
-        this.drawElement(this.borderBotRight, rect[0] + rect[2] -
-            this.borderBotRight[2], rect[1] + rect[3] - this.borderBotRight[3]);
+        if (bordersVisible) {
+            // Corners
+            this.drawElement(this.borderTopLeft, rect[0], rect[1]);
+            this.drawElement(this.borderTopRight, rect[0] + rect[2] -
+                this.borderTopRight[2], rect[1]);
+            this.drawElement(this.borderBotLeft, rect[0], rect[1] +
+                rect[3] - this.borderBotLeft[3]);
+            this.drawElement(this.borderBotRight, rect[0] + rect[2] -
+                this.borderBotRight[2], rect[1] + rect[3] - this.borderBotRight[
+                3]);
 
-        // Borders
-        x = rect[0];
-        for (y = rect[1] + this.borderTopLeft[3], l = rect[1] + rect[3] -
-             this.borderBotLeft[3] - 1; y < l; y += this.borderLeft[3])
-        {
-            if (y + this.borderLeft[3] < l) {
-                this.drawElement(this.borderLeft, x, y);
-            } else {
-                this.drawElement(this.borderLeft, x, y, this
-                    .borderLeft[2], l - y + 1);
+            // Borders
+            x = rect[0];
+            for (y = rect[1] + this.borderTopLeft[3], l = rect[1] + rect[3] -
+                 this.borderBotLeft[3] - 1; y < l; y += this.borderLeft[3])
+            {
+                if (y + this.borderLeft[3] < l) {
+                    this.drawElement(this.borderLeft, x, y);
+                } else {
+                    this.drawElement(this.borderLeft, x, y, this
+                        .borderLeft[2], l - y + 1);
+                }
             }
-        }
-        x = rect[0] + rect[2] - this.borderTopRight[2];
-        for (y = rect[1] + this.borderTopLeft[3], l = rect[1] + rect[3] -
-             this.borderBotLeft[3] - 1; y < l; y += this.borderRight[3])
-        {
-            if (y + this.borderRight[3] < l) {
-                this.drawElement(this.borderRight, x, y);
-            } else {
-                this.drawElement(this.borderRight, x, y, this
-                    .borderRight[2], l - y + 1);
+            x = rect[0] + rect[2] - this.borderTopRight[2];
+            for (y = rect[1] + this.borderTopLeft[3], l = rect[1] + rect[3] -
+                 this.borderBotLeft[3] - 1; y < l; y += this.borderRight[3])
+            {
+                if (y + this.borderRight[3] < l) {
+                    this.drawElement(this.borderRight, x, y);
+                } else {
+                    this.drawElement(this.borderRight, x, y, this
+                        .borderRight[2], l - y + 1);
+                }
             }
-        }
-        y = rect[1];
-        for (x = rect[0] + this.borderTopLeft[2], l = rect[0] + rect[2] -
-             this.borderTopRight[2] - 1; x < l; x += this.borderTop[2])
-        {
-            if (x + this.borderTop[2] < l) {
-                this.drawElement(this.borderTop, x, y);
-            } else {
-                this.drawElement(this.borderTop, x, y, l - x + 1,
-                    this.borderTop[3]);
+            y = rect[1];
+            for (x = rect[0] + this.borderTopLeft[2], l = rect[0] + rect[2] -
+                 this.borderTopRight[2] - 1; x < l; x += this.borderTop[2])
+            {
+                if (x + this.borderTop[2] < l) {
+                    this.drawElement(this.borderTop, x, y);
+                } else {
+                    this.drawElement(this.borderTop, x, y, l - x + 1,
+                        this.borderTop[3]);
+                }
             }
-        }
-        y = rect[1] + rect[3] - this.borderBotLeft[3];
-        for (x = rect[0] + this.borderBotLeft[2], l = rect[0] + rect[2] -
-             this.borderBotRight[2] - 1; x < l; x += this.borderBot[2])
-        {
-            if (x + this.borderBot[2] < l) {
-                this.drawElement(this.borderBot, x, y);
-            } else {
-                this.drawElement(this.borderBot, x, y, l - x + 1,
-                    this.borderBot[3]);
+            y = rect[1] + rect[3] - this.borderBotLeft[3];
+            for (x = rect[0] + this.borderBotLeft[2], l = rect[0] + rect[2] -
+                 this.borderBotRight[2] - 1; x < l; x += this.borderBot[2])
+            {
+                if (x + this.borderBot[2] < l) {
+                    this.drawElement(this.borderBot, x, y);
+                } else {
+                    this.drawElement(this.borderBot, x, y, l - x + 1,
+                        this.borderBot[3]);
+                }
             }
         }
 

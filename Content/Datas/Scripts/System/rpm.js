@@ -9,6 +9,119 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+// -------------------------------------------------------
+//
+//  CLASS RPM
+//
+// -------------------------------------------------------
+
+/** @class
+*   Utility class with a lot of functions.
+*/
+function RPM(){
+
+}
+
+// -------------------------------------------------------
+//  PATHS
+// -------------------------------------------------------
+
+RPM.PATH_BR = "";
+RPM.PATH_DATAS = $ROOT_DIRECTORY + "Content/Datas/";
+RPM.FILE_MAPS = RPM.PATH_DATAS + "Maps/";
+RPM.FILE_MAP_INFOS = "/infos.json";
+RPM.FILE_MAP_OBJECTS = "/objects.json";
+RPM.FILE_PICTURES_DATAS = RPM.PATH_DATAS + "pictures.json";
+RPM.FILE_VIDEOS_DATAS = RPM.PATH_DATAS + "videos.json";
+RPM.FILE_SONGS_DATAS = RPM.PATH_DATAS + "songs.json";
+RPM.FILE_SHAPES_DATAS = RPM.PATH_DATAS + "shapes.json";
+RPM.FILE_COMMON_EVENTS = RPM.PATH_DATAS + "commonEvents.json";
+RPM.FILE_ITEMS = RPM.PATH_DATAS + "items.json";
+RPM.FILE_SKILLS = RPM.PATH_DATAS + "skills.json";
+RPM.FILE_WEAPONS = RPM.PATH_DATAS + "weapons.json";
+RPM.FILE_ARMORS = RPM.PATH_DATAS + "armors.json";
+RPM.FILE_HEROES = RPM.PATH_DATAS + "heroes.json";
+RPM.FILE_MONSTERS = RPM.PATH_DATAS + "monsters.json";
+RPM.FILE_TROOPS = RPM.PATH_DATAS + "troops.json";
+RPM.FILE_BATTLE_SYSTEM = RPM.PATH_DATAS + "battleSystem.json";
+RPM.FILE_TITLE_SCREEN_GAME_OVER = RPM.PATH_DATAS + "titlescreenGameover.json";
+RPM.FILE_KEYBOARD = RPM.PATH_DATAS + "keyBoard.json";
+RPM.FILE_SYSTEM = RPM.PATH_DATAS + "system.json";
+RPM.FILE_CLASSES = RPM.PATH_DATAS + "classes.json";
+RPM.FILE_TILESETS_DATAS = RPM.PATH_DATAS + "tilesets.json";
+RPM.FILE_SPECIAL_ELEMENTS = RPM.PATH_DATAS + "specialElements.json";
+RPM.FILE_VARIABLES = RPM.PATH_DATAS + "variables.json";
+RPM.FILE_SETTINGS = RPM.PATH_DATAS + "settings.json";
+RPM.FILE_SAVE = RPM.PATH_DATAS + "saves.json";
+RPM.PATH_PICTURES = "Content/Pictures";
+RPM.PATH_VIDEOS = "Content/Videos";
+RPM.PATH_HUD = RPM.PATH_PICTURES + "/HUD/";
+RPM.PATH_TEXTURES2D = RPM.PATH_PICTURES + "/Textures2D/";
+RPM.PATH_BARS = RPM.PATH_HUD + "Bars";
+RPM.PATH_FACESETS = RPM.PATH_HUD + "Facesets";
+RPM.PATH_ICONS = RPM.PATH_HUD + "Icons";
+RPM.PATH_WINDOW_SKINS = RPM.PATH_HUD + "WindowSkins";
+RPM.PATH_TITLE_SCREEN = RPM.PATH_HUD + "TitleScreen";
+RPM.PATH_AUTOTILES = RPM.PATH_TEXTURES2D + "Autotiles";
+RPM.PATH_CHARACTERS = RPM.PATH_TEXTURES2D + "Characters";
+RPM.PATH_RELIEFS = RPM.PATH_TEXTURES2D + "Reliefs";
+RPM.PATH_TILESETS = RPM.PATH_TEXTURES2D + "Tilesets";
+RPM.PATH_WALLS = RPM.PATH_TEXTURES2D + "Walls";
+RPM.PATH_BATTLERS = RPM.PATH_TEXTURES2D + "Battlers";
+RPM.PATH_OBJECTS_3D = RPM.PATH_TEXTURES2D + "Objects3D";
+RPM.PATH_MOUNTAINS = RPM.PATH_TEXTURES2D + "Mountains";
+RPM.PATH_SONGS = "Content/Songs/";
+RPM.PATH_MUSICS = RPM.PATH_SONGS + "Musics";
+RPM.PATH_BACKGROUND_SOUNDS = RPM.PATH_SONGS + "BackgroundSounds";
+RPM.PATH_SOUNDS = RPM.PATH_SONGS + "Sounds";
+RPM.PATH_MUSIC_EFFECTS = RPM.PATH_SONGS + "MusicEffects";
+RPM.PATH_SHAPES = "Content/Shapes/";
+RPM.PATH_OBJ = RPM.PATH_SHAPES + "OBJ";
+RPM.PATH_MTL = RPM.PATH_SHAPES + "MTL";
+RPM.PATH_OBJ_COLLISIONS = RPM.PATH_SHAPES + "Collisions";
+
+// -------------------------------------------------------
+//  CONSTANTS
+// -------------------------------------------------------
+
+RPM.SMALL_FONT_SIZE = 8;
+RPM.MEDIUM_FONT_SIZE = 10;
+RPM.BASIC_SQUARE_SIZE = 32;
+RPM.BATLLER_STEPS = 9;
+RPM.SMALL_SLOT_HEIGHT = 30;
+RPM.MEDIUM_SLOT_WIDTH = 200;
+RPM.MEDIUM_SLOT_HEIGHT = 40;
+RPM.LARGE_SLOT_HEIGHT = 60;
+RPM.MEDIUM_SPACE = 5;
+RPM.LARGE_SPACE = 10;
+RPM.HUGE_SPACE = 20;
+RPM.SMALL_PADDING_BOX = [10, 10, 10, 10];
+RPM.MEDIUM_PADDING_BOX = [20, 20, 20, 20];
+RPM.HUGE_PADDING_BOX = [30, 30, 30, 30];
+RPM.DIALOG_PADDING_BOX = [30, 50, 30, 50];
+RPM.SMALL_SLOT_PADDING = [10, 5, 10, 5];
+RPM.ONE_SECOND_MILLI = 1000;
+RPM.STRING_RGBA = "rgba";
+RPM.STRING_PARENTHESIS_LEFT = "(";
+RPM.STRING_PARENTHESIS_RIGHT = ")";
+RPM.STRING_COMA = ",";
+RPM.UNDEFINED = 'undefined';
+
+// -------------------------------------------------------
+//  COLORS
+// -------------------------------------------------------
+
+RPM.COLOR_GREEN = SystemColor.createColor(25, 214, 25);
+RPM.COLOR_RED = SystemColor.createColor(216, 33, 17);
+RPM.COLOR_WHITE = SystemColor.createColor(255, 255, 255);
+RPM.COLOR_BLACK = SystemColor.createColor(0, 0, 0);
+
+// -------------------------------------------------------
+//  LOADER
+// -------------------------------------------------------
+
+RPM.OBJ_LOADER = new THREE.OBJLoader();
+
 /** Binary operations.
 *   @type {function[]} */
 var $operators_compare =
@@ -188,7 +301,7 @@ var KeyEvent = {
     getKeyChar: function(key){
         // Character
         if (key >= KeyEvent.DOM_VK_A && key <= KeyEvent.DOM_VK_Z){
-            return String.fromCharCode(key).toLowerCase();
+            return String.fromCharCode(key);
         }
 
         // Numbers (PADNUM)
@@ -200,9 +313,167 @@ var KeyEvent = {
         if (KeyEvent.isKeyNumberTopPressed(key)){
             return String.fromCharCode(key);
         }
-        else{
+        else {
             return "";
         }
+    },
+
+    getKeyString: function(key) {
+        var text;
+
+        text = KeyEvent.getKeyChar(key);
+        if (!text) {
+            switch (key) {
+            case KeyEvent.DOM_VK_CANCEL:
+                return "CANCEL";
+            case KeyEvent.DOM_VK_HELP:
+                return "HELP";
+            case KeyEvent.DOM_VK_BACK_SPACE:
+                return "BACKSPACE";
+            case KeyEvent.DOM_VK_TAB:
+                return "TAB";
+            case KeyEvent.DOM_VK_CLEAR:
+                return "CLEAR";
+            case KeyEvent.DOM_VK_RETURN:
+                return "RETURN";
+            case KeyEvent.DOM_VK_ENTER:
+                return "ENTER";
+            case KeyEvent.DOM_VK_SHIFT:
+            case 16777248:
+                return "SHIFT";
+            case KeyEvent.DOM_VK_CONTROL:
+            case 16777249:
+                return "CTRL";
+            case KeyEvent.DOM_VK_ALT:
+            case 16777251:
+                return "ALT";
+            case KeyEvent.DOM_VK_PAUSE:
+                return "PAUSE";
+            case KeyEvent.DOM_VK_CAPS_LOCK:
+                return "CAPSLOCK";
+            case KeyEvent.DOM_VK_ESCAPE:
+                return "ESCAPE";
+            case KeyEvent.DOM_VK_SPACE:
+                return "SPACE";
+            case KeyEvent.DOM_VK_PAGE_UP:
+                return "PAGEUP";
+            case KeyEvent.DOM_VK_PAGE_DOWN:
+                return "PAGEDOWN";
+            case KeyEvent.DOM_VK_END:
+                return "END";
+            case KeyEvent.DOM_VK_HOME:
+                return "HOME";
+            case KeyEvent.DOM_VK_LEFT:
+            case 16777234:
+                return "LEFT";
+            case KeyEvent.DOM_VK_UP:
+            case 16777235:
+                return "UP";
+            case KeyEvent.DOM_VK_RIGHT:
+            case 16777236:
+                return "RIGHT";
+            case KeyEvent.DOM_VK_DOWN:
+            case 16777237:
+                return "DOWN";
+            case KeyEvent.DOM_VK_PRINTSCREEN:
+                return "PRINTSCREEN";
+            case KeyEvent.DOM_VK_INSERT:
+                return "INSERT";
+            case KeyEvent.DOM_VK_DELETE:
+                return "DELETE";
+            case KeyEvent.DOM_VK_SEMICOLON:
+                return ";";
+            case KeyEvent.DOM_VK_EQUALS:
+                return "=";
+            case KeyEvent.DOM_VK_CONTEXT_MENU:
+                return "CONTEXTMENU";
+            case KeyEvent.DOM_VK_MULTIPLY:
+                return "*";
+            case KeyEvent.DOM_VK_ADD:
+                return "ADD";
+            case KeyEvent.DOM_VK_SEPARATOR:
+                return "SEPARATOR";
+            case KeyEvent.DOM_VK_SUBTRACT:
+                return "SUBSTRACT";
+            case KeyEvent.DOM_VK_DECIMAL:
+                return "DECIMAL";
+            case KeyEvent.DOM_VK_DIVIDE:
+                return "DIVIDE";
+            case KeyEvent.DOM_VK_F1:
+                return "F1";
+            case KeyEvent.DOM_VK_F2:
+                return "F2";
+            case KeyEvent.DOM_VK_F3:
+                return "F3";
+            case KeyEvent.DOM_VK_F4:
+                return "F4";
+            case KeyEvent.DOM_VK_F5:
+                return "F5";
+            case KeyEvent.DOM_VK_F6:
+                return "F6";
+            case KeyEvent.DOM_VK_F7:
+                return "F7";
+            case KeyEvent.DOM_VK_F8:
+                return "F8";
+            case KeyEvent.DOM_VK_F9:
+                return "F9";
+            case KeyEvent.DOM_VK_F10:
+                return "F10";
+            case KeyEvent.DOM_VK_F11:
+                return "F11";
+            case KeyEvent.DOM_VK_F12:
+                return "F12";
+            case KeyEvent.DOM_VK_F13:
+                return "F13";
+            case KeyEvent.DOM_VK_F14:
+                return "F14";
+            case KeyEvent.DOM_VK_F15:
+                return "F15";
+            case KeyEvent.DOM_VK_F16:
+                return "F16";
+            case KeyEvent.DOM_VK_F17:
+                return "F17";
+            case KeyEvent.DOM_VK_F18:
+                return "F18";
+            case KeyEvent.DOM_VK_F19:
+                return "F19";
+            case KeyEvent.DOM_VK_F20:
+                return "F20";
+            case KeyEvent.DOM_VK_F21:
+                return "F21";
+            case KeyEvent.DOM_VK_F22:
+                return "F22";
+            case KeyEvent.DOM_VK_F23:
+                return "F23";
+            case KeyEvent.DOM_VK_F24:
+                return "F24";
+            case KeyEvent.DOM_VK_NUM_LOCK:
+                return "NUMLOCK";
+            case KeyEvent.DOM_VK_SCROLL_LOCK:
+                return "SCROLLLOCK";
+            case KeyEvent.DOM_VK_COMMA:
+                return ",";
+            case KeyEvent.DOM_VK_PERIOD:
+                return "PERIOD";
+            case KeyEvent.DOM_VK_SLASH:
+                return "/";
+            case KeyEvent.DOM_VK_BACK_QUOTE:
+                return "`";
+            case KeyEvent.DOM_VK_OPEN_BRACKET:
+                return "{";
+            case KeyEvent.DOM_VK_BACK_SLASH:
+                return "BACKSLASH";
+            case KeyEvent.DOM_VK_CLOSE_BRACKET:
+                return "}";
+            case KeyEvent.DOM_VK_QUOTE:
+                return '"';
+            case KeyEvent.DOM_VK_META:
+                return "META";
+            }
+            return "" + key;
+        }
+
+        return text;
     }
 };
 
@@ -285,118 +556,6 @@ Tree.prototype = {
         return this.root.add(data);
     }
 }
-
-// -------------------------------------------------------
-//
-//  CLASS RPM
-//
-// -------------------------------------------------------
-
-/** @class
-*   Utility class with a lot of functions.
-*/
-function RPM(){
-
-}
-
-// -------------------------------------------------------
-//  PATHS
-// -------------------------------------------------------
-
-RPM.PATH_BR = "";
-RPM.PATH_DATAS = $ROOT_DIRECTORY + "Content/Datas/";
-RPM.FILE_MAPS = RPM.PATH_DATAS + "Maps/";
-RPM.FILE_MAP_INFOS = "/infos.json";
-RPM.FILE_MAP_OBJECTS = "/objects.json";
-RPM.FILE_PICTURES_DATAS = RPM.PATH_DATAS + "pictures.json";
-RPM.FILE_VIDEOS_DATAS = RPM.PATH_DATAS + "videos.json";
-RPM.FILE_SONGS_DATAS = RPM.PATH_DATAS + "songs.json";
-RPM.FILE_SHAPES_DATAS = RPM.PATH_DATAS + "shapes.json";
-RPM.FILE_COMMON_EVENTS = RPM.PATH_DATAS + "commonEvents.json";
-RPM.FILE_ITEMS = RPM.PATH_DATAS + "items.json";
-RPM.FILE_SKILLS = RPM.PATH_DATAS + "skills.json";
-RPM.FILE_WEAPONS = RPM.PATH_DATAS + "weapons.json";
-RPM.FILE_ARMORS = RPM.PATH_DATAS + "armors.json";
-RPM.FILE_HEROES = RPM.PATH_DATAS + "heroes.json";
-RPM.FILE_MONSTERS = RPM.PATH_DATAS + "monsters.json";
-RPM.FILE_TROOPS = RPM.PATH_DATAS + "troops.json";
-RPM.FILE_BATTLE_SYSTEM = RPM.PATH_DATAS + "battleSystem.json";
-RPM.FILE_TITLE_SCREEN_GAME_OVER = RPM.PATH_DATAS + "titlescreenGameover.json";
-RPM.FILE_KEYBOARD = RPM.PATH_DATAS + "keyBoard.json";
-RPM.FILE_SYSTEM = RPM.PATH_DATAS + "system.json";
-RPM.FILE_CLASSES = RPM.PATH_DATAS + "classes.json";
-RPM.FILE_TILESETS_DATAS = RPM.PATH_DATAS + "tilesets.json";
-RPM.FILE_SPECIAL_ELEMENTS = RPM.PATH_DATAS + "specialElements.json";
-RPM.FILE_VARIABLES = RPM.PATH_DATAS + "variables.json";
-RPM.FILE_SETTINGS = RPM.PATH_DATAS + "settings.json";
-RPM.FILE_SAVE = RPM.PATH_DATAS + "saves.json";
-RPM.PATH_PICTURES = "Content/Pictures";
-RPM.PATH_VIDEOS = "Content/Videos";
-RPM.PATH_HUD = RPM.PATH_PICTURES + "/HUD/";
-RPM.PATH_TEXTURES2D = RPM.PATH_PICTURES + "/Textures2D/";
-RPM.PATH_BARS = RPM.PATH_HUD + "Bars";
-RPM.PATH_FACESETS = RPM.PATH_HUD + "Facesets";
-RPM.PATH_ICONS = RPM.PATH_HUD + "Icons";
-RPM.PATH_WINDOW_SKINS = RPM.PATH_HUD + "WindowSkins";
-RPM.PATH_TITLE_SCREEN = RPM.PATH_HUD + "TitleScreen";
-RPM.PATH_AUTOTILES = RPM.PATH_TEXTURES2D + "Autotiles";
-RPM.PATH_CHARACTERS = RPM.PATH_TEXTURES2D + "Characters";
-RPM.PATH_RELIEFS = RPM.PATH_TEXTURES2D + "Reliefs";
-RPM.PATH_TILESETS = RPM.PATH_TEXTURES2D + "Tilesets";
-RPM.PATH_WALLS = RPM.PATH_TEXTURES2D + "Walls";
-RPM.PATH_BATTLERS = RPM.PATH_TEXTURES2D + "Battlers";
-RPM.PATH_OBJECTS_3D = RPM.PATH_TEXTURES2D + "Objects3D";
-RPM.PATH_MOUNTAINS = RPM.PATH_TEXTURES2D + "Mountains";
-RPM.PATH_SONGS = "Content/Songs/";
-RPM.PATH_MUSICS = RPM.PATH_SONGS + "Musics";
-RPM.PATH_BACKGROUND_SOUNDS = RPM.PATH_SONGS + "BackgroundSounds";
-RPM.PATH_SOUNDS = RPM.PATH_SONGS + "Sounds";
-RPM.PATH_MUSIC_EFFECTS = RPM.PATH_SONGS + "MusicEffects";
-RPM.PATH_SHAPES = "Content/Shapes/";
-RPM.PATH_OBJ = RPM.PATH_SHAPES + "OBJ";
-RPM.PATH_MTL = RPM.PATH_SHAPES + "MTL";
-RPM.PATH_OBJ_COLLISIONS = RPM.PATH_SHAPES + "Collisions";
-
-// -------------------------------------------------------
-//  CONSTANTS
-// -------------------------------------------------------
-
-RPM.SMALL_FONT_SIZE = 8;
-RPM.MEDIUM_FONT_SIZE = 10;
-RPM.BASIC_SQUARE_SIZE = 32;
-RPM.BATLLER_STEPS = 9;
-RPM.SMALL_SLOT_HEIGHT = 30;
-RPM.MEDIUM_SLOT_WIDTH = 200;
-RPM.MEDIUM_SLOT_HEIGHT = 40;
-RPM.MEDIUM_SPACE = 5;
-RPM.LARGE_SPACE = 10;
-RPM.HUGE_SPACE = 20;
-RPM.SMALL_PADDING_BOX = [10, 10, 10, 10];
-RPM.MEDIUM_PADDING_BOX = [20, 20, 20, 20];
-RPM.HUGE_PADDING_BOX = [30, 30, 30, 30];
-RPM.DIALOG_PADDING_BOX = [30, 50, 30, 50];
-RPM.SMALL_SLOT_PADDING = [10, 5, 10, 5];
-RPM.ONE_SECOND_MILLI = 1000;
-RPM.STRING_RGBA = "rgba";
-RPM.STRING_PARENTHESIS_LEFT = "(";
-RPM.STRING_PARENTHESIS_RIGHT = ")";
-RPM.STRING_COMA = ",";
-RPM.UNDEFINED = 'undefined';
-
-// -------------------------------------------------------
-//  COLORS
-// -------------------------------------------------------
-
-RPM.COLOR_GREEN = SystemColor.createColor(25, 214, 25);
-RPM.COLOR_RED = SystemColor.createColor(216, 33, 17);
-RPM.COLOR_WHITE = SystemColor.createColor(255, 255, 255);
-RPM.COLOR_BLACK = SystemColor.createColor(0, 0, 0);
-
-// -------------------------------------------------------
-//  LOADER
-// -------------------------------------------------------
-
-RPM.OBJ_LOADER = new THREE.OBJLoader();
 
 // -------------------------------------------------------
 //  FUNCTIONS

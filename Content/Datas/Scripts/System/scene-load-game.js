@@ -27,6 +27,11 @@ function SceneLoadGame() {
                 new GraphicText("Load a game"),
                 new GraphicText("Select a slot you want to load.")
                 );
+
+    if ($datasGame.titlescreenGameover.isTitleBackgroundImage) {
+        this.pictureBackground = Picture2D.createImageWithID($datasGame
+            .titlescreenGameover.titleBackgroundImageID, PictureKind.TitleScreen);
+    }
 }
 
 SceneLoadGame.prototype = {
@@ -86,6 +91,10 @@ SceneLoadGame.prototype = {
     // -------------------------------------------------------
 
     drawHUD: function(){
+        if ($datasGame.titlescreenGameover.isTitleBackgroundImage) {
+            this.pictureBackground.draw();
+        }
+
         SceneSaveLoadGame.prototype.drawHUD.call(this);
     }
 }

@@ -34,21 +34,11 @@
 *   index.
 */
 function WindowChoices(orientation, x, y, w, h, nbItemsMax, listContents,
-                       listCallBacks, padding, space, currentSelectedIndex)
+    listCallBacks, padding, space, currentSelectedIndex, bordersInsideVisible)
 {
     WindowTabs.call(this, orientation, x, y, w, h, nbItemsMax, listContents,
-                    listCallBacks, padding, space, currentSelectedIndex);
-
-    var i, l;
-
-    /*
-    // Set all the windows borders opacity to 0
-    for (i = 0, l = this.listWindows.length; i < l; i++)
-        this.listWindows[i].bordersOpacity = 0;
-
-    // Create a main window containing all this sub-windows choices
-    this.windowMain = new WindowBox(x, y, w, h);
-    */
+        listCallBacks, padding, space, currentSelectedIndex,
+        bordersInsideVisible);
 }
 
 WindowChoices.prototype = {

@@ -40,13 +40,14 @@
 *   index.
 */
 function WindowTabs(orientation, x, y, w, h, nbItemsMax, listContents,
-                    listCallBacks, padding, space, currentSelectedIndex)
+    listCallBacks, padding, space, currentSelectedIndex, bordersInsideVisible)
 {
 
     // Default values
     if (typeof padding === 'undefined') padding = [0,0,0,0];
     if (typeof space === 'undefined') space = 0;
     if (typeof currentSelectedIndex === 'undefined') currentSelectedIndex = 0;
+    if (typeof bordersInsideVisible === 'undefined') bordersInsideVisible = true;
 
     Bitmap.call(this, x, y, w, h);
 
@@ -59,6 +60,7 @@ function WindowTabs(orientation, x, y, w, h, nbItemsMax, listContents,
     this.listContents = listContents;
     this.nbItemsMax = nbItemsMax;
     this.padding = padding;
+    this.bordersInsideVisible = bordersInsideVisible;
 
     WindowTabs.prototype.setContentsCallbacks.call(this, listContents,
         listCallBacks, currentSelectedIndex);
@@ -67,6 +69,8 @@ function WindowTabs(orientation, x, y, w, h, nbItemsMax, listContents,
 WindowTabs.prototype = {
 
     updateContentSize: function(currentSelectedIndex) {
+        var window;
+
         if (typeof currentSelectedIndex === 'undefined') {
             currentSelectedIndex = 0;
         }
@@ -85,19 +89,25 @@ WindowTabs.prototype = {
         }
         this.setW(boxWidth);
         this.setH(boxHeight);
+        if (!this.bordersInsideVisible) {
+            this.windowMain = new WindowBox(this.oX, this.oY, boxWidth,
+                boxHeight);
+        }
 
         // Create a new windowBox for each choice and according to the orientation
         this.listWindows = new Array(totalNb);
         for (var i = 0; i < totalNb; i++) {
             if (this.orientation === OrientationWindow.Horizontal) {
-                this.listWindows[i] = new WindowBox(this.oX + (i * this
-                    .choiceWidth) + (i * this.space), this.oY, this.choiceWidth,
-                    this.choiceHeight, this.listContents[i], this.padding);
+                window = new WindowBox(this.oX + (i * this.choiceWidth) + (i *
+                    this.space), this.oY, this.choiceWidth, this.choiceHeight,
+                    this.listContents[i], this.padding);
             } else {
-                this.listWindows[i] = new WindowBox(this.oX, this.oY + (i * this
-                    .choiceHeight) + (i * this.space), this.choiceWidth, this
-                    .choiceHeight, this.listContents[i], this.padding);
+                window = new WindowBox(this.oX, this.oY + (i * this.choiceHeight
+                    ) + (i * this.space), this.choiceWidth, this.choiceHeight,
+                    this.listContents[i], this.padding);
             }
+            window.bordersVisible = this.bordersInsideVisible;
+            this.listWindows[i] = window;
         }
 
         if (this.size > 0) {
@@ -194,7 +204,6 @@ WindowTabs.prototype = {
              this.listCallBacks = callbacks;
         }
     },
-
 
     // -------------------------------------------------------
 
@@ -347,6 +356,10 @@ WindowTabs.prototype = {
     */
     draw: function() {
         var i, index, offset;
+
+        if (!this.bordersInsideVisible) {
+            this.windowMain.draw();
+        }
 
         offset = this.currentSelectedIndex === -1 ? -1 : this.offsetSelectedIndex;
         for (i = 0; i < this.size; i++) {

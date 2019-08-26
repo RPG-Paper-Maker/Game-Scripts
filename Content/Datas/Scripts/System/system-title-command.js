@@ -39,8 +39,8 @@ SystemTitleCommand.prototype.getAction = function() {
        return this.startNewGame;
    case TitleCommandKind.LoadGame:
        return this.loadGame;
-   case TitleCommandKind.Options:
-       return this.showOptions;
+   case TitleCommandKind.Settings:
+       return this.showSettings;
    case TitleCommandKind.Exit:
        return this.exit;
    case TitleCommandKind.Script:
@@ -78,8 +78,8 @@ SystemTitleCommand.prototype.loadGame = function() {
 
 /** Callback function for loading an existing game.
 */
-SystemTitleCommand.prototype.showOptions = function() {
-    quit();
+SystemTitleCommand.prototype.showSettings = function() {
+    $gameStack.push(new SceneTitleSettings());
 }
 
 // -------------------------------------------------------

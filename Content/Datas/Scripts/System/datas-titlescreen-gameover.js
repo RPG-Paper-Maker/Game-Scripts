@@ -22,9 +22,11 @@ function DatasTitlescreenGameover() {
     this.read();
 }
 
+// -------------------------------------------------------
+
 DatasTitlescreenGameover.prototype.read = function() {
     RPM.openFile(this, RPM.FILE_TITLE_SCREEN_GAME_OVER, true, function(res) {
-        var i, l, json, jsonTab, obj;
+        var i, l, j, json, jsonTab, obj;
 
         json = JSON.parse(res);
 
@@ -42,9 +44,20 @@ DatasTitlescreenGameover.prototype.read = function() {
             obj.readJSON(jsonTab[i]);
             this.titleCommands[i] = obj;
         }
-        this.titleOptionKeyboard = RPM.jsonDefault(json.tok, true);
+        jsonTab = json.ts;
+        l = jsonTab.length;
+        this.titleSettings = [];
+        for (i = 0, j = 0; i < l; i++) {
+            obj = jsonTab[i];
+            if (obj.tso) {
+                this.titleSettings[j] = obj.id;
+                j++;
+            }
+        }
     });
 };
+
+// -------------------------------------------------------
 
 DatasTitlescreenGameover.prototype.getCommandsNames = function() {
     var i, l, list, obj, titleCommand;
@@ -61,6 +74,8 @@ DatasTitlescreenGameover.prototype.getCommandsNames = function() {
     return list;
 };
 
+// -------------------------------------------------------
+
 DatasTitlescreenGameover.prototype.getCommandsActions = function() {
     var i, l, list;
 
@@ -72,3 +87,47 @@ DatasTitlescreenGameover.prototype.getCommandsActions = function() {
 
     return list;
 };
+
+// -------------------------------------------------------
+
+DatasTitlescreenGameover.prototype.getSettingsCommandsContent = function() {
+    var i, l, list;
+
+    l = this.titleSettings.length;
+    list = new Array(l);
+    for (i = 0; i < l; i++) {
+        list[i] = new GraphicSetting(this.titleSettings[i]);
+    }
+
+    return list;
+};
+
+// -------------------------------------------------------
+
+DatasTitlescreenGameover.prototype.getSettingsCommandsActions = function() {
+    var i, l, list;
+
+    l = this.titleSettings.length;
+    list = new Array(l);
+    for (i = 0; i < l; i++) {
+        list[i] = this.getSettingsCommandsAction(this.titleSettings[i]);
+    }
+
+    return list;
+};
+
+// -------------------------------------------------------
+
+DatasTitlescreenGameover.prototype.getSettingsCommandsAction = function(id) {
+    switch (id) {
+    case TitleSettingKind.KeyboardAssigment:
+        return DatasTitlescreenGameover.prototype.keyboardAssignment;
+    }
+};
+
+// -------------------------------------------------------
+
+DatasTitlescreenGameover.prototype.keyboardAssignment = function() {
+    $gameStack.push(new SceneKeyboardAssign());
+};
+

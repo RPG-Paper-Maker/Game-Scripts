@@ -430,8 +430,18 @@ Object.freeze(MountainCollisionKind);
 var TitleCommandKind = {
     NewGame: 0,
     LoadGame: 1,
-    Options: 2,
+    Settings: 2,
     Exit: 3,
     Script: 4
 };
 Object.freeze(TitleCommandKind);
+
+/**
+*   Enum for the title settings.
+*   @enum {number}
+*   @readonly
+*/
+var TitleSettingKind = {
+    KeyboardAssigment: 0
+};
+Object.freeze(TitleSettingKind);

@@ -61,6 +61,7 @@ DatasKeyBoard.prototype = {
             var jsonList = json.list;
             var i, l = jsonList.length;
             this.list = new Array(l+1);
+            this.listOrdered = new Array(l);
             for (i = 0; i < l; i++){
                 var jsonKey = jsonList[i];
                 var id = jsonKey.id;
@@ -68,6 +69,7 @@ DatasKeyBoard.prototype = {
                 var key = new SystemKeyBoard();
                 key.readJSON(jsonKey);
                 this.list[id] = key;
+                this.listOrdered[i] = key;
                 this[abbreviation] = key;
             }
 
@@ -80,5 +82,33 @@ DatasKeyBoard.prototype = {
             this.menuControls["Left"] = this.list[json["l"]];
             this.menuControls["Right"] = this.list[json["r"]];
         });
+    },
+
+    // -------------------------------------------------------
+
+    getCommandsGraphics: function() {
+        var i, l, list;
+
+        l = this.listOrdered.length;
+        list = new Array(l);
+        for (i = 0; i < l; i++) {
+            list[i] = new GraphicKeyboard(this.listOrdered[i]);
+        }
+
+        return list;
+    },
+
+    // -------------------------------------------------------
+
+    getCommandsActions: function() {
+        var i, l, list;
+
+        l = this.listOrdered.length;
+        list = new Array(l);
+        for (i = 0; i < l; i++) {
+            list[i] = SceneKeyboardAssign.prototype.updateKey;
+        }
+
+        return list;
     }
 }

@@ -49,6 +49,7 @@ function WindowBox(x, y, w, h, content, padding, limitContent) {
     this.backgroundOpacity = 1;
     this.selected = false;
     this.contentLoaded = true;
+    this.bordersVisible = true;
 }
 
 WindowBox.prototype = {
@@ -126,7 +127,7 @@ WindowBox.prototype = {
 
             // Draw box
             $datasGame.system.getWindowSkin().drawBox(windowDimension, this
-                .selected);
+                .selected, this.bordersVisible);
 
             // Draw content
             if (this.content !== null) {

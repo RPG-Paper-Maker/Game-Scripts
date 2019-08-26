@@ -28,7 +28,29 @@ SystemKeyBoard.prototype = {
     /** Read the JSON associated to the key.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json){
+    readJSON: function(json) {
+        SystemLang.prototype.readJSON.call(this, json);
+
         this.sc = json.sc;
+    },
+
+    // -------------------------------------------------------
+
+    toString: function() {
+        var i, j, l, ll, stringList, subList, originalSubList;
+
+        l = this.sc.length;
+        stringList = new Array(l);
+        for (i = 0; i < l; i++) {
+            originalSubList = this.sc[i];
+            ll = originalSubList.length;
+            subList = new Array(ll);
+            for (j = 0; j < ll; j++) {
+                subList[j] = KeyEvent.getKeyString(originalSubList[j]);
+            }
+            stringList[i] = subList.join(" + ");
+        }
+
+        return stringList.join(" | ");
     }
 }
