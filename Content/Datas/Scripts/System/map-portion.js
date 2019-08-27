@@ -663,7 +663,7 @@ MapPortion.prototype = {
                 obj3D.read(v, datas);
 
                 // Constructing the geometry
-                obj = hash[obj3D.id];
+                obj = hash[obj3D.datas.pictureID];
                 if (typeof obj !== 'undefined') {
                     if (obj === null) {
                         obj = {};
@@ -675,7 +675,7 @@ MapPortion.prototype = {
                         obj.geometry = geometry;
                         obj.material = material;
                         obj.c = count;
-                        hash[obj3D.id] = obj;
+                        hash[obj3D.datas.pictureID] = obj;
                     }
                     else {
                         geometry = obj.geometry;

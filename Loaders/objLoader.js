@@ -156,6 +156,14 @@ THREE.OBJLoader.prototype = {
                 uvs.push(t[result[7] - 1]);
                 vertices.push(v[result[10] - 1]);
                 uvs.push(t[result[11] - 1]);
+                if (result[14]) {
+                    vertices.push(v[result[2] - 1]);
+                    uvs.push(t[result[3] - 1]);
+                    vertices.push(v[result[10] - 1]);
+                    uvs.push(t[result[11] - 1]);
+                    vertices.push(v[result[14] - 1]);
+                    uvs.push(t[result[15] - 1]);
+                }
             }
 		}
 
