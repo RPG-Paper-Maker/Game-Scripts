@@ -938,9 +938,13 @@ EventCommandMoveObject.prototype = {
                                     this.isCameraOrientation);
         currentState.distance += distances[0];
         currentState.normalDistance += distances[1];
-        if (!square || (square && currentState.normalDistance >= $SQUARE_SIZE)){
+        if (!square || (square && currentState.normalDistance >= $SQUARE_SIZE &&
+            this.isIgnore) || (square && currentState.distance >= $SQUARE_SIZE))
+        {
             if (square && currentState.distance === currentState.normalDistance)
+            {
                 object.position = currentState.position;
+            }
 
             return true;
         }

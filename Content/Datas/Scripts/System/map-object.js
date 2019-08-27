@@ -36,7 +36,6 @@ function MapObject(system, position) {
     this.orientation = this.orientationEye;
     this.width = 1;
     this.height = 1;
-    this.frameDuration = 150;
     this.moving = false;
     this.movingHorizontal = null;
     this.movingVertical = null;
@@ -55,6 +54,8 @@ function MapObject(system, position) {
 *   @default 0.004666
 */
 MapObject.SPEED_NORMAL = 0.004666;
+
+MapObject.FRAME_DURATION = 150;
 
 /** Update the object with a particular ID.
 *   @static
@@ -746,7 +747,9 @@ MapObject.prototype = {
                 // If moving, update frame
                 if (this.currentState.moveAnimation){
                     this.frameTick += $elapsedTime;
-                    if (this.frameTick >= this.frameDuration){
+                    if (this.frameTick >= (MapObject.FRAME_DURATION / this
+                        .frequency.getValue()))
+                    {
                         this.frame = (this.frame + 1) % $FRAMES;
                         this.frameTick = 0;
                     }
