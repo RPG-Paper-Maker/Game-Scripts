@@ -60,7 +60,7 @@ DatasShapes.prototype = {
                     id = jsonShape.id;
                     shape = new SystemShape();
                     shape.readJSON(jsonShape);
-                    if (i === CustomShapeKind.OBJ) {
+                    if (k === CustomShapeKind.OBJ) {
                         shape.loadObjectCustom();
                     }
 
