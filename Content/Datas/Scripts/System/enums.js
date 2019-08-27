@@ -18,7 +18,12 @@ var CommandMoveKind = {
     MoveNorth: 0,
     MoveSouth: 1,
     MoveWest: 2,
-    MoveEast: 3
+    MoveEast: 3,
+    MoveNorthWest: 4,
+    MoveNorthEast: 5,
+    MoveSouthWest: 6,
+    MoveSouthEast: 7,
+    MoveRandom: 8
 }
 Object.freeze(CommandMoveKind);
 
@@ -445,3 +450,15 @@ var TitleSettingKind = {
     KeyboardAssigment: 0
 };
 Object.freeze(TitleSettingKind);
+
+/**
+*   Enum for the object moving.
+*   @enum {number}
+*   @readonly
+*/
+var ObjectMovingKind = {
+    Fix: 0,
+    Random: 1,
+    Route: 2
+};
+Object.freeze(ObjectMovingKind);

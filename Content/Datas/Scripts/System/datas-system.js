@@ -170,6 +170,17 @@ DatasSystem.prototype = {
                 this.detections[jsonElement.id] = element;
             }
 
+            // Speed / frequency
+            jsonList = json.sf;
+            l = jsonList.length;
+            this.speedFrequencies = new Array(l + 1);
+            for (i = 0; i < l; i++) {
+                jsonElement = jsonList[i];
+                id = jsonElement.id;
+                element = SystemValue.readOrDefaultNumberDouble(jsonElement.v, 1);
+                this.speedFrequencies[jsonElement.id] = element;
+            }
+
             // read song now that BR path is loaded
             $datasGame.songs.read();
         });

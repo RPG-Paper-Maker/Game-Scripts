@@ -31,7 +31,6 @@ function MapObject(system, position) {
     this.meshBoundingBox = null;
     this.currentBoundingBox = null;
     this.boundingBoxSettings = null;
-    this.speed = 1.0;
     this.frame = 0;
     this.orientationEye = Orientation.South;
     this.orientation = this.orientationEye;
@@ -236,6 +235,10 @@ MapObject.prototype = {
         if (this.currentState !== null && !this.isNone() && material && material
             .map)
         {
+            this.speed = $datasGame.system.speedFrequencies[this.currentState
+                .speedID];
+            this.frequency = $datasGame.system.speedFrequencies[this
+                .currentState.frequencyID];
             this.frame = this.currentState.indexX >= $FRAMES ? $FRAMES - 1 :
                 this.currentState.indexX;
             this.orientationEye = this.currentState.indexY;
@@ -280,6 +283,8 @@ MapObject.prototype = {
         else {
             this.mesh = null;
             this.boundingBoxSettings = null;
+            this.speed = SystemValue.createNumberDouble(1);
+            this.frequency = SystemValue.createNumberDouble(1);
         }
 
         // Add to the scene
@@ -532,8 +537,8 @@ MapObject.prototype = {
         this.removeMoveTemp();
 
         // Set position
-        var speed = this.speed * MapObject.SPEED_NORMAL * $averageElapsedTime *
-            $SQUARE_SIZE;
+        var speed = this.speed.getValue() * MapObject.SPEED_NORMAL *
+            $averageElapsedTime * $SQUARE_SIZE;
         if (this.movingVertical !== null && this.movingHorizontal !== null)
             speed *= Math.SQRT1_2;
         var normalDistance = Math.min(limit, speed);
@@ -773,9 +778,21 @@ MapObject.prototype = {
                 this.updateUVs();
         }
 
+        // Moving
+        this.updateMovingState();
+
         // Time events
         this.receivedOneEvent = false;
         this.updateTimeEvents();
+    },
+
+    // -------------------------------------------------------
+
+    updateMovingState: function() {
+        if (this.currentState.objectMovingKind !== ObjectMovingKind.Fix) {
+            $currentMap.addReaction(null, this.currentState.route, this, this
+                .currentState.id, [null]);
+        }
     },
 
     // -------------------------------------------------------

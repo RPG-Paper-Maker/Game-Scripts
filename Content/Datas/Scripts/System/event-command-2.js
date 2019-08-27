@@ -842,7 +842,7 @@ EventCommandTeleportObject.prototype = {
 *   @property {Object[]} parameters Parameters for ach moves callbacks.
 *   @param {JSON} command Direct JSON command to parse.
 */
-function EventCommandMoveObject(command){
+function EventCommandMoveObject(command) {
     var i = 0, l = command.length;
 
     // Object ID
@@ -862,7 +862,7 @@ function EventCommandMoveObject(command){
         var kind = command[i++];
 
         if (kind >= CommandMoveKind.MoveNorth &&
-            kind <= CommandMoveKind.MoveEast)
+            kind <= CommandMoveKind.MoveRandom)
         {
             this.parameters.push({ square: command[i++] === 0 });
             switch (kind){
@@ -877,6 +877,14 @@ function EventCommandMoveObject(command){
                 break;
             case CommandMoveKind.MoveEast:
                 this.moves.push(this.moveEast);
+                break;
+            case CommandMoveKind.MoveNorthWest:
+            case CommandMoveKind.MoveNorthEast:
+            case CommandMoveKind.MoveSouthWest:
+            case CommandMoveKind.MoveSouthEast:
+                break;
+            case CommandMoveKind.MoveRandom:
+                this.moves.push(this.moveRandom);
                 break;
             }
         }
@@ -900,7 +908,8 @@ EventCommandMoveObject.prototype = {
             position: null,
             waitingPosition: false,
             moved: false,
-            object: null
+            object: null,
+            random: RPM.random(0, 3)
         }
     },
 
@@ -947,7 +956,7 @@ EventCommandMoveObject.prototype = {
     *   @param {Object} parameters The parameters.
     */
     moveNorth: function(currentState, object, parameters){
-        return currentState ? this.move(currentState, object, parameters.square,
+        return object ? this.move(currentState, object, parameters.square,
             Orientation.North) : Orientation.North;
     },
 
@@ -959,7 +968,7 @@ EventCommandMoveObject.prototype = {
     *   @param {Object} parameters The parameters.
     */
     moveSouth: function(currentState, object, parameters){
-        return currentState ? this.move(currentState, object, parameters.square,
+        return object ? this.move(currentState, object, parameters.square,
             Orientation.South) : Orientation.South;
     },
 
@@ -971,7 +980,7 @@ EventCommandMoveObject.prototype = {
     *   @param {Object} parameters The parameters.
     */
     moveWest: function(currentState, object, parameters){
-        return currentState ? this.move(currentState, object, parameters.square,
+        return object ? this.move(currentState, object, parameters.square,
             Orientation.West) : Orientation.West;
     },
 
@@ -983,8 +992,28 @@ EventCommandMoveObject.prototype = {
     *   @param {Object} parameters The parameters.
     */
     moveEast: function(currentState, object, parameters){
-        return currentState ? this.move(currentState, object, parameters.square,
+        return object ? this.move(currentState, object, parameters.square,
             Orientation.East) : Orientation.East;
+    },
+
+    // -------------------------------------------------------
+
+    /** Function to move random.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The object to move.
+    *   @param {Object} parameters The parameters.
+    */
+    moveRandom: function(currentState, object, parameters) {
+        switch (currentState.random) {
+        case CommandMoveKind.MoveNorth:
+            return this.moveNorth(currentState, object, parameters);
+        case CommandMoveKind.MoveSouth:
+            return this.moveSouth(currentState, object, parameters);
+        case CommandMoveKind.MoveWest:
+            return this.moveWest(currentState, object, parameters);
+        case CommandMoveKind.MoveEast:
+            return this.moveEast(currentState, object, parameters);
+        }
     },
 
     // -------------------------------------------------------
@@ -996,7 +1025,7 @@ EventCommandMoveObject.prototype = {
     *   @returns {number} The number of node to pass.
     */
     update: function(currentState, object, state){
-        if (currentState.parallel) {
+        if (currentState.parallel && this.moves.length > 0) {
             if (!currentState.waitingObject) {
                 var objectID = this.objectID.getValue();
 
@@ -1012,6 +1041,7 @@ EventCommandMoveObject.prototype = {
                 currentState.waitingObject = true;
             }
             if (currentState.object !== null) {
+
                 var finished = this.moves[currentState.index].call(this,
                     currentState, currentState.object, this.parameters[
                     currentState.index]);
@@ -1020,6 +1050,7 @@ EventCommandMoveObject.prototype = {
                     currentState.distance = 0;
                     currentState.normalDistance = 0;
                     currentState.index = currentState.index + 1;
+                    currentState.random = RPM.random(0, 3);
                     currentState.position = null;
                 }
 
@@ -1035,7 +1066,11 @@ EventCommandMoveObject.prototype = {
     // -------------------------------------------------------
 
     getCurrentOrientation: function(currentState) {
-        return this.moves[currentState.index].call(this);
+        if (this.moves.length === 0) {
+            return Orientation.None;
+        }
+
+        return this.moves[currentState.index].call(this, currentState);
     },
 
     // -------------------------------------------------------

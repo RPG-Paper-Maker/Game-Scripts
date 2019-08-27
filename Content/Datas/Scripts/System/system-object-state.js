@@ -38,7 +38,7 @@
 *   @property {boolean} keepPosition Indicate if the object should keep the
 *   position after moving (after changing map / save).
 */
-function SystemObjectState(){
+function SystemObjectState() {
 
 }
 
@@ -47,7 +47,9 @@ SystemObjectState.prototype = {
     /** Read the JSON associated to the object state.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json){
+    readJSON: function(json) {
+        var jsonRoute;
+
         this.id = json.id;
         this.graphicID = json.gid;
         this.graphicKind = json.gk;
@@ -57,6 +59,19 @@ SystemObjectState.prototype = {
             this.indexX = json.x;
             this.indexY = json.y;
         }
+        this.objectMovingKind = RPM.jsonDefault(json.omk, ObjectMovingKind.Fix);
+        jsonRoute = RPM.jsonDefault(json.ecr, {
+            kind: EventCommandKind.MoveObject,
+            command: [PrimitiveValueKind.DataBase, -1, 0, 1, 0, CommandMoveKind
+                .MoveRandom, 0]
+        });
+        this.route = new SystemObjectReaction();
+        this.route.readJSON({
+            bh: false,
+            c: [jsonRoute]
+        });
+        this.speedID = RPM.jsonDefault(json.s, 1);
+        this.frequencyID = RPM.jsonDefault(json.f, 1);
         this.moveAnimation = json.move;
         this.stopAnimation = json.stop;
         this.climbAnimation = json.climb;
