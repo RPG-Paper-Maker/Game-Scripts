@@ -50,7 +50,7 @@ Autotile.prototype = {
         var picture = autotile ? $datasGame.pictures.list[PictureKind.Autotiles]
             [autotile.pictureID] : null;
         var collison = picture ? picture.getCollisionAtIndex(Land.prototype
-            .getIndex.call(this, width / $SQUARE_SIZE / 2)) : null;
+            .getIndex.call(this, picture.width)) : null;
 
         return Land.prototype.updateGeometry.call(this, geometry, collison,
             position, width, height, x, y, w, h, i);
