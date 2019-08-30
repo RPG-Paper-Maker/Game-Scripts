@@ -422,7 +422,7 @@ MapObject.prototype = {
     checkCollisionDetection: function() {
         for (var i = 0, l = this.meshBoundingBox.length; i < l; i++) {
             if (CollisionsUtilities.obbVSobb(this.meshBoundingBox[i].geometry,
-                $BB_BOX.geometry))
+                $BB_BOX_DETECTION.geometry))
             {
                 return true;
             }
