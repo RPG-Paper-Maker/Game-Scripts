@@ -420,8 +420,20 @@ MapObject.prototype = {
     // -------------------------------------------------------
 
     checkCollisionDetection: function() {
-        for (var i = 0, l = this.meshBoundingBox.length; i < l; i++) {
+        var i, l;
+        for (i = 0, l = this.meshBoundingBox.length; i < l; i++) {
             if (CollisionsUtilities.obbVSobb(this.meshBoundingBox[i].geometry,
+                $BB_BOX_DETECTION.geometry))
+            {
+                return true;
+            }
+        }
+        // If no bounding box, use only one square by default
+        if (l === 0) {
+            MapPortion.applyBoxSpriteTransforms($BB_BOX_DEFAULT_DETECTION, [this
+                .position.x, this.position.y + ($SQUARE_SIZE / 2), this.position
+                .z, $SQUARE_SIZE, $SQUARE_SIZE, $SQUARE_SIZE, 0, 0, 0]);
+            if (CollisionsUtilities.obbVSobb($BB_BOX_DEFAULT_DETECTION.geometry,
                 $BB_BOX_DETECTION.geometry))
             {
                 return true;

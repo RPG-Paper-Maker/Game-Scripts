@@ -229,6 +229,7 @@ var $BB_BOX = MapPortion.createBox();
 /** A bounding box used for boxes collisions.
 *   @type {THREE.Mesh} */
 var $BB_BOX_DETECTION = MapPortion.createBox();
+var $BB_BOX_DEFAULT_DETECTION = MapPortion.createBox();
 
 /** A bounding box used for cylinders collisions.
 *   @type {THREE.Mesh} */
