@@ -478,7 +478,6 @@ function EventCommandSendEvent(command) {
 
     // Target
     i = 0;
-    j = 0;
     l = command.length;
     this.targetKind = command[i++];
     this.senderNoReceiver = false;
@@ -488,11 +487,11 @@ function EventCommandSendEvent(command) {
         k = command[i++];
         v = command[i++];
         this.idTarget = SystemValue.createValue(k, v);
-        this.senderNoReceiver = command[i++] === "1";
+        this.senderNoReceiver = command[i++] === 1;
         break;
     }
 
-    this.isSystem = command[i++] === "1";
+    this.isSystem = command[i++] === 0;
     this.eventId = command[i++];
 
     // Parameters
@@ -501,18 +500,22 @@ function EventCommandSendEvent(command) {
     var parameters = events[this.eventId].parameters;
     this.parameters = [];
     while (i < l) {
+        var parameter;
         var paramID = command[i++];
         k = command[i++];
-        v = command[i++];
-        var parameter = SystemValue.createValue(k, v);
 
-        // If default value
-        if (parameter.kind === 2)
-            parameter = parameters[j].value;
-
+        if (k <= PrimitiveValueKind.Default) {
+            // If default value
+            if (k === PrimitiveValueKind.Default) {
+                parameter = parameters[paramID].value;
+            } else {
+                parameter = SystemValue.createValue(k, null);
+            }
+        } else {
+            v = command[i++];
+            parameter = SystemValue.createValue(k, v);
+        }
         this.parameters[paramID] = parameter;
-        i++;
-        j++;
     }
 
     this.isDirectNode = true;
