@@ -48,7 +48,8 @@ SystemDetection.prototype = {
 
         boundingBoxes = this.getBoundingBoxes(sender);
         for (i = 0, l = boundingBoxes.length; i < l; i++) {
-            MapPortion.applyBoxSpriteTransforms($BB_BOX, boundingBoxes[i]);
+            MapPortion.applyBoxSpriteTransforms($BB_BOX_DETECTION, boundingBoxes
+                [i]);
             if (object.checkCollisionDetection()) {
                 return true;
             }

@@ -103,6 +103,7 @@ DatasSystem.prototype = {
 
             // Debug
             this.showBB = (typeof json.bb !== 'undefined');
+            this.showBB = true;
             if (this.showBB) {
                 $BB_MATERIAL.color.setHex(0xff0000);
                 $BB_MATERIAL.wireframe = true;
