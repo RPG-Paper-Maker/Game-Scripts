@@ -130,7 +130,7 @@ Object3DBox.prototype = {
     updateGeometry: function(geometry, position, c) {
         var i, l, vecA, vecB, vecC, vecD, faceA, faceB, localPosition, size,
             textures, w, h, d, totalX, totalY, texA, texB, texC, texD,
-            objCollision, ws, hs, ds, coef;
+            objCollision, ws, hs, ds, coef, angleY, angleX, angleZ, center;
 
         coef = 0.01;
         localPosition = RPM.positionToVector3(position);
@@ -138,12 +138,17 @@ Object3DBox.prototype = {
         localPosition.setY(localPosition.y + coef);
         localPosition.setZ(localPosition.z + coef);
         size = this.datas.getSizeVector();
+        center = new THREE.Vector3(localPosition.x + (size.x / 2), localPosition
+            .y + (size.y / 2), localPosition.z + (size.z / 2));
         size.setX(size.x - (2 * coef));
         size.setY(size.y - (2 * coef));
         size.setZ(size.z - (2 * coef));
         w = this.datas.widthPixels();
         h = this.datas.heightPixels();
         d = this.datas.depthPixels();
+        angleY = RPM.positionAngleY(position);
+        angleX = RPM.positionAngleX(position);
+        angleZ = RPM.positionAngleZ(position);
 
         // Textures
         textures = Object3DBox.TEXTURES_VALUES.slice(0);
@@ -185,6 +190,18 @@ Object3DBox.prototype = {
                 new THREE.Vector2(textures[texC[0]], textures[texC[1]]),
                 new THREE.Vector2(textures[texD[0]], textures[texD[1]])
             ];
+            if (angleY !== 0.0) {
+                Sprite.rotateSprite(vecA, vecB, vecC, vecD, center, angleY,
+                    Sprite.Y_AXIS);
+            }
+            if (angleX !== 0.0) {
+                Sprite.rotateSprite(vecA, vecB, vecC, vecD, center, angleX,
+                    Sprite.X_AXIS);
+            }
+            if (angleZ !== 0.0) {
+                Sprite.rotateSprite(vecA, vecB, vecC, vecD, center, angleZ,
+                    Sprite.Z_AXIS);
+            }
             c = Sprite.addStaticSpriteToGeometry(geometry, vecA, vecB, vecC,
                 vecD, faceA, faceB, c);
         }
@@ -206,9 +223,9 @@ Object3DBox.prototype = {
                     w,
                     h,
                     d,
-                    0,
-                    0,
-                    0
+                    angleY,
+                    angleX,
+                    angleZ
                 ],
                 w: Math.floor(ws / 2),
                 h: Math.floor(hs / 2),

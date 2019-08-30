@@ -223,6 +223,9 @@ THREE.OBJLoader.prototype = {
         object.uvs = uvs;
         object.minVertex = minVertex;
         object.maxVertex = maxVertex;
+        object.center = new THREE.Vector3(((maxVertex.x - minVertex.x) / 2) +
+            minVertex.x, ((maxVertex.y - minVertex.y) / 2) + minVertex.y, ((
+            maxVertex.z - minVertex.z) / 2) + minVertex.z);
         object.w = maxVertex.x - minVertex.x;
         object.h = maxVertex.y - minVertex.y;
         object.d = maxVertex.z - minVertex.z;

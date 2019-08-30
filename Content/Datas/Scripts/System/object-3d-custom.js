@@ -39,20 +39,39 @@ Object3DCustom.prototype = {
     updateGeometry: function(geometry, position, c) {
         var i, j, l, vecA, vecB, vecC, face, localPosition, size,
             modelGeometry, vertices, uvs, objCollision, obj, w, h, d,
-            minPos, scale, scaleVec;
+            minPos, scale, scaleVec, angleY, angleX, angleZ, center;
 
         localPosition = RPM.positionToVector3(position);
         modelGeometry = $datasGame.shapes.get(CustomShapeKind.OBJ, this.datas
             .objID).geometry;
         vertices = modelGeometry.vertices;
         uvs = modelGeometry.uvs;
+        center = modelGeometry.center;
         scale = this.datas.scale;
         scaleVec = new THREE.Vector3(scale, scale, scale);
         l = modelGeometry.vertices.length;
+        angleY = RPM.positionAngleY(position);
+        angleX = RPM.positionAngleX(position);
+        angleZ = RPM.positionAngleZ(position);
         for (i = 0, j = 0; i < l; i += 3) {
             vecA = vertices[i].clone();
             vecB = vertices[i + 1].clone();
             vecC = vertices[i + 2].clone();
+            if (angleY !== 0.0) {
+                Sprite.rotateVertex(vecA, center, angleY, Sprite.Y_AXIS);
+                Sprite.rotateVertex(vecB, center, angleY, Sprite.Y_AXIS);
+                Sprite.rotateVertex(vecC, center, angleY, Sprite.Y_AXIS);
+            }
+            if (angleX !== 0.0) {
+                Sprite.rotateVertex(vecA, center, angleX, Sprite.X_AXIS);
+                Sprite.rotateVertex(vecB, center, angleX, Sprite.X_AXIS);
+                Sprite.rotateVertex(vecC, center, angleX, Sprite.X_AXIS);
+            }
+            if (angleZ !== 0.0) {
+                Sprite.rotateVertex(vecA, center, angleZ, Sprite.Z_AXIS);
+                Sprite.rotateVertex(vecB, center, angleZ, Sprite.Z_AXIS);
+                Sprite.rotateVertex(vecC, center, angleZ, Sprite.Z_AXIS);
+            }
             vecA.multiply(scaleVec);
             vecB.multiply(scaleVec);
             vecC.multiply(scaleVec);
@@ -92,9 +111,9 @@ Object3DCustom.prototype = {
                     w,
                     h,
                     d,
-                    0,
-                    0,
-                    0
+                    angleY,
+                    angleX,
+                    angleZ
                 ],
                 w: Math.ceil(w / 2 / $SQUARE_SIZE),
                 h: Math.ceil(h / 2 / $SQUARE_SIZE),
