@@ -92,6 +92,8 @@ Object3DCustom.prototype = {
                     w,
                     h,
                     d,
+                    0,
+                    0,
                     0
                 ],
                 w: Math.ceil(w / 2 / $SQUARE_SIZE),

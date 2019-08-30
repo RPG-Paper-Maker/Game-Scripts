@@ -206,6 +206,8 @@ Object3DBox.prototype = {
                     w,
                     h,
                     d,
+                    0,
+                    0,
                     0
                 ],
                 w: Math.floor(ws / 2),

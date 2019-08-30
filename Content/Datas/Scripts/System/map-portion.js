@@ -214,7 +214,9 @@ MapPortion.applyBoxLandTransforms = function(box, boundingBox) {
     box.geometry.translate(-box.previousTranslate[0],
                            -box.previousTranslate[1],
                            -box.previousTranslate[2]);
-    box.geometry.rotateY(-box.previousRotate * Math.PI / 180.0);
+    box.geometry.rotateZ(-box.previousRotate[2] * Math.PI / 180.0);
+    box.geometry.rotateX(-box.previousRotate[1] * Math.PI / 180.0);
+    box.geometry.rotateY(-box.previousRotate[0] * Math.PI / 180.0);
     box.geometry.scale(1 / box.previousScale[0],
                        1 / box.previousScale[1],
                        1 / box.previousScale[2]);
@@ -225,7 +227,7 @@ MapPortion.applyBoxLandTransforms = function(box, boundingBox) {
 
     // Register previous transforms to current
     box.previousTranslate = [boundingBox[0], boundingBox[1], boundingBox[2]];
-    box.previousRotate = 0;
+    box.previousRotate = [0, 0, 0];
     box.previousScale = [boundingBox[3], 1, boundingBox[4]];
 
     // Update geometry now
@@ -240,7 +242,9 @@ MapPortion.applyBoxSpriteTransforms = function(box, boundingBox) {
     box.geometry.translate(-box.previousTranslate[0],
                            -box.previousTranslate[1],
                            -box.previousTranslate[2]);
-    box.geometry.rotateY(-box.previousRotate * Math.PI / 180.0);
+    box.geometry.rotateZ(-box.previousRotate[2] * Math.PI / 180.0);
+    box.geometry.rotateX(-box.previousRotate[1] * Math.PI / 180.0);
+    box.geometry.rotateY(-box.previousRotate[0] * Math.PI / 180.0);
     box.geometry.scale(1 / box.previousScale[0],
                        1 / box.previousScale[1],
                        1 / box.previousScale[2]);
@@ -248,11 +252,13 @@ MapPortion.applyBoxSpriteTransforms = function(box, boundingBox) {
     // Update to the new ones
     box.geometry.scale(boundingBox[3], boundingBox[4], boundingBox[5]);
     box.geometry.rotateY(boundingBox[6] * Math.PI / 180.0);
+    box.geometry.rotateX(boundingBox[7] * Math.PI / 180.0);
+    box.geometry.rotateZ(boundingBox[8] * Math.PI / 180.0);
     box.geometry.translate(boundingBox[0], boundingBox[1], boundingBox[2]);
 
     // Register previous transforms to current
     box.previousTranslate = [boundingBox[0], boundingBox[1], boundingBox[2]];
-    box.previousRotate = boundingBox[6];
+    box.previousRotate = [boundingBox[6], boundingBox[7], boundingBox[8]];
     box.previousScale = [boundingBox[3], boundingBox[4], boundingBox[5]];
 
     // Update geometry now
@@ -292,7 +298,7 @@ MapPortion.applyOrientedBoxTransforms = function(box, boundingBox) {
 MapPortion.createBox = function() {
     var box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), $BB_MATERIAL);
     box.previousTranslate = [0, 0, 0];
-    box.previousRotate = 0;
+    box.previousRotate = [0, 0, 0];
     box.previousScale = [1, 1, 1];
 
     return box;

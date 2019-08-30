@@ -913,8 +913,38 @@ RPM.positionCenterZ = function(position) {
 *   @param {number[]} position The json position.
 *   @returns number
 */
-RPM.positionAngle = function(position) {
+RPM.positionAngleY = function(position) {
     var a = position[7];
+    if (typeof a == 'undefined')
+        a = 0;
+
+    return a;
+}
+
+// -------------------------------------------------------
+
+/** Extract the angle from position.
+*   @static
+*   @param {number[]} position The json position.
+*   @returns number
+*/
+RPM.positionAngleX = function(position) {
+    var a = position[8];
+    if (typeof a == 'undefined')
+        a = 0;
+
+    return a;
+}
+
+// -------------------------------------------------------
+
+/** Extract the angle from position.
+*   @static
+*   @param {number[]} position The json position.
+*   @returns number
+*/
+RPM.positionAngleZ = function(position) {
+    var a = position[9];
     if (typeof a == 'undefined')
         a = 0;
 

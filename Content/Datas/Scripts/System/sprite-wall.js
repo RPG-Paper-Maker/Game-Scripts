@@ -50,7 +50,7 @@ SpriteWall.prototype = {
             vecD = new THREE.Vector3(-0.5, 0.0, 0.0),
             center = new THREE.Vector3(),
             size = new THREE.Vector3($SQUARE_SIZE, height, 0),
-            angle = RPM.positionAngle(position);
+            angle = RPM.positionAngleY(position);
         var i, l, x, y, w, h, coefX, coefY, rect, textureRect, wall, picture;
         var texFaceA, texFaceB;
         var localPosition = RPM.positionToVector3(position);
@@ -116,7 +116,9 @@ SpriteWall.prototype = {
                     rect[2],
                     rect[3],
                     1,
-                    angle
+                    angle,
+                    0,
+                    0
                 ],
                 w: 0,
                 h: textureRect[3],
@@ -124,7 +126,7 @@ SpriteWall.prototype = {
             });
         }
 
-        Sprite.rotateSprite(vecA, vecB, vecC, vecD, center, angle);
+        Sprite.rotateSprite(vecA, vecB, vecC, vecD, center, angle, Sprite.Y_AXIS);
         c = Sprite.addStaticSpriteToGeometry(geometry, vecA, vecB, vecC, vecD,
                                              texFaceA, texFaceB, c);
 

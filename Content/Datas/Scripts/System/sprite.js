@@ -27,15 +27,19 @@ function Sprite(kind, texture) {
     this.front = true;
 }
 
+Sprite.Y_AXIS = new THREE.Vector3(0, 1, 0);
+Sprite.X_AXIS = new THREE.Vector3(1, 0, 0);
+Sprite.Z_AXIS = new THREE.Vector3(0, 0, 1);
+
 /** @static
 *   Rotate a vertex around a specified center.
 *   @param {THREE.Vector3} vec The vertex to rotate.
 *   @param {THREE.Vector3} center The center to rotate around.
 *   @param {number} angle The angle in degree.
 */
-Sprite.rotateVertex = function(vec, center, angle) {
+Sprite.rotateVertex = function(vec, center, angle, axis) {
     vec.sub(center);
-    vec.applyAxisAngle(new THREE.Vector3(0, 1, 0), angle * Math.PI / 180.0);
+    vec.applyAxisAngle(axis, angle * Math.PI / 180.0);
     vec.add(center);
 }
 
@@ -48,11 +52,11 @@ Sprite.rotateVertex = function(vec, center, angle) {
 *   @param {THREE.Vector3} center The center to rotate around.
 *   @param {number} angle The angle in degree.
 */
-Sprite.rotateSprite = function(vecA, vecB, vecC, vecD, center, angle) {
-    Sprite.rotateVertex(vecA, center, angle);
-    Sprite.rotateVertex(vecB, center, angle);
-    Sprite.rotateVertex(vecC, center, angle);
-    Sprite.rotateVertex(vecD, center, angle);
+Sprite.rotateSprite = function(vecA, vecB, vecC, vecD, center, angle, axis) {
+    Sprite.rotateVertex(vecA, center, angle, axis);
+    Sprite.rotateVertex(vecB, center, angle, axis);
+    Sprite.rotateVertex(vecC, center, angle, axis);
+    Sprite.rotateVertex(vecD, center, angle, axis);
 }
 
 /** @static
@@ -106,17 +110,15 @@ Sprite.prototype = {
             vecB = new THREE.Vector3(0.5, 1.0, 0.0),
             vecC = new THREE.Vector3(0.5, 0.0, 0.0),
             vecD = new THREE.Vector3(-0.5, 0.0, 0.0),
-            center = new THREE.Vector3(),
+            center = new THREE.Vector3(0, 0, 0),
             size = new THREE.Vector3(this.textureRect[2] * $SQUARE_SIZE,
                                      this.textureRect[3] * $SQUARE_SIZE, 1.0);
-        var x, y, w, h, i, l, coefX, coefY, rect;
+        var x, y, w, h, i, l, coefX, coefY, rect, angleY, angleX, angleZ;
         var texFaceA, texFaceB;
 
         // For static sprites
         MapElement.prototype.scale.call(this, vecA, vecB, vecC, vecD, center,
                                         position, size, this.kind);
-        Sprite.rotateSprite(vecA, vecB, vecC, vecD, center,
-                            RPM.positionAngle(position));
         if (localPosition !== null) {
             vecA.add(localPosition);
             vecB.add(localPosition);
@@ -129,6 +131,23 @@ Sprite.prototype = {
                 localPosition = RPM.positionToVector3(position);
             else
                 localPosition = new THREE.Vector3();
+        }
+        angleY = RPM.positionAngleY(position);
+        angleX = RPM.positionAngleX(position);
+        angleZ = RPM.positionAngleZ(position);
+        if (this.kind !== ElementMapKind.SpritesFace) {
+            if (angleY !== 0.0) {
+                Sprite.rotateSprite(vecA, vecB, vecC, vecD, center, angleY,
+                    Sprite.Y_AXIS);
+            }
+            if (angleX !== 0.0) {
+                Sprite.rotateSprite(vecA, vecB, vecC, vecD, center, angleX,
+                    Sprite.X_AXIS);
+            }
+            if (angleZ !== 0.0) {
+                Sprite.rotateSprite(vecA, vecB, vecC, vecD, center, angleZ,
+                    Sprite.Z_AXIS);
+            }
         }
 
         // Getting UV coordinates
@@ -180,7 +199,9 @@ Sprite.prototype = {
                         rect[2],
                         rect[3],
                         1,
-                        0
+                        angleY,
+                        angleX,
+                        angleZ
                     ],
                     w: w,
                     h: h,
@@ -216,7 +237,7 @@ Sprite.prototype = {
                 vecDoubleC = vecC.clone(),
                 vecDoubleD = vecD.clone();
             Sprite.rotateSprite(vecDoubleA, vecDoubleB, vecDoubleC, vecDoubleD,
-                                center, 90);
+                center, 90, Sprite.Y_AXIS);
 
             c = Sprite.addStaticSpriteToGeometry(geometry, vecDoubleA,
                                                  vecDoubleB, vecDoubleC,
@@ -234,9 +255,9 @@ Sprite.prototype = {
                     vecQuadra2C = vecC.clone(),
                     vecQuadra2D = vecD.clone();
                 Sprite.rotateSprite(vecQuadra1A, vecQuadra1B, vecQuadra1C,
-                                    vecQuadra1D, center, 45);
+                    vecQuadra1D, center, 45, Sprite.Y_AXIS);
                 Sprite.rotateSprite(vecQuadra2A, vecQuadra2B, vecQuadra2C,
-                                    vecQuadra2D, center, -45);
+                    vecQuadra2D, center, -45, Sprite.Y_AXIS);
                 c = Sprite.addStaticSpriteToGeometry(geometry, vecQuadra1A,
                                                      vecQuadra1B, vecQuadra1C,
                                                      vecQuadra1D, texFaceA,

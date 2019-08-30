@@ -99,6 +99,8 @@ SystemDetection.prototype = {
                     $SQUARE_SIZE,
                     (box[1] * $SQUARE_SIZE) + (box[2] / 100 * $SQUARE_SIZE),
                     $SQUARE_SIZE,
+                    0,
+                    0,
                     0
             ];
         }

@@ -272,7 +272,7 @@ Mountain.prototype = {
         vecD = new THREE.Vector3(xLeftBot, yBot, zFrontLeft);
 
         // Rotate and draw sprite side
-        Sprite.rotateSprite(vecA, vecB, vecC, vecD, center, angle);
+        Sprite.rotateSprite(vecA, vecB, vecC, vecD, center, angle, Sprite.Y_AXIS);
         count = Sprite.addStaticSpriteToGeometry(geometry, vecA,
             vecB, vecC, vecD, texFaceA, texFaceB, count);
 
@@ -356,6 +356,8 @@ Mountain.prototype = {
                     wp,
                     hp,
                     wp,
+                    0,
+                    0,
                     0
                 ],
                 w: this.getTotalSquaresWidth(),
