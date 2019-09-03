@@ -36,6 +36,17 @@ SystemHero.prototype = {
         this.idFaceset = typeof json.fid === 'undefined' ? -1 : json.fid;
         this.classInherit = new SystemClass();
         this.classInherit.readJSON(json.ci);
+        this.check();
+    },
+
+    // -------------------------------------------------------
+
+    check: function() {
+        if (!$datasGame.classes.list[this.idClass]) {
+            RPM.showErrorMessage("Can't find class with ID " + RPM.formatNumber(
+                this.idClass, 4) + " for " + (this.rewards ? "monster" : "hero")
+                + " " + this.name + ", check it in datasbase.");
+        }
     },
 
     // -------------------------------------------------------

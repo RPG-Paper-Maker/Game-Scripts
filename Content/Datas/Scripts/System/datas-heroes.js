@@ -21,27 +21,31 @@
 *   to ID.
 */
 function DatasHeroes(){
-
+    this.loaded = false;
 }
 
 DatasHeroes.prototype = {
 
     /** Read the JSON file associated to heroes.
     */
-    read: function(){
-        RPM.openFile(this, RPM.FILE_HEROES, true, function(res){
-            var json = JSON.parse(res).heroes;
-            var i, l = json.length;
-            this.list = new Array(l+1);
+    read: function() {
+        if (!this.loaded) {
+            RPM.openFile(this, RPM.FILE_HEROES, true, function(res){
+                var json = JSON.parse(res).heroes;
+                var i, l = json.length;
+                this.list = new Array(l+1);
 
-            // Sorting all the heroes according to the ID
-            for (i = 0; i < l; i++){
-                var jsonHero = json[i];
-                var id = jsonHero.id;
-                var hero = new SystemHero();
-                hero.readJSON(jsonHero);
-                this.list[id] = hero;
-            }
-        });
+                // Sorting all the heroes according to the ID
+                for (i = 0; i < l; i++){
+                    var jsonHero = json[i];
+                    var id = jsonHero.id;
+                    var hero = new SystemHero();
+                    hero.readJSON(jsonHero);
+                    this.list[id] = hero;
+                }
+
+                this.loaded = true;
+            });
+        }
     }
 }

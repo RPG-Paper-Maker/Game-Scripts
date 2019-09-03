@@ -21,7 +21,7 @@
 *   according to ID.
 */
 function DatasMonsters(){
-
+    this.loaded = false;
 }
 
 DatasMonsters.prototype = {
@@ -29,19 +29,23 @@ DatasMonsters.prototype = {
     /** Read the JSON file associated to monsters.
     */
     read: function(){
-        RPM.openFile(this, RPM.FILE_MONSTERS, true, function(res){
-            var json = JSON.parse(res).monsters;
-            var i, l = json.length;
-            this.list = new Array(l+1);
+        if (!this.loaded) {
+            RPM.openFile(this, RPM.FILE_MONSTERS, true, function(res){
+                var json = JSON.parse(res).monsters;
+                var i, l = json.length;
+                this.list = new Array(l+1);
 
-            // Sorting all the monsters according to the ID
-            for (i = 0; i < l; i++){
-                var jsonMonster = json[i];
-                var id = jsonMonster.id;
-                var monster = new SystemMonster();
-                monster.readJSON(jsonMonster);
-                this.list[id] = monster;
-            }
-        });
+                // Sorting all the monsters according to the ID
+                for (i = 0; i < l; i++){
+                    var jsonMonster = json[i];
+                    var id = jsonMonster.id;
+                    var monster = new SystemMonster();
+                    monster.readJSON(jsonMonster);
+                    this.list[id] = monster;
+                }
+
+                this.loaded = true;
+            });
+        }
     }
 }

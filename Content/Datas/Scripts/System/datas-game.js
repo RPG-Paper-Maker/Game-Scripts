@@ -42,7 +42,7 @@ function DatasGame(){
     this.skills = new DatasSkills();
     this.weapons = new DatasWeapons();
     this.armors = new DatasArmors();
-    this.classes = new DatasClasses();
+    this.classes = new DatasClasses(this);
     this.heroes = new DatasHeroes();
     this.monsters = new DatasMonsters();
     this.troops = new DatasTroops();
@@ -85,8 +85,10 @@ DatasGame.prototype = {
 
     readAfterPictures: function() {
         this.tilesets.read();
-        this.heroes.read();
-        this.monsters.read();
+        if (this.classes.loaded) {
+            this.heroes.read();
+            this.monsters.read();
+        }
         this.system.loadWindowSkins();
     },
 
@@ -99,18 +101,6 @@ DatasGame.prototype = {
             } else {
                 this.tilesets.loading.splice(0, 1);
             }
-
-            /*
-            var tileset;
-            for (var i = this.tilesets.loading.length - 1; i >= 0; i--) {
-                tileset = this.tilesets.loading[i];
-                if (tileset.callback !== null) {
-                    tileset.callback.call(tileset);
-                }
-                else {
-                    this.tilesets.loading.splice(i, 1);
-                }
-            }*/
             this.loaded = this.tilesets.loading.length === 0;
         }
     },

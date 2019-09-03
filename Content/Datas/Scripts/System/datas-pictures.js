@@ -21,6 +21,7 @@
 *   according to ID and PictureKind.
 */
 function DatasPictures(context, callback){
+    this.loaded = false;
     this.read(context, callback);
 }
 
@@ -73,6 +74,7 @@ DatasPictures.prototype = {
                 this.list[k] = list;
             }
 
+            this.loaded = true;
             callback.call(context);
         });
     },

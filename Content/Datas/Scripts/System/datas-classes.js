@@ -20,7 +20,8 @@
 *   @property {SystemClass[]} list List of all the classes of the game according
 *   to ID.
 */
-function DatasClasses(){
+function DatasClasses() {
+    this.loaded = false;
     this.read();
 }
 
@@ -42,6 +43,10 @@ DatasClasses.prototype = {
                 c.readJSON(jsonClass);
                 this.list[id] = c;
             }
+            this.loaded = true;
+
+            $datasGame.heroes.read();
+            $datasGame.monsters.read();
         });
     }
 }
