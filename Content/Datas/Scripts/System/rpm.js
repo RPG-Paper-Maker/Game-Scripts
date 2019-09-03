@@ -1104,7 +1104,10 @@ RPM.arePortionEquals= function(portion1, portion2) {
 *   @param {Error} error The error message.
 */
 RPM.showError = function(e){
-    var txt = e.fileName + " - line: " + e.lineNumber + " -> " + e.message;
+    var txt;
+
+    txt = e.fileName + " - line: " + e.lineNumber + " -> " + e.message + "\n" +
+        e.stack;
     RPM.showErrorMessage(txt);
 }
 
