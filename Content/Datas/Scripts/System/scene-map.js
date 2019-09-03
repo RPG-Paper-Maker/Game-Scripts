@@ -64,10 +64,6 @@ SceneMap.getPortionName = function(x, y, z){
 // -------------------------------------------------------
 
 SceneMap.getGlobalPortion = function(position) {
-    if (!position) {
-        console.log("a")
-    }
-
     return [
         Math.floor(position[0] / $PORTION_SIZE),
         Math.floor(position[1] / $PORTION_SIZE),

@@ -447,8 +447,8 @@ MapPortion.prototype = {
     *   @param {Object} json Json object describing the object.
     */
     readSprites: function(json){
-        this.readSpritesGlobals(json.list);
         this.readSpritesWalls(json.walls);
+        this.readSpritesGlobals(json.list);
     },
 
     // -------------------------------------------------------
