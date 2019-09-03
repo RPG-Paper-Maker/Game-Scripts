@@ -36,7 +36,7 @@ SystemMonster.prototype.readJSON = function(json) {
 
     jsonCurrencies = json.cur;
     currenciesLength = jsonCurrencies.length;
-    jsonLoots = json.loots;
+    jsonLoots = RPM.jsonDefault(json.loots, []);
     lootsLength = jsonLoots.length;
     this.rewards.xp = new SystemProgressionTable(this.getProperty("finalLevel"));
     this.rewards.currencies = new Array(currenciesLength);
