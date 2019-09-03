@@ -358,26 +358,55 @@ MapPortion.prototype = {
         var width = material.map ? material.map.image.width : 0;
         var height = material.map ? material.map.image.height : 0;
         var geometry = new THREE.Geometry();
-        var index;
-        geometry.faceVertexUvs[0] = [];
+        var i, j, l, ll, index, count, layers, layer;
 
-        for (var i = 0, length = json.length; i < length; i++){
+        geometry.faceVertexUvs[0] = [];
+        layers = [];
+        count = 0;
+        for (i = 0, l = json.length; i < l; i++) {
             jsonFloor = json[i];
             position = jsonFloor.k;
+            layer = RPM.positionLayer(position);
             floor = new Floor();
             floor.read(jsonFloor.v);
+            if (layer > 0) {
+                for (j = 0, ll = layers.length; j < ll; j++) {
+                    if (layer <= RPM.positionLayer(layers[j][0])) {
+                        layers.splice(j, 0, [position, floor]);
+                        break;
+                    }
+                }
+                if (j === ll) {
+                    layers.push([position, floor]);
+                }
+            } else {
+                objCollision = floor.updateGeometry(geometry, position, width,
+                    height, count);
+                index = RPM.positionJSONToIndex(position);
+                if (objCollision !== null) {
+                    this.boundingBoxesLands[index].push(objCollision);
+                }
+                this.addToNonEmpty(position);
+                count++;
+            }
+        }
+
+        // Draw layers separatly
+        for (i = 0, l = layers.length; i < l; i++) {
+            position = layers[i][0];
+            floor = layers[i][1];
             objCollision = floor.updateGeometry(geometry, position, width,
-                height, i);
+                height, count);
             index = RPM.positionJSONToIndex(position);
             if (objCollision !== null) {
                 this.boundingBoxesLands[index].push(objCollision);
             }
             this.addToNonEmpty(position);
+            count++;
         }
 
-        geometry.uvsNeedUpdate = true;
-
         // Creating the plane
+        geometry.uvsNeedUpdate = true;
         this.staticFloorsMesh = new THREE.Mesh(geometry, material);
         $currentMap.scene.add(this.staticFloorsMesh);
     },
