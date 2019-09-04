@@ -21,6 +21,10 @@ function SystemLang() {
 
 }
 
+SystemLang.EMPTY_NAMES = {
+    names: ["", ""]
+}
+
 SystemLang.prototype = {
 
     /** Read the JSON associated to the lang.

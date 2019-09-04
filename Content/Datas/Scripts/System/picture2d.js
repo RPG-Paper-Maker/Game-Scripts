@@ -30,18 +30,24 @@
 function Picture2D(path, callback, x, y, w, h) {
     Bitmap.call(this, x, y, w, h);
 
-    this.path = path;
-    this.callback = callback;
-    this.checked = false;
+    if (path) {
+        this.path = path;
+        this.callback = callback;
+        this.checked = false;
+        this.empty = false;
 
-    $picturesLoading.push(this);
-    $canvasRendering.loadImage(path);
+        $picturesLoading.push(this);
+        $canvasRendering.loadImage(path);
+    } else {
+        this.empty = true;
+    }
 }
 
 // -------------------------------------------------------
 
 Picture2D.createImage = function(image, kind, callback, x, y, w, h) {
-    return new Picture2D(image.getPath(kind)[1], callback, x, y, w, h);
+    return image ? new Picture2D(image.getPath(kind)[1], callback, x, y, w, h) :
+        new Picture2D();
 }
 
 // -------------------------------------------------------
@@ -72,6 +78,13 @@ Picture2D.prototype.check = function() {
         this.checked = true;
         $requestPaintHUD = true;
 
+        return true;
+    }
+    if (this.empty) {
+        Bitmap.prototype.setW.call(this, 1);
+        Bitmap.prototype.setH.call(this, 1);
+        this.checked = true;
+        $requestPaintHUD = true;
         return true;
     }
 
@@ -130,12 +143,14 @@ Picture2D.prototype.draw = function(x, y, w, h, sx, sy, sw, sh, positionResize)
     }
 
     // Draw the image
-    if (this.reverse) {
-        $context.save();
-        $context.scale(-1, 1);
-        $context.drawImage(this.path, sx, sy, sw, sh, -x - w, y, w, h);
-        $context.restore();
-    } else {
-        $context.drawImage(this.path, sx, sy, sw, sh, x, y, w, h);
+    if (!this.empty) {
+        if (this.reverse) {
+            $context.save();
+            $context.scale(-1, 1);
+            $context.drawImage(this.path, sx, sy, sw, sh, -x - w, y, w, h);
+            $context.restore();
+        } else {
+            $context.drawImage(this.path, sx, sy, sw, sh, x, y, w, h);
+        }
     }
 };
