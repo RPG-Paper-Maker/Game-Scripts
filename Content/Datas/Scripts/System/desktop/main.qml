@@ -35,6 +35,7 @@ Window {
     title: qsTr("Game")
     visible: true
     Component.onCompleted: {
+        Game.$that = Game;
         Game.$window = window;
         Game.$canvasHUD = canvas;
         Game.$canvas3D = canvas3d;

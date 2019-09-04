@@ -1291,7 +1291,7 @@ RPM.evaluateFormula = function(formula, user, target, damage) {
 // -------------------------------------------------------
 
 RPM.evaluateScript = function(script) {
-    new Function(script)();
+    new Function("$that", script)($that);
 };
 
 // -------------------------------------------------------

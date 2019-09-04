@@ -22,6 +22,8 @@
 //  GLOBAL VARIABLES
 // -------------------------------------------------------
 
+var $that;
+
 /** The main window.
 *   @type {Window} */
 var $window;
