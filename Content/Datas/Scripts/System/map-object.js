@@ -44,6 +44,7 @@ function MapObject(system, position) {
     this.isStartup = false;
     this.isInScene = false;
     this.receivedOneEvent = false;
+    this.movingState = null;
     this.initializeProperties();
     this.initializeTimeEvents();
 }
@@ -805,8 +806,13 @@ MapObject.prototype = {
 
     updateMovingState: function() {
         if (this.currentState.objectMovingKind !== ObjectMovingKind.Fix) {
-            $currentMap.addReaction(null, this.currentState.route, this, this
-                .currentState.id, [null]);
+            var interpreter;
+
+            interpreter = $currentMap.addReaction(null, this.currentState.route,
+                this, this.currentState.id, [null], null, true);
+            if (interpreter !== null) {
+                this.movingState = interpreter.currentCommandState;
+            }
         }
     },
 

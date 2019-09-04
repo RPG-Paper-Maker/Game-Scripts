@@ -62,7 +62,7 @@ SystemObjectState.prototype = {
         this.objectMovingKind = RPM.jsonDefault(json.omk, ObjectMovingKind.Fix);
         jsonRoute = RPM.jsonDefault(json.ecr, {
             kind: EventCommandKind.MoveObject,
-            command: [PrimitiveValueKind.DataBase, -1, 0, 1, 0, CommandMoveKind
+            command: [PrimitiveValueKind.DataBase, -1, 1, 1, 0, CommandMoveKind
                 .MoveRandom, 0]
         });
         this.route = new SystemObjectReaction();

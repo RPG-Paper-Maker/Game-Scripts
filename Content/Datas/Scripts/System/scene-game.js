@@ -75,7 +75,7 @@ SceneGame.prototype = {
             interpreter = this.reactionInterpreters[i];
             interpreter.update();
             if (interpreter.isFinished()) {
-                interpreter.updateCurrentTime();
+                interpreter.updateFinish();
                 endingReactions.unshift(i);
             }
             // If changed map, STOP
@@ -119,7 +119,9 @@ SceneGame.prototype = {
     *   @param {SystemParameter[]} parameters All the parameters coming with
     *   this reaction.
     */
-    addReaction: function(sender, reaction, object, state, parameters, event) {
+    addReaction: function(sender, reaction, object, state, parameters, event,
+        moving)
+    {
         if (reaction.getFirstCommand() !== null){
             var reactionInterpreter;
 
@@ -139,8 +141,16 @@ SceneGame.prototype = {
                 reactionInterpreter = new ReactionInterpreter(sender, reaction,
                     object, state, parameters, event);
                 this.reactionInterpreters.push(reactionInterpreter);
+                if (!moving) {
+                    if (object.movingState !== null) {
+                        object.movingState.pause = true;
+                    }
+                }
+
+                return reactionInterpreter;
             }
         }
+        return null;
     },
 
     // -------------------------------------------------------

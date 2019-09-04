@@ -912,7 +912,8 @@ EventCommandMoveObject.prototype = {
             waitingPosition: false,
             moved: false,
             object: null,
-            random: RPM.random(0, 3)
+            random: RPM.random(0, 3),
+            pause: false
         }
     },
 
@@ -1032,6 +1033,9 @@ EventCommandMoveObject.prototype = {
     *   @returns {number} The number of node to pass.
     */
     update: function(currentState, object, state){
+        if (currentState.pause) {
+            return 0;
+        }
         if (currentState.parallel && this.moves.length > 0) {
             if (!currentState.waitingObject) {
                 var objectID = this.objectID.getValue();

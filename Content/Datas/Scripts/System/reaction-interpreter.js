@@ -72,9 +72,12 @@ ReactionInterpreter.prototype = {
 
     // -------------------------------------------------------
 
-    updateCurrentTime: function() {
+    updateFinish: function() {
         if (this.currentTimeState) {
             this.currentTimeState[1] = new Date().getTime();
+        }
+        if (this.currentMapObject.movingState !== null) {
+            this.currentMapObject.movingState.pause = false;
         }
     },
 
