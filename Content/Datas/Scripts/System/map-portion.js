@@ -951,13 +951,30 @@ MapPortion.prototype = {
     // -------------------------------------------------------
 
     updateCollision: function(boundingBoxes, collisions, position, side) {
-        var i, l, a, b, c, objCollision, positionPlus, objCollisionPlus;
+        var i, l, a, b, c, minW, maxW, minH, maxH, minD, maxD, objCollision,
+            positionPlus, objCollisionPlus;
 
         for (i = 0, l = collisions.length; i < l; i++) {
             objCollision = collisions[i];
-            for (a = -objCollision.w; a <= objCollision.w; a++) {
-                for (b = -objCollision.h; b <= objCollision.h; b++) {
-                    for (c = -objCollision.d; c <= objCollision.d; c++) {
+            if (side) {
+                minW = -objCollision.w;
+                maxW = objCollision.w;
+                minH = -objCollision.h;
+                maxH = objCollision.h;
+                minD = -objCollision.d;
+                maxD = objCollision.d;
+
+            } else {
+                minW = 0;
+                maxW = objCollision.m;
+                minH = 0;
+                maxH = objCollision.m;
+                minD = 0;
+                maxD = objCollision.m;
+            }
+            for (a = minW; a <= maxW; a++) {
+                for (b = minH; b <= maxH; b++) {
+                    for (c = minD; c <= maxD; c++) {
                         positionPlus = [
                             position[0] + a,
                             position[1] + b,
@@ -968,7 +985,8 @@ MapPortion.prototype = {
                         {
                             if (side) {
                                 objCollisionPlus = {};
-                                objCollisionPlus = Object.assign(objCollisionPlus, objCollision);
+                                objCollisionPlus = Object.assign(
+                                    objCollisionPlus, objCollision);
                                 objCollisionPlus.left = a < 0;
                                 objCollisionPlus.right = a > 0;
                                 objCollisionPlus.top = c < 0;

@@ -235,9 +235,8 @@ Object3DBox.prototype = {
                     angleX,
                     angleZ
                 ],
-                w: Math.floor(ws / 2),
-                h: Math.floor(hs / 2),
-                d: Math.floor(ds / 2),
+                m: Math.max(Math.max(Math.floor(ws / 2), Math.floor(hs / 2)),
+                    Math.floor(ds / 2)),
                 k: true
             });
         }
