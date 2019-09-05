@@ -130,25 +130,33 @@ Object3DBox.prototype = {
     updateGeometry: function(geometry, position, c) {
         var i, l, vecA, vecB, vecC, vecD, faceA, faceB, localPosition, size,
             textures, w, h, d, totalX, totalY, texA, texB, texC, texD,
-            objCollision, ws, hs, ds, coef, angleY, angleX, angleZ, center;
+            objCollision, ws, hs, ds, coef, angleY, angleX, angleZ, center,
+            centerReal;
 
         coef = 0.01;
         localPosition = RPM.positionToVector3(position);
-        localPosition.setX(localPosition.x + coef);
+        localPosition.setX(localPosition.x - ($SQUARE_SIZE / 2) + coef);
         localPosition.setY(localPosition.y + coef);
-        localPosition.setZ(localPosition.z + coef);
+        localPosition.setZ(localPosition.z - ($SQUARE_SIZE / 2) + coef);
+        angleY = RPM.positionAngleY(position);
+        angleX = RPM.positionAngleX(position);
+        angleZ = RPM.positionAngleZ(position);
         size = this.datas.getSizeVector();
-        center = new THREE.Vector3(localPosition.x + (size.x / 2), localPosition
-            .y + (size.y / 2), localPosition.z + (size.z / 2));
+        center = new THREE.Vector3(localPosition.x + Math.floor($SQUARE_SIZE / 2
+            ), localPosition.y + (size.y / 2), localPosition.z + Math.floor(
+            $SQUARE_SIZE / 2));
+        centerReal = new THREE.Vector3(localPosition.x + Math.floor(size.x / 2),
+            localPosition.y + (size.y / 2), localPosition.z + Math.floor(size.z
+            / 2));
+        Sprite.rotateVertex(centerReal, center, angleY, Sprite.Y_AXIS);
+        Sprite.rotateVertex(centerReal, center, angleX, Sprite.X_AXIS);
+        Sprite.rotateVertex(centerReal, center, angleZ, Sprite.Z_AXIS);
         size.setX(size.x - (2 * coef));
         size.setY(size.y - (2 * coef));
         size.setZ(size.z - (2 * coef));
         w = this.datas.widthPixels();
         h = this.datas.heightPixels();
         d = this.datas.depthPixels();
-        angleY = RPM.positionAngleY(position);
-        angleX = RPM.positionAngleX(position);
-        angleZ = RPM.positionAngleZ(position);
 
         // Textures
         textures = Object3DBox.TEXTURES_VALUES.slice(0);
@@ -217,9 +225,9 @@ Object3DBox.prototype = {
                 p: position,
                 l: localPosition,
                 b: [
-                    localPosition.x + Math.floor(w / 2),
-                    localPosition.y + Math.floor(h / 2),
-                    localPosition.z + Math.floor(d / 2),
+                    centerReal.x,
+                    centerReal.y,
+                    centerReal.z,
                     w,
                     h,
                     d,
