@@ -53,8 +53,9 @@ SystemObjectReaction.prototype = {
     readChildrenJSON: function(jsonCommands, commands){
         for (var j = 0, ll = jsonCommands.length; j < ll; j++){
             var node = commands.add(EventCommand.getEventCommand(jsonCommands[j]));
-            if (jsonCommands[j].hasOwnProperty("children"))
+            if (jsonCommands[j].hasOwnProperty("children")) {
                 this.readChildrenJSON(jsonCommands[j].children, node);
+            }
         }
     },
 

@@ -144,8 +144,12 @@ ReactionInterpreter.prototype = {
         else{
             // If entering in a node
             if (result === -1){
-                if (this.currentCommand.firstChild === null) Qt.quit();
-                value = this.currentCommand.firstChild;
+                if (this.currentCommand.firstChild === null)  {
+                    return this.endOfBlock(new Node(this.currentCommand, null),
+                        null);
+                } else {
+                    value = this.currentCommand.firstChild;
+                }
             }
             // If leaving last while node
             else if (result === -2){
