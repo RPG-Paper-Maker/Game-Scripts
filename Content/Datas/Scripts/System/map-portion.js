@@ -179,7 +179,9 @@ MapPortion.checkCollisionRay = function(positionBefore, positionAfter, object) {
                 for (i = 0; i < l; i++) {
                     temp = floors[i];
 
-                    if (temp >= limitY) {
+                    if (temp <= (positionAfter.y + $datasGame.system
+                        .mountainCollisionHeight.getValue()) && temp >= limitY)
+                    {
                         if (maxY === null) {
                             maxY = temp;
                         } else {
@@ -1334,7 +1336,7 @@ MapPortion.prototype = {
             for (j = 0, ll = objCollision.length; j < ll; j++) {
                 result = this.checkMountainCollision(jpositionAfter,
                     positionAfter, testedCollisions, object, objCollision[j],
-                    yMountain, block, true);
+                    yMountain, block);
                 if (result[0]) {
                     return [result[1], result[2]];
                 } else {
@@ -1353,14 +1355,14 @@ MapPortion.prototype = {
     *   @returns {boolean}
     */
     checkMountainCollision: function(jpositionAfter, positionAfter,
-        testedCollisions, object, objCollision, yMountain, block, lol)
+        testedCollisions, object, objCollision, yMountain, block)
     {
         var result;
 
         if (testedCollisions.indexOf(objCollision) === -1) {
             testedCollisions.push(objCollision);
             result = this.checkIntersectionMountain(jpositionAfter,
-                positionAfter, objCollision, object, lol);
+                positionAfter, objCollision, object);
             if (result[0]) {
                 if (result[1] === null) {
                     return [true, result[0], result[1]];
@@ -1380,7 +1382,7 @@ MapPortion.prototype = {
     // -------------------------------------------------------
 
     checkIntersectionMountain: function(jpositionAfter, positionAfter,
-        objCollision, object, lol) {
+        objCollision, object) {
         var point, result, x, y, z, w, h, plane, ray, pA, pB, pC, ptA, ptB, ptC,
             newPosition, mountain, forceAlways, forceNever;
 
@@ -1394,7 +1396,7 @@ MapPortion.prototype = {
         w = objCollision.rw;
         h = objCollision.rh;
 
-        if (positionAfter.y >= y && positionAfter.y <= (y + objCollision.rh)) {
+        if (positionAfter.y <= (y + objCollision.rh)) {
             // if w = 0, check height
             if (objCollision.rw === 0) {
                 if (CollisionsUtilities.isPointOnRectangle(point, x, x +
@@ -1537,8 +1539,6 @@ MapPortion.prototype = {
                     newPosition.y];
             }
         }
-
-
 
         return [false, null];
     },
