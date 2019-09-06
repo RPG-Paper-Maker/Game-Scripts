@@ -210,8 +210,17 @@ MapObject.prototype = {
             }
             this.states = $game.startupStates[$currentMap.id];
         } else {
-            var portion = SceneMap.getGlobalPortion(
-                        $currentMap.allObjects[this.system.id]);
+            var obj;
+
+            obj = $currentMap.allObjects[this.system.id];
+            if (typeof obj === 'undefined') {
+                RPM.showErrorMessage("Can't find object " + this.system.name +
+                    " in object linking. Please remove this object from your " +
+                    "map and recreate it.\nIf possible, report that you got " +
+                    "this error and describe the steps for having this " +
+                    "because we are trying to fix this issue.");
+            }
+            var portion = SceneMap.getGlobalPortion(obj);
             var portionDatas = $game.mapsDatas[$currentMap.id]
                     [portion[0]][portion[1]][portion[2]];
             var indexState = portionDatas.si.indexOf(this.system.id);

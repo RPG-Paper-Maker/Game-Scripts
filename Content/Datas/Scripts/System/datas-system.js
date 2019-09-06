@@ -202,12 +202,20 @@ DatasSystem.prototype = {
             l = json.length;
             var id = $datasGame.system.idObjectStartHero;
             var position;
+
             for (i = 0; i < l; i++){
                 jsonObject = json[i];
                 if (jsonObject.id === id){
                     position = jsonObject.p;
                     break;
                 }
+            }
+            if (typeof position == 'undefined') {
+                RPM.showErrorMessage("Can't find hero in object linking. Please"
+                    + " remove the hero object from your map and recreate it." +
+                    "\nIf possible, report that you got this error and " +
+                    "describe the steps for having this because we are trying "
+                    + "to fix this issue.");
             }
             var globalPortion = SceneMap.getGlobalPortion(position);
 

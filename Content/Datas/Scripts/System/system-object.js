@@ -38,6 +38,7 @@ SystemObject.prototype = {
             jsonEvent, prop;
 
         this.id = json.id;
+        this.name = json.name;
         this.eventFrame = json.ooepf;
         this.states = [];
         this.properties = [];
