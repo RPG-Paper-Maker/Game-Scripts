@@ -24,7 +24,7 @@
 *   @param {THREE.Mesh} mesh The current mesh used for this object.
 *   @param {SystemObject} system System infos.
 */
-function MapObject(system, position) {
+function MapObject(system, position, isHero) {
     this.system = system;
     this.position = position;
     this.mesh = null;
@@ -40,12 +40,14 @@ function MapObject(system, position) {
     this.movingHorizontal = null;
     this.movingVertical = null;
     this.frameTick = 0;
-    this.isHero = false;
-    this.isStartup = false;
+    this.isHero = RPM.jsonDefault(isHero, false);
+    this.isStartup = typeof position === RPM.UNDEFINED;
     this.isInScene = false;
     this.receivedOneEvent = false;
     this.movingState = null;
-    this.initializeProperties();
+    if (!this.isHero && !this.isStartup) {
+        this.initializeProperties();
+    }
     this.initializeTimeEvents();
 }
 
@@ -143,12 +145,39 @@ MapObject.updateObjectWithID = function(object, objectID, base, callback){
 MapObject.prototype = {
 
     initializeProperties: function() {
-        var i, l, prop;
+        var i, l, prop, mapProp, propValue;
+
+        if (this.isHero) {
+            mapProp = $game.heroProperties;
+        } else if (this.isStartup) {
+            mapProp = $game.startupProperties[$currentMap.id];
+            if (typeof mapProp === RPM.UNDEFINED) {
+                mapProp = [];
+            }
+        } else {
+            var obj, portion, portionDatas, indexProp;
+
+            obj = $currentMap.allObjects[this.system.id];
+            if (typeof obj === 'undefined') {
+                RPM.showErrorMessage("Can't find object " + this.system.name +
+                    " in object linking. Please remove this object from your " +
+                    "map and recreate it.\nIf possible, report that you got " +
+                    "this error and describe the steps for having this " +
+                    "because we are trying to fix this issue.");
+            }
+            portion = SceneMap.getGlobalPortion(obj);
+            portionDatas = $game.mapsDatas[$currentMap.id][portion[0]][portion[1
+                ]][portion[2]];
+            indexProp = portionDatas.pi.indexOf(this.system.id);
+            mapProp = (indexProp === -1) ? [] : portionDatas.p[indexProp];
+        }
 
         this.properties = [];
         for (i = 0, l = this.system.properties.length; i < l; i++) {
             prop = this.system.properties[i];
-            this.properties[prop.id] = prop.initialValue.getValue();
+            propValue = mapProp[prop.id - 1];
+            this.properties[prop.id] = typeof propValue === 'undefined' ? prop
+                .initialValue.getValue() : propValue;
         }
     },
 

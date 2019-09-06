@@ -1702,11 +1702,36 @@ EventCommandChangeProperty.prototype = {
     initialize: function(){ return null; },
 
     update: function(currentState, object, state) {
-        var propertyID;
+        var propertyID, newValue, portion, portionDatas, indexProp, props;
 
         propertyID = this.propertyID.getValue();
-        object.properties[propertyID] = $operators_numbers[this.operationKind](
-            object.properties[propertyID], this.newValue.getValue());
+        newValue = $operators_numbers[this.operationKind](object.properties[
+            propertyID], this.newValue.getValue());
+        object.properties[propertyID] = newValue;
+
+        if (object.isHero) {
+            props = $game.heroProperties;
+        } else if (object.isStartup) {
+            props = $game.startupProperties[$currentMap.id];
+            if (typeof props === 'undefined') {
+                props = [];
+                $game.startupProperties[$currentMap.id] = props;
+            }
+        } else {
+            portion = SceneMap.getGlobalPortion($currentMap.allObjects[object
+                .system.id]);
+            portionDatas = $game.mapsDatas[$currentMap.id][portion[0]][portion[
+                1]][portion[2]];
+            indexProp = portionDatas.pi.indexOf(object.system.id);
+            if (indexProp === -1) {
+                props = [];
+                portionDatas.pi.push(object.system.id);
+                portionDatas.p.push(props);
+            } else {
+                props = portionDatas.p[indexProp];
+            }
+        }
+        props[propertyID - 1] = newValue;
 
         return 1;
     },

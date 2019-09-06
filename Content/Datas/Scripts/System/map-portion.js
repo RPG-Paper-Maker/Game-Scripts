@@ -894,7 +894,7 @@ MapPortion.prototype = {
                 position = new THREE.Vector3(localPosition.x,
                                              localPosition.y,
                                              localPosition.z);
-                return new MapObject(object, position);
+                return new MapObject(object, position, true);
             }
         }
 

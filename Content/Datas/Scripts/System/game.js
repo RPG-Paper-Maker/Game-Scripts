@@ -29,13 +29,10 @@
 *   @property {number} hero Hero informations.
 *   @property {number} mapsDatas All the informations for each maps.
 */
-function Game(){
+function Game() {
     this.currentSlot = -1;
-    this.hero = new MapObject($modelHero.system,
-                              new THREE.Vector3($modelHero.position.x,
-                                                $modelHero.position.y,
-                                                $modelHero.position.z));
-    this.hero.isHero = true;
+    this.hero = new MapObject($modelHero.system, new THREE.Vector3($modelHero
+        .position.x, $modelHero.position.y, $modelHero.position.z), true);
 }
 
 Game.prototype = {
@@ -53,10 +50,13 @@ Game.prototype = {
         this.initializeVariables();
         this.currentMapId = $datasGame.system.idMapStartHero;
         this.heroStates = [1];
+        this.heroProperties = [];
         this.startupStates = {};
+        this.startupProperties = {};
         EventCommandModifyTeam.instanciateTeam(GroupKind.Team,
                                                CharacterKind.Hero, 1, 1, 1);
         this.mapsDatas = {};
+        this.hero.initializeProperties();
     },
 
     // -------------------------------------------------------
@@ -146,7 +146,9 @@ Game.prototype = {
                                positionHero[1],
                                positionHero[2]);
         this.heroStates = json.heroStates;
+        this.heroProperties = json.heroProp;
         this.startupStates = json.startS;
+        this.startupProperties = json.startP;
         this.readMapsDatas(json.mapsDatas);
     },
 
@@ -192,7 +194,9 @@ Game.prototype = {
                                this.hero.position.y,
                                this.hero.position.z],
                 heroStates: this.heroStates,
+                heroProp: this.heroProperties,
                 startS: this.startupStates,
+                startP: this.startupProperties,
                 mapsDatas : this.getCompressedMapsDatas()
             };
 
@@ -206,7 +210,6 @@ Game.prototype = {
     getCompressedMapsDatas: function() {
         var obj = {}, i, j, k, l = Object.keys(this.mapsDatas).length, w, h, id,
             datas, inf, objPortion;
-        /*
         for (id in this.mapsDatas) {
             objPortion = new Array(l);
             l = this.mapsDatas[id].length;
@@ -235,6 +238,12 @@ Game.prototype = {
                             if (datas.s && datas.s.length) {
                                 inf.s = datas.s;
                             }
+                            if (datas.pi && datas.pi.length) {
+                                inf.pi = datas.pi;
+                            }
+                            if (datas.p && datas.p.length) {
+                                inf.p = datas.p;
+                            }
                         }
                         objPortion[i][j][k] = datas ? inf : null;
                     }
@@ -242,7 +251,6 @@ Game.prototype = {
             }
             obj[id] = objPortion;
         }
-        */
 
         return obj;
     }

@@ -113,9 +113,6 @@ SceneMap.prototype.readMapInfos = function(){
         if (this.isBattleMap) {
             this.initialize();
         }
-
-        // Now that we have map dimensions, we can initialize object portion
-        this.initializePortionsObjects();
     });
 }
 
@@ -242,8 +239,10 @@ SceneMap.prototype.initializeObjects = function(){
             jsonObject = json[i];
             this.allObjects[jsonObject.id] = jsonObject.p;
         }
-        this.callBackAfterLoading = this.initializePortions;
+        this.initializePortionsObjects();
+        this.mapInfos.startupObject.initializeProperties();
     });
+    this.callBackAfterLoading = this.initializePortions;
 }
 
 // -------------------------------------------------------
@@ -279,8 +278,12 @@ SceneMap.prototype.initializePortionsObjects = function(){
                         // portion
                     si: datas && datas.si ? datas.si : [],
                         // Ids of the objects that have modified states
-                    s: datas && datas.s ? datas.s : []
+                    s: datas && datas.s ? datas.s : [],
                         // States of the objects according to id
+                    pi: datas && datas.pi ? datas.pi : [],
+                        // Ids of the objects that have modified properties
+                    p: datas && datas.p ? datas.p : [],
+                        // Properties values of the objects according to id
                 };
             }
         }
@@ -372,7 +375,7 @@ SceneMap.prototype.loadCollisions = function() {
         }
     }
 
-    this.callBackAfterLoading = this.initializeObjects();
+    this.callBackAfterLoading = this.initializeObjects;
 }
 
 // -------------------------------------------------------

@@ -51,6 +51,9 @@ SceneLoadGame.prototype = {
         {
             $game = this.windowChoicesSlots.getCurrentContent().game;
             if (!$game.isNull) {
+                // Initialize properties for hero
+                $game.hero.initializeProperties();
+
                 // Stop video if existing
                 if (!$datasGame.titlescreenGameover.isTitleBackgroundVideo) {
                     $canvasVideos.stop();

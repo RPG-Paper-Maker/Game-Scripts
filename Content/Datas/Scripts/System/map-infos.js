@@ -53,7 +53,6 @@ MapInfos.prototype = {
         var startupReactions = new SystemObject();
         startupReactions.readJSON(json.so);
         this.startupObject = new MapObject(startupReactions);
-        this.startupObject.isStartup = true;
         this.startupObject.changeState();
     },
 
