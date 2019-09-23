@@ -113,7 +113,6 @@ function EventCommandShowText(command) {
     this.windowMain = new WindowBox(10, $SCREEN_Y - 10 - 150, $SCREEN_X - 20,
         150, new GraphicMessage(this.message, this.facesetID), RPM
         .HUGE_PADDING_BOX);
-    this.windowMain.content.verticalAlign = Align.Left;
     this.windowInterlocutor = new WindowBox(this.windowMain.oX + (RPM
         .MEDIUM_SLOT_HEIGHT / 2), this.windowMain.oY - (RPM.MEDIUM_SLOT_HEIGHT /
         2), RPM.MEDIUM_SLOT_WIDTH, RPM.MEDIUM_SLOT_HEIGHT, new GraphicText("",

@@ -105,9 +105,8 @@ GraphicText.prototype = {
     measureText: function() {
         var w;
 
-        this.updateContextFontReal();
-        w = $context.measureText(this.text).width;
         this.updateContextFont();
+        w = $context.measureText(this.text).width;
 
         return w;
     },
