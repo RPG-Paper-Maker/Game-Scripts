@@ -102,6 +102,16 @@ GraphicText.prototype = {
         $context.font = this.fontWithoutResize;
     },
 
+    measureText: function() {
+        var w;
+
+        this.updateContextFontReal();
+        w = $context.measureText(this.text).width;
+        this.updateContextFont();
+
+        return w;
+    },
+
     // -------------------------------------------------------
 
     updateFontSize: function(fontSize) {

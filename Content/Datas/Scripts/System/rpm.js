@@ -104,8 +104,15 @@ RPM.ONE_SECOND_MILLI = 1000;
 RPM.STRING_RGBA = "rgba";
 RPM.STRING_PARENTHESIS_LEFT = "(";
 RPM.STRING_PARENTHESIS_RIGHT = ")";
+RPM.STRING_BRACKET_LEFT = "[";
+RPM.STRING_BRACKET_RIGHT = "]";
 RPM.STRING_COMA = ",";
+RPM.STRING_SLASH = "/";
 RPM.UNDEFINED = 'undefined';
+RPM.TAG_BOLD = "b";
+RPM.TAG_LEFT = "l";
+RPM.TAG_CENTER = "c";
+RPM.TAG_RIGHT = "r";
 
 // -------------------------------------------------------
 //  COLORS
@@ -1310,4 +1317,10 @@ RPM.formulaContainsTarget = function(formula) {
 
 RPM.jsonDefault = function(json, defaultValue) {
     return typeof json === RPM.UNDEFINED ? defaultValue : json;
+};
+
+// -------------------------------------------------------
+
+RPM.defaultValue = function(value, defaultValue) {
+    return typeof value === RPM.UNDEFINED ? defaultValue : value;
 };

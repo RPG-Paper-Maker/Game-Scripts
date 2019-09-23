@@ -462,3 +462,18 @@ var ObjectMovingKind = {
     Route: 2
 };
 Object.freeze(ObjectMovingKind);
+
+/**
+*   Enum for the tags.
+*   @enum {number}
+*   @readonly
+*/
+var TagKind = {
+    Text: 0,
+    Bold: 1,
+    Italic: 2,
+    Left: 3,
+    Center: 4,
+    Right: 5
+};
+Object.freeze(TagKind);

@@ -97,13 +97,27 @@ EventCommand.getEventCommand = function(json) {
 *   @property {WindowBox} window Window containins the message to display.
 *   @param {JSON} command Direct JSON command to parse.
 */
-function EventCommandShowText(command){
-    this.message = command[0];
+function EventCommandShowText(command) {
+    var i, k, v;
+
+    i = 0;
+    k = command[i++];
+    v = command[i++];
+    this.interlocutor = SystemValue.createValue(k, v);
+    this.facesetID = command[i++];
+    this.message = command[i++];
+
     this.isDirectNode = false;
     this.parallel = false;
-    this.window = new WindowBox(10, $SCREEN_Y - 10 - 150, $SCREEN_X - 20, 150,
-        new GraphicText(this.message, Align.Left), RPM.DIALOG_PADDING_BOX);
-    this.window.content.verticalAlign = Align.Left;
+
+    this.windowMain = new WindowBox(10, $SCREEN_Y - 10 - 150, $SCREEN_X - 20,
+        150, new GraphicMessage(this.message, this.facesetID), RPM
+        .HUGE_PADDING_BOX);
+    this.windowMain.content.verticalAlign = Align.Left;
+    this.windowInterlocutor = new WindowBox(this.windowMain.oX + (RPM
+        .MEDIUM_SLOT_HEIGHT / 2), this.windowMain.oY - (RPM.MEDIUM_SLOT_HEIGHT /
+        2), RPM.MEDIUM_SLOT_WIDTH, RPM.MEDIUM_SLOT_HEIGHT, new GraphicText("",
+        Align.Center), RPM.SMALL_SLOT_PADDING);
 }
 
 EventCommandShowText.prototype = {
@@ -112,6 +126,8 @@ EventCommandShowText.prototype = {
     *   @returns {Object} The current state (clicked).
     */
     initialize: function(){
+        this.windowMain.content.update();
+
         return {
             clicked: false,
             frame: 0,
@@ -137,6 +153,7 @@ EventCommandShowText.prototype = {
             currentState.frameTick = 0;
             $requestPaintHUD = true;
         }
+        this.windowInterlocutor.content.setText(this.interlocutor.getValue());
 
         return 0;
     },
@@ -165,7 +182,10 @@ EventCommandShowText.prototype = {
     *   @param {Object} currentState The current state of the event.
     */
     drawHUD: function(currentState) {
-        this.window.draw();
+        this.windowMain.draw();
+        if (this.windowInterlocutor.content.text) {
+            this.windowInterlocutor.draw();
+        }
 
         $datasGame.system.getWindowSkin().drawArrowMessage(currentState.frame,
             $SCREEN_X / 2, $SCREEN_Y - 40);

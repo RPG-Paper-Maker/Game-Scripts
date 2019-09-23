@@ -134,7 +134,10 @@ WindowBox.prototype = {
                 if (!isChoice && this.limitContent) {
                     $context.save();
                     $context.beginPath();
-                    $context.rect(this.x, this.y, this.w, this.h);
+                    $context.rect(RPM.getScreenX(contentDimension[0]), RPM
+                        .getScreenY(contentDimension[1] - (this.padding[3] / 2))
+                        , RPM.getScreenX(contentDimension[2]), RPM.getScreenY(
+                        contentDimension[3] + this.padding[3]));
                     $context.clip();
                 }
                 if (isChoice){
@@ -144,8 +147,7 @@ WindowBox.prototype = {
                          contentDimension[2],
                          contentDimension[3]
                     );
-                }
-                else{
+                } else {
                     this.content.drawInformations(
                          contentDimension[0],
                          contentDimension[1],

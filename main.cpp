@@ -20,6 +20,10 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
+    #ifdef Q_OS_WIN
+        QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
+    #endif
+
     // The application can now be used even if called from another directory
     QDir bin(qApp->applicationDirPath());
     #ifdef Q_OS_MAC

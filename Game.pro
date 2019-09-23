@@ -21,6 +21,7 @@ DISTFILES += \
     Content/Datas/Scripts/System/desktop/main.qml \
     Content/Datas/Scripts/System/desktop/includes.js \
     Content/Datas/Scripts/System/graphic-keyboard.js \
+    Content/Datas/Scripts/System/graphic-message.js \
     Content/Datas/Scripts/System/graphic-setting.js \
     Content/Datas/Scripts/System/main.js \
     Content/Datas/Scripts/System/battler.js \
