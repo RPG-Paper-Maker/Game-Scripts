@@ -23,7 +23,7 @@ function GraphicMessage(message, facesetID) {
     Bitmap.call(this);
 
     //this.message = message;
-    this.message = "Test[b][i]Bold[/i]\nBold[/b][i]Italic\nita[/i]noita";
+    this.message = "[font=1]Size\nENcor[/font]e";
     this.faceset = Picture2D.createImage($datasGame.pictures.get(PictureKind
         .Facesets, facesetID), PictureKind.Facesets);
     this.graphics = [];
@@ -85,6 +85,12 @@ GraphicMessage.prototype.setMessage = function(message) {
             } else if (tag === RPM.TAG_RIGHT) {
                 currentNode = this.updateTag(currentNode, TagKind.Right,
                     null, open);
+            } else if (tag.includes(RPM.TAG_SIZE)) {
+                currentNode = this.updateTag(currentNode, TagKind.Size, open ?
+                    parseInt(tag.split(RPM.STRING_EQUAL)[1]) : null, open);
+            } else if (tag.includes(RPM.TAG_FONT)) {
+                currentNode = this.updateTag(currentNode, TagKind.Font, open ?
+                    parseInt(tag.split(RPM.STRING_EQUAL)[1]) : null, open);
             } else {
                 currentNode.add([TagKind.Text, message.substring(c, cr + 1)]);
             }
@@ -135,7 +141,9 @@ GraphicMessage.prototype.update = function() {
         h: this.heights,
         ca: Align.Left,
         cb: false,
-        ci: false
+        ci: false,
+        cs: $fontSize,
+        cf: $fontName
     };
 
     // Update nodes
@@ -167,7 +175,7 @@ GraphicMessage.prototype.update = function() {
 // -------------------------------------------------------
 
 GraphicMessage.prototype.updateNodes = function(node, result) {
-    var graphic, align, bold, italic;
+    var graphic, align, bold, italic, size, font;
 
     switch (node.data[0]) {
     case TagKind.NewLine:
@@ -175,13 +183,13 @@ GraphicMessage.prototype.updateNodes = function(node, result) {
         result.p.push(0);
         result.a.push(-1);
         if (result.h[0] === 0) {
-            result.h[0] = $fontSize;
+            result.h[0] = result.cs;
         }
         result.h.unshift(0);
         break;
     case TagKind.Text:
         graphic = new GraphicText(node.data[1], { bold: result.cb, italic:
-            result.ci } );
+            result.ci, fontSize: result.cs, fontName: result.cf } );
         result.g.push(graphic);
         result.p.push(graphic.measureText());
         result.a.push(result.ca);
@@ -209,6 +217,14 @@ GraphicMessage.prototype.updateNodes = function(node, result) {
         align = result.ca;
         result.ca = Align.Right;
         break;
+    case TagKind.Size:
+        size = result.cs;
+        result.cs = $datasGame.system.fontSizes[node.data[1]].getValue();
+        break;
+    case TagKind.Font:
+        font = result.cf;
+        result.cf = $datasGame.system.fontNames[node.data[1]].getValue();
+        break;
     }
     if (node.firstChild !== null) {
         this.updateNodes(node.firstChild, result);
@@ -225,6 +241,12 @@ GraphicMessage.prototype.updateNodes = function(node, result) {
     case TagKind.Center:
     case TagKind.Right:
         result.ca = align;
+        break;
+    case TagKind.Size:
+        result.cs = size;
+        break;
+    case TagKind.Font:
+        result.cf = font;
         break;
     }
     // Go next if possible

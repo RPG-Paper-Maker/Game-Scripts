@@ -181,6 +181,29 @@ DatasSystem.prototype = {
                 this.speedFrequencies[jsonElement.id] = element;
             }
 
+            // Font sizes
+            jsonList = json.fs;
+            l = jsonList.length;
+            this.fontSizes = new Array(l + 1);
+            for (i = 0; i < l; i++) {
+                jsonElement = jsonList[i];
+                id = jsonElement.id;
+                element = SystemValue.readOrDefaultNumber(jsonElement.s, 0);
+                this.fontSizes[jsonElement.id] = element;
+            }
+
+            // Font names
+            jsonList = json.fn;
+            l = jsonList.length;
+            this.fontNames = new Array(l + 1);
+            for (i = 0; i < l; i++) {
+                jsonElement = jsonList[i];
+                id = jsonElement.id;
+                element = SystemValue.readOrDefaultMessage(jsonElement.f, RPM
+                    .DEFAULT_FONT);
+                this.fontNames[jsonElement.id] = element;
+            }
+
             // read song now that BR path is loaded
             $datasGame.songs.read();
         });

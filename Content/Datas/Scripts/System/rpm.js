@@ -109,12 +109,16 @@ RPM.STRING_BRACKET_RIGHT = "]";
 RPM.STRING_COMA = ",";
 RPM.STRING_SLASH = "/";
 RPM.STRING_NEW_LINE = "\n";
+RPM.STRING_EQUAL = "=";
 RPM.UNDEFINED = 'undefined';
 RPM.TAG_BOLD = "b";
 RPM.TAG_ITALIC = "i";
 RPM.TAG_LEFT = "l";
 RPM.TAG_CENTER = "c";
 RPM.TAG_RIGHT = "r";
+RPM.TAG_SIZE = "size";
+RPM.TAG_FONT = "font";
+RPM.DEFAULT_FONT = "Arial";
 
 // -------------------------------------------------------
 //  COLORS
