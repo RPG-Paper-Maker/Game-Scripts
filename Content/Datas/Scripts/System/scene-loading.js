@@ -22,8 +22,8 @@
 function SceneLoading() {
     SceneGame.call(this);
 
-    this.text = new GraphicText("Loading...", Align.Right, $fontSize, $fontName,
-        590, 450, 40, 20);
+    this.text = new GraphicText("Loading...", { align: Align.Right, x: 590, y:
+        450, w: 40, h: 20 });
 }
 
 SceneLoading.prototype = {

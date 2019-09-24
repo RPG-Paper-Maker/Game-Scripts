@@ -20,10 +20,10 @@
 */
 function GraphicKeyboard(kb) {
     this.kb = kb;
-    this.graphicTextName = new GraphicText(kb.name, Align.Left);
-    this.graphicTextShort = new GraphicText(kb.toString(), Align.Center);
-    this.graphicTextInformation = new GraphicText("Press any keys...", Align
-        .Center);
+    this.graphicTextName = new GraphicText(kb.name);
+    this.graphicTextShort = new GraphicText(kb.toString(), { align: Align.Center });
+    this.graphicTextInformation = new GraphicText("Press any keys...", { align:
+        Align.Center });
 }
 
 // -------------------------------------------------------

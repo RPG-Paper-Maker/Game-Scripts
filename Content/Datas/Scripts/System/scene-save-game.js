@@ -22,11 +22,9 @@
 function SceneSaveGame() {
     SceneSaveLoadGame.call(this);
 
-    SceneSaveLoadGame.prototype.setContents.call(
-                this,
-                new GraphicText("Save a game"),
-                new GraphicText("Select a slot where you want to save.")
-                );
+    SceneSaveLoadGame.prototype.setContents.call(this, new GraphicText(
+        "Save a game", { align: Align.Center }), new GraphicText(
+        "Select a slot where you want to save.", { align: Align.Center }));
 }
 
 SceneSaveGame.prototype = {

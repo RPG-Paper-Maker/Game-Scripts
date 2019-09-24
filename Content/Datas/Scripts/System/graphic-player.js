@@ -42,15 +42,14 @@ function GraphicPlayer(gamePlayer, reverse) {
     expStat = $datasGame.battleSystem.getExpStatistic();
 
     // All the graphics
-    this.graphicName = new GraphicText(character.name, Align.Left);
-    this.graphicClass = new GraphicText(cl.name, Align.Left, 10);
-    this.graphicLevelName = new GraphicText(levelStat.name, Align.Left);
-    this.graphicLevel = new GraphicText("" + gamePlayer[levelStat.abbreviation],
-        Align.Left);
-    this.graphicExpName = new GraphicText(expStat.name, Align.Left, RPM
-        .MEDIUM_FONT_SIZE);
+    this.graphicName = new GraphicText(character.name);
+    this.graphicClass = new GraphicText(cl.name, { fontSize: 10 });
+    this.graphicLevelName = new GraphicText(levelStat.name);
+    this.graphicLevel = new GraphicText("" + gamePlayer[levelStat.abbreviation]);
+    this.graphicExpName = new GraphicText(expStat.name, { fontSize: RPM
+        .MEDIUM_FONT_SIZE });
     this.graphicExp = new GraphicText(gamePlayer.getBarAbbreviation(expStat),
-        Align.Left, RPM.MEDIUM_FONT_SIZE);
+        { fontSize: RPM.MEDIUM_FONT_SIZE });
 
     // Adding stats
     context = $canvasHUD.getContext('2d');
@@ -68,7 +67,7 @@ function GraphicPlayer(gamePlayer, reverse) {
 
             // Only display bars
             if (!statistic.isFix){
-                textName = new GraphicText(statistic.name + ":", Align.Left);
+                textName = new GraphicText(statistic.name + ":");
                 context.font = textName.font;
                 textName.updateContextFont(context);
                 c = context.measureText(textName.text).width;
@@ -79,7 +78,7 @@ function GraphicPlayer(gamePlayer, reverse) {
                 txt = "" + gamePlayer[statistic.abbreviation];
                 if (!statistic.isFix)
                     txt += "/" + gamePlayer[statistic.getMaxAbbreviation()];
-                text = new GraphicText(txt, Align.Left);
+                text = new GraphicText(txt);
                 c = context.measureText(text.text).width;
                 if (c > this.maxStatNamesLength) {
                     this.maxStatLength = c;
@@ -109,7 +108,7 @@ function GraphicPlayer(gamePlayer, reverse) {
     this.battlerFrameDuration = 250;
 
     // Level up
-    this.graphicLevelUp = new GraphicText("Level up!", Align.Left);
+    this.graphicLevelUp = new GraphicText("Level up!");
 
     this.displayNameLevel = true;
 }

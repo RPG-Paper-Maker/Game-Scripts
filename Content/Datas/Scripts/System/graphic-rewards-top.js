@@ -23,7 +23,7 @@ function GraphicRewardsTop(xp, currencies) {
 
     // Experience
     this.graphicXP = new GraphicText($datasGame.battleSystem.getExpStatistic()
-        .name + ": " + xp, Align.Left);
+        .name + ": " + xp);
     $context.font = this.graphicXP.font;
     this.graphicXP.updateContextFont();
     this.graphicXPLength = $context.measureText(this.graphicXP.text).width;

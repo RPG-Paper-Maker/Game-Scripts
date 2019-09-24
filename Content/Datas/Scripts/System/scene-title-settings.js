@@ -30,8 +30,8 @@ function SceneTitleSettings() {
 
     // Creating windows
     this.windowSettings = new WindowBox(RPM.HUGE_SPACE, RPM.HUGE_SPACE, RPM
-        .MEDIUM_SLOT_WIDTH, RPM.LARGE_SLOT_HEIGHT, new GraphicText("SETTINGS"),
-        RPM.SMALL_SLOT_PADDING);
+        .MEDIUM_SLOT_WIDTH, RPM.LARGE_SLOT_HEIGHT, new GraphicText("SETTINGS", {
+        align: Align.Center }), RPM.SMALL_SLOT_PADDING);
     this.windowInformations = new WindowBox(RPM.HUGE_SPACE + RPM
         .MEDIUM_SLOT_WIDTH + RPM.LARGE_SPACE, RPM.HUGE_SPACE, $SCREEN_X - (2 *
         RPM.HUGE_SPACE) - RPM.MEDIUM_SLOT_WIDTH - RPM.LARGE_SPACE, RPM

@@ -66,7 +66,7 @@ DatasTitlescreenGameover.prototype.getCommandsNames = function() {
     list = new Array(l);
     for (i = 0; i < l; i++) {
         titleCommand = this.titleCommands[i]
-        obj = new GraphicText(titleCommand.name);
+        obj = new GraphicText(titleCommand.name, { align: Align.Center });
         obj.datas = titleCommand;
         list[i] = obj;
     }

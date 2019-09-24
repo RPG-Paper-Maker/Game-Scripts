@@ -22,12 +22,9 @@
 function SceneLoadGame() {
     SceneSaveLoadGame.call(this);
 
-    SceneSaveLoadGame.prototype.setContents.call(
-                this,
-                new GraphicText("Load a game"),
-                new GraphicText("Select a slot you want to load.")
-                );
-
+    SceneSaveLoadGame.prototype.setContents.call(this, new GraphicText(
+        "Load a game", { align: Align.Center }), new GraphicText(
+        "Select a slot you want to load.", { align: Align.Center }));
     if ($datasGame.titlescreenGameover.isTitleBackgroundImage) {
         this.pictureBackground = Picture2D.createImageWithID($datasGame
             .titlescreenGameover.titleBackgroundImageID, PictureKind.TitleScreen);

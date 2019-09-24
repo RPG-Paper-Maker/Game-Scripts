@@ -39,7 +39,8 @@ SceneBattle.prototype.initializeStep2 = function() {
         informationText = "";
         break;
     }
-    this.windowTopInformations.content = new GraphicText(informationText);
+    this.windowTopInformations.content = new GraphicText(informationText, {
+        align: Align.Center });
     this.time = new Date().getTime();
     this.damages = [];
     this.effects = [];

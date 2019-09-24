@@ -33,13 +33,13 @@ function GraphicEquip(gamePlayer, id, length){
     this.equipmentLength = length;
 
     // All the graphics
-    this.graphicEquipmentName =
-         new GraphicText($datasGame.battleSystem.equipments[id], Align.Left);
+    this.graphicEquipmentName = new GraphicText($datasGame.battleSystem
+        .equipments[id]);
     if (equiped === null)
-        this.graphicEquipment = new GraphicText("-", Align.Left);
-    else{
-        this.graphicEquipment =
-             new GraphicText(equiped.getItemInformations().name, Align.Left);
+        this.graphicEquipment = new GraphicText("-");
+    else {
+        this.graphicEquipment = new GraphicText(equiped.getItemInformations()
+            .name);
     }
 }
 

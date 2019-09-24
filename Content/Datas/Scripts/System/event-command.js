@@ -115,8 +115,8 @@ function EventCommandShowText(command) {
         .HUGE_PADDING_BOX);
     this.windowInterlocutor = new WindowBox(this.windowMain.oX + (RPM
         .MEDIUM_SLOT_HEIGHT / 2), this.windowMain.oY - (RPM.MEDIUM_SLOT_HEIGHT /
-        2), RPM.MEDIUM_SLOT_WIDTH, RPM.MEDIUM_SLOT_HEIGHT, new GraphicText("",
-        Align.Center), RPM.SMALL_SLOT_PADDING);
+        2), RPM.MEDIUM_SLOT_WIDTH, RPM.MEDIUM_SLOT_HEIGHT, new GraphicText("", {
+        align: Align.Center }), RPM.SMALL_SLOT_PADDING);
 }
 
 EventCommandShowText.prototype = {

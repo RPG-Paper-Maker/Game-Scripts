@@ -31,17 +31,19 @@ function SceneMenuInventory() {
 
     // Initializing the top menu for item kinds
     menuKind = [
-        new GraphicText("All"),
-        new GraphicText("Consumables"),
-        new GraphicText($datasGame.system.itemsTypes[1].name),
-        new GraphicText($datasGame.system.itemsTypes[2].name),
-        new GraphicText("Weapons"),
-        new GraphicText("Armors")
+        new GraphicText("All", { align: Align.Center }),
+        new GraphicText("Consumables", { align: Align.Center }),
+        new GraphicText($datasGame.system.itemsTypes[1].name, { align: Align
+            .Center }),
+        new GraphicText($datasGame.system.itemsTypes[2].name, { align: Align
+            .Center }),
+        new GraphicText("Weapons", { align: Align.Center }),
+        new GraphicText("Armors", { align: Align.Center })
     ];
 
     // All the windows
-    this.windowTop = new WindowBox(20, 20, 200, 30,
-                                   new GraphicText("Inventory"));
+    this.windowTop = new WindowBox(20, 20, 200, 30, new GraphicText("Inventory",
+        { align: Align.Center }));
     this.windowChoicesTabs = new WindowTabs(OrientationWindow.Horizontal, 5, 60,
         105, RPM.SMALL_SLOT_HEIGHT, 6, menuKind, null);
     this.windowChoicesList = new WindowChoices(OrientationWindow.Vertical, 20,
@@ -50,7 +52,8 @@ function SceneMenuInventory() {
     this.windowInformations = new WindowBox(240, 100, 360, 200, null, RPM
         .HUGE_PADDING_BOX);
     this.windowEmpty = new WindowBox(10, 100, $SCREEN_X - 20, RPM
-        .SMALL_SLOT_HEIGHT, new GraphicText("Empty"), RPM.SMALL_SLOT_PADDING);
+        .SMALL_SLOT_HEIGHT, new GraphicText("Empty", { align: Align.Center }),
+        RPM.SMALL_SLOT_PADDING);
     this.windowBoxUseItem = new WindowBox(240, 320, 360, 140, new
         GraphicUserSkillItem(), RPM.SMALL_PADDING_BOX);
     l = menuKind.length;

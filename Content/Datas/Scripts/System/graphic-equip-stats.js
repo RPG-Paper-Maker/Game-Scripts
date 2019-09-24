@@ -55,7 +55,7 @@ function GraphicEquipStats(gamePlayer, newValues){
             statistic = $datasGame.battleSystem.statistics[id];
 
             // Name of the stat
-            graphicName = new GraphicText(statistic.name + ":", Align.Left);
+            graphicName = new GraphicText(statistic.name + ":");
             $context.font = graphicName.font;
             graphicName.updateContextFont();
             c = $context.measureText(graphicName.text).width;
@@ -68,7 +68,7 @@ function GraphicEquipStats(gamePlayer, newValues){
             if (!statistic.isFix) {
                txt += "/" + gamePlayer[statistic.getMaxAbbreviation()];
             }
-            graphicValue = new GraphicText(txt, Align.Left);
+            graphicValue = new GraphicText(txt);
             $context.font = graphicValue.font;
             graphicValue.updateContextFont();
             c = $context.measureText(graphicValue.text).width;
@@ -84,7 +84,7 @@ function GraphicEquipStats(gamePlayer, newValues){
                     txt = Math.min(gamePlayer[statistic.abbreviation], newValues
                         [id]) + "/" + newValues[id];
                 }
-                this.listNewStats.push(new GraphicText(txt, Align.left));
+                this.listNewStats.push(new GraphicText(txt));
             }
 
             j++;
@@ -96,7 +96,7 @@ function GraphicEquipStats(gamePlayer, newValues){
     this.valueLength = maxLengthValue;
 
     // Arrow
-    this.graphicArrow = new GraphicText("->", Align.Left);
+    this.graphicArrow = new GraphicText("->");
     $context.font = this.graphicArrow.font;
     this.graphicArrow.updateContextFont();
     this.arrowLength = $context.measureText(this.graphicArrow.text).width;

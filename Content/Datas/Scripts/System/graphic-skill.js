@@ -25,7 +25,8 @@ function GraphicSkill(gameSkill){
 
     // All the graphics
     this.graphicName = new GraphicTextIcon(this.skill.name, this.skill.pictureID);
-    this.graphicCost = new GraphicText(this.skill.getCostString(), Align.Right);
+    this.graphicCost = new GraphicText(this.skill.getCostString(), { align:
+        Align.Right });
     this.graphicInformations = new GraphicSkillItem(this.skill);
 }
 

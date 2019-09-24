@@ -21,13 +21,14 @@ function GraphicSave(game) {
     var player;
 
     this.game = game;
-    this.graphicSlot = new GraphicText("Slot " + game.currentSlot);
+    this.graphicSlot = new GraphicText("Slot " + game.currentSlot, { align:
+        Align.Center });
 
     if (game.isNull) {
-        this.graphicEmpty = new GraphicText("Empty");
+        this.graphicEmpty = new GraphicText("Empty", { align: Align.Center });
     } else {
         this.graphicTimer = new GraphicText(RPM.getStringDate(game.playTime),
-            Align.Right);
+            { align: Align.Right });
         this.graphicCharacters = new Array;
         for (var i = 0, l = game.teamHeroes.length; i < l; i++) {
             player = new GraphicPlayer(game.teamHeroes[i]);

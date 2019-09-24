@@ -47,7 +47,7 @@ function GraphicStatisticProgression(gamePlayer) {
             value = this.gamePlayer[statistic.getAbbreviationNext()] - this
                 .gamePlayer[statistic.getBeforeAbbreviation()];
             txt = value >= 0 ? "+" : "-";
-            graphic = new GraphicText(txt + value, Align.Left);
+            graphic = new GraphicText(txt + value);
             if (value > 0) {
                 graphic.color = RPM.COLOR_GREEN;
             } else if (value < 0) {
@@ -76,7 +76,7 @@ GraphicStatisticProgression.prototype = {
                 id !== $datasGame.battleSystem.idExpStatistic)
             {
                 statistic = $datasGame.battleSystem.statistics[id];
-                graphicName = new GraphicText(statistic.name + ":", Align.Left);
+                graphicName = new GraphicText(statistic.name + ":");
                 $context.font = graphicName.font;
                 graphicName.updateContextFont();
                 c = $context.measureText(graphicName.text).width;
@@ -99,7 +99,7 @@ GraphicStatisticProgression.prototype = {
                 if (!statistic.isFix) {
                     txt += "/" + this.gamePlayer[statistic.getMaxAbbreviation()];
                 }
-                graphic = new GraphicText(txt, Align.Left);
+                graphic = new GraphicText(txt);
                 $context.font = graphic.font;
                 graphic.updateContextFont();
                 c = $context.measureText(graphic.text).width;

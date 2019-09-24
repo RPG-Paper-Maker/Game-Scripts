@@ -24,29 +24,29 @@ function GraphicSkillItem(skillItem) {
     // All the graphics
     this.graphicName = new GraphicTextIcon(skillItem.name, skillItem.pictureID);
     if (skillItem.hasType) {
-        this.graphicType = new GraphicText(skillItem.getType().name, Align.Left,
-            RPM.MEDIUM_FONT_SIZE);
+        this.graphicType = new GraphicText(skillItem.getType().name, { fontSize:
+            RPM.MEDIUM_FONT_SIZE });
     }
-    this.graphicDescription = new GraphicText(skillItem.description.name, Align
-        .Left);
+    this.graphicDescription = new GraphicText(skillItem.description.name);
     if (skillItem.hasTargetKind) {
         this.graphicTarget = new GraphicText("Target: " + skillItem
-            .getTargetKindString(), Align.Right, RPM.MEDIUM_FONT_SIZE);
+            .getTargetKindString(), { align: Align.Right, fontSize: RPM
+            .MEDIUM_FONT_SIZE });
     }
     this.graphicEffects = [];
     for (i = 0, l = this.skillItem.effects.length; i < l; i++) {
         txt = this.skillItem.effects[i].toString();
         if (txt) {
-            this.graphicEffects.push(new GraphicText(txt, Align.Left, RPM
-                .MEDIUM_FONT_SIZE));
+            this.graphicEffects.push(new GraphicText(txt, { fontSize: RPM
+                .MEDIUM_FONT_SIZE }));
         }
     }
     this.graphicCharacteristics = [];
     for (i = 0, l = this.skillItem.characteristics.length; i < l; i++) {
         txt = this.skillItem.characteristics[i].toString();
         if (txt) {
-            this.graphicCharacteristics.push(new GraphicText(txt, Align.Left, RPM
-                .MEDIUM_FONT_SIZE));
+            this.graphicCharacteristics.push(new GraphicText(txt, { fontSize:
+                RPM.MEDIUM_FONT_SIZE }));
         }
     }
 }

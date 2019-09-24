@@ -23,7 +23,8 @@
 
 SceneBattle.prototype.initializeStep4 = function(){
     var i, l, battler, id, w, h;
-    this.windowTopInformations.content = new GraphicText("Victory!");
+    this.windowTopInformations.content = new GraphicText("Victory!", { align:
+        Align.Center });
 
     // Rewards
     this.prepareRewards();

@@ -31,25 +31,18 @@
 *   @param {number} w The w coords of the text.
 *   @param {number} h The h coords of the text.
 */
-function GraphicText(text, align, fontSize, fontName, x, y, w, h, color,
-    verticalAlign)
-{
-    Bitmap.call(this, x, y, w, h);
+function GraphicText(text, opt) {
+    opt = RPM.defaultValue(opt, {});
 
-    // Default values
-    if (typeof align === 'undefined') align = Align.Center;
-    if (typeof fontSize === 'undefined') fontSize = $fontSize;
-    if (typeof fontName === 'undefined') fontName = $fontName;
-    if (typeof verticalAlign === 'undefined') verticalAlign = Align.Center;
+    Bitmap.call(this, opt.x, opt.y, opt.w, opt.h);
 
-    this.text = text;
-    this.align = align;
-    this.color = color;
-    this.verticalAlign = verticalAlign;
-
-    // Font
-    this.fontName = fontName;
-    this.updateFontSize(fontSize);
+    this.text = RPM.defaultValue(text, "");
+    this.align = RPM.defaultValue(opt.align, Align.Left);
+    this.fontSize = RPM.defaultValue(opt.fontSize, $fontSize);
+    this.fontName = RPM.defaultValue(opt.fontName, $fontName);
+    this.verticalAlign = RPM.defaultValue(opt.verticalAlign, Align.Center);
+    this.color = RPM.defaultValue(opt.color, RPM.COLOR_WHITE);
+    this.updateFontSize(this.fontSize);
 }
 
 GraphicText.prototype = {
@@ -151,7 +144,7 @@ GraphicText.prototype = {
         h = RPM.getScreenY(h);
 
         // Set context options
-        $context.fillStyle = (this.color ? this.color : RPM.COLOR_WHITE).rgb;
+        $context.fillStyle = this.color.rgb;
         $context.font = this.font;
         $context.textAlign = this.align;
 

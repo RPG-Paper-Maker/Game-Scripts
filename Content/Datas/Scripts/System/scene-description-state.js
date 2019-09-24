@@ -35,7 +35,8 @@ function SceneDescriptionState() {
         listHeroes[i] = new GraphicPlayerDescription($game.teamHeroes[i]);
 
     // All the windows
-    this.windowTop = new WindowBox(20, 20, 200, 30, new GraphicText("State"));
+    this.windowTop = new WindowBox(20, 20, 200, 30, new GraphicText("State", {
+        align: Align.Center }));
     this.windowChoicesTabs = new WindowTabs(OrientationWindow.Horizontal, 50,
         60, 110, RPM.SMALL_SLOT_HEIGHT, 4, listHeroes, null);
     this.windowInformations = new WindowBox(20, 100, 600, 340, null, RPM

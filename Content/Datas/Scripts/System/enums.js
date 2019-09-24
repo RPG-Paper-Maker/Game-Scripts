@@ -469,11 +469,12 @@ Object.freeze(ObjectMovingKind);
 *   @readonly
 */
 var TagKind = {
-    Text: 0,
-    Bold: 1,
-    Italic: 2,
-    Left: 3,
-    Center: 4,
-    Right: 5
+    NewLine: 0,
+    Text: 1,
+    Bold: 2,
+    Italic: 3,
+    Left: 4,
+    Center: 5,
+    Right: 6
 };
 Object.freeze(TagKind);

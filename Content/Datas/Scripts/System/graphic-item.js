@@ -29,7 +29,7 @@ function GraphicItem(gameItem, nbItem){
     // All the graphics
     this.graphicName = new GraphicTextIcon(this.item.name, this.item.pictureID);
     this.graphicNb = new GraphicText("x" + (typeof nbItem === 'undefined' ?
-        gameItem.nb : nbItem), Align.Right);
+        gameItem.nb : nbItem), { align: Align.Right });
     this.graphicInformations = new GraphicSkillItem(this.item);
 }
 

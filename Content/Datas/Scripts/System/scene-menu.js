@@ -37,13 +37,13 @@ function SceneMenu() {
 
     // Initializing the left menu commands (texts and actions)
     menuCommands = [
-        new GraphicText("Inventory"),
-        new GraphicText("Skills"),
-        new GraphicText("Equip"),
-        new GraphicText("State"),
-        new GraphicText("Order"),
-        new GraphicText("Save"),
-        new GraphicText("Quit")
+        new GraphicText("Inventory", { align: Align.Center }),
+        new GraphicText("Skills", { align: Align.Center }),
+        new GraphicText("Equip", { align: Align.Center }),
+        new GraphicText("State", { align: Align.Center }),
+        new GraphicText("Order", { align: Align.Center }),
+        new GraphicText("Save", { align: Align.Center }),
+        new GraphicText("Quit", { align: Align.Center })
     ];
     menuCommandsActions = [
         SceneMenu.prototype.openInventory,

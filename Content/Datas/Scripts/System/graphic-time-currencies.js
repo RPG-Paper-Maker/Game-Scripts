@@ -33,8 +33,8 @@ function GraphicTimeCurrencies() {
 
     // Time
     this.time = $game.playTime;
-    this.graphicPlayTime = new GraphicText(RPM.getStringDate(this.time),
-        Align.Right);
+    this.graphicPlayTime = new GraphicText(RPM.getStringDate(this.time), { align
+        : Align.Right });
 }
 
 GraphicTimeCurrencies.prototype = {

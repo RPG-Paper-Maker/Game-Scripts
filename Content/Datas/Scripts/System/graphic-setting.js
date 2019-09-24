@@ -27,12 +27,13 @@ function GraphicSetting(id) {
     case TitleSettingKind.KeyboardAssigment:
         textLeft = "Keyboard assignement";
         textInformation = "Update keyboard assignement preferences.";
-        this.graphicRight = new GraphicText("...", Align.Center);
+        this.graphicRight = new GraphicText("...", { align: Align.Center });
         break;
     }
 
-    this.graphicTextLeft = new GraphicText(textLeft, Align.Left);
-    this.graphicTextInformation = new GraphicText(textInformation, Align.Center);
+    this.graphicTextLeft = new GraphicText(textLeft);
+    this.graphicTextInformation = new GraphicText(textInformation, { align:
+        Align.Center });
 }
 
 // -------------------------------------------------------

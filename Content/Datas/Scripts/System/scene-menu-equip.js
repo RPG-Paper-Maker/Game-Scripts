@@ -44,7 +44,8 @@ function SceneMenuEquip() {
     nbEquipChoice = SceneMenu.nbItemsToDisplay - nbEquipments - 1;
 
     // All the windows
-    this.windowTop = new WindowBox(20, 20, 200, 30, new GraphicText("Equip"));
+    this.windowTop = new WindowBox(20, 20, 200, 30, new GraphicText("Equip", {
+        align: Align.Center }));
     this.windowChoicesTabs = new WindowTabs(OrientationWindow.Horizontal, 50,
         60, 110, RPM.SMALL_SLOT_HEIGHT, 4, listHeroes, null);
     this.windowChoicesEquipment = new WindowChoices(OrientationWindow.Vertical,
@@ -101,7 +102,7 @@ SceneMenuEquip.prototype = {
         idEquipment = $datasGame.battleSystem.equipmentsOrder
                 [this.windowChoicesEquipment.currentSelectedIndex];
         nb = this.windowChoicesList.listWindows.length;
-        list = [new GraphicText("[Remove]", Align.Left)];
+        list = [new GraphicText("[Remove]")];
         for (i = 0, l = $game.items.length; i < l; i++){
             item = $game.items[i];
             if (item.k !== ItemKind.Item) {

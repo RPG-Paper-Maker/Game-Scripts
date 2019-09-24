@@ -30,13 +30,13 @@ function SceneKeyboardAssign() {
 
     // Creating windows
     this.windowKeyboard = new WindowBox(RPM.HUGE_SPACE, RPM.HUGE_SPACE, RPM
-        .MEDIUM_SLOT_WIDTH, RPM.LARGE_SLOT_HEIGHT, new GraphicText("KEYBOARD"),
-        RPM.SMALL_SLOT_PADDING);
+        .MEDIUM_SLOT_WIDTH, RPM.LARGE_SLOT_HEIGHT, new GraphicText("KEYBOARD", {
+        align: Align.Center }), RPM.SMALL_SLOT_PADDING);
     this.windowInformations = new WindowBox(RPM.HUGE_SPACE + RPM
         .MEDIUM_SLOT_WIDTH + RPM.LARGE_SPACE, RPM.HUGE_SPACE, $SCREEN_X - (2 *
         RPM.HUGE_SPACE) - RPM.MEDIUM_SLOT_WIDTH - RPM.LARGE_SPACE, RPM
         .LARGE_SLOT_HEIGHT, new GraphicText("Select a keyboard shortcut to edit."
-        ), RPM.SMALL_SLOT_PADDING);
+        , { align: Align.Center }), RPM.SMALL_SLOT_PADDING);
     this.windowChoicesMain = new WindowChoices(OrientationWindow.Vertical, RPM
         .HUGE_SPACE, RPM.HUGE_SPACE + RPM.LARGE_SLOT_HEIGHT + RPM.LARGE_SPACE,
         $SCREEN_X - (2 * RPM.HUGE_SPACE), RPM.MEDIUM_SLOT_HEIGHT, 9, $datasGame

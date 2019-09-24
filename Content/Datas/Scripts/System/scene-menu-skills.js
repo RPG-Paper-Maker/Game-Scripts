@@ -42,7 +42,8 @@ function SceneMenuSkills() {
     }
 
     // All the windows
-    this.windowTop = new WindowBox(20, 20, 200, 30, new GraphicText("Skills"));
+    this.windowTop = new WindowBox(20, 20, 200, 30, new GraphicText("Skills", {
+        align: Align.Center }));
     this.windowChoicesTabs = new WindowTabs(OrientationWindow.Horizontal, 50,
         60, 110, RPM.SMALL_SLOT_HEIGHT, 4, listHeroes, null);
     this.windowChoicesList = new WindowChoices(OrientationWindow.Vertical, 20,
@@ -51,7 +52,8 @@ function SceneMenuSkills() {
     this.windowInformations = new WindowBox(240, 100, 360, 200, null, RPM
         .HUGE_PADDING_BOX);
     this.windowEmpty = new WindowBox(10, 100, $SCREEN_X - 20, RPM
-        .SMALL_SLOT_HEIGHT, new GraphicText("Empty"), RPM.SMALL_SLOT_PADDING);
+        .SMALL_SLOT_HEIGHT, new GraphicText("Empty", { align: Align.Center }),
+        RPM.SMALL_SLOT_PADDING);
     this.windowBoxUseSkill = new WindowBox(240, 320, 360, 140, new
         GraphicUserSkillItem(), RPM.SMALL_PADDING_BOX);
 

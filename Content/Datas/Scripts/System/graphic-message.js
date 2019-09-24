@@ -23,7 +23,7 @@ function GraphicMessage(message, facesetID) {
     Bitmap.call(this);
 
     //this.message = message;
-    this.message = "[l]left[/l][c]hello[b]test[/b][/c][r]right[/r]";
+    this.message = "";
     this.faceset = Picture2D.createImage($datasGame.pictures.get(PictureKind
         .Facesets, facesetID), PictureKind.Facesets);
     this.graphics = [];
@@ -38,59 +38,55 @@ GraphicMessage.prototype = Object.create(Bitmap.prototype);
 // -------------------------------------------------------
 
 GraphicMessage.prototype.setMessage = function(message) {
-    var i, l, c, cr, lastC, ll, lines, line, tree, root, ch, tag, node,
+    var i, l, c, cr, lastC, ll, root, ch, tag, node,
         currentNode, open;
 
-    lines = message.split("\n");
-    l = lines.length;
-    this.lines = new Array(l);
-    for (i = 0; i < l; i++) {
-        tree = new Tree(null);
-        root = tree.root;
-        currentNode = root;
-        line = lines[i];
-        lastC = 0;
-        for (c = 0, ll = line.length; c < ll; c++) {
-            ch = line.charAt(c);
-            if (ch === RPM.STRING_BRACKET_LEFT) {
-                open = line.charAt(c + 1) !== RPM.STRING_SLASH;
+    this.tree = new Tree(null);
+    root = this.tree.root;
+    currentNode = root;
+    lastC = 0;
+    for (c = 0, ll = message.length; c < ll; c++) {
+        ch = message.charAt(c);
 
-                // If text before..
-                if (c > lastC) {
-                    currentNode.add([TagKind.Text, line.substring(lastC, c)]);
-                }
+        if (ch === RPM.STRING_NEW_LINE) {
+            lastC = c + 1;
+            currentNode.add([TagKind.NewLine, null]);
+        } else if (ch === RPM.STRING_BRACKET_LEFT) {
+            open = message.charAt(c + 1) !== RPM.STRING_SLASH;
 
-                cr = c;
-                do {
-                    cr++;
-                    ch = line.charAt(cr);
-                } while (cr < ll && ch !== RPM.STRING_BRACKET_RIGHT);
-                tag = line.substring(c + (open ? 1 : 2), cr);
-                if (tag === RPM.TAG_BOLD) {
-                    currentNode = this.updateTag(currentNode, TagKind.Bold, null
-                        , open);
-                } else if (tag === RPM.TAG_LEFT) {
-                    currentNode = this.updateTag(currentNode, TagKind.Left, null
-                        , open);
-                } else if (tag === RPM.TAG_CENTER) {
-                    currentNode = this.updateTag(currentNode, TagKind.Center,
-                        null, open);
-                } else if (tag === RPM.TAG_RIGHT) {
-                    currentNode = this.updateTag(currentNode, TagKind.Right,
-                        null, open);
-                } else {
-                    currentNode.add([TagKind.Text, line.substring(c, cr + 1)]);
-                }
-
-                lastC = cr + 1;
-                c = cr;
+            // If text before..
+            if (c > lastC) {
+                currentNode.add([TagKind.Text, message.substring(lastC, c)]);
             }
-        }
-        if (c > lastC) {
-            currentNode.add([TagKind.Text, line.substring(lastC, c)]);
-        }
 
-        this.lines[i] = tree;
+            cr = c;
+            do {
+                cr++;
+                ch = message.charAt(cr);
+            } while (cr < ll && ch !== RPM.STRING_BRACKET_RIGHT);
+            tag = message.substring(c + (open ? 1 : 2), cr);
+            if (tag === RPM.TAG_BOLD) {
+                currentNode = this.updateTag(currentNode, TagKind.Bold, null
+                    , open);
+            } else if (tag === RPM.TAG_LEFT) {
+                currentNode = this.updateTag(currentNode, TagKind.Left, null
+                    , open);
+            } else if (tag === RPM.TAG_CENTER) {
+                currentNode = this.updateTag(currentNode, TagKind.Center,
+                    null, open);
+            } else if (tag === RPM.TAG_RIGHT) {
+                currentNode = this.updateTag(currentNode, TagKind.Right,
+                    null, open);
+            } else {
+                currentNode.add([TagKind.Text, message.substring(c, cr + 1)]);
+            }
+
+            lastC = cr + 1;
+            c = cr;
+        }
+    }
+    if (ll === 0 || c > lastC) {
+        currentNode.add([TagKind.Text, message.substring(lastC, c)]);
     }
 }
 
@@ -117,59 +113,44 @@ GraphicMessage.prototype.updateTag = function(currentNode, tag, value, open) {
 // -------------------------------------------------------
 
 GraphicMessage.prototype.update = function() {
-    var i, j, c, l, ll, graphics, positions, aligns, height, node, datas,
-        graphic, result, totalWidths, align, currentAlign, width;
+    var i, c, l, result, align, currentAlign, width;
 
-    l = this.lines.length;
-    this.graphics = new Array(l);
-    this.positions = new Array(l);
-    this.heights = new Array(l);
-    this.aligns = new Array(l);
+    this.graphics = [];
+    this.positions = [];
+    this.heights = [];
+    this.aligns = [];
+    this.heights.push(0);
+    result = {
+        g: this.graphics,
+        p: this.positions,
+        a: this.aligns,
+        h: this.heights,
+        ca: Align.Left
+    };
+
+    // Update nodes
+    this.updateNodes(this.tree.root.firstChild, result);
+
+    // Calculate width of align blocks for aligns settings
+    l = this.graphics.length;
     this.totalWidths = new Array(l);
     for (i = 0; i < l; i++) {
-        graphics = [];
-        positions = [];
-        aligns = [];
-        result = {
-            g: graphics,
-            p: positions,
-            a: aligns,
-            h: 0,
-            ca: Align.Left
-        };
-
-        node = this.lines[i].root.firstChild;
-        this.updateNodes(node, result);
-
-        // Stock results
-        this.graphics[i] = graphics;
-        this.positions[i] = positions;
-        this.aligns[i] = aligns;
-        this.heights[i] = result.h === 0 ? $fontSize : result.h;
-
-        // Calculate width of align blocks for aligns settings
-        ll = graphics.length;
-        totalWidths = new Array(l);
-        for (j = 0; j < ll; j++) {
-            align = aligns[j];
-            currentAlign = align;
-            c = j;
-            width = 0;
-            while (c < ll) {
-                align = aligns[c];
-                if (align !== currentAlign) {
-                    c--;
-                    break;
-                }
-                width += positions[c];
-                c++;
+        align = this.aligns[i];
+        currentAlign = align;
+        c = i;
+        width = 0;
+        while (c < l) {
+            align = this.aligns[c];
+            if (align !== currentAlign) {
+                break;
             }
-            while (j < c) {
-                totalWidths[j] = width;
-                j++;
-            }
+            width += this.positions[c];
+            c++;
         }
-        this.totalWidths[i] = totalWidths;
+        while (i < c) {
+            this.totalWidths[i] = width;
+            i++;
+        }
     }
 };
 
@@ -179,13 +160,22 @@ GraphicMessage.prototype.updateNodes = function(node, result) {
     var graphic, align;
 
     switch (node.data[0]) {
+    case TagKind.NewLine:
+        result.g.push(null);
+        result.p.push(0);
+        result.a.push(-1);
+        if (result.h[0] === 0) {
+            result.h[0] = $fontSize;
+        }
+        result.h.unshift(0);
+        break;
     case TagKind.Text:
-        graphic = new GraphicText(node.data[1], Align.Left);
+        graphic = new GraphicText(node.data[1]);
         result.g.push(graphic);
         result.p.push(graphic.measureText());
         result.a.push(result.ca);
-        if (graphic.fontSize > result.h) {
-            result.h = graphic.fontSize;
+        if (graphic.fontSize > result.h[0]) {
+            result.h[0] = graphic.fontSize;
         }
         break;
     case TagKind.Bold:
@@ -206,9 +196,6 @@ GraphicMessage.prototype.updateNodes = function(node, result) {
     if (node.firstChild !== null) {
         this.updateNodes(node.firstChild, result);
     }
-    if (node.next !== null) {
-        this.updateNodes(node.next, result);
-    }
     switch (node.data[0]) {
     case TagKind.Left:
     case TagKind.Center:
@@ -216,13 +203,15 @@ GraphicMessage.prototype.updateNodes = function(node, result) {
         result.ca = align;
         break;
     }
+    if (node.next !== null) {
+        this.updateNodes(node.next, result);
+    }
 }
 
 // -------------------------------------------------------
 
 GraphicMessage.prototype.draw = function(x, y, w, h) {
-    var i, j, l, ll, newX, offsetX, offsetY, graphics, positions, aligns,
-        totalWidths, align;
+    var i, c, l, newX, offsetX, offsetY, align, graphic;
 
     x = RPM.defaultValue(x, this.oX);
     y = RPM.defaultValue(y, this.oY);
@@ -231,35 +220,36 @@ GraphicMessage.prototype.draw = function(x, y, w, h) {
 
     this.faceset.draw(x, y - ((this.faceset.oH - h) / 2));
     newX = x + this.faceset.oW + RPM.HUGE_SPACE;
-    offsetY = 0;
+    offsetY = RPM.HUGE_SPACE;
+    align = -1;
+    c = this.heights.length - 1;
 
-    // Draw each lines
+    // Draw each graphics
     for (i = 0, l = this.graphics.length; i < l; i ++) {
-        offsetX = 0;
-        align = -1;
-        graphics = this.graphics[i];
-        positions = this.positions[i];
-        aligns = this.aligns[i];
-        totalWidths = this.totalWidths[i];
-        for (j = 0, ll = graphics.length; j < ll; j++) {
-            if (align !== aligns[j]) {
-                align = aligns[j];
+        graphic = this.graphics[i];
+
+        // New line
+        if (graphic === null) {
+            offsetY += this.heights[c--] * 2;
+            align = -1;
+        } else {
+            if (align !== this.aligns[i]) {
+                align = this.aligns[i];
                 switch (align) {
                 case Align.Left:
                     offsetX = 0;
                     break;
                 case Align.Center:
-                    offsetX = (w - newX - totalWidths[j]) / 2;
+                    offsetX = (w - newX - this.totalWidths[i]) / 2;
                     break;
                 case Align.Right:
-                    offsetX = x + w - newX - totalWidths[j];
+                    offsetX = x + w - newX - this.totalWidths[i];
                     break;
                 }
             }
-            graphics[j].draw(newX + offsetX, y + offsetY);
-            offsetX += positions[j];
+            graphic.draw(newX + offsetX, y + offsetY);
+            offsetX += this.positions[i];
         }
-        offsetY += this.heights[i] * 2;
     }
 };
 

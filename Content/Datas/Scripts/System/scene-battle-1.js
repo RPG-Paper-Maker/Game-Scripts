@@ -22,7 +22,8 @@
 
 SceneBattle.prototype.initializeStep1 = function(){
     this.battleCommandKind = EffectSpecialActionKind.None;
-    this.windowTopInformations.content = new GraphicText("Select an ally");
+    this.windowTopInformations.content = new GraphicText("Select an ally", {
+        align: Align.Center });
     this.selectedUserIndex = this.selectFirstIndex(CharacterKind.Hero, 0);
     this.kindSelection = CharacterKind.Hero;
     this.attackingGroup = CharacterKind.Hero;

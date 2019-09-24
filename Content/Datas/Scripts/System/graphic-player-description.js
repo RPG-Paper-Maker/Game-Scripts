@@ -44,16 +44,17 @@ function GraphicPlayerDescription(gamePlayer) {
     expStat = $datasGame.battleSystem.getExpStatistic();
 
     // All the graphics
-    this.graphicNameCenter = new GraphicText(character.name, Align.Center);
-    this.graphicName = new GraphicText(character.name, Align.Left);
-    this.graphicClass = new GraphicText(cl.name, Align.Left, RPM.MEDIUM_FONT_SIZE);
-    this.graphicLevelName = new GraphicText(levelStat.name, Align.Left);
-    this.graphicLevel = new GraphicText("" + gamePlayer[levelStat.abbreviation],
-        Align.Left);
-    this.graphicExpName = new GraphicText(expStat.name, Align.Left, RPM
-        .MEDIUM_FONT_SIZE);
-    this.graphicExp = new GraphicText("" + gamePlayer.getBarAbbreviation(expStat),
-        Align.Left, RPM.MEDIUM_FONT_SIZE);
+    this.graphicNameCenter = new GraphicText(character.name, { align: Align
+        .Center });
+    this.graphicName = new GraphicText(character.name);
+    this.graphicClass = new GraphicText(cl.name, { fontSize: RPM
+        .MEDIUM_FONT_SIZE });
+    this.graphicLevelName = new GraphicText(levelStat.name);
+    this.graphicLevel = new GraphicText("" + gamePlayer[levelStat.abbreviation]);
+    this.graphicExpName = new GraphicText(expStat.name, { fontSize: RPM
+        .MEDIUM_FONT_SIZE });
+    this.graphicExp = new GraphicText("" + gamePlayer.getBarAbbreviation(expStat
+        ), { fontSize: RPM.MEDIUM_FONT_SIZE });
 
     // Adding stats
     this.listStatsNames = new Array;
@@ -69,7 +70,7 @@ function GraphicPlayerDescription(gamePlayer) {
             id !== $datasGame.battleSystem.idExpStatistic)
         {
             statistic = $datasGame.battleSystem.statistics[id];
-            graphicName = new GraphicText(statistic.name + ":", Align.Left);
+            graphicName = new GraphicText(statistic.name + ":");
             $context.font = graphicName.font;
             graphicName.updateContextFont();
             c = $context.measureText(graphicName.text).width;
@@ -82,7 +83,7 @@ function GraphicPlayerDescription(gamePlayer) {
             txt = "" + gamePlayer[statistic.abbreviation];
             if (!statistic.isFix)
                 txt += "/" + gamePlayer[statistic.getMaxAbbreviation()];
-            this.listStats.push(new GraphicText(txt, Align.Left));
+            this.listStats.push(new GraphicText(txt));
             j++;
         }
     }
@@ -119,7 +120,7 @@ GraphicPlayerDescription.prototype = {
                 }
                 value = this.gamePlayer[statistic.abbreviation] - this
                     .gamePlayer[statistic.getBeforeAbbreviation()];
-                graphic = new GraphicText(txt + value, Align.Left);
+                graphic = new GraphicText(txt + value);
                 if (value > 0) {
                     graphic.color = RPM.COLOR_GREEN;
                 } else if (value < 0) {
@@ -146,7 +147,7 @@ GraphicPlayerDescription.prototype = {
                 id !== $datasGame.battleSystem.idExpStatistic)
             {
                 statistic = $datasGame.battleSystem.statistics[id];
-                graphicName = new GraphicText(statistic.name + ":", Align.Left);
+                graphicName = new GraphicText(statistic.name + ":");
                 $context.font = graphicName.font;
                 graphicName.updateContextFont();
                 c = $context.measureText(graphicName.text).width;
@@ -169,7 +170,7 @@ GraphicPlayerDescription.prototype = {
                 if (!statistic.isFix) {
                     txt += "/" + this.gamePlayer[statistic.getMaxAbbreviation()];
                 }
-                this.listStats.push(new GraphicText(txt, Align.Left));
+                this.listStats.push(new GraphicText(txt));
             }
         }
     },

@@ -36,7 +36,7 @@ function GraphicTextIcon(text, iconID, side, align, space) {
     this.textIcon = {};
     this.textIcon.icon = Picture2D.createImage($datasGame.pictures.getIcon(
         iconID), PictureKind.Icons);
-    this.textIcon.text = new GraphicText(text, Align.Left);
+    this.textIcon.text = new GraphicText(text);
     $context.font = this.textIcon.text.font;
     this.textIcon.text.updateContextFont();
     this.textIcon.length = $context.measureText(this.textIcon.text.text).width;
