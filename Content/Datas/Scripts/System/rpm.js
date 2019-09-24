@@ -111,6 +111,7 @@ RPM.STRING_SLASH = "/";
 RPM.STRING_NEW_LINE = "\n";
 RPM.UNDEFINED = 'undefined';
 RPM.TAG_BOLD = "b";
+RPM.TAG_ITALIC = "i";
 RPM.TAG_LEFT = "l";
 RPM.TAG_CENTER = "c";
 RPM.TAG_RIGHT = "r";
@@ -728,8 +729,9 @@ RPM.isLoading = function(){
 *   @param {string} fontName The fontName.
 *   @returns {string}
 */
-RPM.createFont = function(fontSize, fontName){
-    return fontSize + "px " + fontName;
+RPM.createFont = function(fontSize, fontName, bold, italic) {
+    return (bold ? "bold " : "") + (italic ? "italic " : "") + fontSize + "px "
+        + fontName;
 }
 
 // -------------------------------------------------------

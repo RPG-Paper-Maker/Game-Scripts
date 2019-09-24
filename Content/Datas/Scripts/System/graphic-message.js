@@ -23,7 +23,7 @@ function GraphicMessage(message, facesetID) {
     Bitmap.call(this);
 
     //this.message = message;
-    this.message = "";
+    this.message = "Test[b][i]Bold[/i]\nBold[/b][i]Italic\nita[/i]noita";
     this.faceset = Picture2D.createImage($datasGame.pictures.get(PictureKind
         .Facesets, facesetID), PictureKind.Facesets);
     this.graphics = [];
@@ -49,6 +49,11 @@ GraphicMessage.prototype.setMessage = function(message) {
         ch = message.charAt(c);
 
         if (ch === RPM.STRING_NEW_LINE) {
+            // If text before..
+            if (c > lastC) {
+                currentNode.add([TagKind.Text, message.substring(lastC, c)]);
+            }
+
             lastC = c + 1;
             currentNode.add([TagKind.NewLine, null]);
         } else if (ch === RPM.STRING_BRACKET_LEFT) {
@@ -67,6 +72,9 @@ GraphicMessage.prototype.setMessage = function(message) {
             tag = message.substring(c + (open ? 1 : 2), cr);
             if (tag === RPM.TAG_BOLD) {
                 currentNode = this.updateTag(currentNode, TagKind.Bold, null
+                    , open);
+            } else if (tag === RPM.TAG_ITALIC) {
+                currentNode = this.updateTag(currentNode, TagKind.Italic, null
                     , open);
             } else if (tag === RPM.TAG_LEFT) {
                 currentNode = this.updateTag(currentNode, TagKind.Left, null
@@ -125,7 +133,9 @@ GraphicMessage.prototype.update = function() {
         p: this.positions,
         a: this.aligns,
         h: this.heights,
-        ca: Align.Left
+        ca: Align.Left,
+        cb: false,
+        ci: false
     };
 
     // Update nodes
@@ -157,7 +167,7 @@ GraphicMessage.prototype.update = function() {
 // -------------------------------------------------------
 
 GraphicMessage.prototype.updateNodes = function(node, result) {
-    var graphic, align;
+    var graphic, align, bold, italic;
 
     switch (node.data[0]) {
     case TagKind.NewLine:
@@ -170,7 +180,8 @@ GraphicMessage.prototype.updateNodes = function(node, result) {
         result.h.unshift(0);
         break;
     case TagKind.Text:
-        graphic = new GraphicText(node.data[1]);
+        graphic = new GraphicText(node.data[1], { bold: result.cb, italic:
+            result.ci } );
         result.g.push(graphic);
         result.p.push(graphic.measureText());
         result.a.push(result.ca);
@@ -179,6 +190,12 @@ GraphicMessage.prototype.updateNodes = function(node, result) {
         }
         break;
     case TagKind.Bold:
+        bold = result.cb;
+        result.cb = true;
+        break;
+    case TagKind.Italic:
+        italic = result.ci;
+        result.ci = true;
         break;
     case TagKind.Left:
         align = result.ca;
@@ -196,13 +213,21 @@ GraphicMessage.prototype.updateNodes = function(node, result) {
     if (node.firstChild !== null) {
         this.updateNodes(node.firstChild, result);
     }
+    // Handle closures
     switch (node.data[0]) {
+    case TagKind.Bold:
+        result.cb = bold;
+        break;
+    case TagKind.Italic:
+        result.ci = italic;
+        break;
     case TagKind.Left:
     case TagKind.Center:
     case TagKind.Right:
         result.ca = align;
         break;
     }
+    // Go next if possible
     if (node.next !== null) {
         this.updateNodes(node.next, result);
     }

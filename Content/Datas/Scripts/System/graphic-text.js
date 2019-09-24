@@ -42,6 +42,8 @@ function GraphicText(text, opt) {
     this.fontName = RPM.defaultValue(opt.fontName, $fontName);
     this.verticalAlign = RPM.defaultValue(opt.verticalAlign, Align.Center);
     this.color = RPM.defaultValue(opt.color, RPM.COLOR_WHITE);
+    this.bold = RPM.defaultValue(opt.bold, false);
+    this.italic = RPM.defaultValue(opt.italic, false);
     this.updateFontSize(this.fontSize);
 }
 
@@ -108,9 +110,11 @@ GraphicText.prototype = {
 
     updateFontSize: function(fontSize) {
         this.fontSize = fontSize;
-        this.fontWithoutResize = RPM.createFont(fontSize, this.fontName);
+        this.fontWithoutResize = RPM.createFont(fontSize, this.fontName, this
+            .bold, this.italic);
         fontSize = RPM.getScreenXY(fontSize);
-        this.font = RPM.createFont(fontSize, this.fontName);
+        this.font = RPM.createFont(fontSize, this.fontName, this.bold, this
+            .italic);
     },
 
     // -------------------------------------------------------
