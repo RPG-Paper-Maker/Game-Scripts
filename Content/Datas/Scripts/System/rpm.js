@@ -118,7 +118,10 @@ RPM.TAG_CENTER = "c";
 RPM.TAG_RIGHT = "r";
 RPM.TAG_SIZE = "size";
 RPM.TAG_FONT = "font";
-RPM.DEFAULT_FONT = "Arial";
+RPM.TAG_TEXT_COLOR = "textcolor";
+RPM.TAG_BACK_COLOR = "backcolor";
+RPM.TAG_STROKE_COLOR = "strokecolor";
+RPM.DEFAULT_FONT = "sans-serif";
 
 // -------------------------------------------------------
 //  COLORS

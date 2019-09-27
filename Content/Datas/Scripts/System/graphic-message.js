@@ -23,7 +23,7 @@ function GraphicMessage(message, facesetID) {
     Bitmap.call(this);
 
     //this.message = message;
-    this.message = "[font=1]Size\nENcor[/font]e";
+    this.message = "[c][strokecolor=1][strokecolor=3]Size[/strokecolor]\nENcor[/strokecolor]e[/c]";
     this.faceset = Picture2D.createImage($datasGame.pictures.get(PictureKind
         .Facesets, facesetID), PictureKind.Facesets);
     this.graphics = [];
@@ -38,30 +38,34 @@ GraphicMessage.prototype = Object.create(Bitmap.prototype);
 // -------------------------------------------------------
 
 GraphicMessage.prototype.setMessage = function(message) {
-    var i, l, c, cr, lastC, ll, root, ch, tag, node,
-        currentNode, open;
+    var i, l, c, cr, lastC, ll, root, ch, tag, node, currentNode, open,
+        notClosed, tagKind, split;
 
     this.tree = new Tree(null);
     root = this.tree.root;
     currentNode = root;
     lastC = 0;
+    notClosed = [];
     for (c = 0, ll = message.length; c < ll; c++) {
         ch = message.charAt(c);
 
         if (ch === RPM.STRING_NEW_LINE) {
             // If text before..
             if (c > lastC) {
-                currentNode.add([TagKind.Text, message.substring(lastC, c)]);
+                currentNode = this.updateTag(currentNode, TagKind.Text, message
+                    .substring(lastC, c), true, notClosed)
             }
 
             lastC = c + 1;
-            currentNode.add([TagKind.NewLine, null]);
+            currentNode = this.updateTag(currentNode, TagKind.NewLine, null,
+                true, notClosed)
         } else if (ch === RPM.STRING_BRACKET_LEFT) {
             open = message.charAt(c + 1) !== RPM.STRING_SLASH;
 
             // If text before..
             if (c > lastC) {
-                currentNode.add([TagKind.Text, message.substring(lastC, c)]);
+                currentNode = this.updateTag(currentNode, TagKind.Text, message
+                    .substring(lastC, c), true, notClosed);
             }
 
             cr = c;
@@ -71,28 +75,35 @@ GraphicMessage.prototype.setMessage = function(message) {
             } while (cr < ll && ch !== RPM.STRING_BRACKET_RIGHT);
             tag = message.substring(c + (open ? 1 : 2), cr);
             if (tag === RPM.TAG_BOLD) {
-                currentNode = this.updateTag(currentNode, TagKind.Bold, null
-                    , open);
+                tagKind = TagKind.Bold;
             } else if (tag === RPM.TAG_ITALIC) {
-                currentNode = this.updateTag(currentNode, TagKind.Italic, null
-                    , open);
+                tagKind = TagKind.Italic;
             } else if (tag === RPM.TAG_LEFT) {
-                currentNode = this.updateTag(currentNode, TagKind.Left, null
-                    , open);
+                tagKind = TagKind.Left;
             } else if (tag === RPM.TAG_CENTER) {
-                currentNode = this.updateTag(currentNode, TagKind.Center,
-                    null, open);
+                tagKind = TagKind.Center;
             } else if (tag === RPM.TAG_RIGHT) {
-                currentNode = this.updateTag(currentNode, TagKind.Right,
-                    null, open);
+                tagKind = TagKind.Right;
             } else if (tag.includes(RPM.TAG_SIZE)) {
-                currentNode = this.updateTag(currentNode, TagKind.Size, open ?
-                    parseInt(tag.split(RPM.STRING_EQUAL)[1]) : null, open);
+                tagKind = TagKind.Size;
             } else if (tag.includes(RPM.TAG_FONT)) {
-                currentNode = this.updateTag(currentNode, TagKind.Font, open ?
-                    parseInt(tag.split(RPM.STRING_EQUAL)[1]) : null, open);
+                tagKind = TagKind.Font;
+            } else if (tag.includes(RPM.TAG_TEXT_COLOR)) {
+                tagKind = TagKind.TextColor;
+            } else if (tag.includes(RPM.TAG_BACK_COLOR)) {
+                tagKind = TagKind.BackColor;
+            } else if (tag.includes(RPM.TAG_STROKE_COLOR)) {
+                tagKind = TagKind.StrokeColor;
             } else {
-                currentNode.add([TagKind.Text, message.substring(c, cr + 1)]);
+                tagKind = TagKind.Text;
+            }
+            if (tagKind === TagKind.Text) {
+                currentNode = this.updateTag(currentNode, TagKind.Text, message
+                    .substring(c, cr + 1), true, notClosed);
+            } else {
+                split = tag.split(RPM.STRING_EQUAL);
+                currentNode = this.updateTag(currentNode, tagKind, open && split
+                    .length > 1 ? parseInt(split[1]) : null, open, notClosed);
             }
 
             lastC = cr + 1;
@@ -100,22 +111,32 @@ GraphicMessage.prototype.setMessage = function(message) {
         }
     }
     if (ll === 0 || c > lastC) {
-        currentNode.add([TagKind.Text, message.substring(lastC, c)]);
+        currentNode = this.updateTag(currentNode, TagKind.Text, message
+            .substring(lastC, c), true, notClosed);
     }
 }
 
 // -------------------------------------------------------
 
-GraphicMessage.prototype.updateTag = function(currentNode, tag, value, open) {
+GraphicMessage.prototype.updateTag = function(currentNode, tag, value, open,
+    notClosed)
+{
     if (open) {
+        var i;
+
+        for (i = notClosed.length - 1; i >= 0; i--) {
+            currentNode = currentNode.add(notClosed[i]);
+            notClosed.splice(i, 1);
+        }
         currentNode.add([tag, value]);
-        if (tag !== TagKind.Text) {
+        if (tag !== TagKind.Text && tag !== TagKind.NewLine) {
             currentNode = currentNode.lastChild;
         }
     } else {
         while (currentNode !== null && currentNode.data !== null && currentNode
             .data[0] !== tag)
         {
+            notClosed.push(currentNode.data);
             currentNode = currentNode.parent;
         }
         currentNode = currentNode.parent;
@@ -143,7 +164,10 @@ GraphicMessage.prototype.update = function() {
         cb: false,
         ci: false,
         cs: $fontSize,
-        cf: $fontName
+        cf: $fontName,
+        ctc: RPM.COLOR_WHITE,
+        cbc: null,
+        csc: null
     };
 
     // Update nodes
@@ -175,7 +199,8 @@ GraphicMessage.prototype.update = function() {
 // -------------------------------------------------------
 
 GraphicMessage.prototype.updateNodes = function(node, result) {
-    var graphic, align, bold, italic, size, font;
+    var graphic, align, bold, italic, size, font, textColor, backColor,
+        strokeColor;
 
     switch (node.data[0]) {
     case TagKind.NewLine:
@@ -189,7 +214,8 @@ GraphicMessage.prototype.updateNodes = function(node, result) {
         break;
     case TagKind.Text:
         graphic = new GraphicText(node.data[1], { bold: result.cb, italic:
-            result.ci, fontSize: result.cs, fontName: result.cf } );
+            result.ci, fontSize: result.cs, fontName: result.cf, color: result
+            .ctc, backColor: result.cbc, strokeColor: result.csc } );
         result.g.push(graphic);
         result.p.push(graphic.measureText());
         result.a.push(result.ca);
@@ -225,6 +251,18 @@ GraphicMessage.prototype.updateNodes = function(node, result) {
         font = result.cf;
         result.cf = $datasGame.system.fontNames[node.data[1]].getValue();
         break;
+    case TagKind.TextColor:
+        textColor = result.ctc;
+        result.ctc = $datasGame.system.colors[node.data[1]];
+        break;
+    case TagKind.BackColor:
+        backColor = result.cbc;
+        result.cbc = $datasGame.system.colors[node.data[1]];
+        break;
+    case TagKind.StrokeColor:
+        strokeColor = result.csc;
+        result.csc = $datasGame.system.colors[node.data[1]];
+        break;
     }
     if (node.firstChild !== null) {
         this.updateNodes(node.firstChild, result);
@@ -247,6 +285,15 @@ GraphicMessage.prototype.updateNodes = function(node, result) {
         break;
     case TagKind.Font:
         result.cf = font;
+        break;
+    case TagKind.TextColor:
+        result.ctc = textColor;
+        break;
+    case TagKind.BackColor:
+        result.cbc = backColor;
+        break;
+    case TagKind.StrokeColor:
+        result.csc = strokeColor;
         break;
     }
     // Go next if possible

@@ -36,7 +36,6 @@ function GraphicText(text, opt) {
 
     Bitmap.call(this, opt.x, opt.y, opt.w, opt.h);
 
-    this.text = RPM.defaultValue(text, "");
     this.align = RPM.defaultValue(opt.align, Align.Left);
     this.fontSize = RPM.defaultValue(opt.fontSize, $fontSize);
     this.fontName = RPM.defaultValue(opt.fontName, $fontName);
@@ -44,7 +43,10 @@ function GraphicText(text, opt) {
     this.color = RPM.defaultValue(opt.color, RPM.COLOR_WHITE);
     this.bold = RPM.defaultValue(opt.bold, false);
     this.italic = RPM.defaultValue(opt.italic, false);
+    this.backColor = RPM.defaultValue(opt.backColor, null);
+    this.strokeColor = RPM.defaultValue(opt.strokeColor, null);
     this.updateFontSize(this.fontSize);
+    this.setText(RPM.defaultValue(text, ""));
 }
 
 GraphicText.prototype = {
@@ -82,6 +84,7 @@ GraphicText.prototype = {
     setText: function(text) {
         if (this.text !== text) {
             this.text = text;
+            this.measureText();
             $requestPaintHUD = true;
         }
     },
@@ -101,9 +104,11 @@ GraphicText.prototype = {
         var w;
 
         this.updateContextFont();
-        w = $context.measureText(this.text).width;
+        w = $context.measureText(this.text);
+        this.textWidth = w.width;
+        this.textHeight = RPM.getScreenXY(this.fontSize);
 
-        return w;
+        return w.width;
     },
 
     // -------------------------------------------------------
@@ -133,8 +138,8 @@ GraphicText.prototype = {
     *   @param {number} h The height dimention to draw graphic.
     */
     draw: function(x, y, w, h) {
-        var lineHeight, lines;
-        var i, l;
+        var lineHeight, lines, xBack;
+        var i, l, yOffset;
 
         // Default values
         if (typeof x === 'undefined') x = this.oX;
@@ -147,17 +152,19 @@ GraphicText.prototype = {
         w = RPM.getScreenX(w);
         h = RPM.getScreenY(h);
 
-        // Set context options
-        $context.fillStyle = this.color.rgb;
-        $context.font = this.font;
-        $context.textAlign = this.align;
-
         // Correcting x and y according to alignment
+        xBack = x;
         switch(this.align) {
+        case Align.Left:
+            break;
         case Align.Right:
-            x += w; break;
+            x += w;
+            xBack = x - this.textWidth;
+            break;
         case Align.Center:
-            x += (w / 2); break;
+            x += (w / 2);
+            xBack = x - (this.textWidth / 2);
+            break;
         }
         y += RPM.getScreenY(this.fontSize) / 3;
         switch(this.verticalAlign) {
@@ -167,12 +174,38 @@ GraphicText.prototype = {
             y += (h / 2); break;
         }
 
-        // Drawing the text
+        // Draw background color
+        if (this.backColor !== null) {
+            $context.fillStyle = this.backColor.rgb;
+            $context.fillRect(xBack, y - this.textHeight, this.textWidth, this.textHeight);
+        }
+
+        // Set context options
+        $context.font = this.font;
+        $context.textAlign = this.align;
         lineHeight = this.fontSize * 2;
         lines = this.text.split("\n");
-        for (i = 0, l = lines.length; i < l; ++i) {
-            $context.fillText(lines[i], x, y);
-            y += lineHeight;
+        l = lines.length;
+
+        // Stroke text
+        if (this.strokeColor !== null) {
+            $context.strokeStyle = this.strokeColor.rgb;
+            yOffset = 0;
+            for (i = 0; i < l; ++i) {
+                $context.strokeText(lines[i], x - 1, y - 1 + yOffset);
+                $context.strokeText(lines[i], x - 1, y  + 1 + yOffset);
+                $context.strokeText(lines[i], x + 1, y - 1 + yOffset);
+                $context.strokeText(lines[i], x + 1, y + 1 + yOffset);
+                yOffset += lineHeight;
+            }
+        }
+
+        // Drawing the text
+        $context.fillStyle = this.color.rgb;
+        yOffset = 0;
+        for (i = 0; i < l; ++i) {
+            $context.fillText(lines[i], x, y + yOffset);
+            yOffset += lineHeight;
         }
     },
 

@@ -477,6 +477,9 @@ var TagKind = {
     Center: 5,
     Right: 6,
     Size: 7,
-    Font: 8
+    Font: 8,
+    TextColor: 9,
+    BackColor: 10,
+    StrokeColor: 11
 };
 Object.freeze(TagKind);
