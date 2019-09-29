@@ -77,7 +77,6 @@ Picture2D.prototype.check = function() {
         }
         this.checked = true;
         $requestPaintHUD = true;
-
         return true;
     }
     if (this.empty) {

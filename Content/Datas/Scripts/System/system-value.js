@@ -102,6 +102,18 @@ SystemValue.createSwitch = function(b){
     return SystemValue.createValue(PrimitiveValueKind.Switch, b);
 }
 
+SystemValue.createVariable = function(id) {
+    return SystemValue.createValue(PrimitiveValueKind.Variable, id);
+}
+
+SystemValue.createParameter = function(id) {
+    return SystemValue.createValue(PrimitiveValueKind.Parameter, id);
+}
+
+SystemValue.createProperty = function(id) {
+    return SystemValue.createValue(PrimitiveValueKind.Property, id);
+}
+
 // -------------------------------------------------------
 
 SystemValue.readOrDefaultNumber = function(json, number) {

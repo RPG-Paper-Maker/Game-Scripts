@@ -61,6 +61,9 @@ DatasPictures.prototype = {
                         id = jsonPicture.id;
                         var picture = new SystemPicture();
                         picture.readJSON(jsonPicture);
+                        if (k === PictureKind.Icons) {
+                            picture.load(k);
+                        }
 
                         if (id !== 0) {
                             if (id === -1)
@@ -75,6 +78,7 @@ DatasPictures.prototype = {
             }
 
             this.loaded = true;
+
             callback.call(context);
         });
     },

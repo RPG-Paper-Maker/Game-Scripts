@@ -139,7 +139,7 @@ GraphicText.prototype = {
     */
     draw: function(x, y, w, h) {
         var lineHeight, lines, xBack;
-        var i, l, yOffset;
+        var i, l, yOffset, textWidth, textHeight;
 
         // Default values
         if (typeof x === 'undefined') x = this.oX;
@@ -154,16 +154,18 @@ GraphicText.prototype = {
 
         // Correcting x and y according to alignment
         xBack = x;
+        textWidth = RPM.getScreenX(this.textWidth);
+        textHeight = RPM.getScreenY(this.textHeight);
         switch(this.align) {
         case Align.Left:
             break;
         case Align.Right:
             x += w;
-            xBack = x - this.textWidth;
+            xBack = x - textWidth;
             break;
         case Align.Center:
             x += (w / 2);
-            xBack = x - (this.textWidth / 2);
+            xBack = x - (textWidth / 2);
             break;
         }
         y += RPM.getScreenY(this.fontSize) / 3;
@@ -177,7 +179,7 @@ GraphicText.prototype = {
         // Draw background color
         if (this.backColor !== null) {
             $context.fillStyle = this.backColor.rgb;
-            $context.fillRect(xBack, y - this.textHeight, this.textWidth, this.textHeight);
+            $context.fillRect(xBack, y - textHeight, textWidth, textHeight);
         }
 
         // Set context options

@@ -480,6 +480,11 @@ var TagKind = {
     Font: 8,
     TextColor: 9,
     BackColor: 10,
-    StrokeColor: 11
+    StrokeColor: 11,
+    Variable: 12,
+    Parameter: 13,
+    Property: 14,
+    HeroName: 15,
+    Icon: 16
 };
 Object.freeze(TagKind);

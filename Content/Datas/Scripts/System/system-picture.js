@@ -97,6 +97,10 @@ SystemPicture.prototype = {
             this.collisionsRepeat = false;
     },
 
+    load: function(pictureKind) {
+        this.picture = Picture2D.createImage(this, pictureKind);
+    },
+
     // -------------------------------------------------------
 
     /** Get the absolute path associated to this picture.

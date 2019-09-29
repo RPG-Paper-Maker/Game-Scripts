@@ -22,8 +22,7 @@
 function GraphicMessage(message, facesetID) {
     Bitmap.call(this);
 
-    //this.message = message;
-    this.message = "[c][strokecolor=1][strokecolor=3]Size[/strokecolor]\nENcor[/strokecolor]e[/c]";
+    this.message = "aaa[c]bbb[/c][r][strokecolor=1]aaaa[/strokecolor][ico=1][/r]";
     this.faceset = Picture2D.createImage($datasGame.pictures.get(PictureKind
         .Facesets, facesetID), PictureKind.Facesets);
     this.graphics = [];
@@ -94,6 +93,16 @@ GraphicMessage.prototype.setMessage = function(message) {
                 tagKind = TagKind.BackColor;
             } else if (tag.includes(RPM.TAG_STROKE_COLOR)) {
                 tagKind = TagKind.StrokeColor;
+            } else if (tag.includes(RPM.TAG_VARIABLE)) {
+                tagKind = TagKind.Variable;
+            } else if (tag.includes(RPM.TAG_PARAMETER)) {
+                tagKind = TagKind.Parameter;
+            } else if (tag.includes(RPM.TAG_PROPERTY)) {
+                tagKind = TagKind.Property;
+            } else if (tag.includes(RPM.TAG_HERO_NAME)) {
+                tagKind = TagKind.HeroName;
+            } else if (tag.includes(RPM.TAG_ICON)) {
+                tagKind = TagKind.Icon;
             } else {
                 tagKind = TagKind.Text;
             }
@@ -128,8 +137,19 @@ GraphicMessage.prototype.updateTag = function(currentNode, tag, value, open,
             currentNode = currentNode.add(notClosed[i]);
             notClosed.splice(i, 1);
         }
+        switch (tag) {
+        case TagKind.Variable:
+        case TagKind.HeroName:
+            value = SystemValue.createVariable(value); break;
+        case TagKind.Parameter:
+            value = SystemValue.createParameter(value); break;
+        case TagKind.Property:
+            value = SystemValue.createProperty(value); break;
+        }
         currentNode.add([tag, value]);
-        if (tag !== TagKind.Text && tag !== TagKind.NewLine) {
+        if (tag !== TagKind.Text && tag !== TagKind.NewLine && tag !== TagKind
+            .Variable)
+        {
             currentNode = currentNode.lastChild;
         }
     } else {
@@ -175,10 +195,9 @@ GraphicMessage.prototype.update = function() {
 
     // Calculate width of align blocks for aligns settings
     l = this.graphics.length;
-    this.totalWidths = new Array(l);
+    this.totalWidths = [];
     for (i = 0; i < l; i++) {
-        align = this.aligns[i];
-        currentAlign = align;
+        currentAlign = this.aligns[i];
         c = i;
         width = 0;
         while (c < l) {
@@ -189,10 +208,8 @@ GraphicMessage.prototype.update = function() {
             width += this.positions[c];
             c++;
         }
-        while (i < c) {
-            this.totalWidths[i] = width;
-            i++;
-        }
+        this.totalWidths.push(width);
+        i = c - 1;
     }
 };
 
@@ -200,9 +217,11 @@ GraphicMessage.prototype.update = function() {
 
 GraphicMessage.prototype.updateNodes = function(node, result) {
     var graphic, align, bold, italic, size, font, textColor, backColor,
-        strokeColor;
+        strokeColor, tag, value;
 
-    switch (node.data[0]) {
+    tag = node.data[0];
+    value = node.data[1];
+    switch (tag) {
     case TagKind.NewLine:
         result.g.push(null);
         result.p.push(0);
@@ -213,7 +232,25 @@ GraphicMessage.prototype.updateNodes = function(node, result) {
         result.h.unshift(0);
         break;
     case TagKind.Text:
-        graphic = new GraphicText(node.data[1], { bold: result.cb, italic:
+    case TagKind.Variable:
+    case TagKind.Parameter:
+    case TagKind.Property:
+    case TagKind.HeroName:
+        var text;
+
+        switch (node.data[0]) {
+        case TagKind.Text:
+            text = value; break;
+        case TagKind.Variable:
+            text = "" + value.getValue(); break;
+        case TagKind.Parameter:
+            text = "" + value.getValue(); break;
+        case TagKind.Property:
+            text = "" + value.getValue(); break;
+        case TagKind.HeroName:
+            text = "" + $game.getHeroByInstanceID(value.getValue()).name; break;
+        }
+        graphic = new GraphicText(text, { bold: result.cb, italic:
             result.ci, fontSize: result.cs, fontName: result.cf, color: result
             .ctc, backColor: result.cbc, strokeColor: result.csc } );
         result.g.push(graphic);
@@ -221,6 +258,15 @@ GraphicMessage.prototype.updateNodes = function(node, result) {
         result.a.push(result.ca);
         if (graphic.fontSize > result.h[0]) {
             result.h[0] = graphic.fontSize;
+        }
+        break;
+    case TagKind.Icon:
+        graphic = $datasGame.pictures.get(PictureKind.Icons, value).picture;
+        result.g.push(graphic);
+        result.p.push(graphic.oW);
+        result.a.push(result.ca);
+        if ($fontSize > result.h[0]) {
+            result.h[0] = $fontSize;
         }
         break;
     case TagKind.Bold:
@@ -245,23 +291,23 @@ GraphicMessage.prototype.updateNodes = function(node, result) {
         break;
     case TagKind.Size:
         size = result.cs;
-        result.cs = $datasGame.system.fontSizes[node.data[1]].getValue();
+        result.cs = $datasGame.system.fontSizes[value].getValue();
         break;
     case TagKind.Font:
         font = result.cf;
-        result.cf = $datasGame.system.fontNames[node.data[1]].getValue();
+        result.cf = $datasGame.system.fontNames[value].getValue();
         break;
     case TagKind.TextColor:
         textColor = result.ctc;
-        result.ctc = $datasGame.system.colors[node.data[1]];
+        result.ctc = $datasGame.system.colors[value];
         break;
     case TagKind.BackColor:
         backColor = result.cbc;
-        result.cbc = $datasGame.system.colors[node.data[1]];
+        result.cbc = $datasGame.system.colors[value];
         break;
     case TagKind.StrokeColor:
         strokeColor = result.csc;
-        result.csc = $datasGame.system.colors[node.data[1]];
+        result.csc = $datasGame.system.colors[value];
         break;
     }
     if (node.firstChild !== null) {
@@ -305,7 +351,7 @@ GraphicMessage.prototype.updateNodes = function(node, result) {
 // -------------------------------------------------------
 
 GraphicMessage.prototype.draw = function(x, y, w, h) {
-    var i, c, l, newX, offsetX, offsetY, align, graphic;
+    var i, j, c, l, newX, offsetX, offsetY, align, graphic;
 
     x = RPM.defaultValue(x, this.oX);
     y = RPM.defaultValue(y, this.oY);
@@ -317,6 +363,7 @@ GraphicMessage.prototype.draw = function(x, y, w, h) {
     offsetY = RPM.HUGE_SPACE;
     align = -1;
     c = this.heights.length - 1;
+    j = 0;
 
     // Draw each graphics
     for (i = 0, l = this.graphics.length; i < l; i ++) {
@@ -334,14 +381,16 @@ GraphicMessage.prototype.draw = function(x, y, w, h) {
                     offsetX = 0;
                     break;
                 case Align.Center:
-                    offsetX = (w - newX - this.totalWidths[i]) / 2;
+                    offsetX = (w - newX - this.totalWidths[j]) / 2;
                     break;
                 case Align.Right:
-                    offsetX = x + w - newX - this.totalWidths[i];
+                    offsetX = x + w - newX - this.totalWidths[j];
                     break;
                 }
+                j++;
             }
-            graphic.draw(newX + offsetX, y + offsetY);
+            graphic.draw(newX + offsetX, y + offsetY - (graphic.path ? graphic
+                .oH / 2 : 0));
             offsetX += this.positions[i];
         }
     }

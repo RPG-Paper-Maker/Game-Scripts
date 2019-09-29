@@ -121,6 +121,11 @@ RPM.TAG_FONT = "font";
 RPM.TAG_TEXT_COLOR = "textcolor";
 RPM.TAG_BACK_COLOR = "backcolor";
 RPM.TAG_STROKE_COLOR = "strokecolor";
+RPM.TAG_VARIABLE = "var";
+RPM.TAG_PARAMETER = "par";
+RPM.TAG_PROPERTY = "pro";
+RPM.TAG_HERO_NAME = "hname";
+RPM.TAG_ICON = "ico";
 RPM.DEFAULT_FONT = "sans-serif";
 
 // -------------------------------------------------------

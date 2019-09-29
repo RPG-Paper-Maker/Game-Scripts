@@ -39,6 +39,7 @@ function GamePlayer(kind, id, instanceId, skills) {
         this.id = id;
         this.instid = instanceId;
         this.character = this.getCharacterInformations();
+        this.name = this.character.name;
 
         // Skills
         l = skills.length;

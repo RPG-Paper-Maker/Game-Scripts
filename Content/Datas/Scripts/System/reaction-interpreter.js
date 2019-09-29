@@ -55,6 +55,7 @@ function ReactionInterpreter(sender, reaction, object, state, parameters, event,
     this.currentState = state;
     this.currentParameters = parameters;
     this.currentCommand = command;
+    this.updateObjectParameters();
     this.currentCommandState = this.currentCommand.data.initialize();
     this.currentTimeState = event;
     $requestPaintHUD = true;
@@ -68,6 +69,12 @@ ReactionInterpreter.prototype = {
     */
     isFinished: function(){
         return (this.currentCommand === null)
+    },
+
+    updateObjectParameters: function() {
+        // Update global variables for getValue()
+        $currentObject = this.currentMapObject;
+        $currentParameters = this.currentParameters;
     },
 
     // -------------------------------------------------------
@@ -123,11 +130,8 @@ ReactionInterpreter.prototype = {
     /** Update a command and return the next command to excecute (if finished).
     *   @returns {Node}
     */
-    updateCommand: function(){
-
-        // Update global variables for getValue()
-        $currentObject = this.currentMapObject;
-        $currentParameters = this.currentParameters;
+    updateCommand: function() {
+        this.updateObjectParameters();
 
         // Update can return different type of values :
         var result = this.currentCommand.data.update(this.currentCommandState,

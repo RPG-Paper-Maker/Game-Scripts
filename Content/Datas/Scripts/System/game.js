@@ -35,7 +35,38 @@ function Game() {
         .position.x, $modelHero.position.y, $modelHero.position.z), true);
 }
 
+Game.getHeroInstanceInTab = function(tab, id) {
+    var i, l, hero;
+
+    for (i = 0, l = tab.length; i < l; i++) {
+        hero = tab[i];
+        if (hero.instid === id) {
+            return hero;
+        }
+    }
+
+    return null;
+}
+
 Game.prototype = {
+
+    getHeroByInstanceID: function(id) {
+        var hero;
+
+        hero = Game.getHeroInstanceInTab(this.teamHeroes, id);
+        if (hero !== null) {
+            return hero;
+        }
+        hero = Game.getHeroInstanceInTab(this.reserveHeroes, id);
+        if (hero !== null) {
+            return hero;
+        }
+        hero = Game.getHeroInstanceInTab(this.hiddenHeroes, id);
+
+        return hero;
+    },
+
+    // -------------------------------------------------------
 
     /** Initialize a default game.
     */
