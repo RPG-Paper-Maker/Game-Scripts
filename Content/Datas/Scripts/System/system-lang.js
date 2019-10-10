@@ -18,7 +18,7 @@
 /** @class
 */
 function SystemLang() {
-
+    this.names = [];
 }
 
 SystemLang.EMPTY_NAMES = {
@@ -38,5 +38,22 @@ SystemLang.prototype = {
         } else {
             this.name = json[1];
         }
+    },
+
+    // -------------------------------------------------------
+
+    getCommand: function(command, i) {
+        var id, name;
+
+        id = command[i++];
+        name = command[i++];
+
+        this.names[id] = name;
+
+        if (id === 1) {
+            this.name = this.names[id];
+        }
+
+        return i;
     }
 }

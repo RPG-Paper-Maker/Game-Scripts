@@ -147,7 +147,7 @@ ReactionInterpreter.prototype = {
         to skip */
         else{
             // If entering in a node
-            if (result === -1){
+            if (result === -1) {
                 if (this.currentCommand.firstChild === null)  {
                     return this.endOfBlock(new Node(this.currentCommand, null),
                         null);
@@ -156,20 +156,21 @@ ReactionInterpreter.prototype = {
                 }
             }
             // If leaving last while node
-            else if (result === -2){
+            else if (result === -2) {
                 var whileNode = this.currentCommand.parent;
                 while (whileNode !== null){
-                    if (whileNode.data instanceof EventCommandWhile)
+                    if (whileNode.data instanceof EventCommandWhile) {
                         return this.goToNextCommand(whileNode);
+                    }
                     whileNode = whileNode.parent;
                 }
                 /* If going here, that means there is no parent while...
                 bring error */
                 RPM.show("Error : there is a breaking loop that is not inside"
-                           + " a loop.");
+                    + " a loop.");
             }
             // If positive number, then it's the number of nodes to skip
-            else{
+            else {
                 value = this.currentCommand;
                 for (var j = 1; j <= result; j++){
                     value = value.next;
@@ -200,9 +201,20 @@ ReactionInterpreter.prototype = {
                 if (command.parent.data instanceof EventCommandWhile){
                     return command.parent; // Redo the while command
                 }
-                /* If condition, choice, or other instruction bloc, leave it
+                /* If choice, search end choice command */
+                else if (command.parent.data instanceof EventCommandChoice) {
+                    var next;
+
+                    next = command.parent;
+                    while (next.data !== null) {
+                        next = next.next;
+                    }
+                    next = next.next;
+                    return next;
+                }
+                /* If condition, or other instruction bloc, leave it
                 and go to next command */
-                else{
+                else {
                     return this.goToNextCommand(command.parent);
                 }
             }

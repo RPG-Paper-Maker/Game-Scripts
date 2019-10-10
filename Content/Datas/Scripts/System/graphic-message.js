@@ -22,7 +22,7 @@
 function GraphicMessage(message, facesetID) {
     Bitmap.call(this);
 
-    this.message = "aaa[c]bbb[/c][r][strokecolor=1]aaaa[/strokecolor][ico=1][/r]";
+    this.message = message;
     this.faceset = Picture2D.createImage($datasGame.pictures.get(PictureKind
         .Facesets, facesetID), PictureKind.Facesets);
     this.graphics = [];

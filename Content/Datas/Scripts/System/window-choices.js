@@ -44,25 +44,25 @@ function WindowChoices(orientation, x, y, w, h, nbItemsMax, listContents,
 WindowChoices.prototype = {
 
     setX: function(x){
-        Bitmap.prototype.setX.call(this, x);
+        WindowTabs.prototype.setX.call(this, x);
     },
 
     // -------------------------------------------------------
 
     setY: function(y){
-        Bitmap.prototype.setY.call(this, y);
+        WindowTabs.prototype.setY.call(this, y);
     },
 
     // -------------------------------------------------------
 
     setW: function(w){
-        Bitmap.prototype.setW.call(this, w);
+        WindowTabs.prototype.setW.call(this, w);
     },
 
     // -------------------------------------------------------
 
     setH: function(h){
-        Bitmap.prototype.setH.call(this, h);
+        WindowTabs.prototype.setH.call(this, h);
     },
 
     // -------------------------------------------------------

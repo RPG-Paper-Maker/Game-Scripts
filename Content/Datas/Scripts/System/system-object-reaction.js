@@ -50,9 +50,21 @@ SystemObjectReaction.prototype = {
     *   @param {Object} jsonCommands Json object describing the object.
     *   @param {Tree} commands All the commands (final result).
     */
-    readChildrenJSON: function(jsonCommands, commands){
+    readChildrenJSON: function(jsonCommands, commands) {
+        var node, command, choice;
+
+        choice = null;
         for (var j = 0, ll = jsonCommands.length; j < ll; j++){
-            var node = commands.add(EventCommand.getEventCommand(jsonCommands[j]));
+            command = EventCommand.getEventCommand(jsonCommands[j]);
+
+            // If text before choice, make a link
+            if (command instanceof EventCommandShowText) {
+                choice = command;
+            } else if (command instanceof EventCommandDisplayChoice) {
+                command.setShowText(choice);
+                choice = null;
+            }
+            node = commands.add(command);
             if (jsonCommands[j].hasOwnProperty("children")) {
                 this.readChildrenJSON(jsonCommands[j].children, node);
             }

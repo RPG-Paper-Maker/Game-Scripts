@@ -79,6 +79,10 @@ EventCommand.getEventCommand = function(json) {
             return new EventCommandPlayMusicEffect(command);
         case EventCommandKind.ChangeProperty:
             return new EventCommandChangeProperty(command);
+        case EventCommandKind.DisplayChoice:
+            return new EventCommandDisplayChoice(command);
+        case EventCommandKind.Choice:
+            return new EventCommandChoice(command);
         default:
             return null;
     }
@@ -186,8 +190,10 @@ EventCommandShowText.prototype = {
             this.windowInterlocutor.draw();
         }
 
-        $datasGame.system.getWindowSkin().drawArrowMessage(currentState.frame,
-            $SCREEN_X / 2, $SCREEN_Y - 40);
+        if (currentState) {
+            $datasGame.system.getWindowSkin().drawArrowMessage(currentState
+                .frame, $SCREEN_X / 2, $SCREEN_Y - 40);
+        }
     }
 }
 

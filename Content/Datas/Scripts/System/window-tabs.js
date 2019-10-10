@@ -125,14 +125,18 @@ WindowTabs.prototype = {
 
     // -------------------------------------------------------
 
-    setX: function(x){
+    setX: function(x) {
         Bitmap.prototype.setX.call(this, x);
+        WindowTabs.prototype.updateContentSize.call(this, this
+            .currentSelectedIndex);
     },
 
     // -------------------------------------------------------
 
-    setY: function(y){
+    setY: function(y) {
         Bitmap.prototype.setY.call(this, y);
+        WindowTabs.prototype.updateContentSize.call(this, this
+            .currentSelectedIndex);
     },
 
     // -------------------------------------------------------

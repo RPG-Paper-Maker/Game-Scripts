@@ -1742,3 +1742,177 @@ EventCommandChangeProperty.prototype = {
     onKeyPressedAndRepeat: function(currentState, key){},
     drawHUD: function(currentState){}
 }
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandDisplayChoice
+//
+// -------------------------------------------------------
+
+function EventCommandDisplayChoice(command) {
+    var i, l, k, v, lang, next, w, graphics, graphic;
+
+    i = 0;
+    k = command[i++];
+    v = command[i++];
+    this.cancelAutoIndex = SystemValue.createValue(k, v);
+    this.choices = [];
+    l = command.length;
+    lang = null;
+    while (i < l) {
+        next = command[i];
+        if (next === RPM.STRING_DASH) {
+            i++;
+            if (lang !== null) {
+                this.choices.push(lang.name);
+            }
+            lang = new SystemLang();
+            i++;
+        }
+        i = lang.getCommand(command, i);
+    }
+    if (lang !== null) {
+        this.choices.push(lang.name);
+    }
+
+    // Determine slots width
+    l = this.choices.length;
+    graphics = new Array(l);
+    w = RPM.MEDIUM_SLOT_WIDTH;
+    for (i = 0; i < l; i++) {
+        graphic = new GraphicText(this.choices[i], { align: Align.Center });
+        graphics[i] = graphic;
+        if (graphic.textWidth > w) {
+            w = graphic.textWidth;
+        }
+    }
+    w += RPM.SMALL_SLOT_PADDING[0] + RPM.SMALL_SLOT_PADDING[2];
+
+    // Window
+    this.windowChoices = new WindowChoices(OrientationWindow.Vertical, ($SCREEN_X - w) / 2, $SCREEN_Y - 10 - 150
+        - (l * RPM.MEDIUM_SLOT_HEIGHT), w, RPM.MEDIUM_SLOT_HEIGHT, l, graphics,
+        null, RPM.SMALL_SLOT_PADDING);
+
+    this.isDirectNode = true;
+    this.parallel = false;
+}
+
+EventCommandDisplayChoice.prototype = {
+
+    setShowText: function(showText) {
+        this.showText = showText;
+
+        // Move to right if show text before
+        if (showText) {
+            this.windowChoices.setX($SCREEN_X - this.windowChoices.oW - 10);
+        }
+    },
+
+    initialize: function() {
+        this.windowChoices.unselect();
+        this.windowChoices.select(0);
+
+        return {
+            index: -1
+        };
+    },
+
+    /** Go inside the else block.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The current object reacting.
+    *   @param {number} state The state ID.
+    *   @returns {number} The number of node to pass.
+    */
+    update: function(currentState, object, state) {
+        return currentState.index + 1;
+    },
+
+    // -------------------------------------------------------
+
+    /** Returns the number of node to pass.
+    *   @returns {number}
+    */
+    goToNextCommand : function() {
+        return 1;
+    },
+
+    // -------------------------------------------------------
+
+    onKeyPressed: function(currentState, key) {
+        if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
+            .Action))
+        {
+            currentState.index = this.windowChoices.currentSelectedIndex;
+        } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
+            .menuControls.Cancel))
+        {
+            currentState.index = this.cancelAutoIndex.getValue();
+        }
+    },
+
+    // -------------------------------------------------------
+
+    onKeyReleased: function(currentState, key){},
+    onKeyPressedRepeat: function(currentState, key){ return true; },
+
+    // -------------------------------------------------------
+
+    onKeyPressedAndRepeat: function(currentState, key) {
+        this.windowChoices.onKeyPressedAndRepeat(key);
+    },
+
+    // -------------------------------------------------------
+
+    drawHUD: function(currentState) {
+        // Display text command if existing
+        if (this.showText) {
+            this.showText.drawHUD();
+        }
+
+        this.windowChoices.draw();
+    }
+}
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandChoice
+//
+// -------------------------------------------------------
+
+function EventCommandChoice(command) {
+    this.index = command[0];
+    this.isDirectNode = true;
+    this.parallel = false;
+}
+
+EventCommandChoice.prototype = {
+
+    initialize: function() { return null; },
+
+    /** Go inside the else block.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The current object reacting.
+    *   @param {number} state The state ID.
+    *   @returns {number} The number of node to pass.
+    */
+    update: function(currentState, object, state) {
+        return -1;
+    },
+
+    // -------------------------------------------------------
+
+    /** Returns the number of node to pass.
+    *   @returns {number}
+    */
+    goToNextCommand : function() {
+        return 1;
+    },
+
+    // -------------------------------------------------------
+
+    onKeyPressed: function(currentState, key){},
+    onKeyReleased: function(currentState, key){},
+    onKeyPressedRepeat: function(currentState, key){ return true; },
+    onKeyPressedAndRepeat: function(currentState, key){},
+    drawHUD: function(currentState){}
+}
