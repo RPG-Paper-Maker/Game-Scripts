@@ -66,7 +66,8 @@ var EventCommandKind = {
     ChangeProperty: 30,
     DisplayChoice: 31,
     Choice: 32,
-    EndChoice: 33
+    EndChoice: 33,
+    Script: 34
 };
 Object.freeze(EventCommandKind);
 

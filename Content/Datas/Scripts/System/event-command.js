@@ -19,6 +19,57 @@ function EventCommand() {
 
 }
 
+EventCommand.prototype = {
+
+    /** Initialize the current state.
+    *   @returns {Object} The current state (clicked).
+    */
+    initialize: function() {
+        return null;
+    },
+
+    // -------------------------------------------------------
+
+    /** Update and check if the event is finished.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The current object reacting.
+    *   @param {number} state The state ID.
+    *   @returns {number} The number of node to pass.
+    */
+    update: function(currentState, object, state) {
+        return 1;
+    },
+
+    // -------------------------------------------------------
+
+    /** Update clicked to true.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {number} key The key ID pressed.
+    */
+    onKeyPressed: function(currentState, key) {},
+
+    // -------------------------------------------------------
+
+    onKeyReleased: function(currentState, key) {},
+
+    // -------------------------------------------------------
+
+    onKeyPressedRepeat: function(currentState, key) {
+        return true;
+    },
+
+    // -------------------------------------------------------
+
+    onKeyPressedAndRepeat: function(currentState, key) {},
+
+    // -------------------------------------------------------
+
+    /** Draw the dialog box.
+    *   @param {Object} currentState The current state of the event.
+    */
+    drawHUD: function(currentState) {}
+}
+
 EventCommand.getEventCommand = function(json) {
     var command = json.command;
     var kind = json.kind;
@@ -83,6 +134,8 @@ EventCommand.getEventCommand = function(json) {
             return new EventCommandDisplayChoice(command);
         case EventCommandKind.Choice:
             return new EventCommandChoice(command);
+        case EventCommandKind.Script:
+            return new EventCommandScript(command);
         default:
             return null;
     }

@@ -71,6 +71,13 @@ SystemValue.createNumber = function(n){
 
 // -------------------------------------------------------
 
+SystemValue.createMessage = function(m) {
+    return SystemValue.createValue(PrimitiveValueKind.Message, m);
+}
+
+
+// -------------------------------------------------------
+
 /** Create a new value number.
 *   @static
 *   @property {number} n The number.
@@ -212,6 +219,8 @@ SystemValue.prototype = {
             return $currentParameters[this.value].getValue();
         case PrimitiveValueKind.Property:
             return $currentObject.properties[this.value];
+        case PrimitiveValueKind.Message:
+            return "" + this.value;
         default:
             return this.value;
         }

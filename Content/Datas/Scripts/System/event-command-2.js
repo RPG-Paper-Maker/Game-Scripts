@@ -1789,9 +1789,9 @@ function EventCommandDisplayChoice(command) {
     w += RPM.SMALL_SLOT_PADDING[0] + RPM.SMALL_SLOT_PADDING[2];
 
     // Window
-    this.windowChoices = new WindowChoices(OrientationWindow.Vertical, ($SCREEN_X - w) / 2, $SCREEN_Y - 10 - 150
-        - (l * RPM.MEDIUM_SLOT_HEIGHT), w, RPM.MEDIUM_SLOT_HEIGHT, l, graphics,
-        null, RPM.SMALL_SLOT_PADDING);
+    this.windowChoices = new WindowChoices(OrientationWindow.Vertical, (
+        $SCREEN_X - w) / 2, $SCREEN_Y - 10 - 150 - (l * RPM.MEDIUM_SLOT_HEIGHT),
+        w, RPM.MEDIUM_SLOT_HEIGHT, l, graphics, null, RPM.SMALL_SLOT_PADDING);
 
     this.isDirectNode = true;
     this.parallel = false;
@@ -1915,4 +1915,37 @@ EventCommandChoice.prototype = {
     onKeyPressedRepeat: function(currentState, key){ return true; },
     onKeyPressedAndRepeat: function(currentState, key){},
     drawHUD: function(currentState){}
+}
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandScript
+//
+// -------------------------------------------------------
+
+function EventCommandScript(command) {
+    var i, k, v;
+
+    i = 0;
+    this.isDynamic = command[i++] === RPM.NUM_BOOL_TRUE;
+    if (this.isDynamic) {
+        k = command[i++];
+        v = command[i++];
+        this.script = SystemValue.createValue(k, v);
+    } else {
+        this.script = SystemValue.createMessage("" + command[i]);
+    }
+
+    this.isDirectNode = true;
+    this.parallel = false;
+}
+
+EventCommandScript.prototype = Object.create(EventCommand.prototype);
+
+// -------------------------------------------------------
+
+EventCommandScript.prototype.update = function(currentState, object, state) {
+    RPM.evaluateScript(this.script.getValue());
+
+    return 1;
 }
