@@ -90,6 +90,7 @@ DatasGame.prototype = {
             this.monsters.read();
         }
         this.system.loadWindowSkins();
+        this.commonEvents.read();
     },
 
     updateLoadings: function() {

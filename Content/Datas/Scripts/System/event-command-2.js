@@ -483,11 +483,15 @@ function EventCommandSendEvent(command) {
     this.senderNoReceiver = false;
     switch (this.targetKind) {
     case 1:
-    case 2:
         k = command[i++];
         v = command[i++];
         this.idTarget = SystemValue.createValue(k, v);
         this.senderNoReceiver = command[i++] === 1;
+        break;
+    case 2:
+        k = command[i++];
+        v = command[i++];
+        this.idTarget = SystemValue.createValue(k, v);
         break;
     }
 
@@ -537,27 +541,66 @@ EventCommandSendEvent.sendEvent = function(sender, targetKind, idTarget,
                                            isSystem, idEvent, parameters,
                                            senderNoReceiver)
 {
-    switch (targetKind){
-
+    switch (targetKind) {
     case 0: // Send to all
-        EventCommandSendEvent.sendEventDetection(
-            sender, -1, isSystem, idEvent, parameters);
+        EventCommandSendEvent.sendEventDetection(sender, -1, isSystem, idEvent,
+            parameters);
         break;
-
     case 1: // Send to detection
-        EventCommandSendEvent.sendEventDetection(
-            sender, idTarget, isSystem, idEvent, parameters, senderNoReceiver);
+        EventCommandSendEvent.sendEventDetection(sender, idTarget, isSystem,
+            idEvent, parameters, senderNoReceiver);
         break;
-
     case 2: // Send to a particular object
-        break;
+        if (idTarget === -1) {
+            // Send to sender
+            sender.receiveEvent(sender, isSystem, idEvent, parameters, sender
+                .states);
+        } else if (idTarget === 0) {
+            // Send to the hero
+            $game.hero.receiveEvent(sender, isSystem, idEvent, parameters, $game
+                .heroStates);
+        } else {
+            $currentMap.updatePortions(this, function(x, y, z, i, j, k) {
+                var a, l, objects, object, mapPortion;
 
-    case 3: // Send to sender
-        break;
+                objects = $game.mapsDatas[$currentMap.id][x][y][z];
 
-    case 4: // Send to the hero
-        $game.hero.receiveEvent(sender, isSystem, idEvent, parameters,
-                                $game.heroStates);
+                // Moved objects
+                for (a = 0, l = objects.min.length; a < l; a++) {
+                    object = objects.min[a];
+                    if (object.system.id === idTarget) {
+                        object.receiveEvent(sender, isSystem, idEvent,
+                            parameters, object.states);
+                        break;
+                    }
+                }
+                for (a = 0, l = objects.mout.length; a < l; a++) {
+                    object = objects.mout[a];
+                    if (object.system.id === idTarget) {
+                        object.receiveEvent(sender, isSystem, idEvent,
+                            parameters, object.states);
+                        break;
+                    }
+                }
+
+                // Static
+                mapPortion = $currentMap.getMapPortion(i, j, k);
+                if (mapPortion) {
+                    for (a = 0, l = mapPortion.objectsList.length; a < l; a++) {
+                        object = mapPortion.objectsList[a];
+                        if (object.system.id === idTarget) {
+                            object.receiveEvent(sender, isSystem, idEvent,
+                                parameters, object.states);
+                            break;
+                        }
+                    }
+                    if (mapPortion.heroID === idTarget) {
+                        $game.hero.receiveEvent(sender, isSystem, idEvent,
+                            parameters, $game.heroStates);
+                    }
+                }
+            });
+        }
         break;
     }
 }

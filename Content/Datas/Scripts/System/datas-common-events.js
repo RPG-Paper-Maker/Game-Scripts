@@ -31,7 +31,7 @@
 *   @property {SystemObject[]} commonObjects List of all the common objects.
 */
 function DatasCommonEvents(){
-    this.read();
+
 }
 
 DatasCommonEvents.prototype = {

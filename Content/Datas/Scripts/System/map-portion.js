@@ -63,6 +63,7 @@ function MapPortion(realX, realY, realZ) {
     this.staticWallsList = new Array;
     this.staticObjects3DList = new Array;
     this.overflowMountains = new Array;
+    this.heroID = -1;
 }
 
 // -------------------------------------------------------
@@ -785,6 +786,8 @@ MapPortion.prototype = {
                 var mapObject = new MapObject(object, position);
                 mapObject.changeState();
                 this.objectsList.push(mapObject);
+            } else {
+                this.heroID = object.id;
             }
         }
 
