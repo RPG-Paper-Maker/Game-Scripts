@@ -195,6 +195,12 @@ MapObject.prototype = {
     updateTimeEvents: function() {
         var i, l, events, event, interval, repeat, timeEllapsed, removeList;
 
+        // First run detection state
+        if (this.currentState.detection !== null) {
+            this.currentState.detection.update(null, this, null);
+        }
+
+        // Run other time events
         removeList = [];
         for (i = 0, l = this.timeEventsEllapsed.length; i < l; i++) {
             events = this.timeEventsEllapsed[i];

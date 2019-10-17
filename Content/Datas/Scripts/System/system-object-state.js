@@ -80,5 +80,9 @@ SystemObjectState.prototype = {
         this.setWithCamera = json.cam;
         this.pixelOffset = json.pix;
         this.keepPosition = json.pos;
+        this.detection = RPM.jsonDefault(json.ecd, null);
+        if (this.detection !== null) {
+            this.detection = EventCommand.getEventCommand(this.detection);
+        }
     }
 }
