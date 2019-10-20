@@ -155,7 +155,6 @@ SceneBattle.prototype.pauseTeamXP = function() {
     for (var i = 0, l = $game.teamHeroes.length; i < l; i++) {
         this.battlers[CharacterKind.Hero][i].character.pauseExperience();
     }
-
 };
 
 // -------------------------------------------------------

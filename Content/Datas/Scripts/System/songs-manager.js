@@ -280,6 +280,7 @@ SongsManager.prototype = {
 
     stopMusic: function(time) {
         this.isMusicNone = true;
+        this.stopSong(SongKind.Music, time, 0, false);
         this.initializeProgressionMusic(this.musics.volume, 0, 0, time);
     },
 

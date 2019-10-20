@@ -355,6 +355,7 @@ SceneBattle.prototype.onCommandSelected = function(key) {
         this.step = 4;
         this.subStep = 3;
         this.transitionEnded = false;
+        this.time = new Date().getTime();
         $songsManager.initializeProgressionMusic(SystemPlaySong
             .currentPlayingMusic.volume, 0, 0, SceneBattle
             .TIME_LINEAR_MUSIC_END);
