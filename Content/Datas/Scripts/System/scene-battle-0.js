@@ -122,7 +122,7 @@ SceneBattle.prototype.initializeWindowCommands = function() {
             .battleCommandsOrder[i]];
         listContent[i] = new GraphicTextIcon(skill.name, skill.pictureID);
         listContent[i].skill = skill;
-        listCallbacks[i] = SystemCommonSkillItem.prototype.use;
+        listCallbacks[i] = SystemCommonSkillItem.prototype.useCommand;
     }
     this.windowChoicesBattleCommands = new WindowChoices(OrientationWindow
         .Vertical, RPM.HUGE_SPACE, $SCREEN_Y - RPM.HUGE_SPACE - (l * RPM

@@ -265,36 +265,47 @@ WindowTabs.prototype = {
 
     /** When going up.
     */
-    goUp: function(){
-        if (this.currentSelectedIndex > 0) {
+    goUp: function() {
+        var index;
+
+        index = this.currentSelectedIndex;
+        if (index > 0) {
             this.currentSelectedIndex--;
             if (this.offsetSelectedIndex > 0) {
                 this.offsetSelectedIndex--;
             }
-        } else if (this.currentSelectedIndex === 0) {
+        } else if (index === 0) {
             this.currentSelectedIndex = this.listWindows.length - 1;
             this.offsetSelectedIndex = this.size - 1;
         }
-        $requestPaintHUD = true;
+        if (index !== this.currentSelectedIndex) {
+            $datasGame.system.soundCursor.playSound();
+            $requestPaintHUD = true;
+        }
     },
 
     // -------------------------------------------------------
 
     /** When going down.
     */
-    goDown: function(){
-        if (this.currentSelectedIndex < this.listWindows.length - 1 && this
-            .currentSelectedIndex >= 0) {
+    goDown: function() {
+        var index;
+
+        index = this.currentSelectedIndex;
+        if (index < this.listWindows.length - 1 && index >= 0) {
             this.currentSelectedIndex++;
             if (this.offsetSelectedIndex < this.size - 1) {
                 this.offsetSelectedIndex++;
             }
         }
-        else if (this.currentSelectedIndex === this.listWindows.length - 1) {
+        else if (index === this.listWindows.length - 1) {
             this.currentSelectedIndex = 0;
             this.offsetSelectedIndex = 0;
         }
-        $requestPaintHUD = true;
+        if (index !== this.currentSelectedIndex) {
+            $datasGame.system.soundCursor.playSound();
+            $requestPaintHUD = true;
+        }
     },
 
     // -------------------------------------------------------
@@ -309,7 +320,13 @@ WindowTabs.prototype = {
             {
                 var callback = this.listCallBacks[this.currentSelectedIndex];
                 if (callback !== null) {
-                    callback.call(base);
+                    if (callback.call(base)) {
+                        $datasGame.system.soundConfirmation.playSound();
+                    } else {
+                        $datasGame.system.soundImpossible.playSound();
+                    }
+                } else {
+                    $datasGame.system.soundImpossible.playSound();
                 }
             }
         }

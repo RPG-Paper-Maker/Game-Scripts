@@ -71,6 +71,9 @@ function SceneMenu() {
     this.windowTimeCurrencies = new WindowBox(20, 0, 150, 0, new
         GraphicTimeCurrencies(), RPM.HUGE_PADDING_BOX);
     this.windowTimeCurrencies.contentLoaded = false;
+
+    // Play a sound when opening the menu
+    $datasGame.system.soundCursor.playSound();
 }
 
 SceneMenu.nbItemsToDisplay = 12;
@@ -81,6 +84,8 @@ SceneMenu.prototype = {
     */
     openInventory: function(){
         $gameStack.push(new SceneMenuInventory());
+
+        return true;
     },
 
     // -------------------------------------------------------
@@ -89,6 +94,8 @@ SceneMenu.prototype = {
     */
     openSkills: function(){
         $gameStack.push(new SceneMenuSkills());
+
+        return true;
     },
 
     // -------------------------------------------------------
@@ -97,6 +104,8 @@ SceneMenu.prototype = {
     */
     openEquip: function(){
         $gameStack.push(new SceneMenuEquip());
+
+        return true;
     },
 
     // -------------------------------------------------------
@@ -105,6 +114,8 @@ SceneMenu.prototype = {
     */
     openState: function(){
         $gameStack.push(new SceneDescriptionState());
+
+        return true;
     },
 
     // -------------------------------------------------------
@@ -113,6 +124,8 @@ SceneMenu.prototype = {
     */
     openOrder: function(){
         this.windowChoicesTeam.select(0);
+
+        return true;
     },
 
     // -------------------------------------------------------
@@ -121,6 +134,8 @@ SceneMenu.prototype = {
     */
     openSave: function(){
         $gameStack.push(new SceneSaveGame());
+
+        return true;
     },
 
     // -------------------------------------------------------
@@ -129,6 +144,8 @@ SceneMenu.prototype = {
     */
     exit: function(){
         quit();
+
+        return true;
     },
 
      // -------------------------------------------------------
@@ -164,6 +181,7 @@ SceneMenu.prototype = {
                                          .Cancel) ||
                 DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.MainMenu))
             {
+                $datasGame.system.soundCancel.playSound();
                 $gameStack.pop();
             }
         }
@@ -174,12 +192,15 @@ SceneMenu.prototype = {
                                          .Cancel) ||
                 DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.MainMenu))
             {
+                $datasGame.system.soundCancel.playSound();
                 this.windowChoicesTeam.unselect();
             }
             else if (DatasKeyBoard.isKeyEqual(key,
                                               $datasGame.keyBoard.menuControls
                                               .Action))
             {
+                $datasGame.system.soundConfirmation.playSound();
+
                 // If selecting the first hero to interchange
                 if (this.selectedOrder === -1){
                     this.selectedOrder =

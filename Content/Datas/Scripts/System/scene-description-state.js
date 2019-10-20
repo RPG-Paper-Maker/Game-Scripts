@@ -67,6 +67,7 @@ SceneDescriptionState.prototype = {
             DatasKeyBoard.isKeyEqual(key,
                                      $datasGame.keyBoard.MainMenu))
         {
+            $datasGame.system.soundCancel.playSound();
             $gameStack.pop();
         }
     },

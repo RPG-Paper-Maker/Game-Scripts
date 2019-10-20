@@ -169,7 +169,7 @@ SceneBattle.prototype.unpauseTeamXP = function() {
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.playMapMusic = function()  {
+SceneBattle.prototype.playMapMusic = function() {
     SceneBattle.musicMap.playSong(SceneBattle.musicMapTime, 0);
     $songsManager.initializeProgressionMusic(0, SceneBattle.musicMap.volume, 0,
         SceneBattle.TIME_LINEAR_MUSIC_START);

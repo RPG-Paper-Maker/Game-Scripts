@@ -129,5 +129,7 @@ DatasTitlescreenGameover.prototype.getSettingsCommandsAction = function(id) {
 
 DatasTitlescreenGameover.prototype.keyboardAssignment = function() {
     $gameStack.push(new SceneKeyboardAssign());
+
+    return true;
 };
 

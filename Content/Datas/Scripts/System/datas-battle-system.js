@@ -139,7 +139,7 @@ DatasBattleSystem.prototype = {
             // Musics
             this.battleMusic = new SystemPlaySong(SongKind.Music);
             this.battleMusic.readJSON(json.bmusic);
-            this.battleLevelUp = new SystemPlaySong(SongKind.Soun);
+            this.battleLevelUp = new SystemPlaySong(SongKind.Sound);
             this.battleLevelUp.readJSON(json.blevelup);
             this.battleVictory = new SystemPlaySong(SongKind.Music);
             this.battleVictory.readJSON(json.bvictory);

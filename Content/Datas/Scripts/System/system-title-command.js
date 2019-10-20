@@ -64,6 +64,8 @@ SystemTitleCommand.prototype.startNewGame = function() {
 
     // Add local map to stack
     $gameStack.replace(new SceneMap($datasGame.system.idMapStartHero));
+
+    return true;
 }
 
 // -------------------------------------------------------
@@ -72,6 +74,8 @@ SystemTitleCommand.prototype.startNewGame = function() {
 */
 SystemTitleCommand.prototype.loadGame = function() {
     $gameStack.push(new SceneLoadGame());
+
+    return true;
 }
 
 // -------------------------------------------------------
@@ -80,6 +84,8 @@ SystemTitleCommand.prototype.loadGame = function() {
 */
 SystemTitleCommand.prototype.showSettings = function() {
     $gameStack.push(new SceneTitleSettings());
+
+    return true;
 }
 
 // -------------------------------------------------------
@@ -88,6 +94,8 @@ SystemTitleCommand.prototype.showSettings = function() {
 */
 SystemTitleCommand.prototype.exit = function() {
     quit();
+
+    return true;
 }
 
 // -------------------------------------------------------
@@ -96,4 +104,6 @@ SystemTitleCommand.prototype.exit = function() {
 */
 SystemTitleCommand.prototype.executeScript = function() {
     RPM.evaluateScript(this.script);
+
+    return true;
 }

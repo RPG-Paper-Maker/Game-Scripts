@@ -123,6 +123,8 @@ SceneBattle.prototype.selectFirstIndex = function(kind, index) {
         }
     }
 
+    $datasGame.system.soundCursor.playSound();
+
     return index;
 };
 
@@ -174,6 +176,7 @@ SceneBattle.prototype.moveArrow = function() {
         .selectedUserTargetIndex()];
     window.content = this.subStep === 2 ? graphics.target : graphics.user;
     window.content.update();
+
     $requestPaintHUD = true;
 };
 
@@ -203,6 +206,7 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
         if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
             .Action))
         {
+            $datasGame.system.soundConfirmation.playSound();
             this.onAllySelected();
         }
         break;
@@ -214,6 +218,7 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
         } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
             .menuControls.Cancel))
         {
+            $datasGame.system.soundCancel.playSound();
             this.onAllyUnselected();
         }
         break;
@@ -221,10 +226,12 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
         if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
             .Action))
         {
+            $datasGame.system.soundConfirmation.playSound();
             this.onTargetsSelected();
         } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
             .menuControls.Cancel))
         {
+            $datasGame.system.soundCancel.playSound();
             this.onTargetsUnselected();
         }
         break;
@@ -426,8 +433,14 @@ SceneBattle.prototype.onKeyPressedAndRepeatStep1 = function(key){
         }
 
         if (this.subStep === 0) {
+            if (this.selectedUserIndex !== index) {
+                $datasGame.system.soundCursor.playSound();
+            }
             this.selectedUserIndex = index;
         } else {
+            if (this.selectedUserIndex !== index) {
+                $datasGame.system.soundCursor.playSound();
+            }
             this.selectedTargetIndex = index;
         }
         this.moveArrow();

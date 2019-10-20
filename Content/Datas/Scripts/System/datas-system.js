@@ -206,6 +206,16 @@ DatasSystem.prototype = {
 
             // read song now that BR path is loaded
             $datasGame.songs.read();
+
+            // Sounds
+            this.soundCursor = new SystemPlaySong(SongKind.Sound);
+            this.soundCursor.readJSON(json.scu);
+            this.soundConfirmation = new SystemPlaySong(SongKind.Sound);
+            this.soundConfirmation.readJSON(json.sco);
+            this.soundCancel = new SystemPlaySong(SongKind.Sound);
+            this.soundCancel.readJSON(json.sca);
+            this.soundImpossible = new SystemPlaySong(SongKind.Sound);
+            this.soundImpossible.readJSON(json.si);
         });
     },
 

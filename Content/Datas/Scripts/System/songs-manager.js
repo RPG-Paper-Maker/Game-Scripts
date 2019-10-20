@@ -203,12 +203,14 @@ SongsManager.prototype = {
             return;
 
         var player = this.sounds[this.soundIndex++];
+        player.stop();
         player.volume = volume;
         player.source = $datasGame.songs.list[SongKind.Sound][id]
             .getPath(SongKind.Sound)[0];
         player.play();
-        if (this.soundIndex === 5)
+        if (this.soundIndex === 10) {
             this.soundIndex = 0;
+        }
     },
 
     // -------------------------------------------------------

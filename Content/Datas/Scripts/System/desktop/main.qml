@@ -92,24 +92,44 @@ Window {
         }
     }
 
-    SoundEffect {
+    Audio {
         id: playSound1;
     }
 
-    SoundEffect {
+    Audio {
         id: playSound2;
     }
 
-    SoundEffect {
+    Audio {
         id: playSound3;
     }
 
-    SoundEffect {
+    Audio {
         id: playSound4;
     }
 
-    SoundEffect {
+    Audio {
         id: playSound5;
+    }
+
+    Audio {
+        id: playSound6;
+    }
+
+    Audio {
+        id: playSound7;
+    }
+
+    Audio {
+        id: playSound8;
+    }
+
+    Audio {
+        id: playSound9;
+    }
+
+    Audio {
+        id: playSound10;
     }
 
     property double startTime: new Date().getTime()
@@ -202,7 +222,8 @@ Window {
                 Game.$songsManager = new Game.SongsManager(
                     musicPlayer, backgroundsoundPlayer, musicEffectPlayer,
                     [playSound1, playSound2, playSound3, playSound4,
-                    playSound5]);
+                    playSound5, playSound6, playSound7, playSound8, playSound9,
+                    playSound10]);
                 Game.$canvasVideos = video;
                 Game.initialize();
                 Game.initializeGL(canvas3d);

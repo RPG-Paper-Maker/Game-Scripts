@@ -48,6 +48,8 @@ SceneLoadGame.prototype = {
         {
             $game = this.windowChoicesSlots.getCurrentContent().game;
             if (!$game.isNull) {
+                $datasGame.system.soundConfirmation.playSound();
+
                 // Initialize properties for hero
                 $game.hero.initializeProperties();
 
@@ -60,6 +62,8 @@ SceneLoadGame.prototype = {
                 $gameStack.pop()
                 $gameStack.replace(new SceneMap(
                                        $datasGame.system.idMapStartHero));
+            } else {
+                $datasGame.system.soundImpossible.playSound();
             }
         }
     },

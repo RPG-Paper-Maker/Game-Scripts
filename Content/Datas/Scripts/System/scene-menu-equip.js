@@ -210,12 +210,14 @@ SceneMenuEquip.prototype = {
                 DatasKeyBoard.isKeyEqual(key,
                                          $datasGame.keyBoard.MainMenu))
             {
+                $datasGame.system.soundCancel.playSound();
                 $gameStack.pop();
             }
             else if (DatasKeyBoard.isKeyEqual(key,
                                               $datasGame.keyBoard.menuControls
                                               .Action))
             {
+                $datasGame.system.soundConfirmation.playSound();
                 this.selectedEquipment =
                      this.windowChoicesEquipment.currentSelectedIndex;
                 this.windowChoicesList.currentSelectedIndex = 0;
@@ -230,6 +232,7 @@ SceneMenuEquip.prototype = {
                 DatasKeyBoard.isKeyEqual(key,
                                          $datasGame.keyBoard.MainMenu))
             {
+                $datasGame.system.soundCancel.playSound();
                 this.selectedEquipment = -1;
                 this.windowChoicesList.unselect();
                 this.updateInformations();
@@ -239,6 +242,7 @@ SceneMenuEquip.prototype = {
                                               .Action))
             {
                 if (this.windowChoicesList.getCurrentContent() !== null){
+                    $datasGame.system.soundConfirmation.playSound();
                     if (this.windowChoicesList.currentSelectedIndex === 0)
                         this.remove();
                     else
@@ -246,6 +250,8 @@ SceneMenuEquip.prototype = {
                     this.selectedEquipment = -1;
                     this.windowChoicesList.unselect();
                     this.updateForTab();
+                } else {
+                    $datasGame.system.soundImpossible.playSound();
                 }
             }
         }

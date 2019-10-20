@@ -44,6 +44,7 @@ SceneSaveGame.prototype = {
         if (DatasKeyBoard.isKeyEqual(key,
                                      $datasGame.keyBoard.menuControls.Action))
         {
+            $datasGame.system.soundConfirmation.playSound();
             slot = this.windowChoicesSlots.currentSelectedIndex + 1;
             $game.write(slot);
 

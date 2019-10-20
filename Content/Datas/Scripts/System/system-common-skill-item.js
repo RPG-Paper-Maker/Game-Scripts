@@ -77,6 +77,19 @@ SystemCommonSkillItem.prototype.readJSON = function(json) {
 
 // -------------------------------------------------------
 
+SystemCommonSkillItem.prototype.useCommand = function() {
+    var possible;
+
+    possible = this.isPossible();
+    if (possible) {
+        this.use();
+    }
+
+    return possible;
+}
+
+// -------------------------------------------------------
+
 SystemCommonSkillItem.prototype.use = function() {
     var i, l, isDoingSomething;
 

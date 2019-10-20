@@ -129,15 +129,19 @@ SceneMenuSkills.prototype = {
                     .AllAllies) && (availableKind === AvailableKind.Always ||
                     availableKind === AvailableKind.MainMenu))
                 {
+                    $datasGame.system.soundConfirmation.playSound();
                     this.substep = 1;
                     this.windowBoxUseSkill.content.setAll(targetKind ===
                         TargetKind.AllAllies);
                     $requestPaintHUD = true;
+                } else {
+                    $datasGame.system.soundImpossible.playSound();
                 }
             } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
                 .menuControls.Cancel) || DatasKeyBoard.isKeyEqual(key,
                 $datasGame.keyBoard.MainMenu))
             {
+                $datasGame.system.soundCancel.playSound();
                 $currentMap.user = null;
                 $gameStack.pop();
             }
@@ -157,6 +161,7 @@ SceneMenuSkills.prototype = {
                 .menuControls.Cancel) || DatasKeyBoard.isKeyEqual(key,
                 $datasGame.keyBoard.MainMenu))
             {
+                $datasGame.system.soundCancel.playSound();
                 this.substep = 0;
                 $requestPaintHUD = true;
             }
