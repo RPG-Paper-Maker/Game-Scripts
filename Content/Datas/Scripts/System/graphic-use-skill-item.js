@@ -81,6 +81,9 @@ GraphicUserSkillItem.prototype = {
     moveArrow: function(index) {
         if (!this.isAll) {
             this.indexArrow = RPM.mod(index, this.graphicCharacters.length);
+            if (this.indexArrow !== index) {
+                $datasGame.system.soundCursor.playSound();
+            }
             $currentMap.targets = [$game.teamHeroes[this.indexArrow]];
             $requestPaintHUD = true;
         }

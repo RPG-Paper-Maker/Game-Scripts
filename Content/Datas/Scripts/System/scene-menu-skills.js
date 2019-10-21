@@ -151,6 +151,7 @@ SceneMenuSkills.prototype = {
                 .Action))
             {
                 if (this.windowInformations.content.skill.use()) {
+                    this.windowInformations.content.skill.sound.playSound();
                     this.windowBoxUseSkill.content.updateStats();
                     if (!this.windowInformations.content.skill.isPossible()) {
                         this.substep = 0;

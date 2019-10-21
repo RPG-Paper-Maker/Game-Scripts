@@ -88,6 +88,7 @@ SceneBattle.prototype.initializeStep2 = function() {
     }
     this.currentEffectIndex = 0;
     if (this.effects.length > 0) {
+        this.effects[this.currentEffectIndex].needsPlaySound = true;
         this.effects[this.currentEffectIndex].execute();
     }
 };
@@ -95,12 +96,17 @@ SceneBattle.prototype.initializeStep2 = function() {
 // -------------------------------------------------------
 
 SceneBattle.prototype.updateStep2 = function() {
-    var i, l, isAnotherEffect, damage;
+    var i, l, isAnotherEffect, damage, effect;
 
     if (!this.user.isAttacking()) {
         for (i = 0, l = this.targets.length; i < l; i++) {
             damage = this.damages[i];
             this.targets[i].updateDead(damage[0] > 0 && !damage[1], this.user);
+        }
+        effect = this.effects[this.currentEffectIndex];
+        if (effect && effect.needsPlaySound) {
+            effect.sound.playSound();
+            effect.needsPlaySound = false;
         }
     }
 
@@ -110,8 +116,10 @@ SceneBattle.prototype.updateStep2 = function() {
         for (l = this.effects.length; this.currentEffectIndex < l; this
             .currentEffectIndex++)
         {
-            this.effects[this.currentEffectIndex].execute()
-            if (this.effects[this.currentEffectIndex].isAnimated()) {
+            effect = this.effects[this.currentEffectIndex];
+            effect.needsPlaySound = true;
+            effect.execute();
+            if (effect.isAnimated()) {
                 break;
             }
         }

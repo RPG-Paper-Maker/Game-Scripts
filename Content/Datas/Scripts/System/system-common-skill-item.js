@@ -63,6 +63,8 @@ SystemCommonSkillItem.prototype.readJSON = function(json) {
     for (i = 0; i < l; i++) {
         effect = new SystemEffect();
         effect.readJSON(jsonEffects[i]);
+        // TEMP BEFORE ANIMATIONS
+        effect.sound = this.sound;
         this.effects[i] = effect;
     }
     jsonCharacteristics = json.car;
