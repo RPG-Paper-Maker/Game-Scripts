@@ -67,7 +67,8 @@ var EventCommandKind = {
     DisplayChoice: 31,
     Choice: 32,
     EndChoice: 33,
-    Script: 34
+    Script: 34,
+    DisplayAPicture: 35
 };
 Object.freeze(EventCommandKind);
 
@@ -185,7 +186,8 @@ var PictureKind = {
     Facesets: 9,
     WindowSkins: 10,
     TitleScreen: 11,
-    Objects3D: 12
+    Objects3D: 12,
+    Pictures: 13
 };
 Object.freeze(PictureKind);
 

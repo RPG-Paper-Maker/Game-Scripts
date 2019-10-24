@@ -30,6 +30,9 @@
 function Picture2D(path, callback, x, y, w, h) {
     Bitmap.call(this, x, y, w, h);
 
+    this.zoom = 1.0;
+    this.opacity = 1.0;
+    this.angle = 0;
     if (path) {
         this.path = path;
         this.callback = callback;
@@ -123,12 +126,12 @@ Picture2D.prototype.draw = function(x, y, w, h, sx, sy, sw, sh, positionResize)
         }
     }
     if (typeof w === 'undefined') {
-        w = this.w;
+        w = this.w * this.zoom;
     } else {
         w = RPM.getScreenX(w);
     }
     if (typeof h === 'undefined') {
-        h = this.h;
+        h = this.h * this.zoom;
     } else {
         h = RPM.getScreenY(h);
     }
@@ -143,6 +146,13 @@ Picture2D.prototype.draw = function(x, y, w, h, sx, sy, sw, sh, positionResize)
 
     // Draw the image
     if (!this.empty) {
+        var angle;
+
+        angle = this.angle * Math.PI / 180;
+        $context.globalAlpha = this.opacity;
+        if (angle !== 0) {
+            $context.rotate(angle);
+        }
         if (this.reverse) {
             $context.save();
             $context.scale(-1, 1);
@@ -151,5 +161,9 @@ Picture2D.prototype.draw = function(x, y, w, h, sx, sy, sw, sh, positionResize)
         } else {
             $context.drawImage(this.path, sx, sy, sw, sh, x, y, w, h);
         }
+        if (angle !== 0) {
+            $context.rotate(-angle);
+        }
+        $context.globalAlpha = 1.0;
     }
 };

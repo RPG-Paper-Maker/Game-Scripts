@@ -136,6 +136,8 @@ EventCommand.getEventCommand = function(json) {
             return new EventCommandChoice(command);
         case EventCommandKind.Script:
             return new EventCommandScript(command);
+        case EventCommandKind.DisplayAPicture:
+            return new EventCommandDisplayAPicture(command);
         default:
             return null;
     }

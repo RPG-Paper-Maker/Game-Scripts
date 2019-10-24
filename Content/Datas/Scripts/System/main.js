@@ -220,6 +220,8 @@ var $currentObject = null;
 
 var $currentParameters = null;
 
+var $displayedPictures = [];
+
 // -------------------------------------------------------
 //  BOUNDING BOXES
 // -------------------------------------------------------

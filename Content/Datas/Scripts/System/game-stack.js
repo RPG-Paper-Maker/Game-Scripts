@@ -184,7 +184,14 @@ GameStack.prototype = {
     */
     drawHUD: function() {
         if (!this.isEmpty()) {
+            var i, l;
+
             this.top().drawHUD();
+
+            // Display image command
+            for (i = 0, l = $displayedPictures.length; i < l; i++) {
+                $displayedPictures[i][1].draw();
+            }
         }
     }
 }

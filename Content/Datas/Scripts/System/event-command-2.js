@@ -1992,3 +1992,84 @@ EventCommandScript.prototype.update = function(currentState, object, state) {
 
     return 1;
 }
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandDisplayAPicture
+//
+// -------------------------------------------------------
+
+function EventCommandDisplayAPicture(command) {
+    var i, k, v;
+
+    i = 0;
+    this.pictureID = command[i++];
+    k = command[i++];
+    v = command[i++];
+    this.index = SystemValue.createValue(k, v);
+    if (command[i++] === RPM.NUM_BOOL_TRUE) {
+        this.originX = $SCREEN_X / 2;
+        this.originY = $SCREEN_Y / 2;
+    } else {
+        this.originX = 0;
+        this.originY = 0;
+    }
+    k = command[i++];
+    v = command[i++];
+    this.x = SystemValue.createValue(k, v);
+    k = command[i++];
+    v = command[i++];
+    this.y = SystemValue.createValue(k, v);
+    k = command[i++];
+    v = command[i++];
+    this.zoom = SystemValue.createValue(k, v);
+    k = command[i++];
+    v = command[i++];
+    this.opacity = SystemValue.createValue(k, v);
+    k = command[i++];
+    v = command[i++];
+    this.angle = SystemValue.createValue(k, v);
+
+    this.isDirectNode = true;
+    this.parallel = false;
+}
+
+EventCommandDisplayAPicture.prototype = Object.create(EventCommand.prototype);
+
+// -------------------------------------------------------
+
+EventCommandDisplayAPicture.prototype.update = function(currentState, object,
+    state)
+{
+    var i, l, obj, index, picture, currentIndex, value, picture, ok;
+
+    currentIndex = this.index.getValue();
+    picture = Picture2D.createImage($datasGame.pictures.get(PictureKind.Pictures
+        , this.pictureID), PictureKind.Pictures);
+    picture.setX(this.originX + this.x.getValue());
+    picture.setY(this.originY + this.y.getValue());
+    picture.zoom = this.zoom.getValue() / 100;
+    picture.opacity = this.opacity.getValue() / 100;
+    picture.angle = this.angle.getValue();
+    value = [currentIndex, picture];
+    ok = false;
+    for (i = 0, l = $displayedPictures.length; i < l; i++) {
+        obj = $displayedPictures[i];
+        index = obj[0];
+        picture = obj[1];
+        if (currentIndex === index) {
+            $displayedPictures[i] = value;
+            ok = true;
+            break;
+        } else if (currentIndex < index) {
+            $displayedPictures.splice(i, 0, value);
+            ok = true;
+            break;
+        }
+    }
+    if (!ok) {
+        $displayedPictures.push(value);
+    }
+
+    return 1;
+}
