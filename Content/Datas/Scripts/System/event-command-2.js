@@ -2041,7 +2041,7 @@ EventCommandDisplayAPicture.prototype = Object.create(EventCommand.prototype);
 EventCommandDisplayAPicture.prototype.update = function(currentState, object,
     state)
 {
-    var i, l, obj, index, picture, currentIndex, value, picture, ok;
+    var i, l, index, currentIndex, value, picture, ok;
 
     currentIndex = this.index.getValue();
     picture = Picture2D.createImage($datasGame.pictures.get(PictureKind.Pictures
@@ -2054,9 +2054,7 @@ EventCommandDisplayAPicture.prototype.update = function(currentState, object,
     value = [currentIndex, picture];
     ok = false;
     for (i = 0, l = $displayedPictures.length; i < l; i++) {
-        obj = $displayedPictures[i];
-        index = obj[0];
-        picture = obj[1];
+        index = $displayedPictures[i][0];
         if (currentIndex === index) {
             $displayedPictures[i] = value;
             ok = true;
@@ -2070,6 +2068,218 @@ EventCommandDisplayAPicture.prototype.update = function(currentState, object,
     if (!ok) {
         $displayedPictures.push(value);
     }
+    $requestPaintHUD = true;
+
+    return 1;
+}
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandSetMoveTurnAPicture
+//
+// -------------------------------------------------------
+
+function EventCommandSetMoveTurnAPicture(command) {
+    var i, k, v, checked;
+
+    i = 0;
+    k = command[i++];
+    v = command[i++];
+    this.index = SystemValue.createValue(k, v);
+    checked = command[i++] === RPM.NUM_BOOL_TRUE;
+    if (checked) {
+        this.pictureID = command[i++];
+    }
+    checked = command[i++] === RPM.NUM_BOOL_TRUE;
+    if (checked) {
+        k = command[i++];
+        v = command[i++];
+        this.zoom = SystemValue.createValue(k, v);
+    }
+    checked = command[i++] === RPM.NUM_BOOL_TRUE;
+    if (checked) {
+        k = command[i++];
+        v = command[i++];
+        this.opacity = SystemValue.createValue(k, v);
+    }
+    checked = command[i++] === RPM.NUM_BOOL_TRUE;
+    if (checked) {
+        k = command[i++];
+        v = command[i++];
+        this.x = SystemValue.createValue(k, v);
+    }
+    checked = command[i++] === RPM.NUM_BOOL_TRUE;
+    if (checked) {
+        k = command[i++];
+        v = command[i++];
+        this.y = SystemValue.createValue(k, v);
+    }
+    checked = command[i++] === RPM.NUM_BOOL_TRUE;
+    if (checked) {
+        k = command[i++];
+        v = command[i++];
+        this.angle = SystemValue.createValue(k, v);
+    }
+    k = command[i++];
+    v = command[i++];
+    this.time = SystemValue.createValue(k, v);
+    this.waitEnd = command[i++] === RPM.NUM_BOOL_TRUE;
+
+    this.isDirectNode = true;
+    this.parallel = !this.waitEnd;
+}
+
+EventCommandSetMoveTurnAPicture.prototype = Object.create(EventCommand.prototype);
+
+// -------------------------------------------------------
+
+EventCommandSetMoveTurnAPicture.prototype.initialize = function() {
+    var i, l, time, index, finalZoom, finalOpacity, finalX, finalY, finalAngle,
+        picture, obj;
+
+    time = this.time.getValue() * 1000;
+    index = this.index.getValue();
+    for (i = 0, l = $displayedPictures.length; i < l; i++) {
+        obj = $displayedPictures[i];
+        if (index === obj[0]) {
+            picture = obj[1];
+            break;
+        }
+    }
+    if (picture) {
+        // If new picture ID, create a new picture
+        if (this.pictureID) {
+            var prevX, prevY, prevZoom, prevOpacity, prevAngle;
+
+            prevX = picture.oX;
+            prevY = picture.oY;
+            prevZoom = picture.zoom;
+            prevOpacity = picture.opacity;
+            prevAngle = picture.angle;
+            picture = Picture2D.createImage($datasGame.pictures.get(PictureKind
+                .Pictures , this.pictureID), PictureKind.Pictures);
+            picture.setX(prevX);
+            picture.setY(prevY);
+            picture.zoom = prevZoom;
+            picture.opacity = prevOpacity;
+            picture.angle = prevAngle;
+            $displayedPictures[i][1] = picture;
+        }
+    } else {
+        return {};
+    }
+
+    return {
+        parallel: this.waitEnd,
+        picture: picture,
+        finalDifZoom: this.zoom ? (this.zoom.getValue() / 100) - picture.zoom :
+            null,
+        finalDifOpacity: this.opacity ? (this.opacity.getValue() / 100) -
+            picture.opacity : null,
+        finalDifX: this.x ? this.x.getValue() - picture.oX : null,
+        finalDifY: this.y ? this.y.getValue() - picture.oY : null,
+        finalDifAngle: this.angle ? this.angle.getValue() - picture.angle : null,
+        time: time,
+        timeLeft: time
+    }
+}
+
+// -------------------------------------------------------
+
+EventCommandSetMoveTurnAPicture.prototype.update = function(currentState, object
+    , state)
+{
+    // If no picture corresponds, go to next command
+    if (!currentState.picture) {
+        return 1;
+    }
+
+    if (currentState.parallel) {
+        // Updating the time left
+        var timeRate, dif;
+
+        if (currentState.time === 0) {
+            timeRate = 1;
+        } else {
+            dif = $elapsedTime;
+            currentState.timeLeft -= $elapsedTime;
+            if (currentState.timeLeft < 0) {
+                dif += currentState.timeLeft;
+                currentState.timeLeft = 0;
+            }
+            timeRate = dif / currentState.time;
+        }
+
+        // Set
+        if (this.zoom) {
+            currentState.picture.zoom += timeRate * currentState.finalDifZoom;
+        }
+        if (this.opacity) {
+            currentState.picture.opacity += timeRate * currentState
+                .finalDifOpacity;
+        }
+
+        // Move
+        if (this.x) {
+            currentState.picture.setX(currentState.picture.oX + (timeRate *
+                currentState.finalDifX));
+        }
+        if (this.y) {
+            currentState.picture.setY(currentState.picture.oY + (timeRate *
+                currentState.finalDifY));
+        }
+
+        // Turn
+        if (this.angle) {
+            currentState.picture.angle += timeRate * currentState.finalDifAngle;
+        }
+
+        // If time = 0, then this is the end of the command
+        if (currentState.timeLeft === 0) {
+            return 1;
+        }
+
+        return 0;
+    }
+
+    return 1;
+}
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandRemoveAPicture
+//
+// -------------------------------------------------------
+
+function EventCommandRemoveAPicture(command) {
+    var i, k, v;
+
+    i = 0;
+    k = command[i++];
+    v = command[i++];
+    this.index = SystemValue.createValue(k, v);
+
+    this.isDirectNode = true;
+    this.parallel = false;
+}
+
+EventCommandRemoveAPicture.prototype = Object.create(EventCommand.prototype);
+
+// -------------------------------------------------------
+
+EventCommandRemoveAPicture.prototype.update = function(currentState, object,
+    state)
+{
+    var i, l, currentIndex;
+
+    currentIndex = this.index.getValue();
+    for (i = 0, l = $displayedPictures.length; i < l; i++) {
+        if (currentIndex === $displayedPictures[i][0]) {
+            $displayedPictures.splice(i, 1);
+            break;
+        }
+    }
+    $requestPaintHUD = true;
 
     return 1;
 }

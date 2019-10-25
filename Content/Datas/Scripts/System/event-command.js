@@ -138,6 +138,10 @@ EventCommand.getEventCommand = function(json) {
             return new EventCommandScript(command);
         case EventCommandKind.DisplayAPicture:
             return new EventCommandDisplayAPicture(command);
+        case EventCommandKind.SetMoveTurnAPicture:
+            return new EventCommandSetMoveTurnAPicture(command);
+        case EventCommandKind.RemoveAPicture:
+            return new EventCommandRemoveAPicture(command);
         default:
             return null;
     }
