@@ -183,11 +183,12 @@ GraphicMessage.prototype.update = function() {
         ca: Align.Left,
         cb: false,
         ci: false,
-        cs: $fontSize,
-        cf: $fontName,
-        ctc: RPM.COLOR_WHITE,
-        cbc: null,
-        csc: null
+        cs: RPM.defaultValue($datasGame.system.dbOptions.vtSize, $fontSize),
+        cf: RPM.defaultValue($datasGame.system.dbOptions.vtFont, $fontName),
+        ctc: RPM.defaultValue($datasGame.system.dbOptions.vtcText, RPM.COLOR_WHITE),
+        cbc: RPM.defaultValue($datasGame.system.dbOptions.vtcBackground, null),
+        csc: RPM.defaultValue($datasGame.system.dbOptions.vtOutline, false) ? RPM
+            .defaultValue($datasGame.system.dbOptions.vtcOutline, null) : null
     };
 
     // Update nodes
@@ -350,6 +351,22 @@ GraphicMessage.prototype.updateNodes = function(node, result) {
 
 // -------------------------------------------------------
 
+GraphicMessage.prototype.drawBehind = function(x, y, w, h) {
+    if (!$datasGame.system.dbOptions.vfPosAbove) {
+        this.drawFaceset(x, y, w, h);
+    }
+}
+
+// -------------------------------------------------------
+
+GraphicMessage.prototype.drawFaceset = function(x, y, w, h) {
+    this.faceset.draw(x + RPM.defaultValue($datasGame.system.dbOptions.vfX, 0),
+        y - ((this.faceset.oH - h) / 2) + RPM.defaultValue($datasGame.system
+        .dbOptions.vfY, 0));
+}
+
+// -------------------------------------------------------
+
 GraphicMessage.prototype.draw = function(x, y, w, h) {
     var i, j, c, l, newX, offsetX, offsetY, align, graphic;
 
@@ -358,7 +375,9 @@ GraphicMessage.prototype.draw = function(x, y, w, h) {
     w = RPM.defaultValue(w, this.oW);
     h = RPM.defaultValue(h, this.oH);
 
-    this.faceset.draw(x, y - ((this.faceset.oH - h) / 2));
+    if ($datasGame.system.dbOptions.vfPosAbove) {
+        this.drawFaceset(x, y, w, h);
+    }
     newX = x + this.faceset.oW + RPM.HUGE_SPACE;
     offsetY = RPM.HUGE_SPACE;
     align = -1;

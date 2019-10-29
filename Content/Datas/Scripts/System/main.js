@@ -248,7 +248,6 @@ var $BB_ORIENTED_BOX = MapPortion.createOrientedBox();
 function initialize(){
     $settings = new Settings();
     $gameStack = new GameStack();
-    $loadingScene = new SceneLoading();
 }
 
 // -------------------------------------------------------
@@ -375,7 +374,9 @@ function drawHUD(loading) {
         $context.webkitImageSmoothingEnabled = false;
         $context.imageSmoothingEnabled = false;
         if (loading) {
-            $loadingScene.drawHUD();
+            if ($loadingScene) {
+                $loadingScene.drawHUD();
+            }
         }
         else {
             $gameStack.drawHUD();

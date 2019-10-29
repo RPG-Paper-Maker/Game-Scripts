@@ -80,7 +80,6 @@ DatasSystem.prototype = {
             $context.width = w;
             $context.height = h;
             resizeGL($canvas3D);
-            $loadingScene.text.updateFont();
             $requestPaintHUD = true;
 
             // Other numbers
@@ -144,7 +143,6 @@ DatasSystem.prototype = {
                 windowSkin.readJSON(jsonWindowSkin);
                 this.windowSkins[id] = windowSkin;
             }
-            this.idWindowSkin = json.wskin;
 
             // CameraProperties
             jsonList = json.cp;
@@ -216,6 +214,12 @@ DatasSystem.prototype = {
             this.soundCancel.readJSON(json.sca);
             this.soundImpossible = new SystemPlaySong(SongKind.Sound);
             this.soundImpossible.readJSON(json.si);
+
+            // Dialog box options
+            this.dbOptions = EventCommand.getEventCommand(json.dbo);
+            this.dbOptions.update();
+
+            $loadingScene = new SceneLoading();
         });
     },
 
@@ -296,6 +300,6 @@ DatasSystem.prototype = {
     // -------------------------------------------------------
 
     getWindowSkin: function() {
-        return this.windowSkins[this.idWindowSkin];
+        return this.windowSkins[this.dbOptions.windowSkinID.getValue()];
     }
 }

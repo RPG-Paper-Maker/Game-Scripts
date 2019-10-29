@@ -142,6 +142,8 @@ EventCommand.getEventCommand = function(json) {
             return new EventCommandSetMoveTurnAPicture(command);
         case EventCommandKind.RemoveAPicture:
             return new EventCommandRemoveAPicture(command);
+        case EventCommandKind.SetDialogBoxOptions:
+            return new EventCommandSetDialogBoxOptions(command);
         default:
             return null;
     }
@@ -173,9 +175,8 @@ function EventCommandShowText(command) {
     this.isDirectNode = false;
     this.parallel = false;
 
-    this.windowMain = new WindowBox(10, $SCREEN_Y - 10 - 150, $SCREEN_X - 20,
-        150, new GraphicMessage(this.message, this.facesetID), RPM
-        .HUGE_PADDING_BOX);
+    this.windowMain = new WindowBox(0, 0, 0, 0, new GraphicMessage(this.message,
+        this.facesetID), RPM.HUGE_PADDING_BOX);
     this.windowInterlocutor = new WindowBox(this.windowMain.oX + (RPM
         .MEDIUM_SLOT_HEIGHT / 2), this.windowMain.oY - (RPM.MEDIUM_SLOT_HEIGHT /
         2), RPM.MEDIUM_SLOT_WIDTH, RPM.MEDIUM_SLOT_HEIGHT, new GraphicText("", {
@@ -187,7 +188,24 @@ EventCommandShowText.prototype = {
     /** Initialize the current state.
     *   @returns {Object} The current state (clicked).
     */
-    initialize: function(){
+    initialize: function() {
+        this.windowMain.setX(RPM.defaultValue($datasGame.system.dbOptions.vx, 0));
+        this.windowMain.setY(RPM.defaultValue($datasGame.system.dbOptions.vy, 0));
+        this.windowMain.setW(RPM.defaultValue($datasGame.system.dbOptions.vw, 0));
+        this.windowMain.setH(RPM.defaultValue($datasGame.system.dbOptions.vh, 0));
+        this.windowInterlocutor.setX(this.windowMain.oX + (RPM
+            .MEDIUM_SLOT_HEIGHT / 2));
+        this.windowInterlocutor.setY(this.windowMain.oY - (RPM
+            .MEDIUM_SLOT_HEIGHT / 2));
+        this.windowMain.padding[0] = RPM.defaultValue($datasGame.system
+            .dbOptions.vpLeft, 0);
+        this.windowMain.padding[1] = RPM.defaultValue($datasGame.system
+            .dbOptions.vpTop, 0);
+        this.windowMain.padding[2] = RPM.defaultValue($datasGame.system
+            .dbOptions.vpRight, 0);
+        this.windowMain.padding[3] = RPM.defaultValue($datasGame.system
+            .dbOptions.vpBottom, 0);
+        this.windowMain.updateDimensions();
         this.windowMain.content.update();
 
         return {
@@ -244,6 +262,9 @@ EventCommandShowText.prototype = {
     *   @param {Object} currentState The current state of the event.
     */
     drawHUD: function(currentState) {
+        if (!this.windowMain.content.fAbove) {
+            this.windowMain.content.drawFaceset();
+        }
         this.windowMain.draw();
         if (this.windowInterlocutor.content.text) {
             this.windowInterlocutor.draw();
@@ -251,7 +272,8 @@ EventCommandShowText.prototype = {
 
         if (currentState) {
             $datasGame.system.getWindowSkin().drawArrowMessage(currentState
-                .frame, $SCREEN_X / 2, $SCREEN_Y - 40);
+                .frame, this.windowMain.oX + (this.windowMain.oW / 2), this
+                .windowMain.oY + (this.windowMain.oH - 40));
         }
     }
 }

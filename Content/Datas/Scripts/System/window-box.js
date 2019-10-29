@@ -125,6 +125,12 @@ WindowBox.prototype = {
                 contentDimension = this.contentDimension;
             }
 
+            // Content behind
+            if (this.content && this.content.drawBehind) {
+                this.content.drawBehind(contentDimension[0], contentDimension[1]
+                    , contentDimension[2], contentDimension[3]);
+            }
+
             // Draw box
             $datasGame.system.getWindowSkin().drawBox(windowDimension, this
                 .selected, this.bordersVisible);

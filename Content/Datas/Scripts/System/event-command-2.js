@@ -2283,3 +2283,192 @@ EventCommandRemoveAPicture.prototype.update = function(currentState, object,
 
     return 1;
 }
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandSetDialogBoxOptions
+//
+// -------------------------------------------------------
+
+function EventCommandSetDialogBoxOptions(command) {
+    var i, k, v, checked;
+
+    i = 0;
+    checked = command[i++] === RPM.NUM_BOOL_TRUE;
+    if (checked) {
+        k = command[i++];
+        v = command[i++];
+        this.windowSkinID = SystemValue.createValue(k, v);
+    }
+    checked = command[i++] === RPM.NUM_BOOL_TRUE;
+    if (checked) {
+        k = command[i++];
+        v = command[i++];
+        this.x = SystemValue.createValue(k, v);
+    }
+    checked = command[i++] === RPM.NUM_BOOL_TRUE;
+    if (checked) {
+        k = command[i++];
+        v = command[i++];
+        this.y = SystemValue.createValue(k, v);
+    }
+    checked = command[i++] === RPM.NUM_BOOL_TRUE;
+    if (checked) {
+        k = command[i++];
+        v = command[i++];
+        this.w = SystemValue.createValue(k, v);
+    }
+    checked = command[i++] === RPM.NUM_BOOL_TRUE;
+    if (checked) {
+        k = command[i++];
+        v = command[i++];
+        this.h = SystemValue.createValue(k, v);
+    }
+    checked = command[i++] === RPM.NUM_BOOL_TRUE;
+    if (checked) {
+        k = command[i++];
+        v = command[i++];
+        this.pLeft = SystemValue.createValue(k, v);
+    }
+    checked = command[i++] === RPM.NUM_BOOL_TRUE;
+    if (checked) {
+        k = command[i++];
+        v = command[i++];
+        this.pTop = SystemValue.createValue(k, v);
+    }
+    checked = command[i++] === RPM.NUM_BOOL_TRUE;
+    if (checked) {
+        k = command[i++];
+        v = command[i++];
+        this.pRight = SystemValue.createValue(k, v);
+    }
+    checked = command[i++] === RPM.NUM_BOOL_TRUE;
+    if (checked) {
+        k = command[i++];
+        v = command[i++];
+        this.pBottom = SystemValue.createValue(k, v);
+    }
+    checked = command[i++] === RPM.NUM_BOOL_TRUE;
+    if (checked) {
+        this.fPosAbove = command[i++] === RPM.NUM_BOOL_TRUE;
+    }
+    checked = command[i++] === RPM.NUM_BOOL_TRUE;
+    if (checked) {
+        k = command[i++];
+        v = command[i++];
+        this.fX = SystemValue.createValue(k, v);
+    }
+    checked = command[i++] === RPM.NUM_BOOL_TRUE;
+    if (checked) {
+        k = command[i++];
+        v = command[i++];
+        this.fY = SystemValue.createValue(k, v);
+    }
+    checked = command[i++] === RPM.NUM_BOOL_TRUE;
+    if (checked) {
+        this.tOutline = command[i++] !== RPM.NUM_BOOL_TRUE;
+    }
+    checked = command[i++] === RPM.NUM_BOOL_TRUE;
+    if (checked) {
+        k = command[i++];
+        v = command[i++];
+        this.tcText = SystemValue.createValue(k, v);
+    }
+    checked = command[i++] === RPM.NUM_BOOL_TRUE;
+    if (checked) {
+        k = command[i++];
+        v = command[i++];
+        this.tcOutline = SystemValue.createValue(k, v);
+    }
+    checked = command[i++] === RPM.NUM_BOOL_TRUE;
+    if (checked) {
+        k = command[i++];
+        v = command[i++];
+        this.tcBackground = SystemValue.createValue(k, v);
+    }
+    checked = command[i++] === RPM.NUM_BOOL_TRUE;
+    if (checked) {
+        k = command[i++];
+        v = command[i++];
+        this.tSize = SystemValue.createValue(k, v);
+    }
+    checked = command[i++] === RPM.NUM_BOOL_TRUE;
+    if (checked) {
+        k = command[i++];
+        v = command[i++];
+        this.tFont = SystemValue.createValue(k, v);
+    }
+
+    this.isDirectNode = true;
+    this.parallel = false;
+}
+
+EventCommandSetDialogBoxOptions.prototype = Object.create(EventCommand.prototype);
+
+// -------------------------------------------------------
+
+EventCommandSetDialogBoxOptions.prototype.update = function(currentState, object
+    , state)
+{
+    if (!RPM.isUndefined(this.windowSkinID)) {
+        $datasGame.system.dbOptions.vwindowSkinID = this.windowSkinID.getValue();
+    }
+    if (!RPM.isUndefined(this.x)) {
+        $datasGame.system.dbOptions.vx = this.x.getValue();
+    }
+    if (!RPM.isUndefined(this.y)) {
+        $datasGame.system.dbOptions.vy = this.y.getValue();
+    }
+    if (!RPM.isUndefined(this.w)) {
+        $datasGame.system.dbOptions.vw = this.w.getValue();
+    }
+    if (!RPM.isUndefined(this.h)) {
+        $datasGame.system.dbOptions.vh = this.h.getValue();
+    }
+    if (!RPM.isUndefined(this.pLeft)) {
+        $datasGame.system.dbOptions.vpLeft = this.pLeft.getValue();
+    }
+    if (!RPM.isUndefined(this.pTop)) {
+        $datasGame.system.dbOptions.vpTop = this.pTop.getValue();
+    }
+    if (!RPM.isUndefined(this.pRight)) {
+        $datasGame.system.dbOptions.vpRight = this.pRight.getValue();
+    }
+    if (!RPM.isUndefined(this.pBottom)) {
+        $datasGame.system.dbOptions.vpBottom = this.pBottom.getValue();
+    }
+    if (!RPM.isUndefined(this.fPosAbove)) {
+        $datasGame.system.dbOptions.vfPosAbove = this.fPosAbove;
+    }
+    if (!RPM.isUndefined(this.fX)) {
+        $datasGame.system.dbOptions.fX = this.fX.getValue();
+    }
+    if (!RPM.isUndefined(this.fY)) {
+        $datasGame.system.dbOptions.fY = this.fY.getValue();
+    }
+    if (!RPM.isUndefined(this.tOutline)) {
+        $datasGame.system.dbOptions.vtOutline = this.tOutline;
+    }
+    if (!RPM.isUndefined(this.tcText)) {
+        $datasGame.system.dbOptions.vtcText = $datasGame.system.colors[this
+            .tcText.getValue()];
+    }
+    if (!RPM.isUndefined(this.tcOutline)) {
+        $datasGame.system.dbOptions.vtcOutline = $datasGame.system.colors[this
+            .tcOutline.getValue()];
+    }
+    if (!RPM.isUndefined(this.tcBackground)) {
+        $datasGame.system.dbOptions.vtcBackground = $datasGame.system.colors[
+            this.tcBackground.getValue()];
+    }
+    if (!RPM.isUndefined(this.tSize)) {
+        $datasGame.system.dbOptions.vtSize = $datasGame.system.fontSizes[this
+            .tSize.getValue()].getValue();
+    }
+    if (!RPM.isUndefined(this.tFont)) {
+        $datasGame.system.dbOptions.vtFont = $datasGame.system.fontNames[this
+            .tFont.getValue()].getValue();
+    }
+
+    return 1;
+}

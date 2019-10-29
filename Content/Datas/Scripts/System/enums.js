@@ -70,7 +70,8 @@ var EventCommandKind = {
     Script: 34,
     DisplayAPicture: 35,
     SetMoveTurnAPicture: 36,
-    RemoveAPicture: 37
+    RemoveAPicture: 37,
+    SetDialogBoxOptions: 38
 };
 Object.freeze(EventCommandKind);
 

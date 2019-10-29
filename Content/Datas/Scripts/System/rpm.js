@@ -1334,11 +1334,17 @@ RPM.formulaContainsTarget = function(formula) {
 // -------------------------------------------------------
 
 RPM.jsonDefault = function(json, defaultValue) {
-    return typeof json === RPM.UNDEFINED ? defaultValue : json;
+    return RPM.isUndefined(json) ? defaultValue : json;
 };
 
 // -------------------------------------------------------
 
 RPM.defaultValue = function(value, defaultValue) {
-    return typeof value === RPM.UNDEFINED ? defaultValue : value;
+    return RPM.isUndefined(value) ? defaultValue : value;
+};
+
+// -------------------------------------------------------
+
+RPM.isUndefined = function(value) {
+    return typeof value === RPM.UNDEFINED;
 };

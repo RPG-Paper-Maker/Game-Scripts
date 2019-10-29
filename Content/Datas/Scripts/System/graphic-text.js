@@ -37,14 +37,20 @@ function GraphicText(text, opt) {
     Bitmap.call(this, opt.x, opt.y, opt.w, opt.h);
 
     this.align = RPM.defaultValue(opt.align, Align.Left);
-    this.fontSize = RPM.defaultValue(opt.fontSize, $fontSize);
-    this.fontName = RPM.defaultValue(opt.fontName, $fontName);
+    this.fontSize = RPM.defaultValue(opt.fontSize, RPM.defaultValue($datasGame
+        .system.dbOptions.vtSize, $fontSize));
+    this.fontName = RPM.defaultValue(opt.fontName, RPM.defaultValue($datasGame
+        .system.dbOptions.vtFont, $fontName));
     this.verticalAlign = RPM.defaultValue(opt.verticalAlign, Align.Center);
-    this.color = RPM.defaultValue(opt.color, RPM.COLOR_WHITE);
+    this.color = RPM.defaultValue(opt.color, RPM.defaultValue($datasGame.system
+        .dbOptions.vtcText, RPM.COLOR_WHITE));
     this.bold = RPM.defaultValue(opt.bold, false);
     this.italic = RPM.defaultValue(opt.italic, false);
-    this.backColor = RPM.defaultValue(opt.backColor, null);
-    this.strokeColor = RPM.defaultValue(opt.strokeColor, null);
+    this.backColor = RPM.defaultValue(opt.backColor, RPM.defaultValue($datasGame
+        .system.dbOptions.vtcBackground, null));
+    this.strokeColor = RPM.defaultValue(opt.strokeColor, RPM.defaultValue(
+        $datasGame.system.dbOptions.tOutline, false)? RPM.defaultValue(
+        $datasGame.system.dbOptions.vtcOutline, null) : null);
     this.updateFontSize(this.fontSize);
     this.setText(RPM.defaultValue(text, ""));
 }
@@ -139,7 +145,7 @@ GraphicText.prototype = {
     */
     draw: function(x, y, w, h) {
         var lineHeight, lines, xBack;
-        var i, l, yOffset, textWidth, textHeight;
+        var i, l, yOffset, textWidth, textHeight, color;
 
         // Default values
         if (typeof x === 'undefined') x = this.oX;
