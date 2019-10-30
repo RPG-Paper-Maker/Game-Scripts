@@ -1149,8 +1149,13 @@ EventCommandMoveObject.prototype = {
 *   @property {number} milliseconds The number of milliseconds to wait.
 *   @param {JSON} command Direct JSON command to parse.
 */
-function EventCommandWait(command){
-    this.milliseconds = command[0] * 1000;
+function EventCommandWait(command) {
+    var i, k, v;
+
+    i = 0;
+    k = command[i++];
+    v = command[i++];
+    this.milliseconds = SystemValue.createValue(k, v);
 
     this.isDirectNode = false;
     this.parallel = false;
@@ -1161,8 +1166,9 @@ EventCommandWait.prototype = {
     /** Initialize the current state.
     *   @returns {Object} The current state (clicked).
     */
-    initialize: function(){
+    initialize: function() {
         return {
+            milliseconds: this.milliseconds.getValue() * 1000,
             currentTime: new Date().getTime()
         }
     },
@@ -1175,9 +1181,9 @@ EventCommandWait.prototype = {
     *   @param {number} state The state ID.
     *   @returns {number} The number of node to pass.
     */
-    update: function(currentState, object, state){
-        return (currentState.currentTime + this.milliseconds <=
-                new Date().getTime()) ? 1 : 0;
+    update: function(currentState, object, state) {
+        return (currentState.currentTime + currentState.milliseconds <= new
+            Date().getTime()) ? 1 : 0;
     },
 
     // -------------------------------------------------------
