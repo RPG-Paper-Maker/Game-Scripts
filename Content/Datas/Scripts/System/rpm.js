@@ -1348,3 +1348,9 @@ RPM.defaultValue = function(value, defaultValue) {
 RPM.isUndefined = function(value) {
     return typeof value === RPM.UNDEFINED;
 };
+
+// -------------------------------------------------------
+
+RPM.numToBool = function(num) {
+    return num === RPM.NUM_BOOL_TRUE;
+}

@@ -592,6 +592,64 @@ function EventCommandIf(command) {
         k = command[i++];
         v = command[i++];
         this.variableParamPropValue = SystemValue.createValue(k, v);
+        break;
+    case 1: // Heroes
+        this.heroesSelection = command[i++];
+        if (this.heroesSelection === ConditionHeroesKind.TheHeroeWithInstanceID) {
+            k = command[i++];
+            v = command[i++];
+            this.heroInstanceID = SystemValue.createValue(k, v);;
+        }
+        this.heroesInTeam = RPM.numToBool(command[i++]);
+        if (this.heroesInTeam) {
+            this.heroesInTeamSelection = command[i++];
+        }
+        this.heroesKind = command[i++];
+        switch (this.heroesKind) {
+        case 0:
+            k = command[i++];
+            v = command[i++];
+            this.heroesNamed = SystemValue.createValue(k, v);
+            break;
+        case 1:
+            this.heroesInTeamValue = command[i++];
+            break;
+        case 2:
+            k = command[i++];
+            v = command[i++];
+            this.heroesSkillID = SystemValue.createValue(k, v);
+            break;
+        case 3:
+            this.heroesEquipedKind = command[i++];
+            switch (this.heroesEquipedKind) {
+            case 0:
+                k = command[i++];
+                v = command[i++];
+                this.heroesEquipedWeaponID = SystemValue.createValue(k, v);
+                break;
+            case 1:
+                k = command[i++];
+                v = command[i++];
+                this.heroesEquipedArmorID = SystemValue.createValue(k, v);
+                break;
+            }
+            break;
+        case 4:
+            k = command[i++];
+            v = command[i++];
+            this.heroesStatusID = SystemValue.createValue(k, v);
+            break;
+        case 5:
+            k = command[i++];
+            v = command[i++];
+            this.heroesStatisticID = SystemValue.createValue(k, v);
+            this.heroesStatisticOperation = command[i++];
+            k = command[i++];
+            v = command[i++];
+            this.heroesStatisticValue = SystemValue.createValue(k, v);
+            break;
+        }
+        break;
     }
 
     this.isDirectNode = true;
@@ -600,7 +658,82 @@ function EventCommandIf(command) {
 
 EventCommandIf.prototype = {
 
+    allTheHeroes: function(tab, callback) {
+        var i, l;
+
+        for (i = 0, l = tab.length; i < l; i++) {
+            if (!callback.call(this, tab[i])) {
+                return false;
+            }
+        }
+
+        return true;
+    },
+
+    // -------------------------------------------------------
+
+    noneOfTheHeroes: function(tab, callback) {
+        var i, l;
+
+        for (i = 0, l = tab.length; i < l; i++) {
+            if (callback.call(this, tab[i])) {
+                return false;
+            }
+        }
+
+        return true;
+    },
+
+    // -------------------------------------------------------
+
+    atLeastOneHero: function(tab, callback) {
+        var i, l;
+
+        for (i = 0, l = tab.length; i < l; i++) {
+            if (callback.call(this, tab[i])) {
+                return true;
+            }
+        }
+
+        return false;
+    },
+
+    // -------------------------------------------------------
+
+    theHeroeWithInstanceID: function(tab, id, callback) {
+        var i, l, hero;
+
+        for (i = 0, l = tab.length; i < l; i++) {
+            hero = tab[i];
+            if (hero.instid === id && !callback.call(this, hero)) {
+                return false;
+            }
+        }
+
+        return true;
+    },
+
+    // -------------------------------------------------------
+
+    getResult: function(tab, callback) {
+        switch (this.heroesSelection) {
+        case ConditionHeroesKind.AllTheHeroes:
+            return this.allTheHeroes(tab, callback);
+        case ConditionHeroesKind.NoneOfTheHeroes:
+            return this.noneOfTheHeroes(tab, callback);
+        case ConditionHeroesKind.AtLeastOneHero:
+            return this.atLeastOneHero(tab, callback);
+        case ConditionHeroesKind.TheHeroeWithInstanceID:
+            return this.theHeroeWithInstanceID(tab, this.heroInstanceID
+                .getValue(), callback);
+        }
+    },
+
+    // -------------------------------------------------------
+
     initialize: function(){ return null; },
+
+    // -------------------------------------------------------
 
     /** Check where to go according to the condition.
     *   @param {Object} currentState The current state of the event.
@@ -609,13 +742,110 @@ EventCommandIf.prototype = {
     *   @returns {number} The number of node to pass.
     */
     update: function(currentState, object, state){
-        var result;
+        var i, l, id, result;
 
         switch (this.kind) {
         case 0: // Variable / Param / Prop
             result = $operators_compare[this.variableParamPropOperationKind](
                 this.variableParamProp.getValue(), this.variableParamPropValue
-                .getValue())
+                .getValue());
+            break;
+        case 1:
+            var heroesSelection, nb;
+
+            if (this.heroesInTeam) {
+                heroesSelection = $game.getTeam(this.heroesInTeamSelection);
+            } else {
+                heroesSelection = $game.teamHeroes.concat($game.reserveHeroes);
+                heroesSelection.concat($game.hiddenHeroes);
+            }
+
+            switch (this.heroesKind) {
+            case 0:
+                var name;
+
+                name = this.heroesNamed.getValue();
+                result = this.getResult(heroesSelection, function(hero) {
+                    return hero.name === name;
+                });
+                break;
+            case 1:
+                var tab;
+
+                tab = $game.getTeam(this.heroesInTeamValue);
+                result = this.getResult(heroesSelection, function(hero) {
+                    id = hero.instid;
+                    for (i = 0, l = tab.length; i < l; i++) {
+                        if (tab[i].instid === id) {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+                break;
+            case 2:
+                id = this.heroesSkillID.getValue();
+                result = this.getResult(heroesSelection, function(hero) {
+                    for (i = 0, l = hero.sk.length; i < l; i++) {
+                        if (hero.sk[i].id === id) {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+                break;
+            case 3:
+                var equip;
+
+                switch (this.heroesEquipedKind) {
+                case 0:
+                    id = this.heroesEquipedWeaponID.getValue();
+                    result = this.getResult(heroesSelection, function(hero) {
+                        for (i = 0, l = hero.equip.length; i < l; i++) {
+                            equip = hero.equip[i];
+                            if (equip && equip.k === ItemKind.Weapon && equip.id
+                                === id)
+                            {
+                                return true;
+                            }
+                        }
+                        return false;
+                    });
+                    break;
+                case 1:
+                    id = this.heroesEquipedArmorID.getValue();
+                    result = this.getResult(heroesSelection, function(hero) {
+                        for (i = 0, l = hero.equip.length; i < l; i++) {
+                            equip = hero.equip[i];
+                            if (equip && equip.k === ItemKind.Armor && equip.id
+                                === id)
+                            {
+                                return true;
+                            }
+                        }
+                        return false;
+                    });
+                    break;
+                }
+                break;
+            case 4:
+                // TODO
+                break;
+            case 5:
+                var stat, value;
+
+                stat = $datasGame.battleSystem.statistics[this.heroesStatisticID
+                    .getValue()];
+                value = this.heroesStatisticValue.getValue();
+                result = this.getResult(heroesSelection, function(hero) {
+                    return $operators_compare[this.heroesStatisticOperation](
+                        hero[stat.abbreviation], value);
+                });
+                break;
+            }
+            break;
+        default:
+            break;
         }
 
         if (result) {

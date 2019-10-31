@@ -497,3 +497,16 @@ var TagKind = {
     Icon: 16
 };
 Object.freeze(TagKind);
+
+/**
+*   Enum for the condition heroes.
+*   @enum {number}
+*   @readonly
+*/
+var ConditionHeroesKind = {
+    AllTheHeroes: 0,
+    NoneOfTheHeroes: 1,
+    AtLeastOneHero: 2,
+    TheHeroeWithInstanceID: 3
+};
+Object.freeze(ConditionHeroesKind);

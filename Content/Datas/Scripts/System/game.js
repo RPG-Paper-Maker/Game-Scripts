@@ -111,6 +111,21 @@ Game.prototype = {
 
     // -------------------------------------------------------
 
+    getTeam: function(kind) {
+        switch (kind) {
+        case GroupKind.Team:
+            return this.teamHeroes;
+        case GroupKind.Reserve:
+            return this.reserveHeroes;
+        case GroupKind.Hidden:
+            return this.hiddenHeroes;
+        }
+
+        return null;
+    },
+
+    // -------------------------------------------------------
+
     /** Read a game file.
     *   @param {number} slot The number of the slot to load.
     *   @param {Object} json json Json object describing the object.
