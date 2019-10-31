@@ -221,6 +221,8 @@ SystemValue.prototype = {
             return $currentObject.properties[this.value];
         case PrimitiveValueKind.Message:
             return "" + this.value;
+        case PrimitiveValueKind.Switch:
+            return RPM.numToBool(this.value);
         default:
             return this.value;
         }

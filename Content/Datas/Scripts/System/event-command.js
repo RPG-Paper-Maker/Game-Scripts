@@ -688,6 +688,19 @@ function EventCommandIf(command) {
         this.armorValue = SystemValue.createValue(k, v);
         this.armorEquiped = RPM.numToBool(command[i++]);
         break;
+    case 6:
+        k = command[i++];
+        v = command[i++];
+        this.keyID = SystemValue.createValue(k, v);
+        k = command[i++];
+        v = command[i++];
+        this.keyValue = SystemValue.createValue(k, v);
+        break;
+    case 7:
+        k = command[i++];
+        v = command[i++];
+        this.script = SystemValue.createValue(k, v);
+        break;
     }
 
     this.isDirectNode = true;
@@ -948,6 +961,20 @@ EventCommandIf.prototype = {
             }
             result = $operators_compare[this.operationArmor](nb, this.armorValue
                 .getValue());
+            break;
+        case 6:
+            data = $datasGame.keyBoard.list[this.keyID.getValue()];
+            value = this.keyValue.getValue();
+            result = !value;
+            for (i = 0, l = $keysPressed.length; i < l; i++) {
+                if (DatasKeyBoard.isKeyEqual($keysPressed[i], data)) {
+                    result = value;
+                    break;
+                }
+            }
+            break;
+        case 7:
+            result = RPM.evaluateScript("return " + this.script.getValue());
             break;
         default:
             break;
