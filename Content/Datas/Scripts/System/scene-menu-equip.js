@@ -109,18 +109,7 @@ SceneMenuEquip.prototype = {
                 systemItem = item.getItemInformations();
                 type = systemItem.getType();
                 if (type.equipments[idEquipment]) {
-
-                    // Correct the number according to equiped items
                     nbItem = item.nb;
-                    ll = $game.teamHeroes.length;
-                    for (c = 0; c < ll; c++){
-                        character = $game.teamHeroes[c];
-                        lll = character.equip.length;
-                        for (k = 0; k < lll; k++) {
-                            if (item === character.equip[k]) nbItem--;
-                        }
-                    }
-
                     if (nbItem > 0){
                         list.push(new GraphicItem(item, nbItem));
                     }
@@ -165,11 +154,17 @@ SceneMenuEquip.prototype = {
     /** Remove the equipment of the character.
     */
     remove: function(){
-        var character =
-                $game.teamHeroes[this.windowChoicesTabs.currentSelectedIndex];
-        var id = $datasGame.battleSystem.equipmentsOrder
-                [this.windowChoicesEquipment.currentSelectedIndex];
+        var i, l, character, id, prev, item;
+
+        character = $game.teamHeroes[this.windowChoicesTabs.currentSelectedIndex];
+        id = $datasGame.battleSystem.equipmentsOrder[this.windowChoicesEquipment
+            .currentSelectedIndex];
+        prev = character.equip[id];
         character.equip[id] = null;
+        if (prev) {
+            prev.add(1);
+        }
+
         this.updateStats();
     },
 
@@ -177,13 +172,28 @@ SceneMenuEquip.prototype = {
 
     /** Equip the selected equipment.
     */
-    equip: function(){
-        var index = this.windowChoicesTabs.currentSelectedIndex;
-        var character = $game.teamHeroes[index];
-        var item = this.windowChoicesList.getCurrentContent().gameItem;
-        var id = $datasGame.battleSystem.equipmentsOrder
-                [this.windowChoicesEquipment.currentSelectedIndex];
-        character.equip[id] = item;
+    equip: function() {
+        var i, l, gameItem, item, index, character, id, prev;
+
+        index = this.windowChoicesTabs.currentSelectedIndex;
+        character = $game.teamHeroes[index];
+        gameItem = this.windowChoicesList.getCurrentContent().gameItem;
+        id = $datasGame.battleSystem.equipmentsOrder[this.windowChoicesEquipment
+            .currentSelectedIndex];
+        prev = character.equip[id];
+        character.equip[id] = gameItem;
+
+        // Remove one equip from inventory
+        for (i = 0, l = $game.items.length; i < l; i++) {
+            item = $game.items[i];
+            if (item.k === gameItem.k && item.id === gameItem.id) {
+                item.remove(1);
+            }
+        }
+        if (prev) {
+            prev.add(1);
+        }
+
         this.updateStats();
     },
 

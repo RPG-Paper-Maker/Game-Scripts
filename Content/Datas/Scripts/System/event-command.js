@@ -650,6 +650,44 @@ function EventCommandIf(command) {
             break;
         }
         break;
+    case 2:
+        k = command[i++];
+        v = command[i++];
+        this.currencyID = SystemValue.createValue(k, v);
+        this.operationCurrency = command[i++];
+        k = command[i++];
+        v = command[i++];
+        this.currencyValue = SystemValue.createValue(k, v);
+        break;
+    case 3:
+        k = command[i++];
+        v = command[i++];
+        this.itemID = SystemValue.createValue(k, v);
+        this.operationItem = command[i++];
+        k = command[i++];
+        v = command[i++];
+        this.itemValue = SystemValue.createValue(k, v);
+        break;
+    case 4:
+        k = command[i++];
+        v = command[i++];
+        this.weaponID = SystemValue.createValue(k, v);
+        this.operationWeapon = command[i++];
+        k = command[i++];
+        v = command[i++];
+        this.weaponValue = SystemValue.createValue(k, v);
+        this.weaponEquiped = RPM.numToBool(command[i++]);
+        break;
+    case 5:
+        k = command[i++];
+        v = command[i++];
+        this.armorID = SystemValue.createValue(k, v);
+        this.operationArmor = command[i++];
+        k = command[i++];
+        v = command[i++];
+        this.armorValue = SystemValue.createValue(k, v);
+        this.armorEquiped = RPM.numToBool(command[i++]);
+        break;
     }
 
     this.isDirectNode = true;
@@ -742,7 +780,7 @@ EventCommandIf.prototype = {
     *   @returns {number} The number of node to pass.
     */
     update: function(currentState, object, state){
-        var i, l, id, result;
+        var i, j, l, ll, id, result, data, value, nb, heroesSelection, h, equip;
 
         switch (this.kind) {
         case 0: // Variable / Param / Prop
@@ -751,8 +789,6 @@ EventCommandIf.prototype = {
                 .getValue());
             break;
         case 1:
-            var heroesSelection, nb;
-
             if (this.heroesInTeam) {
                 heroesSelection = $game.getTeam(this.heroesInTeamSelection);
             } else {
@@ -795,8 +831,6 @@ EventCommandIf.prototype = {
                 });
                 break;
             case 3:
-                var equip;
-
                 switch (this.heroesEquipedKind) {
                 case 0:
                     id = this.heroesEquipedWeaponID.getValue();
@@ -832,17 +866,88 @@ EventCommandIf.prototype = {
                 // TODO
                 break;
             case 5:
-                var stat, value;
-
-                stat = $datasGame.battleSystem.statistics[this.heroesStatisticID
+                data = $datasGame.battleSystem.statistics[this.heroesStatisticID
                     .getValue()];
                 value = this.heroesStatisticValue.getValue();
                 result = this.getResult(heroesSelection, function(hero) {
                     return $operators_compare[this.heroesStatisticOperation](
-                        hero[stat.abbreviation], value);
+                        hero[data.abbreviation], value);
                 });
                 break;
             }
+            break;
+        case 2:
+            result = $operators_compare[this.operationCurrency]($game.currencies
+                [this.currencyID.getValue()], this.currencyValue.getValue());
+            break;
+        case 3:
+            nb = 0;
+            id = this.itemID.getValue();
+            for (i = 0, l = $game.items.length; i < l; i++) {
+                data = $game.items[i];
+                if (data.k === ItemKind.Item && data.id === id) {
+                    nb = data.nb;
+                    break;
+                }
+            }
+            result = $operators_compare[this.operationItem](nb, this.itemValue
+                .getValue());
+            break;
+        case 4:
+            nb = 0;
+            id = this.weaponID.getValue();
+            for (i = 0, l = $game.items.length; i < l; i++) {
+                data = $game.items[i];
+                if (data.k === ItemKind.Weapon && data.id === id) {
+                    nb = data.nb;
+                    break;
+                }
+            }
+            if (this.weaponEquiped) {
+                heroesSelection = $game.teamHeroes.concat($game.reserveHeroes);
+                heroesSelection.concat($game.hiddenHeroes);
+                for (i = 0, l = heroesSelection.length; i < l; i++) {
+                    h = heroesSelection[i];
+                    for (j = 0, ll = h.equip.length; j < ll; j++) {
+                        equip = h.equip[j];
+                        if (equip && equip.k === ItemKind.Weapon && equip.id ===
+                            id)
+                        {
+                            nb += 1;
+                        }
+                    }
+                }
+            }
+            result = $operators_compare[this.operationWeapon](nb, this
+                .weaponValue.getValue());
+            break;
+        case 5:
+            nb = 0;
+            id = this.armorID.getValue();
+            for (i = 0, l = $game.items.length; i < l; i++) {
+                data = $game.items[i];
+                if (data.k === ItemKind.Armor && data.id === id) {
+                    nb = data.nb;
+                    break;
+                }
+            }
+            if (this.armorEquiped) {
+                heroesSelection = $game.teamHeroes.concat($game.reserveHeroes);
+                heroesSelection.concat($game.hiddenHeroes);
+                for (i = 0, l = heroesSelection.length; i < l; i++) {
+                    h = heroesSelection[i];
+                    for (j = 0, ll = h.equip.length; j < ll; j++) {
+                        equip = h.equip[j];
+                        if (equip && equip.k === ItemKind.Armor && equip.id ===
+                            id)
+                        {
+                            nb += 1;
+                        }
+                    }
+                }
+            }
+            result = $operators_compare[this.operationArmor](nb, this.armorValue
+                .getValue());
             break;
         default:
             break;

@@ -32,6 +32,24 @@ function GameItem(kind, id, nb){
 
 GameItem.prototype = {
 
+    remove: function(nb) {
+        this.nb -= nb;
+        if (this.nb <= 0) {
+            $game.items.splice($game.items.indexOf(this), 1);
+        }
+    },
+
+    // -------------------------------------------------------
+
+    add: function(nb) {
+        if (this.nb === 0) {
+            $game.items.push(this);
+        }
+        this.nb += nb;
+    },
+
+    // -------------------------------------------------------
+
     /** Get the item informations system.
     *   @returns {SystemItem|SystemWeapon|SystemArmor}
     */
@@ -47,6 +65,8 @@ GameItem.prototype = {
 
         return null;
     },
+
+    // -------------------------------------------------------
 
     /** Modify items only if already in inventory
     *   @param {function} callback callback function for action.

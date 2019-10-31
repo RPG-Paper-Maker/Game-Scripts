@@ -287,11 +287,11 @@ DatasSystem.prototype = {
     *   @returns {number[]}
     */
     getDefaultCurrencies: function(){
-        var i, l = this.currencies.length;
-        var list = new Array(l);
+        var id, list;
 
-        for (i = 1; i < l; i++) {
-            list[i] = 0;
+        list = [];
+        for (id in this.currencies) {
+            list[id] = 0;
         }
 
         return list;
