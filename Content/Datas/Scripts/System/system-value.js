@@ -30,10 +30,20 @@ function SystemValue(){
 *   @property {number} v The value.
 *   @returns {SystemValue}
 */
-SystemValue.createValue = function(k, v){
+SystemValue.createValue = function(k, v) {
     var value = new SystemValue();
     value.kind = k;
-    value.value = v;
+    switch (this.kind) {
+    case PrimitiveValueKind.Message:
+        value.value = "" + v;
+        break;
+    case PrimitiveValueKind.Switch:
+        value.value = RPM.numToBool(v);
+        break;
+    default:
+        value.value = v;
+        break;
+    }
     return value;
 }
 
@@ -219,10 +229,6 @@ SystemValue.prototype = {
             return $currentParameters[this.value].getValue();
         case PrimitiveValueKind.Property:
             return $currentObject.properties[this.value];
-        case PrimitiveValueKind.Message:
-            return "" + this.value;
-        case PrimitiveValueKind.Switch:
-            return RPM.numToBool(this.value);
         default:
             return this.value;
         }
