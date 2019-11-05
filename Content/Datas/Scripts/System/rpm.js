@@ -80,6 +80,7 @@ RPM.PATH_SHAPES = "Content/Shapes/";
 RPM.PATH_OBJ = RPM.PATH_SHAPES + "OBJ";
 RPM.PATH_MTL = RPM.PATH_SHAPES + "MTL";
 RPM.PATH_OBJ_COLLISIONS = RPM.PATH_SHAPES + "Collisions";
+RPM.PATH_SHADERS = "Content/Shaders/";
 
 // -------------------------------------------------------
 //  CONSTANTS
@@ -706,6 +707,14 @@ RPM.openFile = function(base, url, loading, callback){
     doc.send();
 }
 
+RPM.openFile(null, $ROOT_DIRECTORY + RPM.PATH_SHADERS + "fix.vert", false, function(res) {
+    console.log(RPM.PATH_SHADERS + "fix.vert")
+    RPM.SHADER_FIX_VERTEX = res;
+});
+RPM.openFile(null, $ROOT_DIRECTORY + RPM.PATH_SHADERS + "fix.frag", false, function(res) {
+    RPM.SHADER_FIX_FRAGMENT = res;
+});
+
 // -------------------------------------------------------
 
 /** Write a json file
@@ -1262,19 +1271,25 @@ RPM.loadTextureEmpty = function(){
 *   @retuns {THREE.MeshBasicMaterial}
 */
 RPM.createMaterial = function(texture) {
+    var material;
+
     texture.magFilter = THREE.NearestFilter;
     texture.minFilter = THREE.NearestFilter;
     texture.flipY = false;
+    var uniforms = {
+        texture: { type: "t", value: texture }
+    };
 
-    return new THREE.MeshBasicMaterial(
-    {
-        map: texture,
+    material = new THREE.ShaderMaterial({
+        uniforms:       uniforms,
+        vertexShader:   RPM.SHADER_FIX_VERTEX,
+        fragmentShader: RPM.SHADER_FIX_FRAGMENT,
         transparent: true,
-        side: THREE.DoubleSide,
-        shading: THREE.FlatShading,
-        alphaTest: 0.5,
-        overdraw: 0.5
+        side: THREE.DoubleSide
     });
+    material.map = texture;
+
+    return material;
 };
 
 // -------------------------------------------------------
