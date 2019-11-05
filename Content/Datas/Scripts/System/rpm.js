@@ -1277,7 +1277,8 @@ RPM.createMaterial = function(texture) {
     texture.minFilter = THREE.NearestFilter;
     texture.flipY = false;
     var uniforms = {
-        texture: { type: "t", value: texture }
+        texture: { type: "t", value: texture },
+        colorD: { type: "v4", value: $colorDominating }
     };
 
     material = new THREE.ShaderMaterial({
