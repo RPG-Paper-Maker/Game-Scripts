@@ -144,6 +144,8 @@ EventCommand.getEventCommand = function(json) {
             return new EventCommandRemoveAPicture(command);
         case EventCommandKind.SetDialogBoxOptions:
             return new EventCommandSetDialogBoxOptions(command);
+        case EventCommandKind.TitleScreen:
+            return new EventCommandTitleScreen(command);
         default:
             return null;
     }

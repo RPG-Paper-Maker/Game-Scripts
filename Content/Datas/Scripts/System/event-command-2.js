@@ -2570,3 +2570,27 @@ EventCommandSetDialogBoxOptions.prototype.update = function(currentState, object
 
     return 1;
 }
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandTitleScreen
+//
+// -------------------------------------------------------
+
+function EventCommandTitleScreen(command) {
+    this.isDirectNode = true;
+    this.parallel = false;
+}
+
+EventCommandTitleScreen.prototype = Object.create(EventCommand.prototype);
+
+// -------------------------------------------------------
+
+EventCommandTitleScreen.prototype.update = function(currentState, object,
+    state)
+{
+    $gameStack.pop();
+    $gameStack.pushTitleScreen();
+
+    return 1;
+}
