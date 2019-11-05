@@ -27,6 +27,7 @@
 function MapObject(system, position, isHero) {
     this.system = system;
     this.position = position;
+    this.previousPosition = position;
     this.mesh = null;
     this.meshBoundingBox = null;
     this.currentBoundingBox = null;
@@ -45,6 +46,9 @@ function MapObject(system, position, isHero) {
     this.isInScene = false;
     this.receivedOneEvent = false;
     this.movingState = null;
+    this.previousOrientation = null;
+    this.previousMoveCommand = null;
+    this.otherMoveCommand = null;
     if (!this.isHero && !this.isStartup) {
         this.initializeProperties();
     }
@@ -354,9 +358,9 @@ MapObject.prototype = {
     */
     getFuturPosition: function(orientation, distance, angle){
 
-        var position = new THREE.Vector3(this.position.x,
-                                         this.position.y,
-                                         this.position.z);
+        var position = new THREE.Vector3(this.previousPosition.x,
+                                         this.previousPosition.y,
+                                         this.previousPosition.z);
 
         // The speed depends on the time elapsed since the last update
         var xPlus, zPlus, xAbs, zAbs, res, i, l, blocked;
@@ -364,8 +368,9 @@ MapObject.prototype = {
         var h = $currentMap.mapInfos.width * $SQUARE_SIZE;
         var result, yMountain;
 
-        switch (orientation){
-        case Orientation.South:
+        if (orientation === Orientation.South || this.previousOrientation === Orientation
+            .South)
+        {
             xPlus = distance * RPM.cos(angle * Math.PI / 180.0);
             zPlus = distance * RPM.sin(angle * Math.PI / 180.0);
             res = position.z - zPlus;
@@ -374,8 +379,10 @@ MapObject.prototype = {
             res = position.x - xPlus;
             if (res >= 0 && res < w)
                 position.setX(res);
-            break;
-        case Orientation.West:
+        }
+        if (orientation === Orientation.West || this.previousOrientation === Orientation
+            .West)
+        {
             xPlus = distance * RPM.cos((angle - 90.0) * Math.PI / 180.0);
             zPlus = distance * RPM.sin((angle - 90.0) * Math.PI / 180.0);
             res = position.x + xPlus;
@@ -384,8 +391,10 @@ MapObject.prototype = {
             res = position.z + zPlus;
             if (res >= 0 && res < h)
                position.setZ(res);
-            break;
-        case Orientation.North:
+        }
+        if (orientation === Orientation.North || this.previousOrientation === Orientation
+            .North)
+        {
             xPlus = distance * RPM.cos(angle * Math.PI / 180.0);
             zPlus = distance * RPM.sin(angle * Math.PI / 180.0);
             res = position.z + zPlus;
@@ -394,8 +403,10 @@ MapObject.prototype = {
             res = position.x + xPlus;
             if (res >= 0 && res < w)
                 position.setX(res);
-            break;
-        case Orientation.East:
+        }
+        if (orientation === Orientation.East || this.previousOrientation === Orientation
+                .East)
+        {
             xPlus = distance * RPM.cos((angle - 90.0) * Math.PI / 180.0);
             zPlus = distance * RPM.sin((angle - 90.0) * Math.PI / 180.0);
             res = position.x - xPlus;
@@ -404,9 +415,13 @@ MapObject.prototype = {
             res = position.z - zPlus;
             if (res >= 0 && res < h)
                 position.setZ(res);
-            break;
-        default:
-            break;
+        }
+
+        if (this.blockX) {
+            position.setX(this.previousPosition.x);
+        }
+        if (this.blockZ) {
+            position.setZ(this.previousPosition.z);
         }
 
         // Collision
@@ -589,7 +604,7 @@ MapObject.prototype = {
     *   @returns {number} Distance cross.
     */
     move: function(orientation, limit, angle, isCameraOrientation){
-        var objects, movedObjects, index;
+        var objects, movedObjects, index, normalDistance, position, distance;
 
         // Remove from move
         this.removeMoveTemp();
@@ -597,11 +612,16 @@ MapObject.prototype = {
         // Set position
         var speed = this.speed.getValue() * MapObject.SPEED_NORMAL *
             $averageElapsedTime * $SQUARE_SIZE;
-        if (this.movingVertical !== null && this.movingHorizontal !== null)
+        if (this.otherMoveCommand !== null) {
             speed *= Math.SQRT1_2;
-        var normalDistance = Math.min(limit, speed);
-        var position = this.getFuturPosition(orientation, normalDistance, angle);
-        var distance = (position === this.position) ? 0 : normalDistance;
+        }
+
+        normalDistance = Math.min(limit, speed);
+        position = this.getFuturPosition(orientation, normalDistance, angle);
+        distance = (position.equals(this.position)) ? 0 : normalDistance;
+        if (this.previousOrientation !== null) {
+            orientation = this.previousOrientation;
+        }
         if (isCameraOrientation) {
             orientation = RPM.mod(orientation +
                                 $currentMap.camera.getMapOrientation() - 2, 4);
@@ -794,6 +814,7 @@ MapObject.prototype = {
     /** Update the object graphics.
     */
     update: function(angle) {
+
         // Graphic updates
         if (this.mesh !== null) {
             var frame = this.frame;
@@ -820,8 +841,7 @@ MapObject.prototype = {
                                        this.position.z);
                 //this.updateBBPosition(this.position);
                 this.moving = false;
-                this.movingVertical = null;
-                this.movingHorizontal = null;
+                this.previousPosition = this.position;
             }
             else {
                 this.frame = this.currentState.indexX;
@@ -865,6 +885,7 @@ MapObject.prototype = {
     /** Update the move states to know if diagonal move is needed.
     */
     updateMoveStates: function(orientation) {
+        /*
         switch (orientation) {
         case Orientation.South:
         case Orientation.North:
@@ -874,7 +895,7 @@ MapObject.prototype = {
         case Orientation.East:
             this.movingHorizontal = orientation;
             break;
-        }
+        }*/
     },
 
     // -------------------------------------------------------

@@ -911,6 +911,7 @@ function EventCommandMoveObject(command) {
             kind <= CommandMoveKind.MoveRandom)
         {
             this.parameters.push({ square: command[i++] === 0 });
+            this.kind = kind;
             switch (kind){
             case CommandMoveKind.MoveNorth:
                 this.moves.push(this.moveNorth);
@@ -925,9 +926,16 @@ function EventCommandMoveObject(command) {
                 this.moves.push(this.moveEast);
                 break;
             case CommandMoveKind.MoveNorthWest:
+                this.moves.push(this.moveNorthWest);
+                break;
             case CommandMoveKind.MoveNorthEast:
+                this.moves.push(this.moveNorthEast);
+                break;
             case CommandMoveKind.MoveSouthWest:
+                this.moves.push(this.moveSouthWest);
+                break;
             case CommandMoveKind.MoveSouthEast:
+                this.moves.push(this.moveSouthEast);
                 break;
             case CommandMoveKind.MoveRandom:
                 this.moves.push(this.moveRandom);
@@ -968,31 +976,63 @@ EventCommandMoveObject.prototype = {
     *   @param {bool} square Indicate if it is a square move.
     *   @param {Orientation} orientation The orientation where to move.
     */
-    move: function(currentState, object, square, orientation){
+    move: function(currentState, object, square, orientation) {
 
         var angle = this.isCameraOrientation ?
                     $currentMap.camera.horizontalAngle : -90.0;
 
-        if (currentState.position === null && square)
-        {
+        if (currentState.position === null && square) {
+            currentState.initialPosition = object.position;
             currentState.position = object.getFuturPosition(orientation,
-                                                            $SQUARE_SIZE,
-                                                            angle);
+                $SQUARE_SIZE, angle);
+            if (currentState.initialPosition.equals(currentState.position)) {
+                object.move(orientation, 0, angle, this.isCameraOrientation);
+                return true;
+            }
+            /*
+            if (position.x === currentState.position.x) {
+                object.blockX = true;
+            }
+            if (position.z === currentState.position.z) {
+                object.blockZ = true;
+            }*/
+        }
+        if (object.previousMoveCommand === null) {
+            object.previousMoveCommand = this;
+            object.previousOrientation = orientation;
+        } else if (object.previousMoveCommand === this) {
+            if (object.otherMoveCommand) {
+                return true;
+            }
+        } else if (object.previousMoveCommand && object.otherMoveCommand &&
+            object.otherMoveCommand !== this)
+        {
+            return true;
+        } else if (object.previousMoveCommand !== this) {
+            object.otherMoveCommand = this;
         }
 
-        var distances = object.move(orientation, $SQUARE_SIZE -
-                                    currentState.distance, angle,
-                                    this.isCameraOrientation);
+        var distances = object.move(orientation, $SQUARE_SIZE - currentState
+            .distance, angle, this.isCameraOrientation);
         currentState.distance += distances[0];
         currentState.normalDistance += distances[1];
         if (!square || (square && currentState.normalDistance >= $SQUARE_SIZE &&
-            this.isIgnore) || (square && currentState.distance >= $SQUARE_SIZE))
+            this.isIgnore) || (square && currentState.distance >= $SQUARE_SIZE
+            || (distances[0] === 0)))
         {
             if (square && currentState.distance === currentState.normalDistance)
             {
                 object.position = currentState.position;
             }
+            if (distances[0] === 0) {
+                object.position = currentState.initialPosition;
+            }
 
+            object.previousOrientation = null;
+            object.previousMoveCommand = null;
+            object.otherMoveCommand = null;
+            object.blockX = false;
+            object.blockZ = false;
             return true;
         }
 
@@ -1049,6 +1089,58 @@ EventCommandMoveObject.prototype = {
 
     // -------------------------------------------------------
 
+    /** Function to move north west.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The object to move.
+    *   @param {Object} parameters The parameters.
+    */
+    moveNorthWest: function(currentState, object, parameters) {
+        var a = this.moveNorth(currentState, object, parameters);
+        var b = this.moveWest(currentState, object, parameters);
+        return object ? a & b : a;
+    },
+
+    // -------------------------------------------------------
+
+    /** Function to move north west.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The object to move.
+    *   @param {Object} parameters The parameters.
+    */
+    moveNorthEast: function(currentState, object, parameters) {
+        var a = this.moveNorth(currentState, object, parameters);
+        var b = this.moveEast(currentState, object, parameters);
+        return object ? a & b : a;
+    },
+
+    // -------------------------------------------------------
+
+    /** Function to move north west.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The object to move.
+    *   @param {Object} parameters The parameters.
+    */
+    moveSouthWest: function(currentState, object, parameters) {
+        var a = this.moveSouth(currentState, object, parameters);
+        var b = this.moveWest(currentState, object, parameters);
+        return object ? a & b : a;
+    },
+
+    // -------------------------------------------------------
+
+    /** Function to move north west.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The object to move.
+    *   @param {Object} parameters The parameters.
+    */
+    moveSouthEast: function(currentState, object, parameters) {
+        var a = this.moveSouth(currentState, object, parameters);
+        var b = this.moveEast(currentState, object, parameters);
+        return object ? a & b : a;
+    },
+
+    // -------------------------------------------------------
+
     /** Function to move random.
     *   @param {Object} currentState The current state of the event.
     *   @param {MapObject} object The object to move.
@@ -1071,7 +1163,7 @@ EventCommandMoveObject.prototype = {
 
     /** Move the object(s).
     *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
+    *   @param {Mapthis.moving = true;Object} object The current object reacting.
     *   @param {number} state The state ID.
     *   @returns {number} The number of node to pass.
     */
