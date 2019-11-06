@@ -143,7 +143,8 @@ SceneMenu.prototype = {
     /** Callback function for quiting the game.
     */
     exit: function(){
-        quit();
+        $gameStack.pop();
+        $gameStack.push(new SceneTitleScreen());
 
         return true;
     },
