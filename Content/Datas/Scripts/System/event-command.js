@@ -148,6 +148,8 @@ EventCommand.getEventCommand = function(json) {
             return new EventCommandTitleScreen(command);
         case EventCommandKind.ChangeScreenTone:
             return new EventCommandChangeScreenTone(command);
+        case EventCommandKind.RemoveObjectFromMap:
+            return new EventCommandRemoveObjectFromMap(command);
         default:
             return null;
     }

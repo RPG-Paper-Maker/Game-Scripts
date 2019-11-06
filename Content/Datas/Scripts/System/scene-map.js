@@ -284,6 +284,8 @@ SceneMap.prototype.initializePortionsObjects = function(){
                         // Ids of the objects that have modified properties
                     p: datas && datas.p ? datas.p : [],
                         // Properties values of the objects according to id
+                    r: datas && datas.r ? datas.r : []
+                        // Removed objects according to id
                 };
             }
         }

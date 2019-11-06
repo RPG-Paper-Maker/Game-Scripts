@@ -72,9 +72,12 @@ MapObject.FRAME_DURATION = 150;
 *   @param {function} callback The function to call after having found the
 *   object.
 */
-MapObject.updateObjectWithID = function(object, objectID, base, callback){
-    switch (objectID){
+MapObject.updateObjectWithID = function(object, objectID, base, callback) {
+    if (object.isHero && objectID === -1) {
+        callback.call(base, $game.hero);
+    }
 
+    switch (objectID) {
     case -1: // This object
         callback.call(base, object);
         break;

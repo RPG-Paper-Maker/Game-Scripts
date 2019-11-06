@@ -1175,15 +1175,11 @@ EventCommandMoveObject.prototype = {
             if (!currentState.waitingObject) {
                 var objectID = this.objectID.getValue();
 
-                if (objectID === 0 || (object.isHero && objectID === -1)) {
-                    currentState.object = $game.hero;
-                } else {
-                    MapObject.updateObjectWithID(object, objectID, this, function(
-                        moved)
-                    {
-                        currentState.object = moved;
-                    });
-                }
+                MapObject.updateObjectWithID(object, objectID, this, function(
+                    moved)
+                {
+                    currentState.object = moved;
+                });
                 currentState.waitingObject = true;
             }
             if (currentState.object !== null) {
@@ -2697,6 +2693,44 @@ EventCommandChangeScreenTone.prototype.update = function(currentState, object,
 
         return 0;
     }
+
+    return 1;
+}
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandRemoveObjectFromMap
+//
+// -------------------------------------------------------
+
+function EventCommandRemoveObjectFromMap(command) {
+    var i, k, v;
+
+    i = 0;
+    k = command[i++];
+    v = command[i++];
+    this.objectID = SystemValue.createValue(k, v);
+
+    this.isDirectNode = true;
+    this.parallel = false;
+}
+
+EventCommandRemoveObjectFromMap.prototype = Object.create(EventCommand.prototype);
+
+// -------------------------------------------------------
+
+EventCommandRemoveObjectFromMap.prototype.update = function(currentState, object
+    , state)
+{
+    var objectID;
+
+    objectID = this.objectID.getValue();
+
+    MapObject.updateObjectWithID(object, objectID, this, function(
+        removed)
+    {
+        removed.removeFromScene();
+    });
 
     return 1;
 }

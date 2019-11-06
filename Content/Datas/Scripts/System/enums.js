@@ -73,7 +73,8 @@ var EventCommandKind = {
     RemoveAPicture: 37,
     SetDialogBoxOptions: 38,
     TitleScreen: 39,
-    ChangeScreenTone: 40
+    ChangeScreenTone: 40,
+    RemoveObjectFromMap: 41
 };
 Object.freeze(EventCommandKind);
 
