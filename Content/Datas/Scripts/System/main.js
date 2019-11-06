@@ -224,6 +224,10 @@ var $displayedPictures = [];
 
 var $screenTone = new THREE.Vector4(0, 0, 0, 1);
 
+var $allowSaves = true;
+
+var $allowMainMenu = true;
+
 // -------------------------------------------------------
 //  BOUNDING BOXES
 // -------------------------------------------------------

@@ -2753,3 +2753,59 @@ EventCommandStopReaction.prototype.update = function(currentState, object, state
 {
     return -3;
 }
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandAllowForbidSaves
+//
+// -------------------------------------------------------
+
+function EventCommandAllowForbidSaves(command) {
+    var i, k, v;
+
+    EventCommand.call(this, command);
+    i = 0;
+    k = command[i++];
+    v = command[i++];
+    this.allow = SystemValue.createValue(k, v);
+}
+
+EventCommandAllowForbidSaves.prototype = Object.create(EventCommand.prototype);
+
+// -------------------------------------------------------
+
+EventCommandAllowForbidSaves.prototype.update = function(currentState, object,
+    state)
+{
+    $allowSaves = this.allow.getValue();
+
+    return 1;
+}
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandAllowForbidMainMenu
+//
+// -------------------------------------------------------
+
+function EventCommandAllowForbidMainMenu(command) {
+    var i, k, v;
+
+    EventCommand.call(this, command);
+    i = 0;
+    k = command[i++];
+    v = command[i++];
+    this.allow = SystemValue.createValue(k, v);
+}
+
+EventCommandAllowForbidMainMenu.prototype = Object.create(EventCommand.prototype);
+
+// -------------------------------------------------------
+
+EventCommandAllowForbidMainMenu.prototype.update = function(currentState, object
+    , state)
+{
+    $allowMainMenu = this.allow.getValue();
+
+    return 1;
+}

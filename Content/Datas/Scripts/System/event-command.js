@@ -153,6 +153,10 @@ EventCommand.getEventCommand = function(json) {
             return new EventCommandRemoveObjectFromMap(command);
         case EventCommandKind.StopReaction:
             return new EventCommandStopReaction(command);
+        case EventCommandKind.AllowForbidSaves:
+            return new EventCommandAllowForbidSaves(command);
+        case EventCommandKind.AllowForbidMainMenu:
+            return new EventCommandAllowForbidMainMenu(command);
         default:
             return null;
     }
@@ -1099,9 +1103,10 @@ EventCommandOpenMainMenu.prototype = {
     *   @param {number} state The state ID.
     *   @returns {number} The number of node to pass.
     */
-    update: function(currentState, object, state){
-        if (currentState.opened)
+    update: function(currentState, object, state) {
+        if (!$allowMainMenu || currentState.opened) {
             return 1;
+        }
         $gameStack.push(new SceneMenu());
         currentState.opened = true;
 
@@ -1153,9 +1158,10 @@ EventCommandOpenSavesMenu.prototype = {
     *   @param {number} state The state ID.
     *   @returns {number} The number of node to pass.
     */
-    update: function(currentState, object, state){
-        if (currentState.opened)
+    update: function(currentState, object, state) {
+        if (!$allowSaves || currentState.opened) {
             return 1;
+        }
         $gameStack.push(new SceneSaveGame());
         currentState.opened = true;
 

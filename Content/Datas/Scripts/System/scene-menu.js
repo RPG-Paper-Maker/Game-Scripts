@@ -132,10 +132,13 @@ SceneMenu.prototype = {
 
     /** Callback function for opening save menu.
     */
-    openSave: function(){
-        $gameStack.push(new SceneSaveGame());
+    openSave: function() {
+        if ($allowSaves) {
+            $gameStack.push(new SceneSaveGame());
+            return true;
+        }
 
-        return true;
+        return false;
     },
 
     // -------------------------------------------------------

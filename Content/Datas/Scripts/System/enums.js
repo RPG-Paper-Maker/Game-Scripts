@@ -75,7 +75,9 @@ var EventCommandKind = {
     TitleScreen: 39,
     ChangeScreenTone: 40,
     RemoveObjectFromMap: 41,
-    StopReaction: 42
+    StopReaction: 42,
+    AllowForbidSaves: 43,
+    AllowForbidMainMenu: 44
 };
 Object.freeze(EventCommandKind);
 
