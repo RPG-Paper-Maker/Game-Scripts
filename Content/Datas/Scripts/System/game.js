@@ -269,15 +269,6 @@ Game.prototype = {
                         inf = {};
                         datas = this.mapsDatas[id][i][j][k];
                         if (datas) {
-                            if (datas.min && datas.min.length) {
-                                inf.min = datas.min;
-                            }
-                            if (datas.mout && datas.mout.length) {
-                                inf.mout = datas.mout;
-                            }
-                            if (datas.m && datas.m.length) {
-                                inf.m = datas.m;
-                            }
                             if (datas.si && datas.si.length) {
                                 inf.si = datas.si;
                             }
