@@ -222,7 +222,7 @@ var $currentParameters = null;
 
 var $displayedPictures = [];
 
-var $colorDominating = new THREE.Vector4(0, 0, 0, 1);
+var $screenTone = new THREE.Vector4(0, 0, 0, 1);
 
 // -------------------------------------------------------
 //  BOUNDING BOXES

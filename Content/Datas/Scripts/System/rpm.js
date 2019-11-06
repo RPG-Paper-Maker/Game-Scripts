@@ -1278,7 +1278,7 @@ RPM.createMaterial = function(texture) {
     texture.flipY = false;
     var uniforms = {
         texture: { type: "t", value: texture },
-        colorD: { type: "v4", value: $colorDominating }
+        colorD: { type: "v4", value: $screenTone }
     };
 
     material = new THREE.ShaderMaterial({
@@ -1296,7 +1296,7 @@ RPM.createMaterial = function(texture) {
 // -------------------------------------------------------
 
 RPM.updateBackgroundColor = function(color) {
-    $renderer.setClearColor(color.getHex(), color.alpha);
+    $renderer.setClearColor(color.getHex($screenTone), color.alpha);
 }
 
 // -------------------------------------------------------

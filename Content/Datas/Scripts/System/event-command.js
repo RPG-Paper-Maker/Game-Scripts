@@ -146,6 +146,8 @@ EventCommand.getEventCommand = function(json) {
             return new EventCommandSetDialogBoxOptions(command);
         case EventCommandKind.TitleScreen:
             return new EventCommandTitleScreen(command);
+        case EventCommandKind.ChangeScreenTone:
+            return new EventCommandChangeScreenTone(command);
         default:
             return null;
     }

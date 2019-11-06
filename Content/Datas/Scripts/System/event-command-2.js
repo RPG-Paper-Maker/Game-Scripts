@@ -2594,3 +2594,109 @@ EventCommandTitleScreen.prototype.update = function(currentState, object,
 
     return 1;
 }
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandChangeScreenTone
+//
+// -------------------------------------------------------
+
+function EventCommandChangeScreenTone(command) {
+    var i, k, v, checked;
+
+    i = 0;
+    k = command[i++];
+    v = command[i++];
+    this.r = SystemValue.createValue(k, v);
+    k = command[i++];
+    v = command[i++];
+    this.g = SystemValue.createValue(k, v);
+    k = command[i++];
+    v = command[i++];
+    this.b = SystemValue.createValue(k, v);
+    k = command[i++];
+    v = command[i++];
+    this.grey = SystemValue.createValue(k, v);
+    if (RPM.numToBool(command[i++])) {
+        this.subColor = RPM.numToBool(command[i++]);
+        k = command[i++];
+        v = command[i++];
+        this.colorID = SystemValue.createValue(k, v);
+    }
+    this.waitEnd = RPM.numToBool(command[i++]);
+    k = command[i++];
+    v = command[i++];
+    this.time = SystemValue.createValue(k, v);
+
+    this.isDirectNode = true;
+    this.parallel = !this.waitEnd;
+}
+
+EventCommandChangeScreenTone.prototype = Object.create(EventCommand.prototype);
+
+// -------------------------------------------------------
+
+EventCommandChangeScreenTone.prototype.initialize = function() {
+    var time, color;
+
+    time = this.time.getValue() * 1000;
+    color = this.colorID ? $datasGame.system.colors[this.colorID.getValue()] :
+        null;
+
+    return {
+        parallel: this.waitEnd,
+        finalDifRed: Math.max(Math.min((this.r.getValue() + (color ? color.red :
+            0)) / 255, 1), 0) - $screenTone.x,
+        finalDifGreen: Math.max(Math.min((this.g.getValue() + (color ? color
+            .green : 0)) / 255, 1), 0) - $screenTone.y,
+        finalDifBlue: Math.max(Math.min((this.b.getValue() + (color ? color.blue
+            : 0)) / 255, 1), 0) - $screenTone.z,
+        finalDifGrey: Math.max(Math.min(1 - (this.grey.getValue() / 100), 1),
+            0) - $screenTone.w,
+        time: time,
+        timeLeft: time
+    }
+}
+
+// -------------------------------------------------------
+
+EventCommandChangeScreenTone.prototype.update = function(currentState, object,
+    state)
+{
+    if (currentState.parallel) {
+        // Updating the time left
+        var timeRate, dif;
+
+        if (currentState.time === 0) {
+            timeRate = 1;
+        } else {
+            dif = $elapsedTime;
+            currentState.timeLeft -= $elapsedTime;
+            if (currentState.timeLeft < 0) {
+                dif += currentState.timeLeft;
+                currentState.timeLeft = 0;
+            }
+            timeRate = dif / currentState.time;
+        }
+
+        // Update values
+        $screenTone.setX($screenTone.x + (timeRate * currentState
+            .finalDifRed));
+        $screenTone.setY($screenTone.y + (timeRate * currentState
+            .finalDifGreen));
+        $screenTone.setZ($screenTone.z + (timeRate * currentState
+            .finalDifBlue));
+        $screenTone.setW($screenTone.w + (timeRate * currentState
+            .finalDifGrey));
+        RPM.updateBackgroundColor($currentMap.mapInfos.backgroundColor);
+
+        // If time = 0, then this is the end of the command
+        if (currentState.timeLeft === 0) {
+            return 1;
+        }
+
+        return 0;
+    }
+
+    return 1;
+}

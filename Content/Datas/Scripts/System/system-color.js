@@ -28,6 +28,13 @@ SystemColor.createColor = function(r, g, b, a) {
     return color;
 }
 
+// -------------------------------------------------------
+SystemColor.mix = function(x, y, a) {
+    return x.clone().multiplyScalar(1 - a).add(y.clone().multiplyScalar(a));
+}
+
+// -------------------------------------------------------
+
 SystemColor.prototype = {
 
     initialize: function(r, g, b, a) {
@@ -54,7 +61,20 @@ SystemColor.prototype = {
 
     // -------------------------------------------------------
 
-    getHex: function() {
+    getHex: function(tone) {
+        if (tone) {
+            var rgb, w, intensity, m;
+
+            rgb = new THREE.Vector3(Math.max(Math.min(this.color.r + tone.x, 1),
+                0), Math.max(Math.min(this.color.g + tone.y, 1), 0)
+                , Math.max(Math.min(this.color.b + tone.z, 1), 0));
+            w = new THREE.Vector3(0.2125, 0.7154, 0.0721);
+            intensity = rgb.dot(w);
+            m = SystemColor.mix(new THREE.Vector3(intensity, intensity,
+                intensity), rgb, tone.w);
+            return new THREE.Color(m.x, m.y, m.z).getHex();
+        }
+
         return this.color.getHex();
     }
 }
