@@ -169,6 +169,10 @@ ReactionInterpreter.prototype = {
                 RPM.show("Error : there is a breaking loop that is not inside"
                     + " a loop.");
             }
+            // If stopping the reaction
+            else if (result === -3) {
+                return null;
+            }
             // If positive number, then it's the number of nodes to skip
             else {
                 value = this.currentCommand;

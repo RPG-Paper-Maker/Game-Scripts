@@ -16,7 +16,8 @@
 // -------------------------------------------------------
 
 function EventCommand() {
-
+    this.isDirectNode = true;
+    this.parallel = false;
 }
 
 EventCommand.prototype = {
@@ -150,6 +151,8 @@ EventCommand.getEventCommand = function(json) {
             return new EventCommandChangeScreenTone(command);
         case EventCommandKind.RemoveObjectFromMap:
             return new EventCommandRemoveObjectFromMap(command);
+        case EventCommandKind.StopReaction:
+            return new EventCommandStopReaction(command);
         default:
             return null;
     }

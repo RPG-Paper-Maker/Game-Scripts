@@ -2734,3 +2734,22 @@ EventCommandRemoveObjectFromMap.prototype.update = function(currentState, object
 
     return 1;
 }
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandStopReaction
+//
+// -------------------------------------------------------
+
+function EventCommandStopReaction(command) {
+    EventCommand.call(this, command);
+}
+
+EventCommandStopReaction.prototype = Object.create(EventCommand.prototype);
+
+// -------------------------------------------------------
+
+EventCommandStopReaction.prototype.update = function(currentState, object, state)
+{
+    return -3;
+}
