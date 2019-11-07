@@ -61,8 +61,9 @@ function MapObject(system, position, isHero) {
 *   @default 0.004666
 */
 MapObject.SPEED_NORMAL = 0.004666;
-
 MapObject.FRAME_DURATION = 150;
+
+// -------------------------------------------------------
 
 /** Update the object with a particular ID.
 *   @static
@@ -87,65 +88,84 @@ MapObject.updateObjectWithID = function(object, objectID, base, callback) {
         break;
 
     default: // Particular object
-        var globalPortion = SceneMap.getGlobalPortion(
-                    $currentMap.allObjects[objectID]);
-        var localPortion = $currentMap.getLocalPortion(globalPortion);
-        var i, l, moved, mapsDatas, movedObjects, mapPortion, objects;
+        MapObject.getObjectAndPortion(object, objectID, base, callback);
+        break;
+    }
+}
 
-        // First search in the moved objects
-        mapsDatas = $game.mapsDatas[$currentMap.id]
-                         [globalPortion[0]][globalPortion[1]][globalPortion[2]];
-        movedObjects = mapsDatas.m;
-        moved = null;
-        for (i = 0, l = movedObjects.length; i < l; i++){
-            if (movedObjects[i].system.id === objectID){
-                moved = movedObjects[i];
+// -------------------------------------------------------
+
+MapObject.getObjectAndPortion = function(object, objectID, base, callback) {
+    var i, l, globalPortion, localPortion, moved, mapsDatas, movedObjects,
+        mapPortion, objects;
+
+    switch (objectID) {
+    case -1: // This object
+        objectID = object.system.id;
+        break;
+    case 0: // Hero
+        objectID = $game.hero.system.id;
+        break;
+    default:
+        break;
+    }
+    globalPortion = SceneMap.getGlobalPortion($currentMap.allObjects[
+        objectID]);
+    localPortion = $currentMap.getLocalPortion(globalPortion);
+
+    // First search in the moved objects
+    mapsDatas = $game.mapsDatas[$currentMap.id][globalPortion[0]][
+        globalPortion[1]][globalPortion[2]];
+    movedObjects = mapsDatas.m;
+    moved = null;
+    for (i = 0, l = movedObjects.length; i < l; i++) {
+        if (movedObjects[i].system.id === objectID) {
+            moved = movedObjects[i];
+            break;
+        }
+    }
+    if (moved !== null) {
+        callback.call(base, moved, objectID, 0, i, null, mapsDatas);
+        return;
+    }
+
+    // If not moving, search directly in portion
+    if ($currentMap.isInPortion(localPortion)) {
+        mapPortion = $currentMap.getMapPortionByPortion(localPortion);
+        objects = mapPortion.objectsList;
+
+        for (i = 0, l = objects.length; i < l; i++){
+            if (objects[i].system.id === objectID){
+                moved = objects[i];
                 break;
             }
         }
-        if (moved !== null){
-            callback.call(base, moved);
-            break;
+
+        if (moved === null) {
+            callback.call(base, $game.hero, objectID, 1, -1, null, mapsDatas);
+        } else {
+            callback.call(base, moved, objectID, 1, i, objects, mapsDatas);
         }
+    }
+    // Load the file if not already in temp
+    else{
+        var fileName = SceneMap.getPortionName(globalPortion[0], globalPortion[
+            1], globalPortion[2]);
+        RPM.openFile(this, RPM.FILE_MAPS + $currentMap.mapName + "/" +
+                       fileName, false, function(res)
+        {
+            var json = JSON.parse(res);
+            mapPortion = new MapPortion(globalPortion[0],
+                                        globalPortion[1],
+                                        globalPortion[2]);
+            moved = mapPortion.getObjFromID(json, objectID);
 
-        // If not moving, search directly in portion
-        if ($currentMap.isInPortion(localPortion)) {
-            mapPortion = $currentMap.getMapPortionByPortion(localPortion);
-            objects = mapPortion.objectsList;
-
-            for (i = 0, l = objects.length; i < l; i++){
-                if (objects[i].system.id === objectID){
-                    moved = objects[i];
-                    break;
-                }
-            }
-
-            if (moved === null) {
-                callback.call(base, $game.hero);
-            } else {
-                callback.call(base, moved);
-            }
-        }
-        // Load the file if not already in temp
-        else{
-            var fileName = SceneMap.getPortionName(realX, realY, realZ);
-            RPM.openFile(this, RPM.FILE_MAPS + this.mapName + "/" +
-                           fileName, false, function(res)
-            {
-                var json = JSON.parse(res);
-                mapPortion = new MapPortion(globalPortion[0],
-                                            globalPortion[1],
-                                            globalPortion[2]);
-                moved = mapPortion.getObjFromID(json.objs.sprites, objectID);
-
-               if (moved === null) {
-                   callback.call(base, $game.hero);
-               } else {
-                   callback.call(base, moved);
-               }
-            });
-        }
-        break;
+           if (moved === null) {
+               callback.call(base, $game.hero, objectID, 2, -1, null, mapsDatas);
+           } else {
+               callback.call(base, moved, objectID, 2, -1, null, mapsDatas);
+           }
+        });
     }
 }
 

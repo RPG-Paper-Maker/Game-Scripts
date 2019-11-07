@@ -598,9 +598,10 @@ SceneMap.prototype.closeMap = function() {
         for (j = -d; j < h; j++){
             for (k = 0; k < w; k++){
                 var portion = objectsPortions[i][j][k];
-                portion.mr = [];
-                portion.ma = [];
+                portion.min = [];
+                portion.mout = [];
                 portion.m = [];
+                portion.r = [];
             }
         }
     }

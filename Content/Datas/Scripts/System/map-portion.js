@@ -751,11 +751,13 @@ MapPortion.prototype = {
     *   at the beginning of the game.
     */
     readObjects: function(json, isMapHero){
-        var datas, objects, index, i, l, j, ll;
+        var datas, objects, objectsM, objectsR, index, i, l, j, ll, lll, id;
         datas = $currentMap.getObjectsAtPortion(this.realX, this.realY,
                                                 this.realZ);
-        objects = datas.m;
-        ll = objects.length;
+        objectsM = datas.m;
+        objectsR = datas.r;
+        ll = objectsM.length;
+        lll = objectsR.length;
 
         for (i = 0, l = json.length; i < l; i++){
             var jsonObject = json[i];
@@ -763,11 +765,18 @@ MapPortion.prototype = {
             var jsonObjectValue = jsonObject.v;
             var object = new SystemObject;
             object.readJSON(jsonObjectValue);
+            id = object.id;
 
             // Check if the object is moving (so no need to add it to the scene)
             index = -1;
             for (j = 0; j < ll; j++) {
-                if (objects[j].system.id === object.id) {
+                if (objectsM[j].system.id === id) {
+                    index = j;
+                    break;
+                }
+            }
+            for (j = 0; j < lll; j++) {
+                if (objectsR[j] === id) {
                     index = j;
                     break;
                 }
@@ -850,27 +859,28 @@ MapPortion.prototype = {
     *   @param {number} id The ID of the object.
     *   @returns {MapObject}
     */
-    getObjFromID: function(json, id){
-        for (var i = 0, l = json.length; i < l; i++){
-            var jsonTextures = json[i];
-            var texture = jsonTextures.k;
-            var jsonObjects = jsonTextures.v;
-            for (var j = 0, ll = jsonObjects.length; j < ll; j++){
-                var jsonObject = jsonObjects[j];
-                var position = jsonObject.k;
-                var jsonObjectValue = jsonObject.v;
-                var object = new SystemObject;
-                if (jsonObjectValue.id === id){
-                    object.readJSON(jsonObjectValue);
-                    var localPosition = RPM.positionToVector3(position);
-                    position = new THREE.Vector3(localPosition.x,
-                                                 localPosition.y,
-                                                 localPosition.z);
-                    var mapObject = new MapObject(object, position);
-                    mapObject.changeState();
+    getObjFromID: function(json, id) {
+        if (json.objs && json.objs.list) {
+            json = json.objs.list;
+        } else {
+            return null;
+        }
 
-                    return mapObject;
-                }
+        for (var i = 0, l = json.length; i < l; i++){
+            var jsonObject = json[i];
+            var position = jsonObject.k;
+            var jsonObjectValue = jsonObject.v;
+            var object = new SystemObject;
+            if (jsonObjectValue.id === id) {
+                object.readJSON(jsonObjectValue);
+                var localPosition = RPM.positionToVector3(position);
+                position = new THREE.Vector3(localPosition.x,
+                                             localPosition.y,
+                                             localPosition.z);
+                var mapObject = new MapObject(object, position);
+                mapObject.changeState();
+
+                return mapObject;
             }
         }
 

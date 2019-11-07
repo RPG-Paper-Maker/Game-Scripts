@@ -2719,6 +2719,15 @@ EventCommandRemoveObjectFromMap.prototype = Object.create(EventCommand.prototype
 
 // -------------------------------------------------------
 
+EventCommandRemoveObjectFromMap.prototype.initialize = function() {
+    return {
+        started: false,
+        finished: false
+    }
+}
+
+// -------------------------------------------------------
+
 EventCommandRemoveObjectFromMap.prototype.update = function(currentState, object
     , state)
 {
@@ -2726,13 +2735,43 @@ EventCommandRemoveObjectFromMap.prototype.update = function(currentState, object
 
     objectID = this.objectID.getValue();
 
-    MapObject.updateObjectWithID(object, objectID, this, function(
-        removed)
-    {
-        removed.removeFromScene();
-    });
+    if (!currentState.started) {
+        currentState.started = true;
+        MapObject.getObjectAndPortion(object, objectID, this, function(removed,
+            id, kind, i, objects, datas)
+        {
+            var index;
 
-    return 1;
+            if (datas.r.indexOf(id) === -1) {
+                switch (kind) {
+                case 0:
+                    datas.m.splice(i, 1);
+                    index = datas.min.indexOf(removed);
+                    if (index === -1) {
+                        datas = $game.mapsDatas[$currentMap.id][Math.floor(
+                            removed.position.x / $PORTION_SIZE)][Math.floor(
+                            removed.position.y / $PORTION_SIZE)][Math.floor(
+                            removed.position.z / $PORTION_SIZE)];
+                        datas.mout.splice(datas.mout.indexOf(removed), 1);
+                    } else {
+                        datas.min.splice(index, 1);
+                    }
+                    break;
+                case 1:
+                    if (i > -1) {
+                        objects.splice(i, 1);
+                    }
+                    break;
+                }
+
+                datas.r.push(id);
+                removed.removeFromScene();
+            }
+            currentState.finished = true;
+        });
+    }
+
+    return currentState.finished ? 1 : 0;
 }
 
 // -------------------------------------------------------
