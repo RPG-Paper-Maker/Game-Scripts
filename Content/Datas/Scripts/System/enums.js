@@ -516,3 +516,19 @@ var ConditionHeroesKind = {
     TheHeroeWithInstanceID: 3
 };
 Object.freeze(ConditionHeroesKind);
+
+/**
+*   Enum for the variables map object characteristics.
+*   @enum {number}
+*   @readonly
+*/
+var VariableMapObjectCharacteristicKind = {
+    XSquarePosition: 0,
+    YSquarePosition: 1,
+    ZSquarePosition: 2,
+    XPixelPosition: 3,
+    YPixelPosition: 4,
+    ZPixelPosition: 5,
+    Orientation: 6
+};
+Object.freeze(VariableMapObjectCharacteristicKind);

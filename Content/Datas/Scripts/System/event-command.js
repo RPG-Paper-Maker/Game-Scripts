@@ -331,6 +331,16 @@ function EventCommandChangeVariables(command) {
         this.valueRandomA = SystemValue.createValueCommand(command, iterator);
         this.valueRandomB = SystemValue.createValueCommand(command, iterator);
         break;
+    case 2: // Message
+        this.valueMessage = SystemValue.createValueCommand(command, iterator);
+        break;
+    case 3: // Switch
+        this.valueSwitch = SystemValue.createValueCommand(command, iterator);
+        break;
+    case 4: // Map object characteristic
+        this.valueMapObject = SystemValue.createValueCommand(command, iterator);
+        this.valueMapObjectChar = command[iterator.i++];
+        break;
     }
 
     this.isDirectNode = true;
@@ -339,7 +349,11 @@ function EventCommandChangeVariables(command) {
 
 EventCommandChangeVariables.prototype = {
 
-    initialize: function(){ return null; },
+    initialize: function() {
+        return {
+            started: false,
+        };
+    },
 
     /** Parse command and change the variable values, and then finish.
     *   @param {Object} currentState The current state of the event.
@@ -348,26 +362,70 @@ EventCommandChangeVariables.prototype = {
     *   @returns {number} The number of node to pass.
     */
     update: function(currentState, object, state) {
-        var value, randomA, randomB;
-        var i, l;
+        if (!currentState.started) {
+            currentState.started = true;
+            // Get value to set
+            switch (this.valueKind) {
+            case 0: // Number
+                currentState.value = this.valueNumber.getValue();
+                break;
+            case 1: // Random number
+                currentState.value = RPM.random(this.valueRandomA.getValue(),
+                    this.valueRandomB.getValue());
+                break;
+            case 2: // Message
+                currentState.value = this.valueMessage.getValue();
+                break;
+            case 3: // Switch
+                currentState.value = this.valueSwitch.getValue(true);
+                break;
+            case 4: // Map object characteristic
+                var objectID;
 
-        switch (this.valueKind) {
-        case 0: // Number
-            value = this.valueNumber.getValue();
-            break;
-        case 1: // Random number
-            randomA = this.valueRandomA.getValue();
-            randomB = this.valueRandomB.getValue();
-            value = RPM.random(randomA, randomB);
-            break;
+                objectID = this.valueMapObject.getValue();
+
+                MapObject.updateObjectWithID(object, objectID, this, function(
+                    obj)
+                {
+                    switch(this.valueMapObjectChar) {
+                    case VariableMapObjectCharacteristicKind.XSquarePosition:
+                        currentState.value = RPM.getPosition(obj.position)[0];
+                        break;
+                    case VariableMapObjectCharacteristicKind.YSquarePosition:
+                        currentState.value = RPM.getPosition(obj.position)[1];
+                        break;
+                    case VariableMapObjectCharacteristicKind.ZSquarePosition:
+                        currentState.value = RPM.getPosition(obj.position)[2];
+                        break;
+                    case VariableMapObjectCharacteristicKind.XPixelPosition:
+                        currentState.value = obj.position.x;
+                        break;
+                    case VariableMapObjectCharacteristicKind.YPixelPosition:
+                        currentState.value = obj.position.y;
+                        break;
+                    case VariableMapObjectCharacteristicKind.ZPixelPosition:
+                        currentState.value = obj.position.z;
+                        break;
+                    case VariableMapObjectCharacteristicKind.Orientation:
+                        currentState.value = obj.orientation;
+                        break;
+                    }
+                });
+            }
         }
 
-        for (i = 0, l = this.nbSelection; i < l; i++) {
-            $game.variables[this.selection + i] = $operators_numbers[this
-                .operation]($game.variables[this.selection + i], value);
+        // Apply new value to variable(s)
+        if (!RPM.isUndefined(currentState.value)) {
+            var i, l;
+
+            for (i = 0, l = this.nbSelection; i < l; i++) {
+                $game.variables[this.selection + i] = $operators_numbers[this
+                    .operation]($game.variables[this.selection + i],
+                    currentState.value);
+            }
         }
 
-        return 1;
+        return RPM.isUndefined(currentState.value) ? 0 : 1;
     },
 
     // -------------------------------------------------------

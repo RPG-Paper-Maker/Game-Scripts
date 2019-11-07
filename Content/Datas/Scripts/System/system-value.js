@@ -221,7 +221,7 @@ SystemValue.prototype = {
     /** Get the value.
     *   @returns {number}
     */
-    getValue: function() {
+    getValue: function(s) {
         switch (this.kind) {
         case PrimitiveValueKind.Variable:
             return $game.variables[this.value];
@@ -229,6 +229,8 @@ SystemValue.prototype = {
             return $currentParameters[this.value].getValue();
         case PrimitiveValueKind.Property:
             return $currentObject.properties[this.value];
+        case PrimitiveValueKind.Switch:
+            return s ? (this.value ? true : false) : this.value;
         default:
             return this.value;
         }
