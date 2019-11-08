@@ -1008,10 +1008,12 @@ EventCommandMoveObject.prototype = {
                     $currentMap.camera.horizontalAngle : -90.0;
 
         if (currentState.position === null && square) {
-            currentState.initialPosition = object.position;
+            var position;
+
+            position = object.position;
             currentState.position = object.getFuturPosition(orientation,
                 $SQUARE_SIZE, angle);
-            if (currentState.initialPosition.equals(currentState.position)) {
+            if (position.equals(currentState.position)) {
                 object.move(orientation, 0, angle, this.isCameraOrientation);
                 return true;
             }
@@ -1044,9 +1046,6 @@ EventCommandMoveObject.prototype = {
             if (square && currentState.distance === currentState.normalDistance)
             {
                 object.position = currentState.position;
-            }
-            if (distances[0] === 0) {
-                object.position = currentState.initialPosition;
             }
 
             object.previousOrientation = null;
