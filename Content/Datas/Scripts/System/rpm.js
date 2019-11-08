@@ -80,7 +80,7 @@ RPM.PATH_SHAPES = "Content/Shapes/";
 RPM.PATH_OBJ = RPM.PATH_SHAPES + "OBJ";
 RPM.PATH_MTL = RPM.PATH_SHAPES + "MTL";
 RPM.PATH_OBJ_COLLISIONS = RPM.PATH_SHAPES + "Collisions";
-RPM.PATH_SHADERS = "Content/Shaders/";
+RPM.PATH_SHADERS = RPM.PATH_DATAS + "Scripts/System/Shaders/";
 
 // -------------------------------------------------------
 //  CONSTANTS
@@ -707,10 +707,10 @@ RPM.openFile = function(base, url, loading, callback){
     doc.send();
 }
 
-RPM.openFile(null, $ROOT_DIRECTORY + RPM.PATH_SHADERS + "fix.vert", false, function(res) {
+RPM.openFile(null, RPM.PATH_SHADERS + "fix.vert", false, function(res) {
     RPM.SHADER_FIX_VERTEX = res;
 });
-RPM.openFile(null, $ROOT_DIRECTORY + RPM.PATH_SHADERS + "fix.frag", false, function(res) {
+RPM.openFile(null, RPM.PATH_SHADERS + "fix.frag", false, function(res) {
     RPM.SHADER_FIX_FRAGMENT = res;
 });
 
