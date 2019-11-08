@@ -708,7 +708,6 @@ RPM.openFile = function(base, url, loading, callback){
 }
 
 RPM.openFile(null, $ROOT_DIRECTORY + RPM.PATH_SHADERS + "fix.vert", false, function(res) {
-    console.log(RPM.PATH_SHADERS + "fix.vert")
     RPM.SHADER_FIX_VERTEX = res;
 });
 RPM.openFile(null, $ROOT_DIRECTORY + RPM.PATH_SHADERS + "fix.frag", false, function(res) {

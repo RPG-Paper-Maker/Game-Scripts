@@ -16,18 +16,23 @@
 // -------------------------------------------------------
 
 /** @class
-*   A reaction to an event.
+*   A common reaction.
+*   @property {boolean} blockingHero Indicates if this reaction is blocking
+*   the hero.
+*   @property {Object} labels Hash of all the labels.
+*   @property {Tree} commands All the commands.
 */
-function SystemCommonReaction(){
-
+function SystemCommonReaction() {
+    SystemObjectReaction.call(this);
 }
 
-SystemCommonReaction.prototype = {
+SystemCommonReaction.prototype = Object.create(SystemObjectReaction.prototype);
 
-    /** Read the JSON associated to the common reaction.
-    *   @param {Object} json Json object describing the object.
-    */
-    readJSON: function(json){
+/** Read the JSON associated to the object reaction.
+*   @param {Object} json Json object describing the object.
+*/
+SystemCommonReaction.prototype.readJSON = function(json) {
+    SystemObjectReaction.prototype.readJSON.call(this, json);
 
-    }
+    this.parameters = SystemParameter.readParameters(json);
 }

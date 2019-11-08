@@ -157,6 +157,8 @@ EventCommand.getEventCommand = function(json) {
             return new EventCommandAllowForbidSaves(command);
         case EventCommandKind.AllowForbidMainMenu:
             return new EventCommandAllowForbidMainMenu(command);
+        case EventCommandKind.CallACommonReaction:
+            return new EventCommandCallACommonReaction(command);
         default:
             return null;
     }

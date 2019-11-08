@@ -2848,3 +2848,143 @@ EventCommandAllowForbidMainMenu.prototype.update = function(currentState, object
 
     return 1;
 }
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandCallACommonReaction
+//
+// -------------------------------------------------------
+
+function EventCommandCallACommonReaction(command) {
+    var i, l, k, v, paramID;
+
+    EventCommand.call(this, command);
+    i = 0;
+    this.commonReactionID = command[i++];
+    this.parameters = [];
+    l = command.length;
+    while (i < l) {
+        paramID = command[i++];
+        k = command[i++];
+        v = command[i++];
+        this.parameters[paramID] = SystemValue.createValue(k, v);
+    }
+}
+
+EventCommandCallACommonReaction.prototype = Object.create(EventCommand.prototype);
+
+// -------------------------------------------------------
+
+EventCommandCallACommonReaction.prototype.initialize = function() {
+    return {
+        interpreter: null
+    };
+}
+
+// -------------------------------------------------------
+
+EventCommandCallACommonReaction.prototype.update = function(currentState, object
+    , state)
+{
+    if (!currentState.interpreter) {
+        var id, reaction, k, v, parameter;
+
+        reaction = $datasGame.commonEvents.commonReactions[this.commonReactionID];
+
+        // Correct parameters for default values
+        for (id in reaction.parameters) {
+            v = reaction.parameters[id].value;
+            parameter = this.parameters[id];
+            k = parameter ? parameter.kind : PrimitiveValueKind.None;
+            if (k <= PrimitiveValueKind.Default) {
+                // If default value
+                if (k === PrimitiveValueKind.Default) {
+                    parameter = v;
+                } else {
+                    parameter = SystemValue.createValue(k, null);
+                }
+            }
+            this.parameters[id] = parameter;
+        }
+
+        currentState.interpreter = new ReactionInterpreter(object, $datasGame
+            .commonEvents.commonReactions[this.commonReactionID], null, null,
+            this.parameters);
+    }
+
+    $blockingHero = currentState.interpreter.currentReaction.blockingHero;
+    currentState.interpreter.update();
+    if (currentState.interpreter.isFinished()) {
+        currentState.interpreter.updateFinish();
+        return 1;
+    }
+
+    return 0;
+}
+
+// -------------------------------------------------------
+
+EventCommandCallACommonReaction.prototype.onKeyPressed = function(currentState,
+    key)
+{
+    if (currentState.interpreter && currentState.interpreter.currentCommand) {
+        currentState.interpreter.currentCommand.data.onKeyPressed(currentState
+            .interpreter.currentCommandState, key);
+    }
+
+    EventCommand.prototype.onKeyPressed.call(this, currentState, key);
+}
+
+// -------------------------------------------------------
+
+EventCommandCallACommonReaction.prototype.onKeyReleased = function(currentState,
+    key)
+{
+    if (currentState.interpreter && currentState.interpreter.currentCommand) {
+        currentState.interpreter.currentCommand.data.onKeyReleased(currentState
+            .interpreter.currentCommandState, key);
+    }
+
+    EventCommand.prototype.onKeyReleased.call(this, currentState, key);
+}
+
+// -------------------------------------------------------
+
+EventCommandCallACommonReaction.prototype.onKeyPressedRepeat = function(
+    currentState, key)
+{
+    if (currentState.interpreter && currentState.interpreter.currentCommand) {
+        return currentState.interpreter.currentCommand.data.onKeyPressedRepeat(
+            currentState.interpreter.currentCommandState, key);
+    }
+
+    return EventCommand.prototype.onKeyPressedRepeat.call(this, currentState,
+        key);
+}
+
+// -------------------------------------------------------
+
+EventCommandCallACommonReaction.prototype.onKeyPressedAndRepeat = function(
+    currentState, key)
+{
+    if (currentState.interpreter && currentState.interpreter.currentCommand) {
+        currentState.interpreter.currentCommand.data.onKeyPressedAndRepeat(
+            currentState.interpreter.currentCommandState, key);
+    }
+
+    EventCommand.prototype.onKeyPressedAndRepeat.call(this, currentState, key);
+}
+
+// -------------------------------------------------------
+
+/** Draw the dialog box.
+*   @param {Object} currentState The current state of the event.
+*/
+EventCommandCallACommonReaction.prototype.drawHUD = function(currentState) {
+    if (currentState.interpreter && currentState.interpreter.currentCommand) {
+        currentState.interpreter.currentCommand.data.drawHUD(currentState
+            .interpreter.currentCommandState);
+    }
+
+    EventCommand.prototype.drawHUD.call(this, currentState);
+}

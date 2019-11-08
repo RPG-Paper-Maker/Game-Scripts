@@ -83,7 +83,8 @@ ReactionInterpreter.prototype = {
         if (this.currentTimeState) {
             this.currentTimeState[1] = new Date().getTime();
         }
-        if (this.currentMapObject.movingState !== null) {
+        if (this.currentMapObject && this.currentMapObject.movingState !== null)
+        {
             this.currentMapObject.movingState.pause = false;
         }
     },
@@ -247,7 +248,9 @@ ReactionInterpreter.prototype = {
     /**
     */
     updateObjectMoveState: function() {
-        if (this.currentCommand.data instanceof EventCommandMoveObject) {
+        if (this.currentMapObject && this.currentCommand.data instanceof
+            EventCommandMoveObject)
+        {
             this.currentMapObject.updateMoveStates(this.currentCommand.data.
                 getCurrentOrientation(this.currentCommandState));
         }

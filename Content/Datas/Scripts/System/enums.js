@@ -77,7 +77,8 @@ var EventCommandKind = {
     RemoveObjectFromMap: 41,
     StopReaction: 42,
     AllowForbidSaves: 43,
-    AllowForbidMainMenu: 44
+    AllowForbidMainMenu: 44,
+    CallACommonReaction: 45
 };
 Object.freeze(EventCommandKind);
 
