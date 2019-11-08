@@ -907,8 +907,8 @@ function EventCommandMoveObject(command) {
     while(i < l){
         var kind = command[i++];
 
-        if (kind >= CommandMoveKind.MoveNorth &&
-            kind <= CommandMoveKind.MoveRandom)
+        if (kind >= CommandMoveKind.MoveNorth && kind <= CommandMoveKind
+            .MoveBack)
         {
             this.parameters.push({ square: command[i++] === 0 });
             this.kind = kind;
@@ -940,6 +940,18 @@ function EventCommandMoveObject(command) {
             case CommandMoveKind.MoveRandom:
                 this.moves.push(this.moveRandom);
                 break;
+            case CommandMoveKind.MoveHero:
+                this.moves.push(this.moveHero);
+                break;
+            case CommandMoveKind.MoveOppositeHero:
+                this.moves.push(this.moveOppositeHero);
+                break;
+            case CommandMoveKind.MoveFront:
+                this.moves.push(this.moveFront);
+                break;
+            case CommandMoveKind.MoveBack:
+                this.moves.push(this.moveBack);
+                break;
             }
         }
     }
@@ -948,12 +960,25 @@ function EventCommandMoveObject(command) {
     this.parallel = !this.isWaitEnd;
 }
 
+EventCommandMoveObject.oppositeOrientation = function(orientation) {
+    switch (orientation) {
+    case Orientation.South:
+        return Orientation.North;
+    case Orientation.West:
+        return Orientation.East;
+    case Orientation.North:
+        return Orientation.South;
+    case Orientation.East:
+        return Orientation.West;
+    }
+}
+
 EventCommandMoveObject.prototype = {
 
     /** Initialize the current state.
     *   @returns {Object} The current state (position, distance).
     */
-    initialize: function(){
+    initialize: function() {
         return {
             parallel: this.isWaitEnd,
             index: 0,
@@ -964,6 +989,7 @@ EventCommandMoveObject.prototype = {
             moved: false,
             object: null,
             random: RPM.random(0, 3),
+            moveHeroOrientation: null,
             pause: false
         }
     },
@@ -989,15 +1015,10 @@ EventCommandMoveObject.prototype = {
                 object.move(orientation, 0, angle, this.isCameraOrientation);
                 return true;
             }
-            /*
-            if (position.x === currentState.position.x) {
-                object.blockX = true;
-            }
-            if (position.z === currentState.position.z) {
-                object.blockZ = true;
-            }*/
         }
-        if (object.previousMoveCommand === null) {
+        if (object.previousMoveCommand === null && object.previousOrientation
+            === null)
+        {
             object.previousMoveCommand = this;
             object.previousOrientation = orientation;
         } else if (object.previousMoveCommand === this) {
@@ -1031,8 +1052,6 @@ EventCommandMoveObject.prototype = {
             object.previousOrientation = null;
             object.previousMoveCommand = null;
             object.otherMoveCommand = null;
-            object.blockX = false;
-            object.blockZ = false;
             return true;
         }
 
@@ -1095,9 +1114,14 @@ EventCommandMoveObject.prototype = {
     *   @param {Object} parameters The parameters.
     */
     moveNorthWest: function(currentState, object, parameters) {
-        var a = this.moveNorth(currentState, object, parameters);
-        var b = this.moveWest(currentState, object, parameters);
-        return object ? a & b : a;
+        var orientation;
+
+        if (object) {
+            object.previousOrientation = Orientation.North;
+        }
+        orientation = this.moveWest(currentState, object, parameters);
+
+        return object ? orientation : Orientation.North;
     },
 
     // -------------------------------------------------------
@@ -1108,9 +1132,14 @@ EventCommandMoveObject.prototype = {
     *   @param {Object} parameters The parameters.
     */
     moveNorthEast: function(currentState, object, parameters) {
-        var a = this.moveNorth(currentState, object, parameters);
-        var b = this.moveEast(currentState, object, parameters);
-        return object ? a & b : a;
+        var orientation;
+
+        if (object) {
+            object.previousOrientation = Orientation.North;
+        }
+        orientation = this.moveEast(currentState, object, parameters);
+
+        return object ? orientation : Orientation.North;
     },
 
     // -------------------------------------------------------
@@ -1121,9 +1150,14 @@ EventCommandMoveObject.prototype = {
     *   @param {Object} parameters The parameters.
     */
     moveSouthWest: function(currentState, object, parameters) {
-        var a = this.moveSouth(currentState, object, parameters);
-        var b = this.moveWest(currentState, object, parameters);
-        return object ? a & b : a;
+        var orientation;
+
+        if (object) {
+            object.previousOrientation = Orientation.South;
+        }
+        orientation = this.moveWest(currentState, object, parameters);
+
+        return object ? orientation : Orientation.South;
     },
 
     // -------------------------------------------------------
@@ -1134,9 +1168,14 @@ EventCommandMoveObject.prototype = {
     *   @param {Object} parameters The parameters.
     */
     moveSouthEast: function(currentState, object, parameters) {
-        var a = this.moveSouth(currentState, object, parameters);
-        var b = this.moveEast(currentState, object, parameters);
-        return object ? a & b : a;
+        var orientation;
+
+        if (object) {
+            object.previousOrientation = Orientation.South;
+        }
+        orientation = this.moveEast(currentState, object, parameters);
+
+        return object ? orientation : Orientation.South;
     },
 
     // -------------------------------------------------------
@@ -1156,6 +1195,113 @@ EventCommandMoveObject.prototype = {
             return this.moveWest(currentState, object, parameters);
         case CommandMoveKind.MoveEast:
             return this.moveEast(currentState, object, parameters);
+        }
+    },
+
+    /** Function to move north west.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The object to move.
+    *   @param {Object} parameters The parameters.
+    */
+    moveHero: function(currentState, object, parameters) {
+        return this.moveHeroAndOpposite(currentState, object, parameters, false);
+    },
+
+    /** Function to move north west.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The object to move.
+    *   @param {Object} parameters The parameters.
+    */
+    moveOppositeHero: function(currentState, object, parameters) {
+        return this.moveHeroAndOpposite(currentState, object, parameters, true);
+    },
+
+    /** Function to move north west.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The object to move.
+    *   @param {Object} parameters The parameters.
+    */
+    moveHeroAndOpposite: function(currentState, object, parameters, opposite) {
+        var position;
+
+        if (object) {
+            var orientation;
+
+            orientation = currentState.moveHeroOrientation === null ? this
+                .getHeroOrientation(object) : currentState.moveHeroOrientation;
+            currentState.moveHeroOrientation = orientation;
+            if (opposite) {
+                orientation = EventCommandMoveObject.oppositeOrientation(
+                    orientation);
+            }
+            return this.move(currentState, object, parameters.square,
+                orientation);
+        }
+
+        return Orientation.None;
+    },
+
+    /** Function to move north west.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The object to move.
+    *   @param {Object} parameters The parameters.
+    */
+    moveFront: function(currentState, object, parameters) {
+        var orientation;
+
+        if (object) {
+            orientation = currentState.moveHeroOrientation === null ? object
+                .orientationEye : currentState.moveHeroOrientation;
+            currentState.moveHeroOrientation = orientation;
+            return this.move(currentState, object, parameters.square,
+                currentState.moveHeroOrientation);
+        }
+
+        return Orientation.None;
+    },
+
+    /** Function to move north west.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The object to move.
+    *   @param {Object} parameters The parameters.
+    */
+    moveBack: function(currentState, object, parameters) {
+        var orientation;
+
+        if (object) {
+            orientation = currentState.moveHeroOrientation === null ?
+                EventCommandMoveObject.oppositeOrientation(object
+                .orientationEye) : currentState.moveHeroOrientation;
+            currentState.moveHeroOrientation = orientation;
+            return this.move(currentState, object, parameters.square,
+                currentState.moveHeroOrientation);
+        }
+
+        return Orientation.None;
+    },
+
+    /** Function to move north west.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The object to move.
+    *   @param {Object} parameters The parameters.
+    */
+    getHeroOrientation: function(object) {
+        var xDif, zDif;
+
+        xDif = object.position.x - $game.hero.position.x;
+        zDif = object.position.z - $game.hero.position.z;
+        if (Math.abs(xDif) > Math.abs(zDif)) {
+            if (xDif > 0) {
+                return Orientation.West;
+            } else {
+                return Orientation.East;
+            }
+        } else {
+            if (zDif > 0) {
+                return Orientation.North;
+            } else {
+                return Orientation.South;
+            }
         }
     },
 
@@ -1194,6 +1340,7 @@ EventCommandMoveObject.prototype = {
                     currentState.index = currentState.index + 1;
                     currentState.random = RPM.random(0, 3);
                     currentState.position = null;
+                    currentState.moveHeroOrientation = null;
                 }
 
                 return (this.moves[currentState.index] == null) ? 1 : 0;

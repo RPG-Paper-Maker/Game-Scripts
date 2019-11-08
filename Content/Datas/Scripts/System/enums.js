@@ -23,7 +23,11 @@ var CommandMoveKind = {
     MoveNorthEast: 5,
     MoveSouthWest: 6,
     MoveSouthEast: 7,
-    MoveRandom: 8
+    MoveRandom: 8,
+    MoveHero: 9,
+    MoveOppositeHero: 10,
+    MoveFront: 11,
+    MoveBack: 12
 }
 Object.freeze(CommandMoveKind);
 

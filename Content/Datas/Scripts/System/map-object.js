@@ -47,7 +47,6 @@ function MapObject(system, position, isHero) {
     this.receivedOneEvent = false;
     this.movingState = null;
     this.previousOrientation = null;
-    this.previousMoveCommand = null;
     this.otherMoveCommand = null;
     if (!this.isHero && !this.isStartup) {
         this.initializeProperties();
@@ -438,13 +437,6 @@ MapObject.prototype = {
             res = position.z - zPlus;
             if (res >= 0 && res < h)
                 position.setZ(res);
-        }
-
-        if (this.blockX) {
-            position.setX(this.previousPosition.x);
-        }
-        if (this.blockZ) {
-            position.setZ(this.previousPosition.z);
         }
 
         // Collision
