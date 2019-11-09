@@ -48,6 +48,7 @@ function MapObject(system, position, isHero) {
     this.movingState = null;
     this.previousOrientation = null;
     this.otherMoveCommand = null;
+    this.yMountain = null;
     if (!this.isHero && !this.isStartup) {
         this.initializeProperties();
     }
@@ -390,8 +391,8 @@ MapObject.prototype = {
         var h = $currentMap.mapInfos.width * $SQUARE_SIZE;
         var result, yMountain;
 
-        if (orientation === Orientation.South || this.previousOrientation === Orientation
-            .South)
+        if (orientation === Orientation.South || this.previousOrientation ===
+            Orientation.South)
         {
             xPlus = distance * RPM.cos(angle * Math.PI / 180.0);
             zPlus = distance * RPM.sin(angle * Math.PI / 180.0);
@@ -402,8 +403,8 @@ MapObject.prototype = {
             if (res >= 0 && res < w)
                 position.setX(res);
         }
-        if (orientation === Orientation.West || this.previousOrientation === Orientation
-            .West)
+        if (orientation === Orientation.West || this.previousOrientation ===
+            Orientation.West)
         {
             xPlus = distance * RPM.cos((angle - 90.0) * Math.PI / 180.0);
             zPlus = distance * RPM.sin((angle - 90.0) * Math.PI / 180.0);
@@ -414,8 +415,8 @@ MapObject.prototype = {
             if (res >= 0 && res < h)
                position.setZ(res);
         }
-        if (orientation === Orientation.North || this.previousOrientation === Orientation
-            .North)
+        if (orientation === Orientation.North || this.previousOrientation ===
+            Orientation.North)
         {
             xPlus = distance * RPM.cos(angle * Math.PI / 180.0);
             zPlus = distance * RPM.sin(angle * Math.PI / 180.0);
@@ -426,8 +427,8 @@ MapObject.prototype = {
             if (res >= 0 && res < w)
                 position.setX(res);
         }
-        if (orientation === Orientation.East || this.previousOrientation === Orientation
-                .East)
+        if (orientation === Orientation.East || this.previousOrientation ===
+            Orientation.East)
         {
             xPlus = distance * RPM.cos((angle - 90.0) * Math.PI / 180.0);
             zPlus = distance * RPM.sin((angle - 90.0) * Math.PI / 180.0);
@@ -468,6 +469,12 @@ MapObject.prototype = {
                     break;
                 }
             }
+        }
+        if (yMountain !== null && !position.equals(this.position)) {
+            this.yMountain = yMountain - this.position.y;
+            this.timeYMountain = new Date().getTime();
+            this.yMountainBefore = this.position.y;
+            position.setY(this.yMountainBefore);
         }
 
         this.updateBBPosition(this.position);
@@ -871,6 +878,17 @@ MapObject.prototype = {
             // Update mesh
             if (frame !== this.frame || orientation !== this.orientation)
                 this.updateUVs();
+        }
+
+        // Smooth camera y Mountain up / down
+        if (this.yMountain !== null) {
+            var time;
+
+            time = Math.min(1, (new Date().getTime() - this.timeYMountain) / 40);
+            this.position.setY(this.yMountainBefore + (time * this.yMountain));
+            if (time === 1) {
+                this.yMountain = null;
+            }
         }
 
         // Moving
