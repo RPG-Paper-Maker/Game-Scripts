@@ -44,6 +44,12 @@ SystemEffect.prototype.readJSON = function(json) {
             break;
         }
         this.damageFormula = SystemValue.readOrDefaultMessage(json.df);
+        this.isDamagesMinimum = RPM.defaultValue(json.idmin, true);
+        this.damagesMinimumFormula = SystemValue.readOrDefaultMessage(json.dmin,
+            "0");
+        this.isDamagesMaximum = RPM.defaultValue(json.idmax, false);
+        this.damagesMaximumFormula = SystemValue.readOrDefaultMessage(json.dmax,
+            "0");
         this.isDamageElement = typeof json.ide !== 'undefined' ? json.ide :
             false;
         this.damageElementID = SystemValue.readOrDefaultDatabase(json.deid);
@@ -140,6 +146,16 @@ SystemEffect.prototype.execute = function() {
                             user, target, damage));
                         crit = true;
                     }
+                }
+                if (this.isDamagesMinimum) {
+                    var lol = RPM.evaluateFormula(this
+                                                  .damagesMinimumFormula.getValue(), user, target);
+                    damage = Math.max(damage, RPM.evaluateFormula(this
+                        .damagesMinimumFormula.getValue(), user, target));
+                }
+                if (this.isDamagesMaximum) {
+                    damage = Math.min(damage, RPM.evaluateFormula(this
+                        .damagesMaximumFormula.getValue(), user, target));
                 }
             }
 
