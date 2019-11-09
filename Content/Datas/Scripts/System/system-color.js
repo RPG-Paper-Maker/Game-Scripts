@@ -66,8 +66,8 @@ SystemColor.prototype = {
             var rgb, w, intensity, m;
 
             rgb = new THREE.Vector3(Math.max(Math.min(this.color.r + tone.x, 1),
-                0), Math.max(Math.min(this.color.g + tone.y, 1), 0)
-                , Math.max(Math.min(this.color.b + tone.z, 1), 0));
+                -1), Math.max(Math.min(this.color.g + tone.y, 1), -1)
+                , Math.max(Math.min(this.color.b + tone.z, 1), -1));
             w = new THREE.Vector3(0.2125, 0.7154, 0.0721);
             intensity = rgb.dot(w);
             m = SystemColor.mix(new THREE.Vector3(intensity, intensity,

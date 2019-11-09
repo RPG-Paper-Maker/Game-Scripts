@@ -2788,13 +2788,13 @@ EventCommandChangeScreenTone.prototype.initialize = function() {
     return {
         parallel: this.waitEnd,
         finalDifRed: Math.max(Math.min((this.r.getValue() + (color ? color.red :
-            0)) / 255, 1), 0) - $screenTone.x,
+            0)) / 255, 1), -1) - $screenTone.x,
         finalDifGreen: Math.max(Math.min((this.g.getValue() + (color ? color
-            .green : 0)) / 255, 1), 0) - $screenTone.y,
+            .green : 0)) / 255, 1), -1) - $screenTone.y,
         finalDifBlue: Math.max(Math.min((this.b.getValue() + (color ? color.blue
-            : 0)) / 255, 1), 0) - $screenTone.z,
+            : 0)) / 255, 1), -1) - $screenTone.z,
         finalDifGrey: Math.max(Math.min(1 - (this.grey.getValue() / 100), 1),
-            0) - $screenTone.w,
+            -1) - $screenTone.w,
         time: time,
         timeLeft: time
     }
