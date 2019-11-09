@@ -90,6 +90,7 @@ SceneSaveLoadGame.prototype = {
             }
 
             this.windowChoicesSlots.setContents(this.gamesDatas);
+            this.loaded = true;
         });
     },
 
@@ -155,10 +156,12 @@ SceneSaveLoadGame.prototype = {
 
     // -------------------------------------------------------
 
-    drawHUD: function(){
-        this.windowTop.draw();
-        this.windowChoicesSlots.draw();
-        this.windowInformations.draw();
-        this.windowBot.draw();
+    drawHUD: function() {
+        if (this.loaded) {
+            this.windowTop.draw();
+            this.windowChoicesSlots.draw();
+            this.windowInformations.draw();
+            this.windowBot.draw();
+        }
     }
 }
