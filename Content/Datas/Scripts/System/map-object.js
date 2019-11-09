@@ -569,6 +569,10 @@ MapObject.prototype = {
                         position.z + this.boundingBoxSettings.b[i][2],
                         this.boundingBoxSettings.b[i][3],
                         this.boundingBoxSettings.b[i][4],
+                        this.boundingBoxSettings.b[i][5],
+                        this.boundingBoxSettings.b[i][6],
+                        this.boundingBoxSettings.b[i][7],
+                        this.boundingBoxSettings.b[i][8]
                     ]);
             }
             else {

@@ -129,7 +129,8 @@ CollisionSquare.unionSquares = function(squares, l, w, h) {
 CollisionSquare.getBB = function(rect, w, h) {
     return [
         (rect[0] - ((w * $SQUARE_SIZE) - rect[0] - rect[2])) / 2,
-        (h * $SQUARE_SIZE) - rect[1] - (rect[3] / 2), 0, rect[2], rect[3]
+        (h * $SQUARE_SIZE) - rect[1] - (rect[3] / 2), 0, rect[2], rect[3], 1, 0,
+        0, 0
     ];
 }
 
