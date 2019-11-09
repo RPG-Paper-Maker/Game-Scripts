@@ -66,8 +66,12 @@ function Battler(character, position, camera) {
     else {
         // Copy original material because there will be individual color changes
         var originalMaterial = $datasGame.tilesets.texturesBattlers[idBattler];
-        var material = originalMaterial.clone();
-        material.map = originalMaterial.map.clone();
+        var material;
+
+        material = RPM.createMaterial(originalMaterial.map.clone(), {
+            texture: { type: "t", value: originalMaterial.map },
+            colorD: { type: "v4", value: $screenTone.clone()}
+        });
         material.map.needsUpdate = true;
 
         this.width = Math.floor(material.map.image.width / $SQUARE_SIZE / $FRAMES);
@@ -103,9 +107,15 @@ Battler.prototype = {
     setActive: function(active) {
         this.active = active;
         if (active) {
-            this.mesh.material.color.setRGB(1, 1, 1);
+            this.mesh.material.uniforms.colorD.value.setX($screenTone.x);
+            this.mesh.material.uniforms.colorD.value.setY($screenTone.y);
+            this.mesh.material.uniforms.colorD.value.setZ($screenTone.z);
+            this.mesh.material.uniforms.colorD.value.setW($screenTone.w);
         } else {
-            this.mesh.material.color.setRGB(0.5, 0.5, 0.5);
+            this.mesh.material.uniforms.colorD.value.setX($screenTone.x - 0.3);
+            this.mesh.material.uniforms.colorD.value.setY($screenTone.y - 0.3);
+            this.mesh.material.uniforms.colorD.value.setZ($screenTone.z - 0.3);
+            this.mesh.material.uniforms.colorD.value.setW($screenTone.w - 0.3);
         }
     },
 
@@ -184,6 +194,7 @@ Battler.prototype = {
 
     update: function() {
         if (this.mesh !== null) {
+            this.setActive(this.active);
             this.updateSelected();
             this.updateFrame();
             this.updateArrow();

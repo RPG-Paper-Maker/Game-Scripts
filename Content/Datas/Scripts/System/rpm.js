@@ -1269,16 +1269,18 @@ RPM.loadTextureEmpty = function(){
 /** Create a material from texture.
 *   @retuns {THREE.MeshBasicMaterial}
 */
-RPM.createMaterial = function(texture) {
+RPM.createMaterial = function(texture, uniforms) {
     var material;
 
     texture.magFilter = THREE.NearestFilter;
     texture.minFilter = THREE.NearestFilter;
     texture.flipY = false;
-    var uniforms = {
-        texture: { type: "t", value: texture },
-        colorD: { type: "v4", value: $screenTone }
-    };
+    if (!uniforms) {
+        uniforms = {
+            texture: { type: "t", value: texture },
+            colorD: { type: "v4", value: $screenTone }
+        };
+    }
 
     material = new THREE.ShaderMaterial({
         uniforms:       uniforms,
