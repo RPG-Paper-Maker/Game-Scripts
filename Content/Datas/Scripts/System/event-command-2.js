@@ -2129,7 +2129,7 @@ EventCommandDisplayChoice.prototype = {
         } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
             .menuControls.Cancel))
         {
-            currentState.index = this.cancelAutoIndex.getValue();
+            currentState.index = this.cancelAutoIndex.getValue() - 1;
         }
     },
 
