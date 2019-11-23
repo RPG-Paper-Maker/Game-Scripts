@@ -112,23 +112,25 @@ DatasCommonEvents.prototype = {
     modelReOrder: function(jsonObject, reorderedList, jsonObjects,
                            objectsLength)
     {
-        if (!jsonObject.hasOwnProperty("stocked")){
+        if (jsonObject && !jsonObject.hasOwnProperty("stocked")) {
 
             // If id = -1, we can add to the list
             var id = jsonObject.hId;
-            if (id !== -1){
+            if (id !== -1) {
 
                 // Search id in the json list
-                var inheritedObject;
-                for (var j = 0; j < l; j++){
+                var inheritedObject, j, l;
+
+                for (j = 0; j < l; j++){
                     inheritedObject = jsonObjects[j];
-                    if (inheritedObject.id === id)
+                    if (inheritedObject.id === id) {
                         break;
+                    }
                 }
 
                 // test inheritance for this object
                 this.modelReOrder(inheritedObject, reorderedList, jsonObjects,
-                                  objectsLength);
+                    objectsLength);
             }
 
             jsonObject.stocked = true;
