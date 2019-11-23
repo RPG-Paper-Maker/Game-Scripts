@@ -72,7 +72,8 @@ SystemColor.prototype = {
             intensity = rgb.dot(w);
             m = SystemColor.mix(new THREE.Vector3(intensity, intensity,
                 intensity), rgb, tone.w);
-            return new THREE.Color(m.x, m.y, m.z).getHex();
+            return new THREE.Color(Math.min(Math.max(0, m.x), 1), Math.min(Math
+                .max(0, m.y), 1), Math.min(Math.max(0, m.z), 1)).getHex();
         }
 
         return this.color.getHex();
