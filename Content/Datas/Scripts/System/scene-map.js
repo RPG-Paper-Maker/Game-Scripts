@@ -326,7 +326,7 @@ SceneMap.prototype.loadTextures = function(){
 // -------------------------------------------------------
 
 SceneMap.prototype.loadCollisions = function() {
-    var pictures, list, image;
+    var pictures, list, image, picture;
     var i, l, p;
 
     // Tileset
@@ -340,7 +340,10 @@ SceneMap.prototype.loadCollisions = function() {
     l = pictures.length;
     this.collisions[PictureKind.Characters] = new Array(l);
     for (i = 1; i < l; i++) {
-        image = this.texturesCharacters[i].map.image;
+        picture = this.texturesCharacters[i];
+        if (picture.map) {
+            image = picture.map.image;
+        }
         p = pictures[i];
         if (p) {
             p.readCollisionsImage(image);
