@@ -232,7 +232,7 @@ Battler.prototype = {
     // -------------------------------------------------------
 
     updateFrame: function() {
-        if (!this.character.isDead() && !this.attacking) {
+        if (!this.attacking) {
             var frame = this.frame;
             this.frameTick += $elapsedTime;
             if (this.frameTick >= this.frameDuration)
@@ -322,6 +322,7 @@ Battler.prototype = {
             switch (this.step) {
             case BattlerStep.Normal:
             case BattlerStep.Victory:
+            case BattlerStep.Dead:
                 frame = this.frame; break;
             case BattlerStep.Attack:
             case BattlerStep.Skill:
