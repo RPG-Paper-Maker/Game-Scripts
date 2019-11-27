@@ -7,7 +7,7 @@
 *.la
 *.lai
 *.dylib
-Content/Pictures
+Content/Images
 Content/Shapes
 Content/Songs
 Content/Datas/Maps

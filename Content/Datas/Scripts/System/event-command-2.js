@@ -2474,6 +2474,8 @@ EventCommandSetMoveTurnAPicture.prototype.update = function(currentState, object
             currentState.picture.angle += timeRate * currentState.finalDifAngle;
         }
 
+        $requestPaintHUD = true;
+
         // If time = 0, then this is the end of the command
         if (currentState.timeLeft === 0) {
             return 1;
