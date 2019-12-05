@@ -35,6 +35,11 @@ function SceneMap(id, isBattleMap){
     $currentMap = this;
     this.id = id;
     this.isBattleMap = isBattleMap;
+
+    if (!isBattleMap) {
+        $game.currentMapId = id;
+    }
+
     this.mapName = RPM.generateMapName(id);
     this.scene = new THREE.Scene();
     this.readMapInfos();

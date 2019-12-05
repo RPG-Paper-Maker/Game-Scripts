@@ -60,8 +60,7 @@ SceneLoadGame.prototype = {
 
                 // Pop load and title screen from the stack
                 $gameStack.pop()
-                $gameStack.replace(new SceneMap(
-                                       $datasGame.system.idMapStartHero));
+                $gameStack.replace(new SceneMap($game.currentMapId));
             } else {
                 $datasGame.system.soundImpossible.playSound();
             }
