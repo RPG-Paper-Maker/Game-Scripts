@@ -223,7 +223,7 @@ MapObject.prototype = {
         var i, l, events, event, interval, repeat, timeEllapsed, removeList;
 
         // First run detection state
-        if (this.currentState.detection !== null) {
+        if (this.currentState && this.currentState.detection !== null) {
             this.currentState.detection.update(null, this, null);
         }
 
@@ -286,7 +286,8 @@ MapObject.prototype = {
             var portionDatas = $game.mapsDatas[$currentMap.id]
                     [portion[0]][portion[1]][portion[2]];
             var indexState = portionDatas.si.indexOf(this.system.id);
-            this.states = (indexState === -1) ? [1] : portionDatas.s[indexState];
+            this.states = (indexState === -1) ? [this.system.states.length > 0 ?
+                this.system.states[0].id : 1] : portionDatas.s[indexState];
         }
         this.currentState = null;
         for (var i = this.system.states.length - 1; i >= 0; i--){
@@ -301,9 +302,10 @@ MapObject.prototype = {
         if (this.isStartup) {
             return;
         }
-        var material = this.currentState.graphicID === 0 ? $currentMap
-            .textureTileset : $currentMap.texturesCharacters[this.currentState
-            .graphicID];
+
+        var material = this.currentState === null ? null : (this.currentState
+            .graphicID === 0 ? $currentMap.textureTileset : $currentMap
+            .texturesCharacters[this.currentState.graphicID]);
         this.meshBoundingBox = new Array;
         if (this.currentState !== null && !this.isNone() && material && material
             .map)
@@ -906,7 +908,9 @@ MapObject.prototype = {
     // -------------------------------------------------------
 
     updateMovingState: function() {
-        if (this.currentState.objectMovingKind !== ObjectMovingKind.Fix) {
+        if (this.currentState && this.currentState.objectMovingKind !==
+            ObjectMovingKind.Fix)
+        {
             var interpreter;
 
             interpreter = $currentMap.addReaction(null, this.currentState.route,

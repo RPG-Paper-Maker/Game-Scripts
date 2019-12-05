@@ -654,7 +654,7 @@ EventCommandSendEvent.sendEventDetection = function(
 EventCommandSendEvent.sendEventObjects = function(
     objects, portionDatas, sender, idTarget, isSystem, idEvent, parameters, senderNoReceiver)
 {
-    var i, l, object, states, indexState, posObject, test, detection, pos,
+    var i, l, object, indexState, posObject, test, detection, pos,
         boundingBox;
     if (sender !== null)
         pos = sender.position;
@@ -674,15 +674,8 @@ EventCommandSendEvent.sendEventObjects = function(
             }
         }
 
-        // Get states
-        states = [1];
-        indexState =
-                portionDatas.si.indexOf(object.system.id);
-        if (indexState !== -1)
-            states = portionDatas.s[indexState];
-
         // Make the object receive the event
-        object.receiveEvent(sender, isSystem, idEvent, parameters, states);
+        object.receiveEvent(sender, isSystem, idEvent, parameters, object.states);
     }
 }
 
