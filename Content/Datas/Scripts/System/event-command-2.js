@@ -996,6 +996,9 @@ EventCommandMoveObject.prototype = {
     *   @param {Orientation} orientation The orientation where to move.
     */
     move: function(currentState, object, square, orientation) {
+        if (object.moveFrequencyTick > 0) {
+            return false;
+        }
 
         var angle = this.isCameraOrientation ?
                     $currentMap.camera.horizontalAngle : -90.0;
@@ -1008,6 +1011,7 @@ EventCommandMoveObject.prototype = {
                 $SQUARE_SIZE, angle);
             if (position.equals(currentState.position)) {
                 object.move(orientation, 0, angle, this.isCameraOrientation);
+                this.moveFrequency(object);
                 return true;
             }
         }
@@ -1018,11 +1022,13 @@ EventCommandMoveObject.prototype = {
             object.previousOrientation = orientation;
         } else if (object.previousMoveCommand === this) {
             if (object.otherMoveCommand) {
+                this.moveFrequency(object);
                 return true;
             }
         } else if (object.previousMoveCommand && object.otherMoveCommand &&
             object.otherMoveCommand !== this)
         {
+            this.moveFrequency(object);
             return true;
         } else if (object.previousMoveCommand !== this) {
             object.otherMoveCommand = this;
@@ -1044,10 +1050,18 @@ EventCommandMoveObject.prototype = {
             object.previousOrientation = null;
             object.previousMoveCommand = null;
             object.otherMoveCommand = null;
+
+            this.moveFrequency(object);
             return true;
         }
 
         return false;
+    },
+
+    // -------------------------------------------------------
+
+    moveFrequency: function(object) {
+        object.moveFrequencyTick = object.frequency.getValue() * 1000;
     },
 
     // -------------------------------------------------------

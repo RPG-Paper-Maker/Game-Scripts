@@ -168,15 +168,25 @@ DatasSystem.prototype = {
                 this.detections[jsonElement.id] = element;
             }
 
-            // Speed / frequency
+            // Speeds
             jsonList = json.sf;
             l = jsonList.length;
-            this.speedFrequencies = new Array(l + 1);
+            this.speeds = new Array(l + 1);
             for (i = 0; i < l; i++) {
                 jsonElement = jsonList[i];
                 id = jsonElement.id;
                 element = SystemValue.readOrDefaultNumberDouble(jsonElement.v, 1);
-                this.speedFrequencies[jsonElement.id] = element;
+                this.speeds[jsonElement.id] = element;
+            }
+            // Frequencies
+            jsonList = json.f;
+            l = jsonList.length;
+            this.frequencies = new Array(l + 1);
+            for (i = 0; i < l; i++) {
+                jsonElement = jsonList[i];
+                id = jsonElement.id;
+                element = SystemValue.readOrDefaultNumberDouble(jsonElement.v, 1);
+                this.frequencies[jsonElement.id] = element;
             }
 
             // Font sizes

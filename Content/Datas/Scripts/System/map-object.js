@@ -41,6 +41,7 @@ function MapObject(system, position, isHero) {
     this.movingHorizontal = null;
     this.movingVertical = null;
     this.frameTick = 0;
+    this.moveFrequencyTick = 0;
     this.isHero = RPM.jsonDefault(isHero, false);
     this.isStartup = typeof position === RPM.UNDEFINED;
     this.isInScene = false;
@@ -310,10 +311,9 @@ MapObject.prototype = {
         if (this.currentState !== null && !this.isNone() && material && material
             .map)
         {
-            this.speed = $datasGame.system.speedFrequencies[this.currentState
-                .speedID];
-            this.frequency = $datasGame.system.speedFrequencies[this
-                .currentState.frequencyID];
+            this.speed = $datasGame.system.speeds[this.currentState.speedID];
+            this.frequency = $datasGame.system.frequencies[this.currentState
+                .frequencyID];
             this.frame = this.currentState.indexX >= $FRAMES ? $FRAMES - 1 :
                 this.currentState.indexX;
             this.orientationEye = this.currentState.indexY;
@@ -842,19 +842,22 @@ MapObject.prototype = {
     /** Update the object graphics.
     */
     update: function(angle) {
+        if (this.moveFrequencyTick > 0) {
+            this.moveFrequencyTick -= $elapsedTime;
+        }
 
         // Graphic updates
         if (this.mesh !== null) {
             var frame = this.frame;
             var orientation = this.orientation;
 
-            if (this.moving){
+            if (this.moving) {
 
                 // If moving, update frame
                 if (this.currentState.moveAnimation){
                     this.frameTick += $elapsedTime;
                     if (this.frameTick >= (MapObject.FRAME_DURATION / this
-                        .frequency.getValue()))
+                        .speed.getValue()))
                     {
                         this.frame = (this.frame + 1) % $FRAMES;
                         this.frameTick = 0;
