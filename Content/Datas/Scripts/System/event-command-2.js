@@ -2294,9 +2294,9 @@ EventCommandDisplayAPicture.prototype.update = function(currentState, object,
     currentIndex = this.index.getValue();
     picture = $datasGame.pictures.get(PictureKind.Pictures, this.pictureID)
         .picture.createCopy();
-    picture.setX(this.originX - (this.centered ? (picture.w / 2) : 0) + this.x
+    picture.setX(this.originX - (this.centered ? (picture.oW / 2) : 0) + this.x
         .getValue());
-    picture.setY(this.originY - (this.centered ? (picture.h / 2) : 0) + this.y
+    picture.setY(this.originY - (this.centered ? (picture.oH / 2) : 0) + this.y
         .getValue());
     picture.centered = this.centered;
     picture.zoom = this.zoom.getValue() / 100;
@@ -2405,8 +2405,8 @@ EventCommandSetMoveTurnAPicture.prototype.initialize = function() {
 
             prevX = picture.oX;
             prevY = picture.oY;
-            prevW = picture.w;
-            prevH = picture.h;
+            prevW = picture.oW;
+            prevH = picture.oH;
             prevCentered = picture.centered;
             prevZoom = picture.zoom;
             prevOpacity = picture.opacity;
@@ -2414,8 +2414,8 @@ EventCommandSetMoveTurnAPicture.prototype.initialize = function() {
             picture = $datasGame.pictures.get(PictureKind.Pictures, this
                 .pictureID).picture.createCopy();
             if (prevCentered) {
-                prevX += (prevW - picture.w) / 2;
-                prevY += (prevH - picture.h) / 2;
+                prevX += (prevW - picture.oW) / 2;
+                prevY += (prevH - picture.oH) / 2;
             }
             picture.setX(prevX);
             picture.setY(prevY);
@@ -2436,8 +2436,10 @@ EventCommandSetMoveTurnAPicture.prototype.initialize = function() {
             null,
         finalDifOpacity: this.opacity ? (this.opacity.getValue() / 100) -
             picture.opacity : null,
-        finalDifX: this.x ? this.x.getValue() - picture.oX : null,
-        finalDifY: this.y ? this.y.getValue() - picture.oY : null,
+        finalDifX: this.x ? (picture.centered ? $SCREEN_X / 2 : 0) + this.x
+            .getValue() - picture.oX : null,
+        finalDifY: this.y ? (picture.centered ? $SCREEN_Y / 2 : 0) + this.y
+            .getValue() - picture.oY : null,
         finalDifAngle: this.angle ? this.angle.getValue() - picture.angle : null,
         time: time,
         timeLeft: time
