@@ -2254,7 +2254,8 @@ function EventCommandDisplayAPicture(command) {
     k = command[i++];
     v = command[i++];
     this.index = SystemValue.createValue(k, v);
-    if (command[i++] === RPM.NUM_BOOL_TRUE) {
+    this.centered = command[i++] === RPM.NUM_BOOL_TRUE;
+    if (this.centered) {
         this.originX = $SCREEN_X / 2;
         this.originY = $SCREEN_Y / 2;
     } else {
@@ -2291,10 +2292,13 @@ EventCommandDisplayAPicture.prototype.update = function(currentState, object,
     var i, l, index, currentIndex, value, picture, ok;
 
     currentIndex = this.index.getValue();
-    picture = Picture2D.createImage($datasGame.pictures.get(PictureKind.Pictures
-        , this.pictureID), PictureKind.Pictures);
-    picture.setX(this.originX + this.x.getValue());
-    picture.setY(this.originY + this.y.getValue());
+    picture = $datasGame.pictures.get(PictureKind.Pictures, this.pictureID)
+        .picture.createCopy();
+    picture.setX(this.originX - (this.centered ? (picture.w / 2) : 0) + this.x
+        .getValue());
+    picture.setY(this.originY - (this.centered ? (picture.h / 2) : 0) + this.y
+        .getValue());
+    picture.centered = this.centered;
     picture.zoom = this.zoom.getValue() / 100;
     picture.opacity = this.opacity.getValue() / 100;
     picture.angle = this.angle.getValue();
@@ -2396,17 +2400,26 @@ EventCommandSetMoveTurnAPicture.prototype.initialize = function() {
     if (picture) {
         // If new picture ID, create a new picture
         if (this.pictureID) {
-            var prevX, prevY, prevZoom, prevOpacity, prevAngle;
+            var prevX, prevY, prevW, prevH, prevCentered, prevZoom, prevOpacity,
+                prevAngle;
 
             prevX = picture.oX;
             prevY = picture.oY;
+            prevW = picture.w;
+            prevH = picture.h;
+            prevCentered = picture.centered;
             prevZoom = picture.zoom;
             prevOpacity = picture.opacity;
             prevAngle = picture.angle;
-            picture = Picture2D.createImage($datasGame.pictures.get(PictureKind
-                .Pictures , this.pictureID), PictureKind.Pictures);
+            picture = $datasGame.pictures.get(PictureKind.Pictures, this
+                .pictureID).picture.createCopy();
+            if (prevCentered) {
+                prevX += (prevW - picture.w) / 2;
+                prevY += (prevH - picture.h) / 2;
+            }
             picture.setX(prevX);
             picture.setY(prevY);
+            picture.centered = prevCentered;
             picture.zoom = prevZoom;
             picture.opacity = prevOpacity;
             picture.angle = prevAngle;

@@ -61,7 +61,9 @@ DatasPictures.prototype = {
                         id = jsonPicture.id;
                         var picture = new SystemPicture();
                         picture.readJSON(jsonPicture);
-                        if (k === PictureKind.Icons) {
+                        if (k === PictureKind.Icons || k === PictureKind
+                            .Pictures)
+                        {
                             picture.load(k);
                         }
 

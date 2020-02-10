@@ -66,6 +66,22 @@ Picture2D.prototype = Object.create(Bitmap.prototype);
 
 // -------------------------------------------------------
 
+Picture2D.prototype.createCopy = function() {
+    var picture = new Picture2D();
+
+    picture.empty = this.empty;
+    picture.path = this.path;
+    picture.callback = this.callback;
+    picture.image = this.image;
+    picture.checked = true;
+    picture.setW(picture.image.width);
+    picture.setH(picture.image.height);
+
+    return picture;
+};
+
+// -------------------------------------------------------
+
 Picture2D.prototype.check = function() {
     if ($canvasRendering.isImageLoaded(this.path)) {
         var context = $canvasRendering.getContext('2d');
@@ -127,11 +143,17 @@ Picture2D.prototype.draw = function(x, y, w, h, sx, sy, sw, sh, positionResize)
     }
     if (typeof w === 'undefined') {
         w = this.w * this.zoom;
+        if (this.centered) {
+            x += (this.w - (this.w * this.zoom)) / 2;
+        }
     } else {
         w = RPM.getScreenX(w);
     }
     if (typeof h === 'undefined') {
         h = this.h * this.zoom;
+        if (this.centered) {
+            y += (this.h - (this.h * this.zoom)) / 2;
+        }
     } else {
         h = RPM.getScreenY(h);
     }
@@ -149,21 +171,35 @@ Picture2D.prototype.draw = function(x, y, w, h, sx, sy, sw, sh, positionResize)
         var angle;
 
         angle = this.angle * Math.PI / 180;
+        $context.save();
         $context.globalAlpha = this.opacity;
+        if (!this.centered) {
+            if (this.reverse) {
+                $context.scale(-1, 1);
+                $context.translate(-x -w, y);
+            } else {
+                $context.translate(x, y);
+            }
+        }
         if (angle !== 0) {
+            if (this.centered) {
+                $context.translate(x + w / 2, y + h / 2);
+            }
             $context.rotate(angle);
+            if (this.centered) {
+                $context.translate(-x - w / 2, -y - h / 2);
+            }
         }
-        if (this.reverse) {
-            $context.save();
-            $context.scale(-1, 1);
-            $context.drawImage(this.path, sx, sy, sw, sh, -x - w, y, w, h);
-            $context.restore();
-        } else {
-            $context.drawImage(this.path, sx, sy, sw, sh, x, y, w, h);
+        if (this.centered) {
+            if (this.reverse) {
+                $context.scale(-1, 1);
+                $context.translate(-x -w, y);
+            } else {
+                $context.translate(x, y);
+            }
         }
-        if (angle !== 0) {
-            $context.rotate(-angle);
-        }
+        $context.drawImage(this.path, sx, sy, sw, sh, 0, 0, w, h);
         $context.globalAlpha = 1.0;
+        $context.restore();
     }
 };
