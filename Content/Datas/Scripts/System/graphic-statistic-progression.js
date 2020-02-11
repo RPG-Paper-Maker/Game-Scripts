@@ -76,6 +76,10 @@ GraphicStatisticProgression.prototype = {
                 id !== $datasGame.battleSystem.idExpStatistic)
             {
                 statistic = $datasGame.battleSystem.statistics[id];
+                if (statistic.isRes) {
+                    continue;
+                }
+
                 graphicName = new GraphicText(statistic.name + ":");
                 $context.font = graphicName.font;
                 graphicName.updateContextFont();

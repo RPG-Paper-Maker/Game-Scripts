@@ -39,20 +39,53 @@ DatasBattleSystem.prototype = {
     read: function(){
         RPM.openFile(this, RPM.FILE_BATTLE_SYSTEM, true, function(res){
             var json = JSON.parse(res);
-            var id;
+            var i, l, id, maxID, index, name;
+
+            // Elements
+            var jsonElements = json.elements;
+            l = jsonElements.length;
+            this.elements = new Array(l+1);
+            this.elementsOrder = new Array(l);
+            for (i = 0; i < l; i++){
+                var jsonElement = jsonElements[i];
+                id = jsonElement.id;
+                var element = new SystemElement();
+                element.readJSON(jsonElement);
+                this.elements[id] = element;
+                this.elementsOrder[i] = id;
+            }
 
             // Statistics
             var jsonStatistics = json.statistics;
-            var i, l = jsonStatistics.length;
-            this.statistics = new Array(l+1);
+            l = jsonStatistics.length;
+            this.statistics = [];
             this.statisticsOrder = new Array(l);
-            for (i = 0; i < l; i++){
-                var jsonStatistic = jsonStatistics[i];
+            this.statisticsElements = [];
+            this.statisticsElementsPercent = [];
+            maxID = 0;
+            for (index = 0; index < l; index++){
+                var jsonStatistic = jsonStatistics[index];
                 id = jsonStatistic.id;
                 var statistic = new SystemStatistic();
                 statistic.readJSON(jsonStatistic);
                 this.statistics[id] = statistic;
-                this.statisticsOrder[i] = id;
+                this.statisticsOrder[index] = id;
+                if (id > maxID) {
+                    maxID = id;
+                }
+            }
+            // Add elements res to statistics
+            for (i = 0, l = this.elementsOrder.length; i < l; i++) {
+                id = this.elementsOrder[i];
+                name = this.elements[id].name;
+                this.statistics[maxID + (i * 2) + 1] = SystemStatistic
+                    .createElementRes(id, name);
+                this.statistics[maxID + (i * 2) + 2] = SystemStatistic
+                    .createElementResPercent(id, name);
+                this.statisticsOrder[index + (i * 2)] = maxID + (i * 2) + 1;
+                this.statisticsOrder[index + (i * 2) + 1] = maxID + (i * 2) + 2;
+                this.statisticsElements[id] = maxID + (i * 2) + 1;
+                this.statisticsElementsPercent[id] = maxID + (i * 2) + 2;
             }
 
             // Equipments
@@ -65,18 +98,6 @@ DatasBattleSystem.prototype = {
                 id = jsonEquipment.id;
                 this.equipments[id] = jsonEquipment.names[1];
                 this.equipmentsOrder[i] = id;
-            }
-
-            // Elements
-            var jsonElements = json.elements;
-            l = jsonElements.length;
-            this.elements = new Array(l+1);
-            for (i = 0; i < l; i++){
-                var jsonElement = jsonElements[i];
-                id = jsonElement.id;
-                var element = new SystemElement();
-                element.readJSON(jsonElement);
-                this.elements[id] = element;
             }
 
             // Weapons kind

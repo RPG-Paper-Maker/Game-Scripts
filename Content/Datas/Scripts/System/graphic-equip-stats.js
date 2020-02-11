@@ -53,6 +53,9 @@ function GraphicEquipStats(gamePlayer, newValues){
             id !== $datasGame.battleSystem.idExpStatistic)
         {
             statistic = $datasGame.battleSystem.statistics[id];
+            if (statistic.isRes) {
+                continue;
+            }
 
             // Name of the stat
             graphicName = new GraphicText(statistic.name + ":");

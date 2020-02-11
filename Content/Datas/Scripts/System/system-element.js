@@ -18,20 +18,27 @@
 /** @class
 *   An element of the game.
 *   @property {string} name The name of the element.
-*   @property {number[]} efficiency The list of efficiency according.
-*   to each element.
 */
-function SystemElement(){
+function SystemElement() {
 
 }
 
-SystemElement.prototype = {
+SystemElement.prototype = Object.create(SystemIcon.prototype);
 
-    /** Read the JSON associated to the element.
-    *   @param {Object} json Json object describing the object.
-    */
-    readJSON: function(json){
-        this.name = json.names[1];
-        this.efficiency = json.efficiency;
+// -------------------------------------------------------
+
+SystemElement.prototype.readJSON = function(json) {
+    SystemIcon.prototype.readJSON.call(this, json);
+
+    var i, l, jsonList, jsonElement, value;
+
+    jsonList = json.e;
+    this.efficiency = [];
+
+    for (i = 0, l = jsonList.length; i < l; i++) {
+        jsonElement = jsonList[i];
+        value = new SystemValue();
+        value.read(jsonElement[RPM.JSON_VALUE]);
+        this.efficiency[jsonElement[RPM.JSON_KEY]] = value;
     }
 }

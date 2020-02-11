@@ -22,8 +22,36 @@
 *   (for javascript code).
 *   @property {boolean} isFix Indicate if this statistic is fix (no bar).
 */
-function SystemStatistic(){
+function SystemStatistic() {
 
+}
+
+// -------------------------------------------------------
+
+SystemStatistic.createElementRes = function(id, name) {
+    var stat;
+
+    stat = new SystemStatistic();
+    stat.name = name + " res.";
+    stat.abbreviation = "elres" + id;
+    stat.isFix = true;
+    stat.isRes = true;
+
+    return stat;
+}
+
+// -------------------------------------------------------
+
+SystemStatistic.createElementResPercent = function(id, name) {
+    var stat;
+
+    stat = new SystemStatistic();
+    stat.name = name + " res.(%)";
+    stat.abbreviation = "elresp" + id;
+    stat.isFix = true;
+    stat.isRes = true;
+
+    return stat;
 }
 
 SystemStatistic.prototype = {

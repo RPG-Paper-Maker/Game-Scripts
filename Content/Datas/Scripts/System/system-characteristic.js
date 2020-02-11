@@ -93,20 +93,32 @@ SystemCharacteristic.prototype.getNewStatValue = function(gamePlayer) {
         case IncreaseDecreaseKind.StatValue:
             statID = this.statisticValueID.getValue();
             stat = $datasGame.battleSystem.statistics[statID];
-            break;
+            value = this.value.getValue() * (this.isIncreaseDecrease ? 1 : - 1);
+            baseStatValue = gamePlayer[stat.getAbbreviationNext()] - gamePlayer[
+                stat.getBonusAbbreviation()];
+            if (this.operation) { // *
+                value = this.unit ? baseStatValue * Math.round(baseStatValue *
+                    value / 100) : baseStatValue * value; // % / Fix
+            } else { // +
+                value = this.unit ? Math.round(baseStatValue * value / 100) :
+                    value; // % / Fix
+            }
+            return [statID, value];
+        case IncreaseDecreaseKind.ElementRes:
+            statID = this.unit ? $datasGame.battleSystem
+                .statisticsElementsPercent[this.elementResID.getValue()] :
+                $datasGame.battleSystem.statisticsElements[this.elementResID
+                .getValue()];
+            stat = $datasGame.battleSystem.statistics[statID];
+            value = this.value.getValue() * (this.isIncreaseDecrease ? 1 : - 1);
+            if (this.operation) { // *
+                value *= gamePlayer[stat.getAbbreviationNext()] - gamePlayer[
+                    stat.getBonusAbbreviation()];
+            }
+            return [statID, value];
         default:
             return null;
         }
-        value = this.value.getValue() * (this.isIncreaseDecrease ? 1 : - 1);
-        baseStatValue = gamePlayer[stat.getAbbreviationNext()] - gamePlayer[
-            stat.getBonusAbbreviation()];
-        if (this.operation) {
-            value = this.unit ? baseStatValue * Math.round(baseStatValue * value
-                / 100) : baseStatValue * value;
-        } else {
-            value = this.unit ? Math.round(baseStatValue * value / 100) : value;
-        }
-        return [statID, value];
     default:
         return null;
     }

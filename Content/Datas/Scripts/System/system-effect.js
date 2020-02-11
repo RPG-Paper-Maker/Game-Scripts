@@ -133,8 +133,17 @@ SystemEffect.prototype.execute = function() {
                     damage = RPM.random(damage - variance, damage + variance);
                 }
                 if (this.isDamageElement) {
+                    var fixRes, percentRes;
+
                     element = this.damageElementID.getValue();
-                    // TODO
+                    fixRes = target[$datasGame.battleSystem.statistics[
+                        $datasGame.battleSystem.statisticsElements[element]]
+                        .abbreviation]
+                    percentRes = target[$datasGame.battleSystem.statistics[
+                        $datasGame.battleSystem.statisticsElementsPercent[
+                        element]].abbreviation]
+                    damage -= (damage * percentRes / 100);
+                    damage -= fixRes;
                 }
                 if (this.isDamageCritical) {
                     critical = RPM.evaluateFormula(this.damageCriticalFormula
@@ -148,8 +157,6 @@ SystemEffect.prototype.execute = function() {
                     }
                 }
                 if (this.isDamagesMinimum) {
-                    var lol = RPM.evaluateFormula(this
-                                                  .damagesMinimumFormula.getValue(), user, target);
                     damage = Math.max(damage, RPM.evaluateFormula(this
                         .damagesMinimumFormula.getValue(), user, target));
                 }

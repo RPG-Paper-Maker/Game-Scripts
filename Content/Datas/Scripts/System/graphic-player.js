@@ -58,7 +58,7 @@ function GraphicPlayer(gamePlayer, reverse) {
     this.maxStatNamesLength = 0;
     this.maxStatLength = 0;
     var i, l = $datasGame.battleSystem.statisticsOrder.length;
-    for (i = 0; i < l; i++){
+    for (i = 0; i < l; i++) {
         id = $datasGame.battleSystem.statisticsOrder[i];
         if (id !== $datasGame.battleSystem.idLevelStatistic && id !== $datasGame
             .battleSystem.idExpStatistic)
@@ -66,7 +66,7 @@ function GraphicPlayer(gamePlayer, reverse) {
             statistic = $datasGame.battleSystem.statistics[id];
 
             // Only display bars
-            if (!statistic.isFix){
+            if (!statistic.isFix) {
                 textName = new GraphicText(statistic.name + ":");
                 context.font = textName.font;
                 textName.updateContextFont(context);

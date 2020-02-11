@@ -70,6 +70,10 @@ function GraphicPlayerDescription(gamePlayer) {
             id !== $datasGame.battleSystem.idExpStatistic)
         {
             statistic = $datasGame.battleSystem.statistics[id];
+            if (statistic.isRes) {
+                continue;
+            }
+
             graphicName = new GraphicText(statistic.name + ":");
             $context.font = graphicName.font;
             graphicName.updateContextFont();
@@ -111,6 +115,9 @@ GraphicPlayerDescription.prototype = {
                 id !== $datasGame.battleSystem.idExpStatistic)
             {
                 statistic = $datasGame.battleSystem.statistics[id];
+                if (statistic.isRes) {
+                    continue;
+                }
                 if (value > 0) {
                     txt = "+";
                 } else if (value < 0) {
@@ -254,7 +261,7 @@ GraphicPlayerDescription.prototype = {
         // Stats
         l = this.listStatsNames.length;
         for (i = 0; i < l; i++){
-            xStat = x + (Math.floor(i/7)*200);
+            xStat = x + (Math.floor(i/7)*190);
             yStat = yStats + ((i%7)*30);
             this.listStatsNames[i].draw(xStat, yStat, 0, 0);
             this.listStats[i].draw(xStat + this.listLength[Math.floor(i/7)] + 10

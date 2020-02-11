@@ -131,6 +131,8 @@ RPM.TAG_PROPERTY = "pro";
 RPM.TAG_HERO_NAME = "hname";
 RPM.TAG_ICON = "ico";
 RPM.DEFAULT_FONT = "sans-serif";
+RPM.JSON_KEY = "k";
+RPM.JSON_VALUE = "v";
 
 // -------------------------------------------------------
 //  COLORS

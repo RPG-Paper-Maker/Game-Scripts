@@ -85,7 +85,6 @@ SystemValue.createMessage = function(m) {
     return SystemValue.createValue(PrimitiveValueKind.Message, m);
 }
 
-
 // -------------------------------------------------------
 
 /** Create a new value number.

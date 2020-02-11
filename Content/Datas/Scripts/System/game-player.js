@@ -168,9 +168,9 @@ GamePlayer.prototype = {
     *   @param {number} level The level of the new character.
     */
     instanciate: function(level) {
-        var skills, skill, statistics, statistic, statisticsProgression,
-            statisticProgression, nonFixStatistics;
-        var i, j, l, ll;
+        var i, j, l, ll, skills, skill, statistics, statistic,
+            statisticsProgression, statisticProgression, nonFixStatistics,
+            elements, elementsOrder;
 
         // Skills
         this.sk = [];

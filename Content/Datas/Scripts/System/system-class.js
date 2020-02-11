@@ -29,13 +29,15 @@ SystemClass.prototype = Object.create(SystemLang.prototype);
 SystemClass.prototype.readJSON = function(json) {
     SystemLang.prototype.readJSON.call(this, json);
 
+    var elements, elementsOrder, statisticProgression;
+
     this.initialLevel = json.iniL ? json.iniL : -1;
     this.finalLevel = json.mxL ? json.mxL : -1;
     this.experienceBase = json.eB ? json.eB : -1;
     this.experienceInflation = json.eI ? json.eI : -1;
     this.experienceTable = {};
     var jsonExperienceTable = json.eT;
-    var i, l;
+    var i, l, index;
     if (jsonExperienceTable) {
         for (i = 0, l = jsonExperienceTable.length; i < l; i++) {
             this.experienceTable[jsonExperienceTable[i].k] =
@@ -50,10 +52,10 @@ SystemClass.prototype.readJSON = function(json) {
     }
     l = jsonStatisticsProgression.length;
     this.statisticsProgression = new Array(l);
-    for (i = 0; i < l; i++){
-        var statisticProgression = new SystemStatisticProgression();
-        statisticProgression.readJSON(jsonStatisticsProgression[i]);
-        this.statisticsProgression[i] = statisticProgression;
+    for (index = 0; index < l; index++){
+        statisticProgression = new SystemStatisticProgression();
+        statisticProgression.readJSON(jsonStatisticsProgression[index]);
+        this.statisticsProgression[index] = statisticProgression;
     }
 
     // Skills
