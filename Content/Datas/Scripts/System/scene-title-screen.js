@@ -26,6 +26,9 @@ function SceneTitleScreen() {
 
     SceneGame.call(this);
 
+    // Destroy pictures
+    $displayedPictures = [];
+
     // Creating background
     if ($datasGame.titlescreenGameover.isTitleBackgroundImage) {
         this.pictureBackground = Picture2D.createImageWithID($datasGame
