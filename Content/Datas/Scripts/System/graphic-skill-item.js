@@ -18,10 +18,11 @@
 /** @class
 */
 function GraphicSkillItem(skillItem) {
-    var i, l, effect, txt;
+    var i, l, effect, txt, graphic, graphicIcon;
     this.skillItem = skillItem;
 
     // All the graphics
+    this.graphicElements = [];
     this.graphicName = new GraphicTextIcon(skillItem.name, skillItem.pictureID);
     if (skillItem.hasType) {
         this.graphicType = new GraphicText(skillItem.getType().name, { fontSize:
@@ -35,10 +36,20 @@ function GraphicSkillItem(skillItem) {
     }
     this.graphicEffects = [];
     for (i = 0, l = this.skillItem.effects.length; i < l; i++) {
-        txt = this.skillItem.effects[i].toString();
+        effect = this.skillItem.effects[i];
+        txt = effect.toString();
         if (txt) {
-            this.graphicEffects.push(new GraphicText(txt, { fontSize: RPM
-                .MEDIUM_FONT_SIZE }));
+            graphic = new GraphicText(txt, { fontSize: RPM.MEDIUM_FONT_SIZE });
+            this.graphicEffects.push(graphic);
+        }
+        if (effect.isDamageElement) {
+            graphicIcon = Picture2D.createImage($datasGame.pictures.getIcon(
+                $datasGame.battleSystem.elements[effect.damageElementID
+                .getValue()].pictureID), PictureKind.Icons)
+            this.graphicElements.push(graphicIcon);
+            if (txt) {
+                graphic.elementIcon = graphicIcon;
+            }
         }
     }
     this.graphicCharacteristics = [];
@@ -61,13 +72,19 @@ GraphicSkillItem.prototype = {
     *   @param {number} h The height dimention to draw graphic.
     */
     drawInformations: function(x, y, w, h) {
-        var i, l, offsetY, graphic;
+        var i, l, offsetY, graphic, offsetX;
 
         offsetY = 0;
         this.graphicName.draw(x, y + offsetY, w, 0);
         offsetY += this.graphicName.getMaxHeight();
         if (this.skillItem.hasTargetKind) {
             this.graphicTarget.draw(x, y + offsetY, w, 0);
+        }
+        offsetX = x + this.graphicName.getWidth() + this.graphicName.space;
+        for (i = 0, l = this.graphicElements.length; i < l; i++) {
+            graphic = this.graphicElements[i];
+            graphic.draw(offsetX, y - (graphic.h / 2));
+            offsetX += this.graphicElements.w + this.graphicName.space;
         }
         if (this.skillItem.hasType) {
             this.graphicType.draw(x + this.graphicName.textIcon.icon.w + this
@@ -79,6 +96,10 @@ GraphicSkillItem.prototype = {
         for (i = 0, l = this.graphicEffects.length; i < l; i++) {
             graphic = this.graphicEffects[i];
             graphic.draw(x, y + offsetY, w, 0);
+            if (graphic.elementIcon) {
+                graphic.elementIcon.draw(x + graphic.measureText(), y + offsetY
+                    - (graphic.elementIcon.h / 2));
+            }
             offsetY += graphic.fontSize + RPM.MEDIUM_SPACE;
         }
         offsetY += RPM.LARGE_SPACE;
