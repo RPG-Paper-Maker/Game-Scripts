@@ -64,8 +64,10 @@ SceneBattle.prototype.initializeStep2 = function() {
             }
         }
         if (this.effects.length === 0) {
-            this.userAnimation = $datasGame.animations.list[1];
-            this.targetAnimation = $datasGame.animations.list[1];
+            this.userAnimation = $datasGame.animations.list[$datasGame.skills
+                .list[1].animationUserID.getValue()];
+            this.targetAnimation = $datasGame.animations.list[$datasGame.skills
+                .list[1].animationTargetID.getValue()];
             effects = this.attackSkill.effects;
             for (i = 1, l = effects.length; i < l; i++) {
                 this.effects.push(effects[i]);
