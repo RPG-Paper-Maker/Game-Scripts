@@ -51,6 +51,14 @@ SystemAnimation.prototype.createPicture = function() {
 
 // -------------------------------------------------------
 
+SystemAnimation.prototype.playSounds = function(frame, condition) {
+    if (frame > 0 && frame < this.frames.length) {
+        this.frames[frame].playSounds(condition);
+    }
+}
+
+// -------------------------------------------------------
+
 SystemAnimation.prototype.draw = function(picture, frame, battler) {
     if (frame > 0 && frame < this.frames.length) {
         var position;

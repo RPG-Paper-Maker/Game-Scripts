@@ -32,3 +32,13 @@ SystemAnimationFrameEffect.prototype.readJSON = function(json) {
     }
     this.condition = RPM.defaultValue(json.c, AnimationEffectConditionKind.None);
 }
+
+// -------------------------------------------------------
+
+SystemAnimationFrameEffect.prototype.playSE = function(condition) {
+    if (this.isSE && (this.condition === AnimationEffectConditionKind.None ||
+        this.condition === condition))
+    {
+        this.se.playSound();
+    }
+}

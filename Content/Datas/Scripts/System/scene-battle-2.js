@@ -118,6 +118,18 @@ SceneBattle.prototype.initializeStep2 = function() {
 
 // -------------------------------------------------------
 
+SceneBattle.prototype.getCondition = function() {
+    if (this.damages[0][1]) {
+        return AnimationEffectConditionKind.Critical;
+    }
+    if (this.damages[0][2]) {
+        return AnimationEffectConditionKind.Miss;
+    }
+    return AnimationEffectConditionKind.Hit;
+};
+
+// -------------------------------------------------------
+
 SceneBattle.prototype.updateStep2 = function() {
     var i, l, isAnotherEffect, damage, effect;
 
@@ -131,6 +143,7 @@ SceneBattle.prototype.updateStep2 = function() {
         // User animation if exists
         if (this.userAnimation) {
             this.frameUser++;
+            this.userAnimation.playSounds(this.frameUser, this.getCondition());
             $requestPaintHUD = true;
         }
 
@@ -145,6 +158,7 @@ SceneBattle.prototype.updateStep2 = function() {
         // Target animation if exists
         if (this.targetAnimation) {
             this.frameTarget++;
+            this.targetAnimation.playSounds(this.frameTarget, this.getCondition());
             $requestPaintHUD = true;
             if (this.frameTarget > this.targetAnimation.frames.length) {
                 this.time = new Date().getTime() - (SceneBattle

@@ -70,16 +70,22 @@ SystemAnimationFrame.prototype.readJSON = function(json) {
         jsonEffect = jsonEffects[i];
         effect = new SystemAnimationFrameEffect();
         effect.readJSON(jsonEffect);
-        this.effects[i] = element;
+        this.effects[i] = effect;
+    }
+}
+
+// -------------------------------------------------------
+
+SystemAnimationFrame.prototype.playSounds = function(condition) {
+    for (var i = 0, l = this.effects.length; i < l; i++) {
+        this.effects[i].playSE(condition);
     }
 }
 
 // -------------------------------------------------------
 
 SystemAnimationFrame.prototype.draw = function(picture, position, rows, cols) {
-    var i, l;
-
-    for (i = 0, l = this.elements.length; i < l; i++) {
+    for (var i = 0, l = this.elements.length; i < l; i++) {
         this.elements[i].draw(picture, position, rows, cols);
     }
 }
