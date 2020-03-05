@@ -294,8 +294,8 @@ SceneBattle.prototype.drawHUDStep2 = function() {
     }
 
     // Draw damages
-    if (!this.user.isAttacking() && this.frameTarget > this.targetAnimation
-        .frames.length)
+    if (!this.user.isAttacking() && (!this.targetAnimation || this.frameTarget >
+        this.targetAnimation.frames.length))
     {
         var damage;
 
