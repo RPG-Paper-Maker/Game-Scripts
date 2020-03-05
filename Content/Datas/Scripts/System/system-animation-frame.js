@@ -22,31 +22,6 @@ function SystemAnimationFrame() {
 
 }
 
-// -------------------------------------------------------
-
-SystemAnimationFrame.prototype.readJSON = function(json) {
-    var i, l, jsonElements, jsonElement, jsonEffects, jsonEffect, element,
-        effect;
-
-    jsonElements = RPM.defaultValue(json.e, []);
-    l = jsonElements.length;
-    this.elements = new Array(l);
-    for (i = 0; i < l; i++) {
-        jsonElement = jsonElements[i];
-        element = new SystemAnimationFrameElement();
-        element.readJSON(jsonElement);
-        this.elements[i] = element;
-    }
-    jsonEffects = RPM.defaultValue(json.ef, []);
-    l = jsonEffects.length;
-    this.effects = new Array(l);
-    for (i = 0; i < l; i++) {
-        jsonEffect = jsonEffects[i];
-        effect = new SystemAnimationFrameEffect();
-        effect.readJSON(jsonEffect);
-        this.effects[i] = element;
-    }
-}
 
 // -------------------------------------------------------
 

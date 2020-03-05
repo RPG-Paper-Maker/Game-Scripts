@@ -28,7 +28,7 @@ SystemAnimation.prototype.readJSON = function(json) {
     var i, l, jsonFrames, jsonFrame, frame;
 
     this.pictureID = RPM.defaultValue(json.pid, 1);
-    this.positionKind = RPM.defaultValue(json.pk, AnimationPositionKind.Top);
+    this.positionKind = RPM.defaultValue(json.pk, AnimationPositionKind.Middle);
     jsonFrames = json.f;
     l = jsonFrames.length;
     this.frames = new Array(l + 1);
