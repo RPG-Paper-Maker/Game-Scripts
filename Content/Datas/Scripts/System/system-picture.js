@@ -75,6 +75,8 @@ SystemPicture.getLocalFolder = function(kind){
         return RPM.PATH_MOUNTAINS;
     case PictureKind.Pictures:
         return RPM.PATH_HUD_PICTURES;
+    case PictureKind.Animations:
+        return RPM.PATH_ANIMATIONS;
     }
 
     return "";

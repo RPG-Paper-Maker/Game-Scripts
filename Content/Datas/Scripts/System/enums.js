@@ -201,7 +201,8 @@ var PictureKind = {
     WindowSkins: 10,
     TitleScreen: 11,
     Objects3D: 12,
-    Pictures: 13
+    Pictures: 13,
+    Animations: 14
 };
 Object.freeze(PictureKind);
 
@@ -537,3 +538,29 @@ var VariableMapObjectCharacteristicKind = {
     Orientation: 6
 };
 Object.freeze(VariableMapObjectCharacteristicKind);
+
+/**
+*   Enum for the animation position kind.
+*   @enum {number}
+*   @readonly
+*/
+var AnimationPositionKind = {
+    Top: 0,
+    Middle: 1,
+    Bottom: 2,
+    ScreenCenter: 3
+};
+Object.freeze(AnimationPositionKind);
+
+/**
+*   Enum for the animation effect condition kind.
+*   @enum {number}
+*   @readonly
+*/
+var AnimationEffectConditionKind = {
+    None: 0,
+    Hit: 1,
+    Miss: 2,
+    Critical: 3
+};
+Object.freeze(AnimationEffectConditionKind);

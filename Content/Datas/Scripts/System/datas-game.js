@@ -52,6 +52,7 @@ function DatasGame(){
     this.keyBoard = new DatasKeyBoard();
     this.shapes = new DatasShapes();
     this.specialElements = new DatasSpecialElements();
+    this.animations = new DatasAnimations();
     this.pictures = new DatasPictures(this, DatasGame.prototype.readAfterPictures);
     this.videos = new DatasVideos();
     this.readSettings();

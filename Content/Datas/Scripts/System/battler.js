@@ -26,6 +26,9 @@ function Battler(character, position, camera) {
     this.character = character;
     this.arrowPosition = RPM.toScreenPosition(position, camera.threeCamera);
     this.damagePosition = RPM.toScreenPosition(position, camera.threeCamera);
+    this.topPosition = RPM.toScreenPosition(position, camera.threeCamera);
+    this.midPosition = RPM.toScreenPosition(position, camera.threeCamera);
+    this.botPosition = RPM.toScreenPosition(position, camera.threeCamera);
     this.active = true;
     this.attackingFrame = 0;
     this.attackingFrameTick = 0;
@@ -85,6 +88,8 @@ function Battler(character, position, camera) {
         this.mesh.position.set(position.x, position.y, position.z);
         this.upPosition = new THREE.Vector3(position.x, position.y + (this
             .height * $SQUARE_SIZE), position.z);
+        this.halfPosition = new THREE.Vector3(position.x, position.y + (this
+            .height * $SQUARE_SIZE / 2), position.z);
         if (character.k === CharacterKind.Monster) {
             this.mesh.scale.set(-1, 1, 1);
         }
@@ -200,6 +205,7 @@ Battler.prototype = {
             this.updateArrow();
             this.updateDamages();
             this.updateAttacking();
+            this.updatePositions();
         }
     },
 
@@ -224,6 +230,8 @@ Battler.prototype = {
         if (this.mesh.position.x !== newX) {
             this.mesh.position.setX(newX);
             this.upPosition.setX(newX);
+            this.halfPosition.setX(newX);
+            this.updatePositions();
             this.updateArrowPosition($currentMap.camera);
             $requestPaintHUD = true;
         }
@@ -285,6 +293,17 @@ Battler.prototype = {
                 this.updateUVs();
             }
         }
+    },
+
+    // -------------------------------------------------------
+
+    updatePositions: function() {
+        this.topPosition = RPM.toScreenPosition(this.upPosition, $currentMap
+            .camera.threeCamera);
+        this.midPosition = RPM.toScreenPosition(this.halfPosition, $currentMap
+            .camera.threeCamera);
+        this.botPosition = RPM.toScreenPosition(this.position, $currentMap
+            .camera.threeCamera);
     },
 
     // -------------------------------------------------------

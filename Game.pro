@@ -17,9 +17,13 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
+    Content/Datas/Scripts/System/datas-animations.js \
     Content/Datas/Scripts/System/datas-videos.js \
     Content/Datas/Scripts/System/desktop/main.qml \
     Content/Datas/Scripts/System/desktop/includes.js \
+    Content/Datas/Scripts/System/system-animation-frame-effect.js \
+    Content/Datas/Scripts/System/system-animation-frame-element.js \
+    Content/Datas/Scripts/System/system-animation-frame.js \
     Content/Datas/Scripts/System/graphic-keyboard.js \
     Content/Datas/Scripts/System/graphic-message.js \
     Content/Datas/Scripts/System/graphic-setting.js \
@@ -34,6 +38,7 @@ DISTFILES += \
     Content/Datas/Scripts/System/bitmap.js \
     Content/Datas/Scripts/System/scene-game.js \
     Content/Datas/Scripts/System/scene-title-screen.js \
+    Content/Datas/Scripts/System/system-animation.js \
     Content/Datas/Scripts/System/system-camera-properties.js \
     Content/Datas/Scripts/System/system-detection.js \
     Content/Datas/Scripts/System/system-mountain.js \
