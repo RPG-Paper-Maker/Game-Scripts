@@ -136,7 +136,25 @@ SceneBattle.prototype.updateStep2 = function() {
         }
         break;
     case 1: // Animation target
-        if (new Date().getTime() - this.time >= SceneBattle.TIME_ACTION_ANIMATION) {
+        // Target animation if exists
+        if (this.targetAnimation) {
+            this.frameTarget++;
+            $requestPaintHUD = true;
+            if (this.frameTarget > this.targetAnimation.frames.length) {
+                this.time = new Date().getTime() - (SceneBattle
+                    .TIME_ACTION_ANIMATION / 2);
+                this.subStep = 2;
+            }
+        } else {
+            this.time = new Date().getTime() - (SceneBattle
+                .TIME_ACTION_ANIMATION / 2);
+            this.subStep = 2;
+        }
+        break;
+    case 2:
+        if ((new Date().getTime() - this.time) >= SceneBattle
+            .TIME_ACTION_ANIMATION)
+        {
             for (i = 0, l = this.targets.length; i < l; i++) {
                 damage = this.damages[i];
                 this.targets[i].updateDead(damage[0] > 0 && !damage[1], this.user);
@@ -229,7 +247,9 @@ SceneBattle.prototype.onKeyPressedAndRepeatStep2 = function(key){
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.drawHUDStep2 = function(){
+SceneBattle.prototype.drawHUDStep2 = function() {
+    var i, l;
+
     this.windowTopInformations.draw();
 
     // Draw animations
@@ -237,10 +257,25 @@ SceneBattle.prototype.drawHUDStep2 = function(){
         this.userAnimation.draw(this.userAnimationPicture, this.frameUser, this
             .user.midPosition);
     }
+    if (this.targetAnimation) {
+        if (this.targetAnimation.positionKind === AnimationPositionKind
+            .ScreenCenter)
+        {
+            this.targetAnimation.draw(this.targetAnimationPicture, this
+                .frameTarget, null);
+        } else {
+            for (i = 0, l = this.targets.length; i < l; i++) {
+                this.targetAnimation.draw(this.targetAnimationPicture, this
+                    .frameTarget, this.targets[i].midPosition);
+            }
+        }
+    }
 
     // Draw damages
-    if (!this.user.isAttacking()) {
-        var i, l, damage;
+    if (!this.user.isAttacking() && this.frameTarget > this.targetAnimation
+        .frames.length)
+    {
+        var damage;
 
         for (i = 0, l = this.damages.length; i < l; i++) {
             damage = this.damages[i];
