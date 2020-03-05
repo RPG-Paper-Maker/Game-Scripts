@@ -15,7 +15,8 @@
 //
 //  Step 2 :
 //      SubStep 0 : Animation user + animation sprite
-//      SubStep 1 : Animation target + damages
+//      SubStep 1 : Animation target
+//      SubStep 2 : Damages
 //
 // -------------------------------------------------------
 
@@ -122,6 +123,11 @@ SceneBattle.prototype.updateStep2 = function() {
 
     switch (this.subStep) {
     case 0: // Animation user
+        // Before animation, wait for enemy moving
+        if (this.user.moving) {
+            return;
+        }
+
         // User animation if exists
         if (this.userAnimation) {
             this.frameUser++;
@@ -151,7 +157,7 @@ SceneBattle.prototype.updateStep2 = function() {
             this.subStep = 2;
         }
         break;
-    case 2:
+    case 2: // Damages
         if ((new Date().getTime() - this.time) >= SceneBattle
             .TIME_ACTION_ANIMATION)
         {
@@ -255,7 +261,7 @@ SceneBattle.prototype.drawHUDStep2 = function() {
     // Draw animations
     if (this.userAnimation) {
         this.userAnimation.draw(this.userAnimationPicture, this.frameUser, this
-            .user.midPosition);
+            .user);
     }
     if (this.targetAnimation) {
         if (this.targetAnimation.positionKind === AnimationPositionKind
@@ -266,7 +272,7 @@ SceneBattle.prototype.drawHUDStep2 = function() {
         } else {
             for (i = 0, l = this.targets.length; i < l; i++) {
                 this.targetAnimation.draw(this.targetAnimationPicture, this
-                    .frameTarget, this.targets[i].midPosition);
+                    .frameTarget, this.targets[i]);
             }
         }
     }

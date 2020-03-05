@@ -46,10 +46,11 @@ SystemAnimationFrameElement.prototype.draw = function(picture, position, rows,
     picture.opacity = this.opacity;
     picture.angle = this.angle;
     picture.centered = true;
-    //picture.reverse = this.flip;
+    picture.reverse = this.flip;
     w = picture.oW / cols;
     h = picture.oH / rows;
 
-    picture.draw(position.x + this.x - ((w / 2) * this.zoom), position.y + this.y - ((w / 2) * this.zoom), w * this.zoom, h * this.zoom, w * this.texCol
-        , h * this.texRow, w, h, true);
+    picture.draw(position.x + this.x - ((w / 2) * this.zoom), position.y +
+        this.y - ((w / 2) * this.zoom), w * this.zoom, h * this.zoom, w * this
+        .texCol, h * this.texRow, w, h, true);
 }

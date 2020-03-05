@@ -225,8 +225,12 @@ Battler.prototype = {
 
         time = new Date().getTime() - this.timerMove;
         if (time <= Battler.TIME_MOVE) {
+            this.moving = true;
             newX = progression.getProgressionAt(time, Battler.TIME_MOVE, true);
+        } else {
+            this.moving = false;
         }
+
         if (this.mesh.position.x !== newX) {
             this.mesh.position.setX(newX);
             this.upPosition.setX(newX);
@@ -302,7 +306,7 @@ Battler.prototype = {
             .camera.threeCamera);
         this.midPosition = RPM.toScreenPosition(this.halfPosition, $currentMap
             .camera.threeCamera);
-        this.botPosition = RPM.toScreenPosition(this.position, $currentMap
+        this.botPosition = RPM.toScreenPosition(this.mesh.position, $currentMap
             .camera.threeCamera);
     },
 

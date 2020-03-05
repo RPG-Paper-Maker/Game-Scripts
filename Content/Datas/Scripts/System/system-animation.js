@@ -51,8 +51,30 @@ SystemAnimation.prototype.createPicture = function() {
 
 // -------------------------------------------------------
 
-SystemAnimation.prototype.draw = function(picture, frame, position) {
+SystemAnimation.prototype.draw = function(picture, frame, battler) {
     if (frame > 0 && frame < this.frames.length) {
+        var position;
+
+        // Change position according to kind
+        switch (this.positionKind) {
+        case AnimationPositionKind.Top:
+            position = battler.topPosition;
+            break;
+        case AnimationPositionKind.Middle:
+            position = battler.midPosition;
+            break;
+        case AnimationPositionKind.Bottom:
+            position = battler.botPosition;
+            break;
+        case AnimationPositionKind.ScreenCenter:
+            position = {
+                x: 0,
+                y: 0
+            };
+            break;
+        }
+
+        // Draw!!!
         this.frames[frame].draw(picture, position, this.rows, this.cols);
     }
 }
