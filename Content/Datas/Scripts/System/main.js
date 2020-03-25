@@ -266,10 +266,10 @@ function initializeGL(canvas){
     // Create the renderer
     if ($DESKTOP) {
         $renderer = new THREE.Canvas3DRenderer({
-                                                   canvas: canvas,
-                                                   devicePixelRatio:
-                                                   canvas.devicePixelRatio
-                                               });
+            canvas: canvas,
+            devicePixelRatio: canvas.devicePixelRatio,
+            antialias: true
+        });
     }
     else{
         $renderer = new THREE.WebGLRenderer();

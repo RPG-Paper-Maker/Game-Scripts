@@ -564,3 +564,44 @@ var AnimationEffectConditionKind = {
     Critical: 3
 };
 Object.freeze(AnimationEffectConditionKind);
+
+/**
+*   Enum for the monster action kind.
+*   @enum {number}
+*   @readonly
+*/
+var MonsterActionKind = {
+    UseSkill: 0,
+    UseItem: 1,
+    DoNothing: 2
+};
+
+Object.freeze(MonsterActionKind);
+
+/**
+*   Enum for the monster action target kind.
+*   @enum {number}
+*   @readonly
+*/
+var MonsterActionTargetKind = {
+    Random: 0,
+    WeakEnemies: 1
+};
+
+Object.freeze(MonsterActionTargetKind);
+
+/**
+*   Enum for the operation kind.
+*   @enum {number}
+*   @readonly
+*/
+var OperationKind = {
+    EqualTo: 0,
+    NotEqualTo: 1,
+    GreaterThanOrEqualTo: 2,
+    LesserThanOrEqualTo: 3,
+    GreaterThan: 4,
+    LesserThan: 5
+};
+
+Object.freeze(OperationKind);

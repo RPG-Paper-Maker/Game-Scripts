@@ -29,7 +29,7 @@ SystemMonster.prototype = Object.create(SystemHero.prototype);
 
 SystemMonster.prototype.readJSON = function(json) {
     var i, hash, currenciesLength, jsonCurrencies, progression, jsonLoots,
-        lootsLength, loot;
+        lootsLength, loot, jsonActions, actionsLength, action;
 
     this.rewards = {};
     SystemHero.prototype.readJSON.call(this, json);
@@ -38,9 +38,12 @@ SystemMonster.prototype.readJSON = function(json) {
     currenciesLength = jsonCurrencies.length;
     jsonLoots = RPM.jsonDefault(json.loots, []);
     lootsLength = jsonLoots.length;
+    jsonActions = RPM.jsonDefault(json.a, []);
+    actionsLength = jsonActions.length;
     this.rewards.xp = new SystemProgressionTable(this.getProperty("finalLevel"));
     this.rewards.currencies = new Array(currenciesLength);
     this.rewards.loots = new Array(lootsLength);
+    this.actions = new Array(actionsLength);
 
     // Experience
     this.rewards.xp.readJSON(json.xp);
@@ -58,6 +61,14 @@ SystemMonster.prototype.readJSON = function(json) {
         loot = new SystemLoot();
         loot.readJSON(jsonLoots[i]);
         this.rewards.loots[i] = loot;
+    }
+
+    // Actions
+    for (i = 0; i < actionsLength; i++) {
+        action = new SystemMonsterAction();
+        action.readJSON(jsonActions[i]);
+        action.monster = this;
+        this.actions[i] = action;
     }
 }
 

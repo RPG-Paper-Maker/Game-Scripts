@@ -41,6 +41,7 @@ DISTFILES += \
     Content/Datas/Scripts/System/system-animation.js \
     Content/Datas/Scripts/System/system-camera-properties.js \
     Content/Datas/Scripts/System/system-detection.js \
+    Content/Datas/Scripts/System/system-monster-action.js \
     Content/Datas/Scripts/System/system-mountain.js \
     Content/Datas/Scripts/System/system-property.js \
     Content/Datas/Scripts/System/system-special-element.js \
