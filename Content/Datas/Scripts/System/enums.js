@@ -321,7 +321,8 @@ var EffectSpecialActionKind = {
     OpenSkills: 1,
     OpenItems: 2,
     Escape: 3,
-    EndTurn: 4
+    EndTurn: 4,
+    DoNothing: 5
 };
 Object.freeze(EffectSpecialActionKind);
 

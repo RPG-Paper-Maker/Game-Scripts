@@ -51,6 +51,7 @@ function Battler(character, position, camera) {
     this.lastSkillOffset = 0;
     this.lastItemIndex = 0;
     this.lastItemOffset = 0;
+    this.itemsNumbers = [];
     this.progressionAllyFront = SystemProgressionTable.createProgression(this
         .position.x, this.position.x - Battler.OFFSET_SELECTED, 0);
     this.progressionAllyBack = SystemProgressionTable.createProgression(this.
@@ -103,8 +104,11 @@ Battler.TIME_MOVE = 200;
 Battler.prototype = {
 
     setSelected: function(selected) {
-        this.selected = selected;
-        this.timerMove = new Date().getTime();
+        if (this.selected !== selected)
+        {
+            this.selected = selected;
+            this.timerMove = new Date().getTime();
+        }
     },
 
     // -------------------------------------------------------

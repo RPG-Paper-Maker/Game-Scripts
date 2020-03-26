@@ -35,11 +35,9 @@ SceneBattle.prototype.initializeStep3 = function() {
 
     // Define targets
     this.defineTargets();
-        
+
     this.time = new Date().getTime();
     this.timeEnemyAttack = new Date().getTime();
-    this.battleCommandKind = EffectSpecialActionKind.ApplyWeapons;
-    this.attackSkill = $datasGame.skills.list[1];
 };
 
 // -------------------------------------------------------
@@ -47,13 +45,15 @@ SceneBattle.prototype.initializeStep3 = function() {
 SceneBattle.prototype.defineAction = function()
 {
     var i, l, actions, action, priorities, monster, systemActions, random, step,
-        value;
+        value, character;
 
     actions = [];
-    monster = this.user.character.character;
+    character = this.user.character;
+    monster = character.character;
     systemActions = monster.actions;
     priorities = 0;
-    this.action = null;
+    this.action = this.actionDoNothing;
+    this.battleCommandKind = EffectSpecialActionKind.DoNothing;
 
     // List every possible actions
     for (i = 0, l = systemActions.length; i < l; i++)
@@ -64,12 +64,18 @@ SceneBattle.prototype.defineAction = function()
         {
             continue;
         }
-        if (action.isConditionStatistic && !$operators_compare[action
-            .operationKindStatistic](monster[$datasGame.battleSystem.statistics[
-            action.statisticID.getvalue()].abbreviation], action
-            .statisticValueCompare.getValue()))
+        if (action.isConditionStatistic)
         {
-            continue;
+            var stat;
+
+            stat = $datasGame.battleSystem.statistics[action.statisticID
+                .getValue()];
+            if (!$operators_compare[action.operationKindStatistic](character[
+                stat.abbreviation] / character[stat.getMaxAbbreviation()] * 100,
+                action.statisticValueCompare.getValue()))
+            {
+                continue;
+            }
         }
         if (action.isConditionVariable && !$operators_compare[action
             .operationKindVariable]($game.variables[action.variableID], action
@@ -85,6 +91,23 @@ SceneBattle.prototype.defineAction = function()
             .getValue()))
         {
             continue;
+        }
+        if (action.actionKind === MonsterActionKind.UseSkill)
+        {
+            if (!$datasGame.skills.list[action.skillID.getValue()].isPossible())
+            {
+                continue;
+            }
+        }
+        if (action.actionKind === MonsterActionKind.UseItem)
+        {
+            var number;
+
+            number = this.user.itemsNumbers[action.itemID.getValue()];
+            if (!RPM.isUndefined(number) && number === 0)
+            {
+                continue;
+            }
         }
 
         // Push to possible actions if passing every conditions
@@ -106,24 +129,135 @@ SceneBattle.prototype.defineAction = function()
         value = (action.priority.getValue() / priorities) * 100;
         if (random >= step && random <= (value + step)) {
             this.action = action;
-            return;
+            break;
         }
         step += value;
+    }
+
+    // Define battle command kind
+    switch (this.action.actionKind)
+    {
+    case MonsterActionKind.UseSkill:
+        var effect;
+
+        effect = $datasGame.skills.list[this.action.skillID.getValue()].effects[0];
+        this.battleCommandKind = effect.kind === EffectKind.SpecialActions ?
+            effect.specialActionKind : EffectSpecialActionKind.OpenSkills;
+        break;
+    case MonsterActionKind.UseItem:
+        var id;
+
+        this.battleCommandKind = EffectSpecialActionKind.OpenItems;
+
+        // If item, use one
+        id = this.action.itemID.getValue();
+        this.user.itemsNumbers[id] = (this.user.itemsNumbers[id] ? this.user
+            .itemsNumbers[id] : this.action.itemNumberMax.getValue()) - 1;
+        break;
+    case MonsterActionKind.DoNothing:
+        this.battleCommandKind = EffectSpecialActionKind.DoNothing;
+        break;
     }
 };
 
 // -------------------------------------------------------
 
 SceneBattle.prototype.defineTargets = function() {
-    this.targets = [this.battlers[CharacterKind.Hero][RPM.random(0, this
-        .battlers[CharacterKind.Hero].length - 1)]];
+    if (!this.action)
+    {
+        this.targets = [];
+        return;
+    }
+
+    var i, l, side, targetKind, target;
+
+    // Verify if the target is not all allies or all enemies and define side
+    switch (this.action.actionKind)
+    {
+    case MonsterActionKind.UseSkill:
+        targetKind = $datasGame.skills.list[this.action.skillID.getValue()]
+            .targetKind;
+        break;
+    case MonsterActionKind.UseItem:
+        targetKind = $datasGame.items.list[this.action.itemID.getValue()]
+            .targetKind;
+        break;
+    case MonsterActionKind.DoNothing:
+        this.targets = [];
+        return;
+    }
+    switch (targetKind)
+    {
+    case TargetKind.None:
+        this.targets = [];
+        return;
+    case TargetKind.User:
+        this.targets = [this.user];
+        return;
+    case TargetKind.Enemy:
+        side = CharacterKind.Hero;
+        break;
+    case TargetKind.Ally:
+        side = CharacterKind.Monster;
+        break;
+    case TargetKind.AllEnemies:
+        this.targets = this.battlers[CharacterKind.Hero];
+        return;
+    case TargetKind.AllAllies:
+        this.targets = this.battlers[CharacterKind.Monster];
+        return;
+    }
+
+    // Select one enemy / ally according to target kind
+    l = this.battlers[side].length;
+    switch (this.action.targetKind)
+    {
+    case MonsterActionTargetKind.Random:
+        i = RPM.random(0, l - 1);
+        while (!this.isDefined(side, i))
+        {
+            i++;
+            i = i % l;
+        }
+        target = this.battlers[side][i];
+        break;
+    case MonsterActionTargetKind.WeakEnemies:
+        var minHP, tempTarget,tempHP;
+
+        i = 0;
+        while (!this.isDefined(side, i))
+        {
+            i++;
+            i = i % l;
+        }
+        target = this.battlers[side][i];
+        minHP = target.character.hp;
+        while (i < l)
+        {
+            tempTarget = this.battlers[side][i];
+            if (this.isDefined(side, i))
+            {
+                tempHP = tempTarget.character.hp;
+                if (tempHP < minHP)
+                {
+                    target = tempTarget;
+                }
+            }
+            i++;
+        }
+        break;
+    }
+    this.targets = [target];
 };
 
 // -------------------------------------------------------
 
 SceneBattle.prototype.updateStep3 = function(){
     if (new Date().getTime() - this.time >= 500) {
-        this.user.setSelected(true);
+        if (this.action.actionKind !== MonsterActionKind.DoNothing)
+        {
+            this.user.setSelected(true);
+        }
         if (new Date().getTime() - this.timeEnemyAttack >= 1000) {
             this.changeStep(2);
         }

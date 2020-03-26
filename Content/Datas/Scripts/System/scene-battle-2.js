@@ -29,12 +29,16 @@ SceneBattle.prototype.initializeStep2 = function() {
         informationText = this.attackSkill.name;
         break;
     case EffectSpecialActionKind.OpenSkills:
-        informationText = this.windowChoicesSkills.getCurrentContent().skill
-            .name;
+        content = this.attackingGroup === CharacterKind.Hero ? this
+            .windowChoicesSkills.getCurrentContent().skill : $datasGame.skills
+            .list[this.action.skillID.getValue()];
+        informationText = content.name;
         break;
     case EffectSpecialActionKind.OpenItems:
-        informationText = this.windowChoicesItems.getCurrentContent().item
-            .name;
+        content = this.attackingGroup === CharacterKind.Hero ? this
+            .windowChoicesItems.getCurrentContent().item : $datasGame.items.list
+            [this.action.itemID.getValue()];
+        informationText = content.name;
         break;
     default:
         informationText = "";
@@ -55,9 +59,9 @@ SceneBattle.prototype.initializeStep2 = function() {
             if (gameItem && gameItem.k === ItemKind.Weapon) {
                 weapon = gameItem.getItemInformations();
                 this.userAnimation = $datasGame.animations.list[weapon
-                    .animationUserID];
+                    .animationUserID.getValue()];
                 this.targetAnimation = $datasGame.animations.list[weapon
-                    .animationTargetID];
+                    .animationTargetID.getValue()];
                 for (j = 0, ll = weapon.effects.length; j < ll; j++) {
                     this.effects.push(weapon.effects[j]);
                 }
@@ -76,24 +80,25 @@ SceneBattle.prototype.initializeStep2 = function() {
         this.user.setAttacking();
         break;
     case EffectSpecialActionKind.OpenSkills:
-        content = this.windowChoicesSkills.getCurrentContent().skill;
         this.userAnimation = $datasGame.animations.list[content
-            .animationUserID];
+            .animationUserID.getValue()];
         this.targetAnimation = $datasGame.animations.list[content
-            .animationTargetID];
+            .animationTargetID.getValue()];
         this.effects = content.effects;
         content.cost();
         this.user.setUsingSkill();
         break;
     case EffectSpecialActionKind.OpenItems:
         var graphic = this.windowChoicesItems.getCurrentContent();
-        content = graphic.item;
         this.userAnimation = $datasGame.animations.list[content
-            .animationUserID];
+            .animationUserID.getValue()];
         this.targetAnimation = $datasGame.animations.list[content
-            .animationTargetID];
+            .animationTargetID.getValue()];
         this.effects = content.effects;
-        $game.useItem(graphic.gameItem);
+        if (this.attackingGroup === CharacterKind.Hero)
+        {
+            $game.useItem(graphic.gameItem);
+        }
         this.user.setUsingItem();
         break;
     case EffectSpecialActionKind.EndTurn:
@@ -104,6 +109,11 @@ SceneBattle.prototype.initializeStep2 = function() {
             user.setActive(false);
             user.setSelected(false);
         }
+        this.subStep = 2;
+        break;
+    case EffectSpecialActionKind.DoNothing:
+        this.time -= SceneBattle.TIME_ACTION_ANIMATION;
+        this.subStep = 2;
         break;
     }
     this.currentEffectIndex = 0;

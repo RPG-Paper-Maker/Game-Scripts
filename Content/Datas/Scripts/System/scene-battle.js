@@ -76,6 +76,8 @@ function SceneBattle(troopID, canGameOver, canEscape, battleMap, transitionStart
     this.step = 0;
     this.sceneMap = $gameStack.top();
     this.sceneMapCameraDistance = this.sceneMap.camera.distance;
+    this.actionDoNothing = new SystemMonsterAction();
+    this.actionDoNothing.readJSON({});
 }
 
 SceneBattle.TRANSITION_ZOOM_TIME = 500;
