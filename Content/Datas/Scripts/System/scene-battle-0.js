@@ -29,6 +29,7 @@ SceneBattle.prototype.initializeStep0 = function() {
     this.battlers = new Array(2);
     this.graphicPlayers = new Array(2);
     this.time = new Date().getTime();
+    this.turn = 1;
 
     this.initializeAlliesBattlers();
     this.initializeEnemiesBattlers();

@@ -30,6 +30,9 @@ SceneBattle.prototype.initializeStep3 = function() {
         i++;
     } while (!this.isDefined(CharacterKind.Monster, i - 1));
 
+    // Define action
+    this.defineAction();
+
     // Define targets
     this.defineTargets();
         
@@ -37,6 +40,76 @@ SceneBattle.prototype.initializeStep3 = function() {
     this.timeEnemyAttack = new Date().getTime();
     this.battleCommandKind = EffectSpecialActionKind.ApplyWeapons;
     this.attackSkill = $datasGame.skills.list[1];
+};
+
+// -------------------------------------------------------
+
+SceneBattle.prototype.defineAction = function()
+{
+    var i, l, actions, action, priorities, monster, systemActions, random, step,
+        value;
+
+    actions = [];
+    monster = this.user.character.character;
+    systemActions = monster.actions;
+    priorities = 0;
+    this.action = null;
+
+    // List every possible actions
+    for (i = 0, l = systemActions.length; i < l; i++)
+    {
+        action = systemActions[i];
+        if (action.isConditionTurn && !$operators_compare[action
+            .operationKindTurn](this.turn, action.turnValueCompare.getValue()))
+        {
+            continue;
+        }
+        if (action.isConditionStatistic && !$operators_compare[action
+            .operationKindStatistic](monster[$datasGame.battleSystem.statistics[
+            action.statisticID.getvalue()].abbreviation], action
+            .statisticValueCompare.getValue()))
+        {
+            continue;
+        }
+        if (action.isConditionVariable && !$operators_compare[action
+            .operationKindVariable]($game.variables[action.variableID], action
+            .variableValueCompare.getValue()))
+        {
+            continue;
+        }
+        if (action.isConditionStatus)
+        {
+            // TODO
+        }
+        if (action.isConditionScript && !RPM.evaluateScript(action.script
+            .getValue()))
+        {
+            continue;
+        }
+
+        // Push to possible actions if passing every conditions
+        actions.push(action);
+        priorities += action.priority.getValue();
+    }
+
+    // If no action
+    if (priorities <= 0) {
+        return;
+    }
+
+    // Random
+    random = RPM.random(0, 100);
+    step = 0;
+    for (i = 0, l = actions.length; i < l; i++)
+    {
+        action = actions[i];
+        value = (action.priority.getValue() / priorities) * 100;
+        if (random >= step && random <= (value + step)) {
+            this.action = action;
+            return;
+        }
+        step += value;
+    }
 };
 
 // -------------------------------------------------------

@@ -66,7 +66,7 @@ SystemMonsterAction.prototype.readJSON = function(json)
         this.statusID = SystemValue.readOrDefaultNumber(json.stsid, 0);
     }
     this.isConditionScript = RPM.jsonDefault(json.icsc, false);
-    if (this.isConditionScript) {
+    if (this.isConditionScript && !RPM.evaluateScript(this.script.getValue())) {
         this.script = SystemValue.readOrDefaultMessage(json.s, "");
     }
 }

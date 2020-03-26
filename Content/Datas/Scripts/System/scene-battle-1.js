@@ -20,7 +20,7 @@
 //
 // -------------------------------------------------------
 
-SceneBattle.prototype.initializeStep1 = function(){
+SceneBattle.prototype.initializeStep1 = function() {
     this.battleCommandKind = EffectSpecialActionKind.None;
     this.windowTopInformations.content = new GraphicText("Select an ally", {
         align: Align.Center });

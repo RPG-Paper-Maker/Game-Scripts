@@ -228,6 +228,7 @@ SceneBattle.prototype.updateStep2 = function() {
                     if (this.attackingGroup === CharacterKind.Hero) {
                         this.changeStep(3); // Attack of ennemies
                     } else {
+                        this.turn++;
                         this.changeStep(1); // Attack of heroes
                     }
                 } else {
