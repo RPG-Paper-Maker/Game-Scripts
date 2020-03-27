@@ -143,7 +143,7 @@ SceneBattle.prototype.getCondition = function() {
 // -------------------------------------------------------
 
 SceneBattle.prototype.updateStep2 = function() {
-    var i, l, isAnotherEffect, damage, effect;
+    var i, j, l, ll, isAnotherEffect, damage, effect;
 
     switch (this.subStep) {
     case 0: // Animation user
@@ -163,23 +163,33 @@ SceneBattle.prototype.updateStep2 = function() {
         if ((!this.userAnimation || this.frameUser > this.userAnimation.frames
             .length) && !this.user.isAttacking())
         {
-            this.subStep = 1;
+            if (!this.targetAnimation)
+            {
+                this.time = new Date().getTime() - (SceneBattle
+                    .TIME_ACTION_ANIMATION / 2);
+                for (i = 0, l = $currentMap.targets.length; i < l; i++)
+                {
+                    $currentMap.targets[i].timeDamage = 0;
+                }
+                this.subStep = 2;
+            } else
+            {
+                this.subStep = 1;
+            }
         }
         break;
     case 1: // Animation target
         // Target animation if exists
-        if (this.targetAnimation) {
-            this.frameTarget++;
-            this.targetAnimation.playSounds(this.frameTarget, this.getCondition());
-            $requestPaintHUD = true;
-            if (this.frameTarget > this.targetAnimation.frames.length) {
-                this.time = new Date().getTime() - (SceneBattle
-                    .TIME_ACTION_ANIMATION / 2);
-                this.subStep = 2;
-            }
-        } else {
+        this.frameTarget++;
+        this.targetAnimation.playSounds(this.frameTarget, this.getCondition());
+        $requestPaintHUD = true;
+        if (this.frameTarget > this.targetAnimation.frames.length) {
             this.time = new Date().getTime() - (SceneBattle
                 .TIME_ACTION_ANIMATION / 2);
+            for (i = 0, l = $currentMap.targets.length; i < l; i++)
+            {
+                $currentMap.targets[i].timeDamage = 0;
+            }
             this.subStep = 2;
         }
         break;
@@ -191,29 +201,7 @@ SceneBattle.prototype.updateStep2 = function() {
                 damage = this.damages[i];
                 this.targets[i].updateDead(damage[0] > 0 && !damage[1], this.user);
             }
-            effect = this.effects[this.currentEffectIndex];
-
             $requestPaintHUD = true;
-            this.currentEffectIndex++;
-            for (l = this.effects.length; this.currentEffectIndex < l; this
-                .currentEffectIndex++)
-            {
-                effect = this.effects[this.currentEffectIndex];
-                effect.execute();
-                if (effect.isAnimated()) {
-                    break;
-                }
-            }
-
-            isAnotherEffect = this.currentEffectIndex < this.effects.length;
-
-            if (isAnotherEffect) {
-                this.time = new Date().getTime() - (SceneBattle
-                    .TIME_ACTION_ANIMATION / 2);
-            } else {
-                this.user.setActive(false);
-                this.user.setSelected(false);
-            }
 
             // Target and user test death
             this.user.updateDead(false);
@@ -228,8 +216,30 @@ SceneBattle.prototype.updateStep2 = function() {
             } else if (this.isLose()) {
                 this.gameOver();
             } else {
+                effect = this.effects[this.currentEffectIndex];
+                this.currentEffectIndex++;
+                for (l = this.effects.length; this.currentEffectIndex < l; this
+                    .currentEffectIndex++)
+                {
+                    effect = this.effects[this.currentEffectIndex];
+                    effect.execute();
+                    if (effect.isAnimated()) {
+                        break;
+                    }
+                }
+                isAnotherEffect = this.currentEffectIndex < this.effects.length;
                 if (isAnotherEffect) {
+                    this.time = new Date().getTime() - (SceneBattle
+                                                        .TIME_ACTION_ANIMATION / 2);
+                    for (j = 0, ll = $currentMap.targets.length; j < ll; j++)
+                    {
+                        $currentMap.targets[j].timeDamage = 0;
+                    }
                     return;
+                } else
+                {
+                    this.user.setActive(false);
+                    this.user.setSelected(false);
                 }
 
                 // Testing end of turn
@@ -312,6 +322,7 @@ SceneBattle.prototype.drawHUDStep2 = function() {
 
         for (i = 0, l = this.damages.length; i < l; i++) {
             damage = this.damages[i];
+            console.log(this.targets[i].timeDamage);
             this.targets[i].drawDamages(damage[0], damage[1], damage[2]);
         }
     }

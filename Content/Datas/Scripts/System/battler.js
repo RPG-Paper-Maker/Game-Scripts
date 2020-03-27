@@ -61,6 +61,7 @@ function Battler(character, position, camera) {
     this.progressionEnemyBack = SystemProgressionTable.createProgression(this.
         position.x + Battler.OFFSET_SELECTED, this.position.x, 0);
     this.timerMove = 0;
+    this.timeDamage = Battler.TOTAL_TIME_DAMAGE;
 
     var idBattler = $datasGame.getHeroesMonsters(character.k).list[character.id]
         .idBattler;
@@ -100,6 +101,7 @@ function Battler(character, position, camera) {
 
 Battler.OFFSET_SELECTED = 10;
 Battler.TIME_MOVE = 200;
+Battler.TOTAL_TIME_DAMAGE = 250;
 
 Battler.prototype = {
 
@@ -248,6 +250,15 @@ Battler.prototype = {
     // -------------------------------------------------------
 
     updateFrame: function() {
+        if (this.timeDamage < Battler.TOTAL_TIME_DAMAGE)
+        {
+            this.timeDamage += $elapsedTime;
+            if (this.timeDamage > Battler.TOTAL_TIME_DAMAGE)
+            {
+                this.timeDamage = Battler.TOTAL_TIME_DAMAGE;
+            }
+            $requestPaintHUD = true;
+        }
         if (!this.attacking) {
             var frame = this.frame;
             this.frameTick += $elapsedTime;
@@ -385,6 +396,7 @@ Battler.prototype = {
 
     drawDamages: function(damage, isCrit, isMiss) {
         $datasGame.system.getWindowSkin().drawDamages(damage, this
-            .damagePosition.x, this.damagePosition.y, isCrit, isMiss);
+            .damagePosition.x, this.damagePosition.y, isCrit, isMiss, this
+            .timeDamage / Battler.TOTAL_TIME_DAMAGE);
     }
 }

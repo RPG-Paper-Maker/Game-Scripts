@@ -65,6 +65,10 @@ SystemEffect.prototype.readJSON = function(json) {
             false;
         this.damagePrecisionFormula = SystemValue.readOrDefaultMessage(json.dpf,
             "100");
+        this.isDamagePrecision = typeof json.idp !== 'undefined' ? json.idp :
+            false;
+        this.isDamageStockVariableID = RPM.jsonDefault(json.idsv, false);
+        this.damageStockVariableID = RPM.jsonDefault(json.dsv, 1);
         break;
     case EffectKind.Status:
         this.isAddStatus = typeof json.iast !== 'undefined' ? json.iast : true;
@@ -105,8 +109,8 @@ SystemEffect.prototype.execute = function() {
 
     switch (this.kind) {
     case EffectKind.Damages:
-        var damage, miss, crit, element, variance, critical, precision, random,
-            before;
+        var j, ll, damage, miss, crit, element, variance, critical, precision,
+            random, before;
 
         l = targets.length;
         $currentMap.damages = new Array(l);
@@ -165,7 +169,13 @@ SystemEffect.prototype.execute = function() {
                         .damagesMaximumFormula.getValue(), user, target));
                 }
             }
+            if (this.isDamageStockVariableID)
+            {
+                $game.variables[this.damageStockVariableID] = damage === null ?
+                    0 : damage;
+            }
 
+            // For diplaying result in HUD
             if ($currentMap.isBattleMap) {
                 $currentMap.damages[i] = [damage, crit, miss];
             }

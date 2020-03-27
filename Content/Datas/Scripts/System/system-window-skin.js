@@ -58,15 +58,19 @@ SystemWindowSkin.prototype = {
 
     // -------------------------------------------------------
 
-    drawElement: function(r, x, y, w, h) {
+    drawElement: function(r, x, y, w, h, zoom) {
         if (!w) {
             w = r[2];
         }
         if (!h) {
             h = r[3];
         }
+        if (RPM.isUndefined(zoom))
+        {
+            zoom = 1.0;
+        }
 
-        this.picture.draw(x, y, w, h, r[0], r[1], r[2], r[3]);
+        this.picture.draw(x, y, w * zoom, h * zoom, r[0], r[1], r[2], r[3]);
     },
 
     // -------------------------------------------------------
@@ -184,28 +188,29 @@ SystemWindowSkin.prototype = {
 
     // -------------------------------------------------------
 
-    drawDamagesNumber: function(damage, x, y, rect) {
+    drawDamagesNumber: function(damage, x, y, rect, zoom) {
         var digits = ("" + damage).split("").map(Number);
         var width = rect[2] / 10;
         var height = rect[3];
         for (var i = 0, l = digits.length; i < l; i++) {
-            this.picture.draw(x + ((i - (l / 2)) * (width + 1)), y, width,
-                height, rect[0] + (digits[i] * width), rect[1], width, height,
-                false);
+            this.picture.draw(x + ((i - (l / 2)) * (width + 1)), y, width * zoom
+                , height * zoom, rect[0] + (digits[i] * width), rect[1], width,
+                height, false);
         }
     },
 
     // -------------------------------------------------------
 
-    drawDamages: function(damage, x, y, isCrit, isMiss) {
+    drawDamages: function(damage, x, y, isCrit, isMiss, zoom) {
         if (isMiss) {
-            this.drawElement(this.textMiss, x - this.textMiss[2] / 2, y);
+            this.drawElement(this.textMiss, x - this.textMiss[2] / 2, y, null,
+                null, zoom);
         } else if (damage < 0) {
-            this.drawDamagesNumber(damage, x, y, this.textHeal);
+            this.drawDamagesNumber(damage, x, y, this.textHeal, zoom);
         } else if (isCrit) {
-            this.drawDamagesNumber(damage, x, y, this.textCritical);
+            this.drawDamagesNumber(damage, x, y, this.textCritical, zoom);
         } else {
-            this.drawDamagesNumber(damage, x, y, this.textNormal);
+            this.drawDamagesNumber(damage, x, y, this.textNormal, zoom);
         }
     }
 }
