@@ -1330,8 +1330,8 @@ RPM.variance = function(value, variance) {
 // -------------------------------------------------------
 
 RPM.evaluateFormula = function(formula, user, target, damage) {
-    return new Function("u", "t", "damage", "return " + formula)(user, target,
-        damage);
+    return new Function("u", "t", "damage", "$that", "return " + formula)(user,
+        target, damage, $that);
 };
 
 // -------------------------------------------------------

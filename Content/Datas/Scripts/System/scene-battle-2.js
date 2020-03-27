@@ -167,9 +167,9 @@ SceneBattle.prototype.updateStep2 = function() {
             {
                 this.time = new Date().getTime() - (SceneBattle
                     .TIME_ACTION_ANIMATION / 2);
-                for (i = 0, l = $currentMap.targets.length; i < l; i++)
+                for (i = 0, l = this.targets.length; i < l; i++)
                 {
-                    $currentMap.targets[i].timeDamage = 0;
+                    this.targets[i].timeDamage = 0;
                 }
                 this.subStep = 2;
             } else
@@ -186,9 +186,9 @@ SceneBattle.prototype.updateStep2 = function() {
         if (this.frameTarget > this.targetAnimation.frames.length) {
             this.time = new Date().getTime() - (SceneBattle
                 .TIME_ACTION_ANIMATION / 2);
-            for (i = 0, l = $currentMap.targets.length; i < l; i++)
+            for (i = 0, l = this.targets.length; i < l; i++)
             {
-                $currentMap.targets[i].timeDamage = 0;
+                this.targets[i].timeDamage = 0;
             }
             this.subStep = 2;
         }
@@ -221,6 +221,7 @@ SceneBattle.prototype.updateStep2 = function() {
                 for (l = this.effects.length; this.currentEffectIndex < l; this
                     .currentEffectIndex++)
                 {
+                    this.targets = this.tempTargets;
                     effect = this.effects[this.currentEffectIndex];
                     effect.execute();
                     if (effect.isAnimated()) {
@@ -231,9 +232,9 @@ SceneBattle.prototype.updateStep2 = function() {
                 if (isAnotherEffect) {
                     this.time = new Date().getTime() - (SceneBattle
                                                         .TIME_ACTION_ANIMATION / 2);
-                    for (j = 0, ll = $currentMap.targets.length; j < ll; j++)
+                    for (j = 0, ll = this.targets.length; j < ll; j++)
                     {
-                        $currentMap.targets[j].timeDamage = 0;
+                        this.targets[j].timeDamage = 0;
                     }
                     return;
                 } else
@@ -322,7 +323,6 @@ SceneBattle.prototype.drawHUDStep2 = function() {
 
         for (i = 0, l = this.damages.length; i < l; i++) {
             damage = this.damages[i];
-            console.log(this.targets[i].timeDamage);
             this.targets[i].drawDamages(damage[0], damage[1], damage[2]);
         }
     }

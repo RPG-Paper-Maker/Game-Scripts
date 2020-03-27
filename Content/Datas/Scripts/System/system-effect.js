@@ -94,6 +94,9 @@ SystemEffect.prototype.readJSON = function(json) {
         this.scriptFormula = SystemValue.readOrDefaultMessage(json.sf);
         break;
     }
+    this.isTemporarilyChangeTarget = RPM.jsonDefault(json.itct, false);
+    this.temporarilyChangeTargetFormula = SystemValue.readOrDefaultMessage(json
+        .tctf);
 }
 
 // -------------------------------------------------------
@@ -104,6 +107,12 @@ SystemEffect.prototype.execute = function() {
 
     user = $currentMap.user ? ($currentMap.isBattleMap ? $currentMap.user
         .character : $currentMap.user) : GamePlayer.getTemporaryPlayer();
+    $currentMap.tempTargets = $currentMap.targets;
+    if (this.isTemporarilyChangeTarget)
+    {
+        $currentMap.targets = RPM.evaluateFormula(this
+            .temporarilyChangeTargetFormula.getValue(), user, null)
+    }
     targets = $currentMap.targets;
     result = false;
 

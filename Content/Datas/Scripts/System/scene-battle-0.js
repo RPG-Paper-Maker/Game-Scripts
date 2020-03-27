@@ -42,7 +42,7 @@ SceneBattle.prototype.initializeStep0 = function() {
 // -------------------------------------------------------
 
 SceneBattle.prototype.initializeAlliesBattlers = function() {
-    var i, l, position, battler;
+    var i, l, position, battler, character;
 
     l = $game.teamHeroes.length;
     this.battlers[CharacterKind.Hero] = new Array(l);
@@ -53,7 +53,9 @@ SceneBattle.prototype.initializeAlliesBattlers = function() {
         position = new THREE.Vector3($game.heroBattle.position.x + (2 *
             $SQUARE_SIZE) + (i * $SQUARE_SIZE / 2), $game.heroBattle.position.y, 
             $game.heroBattle.position.z - $SQUARE_SIZE + (i * $SQUARE_SIZE));
-        battler = new Battler($game.teamHeroes[i], position, this.camera);
+        character = $game.teamHeroes[i];
+        battler = new Battler(character, position, this.camera);
+        character.battler = battler;
         battler.addToScene();
         this.battlers[CharacterKind.Hero][i] = battler;
 
@@ -86,6 +88,7 @@ SceneBattle.prototype.initializeEnemiesBattlers = function() {
             .charactersInstances++, []);
         instancied.instanciate(enemy.level);
         battler = new Battler(instancied, position, this.camera);
+        instancied.battler = battler;
         battler.addToScene();
         this.battlers[CharacterKind.Monster][i] = battler;
 
