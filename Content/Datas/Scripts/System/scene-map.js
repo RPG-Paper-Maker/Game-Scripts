@@ -657,10 +657,10 @@ SceneMap.prototype.update = function() {
             if (mapPortion)
                 mapPortion.updateFaceSprites(angle);
         });
-
-        // Update
-        SceneGame.prototype.update.call(this);
     }
+
+    // Update
+    SceneGame.prototype.update.call(this);
 }
 
 // -------------------------------------------------------

@@ -394,6 +394,7 @@ SceneBattle.prototype.onKeyPressed = function(key) {
     case 4:
         this.onKeyPressedStep4(key); break;
     }
+    SceneGame.prototype.onKeyPressed.call(this, key);
 };
 
 // -------------------------------------------------------
@@ -411,6 +412,7 @@ SceneBattle.prototype.onKeyReleased = function(key) {
     case 4:
         this.onKeyReleasedStep4(key); break;
     }
+    SceneGame.prototype.onKeyReleased.call(this, key);
 };
 
 // -------------------------------------------------------
@@ -428,6 +430,7 @@ SceneBattle.prototype.onKeyPressedRepeat = function(key) {
     case 4:
         this.onKeyPressedRepeatStep4(key); break;
     }
+    SceneGame.prototype.onKeyPressedRepeat.call(this, key);
 };
 
 // -------------------------------------------------------
@@ -445,6 +448,7 @@ SceneBattle.prototype.onKeyPressedAndRepeat = function(key) {
     case 4:
         this.onKeyPressedAndRepeatStep4(key); break;
     }
+    SceneGame.prototype.onKeyPressedAndRepeat.call(this, key);
 };
 
 // -------------------------------------------------------
@@ -472,4 +476,5 @@ SceneBattle.prototype.drawHUD = function() {
     case 4:
         this.drawHUDStep4(); break;
     }
+    SceneMap.prototype.drawHUD.call(this);
 };

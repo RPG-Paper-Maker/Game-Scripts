@@ -19,7 +19,7 @@
 *   An effect of a common skill item.
 */
 function SystemEffect() {
-
+    this.currentCommonReactionState = null;
 }
 
 // -------------------------------------------------------
@@ -84,7 +84,8 @@ SystemEffect.prototype.readJSON = function(json) {
         this.performSkillID = SystemValue.readOrDefaultDatabase(json.psid);
         break;
     case EffectKind.CommonReaction:
-        this.commonReactionID = SystemValue.readOrDefaultDatabase(json.crid);
+        this.commonReaction = RPM.isUndefined(json.cr) ? null : EventCommand
+            .getEventCommand(json.cr);
         break;
     case EffectKind.SpecialActions:
         this.specialActionKind = typeof json.sak !== 'undefined' ? json.sak :
@@ -237,6 +238,10 @@ SystemEffect.prototype.execute = function() {
     case EffectKind.PerformSkill:
         break;
     case EffectKind.CommonReaction:
+        $currentMap.reactionInterpreters.push(new ReactionInterpreter(null, $datasGame
+                    .commonEvents.commonReactions[this.commonReaction.commonReactionID], null, null,
+                    this.commonReaction.parameters));
+
         break;
     case EffectKind.SpecialActions:
         $currentMap.battleCommandKind = this.specialActionKind;
@@ -251,7 +256,8 @@ SystemEffect.prototype.execute = function() {
 // -------------------------------------------------------
 
 SystemEffect.prototype.isAnimated = function() {
-    return this.kind === EffectKind.Damages || this.kind === EffectKind.Status;
+    return this.kind === EffectKind.Damages || this.kind === EffectKind.Status
+        || this.kind === EffectKind.CommonReaction;
 }
 
 // -------------------------------------------------------

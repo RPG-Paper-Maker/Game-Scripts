@@ -194,6 +194,16 @@ SceneBattle.prototype.updateStep2 = function() {
         }
         break;
     case 2: // Damages
+        // If calling a common reaction, wait for it to be finished
+        if (this.reactionInterpreters.length > 0)
+        {
+            for (i = 0, l = this.targets.length; i < l; i++)
+            {
+                this.targets[i].timeDamage = 0;
+            }
+            return;
+        }
+
         if ((new Date().getTime() - this.time) >= SceneBattle
             .TIME_ACTION_ANIMATION)
         {
@@ -316,8 +326,9 @@ SceneBattle.prototype.drawHUDStep2 = function() {
     }
 
     // Draw damages
-    if (!this.user.isAttacking() && (!this.targetAnimation || this.frameTarget >
-        this.targetAnimation.frames.length))
+    if (this.reactionInterpreters.length === 0 && !this.user.isAttacking() && (
+        !this.targetAnimation || this.frameTarget > this.targetAnimation.frames
+        .length))
     {
         var damage;
 
