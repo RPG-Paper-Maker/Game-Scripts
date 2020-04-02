@@ -53,17 +53,20 @@ SceneBattle.prototype.initializeStep2 = function() {
     this.frameTarget = 0;
     switch (this.battleCommandKind) {
     case EffectSpecialActionKind.ApplyWeapons:
-        equipments = this.user.character.equip;
-        for (i = 0, l = equipments.length; i < l; i++) {
-            gameItem = equipments[i];
-            if (gameItem && gameItem.k === ItemKind.Weapon) {
-                weapon = gameItem.getItemInformations();
-                this.userAnimation = $datasGame.animations.list[weapon
-                    .animationUserID.getValue()];
-                this.targetAnimation = $datasGame.animations.list[weapon
-                    .animationTargetID.getValue()];
-                for (j = 0, ll = weapon.effects.length; j < ll; j++) {
-                    this.effects.push(weapon.effects[j]);
+        if (this.attackingGroup === CharacterKind.Hero)
+        {
+            equipments = this.user.character.equip;
+            for (i = 0, l = equipments.length; i < l; i++) {
+                gameItem = equipments[i];
+                if (gameItem && gameItem.k === ItemKind.Weapon) {
+                    weapon = gameItem.getItemInformations();
+                    this.userAnimation = $datasGame.animations.list[weapon
+                        .animationUserID.getValue()];
+                    this.targetAnimation = $datasGame.animations.list[weapon
+                        .animationTargetID.getValue()];
+                    for (j = 0, ll = weapon.effects.length; j < ll; j++) {
+                        this.effects.push(weapon.effects[j]);
+                    }
                 }
             }
         }

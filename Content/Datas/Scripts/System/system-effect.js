@@ -65,8 +65,6 @@ SystemEffect.prototype.readJSON = function(json) {
             false;
         this.damagePrecisionFormula = SystemValue.readOrDefaultMessage(json.dpf,
             "100");
-        this.isDamagePrecision = typeof json.idp !== 'undefined' ? json.idp :
-            false;
         this.isDamageStockVariableID = RPM.jsonDefault(json.idsv, false);
         this.damageStockVariableID = RPM.jsonDefault(json.dsv, 1);
         break;
@@ -133,7 +131,7 @@ SystemEffect.prototype.execute = function() {
                 precision = RPM.evaluateFormula(this.damagePrecisionFormula
                     .getValue(), user, target);
                 random = RPM.random(0, 100);
-                if (precision > random) {
+                if (precision < random) {
                     damage = null;
                     miss = true;
                 }
