@@ -35,7 +35,7 @@ DatasPictures.prototype = {
             var i, j, l, ll, lll;
             var list;
 
-            l = RPM.countFields(PictureKind) - 1;
+            l = RPM.countFields(PictureKind);
             this.list = new Array(l);
             for (i = 0; i < l; i++){
                 var jsonHash = json[i];

@@ -327,10 +327,10 @@ MapObject.prototype = {
             } else {
                 x = 0;
                 y = 0;
-                this.width = Math.floor(material.map.image.width / $SQUARE_SIZE /
-                    $FRAMES);
-                this.height = Math.floor(material.map.image.height /
-                    $SQUARE_SIZE / 4);
+                this.width = material.map.image.width / $SQUARE_SIZE /
+                    $FRAMES;
+                this.height = material.map.image.height /
+                    $SQUARE_SIZE / 4;
             }
 
             var sprite = new Sprite(this.currentState.graphicKind,
