@@ -102,7 +102,7 @@ SceneBattle.prototype.prepareRewards = function() {
     }
     for (i = 0, l = this.loots.length; i < l; i++) {
         for (id in this.loots[i]) {
-            this.loots[i][id] = new GameItem(i, id, this.loots[i][id]);
+            this.loots[i][id] = new GameItem(i, parseInt(id), this.loots[i][id]);
         }
     }
 
