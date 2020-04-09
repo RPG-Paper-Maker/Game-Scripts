@@ -145,7 +145,7 @@ SceneMenuInventory.prototype = {
                     .AllAllies) && (availableKind === AvailableKind.Always ||
                     availableKind === AvailableKind.MainMenu))
                 {
-                    $datasGame.system.soundConfirmation.play();
+                    $datasGame.system.soundConfirmation.playSound();
                     this.substep = 1;
                     this.windowBoxUseItem.content.setAll(targetKind ===
                         TargetKind.AllAllies);
