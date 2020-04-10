@@ -57,18 +57,21 @@ DatasShapes.prototype = {
                 list = new Array(lll + 1);
                 for (j = 0; j < lll + 1; j++) {
                     jsonShape = jsonList[j];
-                    id = jsonShape.id;
-                    shape = new SystemShape();
-                    shape.readJSON(jsonShape);
-                    if (k === CustomShapeKind.OBJ) {
-                        shape.loadObjectCustom();
-                    }
-
-                    if (id !== 0) {
-                        if (id === -1) {
-                            id = 0;
+                    if (jsonShape)
+                    {
+                        id = jsonShape.id;
+                        shape = new SystemShape();
+                        shape.readJSON(jsonShape);
+                        if (k === CustomShapeKind.OBJ) {
+                            shape.loadObjectCustom();
                         }
-                        list[id] = shape;
+
+                        if (id !== 0) {
+                            if (id === -1) {
+                                id = 0;
+                            }
+                            list[id] = shape;
+                        }
                     }
                 }
 

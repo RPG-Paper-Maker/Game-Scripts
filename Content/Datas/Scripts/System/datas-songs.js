@@ -56,14 +56,17 @@ DatasSongs.prototype = {
                 list = new Array(lll + 1);
                 for (j = 0; j < lll + 1; j++){
                     jsonSong = jsonList[j];
-                    id = jsonSong.id;
-                    var song = new SystemSong();
-                    song.readJSON(jsonSong);
+                    if (jsonSong)
+                    {
+                        id = jsonSong.id;
+                        var song = new SystemSong();
+                        song.readJSON(jsonSong);
 
-                    if (id === -1)
-                        id = 0;
+                        if (id === -1)
+                            id = 0;
 
-                    list[id] = song;
+                        list[id] = song;
+                    }
                 }
 
                 this.list[k] = list;

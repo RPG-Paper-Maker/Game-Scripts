@@ -202,7 +202,8 @@ var PictureKind = {
     TitleScreen: 11,
     Objects3D: 12,
     Pictures: 13,
-    Animations: 14
+    Animations: 14,
+    SkyBoxes: 15
 };
 Object.freeze(PictureKind);
 
