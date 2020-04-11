@@ -139,21 +139,6 @@ SystemTileset.prototype = {
         var textures = new Array(l);
         var paths, special, pic, callback, that;
 
-        // Set callback
-        switch (pictureKind) {
-        case PictureKind.Walls:
-            that = this;
-            callback = function(pathLocal, picture) {
-                var texture = new THREE.Texture();
-                that.loadTextureWall(texture, pathLocal, picture);
-                return texture;
-            }
-            break;
-        default:
-            callback = null;
-            break;
-        }
-
         for (i = 0, l = specialsIDs.length; i < l; i++){
             id = specialsIDs[i];
             special = specials[id];
@@ -161,6 +146,21 @@ SystemTileset.prototype = {
                 pic = $datasGame.pictures.list[pictureKind][special.pictureID];
                 if (pic) {
                     paths = pic.getPath(pictureKind);
+                    // Set callback
+                    switch (pictureKind) {
+                    case PictureKind.Walls:
+                        that = this;
+                        callback = function(pathLocal, picture) {
+                            var texture = new THREE.Texture();
+                            that.loadTextureWall(texture, pathLocal, picture, id);
+                            return texture;
+                        }
+                        break;
+                    default:
+                        callback = null;
+                        break;
+                    }
+
                     textures[id] = RPM.loadTexture(paths, pic, callback);
                 } else {
                     textures[id] = RPM.loadTextureEmpty();
@@ -308,7 +308,7 @@ SystemTileset.prototype = {
                     textureAutotile.setBegin(id, point);
                 }
                 that.paintPictureAutotile(context, pathLocal, img, offset,
-                    point);
+                    point, id);
                 textureAutotile.setEnd(id, point);
                 textureAutotile.addToList(id, point);
                 offset++;
@@ -341,53 +341,59 @@ SystemTileset.prototype = {
 
     /** Paint the picture in texture.
     */
-    paintPictureAutotile: function(context, pathLocal, img, offset, point) {
+    paintPictureAutotile: function(context, pathLocal, img, offset, point, id) {
         var count, lA, lB, lC, lD, row = -1;
         var offsetX = point[0] * 2 * $SQUARE_SIZE;
         var offsetY = point[1] * 3 * $SQUARE_SIZE;
         var sDiv = Math.floor($SQUARE_SIZE / 2);
         var y = offset * Autotiles.COUNT_LIST * 2;
 
-        for (var a = 0; a < Autotiles.COUNT_LIST; a++) {
-            lA = Autotiles.autotileBorder[Autotiles.listA[a]];
-            count = 0;
-            row++;
-            for (var b = 0; b < Autotiles.COUNT_LIST; b++) {
-                lB = Autotiles.autotileBorder[Autotiles.listB[b]];
-                for (var c = 0; c < Autotiles.COUNT_LIST; c++) {
-                    lC = Autotiles.autotileBorder[Autotiles.listC[c]];
-                    for (var d = 0; d < Autotiles.COUNT_LIST; d++) {
-                        lD = Autotiles.autotileBorder[Autotiles.listD[d]];
+        try
+        {
+            for (var a = 0; a < Autotiles.COUNT_LIST; a++) {
+                lA = Autotiles.autotileBorder[Autotiles.listA[a]];
+                count = 0;
+                row++;
+                for (var b = 0; b < Autotiles.COUNT_LIST; b++) {
+                    lB = Autotiles.autotileBorder[Autotiles.listB[b]];
+                    for (var c = 0; c < Autotiles.COUNT_LIST; c++) {
+                        lC = Autotiles.autotileBorder[Autotiles.listC[c]];
+                        for (var d = 0; d < Autotiles.COUNT_LIST; d++) {
+                            lD = Autotiles.autotileBorder[Autotiles.listD[d]];
 
-                        // Draw
-                        context.drawImage(pathLocal, (lA % 4 * sDiv) + offsetX,
-                                          (Math.floor(lA / 4) * sDiv) + offsetY,
-                                          sDiv, sDiv, count * $SQUARE_SIZE,
-                                          (row + y) * $SQUARE_SIZE, sDiv, sDiv);
-                        context.drawImage(pathLocal, (lB % 4 * sDiv) + offsetX,
-                                          (Math.floor(lB / 4) * sDiv) + offsetY,
-                                          sDiv, sDiv,
-                                          count * $SQUARE_SIZE + sDiv,
-                                          (row + y) * $SQUARE_SIZE, sDiv, sDiv);
-                        context.drawImage(pathLocal, (lC % 4 * sDiv) + offsetX,
-                                          (Math.floor(lC / 4) * sDiv) + offsetY,
-                                          sDiv, sDiv, count * $SQUARE_SIZE,
-                                          (row + y) * $SQUARE_SIZE + sDiv,
-                                          sDiv, sDiv);
-                        context.drawImage(pathLocal, (lD % 4 * sDiv) + offsetX,
-                                          (Math.floor(lD / 4) * sDiv) + offsetY,
-                                          sDiv, sDiv,
-                                          count * $SQUARE_SIZE + sDiv,
-                                          (row + y) * $SQUARE_SIZE + sDiv,
-                                          sDiv, sDiv);
-                        count++;
-                        if (count === 64) {
-                            count = 0;
-                            row++;
+                            // Draw
+                            context.drawImage(pathLocal, (lA % 4 * sDiv) + offsetX,
+                                              (Math.floor(lA / 4) * sDiv) + offsetY,
+                                              sDiv, sDiv, count * $SQUARE_SIZE,
+                                              (row + y) * $SQUARE_SIZE, sDiv, sDiv);
+                            context.drawImage(pathLocal, (lB % 4 * sDiv) + offsetX,
+                                              (Math.floor(lB / 4) * sDiv) + offsetY,
+                                              sDiv, sDiv,
+                                              count * $SQUARE_SIZE + sDiv,
+                                              (row + y) * $SQUARE_SIZE, sDiv, sDiv);
+                            context.drawImage(pathLocal, (lC % 4 * sDiv) + offsetX,
+                                              (Math.floor(lC / 4) * sDiv) + offsetY,
+                                              sDiv, sDiv, count * $SQUARE_SIZE,
+                                              (row + y) * $SQUARE_SIZE + sDiv,
+                                              sDiv, sDiv);
+                            context.drawImage(pathLocal, (lD % 4 * sDiv) + offsetX,
+                                              (Math.floor(lD / 4) * sDiv) + offsetY,
+                                              sDiv, sDiv,
+                                              count * $SQUARE_SIZE + sDiv,
+                                              (row + y) * $SQUARE_SIZE + sDiv,
+                                              sDiv, sDiv);
+                            count++;
+                            if (count === 64) {
+                                count = 0;
+                                row++;
+                            }
                         }
                     }
                 }
             }
+        } catch (e)
+        {
+            RPM.showErrorMessage("Error: Wrong autotile (with ID:" + id + ") parsing. Please verify that you have a 2 x 3 picture (for each individual autotile).");
         }
     },
 
@@ -415,7 +421,7 @@ SystemTileset.prototype = {
     *   @param {THREE.Texture} texture The final texture reference.
     *   @param {string} pathLocal The path of the texture.
     */
-    loadTextureWall: function(texture, pathLocal, picture) {
+    loadTextureWall: function(texture, pathLocal, picture, id) {
         var callback = function() {
             var context = $canvasRendering.getContext("2d");
             var img = context.createImageData(pathLocal);
@@ -433,8 +439,15 @@ SystemTileset.prototype = {
                 img.height);
             var right = context.getImageData(img.width - Math.floor(
                 $SQUARE_SIZE / 2), 0, Math.floor($SQUARE_SIZE / 2), img.height);
-            context.drawImage(left, img.width, 0);
-            context.drawImage(right, img.width + Math.floor($SQUARE_SIZE / 2), 0);
+            try
+            {
+                context.drawImage(left, img.width, 0);
+                context.drawImage(right, img.width + Math.floor($SQUARE_SIZE / 2
+                    ), 0);
+            } catch (e)
+            {
+                RPM.showErrorMessage("Error: Wrong wall (with ID:" + id + ") parsing. Please verify that you have a 3 x 3 picture.");
+            }
             var image = new Image();
             image.addEventListener('load', function() {
                 texture.image = image;
@@ -559,7 +572,7 @@ SystemTileset.prototype = {
                 }
                 if (picture) {
                     that.paintPictureMountain(context, pathLocal, img, offset,
-                        point);
+                        point, id);
                 }
 
                 textureMountain.setEnd(id, point);
@@ -593,7 +606,7 @@ SystemTileset.prototype = {
 
     /** Paint the picture in texture.
     */
-    paintPictureMountain: function(context, pathLocal, img, offset, point) {
+    paintPictureMountain: function(context, pathLocal, img, offset, point, id) {
         var i, l, y, sourceSize, sDiv;
 
         y = offset * 4 * $SQUARE_SIZE;
@@ -604,33 +617,38 @@ SystemTileset.prototype = {
         context.drawImage(pathLocal, 0, y);
 
         // Add left/right autos
-        for (i = 0, l = 3; i < l; i++) {
-            context.drawImage(pathLocal, 0, (i * $SQUARE_SIZE), sDiv,
-                $SQUARE_SIZE, sourceSize, y + (i * $SQUARE_SIZE), sDiv,
-                $SQUARE_SIZE);
-            context.drawImage(pathLocal, sourceSize - sDiv, (i * $SQUARE_SIZE),
-                sDiv, $SQUARE_SIZE, sourceSize + sDiv, y + (i * $SQUARE_SIZE),
-                sDiv, $SQUARE_SIZE);
-        }
+        try {
+            for (i = 0, l = 3; i < l; i++) {
+                context.drawImage(pathLocal, 0, (i * $SQUARE_SIZE), sDiv,
+                    $SQUARE_SIZE, sourceSize, y + (i * $SQUARE_SIZE), sDiv,
+                    $SQUARE_SIZE);
+                context.drawImage(pathLocal, sourceSize - sDiv, (i * $SQUARE_SIZE),
+                    sDiv, $SQUARE_SIZE, sourceSize + sDiv, y + (i * $SQUARE_SIZE),
+                    sDiv, $SQUARE_SIZE);
+            }
 
-        // Add top/bot autos
-        for (i = 0, l = 3; i < l; i++) {
-            context.drawImage(pathLocal, i * $SQUARE_SIZE, 0, $SQUARE_SIZE, sDiv
-                , i * $SQUARE_SIZE, y + sourceSize, $SQUARE_SIZE, sDiv);
-            context.drawImage(pathLocal, i * $SQUARE_SIZE, sourceSize - sDiv,
-                $SQUARE_SIZE, sDiv, i * $SQUARE_SIZE, y + sourceSize + sDiv,
-                $SQUARE_SIZE, sDiv);
-        }
+            // Add top/bot autos
+            for (i = 0, l = 3; i < l; i++) {
+                context.drawImage(pathLocal, i * $SQUARE_SIZE, 0, $SQUARE_SIZE, sDiv
+                    , i * $SQUARE_SIZE, y + sourceSize, $SQUARE_SIZE, sDiv);
+                context.drawImage(pathLocal, i * $SQUARE_SIZE, sourceSize - sDiv,
+                    $SQUARE_SIZE, sDiv, i * $SQUARE_SIZE, y + sourceSize + sDiv,
+                    $SQUARE_SIZE, sDiv);
+            }
 
-        // Add all sides autos
-        context.drawImage(pathLocal, 0, 0, sDiv, sDiv, sourceSize, y +
-            sourceSize, sDiv, sDiv);
-        context.drawImage(pathLocal, sourceSize - sDiv, 0, sDiv, sDiv,
-            sourceSize + sDiv, y + sourceSize, sDiv, sDiv);
-        context.drawImage(pathLocal, 0, sourceSize - sDiv, sDiv, sDiv,
-            sourceSize, y + sourceSize + sDiv, sDiv, sDiv);
-        context.drawImage(pathLocal, sourceSize - sDiv, sourceSize - sDiv, sDiv,
-            sDiv, sourceSize + sDiv, y + sourceSize + sDiv, sDiv, sDiv);
+            // Add all sides autos
+            context.drawImage(pathLocal, 0, 0, sDiv, sDiv, sourceSize, y +
+                sourceSize, sDiv, sDiv);
+            context.drawImage(pathLocal, sourceSize - sDiv, 0, sDiv, sDiv,
+                sourceSize + sDiv, y + sourceSize, sDiv, sDiv);
+            context.drawImage(pathLocal, 0, sourceSize - sDiv, sDiv, sDiv,
+                sourceSize, y + sourceSize + sDiv, sDiv, sDiv);
+            context.drawImage(pathLocal, sourceSize - sDiv, sourceSize - sDiv, sDiv,
+                sDiv, sourceSize + sDiv, y + sourceSize + sDiv, sDiv, sDiv);
+        } catch (e)
+        {
+            RPM.showErrorMessage("Error: Wrong mountain (with ID:" + id + ") parsing. Please verify that you have a 3 x 3 picture.");
+        }
     },
 
     // -------------------------------------------------------
