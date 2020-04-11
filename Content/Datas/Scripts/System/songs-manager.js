@@ -199,15 +199,19 @@ SongsManager.prototype = {
     *   @param {number} volume The volume of the sound.
     */
     playSound: function(id, volume) {
+        var song;
         if (id === -1)
             return;
 
         var player = this.sounds[this.soundIndex++];
         player.stop();
         player.volume = volume;
-        player.source = $datasGame.songs.list[SongKind.Sound][id]
-            .getPath(SongKind.Sound)[0];
-        player.play();
+        song = $datasGame.songs.list[SongKind.Sound][id];
+        if (song)
+        {
+            player.source = song.getPath(SongKind.Sound)[0];
+            player.play();
+        }
         if (this.soundIndex === 10) {
             this.soundIndex = 0;
         }
