@@ -105,7 +105,7 @@ SystemClass.prototype.getStatisticsProgression = function(upClass) {
             if (upClass.statisticsProgression[i].id === this
                 .statisticsProgression[j].id)
             {
-                list[i] = upClass.statisticsProgression[j];
+                list[j] = upClass.statisticsProgression[i];
                 checked = true;
                 break;
             }
