@@ -76,7 +76,7 @@ SceneGame.prototype = {
             interpreter.update();
             if (interpreter.isFinished()) {
                 interpreter.updateFinish();
-                endingReactions.unshift(i);
+                endingReactions.push(i);
             }
             // If changed map, STOP
             if ($currentMap.callBackAfterLoading !== null)
@@ -84,7 +84,8 @@ SceneGame.prototype = {
         }
 
         // Deleting finished reactions
-        for (i = 0, l = endingReactions.length; i < l; i++){
+        for (i = endingReactions.length - 1; i >= 0; i--)
+        {
             this.reactionInterpreters.splice(endingReactions[i], 1);
         }
     },
@@ -101,10 +102,11 @@ SceneGame.prototype = {
             var previousCommand = this.parallelCommands[i].currentCommand;
             var command = this.parallelCommands[i].updateCommand();
             if (previousCommand !== command)
-                endingCommands.unshift(i);
+                endingCommands.push(i);
         }
 
-        for (i = 0, l = endingCommands.length; i < l; i++){
+        for (i = endingCommands.length - 1; i >= 0; i--)
+        {
             this.parallelCommands.splice(endingCommands[i], 1);
         }
     },
