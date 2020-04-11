@@ -181,81 +181,85 @@ SceneBattle.prototype.initializeWindowsEnd = function() {
 SceneBattle.prototype.updateStep0 = function() {
     $requestPaintHUD = true;
 
-    this.updateTransitionStartFade();
-    this.updateTransitionStartZoom();
+    if (this.transitionStart === MapTransitionKind.Fade)
+    {
+        this.updateTransitionStartFade();
+    } else if (this.transitionStart === MapTransitionKind.Zoom)
+    {
+        this.updateTransitionStartZoom();
+    } else
+    {
+        this.changeStep(1);
+    }
 };
 
 // -------------------------------------------------------
 
 SceneBattle.prototype.updateTransitionStartFade = function() {
-    if (this.transitionStart === MapTransitionKind.Fade) {
-        if (this.transitionColor) {
-            this.transitionColorAlpha += SceneBattle.TRANSITION_COLOR_VALUE;
-            if (this.transitionColorAlpha >= 1) {
-                this.transitionColorAlpha = 1;
-                this.transitionColor = false;
-                this.timeTransition = new Date().getTime();
-                this.updateBackgroundColor();
-            }
-            return;
+    if (this.transitionColor) {
+        this.transitionColorAlpha += SceneBattle.TRANSITION_COLOR_VALUE;
+        if (this.transitionColorAlpha >= 1) {
+            this.transitionColorAlpha = 1;
+            this.transitionColor = false;
+            this.timeTransition = new Date().getTime();
+            this.updateBackgroundColor();
         }
-        if (new Date().getTime() - this.timeTransition < SceneBattle
-            .TRANSITION_COLOR_END_WAIT)
-        {
-            return;
-        }
-        if (this.transitionColorAlpha > 0) {
-            this.transitionColorAlpha -= SceneBattle.TRANSITION_COLOR_VALUE;
-            if (this.transitionColorAlpha <= 0) {
-                this.transitionColorAlpha = 0;
-            }
-            return;
-        }
-
-        this.changeStep(1);
+        return;
     }
+    if (new Date().getTime() - this.timeTransition < SceneBattle
+        .TRANSITION_COLOR_END_WAIT)
+    {
+        return;
+    }
+    if (this.transitionColorAlpha > 0) {
+        this.transitionColorAlpha -= SceneBattle.TRANSITION_COLOR_VALUE;
+        if (this.transitionColorAlpha <= 0) {
+            this.transitionColorAlpha = 0;
+        }
+        return;
+    }
+
+    this.changeStep(1);
 };
 
 // -------------------------------------------------------
 
 SceneBattle.prototype.updateTransitionStartZoom = function() {
-    if (this.transitionStart === MapTransitionKind.Zoom) {
-        var offset;
+    var offset;
 
-        if (this.transitionZoom) {
-            offset = SceneBattle.START_CAMERA_DISTANCE / this
-                .sceneMapCameraDistance * SceneBattle.TRANSITION_ZOOM_TIME;
-            this.sceneMap.camera.distance = (1 - (((new Date().getTime() - this
-                .time) - offset) / (SceneBattle.TRANSITION_ZOOM_TIME - offset)))
-                * this.sceneMapCameraDistance;
-            if (this.sceneMap.camera.distance <= SceneBattle
-                .START_CAMERA_DISTANCE) 
-            {
-                this.sceneMap.camera.distance = SceneBattle
-                    .START_CAMERA_DISTANCE;
-                this.transitionZoom = false;
-                this.updateBackgroundColor();
-                this.time = new Date().getTime();
-            }
-            this.sceneMap.camera.update();
+    if (this.transitionZoom) {
+        offset = SceneBattle.START_CAMERA_DISTANCE / this
+            .sceneMapCameraDistance * SceneBattle.TRANSITION_ZOOM_TIME;
+        this.sceneMap.camera.distance = (1 - (((new Date().getTime() - this
+            .time) - offset) / (SceneBattle.TRANSITION_ZOOM_TIME - offset)))
+            * this.sceneMapCameraDistance;
+        if (this.sceneMap.camera.distance <= SceneBattle
+            .START_CAMERA_DISTANCE)
+        {
+            this.sceneMap.camera.distance = SceneBattle
+                .START_CAMERA_DISTANCE;
+            this.transitionZoom = false;
+            this.updateBackgroundColor();
+            this.time = new Date().getTime();
+        }
+        this.sceneMap.camera.update();
+        return;
+    }
+    if (this.camera.distance < this.cameraDistance) {
+        offset = SceneBattle.START_CAMERA_DISTANCE / this.cameraDistance *
+            SceneBattle.TRANSITION_ZOOM_TIME;
+        this.camera.distance = (((new Date().getTime() - this.time) - offset
+            ) / (SceneBattle.TRANSITION_ZOOM_TIME - offset)) * this
+            .cameraDistance;
+        if (this.camera.distance >= this.cameraDistance) {
+            this.camera.distance = this.cameraDistance;
+            this.cameraON = true;
+        } else {
             return;
         }
-        if (this.camera.distance < this.cameraDistance) {
-            offset = SceneBattle.START_CAMERA_DISTANCE / this.cameraDistance *
-                SceneBattle.TRANSITION_ZOOM_TIME;
-            this.camera.distance = (((new Date().getTime() - this.time) - offset
-                ) / (SceneBattle.TRANSITION_ZOOM_TIME - offset)) * this
-                .cameraDistance;
-            if (this.camera.distance >= this.cameraDistance) {
-                this.camera.distance = this.cameraDistance;
-                this.cameraON = true;
-            } else {
-                return;
-            }
-        }
-
-        this.changeStep(1);
     }
+
+    this.changeStep(1);
 };
 
 // -------------------------------------------------------
