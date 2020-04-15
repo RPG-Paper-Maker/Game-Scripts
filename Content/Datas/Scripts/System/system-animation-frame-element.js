@@ -40,17 +40,19 @@ SystemAnimationFrameElement.prototype.readJSON = function(json) {
 SystemAnimationFrameElement.prototype.draw = function(picture, position, rows,
     cols)
 {
-    var w, h;
+    var oW, oH, w, h;
 
     picture.zoom = this.zoom;
     picture.opacity = this.opacity;
     picture.angle = this.angle;
     picture.centered = true;
     picture.reverse = this.flip;
-    w = picture.oW / cols;
-    h = picture.oH / rows;
+    oW = picture.oW / cols;
+    oH = picture.oH / rows;
+    w = picture.w / cols;
+    h = picture.h / rows;
 
     picture.draw(position.x + this.x - ((w / 2) * this.zoom), position.y +
-        this.y - ((w / 2) * this.zoom), w * this.zoom, h * this.zoom, w * this
-        .texCol, h * this.texRow, w, h, true);
+        this.y - ((w / 2) * this.zoom), w * this.zoom, h * this.zoom, oW * this
+        .texCol, oH * this.texRow, oW, oH, false);
 }
