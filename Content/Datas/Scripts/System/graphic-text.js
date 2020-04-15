@@ -112,7 +112,7 @@ GraphicText.prototype = {
         this.updateContextFont();
         w = $context.measureText(this.text);
         this.textWidth = w.width;
-        this.textHeight = RPM.getScreenXY(this.fontSize);
+        this.textHeight = RPM.getScreenMinXY(this.fontSize);
 
         return w.width;
     },
@@ -123,7 +123,7 @@ GraphicText.prototype = {
         this.fontSize = fontSize;
         this.fontWithoutResize = RPM.createFont(fontSize, this.fontName, this
             .bold, this.italic);
-        fontSize = RPM.getScreenXY(fontSize);
+        fontSize = RPM.getScreenMinXY(fontSize);
         this.font = RPM.createFont(fontSize, this.fontName, this.bold, this
             .italic);
     },

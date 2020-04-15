@@ -47,12 +47,9 @@ SystemAnimationFrameElement.prototype.draw = function(picture, position, rows,
     picture.angle = this.angle;
     picture.centered = true;
     picture.reverse = this.flip;
-    oW = picture.oW / cols;
-    oH = picture.oH / rows;
-    w = picture.w / cols;
-    h = picture.h / rows;
+    w = picture.oW / cols;
+    h = picture.oH / rows;
 
-    picture.draw(position.x + this.x - ((w / 2) * this.zoom), position.y +
-        this.y - ((w / 2) * this.zoom), w * this.zoom, h * this.zoom, oW * this
-        .texCol, oH * this.texRow, oW, oH, false);
+    picture.draw(position.x + this.x, position.y + this.y, w * this.zoom, h *
+        this.zoom, w * this.texCol, h * this.texRow, w, h, false);
 }

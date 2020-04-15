@@ -54,6 +54,7 @@ SystemWindowSkin.prototype = {
     updatePicture: function() {
         this.picture = Picture2D.createImage($datasGame.pictures.get(PictureKind
             .WindowSkins, this.pictureID), PictureKind.WindowSkins);
+        this.picture.stretch = true;
     },
 
     // -------------------------------------------------------

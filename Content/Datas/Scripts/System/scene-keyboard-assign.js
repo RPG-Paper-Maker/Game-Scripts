@@ -26,6 +26,7 @@ function SceneKeyboardAssign() {
     if ($datasGame.titlescreenGameover.isTitleBackgroundImage) {
         this.pictureBackground = Picture2D.createImageWithID($datasGame
             .titlescreenGameover.titleBackgroundImageID, PictureKind.TitleScreen);
+        this.pictureBackground.cover = true;
     }
 
     // Creating windows

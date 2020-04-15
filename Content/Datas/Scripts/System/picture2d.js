@@ -33,6 +33,8 @@ function Picture2D(path, callback, x, y, w, h) {
     this.zoom = 1.0;
     this.opacity = 1.0;
     this.angle = 0;
+    this.cover = false;
+    this.stretch = false;
     if (path) {
         this.path = path;
         this.callback = callback;
@@ -88,8 +90,21 @@ Picture2D.prototype.check = function() {
         $picturesLoading.splice($picturesLoading.indexOf(this), 1);
         $picturesLoaded.push(this);
         this.image = context.createImageData(this.path);
-        Bitmap.prototype.setW.call(this, this.image.width);
-        Bitmap.prototype.setH.call(this, this.image.height);
+        this.oW = this.image.width;
+        this.oH = this.image.height;
+        if (this.cover)
+        {
+            this.w = $canvasWidth;
+            this.h = $canvasHeight;
+        } else if (this.stretch)
+        {
+            this.w = RPM.getScreenX(this.image.width);
+            this.h = RPM.getScreenY(this.image.height);
+        } else
+        {
+            this.w = RPM.getScreenMinXY(this.image.width);
+            this.h = RPM.getScreenMinXY(this.image.height);
+        }
 
         if (this.callback) {
             this.callback.call(this);
@@ -147,7 +162,7 @@ Picture2D.prototype.draw = function(x, y, w, h, sx, sy, sw, sh, positionResize)
             x += (this.w - (this.w * this.zoom)) / 2;
         }
     } else {
-        w = RPM.getScreenX(w);
+        w = this.stretch ? RPM.getScreenX(w) : RPM.getScreenMinXY(w);
     }
     if (typeof h === 'undefined') {
         h = this.h * this.zoom;
@@ -155,7 +170,7 @@ Picture2D.prototype.draw = function(x, y, w, h, sx, sy, sw, sh, positionResize)
             y += (this.h - (this.h * this.zoom)) / 2;
         }
     } else {
-        h = RPM.getScreenY(h);
+        h = this.stretch ? RPM.getScreenY(h) : RPM.getScreenMinXY(h)
     }
     if (typeof sx === 'undefined') sx = 0;
     if (typeof sy === 'undefined') sy = 0;
@@ -195,7 +210,7 @@ Picture2D.prototype.draw = function(x, y, w, h, sx, sy, sw, sh, positionResize)
                 $context.scale(-1, 1);
                 $context.translate(-x -w, y);
             } else {
-                $context.translate(x, y);
+                $context.translate(x - (w / 2), y - (h / 2));
             }
         }
         $context.drawImage(this.path, sx, sy, sw, sh, 0, 0, w, h);

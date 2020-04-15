@@ -1024,6 +1024,18 @@ RPM.getScreenXY = function(xy) {
 
 // -------------------------------------------------------
 
+/** Get the pixel position transformation according to screen size.
+*   @static
+*   @param {number} xy The position on screen.
+*   @returns {number}
+*/
+
+RPM.getScreenMinXY = function(xy) {
+    return Math.ceil(xy * Math.min($windowX,$windowY));
+}
+
+// -------------------------------------------------------
+
 /** Get the pixel position transformation according to screen size, but without
 *   rounding it.
 *   @static
