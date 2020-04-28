@@ -277,9 +277,6 @@ EventCommandShowText.prototype = {
     *   @param {Object} currentState The current state of the event.
     */
     drawHUD: function(currentState) {
-        if (!this.windowMain.content.fAbove) {
-            this.windowMain.content.drawFaceset();
-        }
         this.windowMain.draw();
         if (this.windowInterlocutor.content.text) {
             this.windowInterlocutor.draw();
