@@ -212,7 +212,11 @@ SceneBattle.prototype.updateStep2 = function() {
         {
             for (i = 0, l = this.targets.length; i < l; i++) {
                 damage = this.damages[i];
-                this.targets[i].updateDead(damage[0] > 0 && !damage[1], this.user);
+                if (damage)
+                {
+                    this.targets[i].updateDead(damage[0] > 0 && !damage[1], this
+                        .user);
+                }
             }
             $requestPaintHUD = true;
 

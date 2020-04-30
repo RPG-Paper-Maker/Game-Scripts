@@ -141,9 +141,16 @@ SceneBattle.prototype.defineAction = function()
         var effect;
 
         effect = $datasGame.skills.list[this.action.skillID.getValue()].effects[0];
-        this.battleCommandKind = effect.kind === EffectKind.SpecialActions ?
-            effect.specialActionKind : EffectSpecialActionKind.OpenSkills;
-        this.attackSkill = $datasGame.skills.list[this.action.skillID.getValue()];
+        if (effect)
+        {
+            this.battleCommandKind = effect.kind === EffectKind.SpecialActions ?
+                effect.specialActionKind : EffectSpecialActionKind.OpenSkills;
+        } else
+        {
+            this.battleCommandKind = EffectSpecialActionKind.OpenSkills;
+        }
+        this.attackSkill = $datasGame.skills.list[this.action.skillID
+            .getValue()];
         break;
     case MonsterActionKind.UseItem:
         var id;
