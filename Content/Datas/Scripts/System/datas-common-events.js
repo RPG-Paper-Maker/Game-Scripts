@@ -119,9 +119,10 @@ DatasCommonEvents.prototype = {
             if (id !== -1) {
 
                 // Search id in the json list
-                var inheritedObject, j, l;
+                var inheritedObject, j;
 
-                for (j = 0; j < l; j++){
+                for (j = 0; j < objectsLength; j++)
+                {
                     inheritedObject = jsonObjects[j];
                     if (inheritedObject.id === id) {
                         break;
