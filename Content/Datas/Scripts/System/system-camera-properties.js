@@ -35,6 +35,9 @@ SystemCameraProperties.prototype = {
         this.targetOffsetX = SystemValue.readOrDefaultNumber(json.tox, 0);
         this.targetOffsetY = SystemValue.readOrDefaultNumber(json.toy, 0);
         this.targetOffsetZ = SystemValue.readOrDefaultNumber(json.toz, 0);
+        this.isSquareTargetOffsetX = RPM.jsonDefault(json.istox, true);
+        this.isSquareTargetOffsetY = RPM.jsonDefault(json.istoy, true);
+        this.isSquareTargetOffsetZ = RPM.jsonDefault(json.istoz, true);
         this.fov = SystemValue.readOrDefaultNumberDouble(json.fov, 45);
         this.near = SystemValue.readOrDefaultNumberDouble(json.n, 1);
         this.far = SystemValue.readOrDefaultNumberDouble(json.f, 100000);
@@ -43,6 +46,8 @@ SystemCameraProperties.prototype = {
     // -------------------------------------------------------
 
     initializeCamera: function(camera) {
+        var x, y, z;
+
         camera.threeCamera = new THREE.PerspectiveCamera(this.fov.getValue(),
             $canvasWidth / $canvasHeight, this.near.getValue(), this.far
             .getValue());
@@ -52,7 +57,21 @@ SystemCameraProperties.prototype = {
         camera.verticalAngle = this.verticalAngle.getValue();
         camera.verticalRight = true;
         camera.targetPosition = new THREE.Vector3();
-        camera.targetOffset = new THREE.Vector3(this.targetOffsetX.getValue(),
-            this.targetOffsetY.getValue(), this.targetOffsetZ.getValue());
+        x = this.targetOffsetX.getValue();
+        if (this.isSquareTargetOffsetX)
+        {
+            x *= $SQUARE_SIZE;
+        }
+        y = this.targetOffsetY.getValue();
+        if (this.isSquareTargetOffsetY)
+        {
+            y *= $SQUARE_SIZE;
+        }
+        z = this.targetOffsetZ.getValue();
+        if (this.isSquareTargetOffsetZ)
+        {
+            z *= $SQUARE_SIZE;
+        }
+        camera.targetOffset = new THREE.Vector3(x, y, z);
     }
 }
