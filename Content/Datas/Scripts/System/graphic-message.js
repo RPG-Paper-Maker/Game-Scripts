@@ -360,9 +360,9 @@ GraphicMessage.prototype.drawBehind = function(x, y, w, h) {
 // -------------------------------------------------------
 
 GraphicMessage.prototype.drawFaceset = function(x, y, w, h) {
-    this.faceset.draw(x + RPM.defaultValue($datasGame.system.dbOptions.vfX, 0),
+    this.faceset.draw(x + RPM.defaultValue($datasGame.system.dbOptions.fX, 0),
         y - ((this.faceset.oH - h) / 2) + RPM.defaultValue($datasGame.system
-        .dbOptions.vfY, 0));
+        .dbOptions.fY, 0));
 }
 
 // -------------------------------------------------------
