@@ -30,13 +30,13 @@ SceneBattle.prototype.initializeStep2 = function() {
         break;
     case EffectSpecialActionKind.OpenSkills:
         content = this.attackingGroup === CharacterKind.Hero ? this
-            .windowChoicesSkills.getCurrentContent().skill : $datasGame.skills
+            .windowChoicesSkills.getCurrentContent().skill : RPM.datasGame.skills
             .list[this.action.skillID.getValue()];
         informationText = content.name;
         break;
     case EffectSpecialActionKind.OpenItems:
         content = this.attackingGroup === CharacterKind.Hero ? this
-            .windowChoicesItems.getCurrentContent().item : $datasGame.items.list
+            .windowChoicesItems.getCurrentContent().item : RPM.datasGame.items.list
             [this.action.itemID.getValue()];
         informationText = content.name;
         break;
@@ -60,9 +60,9 @@ SceneBattle.prototype.initializeStep2 = function() {
                 gameItem = equipments[i];
                 if (gameItem && gameItem.k === ItemKind.Weapon) {
                     weapon = gameItem.getItemInformations();
-                    this.userAnimation = $datasGame.animations.list[weapon
+                    this.userAnimation = RPM.datasGame.animations.list[weapon
                         .animationUserID.getValue()];
-                    this.targetAnimation = $datasGame.animations.list[weapon
+                    this.targetAnimation = RPM.datasGame.animations.list[weapon
                         .animationTargetID.getValue()];
                     for (j = 0, ll = weapon.effects.length; j < ll; j++) {
                         this.effects.push(weapon.effects[j]);
@@ -71,9 +71,9 @@ SceneBattle.prototype.initializeStep2 = function() {
             }
         }
         if (this.effects.length === 0) {
-            this.userAnimation = $datasGame.animations.list[$datasGame.skills
+            this.userAnimation = RPM.datasGame.animations.list[RPM.datasGame.skills
                 .list[1].animationUserID.getValue()];
-            this.targetAnimation = $datasGame.animations.list[$datasGame.skills
+            this.targetAnimation = RPM.datasGame.animations.list[RPM.datasGame.skills
                 .list[1].animationTargetID.getValue()];
             effects = this.attackSkill.effects;
             for (i = 1, l = effects.length; i < l; i++) {
@@ -83,9 +83,9 @@ SceneBattle.prototype.initializeStep2 = function() {
         this.user.setAttacking();
         break;
     case EffectSpecialActionKind.OpenSkills:
-        this.userAnimation = $datasGame.animations.list[content
+        this.userAnimation = RPM.datasGame.animations.list[content
             .animationUserID.getValue()];
-        this.targetAnimation = $datasGame.animations.list[content
+        this.targetAnimation = RPM.datasGame.animations.list[content
             .animationTargetID.getValue()];
         this.effects = content.effects;
         content.cost();
@@ -93,14 +93,14 @@ SceneBattle.prototype.initializeStep2 = function() {
         break;
     case EffectSpecialActionKind.OpenItems:
         var graphic = this.windowChoicesItems.getCurrentContent();
-        this.userAnimation = $datasGame.animations.list[content
+        this.userAnimation = RPM.datasGame.animations.list[content
             .animationUserID.getValue()];
-        this.targetAnimation = $datasGame.animations.list[content
+        this.targetAnimation = RPM.datasGame.animations.list[content
             .animationTargetID.getValue()];
         this.effects = content.effects;
         if (this.attackingGroup === CharacterKind.Hero)
         {
-            $game.useItem(graphic.gameItem);
+            RPM.game.useItem(graphic.gameItem);
         }
         this.user.setUsingItem();
         break;
@@ -159,7 +159,7 @@ SceneBattle.prototype.updateStep2 = function() {
         if (this.userAnimation) {
             this.frameUser++;
             this.userAnimation.playSounds(this.frameUser, this.getCondition());
-            $requestPaintHUD = true;
+            RPM.requestPaintHUD = true;
         }
 
         // Test if animation finished
@@ -185,7 +185,7 @@ SceneBattle.prototype.updateStep2 = function() {
         // Target animation if exists
         this.frameTarget++;
         this.targetAnimation.playSounds(this.frameTarget, this.getCondition());
-        $requestPaintHUD = true;
+        RPM.requestPaintHUD = true;
         if (this.frameTarget > this.targetAnimation.frames.length) {
             this.time = new Date().getTime() - (SceneBattle
                 .TIME_ACTION_ANIMATION / 2);
@@ -218,7 +218,7 @@ SceneBattle.prototype.updateStep2 = function() {
                         .user);
                 }
             }
-            $requestPaintHUD = true;
+            RPM.requestPaintHUD = true;
 
             // Target and user test death
             this.user.updateDead(false);

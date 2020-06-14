@@ -24,7 +24,7 @@
 *   @property {boolean} bot
 */
 function CollisionSquare(){
-    this.rect = [0, 0, $SQUARE_SIZE, $SQUARE_SIZE];
+    this.rect = [0, 0, RPM.SQUARE_SIZE, RPM.SQUARE_SIZE];
     this.left = true;
     this.right = true;
     this.top = true;
@@ -43,13 +43,13 @@ CollisionSquare.unionSquares = function(squares, l, w, h) {
             square = squares[i + k];
             if (square !== null) {
                 if (square[0] === 0 || square[1] === 0 ||
-                    square[0] + square[2] === $SQUARE_SIZE ||
-                    square[1] + square[3] === $SQUARE_SIZE)
+                    square[0] + square[2] === RPM.SQUARE_SIZE ||
+                    square[1] + square[3] === RPM.SQUARE_SIZE)
                 {
                     boolGrid[i + k] = true;
                 } else {
-                    square[0] = square[0] + $SQUARE_SIZE * i;
-                    square[1] = square[1] + $SQUARE_SIZE * j;
+                    square[0] = square[0] + RPM.SQUARE_SIZE * i;
+                    square[1] = square[1] + RPM.SQUARE_SIZE * j;
                     result.push(square);
                     boolGrid[i + k] = false;
                 }
@@ -64,15 +64,15 @@ CollisionSquare.unionSquares = function(squares, l, w, h) {
             if (boolGrid[i + k]) {
                 s = squares[i + k];
                 square = [s[0], s[1], s[2], s[3]];
-                square[0] = square[0] + $SQUARE_SIZE * i;
-                square[1] = square[1] + $SQUARE_SIZE * j;
+                square[0] = square[0] + RPM.SQUARE_SIZE * i;
+                square[1] = square[1] + RPM.SQUARE_SIZE * j;
                 boolGrid[i + k] = false;
                 tempW = -1;
                 for (a = i +1; a < w && tempW === -1; a++) {
                     c = false;
                     if (boolGrid[a + k]) {
                         if (squares[a + k - 1][0] + squares[a + k - 1][2] ===
-                            $SQUARE_SIZE && squares[a + k][0] === 0)
+                            RPM.SQUARE_SIZE && squares[a + k][0] === 0)
                         {
                             if (squares[a + k][1] === squares[a + k - 1][1] &&
                                 squares[a + k][3] === squares[a + k - 1][3])
@@ -92,7 +92,7 @@ CollisionSquare.unionSquares = function(squares, l, w, h) {
                     c = true;
                     for (a = i; a < i + tempW; a++) {
                         if (!(boolGrid[a + kk] && squares[a + kk - w][1] +
-                              squares[a + kk - w][3] === $SQUARE_SIZE &&
+                              squares[a + kk - w][3] === RPM.SQUARE_SIZE &&
                               squares[a + kk][1] === 0 && squares[a + kk][0] ===
                               squares[a + kk - w][0] && squares[a + kk][2] ===
                               squares[a + kk - w][2]))
@@ -128,8 +128,8 @@ CollisionSquare.unionSquares = function(squares, l, w, h) {
 
 CollisionSquare.getBB = function(rect, w, h) {
     return [
-        (rect[0] - ((w * $SQUARE_SIZE) - rect[0] - rect[2])) / 2,
-        (h * $SQUARE_SIZE) - rect[1] - (rect[3] / 2), 0, rect[2], rect[3], 1, 0,
+        (rect[0] - ((w * RPM.SQUARE_SIZE) - rect[0] - rect[2])) / 2,
+        (h * RPM.SQUARE_SIZE) - rect[1] - (rect[3] / 2), 0, rect[2], rect[3], 1, 0,
         0, 0
     ];
 }
@@ -151,10 +151,10 @@ CollisionSquare.prototype = {
                 this.rect = null;
             else {
                 this.rect = [
-                    Math.round(rect[0] * $SQUARE_SIZE / 100),
-                    Math.round(rect[1] * $SQUARE_SIZE / 100),
-                    Math.round(rect[2] * $SQUARE_SIZE / 100),
-                    Math.round(rect[3] * $SQUARE_SIZE / 100)
+                    Math.round(rect[0] * RPM.SQUARE_SIZE / 100),
+                    Math.round(rect[1] * RPM.SQUARE_SIZE / 100),
+                    Math.round(rect[2] * RPM.SQUARE_SIZE / 100),
+                    Math.round(rect[3] * RPM.SQUARE_SIZE / 100)
                 ];
             }
         }

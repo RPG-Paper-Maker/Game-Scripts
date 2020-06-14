@@ -1,7 +1,17 @@
-# Game Scripts
+# Game
 
-This repository contains all the system scripts used for the games generated. The scripts can be found here:
-    
-    Content/Datas/Scripts/System
-    
-This repo is independant and there is all the needed stuff to test any feature linked to the games.
+Game and scripts.
+
+## How to install
+
+This is using electron.js framework. Download it according to your environment:
+
+https://www.electronjs.org/docs/tutorial/development-environment
+
+## How to run
+
+First, complete the `Content` folder thanks to any recent project you want to test here. You should replace anything but the `Content/Datas/Scripts` folder.
+
+When it's done, just run
+
+	npm start

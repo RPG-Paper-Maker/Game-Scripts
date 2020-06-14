@@ -39,9 +39,9 @@ function GraphicPlayerDescription(gamePlayer) {
     // Informations
     this.gamePlayer = gamePlayer;
     character = gamePlayer.getCharacterInformations();
-    cl = $datasGame.classes.list[character.idClass];
-    levelStat = $datasGame.battleSystem.getLevelStatistic();
-    expStat = $datasGame.battleSystem.getExpStatistic();
+    cl = RPM.datasGame.classes.list[character.idClass];
+    levelStat = RPM.datasGame.battleSystem.getLevelStatistic();
+    expStat = RPM.datasGame.battleSystem.getExpStatistic();
 
     // All the graphics
     this.graphicNameCenter = new GraphicText(character.name, { align: Align
@@ -61,23 +61,23 @@ function GraphicPlayerDescription(gamePlayer) {
     this.listStats = new Array;
     this.listLength = new Array;
     j = 0;
-    l = $datasGame.battleSystem.statisticsOrder.length;
+    l = RPM.datasGame.battleSystem.statisticsOrder.length;
     maxLength = 0;
 
     for (i = 0; i < l; i++){
-        var id = $datasGame.battleSystem.statisticsOrder[i];
-        if (id !== $datasGame.battleSystem.idLevelStatistic &&
-            id !== $datasGame.battleSystem.idExpStatistic)
+        var id = RPM.datasGame.battleSystem.statisticsOrder[i];
+        if (id !== RPM.datasGame.battleSystem.idLevelStatistic &&
+            id !== RPM.datasGame.battleSystem.idExpStatistic)
         {
-            statistic = $datasGame.battleSystem.statistics[id];
+            statistic = RPM.datasGame.battleSystem.statistics[id];
             if (statistic.isRes) {
                 continue;
             }
 
             graphicName = new GraphicText(statistic.name + ":");
-            $context.font = graphicName.font;
+            Platform.ctx.font = graphicName.font;
             graphicName.updateContextFont();
-            c = $context.measureText(graphicName.text).width;
+            c = Platform.ctx.measureText(graphicName.text).width;
             if (c > maxLength) maxLength = c;
             if (j%7 === 6){
                 this.listLength.push(maxLength);
@@ -94,7 +94,7 @@ function GraphicPlayerDescription(gamePlayer) {
     this.listLength.push(maxLength);
 
     // Battler
-    this.battler = Picture2D.createImage($datasGame.pictures.get(PictureKind
+    this.battler = Picture2D.createImage(RPM.datasGame.pictures.get(PictureKind
         .Battlers, character.idBattler), PictureKind.Battlers);
     this.battlerFrame = 0;
     this.battlerFrameTick = 0;
@@ -107,14 +107,14 @@ GraphicPlayerDescription.prototype = {
         var i, l, id, statistic, value, txt, graphic;
 
         this.listStatsProgression = new Array;
-        for (i = 0, l = $datasGame.battleSystem.statisticsOrder.length; i < l;
+        for (i = 0, l = RPM.datasGame.battleSystem.statisticsOrder.length; i < l;
              i++)
         {
-            id = $datasGame.battleSystem.statisticsOrder[i];
-            if (id !== $datasGame.battleSystem.idLevelStatistic &&
-                id !== $datasGame.battleSystem.idExpStatistic)
+            id = RPM.datasGame.battleSystem.statisticsOrder[i];
+            if (id !== RPM.datasGame.battleSystem.idLevelStatistic &&
+                id !== RPM.datasGame.battleSystem.idExpStatistic)
             {
-                statistic = $datasGame.battleSystem.statistics[id];
+                statistic = RPM.datasGame.battleSystem.statistics[id];
                 if (statistic.isRes) {
                     continue;
                 }
@@ -146,18 +146,18 @@ GraphicPlayerDescription.prototype = {
         this.listStatsNames = new Array;
         this.listStats = new Array;
         this.maxLength = 0;
-        for (i = 0, l = $datasGame.battleSystem.statisticsOrder.length; i < l;
+        for (i = 0, l = RPM.datasGame.battleSystem.statisticsOrder.length; i < l;
              i++)
         {
-            id = $datasGame.battleSystem.statisticsOrder[i];
-            if (id !== $datasGame.battleSystem.idLevelStatistic &&
-                id !== $datasGame.battleSystem.idExpStatistic)
+            id = RPM.datasGame.battleSystem.statisticsOrder[i];
+            if (id !== RPM.datasGame.battleSystem.idLevelStatistic &&
+                id !== RPM.datasGame.battleSystem.idExpStatistic)
             {
-                statistic = $datasGame.battleSystem.statistics[id];
+                statistic = RPM.datasGame.battleSystem.statistics[id];
                 graphicName = new GraphicText(statistic.name + ":");
-                $context.font = graphicName.font;
+                Platform.ctx.font = graphicName.font;
                 graphicName.updateContextFont();
-                c = $context.measureText(graphicName.text).width;
+                c = Platform.ctx.measureText(graphicName.text).width;
                 if (c > this.maxLength) {
                     this.maxLength = c;
                 }
@@ -186,13 +186,13 @@ GraphicPlayerDescription.prototype = {
 
     updateBattler: function() {
         var frame = this.battlerFrame;
-        this.battlerFrameTick += $elapsedTime;
+        this.battlerFrameTick += RPM.elapsedTime;
         if (this.battlerFrameTick >= this.battlerFrameDuration) {
-            this.battlerFrame = (this.battlerFrame + 1) % $FRAMES;
+            this.battlerFrame = (this.battlerFrame + 1) % RPM.FRAMES;
             this.battlerFrameTick = 0;
         }
         if (frame !== this.battlerFrame) {
-            $requestPaintHUD = true;
+            RPM.requestPaintHUD = true;
         }
     },
 
@@ -229,8 +229,8 @@ GraphicPlayerDescription.prototype = {
         var i, l;
         xCharacter = x + 80;
         yName = y + 20;
-        coef = RPM.BASIC_SQUARE_SIZE / $SQUARE_SIZE;
-        wBattler = this.battler.oW / $FRAMES;
+        coef = RPM.BASIC_SQUARE_SIZE / RPM.SQUARE_SIZE;
+        wBattler = this.battler.oW / RPM.FRAMES;
         hBattler = this.battler.oH / RPM.BATLLER_STEPS;
 
         // Battler
@@ -242,18 +242,18 @@ GraphicPlayerDescription.prototype = {
         yName = y + 10;
         this.graphicName.draw(xCharacter, yName, 0, 0);
         this.graphicName.updateContextFont();
-        xLevelName = xCharacter + $context.measureText(this.graphicName.text)
+        xLevelName = xCharacter + Platform.ctx.measureText(this.graphicName.text)
             .width + 10;
         this.graphicLevelName.draw(xLevelName, yName, 0, 0);
         this.graphicLevelName.updateContextFont();
-        xLevel = xLevelName + $context.measureText(this.graphicLevelName.text)
+        xLevel = xLevelName + Platform.ctx.measureText(this.graphicLevelName.text)
             .width;
         this.graphicLevel.draw(xLevel, yName, 0, 0);
         yClass = yName + 20;
         this.graphicClass.draw(xCharacter, yClass, 0, 0);
         yExp = yClass + 20;
         this.graphicExpName.draw(xCharacter, yExp, 0, 0);
-        xExp = xCharacter + $context.measureText(this.graphicExpName.text).width
+        xExp = xCharacter + Platform.ctx.measureText(this.graphicExpName.text).width
             + 10;
         this.graphicExp.draw(xExp, yExp, 0, 0);
         yStats = yExp + 30;

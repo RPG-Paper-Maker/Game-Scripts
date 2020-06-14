@@ -56,10 +56,10 @@ function SceneMenu() {
     ];
 
     // Initializing graphics for displaying heroes informations
-    nbHeroes = $game.teamHeroes.length;
+    nbHeroes = RPM.game.teamHeroes.length;
     graphicsHeroes = new Array(nbHeroes);
     for (i = 0; i < nbHeroes; i++) {
-        graphicsHeroes[i] = new GraphicPlayer($game.teamHeroes[i]);
+        graphicsHeroes[i] = new GraphicPlayer(RPM.game.teamHeroes[i]);
     }
 
     // All the windows
@@ -73,7 +73,7 @@ function SceneMenu() {
     this.windowTimeCurrencies.contentLoaded = false;
 
     // Play a sound when opening the menu
-    $datasGame.system.soundCursor.playSound();
+    RPM.datasGame.system.soundCursor.playSound();
 }
 
 SceneMenu.nbItemsToDisplay = 12;
@@ -83,7 +83,7 @@ SceneMenu.prototype = {
     /** Callback function for opening inventory.
     */
     openInventory: function(){
-        $gameStack.push(new SceneMenuInventory());
+        RPM.gameStack.push(new SceneMenuInventory());
 
         return true;
     },
@@ -93,7 +93,7 @@ SceneMenu.prototype = {
     /** Callback function for opening skills menu.
     */
     openSkills: function(){
-        $gameStack.push(new SceneMenuSkills());
+        RPM.gameStack.push(new SceneMenuSkills());
 
         return true;
     },
@@ -103,7 +103,7 @@ SceneMenu.prototype = {
     /** Callback function for opening equipment menu.
     */
     openEquip: function(){
-        $gameStack.push(new SceneMenuEquip());
+        RPM.gameStack.push(new SceneMenuEquip());
 
         return true;
     },
@@ -113,7 +113,7 @@ SceneMenu.prototype = {
     /** Callback function for opening player description state menu.
     */
     openState: function(){
-        $gameStack.push(new SceneDescriptionState());
+        RPM.gameStack.push(new SceneDescriptionState());
 
         return true;
     },
@@ -133,8 +133,8 @@ SceneMenu.prototype = {
     /** Callback function for opening save menu.
     */
     openSave: function() {
-        if ($allowSaves) {
-            $gameStack.push(new SceneSaveGame());
+        if (RPM.allowSaves) {
+            RPM.gameStack.push(new SceneSaveGame());
             return true;
         }
 
@@ -146,8 +146,8 @@ SceneMenu.prototype = {
     /** Callback function for quiting the game.
     */
     exit: function(){
-        $gameStack.pop();
-        $gameStack.push(new SceneTitleScreen());
+        RPM.gameStack.pop();
+        RPM.gameStack.push(new SceneTitleScreen());
 
         return true;
     },
@@ -163,7 +163,7 @@ SceneMenu.prototype = {
             w = this.windowTimeCurrencies.content.height + this
                 .windowTimeCurrencies.padding[1] + this.windowTimeCurrencies
                 .padding[3];
-            this.windowTimeCurrencies.setY($SCREEN_Y - 20 - w);
+            this.windowTimeCurrencies.setY(RPM.SCREEN_Y - 20 - w);
             this.windowTimeCurrencies.setH(w);
             this.windowTimeCurrencies.contentLoaded = true;
         }
@@ -181,29 +181,29 @@ SceneMenu.prototype = {
             this.windowChoicesCommands.onKeyPressed(key, this);
 
             // Quit the menu if cancelling + in window command
-            if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
+            if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
                                          .Cancel) ||
-                DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.MainMenu))
+                DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.MainMenu))
             {
-                $datasGame.system.soundCancel.playSound();
-                $gameStack.pop();
+                RPM.datasGame.system.soundCancel.playSound();
+                RPM.gameStack.pop();
             }
         }
         else{
 
             // If in reorder team window
-            if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
+            if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
                                          .Cancel) ||
-                DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.MainMenu))
+                DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.MainMenu))
             {
-                $datasGame.system.soundCancel.playSound();
+                RPM.datasGame.system.soundCancel.playSound();
                 this.windowChoicesTeam.unselect();
             }
             else if (DatasKeyBoard.isKeyEqual(key,
-                                              $datasGame.keyBoard.menuControls
+                                              RPM.datasGame.keyBoard.menuControls
                                               .Action))
             {
-                $datasGame.system.soundConfirmation.playSound();
+                RPM.datasGame.system.soundConfirmation.playSound();
 
                 // If selecting the first hero to interchange
                 if (this.selectedOrder === -1){
@@ -217,11 +217,11 @@ SceneMenu.prototype = {
                     var item1, item2;
 
                     // Change the current game order
-                    item1 = $game.teamHeroes[this.selectedOrder];
-                    item2 = $game.teamHeroes
+                    item1 = RPM.game.teamHeroes[this.selectedOrder];
+                    item2 = RPM.game.teamHeroes
                             [this.windowChoicesTeam.currentSelectedIndex];
-                    $game.teamHeroes[this.selectedOrder] = item2;
-                    $game.teamHeroes
+                    RPM.game.teamHeroes[this.selectedOrder] = item2;
+                    RPM.game.teamHeroes
                             [this.windowChoicesTeam.currentSelectedIndex]
                             = item1;
                     item1 =
@@ -276,7 +276,7 @@ SceneMenu.prototype = {
     // -------------------------------------------------------
 
     draw3D: function(canvas){
-        $currentMap.draw3D(canvas);
+        RPM.currentMap.draw3D(canvas);
     },
 
     // -------------------------------------------------------
@@ -284,7 +284,7 @@ SceneMenu.prototype = {
     drawHUD: function() {
         if (this.windowTimeCurrencies.contentLoaded) {
             // Draw the local map behind
-            $currentMap.drawHUD();
+            RPM.currentMap.drawHUD();
 
             // Draw the windows
             this.windowChoicesCommands.draw();

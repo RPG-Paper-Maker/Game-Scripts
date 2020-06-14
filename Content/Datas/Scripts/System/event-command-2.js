@@ -129,11 +129,11 @@ EventCommandStartBattle.prototype = {
         // Initializing battle
         if (currentState.sceneBattle === null) {
             var battleMap = (this.battleMapID === null) ? new SystemBattleMap(
-                $datasGame.system.cameraProperties[1], this.idMap.getValue(), [
+                RPM.datasGame.system.cameraProperties[1], this.idMap.getValue(), [
                 this.x.getValue(), this.y.getValue(), this.yPlus.getValue(),
-                this.z.getValue(), 0]) : $datasGame.battleSystem.battleMaps[this
+                this.z.getValue(), 0]) : RPM.datasGame.battleSystem.battleMaps[this
                 .battleMapID.getValue()];
-            $game.heroBattle = {
+            RPM.game.heroBattle = {
                 position: RPM.positionToVector3(battleMap.position)
             };
 
@@ -141,14 +141,14 @@ EventCommandStartBattle.prototype = {
             var sceneBattle = new SceneBattle(this.troopID.getValue(),
                 this.canGameOver, this.canEscape, battleMap,
                 this.transitionStart, this.transitionEnd, this
-                .transitionStartColor ? $datasGame.system.colors
+                .transitionStartColor ? RPM.datasGame.system.colors
                 [this.transitionStartColor.getValue()] : null, this
-                .transitionEndColor ? $datasGame.system.colors[this
+                .transitionEndColor ? RPM.datasGame.system.colors[this
                 .transitionEndColor.getValue()] : null);
              // Keep instance of battle state for results
             currentState.sceneBattle = sceneBattle;
-            currentState.mapScene = $gameStack.top();
-            $gameStack.push(sceneBattle);
+            currentState.mapScene = RPM.gameStack.top();
+            RPM.gameStack.push(sceneBattle);
 
             return 0; // Stay on this command as soon as we are in battle state
         }
@@ -390,17 +390,17 @@ EventCommandChangeState.prototype = {
     */
     update: function(currentState, object, state) {
         if (object.isHero || object.isStartup) {
-            var states = (object.isHero ? $game.heroStates : $game
-                .startupStates)[$currentMap.id];
+            var states = (object.isHero ? RPM.game.heroStates : RPM.game
+                .startupStates)[RPM.currentMap.id];
             switch (this.operationKind) {
             case 0: // Replacing
                 if (object.isHero) {
-                    $game.heroStates[$currentMap.id] = [];
+                    RPM.game.heroStates[RPM.currentMap.id] = [];
                 } else {
-                    $game.startupStates[$currentMap.id] = [];
+                    RPM.game.startupStates[RPM.currentMap.id] = [];
                 }
-                states = (object.isHero ? $game.heroStates : $game.startupStates
-                    )[$currentMap.id];
+                states = (object.isHero ? RPM.game.heroStates : RPM.game.startupStates
+                    )[RPM.currentMap.id];
                 EventCommandChangeState.addStateSpecial(states, this.idState
                     .getValue());
                 break;
@@ -414,9 +414,9 @@ EventCommandChangeState.prototype = {
                 break;
             }
         } else {
-            var portion = SceneMap.getGlobalPortion($currentMap.allObjects[object
+            var portion = SceneMap.getGlobalPortion(RPM.currentMap.allObjects[object
                 .system.id]);
-            var portionDatas = $game.mapsDatas[$currentMap.id][portion[0]][portion[
+            var portionDatas = RPM.game.mapsDatas[RPM.currentMap.id][portion[0]][portion[
                 1]][portion[2]];
             var indexState = portionDatas.si.indexOf(object.system.id);
             if (indexState === -1){
@@ -499,8 +499,8 @@ function EventCommandSendEvent(command) {
     this.eventId = command[i++];
 
     // Parameters
-    var events = this.isSystem ? $datasGame.commonEvents.eventsSystem :
-                                 $datasGame.commonEvents.eventsUser;
+    var events = this.isSystem ? RPM.datasGame.commonEvents.eventsSystem :
+                                 RPM.datasGame.commonEvents.eventsUser;
     var parameters = events[this.eventId].parameters;
     this.parameters = [];
     while (i < l) {
@@ -557,13 +557,13 @@ EventCommandSendEvent.sendEvent = function(sender, targetKind, idTarget,
                 .states);
         } else if (idTarget === 0) {
             // Send to the hero
-            $game.hero.receiveEvent(sender, isSystem, idEvent, parameters, $game
+            RPM.game.hero.receiveEvent(sender, isSystem, idEvent, parameters, RPM.game
                 .heroStates);
         } else {
-            $currentMap.updatePortions(this, function(x, y, z, i, j, k) {
+            RPM.currentMap.updatePortions(this, function(x, y, z, i, j, k) {
                 var a, l, objects, object, mapPortion;
 
-                objects = $game.mapsDatas[$currentMap.id][x][y][z];
+                objects = RPM.game.mapsDatas[RPM.currentMap.id][x][y][z];
 
                 // Moved objects
                 for (a = 0, l = objects.min.length; a < l; a++) {
@@ -584,7 +584,7 @@ EventCommandSendEvent.sendEvent = function(sender, targetKind, idTarget,
                 }
 
                 // Static
-                mapPortion = $currentMap.getMapPortion(i, j, k);
+                mapPortion = RPM.currentMap.getMapPortion(i, j, k);
                 if (mapPortion) {
                     for (a = 0, l = mapPortion.objectsList.length; a < l; a++) {
                         object = mapPortion.objectsList[a];
@@ -595,8 +595,8 @@ EventCommandSendEvent.sendEvent = function(sender, targetKind, idTarget,
                         }
                     }
                     if (mapPortion.heroID === idTarget) {
-                        $game.hero.receiveEvent(sender, isSystem, idEvent,
-                            parameters, $game.heroStates);
+                        RPM.game.hero.receiveEvent(sender, isSystem, idEvent,
+                            parameters, RPM.game.heroStates);
                     }
                 }
             });
@@ -612,8 +612,8 @@ EventCommandSendEvent.sendEventDetection = function(
 {
     var objects;
 
-    $currentMap.updatePortions(this, function(x, y, z, i, j, k) {
-        objects = $game.mapsDatas[$currentMap.id][x][y][z];
+    RPM.currentMap.updatePortions(this, function(x, y, z, i, j, k) {
+        objects = RPM.game.mapsDatas[RPM.currentMap.id][x][y][z];
 
         // Moved objects
         EventCommandSendEvent.sendEventObjects(objects.min, objects,
@@ -624,7 +624,7 @@ EventCommandSendEvent.sendEventDetection = function(
                                               parameters, senderNoReceiver);
 
         // Static
-        var mapPortion = $currentMap.getMapPortion(i, j, k);
+        var mapPortion = RPM.currentMap.getMapPortion(i, j, k);
         if (mapPortion) {
             EventCommandSendEvent.sendEventObjects(mapPortion.objectsList,
                                                   objects, sender, idTarget,
@@ -634,17 +634,17 @@ EventCommandSendEvent.sendEventDetection = function(
     });
 
     // And the hero!
-    if (!senderNoReceiver || sender !== $game.hero) {
+    if (!senderNoReceiver || sender !== RPM.game.hero) {
         if (idTarget !== -1) {
             // Check according to detection model
-            if (!$datasGame.system.detections[idTarget].checkCollision(sender,
-                $game.hero))
+            if (!RPM.datasGame.system.detections[idTarget].checkCollision(sender,
+                RPM.game.hero))
             {
                 return;
             }
         }
 
-        $game.hero.receiveEvent(sender, isSystem, idEvent, parameters, $game
+        RPM.game.hero.receiveEvent(sender, isSystem, idEvent, parameters, RPM.game
             .heroStates);
     }
 }
@@ -667,7 +667,7 @@ EventCommandSendEvent.sendEventObjects = function(
 
         if (idTarget !== -1) {
             // Check according to detection model
-            if (!$datasGame.system.detections[idTarget].checkCollision(sender,
+            if (!RPM.datasGame.system.detections[idTarget].checkCollision(sender,
                 object))
             {
                 continue;
@@ -836,12 +836,12 @@ EventCommandTeleportObject.prototype = {
 
                         // If hero set the current map
                         if (moved.isHero) {
-                            $game.hero.position = currentState.position;
-                            if ($currentMap.id !== id) {
-                                $currentMap.closeMap();
-                                $gameStack.replace(new SceneMap(id));
+                            RPM.game.hero.position = currentState.position;
+                            if (RPM.currentMap.id !== id) {
+                                RPM.currentMap.closeMap();
+                                RPM.gameStack.replace(new SceneMap(id));
                             } else {
-                                $currentMap.loadPortions(true);
+                                RPM.currentMap.loadPortions(true);
                             }
                         }
                     }
@@ -1001,14 +1001,14 @@ EventCommandMoveObject.prototype = {
         }
 
         var angle = this.isCameraOrientation ?
-                    $currentMap.camera.horizontalAngle : -90.0;
+                    RPM.currentMap.camera.horizontalAngle : -90.0;
 
         if (currentState.position === null && square) {
             var position;
 
             position = object.position;
             currentState.position = object.getFuturPosition(orientation,
-                $SQUARE_SIZE, angle);
+                RPM.SQUARE_SIZE, angle);
             if (position.equals(currentState.position)) {
                 object.move(orientation, 0, angle, this.isCameraOrientation);
                 this.moveFrequency(object);
@@ -1034,12 +1034,12 @@ EventCommandMoveObject.prototype = {
             object.otherMoveCommand = this;
         }
 
-        var distances = object.move(orientation, $SQUARE_SIZE - currentState
+        var distances = object.move(orientation, RPM.SQUARE_SIZE - currentState
             .distance, angle, this.isCameraOrientation);
         currentState.distance += distances[0];
         currentState.normalDistance += distances[1];
-        if (!square || (square && currentState.normalDistance >= $SQUARE_SIZE &&
-            this.isIgnore) || (square && currentState.distance >= $SQUARE_SIZE
+        if (!square || (square && currentState.normalDistance >= RPM.SQUARE_SIZE &&
+            this.isIgnore) || (square && currentState.distance >= RPM.SQUARE_SIZE
             || (distances[0] === 0)))
         {
             if (square && currentState.distance === currentState.normalDistance)
@@ -1294,8 +1294,8 @@ EventCommandMoveObject.prototype = {
     getHeroOrientation: function(object) {
         var xDif, zDif;
 
-        xDif = object.position.x - $game.hero.position.x;
-        zDif = object.position.z - $game.hero.position.z;
+        xDif = object.position.x - RPM.game.hero.position.x;
+        zDif = object.position.z - RPM.game.hero.position.z;
         if (Math.abs(xDif) > Math.abs(zDif)) {
             if (xDif > 0) {
                 return Orientation.West;
@@ -1513,30 +1513,30 @@ EventCommandMoveCamera.prototype = {
     */
     initialize: function(){
         var time = this.time.getValue() * 1000;
-        var operation = $operators_numbers[this.operation];
-        var finalX = operation($currentMap.camera.threeCamera.position.x,
+        var operation = RPM.operators_numbers[this.operation];
+        var finalX = operation(RPM.currentMap.camera.threeCamera.position.x,
                                this.x.getValue() *
-                               (this.xSquare ? $SQUARE_SIZE : 1));
-        var finalY = operation($currentMap.camera.threeCamera.position.y,
+                               (this.xSquare ? RPM.SQUARE_SIZE : 1));
+        var finalY = operation(RPM.currentMap.camera.threeCamera.position.y,
                                this.y.getValue() *
-                               (this.ySquare ? $SQUARE_SIZE : 1));
-        var finalZ = operation($currentMap.camera.threeCamera.position.z,
+                               (this.ySquare ? RPM.SQUARE_SIZE : 1));
+        var finalZ = operation(RPM.currentMap.camera.threeCamera.position.z,
                                this.z.getValue() *
-                               (this.zSquare ? $SQUARE_SIZE : 1));
-        var finalH = operation($currentMap.camera.horizontalAngle,
+                               (this.zSquare ? RPM.SQUARE_SIZE : 1));
+        var finalH = operation(RPM.currentMap.camera.horizontalAngle,
                                this.h.getValue());
-        var finalV = operation($currentMap.camera.verticalAngle,
+        var finalV = operation(RPM.currentMap.camera.verticalAngle,
                                this.v.getValue());
-        var finalDistance = operation($currentMap.camera.distance,
+        var finalDistance = operation(RPM.currentMap.camera.distance,
                                       this.distance.getValue());
 
         return {
             parallel: this.isWaitEnd,
             finalDifPosition: new THREE.Vector3(finalX, finalY, finalZ).sub(
-                                  $currentMap.camera.threeCamera.position),
-            finalDifH: finalH - $currentMap.camera.horizontalAngle,
-            finalDifV: finalV - $currentMap.camera.verticalAngle,
-            finalDistance: finalDistance - $currentMap.camera.distance,
+                                  RPM.currentMap.camera.threeCamera.position),
+            finalDifH: finalH - RPM.currentMap.camera.horizontalAngle,
+            finalDifV: finalV - RPM.currentMap.camera.verticalAngle,
+            finalDistance: finalDistance - RPM.currentMap.camera.distance,
             time: time,
             timeLeft: time
         }
@@ -1560,8 +1560,8 @@ EventCommandMoveCamera.prototype = {
             if (currentState.time === 0)
                 timeRate = 1;
             else {
-                dif = $elapsedTime;
-                currentState.timeLeft -= $elapsedTime;
+                dif = RPM.elapsedTime;
+                currentState.timeLeft -= RPM.elapsedTime;
                 if (currentState.timeLeft < 0) {
                     dif += currentState.timeLeft;
                     currentState.timeLeft = 0;
@@ -1576,28 +1576,28 @@ EventCommandMoveCamera.prototype = {
                 timeRate * currentState.finalDifPosition.y,
                 timeRate * currentState.finalDifPosition.z
             );
-            $currentMap.camera.threeCamera.position.add(positionOffset);
+            RPM.currentMap.camera.threeCamera.position.add(positionOffset);
             if (this.moveTargetOffset)
-                $currentMap.camera.targetOffset.add(positionOffset);
+                RPM.currentMap.camera.targetOffset.add(positionOffset);
             else {
-                $currentMap.camera.updateAngles();
-                $currentMap.camera.updateDistance();
+                RPM.currentMap.camera.updateAngles();
+                RPM.currentMap.camera.updateDistance();
             }
 
             // Rotation
-            $currentMap.camera.horizontalAngle +=
+            RPM.currentMap.camera.horizontalAngle +=
                     timeRate * currentState.finalDifH;
-            $currentMap.camera.addVerticalAngle(
+            RPM.currentMap.camera.addVerticalAngle(
                     timeRate * currentState.finalDifV);
             if (this.rotationTargetOffset)
-                $currentMap.camera.updateTargetOffset();
+                RPM.currentMap.camera.updateTargetOffset();
 
             // Zoom
-            $currentMap.camera.distance += timeRate *
+            RPM.currentMap.camera.distance += timeRate *
                     currentState.finalDistance;
 
             // Update
-            $currentMap.camera.update();
+            RPM.currentMap.camera.update();
 
             // If time = 0, then this is the end of the command
             if (currentState.timeLeft === 0)
@@ -1726,7 +1726,7 @@ EventCommandStopMusic.parseStopSong = function(that, command) {
 // -------------------------------------------------------
 
 EventCommandStopMusic.stopSong = function(that, kind, time) {
-    return $songsManager.stopSong(kind, time, that.seconds.getValue()) ? 1 : 0;
+    return RPM.songsManager.stopSong(kind, time, that.seconds.getValue()) ? 1 : 0;
 };
 
 // -------------------------------------------------------
@@ -1995,22 +1995,22 @@ EventCommandChangeProperty.prototype = {
         var propertyID, newValue, portion, portionDatas, indexProp, props;
 
         propertyID = this.propertyID.getValue();
-        newValue = $operators_numbers[this.operationKind](object.properties[
+        newValue = RPM.operators_numbers[this.operationKind](object.properties[
             propertyID], this.newValue.getValue());
         object.properties[propertyID] = newValue;
 
         if (object.isHero) {
-            props = $game.heroProperties;
+            props = RPM.game.heroProperties;
         } else if (object.isStartup) {
-            props = $game.startupProperties[$currentMap.id];
+            props = RPM.game.startupProperties[RPM.currentMap.id];
             if (typeof props === 'undefined') {
                 props = [];
-                $game.startupProperties[$currentMap.id] = props;
+                RPM.game.startupProperties[RPM.currentMap.id] = props;
             }
         } else {
-            portion = SceneMap.getGlobalPortion($currentMap.allObjects[object
+            portion = SceneMap.getGlobalPortion(RPM.currentMap.allObjects[object
                 .system.id]);
-            portionDatas = $game.mapsDatas[$currentMap.id][portion[0]][portion[
+            portionDatas = RPM.game.mapsDatas[RPM.currentMap.id][portion[0]][portion[
                 1]][portion[2]];
             indexProp = portionDatas.pi.indexOf(object.system.id);
             if (indexProp === -1) {
@@ -2080,7 +2080,7 @@ function EventCommandDisplayChoice(command) {
 
     // Window
     this.windowChoices = new WindowChoices(OrientationWindow.Vertical, (
-        $SCREEN_X - w) / 2, $SCREEN_Y - 10 - 150 - (l * RPM.MEDIUM_SLOT_HEIGHT),
+        RPM.SCREEN_X - w) / 2, RPM.SCREEN_Y - 10 - 150 - (l * RPM.MEDIUM_SLOT_HEIGHT),
         w, RPM.MEDIUM_SLOT_HEIGHT, l, graphics, null, RPM.SMALL_SLOT_PADDING);
 
     this.isDirectNode = true;
@@ -2094,7 +2094,7 @@ EventCommandDisplayChoice.prototype = {
 
         // Move to right if show text before
         if (showText) {
-            this.windowChoices.setX($SCREEN_X - this.windowChoices.oW - 10);
+            this.windowChoices.setX(RPM.SCREEN_X - this.windowChoices.oW - 10);
         }
     },
 
@@ -2129,11 +2129,11 @@ EventCommandDisplayChoice.prototype = {
     // -------------------------------------------------------
 
     onKeyPressed: function(currentState, key) {
-        if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
+        if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
             .Action))
         {
             currentState.index = this.windowChoices.currentSelectedIndex;
-        } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
+        } else if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard
             .menuControls.Cancel))
         {
             currentState.index = this.cancelAutoIndex.getValue() - 1;
@@ -2256,8 +2256,8 @@ function EventCommandDisplayAPicture(command) {
     this.index = SystemValue.createValue(k, v);
     this.centered = command[i++] === RPM.NUM_BOOL_TRUE;
     if (this.centered) {
-        this.originX = $SCREEN_X / 2;
-        this.originY = $SCREEN_Y / 2;
+        this.originX = RPM.SCREEN_X / 2;
+        this.originY = RPM.SCREEN_Y / 2;
     } else {
         this.originX = 0;
         this.originY = 0;
@@ -2292,7 +2292,7 @@ EventCommandDisplayAPicture.prototype.update = function(currentState, object,
     var i, l, index, currentIndex, value, picture, ok;
 
     currentIndex = this.index.getValue();
-    picture = $datasGame.pictures.get(PictureKind.Pictures, this.pictureID)
+    picture = RPM.datasGame.pictures.get(PictureKind.Pictures, this.pictureID)
         .picture.createCopy();
     picture.setX(this.originX - (this.centered ? (picture.oW / 2) : 0) + this.x
         .getValue());
@@ -2304,22 +2304,22 @@ EventCommandDisplayAPicture.prototype.update = function(currentState, object,
     picture.angle = this.angle.getValue();
     value = [currentIndex, picture];
     ok = false;
-    for (i = 0, l = $displayedPictures.length; i < l; i++) {
-        index = $displayedPictures[i][0];
+    for (i = 0, l = RPM.displayedPictures.length; i < l; i++) {
+        index = RPM.displayedPictures[i][0];
         if (currentIndex === index) {
-            $displayedPictures[i] = value;
+            RPM.displayedPictures[i] = value;
             ok = true;
             break;
         } else if (currentIndex < index) {
-            $displayedPictures.splice(i, 0, value);
+            RPM.displayedPictures.splice(i, 0, value);
             ok = true;
             break;
         }
     }
     if (!ok) {
-        $displayedPictures.push(value);
+        RPM.displayedPictures.push(value);
     }
-    $requestPaintHUD = true;
+    RPM.requestPaintHUD = true;
 
     return 1;
 }
@@ -2390,8 +2390,8 @@ EventCommandSetMoveTurnAPicture.prototype.initialize = function() {
 
     time = this.time.getValue() * 1000;
     index = this.index.getValue();
-    for (i = 0, l = $displayedPictures.length; i < l; i++) {
-        obj = $displayedPictures[i];
+    for (i = 0, l = RPM.displayedPictures.length; i < l; i++) {
+        obj = RPM.displayedPictures[i];
         if (index === obj[0]) {
             picture = obj[1];
             break;
@@ -2411,7 +2411,7 @@ EventCommandSetMoveTurnAPicture.prototype.initialize = function() {
             prevZoom = picture.zoom;
             prevOpacity = picture.opacity;
             prevAngle = picture.angle;
-            picture = $datasGame.pictures.get(PictureKind.Pictures, this
+            picture = RPM.datasGame.pictures.get(PictureKind.Pictures, this
                 .pictureID).picture.createCopy();
             if (prevCentered) {
                 prevX += (prevW - picture.oW) / 2;
@@ -2423,7 +2423,7 @@ EventCommandSetMoveTurnAPicture.prototype.initialize = function() {
             picture.zoom = prevZoom;
             picture.opacity = prevOpacity;
             picture.angle = prevAngle;
-            $displayedPictures[i][1] = picture;
+            RPM.displayedPictures[i][1] = picture;
         }
     } else {
         return {};
@@ -2436,9 +2436,9 @@ EventCommandSetMoveTurnAPicture.prototype.initialize = function() {
             null,
         finalDifOpacity: this.opacity ? (this.opacity.getValue() / 100) -
             picture.opacity : null,
-        finalDifX: this.x ? (picture.centered ? $SCREEN_X / 2 : 0) + this.x
+        finalDifX: this.x ? (picture.centered ? RPM.SCREEN_X / 2 : 0) + this.x
             .getValue() - picture.oX : null,
-        finalDifY: this.y ? (picture.centered ? $SCREEN_Y / 2 : 0) + this.y
+        finalDifY: this.y ? (picture.centered ? RPM.SCREEN_Y / 2 : 0) + this.y
             .getValue() - picture.oY : null,
         finalDifAngle: this.angle ? this.angle.getValue() - picture.angle : null,
         time: time,
@@ -2463,8 +2463,8 @@ EventCommandSetMoveTurnAPicture.prototype.update = function(currentState, object
         if (currentState.time === 0) {
             timeRate = 1;
         } else {
-            dif = $elapsedTime;
-            currentState.timeLeft -= $elapsedTime;
+            dif = RPM.elapsedTime;
+            currentState.timeLeft -= RPM.elapsedTime;
             if (currentState.timeLeft < 0) {
                 dif += currentState.timeLeft;
                 currentState.timeLeft = 0;
@@ -2496,7 +2496,7 @@ EventCommandSetMoveTurnAPicture.prototype.update = function(currentState, object
             currentState.picture.angle += timeRate * currentState.finalDifAngle;
         }
 
-        $requestPaintHUD = true;
+        RPM.requestPaintHUD = true;
 
         // If time = 0, then this is the end of the command
         if (currentState.timeLeft === 0) {
@@ -2537,13 +2537,13 @@ EventCommandRemoveAPicture.prototype.update = function(currentState, object,
     var i, l, currentIndex;
 
     currentIndex = this.index.getValue();
-    for (i = 0, l = $displayedPictures.length; i < l; i++) {
-        if (currentIndex === $displayedPictures[i][0]) {
-            $displayedPictures.splice(i, 1);
+    for (i = 0, l = RPM.displayedPictures.length; i < l; i++) {
+        if (currentIndex === RPM.displayedPictures[i][0]) {
+            RPM.displayedPictures.splice(i, 1);
             break;
         }
     }
-    $requestPaintHUD = true;
+    RPM.requestPaintHUD = true;
 
     return 1;
 }
@@ -2675,62 +2675,62 @@ EventCommandSetDialogBoxOptions.prototype.update = function(currentState, object
     , state)
 {
     if (!RPM.isUndefined(this.windowSkinID)) {
-        $datasGame.system.dbOptions.vwindowSkinID = this.windowSkinID.getValue();
+        RPM.datasGame.system.dbOptions.vwindowSkinID = this.windowSkinID.getValue();
     }
     if (!RPM.isUndefined(this.x)) {
-        $datasGame.system.dbOptions.vx = this.x.getValue();
+        RPM.datasGame.system.dbOptions.vx = this.x.getValue();
     }
     if (!RPM.isUndefined(this.y)) {
-        $datasGame.system.dbOptions.vy = this.y.getValue();
+        RPM.datasGame.system.dbOptions.vy = this.y.getValue();
     }
     if (!RPM.isUndefined(this.w)) {
-        $datasGame.system.dbOptions.vw = this.w.getValue();
+        RPM.datasGame.system.dbOptions.vw = this.w.getValue();
     }
     if (!RPM.isUndefined(this.h)) {
-        $datasGame.system.dbOptions.vh = this.h.getValue();
+        RPM.datasGame.system.dbOptions.vh = this.h.getValue();
     }
     if (!RPM.isUndefined(this.pLeft)) {
-        $datasGame.system.dbOptions.vpLeft = this.pLeft.getValue();
+        RPM.datasGame.system.dbOptions.vpLeft = this.pLeft.getValue();
     }
     if (!RPM.isUndefined(this.pTop)) {
-        $datasGame.system.dbOptions.vpTop = this.pTop.getValue();
+        RPM.datasGame.system.dbOptions.vpTop = this.pTop.getValue();
     }
     if (!RPM.isUndefined(this.pRight)) {
-        $datasGame.system.dbOptions.vpRight = this.pRight.getValue();
+        RPM.datasGame.system.dbOptions.vpRight = this.pRight.getValue();
     }
     if (!RPM.isUndefined(this.pBottom)) {
-        $datasGame.system.dbOptions.vpBottom = this.pBottom.getValue();
+        RPM.datasGame.system.dbOptions.vpBottom = this.pBottom.getValue();
     }
     if (!RPM.isUndefined(this.fPosAbove)) {
-        $datasGame.system.dbOptions.vfPosAbove = this.fPosAbove;
+        RPM.datasGame.system.dbOptions.vfPosAbove = this.fPosAbove;
     }
     if (!RPM.isUndefined(this.fX)) {
-        $datasGame.system.dbOptions.fX = this.fX.getValue();
+        RPM.datasGame.system.dbOptions.fX = this.fX.getValue();
     }
     if (!RPM.isUndefined(this.fY)) {
-        $datasGame.system.dbOptions.fY = this.fY.getValue();
+        RPM.datasGame.system.dbOptions.fY = this.fY.getValue();
     }
     if (!RPM.isUndefined(this.tOutline)) {
-        $datasGame.system.dbOptions.vtOutline = this.tOutline;
+        RPM.datasGame.system.dbOptions.vtOutline = this.tOutline;
     }
     if (!RPM.isUndefined(this.tcText)) {
-        $datasGame.system.dbOptions.vtcText = $datasGame.system.colors[this
+        RPM.datasGame.system.dbOptions.vtcText = RPM.datasGame.system.colors[this
             .tcText.getValue()];
     }
     if (!RPM.isUndefined(this.tcOutline)) {
-        $datasGame.system.dbOptions.vtcOutline = $datasGame.system.colors[this
+        RPM.datasGame.system.dbOptions.vtcOutline = RPM.datasGame.system.colors[this
             .tcOutline.getValue()];
     }
     if (!RPM.isUndefined(this.tcBackground)) {
-        $datasGame.system.dbOptions.vtcBackground = $datasGame.system.colors[
+        RPM.datasGame.system.dbOptions.vtcBackground = RPM.datasGame.system.colors[
             this.tcBackground.getValue()];
     }
     if (!RPM.isUndefined(this.tSize)) {
-        $datasGame.system.dbOptions.vtSize = $datasGame.system.fontSizes[this
+        RPM.datasGame.system.dbOptions.vtSize = RPM.datasGame.system.fontSizes[this
             .tSize.getValue()].getValue();
     }
     if (!RPM.isUndefined(this.tFont)) {
-        $datasGame.system.dbOptions.vtFont = $datasGame.system.fontNames[this
+        RPM.datasGame.system.dbOptions.vtFont = RPM.datasGame.system.fontNames[this
             .tFont.getValue()].getValue();
     }
 
@@ -2755,8 +2755,8 @@ EventCommandTitleScreen.prototype = Object.create(EventCommand.prototype);
 EventCommandTitleScreen.prototype.update = function(currentState, object,
     state)
 {
-    $gameStack.pop();
-    $gameStack.pushTitleScreen();
+    RPM.gameStack.pop();
+    RPM.gameStack.pushTitleScreen();
 
     return 1;
 }
@@ -2806,19 +2806,19 @@ EventCommandChangeScreenTone.prototype.initialize = function() {
     var time, color;
 
     time = this.time.getValue() * 1000;
-    color = this.colorID ? $datasGame.system.colors[this.colorID.getValue()] :
+    color = this.colorID ? RPM.datasGame.system.colors[this.colorID.getValue()] :
         null;
 
     return {
         parallel: this.waitEnd,
         finalDifRed: Math.max(Math.min((this.r.getValue() + (color ? color.red :
-            0)) / 255, 1), -1) - $screenTone.x,
+            0)) / 255, 1), -1) - RPM.screenTone.x,
         finalDifGreen: Math.max(Math.min((this.g.getValue() + (color ? color
-            .green : 0)) / 255, 1), -1) - $screenTone.y,
+            .green : 0)) / 255, 1), -1) - RPM.screenTone.y,
         finalDifBlue: Math.max(Math.min((this.b.getValue() + (color ? color.blue
-            : 0)) / 255, 1), -1) - $screenTone.z,
+            : 0)) / 255, 1), -1) - RPM.screenTone.z,
         finalDifGrey: Math.max(Math.min(1 - (this.grey.getValue() / 100), 1),
-            -1) - $screenTone.w,
+            -1) - RPM.screenTone.w,
         time: time,
         timeLeft: time
     }
@@ -2836,8 +2836,8 @@ EventCommandChangeScreenTone.prototype.update = function(currentState, object,
         if (currentState.time === 0) {
             timeRate = 1;
         } else {
-            dif = $elapsedTime;
-            currentState.timeLeft -= $elapsedTime;
+            dif = RPM.elapsedTime;
+            currentState.timeLeft -= RPM.elapsedTime;
             if (currentState.timeLeft < 0) {
                 dif += currentState.timeLeft;
                 currentState.timeLeft = 0;
@@ -2846,15 +2846,15 @@ EventCommandChangeScreenTone.prototype.update = function(currentState, object,
         }
 
         // Update values
-        $screenTone.setX($screenTone.x + (timeRate * currentState
+        RPM.screenTone.setX(RPM.screenTone.x + (timeRate * currentState
             .finalDifRed));
-        $screenTone.setY($screenTone.y + (timeRate * currentState
+        RPM.screenTone.setY(RPM.screenTone.y + (timeRate * currentState
             .finalDifGreen));
-        $screenTone.setZ($screenTone.z + (timeRate * currentState
+        RPM.screenTone.setZ(RPM.screenTone.z + (timeRate * currentState
             .finalDifBlue));
-        $screenTone.setW($screenTone.w + (timeRate * currentState
+        RPM.screenTone.setW(RPM.screenTone.w + (timeRate * currentState
             .finalDifGrey));
-        RPM.updateBackgroundColor($currentMap.mapInfos.backgroundColor);
+        RPM.updateBackgroundColor(RPM.currentMap.mapInfos.backgroundColor);
 
         // If time = 0, then this is the end of the command
         if (currentState.timeLeft === 0) {
@@ -2918,10 +2918,10 @@ EventCommandRemoveObjectFromMap.prototype.update = function(currentState, object
                     datas.m.splice(i, 1);
                     index = datas.min.indexOf(removed);
                     if (index === -1) {
-                        datas = $game.mapsDatas[$currentMap.id][Math.floor(
-                            removed.position.x / $PORTION_SIZE)][Math.floor(
-                            removed.position.y / $PORTION_SIZE)][Math.floor(
-                            removed.position.z / $PORTION_SIZE)];
+                        datas = RPM.game.mapsDatas[RPM.currentMap.id][Math.floor(
+                            removed.position.x / RPM.PORTION_SIZE)][Math.floor(
+                            removed.position.y / RPM.PORTION_SIZE)][Math.floor(
+                            removed.position.z / RPM.PORTION_SIZE)];
                         datas.mout.splice(datas.mout.indexOf(removed), 1);
                     } else {
                         datas.min.splice(index, 1);
@@ -2986,7 +2986,7 @@ EventCommandAllowForbidSaves.prototype = Object.create(EventCommand.prototype);
 EventCommandAllowForbidSaves.prototype.update = function(currentState, object,
     state)
 {
-    $allowSaves = this.allow.getValue();
+    RPM.allowSaves = this.allow.getValue();
 
     return 1;
 }
@@ -3014,7 +3014,7 @@ EventCommandAllowForbidMainMenu.prototype = Object.create(EventCommand.prototype
 EventCommandAllowForbidMainMenu.prototype.update = function(currentState, object
     , state)
 {
-    $allowMainMenu = this.allow.getValue();
+    RPM.allowMainMenu = this.allow.getValue();
 
     return 1;
 }
@@ -3059,7 +3059,7 @@ EventCommandCallACommonReaction.prototype.update = function(currentState, object
     if (!currentState.interpreter) {
         var id, reaction, k, v, parameter;
 
-        reaction = $datasGame.commonEvents.commonReactions[this.commonReactionID];
+        reaction = RPM.datasGame.commonEvents.commonReactions[this.commonReactionID];
 
         // Correct parameters for default values
         for (id in reaction.parameters) {
@@ -3077,12 +3077,12 @@ EventCommandCallACommonReaction.prototype.update = function(currentState, object
             this.parameters[id] = parameter;
         }
 
-        currentState.interpreter = new ReactionInterpreter(object, $datasGame
+        currentState.interpreter = new ReactionInterpreter(object, RPM.datasGame
             .commonEvents.commonReactions[this.commonReactionID], null, null,
             this.parameters);
     }
 
-    $blockingHero = currentState.interpreter.currentReaction.blockingHero;
+    RPM.blockingHero = currentState.interpreter.currentReaction.blockingHero;
     currentState.interpreter.update();
     if (currentState.interpreter.isFinished()) {
         currentState.interpreter.updateFinish();

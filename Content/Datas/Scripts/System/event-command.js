@@ -204,21 +204,21 @@ EventCommandShowText.prototype = {
     *   @returns {Object} The current state (clicked).
     */
     initialize: function() {
-        this.windowMain.setX(RPM.defaultValue($datasGame.system.dbOptions.vx, 0));
-        this.windowMain.setY(RPM.defaultValue($datasGame.system.dbOptions.vy, 0));
-        this.windowMain.setW(RPM.defaultValue($datasGame.system.dbOptions.vw, 0));
-        this.windowMain.setH(RPM.defaultValue($datasGame.system.dbOptions.vh, 0));
+        this.windowMain.setX(RPM.defaultValue(RPM.datasGame.system.dbOptions.vx, 0));
+        this.windowMain.setY(RPM.defaultValue(RPM.datasGame.system.dbOptions.vy, 0));
+        this.windowMain.setW(RPM.defaultValue(RPM.datasGame.system.dbOptions.vw, 0));
+        this.windowMain.setH(RPM.defaultValue(RPM.datasGame.system.dbOptions.vh, 0));
         this.windowInterlocutor.setX(this.windowMain.oX + (RPM
             .MEDIUM_SLOT_HEIGHT / 2));
         this.windowInterlocutor.setY(this.windowMain.oY - (RPM
             .MEDIUM_SLOT_HEIGHT / 2));
-        this.windowMain.padding[0] = RPM.defaultValue($datasGame.system
+        this.windowMain.padding[0] = RPM.defaultValue(RPM.datasGame.system
             .dbOptions.vpLeft, 0);
-        this.windowMain.padding[1] = RPM.defaultValue($datasGame.system
+        this.windowMain.padding[1] = RPM.defaultValue(RPM.datasGame.system
             .dbOptions.vpTop, 0);
-        this.windowMain.padding[2] = RPM.defaultValue($datasGame.system
+        this.windowMain.padding[2] = RPM.defaultValue(RPM.datasGame.system
             .dbOptions.vpRight, 0);
-        this.windowMain.padding[3] = RPM.defaultValue($datasGame.system
+        this.windowMain.padding[3] = RPM.defaultValue(RPM.datasGame.system
             .dbOptions.vpBottom, 0);
         this.windowMain.updateDimensions();
         this.windowMain.content.update();
@@ -242,11 +242,11 @@ EventCommandShowText.prototype = {
     update: function(currentState, object, state){
         if (currentState.clicked)
             return 1;
-        currentState.frameTick += $elapsedTime;
+        currentState.frameTick += RPM.elapsedTime;
         if (currentState.frameTick >= currentState.frameDuration) {
-            currentState.frame = (currentState.frame + 1) % $FRAMES;
+            currentState.frame = (currentState.frame + 1) % RPM.FRAMES;
             currentState.frameTick = 0;
-            $requestPaintHUD = true;
+            RPM.requestPaintHUD = true;
         }
         this.windowInterlocutor.content.setText(this.interlocutor.getValue());
 
@@ -261,7 +261,7 @@ EventCommandShowText.prototype = {
     */
     onKeyPressed: function(currentState, key){
         if (DatasKeyBoard.isKeyEqual(key,
-                                     $datasGame.keyBoard.menuControls.Action))
+                                     RPM.datasGame.keyBoard.menuControls.Action))
         {
             currentState.clicked = true;
         }
@@ -283,7 +283,7 @@ EventCommandShowText.prototype = {
         }
 
         if (currentState) {
-            $datasGame.system.getWindowSkin().drawArrowMessage(currentState
+            RPM.datasGame.system.getWindowSkin().drawArrowMessage(currentState
                 .frame, this.windowMain.oX + (this.windowMain.oW / 2), this
                 .windowMain.oY + (this.windowMain.oH - 40));
         }
@@ -418,8 +418,8 @@ EventCommandChangeVariables.prototype = {
             var i, l;
 
             for (i = 0, l = this.nbSelection; i < l; i++) {
-                $game.variables[this.selection + i] = $operators_numbers[this
-                    .operation]($game.variables[this.selection + i],
+                RPM.game.variables[this.selection + i] = RPM.operators_numbers[this
+                    .operation](RPM.game.variables[this.selection + i],
                     currentState.value);
             }
         }
@@ -464,7 +464,7 @@ EventCommandEndGame.prototype = {
     *   @returns {number} The number of node to pass.
     */
     update: function(currentState, object, state){
-        quit();
+        Platform.quit();
     },
 
     // -------------------------------------------------------
@@ -596,7 +596,7 @@ EventCommandInputNumber.prototype = {
     */
     update: function(currentState, object, state){
         if (currentState.confirmed){
-            $datasGame.variables[this.id] = currentState.entered;
+            RPM.datasGame.variables[this.id] = currentState.entered;
             return 1;
         }
 
@@ -628,7 +628,7 @@ EventCommandInputNumber.prototype = {
     *   @param {Object} currentState The current state of the event.
     */
     drawHUD: function(currentState){
-        $context.fillText(currentState.entered, $canvasWidth / 2, $canvasHeight
+        Platform.ctx.fillText(currentState.entered, RPM.canvasWidth / 2, RPM.canvasHeight
             / 2);
     }
 }
@@ -867,16 +867,16 @@ EventCommandIf.prototype = {
 
         switch (this.kind) {
         case 0: // Variable / Param / Prop
-            result = $operators_compare[this.variableParamPropOperationKind](
+            result = RPM.operators_compare[this.variableParamPropOperationKind](
                 this.variableParamProp.getValue(), this.variableParamPropValue
                 .getValue());
             break;
         case 1:
             if (this.heroesInTeam) {
-                heroesSelection = $game.getTeam(this.heroesInTeamSelection);
+                heroesSelection = RPM.game.getTeam(this.heroesInTeamSelection);
             } else {
-                heroesSelection = $game.teamHeroes.concat($game.reserveHeroes);
-                heroesSelection.concat($game.hiddenHeroes);
+                heroesSelection = RPM.game.teamHeroes.concat(RPM.game.reserveHeroes);
+                heroesSelection.concat(RPM.game.hiddenHeroes);
             }
 
             switch (this.heroesKind) {
@@ -891,7 +891,7 @@ EventCommandIf.prototype = {
             case 1:
                 var tab;
 
-                tab = $game.getTeam(this.heroesInTeamValue);
+                tab = RPM.game.getTeam(this.heroesInTeamValue);
                 result = this.getResult(heroesSelection, function(hero) {
                     id = hero.instid;
                     for (i = 0, l = tab.length; i < l; i++) {
@@ -949,46 +949,46 @@ EventCommandIf.prototype = {
                 // TODO
                 break;
             case 5:
-                data = $datasGame.battleSystem.statistics[this.heroesStatisticID
+                data = RPM.datasGame.battleSystem.statistics[this.heroesStatisticID
                     .getValue()];
                 value = this.heroesStatisticValue.getValue();
                 result = this.getResult(heroesSelection, function(hero) {
-                    return $operators_compare[this.heroesStatisticOperation](
+                    return RPM.operators_compare[this.heroesStatisticOperation](
                         hero[data.abbreviation], value);
                 });
                 break;
             }
             break;
         case 2:
-            result = $operators_compare[this.operationCurrency]($game.currencies
+            result = RPM.operators_compare[this.operationCurrency](RPM.game.currencies
                 [this.currencyID.getValue()], this.currencyValue.getValue());
             break;
         case 3:
             nb = 0;
             id = this.itemID.getValue();
-            for (i = 0, l = $game.items.length; i < l; i++) {
-                data = $game.items[i];
+            for (i = 0, l = RPM.game.items.length; i < l; i++) {
+                data = RPM.game.items[i];
                 if (data.k === ItemKind.Item && data.id === id) {
                     nb = data.nb;
                     break;
                 }
             }
-            result = $operators_compare[this.operationItem](nb, this.itemValue
+            result = RPM.operators_compare[this.operationItem](nb, this.itemValue
                 .getValue());
             break;
         case 4:
             nb = 0;
             id = this.weaponID.getValue();
-            for (i = 0, l = $game.items.length; i < l; i++) {
-                data = $game.items[i];
+            for (i = 0, l = RPM.game.items.length; i < l; i++) {
+                data = RPM.game.items[i];
                 if (data.k === ItemKind.Weapon && data.id === id) {
                     nb = data.nb;
                     break;
                 }
             }
             if (this.weaponEquiped) {
-                heroesSelection = $game.teamHeroes.concat($game.reserveHeroes);
-                heroesSelection.concat($game.hiddenHeroes);
+                heroesSelection = RPM.game.teamHeroes.concat(RPM.game.reserveHeroes);
+                heroesSelection.concat(RPM.game.hiddenHeroes);
                 for (i = 0, l = heroesSelection.length; i < l; i++) {
                     h = heroesSelection[i];
                     for (j = 0, ll = h.equip.length; j < ll; j++) {
@@ -1001,22 +1001,22 @@ EventCommandIf.prototype = {
                     }
                 }
             }
-            result = $operators_compare[this.operationWeapon](nb, this
+            result = RPM.operators_compare[this.operationWeapon](nb, this
                 .weaponValue.getValue());
             break;
         case 5:
             nb = 0;
             id = this.armorID.getValue();
-            for (i = 0, l = $game.items.length; i < l; i++) {
-                data = $game.items[i];
+            for (i = 0, l = RPM.game.items.length; i < l; i++) {
+                data = RPM.game.items[i];
                 if (data.k === ItemKind.Armor && data.id === id) {
                     nb = data.nb;
                     break;
                 }
             }
             if (this.armorEquiped) {
-                heroesSelection = $game.teamHeroes.concat($game.reserveHeroes);
-                heroesSelection.concat($game.hiddenHeroes);
+                heroesSelection = RPM.game.teamHeroes.concat(RPM.game.reserveHeroes);
+                heroesSelection.concat(RPM.game.hiddenHeroes);
                 for (i = 0, l = heroesSelection.length; i < l; i++) {
                     h = heroesSelection[i];
                     for (j = 0, ll = h.equip.length; j < ll; j++) {
@@ -1029,15 +1029,15 @@ EventCommandIf.prototype = {
                     }
                 }
             }
-            result = $operators_compare[this.operationArmor](nb, this.armorValue
+            result = RPM.operators_compare[this.operationArmor](nb, this.armorValue
                 .getValue());
             break;
         case 6:
-            data = $datasGame.keyBoard.list[this.keyID.getValue()];
+            data = RPM.datasGame.keyBoard.list[this.keyID.getValue()];
             value = this.keyValue.getValue();
             result = !value;
-            for (i = 0, l = $keysPressed.length; i < l; i++) {
-                if (DatasKeyBoard.isKeyEqual($keysPressed[i], data)) {
+            for (i = 0, l = RPM.keysPressed.length; i < l; i++) {
+                if (DatasKeyBoard.isKeyEqual(RPM.keysPressed[i], data)) {
                     result = value;
                     break;
                 }
@@ -1161,10 +1161,10 @@ EventCommandOpenMainMenu.prototype = {
     *   @returns {number} The number of node to pass.
     */
     update: function(currentState, object, state) {
-        if (!$allowMainMenu || currentState.opened) {
+        if (!RPM.allowMainMenu || currentState.opened) {
             return 1;
         }
-        $gameStack.push(new SceneMenu());
+        RPM.gameStack.push(new SceneMenu());
         currentState.opened = true;
 
         return 0;
@@ -1216,10 +1216,10 @@ EventCommandOpenSavesMenu.prototype = {
     *   @returns {number} The number of node to pass.
     */
     update: function(currentState, object, state) {
-        if (!$allowSaves || currentState.opened) {
+        if (!RPM.allowSaves || currentState.opened) {
             return 1;
         }
-        $gameStack.push(new SceneSaveGame());
+        RPM.gameStack.push(new SceneSaveGame());
         currentState.opened = true;
 
         return 0;
@@ -1359,16 +1359,16 @@ EventCommandModifyTeam.instanciateTeam = function(where, type, id, level,
 {
 
     // Stock the instanciation id in a variable
-    $game.variables[stockId] = $game.charactersInstances;
+    RPM.game.variables[stockId] = RPM.game.charactersInstances;
 
     // Adding the instanciated character in the right group
-    var player = new GamePlayer(type, id, $game.charactersInstances++, []);
+    var player = new GamePlayer(type, id, RPM.game.charactersInstances++, []);
     player.instanciate(level);
     var group;
     switch(where){
-    case 0: group = $game.teamHeroes; break;
-    case 1: group = $game.reserveHeroes; break;
-    case 2: group = $game.hiddenHeroes; break;
+    case 0: group = RPM.game.teamHeroes; break;
+    case 1: group = RPM.game.reserveHeroes; break;
+    case 2: group = RPM.game.hiddenHeroes; break;
     }
 
     group.push(player);
@@ -1387,8 +1387,8 @@ EventCommandModifyTeam.prototype = {
     */
     addRemove: function(kind, id, where) {
         // Serching for the id
-        var groups = [$game.teamHeroes, $game.reserveHeroes,
-                      $game.hiddenHeroes];
+        var groups = [RPM.game.teamHeroes, RPM.game.reserveHeroes,
+                      RPM.game.hiddenHeroes];
         var group = null;
         var player;
         var i, j, l, ll;

@@ -129,7 +129,7 @@ Camera.prototype = {
 
     updateView: function() {
         this.threeCamera.lookAt(this.targetPosition);
-        $currentMap.orientation = this.getMapOrientation();
+        RPM.currentMap.orientation = this.getMapOrientation();
     },
 
     /** Update the camera angle.

@@ -23,8 +23,8 @@ function SceneKeyboardAssign() {
     SceneGame.call(this);
 
     // Creating background
-    if ($datasGame.titlescreenGameover.isTitleBackgroundImage) {
-        this.pictureBackground = Picture2D.createImageWithID($datasGame
+    if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage) {
+        this.pictureBackground = Picture2D.createImageWithID(RPM.datasGame
             .titlescreenGameover.titleBackgroundImageID, PictureKind.TitleScreen);
         this.pictureBackground.cover = true;
     }
@@ -34,17 +34,17 @@ function SceneKeyboardAssign() {
         .MEDIUM_SLOT_WIDTH, RPM.LARGE_SLOT_HEIGHT, new GraphicText("KEYBOARD", {
         align: Align.Center }), RPM.SMALL_SLOT_PADDING);
     this.windowInformations = new WindowBox(RPM.HUGE_SPACE + RPM
-        .MEDIUM_SLOT_WIDTH + RPM.LARGE_SPACE, RPM.HUGE_SPACE, $SCREEN_X - (2 *
+        .MEDIUM_SLOT_WIDTH + RPM.LARGE_SPACE, RPM.HUGE_SPACE, RPM.SCREEN_X - (2 *
         RPM.HUGE_SPACE) - RPM.MEDIUM_SLOT_WIDTH - RPM.LARGE_SPACE, RPM
         .LARGE_SLOT_HEIGHT, new GraphicText("Select a keyboard shortcut to edit."
         , { align: Align.Center }), RPM.SMALL_SLOT_PADDING);
     this.windowChoicesMain = new WindowChoices(OrientationWindow.Vertical, RPM
         .HUGE_SPACE, RPM.HUGE_SPACE + RPM.LARGE_SLOT_HEIGHT + RPM.LARGE_SPACE,
-        $SCREEN_X - (2 * RPM.HUGE_SPACE), RPM.MEDIUM_SLOT_HEIGHT, 9, $datasGame
-        .keyBoard.getCommandsGraphics(), $datasGame.keyBoard.getCommandsActions()
+        RPM.SCREEN_X - (2 * RPM.HUGE_SPACE), RPM.MEDIUM_SLOT_HEIGHT, 9, RPM.datasGame
+        .keyBoard.getCommandsGraphics(), RPM.datasGame.keyBoard.getCommandsActions()
         , RPM.SMALL_SLOT_PADDING, 0, 0, false);
-    this.windowPress = new WindowBox(($SCREEN_X / 2) - (SceneKeyboardAssign
-        .WINDOW_PRESS_WIDTH / 2), ($SCREEN_Y / 2) - (SceneKeyboardAssign
+    this.windowPress = new WindowBox((RPM.SCREEN_X / 2) - (SceneKeyboardAssign
+        .WINDOW_PRESS_WIDTH / 2), (RPM.SCREEN_Y / 2) - (SceneKeyboardAssign
         .WINDOW_PRESS_HEIGHT / 2), SceneKeyboardAssign.WINDOW_PRESS_WIDTH,
         SceneKeyboardAssign.WINDOW_PRESS_HEIGHT, null, RPM.DIALOG_PADDING_BOX);
 
@@ -76,11 +76,11 @@ SceneKeyboardAssign.prototype = {
                     this.windowChoicesMain.getCurrentContent().updateShort(this
                         .originalSC);
                 } else {
-                    $settings.updateKeyboard(this.windowChoicesMain
+                    RPM.settings.updateKeyboard(this.windowChoicesMain
                         .getCurrentContent().kb.id, this.currentSC);
                 }
 
-                $requestPaintHUD = true;
+                RPM.requestPaintHUD = true;
             }
         }
     },
@@ -121,12 +121,12 @@ SceneKeyboardAssign.prototype = {
         } else {
             this.windowChoicesMain.onKeyPressed(key, this);
 
-            if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
-                .Cancel) || DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
+            if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
+                .Cancel) || DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard
                 .MainMenu))
             {
-                $datasGame.system.soundCancel.playSound();
-                $gameStack.pop();
+                RPM.datasGame.system.soundCancel.playSound();
+                RPM.gameStack.pop();
             }
         }
     },
@@ -166,7 +166,7 @@ SceneKeyboardAssign.prototype = {
     // -------------------------------------------------------
 
     drawHUD: function() {
-        if ($datasGame.titlescreenGameover.isTitleBackgroundImage) {
+        if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage) {
             this.pictureBackground.draw();
         }
         this.windowKeyboard.draw();

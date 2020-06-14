@@ -42,7 +42,7 @@ SystemHero.prototype = {
     // -------------------------------------------------------
 
     check: function() {
-        if (!$datasGame.classes.list[this.idClass]) {
+        if (!RPM.datasGame.classes.list[this.idClass]) {
             RPM.showErrorMessage("Can't find class with ID " + RPM.formatNumber(
                 this.idClass, 4) + " for " + (this.rewards ? "monster" : "hero")
                 + " " + this.name + ", check it in datasbase.");
@@ -52,28 +52,28 @@ SystemHero.prototype = {
     // -------------------------------------------------------
 
     getProperty: function(prop) {
-        return $datasGame.classes.list[this.idClass].getProperty(prop,
+        return RPM.datasGame.classes.list[this.idClass].getProperty(prop,
             this.classInherit);
     },
 
     // -------------------------------------------------------
 
     getExperienceTable: function() {
-        return $datasGame.classes.list[this.idClass].getExperienceTable(this
+        return RPM.datasGame.classes.list[this.idClass].getExperienceTable(this
             .classInherit);
     },
 
     // -------------------------------------------------------
 
     getStatisticsProgression: function() {
-        return $datasGame.classes.list[this.idClass].getStatisticsProgression(
+        return RPM.datasGame.classes.list[this.idClass].getStatisticsProgression(
             this.classInherit);
     },
 
     // -------------------------------------------------------
 
     getSkills: function(upClass) {
-        return $datasGame.classes.list[this.idClass].getSkills(this.classInherit);
+        return RPM.datasGame.classes.list[this.idClass].getSkills(this.classInherit);
     },
 
     // -------------------------------------------------------

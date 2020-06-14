@@ -31,7 +31,7 @@ GameStack.prototype = {
     */
     push: function(scene) {
         this.content.push(scene);
-        $requestPaintHUD = true;
+        RPM.requestPaintHUD = true;
     },
 
     // -------------------------------------------------------
@@ -40,7 +40,7 @@ GameStack.prototype = {
     *   @returns {SceneGame} The last scene that is removed.
     */
     pop: function() {
-        $requestPaintHUD = true;
+        RPM.requestPaintHUD = true;
         return this.content.pop();
     },
 
@@ -189,8 +189,8 @@ GameStack.prototype = {
             this.top().drawHUD();
 
             // Display image command
-            for (i = 0, l = $displayedPictures.length; i < l; i++) {
-                $displayedPictures[i][1].draw();
+            for (i = 0, l = RPM.displayedPictures.length; i < l; i++) {
+                RPM.displayedPictures[i][1].draw();
             }
         }
     }

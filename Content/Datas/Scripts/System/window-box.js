@@ -132,19 +132,19 @@ WindowBox.prototype = {
             }
 
             // Draw box
-            $datasGame.system.getWindowSkin().drawBox(windowDimension, this
+            RPM.datasGame.system.getWindowSkin().drawBox(windowDimension, this
                 .selected, this.bordersVisible);
 
             // Draw content
             if (this.content !== null) {
                 if (!isChoice && this.limitContent) {
-                    $context.save();
-                    $context.beginPath();
-                    $context.rect(RPM.getScreenX(contentDimension[0]), RPM
+                    Platform.ctx.save();
+                    Platform.ctx.beginPath();
+                    Platform.ctx.rect(RPM.getScreenX(contentDimension[0]), RPM
                         .getScreenY(contentDimension[1] - (this.padding[3] / 2))
                         , RPM.getScreenX(contentDimension[2]), RPM.getScreenY(
                         contentDimension[3] + this.padding[3]));
-                    $context.clip();
+                    Platform.ctx.clip();
                 }
                 if (isChoice){
                     this.content.draw(
@@ -162,7 +162,7 @@ WindowBox.prototype = {
                     );
                 }
                 if (this.limitContent) {
-                    $context.restore();
+                    Platform.ctx.restore();
                 }
             }
         }

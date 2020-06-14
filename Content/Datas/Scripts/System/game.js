@@ -31,8 +31,8 @@
 */
 function Game() {
     this.currentSlot = -1;
-    this.hero = new MapObject($modelHero.system, new THREE.Vector3($modelHero
-        .position.x, $modelHero.position.y, $modelHero.position.z), true);
+    this.hero = new MapObject(RPM.modelHero.system, new THREE.Vector3(RPM.modelHero
+        .position.x, RPM.modelHero.position.y, RPM.modelHero.position.z), true);
 }
 
 Game.getHeroInstanceInTab = function(tab, id) {
@@ -71,15 +71,14 @@ Game.prototype = {
     /** Initialize a default game.
     */
     initializeDefault: function(){
-        this.playTime = 0;
         this.teamHeroes = [];
         this.reserveHeroes = [];
         this.hiddenHeroes = [];
         this.items = [];
-        this.currencies = $datasGame.system.getDefaultCurrencies();
+        this.currencies = RPM.datasGame.system.getDefaultCurrencies();
         this.charactersInstances = 0;
         this.initializeVariables();
-        this.currentMapId = $datasGame.system.idMapStartHero;
+        this.currentMapId = RPM.datasGame.system.idMapStartHero;
         this.heroStates = [1];
         this.heroProperties = [];
         this.startupStates = {};
@@ -88,6 +87,7 @@ Game.prototype = {
                                                CharacterKind.Hero, 1, 1, 1);
         this.mapsDatas = {};
         this.hero.initializeProperties();
+        this.playTime = new Chrono(0);
     },
 
     // -------------------------------------------------------
@@ -95,8 +95,8 @@ Game.prototype = {
     /** Initialize the default variables.
     */
     initializeVariables: function(){
-        this.variables = new Array($datasGame.variablesNumbers);
-        for (var i = 0; i < $datasGame.variablesNumbers; i++)
+        this.variables = new Array(RPM.datasGame.variablesNumbers);
+        for (var i = 0; i < RPM.datasGame.variablesNumbers; i++)
             this.variables[i] = null;
     },
 
@@ -132,7 +132,7 @@ Game.prototype = {
     */
     read: function(slot, json){
         this.currentSlot = slot;
-        this.playTime = json.t;
+        this.playTime = new Chrono(json.t);
         this.charactersInstances = json.inst;
         this.variables = json.vars;
 
@@ -227,7 +227,7 @@ Game.prototype = {
             var jsonList = JSON.parse(res);
             jsonList[slot - 1] =
             {
-                t: this.playTime,
+                t: this.playTime.time,
                 th: teamHeroes,
                 sh: reserveHeroes,
                 hh: hiddenHeroes,

@@ -74,7 +74,7 @@ function SceneBattle(troopID, canGameOver, canEscape, battleMap, transitionStart
     this.transitionColor = transitionStart === MapTransitionKind.Fade;
     this.transitionColorAlpha = 0;
     this.step = 0;
-    this.sceneMap = $gameStack.top();
+    this.sceneMap = RPM.gameStack.top();
     this.sceneMapCameraDistance = this.sceneMap.camera.distance;
     this.actionDoNothing = new SystemMonsterAction();
     this.actionDoNothing.readJSON({});
@@ -118,8 +118,8 @@ SceneBattle.prototype = Object.create(SceneMap.prototype);
 /** Initialize and correct some camera settings for the battle start.
 */
 SceneBattle.prototype.initializeCamera = function() {
-    this.camera = new Camera($datasGame.system.cameraProperties[this
-        .sysBattleMap.cameraPropertiesID.getValue()], $game.heroBattle);
+    this.camera = new Camera(RPM.datasGame.system.cameraProperties[this
+        .sysBattleMap.cameraPropertiesID.getValue()], RPM.game.heroBattle);
     this.cameraStep = 0;
     this.cameraTick = SceneBattle.CAMERA_TICK;
     this.cameraOffset = SceneBattle.CAMERA_OFFSET;
@@ -216,7 +216,7 @@ SceneBattle.prototype.isLose = function() {
 */
 SceneBattle.prototype.gameOver = function() {
     if (this.canGameOver) {
-        quit(); // TODO
+        Platform.quit(); // TODO
     } else {
         this.endBattle();
     }
@@ -239,14 +239,14 @@ SceneBattle.prototype.endBattle = function() {
     var i, l;
 
     // Heroes
-    l = $game.teamHeroes.length;
+    l = RPM.game.teamHeroes.length;
     for (i = 0; i < l; i++) {
         this.battlers[CharacterKind.Hero][i].removeFromScene();
     }
 
-    $currentMap.closeMap();
-    $gameStack.pop();
-    $currentMap = $gameStack.top();
+    RPM.currentMap.closeMap();
+    RPM.gameStack.pop();
+    RPM.currentMap = RPM.gameStack.top();
 };
 
 // -------------------------------------------------------
@@ -277,7 +277,7 @@ SceneBattle.prototype.initialize = function() {
     case 4:
         this.initializeStep4(); break;
     }
-    $requestPaintHUD = true;
+    RPM.requestPaintHUD = true;
 };
 
 // -------------------------------------------------------

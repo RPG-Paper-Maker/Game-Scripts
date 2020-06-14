@@ -21,11 +21,6 @@
 function SongsManager(musicPlayer, backgroundPlayer, musicEffects,
                       soundsPlayers)
 {
-    this.musics = musicPlayer;
-    this.backgroundSounds = backgroundPlayer;
-    this.musicEffects = musicEffects;
-    this.sounds = soundsPlayers;
-    this.soundIndex = 0;
     this.musicEffectStep = 0;
     this.isProgressionMusicEnd = true;
     this.isMusicNone = true;
@@ -43,48 +38,14 @@ function SongsManager(musicPlayer, backgroundPlayer, musicEffects,
     this.ends[SongKind.Music] = null;
     this.ends[SongKind.BackgroundSound] = null;
     this.ends[SongKind.MusicEffect] = null;
-
+    this.currentSong = new Array(l);
+    this.currentSong[SongKind.Music] = null;
+    this.currentSong[SongKind.BackgroundSound] = null;
+    this.currentSong[SongKind.MusicEffect] = null;
     this.progressionMusic = null;
 }
 
 SongsManager.prototype = {
-
-    /** Get the player according to the song kind.
-    *   @param {SongKind} kind The kind of song.
-    *   @returns {Audio}
-    */
-    getPlayer: function(kind) {
-        switch (kind) {
-        case SongKind.Music:
-            return this.musics;
-        case SongKind.BackgroundSound:
-            return this.backgroundSounds;
-        case SongKind.MusicEffect:
-            return this.musicEffects;
-        default:
-            return null;
-        }
-    },
-
-    // -------------------------------------------------------
-
-    /** Add songs on the playlist
-    *   @param {SongKind} kind The kind of song to add.
-    *   @param {SystemSong[]} songs The list of songs to add.
-    */
-    addSongs: function(kind, songs) {
-        var player = this.getPlayer(kind);
-        if (!player)
-            return;
-
-        var song, i, l = songs.length;
-        var paths = new Array(l + 1);
-        for (i = 0; i < l; i++) {
-            song = songs[i];
-            paths[song.id === -1 ? 0 : song.id] = song.getPath(kind)[0];
-        }
-        player.playlist.addItems(paths);
-    },
 
     // -------------------------------------------------------
 
@@ -110,22 +71,21 @@ SongsManager.prototype = {
         case SongKind.BackgroundSound:
             break;
         }
-
-        var player = this.getPlayer(kind);
-        if (!player)
-            return;
-
-        this.volumes[kind] = volume;
-        player.volume = volume;
-        this.starts[kind] = start * 1000;
-        this.ends[kind] = end * 1000;
-        if (id === -1) {
-            player.stop();
+        if (this.currentSong[kind] !== null)
+        {
+            this.currentSong[kind].stop();
         }
-        else {
-            player.playlist.currentIndex = id;
-            player.seek(this.starts[kind]);
-            player.play();
+        let song = RPM.datasGame.songs.get(kind, id);
+        if (song)
+        {
+            song = song.song;
+            song.volume(volume);
+            song.seek(start);
+            song.play();
+            this.volumes[kind] = volume;
+            this.starts[kind] = start;
+            this.ends[kind] = end;
+            this.currentSong[kind] = song;
         }
     },
 
@@ -140,26 +100,28 @@ SongsManager.prototype = {
     *   @returns {boolean} Indicates if the song is stopped.
     */
     stopSong: function(kind, time, seconds, pause) {
-        var player = this.getPlayer(kind);
-        if (!player)
+        let current = new Date().getTime();
+        let ellapsedTime = current - time;
+        let currentSong = this.currentSong[kind];
+
+        if (currentSong === null)
+        {
             return true;
-
-        var current = new Date().getTime();
-        var ellapsedTime = current - time;
-
+        }
         if (ellapsedTime >= (seconds * 1000)) {
-            player.volume = 0;
+            currentSong.volume(0);
             if (pause) {
-                player.pause();
+                currentSong.pause();
             }
             else {
-                player.stop();
+                currentSong.stop();
+                this.currentSong[kind] = null;
             }
             return true;
         }
         else {
-            player.volume = (this.volumes[kind] * (100 - ((ellapsedTime /
-                (seconds * 1000)) * 100))) / 100;
+            currentSong.volume((this.volumes[kind] * (100 - ((ellapsedTime /
+                (seconds * 1000)) * 100))) / 100);
             return false;
         }
     },
@@ -174,20 +136,21 @@ SongsManager.prototype = {
     *   @returns {boolean} Indicates if the song is played with all volume.
     */
     unpauseSong: function(kind, time, seconds) {
-        var player = this.getPlayer(kind);
-        if (!player)
+        let current = new Date().getTime();
+        let ellapsedTime = current - time;
+        let currentSong = this.currentSong[kind];
+
+        if (currentSong === null)
+        {
             return true;
-
-        var current = new Date().getTime();
-        var ellapsedTime = current - time;
-
+        }
         if (ellapsedTime >= (seconds * 1000)) {
-            player.volume = this.volumes[kind];
+            currentSong.volume(this.volumes[kind]);
             return true;
         }
         else {
-            player.volume = this.volumes[kind] * (ellapsedTime /
-                (seconds * 1000));
+            currentSong.volume(this.volumes[kind] * (ellapsedTime /
+                (seconds * 1000)));
             return false;
         }
     },
@@ -199,21 +162,20 @@ SongsManager.prototype = {
     *   @param {number} volume The volume of the sound.
     */
     playSound: function(id, volume) {
-        var song;
+        let sound;
         if (id === -1)
-            return;
-
-        var player = this.sounds[this.soundIndex++];
-        player.stop();
-        player.volume = volume;
-        song = $datasGame.songs.list[SongKind.Sound][id];
-        if (song)
         {
-            player.source = song.getPath(SongKind.Sound)[0];
-            player.play();
+            return;
         }
-        if (this.soundIndex === 10) {
-            this.soundIndex = 0;
+
+        sound = RPM.datasGame.songs.list[SongKind.Sound][id];
+        if (sound)
+        {
+            sound = new Howl({
+                src: [sound.getPath(SongKind.Sound)[0]],
+                volume: volume
+            });
+            sound.play();
         }
     },
 
@@ -225,22 +187,30 @@ SongsManager.prototype = {
     */
     playMusicEffect: function(id, volume, currentState) {
         if (id === -1 || currentState.end)
+        {
             return true;
-
-        if (this.musicEffectStep === 0) {
+        }
+        if (this.musicEffectStep === 0) 
+        {
             this.playSong(SongKind.MusicEffect, id, volume, null, null);
             this.musicEffectStep++;
         }
-        if (this.musicEffectStep === 1) {
-            if (this.stopSong(SongKind.Music, currentState.timeStop, 0.5,
+        if (this.musicEffectStep === 1) 
+        {
+            if (this.stopSong(SongKind.Music, currentState.timeStop, 0,
                               true))
             {
                 this.musicEffectStep++;
             }
         }
         if (this.musicEffectStep === 2) {
-            if (this.musicEffects.playbackState === Audio.StoppedState) {
-                this.musics.play();
+            if (this.currentSong[SongKind.MusicEffect] === null || !this
+                .currentSong[SongKind.MusicEffect].playing()) 
+            {
+                if (this.currentSong[SongKind.Music] !== null)
+                {
+                    this.currentSong[SongKind.Music].play();
+                }
                 currentState.timePlay = new Date().getTime();
                 this.musicEffectStep++;
             }
@@ -261,11 +231,14 @@ SongsManager.prototype = {
 
     /** Update songs positions or other stuffs.
     */
-    updateByKind: function(kind) {
-        var player = this.getPlayer(kind);
-        if (player.playbackState === Audio.PlayingState) {
-            if (this.ends[kind] && player.position >= this.ends[kind]) {
-                player.seek(this.starts[kind]);
+    updateByKind: function(kind) 
+    {
+        let song = this.currentSong[kind];
+        if (song !== null && song.playing()) 
+        {
+            if (this.ends[kind] && song.seek() >= this.ends[kind])
+            {
+                song.seek(this.starts[kind]);
             }
         }
     },
@@ -284,8 +257,9 @@ SongsManager.prototype = {
 
     stopMusic: function(time) {
         this.isMusicNone = true;
-        this.stopSong(SongKind.Music, time, 0, false);
-        this.initializeProgressionMusic(this.musics.volume, 0, 0, time);
+        this.stopSong(SongKind.Music, time, 0, false)
+        this.initializeProgressionMusic(this.currentSong[SongKind.Music] ===  
+            null ? 0 : this.currentSong[SongKind.Music].volume(), 0, 0, time);
     },
 
     // -------------------------------------------------------
@@ -307,13 +281,39 @@ SongsManager.prototype = {
                 tick = this.progressionMusicEnd;
                 this.isProgressionMusicEnd = true;
             }
-            this.musics.volume = this.progressionMusic.getProgressionAt(
-                tick, this.progressionMusicEnd) / 100;
-            if (this.musics.volume === 0) {
-                this.musics.stop();
-            } else if (!this.isMusicNone) {
-                this.musics.play();
+            let song = this.currentSong[SongKind.Music];
+            if (song)
+            {
+                song.volume(this.progressionMusic.getProgressionAt(tick, this
+                    .progressionMusicEnd) / 100);
+                if (song.volume() === 0) 
+                {
+                    song.stop();
+                } else if (!this.isMusicNone && !song.playing()) 
+                {
+                    song.play();
+                }
             }
+        }
+    },
+
+    stopAll: function() 
+    {
+        if (this.currentSong[SongKind.Music] !== null)
+        {
+            this.currentSong[SongKind.Music].stop();
+            this.currentSong[SongKind.Music] = null;
+        }
+        if (this.currentSong[SongKind.BackgroundSound] !== null)
+        {
+            this.currentSong[SongKind.BackgroundSound].stop();
+            this.currentSong[SongKind.BackgroundSound] = null;
+        }
+        if (this.currentSong[SongKind.MusicEffect] !== null)
+        {
+            this.currentSong[SongKind.MusicEffect].stop();
+            this.currentSong[SongKind.MusicEffect] = null;
+            this.musicEffectStep = 0;
         }
     }
 }

@@ -54,16 +54,19 @@ SystemTitleCommand.prototype.getAction = function() {
 */
 SystemTitleCommand.prototype.startNewGame = function() {
     // Stop video if existing
-    if (!$datasGame.titlescreenGameover.isTitleBackgroundVideo) {
-        $canvasVideos.stop();
+    if (!RPM.datasGame.titlescreenGameover.isTitleBackgroundImage) {
+        Platform.canvasVideos.classList.add("hidden");
+        Platform.canvasVideos.pause();
+        Platform.canvasVideos.src = "";
     }
+    RPM.songsManager.stopAll();
 
     // Create a new game
-    $game = new Game();
-    $game.initializeDefault();
+    RPM.game = new Game();
+    RPM.game.initializeDefault();
 
     // Add local map to stack
-    $gameStack.replace(new SceneMap($datasGame.system.idMapStartHero));
+    RPM.gameStack.replace(new SceneMap(RPM.datasGame.system.idMapStartHero));
 
     return true;
 }
@@ -73,7 +76,7 @@ SystemTitleCommand.prototype.startNewGame = function() {
 /** Callback function for loading an existing game.
 */
 SystemTitleCommand.prototype.loadGame = function() {
-    $gameStack.push(new SceneLoadGame());
+    RPM.gameStack.push(new SceneLoadGame());
 
     return true;
 }
@@ -83,7 +86,7 @@ SystemTitleCommand.prototype.loadGame = function() {
 /** Callback function for loading an existing game.
 */
 SystemTitleCommand.prototype.showSettings = function() {
-    $gameStack.push(new SceneTitleSettings());
+    RPM.gameStack.push(new SceneTitleSettings());
 
     return true;
 }
@@ -93,7 +96,7 @@ SystemTitleCommand.prototype.showSettings = function() {
 /** Callback function for closing the window.
 */
 SystemTitleCommand.prototype.exit = function() {
-    quit();
+    Platform.quit();
 
     return true;
 }

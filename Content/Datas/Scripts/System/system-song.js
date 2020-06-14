@@ -29,8 +29,8 @@ function SystemSong(){
 *   @returns {string}
 */
 SystemSong.getFolder = function(kind, isBR){
-    var folder = isBR ? RPM.PATH_BR : $ROOT_DIRECTORY;
-    var folderLocal = isBR ? RPM.PATH_BR : $ROOT_DIRECTORY_LOCAL;
+    var folder = isBR ? RPM.PATH_BR : RPM.ROOT_DIRECTORY_LOCAL;
+    var folderLocal = isBR ? RPM.PATH_BR : RPM.ROOT_DIRECTORY_LOCAL;
     var dir = SystemSong.getLocalFolder(kind);
     var path = folder + dir;
     var pathLocal = folderLocal + dir;
@@ -85,5 +85,18 @@ SystemSong.prototype = {
         paths[1] += "/" + this.name;
 
         return paths;
+    },
+
+    // -------------------------------------------------------
+
+    load: function(kind)
+    {
+        if (this.id !== -1)
+        {
+            this.song = new Howl({
+                src: [this.getPath(kind)[0]],
+                loop: kind !== SongKind.MusicEffect
+            });
+        }
     }
 }

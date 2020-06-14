@@ -23,7 +23,7 @@ function GraphicMessage(message, facesetID) {
     Bitmap.call(this);
 
     this.message = message;
-    this.faceset = Picture2D.createImage($datasGame.pictures.get(PictureKind
+    this.faceset = Picture2D.createImage(RPM.datasGame.pictures.get(PictureKind
         .Facesets, facesetID), PictureKind.Facesets);
     this.graphics = [];
     this.positions = [];
@@ -183,12 +183,12 @@ GraphicMessage.prototype.update = function() {
         ca: Align.Left,
         cb: false,
         ci: false,
-        cs: RPM.defaultValue($datasGame.system.dbOptions.vtSize, $fontSize),
-        cf: RPM.defaultValue($datasGame.system.dbOptions.vtFont, $fontName),
-        ctc: RPM.defaultValue($datasGame.system.dbOptions.vtcText, RPM.COLOR_WHITE),
-        cbc: RPM.defaultValue($datasGame.system.dbOptions.vtcBackground, null),
-        csc: RPM.defaultValue($datasGame.system.dbOptions.vtOutline, false) ? RPM
-            .defaultValue($datasGame.system.dbOptions.vtcOutline, null) : null
+        cs: RPM.defaultValue(RPM.datasGame.system.dbOptions.vtSize, RPM.fontSize),
+        cf: RPM.defaultValue(RPM.datasGame.system.dbOptions.vtFont, RPM.fontName),
+        ctc: RPM.defaultValue(RPM.datasGame.system.dbOptions.vtcText, RPM.COLOR_WHITE),
+        cbc: RPM.defaultValue(RPM.datasGame.system.dbOptions.vtcBackground, null),
+        csc: RPM.defaultValue(RPM.datasGame.system.dbOptions.vtOutline, false) ? RPM
+            .defaultValue(RPM.datasGame.system.dbOptions.vtcOutline, null) : null
     };
 
     // Update nodes
@@ -249,7 +249,7 @@ GraphicMessage.prototype.updateNodes = function(node, result) {
         case TagKind.Property:
             text = "" + value.getValue(); break;
         case TagKind.HeroName:
-            text = "" + $game.getHeroByInstanceID(value.getValue()).name; break;
+            text = "" + RPM.game.getHeroByInstanceID(value.getValue()).name; break;
         }
         graphic = new GraphicText(text, { bold: result.cb, italic:
             result.ci, fontSize: result.cs, fontName: result.cf, color: result
@@ -262,12 +262,12 @@ GraphicMessage.prototype.updateNodes = function(node, result) {
         }
         break;
     case TagKind.Icon:
-        graphic = $datasGame.pictures.get(PictureKind.Icons, value).picture;
+        graphic = RPM.datasGame.pictures.get(PictureKind.Icons, value).picture;
         result.g.push(graphic);
         result.p.push(graphic.oW);
         result.a.push(result.ca);
-        if ($fontSize > result.h[0]) {
-            result.h[0] = $fontSize;
+        if (RPM.fontSize > result.h[0]) {
+            result.h[0] = RPM.fontSize;
         }
         break;
     case TagKind.Bold:
@@ -292,23 +292,23 @@ GraphicMessage.prototype.updateNodes = function(node, result) {
         break;
     case TagKind.Size:
         size = result.cs;
-        result.cs = $datasGame.system.fontSizes[value].getValue();
+        result.cs = RPM.datasGame.system.fontSizes[value].getValue();
         break;
     case TagKind.Font:
         font = result.cf;
-        result.cf = $datasGame.system.fontNames[value].getValue();
+        result.cf = RPM.datasGame.system.fontNames[value].getValue();
         break;
     case TagKind.TextColor:
         textColor = result.ctc;
-        result.ctc = $datasGame.system.colors[value];
+        result.ctc = RPM.datasGame.system.colors[value];
         break;
     case TagKind.BackColor:
         backColor = result.cbc;
-        result.cbc = $datasGame.system.colors[value];
+        result.cbc = RPM.datasGame.system.colors[value];
         break;
     case TagKind.StrokeColor:
         strokeColor = result.csc;
-        result.csc = $datasGame.system.colors[value];
+        result.csc = RPM.datasGame.system.colors[value];
         break;
     }
     if (node.firstChild !== null) {
@@ -352,7 +352,7 @@ GraphicMessage.prototype.updateNodes = function(node, result) {
 // -------------------------------------------------------
 
 GraphicMessage.prototype.drawBehind = function(x, y, w, h) {
-    if (!$datasGame.system.dbOptions.vfPosAbove) {
+    if (!RPM.datasGame.system.dbOptions.vfPosAbove) {
         this.drawFaceset(x, y, w, h);
     }
 }
@@ -360,8 +360,8 @@ GraphicMessage.prototype.drawBehind = function(x, y, w, h) {
 // -------------------------------------------------------
 
 GraphicMessage.prototype.drawFaceset = function(x, y, w, h) {
-    this.faceset.draw(x + RPM.defaultValue($datasGame.system.dbOptions.fX, 0),
-        y - ((this.faceset.oH - h) / 2) + RPM.defaultValue($datasGame.system
+    this.faceset.draw(x + RPM.defaultValue(RPM.datasGame.system.dbOptions.fX, 0),
+        y - ((this.faceset.oH - h) / 2) + RPM.defaultValue(RPM.datasGame.system
         .dbOptions.fY, 0));
 }
 
@@ -375,7 +375,7 @@ GraphicMessage.prototype.draw = function(x, y, w, h) {
     w = RPM.defaultValue(w, this.oW);
     h = RPM.defaultValue(h, this.oH);
 
-    if ($datasGame.system.dbOptions.vfPosAbove) {
+    if (RPM.datasGame.system.dbOptions.vfPosAbove) {
         this.drawFaceset(x, y, w, h);
     }
     newX = x + this.faceset.oW + RPM.HUGE_SPACE;

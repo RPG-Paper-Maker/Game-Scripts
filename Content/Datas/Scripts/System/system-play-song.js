@@ -118,7 +118,7 @@ SystemPlaySong.prototype = {
             SystemPlaySong.currentPlayingMusic = this;
         }
 
-        $songsManager.playSong(this.kind, this.songID.getValue(), volume, start,
+        RPM.songsManager.playSong(this.kind, this.songID.getValue(), volume, start,
             this.end ? this.end.getValue() : null);
 
         return 1;
@@ -127,14 +127,14 @@ SystemPlaySong.prototype = {
     // -------------------------------------------------------
 
     playSound: function() {
-        $songsManager.playSound(this.songID.getValue(), this.volume.getValue() /
+        RPM.songsManager.playSound(this.songID.getValue(), this.volume.getValue() /
             100);
     },
 
     // -------------------------------------------------------
 
     playMusicEffect: function(currentState) {
-        var played = $songsManager.playMusicEffect(this.songID.getValue(),
+        var played = RPM.songsManager.playMusicEffect(this.songID.getValue(),
             this.volume.getValue() / 100, currentState);
         currentState.end = played;
         return currentState.parallel ? (played ? 1 : 0) : 1;

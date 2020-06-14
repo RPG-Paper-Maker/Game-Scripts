@@ -49,7 +49,7 @@ SpriteWall.prototype = {
             vecC = new THREE.Vector3(0.5, 0.0, 0.0),
             vecD = new THREE.Vector3(-0.5, 0.0, 0.0),
             center = new THREE.Vector3(),
-            size = new THREE.Vector3($SQUARE_SIZE, height, 0),
+            size = new THREE.Vector3(RPM.SQUARE_SIZE, height, 0),
             angle = RPM.positionAngleY(position);
         var i, l, x, y, w, h, coefX, coefY, rect, textureRect, wall, picture;
         var texFaceA, texFaceB;
@@ -69,13 +69,13 @@ SpriteWall.prototype = {
         center.add(localPosition);
 
         // Getting UV coordinates
-        textureRect = [this.kind, 0, 1, Math.floor(height / $SQUARE_SIZE)];
-        x = (textureRect[0] * $SQUARE_SIZE) / width;
+        textureRect = [this.kind, 0, 1, Math.floor(height / RPM.SQUARE_SIZE)];
+        x = (textureRect[0] * RPM.SQUARE_SIZE) / width;
         y = textureRect[1];
-        w = $SQUARE_SIZE / width;
+        w = RPM.SQUARE_SIZE / width;
         h = 1.0;
-        coefX = 0.1 / width;
-        coefY = 0.1 / height;
+        coefX = RPM.COEF_TEX / width;
+        coefY = RPM.COEF_TEX / height;
         x += coefX;
         y += coefY;
         w -= (coefX * 2);
@@ -96,9 +96,9 @@ SpriteWall.prototype = {
         // Collision
         var objCollision = new Array;
         var collisions = new Array;
-        wall = $datasGame.specialElements.walls[this.id];
+        wall = RPM.datasGame.specialElements.walls[this.id];
         if (wall) {
-            picture = $datasGame.pictures.list[PictureKind.Walls][wall.pictureID];
+            picture = RPM.datasGame.pictures.list[PictureKind.Walls][wall.pictureID];
             if (picture) {
                 collisions = picture.getSquaresForWall(textureRect);
             }
@@ -110,7 +110,7 @@ SpriteWall.prototype = {
                 l: localPosition,
                 b: [
                     localPosition.x,
-                    localPosition.y + Math.floor((textureRect[3] * $SQUARE_SIZE
+                    localPosition.y + Math.floor((textureRect[3] * RPM.SQUARE_SIZE
                         - rect[1]) / 2),
                     localPosition.z,
                     rect[2],

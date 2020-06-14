@@ -49,7 +49,7 @@ Bitmap.prototype = {
     setX: function(x){
         this.oX = x;
         this.x = RPM.getScreenX(x);
-        $requestPaintHUD = true;
+        RPM.requestPaintHUD = true;
     },
 
     // -------------------------------------------------------
@@ -60,7 +60,7 @@ Bitmap.prototype = {
     setY: function(y){
         this.oY = y;
         this.y = RPM.getScreenY(y);
-        $requestPaintHUD = true;
+        RPM.requestPaintHUD = true;
     },
 
     // -------------------------------------------------------
@@ -71,7 +71,7 @@ Bitmap.prototype = {
     setW: function(w){
         this.oW = w;
         this.w = RPM.getScreenX(w);
-        $requestPaintHUD = true;
+        RPM.requestPaintHUD = true;
     },
 
     // -------------------------------------------------------
@@ -82,7 +82,7 @@ Bitmap.prototype = {
     setH: function(h){
         this.oH = h;
         this.h = RPM.getScreenY(h);
-        $requestPaintHUD = true;
+        RPM.requestPaintHUD = true;
     },
 
     // -------------------------------------------------------
@@ -92,7 +92,7 @@ Bitmap.prototype = {
     setLeft: function() {
         this.oX = 0;
         this.x = 0;
-        $requestPaintHUD = true;
+        RPM.requestPaintHUD = true;
     },
 
     // -------------------------------------------------------
@@ -102,7 +102,7 @@ Bitmap.prototype = {
     setTop: function() {
         this.oY = 0;
         this.y = 0;
-        $requestPaintHUD = true;
+        RPM.requestPaintHUD = true;
     },
 
     // -------------------------------------------------------
@@ -110,7 +110,7 @@ Bitmap.prototype = {
     /** Set the position to the top.
     */
     setRight: function(offset) {
-        Bitmap.prototype.setX.call(this, $SCREEN_X - this.oW - (offset ? offset
+        Bitmap.prototype.setX.call(this, RPM.SCREEN_X - this.oW - (offset ? offset
             : 0));
     },
 
@@ -119,7 +119,7 @@ Bitmap.prototype = {
     /** Set the position to the top.
     */
     setBot: function(offset) {
-        Bitmap.prototype.setY.call(this, $SCREEN_Y - this.oH - (offset ? offset
+        Bitmap.prototype.setY.call(this, RPM.SCREEN_Y - this.oH - (offset ? offset
             : 0));
     },
 

@@ -44,16 +44,16 @@ SceneBattle.prototype.initializeStep0 = function() {
 SceneBattle.prototype.initializeAlliesBattlers = function() {
     var i, l, position, battler, character;
 
-    l = $game.teamHeroes.length;
+    l = RPM.game.teamHeroes.length;
     this.battlers[CharacterKind.Hero] = new Array(l);
     this.graphicPlayers[CharacterKind.Hero] = new Array(l);
     for (i = 0; i < l; i++) {
 
         // Battlers
-        position = new THREE.Vector3($game.heroBattle.position.x + (2 *
-            $SQUARE_SIZE) + (i * $SQUARE_SIZE / 2), $game.heroBattle.position.y, 
-            $game.heroBattle.position.z - $SQUARE_SIZE + (i * $SQUARE_SIZE));
-        character = $game.teamHeroes[i];
+        position = new THREE.Vector3(RPM.game.heroBattle.position.x + (2 *
+            RPM.SQUARE_SIZE) + (i * RPM.SQUARE_SIZE / 2), RPM.game.heroBattle.position.y, 
+            RPM.game.heroBattle.position.z - RPM.SQUARE_SIZE + (i * RPM.SQUARE_SIZE));
+        character = RPM.game.teamHeroes[i];
         battler = new Battler(character, position, this.camera);
         character.battler = battler;
         battler.addToScene();
@@ -72,7 +72,7 @@ SceneBattle.prototype.initializeAlliesBattlers = function() {
 SceneBattle.prototype.initializeEnemiesBattlers = function() {
     var i, l, troop, enemy, position, instancied, battler;
 
-    troop = $datasGame.troops.list[this.troopID];
+    troop = RPM.datasGame.troops.list[this.troopID];
     l = troop.list.length;
     this.battlers[CharacterKind.Monster] = new Array(l);
     this.graphicPlayers[CharacterKind.Monster] = new Array(l);
@@ -80,11 +80,11 @@ SceneBattle.prototype.initializeEnemiesBattlers = function() {
 
         // Battlers
         enemy = troop.list[i];
-        position = new THREE.Vector3($game.heroBattle.position.x - (2 *
-            $SQUARE_SIZE) - (i * $SQUARE_SIZE * 3 / 4), $game.heroBattle
-            .position.y, $game.heroBattle.position.z - $SQUARE_SIZE + (i *
-            $SQUARE_SIZE));
-        instancied = new GamePlayer(CharacterKind.Monster, enemy.id, $game
+        position = new THREE.Vector3(RPM.game.heroBattle.position.x - (2 *
+            RPM.SQUARE_SIZE) - (i * RPM.SQUARE_SIZE * 3 / 4), RPM.game.heroBattle
+            .position.y, RPM.game.heroBattle.position.z - RPM.SQUARE_SIZE + (i *
+            RPM.SQUARE_SIZE));
+        instancied = new GamePlayer(CharacterKind.Monster, enemy.id, RPM.game
             .charactersInstances++, []);
         instancied.instanciate(enemy.level);
         battler = new Battler(instancied, position, this.camera);
@@ -102,13 +102,13 @@ SceneBattle.prototype.initializeEnemiesBattlers = function() {
 // -------------------------------------------------------
 
 SceneBattle.prototype.initializeInformations = function() {
-    this.windowTopInformations = new WindowBox(0, RPM.HUGE_SPACE, $SCREEN_X, RPM
+    this.windowTopInformations = new WindowBox(0, RPM.HUGE_SPACE, RPM.SCREEN_X, RPM
         .SMALL_SLOT_HEIGHT, null, RPM.SMALL_SLOT_PADDING);
-    this.windowUserInformations = new WindowBox($SCREEN_X - SceneBattle
-        .WINDOW_PROFILE_WIDTH, $SCREEN_Y - SceneBattle.WINDOW_PROFILE_HEIGHT,
+    this.windowUserInformations = new WindowBox(RPM.SCREEN_X - SceneBattle
+        .WINDOW_PROFILE_WIDTH, RPM.SCREEN_Y - SceneBattle.WINDOW_PROFILE_HEIGHT,
         SceneBattle.WINDOW_PROFILE_WIDTH, SceneBattle.WINDOW_PROFILE_HEIGHT, 
         null, RPM.SMALL_PADDING_BOX, false);
-    this.windowTargetInformations = new WindowBox(0, $SCREEN_Y - SceneBattle
+    this.windowTargetInformations = new WindowBox(0, RPM.SCREEN_Y - SceneBattle
         .WINDOW_PROFILE_HEIGHT, SceneBattle.WINDOW_PROFILE_WIDTH, SceneBattle
         .WINDOW_PROFILE_HEIGHT, null, RPM.SMALL_PADDING_BOX, false);
 };
@@ -118,18 +118,18 @@ SceneBattle.prototype.initializeInformations = function() {
 SceneBattle.prototype.initializeWindowCommands = function() {
     var i, l, listContent, listCallbacks, skill;
 
-    l = $datasGame.battleSystem.battleCommandsOrder.length;
+    l = RPM.datasGame.battleSystem.battleCommandsOrder.length;
     listContent = new Array(l);
     listCallbacks = new Array(l);
     for (i = 0; i < l; i++) {
-        skill = $datasGame.skills.list[$datasGame.battleSystem
+        skill = RPM.datasGame.skills.list[RPM.datasGame.battleSystem
             .battleCommandsOrder[i]];
         listContent[i] = new GraphicTextIcon(skill.name, skill.pictureID);
         listContent[i].skill = skill;
         listCallbacks[i] = SystemCommonSkillItem.prototype.useCommand;
     }
     this.windowChoicesBattleCommands = new WindowChoices(OrientationWindow
-        .Vertical, RPM.HUGE_SPACE, $SCREEN_Y - RPM.HUGE_SPACE - (l * RPM
+        .Vertical, RPM.HUGE_SPACE, RPM.SCREEN_Y - RPM.HUGE_SPACE - (l * RPM
         .SMALL_SLOT_HEIGHT), SceneBattle.WINDOW_COMMANDS_WIDTH, RPM
         .SMALL_SLOT_HEIGHT, SceneBattle.COMMANDS_NUMBER, listContent, 
         listCallbacks, RPM.SMALL_SLOT_PADDING);
@@ -138,7 +138,7 @@ SceneBattle.prototype.initializeWindowCommands = function() {
         .WINDOW_COMMANDS_SELECT_Y, SceneBattle.WINDOW_COMMANDS_SELECT_WIDTH, RPM
         .SMALL_SLOT_HEIGHT, SceneBattle.COMMANDS_NUMBER, [], null, RPM
         .SMALL_SLOT_PADDING);
-    this.windowSkillDescription = new WindowBox($SCREEN_X - SceneBattle
+    this.windowSkillDescription = new WindowBox(RPM.SCREEN_X - SceneBattle
         .WINDOW_DESCRIPTIONS_X, SceneBattle.WINDOW_DESCRIPTIONS_Y, SceneBattle
         .WINDOW_DESCRIPTIONS_WIDTH, SceneBattle.WINDOW_DESCRIPTIONS_HEIGHT, null
         , RPM.HUGE_PADDING_BOX);
@@ -147,7 +147,7 @@ SceneBattle.prototype.initializeWindowCommands = function() {
         .WINDOW_COMMANDS_SELECT_Y, SceneBattle.WINDOW_COMMANDS_SELECT_WIDTH, RPM
         .SMALL_SLOT_HEIGHT, SceneBattle.COMMANDS_NUMBER, [], null, RPM
         .SMALL_SLOT_PADDING);
-    this.windowItemDescription = new WindowBox($SCREEN_X - SceneBattle
+    this.windowItemDescription = new WindowBox(RPM.SCREEN_X - SceneBattle
         .WINDOW_DESCRIPTIONS_X, SceneBattle.WINDOW_DESCRIPTIONS_Y, SceneBattle
         .WINDOW_DESCRIPTIONS_WIDTH, SceneBattle.WINDOW_DESCRIPTIONS_HEIGHT, null
         , RPM.HUGE_PADDING_BOX);
@@ -157,9 +157,10 @@ SceneBattle.prototype.initializeWindowCommands = function() {
 
 SceneBattle.prototype.initializeMusics = function() {
     SceneBattle.musicMap = SystemPlaySong.currentPlayingMusic;
-    SceneBattle.musicMapTime = $songsManager.getPlayer(SongKind.Music).position
-        / RPM.ONE_SECOND_MILLI;
-    $datasGame.battleSystem.battleMusic.playSong();
+    let song = RPM.songsManager.currentSong[SongKind.Music];
+    SceneBattle.musicMapTime = song === null ? 0 : song.seek() / RPM
+        .ONE_SECOND_MILLI;
+    RPM.datasGame.battleSystem.battleMusic.playSong();
 };
 
 
@@ -168,7 +169,7 @@ SceneBattle.prototype.initializeMusics = function() {
 SceneBattle.prototype.initializeWindowsEnd = function() {
     this.windowExperienceProgression = new WindowBox(SceneBattle
         .WINDOW_EXPERIENCE_X, SceneBattle.WINDOW_EXPERIENCE_Y, SceneBattle
-        .WINDOW_EXPERIENCE_WIDTH, (SceneBattle.WINDOW_EXPERIENCE_HEIGHT * $game
+        .WINDOW_EXPERIENCE_WIDTH, (SceneBattle.WINDOW_EXPERIENCE_HEIGHT * RPM.game
         .teamHeroes.length) + RPM.SMALL_PADDING_BOX[2] + RPM.SMALL_PADDING_BOX
         [3], new GraphicXPProgression(), RPM.SMALL_PADDING_BOX);
     this.windowStatisticProgression = new WindowBox(SceneBattle.WINDOW_STATS_X, 
@@ -179,7 +180,7 @@ SceneBattle.prototype.initializeWindowsEnd = function() {
 // -------------------------------------------------------
 
 SceneBattle.prototype.updateStep0 = function() {
-    $requestPaintHUD = true;
+    RPM.requestPaintHUD = true;
 
     if (this.transitionStart === MapTransitionKind.Fade)
     {
@@ -290,11 +291,11 @@ SceneBattle.prototype.onKeyPressedAndRepeatStep0 = function(key){
 
 SceneBattle.prototype.drawHUDStep0 = function() {
     if (this.transitionStart === 1) {
-        $context.fillStyle = RPM.STRING_RGBA + RPM.STRING_PARENTHESIS_LEFT + 
+        Platform.ctx.fillStyle = RPM.STRING_RGBA + RPM.STRING_PARENTHESIS_LEFT + 
             this.transitionStartColor.red + RPM.STRING_COMA + this
             .transitionStartColor.green + RPM.STRING_COMA + this
             .transitionStartColor.blue + RPM.STRING_COMA + this
             .transitionColorAlpha + RPM.STRING_PARENTHESIS_RIGHT;
-        $context.fillRect(0, 0, $canvasWidth, $canvasHeight);
+        Platform.ctx.fillRect(0, 0, RPM.canvasWidth, RPM.canvasHeight);
     }
 };

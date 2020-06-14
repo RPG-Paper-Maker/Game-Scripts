@@ -104,15 +104,15 @@ SystemEffect.prototype.execute = function() {
     var user, targets, target, result;
     var i, l;
 
-    user = $currentMap.user ? ($currentMap.isBattleMap ? $currentMap.user
-        .character : $currentMap.user) : GamePlayer.getTemporaryPlayer();
-    $currentMap.tempTargets = $currentMap.targets;
+    user = RPM.currentMap.user ? (RPM.currentMap.isBattleMap ? RPM.currentMap.user
+        .character : RPM.currentMap.user) : GamePlayer.getTemporaryPlayer();
+    RPM.currentMap.tempTargets = RPM.currentMap.targets;
     if (this.isTemporarilyChangeTarget)
     {
-        $currentMap.targets = RPM.evaluateFormula(this
+        RPM.currentMap.targets = RPM.evaluateFormula(this
             .temporarilyChangeTargetFormula.getValue(), user, null)
     }
-    targets = $currentMap.targets;
+    targets = RPM.currentMap.targets;
     result = false;
 
     switch (this.kind) {
@@ -121,12 +121,12 @@ SystemEffect.prototype.execute = function() {
             random, before;
 
         l = targets.length;
-        $currentMap.damages = new Array(l);
+        RPM.currentMap.damages = new Array(l);
         for (i = 0; i < l; i++) {
             damage = 0;
             miss = false;
             crit = false;
-            target = $currentMap.isBattleMap ? targets[i].character : targets[i];
+            target = RPM.currentMap.isBattleMap ? targets[i].character : targets[i];
             if (this.isDamagePrecision) {
                 precision = RPM.evaluateFormula(this.damagePrecisionFormula
                     .getValue(), user, target);
@@ -148,11 +148,11 @@ SystemEffect.prototype.execute = function() {
                     var fixRes, percentRes;
 
                     element = this.damageElementID.getValue();
-                    fixRes = target[$datasGame.battleSystem.statistics[
-                        $datasGame.battleSystem.statisticsElements[element]]
+                    fixRes = target[RPM.datasGame.battleSystem.statistics[
+                        RPM.datasGame.battleSystem.statisticsElements[element]]
                         .abbreviation]
-                    percentRes = target[$datasGame.battleSystem.statistics[
-                        $datasGame.battleSystem.statisticsElementsPercent[
+                    percentRes = target[RPM.datasGame.battleSystem.statistics[
+                        RPM.datasGame.battleSystem.statisticsElementsPercent[
                         element]].abbreviation]
                     damage -= (damage * percentRes / 100);
                     damage -= fixRes;
@@ -163,7 +163,7 @@ SystemEffect.prototype.execute = function() {
                     random = RPM.random(0, 100);
                     if (random <= critical) {
                         damage = RPM.evaluateFormula(RPM.evaluateFormula(
-                            $datasGame.battleSystem.formulaCrit.getValue(),
+                            RPM.datasGame.battleSystem.formulaCrit.getValue(),
                             user, target, damage));
                         crit = true;
                     }
@@ -179,18 +179,18 @@ SystemEffect.prototype.execute = function() {
             }
             if (this.isDamageStockVariableID)
             {
-                $game.variables[this.damageStockVariableID] = damage === null ?
+                RPM.game.variables[this.damageStockVariableID] = damage === null ?
                     0 : damage;
             }
 
             // For diplaying result in HUD
-            if ($currentMap.isBattleMap) {
-                $currentMap.damages[i] = [damage, crit, miss];
+            if (RPM.currentMap.isBattleMap) {
+                RPM.currentMap.damages[i] = [damage, crit, miss];
             }
 
             switch (this.damageKind) {
             case DamagesKind.Stat:
-                var stat = $datasGame.battleSystem.statistics[this
+                var stat = RPM.datasGame.battleSystem.statistics[this
                     .damageStatisticID.getValue()];
                 var abbreviation = stat.abbreviation;
                 var max = target[stat.getMaxAbbreviation()];
@@ -208,22 +208,22 @@ SystemEffect.prototype.execute = function() {
             case DamagesKind.Currency:
                 var currencyID = this.damageCurrencyID.getValue();
                 if (target.k === CharacterKind.Hero) {
-                    before = $game.currencies[currencyID];
-                    $game.currencies[currencyID] -= damage;
-                    if ($game.currencies[currencyID] < 0) {
-                        $game.currencies[currencyID] = 0;
+                    before = RPM.game.currencies[currencyID];
+                    RPM.game.currencies[currencyID] -= damage;
+                    if (RPM.game.currencies[currencyID] < 0) {
+                        RPM.game.currencies[currencyID] = 0;
                     }
-                    result = result || (before !== $game.currencies[currencyID]
+                    result = result || (before !== RPM.game.currencies[currencyID]
                         && damage !== 0);
                 }    
                 break;
             case DamagesKind.Variable:
-                before = $game.variables[this.damageVariableID];
-                $game.variables[this.damageVariableID] -= damage;
-                if ($game.variables[this.damageVariableID] < 0) {
-                    $game.variables[this.damageVariableID] = 0;
+                before = RPM.game.variables[this.damageVariableID];
+                RPM.game.variables[this.damageVariableID] -= damage;
+                if (RPM.game.variables[this.damageVariableID] < 0) {
+                    RPM.game.variables[this.damageVariableID] = 0;
                 }
-                result = result || (before !== $game.variables[this
+                result = result || (before !== RPM.game.variables[this
                     .damageVariableID] && damage !== 0);
                 break;
             }
@@ -236,13 +236,13 @@ SystemEffect.prototype.execute = function() {
     case EffectKind.PerformSkill:
         break;
     case EffectKind.CommonReaction:
-        $currentMap.reactionInterpreters.push(new ReactionInterpreter(null, $datasGame
+        RPM.currentMap.reactionInterpreters.push(new ReactionInterpreter(null, RPM.datasGame
                     .commonEvents.commonReactions[this.commonReaction.commonReactionID], null, null,
                     this.commonReaction.parameters));
 
         break;
     case EffectKind.SpecialActions:
-        $currentMap.battleCommandKind = this.specialActionKind;
+        RPM.currentMap.battleCommandKind = this.specialActionKind;
         break;
     case EffectKind.Script:
         break;
@@ -264,12 +264,12 @@ SystemEffect.prototype.toString = function() {
     var user, target, result;
     var i, l;
 
-    user = $currentMap.user ? ($currentMap.isBattleMap ? $currentMap.user
-        .character : $currentMap.user) : GamePlayer.getTemporaryPlayer();
+    user = RPM.currentMap.user ? (RPM.currentMap.isBattleMap ? RPM.currentMap.user
+        .character : RPM.currentMap.user) : GamePlayer.getTemporaryPlayer();
     /*
-    target = $currentMap.targets && $currentMap.targets.length > 0 ? (
-        $currentMap.isBattleMap ? $currentMap.targets[$currentMap
-        .selectedUserTargetIndex()] : $currentMap.target) : GamePlayer
+    target = RPM.currentMap.targets && RPM.currentMap.targets.length > 0 ? (
+        RPM.currentMap.isBattleMap ? RPM.currentMap.targets[RPM.currentMap
+        .selectedUserTargetIndex()] : RPM.currentMap.target) : GamePlayer
         .getTemporaryPlayer();
     */
     target = GamePlayer.getTemporaryPlayer();
@@ -310,15 +310,15 @@ SystemEffect.prototype.toString = function() {
         damageName = "";
         switch (this.damageKind) {
         case DamagesKind.Stat:
-            damageName = $datasGame.battleSystem.statistics[this
+            damageName = RPM.datasGame.battleSystem.statistics[this
                 .damageStatisticID.getValue()].name;
             break;
         case DamagesKind.Currency:
-            damageName = $datasGame.system.currencies[this.damageCurrencyID
+            damageName = RPM.datasGame.system.currencies[this.damageCurrencyID
                 .getValue()].name;
             break;
         case DamagesKind.Variable:
-            damageName = $datasGame.variablesNames[this.damageVariableID];
+            damageName = RPM.datasGame.variablesNames[this.damageVariableID];
             break;
         }
         return (damage > 0 ? "Damage" : "Heal") + " " + damageName + ": " + (min
@@ -329,10 +329,10 @@ SystemEffect.prototype.toString = function() {
             RPM.evaluateFormula(this.statusPrecisionFormula.getValue(), user,
             target) + "%]";
     case EffectKind.AddRemoveSkill:
-        return (this.isAddSkill ? "Add" : "Remove") + " skill " + $datasGame
+        return (this.isAddSkill ? "Add" : "Remove") + " skill " + RPM.datasGame
             .skills.list[this.addSkillID.getValue()].name;
     case EffectKind.PerformSkill:
-        return "Perform skill " + $datasGame.skills.list[this.performSkillID
+        return "Perform skill " + RPM.datasGame.skills.list[this.performSkillID
             .getValue()].name;
     default:
         return "";

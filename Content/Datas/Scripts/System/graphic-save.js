@@ -27,8 +27,8 @@ function GraphicSave(game) {
     if (game.isNull) {
         this.graphicEmpty = new GraphicText("Empty", { align: Align.Center });
     } else {
-        this.graphicTimer = new GraphicText(RPM.getStringDate(game.playTime),
-            { align: Align.Right });
+        this.graphicTimer = new GraphicText(RPM.getStringDate(game.playTime
+            .getSeconds()), { align: Align.Right });
         this.graphicCharacters = new Array;
         for (var i = 0, l = game.teamHeroes.length; i < l; i++) {
             player = new GraphicPlayer(game.teamHeroes[i]);

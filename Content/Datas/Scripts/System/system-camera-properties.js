@@ -49,9 +49,9 @@ SystemCameraProperties.prototype = {
         var x, y, z;
 
         camera.threeCamera = new THREE.PerspectiveCamera(this.fov.getValue(),
-            $canvasWidth / $canvasHeight, this.near.getValue(), this.far
+            RPM.canvasWidth / RPM.canvasHeight, this.near.getValue(), this.far
             .getValue());
-        camera.distance = this.distance.getValue() * ($SQUARE_SIZE / RPM
+        camera.distance = this.distance.getValue() * (RPM.SQUARE_SIZE / RPM
             .BASIC_SQUARE_SIZE);
         camera.horizontalAngle = this.horizontalAngle.getValue();
         camera.verticalAngle = this.verticalAngle.getValue();
@@ -60,17 +60,17 @@ SystemCameraProperties.prototype = {
         x = this.targetOffsetX.getValue();
         if (this.isSquareTargetOffsetX)
         {
-            x *= $SQUARE_SIZE;
+            x *= RPM.SQUARE_SIZE;
         }
         y = this.targetOffsetY.getValue();
         if (this.isSquareTargetOffsetY)
         {
-            y *= $SQUARE_SIZE;
+            y *= RPM.SQUARE_SIZE;
         }
         z = this.targetOffsetZ.getValue();
         if (this.isSquareTargetOffsetZ)
         {
-            z *= $SQUARE_SIZE;
+            z *= RPM.SQUARE_SIZE;
         }
         camera.targetOffset = new THREE.Vector3(x, y, z);
     }

@@ -38,11 +38,11 @@ function MapPortion(realX, realY, realZ) {
     this.realZ = realZ;
     this.staticFloorsMesh = null;
     this.staticSpritesMesh = null;
-    l = $PORTION_SIZE * $PORTION_SIZE * $PORTION_SIZE;
-    this.squareNonEmpty = new Array($PORTION_SIZE * $PORTION_SIZE);
-    for (i = 0; i < $PORTION_SIZE; i++) {
-        this.squareNonEmpty[i] = new Array($PORTION_SIZE);
-        for (j = 0; j < $PORTION_SIZE; j++) {
+    l = RPM.PORTION_SIZE * RPM.PORTION_SIZE * RPM.PORTION_SIZE;
+    this.squareNonEmpty = new Array(RPM.PORTION_SIZE * RPM.PORTION_SIZE);
+    for (i = 0; i < RPM.PORTION_SIZE; i++) {
+        this.squareNonEmpty[i] = new Array(RPM.PORTION_SIZE);
+        for (j = 0; j < RPM.PORTION_SIZE; j++) {
             this.squareNonEmpty[i][j] = new Array;
         }
     }
@@ -119,12 +119,12 @@ MapPortion.checkCollisionRay = function(positionBefore, positionAfter, object) {
     for (i = startI; i <= endI; i++) {
         for (j = startJ; j <= endJ; j++) {
             for (k = startK; k <= endK; k++) {
-                positionAfterPlus.set(positionAfter.x + i * $SQUARE_SIZE,
-                                      positionAfter.y + j * $SQUARE_SIZE,
-                                      positionAfter.z + k * $SQUARE_SIZE);
-                portion = $currentMap.getLocalPortion(RPM.getPortion(
+                positionAfterPlus.set(positionAfter.x + i * RPM.SQUARE_SIZE,
+                                      positionAfter.y + j * RPM.SQUARE_SIZE,
+                                      positionAfter.z + k * RPM.SQUARE_SIZE);
+                portion = RPM.currentMap.getLocalPortion(RPM.getPortion(
                                                           positionAfterPlus));
-                mapPortion = $currentMap.getMapPortionByPortion(portion);
+                mapPortion = RPM.currentMap.getMapPortionByPortion(portion);
                 if (mapPortion !== null) {
                     result = mapPortion.checkCollision(jpositionBefore, [
                         jpositionAfter[0] + i, jpositionAfter[1] + j,
@@ -146,16 +146,16 @@ MapPortion.checkCollisionRay = function(positionBefore, positionAfter, object) {
     }
 
     // Check collision inside & with other objects
-    if (object !== $game.hero && object.checkCollisionObject($game.hero,
+    if (object !== RPM.game.hero && object.checkCollisionObject(RPM.game.hero,
                                                              positionAfter)) {
         return [true, null];
     }
 
     // Check objects collisions
-    portion = $currentMap.getLocalPortion(RPM.getPortion(positionAfter));
+    portion = RPM.currentMap.getLocalPortion(RPM.getPortion(positionAfter));
     for (i = 0; i < 2; i++) {
         for (j = 0; j < 2; j++) {
-            mapPortion = $currentMap.getMapPortionByPortion([portion[0] + i,
+            mapPortion = RPM.currentMap.getMapPortionByPortion([portion[0] + i,
                 portion[1], portion[2] + j]);
             if (mapPortion !== null &&
                 mapPortion.checkObjectsCollision(object, positionAfter)) {
@@ -165,22 +165,22 @@ MapPortion.checkCollisionRay = function(positionBefore, positionAfter, object) {
     }
 
     // Check empty square or square mountain height possible down
-    mapPortion = $currentMap.getMapPortionByPortion(portion);
+    mapPortion = RPM.currentMap.getMapPortionByPortion(portion);
     if (mapPortion !== null) {
-        floors = mapPortion.squareNonEmpty[jpositionAfter[0] % $PORTION_SIZE]
-            [jpositionAfter[2] % $PORTION_SIZE];
+        floors = mapPortion.squareNonEmpty[jpositionAfter[0] % RPM.PORTION_SIZE]
+            [jpositionAfter[2] % RPM.PORTION_SIZE];
         if (yMountain === null && floors.indexOf(positionAfter.y) === -1) {
             l = floors.length;
             if (l === 0) {
                 return [true, null];
             } else {
                 maxY = null;
-                limitY = positionAfter.y - $datasGame.system
+                limitY = positionAfter.y - RPM.datasGame.system
                     .mountainCollisionHeight.getValue();
                 for (i = 0; i < l; i++) {
                     temp = floors[i];
 
-                    if (temp <= (positionAfter.y + $datasGame.system
+                    if (temp <= (positionAfter.y + RPM.datasGame.system
                         .mountainCollisionHeight.getValue()) && temp >= limitY)
                     {
                         if (maxY === null) {
@@ -299,7 +299,7 @@ MapPortion.applyOrientedBoxTransforms = function(box, boundingBox) {
 // -------------------------------------------------------
 
 MapPortion.createBox = function() {
-    var box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), $BB_MATERIAL);
+    var box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), RPM.BB_MATERIAL);
     box.previousTranslate = [0, 0, 0];
     box.previousRotate = [0, 0, 0];
     box.previousScale = [1, 1, 1];
@@ -310,7 +310,7 @@ MapPortion.createBox = function() {
 // -------------------------------------------------------
 
 MapPortion.createOrientedBox = function() {
-    var box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), $BB_MATERIAL);
+    var box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), RPM.BB_MATERIAL);
     box.previousTranslate = [0, 0, 0];
     box.previousScale = [1, 1, 1];
     box.geometry.rotateY(Math.PI / 4);
@@ -357,7 +357,7 @@ MapPortion.prototype = {
     */
     readFloors: function(json){
         var jsonFloor, floor, collision, objCollision, position, boundingBox;
-        var material = $currentMap.textureTileset;
+        var material = RPM.currentMap.textureTileset;
         var width = material.map ? material.map.image.width : 0;
         var height = material.map ? material.map.image.height : 0;
         var geometry = new THREE.Geometry();
@@ -411,7 +411,7 @@ MapPortion.prototype = {
         // Creating the plane
         geometry.uvsNeedUpdate = true;
         this.staticFloorsMesh = new THREE.Mesh(geometry, material);
-        $currentMap.scene.add(this.staticFloorsMesh);
+        RPM.currentMap.scene.add(this.staticFloorsMesh);
     },
 
     // -------------------------------------------------------
@@ -425,13 +425,13 @@ MapPortion.prototype = {
 
         var jsonAutotile;
         var autotile, autotiles, textureAutotile, texture = null, objCollision;
-        var i, l, index, autotilesLength = $currentMap.texturesAutotiles.length;
+        var i, l, index, autotilesLength = RPM.currentMap.texturesAutotiles.length;
         var position, indexPos;
 
         // Create autotiles according to the textures
         for (i = 0; i < autotilesLength; i++) {
             this.staticAutotilesList.push(
-                 new Autotiles($currentMap.texturesAutotiles[i]));
+                 new Autotiles(RPM.currentMap.texturesAutotiles[i]));
         }
 
         // Read and update geometry
@@ -445,7 +445,7 @@ MapPortion.prototype = {
             texture = null;
             for (; index < autotilesLength; index++) {
 
-                textureAutotile = $currentMap.texturesAutotiles[index];
+                textureAutotile = RPM.currentMap.texturesAutotiles[index];
                 if (textureAutotile.isInTexture(autotile.autotileID, autotile
                     .texture))
                 {
@@ -469,7 +469,7 @@ MapPortion.prototype = {
             autotiles = this.staticAutotilesList[i];
             autotiles.uvsNeedUpdate = true;
             autotiles.createMesh();
-            $currentMap.scene.add(autotiles.mesh);
+            RPM.currentMap.scene.add(autotiles.mesh);
         }
     },
 
@@ -491,7 +491,7 @@ MapPortion.prototype = {
     readSpritesGlobals: function(json){
         var localPosition, plane, s, position, ss, sprite, result;
         var collisions, positionPlus;
-        var material = $currentMap.textureTileset;
+        var material = RPM.currentMap.textureTileset;
         var i, count = 0, l;
         var staticGeometry = new THREE.Geometry(), geometry;
         staticGeometry.faceVertexUvs[0] = [];
@@ -515,7 +515,7 @@ MapPortion.prototype = {
                     plane.position.set(localPosition.x, localPosition.y,
                                        localPosition.z);
                     this.faceSpritesList.push(plane);
-                    $currentMap.scene.add(plane);
+                    RPM.currentMap.scene.add(plane);
                 }
                 else {
                     result = sprite.updateGeometry(
@@ -531,7 +531,7 @@ MapPortion.prototype = {
 
         staticGeometry.uvsNeedUpdate = true;
         this.staticSpritesMesh = new THREE.Mesh(staticGeometry, material);
-        $currentMap.scene.add(this.staticSpritesMesh);
+        RPM.currentMap.scene.add(this.staticSpritesMesh);
     },
 
     // -------------------------------------------------------
@@ -542,7 +542,7 @@ MapPortion.prototype = {
     readSpritesWalls: function(json) {
         var i, l, wallsIds, count;
         var hash, geometry, material, obj, mesh, result, collisions;
-        wallsIds = $currentMap.texturesWalls.length;
+        wallsIds = RPM.currentMap.texturesWalls.length;
         hash = new Array(wallsIds);
         for (i = 0; i < wallsIds; i++)
             hash[i] = null;
@@ -564,7 +564,7 @@ MapPortion.prototype = {
                     obj = {};
                     geometry = new THREE.Geometry();
                     geometry.faceVertexUvs[0] = [];
-                    material = $currentMap.texturesWalls[sprite.id];
+                    material = RPM.currentMap.texturesWalls[sprite.id];
                     count = 0;
                     obj.geometry = geometry;
                     obj.material = material;
@@ -592,7 +592,7 @@ MapPortion.prototype = {
                 geometry.uvsNeedUpdate = true;
                 mesh = new THREE.Mesh(geometry, obj.material);
                 this.staticWallsList.push(mesh);
-                $gameStack.top().scene.add(mesh);
+                RPM.gameStack.top().scene.add(mesh);
             }
         }
     },
@@ -611,12 +611,12 @@ MapPortion.prototype = {
             geometry;
 
         texture = null;
-        mountainsLength = $currentMap.texturesMountains.length;
+        mountainsLength = RPM.currentMap.texturesMountains.length;
         jsonAll = json.a;
 
         // Create mountains according to the textures
         for (i = 0; i < mountainsLength; i++) {
-            this.staticMountainsList.push(new Mountains($currentMap
+            this.staticMountainsList.push(new Mountains(RPM.currentMap
                 .texturesMountains[i]));
         }
 
@@ -631,7 +631,7 @@ MapPortion.prototype = {
             index = 0;
             for (; index < mountainsLength; index++) {
 
-                textureMountain = $currentMap.texturesMountains[index];
+                textureMountain = RPM.currentMap.texturesMountains[index];
                 if (textureMountain.isInTexture(mountain.mountainID)) {
                     texture = textureMountain;
                     mountains = this.staticMountainsList[index];
@@ -651,7 +651,7 @@ MapPortion.prototype = {
             mountains = this.staticMountainsList[i];
             mountains.uvsNeedUpdate = true;
             mountains.createMesh();
-            $currentMap.scene.add(mountains.mesh);
+            RPM.currentMap.scene.add(mountains.mesh);
         }
 
         // Handle overflow
@@ -668,7 +668,7 @@ MapPortion.prototype = {
         var hash, geometry, material, obj, mesh, result, collisions;
 
         jsonAll = json.a;
-        objectsIds = $currentMap.texturesObjects3D.length;
+        objectsIds = RPM.currentMap.texturesObjects3D.length;
         hash = new Array(objectsIds);
         for (i = 1; i <= objectsIds; i++) {
             hash[i] = null;
@@ -679,7 +679,7 @@ MapPortion.prototype = {
             o = jsonAll[i];
             position = o.k;
             v = o.v;
-            datas = $datasGame.specialElements.objects[v.did];
+            datas = RPM.datasGame.specialElements.objects[v.did];
 
             if (datas) {
                 switch (datas.shapeKind) {
@@ -707,7 +707,7 @@ MapPortion.prototype = {
                         obj = {};
                         geometry = new THREE.Geometry();
                         geometry.faceVertexUvs[0] = [];
-                        material = $currentMap.texturesObjects3D[obj3D.datas
+                        material = RPM.currentMap.texturesObjects3D[obj3D.datas
                             .pictureID];
                         count = 0;
                         obj.geometry = geometry;
@@ -738,7 +738,7 @@ MapPortion.prototype = {
                 geometry.uvsNeedUpdate = true;
                 mesh = new THREE.Mesh(geometry, obj.material);
                 this.staticObjects3DList.push(mesh);
-                $gameStack.top().scene.add(mesh);
+                RPM.gameStack.top().scene.add(mesh);
             }
         }
     },
@@ -752,7 +752,7 @@ MapPortion.prototype = {
     */
     readObjects: function(json, isMapHero){
         var datas, objects, objectsM, objectsR, index, i, l, j, ll, lll, id;
-        datas = $currentMap.getObjectsAtPortion(this.realX, this.realY,
+        datas = RPM.currentMap.getObjectsAtPortion(this.realX, this.realY,
                                                 this.realZ);
         objectsM = datas.m;
         objectsR = datas.r;
@@ -785,7 +785,7 @@ MapPortion.prototype = {
             /* If it is the hero, you should not add it to the list of
             objects to display */
             if ((!isMapHero ||
-                $datasGame.system.idObjectStartHero !== object.id) &&
+                RPM.datasGame.system.idObjectStartHero !== object.id) &&
                 index === -1)
             {
                 var localPosition = RPM.positionToVector3(position);
@@ -815,31 +815,31 @@ MapPortion.prototype = {
     */
     cleanAll: function() {
         var i, l, datas, objects, object, index;
-        datas = $game.mapsDatas[$currentMap.id][this.realX][this.realY][this
+        datas = RPM.game.mapsDatas[RPM.currentMap.id][this.realX][this.realY][this
             .realZ];
 
         // Static stuff
-        $currentMap.scene.remove(this.staticFloorsMesh);
-        $currentMap.scene.remove(this.staticSpritesMesh);
+        RPM.currentMap.scene.remove(this.staticFloorsMesh);
+        RPM.currentMap.scene.remove(this.staticSpritesMesh);
         for (i = 0, l = this.faceSpritesList.length; i < l; i++) {
-            $currentMap.scene.remove(this.faceSpritesList[i]);
+            RPM.currentMap.scene.remove(this.faceSpritesList[i]);
         }
         for (i = 0, l = this.staticWallsList.length; i < l; i++) {
-            $currentMap.scene.remove(this.staticWallsList[i]);
+            RPM.currentMap.scene.remove(this.staticWallsList[i]);
         }
         for (i = 0, l = this.staticAutotilesList.length; i < l; i++) {
-            $currentMap.scene.remove(this.staticAutotilesList[i].mesh);
+            RPM.currentMap.scene.remove(this.staticAutotilesList[i].mesh);
         }
         for (i = 0, l = this.staticMountainsList.length; i < l; i++) {
-            $currentMap.scene.remove(this.staticMountainsList[i].mesh);
+            RPM.currentMap.scene.remove(this.staticMountainsList[i].mesh);
         }
         for (i = 0, l = this.staticObjects3DList.length; i < l; i++) {
-            $currentMap.scene.remove(this.staticObjects3DList[i]);
+            RPM.currentMap.scene.remove(this.staticObjects3DList[i]);
         }
 
         // Objects
         for (i = 0, l = this.objectsList.length; i < l; i++) {
-            $currentMap.scene.remove(this.objectsList[i].mesh);
+            RPM.currentMap.scene.remove(this.objectsList[i].mesh);
         }
 
         // Remove moved objects from the scene
@@ -900,7 +900,7 @@ MapPortion.prototype = {
             var position = jsonObject.k;
             var jsonObjectValue = jsonObject.v;
 
-            if ($datasGame.system.idObjectStartHero === jsonObjectValue.id){
+            if (RPM.datasGame.system.idObjectStartHero === jsonObjectValue.id){
                 var object = new SystemObject;
                 object.readJSON(jsonObjectValue);
                 var localPosition = RPM.positionToVector3(position);
@@ -951,7 +951,7 @@ MapPortion.prototype = {
                             position[1] + b,
                             position[3] + c
                         ];
-                        if ($currentMap.isInMap(positionPlus) && this
+                        if (RPM.currentMap.isInMap(positionPlus) && this
                             .isPositionIn(positionPlus))
                         {
                             this.boundingBoxesSprites[RPM.positionToIndex(
@@ -995,7 +995,7 @@ MapPortion.prototype = {
                             position[1] + b,
                             position[3] + c
                         ];
-                        if ($currentMap.isInMap(positionPlus) && this
+                        if (RPM.currentMap.isInMap(positionPlus) && this
                             .isPositionIn(positionPlus))
                         {
                             if (side) {
@@ -1057,16 +1057,16 @@ MapPortion.prototype = {
     // -------------------------------------------------------
 
     addToNonEmpty: function(position) {
-        this.squareNonEmpty[position[0] % $PORTION_SIZE][position[3] %
-            $PORTION_SIZE].push(RPM.positionTotalY(position));
+        this.squareNonEmpty[position[0] % RPM.PORTION_SIZE][position[3] %
+            RPM.PORTION_SIZE].push(RPM.positionTotalY(position));
     },
 
     // -------------------------------------------------------
 
     isPositionIn: function(position) {
-        return this.realX === Math.floor(position[0] / $PORTION_SIZE) && this
-            .realY === Math.floor(position[1] / $PORTION_SIZE) && this.realZ ===
-            Math.floor(position[2] / $PORTION_SIZE);
+        return this.realX === Math.floor(position[0] / RPM.PORTION_SIZE) && this
+            .realY === Math.floor(position[1] / RPM.PORTION_SIZE) && this.realZ ===
+            Math.floor(position[2] / RPM.PORTION_SIZE);
     },
 
     // -------------------------------------------------------
@@ -1168,10 +1168,10 @@ MapPortion.prototype = {
         if (collision !== null)
             return false;
 
-        MapPortion.applyBoxLandTransforms($BB_BOX, boundingBox);
+        MapPortion.applyBoxLandTransforms(RPM.BB_BOX, boundingBox);
 
         return CollisionsUtilities.obbVSobb(object.currentBoundingBox.geometry,
-                                            $BB_BOX.geometry);
+                                            RPM.BB_BOX.geometry);
     },
 
     // -------------------------------------------------------
@@ -1270,16 +1270,16 @@ MapPortion.prototype = {
             return false;
 
         if (fix) {
-            MapPortion.applyBoxSpriteTransforms($BB_BOX, boundingBox);
+            MapPortion.applyBoxSpriteTransforms(RPM.BB_BOX, boundingBox);
             return CollisionsUtilities.obbVSobb(
-                   object.currentBoundingBox.geometry, $BB_BOX.geometry);
+                   object.currentBoundingBox.geometry, RPM.BB_BOX.geometry);
         }
         else {
-            MapPortion.applyOrientedBoxTransforms($BB_ORIENTED_BOX,
+            MapPortion.applyOrientedBoxTransforms(RPM.BB_ORIENTED_BOX,
                                                   boundingBox);
             return CollisionsUtilities.obbVSobb(
                    object.currentBoundingBox.geometry,
-                   $BB_ORIENTED_BOX.geometry);
+                   RPM.BB_ORIENTED_BOX.geometry);
         }
     },
 
@@ -1343,7 +1343,7 @@ MapPortion.prototype = {
         }
         for (i = 0, l = this.overflowMountains.length; i < l; i++) {
             positionOverflow = this.overflowMountains[i];
-            mapPortion = $currentMap.getMapPortionByPosition(positionOverflow);
+            mapPortion = RPM.currentMap.getMapPortionByPosition(positionOverflow);
             objCollision = mapPortion.getObjectCollisionAt(positionOverflow,
                 jpositionAfter, ElementMapKind.Mountains);
             for (j = 0, ll = objCollision.length; j < ll; j++) {
@@ -1413,10 +1413,10 @@ MapPortion.prototype = {
             // if w = 0, check height
             if (objCollision.rw === 0) {
                 if (CollisionsUtilities.isPointOnRectangle(point, x, x +
-                    $SQUARE_SIZE, z, z + $SQUARE_SIZE))
+                    RPM.SQUARE_SIZE, z, z + RPM.SQUARE_SIZE))
                 {
                     return forceAlways || -(!forceNever && ((y + objCollision.rh
-                        ) <= (positionAfter.y + $datasGame.system
+                        ) <= (positionAfter.y + RPM.datasGame.system
                         .mountainCollisionHeight.getValue()))) ? [false, y +
                         objCollision.rh] : [true, null];
                 }
@@ -1443,9 +1443,9 @@ MapPortion.prototype = {
                             return [false, null];
                         }
                     } else if (objCollision.bot && !mountain.bot) {
-                        ptA = new THREE.Vector2(x - w, z + $SQUARE_SIZE);
-                        ptB = new THREE.Vector2(x, z + $SQUARE_SIZE);
-                        ptC = new THREE.Vector2(x, z + $SQUARE_SIZE + w);
+                        ptA = new THREE.Vector2(x - w, z + RPM.SQUARE_SIZE);
+                        ptB = new THREE.Vector2(x, z + RPM.SQUARE_SIZE);
+                        ptC = new THREE.Vector2(x, z + RPM.SQUARE_SIZE + w);
                         if (CollisionsUtilities.isPointOnTriangle(point, ptA,
                             ptB, ptC))
                         {
@@ -1457,20 +1457,20 @@ MapPortion.prototype = {
                         }
                     } else {
                         if (CollisionsUtilities.isPointOnRectangle(point, x - w,
-                            x, z, z + $SQUARE_SIZE))
+                            x, z, z + RPM.SQUARE_SIZE))
                         {
                             pA = new THREE.Vector3(x - w, y, z);
                             pB = new THREE.Vector3(x, y + h, z);
-                            pC = new THREE.Vector3(x, y + h, z + $SQUARE_SIZE);
+                            pC = new THREE.Vector3(x, y + h, z + RPM.SQUARE_SIZE);
                         } else {
                             return [false, null];
                         }
                     }
                 } else if (objCollision.right && !mountain.right) {
                     if (objCollision.top && !mountain.top) {
-                        ptA = new THREE.Vector2(x + $SQUARE_SIZE, z - w);
-                        ptB = new THREE.Vector2(x + $SQUARE_SIZE, z);
-                        ptC = new THREE.Vector2(x + $SQUARE_SIZE + w, z);
+                        ptA = new THREE.Vector2(x + RPM.SQUARE_SIZE, z - w);
+                        ptB = new THREE.Vector2(x + RPM.SQUARE_SIZE, z);
+                        ptC = new THREE.Vector2(x + RPM.SQUARE_SIZE + w, z);
                         if (CollisionsUtilities.isPointOnTriangle(point, ptA,
                             ptB, ptC))
                         {
@@ -1481,12 +1481,12 @@ MapPortion.prototype = {
                             return [false, null];
                         }
                     } else if (objCollision.bot && !mountain.bot) {
-                        ptA = new THREE.Vector2(x + $SQUARE_SIZE, z +
-                            $SQUARE_SIZE + w);
-                        ptB = new THREE.Vector2(x + $SQUARE_SIZE, z +
-                            $SQUARE_SIZE);
-                        ptC = new THREE.Vector2(x + $SQUARE_SIZE + w, z +
-                            $SQUARE_SIZE);
+                        ptA = new THREE.Vector2(x + RPM.SQUARE_SIZE, z +
+                            RPM.SQUARE_SIZE + w);
+                        ptB = new THREE.Vector2(x + RPM.SQUARE_SIZE, z +
+                            RPM.SQUARE_SIZE);
+                        ptC = new THREE.Vector2(x + RPM.SQUARE_SIZE + w, z +
+                            RPM.SQUARE_SIZE);
                         if (CollisionsUtilities.isPointOnTriangle(point, ptA,
                             ptB, ptC))
                         {
@@ -1498,13 +1498,13 @@ MapPortion.prototype = {
                         }
                     } else {
                         if (CollisionsUtilities.isPointOnRectangle(point, x +
-                            $SQUARE_SIZE, x + $SQUARE_SIZE + w, z, z +
-                            $SQUARE_SIZE))
+                            RPM.SQUARE_SIZE, x + RPM.SQUARE_SIZE + w, z, z +
+                            RPM.SQUARE_SIZE))
                         {
-                            pA = new THREE.Vector3(x + $SQUARE_SIZE, y + h, z +
-                                $SQUARE_SIZE);
-                            pB = new THREE.Vector3(x + $SQUARE_SIZE, y + h, z);
-                            pC = new THREE.Vector3(x + $SQUARE_SIZE + w, y, z);
+                            pA = new THREE.Vector3(x + RPM.SQUARE_SIZE, y + h, z +
+                                RPM.SQUARE_SIZE);
+                            pB = new THREE.Vector3(x + RPM.SQUARE_SIZE, y + h, z);
+                            pC = new THREE.Vector3(x + RPM.SQUARE_SIZE + w, y, z);
                         } else {
                             return [false, null];
                         }
@@ -1512,22 +1512,22 @@ MapPortion.prototype = {
                 } else {
                     if (objCollision.top && !mountain.top) {
                         if (CollisionsUtilities.isPointOnRectangle(point, x, x +
-                            $SQUARE_SIZE, z - w, z))
+                            RPM.SQUARE_SIZE, z - w, z))
                         {
                             pA = new THREE.Vector3(x, y + h, z);
                             pB = new THREE.Vector3(x, y, z - w);
-                            pC = new THREE.Vector3(x + $SQUARE_SIZE, y, z - w);
+                            pC = new THREE.Vector3(x + RPM.SQUARE_SIZE, y, z - w);
                         } else {
                             return [false, null];
                         }
                     } else if (objCollision.bot && !mountain.bot) {
                         if (CollisionsUtilities.isPointOnRectangle(point, x, x +
-                            $SQUARE_SIZE, z + $SQUARE_SIZE, z + $SQUARE_SIZE + w))
+                            RPM.SQUARE_SIZE, z + RPM.SQUARE_SIZE, z + RPM.SQUARE_SIZE + w))
                         {
-                            pA = new THREE.Vector3(x + $SQUARE_SIZE, y, z +
-                                $SQUARE_SIZE + w);
-                            pB = new THREE.Vector3(x, y, z + $SQUARE_SIZE + w);
-                            pC = new THREE.Vector3(x, y + h, z + $SQUARE_SIZE);
+                            pA = new THREE.Vector3(x + RPM.SQUARE_SIZE, y, z +
+                                RPM.SQUARE_SIZE + w);
+                            pB = new THREE.Vector3(x, y, z + RPM.SQUARE_SIZE + w);
+                            pC = new THREE.Vector3(x, y + h, z + RPM.SQUARE_SIZE);
                         } else {
                             return [false, null];
                         }
@@ -1537,7 +1537,7 @@ MapPortion.prototype = {
                 }
 
                 // If angle limit, block
-                if (forceNever || (!forceAlways && mountain.angle > $datasGame
+                if (forceNever || (!forceAlways && mountain.angle > RPM.datasGame
                     .system.mountainCollisionAngle.getValue()))
                 {
                     return [true, null];
@@ -1548,7 +1548,7 @@ MapPortion.prototype = {
                 ray.intersectPlane(plane, newPosition);
 
                 return [!forceAlways && (Math.abs(newPosition.y - positionAfter
-                    .y) > $datasGame.system.mountainCollisionHeight.getValue()),
+                    .y) > RPM.datasGame.system.mountainCollisionHeight.getValue()),
                     newPosition.y];
             }
         }
@@ -1562,7 +1562,7 @@ MapPortion.prototype = {
     *   @returns {boolean}
     */
     checkObjectsCollision: function(object, position) {
-        var datas = $currentMap.getObjectsAtPortion(this.realX, this.realY,
+        var datas = RPM.currentMap.getObjectsAtPortion(this.realX, this.realY,
                                                     this.realZ);
 
         return this.checkObjectsCollisionList(this.objectsList, object,

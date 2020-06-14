@@ -48,7 +48,7 @@ SystemDetection.prototype = {
 
         boundingBoxes = this.getBoundingBoxes(sender);
         for (i = 0, l = boundingBoxes.length; i < l; i++) {
-            MapPortion.applyBoxSpriteTransforms($BB_BOX_DETECTION, boundingBoxes
+            MapPortion.applyBoxSpriteTransforms(RPM.BB_BOX_DETECTION, boundingBoxes
                 [i]);
             if (object.checkCollisionDetection()) {
                 return true;
@@ -75,20 +75,20 @@ SystemDetection.prototype = {
             // Update position according to sender orientation
             switch (orientation) {
             case Orientation.South:
-                x = p[0] * $SQUARE_SIZE;
-                z = p[3]* $SQUARE_SIZE;
+                x = p[0] * RPM.SQUARE_SIZE;
+                z = p[3]* RPM.SQUARE_SIZE;
                 break;
             case Orientation.West:
-                x = -p[3] * $SQUARE_SIZE;
-                z = p[0] * $SQUARE_SIZE;
+                x = -p[3] * RPM.SQUARE_SIZE;
+                z = p[0] * RPM.SQUARE_SIZE;
                 break;
             case Orientation.North:
-                x = -p[0] * $SQUARE_SIZE;
-                z = -p[3] * $SQUARE_SIZE;
+                x = -p[0] * RPM.SQUARE_SIZE;
+                z = -p[3] * RPM.SQUARE_SIZE;
                 break;
             case Orientation.East:
-                x = p[3] * $SQUARE_SIZE;
-                z = -p[0] * $SQUARE_SIZE;
+                x = p[3] * RPM.SQUARE_SIZE;
+                z = -p[0] * RPM.SQUARE_SIZE;
                 break;
             }
 
@@ -96,9 +96,9 @@ SystemDetection.prototype = {
                     localPosition.x + x,
                     localPosition.y + RPM.positionTotalY(p),
                     localPosition.z + z,
-                    $SQUARE_SIZE,
-                    (box[1] * $SQUARE_SIZE) + (box[2] / 100 * $SQUARE_SIZE),
-                    $SQUARE_SIZE,
+                    RPM.SQUARE_SIZE,
+                    (box[1] * RPM.SQUARE_SIZE) + (box[2] / 100 * RPM.SQUARE_SIZE),
+                    RPM.SQUARE_SIZE,
                     0,
                     0,
                     0

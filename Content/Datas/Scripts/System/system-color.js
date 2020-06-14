@@ -18,11 +18,13 @@
 /** @class
 *   An color of the game.
 */
-function SystemColor() {
+function SystemColor()
+{
 
 }
 
-SystemColor.createColor = function(r, g, b, a) {
+SystemColor.createColor = function(r, g, b, a)
+{
     var color = new SystemColor();
     color.initialize(r, g, b, a);
     return color;

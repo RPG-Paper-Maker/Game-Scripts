@@ -21,8 +21,8 @@ function GraphicUserSkillItem() {
     var player;
 
     this.graphicCharacters = new Array;
-    for (var i = 0, l = $game.teamHeroes.length; i < l; i++) {
-        player = new GraphicPlayer($game.teamHeroes[i]);
+    for (var i = 0, l = RPM.game.teamHeroes.length; i < l; i++) {
+        player = new GraphicPlayer(RPM.game.teamHeroes[i]);
         player.initializeCharacter(true);
         this.graphicCharacters.push(player);
     }
@@ -37,14 +37,14 @@ GraphicUserSkillItem.prototype = {
         if (b) {
             var i, l;
 
-            l = $game.teamHeroes.length;
-            $currentMap.targets = new Array(l);
+            l = RPM.game.teamHeroes.length;
+            RPM.currentMap.targets = new Array(l);
             for (i = 0; i < l; i++) {
-                $currentMap.targets[i] = $game.teamHeroes[i];
+                RPM.currentMap.targets[i] = RPM.game.teamHeroes[i];
             }
         } else {
             this.indexArrow = 0;
-            $currentMap.targets = [$game.teamHeroes[this.indexArrow]];
+            RPM.currentMap.targets = [RPM.game.teamHeroes[this.indexArrow]];
         }
     },
 
@@ -82,20 +82,20 @@ GraphicUserSkillItem.prototype = {
         if (!this.isAll) {
             this.indexArrow = RPM.mod(index, this.graphicCharacters.length);
             if (this.indexArrow !== index) {
-                $datasGame.system.soundCursor.playSound();
+                RPM.datasGame.system.soundCursor.playSound();
             }
-            $currentMap.targets = [$game.teamHeroes[this.indexArrow]];
-            $requestPaintHUD = true;
+            RPM.currentMap.targets = [RPM.game.teamHeroes[this.indexArrow]];
+            RPM.requestPaintHUD = true;
         }
     },
 
     // -------------------------------------------------------
 
     onKeyPressedAndRepeat: function(key) {
-        if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls.Right))
+        if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls.Right))
         {
             this.goRight();
-        } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
+        } else if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard
             .menuControls.Left))
         {
             this.goLeft();
@@ -105,7 +105,7 @@ GraphicUserSkillItem.prototype = {
     // -------------------------------------------------------
 
     drawArrowAtIndex: function(index, x, y, h) {
-        $datasGame.system.getWindowSkin().drawArrowTarget(this.graphicCharacters
+        RPM.datasGame.system.getWindowSkin().drawArrowTarget(this.graphicCharacters
             [index].battlerFrame, x + 32 + (index * 85), y + h - 20);
     },
 

@@ -43,7 +43,7 @@ SystemTileset.prototype = {
         var jsonSpecials;
 
         this.id = json.id;
-        this.picture = $datasGame.pictures.list[PictureKind.Tilesets][json.pic];
+        this.picture = RPM.datasGame.pictures.list[PictureKind.Tilesets][json.pic];
 
         // Special elements
         jsonSpecials = json.auto;
@@ -133,7 +133,7 @@ SystemTileset.prototype = {
     */
     loadSpecialTextures: function(pictureKind, texturesName, specialField)
     {
-        var specials = $datasGame.specialElements[specialField];
+        var specials = RPM.datasGame.specialElements[specialField];
         var specialsIDs = this[specialField];
         var id, i, l = specials.length;
         var textures = new Array(l);
@@ -143,7 +143,7 @@ SystemTileset.prototype = {
             id = specialsIDs[i];
             special = specials[id];
             if (special) {
-                pic = $datasGame.pictures.list[pictureKind][special.pictureID];
+                pic = RPM.datasGame.pictures.list[pictureKind][special.pictureID];
                 if (pic) {
                     paths = pic.getPath(pictureKind);
                     // Set callback
@@ -196,8 +196,7 @@ SystemTileset.prototype = {
     loadAutotiles: function() {
         var i, l, autotiles, autotilesIDs, id, offset, result, paths, autotile,
             textureAutotile, that, texture, context, picture, callback;
-
-        autotiles = $datasGame.specialElements.autotiles;
+        autotiles = RPM.datasGame.specialElements.autotiles;
         autotilesIDs = this.autotiles;
         i = 0;
         l = autotiles.length;
@@ -206,12 +205,11 @@ SystemTileset.prototype = {
         textureAutotile = null;
         that = this;
         texture = new THREE.Texture();
-        context = $canvasRendering.getContext("2d");
-        context.clearRect(0, 0, $canvasRendering.width, $canvasRendering.height);
-        $canvasRendering.width = 64 * $SQUARE_SIZE;
-        $canvasRendering.height = $MAX_PICTURE_SIZE;
+        context = Platform.canvasRendering.getContext("2d");
+        context.clearRect(0, 0, Platform.canvasRendering.width, Platform.canvasRendering.height);
+        Platform.canvasRendering.width = 64 * RPM.SQUARE_SIZE;
+        Platform.canvasRendering.height = RPM.MAX_PICTURE_SIZE;
         this.texturesAutotiles = new Array;
-
         callback = function() {
             if (result !== null) {
                 if (result.length < 3) {
@@ -226,7 +224,7 @@ SystemTileset.prototype = {
                 id = autotilesIDs[i];
                 autotile = autotiles[id];
                 if (autotile) {
-                    picture = $datasGame.pictures.list[PictureKind.Autotiles][
+                    picture = RPM.datasGame.pictures.list[PictureKind.Autotiles][
                         autotile.pictureID];
                     if (picture) {
                         paths = picture.getPath(PictureKind.Autotiles);
@@ -283,17 +281,16 @@ SystemTileset.prototype = {
         var i, path, pathLocal, that, result, callback, point, img, width,
             height, size, pic;
 
-        $filesToLoad++;
+        RPM.filesToLoad++;
         path = paths[0];
         pathLocal = paths[1];
         that = this;
         result = new Array;
 
         callback = function() {
-            $loadedFiles++;
-            img = context.createImageData(pathLocal);
-            width = Math.floor((img.width / 2) / $SQUARE_SIZE);
-            height = Math.floor((img.height / 3) / $SQUARE_SIZE);
+            RPM.loadedFiles++;
+            width = Math.floor((this.image.width / 2) / RPM.SQUARE_SIZE);
+            height = Math.floor((this.image.height / 3) / RPM.SQUARE_SIZE);
             size = width * height;
 
             // Update picture width and height for collisions settings
@@ -307,7 +304,7 @@ SystemTileset.prototype = {
                     textureAutotile = new TextureSeveral();
                     textureAutotile.setBegin(id, point);
                 }
-                that.paintPictureAutotile(context, pathLocal, img, offset,
+                that.paintPictureAutotile(context, pathLocal, this.image, offset,
                     point, id);
                 textureAutotile.setEnd(id, point);
                 textureAutotile.addToList(id, point);
@@ -315,7 +312,7 @@ SystemTileset.prototype = {
                 if (offset === that.getMaxAutotilesOffsetTexture()) {
                     that.updateTextureAutotile(textureAutotile, texture);
                     texture = new THREE.Texture();
-                    context.clearRect(0, 0, $canvasRendering.width,
+                    context.clearRect(0, 0, Platform.canvasRendering.width,
                         canvasRendering.height);
                     textureAutotile = null;
                     offset = 0;
@@ -326,13 +323,8 @@ SystemTileset.prototype = {
             result.push(texture);
             result.push(offset);
         };
-
-
-        if ($canvasRendering.isImageLoaded(pathLocal)) {
-            callback.call(this);
-        } else {
-            pic = new Picture2D(pathLocal, callback);
-        }
+        
+        pic = new Picture2D(pathLocal, callback);
 
         return result;
     },
@@ -343,9 +335,9 @@ SystemTileset.prototype = {
     */
     paintPictureAutotile: function(context, pathLocal, img, offset, point, id) {
         var count, lA, lB, lC, lD, row = -1;
-        var offsetX = point[0] * 2 * $SQUARE_SIZE;
-        var offsetY = point[1] * 3 * $SQUARE_SIZE;
-        var sDiv = Math.floor($SQUARE_SIZE / 2);
+        var offsetX = point[0] * 2 * RPM.SQUARE_SIZE;
+        var offsetY = point[1] * 3 * RPM.SQUARE_SIZE;
+        var sDiv = Math.floor(RPM.SQUARE_SIZE / 2);
         var y = offset * Autotiles.COUNT_LIST * 2;
 
         try
@@ -362,25 +354,25 @@ SystemTileset.prototype = {
                             lD = Autotiles.autotileBorder[Autotiles.listD[d]];
 
                             // Draw
-                            context.drawImage(pathLocal, (lA % 4 * sDiv) + offsetX,
+                            context.drawImage(img, (lA % 4 * sDiv) + offsetX,
                                               (Math.floor(lA / 4) * sDiv) + offsetY,
-                                              sDiv, sDiv, count * $SQUARE_SIZE,
-                                              (row + y) * $SQUARE_SIZE, sDiv, sDiv);
-                            context.drawImage(pathLocal, (lB % 4 * sDiv) + offsetX,
+                                              sDiv, sDiv, count * RPM.SQUARE_SIZE,
+                                              (row + y) * RPM.SQUARE_SIZE, sDiv, sDiv);
+                            context.drawImage(img, (lB % 4 * sDiv) + offsetX,
                                               (Math.floor(lB / 4) * sDiv) + offsetY,
                                               sDiv, sDiv,
-                                              count * $SQUARE_SIZE + sDiv,
-                                              (row + y) * $SQUARE_SIZE, sDiv, sDiv);
-                            context.drawImage(pathLocal, (lC % 4 * sDiv) + offsetX,
+                                              count * RPM.SQUARE_SIZE + sDiv,
+                                              (row + y) * RPM.SQUARE_SIZE, sDiv, sDiv);
+                            context.drawImage(img, (lC % 4 * sDiv) + offsetX,
                                               (Math.floor(lC / 4) * sDiv) + offsetY,
-                                              sDiv, sDiv, count * $SQUARE_SIZE,
-                                              (row + y) * $SQUARE_SIZE + sDiv,
+                                              sDiv, sDiv, count * RPM.SQUARE_SIZE,
+                                              (row + y) * RPM.SQUARE_SIZE + sDiv,
                                               sDiv, sDiv);
-                            context.drawImage(pathLocal, (lD % 4 * sDiv) + offsetX,
+                            context.drawImage(img, (lD % 4 * sDiv) + offsetX,
                                               (Math.floor(lD / 4) * sDiv) + offsetY,
                                               sDiv, sDiv,
-                                              count * $SQUARE_SIZE + sDiv,
-                                              (row + y) * $SQUARE_SIZE + sDiv,
+                                              count * RPM.SQUARE_SIZE + sDiv,
+                                              (row + y) * RPM.SQUARE_SIZE + sDiv,
                                               sDiv, sDiv);
                             count++;
                             if (count === 64) {
@@ -403,13 +395,13 @@ SystemTileset.prototype = {
     */
     updateTextureAutotile: function(textureAutotile, texture) {
         var image = new Image();
-        $filesToLoad++;
+        RPM.filesToLoad++;
         image.addEventListener('load', function() {
             texture.image = image;
             texture.needsUpdate = true;
-            $loadedFiles++;
+            RPM.loadedFiles++;
         }, false);
-        image.src = $canvasRendering.toDataURL();
+        image.src = Platform.canvasRendering.toDataURL();
 
         textureAutotile.texture = RPM.createMaterial(texture);
         this.texturesAutotiles.push(textureAutotile);
@@ -423,26 +415,25 @@ SystemTileset.prototype = {
     */
     loadTextureWall: function(texture, pathLocal, picture, id) {
         var callback = function() {
-            var context = $canvasRendering.getContext("2d");
-            var img = context.createImageData(pathLocal);
+            var context = Platform.canvasRendering.getContext("2d");
 
             // Update picture infos for collisions
-            picture.width = Math.floor(img.width / $SQUARE_SIZE);
-            picture.height = Math.floor(img.height / $SQUARE_SIZE);
+            picture.width = Math.floor(this.image.width / RPM.SQUARE_SIZE);
+            picture.height = Math.floor(this.image.height / RPM.SQUARE_SIZE);
 
-            context.clearRect(0, 0, $canvasRendering.width,
-                              $canvasRendering.height);
-            $canvasRendering.width = img.width + $SQUARE_SIZE;
-            $canvasRendering.height = img.height;
-            context.drawImage(pathLocal, 0, 0);
-            var left = context.getImageData(0, 0, Math.floor($SQUARE_SIZE / 2),
-                img.height);
-            var right = context.getImageData(img.width - Math.floor(
-                $SQUARE_SIZE / 2), 0, Math.floor($SQUARE_SIZE / 2), img.height);
+            context.clearRect(0, 0, Platform.canvasRendering.width,
+                              Platform.canvasRendering.height);
+            Platform.canvasRendering.width = this.image.width + RPM.SQUARE_SIZE;
+            Platform.canvasRendering.height = this.image.height;
+            context.drawImage(this.image, 0, 0);
+            var left = context.getImageData(0, 0, Math.floor(RPM.SQUARE_SIZE / 2),
+                this.image.height);
+            var right = context.getImageData(this.image.width - Math.floor(
+                RPM.SQUARE_SIZE / 2), 0, Math.floor(RPM.SQUARE_SIZE / 2), this.image.height);
             try
             {
-                context.drawImage(left, img.width, 0);
-                context.drawImage(right, img.width + Math.floor($SQUARE_SIZE / 2
+                context.putImageData(left, this.image.width, 0);
+                context.putImageData(right, this.image.width + Math.floor(RPM.SQUARE_SIZE / 2
                     ), 0);
             } catch (e)
             {
@@ -452,15 +443,12 @@ SystemTileset.prototype = {
             image.addEventListener('load', function() {
                 texture.image = image;
                 texture.needsUpdate = true;
-                $loadedFiles++;
+                RPM.loadedFiles++;
             }, false);
-            image.src = $canvasRendering.toDataURL();
+            image.src = Platform.canvasRendering.toDataURL();
         };
 
-        if ($canvasRendering.isImageLoaded(pathLocal))
-            callback.call(this);
-        else
-            var pic = new Picture2D(pathLocal, callback);
+        var pic = new Picture2D(pathLocal, callback);
     },
 
     // -------------------------------------------------------
@@ -471,7 +459,7 @@ SystemTileset.prototype = {
         var i, l, mountains, mountainsIDs, id, offset, result, paths, mountain,
             textureMountain, that, texture, context, picture, callback;
 
-        mountains = $datasGame.specialElements.mountains;
+        mountains = RPM.datasGame.specialElements.mountains;
         mountainsIDs = this.mountains;
         i = 0;
         l = mountains.length;
@@ -480,10 +468,10 @@ SystemTileset.prototype = {
         textureMountain = null;
         that = this;
         texture = new THREE.Texture();
-        context = $canvasRendering.getContext("2d");
-        context.clearRect(0, 0, $canvasRendering.width, $canvasRendering.height);
-        $canvasRendering.width = 4 * $SQUARE_SIZE;
-        $canvasRendering.height = $MAX_PICTURE_SIZE;
+        context = Platform.canvasRendering.getContext("2d");
+        context.clearRect(0, 0, Platform.canvasRendering.width, Platform.canvasRendering.height);
+        Platform.canvasRendering.width = 4 * RPM.SQUARE_SIZE;
+        Platform.canvasRendering.height = RPM.MAX_PICTURE_SIZE;
         this.texturesMountains = new Array;
 
         callback = function() {
@@ -500,7 +488,7 @@ SystemTileset.prototype = {
                 id = mountainsIDs[i];
                 mountain = mountains[id];
                 if (mountain) {
-                    picture = $datasGame.pictures.list[PictureKind.Mountains][
+                    picture = RPM.datasGame.pictures.list[PictureKind.Mountains][
                         mountain.pictureID];
                 } else {
                     picture = null;
@@ -536,10 +524,10 @@ SystemTileset.prototype = {
     loadTextureMountain: function(textureMountain, texture, picture, context,
         offset, id)
     {
-        var i, paths, path, pathLocal, that, result, callback, point, img, width,
+        var i, paths, path, pathLocal, that, result, callback, point, width,
             height, size, pic;
 
-        $filesToLoad++;
+        RPM.filesToLoad++;
         if (picture) {
             paths = picture.getPath(PictureKind.Mountains);
             path = paths[0];
@@ -549,10 +537,7 @@ SystemTileset.prototype = {
         result = new Array;
 
         callback = function() {
-            $loadedFiles++;
-            if (picture) {
-                img = context.createImageData(pathLocal);
-            }
+            RPM.loadedFiles++;
             width = 3;
             height = 3;
             size = 9;
@@ -571,7 +556,7 @@ SystemTileset.prototype = {
                     textureMountain.setBegin(id, point);
                 }
                 if (picture) {
-                    that.paintPictureMountain(context, pathLocal, img, offset,
+                    that.paintPictureMountain(context, pathLocal, this.image, offset,
                         point, id);
                 }
 
@@ -581,7 +566,7 @@ SystemTileset.prototype = {
                 if (offset === that.getMaxMountainOffsetTexture()) {
                     that.updateTextureMountain(textureMountain, texture);
                     texture = new THREE.Texture();
-                    context.clearRect(0, 0, $canvasRendering.width,
+                    context.clearRect(0, 0, Platform.canvasRendering.width,
                         canvasRendering.height);
                     textureMountain = null;
                     offset = 0;
@@ -593,7 +578,7 @@ SystemTileset.prototype = {
             result.push(offset);
         };
 
-        if (!picture || $canvasRendering.isImageLoaded(pathLocal)) {
+        if (!picture) {
             callback.call(this);
         } else {
             pic = new Picture2D(pathLocal, callback);
@@ -609,41 +594,41 @@ SystemTileset.prototype = {
     paintPictureMountain: function(context, pathLocal, img, offset, point, id) {
         var i, l, y, sourceSize, sDiv;
 
-        y = offset * 4 * $SQUARE_SIZE;
-        sourceSize = 3 * $SQUARE_SIZE;
-        sDiv = Math.round($SQUARE_SIZE / 2);
+        y = offset * 4 * RPM.SQUARE_SIZE;
+        sourceSize = 3 * RPM.SQUARE_SIZE;
+        sDiv = Math.round(RPM.SQUARE_SIZE / 2);
 
         // Draw original image
-        context.drawImage(pathLocal, 0, y);
+        context.drawImage(img, 0, y);
 
         // Add left/right autos
         try {
             for (i = 0, l = 3; i < l; i++) {
-                context.drawImage(pathLocal, 0, (i * $SQUARE_SIZE), sDiv,
-                    $SQUARE_SIZE, sourceSize, y + (i * $SQUARE_SIZE), sDiv,
-                    $SQUARE_SIZE);
-                context.drawImage(pathLocal, sourceSize - sDiv, (i * $SQUARE_SIZE),
-                    sDiv, $SQUARE_SIZE, sourceSize + sDiv, y + (i * $SQUARE_SIZE),
-                    sDiv, $SQUARE_SIZE);
+                context.drawImage(img, 0, (i * RPM.SQUARE_SIZE), sDiv,
+                    RPM.SQUARE_SIZE, sourceSize, y + (i * RPM.SQUARE_SIZE), sDiv,
+                    RPM.SQUARE_SIZE);
+                context.drawImage(img, sourceSize - sDiv, (i * RPM.SQUARE_SIZE),
+                    sDiv, RPM.SQUARE_SIZE, sourceSize + sDiv, y + (i * RPM.SQUARE_SIZE),
+                    sDiv, RPM.SQUARE_SIZE);
             }
 
             // Add top/bot autos
             for (i = 0, l = 3; i < l; i++) {
-                context.drawImage(pathLocal, i * $SQUARE_SIZE, 0, $SQUARE_SIZE, sDiv
-                    , i * $SQUARE_SIZE, y + sourceSize, $SQUARE_SIZE, sDiv);
-                context.drawImage(pathLocal, i * $SQUARE_SIZE, sourceSize - sDiv,
-                    $SQUARE_SIZE, sDiv, i * $SQUARE_SIZE, y + sourceSize + sDiv,
-                    $SQUARE_SIZE, sDiv);
+                context.drawImage(img, i * RPM.SQUARE_SIZE, 0, RPM.SQUARE_SIZE, sDiv
+                    , i * RPM.SQUARE_SIZE, y + sourceSize, RPM.SQUARE_SIZE, sDiv);
+                context.drawImage(img, i * RPM.SQUARE_SIZE, sourceSize - sDiv,
+                    RPM.SQUARE_SIZE, sDiv, i * RPM.SQUARE_SIZE, y + sourceSize + sDiv,
+                    RPM.SQUARE_SIZE, sDiv);
             }
 
             // Add all sides autos
-            context.drawImage(pathLocal, 0, 0, sDiv, sDiv, sourceSize, y +
+            context.drawImage(img, 0, 0, sDiv, sDiv, sourceSize, y +
                 sourceSize, sDiv, sDiv);
-            context.drawImage(pathLocal, sourceSize - sDiv, 0, sDiv, sDiv,
+            context.drawImage(img, sourceSize - sDiv, 0, sDiv, sDiv,
                 sourceSize + sDiv, y + sourceSize, sDiv, sDiv);
-            context.drawImage(pathLocal, 0, sourceSize - sDiv, sDiv, sDiv,
+            context.drawImage(img, 0, sourceSize - sDiv, sDiv, sDiv,
                 sourceSize, y + sourceSize + sDiv, sDiv, sDiv);
-            context.drawImage(pathLocal, sourceSize - sDiv, sourceSize - sDiv, sDiv,
+            context.drawImage(img, sourceSize - sDiv, sourceSize - sDiv, sDiv,
                 sDiv, sourceSize + sDiv, y + sourceSize + sDiv, sDiv, sDiv);
         } catch (e)
         {
@@ -657,13 +642,13 @@ SystemTileset.prototype = {
     */
     updateTextureMountain: function(textureMountain, texture) {
         var image = new Image();
-        $filesToLoad++;
+        RPM.filesToLoad++;
         image.addEventListener('load', function() {
             texture.image = image;
             texture.needsUpdate = true;
-            $loadedFiles++;
+            RPM.loadedFiles++;
         }, false);
-        image.src = $canvasRendering.toDataURL();
+        image.src = Platform.canvasRendering.toDataURL();
 
         textureMountain.texture = RPM.createMaterial(texture);
         this.texturesMountains.push(textureMountain);
@@ -672,12 +657,12 @@ SystemTileset.prototype = {
     // -------------------------------------------------------
 
     getMaxMountainOffsetTexture: function() {
-        return Math.floor($MAX_PICTURE_SIZE / (4 * $SQUARE_SIZE));
+        return Math.floor(RPM.MAX_PICTURE_SIZE / (4 * RPM.SQUARE_SIZE));
     },
 
     // -------------------------------------------------------
 
     getMaxAutotilesOffsetTexture: function() {
-        return Math.floor($MAX_PICTURE_SIZE / (9 * $SQUARE_SIZE));
+        return Math.floor(RPM.MAX_PICTURE_SIZE / (9 * RPM.SQUARE_SIZE));
     }
 }

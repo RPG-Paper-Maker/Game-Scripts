@@ -36,16 +36,16 @@ MapInfos.prototype = {
         this.depth = json.d;
 
         // Tileset: if not existing, by default select the first one
-        this.tileset = $datasGame.tilesets.list[json.tileset];
+        this.tileset = RPM.datasGame.tilesets.list[json.tileset];
         if (!this.tileset) {
-            this.tileset = $datasGame.tilesets.list[1];
+            this.tileset = RPM.datasGame.tilesets.list[1];
         }
 
         this.music = new SystemPlaySong(SongKind.Music);
         this.music.readJSON(json.music);
         this.backgroundSound = new SystemPlaySong(SongKind.BackgroundSound);
         this.backgroundSound.readJSON(json.bgs);
-        this.cameraProperties = $datasGame.system.cameraProperties[SystemValue
+        this.cameraProperties = RPM.datasGame.system.cameraProperties[SystemValue
             .readOrDefaultDatabase(json.cpi, 1).getValue()];
         this.backgroundColorID = new SystemValue();
         this.backgroundColorID.read(json.sky);
@@ -57,7 +57,7 @@ MapInfos.prototype = {
     },
 
     updateBackgroundColor: function() {
-        this.backgroundColor = $datasGame.system.colors[this.backgroundColorID
+        this.backgroundColor = RPM.datasGame.system.colors[this.backgroundColorID
             .getValue()];
     }
 }

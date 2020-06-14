@@ -42,7 +42,7 @@ Object3DCustom.prototype = {
             minPos, scale, scaleVec, angleY, angleX, angleZ, center;
 
         localPosition = RPM.positionToVector3(position);
-        modelGeometry = $datasGame.shapes.get(CustomShapeKind.OBJ, this.datas
+        modelGeometry = RPM.datasGame.shapes.get(CustomShapeKind.OBJ, this.datas
             .objID).geometry;
         vertices = modelGeometry.vertices;
         uvs = modelGeometry.uvs;
@@ -115,9 +115,9 @@ Object3DCustom.prototype = {
                     angleX,
                     angleZ
                 ],
-                w: Math.ceil(w / 2 / $SQUARE_SIZE),
-                h: Math.ceil(h / 2 / $SQUARE_SIZE),
-                d: Math.ceil(d / 2 / $SQUARE_SIZE),
+                w: Math.ceil(w / 2 / RPM.SQUARE_SIZE),
+                h: Math.ceil(h / 2 / RPM.SQUARE_SIZE),
+                d: Math.ceil(d / 2 / RPM.SQUARE_SIZE),
                 k: true
             });
         }

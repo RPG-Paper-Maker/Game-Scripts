@@ -59,7 +59,7 @@ SceneBattle.prototype.defineAction = function()
     for (i = 0, l = systemActions.length; i < l; i++)
     {
         action = systemActions[i];
-        if (action.isConditionTurn && !$operators_compare[action
+        if (action.isConditionTurn && !RPM.operators_compare[action
             .operationKindTurn](this.turn, action.turnValueCompare.getValue()))
         {
             continue;
@@ -68,17 +68,17 @@ SceneBattle.prototype.defineAction = function()
         {
             var stat;
 
-            stat = $datasGame.battleSystem.statistics[action.statisticID
+            stat = RPM.datasGame.battleSystem.statistics[action.statisticID
                 .getValue()];
-            if (!$operators_compare[action.operationKindStatistic](character[
+            if (!RPM.operators_compare[action.operationKindStatistic](character[
                 stat.abbreviation] / character[stat.getMaxAbbreviation()] * 100,
                 action.statisticValueCompare.getValue()))
             {
                 continue;
             }
         }
-        if (action.isConditionVariable && !$operators_compare[action
-            .operationKindVariable]($game.variables[action.variableID], action
+        if (action.isConditionVariable && !RPM.operators_compare[action
+            .operationKindVariable](RPM.game.variables[action.variableID], action
             .variableValueCompare.getValue()))
         {
             continue;
@@ -94,7 +94,7 @@ SceneBattle.prototype.defineAction = function()
         }
         if (action.actionKind === MonsterActionKind.UseSkill)
         {
-            if (!$datasGame.skills.list[action.skillID.getValue()].isPossible())
+            if (!RPM.datasGame.skills.list[action.skillID.getValue()].isPossible())
             {
                 continue;
             }
@@ -140,7 +140,7 @@ SceneBattle.prototype.defineAction = function()
     case MonsterActionKind.UseSkill:
         var effect;
 
-        effect = $datasGame.skills.list[this.action.skillID.getValue()].effects[0];
+        effect = RPM.datasGame.skills.list[this.action.skillID.getValue()].effects[0];
         if (effect)
         {
             this.battleCommandKind = effect.kind === EffectKind.SpecialActions ?
@@ -149,7 +149,7 @@ SceneBattle.prototype.defineAction = function()
         {
             this.battleCommandKind = EffectSpecialActionKind.OpenSkills;
         }
-        this.attackSkill = $datasGame.skills.list[this.action.skillID
+        this.attackSkill = RPM.datasGame.skills.list[this.action.skillID
             .getValue()];
         break;
     case MonsterActionKind.UseItem:
@@ -183,11 +183,11 @@ SceneBattle.prototype.defineTargets = function() {
     switch (this.action.actionKind)
     {
     case MonsterActionKind.UseSkill:
-        targetKind = $datasGame.skills.list[this.action.skillID.getValue()]
+        targetKind = RPM.datasGame.skills.list[this.action.skillID.getValue()]
             .targetKind;
         break;
     case MonsterActionKind.UseItem:
-        targetKind = $datasGame.items.list[this.action.itemID.getValue()]
+        targetKind = RPM.datasGame.items.list[this.action.itemID.getValue()]
             .targetKind;
         break;
     case MonsterActionKind.DoNothing:

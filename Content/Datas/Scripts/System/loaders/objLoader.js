@@ -2,9 +2,7 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.OBJLoader = function ( manager ) {
-
-	this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
+THREE.OBJLoader = function () {;
 
 	this.materials = null;
 
@@ -18,10 +16,11 @@ THREE.OBJLoader.prototype = {
 
 		var scope = this;
 
-		var loader = new THREE.XHRLoader( scope.manager );
-		loader.setPath( this.path );
+		var loader = new THREE.FileLoader();
+		console.log(url)
+		//loader.setPath( this.path );
 		loader.load( url, function ( text ) {
-
+			console.log("ok")
 			onLoad( scope.parse( text ) );
 
 		}, onProgress, onError );

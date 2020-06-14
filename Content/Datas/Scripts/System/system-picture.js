@@ -29,8 +29,8 @@ function SystemPicture(){
 *   @returns {string}
 */
 SystemPicture.getFolder = function(kind, isBR){
-    var folder = isBR ? RPM.PATH_BR : $ROOT_DIRECTORY;
-    var folderLocal = isBR ? RPM.PATH_BR : $ROOT_DIRECTORY_LOCAL;
+    var folder = isBR ? RPM.PATH_BR : RPM.ROOT_DIRECTORY_LOCAL;
+    var folderLocal = isBR ? RPM.PATH_BR : RPM.ROOT_DIRECTORY_LOCAL;
     var dir = SystemPicture.getLocalFolder(kind);
     var path = folder + dir;
     var pathLocal = folderLocal + dir;
@@ -124,8 +124,8 @@ SystemPicture.prototype = {
     /** Read collisions according to image size.
     */
     readCollisionsImage: function(image) {
-        this.width = Math.floor(image.width / $SQUARE_SIZE);
-        this.height = Math.floor(image.height / $SQUARE_SIZE);
+        this.width = Math.floor(image.width / RPM.SQUARE_SIZE);
+        this.height = Math.floor(image.height / RPM.SQUARE_SIZE);
 
         this.readCollisions();
     },
@@ -141,7 +141,7 @@ SystemPicture.prototype = {
 
         var i, j, k, l, w, h, index, collision;
         var jsonTab, jsonKey, jsonVal;
-        w = this.width / $FRAMES;
+        w = this.width / RPM.FRAMES;
         h = this.height / 4;
 
         // Initialize
@@ -160,7 +160,7 @@ SystemPicture.prototype = {
             this.collisions[index] = collision;
 
             if (this.collisionsRepeat) {
-                for (j = 0; j < $FRAMES; j++) {
+                for (j = 0; j < RPM.FRAMES; j++) {
                     for (k = 0; k < 4; k++) {
                         this.collisions[(jsonKey[0] + (j * w)) + ((jsonKey[1] +
                         (k * h)) * this.width)] = collision;
@@ -237,7 +237,7 @@ SystemPicture.prototype = {
                     squares[i] = square.rect;
                 }
                 else
-                    squares[i] = [0, 0, $SQUARE_SIZE, $SQUARE_SIZE];
+                    squares[i] = [0, 0, RPM.SQUARE_SIZE, RPM.SQUARE_SIZE];
             }
             else {
                 square = this.getCollisionAtPos(x, y);
@@ -277,14 +277,14 @@ SystemPicture.prototype = {
     /** Get a specific collision square according to texture.
     */
     getSquaresForStates: function(image) {
-        var w = Math.floor(image.width / $SQUARE_SIZE / $FRAMES);
-        var h = Math.floor(image.height / $SQUARE_SIZE / 4);
-        var states = new Array($FRAMES * 4);
+        var w = Math.floor(image.width / RPM.SQUARE_SIZE / RPM.FRAMES);
+        var h = Math.floor(image.height / RPM.SQUARE_SIZE / 4);
+        var states = new Array(RPM.FRAMES * 4);
         var i, j;
 
-        for (i = 0; i < $FRAMES; i++) {
+        for (i = 0; i < RPM.FRAMES; i++) {
             for (j = 0; j < 4; j++) {
-                states[i + (j * $FRAMES)] = this.getSquaresForTexture(
+                states[i + (j * RPM.FRAMES)] = this.getSquaresForTexture(
                     [i * w, j * h, w, h]);
             }
         }

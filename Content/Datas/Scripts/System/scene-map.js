@@ -32,12 +32,12 @@
 function SceneMap(id, isBattleMap){
     SceneGame.call(this);
 
-    $currentMap = this;
+    RPM.currentMap = this;
     this.id = id;
     this.isBattleMap = isBattleMap;
 
     if (!isBattleMap) {
-        $game.currentMapId = id;
+        RPM.game.currentMapId = id;
     }
 
     this.mapName = RPM.generateMapName(id);
@@ -47,9 +47,9 @@ function SceneMap(id, isBattleMap){
     this.collisions = new Array;
 
     // Adding meshes for collision
-    if ($datasGame.system.showBB) {
-        this.scene.add($BB_BOX);
-        this.scene.add($BB_ORIENTED_BOX);
+    if (RPM.datasGame.system.showBB) {
+        this.scene.add(RPM.BB_BOX);
+        this.scene.add(RPM.BB_ORIENTED_BOX);
     }
 
     this.callBackAfterLoading = this.loadTextures;
@@ -70,9 +70,9 @@ SceneMap.getPortionName = function(x, y, z){
 
 SceneMap.getGlobalPortion = function(position) {
     return [
-        Math.floor(position[0] / $PORTION_SIZE),
-        Math.floor(position[1] / $PORTION_SIZE),
-        Math.floor(position[3] / $PORTION_SIZE)
+        Math.floor(position[0] / RPM.PORTION_SIZE),
+        Math.floor(position[1] / RPM.PORTION_SIZE),
+        Math.floor(position[3] / RPM.PORTION_SIZE)
     ];
 }
 
@@ -82,7 +82,7 @@ SceneMap.prototype = Object.create(SceneGame.prototype);
 /** Get the hero position according to battle map
 */
 SceneMap.prototype.getHeroPosition = function() {
-    return this.isBattleMap ? $game.heroBattle.position : $game.hero.position;
+    return this.isBattleMap ? RPM.game.heroBattle.position : RPM.game.hero.position;
 }
 
 // -------------------------------------------------------
@@ -95,20 +95,20 @@ SceneMap.prototype.updateBackgroundColor = function() {
 /** Read the map infos file.
 */
 SceneMap.prototype.readMapInfos = function(){
-    $filesToLoad++;
+    RPM.filesToLoad++;
     this.mapInfos = new MapInfos();
     RPM.openFile(this, RPM.FILE_MAPS + this.mapName + RPM.FILE_MAP_INFOS,
         true, function(res)
     {
         var json = JSON.parse(res);
         this.mapInfos.read(json);
-        $loadedFiles++;
+        RPM.loadedFiles++;
 
         // Camera initialization
         if (this.isBattleMap) {
             this.initializeCamera();
         } else {
-            this.camera = new Camera(this.mapInfos.cameraProperties, $game
+            this.camera = new Camera(this.mapInfos.cameraProperties, RPM.game
                 .hero);
             this.camera.update();
         }
@@ -130,7 +130,7 @@ SceneMap.prototype.initializePortions = function(){
 
     // Hero initialize
     if (!this.isBattleMap) {
-        $game.hero.changeState();
+        RPM.game.hero.changeState();
 
         // Start music and background sound
         this.mapInfos.music.playSong();
@@ -142,7 +142,7 @@ SceneMap.prototype.initializePortions = function(){
 
     // End callback
     this.callBackAfterLoading = null;
-    $requestPaintHUD = true;
+    RPM.requestPaintHUD = true;
 }
 
 // -------------------------------------------------------
@@ -177,10 +177,10 @@ SceneMap.prototype.loadPortions = function(noNewPortion) {
 *   @param {number} z The local z portion.
 */
 SceneMap.prototype.loadPortion = function(realX, realY, realZ, x, y, z, wait, move) {
-    var lx = Math.ceil(this.mapInfos.length / $PORTION_SIZE);
-    var lz = Math.ceil(this.mapInfos.width / $PORTION_SIZE);
-    var ld = Math.ceil(this.mapInfos.depth / $PORTION_SIZE);
-    var lh = Math.ceil(this.mapInfos.height / $PORTION_SIZE);
+    var lx = Math.ceil(this.mapInfos.length / RPM.PORTION_SIZE);
+    var lz = Math.ceil(this.mapInfos.width / RPM.PORTION_SIZE);
+    var ld = Math.ceil(this.mapInfos.depth / RPM.PORTION_SIZE);
+    var lh = Math.ceil(this.mapInfos.height / RPM.PORTION_SIZE);
 
     if (realX >= 0 && realX < lx && realY >= -ld && realY < lh &&
         realZ >= 0 && realZ < lz)
@@ -195,7 +195,7 @@ SceneMap.prototype.loadPortion = function(realX, realY, realZ, x, y, z, wait, mo
             if (json.hasOwnProperty("lands")){
                 mapPortion = new MapPortion(realX, realY, realZ);
                 mapPortion.read(
-                        json, this.id === $datasGame.system.idMapStartHero);
+                        json, this.id === RPM.datasGame.system.idMapStartHero);
             }
             this.setMapPortion(x, y, z, mapPortion, move);
         });
@@ -255,13 +255,13 @@ SceneMap.prototype.initializeObjects = function(){
 /** All the objects moved or/and with changed states.
 */
 SceneMap.prototype.initializePortionsObjects = function(){
-    var mapsDatas = $game.mapsDatas[this.id];
+    var mapsDatas = RPM.game.mapsDatas[this.id];
     var datas = null;
 
-    var l = Math.ceil(this.mapInfos.length / $PORTION_SIZE);
-    var w = Math.ceil(this.mapInfos.width / $PORTION_SIZE);
-    var d = Math.ceil(this.mapInfos.depth / $PORTION_SIZE);
-    var h = Math.ceil(this.mapInfos.height / $PORTION_SIZE);
+    var l = Math.ceil(this.mapInfos.length / RPM.PORTION_SIZE);
+    var w = Math.ceil(this.mapInfos.width / RPM.PORTION_SIZE);
+    var d = Math.ceil(this.mapInfos.depth / RPM.PORTION_SIZE);
+    var h = Math.ceil(this.mapInfos.height / RPM.PORTION_SIZE);
 
     var objectsPortions = new Array(l);
     for (var i = 0; i < l; i++){
@@ -296,7 +296,7 @@ SceneMap.prototype.initializePortionsObjects = function(){
         }
     }
 
-    $game.mapsDatas[this.id] = objectsPortions;
+    RPM.game.mapsDatas[this.id] = objectsPortions;
 }
 
 // -------------------------------------------------------
@@ -304,7 +304,7 @@ SceneMap.prototype.initializePortionsObjects = function(){
 /** Get the objects at a specific portion.
 */
 SceneMap.prototype.getObjectsAtPortion = function(i, j, k){
-    return $game.mapsDatas[this.id][i][j][k];
+    return RPM.game.mapsDatas[this.id][i][j][k];
 }
 
 
@@ -319,11 +319,11 @@ SceneMap.prototype.loadTextures = function(){
     paths = tileset.getPath();
     this.textureTileset = paths ? RPM.loadTexture(paths, tileset.picture) :
         RPM.loadTextureEmpty();
-    this.texturesAutotiles = $datasGame.tilesets.getTexturesAutotiles(tileset);
-    this.texturesWalls = $datasGame.tilesets.getTexturesWalls(tileset);
-    this.texturesMountains = $datasGame.tilesets.getTexturesMountains(tileset);
-    this.texturesObjects3D = $datasGame.tilesets.texturesObjects3D;
-    this.texturesCharacters = $datasGame.tilesets.texturesCharacters;
+    this.texturesAutotiles = RPM.datasGame.tilesets.getTexturesAutotiles(tileset);
+    this.texturesWalls = RPM.datasGame.tilesets.getTexturesWalls(tileset);
+    this.texturesMountains = RPM.datasGame.tilesets.getTexturesMountains(tileset);
+    this.texturesObjects3D = RPM.datasGame.tilesets.texturesObjects3D;
+    this.texturesCharacters = RPM.datasGame.tilesets.texturesCharacters;
 
     this.callBackAfterLoading = this.loadCollisions;
 }
@@ -341,7 +341,7 @@ SceneMap.prototype.loadCollisions = function() {
     }
 
     // Characters
-    pictures = $datasGame.pictures.list[PictureKind.Characters];
+    pictures = RPM.datasGame.pictures.list[PictureKind.Characters];
     l = pictures.length;
     this.collisions[PictureKind.Characters] = new Array(l);
     for (i = 1; i < l; i++) {
@@ -361,9 +361,9 @@ SceneMap.prototype.loadCollisions = function() {
 
     // Autotiles
     list = this.mapInfos.tileset.autotiles;
-    pictures = $datasGame.pictures.list[PictureKind.Autotiles];
+    pictures = RPM.datasGame.pictures.list[PictureKind.Autotiles];
     for (i = 0, l = list.length; i < l; i++) {
-        p = $datasGame.specialElements.autotiles[list[i]];
+        p = RPM.datasGame.specialElements.autotiles[list[i]];
         if (p) {
             p = pictures[p.pictureID];
             if (p) {
@@ -374,9 +374,9 @@ SceneMap.prototype.loadCollisions = function() {
 
     // Walls
     list = this.mapInfos.tileset.walls;
-    pictures = $datasGame.pictures.list[PictureKind.Walls];
+    pictures = RPM.datasGame.pictures.list[PictureKind.Walls];
     for (i = 0, l = list.length; i < l; i++) {
-        p = $datasGame.specialElements.walls[list[i]];
+        p = RPM.datasGame.specialElements.walls[list[i]];
         if (p) {
             p = pictures[p.pictureID];
             if (p) {
@@ -450,7 +450,7 @@ SceneMap.prototype.getLocalPortion = function(portion){
 // -------------------------------------------------------
 
 SceneMap.prototype.getMapPortionLimit = function(){
-    return $PORTIONS_RAY_NEAR + $PORTIONS_RAY_FAR;
+    return RPM.PORTIONS_RAY_NEAR + RPM.PORTIONS_RAY_FAR;
 }
 
 // -------------------------------------------------------
@@ -596,12 +596,12 @@ SceneMap.prototype.updateMovingPortionsUpDown = function(newPortion) {
 */
 SceneMap.prototype.closeMap = function() {
     var i, j, k;
-    var l = Math.ceil(this.mapInfos.length / $PORTION_SIZE);
-    var w = Math.ceil(this.mapInfos.width / $PORTION_SIZE);
-    var d = Math.ceil(this.mapInfos.depth / $PORTION_SIZE);
-    var h = Math.ceil(this.mapInfos.height / $PORTION_SIZE);
+    var l = Math.ceil(this.mapInfos.length / RPM.PORTION_SIZE);
+    var w = Math.ceil(this.mapInfos.width / RPM.PORTION_SIZE);
+    var d = Math.ceil(this.mapInfos.depth / RPM.PORTION_SIZE);
+    var h = Math.ceil(this.mapInfos.height / RPM.PORTION_SIZE);
 
-    var objectsPortions = $game.mapsDatas[this.id];
+    var objectsPortions = RPM.game.mapsDatas[this.id];
     for (i = 0; i < l; i++){
         for (j = -d; j < h; j++){
             for (k = 0; k < w; k++){
@@ -619,7 +619,7 @@ SceneMap.prototype.closeMap = function() {
         this.scene.remove(this.scene.children[i]);
     }
 
-    $currentMap = null;
+    RPM.currentMap = null;
 }
 
 // -------------------------------------------------------
@@ -639,9 +639,9 @@ SceneMap.prototype.update = function() {
         this.mapInfos.startupObject.update();
 
         // Update the objects
-        $game.hero.update(angle);
+        RPM.game.hero.update(angle);
         this.updatePortions(this, function(x, y, z, i, j, k) {
-            var objects = $game.mapsDatas[this.id][x][y][z];
+            var objects = RPM.game.mapsDatas[this.id][x][y][z];
             var movedObjects = objects.min;
             var movedObject;
             var p, l;
@@ -669,10 +669,10 @@ SceneMap.prototype.updatePortions = function(base, callback) {
     var limit = this.getMapPortionLimit();
     var i, j, k, p, l, x, y, z;
 
-    var lx = Math.ceil(this.mapInfos.length / $PORTION_SIZE);
-    var lz = Math.ceil(this.mapInfos.width / $PORTION_SIZE);
-    var ld = Math.ceil(this.mapInfos.depth / $PORTION_SIZE);
-    var lh = Math.ceil(this.mapInfos.height / $PORTION_SIZE);
+    var lx = Math.ceil(this.mapInfos.length / RPM.PORTION_SIZE);
+    var lz = Math.ceil(this.mapInfos.width / RPM.PORTION_SIZE);
+    var ld = Math.ceil(this.mapInfos.depth / RPM.PORTION_SIZE);
+    var lh = Math.ceil(this.mapInfos.height / RPM.PORTION_SIZE);
 
     for (i = -limit; i <= limit; i++) {
         for (j = -limit; j <= limit; j++) {
@@ -695,7 +695,7 @@ SceneMap.prototype.updatePortions = function(base, callback) {
 SceneMap.prototype.onKeyPressed = function(key){
 
     // Send keyPressEvent to all the objects
-    if (!$blockingHero){
+    if (!RPM.blockingHero){
         EventCommandSendEvent.sendEvent(null, 0, 1, true, 3,
                                         [null,
                                         SystemValue.createNumber(key),
@@ -715,7 +715,7 @@ SceneMap.prototype.onKeyReleased = function(key){
 // -------------------------------------------------------
 
 SceneMap.prototype.onKeyPressedRepeat = function(key){
-    if (!$blockingHero){
+    if (!RPM.blockingHero){
         EventCommandSendEvent.sendEvent(null, 0, 1, true, 3,
                                         [null,
                                         SystemValue.createNumber(key),
@@ -731,7 +731,7 @@ SceneMap.prototype.onKeyPressedRepeat = function(key){
 // -------------------------------------------------------
 
 SceneMap.prototype.onKeyPressedAndRepeat = function(key){
-    if (!$blockingHero){
+    if (!RPM.blockingHero){
         EventCommandSendEvent.sendEvent(null, 0, 1, true, 3,
                                         [null,
                                         SystemValue.createNumber(key),
@@ -745,7 +745,7 @@ SceneMap.prototype.onKeyPressedAndRepeat = function(key){
 // -------------------------------------------------------
 
 SceneMap.prototype.draw3D = function(canvas){
-    $renderer.render(this.scene, this.camera.threeCamera);
+    RPM.renderer.render(this.scene, this.camera.threeCamera);
 }
 
 // -------------------------------------------------------

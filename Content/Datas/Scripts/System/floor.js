@@ -40,13 +40,13 @@ Floor.prototype = {
             return null;
         }
 
-        var x = (this.texture[0] * $SQUARE_SIZE) / width;
-        var y = (this.texture[1] * $SQUARE_SIZE) / height;
-        var w = (this.texture[2] * $SQUARE_SIZE) / width;
-        var h = (this.texture[3] * $SQUARE_SIZE) / height;
+        var x = (this.texture[0] * RPM.SQUARE_SIZE) / width;
+        var y = (this.texture[1] * RPM.SQUARE_SIZE) / height;
+        var w = (this.texture[2] * RPM.SQUARE_SIZE) / width;
+        var h = (this.texture[3] * RPM.SQUARE_SIZE) / height;
 
         return Land.prototype.updateGeometry.call(this, geometry,
-            $currentMap.mapInfos.tileset.picture.getCollisionAt(this.texture),
+            RPM.currentMap.mapInfos.tileset.picture.getCollisionAt(this.texture),
             position, width, height, x, y, w, h, i);
     }
 }

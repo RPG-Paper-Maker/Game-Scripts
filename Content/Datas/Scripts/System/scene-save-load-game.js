@@ -46,12 +46,12 @@ SceneSaveLoadGame.prototype = {
             games.push(SceneSaveLoadGame.prototype.getEmptyGame(i))
         }
 
-        this.windowTop = new WindowBox(20, 20, $SCREEN_X - 40, 30);
+        this.windowTop = new WindowBox(20, 20, RPM.SCREEN_X - 40, 30);
         this.windowChoicesSlots = new WindowChoices(OrientationWindow.Vertical,
             10, 100, 100, 50, 4, games, []);
         this.windowInformations = new WindowBox(120, 100, 500, 300, null, [20,
             20, 20, 20]);
-        this.windowBot = new WindowBox(20, $SCREEN_Y - 50, $SCREEN_X - 40, 30);
+        this.windowBot = new WindowBox(20, RPM.SCREEN_Y - 50, RPM.SCREEN_X - 40, 30);
     },
 
     // -------------------------------------------------------
@@ -137,11 +137,11 @@ SceneSaveLoadGame.prototype = {
 
     onKeyPressed: function(key){
         if (DatasKeyBoard.isKeyEqual(key,
-                                     $datasGame.keyBoard.menuControls.Cancel) ||
-            DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.MainMenu))
+                                     RPM.datasGame.keyBoard.menuControls.Cancel) ||
+            DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.MainMenu))
         {
-            $datasGame.system.soundCancel.playSound();
-            $gameStack.pop();
+            RPM.datasGame.system.soundCancel.playSound();
+            RPM.gameStack.pop();
         }
     },
 

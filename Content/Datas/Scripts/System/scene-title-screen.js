@@ -26,31 +26,33 @@ function SceneTitleScreen() {
 
     SceneGame.call(this);
 
+    RPM.songsManager.stopAll();
+
     // Destroy pictures
-    $displayedPictures = [];
+    RPM.displayedPictures = [];
 
     // Creating background
-    if ($datasGame.titlescreenGameover.isTitleBackgroundImage) {
-        this.pictureBackground = Picture2D.createImageWithID($datasGame
+    if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage) {
+        this.pictureBackground = Picture2D.createImageWithID(RPM.datasGame
             .titlescreenGameover.titleBackgroundImageID, PictureKind.TitleScreen);
         this.pictureBackground.cover = true;
     } else {
-
-        $canvasVideos.source = $datasGame.videos.list[$datasGame
+        Platform.canvasVideos.classList.remove('hidden');
+        Platform.canvasVideos.src = RPM.datasGame.videos.list[RPM.datasGame
             .titlescreenGameover.titleBackgroundVideoID].getPath()[1];
-        $canvasVideos.play();
+        Platform.canvasVideos.play();
     }
 
     // Windows
-    commandsNb = $datasGame.titlescreenGameover.titleCommands.length;
+    commandsNb = RPM.datasGame.titlescreenGameover.titleCommands.length;
     this.windowChoicesCommands = new WindowChoices(OrientationWindow.Vertical,
-        $SCREEN_X / 2 - (RPM.MEDIUM_SLOT_WIDTH / 2), $SCREEN_Y - RPM.HUGE_SPACE
+        RPM.SCREEN_X / 2 - (RPM.MEDIUM_SLOT_WIDTH / 2), RPM.SCREEN_Y - RPM.HUGE_SPACE
         - (commandsNb * RPM.MEDIUM_SLOT_HEIGHT), RPM.MEDIUM_SLOT_WIDTH,
-        RPM.MEDIUM_SLOT_HEIGHT, commandsNb, $datasGame.titlescreenGameover
-        .getCommandsNames(), $datasGame.titlescreenGameover.getCommandsActions());
+        RPM.MEDIUM_SLOT_HEIGHT, commandsNb, RPM.datasGame.titlescreenGameover
+        .getCommandsNames(), RPM.datasGame.titlescreenGameover.getCommandsActions());
 
     // Play title screen song
-    $datasGame.titlescreenGameover.titleMusic.playSong();
+    RPM.datasGame.titlescreenGameover.titleMusic.playSong();
 }
 
 SceneTitleScreen.prototype = {
@@ -93,7 +95,7 @@ SceneTitleScreen.prototype = {
     // -------------------------------------------------------
 
     drawHUD: function() {
-        if ($datasGame.titlescreenGameover.isTitleBackgroundImage) {
+        if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage) {
             this.pictureBackground.draw();
         }
 

@@ -70,7 +70,7 @@ DatasKeyBoard.prototype = {
                 var abbreviation = jsonKey.abr;
                 var key = new SystemKeyBoard();
                 key.readJSON(jsonKey);
-                sc = $settings.kb[id];
+                sc = RPM.settings.kb[id];
                 if (sc) {
                     key.sc = sc;
                 }

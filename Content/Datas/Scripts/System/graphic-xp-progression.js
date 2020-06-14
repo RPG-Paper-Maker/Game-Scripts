@@ -21,10 +21,10 @@
 function GraphicXPProgression() {
     var i, l, player;
 
-    l = $game.teamHeroes.length
+    l = RPM.game.teamHeroes.length
     this.graphicCharacters = new Array(l);
     for (i = 0; i < l; i++) {
-        player = new GraphicPlayer($game.teamHeroes[i]);
+        player = new GraphicPlayer(RPM.game.teamHeroes[i]);
         this.graphicCharacters[i] = player;
     }
 }
@@ -32,7 +32,7 @@ function GraphicXPProgression() {
 GraphicXPProgression.prototype = {
 
     updateExperience: function() {
-        for (var i = 0, l = $game.teamHeroes.length; i < l; i++) {
+        for (var i = 0, l = RPM.game.teamHeroes.length; i < l; i++) {
             this.graphicCharacters[i].updateExperience();
         }
     },

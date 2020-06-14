@@ -28,8 +28,8 @@ function SystemVideo() {
 *   @returns {string}
 */
 SystemVideo.getFolder = function(isBR) {
-    var folder = isBR ? RPM.PATH_BR : $ROOT_DIRECTORY;
-    var folderLocal = isBR ? RPM.PATH_BR : $ROOT_DIRECTORY_LOCAL;
+    var folder = isBR ? RPM.PATH_BR : RPM.ROOT_DIRECTORY_LOCAL;
+    var folderLocal = isBR ? RPM.PATH_BR : RPM.ROOT_DIRECTORY_LOCAL;
     var dir = SystemVideo.getLocalFolder();
     var path = folder + dir;
     var pathLocal = folderLocal + dir;

@@ -25,8 +25,8 @@ function SceneLoadGame() {
     SceneSaveLoadGame.prototype.setContents.call(this, new GraphicText(
         "Load a game", { align: Align.Center }), new GraphicText(
         "Select a slot you want to load.", { align: Align.Center }));
-    if ($datasGame.titlescreenGameover.isTitleBackgroundImage) {
-        this.pictureBackground = Picture2D.createImageWithID($datasGame
+    if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage) {
+        this.pictureBackground = Picture2D.createImageWithID(RPM.datasGame
             .titlescreenGameover.titleBackgroundImageID, PictureKind.TitleScreen);
         this.pictureBackground.cover = true;
     }
@@ -45,25 +45,27 @@ SceneLoadGame.prototype = {
 
         // If action, load the selected slot
         if (DatasKeyBoard.isKeyEqual(key,
-                                     $datasGame.keyBoard.menuControls.Action))
+                                     RPM.datasGame.keyBoard.menuControls.Action))
         {
-            $game = this.windowChoicesSlots.getCurrentContent().game;
-            if (!$game.isNull) {
-                $datasGame.system.soundConfirmation.playSound();
+            RPM.game = this.windowChoicesSlots.getCurrentContent().game;
+            if (!RPM.game.isNull) {
+                RPM.datasGame.system.soundConfirmation.playSound();
 
                 // Initialize properties for hero
-                $game.hero.initializeProperties();
+                RPM.game.hero.initializeProperties();
 
                 // Stop video if existing
-                if (!$datasGame.titlescreenGameover.isTitleBackgroundVideo) {
-                    $canvasVideos.stop();
+                if (!RPM.datasGame.titlescreenGameover.isTitleBackgroundVideo) {
+                    Platform.canvasVideos.classList.add("hidden");
+                    Platform.canvasVideos.pause();
+                    Platform.canvasVideos.src = "";
                 }
 
                 // Pop load and title screen from the stack
-                $gameStack.pop()
-                $gameStack.replace(new SceneMap($game.currentMapId));
+                RPM.gameStack.pop()
+                RPM.gameStack.replace(new SceneMap(RPM.game.currentMapId));
             } else {
-                $datasGame.system.soundImpossible.playSound();
+                RPM.datasGame.system.soundImpossible.playSound();
             }
         }
     },
@@ -95,7 +97,7 @@ SceneLoadGame.prototype = {
     // -------------------------------------------------------
 
     drawHUD: function(){
-        if ($datasGame.titlescreenGameover.isTitleBackgroundImage) {
+        if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage) {
             this.pictureBackground.draw();
         }
 

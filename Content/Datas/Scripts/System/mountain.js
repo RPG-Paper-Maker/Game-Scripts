@@ -70,31 +70,31 @@ Mountain.prototype = {
     // -------------------------------------------------------
 
     getWidthOnlyPixelsPlus: function() {
-        return Math.round(this.widthPixels * $SQUARE_SIZE / 100);
+        return Math.round(this.widthPixels * RPM.SQUARE_SIZE / 100);
     },
 
     // -------------------------------------------------------
 
     getHeightOnlyPixelsPlus: function() {
-        return Math.round(this.heightPixels * $SQUARE_SIZE / 100);
+        return Math.round(this.heightPixels * RPM.SQUARE_SIZE / 100);
     },
 
     // -------------------------------------------------------
 
     getWidthTotalPixels: function() {
-        return this.widthSquares * $SQUARE_SIZE + this.getWidthOnlyPixelsPlus();
+        return this.widthSquares * RPM.SQUARE_SIZE + this.getWidthOnlyPixelsPlus();
     },
 
     // -------------------------------------------------------
 
     getHeightTotalPixels: function() {
-        return this.heightSquares * $SQUARE_SIZE + this.getHeightOnlyPixelsPlus();
+        return this.heightSquares * RPM.SQUARE_SIZE + this.getHeightOnlyPixelsPlus();
     },
 
     // -------------------------------------------------------
 
     getSystem: function() {
-        return $datasGame.specialElements.mountains[this.mountainID];
+        return RPM.datasGame.specialElements.mountains[this.mountainID];
     },
 
     // -------------------------------------------------------
@@ -107,7 +107,7 @@ Mountain.prototype = {
             vecCenterA, vecCenterB, xKind, nbSteps;
 
         xKind = Mountain.X_LEFT_OFFSET;
-        nbSteps = Math.ceil(faceHeight / $SQUARE_SIZE);
+        nbSteps = Math.ceil(faceHeight / RPM.SQUARE_SIZE);
         vecCenterA = vecFrontA.clone().addScaledVector(vecBackA.clone().sub(
             vecFrontA), 0.5);
         vecCenterB = vecFrontB.clone().addScaledVector(vecBackB.clone().sub(
@@ -125,14 +125,14 @@ Mountain.prototype = {
         }
 
         // Draw all faces
-        if (faceHeight === $SQUARE_SIZE) { // 1 Mix sprite
+        if (faceHeight === RPM.SQUARE_SIZE) { // 1 Mix sprite
             // Mix
             count = this.drawSideCorner(xKind, Mountain.Y_MIX_OFFSET, angle,
                 center, width, height, w, faceHeight, wp, xLeft, xRight,
                 vecBackA.x, vecBackB.x, vecFrontA.x, vecBackB.x, yTop, yBot,
                 zFront, zBack, vecFrontA.z, vecFrontB.z, vecBackA.z, vecBackB.z,
                 yOffset, geometry, count, 0, vecFrontA.distanceTo(vecFrontB));
-        } else if (faceHeight <= (2 * $SQUARE_SIZE)) { // 2 B / T sprites
+        } else if (faceHeight <= (2 * RPM.SQUARE_SIZE)) { // 2 B / T sprites
             // Bottom
             count = this.drawSideCorner(xKind, Mountain.Y_BOT_OFFSET, angle,
                 center, width, height, w, Math.floor(faceHeight / 2), wp, xLeft,
@@ -229,12 +229,12 @@ Mountain.prototype = {
             coefY, texFaceA, texFaceB;
 
         // Textures coordinates
-        x = (xKind * $SQUARE_SIZE) / width;
-        y = ((yKind * $SQUARE_SIZE) + (yKind === Mountain.Y_BOT_OFFSET ?
-            $SQUARE_SIZE - faceHeight : 0) + yOffset) / height;
+        x = (xKind * RPM.SQUARE_SIZE) / width;
+        y = ((yKind * RPM.SQUARE_SIZE) + (yKind === Mountain.Y_BOT_OFFSET ?
+            RPM.SQUARE_SIZE - faceHeight : 0) + yOffset) / height;
         h = faceHeight / height;
-        coefX = 0.1 / width;
-        coefY = 0.1 / height;
+        coefX = RPM.COEF_TEX / width;
+        coefY = RPM.COEF_TEX / height;
         x += coefX;
         y += coefY;
         w -= (coefX * 2);
@@ -242,14 +242,14 @@ Mountain.prototype = {
 
         // Textures and vertices
         if (isCorner) {
-            texA = new THREE.Vector2(((xKind * $SQUARE_SIZE) + (($SQUARE_SIZE -
+            texA = new THREE.Vector2(((xKind * RPM.SQUARE_SIZE) + ((RPM.SQUARE_SIZE -
                 xCornerOffsetTop) / 2)) / width + coefX, y);
-            texB = new THREE.Vector2((((xKind + 1) * $SQUARE_SIZE) - ((
-                $SQUARE_SIZE - xCornerOffsetTop) / 2)) / width - coefX, y);
-            texC = new THREE.Vector2((((xKind + 1) * $SQUARE_SIZE) - ((
-                $SQUARE_SIZE - xCornerOffsetBot) / 2)) / width - coefX, y + h);
-            texD = new THREE.Vector2((((xKind) * $SQUARE_SIZE) + ((
-                $SQUARE_SIZE - xCornerOffsetBot) / 2)) / width + coefX, y + h);
+            texB = new THREE.Vector2((((xKind + 1) * RPM.SQUARE_SIZE) - ((
+                RPM.SQUARE_SIZE - xCornerOffsetTop) / 2)) / width - coefX, y);
+            texC = new THREE.Vector2((((xKind + 1) * RPM.SQUARE_SIZE) - ((
+                RPM.SQUARE_SIZE - xCornerOffsetBot) / 2)) / width - coefX, y + h);
+            texD = new THREE.Vector2((((xKind) * RPM.SQUARE_SIZE) + ((
+                RPM.SQUARE_SIZE - xCornerOffsetBot) / 2)) / width + coefX, y + h);
         } else { // Triangle form for corners
             texA = new THREE.Vector2(x, y);
             texB = new THREE.Vector2(x + w, y);
@@ -292,22 +292,22 @@ Mountain.prototype = {
             yBot, zFront, zBack, objCollision;
 
         // General configurations
-        yOffset = texture.getOffset(this.mountainID, null) * 4 * $SQUARE_SIZE;
+        yOffset = texture.getOffset(this.mountainID, null) * 4 * RPM.SQUARE_SIZE;
         wp = this.getWidthTotalPixels();
         hp = this.getHeightTotalPixels();
-        width = 4 * $SQUARE_SIZE;
-        height = $MAX_PICTURE_SIZE;
+        width = 4 * RPM.SQUARE_SIZE;
+        height = RPM.MAX_PICTURE_SIZE;
         faceHeight = Math.sqrt((wp * wp) + (hp * hp));
-        w = $SQUARE_SIZE / width;
+        w = RPM.SQUARE_SIZE / width;
         localPosition = RPM.positionToBorderVector3(position);
-        center = new THREE.Vector3(localPosition.x + ($SQUARE_SIZE / 2),
+        center = new THREE.Vector3(localPosition.x + (RPM.SQUARE_SIZE / 2),
             localPosition.y + (hp / 2), localPosition.z + (
-            $SQUARE_SIZE / 2));
+            RPM.SQUARE_SIZE / 2));
         xLeft = localPosition.x;
-        xRight = localPosition.x + $SQUARE_SIZE;
+        xRight = localPosition.x + RPM.SQUARE_SIZE;
         yTop = localPosition.y + hp;
         yBot = localPosition.y;
-        zFront = localPosition.z + $SQUARE_SIZE + wp;
+        zFront = localPosition.z + RPM.SQUARE_SIZE + wp;
         zBack = zFront - wp;
         vecFrontB = new THREE.Vector3(xLeft, yBot, zFront);
         vecBackB = new THREE.Vector3(xLeft, yTop, zBack);
@@ -344,7 +344,7 @@ Mountain.prototype = {
         }
 
         // Collisions
-        wp = wp * 2 + $SQUARE_SIZE;
+        wp = wp * 2 + RPM.SQUARE_SIZE;
         objCollision = [
             {
                 p: position,

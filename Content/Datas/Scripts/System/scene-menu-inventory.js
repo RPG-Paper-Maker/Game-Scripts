@@ -33,9 +33,9 @@ function SceneMenuInventory() {
     menuKind = [
         new GraphicText("All", { align: Align.Center }),
         new GraphicText("Consumables", { align: Align.Center }),
-        new GraphicText($datasGame.system.itemsTypes[1].name, { align: Align
+        new GraphicText(RPM.datasGame.system.itemsTypes[1].name, { align: Align
             .Center }),
-        new GraphicText($datasGame.system.itemsTypes[2].name, { align: Align
+        new GraphicText(RPM.datasGame.system.itemsTypes[2].name, { align: Align
             .Center }),
         new GraphicText("Weapons", { align: Align.Center }),
         new GraphicText("Armors", { align: Align.Center })
@@ -51,7 +51,7 @@ function SceneMenuInventory() {
         RPM.SMALL_SLOT_PADDING);
     this.windowInformations = new WindowBox(240, 100, 360, 200, null, RPM
         .HUGE_PADDING_BOX);
-    this.windowEmpty = new WindowBox(10, 100, $SCREEN_X - 20, RPM
+    this.windowEmpty = new WindowBox(10, 100, RPM.SCREEN_X - 20, RPM
         .SMALL_SLOT_HEIGHT, new GraphicText("Empty", { align: Align.Center }),
         RPM.SMALL_SLOT_PADDING);
     this.windowBoxUseItem = new WindowBox(240, 320, 360, 140, new
@@ -88,12 +88,12 @@ SceneMenuInventory.prototype = {
     updateForTab: function(){
         var i, list;
         var indexTab = this.windowChoicesTabs.currentSelectedIndex;
-        var nbItems = $game.items.length;
+        var nbItems = RPM.game.items.length;
 
         list = [];
         for (i = 0; i < nbItems; i++){
-            var ownedItem = $game.items[i];
-            var item = $datasGame.items.list[ownedItem.id];
+            var ownedItem = RPM.game.items[i];
+            var item = RPM.datasGame.items.list[ownedItem.id];
             if (indexTab === 0 ||
                 (indexTab === 1 && (ownedItem.k === ItemKind.Item
                                     && item.consumable)) ||
@@ -128,7 +128,7 @@ SceneMenuInventory.prototype = {
     onKeyPressed: function(key) {
         switch (this.substep) {
         case 0:
-            if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
+            if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
                 .Action))
             {
                 var targetKind, availableKind;
@@ -145,45 +145,45 @@ SceneMenuInventory.prototype = {
                     .AllAllies) && (availableKind === AvailableKind.Always ||
                     availableKind === AvailableKind.MainMenu))
                 {
-                    $datasGame.system.soundConfirmation.playSound();
+                    RPM.datasGame.system.soundConfirmation.playSound();
                     this.substep = 1;
                     this.windowBoxUseItem.content.setAll(targetKind ===
                         TargetKind.AllAllies);
-                    $requestPaintHUD = true;
+                    RPM.requestPaintHUD = true;
                 } else {
-                    $datasGame.system.soundImpossible.playSound();
+                    RPM.datasGame.system.soundImpossible.playSound();
                 }
-            } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
+            } else if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard
                 .menuControls.Cancel) || DatasKeyBoard.isKeyEqual(key,
-                $datasGame.keyBoard.MainMenu))
+                RPM.datasGame.keyBoard.MainMenu))
             {
-                $datasGame.system.soundCancel.playSound();
-                $gameStack.pop();
+                RPM.datasGame.system.soundCancel.playSound();
+                RPM.gameStack.pop();
             }
             break;
         case 1:
-            if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
+            if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
                 .Action))
             {
                 if (this.windowInformations.content.item.isPossible() && this
                     .windowInformations.content.item.use())
                 {
-                    $game.useItem(this.windowInformations.content.gameItem);
+                    RPM.game.useItem(this.windowInformations.content.gameItem);
                     if (this.windowInformations.content.gameItem.nb > 0) {
                         this.windowInformations.content.updateNb();
                     } else {
                         this.updateForTab();
                     }
                     this.windowBoxUseItem.content.updateStats();
-                    $requestPaintHUD = true;
+                    RPM.requestPaintHUD = true;
                 }
-            } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
+            } else if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard
                 .menuControls.Cancel) || DatasKeyBoard.isKeyEqual(key,
-                $datasGame.keyBoard.MainMenu))
+                RPM.datasGame.keyBoard.MainMenu))
             {
-                $datasGame.system.soundCancel.playSound();
+                RPM.datasGame.system.soundCancel.playSound();
                 this.substep = 0;
-                $requestPaintHUD = true;
+                RPM.requestPaintHUD = true;
             }
             break;
         }
@@ -233,7 +233,7 @@ SceneMenuInventory.prototype = {
     // -------------------------------------------------------
 
     draw3D: function(canvas){
-        $currentMap.draw3D(canvas);
+        RPM.currentMap.draw3D(canvas);
     },
 
     // -------------------------------------------------------
@@ -241,7 +241,7 @@ SceneMenuInventory.prototype = {
     drawHUD: function(context){
 
         // Draw the local map behind
-        $currentMap.drawHUD(context);
+        RPM.currentMap.drawHUD(context);
 
         // Draw the menu
         this.windowTop.draw();

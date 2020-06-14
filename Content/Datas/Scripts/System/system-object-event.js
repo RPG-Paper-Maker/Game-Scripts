@@ -40,8 +40,8 @@ SystemObjectEvent.prototype = {
 
         // Parameters
         var listEvents = this.isSystem ?
-                    $datasGame.commonEvents.eventsSystem
-                  : $datasGame.commonEvents.eventsUser;
+                    RPM.datasGame.commonEvents.eventsSystem
+                  : RPM.datasGame.commonEvents.eventsUser;
         this.parameters =
              SystemParameter.readParametersWithDefault(
                  json, listEvents[this.idEvent].parameters);

@@ -68,17 +68,17 @@ Land.prototype = {
 
         // Vertices
         geometry.vertices.push(new THREE.Vector3(a, b, c));
-        geometry.vertices.push(new THREE.Vector3(a + $SQUARE_SIZE, b, c));
-        geometry.vertices.push(new THREE.Vector3(a + $SQUARE_SIZE, b,
-                                                 c + $SQUARE_SIZE));
-        geometry.vertices.push(new THREE.Vector3(a, b, c + $SQUARE_SIZE));
+        geometry.vertices.push(new THREE.Vector3(a + RPM.SQUARE_SIZE, b, c));
+        geometry.vertices.push(new THREE.Vector3(a + RPM.SQUARE_SIZE, b,
+                                                 c + RPM.SQUARE_SIZE));
+        geometry.vertices.push(new THREE.Vector3(a, b, c + RPM.SQUARE_SIZE));
         var j = i * 4;
         geometry.faces.push(new THREE.Face3(j, j + 1, j + 2));
         geometry.faces.push(new THREE.Face3(j, j + 2, j + 3));
 
         // Texture
-        var coefX = 0.1 / width;
-        var coefY = 0.1 / height;
+        var coefX = RPM.COEF_TEX / width;
+        var coefY = RPM.COEF_TEX / height;
         x += coefX;
         y += coefY;
         w -= (coefX * 2);
@@ -101,11 +101,11 @@ Land.prototype = {
             if (!collision.hasAllDirections()) {
                 if (rect === null) {
                     rect = [
-                        a  + $SQUARE_SIZE / 2,
+                        a  + RPM.SQUARE_SIZE / 2,
                         b + 0.5,
-                        c + $SQUARE_SIZE / 2,
-                        $SQUARE_SIZE,
-                        $SQUARE_SIZE,
+                        c + RPM.SQUARE_SIZE / 2,
+                        RPM.SQUARE_SIZE,
+                        RPM.SQUARE_SIZE,
                         1,
                         0
                     ]
@@ -123,9 +123,9 @@ Land.prototype = {
                     p: position,
                     l: localPosition,
                     b: [
-                        a + rect[0] + $SQUARE_SIZE / 2,
+                        a + rect[0] + RPM.SQUARE_SIZE / 2,
                         b + 0.5,
-                        c + rect[1] + $SQUARE_SIZE / 2,
+                        c + rect[1] + RPM.SQUARE_SIZE / 2,
                         rect[2],
                         rect[3],
                         1,

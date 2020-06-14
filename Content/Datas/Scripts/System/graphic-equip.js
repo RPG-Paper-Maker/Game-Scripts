@@ -33,7 +33,7 @@ function GraphicEquip(gamePlayer, id, length){
     this.equipmentLength = length;
 
     // All the graphics
-    this.graphicEquipmentName = new GraphicText($datasGame.battleSystem
+    this.graphicEquipmentName = new GraphicText(RPM.datasGame.battleSystem
         .equipments[id]);
     if (equiped === null)
         this.graphicEquipment = new GraphicText("-");

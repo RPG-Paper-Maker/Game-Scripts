@@ -50,7 +50,7 @@ function GamePlayer(kind, id, instanceId, skills) {
         }
 
         // Equip
-        l = $datasGame.battleSystem.equipments.length;
+        l = RPM.datasGame.battleSystem.equipments.length;
         this.equip = new Array(l);
         for (i = 1; i < l; i++) {
             this.equip[i] = null;
@@ -71,12 +71,12 @@ function GamePlayer(kind, id, instanceId, skills) {
 GamePlayer.getEquipmentLength = function(){
 
     // Adding equipments
-    var i, l = $datasGame.battleSystem.equipments.length - 1;
+    var i, l = RPM.datasGame.battleSystem.equipments.length - 1;
     var maxLength = 0;
     for (i = 0; i < l; i++){
-        var text = new GraphicText($datasGame.battleSystem.equipments[i+1]);
+        var text = new GraphicText(RPM.datasGame.battleSystem.equipments[i+1]);
         text.updateContextFont();
-        var c = $context.measureText(text.text).width;
+        var c = Platform.ctx.measureText(text.text).width;
         if (c > maxLength) maxLength = c;
     }
 
@@ -90,7 +90,7 @@ GamePlayer.getTemporaryPlayer = function(values) {
     var i, l;
 
     player = new GamePlayer();
-    statistics = $datasGame.battleSystem.statistics;
+    statistics = RPM.datasGame.battleSystem.statistics;
     for (i = 1, l = statistics.length; i < l; i++) {
         player.initStatValue(statistics[i], values ? values[i] : 0);
     }
@@ -122,10 +122,10 @@ GamePlayer.prototype = {
     *   @returns {Object}
     */
     getSaveStat: function(){
-        var i, l = $datasGame.battleSystem.statistics.length - 1;
+        var i, l = RPM.datasGame.battleSystem.statistics.length - 1;
         var list = new Array(l);
         for (i = 0; i < l; i++){
-            var statistic = $datasGame.battleSystem.statistics[i+1];
+            var statistic = RPM.datasGame.battleSystem.statistics[i+1];
             if (statistic.isFix) {
                 list[i] = [this[statistic.abbreviation],
                            this[statistic.getBonusAbbreviation()]];
@@ -147,7 +147,7 @@ GamePlayer.prototype = {
         var i, l = this.equip.length - 1;
         var list = new Array(l);
         for (i = 0; i < l; i++){
-            list[i] = $game.items.indexOf(this.equip[i+1]);
+            list[i] = RPM.game.items.indexOf(this.equip[i+1]);
         }
         return list;
     },
@@ -158,7 +158,7 @@ GamePlayer.prototype = {
     *   @returns {boolean}
     */
     isDead: function(){
-        return RPM.evaluateFormula($datasGame.battleSystem.formulaIsDead
+        return RPM.evaluateFormula(RPM.datasGame.battleSystem.formulaIsDead
             .getValue(), this, null);
     },
 
@@ -184,7 +184,7 @@ GamePlayer.prototype = {
         }
 
         // Stats
-        statistics = $datasGame.battleSystem.statistics;
+        statistics = RPM.datasGame.battleSystem.statistics;
         statisticsProgression = this.character.getStatisticsProgression();
         nonFixStatistics = new Array;
         for (i = 1, l = statistics.length; i < l; i++) {
@@ -197,10 +197,10 @@ GamePlayer.prototype = {
             this.initStatValue(statistic, 0);
             this[statistic.getBonusAbbreviation()] = 0;
 
-            if (i === $datasGame.battleSystem.idLevelStatistic) {
+            if (i === RPM.datasGame.battleSystem.idLevelStatistic) {
                 // Level
                 this[statistic.abbreviation] = level;
-            } else if (i === $datasGame.battleSystem.idExpStatistic) {
+            } else if (i === RPM.datasGame.battleSystem.idExpStatistic) {
                 // Experience
                 this[statistic.abbreviation] = this.expList[level];
                 this[statistic.getMaxAbbreviation()] = this.expList
@@ -240,7 +240,7 @@ GamePlayer.prototype = {
             statisticProgression;
         var i, j, k, l, ll;
 
-        statistics = $datasGame.battleSystem.statistics;
+        statistics = RPM.datasGame.battleSystem.statistics;
         l = statistics.length
         list = new Array(l);
         bonus = new Array(l);
@@ -317,7 +317,7 @@ GamePlayer.prototype = {
             list = result[0];
             bonus = result[1];
         }
-        statistics = $datasGame.battleSystem.statistics;
+        statistics = RPM.datasGame.battleSystem.statistics;
         for (i = 1, l = statistics.length; i < l; i++) {
             statistic = statistics[i];
             value = list[i];
@@ -366,7 +366,7 @@ GamePlayer.prototype = {
 
         // Fix values : equipment influence etc
         level = this.getCurrentLevel();
-        statistics = $datasGame.battleSystem.statistics;
+        statistics = RPM.datasGame.battleSystem.statistics;
         statisticsProgression = this.character.getStatisticsProgression();
         nonFixStatistics = new Array;
         for (i = 1, l = statistics.length; i < l; i++) {
@@ -375,8 +375,8 @@ GamePlayer.prototype = {
         for (i = 1, l = statistics.length; i < l; i++) {
             statistic = statistics[i];
 
-            if (i !== $datasGame.battleSystem.idLevelStatistic & i !==
-                $datasGame.battleSystem.idExpStatistic)
+            if (i !== RPM.datasGame.battleSystem.idLevelStatistic & i !==
+                RPM.datasGame.battleSystem.idExpStatistic)
             {
                 for (j = 0, ll = statisticsProgression.length; j < ll; j++) {
                     statisticProgression = statisticsProgression[j];
@@ -422,9 +422,9 @@ GamePlayer.prototype = {
 
         // Stats
         var jsonStats = json.stats;
-        var i, l = $datasGame.battleSystem.statistics.length;
+        var i, l = RPM.datasGame.battleSystem.statistics.length;
         for (i = 1; i < l; i++){
-            var statistic = $datasGame.battleSystem.statistics[i];
+            var statistic = RPM.datasGame.battleSystem.statistics[i];
             var value = jsonStats[i-1];
             this[statistic.abbreviation] = value[0];
             this[statistic.getBonusAbbreviation()] = value[1];
@@ -434,7 +434,7 @@ GamePlayer.prototype = {
         }
 
         // Equip
-        l = $datasGame.battleSystem.equipments.length;
+        l = RPM.datasGame.battleSystem.equipments.length;
         this.equip = new Array(l);
         for (i = 1; i < l; i++){
             var item = items[json.equip[i-1]];
@@ -452,9 +452,9 @@ GamePlayer.prototype = {
     getCharacterInformations: function(){
         switch (this.k){
         case CharacterKind.Hero:
-            return $datasGame.heroes.list[this.id];
+            return RPM.datasGame.heroes.list[this.id];
         case CharacterKind.Monster:
-            return $datasGame.monsters.list[this.id];
+            return RPM.datasGame.monsters.list[this.id];
         }
 
         return null;
@@ -463,13 +463,13 @@ GamePlayer.prototype = {
     // -------------------------------------------------------
 
     getCurrentLevel: function() {
-        return this[$datasGame.battleSystem.getLevelStatistic().abbreviation];
+        return this[RPM.datasGame.battleSystem.getLevelStatistic().abbreviation];
     },
 
     // -------------------------------------------------------
 
     levelUp: function() {
-        this[$datasGame.battleSystem.getLevelStatistic().abbreviation]++;
+        this[RPM.datasGame.battleSystem.getLevelStatistic().abbreviation]++;
 
         // Update statistics
         this.updateAllStatsValues();
@@ -497,9 +497,9 @@ GamePlayer.prototype = {
 
     updateRemainingXP: function(fullTime) {
         if (this.getCurrentLevel() < this.expList.length - 1) {
-            var current = this[$datasGame.battleSystem.getExpStatistic()
+            var current = this[RPM.datasGame.battleSystem.getExpStatistic()
                 .abbreviation];
-            var max = this[$datasGame.battleSystem.getExpStatistic()
+            var max = this[RPM.datasGame.battleSystem.getExpStatistic()
                 .getMaxAbbreviation()];
             var xpForLvl = max - current;
             var dif = this.totalRemainingXP - xpForLvl;
@@ -520,7 +520,7 @@ GamePlayer.prototype = {
     // -------------------------------------------------------
 
     updateObtainedExperience: function() {
-        var xpAbbreviation = $datasGame.battleSystem.getExpStatistic()
+        var xpAbbreviation = RPM.datasGame.battleSystem.getExpStatistic()
             .abbreviation;
         var tick = new Date().getTime() - this.timeXP;
         if (tick >= this.totalTimeXP) {
@@ -540,9 +540,9 @@ GamePlayer.prototype = {
     // -------------------------------------------------------
 
     updateExperience: function() {
-        var xpAbbreviation = $datasGame.battleSystem.getExpStatistic()
+        var xpAbbreviation = RPM.datasGame.battleSystem.getExpStatistic()
             .abbreviation;
-        var maxXPAbbreviation = $datasGame.battleSystem.getExpStatistic()
+        var maxXPAbbreviation = RPM.datasGame.battleSystem.getExpStatistic()
             .getMaxAbbreviation();
         var maxXP = this[maxXPAbbreviation];
         this.updateObtainedExperience();

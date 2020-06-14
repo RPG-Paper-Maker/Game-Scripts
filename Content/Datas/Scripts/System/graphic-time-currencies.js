@@ -25,14 +25,14 @@ function GraphicTimeCurrencies() {
 
     // Currencies
     this.currencies = [];
-    for (id in $game.currencies) {
-        this.currencies.push(new GraphicTextIcon("" + $game.currencies[id],
-            $datasGame.system.currencies[id].pictureID, Align.Right, Align
+    for (id in RPM.game.currencies) {
+        this.currencies.push(new GraphicTextIcon("" + RPM.game.currencies[id],
+            RPM.datasGame.system.currencies[id].pictureID, Align.Right, Align
             .Right));
     }
 
     // Time
-    this.time = $game.playTime;
+    this.time = RPM.game.playTime.getSeconds();
     this.graphicPlayTime = new GraphicText(RPM.getStringDate(this.time), { align
         : Align.Right });
 }
@@ -74,8 +74,8 @@ GraphicTimeCurrencies.prototype = {
     // -------------------------------------------------------
 
     update: function() {
-        if ($game.playTime !== this.time) {
-            this.graphicPlayTime.setText(RPM.getStringDate($game.playTime));
+        if (RPM.game.playTime.getSeconds() !== this.time) {
+            this.graphicPlayTime.setText(RPM.getStringDate(RPM.game.playTime.getSeconds()));
         }
     },
 

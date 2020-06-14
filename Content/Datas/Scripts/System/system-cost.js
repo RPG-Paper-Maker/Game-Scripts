@@ -46,21 +46,21 @@ SystemCost.prototype.readJSON = function(json) {
 SystemCost.prototype.use = function() {
     var user, target, value, currentValue;
 
-    user = $currentMap.user ? ($currentMap.isBattleMap ? $currentMap.user
-        .character : $currentMap.user) : GamePlayer.getTemporaryPlayer();
+    user = RPM.currentMap.user ? (RPM.currentMap.isBattleMap ? RPM.currentMap.user
+        .character : RPM.currentMap.user) : GamePlayer.getTemporaryPlayer();
     target = GamePlayer.getTemporaryPlayer();
     value = RPM.evaluateFormula(this.valueFormula.getValue(), user, target);
 
     switch (this.kind) {
     case DamagesKind.Stat:
-        user[$datasGame.battleSystem.statistics[this.statisticID.getValue()]
+        user[RPM.datasGame.battleSystem.statistics[this.statisticID.getValue()]
             .abbreviation] -= value;
         break;
     case DamagesKind.Currency:
-        $game.currencies[this.currencyID.getValue()] -= value;
+        RPM.game.currencies[this.currencyID.getValue()] -= value;
         break;
     case DamagesKind.Variable:
-        $game.variables[this.variableID] -= value;
+        RPM.game.variables[this.variableID] -= value;
         break;
     }
 }
@@ -70,21 +70,21 @@ SystemCost.prototype.use = function() {
 SystemCost.prototype.isPossible = function() {
     var user, target, value, currentValue;
 
-    user = $currentMap.user ? ($currentMap.isBattleMap ? $currentMap.user
-        .character : $currentMap.user) : GamePlayer.getTemporaryPlayer();
+    user = RPM.currentMap.user ? (RPM.currentMap.isBattleMap ? RPM.currentMap.user
+        .character : RPM.currentMap.user) : GamePlayer.getTemporaryPlayer();
     target = GamePlayer.getTemporaryPlayer();
     value = RPM.evaluateFormula(this.valueFormula.getValue(), user, target);
 
     switch (this.kind) {
     case DamagesKind.Stat:
-        currentValue = user[$datasGame.battleSystem.statistics[this.statisticID
+        currentValue = user[RPM.datasGame.battleSystem.statistics[this.statisticID
             .getValue()].abbreviation];
         break;
     case DamagesKind.Currency:
-        currentValue = $game.currencies[this.currencyID.getValue()];
+        currentValue = RPM.game.currencies[this.currencyID.getValue()];
         break;
     case DamagesKind.Variable:
-        currentValue = $game.variables[this.variableID];
+        currentValue = RPM.game.variables[this.variableID];
         break;
     }
 
@@ -96,21 +96,21 @@ SystemCost.prototype.isPossible = function() {
 SystemCost.prototype.toString = function() {
     var result, user, target;
 
-    user = $currentMap.user ? ($currentMap.isBattleMap ? $currentMap.user
-        .character : $currentMap.user) : GamePlayer.getTemporaryPlayer();
+    user = RPM.currentMap.user ? (RPM.currentMap.isBattleMap ? RPM.currentMap.user
+        .character : RPM.currentMap.user) : GamePlayer.getTemporaryPlayer();
     target = GamePlayer.getTemporaryPlayer();
     result = RPM.evaluateFormula(this.valueFormula.getValue(), user, target) +
         " ";
     switch (this.kind) {
     case DamagesKind.Stat:
-        result += $datasGame.battleSystem.statistics[this.statisticID.getValue()
+        result += RPM.datasGame.battleSystem.statistics[this.statisticID.getValue()
             ].name;
         break;
     case DamagesKind.Currency:
-        result += $datasGame.system.currencies[this.currencyID.getValue()].name;
+        result += RPM.datasGame.system.currencies[this.currencyID.getValue()].name;
         break;
     case DamagesKind.Variable:
-        result += $datasGame.variablesNames[this.variableID];
+        result += RPM.datasGame.variablesNames[this.variableID];
         break;
     }
 

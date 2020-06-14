@@ -31,8 +31,18 @@ SystemKeyBoard.prototype = {
     readJSON: function(json) {
         SystemLang.prototype.readJSON.call(this, json);
 
+        var i, l, j, ll;
         this.id = json.id;
         this.sc = json.sc;
+        var list;
+        for (i = 0, l = this.sc.length; i < l; i++) 
+        {
+            list = this.sc[i];
+            for (j = 0, ll = list.length; j < ll; j++) 
+            {
+                list[j] = KeyEvent.qtToDOM(list[j]);
+            }
+        }
     },
 
     // -------------------------------------------------------

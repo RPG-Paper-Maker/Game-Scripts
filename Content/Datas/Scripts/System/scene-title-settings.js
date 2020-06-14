@@ -23,8 +23,8 @@ function SceneTitleSettings() {
     SceneGame.call(this);
 
     // Creating background
-    if ($datasGame.titlescreenGameover.isTitleBackgroundImage) {
-        this.pictureBackground = Picture2D.createImageWithID($datasGame
+    if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage) {
+        this.pictureBackground = Picture2D.createImageWithID(RPM.datasGame
             .titlescreenGameover.titleBackgroundImageID, PictureKind.TitleScreen);
         this.pictureBackground.cover = true;
     }
@@ -34,13 +34,13 @@ function SceneTitleSettings() {
         .MEDIUM_SLOT_WIDTH, RPM.LARGE_SLOT_HEIGHT, new GraphicText("SETTINGS", {
         align: Align.Center }), RPM.SMALL_SLOT_PADDING);
     this.windowInformations = new WindowBox(RPM.HUGE_SPACE + RPM
-        .MEDIUM_SLOT_WIDTH + RPM.LARGE_SPACE, RPM.HUGE_SPACE, $SCREEN_X - (2 *
+        .MEDIUM_SLOT_WIDTH + RPM.LARGE_SPACE, RPM.HUGE_SPACE, RPM.SCREEN_X - (2 *
         RPM.HUGE_SPACE) - RPM.MEDIUM_SLOT_WIDTH - RPM.LARGE_SPACE, RPM
         .LARGE_SLOT_HEIGHT, null, RPM.SMALL_SLOT_PADDING);
     this.windowChoicesMain = new WindowChoices(OrientationWindow.Vertical, RPM
         .HUGE_SPACE, RPM.HUGE_SPACE + RPM.LARGE_SLOT_HEIGHT + RPM.LARGE_SPACE,
-        $SCREEN_X - (2 * RPM.HUGE_SPACE), RPM.MEDIUM_SLOT_HEIGHT, 9, $datasGame
-        .titlescreenGameover.getSettingsCommandsContent(), $datasGame
+        RPM.SCREEN_X - (2 * RPM.HUGE_SPACE), RPM.MEDIUM_SLOT_HEIGHT, 9, RPM.datasGame
+        .titlescreenGameover.getSettingsCommandsContent(), RPM.datasGame
         .titlescreenGameover.getSettingsCommandsActions(), RPM
         .SMALL_SLOT_PADDING, 0, 0, false);
 
@@ -58,12 +58,12 @@ SceneTitleSettings.prototype = {
     onKeyPressed: function(key) {
         this.windowChoicesMain.onKeyPressed(key);
 
-        if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
-            .Cancel) || DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
+        if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
+            .Cancel) || DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard
             .MainMenu))
         {
-            $datasGame.system.soundCancel.playSound();
-            $gameStack.pop();
+            RPM.datasGame.system.soundCancel.playSound();
+            RPM.gameStack.pop();
         }
     },
 
@@ -96,7 +96,7 @@ SceneTitleSettings.prototype = {
     // -------------------------------------------------------
 
     drawHUD: function() {
-        if ($datasGame.titlescreenGameover.isTitleBackgroundImage) {
+        if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage) {
             this.pictureBackground.draw();
         }
         this.windowSettings.draw();

@@ -21,7 +21,7 @@
 *   @param {GameSkill} gameSkill The current selected skill.
 */
 function GraphicSkill(gameSkill){
-    this.skill = $datasGame.skills.list[gameSkill.id];
+    this.skill = RPM.datasGame.skills.list[gameSkill.id];
 
     // All the graphics
     this.graphicName = new GraphicTextIcon(this.skill.name, this.skill.pictureID);

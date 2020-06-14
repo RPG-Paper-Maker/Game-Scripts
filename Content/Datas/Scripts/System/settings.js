@@ -46,7 +46,7 @@ Settings.prototype.read = function() {
             this.kb[id] = jsonObjs[id];
         }
 
-        $datasGame = new DatasGame();
+        RPM.datasGame = new DatasGame();
     });
 }
 

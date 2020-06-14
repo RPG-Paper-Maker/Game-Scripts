@@ -44,24 +44,24 @@ function GraphicEquipStats(gamePlayer, newValues){
     this.listStats = new Array;
     this.listNewStats = new Array;
     j = 0;
-    l = $datasGame.battleSystem.statisticsOrder.length;
+    l = RPM.datasGame.battleSystem.statisticsOrder.length;
     maxLength = 0;
     maxLengthValue = 0;
     for (i = 0; i < l; i++){
-        id = $datasGame.battleSystem.statisticsOrder[i];
-        if (id !== $datasGame.battleSystem.idLevelStatistic &&
-            id !== $datasGame.battleSystem.idExpStatistic)
+        id = RPM.datasGame.battleSystem.statisticsOrder[i];
+        if (id !== RPM.datasGame.battleSystem.idLevelStatistic &&
+            id !== RPM.datasGame.battleSystem.idExpStatistic)
         {
-            statistic = $datasGame.battleSystem.statistics[id];
+            statistic = RPM.datasGame.battleSystem.statistics[id];
             if (statistic.isRes) {
                 continue;
             }
 
             // Name of the stat
             graphicName = new GraphicText(statistic.name + ":");
-            $context.font = graphicName.font;
+            Platform.ctx.font = graphicName.font;
             graphicName.updateContextFont();
-            c = $context.measureText(graphicName.text).width;
+            c = Platform.ctx.measureText(graphicName.text).width;
             if (c > maxLength)
                 maxLength = c;
             this.listStatsNames.push(graphicName);
@@ -72,9 +72,9 @@ function GraphicEquipStats(gamePlayer, newValues){
                txt += "/" + gamePlayer[statistic.getMaxAbbreviation()];
             }
             graphicValue = new GraphicText(txt);
-            $context.font = graphicValue.font;
+            Platform.ctx.font = graphicValue.font;
             graphicValue.updateContextFont();
-            c = $context.measureText(graphicValue.text).width;
+            c = Platform.ctx.measureText(graphicValue.text).width;
             if (c > maxLengthValue)
                 maxLengthValue = c;
             this.listStats.push(graphicValue);
@@ -100,9 +100,9 @@ function GraphicEquipStats(gamePlayer, newValues){
 
     // Arrow
     this.graphicArrow = new GraphicText("->");
-    $context.font = this.graphicArrow.font;
+    Platform.ctx.font = this.graphicArrow.font;
     this.graphicArrow.updateContextFont();
-    this.arrowLength = $context.measureText(this.graphicArrow.text).width;
+    this.arrowLength = Platform.ctx.measureText(this.graphicArrow.text).width;
 }
 
 GraphicEquipStats.prototype = {

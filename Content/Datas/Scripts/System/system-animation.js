@@ -45,7 +45,7 @@ SystemAnimation.prototype.readJSON = function(json) {
 // -------------------------------------------------------
 
 SystemAnimation.prototype.createPicture = function() {
-    return $datasGame.pictures.get(PictureKind.Animations, this.pictureID)
+    return RPM.datasGame.pictures.get(PictureKind.Animations, this.pictureID)
         .picture.createCopy();
 }
 

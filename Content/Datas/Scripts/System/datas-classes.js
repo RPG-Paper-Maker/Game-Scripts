@@ -45,8 +45,8 @@ DatasClasses.prototype = {
             }
             this.loaded = true;
 
-            $datasGame.heroes.read();
-            $datasGame.monsters.read();
+            RPM.datasGame.heroes.read();
+            RPM.datasGame.monsters.read();
         });
     }
 }

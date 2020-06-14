@@ -92,7 +92,7 @@ SystemCharacteristic.prototype.getNewStatValue = function(gamePlayer) {
         switch (this.increaseDecreaseKind) {
         case IncreaseDecreaseKind.StatValue:
             statID = this.statisticValueID.getValue();
-            stat = $datasGame.battleSystem.statistics[statID];
+            stat = RPM.datasGame.battleSystem.statistics[statID];
             value = this.value.getValue() * (this.isIncreaseDecrease ? 1 : - 1);
             baseStatValue = gamePlayer[stat.getAbbreviationNext()] - gamePlayer[
                 stat.getBonusAbbreviation()];
@@ -105,11 +105,11 @@ SystemCharacteristic.prototype.getNewStatValue = function(gamePlayer) {
             }
             return [statID, value];
         case IncreaseDecreaseKind.ElementRes:
-            statID = this.unit ? $datasGame.battleSystem
+            statID = this.unit ? RPM.datasGame.battleSystem
                 .statisticsElementsPercent[this.elementResID.getValue()] :
-                $datasGame.battleSystem.statisticsElements[this.elementResID
+                RPM.datasGame.battleSystem.statisticsElements[this.elementResID
                 .getValue()];
-            stat = $datasGame.battleSystem.statistics[statID];
+            stat = RPM.datasGame.battleSystem.statistics[statID];
             value = this.value.getValue() * (this.isIncreaseDecrease ? 1 : - 1);
             if (this.operation) { // *
                 value *= gamePlayer[stat.getAbbreviationNext()] - gamePlayer[
@@ -129,11 +129,11 @@ SystemCharacteristic.prototype.getNewStatValue = function(gamePlayer) {
 SystemCharacteristic.prototype.toString = function() {
     var user, target, result;
 
-    user = $currentMap.user ? ($currentMap.isBattleMap ? $currentMap.user
-        .character : $currentMap.user) : GamePlayer.getTemporaryPlayer();
+    user = RPM.currentMap.user ? (RPM.currentMap.isBattleMap ? RPM.currentMap.user
+        .character : RPM.currentMap.user) : GamePlayer.getTemporaryPlayer();
     /*
-    target = $currentMap.targets && $currentMap.targets.length > 0 ? $currentMap
-        .targets[$currentMap.selectedUserTargetIndex()] : GamePlayer
+    target = RPM.currentMap.targets && RPM.currentMap.targets.length > 0 ? RPM.currentMap
+        .targets[RPM.currentMap.selectedUserTargetIndex()] : GamePlayer
         .getTemporaryPlayer();
     */
     target = GamePlayer.getTemporaryPlayer();
@@ -145,32 +145,32 @@ SystemCharacteristic.prototype.toString = function() {
 
         switch (this.increaseDecreaseKind) {
         case IncreaseDecreaseKind.StatValue:
-            result += $datasGame.battleSystem.statistics[RPM.evaluateFormula(
+            result += RPM.datasGame.battleSystem.statistics[RPM.evaluateFormula(
                 this.statisticValueID.getValue(), user, target)].name;
             break;
         case IncreaseDecreaseKind.ElementRes:
-            result += $datasGame.battleSystem.elements[this.elementResID
+            result += RPM.datasGame.battleSystem.elements[this.elementResID
                 .getValue()].name + " res.";
             break;
         case IncreaseDecreaseKind.StatusRes:
             break;
         case IncreaseDecreaseKind.ExperienceGain:
-            result += $datasGame.battleSystem.getExpStatistic().name + " gain";
+            result += RPM.datasGame.battleSystem.getExpStatistic().name + " gain";
             break;
         case IncreaseDecreaseKind.CurrencyGain:
-            result += $datasGame.system.currencies[this.currencyGainID
+            result += RPM.datasGame.system.currencies[this.currencyGainID
                 .getValue()].name + " gain";
             break;
         case IncreaseDecreaseKind.SkillCost:
             if (this.isAllSkillCost) {
                 result += "All skills cost";
             } else {
-                result += $datasGame.skills.list[this.skillCostID.getValue()]
+                result += RPM.datasGame.skills.list[this.skillCostID.getValue()]
                     .name + " skill cost";
             }
             break;
         case IncreaseDecreaseKind.Variable:
-            result += $datasGame.variablesNames[this.variableID];
+            result += RPM.datasGame.variablesNames[this.variableID];
             break;
         }
         result += " ";

@@ -30,11 +30,11 @@ function SceneMenuSkills() {
     var listHeroes;
 
     // Tab heroes
-    nbHeroes = $game.teamHeroes.length;
+    nbHeroes = RPM.game.teamHeroes.length;
     listHeroes = new Array(nbHeroes);
     this.positionChoice = new Array(nbHeroes);
     for (i = 0; i < nbHeroes; i++) {
-        listHeroes[i] = new GraphicPlayerDescription($game.teamHeroes[i]);
+        listHeroes[i] = new GraphicPlayerDescription(RPM.game.teamHeroes[i]);
         this.positionChoice[i] = {
             index: 0,
             offset: 0
@@ -51,7 +51,7 @@ function SceneMenuSkills() {
         RPM.SMALL_SLOT_PADDING);
     this.windowInformations = new WindowBox(240, 100, 360, 200, null, RPM
         .HUGE_PADDING_BOX);
-    this.windowEmpty = new WindowBox(10, 100, $SCREEN_X - 20, RPM
+    this.windowEmpty = new WindowBox(10, 100, RPM.SCREEN_X - 20, RPM
         .SMALL_SLOT_HEIGHT, new GraphicText("Empty", { align: Align.Center }),
         RPM.SMALL_SLOT_PADDING);
     this.windowBoxUseSkill = new WindowBox(240, 320, 360, 140, new
@@ -80,8 +80,8 @@ SceneMenuSkills.prototype = {
     updateForTab: function(){
         var i, l;
         var indexTab = this.windowChoicesTabs.currentSelectedIndex;
-        $currentMap.user = $game.teamHeroes[indexTab];
-        var skills = $currentMap.user.sk;
+        RPM.currentMap.user = RPM.game.teamHeroes[indexTab];
+        var skills = RPM.currentMap.user.sk;
         var list;
 
         // Get the first skills of the hero
@@ -96,7 +96,7 @@ SceneMenuSkills.prototype = {
         this.windowChoicesList.offsetSelectedIndex = this.positionChoice[
             indexTab].offset;
         this.windowChoicesList.select(this.positionChoice[indexTab].index);
-        $currentMap.user = $game.teamHeroes[indexTab];
+        RPM.currentMap.user = RPM.game.teamHeroes[indexTab];
     },
 
     // -------------------------------------------------------
@@ -112,7 +112,7 @@ SceneMenuSkills.prototype = {
     onKeyPressed: function(key){
         switch (this.substep) {
         case 0:
-            if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
+            if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
                 .Action))
             {
                 var targetKind, availableKind;
@@ -129,25 +129,25 @@ SceneMenuSkills.prototype = {
                     .AllAllies) && (availableKind === AvailableKind.Always ||
                     availableKind === AvailableKind.MainMenu))
                 {
-                    $datasGame.system.soundConfirmation.playSound();
+                    RPM.datasGame.system.soundConfirmation.playSound();
                     this.substep = 1;
                     this.windowBoxUseSkill.content.setAll(targetKind ===
                         TargetKind.AllAllies);
-                    $requestPaintHUD = true;
+                    RPM.requestPaintHUD = true;
                 } else {
-                    $datasGame.system.soundImpossible.playSound();
+                    RPM.datasGame.system.soundImpossible.playSound();
                 }
-            } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
+            } else if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard
                 .menuControls.Cancel) || DatasKeyBoard.isKeyEqual(key,
-                $datasGame.keyBoard.MainMenu))
+                RPM.datasGame.keyBoard.MainMenu))
             {
-                $datasGame.system.soundCancel.playSound();
-                $currentMap.user = null;
-                $gameStack.pop();
+                RPM.datasGame.system.soundCancel.playSound();
+                RPM.currentMap.user = null;
+                RPM.gameStack.pop();
             }
             break;
         case 1:
-            if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
+            if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
                 .Action))
             {
                 if (this.windowInformations.content.skill.use()) {
@@ -156,15 +156,15 @@ SceneMenuSkills.prototype = {
                     if (!this.windowInformations.content.skill.isPossible()) {
                         this.substep = 0;
                     }
-                    $requestPaintHUD = true;
+                    RPM.requestPaintHUD = true;
                 }
-            } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
+            } else if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard
                 .menuControls.Cancel) || DatasKeyBoard.isKeyEqual(key,
-                $datasGame.keyBoard.MainMenu))
+                RPM.datasGame.keyBoard.MainMenu))
             {
-                $datasGame.system.soundCancel.playSound();
+                RPM.datasGame.system.soundCancel.playSound();
                 this.substep = 0;
-                $requestPaintHUD = true;
+                RPM.requestPaintHUD = true;
             }
             break;
         }
@@ -213,14 +213,14 @@ SceneMenuSkills.prototype = {
     // -------------------------------------------------------
 
     draw3D: function(canvas){
-        $currentMap.draw3D(canvas);
+        RPM.currentMap.draw3D(canvas);
     },
 
     // -------------------------------------------------------
 
     drawHUD: function(context){
         // Draw the local map behind
-        $currentMap.drawHUD(context);
+        RPM.currentMap.drawHUD(context);
 
         // Draw the menu
         this.windowTop.draw(context);

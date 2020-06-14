@@ -36,5 +36,5 @@ SystemItem.prototype.readJSON = function(json) {
 // -------------------------------------------------------
 
 SystemItem.prototype.getType = function() {
-    return $datasGame.system.itemsTypes[this.type];
+    return RPM.datasGame.system.itemsTypes[this.type];
 }

@@ -58,7 +58,7 @@ function ReactionInterpreter(sender, reaction, object, state, parameters, event,
     this.updateObjectParameters();
     this.currentCommandState = this.currentCommand.data.initialize();
     this.currentTimeState = event;
-    $requestPaintHUD = true;
+    RPM.requestPaintHUD = true;
 }
 
 ReactionInterpreter.prototype = {
@@ -73,8 +73,8 @@ ReactionInterpreter.prototype = {
 
     updateObjectParameters: function() {
         // Update global variables for getValue()
-        $currentObject = this.currentMapObject;
-        $currentParameters = this.currentParameters;
+        RPM.currentObject = this.currentMapObject;
+        RPM.currentParameters = this.currentParameters;
     },
 
     // -------------------------------------------------------
@@ -106,12 +106,12 @@ ReactionInterpreter.prototype = {
                                                           this.currentTimeState,
                                                           this.currentCommand);
                 interpreter.currentCommandState.parallel = true;
-                $currentMap.parallelCommands.push(interpreter);
+                RPM.currentMap.parallelCommands.push(interpreter);
             }
 
             var new_command = this.updateCommand();
             if (new_command !== this.currentCommand){
-                $requestPaintHUD = true;
+                RPM.requestPaintHUD = true;
                 this.currentCommand = new_command;
                 if (this.currentCommand !== null){
                     this.currentCommandState =

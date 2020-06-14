@@ -63,24 +63,24 @@ function Battler(character, position, camera) {
     this.timerMove = 0;
     this.timeDamage = Battler.TOTAL_TIME_DAMAGE;
 
-    var idBattler = $datasGame.getHeroesMonsters(character.k).list[character.id]
+    var idBattler = RPM.datasGame.getHeroesMonsters(character.k).list[character.id]
         .idBattler;
     if (idBattler === -1) {
         this.mesh = null;
     }
     else {
         // Copy original material because there will be individual color changes
-        var originalMaterial = $datasGame.tilesets.texturesBattlers[idBattler];
+        var originalMaterial = RPM.datasGame.tilesets.texturesBattlers[idBattler];
         var material;
 
         material = RPM.createMaterial(originalMaterial.map.clone(), {
             texture: { type: "t", value: originalMaterial.map },
-            colorD: { type: "v4", value: $screenTone.clone()}
+            colorD: { type: "v4", value: RPM.screenTone.clone()}
         });
         material.map.needsUpdate = true;
 
-        this.width = Math.floor(material.map.image.width / $SQUARE_SIZE / $FRAMES);
-        this.height = Math.floor(material.map.image.height / $SQUARE_SIZE /
+        this.width = Math.floor(material.map.image.width / RPM.SQUARE_SIZE / RPM.FRAMES);
+        this.height = Math.floor(material.map.image.height / RPM.SQUARE_SIZE /
             RPM.BATLLER_STEPS);
         var sprite = new Sprite(ElementMapKind.SpritesFace, [0, 0, this.width,
             this.height]);
@@ -89,9 +89,9 @@ function Battler(character, position, camera) {
         this.mesh = new THREE.Mesh(geometry, material);
         this.mesh.position.set(position.x, position.y, position.z);
         this.upPosition = new THREE.Vector3(position.x, position.y + (this
-            .height * $SQUARE_SIZE), position.z);
+            .height * RPM.SQUARE_SIZE), position.z);
         this.halfPosition = new THREE.Vector3(position.x, position.y + (this
-            .height * $SQUARE_SIZE / 2), position.z);
+            .height * RPM.SQUARE_SIZE / 2), position.z);
         if (character.k === CharacterKind.Monster) {
             this.mesh.scale.set(-1, 1, 1);
         }
@@ -118,15 +118,15 @@ Battler.prototype = {
     setActive: function(active) {
         this.active = active;
         if (active) {
-            this.mesh.material.uniforms.colorD.value.setX($screenTone.x);
-            this.mesh.material.uniforms.colorD.value.setY($screenTone.y);
-            this.mesh.material.uniforms.colorD.value.setZ($screenTone.z);
-            this.mesh.material.uniforms.colorD.value.setW($screenTone.w);
+            this.mesh.material.uniforms.colorD.value.setX(RPM.screenTone.x);
+            this.mesh.material.uniforms.colorD.value.setY(RPM.screenTone.y);
+            this.mesh.material.uniforms.colorD.value.setZ(RPM.screenTone.z);
+            this.mesh.material.uniforms.colorD.value.setW(RPM.screenTone.w);
         } else {
-            this.mesh.material.uniforms.colorD.value.setX($screenTone.x - 0.3);
-            this.mesh.material.uniforms.colorD.value.setY($screenTone.y - 0.3);
-            this.mesh.material.uniforms.colorD.value.setZ($screenTone.z - 0.3);
-            this.mesh.material.uniforms.colorD.value.setW($screenTone.w - 0.3);
+            this.mesh.material.uniforms.colorD.value.setX(RPM.screenTone.x - 0.3);
+            this.mesh.material.uniforms.colorD.value.setY(RPM.screenTone.y - 0.3);
+            this.mesh.material.uniforms.colorD.value.setZ(RPM.screenTone.z - 0.3);
+            this.mesh.material.uniforms.colorD.value.setW(RPM.screenTone.w - 0.3);
         }
     },
 
@@ -149,7 +149,7 @@ Battler.prototype = {
     // -------------------------------------------------------
 
     isAttacking: function() {
-        return this.isStepAttacking() && this.attackingFrame !== $FRAMES -1;
+        return this.isStepAttacking() && this.attackingFrame !== RPM.FRAMES -1;
     },
 
     // -------------------------------------------------------
@@ -242,8 +242,8 @@ Battler.prototype = {
             this.upPosition.setX(newX);
             this.halfPosition.setX(newX);
             this.updatePositions();
-            this.updateArrowPosition($currentMap.camera);
-            $requestPaintHUD = true;
+            this.updateArrowPosition(RPM.currentMap.camera);
+            RPM.requestPaintHUD = true;
         }
     },
 
@@ -252,19 +252,19 @@ Battler.prototype = {
     updateFrame: function() {
         if (this.timeDamage < Battler.TOTAL_TIME_DAMAGE)
         {
-            this.timeDamage += $elapsedTime;
+            this.timeDamage += RPM.elapsedTime;
             if (this.timeDamage > Battler.TOTAL_TIME_DAMAGE)
             {
                 this.timeDamage = Battler.TOTAL_TIME_DAMAGE;
             }
-            $requestPaintHUD = true;
+            RPM.requestPaintHUD = true;
         }
         if (!this.attacking) {
             var frame = this.frame;
-            this.frameTick += $elapsedTime;
+            this.frameTick += RPM.elapsedTime;
             if (this.frameTick >= this.frameDuration)
             {
-                this.frame = (this.frame + 1) % $FRAMES;
+                this.frame = (this.frame + 1) % RPM.FRAMES;
                 this.frameTick = 0;
             }
             if (frame !== this.frame) {
@@ -276,13 +276,13 @@ Battler.prototype = {
     // -------------------------------------------------------
 
     updateArrow: function() {
-        this.frameArrowTick += $elapsedTime;
+        this.frameArrowTick += RPM.elapsedTime;
         if (this.frameArrowTick >= this.frameArrowDuration) {
-            this.frameArrow = (this.frameArrow + 1) % $FRAMES;
+            this.frameArrow = (this.frameArrow + 1) % RPM.FRAMES;
             this.frameArrowTick = 0;
             this.arrowPosition = RPM.toScreenPosition(this.mesh.position,
-                $currentMap.camera.threeCamera);
-            $requestPaintHUD = true;
+                RPM.currentMap.camera.threeCamera);
+            RPM.requestPaintHUD = true;
         }
     },
 
@@ -290,7 +290,7 @@ Battler.prototype = {
 
     updateDamages: function() {
         this.damagePosition = RPM.toScreenPosition(this.upPosition,
-            $currentMap.camera.threeCamera);
+            RPM.currentMap.camera.threeCamera);
     },
 
     // -------------------------------------------------------
@@ -298,9 +298,9 @@ Battler.prototype = {
     updateAttacking: function() {
         if (this.isStepAttacking()) {
             var frame = this.attackingFrame;
-            this.attackingFrameTick += $elapsedTime;
+            this.attackingFrameTick += RPM.elapsedTime;
             if (this.attackingFrameTick >= this.attackingFrameDuration) {
-                this.attackingFrame = (this.attackingFrame + 1) % $FRAMES;
+                this.attackingFrame = (this.attackingFrame + 1) % RPM.FRAMES;
                 this.attackingFrameTick = 0;
             }
 
@@ -317,11 +317,11 @@ Battler.prototype = {
     // -------------------------------------------------------
 
     updatePositions: function() {
-        this.topPosition = RPM.toScreenPosition(this.upPosition, $currentMap
+        this.topPosition = RPM.toScreenPosition(this.upPosition, RPM.currentMap
             .camera.threeCamera);
-        this.midPosition = RPM.toScreenPosition(this.halfPosition, $currentMap
+        this.midPosition = RPM.toScreenPosition(this.halfPosition, RPM.currentMap
             .camera.threeCamera);
-        this.botPosition = RPM.toScreenPosition(this.mesh.position, $currentMap
+        this.botPosition = RPM.toScreenPosition(this.mesh.position, RPM.currentMap
             .camera.threeCamera);
     },
 
@@ -336,7 +336,7 @@ Battler.prototype = {
 
     addToScene: function(){
         if (this.mesh !== null) {
-            $currentMap.scene.add(this.mesh);
+            RPM.currentMap.scene.add(this.mesh);
         }
     },
 
@@ -344,7 +344,7 @@ Battler.prototype = {
 
     removeFromScene: function(){
         if (this.mesh !== null) {
-            $currentMap.scene.remove(this.mesh);
+            RPM.currentMap.scene.remove(this.mesh);
         }
     },
 
@@ -369,8 +369,8 @@ Battler.prototype = {
                 frame = this.attackingFrame; break;
             }
 
-            var w = this.width * $SQUARE_SIZE / textureWidth;
-            var h = this.height * $SQUARE_SIZE / textureHeight;
+            var w = this.width * RPM.SQUARE_SIZE / textureWidth;
+            var h = this.height * RPM.SQUARE_SIZE / textureHeight;
             var x = frame * w;
             var y = this.step * h;
 
@@ -388,14 +388,14 @@ Battler.prototype = {
     // -------------------------------------------------------
 
     drawArrow: function() {
-        $datasGame.system.getWindowSkin().drawArrowTarget(this.frameArrow, this
+        RPM.datasGame.system.getWindowSkin().drawArrowTarget(this.frameArrow, this
             .arrowPosition.x, this.arrowPosition.y, false);
     },
 
     // -------------------------------------------------------
 
     drawDamages: function(damage, isCrit, isMiss) {
-        $datasGame.system.getWindowSkin().drawDamages(damage, this
+        RPM.datasGame.system.getWindowSkin().drawDamages(damage, this
             .damagePosition.x, this.damagePosition.y, isCrit, isMiss, this
             .timeDamage / Battler.TOTAL_TIME_DAMAGE);
     }

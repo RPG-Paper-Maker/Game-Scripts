@@ -135,16 +135,16 @@ Object3DBox.prototype = {
 
         coef = 0.01;
         localPosition = RPM.positionToVector3(position);
-        localPosition.setX(localPosition.x - ($SQUARE_SIZE / 2) + coef);
+        localPosition.setX(localPosition.x - (RPM.SQUARE_SIZE / 2) + coef);
         localPosition.setY(localPosition.y + coef);
-        localPosition.setZ(localPosition.z - ($SQUARE_SIZE / 2) + coef);
+        localPosition.setZ(localPosition.z - (RPM.SQUARE_SIZE / 2) + coef);
         angleY = RPM.positionAngleY(position);
         angleX = RPM.positionAngleX(position);
         angleZ = RPM.positionAngleZ(position);
         size = this.datas.getSizeVector();
-        center = new THREE.Vector3(localPosition.x + Math.floor($SQUARE_SIZE / 2
+        center = new THREE.Vector3(localPosition.x + Math.floor(RPM.SQUARE_SIZE / 2
             ), localPosition.y + (size.y / 2), localPosition.z + Math.floor(
-            $SQUARE_SIZE / 2));
+            RPM.SQUARE_SIZE / 2));
         centerReal = new THREE.Vector3(localPosition.x + Math.floor(size.x / 2),
             localPosition.y + (size.y / 2), localPosition.z + Math.floor(size.z
             / 2));

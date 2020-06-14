@@ -14,7 +14,7 @@
 *   @enum {number}
 *   @readonly
 */
-var CommandMoveKind = {
+let CommandMoveKind = {
     MoveNorth: 0,
     MoveSouth: 1,
     MoveWest: 2,
@@ -36,10 +36,10 @@ Object.freeze(CommandMoveKind);
 *   @enum {number}
 *   @readonly
 */
-var EventCommandKind = {
+let EventCommandKind = {
     None: 0,
     ShowText: 1,
-    ChangeVariables: 2,
+    Changeletiables: 2,
     EndGame: 3,
     While: 4,
     EndWhile: 5,
@@ -91,7 +91,7 @@ Object.freeze(EventCommandKind);
 *   @enum {number}
 *   @readonly
 */
-var ItemKind = {
+let ItemKind = {
      Item: 0,
      Weapon: 1,
      Armor: 2
@@ -103,7 +103,7 @@ Object.freeze(ItemKind);
 *   @enum {number}
 *   @readonly
 */
-var CharacterKind = {
+let CharacterKind = {
     Hero: 0,
     Monster: 1
 }
@@ -115,7 +115,7 @@ Object.freeze(CharacterKind);
 *   @enum {number}
 *   @readonly
 */
-var GroupKind = {
+let GroupKind = {
     Team: 0,
     Reserve: 1,
     Hidden: 2
@@ -127,7 +127,7 @@ Object.freeze(GroupKind);
 *   @enum {string}
 *   @readonly
 */
-var Align = {
+let Align = {
     Left: "left",
     Right: "right",
     Center: "center"
@@ -139,7 +139,7 @@ Object.freeze(Align);
 *   @enum {string}
 *   @readonly
 */
-var Orientation = {
+let Orientation = {
     South: 0,
     West: 1,
     North: 2,
@@ -153,7 +153,7 @@ Object.freeze(Orientation);
 *   @enum {number}
 *   @readonly
 */
-var ElementMapKind = {
+let ElementMapKind = {
     None: 0,
     Floors: 1,
     Autotiles: 2,
@@ -174,7 +174,7 @@ Object.freeze(ElementMapKind);
 *   @enum {number}
 *   @readonly
 */
-var SpriteWallKind = {
+let SpriteWallKind = {
     Left: 0,
     Middle: 1,
     Right: 2,
@@ -187,7 +187,7 @@ Object.freeze(SpriteWallKind);
 *   @enum {number}
 *   @readonly
 */
-var PictureKind = {
+let PictureKind = {
     None: 0,
     Bars: 1,
     Icons: 2,
@@ -212,7 +212,7 @@ Object.freeze(PictureKind);
 *   @enum {number}
 *   @readonly
 */
-var SongKind = {
+let SongKind = {
     None: 0,
     Music: 1,
     BackgroundSound: 2,
@@ -225,12 +225,12 @@ Object.freeze(SongKind);
 *   @enum {number}
 *   @readonly
 */
-var PrimitiveValueKind = {
+let PrimitiveValueKind = {
     None: 0,
     Anything: 1,
     Default: 2,
     Number: 3,
-    Variable: 4,
+    letiable: 4,
     Parameter: 5,
     Property: 6,
     DataBase: 7,
@@ -247,7 +247,7 @@ Object.freeze(PrimitiveValueKind);
 *   @enum {number}
 *   @readonly
 */
-var OrientationWindow = {
+let OrientationWindow = {
     Vertical: 0,
     Horizontal: 1
 };
@@ -258,7 +258,7 @@ Object.freeze(OrientationWindow);
 *   @enum {number}
 *   @readonly
 */
-var BattlerStep = {
+let BattlerStep = {
     Normal: 0,
     Attack: 1,
     Skill: 2,
@@ -276,7 +276,7 @@ Object.freeze(BattlerStep);
 *   @enum {number}
 *   @readonly
 */
-var LootKind = {
+let LootKind = {
     Item: 0,
     Weapon: 1,
     Armor: 2
@@ -288,10 +288,10 @@ Object.freeze(LootKind);
 *   @enum {number}
 *   @readonly
 */
-var DamagesKind = {
+let DamagesKind = {
     Stat: 0,
     Currency: 1,
-    Variable: 2
+    letiable: 2
 };
 Object.freeze(DamagesKind);
 
@@ -300,7 +300,7 @@ Object.freeze(DamagesKind);
 *   @enum {number}
 *   @readonly
 */
-var EffectKind = {
+let EffectKind = {
     Damages: 0,
     Status: 1,
     AddRemoveSkill: 2,
@@ -316,7 +316,7 @@ Object.freeze(EffectKind);
 *   @enum {number}
 *   @readonly
 */
-var EffectSpecialActionKind = {
+let EffectSpecialActionKind = {
     None: -1,
     ApplyWeapons: 0,
     OpenSkills: 1,
@@ -332,7 +332,7 @@ Object.freeze(EffectSpecialActionKind);
 *   @enum {number}
 *   @readonly
 */
-var CharacteristicKind = {
+let CharacteristicKind = {
     IncreaseDecrease: 0,
     Script: 1,
     AllowForbidEquip: 2,
@@ -346,14 +346,14 @@ Object.freeze(CharacteristicKind);
 *   @enum {number}
 *   @readonly
 */
-var IncreaseDecreaseKind = {
+let IncreaseDecreaseKind = {
     StatValue: 0,
     ElementRes: 1,
     StatusRes: 2,
     ExperienceGain: 3,
     CurrencyGain: 4,
     SkillCost: 5,
-    Variable: 6
+    letiable: 6
 };
 Object.freeze(IncreaseDecreaseKind);
 
@@ -362,7 +362,7 @@ Object.freeze(IncreaseDecreaseKind);
 *   @enum {number}
 *   @readonly
 */
-var TargetKind = {
+let TargetKind = {
     None: 0,
     User: 1,
     Enemy: 2,
@@ -377,7 +377,7 @@ Object.freeze(TargetKind);
 *   @enum {number}
 *   @readonly
 */
-var AvailableKind = {
+let AvailableKind = {
     Battle: 0,
     MainMenu: 1,
     Always: 2,
@@ -390,7 +390,7 @@ Object.freeze(AvailableKind);
 *   @enum {number}
 *   @readonly
 */
-var ShapeKind = {
+let ShapeKind = {
     Box: 0,
     Sphere: 1,
     Cylinder: 2,
@@ -405,7 +405,7 @@ Object.freeze(ShapeKind);
 *   @enum {number}
 *   @readonly
 */
-var CustomShapeKind = {
+let CustomShapeKind = {
     None: 0,
     OBJ: 1,
     MTL: 2,
@@ -418,7 +418,7 @@ Object.freeze(CustomShapeKind);
 *   @enum {number}
 *   @readonly
 */
-var ObjectCollisionKind = {
+let ObjectCollisionKind = {
     None: 0,
     Perfect: 1,
     Simplified: 2,
@@ -431,7 +431,7 @@ Object.freeze(ObjectCollisionKind);
 *   @enum {number}
 *   @readonly
 */
-var MapTransitionKind = {
+let MapTransitionKind = {
     None: 0,
     Fade: 1,
     Zoom: 2
@@ -443,7 +443,7 @@ Object.freeze(MapTransitionKind);
 *   @enum {number}
 *   @readonly
 */
-var MountainCollisionKind = {
+let MountainCollisionKind = {
     Default: 0,
     Always: 1,
     Never: 2
@@ -455,7 +455,7 @@ Object.freeze(MountainCollisionKind);
 *   @enum {number}
 *   @readonly
 */
-var TitleCommandKind = {
+let TitleCommandKind = {
     NewGame: 0,
     LoadGame: 1,
     Settings: 2,
@@ -469,7 +469,7 @@ Object.freeze(TitleCommandKind);
 *   @enum {number}
 *   @readonly
 */
-var TitleSettingKind = {
+let TitleSettingKind = {
     KeyboardAssigment: 0
 };
 Object.freeze(TitleSettingKind);
@@ -479,7 +479,7 @@ Object.freeze(TitleSettingKind);
 *   @enum {number}
 *   @readonly
 */
-var ObjectMovingKind = {
+let ObjectMovingKind = {
     Fix: 0,
     Random: 1,
     Route: 2
@@ -491,7 +491,7 @@ Object.freeze(ObjectMovingKind);
 *   @enum {number}
 *   @readonly
 */
-var TagKind = {
+let TagKind = {
     NewLine: 0,
     Text: 1,
     Bold: 2,
@@ -504,7 +504,7 @@ var TagKind = {
     TextColor: 9,
     BackColor: 10,
     StrokeColor: 11,
-    Variable: 12,
+    letiable: 12,
     Parameter: 13,
     Property: 14,
     HeroName: 15,
@@ -517,7 +517,7 @@ Object.freeze(TagKind);
 *   @enum {number}
 *   @readonly
 */
-var ConditionHeroesKind = {
+let ConditionHeroesKind = {
     AllTheHeroes: 0,
     NoneOfTheHeroes: 1,
     AtLeastOneHero: 2,
@@ -526,11 +526,11 @@ var ConditionHeroesKind = {
 Object.freeze(ConditionHeroesKind);
 
 /**
-*   Enum for the variables map object characteristics.
+*   Enum for the letiables map object characteristics.
 *   @enum {number}
 *   @readonly
 */
-var VariableMapObjectCharacteristicKind = {
+let letiableMapObjectCharacteristicKind = {
     XSquarePosition: 0,
     YSquarePosition: 1,
     ZSquarePosition: 2,
@@ -539,14 +539,14 @@ var VariableMapObjectCharacteristicKind = {
     ZPixelPosition: 5,
     Orientation: 6
 };
-Object.freeze(VariableMapObjectCharacteristicKind);
+Object.freeze(letiableMapObjectCharacteristicKind);
 
 /**
 *   Enum for the animation position kind.
 *   @enum {number}
 *   @readonly
 */
-var AnimationPositionKind = {
+let AnimationPositionKind = {
     Top: 0,
     Middle: 1,
     Bottom: 2,
@@ -559,7 +559,7 @@ Object.freeze(AnimationPositionKind);
 *   @enum {number}
 *   @readonly
 */
-var AnimationEffectConditionKind = {
+let AnimationEffectConditionKind = {
     None: 0,
     Hit: 1,
     Miss: 2,
@@ -572,7 +572,7 @@ Object.freeze(AnimationEffectConditionKind);
 *   @enum {number}
 *   @readonly
 */
-var MonsterActionKind = {
+let MonsterActionKind = {
     UseSkill: 0,
     UseItem: 1,
     DoNothing: 2
@@ -585,7 +585,7 @@ Object.freeze(MonsterActionKind);
 *   @enum {number}
 *   @readonly
 */
-var MonsterActionTargetKind = {
+let MonsterActionTargetKind = {
     Random: 0,
     WeakEnemies: 1
 };
@@ -597,7 +597,7 @@ Object.freeze(MonsterActionTargetKind);
 *   @enum {number}
 *   @readonly
 */
-var OperationKind = {
+let OperationKind = {
     EqualTo: 0,
     NotEqualTo: 1,
     GreaterThanOrEqualTo: 2,

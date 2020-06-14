@@ -42,14 +42,14 @@ SceneSaveGame.prototype = {
 
         // If action, save in the selected slot
         if (DatasKeyBoard.isKeyEqual(key,
-                                     $datasGame.keyBoard.menuControls.Action))
+                                     RPM.datasGame.keyBoard.menuControls.Action))
         {
-            $datasGame.system.soundConfirmation.playSound();
+            RPM.datasGame.system.soundConfirmation.playSound();
             slot = this.windowChoicesSlots.currentSelectedIndex + 1;
-            $game.write(slot);
+            RPM.game.write(slot);
 
             // Pop to return in the precedent state
-            $gameStack.pop();
+            RPM.gameStack.pop();
         }
     },
 

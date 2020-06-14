@@ -85,7 +85,7 @@ DatasTilesets.prototype = {
     *   @param {string} texturesName The field name textures.
     */
     loadPictures: function(pictureKind, texturesName){
-        var pictures = $datasGame.pictures.list[pictureKind], picture;
+        var pictures = RPM.datasGame.pictures.list[pictureKind], picture;
         var l = pictures.length;
         var textures = new Array(l);
         var paths;

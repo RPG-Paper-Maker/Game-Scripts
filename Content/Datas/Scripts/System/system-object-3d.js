@@ -53,22 +53,22 @@ SystemObject3D.prototype = {
     // -------------------------------------------------------
 
     widthPixels: function() {
-        return (this.widthSquare * $SQUARE_SIZE) + (this.widthPixel *
-            $SQUARE_SIZE / 100);
+        return (this.widthSquare * RPM.SQUARE_SIZE) + (this.widthPixel *
+            RPM.SQUARE_SIZE / 100);
     },
 
     // -------------------------------------------------------
 
     heightPixels: function() {
-        return (this.heightSquare * $SQUARE_SIZE) + (this.heightPixel *
-            $SQUARE_SIZE / 100);
+        return (this.heightSquare * RPM.SQUARE_SIZE) + (this.heightPixel *
+            RPM.SQUARE_SIZE / 100);
     },
 
     // -------------------------------------------------------
 
     depthPixels: function() {
-        return (this.depthSquare * $SQUARE_SIZE) + (this.depthPixel *
-            $SQUARE_SIZE / 100);
+        return (this.depthSquare * RPM.SQUARE_SIZE) + (this.depthPixel *
+            RPM.SQUARE_SIZE / 100);
     },
 
     // -------------------------------------------------------
@@ -99,6 +99,6 @@ SystemObject3D.prototype = {
     // -------------------------------------------------------
 
     getObj: function() {
-        return $datasGame.shapes.get(CustomShapeKind.OBJ, this.objID);
+        return RPM.datasGame.shapes.get(CustomShapeKind.OBJ, this.objID);
     }
 }

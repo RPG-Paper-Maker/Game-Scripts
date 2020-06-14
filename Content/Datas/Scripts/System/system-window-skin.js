@@ -52,7 +52,7 @@ SystemWindowSkin.prototype = {
     // -------------------------------------------------------
 
     updatePicture: function() {
-        this.picture = Picture2D.createImage($datasGame.pictures.get(PictureKind
+        this.picture = Picture2D.createImage(RPM.datasGame.pictures.get(PictureKind
             .WindowSkins, this.pictureID), PictureKind.WindowSkins);
         this.picture.stretch = true;
     },
@@ -171,7 +171,7 @@ SystemWindowSkin.prototype = {
     // -------------------------------------------------------
 
     drawArrowTarget: function(frame, x, y, positionResize) {
-        var width = this.arrowTargetSelection[2] / $FRAMES;
+        var width = this.arrowTargetSelection[2] / RPM.FRAMES;
         this.picture.draw(x - (width / 2), y, width, this.arrowTargetSelection
             [3],this.arrowTargetSelection[0] + (frame * width), this
             .arrowTargetSelection[1], width, this.arrowTargetSelection[3],
@@ -181,7 +181,7 @@ SystemWindowSkin.prototype = {
     // -------------------------------------------------------
 
     drawArrowMessage: function(frame, x, y) {
-        var width = this.arrowEndMessage[2] / $FRAMES;
+        var width = this.arrowEndMessage[2] / RPM.FRAMES;
         this.picture.draw(x - (width / 2), y, width, this.arrowEndMessage[3],
             this.arrowEndMessage[0] + (frame * width), this.arrowEndMessage[1],
             width, this.arrowEndMessage[3]);

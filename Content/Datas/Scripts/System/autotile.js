@@ -42,12 +42,12 @@ Autotile.prototype = {
         var xTile = this.tileID % 64;
         var yTile = Math.floor(this.tileID / 64) +
                 (10 * texture.getOffset(this.autotileID, this.texture));
-        var x = (xTile * $SQUARE_SIZE) / width;
-        var y = (yTile * $SQUARE_SIZE) / height;
-        var w = $SQUARE_SIZE / width;
-        var h = $SQUARE_SIZE / height;
-        var autotile = $datasGame.specialElements.autotiles[this.autotileID];
-        var picture = autotile ? $datasGame.pictures.list[PictureKind.Autotiles]
+        var x = (xTile * RPM.SQUARE_SIZE) / width;
+        var y = (yTile * RPM.SQUARE_SIZE) / height;
+        var w = RPM.SQUARE_SIZE / width;
+        var h = RPM.SQUARE_SIZE / height;
+        var autotile = RPM.datasGame.specialElements.autotiles[this.autotileID];
+        var picture = autotile ? RPM.datasGame.pictures.list[PictureKind.Autotiles]
             [autotile.pictureID] : null;
         var collison = picture ? picture.getCollisionAtIndex(Land.prototype
             .getIndex.call(this, picture.width)) : null;

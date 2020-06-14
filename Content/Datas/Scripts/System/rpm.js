@@ -18,7 +18,8 @@
 /** @class
 *   Utility class with a lot of functions.
 */
-function RPM(){
+function RPM()
+{
 
 }
 
@@ -27,7 +28,8 @@ function RPM(){
 // -------------------------------------------------------
 
 RPM.PATH_BR = "";
-RPM.PATH_DATAS = $ROOT_DIRECTORY + "Content/Datas/";
+RPM.ROOT_DIRECTORY_LOCAL = "."
+RPM.PATH_DATAS = Platform.ROOT_DIRECTORY + "/Content/Datas/";
 RPM.FILE_MAPS = RPM.PATH_DATAS + "Maps/";
 RPM.FILE_MAP_INFOS = "/infos.json";
 RPM.FILE_MAP_OBJECTS = "/objects.json";
@@ -54,8 +56,8 @@ RPM.FILE_VARIABLES = RPM.PATH_DATAS + "variables.json";
 RPM.FILE_SETTINGS = RPM.PATH_DATAS + "settings.json";
 RPM.FILE_SAVE = RPM.PATH_DATAS + "saves.json";
 RPM.FILE_ANIMATIONS = RPM.PATH_DATAS + "animations.json";
-RPM.PATH_PICTURES = "Content/Images";
-RPM.PATH_VIDEOS = "Content/Videos";
+RPM.PATH_PICTURES = "/Content/Images";
+RPM.PATH_VIDEOS = "/Content/Videos";
 RPM.PATH_HUD = RPM.PATH_PICTURES + "/HUD/";
 RPM.PATH_TEXTURES2D = RPM.PATH_PICTURES + "/Textures2D/";
 RPM.PATH_BARS = RPM.PATH_HUD + "Bars";
@@ -73,16 +75,16 @@ RPM.PATH_WALLS = RPM.PATH_TEXTURES2D + "Walls";
 RPM.PATH_BATTLERS = RPM.PATH_TEXTURES2D + "Battlers";
 RPM.PATH_OBJECTS_3D = RPM.PATH_TEXTURES2D + "Objects3D";
 RPM.PATH_MOUNTAINS = RPM.PATH_TEXTURES2D + "Mountains";
-RPM.PATH_SONGS = "Content/Songs/";
+RPM.PATH_SONGS = "/Content/Songs/";
 RPM.PATH_MUSICS = RPM.PATH_SONGS + "Musics";
 RPM.PATH_BACKGROUND_SOUNDS = RPM.PATH_SONGS + "BackgroundSounds";
 RPM.PATH_SOUNDS = RPM.PATH_SONGS + "Sounds";
 RPM.PATH_MUSIC_EFFECTS = RPM.PATH_SONGS + "MusicEffects";
-RPM.PATH_SHAPES = "Content/Shapes/";
+RPM.PATH_SHAPES = "/Content/Shapes/";
 RPM.PATH_OBJ = RPM.PATH_SHAPES + "OBJ";
 RPM.PATH_MTL = RPM.PATH_SHAPES + "MTL";
 RPM.PATH_OBJ_COLLISIONS = RPM.PATH_SHAPES + "Collisions";
-RPM.PATH_SHADERS = RPM.PATH_DATAS + "Scripts/System/Shaders/";
+RPM.PATH_SHADERS = RPM.PATH_DATAS + "Scripts/System/shaders/";
 
 // -------------------------------------------------------
 //  CONSTANTS
@@ -99,6 +101,11 @@ RPM.LARGE_SLOT_HEIGHT = 60;
 RPM.MEDIUM_SPACE = 5;
 RPM.LARGE_SPACE = 10;
 RPM.HUGE_SPACE = 20;
+RPM.PORTIONS_RAY_FAR = 0;
+RPM.PORTION_SIZE = 16;
+RPM.MAX_PICTURE_SIZE = 4096;
+RPM.SCREEN_X = 640;
+RPM.SCREEN_Y = 480;
 RPM.SMALL_PADDING_BOX = [10, 10, 10, 10];
 RPM.MEDIUM_PADDING_BOX = [20, 20, 20, 20];
 RPM.HUGE_PADDING_BOX = [30, 30, 30, 30];
@@ -106,6 +113,7 @@ RPM.DIALOG_PADDING_BOX = [30, 50, 30, 50];
 RPM.SMALL_SLOT_PADDING = [10, 5, 10, 5];
 RPM.ONE_SECOND_MILLI = 1000;
 RPM.NUM_BOOL_TRUE = 1;
+RPM.COEF_TEX = 0.2;
 RPM.STRING_RGBA = "rgba";
 RPM.STRING_PARENTHESIS_LEFT = "(";
 RPM.STRING_PARENTHESIS_RIGHT = ")";
@@ -145,15 +153,43 @@ RPM.COLOR_RED = SystemColor.createColor(216, 33, 17);
 RPM.COLOR_WHITE = SystemColor.createColor(255, 255, 255);
 RPM.COLOR_BLACK = SystemColor.createColor(0, 0, 0);
 
+
 // -------------------------------------------------------
-//  LOADER
+//  OTHERS
 // -------------------------------------------------------
 
+$that = this;
+RPM.elapsedTime = 0;
+RPM.averageElapsedTime = 0;
+RPM.lastUpdateTime = new Date().getTime();
+RPM.keysPressed = new Array;
+RPM.picturesLoading = new Array;
+RPM.picturesLoaded = new Array;
+RPM.filesToLoad = 0;
+RPM.loadedFiles = 0;
+RPM.fontSize = 13;
+RPM.fontName = "sans-serif";
+RPM.blockingHero = false;
+RPM.game = null;
+RPM.DIALOG_ERROR = null;
+RPM.BB_MATERIAL = new THREE.MeshBasicMaterial();
+RPM.BB_MATERIAL.visible = false;
+RPM.textureLoader = new THREE.TextureLoader();
+RPM.requestPaintHUD = true;
+RPM.currentObject = null;
+RPM.currentParameters = null;
+RPM.currentMap = null;
+RPM.displayedPictures = [];
+RPM.screenTone = new THREE.Vector4(0, 0, 0, 1);
+RPM.allowSaves = true;
+RPM.allowMainMenu = true;
+RPM.BB_BOX = MapPortion.createBox();
+RPM.BB_BOX_DETECTION = MapPortion.createBox();
+RPM.BB_BOX_DEFAULT_DETECTION = MapPortion.createBox();
+RPM.BB_ORIENTED_BOX = MapPortion.createOrientedBox();
 RPM.OBJ_LOADER = new THREE.OBJLoader();
 
-/** Binary operations.
-*   @type {function[]} */
-var $operators_compare =
+RPM.operators_compare =
 [
     function(a, b) { return a === b },
     function(a, b) { return a !== b },
@@ -162,10 +198,7 @@ var $operators_compare =
     function(a, b) { return a > b },
     function(a, b) { return a < b }
 ];
-
-/** Arithmetic operations.
-*   @type {function[]} */
-var $operators_numbers =
+RPM.operators_numbers =
 [
     function(a, b) { return b },
     function(a, b) { return a + b },
@@ -181,31 +214,31 @@ var $operators_numbers =
 *   The key events.
 */
 var KeyEvent = {
-    DOM_VK_CANCEL: $DESKTOP ? 0 : 3,
-    DOM_VK_HELP: $DESKTOP ? 0 : 6,
-    DOM_VK_BACK_SPACE: $DESKTOP ? 16777219 : 8,
-    DOM_VK_TAB: $DESKTOP ? 16777217 : 9,
-    DOM_VK_CLEAR: $DESKTOP ? 0 : 12,
-    DOM_VK_RETURN: $DESKTOP ? 16777220 : 13,
-    DOM_VK_ENTER: $DESKTOP ? 16777221 : 14,
-    DOM_VK_SHIFT: $DESKTOP ? 16777248 : 16,
-    DOM_VK_CONTROL: $DESKTOP ? 16777249 : 17,
-    DOM_VK_ALT: $DESKTOP ? 16777251 : 18,
-    DOM_VK_PAUSE: $DESKTOP ? 16777224 : 19,
-    DOM_VK_CAPS_LOCK: $DESKTOP ? 16777252 : 20,
-    DOM_VK_ESCAPE: $DESKTOP ? 16777216 : 27,
+    DOM_VK_CANCEL: 3,
+    DOM_VK_HELP: 6,
+    DOM_VK_BACK_SPACE: 8,
+    DOM_VK_TAB: 9,
+    DOM_VK_CLEAR: 12,
+    DOM_VK_RETURN: 13,
+    DOM_VK_ENTER: 14,
+    DOM_VK_SHIFT: 16,
+    DOM_VK_CONTROL: 17,
+    DOM_VK_ALT: 18,
+    DOM_VK_PAUSE: 19,
+    DOM_VK_CAPS_LOCK: 20,
+    DOM_VK_ESCAPE: 27,
     DOM_VK_SPACE: 32,
-    DOM_VK_PAGE_UP: $DESKTOP ? 16777238 : 33,
-    DOM_VK_PAGE_DOWN: $DESKTOP ? 16777239 : 34,
-    DOM_VK_END: $DESKTOP ? 16777233 : 35,
-    DOM_VK_HOME: $DESKTOP ? 16777250 : 36,
-    DOM_VK_LEFT: $DESKTOP ? 16777234 : 37,
-    DOM_VK_UP: $DESKTOP ? 16777235 : 38,
-    DOM_VK_RIGHT: $DESKTOP ? 16777236 : 39,
-    DOM_VK_DOWN: $DESKTOP ? 16777237 : 40,
-    DOM_VK_PRINTSCREEN: $DESKTOP ? 0 : 44,
-    DOM_VK_INSERT: $DESKTOP ? 16777222 : 45,
-    DOM_VK_DELETE: $DESKTOP ? 16777223 : 46,
+    DOM_VK_PAGE_UP: 33,
+    DOM_VK_PAGE_DOWN: 34,
+    DOM_VK_END: 35,
+    DOM_VK_HOME: 36,
+    DOM_VK_LEFT: 37,
+    DOM_VK_UP: 38,
+    DOM_VK_RIGHT: 39,
+    DOM_VK_DOWN: 40,
+    DOM_VK_PRINTSCREEN: 44,
+    DOM_VK_INSERT: 45,
+    DOM_VK_DELETE: 46,
     DOM_VK_0: 48,
     DOM_VK_1: 49,
     DOM_VK_2: 50,
@@ -254,47 +287,47 @@ var KeyEvent = {
     DOM_VK_NUMPAD7: 103,
     DOM_VK_NUMPAD8: 104,
     DOM_VK_NUMPAD9: 105,
-    DOM_VK_MULTIPLY: $DESKTOP ? 42 : 106,
-    DOM_VK_ADD: $DESKTOP ? 43 : 107,
-    DOM_VK_SEPARATOR: $DESKTOP ? 124 : 108,
-    DOM_VK_SUBTRACT: $DESKTOP ? 45 : 109,
-    DOM_VK_DECIMAL: $DESKTOP ? 16777223 : 110,
-    DOM_VK_DIVIDE: $DESKTOP ? 47 : 111,
-    DOM_VK_F1: $DESKTOP ? 16777264 : 112,
-    DOM_VK_F2: $DESKTOP ? 16777265 : 113,
-    DOM_VK_F3: $DESKTOP ? 16777266 : 114,
-    DOM_VK_F4: $DESKTOP ? 16777267 : 115,
-    DOM_VK_F5: $DESKTOP ? 16777268 : 116,
-    DOM_VK_F6: $DESKTOP ? 16777269 : 117,
-    DOM_VK_F7: $DESKTOP ? 16777270 : 118,
-    DOM_VK_F8: $DESKTOP ? 16777271 : 119,
-    DOM_VK_F9: $DESKTOP ? 16777272 : 120,
-    DOM_VK_F10: $DESKTOP ? 16777273 : 121,
-    DOM_VK_F11: $DESKTOP ? 16777274 : 122,
-    DOM_VK_F12: $DESKTOP ? 16777275 : 123,
-    DOM_VK_F13: $DESKTOP ? 16777276 : 124,
-    DOM_VK_F14: $DESKTOP ? 16777277 : 125,
-    DOM_VK_F15: $DESKTOP ? 16777278 : 126,
-    DOM_VK_F16: $DESKTOP ? 16777279 : 127,
-    DOM_VK_F17: $DESKTOP ? 16777280 : 128,
-    DOM_VK_F18: $DESKTOP ? 16777281 : 129,
-    DOM_VK_F19: $DESKTOP ? 16777282 : 130,
-    DOM_VK_F20: $DESKTOP ? 16777283 : 131,
-    DOM_VK_F21: $DESKTOP ? 16777284 : 132,
-    DOM_VK_F22: $DESKTOP ? 16777285 : 133,
-    DOM_VK_F23: $DESKTOP ? 16777286 : 134,
-    DOM_VK_F24: $DESKTOP ? 16777287 : 135,
-    DOM_VK_NUM_LOCK: $DESKTOP ? 16777253 : 144,
-    DOM_VK_SCROLL_LOCK: $DESKTOP ? 0 : 145,
-    DOM_VK_COMMA: $DESKTOP ? 44 : 188,
-    DOM_VK_PERIOD: $DESKTOP ? 0 : 190,
-    DOM_VK_SLASH: $DESKTOP ? 47 : 191,
-    DOM_VK_BACK_QUOTE: $DESKTOP ? 96 : 192,
-    DOM_VK_OPEN_BRACKET: $DESKTOP ? 91 : 219,
-    DOM_VK_BACK_SLASH: $DESKTOP ? 92 : 220,
-    DOM_VK_CLOSE_BRACKET: $DESKTOP ? 93 : 221,
-    DOM_VK_QUOTE: $DESKTOP ? 34 : 222,
-    DOM_VK_META: $DESKTOP ? 0 : 224,
+    DOM_VK_MULTIPLY: 106,
+    DOM_VK_ADD: 107,
+    DOM_VK_SEPARATOR: 108,
+    DOM_VK_SUBTRACT: 109,
+    DOM_VK_DECIMAL: 110,
+    DOM_VK_DIVIDE: 111,
+    DOM_VK_F1: 112,
+    DOM_VK_F2: 113,
+    DOM_VK_F3: 114,
+    DOM_VK_F4: 115,
+    DOM_VK_F5: 116,
+    DOM_VK_F6: 117,
+    DOM_VK_F7: 118,
+    DOM_VK_F8: 119,
+    DOM_VK_F9: 120,
+    DOM_VK_F10: 121,
+    DOM_VK_F11: 122,
+    DOM_VK_F12: 123,
+    DOM_VK_F13: 124,
+    DOM_VK_F14: 125,
+    DOM_VK_F15: 126,
+    DOM_VK_F16: 127,
+    DOM_VK_F17: 128,
+    DOM_VK_F18: 129,
+    DOM_VK_F19: 130,
+    DOM_VK_F20: 131,
+    DOM_VK_F21: 132,
+    DOM_VK_F22: 133,
+    DOM_VK_F23: 134,
+    DOM_VK_F24: 135,
+    DOM_VK_NUM_LOCK: 144,
+    DOM_VK_SCROLL_LOCK: 145,
+    DOM_VK_COMMA: 188,
+    DOM_VK_PERIOD: 190,
+    DOM_VK_SLASH: 191,
+    DOM_VK_BACK_QUOTE: 192,
+    DOM_VK_OPEN_BRACKET: 219,
+    DOM_VK_BACK_SLASH: 220,
+    DOM_VK_CLOSE_BRACKET: 221,
+    DOM_VK_QUOTE: 222,
+    DOM_VK_META: 224,
     SQUARE: 178,
     AMPERSAND: 38,
     E_ACCENT_RIGHT: 201,
@@ -329,6 +362,129 @@ var KeyEvent = {
     LESS_THAN: 60,
     GREATER_THAN: 62,
 
+    qtToDOM: function(key)
+    {
+        switch (key) 
+        {
+        case 16777219:
+            return KeyEvent.DOM_VK_BACK_SPACE;
+        case 16777217:
+            return KeyEvent.DOM_VK_TAB;
+        case 16777220:
+            return KeyEvent.DOM_VK_RETURN;
+        case 16777221:
+            return KeyEvent.DOM_VK_ENTER;
+        case 16777248:
+            return KeyEvent.DOM_VK_SHIFT;
+        case 16777249:
+            return KeyEvent.DOM_VK_CONTROL;
+        case 16777251:
+            return KeyEvent.DOM_VK_ALT;
+        case 16777224:
+            return KeyEvent.DOM_VK_PAUSE;
+        case 16777252:
+            return KeyEvent.DOM_VK_CAPS_LOCK;
+        case 16777216:
+            return KeyEvent.DOM_VK_ESCAPE;
+        case 16777238:
+            return KeyEvent.DOM_VK_PAGE_UP;
+        case 16777239:
+            return KeyEvent.DOM_VK_PAGE_DOWN;
+        case 16777233:
+            return KeyEvent.DOM_VK_END;
+        case 16777250:
+            return KeyEvent.DOM_VK_HOME;
+        case 16777234:
+            return KeyEvent.DOM_VK_LEFT;
+        case 16777235:
+            return KeyEvent.DOM_VK_UP;
+        case 16777236:
+            return KeyEvent.DOM_VK_RIGHT;
+        case 16777237:
+            return KeyEvent.DOM_VK_DOWN;
+        case 16777222:
+            return KeyEvent.DOM_VK_INSERT;
+        case 16777223:
+            return KeyEvent.DOM_VK_DELETE;
+        case 42:
+            return KeyEvent.DOM_VK_MULTIPLY;
+        case 43:
+            return KeyEvent.DOM_VK_ADD;
+        case 124:
+            return KeyEvent.DOM_VK_SEPARATOR;
+        case 45:
+            return KeyEvent.DOM_VK_SUBTRACT;
+        case 16777223:
+            return KeyEvent.DOM_VK_DECIMAL;
+        case 47:
+            return KeyEvent.DOM_VK_DIVIDE;
+        case 16777264:
+            return KeyEvent.DOM_VK_F1;
+        case 16777265:
+            return KeyEvent.DOM_VK_F2;
+        case 16777266:
+            return KeyEvent.DOM_VK_F3;
+        case 16777267:
+            return KeyEvent.DOM_VK_F4;
+        case 16777268:
+            return KeyEvent.DOM_VK_F5;
+        case 16777269:
+            return KeyEvent.DOM_VK_F6;
+        case 16777270:
+            return KeyEvent.DOM_VK_F7;
+        case 16777271:
+            return KeyEvent.DOM_VK_F8;
+        case 16777272:
+            return KeyEvent.DOM_VK_F9;
+        case 16777273:
+            return KeyEvent.DOM_VK_F10;
+        case 16777274:
+            return KeyEvent.DOM_VK_F11;
+        case 16777275:
+            return KeyEvent.DOM_VK_F12;
+        case 16777276:
+            return KeyEvent.DOM_VK_F13;
+        case 16777277:
+            return KeyEvent.DOM_VK_F14;
+        case 16777278:
+            return KeyEvent.DOM_VK_F15;
+        case 16777279:
+            return KeyEvent.DOM_VK_F16;
+        case 16777280:
+            return KeyEvent.DOM_VK_F17;
+        case 16777281:
+            return KeyEvent.DOM_VK_F18;
+        case 16777282:
+            return KeyEvent.DOM_VK_F19;
+        case 16777283:
+            return KeyEvent.DOM_VK_F20;
+        case 16777284:
+            return KeyEvent.DOM_VK_F21;
+        case 16777285:
+            return KeyEvent.DOM_VK_F22;
+        case 16777286:
+            return KeyEvent.DOM_VK_F23;
+        case 16777287:
+            return KeyEvent.DOM_VK_F24;
+        case 16777253:
+            return KeyEvent.DOM_VK_NUM_LOCK;
+        case 44:
+            return KeyEvent.DOM_VK_COMMA;
+        case 96:
+            return KeyEvent.DOM_VK_BACK_QUOTE;
+        case 91:
+            return KeyEvent.DOM_VK_OPEN_BRACKET;
+        case 92:
+            return KeyEvent.DOM_VK_BACK_SLASH;
+        case 93:
+            return KeyEvent.DOM_VK_CLOSE_BRACKET;
+        case 34:
+            return KeyEvent.DOM_VK_QUOTE;
+        default:
+            return key;
+        }
+    },
+
     /** Check if the pressed key is a PAD number.
     *   @param {number} key The key ID.
     *   @returns {boolean}
@@ -342,7 +498,7 @@ var KeyEvent = {
     *   @returns {boolean}
     */
     isKeyNumberTopPressed: function(key){
-        var shift = $keysPressed.indexOf(KeyEvent.DOM_VK_SHIFT) !== -1;
+        var shift = RPM.keysPressed.indexOf(KeyEvent.DOM_VK_SHIFT) !== -1;
         return shift && key >= KeyEvent.DOM_VK_0 && key <= KeyEvent.DOM_VK_9;
     },
 
@@ -690,25 +846,28 @@ Tree.prototype = {
 *   @param {function} callback A callback function to excecute when the file is
 *   loaded.
 */
-RPM.openFile = function(base, url, loading, callback){
-    if (loading)
-        $filesToLoad++;
-    var doc = new XMLHttpRequest();
-    doc.onreadystatechange = function() {
-        if (doc.readyState === XMLHttpRequest.DONE) {
-            try{
-                callback.call(base, doc.responseText);
-            }
-            catch (e){
-                RPM.showError(e);
-            }
+RPM.LOL = 0;
+RPM.openFile = function(base, url, loading, callback)
+{
+    const fs = require('fs');
 
-            if (loading)
-                $loadedFiles++;
-        }
+    if (loading)
+    {
+        RPM.filesToLoad++;
     }
-    doc.open("GET", url, true);
-    doc.send();
+    fs.readFile(url, function (e, data) {
+        if (e) 
+        {
+            RPM.showError(e);
+        } else
+        {
+            callback.call(base, data.toString());
+            if (loading)
+            {
+                RPM.loadedFiles++;
+            }
+        }
+    });
 }
 
 RPM.openFile(null, RPM.PATH_SHADERS + "fix.vert", false, function(res) {
@@ -725,10 +884,16 @@ RPM.openFile(null, RPM.PATH_SHADERS + "fix.frag", false, function(res) {
 *   @param {string} url The path of the file.
 *   @param {Object} obj An object that can be stringified by JSON.
 */
-RPM.saveFile = function(url, obj){
-    var doc = new XMLHttpRequest();
-    doc.open("PUT", url, false);
-    doc.send(JSON.stringify(obj));
+RPM.saveFile = function(url, obj)
+{
+    const fs = require('fs');
+
+    fs.writeFile(url, JSON.stringify(obj), (e) => {
+        if (e)
+        {
+            RPM.showError(e);
+        }
+    });
 }
 
 // -------------------------------------------------------
@@ -738,9 +903,9 @@ RPM.saveFile = function(url, obj){
 *   @returns {boolean}
 */
 RPM.isLoading = function(){
-    if ($filesToLoad === $loadedFiles) {
-        $filesToLoad = 0;
-        $loadedFiles = 0;
+    if (RPM.filesToLoad === RPM.loadedFiles) {
+        RPM.filesToLoad = 0;
+        RPM.loadedFiles = 0;
         return false;
     }
 
@@ -763,17 +928,6 @@ RPM.createFont = function(fontSize, fontName, bold, italic) {
 
 // -------------------------------------------------------
 
-/** If a current game exists, add one second to the timer.
-*   @static
-*/
-RPM.updateTimer = function(){
-    if ($game !== null){
-        $game.playTime++;
-    }
-}
-
-// -------------------------------------------------------
-
 /** Describe a javascript object.
 *   @static
 *   @param {Object} obj The javascript object.
@@ -782,7 +936,7 @@ RPM.updateTimer = function(){
 RPM.describe = function(obj){
     var res = "";
     for (var p in obj)
-        res += console.log(p + ": " + obj[p]);
+        res += cons.log(p + ": " + obj[p]);
 
     return res;
 }
@@ -794,7 +948,7 @@ RPM.describe = function(obj){
 *   @param {string} text text to display.
 */
 RPM.show = function(text){
-    alert(text)
+    dia.showMessageBoxSync({ title: 'Error', type: 'error', message: text });
 }
 
 // -------------------------------------------------------
@@ -843,9 +997,9 @@ RPM.generateMapName = function(id){
 *   @returns {number}
 */
 RPM.positionJSONToIndex = function(position){
-    return (position[0] % $PORTION_SIZE) + (RPM.mod(position[1], $PORTION_SIZE) *
-        $PORTION_SIZE) + ((position[3] % $PORTION_SIZE) * $PORTION_SIZE *
-        $PORTION_SIZE);
+    return (position[0] % RPM.PORTION_SIZE) + (RPM.mod(position[1], RPM
+        .PORTION_SIZE) * RPM.PORTION_SIZE) + ((position[3] % RPM
+        .PORTION_SIZE) * RPM.PORTION_SIZE * RPM.PORTION_SIZE);
 }
 
 // -------------------------------------------------------
@@ -856,9 +1010,9 @@ RPM.positionJSONToIndex = function(position){
 *   @returns {number}
 */
 RPM.positionToIndex = function(position) {
-    return (position[0] % $PORTION_SIZE) + (RPM.mod(position[1], $PORTION_SIZE) *
-        $PORTION_SIZE) + ((position[2] % $PORTION_SIZE) * $PORTION_SIZE *
-        $PORTION_SIZE);
+    return (position[0] % RPM.PORTION_SIZE) + (RPM.mod(position[1], RPM
+        .PORTION_SIZE) * RPM.PORTION_SIZE) + ((position[2] % RPM.PORTION_SIZE
+        ) * RPM.PORTION_SIZE * RPM.PORTION_SIZE);
 }
 
 // -------------------------------------------------------
@@ -870,8 +1024,8 @@ RPM.positionToIndex = function(position) {
 */
 RPM.positionToVector3 = function(position){
     var pos = RPM.positionToBorderVector3(position);
-    pos.setX(pos.x + (RPM.positionCenterX(position) / 100 * $SQUARE_SIZE));
-    pos.setZ(pos.z + (RPM.positionCenterZ(position) / 100 * $SQUARE_SIZE));
+    pos.setX(pos.x + (RPM.positionCenterX(position) / 100 * RPM.SQUARE_SIZE));
+    pos.setZ(pos.z + (RPM.positionCenterZ(position) / 100 * RPM.SQUARE_SIZE));
 
     return pos;
 }
@@ -885,10 +1039,10 @@ RPM.positionToVector3 = function(position){
 */
 RPM.positionToBorderVector3 = function(position){
     return new THREE.Vector3(
-                position[0] * $SQUARE_SIZE,
-                (position[1] * $SQUARE_SIZE) +
-                (position[2] * $SQUARE_SIZE / 100),
-                position[3] * $SQUARE_SIZE);
+                position[0] * RPM.SQUARE_SIZE,
+                (position[1] * RPM.SQUARE_SIZE) +
+                (position[2] * RPM.SQUARE_SIZE / 100),
+                position[3] * RPM.SQUARE_SIZE);
 }
 
 // -------------------------------------------------------
@@ -899,7 +1053,8 @@ RPM.positionToBorderVector3 = function(position){
 *   @returns {number}
 */
 RPM.positionTotalY = function(position){
-    return (position[1] * $SQUARE_SIZE) + (position[2] * $SQUARE_SIZE / 100);
+    return (position[1] * RPM.SQUARE_SIZE) + (position[2] * RPM.SQUARE_SIZE / 
+        100);
 }
 
 // -------------------------------------------------------
@@ -1019,7 +1174,7 @@ RPM.getScreenY = function(y) {
 */
 
 RPM.getScreenXY = function(xy) {
-    return Math.ceil(($windowX + $windowY) / 2 * xy);
+    return Math.ceil((RPM.windowX + RPM.windowY) / 2 * xy);
 }
 
 // -------------------------------------------------------
@@ -1031,7 +1186,7 @@ RPM.getScreenXY = function(xy) {
 */
 
 RPM.getScreenMinXY = function(xy) {
-    return Math.ceil(xy * Math.min($windowX,$windowY));
+    return Math.ceil(xy * Math.min(RPM.windowX,RPM.windowY));
 }
 
 // -------------------------------------------------------
@@ -1043,7 +1198,7 @@ RPM.getScreenMinXY = function(xy) {
 *   @returns {number}
 */
 RPM.getDoubleScreenX = function(x) {
-    return $windowX * x;
+    return RPM.windowX * x;
 }
 
 // -------------------------------------------------------
@@ -1055,7 +1210,7 @@ RPM.getDoubleScreenX = function(x) {
 *   @returns {number}
 */
 RPM.getDoubleScreenY = function(y) {
-    return $windowY * y;
+    return RPM.windowY * y;
 }
 
 // -------------------------------------------------------
@@ -1066,7 +1221,7 @@ RPM.getDoubleScreenY = function(y) {
 *   @returns {number}
 */
 RPM.getSquare = function(x) {
-    return Math.floor(x / $SQUARE_SIZE);
+    return Math.floor(x / RPM.SQUARE_SIZE);
 };
 
 // -------------------------------------------------------
@@ -1123,9 +1278,9 @@ RPM.sin = function(w){
 RPM.getPortion = function(position){
     var p = RPM.getPosition(position);
     return [
-        Math.floor(p[0] / $PORTION_SIZE),
-        Math.floor(p[1] / $PORTION_SIZE),
-        Math.floor(p[2] / $PORTION_SIZE)
+        Math.floor(p[0] / RPM.PORTION_SIZE),
+        Math.floor(p[1] / RPM.PORTION_SIZE),
+        Math.floor(p[2] / RPM.PORTION_SIZE)
     ]
 }
 
@@ -1133,9 +1288,9 @@ RPM.getPortion = function(position){
 
 RPM.getPosition = function(position){
     return [
-        Math.floor(position.x / $SQUARE_SIZE),
-        Math.floor(position.y / $SQUARE_SIZE),
-        Math.floor(position.z / $SQUARE_SIZE)
+        Math.floor(position.x / RPM.SQUARE_SIZE),
+        Math.floor(position.y / RPM.SQUARE_SIZE),
+        Math.floor(position.z / RPM.SQUARE_SIZE)
     ];
 }
 
@@ -1164,16 +1319,17 @@ RPM.showError = function(e){
 
 /** Show an error message.
 *   @static
-*   @param {string} error The error message.
+*   @param {string} msg The error message.
 */
-RPM.showErrorMessage = function(error){
-    if ($DIALOG_ERROR !== null) {
-        if (!$DIALOG_ERROR.text) {
-            $DIALOG_ERROR.text = error;
-            $DIALOG_ERROR.open();
-        }
-    } else {
-        console.log(error);
+RPM.showErrorMessage = function(msg)
+{
+    if (Platform.DESKTOP)
+    {
+        const dialog = require('electron').remote.dialog;
+        dialog.showMessageBoxSync({ title: 'Error', type: 'error', message: msg });
+    } else
+    {
+        console.log(msg);
     }
 }
 
@@ -1242,7 +1398,7 @@ RPM.random = function(min, max) {
 *   @retuns {THREE.MeshBasicMaterial}
 */
 RPM.loadTexture = function(paths, picture, callback) {
-    $filesToLoad++;
+    RPM.filesToLoad++;
     var path = paths[0];
     var pathLocal = paths[1];
     var texture;
@@ -1250,9 +1406,9 @@ RPM.loadTexture = function(paths, picture, callback) {
     if (callback) {
         texture = callback.call(this, pathLocal, picture);
     } else {
-        texture = $textureLoader.load(path,
+        texture = RPM.textureLoader.load(path,
             function(t){
-                $loadedFiles++;
+                RPM.loadedFiles++;
             },
             function (t) {},
             function (t) {
@@ -1274,9 +1430,8 @@ RPM.loadTextureEmpty = function(){
     {
         transparent: true,
         side: THREE.DoubleSide,
-        shading: THREE.FlatShading,
-        alphaTest: 0.5,
-        overdraw: 0.5
+        flatShading: THREE.FlatShading,
+        alphaTest: 0.5
     });
 };
 
@@ -1294,7 +1449,7 @@ RPM.createMaterial = function(texture, uniforms) {
     if (!uniforms) {
         uniforms = {
             texture: { type: "t", value: texture },
-            colorD: { type: "v4", value: $screenTone }
+            colorD: { type: "v4", value: RPM.screenTone }
         };
     }
 
@@ -1313,14 +1468,14 @@ RPM.createMaterial = function(texture, uniforms) {
 // -------------------------------------------------------
 
 RPM.updateBackgroundColor = function(color) {
-    $renderer.setClearColor(color.getHex($screenTone), color.alpha);
+    RPM.renderer.setClearColor(color.getHex(RPM.screenTone), color.alpha);
 }
 
 // -------------------------------------------------------
 
 RPM.toScreenPosition = function(vector, camera) {
-    var widthHalf = $canvasWidth / 2;
-    var heightHalf = $canvasHeight / 2;
+    var widthHalf = RPM.canvasWidth / 2;
+    var heightHalf = RPM.canvasHeight / 2;
     var position = vector.clone();
     camera.updateMatrixWorld(true);
     position.project(camera);

@@ -35,7 +35,7 @@ GameItem.prototype = {
     remove: function(nb) {
         this.nb -= nb;
         if (this.nb <= 0) {
-            $game.items.splice($game.items.indexOf(this), 1);
+            RPM.game.items.splice(RPM.game.items.indexOf(this), 1);
         }
     },
 
@@ -43,7 +43,7 @@ GameItem.prototype = {
 
     add: function(nb) {
         if (this.nb === 0) {
-            $game.items.push(this);
+            RPM.game.items.push(this);
         }
         this.nb += nb;
     },
@@ -56,11 +56,11 @@ GameItem.prototype = {
     getItemInformations: function(){
         switch (this.k){
         case ItemKind.Item:
-            return $datasGame.items.list[this.id];
+            return RPM.datasGame.items.list[this.id];
         case ItemKind.Weapon:
-            return $datasGame.weapons.list[this.id];
+            return RPM.datasGame.weapons.list[this.id];
         case ItemKind.Armor:
-            return $datasGame.armors.list[this.id];
+            return RPM.datasGame.armors.list[this.id];
         }
 
         return null;
@@ -74,9 +74,9 @@ GameItem.prototype = {
     *   inventory.
     */
     modifyItems: function(callback) {
-        var i, l = $game.items.length;
+        var i, l = RPM.game.items.length;
         for (i = 0; i < l; i++){
-            var item = $game.items[i];
+            var item = RPM.game.items[i];
             if (item.k === this.k && item.id === this.id) {
                 // If the item already is in the inventory...
                 callback.call(this, item, i);
@@ -96,7 +96,7 @@ GameItem.prototype = {
                 item.nb = this.nb;
             });
         if (!alreadyInInventory) {
-            $game.items.push(this);
+            RPM.game.items.push(this);
         }
     },
 
@@ -109,7 +109,7 @@ GameItem.prototype = {
                 item.nb += this.nb;
             });
         if (!alreadyInInventory) {
-            $game.items.push(this);
+            RPM.game.items.push(this);
         }
     },
 
@@ -121,7 +121,7 @@ GameItem.prototype = {
         var alreadyInInventory = this.modifyItems(function(item, index) {
                 item.nb -= this.nb;
                 if (item.nb <= 0) {
-                    $game.items.splice(index, 1);
+                    RPM.game.items.splice(index, 1);
                 }
             });
     },

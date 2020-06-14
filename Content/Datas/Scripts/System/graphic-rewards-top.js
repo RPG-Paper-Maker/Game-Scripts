@@ -22,16 +22,16 @@ function GraphicRewardsTop(xp, currencies) {
     var id, currency;
 
     // Experience
-    this.graphicXP = new GraphicText($datasGame.battleSystem.getExpStatistic()
+    this.graphicXP = new GraphicText(RPM.datasGame.battleSystem.getExpStatistic()
         .name + ": " + xp);
-    $context.font = this.graphicXP.font;
+    Platform.ctx.font = this.graphicXP.font;
     this.graphicXP.updateContextFont();
-    this.graphicXPLength = $context.measureText(this.graphicXP.text).width;
+    this.graphicXPLength = Platform.ctx.measureText(this.graphicXP.text).width;
 
     // Currencies
     this.currencies = [];
     for (id in currencies) {
-        this.currencies.push(new GraphicTextIcon("" + currencies[id], $datasGame
+        this.currencies.push(new GraphicTextIcon("" + currencies[id], RPM.datasGame
             .system.currencies[id].pictureID, Align.Left, Align.Left));
     }
 }

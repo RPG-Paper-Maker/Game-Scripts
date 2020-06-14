@@ -65,9 +65,9 @@ MapElement.prototype = {
         var offset = new THREE.Vector3(0, 0, zPlus);
 
         // Center
-        center.setX(this.xOffset * $SQUARE_SIZE);
-        center.setY(this.yOffset * $SQUARE_SIZE);
-        center.setZ(this.zOffset * $SQUARE_SIZE);
+        center.setX(this.xOffset * RPM.SQUARE_SIZE);
+        center.setY(this.yOffset * RPM.SQUARE_SIZE);
+        center.setZ(this.zOffset * RPM.SQUARE_SIZE);
 
         // Position
         var pos = center.clone();

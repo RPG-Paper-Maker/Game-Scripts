@@ -43,8 +43,8 @@ function GraphicSkillItem(skillItem) {
             this.graphicEffects.push(graphic);
         }
         if (effect.isDamageElement) {
-            graphicIcon = Picture2D.createImage($datasGame.pictures.getIcon(
-                $datasGame.battleSystem.elements[effect.damageElementID
+            graphicIcon = Picture2D.createImage(RPM.datasGame.pictures.getIcon(
+                RPM.datasGame.battleSystem.elements[effect.damageElementID
                 .getValue()].pictureID), PictureKind.Icons)
             this.graphicElements.push(graphicIcon);
             if (txt) {

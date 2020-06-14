@@ -76,7 +76,7 @@ MapObject.FRAME_DURATION = 150;
 */
 MapObject.updateObjectWithID = function(object, objectID, base, callback) {
     if (object.isHero && objectID === -1) {
-        callback.call(base, $game.hero);
+        callback.call(base, RPM.game.hero);
     }
 
     switch (objectID) {
@@ -85,7 +85,7 @@ MapObject.updateObjectWithID = function(object, objectID, base, callback) {
         break;
 
     case 0: // Hero
-        callback.call(base, $game.hero);
+        callback.call(base, RPM.game.hero);
         break;
 
     default: // Particular object
@@ -105,17 +105,17 @@ MapObject.getObjectAndPortion = function(object, objectID, base, callback) {
         objectID = object.system.id;
         break;
     case 0: // Hero
-        objectID = $game.hero.system.id;
+        objectID = RPM.game.hero.system.id;
         break;
     default:
         break;
     }
-    globalPortion = SceneMap.getGlobalPortion($currentMap.allObjects[
+    globalPortion = SceneMap.getGlobalPortion(RPM.currentMap.allObjects[
         objectID]);
-    localPortion = $currentMap.getLocalPortion(globalPortion);
+    localPortion = RPM.currentMap.getLocalPortion(globalPortion);
 
     // First search in the moved objects
-    mapsDatas = $game.mapsDatas[$currentMap.id][globalPortion[0]][
+    mapsDatas = RPM.game.mapsDatas[RPM.currentMap.id][globalPortion[0]][
         globalPortion[1]][globalPortion[2]];
     movedObjects = mapsDatas.m;
     moved = null;
@@ -131,8 +131,8 @@ MapObject.getObjectAndPortion = function(object, objectID, base, callback) {
     }
 
     // If not moving, search directly in portion
-    if ($currentMap.isInPortion(localPortion)) {
-        mapPortion = $currentMap.getMapPortionByPortion(localPortion);
+    if (RPM.currentMap.isInPortion(localPortion)) {
+        mapPortion = RPM.currentMap.getMapPortionByPortion(localPortion);
         objects = mapPortion.objectsList;
 
         for (i = 0, l = objects.length; i < l; i++){
@@ -143,7 +143,7 @@ MapObject.getObjectAndPortion = function(object, objectID, base, callback) {
         }
 
         if (moved === null) {
-            callback.call(base, $game.hero, objectID, 1, -1, null, mapsDatas);
+            callback.call(base, RPM.game.hero, objectID, 1, -1, null, mapsDatas);
         } else {
             callback.call(base, moved, objectID, 1, i, objects, mapsDatas);
         }
@@ -152,7 +152,7 @@ MapObject.getObjectAndPortion = function(object, objectID, base, callback) {
     else{
         var fileName = SceneMap.getPortionName(globalPortion[0], globalPortion[
             1], globalPortion[2]);
-        RPM.openFile(this, RPM.FILE_MAPS + $currentMap.mapName + "/" +
+        RPM.openFile(this, RPM.FILE_MAPS + RPM.currentMap.mapName + "/" +
                        fileName, false, function(res)
         {
             var json = JSON.parse(res);
@@ -162,7 +162,7 @@ MapObject.getObjectAndPortion = function(object, objectID, base, callback) {
             moved = mapPortion.getObjFromID(json, objectID);
 
            if (moved === null) {
-               callback.call(base, $game.hero, objectID, 2, -1, null, mapsDatas);
+               callback.call(base, RPM.game.hero, objectID, 2, -1, null, mapsDatas);
            } else {
                callback.call(base, moved, objectID, 2, -1, null, mapsDatas);
            }
@@ -176,16 +176,16 @@ MapObject.prototype = {
         var i, l, prop, mapProp, propValue;
 
         if (this.isHero) {
-            mapProp = $game.heroProperties;
+            mapProp = RPM.game.heroProperties;
         } else if (this.isStartup) {
-            mapProp = $game.startupProperties[$currentMap.id];
+            mapProp = RPM.game.startupProperties[RPM.currentMap.id];
             if (typeof mapProp === RPM.UNDEFINED) {
                 mapProp = [];
             }
         } else {
             var obj, portion, portionDatas, indexProp;
 
-            obj = $currentMap.allObjects[this.system.id];
+            obj = RPM.currentMap.allObjects[this.system.id];
             if (typeof obj === 'undefined') {
                 RPM.showErrorMessage("Can't find object " + this.system.name +
                     " in object linking. Please remove this object from your " +
@@ -194,7 +194,7 @@ MapObject.prototype = {
                     "because we are trying to fix this issue.");
             }
             portion = SceneMap.getGlobalPortion(obj);
-            portionDatas = $game.mapsDatas[$currentMap.id][portion[0]][portion[1
+            portionDatas = RPM.game.mapsDatas[RPM.currentMap.id][portion[0]][portion[1
                 ]][portion[2]];
             indexProp = portionDatas.pi.indexOf(this.system.id);
             mapProp = (indexProp === -1) ? [] : portionDatas.p[indexProp];
@@ -266,16 +266,16 @@ MapObject.prototype = {
 
         // Updating the current state
         if (this.isHero) {
-            this.states = $game.heroStates;
+            this.states = RPM.game.heroStates;
         } else if (this.isStartup) {
-            if (!$game.startupStates.hasOwnProperty($currentMap.id)) {
-                $game.startupStates[$currentMap.id] = [1];
+            if (!RPM.game.startupStates.hasOwnProperty(RPM.currentMap.id)) {
+                RPM.game.startupStates[RPM.currentMap.id] = [1];
             }
-            this.states = $game.startupStates[$currentMap.id];
+            this.states = RPM.game.startupStates[RPM.currentMap.id];
         } else {
             var obj;
 
-            obj = $currentMap.allObjects[this.system.id];
+            obj = RPM.currentMap.allObjects[this.system.id];
             if (typeof obj === 'undefined') {
                 RPM.showErrorMessage("Can't find object " + this.system.name +
                     " in object linking. Please remove this object from your " +
@@ -284,7 +284,7 @@ MapObject.prototype = {
                     "because we are trying to fix this issue.");
             }
             var portion = SceneMap.getGlobalPortion(obj);
-            var portionDatas = $game.mapsDatas[$currentMap.id]
+            var portionDatas = RPM.game.mapsDatas[RPM.currentMap.id]
                     [portion[0]][portion[1]][portion[2]];
             var indexState = portionDatas.si.indexOf(this.system.id);
             this.states = (indexState === -1) ? [this.system.states.length > 0 ?
@@ -305,16 +305,16 @@ MapObject.prototype = {
         }
 
         var material = this.currentState === null ? null : (this.currentState
-            .graphicID === 0 ? $currentMap.textureTileset : $currentMap
+            .graphicID === 0 ? RPM.currentMap.textureTileset : RPM.currentMap
             .texturesCharacters[this.currentState.graphicID]);
         this.meshBoundingBox = new Array;
         if (this.currentState !== null && !this.isNone() && material && material
             .map)
         {
-            this.speed = $datasGame.system.speeds[this.currentState.speedID];
-            this.frequency = $datasGame.system.frequencies[this.currentState
+            this.speed = RPM.datasGame.system.speeds[this.currentState.speedID];
+            this.frequency = RPM.datasGame.system.frequencies[this.currentState
                 .frequencyID];
-            this.frame = this.currentState.indexX >= $FRAMES ? $FRAMES - 1 :
+            this.frame = this.currentState.indexX >= RPM.FRAMES ? RPM.FRAMES - 1 :
                 this.currentState.indexX;
             this.orientationEye = this.currentState.indexY;
             this.updateOrientation();
@@ -327,10 +327,10 @@ MapObject.prototype = {
             } else {
                 x = 0;
                 y = 0;
-                this.width = material.map.image.width / $SQUARE_SIZE /
-                    $FRAMES;
+                this.width = material.map.image.width / RPM.SQUARE_SIZE /
+                    RPM.FRAMES;
                 this.height = material.map.image.height /
-                    $SQUARE_SIZE / 4;
+                    RPM.SQUARE_SIZE / 4;
             }
 
             var sprite = new Sprite(this.currentState.graphicKind,
@@ -346,7 +346,7 @@ MapObject.prototype = {
                                    this.position.z);
             this.boundingBoxSettings = objCollision[1][0];
             if (this.currentState.graphicID === 0) {
-                picture = $currentMap.mapInfos.tileset.picture;
+                picture = RPM.currentMap.mapInfos.tileset.picture;
                 this.boundingBoxSettings.squares = picture ? picture
                     .getSquaresForTexture(this.currentState.rectTileset) : [];
             }
@@ -389,8 +389,8 @@ MapObject.prototype = {
 
         // The speed depends on the time elapsed since the last update
         var xPlus, zPlus, xAbs, zAbs, res, i, l, blocked;
-        var w = $currentMap.mapInfos.length * $SQUARE_SIZE;
-        var h = $currentMap.mapInfos.width * $SQUARE_SIZE;
+        var w = RPM.currentMap.mapInfos.length * RPM.SQUARE_SIZE;
+        var h = RPM.currentMap.mapInfos.width * RPM.SQUARE_SIZE;
         var result, yMountain;
 
         if (orientation === Orientation.South || this.previousOrientation ===
@@ -507,18 +507,18 @@ MapObject.prototype = {
         var i, l;
         for (i = 0, l = this.meshBoundingBox.length; i < l; i++) {
             if (CollisionsUtilities.obbVSobb(this.meshBoundingBox[i].geometry,
-                $BB_BOX_DETECTION.geometry))
+                RPM.BB_BOX_DETECTION.geometry))
             {
                 return true;
             }
         }
         // If no bounding box, use only one square by default
         if (l === 0) {
-            MapPortion.applyBoxSpriteTransforms($BB_BOX_DEFAULT_DETECTION, [this
-                .position.x, this.position.y + ($SQUARE_SIZE / 2), this.position
-                .z, $SQUARE_SIZE, $SQUARE_SIZE, $SQUARE_SIZE, 0, 0, 0]);
-            if (CollisionsUtilities.obbVSobb($BB_BOX_DEFAULT_DETECTION.geometry,
-                $BB_BOX_DETECTION.geometry))
+            MapPortion.applyBoxSpriteTransforms(RPM.BB_BOX_DEFAULT_DETECTION, [this
+                .position.x, this.position.y + (RPM.SQUARE_SIZE / 2), this.position
+                .z, RPM.SQUARE_SIZE, RPM.SQUARE_SIZE, RPM.SQUARE_SIZE, 0, 0, 0]);
+            if (CollisionsUtilities.obbVSobb(RPM.BB_BOX_DEFAULT_DETECTION.geometry,
+                RPM.BB_BOX_DETECTION.geometry))
             {
                 return true;
             }
@@ -531,14 +531,14 @@ MapObject.prototype = {
 
     isInRect: function(object) {
         var la, lb, ra, rb, ba, bb, ta, tb;
-        la = this.position.x - Math.floor(this.width * $SQUARE_SIZE / 2);
-        lb = object.position.x - Math.floor(this.width * $SQUARE_SIZE / 2);
-        ra = this.position.x + Math.floor(this.width * $SQUARE_SIZE / 2);
-        rb = object.position.x + Math.floor(this.width * $SQUARE_SIZE / 2);
-        ba = this.position.z + Math.floor(this.width * $SQUARE_SIZE / 2);
-        bb = object.position.z + Math.floor(this.width * $SQUARE_SIZE / 2);
-        ta = this.position.z - Math.floor(this.width * $SQUARE_SIZE / 2);
-        tb = object.position.z - Math.floor(this.width * $SQUARE_SIZE / 2);
+        la = this.position.x - Math.floor(this.width * RPM.SQUARE_SIZE / 2);
+        lb = object.position.x - Math.floor(this.width * RPM.SQUARE_SIZE / 2);
+        ra = this.position.x + Math.floor(this.width * RPM.SQUARE_SIZE / 2);
+        rb = object.position.x + Math.floor(this.width * RPM.SQUARE_SIZE / 2);
+        ba = this.position.z + Math.floor(this.width * RPM.SQUARE_SIZE / 2);
+        bb = object.position.z + Math.floor(this.width * RPM.SQUARE_SIZE / 2);
+        ta = this.position.z - Math.floor(this.width * RPM.SQUARE_SIZE / 2);
+        tb = object.position.z - Math.floor(this.width * RPM.SQUARE_SIZE / 2);
 
         return (la < rb && ra > lb && ta < bb && ba > tb);
     },
@@ -550,7 +550,7 @@ MapObject.prototype = {
     */
     updateBB: function(position) {
         if (this.currentState.graphicID !== 0) {
-            this.boundingBoxSettings.squares = $currentMap.collisions
+            this.boundingBoxSettings.squares = RPM.currentMap.collisions
                 [PictureKind.Characters][this.currentState.graphicID]
                 [this.getStateIndex()];
         }
@@ -639,7 +639,7 @@ MapObject.prototype = {
 
         // Set position
         var speed = this.speed.getValue() * MapObject.SPEED_NORMAL *
-            $averageElapsedTime * $SQUARE_SIZE;
+            RPM.averageElapsedTime * RPM.SQUARE_SIZE;
         if (this.otherMoveCommand !== null) {
             speed *= Math.SQRT1_2;
         }
@@ -652,7 +652,7 @@ MapObject.prototype = {
         }
         if (isCameraOrientation) {
             orientation = RPM.mod(orientation +
-                                $currentMap.camera.getMapOrientation() - 2, 4);
+                                RPM.currentMap.camera.getMapOrientation() - 2, 4);
         }
         this.position.set(position.x, position.y, position.z);
 
@@ -699,7 +699,7 @@ MapObject.prototype = {
 
         if (!this.isHero){
             previousPortion = RPM.getPortion(this.position);
-            objects = $game.mapsDatas[$currentMap.id]
+            objects = RPM.game.mapsDatas[RPM.currentMap.id]
                    [previousPortion[0]][previousPortion[1]][previousPortion[2]];
 
             // Remove from the moved objects in or out of the portion
@@ -714,14 +714,14 @@ MapObject.prototype = {
 
             // Add to moved objects of the original portion if not done yet
             originalPortion = SceneMap.getGlobalPortion(
-                        $currentMap.allObjects[this.system.id]);
-            objects = $game.mapsDatas[$currentMap.id]
+                        RPM.currentMap.allObjects[this.system.id]);
+            objects = RPM.game.mapsDatas[RPM.currentMap.id]
                    [originalPortion[0]][originalPortion[1]][originalPortion[2]];
             movedObjects = objects.m;
             if (movedObjects.indexOf(this) === -1) {
                 movedObjects.push(this);
-                localPortion = $currentMap.getLocalPortion(originalPortion);
-                mapPortion = $currentMap.getMapPortionByPortion(localPortion);
+                localPortion = RPM.currentMap.getLocalPortion(originalPortion);
+                mapPortion = RPM.currentMap.getMapPortionByPortion(localPortion);
                 movedObjects = mapPortion.objectsList;
                 index = movedObjects.indexOf(this);
                 if (index !== -1)
@@ -737,10 +737,10 @@ MapObject.prototype = {
         afterPortion = RPM.getPortion(this.position);
 
         if (!this.isHero){
-            objects = $game.mapsDatas[$currentMap.id]
+            objects = RPM.game.mapsDatas[RPM.currentMap.id]
                     [afterPortion[0]][afterPortion[1]][afterPortion[2]];
             originalPortion = SceneMap.getGlobalPortion(
-                        $currentMap.allObjects[this.system.id]);
+                        RPM.currentMap.allObjects[this.system.id]);
 
             if (originalPortion[0] !== afterPortion[0] ||
                 originalPortion[1] !== afterPortion[1] ||
@@ -753,8 +753,8 @@ MapObject.prototype = {
         }
 
         // Add or remove from scene
-        localPortion = $currentMap.getLocalPortion(afterPortion);
-        if ($currentMap.isInPortion(localPortion))
+        localPortion = RPM.currentMap.getLocalPortion(afterPortion);
+        if (RPM.currentMap.isInPortion(localPortion))
             this.addToScene();
         else
             this.removeFromScene();
@@ -764,7 +764,7 @@ MapObject.prototype = {
 
     addToScene: function(){
         if (!this.isInScene && this.mesh !== null) {
-            $currentMap.scene.add(this.mesh);
+            RPM.currentMap.scene.add(this.mesh);
             this.isInScene = true;
         }
     },
@@ -772,9 +772,9 @@ MapObject.prototype = {
     // -------------------------------------------------------
 
     addBBToScene: function() {
-        if ($datasGame.system.showBB) {
+        if (RPM.datasGame.system.showBB) {
             for (var i = 0, l = this.meshBoundingBox.length; i < l; i++)
-                $currentMap.scene.add(this.meshBoundingBox[i]);
+                RPM.currentMap.scene.add(this.meshBoundingBox[i]);
         }
     },
 
@@ -782,7 +782,7 @@ MapObject.prototype = {
 
     removeFromScene: function(){
         if (this.isInScene) {
-            $currentMap.scene.remove(this.mesh);
+            RPM.currentMap.scene.remove(this.mesh);
             this.removeBBFromScene();
             this.isInScene = false;
         }
@@ -791,9 +791,9 @@ MapObject.prototype = {
     // -------------------------------------------------------
 
     removeBBFromScene: function() {
-        if ($datasGame.system.showBB) {
+        if (RPM.datasGame.system.showBB) {
             for (var i = 0, l = this.meshBoundingBox.length; i < l; i++)
-                $currentMap.scene.remove(this.meshBoundingBox[i]);
+                RPM.currentMap.scene.remove(this.meshBoundingBox[i]);
         }
 
         this.meshBoundingBox = new Array;
@@ -824,7 +824,7 @@ MapObject.prototype = {
                 states[i], parameters);
 
             for (j = 0, ll = reactions.length; j < ll; j++) {
-                SceneGame.prototype.addReaction.call($gameStack.top(), sender,
+                SceneGame.prototype.addReaction.call(RPM.gameStack.top(), sender,
                     reactions[j], this, state, parameters, event);
                 this.receivedOneEvent = true;
                 test = true;
@@ -843,7 +843,7 @@ MapObject.prototype = {
     */
     update: function(angle) {
         if (this.moveFrequencyTick > 0) {
-            this.moveFrequencyTick -= $elapsedTime;
+            this.moveFrequencyTick -= RPM.elapsedTime;
         }
 
         // Graphic updates
@@ -855,11 +855,11 @@ MapObject.prototype = {
 
                 // If moving, update frame
                 if (this.currentState.moveAnimation){
-                    this.frameTick += $elapsedTime;
+                    this.frameTick += RPM.elapsedTime;
                     if (this.frameTick >= (MapObject.FRAME_DURATION / this
                         .speed.getValue()))
                     {
-                        this.frame = (this.frame + 1) % $FRAMES;
+                        this.frame = (this.frame + 1) % RPM.FRAMES;
                         this.frameTick = 0;
                     }
                 }
@@ -916,7 +916,7 @@ MapObject.prototype = {
         {
             var interpreter;
 
-            interpreter = $currentMap.addReaction(null, this.currentState.route,
+            interpreter = RPM.currentMap.addReaction(null, this.currentState.route,
                 this, this.currentState.id, [null], null, true);
             if (interpreter !== null) {
                 this.movingState = interpreter.currentCommandState;
@@ -957,7 +957,7 @@ MapObject.prototype = {
     /** Update the orientation according to the camera position
     */
     updateOrientation: function(){
-        this.orientation = RPM.mod(($currentMap.orientation - 2) * 3 +
+        this.orientation = RPM.mod((RPM.currentMap.orientation - 2) * 3 +
                                      this.orientationEye, 4);
     },
 
@@ -974,18 +974,24 @@ MapObject.prototype = {
                 textureWidth = this.mesh.material.map.image.width;
                 textureHeight = this.mesh.material.map.image.height;
                 if (this.currentState.graphicID === 0) {
-                    w = this.width * $SQUARE_SIZE / textureWidth;
-                    h = this.height * $SQUARE_SIZE / textureHeight;
-                    x = this.currentState.rectTileset[0] * $SQUARE_SIZE /
+                    w = this.width * RPM.SQUARE_SIZE / textureWidth;
+                    h = this.height * RPM.SQUARE_SIZE / textureHeight;
+                    x = this.currentState.rectTileset[0] * RPM.SQUARE_SIZE /
                         textureWidth;
-                    y = this.currentState.rectTileset[1] * $SQUARE_SIZE /
+                    y = this.currentState.rectTileset[1] * RPM.SQUARE_SIZE /
                         textureHeight;
                 } else {
-                    w = this.width * $SQUARE_SIZE / textureWidth;
-                    h = this.height * $SQUARE_SIZE / textureHeight;
-                    x = (this.frame >= $FRAMES ? $FRAMES - 1 : this.frame) * w;
+                    w = this.width * RPM.SQUARE_SIZE / textureWidth;
+                    h = this.height * RPM.SQUARE_SIZE / textureHeight;
+                    x = (this.frame >= RPM.FRAMES ? RPM.FRAMES - 1 : this.frame) * w;
                     y = this.orientation * h;
                 }
+                var coefX = RPM.COEF_TEX / textureWidth;
+                var coefY = RPM.COEF_TEX / textureHeight;
+                x += coefX;
+                y += coefY;
+                w -= (coefX * 2);
+                h -= (coefY * 2);
 
                 // Update geometry
                 this.mesh.geometry.faceVertexUvs[0][0][0].set(x, y);
@@ -1006,7 +1012,7 @@ MapObject.prototype = {
     updateMaterial: function(){
         if (!this.isNone()){
             this.mesh.material = this.currentState.graphicID === 0 ?
-                $currentMap.textureTileset : $currentMap.texturesCharacters[
+                RPM.currentMap.textureTileset : RPM.currentMap.texturesCharacters[
                 this.currentState.graphicID];
         } else {
             this.mesh = null;
@@ -1016,7 +1022,7 @@ MapObject.prototype = {
     // -------------------------------------------------------
 
     getStateIndex: function() {
-        return this.frame + (this.orientation * $FRAMES);
+        return this.frame + (this.orientation * RPM.FRAMES);
     },
 
     // -------------------------------------------------------

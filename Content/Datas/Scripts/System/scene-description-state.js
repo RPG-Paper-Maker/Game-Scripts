@@ -29,10 +29,10 @@ function SceneDescriptionState() {
     var listHeroes;
 
     // Tab heroes
-    nbHeroes = $game.teamHeroes.length;
+    nbHeroes = RPM.game.teamHeroes.length;
     listHeroes = new Array(nbHeroes);
     for (i = 0; i < nbHeroes; i++)
-        listHeroes[i] = new GraphicPlayerDescription($game.teamHeroes[i]);
+        listHeroes[i] = new GraphicPlayerDescription(RPM.game.teamHeroes[i]);
 
     // All the windows
     this.windowTop = new WindowBox(20, 20, 200, 30, new GraphicText("State", {
@@ -63,12 +63,12 @@ SceneDescriptionState.prototype = {
 
     onKeyPressed: function(key){
         if (DatasKeyBoard.isKeyEqual(key,
-                                     $datasGame.keyBoard.menuControls.Cancel) ||
+                                     RPM.datasGame.keyBoard.menuControls.Cancel) ||
             DatasKeyBoard.isKeyEqual(key,
-                                     $datasGame.keyBoard.MainMenu))
+                                     RPM.datasGame.keyBoard.MainMenu))
         {
-            $datasGame.system.soundCancel.playSound();
-            $gameStack.pop();
+            RPM.datasGame.system.soundCancel.playSound();
+            RPM.gameStack.pop();
         }
     },
 
@@ -95,7 +95,7 @@ SceneDescriptionState.prototype = {
     // -------------------------------------------------------
 
     draw3D: function(canvas){
-        $currentMap.draw3D(canvas);
+        RPM.currentMap.draw3D(canvas);
     },
 
     // -------------------------------------------------------
@@ -103,7 +103,7 @@ SceneDescriptionState.prototype = {
     drawHUD: function(){
 
         // Draw the local map behind
-        $currentMap.drawHUD();
+        RPM.currentMap.drawHUD();
 
         // Draw the menu
         this.windowTop.draw();

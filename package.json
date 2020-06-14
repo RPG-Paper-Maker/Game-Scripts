@@ -1,0 +1,28 @@
+{
+  "name": "loading...",
+  "version": "1.0.0",
+  "description": "Game and scripts.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ./main.js --dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RPG-Paper-Maker/Game.git"
+  },
+  "author": "Wano",
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/RPG-Paper-Maker/Game/issues"
+  },
+  "homepage": "https://github.com/RPG-Paper-Maker/Game#readme",
+  "devDependencies": {
+    "electron": "^8.1.0"
+  },
+  "build": {
+    "appId": "your.id"
+  },
+  "env": {
+    "ELECTRON_NO_ASAR": null
+  }
+}

@@ -29,7 +29,7 @@ SceneBattle.prototype.initializeStep4 = function(){
     // Rewards
     this.prepareRewards();
     for (id in this.currencies) {
-        $game.currencies[id] += this.currencies[id];
+        RPM.game.currencies[id] += this.currencies[id];
     }
     for (i = 0, l = this.loots.length; i < l; i++) {
         for (id in this.loots[i]) {
@@ -38,7 +38,7 @@ SceneBattle.prototype.initializeStep4 = function(){
     }
 
     // Heroes
-    for (i = 0, l = $game.teamHeroes.length; i < l; i++) {
+    for (i = 0, l = RPM.game.teamHeroes.length; i < l; i++) {
         battler = this.battlers[CharacterKind.Hero][i];
         battler.setVictory();
         battler.character.totalRemainingXP = this.xp;
@@ -51,13 +51,13 @@ SceneBattle.prototype.initializeStep4 = function(){
     this.priorityIndex = 0;
 
     // Music
-    $datasGame.battleSystem.battleVictory.playSong();
+    RPM.datasGame.battleSystem.battleVictory.playSong();
 
     // Windows
     w = 200 + RPM.SMALL_PADDING_BOX[0] + RPM.SMALL_PADDING_BOX[2];
     h = this.lootsNumber * 30 + RPM.SMALL_PADDING_BOX[1] + RPM.SMALL_PADDING_BOX
         [3];
-    this.windowLoots = new WindowBox($SCREEN_X - 20 - w, $SCREEN_Y - 20 - h, w,
+    this.windowLoots = new WindowBox(RPM.SCREEN_X - 20 - w, RPM.SCREEN_Y - 20 - h, w,
         h, new GraphicLoots(this.loots, this.lootsNumber), RPM
         .SMALL_PADDING_BOX);
 };
@@ -115,7 +115,7 @@ SceneBattle.prototype.prepareRewards = function() {
 SceneBattle.prototype.updateTeamXP = function() {
     var i, l, character, y, h;
     this.finishedXP = true;
-    for (i = this.priorityIndex, l = $game.teamHeroes.length; i < l; i++) {
+    for (i = this.priorityIndex, l = RPM.game.teamHeroes.length; i < l; i++) {
         character = this.battlers[CharacterKind.Hero][i].character;
         if (!character.isExperienceUpdated()) {
             if (character.updateExperience()) { // Level up
@@ -123,7 +123,7 @@ SceneBattle.prototype.updateTeamXP = function() {
                 this.user.levelingUp = true;
                 this.finishedXP = false;
                 this.windowExperienceProgression.content.updateExperience();
-                this.priorityIndex = i + 1 % $game.teamHeroes.length;
+                this.priorityIndex = i + 1 % RPM.game.teamHeroes.length;
                 this.pauseTeamXP();
                 this.finishedXP = false;
                 this.user.stepLevelUp = 0;
@@ -132,12 +132,12 @@ SceneBattle.prototype.updateTeamXP = function() {
                 y = 90 + (i * 90);
                 h = this.windowStatisticProgression.content.getHeight() + RPM
                     .HUGE_PADDING_BOX[0] + RPM.HUGE_PADDING_BOX[2];
-                if (y + h > $canvasHeight - 10) {
-                    y = $canvasHeight - h - 10;
+                if (y + h > RPM.canvasHeight - 10) {
+                    y = RPM.canvasHeight - h - 10;
                 }
                 this.windowStatisticProgression.setY(y);
                 this.windowStatisticProgression.setH(h);
-                $datasGame.battleSystem.battleLevelUp.playSound();
+                RPM.datasGame.battleSystem.battleLevelUp.playSound();
                 this.subStep = 2;
                 return;
             }
@@ -152,7 +152,7 @@ SceneBattle.prototype.updateTeamXP = function() {
 // -------------------------------------------------------
 
 SceneBattle.prototype.pauseTeamXP = function() {
-    for (var i = 0, l = $game.teamHeroes.length; i < l; i++) {
+    for (var i = 0, l = RPM.game.teamHeroes.length; i < l; i++) {
         this.battlers[CharacterKind.Hero][i].character.pauseExperience();
     }
 };
@@ -160,7 +160,7 @@ SceneBattle.prototype.pauseTeamXP = function() {
 // -------------------------------------------------------
 
 SceneBattle.prototype.unpauseTeamXP = function() {
-    for (var i = 0, l = $game.teamHeroes.length; i < l; i++) {
+    for (var i = 0, l = RPM.game.teamHeroes.length; i < l; i++) {
         this.battlers[CharacterKind.Hero][i].character.unpauseExperience();
     }
     this.user.updateRemainingXP(SceneBattle.TIME_PROGRESSION_XP);
@@ -170,7 +170,7 @@ SceneBattle.prototype.unpauseTeamXP = function() {
 
 SceneBattle.prototype.playMapMusic = function() {
     SceneBattle.musicMap.playSong(SceneBattle.musicMapTime, 0);
-    $songsManager.initializeProgressionMusic(0, SceneBattle.musicMap.volume, 0,
+    RPM.songsManager.initializeProgressionMusic(0, SceneBattle.musicMap.volume, 0,
         SceneBattle.TIME_LINEAR_MUSIC_START);
 }
 
@@ -182,23 +182,23 @@ SceneBattle.prototype.updateStep4 = function() {
         if (new Date().getTime() - this.time >= SceneBattle.TIME_END_WAIT) {
             this.time = new Date().getTime();
             this.windowTopInformations.content = this.graphicRewardTop;
-            for (var i = 0, l = $game.teamHeroes.length; i < l; i++) {
+            for (var i = 0, l = RPM.game.teamHeroes.length; i < l; i++) {
                 this.battlers[CharacterKind.Hero][i].character.updateRemainingXP(
                     SceneBattle.TIME_PROGRESSION_XP);
             }
-            $requestPaintHUD = true;
+            RPM.requestPaintHUD = true;
             this.subStep = 1;
         }
         break;
     case 1:
         this.updateTeamXP();
-        $requestPaintHUD = true;
+        RPM.requestPaintHUD = true;
         break;
     case 2:
         break;
     case 3:
-        $requestPaintHUD = true;
-        if ($songsManager.isProgressionMusicEnd && this.transitionEnded) {
+        RPM.requestPaintHUD = true;
+        if (RPM.songsManager.isProgressionMusicEnd && this.transitionEnded) {
             this.win();
         }
 
@@ -215,7 +215,7 @@ SceneBattle.prototype.updateStep4 = function() {
                 if (this.camera.distance <= SceneBattle.START_CAMERA_DISTANCE) {
                     this.camera.distance = SceneBattle.START_CAMERA_DISTANCE;
                     this.transitionZoom = true;
-                    $gameStack.topMinusOne().updateBackgroundColor();
+                    RPM.gameStack.topMinusOne().updateBackgroundColor();
                     this.playMapMusic();
                     this.time = new Date().getTime();
                 }
@@ -247,7 +247,7 @@ SceneBattle.prototype.updateStep4 = function() {
                     this.transitionColorAlpha = 1;
                     this.transitionColor = true;
                     this.timeTransition = new Date().getTime();
-                    $gameStack.topMinusOne().updateBackgroundColor();
+                    RPM.gameStack.topMinusOne().updateBackgroundColor();
                 }
                 return;
             }
@@ -281,18 +281,18 @@ SceneBattle.prototype.updateStep4 = function() {
 SceneBattle.prototype.onKeyPressedStep4 = function(key){
     switch (this.subStep) {
     case 1:
-        if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
+        if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
             .Action))
         {
             if (this.finishedXP) {
                 this.transitionEnded = false;
-                $songsManager.initializeProgressionMusic(SystemPlaySong
+                RPM.songsManager.initializeProgressionMusic(SystemPlaySong
                     .currentPlayingMusic.volume, 0, 0, SceneBattle
                     .TIME_LINEAR_MUSIC_END);
                 this.subStep = 3;
                 this.time = new Date().getTime();
             } else { // Pass xp
-                for (var i = 0, l = $game.teamHeroes.length; i < l; i++) {
+                for (var i = 0, l = RPM.game.teamHeroes.length; i < l; i++) {
                     var character = this.battlers[CharacterKind.Hero][i].character;
                     character.passExperience();
                     character.updateObtainedExperience();
@@ -301,7 +301,7 @@ SceneBattle.prototype.onKeyPressedStep4 = function(key){
         }
         break;
     case 2:
-        if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
+        if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
             .Action))
         {
             if (this.user.stepLevelUp === 0) {
@@ -313,7 +313,7 @@ SceneBattle.prototype.onKeyPressedStep4 = function(key){
                 this.unpauseTeamXP();
                 this.subStep = 1;
             }
-            $requestPaintHUD = true;
+            RPM.requestPaintHUD = true;
         }
         break;
     }
@@ -357,10 +357,10 @@ SceneBattle.prototype.drawHUDStep4 = function() {
     case 3:
         // Transition fade
         if (this.transitionEnd === 1) {
-            $context.fillStyle = "rgba(" + this.transitionEndColor.red + "," +
+            Platform.ctx.fillStyle = "rgba(" + this.transitionEndColor.red + "," +
                 this.transitionEndColor.green + "," + this.transitionEndColor.blue +
                 "," + this.transitionColorAlpha + ")";
-            $context.fillRect(0, 0, $canvasWidth, $canvasHeight);
+            Platform.ctx.fillRect(0, 0, RPM.canvasWidth, RPM.canvasHeight);
         }
         break;
     }

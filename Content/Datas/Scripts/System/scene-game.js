@@ -62,10 +62,10 @@ SceneGame.prototype = {
         var endingReactions = new Array;
 
         // Updating blocking hero
-        $blockingHero = false;
+        RPM.blockingHero = false;
         for (i = 0, l = this.reactionInterpreters.length; i < l; i++){
             if (this.reactionInterpreters[i].currentReaction.blockingHero){
-                $blockingHero = true;
+                RPM.blockingHero = true;
                 break;
             }
         }
@@ -79,7 +79,7 @@ SceneGame.prototype = {
                 endingReactions.push(i);
             }
             // If changed map, STOP
-            if ($currentMap.callBackAfterLoading !== null)
+            if (RPM.currentMap.callBackAfterLoading !== null)
                 return;
         }
 

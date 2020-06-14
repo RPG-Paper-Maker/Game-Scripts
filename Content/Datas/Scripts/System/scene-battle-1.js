@@ -39,9 +39,9 @@ SceneBattle.prototype.initializeStep1 = function() {
 
     // Items
     var ownedItem, item;
-    for (var i = 0, l = $game.items.length; i < l; i++) {
-        ownedItem = $game.items[i];
-        item = $datasGame.items.list[ownedItem.id];
+    for (var i = 0, l = RPM.game.items.length; i < l; i++) {
+        ownedItem = RPM.game.items[i];
+        item = RPM.datasGame.items.list[ownedItem.id];
         if (ownedItem.k === ItemKind.Item && item.consumable && (item
             .avaialableKind === AvailableKind.Battle || item.availableKind ===
             AvailableKind.Always))
@@ -123,7 +123,7 @@ SceneBattle.prototype.selectFirstIndex = function(kind, index) {
         }
     }
 
-    $datasGame.system.soundCursor.playSound();
+    RPM.datasGame.system.soundCursor.playSound();
 
     return index;
 };
@@ -177,7 +177,7 @@ SceneBattle.prototype.moveArrow = function() {
     window.content = this.subStep === 2 ? graphics.target : graphics.user;
     window.content.update();
 
-    $requestPaintHUD = true;
+    RPM.requestPaintHUD = true;
 };
 
 // -------------------------------------------------------
@@ -203,35 +203,35 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
 
     switch (this.subStep) {
     case 0:
-        if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
+        if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
             .Action))
         {
-            $datasGame.system.soundConfirmation.playSound();
+            RPM.datasGame.system.soundConfirmation.playSound();
             this.onAllySelected();
         }
         break;
     case 1:
-        if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
+        if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
             .Action))
         {
             this.onCommandSelected(key);
-        } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
+        } else if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard
             .menuControls.Cancel))
         {
-            $datasGame.system.soundCancel.playSound();
+            RPM.datasGame.system.soundCancel.playSound();
             this.onAllyUnselected();
         }
         break;
     case 2:
-        if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard.menuControls
+        if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
             .Action))
         {
-            $datasGame.system.soundConfirmation.playSound();
+            RPM.datasGame.system.soundConfirmation.playSound();
             this.onTargetsSelected();
-        } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
+        } else if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard
             .menuControls.Cancel))
         {
-            $datasGame.system.soundCancel.playSound();
+            RPM.datasGame.system.soundCancel.playSound();
             this.onTargetsUnselected();
         }
         break;
@@ -257,7 +257,7 @@ SceneBattle.prototype.onAllySelected = function() {
     this.listSkills = [];
     for (i = 0, l = skills.length; i < l; i++) {
         ownedSkill = skills[i];
-        availableKind = $datasGame.skills.list[ownedSkill.id]
+        availableKind = RPM.datasGame.skills.list[ownedSkill.id]
             .availableKind;
         if (availableKind === AvailableKind.Always || availableKind
             === AvailableKind.Battle)
@@ -275,7 +275,7 @@ SceneBattle.prototype.onAllySelected = function() {
     this.windowChoicesItems.offsetSelectedIndex = this.user.lastItemOffset;
     this.windowChoicesItems.select(this.user.lastItemIndex);
 
-    $requestPaintHUD = true;
+    RPM.requestPaintHUD = true;
 };
 
 // -------------------------------------------------------
@@ -356,7 +356,7 @@ SceneBattle.prototype.onCommandSelected = function(key) {
         this.subStep = 3;
         this.transitionEnded = false;
         this.time = new Date().getTime();
-        $songsManager.initializeProgressionMusic(SystemPlaySong
+        RPM.songsManager.initializeProgressionMusic(SystemPlaySong
             .currentPlayingMusic.volume, 0, 0, SceneBattle
             .TIME_LINEAR_MUSIC_END);
         for (i = 0, l = this.battlers[CharacterKind.Hero].length; i < l; i++) {
@@ -420,13 +420,13 @@ SceneBattle.prototype.onKeyPressedAndRepeatStep1 = function(key){
     case 0:
     case 2:
         if (!this.userTarget) {
-            if (DatasKeyBoard.isKeyEqual(key,$datasGame.keyBoard.menuControls.Up
-                ) || DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
+            if (DatasKeyBoard.isKeyEqual(key,RPM.datasGame.keyBoard.menuControls.Up
+                ) || DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard
                 .menuControls.Left))
             {
                 index = this.indexArrowUp();
-            } else if (DatasKeyBoard.isKeyEqual(key, $datasGame.keyBoard
-                .menuControls.Down) || DatasKeyBoard.isKeyEqual(key, $datasGame
+            } else if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard
+                .menuControls.Down) || DatasKeyBoard.isKeyEqual(key, RPM.datasGame
                 .keyBoard.menuControls.Right))
             {
                 index = this.indexArrowDown();
@@ -435,12 +435,12 @@ SceneBattle.prototype.onKeyPressedAndRepeatStep1 = function(key){
 
         if (this.subStep === 0) {
             if (this.selectedUserIndex !== index) {
-                $datasGame.system.soundCursor.playSound();
+                RPM.datasGame.system.soundCursor.playSound();
             }
             this.selectedUserIndex = index;
         } else {
             if (this.selectedUserIndex !== index) {
-                $datasGame.system.soundCursor.playSound();
+                RPM.datasGame.system.soundCursor.playSound();
             }
             this.selectedTargetIndex = index;
         }

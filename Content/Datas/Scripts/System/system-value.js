@@ -171,7 +171,7 @@ SystemValue.readOrDefaultDatabase = function(json) {
         return value;
     }
 
-    return SystemValue.createValue(PrimitiveValueKind.Database, 1);
+    return SystemValue.createValue(PrimitiveValueKind.DataBase, 1);
 }
 
 // -------------------------------------------------------
@@ -223,11 +223,11 @@ SystemValue.prototype = {
     getValue: function(s) {
         switch (this.kind) {
         case PrimitiveValueKind.Variable:
-            return $game.variables[this.value];
+            return RPM.game.variables[this.value];
         case PrimitiveValueKind.Parameter:
-            return $currentParameters[this.value].getValue();
+            return RPM.currentParameters[this.value].getValue();
         case PrimitiveValueKind.Property:
-            return $currentObject.properties[this.value];
+            return RPM.currentObject.properties[this.value];
         case PrimitiveValueKind.Switch:
             return s ? (this.value ? true : false) : this.value;
         default:
@@ -248,12 +248,12 @@ SystemValue.prototype = {
             value.kind !== PrimitiveValueKind.KeyBoard)
         {
             return DatasKeyBoard.isKeyEqual(
-                        value.value, $datasGame.keyBoard.list[this.value]);
+                        value.value, RPM.datasGame.keyBoard.list[this.value]);
         } else if (value.kind === PrimitiveValueKind.KeyBoard &&
                  this.kind !== PrimitiveValueKind.KeyBoard)
         {
             return DatasKeyBoard.isKeyEqual(
-                        this.value, $datasGame.keyBoard.list[value.value]);
+                        this.value, RPM.datasGame.keyBoard.list[value.value]);
         } else if (this.kind === PrimitiveValueKind.Anything || value.kind ===
             PrimitiveValueKind.Anything)
         {

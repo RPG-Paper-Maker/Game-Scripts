@@ -36,14 +36,14 @@ function GraphicStatisticProgression(gamePlayer) {
 
     this.gamePlayer = gamePlayer;
     this.listStatsProgression = new Array;
-    for (i = 0, l = $datasGame.battleSystem.statisticsOrder.length; i < l;
+    for (i = 0, l = RPM.datasGame.battleSystem.statisticsOrder.length; i < l;
          i++)
     {
-        id = $datasGame.battleSystem.statisticsOrder[i];
-        if (id !== $datasGame.battleSystem.idLevelStatistic &&
-            id !== $datasGame.battleSystem.idExpStatistic)
+        id = RPM.datasGame.battleSystem.statisticsOrder[i];
+        if (id !== RPM.datasGame.battleSystem.idLevelStatistic &&
+            id !== RPM.datasGame.battleSystem.idExpStatistic)
         {
-            statistic = $datasGame.battleSystem.statistics[id];
+            statistic = RPM.datasGame.battleSystem.statistics[id];
             value = this.gamePlayer[statistic.getAbbreviationNext()] - this
                 .gamePlayer[statistic.getBeforeAbbreviation()];
             txt = value >= 0 ? "+" : "-";
@@ -68,22 +68,22 @@ GraphicStatisticProgression.prototype = {
         this.listStats = new Array;
         this.maxLength = 0;
         this.maxProgressionLength = 0;
-        for (i = 0, l = $datasGame.battleSystem.statisticsOrder.length; i < l;
+        for (i = 0, l = RPM.datasGame.battleSystem.statisticsOrder.length; i < l;
              i++)
         {
-            id = $datasGame.battleSystem.statisticsOrder[i];
-            if (id !== $datasGame.battleSystem.idLevelStatistic &&
-                id !== $datasGame.battleSystem.idExpStatistic)
+            id = RPM.datasGame.battleSystem.statisticsOrder[i];
+            if (id !== RPM.datasGame.battleSystem.idLevelStatistic &&
+                id !== RPM.datasGame.battleSystem.idExpStatistic)
             {
-                statistic = $datasGame.battleSystem.statistics[id];
+                statistic = RPM.datasGame.battleSystem.statistics[id];
                 if (statistic.isRes) {
                     continue;
                 }
 
                 graphicName = new GraphicText(statistic.name + ":");
-                $context.font = graphicName.font;
+                Platform.ctx.font = graphicName.font;
                 graphicName.updateContextFont();
-                c = $context.measureText(graphicName.text).width;
+                c = Platform.ctx.measureText(graphicName.text).width;
                 if (c > this.maxLength) {
                     this.maxLength = c;
                 }
@@ -104,9 +104,9 @@ GraphicStatisticProgression.prototype = {
                     txt += "/" + this.gamePlayer[statistic.getMaxAbbreviation()];
                 }
                 graphic = new GraphicText(txt);
-                $context.font = graphic.font;
+                Platform.ctx.font = graphic.font;
                 graphic.updateContextFont();
-                c = $context.measureText(graphic.text).width;
+                c = Platform.ctx.measureText(graphic.text).width;
                 if (c > this.maxProgressionLength) {
                     this.maxProgressionLength = c;
                 }

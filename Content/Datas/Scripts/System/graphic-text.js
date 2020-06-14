@@ -24,8 +24,8 @@
 *   @property {number} fontSize The font height used for the text.
 *   @param {string} text The brut text to display.
 *   @param {Align} [align=Align.Center] - Alignement of the text.
-*   @param {number} [fontSize=$fontSize] - The font height used for the text.
-*   @param {string} [fontName=$fontName] - The font name used for the text.
+*   @param {number} [fontSize=RPM.fontSize] - The font height used for the text.
+*   @param {string} [fontName=RPM.fontName] - The font name used for the text.
 *   @param {number} x The x coords of the text.
 *   @param {number} y The y coords of the text.
 *   @param {number} w The w coords of the text.
@@ -37,20 +37,20 @@ function GraphicText(text, opt) {
     Bitmap.call(this, opt.x, opt.y, opt.w, opt.h);
 
     this.align = RPM.defaultValue(opt.align, Align.Left);
-    this.fontSize = RPM.defaultValue(opt.fontSize, RPM.defaultValue($datasGame
-        .system.dbOptions.vtSize, $fontSize));
-    this.fontName = RPM.defaultValue(opt.fontName, RPM.defaultValue($datasGame
-        .system.dbOptions.vtFont, $fontName));
+    this.fontSize = RPM.defaultValue(opt.fontSize, RPM.defaultValue(RPM.datasGame
+        .system.dbOptions.vtSize, RPM.fontSize));
+    this.fontName = RPM.defaultValue(opt.fontName, RPM.defaultValue(RPM.datasGame
+        .system.dbOptions.vtFont, RPM.fontName));
     this.verticalAlign = RPM.defaultValue(opt.verticalAlign, Align.Center);
-    this.color = RPM.defaultValue(opt.color, RPM.defaultValue($datasGame.system
+    this.color = RPM.defaultValue(opt.color, RPM.defaultValue(RPM.datasGame.system
         .dbOptions.vtcText, RPM.COLOR_WHITE));
     this.bold = RPM.defaultValue(opt.bold, false);
     this.italic = RPM.defaultValue(opt.italic, false);
-    this.backColor = RPM.defaultValue(opt.backColor, RPM.defaultValue($datasGame
+    this.backColor = RPM.defaultValue(opt.backColor, RPM.defaultValue(RPM.datasGame
         .system.dbOptions.vtcBackground, null));
     this.strokeColor = RPM.defaultValue(opt.strokeColor, RPM.defaultValue(
-        $datasGame.system.dbOptions.tOutline, false)? RPM.defaultValue(
-        $datasGame.system.dbOptions.vtcOutline, null) : null);
+        RPM.datasGame.system.dbOptions.tOutline, false)? RPM.defaultValue(
+        RPM.datasGame.system.dbOptions.vtcOutline, null) : null);
     this.updateFontSize(this.fontSize);
     this.setText(RPM.defaultValue(text, ""));
 }
@@ -91,7 +91,7 @@ GraphicText.prototype = {
         if (this.text !== text) {
             this.text = text;
             this.measureText();
-            $requestPaintHUD = true;
+            RPM.requestPaintHUD = true;
         }
     },
 
@@ -99,18 +99,18 @@ GraphicText.prototype = {
     *   used before a context.measureText.
     */
     updateContextFontReal: function(){
-        $context.font = this.font;
+        Platform.ctx.font = this.font;
     },
 
     updateContextFont: function(){
-        $context.font = this.fontWithoutResize;
+        Platform.ctx.font = this.fontWithoutResize;
     },
 
     measureText: function() {
         var w;
 
         this.updateContextFont();
-        w = $context.measureText(this.text);
+        w = Platform.ctx.measureText(this.text);
         this.textWidth = w.width;
         this.textHeight = RPM.getScreenMinXY(this.fontSize);
 
@@ -184,35 +184,35 @@ GraphicText.prototype = {
 
         // Draw background color
         if (this.backColor !== null) {
-            $context.fillStyle = this.backColor.rgb;
-            $context.fillRect(xBack, y - textHeight, textWidth, textHeight);
+            Platform.ctx.fillStyle = this.backColor.rgb;
+            Platform.ctx.fillRect(xBack, y - textHeight, textWidth, textHeight);
         }
 
         // Set context options
-        $context.font = this.font;
-        $context.textAlign = this.align;
+        Platform.ctx.font = this.font;
+        Platform.ctx.textAlign = this.align;
         lineHeight = this.fontSize * 2;
         lines = this.text.split("\n");
         l = lines.length;
 
         // Stroke text
         if (this.strokeColor !== null) {
-            $context.strokeStyle = this.strokeColor.rgb;
+            Platform.ctx.strokeStyle = this.strokeColor.rgb;
             yOffset = 0;
             for (i = 0; i < l; ++i) {
-                $context.strokeText(lines[i], x - 1, y - 1 + yOffset);
-                $context.strokeText(lines[i], x - 1, y  + 1 + yOffset);
-                $context.strokeText(lines[i], x + 1, y - 1 + yOffset);
-                $context.strokeText(lines[i], x + 1, y + 1 + yOffset);
+                Platform.ctx.strokeText(lines[i], x - 1, y - 1 + yOffset);
+                Platform.ctx.strokeText(lines[i], x - 1, y  + 1 + yOffset);
+                Platform.ctx.strokeText(lines[i], x + 1, y - 1 + yOffset);
+                Platform.ctx.strokeText(lines[i], x + 1, y + 1 + yOffset);
                 yOffset += lineHeight;
             }
         }
 
         // Drawing the text
-        $context.fillStyle = this.color.rgb;
+        Platform.ctx.fillStyle = this.color.rgb;
         yOffset = 0;
         for (i = 0; i < l; ++i) {
-            $context.fillText(lines[i], x, y + yOffset);
+            Platform.ctx.fillText(lines[i], x, y + yOffset);
             yOffset += lineHeight;
         }
     },

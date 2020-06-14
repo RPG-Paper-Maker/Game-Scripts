@@ -34,13 +34,13 @@ function SceneMenuEquip() {
     var listHeroes;
 
     // Tab heroes
-    nbHeroes = $game.teamHeroes.length;
+    nbHeroes = RPM.game.teamHeroes.length;
     listHeroes = new Array(nbHeroes);
     for (i = 0; i < nbHeroes; i++)
-        listHeroes[i] = new GraphicPlayerDescription($game.teamHeroes[i]);
+        listHeroes[i] = new GraphicPlayerDescription(RPM.game.teamHeroes[i]);
 
     // Equipment
-    nbEquipments = $datasGame.battleSystem.equipments.length - 1;
+    nbEquipments = RPM.datasGame.battleSystem.equipments.length - 1;
     nbEquipChoice = SceneMenu.nbItemsToDisplay - nbEquipments - 1;
 
     // All the windows
@@ -74,14 +74,14 @@ SceneMenuEquip.prototype = {
 
         // update equipment
         equipLength = GamePlayer.getEquipmentLength();
-        l = $datasGame.battleSystem.equipmentsOrder.length;
+        l = RPM.datasGame.battleSystem.equipmentsOrder.length;
         list = new Array(l);
         for (i = 0; i < l; i++){
             list[i] =
                     new GraphicEquip(
-                        $game.teamHeroes
+                        RPM.game.teamHeroes
                         [this.windowChoicesTabs.currentSelectedIndex],
-                        $datasGame.battleSystem.equipmentsOrder[i],
+                        RPM.datasGame.battleSystem.equipmentsOrder[i],
                         equipLength);
         }
         this.windowChoicesEquipment.setContents(list);
@@ -99,12 +99,12 @@ SceneMenuEquip.prototype = {
         var idEquipment, nb, i, l, c, ll, k, lll, nbItem;
         var list, type, systemItem, item, character;
 
-        idEquipment = $datasGame.battleSystem.equipmentsOrder
+        idEquipment = RPM.datasGame.battleSystem.equipmentsOrder
                 [this.windowChoicesEquipment.currentSelectedIndex];
         nb = this.windowChoicesList.listWindows.length;
         list = [new GraphicText("[Remove]")];
-        for (i = 0, l = $game.items.length; i < l; i++){
-            item = $game.items[i];
+        for (i = 0, l = RPM.game.items.length; i < l; i++){
+            item = RPM.game.items[i];
             if (item.k !== ItemKind.Item) {
                 systemItem = item.getItemInformations();
                 type = systemItem.getType();
@@ -129,7 +129,7 @@ SceneMenuEquip.prototype = {
         var result, gamePlayer, item;
         var i, j, k, l, ll;
 
-        gamePlayer = $game.teamHeroes[this.windowChoicesTabs
+        gamePlayer = RPM.game.teamHeroes[this.windowChoicesTabs
             .currentSelectedIndex];
         if (this.selectedEquipment === -1)
             this.list = [];
@@ -140,7 +140,7 @@ SceneMenuEquip.prototype = {
                 this.list = [];
             } else {
                 result = gamePlayer.getEquipmentStatsAndBonus(item.item,
-                    $datasGame.battleSystem.equipmentsOrder[this
+                    RPM.datasGame.battleSystem.equipmentsOrder[this
                     .windowChoicesEquipment.currentSelectedIndex]);
                 this.list = result[0];
                 this.bonus = result[1];
@@ -156,8 +156,8 @@ SceneMenuEquip.prototype = {
     remove: function(){
         var i, l, character, id, prev, item;
 
-        character = $game.teamHeroes[this.windowChoicesTabs.currentSelectedIndex];
-        id = $datasGame.battleSystem.equipmentsOrder[this.windowChoicesEquipment
+        character = RPM.game.teamHeroes[this.windowChoicesTabs.currentSelectedIndex];
+        id = RPM.datasGame.battleSystem.equipmentsOrder[this.windowChoicesEquipment
             .currentSelectedIndex];
         prev = character.equip[id];
         character.equip[id] = null;
@@ -176,18 +176,19 @@ SceneMenuEquip.prototype = {
         var i, l, gameItem, item, index, character, id, prev;
 
         index = this.windowChoicesTabs.currentSelectedIndex;
-        character = $game.teamHeroes[index];
+        character = RPM.game.teamHeroes[index];
         gameItem = this.windowChoicesList.getCurrentContent().gameItem;
-        id = $datasGame.battleSystem.equipmentsOrder[this.windowChoicesEquipment
+        id = RPM.datasGame.battleSystem.equipmentsOrder[this.windowChoicesEquipment
             .currentSelectedIndex];
         prev = character.equip[id];
         character.equip[id] = gameItem;
 
         // Remove one equip from inventory
-        for (i = 0, l = $game.items.length; i < l; i++) {
-            item = $game.items[i];
+        for (i = 0, l = RPM.game.items.length; i < l; i++) {
+            item = RPM.game.items[i];
             if (item.k === gameItem.k && item.id === gameItem.id) {
                 item.remove(1);
+                break;
             }
         }
         if (prev) {
@@ -200,7 +201,7 @@ SceneMenuEquip.prototype = {
     // -------------------------------------------------------
 
     updateStats: function() {
-        $game.teamHeroes[this.windowChoicesTabs.currentSelectedIndex]
+        RPM.game.teamHeroes[this.windowChoicesTabs.currentSelectedIndex]
             .updateEquipmentStats(this.list, this.bonus);
     },
 
@@ -215,19 +216,19 @@ SceneMenuEquip.prototype = {
     onKeyPressed: function(key){
         if (this.selectedEquipment === -1){
             if (DatasKeyBoard.isKeyEqual(key,
-                                         $datasGame.keyBoard.menuControls
+                                         RPM.datasGame.keyBoard.menuControls
                                          .Cancel) ||
                 DatasKeyBoard.isKeyEqual(key,
-                                         $datasGame.keyBoard.MainMenu))
+                                         RPM.datasGame.keyBoard.MainMenu))
             {
-                $datasGame.system.soundCancel.playSound();
-                $gameStack.pop();
+                RPM.datasGame.system.soundCancel.playSound();
+                RPM.gameStack.pop();
             }
             else if (DatasKeyBoard.isKeyEqual(key,
-                                              $datasGame.keyBoard.menuControls
+                                              RPM.datasGame.keyBoard.menuControls
                                               .Action))
             {
-                $datasGame.system.soundConfirmation.playSound();
+                RPM.datasGame.system.soundConfirmation.playSound();
                 this.selectedEquipment =
                      this.windowChoicesEquipment.currentSelectedIndex;
                 this.windowChoicesList.currentSelectedIndex = 0;
@@ -237,22 +238,22 @@ SceneMenuEquip.prototype = {
         }
         else{
             if (DatasKeyBoard.isKeyEqual(key,
-                                         $datasGame.keyBoard.menuControls
+                                         RPM.datasGame.keyBoard.menuControls
                                          .Cancel) ||
                 DatasKeyBoard.isKeyEqual(key,
-                                         $datasGame.keyBoard.MainMenu))
+                                         RPM.datasGame.keyBoard.MainMenu))
             {
-                $datasGame.system.soundCancel.playSound();
+                RPM.datasGame.system.soundCancel.playSound();
                 this.selectedEquipment = -1;
                 this.windowChoicesList.unselect();
                 this.updateInformations();
             }
             else if (DatasKeyBoard.isKeyEqual(key,
-                                              $datasGame.keyBoard.menuControls
+                                              RPM.datasGame.keyBoard.menuControls
                                               .Action))
             {
                 if (this.windowChoicesList.getCurrentContent() !== null){
-                    $datasGame.system.soundConfirmation.playSound();
+                    RPM.datasGame.system.soundConfirmation.playSound();
                     if (this.windowChoicesList.currentSelectedIndex === 0)
                         this.remove();
                     else
@@ -261,7 +262,7 @@ SceneMenuEquip.prototype = {
                     this.windowChoicesList.unselect();
                     this.updateForTab();
                 } else {
-                    $datasGame.system.soundImpossible.playSound();
+                    RPM.datasGame.system.soundImpossible.playSound();
                 }
             }
         }
@@ -282,7 +283,6 @@ SceneMenuEquip.prototype = {
     // -------------------------------------------------------
 
     onKeyPressedAndRepeat: function(key){
-
         // Tab
         var indexTab = this.windowChoicesTabs.currentSelectedIndex;
         this.windowChoicesTabs.onKeyPressedAndRepeat(key);
@@ -309,7 +309,7 @@ SceneMenuEquip.prototype = {
     // -------------------------------------------------------
 
     draw3D: function(canvas){
-        $currentMap.draw3D(canvas);
+        RPM.currentMap.draw3D(canvas);
     },
 
     // -------------------------------------------------------
@@ -317,7 +317,7 @@ SceneMenuEquip.prototype = {
     drawHUD: function(context){
 
         // Draw the local map behind
-        $currentMap.drawHUD(context);
+        RPM.currentMap.drawHUD(context);
 
         // Draw the menu
         this.windowTop.draw(context);

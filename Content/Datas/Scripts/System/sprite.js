@@ -111,8 +111,8 @@ Sprite.prototype = {
             vecC = new THREE.Vector3(0.5, 0.0, 0.0),
             vecD = new THREE.Vector3(-0.5, 0.0, 0.0),
             center = new THREE.Vector3(0, 0, 0),
-            size = new THREE.Vector3(this.textureRect[2] * $SQUARE_SIZE,
-                                     this.textureRect[3] * $SQUARE_SIZE, 1.0);
+            size = new THREE.Vector3(this.textureRect[2] * RPM.SQUARE_SIZE,
+                                     this.textureRect[3] * RPM.SQUARE_SIZE, 1.0);
         var x, y, w, h, i, l, coefX, coefY, rect, angleY, angleX, angleZ;
         var texFaceA, texFaceB;
 
@@ -151,12 +151,12 @@ Sprite.prototype = {
         }
 
         // Getting UV coordinates
-        x = (this.textureRect[0] * $SQUARE_SIZE) / width;
-        y = (this.textureRect[1] * $SQUARE_SIZE) / height;
-        w = (this.textureRect[2] * $SQUARE_SIZE) / width;
-        h = (this.textureRect[3] * $SQUARE_SIZE) / height;
-        coefX = 0.1 / width;
-        coefY = 0.1 / height;
+        x = (this.textureRect[0] * RPM.SQUARE_SIZE) / width;
+        y = (this.textureRect[1] * RPM.SQUARE_SIZE) / height;
+        w = (this.textureRect[2] * RPM.SQUARE_SIZE) / width;
+        h = (this.textureRect[3] * RPM.SQUARE_SIZE) / height;
+        coefX = RPM.COEF_TEX / width;
+        coefY = RPM.COEF_TEX / height;
         x += coefX;
         y += coefY;
         w -= (coefX * 2);
@@ -180,7 +180,7 @@ Sprite.prototype = {
         h = Math.floor(this.textureRect[3] / 2);
 
         if (tileset) {
-            var collisions = $currentMap.mapInfos.tileset.picture
+            var collisions = RPM.currentMap.mapInfos.tileset.picture
                 .getSquaresForTexture(this.textureRect);
             l = collisions.length;
             for (i = 0; i < l; i++) {
@@ -190,10 +190,10 @@ Sprite.prototype = {
                     l: localPosition,
                     b: [
                         (localPosition.x - (Math.floor(this.textureRect[2] / 2)
-                            * $SQUARE_SIZE)) - ((this.textureRect[2] % 2) * Math
-                            .round($SQUARE_SIZE / 2)) + rect[0] + Math.round(
+                            * RPM.SQUARE_SIZE)) - ((this.textureRect[2] % 2) * Math
+                            .round(RPM.SQUARE_SIZE / 2)) + rect[0] + Math.round(
                             rect[2] / 2),
-                        localPosition.y + (this.textureRect[3] * $SQUARE_SIZE) -
+                        localPosition.y + (this.textureRect[3] * RPM.SQUARE_SIZE) -
                             rect[1] - Math.round(rect[3] / 2),
                         localPosition.z,
                         rect[2],
