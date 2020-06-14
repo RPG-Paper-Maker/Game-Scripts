@@ -111,10 +111,10 @@ GraphicText.prototype = {
 
         this.updateContextFont();
         w = Platform.ctx.measureText(this.text);
-        this.textWidth = w.width;
-        this.textHeight = RPM.getScreenMinXY(this.fontSize);
+        this.textWidth = w.width + (this.strokeColor === null ? 0 : 2);
+        this.textHeight = this.fontSize + (this.strokeColor === null ? 0 : 2);
 
-        return w.width;
+        return this.textWidth;
     },
 
     // -------------------------------------------------------
@@ -143,9 +143,9 @@ GraphicText.prototype = {
     *   @param {number} w The width dimention to draw graphic.
     *   @param {number} h The height dimention to draw graphic.
     */
-    draw: function(x, y, w, h) {
+    draw: function(x, y, w, h, positionResize) {
         var lineHeight, lines, xBack;
-        var i, l, yOffset, textWidth, textHeight, color;
+        var i, l, yOffset, textWidth, textHeight;
 
         // Default values
         if (typeof x === 'undefined') x = this.oX;
@@ -153,8 +153,14 @@ GraphicText.prototype = {
         if (typeof w === 'undefined') w = this.oW;
         if (typeof h === 'undefined') h = this.oH;
 
-        x = RPM.getScreenX(x);
-        y = RPM.getScreenY(y);
+        if (typeof positionResize === 'undefined') {
+            positionResize = true;
+        }
+        if (positionResize)
+        {
+            x = RPM.getScreenX(x);
+            y = RPM.getScreenY(y);
+        }
         w = RPM.getScreenX(w);
         h = RPM.getScreenY(h);
 

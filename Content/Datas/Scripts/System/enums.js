@@ -39,7 +39,7 @@ Object.freeze(CommandMoveKind);
 let EventCommandKind = {
     None: 0,
     ShowText: 1,
-    Changeletiables: 2,
+    ChangeVariables: 2,
     EndGame: 3,
     While: 4,
     EndWhile: 5,
@@ -230,7 +230,7 @@ let PrimitiveValueKind = {
     Anything: 1,
     Default: 2,
     Number: 3,
-    letiable: 4,
+    Variable: 4,
     Parameter: 5,
     Property: 6,
     DataBase: 7,
@@ -291,7 +291,7 @@ Object.freeze(LootKind);
 let DamagesKind = {
     Stat: 0,
     Currency: 1,
-    letiable: 2
+    Variable: 2
 };
 Object.freeze(DamagesKind);
 
@@ -353,7 +353,7 @@ let IncreaseDecreaseKind = {
     ExperienceGain: 3,
     CurrencyGain: 4,
     SkillCost: 5,
-    letiable: 6
+    Variable: 6
 };
 Object.freeze(IncreaseDecreaseKind);
 
@@ -504,7 +504,7 @@ let TagKind = {
     TextColor: 9,
     BackColor: 10,
     StrokeColor: 11,
-    letiable: 12,
+    Variable: 12,
     Parameter: 13,
     Property: 14,
     HeroName: 15,
@@ -526,11 +526,11 @@ let ConditionHeroesKind = {
 Object.freeze(ConditionHeroesKind);
 
 /**
-*   Enum for the letiables map object characteristics.
+*   Enum for the variables map object characteristics.
 *   @enum {number}
 *   @readonly
 */
-let letiableMapObjectCharacteristicKind = {
+let VariableMapObjectCharacteristicKind = {
     XSquarePosition: 0,
     YSquarePosition: 1,
     ZSquarePosition: 2,
@@ -539,7 +539,7 @@ let letiableMapObjectCharacteristicKind = {
     ZPixelPosition: 5,
     Orientation: 6
 };
-Object.freeze(letiableMapObjectCharacteristicKind);
+Object.freeze(VariableMapObjectCharacteristicKind);
 
 /**
 *   Enum for the animation position kind.

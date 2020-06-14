@@ -95,7 +95,8 @@ SystemSong.prototype = {
         {
             this.song = new Howl({
                 src: [this.getPath(kind)[0]],
-                loop: kind !== SongKind.MusicEffect
+                loop: kind !== SongKind.MusicEffect,
+                html5: true
             });
         }
     }

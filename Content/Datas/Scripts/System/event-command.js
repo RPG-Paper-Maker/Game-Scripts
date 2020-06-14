@@ -222,6 +222,7 @@ EventCommandShowText.prototype = {
             .dbOptions.vpBottom, 0);
         this.windowMain.updateDimensions();
         this.windowMain.content.update();
+        this.windowInterlocutor.content.setText(this.interlocutor.getValue());
 
         return {
             clicked: false,

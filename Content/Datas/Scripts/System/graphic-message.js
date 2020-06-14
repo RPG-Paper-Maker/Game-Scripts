@@ -368,7 +368,7 @@ GraphicMessage.prototype.drawFaceset = function(x, y, w, h) {
 // -------------------------------------------------------
 
 GraphicMessage.prototype.draw = function(x, y, w, h) {
-    var i, j, c, l, newX, offsetX, offsetY, align, graphic;
+    var i, j, c, l, newX, newY, offsetX, offsetY, align, graphic;
 
     x = RPM.defaultValue(x, this.oX);
     y = RPM.defaultValue(y, this.oY);
@@ -378,8 +378,9 @@ GraphicMessage.prototype.draw = function(x, y, w, h) {
     if (RPM.datasGame.system.dbOptions.vfPosAbove) {
         this.drawFaceset(x, y, w, h);
     }
-    newX = x + this.faceset.oW + RPM.HUGE_SPACE;
-    offsetY = RPM.HUGE_SPACE;
+    newX = RPM.getScreenX(x + this.faceset.oW + RPM.HUGE_SPACE);
+    newY = RPM.getScreenY(y + RPM.HUGE_SPACE);
+    offsetY = 0;
     align = -1;
     c = this.heights.length - 1;
     j = 0;
@@ -390,7 +391,7 @@ GraphicMessage.prototype.draw = function(x, y, w, h) {
 
         // New line
         if (graphic === null) {
-            offsetY += this.heights[c--] * 2;
+            offsetY += RPM.getScreenMinXY(this.heights[c--] * 2);
             align = -1;
         } else {
             if (align !== this.aligns[i]) {
@@ -400,17 +401,25 @@ GraphicMessage.prototype.draw = function(x, y, w, h) {
                     offsetX = 0;
                     break;
                 case Align.Center:
-                    offsetX = (w - newX - this.totalWidths[j]) / 2;
+                    offsetX = RPM.getScreenMinXY((w - newX - this.totalWidths[j]) / 2);
                     break;
                 case Align.Right:
-                    offsetX = x + w - newX - this.totalWidths[j];
+                    offsetX = RPM.getScreenMinXY(x + w - newX - this.totalWidths[j]);
                     break;
                 }
                 j++;
             }
-            graphic.draw(newX + offsetX, y + offsetY - (graphic.path ? graphic
-                .oH / 2 : 0));
-            offsetX += this.positions[i];
+            if (graphic.path)
+            {
+                graphic.draw(newX + offsetX, newY - (graphic.h / 2) + offsetY, 
+                    graphic.oW, graphic.oH, 0, 0, graphic.oW, graphic.oH, false);
+            }
+            else
+            {
+                graphic.draw(newX + offsetX, newY + offsetY, graphic.oW, graphic
+                    .oH, false);
+            }
+            offsetX += RPM.getScreenMinXY(this.positions[i]);
         }
     }
 };
