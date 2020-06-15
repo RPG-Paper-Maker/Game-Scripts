@@ -79,8 +79,9 @@ Picture2D.prototype.createCopy = function() {
     picture.callback = this.callback;
     picture.image = this.image;
     picture.checked = true;
-    picture.setW(picture.image.width);
-    picture.setH(picture.image.height);
+    picture.stretch = false;
+    picture.setW(picture.image.width, true);
+    picture.setH(picture.image.height, true);
 
     return picture;
 };
@@ -154,17 +155,11 @@ Picture2D.prototype.draw = function(x, y, w, h, sx, sy, sw, sh, positionResize)
     }
     if (typeof w === 'undefined') {
         w = this.w * this.zoom;
-        if (this.centered) {
-            x += (this.w - (this.w * this.zoom)) / 2;
-        }
     } else {
         w = this.stretch ? RPM.getScreenX(w) : RPM.getScreenMinXY(w);
     }
     if (typeof h === 'undefined') {
         h = this.h * this.zoom;
-        if (this.centered) {
-            y += (this.h - (this.h * this.zoom)) / 2;
-        }
     } else {
         h = this.stretch ? RPM.getScreenY(h) : RPM.getScreenMinXY(h)
     }
@@ -194,11 +189,11 @@ Picture2D.prototype.draw = function(x, y, w, h, sx, sy, sw, sh, positionResize)
         }
         if (angle !== 0) {
             if (this.centered) {
-                Platform.ctx.translate(x + w / 2, y + h / 2);
+                Platform.ctx.translate(x, y);
             }
             Platform.ctx.rotate(angle);
             if (this.centered) {
-                Platform.ctx.translate(-x - w / 2, -y - h / 2);
+                Platform.ctx.translate(-x, -y);
             }
         }
         if (this.centered) {

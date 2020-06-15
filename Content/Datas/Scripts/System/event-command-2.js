@@ -2294,10 +2294,8 @@ EventCommandDisplayAPicture.prototype.update = function(currentState, object,
     currentIndex = this.index.getValue();
     picture = RPM.datasGame.pictures.get(PictureKind.Pictures, this.pictureID)
         .picture.createCopy();
-    picture.setX(this.originX - (this.centered ? (picture.oW / 2) : 0) + this.x
-        .getValue());
-    picture.setY(this.originY - (this.centered ? (picture.oH / 2) : 0) + this.y
-        .getValue());
+    picture.setX(this.originX + this.x.getValue());
+    picture.setY(this.originY + this.y.getValue());
     picture.centered = this.centered;
     picture.zoom = this.zoom.getValue() / 100;
     picture.opacity = this.opacity.getValue() / 100;

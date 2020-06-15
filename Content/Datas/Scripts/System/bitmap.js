@@ -46,9 +46,10 @@ Bitmap.prototype = {
     /** Set the x value.
     *   @param {number} x The x value.
     */
-    setX: function(x){
+    setX: function(x, min)
+    {
         this.oX = x;
-        this.x = RPM.getScreenX(x);
+        this.x = min ? RPM.getScreenMinXY(x) : RPM.getScreenX(x);
         RPM.requestPaintHUD = true;
     },
 
@@ -57,9 +58,10 @@ Bitmap.prototype = {
     /** Set the y value.
     *   @param {number} y The y value.
     */
-    setY: function(y){
+    setY: function(y, min)
+    {
         this.oY = y;
-        this.y = RPM.getScreenY(y);
+        this.y = min ? RPM.getScreenMinXY(y) : RPM.getScreenY(y);
         RPM.requestPaintHUD = true;
     },
 
@@ -68,9 +70,9 @@ Bitmap.prototype = {
     /** Set the w value.
     *   @param {number} w The w value.
     */
-    setW: function(w){
+    setW: function(w, min){
         this.oW = w;
-        this.w = RPM.getScreenX(w);
+        this.w = min ? RPM.getScreenMinXY(w) : RPM.getScreenX(w);
         RPM.requestPaintHUD = true;
     },
 
@@ -79,9 +81,9 @@ Bitmap.prototype = {
     /** Set the h value.
     *   @param {number} h The h value.
     */
-    setH: function(h){
+    setH: function(h, min){
         this.oH = h;
-        this.h = RPM.getScreenY(h);
+        this.h = min ? RPM.getScreenMinXY(h) : RPM.getScreenY(h);
         RPM.requestPaintHUD = true;
     },
 
