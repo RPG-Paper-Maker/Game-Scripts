@@ -176,6 +176,7 @@ SystemEffect.prototype.execute = function() {
                     damage = Math.min(damage, RPM.evaluateFormula(this
                         .damagesMaximumFormula.getValue(), user, target));
                 }
+                damage = Math.round(damage);
             }
             if (this.isDamageStockVariableID)
             {

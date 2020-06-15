@@ -193,11 +193,13 @@ SystemWindowSkin.prototype = {
         var digits = ("" + damage).split("").map(Number);
         var width = rect[2] / 10;
         var height = rect[3];
+        this.picture.stretch = false;
         for (var i = 0, l = digits.length; i < l; i++) {
-            this.picture.draw(x + ((i - (l / 2)) * (width + 1)), y, width * zoom
-                , height * zoom, rect[0] + (digits[i] * width), rect[1], width,
-                height, false);
+            this.picture.draw(x + ((i - ((l -1) / 2)) * (RPM.getScreenMinXY(
+                width) * zoom)), y, width * zoom, height * zoom, rect[0] + (
+                digits[i] * width), rect[1], width, height, false);
         }
+        this.picture.stretch = true;
     },
 
     // -------------------------------------------------------
