@@ -390,17 +390,17 @@ EventCommandChangeState.prototype = {
     */
     update: function(currentState, object, state) {
         if (object.isHero || object.isStartup) {
-            var states = (object.isHero ? RPM.game.heroStates : RPM.game
-                .startupStates)[RPM.currentMap.id];
+            var states = object.isHero ? RPM.game.heroStates : RPM.game
+                .startupStates[RPM.currentMap.id];
             switch (this.operationKind) {
             case 0: // Replacing
                 if (object.isHero) {
-                    RPM.game.heroStates[RPM.currentMap.id] = [];
+                    RPM.game.heroStates = [];
                 } else {
                     RPM.game.startupStates[RPM.currentMap.id] = [];
                 }
-                states = (object.isHero ? RPM.game.heroStates : RPM.game.startupStates
-                    )[RPM.currentMap.id];
+                states = object.isHero ? RPM.game.heroStates : RPM.game.startupStates
+                    [RPM.currentMap.id];
                 EventCommandChangeState.addStateSpecial(states, this.idState
                     .getValue());
                 break;
