@@ -725,7 +725,7 @@ MapPortion.prototype = {
                         result = obj3D.updateGeometry(geometry, position, count);
                         obj.c = result[0];
                         this.updateCollision(this.boundingBoxesObjects3D, result[1],
-                            position);
+                            position, true);
                     }
                 }
             }
@@ -1300,7 +1300,7 @@ MapPortion.prototype = {
                 objCollision = objects3D[i];
                 if (testedCollisions.indexOf(objCollision) === -1) {
                     testedCollisions.push(objCollision);
-
+                    
                     if (this.checkIntersectionSprite(objCollision.b,
                         objCollision.k, object))
                     {

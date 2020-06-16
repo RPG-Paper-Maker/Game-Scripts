@@ -846,7 +846,6 @@ Tree.prototype = {
 *   @param {function} callback A callback function to excecute when the file is
 *   loaded.
 */
-RPM.LOL = 0;
 RPM.openFile = function(base, url, loading, callback)
 {
     const fs = require('fs');

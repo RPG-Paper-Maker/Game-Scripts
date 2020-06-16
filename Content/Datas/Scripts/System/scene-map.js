@@ -41,7 +41,7 @@ function SceneMap(id, isBattleMap){
     }
 
     this.mapName = RPM.generateMapName(id);
-    this.scene = new THREE.Scene();
+    this.scene = new Physijs.Scene();
     this.readMapInfos();
     this.currentPortion = RPM.getPortion(this.getHeroPosition());
     this.collisions = new Array;

@@ -340,7 +340,7 @@ MapObject.prototype = {
                                            this.position);
             geometry = result[0];
             objCollision = result[1];
-            this.mesh = new THREE.Mesh(geometry, material);
+            this.mesh = new Physijs.ConvexMesh(geometry, material);
             this.mesh.position.set(this.position.x,
                                    this.position.y,
                                    this.position.z);

@@ -82,15 +82,11 @@ SystemShape.prototype = {
 
             that = this;
             RPM.filesToLoad++;
-            RPM.LOL++;
-            console.log(RPM.LOL)
             RPM.OBJ_LOADER.load(this.getPath(CustomShapeKind.OBJ)[0], function(
                 geometry)
             {
                 that.geometry = geometry;
                 RPM.loadedFiles++;
-                RPM.LOL++;
-            console.log(RPM.LOL)
             });
         }
     },
