@@ -18,7 +18,7 @@
 /** @class
 *   A battle map of the game.
 */
-function SystemBattleMap(cameraProperties, idMap, position) {
+function SystemBattleMap(idMap, position) {
     this.idMap = idMap;
     this.position = position;
 }
@@ -29,7 +29,6 @@ SystemBattleMap.prototype = {
     *   @param {Object} json Json object describing the object.
     */
     readJSON: function(json) {
-        this.cameraPropertiesID = SystemValue.readOrDefaultDatabase(json.cpi, 1);
         this.idMap = json.idm;
         this.position = json.p;
     }

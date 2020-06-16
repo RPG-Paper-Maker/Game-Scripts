@@ -129,10 +129,9 @@ EventCommandStartBattle.prototype = {
         // Initializing battle
         if (currentState.sceneBattle === null) {
             var battleMap = (this.battleMapID === null) ? new SystemBattleMap(
-                RPM.datasGame.system.cameraProperties[1], this.idMap.getValue(), [
-                this.x.getValue(), this.y.getValue(), this.yPlus.getValue(),
-                this.z.getValue(), 0]) : RPM.datasGame.battleSystem.battleMaps[this
-                .battleMapID.getValue()];
+                this.idMap.getValue(), [this.x.getValue(), this.y.getValue(), 
+                this.yPlus.getValue(), this.z.getValue()]) : RPM.datasGame
+                .battleSystem.battleMaps[this.battleMapID.getValue()];
             RPM.game.heroBattle = {
                 position: RPM.positionToVector3(battleMap.position)
             };
@@ -145,7 +144,8 @@ EventCommandStartBattle.prototype = {
                 [this.transitionStartColor.getValue()] : null, this
                 .transitionEndColor ? RPM.datasGame.system.colors[this
                 .transitionEndColor.getValue()] : null);
-             // Keep instance of battle state for results
+            
+            // Keep instance of battle state for results
             currentState.sceneBattle = sceneBattle;
             currentState.mapScene = RPM.gameStack.top();
             RPM.gameStack.push(sceneBattle);

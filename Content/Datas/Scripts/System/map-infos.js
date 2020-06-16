@@ -46,7 +46,7 @@ MapInfos.prototype = {
         this.backgroundSound = new SystemPlaySong(SongKind.BackgroundSound);
         this.backgroundSound.readJSON(json.bgs);
         this.cameraProperties = RPM.datasGame.system.cameraProperties[SystemValue
-            .readOrDefaultDatabase(json.cpi, 1).getValue()];
+            .readOrDefaultDatabase(json.cp, 1).getValue()];
         this.backgroundColorID = new SystemValue();
         this.backgroundColorID.read(json.sky);
         this.updateBackgroundColor();
