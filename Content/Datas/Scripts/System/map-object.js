@@ -358,8 +358,12 @@ MapObject.prototype = {
         else {
             this.mesh = null;
             this.boundingBoxSettings = null;
-            this.speed = SystemValue.createNumberDouble(1);
-            this.frequency = SystemValue.createNumberDouble(1);
+            this.speed = this.currentState === null ? SystemValue
+                .createNumberDouble(1) : RPM.datasGame.system.speeds[this
+                .currentState.speedID];
+            this.frequency = this.currentState === null ? SystemValue
+                .createNumberDouble(0) : RPM.datasGame.system.frequencies[this
+                .currentState.frequencyID];
         }
 
         // Add to the scene
