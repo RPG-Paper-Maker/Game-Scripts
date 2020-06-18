@@ -18,11 +18,23 @@
 //      SubStep 1 : Experience update
 //      SubStep 2 : Level up
 //      SubStep 3 : End transition
+//      SubStep 4 : Defeat message
 //
 // -------------------------------------------------------
 
 SceneBattle.prototype.initializeStep4 = function(){
     var i, l, battler, id, w, h;
+
+    // If loosing, directly go to end transition
+    if (!this.winning)
+    {
+        this.windowTopInformations.content = new GraphicText("Defeat...", { 
+            align: Align.Center });
+        this.subStep = 4;
+        return;
+    }
+
+    // Change information bar content
     this.windowTopInformations.content = new GraphicText("Victory!", { align:
         Align.Center });
 
@@ -176,6 +188,18 @@ SceneBattle.prototype.playMapMusic = function() {
 
 // -------------------------------------------------------
 
+SceneBattle.prototype.prepareEndTransition = function()
+{
+    this.transitionEnded = false;
+    RPM.songsManager.initializeProgressionMusic(SystemPlaySong
+        .currentPlayingMusic.volume, 0, 0, SceneBattle
+        .TIME_LINEAR_MUSIC_END);
+    this.subStep = 3;
+    this.time = new Date().getTime();
+}
+
+// -------------------------------------------------------
+
 SceneBattle.prototype.updateStep4 = function() {
     switch (this.subStep) {
     case 0:
@@ -199,7 +223,13 @@ SceneBattle.prototype.updateStep4 = function() {
     case 3:
         RPM.requestPaintHUD = true;
         if (RPM.songsManager.isProgressionMusicEnd && this.transitionEnded) {
-            this.win();
+            if (this.winning)
+            {
+                this.win();
+            } else
+            {
+                this.gameOver();
+            }
         }
 
         // Transition zoom
@@ -285,12 +315,7 @@ SceneBattle.prototype.onKeyPressedStep4 = function(key){
             .Action))
         {
             if (this.finishedXP) {
-                this.transitionEnded = false;
-                RPM.songsManager.initializeProgressionMusic(SystemPlaySong
-                    .currentPlayingMusic.volume, 0, 0, SceneBattle
-                    .TIME_LINEAR_MUSIC_END);
-                this.subStep = 3;
-                this.time = new Date().getTime();
+                this.prepareEndTransition();
             } else { // Pass xp
                 for (var i = 0, l = RPM.game.teamHeroes.length; i < l; i++) {
                     var character = this.battlers[CharacterKind.Hero][i].character;
@@ -315,6 +340,9 @@ SceneBattle.prototype.onKeyPressedStep4 = function(key){
             }
             RPM.requestPaintHUD = true;
         }
+        break;
+    case 4:
+        this.prepareEndTransition();
         break;
     }
 };

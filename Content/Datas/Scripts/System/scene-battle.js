@@ -226,7 +226,6 @@ SceneBattle.prototype.gameOver = function() {
 /** Win the battle.
 */
 SceneBattle.prototype.win = function() {
-    this.winning = true;
     this.endBattle();
 };
 

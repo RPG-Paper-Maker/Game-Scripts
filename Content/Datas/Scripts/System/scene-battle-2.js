@@ -228,10 +228,12 @@ SceneBattle.prototype.updateStep2 = function() {
 
             // Testing end of battle
             if (this.isWin()) {
+                this.winning = true;
                 this.activeGroup();
                 this.changeStep(4);
             } else if (this.isLose()) {
-                this.gameOver();
+                this.winning = false;
+                this.changeStep(4);
             } else {
                 effect = this.effects[this.currentEffectIndex];
                 this.currentEffectIndex++;

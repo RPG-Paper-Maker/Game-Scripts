@@ -20,7 +20,16 @@
 //
 // -------------------------------------------------------
 
-SceneBattle.prototype.initializeStep1 = function() {
+SceneBattle.prototype.initializeStep1 = function() 
+{
+    // Check if everyone is dead to avoid infinite looping
+    if (this.isLose())
+    {
+        this.winning = false;
+        this.changeStep(4);
+        return;
+    }
+
     this.battleCommandKind = EffectSpecialActionKind.None;
     this.windowTopInformations.content = new GraphicText("Select an ally", {
         align: Align.Center });

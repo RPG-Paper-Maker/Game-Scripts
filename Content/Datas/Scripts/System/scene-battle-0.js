@@ -55,6 +55,7 @@ SceneBattle.prototype.initializeAlliesBattlers = function() {
             RPM.game.heroBattle.position.z - RPM.SQUARE_SIZE + (i * RPM.SQUARE_SIZE));
         character = RPM.game.teamHeroes[i];
         battler = new Battler(character, position, this.camera);
+        battler.updateDead(false);
         character.battler = battler;
         battler.addToScene();
         this.battlers[CharacterKind.Hero][i] = battler;
