@@ -148,7 +148,8 @@ GraphicMessage.prototype.updateTag = function(currentNode, tag, value, open,
         }
         currentNode.add([tag, value]);
         if (tag !== TagKind.Text && tag !== TagKind.NewLine && tag !== TagKind
-            .Variable)
+            .Variable && tag !== TagKind.Icon && tag !== TagKind.Property && tag 
+            !== TagKind.Parameter && tag !== TagKind.HeroName)
         {
             currentNode = currentNode.lastChild;
         }
@@ -393,6 +394,7 @@ GraphicMessage.prototype.draw = function(x, y, w, h) {
         if (graphic === null) {
             offsetY += RPM.getScreenMinXY(this.heights[c--] * 2);
             align = -1;
+            j++;
         } else {
             if (align !== this.aligns[i]) {
                 align = this.aligns[i];
@@ -401,10 +403,10 @@ GraphicMessage.prototype.draw = function(x, y, w, h) {
                     offsetX = 0;
                     break;
                 case Align.Center:
-                    offsetX = RPM.getScreenMinXY((w - newX - this.totalWidths[j]) / 2);
+                    offsetX = (RPM.getScreenX(w) - RPM.getScreenMinXY(this.totalWidths[j]) - newX) / 2;
                     break;
                 case Align.Right:
-                    offsetX = RPM.getScreenMinXY(x + w - newX - this.totalWidths[j]);
+                    offsetX = RPM.getScreenX(w) - RPM.getScreenMinXY(this.totalWidths[j]) - newX;
                     break;
                 }
                 j++;
