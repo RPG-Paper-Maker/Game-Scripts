@@ -3156,3 +3156,43 @@ EventCommandCallACommonReaction.prototype.drawHUD = function(currentState) {
 
     EventCommand.prototype.drawHUD.call(this, currentState);
 }
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandLabel
+//
+// -------------------------------------------------------
+
+function EventCommandLabel(command) {
+    EventCommand.call(this, command);
+    let i = 0;
+    let k = command[i++];
+    let v = command[i++];
+    this.label = SystemValue.createValue(k, v);
+}
+
+EventCommandLabel.prototype = Object.create(EventCommand.prototype);
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandJumpToLabel
+//
+// -------------------------------------------------------
+
+function EventCommandJumpToLabel(command) {
+    EventCommand.call(this, command);
+    let i = 0;
+    let k = command[i++];
+    let v = command[i++];
+    this.label = SystemValue.createValue(k, v);
+}
+
+EventCommandJumpToLabel.prototype = Object.create(EventCommand.prototype);
+
+// -------------------------------------------------------
+
+EventCommandJumpToLabel.prototype.update = function(currentState, object
+    , state)
+{
+    return this.label.getValue();
+}

@@ -142,7 +142,15 @@ ReactionInterpreter.prototype = {
 
         // If the value is a string, then it can only be a label call
         if (typeof result === 'string'){
-            // TODO
+            let tab;
+            for (let i = 0, l = this.currentReaction.labels.length; i < l; i++)
+            {
+                tab = this.currentReaction.labels[i];
+                if (result === tab[0].getValue())
+                {
+                    value = tab[1].next;
+                }
+            }
         }
         /* Else, that means it's a number which represents the number of nodes
         to skip */

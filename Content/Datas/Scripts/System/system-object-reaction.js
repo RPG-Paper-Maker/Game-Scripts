@@ -19,7 +19,7 @@
 *   A reaction to an event.
 */
 function SystemObjectReaction() {
-    this.labels = new Array; // TODO
+    this.labels = new Array;
 }
 
 /** Read the JSON associated to the object reaction.
@@ -52,6 +52,7 @@ SystemObjectReaction.prototype.readChildrenJSON = function(jsonCommands,
     choice = null;
     for (var j = 0, ll = jsonCommands.length; j < ll; j++){
         command = EventCommand.getEventCommand(jsonCommands[j]);
+        node = commands.add(command);
 
         // If text before choice, make a link
         if (command instanceof EventCommandShowText) {
@@ -59,8 +60,10 @@ SystemObjectReaction.prototype.readChildrenJSON = function(jsonCommands,
         } else if (command instanceof EventCommandDisplayChoice) {
             command.setShowText(choice);
             choice = null;
+        } else if (command instanceof EventCommandLabel) // Label
+        {
+            this.labels.push([command.label, node]);
         }
-        node = commands.add(command);
         if (jsonCommands[j].hasOwnProperty("children")) {
             this.readChildrenJSON(jsonCommands[j].children, node);
         }

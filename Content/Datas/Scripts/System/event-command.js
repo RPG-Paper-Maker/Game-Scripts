@@ -159,6 +159,10 @@ EventCommand.getEventCommand = function(json) {
             return new EventCommandAllowForbidMainMenu(command);
         case EventCommandKind.CallACommonReaction:
             return new EventCommandCallACommonReaction(command);
+        case EventCommandKind.Label:
+            return new EventCommandLabel(command);
+        case EventCommandKind.JumpLabel:
+            return new EventCommandJumpToLabel(command);
         default:
             return null;
     }
