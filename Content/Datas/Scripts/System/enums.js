@@ -84,7 +84,8 @@ let EventCommandKind = {
     AllowForbidMainMenu: 44,
     CallACommonReaction: 45,
     Label: 46,
-    JumpLabel: 47
+    JumpLabel: 47,
+    Comment: 48
 };
 Object.freeze(EventCommandKind);
 

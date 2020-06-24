@@ -52,6 +52,14 @@ SystemObjectReaction.prototype.readChildrenJSON = function(jsonCommands,
     choice = null;
     for (var j = 0, ll = jsonCommands.length; j < ll; j++){
         command = EventCommand.getEventCommand(jsonCommands[j]);
+
+        // Comment
+        if (command instanceof EventCommandComment)
+        {
+            continue;
+        }
+
+        // Add node
         node = commands.add(command);
 
         // If text before choice, make a link

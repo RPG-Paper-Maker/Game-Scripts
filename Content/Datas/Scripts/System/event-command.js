@@ -163,6 +163,8 @@ EventCommand.getEventCommand = function(json) {
             return new EventCommandLabel(command);
         case EventCommandKind.JumpLabel:
             return new EventCommandJumpToLabel(command);
+        case EventCommandKind.Comment:
+            return new EventCommandComment();
         default:
             return null;
     }

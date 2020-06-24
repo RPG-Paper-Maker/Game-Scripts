@@ -3196,3 +3196,13 @@ EventCommandJumpToLabel.prototype.update = function(currentState, object
 {
     return this.label.getValue();
 }
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandComment
+//
+// -------------------------------------------------------
+
+function EventCommandComment() {
+    
+}
