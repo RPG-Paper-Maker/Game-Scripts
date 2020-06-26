@@ -87,7 +87,8 @@ let EventCommandKind = {
     JumpLabel: 47,
     Comment: 48,
     ChangeAStatistic: 49,
-    ChangeASkill: 50
+    ChangeASkill: 50,
+    ChangeName: 51
 };
 Object.freeze(EventCommandKind);
 

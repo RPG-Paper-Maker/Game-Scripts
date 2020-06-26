@@ -3261,9 +3261,9 @@ EventCommandChangeAStatistic.prototype = Object.create(EventCommand.prototype);
 EventCommandChangeAStatistic.prototype.update = function(currentState, object
     , state)
 {
+    let targets, target;
     let stat = RPM.datasGame.battleSystem.statistics[this.statisticID.getValue()];
     let abr = stat.abbreviation;
-    let targets, target;
     switch (this.selection)
     {
     case 0:
@@ -3306,16 +3306,16 @@ EventCommandChangeAStatistic.prototype.update = function(currentState, object
 
 // -------------------------------------------------------
 //
-//  CLASS EventCommandChangeASkill
+//  CLASS EventCommandChangeName
 //
 // -------------------------------------------------------
 
-function EventCommandChangeASkill(command) {
+function EventCommandChangeName(command) {
     EventCommand.call(this, command);
     var iterator = {
         i: 0
     }
-    this.skillID = SystemValue.createValueCommand(command, iterator);
+    this.name = SystemValue.createValueCommand(command, iterator);
 
     // Selection
     this.selection = command[iterator.i++];
@@ -3328,20 +3328,17 @@ function EventCommandChangeASkill(command) {
         this.groupIndex = command[iterator.i++];
         break;
     }
-    
-    // Operation
-    this.operation = command[iterator.i++];
 }
 
-EventCommandChangeASkill.prototype = Object.create(EventCommand.prototype);
+EventCommandChangeName.prototype = Object.create(EventCommand.prototype);
 
 // -------------------------------------------------------
 
-EventCommandChangeASkill.prototype.update = function(currentState, object
+EventCommandChangeName.prototype.update = function(currentState, object
     , state)
 {
-    let skillID = this.skillID.getValue();
-    let targets, target, index;
+    let targets, target;
+    let name = this.name.getValue();
     switch (this.selection)
     {
     case 0:
@@ -3354,22 +3351,8 @@ EventCommandChangeASkill.prototype.update = function(currentState, object
     for (let i = 0, l = targets.length; i < l; i++)
     {
         target = targets[i];
-        index = RPM.indexOfProp(target.sk, "id", skillID);
-        switch (this.operation)
-        {
-        case 0:
-            if (index === -1)
-            {
-                target.sk.push(new GameSkill(skillID));
-            }
-            break;
-        case 1:
-            if (index !== -1)
-            {
-                target.sk.splice(index, 1);
-            }
-            break;
-        }
+        target.character.name = name;
+        target.name = name;
     }
 
     return 1;
