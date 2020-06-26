@@ -85,7 +85,9 @@ let EventCommandKind = {
     CallACommonReaction: 45,
     Label: 46,
     JumpLabel: 47,
-    Comment: 48
+    Comment: 48,
+    ChangeAStatistic: 49,
+    ChangeASkill: 50
 };
 Object.freeze(EventCommandKind);
 

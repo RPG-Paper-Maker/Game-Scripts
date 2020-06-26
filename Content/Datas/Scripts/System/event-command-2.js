@@ -3165,10 +3165,10 @@ EventCommandCallACommonReaction.prototype.drawHUD = function(currentState) {
 
 function EventCommandLabel(command) {
     EventCommand.call(this, command);
-    let i = 0;
-    let k = command[i++];
-    let v = command[i++];
-    this.label = SystemValue.createValue(k, v);
+    let iterator = {
+        i: 0
+    }
+    this.label = SystemValue.createValueCommand(command, iterator);
 }
 
 EventCommandLabel.prototype = Object.create(EventCommand.prototype);
@@ -3181,10 +3181,10 @@ EventCommandLabel.prototype = Object.create(EventCommand.prototype);
 
 function EventCommandJumpToLabel(command) {
     EventCommand.call(this, command);
-    let i = 0;
-    let k = command[i++];
-    let v = command[i++];
-    this.label = SystemValue.createValue(k, v);
+    let iterator = {
+        i: 0
+    }
+    this.label = SystemValue.createValueCommand(command, iterator);
 }
 
 EventCommandJumpToLabel.prototype = Object.create(EventCommand.prototype);
@@ -3205,4 +3205,172 @@ EventCommandJumpToLabel.prototype.update = function(currentState, object
 
 function EventCommandComment() {
     
+}
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandChangeAStatistic
+//
+// -------------------------------------------------------
+
+function EventCommandChangeAStatistic(command) {
+    EventCommand.call(this, command);
+    var iterator = {
+        i: 0
+    }
+    this.statisticID = SystemValue.createValueCommand(command, iterator);
+
+    // Selection
+    this.selection = command[iterator.i++];
+    switch (this.selection)
+    {
+    case 0:
+        this.heInstanceID = SystemValue.createValueCommand(command, iterator);
+        break;
+    case 1:
+        this.groupIndex = command[iterator.i++];
+        break;
+    }
+    
+    // Operation
+    this.operation = command[iterator.i++];
+
+    // Value
+    this.value = command[iterator.i++];
+    switch (this.value)
+    {
+    case 0:
+        this.vNumber = SystemValue.createValueCommand(command, iterator);
+        break;
+    case 1:
+        this.vFormula = SystemValue.createValueCommand(command, iterator);
+        break;
+    case 2:
+        this.vMax = true;
+        break;
+    }
+
+    // Option
+    this.canAboveMax = command[iterator.i++] === RPM.NUM_BOOL_TRUE;
+}
+
+EventCommandChangeAStatistic.prototype = Object.create(EventCommand.prototype);
+
+// -------------------------------------------------------
+
+EventCommandChangeAStatistic.prototype.update = function(currentState, object
+    , state)
+{
+    let stat = RPM.datasGame.battleSystem.statistics[this.statisticID.getValue()];
+    let abr = stat.abbreviation;
+    let targets, target;
+    switch (this.selection)
+    {
+    case 0:
+        targets = [RPM.game.getHeroByInstanceID(this.heInstanceID.getValue())];
+        break;
+    case 1:
+        targets = RPM.game.getTeam(this.groupIndex);
+        break;
+    }
+    for (let i = 0, l = targets.length; i < l; i++)
+    {
+        target = targets[i];
+        switch (this.value)
+        {
+        case 0:
+            target[abr] = RPM.operators_numbers[this.operation](target[abr], 
+                this.vNumber.getValue());
+            break;
+        case 1:
+            target[abr] = RPM.operators_numbers[this.operation](target[abr],
+                RPM.evaluateFormula(this.vFormula.getValue(), target, null));
+            break;
+        case 2:
+            target[abr] = RPM.operators_numbers[this.operation](target[abr], 
+                target[stat.getMaxAbbreviation()]);
+            break;
+        }
+        if (!this.canAboveMax)
+        {
+            let max = target[stat.getMaxAbbreviation()];
+            if (target[abr] > max)
+            {
+                target[abr] = max;
+            }
+        }
+    }
+
+    return 1;
+}
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandChangeASkill
+//
+// -------------------------------------------------------
+
+function EventCommandChangeASkill(command) {
+    EventCommand.call(this, command);
+    var iterator = {
+        i: 0
+    }
+    this.skillID = SystemValue.createValueCommand(command, iterator);
+
+    // Selection
+    this.selection = command[iterator.i++];
+    switch (this.selection)
+    {
+    case 0:
+        this.heInstanceID = SystemValue.createValueCommand(command, iterator);
+        break;
+    case 1:
+        this.groupIndex = command[iterator.i++];
+        break;
+    }
+    
+    // Operation
+    this.operation = command[iterator.i++];
+}
+
+EventCommandChangeASkill.prototype = Object.create(EventCommand.prototype);
+
+// -------------------------------------------------------
+
+EventCommandChangeASkill.prototype.update = function(currentState, object
+    , state)
+{
+    let skillID = this.skillID.getValue();
+    let targets, target, index;
+    switch (this.selection)
+    {
+    case 0:
+        targets = [RPM.game.getHeroByInstanceID(this.heInstanceID.getValue())];
+        break;
+    case 1:
+        targets = RPM.game.getTeam(this.groupIndex);
+        break;
+    }
+    for (let i = 0, l = targets.length; i < l; i++)
+    {
+        target = targets[i];
+        index = RPM.indexOfProp(target.sk, "id", skillID);
+        switch (this.operation)
+        {
+        case 0:
+            if (index === -1)
+            {
+                target.sk.push(new GameSkill(skillID));
+            }
+            break;
+        case 1:
+            if (index !== -1)
+            {
+                target.sk.splice(index, 1);
+            }
+            break;
+        }
+    }
+
+    return 1;
 }

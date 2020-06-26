@@ -1541,3 +1541,18 @@ RPM.isUndefined = function(value) {
 RPM.numToBool = function(num) {
     return num === RPM.NUM_BOOL_TRUE;
 }
+
+// -------------------------------------------------------
+
+RPM.indexOfProp = function(array, attr, value)
+{
+    for (let i = 0, l = array.length; i < l; i ++) 
+    {
+        if (array[i][attr] === value) 
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}
