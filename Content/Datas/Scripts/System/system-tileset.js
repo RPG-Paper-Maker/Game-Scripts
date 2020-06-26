@@ -313,7 +313,7 @@ SystemTileset.prototype = {
                     that.updateTextureAutotile(textureAutotile, texture);
                     texture = new THREE.Texture();
                     context.clearRect(0, 0, Platform.canvasRendering.width,
-                        canvasRendering.height);
+                        Platform.canvasRendering.height);
                     textureAutotile = null;
                     offset = 0;
                 }
