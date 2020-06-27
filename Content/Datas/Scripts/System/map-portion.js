@@ -723,7 +723,7 @@ MapPortion.prototype = {
                         result = obj3D.updateGeometry(geometry, position, count);
                         obj.c = result[0];
                         this.updateCollision(this.boundingBoxesObjects3D, result[1],
-                            position, true);
+                            position, datas.shapeKind === ShapeKind.Custom);
                     }
                 }
             }
