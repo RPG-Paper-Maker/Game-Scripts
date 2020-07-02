@@ -224,10 +224,15 @@ SceneGame.prototype = {
     /** Draw HUD.
     */
     drawHUD: function() {
-        var i, l;
+        let i, l;
 
-        for (i = 0, l = this.reactionInterpreters.length; i < l; i++){
+        for (i = 0, l = this.reactionInterpreters.length; i < l; i++)
+        {
             this.reactionInterpreters[i].drawHUD();
+        }
+        for (i = 0, l = this.parallelCommands.length; i < l; i++)
+        {
+            this.parallelCommands[i].drawHUD();
         }
     }
 }

@@ -364,6 +364,8 @@ MapObject.prototype = {
             this.frequency = this.currentState === null ? SystemValue
                 .createNumberDouble(0) : RPM.datasGame.system.frequencies[this
                 .currentState.frequencyID];
+            this.width = 0;
+            this.height = 0;
         }
 
         // Add to the scene
@@ -885,6 +887,10 @@ MapObject.prototype = {
                 if (this.currentState.setWithCamera)
                     this.updateOrientation();
             }
+            this.upPosition = new THREE.Vector3(this.position.x, this.position.y 
+                + (this.height * RPM.SQUARE_SIZE), this.position.z);
+            this.halfPosition = new THREE.Vector3(this.position.x, this.position
+                .y + (this.height * RPM.SQUARE_SIZE / 2), this.position.z);
 
             this.updateAngle(angle);
 

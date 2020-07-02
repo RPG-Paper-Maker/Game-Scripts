@@ -175,6 +175,8 @@ EventCommand.getEventCommand = function(json) {
             return new EventCommandChangeEquipment(command);
         case EventCommandKind.ModifyCurrency:
             return new EventCommandModifyCurrency(command);
+        case EventCommandKind.DisplayAnAnimation:
+            return new EventCommandDisplayAnAnimation(command);
         default:
             return null;
     }

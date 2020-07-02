@@ -3463,3 +3463,79 @@ EventCommandModifyCurrency.prototype.update = function(currentState, object
 
     return 1;
 }
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandDisplayAnAnimation
+//
+// -------------------------------------------------------
+
+function EventCommandDisplayAnAnimation(command) {
+    EventCommand.call(this, command);
+    var iterator = {
+        i: 0
+    };
+    this.objectID = SystemValue.createValueCommand(command, iterator);
+    this.animationID = SystemValue.createValueCommand(command, iterator);
+    this.isWaitEnd = RPM.numToBool(command[iterator.i++]);
+    this.isDirectNode = !this.isWaitEnd;
+    this.parallel = !this.isWaitEnd;
+}
+
+EventCommandDisplayAnAnimation.prototype = Object.create(EventCommand.prototype);
+
+
+EventCommandDisplayAnAnimation.prototype.initialize = function() {
+    let animation = RPM.datasGame.animations.list[this.animationID.getValue()];
+    return {
+        parallel: this.isWaitEnd,
+        animation: animation,
+        picture: animation.createPicture(),
+        frame: 1,
+        frameMax: animation.frames.length - 1,
+        object: null,
+        waitingObject: false
+    }
+}
+
+// -------------------------------------------------------
+
+EventCommandDisplayAnAnimation.prototype.update = function(currentState, object
+    , state)
+{
+    if (currentState.parallel) {
+        if (!currentState.waitingObject) {
+            let objectID = this.objectID.getValue();
+            MapObject.updateObjectWithID(object, objectID, this, function(
+                moved)
+            {
+                currentState.object = moved;
+            });
+            currentState.waitingObject = true;
+        }
+        if (currentState.object !== null) {
+            currentState.object.topPosition = RPM.toScreenPosition(currentState
+                .object.upPosition, RPM.currentMap.camera.threeCamera);
+            currentState.object.midPosition = RPM.toScreenPosition(currentState
+                .object.halfPosition, RPM.currentMap.camera.threeCamera);
+            currentState.object.botPosition = RPM.toScreenPosition(currentState
+                .object.position, RPM.currentMap.camera.threeCamera);
+            currentState.animation.playSounds(currentState.frame, 
+                AnimationEffectConditionKind.None);
+            currentState.frame++;
+            return currentState.frame > currentState.frameMax ? 1 : 0;
+        }
+    }
+
+    return 1;
+}
+
+// -------------------------------------------------------
+
+EventCommandDisplayAnAnimation.prototype.drawHUD = function(currentState)
+{
+    if (currentState.object !== null) {
+        currentState.animation.draw(currentState.picture, currentState.frame, 
+            currentState.object)
+    }
+}
