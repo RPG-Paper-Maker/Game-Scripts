@@ -3433,3 +3433,33 @@ EventCommandChangeEquipment.prototype.update = function(currentState, object
 
     return 1;
 }
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandModifyCurrency
+//
+// -------------------------------------------------------
+
+function EventCommandModifyCurrency(command) {
+    EventCommand.call(this, command);
+    var iterator = {
+        i: 0
+    };
+    this.currencyID = SystemValue.createValueCommand(command, iterator);
+    this.operation = command[iterator.i++];
+    this.value = SystemValue.createValueCommand(command, iterator);
+}
+
+EventCommandModifyCurrency.prototype = Object.create(EventCommand.prototype);
+
+// -------------------------------------------------------
+
+EventCommandModifyCurrency.prototype.update = function(currentState, object
+    , state)
+{
+    let currencyID = this.currencyID.getValue();
+    RPM.game.currencies[currencyID] = RPM.operators_numbers[this.operation](RPM
+        .game.currencies[currencyID], this.value.getValue());
+
+    return 1;
+}

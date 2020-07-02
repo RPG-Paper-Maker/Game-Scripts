@@ -171,8 +171,10 @@ EventCommand.getEventCommand = function(json) {
             return new EventCommandChangeASkill(command);
         case EventCommandKind.ChangeName:
             return new EventCommandChangeName(command);
-            case EventCommandKind.ChangeEquipment:
+        case EventCommandKind.ChangeEquipment:
             return new EventCommandChangeEquipment(command);
+        case EventCommandKind.ModifyCurrency:
+            return new EventCommandModifyCurrency(command);
         default:
             return null;
     }

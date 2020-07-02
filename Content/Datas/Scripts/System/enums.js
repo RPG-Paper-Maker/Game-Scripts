@@ -89,7 +89,8 @@ let EventCommandKind = {
     ChangeAStatistic: 49,
     ChangeASkill: 50,
     ChangeName: 51,
-    ChangeEquipment: 52
+    ChangeEquipment: 52,
+    ModifyCurrency: 53
 };
 Object.freeze(EventCommandKind);
 
