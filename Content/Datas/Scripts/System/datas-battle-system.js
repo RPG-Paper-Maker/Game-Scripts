@@ -93,11 +93,16 @@ DatasBattleSystem.prototype = {
             l = jsonEquipments.length;
             this.equipments = new Array(l+1);
             this.equipmentsOrder = new Array(l);
+            this.maxEquipmentID = 1;
             for (i = 0; i < l; i++){
                 var jsonEquipment = jsonEquipments[i];
                 id = jsonEquipment.id;
                 this.equipments[id] = jsonEquipment.names[1];
                 this.equipmentsOrder[i] = id;
+                if (id > this.maxEquipmentID)
+                {
+                    this.maxEquipmentID = id;
+                }
             }
 
             // Weapons kind

@@ -3357,3 +3357,79 @@ EventCommandChangeName.prototype.update = function(currentState, object
 
     return 1;
 }
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandChangeEquipment
+//
+// -------------------------------------------------------
+
+function EventCommandChangeEquipment(command) {
+    EventCommand.call(this, command);
+    var iterator = {
+        i: 0
+    };
+    this.equipmentID = SystemValue.createValueCommand(command, iterator);
+    this.isWeapon = RPM.numToBool(command[iterator.i++]);
+    this.weaponArmorID = SystemValue.createValueCommand(command, iterator);
+
+    // Selection
+    this.selection = command[iterator.i++];
+    switch (this.selection)
+    {
+    case 0:
+        this.heInstanceID = SystemValue.createValueCommand(command, iterator);
+        break;
+    case 1:
+        this.groupIndex = command[iterator.i++];
+        break;
+    }
+
+    this.isApplyInInventory = RPM.numToBool(command[iterator.i++]);
+}
+
+EventCommandChangeEquipment.prototype = Object.create(EventCommand.prototype);
+
+// -------------------------------------------------------
+
+EventCommandChangeEquipment.prototype.update = function(currentState, object
+    , state)
+{
+    let equipmentID = this.equipmentID.getValue();
+    let kind = this.isWeapon ? ItemKind.Weapon : ItemKind.Armor;
+    let weaponArmorID = this.weaponArmorID.getValue();
+    let targets, target, item;
+    switch (this.selection)
+    {
+    case 0:
+        targets = [RPM.game.getHeroByInstanceID(this.heInstanceID.getValue())];
+        break;
+    case 1:
+        targets = RPM.game.getTeam(this.groupIndex);
+        break;
+    }
+    for (let i = 0, l = targets.length; i < l; i++)
+    {
+        target = targets[i];
+        item = GameItem.findItem(kind, weaponArmorID);
+        if (item === null)
+        {
+            if (this.isApplyInInventory)
+            {
+                break; // Don't apply because not in inventory
+            }
+            item = new GameItem(kind, weaponArmorID, 0);
+        }
+        if (target.equip[equipmentID] !== null)
+        {
+            target.equip[equipmentID].add(1);
+        }
+        target.equip[equipmentID] = item;
+        if (this.isApplyInInventory)
+        {
+            item.remove(1);
+        }
+    }
+
+    return 1;
+}

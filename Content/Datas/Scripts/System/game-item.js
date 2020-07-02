@@ -30,6 +30,20 @@ function GameItem(kind, id, nb){
     this.nb = nb;
 }
 
+GameItem.findItem = function(kind, id)
+{
+    let item;
+    for (let i = 0, l = RPM.game.items.length; i < l; i++)
+    {
+        item = RPM.game.items[i];
+        if (item.k === kind && item.id === id)
+        {
+            return item;
+        }
+    }
+    return null;
+};
+
 GameItem.prototype = {
 
     remove: function(nb) {

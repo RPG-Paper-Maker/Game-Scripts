@@ -50,9 +50,9 @@ function GamePlayer(kind, id, instanceId, skills) {
         }
 
         // Equip
-        l = RPM.datasGame.battleSystem.equipments.length;
-        this.equip = new Array(l);
-        for (i = 1; i < l; i++) {
+        l = RPM.datasGame.battleSystem.maxEquipmentID;
+        this.equip = new Array(l + 1);
+        for (i = 1; i <= l; i++) {
             this.equip[i] = null;
         }
 
@@ -144,10 +144,14 @@ GamePlayer.prototype = {
     *   @returns {Object}
     */
     getSaveEquip: function(){
-        var i, l = this.equip.length - 1;
+        var i, l = this.equip.length;
         var list = new Array(l);
-        for (i = 0; i < l; i++){
-            list[i] = RPM.game.items.indexOf(this.equip[i+1]);
+        for (i = 1; i < l; i++)
+        {
+            if (this.equip[i] !== null)
+            {
+                list[i] = [this.equip[i].k, this.equip[i].id, this.equip[i].nb];
+            }
         }
         return list;
     },
@@ -416,10 +420,9 @@ GamePlayer.prototype = {
 
     /** Read the JSON associated to the character and items.
     *   @param {object} json Json object describing the character.
-    *   @param {Object} items Json object describing the items.
     */
-    readJSON: function(json, items){
-
+    readJSON: function(json)
+    {
         // Stats
         var jsonStats = json.stats;
         var i, l = RPM.datasGame.battleSystem.statistics.length;
@@ -434,11 +437,23 @@ GamePlayer.prototype = {
         }
 
         // Equip
-        l = RPM.datasGame.battleSystem.equipments.length;
-        this.equip = new Array(l);
-        for (i = 1; i < l; i++){
-            var item = items[json.equip[i-1]];
-            if (typeof item === 'undefined') item = null;
+        l = RPM.datasGame.battleSystem.maxEquipmentID;
+        this.equip = new Array(l + 1);
+        let equip, item;
+        for (i = 1; i <= l; i++)
+        {
+            equip = json.equip[i];
+            if (equip)
+            {
+                item = GameItem.findItem(equip[0], equip[1]);
+                if (item === null)
+                {
+                    item = new GameItem(equip[0], equip[1], equip[2]);
+                }
+            } else
+            {
+                item = null;
+            }
             this.equip[i] = item;
         }
         this.updateEquipmentStats();

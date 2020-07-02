@@ -88,7 +88,8 @@ let EventCommandKind = {
     Comment: 48,
     ChangeAStatistic: 49,
     ChangeASkill: 50,
-    ChangeName: 51
+    ChangeName: 51,
+    ChangeEquipment: 52
 };
 Object.freeze(EventCommandKind);
 
