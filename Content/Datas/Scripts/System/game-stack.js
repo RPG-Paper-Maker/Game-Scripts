@@ -184,12 +184,25 @@ GameStack.prototype = {
     */
     drawHUD: function() {
         if (!this.isEmpty()) {
-            var i, l;
+            var i, l, v;
 
+            // Display < 0 index image command
+            for (i = 0, l = RPM.displayedPictures.length; i < l; i++) 
+            {
+                v = RPM.displayedPictures[i];
+                if (v[0] >= 0)
+                {
+                    break;
+                }
+                v[1].draw();
+            }
+
+            // Draw system HUD
             this.top().drawHUD();
 
-            // Display image command
-            for (i = 0, l = RPM.displayedPictures.length; i < l; i++) {
+            // Display >= 0 index image command
+            for (; i < l; i++) 
+            {
                 RPM.displayedPictures[i][1].draw();
             }
         }
