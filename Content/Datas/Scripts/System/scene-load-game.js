@@ -65,6 +65,7 @@ SceneLoadGame.prototype = {
                 RPM.gameStack.pop()
                 RPM.gameStack.replace(new SceneMap(RPM.game.currentMapId));
             } else {
+                RPM.game = null;
                 RPM.datasGame.system.soundImpossible.playSound();
             }
         }
