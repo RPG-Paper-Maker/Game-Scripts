@@ -1065,6 +1065,9 @@ EventCommandIf.prototype = {
         case 7:
             result = RPM.evaluateScript("return " + this.script.getValue());
             break;
+        case 8:
+            result = RPM.escaped;
+            break;
         default:
             break;
         }

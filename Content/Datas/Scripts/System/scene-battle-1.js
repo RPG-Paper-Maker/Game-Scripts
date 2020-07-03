@@ -366,6 +366,7 @@ SceneBattle.prototype.onCommandSelected = function(key) {
         this.transitionEnded = false;
         this.time = new Date().getTime();
         this.winning = true;
+        RPM.escaped = true;
         RPM.songsManager.initializeProgressionMusic(SystemPlaySong
             .currentPlayingMusic.volume, 0, 0, SceneBattle
             .TIME_LINEAR_MUSIC_END);

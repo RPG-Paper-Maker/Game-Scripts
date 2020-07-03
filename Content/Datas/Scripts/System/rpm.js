@@ -169,6 +169,7 @@ RPM.filesToLoad = 0;
 RPM.loadedFiles = 0;
 RPM.fontSize = 13;
 RPM.fontName = "sans-serif";
+RPM.escaped = false;
 RPM.blockingHero = false;
 RPM.game = null;
 RPM.DIALOG_ERROR = null;

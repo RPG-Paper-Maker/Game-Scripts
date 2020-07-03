@@ -19,6 +19,7 @@
 // -------------------------------------------------------
 
 SceneBattle.prototype.initializeStep0 = function() {
+    RPM.escaped = false;
     this.winning = false;
     this.kindSelection = CharacterKind.Hero;
     this.selectedUserIndex = 0;
