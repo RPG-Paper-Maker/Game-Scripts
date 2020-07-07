@@ -33,7 +33,7 @@ function SystemValue(){
 SystemValue.createValue = function(k, v) {
     var value = new SystemValue();
     value.kind = k;
-    switch (this.kind) {
+    switch (k) {
     case PrimitiveValueKind.Message:
         value.value = "" + v;
         break;
@@ -115,7 +115,7 @@ SystemValue.createKeyBoard = function(k){
 *   @returns {SystemValue}
 */
 SystemValue.createSwitch = function(b){
-    return SystemValue.createValue(PrimitiveValueKind.Switch, b);
+    return SystemValue.createValue(PrimitiveValueKind.Switch, RPM.boolToNum(b));
 }
 
 SystemValue.createVariable = function(id) {
@@ -220,7 +220,7 @@ SystemValue.prototype = {
     /** Get the value.
     *   @returns {number}
     */
-    getValue: function(s) {
+    getValue: function() {
         switch (this.kind) {
         case PrimitiveValueKind.Variable:
             return RPM.game.variables[this.value];
@@ -228,8 +228,6 @@ SystemValue.prototype = {
             return RPM.currentParameters[this.value].getValue();
         case PrimitiveValueKind.Property:
             return RPM.currentObject.properties[this.value];
-        case PrimitiveValueKind.Switch:
-            return s ? (this.value ? true : false) : this.value;
         default:
             return this.value;
         }

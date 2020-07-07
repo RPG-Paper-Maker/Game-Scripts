@@ -113,6 +113,7 @@ RPM.DIALOG_PADDING_BOX = [30, 50, 30, 50];
 RPM.SMALL_SLOT_PADDING = [10, 5, 10, 5];
 RPM.ONE_SECOND_MILLI = 1000;
 RPM.NUM_BOOL_TRUE = 1;
+RPM.NUM_BOOL_FALSE = 0;
 RPM.COEF_TEX = 0.2;
 RPM.STRING_RGBA = "rgba";
 RPM.STRING_PARENTHESIS_LEFT = "(";
@@ -1541,6 +1542,12 @@ RPM.isUndefined = function(value) {
 
 RPM.numToBool = function(num) {
     return num === RPM.NUM_BOOL_TRUE;
+}
+
+// -------------------------------------------------------
+
+RPM.boolToNum = function(b) {
+    return b ? RPM.NUM_BOOL_TRUE : RPM.NUM_BOOL_FALSE;
 }
 
 // -------------------------------------------------------
