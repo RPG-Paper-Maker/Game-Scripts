@@ -47,17 +47,35 @@ MapInfos.prototype = {
         this.backgroundSound.readJSON(json.bgs);
         this.cameraProperties = RPM.datasGame.system.cameraProperties[SystemValue
             .readOrDefaultDatabase(json.cp, 1).getValue()];
-        this.backgroundColorID = new SystemValue();
-        this.backgroundColorID.read(json.sky);
+        this.isBackgroundColor = json.isky;
+        if (this.isBackgroundColor)
+        {
+            this.backgroundColorID = new SystemValue();
+            this.backgroundColorID.read(json.sky);
+        }
         this.updateBackgroundColor();
+        this.isBackgroundImage = json.isi;
+        if (this.isBackgroundImage)
+        {
+            this.backgroundImageID = json.ipid;
+            this.updateBackgroundImage();
+        }
         var startupReactions = new SystemObject();
         startupReactions.readJSON(json.so);
         this.startupObject = new MapObject(startupReactions);
         this.startupObject.changeState();
     },
 
-    updateBackgroundColor: function() {
-        this.backgroundColor = RPM.datasGame.system.colors[this.backgroundColorID
-            .getValue()];
+    updateBackgroundColor: function() 
+    {
+        this.backgroundColor = RPM.datasGame.system.colors[this
+            .isBackgroundColor ? this.backgroundColorID.getValue() : 1];
+    },
+
+    updateBackgroundImage: function() 
+    {
+        RPM.currentMap.scene.background = RPM.textureLoader.load(RPM.datasGame
+            .pictures.get(PictureKind.Pictures, this.backgroundImageID)
+            .getPath(PictureKind.Pictures)[0]);
     }
 }
