@@ -213,7 +213,7 @@ let PictureKind = {
     Objects3D: 12,
     Pictures: 13,
     Animations: 14,
-    SkyBoxes: 15
+    Skyboxes: 15
 };
 Object.freeze(PictureKind);
 

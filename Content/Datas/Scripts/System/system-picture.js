@@ -45,7 +45,6 @@ SystemPicture.getFolder = function(kind, isBR){
 *   @returns {string}
 */
 SystemPicture.getLocalFolder = function(kind){
-
     switch(kind){
     case PictureKind.Bars:
         return RPM.PATH_BARS;
@@ -55,8 +54,8 @@ SystemPicture.getLocalFolder = function(kind){
         return RPM.PATH_AUTOTILES;
     case PictureKind.Characters:
         return RPM.PATH_CHARACTERS;
-    case PictureKind.Reliefs:
-        return RPM.PATH_RELIEFS;
+        case PictureKind.Mountains:
+        return RPM.PATH_MOUNTAINS;
     case PictureKind.Tilesets:
         return RPM.PATH_TILESETS;
     case PictureKind.Walls:
@@ -71,12 +70,12 @@ SystemPicture.getLocalFolder = function(kind){
         return RPM.PATH_TITLE_SCREEN;
     case PictureKind.Objects3D:
         return RPM.PATH_OBJECTS_3D;
-    case PictureKind.Mountains:
-        return RPM.PATH_MOUNTAINS;
     case PictureKind.Pictures:
         return RPM.PATH_HUD_PICTURES;
     case PictureKind.Animations:
         return RPM.PATH_ANIMATIONS;
+    case PictureKind.Skyboxes:
+        return RPM.PATH_SKYBOXES;
     }
 
     return "";

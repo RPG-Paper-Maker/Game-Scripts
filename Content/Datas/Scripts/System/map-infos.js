@@ -48,18 +48,22 @@ MapInfos.prototype = {
         this.cameraProperties = RPM.datasGame.system.cameraProperties[SystemValue
             .readOrDefaultDatabase(json.cp, 1).getValue()];
         this.isBackgroundColor = json.isky;
+        this.isBackgroundImage = json.isi;
         if (this.isBackgroundColor)
         {
             this.backgroundColorID = new SystemValue();
             this.backgroundColorID.read(json.sky);
-        }
-        this.updateBackgroundColor();
-        this.isBackgroundImage = json.isi;
-        if (this.isBackgroundImage)
+        } else if (this.isBackgroundImage)
         {
             this.backgroundImageID = json.ipid;
             this.updateBackgroundImage();
+        } else  
+        {
+            this.backgroundSkyboxID = SystemValue.readOrDefaultDatabase(json
+                .sbid);
+            this.updateBackgroundSkybox();
         }
+        this.updateBackgroundColor();
         var startupReactions = new SystemObject();
         startupReactions.readJSON(json.so);
         this.startupObject = new MapObject(startupReactions);
@@ -74,8 +78,21 @@ MapInfos.prototype = {
 
     updateBackgroundImage: function() 
     {
-        RPM.currentMap.scene.background = RPM.textureLoader.load(RPM.datasGame
-            .pictures.get(PictureKind.Pictures, this.backgroundImageID)
-            .getPath(PictureKind.Pictures)[0]);
+        this.updateBackground(RPM.textureLoader.load(RPM.datasGame.pictures.get(
+            PictureKind.Pictures, this.backgroundImageID).getPath(PictureKind
+            .Pictures)[0]));
+    },
+
+    updateBackgroundSkybox: function() 
+    {
+        this.updateBackground(RPM.datasGame.system.skyboxes[this
+            .backgroundSkyboxID.getValue()].createTexture());
+    },
+
+    updateBackground: function(texture)
+    {
+        texture.magFilter = THREE.NearestFilter;
+        texture.minFilter = THREE.NearestFilter;
+        RPM.currentMap.scene.background = texture;
     }
 }

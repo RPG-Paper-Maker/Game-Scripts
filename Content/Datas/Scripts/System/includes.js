@@ -68,6 +68,7 @@ document.write(`<script src="Content/Datas/Scripts/System/system-element.js"></s
 document.write(`<script src="Content/Datas/Scripts/System/system-weapon-armor-kind.js"></script>`);
 document.write(`<script src="Content/Datas/Scripts/System/system-keyboard.js"></script>`);
 document.write(`<script src="Content/Datas/Scripts/System/system-currency.js"></script>`);
+document.write(`<script src="Content/Datas/Scripts/System/system-skybox.js"></script>`);
 document.write(`<script src="Content/Datas/Scripts/System/system-loot.js"></script>`);
 document.write(`<script src="Content/Datas/Scripts/System/system-progression-table.js"></script>`);
 document.write(`<script src="Content/Datas/Scripts/System/system-battle-map.js"></script>`);

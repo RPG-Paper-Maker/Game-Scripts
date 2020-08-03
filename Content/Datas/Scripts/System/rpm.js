@@ -69,12 +69,12 @@ RPM.PATH_HUD_PICTURES = RPM.PATH_HUD + "Pictures";
 RPM.PATH_ANIMATIONS = RPM.PATH_HUD + "Animations";
 RPM.PATH_AUTOTILES = RPM.PATH_TEXTURES2D + "Autotiles";
 RPM.PATH_CHARACTERS = RPM.PATH_TEXTURES2D + "Characters";
-RPM.PATH_RELIEFS = RPM.PATH_TEXTURES2D + "Reliefs";
 RPM.PATH_TILESETS = RPM.PATH_TEXTURES2D + "Tilesets";
 RPM.PATH_WALLS = RPM.PATH_TEXTURES2D + "Walls";
 RPM.PATH_BATTLERS = RPM.PATH_TEXTURES2D + "Battlers";
 RPM.PATH_OBJECTS_3D = RPM.PATH_TEXTURES2D + "Objects3D";
 RPM.PATH_MOUNTAINS = RPM.PATH_TEXTURES2D + "Mountains";
+RPM.PATH_SKYBOXES = RPM.PATH_TEXTURES2D + "SkyBoxes";
 RPM.PATH_SONGS = "/Content/Songs/";
 RPM.PATH_MUSICS = RPM.PATH_SONGS + "Musics";
 RPM.PATH_BACKGROUND_SOUNDS = RPM.PATH_SONGS + "BackgroundSounds";
@@ -154,7 +154,6 @@ RPM.COLOR_RED = SystemColor.createColor(216, 33, 17);
 RPM.COLOR_WHITE = SystemColor.createColor(255, 255, 255);
 RPM.COLOR_BLACK = SystemColor.createColor(0, 0, 0);
 
-
 // -------------------------------------------------------
 //  OTHERS
 // -------------------------------------------------------
@@ -190,6 +189,7 @@ RPM.BB_BOX_DETECTION = MapPortion.createBox();
 RPM.BB_BOX_DEFAULT_DETECTION = MapPortion.createBox();
 RPM.BB_ORIENTED_BOX = MapPortion.createOrientedBox();
 RPM.OBJ_LOADER = new THREE.OBJLoader();
+RPM.CUBE_TEXTURE_LOADER = new THREE.CubeTextureLoader();
 
 RPM.operators_compare =
 [

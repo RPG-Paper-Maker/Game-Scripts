@@ -146,7 +146,7 @@ DatasSystem.prototype = {
                 id = jsonElement.id;
                 element = new SystemCameraProperties();
                 element.readJSON(jsonElement);
-                this.cameraProperties[jsonElement.id] = element;
+                this.cameraProperties[id] = element;
             }
 
             // Detections
@@ -158,7 +158,7 @@ DatasSystem.prototype = {
                 id = jsonElement.id;
                 element = new SystemDetection();
                 element.readJSON(jsonElement);
-                this.detections[jsonElement.id] = element;
+                this.detections[id] = element;
             }
 
             // Speeds
@@ -169,7 +169,7 @@ DatasSystem.prototype = {
                 jsonElement = jsonList[i];
                 id = jsonElement.id;
                 element = SystemValue.readOrDefaultNumberDouble(jsonElement.v, 1);
-                this.speeds[jsonElement.id] = element;
+                this.speeds[id] = element;
             }
             // Frequencies
             jsonList = json.f;
@@ -179,7 +179,7 @@ DatasSystem.prototype = {
                 jsonElement = jsonList[i];
                 id = jsonElement.id;
                 element = SystemValue.readOrDefaultNumberDouble(jsonElement.v, 1);
-                this.frequencies[jsonElement.id] = element;
+                this.frequencies[id] = element;
             }
 
             // Font sizes
@@ -190,7 +190,7 @@ DatasSystem.prototype = {
                 jsonElement = jsonList[i];
                 id = jsonElement.id;
                 element = SystemValue.readOrDefaultNumber(jsonElement.s, 0);
-                this.fontSizes[jsonElement.id] = element;
+                this.fontSizes[id] = element;
             }
 
             // Font names
@@ -202,7 +202,19 @@ DatasSystem.prototype = {
                 id = jsonElement.id;
                 element = SystemValue.readOrDefaultMessage(jsonElement.f, RPM
                     .DEFAULT_FONT);
-                this.fontNames[jsonElement.id] = element;
+                this.fontNames[id] = element;
+            }
+
+            // Skyboxes
+            jsonList = json.sb;
+            l = jsonList.length;
+            this.skyboxes = new Array(l + 1);
+            for (i = 0; i < l; i++) {
+                jsonElement = jsonList[i];
+                id = jsonElement.id;
+                element = new SystemSkybox();
+                element.readJSON(jsonElement);
+                this.skyboxes[id] = element;
             }
 
             // read song now that BR path is loaded
