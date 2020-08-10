@@ -2766,31 +2766,23 @@ EventCommandTitleScreen.prototype.update = function(currentState, object,
 // -------------------------------------------------------
 
 function EventCommandChangeScreenTone(command) {
-    var i, k, v, checked;
-
-    i = 0;
-    k = command[i++];
-    v = command[i++];
-    this.r = SystemValue.createValue(k, v);
-    k = command[i++];
-    v = command[i++];
-    this.g = SystemValue.createValue(k, v);
-    k = command[i++];
-    v = command[i++];
-    this.b = SystemValue.createValue(k, v);
-    k = command[i++];
-    v = command[i++];
-    this.grey = SystemValue.createValue(k, v);
-    if (RPM.numToBool(command[i++])) {
-        this.subColor = RPM.numToBool(command[i++]);
-        k = command[i++];
-        v = command[i++];
-        this.colorID = SystemValue.createValue(k, v);
+    if (!command)
+    {
+        return;
     }
-    this.waitEnd = RPM.numToBool(command[i++]);
-    k = command[i++];
-    v = command[i++];
-    this.time = SystemValue.createValue(k, v);
+    var iterator = {
+        i: 0
+    };
+    this.r = SystemValue.createValueCommand(command, iterator);
+    this.g = SystemValue.createValueCommand(command, iterator);
+    this.b = SystemValue.createValueCommand(command, iterator);
+    this.grey = SystemValue.createValueCommand(command, iterator);
+    if (RPM.numToBool(command[iterator.i++])) {
+        this.subColor = RPM.numToBool(command[iterator.i++]);
+        this.colorID = SystemValue.createValueCommand(command, iterator);
+    }
+    this.waitEnd = RPM.numToBool(command[iterator.i++]);
+    this.time = SystemValue.createValueCommand(command, iterator);
 
     this.isDirectNode = true;
     this.parallel = !this.waitEnd;
@@ -2829,7 +2821,7 @@ EventCommandChangeScreenTone.prototype.update = function(currentState, object,
 {
     if (currentState.parallel) {
         // Updating the time left
-        var timeRate, dif;
+        let timeRate, dif;
 
         if (currentState.time === 0) {
             timeRate = 1;
@@ -3538,4 +3530,181 @@ EventCommandDisplayAnAnimation.prototype.drawHUD = function(currentState)
         currentState.animation.draw(currentState.picture, currentState.frame, 
             currentState.object)
     }
+}
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandShakeScreen
+//
+// -------------------------------------------------------
+
+function EventCommandShakeScreen(command) {
+    EventCommandChangeScreenTone.call(this, command);
+    var iterator = {
+        i: 0
+    };
+    this.offset = SystemValue.createValueCommand(command, iterator);
+    this.shakeNumber = SystemValue.createValueCommand(command, iterator);
+    this.isWaitEnd = RPM.numToBool(command[iterator.i++]);
+    this.time = SystemValue.createValueCommand(command, iterator);
+
+    this.isDirectNode = !this.isWaitEnd;
+    this.parallel = !this.isWaitEnd;
+}
+
+EventCommandShakeScreen.prototype = Object.create(EventCommand.prototype);
+
+
+EventCommandShakeScreen.prototype.initialize = function() {
+    let t = this.time.getValue();
+    let time = t * 1000;
+    let shakeNumber = this.shakeNumber.getValue();
+    // Should be pair to have perfect cycles
+    let totalShakes = shakeNumber * t;
+    if (totalShakes % 2 !== 0)
+    {
+        let floor = Math.floor(totalShakes / 2) * 2;
+        let ceil = floor + 2;
+        shakeNumber = ((floor !== 0 && (totalShakes - floor) < (ceil - totalShakes)) ? floor : ceil) 
+            / t; 
+    }
+    let shakeTime = 1 / (shakeNumber * 2) * 1000;
+    let offset = this.offset.getValue();
+
+    return {
+        parallel: this.isWaitEnd,
+        offset: offset,
+        shakeTime: shakeTime,
+        shakeTimeLeft: shakeTime,
+        currentOffset: 0,
+        beginPosX: RPM.currentMap.camera.targetOffset.x,
+        beginPosZ: RPM.currentMap.camera.targetOffset.z,
+        finalDifPos: -offset,
+        time: time,
+        timeLeft: time,
+        left: true
+    }
+}
+
+// -------------------------------------------------------
+
+EventCommandShakeScreen.prototype.update = function(currentState, object
+    , state)
+{
+    if (currentState.parallel) {
+        let timeRate, dif;
+
+        if (currentState.time === 0) {
+            timeRate = 1;
+        } else 
+        {
+            dif = RPM.elapsedTime;
+            currentState.timeLeft -= RPM.elapsedTime;
+            if (currentState.timeLeft < 0) {
+                dif += currentState.timeLeft;
+                currentState.timeLeft = 0;
+            }
+            currentState.shakeTimeLeft -= RPM.elapsedTime;
+            if (currentState.shakeTimeLeft <= 0) {
+                dif += currentState.shakeTimeLeft;
+                currentState.shakeTimeLeft = currentState.shakeTime + 
+                    currentState.shakeTimeLeft;
+                currentState.currentOffset++;
+                currentState.finalDifPos = (Math.ceil(currentState.currentOffset 
+                    / 2) % 2 === 0) ? -currentState.offset : currentState.offset;
+            }
+            timeRate = dif / currentState.shakeTime;
+        }
+
+        let value = timeRate * currentState.finalDifPos;
+
+        RPM.currentMap.camera.targetOffset.x += value * -Math.sin(RPM.currentMap
+            .camera.horizontalAngle * Math.PI / 180.0);
+        RPM.currentMap.camera.targetOffset.z += value * Math.cos(RPM.currentMap
+            .camera.horizontalAngle * Math.PI / 180.0);
+
+        if (currentState.timeLeft === 0)
+        {
+            RPM.currentMap.camera.targetOffset.x = currentState.beginPosX;
+            RPM.currentMap.camera.targetOffset.z = currentState.beginPosZ;
+            return 1;
+        }
+        return 0;
+    }
+
+    return 1;
+}
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandFlashScreen
+//
+// -------------------------------------------------------
+
+function EventCommandFlashScreen(command) {
+    EventCommand.call(this, command);
+    var iterator = {
+        i: 0
+    }
+    this.colorID = SystemValue.createValueCommand(command, iterator);
+    this.isWaitEnd = RPM.numToBool(command[iterator.i++]);
+    this.time = SystemValue.createValueCommand(command, iterator);
+    this.isDirectNode = !this.isWaitEnd;
+    this.parallel = !this.isWaitEnd;
+}
+
+EventCommandFlashScreen.prototype = Object.create(EventCommand.prototype);
+
+EventCommandFlashScreen.prototype.initialize = function() {
+    let time = this.time.getValue() * 1000;
+    let color = RPM.datasGame.system.colors[this.colorID.getValue()];
+
+    return {
+        parallel: this.isWaitEnd,
+        time: time,
+        timeLeft: time,
+        color: color.getHex(),
+        finalDifA: -color.alpha,
+        a: color.alpha
+    }
+}
+
+// -------------------------------------------------------
+
+EventCommandFlashScreen.prototype.update = function(currentState, object
+    , state)
+{
+    if (currentState.parallel)
+    {
+        let timeRate, dif;
+
+        if (currentState.time === 0) {
+            timeRate = 1;
+        } else {
+            dif = RPM.elapsedTime;
+            currentState.timeLeft -= RPM.elapsedTime;
+            if (currentState.timeLeft < 0) {
+                dif += currentState.timeLeft;
+                currentState.timeLeft = 0;
+            }
+            timeRate = dif / currentState.time;
+        }
+
+        // Update values
+        currentState.a = currentState.a + (timeRate * currentState.finalDifA);
+        RPM.requestPaintHUD = true;
+
+        return currentState.timeLeft === 0 ? 1 : 0;
+    }
+
+    return 1;
+}
+
+// -------------------------------------------------------
+
+EventCommandFlashScreen.prototype.drawHUD = function(currentState) {
+    Platform.ctx.fillStyle = currentState.color;
+    Platform.ctx.globalAlpha = currentState.a;
+    Platform.ctx.fillRect(0, 0, RPM.canvasWidth, RPM.canvasHeight);
+    Platform.ctx.globalAlpha = 1.0;
 }

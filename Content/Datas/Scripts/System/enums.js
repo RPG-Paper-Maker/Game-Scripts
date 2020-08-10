@@ -92,7 +92,8 @@ let EventCommandKind = {
     ChangeEquipment: 52,
     ModifyCurrency: 53,
     DisplayAnAnimation: 54,
-    IfEscaped: 55
+    ShakeScreen: 55,
+    FlashScreen: 56
 };
 Object.freeze(EventCommandKind);
 

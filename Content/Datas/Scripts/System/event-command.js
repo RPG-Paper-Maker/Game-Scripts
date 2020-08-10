@@ -177,6 +177,10 @@ EventCommand.getEventCommand = function(json) {
             return new EventCommandModifyCurrency(command);
         case EventCommandKind.DisplayAnAnimation:
             return new EventCommandDisplayAnAnimation(command);
+        case EventCommandKind.ShakeScreen:
+            return new EventCommandShakeScreen(command);
+        case EventCommandKind.FlashScreen:
+            return new EventCommandFlashScreen(command);
         default:
             return null;
     }
