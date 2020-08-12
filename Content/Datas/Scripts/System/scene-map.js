@@ -45,7 +45,6 @@ function SceneMap(id, isBattleMap, minimal)
         }
         this.scene = new Physijs.Scene();
         this.readMapInfos();
-        this.currentPortion = RPM.getPortion(this.getHeroPosition());
         this.collisions = new Array;
 
         // Adding meshes for collision
@@ -114,6 +113,7 @@ SceneMap.prototype.readMapInfos = function(){
             this.camera = new Camera(this.mapInfos.cameraProperties, RPM.game
                 .hero);
             this.camera.update();
+            this.currentPortion = RPM.getPortion(this.camera.threeCamera.position);
         }
         this.orientation = this.camera.getMapOrientation();
 
@@ -154,7 +154,7 @@ SceneMap.prototype.initializePortions = function(){
 // -------------------------------------------------------
 
 SceneMap.prototype.loadPortions = function(noNewPortion) {
-    this.currentPortion = RPM.getPortion(this.getHeroPosition());
+    this.currentPortion = RPM.getPortion(this.camera.threeCamera.position);
 
     var limit = this.getMapPortionLimit();
     if (!noNewPortion) {
@@ -500,7 +500,7 @@ SceneMap.prototype.isInMap = function(position) {
 // -------------------------------------------------------
 
 SceneMap.prototype.updateMovingPortions = function() {
-    var newPortion = RPM.getPortion(this.getHeroPosition());
+    var newPortion = RPM.getPortion(this.camera.threeCamera.position);
 
     if (!RPM.arePortionEquals(newPortion, this.currentPortion)){
         this.updateMovingPortionsEastWest(newPortion);
@@ -651,7 +651,8 @@ SceneMap.prototype.update = function() {
     this.camera.threeCamera.getWorldDirection(vector);
     var angle = Math.atan2(vector.x,vector.z) + (180 * Math.PI / 180.0);
 
-    if (!this.isBattleMap) {
+    if (!this.isBattleMap) 
+    {
         this.mapInfos.startupObject.update();
 
         // Update the objects
@@ -708,17 +709,19 @@ SceneMap.prototype.updatePortions = function(base, callback) {
 // -------------------------------------------------------
 
 SceneMap.prototype.onKeyPressed = function(key){
+    if (this.callBackAfterLoading === null)
+    {
+        // Send keyPressEvent to all the objects
+        if (!RPM.blockingHero){
+            EventCommandSendEvent.sendEvent(null, 0, 1, true, 3,
+                                            [null,
+                                            SystemValue.createNumber(key),
+                                            SystemValue.createSwitch(false),
+                                            SystemValue.createSwitch(false)], true);
+        }
 
-    // Send keyPressEvent to all the objects
-    if (!RPM.blockingHero){
-        EventCommandSendEvent.sendEvent(null, 0, 1, true, 3,
-                                        [null,
-                                        SystemValue.createNumber(key),
-                                        SystemValue.createSwitch(false),
-                                        SystemValue.createSwitch(false)], true);
+        SceneGame.prototype.onKeyPressed.call(this, key);
     }
-
-    SceneGame.prototype.onKeyPressed.call(this, key);
 }
 
 // -------------------------------------------------------
@@ -730,31 +733,38 @@ SceneMap.prototype.onKeyReleased = function(key){
 // -------------------------------------------------------
 
 SceneMap.prototype.onKeyPressedRepeat = function(key){
-    if (!RPM.blockingHero){
-        EventCommandSendEvent.sendEvent(null, 0, 1, true, 3,
-                                        [null,
-                                        SystemValue.createNumber(key),
-                                        SystemValue.createSwitch(true),
-                                        SystemValue.createSwitch(true)], true);
+    if (this.callBackAfterLoading === null)
+    {
+        if (!RPM.blockingHero){
+            EventCommandSendEvent.sendEvent(null, 0, 1, true, 3,
+                                            [null,
+                                            SystemValue.createNumber(key),
+                                            SystemValue.createSwitch(true),
+                                            SystemValue.createSwitch(true)], true);
+        }
+    
+        var block = SceneGame.prototype.onKeyPressedRepeat.call(this, key);
+    
+        return block;
     }
-
-    var block = SceneGame.prototype.onKeyPressedRepeat.call(this, key);
-
-    return block;
+    return true;
 }
 
 // -------------------------------------------------------
 
 SceneMap.prototype.onKeyPressedAndRepeat = function(key){
-    if (!RPM.blockingHero){
-        EventCommandSendEvent.sendEvent(null, 0, 1, true, 3,
-                                        [null,
-                                        SystemValue.createNumber(key),
-                                        SystemValue.createSwitch(true),
-                                        SystemValue.createSwitch(false)], true);
+    if (this.callBackAfterLoading === null)
+    {
+        if (!RPM.blockingHero){
+            EventCommandSendEvent.sendEvent(null, 0, 1, true, 3,
+                                            [null,
+                                            SystemValue.createNumber(key),
+                                            SystemValue.createSwitch(true),
+                                            SystemValue.createSwitch(false)], true);
+        }
+    
+        SceneGame.prototype.onKeyPressedAndRepeat.call(this, key);
     }
-
-    SceneGame.prototype.onKeyPressedAndRepeat.call(this, key);
 }
 
 // -------------------------------------------------------
