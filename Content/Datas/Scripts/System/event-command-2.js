@@ -283,15 +283,16 @@ EventCommandIfLose.prototype = {
 *   @property {number} operationKind Index of operation.
 *   @param {JSON} command Direct JSON command to parse.
 */
-function EventCommandChangeState(command){
-    var i, k, v;
-
-    // Parsing
-    i = 0;
-    k = command[i++];
-    v = command[i++];
-    this.idState = SystemValue.createValue(k, v);
-    this.operationKind = command[i++];
+function EventCommandChangeState(command)
+{
+    EventCommand.call(this, command);
+    var iterator = {
+        i: 0
+    }
+    this.mapID = SystemValue.createValueCommand(command, iterator);
+    this.objectID = SystemValue.createValueCommand(command, iterator);
+    this.idState = SystemValue.createValueCommand(command, iterator);
+    this.operationKind = command[iterator.i++];
 
     this.isDirectNode = true;
     this.parallel = false;
@@ -380,7 +381,15 @@ EventCommandChangeState.removeStateSpecial = function(states, state) {
 
 EventCommandChangeState.prototype = {
 
-    initialize: function(){ return null; },
+    initialize: function()
+    { 
+        return {
+            map: null,
+            object: null,
+            mapID: this.mapID.getValue(),
+            objectID: this.objectID.getValue()
+        }; 
+    },
 
     /** Change the state of the object and finish.
     *   @param {Object} currentState The current state of the event.
@@ -388,63 +397,106 @@ EventCommandChangeState.prototype = {
     *   @param {number} state The state ID.
     *   @returns {number} The number of node to pass.
     */
-    update: function(currentState, object, state) {
-        if (object.isHero || object.isStartup) {
-            var states = object.isHero ? RPM.game.heroStates : RPM.game
-                .startupStates[RPM.currentMap.id];
-            switch (this.operationKind) {
-            case 0: // Replacing
-                if (object.isHero) {
-                    RPM.game.heroStates = [];
-                } else {
-                    RPM.game.startupStates[RPM.currentMap.id] = [];
+    update: function(currentState, object, state) 
+    {
+        let objectID = currentState.objectID === -1 ? object.system.id : 
+            currentState.objectID;
+        if (!currentState.waitingObject) {
+            if (currentState.map === null)
+            {
+                if (currentState.mapID === -1 || currentState.mapID === RPM
+                    .currentMap.id)
+                {
+                    currentState.map = RPM.currentMap;
+                } else
+                {
+                    currentState.map = new SceneMap(currentState.mapID, false, 
+                        true);
+                    currentState.map.readMapInfos();
+                    currentState.map.initializeObjects();
                 }
-                states = object.isHero ? RPM.game.heroStates : RPM.game.startupStates
-                    [RPM.currentMap.id];
-                EventCommandChangeState.addStateSpecial(states, this.idState
-                    .getValue());
-                break;
-            case 1: // Adding
-                EventCommandChangeState.addStateSpecial(states, this.idState
-                    .getValue());
-                break;
-            case 2: // Deleting
-                EventCommandChangeState.removeStateSpecial(states, this.idState
-                    .getValue());
-                break;
             }
-        } else {
-            var portion = SceneMap.getGlobalPortion(RPM.currentMap.allObjects[object
-                .system.id]);
-            var portionDatas = RPM.game.mapsDatas[RPM.currentMap.id][portion[0]][portion[
-                1]][portion[2]];
-            var indexState = portionDatas.si.indexOf(object.system.id);
-            if (indexState === -1){
-                indexState = portionDatas.si.length;
-                portionDatas.si.push(object.system.id);
-                portionDatas.s.push([1]);
-            }
-
-            switch (this.operationKind) {
-            case 0: // Replacing
-                EventCommandChangeState.removeAll(portionDatas, indexState);
-                EventCommandChangeState.addState(portionDatas, indexState,
-                                                 this.idState.getValue());
-                break;
-            case 1: // Adding
-                EventCommandChangeState.addState(portionDatas, indexState,
-                                                 this.idState.getValue());
-                break;
-            case 2: // Deleting
-                EventCommandChangeState.removeState(portionDatas, indexState,
-                                                    this.idState.getValue());
-                break;
+            if (currentState.map.allObjects && currentState.map
+                .portionsObjectsUpdated)
+            {
+                if (currentState.map === RPM.currentMap)
+                {
+                    MapObject.updateObjectWithID(object, objectID, 
+                        this, function(moved)
+                    {
+                        currentState.object = moved;
+                    });
+                } else
+                {
+                    currentState.object = {};
+                }
+                currentState.waitingObject = true;
             }
         }
+        if (currentState.waitingObject && currentState.object !== null) 
+        {
+            if (currentState.object.isHero || currentState.object.isStartup) 
+            {
+                var states = currentState.object.isHero ? RPM.game.heroStates : 
+                    RPM.game.startupStates[RPM.currentMap.id];
+                switch (this.operationKind) {
+                case 0: // Replacing
+                    if (currentState.object.isHero) {
+                        RPM.game.heroStates = [];
+                    } else {
+                        RPM.game.startupStates[RPM.currentMap.id] = [];
+                    }
+                    states = currentState.object.isHero ? RPM.game.heroStates : RPM.game
+                        .startupStates[RPM.currentMap.id];
+                    EventCommandChangeState.addStateSpecial(states, this.idState
+                        .getValue());
+                    break;
+                case 1: // Adding
+                    EventCommandChangeState.addStateSpecial(states, this.idState
+                        .getValue());
+                    break;
+                case 2: // Deleting
+                    EventCommandChangeState.removeStateSpecial(states, this
+                        .idState.getValue());
+                    break;
+                }
+            } else {
+                var portion = SceneMap.getGlobalPortion(currentState.map
+                    .allObjects[objectID]);
+                var portionDatas = RPM.game.mapsDatas[currentState.map.id][
+                    portion[0]][portion[1]][portion[2]];
+                var indexState = portionDatas.si.indexOf(objectID);
+                if (indexState === -1){
+                    indexState = portionDatas.si.length;
+                    portionDatas.si.push(objectID);
+                    portionDatas.s.push([1]);
+                }
+    
+                switch (this.operationKind) {
+                case 0: // Replacing
+                    EventCommandChangeState.removeAll(portionDatas, indexState);
+                    EventCommandChangeState.addState(portionDatas, indexState,
+                                                        this.idState.getValue());
+                    break;
+                case 1: // Adding
+                    EventCommandChangeState.addState(portionDatas, indexState,
+                                                        this.idState.getValue());
+                    break;
+                case 2: // Deleting
+                    EventCommandChangeState.removeState(portionDatas, indexState,
+                                                        this.idState.getValue());
+                    break;
+                }
+            }
+    
+            if (currentState.map === RPM.currentMap)
+            {
+                currentState.object.changeState();
+            }
+            return 1;
+        }
 
-        object.changeState();
-
-        return 1;
+        return 0;
     },
 
     // -------------------------------------------------------

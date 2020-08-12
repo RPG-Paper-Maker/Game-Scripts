@@ -74,12 +74,14 @@ MapObject.FRAME_DURATION = 150;
 *   @param {function} callback The function to call after having found the
 *   object.
 */
-MapObject.updateObjectWithID = function(object, objectID, base, callback) {
+MapObject.updateObjectWithID = function(object, objectID, base, callback) 
+{
     if (object.isHero && objectID === -1) {
         callback.call(base, RPM.game.hero);
     }
 
-    switch (objectID) {
+    switch (objectID) 
+    {
     case -1: // This object
         callback.call(base, object);
         break;
@@ -96,7 +98,8 @@ MapObject.updateObjectWithID = function(object, objectID, base, callback) {
 
 // -------------------------------------------------------
 
-MapObject.getObjectAndPortion = function(object, objectID, base, callback) {
+MapObject.getObjectAndPortion = function(object, objectID, base, callback) 
+{
     var i, l, globalPortion, localPortion, moved, mapsDatas, movedObjects,
         mapPortion, objects;
 
@@ -112,7 +115,6 @@ MapObject.getObjectAndPortion = function(object, objectID, base, callback) {
     }
     globalPortion = SceneMap.getGlobalPortion(RPM.currentMap.allObjects[
         objectID]);
-    localPortion = RPM.currentMap.getLocalPortion(globalPortion);
 
     // First search in the moved objects
     mapsDatas = RPM.game.mapsDatas[RPM.currentMap.id][globalPortion[0]][
@@ -131,6 +133,7 @@ MapObject.getObjectAndPortion = function(object, objectID, base, callback) {
     }
 
     // If not moving, search directly in portion
+    localPortion = RPM.currentMap.getLocalPortion(globalPortion);
     if (RPM.currentMap.isInPortion(localPortion)) {
         mapPortion = RPM.currentMap.getMapPortionByPortion(localPortion);
         objects = mapPortion.objectsList;

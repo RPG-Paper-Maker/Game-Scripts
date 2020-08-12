@@ -29,30 +29,33 @@
 *   of the map.
 *   @param {number} id The ID of the map.
 */
-function SceneMap(id, isBattleMap){
+function SceneMap(id, isBattleMap, minimal)
+{
     SceneGame.call(this);
 
-    RPM.currentMap = this;
     this.id = id;
     this.isBattleMap = isBattleMap;
-
-    if (!isBattleMap) {
-        RPM.game.currentMapId = id;
-    }
-
     this.mapName = RPM.generateMapName(id);
-    this.scene = new Physijs.Scene();
-    this.readMapInfos();
-    this.currentPortion = RPM.getPortion(this.getHeroPosition());
-    this.collisions = new Array;
 
-    // Adding meshes for collision
-    if (RPM.datasGame.system.showBB) {
-        this.scene.add(RPM.BB_BOX);
-        this.scene.add(RPM.BB_ORIENTED_BOX);
-    }
+    if (!minimal)
+    {
+        RPM.currentMap = this;
+        if (!isBattleMap) {
+            RPM.game.currentMapId = id;
+        }
+        this.scene = new Physijs.Scene();
+        this.readMapInfos();
+        this.currentPortion = RPM.getPortion(this.getHeroPosition());
+        this.collisions = new Array;
 
-    this.callBackAfterLoading = this.loadTextures;
+        // Adding meshes for collision
+        if (RPM.datasGame.system.showBB) {
+            this.scene.add(RPM.BB_BOX);
+            this.scene.add(RPM.BB_ORIENTED_BOX);
+        }
+
+        this.callBackAfterLoading = this.loadTextures;
+    } 
 }
 
 /** Get the portion file name.
@@ -118,6 +121,9 @@ SceneMap.prototype.readMapInfos = function(){
         if (this.isBattleMap) {
             this.initialize();
         }
+
+        this.initializeObjects();
+        this.initializePortionsObjects();
     });
 }
 
@@ -244,10 +250,8 @@ SceneMap.prototype.initializeObjects = function(){
             jsonObject = json[i];
             this.allObjects[jsonObject.id] = jsonObject.p;
         }
-        this.initializePortionsObjects();
         this.mapInfos.startupObject.initializeProperties();
     });
-    this.callBackAfterLoading = this.initializePortions;
 }
 
 // -------------------------------------------------------
@@ -297,6 +301,7 @@ SceneMap.prototype.initializePortionsObjects = function(){
     }
 
     RPM.game.mapsDatas[this.id] = objectsPortions;
+    this.portionsObjectsUpdated = true;
 }
 
 // -------------------------------------------------------
@@ -385,7 +390,7 @@ SceneMap.prototype.loadCollisions = function() {
         }
     }
 
-    this.callBackAfterLoading = this.initializeObjects;
+    this.callBackAfterLoading = this.initializePortions;
 }
 
 // -------------------------------------------------------
