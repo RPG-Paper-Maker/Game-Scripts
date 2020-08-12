@@ -843,7 +843,10 @@ MapPortion.prototype = {
 
         // Objects
         for (i = 0, l = this.objectsList.length; i < l; i++) {
-            RPM.currentMap.scene.remove(this.objectsList[i].mesh);
+            if (this.objectsList[i].mesh !== null)
+            {
+                RPM.currentMap.scene.remove(this.objectsList[i].mesh);
+            }
         }
 
         // Remove moved objects from the scene
