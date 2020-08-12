@@ -463,8 +463,8 @@ EventCommandChangeState.prototype = {
             } else {
                 var portion = SceneMap.getGlobalPortion(currentState.map
                     .allObjects[objectID]);
-                var portionDatas = RPM.game.mapsDatas[currentState.map.id][
-                    portion[0]][portion[1]][portion[2]];
+                var portionDatas = RPM.game.getPotionsDatas(currentState.map.id,
+                    portion[0],portion[1],portion[2]);
                 var indexState = portionDatas.si.indexOf(objectID);
                 if (indexState === -1){
                     indexState = portionDatas.si.length;
@@ -615,7 +615,7 @@ EventCommandSendEvent.sendEvent = function(sender, targetKind, idTarget,
             RPM.currentMap.updatePortions(this, function(x, y, z, i, j, k) {
                 var a, l, objects, object, mapPortion;
 
-                objects = RPM.game.mapsDatas[RPM.currentMap.id][x][y][z];
+                objects = RPM.game.getPotionsDatas(RPM.currentMap.id, x, y, z);
 
                 // Moved objects
                 for (a = 0, l = objects.min.length; a < l; a++) {
@@ -665,7 +665,7 @@ EventCommandSendEvent.sendEventDetection = function(
     var objects;
 
     RPM.currentMap.updatePortions(this, function(x, y, z, i, j, k) {
-        objects = RPM.game.mapsDatas[RPM.currentMap.id][x][y][z];
+        objects = RPM.game.getPotionsDatas(RPM.currentMap.id, x, y, z);
 
         // Moved objects
         EventCommandSendEvent.sendEventObjects(objects.min, objects,
@@ -2062,8 +2062,8 @@ EventCommandChangeProperty.prototype = {
         } else {
             portion = SceneMap.getGlobalPortion(RPM.currentMap.allObjects[object
                 .system.id]);
-            portionDatas = RPM.game.mapsDatas[RPM.currentMap.id][portion[0]][portion[
-                1]][portion[2]];
+            portionDatas = RPM.game.getPotionsDatas(RPM.currentMap.id, portion[0
+                ], portion[1], portion[2]);
             indexProp = portionDatas.pi.indexOf(object.system.id);
             if (indexProp === -1) {
                 props = [];
@@ -2960,10 +2960,10 @@ EventCommandRemoveObjectFromMap.prototype.update = function(currentState, object
                     datas.m.splice(i, 1);
                     index = datas.min.indexOf(removed);
                     if (index === -1) {
-                        datas = RPM.game.mapsDatas[RPM.currentMap.id][Math.floor(
-                            removed.position.x / RPM.PORTION_SIZE)][Math.floor(
-                            removed.position.y / RPM.PORTION_SIZE)][Math.floor(
-                            removed.position.z / RPM.PORTION_SIZE)];
+                        datas = RPM.game.getPotionsDatas(RPM.currentMap.id, Math
+                            .floor(removed.position.x / RPM.PORTION_SIZE), Math
+                            .floor(removed.position.y / RPM.PORTION_SIZE), Math
+                            .floor(removed.position.z / RPM.PORTION_SIZE));
                         datas.mout.splice(datas.mout.indexOf(removed), 1);
                     } else {
                         datas.min.splice(index, 1);

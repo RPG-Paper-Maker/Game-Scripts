@@ -126,6 +126,13 @@ Game.prototype = {
 
     // -------------------------------------------------------
 
+    getPotionsDatas: function(id, i, j, k)
+    {
+        return RPM.game.mapsDatas[id][i][j < 0 ? 0 : 1][Math.abs(j)][k];
+    },
+
+    // -------------------------------------------------------
+
     /** Read a game file.
     *   @param {number} slot The number of the slot to load.
     *   @param {Object} json json Json object describing the object.
@@ -255,34 +262,38 @@ Game.prototype = {
     */
     getCompressedMapsDatas: function() {
         var obj = {}, i, j, k, l = Object.keys(this.mapsDatas).length, w, h, id,
-            datas, inf, objPortion;
+            datas, inf, objPortion, jp;
         for (id in this.mapsDatas) {
-            objPortion = new Array(l);
             l = this.mapsDatas[id].length;
-            h = this.mapsDatas[id][0].length;
-            w = this.mapsDatas[id][0][0].length;
+            objPortion = new Array(l);
             for (i = 0; i < l; i++) {
-                objPortion[i] = new Array(h);
-                for (j = 0; j < h; j++) {
-                    objPortion[i][j] = new Array(w);
-                    for (k = 0; k < w; k++) {
-                        inf = {};
-                        datas = this.mapsDatas[id][i][j][k];
-                        if (datas) {
-                            if (datas.si && datas.si.length) {
-                                inf.si = datas.si;
+                objPortion[i] = new Array(2);
+                for (jp = 0; jp < 2; jp++)
+                {
+                    h = this.mapsDatas[id][i][jp].length;
+                    objPortion[i][jp] = new Array(h);
+                    for (j = (jp === 0 ? 1 : 0); j < h; j++) {
+                        w = this.mapsDatas[id][i][jp][j].length;
+                        objPortion[i][jp][j] = new Array(w);
+                        for (k = 0; k < w; k++) {
+                            inf = {};
+                            datas = this.mapsDatas[id][i][jp][j][k];
+                            if (datas) {
+                                if (datas.si && datas.si.length) {
+                                    inf.si = datas.si;
+                                }
+                                if (datas.s && datas.s.length) {
+                                    inf.s = datas.s;
+                                }
+                                if (datas.pi && datas.pi.length) {
+                                    inf.pi = datas.pi;
+                                }
+                                if (datas.p && datas.p.length) {
+                                    inf.p = datas.p;
+                                }
                             }
-                            if (datas.s && datas.s.length) {
-                                inf.s = datas.s;
-                            }
-                            if (datas.pi && datas.pi.length) {
-                                inf.pi = datas.pi;
-                            }
-                            if (datas.p && datas.p.length) {
-                                inf.p = datas.p;
-                            }
+                            objPortion[i][jp][j][k] = datas ? inf : null;
                         }
-                        objPortion[i][j][k] = datas ? inf : null;
                     }
                 }
             }

@@ -266,15 +266,23 @@ SceneMap.prototype.initializePortionsObjects = function(){
     var w = Math.ceil(this.mapInfos.width / RPM.PORTION_SIZE);
     var d = Math.ceil(this.mapInfos.depth / RPM.PORTION_SIZE);
     var h = Math.ceil(this.mapInfos.height / RPM.PORTION_SIZE);
+    let jp, jabs;
 
     var objectsPortions = new Array(l);
-    for (var i = 0; i < l; i++){
-        objectsPortions[i] = new Array(h);
-        for (var j = -d; j < h; j++){
-            objectsPortions[i][j] = new Array(w);
-            for (var k = 0; k < w; k++){
-                datas = (mapsDatas) ? mapsDatas[i][j][k] : null;
-                objectsPortions[i][j][k] =
+    for (var i = 0; i < l; i++)
+    {
+        objectsPortions[i] = new Array(2);
+        objectsPortions[i][0] = new Array(d); // Depth
+        objectsPortions[i][1] = new Array(h); // Height
+        for (var j = -d; j < h; j++)
+        {
+            jp = j < 0 ? 0 : 1;
+            jabs = Math.abs(j);
+            objectsPortions[i][jp][jabs] = new Array(w);
+            for (var k = 0; k < w; k++)
+            {
+                datas = (mapsDatas) ? mapsDatas[i][jp][jabs][k] : null;
+                objectsPortions[i][jp][jabs][k] =
                 {
                     min: datas && datas.min ? datas.min : [],
                         // All the moved objects that are in this
@@ -309,7 +317,7 @@ SceneMap.prototype.initializePortionsObjects = function(){
 /** Get the objects at a specific portion.
 */
 SceneMap.prototype.getObjectsAtPortion = function(i, j, k){
-    return RPM.game.mapsDatas[this.id][i][j][k];
+    return RPM.game.getPotionsDatas(this.id, i, j, k);
 }
 
 
@@ -607,10 +615,13 @@ SceneMap.prototype.closeMap = function() {
     var h = Math.ceil(this.mapInfos.height / RPM.PORTION_SIZE);
 
     var objectsPortions = RPM.game.mapsDatas[this.id];
-    for (i = 0; i < l; i++){
-        for (j = -d; j < h; j++){
-            for (k = 0; k < w; k++){
-                var portion = objectsPortions[i][j][k];
+    for (i = 0; i < l; i++)
+    {
+        for (j = -d; j < h; j++)
+        {
+            for (k = 0; k < w; k++)
+            {
+                var portion = objectsPortions[i][j < 0 ? 0 : 1][Math.abs(j)][k];
                 portion.min = [];
                 portion.mout = [];
                 portion.m = [];
@@ -646,9 +657,8 @@ SceneMap.prototype.update = function() {
         // Update the objects
         RPM.game.hero.update(angle);
         this.updatePortions(this, function(x, y, z, i, j, k) {
-            var objects = RPM.game.mapsDatas[this.id][x][y][z];
+            var objects = RPM.game.getPotionsDatas(this.id, x, y, z);
             var movedObjects = objects.min;
-            var movedObject;
             var p, l;
             for (p = 0, l = movedObjects.length; p < l; p++)
                 movedObjects[p].update(angle);

@@ -117,8 +117,8 @@ MapObject.getObjectAndPortion = function(object, objectID, base, callback)
         objectID]);
 
     // First search in the moved objects
-    mapsDatas = RPM.game.mapsDatas[RPM.currentMap.id][globalPortion[0]][
-        globalPortion[1]][globalPortion[2]];
+    mapsDatas = RPM.game.getPotionsDatas(RPM.currentMap.id, globalPortion[0],
+        globalPortion[1], globalPortion[2]);
     movedObjects = mapsDatas.m;
     moved = null;
     for (i = 0, l = movedObjects.length; i < l; i++) {
@@ -197,8 +197,8 @@ MapObject.prototype = {
                     "because we are trying to fix this issue.");
             }
             portion = SceneMap.getGlobalPortion(obj);
-            portionDatas = RPM.game.mapsDatas[RPM.currentMap.id][portion[0]][portion[1
-                ]][portion[2]];
+            portionDatas = RPM.game.getPotionsDatas(RPM.currentMap.id, portion[0
+                ], portion[1], portion[2]);
             indexProp = portionDatas.pi.indexOf(this.system.id);
             mapProp = (indexProp === -1) ? [] : portionDatas.p[indexProp];
         }
@@ -287,8 +287,8 @@ MapObject.prototype = {
                     "because we are trying to fix this issue.");
             }
             var portion = SceneMap.getGlobalPortion(obj);
-            var portionDatas = RPM.game.mapsDatas[RPM.currentMap.id]
-                    [portion[0]][portion[1]][portion[2]];
+            var portionDatas = RPM.game.getPotionsDatas(RPM.currentMap.id,
+                portion[0], portion[1], portion[2]);
             var indexState = portionDatas.si.indexOf(this.system.id);
             this.states = (indexState === -1) ? [this.system.states.length > 0 ?
                 this.system.states[0].id : 1] : portionDatas.s[indexState];
@@ -708,8 +708,8 @@ MapObject.prototype = {
 
         if (!this.isHero){
             previousPortion = RPM.getPortion(this.position);
-            objects = RPM.game.mapsDatas[RPM.currentMap.id]
-                   [previousPortion[0]][previousPortion[1]][previousPortion[2]];
+            objects = RPM.game.getPotionsDatas(RPM.currentMap.id,
+                previousPortion[0], previousPortion[1], previousPortion[2]);
 
             // Remove from the moved objects in or out of the portion
             movedObjects = objects.mout;
@@ -724,8 +724,8 @@ MapObject.prototype = {
             // Add to moved objects of the original portion if not done yet
             originalPortion = SceneMap.getGlobalPortion(
                         RPM.currentMap.allObjects[this.system.id]);
-            objects = RPM.game.mapsDatas[RPM.currentMap.id]
-                   [originalPortion[0]][originalPortion[1]][originalPortion[2]];
+            objects = RPM.game.getPotionsDatas(RPM.currentMap.id,
+                originalPortion[0], originalPortion[1], originalPortion[2]);
             movedObjects = objects.m;
             if (movedObjects.indexOf(this) === -1) {
                 movedObjects.push(this);
@@ -746,8 +746,8 @@ MapObject.prototype = {
         afterPortion = RPM.getPortion(this.position);
 
         if (!this.isHero){
-            objects = RPM.game.mapsDatas[RPM.currentMap.id]
-                    [afterPortion[0]][afterPortion[1]][afterPortion[2]];
+            objects = RPM.game.getPotionsDatas(RPM.currentMap.id,
+                afterPortion[0], afterPortion[1], afterPortion[2]);
             originalPortion = SceneMap.getGlobalPortion(
                         RPM.currentMap.allObjects[this.system.id]);
 

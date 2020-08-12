@@ -813,8 +813,8 @@ MapPortion.prototype = {
     */
     cleanAll: function() {
         var i, l, datas, objects, object, index;
-        datas = RPM.game.mapsDatas[RPM.currentMap.id][this.realX][this.realY][this
-            .realZ];
+        datas = RPM.game.getPotionsDatas(RPM.currentMap.id, this.realX, this
+            .realY, this.realZ);
 
         // Static stuff
         RPM.currentMap.scene.remove(this.staticFloorsMesh);
