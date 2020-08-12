@@ -1274,23 +1274,24 @@ EventCommandOpenSavesMenu.prototype = {
 *   @param {JSON} command Direct JSON command to parse.
 */
 function EventCommandModifyInventory(command) {
-    var i, k, v;
-
-    i = 0;
-    this.itemKind = command[i++];
-    this.itemId = command[i++];
-    this.operation = command[i++];
-    k = command[i++];
-    v = command[i++];
-    this.value = SystemValue.createValue(k, v);
-
+    EventCommand.call(this, command);
+    var iterator = {
+        i: 0
+    }
+    this.itemKind = command[iterator.i++];
+    this.itemID = SystemValue.createValueCommand(command, iterator);
+    this.operation = command[iterator.i++];
+    this.value = SystemValue.createValueCommand(command, iterator);
     this.isDirectNode = true;
     this.parallel = false;
 }
 
 EventCommandModifyInventory.prototype = {
 
-    initialize: function(){ return null; },
+    initialize: function()
+    { 
+        return null;
+    },
 
     // -------------------------------------------------------
 
@@ -1301,7 +1302,8 @@ EventCommandModifyInventory.prototype = {
     *   @returns {number} The number of node to pass.
     */
     update: function(currentState, object, state) {
-        var item = new GameItem(this.itemKind, this.itemId, this.value.getValue());
+        let item = new GameItem(this.itemKind, this.itemID.getValue(), this
+            .value.getValue());
 
         // Doing the coresponding operation
         switch(this.operation){
