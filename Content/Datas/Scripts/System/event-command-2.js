@@ -1581,16 +1581,17 @@ EventCommandMoveCamera.prototype = {
                                this.v.getValue());
         var finalDistance = operation(RPM.currentMap.camera.distance,
                                       this.distance.getValue());
-
+                                      
         return {
             parallel: this.isWaitEnd,
-            finalDifPosition: new THREE.Vector3(finalX, finalY, finalZ).sub(
-                                  RPM.currentMap.camera.threeCamera.position),
+            finalPosition: new THREE.Vector3(finalX, finalY, finalZ),
             finalDifH: finalH - RPM.currentMap.camera.horizontalAngle,
             finalDifV: finalV - RPM.currentMap.camera.verticalAngle,
             finalDistance: finalDistance - RPM.currentMap.camera.distance,
             time: time,
-            timeLeft: time
+            timeLeft: time,
+            targetID: this.targetID === null ? null : this.targetID.getValue(),
+            target: null
         }
     },
 
@@ -1602,58 +1603,113 @@ EventCommandMoveCamera.prototype = {
     *   @param {number} state The state ID.
     *   @returns {number} The number of node to pass.
     */
-    update: function(currentState, object, state){
+    update: function(currentState, object, state)
+    {
 
-        if (currentState.parallel) {
-
-            // Updating the time left
-            var timeRate, dif;
-
-            if (currentState.time === 0)
-                timeRate = 1;
-            else {
-                dif = RPM.elapsedTime;
-                currentState.timeLeft -= RPM.elapsedTime;
-                if (currentState.timeLeft < 0) {
-                    dif += currentState.timeLeft;
-                    currentState.timeLeft = 0;
+        if (currentState.parallel) 
+        {
+            if (!currentState.waitingObject) {
+                if (currentState.targetID === null)
+                {
+                    currentState.target = false;
+                } else
+                {
+                    MapObject.updateObjectWithID(object, currentState.targetID, 
+                        this, function(target)
+                    {
+                        currentState.target = target;
+                    });
                 }
-                timeRate = dif / currentState.time;
+                currentState.waitingObject = true;
             }
+            if (currentState.target !== null) 
+            {
+                if (!currentState.editedTarget)
+                {
+                    if (currentState.target)
+                    {
+                        RPM.currentMap.camera.targetOffset.add(RPM.currentMap
+                            .camera.target.position.clone().sub(currentState
+                            .target.position));
+                        let dif = currentState.target.position.clone().sub(RPM
+                            .currentMap.camera.target.position);
+                        currentState.finalPosition.add(dif);
+                        RPM.currentMap.camera.target = currentState.target;
+                        if (!this.moveTargetOffset)
+                        {
+                            currentState.moveChangeTargetDif = currentState
+                                .finalPosition.clone().sub(dif).sub(RPM
+                                .currentMap.camera.threeCamera.position);
+                        }
+                    }
+                    currentState.finalDifPosition = currentState.finalPosition
+                        .sub(RPM.currentMap.camera.threeCamera.position);
+                    currentState.editedTarget = true;
+                }
 
-            // Move
-            var positionOffset;
-            positionOffset = new THREE.Vector3(
-                timeRate * currentState.finalDifPosition.x,
-                timeRate * currentState.finalDifPosition.y,
-                timeRate * currentState.finalDifPosition.z
-            );
-            RPM.currentMap.camera.threeCamera.position.add(positionOffset);
-            if (this.moveTargetOffset)
-                RPM.currentMap.camera.targetOffset.add(positionOffset);
-            else {
-                RPM.currentMap.camera.updateAngles();
-                RPM.currentMap.camera.updateDistance();
+                // Updating the time left
+                let timeRate, dif;
+                if (currentState.time === 0)
+                {
+                    timeRate = 1;
+                } else 
+                {
+                    dif = RPM.elapsedTime;
+                    currentState.timeLeft -= RPM.elapsedTime;
+                    if (currentState.timeLeft < 0) 
+                    {
+                        dif += currentState.timeLeft;
+                        currentState.timeLeft = 0;
+                    }
+                    timeRate = dif / currentState.time;
+                }
+
+                // Move
+                var positionOffset;
+                positionOffset = new THREE.Vector3(
+                    timeRate * currentState.finalDifPosition.x,
+                    timeRate * currentState.finalDifPosition.y,
+                    timeRate * currentState.finalDifPosition.z
+                );
+                RPM.currentMap.camera.threeCamera.position.add(positionOffset);
+                if (this.moveTargetOffset)
+                    RPM.currentMap.camera.targetOffset.add(positionOffset);
+                else {
+                    if (currentState.moveChangeTargetDif)
+                    {
+                        
+                        positionOffset = new THREE.Vector3(
+                            timeRate * (currentState.finalDifPosition.x - 
+                                currentState.moveChangeTargetDif.x),
+                            timeRate * (currentState.finalDifPosition.y - 
+                                currentState.moveChangeTargetDif.y),
+                            timeRate * (currentState.finalDifPosition.z - 
+                                currentState.moveChangeTargetDif.z)
+                        );
+                        RPM.currentMap.camera.targetOffset.add(positionOffset);
+                    }
+                    RPM.currentMap.camera.updateAngles();
+                    RPM.currentMap.camera.updateDistance();
+                }
+
+                // Rotation
+                RPM.currentMap.camera.horizontalAngle +=
+                        timeRate * currentState.finalDifH;
+                RPM.currentMap.camera.addVerticalAngle(
+                        timeRate * currentState.finalDifV);
+                if (this.rotationTargetOffset)
+                    RPM.currentMap.camera.updateTargetOffset();
+
+                // Zoom
+                RPM.currentMap.camera.distance += timeRate *
+                        currentState.finalDistance;
+
+                // Update
+                RPM.currentMap.camera.update();
+
+                // If time = 0, then this is the end of the command
+                return currentState.timeLeft === 0 ? 1 : 0;
             }
-
-            // Rotation
-            RPM.currentMap.camera.horizontalAngle +=
-                    timeRate * currentState.finalDifH;
-            RPM.currentMap.camera.addVerticalAngle(
-                    timeRate * currentState.finalDifV);
-            if (this.rotationTargetOffset)
-                RPM.currentMap.camera.updateTargetOffset();
-
-            // Zoom
-            RPM.currentMap.camera.distance += timeRate *
-                    currentState.finalDistance;
-
-            // Update
-            RPM.currentMap.camera.update();
-
-            // If time = 0, then this is the end of the command
-            if (currentState.timeLeft === 0)
-                return 1;
 
             return 0;
         }
