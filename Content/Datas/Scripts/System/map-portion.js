@@ -817,8 +817,14 @@ MapPortion.prototype = {
             .realY, this.realZ);
 
         // Static stuff
-        RPM.currentMap.scene.remove(this.staticFloorsMesh);
-        RPM.currentMap.scene.remove(this.staticSpritesMesh);
+        if (this.staticFloorsMesh !== null)
+        {
+            RPM.currentMap.scene.remove(this.staticFloorsMesh);
+        }
+        if (this.staticSpritesMesh !== null)
+        {
+            RPM.currentMap.scene.remove(this.staticSpritesMesh);
+        }
         for (i = 0, l = this.faceSpritesList.length; i < l; i++) {
             RPM.currentMap.scene.remove(this.faceSpritesList[i]);
         }
