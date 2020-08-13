@@ -113,7 +113,16 @@ SceneMap.prototype.readMapInfos = function(){
             this.camera = new Camera(this.mapInfos.cameraProperties, RPM.game
                 .hero);
             this.camera.update();
-            this.currentPortion = RPM.getPortion(this.camera.threeCamera.position);
+            this.currentPortion = RPM.getPortion(this.camera.threeCamera
+                .position);
+            if (this.mapInfos.skyboxGeometry !== null)
+            {
+                this.previousCameraPosition = this.camera.threeCamera.position
+                    .clone();
+                this.mapInfos.skyboxGeometry.translate(this.camera.threeCamera
+                    .position.x, this.camera.threeCamera.position.y, this.camera
+                    .threeCamera.position.z);
+            }
         }
         this.orientation = this.camera.getMapOrientation();
 
@@ -646,6 +655,15 @@ SceneMap.prototype.update = function() {
     // Update camera
     this.camera.update();
 
+    // Update skybox
+    if (this.mapInfos.skyboxGeometry !== null)
+    {
+        let posDif = this.camera.threeCamera.position.clone().sub(this
+            .previousCameraPosition);
+        this.mapInfos.skyboxGeometry.translate(posDif.x, posDif.y, posDif.z);
+        this.previousCameraPosition = this.camera.threeCamera.position.clone();
+    }
+
     // Getting the Y angle of the camera
     var vector = new THREE.Vector3();
     this.camera.threeCamera.getWorldDirection(vector);
@@ -770,6 +788,12 @@ SceneMap.prototype.onKeyPressedAndRepeat = function(key){
 // -------------------------------------------------------
 
 SceneMap.prototype.draw3D = function(canvas){
+    RPM.renderer.clear();
+    if (this.mapInfos.sceneBackground !== null)
+    {
+        RPM.renderer.render(this.mapInfos.sceneBackground, this.mapInfos
+            .cameraBackground);
+    }
     RPM.renderer.render(this.scene, this.camera.threeCamera);
 }
 

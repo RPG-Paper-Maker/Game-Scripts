@@ -1,11 +1,18 @@
 uniform sampler2D texture;
 uniform vec4 colorD;
+uniform bool reverseH;
 uniform float alpha_threshold;
 
 varying vec2 vUv;
 
 void main() {
-	vec4 color = texture2D(texture, vUv);
+	vec2 pos;
+	
+	if (reverseH)
+		pos = vec2(1.0 - vUv.x, vUv.y);
+	else
+		pos = vUv;
+	vec4 color = texture2D(texture, pos);
 	if (color.a <= alpha_threshold)
         discard;
     vec3 rgb = vec3(color.x + colorD.x, color.y + colorD.y, color.z + colorD.z);

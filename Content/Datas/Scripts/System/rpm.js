@@ -1441,21 +1441,22 @@ RPM.loadTextureEmpty = function(){
 /** Create a material from texture.
 *   @retuns {THREE.MeshBasicMaterial}
 */
-RPM.createMaterial = function(texture, uniforms) {
+RPM.createMaterial = function(texture, opts) {
     var material;
 
+    opts = RPM.defaultValue(opts, {})
     texture.magFilter = THREE.NearestFilter;
     texture.minFilter = THREE.NearestFilter;
-    texture.flipY = false;
-    if (!uniforms) {
-        uniforms = {
+    texture.flipY = opts.flipY;
+    if (!opts.uniforms) {
+        opts.uniforms = {
             texture: { type: "t", value: texture },
-            colorD: { type: "v4", value: RPM.screenTone }
+            colorD: { type: "v4", value: RPM.screenTone },
+            reverseH: { type: "b", value: opts.flipX },
         };
     }
-
     material = new THREE.ShaderMaterial({
-        uniforms:       uniforms,
+        uniforms:       opts.uniforms,
         vertexShader:   RPM.SHADER_FIX_VERTEX,
         fragmentShader: RPM.SHADER_FIX_FRAGMENT,
         transparent: true,

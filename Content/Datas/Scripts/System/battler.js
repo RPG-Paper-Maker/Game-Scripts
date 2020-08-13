@@ -73,10 +73,11 @@ function Battler(character, position, camera) {
         var originalMaterial = RPM.datasGame.tilesets.texturesBattlers[idBattler];
         var material;
 
-        material = RPM.createMaterial(originalMaterial.map.clone(), {
+        material = RPM.createMaterial(originalMaterial.map.clone(), { uniforms:
+        {
             texture: { type: "t", value: originalMaterial.map },
             colorD: { type: "v4", value: RPM.screenTone.clone()}
-        });
+        }});
         material.map.needsUpdate = true;
 
         this.width = Math.floor(material.map.image.width / RPM.SQUARE_SIZE / RPM.FRAMES);

@@ -38,13 +38,26 @@ SystemSkybox.prototype.readJSON = function(json) {
 
 // -------------------------------------------------------
 
-SystemSkybox.prototype.createTexture = function() {
-    return RPM.CUBE_TEXTURE_LOADER.load([
-        RPM.datasGame.pictures.get(PictureKind.Skyboxes, this.right).getPath(PictureKind.Skyboxes)[0],
-        RPM.datasGame.pictures.get(PictureKind.Skyboxes, this.left).getPath(PictureKind.Skyboxes)[0],
-        RPM.datasGame.pictures.get(PictureKind.Skyboxes, this.top).getPath(PictureKind.Skyboxes)[0],
-        RPM.datasGame.pictures.get(PictureKind.Skyboxes, this.bot).getPath(PictureKind.Skyboxes)[0],
-        RPM.datasGame.pictures.get(PictureKind.Skyboxes, this.front).getPath(PictureKind.Skyboxes)[0],
-        RPM.datasGame.pictures.get(PictureKind.Skyboxes, this.back).getPath(PictureKind.Skyboxes)[0]
-    ]);
+SystemSkybox.prototype.createTextures = function() 
+{
+    return [
+        RPM.createMaterial(RPM.textureLoader.load(RPM.datasGame.pictures.get(
+            PictureKind.Skyboxes, this.left).getPath(PictureKind.Skyboxes)[0]), 
+            { flipY: true, flipX: true }),
+        RPM.createMaterial(RPM.textureLoader.load(RPM.datasGame.pictures.get(
+            PictureKind.Skyboxes, this.right).getPath(PictureKind.Skyboxes)[0]), 
+            { flipY: true, flipX: true }),
+        RPM.createMaterial(RPM.textureLoader.load(RPM.datasGame.pictures.get(
+            PictureKind.Skyboxes, this.top).getPath(PictureKind.Skyboxes)[0]), 
+            { flipY: true, flipX: true }),
+        RPM.createMaterial(RPM.textureLoader.load(RPM.datasGame.pictures.get(
+            PictureKind.Skyboxes, this.bot).getPath(PictureKind.Skyboxes)[0]), 
+            { flipY: true, flipX: true }),
+        RPM.createMaterial(RPM.textureLoader.load(RPM.datasGame.pictures.get(
+            PictureKind.Skyboxes, this.front).getPath(PictureKind.Skyboxes)[0]), 
+            { flipY: true, flipX: true }),
+        RPM.createMaterial(RPM.textureLoader.load(RPM.datasGame.pictures.get(
+            PictureKind.Skyboxes, this.back).getPath(PictureKind.Skyboxes)[0]), 
+            { flipY: true, flipX: true })
+    ];
 }

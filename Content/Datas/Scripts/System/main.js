@@ -36,6 +36,7 @@ RPM.initializeGL = function()
     // Create the renderer
     RPM.renderer = new THREE.WebGLRenderer({antialias: RPM.datasGame.system
         .antialias, alpha: true});
+    RPM.renderer.autoClear = false;
     RPM.renderer.setSize(RPM.canvasWidth, RPM.canvasHeight);
     if (RPM.datasGame.system.antialias)
     {

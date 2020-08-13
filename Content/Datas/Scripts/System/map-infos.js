@@ -19,7 +19,8 @@
 *   The properties of a map.
 */
 function MapInfos() {
-
+    this.sceneBackground = null;
+    this.skyboxGeometry = null;
 }
 
 MapInfos.prototype = {
@@ -78,21 +79,23 @@ MapInfos.prototype = {
 
     updateBackgroundImage: function() 
     {
-        this.updateBackground(RPM.textureLoader.load(RPM.datasGame.pictures.get(
-            PictureKind.Pictures, this.backgroundImageID).getPath(PictureKind
-            .Pictures)[0]));
+        let bgMat = RPM.createMaterial(RPM.textureLoader.load(RPM.datasGame
+            .pictures.get(PictureKind.Pictures, this.backgroundImageID).getPath(
+            PictureKind.Pictures)[0]), { flipY: true });
+        bgMat.depthTest = false;
+        bgMat.depthWrite = false;
+        this.sceneBackground = new Physijs.Scene();
+        this.cameraBackground = new THREE.Camera();
+        this.sceneBackground.add(new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 
+            2), bgMat));
     },
 
     updateBackgroundSkybox: function() 
     {
-        this.updateBackground(RPM.datasGame.system.skyboxes[this
-            .backgroundSkyboxID.getValue()].createTexture());
-    },
-
-    updateBackground: function(texture)
-    {
-        texture.magFilter = THREE.NearestFilter;
-        texture.minFilter = THREE.NearestFilter;
-        RPM.currentMap.scene.background = texture;
+        let size = 10000 * RPM.SQUARE_SIZE / RPM.BASIC_SQUARE_SIZE;
+        this.skyboxGeometry = new THREE.BoxGeometry(size, size, size);
+        let bgMesh = new THREE.Mesh(this.skyboxGeometry, RPM.datasGame.system
+            .skyboxes[this.backgroundSkyboxID.getValue()].createTextures());
+        RPM.currentMap.scene.add(bgMesh);
     }
 }
