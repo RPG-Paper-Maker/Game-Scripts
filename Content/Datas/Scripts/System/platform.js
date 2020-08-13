@@ -16,17 +16,28 @@ const console = remote.getGlobal('console');
 const Screen = remote.screen;
 const app = remote.app;
 
-window.onerror = function (msg, url, line, column, error)
+window.onerror = function (msg, url, line, column, err)
 {
-    // Convert error to Object to it can be properly send to main process
-    let obj = {};
-    Object.getOwnPropertyNames(error).forEach(function(key) 
+    let str = "";
+
+    if (err.stack != null) 
     {
-        obj[key] = error[key];
+        str += err.stack;
+    } else if (err.message != null) 
+    {
+        str += err.message;
+    }
+    const fs = require('fs');
+
+    fs.writeFile("log.txt", "ERROR LOG:\n\n" + str, (e) => {
+        if (e)
+        {
+            RPM.showError(e);
+        }
     });
 
     // Send it to main process to open a dialog box
-    ipc.send('window-error', obj);
+    ipc.send('window-error', str);
 }
 
 function Platform()

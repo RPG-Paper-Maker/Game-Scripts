@@ -26,18 +26,7 @@ function createWindow () {
     });
     //window.webContents.openDevTools();
     ipc.on('window-error', function(event, err) {
-        let str = "";
-        if (err != null) 
-        {
-            if (err.stack != null) 
-            {
-                str += err.stack;
-            } else if (err.message != null) 
-            {
-                str += err.message;
-            }
-        }
-        dialog.showMessageBoxSync({ title: 'Error', type: 'error', message: str });
+        dialog.showMessageBoxSync({ title: 'Error', type: 'error', message: err });
         window.close()
     });
     ipc.on('change-window-title', function(event, title) {
