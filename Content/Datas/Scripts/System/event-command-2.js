@@ -1062,6 +1062,12 @@ EventCommandMoveObject.prototype = {
             currentState.position = object.getFuturPosition(orientation,
                 RPM.SQUARE_SIZE, angle);
             if (position.equals(currentState.position)) {
+                if (this.isIgnore)
+                {
+                    currentState.position = null;
+                    object.moving = true;
+                    return false;
+                }
                 object.move(orientation, 0, angle, this.isCameraOrientation);
                 this.moveFrequency(object);
                 return true;
@@ -1090,10 +1096,16 @@ EventCommandMoveObject.prototype = {
             .distance, angle, this.isCameraOrientation);
         currentState.distance += distances[0];
         currentState.normalDistance += distances[1];
-        if (!square || (square && currentState.normalDistance >= RPM.SQUARE_SIZE &&
-            this.isIgnore) || (square && currentState.distance >= RPM.SQUARE_SIZE
+        if (!square || (square && currentState.normalDistance >= RPM.SQUARE_SIZE
+            ) || (square && currentState.distance >= RPM.SQUARE_SIZE
             || (distances[0] === 0)))
         {
+            if (this.isIgnore && distances[0] === 0)
+            {
+                currentState.position = null;
+                object.moving = true;
+                return false;
+            }
             if (square && currentState.distance === currentState.normalDistance)
             {
                 object.position = currentState.position;
