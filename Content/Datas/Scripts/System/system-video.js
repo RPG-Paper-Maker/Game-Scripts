@@ -27,14 +27,12 @@ function SystemVideo() {
 *   @param {boolean} isBR Indicate if the video is a BR.
 *   @returns {string}
 */
-SystemVideo.getFolder = function(isBR) {
-    var folder = isBR ? RPM.PATH_BR : RPM.ROOT_DIRECTORY_LOCAL;
-    var folderLocal = isBR ? RPM.PATH_BR : RPM.ROOT_DIRECTORY_LOCAL;
+SystemVideo.getFolder = function(isBR, dlc) {
+    var folder = isBR ? RPM.PATH_BR : (dlc ? RPM.PATH_DLCS + "/" + dlc : RPM
+        .ROOT_DIRECTORY_LOCAL);
     var dir = SystemVideo.getLocalFolder();
     var path = folder + dir;
-    var pathLocal = folderLocal + dir;
-
-    return [path, pathLocal];
+    return [path, path];
 };
 
 // -------------------------------------------------------
@@ -56,6 +54,7 @@ SystemVideo.prototype = {
     readJSON: function(json) {
         this.name = json.name;
         this.isBR = json.br;
+        this.dlc = RPM.defaultValue(json.d, "");
     },
 
     // -------------------------------------------------------
@@ -64,7 +63,7 @@ SystemVideo.prototype = {
     *   @returns {string}
     */
     getPath: function() {
-        var paths = SystemVideo.getFolder(this.isBR);
+        var paths = SystemVideo.getFolder(this.isBR, this.dlc);
         paths[0] += "/" + this.name;
         paths[1] += "/" + this.name;
 

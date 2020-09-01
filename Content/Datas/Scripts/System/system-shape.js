@@ -28,14 +28,13 @@ function SystemShape() {
 *   @param {boolean} isBR Indicate if the shape is a BR.
 *   @returns {string}
 */
-SystemShape.getFolder = function(kind, isBR) {
-    var folder = isBR ? RPM.PATH_BR : RPM.ROOT_DIRECTORY_LOCAL;
-    var folderLocal = isBR ? RPM.PATH_BR : RPM.ROOT_DIRECTORY_LOCAL;
+SystemShape.getFolder = function(kind, isBR, dlc) {
+    var folder = isBR ? RPM.PATH_BR : (dlc ? RPM.PATH_DLCS + "/" + dlc : RPM
+        .ROOT_DIRECTORY_LOCAL);
     var dir = SystemShape.getLocalFolder(kind);
     var path = folder + dir;
-    var pathLocal = folderLocal + dir;
 
-    return [path, pathLocal];
+    return [path, path];
 };
 
 // -------------------------------------------------------
@@ -68,6 +67,7 @@ SystemShape.prototype = {
         this.id = json.id;
         this.name = json.name;
         this.isBR = json.br;
+        this.dlc = RPM.defaultValue(json.d, "");
     },
 
     // -------------------------------------------------------
@@ -98,7 +98,7 @@ SystemShape.prototype = {
     *   @returns {string}
     */
     getPath: function(kind) {
-        var paths = SystemShape.getFolder(kind, this.isBR);
+        var paths = SystemShape.getFolder(kind, this.isBR, this.dlc);
         paths[0] += "/" + this.name;
         paths[1] += "/" + this.name;
 

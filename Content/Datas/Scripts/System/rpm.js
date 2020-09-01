@@ -55,6 +55,7 @@ RPM.FILE_SPECIAL_ELEMENTS = RPM.PATH_DATAS + "specialElements.json";
 RPM.FILE_VARIABLES = RPM.PATH_DATAS + "variables.json";
 RPM.FILE_SETTINGS = RPM.PATH_DATAS + "settings.json";
 RPM.FILE_SAVE = RPM.PATH_DATAS + "saves.json";
+RPM.FILE_DLCS = RPM.PATH_DATAS + "dlcs.json";
 RPM.FILE_ANIMATIONS = RPM.PATH_DATAS + "animations.json";
 RPM.PATH_PICTURES = "/Content/Images";
 RPM.PATH_VIDEOS = "/Content/Videos";

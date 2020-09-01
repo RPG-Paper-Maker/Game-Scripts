@@ -28,14 +28,13 @@ function SystemPicture(){
 *   @param {boolean} isBR Indicate if the pciture is a BR.
 *   @returns {string}
 */
-SystemPicture.getFolder = function(kind, isBR){
-    var folder = isBR ? RPM.PATH_BR : RPM.ROOT_DIRECTORY_LOCAL;
-    var folderLocal = isBR ? RPM.PATH_BR : RPM.ROOT_DIRECTORY_LOCAL;
+SystemPicture.getFolder = function(kind, isBR, dlc){
+    var folder = isBR ? RPM.PATH_BR : (dlc ? RPM.PATH_DLCS + "/" + dlc : RPM
+        .ROOT_DIRECTORY_LOCAL);
     var dir = SystemPicture.getLocalFolder(kind);
     var path = folder + dir;
-    var pathLocal = folderLocal + dir;
 
-    return [path, pathLocal];
+    return [path, path];
 };
 
 // -------------------------------------------------------
@@ -91,6 +90,7 @@ SystemPicture.prototype = {
     readJSON: function(json){
         this.name = json.name;
         this.isBR = json.br;
+        this.dlc = RPM.defaultValue(json.d, "");
         this.jsonCollisions = json.col;
         this.collisionsRepeat = json.rcol;
 
@@ -111,7 +111,7 @@ SystemPicture.prototype = {
     *   @returns {string}
     */
     getPath: function(kind) {
-        var paths = SystemPicture.getFolder(kind, this.isBR);
+        var paths = SystemPicture.getFolder(kind, this.isBR, this.dlc);
         paths[0] += "/" + this.name;
         paths[1] += "/" + this.name;
 

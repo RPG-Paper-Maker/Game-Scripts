@@ -55,6 +55,7 @@ function DatasGame(){
     this.animations = new DatasAnimations();
     this.pictures = new DatasPictures(this, DatasGame.prototype.readAfterPictures);
     this.videos = new DatasVideos();
+    this.dlcs = new DatasDLCs();
     this.readSettings();
     this.loaded = false;
 }
