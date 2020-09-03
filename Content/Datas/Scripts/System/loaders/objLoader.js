@@ -49,7 +49,9 @@ THREE.OBJLoader.prototype = {
         var minVertex = new THREE.Vector3();
         var maxVertex = new THREE.Vector3();
         var firstVertex = true;
-        var temp3D;
+		var temp3D;
+		let j, n;
+		let lineList;
 
 		// v float float float
 		var vertex_pattern = /^v\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/;
@@ -80,7 +82,8 @@ THREE.OBJLoader.prototype = {
 
 		//
 
-        var lines = text.split( '\n' );
+		var lines = text.split( '\n' );
+		let arg1, arg2, arg3;
 
 		for ( var i = 0; i < lines.length; i ++ ) {
 
@@ -145,20 +148,21 @@ THREE.OBJLoader.prototype = {
 
 				// ["f 1/1/1 2/2/2 3/3/3", " 1/1/1", "1", "1", "1", " 2/2/2", "2", "2", "2", " 3/3/3", "3", "3", "3", undefined, undefined, undefined, undefined]
 
-                vertices.push(v[result[2] - 1]);
-                uvs.push(t[result[3] - 1]);
-                vertices.push(v[result[6] - 1]);
-                uvs.push(t[result[7] - 1]);
-                vertices.push(v[result[10] - 1]);
-                uvs.push(t[result[11] - 1]);
-                if (result[14]) {
-                    vertices.push(v[result[2] - 1]);
-                    uvs.push(t[result[3] - 1]);
-                    vertices.push(v[result[10] - 1]);
-                    uvs.push(t[result[11] - 1]);
-                    vertices.push(v[result[14] - 1]);
-                    uvs.push(t[result[15] - 1]);
-                }
+				lineList = line.split(" ");
+                n = lineList.length - 1;
+				arg1 = lineList[1].split("/");
+                for (j = 1; j < n - 1; j++)
+                {
+                    arg2 = lineList[1 + j].split("/");
+					arg3 = lineList[2 + j].split("/");
+					
+					vertices.push(v[arg1[0] - 1]);
+					uvs.push(t[arg1[1] - 1]);
+					vertices.push(v[arg2[0] - 1]);
+					uvs.push(t[arg2[1] - 1]);
+					vertices.push(v[arg3[0] - 1]);
+					uvs.push(t[arg3[1] - 1]);
+				}
             }
 		}
 
