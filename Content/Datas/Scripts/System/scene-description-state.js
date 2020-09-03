@@ -56,12 +56,15 @@ SceneDescriptionState.prototype = {
     // -------------------------------------------------------
 
     update: function(){
+        SceneGame.prototype.update.call(RPM.currentMap);
         this.windowInformations.content.updateBattler();
     },
 
     // -------------------------------------------------------
 
     onKeyPressed: function(key){
+        SceneGame.prototype.onKeyPressed.call(RPM.currentMap, key);
+
         if (DatasKeyBoard.isKeyEqual(key,
                                      RPM.datasGame.keyBoard.menuControls.Cancel) ||
             DatasKeyBoard.isKeyEqual(key,
@@ -75,18 +78,20 @@ SceneDescriptionState.prototype = {
     // -------------------------------------------------------
 
     onKeyReleased: function(key){
-
+        SceneGame.prototype.onKeyReleased.call(RPM.currentMap, key);
     },
 
     // -------------------------------------------------------
 
     onKeyPressedRepeat: function(key){
-
+        SceneGame.prototype.onKeyPressedRepeat.call(RPM.currentMap, key);
     },
 
     // -------------------------------------------------------
 
     onKeyPressedAndRepeat: function(key){
+        SceneGame.prototype.onKeyPressedAndRepeat.call(RPM.currentMap, key);
+
         var indexTab = this.windowChoicesTabs.currentSelectedIndex;
         this.windowChoicesTabs.onKeyPressedAndRepeat(key);
         this.synchronize();
@@ -109,5 +114,10 @@ SceneDescriptionState.prototype = {
         this.windowTop.draw();
         this.windowChoicesTabs.draw();
         this.windowInformations.draw();
+    },
+
+    close: function()
+    {
+
     }
 }

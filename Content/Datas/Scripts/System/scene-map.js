@@ -802,3 +802,8 @@ SceneMap.prototype.draw3D = function(canvas){
 SceneMap.prototype.drawHUD = function(){
     SceneGame.prototype.drawHUD.call(this);
 }
+
+SceneMap.prototype.close = function()
+{
+
+}

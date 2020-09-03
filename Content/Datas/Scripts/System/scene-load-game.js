@@ -74,15 +74,15 @@ SceneLoadGame.prototype = {
     // -------------------------------------------------------
 
     onKeyReleased: function(key){
-
+        SceneSaveLoadGame.prototype.onKeyReleased.call(this, key);
     },
 
     // -------------------------------------------------------
 
     onKeyPressedRepeat: function(key){
-
+        SceneSaveLoadGame.prototype.onKeyPressedRepeat.call(this, key);
     },
-
+    
     // -------------------------------------------------------
 
     onKeyPressedAndRepeat: function(key){
@@ -103,5 +103,10 @@ SceneLoadGame.prototype = {
         }
 
         SceneSaveLoadGame.prototype.drawHUD.call(this);
+    },
+
+    close: function()
+    {
+
     }
 }

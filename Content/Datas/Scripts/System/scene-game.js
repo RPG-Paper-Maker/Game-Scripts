@@ -234,5 +234,10 @@ SceneGame.prototype = {
         {
             this.parallelCommands[i].drawHUD();
         }
+    },
+
+    close: function()
+    {
+
     }
 }

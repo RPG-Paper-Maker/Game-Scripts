@@ -100,5 +100,10 @@ SceneTitleScreen.prototype = {
         }
 
         this.windowChoicesCommands.draw();
+    },
+
+    close: function()
+    {
+
     }
 }

@@ -41,7 +41,9 @@ GameStack.prototype = {
     */
     pop: function() {
         RPM.requestPaintHUD = true;
-        return this.content.pop();
+        let scene = this.content.pop();
+        scene.close();
+        return scene;
     },
 
     // -------------------------------------------------------

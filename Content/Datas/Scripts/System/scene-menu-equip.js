@@ -208,12 +208,14 @@ SceneMenuEquip.prototype = {
     // -------------------------------------------------------
 
     update: function(){
-
+        SceneGame.prototype.update.call(RPM.currentMap);
     },
 
     // -------------------------------------------------------
 
     onKeyPressed: function(key){
+        SceneGame.prototype.onKeyPressed.call(RPM.currentMap, key);
+
         if (this.selectedEquipment === -1){
             if (DatasKeyBoard.isKeyEqual(key,
                                          RPM.datasGame.keyBoard.menuControls
@@ -271,18 +273,20 @@ SceneMenuEquip.prototype = {
     // -------------------------------------------------------
 
     onKeyReleased: function(key){
-
+        SceneGame.prototype.onKeyReleased.call(RPM.currentMap, key);
     },
 
     // -------------------------------------------------------
 
     onKeyPressedRepeat: function(key){
-
+        SceneGame.prototype.onKeyPressedRepeat.call(RPM.currentMap, key);
     },
 
     // -------------------------------------------------------
 
     onKeyPressedAndRepeat: function(key){
+        SceneGame.prototype.onKeyPressedAndRepeat.call(RPM.currentMap, key);
+        
         // Tab
         var indexTab = this.windowChoicesTabs.currentSelectedIndex;
         this.windowChoicesTabs.onKeyPressedAndRepeat(key);
@@ -325,5 +329,10 @@ SceneMenuEquip.prototype = {
         this.windowChoicesEquipment.draw(context);
         this.windowChoicesList.draw(context);
         this.windowInformations.draw(context);
+    },
+
+    close: function()
+    {
+
     }
 }

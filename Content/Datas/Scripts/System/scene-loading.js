@@ -31,31 +31,31 @@ SceneLoading.prototype = {
     // -------------------------------------------------------
 
     update: function(){
-
+        SceneGame.prototype.update.call(RPM.currentMap);
     },
 
     // -------------------------------------------------------
 
     onKeyPressed: function(key){
-
+        SceneGame.prototype.onKeyPressed.call(RPM.currentMap, key);
     },
 
     // -------------------------------------------------------
 
     onKeyReleased: function(key){
-
+        SceneGame.prototype.onKeyReleased.call(RPM.currentMap, key);
     },
 
     // -------------------------------------------------------
 
     onKeyPressedRepeat: function(key){
-
+        SceneGame.prototype.onKeyPressedRepeat.call(RPM.currentMap, key);
     },
 
     // -------------------------------------------------------
 
     onKeyPressedAndRepeat: function(key){
-
+        SceneGame.prototype.onKeyPressedAndRepeat.call(RPM.currentMap, key);
     },
 
     // -------------------------------------------------------
@@ -68,5 +68,10 @@ SceneLoading.prototype = {
 
     drawHUD: function() {
         this.text.draw();
+    },
+
+    close: function()
+    {
+
     }
 }

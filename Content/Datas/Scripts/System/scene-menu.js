@@ -32,6 +32,8 @@ function SceneMenu() {
     var i, nbHeroes;
     var graphicsHeroes;
 
+    RPM.isInMainMenu = true;
+
     // Initializing order index
     this.selectedOrder = -1;
 
@@ -155,6 +157,8 @@ SceneMenu.prototype = {
      // -------------------------------------------------------
 
     update: function() {
+        SceneGame.prototype.update.call(RPM.currentMap);
+
         var i, l, w;
 
         if (!this.windowTimeCurrencies.contentLoaded && this
@@ -177,6 +181,8 @@ SceneMenu.prototype = {
     // -------------------------------------------------------
 
     onKeyPressed: function(key){
+        SceneGame.prototype.onKeyPressed.call(RPM.currentMap, key);
+
         if (this.windowChoicesTeam.currentSelectedIndex === -1){
             this.windowChoicesCommands.onKeyPressed(key, this);
 
@@ -250,18 +256,19 @@ SceneMenu.prototype = {
     // -------------------------------------------------------
 
     onKeyReleased: function(key){
-
+        SceneGame.prototype.onKeyReleased.call(RPM.currentMap, key);
     },
 
     // -------------------------------------------------------
 
     onKeyPressedRepeat: function(key){
-
+        SceneGame.prototype.onKeyPressedRepeat.call(RPM.currentMap, key);
     },
 
     // -------------------------------------------------------
 
     onKeyPressedAndRepeat: function(key){
+        SceneGame.prototype.onKeyPressedAndRepeat.call(RPM.currentMap, key);
         if (this.windowChoicesTeam.currentSelectedIndex === -1)
             this.windowChoicesCommands.onKeyPressedAndRepeat(key);
         else{
@@ -293,5 +300,10 @@ SceneMenu.prototype = {
             // Draw play time and currencies
             this.windowTimeCurrencies.draw();
         }
+    },
+
+    close: function()
+    {
+        RPM.isInMainMenu = false;
     }
 }

@@ -65,6 +65,8 @@ SceneKeyboardAssign.MAX_WAIT_TIME = 1000;
 SceneKeyboardAssign.prototype = {
 
     update: function() {
+        SceneGame.prototype.update.call(RPM.currentMap);
+
         if (this.showPress) {
             if (this.keysPressed.length === 0 && new Date().getTime() - this
                 .waitTime >= this.compareWait)
@@ -103,6 +105,8 @@ SceneKeyboardAssign.prototype = {
     // -------------------------------------------------------
 
     onKeyPressed: function(key) {
+        SceneGame.prototype.onKeyPressed.call(RPM.currentMap, key);
+
         if (this.showPress) {
             var current;
 
@@ -134,6 +138,8 @@ SceneKeyboardAssign.prototype = {
     // -------------------------------------------------------
 
     onKeyReleased: function(key) {
+        SceneGame.prototype.onKeyReleased.call(RPM.currentMap, key);
+
         this.keysPressed.splice(this.keysPressed.indexOf(key), 1);
         if (this.keysPressed.length === 0 && this.currentSC.length > 0) {
             this.compareWait = SceneKeyboardAssign.MAX_WAIT_TIME;
@@ -145,12 +151,13 @@ SceneKeyboardAssign.prototype = {
     // -------------------------------------------------------
 
     onKeyPressedRepeat: function(key) {
-
+        SceneGame.prototype.onKeyPressedRepeat.call(RPM.currentMap, key);
     },
 
     // -------------------------------------------------------
 
     onKeyPressedAndRepeat: function(key) {
+        SceneGame.prototype.onKeyPressedAndRepeat.call(RPM.currentMap, key);
         if (!this.showPress) {
             this.windowChoicesMain.onKeyPressedAndRepeat(key);
             this.windowPress.content = this.windowChoicesMain.getCurrentContent();
@@ -175,5 +182,10 @@ SceneKeyboardAssign.prototype = {
         if (this.showPress) {
             this.windowPress.draw();
         }
+    },
+
+    close: function()
+    {
+
     }
 }

@@ -185,6 +185,7 @@ RPM.displayedPictures = [];
 RPM.screenTone = new THREE.Vector4(0, 0, 0, 1);
 RPM.allowSaves = true;
 RPM.allowMainMenu = true;
+RPM.isInMainMenu = false;
 RPM.BB_BOX = MapPortion.createBox();
 RPM.BB_BOX_DETECTION = MapPortion.createBox();
 RPM.BB_BOX_DEFAULT_DETECTION = MapPortion.createBox();

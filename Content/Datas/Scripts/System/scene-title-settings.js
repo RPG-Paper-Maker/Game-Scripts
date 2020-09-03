@@ -57,7 +57,6 @@ SceneTitleSettings.prototype = {
 
     onKeyPressed: function(key) {
         this.windowChoicesMain.onKeyPressed(key);
-
         if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
             .Cancel) || DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard
             .MainMenu))
@@ -102,5 +101,10 @@ SceneTitleSettings.prototype = {
         this.windowSettings.draw();
         this.windowInformations.draw();
         this.windowChoicesMain.draw();
+    },
+
+    close: function()
+    {
+
     }
 }

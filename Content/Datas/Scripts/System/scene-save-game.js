@@ -56,13 +56,13 @@ SceneSaveGame.prototype = {
     // -------------------------------------------------------
 
     onKeyReleased: function(key){
-
+        SceneSaveLoadGame.prototype.onKeyReleased.call(this, key);
     },
 
     // -------------------------------------------------------
 
     onKeyPressedRepeat: function(key){
-
+        SceneSaveLoadGame.prototype.onKeyPressedRepeat.call(this, key);
     },
 
     // -------------------------------------------------------
@@ -81,5 +81,10 @@ SceneSaveGame.prototype = {
 
     drawHUD: function(){
         SceneSaveLoadGame.prototype.drawHUD.call(this);
+    },
+
+    close: function()
+    {
+
     }
 }

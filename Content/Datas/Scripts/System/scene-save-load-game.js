@@ -128,6 +128,11 @@ SceneSaveLoadGame.prototype = {
     // -------------------------------------------------------
 
     update: function() {
+        if (RPM.currentMap !== null)
+        {
+            SceneGame.prototype.update.call(RPM.currentMap);
+        }
+
         if (!this.windowInformations.content.game.isNull) {
             this.windowInformations.content.update();
         }
@@ -136,6 +141,11 @@ SceneSaveLoadGame.prototype = {
     // -------------------------------------------------------
 
     onKeyPressed: function(key){
+        if (RPM.currentMap !== null)
+        {
+            SceneGame.prototype.onKeyPressed.call(RPM.currentMap, key);
+        }
+
         if (DatasKeyBoard.isKeyEqual(key,
                                      RPM.datasGame.keyBoard.menuControls.Cancel) ||
             DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.MainMenu))
@@ -147,7 +157,30 @@ SceneSaveLoadGame.prototype = {
 
     // -------------------------------------------------------
 
+    onKeyReleased: function(key){
+        if (RPM.currentMap !== null)
+        {
+            SceneGame.prototype.onKeyReleased.call(RPM.currentMap, key);
+        }
+    },
+
+    // -------------------------------------------------------
+
+    onKeyPressedRepeat: function(key){
+        if (RPM.currentMap !== null)
+        {
+            SceneGame.prototype.onKeyPressedRepeat.call(RPM.currentMap, key);
+        }
+    },
+
+    // -------------------------------------------------------
+
     onKeyPressedAndRepeat: function(key){
+        if (RPM.currentMap !== null)
+        {
+            SceneGame.prototype.onKeyPressedAndRepeat.call(RPM.currentMap, key);
+        }
+        
         this.windowChoicesSlots.onKeyPressedAndRepeat(key);
         SceneSaveLoadGame.prototype.updateInformations.call(
                     this, this.windowChoicesSlots.currentSelectedIndex);
@@ -163,5 +196,10 @@ SceneSaveLoadGame.prototype = {
             this.windowInformations.draw();
             this.windowBot.draw();
         }
+    },
+
+    close: function()
+    {
+
     }
 }

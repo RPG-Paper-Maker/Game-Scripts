@@ -58,6 +58,7 @@ function ReactionInterpreter(sender, reaction, object, state, parameters, event,
     this.updateObjectParameters();
     this.currentCommandState = this.currentCommand.data.initialize();
     this.currentTimeState = event;
+    this.isInMainMenu = RPM.isInMainMenu;
     RPM.requestPaintHUD = true;
 }
 
@@ -69,6 +70,11 @@ ReactionInterpreter.prototype = {
     */
     isFinished: function(){
         return (this.currentCommand === null)
+    },
+
+    canExecute: function()
+    {
+        return this.isInMainMenu || this.isInMainMenu === RPM.isInMainMenu;
     },
 
     updateObjectParameters: function() {
@@ -93,7 +99,13 @@ ReactionInterpreter.prototype = {
 
     /** Update the current commands.
     */
-    update: function(){
+    update: function()
+    {
+        if (!this.canExecute())
+        {
+            return;
+        }
+        
         var directNode = true;
 
         while (directNode){
@@ -269,8 +281,12 @@ ReactionInterpreter.prototype = {
     /** First key press handle for the current command.
     *   @param {number} key The key ID pressed.
     */
-    onKeyPressed: function(key){
-        this.currentCommand.data.onKeyPressed(this.currentCommandState, key);
+    onKeyPressed: function(key)
+    {
+        if (this.canExecute())
+        {
+            this.currentCommand.data.onKeyPressed(this.currentCommandState, key);
+        }
     },
 
     // -------------------------------------------------------
@@ -278,8 +294,12 @@ ReactionInterpreter.prototype = {
     /** First key release handle for the current command.
     *   @param {number} key The key ID released.
     */
-    onKeyReleased: function(key){
-        this.currentCommand.data.onKeyReleased(this.currentCommandState, key);
+    onKeyReleased: function(key)
+    {
+        if (this.canExecute())
+        {
+            this.currentCommand.data.onKeyReleased(this.currentCommandState, key);
+        }
     },
 
     // -------------------------------------------------------
@@ -288,9 +308,14 @@ ReactionInterpreter.prototype = {
     *   @param {number} key The key ID pressed.
     *   @returns {boolean} false if the other keys are blocked after it.
     */
-    onKeyPressedRepeat: function(key){
-        return this.currentCommand.data.onKeyPressedRepeat(
-                    this.currentCommandState, key);
+    onKeyPressedRepeat: function(key)
+    {
+        if (this.canExecute())
+        {
+            return this.currentCommand.data.onKeyPressedRepeat(this
+                .currentCommandState, key);
+        }
+        return true;
     },
 
     // -------------------------------------------------------
@@ -301,8 +326,12 @@ ReactionInterpreter.prototype = {
     *   @returns {boolean} false if the other keys are blocked after it.
     */
     onKeyPressedAndRepeat: function(key){
-        return this.currentCommand.data.onKeyPressedAndRepeat(
-                    this.currentCommandState, key);
+        if (this.canExecute())
+        {
+            return this.currentCommand.data.onKeyPressedAndRepeat(this
+                .currentCommandState, key);
+        }
+        return true;
     },
 
     // -------------------------------------------------------
@@ -310,7 +339,8 @@ ReactionInterpreter.prototype = {
     /** Draw HUD for the current command.
     *   @param {Canvas.Context} context The canvas context.
     */
-    drawHUD: function(){
+    drawHUD: function()
+    {
         this.currentCommand.data.drawHUD(this.currentCommandState);
     }
 }

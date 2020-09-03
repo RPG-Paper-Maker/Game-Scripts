@@ -476,3 +476,8 @@ SceneBattle.prototype.drawHUD = function() {
     }
     SceneMap.prototype.drawHUD.call(this);
 };
+
+SceneBattle.prototype.close = function()
+{
+
+};

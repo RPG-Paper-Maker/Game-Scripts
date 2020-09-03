@@ -102,6 +102,8 @@ SceneMenuSkills.prototype = {
     // -------------------------------------------------------
 
     update: function(){
+        SceneGame.prototype.update.call(RPM.currentMap);
+
         if (this.windowChoicesList.currentSelectedIndex !== -1) {
             this.windowBoxUseSkill.update();
         }
@@ -110,6 +112,8 @@ SceneMenuSkills.prototype = {
     // -------------------------------------------------------
 
     onKeyPressed: function(key){
+        SceneGame.prototype.onKeyPressed.call(RPM.currentMap, key);
+
         switch (this.substep) {
         case 0:
             if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
@@ -173,18 +177,20 @@ SceneMenuSkills.prototype = {
     // -------------------------------------------------------
 
     onKeyReleased: function(key){
-
+        SceneGame.prototype.onKeyReleased.call(RPM.currentMap, key);
     },
 
     // -------------------------------------------------------
 
     onKeyPressedRepeat: function(key){
-
+        SceneGame.prototype.onKeyPressedRepeat.call(RPM.currentMap, key);
     },
 
     // -------------------------------------------------------
 
     onKeyPressedAndRepeat: function(key) {
+        SceneGame.prototype.onKeyPressedAndRepeat.call(RPM.currentMap, key);
+        
         switch (this.substep) {
         case 0:
             var position;
@@ -234,5 +240,10 @@ SceneMenuSkills.prototype = {
         } else {
             this.windowEmpty.draw();
         }
+    },
+
+    close: function()
+    {
+
     }
 }
