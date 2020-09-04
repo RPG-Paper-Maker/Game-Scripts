@@ -50,7 +50,7 @@ function MapObject(system, position, isHero) {
     this.previousOrientation = null;
     this.otherMoveCommand = null;
     this.yMountain = null;
-    if (!this.isHero && !this.isStartup) {
+    if (!this.isHero) {
         this.initializeProperties();
     }
     this.initializeTimeEvents();
@@ -176,12 +176,14 @@ MapObject.getObjectAndPortion = function(object, objectID, base, callback)
 MapObject.prototype = {
 
     initializeProperties: function() {
-        var i, l, prop, mapProp, propValue;
+        var i, l, prop, mapProp, propValue, mapStatesOpts;
 
         if (this.isHero) {
             mapProp = RPM.game.heroProperties;
+            mapStatesOpts = RPM.game.heroStatesOptions;
         } else if (this.isStartup) {
             mapProp = RPM.game.startupProperties[RPM.currentMap.id];
+            mapStatesOpts = [];
             if (typeof mapProp === RPM.UNDEFINED) {
                 mapProp = [];
             }
@@ -201,6 +203,8 @@ MapObject.prototype = {
                 ], portion[1], portion[2]);
             indexProp = portionDatas.pi.indexOf(this.system.id);
             mapProp = (indexProp === -1) ? [] : portionDatas.p[indexProp];
+            indexProp = portionDatas.soi.indexOf(this.system.id);
+            mapStatesOpts = (indexProp === -1) ? [] : portionDatas.so[indexProp];
         }
 
         this.properties = [];
@@ -209,6 +213,22 @@ MapObject.prototype = {
             propValue = mapProp[prop.id - 1];
             this.properties[prop.id] = typeof propValue === 'undefined' ? prop
                 .initialValue.getValue() : propValue;
+        }
+        let state, stateValue, stateSystem;
+        this.statesInstance = [];
+        for (var i = 0, l = this.system.states.length; i < l; i++)
+        {
+            stateSystem = this.system.states[i];
+            stateValue = mapStatesOpts[stateSystem.id - 1];
+            state = stateSystem.copyInstance();
+            this.statesInstance[stateSystem.id - 1] = state;
+            if (!RPM.isUndefined(stateValue))
+            {
+                state.graphicID = stateValue.gid;
+                state.rectTileset = stateValue.gt;
+                state.indexX = stateValue.gix;
+                state.indexY = stateValue.giy;
+            }
         }
     },
 
@@ -294,10 +314,12 @@ MapObject.prototype = {
                 this.system.states[0].id : 1] : portionDatas.s[indexState];
         }
         this.currentState = null;
+        this.currentStateInstance = null;
         for (var i = this.system.states.length - 1; i >= 0; i--){
             var state = this.system.states[i];
             if (this.states.indexOf(state.id) !== -1){
                 this.currentState = state;
+                this.currentStateInstance = this.statesInstance[i];
                 break;
             }
         }
@@ -307,9 +329,9 @@ MapObject.prototype = {
             return;
         }
 
-        var material = this.currentState === null ? null : (this.currentState
+        var material = this.currentState === null ? null : (this.currentStateInstance
             .graphicID === 0 ? RPM.currentMap.textureTileset : RPM.currentMap
-            .texturesCharacters[this.currentState.graphicID]);
+            .texturesCharacters[this.currentStateInstance.graphicID]);
         this.meshBoundingBox = new Array;
         if (this.currentState !== null && !this.isNone() && material && material
             .map)
@@ -317,16 +339,16 @@ MapObject.prototype = {
             this.speed = RPM.datasGame.system.speeds[this.currentState.speedID];
             this.frequency = RPM.datasGame.system.frequencies[this.currentState
                 .frequencyID];
-            this.frame = this.currentState.indexX >= RPM.FRAMES ? RPM.FRAMES - 1 :
-                this.currentState.indexX;
-            this.orientationEye = this.currentState.indexY;
+            this.frame = this.currentStateInstance.indexX >= RPM.FRAMES ? RPM.FRAMES - 1 :
+                this.currentStateInstance.indexX;
+            this.orientationEye = this.currentStateInstance.indexY;
             this.updateOrientation();
 
-            if (this.currentState.graphicID === 0) {
-                x = this.currentState.rectTileset[0];
-                y = this.currentState.rectTileset[1];
-                this.width = this.currentState.rectTileset[2];
-                this.height = this.currentState.rectTileset[3];
+            if (this.currentStateInstance.graphicID === 0) {
+                x = this.currentStateInstance.rectTileset[0];
+                y = this.currentStateInstance.rectTileset[1];
+                this.width = this.currentStateInstance.rectTileset[2];
+                this.height = this.currentStateInstance.rectTileset[3];
             } else {
                 x = 0;
                 y = 0;
@@ -348,10 +370,10 @@ MapObject.prototype = {
                                    this.position.y,
                                    this.position.z);
             this.boundingBoxSettings = objCollision[1][0];
-            if (this.currentState.graphicID === 0) {
+            if (this.currentStateInstance.graphicID === 0) {
                 picture = RPM.currentMap.mapInfos.tileset.picture;
                 this.boundingBoxSettings.squares = picture ? picture
-                    .getSquaresForTexture(this.currentState.rectTileset) : [];
+                    .getSquaresForTexture(this.currentStateInstance.rectTileset) : [];
             }
 
             this.updateBB(this.position);
@@ -558,9 +580,9 @@ MapObject.prototype = {
     *   @param {THREE.Vector3} position Position to update.
     */
     updateBB: function(position) {
-        if (this.currentState.graphicID !== 0) {
+        if (this.currentStateInstance.graphicID !== 0) {
             this.boundingBoxSettings.squares = RPM.currentMap.collisions
-                [PictureKind.Characters][this.currentState.graphicID]
+                [PictureKind.Characters][this.currentStateInstance.graphicID]
                 [this.getStateIndex()];
         }
 
@@ -884,7 +906,7 @@ MapObject.prototype = {
                 this.previousPosition = this.position;
             }
             else {
-                this.frame = this.currentState.indexX;
+                this.frame = this.currentStateInstance.indexX;
 
                 // Update angle
                 if (this.currentState.setWithCamera)
@@ -986,12 +1008,12 @@ MapObject.prototype = {
             if (this.mesh.material && this.mesh.material.map) {
                 textureWidth = this.mesh.material.map.image.width;
                 textureHeight = this.mesh.material.map.image.height;
-                if (this.currentState.graphicID === 0) {
+                if (this.currentStateInstance.graphicID === 0) {
                     w = this.width * RPM.SQUARE_SIZE / textureWidth;
                     h = this.height * RPM.SQUARE_SIZE / textureHeight;
-                    x = this.currentState.rectTileset[0] * RPM.SQUARE_SIZE /
+                    x = this.currentStateInstance.rectTileset[0] * RPM.SQUARE_SIZE /
                         textureWidth;
-                    y = this.currentState.rectTileset[1] * RPM.SQUARE_SIZE /
+                    y = this.currentStateInstance.rectTileset[1] * RPM.SQUARE_SIZE /
                         textureHeight;
                 } else {
                     w = this.width * RPM.SQUARE_SIZE / textureWidth;
@@ -1024,9 +1046,9 @@ MapObject.prototype = {
     */
     updateMaterial: function(){
         if (!this.isNone()){
-            this.mesh.material = this.currentState.graphicID === 0 ?
+            this.mesh.material = this.currentStateInstance.graphicID === 0 ?
                 RPM.currentMap.textureTileset : RPM.currentMap.texturesCharacters[
-                this.currentState.graphicID];
+                this.currentStateInstance.graphicID];
         } else {
             this.mesh = null;
         }
@@ -1042,6 +1064,6 @@ MapObject.prototype = {
 
     isNone: function() {
         return this.currentState.graphicKind === ElementMapKind.None ||
-               this.currentState.graphicID === -1;
+               this.currentStateInstance.graphicID === -1;
     }
 }

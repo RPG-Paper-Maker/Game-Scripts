@@ -81,6 +81,7 @@ Game.prototype = {
         this.currentMapId = RPM.datasGame.system.idMapStartHero;
         this.heroStates = [1];
         this.heroProperties = [];
+        this.heroStatesOptions = [];
         this.startupStates = {};
         this.startupProperties = {};
         EventCommandModifyTeam.instanciateTeam(GroupKind.Team,
@@ -200,6 +201,7 @@ Game.prototype = {
                                positionHero[2]);
         this.heroStates = json.heroStates;
         this.heroProperties = json.heroProp;
+        this.heroStatesOptions = json.heroStatesOpts;
         this.startupStates = json.startS;
         this.startupProperties = json.startP;
         this.readMapsDatas(json.mapsDatas);
@@ -248,6 +250,7 @@ Game.prototype = {
                                this.hero.position.z],
                 heroStates: this.heroStates,
                 heroProp: this.heroProperties,
+                heroStatesOpts: this.heroStatesOptions,
                 startS: this.startupStates,
                 startP: this.startupProperties,
                 mapsDatas : this.getCompressedMapsDatas()
@@ -290,6 +293,12 @@ Game.prototype = {
                                 }
                                 if (datas.p && datas.p.length) {
                                     inf.p = datas.p;
+                                }
+                                if (datas.soi && datas.soi.length) {
+                                    inf.soi = datas.soi;
+                                }
+                                if (datas.so && datas.so.length) {
+                                    inf.so = datas.so;
                                 }
                             }
                             objPortion[i][jp][j][k] = datas ? inf : null;

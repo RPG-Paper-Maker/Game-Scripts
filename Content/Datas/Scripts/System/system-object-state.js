@@ -84,5 +84,15 @@ SystemObjectState.prototype = {
         if (this.detection !== null) {
             this.detection = EventCommand.getEventCommand(this.detection);
         }
+    },
+
+    copyInstance()
+    {
+        return {
+            graphicID: this.graphicID,
+            rectTileset: this.rectTileset,
+            indexX: this.indexX,
+            indexY: this.indexY
+        }
     }
 }

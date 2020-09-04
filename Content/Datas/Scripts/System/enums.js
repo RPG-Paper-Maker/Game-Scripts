@@ -27,7 +27,8 @@ let CommandMoveKind = {
     MoveHero: 9,
     MoveOppositeHero: 10,
     MoveFront: 11,
-    MoveBack: 12
+    MoveBack: 12,
+    ChangeGraphics: 13
 }
 Object.freeze(CommandMoveKind);
 

@@ -49,7 +49,7 @@ SystemPlaySong.prototype = {
         // Parse
         var id = json.id;
         var isSelectedByID = json.isbi;
-        if (this.isSelectedByID) {
+        if (isSelectedByID) {
             this.songID = new SystemValue();
             this.songID.read(json.vid);
         } else {

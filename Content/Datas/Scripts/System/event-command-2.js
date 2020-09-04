@@ -949,15 +949,16 @@ function EventCommandMoveObject(command) {
     // List of move commands
     this.moves = [];
     this.parameters = [];
-    while(i < l){
-        var kind = command[i++];
-
-        if (kind >= CommandMoveKind.MoveNorth && kind <= CommandMoveKind
-            .MoveBack)
+    let permanent;
+    while (i < l)
+    {
+        this.kind = command[i++];
+        if (this.kind >= CommandMoveKind.MoveNorth && this.kind <= 
+            CommandMoveKind.MoveBack)
         {
             this.parameters.push({ square: command[i++] === 0 });
-            this.kind = kind;
-            switch (kind){
+            switch (this.kind)
+            {
             case CommandMoveKind.MoveNorth:
                 this.moves.push(this.moveNorth);
                 break;
@@ -998,6 +999,20 @@ function EventCommandMoveObject(command) {
                 this.moves.push(this.moveBack);
                 break;
             }
+        }
+        if (this.kind === CommandMoveKind.ChangeGraphics)
+        {
+            permanent = RPM.numToBool(command[i++]);
+            var k = command[i++];
+            var v = command[i++];
+            let pictureID = SystemValue.createValue(k, v);
+            let indexX = command[i++];
+            let indexY = command[i++];
+            let width = command[i++];
+            let height = command[i++];
+            this.parameters.push({ permanent: permanent, pictureID: pictureID, 
+                indexX: indexX, indexY: indexY, width: width, height: height});
+            this.moves.push(this.changeGraphics);
         }
     }
 
@@ -1347,6 +1362,70 @@ EventCommandMoveObject.prototype = {
                 currentState.moveHeroOrientation);
         }
 
+        return Orientation.None;
+    },
+
+    // -------------------------------------------------------
+
+    changeGraphics: function(currentState, object, parameters) {
+        if (object)
+        {
+            // Change object current state value
+            object.currentStateInstance.graphicID = parameters.pictureID
+                .getValue();
+            if (object.currentStateInstance.graphicID === 0)
+            {
+                object.currentStateInstance.rectTileset = [
+                    parameters.indexX,
+                    parameters.indexY,
+                    parameters.width,
+                    parameters.height
+                ];
+            } else
+            {
+                object.currentStateInstance.indexX = parameters.indexX;
+                object.currentStateInstance.indexY = parameters.indexY;
+            }
+
+            // Permanent change
+            if (parameters.permanent)
+            {
+                let statesOptions;
+                if (object.isHero) {
+                    statesOptions = RPM.game.heroStatesOptions;
+                } else if (object.isStartup)
+                {
+                    return;
+                } else 
+                {
+                    let portion = SceneMap.getGlobalPortion(RPM.currentMap
+                        .allObjects[object.system.id]);
+                    let portionDatas = RPM.game.getPotionsDatas(RPM.currentMap
+                        .id, portion[0], portion[1], portion[2]);
+                    let indexProp = portionDatas.soi.indexOf(object.system.id);
+                    if (indexProp === -1) {
+                        statesOptions = [];
+                        portionDatas.soi.push(object.system.id);
+                        portionDatas.so.push(statesOptions);
+                    } else {
+                        statesOptions = portionDatas.so[indexProp];
+                    }
+                }
+                let options = statesOptions[object.currentState.id - 1];
+                if (!options)
+                {
+                    options = {};
+                    statesOptions[object.currentState.id - 1] = options;
+                }
+                options.gid = object.currentStateInstance.graphicID;
+                options.gt = object.currentStateInstance.rectTileset;
+                options.gix = object.currentStateInstance.indexX;
+                options.giy = object.currentStateInstance.indexY;
+            }
+
+            // Graphic update
+            object.changeState();
+        }
         return Orientation.None;
     },
 
