@@ -2449,7 +2449,10 @@ function EventCommandDisplayAPicture(command) {
     var i, k, v;
 
     i = 0;
-    this.pictureID = command[i++];
+    k = command[i++];
+    v = command[i++];
+    i++;
+    this.pictureID = SystemValue.createValue(k, v);
     k = command[i++];
     v = command[i++];
     this.index = SystemValue.createValue(k, v);
@@ -2491,8 +2494,8 @@ EventCommandDisplayAPicture.prototype.update = function(currentState, object,
     var i, l, index, currentIndex, value, picture, ok;
 
     currentIndex = this.index.getValue();
-    picture = RPM.datasGame.pictures.get(PictureKind.Pictures, this.pictureID)
-        .picture.createCopy();
+    picture = RPM.datasGame.pictures.get(PictureKind.Pictures, this.pictureID
+        .getValue()).picture.createCopy();
     picture.setX(this.originX + this.x.getValue());
     picture.setY(this.originY + this.y.getValue());
     picture.centered = this.centered;
@@ -2536,7 +2539,10 @@ function EventCommandSetMoveTurnAPicture(command) {
     this.index = SystemValue.createValue(k, v);
     checked = command[i++] === RPM.NUM_BOOL_TRUE;
     if (checked) {
-        this.pictureID = command[i++];
+        k = command[i++];
+        v = command[i++];
+        i++; 
+        this.pictureID = SystemValue.createValue(k, v);
     }
     checked = command[i++] === RPM.NUM_BOOL_TRUE;
     if (checked) {
@@ -2609,7 +2615,7 @@ EventCommandSetMoveTurnAPicture.prototype.initialize = function() {
             prevOpacity = picture.opacity;
             prevAngle = picture.angle;
             picture = RPM.datasGame.pictures.get(PictureKind.Pictures, this
-                .pictureID).picture.createCopy();
+                .pictureID.getValue()).picture.createCopy();
             if (prevCentered) {
                 prevX += (prevW - picture.oW) / 2;
                 prevY += (prevH - picture.oH) / 2;
