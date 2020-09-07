@@ -84,6 +84,8 @@ DatasSystem.prototype = {
                 .mch, 4);
             this.mountainCollisionAngle = SystemValue.readOrDefaultNumberDouble(
                 json.mca, 45);
+            this.mapFrameDuration = SystemValue.readOrDefaultNumber(json.mfd, 
+                150);
 
             // Path BR
             RPM.PATH_BR = "file:///" + json.pathBR;

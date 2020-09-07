@@ -887,8 +887,8 @@ MapObject.prototype = {
                 // If moving, update frame
                 if (this.currentState.moveAnimation){
                     this.frameTick += RPM.elapsedTime;
-                    if (this.frameTick >= (MapObject.FRAME_DURATION / this
-                        .speed.getValue()))
+                    if (this.frameTick >= (RPM.datasGame.system.mapFrameDuration
+                        .getValue() / this.speed.getValue()))
                     {
                         this.frame = (this.frame + 1) % RPM.FRAMES;
                         this.frameTick = 0;
