@@ -101,12 +101,14 @@ ReactionInterpreter.prototype = {
     */
     update: function()
     {
-        if (!this.canExecute())
+        if (this.isFinished() || RPM.currentMap.callBackAfterLoading !== null || 
+            !this.canExecute())
         {
             return;
         }
         
-        var directNode = true;
+        RPM.currentReaction = this;
+        let directNode = true;
 
         while (directNode){
             if (this.currentCommand.data.parallel){
@@ -144,6 +146,11 @@ ReactionInterpreter.prototype = {
     *   @returns {Node}
     */
     updateCommand: function() {
+        if (RPM.currentMap.callBackAfterLoading !== null)
+        {
+            return this.currentCommand;
+        }
+
         this.updateObjectParameters();
 
         // Update can return different type of values :
@@ -268,8 +275,8 @@ ReactionInterpreter.prototype = {
     /**
     */
     updateObjectMoveState: function() {
-        if (this.currentMapObject && this.currentCommand.data instanceof
-            EventCommandMoveObject)
+        if (!this.isFinished() && this.currentMapObject && this.currentCommand
+            .data instanceof EventCommandMoveObject)
         {
             this.currentMapObject.updateMoveStates(this.currentCommand.data.
                 getCurrentOrientation(this.currentCommandState));
@@ -283,7 +290,8 @@ ReactionInterpreter.prototype = {
     */
     onKeyPressed: function(key)
     {
-        if (this.canExecute())
+        if (!this.isFinished() && (RPM.currentMap.callBackAfterLoading === null 
+            && this.canExecute()))
         {
             this.currentCommand.data.onKeyPressed(this.currentCommandState, key);
         }
@@ -296,7 +304,8 @@ ReactionInterpreter.prototype = {
     */
     onKeyReleased: function(key)
     {
-        if (this.canExecute())
+        if (!this.isFinished() && (RPM.currentMap.callBackAfterLoading === null 
+            && this.canExecute()))
         {
             this.currentCommand.data.onKeyReleased(this.currentCommandState, key);
         }
@@ -310,7 +319,8 @@ ReactionInterpreter.prototype = {
     */
     onKeyPressedRepeat: function(key)
     {
-        if (this.canExecute())
+        if (!this.isFinished() && (RPM.currentMap.callBackAfterLoading === null 
+            && this.canExecute()))
         {
             return this.currentCommand.data.onKeyPressedRepeat(this
                 .currentCommandState, key);
@@ -326,7 +336,8 @@ ReactionInterpreter.prototype = {
     *   @returns {boolean} false if the other keys are blocked after it.
     */
     onKeyPressedAndRepeat: function(key){
-        if (this.canExecute())
+        if (!this.isFinished() && (RPM.currentMap.callBackAfterLoading === null 
+            && this.canExecute()))
         {
             return this.currentCommand.data.onKeyPressedAndRepeat(this
                 .currentCommandState, key);

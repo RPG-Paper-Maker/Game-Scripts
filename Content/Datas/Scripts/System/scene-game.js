@@ -37,7 +37,7 @@ SceneGame.prototype = {
     */
     update: function() {
         var i, l;
-
+        
         // Check diagonal moves
         for (i = 0, l = this.reactionInterpreters.length; i < l; i++)
             this.reactionInterpreters[i].updateObjectMoveState();

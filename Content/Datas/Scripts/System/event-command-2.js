@@ -399,13 +399,14 @@ EventCommandChangeState.prototype = {
     */
     update: function(currentState, object, state) 
     {
-        let objectID = currentState.objectID === -1 ? object.system.id : 
-            currentState.objectID;
+
+        let objectID = currentState.objectID === -1 && !object.isHero && !object
+            .isStartup ? object.system.id : -1;
         if (!currentState.waitingObject) {
             if (currentState.map === null)
             {
                 if (currentState.mapID === -1 || currentState.mapID === RPM
-                    .currentMap.id)
+                    .currentMap.id || currentState.objectID === -1)
                 {
                     currentState.map = RPM.currentMap;
                 } else
@@ -823,7 +824,7 @@ function EventCommandTeleportObject(command){
     // Options
     // TODO
 
-    this.isDirectNode = true;
+    this.isDirectNode = false;
     this.parallel = false;
 }
 
@@ -891,7 +892,10 @@ EventCommandTeleportObject.prototype = {
                             RPM.game.hero.position = currentState.position;
                             if (RPM.currentMap.id !== id) {
                                 RPM.currentMap.closeMap();
-                                RPM.gameStack.replace(new SceneMap(id));
+                                let map = new SceneMap(id);
+                                map.reactionInterpreters.push(RPM
+                                    .currentReaction);
+                                RPM.gameStack.replace(map);
                             } else {
                                 RPM.currentMap.loadPortions(true);
                             }

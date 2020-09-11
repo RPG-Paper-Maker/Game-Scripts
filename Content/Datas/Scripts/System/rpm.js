@@ -181,6 +181,7 @@ RPM.requestPaintHUD = true;
 RPM.currentObject = null;
 RPM.currentParameters = null;
 RPM.currentMap = null;
+RPM.currentReaction = null;
 RPM.displayedPictures = [];
 RPM.screenTone = new THREE.Vector4(0, 0, 0, 1);
 RPM.allowSaves = true;

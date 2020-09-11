@@ -76,10 +76,6 @@ MapObject.FRAME_DURATION = 150;
 */
 MapObject.updateObjectWithID = function(object, objectID, base, callback) 
 {
-    if (object.isHero && objectID === -1) {
-        callback.call(base, RPM.game.hero);
-    }
-
     switch (objectID) 
     {
     case -1: // This object
@@ -763,11 +759,12 @@ MapObject.prototype = {
 
     // -------------------------------------------------------
 
-    addMoveTemp: function(){
-        var objects, afterPortion, originalPortion, localPortion;
-        afterPortion = RPM.getPortion(this.position);
-
-        if (!this.isHero){
+    addMoveTemp: function()
+    {
+        if (!this.isHero)
+        {
+            var objects, afterPortion, originalPortion, localPortion;
+            afterPortion = RPM.getPortion(this.position);
             objects = RPM.game.getPotionsDatas(RPM.currentMap.id,
                 afterPortion[0], afterPortion[1], afterPortion[2]);
             originalPortion = SceneMap.getGlobalPortion(
@@ -781,14 +778,14 @@ MapObject.prototype = {
             }
             else
                 objects.min.push(this);
-        }
 
-        // Add or remove from scene
-        localPortion = RPM.currentMap.getLocalPortion(afterPortion);
-        if (RPM.currentMap.isInPortion(localPortion))
-            this.addToScene();
-        else
-            this.removeFromScene();
+            // Add or remove from scene
+            localPortion = RPM.currentMap.getLocalPortion(afterPortion);
+            if (RPM.currentMap.isInPortion(localPortion))
+                this.addToScene();
+            else
+                this.removeFromScene();
+        }
     },
 
     // -------------------------------------------------------
