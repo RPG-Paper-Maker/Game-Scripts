@@ -499,12 +499,6 @@ MapObject.prototype = {
                 }
             }
         }
-        if (yMountain !== null && !position.equals(this.position)) {
-            this.yMountain = yMountain - this.position.y;
-            this.timeYMountain = new Date().getTime();
-            this.yMountainBefore = this.position.y;
-            position.setY(this.yMountainBefore);
-        }
 
         this.updateBBPosition(this.position);
 
@@ -919,17 +913,6 @@ MapObject.prototype = {
             // Update mesh
             if (frame !== this.frame || orientation !== this.orientation)
                 this.updateUVs();
-        }
-
-        // Smooth camera y Mountain up / down
-        if (this.yMountain !== null) {
-            var time;
-
-            time = Math.min(1, (new Date().getTime() - this.timeYMountain) / 40);
-            this.position.setY(this.yMountainBefore + (time * this.yMountain));
-            if (time === 1) {
-                this.yMountain = null;
-            }
         }
 
         // Moving

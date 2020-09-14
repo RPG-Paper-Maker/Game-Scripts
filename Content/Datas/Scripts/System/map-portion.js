@@ -166,7 +166,8 @@ MapPortion.checkCollisionRay = function(positionBefore, positionAfter, object) {
 
     // Check empty square or square mountain height possible down
     mapPortion = RPM.currentMap.getMapPortionByPortion(portion);
-    if (mapPortion !== null) {
+    if (mapPortion !== null) 
+    {
         floors = mapPortion.squareNonEmpty[jpositionAfter[0] % RPM.PORTION_SIZE]
             [jpositionAfter[2] % RPM.PORTION_SIZE];
         if (yMountain === null && floors.indexOf(positionAfter.y) === -1) {
@@ -1016,7 +1017,6 @@ MapPortion.prototype = {
                             } else {
                                 objCollisionPlus = objCollision;
                             }
-
                             boundingBoxes[RPM.positionToIndex(positionPlus)]
                                 .push(objCollisionPlus);
                         }
@@ -1538,7 +1538,15 @@ MapPortion.prototype = {
                         return [false, null];
                     }
                 } else {
-                    return [false, null];
+                    if (CollisionsUtilities.isPointOnRectangle(point, x, x +
+                        RPM.SQUARE_SIZE, z, z + RPM.SQUARE_SIZE))
+                    {
+                        return forceAlways || !forceNever ? [false, y +
+                            objCollision.rh] : [true, null];
+                    } else
+                    {
+                        return [false, null];
+                    }
                 }
             }
 
