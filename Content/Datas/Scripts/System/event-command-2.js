@@ -3133,7 +3133,7 @@ EventCommandRemoveObjectFromMap.prototype.update = function(currentState, object
                     break;
                 }
 
-                datas.r.push(id);
+                removed.removed = true;
                 removed.removeFromScene();
             }
             currentState.finished = true;

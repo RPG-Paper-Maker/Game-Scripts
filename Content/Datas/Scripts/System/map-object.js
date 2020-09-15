@@ -239,7 +239,8 @@ MapObject.prototype = {
         }
     },
 
-    updateTimeEvents: function() {
+    updateTimeEvents: function() 
+    {
         var i, l, events, event, interval, repeat, timeEllapsed, removeList;
 
         // First run detection state
@@ -652,7 +653,13 @@ MapObject.prototype = {
     *   @param {number} limit Max distance to go.
     *   @returns {number} Distance cross.
     */
-    move: function(orientation, limit, angle, isCameraOrientation){
+    move: function(orientation, limit, angle, isCameraOrientation)
+    {
+        if (this.removed)
+        {
+            return [0, 0];
+        }
+        
         var objects, movedObjects, index, normalDistance, position, distance;
 
         // Remove from move
@@ -699,6 +706,10 @@ MapObject.prototype = {
     *   @param {THREE.Vector3} position Position to teleport.
     */
     teleport: function(position){
+        if (this.removed)
+        {
+            return;
+        }
 
         // Remove from move
         this.removeMoveTemp();
@@ -864,6 +875,11 @@ MapObject.prototype = {
     /** Update the object graphics.
     */
     update: function(angle) {
+        if (this.removed)
+        {
+            return;
+        }
+
         if (this.moveFrequencyTick > 0) {
             this.moveFrequencyTick -= RPM.elapsedTime;
         }
@@ -926,8 +942,8 @@ MapObject.prototype = {
     // -------------------------------------------------------
 
     updateMovingState: function() {
-        if (this.currentState && this.currentState.objectMovingKind !==
-            ObjectMovingKind.Fix)
+        if (!this.removed && this.currentState && this.currentState
+            .objectMovingKind !== ObjectMovingKind.Fix)
         {
             var interpreter;
 

@@ -683,7 +683,9 @@ SceneMap.prototype.update = function() {
             var movedObjects = objects.min;
             var p, l;
             for (p = 0, l = movedObjects.length; p < l; p++)
+            {
                 movedObjects[p].update(angle);
+            }
             movedObjects = objects.mout;
             for (p = 0, l = movedObjects.length; p < l; p++)
                 movedObjects[p].update(angle);
