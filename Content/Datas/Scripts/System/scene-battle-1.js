@@ -361,17 +361,21 @@ SceneBattle.prototype.onCommandSelected = function(key) {
         }
         break;
     case EffectSpecialActionKind.Escape:
-        this.step = 4;
-        this.subStep = 3;
-        this.transitionEnded = false;
-        this.time = new Date().getTime();
-        this.winning = true;
-        RPM.escaped = true;
-        RPM.songsManager.initializeProgressionMusic(SystemPlaySong
-            .currentPlayingMusic.volume, 0, 0, SceneBattle
-            .TIME_LINEAR_MUSIC_END);
-        for (i = 0, l = this.battlers[CharacterKind.Hero].length; i < l; i++) {
-            this.battlers[CharacterKind.Hero][i].setEscaping();
+        if (this.canEscape)
+        {
+            this.step = 4;
+            this.subStep = 3;
+            this.transitionEnded = false;
+            this.time = new Date().getTime();
+            this.winning = true;
+            RPM.escaped = true;
+            RPM.songsManager.initializeProgressionMusic(SystemPlaySong
+                .currentPlayingMusic.volume, 0, 0, SceneBattle
+                .TIME_LINEAR_MUSIC_END);
+            for (i = 0, l = this.battlers[CharacterKind.Hero].length; i < l; i++) 
+            {
+                this.battlers[CharacterKind.Hero][i].setEscaping();
+            }
         }
         return;
     case EffectSpecialActionKind.EndTurn:
