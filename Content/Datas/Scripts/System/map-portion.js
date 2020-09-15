@@ -1574,7 +1574,10 @@ MapPortion.prototype = {
             if (forceNever || (!forceAlways && mountain.angle > RPM.datasGame
                 .system.mountainCollisionAngle.getValue()))
             {
-                return [true, null];
+                // Check if floor existing on top of the mountain angle
+                isFloor = this.boundingBoxesLands[RPM.positionToIndex(
+                    jpositionAfter)].length > 0;
+                return [!isFloor, null];
             }
 
             return [!forceAlways && (Math.abs(newPosition.y - positionAfter
