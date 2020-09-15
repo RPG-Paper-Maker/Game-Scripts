@@ -3724,6 +3724,7 @@ EventCommandDisplayAnAnimation.prototype.update = function(currentState, object
             currentState.animation.playSounds(currentState.frame, 
                 AnimationEffectConditionKind.None);
             currentState.frame++;
+            RPM.requestPaintHUD = true;
             return currentState.frame > currentState.frameMax ? 1 : 0;
         }
     }
