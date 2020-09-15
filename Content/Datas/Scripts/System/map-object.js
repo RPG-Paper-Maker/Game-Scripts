@@ -217,7 +217,7 @@ MapObject.prototype = {
             stateSystem = this.system.states[i];
             stateValue = mapStatesOpts[stateSystem.id - 1];
             state = stateSystem.copyInstance();
-            this.statesInstance[stateSystem.id - 1] = state;
+            this.statesInstance[i] = state;
             if (!RPM.isUndefined(stateValue))
             {
                 state.graphicID = stateValue.gid;
@@ -326,9 +326,10 @@ MapObject.prototype = {
             return;
         }
 
-        var material = this.currentState === null ? null : (this.currentStateInstance
-            .graphicID === 0 ? RPM.currentMap.textureTileset : RPM.currentMap
-            .texturesCharacters[this.currentStateInstance.graphicID]);
+        var material = this.currentStateInstance === null ? null : (this
+            .currentStateInstance.graphicID === 0 ? RPM.currentMap
+            .textureTileset : RPM.currentMap.texturesCharacters[this
+            .currentStateInstance.graphicID]);
         this.meshBoundingBox = new Array;
         if (this.currentState !== null && !this.isNone() && material && material
             .map)
