@@ -1538,15 +1538,7 @@ MapPortion.prototype = {
                         return [false, null];
                     }
                 } else {
-                    if (CollisionsUtilities.isPointOnRectangle(point, x, x +
-                        RPM.SQUARE_SIZE, z, z + RPM.SQUARE_SIZE))
-                    {
-                        return forceAlways || !forceNever ? [false, y +
-                            objCollision.rh] : [true, null];
-                    } else
-                    {
-                        return [false, null];
-                    }
+                    return [false, null];
                 }
             }
 
