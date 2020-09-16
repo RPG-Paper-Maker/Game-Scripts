@@ -1575,8 +1575,9 @@ MapPortion.prototype = {
                 .system.mountainCollisionAngle.getValue()))
             {
                 // Check if floor existing on top of the mountain angle
-                isFloor = this.boundingBoxesLands[RPM.positionToIndex(
-                    jpositionAfter)].length > 0;
+                isFloor = jposition[1] === jpositionAfter[1] ? false : this
+                    .boundingBoxesLands[RPM.positionToIndex(jpositionAfter)]
+                    .length > 0;
                 return [!isFloor, null];
             }
 
