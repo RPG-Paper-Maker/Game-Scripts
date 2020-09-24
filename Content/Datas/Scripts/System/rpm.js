@@ -1280,7 +1280,12 @@ RPM.sin = function(w){
 // -------------------------------------------------------
 
 RPM.getPortion = function(position){
-    var p = RPM.getPosition(position);
+    return RPM.getPortionArray(RPM.getPosition(position));
+}
+
+// -------------------------------------------------------
+
+RPM.getPortionArray = function(p){
     return [
         Math.floor(p[0] / RPM.PORTION_SIZE),
         Math.floor(p[1] / RPM.PORTION_SIZE),

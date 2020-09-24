@@ -170,6 +170,16 @@ MapPortion.checkCollisionRay = function(positionBefore, positionAfter, object) {
     {
         floors = mapPortion.squareNonEmpty[jpositionAfter[0] % RPM.PORTION_SIZE]
             [jpositionAfter[2] % RPM.PORTION_SIZE];
+        if (floors.length === 0)
+        {
+            let otherMapPortion = RPM.currentMap.getMapPortionByPortion([portion
+                [0], portion[1] + 1, portion[2]]);
+            if (otherMapPortion)
+            {
+                floors = otherMapPortion.squareNonEmpty[jpositionAfter[0] % RPM
+                    .PORTION_SIZE][jpositionAfter[2] % RPM.PORTION_SIZE];
+            }
+        }
         if (yMountain === null && floors.indexOf(positionAfter.y) === -1) {
             l = floors.length;
             if (l === 0) {
