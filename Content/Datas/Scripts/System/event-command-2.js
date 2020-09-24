@@ -1772,7 +1772,6 @@ EventCommandMoveCamera.prototype = {
                 else {
                     if (currentState.moveChangeTargetDif)
                     {
-                        
                         positionOffset = new THREE.Vector3(
                             timeRate * (currentState.finalDifPosition.x - 
                                 currentState.moveChangeTargetDif.x),
@@ -1783,9 +1782,10 @@ EventCommandMoveCamera.prototype = {
                         );
                         RPM.currentMap.camera.targetOffset.add(positionOffset);
                     }
-                    RPM.currentMap.camera.updateAngles();
-                    RPM.currentMap.camera.updateDistance();
                 }
+                RPM.currentMap.camera.updateTargetPosition();
+                RPM.currentMap.camera.updateAngles();
+                RPM.currentMap.camera.updateDistance();
 
                 // Rotation
                 RPM.currentMap.camera.horizontalAngle +=
