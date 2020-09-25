@@ -115,9 +115,13 @@ Object3DCustom.prototype = {
                     angleX,
                     angleZ
                 ],
+                c: center,
                 w: Math.ceil(w / 2 / RPM.SQUARE_SIZE),
                 h: Math.ceil(h / 2 / RPM.SQUARE_SIZE),
                 d: Math.ceil(d / 2 / RPM.SQUARE_SIZE),
+                m: Math.max(Math.max(Math.ceil(w / 2 / RPM.SQUARE_SIZE), Math
+                    .ceil(h / 2 / RPM.SQUARE_SIZE)), Math.ceil(d / 2 / RPM
+                    .SQUARE_SIZE)),
                 k: true
             });
         }

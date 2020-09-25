@@ -985,33 +985,32 @@ MapPortion.prototype = {
 
     updateCollision: function(boundingBoxes, collisions, position, side) {
         var i, l, a, b, c, minW, maxW, minH, maxH, minD, maxD, objCollision,
-            positionPlus, objCollisionPlus;
+            positionPlus, objCollisionPlus, centeredPosition;
 
         for (i = 0, l = collisions.length; i < l; i++) {
             objCollision = collisions[i];
             if (side) {
-                minW = -objCollision.w;
-                maxW = objCollision.w;
-                minH = -objCollision.h;
-                maxH = objCollision.h;
-                minD = -objCollision.d;
-                maxD = objCollision.d;
+                centeredPosition = [position[0] + Math.ceil(objCollision.c.x / 
+                    RPM.SQUARE_SIZE), position[1] + Math.ceil(objCollision.c.y / 
+                    RPM.SQUARE_SIZE), position[3] + Math.ceil(objCollision.c.z / 
+                    RPM.SQUARE_SIZE)];
 
             } else {
-                minW = 0;
-                maxW = objCollision.m;
-                minH = 0;
-                maxH = objCollision.m;
-                minD = 0;
-                maxD = objCollision.m;
+                centeredPosition = [position[0], position[1], position[3]];
             }
+            minW = -objCollision.m;
+                maxW = objCollision.m;
+                minH = -objCollision.m;
+                maxH = objCollision.m;
+                minD = -objCollision.m;
+                maxD = objCollision.m;
             for (a = minW; a <= maxW; a++) {
                 for (b = minH; b <= maxH; b++) {
                     for (c = minD; c <= maxD; c++) {
                         positionPlus = [
-                            position[0] + a,
-                            position[1] + b,
-                            position[3] + c
+                            centeredPosition[0] + a,
+                            centeredPosition[1] + b,
+                            centeredPosition[2] + c
                         ];
                         if (RPM.currentMap.isInMap(positionPlus) && this
                             .isPositionIn(positionPlus))

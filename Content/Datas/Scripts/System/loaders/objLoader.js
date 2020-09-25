@@ -227,10 +227,8 @@ THREE.OBJLoader.prototype = {
             maxVertex.z - minVertex.z) / 2) + minVertex.z);
         object.w = maxVertex.x - minVertex.x;
         object.h = maxVertex.y - minVertex.y;
-        object.d = maxVertex.z - minVertex.z;
+		object.d = maxVertex.z - minVertex.z;
 
         return object;
-
 	}
-
 };
