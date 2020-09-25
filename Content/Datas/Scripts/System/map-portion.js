@@ -1434,13 +1434,22 @@ MapPortion.prototype = {
 
         // if w = 0, check height
         if (objCollision.rw === 0) {
-            if (CollisionsUtilities.isPointOnRectangle(point, x, x +
-                RPM.SQUARE_SIZE, z, z + RPM.SQUARE_SIZE))
+            let pass = forceAlways || -(!forceNever && ((y + objCollision.rh) <= 
+                (positionAfter.y + RPM.datasGame.system.mountainCollisionHeight
+                .getValue())));
+            if (CollisionsUtilities.isPointOnRectangle(point, x, x + RPM
+                .SQUARE_SIZE, z, z + RPM.SQUARE_SIZE))
             {
-                return forceAlways || -(!forceNever && ((y + objCollision.rh
-                    ) <= (positionAfter.y + RPM.datasGame.system
-                    .mountainCollisionHeight.getValue()))) ? [false, y +
-                    objCollision.rh] : [true, null];
+                return pass ? [false, y + objCollision.rh] : [true, null];
+            } else
+            {
+                if (!pass)
+                {
+                    return [this.checkIntersectionSprite([x + (RPM.SQUARE_SIZE / 
+                        2), y + (RPM.SQUARE_SIZE / 2), z + (RPM.SQUARE_SIZE / 2)
+                        , RPM.SQUARE_SIZE, objCollision.rh, RPM.SQUARE_SIZE, 0, 
+                        0, 0], true, object), null];
+                }
             }
         } else { // if w > 0, go like a slope
             // Get coplanar points according to side
