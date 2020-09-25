@@ -2438,9 +2438,9 @@ EventCommandScript.prototype = Object.create(EventCommand.prototype);
 // -------------------------------------------------------
 
 EventCommandScript.prototype.update = function(currentState, object, state) {
-    RPM.evaluateScript(this.script.getValue());
-
-    return 1;
+    let res = new Function("$that", "$object", this.script.getValue())($that, 
+        object);
+    return RPM.isUndefined(res) ? 1 : res;
 }
 
 // -------------------------------------------------------
