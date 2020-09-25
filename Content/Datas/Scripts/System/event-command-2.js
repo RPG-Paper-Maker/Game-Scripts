@@ -3762,13 +3762,23 @@ function EventCommandShakeScreen(command) {
     this.parallel = !this.isWaitEnd;
 }
 
+EventCommandShakeScreen.updateTargetOffset = function(currentState, 
+    timeRate)
+{
+    let value = timeRate * currentState.finalDifPos;
+    RPM.currentMap.camera.targetOffset.x += value * -Math.sin(RPM.currentMap
+        .camera.horizontalAngle * Math.PI / 180.0);
+    RPM.currentMap.camera.targetOffset.z += value * Math.cos(RPM.currentMap
+        .camera.horizontalAngle * Math.PI / 180.0);
+}
+
 EventCommandShakeScreen.prototype = Object.create(EventCommand.prototype);
 
-
-EventCommandShakeScreen.prototype.initialize = function() {
+EventCommandShakeScreen.prototype.initialize = function()
+{
     let t = this.time.getValue();
     let time = t * 1000;
-    let shakeNumber = this.shakeNumber.getValue();
+    let shakeNumber = this.shakeNumber.getValue() * 2;
     // Should be pair to have perfect cycles
     let totalShakes = shakeNumber * t;
     if (totalShakes % 2 !== 0)
@@ -3802,7 +3812,7 @@ EventCommandShakeScreen.prototype.update = function(currentState, object
     , state)
 {
     if (currentState.parallel) {
-        let timeRate, dif;
+        let timeRate, dif, value;
 
         if (currentState.time === 0) {
             timeRate = 1;
@@ -3816,7 +3826,11 @@ EventCommandShakeScreen.prototype.update = function(currentState, object
             }
             currentState.shakeTimeLeft -= RPM.elapsedTime;
             if (currentState.shakeTimeLeft <= 0) {
-                dif += currentState.shakeTimeLeft;
+                timeRate = (dif + currentState.shakeTimeLeft) / currentState
+                    .shakeTime;
+                EventCommandShakeScreen.updateTargetOffset(currentState, 
+                    timeRate);
+                dif = -currentState.shakeTimeLeft;
                 currentState.shakeTimeLeft = currentState.shakeTime + 
                     currentState.shakeTimeLeft;
                 currentState.currentOffset++;
@@ -3825,14 +3839,7 @@ EventCommandShakeScreen.prototype.update = function(currentState, object
             }
             timeRate = dif / currentState.shakeTime;
         }
-
-        let value = timeRate * currentState.finalDifPos;
-
-        RPM.currentMap.camera.targetOffset.x += value * -Math.sin(RPM.currentMap
-            .camera.horizontalAngle * Math.PI / 180.0);
-        RPM.currentMap.camera.targetOffset.z += value * Math.cos(RPM.currentMap
-            .camera.horizontalAngle * Math.PI / 180.0);
-
+        EventCommandShakeScreen.updateTargetOffset(currentState, timeRate);
         if (currentState.timeLeft === 0)
         {
             RPM.currentMap.camera.targetOffset.x = currentState.beginPosX;
