@@ -399,9 +399,6 @@ EventCommandChangeState.prototype = {
     */
     update: function(currentState, object, state) 
     {
-
-        let objectID = currentState.objectID === -1 && !object.isHero && !object
-            .isStartup ? object.system.id : -1;
         if (!currentState.waitingObject) {
             if (currentState.map === null)
             {
@@ -422,7 +419,7 @@ EventCommandChangeState.prototype = {
             {
                 if (currentState.map === RPM.currentMap)
                 {
-                    MapObject.updateObjectWithID(object, objectID, 
+                    MapObject.updateObjectWithID(object, currentState.objectID, 
                         this, function(moved)
                     {
                         currentState.object = moved;
@@ -447,8 +444,8 @@ EventCommandChangeState.prototype = {
                     } else {
                         RPM.game.startupStates[RPM.currentMap.id] = [];
                     }
-                    states = currentState.object.isHero ? RPM.game.heroStates : RPM.game
-                        .startupStates[RPM.currentMap.id];
+                    states = currentState.object.isHero ? RPM.game.heroStates : 
+                        RPM.game.startupStates[RPM.currentMap.id];
                     EventCommandChangeState.addStateSpecial(states, this.idState
                         .getValue());
                     break;
@@ -462,6 +459,8 @@ EventCommandChangeState.prototype = {
                     break;
                 }
             } else {
+                let objectID = currentState.objectID === -1 ? object.system.id : 
+                    currentState.objectID;
                 var portion = SceneMap.getGlobalPortion(currentState.map
                     .allObjects[objectID]);
                 var portionDatas = RPM.game.getPotionsDatas(currentState.map.id,
@@ -489,14 +488,12 @@ EventCommandChangeState.prototype = {
                     break;
                 }
             }
-    
             if (currentState.map === RPM.currentMap)
             {
                 currentState.object.changeState();
             }
             return 1;
         }
-
         return 0;
     },
 
