@@ -51,10 +51,16 @@ function GraphicPlayerDescription(gamePlayer) {
         .MEDIUM_FONT_SIZE });
     this.graphicLevelName = new GraphicText(levelStat.name);
     this.graphicLevel = new GraphicText("" + gamePlayer[levelStat.abbreviation]);
-    this.graphicExpName = new GraphicText(expStat.name, { fontSize: RPM
-        .MEDIUM_FONT_SIZE });
-    this.graphicExp = new GraphicText("" + gamePlayer.getBarAbbreviation(expStat
-        ), { fontSize: RPM.MEDIUM_FONT_SIZE });
+    if (expStat === null)
+    {
+        this.graphicExpName = null;
+    } else
+    {
+        this.graphicExpName = new GraphicText(expStat.name, { fontSize: RPM
+            .MEDIUM_FONT_SIZE });
+        this.graphicExp = new GraphicText("" + gamePlayer.getBarAbbreviation(expStat
+            ), { fontSize: RPM.MEDIUM_FONT_SIZE });
+    }
 
     // Adding stats
     this.listStatsNames = new Array;
@@ -252,10 +258,13 @@ GraphicPlayerDescription.prototype = {
         yClass = yName + 20;
         this.graphicClass.draw(xCharacter, yClass, 0, 0);
         yExp = yClass + 20;
-        this.graphicExpName.draw(xCharacter, yExp, 0, 0);
-        xExp = xCharacter + Platform.ctx.measureText(this.graphicExpName.text).width
-            + 10;
-        this.graphicExp.draw(xExp, yExp, 0, 0);
+        if (this.graphicExpName !== null)
+        {
+            this.graphicExpName.draw(xCharacter, yExp, 0, 0);
+            xExp = xCharacter + Platform.ctx.measureText(this.graphicExpName.text).width
+                + 10;
+            this.graphicExp.draw(xExp, yExp, 0, 0);
+        }
         yStats = yExp + 30;
 
         // Stats

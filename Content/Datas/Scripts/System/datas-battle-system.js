@@ -187,6 +187,7 @@ DatasBattleSystem.prototype = {
     *   @returns {SystemStatistic}
     */
     getExpStatistic: function(){
-        return this.statistics[this.idExpStatistic];
+        let stat = this.statistics[this.idExpStatistic];
+        return (RPM.isUndefined(stat) || stat.isRes) ? null : stat;
     }
 }

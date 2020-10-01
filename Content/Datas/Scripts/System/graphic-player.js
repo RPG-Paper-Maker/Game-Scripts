@@ -45,10 +45,16 @@ function GraphicPlayer(gamePlayer, reverse) {
     this.graphicClass = new GraphicText(cl.name, { fontSize: 10 });
     this.graphicLevelName = new GraphicText(levelStat.name);
     this.graphicLevel = new GraphicText("" + gamePlayer[levelStat.abbreviation]);
-    this.graphicExpName = new GraphicText(expStat.name, { fontSize: RPM
-        .MEDIUM_FONT_SIZE });
-    this.graphicExp = new GraphicText(gamePlayer.getBarAbbreviation(expStat),
-        { fontSize: RPM.MEDIUM_FONT_SIZE });
+    if (expStat === null)
+    {
+        this.graphicExpName = null;
+    } else
+    {
+        this.graphicExpName = new GraphicText(expStat.name, { fontSize: RPM
+            .MEDIUM_FONT_SIZE });
+        this.graphicExp = new GraphicText(gamePlayer.getBarAbbreviation(expStat),
+            { fontSize: RPM.MEDIUM_FONT_SIZE });
+    }
 
     // Adding stats
     this.listStatsNames = [];
@@ -291,10 +297,13 @@ GraphicPlayer.prototype = {
         yClass = yName + 15;
         this.graphicClass.draw(xCharacter, yClass, 0, 0);
         yExp = yClass + 29;
-        this.graphicExpName.draw(xCharacter, yExp, 0, 0);
-        xExp = xCharacter + Platform.ctx.measureText(this.graphicExpName.text).width
-            + 10;
-        this.graphicExp.draw(xExp, yExp, 0, 0);
+        if (this.graphicExpName !== null)
+        {
+            this.graphicExpName.draw(xCharacter, yExp, 0, 0);
+            xExp = xCharacter + Platform.ctx.measureText(this.graphicExpName.text).width
+                + 10;
+            this.graphicExp.draw(xExp, yExp, 0, 0);
+        }
     },
 
     /** Drawing the player informations in battles.
