@@ -134,11 +134,14 @@ SceneBattle.prototype.initializeStep2 = function() {
 // -------------------------------------------------------
 
 SceneBattle.prototype.getCondition = function() {
-    if (this.damages[0][1]) {
-        return AnimationEffectConditionKind.Critical;
-    }
-    if (this.damages[0][2]) {
-        return AnimationEffectConditionKind.Miss;
+    if (this.damages[0])
+    {
+        if (this.damages[0][1]) {
+            return AnimationEffectConditionKind.Critical;
+        }
+        if (this.damages[0][2]) {
+            return AnimationEffectConditionKind.Miss;
+        }
     }
     return AnimationEffectConditionKind.Hit;
 };
