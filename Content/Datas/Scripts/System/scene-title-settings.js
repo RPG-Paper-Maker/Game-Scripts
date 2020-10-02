@@ -31,12 +31,20 @@ function SceneTitleSettings() {
 
     // Creating windows
     this.windowSettings = new WindowBox(RPM.HUGE_SPACE, RPM.HUGE_SPACE, RPM
-        .MEDIUM_SLOT_WIDTH, RPM.LARGE_SLOT_HEIGHT, new GraphicText("SETTINGS", {
-        align: Align.Center }), RPM.SMALL_SLOT_PADDING);
+        .MEDIUM_SLOT_WIDTH, RPM.LARGE_SLOT_HEIGHT,
+        {
+            content: new GraphicText("SETTINGS", { align: Align.Center }),
+            padding: RPM.SMALL_SLOT_PADDING
+        }
+    );
     this.windowInformations = new WindowBox(RPM.HUGE_SPACE + RPM
-        .MEDIUM_SLOT_WIDTH + RPM.LARGE_SPACE, RPM.HUGE_SPACE, RPM.SCREEN_X - (2 *
-        RPM.HUGE_SPACE) - RPM.MEDIUM_SLOT_WIDTH - RPM.LARGE_SPACE, RPM
-        .LARGE_SLOT_HEIGHT, null, RPM.SMALL_SLOT_PADDING);
+        .MEDIUM_SLOT_WIDTH + RPM.LARGE_SPACE, RPM.HUGE_SPACE, RPM.SCREEN_X - (2 
+        * RPM.HUGE_SPACE) - RPM.MEDIUM_SLOT_WIDTH - RPM.LARGE_SPACE, RPM
+        .LARGE_SLOT_HEIGHT,
+        {
+            padding: RPM.SMALL_SLOT_PADDING
+        }
+    );
     this.windowChoicesMain = new WindowChoices(RPM.HUGE_SPACE, RPM.HUGE_SPACE + 
         RPM.LARGE_SLOT_HEIGHT + RPM.LARGE_SPACE, RPM.SCREEN_X - (2 * RPM
         .HUGE_SPACE), RPM.MEDIUM_SLOT_HEIGHT, RPM.datasGame.titlescreenGameover

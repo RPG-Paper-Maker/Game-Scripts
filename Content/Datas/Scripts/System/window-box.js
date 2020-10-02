@@ -10,48 +10,108 @@
 */
 
 /** @class
-*   A class for window boxes.
+*   A class for window boxes
 *   @extends Bitmap
-*   @property {number[]} windowDimension Dimensions of the window (rectangle).
-*   @property {Object} content Content (containing a draw function) to display
-*   inside the window.
-*   @property {number[]} padding Padding of the box.
-*   @property {number[]} contentDimension Dimension of content.
-*   @param {number} x The x coords.
-*   @param {number} y The y coords.
-*   @param {number} w The w coords.
-*   @param {number} h The h coords.
-*   @param {Object} [content=null] - Content (containing a draw function) to
+*   @property {Bitmap} content Content (containing a draw function) to
 *   display inside the window.
-*   @param {number[]} [padding=[0,0,0,0]] - Padding of the box.
+*   @property {number[]} padding Padding of the box
+*   @property {boolean} limitContent If checked, the content will be 
+*   cut according to padding
+*   @property {number} bordersOpacity Opacity of borders beetween 0 and 1, 
+*   default is 1
+*   @property {number} backgroundOpacity Opacity of background beetween 0 and 1
+*   , default is 1
+*   @property {boolean} selected If checked, the background will change, 
+*   default is false
+*   @property {boolean} bordersVisible If checked, show the borders, default 
+*   is true
+*   @property {number[]} contentDimension Dimension of content
+*   @property {number[]} windowDimension Dimensions of the window
+*   @param {number} x The x coords
+*   @param {number} y The y coords
+*   @param {number} w The w coords
+*   @param {number} h The h coords
+*   @param {Object} [opts={}] Options
+*   @param {Bitmap} [opts.content=null] Content (containing a draw function) to
+*   display inside the window.
+*   @param {number[]} [opts.padding=[0,0,0,0]] Padding of the box
+*   @param {boolean} [opts.limitContent=true] If checked, the content will be 
+*   cut according to padding
 */
 class WindowBox extends Bitmap
 {
-    constructor(x, y, w, h, content, padding, limitContent)
+    constructor(x, y, w, h, { content = null, padding = [0, 0, 0, 0], 
+        limitContent = true } = {})
     {
         super(x, y, w, h);
 
-        // Default values
-        if (typeof content === 'undefined') content = null;
-        if (typeof padding === 'undefined') padding = [0,0,0,0];
-        if (typeof limitContent === 'undefined') {
-            limitContent = true;
-        }
-
-        this.padding = padding;
         this.content = content;
+        this.padding = padding;
         this.limitContent = limitContent;
         this.updateDimensions();
         this.bordersOpacity = 1;
         this.backgroundOpacity = 1;
         this.selected = false;
-        this.contentLoaded = true;
         this.bordersVisible = true;
     }
 
-    updateDimensions() {
+    // -------------------------------------------------------
+    /** Set the x value
+    *   @param {number} x The x value
+    */
+    setX(x)
+    {
+        super.setX(x);
+        if (this.padding)
+        {
+            this.updateDimensions();
+        }
+    }
 
+    // -------------------------------------------------------
+    /** Set the y value
+    *   @param {number} y The y value
+    */
+    setY(y)
+    {
+        super.setY(y);
+        if (this.padding)
+        {
+            this.updateDimensions();
+        }
+    }
 
+    // -------------------------------------------------------
+    /** Set the w value
+    *   @param {number} w The w value
+    */
+    setW(w)
+    {
+        super.setW(w);
+        if (this.padding)
+        {
+            this.updateDimensions();
+        }
+    }
+
+    // -------------------------------------------------------
+    /** Set the h value
+    *   @param {number} h The h value
+    */
+    setH(h)
+    {
+        super.setH(h);
+        if (this.padding)
+        {
+            this.updateDimensions();
+        }
+    }
+
+    // -------------------------------------------------------
+    /** Update the content and window dimensions
+    */
+    updateDimensions()
+    {
         // Setting content dimensions
         this.contentDimension = [
             this.oX + this.padding[0],
@@ -69,109 +129,64 @@ class WindowBox extends Bitmap
         ];
     }
 
-    setX(x){
-        super.setX(x);
-        if (this.padding)
-        {
-            this.updateDimensions();
-        }
-    }
-
     // -------------------------------------------------------
-
-    setY(y){
-        super.setY(y);
-        if (this.padding)
+    /** Update the content
+    */
+    update()
+    {
+        if (this.content)
         {
-            this.updateDimensions();
-        }
-    }
-
-    // -------------------------------------------------------
-
-    setW(w){
-        super.setW(w);
-        if (this.padding)
-        {
-            this.updateDimensions();
-        }
-    }
-
-    // -------------------------------------------------------
-
-    setH(h){
-        super.setH(h);
-        if (this.padding)
-        {
-            this.updateDimensions();
-        }
-    }
-
-    update() {
-        if (this.content !== null) {
             this.content.update();
         }
     }
 
     // -------------------------------------------------------
-
     /** Draw the window
-    *   @param {Canvas.Context} context The canvas context.
-    *   @param {boolean} [isChoice=false] - Indicate if this window box is used
+    *   @param {boolean} [isChoice=false] Indicate if this window box is used
     *   for a window choices.
+    *   @param {number[]} [windowDimension = this.windowDimension] Dimensions 
+    *   of the window
+    *   @param {number[]} [contentDimension = this.contentDimension] Dimension 
+    *   of content
     */
-    draw(isChoice, windowDimension, contentDimension) {
-        if (this.contentLoaded) {
-            // Default values
-            if (typeof isChoice === 'undefined') {
-                isChoice = false;
-            }
-            if (typeof windowDimension === 'undefined') {
-                windowDimension = this.windowDimension;
-            }
-            if (typeof contentDimension === 'undefined') {
-                contentDimension = this.contentDimension;
-            }
+    draw(isChoice = false, windowDimension = this.windowDimension, 
+        contentDimension = this.contentDimension)
+    {
+        // Content behind
+        if (this.content && this.content.drawBehind)
+        {
+            this.content.drawBehind(contentDimension[0], contentDimension[1], 
+                contentDimension[2], contentDimension[3]);
+        }
 
-            // Content behind
-            if (this.content && this.content.drawBehind) {
-                this.content.drawBehind(contentDimension[0], contentDimension[1]
+        // Draw box
+        RPM.datasGame.system.getWindowSkin().drawBox(windowDimension, this
+            .selected, this.bordersVisible);
+
+        // Draw content
+        if (this.content)
+        {
+            if (!isChoice && this.limitContent)
+            {
+                Platform.ctx.save();
+                Platform.ctx.beginPath();
+                Platform.ctx.rect(RPM.getScreenX(contentDimension[0]), RPM
+                    .getScreenY(contentDimension[1] - (this.padding[3] / 2))
+                    , RPM.getScreenX(contentDimension[2]), RPM.getScreenY(
+                    contentDimension[3] + this.padding[3]));
+                Platform.ctx.clip();
+            }
+            if (isChoice)
+            {
+                this.content.drawChoice(contentDimension[0], contentDimension[1]
                     , contentDimension[2], contentDimension[3]);
+            } else {
+                this.content.drawBox(contentDimension[0], contentDimension[1], 
+                    contentDimension[2], contentDimension[3]);
             }
-
-            // Draw box
-            RPM.datasGame.system.getWindowSkin().drawBox(windowDimension, this
-                .selected, this.bordersVisible);
-
-            // Draw content
-            if (this.content !== null) {
-                if (!isChoice && this.limitContent) {
-                    Platform.ctx.save();
-                    Platform.ctx.beginPath();
-                    Platform.ctx.rect(RPM.getScreenX(contentDimension[0]), RPM
-                        .getScreenY(contentDimension[1] - (this.padding[3] / 2))
-                        , RPM.getScreenX(contentDimension[2]), RPM.getScreenY(
-                        contentDimension[3] + this.padding[3]));
-                    Platform.ctx.clip();
-                }
-                if (isChoice){
-                    this.content.draw(
-                         contentDimension[0],
-                         contentDimension[1],
-                         contentDimension[2],
-                         contentDimension[3]
-                    );
-                } else {
-                    this.content.drawInformations(
-                         contentDimension[0],
-                         contentDimension[1],
-                         contentDimension[2],
-                         contentDimension[3]
-                    );
-                }
-                if (this.limitContent) {
-                    Platform.ctx.restore();
-                }
+            if (!isChoice && this.limitContent)
+            {
+                Platform.ctx.restore();
             }
         }
     }

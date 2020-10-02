@@ -31,13 +31,22 @@ function SceneKeyboardAssign() {
 
     // Creating windows
     this.windowKeyboard = new WindowBox(RPM.HUGE_SPACE, RPM.HUGE_SPACE, RPM
-        .MEDIUM_SLOT_WIDTH, RPM.LARGE_SLOT_HEIGHT, new GraphicText("KEYBOARD", {
-        align: Align.Center }), RPM.SMALL_SLOT_PADDING);
+        .MEDIUM_SLOT_WIDTH, RPM.LARGE_SLOT_HEIGHT,
+        {
+            content: new GraphicText("KEYBOARD", { align: Align.Center }),
+            padding: RPM.SMALL_SLOT_PADDING
+        }
+    );
     this.windowInformations = new WindowBox(RPM.HUGE_SPACE + RPM
-        .MEDIUM_SLOT_WIDTH + RPM.LARGE_SPACE, RPM.HUGE_SPACE, RPM.SCREEN_X - (2 *
-        RPM.HUGE_SPACE) - RPM.MEDIUM_SLOT_WIDTH - RPM.LARGE_SPACE, RPM
-        .LARGE_SLOT_HEIGHT, new GraphicText("Select a keyboard shortcut to edit."
-        , { align: Align.Center }), RPM.SMALL_SLOT_PADDING);
+        .MEDIUM_SLOT_WIDTH + RPM.LARGE_SPACE, RPM.HUGE_SPACE, RPM.SCREEN_X - (2 
+        * RPM.HUGE_SPACE) - RPM.MEDIUM_SLOT_WIDTH - RPM.LARGE_SPACE, RPM
+        .LARGE_SLOT_HEIGHT, 
+        {
+            content: new GraphicText("Select a keyboard shortcut to edit.", { 
+                align: Align.Center }),
+            padding: RPM.SMALL_SLOT_PADDING
+        }
+    );
     this.windowChoicesMain = new WindowChoices(RPM.HUGE_SPACE, RPM.HUGE_SPACE + 
         RPM.LARGE_SLOT_HEIGHT + RPM.LARGE_SPACE, RPM.SCREEN_X - (2 * RPM
         .HUGE_SPACE), RPM.MEDIUM_SLOT_HEIGHT, RPM.datasGame.keyBoard
@@ -51,7 +60,11 @@ function SceneKeyboardAssign() {
     this.windowPress = new WindowBox((RPM.SCREEN_X / 2) - (SceneKeyboardAssign
         .WINDOW_PRESS_WIDTH / 2), (RPM.SCREEN_Y / 2) - (SceneKeyboardAssign
         .WINDOW_PRESS_HEIGHT / 2), SceneKeyboardAssign.WINDOW_PRESS_WIDTH,
-        SceneKeyboardAssign.WINDOW_PRESS_HEIGHT, null, RPM.DIALOG_PADDING_BOX);
+        SceneKeyboardAssign.WINDOW_PRESS_HEIGHT,
+        {
+            padding: RPM.DIALOG_PADDING_BOX
+        }
+    );
 
     // Initialize
     this.showPress = false;
@@ -65,13 +78,13 @@ SceneKeyboardAssign.WINDOW_PRESS_HEIGHT = 200;
 SceneKeyboardAssign.MAX_WAIT_TIME_FIRST = 3000;
 SceneKeyboardAssign.MAX_WAIT_TIME = 1000;
 
+
+
 // -------------------------------------------------------
 
 SceneKeyboardAssign.prototype = {
 
     update: function() {
-        SceneGame.prototype.update.call(RPM.currentMap);
-
         if (this.showPress) {
             if (this.keysPressed.length === 0 && new Date().getTime() - this
                 .waitTime >= this.compareWait)
@@ -110,8 +123,6 @@ SceneKeyboardAssign.prototype = {
     // -------------------------------------------------------
 
     onKeyPressed: function(key) {
-        SceneGame.prototype.onKeyPressed.call(RPM.currentMap, key);
-
         if (this.showPress) {
             var current;
 
@@ -143,8 +154,6 @@ SceneKeyboardAssign.prototype = {
     // -------------------------------------------------------
 
     onKeyReleased: function(key) {
-        SceneGame.prototype.onKeyReleased.call(RPM.currentMap, key);
-
         this.keysPressed.splice(this.keysPressed.indexOf(key), 1);
         if (this.keysPressed.length === 0 && this.currentSC.length > 0) {
             this.compareWait = SceneKeyboardAssign.MAX_WAIT_TIME;
@@ -156,13 +165,12 @@ SceneKeyboardAssign.prototype = {
     // -------------------------------------------------------
 
     onKeyPressedRepeat: function(key) {
-        SceneGame.prototype.onKeyPressedRepeat.call(RPM.currentMap, key);
+
     },
 
     // -------------------------------------------------------
 
     onKeyPressedAndRepeat: function(key) {
-        SceneGame.prototype.onKeyPressedAndRepeat.call(RPM.currentMap, key);
         if (!this.showPress) {
             this.windowChoicesMain.onKeyPressedAndRepeat(key);
             this.windowPress.content = this.windowChoicesMain.getCurrentContent();

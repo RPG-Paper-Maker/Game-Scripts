@@ -43,7 +43,7 @@ GraphicXPProgression.prototype = {
     *   @param {number} w The width dimention to draw graphic.
     *   @param {number} h The height dimention to draw graphic.
     */
-    drawInformations: function(x, y, w, h) {
+    drawBox: function(x, y, w, h) {
         for (var i = 0, l = this.graphicCharacters.length; i < l; i++) {
             this.graphicCharacters[i].draw(x, y + (i * 90), w, 85);
         }

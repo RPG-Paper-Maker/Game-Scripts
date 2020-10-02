@@ -74,7 +74,7 @@ GraphicTextIcon.prototype = {
     *   @param {number} w The width dimention to draw graphic.
     *   @param {number} h The height dimention to draw graphic.
     */
-    draw: function(x, y, w, h) {
+    drawChoice: function(x, y, w, h) {
         var iconWidth, iconHeight, offset, heightMax;
         iconWidth = this.textIcon.icon.oW;
         iconHeight = this.textIcon.icon.oH;
@@ -108,5 +108,15 @@ GraphicTextIcon.prototype = {
             offset += this.textIcon.length + this.space;
             this.textIcon.icon.draw(x + offset, y - (iconHeight / 2) + (h / 2));
         }
+    },
+
+    drawBox: function(x, y, w, h)
+    {
+        this.drawChoice(x, y, w, h);
+    },
+
+    draw: function(x, y, w, h)
+    {
+        this.drawChoice(x, y, w, h);
     }
 }

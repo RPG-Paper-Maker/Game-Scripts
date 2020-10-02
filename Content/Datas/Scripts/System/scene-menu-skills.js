@@ -42,8 +42,11 @@ function SceneMenuSkills() {
     }
 
     // All the windows
-    this.windowTop = new WindowBox(20, 20, 200, 30, new GraphicText("Skills", {
-        align: Align.Center }));
+    this.windowTop = new WindowBox(20, 20, 200, 30, 
+        {
+            content: new GraphicText("Skills", { align: Align.Center })
+        }
+    );
     this.windowChoicesTabs = new WindowChoices(50, 60, 110, RPM
         .SMALL_SLOT_HEIGHT, listHeroes, 
         {
@@ -58,13 +61,24 @@ function SceneMenuSkills() {
             nbItemsMax: SceneMenu.nbItemsToDisplay
         }
     );
-    this.windowInformations = new WindowBox(240, 100, 360, 200, null, RPM
-        .HUGE_PADDING_BOX);
+    this.windowInformations = new WindowBox(240, 100, 360, 200, 
+        {
+            padding: RPM.HUGE_PADDING_BOX
+        }
+    );
     this.windowEmpty = new WindowBox(10, 100, RPM.SCREEN_X - 20, RPM
-        .SMALL_SLOT_HEIGHT, new GraphicText("Empty", { align: Align.Center }),
-        RPM.SMALL_SLOT_PADDING);
-    this.windowBoxUseSkill = new WindowBox(240, 320, 360, 140, new
-        GraphicUserSkillItem(), RPM.SMALL_PADDING_BOX);
+        .SMALL_SLOT_HEIGHT,
+        {
+            content: new GraphicText("Empty", { align: Align.Center }),
+            padding: RPM.SMALL_SLOT_PADDING
+        }
+    );
+    this.windowBoxUseSkill = new WindowBox(240, 320, 360, 140,
+        {
+            content: new GraphicUserSkillItem(),
+            padding: RPM.SMALL_PADDING_BOX
+        }
+    );
 
     // Update for changing tab
     this.substep = 0;

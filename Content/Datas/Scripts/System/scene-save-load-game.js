@@ -53,9 +53,13 @@ SceneSaveLoadGame.prototype = {
                 padding: [0, 0, 0, 0]
             }
         );
-        this.windowInformations = new WindowBox(120, 100, 500, 300, null, [20,
-            20, 20, 20]);
-        this.windowBot = new WindowBox(20, RPM.SCREEN_Y - 50, RPM.SCREEN_X - 40, 30);
+        this.windowInformations = new WindowBox(120, 100, 500, 300,
+            {
+                padding: RPM.MEDIUM_PADDING_BOX
+            }
+        );
+        this.windowBot = new WindowBox(20, RPM.SCREEN_Y - 50, RPM.SCREEN_X - 40, 
+            30);
     },
 
     // -------------------------------------------------------

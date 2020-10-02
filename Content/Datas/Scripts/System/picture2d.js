@@ -69,8 +69,8 @@ class Picture2D extends Bitmap
     
     check() {
         if (this.empty) {
-            this.setW.call(1);
-            this.setH.call(1);
+            this.setW(1);
+            this.setH(1);
             this.checked = true;
             RPM.requestPaintHUD = true;
             return true;

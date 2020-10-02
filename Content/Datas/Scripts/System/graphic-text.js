@@ -38,13 +38,14 @@
 *   The font name used for the text
 *   @param {AlignVertical} [opts.verticalAlign=AlignVertical.Center] Vertical 
 *   alignement of the text
-*   @param {SystemColor} [opts.color=Align.Left] The color used for the text
-*   @param {boolean} [opts.bold=Align.Left] If checked, make the text bold
-*   @param {boolean} [opts.italic=Align.Left] If checked, make the text italic
-*   @param {SystemColor} [opts.backColor=Align.Left] The background color 
-*   behind the text
-*   @param {SystemColor} [opts.strokeColor=Align.Left] The stroke color of the 
-*   text
+*   @param {SystemColor} [opts.color=RPM.defaultValue(RPM.datasGame.system.dbOptions.vtcText] 
+*   The color used for the text
+*   @param {boolean} [opts.bold=false] If checked, make the text bold
+*   @param {boolean} [opts.italic=false] If checked, make the text italic
+*   @param {SystemColor} [opts.backColor=RPM.defaultValue(RPM.datasGame.system.dbOptions.vtcBackground, null)] 
+*   The background color behind the text
+*   @param {SystemColor} [opts.strokeColor=RPM.defaultValue(RPM.datasGame.system.dbOptions.tOutline, false)? RPM.defaultValue(RPM.datasGame.system.dbOptions.vtcOutline, null) : null] 
+*   The stroke color of the text
 */
 
 class GraphicText extends Bitmap
@@ -134,7 +135,6 @@ class GraphicText extends Bitmap
     }
 
     // -------------------------------------------------------
-
     /** Drawing the text in choice box
     *   @param {number} [x=this.oX] The x position to draw graphic
     *   @param {number} [y=this.oY] The y position to draw graphic
@@ -143,8 +143,8 @@ class GraphicText extends Bitmap
     *   @param {boolean} [positionResize=true] If checked, resize postion 
     *   according to screen resolution
     */
-    draw(x = this.oX, y = this.oY, w = this.oW, h = this.oH, positionResize = 
-        true)
+    drawChoice(x = this.oX, y = this.oY, w = this.oW, h = this.oH, 
+        positionResize = true)
     {
         // If position resize checked, resize it
         if (positionResize)
@@ -227,15 +227,33 @@ class GraphicText extends Bitmap
     }
 
     // -------------------------------------------------------
-
-    /** Drawing the text in choice box
+    /** Drawing the text in box (duplicate of drawChoice)
     *   @param {number} [x=this.oX] The x position to draw graphic
     *   @param {number} [y=this.oY] The y position to draw graphic
     *   @param {number} [w=this.oW] The width dimention to draw graphic
     *   @param {number} [h=this.oH] The height dimention to draw graphic
+    *   @param {boolean} [positionResize=true] If checked, resize postion 
+    *   according to screen resolution
     */
-    drawInformations(x = this.oX, y = this.oY, w = this.oW, h = this.oH)
+    drawBox(x = this.oX, y = this.oY, w = this.oW, h = this.oH, positionResize
+        = true)
     {
-        this.draw(x, y, w, h);
+        this.drawChoice(x, y, w, h, positionResize);
+    }
+
+    // -------------------------------------------------------
+
+    /** Drawing the text (duplicate of drawChoice)
+    *   @param {number} [x=this.oX] The x position to draw graphic
+    *   @param {number} [y=this.oY] The y position to draw graphic
+    *   @param {number} [w=this.oW] The width dimention to draw graphic
+    *   @param {number} [h=this.oH] The height dimention to draw graphic
+    *   @param {boolean} [positionResize=true] If checked, resize postion 
+    *   according to screen resolution
+    */
+    draw(x = this.oX, y = this.oY, w = this.oW, h = this.oH, positionResize = 
+        true)
+    {
+        this.drawChoice(x, y, w, h, positionResize);
     }
 }

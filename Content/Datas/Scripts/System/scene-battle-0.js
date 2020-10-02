@@ -104,15 +104,28 @@ SceneBattle.prototype.initializeEnemiesBattlers = function() {
 // -------------------------------------------------------
 
 SceneBattle.prototype.initializeInformations = function() {
-    this.windowTopInformations = new WindowBox(0, RPM.HUGE_SPACE, RPM.SCREEN_X, RPM
-        .SMALL_SLOT_HEIGHT, null, RPM.SMALL_SLOT_PADDING);
+    this.windowTopInformations = new WindowBox(0, RPM.HUGE_SPACE, RPM.SCREEN_X, 
+        RPM.SMALL_SLOT_HEIGHT, 
+        {
+            padding: RPM.SMALL_SLOT_PADDING
+        }
+    );
     this.windowUserInformations = new WindowBox(RPM.SCREEN_X - SceneBattle
         .WINDOW_PROFILE_WIDTH, RPM.SCREEN_Y - SceneBattle.WINDOW_PROFILE_HEIGHT,
-        SceneBattle.WINDOW_PROFILE_WIDTH, SceneBattle.WINDOW_PROFILE_HEIGHT, 
-        null, RPM.SMALL_PADDING_BOX, false);
+        SceneBattle.WINDOW_PROFILE_WIDTH, SceneBattle.WINDOW_PROFILE_HEIGHT,
+        {
+            padding: RPM.SMALL_PADDING_BOX,
+            limitContent: false
+        }
+    );
     this.windowTargetInformations = new WindowBox(0, RPM.SCREEN_Y - SceneBattle
         .WINDOW_PROFILE_HEIGHT, SceneBattle.WINDOW_PROFILE_WIDTH, SceneBattle
-        .WINDOW_PROFILE_HEIGHT, null, RPM.SMALL_PADDING_BOX, false);
+        .WINDOW_PROFILE_HEIGHT,
+        {
+            padding: RPM.SMALL_PADDING_BOX,
+            limitContent: false
+        }
+    );
 };
 
 // -------------------------------------------------------
@@ -147,8 +160,11 @@ SceneBattle.prototype.initializeWindowCommands = function() {
     );
     this.windowSkillDescription = new WindowBox(RPM.SCREEN_X - SceneBattle
         .WINDOW_DESCRIPTIONS_X, SceneBattle.WINDOW_DESCRIPTIONS_Y, SceneBattle
-        .WINDOW_DESCRIPTIONS_WIDTH, SceneBattle.WINDOW_DESCRIPTIONS_HEIGHT, null
-        , RPM.HUGE_PADDING_BOX);
+        .WINDOW_DESCRIPTIONS_WIDTH, SceneBattle.WINDOW_DESCRIPTIONS_HEIGHT, 
+        {
+            padding: RPM.HUGE_PADDING_BOX
+        }
+    );
     this.windowChoicesItems = new WindowChoices(SceneBattle
         .WINDOW_COMMANDS_SELECT_X, SceneBattle.WINDOW_COMMANDS_SELECT_Y, 
         SceneBattle.WINDOW_COMMANDS_SELECT_WIDTH, RPM.SMALL_SLOT_HEIGHT, [], 
@@ -158,8 +174,11 @@ SceneBattle.prototype.initializeWindowCommands = function() {
     );
     this.windowItemDescription = new WindowBox(RPM.SCREEN_X - SceneBattle
         .WINDOW_DESCRIPTIONS_X, SceneBattle.WINDOW_DESCRIPTIONS_Y, SceneBattle
-        .WINDOW_DESCRIPTIONS_WIDTH, SceneBattle.WINDOW_DESCRIPTIONS_HEIGHT, null
-        , RPM.HUGE_PADDING_BOX);
+        .WINDOW_DESCRIPTIONS_WIDTH, SceneBattle.WINDOW_DESCRIPTIONS_HEIGHT, 
+        {
+            padding: RPM.HUGE_PADDING_BOX
+        }
+    );
 };
 
 // -------------------------------------------------------
@@ -178,12 +197,21 @@ SceneBattle.prototype.initializeMusics = function() {
 SceneBattle.prototype.initializeWindowsEnd = function() {
     this.windowExperienceProgression = new WindowBox(SceneBattle
         .WINDOW_EXPERIENCE_X, SceneBattle.WINDOW_EXPERIENCE_Y, SceneBattle
-        .WINDOW_EXPERIENCE_WIDTH, (SceneBattle.WINDOW_EXPERIENCE_HEIGHT * RPM.game
-        .teamHeroes.length) + RPM.SMALL_PADDING_BOX[2] + RPM.SMALL_PADDING_BOX
-        [3], new GraphicXPProgression(), RPM.SMALL_PADDING_BOX);
+        .WINDOW_EXPERIENCE_WIDTH, (SceneBattle.WINDOW_EXPERIENCE_HEIGHT * RPM
+        .game.teamHeroes.length) + RPM.SMALL_PADDING_BOX[2] + RPM
+        .SMALL_PADDING_BOX[3], 
+        {
+            content: new GraphicXPProgression(),
+            padding: RPM.SMALL_PADDING_BOX
+        }
+    );
     this.windowStatisticProgression = new WindowBox(SceneBattle.WINDOW_STATS_X, 
         SceneBattle.WINDOW_STATS_Y, SceneBattle.WINDOW_STATS_WIDTH, SceneBattle
-        .WINDOW_STATS_HEIGHT, null, RPM.HUGE_PADDING_BOX);
+        .WINDOW_STATS_HEIGHT,
+        {
+            padding: RPM.HUGE_PADDING_BOX
+        }
+    );
 };
 
 // -------------------------------------------------------

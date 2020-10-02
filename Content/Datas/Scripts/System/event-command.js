@@ -212,12 +212,20 @@ function EventCommandShowText(command) {
     this.isDirectNode = false;
     this.parallel = false;
 
-    this.windowMain = new WindowBox(0, 0, 0, 0, new GraphicMessage("" + this
-        .message, this.facesetID), RPM.HUGE_PADDING_BOX);
+    this.windowMain = new WindowBox(0, 0, 0, 0,
+        {
+            content: new GraphicMessage("" + this.message, this.facesetID),
+            padding: RPM.HUGE_PADDING_BOX
+        }
+    );
     this.windowInterlocutor = new WindowBox(this.windowMain.oX + (RPM
         .MEDIUM_SLOT_HEIGHT / 2), this.windowMain.oY - (RPM.MEDIUM_SLOT_HEIGHT /
-        2), RPM.MEDIUM_SLOT_WIDTH, RPM.MEDIUM_SLOT_HEIGHT, new GraphicText("", {
-        align: Align.Center }), RPM.SMALL_SLOT_PADDING);
+        2), RPM.MEDIUM_SLOT_WIDTH, RPM.MEDIUM_SLOT_HEIGHT,
+        {
+            content: new GraphicText("", { align: Align.Center }),
+            padding: RPM.SMALL_SLOT_PADDING
+        }
+    );
 }
 
 EventCommandShowText.prototype = {

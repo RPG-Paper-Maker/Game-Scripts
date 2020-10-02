@@ -38,13 +38,13 @@ function GraphicSetting(id) {
 
 // -------------------------------------------------------
 
-GraphicSetting.prototype.draw = function(x, y, w, h) {
+GraphicSetting.prototype.drawChoice = function(x, y, w, h) {
     this.graphicTextLeft.draw(x, y, w, h);
     this.graphicRight.draw(x + (w / 2), y, w / 2, h);
 };
 
 // -------------------------------------------------------
 
-GraphicSetting.prototype.drawInformations = function(x, y, w, h) {
+GraphicSetting.prototype.drawBox = function(x, y, w, h) {
     this.graphicTextInformation.draw(x, y, w, h);
 }

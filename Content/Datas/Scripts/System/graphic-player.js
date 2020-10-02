@@ -262,7 +262,7 @@ GraphicPlayer.prototype = {
     *   @param {number} w The width dimention to draw graphic.
     *   @param {number} h The height dimention to draw graphic.
     */
-    draw: function(x, y, w, h) {
+    drawChoice: function(x, y, w, h) {
         var xCharacter, yName, xLevelName, xLevel, yClass, coef, wBattler,
             hBattler, xExp, yExp, xLevelUp;
         xCharacter = x + 80;
@@ -312,7 +312,7 @@ GraphicPlayer.prototype = {
     *   @param {number} w The width dimention to draw graphic.
     *   @param {number} h The height dimention to draw graphic.
     */
-    drawInformations: function(x, y, w, h) {
+    drawBox: function(x, y, w, h) {
         var yName, xLevelName, xLevel, yStats, xStat, yStat, wName, wLevelName,
             wLevel, wStats, wStat, firstLineLength, xOffset;
 

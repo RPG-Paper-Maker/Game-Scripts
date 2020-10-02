@@ -82,8 +82,12 @@ function SceneMenu() {
 
         }
     );
-    this.windowTimeCurrencies = new WindowBox(20, 0, 150, 0, new
-        GraphicTimeCurrencies(), RPM.HUGE_PADDING_BOX);
+    this.windowTimeCurrencies = new WindowBox(20, 0, 150, 0,
+        {
+            content: new GraphicTimeCurrencies(),
+            padding: RPM.HUGE_PADDING_BOX
+        }
+    );
     this.windowTimeCurrencies.contentLoaded = false;
 
     // Play a sound when opening the menu

@@ -42,8 +42,11 @@ function SceneMenuInventory() {
     ];
 
     // All the windows
-    this.windowTop = new WindowBox(20, 20, 200, 30, new GraphicText("Inventory",
-        { align: Align.Center }));
+    this.windowTop = new WindowBox(20, 20, 200, 30,
+        {
+            content: new GraphicText("Inventory", { align: Align.Center })
+        }
+    );
     this.windowChoicesTabs = new WindowChoices(5, 60, 105, RPM.SMALL_SLOT_HEIGHT
         , menuKind,
         {
@@ -57,13 +60,24 @@ function SceneMenuInventory() {
             nbItemsMax: SceneMenu.nbItemsToDisplay,
         }
     );
-    this.windowInformations = new WindowBox(240, 100, 360, 200, null, RPM
-        .HUGE_PADDING_BOX);
+    this.windowInformations = new WindowBox(240, 100, 360, 200,
+        {
+            padding: RPM.HUGE_PADDING_BOX
+        }
+    );
     this.windowEmpty = new WindowBox(10, 100, RPM.SCREEN_X - 20, RPM
-        .SMALL_SLOT_HEIGHT, new GraphicText("Empty", { align: Align.Center }),
-        RPM.SMALL_SLOT_PADDING);
-    this.windowBoxUseItem = new WindowBox(240, 320, 360, 140, new
-        GraphicUserSkillItem(), RPM.SMALL_PADDING_BOX);
+        .SMALL_SLOT_HEIGHT, 
+        {
+            content: new GraphicText("Empty", { align: Align.Center }),
+            padding: RPM.SMALL_SLOT_PADDING
+        }
+    );
+    this.windowBoxUseItem = new WindowBox(240, 320, 360, 140,
+        {
+            content: new GraphicUserSkillItem(),
+            padding: RPM.SMALL_PADDING_BOX
+        }
+    );
     l = menuKind.length;
     this.positionChoice = new Array(l);
     for (i = 0; i < l; i++) {

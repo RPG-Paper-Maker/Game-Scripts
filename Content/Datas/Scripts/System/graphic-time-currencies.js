@@ -85,7 +85,7 @@ GraphicTimeCurrencies.prototype = {
     *   @param {number} w The width dimention to draw graphic.
     *   @param {number} h The height dimention to draw graphic.
     */
-    drawInformations: function(x, y, w, h) {
+    drawBox: function(x, y, w, h) {
         var i, l, currency, previousCurrency;
 
         previousCurrency = null;

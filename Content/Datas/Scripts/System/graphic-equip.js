@@ -51,7 +51,7 @@ GraphicEquip.prototype = {
     *   @param {number} w The width dimention to draw graphic.
     *   @param {number} h The height dimention to draw graphic.
     */
-    draw: function(x, y, w, h){
+    drawChoice: function(x, y, w, h){
         this.graphicEquipmentName.draw(x, y, w, h);
         this.graphicEquipment.draw(x + this.equipmentLength + 10, y, w, h);
     }

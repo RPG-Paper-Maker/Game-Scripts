@@ -172,12 +172,20 @@ class WindowChoices extends Bitmap
             {
                 window = new WindowBox(this.oX + (i * this.choiceWidth) + (i *
                     this.space), this.oY, this.choiceWidth, this.choiceHeight,
-                    this.listContents[i], this.padding);
+                    {
+                        content: this.listContents[i],
+                        padding: this.padding
+                    }
+                );
             } else
             {
                 window = new WindowBox(this.oX, this.oY + (i * this.choiceHeight
                     ) + (i * this.space), this.choiceWidth, this.choiceHeight,
-                    this.listContents[i], this.padding);
+                    {
+                        content: this.listContents[i],
+                        padding: this.padding
+                    }
+                );
             }
             window.bordersVisible = this.bordersInsideVisible;
             this.listWindows[i] = window;

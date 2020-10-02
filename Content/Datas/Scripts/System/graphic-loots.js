@@ -42,7 +42,7 @@ GraphicLoots.prototype = {
     *   @param {number} w The width dimention to draw graphic.
     *   @param {number} h The height dimention to draw graphic.
     */
-    drawInformations: function(x, y, w, h) {
+    drawBox: function(x, y, w, h) {
         var i, l;
 
         for (i = 0, l = this.graphicsLoots.length; i < l; i++) {

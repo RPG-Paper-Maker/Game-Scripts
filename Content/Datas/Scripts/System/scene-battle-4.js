@@ -69,9 +69,13 @@ SceneBattle.prototype.initializeStep4 = function(){
     w = 200 + RPM.SMALL_PADDING_BOX[0] + RPM.SMALL_PADDING_BOX[2];
     h = this.lootsNumber * 30 + RPM.SMALL_PADDING_BOX[1] + RPM.SMALL_PADDING_BOX
         [3];
-    this.windowLoots = new WindowBox(RPM.SCREEN_X - 20 - w, RPM.SCREEN_Y - 20 - h, w,
-        h, new GraphicLoots(this.loots, this.lootsNumber), RPM
-        .SMALL_PADDING_BOX);
+    this.windowLoots = new WindowBox(RPM.SCREEN_X - 20 - w, RPM.SCREEN_Y - 20 - 
+        h, w, h,
+        {
+            content: new GraphicLoots(this.loots, this.lootsNumber),
+            padding: RPM.SMALL_PADDING_BOX
+        }
+    );
 };
 
 // -------------------------------------------------------

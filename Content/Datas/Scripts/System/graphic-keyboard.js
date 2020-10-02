@@ -35,14 +35,14 @@ GraphicKeyboard.prototype.updateShort = function(sh) {
 
 // -------------------------------------------------------
 
-GraphicKeyboard.prototype.draw = function(x, y, w, h) {
+GraphicKeyboard.prototype.drawChoice = function(x, y, w, h) {
     this.graphicTextName.draw(x, y, w, h);
     this.graphicTextShort.draw(x + (w / 2), y, w / 2, h);
 };
 
 // -------------------------------------------------------
 
-GraphicKeyboard.prototype.drawInformations = function(x, y, w, h) {
+GraphicKeyboard.prototype.drawBox = function(x, y, w, h) {
     this.graphicTextInformation.draw(x, y, w, (h / 2));
     this.graphicTextShort.draw(x, y + (h / 2), w, (h / 2));
 }

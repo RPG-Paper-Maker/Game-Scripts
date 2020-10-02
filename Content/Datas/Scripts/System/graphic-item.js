@@ -47,7 +47,7 @@ GraphicItem.prototype = {
     *   @param {number} w The width dimention to draw graphic.
     *   @param {number} h The height dimention to draw graphic.
     */
-    draw: function(x, y, w, h) {
+    drawChoice: function(x, y, w, h) {
         this.graphicName.draw(x, y, w, h);
         this.graphicNb.draw(x, y, w, h);
     },
@@ -58,8 +58,8 @@ GraphicItem.prototype = {
     *   @param {number} w The width dimention to draw graphic.
     *   @param {number} h The height dimention to draw graphic.
     */
-    drawInformations: function(x, y, w, h) {
-        this.graphicInformations.drawInformations(x, y, w, h);
+    drawBox: function(x, y, w, h) {
+        this.graphicInformations.drawBox(x, y, w, h);
         this.graphicNb.draw(x, y, w, 0);
     }
 }

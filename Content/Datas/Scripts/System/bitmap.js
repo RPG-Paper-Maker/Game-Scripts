@@ -71,7 +71,6 @@ class Bitmap
     }
 
     // -------------------------------------------------------
-
     /** Set the h value
     *   @param {number} h The h value
     *   @param {boolean} [min=false] If checked, transform screen value with min 
@@ -85,7 +84,6 @@ class Bitmap
     }
 
     // -------------------------------------------------------
-
     /** Set the position to the top
     */
     setLeft()
@@ -96,7 +94,6 @@ class Bitmap
     }
 
     // -------------------------------------------------------
-
     /** Set the position to the top
     */
     setTop()
@@ -116,7 +113,6 @@ class Bitmap
     }
 
     // -------------------------------------------------------
-
     /** Set the position to the bot
     */
     setBot(offset)
@@ -125,7 +121,6 @@ class Bitmap
     }
 
     // -------------------------------------------------------
-
     /** Set all the coords values
     *   @param {number} x The x value
     *   @param {number} y The y value

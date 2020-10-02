@@ -52,7 +52,7 @@ GraphicSave.prototype = {
     *   @param {number} w The width dimention to draw graphic.
     *   @param {number} h The height dimention to draw graphic.
     */
-    draw: function(x, y, w, h) {
+    drawChoice: function(x, y, w, h) {
         this.graphicSlot.draw(x, y, w, h);
     },
 
@@ -62,7 +62,7 @@ GraphicSave.prototype = {
     *   @param {number} w The width dimention to draw graphic.
     *   @param {number} h The height dimention to draw graphic.
     */
-    drawInformations: function(x, y, w, h) {
+    drawBox: function(x, y, w, h) {
         if (this.game.isNull) {
             this.graphicEmpty.draw(x, y, w, h);
         } else {

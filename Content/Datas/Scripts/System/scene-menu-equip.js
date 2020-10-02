@@ -44,8 +44,11 @@ function SceneMenuEquip() {
     nbEquipChoice = SceneMenu.nbItemsToDisplay - nbEquipments - 1;
 
     // All the windows
-    this.windowTop = new WindowBox(20, 20, 200, 30, new GraphicText("Equip", {
-        align: Align.Center }));
+    this.windowTop = new WindowBox(20, 20, 200, 30,
+        {
+            content: new GraphicText("Equip", { align: Align.Center })
+        }
+    );
     this.windowChoicesTabs = new WindowChoices(50, 60, 110, RPM
         .SMALL_SLOT_HEIGHT, listHeroes,
         {
@@ -67,8 +70,11 @@ function SceneMenuEquip() {
             currentSelectedIndex: -1
         }
     );
-    this.windowInformations = new WindowBox(330, 100, 285, 350, null, RPM
-        .SMALL_PADDING_BOX);
+    this.windowInformations = new WindowBox(330, 100, 285, 350,
+        {
+            padding: RPM.SMALL_PADDING_BOX
+        }
+    );
 
     // Updates
     this.updateForTab();
