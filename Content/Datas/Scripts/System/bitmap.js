@@ -9,131 +9,131 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS Bitmap
-//
-// -------------------------------------------------------
-
 /** @class
 *   A bitmap is something that can be drawn on the HUD. It can be a window,
 *   a text, an image...
-*   @property {number} x Coords of the bitmap.
-*   @property {number} y Coords of the bitmap.
-*   @property {number} w Coords of the bitmap.
-*   @property {number} h Coords of the bitmap.
-*   @param {number} [x=0] - Coords of the bitmap.
-*   @param {number} [y=0] - Coords of the bitmap.
-*   @param {number} [w=0] - Coords of the bitmap.
-*   @param {number} [h=0] - Coords of the bitmap.
+*   @property {number} x x coord of the bitmap
+*   @property {number} y y coord of the bitmap
+*   @property {number} w w coord of the bitmap
+*   @property {number} h h coord of the bitmap
+*   @param {number} [x=0] x coord of the bitmap
+*   @param {number} [y=0] y coord of the bitmap
+*   @param {number} [w=0] w coord of the bitmap
+*   @param {number} [h=0] h coord of the bitmap
 */
-function Bitmap(x, y, w, h){
+class Bitmap
+{
+    constructor(x = 0, y = 0, w = 0, h = 0)
+    {
+        this.setX(x);
+        this.setY(y);
+        this.setW(w);
+        this.setH(h);
+    }
 
-    // Default values
-    if (typeof x === 'undefined') x = 0;
-    if (typeof y === 'undefined') y = 0;
-    if (typeof w === 'undefined') w = 0;
-    if (typeof h === 'undefined') h = 0;
-
-    Bitmap.prototype.setX.call(this, x);
-    Bitmap.prototype.setY.call(this, y);
-    Bitmap.prototype.setW.call(this, w);
-    Bitmap.prototype.setH.call(this, h);
-}
-
-Bitmap.prototype = {
-
-    /** Set the x value.
-    *   @param {number} x The x value.
+    // -------------------------------------------------------
+    /** Set the x value
+    *   @param {number} x The x value
+    *   @param {boolean} [min=false] If checked, transform screen value with min 
+    *   x y
     */
-    setX: function(x, min)
+    setX(x, min = false)
     {
         this.oX = x;
         this.x = min ? RPM.getScreenMinXY(x) : RPM.getScreenX(x);
         RPM.requestPaintHUD = true;
-    },
+    }
 
     // -------------------------------------------------------
-
-    /** Set the y value.
-    *   @param {number} y The y value.
+    /** Set the y value
+    *   @param {number} y The y value
+    *   @param {boolean} [min=false] If checked, transform screen value with min 
+    *   x y
     */
-    setY: function(y, min)
+    setY(y, min)
     {
         this.oY = y;
         this.y = min ? RPM.getScreenMinXY(y) : RPM.getScreenY(y);
         RPM.requestPaintHUD = true;
-    },
+    }
 
     // -------------------------------------------------------
-
-    /** Set the w value.
-    *   @param {number} w The w value.
+    /** Set the w value
+    *   @param {number} w The w value
+    *   @param {boolean} [min=false] If checked, transform screen value with min 
+    *   x y
     */
-    setW: function(w, min){
+    setW(w, min)
+    {
         this.oW = w;
         this.w = min ? RPM.getScreenMinXY(w) : RPM.getScreenX(w);
         RPM.requestPaintHUD = true;
-    },
+    }
 
     // -------------------------------------------------------
 
-    /** Set the h value.
-    *   @param {number} h The h value.
+    /** Set the h value
+    *   @param {number} h The h value
+    *   @param {boolean} [min=false] If checked, transform screen value with min 
+    *   x y
     */
-    setH: function(h, min){
+    setH(h, min)
+    {
         this.oH = h;
         this.h = min ? RPM.getScreenMinXY(h) : RPM.getScreenY(h);
         RPM.requestPaintHUD = true;
-    },
+    }
 
     // -------------------------------------------------------
 
-    /** Set the position to the top.
+    /** Set the position to the top
     */
-    setLeft: function() {
+    setLeft()
+    {
         this.oX = 0;
         this.x = 0;
         RPM.requestPaintHUD = true;
-    },
+    }
 
     // -------------------------------------------------------
 
-    /** Set the position to the top.
+    /** Set the position to the top
     */
-    setTop: function() {
+    setTop()
+    {
         this.oY = 0;
         this.y = 0;
         RPM.requestPaintHUD = true;
-    },
+    }
 
     // -------------------------------------------------------
 
-    /** Set the position to the top.
+    /** Set the position to the right
     */
-    setRight: function(offset) {
-        Bitmap.prototype.setX.call(this, RPM.SCREEN_X - this.oW - (offset ? offset
-            : 0));
-    },
+    setRight(offset)
+    {
+        this.setX(RPM.SCREEN_X - this.oW - (offset ? offset : 0));
+    }
 
     // -------------------------------------------------------
 
-    /** Set the position to the top.
+    /** Set the position to the bot
     */
-    setBot: function(offset) {
-        Bitmap.prototype.setY.call(this, RPM.SCREEN_Y - this.oH - (offset ? offset
-            : 0));
-    },
+    setBot(offset)
+    {
+        this.setY(RPM.SCREEN_Y - this.oH - (offset ? offset : 0));
+    }
 
     // -------------------------------------------------------
 
-    /** Set all the coords values.
-    *   @param {number} x The x value.
-    *   @param {number} y The y value.
-    *   @param {number} w The w value.
-    *   @param {number} h The h value.
+    /** Set all the coords values
+    *   @param {number} x The x value
+    *   @param {number} y The y value
+    *   @param {number} w The w value
+    *   @param {number} h The h value
     */
-    setCoords: function(x, y, w, h){
+    setCoords(x, y, w, h)
+    {
         this.setX(x);
         this.setY(y);
         this.setW(w);

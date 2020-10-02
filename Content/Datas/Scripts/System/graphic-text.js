@@ -9,153 +9,143 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS GraphicText : Bitmap
-//
-// -------------------------------------------------------
-
 /** @class
-*   A class for all the texts to display in screen.
+*   A class for all the texts to display in HUD
 *   @extends Bitmap
-*   @property {string} text The brut text to display.
-*   @property {Align} align Alignement of the text.
-*   @property {string} font The font used for the text.
-*   @property {number} fontSize The font height used for the text.
-*   @param {string} text The brut text to display.
-*   @param {Align} [align=Align.Center] - Alignement of the text.
-*   @param {number} [fontSize=RPM.fontSize] - The font height used for the text.
-*   @param {string} [fontName=RPM.fontName] - The font name used for the text.
-*   @param {number} x The x coords of the text.
-*   @param {number} y The y coords of the text.
-*   @param {number} w The w coords of the text.
-*   @param {number} h The h coords of the text.
+*   @property {string} text The brut text to display
+*   @property {Align} align Alignement of the text
+*   @property {number} fontSize The font height used for the text
+*   @property {string} fontName The font name used for the text
+*   @property {AlignVertical} verticalAlign Vertical alignement of the text
+*   @property {SystemColor} color The color used for the text
+*   @property {boolean} bold If checked, make the text bold
+*   @property {boolean} italic If checked, make the text italic
+*   @property {SystemColor} backColor The background color behind the text
+*   @property {SystemColor} strokeColor The stroke color of the text
+*   @property {string} font The font used for the text (combining fontSize + 
+*   fontName)
+*   @property {number} textWidth The font text width (without resizing)
+*   @param {string} [text=""] The brut text to display
+*   @param {Object} [opts={}] Options
+*   @param {number} [opts.x=0] The x coords of the text
+*   @param {number} [opts.y=0] The y coords of the text
+*   @param {number} [opts.w=0] The w coords of the text
+*   @param {number} [opts.h=0] The h coords of the text
+*   @param {Align} [opts.align=Align.Left] Alignement of the text
+*   @param {number} [opts.fontSize=RPM.defaultValue(RPM.datasGame.system.dbOptions.vtSize, RPM.fontSize)] 
+*   The font height used for the text
+*   @param {string} [opts.fontName=RPM.defaultValue(RPM.datasGame.system.dbOptions.vtFont, RPM.fontName)]
+*   The font name used for the text
+*   @param {AlignVertical} [opts.verticalAlign=AlignVertical.Center] Vertical 
+*   alignement of the text
+*   @param {SystemColor} [opts.color=Align.Left] The color used for the text
+*   @param {boolean} [opts.bold=Align.Left] If checked, make the text bold
+*   @param {boolean} [opts.italic=Align.Left] If checked, make the text italic
+*   @param {SystemColor} [opts.backColor=Align.Left] The background color 
+*   behind the text
+*   @param {SystemColor} [opts.strokeColor=Align.Left] The stroke color of the 
+*   text
 */
-function GraphicText(text, opt) {
-    opt = RPM.defaultValue(opt, {});
 
-    Bitmap.call(this, opt.x, opt.y, opt.w, opt.h);
+class GraphicText extends Bitmap
+{
+    constructor(text = "", { x = 0, y = 0, w = 0, h = 0, align = Align.Left, 
+        fontSize = RPM.defaultValue(RPM.datasGame.system.dbOptions.vtSize, RPM
+        .fontSize), fontName = RPM.defaultValue(RPM.datasGame.system.dbOptions
+        .vtFont, RPM.fontName), verticalAlign = AlignVertical.Center, color = 
+        RPM.defaultValue(RPM.datasGame.system.dbOptions.vtcText, RPM.COLOR_WHITE
+        ), bold = false, italic = false, backColor = RPM.defaultValue(RPM
+        .datasGame.system.dbOptions.vtcBackground, null), strokeColor = RPM
+        .defaultValue(RPM.datasGame.system.dbOptions.tOutline, false)? RPM
+        .defaultValue(RPM.datasGame.system.dbOptions.vtcOutline, null) : null})
+    {
+        super(x, y, w, h);
 
-    this.align = RPM.defaultValue(opt.align, Align.Left);
-    this.fontSize = RPM.defaultValue(opt.fontSize, RPM.defaultValue(RPM.datasGame
-        .system.dbOptions.vtSize, RPM.fontSize));
-    this.fontName = RPM.defaultValue(opt.fontName, RPM.defaultValue(RPM.datasGame
-        .system.dbOptions.vtFont, RPM.fontName));
-    this.verticalAlign = RPM.defaultValue(opt.verticalAlign, Align.Center);
-    this.color = RPM.defaultValue(opt.color, RPM.defaultValue(RPM.datasGame.system
-        .dbOptions.vtcText, RPM.COLOR_WHITE));
-    this.bold = RPM.defaultValue(opt.bold, false);
-    this.italic = RPM.defaultValue(opt.italic, false);
-    this.backColor = RPM.defaultValue(opt.backColor, RPM.defaultValue(RPM.datasGame
-        .system.dbOptions.vtcBackground, null));
-    this.strokeColor = RPM.defaultValue(opt.strokeColor, RPM.defaultValue(
-        RPM.datasGame.system.dbOptions.tOutline, false)? RPM.defaultValue(
-        RPM.datasGame.system.dbOptions.vtcOutline, null) : null);
-    this.updateFontSize(this.fontSize);
-    this.setText(RPM.defaultValue(text, ""));
-}
+        // Parameters
+        this.align = align;
+        this.fontName = fontName;
+        this.verticalAlign = verticalAlign;
+        this.color = color;
+        this.bold = bold;
+        this.italic = italic;
+        this.backColor = backColor;
+        this.strokeColor = strokeColor;
 
-GraphicText.prototype = {
-
-    setX: function(x){
-        Bitmap.prototype.setX.call(this, x);
-    },
-
-    // -------------------------------------------------------
-
-    setY: function(y){
-        Bitmap.prototype.setY.call(this, y);
-    },
+        this.setFontSize(fontSize);
+        this.setText(RPM.defaultValue(text, ""));
+    }
 
     // -------------------------------------------------------
+    /** Set the font size and the final font
+    *   @param {number} fontSize The new font size
+    */
+    setFontSize(fontSize)
+    {
+        this.fontSize = fontSize;
 
-    setW: function(w){
-        Bitmap.prototype.setW.call(this, w);
-    },
-
-    // -------------------------------------------------------
-
-    setH: function(h){
-        Bitmap.prototype.setH.call(this, h);
-    },
-
-    // -------------------------------------------------------
-
-    setCoords: function(x, y, w, h){
-        Bitmap.prototype.setCoords.call(this, x, y, w, h);
-    },
+        // Create fonts without resizing (screen resolution) + with resize
+        this.oFont = RPM.createFont(fontSize, this.fontName, this.bold, this
+            .italic);
+        this.font = RPM.createFont(RPM.getScreenMinXY(fontSize), this.fontName, 
+        this.bold, this.italic);
+    }
 
     // -------------------------------------------------------
-
-    setText: function(text) {
-        if (this.text !== text) {
+    /** Set the current displayed text
+    *   @param {string} text The new text
+    */
+    setText(text)
+    {
+        if (this.text !== text)
+        {
             this.text = text;
             this.measureText();
             RPM.requestPaintHUD = true;
         }
-    },
+    }
 
-    /** Update the context font (without window resizing). This function is
-    *   used before a context.measureText.
+    // -------------------------------------------------------
+    /** Update the context font (without window resizing), this function is
+    *   used before a context.measureText
     */
-    updateContextFontReal: function(){
+    updateContextFont()
+    {
+        Platform.ctx.font = this.oFont;
+    }
+
+    // -------------------------------------------------------
+    /** Update the context font with resizing
+    */
+    updateContextFontReal()
+    {
         Platform.ctx.font = this.font;
-    },
-
-    updateContextFont: function(){
-        Platform.ctx.font = this.fontWithoutResize;
-    },
-
-    measureText: function() {
-        var w;
-
-        this.updateContextFont();
-        w = Platform.ctx.measureText(this.text);
-        this.textWidth = w.width + (this.strokeColor === null ? 0 : 2);
-        this.textHeight = this.fontSize + (this.strokeColor === null ? 0 : 2);
-
-        return this.textWidth;
-    },
+    }
 
     // -------------------------------------------------------
-
-    updateFontSize: function(fontSize) {
-        this.fontSize = fontSize;
-        this.fontWithoutResize = RPM.createFont(fontSize, this.fontName, this
-            .bold, this.italic);
-        fontSize = RPM.getScreenMinXY(fontSize);
-        this.font = RPM.createFont(fontSize, this.fontName, this.bold, this
-            .italic);
-    },
-
-    // -------------------------------------------------------
-
-    updateFont: function() {
-        this.updateFontSize(this.fontSize);
-    },
-
-    // -------------------------------------------------------
-
-    /** Drawing the text in choice box.
-    *   @param {Canvas.Context} context The canvas context.
-    *   @param {number} x The x position to draw graphic.
-    *   @param {number} y The y position to draw graphic.
-    *   @param {number} w The width dimention to draw graphic.
-    *   @param {number} h The height dimention to draw graphic.
+    /** Measure text width and stock results in the instance
     */
-    draw: function(x, y, w, h, positionResize) {
-        var lineHeight, lines, xBack;
-        var i, l, yOffset, textWidth, textHeight;
+    measureText()
+    {
+        this.updateContextFont();
+        this.textWidth = Platform.ctx.measureText(this.text).width + (this
+            .strokeColor === null ? 0 : 2);
+        return this.textWidth;
+    }
 
-        // Default values
-        if (typeof x === 'undefined') x = this.oX;
-        if (typeof y === 'undefined') y = this.oY;
-        if (typeof w === 'undefined') w = this.oW;
-        if (typeof h === 'undefined') h = this.oH;
+    // -------------------------------------------------------
 
-        if (typeof positionResize === 'undefined') {
-            positionResize = true;
-        }
+    /** Drawing the text in choice box
+    *   @param {number} [x=this.oX] The x position to draw graphic
+    *   @param {number} [y=this.oY] The y position to draw graphic
+    *   @param {number} [w=this.oW] The width dimention to draw graphic
+    *   @param {number} [h=this.oH] The height dimention to draw graphic
+    *   @param {boolean} [positionResize=true] If checked, resize postion 
+    *   according to screen resolution
+    */
+    draw(x = this.oX, y = this.oY, w = this.oW, h = this.oH, positionResize = 
+        true)
+    {
+        // If position resize checked, resize it
         if (positionResize)
         {
             x = RPM.getScreenX(x);
@@ -165,10 +155,12 @@ GraphicText.prototype = {
         h = RPM.getScreenY(h);
 
         // Correcting x and y according to alignment
-        xBack = x;
-        textWidth = RPM.getScreenX(this.textWidth);
-        textHeight = RPM.getScreenY(this.textHeight);
-        switch(this.align) {
+        let xBack = x;
+        let textWidth = RPM.getScreenX(this.textWidth);
+        let textHeight = RPM.getScreenY(this.fontSize + (this.strokeColor === 
+            null ? 0 : 2));
+        switch(this.align)
+        {
         case Align.Left:
             break;
         case Align.Right:
@@ -181,15 +173,21 @@ GraphicText.prototype = {
             break;
         }
         y += RPM.getScreenY(this.fontSize) / 3;
-        switch(this.verticalAlign) {
-        case Align.Right:
-            y += h; break;
-        case Align.Center:
-            y += (h / 2); break;
+        switch(this.verticalAlign)
+        {
+        case AlignVertical.Bot:
+            y += h;
+            break;
+        case AlignVertical.Top:
+            break;
+        case AlignVertical.Center:
+            y += (h / 2);
+            break;
         }
 
         // Draw background color
-        if (this.backColor !== null) {
+        if (this.backColor !== null)
+        {
             Platform.ctx.fillStyle = this.backColor.rgb;
             Platform.ctx.fillRect(xBack, y - textHeight, textWidth, textHeight);
         }
@@ -197,15 +195,18 @@ GraphicText.prototype = {
         // Set context options
         Platform.ctx.font = this.font;
         Platform.ctx.textAlign = this.align;
-        lineHeight = this.fontSize * 2;
-        lines = this.text.split("\n");
-        l = lines.length;
+        let lineHeight = this.fontSize * 2;
+        let lines = this.text.split("\n");
+        let i, l = lines.length;
 
         // Stroke text
-        if (this.strokeColor !== null) {
+        let yOffset;
+        if (this.strokeColor !== null)
+        {
             Platform.ctx.strokeStyle = this.strokeColor.rgb;
             yOffset = 0;
-            for (i = 0; i < l; ++i) {
+            for (i = 0; i < l; i++)
+            {
                 Platform.ctx.strokeText(lines[i], x - 1, y - 1 + yOffset);
                 Platform.ctx.strokeText(lines[i], x - 1, y  + 1 + yOffset);
                 Platform.ctx.strokeText(lines[i], x + 1, y - 1 + yOffset);
@@ -217,21 +218,23 @@ GraphicText.prototype = {
         // Drawing the text
         Platform.ctx.fillStyle = this.color.rgb;
         yOffset = 0;
-        for (i = 0; i < l; ++i) {
+        for (i = 0; i < l; i++)
+        {
             Platform.ctx.fillText(lines[i], x, y + yOffset);
             yOffset += lineHeight;
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    /** Drawing the text in choice box.
-    *   @param {number} x The x position to draw graphic.
-    *   @param {number} y The y position to draw graphic.
-    *   @param {number} w The width dimention to draw graphic.
-    *   @param {number} h The height dimention to draw graphic.
+    /** Drawing the text in choice box
+    *   @param {number} [x=this.oX] The x position to draw graphic
+    *   @param {number} [y=this.oY] The y position to draw graphic
+    *   @param {number} [w=this.oW] The width dimention to draw graphic
+    *   @param {number} [h=this.oH] The height dimention to draw graphic
     */
-    drawInformations: function(x, y, w, h){
+    drawInformations(x = this.oX, y = this.oY, w = this.oW, h = this.oH)
+    {
         this.draw(x, y, w, h);
     }
 }

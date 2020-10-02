@@ -106,7 +106,6 @@ document.write(`<script src="Content/Datas/Scripts/System/collisions-utilities.j
 document.write(`<script src="Content/Datas/Scripts/System/bitmap.js"></script>`);
 document.write(`<script src="Content/Datas/Scripts/System/picture2d.js"></script>`);
 document.write(`<script src="Content/Datas/Scripts/System/window-box.js"></script>`);
-document.write(`<script src="Content/Datas/Scripts/System/window-tabs.js"></script>`);
 document.write(`<script src="Content/Datas/Scripts/System/window-choices.js"></script>`);
 document.write(`<script src="Content/Datas/Scripts/System/graphic-text.js"></script>`);
 document.write(`<script src="Content/Datas/Scripts/System/graphic-text-icon.js"></script>`);

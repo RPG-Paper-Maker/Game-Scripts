@@ -1459,7 +1459,7 @@ EventCommandMoveObject.prototype = {
 
     /** Move the object(s).
     *   @param {Object} currentState The current state of the event.
-    *   @param {Mapthis.moving = true;Object} object The current object reacting.
+    *   @param {MapObject} object The current object reacting.
     *   @param {number} state The state ID.
     *   @returns {number} The number of node to pass.
     */

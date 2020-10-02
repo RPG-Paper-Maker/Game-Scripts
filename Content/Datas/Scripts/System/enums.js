@@ -135,7 +135,7 @@ let GroupKind = {
 Object.freeze(GroupKind);
 
 /**
-*   Enum for the different aligns kind.
+*   Enum for the different horizontal aligns kind.
 *   @enum {string}
 *   @readonly
 */
@@ -145,6 +145,18 @@ let Align = {
     Center: "center"
 }
 Object.freeze(Align);
+
+/**
+*   Enum for the different vertical aligns kind.
+*   @enum {string}
+*   @readonly
+*/
+let AlignVertical = {
+    Bot: 0,
+    Top: 1,
+    Center: 2
+}
+Object.freeze(AlignVertical);
 
 /**
 *   Enum for the different orientations kind.
