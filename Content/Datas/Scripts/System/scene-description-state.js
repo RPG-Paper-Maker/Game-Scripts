@@ -37,8 +37,13 @@ function SceneDescriptionState() {
     // All the windows
     this.windowTop = new WindowBox(20, 20, 200, 30, new GraphicText("State", {
         align: Align.Center }));
-    this.windowChoicesTabs = new WindowTabs(OrientationWindow.Horizontal, 50,
-        60, 110, RPM.SMALL_SLOT_HEIGHT, 4, listHeroes, null);
+    this.windowChoicesTabs = new WindowChoices(50, 60, 110, RPM
+        .SMALL_SLOT_HEIGHT, listHeroes,
+        {
+            orientation: OrientationWindow.Horizontal,
+            nbItemsMax: 4
+        }
+    );
     this.windowInformations = new WindowBox(20, 100, 600, 340, null, RPM
         .HUGE_PADDING_BOX);
     this.synchronize();

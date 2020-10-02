@@ -57,7 +57,8 @@ class GraphicText extends Bitmap
         ), bold = false, italic = false, backColor = RPM.defaultValue(RPM
         .datasGame.system.dbOptions.vtcBackground, null), strokeColor = RPM
         .defaultValue(RPM.datasGame.system.dbOptions.tOutline, false)? RPM
-        .defaultValue(RPM.datasGame.system.dbOptions.vtcOutline, null) : null})
+        .defaultValue(RPM.datasGame.system.dbOptions.vtcOutline, null) : null} =
+        {})
     {
         super(x, y, w, h);
 

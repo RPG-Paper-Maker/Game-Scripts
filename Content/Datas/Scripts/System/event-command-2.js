@@ -2279,10 +2279,13 @@ function EventCommandDisplayChoice(command) {
     w += RPM.SMALL_SLOT_PADDING[0] + RPM.SMALL_SLOT_PADDING[2];
 
     // Window
-    this.windowChoices = new WindowChoices(OrientationWindow.Vertical, (
-        RPM.SCREEN_X - w) / 2, RPM.SCREEN_Y - 10 - 150 - (l * RPM.MEDIUM_SLOT_HEIGHT),
-        w, RPM.MEDIUM_SLOT_HEIGHT, l, graphics, null, RPM.SMALL_SLOT_PADDING);
-
+    this.windowChoices = new WindowChoices((RPM.SCREEN_X - w) / 2, RPM.SCREEN_Y 
+        - 10 - 150 - (l * RPM.MEDIUM_SLOT_HEIGHT), w, RPM.MEDIUM_SLOT_HEIGHT, 
+        graphics, 
+        {
+            nbItemsMax: l
+        }
+    );
     this.isDirectNode = true;
     this.parallel = false;
 }

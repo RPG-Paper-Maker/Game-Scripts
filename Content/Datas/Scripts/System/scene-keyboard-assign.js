@@ -38,11 +38,16 @@ function SceneKeyboardAssign() {
         RPM.HUGE_SPACE) - RPM.MEDIUM_SLOT_WIDTH - RPM.LARGE_SPACE, RPM
         .LARGE_SLOT_HEIGHT, new GraphicText("Select a keyboard shortcut to edit."
         , { align: Align.Center }), RPM.SMALL_SLOT_PADDING);
-    this.windowChoicesMain = new WindowChoices(OrientationWindow.Vertical, RPM
-        .HUGE_SPACE, RPM.HUGE_SPACE + RPM.LARGE_SLOT_HEIGHT + RPM.LARGE_SPACE,
-        RPM.SCREEN_X - (2 * RPM.HUGE_SPACE), RPM.MEDIUM_SLOT_HEIGHT, 9, RPM.datasGame
-        .keyBoard.getCommandsGraphics(), RPM.datasGame.keyBoard.getCommandsActions()
-        , RPM.SMALL_SLOT_PADDING, 0, 0, false);
+    this.windowChoicesMain = new WindowChoices(RPM.HUGE_SPACE, RPM.HUGE_SPACE + 
+        RPM.LARGE_SLOT_HEIGHT + RPM.LARGE_SPACE, RPM.SCREEN_X - (2 * RPM
+        .HUGE_SPACE), RPM.MEDIUM_SLOT_HEIGHT, RPM.datasGame.keyBoard
+        .getCommandsGraphics(),
+        {
+            nbItemsMax: 9,
+            listCallbacks: RPM.datasGame.keyBoard.getCommandsActions(),
+            bordersInsideVisible: false
+        }
+    );
     this.windowPress = new WindowBox((RPM.SCREEN_X / 2) - (SceneKeyboardAssign
         .WINDOW_PRESS_WIDTH / 2), (RPM.SCREEN_Y / 2) - (SceneKeyboardAssign
         .WINDOW_PRESS_HEIGHT / 2), SceneKeyboardAssign.WINDOW_PRESS_WIDTH,

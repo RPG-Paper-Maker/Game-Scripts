@@ -9,12 +9,6 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS WindowBox
-//
-// -------------------------------------------------------
-
 /** @class
 *   A class for window boxes.
 *   @extends Bitmap
@@ -31,30 +25,32 @@
 *   display inside the window.
 *   @param {number[]} [padding=[0,0,0,0]] - Padding of the box.
 */
-function WindowBox(x, y, w, h, content, padding, limitContent) {
-    Bitmap.call(this, x, y, w, h);
+class WindowBox extends Bitmap
+{
+    constructor(x, y, w, h, content, padding, limitContent)
+    {
+        super(x, y, w, h);
 
-    // Default values
-    if (typeof content === 'undefined') content = null;
-    if (typeof padding === 'undefined') padding = [0,0,0,0];
-    if (typeof limitContent === 'undefined') {
-        limitContent = true;
+        // Default values
+        if (typeof content === 'undefined') content = null;
+        if (typeof padding === 'undefined') padding = [0,0,0,0];
+        if (typeof limitContent === 'undefined') {
+            limitContent = true;
+        }
+
+        this.padding = padding;
+        this.content = content;
+        this.limitContent = limitContent;
+        this.updateDimensions();
+        this.bordersOpacity = 1;
+        this.backgroundOpacity = 1;
+        this.selected = false;
+        this.contentLoaded = true;
+        this.bordersVisible = true;
     }
 
-    this.padding = padding;
-    this.content = content;
-    this.limitContent = limitContent;
-    this.updateDimensions();
-    this.bordersOpacity = 1;
-    this.backgroundOpacity = 1;
-    this.selected = false;
-    this.contentLoaded = true;
-    this.bordersVisible = true;
-}
+    updateDimensions() {
 
-WindowBox.prototype = {
-
-    updateDimensions: function() {
 
         // Setting content dimensions
         this.contentDimension = [
@@ -71,39 +67,51 @@ WindowBox.prototype = {
             this.oW,
             this.oH
         ];
-    },
+    }
 
-    setX: function(x){
-        Bitmap.prototype.setX.call(this, x);
-        this.updateDimensions();
-    },
-
-    // -------------------------------------------------------
-
-    setY: function(y){
-        Bitmap.prototype.setY.call(this, y);
-        this.updateDimensions();
-    },
+    setX(x){
+        super.setX(x);
+        if (this.padding)
+        {
+            this.updateDimensions();
+        }
+    }
 
     // -------------------------------------------------------
 
-    setW: function(w){
-        Bitmap.prototype.setW.call(this, w);
-        this.updateDimensions();
-    },
+    setY(y){
+        super.setY(y);
+        if (this.padding)
+        {
+            this.updateDimensions();
+        }
+    }
 
     // -------------------------------------------------------
 
-    setH: function(h){
-        Bitmap.prototype.setH.call(this, h);
-        this.updateDimensions();
-    },
+    setW(w){
+        super.setW(w);
+        if (this.padding)
+        {
+            this.updateDimensions();
+        }
+    }
 
-    update: function() {
+    // -------------------------------------------------------
+
+    setH(h){
+        super.setH(h);
+        if (this.padding)
+        {
+            this.updateDimensions();
+        }
+    }
+
+    update() {
         if (this.content !== null) {
             this.content.update();
         }
-    },
+    }
 
     // -------------------------------------------------------
 
@@ -112,7 +120,7 @@ WindowBox.prototype = {
     *   @param {boolean} [isChoice=false] - Indicate if this window box is used
     *   for a window choices.
     */
-    draw: function(isChoice, windowDimension, contentDimension) {
+    draw(isChoice, windowDimension, contentDimension) {
         if (this.contentLoaded) {
             // Default values
             if (typeof isChoice === 'undefined') {

@@ -46,15 +46,27 @@ function SceneMenuEquip() {
     // All the windows
     this.windowTop = new WindowBox(20, 20, 200, 30, new GraphicText("Equip", {
         align: Align.Center }));
-    this.windowChoicesTabs = new WindowTabs(OrientationWindow.Horizontal, 50,
-        60, 110, RPM.SMALL_SLOT_HEIGHT, 4, listHeroes, null);
-    this.windowChoicesEquipment = new WindowChoices(OrientationWindow.Vertical,
-        20, 100, 290, RPM.SMALL_SLOT_HEIGHT, nbEquipments, new Array(
-        nbEquipments), null, RPM.SMALL_SLOT_PADDING);
-    this.windowChoicesList = new WindowChoices(OrientationWindow.Vertical, 20,
-        100 + (nbEquipments + 1) * RPM.SMALL_SLOT_HEIGHT, 290, RPM
-        .SMALL_SLOT_HEIGHT, nbEquipChoice, [], null, RPM.SMALL_SLOT_PADDING, 0,
-        -1);
+    this.windowChoicesTabs = new WindowChoices(50, 60, 110, RPM
+        .SMALL_SLOT_HEIGHT, listHeroes,
+        {
+            orientation: OrientationWindow.Horizontal,
+            nbItemsMax: 4,
+            padding: [0, 0, 0, 0]
+        }
+    );
+    this.windowChoicesEquipment = new WindowChoices(20, 100, 290, RPM
+        .SMALL_SLOT_HEIGHT, new Array(nbEquipments),
+        {
+            nbItemsMax: nbEquipments
+        }
+    );
+    this.windowChoicesList = new WindowChoices(20, 100 + (nbEquipments + 1) * 
+        RPM.SMALL_SLOT_HEIGHT, 290, RPM.SMALL_SLOT_HEIGHT, [],
+        {
+            nbItemsMax: nbEquipChoice,
+            currentSelectedIndex: -1
+        }
+    );
     this.windowInformations = new WindowBox(330, 100, 285, 350, null, RPM
         .SMALL_PADDING_BOX);
 

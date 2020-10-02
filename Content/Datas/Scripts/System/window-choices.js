@@ -49,7 +49,7 @@
 *   orientation of the window (horizontal or vertical)
 *   @param {number} [opts.nbItemsMax = listContents.length] Max number of items 
 *   to display on the choice box
-*   @param {number[]} [opts.padding=[0,0,0,0]] Padding of the box
+*   @param {number[]} [opts.padding=RPM.SMALL_SLOT_PADDING] Padding of the box
 *   @param {number} [opts.space=0] Space between each choice in the box
 *   @param {number} [opts.currentSelectedIndex=0] The current selected index 
 *   position in the choice box
@@ -61,11 +61,11 @@ class WindowChoices extends Bitmap
     /** Number of milliseconds to wait before going up/down when keypress repeat
     *   @member {number} [WindowChoices.TIME_WAIT_PRESS=50]
     */
-    TIME_WAIT_PRESS = 50;
+    static TIME_WAIT_PRESS = 50;
 
     constructor (x, y, w, h, listContents, { listCallbacks = null, orientation = 
         OrientationWindow.Vertical, nbItemsMax = listContents.length, padding 
-        = [0, 0, 0, 0], space = 0, currentSelectedIndex = 0, 
+        = RPM.SMALL_SLOT_PADDING, space = 0, currentSelectedIndex = 0, 
         bordersInsideVisible = true } = {})
     {
         super(x, y, w, h);
@@ -96,7 +96,10 @@ class WindowChoices extends Bitmap
     setX(x)
     {
         super.setX(x);
-        this.updateContentSize(this.currentSelectedIndex);
+        if (this.listContents)
+        {
+            this.updateContentSize(this.currentSelectedIndex);
+        }
     }
 
     // -------------------------------------------------------
@@ -106,7 +109,10 @@ class WindowChoices extends Bitmap
     setY(y)
     {
         super.setY(y);
-        this.updateContentSize(this.currentSelectedIndex);
+        if (this.listContents)
+        {
+            this.updateContentSize(this.currentSelectedIndex);
+        }
     }
 
     // -------------------------------------------------------
@@ -212,7 +218,7 @@ class WindowChoices extends Bitmap
     {
         for (let i = 0, l = this.listWindows.length; i < l; i++)
         {
-            this.setContent(this, i, contents[i]);
+            this.setContent(i, contents[i]);
         }
     }
 
@@ -225,8 +231,9 @@ class WindowChoices extends Bitmap
         if (callbacks === null)
         {
             // Create a complete empty list according to contents length
+            let l = this.listContents.length;
             this.listCallBacks = new Array(l);
-            for (let i = 0, l = this.listContents.length; i < l; i++)
+            for (let i = 0; i < l; i++)
             {
                 this.listCallBacks[i] = null;
             }
@@ -288,7 +295,7 @@ class WindowChoices extends Bitmap
     */
     selectCurrent()
     {
-        this.select.call(this.currentSelectedIndex);
+        this.select(this.currentSelectedIndex);
     }
 
     // -------------------------------------------------------

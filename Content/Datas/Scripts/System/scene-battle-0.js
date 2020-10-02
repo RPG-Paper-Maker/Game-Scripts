@@ -130,25 +130,32 @@ SceneBattle.prototype.initializeWindowCommands = function() {
         listContent[i].skill = skill;
         listCallbacks[i] = SystemCommonSkillItem.prototype.useCommand;
     }
-    this.windowChoicesBattleCommands = new WindowChoices(OrientationWindow
-        .Vertical, RPM.HUGE_SPACE, RPM.SCREEN_Y - RPM.HUGE_SPACE - (l * RPM
-        .SMALL_SLOT_HEIGHT), SceneBattle.WINDOW_COMMANDS_WIDTH, RPM
-        .SMALL_SLOT_HEIGHT, SceneBattle.COMMANDS_NUMBER, listContent, 
-        listCallbacks, RPM.SMALL_SLOT_PADDING);
-    this.windowChoicesSkills = new WindowChoices(OrientationWindow.Vertical, 
-        SceneBattle.WINDOW_COMMANDS_SELECT_X, SceneBattle
-        .WINDOW_COMMANDS_SELECT_Y, SceneBattle.WINDOW_COMMANDS_SELECT_WIDTH, RPM
-        .SMALL_SLOT_HEIGHT, SceneBattle.COMMANDS_NUMBER, [], null, RPM
-        .SMALL_SLOT_PADDING);
+    this.windowChoicesBattleCommands = new WindowChoices(RPM.HUGE_SPACE, 
+        RPM.SCREEN_Y - RPM.HUGE_SPACE - (l * RPM.SMALL_SLOT_HEIGHT), SceneBattle
+        .WINDOW_COMMANDS_WIDTH, RPM.SMALL_SLOT_HEIGHT, listContent, 
+        { 
+            nbItemsMax: SceneBattle.COMMANDS_NUMBER,
+            listCallbacks: listCallbacks
+        }
+    );
+    this.windowChoicesSkills = new WindowChoices(SceneBattle
+        .WINDOW_COMMANDS_SELECT_X, SceneBattle.WINDOW_COMMANDS_SELECT_Y, 
+        SceneBattle.WINDOW_COMMANDS_SELECT_WIDTH, RPM.SMALL_SLOT_HEIGHT, [],
+        { 
+            nbItemsMax: SceneBattle.COMMANDS_NUMBER
+        }
+    );
     this.windowSkillDescription = new WindowBox(RPM.SCREEN_X - SceneBattle
         .WINDOW_DESCRIPTIONS_X, SceneBattle.WINDOW_DESCRIPTIONS_Y, SceneBattle
         .WINDOW_DESCRIPTIONS_WIDTH, SceneBattle.WINDOW_DESCRIPTIONS_HEIGHT, null
         , RPM.HUGE_PADDING_BOX);
-    this.windowChoicesItems = new WindowChoices(OrientationWindow.Vertical, 
-        SceneBattle.WINDOW_COMMANDS_SELECT_X, SceneBattle
-        .WINDOW_COMMANDS_SELECT_Y, SceneBattle.WINDOW_COMMANDS_SELECT_WIDTH, RPM
-        .SMALL_SLOT_HEIGHT, SceneBattle.COMMANDS_NUMBER, [], null, RPM
-        .SMALL_SLOT_PADDING);
+    this.windowChoicesItems = new WindowChoices(SceneBattle
+        .WINDOW_COMMANDS_SELECT_X, SceneBattle.WINDOW_COMMANDS_SELECT_Y, 
+        SceneBattle.WINDOW_COMMANDS_SELECT_WIDTH, RPM.SMALL_SLOT_HEIGHT, [], 
+        { 
+            nbItemsMax: SceneBattle.COMMANDS_NUMBER
+        }
+    );
     this.windowItemDescription = new WindowBox(RPM.SCREEN_X - SceneBattle
         .WINDOW_DESCRIPTIONS_X, SceneBattle.WINDOW_DESCRIPTIONS_Y, SceneBattle
         .WINDOW_DESCRIPTIONS_WIDTH, SceneBattle.WINDOW_DESCRIPTIONS_HEIGHT, null

@@ -183,13 +183,13 @@ GraphicPlayer.prototype = {
             this.displayNameLevel = false;
         }
 
-        this.graphicName.updateFontSize(RPM.MEDIUM_FONT_SIZE);
-        this.graphicLevelName.updateFontSize(RPM.MEDIUM_FONT_SIZE);
-        this.graphicLevel.updateFontSize(RPM.MEDIUM_FONT_SIZE);
+        this.graphicName.setFontSize(RPM.MEDIUM_FONT_SIZE);
+        this.graphicLevelName.setFontSize(RPM.MEDIUM_FONT_SIZE);
+        this.graphicLevel.setFontSize(RPM.MEDIUM_FONT_SIZE);
         var i, l = this.listStatsNames.length;
         for (i = 0; i < l; i++){
-            this.listStatsNames[i].updateFontSize(RPM.SMALL_FONT_SIZE);
-            this.listStats[i].updateFontSize(RPM.SMALL_FONT_SIZE);
+            this.listStatsNames[i].setFontSize(RPM.SMALL_FONT_SIZE);
+            this.listStats[i].setFontSize(RPM.SMALL_FONT_SIZE);
         }
     },
 

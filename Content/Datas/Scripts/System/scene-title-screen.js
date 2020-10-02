@@ -45,11 +45,16 @@ function SceneTitleScreen() {
 
     // Windows
     commandsNb = RPM.datasGame.titlescreenGameover.titleCommands.length;
-    this.windowChoicesCommands = new WindowChoices(OrientationWindow.Vertical,
-        RPM.SCREEN_X / 2 - (RPM.MEDIUM_SLOT_WIDTH / 2), RPM.SCREEN_Y - RPM.HUGE_SPACE
-        - (commandsNb * RPM.MEDIUM_SLOT_HEIGHT), RPM.MEDIUM_SLOT_WIDTH,
-        RPM.MEDIUM_SLOT_HEIGHT, commandsNb, RPM.datasGame.titlescreenGameover
-        .getCommandsNames(), RPM.datasGame.titlescreenGameover.getCommandsActions());
+    this.windowChoicesCommands = new WindowChoices(RPM.SCREEN_X / 2 - (
+        RPM.MEDIUM_SLOT_WIDTH / 2), RPM.SCREEN_Y - RPM.HUGE_SPACE - (commandsNb 
+        * RPM.MEDIUM_SLOT_HEIGHT), RPM.MEDIUM_SLOT_WIDTH, RPM.MEDIUM_SLOT_HEIGHT
+        , RPM.datasGame.titlescreenGameover.getCommandsNames(),
+        {
+            nbItemsMax: commandsNb,
+            listCallbacks: RPM.datasGame.titlescreenGameover.getCommandsActions(),
+            padding: [0, 0, 0, 0]
+        }
+    );
 
     // Play title screen song
     RPM.datasGame.titlescreenGameover.titleMusic.playSong();

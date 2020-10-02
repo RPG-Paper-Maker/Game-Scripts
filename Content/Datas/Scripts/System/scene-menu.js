@@ -65,11 +65,23 @@ function SceneMenu() {
     }
 
     // All the windows
-    this.windowChoicesCommands = new WindowChoices(OrientationWindow.Vertical,
-        20, 20, 150, RPM.MEDIUM_SLOT_HEIGHT, menuCommands.length, menuCommands,
-        menuCommandsActions);
-    this.windowChoicesTeam = new WindowTabs(OrientationWindow.Vertical, 190, 20,
-        430, 95, 4, graphicsHeroes, null, [5,5,5,5], 15, -1);
+    this.windowChoicesCommands = new WindowChoices(20, 20, 150, RPM
+        .MEDIUM_SLOT_HEIGHT, menuCommands,
+        {
+            nbItemsMax: menuCommands.length,
+            listCallbacks: menuCommandsActions,
+            padding: [0, 0, 0, 0]
+        }
+    );
+    this.windowChoicesTeam = new WindowChoices(190, 20, 430, 95, graphicsHeroes, 
+        {
+            nbItemsMax: 4,
+            padding: RPM.VERY_SMALL_PADDING_BOX,
+            space: 15,
+            currentSelectedIndex: -1
+
+        }
+    );
     this.windowTimeCurrencies = new WindowBox(20, 0, 150, 0, new
         GraphicTimeCurrencies(), RPM.HUGE_PADDING_BOX);
     this.windowTimeCurrencies.contentLoaded = false;

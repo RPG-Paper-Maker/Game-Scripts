@@ -44,11 +44,19 @@ function SceneMenuInventory() {
     // All the windows
     this.windowTop = new WindowBox(20, 20, 200, 30, new GraphicText("Inventory",
         { align: Align.Center }));
-    this.windowChoicesTabs = new WindowTabs(OrientationWindow.Horizontal, 5, 60,
-        105, RPM.SMALL_SLOT_HEIGHT, 6, menuKind, null);
-    this.windowChoicesList = new WindowChoices(OrientationWindow.Vertical, 20,
-        100, 200, RPM.SMALL_SLOT_HEIGHT, SceneMenu.nbItemsToDisplay, [], null,
-        RPM.SMALL_SLOT_PADDING);
+    this.windowChoicesTabs = new WindowChoices(5, 60, 105, RPM.SMALL_SLOT_HEIGHT
+        , menuKind,
+        {
+            orientation: OrientationWindow.Horizontal,
+            nbItemsMax: 6
+        }
+    );
+    this.windowChoicesList = new WindowChoices(20, 100, 200, RPM
+        .SMALL_SLOT_HEIGHT, [],
+        {
+            nbItemsMax: SceneMenu.nbItemsToDisplay,
+        }
+    );
     this.windowInformations = new WindowBox(240, 100, 360, 200, null, RPM
         .HUGE_PADDING_BOX);
     this.windowEmpty = new WindowBox(10, 100, RPM.SCREEN_X - 20, RPM

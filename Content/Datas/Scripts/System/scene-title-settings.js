@@ -37,12 +37,17 @@ function SceneTitleSettings() {
         .MEDIUM_SLOT_WIDTH + RPM.LARGE_SPACE, RPM.HUGE_SPACE, RPM.SCREEN_X - (2 *
         RPM.HUGE_SPACE) - RPM.MEDIUM_SLOT_WIDTH - RPM.LARGE_SPACE, RPM
         .LARGE_SLOT_HEIGHT, null, RPM.SMALL_SLOT_PADDING);
-    this.windowChoicesMain = new WindowChoices(OrientationWindow.Vertical, RPM
-        .HUGE_SPACE, RPM.HUGE_SPACE + RPM.LARGE_SLOT_HEIGHT + RPM.LARGE_SPACE,
-        RPM.SCREEN_X - (2 * RPM.HUGE_SPACE), RPM.MEDIUM_SLOT_HEIGHT, 9, RPM.datasGame
-        .titlescreenGameover.getSettingsCommandsContent(), RPM.datasGame
-        .titlescreenGameover.getSettingsCommandsActions(), RPM
-        .SMALL_SLOT_PADDING, 0, 0, false);
+    this.windowChoicesMain = new WindowChoices(RPM.HUGE_SPACE, RPM.HUGE_SPACE + 
+        RPM.LARGE_SLOT_HEIGHT + RPM.LARGE_SPACE, RPM.SCREEN_X - (2 * RPM
+        .HUGE_SPACE), RPM.MEDIUM_SLOT_HEIGHT, RPM.datasGame.titlescreenGameover
+        .getSettingsCommandsContent(), 
+        {
+            nbItemsMax: 9,
+            listCallbacks: RPM.datasGame.titlescreenGameover
+                .getSettingsCommandsActions(),
+            bordersInsideVisible: false
+        }
+    );
 
     this.windowInformations.content = this.windowChoicesMain.getCurrentContent();
 }

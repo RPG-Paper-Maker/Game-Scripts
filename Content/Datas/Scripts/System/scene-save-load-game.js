@@ -47,8 +47,12 @@ SceneSaveLoadGame.prototype = {
         }
 
         this.windowTop = new WindowBox(20, 20, RPM.SCREEN_X - 40, 30);
-        this.windowChoicesSlots = new WindowChoices(OrientationWindow.Vertical,
-            10, 100, 100, 50, 4, games, []);
+        this.windowChoicesSlots = new WindowChoices(10, 100, 100, 50, games,
+            {
+                nbItemsMax: 4,
+                padding: [0, 0, 0, 0]
+            }
+        );
         this.windowInformations = new WindowBox(120, 100, 500, 300, null, [20,
             20, 20, 20]);
         this.windowBot = new WindowBox(20, RPM.SCREEN_Y - 50, RPM.SCREEN_X - 40, 30);

@@ -44,11 +44,20 @@ function SceneMenuSkills() {
     // All the windows
     this.windowTop = new WindowBox(20, 20, 200, 30, new GraphicText("Skills", {
         align: Align.Center }));
-    this.windowChoicesTabs = new WindowTabs(OrientationWindow.Horizontal, 50,
-        60, 110, RPM.SMALL_SLOT_HEIGHT, 4, listHeroes, null);
-    this.windowChoicesList = new WindowChoices(OrientationWindow.Vertical, 20,
-        100, 200, RPM.SMALL_SLOT_HEIGHT, SceneMenu.nbItemsToDisplay, [], null,
-        RPM.SMALL_SLOT_PADDING);
+    this.windowChoicesTabs = new WindowChoices(50, 60, 110, RPM
+        .SMALL_SLOT_HEIGHT, listHeroes, 
+        {
+            orientation: OrientationWindow.Horizontal,
+            nbItemsMax: 4,
+            padding: [0, 0, 0, 0]
+        }
+    );
+    this.windowChoicesList = new WindowChoices(20, 100, 200, RPM
+        .SMALL_SLOT_HEIGHT, [],
+        {
+            nbItemsMax: SceneMenu.nbItemsToDisplay
+        }
+    );
     this.windowInformations = new WindowBox(240, 100, 360, 200, null, RPM
         .HUGE_PADDING_BOX);
     this.windowEmpty = new WindowBox(10, 100, RPM.SCREEN_X - 20, RPM
