@@ -39,7 +39,7 @@ DatasVideos.prototype = {
             for (i = 0, l = jsonTab.length; i < l; i++) {
                 jsonObj = jsonTab[i];
                 video = new SystemVideo();
-                video.readJSON(jsonObj);
+                video.read(jsonObj);
                 this.list[jsonObj.id] = video;
             }
         });

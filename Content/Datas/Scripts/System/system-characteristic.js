@@ -24,7 +24,7 @@ function SystemCharacteristic() {
 
 // -------------------------------------------------------
 
-SystemCharacteristic.prototype.readJSON = function(json) {
+SystemCharacteristic.prototype.read = function(json) {
     this.kind = typeof json.k !== 'undefined' ? json.k : CharacteristicKind
         .IncreaseDecrease;
 

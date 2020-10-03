@@ -36,7 +36,7 @@ SystemParameter.readParameters = function(json){
     for (i = 0; i < l; i++){
         var jsonParameter = jsonParameters[i];
         var parameter = new SystemParameter();
-        parameter.readJSON(jsonParameter);
+        parameter.read(jsonParameter);
         parameters[jsonParameter.id] = parameter;
     }
 
@@ -58,7 +58,7 @@ SystemParameter.readParametersWithDefault = function(json, list){
     for (i = 0, l = jsonParameters.length; i < l; i++){
         var jsonParameter = jsonParameters[i];
         var parameter = new SystemParameter();
-        parameter.readJSONDefault(jsonParameter.v);
+        parameter.readDefault(jsonParameter.v);
 
         // If default value
         if (parameter.value.kind === 2)
@@ -77,7 +77,7 @@ SystemParameter.prototype = {
     /** Read the JSON associated to the parameter value.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json){
+    read: function(json){
         this.value = new SystemValue;
         this.value.read(json.d);
     },
@@ -85,7 +85,7 @@ SystemParameter.prototype = {
     /** Read the JSON associated to the parameter default value.
     *   @param {Object} json Json object describing the object.
     */
-    readJSONDefault: function(json){
+    readDefault: function(json){
         this.value = new SystemValue;
         this.value.read(json);
     },

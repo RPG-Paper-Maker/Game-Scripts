@@ -27,7 +27,7 @@ SystemSkybox.prototype = Object.create(SystemCommonSkillItem.prototype);
 
 // -------------------------------------------------------
 
-SystemSkybox.prototype.readJSON = function(json) {
+SystemSkybox.prototype.read = function(json) {
     this.front = RPM.jsonDefault(json.fid, 1);
     this.back = RPM.jsonDefault(json.bid, 1);
     this.top = RPM.jsonDefault(json.tid, 1);

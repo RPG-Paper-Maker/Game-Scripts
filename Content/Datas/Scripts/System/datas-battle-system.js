@@ -50,7 +50,7 @@ DatasBattleSystem.prototype = {
                 var jsonElement = jsonElements[i];
                 id = jsonElement.id;
                 var element = new SystemElement();
-                element.readJSON(jsonElement);
+                element.read(jsonElement);
                 this.elements[id] = element;
                 this.elementsOrder[i] = id;
             }
@@ -67,7 +67,7 @@ DatasBattleSystem.prototype = {
                 var jsonStatistic = jsonStatistics[index];
                 id = jsonStatistic.id;
                 var statistic = new SystemStatistic();
-                statistic.readJSON(jsonStatistic);
+                statistic.read(jsonStatistic);
                 this.statistics[id] = statistic;
                 this.statisticsOrder[index] = id;
                 if (id > maxID) {
@@ -113,7 +113,7 @@ DatasBattleSystem.prototype = {
                 var jsonWeaponKind = jsonWeaponsKind[i];
                 id = jsonWeaponKind.id;
                 var weaponKind = new SystemWeaponArmorKind();
-                weaponKind.readJSON(jsonWeaponKind);
+                weaponKind.read(jsonWeaponKind);
                 this.weaponsKind[id] = weaponKind;
             }
 
@@ -125,7 +125,7 @@ DatasBattleSystem.prototype = {
                 var jsonArmorKind = jsonArmorsKind[i];
                 id = jsonArmorKind.id;
                 var armorKind = new SystemWeaponArmorKind();
-                armorKind.readJSON(jsonArmorKind);
+                armorKind.read(jsonArmorKind);
                 this.armorsKind[id] = armorKind;
             }
 
@@ -149,7 +149,7 @@ DatasBattleSystem.prototype = {
                 var jsonBattleMap = jsonBattleMaps[i];
                 id = jsonBattleMap.id;
                 var battleMap = new SystemBattleMap();
-                battleMap.readJSON(jsonBattleMap);
+                battleMap.read(jsonBattleMap);
                 this.battleMaps[id] = battleMap;
             }
 
@@ -164,11 +164,11 @@ DatasBattleSystem.prototype = {
 
             // Musics
             this.battleMusic = new SystemPlaySong(SongKind.Music);
-            this.battleMusic.readJSON(json.bmusic);
+            this.battleMusic.read(json.bmusic);
             this.battleLevelUp = new SystemPlaySong(SongKind.Sound);
-            this.battleLevelUp.readJSON(json.blevelup);
+            this.battleLevelUp.read(json.blevelup);
             this.battleVictory = new SystemPlaySong(SongKind.Music);
-            this.battleVictory.readJSON(json.bvictory);
+            this.battleVictory.read(json.bvictory);
         });
     },
 

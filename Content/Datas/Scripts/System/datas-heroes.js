@@ -40,7 +40,7 @@ DatasHeroes.prototype = {
                     var jsonHero = json[i];
                     var id = jsonHero.id;
                     var hero = new SystemHero();
-                    hero.readJSON(jsonHero);
+                    hero.read(jsonHero);
                     this.list[id] = hero;
                 }
 

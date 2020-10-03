@@ -24,7 +24,7 @@ function SystemAnimation() {
 
 // -------------------------------------------------------
 
-SystemAnimation.prototype.readJSON = function(json) {
+SystemAnimation.prototype.read = function(json) {
     var i, l, jsonFrames, jsonFrame, frame;
 
     this.pictureID = RPM.defaultValue(json.pid, 1);
@@ -35,7 +35,7 @@ SystemAnimation.prototype.readJSON = function(json) {
     for (i = 0; i < l; i++) {
         jsonFrame = jsonFrames[i];
         frame = new SystemAnimationFrame();
-        frame.readJSON(jsonFrame);
+        frame.read(jsonFrame);
         this.frames[jsonFrame.id] = frame;
     }
     this.rows = RPM.defaultValue(json.r, 5);

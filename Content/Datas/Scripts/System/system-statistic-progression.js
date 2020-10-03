@@ -30,14 +30,14 @@ SystemStatisticProgression.prototype = {
     /** Read the JSON associated to the statistic progression.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json) {
+    read: function(json) {
         this.id = json.id;
         this.maxValue = new SystemValue();
         this.maxValue.read(json.m);
         this.isFix = json["if"];
         if (this.isFix) {
             this.table = new SystemProgressionTable();
-            this.table.readJSON(json.t);
+            this.table.read(json.t);
             this.random = new SystemValue();
             this.random.read(json.r);
         } else {

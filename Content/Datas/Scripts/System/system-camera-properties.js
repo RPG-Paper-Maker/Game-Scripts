@@ -27,7 +27,7 @@ SystemCameraProperties.prototype = {
     /** Read the JSON associated to the camera properties.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json) {
+    read: function(json) {
         this.distance = SystemValue.readOrDefaultNumberDouble(json.d, 250);
         this.horizontalAngle = SystemValue.readOrDefaultNumberDouble(json.ha,
             -90);

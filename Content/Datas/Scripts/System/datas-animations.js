@@ -40,7 +40,7 @@ DatasAnimations.prototype = {
             for (i = 0; i < l; i++){
                 jsonAnimation = json[i];
                 animation = new SystemAnimation();
-                animation.readJSON(jsonAnimation);
+                animation.read(jsonAnimation);
                 this.list[jsonAnimation.id] = animation;
             }
         });

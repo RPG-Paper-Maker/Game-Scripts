@@ -9,104 +9,113 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemTitleCommand
-//
-// -------------------------------------------------------
-
 /** @class
-*   A title command of the game.
+*   A title command of the game
+*   @extends SystemLang
+*   @property {}
 */
-function SystemTitleCommand() {
-
-}
-
-// -------------------------------------------------------
-
-SystemTitleCommand.prototype.readJSON = function(json) {
-   SystemLang.prototype.readJSON.call(this, json);
-
-   this.kind = RPM.jsonDefault(json.k, TitleCommandKind.NewGame);
-   this.script = RPM.jsonDefault(json.s, "");
-}
-
-// -------------------------------------------------------
-
-SystemTitleCommand.prototype.getAction = function() {
-   switch (this.kind) {
-   case TitleCommandKind.NewGame:
-       return this.startNewGame;
-   case TitleCommandKind.LoadGame:
-       return this.loadGame;
-   case TitleCommandKind.Settings:
-       return this.showSettings;
-   case TitleCommandKind.Exit:
-       return this.exit;
-   case TitleCommandKind.Script:
-       return this.executeScript;
-   }
-}
-
-// -------------------------------------------------------
-
-/** Callback function for starting a new game.
-*/
-SystemTitleCommand.prototype.startNewGame = function() {
-    // Stop video if existing
-    if (!RPM.datasGame.titlescreenGameover.isTitleBackgroundImage) {
-        Platform.canvasVideos.classList.add("hidden");
-        Platform.canvasVideos.pause();
-        Platform.canvasVideos.src = "";
+class SystemTitleCommand extends SystemLang
+{
+    constructor()
+    {
+        super();
     }
-    RPM.songsManager.stopAll();
 
-    // Create a new game
-    RPM.game = new Game();
-    RPM.game.initializeDefault();
-
-    // Add local map to stack
-    RPM.gameStack.replace(new SceneMap(RPM.datasGame.system.idMapStartHero));
-
-    return true;
-}
-
-// -------------------------------------------------------
-
-/** Callback function for loading an existing game.
-*/
-SystemTitleCommand.prototype.loadGame = function() {
-    RPM.gameStack.push(new SceneLoadGame());
-
-    return true;
-}
-
-// -------------------------------------------------------
-
-/** Callback function for loading an existing game.
-*/
-SystemTitleCommand.prototype.showSettings = function() {
-    RPM.gameStack.push(new SceneTitleSettings());
-
-    return true;
-}
-
-// -------------------------------------------------------
-
-/** Callback function for closing the window.
-*/
-SystemTitleCommand.prototype.exit = function() {
-    Platform.quit();
-
-    return true;
-}
-
-// -------------------------------------------------------
-
-/** Callback function for closing the window.
-*/
-SystemTitleCommand.prototype.executeScript = function() {
-    RPM.evaluateScript(this.script);
-
-    return true;
+    // -------------------------------------------------------
+    /** Read the JSON associated to the title screen command
+    *   @param {Object} json Json object describing the title screen command
+    */
+    read(json)
+    {
+        super.read(json);
+    
+        this.kind = RPM.jsonDefault(json.k, TitleCommandKind.NewGame);
+        this.script = RPM.jsonDefault(json.s, RPM.STRING_EMPTY);
+    }
+    
+    // -------------------------------------------------------
+    /** Get the action function according to kind
+    *   @returns {function}
+    */
+    getAction()
+    {
+        switch (this.kind)
+        {
+        case TitleCommandKind.NewGame:
+            return this.startNewGame;
+        case TitleCommandKind.LoadGame:
+            return this.loadGame;
+        case TitleCommandKind.Settings:
+            return this.showSettings;
+        case TitleCommandKind.Exit:
+            return this.exit;
+        case TitleCommandKind.Script:
+            return this.executeScript;
+        }
+    }
+    
+    // -------------------------------------------------------
+    /** Callback function for start a new game
+    *   @returns {boolean}
+    */
+    startNewGame()
+    {
+        // Stop video and songs if existing
+        if (!RPM.datasGame.titlescreenGameover.isTitleBackgroundImage)
+        {
+            Platform.canvasVideos.classList.add(RPM.CLASS_HIDDEN);
+            Platform.canvasVideos.pause();
+            Platform.canvasVideos.src = RPM.STRING_EMPTY;
+        }
+        RPM.songsManager.stopAll();
+    
+        // Create a new game
+        RPM.game = new Game();
+        RPM.game.initializeDefault();
+    
+        // Add local map to stack
+        RPM.gameStack.replace(new SceneMap(RPM.datasGame.system.idMapStartHero));
+    
+        return true;
+    }
+    
+    // -------------------------------------------------------
+    /** Callback function for loading an existing game
+    *   @returns {boolean}
+    */
+    loadGame()
+    {
+        RPM.gameStack.push(new SceneLoadGame());
+        return true;
+    }
+    
+    // -------------------------------------------------------
+    /** Callback function for loading an existing game
+    *   @returns {boolean}
+    */
+    showSettings()
+    {
+        RPM.gameStack.push(new SceneTitleSettings());
+        return true;
+    }
+    
+    // -------------------------------------------------------
+    /** Callback function for closing the window
+    *   @returns {boolean}
+    */
+    exit()
+    {
+        Platform.quit();
+        return true;
+    }
+    
+    // -------------------------------------------------------
+    /** Callback function for closing the window
+    *   @returns {boolean}
+    */
+    executeScript()
+    {
+        RPM.evaluateScript(this.script);
+        return true;
+    }
 }

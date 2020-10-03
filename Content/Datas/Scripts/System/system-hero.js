@@ -29,13 +29,13 @@ SystemHero.prototype = {
     /** Read the JSON associated to the hero.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json){
+    read: function(json){
         this.name = json.names[1];
         this.idClass = json.class;
         this.idBattler = typeof json.bid === 'undefined' ? -1 : json.bid;
         this.idFaceset = typeof json.fid === 'undefined' ? -1 : json.fid;
         this.classInherit = new SystemClass();
-        this.classInherit.readJSON(json.ci);
+        this.classInherit.read(json.ci);
         this.check();
     },
 

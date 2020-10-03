@@ -28,8 +28,8 @@ SystemObject3D.prototype = {
     /** Read the JSON associated to the object 3D.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json) {
-        SystemSpecialElement.prototype.readJSON.call(this, json);
+    read: function(json) {
+        SystemSpecialElement.prototype.read.call(this, json);
 
         this.id = json.id;
         this.shapeKind = typeof json.sk === 'undefined' ? ShapeKind.Box : json

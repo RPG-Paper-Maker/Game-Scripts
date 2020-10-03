@@ -139,7 +139,7 @@ CollisionSquare.prototype = {
     /** Read the JSON associated to the collision square.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json) {
+    read: function(json) {
         var rect = json.rec;
         var left = json.l;
         var right = json.r;

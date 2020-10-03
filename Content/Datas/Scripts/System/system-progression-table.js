@@ -49,7 +49,7 @@ SystemProgressionTable.prototype = {
     /** Read the JSON associated to the picture.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json){
+    read: function(json){
         this.initialValue = new SystemValue();
         this.initialValue.read(json.i);
         this.finalValue = new SystemValue();

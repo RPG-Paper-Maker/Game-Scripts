@@ -27,8 +27,8 @@ SystemElement.prototype = Object.create(SystemIcon.prototype);
 
 // -------------------------------------------------------
 
-SystemElement.prototype.readJSON = function(json) {
-    SystemIcon.prototype.readJSON.call(this, json);
+SystemElement.prototype.read = function(json) {
+    SystemIcon.prototype.read.call(this, json);
 
     var i, l, jsonList, jsonElement, value;
 

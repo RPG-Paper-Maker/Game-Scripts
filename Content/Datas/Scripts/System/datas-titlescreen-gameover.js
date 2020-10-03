@@ -35,13 +35,13 @@ DatasTitlescreenGameover.prototype.read = function() {
         this.titleBackgroundImageID = RPM.jsonDefault(json.tb, 1);
         this.titleBackgroundVideoID = RPM.jsonDefault(json.tbv, 1);
         this.titleMusic = new SystemPlaySong(SongKind.Music);
-        this.titleMusic.readJSON(json.tm);
+        this.titleMusic.read(json.tm);
         jsonTab = RPM.jsonDefault(json.tc, []);
         l = jsonTab.length;
         this.titleCommands = new Array(l);
         for (i = 0; i < l; i++) {
             obj = new SystemTitleCommand;
-            obj.readJSON(jsonTab[i]);
+            obj.read(jsonTab[i]);
             this.titleCommands[i] = obj;
         }
         jsonTab = json.ts;

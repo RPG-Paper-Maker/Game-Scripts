@@ -421,7 +421,7 @@ GamePlayer.prototype = {
     /** Read the JSON associated to the character and items.
     *   @param {object} json Json object describing the character.
     */
-    readJSON: function(json)
+    read: function(json)
     {
         // Stats
         var jsonStats = json.stats;

@@ -32,7 +32,7 @@ SystemObject.prototype = {
     /** Read the JSON associated to the object.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json){
+    read: function(json){
         var i, j, l, ll, id, hId;
         var jsonStates, jsonState, jsonProperties, jsonProperty, jsonEvents,
             jsonEvent, prop;
@@ -88,7 +88,7 @@ SystemObject.prototype = {
                     break;
             }
             var state = new SystemObjectState();
-            state.readJSON(jsonState);
+            state.read(jsonState);
             this.states[j] = state;
         }
 
@@ -98,7 +98,7 @@ SystemObject.prototype = {
         for (i = 0; i < l; i++) {
             jsonProperty = jsonProperties[i];
             prop = new SystemProperty();
-            prop.readJSON(jsonProperty);
+            prop.read(jsonProperty);
             id = prop.id;
             for (j = 0, ll = this.properties.length; j < ll; j++) {
                 if (this.properties[j].id === id)
@@ -113,7 +113,7 @@ SystemObject.prototype = {
         for (i = 0; i < l; i++){
             jsonEvent = jsonEvents[i];
             var event = new SystemObjectEvent();
-            event.readJSON(jsonEvent);
+            event.read(jsonEvent);
 
             if (this.events.hasOwnProperty(event.idEvent)) {
                 var list = this.events[event.idEvent];

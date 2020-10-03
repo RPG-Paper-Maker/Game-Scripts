@@ -25,7 +25,7 @@ function SystemObjectReaction() {
 /** Read the JSON associated to the object reaction.
 *   @param {Object} json Json object describing the object.
 */
-SystemObjectReaction.prototype.readJSON = function(json) {
+SystemObjectReaction.prototype.read = function(json) {
     this.idEvent = json.id;
 
     // Options

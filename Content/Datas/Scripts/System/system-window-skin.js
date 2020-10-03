@@ -45,7 +45,7 @@ class SystemWindowSkin
     /** Read the JSON associated to the window skin
     *   @param {Object} json Json object describing the window skin
     */
-    readJSON(json)
+    read(json)
     {
         this.pictureID = json.pid;
         this.borderTopLeft = json.tl;

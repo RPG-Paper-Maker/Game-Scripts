@@ -39,7 +39,7 @@ DatasWeapons.prototype = {
                 var jsonWeapon = json[i];
                 var id = jsonWeapon["id"];
                 var weapon = new SystemWeapon();
-                weapon.readJSON(jsonWeapon);
+                weapon.read(jsonWeapon);
                 this.list[id] = weapon;
             }
         });

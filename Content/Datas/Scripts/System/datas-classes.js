@@ -40,7 +40,7 @@ DatasClasses.prototype = {
                 var jsonClass = json[i];
                 var id = jsonClass.id;
                 var c = new SystemClass();
-                c.readJSON(jsonClass);
+                c.read(jsonClass);
                 this.list[id] = c;
             }
             this.loaded = true;

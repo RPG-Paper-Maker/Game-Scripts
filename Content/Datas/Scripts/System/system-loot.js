@@ -31,7 +31,7 @@ SystemLoot.prototype = {
     /** Read the JSON associated to the loot.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json) {
+    read: function(json) {
         this.kind = json.k;
         this.lootID = new SystemValue();
         this.lootID.read(json.lid);

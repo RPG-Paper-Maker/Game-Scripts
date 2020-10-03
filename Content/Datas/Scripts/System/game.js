@@ -169,7 +169,7 @@ Game.prototype = {
             heroJson = heroesJson[i];
             character = new GamePlayer(heroJson.k, heroJson.id, heroJson.instid,
                                        heroJson.sk);
-            character.readJSON(heroJson);
+            character.read(heroJson);
             this.teamHeroes[i] = character;
         }
         heroesJson = json.sh;
@@ -179,7 +179,7 @@ Game.prototype = {
             heroJson = heroesJson[i];
             character = new GamePlayer(heroJson.k, heroJson.id, heroJson.instid,
                                        heroJson.sk);
-            character.readJSON(heroJson);
+            character.read(heroJson);
             this.reserveHeroes[i] = character;
         }
         heroesJson = json.hh;
@@ -189,7 +189,7 @@ Game.prototype = {
             heroJson = heroesJson[i];
             character = new GamePlayer(heroJson.k, heroJson.id, heroJson.instid,
                                        heroJson.sk);
-            character.readJSON(heroJson);
+            character.read(heroJson);
             this.hiddenHeroes[i] = character;
         }
 

@@ -402,7 +402,7 @@ MapObject.prototype = {
         var jsonPosition = json.k;
         this.position = RPM.positionToVector3(jsonPosition);
         this.system = new SystemObject;
-        this.system.readJSON(json.v);
+        this.system.read(json.v);
     },
 
     /** Simulate moving object position.

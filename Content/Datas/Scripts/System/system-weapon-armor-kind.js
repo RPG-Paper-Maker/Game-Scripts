@@ -9,30 +9,28 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemWeaponArmorKind
-//
-// -------------------------------------------------------
-
 /** @class
-*   A weapon/armor kind of the game.
-*   @property {string} name The name of the weapon / armor kind.
+*   A weapon/armor kind of the game
+*   @property {string} name The name of the weapon / armor kind
 *   @property {boolean[]} equipments List of booleans indicating which equipment
-*   is ok.
+*   is ok
 */
-function SystemWeaponArmorKind(){
+class SystemWeaponArmorKind
+{
+    constructor()
+    {
 
-}
+    }
 
-SystemWeaponArmorKind.prototype = {
-
-    /** Read the JSON associated to the weapon / armor kind.
-    *   @param {Object} json Json object describing the object.
+    // -------------------------------------------------------
+    /** Read the JSON associated to the weapon / armor kind
+    *   @param {Object} json Json object describing the weapon / armor kind
     */
-    readJSON: function(json){
+    read(json)
+    {
         this.name = json.names[1];
         this.equipments = json.equipment;
         this.equipments.unshift(false);
     }
+
 }

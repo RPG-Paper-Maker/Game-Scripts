@@ -650,6 +650,7 @@ MapPortion.prototype = {
 
             if (texture !== null && texture.texture !== null) {
                 objCollision = mountains.updateGeometry(position, mountain);
+                console.log(objCollision)
                 this.updateCollision(this.boundingBoxesMountains, objCollision,
                     position, true);
             }
@@ -773,7 +774,7 @@ MapPortion.prototype = {
             var position = jsonObject.k;
             var jsonObjectValue = jsonObject.v;
             var object = new SystemObject;
-            object.readJSON(jsonObjectValue);
+            object.read(jsonObjectValue);
             id = object.id;
 
             // Check if the object is moving (so no need to add it to the scene)
@@ -890,7 +891,7 @@ MapPortion.prototype = {
             var jsonObjectValue = jsonObject.v;
             var object = new SystemObject;
             if (jsonObjectValue.id === id) {
-                object.readJSON(jsonObjectValue);
+                object.read(jsonObjectValue);
                 var localPosition = RPM.positionToVector3(position);
                 position = new THREE.Vector3(localPosition.x,
                                              localPosition.y,
@@ -920,7 +921,7 @@ MapPortion.prototype = {
 
             if (RPM.datasGame.system.idObjectStartHero === jsonObjectValue.id){
                 var object = new SystemObject;
-                object.readJSON(jsonObjectValue);
+                object.read(jsonObjectValue);
                 var localPosition = RPM.positionToVector3(position);
                 position = new THREE.Vector3(localPosition.x,
                                              localPosition.y,
@@ -989,7 +990,7 @@ MapPortion.prototype = {
 
         for (i = 0, l = collisions.length; i < l; i++) {
             objCollision = collisions[i];
-            if (side) {
+            if (objCollision.c) {
                 centeredPosition = [position[0] + Math.ceil(objCollision.c.x / 
                     RPM.SQUARE_SIZE), position[1] + Math.ceil(objCollision.c.y / 
                     RPM.SQUARE_SIZE), position[3] + Math.ceil(objCollision.c.z / 
@@ -999,11 +1000,11 @@ MapPortion.prototype = {
                 centeredPosition = [position[0], position[1], position[3]];
             }
             minW = -objCollision.m;
-                maxW = objCollision.m;
-                minH = -objCollision.m;
-                maxH = objCollision.m;
-                minD = -objCollision.m;
-                maxD = objCollision.m;
+            maxW = objCollision.m;
+            minH = -objCollision.m;
+            maxH = objCollision.m;
+            minD = -objCollision.m;
+            maxD = objCollision.m;
             for (a = minW; a <= maxW; a++) {
                 for (b = minH; b <= maxH; b++) {
                     for (c = minD; c <= maxD; c++) {

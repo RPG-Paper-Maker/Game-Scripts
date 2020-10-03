@@ -28,7 +28,7 @@ SystemSpecialElement.prototype = {
     /** Read the JSON associated to the special element.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json){
+    read: function(json){
         this.pictureID = typeof json.pic === 'undefined' ? -1 : json.pic;
     }
 }

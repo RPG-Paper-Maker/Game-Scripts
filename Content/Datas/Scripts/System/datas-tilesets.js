@@ -43,7 +43,7 @@ DatasTilesets.prototype = {
                 var jsonTileset = json[i];
                 var id = jsonTileset.id;
                 tileset = new SystemTileset();
-                tileset.readJSON(jsonTileset);
+                tileset.read(jsonTileset);
                 this.list[id] = tileset;
 
                 // Autotiles, walls

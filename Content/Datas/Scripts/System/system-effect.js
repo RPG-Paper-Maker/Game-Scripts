@@ -24,7 +24,7 @@ function SystemEffect() {
 
 // -------------------------------------------------------
 
-SystemEffect.prototype.readJSON = function(json) {
+SystemEffect.prototype.read = function(json) {
     this.kind = typeof json.k !== 'undefined' ? json.k : EffectKind.Damages;
 
     switch (this.kind) {

@@ -9,34 +9,34 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemTroop
-//
-// -------------------------------------------------------
-
 /** @class
-*   A troop of the game.
-*   @property {Object[]} list of the monsters (ids,level).
+*   A troop of the game
+*   @property {Object[]} list list of the monsters (ids, level)
 */
-function SystemTroop(){
+class SystemTroop
+{
+    constructor()
+    {
 
-}
+    }
 
-SystemTroop.prototype = {
-
-    /** Read the JSON associated to the troop.
-    *   @param {Object} json Json object describing the object.
+    // -------------------------------------------------------
+    /** Read the JSON associated to the troop
+    *   @param {Object} json Json object describing the troop
     */
-    readJSON: function(json){
-        var jsonList = json.l;
-        var i, l = jsonList.length;
+    read(json)
+    {
+        let jsonList = json.l;
+        let l = jsonList.length;
         this.list = new Array(l);
-        for (i = 0; i < l; i++){
-            var jsonMonster = jsonList[i];
-            this.list[i] = {
-                id: jsonMonster.id,
-                level: jsonMonster.l
+        let jsonElement;
+        for (let i = 0; i < l; i++)
+        {
+            jsonElement = jsonList[i];
+            this.list[i] =
+            {
+                id: jsonElement.id,
+                level: jsonElement.l
             };
         }
     }

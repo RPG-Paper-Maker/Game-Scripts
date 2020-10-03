@@ -25,7 +25,7 @@ function SystemAnimationFrame() {
 
 // -------------------------------------------------------
 
-SystemAnimationFrame.prototype.readJSON = function(json) {
+SystemAnimationFrame.prototype.read = function(json) {
     var i, l, jsonElements, jsonElement, jsonEffects, jsonEffect, element,
         effect;
 
@@ -35,7 +35,7 @@ SystemAnimationFrame.prototype.readJSON = function(json) {
     for (i = 0; i < l; i++) {
         jsonElement = jsonElements[i];
         element = new SystemAnimationFrameElement();
-        element.readJSON(jsonElement);
+        element.read(jsonElement);
         this.elements[i] = element;
     }
     jsonEffects = RPM.defaultValue(json.ef, []);
@@ -44,7 +44,7 @@ SystemAnimationFrame.prototype.readJSON = function(json) {
     for (i = 0; i < l; i++) {
         jsonEffect = jsonEffects[i];
         effect = new SystemAnimationFrameEffect();
-        effect.readJSON(jsonEffect);
+        effect.read(jsonEffect);
         this.effects[i] = effect;
     }
 }

@@ -28,8 +28,8 @@ SystemKeyBoard.prototype = {
     /** Read the JSON associated to the key.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json) {
-        SystemLang.prototype.readJSON.call(this, json);
+    read: function(json) {
+        SystemLang.prototype.read.call(this, json);
 
         var i, l, j, ll;
         this.id = json.id;

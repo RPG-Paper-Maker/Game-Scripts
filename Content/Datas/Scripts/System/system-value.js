@@ -9,219 +9,241 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemValue
-//
-// -------------------------------------------------------
-
 /** @class
-*   A value in the system.
-*   @property {number} kind The kind of value.
-*   @property {number} value The value.
+*   A value in the system
+*   @property {number} kind The kind of value
+*   @property {number} value The value
+*   @param {number} [k=PrimitiveValueKind.None] The kind of value
+*   @param {number} [v=0] The value
 */
-function SystemValue(){
-
-}
-
-/** Create a new value.
-*   @static
-*   @property {number} k The kind of value.
-*   @property {number} v The value.
-*   @returns {SystemValue}
-*/
-SystemValue.createValue = function(k, v) {
-    var value = new SystemValue();
-    value.kind = k;
-    switch (k) {
-    case PrimitiveValueKind.Message:
-        value.value = "" + v;
-        break;
-    case PrimitiveValueKind.Switch:
-        value.value = RPM.numToBool(v);
-        break;
-    default:
-        value.value = v;
-        break;
-    }
-    return value;
-}
-
-// -------------------------------------------------------
-
-SystemValue.createValueCommand = function(command, iterator) {
-    var k, v;
-
-    k = command[iterator.i++];
-    v = command[iterator.i++];
-
-    return SystemValue.createValue(k, v);
-}
-
-// -------------------------------------------------------
-
-/** Create a none value.
-*   @static
-*   @returns {SystemValue}
-*/
-SystemValue.createNone = function(){
-    return SystemValue.createValue(PrimitiveValueKind.None, null);
-}
-
-// -------------------------------------------------------
-
-/** Create a new value number.
-*   @static
-*   @property {number} n The number.
-*   @returns {SystemValue}
-*/
-SystemValue.createNumber = function(n){
-    return SystemValue.createValue(PrimitiveValueKind.Number, n);
-}
-
-// -------------------------------------------------------
-
-SystemValue.createMessage = function(m) {
-    return SystemValue.createValue(PrimitiveValueKind.Message, m);
-}
-
-// -------------------------------------------------------
-
-/** Create a new value number.
-*   @static
-*   @property {number} n The number.
-*   @returns {SystemValue}
-*/
-SystemValue.createNumberDouble = function(n){
-    return SystemValue.createValue(PrimitiveValueKind.NumberDouble, n);
-}
-
-// -------------------------------------------------------
-
-/** Create a new value keyBoard.
-*   @static
-*   @property {number} k The key number.
-*   @returns {SystemValue}
-*/
-SystemValue.createKeyBoard = function(k){
-    return SystemValue.createValue(PrimitiveValueKind.KeyBoard, k);
-}
-
-// -------------------------------------------------------
-
-/** Create a new value switch.
-*   @static
-*   @property {boolean} b The value of the switch.
-*   @returns {SystemValue}
-*/
-SystemValue.createSwitch = function(b){
-    return SystemValue.createValue(PrimitiveValueKind.Switch, RPM.boolToNum(b));
-}
-
-SystemValue.createVariable = function(id) {
-    return SystemValue.createValue(PrimitiveValueKind.Variable, id);
-}
-
-SystemValue.createParameter = function(id) {
-    return SystemValue.createValue(PrimitiveValueKind.Parameter, id);
-}
-
-SystemValue.createProperty = function(id) {
-    return SystemValue.createValue(PrimitiveValueKind.Property, id);
-}
-
-// -------------------------------------------------------
-
-SystemValue.readOrDefaultNumber = function(json, number) {
-    if (typeof number === 'undefined') {
-        number = 0;
-    }
-
-    if (typeof json !== 'undefined') {
-        var value = new SystemValue();
-        value.read(json);
-        return value;
-    }
-
-    return SystemValue.createNumber(number);
-}
-
-// -------------------------------------------------------
-
-SystemValue.readOrDefaultNumberDouble = function(json, number) {
-    if (typeof number === 'undefined') {
-        number = 0;
-    }
-
-    if (typeof json !== 'undefined') {
-        var value = new SystemValue();
-        value.read(json);
-        return value;
-    }
-
-    return SystemValue.createNumberDouble(number);
-}
-
-// -------------------------------------------------------
-
-SystemValue.readOrDefaultDatabase = function(json) {
-    if (typeof json !== 'undefined') {
-        var value = new SystemValue();
-        value.read(json);
-        return value;
-    }
-
-    return SystemValue.createValue(PrimitiveValueKind.DataBase, 1);
-}
-
-// -------------------------------------------------------
-
-SystemValue.readOrDefaultMessage = function(json, message) {
-    if (json) {
-        var value = new SystemValue();
-        value.read(json);
-        return value;
-    }
-
-    return SystemValue.createValue(PrimitiveValueKind.Message, message ? message
-        : "");
-}
-
-// -------------------------------------------------------
-
-SystemValue.readOrNone = function(json) {
-    if (json) {
-        var value = new SystemValue();
-        value.read(json);
-        return value;
-    }
-
-    return SystemValue.createNone();
-}
-
-// -------------------------------------------------------
-
-SystemValue.prototype = {
-
-    /** Read the JSON associated to the valuel.
-    *   @param {Object} json Json object describing the object.
-    */
-    read: function(json){
-        if (!json) {
-            var a = 1;
+class SystemValue
+{
+    constructor(k = PrimitiveValueKind.None, v = 0)
+    {
+        this.kind = k;
+        switch (k) 
+        {
+        case PrimitiveValueKind.None:
+            this.value = null;
+            break;
+        case PrimitiveValueKind.Message:
+            this.value = RPM.numToString(v);
+            break;
+        case PrimitiveValueKind.Switch:
+            this.value = RPM.numToBool(v);
+            break;
+        default:
+            this.value = v;
+            break;
         }
-
-        this.kind = json.k;
-        this.value = json.v;
-    },
+    }
 
     // -------------------------------------------------------
+    /** Create a new value from a command and iterator
+    *   @static
+    *   @param {?[]} command The list describing the command
+    *   @param {Object} iterator The iterator
+    *   @returns {SystemValue}
+    */
+    static createValueCommand = function(command, iterator) {
+        let k = command[iterator.i++];
+        let v = command[iterator.i++];
+        return new SystemValue(k, v);
+    }
 
-    /** Get the value.
+    // -------------------------------------------------------
+    /** Create a none value
+    *   @static
+    *   @returns {SystemValue}
+    */
+    static createNone()
+    {
+        return new SystemValue(PrimitiveValueKind.None, null);
+    }
+
+    // -------------------------------------------------------
+    /** Create a new value number
+    *   @static
+    *   @param {number} n The number
+    *   @returns {SystemValue}
+    */
+    static createNumber(n)
+    {
+        return new SystemValue(PrimitiveValueKind.Number, n);
+    }
+
+    // -------------------------------------------------------
+    /** Create a new value message
+    *   @static
+    *   @param {string} m The message
+    *   @returns {SystemValue}
+    */
+    static createMessage(m)
+    {
+        return new SystemValue(PrimitiveValueKind.Message, m);
+    }
+
+    // -------------------------------------------------------
+    /** Create a new value decimal number
+    *   @static
+    *   @param {number} n The number
+    *   @returns {SystemValue}
+    */
+    static createNumberDouble(n)
+    {
+        return new SystemValue(PrimitiveValueKind.NumberDouble, n);
+    }
+
+    // -------------------------------------------------------
+    /** Create a new value keyBoard
+    *   @static
+    *   @param {number} k The key number
+    *   @returns {SystemValue}
+    */
+    static createKeyBoard(k)
+    {
+        return new SystemValue(PrimitiveValueKind.KeyBoard, k);
+    }
+
+    // -------------------------------------------------------
+    /** Create a new value switch
+    *   @static
+    *   @param {boolean} b The value of the switch
+    *   @returns {SystemValue}
+    */
+    static createSwitch(b)
+    {
+        return new SystemValue(PrimitiveValueKind.Switch, RPM.boolToNum(b));
+    }
+
+    // -------------------------------------------------------
+    /** Create a new value variable
+    *   @static
+    *   @param {number} id The variable id
+    *   @returns {SystemValue}
+    */
+    static createVariable(id)
+    {
+        return new SystemValue(PrimitiveValueKind.Variable, id);
+    }
+
+    // -------------------------------------------------------
+    /** Create a new value parameter
+    *   @static
+    *   @param {number} id The parameter id
+    *   @returns {SystemValue}
+    */
+    static createParameter(id)
+    {
+        return new SystemValue(PrimitiveValueKind.Parameter, id);
+    }
+
+    // -------------------------------------------------------
+    /** Create a new value property
+    *   @static
+    *   @param {number} id The property id
+    *   @returns {SystemValue}
+    */
+    static createProperty(id)
+    {
+        return new SystemValue(PrimitiveValueKind.Property, id);
+    }
+
+    // -------------------------------------------------------
+    /** Try to read a number value, if not possible put default value
+    *   @static
+    *   @param {number} json The json value
+    *   @param {number} [n=0] The default value
+    *   @returns {SystemValue}
+    */
+    static readOrDefaultNumber(json, n = 0)
+    {
+        return RPM.isUndefined(json) ? SystemValue.createNumber(n) : 
+            SystemValue.readFromJSON(json);
+    }
+
+    // -------------------------------------------------------
+    /** Try to read a double number value, if not possible put default value
+    *   @static
+    *   @param {number} json The json value
+    *   @param {number} [n=0] The default value
+    *   @returns {SystemValue}
+    */
+    static readOrDefaultNumberDouble(json, n = 0)
+    {
+        return RPM.isUndefined(json) ? SystemValue.createNumberDouble(n) : 
+            SystemValue.readFromJSON(json);
+    }
+
+    // -------------------------------------------------------
+    /** Try to read a database value, if not possible put default value
+    *   @static
+    *   @param {number} json The json value
+    *   @param {number} [id=1] The default value
+    *   @returns {SystemValue}
+    */
+    static readOrDefaultDatabase = function(json, id = 1)
+    {
+        return RPM.isUndefined(json) ? new SystemValue(PrimitiveValueKind
+            .DataBase, id) : SystemValue.readFromJSON(json);
+    }
+
+    // -------------------------------------------------------
+    /** Try to read a message value, if not possible put default value
+    *   @static
+    *   @param {number} json The json value
+    *   @param {number} [m=RPM.STRING_EMPTY] The default value
+    *   @returns {SystemValue}
+    */
+    static readOrDefaultMessage(json, m)
+    {
+        return RPM.isUndefined(json) ? new SystemValue(PrimitiveValueKind
+            .Message, m) : SystemValue.readFromJSON(json);
+    }
+
+    // -------------------------------------------------------
+    /** Try to read a value, if not possible put none value
+    *   @static
+    *   @param {number} json The json value
+    *   @returns {SystemValue}
+    */
+    static readOrNone(json)
+    {
+        return RPM.isUndefined(json) ? SystemValue.createNone() : SystemValue
+            .readFromJSON(json);
+    }
+
+    // -------------------------------------------------------
+    /** Read a value of any kind and return it
+    *   @static
+    *   @param {number} json The json value
+    *   @returns {SystemValue}
+    */
+    static readFromJSON(json)
+    {
+        let value = new SystemValue();
+        value.read(json);
+        return value;
+    }
+
+    // -------------------------------------------------------
+    /** Read the JSON associated to the value
+    *   @param {Object} json Json object describing the value
+    */
+    read(json)
+    {
+        this.kind = json.k;
+        this.value = json.v;
+    }
+
+    // -------------------------------------------------------
+    /** Get the value
     *   @returns {number}
     */
-    getValue: function() {
-        switch (this.kind) {
+    getValue()
+    {
+        switch (this.kind)
+        {
         case PrimitiveValueKind.Variable:
             return RPM.game.variables[this.value];
         case PrimitiveValueKind.Parameter:
@@ -231,33 +253,32 @@ SystemValue.prototype = {
         default:
             return this.value;
         }
-    },
+    }
 
     // -------------------------------------------------------
-
-    /** Check if a value is equal to another one.
-    *   @param {SystemValue} value The value to compare.
+    /** Check if a value is equal to another one
+    *   @param {SystemValue} value The value to compare
     *   @returns {boolean}
     */
-    isEqual: function(value){
-
+    isEqual(value)
+    {
         // If keyBoard
-        if (this.kind === PrimitiveValueKind.KeyBoard &&
-            value.kind !== PrimitiveValueKind.KeyBoard)
+        if (this.kind === PrimitiveValueKind.KeyBoard && value.kind !== 
+            PrimitiveValueKind.KeyBoard)
         {
-            return DatasKeyBoard.isKeyEqual(
-                        value.value, RPM.datasGame.keyBoard.list[this.value]);
-        } else if (value.kind === PrimitiveValueKind.KeyBoard &&
-                 this.kind !== PrimitiveValueKind.KeyBoard)
+            return DatasKeyBoard.isKeyEqual(value.value, RPM.datasGame.keyBoard
+                .list[this.value]);
+        } else if (value.kind === PrimitiveValueKind.KeyBoard && this.kind !== 
+            PrimitiveValueKind.KeyBoard)
         {
-            return DatasKeyBoard.isKeyEqual(
-                        this.value, RPM.datasGame.keyBoard.list[value.value]);
+            return DatasKeyBoard.isKeyEqual(this.value, RPM.datasGame.keyBoard
+                .list[value.value]);
         } else if (this.kind === PrimitiveValueKind.Anything || value.kind ===
             PrimitiveValueKind.Anything)
         {
             return true;
         }
-
+        // If any other value, compare the direct values
         return this.getValue() === value.getValue();
     }
 }

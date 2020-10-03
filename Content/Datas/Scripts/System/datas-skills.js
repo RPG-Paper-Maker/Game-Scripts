@@ -39,7 +39,7 @@ DatasSkills.prototype = {
                 var jsonSkill = json[i];
                 var id = jsonSkill["id"];
                 var skill = new SystemSkill();
-                skill.readJSON(jsonSkill);
+                skill.read(jsonSkill);
                 this.list[id] = skill;
             }
         });

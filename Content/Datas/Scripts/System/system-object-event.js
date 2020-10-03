@@ -32,7 +32,7 @@ SystemObjectEvent.prototype = {
     /** Read the JSON associated to the object event.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json){
+    read: function(json){
         var i, l, id, idState;
 
         this.isSystem = json.sys;
@@ -52,7 +52,7 @@ SystemObjectEvent.prototype = {
         for (idState in jsonReactions){
             var jsonReaction = jsonReactions[idState];
             var reaction = new SystemObjectReaction();
-            reaction.readJSON(jsonReaction);
+            reaction.read(jsonReaction);
             this.reactions[idState] = reaction;
         }
     },

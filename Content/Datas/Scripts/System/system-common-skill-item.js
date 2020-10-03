@@ -28,8 +28,8 @@ SystemCommonSkillItem.prototype = Object.create(SystemIcon.prototype);
 
 // -------------------------------------------------------
 
-SystemCommonSkillItem.prototype.readJSON = function(json) {
-    SystemIcon.prototype.readJSON.call(this, json);
+SystemCommonSkillItem.prototype.read = function(json) {
+    SystemIcon.prototype.read.call(this, json);
     var jsonCosts, jsonEffects, jsonCharacteristics, cost, effect, characteristic;
     var i, l;
 
@@ -37,14 +37,14 @@ SystemCommonSkillItem.prototype.readJSON = function(json) {
     this.consumable = typeof json.con !== 'undefined' ? json.con : false;
     this.oneHand = typeof json.oh !== 'undefined' ? json.oh : true;
     this.description = new SystemLang();
-    this.description.readJSON(RPM.jsonDefault(json.d, SystemLang.EMPTY_NAMES));
+    this.description.read(RPM.jsonDefault(json.d, SystemLang.EMPTY_NAMES));
     this.targetKind = typeof json.tk !== 'undefined' ? json.tk : TargetKind.None;
     this.targetConditionFormula = SystemValue.readOrNone(json.tcf);
     this.conditionFormula = SystemValue.readOrNone(json.cf);
     this.availableKind = typeof json.ak !== 'undefined' ? json.ak : AvailableKind
         .Never;
     this.sound = new SystemPlaySong(SongKind.sound);
-    this.sound.readJSON(json.s);
+    this.sound.read(json.s);
     this.animationUserID = SystemValue.readOrNone(json.auid);
     this.animationTargetID = SystemValue.readOrNone(json.atid);
     this.price = SystemValue.readOrDefaultNumber(json.p);
@@ -54,7 +54,7 @@ SystemCommonSkillItem.prototype.readJSON = function(json) {
     this.costs = new Array(l);
     for (i = 0; i < l; i++) {
         cost = new SystemCost();
-        cost.readJSON(jsonCosts[i]);
+        cost.read(jsonCosts[i]);
         this.costs[i] = cost;
     }
     jsonEffects = json.e;
@@ -62,7 +62,7 @@ SystemCommonSkillItem.prototype.readJSON = function(json) {
     this.effects = new Array(l);
     for (i = 0; i < l; i++) {
         effect = new SystemEffect();
-        effect.readJSON(jsonEffects[i]);
+        effect.read(jsonEffects[i]);
         // TEMP BEFORE ANIMATIONS
         effect.sound = this.sound;
         this.effects[i] = effect;
@@ -72,7 +72,7 @@ SystemCommonSkillItem.prototype.readJSON = function(json) {
     this.characteristics = new Array(l);
     for (i = 0; i < l; i++) {
         characteristic = new SystemCharacteristic();
-        characteristic.readJSON(jsonCharacteristics[i]);
+        characteristic.read(jsonCharacteristics[i]);
         this.characteristics[i] = characteristic;
     }
 }

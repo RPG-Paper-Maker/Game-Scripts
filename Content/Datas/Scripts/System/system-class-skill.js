@@ -29,7 +29,7 @@ SystemClassSkill.prototype = {
     /** Read the JSON associated to the class skill.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json){
+    read: function(json){
         this.id = json.id;
         this.level = json.l;
     }

@@ -26,8 +26,8 @@ function SystemClass() {
 
 SystemClass.prototype = Object.create(SystemLang.prototype);
 
-SystemClass.prototype.readJSON = function(json) {
-    SystemLang.prototype.readJSON.call(this, json);
+SystemClass.prototype.read = function(json) {
+    SystemLang.prototype.read.call(this, json);
 
     var elements, elementsOrder, statisticProgression;
 
@@ -54,7 +54,7 @@ SystemClass.prototype.readJSON = function(json) {
     this.statisticsProgression = new Array(l);
     for (index = 0; index < l; index++){
         statisticProgression = new SystemStatisticProgression();
-        statisticProgression.readJSON(jsonStatisticsProgression[index]);
+        statisticProgression.read(jsonStatisticsProgression[index]);
         this.statisticsProgression[index] = statisticProgression;
     }
 
@@ -67,7 +67,7 @@ SystemClass.prototype.readJSON = function(json) {
     this.skills = new Array(l);
     for (i = 0; i < l; i++){
         var classSkill = new SystemClassSkill();
-        classSkill.readJSON(jsonClassSkills[i]);
+        classSkill.read(jsonClassSkills[i]);
         this.skills[i] = classSkill;
     }
 };

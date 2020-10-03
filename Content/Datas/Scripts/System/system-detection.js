@@ -27,7 +27,7 @@ SystemDetection.prototype = {
     /** Read the JSON associated to the detection.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json) {
+    read: function(json) {
         var i, l, jsonTab, jsonObj;
 
         jsonTab = typeof json.b === 'undefined' ? [] : json.b;

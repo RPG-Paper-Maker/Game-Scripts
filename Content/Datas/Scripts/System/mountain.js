@@ -365,6 +365,8 @@ Mountain.prototype = {
                 d: this.getTotalSquaresWidth(),
                 rw: this.getWidthTotalPixels(),
                 rh: this.getHeightTotalPixels(),
+                m: Math.max(this.getTotalSquaresWidth(), this
+                    .getTotalSquaresHeight(position[2])),
                 t: this,
                 k: true
             }

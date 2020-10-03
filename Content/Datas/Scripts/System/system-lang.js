@@ -30,7 +30,7 @@ SystemLang.prototype = {
     /** Read the JSON associated to the lang.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json) {
+    read: function(json) {
         this.names = json.names;
 
         if (this.names) {

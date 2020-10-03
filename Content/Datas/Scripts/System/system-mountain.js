@@ -28,8 +28,8 @@ SystemMountain.prototype = {
     /** Read the JSON associated to the mountain.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json) {
-        SystemSpecialElement.prototype.readJSON.call(this, json);
+    read: function(json) {
+        SystemSpecialElement.prototype.read.call(this, json);
 
         this.id = json.id;
         this.collisionKind = typeof json.mck === 'undefined' ?

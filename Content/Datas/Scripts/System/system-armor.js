@@ -30,8 +30,8 @@ SystemArmor.prototype = Object.create(SystemCommonSkillItem.prototype);
 
 // -------------------------------------------------------
 
-SystemArmor.prototype.readJSON = function(json) {
-    SystemCommonSkillItem.prototype.readJSON.call(this, json);
+SystemArmor.prototype.read = function(json) {
+    SystemCommonSkillItem.prototype.read.call(this, json);
 }
 
 // -------------------------------------------------------

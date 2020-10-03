@@ -66,7 +66,7 @@ SystemSong.prototype = {
     /** Read the JSON associated to the song.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json){
+    read: function(json){
         this.id = json.id;
         this.name = json.name;
         this.isBR = json.br;

@@ -39,7 +39,7 @@ DatasItems.prototype = {
                 var jsonItem = json[i];
                 var id = jsonItem.id;
                 var item = new SystemItem();
-                item.readJSON(jsonItem);
+                item.read(jsonItem);
                 this.list[id] = item;
             }
         });

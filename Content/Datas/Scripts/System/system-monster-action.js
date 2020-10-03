@@ -26,7 +26,7 @@ function SystemMonsterAction()
 
 // -------------------------------------------------------
 
-SystemMonsterAction.prototype.readJSON = function(json)
+SystemMonsterAction.prototype.read = function(json)
 {
     this.actionKind = RPM.jsonDefault(json.ak, MonsterActionKind.DoNothing);
     switch (this.actionKind)

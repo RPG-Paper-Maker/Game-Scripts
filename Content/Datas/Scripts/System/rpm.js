@@ -117,7 +117,9 @@ RPM.ONE_SECOND_MILLI = 1000;
 RPM.NUM_BOOL_TRUE = 1;
 RPM.NUM_BOOL_FALSE = 0;
 RPM.COEF_TEX = 0.2;
+RPM.CLASS_HIDDEN = "hidden";
 RPM.STRING_RGBA = "rgba";
+RPM.STRING_EMPTY = "";
 RPM.STRING_PARENTHESIS_LEFT = "(";
 RPM.STRING_PARENTHESIS_RIGHT = ")";
 RPM.STRING_BRACKET_LEFT = "[";
@@ -1573,4 +1575,9 @@ RPM.indexOfProp = function(array, attr, value)
     }
 
     return -1;
+}
+
+RPM.numToString = function(n)
+{
+    return RPM.STRING_EMPTY + n;
 }

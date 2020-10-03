@@ -24,7 +24,7 @@ function SystemCost() {
 
 // -------------------------------------------------------
 
-SystemCost.prototype.readJSON = function(json) {
+SystemCost.prototype.read = function(json) {
     this.kind = typeof json.k !== 'undefined' ? json.k : DamagesKind.Stat;
 
     switch (this.kind) {

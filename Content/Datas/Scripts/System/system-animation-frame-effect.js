@@ -24,11 +24,11 @@ function SystemAnimationFrameEffect() {
 
 // -------------------------------------------------------
 
-SystemAnimationFrameEffect.prototype.readJSON = function(json) {
+SystemAnimationFrameEffect.prototype.read = function(json) {
     this.isSE = RPM.defaultValue(json.ise, true);
     if (this.isSE) {
         this.se = new SystemPlaySong(SongKind.Sound);
-        this.se.readJSON(json.se);
+        this.se.read(json.se);
     }
     this.condition = RPM.defaultValue(json.c, AnimationEffectConditionKind.None);
 }

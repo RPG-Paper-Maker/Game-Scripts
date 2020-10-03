@@ -26,7 +26,7 @@ SystemIcon.prototype = {
     /** Read the JSON associated to the currency.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json) {
+    read: function(json) {
         this.name = json.names[1];
         this.pictureID = json.pid;
     }

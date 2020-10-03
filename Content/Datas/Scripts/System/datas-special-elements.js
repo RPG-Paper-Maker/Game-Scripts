@@ -46,7 +46,7 @@ DatasSpecialElements.prototype = {
                 jsonSpecial = jsonSpecials[i];
                 id = jsonSpecial.id;
                 autotile = new SystemSpecialElement();
-                autotile.readJSON(jsonSpecial);
+                autotile.read(jsonSpecial);
                 this.autotiles[id] = autotile;
             }
 
@@ -58,7 +58,7 @@ DatasSpecialElements.prototype = {
                 jsonSpecial = jsonSpecials[i];
                 id = jsonSpecial.id;
                 wall = new SystemSpecialElement();
-                wall.readJSON(jsonSpecial);
+                wall.read(jsonSpecial);
                 this.walls[id] = wall;
             }
 
@@ -70,7 +70,7 @@ DatasSpecialElements.prototype = {
                 jsonSpecial = jsonSpecials[i];
                 id = jsonSpecial.id;
                 object = new SystemMountain();
-                object.readJSON(jsonSpecial);
+                object.read(jsonSpecial);
                 this.mountains[id] = object;
             }
 
@@ -82,7 +82,7 @@ DatasSpecialElements.prototype = {
                 jsonSpecial = jsonSpecials[i];
                 id = jsonSpecial.id;
                 object = new SystemObject3D();
-                object.readJSON(jsonSpecial);
+                object.read(jsonSpecial);
                 this.objects[id] = object;
             }
         });

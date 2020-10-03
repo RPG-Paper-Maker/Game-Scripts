@@ -31,8 +31,8 @@ SystemCommonReaction.prototype = Object.create(SystemObjectReaction.prototype);
 /** Read the JSON associated to the object reaction.
 *   @param {Object} json Json object describing the object.
 */
-SystemCommonReaction.prototype.readJSON = function(json) {
-    SystemObjectReaction.prototype.readJSON.call(this, json);
+SystemCommonReaction.prototype.read = function(json) {
+    SystemObjectReaction.prototype.read.call(this, json);
 
     this.parameters = SystemParameter.readParameters(json);
 }

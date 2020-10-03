@@ -39,7 +39,7 @@ DatasArmors.prototype = {
                 var jsonArmor = json[i];
                 var id = jsonArmor["id"];
                 var armor = new SystemArmor();
-                armor.readJSON(jsonArmor);
+                armor.read(jsonArmor);
                 this.list[id] = armor;
             }
         });

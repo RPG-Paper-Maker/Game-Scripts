@@ -39,7 +39,7 @@ DatasTroops.prototype = {
                 var jsonTroop = json[i];
                 var id = jsonTroop.id;
                 var troop = new SystemTroop();
-                troop.readJSON(jsonTroop);
+                troop.read(jsonTroop);
                 this.list[id] = troop;
             }
         });

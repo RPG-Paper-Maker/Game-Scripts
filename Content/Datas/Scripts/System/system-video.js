@@ -9,64 +9,60 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemVideo
-//
-// -------------------------------------------------------
-
 /** @class
-*   A video of the game.
-*   @property {boolean} isBR Indicate if the video is a BR (Basic Ressource).
+*   A video of the game
+*   @property {string} name The video name
+*   @property {boolean} isBR Indicate if the video is a BR (Basic Ressource)
+*   @property {boolean} isBR Indicate if the video is a DLC
 */
-function SystemVideo() {
-
-}
-
-/** Get the folder associated to videos.
-*   @param {boolean} isBR Indicate if the video is a BR.
-*   @returns {string}
-*/
-SystemVideo.getFolder = function(isBR, dlc) {
-    var folder = isBR ? RPM.PATH_BR : (dlc ? RPM.PATH_DLCS + "/" + dlc : RPM
-        .ROOT_DIRECTORY_LOCAL);
-    var dir = SystemVideo.getLocalFolder();
-    var path = folder + dir;
-    return [path, path];
-};
-
-// -------------------------------------------------------
-
-/** Get the local folder associated to videos.
-*   @returns {string}
-*/
-SystemVideo.getLocalFolder = function() {
-    return RPM.PATH_VIDEOS;
-};
-
-// -------------------------------------------------------
-
-SystemVideo.prototype = {
-
-    /** Read the JSON associated to the video.
-    *   @param {Object} json Json object describing the object.
-    */
-    readJSON: function(json) {
-        this.name = json.name;
-        this.isBR = json.br;
-        this.dlc = RPM.defaultValue(json.d, "");
-    },
+class SystemVideo
+{
+    constructor()
+    {
+        
+    }
 
     // -------------------------------------------------------
-
-    /** Get the absolute path associated to this video.
+    /** Get the folder associated to videos
+    *   @static
+    *   @param {boolean} isBR Indicate if the video is a BR
+    *   @param {boolean} dlc Indicate if the video is a DLC
     *   @returns {string}
     */
-    getPath: function() {
-        var paths = SystemVideo.getFolder(this.isBR, this.dlc);
-        paths[0] += "/" + this.name;
-        paths[1] += "/" + this.name;
+    static getFolder(isBR, dlc)
+    {
+        return (isBR ? RPM.PATH_BR : (dlc ? RPM.PATH_DLCS + RPM.STRING_SLASH + 
+            dlc : RPM.ROOT_DIRECTORY_LOCAL)) + SystemVideo.getLocalFolder();
+    }
 
-        return paths;
+    // -------------------------------------------------------
+    /** Get the local folder associated to videos
+    *   @static
+    *   @returns {string}
+    */
+    static getLocalFolder()
+    {
+        return RPM.PATH_VIDEOS;
+    }
+
+    // -------------------------------------------------------
+    /** Read the JSON associated to the video
+    *   @param {Object} json Json object describing the video
+    */
+    read(json)
+    {
+        this.name = json.name;
+        this.isBR = json.br;
+        this.dlc = RPM.defaultValue(json.d, RPM.STRING_EMPTY);
+    }
+
+    // -------------------------------------------------------
+    /** Get the absolute path associated to this video
+    *   @returns {string}
+    */
+    getPath()
+    {
+        return SystemVideo.getFolder(this.isBR, this.dlc) + RPM.STRING_SLASH + 
+            this.name;
     }
 }

@@ -57,7 +57,7 @@ SystemColor.prototype = {
     /** Read the JSON associated to the element.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json) {
+    read: function(json) {
         this.initialize(json.r, json.g, json.b, json.a);
     },
 

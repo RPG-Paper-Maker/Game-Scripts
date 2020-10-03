@@ -40,7 +40,7 @@ DatasMonsters.prototype = {
                     var jsonMonster = json[i];
                     var id = jsonMonster.id;
                     var monster = new SystemMonster();
-                    monster.readJSON(jsonMonster);
+                    monster.read(jsonMonster);
                     this.list[id] = monster;
                 }
 

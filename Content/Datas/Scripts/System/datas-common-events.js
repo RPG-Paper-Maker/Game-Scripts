@@ -52,7 +52,7 @@ DatasCommonEvents.prototype = {
             for (i = 0; i < l; i++){
                 jsonEvent = jsonEvents[i];
                 event = new SystemEvent();
-                event.readJSON(jsonEvent);
+                event.read(jsonEvent);
                 this.eventsSystem[jsonEvent.id] = event;
             }
             jsonEvents = json["eventsUser"];
@@ -61,7 +61,7 @@ DatasCommonEvents.prototype = {
             for (i = 0; i < l; i++){
                 jsonEvent = jsonEvents[i];
                 event = new SystemEvent();
-                event.readJSON(jsonEvent);
+                event.read(jsonEvent);
                 this.eventsUser[jsonEvent.id] = event;
             }
 
@@ -72,7 +72,7 @@ DatasCommonEvents.prototype = {
             for (i = 0; i < l; i++){
                 var jsonReaction = jsonReactions[i];
                 var reaction = new SystemCommonReaction();
-                reaction.readJSON(jsonReaction);
+                reaction.read(jsonReaction);
                 this.commonReactions[jsonReaction.id] = reaction;
             }
 
@@ -94,7 +94,7 @@ DatasCommonEvents.prototype = {
             for (i = 0; i < l; i++){
                 jsonObject = reorderedList[i];
                 var object = new SystemObject();
-                object.readJSON(jsonObject);
+                object.read(jsonObject);
                 this.commonObjects[jsonObject.id] = object;
             }
         });

@@ -28,7 +28,7 @@ SystemEvent.prototype = {
     /** Read the JSON associated to the event.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json){
+    read: function(json){
         this.parameters = SystemParameter.readParameters(json);
     }
 }

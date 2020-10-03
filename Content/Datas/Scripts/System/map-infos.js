@@ -43,9 +43,9 @@ MapInfos.prototype = {
         }
 
         this.music = new SystemPlaySong(SongKind.Music);
-        this.music.readJSON(json.music);
+        this.music.read(json.music);
         this.backgroundSound = new SystemPlaySong(SongKind.BackgroundSound);
-        this.backgroundSound.readJSON(json.bgs);
+        this.backgroundSound.read(json.bgs);
         this.cameraProperties = RPM.datasGame.system.cameraProperties[SystemValue
             .readOrDefaultDatabase(json.cp, 1).getValue()];
         this.isBackgroundColor = json.isky;
@@ -66,7 +66,7 @@ MapInfos.prototype = {
         }
         this.updateBackgroundColor();
         var startupReactions = new SystemObject();
-        startupReactions.readJSON(json.so);
+        startupReactions.read(json.so);
         this.startupObject = new MapObject(startupReactions);
         this.startupObject.changeState();
     },

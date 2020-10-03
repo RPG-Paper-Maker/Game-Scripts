@@ -9,33 +9,31 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemWeapon : SystemArmor
-//
-//  A weapon of the game.
-//
-// -------------------------------------------------------
-
 /** @class
-*   A weapon of the game.
+*   A weapon of the game
 *   @extends SystemArmor
 */
-function SystemWeapon() {
-    SystemCommonSkillItem.call(this);
-}
+class SystemWeapon extends SystemCommonSkillItem
+{
+    constructor()
+    {
+        super();
+    }
 
-
-SystemWeapon.prototype = Object.create(SystemCommonSkillItem.prototype);
-
-// -------------------------------------------------------
-
-SystemWeapon.prototype.readJSON = function(json) {
-    SystemCommonSkillItem.prototype.readJSON.call(this, json);
-}
-
-// -------------------------------------------------------
-
-SystemWeapon.prototype.getType = function() {
-    return RPM.datasGame.battleSystem.weaponsKind[this.type];
+    /** Read the JSON associated to the weapon
+    *   @param {Object} json Json object describing the weapon
+    */
+    read(json)
+    {
+        super.read(json);
+    }
+    
+    // -------------------------------------------------------
+    /** Get the weapon kind
+    *   @returns {SystemWeaponArmorKind}
+    */
+    getType()
+    {
+        return RPM.datasGame.battleSystem.weaponsKind[this.type];
+    }
 }

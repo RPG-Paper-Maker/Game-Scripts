@@ -59,7 +59,7 @@ SystemStatistic.prototype = {
     /** Read the JSON associated to the statistic.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json){
+    read: function(json){
         this.name = json.names[1];
         this.abbreviation = json.abr;
         this.isFix = json.fix;

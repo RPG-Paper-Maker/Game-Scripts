@@ -47,7 +47,7 @@ SystemObjectState.prototype = {
     /** Read the JSON associated to the object state.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json) {
+    read: function(json) {
         var jsonRoute;
 
         this.id = json.id;
@@ -66,7 +66,7 @@ SystemObjectState.prototype = {
                 .MoveRandom, 0]
         });
         this.route = new SystemObjectReaction();
-        this.route.readJSON({
+        this.route.read({
             bh: false,
             c: [jsonRoute]
         });

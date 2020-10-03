@@ -40,7 +40,7 @@ SystemPlaySong.prototype = {
     /** Read the JSON associated to the play song.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json) {
+    read: function(json) {
         if (!json) {
             this.setDefault();
             return;

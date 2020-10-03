@@ -49,7 +49,7 @@ DatasSystem.prototype = {
 
             // Project name
             this.projectName = new SystemLang();
-            this.projectName.readJSON(json.pn);
+            this.projectName.read(json.pn);
             Platform.setWindowTitle(this.projectName.name);
 
             // Screen resolution
@@ -96,7 +96,7 @@ DatasSystem.prototype = {
             this.getModelHero();
 
             // Debug
-            this.showBB = (typeof json.bb !== 'undefined');
+            this.showBB = true
             if (this.showBB) {
                 RPM.BB_MATERIAL.color.setHex(0xff0000);
                 RPM.BB_MATERIAL.wireframe = true;
@@ -111,7 +111,7 @@ DatasSystem.prototype = {
                 var jsonColor = jsonColors[i];
                 id = jsonColor.id;
                 var color = new SystemColor();
-                color.readJSON(jsonColor);
+                color.read(jsonColor);
                 this.colors[id] = color;
             }
 
@@ -123,7 +123,7 @@ DatasSystem.prototype = {
                 var jsonCurrency = jsonCurrencies[i];
                 id = jsonCurrency.id;
                 var currency = new SystemCurrency();
-                currency.readJSON(jsonCurrency);
+                currency.read(jsonCurrency);
                 this.currencies[id] = currency;
             }
 
@@ -135,7 +135,7 @@ DatasSystem.prototype = {
                 var jsonWindowSkin = jsonWindowSkins[i];
                 id = jsonWindowSkin.id;
                 var windowSkin = new SystemWindowSkin();
-                windowSkin.readJSON(jsonWindowSkin);
+                windowSkin.read(jsonWindowSkin);
                 this.windowSkins[id] = windowSkin;
             }
 
@@ -147,7 +147,7 @@ DatasSystem.prototype = {
                 jsonElement = jsonList[i];
                 id = jsonElement.id;
                 element = new SystemCameraProperties();
-                element.readJSON(jsonElement);
+                element.read(jsonElement);
                 this.cameraProperties[id] = element;
             }
 
@@ -159,7 +159,7 @@ DatasSystem.prototype = {
                 jsonElement = jsonList[i];
                 id = jsonElement.id;
                 element = new SystemDetection();
-                element.readJSON(jsonElement);
+                element.read(jsonElement);
                 this.detections[id] = element;
             }
 
@@ -215,7 +215,7 @@ DatasSystem.prototype = {
                 jsonElement = jsonList[i];
                 id = jsonElement.id;
                 element = new SystemSkybox();
-                element.readJSON(jsonElement);
+                element.read(jsonElement);
                 this.skyboxes[id] = element;
             }
 
@@ -224,13 +224,13 @@ DatasSystem.prototype = {
 
             // Sounds
             this.soundCursor = new SystemPlaySong(SongKind.Sound);
-            this.soundCursor.readJSON(json.scu);
+            this.soundCursor.read(json.scu);
             this.soundConfirmation = new SystemPlaySong(SongKind.Sound);
-            this.soundConfirmation.readJSON(json.sco);
+            this.soundConfirmation.read(json.sco);
             this.soundCancel = new SystemPlaySong(SongKind.Sound);
-            this.soundCancel.readJSON(json.sca);
+            this.soundCancel.read(json.sca);
             this.soundImpossible = new SystemPlaySong(SongKind.Sound);
-            this.soundImpossible.readJSON(json.si);
+            this.soundImpossible.read(json.si);
 
             // Dialog box options
             this.dbOptions = EventCommand.getEventCommand(json.dbo);

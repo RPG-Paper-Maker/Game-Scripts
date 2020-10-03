@@ -28,7 +28,7 @@ SystemBattleMap.prototype = {
     /** Read the JSON associated to the element.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json) {
+    read: function(json) {
         this.idMap = json.idm;
         this.position = json.p;
     }

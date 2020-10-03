@@ -24,7 +24,7 @@ function SystemAnimationFrameElement() {
 
 // -------------------------------------------------------
 
-SystemAnimationFrameElement.prototype.readJSON = function(json) {
+SystemAnimationFrameElement.prototype.read = function(json) {
     this.x = RPM.defaultValue(json.x, 0);
     this.y = RPM.defaultValue(json.y, 0);
     this.texRow = RPM.defaultValue(json.tr, 0);

@@ -69,7 +69,7 @@ DatasKeyBoard.prototype = {
                 var id = jsonKey.id;
                 var abbreviation = jsonKey.abr;
                 var key = new SystemKeyBoard();
-                key.readJSON(jsonKey);
+                key.read(jsonKey);
                 sc = RPM.settings.kb[id];
                 if (sc) {
                     key.sc = sc;

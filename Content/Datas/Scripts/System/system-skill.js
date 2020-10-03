@@ -29,8 +29,8 @@ SystemSkill.prototype = Object.create(SystemCommonSkillItem.prototype);
 
 // -------------------------------------------------------
 
-SystemSkill.prototype.readJSON = function(json) {
-    SystemCommonSkillItem.prototype.readJSON.call(this, json);
+SystemSkill.prototype.read = function(json) {
+    SystemCommonSkillItem.prototype.read.call(this, json);
 }
 
 // -------------------------------------------------------

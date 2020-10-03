@@ -87,7 +87,7 @@ SystemPicture.prototype = {
     /** Read the JSON associated to the picture.
     *   @param {Object} json Json object describing the object.
     */
-    readJSON: function(json){
+    read: function(json){
         this.name = json.name;
         this.isBR = json.br;
         this.dlc = RPM.defaultValue(json.d, "");
@@ -155,7 +155,7 @@ SystemPicture.prototype = {
             jsonVal = jsonTab.v;
             index = jsonKey[0] + (jsonKey[1] * this.width);
             collision = new CollisionSquare;
-            collision.readJSON(jsonVal);
+            collision.read(jsonVal);
             this.collisions[index] = collision;
 
             if (this.collisionsRepeat) {

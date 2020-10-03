@@ -9,14 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemTileset
-//
-// -------------------------------------------------------
-
 /** @class
-*   A tileset of the game.
+*   A tileset of the game
 *   @property {SystemPicture} picture The picture used for this tileset.
 *   @property {number} width
 *   @property {number} height
@@ -26,19 +20,21 @@
 *   @property {CollisionSquare[]} collisions List of all the collisions
 *   according to the position on the texture.
 */
-function SystemTileset() {
-    this.callback = null;
-    this.collisions = null;
-    this.ownsAutotiles = false;
-    this.ownsWalls = false;
-}
+class SystemTileset
+{
+    constructor()
+    {
+        this.callback = null;
+        this.collisions = null;
+        this.ownsAutotiles = false;
+        this.ownsWalls = false;
+    }
 
-SystemTileset.prototype = {
-
-    /** Read the JSON associated to the tileset.
-    *   @param {Object} json Json object describing the object.
+    /** Read the JSON associated to the tileset
+    *   @param {Object} json Json object describing the tileset
     */
-    readJSON: function(json) {
+    read(json)
+    {
         var i, l;
         var jsonSpecials;
 
@@ -70,23 +66,23 @@ SystemTileset.prototype = {
         for (i = 0; i < l; i++) {
             this.objects[i] = jsonSpecials[i].id;
         }
-    },
+    }
 
     // -------------------------------------------------------
-
     /** Get the path to the picture tileset.
     *   @returns {string}
     */
-    getPath: function() {
+    getPath()
+    {
         return this.picture ? this.picture.getPath(PictureKind.Tilesets) : null;
-    },
+    }
 
     // -------------------------------------------------------
-
     /** Get the string logic for special elements.
     *   @returns {string}
     */
-    getSpecialString: function(specials) {
+    getSpecialString(specials)
+    {
         var result = "";
 
         for (var i = 0, l = specials.length; i < l; i++) {
@@ -94,34 +90,37 @@ SystemTileset.prototype = {
         }
 
         return result;
-    },
+    }
 
     // -------------------------------------------------------
 
     /** Get the string logic for autotiles.
     *   @returns {string}
     */
-    getAutotilesString: function() {
+    getAutotilesString()
+    {
         return this.getSpecialString(this.autotiles);
-    },
+    }
 
     // -------------------------------------------------------
 
     /** Get the string logic for walls.
     *   @returns {string}
     */
-    getWallsString: function() {
+    getWallsString()
+    {
         return this.getSpecialString(this.walls);
-    },
+    }
 
     // -------------------------------------------------------
 
     /** Get the string logic for mountains.
     *   @returns {string}
     */
-    getMountainsString: function() {
+    getMountainsString()
+    {
         return this.getSpecialString(this.mountains);
-    },
+    }
 
     // -------------------------------------------------------
 
@@ -131,7 +130,7 @@ SystemTileset.prototype = {
     *   @param {string} texturesName The field name textures.
     *   @param {string} specialField The field name for special.
     */
-    loadSpecialTextures: function(pictureKind, texturesName, specialField)
+    loadSpecialTextures(pictureKind, texturesName, specialField)
     {
         var specials = RPM.datasGame.specialElements[specialField];
         var specialsIDs = this[specialField];
@@ -171,11 +170,12 @@ SystemTileset.prototype = {
         }
 
         this[texturesName] = textures;
-    },
+    }
 
     // -------------------------------------------------------
 
-    loadSpecials: function() {
+    loadSpecials()
+    {
         if (!this.ownsAutotiles) {
             this.loadAutotiles();
         } else {
@@ -187,13 +187,14 @@ SystemTileset.prototype = {
                 }
             }
         }
-    },
+    }
 
     // -------------------------------------------------------
 
     /** Load all the autotiles with reduced files.
     */
-    loadAutotiles: function() {
+    loadAutotiles()
+    {
         var i, l, autotiles, autotilesIDs, id, offset, result, paths, autotile,
             textureAutotile, that, texture, context, picture, callback;
         autotiles = RPM.datasGame.specialElements.autotiles;
@@ -260,23 +261,24 @@ SystemTileset.prototype = {
         }
 
         callback.call(this);
-    },
+    }
 
     // -------------------------------------------------------
 
     /** Load all the walls.
     */
-    loadWalls: function() {
+    loadWalls()
+    {
         this.loadSpecialTextures(PictureKind.Walls, "texturesWalls", "walls");
         this.callback = null;
-    },
+    }
 
     // -------------------------------------------------------
 
     /** Load an autotile ID and add it to context rendering.
     */
-    loadTextureAutotile: function(textureAutotile, texture, picture, context,
-        paths, offset, id)
+    loadTextureAutotile(textureAutotile, texture, picture, context, paths, 
+        offset, id)
     {
         var i, path, pathLocal, that, result, callback, point, img, width,
             height, size, pic;
@@ -327,13 +329,14 @@ SystemTileset.prototype = {
         pic = new Picture2D(pathLocal, callback);
 
         return result;
-    },
+    }
 
     // -------------------------------------------------------
 
     /** Paint the picture in texture.
     */
-    paintPictureAutotile: function(context, pathLocal, img, offset, point, id) {
+    paintPictureAutotile(context, pathLocal, img, offset, point, id)
+    {
         var count, lA, lB, lC, lD, row = -1;
         var offsetX = point[0] * 2 * RPM.SQUARE_SIZE;
         var offsetY = point[1] * 3 * RPM.SQUARE_SIZE;
@@ -355,25 +358,25 @@ SystemTileset.prototype = {
 
                             // Draw
                             context.drawImage(img, (lA % 4 * sDiv) + offsetX,
-                                              (Math.floor(lA / 4) * sDiv) + offsetY,
-                                              sDiv, sDiv, count * RPM.SQUARE_SIZE,
-                                              (row + y) * RPM.SQUARE_SIZE, sDiv, sDiv);
+                                            (Math.floor(lA / 4) * sDiv) + offsetY,
+                                            sDiv, sDiv, count * RPM.SQUARE_SIZE,
+                                            (row + y) * RPM.SQUARE_SIZE, sDiv, sDiv);
                             context.drawImage(img, (lB % 4 * sDiv) + offsetX,
-                                              (Math.floor(lB / 4) * sDiv) + offsetY,
-                                              sDiv, sDiv,
-                                              count * RPM.SQUARE_SIZE + sDiv,
-                                              (row + y) * RPM.SQUARE_SIZE, sDiv, sDiv);
+                                            (Math.floor(lB / 4) * sDiv) + offsetY,
+                                            sDiv, sDiv,
+                                            count * RPM.SQUARE_SIZE + sDiv,
+                                            (row + y) * RPM.SQUARE_SIZE, sDiv, sDiv);
                             context.drawImage(img, (lC % 4 * sDiv) + offsetX,
-                                              (Math.floor(lC / 4) * sDiv) + offsetY,
-                                              sDiv, sDiv, count * RPM.SQUARE_SIZE,
-                                              (row + y) * RPM.SQUARE_SIZE + sDiv,
-                                              sDiv, sDiv);
+                                            (Math.floor(lC / 4) * sDiv) + offsetY,
+                                            sDiv, sDiv, count * RPM.SQUARE_SIZE,
+                                            (row + y) * RPM.SQUARE_SIZE + sDiv,
+                                            sDiv, sDiv);
                             context.drawImage(img, (lD % 4 * sDiv) + offsetX,
-                                              (Math.floor(lD / 4) * sDiv) + offsetY,
-                                              sDiv, sDiv,
-                                              count * RPM.SQUARE_SIZE + sDiv,
-                                              (row + y) * RPM.SQUARE_SIZE + sDiv,
-                                              sDiv, sDiv);
+                                            (Math.floor(lD / 4) * sDiv) + offsetY,
+                                            sDiv, sDiv,
+                                            count * RPM.SQUARE_SIZE + sDiv,
+                                            (row + y) * RPM.SQUARE_SIZE + sDiv,
+                                            sDiv, sDiv);
                             count++;
                             if (count === 64) {
                                 count = 0;
@@ -387,13 +390,14 @@ SystemTileset.prototype = {
         {
             RPM.showErrorMessage("Error: Wrong autotile (with ID:" + id + ") parsing. Please verify that you have a 2 x 3 picture (for each individual autotile).");
         }
-    },
+    }
 
     // -------------------------------------------------------
 
     /** Update texture of a TextureAutotile.
     */
-    updateTextureAutotile: function(textureAutotile, texture) {
+    updateTextureAutotile(textureAutotile, texture)
+    {
         var image = new Image();
         RPM.filesToLoad++;
         image.addEventListener('load', function() {
@@ -405,7 +409,7 @@ SystemTileset.prototype = {
 
         textureAutotile.texture = RPM.createMaterial(texture);
         this.texturesAutotiles.push(textureAutotile);
-    },
+    }
 
     // -------------------------------------------------------
 
@@ -413,7 +417,8 @@ SystemTileset.prototype = {
     *   @param {THREE.Texture} texture The final texture reference.
     *   @param {string} pathLocal The path of the texture.
     */
-    loadTextureWall: function(texture, pathLocal, picture, id) {
+    loadTextureWall(texture, pathLocal, picture, id)
+    {
         var callback = function() {
             var context = Platform.canvasRendering.getContext("2d");
 
@@ -422,7 +427,7 @@ SystemTileset.prototype = {
             picture.height = Math.floor(this.image.height / RPM.SQUARE_SIZE);
 
             context.clearRect(0, 0, Platform.canvasRendering.width,
-                              Platform.canvasRendering.height);
+                            Platform.canvasRendering.height);
             Platform.canvasRendering.width = this.image.width + RPM.SQUARE_SIZE;
             Platform.canvasRendering.height = this.image.height;
             context.drawImage(this.image, 0, 0);
@@ -449,13 +454,14 @@ SystemTileset.prototype = {
         };
 
         var pic = new Picture2D(pathLocal, callback);
-    },
+    }
 
     // -------------------------------------------------------
 
     /** Load all the mountains with reduced files.
     */
-    loadMountains: function() {
+    loadMountains()
+    {
         var i, l, mountains, mountainsIDs, id, offset, result, paths, mountain,
             textureMountain, that, texture, context, picture, callback;
 
@@ -515,13 +521,13 @@ SystemTileset.prototype = {
         }
 
         callback.call(this);
-    },
+    }
 
     // -------------------------------------------------------
 
     /** Load a mountain ID and add it to context rendering.
     */
-    loadTextureMountain: function(textureMountain, texture, picture, context,
+    loadTextureMountain(textureMountain, texture, picture, context,
         offset, id)
     {
         var i, paths, path, pathLocal, that, result, callback, point, width,
@@ -585,13 +591,14 @@ SystemTileset.prototype = {
         }
 
         return result;
-    },
+    }
 
     // -------------------------------------------------------
 
     /** Paint the picture in texture.
     */
-    paintPictureMountain: function(context, pathLocal, img, offset, point, id) {
+    paintPictureMountain(context, pathLocal, img, offset, point, id)
+    {
         var i, l, y, sourceSize, sDiv;
 
         y = offset * 4 * RPM.SQUARE_SIZE;
@@ -634,13 +641,14 @@ SystemTileset.prototype = {
         {
             RPM.showErrorMessage("Error: Wrong mountain (with ID:" + id + ") parsing. Please verify that you have a 3 x 3 picture.");
         }
-    },
+    }
 
     // -------------------------------------------------------
 
     /** Update texture of a TextureSeveral.
     */
-    updateTextureMountain: function(textureMountain, texture) {
+    updateTextureMountain(textureMountain, texture)
+    {
         var image = new Image();
         RPM.filesToLoad++;
         image.addEventListener('load', function() {
@@ -652,17 +660,19 @@ SystemTileset.prototype = {
 
         textureMountain.texture = RPM.createMaterial(texture);
         this.texturesMountains.push(textureMountain);
-    },
+    }
 
     // -------------------------------------------------------
 
-    getMaxMountainOffsetTexture: function() {
+    getMaxMountainOffsetTexture()
+    {
         return Math.floor(RPM.MAX_PICTURE_SIZE / (4 * RPM.SQUARE_SIZE));
-    },
+    }
 
     // -------------------------------------------------------
 
-    getMaxAutotilesOffsetTexture: function() {
+    getMaxAutotilesOffsetTexture()
+    {
         return Math.floor(RPM.MAX_PICTURE_SIZE / (9 * RPM.SQUARE_SIZE));
     }
 }
