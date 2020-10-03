@@ -28,8 +28,9 @@ DatasTilesets.prototype = {
 
     /** Read the JSON file associated to tilesets.
     */
-    read: function(){
-        RPM.openFile(this, RPM.FILE_TILESETS_DATAS, true, function(res){
+    read: async function(){
+        RPM.openFile(this, RPM.FILE_TILESETS_DATAS, true, async (res) =>
+        {
             var json = JSON.parse(res).list;
             var i, l = json.length, idString, tileset;
             this.list = new Array(l+1);
@@ -68,7 +69,7 @@ DatasTilesets.prototype = {
                     this.loading.push(tileset);
                 }
 
-                tileset.callback = tileset.loadSpecials;
+                await tileset.loadSpecials();
             }
 
             // Load characters textures

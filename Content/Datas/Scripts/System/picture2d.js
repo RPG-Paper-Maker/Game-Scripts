@@ -80,8 +80,8 @@ class Picture2D extends Bitmap
             this.oH = this.image.height;
             if (this.cover)
             {
-                this.w = RPM.canvasWidth;
-                this.h = RPM.canvasHeight;
+                this.w = RPM.CANVAS_WIDTH;
+                this.h = RPM.CANVAS_HEIGHT;
             } else if (this.stretch)
             {
                 this.w = RPM.getScreenX(this.image.width);

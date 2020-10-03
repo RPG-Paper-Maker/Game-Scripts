@@ -36,9 +36,12 @@
 */
 class SystemWindowSkin
 {
-    constructor()
+    constructor(json)
     {
-
+        if (json)
+        {
+            this.read(json);
+        }
     }
     
     // -------------------------------------------------------

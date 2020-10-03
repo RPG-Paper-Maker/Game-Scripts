@@ -34,7 +34,10 @@
 *   @property {DatasBattleSystem} battleSystem Battle System datas.
 *   @property {DatasKeyBoard} keyBoard KeyBoard datas.
 */
-function DatasGame(){
+function DatasGame()
+{
+    this.system = new DatasSystem();
+    /*
     this.tilesets = new DatasTilesets();
     this.songs = new DatasSongs();
     this.commonEvents = new DatasCommonEvents();
@@ -42,7 +45,7 @@ function DatasGame(){
     this.skills = new DatasSkills();
     this.weapons = new DatasWeapons();
     this.armors = new DatasArmors();
-    this.classes = new DatasClasses(this);
+    this.classes = new DatasClasses();
     this.heroes = new DatasHeroes();
     this.monsters = new DatasMonsters();
     this.troops = new DatasTroops();
@@ -53,16 +56,46 @@ function DatasGame(){
     this.shapes = new DatasShapes();
     this.specialElements = new DatasSpecialElements();
     this.animations = new DatasAnimations();
-    this.pictures = new DatasPictures(this, DatasGame.prototype.readAfterPictures);
+    this.pictures = new DatasPictures();
     this.videos = new DatasVideos();
     this.dlcs = new DatasDLCs();
-    this.readSettings();
+    */
     this.loaded = false;
 }
 
 DatasGame.VARIABLES_PER_PAGE = 25;
 
 DatasGame.prototype = {
+
+    read: async function()
+    {
+        await this.system.read();
+        /*
+        await this.songs.read();
+        await this.commonEvents.read();
+        await this.items.read();
+        await this.skills.read();
+        await this.weapons.read();
+        await this.armors.read();
+        await this.troops.read();
+        await this.battleSystem.read();
+        await this.titlescreenGameover.read();
+        await this.keyBoard.read();
+        await this.shapes.read();
+        await this.specialElements.read();
+        await this.animations.read();
+        await this.pictures.read();
+        await this.tilesets.read();
+        await this.classes.read();
+        await this.heroes.read();
+        await this.monsters.read();
+        await this.system.loadWindowSkins();
+        await this.commonEvents.read();
+        await this.videos.read();
+        await this.dlcs.read();
+        this.readSettings();*/
+        this.loaded = true;
+    },
 
     /** Read the JSON files associated to the settings.
     */
@@ -83,29 +116,6 @@ DatasGame.prototype = {
                 }
             }
         });
-    },
-
-    readAfterPictures: function() {
-        this.tilesets.read();
-        if (this.classes.loaded) {
-            this.heroes.read();
-            this.monsters.read();
-        }
-        this.system.loadWindowSkins();
-        this.commonEvents.read();
-    },
-
-    updateLoadings: function() {
-        if (this.tilesets.loading) {
-            var tileset;
-            tileset = this.tilesets.loading[0];
-            if (tileset.callback !== null) {
-                tileset.callback.call(tileset);
-            } else {
-                this.tilesets.loading.splice(0, 1);
-            }
-            this.loaded = this.tilesets.loading.length === 0;
-        }
     },
 
     getHeroesMonsters: function(kind) {

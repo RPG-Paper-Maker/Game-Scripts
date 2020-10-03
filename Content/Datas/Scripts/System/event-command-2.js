@@ -2240,26 +2240,26 @@ EventCommandChangeProperty.prototype = {
 // -------------------------------------------------------
 
 function EventCommandDisplayChoice(command) {
-    var i, l, k, v, lang, next, w, graphics, graphic;
+    var l, lang, next, w, graphics, graphic;
 
-    i = 0;
-    k = command[i++];
-    v = command[i++];
-    this.cancelAutoIndex = new SystemValue(k, v);
+    var iterator = {
+        i: 0
+    };
+    this.cancelAutoIndex = SystemValue.createValueCommand(command, iterator);
     this.choices = [];
     l = command.length;
     lang = null;
-    while (i < l) {
+    while (iterator.i < l) {
         next = command[i];
         if (next === RPM.STRING_DASH) {
-            i++;
+            iterator.i++;
             if (lang !== null) {
                 this.choices.push(lang.name);
             }
             lang = new SystemLang();
-            i++;
+            iterator.i++;
         }
-        i = lang.getCommand(command, i);
+        lang.getCommand(command, iterator);
     }
     if (lang !== null) {
         this.choices.push(lang.name);
@@ -2269,7 +2269,7 @@ function EventCommandDisplayChoice(command) {
     l = this.choices.length;
     graphics = new Array(l);
     w = RPM.MEDIUM_SLOT_WIDTH;
-    for (i = 0; i < l; i++) {
+    for (let i = 0; i < l; i++) {
         graphic = new GraphicText(this.choices[i], { align: Align.Center });
         graphics[i] = graphic;
         if (graphic.textWidth > w) {
@@ -3922,6 +3922,6 @@ EventCommandFlashScreen.prototype.update = function(currentState, object
 EventCommandFlashScreen.prototype.drawHUD = function(currentState) {
     Platform.ctx.fillStyle = currentState.color;
     Platform.ctx.globalAlpha = currentState.a;
-    Platform.ctx.fillRect(0, 0, RPM.canvasWidth, RPM.canvasHeight);
+    Platform.ctx.fillRect(0, 0, RPM.CANVAS_WIDTH, RPM.CANVAS_HEIGHT);
     Platform.ctx.globalAlpha = 1.0;
 }

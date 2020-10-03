@@ -9,25 +9,25 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemCameraProperties
-//
-// -------------------------------------------------------
-
 /** @class
-*   A camera properties of the game.
+*   A camera properties of the game
 */
-function SystemCameraProperties() {
+class SystemCameraProperties
+{
+    constructor(json)
+    {
+        if (json)
+        {
+            this.read(json);
+        }
+    }
 
-}
-
-SystemCameraProperties.prototype = {
-
-    /** Read the JSON associated to the camera properties.
-    *   @param {Object} json Json object describing the object.
+    // -------------------------------------------------------
+    /** Read the JSON associated to the camera properties
+    *   @param {Object} json Json object describing the camera properties
     */
-    read: function(json) {
+    read(json)
+    {
         this.distance = SystemValue.readOrDefaultNumberDouble(json.d, 250);
         this.horizontalAngle = SystemValue.readOrDefaultNumberDouble(json.ha,
             -90);
@@ -41,15 +41,16 @@ SystemCameraProperties.prototype = {
         this.fov = SystemValue.readOrDefaultNumberDouble(json.fov, 45);
         this.near = SystemValue.readOrDefaultNumberDouble(json.n, 1);
         this.far = SystemValue.readOrDefaultNumberDouble(json.f, 100000);
-    },
+    }
 
     // -------------------------------------------------------
-
-    initializeCamera: function(camera) {
-        var x, y, z;
-
+    /** Read the JSON associated to the camera properties
+    *   @param {Object} json Json object describing the camera properties
+    */
+    initializeCamera(camera)
+    {
         camera.threeCamera = new THREE.PerspectiveCamera(this.fov.getValue(),
-            RPM.canvasWidth / RPM.canvasHeight, this.near.getValue(), this.far
+            RPM.CANVAS_WIDTH / RPM.CANVAS_HEIGHT, this.near.getValue(), this.far
             .getValue());
         camera.distance = this.distance.getValue() * (RPM.SQUARE_SIZE / RPM
             .BASIC_SQUARE_SIZE);

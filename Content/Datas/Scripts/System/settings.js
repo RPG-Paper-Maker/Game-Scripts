@@ -19,7 +19,7 @@
 *   All settings.
 */
 function Settings() {
-    this.read();
+
 }
 
 // -------------------------------------------------------
@@ -35,19 +35,14 @@ Settings.prototype.updateKeyboard = function(id, sc) {
 
 /** Read the settings file.
 */
-Settings.prototype.read = function() {
-    RPM.openFile(this, RPM.FILE_SETTINGS, true, function(res) {
-        var json, jsonObjs, id;
+Settings.prototype.read = async function() {
+    let json = await RPM.parseFileJSON(RPM.FILE_SETTINGS);
 
-        json = JSON.parse(res);
-        jsonObjs = json["" + TitleSettingKind.KeyboardAssigment];
-        this.kb = {};
-        for (id in jsonObjs) {
-            this.kb[id] = jsonObjs[id];
-        }
-
-        RPM.datasGame = new DatasGame();
-    });
+    jsonObjs = json["" + TitleSettingKind.KeyboardAssigment];
+    this.kb = {};
+    for (id in jsonObjs) {
+        this.kb[id] = jsonObjs[id];
+    }
 }
 
 // -------------------------------------------------------

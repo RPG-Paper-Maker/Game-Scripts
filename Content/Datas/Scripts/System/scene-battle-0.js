@@ -333,6 +333,6 @@ SceneBattle.prototype.drawHUDStep0 = function() {
             .transitionStartColor.green + RPM.STRING_COMA + this
             .transitionStartColor.blue + RPM.STRING_COMA + this
             .transitionColorAlpha + RPM.STRING_PARENTHESIS_RIGHT;
-        Platform.ctx.fillRect(0, 0, RPM.canvasWidth, RPM.canvasHeight);
+        Platform.ctx.fillRect(0, 0, RPM.CANVAS_WIDTH, RPM.CANVAS_HEIGHT);
     }
 };

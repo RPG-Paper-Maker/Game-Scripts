@@ -21,7 +21,9 @@
 */
 function GameStack(){
     this.content = [];
-    this.displayingContent = false;
+    this.top = null;
+    this.subTop = null;
+    this.bot = null;
 }
 
 GameStack.prototype = {
@@ -29,7 +31,11 @@ GameStack.prototype = {
     /** Push a new scene in the stack.
     *   @param {SceneGame} scene The scene to push.
     */
-    push: function(scene) {
+    push: function(scene)
+    {
+        this.top = scene;
+        this.subTop = this.at(this.content.length - 2);
+        this.bot = this.at(0);
         this.content.push(scene);
         RPM.requestPaintHUD = true;
     },
@@ -39,10 +45,15 @@ GameStack.prototype = {
     /** Pop (remove) the last scene in the stack.
     *   @returns {SceneGame} The last scene that is removed.
     */
-    pop: function() {
-        RPM.requestPaintHUD = true;
+    pop: function()
+    {
+        this.top = this.at(this.content.length - 1);
+        this.subTop = this.at(this.content.length - 2);
+        this.bot = this.at(0);
         let scene = this.content.pop();
         scene.close();
+        RPM.requestPaintHUD = true;
+        
         return scene;
     },
 
@@ -67,31 +78,7 @@ GameStack.prototype = {
     *   @returns {SceneGame} The scene in the index of the stack.
     */
     at: function(i) {
-        return this.content[i];
-    },
-
-    // -------------------------------------------------------
-
-    /** Get the scene on the top of the stack.
-    *   @returns {SceneGame}
-    */
-    top: function() {
-        return this.at(this.content.length - 1);
-    },
-
-    // -------------------------------------------------------
-
-    topMinusOne: function() {
-        return this.at(this.content.length - 2);
-    },
-
-    // -------------------------------------------------------
-
-    /** Get the scene on the bottom of the stack.
-    *   @returns {SceneGame}
-    */
-    bot: function() {
-        return this.at(0);
+        return RPM.defaultValue(this.content[i], null);
     },
 
     // -------------------------------------------------------
@@ -100,11 +87,15 @@ GameStack.prototype = {
     *   @returns {boolean}
     */
     isEmpty: function() {
-        return RPM.isEmpty(this.content);
+        return this.top === null;
+    },
+
+    isLoading: function()
+    {
+        return this.isEmpty || this.top.loading;
     },
 
     // -------------------------------------------------------
-
     /** Push the title screen when empty.
     *   @returns {SceneTitleScreen}
     */
@@ -200,7 +191,7 @@ GameStack.prototype = {
             }
 
             // Draw system HUD
-            this.top().drawHUD();
+            this.top.drawHUD();
 
             // Display >= 0 index image command
             for (; i < l; i++) 

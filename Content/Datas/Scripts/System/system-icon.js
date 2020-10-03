@@ -9,25 +9,29 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemIcon
-//
-// -------------------------------------------------------
-
 /** @class
+*   Something at least including an icon
+*   @property {number} pictureID The icon picture ID
+*   @param {Object} [json=undefined] Json object describing the icon
 */
-function SystemIcon() {
+class SystemIcon extends SystemLang
+{
+    constructor(json)
+    {
+        super();
+        if (json)
+        {
+            this.read(json);
+        }
+    }
 
-}
-
-SystemIcon.prototype = {
-
-    /** Read the JSON associated to the currency.
-    *   @param {Object} json Json object describing the object.
+    /** Read the JSON associated to the icon
+    *   @param {Object} json Json object describing the icon
     */
-    read: function(json) {
-        this.name = json.names[1];
+    read(json)
+    {
+        super.read(json);
+
         this.pictureID = json.pid;
     }
 }

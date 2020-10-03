@@ -21,8 +21,7 @@
 *   to ID.
 */
 function DatasClasses() {
-    this.loaded = false;
-    this.read();
+
 }
 
 DatasClasses.prototype = {

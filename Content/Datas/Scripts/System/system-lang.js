@@ -9,51 +9,56 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemLang
-//
-// -------------------------------------------------------
-
 /** @class
+*   A name that can have several translations
+*   @property {string[]} [names=[]] The different names list according to lang 
+*   ID
+*   @param {Object} [json=undefined] Json object describing the lang
 */
-function SystemLang() {
-    this.names = [];
-}
-
-SystemLang.EMPTY_NAMES = {
-    names: ["", ""]
-}
-
-SystemLang.prototype = {
-
-    /** Read the JSON associated to the lang.
-    *   @param {Object} json Json object describing the object.
+class SystemLang
+{
+    /** The default json for no names
+    *   @member {Object} [WindowChoices.EMPTY_NAMES={names:["",""]}]
     */
-    read: function(json) {
-        this.names = json.names;
+    static EMPTY_NAMES = 
+    {
+        names: ["", ""]
+    }
 
-        if (this.names) {
-            this.name = this.names[1];
-        } else {
-            this.name = json[1];
+    constructor(json)
+    {
+        this.names = [];
+        if (json)
+        {
+            this.read(json);
         }
-    },
+    }
 
     // -------------------------------------------------------
+    /** Read the JSON associated to the name in sevaral langs
+    *   @param {Object} json Json object describing the name in sevaral langs
+    */
+    read(json)
+    {
+        this.names = RPM.defaultValue(json.names, [null, json[1]]);
+    }
 
-    getCommand: function(command, i) {
-        var id, name;
+    // -------------------------------------------------------
+    /** Get the name according to current lang
+    *   @returns {string}
+    */
+    name()
+    {
+        return this.names[1];
+    }
 
-        id = command[i++];
-        name = command[i++];
-
+    // -------------------------------------------------------
+    /** DECRIPTION TODO
+    */
+    getCommand(command, iterator)
+    {
+        let id = command[iterator.i++];
+        let name = command[iterator.i++];
         this.names[id] = name;
-
-        if (id === 1) {
-            this.name = this.names[id];
-        }
-
-        return i;
     }
 }

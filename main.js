@@ -16,6 +16,7 @@ let window;
 
 function createWindow () {    
     window = new BrowserWindow({
+        title: "",
         width: 640,
         height: 480,
         resizable: false,

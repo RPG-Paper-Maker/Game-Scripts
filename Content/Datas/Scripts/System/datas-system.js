@@ -9,14 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS DatasSystem
-//
-// -------------------------------------------------------
-
 /** @class
-*   All the system datas.
+*   All the system datas
 *   @property {string[]} itemsTypes List of all the possible types of items of
 *   the game according to ID.
 *   @property {number} idMapStartHero Id of the map where the hero is in the
@@ -26,284 +20,216 @@
 *   @property {SystemCurrency[]} currencies List of all the currencies of the
 *   game according to ID.
 */
-function DatasSystem(){
-    this.read();
-}
+class DatasSystem
+{
+    constructor()
+    {
 
-DatasSystem.prototype = {
+    }
 
-    /** Read the JSON file associated to system.
+    /** Read the JSON file associated to system
     */
-    read: function(){
-        RPM.openFile(this, RPM.FILE_SYSTEM, true, function(res){
-            var json = JSON.parse(res);
-            var jsonItemsTypes = json.itemsTypes;
-            var i, l = jsonItemsTypes.length, id, w, h, isScreenWindow;
-            var jsonList, jsonElement, element;
-            this.itemsTypes = new Array(l+1);
-            for (i = 0; i < l; i++) {
-                this.itemsTypes[jsonItemsTypes[i].id] = {
-                    name: jsonItemsTypes[i].name
-                };
-            }
+    async read()
+    {
+        let json = await RPM.parseFileJSON(RPM.FILE_SYSTEM);
 
-            // Project name
-            this.projectName = new SystemLang();
-            this.projectName.read(json.pn);
-            Platform.setWindowTitle(this.projectName.name);
+        // Font sizes & font names
+        this.fontSizes = RPM.readJSONSystemList(json.fs, (element) =>
+        {
+            return SystemValue.readOrDefaultNumber(element.s, 0);
+        }, false);
+        this.fontNames = RPM.readJSONSystemList(json.fn, (element) =>
+        {
+            return SystemValue.readOrDefaultMessage(element.f, RPM.DEFAULT_FONT);
+        }, false);
+        
 
-            // Screen resolution
-            w = json.sw;
-            h = json.sh;
-            isScreenWindow = json.isw;
-            if (!isScreenWindow) {
-                w = Platform.screenWidth;
-                h = Platform.screenHeight;
-            }
-            Platform.setWindowSize(w, h, !isScreenWindow);
-            Platform.canvasHUD.width = w;
-            Platform.canvasHUD.height = h;
-            Platform.canvas3D.width = w;
-            Platform.canvas3D.height = h;
-            Platform.canvasVideos.height = h;
-            RPM.canvasWidth = w;
-            RPM.canvasHeight = h;
-            RPM.windowX = RPM.canvasWidth / RPM.SCREEN_X;
-            RPM.windowY = RPM.canvasHeight / RPM.SCREEN_Y;
-            this.antialias = json.aa;
-            RPM.initializeGL();
-            RPM.resizeGL(Platform.canvas3D);
-            RPM.requestPaintHUD = true;
+        // Initialize loading scene now that basics are loaded
+        //RPM.loadingScene = new SceneLoading();
 
-            // Other numbers
-            RPM.SQUARE_SIZE = json.ss;
-            //RPM.PORTIONS_RAY_NEAR = json.pr;
-            RPM.PORTIONS_RAY_NEAR = 3;
-            RPM.FRAMES = json.frames;
-            this.mountainCollisionHeight = SystemValue.readOrDefaultNumber(json
-                .mch, 4);
-            this.mountainCollisionAngle = SystemValue.readOrDefaultNumberDouble(
-                json.mca, 45);
-            this.mapFrameDuration = SystemValue.readOrDefaultNumber(json.mfd, 
-                150);
+        // Project name
+        this.projectName = new SystemLang(json.pn);
+        Platform.setWindowTitle(this.projectName.name());
 
-            // Path BR
-            RPM.PATH_BR = "file:///" + json.pathBR;
+        // Screen resolution + antialiasing
+        let w = json.sw;
+        let h = json.sh;
+        let isScreenWindow = json.isw;
+        if (!isScreenWindow)
+        {
+            w = Platform.screenWidth;
+            h = Platform.screenHeight;
+        }
+        Platform.setWindowSize(w, h, !isScreenWindow);
+        Platform.canvasHUD.width = w;
+        Platform.canvasHUD.height = h;
+        Platform.canvas3D.width = w;
+        Platform.canvas3D.height = h;
+        Platform.canvasVideos.height = h;
+        RPM.CANVAS_WIDTH = w;
+        RPM.CANVAS_HEIGHT = h;
+        RPM.WINDOW_X = RPM.CANVAS_WIDTH / RPM.SCREEN_X;
+        RPM.WINDOW_Y = RPM.CANVAS_HEIGHT / RPM.SCREEN_Y;
+        this.antialias = json.aa;
 
-            // Hero beginning
-            this.idMapStartHero = json.idMapHero;
-            this.idObjectStartHero = json.idObjHero;
-            this.getModelHero();
+        // Now that antialias is on or off, initialize GL stuff
+        RPM.initializeGL();
+        RPM.resizeGL(Platform.canvas3D);
+        RPM.requestPaintHUD = true;
 
-            // Debug
-            this.showBB = true
-            if (this.showBB) {
-                RPM.BB_MATERIAL.color.setHex(0xff0000);
-                RPM.BB_MATERIAL.wireframe = true;
-                RPM.BB_MATERIAL.visible = true;
-            }
+        // Other numbers
+        RPM.SQUARE_SIZE = json.ss;
+        RPM.PORTIONS_RAY_NEAR = 3; // TODO: json.pr
+        RPM.FRAMES = json.frames;
+        this.mountainCollisionHeight = SystemValue.readOrDefaultNumber(json.mch, 
+            4);
+        this.mountainCollisionAngle = SystemValue.readOrDefaultNumberDouble(json
+            .mca, 45);
+        this.mapFrameDuration = SystemValue.readOrDefaultNumber(json.mfd, 150);
 
-            // Colors
-            var jsonColors = json.colors;
-            l = jsonColors.length;
-            this.colors = new Array(l + 1);
-            for (i = 0; i < l; i++){
-                var jsonColor = jsonColors[i];
-                id = jsonColor.id;
-                var color = new SystemColor();
-                color.read(jsonColor);
-                this.colors[id] = color;
-            }
+        // Path BR
+        RPM.PATH_BR = RPM.PATH_FILES + json.pathBR;
 
-            // Currencies
-            var jsonCurrencies = json.currencies;
-            l = jsonCurrencies.length;
-            this.currencies = new Array(l + 1);
-            for (i = 0; i < l; i++){
-                var jsonCurrency = jsonCurrencies[i];
-                id = jsonCurrency.id;
-                var currency = new SystemCurrency();
-                currency.read(jsonCurrency);
-                this.currencies[id] = currency;
-            }
+        // Hero beginning
+        this.idMapStartHero = json.idMapHero;
+        this.idObjectStartHero = json.idObjHero;
+        //await this.getModelHero();
 
-            // WindowSkins
-            var jsonWindowSkins = json.wskins;
-            l = jsonWindowSkins.length;
-            this.windowSkins = new Array(l + 1);
-            for (i = 0; i < l; i++){
-                var jsonWindowSkin = jsonWindowSkins[i];
-                id = jsonWindowSkin.id;
-                var windowSkin = new SystemWindowSkin();
-                windowSkin.read(jsonWindowSkin);
-                this.windowSkins[id] = windowSkin;
-            }
+        // Debug bounding box
+        this.showBB = RPM.defaultValue(json.bb, false);
+        if (this.showBB)
+        {
+            RPM.BB_MATERIAL.color.setHex(0xff0000);
+            RPM.BB_MATERIAL.wireframe = true;
+            RPM.BB_MATERIAL.visible = true;
+        }
 
-            // CameraProperties
-            jsonList = json.cp;
-            l = jsonList.length;
-            this.cameraProperties = new Array(l + 1);
-            for (i = 0; i < l; i++) {
-                jsonElement = jsonList[i];
-                id = jsonElement.id;
-                element = new SystemCameraProperties();
-                element.read(jsonElement);
-                this.cameraProperties[id] = element;
-            }
+        // Lists
+        this.itemsTypes = RPM.readJSONSystemList(json.itemsTypes, (element) =>
+        {
+            return element.name;
+        }, false);
+        this.colors = RPM.readJSONSystemList(json.colors, SystemColor);
+        this.currencies = RPM.readJSONSystemList(json.currencies, SystemCurrency);
+        this.windowSkins = RPM.readJSONSystemList(json.wskins, SystemWindowSkin);
+        this.cameraProperties = RPM.readJSONSystemList(json.cp, 
+            SystemCameraProperties);
 
-            // Detections
-            jsonList = json.d;
-            l = jsonList.length;
-            this.detections = new Array(l + 1);
-            for (i = 0; i < l; i++) {
-                jsonElement = jsonList[i];
-                id = jsonElement.id;
-                element = new SystemDetection();
-                element.read(jsonElement);
-                this.detections[id] = element;
-            }
+        /*
+        // Detections
+        jsonList = json.d;
+        l = jsonList.length;
+        this.detections = new Array(l + 1);
+        for (i = 0; i < l; i++) {
+            jsonElement = jsonList[i];
+            id = jsonElement.id;
+            element = new SystemDetection();
+            element.read(jsonElement);
+            this.detections[id] = element;
+        }
 
-            // Speeds
-            jsonList = json.sf;
-            l = jsonList.length;
-            this.speeds = new Array(l + 1);
-            for (i = 0; i < l; i++) {
-                jsonElement = jsonList[i];
-                id = jsonElement.id;
-                element = SystemValue.readOrDefaultNumberDouble(jsonElement.v, 1);
-                this.speeds[id] = element;
-            }
-            // Frequencies
-            jsonList = json.f;
-            l = jsonList.length;
-            this.frequencies = new Array(l + 1);
-            for (i = 0; i < l; i++) {
-                jsonElement = jsonList[i];
-                id = jsonElement.id;
-                element = SystemValue.readOrDefaultNumberDouble(jsonElement.v, 1);
-                this.frequencies[id] = element;
-            }
+        // Speeds
+        jsonList = json.sf;
+        l = jsonList.length;
+        this.speeds = new Array(l + 1);
+        for (i = 0; i < l; i++) {
+            jsonElement = jsonList[i];
+            id = jsonElement.id;
+            element = SystemValue.readOrDefaultNumberDouble(jsonElement.v, 1);
+            this.speeds[id] = element;
+        }
+        // Frequencies
+        jsonList = json.f;
+        l = jsonList.length;
+        this.frequencies = new Array(l + 1);
+        for (i = 0; i < l; i++) {
+            jsonElement = jsonList[i];
+            id = jsonElement.id;
+            element = SystemValue.readOrDefaultNumberDouble(jsonElement.v, 1);
+            this.frequencies[id] = element;
+        }
 
-            // Font sizes
-            jsonList = json.fs;
-            l = jsonList.length;
-            this.fontSizes = new Array(l + 1);
-            for (i = 0; i < l; i++) {
-                jsonElement = jsonList[i];
-                id = jsonElement.id;
-                element = SystemValue.readOrDefaultNumber(jsonElement.s, 0);
-                this.fontSizes[id] = element;
-            }
+        // Skyboxes
+        jsonList = json.sb;
+        l = jsonList.length;
+        this.skyboxes = new Array(l + 1);
+        for (i = 0; i < l; i++) {
+            jsonElement = jsonList[i];
+            id = jsonElement.id;
+            element = new SystemSkybox();
+            element.read(jsonElement);
+            this.skyboxes[id] = element;
+        }
 
-            // Font names
-            jsonList = json.fn;
-            l = jsonList.length;
-            this.fontNames = new Array(l + 1);
-            for (i = 0; i < l; i++) {
-                jsonElement = jsonList[i];
-                id = jsonElement.id;
-                element = SystemValue.readOrDefaultMessage(jsonElement.f, RPM
-                    .DEFAULT_FONT);
-                this.fontNames[id] = element;
-            }
+        // read song now that BR path is loaded
+        RPM.datasGame.songs.read();
 
-            // Skyboxes
-            jsonList = json.sb;
-            l = jsonList.length;
-            this.skyboxes = new Array(l + 1);
-            for (i = 0; i < l; i++) {
-                jsonElement = jsonList[i];
-                id = jsonElement.id;
-                element = new SystemSkybox();
-                element.read(jsonElement);
-                this.skyboxes[id] = element;
-            }
+        // Sounds
+        this.soundCursor = new SystemPlaySong(SongKind.Sound);
+        this.soundCursor.read(json.scu);
+        this.soundConfirmation = new SystemPlaySong(SongKind.Sound);
+        this.soundConfirmation.read(json.sco);
+        this.soundCancel = new SystemPlaySong(SongKind.Sound);
+        this.soundCancel.read(json.sca);
+        this.soundImpossible = new SystemPlaySong(SongKind.Sound);
+        this.soundImpossible.read(json.si);
 
-            // read song now that BR path is loaded
-            RPM.datasGame.songs.read();
-
-            // Sounds
-            this.soundCursor = new SystemPlaySong(SongKind.Sound);
-            this.soundCursor.read(json.scu);
-            this.soundConfirmation = new SystemPlaySong(SongKind.Sound);
-            this.soundConfirmation.read(json.sco);
-            this.soundCancel = new SystemPlaySong(SongKind.Sound);
-            this.soundCancel.read(json.sca);
-            this.soundImpossible = new SystemPlaySong(SongKind.Sound);
-            this.soundImpossible.read(json.si);
-
-            // Dialog box options
-            this.dbOptions = EventCommand.getEventCommand(json.dbo);
-            this.dbOptions.update();
-
-            RPM.loadingScene = new SceneLoading();
-        });
-    },
+        this.dbOptions = EventCommand.getEventCommand(json.dbo);
+        this.dbOptions.update();
+        */
+    }
 
     // -------------------------------------------------------
 
     /** Update the RPM.modelHero global variable by loading the hero model.
     */
-    getModelHero: function(){
-        var mapName = RPM.generateMapName(this.idMapStartHero);
-        RPM.openFile(null, RPM.FILE_MAPS + mapName + RPM.FILE_MAP_OBJECTS,
-                       true, function(res)
+    async getModelHero()
+    {
+        let mapName = RPM.generateMapName(this.idMapStartHero);
+        let json = (await RPM.parseFileJSON(RPM.FILE_MAPS + mapName + RPM
+            .FILE_MAP_OBJECTS)).objs;
+        let jsonObject, position;
+        for (let i = 0, l = json.length; i < l; i++)
         {
-            var json = JSON.parse(res).objs;
-            var i, l;
-
-            var jsonObject;
-            l = json.length;
-            var id = RPM.datasGame.system.idObjectStartHero;
-            var position;
-
-            for (i = 0; i < l; i++){
-                jsonObject = json[i];
-                if (jsonObject.id === id){
-                    position = jsonObject.p;
-                    break;
-                }
+            jsonObject = json[i];
+            if (jsonObject.id === this.idObjectStartHero)
+            {
+                position = jsonObject.p;
+                break;
             }
-            if (typeof position == 'undefined') {
-                RPM.showErrorMessage("Can't find hero in object linking. Please"
-                    + " remove the hero object from your map and recreate it." +
-                    "\nIf possible, report that you got this error and " +
-                    "describe the steps for having this because we are trying "
-                    + "to fix this issue.");
-            }
-            var globalPortion = SceneMap.getGlobalPortion(position);
-
-            var fileName = SceneMap.getPortionName(globalPortion[0],
-                                                   globalPortion[1],
-                                                   globalPortion[2]);
-
-            RPM.openFile(null, RPM.FILE_MAPS + mapName + "/" + fileName,
-                           false, function(res){
-                var json = JSON.parse(res);
-                var mapPortion = new MapPortion(globalPortion[0],
-                                                globalPortion[1],
-                                                globalPortion[2]);
-
-                // Update the hero model
-                RPM.modelHero = mapPortion.getHeroModel(json);
-            });
-        });
-    },
+        }
+        if (RPM.isUndefined(position))
+        {
+            RPM.showErrorMessage("Can't find hero in object linking. Please"
+                + " remove the hero object from your map and recreate it." +
+                "\nIf possible, report that you got this error and " +
+                "describe the steps for having this because we are trying "
+                + "to fix this issue.");
+        }
+        let globalPortion = SceneMap.getGlobalPortion(position);
+        let fileName = SceneMap.getPortionName(globalPortion[0], globalPortion[1
+            ], globalPortion[2]);
+        json = await RPM.parseFileJSON(RPM.FILE_MAPS + mapName + RPM
+            .STRING_SLASH + fileName);
+        RPM.modelHero = (new MapPortion(globalPortion[0], globalPortion[1],
+            globalPortion[2])).getHeroModel(json);
+    }
 
     // -------------------------------------------------------
 
-    loadWindowSkins: function() {
+    loadWindowSkins()
+    {
         for (var i = 1, l = this.windowSkins.length; i < l; i++) {
             this.windowSkins[i].updatePicture();
         }
-    },
+    }
 
     // -------------------------------------------------------
-
     /** Get the default array currencies for a default game.
     *   @returns {number[]}
     */
-    getDefaultCurrencies: function(){
+    getDefaultCurrencies()
+    {
         var id, list;
 
         list = [];
@@ -312,11 +238,12 @@ DatasSystem.prototype = {
         }
 
         return list;
-    },
+    }
 
     // -------------------------------------------------------
 
-    getWindowSkin: function() {
+    getWindowSkin()
+    {
         return this.windowSkins[this.dbOptions.windowSkinID.getValue()];
     }
 }

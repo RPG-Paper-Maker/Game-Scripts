@@ -29,6 +29,7 @@ function RPM()
 
 RPM.PATH_BR = "";
 RPM.ROOT_DIRECTORY_LOCAL = "."
+RPM.PATH_FILES = "file:///";
 RPM.PATH_DATAS = Platform.ROOT_DIRECTORY + "/Content/Datas/";
 RPM.FILE_MAPS = RPM.PATH_DATAS + "Maps/";
 RPM.FILE_MAP_INFOS = "/infos.json";
@@ -169,8 +170,6 @@ RPM.lastUpdateTime = new Date().getTime();
 RPM.keysPressed = new Array;
 RPM.picturesLoading = new Array;
 RPM.picturesLoaded = new Array;
-RPM.filesToLoad = 0;
-RPM.loadedFiles = 0;
 RPM.fontSize = 13;
 RPM.fontName = "sans-serif";
 RPM.escaped = false;
@@ -849,32 +848,25 @@ Tree.prototype = {
 *   @static
 *   @param {Object} base The class calling this function.
 *   @param {string} url The path of the file.
-*   @param {boolean} loading Indicate if there's a loading screen while loading
-*   the file.
-*   @param {function} callback A callback function to excecute when the file is
-*   loaded.
 */
-RPM.openFile = function(base, url, loading, callback)
+RPM.openFile = async function(url)
 {
-    const fs = require('fs');
+    const fs = require('fs').promises;
 
-    if (loading)
-    {
-        RPM.filesToLoad++;
-    }
-    fs.readFile(url, function (e, data) {
+    return await fs.readFile(url, (e, data) => {
         if (e) 
         {
             RPM.showError(e);
         } else
         {
-            callback.call(base, data.toString());
-            if (loading)
-            {
-                RPM.loadedFiles++;
-            }
+            return data.toString();
         }
     });
+}
+
+RPM.parseFileJSON = async function(url)
+{
+    return JSON.parse(await RPM.openFile(url));
 }
 
 RPM.openFile(null, RPM.PATH_SHADERS + "fix.vert", false, function(res) {
@@ -901,22 +893,6 @@ RPM.saveFile = function(url, obj)
             RPM.showError(e);
         }
     });
-}
-
-// -------------------------------------------------------
-
-/** Check if all the files are loaded.
-*   @static
-*   @returns {boolean}
-*/
-RPM.isLoading = function(){
-    if (RPM.filesToLoad === RPM.loadedFiles) {
-        RPM.filesToLoad = 0;
-        RPM.loadedFiles = 0;
-        return false;
-    }
-
-    return true;
 }
 
 // -------------------------------------------------------
@@ -1181,7 +1157,7 @@ RPM.getScreenY = function(y) {
 */
 
 RPM.getScreenXY = function(xy) {
-    return Math.ceil((RPM.windowX + RPM.windowY) / 2 * xy);
+    return Math.ceil((RPM.WINDOW_X + RPM.WINDOW_Y) / 2 * xy);
 }
 
 // -------------------------------------------------------
@@ -1193,7 +1169,7 @@ RPM.getScreenXY = function(xy) {
 */
 
 RPM.getScreenMinXY = function(xy) {
-    return Math.ceil(xy * Math.min(RPM.windowX,RPM.windowY));
+    return Math.ceil(xy * Math.min(RPM.WINDOW_X,RPM.WINDOW_Y));
 }
 
 // -------------------------------------------------------
@@ -1205,7 +1181,7 @@ RPM.getScreenMinXY = function(xy) {
 *   @returns {number}
 */
 RPM.getDoubleScreenX = function(x) {
-    return RPM.windowX * x;
+    return RPM.WINDOW_X * x;
 }
 
 // -------------------------------------------------------
@@ -1217,7 +1193,7 @@ RPM.getDoubleScreenX = function(x) {
 *   @returns {number}
 */
 RPM.getDoubleScreenY = function(y) {
-    return RPM.windowY * y;
+    return RPM.WINDOW_Y * y;
 }
 
 // -------------------------------------------------------
@@ -1487,8 +1463,8 @@ RPM.updateBackgroundColor = function(color) {
 // -------------------------------------------------------
 
 RPM.toScreenPosition = function(vector, camera) {
-    var widthHalf = RPM.canvasWidth / 2;
-    var heightHalf = RPM.canvasHeight / 2;
+    var widthHalf = RPM.CANVAS_WIDTH / 2;
+    var heightHalf = RPM.CANVAS_HEIGHT / 2;
     var position = vector.clone();
     camera.updateMatrixWorld(true);
     position.project(camera);
@@ -1580,4 +1556,249 @@ RPM.indexOfProp = function(array, attr, value)
 RPM.numToString = function(n)
 {
     return RPM.STRING_EMPTY + n;
+}
+
+RPM.readJSONSystemList = function(jsonList, func, isConstructor=true)
+{
+    let jsonElement;
+    let l = jsonList.length;
+    let list = new Array(l + 1);
+    for (let i = 0; i < l; i++)
+    {
+        jsonElement = jsonList[i];
+        list[jsonElement.id] = isConstructor ? new func(jsonElement) : func.call
+            (null, jsonElement);
+    }
+
+    return list;
+}
+
+RPM.tryCatch = async function(func)
+{
+    try {
+        return await func;
+    } catch(e)
+    {
+        window.onerror(null, null, null, null, e);
+    }
+}
+
+/** Initialize the game stack and datas
+*/
+RPM.initialize = function()
+{
+    RPM.songsManager = new SongsManager();
+    RPM.settings = new Settings();
+    RPM.datasGame = new DatasGame();
+    RPM.gameStack = new GameStack();
+}
+
+// -------------------------------------------------------
+
+/** Load the game stack and datas
+*/
+RPM.load = async function()
+{
+    await RPM.settings.read();
+    await RPM.datasGame.read();
+}
+
+// -------------------------------------------------------
+
+/** Initialize the openGL stuff.
+*/
+RPM.initializeGL = function()
+{
+    // Create the renderer
+    RPM.renderer = new THREE.WebGLRenderer({antialias: RPM.datasGame.system
+        .antialias, alpha: true});
+    RPM.renderer.autoClear = false;
+    RPM.renderer.setSize(RPM.CANVAS_WIDTH, RPM.CANVAS_HEIGHT);
+    if (RPM.datasGame.system.antialias)
+    {
+        RPM.renderer.setPixelRatio(2);
+    }
+    Platform.canvas3D.appendChild(RPM.renderer.domElement);
+}
+
+// -------------------------------------------------------
+
+/** Set the camera aspect while resizing the window.
+*   @param {Canvas} canvas The 3D canvas.
+*/
+RPM.resizeGL = function(canvas)
+{
+    RPM.renderer.setSize(RPM.CANVAS_WIDTH, RPM.CANVAS_HEIGHT);
+    var camera = RPM.gameStack.camera;
+    if (typeof camera !== 'undefined'){
+        camera.threeCamera.aspect = RPM.CANVAS_WIDTH / RPM.CANVAS_HEIGHT;
+        camera.threeCamera.updateProjectionMatrix();
+    }
+}
+
+// -------------------------------------------------------
+
+/** Update the current stack.
+*/
+RPM.update = function()
+{
+    // Update game timer
+    if (RPM.game)
+    {
+        RPM.game.playTime.update();
+    }
+
+    // Update songs manager
+    RPM.songsManager.update();
+
+    // Repeat keypress as long as not blocking
+    var continuePressed = true;
+    var key;
+    for (var i = 0, l = RPM.keysPressed.length; i < l; i++){
+        key = RPM.keysPressed[i];
+        continuePressed = RPM.onKeyPressedRepeat(RPM.keysPressed[i]);
+        if (!continuePressed)
+        {
+            break;
+        }
+    }
+
+    // Update the top of the stack
+    RPM.gameStack.update();
+
+    RPM.elapsedTime = new Date().getTime() - RPM.lastUpdateTime;
+    RPM.averageElapsedTime = (RPM.averageElapsedTime + RPM.elapsedTime) / 2;
+    RPM.lastUpdateTime = new Date().getTime();
+}
+
+// -------------------------------------------------------
+
+/** First key press handle for the current stack.
+*   @param {number} key The key ID pressed.
+*/
+RPM.onKeyPressed = function(key)
+{
+    RPM.gameStack.onKeyPressed(key);
+}
+
+// -------------------------------------------------------
+
+/** First key release handle for the current stack.
+*   @param {number} key The key ID released.
+*/
+RPM.onKeyReleased = function(key)
+{
+    RPM.gameStack.onKeyReleased(key);
+}
+
+// -------------------------------------------------------
+
+/** Key pressed repeat handle for the current stack.
+*   @param {number} key The key ID pressed.
+*   @returns {boolean} false if the other keys are blocked after it.
+*/
+RPM.onKeyPressedRepeat = function(key)
+{
+    return RPM.gameStack.onKeyPressedRepeat(key);
+}
+
+// -------------------------------------------------------
+
+/** Key pressed repeat handle for the current stack, but with
+*   a small wait after the first pressure (generally used for menus).
+*   @param {number} key The key ID pressed.
+*   @returns {boolean} false if the other keys are blocked after it.
+*/
+RPM.onKeyPressedAndRepeat = function(key)
+{
+    return RPM.gameStack.onKeyPressedAndRepeat(key);
+}
+
+// -------------------------------------------------------
+
+/** Draw the 3D for the current stack.
+*   @param {Canvas} canvas The 3D canvas.
+*/
+RPM.draw3D = function()
+{
+    RPM.gameStack.draw3D();
+}
+
+// -------------------------------------------------------
+
+/** Draw HUD for the current stack.
+*   @param {Canvas} canvas The HUD canvas.
+*/
+RPM.drawHUD = function(loading)
+{
+
+    if (RPM.requestPaintHUD)
+    {
+        RPM.requestPaintHUD = false;
+        Platform.ctx.clearRect(0, 0, RPM.CANVAS_WIDTH, RPM.CANVAS_HEIGHT);
+        Platform.ctx.lineWidth = 1;
+        Platform.ctx.webkitImageSmoothingEnabled = false;
+        Platform.ctx.imageSmoothingEnabled = false;
+        if (loading) 
+        {
+            if (RPM.loadingScene) 
+            {
+                RPM.loadingScene.drawHUD();
+            }
+        }
+        else {
+            RPM.gameStack.drawHUD();
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+/** Main loop of the game.
+*/
+
+RPM.loop = function()
+{
+    requestAnimationFrame(RPM.loop);
+
+    // Loading datas game
+    if (RPM.datasGame && !RPM.datasGame.loaded) 
+    {
+        RPM.datasGame.updateLoadings();
+        RPM.drawHUD(true);
+        return;
+    }
+    if (!RPM.isLoading()) 
+    {
+        if (!RPM.gameStack.isEmpty()) 
+        {
+            // Callbacks
+            var callback = RPM.gameStack.top().callBackAfterLoading;
+            if (callback === null) 
+            {
+                RPM.update();
+                callback = RPM.gameStack.top().callBackAfterLoading;
+                if (callback === null) 
+                {
+                    RPM.draw3D();
+                    RPM.drawHUD(false);
+                }
+            } else 
+            {
+                if (!RPM.gameStack.top().isBattleMap) 
+                {
+                    RPM.renderer.clear();
+                    RPM.drawHUD(true);
+                }
+                if (callback) 
+                {
+                    RPM.gameStack.top().callBackAfterLoading = undefined;
+                    callback.call(RPM.gameStack.top());
+                }
+            }
+        }
+        else {
+            RPM.gameStack.pushTitleScreen();
+        }
+    }
 }

@@ -148,8 +148,8 @@ SceneBattle.prototype.updateTeamXP = function() {
                 y = 90 + (i * 90);
                 h = this.windowStatisticProgression.content.getHeight() + RPM
                     .HUGE_PADDING_BOX[0] + RPM.HUGE_PADDING_BOX[2];
-                if (y + h > RPM.canvasHeight - 10) {
-                    y = RPM.canvasHeight - h - 10;
+                if (y + h > RPM.CANVAS_HEIGHT - 10) {
+                    y = RPM.CANVAS_HEIGHT - h - 10;
                 }
                 this.windowStatisticProgression.setY(y);
                 this.windowStatisticProgression.setH(h);
@@ -392,7 +392,7 @@ SceneBattle.prototype.drawHUDStep4 = function() {
             Platform.ctx.fillStyle = "rgba(" + this.transitionEndColor.red + "," +
                 this.transitionEndColor.green + "," + this.transitionEndColor.blue +
                 "," + this.transitionColorAlpha + ")";
-            Platform.ctx.fillRect(0, 0, RPM.canvasWidth, RPM.canvasHeight);
+            Platform.ctx.fillRect(0, 0, RPM.CANVAS_WIDTH, RPM.CANVAS_HEIGHT);
         }
         break;
     }

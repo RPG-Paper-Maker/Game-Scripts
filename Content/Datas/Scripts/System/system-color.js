@@ -9,37 +9,34 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemColor
-//
-// -------------------------------------------------------
-
 /** @class
-*   An color of the game.
+*   An color of the game
 */
-function SystemColor()
+class SystemColor
 {
+    constructor(json)
+    {
+        if (json)
+        {
+            this.read(json);
+        }
+    }
 
-}
+    static createColor(r, g, b, a)
+    {
+        var color = new SystemColor();
+        color.initialize(r, g, b, a);
+        return color;
+    }
 
-SystemColor.createColor = function(r, g, b, a)
-{
-    var color = new SystemColor();
-    color.initialize(r, g, b, a);
-    return color;
-}
+    // -------------------------------------------------------
+    static mix(x, y, a)
+    {
+        return x.clone().multiplyScalar(1 - a).add(y.clone().multiplyScalar(a));
+    }
 
-// -------------------------------------------------------
-SystemColor.mix = function(x, y, a) {
-    return x.clone().multiplyScalar(1 - a).add(y.clone().multiplyScalar(a));
-}
-
-// -------------------------------------------------------
-
-SystemColor.prototype = {
-
-    initialize: function(r, g, b, a) {
+    initialize(r, g, b, a)
+    {
         // Default values
         if (typeof a === 'undefined') a = 255;
 
@@ -50,21 +47,24 @@ SystemColor.prototype = {
 
         this.rgb = "rgb(" + this.red + ", " + this.green + ", " + this.blue + ")";
         this.color = new THREE.Color(this.rgb);
-    },
+    }
 
     // -------------------------------------------------------
 
     /** Read the JSON associated to the element.
     *   @param {Object} json Json object describing the object.
     */
-    read: function(json) {
+    read(json)
+    {
         this.initialize(json.r, json.g, json.b, json.a);
-    },
+    }
 
     // -------------------------------------------------------
 
-    getHex: function(tone) {
-        if (tone) {
+    getHex(tone)
+    {
+        if (tone)
+        {
             var rgb, w, intensity, m;
 
             rgb = new THREE.Vector3(Math.max(Math.min(this.color.r + tone.x, 1),

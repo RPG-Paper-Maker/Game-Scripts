@@ -149,7 +149,7 @@ class SystemTileset
                     switch (pictureKind) {
                     case PictureKind.Walls:
                         that = this;
-                        callback = function(pathLocal, picture) {
+                        callback = async function(pathLocal, picture) {
                             var texture = new THREE.Texture();
                             that.loadTextureWall(texture, pathLocal, picture, id);
                             return texture;
@@ -174,18 +174,19 @@ class SystemTileset
 
     // -------------------------------------------------------
 
-    loadSpecials()
+    async loadSpecials()
     {
-        if (!this.ownsAutotiles) {
-            this.loadAutotiles();
-        } else {
-            if (!this.ownsMountains) {
-                this.loadMountains();
-            } else {
-                if (!this.ownsWalls) {
-                    this.loadWalls();
-                }
-            }
+        if (!this.ownsAutotiles)
+        {
+            await this.loadAutotiles();
+        }
+        if (!this.ownsMountains)
+        {
+            await this.loadMountains();
+        } 
+        if (!this.ownsWalls)
+        {
+            await this.loadWalls();
         }
     }
 
@@ -193,7 +194,7 @@ class SystemTileset
 
     /** Load all the autotiles with reduced files.
     */
-    loadAutotiles()
+    async loadAutotiles()
     {
         var i, l, autotiles, autotilesIDs, id, offset, result, paths, autotile,
             textureAutotile, that, texture, context, picture, callback;
@@ -267,7 +268,7 @@ class SystemTileset
 
     /** Load all the walls.
     */
-    loadWalls()
+    async loadWalls()
     {
         this.loadSpecialTextures(PictureKind.Walls, "texturesWalls", "walls");
         this.callback = null;
@@ -460,7 +461,7 @@ class SystemTileset
 
     /** Load all the mountains with reduced files.
     */
-    loadMountains()
+    async loadMountains()
     {
         var i, l, mountains, mountainsIDs, id, offset, result, paths, mountain,
             textureMountain, that, texture, context, picture, callback;
