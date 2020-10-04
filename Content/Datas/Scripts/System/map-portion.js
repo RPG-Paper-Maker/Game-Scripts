@@ -650,7 +650,6 @@ MapPortion.prototype = {
 
             if (texture !== null && texture.texture !== null) {
                 objCollision = mountains.updateGeometry(position, mountain);
-                console.log(objCollision)
                 this.updateCollision(this.boundingBoxesMountains, objCollision,
                     position, true);
             }

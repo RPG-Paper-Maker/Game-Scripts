@@ -12,174 +12,183 @@
 /** @class
 *   A class for pictures drawable in HUD
 *   @extends Bitmap
-*   @property {string} path The path to the ressource.
-*   @property {function} callback Function to call after the image is loaded.
-*   @param {string} path The path to the ressource.
-*   @param {function} callback Function to call after the image is loaded.
-*   @param {number} [x=0] - Coords of the bitmap.
-*   @param {number} [y=0] - Coords of the bitmap.
-*   @param {number} [w=0] - Coords of the bitmap.
-*   @param {number} [h=0] - Coords of the bitmap.
+*   @property {string} path The path to the ressource
+*   @property {number} [zoom=1.0] The zoom value of the picture
+*   @property {number} [opacity=1.0] The opacity value of the picture
+*   @property {number} [angle=0.0] The angle value of the picture
+*   @property {boolean} [cover=false] Indicate if the picture cover the entire 
+*   canvas
+*   @property {boolean} [stretch=false] Indicate if the picture is stretched if 
+*   necessary
+*   @param {string} path The path to the ressource
+*   @param {number} [x=0] Coords of the bitma
+*   @param {number} [y=0] Coords of the bitmap
+*   @param {number} [w=0] Coords of the bitmap
+*   @param {number} [h=0] Coords of the bitmap
 */
 class Picture2D extends Bitmap
 {
-    constructor(path = "", callback = null, x = 0, y = 0, w = 0, h = 0)
+    constructor(path = "", x = 0, y = 0, w = 0, h = 0)
     {
         super(x, y, w, h);
 
         this.zoom = 1.0;
         this.opacity = 1.0;
-        this.angle = 0;
+        this.angle = 0.0;
         this.cover = false;
         this.stretch = false;
         if (path)
         {
             this.path = path;
-            this.callback = callback;
-            this.checked = false;
+            this.loaded = false;
             this.empty = false;
-            this.image = new Image();
-            this.image.onload = () => {
-                this.check();
-            }
-            this.image.src = this.path;
-        } else {
+        } else
+        {
             this.empty = true;
             this.check();
         }
     }
 
+    // -------------------------------------------------------
+    /** Create a picture and then load it
+    *   @static
+    *   @param {SystemPicture} picture The picture to load
+    *   @param {number} x The x position
+    *   @param {number} y The y position
+    *   @param {number} w The w size
+    *   @param {number} h The h size
+    */
+    static async createImage(picture, x = 0, y = 0, w = 0, h = 0)
+    {
+        await (picture ? new Picture2D(picture.getPath(), x, y, w, h) : new 
+            Picture2D()).load();
+    }
+
+    // -------------------------------------------------------
+    /** Create a picture from kind and id and then load it
+    *   @static
+    *   @param {number} id The picture id to load
+    *   @param {PictureKind} kind The picture kind to load
+    *   @param {number} x The x position
+    *   @param {number} y The y position
+    *   @param {number} w The w size
+    *   @param {number} h The h size
+    */
+    static async createImageWithID(id, kind, x = 0, y = 0, w = 0, h = 0)
+    {
+        return (await Picture2D.createImage(RPM.datasGame.pictures.get(kind, id),
+            x, y, w, h));
+    }
+
+    // -------------------------------------------------------
+    /** Load the picture and then check
+    */
+    async load()
+    {
+        if (this.path)
+        {
+            // Try loading
+            await new Promise((resolve, reject) => {
+                this.image = new Image()
+                this.image.onload = () => resolve()
+                this.image.onerror = () => {
+                    this.empty = true;
+                    resolve()
+                }
+                this.image.src = this.path
+            });
+            // If not empty, configure bitmap size
+            if (!this.empty)
+            {
+                this.oW = this.image.width;
+                this.oH = this.image.height;
+                if (this.cover)
+                {
+                    this.w = RPM.CANVAS_WIDTH;
+                    this.h = RPM.CANVAS_HEIGHT;
+                } else if (this.stretch)
+                {
+                    this.w = RPM.getScreenX(this.image.width);
+                    this.h = RPM.getScreenY(this.image.height);
+                } else
+                {
+                    this.w = RPM.getScreenMinXY(this.image.width);
+                    this.h = RPM.getScreenMinXY(this.image.height);
+                }
+                RPM.requestPaintHUD = true;
+                this.loaded = true;
+            }
+        }
+    }
+
+    // -------------------------------------------------------
+    /** Create a copy of a picture2D
+    */
     createCopy()
     {
-        var picture = new Picture2D();
-    
+        let picture = new Picture2D();
         picture.empty = this.empty;
         picture.path = this.path;
-        picture.callback = this.callback;
         picture.image = this.image;
-        picture.checked = true;
+        picture.loaded = true;
         picture.stretch = false;
         picture.setW(picture.image.width, true);
         picture.setH(picture.image.height, true);
-    
         return picture;
     }
     
     // -------------------------------------------------------
-    
-    check() {
-        if (this.empty) {
-            this.setW(1);
-            this.setH(1);
-            this.checked = true;
-            RPM.requestPaintHUD = true;
-            return true;
-        } else
-        {
-            this.oW = this.image.width;
-            this.oH = this.image.height;
-            if (this.cover)
-            {
-                this.w = RPM.CANVAS_WIDTH;
-                this.h = RPM.CANVAS_HEIGHT;
-            } else if (this.stretch)
-            {
-                this.w = RPM.getScreenX(this.image.width);
-                this.h = RPM.getScreenY(this.image.height);
-            } else
-            {
-                this.w = RPM.getScreenMinXY(this.image.width);
-                this.h = RPM.getScreenMinXY(this.image.height);
-            }
-            if (this.callback) {
-                this.callback.call(this);
-            }
-            this.checked = true;
-            RPM.requestPaintHUD = true;
-            return true;
-        }
-    }
-    
-    // -------------------------------------------------------
-    
-    destroy() {
-        Platform.canvasRendering.unloadImage(this.path);
-    }
-    
-    // -------------------------------------------------------
-    
-    draw (x, y, w, h, sx, sy, sw, sh, positionResize)
+    /** Draw the picture on HUD
+    */
+    draw (x, y, w, h, sx = 0, sy = 0, sw = this.oW, sh = this.oH, positionResize = true)
     {
-        if (!this.checked) {
-            this.check();
-        }
-    
-        // Default values
-        if (typeof positionResize === 'undefined') {
-            positionResize = true;
-        }
-        if (typeof x === 'undefined') {
-            x = this.x;
-        } else {
-            if (positionResize) {
-                x = RPM.getScreenX(x);
-            }
-        }
-        if (typeof y === 'undefined') {
-            y = this.y;
-        } else {
-            if (positionResize) {
-                y = RPM.getScreenY(y);
-            }
-        }
-        if (typeof w === 'undefined') {
-            w = this.w * this.zoom;
-        } else {
-            w = this.stretch ? RPM.getScreenX(w) : RPM.getScreenMinXY(w);
-        }
-        if (typeof h === 'undefined') {
-            h = this.h * this.zoom;
-        } else {
-            h = this.stretch ? RPM.getScreenY(h) : RPM.getScreenMinXY(h)
-        }
-        if (typeof sx === 'undefined') sx = 0;
-        if (typeof sy === 'undefined') sy = 0;
-        if (typeof sw === 'undefined') sw = this.oW;
-        if (typeof sh === 'undefined') sh = this.oH;
-    
-        if (sw <= 0 || sh <= 0) {
-            return;
-        }
-    
-        // Draw the image
-        if (!this.empty) {
-            var angle;
-    
-            angle = this.angle * Math.PI / 180;
+        if (this.loaded && sw > 0 && sh > 0)
+        {
+            // Default values
+            x = RPM.isUndefined(x) ? this.x : (positionResize ? RPM.getScreenX(
+                x) : x);
+            y = RPM.isUndefined(y) ? this.y : (positionResize ? RPM.getScreenY(
+                    y) : y);
+            w = RPM.isUndefined(w) ? this.w * this.zoom : (this.stretch ? RPM
+                .getScreenX(w) : RPM.getScreenMinXY(w));
+            h = RPM.isUndefined(h) ? this.h * this.zoom : (this.stretch ? RPM
+                .getScreenY(h) : RPM.getScreenMinXY(h));
+        
+            // Draw the image according to all parameters
+            let angle = this.angle * Math.PI / 180;
             Platform.ctx.save();
             Platform.ctx.globalAlpha = this.opacity;
-            if (!this.centered) {
-                if (this.reverse) {
+            if (!this.centered)
+            {
+                if (this.reverse)
+                {
                     Platform.ctx.scale(-1, 1);
                     Platform.ctx.translate(-x -w, y);
-                } else {
+                } else
+                {
                     Platform.ctx.translate(x, y);
                 }
             }
-            if (angle !== 0) {
-                if (this.centered) {
+            if (angle !== 0)
+            {
+                if (this.centered)
+                {
                     Platform.ctx.translate(x, y);
                 }
                 Platform.ctx.rotate(angle);
-                if (this.centered) {
+                if (this.centered)
+                {
                     Platform.ctx.translate(-x, -y);
                 }
             }
-            if (this.centered) {
-                if (this.reverse) {
+            if (this.centered)
+            {
+                if (this.reverse)
+                {
                     Platform.ctx.scale(-1, 1);
                     Platform.ctx.translate(-x -w, y);
-                } else {
+                } else
+                {
                     Platform.ctx.translate(x - (w / 2), y - (h / 2));
                 }
             }
@@ -188,18 +197,4 @@ class Picture2D extends Bitmap
             Platform.ctx.restore();
         }
     }
-}
-
-// -------------------------------------------------------
-
-Picture2D.createImage = function(image, kind, callback, x, y, w, h) {
-    return image ? new Picture2D(image.getPath(kind)[1], callback, x, y, w, h) :
-        new Picture2D();
-}
-
-// -------------------------------------------------------
-
-Picture2D.createImageWithID = function(id, kind, callback, x, y, w, h) {
-    return Picture2D.createImage(RPM.datasGame.pictures.get(kind, id), kind,
-        callback, x, y, w, h);
 }

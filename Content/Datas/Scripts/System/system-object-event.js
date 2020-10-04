@@ -45,7 +45,7 @@ class SystemObjectEvent
         // Reactions
         let jsonReactions = json.r;
         this.reactions = {};
-        for (idState in jsonReactions)
+        for (let idState in jsonReactions)
         {
             this.reactions[idState] = new SystemObjectReaction(jsonReactions[
                 idState]);

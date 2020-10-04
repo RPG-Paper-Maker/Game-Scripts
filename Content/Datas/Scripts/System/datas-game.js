@@ -36,8 +36,9 @@
 */
 function DatasGame()
 {
-    this.commonEvents = new DatasCommonEvents();
     this.system = new DatasSystem();
+    this.pictures = new DatasPictures();
+    this.commonEvents = new DatasCommonEvents();
     /*
     this.tilesets = new DatasTilesets();
     this.songs = new DatasSongs();
@@ -69,8 +70,9 @@ DatasGame.prototype = {
 
     read: async function()
     {
-        //await this.commonEvents.read();
         await this.system.read();
+        await this.pictures.read();
+        await this.commonEvents.read();
         /*
         await this.songs.read();
         await this.commonEvents.read();
@@ -85,7 +87,7 @@ DatasGame.prototype = {
         await this.shapes.read();
         await this.specialElements.read();
         await this.animations.read();
-        await this.pictures.read();
+        
         await this.tilesets.read();
         await this.classes.read();
         await this.heroes.read();

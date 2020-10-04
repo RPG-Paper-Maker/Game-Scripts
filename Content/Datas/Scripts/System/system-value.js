@@ -41,7 +41,7 @@ class SystemValue
     // -------------------------------------------------------
     /** Create a new value from a command and iterator
     *   @static
-    *   @param {?[]} command The list describing the command
+    *   @param {any[]} command The list describing the command
     *   @param {Object} iterator The iterator
     *   @returns {SystemValue}
     */

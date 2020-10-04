@@ -9,147 +9,154 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemPicture
-//
-// -------------------------------------------------------
-
 /** @class
-*   A picture of the game.
-*   @property {boolean} isBR Indicate if the pciture is a BR (Basic Ressource).
+*   A picture of the game
+*   @property {PictureKind} kind The kind of picture
+*   @property {string} name The picture name
+*   @property {boolean} isBR Indicate if the picture is a BR (Basic Ressource)
+*   @property {boolean} isDLC Indicate if the picture is a DLC
+*   @property {number[]} jsonCollisions The json used for the picture collision
+*   @property {boolean} collisionsRepeat Indicate if collision is repeated (for 
+*   characters)
+*   @param {Object} [json=undefined] Json object describing the picture
+*   @param {Object} [kind=PictureKind.Pictures] The kind of picture
 */
-function SystemPicture(){
-
-}
-
-/** Get the folder associated to a kind of picture.
-*   @param {PictureKind} kind The kind of picture.
-*   @param {boolean} isBR Indicate if the pciture is a BR.
-*   @returns {string}
-*/
-SystemPicture.getFolder = function(kind, isBR, dlc){
-    var folder = isBR ? RPM.PATH_BR : (dlc ? RPM.PATH_DLCS + "/" + dlc : RPM
-        .ROOT_DIRECTORY_LOCAL);
-    var dir = SystemPicture.getLocalFolder(kind);
-    var path = folder + dir;
-
-    return [path, path];
-};
-
-// -------------------------------------------------------
-
-/** Get the local folder associated to a kind of picture.
-*   @param {PictureKind} kind The kind of picture.
-*   @returns {string}
-*/
-SystemPicture.getLocalFolder = function(kind){
-    switch(kind){
-    case PictureKind.Bars:
-        return RPM.PATH_BARS;
-    case PictureKind.Icons:
-        return RPM.PATH_ICONS;
-    case PictureKind.Autotiles:
-        return RPM.PATH_AUTOTILES;
-    case PictureKind.Characters:
-        return RPM.PATH_CHARACTERS;
-        case PictureKind.Mountains:
-        return RPM.PATH_MOUNTAINS;
-    case PictureKind.Tilesets:
-        return RPM.PATH_TILESETS;
-    case PictureKind.Walls:
-        return RPM.PATH_WALLS;
-    case PictureKind.Battlers:
-        return RPM.PATH_BATTLERS;
-    case PictureKind.Facesets:
-        return RPM.PATH_FACESETS;
-    case PictureKind.WindowSkins:
-        return RPM.PATH_WINDOW_SKINS;
-    case PictureKind.TitleScreen:
-        return RPM.PATH_TITLE_SCREEN;
-    case PictureKind.Objects3D:
-        return RPM.PATH_OBJECTS_3D;
-    case PictureKind.Pictures:
-        return RPM.PATH_HUD_PICTURES;
-    case PictureKind.Animations:
-        return RPM.PATH_ANIMATIONS;
-    case PictureKind.Skyboxes:
-        return RPM.PATH_SKYBOXES;
+class SystemPicture
+{
+    constructor(json, kind = PictureKind.Pictures)
+    {
+        this.kind = kind;
+        if (json)
+        {
+            this.read(json);
+        }
     }
 
-    return "";
-};
-
-// -------------------------------------------------------
-
-SystemPicture.prototype = {
-
-    /** Read the JSON associated to the picture.
-    *   @param {Object} json Json object describing the object.
-    */
-    read: function(json){
-        this.name = json.name;
-        this.isBR = json.br;
-        this.dlc = RPM.defaultValue(json.d, "");
-        this.jsonCollisions = json.col;
-        this.collisionsRepeat = json.rcol;
-
-        if (typeof this.jsonCollisions === 'undefined')
-            this.jsonCollisions = new Array;
-        if (typeof this.collisionsRepeat === 'undefined')
-            this.collisionsRepeat = false;
-    },
-
-    load: function(pictureKind) {
-        this.picture = Picture2D.createImage(this, pictureKind);
-    },
-
     // -------------------------------------------------------
-
-    /** Get the absolute path associated to this picture.
-    *   @param {PictureKind} kind The kind of picture.
+    /** Get the folder associated to a kind of picture
+    *   @static
+    *   @param {PictureKind} kind The kind of picture
+    *   @param {boolean} isBR Indicate if the picture is a BR
+    *   @param {boolean} isDLC Indicate if the picture is a DLC
     *   @returns {string}
     */
-    getPath: function(kind) {
-        var paths = SystemPicture.getFolder(kind, this.isBR, this.dlc);
-        paths[0] += "/" + this.name;
-        paths[1] += "/" + this.name;
-
-        return paths;
-    },
+    static getFolder = function(kind, isBR, dlc)
+    {
+        return (isBR ? RPM.PATH_BR : (dlc ? RPM.PATH_DLCS + RPM.STRING_SLASH + 
+            dlc : RPM.ROOT_DIRECTORY_LOCAL)) + SystemPicture.getLocalFolder(kind);
+    }
 
     // -------------------------------------------------------
-
-    /** Read collisions according to image size.
+    /** Get the local folder associated to a kind of picture
+    *   @static
+    *   @param {PictureKind} kind The kind of picture
+    *   @returns {string}
     */
-    readCollisionsImage: function(image) {
+    static getLocalFolder = function(kind)
+    {
+        switch(kind)
+        {
+        case PictureKind.Bars:
+            return RPM.PATH_BARS;
+        case PictureKind.Icons:
+            return RPM.PATH_ICONS;
+        case PictureKind.Autotiles:
+            return RPM.PATH_AUTOTILES;
+        case PictureKind.Characters:
+            return RPM.PATH_CHARACTERS;
+            case PictureKind.Mountains:
+            return RPM.PATH_MOUNTAINS;
+        case PictureKind.Tilesets:
+            return RPM.PATH_TILESETS;
+        case PictureKind.Walls:
+            return RPM.PATH_WALLS;
+        case PictureKind.Battlers:
+            return RPM.PATH_BATTLERS;
+        case PictureKind.Facesets:
+            return RPM.PATH_FACESETS;
+        case PictureKind.WindowSkins:
+            return RPM.PATH_WINDOW_SKINS;
+        case PictureKind.TitleScreen:
+            return RPM.PATH_TITLE_SCREEN;
+        case PictureKind.Objects3D:
+            return RPM.PATH_OBJECTS_3D;
+        case PictureKind.Pictures:
+            return RPM.PATH_HUD_PICTURES;
+        case PictureKind.Animations:
+            return RPM.PATH_ANIMATIONS;
+        case PictureKind.Skyboxes:
+            return RPM.PATH_SKYBOXES;
+        }
+        return "";
+    }
+
+    // -------------------------------------------------------
+    /** Read the JSON associated to the picture
+    *   @param {Object} json Json object describing the picture
+    */
+    read(json)
+    {
+        this.name = json.name;
+        this.isBR = json.br;
+        this.dlc = RPM.defaultValue(json.d, RPM.STRING_EMPTY);
+        this.jsonCollisions = RPM.defaultValue(json.col, []);
+        this.collisionsRepeat = RPM.defaultValue(json.rcol, false);
+    }
+
+    // -------------------------------------------------------
+    /** Read the JSON associated to the picture
+    */
+    load()
+    {
+        this.picture = Picture2D.createImage(this, this.kind);
+    }
+
+    // -------------------------------------------------------
+    /** Get the absolute path associated to this picture
+    *   @returns {string}
+    */
+    getPath()
+    {
+        return SystemPicture.getFolder(this.kind, this.isBR, this.dlc) + RPM
+            .STRING_SLASH + this.name;
+    }
+
+    // -------------------------------------------------------
+    /** Read collisions according to image size
+    *   @param {Image} image The image texture
+    */
+    readCollisionsImage(image)
+    {
         this.width = Math.floor(image.width / RPM.SQUARE_SIZE);
         this.height = Math.floor(image.height / RPM.SQUARE_SIZE);
-
         this.readCollisions();
-    },
+    }
 
     // -------------------------------------------------------
-
-    /** Read collisions. We assume that this.width and this.height had been
-    *   edited.
+    /** Read collisions, we assume that this.width and this.height had been
+    *   edited
     */
-    readCollisions: function() {
+    readCollisions()
+    {
         if (!this.jsonCollisions)
+        {
             return;
-
-        var i, j, k, l, w, h, index, collision;
-        var jsonTab, jsonKey, jsonVal;
-        w = this.width / RPM.FRAMES;
-        h = this.height / 4;
+        }
 
         // Initialize
+        let w = this.width / RPM.FRAMES;
+        let h = this.height / 4;
         this.collisions = new Array(this.width * this.height);
-        for (i = 0; i < this.width * this.height; i++)
+        let i, l;
+        for (i = 0, l = this.width * this.height; i < l; i++)
+        {
             this.collisions[i] = null;
+        }
 
         // Insert collision
-        for (i = 0, l = this.jsonCollisions.length; i < l ; i++) {
+        let j, k, jsonTab, jsonKey, jsonVal, index, collision;
+        for (i = 0, l = this.jsonCollisions.length; i < l ; i++)
+        {
             jsonTab = this.jsonCollisions[i];
             jsonKey = jsonTab.k;
             jsonVal = jsonTab.v;
@@ -158,72 +165,77 @@ SystemPicture.prototype = {
             collision.read(jsonVal);
             this.collisions[index] = collision;
 
-            if (this.collisionsRepeat) {
-                for (j = 0; j < RPM.FRAMES; j++) {
-                    for (k = 0; k < 4; k++) {
+            if (this.collisionsRepeat)
+            {
+                for (j = 0; j < RPM.FRAMES; j++)
+                {
+                    for (k = 0; k < 4; k++)
+                    {
                         this.collisions[(jsonKey[0] + (j * w)) + ((jsonKey[1] +
-                        (k * h)) * this.width)] = collision;
+                            (k * h)) * this.width)] = collision;
                     }
                 }
             }
         }
-
         this.jsonCollisions = null;
-    },
+    }
 
     // -------------------------------------------------------
-
-    /** Get a specific collision square according to texture.
+    /** Get a specific collision square according to texture
+    *   @param {number[]} pos Texture position
     */
-    getCollisionAt: function(texture) {
-        return this.getCollisionAtPos(texture[0], texture[1]);
-    },
+    getCollisionAt(pos)
+    {
+        return this.getCollisionAtPos(pos[0], pos[1]);
+    }
 
     // -------------------------------------------------------
-
-    /** Get a specific collision square according to texture.
+    /** Get a specific collision square according to texture
+    *   @param {number} x Texture x position
+    *   @param {number} y Texture y position
     */
-    getCollisionAtPos: function(x, y) {
+    getCollisionAtPos(x, y)
+    {
         return this.collisions[x + y * this.width];
-    },
-
-
-    // -------------------------------------------------------
-
-    /** Get a specific collision square according to index.
-    */
-    getCollisionAtIndex: function(index) {
-        return this.getCollisionAtPos(index % this.width,
-                                      Math.floor(index / this.width));
-    },
+    }
 
     // -------------------------------------------------------
-
-    /** Get a specific collision for wall.
+    /** Get a specific collision square according to index
+    *   @param {number} index The index positions
     */
-    getSquaresForWall: function(texture) {
-        var i, l, w = texture[2], h = texture[3], x, y;
-        var square, leftSquare, rightSquare, fusion;
-        l = w * h;
-        var squares = new Array(l);
-        for (i = 0; i < l; i++) {
+    getCollisionAtIndex(index)
+    {
+        return this.getCollisionAtPos(index % this.width, Math.floor(index / 
+            this.width));
+    }
+
+    // -------------------------------------------------------
+    /** Get a specific collision for wall
+    *   @param {number[]} texture Texture position
+    */
+    getSquaresForWall(texture)
+    {
+        let w = texture[2];
+        let h = texture[3];
+        let l = w * h;
+        let squares = new Array(l);
+        let x, y, leftSquare, rightSquare, square;
+        for (let i = 0; i < l; i++)
+        {
             x = texture[0] + (i % w);
             y = texture[1] + Math.floor(i / w);
-
-            if (x === 3) {
+            if (x === 3)
+            {
                 leftSquare = this.getCollisionAtPos(0, y);
                 rightSquare = this.getCollisionAtPos(2, y);
-
-                if (leftSquare === null && rightSquare === null) {
+                if (leftSquare === null && rightSquare === null)
+                {
                     squares[i] = null;
-                }
-                else if (leftSquare === null || rightSquare === null) {
-                    if (leftSquare === null)
-                        square = rightSquare;
-                    else
-                        square = leftSquare;
-
-                    if (!square) {
+                } else if (leftSquare === null || rightSquare === null)
+                {
+                    square = (leftSquare === null ? rightSquare : leftSquare);
+                    if (!square)
+                    {
                         RPM.showErrorMessage("Your wall image " + this.name +
                             " is not using a correct template. Your image "
                             + "should be this size: WIDTH: 3 * SQUARE_SIZE, "
@@ -232,62 +244,59 @@ SystemPicture.prototype = {
                             + "squares.");
                         return;
                     }
-
                     squares[i] = square.rect;
                 }
                 else
+                {
                     squares[i] = [0, 0, RPM.SQUARE_SIZE, RPM.SQUARE_SIZE];
-            }
-            else {
+                }
+            } else
+            {
                 square = this.getCollisionAtPos(x, y);
-                if (square)
-                    squares[i] = square.rect;
-                else
-                    squares[i] = null;
+                squares[i] = square ? square.rect : null;
             }
         }
-
         return CollisionSquare.unionSquares(squares, l, w, h);
-    },
+    }
 
     // -------------------------------------------------------
-
-    /** Get a specific collision square according to texture.
+    /** Get a specific collision square according to texture
+    *   @param {number[]} texture Texture position
     */
-    getSquaresForTexture: function(texture) {
-        var i, l, w = texture[2], h = texture[3];
-        var square;
-        l = w * h;
+    getSquaresForTexture(texture)
+    {
+        let w = texture[2];
+        let h = texture[3];
+        let l = w * h;
         var squares = new Array(l);
-        for (i = 0; i < l; i++) {
-            square = this.getCollisionAtPos(texture[0] + (i % w), texture[1] +
-                     Math.floor(i / w));
-            if (square)
-                squares[i] = square.rect;
-            else
-                squares[i] = null;
+        let square;
+        for (let i = 0; i < l; i++)
+        {
+            square = this.getCollisionAtPos(texture[0] + (i % w), texture[1] + 
+                Math.floor(i / w));
+            square[i] = square ? square.rect : null;
         }
-
         return CollisionSquare.unionSquares(squares, l, w, h);
-    },
+    }
 
     // -------------------------------------------------------
-
-    /** Get a specific collision square according to texture.
+    /** Get a specific collision square according to texture
+    *   @param {Image} image The image texture
     */
-    getSquaresForStates: function(image) {
-        var w = Math.floor(image.width / RPM.SQUARE_SIZE / RPM.FRAMES);
-        var h = Math.floor(image.height / RPM.SQUARE_SIZE / 4);
-        var states = new Array(RPM.FRAMES * 4);
-        var i, j;
-
-        for (i = 0; i < RPM.FRAMES; i++) {
-            for (j = 0; j < 4; j++) {
-                states[i + (j * RPM.FRAMES)] = this.getSquaresForTexture(
-                    [i * w, j * h, w, h]);
+    getSquaresForStates(image)
+    {
+        let w = Math.floor(image.width / RPM.SQUARE_SIZE / RPM.FRAMES);
+        let h = Math.floor(image.height / RPM.SQUARE_SIZE / 4);
+        let states = new Array(RPM.FRAMES * 4);
+        let j;
+        for (let i = 0; i < RPM.FRAMES; i++)
+        {
+            for (j = 0; j < 4; j++)
+            {
+                states[i + (j * RPM.FRAMES)] = this.getSquaresForTexture([i * w,
+                    j * h, w, h]);
             }
         }
-
         return states;
     }
 }

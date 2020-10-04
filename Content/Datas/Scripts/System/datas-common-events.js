@@ -41,10 +41,9 @@ class DatasCommonEvents
         /* First, we'll need to reorder the json list according to
         inheritance */
         let jsonObjects = json.commonObjects;
-        let l = jsonObjects.length;
-        let reorderedList = new Array(l);
+        let reorderedList = [];
         let jsonObject;
-        for (let i = 0; i < l; i++)
+        for (let i = 0, l = jsonObjects.length; i < l; i++)
         {
             jsonObject = jsonObjects[i];
             this.modelReOrder(jsonObject, reorderedList, jsonObjects, l);

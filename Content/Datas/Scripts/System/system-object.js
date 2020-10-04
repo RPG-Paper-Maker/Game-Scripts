@@ -122,14 +122,14 @@ class SystemObject
         let list;
         for (i = 0, l = jsonList.length; i < l; i++)
         {
-            jsonElement = jsonEvents[i];
-            element = new SystemObjectEvent(jsonEvent);
+            jsonElement = jsonList[i];
+            element = new SystemObjectEvent(jsonElement);
             if (this.events.hasOwnProperty(element.idEvent))
             {
                 list = this.events[element.idEvent];
                 for (j = 0, m = list.length; j < m; j++)
                 {
-                    if (list[j].isEqual(event))
+                    if (list[j].isEqual(element))
                     {
                         break;
                     }
@@ -140,12 +140,12 @@ class SystemObject
                 }
                 else
                 {
-                    list.push(event);
+                    list.push(element);
                 }
             }
             else
             {
-                this.events[event.idEvent] = [event];
+                this.events[element.idEvent] = [element];
             }
         }
 
