@@ -9,27 +9,29 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemProperty
-//
-// -------------------------------------------------------
-
 /** @class
-*   A property of an object.
-*   @property {SystemValue} initialValue The initial value of the property.
+*   A property of an object
+*   @property {number} id The ID of the property
+*   @property {SystemValue} initialValue The initial value of the property
+*   @param {Object} [json=undefined] Json object describing the property
 */
-function SystemProperty() {
+class SystemProperty
+{
+    constructor(json)
+    {
+        if (json)
+        {
+            this.read(json);
+        }
+    }
 
-}
-
-SystemProperty.prototype = {
-
-    /** Read the JSON associated to the property.
-    *   @param {Object} json Json object describing the object.
+    // -------------------------------------------------------
+    /** Read the JSON associated to the property
+    *   @param {Object} json Json object describing the property
     */
-    read: function(json) {
-        this.id = json.id
+    read(json)
+    {
+        this.id = json.id;
         this.initialValue = SystemValue.readOrNone(json.iv);
     }
 }

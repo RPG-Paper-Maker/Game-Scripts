@@ -9,79 +9,79 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemObjectEvent
-//
-// -------------------------------------------------------
-
 /** @class
-*   An event that an object can react on.
-*   @property {boolean} isSystem Boolean indicating if it is an event system.
-*   @property {number} idEvent ID of the event.
-*   @property {SystemValue[]} parameters All the parameters values.
+*   An event that an object can react on
+*   @property {boolean} isSystem Boolean indicating if it is an event system
+*   @property {number} idEvent ID of the event
+*   @property {SystemValue[]} parameters All the parameters values
 *   @property {SystemReaction[]} reactions List of all the reactions according
-*   to states id.
+*   to states id
+*   @param {Object} [json=undefined] Json object describing the object event
 */
-function SystemObjectEvent(){
+class SystemObjectEvent
+{
+    constructor(json)
+    {
+        if (json)
+        {
+            this.read(json);
+        }
+    }
 
-}
-
-SystemObjectEvent.prototype = {
-
-    /** Read the JSON associated to the object event.
-    *   @param {Object} json Json object describing the object.
+    // -------------------------------------------------------
+    /** Read the JSON associated to the object event
+    *   @param {Object} json Json object describing the object event
     */
-    read: function(json){
-        var i, l, id, idState;
-
+    read(json)
+    {
         this.isSystem = json.sys;
         this.idEvent = json.id;
 
         // Parameters
-        var listEvents = this.isSystem ?
-                    RPM.datasGame.commonEvents.eventsSystem
-                  : RPM.datasGame.commonEvents.eventsUser;
-        this.parameters =
-             SystemParameter.readParametersWithDefault(
-                 json, listEvents[this.idEvent].parameters);
+        this.parameters = SystemParameter.readParametersWithDefault(json, (this
+            .isSystem ? RPM.datasGame.commonEvents.eventsSystem : RPM.datasGame
+            .commonEvents.eventsUser)[this.idEvent].parameters);
 
         // Reactions
-        var jsonReactions = json["r"];
+        let jsonReactions = json.r;
         this.reactions = {};
-        for (idState in jsonReactions){
-            var jsonReaction = jsonReactions[idState];
-            var reaction = new SystemObjectReaction();
-            reaction.read(jsonReaction);
-            this.reactions[idState] = reaction;
+        for (idState in jsonReactions)
+        {
+            this.reactions[idState] = new SystemObjectReaction(jsonReactions[
+                idState]);
         }
-    },
+    }
 
     // -------------------------------------------------------
-
-    /** Check if this event is equal to another.
-    *   @param {SystemObjectEvent} event The event to compare.
+    /** Check if this event is equal to another
+    *   @param {SystemObjectEvent} event The event to compare
     *   @returns {boolean}
     */
-    isEqual: function(event){
+    isEqual(event)
+    {
         if (this.isSystem !== event.isSystem || this.idEvent !== event.idEvent)
+        {
             return false;
-
-        for (var i = 1, l = this.parameters.length; i < l; i++){
-            if (!this.parameters[i].isEqual(event.parameters[i]))
-                return false;
         }
 
+        for (let i = 1, l = this.parameters.length; i < l; i++)
+        {
+            if (!this.parameters[i].isEqual(event.parameters[i]))
+            {
+                return false;
+            }
+        }
         return true;
-    },
+    }
 
     // -------------------------------------------------------
-
-    /** Add reactions to the event.
-    *   @param {Object} reactions The reactions to add.
+    /** Add reactions to the event
+    *   @param {Object} reactions The reactions to add
     */
-    addReactions: function(reactions){
-        for (var idState in reactions){
+    addReactions(reactions)
+    {
+        for (let idState in reactions)
+        {
             this.reactions[idState] = reactions[idState];
         }
     }

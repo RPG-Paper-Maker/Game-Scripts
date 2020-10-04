@@ -36,11 +36,11 @@
 */
 function DatasGame()
 {
+    this.commonEvents = new DatasCommonEvents();
     this.system = new DatasSystem();
     /*
     this.tilesets = new DatasTilesets();
     this.songs = new DatasSongs();
-    this.commonEvents = new DatasCommonEvents();
     this.items = new DatasItems();
     this.skills = new DatasSkills();
     this.weapons = new DatasWeapons();
@@ -69,6 +69,7 @@ DatasGame.prototype = {
 
     read: async function()
     {
+        //await this.commonEvents.read();
         await this.system.read();
         /*
         await this.songs.read();
@@ -100,8 +101,6 @@ DatasGame.prototype = {
     /** Read the JSON files associated to the settings.
     */
     readSettings: function(){
-        this.settings = {};
-
         RPM.openFile(this, RPM.FILE_VARIABLES, true, function(res){
             var json = JSON.parse(res).variables;
             var i, j, l, ll, variable;

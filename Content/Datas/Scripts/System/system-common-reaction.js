@@ -9,30 +9,31 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemCommonReaction
-//
-// -------------------------------------------------------
-
 /** @class
-*   A common reaction.
-*   @property {boolean} blockingHero Indicates if this reaction is blocking
-*   the hero.
-*   @property {Object} labels Hash of all the labels.
-*   @property {Tree} commands All the commands.
+*   A common reaction
+*   @extends SystemObjectReaction
+*   @property {SystemParameter[]} parameters 
+*   @param {Object} [json=undefined] Json object describing the common reaction
 */
-function SystemCommonReaction() {
-    SystemObjectReaction.call(this);
-}
+class SystemCommonReaction extends SystemObjectReaction
+{
+    constructor(json)
+    {
+        super();
+        if (json)
+        {
+            this.read(json);
+        }
+    }
 
-SystemCommonReaction.prototype = Object.create(SystemObjectReaction.prototype);
+    // -------------------------------------------------------
+    /** Read the JSON associated to the common reaction
+    *   @param {Object} json Json object describing the common reaction
+    */
+    read(json)
+    {
+        super.read(json);
 
-/** Read the JSON associated to the object reaction.
-*   @param {Object} json Json object describing the object.
-*/
-SystemCommonReaction.prototype.read = function(json) {
-    SystemObjectReaction.prototype.read.call(this, json);
-
-    this.parameters = SystemParameter.readParameters(json);
+        this.parameters = SystemParameter.readParameters(json);
+    }
 }

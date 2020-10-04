@@ -9,26 +9,27 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemEvent
-//
-// -------------------------------------------------------
-
 /** @class
-*   An event that can be called.
-*   @property {SystemParameters[]} parameters A list of parameters.
+*   An event that can be called
+*   @property {SystemParameters[]} parameters A list of parameters
+*   @param {Object} [json=undefined] json object describing the event
 */
-function SystemEvent(){
+class SystemEvent
+{
+    constructor(json)
+    {
+        if (json)
+        {
+            this.read(json);
+        }
+    }
 
-}
-
-SystemEvent.prototype = {
-
-    /** Read the JSON associated to the event.
-    *   @param {Object} json Json object describing the object.
+    // -------------------------------------------------------
+    /** Read the JSON associated to the event
+    *   @param {Object} json Json object describing the event
     */
-    read: function(json){
+    read(json)
+    {
         this.parameters = SystemParameter.readParameters(json);
     }
 }

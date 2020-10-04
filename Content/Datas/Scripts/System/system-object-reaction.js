@@ -9,80 +9,92 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemObjectReaction
-//
-// -------------------------------------------------------
-
 /** @class
-*   A reaction to an event.
+*   A reaction to an event
+*   @property {string[]} [labels=[]] List of all labels
+*   @property {number} idEvent The event ID
+*   @property {boolean} blockingHero Indicates if this reaction is blocking
+*   the hero
+*   @property {Tree} commands All the commands
+*   @param {Object} json Json object describing the object reaction
 */
-function SystemObjectReaction() {
-    this.labels = new Array;
-}
-
-/** Read the JSON associated to the object reaction.
-*   @param {Object} json Json object describing the object.
-*/
-SystemObjectReaction.prototype.read = function(json) {
-    this.idEvent = json.id;
-
-    // Options
-    this.blockingHero = json.bh;
-
-    // Read commands
-    var jsonCommands = json.c;
-    var commands = new Tree("root");
-    this.readChildrenJSON(jsonCommands, commands);
-    this.commands = commands;
-}
-
-// -------------------------------------------------------
-
-/** Read the JSON children associated to the object reaction.
-*   @param {Object} jsonCommands Json object describing the object.
-*   @param {Tree} commands All the commands (final result).
-*/
-SystemObjectReaction.prototype.readChildrenJSON = function(jsonCommands,
-    commands)
+class SystemObjectReaction
 {
-    var node, command, choice;
-
-    choice = null;
-    for (var j = 0, ll = jsonCommands.length; j < ll; j++){
-        command = EventCommand.getEventCommand(jsonCommands[j]);
-
-        // Comment
-        if (command instanceof EventCommandComment)
+    constructor(json)
+    {
+        this.labels = [];
+        if (json)
         {
-            continue;
-        }
-
-        // Add node
-        node = commands.add(command);
-
-        // If text before choice, make a link
-        if (command instanceof EventCommandShowText) {
-            choice = command;
-        } else if (command instanceof EventCommandDisplayChoice) {
-            command.setShowText(choice);
-            choice = null;
-        } else if (command instanceof EventCommandLabel) // Label
-        {
-            this.labels.push([command.label, node]);
-        }
-        if (jsonCommands[j].hasOwnProperty("children")) {
-            this.readChildrenJSON(jsonCommands[j].children, node);
+            this.read(json);
         }
     }
-}
 
-// -------------------------------------------------------
+    // -------------------------------------------------------
+    /** Read the JSON associated to the object reaction
+    *   @param {Object} json Json object describing the object reaction
+    */
+    read(json)
+    {
+        this.idEvent = json.id;
 
-/** Get the first node command of the reaction.
-*   @returns {Node}
-*/
-SystemObjectReaction.prototype.getFirstCommand = function() {
-    return this.commands.root.firstChild;
+        // Options
+        this.blockingHero = json.bh;
+
+        // Read commands
+        let jsonCommands = json.c;
+        let commands = new Tree("root");
+        this.readChildrenJSON(jsonCommands, commands);
+        this.commands = commands;
+    }
+
+    // -------------------------------------------------------
+    /** Read the JSON children associated to the object reaction
+    *   @param {Object} jsonCommands Json object describing the object
+    *   @param {Tree} commands All the commands (final result)
+    */
+    readChildrenJSON(jsonCommands,commands)
+    {
+        let choice = null;
+        let command, node;
+        for (let i = 0, l = jsonCommands.length; i < l; i++)
+        {
+            command = EventCommand.getEventCommand(jsonCommands[i]);
+
+            // Comment
+            if (command instanceof EventCommandComment)
+            {
+                continue;
+            }
+
+            // Add node
+            node = commands.add(command);
+
+            // If text before choice, make a link
+            if (command instanceof EventCommandShowText)
+            {
+                choice = command;
+            } else if (command instanceof EventCommandDisplayChoice)
+            {
+                command.setShowText(choice);
+                choice = null;
+            } else if (command instanceof EventCommandLabel) // Label
+            {
+                this.labels.push([command.label, node]);
+            }
+            if (jsonCommands[i].children)
+            {
+                this.readChildrenJSON(jsonCommands[i].children, node);
+            }
+        }
+    }
+
+    // -------------------------------------------------------
+
+    /** Get the first node command of the reaction
+    *   @returns {Node}
+    */
+    getFirstCommand()
+    {
+        return this.commands.root.firstChild;
+    }
 }

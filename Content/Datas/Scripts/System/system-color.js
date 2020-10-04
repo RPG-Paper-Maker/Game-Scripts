@@ -10,7 +10,13 @@
 */
 
 /** @class
-*   An color of the game
+*   @property {number} red The red color between 0 and 255
+*   @property {number} green The green color between 0 and 255
+*   @property {number} blue The blue color between 0 and 255
+*   @property {number} alpha The alpha value between 0 and 1
+*   @property {string} rgb The rgb value used for ctx
+*   @property {THREE.Color} color The three.js color
+*   @param {Object} [json=undefined] Json object describing the color
 */
 class SystemColor
 {
@@ -22,37 +28,53 @@ class SystemColor
         }
     }
 
+    // -------------------------------------------------------
+    /** Create a new color according to RGBA values
+    *   @static
+    *   @param {number} r The red color between 0 and 255
+    *   @param {number} g The green color between 0 and 255
+    *   @param {number} b The blue color between 0 and 255
+    *   @param {number} a The alpha value between 0 and 255
+    */
     static createColor(r, g, b, a)
     {
-        var color = new SystemColor();
+        let color = new SystemColor();
         color.initialize(r, g, b, a);
         return color;
     }
 
     // -------------------------------------------------------
+    /** Used for mixing vectors according to alpha in getHex algorithm
+    *   @static
+    *   @param {THREE.Vector3} x The x position
+    *   @param {THREE.Vector3} y The y position
+    *   @param {number} aThe alpha value between 0 and 1
+    */
     static mix(x, y, a)
     {
         return x.clone().multiplyScalar(1 - a).add(y.clone().multiplyScalar(a));
     }
 
-    initialize(r, g, b, a)
+    // -------------------------------------------------------
+    /** Initialize the color according to RGBA values
+    *   @param {number} r The red color between 0 and 255
+    *   @param {number} g The green color between 0 and 255
+    *   @param {number} b The blue color between 0 and 255
+    *   @param {number} a The alpha value between 0 and 255
+    */
+    initialize(r, g, b, a = 255)
     {
-        // Default values
-        if (typeof a === 'undefined') a = 255;
-
         this.red = r;
         this.green = g;
         this.blue = b;
         this.alpha = a / 255;
-
         this.rgb = "rgb(" + this.red + ", " + this.green + ", " + this.blue + ")";
         this.color = new THREE.Color(this.rgb);
     }
 
     // -------------------------------------------------------
-
-    /** Read the JSON associated to the element.
-    *   @param {Object} json Json object describing the object.
+    /** Read the JSON associated to the color
+    *   @param {Object} json Json object describing the color
     */
     read(json)
     {
@@ -60,24 +82,24 @@ class SystemColor
     }
 
     // -------------------------------------------------------
-
+    /** Get the hex value of the color
+    *   @param {THREE.Vector4} tone The tone value
+    *   @returns {string}
+    */
     getHex(tone)
     {
         if (tone)
         {
-            var rgb, w, intensity, m;
-
-            rgb = new THREE.Vector3(Math.max(Math.min(this.color.r + tone.x, 1),
-                -1), Math.max(Math.min(this.color.g + tone.y, 1), -1)
-                , Math.max(Math.min(this.color.b + tone.z, 1), -1));
-            w = new THREE.Vector3(0.2125, 0.7154, 0.0721);
-            intensity = rgb.dot(w);
-            m = SystemColor.mix(new THREE.Vector3(intensity, intensity,
+            let rgb = new THREE.Vector3(Math.max(Math.min(this.color.r + tone.x, 
+                1), -1), Math.max(Math.min(this.color.g + tone.y, 1), -1), Math
+                .max(Math.min(this.color.b + tone.z, 1), -1));
+            let w = new THREE.Vector3(0.2125, 0.7154, 0.0721);
+            let intensity = rgb.dot(w);
+            let m = SystemColor.mix(new THREE.Vector3(intensity, intensity,
                 intensity), rgb, tone.w);
             return new THREE.Color(Math.min(Math.max(0, m.x), 1), Math.min(Math
                 .max(0, m.y), 1), Math.min(Math.max(0, m.z), 1)).getHex();
         }
-
         return this.color.getHex();
     }
 }

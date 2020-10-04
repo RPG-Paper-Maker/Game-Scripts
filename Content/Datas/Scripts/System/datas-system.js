@@ -32,21 +32,7 @@ class DatasSystem
     async read()
     {
         let json = await RPM.parseFileJSON(RPM.FILE_SYSTEM);
-
-        // Font sizes & font names
-        this.fontSizes = RPM.readJSONSystemList(json.fs, (element) =>
-        {
-            return SystemValue.readOrDefaultNumber(element.s, 0);
-        }, false);
-        this.fontNames = RPM.readJSONSystemList(json.fn, (element) =>
-        {
-            return SystemValue.readOrDefaultMessage(element.f, RPM.DEFAULT_FONT);
-        }, false);
         
-
-        // Initialize loading scene now that basics are loaded
-        //RPM.loadingScene = new SceneLoading();
-
         // Project name
         this.projectName = new SystemLang(json.pn);
         Platform.setWindowTitle(this.projectName.name());
@@ -93,7 +79,6 @@ class DatasSystem
         // Hero beginning
         this.idMapStartHero = json.idMapHero;
         this.idObjectStartHero = json.idObjHero;
-        //await this.getModelHero();
 
         // Debug bounding box
         this.showBB = RPM.defaultValue(json.bb, false);
@@ -114,56 +99,25 @@ class DatasSystem
         this.windowSkins = RPM.readJSONSystemList(json.wskins, SystemWindowSkin);
         this.cameraProperties = RPM.readJSONSystemList(json.cp, 
             SystemCameraProperties);
-
-        /*
-        // Detections
-        jsonList = json.d;
-        l = jsonList.length;
-        this.detections = new Array(l + 1);
-        for (i = 0; i < l; i++) {
-            jsonElement = jsonList[i];
-            id = jsonElement.id;
-            element = new SystemDetection();
-            element.read(jsonElement);
-            this.detections[id] = element;
-        }
-
-        // Speeds
-        jsonList = json.sf;
-        l = jsonList.length;
-        this.speeds = new Array(l + 1);
-        for (i = 0; i < l; i++) {
-            jsonElement = jsonList[i];
-            id = jsonElement.id;
-            element = SystemValue.readOrDefaultNumberDouble(jsonElement.v, 1);
-            this.speeds[id] = element;
-        }
-        // Frequencies
-        jsonList = json.f;
-        l = jsonList.length;
-        this.frequencies = new Array(l + 1);
-        for (i = 0; i < l; i++) {
-            jsonElement = jsonList[i];
-            id = jsonElement.id;
-            element = SystemValue.readOrDefaultNumberDouble(jsonElement.v, 1);
-            this.frequencies[id] = element;
-        }
-
-        // Skyboxes
-        jsonList = json.sb;
-        l = jsonList.length;
-        this.skyboxes = new Array(l + 1);
-        for (i = 0; i < l; i++) {
-            jsonElement = jsonList[i];
-            id = jsonElement.id;
-            element = new SystemSkybox();
-            element.read(jsonElement);
-            this.skyboxes[id] = element;
-        }
-
-        // read song now that BR path is loaded
-        RPM.datasGame.songs.read();
-
+        this.detections = RPM.readJSONSystemList(json.d, SystemDetection);
+        this.skyboxes = RPM.readJSONSystemList(json.sb, SystemSkybox);
+        this.fontSizes = RPM.readJSONSystemList(json.fs, (element) =>
+        {
+            return SystemValue.readOrDefaultNumber(element.s, 0);
+        }, false);
+        this.fontNames = RPM.readJSONSystemList(json.fn, (element) =>
+        {
+            return SystemValue.readOrDefaultMessage(element.f, RPM.DEFAULT_FONT);
+        }, false);
+        this.speeds = RPM.readJSONSystemList(json.sf, (element) =>
+        {
+            return SystemValue.readOrDefaultNumberDouble(element.v, 1);
+        }, false);
+        this.frequencies = RPM.readJSONSystemList(json.f, (element) =>
+        {
+            return SystemValue.readOrDefaultNumberDouble(element.v, 1);
+        }, false);
+        
         // Sounds
         this.soundCursor = new SystemPlaySong(SongKind.Sound);
         this.soundCursor.read(json.scu);
@@ -174,9 +128,12 @@ class DatasSystem
         this.soundImpossible = new SystemPlaySong(SongKind.Sound);
         this.soundImpossible.read(json.si);
 
+        // Window skin options
         this.dbOptions = EventCommand.getEventCommand(json.dbo);
         this.dbOptions.update();
-        */
+
+        // Initialize loading scene now that basics are loaded
+        RPM.loadingScene = new SceneLoading();
     }
 
     // -------------------------------------------------------
