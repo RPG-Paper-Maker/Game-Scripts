@@ -9,99 +9,88 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemShape
-//
-// -------------------------------------------------------
-
 /** @class
-*   A shape of the game.
-*   @property {boolean} isBR Indicate if the shape is a BR (Basic Ressource).
+*   A shape of the game
+*   @property {boolean} isBR Indicate if the shape is a BR (Basic Ressource)
+*   @property {boolean} dlc Indicate if the shape is a DLC
+*   @param {Object} json Json object describing the shape
+*   @param {CustomShapeKind} kind The kind of custom shape
 */
-function SystemShape() {
-
-}
-
-/** Get the folder associated to a kind of custom shape.
-*   @param {CustomShapeKind} kind The kind of custom shape.
-*   @param {boolean} isBR Indicate if the shape is a BR.
-*   @returns {string}
-*/
-SystemShape.getFolder = function(kind, isBR, dlc) {
-    var folder = isBR ? RPM.PATH_BR : (dlc ? RPM.PATH_DLCS + "/" + dlc : RPM
-        .ROOT_DIRECTORY_LOCAL);
-    var dir = SystemShape.getLocalFolder(kind);
-    var path = folder + dir;
-
-    return [path, path];
-};
-
-// -------------------------------------------------------
-
-/** Get the local folder associated to a kind of custom shape.
-*   @param {CustomShapeKind} kind The kind of custom shape.
-*   @returns {string}
-*/
-SystemShape.getLocalFolder = function(kind) {
-    switch(kind) {
-    case CustomShapeKind.OBJ:
-        return RPM.PATH_OBJ;
-    case CustomShapeKind.MTL:
-        return RPM.PATH_MTL;
-    case CustomShapeKind.Collisions:
-        return RPM.PATH_OBJ_COLLISIONS;
+class SystemShape
+{
+    constructor(json, kind)
+    {
+        this.kind = kind;
+        if (json)
+        {
+            this.read(json);
+        }
     }
 
-    return "";
-};
-
-// -------------------------------------------------------
-
-SystemShape.prototype = {
-
-    /** Read the JSON associated to the shape.
-    *   @param {Object} json Json object describing the object.
+    // -------------------------------------------------------
+    /** Get the folder associated to a kind of custom shape
+    *   @static
+    *   @param {CustomShapeKind} kind The kind of custom shape
+    *   @param {number} id The shape id
+    *   @param {string} name The shape name
+    *   @param {boolean} isBR Indicate if the shape is a BR
+    *   @param {boolean} dlc Indicate if the shape is a DLC
+    *   @returns {string}
     */
-    read: function(json) {
+    static getFolder(kind, isBR, dlc)
+    {
+        return (isBR ? RPM.PATH_BR : (dlc ? RPM.PATH_DLCS + RPM.STRING_SLASH + 
+            dlc : RPM.ROOT_DIRECTORY_LOCAL)) + SystemShape.getLocalFolder(kind);
+    }
+
+    // -------------------------------------------------------
+    /** Get the local folder associated to a kind of custom shape
+    *   @param {CustomShapeKind} kind The kind of custom shape
+    *   @returns {string}
+    */
+    static getLocalFolder(kind)
+    {
+        switch(kind)
+        {
+        case CustomShapeKind.OBJ:
+            return RPM.PATH_OBJ;
+        case CustomShapeKind.MTL:
+            return RPM.PATH_MTL;
+        case CustomShapeKind.Collisions:
+            return RPM.PATH_OBJ_COLLISIONS;
+        }
+        return "";
+    }
+
+    // -------------------------------------------------------
+    /** Read the JSON associated to the shape
+    *   @param {Object} json Json object describing the shape
+    */
+    read(json)
+    {
         this.id = json.id;
         this.name = json.name;
         this.isBR = json.br;
-        this.dlc = RPM.defaultValue(json.d, "");
-    },
+        this.dlc = RPM.defaultValue(json.d, RPM.STRING_EMPTY);
+    }
+
+    // -------------------------------------------------------
+    /** Load the .obj
+    */
+    async loadObjectCustom()
+    {
+        this.geometry = this.id === -1 ? RPM.OBJ_LOADER.parse(RPM.STRING_EMPTY) 
+            : await RPM.OBJ_LOADER.load(this.getPath(CustomShapeKind.OBJ));
+    }
 
     // -------------------------------------------------------
 
-    loadObjectCustom: function() {
-        if (this.id === -1)
-        {
-            this.geometry = RPM.OBJ_LOADER.parse("");
-        } else 
-        {
-            var that;
-
-            that = this;
-            RPM.filesToLoad++;
-            RPM.OBJ_LOADER.load(this.getPath(CustomShapeKind.OBJ)[0], function(
-                geometry)
-            {
-                that.geometry = geometry;
-                RPM.loadedFiles++;
-            });
-        }
-    },
-
-    // -------------------------------------------------------
-
-    /** Get the absolute path associated to this picture.
-    *   @param {PictureKind} kind The kind of picture.
+    /** Get the absolute path associated to this picture
     *   @returns {string}
     */
-    getPath: function(kind) {
-        var paths = SystemShape.getFolder(kind, this.isBR, this.dlc);
-        paths[0] += "/" + this.name;
-        paths[1] += "/" + this.name;
-
-        return paths;
+    getPath()
+    {
+        return SystemShape.getFolder(this.kind, this.isBR, this.dlc) + RPM
+            .STRING_SLASH + this.name;
     }
 }

@@ -9,42 +9,51 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemMountain
-//
-// -------------------------------------------------------
-
 /** @class
-*   A mountain of the game.
-*   @property {number} picutreID The picture ID of the mountain.
+*   A mountain of the game
+*   @extends SystemSpecialElement
+*   @property {number} id The mountain id
+*   @property {MountainCollisionKind} collisionKind The collision kind
+*   @param {Object} [json=undefined] Json object describing the mountain
 */
-function SystemMountain() {
+class SystemMountain extends SystemSpecialElement
+{
+    constructor(json)
+    {
+        super();
+        if (json)
+        {
+            this.read(json);
+        }
+    }
 
-}
-
-SystemMountain.prototype = {
-
-    /** Read the JSON associated to the mountain.
-    *   @param {Object} json Json object describing the object.
+    // -------------------------------------------------------
+    /** Read the JSON associated to the mountain
+    *   @param {Object} json Json object describing the mountain
     */
-    read: function(json) {
-        SystemSpecialElement.prototype.read.call(this, json);
-
+    read(json)
+    {
+        super.read(json);
         this.id = json.id;
-        this.collisionKind = typeof json.mck === 'undefined' ?
-            MountainCollisionKind.Default : json.mck;
-    },
+        this.collisionKind = RPM.defaultValue(json.mck, MountainCollisionKind
+            .Default);
+    }
 
     // -------------------------------------------------------
-
-    forceAlways: function() {
+    /** Check if the collision is always forced
+    *   @returns {MountainCollisionKind}
+    */
+    forceAlways()
+    {
         return this.collisionKind === MountainCollisionKind.Always;
-    },
+    }
 
     // -------------------------------------------------------
-
-    forceNever: function() {
+    /** Check if the collision is never forced
+    *   @returns {MountainCollisionKind}
+    */
+    forceNever()
+    {
         return this.collisionKind === MountainCollisionKind.Never;
     }
 }

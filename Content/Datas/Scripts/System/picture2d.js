@@ -58,10 +58,12 @@ class Picture2D extends Bitmap
     *   @param {number} w The w size
     *   @param {number} h The h size
     */
-    static async createImage(picture, x = 0, y = 0, w = 0, h = 0)
+    static async create(picture, x = 0, y = 0, w = 0, h = 0)
     {
-        await (picture ? new Picture2D(picture.getPath(), x, y, w, h) : new 
-            Picture2D()).load();
+        let pic = picture ? new Picture2D(picture.getPath(), x, y, w, h) : new 
+            Picture2D();
+        await pic.load();
+        return pic;
     }
 
     // -------------------------------------------------------
@@ -74,10 +76,28 @@ class Picture2D extends Bitmap
     *   @param {number} w The w size
     *   @param {number} h The h size
     */
-    static async createImageWithID(id, kind, x = 0, y = 0, w = 0, h = 0)
+    static async createWithID(id, kind, x = 0, y = 0, w = 0, h = 0)
     {
-        return (await Picture2D.createImage(RPM.datasGame.pictures.get(kind, id),
-            x, y, w, h));
+        return (await Picture2D.create(RPM.datasGame.pictures.get(kind, id)
+            , x, y, w, h));
+    }
+
+    // -------------------------------------------------------
+    /** Load the image
+    *   @static
+    *   @param {string} path The image path
+    */
+    static async loadImage(path)
+    {
+        return (await new Promise((resolve, reject) => {
+            let image = new Image()
+            image.onload = () => resolve(image);
+            image.onerror = () => {
+                image.empty = true;
+                resolve(image);
+            }
+            image.src = path;
+        }));
     }
 
     // -------------------------------------------------------
@@ -88,15 +108,9 @@ class Picture2D extends Bitmap
         if (this.path)
         {
             // Try loading
-            await new Promise((resolve, reject) => {
-                this.image = new Image()
-                this.image.onload = () => resolve()
-                this.image.onerror = () => {
-                    this.empty = true;
-                    resolve()
-                }
-                this.image.src = this.path
-            });
+            this.image = await Picture2D.loadImage(this.path);
+            this.empty = this.image.empty;
+
             // If not empty, configure bitmap size
             if (!this.empty)
             {

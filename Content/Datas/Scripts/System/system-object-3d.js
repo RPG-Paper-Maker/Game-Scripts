@@ -9,96 +9,121 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemObject3D
-//
-// -------------------------------------------------------
-
 /** @class
-*   A 3D object of the game.
-*   @property {number} picutreID The picture ID of the object 3D.
+*   A 3D object of the game
+*   @extends SystemSpecialElement
+*   @property {number} id The object 3D id
+*   @property {ShapeKind} shapeKind The shape kind of the 3D object
+*   @param {Object} [json=undefined] Json object describing the object 3D
 */
-function SystemObject3D(){
+class SystemObject3D extends SystemSpecialElement
+{
+    constructor(json)
+    {
+        super();
+        if (json)
+        {
+            this.read(json);
+        }
+    }
 
-}
-
-SystemObject3D.prototype = {
-
-    /** Read the JSON associated to the object 3D.
-    *   @param {Object} json Json object describing the object.
+    // -------------------------------------------------------
+    /** Read the JSON associated to the object 3D
+    *   @param {Object} json Json object describing the object 3D
     */
-    read: function(json) {
-        SystemSpecialElement.prototype.read.call(this, json);
+    read(json)
+    {
+        super.read(json);
 
         this.id = json.id;
-        this.shapeKind = typeof json.sk === 'undefined' ? ShapeKind.Box : json
-            .sk;
-        this.objID = typeof json.oid === 'undefined' ? -1 : json.oid;
-        this.mtlID = typeof json.mid === 'undefined' ? -1 : json.mid;
-        this.collisionKind = typeof json.ck === 'undefined' ?
-            ObjectCollisionKind.None : json.ck;
-        this.collisionCustomID = typeof json.ccid === 'undefined' ? -1 : json
-            .ccid;
-        this.scale = typeof json.s === 'undefined' ? 1 : json.s;
-        this.widthSquare = typeof json.ws === 'undefined' ? 1 : json.ws;
-        this.widthPixel = typeof json.wp === 'undefined' ? 0 : json.wp;
-        this.heightSquare = typeof json.hs === 'undefined' ? 1 : json.hs;
-        this.heightPixel = typeof json.hp === 'undefined' ? 0 : json.hp;
-        this.depthSquare = typeof json.ds === 'undefined' ? 1 : json.ds;
-        this.depthPixel = typeof json.dp === 'undefined' ? 0 : json.dp;
-        this.stretch = typeof json.st === 'undefined' ? false : json.st;
-    },
+        this.shapeKind = RPM.defaultValue(json.sk, ShapeKind.Box);
+        this.objID = RPM.defaultValue(json.oid, -1);
+        this.mtlID = RPM.defaultValue(json.mid, -1);
+        this.collisionKind = RPM.defaultValue(json.ck, ObjectCollisionKind.None);
+        this.collisionCustomID = RPM.defaultValue(json.ccid, -1);
+        this.scale = RPM.defaultValue(json.s, 1);
+        this.widthSquare = RPM.defaultValue(json.ws, 1);
+        this.widthPixel = RPM.defaultValue(json.wp, 0);
+        this.heightSquare = RPM.defaultValue(json.hs, 1);
+        this.heightPixel = RPM.defaultValue(json.hp, 0);
+        this.depthSquare = RPM.defaultValue(json.ds, 1);
+        this.depthPixel = RPM.defaultValue(json.dp, 0);
+        this.stretch = RPM.defaultValue(json.st, false);
+    }
 
     // -------------------------------------------------------
-
-    widthPixels: function() {
+    /** Get the width in pixels
+    *   @returns {number}
+    */
+    widthPixels()
+    {
         return (this.widthSquare * RPM.SQUARE_SIZE) + (this.widthPixel *
             RPM.SQUARE_SIZE / 100);
-    },
+    }
 
     // -------------------------------------------------------
-
-    heightPixels: function() {
+    /** Get the height in pixels
+    *   @returns {number}
+    */
+    heightPixels()
+    {
         return (this.heightSquare * RPM.SQUARE_SIZE) + (this.heightPixel *
             RPM.SQUARE_SIZE / 100);
-    },
+    }
 
     // -------------------------------------------------------
-
-    depthPixels: function() {
+    /** Get the depth in pixels
+    *   @returns {number}
+    */
+    depthPixels()
+    {
         return (this.depthSquare * RPM.SQUARE_SIZE) + (this.depthPixel *
             RPM.SQUARE_SIZE / 100);
-    },
+    }
 
     // -------------------------------------------------------
-
-    width: function() {
+    /** Get the width in squares
+    *   @returns {number}
+    */
+    width()
+    {
         return this.widthSquare + (this.widthPixel > 0 ? 1 : 0);
-    },
+    }
 
     // -------------------------------------------------------
-
-    height: function() {
+    /** Get the height in squares
+    *   @returns {number}
+    */
+    height()
+    {
         return this.heightSquare + (this.heightPixel > 0 ? 1 : 0);
-    },
+    }
 
     // -------------------------------------------------------
-
-    depth: function() {
+    /** Get the depth in squares
+    *   @returns {number}
+    */
+    depth()
+    {
         return this.depthSquare + (this.depthPixel > 0 ? 1 : 0);
-    },
+    }
 
     // -------------------------------------------------------
-
-    getSizeVector: function() {
+    /** Get the width in squares
+    *   @returns {THREE.Vector3}
+    */
+    getSizeVector()
+    {
         return new THREE.Vector3(this.widthPixels(), this.heightPixels(), this
             .depthPixels());
-    },
+    }
 
     // -------------------------------------------------------
-
-    getObj: function() {
+    /** Get the shape obj
+    *   @returns {SystemShape}
+    */
+    getObj()
+    {
         return RPM.datasGame.shapes.get(CustomShapeKind.OBJ, this.objID);
     }
 }

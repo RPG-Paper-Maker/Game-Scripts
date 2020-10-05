@@ -93,7 +93,7 @@ function GraphicPlayer(gamePlayer, reverse) {
     }
 
     // Faceset
-    this.faceset = Picture2D.createImage(RPM.datasGame.pictures.get(PictureKind
+    this.faceset = Picture2D.create(RPM.datasGame.pictures.get(PictureKind
         .Facesets, character.idFaceset), PictureKind.Facesets, function() {
         if (reverse) {
             this.setLeft();
@@ -105,7 +105,7 @@ function GraphicPlayer(gamePlayer, reverse) {
     this.faceset.reverse = reverse;
 
     // Battler
-    this.battler = Picture2D.createImage(RPM.datasGame.pictures.get(PictureKind
+    this.battler = Picture2D.create(RPM.datasGame.pictures.get(PictureKind
         .Battlers, character.idBattler), PictureKind.Battlers);
     this.battlerFrame = 0;
     this.battlerFrameTick = 0;

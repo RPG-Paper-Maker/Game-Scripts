@@ -9,80 +9,80 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS DatasShapes
-//
-// -------------------------------------------------------
-
 /** @class
-*   All the shapes datas.
-*   @property {Object[]} list List of all the shapes of the game
-*   according to ID and ShapeKind.
+*   All the shapes datas
+*   @property {SystemShape[]} list List of all the shapes of the game
+*   according to ID and ShapeKind
 */
-function DatasShapes() {
-    this.read();
-}
+class DatasShapes
+{
+    constructor()
+    {
 
-DatasShapes.prototype = {
+    }
 
+    // -------------------------------------------------------
     /** Read the JSON file associated to pictures.
     */
-    read: function() {
-        RPM.openFile(this, RPM.FILE_SHAPES_DATAS, true, function(res) {
-            var json, jsonHash, jsonList, jsonShape, shape;
-            var i, k, j, l, ll, lll, id;
-            var list;
+    async read()
+    {
+        let json = (await RPM.parseFileJSON(RPM.FILE_SHAPES_DATAS)).list;
+        let l = RPM.countFields(CustomShapeKind) - 1;
+        this.list = new Array(l);
+        let j, m, n, jsonHash, k, jsonList, jsonShape, id, list, shape;
+        for (let i = 0; i < l; i++)
+        {
+            jsonHash = json[i];
+            k = jsonHash.k;
+            jsonList = jsonHash.v;
 
-            json = JSON.parse(res).list;
-            l = RPM.countFields(CustomShapeKind) - 1;
-            this.list = new Array(l);
-            for (i = 0; i < l; i++) {
-                jsonHash = json[i];
-                k = jsonHash.k;
-                jsonList = jsonHash.v;
-
-                // Get the max ID
-                ll = jsonList.length;
-                lll = 0;
-                for (j = 0; j < ll; j++){
-                    jsonShape = jsonList[j];
-                    id = jsonShape.id;
-                    if (id > lll) {
-                        lll = id;
-                    }
+            // Get the max ID
+            m = jsonList.length;
+            n = 0;
+            for (j = 0; j < m; j++)
+            {
+                jsonShape = jsonList[j];
+                id = jsonShape.id;
+                if (id > n)
+                {
+                    n = id;
                 }
-
-                // Fill the shapes list
-                list = new Array(lll + 1);
-                for (j = 0; j < lll + 1; j++) {
-                    jsonShape = jsonList[j];
-                    if (jsonShape)
-                    {
-                        id = jsonShape.id;
-                        shape = new SystemShape();
-                        shape.read(jsonShape);
-                        if (k === CustomShapeKind.OBJ) {
-                            shape.loadObjectCustom();
-                        }
-
-                        if (id !== 0) {
-                            if (id === -1) {
-                                id = 0;
-                            }
-                            list[id] = shape;
-                        }
-                    }
-                }
-
-                this.list[k] = list;
             }
-        });
-    },
 
-    /** Get the corresponding shape.
+            // Fill the shapes list
+            list = new Array(n + 1);
+            for (j = 0; j < n + 1; j++)
+            {
+                jsonShape = jsonList[j];
+                if (jsonShape)
+                {
+                    id = jsonShape.id;
+                    shape = new SystemShape(jsonShape, k);
+                    if (k === CustomShapeKind.OBJ)
+                    {
+                        await shape.loadObjectCustom();
+                    }
+                    if (id !== 0)
+                    {
+                        if (id === -1)
+                        {
+                            id = 0;
+                        }
+                        list[id] = shape;
+                    }
+                }
+            }
+            this.list[k] = list;
+        }
+    }
+
+    // -------------------------------------------------------
+    /** Get the corresponding shape
+    *   @param {CustomShapeKind} kind The shape kind
+    *   @param {number} id The shape id
     */
-    get: function(kind, id){
+    get(kind, id)
+    {
         return this.list[kind][id];
-    },
+    }
 }

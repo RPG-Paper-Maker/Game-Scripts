@@ -9,82 +9,30 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS DatasSpecialElements
-//
-// -------------------------------------------------------
-
 /** @class
-*   All the special elements datas.
+*   All the special elements datas
 *   @property {SystemSpecialElement[]} walls List of all the walls of the game
-*   according to ID.
+*   according to ID
 *   @property {SystemSpecialElement[]} autotiles List of all the autotiles of the game
-*    according to ID.
+*    according to ID
 */
-function DatasSpecialElements() {
-    this.read();
-}
+class DatasSpecialElements
+{
+    constructor()
+    {
 
-DatasSpecialElements.prototype = {
+    }
 
+    // -------------------------------------------------------
     /** Read the JSON file associated to pictures.
     */
-    read: function(){
-        RPM.openFile(this, RPM.FILE_SPECIAL_ELEMENTS, true, function(res){
-            var json, jsonSpecials, jsonSpecial;
-            var autotile, wall, mountain, object;
-            var i, l, id;
-
-            json = JSON.parse(res);
-
-            // Autotiles
-            jsonSpecials = json.autotiles;
-            l = jsonSpecials.length;
-            this.autotiles = new Array(l+1);
-            for (i = 0; i < l; i++){
-                jsonSpecial = jsonSpecials[i];
-                id = jsonSpecial.id;
-                autotile = new SystemSpecialElement();
-                autotile.read(jsonSpecial);
-                this.autotiles[id] = autotile;
-            }
-
-            // Walls
-            jsonSpecials = json.walls;
-            l = jsonSpecials.length;
-            this.walls = new Array(l+1);
-            for (i = 0; i < l; i++){
-                jsonSpecial = jsonSpecials[i];
-                id = jsonSpecial.id;
-                wall = new SystemSpecialElement();
-                wall.read(jsonSpecial);
-                this.walls[id] = wall;
-            }
-
-            // Mountains
-            jsonSpecials = json.m;
-            l = jsonSpecials.length;
-            this.mountains = new Array(l + 1);
-            for (i = 0; i < l; i++) {
-                jsonSpecial = jsonSpecials[i];
-                id = jsonSpecial.id;
-                object = new SystemMountain();
-                object.read(jsonSpecial);
-                this.mountains[id] = object;
-            }
-
-            // Objects 3D
-            jsonSpecials = json.o;
-            l = jsonSpecials.length;
-            this.objects = new Array(l + 1);
-            for (i = 0; i < l; i++) {
-                jsonSpecial = jsonSpecials[i];
-                id = jsonSpecial.id;
-                object = new SystemObject3D();
-                object.read(jsonSpecial);
-                this.objects[id] = object;
-            }
-        });
+    async read()
+    {
+        let json = (await RPM.parseFileJSON(RPM.FILE_SPECIAL_ELEMENTS));
+        this.autotiles = RPM.readJSONSystemList(json.autotiles, 
+            SystemSpecialElement);
+        this.walls = RPM.readJSONSystemList(json.walls, SystemSpecialElement);
+        this.mountains = RPM.readJSONSystemList(json.m, SystemMountain);
+        this.objects = RPM.readJSONSystemList(json.o, SystemObject3D);
     }
 }

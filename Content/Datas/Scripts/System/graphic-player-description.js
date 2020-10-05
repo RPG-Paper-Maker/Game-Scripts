@@ -100,7 +100,7 @@ function GraphicPlayerDescription(gamePlayer) {
     this.listLength.push(maxLength);
 
     // Battler
-    this.battler = Picture2D.createImage(RPM.datasGame.pictures.get(PictureKind
+    this.battler = Picture2D.create(RPM.datasGame.pictures.get(PictureKind
         .Battlers, character.idBattler), PictureKind.Battlers);
     this.battlerFrame = 0;
     this.battlerFrameTick = 0;

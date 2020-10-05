@@ -13,13 +13,17 @@
 *   A video of the game
 *   @property {string} name The video name
 *   @property {boolean} isBR Indicate if the video is a BR (Basic Ressource)
-*   @property {boolean} isBR Indicate if the video is a DLC
+*   @property {boolean} dlc Indicate if the video is a DLC
+*   @param {Object} [json=undefined] Json object describing the video
 */
 class SystemVideo
 {
-    constructor()
+    constructor(json)
     {
-        
+        if (json)
+        {
+            this.read(json);
+        }
     }
 
     // -------------------------------------------------------

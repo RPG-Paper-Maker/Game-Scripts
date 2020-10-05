@@ -9,82 +9,77 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS DatasSongs
-//
-// -------------------------------------------------------
-
 /** @class
-*   All the songs datas.
-*   @property {Object[]} list List of all the songs of the game
-*   according to ID and SongKind.
+*   All the songs datas
+*   @property {SystemSong[]} list List of all the songs of the game
+*   according to ID and SongKind
 */
-function DatasSongs(){
+class DatasSongs
+{
+    constructor()
+    {
 
-}
+    }
 
-DatasSongs.prototype = {
-
-    /** Read the JSON file associated to songs.
+    // -------------------------------------------------------
+    /** Read the JSON file associated to songs
     */
-    read: function(){
-        RPM.openFile(this, RPM.FILE_SONGS_DATAS, true, function(res){
-            var json = JSON.parse(res).list;
-            var i, j, l, ll, lll;
-            var list;
+    async read()
+    {
+        let json = (await RPM.parseFileJSON(RPM.FILE_PICTURES_DATAS)).list;
+        let l = RPM.countFields(SongKind) - 1;
+        this.list = new Array(l);
+        let i, j, m, n, jsonHash, k, jsonList, jsonSong, id, list, song;
+        for (i = 0; i < l; i++)
+        {
+            jsonHash = json[i];
+            k = jsonHash.k;
+            jsonList = jsonHash.v;
 
-            l = RPM.countFields(SongKind) - 1;
-            this.list = new Array(l);
-            for (i = 0; i < l; i++){
-                var jsonHash = json[i];
-                var k = jsonHash.k;
-                var jsonList = jsonHash.v;
-
-                // Get the max ID
-                ll = jsonList.length;
-                lll = 0;
-                var jsonSong, id;
-                for (j = 0; j < ll; j++){
-                    jsonSong = jsonList[j];
-                    id = jsonSong.id;
-                    if (id > lll)
-                        lll = id;
+            // Get the max ID
+            m = jsonList.length;
+            n = 0;
+            for (j = 0; j < m; j++)
+            {
+                jsonSong = jsonList[j];
+                id = jsonSong.id;
+                if (id > n)
+                {
+                    n = id;
                 }
-
-                // Fill the songs list
-                list = new Array(lll + 1);
-                for (j = 0; j < lll + 1; j++){
-                    jsonSong = jsonList[j];
-                    if (jsonSong)
-                    {
-                        id = jsonSong.id;
-                        var song = new SystemSong();
-                        song.read(jsonSong);
-                        if (k !== SongKind.Sound)
-                        {
-                            song.load(k);
-                        }
-
-                        if (id === -1)
-                            id = 0;
-
-                        list[id] = song;
-                    }
-                }
-
-                this.list[k] = list;
             }
-        });
-    },
 
-    /** Get the corresponding song.
-    */
-    get: function(kind, id){
-        if (kind === SongKind.None){
-            return new SystemSong();
+            // Fill the songs list
+            list = new Array(n + 1);
+            for (j = 0; j < n + 1; j++)
+            {
+                jsonSong = jsonList[j];
+                if (jsonSong)
+                {
+                    id = jsonSong.id;
+                    song = new SystemSong(jsonSong, k);
+                    if (k !== SongKind.Sound)
+                    {
+                        song.load();
+                    }
+                    if (id === -1)
+                    {
+                        id = 0;
+                    }
+                    list[id] = song;
+                }
+            }
+            this.list[k] = list;
         }
-        else
-            return this.list[kind][id];
+    }
+
+    // -------------------------------------------------------
+    /** Get the corresponding song
+    *   @param {SongKind} kind The song kind
+    *   @param {number} id The song id
+    */
+    get(kind, id)
+    {
+        return kind === SongKind.None ? new SystemSong() : this.list[kind][id];
     }
 }

@@ -9,121 +9,121 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS DatasTilesets
-//
-// -------------------------------------------------------
-
 /** @class
-*   All the tilesets datas.
+*   All the tilesets datas
 *   @property {SystemTileset[]} list List of all the tilesets of the game
-*   according to ID.
+*   according to ID
 */
-function DatasTilesets(){
+class DatasTilesets
+{
+    constructor()
+    {
 
-}
-
-DatasTilesets.prototype = {
-
-    /** Read the JSON file associated to tilesets.
-    */
-    read: async function(){
-        RPM.openFile(this, RPM.FILE_TILESETS_DATAS, true, async (res) =>
-        {
-            var json = JSON.parse(res).list;
-            var i, l = json.length, idString, tileset;
-            this.list = new Array(l+1);
-            this.autotiles = {};
-            this.walls = {};
-            this.mountains = {};
-            this.loading = [];
-
-            // Sorting all the tilesets according to the ID
-            for (i = 0; i < l; i++){
-                var jsonTileset = json[i];
-                var id = jsonTileset.id;
-                tileset = new SystemTileset();
-                tileset.read(jsonTileset);
-                this.list[id] = tileset;
-
-                // Autotiles, walls
-                idString = tileset.getAutotilesString();
-                tileset.ownsAutotiles = this.autotiles.hasOwnProperty(idString);
-                if (!tileset.ownsAutotiles) {
-                    this.autotiles[idString] = tileset;
-                }
-                idString = tileset.getMountainsString();
-                tileset.ownsMountains = this.mountains.hasOwnProperty(idString);
-                if (!tileset.ownsMountains) {
-                    this.mountains[idString] = tileset;
-                }
-                idString = tileset.getWallsString();
-                tileset.ownsWalls = this.walls.hasOwnProperty(idString);
-                if (!tileset.ownsWalls) {
-                    this.walls[idString] = tileset;
-                }
-                if (!tileset.ownsAutotiles || !tileset.ownsMountains ||!tileset
-                    .ownsWalls)
-                {
-                    this.loading.push(tileset);
-                }
-
-                await tileset.loadSpecials();
-            }
-
-            // Load characters textures
-            this.loadPictures(PictureKind.Characters, "texturesCharacters");
-            this.loadPictures(PictureKind.Battlers, "texturesBattlers");
-            this.loadPictures(PictureKind.Objects3D, "texturesObjects3D");
-        });
-    },
+    }
 
     // -------------------------------------------------------
-
-    /** Load pictures.
-    *   @param {PictureKind} pictureKind The picure kind.
-    *   @param {string} texturesName The field name textures.
+    /** Read the JSON file associated to tilesets.
     */
-    loadPictures: function(pictureKind, texturesName){
-        var pictures = RPM.datasGame.pictures.list[pictureKind], picture;
-        var l = pictures.length;
-        var textures = new Array(l);
-        var paths;
+    async read()
+    {
+        let json = (await RPM.parseFileJSON(RPM.FILE_TILESETS_DATAS)).list;
+        let l = json.length;
+        this.list = new Array(l+1);
+        this.autotiles = {};
+        this.walls = {};
+        this.mountains = {};
+        this.loading = [];
 
+        // Sorting all the tilesets according to the ID
+        let i, jsonTileset, tileset, idString;
+        for (i = 0; i < l; i++)
+        {
+            jsonTileset = json[i];
+            tileset = new SystemTileset(jsonTileset);
+            this.list[jsonTileset.id] = tileset;
+
+            // Autotiles, walls
+            idString = tileset.getAutotilesString();
+            tileset.ownsAutotiles = this.autotiles.hasOwnProperty(idString);
+            if (!tileset.ownsAutotiles)
+            {
+                this.autotiles[idString] = tileset;
+            }
+            idString = tileset.getMountainsString();
+            tileset.ownsMountains = this.mountains.hasOwnProperty(idString);
+            if (!tileset.ownsMountains)
+            {
+                this.mountains[idString] = tileset;
+            }
+            idString = tileset.getWallsString();
+            tileset.ownsWalls = this.walls.hasOwnProperty(idString);
+            if (!tileset.ownsWalls)
+            {
+                this.walls[idString] = tileset;
+            }
+            await tileset.loadSpecials();
+        }
+
+        // Load characters textures
+        await this.loadPictures(PictureKind.Characters, "texturesCharacters");
+        //await this.loadPictures(PictureKind.Battlers, "texturesBattlers");
+        //await this.loadPictures(PictureKind.Objects3D, "texturesObjects3D");
+    }
+
+    // -------------------------------------------------------
+    /** Load pictures
+    *   @param {PictureKind} pictureKind The picture kind
+    *   @param {string} texturesName The field name textures
+    */
+    async loadPictures(pictureKind, texturesName)
+    {
+        let pictures = RPM.datasGame.pictures.list[pictureKind];
+        let l = pictures.length;
+        let textures = new Array(l);
         textures[0] = RPM.loadTextureEmpty();
-        for (var i = 1; i < l; i++){
+        let picture, path;
+        for (let i = 1; i < l; i++)
+        {
             picture = pictures[i];
-            if (picture) {
-                paths = picture.getPath(pictureKind);
-                if (paths) {
-                    textures[i] = RPM.loadTexture(paths, picture);
-                } else {
-                    textures[i] = RPM.loadTextureEmpty();
-                }
+            if (picture)
+            {
+                path = picture.getPath();
+                textures[i] = path ? RPM.loadTexture(path) : RPM
+                    .loadTextureEmpty();
             } else {
                 textures[i] = RPM.loadTextureEmpty();
             }
         }
-
         this[texturesName] = textures;
-    },
+    }
 
     // -------------------------------------------------------
-
-    getTexturesAutotiles: function(tileset) {
+    /** Get the autotiles textures
+    *   @param {SystemTileset} tileset The tileset
+    *   @returns {THREE.Material[]}
+    */
+    getTexturesAutotiles(tileset)
+    {
         return this.autotiles[tileset.getAutotilesString()].texturesAutotiles;
-    },
+    }
 
     // -------------------------------------------------------
-
-    getTexturesMountains: function(tileset) {
+    /** Get the mountains textures
+    *   @param {SystemTileset} tileset The tileset
+    *   @returns {THREE.Material[]}
+    */
+    getTexturesMountains(tileset)
+    {
         return this.mountains[tileset.getMountainsString()].texturesMountains;
-    },
+    }
 
     // -------------------------------------------------------
-
-    getTexturesWalls: function(tileset){
+    /** Get the walls textures
+    *   @param {SystemTileset} tileset The tileset
+    *   @returns {THREE.Material[]}
+    */
+    getTexturesWalls(tileset)
+    {
         return this.walls[tileset.getWallsString()].texturesWalls;
     }
 }

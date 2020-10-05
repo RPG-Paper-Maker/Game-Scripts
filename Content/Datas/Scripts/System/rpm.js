@@ -126,6 +126,7 @@ RPM.STRING_PARENTHESIS_RIGHT = ")";
 RPM.STRING_BRACKET_LEFT = "[";
 RPM.STRING_BRACKET_RIGHT = "]";
 RPM.STRING_COMA = ",";
+RPM.STRING_COLON = ":";
 RPM.STRING_SLASH = "/";
 RPM.STRING_NEW_LINE = "\n";
 RPM.STRING_EQUAL = "=";
@@ -869,13 +870,6 @@ RPM.parseFileJSON = async function(url)
     return JSON.parse(await RPM.openFile(url));
 }
 
-RPM.openFile(null, RPM.PATH_SHADERS + "fix.vert", false, function(res) {
-    RPM.SHADER_FIX_VERTEX = res;
-});
-RPM.openFile(null, RPM.PATH_SHADERS + "fix.frag", false, function(res) {
-    RPM.SHADER_FIX_FRAGMENT = res;
-});
-
 // -------------------------------------------------------
 
 /** Write a json file
@@ -1381,30 +1375,26 @@ RPM.random = function(min, max) {
 
 // -------------------------------------------------------
 
-/** Load a texture.
-*   @param {string} path The path of the texture.
+/** Load a texture
+*   @param {string} path The path of the texture
 *   @retuns {THREE.MeshBasicMaterial}
 */
-RPM.loadTexture = function(paths, picture, callback) {
-    RPM.filesToLoad++;
-    var path = paths[0];
-    var pathLocal = paths[1];
-    var texture;
-
-    if (callback) {
-        texture = callback.call(this, pathLocal, picture);
-    } else {
-        texture = RPM.textureLoader.load(path,
-            function(t){
-                RPM.loadedFiles++;
+RPM.loadTexture = async function(path)
+{
+    let texture = (await new Promise((resolve, reject) => {
+        RPM.textureLoader.load(path,
+            (t) => {
+                resolve(t);
             },
-            function (t) {},
-            function (t) {
+            (t) => {
+                resolve(t);
+            },
+            (t) => {
                 RPM.showErrorMessage("Could not load " + path);
+                resolve(t);
             }
         );
-    }
-
+    }));
     return RPM.createMaterial(texture);
 };
 

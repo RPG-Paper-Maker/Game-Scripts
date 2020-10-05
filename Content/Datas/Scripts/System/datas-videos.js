@@ -9,39 +9,24 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS DatasVideos
-//
-// -------------------------------------------------------
-
 /** @class
-*   All the videos datas.
+*   All the videos datas
 *   @property {SystemVideo[]} list List of all the videos of the game
-*   according to ID.
+*   according to ID
 */
-function DatasVideos() {
-    this.read();
-}
+class DatasVideos
+{
+    constructor()
+    {
 
-DatasVideos.prototype = {
+    }
 
-    /** Read the JSON file associated to videos.
+    // -------------------------------------------------------
+    /** Read the JSON file associated to videos
     */
-    read: function() {
-        RPM.openFile(this, RPM.FILE_VIDEOS_DATAS, true, function(res) {
-            var i, l, json, jsonTab, jsonObj, video;
-
-            json = JSON.parse(res);
-
-            jsonTab = json.list;
-            this.list = [];
-            for (i = 0, l = jsonTab.length; i < l; i++) {
-                jsonObj = jsonTab[i];
-                video = new SystemVideo();
-                video.read(jsonObj);
-                this.list[jsonObj.id] = video;
-            }
-        });
+    async read()
+    {
+        let json = (await RPM.parseFileJSON(RPM.FILE_VIDEOS_DATAS)).list;
+        this.list = RPM.readJSONSystemList(json, SystemVideo);
     }
 }

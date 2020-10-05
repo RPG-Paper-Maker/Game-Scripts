@@ -108,7 +108,7 @@ class SystemPicture
     */
     load()
     {
-        this.picture = Picture2D.createImage(this, this.kind);
+        this.picture = Picture2D.create(this, this.kind);
     }
 
     // -------------------------------------------------------

@@ -9,73 +9,69 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS GameDatas
-//
-// -------------------------------------------------------
-
 /** @class
-*   All the global informations of the game.
-*   @property {Object} settings All the general settings.
-*   @property {DatasPictures} pictures Pictures datas.
-*   @property {DatasCommonEvents} commonEvents Common events datas.
-*   @property {DatasItems} items Items datas.
-*   @property {DatasSkills} skills Skills datas.
-*   @property {DatasWeapons} weapons Weapons datas.
-*   @property {DatasArmors} armors Armors datas.
-*   @property {DatasClasses} classes Classes datas.
-*   @property {DatasSpecialElements} specialElements Special elements datas.
-*   @property {DatasTilesets} tileset Tilesets datas.
-*   @property {DatasHeroes} heroes Heroes datas.
-*   @property {DatasMonsters} monsters Monsters datas.
-*   @property {DatasTroops} troops Troops datas.
-*   @property {DatasSystem} system System datas.
-*   @property {DatasBattleSystem} battleSystem Battle System datas.
-*   @property {DatasKeyBoard} keyBoard KeyBoard datas.
+*   All the global informations of the game
+*   @property {Object} settings All the general settings
+*   @property {DatasPictures} pictures Pictures datas
+*   @property {DatasCommonEvents} commonEvents Common events datas
+*   @property {DatasItems} items Items datas
+*   @property {DatasSkills} skills Skills datas
+*   @property {DatasWeapons} weapons Weapons datas
+*   @property {DatasArmors} armors Armors datas
+*   @property {DatasClasses} classes Classes datas
+*   @property {DatasSpecialElements} specialElements Special elements datas
+*   @property {DatasTilesets} tileset Tilesets datas
+*   @property {DatasHeroes} heroes Heroes datas
+*   @property {DatasMonsters} monsters Monsters datas
+*   @property {DatasTroops} troops Troops datas
+*   @property {DatasSystem} system System datas
+*   @property {DatasBattleSystem} battleSystem Battle System datas
+*   @property {DatasKeyBoard} keyBoard KeyBoard datas
 */
-function DatasGame()
+class DatasGame
 {
-    this.system = new DatasSystem();
-    this.pictures = new DatasPictures();
-    this.commonEvents = new DatasCommonEvents();
-    /*
-    this.tilesets = new DatasTilesets();
-    this.songs = new DatasSongs();
-    this.items = new DatasItems();
-    this.skills = new DatasSkills();
-    this.weapons = new DatasWeapons();
-    this.armors = new DatasArmors();
-    this.classes = new DatasClasses();
-    this.heroes = new DatasHeroes();
-    this.monsters = new DatasMonsters();
-    this.troops = new DatasTroops();
-    this.system = new DatasSystem();
-    this.battleSystem = new DatasBattleSystem();
-    this.titlescreenGameover = new DatasTitlescreenGameover();
-    this.keyBoard = new DatasKeyBoard();
-    this.shapes = new DatasShapes();
-    this.specialElements = new DatasSpecialElements();
-    this.animations = new DatasAnimations();
-    this.pictures = new DatasPictures();
-    this.videos = new DatasVideos();
-    this.dlcs = new DatasDLCs();
-    */
-    this.loaded = false;
-}
+    static VARIABLES_PER_PAGE = 25;
 
-DatasGame.VARIABLES_PER_PAGE = 25;
+    constructor()
+    {
+        this.system = new DatasSystem();
+        this.pictures = new DatasPictures();
+        this.songs = new DatasSongs();
+        this.videos = new DatasVideos();
+        this.shapes = new DatasShapes();
+        this.commonEvents = new DatasCommonEvents();
+        this.specialElements = new DatasSpecialElements();
+        this.tilesets = new DatasTilesets();
 
-DatasGame.prototype = {
+        /*
+        this.items = new DatasItems();
+        this.skills = new DatasSkills();
+        this.weapons = new DatasWeapons();
+        this.armors = new DatasArmors();
+        this.classes = new DatasClasses();
+        this.heroes = new DatasHeroes();
+        this.monsters = new DatasMonsters();
+        this.troops = new DatasTroops();
+        this.battleSystem = new DatasBattleSystem();
+        this.titlescreenGameover = new DatasTitlescreenGameover();
+        this.keyBoard = new DatasKeyBoard();
+        this.animations = new DatasAnimations();
+        this.dlcs = new DatasDLCs();
+        */
+        this.loaded = false;
+    }
 
-    read: async function()
+    async read()
     {
         await this.system.read();
+        await this.readSettings();
         await this.pictures.read();
-        await this.commonEvents.read();
-        /*
         await this.songs.read();
-        await this.commonEvents.read();
+        await this.videos.read();
+        await this.shapes.read();
+        await this.specialElements.read();
+        await this.tilesets.read();
+        /*
         await this.items.read();
         await this.skills.read();
         await this.weapons.read();
@@ -84,42 +80,45 @@ DatasGame.prototype = {
         await this.battleSystem.read();
         await this.titlescreenGameover.read();
         await this.keyBoard.read();
-        await this.shapes.read();
-        await this.specialElements.read();
         await this.animations.read();
-        
-        await this.tilesets.read();
         await this.classes.read();
         await this.heroes.read();
         await this.monsters.read();
         await this.system.loadWindowSkins();
-        await this.commonEvents.read();
-        await this.videos.read();
         await this.dlcs.read();
-        this.readSettings();*/
+        */
+        await this.commonEvents.read();
+        await this.system.getModelHero();
         this.loaded = true;
-    },
+    }
 
-    /** Read the JSON files associated to the settings.
+    /** Read the JSON files associated to the settings
     */
-    readSettings: function(){
-        RPM.openFile(this, RPM.FILE_VARIABLES, true, function(res){
-            var json = JSON.parse(res).variables;
-            var i, j, l, ll, variable;
-
-            this.variablesNumbers =
-                 json.length * DatasGame.VARIABLES_PER_PAGE + 1;
-            this.variablesNames = new Array(this.variablesNumbers);
-            for (i = 0, l = json.length; i < l; i++) {
-                for (j = 0, ll = DatasGame.VARIABLES_PER_PAGE; j < ll; j++) {
-                    variable = json[i].list[j];
-                    this.variablesNames[variable.id] = variable.name;
-                }
+    async readSettings()
+    {
+        // Variables
+        let json = (await RPM.parseFileJSON(RPM.FILE_VARIABLES)).variables;
+        this.variablesNumbers = json.length * DatasGame.VARIABLES_PER_PAGE + 1;
+        this.variablesNames = new Array(this.variablesNumbers);
+        let i, j, l, m, variable;
+        for (i = 0, l = json.length; i < l; i++)
+        {
+            for (j = 0, m = DatasGame.VARIABLES_PER_PAGE; j < m; j++)
+            {
+                variable = json[i].list[j];
+                this.variablesNames[variable.id] = variable.name;
             }
-        });
-    },
+        }
 
-    getHeroesMonsters: function(kind) {
+        // Shaders
+        json = await RPM.openFile(RPM.PATH_SHADERS + "fix.vert");
+        RPM.SHADER_FIX_VERTEX = json;
+        json = await RPM.openFile(RPM.PATH_SHADERS + "fix.frag");
+        RPM.SHADER_FIX_FRAGMENT = json;
+    }
+
+    getHeroesMonsters(kind)
+    {
         return (kind === CharacterKind.Hero) ? this.heroes : this.monsters;
     }
 }

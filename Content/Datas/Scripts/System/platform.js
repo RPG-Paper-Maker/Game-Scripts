@@ -54,6 +54,7 @@ Platform.canvasHUD = document.getElementById('hud');
 Platform.canvasVideos = document.getElementById('video-container');
 Platform.canvasRendering = document.getElementById('rendering');
 Platform.ctx = Platform.canvasHUD.getContext('2d');
+Platform.ctxr = Platform.canvasRendering.getContext("2d");
 Platform.DESKTOP = true;
 
 Platform.setWindowTitle = function(title)

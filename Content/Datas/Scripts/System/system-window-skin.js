@@ -76,7 +76,7 @@ class SystemWindowSkin
     */
     updatePicture()
     {
-        this.picture = Picture2D.createImage(RPM.datasGame.pictures.get(
+        this.picture = Picture2D.create(RPM.datasGame.pictures.get(
             PictureKind.WindowSkins, this.pictureID), PictureKind.WindowSkins);
         this.picture.stretch = true;
     }

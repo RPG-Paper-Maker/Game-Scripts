@@ -26,7 +26,7 @@ function SceneLoadGame() {
         "Load a game", { align: Align.Center }), new GraphicText(
         "Select a slot you want to load.", { align: Align.Center }));
     if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage) {
-        this.pictureBackground = Picture2D.createImageWithID(RPM.datasGame
+        this.pictureBackground = Picture2D.createWithID(RPM.datasGame
             .titlescreenGameover.titleBackgroundImageID, PictureKind.TitleScreen);
         this.pictureBackground.cover = true;
     }

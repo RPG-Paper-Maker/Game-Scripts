@@ -12,17 +12,22 @@ THREE.OBJLoader.prototype = {
 
 	constructor: THREE.OBJLoader,
 
-	load: function ( url, onLoad, onProgress, onError ) {
+	load: async function (url) {
 
 		var scope = this;
 
 		var loader = new THREE.FileLoader();
-		//loader.setPath( this.path );
-		loader.load( url, function ( text ) {
-			onLoad( scope.parse( text ) );
 
-		}, onProgress, onError );
-
+		await new Promise((resolve, reject) => {
+			loader.load(url, function ( text ) {
+				resolve(scope.parse(text));
+			}, () => {
+				RPM.showErrorMessage("Could not load " + url);
+				resolve();
+			}, () => {
+				resolve()
+			});
+		});
 	},
 
 	setPath: function ( value ) {

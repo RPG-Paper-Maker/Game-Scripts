@@ -26,7 +26,7 @@ class GraphicMessage extends Bitmap
         super();
 
         this.message = message;
-        this.faceset = Picture2D.createImage(RPM.datasGame.pictures.get(PictureKind
+        this.faceset = Picture2D.create(RPM.datasGame.pictures.get(PictureKind
             .Facesets, facesetID), PictureKind.Facesets);
         this.graphics = [];
         this.positions = [];

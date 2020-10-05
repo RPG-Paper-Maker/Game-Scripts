@@ -9,26 +9,27 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemSpecialElement
-//
-// -------------------------------------------------------
-
 /** @class
-*   A special element (autotile, wall, object3D, mountain) of the game.
-*   @property {number} picutreID The picture ID of the wall.
+*   A special element (autotile, wall, object3D, mountain) of the game
+*   @property {number} pictureID The picture ID of the special element
+*   @param {Object} [json=undefined] Json object describing the special element
 */
-function SystemSpecialElement() {
+class SystemSpecialElement
+{
+    constructor(json)
+    {
+        if (json)
+        {
+            this.read(json);
+        }
+    }
 
-}
-
-SystemSpecialElement.prototype = {
-
-    /** Read the JSON associated to the special element.
-    *   @param {Object} json Json object describing the object.
+    // -------------------------------------------------------
+    /** Read the JSON associated to the special element
+    *   @param {Object} json Json object describing the special element
     */
-    read: function(json){
-        this.pictureID = typeof json.pic === 'undefined' ? -1 : json.pic;
+    read(json)
+    {
+        this.pictureID = RPM.defaultValue(json.pic, -1);
     }
 }

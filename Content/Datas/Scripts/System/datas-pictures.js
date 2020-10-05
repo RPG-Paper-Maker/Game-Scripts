@@ -11,7 +11,7 @@
 
 /** @class
 *   All the pictures datas
-*   @property {Object[]} list List of all the pictures of the game
+*   @property {SystemPicture[]} list List of all the pictures of the game
 *   according to ID and PictureKind
 */
 class DatasPictures
@@ -21,12 +21,12 @@ class DatasPictures
 
     }
 
+    // -------------------------------------------------------
     /** Read the JSON file associated to pictures
     */
     async read()
     {
         let json = (await RPM.parseFileJSON(RPM.FILE_PICTURES_DATAS)).list;
-
         let l = RPM.countFields(PictureKind) - 1;
         this.list = new Array(l);
         let k, j, m, n, id, jsonHash, jsonList, jsonPicture, list, picture;

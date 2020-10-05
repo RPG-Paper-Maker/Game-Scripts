@@ -24,7 +24,7 @@ function SceneTitleSettings() {
 
     // Creating background
     if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage) {
-        this.pictureBackground = Picture2D.createImageWithID(RPM.datasGame
+        this.pictureBackground = Picture2D.createWithID(RPM.datasGame
             .titlescreenGameover.titleBackgroundImageID, PictureKind.TitleScreen);
         this.pictureBackground.cover = true;
     }
