@@ -42,12 +42,11 @@ class DatasGame
         this.commonEvents = new DatasCommonEvents();
         this.specialElements = new DatasSpecialElements();
         this.tilesets = new DatasTilesets();
-
-        /*
         this.items = new DatasItems();
         this.skills = new DatasSkills();
         this.weapons = new DatasWeapons();
         this.armors = new DatasArmors();
+        /*
         this.classes = new DatasClasses();
         this.heroes = new DatasHeroes();
         this.monsters = new DatasMonsters();
@@ -71,11 +70,11 @@ class DatasGame
         await this.shapes.read();
         await this.specialElements.read();
         await this.tilesets.read();
-        /*
         await this.items.read();
         await this.skills.read();
         await this.weapons.read();
         await this.armors.read();
+        /*
         await this.troops.read();
         await this.battleSystem.read();
         await this.titlescreenGameover.read();

@@ -9,39 +9,23 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS WeaponsDatas
-//
-// -------------------------------------------------------
-
 /** @class
-*   All the weapons datas.
+*   All the weapons datas
 *   @property {SystemWeapon[]} list List of all the weapons of the game
-*   according to ID.
+*   according to ID
 */
-function DatasWeapons(){
-    this.read();
-}
+class DatasWeapons
+{
+    constructor()
+    {
 
-DatasWeapons.prototype = {
+    }
 
-    /** Read the JSON file associated to weapons.
+    /** Read the JSON file associated to weapons
     */
-    read: function(){
-        RPM.openFile(this, RPM.FILE_WEAPONS, true, function(res){
-            var json = JSON.parse(res).weapons;
-            var i, l = json.length;
-            this.list = new Array(l+1);
-
-            // Sorting all the weapons according to the ID
-            for (var i = 0; i < l; i++){
-                var jsonWeapon = json[i];
-                var id = jsonWeapon["id"];
-                var weapon = new SystemWeapon();
-                weapon.read(jsonWeapon);
-                this.list[id] = weapon;
-            }
-        });
+    async read()
+    {
+        let json = (await RPM.parseFileJSON(RPM.FILE_WEAPONS)).weapons;
+        this.list = RPM.readJSONSystemList(json, SystemWeapon);
     }
 }

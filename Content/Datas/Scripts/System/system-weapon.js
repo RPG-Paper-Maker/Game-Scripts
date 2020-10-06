@@ -12,14 +12,21 @@
 /** @class
 *   A weapon of the game
 *   @extends SystemArmor
+*   @param {Object} [json=undefined] Json object describing the weapon
 */
-class SystemWeapon extends SystemCommonSkillItem
+class SystemWeapon extends SystemArmor
 {
-    constructor()
+    constructor(json)
     {
         super();
+
+        if (json)
+        {
+            this.read(json);
+        }
     }
 
+    // -------------------------------------------------------
     /** Read the JSON associated to the weapon
     *   @param {Object} json Json object describing the weapon
     */

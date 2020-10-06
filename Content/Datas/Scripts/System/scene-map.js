@@ -148,8 +148,8 @@ SceneMap.prototype.initializePortions = function(){
         RPM.game.hero.changeState();
 
         // Start music and background sound
-        this.mapInfos.music.playSong();
-        this.mapInfos.backgroundSound.playSong();
+        this.mapInfos.music.playMusic();
+        this.mapInfos.backgroundSound.playMusic();
 
         // Background color update
         this.updateBackgroundColor();

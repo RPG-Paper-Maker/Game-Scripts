@@ -57,7 +57,7 @@ function SceneTitleScreen() {
     );
 
     // Play title screen song
-    RPM.datasGame.titlescreenGameover.titleMusic.playSong();
+    RPM.datasGame.titlescreenGameover.titleMusic.playMusic();
 }
 
 SceneTitleScreen.prototype = {

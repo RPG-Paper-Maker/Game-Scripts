@@ -42,7 +42,7 @@ function MapObject(system, position, isHero) {
     this.movingVertical = null;
     this.frameTick = 0;
     this.moveFrequencyTick = 0;
-    this.isHero = RPM.jsonDefault(isHero, false);
+    this.isHero = RPM.defaultValue(isHero, false);
     this.isStartup = typeof position === RPM.UNDEFINED;
     this.isInScene = false;
     this.receivedOneEvent = false;

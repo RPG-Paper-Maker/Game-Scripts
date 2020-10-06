@@ -9,39 +9,23 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS ARMORSDATAS
-//
-// -------------------------------------------------------
-
 /** @class
-*   All the armors datas.
+*   All the armors datas
 *   @property {SystemArmor[]} list List of all the armors of the game according
-*   to ID.
+*   to ID
 */
-function DatasArmors(){
-    this.read();
-}
+class DatasArmors
+{
+    constructor()
+    {
 
-DatasArmors.prototype = {
+    }
 
-    /** Read the JSON file associated to armors.
+    /** Read the JSON file associated to armors
     */
-    read: function(){
-        RPM.openFile(this, RPM.FILE_ARMORS, true, function(res){
-            var json = JSON.parse(res)["armors"];
-            var i, l = json.length;
-            this.list = new Array(l+1);
-
-            // Sorting all the armors according to the ID
-            for (i = 0; i < l; i++){
-                var jsonArmor = json[i];
-                var id = jsonArmor["id"];
-                var armor = new SystemArmor();
-                armor.read(jsonArmor);
-                this.list[id] = armor;
-            }
-        });
+    async read()
+    {
+        let json = (await RPM.parseFileJSON(RPM.FILE_ARMORS)).armors;
+        this.list = RPM.readJSONSystemList(json, SystemArmor);
     }
 }

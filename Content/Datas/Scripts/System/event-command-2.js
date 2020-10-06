@@ -46,7 +46,7 @@ function EventCommandStartBattle(command){
     case 0: // Existing troop ID
         k = command[i++];
         v = command[i++];
-        this.troopID = new SystemValue(k, v);
+        this.troopID = SystemValue.create(k, v);
         break;
     case 1: // If random troop in map properties
         // TODO
@@ -58,7 +58,7 @@ function EventCommandStartBattle(command){
     case 0: // Existing battle map ID
         k = command[i++];
         v = command[i++];
-        this.battleMapID = new SystemValue(k, v);
+        this.battleMapID = SystemValue.create(k, v);
         break;
     case 1: // Select
         this.idMap = SystemValue.createNumber(command[i++]);
@@ -70,19 +70,19 @@ function EventCommandStartBattle(command){
     case 2: // Numbers
         k = command[i++];
         v = command[i++];
-        this.idMap = new SystemValue(k, v);
+        this.idMap = SystemValue.create(k, v);
         k = command[i++];
         v = command[i++];
-        this.x = new SystemValue(k, v);
+        this.x = SystemValue.create(k, v);
         k = command[i++];
         v = command[i++];
-        this.y = new SystemValue(k, v);
+        this.y = SystemValue.create(k, v);
         k = command[i++];
         v = command[i++];
-        this.yPlus = new SystemValue(k, v);
+        this.yPlus = SystemValue.create(k, v);
         k = command[i++];
         v = command[i++];
-        this.z = new SystemValue(k, v);
+        this.z = SystemValue.create(k, v);
         break;
     }
 
@@ -91,13 +91,13 @@ function EventCommandStartBattle(command){
     if (this.transitionStart === 1) {
         k = command[i++];
         v = command[i++];
-        this.transitionStartColor = new SystemValue(k, v);
+        this.transitionStartColor = SystemValue.create(k, v);
     }
     this.transitionEnd = command[i++];
     if (this.transitionEnd === 1) {
         k = command[i++];
         v = command[i++];
-        this.transitionEndColor = new SystemValue(k, v);
+        this.transitionEndColor = SystemValue.create(k, v);
     }
 
     this.isDirectNode = false;
@@ -535,13 +535,13 @@ function EventCommandSendEvent(command) {
     case 1:
         k = command[i++];
         v = command[i++];
-        this.idTarget = new SystemValue(k, v);
+        this.idTarget = SystemValue.create(k, v);
         this.senderNoReceiver = command[i++] === 1;
         break;
     case 2:
         k = command[i++];
         v = command[i++];
-        this.idTarget = new SystemValue(k, v);
+        this.idTarget = SystemValue.create(k, v);
         break;
     }
 
@@ -563,11 +563,11 @@ function EventCommandSendEvent(command) {
             if (k === PrimitiveValueKind.Default) {
                 parameter = parameters[paramID].value;
             } else {
-                parameter = new SystemValue(k, null);
+                parameter = SystemValue.create(k, null);
             }
         } else {
             v = command[i++];
-            parameter = new SystemValue(k, v);
+            parameter = SystemValue.create(k, v);
         }
         this.parameters[paramID] = parameter;
     }
@@ -781,7 +781,7 @@ function EventCommandTeleportObject(command){
     // Object ID
     k = command[i++];
     v = command[i++];
-    this.objectID = new SystemValue(k, v);
+    this.objectID = SystemValue.create(k, v);
 
     // Position
     this.objectIDPosition = null;
@@ -797,24 +797,24 @@ function EventCommandTeleportObject(command){
     case 1:
         k = command[i++];
         v = command[i++];
-        this.idMap = new SystemValue(k, v);
+        this.idMap = SystemValue.create(k, v);
         k = command[i++];
         v = command[i++];
-        this.x = new SystemValue(k, v);
+        this.x = SystemValue.create(k, v);
         k = command[i++];
         v = command[i++];
-        this.y = new SystemValue(k, v);
+        this.y = SystemValue.create(k, v);
         k = command[i++];
         v = command[i++];
-        this.yPlus = new SystemValue(k, v);
+        this.yPlus = SystemValue.create(k, v);
         k = command[i++];
         v = command[i++];
-        this.z = new SystemValue(k, v);
+        this.z = SystemValue.create(k, v);
         break;
     case 2:
         k = command[i++];
         v = command[i++];
-        this.objectIDPosition = new SystemValue(k, v);
+        this.objectIDPosition = SystemValue.create(k, v);
         break;
     }
 
@@ -940,7 +940,7 @@ function EventCommandMoveObject(command) {
     // Object ID
     var k = command[i++];
     var v = command[i++];
-    this.objectID = new SystemValue(k, v);
+    this.objectID = SystemValue.create(k, v);
 
     // Options
     this.isIgnore = command[i++] === 1;
@@ -1006,7 +1006,7 @@ function EventCommandMoveObject(command) {
             permanent = RPM.numToBool(command[i++]);
             var k = command[i++];
             var v = command[i++];
-            let pictureID = new SystemValue(k, v);
+            let pictureID = SystemValue.create(k, v);
             let indexX = command[i++];
             let indexY = command[i++];
             let width = command[i++];
@@ -1540,7 +1540,7 @@ function EventCommandWait(command) {
     i = 0;
     k = command[i++];
     v = command[i++];
-    this.milliseconds = new SystemValue(k, v);
+    this.milliseconds = SystemValue.create(k, v);
 
     this.isDirectNode = false;
     this.parallel = false;
@@ -1604,7 +1604,7 @@ function EventCommandMoveCamera(command){
     else {
         k = command[i++];
         v = command[i++];
-        this.targetID = new SystemValue(k, v);
+        this.targetID = SystemValue.create(k, v);
     }
 
     // Operation
@@ -1615,36 +1615,36 @@ function EventCommandMoveCamera(command){
     this.cameraOrientation = command[i++] === 1;
     k = command[i++];
     v = command[i++];
-    this.x = new SystemValue(k, v);
+    this.x = SystemValue.create(k, v);
     this.xSquare = command[i++] === 0;
     k = command[i++];
     v = command[i++];
-    this.y = new SystemValue(k, v);
+    this.y = SystemValue.create(k, v);
     this.ySquare = command[i++] === 0;
     k = command[i++];
     v = command[i++];
-    this.z = new SystemValue(k, v);
+    this.z = SystemValue.create(k, v);
     this.zSquare = command[i++] === 0;
 
     // Rotation
     this.rotationTargetOffset = command[i++] === 1;
     k = command[i++];
     v = command[i++];
-    this.h = new SystemValue(k, v);
+    this.h = SystemValue.create(k, v);
     k = command[i++];
     v = command[i++];
-    this.v = new SystemValue(k, v);
+    this.v = SystemValue.create(k, v);
 
     // Zoom
     k = command[i++];
     v = command[i++];
-    this.distance = new SystemValue(k, v);
+    this.distance = SystemValue.create(k, v);
 
     // Options
     this.isWaitEnd = command[i++] === 1;
     k = command[i++];
     v = command[i++];
-    this.time = new SystemValue(k, v);
+    this.time = SystemValue.create(k, v);
 
     this.isDirectNode = false;
     this.parallel = !this.isWaitEnd;
@@ -1844,21 +1844,21 @@ EventCommandPlayMusic.parsePlaySong = function(that, command, kind) {
     var isIDprimitive = command[i++] === 1;
     var k = command[i++];
     var v = command[i++];
-    var idValue = new SystemValue(k, v);
+    var idValue = SystemValue.create(k, v);
     var id = SystemValue.createNumber(command[i++]);
     var songID = isIDprimitive ? idValue : id;
     k = command[i++];
     v = command[i++];
-    var volume = new SystemValue(k, v);
+    var volume = SystemValue.create(k, v);
     var isStart = command[i++] === 1;
     k = command[i++];
     v = command[i++];
-    var start = new SystemValue(k, v);
+    var start = SystemValue.create(k, v);
     start = isStart ? start : null;
     var isEnd = command[i++] === 1;
     k = command[i++];
     v = command[i++];
-    var end = new SystemValue(k, v);
+    var end = SystemValue.create(k, v);
     end = isEnd ? end : null;
 
     that.song = new SystemPlaySong(kind);
@@ -1883,7 +1883,7 @@ EventCommandPlayMusic.prototype = {
     */
 
     update: function(currentState, object, state){
-        return this.song.playSong();
+        return this.song.playMusic();
     },
 
     // -------------------------------------------------------
@@ -1920,7 +1920,7 @@ EventCommandStopMusic.parseStopSong = function(that, command) {
 
     var k = command[i++];
     var v = command[i++];
-    that.seconds = new SystemValue(k, v);
+    that.seconds = SystemValue.create(k, v);
 };
 
 // -------------------------------------------------------
@@ -1998,7 +1998,7 @@ EventCommandPlayBackgroundSound.prototype = {
     */
 
     update: function(currentState, object, state){
-        return this.song.playSong();
+        return this.song.playMusic();
     },
 
     // -------------------------------------------------------
@@ -2177,11 +2177,11 @@ function EventCommandChangeProperty(command) {
     i = 0;
     k = command[i++];
     v = command[i++];
-    this.propertyID = new SystemValue(k, v);
+    this.propertyID = SystemValue.create(k, v);
     this.operationKind = command[i++];
     k = command[i++];
     v = command[i++];
-    this.newValue = new SystemValue(k, v);
+    this.newValue = SystemValue.create(k, v);
 
     this.isDirectNode = true;
     this.parallel = false;
@@ -2424,7 +2424,7 @@ function EventCommandScript(command) {
     if (this.isDynamic) {
         k = command[i++];
         v = command[i++];
-        this.script = new SystemValue(k, v);
+        this.script = SystemValue.create(k, v);
     } else {
         this.script = SystemValue.createMessage("" + command[i]);
     }
@@ -2456,10 +2456,10 @@ function EventCommandDisplayAPicture(command) {
     k = command[i++];
     v = command[i++];
     i++;
-    this.pictureID = new SystemValue(k, v);
+    this.pictureID = SystemValue.create(k, v);
     k = command[i++];
     v = command[i++];
-    this.index = new SystemValue(k, v);
+    this.index = SystemValue.create(k, v);
     this.centered = command[i++] === RPM.NUM_BOOL_TRUE;
     if (this.centered) {
         this.originX = RPM.SCREEN_X / 2;
@@ -2470,19 +2470,19 @@ function EventCommandDisplayAPicture(command) {
     }
     k = command[i++];
     v = command[i++];
-    this.x = new SystemValue(k, v);
+    this.x = SystemValue.create(k, v);
     k = command[i++];
     v = command[i++];
-    this.y = new SystemValue(k, v);
+    this.y = SystemValue.create(k, v);
     k = command[i++];
     v = command[i++];
-    this.zoom = new SystemValue(k, v);
+    this.zoom = SystemValue.create(k, v);
     k = command[i++];
     v = command[i++];
-    this.opacity = new SystemValue(k, v);
+    this.opacity = SystemValue.create(k, v);
     k = command[i++];
     v = command[i++];
-    this.angle = new SystemValue(k, v);
+    this.angle = SystemValue.create(k, v);
 
     this.isDirectNode = true;
     this.parallel = false;
@@ -2540,47 +2540,47 @@ function EventCommandSetMoveTurnAPicture(command) {
     i = 0;
     k = command[i++];
     v = command[i++];
-    this.index = new SystemValue(k, v);
+    this.index = SystemValue.create(k, v);
     checked = command[i++] === RPM.NUM_BOOL_TRUE;
     if (checked) {
         k = command[i++];
         v = command[i++];
         i++; 
-        this.pictureID = new SystemValue(k, v);
+        this.pictureID = SystemValue.create(k, v);
     }
     checked = command[i++] === RPM.NUM_BOOL_TRUE;
     if (checked) {
         k = command[i++];
         v = command[i++];
-        this.zoom = new SystemValue(k, v);
+        this.zoom = SystemValue.create(k, v);
     }
     checked = command[i++] === RPM.NUM_BOOL_TRUE;
     if (checked) {
         k = command[i++];
         v = command[i++];
-        this.opacity = new SystemValue(k, v);
+        this.opacity = SystemValue.create(k, v);
     }
     checked = command[i++] === RPM.NUM_BOOL_TRUE;
     if (checked) {
         k = command[i++];
         v = command[i++];
-        this.x = new SystemValue(k, v);
+        this.x = SystemValue.create(k, v);
     }
     checked = command[i++] === RPM.NUM_BOOL_TRUE;
     if (checked) {
         k = command[i++];
         v = command[i++];
-        this.y = new SystemValue(k, v);
+        this.y = SystemValue.create(k, v);
     }
     checked = command[i++] === RPM.NUM_BOOL_TRUE;
     if (checked) {
         k = command[i++];
         v = command[i++];
-        this.angle = new SystemValue(k, v);
+        this.angle = SystemValue.create(k, v);
     }
     k = command[i++];
     v = command[i++];
-    this.time = new SystemValue(k, v);
+    this.time = SystemValue.create(k, v);
     this.waitEnd = command[i++] === RPM.NUM_BOOL_TRUE;
 
     this.isDirectNode = true;
@@ -2728,7 +2728,7 @@ function EventCommandRemoveAPicture(command) {
     i = 0;
     k = command[i++];
     v = command[i++];
-    this.index = new SystemValue(k, v);
+    this.index = SystemValue.create(k, v);
 
     this.isDirectNode = true;
     this.parallel = false;
@@ -2769,55 +2769,55 @@ function EventCommandSetDialogBoxOptions(command) {
     if (checked) {
         k = command[i++];
         v = command[i++];
-        this.windowSkinID = new SystemValue(k, v);
+        this.windowSkinID = SystemValue.create(k, v);
     }
     checked = command[i++] === RPM.NUM_BOOL_TRUE;
     if (checked) {
         k = command[i++];
         v = command[i++];
-        this.x = new SystemValue(k, v);
+        this.x = SystemValue.create(k, v);
     }
     checked = command[i++] === RPM.NUM_BOOL_TRUE;
     if (checked) {
         k = command[i++];
         v = command[i++];
-        this.y = new SystemValue(k, v);
+        this.y = SystemValue.create(k, v);
     }
     checked = command[i++] === RPM.NUM_BOOL_TRUE;
     if (checked) {
         k = command[i++];
         v = command[i++];
-        this.w = new SystemValue(k, v);
+        this.w = SystemValue.create(k, v);
     }
     checked = command[i++] === RPM.NUM_BOOL_TRUE;
     if (checked) {
         k = command[i++];
         v = command[i++];
-        this.h = new SystemValue(k, v);
+        this.h = SystemValue.create(k, v);
     }
     checked = command[i++] === RPM.NUM_BOOL_TRUE;
     if (checked) {
         k = command[i++];
         v = command[i++];
-        this.pLeft = new SystemValue(k, v);
+        this.pLeft = SystemValue.create(k, v);
     }
     checked = command[i++] === RPM.NUM_BOOL_TRUE;
     if (checked) {
         k = command[i++];
         v = command[i++];
-        this.pTop = new SystemValue(k, v);
+        this.pTop = SystemValue.create(k, v);
     }
     checked = command[i++] === RPM.NUM_BOOL_TRUE;
     if (checked) {
         k = command[i++];
         v = command[i++];
-        this.pRight = new SystemValue(k, v);
+        this.pRight = SystemValue.create(k, v);
     }
     checked = command[i++] === RPM.NUM_BOOL_TRUE;
     if (checked) {
         k = command[i++];
         v = command[i++];
-        this.pBottom = new SystemValue(k, v);
+        this.pBottom = SystemValue.create(k, v);
     }
     checked = command[i++] === RPM.NUM_BOOL_TRUE;
     if (checked) {
@@ -2827,13 +2827,13 @@ function EventCommandSetDialogBoxOptions(command) {
     if (checked) {
         k = command[i++];
         v = command[i++];
-        this.fX = new SystemValue(k, v);
+        this.fX = SystemValue.create(k, v);
     }
     checked = command[i++] === RPM.NUM_BOOL_TRUE;
     if (checked) {
         k = command[i++];
         v = command[i++];
-        this.fY = new SystemValue(k, v);
+        this.fY = SystemValue.create(k, v);
     }
     checked = command[i++] === RPM.NUM_BOOL_TRUE;
     if (checked) {
@@ -2843,31 +2843,31 @@ function EventCommandSetDialogBoxOptions(command) {
     if (checked) {
         k = command[i++];
         v = command[i++];
-        this.tcText = new SystemValue(k, v);
+        this.tcText = SystemValue.create(k, v);
     }
     checked = command[i++] === RPM.NUM_BOOL_TRUE;
     if (checked) {
         k = command[i++];
         v = command[i++];
-        this.tcOutline = new SystemValue(k, v);
+        this.tcOutline = SystemValue.create(k, v);
     }
     checked = command[i++] === RPM.NUM_BOOL_TRUE;
     if (checked) {
         k = command[i++];
         v = command[i++];
-        this.tcBackground = new SystemValue(k, v);
+        this.tcBackground = SystemValue.create(k, v);
     }
     checked = command[i++] === RPM.NUM_BOOL_TRUE;
     if (checked) {
         k = command[i++];
         v = command[i++];
-        this.tSize = new SystemValue(k, v);
+        this.tSize = SystemValue.create(k, v);
     }
     checked = command[i++] === RPM.NUM_BOOL_TRUE;
     if (checked) {
         k = command[i++];
         v = command[i++];
-        this.tFont = new SystemValue(k, v);
+        this.tFont = SystemValue.create(k, v);
     }
 
     this.isDirectNode = true;
@@ -3078,7 +3078,7 @@ function EventCommandRemoveObjectFromMap(command) {
     i = 0;
     k = command[i++];
     v = command[i++];
-    this.objectID = new SystemValue(k, v);
+    this.objectID = SystemValue.create(k, v);
 
     this.isDirectNode = true;
     this.parallel = false;
@@ -3175,7 +3175,7 @@ function EventCommandAllowForbidSaves(command) {
     i = 0;
     k = command[i++];
     v = command[i++];
-    this.allow = new SystemValue(k, v);
+    this.allow = SystemValue.create(k, v);
 }
 
 EventCommandAllowForbidSaves.prototype = Object.create(EventCommand.prototype);
@@ -3203,7 +3203,7 @@ function EventCommandAllowForbidMainMenu(command) {
     i = 0;
     k = command[i++];
     v = command[i++];
-    this.allow = new SystemValue(k, v);
+    this.allow = SystemValue.create(k, v);
 }
 
 EventCommandAllowForbidMainMenu.prototype = Object.create(EventCommand.prototype);
@@ -3236,7 +3236,7 @@ function EventCommandCallACommonReaction(command) {
         paramID = command[i++];
         k = command[i++];
         v = command[i++];
-        this.parameters[paramID] = new SystemValue(k, v);
+        this.parameters[paramID] = SystemValue.create(k, v);
     }
 }
 
@@ -3270,7 +3270,7 @@ EventCommandCallACommonReaction.prototype.update = function(currentState, object
                 if (k === PrimitiveValueKind.Default) {
                     parameter = v;
                 } else {
-                    parameter = new SystemValue(k, null);
+                    parameter = SystemValue.create(k, null);
                 }
             }
             this.parameters[id] = parameter;

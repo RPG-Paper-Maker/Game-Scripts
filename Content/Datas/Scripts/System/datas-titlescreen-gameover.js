@@ -31,12 +31,12 @@ DatasTitlescreenGameover.prototype.read = function() {
         json = JSON.parse(res);
 
         // Title screen
-        this.isTitleBackgroundImage = RPM.jsonDefault(json.itbi, true);
-        this.titleBackgroundImageID = RPM.jsonDefault(json.tb, 1);
-        this.titleBackgroundVideoID = RPM.jsonDefault(json.tbv, 1);
+        this.isTitleBackgroundImage = RPM.defaultValue(json.itbi, true);
+        this.titleBackgroundImageID = RPM.defaultValue(json.tb, 1);
+        this.titleBackgroundVideoID = RPM.defaultValue(json.tbv, 1);
         this.titleMusic = new SystemPlaySong(SongKind.Music);
         this.titleMusic.read(json.tm);
-        jsonTab = RPM.jsonDefault(json.tc, []);
+        jsonTab = RPM.defaultValue(json.tc, []);
         l = jsonTab.length;
         this.titleCommands = new Array(l);
         for (i = 0; i < l; i++) {

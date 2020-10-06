@@ -158,8 +158,7 @@ DatasBattleSystem.prototype = {
             this.idExpStatistic = json.xp;
 
             // Formulas
-            this.formulaIsDead = new SystemValue();
-            this.formulaIsDead.read(json.fisdead);
+            this.formulaIsDead = SystemValue.create(json.fisdead);
             this.formulaCrit = SystemValue.readOrDefaultMessage(json.fc);
 
             // Musics

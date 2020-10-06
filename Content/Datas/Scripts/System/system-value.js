@@ -13,29 +13,45 @@
 *   A value in the system
 *   @property {number} kind The kind of value
 *   @property {number} value The value
-*   @param {number} [k=PrimitiveValueKind.None] The kind of value
-*   @param {number} [v=0] The value
+
 */
 class SystemValue
 {
-    constructor(k = PrimitiveValueKind.None, v = 0)
+    constructor(json)
     {
-        this.kind = k;
+        if (json)
+        {
+            this.read(json);
+        }
+    }
+
+    // -------------------------------------------------------
+    /** Create a new value from kind and value
+    *   @static
+    *   @param {number} [k=PrimitiveValueKind.None] The kind of value
+    *   @param {number} [v=0] The value
+    *   @returns {SystemValue}
+    */
+    static create = function(k = PrimitiveValueKind.None, v = 0)
+    {
+        let systemValue = new SystemValue();
+        systemValue.kind = k;
         switch (k) 
         {
         case PrimitiveValueKind.None:
-            this.value = null;
+            systemValue.value = null;
             break;
         case PrimitiveValueKind.Message:
-            this.value = RPM.numToString(v);
+            systemValue.value = RPM.numToString(v);
             break;
         case PrimitiveValueKind.Switch:
-            this.value = RPM.numToBool(v);
+            systemValue.value = RPM.numToBool(v);
             break;
         default:
-            this.value = v;
+            systemValue.value = v;
             break;
         }
+        return systemValue;
     }
 
     // -------------------------------------------------------
@@ -48,7 +64,7 @@ class SystemValue
     static createValueCommand = function(command, iterator) {
         let k = command[iterator.i++];
         let v = command[iterator.i++];
-        return new SystemValue(k, v);
+        return SystemValue.create(k, v);
     }
 
     // -------------------------------------------------------
@@ -58,7 +74,7 @@ class SystemValue
     */
     static createNone()
     {
-        return new SystemValue(PrimitiveValueKind.None, null);
+        return SystemValue.create(PrimitiveValueKind.None, null);
     }
 
     // -------------------------------------------------------
@@ -69,7 +85,7 @@ class SystemValue
     */
     static createNumber(n)
     {
-        return new SystemValue(PrimitiveValueKind.Number, n);
+        return SystemValue.create(PrimitiveValueKind.Number, n);
     }
 
     // -------------------------------------------------------
@@ -80,7 +96,7 @@ class SystemValue
     */
     static createMessage(m)
     {
-        return new SystemValue(PrimitiveValueKind.Message, m);
+        return SystemValue.create(PrimitiveValueKind.Message, m);
     }
 
     // -------------------------------------------------------
@@ -91,7 +107,7 @@ class SystemValue
     */
     static createNumberDouble(n)
     {
-        return new SystemValue(PrimitiveValueKind.NumberDouble, n);
+        return SystemValue.create(PrimitiveValueKind.NumberDouble, n);
     }
 
     // -------------------------------------------------------
@@ -102,7 +118,7 @@ class SystemValue
     */
     static createKeyBoard(k)
     {
-        return new SystemValue(PrimitiveValueKind.KeyBoard, k);
+        return SystemValue.create(PrimitiveValueKind.KeyBoard, k);
     }
 
     // -------------------------------------------------------
@@ -113,7 +129,7 @@ class SystemValue
     */
     static createSwitch(b)
     {
-        return new SystemValue(PrimitiveValueKind.Switch, RPM.boolToNum(b));
+        return SystemValue.create(PrimitiveValueKind.Switch, RPM.boolToNum(b));
     }
 
     // -------------------------------------------------------
@@ -124,7 +140,7 @@ class SystemValue
     */
     static createVariable(id)
     {
-        return new SystemValue(PrimitiveValueKind.Variable, id);
+        return SystemValue.create(PrimitiveValueKind.Variable, id);
     }
 
     // -------------------------------------------------------
@@ -135,7 +151,7 @@ class SystemValue
     */
     static createParameter(id)
     {
-        return new SystemValue(PrimitiveValueKind.Parameter, id);
+        return SystemValue.create(PrimitiveValueKind.Parameter, id);
     }
 
     // -------------------------------------------------------
@@ -146,7 +162,7 @@ class SystemValue
     */
     static createProperty(id)
     {
-        return new SystemValue(PrimitiveValueKind.Property, id);
+        return SystemValue.create(PrimitiveValueKind.Property, id);
     }
 
     // -------------------------------------------------------
@@ -184,7 +200,7 @@ class SystemValue
     */
     static readOrDefaultDatabase = function(json, id = 1)
     {
-        return RPM.isUndefined(json) ? new SystemValue(PrimitiveValueKind
+        return RPM.isUndefined(json) ? SystemValue.create(PrimitiveValueKind
             .DataBase, id) : SystemValue.readFromJSON(json);
     }
 
@@ -197,7 +213,7 @@ class SystemValue
     */
     static readOrDefaultMessage(json, m)
     {
-        return RPM.isUndefined(json) ? new SystemValue(PrimitiveValueKind
+        return RPM.isUndefined(json) ? SystemValue.create(PrimitiveValueKind
             .Message, m) : SystemValue.readFromJSON(json);
     }
 

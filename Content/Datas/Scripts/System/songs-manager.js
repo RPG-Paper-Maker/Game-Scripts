@@ -192,7 +192,7 @@ SongsManager.prototype = {
         }
         if (this.musicEffectStep === 0) 
         {
-            this.playSong(SongKind.MusicEffect, id, volume, null, null);
+            this.playMusic(SongKind.MusicEffect, id, volume, null, null);
             this.musicEffectStep++;
         }
         if (this.musicEffectStep === 1) 

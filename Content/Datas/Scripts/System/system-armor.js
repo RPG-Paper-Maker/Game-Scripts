@@ -16,26 +16,41 @@
 // -------------------------------------------------------
 
 /** @class
-*   An armor of the game.
-*   @property {string} name The name of the armor.
-*   @property {number} idType The kind of armor (ID).
+*   An armor of the game
+*   @extends SystemCommonSkillItem
+*   @property {boolean} hasEffect Indicate if the armor has an effect
+*   @property {string} name The name of the armor
+*   @property {number} idType The kind of armor (ID)
+*   @param {Object} [json=undefined] Json object describing the armor
 */
-function SystemArmor() {
-    SystemCommonSkillItem.call(this);
+class SystemArmor extends SystemCommonSkillItem
+{
+    constructor(json)
+    {
+        super();
 
-    this.hasEffect = false;
-}
+        this.hasEffect = false;
+        if (json)
+        {
+            this.read(json);
+        }
+    }
 
-SystemArmor.prototype = Object.create(SystemCommonSkillItem.prototype);
-
-// -------------------------------------------------------
-
-SystemArmor.prototype.read = function(json) {
-    SystemCommonSkillItem.prototype.read.call(this, json);
-}
-
-// -------------------------------------------------------
-
-SystemArmor.prototype.getType = function() {
-    return RPM.datasGame.battleSystem.armorsKind[this.type];
+    // -------------------------------------------------------
+    /** Read the JSON associated to the armor
+    *   @param {Object} json Json object describing the armor
+    */
+    read(json)
+    {
+        super.read(json);
+    }
+    
+    // -------------------------------------------------------
+    /** Get the armor type
+    *   @returns {SystemWeaponArmorKind}
+    */
+    getType()
+    {
+        return RPM.datasGame.battleSystem.armorsKind[this.type];
+    }
 }

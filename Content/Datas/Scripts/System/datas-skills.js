@@ -9,39 +9,23 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS DatasSkills
-//
-// -------------------------------------------------------
-
 /** @class
-*   All the skills datas.
+*   All the skills datas
 *   @property {SystemSkill[]} list List of all the skills of the game according
-*   to ID.
+*   to ID
 */
-function DatasSkills(){
-    this.read();
-}
+class DatasSkills
+{
+    constructor()
+    {
 
-DatasSkills.prototype = {
+    }
 
-    /** Read the JSON file associated to skills.
+    /** Read the JSON file associated to skills
     */
-    read: function(){
-        RPM.openFile(this, RPM.FILE_SKILLS, true, function(res){
-            var json = JSON.parse(res)["skills"];
-            var i, l = json.length;
-            this.list = new Array(l+1);
-
-            // Sorting all the skills according to the ID
-            for (var i = 0; i < l; i++){
-                var jsonSkill = json[i];
-                var id = jsonSkill["id"];
-                var skill = new SystemSkill();
-                skill.read(jsonSkill);
-                this.list[id] = skill;
-            }
-        });
+    async read()
+    {
+        let json = (await RPM.parseFileJSON(RPM.FILE_SKILLS)).skills;
+        this.list = RPM.readJSONSystemList(json, SystemSkill);
     }
 }

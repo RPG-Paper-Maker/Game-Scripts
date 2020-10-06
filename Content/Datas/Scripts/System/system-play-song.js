@@ -9,98 +9,107 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemPlaySong
-//
-// -------------------------------------------------------
-
 /** @class
+*   A way to play a song
+*   @param {SongKind} kind The kind of song to play
+*   @param {Object} [json=undefined] Json object describing the play song
 */
-function SystemPlaySong(kind) {
-    this.kind = kind;
-}
+class SystemPlaySong
+{
+    /** The music that was previously played (before the current)
+    *   @member {number} [SystemPlaySong.previousMusic=null]
+    */
+    static previousMusic = null;
+    /** The current playing music
+    *   @member {number} [SystemPlaySong.currentPlayingMusic=null]
+    */
+    static currentPlayingMusic = null;
 
-SystemPlaySong.previousMusic = null;
-SystemPlaySong.currentPlayingMusic = null;
+    constructor(kind, json)
+    {
+        this.kind = kind;
+        if (json)
+        {
+            this.read(json);
+        }
+    }
 
-// -------------------------------------------------------
+    // -------------------------------------------------------
+    /** Read the JSON associated to the play song
+    *   @param {Object} json Json object describing the play song
+    */
+    read(json)
+    {
+        if (!json)
+        {
+            this.setDefault();
+            return;
+        }
+        this.songID = json.isbi ? SystemValue.create(json.vid) : 
+        this.volume = SystemValue.create(json.v);
+        this.isStart = json.is;
+        this.start = this.isStart ? SystemValue.create(json.s) : SystemValue
+            .createNumber(0);
+        this.isEnd = json.ie;
+        this.end = this.isEnd ? SystemValue.create(json.e) : SystemValue
+            .createNumber(0);
+    }
 
-SystemPlaySong.prototype = {
-
-    setDefault: function() {
+    // -------------------------------------------------------
+    /** Set song play to default values
+    */
+    setDefault()
+    {
         this.songID = SystemValue.createNumber(-1);
         this.volume = SystemValue.createNumber(100);
         this.isStart = false;
         this.isEnd = false;
-    },
+    }
 
     // -------------------------------------------------------
-
-    /** Read the JSON associated to the play song.
-    *   @param {Object} json Json object describing the object.
+    /** Read the JSON associated to the play song
+    *   @returns {Object}
     */
-    read: function(json) {
-        if (!json) {
-            this.setDefault();
-            return;
-        }
-
-        // Parse
-        var id = json.id;
-        var isSelectedByID = json.isbi;
-        if (isSelectedByID) {
-            this.songID = new SystemValue();
-            this.songID.read(json.vid);
-        } else {
-            this.songID = SystemValue.createNumber(id);
-        }
-
-        this.volume = new SystemValue();
-        this.volume.read(json.v);
-        this.isStart = json.is;
-        if (this.isStart) {
-            this.start = new SystemValue();
-            this.start.read(json.s);
-        } else {
-            this.start = SystemValue.createNumber(0);
-        }
-        this.isEnd = json.ie;
-        if (this.isEnd) {
-            this.end = new SystemValue();
-            this.end.read(json.e);
-        } else {
-            this.end = SystemValue.createNumber(0);
-        }
-    },
-
-    // -------------------------------------------------------
-
-    initialize: function() {
+    initialize()
+    {
         return this.kind === SongKind.MusicEffect ? {
             parallel: false,
             timeStop: new Date().getTime()
         } : null;
-    },
+    }
 
     // -------------------------------------------------------
-
-    updateValues: function(songID, volume, isStart, start, isEnd, end) {
+    /** Read the JSON associated to the play song
+    *   @param {SystemValue} songID The song ID
+    *   @param {SystemValue} volume The volume to play
+    *   @param {boolean} isStart Indicate if there's a start value
+    *   @param {SystemValue} start The start of the song to play
+    *   @param {boolean} isEnd Indicate if there's a end value
+    *   @param {SystemValue} end The end of the song to play
+    */
+    updateValues(songID, volume, isStart, start, isEnd, end)
+    {
         this.songID = songID;
         this.volume = volume;
         this.isStart = isStart;
         this.start = start;
         this.isEnd = isEnd;
         this.end = end;
-    },
+    }
 
     // -------------------------------------------------------
-
-    playSong: function(start, volume) {
-        if (typeof start === 'undefined') {
+    /** Play the music
+    *   @param {number} [start=undefined] The start of the song to play
+    *   @param {number} [volume=undefined] The volume to play
+    */
+    playMusic(start, volume)
+    {
+        if (RPM.isUndefined(start))
+        {
             start = this.start ? this.start.getValue() : null;
         }
-        if (typeof volume === 'undefined') {
+        if (RPM.isUndefined(volume))
+        {
             volume = this.volume.getValue() / 100;
         }
 
@@ -112,29 +121,35 @@ SystemPlaySong.prototype = {
         {
             return 1;
         }
-
-        if (this.kind === SongKind.Music) {
+        // Update current and previous played music
+        if (this.kind === SongKind.Music)
+        {
             SystemPlaySong.previousMusic = SystemPlaySong.currentPlayingMusic;
             SystemPlaySong.currentPlayingMusic = this;
         }
-
-        RPM.songsManager.playSong(this.kind, this.songID.getValue(), volume, start,
-            this.end ? this.end.getValue() : null);
-
+        RPM.songsManager.playMusic(this.kind, this.songID.getValue(), volume, 
+            start, this.end ? this.end.getValue() : null);
         return 1;
-    },
+    }
 
     // -------------------------------------------------------
-
-    playSound: function() {
-        RPM.songsManager.playSound(this.songID.getValue(), this.volume.getValue() /
-            100);
-    },
+    /** Play the sound
+    */
+    playSound()
+    {
+        RPM.songsManager.playSound(this.songID.getValue(), this.volume
+            .getValue() / 100);
+    }
 
     // -------------------------------------------------------
-
-    playMusicEffect: function(currentState) {
-        var played = RPM.songsManager.playMusicEffect(this.songID.getValue(),
+    /** Play the music effect and return the next node value
+    *   @param {Object} currentState The current state of the playing music 
+    *   effect
+    *   @returns {number}
+    */
+    playMusicEffect(currentState)
+    {
+        let played = RPM.songsManager.playMusicEffect(this.songID.getValue(),
             this.volume.getValue() / 100, currentState);
         currentState.end = played;
         return currentState.parallel ? (played ? 1 : 0) : 1;

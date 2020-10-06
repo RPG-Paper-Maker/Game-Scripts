@@ -67,11 +67,11 @@ class SystemObjectState
             this.indexX = json.x;
             this.indexY = json.y;
         }
-        this.objectMovingKind = RPM.jsonDefault(json.omk, ObjectMovingKind.Fix);
+        this.objectMovingKind = RPM.defaultValue(json.omk, ObjectMovingKind.Fix);
         this.route = new SystemObjectReaction(
             {
                 bh: false,
-                c: [RPM.jsonDefault(json.ecr,
+                c: [RPM.defaultValue(json.ecr,
                     {
                         kind: EventCommandKind.MoveObject,
                         command: [PrimitiveValueKind.DataBase, -1, 1, 1, 0, 
@@ -80,8 +80,8 @@ class SystemObjectState
                 ]
             }
         );
-        this.speedID = RPM.jsonDefault(json.s, 1);
-        this.frequencyID = RPM.jsonDefault(json.f, 1);
+        this.speedID = RPM.defaultValue(json.s, 1);
+        this.frequencyID = RPM.defaultValue(json.f, 1);
         this.moveAnimation = json.move;
         this.stopAnimation = json.stop;
         this.climbAnimation = json.climb;
@@ -90,7 +90,7 @@ class SystemObjectState
         this.setWithCamera = json.cam;
         this.pixelOffset = json.pix;
         this.keepPosition = json.pos;
-        this.detection = RPM.jsonDefault(json.ecd, null);
+        this.detection = RPM.defaultValue(json.ecd, null);
         if (this.detection !== null)
         {
             this.detection = EventCommand.getEventCommand(this.detection);

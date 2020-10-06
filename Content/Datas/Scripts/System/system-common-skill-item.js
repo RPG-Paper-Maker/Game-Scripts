@@ -9,146 +9,141 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemCommonSkillItem
-//
-// -------------------------------------------------------
-
 /** @class
+*   A common class for skills, items, weapons, armors
+*   @extends SystemIcon
+*   @property {boolean} [hasType=true] Indicate if the common has a type
+*   @property {boolean} [hasTargetKind=true] Indicate if the common has a 
+*   target kind
+*   @param {Object} [json=undefined] Json object describing the common
 */
-function SystemCommonSkillItem() {
-    SystemIcon.call(this);
-
-    this.hasType = true;
-    this.hasTargetKind = true;
-}
-
-SystemCommonSkillItem.prototype = Object.create(SystemIcon.prototype);
-
-// -------------------------------------------------------
-
-SystemCommonSkillItem.prototype.read = function(json) {
-    SystemIcon.prototype.read.call(this, json);
-    var jsonCosts, jsonEffects, jsonCharacteristics, cost, effect, characteristic;
-    var i, l;
-
-    this.type = typeof json.t !== 'undefined' ? json.t : 1;
-    this.consumable = typeof json.con !== 'undefined' ? json.con : false;
-    this.oneHand = typeof json.oh !== 'undefined' ? json.oh : true;
-    this.description = new SystemLang();
-    this.description.read(RPM.jsonDefault(json.d, SystemLang.EMPTY_NAMES));
-    this.targetKind = typeof json.tk !== 'undefined' ? json.tk : TargetKind.None;
-    this.targetConditionFormula = SystemValue.readOrNone(json.tcf);
-    this.conditionFormula = SystemValue.readOrNone(json.cf);
-    this.availableKind = typeof json.ak !== 'undefined' ? json.ak : AvailableKind
-        .Never;
-    this.sound = new SystemPlaySong(SongKind.sound);
-    this.sound.read(json.s);
-    this.animationUserID = SystemValue.readOrNone(json.auid);
-    this.animationTargetID = SystemValue.readOrNone(json.atid);
-    this.price = SystemValue.readOrDefaultNumber(json.p);
-
-    jsonCosts = json.cos;
-    l = jsonCosts ? jsonCosts.length : 0;
-    this.costs = new Array(l);
-    for (i = 0; i < l; i++) {
-        cost = new SystemCost();
-        cost.read(jsonCosts[i]);
-        this.costs[i] = cost;
-    }
-    jsonEffects = json.e;
-    l = jsonEffects ? jsonEffects.length : 0;
-    this.effects = new Array(l);
-    for (i = 0; i < l; i++) {
-        effect = new SystemEffect();
-        effect.read(jsonEffects[i]);
-        // TEMP BEFORE ANIMATIONS
-        effect.sound = this.sound;
-        this.effects[i] = effect;
-    }
-    jsonCharacteristics = json.car;
-    l = jsonCharacteristics ? jsonCharacteristics.length : 0;
-    this.characteristics = new Array(l);
-    for (i = 0; i < l; i++) {
-        characteristic = new SystemCharacteristic();
-        characteristic.read(jsonCharacteristics[i]);
-        this.characteristics[i] = characteristic;
-    }
-}
-
-// -------------------------------------------------------
-
-SystemCommonSkillItem.prototype.useCommand = function() {
-    var possible;
-
-    possible = this.isPossible();
-    if (possible) {
-        this.use();
+class SystemCommonSkillItem extends SystemIcon
+{
+    constructor(json)
+    {
+        super();
+        this.hasType = true;
+        this.hasTargetKind = true;
+        if (json)
+        {
+            this.read(json);
+        }
     }
 
-    return possible;
-}
+    // -------------------------------------------------------
+    /** Read the JSON associated to the common
+    *   @param {Object} json Json object describing the common
+    */
+    read(json)
+    {
+        super.read(json);
 
-// -------------------------------------------------------
-
-SystemCommonSkillItem.prototype.use = function() {
-    var i, l, isDoingSomething;
-
-    isDoingSomething = false;
-    for (i = 0, l = this.effects.length; i < l; i++) {
-        isDoingSomething = isDoingSomething || this.effects[i].execute();
+        this.type = RPM.defaultValue(json.t, 1);
+        this.consumable = RPM.defaultValue(json.con, false);
+        this.oneHand = RPM.defaultValue(json.oh, true);
+        this.description = new SystemLang(RPM.defaultValue(json.d, SystemLang
+            .EMPTY_NAMES));
+        this.targetKind = RPM.defaultValue(json.tk, TargetKind.None);
+        this.targetConditionFormula = SystemValue.readOrNone(json.tcf);
+        this.conditionFormula = SystemValue.readOrNone(json.cf);
+        this.availableKind = RPM.defaultValue(json.ak, AvailableKind.Never);
+        this.sound = new SystemPlaySong(SongKind.sound, json.s);
+        this.animationUserID = SystemValue.readOrNone(json.auid);
+        this.animationTargetID = SystemValue.readOrNone(json.atid);
+        this.price = SystemValue.readOrDefaultNumber(json.p);
+        let costs = RPM.defaultValue(json.cos, []);
+        this.costs = RPM.readJSONSystemListByIndex(costs, SystemCost);
+        let effects = RPM.defaultValue(json.e, []);
+        this.effects = RPM.readJSONSystemListByIndex(effects, SystemEffect);
+        let characteristics = RPM.defaultValue(json.car, []);
+        this.characteristics = RPM.readJSONSystemListByIndex(characteristics, 
+            SystemCharacteristic);
     }
-    if (isDoingSomething) {
-        for (i = 0, l = this.costs.length; i < l; i++) {
+    
+    // -------------------------------------------------------
+    /** Use the command if possible
+    *   @returns {boolean}
+    */
+    useCommand()
+    {
+        let possible = this.isPossible();
+        if (possible)
+        {
+            this.use();
+        }
+        return possible;
+    }
+    
+    // -------------------------------------------------------
+    /** Execute the effects and costs
+    *   @returns {boolean}
+    */
+    use()
+    {
+        letisDoingSomething = false;
+        let i, l;
+        for (i = 0, l = this.effects.length; i < l; i++)
+        {
+            isDoingSomething = isDoingSomething || this.effects[i].execute();
+        }
+        if (isDoingSomething)
+        {
+            for (i = 0, l = this.costs.length; i < l; i++)
+            {
+                this.costs[i].use();
+            }
+        }
+        return isDoingSomething;
+    }
+    
+    // -------------------------------------------------------
+    /** Use the costs
+    */
+    cost()
+    {
+        for (let i = 0, l = this.costs.length; i < l; i++)
+        {
             this.costs[i].use();
         }
     }
-
-    return isDoingSomething;
-}
-
-// -------------------------------------------------------
-
-SystemCommonSkillItem.prototype.cost = function() {
-    var i, l;
-
-    for (i = 0, l = this.costs.length; i < l; i++) {
-        this.costs[i].use();
-    }
-}
-
-// -------------------------------------------------------
-
-SystemCommonSkillItem.prototype.isPossible = function() {
-    var i, l;
-
-    for (i = 0, l = this.costs.length; i < l; i++) {
-        if (!this.costs[i].isPossible()) {
-            return false;
+    
+    // -------------------------------------------------------
+    /** Use the costs
+    *   @returns {boolean}
+    */
+    isPossible()
+    {
+        for (let i = 0, l = this.costs.length; i < l; i++)
+        {
+            if (!this.costs[i].isPossible())
+            {
+                return false;
+            }
         }
+        return true;
     }
-
-    return true;
-}
-
-// -------------------------------------------------------
-
-SystemCommonSkillItem.prototype.getTargetKindString = function() {
-    switch (this.targetKind) {
-    case TargetKind.None:
-        return "None";
-    case TargetKind.User:
-        return "The user";
-    case TargetKind.Enemy:
-        return "An enemy";
-    case TargetKind.Ally:
-        return "An ally";
-    case TargetKind.AllEnemies:
-        return "All enemies";
-    case TargetKind.AllAllies:
-        return "All allies";
-    }
-
-    return "";
+    
+    // -------------------------------------------------------
+    /** Get the target kind string
+    *   @returns {string}
+    */
+    getTargetKindString()
+    {
+        switch (this.targetKind)
+        {
+        case TargetKind.None:
+            return "None";
+        case TargetKind.User:
+            return "The user";
+        case TargetKind.Enemy:
+            return "An enemy";
+        case TargetKind.Ally:
+            return "An ally";
+        case TargetKind.AllEnemies:
+            return "All enemies";
+        case TargetKind.AllAllies:
+            return "All allies";
+        }
+        return RPM.STRING_EMPTY;
+    }    
 }

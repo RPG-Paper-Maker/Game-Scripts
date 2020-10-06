@@ -29,8 +29,8 @@ class SystemTitleCommand extends SystemLang
     {
         super.read(json);
     
-        this.kind = RPM.jsonDefault(json.k, TitleCommandKind.NewGame);
-        this.script = RPM.jsonDefault(json.s, RPM.STRING_EMPTY);
+        this.kind = RPM.defaultValue(json.k, TitleCommandKind.NewGame);
+        this.script = RPM.defaultValue(json.s, RPM.STRING_EMPTY);
     }
     
     // -------------------------------------------------------

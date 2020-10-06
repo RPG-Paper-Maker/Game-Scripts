@@ -188,7 +188,7 @@ SceneBattle.prototype.initializeMusics = function() {
     let song = RPM.songsManager.currentSong[SongKind.Music];
     SceneBattle.musicMapTime = song === null ? 0 : song.seek() / RPM
         .ONE_SECOND_MILLI;
-    RPM.datasGame.battleSystem.battleMusic.playSong();
+    RPM.datasGame.battleSystem.battleMusic.playMusic();
 };
 
 

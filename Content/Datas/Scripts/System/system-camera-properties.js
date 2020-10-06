@@ -35,9 +35,9 @@ class SystemCameraProperties
         this.targetOffsetX = SystemValue.readOrDefaultNumber(json.tox, 0);
         this.targetOffsetY = SystemValue.readOrDefaultNumber(json.toy, 0);
         this.targetOffsetZ = SystemValue.readOrDefaultNumber(json.toz, 0);
-        this.isSquareTargetOffsetX = RPM.jsonDefault(json.istox, true);
-        this.isSquareTargetOffsetY = RPM.jsonDefault(json.istoy, true);
-        this.isSquareTargetOffsetZ = RPM.jsonDefault(json.istoz, true);
+        this.isSquareTargetOffsetX = RPM.defaultValue(json.istox, true);
+        this.isSquareTargetOffsetY = RPM.defaultValue(json.istoy, true);
+        this.isSquareTargetOffsetZ = RPM.defaultValue(json.istoz, true);
         this.fov = SystemValue.readOrDefaultNumberDouble(json.fov, 45);
         this.near = SystemValue.readOrDefaultNumberDouble(json.n, 1);
         this.far = SystemValue.readOrDefaultNumberDouble(json.f, 100000);

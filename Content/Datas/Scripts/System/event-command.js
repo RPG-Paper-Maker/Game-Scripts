@@ -205,7 +205,7 @@ function EventCommandShowText(command) {
     i = 0;
     k = command[i++];
     v = command[i++];
-    this.interlocutor = new SystemValue(k, v);
+    this.interlocutor = SystemValue.create(k, v);
     this.facesetID = command[i++];
     this.message = command[i++];
 
@@ -688,18 +688,18 @@ function EventCommandIf(command) {
     case 0: // Variable / Param / Prop
         k = command[i++];
         v = command[i++];
-        this.variableParamProp = new SystemValue(k, v);
+        this.variableParamProp = SystemValue.create(k, v);
         this.variableParamPropOperationKind = command[i++];
         k = command[i++];
         v = command[i++];
-        this.variableParamPropValue = new SystemValue(k, v);
+        this.variableParamPropValue = SystemValue.create(k, v);
         break;
     case 1: // Heroes
         this.heroesSelection = command[i++];
         if (this.heroesSelection === ConditionHeroesKind.TheHeroeWithInstanceID) {
             k = command[i++];
             v = command[i++];
-            this.heroInstanceID = new SystemValue(k, v);;
+            this.heroInstanceID = SystemValue.create(k, v);;
         }
         this.heroesInTeam = RPM.numToBool(command[i++]);
         if (this.heroesInTeam) {
@@ -710,7 +710,7 @@ function EventCommandIf(command) {
         case 0:
             k = command[i++];
             v = command[i++];
-            this.heroesNamed = new SystemValue(k, v);
+            this.heroesNamed = SystemValue.create(k, v);
             break;
         case 1:
             this.heroesInTeamValue = command[i++];
@@ -718,7 +718,7 @@ function EventCommandIf(command) {
         case 2:
             k = command[i++];
             v = command[i++];
-            this.heroesSkillID = new SystemValue(k, v);
+            this.heroesSkillID = SystemValue.create(k, v);
             break;
         case 3:
             this.heroesEquipedKind = command[i++];
@@ -726,81 +726,81 @@ function EventCommandIf(command) {
             case 0:
                 k = command[i++];
                 v = command[i++];
-                this.heroesEquipedWeaponID = new SystemValue(k, v);
+                this.heroesEquipedWeaponID = SystemValue.create(k, v);
                 break;
             case 1:
                 k = command[i++];
                 v = command[i++];
-                this.heroesEquipedArmorID = new SystemValue(k, v);
+                this.heroesEquipedArmorID = SystemValue.create(k, v);
                 break;
             }
             break;
         case 4:
             k = command[i++];
             v = command[i++];
-            this.heroesStatusID = new SystemValue(k, v);
+            this.heroesStatusID = SystemValue.create(k, v);
             break;
         case 5:
             k = command[i++];
             v = command[i++];
-            this.heroesStatisticID = new SystemValue(k, v);
+            this.heroesStatisticID = SystemValue.create(k, v);
             this.heroesStatisticOperation = command[i++];
             k = command[i++];
             v = command[i++];
-            this.heroesStatisticValue = new SystemValue(k, v);
+            this.heroesStatisticValue = SystemValue.create(k, v);
             break;
         }
         break;
     case 2:
         k = command[i++];
         v = command[i++];
-        this.currencyID = new SystemValue(k, v);
+        this.currencyID = SystemValue.create(k, v);
         this.operationCurrency = command[i++];
         k = command[i++];
         v = command[i++];
-        this.currencyValue = new SystemValue(k, v);
+        this.currencyValue = SystemValue.create(k, v);
         break;
     case 3:
         k = command[i++];
         v = command[i++];
-        this.itemID = new SystemValue(k, v);
+        this.itemID = SystemValue.create(k, v);
         this.operationItem = command[i++];
         k = command[i++];
         v = command[i++];
-        this.itemValue = new SystemValue(k, v);
+        this.itemValue = SystemValue.create(k, v);
         break;
     case 4:
         k = command[i++];
         v = command[i++];
-        this.weaponID = new SystemValue(k, v);
+        this.weaponID = SystemValue.create(k, v);
         this.operationWeapon = command[i++];
         k = command[i++];
         v = command[i++];
-        this.weaponValue = new SystemValue(k, v);
+        this.weaponValue = SystemValue.create(k, v);
         this.weaponEquiped = RPM.numToBool(command[i++]);
         break;
     case 5:
         k = command[i++];
         v = command[i++];
-        this.armorID = new SystemValue(k, v);
+        this.armorID = SystemValue.create(k, v);
         this.operationArmor = command[i++];
         k = command[i++];
         v = command[i++];
-        this.armorValue = new SystemValue(k, v);
+        this.armorValue = SystemValue.create(k, v);
         this.armorEquiped = RPM.numToBool(command[i++]);
         break;
     case 6:
         k = command[i++];
         v = command[i++];
-        this.keyID = new SystemValue(k, v);
+        this.keyID = SystemValue.create(k, v);
         k = command[i++];
         v = command[i++];
-        this.keyValue = new SystemValue(k, v);
+        this.keyValue = SystemValue.create(k, v);
         break;
     case 7:
         k = command[i++];
         v = command[i++];
-        this.script = new SystemValue(k, v);
+        this.script = SystemValue.create(k, v);
         break;
     }
 
@@ -1363,7 +1363,7 @@ function EventCommandModifyTeam(command){
     case 0: // If create new instance
         k = command[i++];
         v = command[i++];
-        this.instanceLevel = new SystemValue(k, v);
+        this.instanceLevel = SystemValue.create(k, v);
         this.instanceTeam = command[i++];
         this.stockVariableId = command[i++];
         this.instanceKind = command[i++];
@@ -1373,7 +1373,7 @@ function EventCommandModifyTeam(command){
         this.addRemoveKind = command[i++];
         k = command[i++];
         v = command[i++];
-        this.addRemoveID = new SystemValue(k, v);
+        this.addRemoveID = SystemValue.create(k, v);
         this.addRemoveTeam = this.command[i++];
         break;
     }

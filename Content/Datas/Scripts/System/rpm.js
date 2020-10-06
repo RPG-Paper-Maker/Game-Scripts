@@ -131,6 +131,8 @@ RPM.STRING_SLASH = "/";
 RPM.STRING_NEW_LINE = "\n";
 RPM.STRING_EQUAL = "=";
 RPM.STRING_DASH = "-";
+RPM.STRING_SPACE = " ";
+RPM.STRING_ZERO = "0";
 RPM.UNDEFINED = 'undefined';
 RPM.TAG_BOLD = "b";
 RPM.TAG_ITALIC = "i";
@@ -1500,12 +1502,6 @@ RPM.formulaContainsTarget = function(formula) {
 
 // -------------------------------------------------------
 
-RPM.jsonDefault = function(json, defaultValue) {
-    return RPM.isUndefined(json) ? defaultValue : json;
-};
-
-// -------------------------------------------------------
-
 RPM.defaultValue = function(value, defaultValue) {
     return RPM.isUndefined(value) ? defaultValue : value;
 };
@@ -1557,6 +1553,21 @@ RPM.readJSONSystemList = function(jsonList, func, isConstructor=true)
     {
         jsonElement = jsonList[i];
         list[jsonElement.id] = isConstructor ? new func(jsonElement) : func.call
+            (null, jsonElement);
+    }
+
+    return list;
+}
+
+RPM.readJSONSystemListByIndex = function(jsonList, func, isConstructor=true)
+{
+    let jsonElement;
+    let l = jsonList.length;
+    let list = new Array(l + 1);
+    for (let i = 0; i < l; i++)
+    {
+        jsonElement = jsonList[i];
+        list[i] = isConstructor ? new func(jsonElement) : func.call
             (null, jsonElement);
     }
 

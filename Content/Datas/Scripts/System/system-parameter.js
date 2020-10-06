@@ -78,16 +78,14 @@ SystemParameter.prototype = {
     *   @param {Object} json Json object describing the object.
     */
     read: function(json){
-        this.value = new SystemValue;
-        this.value.read(json.d);
+        this.value = new SystemValue(json.d);
     },
 
     /** Read the JSON associated to the parameter default value.
     *   @param {Object} json Json object describing the object.
     */
     readDefault: function(json){
-        this.value = new SystemValue;
-        this.value.read(json);
+        this.value = new SystemValue(json);
     },
 
     /** Check if the parameter is equal to another one.

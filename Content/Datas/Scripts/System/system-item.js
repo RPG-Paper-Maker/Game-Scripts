@@ -9,32 +9,40 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemItem
-//
-// -------------------------------------------------------
-
 /** @class
-*   An item of the game.
-*   @property {string} name The name of the item.
-*   @property {number} idType The id of the item's type.
-*   @property {boolean} consumable Indicate if the item is consumable.
+*   An item of the game
+*   @extends SystemCommonSkillItem
+*   @property {string} name The name of the item
+*   @property {number} idType The id of the item's type
+*   @property {boolean} consumable Indicate if the item is consumable
+*   @param {Object} [json=undefined] Json object describing the item
 */
-function SystemItem() {
-    SystemCommonSkillItem.call(this);
-}
+class SystemItem extends SystemCommonSkillItem
+{
+    constructor(json)
+    {
+        super();
+        if (json)
+        {
+            this.read(json);
+        }
+    }
 
-SystemItem.prototype = Object.create(SystemCommonSkillItem.prototype);
+    // -------------------------------------------------------
+    /** Read the JSON associated to the item
+    *   @param {Object} json Json object describing the item
+    */
+    read(json)
+    {
+        super.read(json);
+    }
 
-// -------------------------------------------------------
-
-SystemItem.prototype.read = function(json) {
-    SystemCommonSkillItem.prototype.read.call(this, json);
-}
-
-// -------------------------------------------------------
-
-SystemItem.prototype.getType = function() {
-    return RPM.datasGame.system.itemsTypes[this.type];
+    // -------------------------------------------------------
+    /** Get the item type
+    *   @returns {string}
+    */
+    getType()
+    {
+        return RPM.datasGame.system.itemsTypes[this.type];
+    }
 }

@@ -29,12 +29,12 @@ class SystemSkybox
     */
     read(json)
     {
-        this.front = RPM.jsonDefault(json.fid, 1);
-        this.back = RPM.jsonDefault(json.bid, 1);
-        this.top = RPM.jsonDefault(json.tid, 1);
-        this.bot = RPM.jsonDefault(json.boid, 1);
-        this.left = RPM.jsonDefault(json.lid, 1);
-        this.right = RPM.jsonDefault(json.rid, 1);
+        this.front = RPM.defaultValue(json.fid, 1);
+        this.back = RPM.defaultValue(json.bid, 1);
+        this.top = RPM.defaultValue(json.tid, 1);
+        this.bot = RPM.defaultValue(json.boid, 1);
+        this.left = RPM.defaultValue(json.lid, 1);
+        this.right = RPM.defaultValue(json.rid, 1);
     }
     
     // -------------------------------------------------------

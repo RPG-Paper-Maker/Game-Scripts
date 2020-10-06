@@ -63,7 +63,7 @@ SceneBattle.prototype.initializeStep4 = function(){
     this.priorityIndex = 0;
 
     // Music
-    RPM.datasGame.battleSystem.battleVictory.playSong();
+    RPM.datasGame.battleSystem.battleVictory.playMusic();
 
     // Windows
     w = 200 + RPM.SMALL_PADDING_BOX[0] + RPM.SMALL_PADDING_BOX[2];
@@ -185,7 +185,7 @@ SceneBattle.prototype.unpauseTeamXP = function() {
 // -------------------------------------------------------
 
 SceneBattle.prototype.playMapMusic = function() {
-    SceneBattle.musicMap.playSong(SceneBattle.musicMapTime, 0);
+    SceneBattle.musicMap.playMusic(SceneBattle.musicMapTime, 0);
     RPM.songsManager.initializeProgressionMusic(0, SceneBattle.musicMap.volume, 0,
         SceneBattle.TIME_LINEAR_MUSIC_START);
 }

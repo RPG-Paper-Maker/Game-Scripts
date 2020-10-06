@@ -9,42 +9,50 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemSkill
-//
-// -------------------------------------------------------
-
 /** @class
-*   A skill of the game.
-*   @property {string} name The name of the skill.
+*   A skill of the game
+*   @extends SystemCommonSkillItem
+*   @property {boolean} hasType Indicate if the skill has a type
+*   @property {string} name The name of the skill
+*   @param {Object} [json=undefined] Json object describing the skill
 */
-function SystemSkill(){
-    SystemCommonSkillItem.call(this);
+class SystemSkill extends SystemCommonSkillItem
+{
+    constructor(json)
+    {
+        super();
 
-    this.hasType = false;
-}
-
-SystemSkill.prototype = Object.create(SystemCommonSkillItem.prototype);
-
-// -------------------------------------------------------
-
-SystemSkill.prototype.read = function(json) {
-    SystemCommonSkillItem.prototype.read.call(this, json);
-}
-
-// -------------------------------------------------------
-
-SystemSkill.prototype.getCostString = function() {
-    var i, l, result;
-
-    result = "";
-    for (i = 0, l = this.costs.length; i < l; i++) {
-        result += this.costs[i].toString();
-        if (i === l - 1) {
-            result += " ";
+        this.hasType = false;
+        if (json)
+        {
+            this.read(json);
         }
     }
 
-    return result;
+    // -------------------------------------------------------
+    /** Read the JSON associated to the skill
+    *   @param {Object} json Json object describing the skill
+    */
+    read(json)
+    {
+        super.read(json);
+    }
+    
+    // -------------------------------------------------------
+    /** Get the string representation of costs
+    *   @returns {string}
+    */
+    getCostString()
+    {
+        let result = RPM.STRING_EMPTY;
+        for (let i = 0, l = this.costs.length; i < l; i++)
+        {
+            result += this.costs[i].toString();
+            if (i === l - 1)
+            {
+                result += RPM.STRING_SPACE;
+            }
+        }
+        return result;
+    }    
 }
