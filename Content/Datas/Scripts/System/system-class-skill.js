@@ -9,27 +9,26 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemClassSkill
-//
-// -------------------------------------------------------
-
 /** @class
-*   A skill to learn for a specific class.
-*   @property {number} id The ID of the skill.
-*   @property {number} level The level to reach to learn this skill.
+*   A skill to learn for a specific class
+*   @property {number} id The ID of the skill
+*   @property {number} level The level to reach to learn this skill
 */
-function SystemClassSkill(){
-
-}
-
-SystemClassSkill.prototype = {
+class SystemClassSkill
+{
+    constructor(json)
+    {
+        if (json)
+        {
+            this.read(json);
+        }
+    }
 
     /** Read the JSON associated to the class skill.
     *   @param {Object} json Json object describing the object.
     */
-    read: function(json){
+    read(json)
+    {
         this.id = json.id;
         this.level = json.l;
     }

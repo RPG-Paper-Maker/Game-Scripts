@@ -137,8 +137,7 @@ class DatasSystem
     }
 
     // -------------------------------------------------------
-
-    /** Update the RPM.modelHero global variable by loading the hero model.
+    /** Update the RPM.modelHero global variable by loading the hero model
     */
     async getModelHero()
     {
@@ -173,32 +172,34 @@ class DatasSystem
     }
 
     // -------------------------------------------------------
-
+    /** Load the window skins pictures
+    */
     loadWindowSkins()
     {
-        for (var i = 1, l = this.windowSkins.length; i < l; i++) {
+        for (let i = 1, l = this.windowSkins.length; i < l; i++)
+        {
             this.windowSkins[i].updatePicture();
         }
     }
 
     // -------------------------------------------------------
-    /** Get the default array currencies for a default game.
+    /** Get the default array currencies for a default game
     *   @returns {number[]}
     */
     getDefaultCurrencies()
     {
-        var id, list;
-
-        list = [];
-        for (id in this.currencies) {
+        let list = [];
+        for (let id in this.currencies)
+        {
             list[id] = 0;
         }
-
         return list;
     }
 
     // -------------------------------------------------------
-
+    /** Get the current system window skin
+    *   @returns {SystemWindowSkin}
+    */
     getWindowSkin()
     {
         return this.windowSkins[this.dbOptions.windowSkinID.getValue()];

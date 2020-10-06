@@ -9,39 +9,23 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS DatasTroops
-//
-// -------------------------------------------------------
-
 /** @class
-*   All the troops datas.
+*   All the troops datas
 *   @property {SystemTroop[]} list List of all the troops of the game according
-*   to ID.
+*   to ID
 */
-function DatasTroops(){
-    this.read();
-}
+class DatasTroops
+{
+    constructor()
+    {
 
-DatasTroops.prototype = {
+    }
 
-    /** Read the JSON file associated to troops.
+    /** Read the JSON file associated to troops
     */
-    read: function(){
-        RPM.openFile(this, RPM.FILE_TROOPS, true, function(res){
-            var json = JSON.parse(res).troops;
-            var i, l = json.length;
-            this.list = new Array(l+1);
-
-            // Sorting all the troops according to the ID
-            for (i = 0; i < l; i++){
-                var jsonTroop = json[i];
-                var id = jsonTroop.id;
-                var troop = new SystemTroop();
-                troop.read(jsonTroop);
-                this.list[id] = troop;
-            }
-        });
+    async read()
+    {
+        let json = (await RPM.parseFileJSON(RPM.FILE_TROOPS)).troops;
+        this.list = RPM.readJSONSystemList(json, SystemTroop);
     }
 }

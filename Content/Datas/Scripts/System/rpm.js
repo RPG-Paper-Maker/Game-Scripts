@@ -134,6 +134,7 @@ RPM.STRING_DASH = "-";
 RPM.STRING_SPACE = " ";
 RPM.STRING_ZERO = "0";
 RPM.UNDEFINED = 'undefined';
+RPM.NUMBER = "number";
 RPM.TAG_BOLD = "b";
 RPM.TAG_ITALIC = "i";
 RPM.TAG_LEFT = "l";
@@ -1511,6 +1512,13 @@ RPM.defaultValue = function(value, defaultValue) {
 RPM.isUndefined = function(value) {
     return typeof value === RPM.UNDEFINED;
 };
+
+// -------------------------------------------------------
+
+RPM.isNumber = function(value) {
+    return typeof value === RPM.NUMBER;
+};
+
 
 // -------------------------------------------------------
 

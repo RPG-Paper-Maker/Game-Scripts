@@ -46,11 +46,11 @@ class DatasGame
         this.skills = new DatasSkills();
         this.weapons = new DatasWeapons();
         this.armors = new DatasArmors();
-        /*
         this.classes = new DatasClasses();
         this.heroes = new DatasHeroes();
         this.monsters = new DatasMonsters();
         this.troops = new DatasTroops();
+        /*
         this.battleSystem = new DatasBattleSystem();
         this.titlescreenGameover = new DatasTitlescreenGameover();
         this.keyBoard = new DatasKeyBoard();
@@ -74,15 +74,16 @@ class DatasGame
         await this.skills.read();
         await this.weapons.read();
         await this.armors.read();
-        /*
+        await this.classes.read();
+        await this.heroes.read();
+        await this.monsters.read();
         await this.troops.read();
+        /*
         await this.battleSystem.read();
         await this.titlescreenGameover.read();
         await this.keyBoard.read();
         await this.animations.read();
-        await this.classes.read();
-        await this.heroes.read();
-        await this.monsters.read();
+        
         await this.system.loadWindowSkins();
         await this.dlcs.read();
         */
@@ -91,6 +92,7 @@ class DatasGame
         this.loaded = true;
     }
 
+    // -------------------------------------------------------
     /** Read the JSON files associated to the settings
     */
     async readSettings()
@@ -116,6 +118,11 @@ class DatasGame
         RPM.SHADER_FIX_FRAGMENT = json;
     }
 
+    // -------------------------------------------------------
+    /** Get the list of heros or monsters according to kind
+    *   @param {CharacterKind} kind The kind of character
+    *   @returns {SystemHero[]}
+    */
     getHeroesMonsters(kind)
     {
         return (kind === CharacterKind.Hero) ? this.heroes : this.monsters;

@@ -9,43 +9,23 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS DatasClasses
-//
-// -------------------------------------------------------
-
 /** @class
-*   All the classes datas.
+*   All the classes datas
 *   @property {SystemClass[]} list List of all the classes of the game according
-*   to ID.
+*   to ID
 */
-function DatasClasses() {
+class DatasClasses
+{
+    constructor()
+    {
 
-}
+    }
 
-DatasClasses.prototype = {
-
-    /** Read the JSON file associated to classes.
+    /** Read the JSON file associated to classes
     */
-    read: function(){
-        RPM.openFile(this, RPM.FILE_CLASSES, true, function(res){
-            var json = JSON.parse(res).classes;
-            var i, l = json.length;
-            this.list = new Array(l+1);
-
-            // Sorting all the classes according to the ID
-            for (i = 0; i < l; i++){
-                var jsonClass = json[i];
-                var id = jsonClass.id;
-                var c = new SystemClass();
-                c.read(jsonClass);
-                this.list[id] = c;
-            }
-            this.loaded = true;
-
-            RPM.datasGame.heroes.read();
-            RPM.datasGame.monsters.read();
-        });
+    async read()
+    {
+        let json = (await RPM.parseFileJSON(RPM.FILE_CLASSES)).classes;
+        this.list = RPM.readJSONSystemList(json, SystemClass);
     }
 }

@@ -9,43 +9,24 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS HeroesDatas
-//
-// -------------------------------------------------------
 
 /** @class
-*   All the heroes datas.
+*   All the heroes datas
 *   @property {SystemHero[]} list List of all the heroes of the game according
-*   to ID.
+*   to ID
 */
-function DatasHeroes(){
-    this.loaded = false;
-}
+class DatasHeroes
+{
+    constructor()
+    {
 
-DatasHeroes.prototype = {
+    }
 
-    /** Read the JSON file associated to heroes.
+    /** Read the JSON file associated to heroes
     */
-    read: function() {
-        if (!this.loaded) {
-            RPM.openFile(this, RPM.FILE_HEROES, true, function(res){
-                var json = JSON.parse(res).heroes;
-                var i, l = json.length;
-                this.list = new Array(l+1);
-
-                // Sorting all the heroes according to the ID
-                for (i = 0; i < l; i++){
-                    var jsonHero = json[i];
-                    var id = jsonHero.id;
-                    var hero = new SystemHero();
-                    hero.read(jsonHero);
-                    this.list[id] = hero;
-                }
-
-                this.loaded = true;
-            });
-        }
+    async read()
+    {
+        let json = (await RPM.parseFileJSON(RPM.FILE_HEROES)).heroes;
+        this.list = RPM.readJSONSystemList(json, SystemHero);
     }
 }

@@ -9,92 +9,99 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemHero
-//
-// -------------------------------------------------------
-
 /** @class
-*   An hero of the game.
-*   @property {string} name The name of the hero.
+*   An hero of the game
+*   @property {string} name The name of the hero
 *   @property {number} idClass The class ID of the hero
 */
-function SystemHero(){
+class SystemHero
+{
+    constructor(json)
+    {
+        if (json)
+        {
+            this.read(json);
+        }
+    }
 
-}
-
-SystemHero.prototype = {
-
-    /** Read the JSON associated to the hero.
-    *   @param {Object} json Json object describing the object.
+    /** Read the JSON associated to the hero
+    *   @param {Object} json Json object describing the object
     */
-    read: function(json){
+    read(json)
+    {
         this.name = json.names[1];
         this.idClass = json.class;
-        this.idBattler = typeof json.bid === 'undefined' ? -1 : json.bid;
-        this.idFaceset = typeof json.fid === 'undefined' ? -1 : json.fid;
-        this.classInherit = new SystemClass();
-        this.classInherit.read(json.ci);
+        this.idBattler = RPM.defaultValue(json.bid, -1);
+        this.idFaceset = RPM.defaultValue(json.fid, -1);
+        this.classInherit = new SystemClass(json.ci);
         this.check();
-    },
+    }
 
     // -------------------------------------------------------
 
-    check: function() {
-        if (!RPM.datasGame.classes.list[this.idClass]) {
+    check()
+    {
+        if (!RPM.datasGame.classes.list[this.idClass])
+        {
             RPM.showErrorMessage("Can't find class with ID " + RPM.formatNumber(
                 this.idClass, 4) + " for " + (this.rewards ? "monster" : "hero")
                 + " " + this.name + ", check it in datasbase.");
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    getProperty: function(prop) {
+    getProperty(prop)
+    {
         return RPM.datasGame.classes.list[this.idClass].getProperty(prop,
             this.classInherit);
-    },
+    }
 
     // -------------------------------------------------------
 
-    getExperienceTable: function() {
+    getExperienceTable()
+    {
         return RPM.datasGame.classes.list[this.idClass].getExperienceTable(this
             .classInherit);
-    },
+    }
 
     // -------------------------------------------------------
 
-    getStatisticsProgression: function() {
+    getStatisticsProgression()
+    {
         return RPM.datasGame.classes.list[this.idClass].getStatisticsProgression(
             this.classInherit);
-    },
+    }
+    
+    // -------------------------------------------------------
+
+    getSkills()
+    {
+        return RPM.datasGame.classes.list[this.idClass].getSkills(this
+            .classInherit);
+    }
 
     // -------------------------------------------------------
 
-    getSkills: function(upClass) {
-        return RPM.datasGame.classes.list[this.idClass].getSkills(this.classInherit);
-    },
-
-    // -------------------------------------------------------
-
-    createExpList: function() {
-        var finalLevel = this.getProperty("finalLevel");
-        var experienceBase = this.getProperty("experienceBase");
-        var experienceInflation = this.getProperty("experienceInflation");
-        var experienceTable = this.getExperienceTable();
-        var expList = new Array(finalLevel + 1);
-        var pow, i;
+    createExpList()
+    {
+        let finalLevel = this.getProperty(SystemClass.PROPERTY_FINAL_LEVEL);
+        let experienceBase = this.getProperty(SystemClass
+            .PROPERTY_EXPERIENCE_BASE);
+        let experienceInflation = this.getProperty(SystemClass
+            .PROPERTY_EXPERIENCE_INFLATION);
+        let experienceTable = this.getExperienceTable();
+        let expList = new Array(finalLevel + 1);
 
         // Basis
-        pow = 2.4 + experienceInflation / 100;
+        let pow = 2.4 + experienceInflation / 100;
         expList[1] = 0;
-        for (i = 2; i <= finalLevel; i++) {
+        for (let i = 2; i <= finalLevel; i++)
+        {
             expList[i] = expList[i - 1] + (experienceTable[i - 1] ?
                 experienceTable[i - 1] : (Math.floor(experienceBase * (Math.pow(
                 i + 3, pow) / Math.pow(5, pow)))));
         }
-
         return expList;
     }
 }

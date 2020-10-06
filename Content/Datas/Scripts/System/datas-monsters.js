@@ -9,43 +9,23 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS DatasMonsters
-//
-// -------------------------------------------------------
-
 /** @class
-*   All the monsters datas.
+*   All the monsters datas
 *   @property {SystemMonster[]} list List of all the monsters of the game
-*   according to ID.
+*   according to ID
 */
-function DatasMonsters(){
-    this.loaded = false;
-}
+class DatasMonsters
+{
+    constructor()
+    {
 
-DatasMonsters.prototype = {
+    }
 
-    /** Read the JSON file associated to monsters.
+    /** Read the JSON file associated to monsters
     */
-    read: function(){
-        if (!this.loaded) {
-            RPM.openFile(this, RPM.FILE_MONSTERS, true, function(res){
-                var json = JSON.parse(res).monsters;
-                var i, l = json.length;
-                this.list = new Array(l+1);
-
-                // Sorting all the monsters according to the ID
-                for (i = 0; i < l; i++){
-                    var jsonMonster = json[i];
-                    var id = jsonMonster.id;
-                    var monster = new SystemMonster();
-                    monster.read(jsonMonster);
-                    this.list[id] = monster;
-                }
-
-                this.loaded = true;
-            });
-        }
+    async read()
+    {
+        let json = (await RPM.parseFileJSON(RPM.FILE_MONSTERS)).monsters;
+        this.list = RPM.readJSONSystemList(json, SystemMonster);
     }
 }

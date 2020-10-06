@@ -9,111 +9,107 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemMonster : SystemHero
-//
-// -------------------------------------------------------
 
 /** @class
-*   A monster of the game.
+*   A monster of the game
 *   @extends SystemHero
 */
-function SystemMonster(){
-    SystemHero.call(this);
-}
-
-SystemMonster.prototype = Object.create(SystemHero.prototype);
-
-// -------------------------------------------------------
-
-SystemMonster.prototype.read = function(json) {
-    var i, hash, currenciesLength, jsonCurrencies, progression, jsonLoots,
-        lootsLength, loot, jsonActions, actionsLength, action;
-
-    this.rewards = {};
-    SystemHero.prototype.read.call(this, json);
-
-    jsonCurrencies = json.cur;
-    currenciesLength = jsonCurrencies.length;
-    jsonLoots = RPM.defaultValue(json.loots, []);
-    lootsLength = jsonLoots.length;
-    jsonActions = RPM.defaultValue(json.a, []);
-    actionsLength = jsonActions.length;
-    this.rewards.xp = new SystemProgressionTable(this.getProperty("finalLevel"));
-    this.rewards.currencies = new Array(currenciesLength);
-    this.rewards.loots = new Array(lootsLength);
-    this.actions = new Array(actionsLength);
-
-    // Experience
-    this.rewards.xp.read(json.xp);
-
-    // Currencies
-    for (i = 0; i < currenciesLength; i++) {
-        hash = jsonCurrencies[i];
-        progression = new SystemProgressionTable(hash.k);
-        progression.read(hash.v);
-        this.rewards.currencies[i] = progression;
-    }
-
-    // Loots
-    for (i = 0; i < lootsLength; i++) {
-        loot = new SystemLoot();
-        loot.read(jsonLoots[i]);
-        this.rewards.loots[i] = loot;
-    }
-
-    // Actions
-    for (i = 0; i < actionsLength; i++) {
-        action = new SystemMonsterAction();
-        action.read(jsonActions[i]);
-        action.monster = this;
-        this.actions[i] = action;
-    }
-}
-
-// -------------------------------------------------------
-
-SystemMonster.prototype.getRewardExperience = function(level) {
-    return this.rewards.xp.getProgressionAt(level, this.getProperty(
-        "finalLevel"));
-}
-
-// -------------------------------------------------------
-
-SystemMonster.prototype.getRewardCurrencies = function(level) {
-    var i, l, currencies, progression;
-    currencies = {};
-    for (i = 0, l = this.rewards.currencies.length; i < l; i++) {
-        progression = this.rewards.currencies[i];
-        currencies[progression.id] = progression.getProgressionAt(level, this
-            .getProperty("finalLevel"));
-    }
-
-    return currencies;
-}
-
-// -------------------------------------------------------
-
-SystemMonster.prototype.getRewardLoots = function(level) {
-    var i, l, loots, loot, list;
-
-    list = new Array(3);
-    list[LootKind.Item] = {};
-    list[LootKind.Weapon] = {};
-    list[LootKind.Armor] = {};
-
-    for (i = 0, l = this.rewards.loots.length; i < l; i++) {
-        loot = this.rewards.loots[i].currenLoot(level);
-        if (loot !== null) {
-            loots = list[loot.k];
-            if (loots.hasOwnProperty(loot.id)) {
-                loots[loot.id] += loot.nb;
-            } else {
-                loots[loot.id] = loot.nb;
-            }
+class SystemMonster extends SystemHero
+{
+    constructor(json)
+    {
+        super();
+        if (json)
+        {
+            this.read(json);
         }
     }
 
-    return list;
+    // -------------------------------------------------------
+
+    read(json)
+    {
+        super.read(json);
+
+        this.rewards = {};
+
+        // Experience
+        this.rewards.xp = new SystemProgressionTable(this.getProperty(
+            SystemClass.PROPERTY_FINAL_LEVEL), json.xp);
+
+        // Currencies
+        let jsonCurrencies = json.cur;
+        let hash, progression;
+        let l = jsonCurrencies.length;
+        this.rewards.currencies = new Array(l);
+        for (let i = 0; i < l; i++)
+        {
+            hash = jsonCurrencies[i];
+            progression = new SystemProgressionTable(hash.k, hash.v);
+            this.rewards.currencies[i] = progression;
+        }
+        // Loots
+        this.rewards.loots = RPM.readJSONSystemListByIndex(RPM.defaultValue(json
+            .loots, []), SystemLoot);
+
+        // Actions
+        this.actions = RPM.readJSONSystemListByIndex(RPM.defaultValue(json
+            .a, []), (jsonAction) =>
+            {
+                let action = new SystemMonsterAction(jsonAction);
+                action.monster = this;
+                return action;
+            }, false
+        );
+    }
+
+    // -------------------------------------------------------
+
+    getRewardExperience(level)
+    {
+        return this.rewards.xp.getProgressionAt(level, this.getProperty(
+            SystemClass.PROPERTY_FINAL_LEVEL));
+    }
+
+    // -------------------------------------------------------
+
+    getRewardCurrencies(level)
+    {
+        let currencies = {};
+        let progression;
+        for (let i = 0, l = this.rewards.currencies.length; i < l; i++)
+        {
+            progression = this.rewards.currencies[i];
+            currencies[progression.id] = progression.getProgressionAt(level, 
+                this.getProperty(SystemClass.PROPERTY_FINAL_LEVEL));
+        }
+        return currencies;
+    }
+
+    // -------------------------------------------------------
+
+    getRewardLoots(level)
+    {
+        let list = new Array(3);
+        list[LootKind.Item] = {};
+        list[LootKind.Weapon] = {};
+        list[LootKind.Armor] = {};
+        let loot, loots;
+        for (let i = 0, l = this.rewards.loots.length; i < l; i++)
+        {
+            loot = this.rewards.loots[i].currenLoot(level);
+            if (loot !== null)
+            {
+                loots = list[loot.k];
+                if (loots.hasOwnProperty(loot.id))
+                {
+                    loots[loot.id] += loot.nb;
+                } else
+                {
+                    loots[loot.id] = loot.nb;
+                }
+            }
+        }
+        return list;
+    }
 }

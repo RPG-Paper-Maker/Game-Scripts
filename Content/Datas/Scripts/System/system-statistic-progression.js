@@ -9,48 +9,45 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemStatisticProgression
-//
-// -------------------------------------------------------
-
 /** @class
-*   A statistic progression of the game.
-*   @property {number} initialValue The initial value of the statistic.
-*   @property {number} finalValue The final value of the statistic.
-*   @property {number} id The id of the statistic.
+*   A statistic progression of the game
+*   @property {number} initialValue The initial value of the statistic
+*   @property {number} finalValue The final value of the statistic
+*   @property {number} id The id of the statistic
 */
-function SystemStatisticProgression(){
-
-}
-
-SystemStatisticProgression.prototype = {
+class SystemStatisticProgression
+{
+    constructor(json)
+    {
+        if (json)
+        {
+            this.read(json);
+        }
+    }
 
     /** Read the JSON associated to the statistic progression.
     *   @param {Object} json Json object describing the object.
     */
-    read: function(json) {
+    read(json)
+    {
         this.id = json.id;
-        this.maxValue = new SystemValue();
-        this.maxValue.read(json.m);
-        this.isFix = json["if"];
+        this.maxValue = new SystemValue(json.m);
+        this.isFix = json.if;
         if (this.isFix) {
-            this.table = new SystemProgressionTable();
-            this.table.read(json.t);
-            this.random = new SystemValue();
-            this.random.read(json.r);
+            this.table = new SystemProgressionTable(json.t);
+            this.random = new SystemValue(json.r);
         } else {
-            this.formula = new SystemValue();
-            this.formula.read(json.f);
+            this.formula = new SystemValue(json.f);
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    getValueAtLevel: function(level, user, maxLevel) {
-        return this.isFix ? this.table.getProgressionAt(level, typeof maxLevel
-             === 'undefined' ? user.character.getProperty("finalLevel") :
-             maxLevel) : RPM.evaluateFormula(this.formula.getValue(), user, null);
+    getValueAtLevel(level, user, maxLevel)
+    {
+        return this.isFix ? this.table.getProgressionAt(level, RPM.defaultValue(
+            maxLevel, user.character.getProperty(SystemClass
+            .PROPERTY_FINAL_LEVEL))) : RPM.evaluateFormula(this.formula
+            .getValue(), user, null);
     }
 }

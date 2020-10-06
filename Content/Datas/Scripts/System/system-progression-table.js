@@ -9,73 +9,73 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemProgressionTable
-//
-// -------------------------------------------------------
-
 /** @class
 *   A progression table
 */
-function SystemProgressionTable(id) {
-    if (id) {
-        this.id = id;
+class SystemProgressionTable
+{
+    constructor(id, json)
+    {
+        if (!RPM.isUndefined(id))
+        {
+            this.id = id;
+        }
+        if (json)
+        {
+            this.read(json);
+        }
     }
-}
 
-SystemProgressionTable.createProgression = function(i, f, equation) {
-    var progression = new SystemProgressionTable();
-    progression.initialize(i, f, equation);
-    return progression;
-};
-
-SystemProgressionTable.prototype = {
-
-    initialize: function(i, f, equation) {
-        if (typeof i === 'number') {
-            i = SystemValue.createNumber(i);
-        }
-        if (typeof f === 'number') {
-            f = SystemValue.createNumber(f);
-        }
-
-        this.initialValue = i;
-        this.finalValue = f;
-        this.equation = equation;
-        this.table = [];
-    },
+    static createProgression(i, f, equation)
+    {
+        let progression = new SystemProgressionTable();
+        progression.initialize(i, f, equation);
+        return progression;
+    }
 
     /** Read the JSON associated to the picture.
     *   @param {Object} json Json object describing the object.
     */
-    read: function(json){
-        this.initialValue = new SystemValue();
-        this.initialValue.read(json.i);
-        this.finalValue = new SystemValue();
-        this.finalValue.read(json.f);
+    read(json)
+    {
+        this.initialValue = new SystemValue(json.i);
+        this.finalValue = new SystemValue(json.f);
         this.equation = json.e;
         this.table = {};
-        var jsonTable = json.t;
-        var i, l;
-        if (jsonTable) {
-            for (i = 0, l = jsonTable.length; i < l; i++) {
+        let jsonTable = json.t;
+        if (jsonTable)
+        {
+            for (let i = 0, l = jsonTable.length; i < l; i++)
+            {
                 this.table[jsonTable[i].k] = jsonTable[i].v;
             }
         }
-    },
+    }
+    
+    initialize(i, f, equation)
+    {
+        if (RPM.isNumber(i))
+        {
+            i = SystemValue.createNumber(i);
+        }
+        if (RPM.isNumber(f))
+        {
+            f = SystemValue.createNumber(f);
+        }
+        this.initialValue = i;
+        this.finalValue = f;
+        this.equation = equation;
+        this.table = [];
+    }
 
     // -------------------------------------------------------
 
-    getProgressionAt: function(current, f, decimal) {
-        if (typeof decimal === 'undefined') {
-            decimal = false;
-        }
-
+    getProgressionAt(current, f, decimal = false)
+    {
         // Check if specific value
-        var table = this.table[current];
-        var result;
-        if (table) {
+        let table = this.table[current];
+        if (table)
+        {
             return table;
         }
 
@@ -85,97 +85,116 @@ SystemProgressionTable.prototype = {
         this.duration = f - 1;
 
         // Check according to equation
-        var x = current - 1;
+        let x = current - 1;
+        let result;
         switch (this.equation) {
         case 0:
-            result = this.easingLinear(x); break;
+            result = this.easingLinear(x);
+            break;
         case -1:
-            result = this.easingQuadraticIn(x); break;
+            result = this.easingQuadraticIn(x);
+            break;
         case 1:
-            result = this.easingQuadraticOut(x); break;
+            result = this.easingQuadraticOut(x);
+            break;
         case -2:
-            result = this.easingCubicIn(x); break;
+            result = this.easingCubicIn(x);
+            break;
         case 2:
-            result = this.easingCubicOut(x); break;
+            result = this.easingCubicOut(x);
+            break;
         case -3:
-            result = this.easingQuarticIn(x); break;
+            result = this.easingQuarticIn(x);
+            break;
         case 3:
-            result = this.easingQuarticOut(x); break;
+            result = this.easingQuarticOut(x);
+            break;
         case -4:
-            result = this.easingQuinticIn(x); break;
+            result = this.easingQuinticIn(x);
+            break;
         case 4:
-            result = this.easingQuinticOut(x); break;
+            result = this.easingQuinticOut(x);
+            break;
         default:
-            result = 0; break;
+            result = 0;
+            break;
         }
-
-        if (!decimal) {
+        if (!decimal)
+        {
             result = Math.floor(result);
         }
-
         return result;
-    },
+    }
 
     // -------------------------------------------------------
 
-    easingLinear: function(x) {
+    easingLinear(x)
+    {
         return this.change * x / this.duration + this.start;
-    },
+    }
 
     // -------------------------------------------------------
 
-    easingQuadraticIn: function(x) {
+    easingQuadraticIn(x)
+    {
         x /= this.duration;
         return this.change * x * x + this.start;
-    },
+    }
 
     // -------------------------------------------------------
 
-    easingQuadraticOut: function(x) {
+    easingQuadraticOut(x)
+    {
         x /= this.duration;
         return -this.change * x * (x - 2) + this.start;
-    },
+    }
 
     // -------------------------------------------------------
 
-    easingCubicIn: function(x) {
+    easingCubicIn(x)
+    {
         x /= this.duration;
         return this.change * x * x * x + this.start;
-    },
+    }
 
     // -------------------------------------------------------
 
-    easingCubicOut: function(x) {
+    easingCubicOut(x)
+    {
         x /= this.duration;
         x--;
         return this.change * (x * x * x + 1) + this.start;
-    },
+    }
 
     // -------------------------------------------------------
 
-    easingQuarticIn: function(x) {
+    easingQuarticIn(x)
+    {
         x /= this.duration;
         return this.change * x * x * x * x + this.start;
-    },
+    }
 
     // -------------------------------------------------------
 
-    easingQuarticOut: function(x) {
+    easingQuarticOut(x)
+    {
         x /= this.duration;
         x--;
         return -this.change * (x * x * x * x - 1) + this.start;
-    },
+    }
 
     // -------------------------------------------------------
 
-    easingQuinticIn: function(x) {
+    easingQuinticIn(x)
+    {
         x /= this.duration;
         return this.change * x * x * x * x * x + this.start;
-    },
+    }
 
     // -------------------------------------------------------
 
-    easingQuinticOut: function(x) {
+    easingQuinticOut(x)
+    {
         x /= this.duration;
         x--;
         return this.change * (x * x * x * x * x + 1) + this.start;
