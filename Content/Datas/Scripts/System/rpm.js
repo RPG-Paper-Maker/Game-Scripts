@@ -1552,7 +1552,7 @@ RPM.numToString = function(n)
     return RPM.STRING_EMPTY + n;
 }
 
-RPM.readJSONSystemList = function(jsonList, func, isConstructor=true)
+RPM.readJSONSystemList = function(jsonList, func, isConstructor = true)
 {
     let jsonElement;
     let l = jsonList.length;
@@ -1563,11 +1563,10 @@ RPM.readJSONSystemList = function(jsonList, func, isConstructor=true)
         list[jsonElement.id] = isConstructor ? new func(jsonElement) : func.call
             (null, jsonElement);
     }
-
     return list;
 }
 
-RPM.readJSONSystemListByIndex = function(jsonList, func, isConstructor=true)
+RPM.readJSONSystemListByIndex = function(jsonList, func, isConstructor = true)
 {
     let jsonElement;
     let l = jsonList.length;
@@ -1578,7 +1577,40 @@ RPM.readJSONSystemListByIndex = function(jsonList, func, isConstructor=true)
         list[i] = isConstructor ? new func(jsonElement) : func.call
             (null, jsonElement);
     }
+    return list;
+}
 
+RPM.readJSONSystemListByIDIndex = function(jsonList, listIDs, listIndexes, func,
+    isConstructor = true)
+{
+    let l = jsonList.length;
+    let maxID = 0;
+    let id, jsonElement;
+    for (let i = 0; i < l; i++)
+    {
+        jsonElement = jsonList[i];
+        id = jsonElement.id;
+        listIDs[id] = isConstructor ? new func(jsonElement) : func.call(null, 
+            jsonElement);
+        listIndexes[i] = id;
+        if (id > maxID)
+        {
+            maxID = id;
+        }
+    }
+    return maxID;
+}
+
+RPM.readJSONSystemListHash = function(jsonList, func, isConstructor = true)
+{
+    let list = [];
+    let jsonElement;
+    for (let i = 0, l = jsonList.length; i < l; i++)
+    {
+        jsonElement = jsonList[i];
+        list[jsonElement[RPM.JSON_KEY]] = isConstructor ? new func(jsonElement[
+            RPM.JSON_VALUE]) : func.call(null, jsonElement);
+    }
     return list;
 }
 

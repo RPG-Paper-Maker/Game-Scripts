@@ -9,36 +9,25 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemElement
-//
-// -------------------------------------------------------
-
 /** @class
-*   An element of the game.
-*   @property {string} name The name of the element.
+*   An element of the game
+*   @property {string} name The name of the element
 */
-function SystemElement() {
-
-}
-
-SystemElement.prototype = Object.create(SystemIcon.prototype);
-
-// -------------------------------------------------------
-
-SystemElement.prototype.read = function(json) {
-    SystemIcon.prototype.read.call(this, json);
-
-    var i, l, jsonList, jsonElement, value;
-
-    jsonList = json.e;
-    this.efficiency = [];
-
-    for (i = 0, l = jsonList.length; i < l; i++) {
-        jsonElement = jsonList[i];
-        value = new SystemValue();
-        value.read(jsonElement[RPM.JSON_VALUE]);
-        this.efficiency[jsonElement[RPM.JSON_KEY]] = value;
+class SystemElement extends SystemIcon
+{
+    constructor(json)
+    {
+        super();
+        if (json)
+        {
+            this.read(json);
+        }
     }
+
+    read(json)
+    {
+        super.read(json);
+    
+        this.efficiency = RPM.readJSONSystemListHash(json.e, SystemValue);
+    }    
 }

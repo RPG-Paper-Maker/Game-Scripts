@@ -50,8 +50,8 @@ class DatasGame
         this.heroes = new DatasHeroes();
         this.monsters = new DatasMonsters();
         this.troops = new DatasTroops();
-        /*
         this.battleSystem = new DatasBattleSystem();
+        /*
         this.titlescreenGameover = new DatasTitlescreenGameover();
         this.keyBoard = new DatasKeyBoard();
         this.animations = new DatasAnimations();
@@ -78,8 +78,8 @@ class DatasGame
         await this.heroes.read();
         await this.monsters.read();
         await this.troops.read();
-        /*
         await this.battleSystem.read();
+        /*
         await this.titlescreenGameover.read();
         await this.keyBoard.read();
         await this.animations.read();

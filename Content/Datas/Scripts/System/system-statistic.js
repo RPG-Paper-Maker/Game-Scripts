@@ -9,83 +9,82 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemStatistic
-//
-// -------------------------------------------------------
-
 /** @class
-*   A statistic of the game.
-*   @property {string} name The name of the statistic.
+*   A statistic of the game
+*   @property {string} name The name of the statistic
 *   @property {string} abbreviation The abbreviation of the statistic
-*   (for javascript code).
-*   @property {boolean} isFix Indicate if this statistic is fix (no bar).
+*   (for javascript code)
+*   @property {boolean} isFix Indicate if this statistic is fix (no bar)
 */
-function SystemStatistic() {
+class SystemStatistic
+{
+    constructor(json)
+    {
+        if (json)
+        {
+            this.read(json);
+        }
+    }
 
-}
-
-// -------------------------------------------------------
-
-SystemStatistic.createElementRes = function(id, name) {
-    var stat;
-
-    stat = new SystemStatistic();
-    stat.name = name + " res.";
-    stat.abbreviation = "elres" + id;
-    stat.isFix = true;
-    stat.isRes = true;
-
-    return stat;
-}
-
-// -------------------------------------------------------
-
-SystemStatistic.createElementResPercent = function(id, name) {
-    var stat;
-
-    stat = new SystemStatistic();
-    stat.name = name + " res.(%)";
-    stat.abbreviation = "elresp" + id;
-    stat.isFix = true;
-    stat.isRes = true;
-
-    return stat;
-}
-
-SystemStatistic.prototype = {
+    static createElementRes(id, name)
+    {
+        let stat;
+        stat = new SystemStatistic();
+        stat.name = name + " res.";
+        stat.abbreviation = "elres" + id;
+        stat.isFix = true;
+        stat.isRes = true;
+        return stat;
+    }
+    
+    // -------------------------------------------------------
+    
+    static createElementResPercent(id, name)
+    {
+        let stat;
+        stat = new SystemStatistic();
+        stat.name = name + " res.(%)";
+        stat.abbreviation = "elresp" + id;
+        stat.isFix = true;
+        stat.isRes = true;
+        return stat;
+    }
 
     /** Read the JSON associated to the statistic.
     *   @param {Object} json Json object describing the object.
     */
-    read: function(json){
+    read(json)
+    {
         this.name = json.names[1];
         this.abbreviation = json.abr;
         this.isFix = json.fix;
-    },
+    }
 
     // -------------------------------------------------------
 
-    getMaxAbbreviation: function() {
+    getMaxAbbreviation()
+    {
         return "max" + this.abbreviation;
-    },
+    }
 
     // -------------------------------------------------------
 
-    getBeforeAbbreviation: function() {
+    getBeforeAbbreviation()
+    {
         return "before" + this.abbreviation;
-    },
+    }
 
     // -------------------------------------------------------
 
-    getBonusAbbreviation: function() {
+    getBonusAbbreviation()
+    {
         return "bonus" + this.abbreviation;
-    },
+    }
 
     // -------------------------------------------------------
 
-    getAbbreviationNext: function() {
+    getAbbreviationNext()
+    {
         return this.isFix ? this.abbreviation : this.getMaxAbbreviation();
     }
 }

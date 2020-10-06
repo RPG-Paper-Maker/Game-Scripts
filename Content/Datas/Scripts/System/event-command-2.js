@@ -128,8 +128,8 @@ EventCommandStartBattle.prototype = {
 
         // Initializing battle
         if (currentState.sceneBattle === null) {
-            var battleMap = (this.battleMapID === null) ? new SystemBattleMap(
-                this.idMap.getValue(), [this.x.getValue(), this.y.getValue(), 
+            var battleMap = (this.battleMapID === null) ? SystemBattleMap.create
+                (this.idMap.getValue(), [this.x.getValue(), this.y.getValue(), 
                 this.yPlus.getValue(), this.z.getValue()]) : RPM.datasGame
                 .battleSystem.battleMaps[this.battleMapID.getValue()];
             RPM.game.heroBattle = {

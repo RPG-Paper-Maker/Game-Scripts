@@ -9,26 +9,30 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemBattleMap
-//
-// -------------------------------------------------------
-
 /** @class
-*   A battle map of the game.
+*   A battle map of the game
 */
-function SystemBattleMap(idMap, position) {
-    this.idMap = idMap;
-    this.position = position;
-}
+class SystemBattleMap
+{
+    constructor(json)
+    {
+        if (json)
+        {
+            this.read(json);
+        }
+    }
 
-SystemBattleMap.prototype = {
+    static create(idMap, position)
+    {
+        this.idMap = idMap;
+        this.position = position;
+    }
 
-    /** Read the JSON associated to the element.
-    *   @param {Object} json Json object describing the object.
+    /** Read the JSON associated to the element
+    *   @param {Object} json Json object describing the object
     */
-    read: function(json) {
+    read(json)
+    {
         this.idMap = json.idm;
         this.position = json.p;
     }
