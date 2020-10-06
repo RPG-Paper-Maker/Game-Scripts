@@ -9,59 +9,60 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemKeyBoard
-//
-// -------------------------------------------------------
-
 /** @class
-*   A key shortcut of the game.
-*   @property {number[][]} sc The shortcut values.
+*   A key shortcut of the game
+*   @property {number[][]} sc The shortcut values
 */
-function SystemKeyBoard(){
+class SystemKeyBoard extends SystemLang
+{
+    constructor(json)
+    {
+        super();
+        if (json)
+        {
+            this.read(json);
+        }
+    }
 
-}
-
-SystemKeyBoard.prototype = {
-
-    /** Read the JSON associated to the key.
-    *   @param {Object} json Json object describing the object.
+    /** Read the JSON associated to the key
+    *   @param {Object} json Json object describing the object
     */
-    read: function(json) {
-        SystemLang.prototype.read.call(this, json);
+    read(json)
+    {
+        super.read(json);
 
-        var i, l, j, ll;
         this.id = json.id;
         this.sc = json.sc;
-        var list;
+        let list;
+        let i, j, l, m;
         for (i = 0, l = this.sc.length; i < l; i++) 
         {
             list = this.sc[i];
-            for (j = 0, ll = list.length; j < ll; j++) 
+            for (j = 0, m = list.length; j < m; j++) 
             {
                 list[j] = KeyEvent.qtToDOM(list[j]);
             }
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    toString: function() {
-        var i, j, l, ll, stringList, subList, originalSubList;
-
-        l = this.sc.length;
-        stringList = new Array(l);
-        for (i = 0; i < l; i++) {
+    toString()
+    {
+        let l = this.sc.length;
+        let stringList = new Array(l);
+        let j, m, originalSubList, subList;
+        for (let i = 0; i < l; i++)
+        {
             originalSubList = this.sc[i];
-            ll = originalSubList.length;
-            subList = new Array(ll);
-            for (j = 0; j < ll; j++) {
+            m = originalSubList.length;
+            subList = new Array(m);
+            for (j = 0; j < ll; j++)
+            {
                 subList[j] = KeyEvent.getKeyString(originalSubList[j]);
             }
             stringList[i] = subList.join(" + ");
         }
-
         return stringList.join(" | ");
     }
 }

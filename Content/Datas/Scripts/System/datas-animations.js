@@ -9,40 +9,23 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS DatasAnimations
-//
-// -------------------------------------------------------
-
 /** @class
-*   All the animations datas.
+*   All the animations datas
 *   @property {SystemAnimation[]} list List of all the animations of the game
-*   according to ID.
+*   according to ID
 */
-function DatasAnimations() {
-    this.read();
-}
+class DatasAnimations
+{
+    constructor()
+    {
 
-DatasAnimations.prototype = {
+    }
 
     /** Read the JSON file associated to troops.
     */
-    read: function() {
-        RPM.openFile(this, RPM.FILE_ANIMATIONS, true, function(res) {
-            var i, l, json, jsonAnimation, animation;
-
-            json = JSON.parse(res).animations;
-            l = json.length;
-            this.list = new Array(l + 1);
-
-            // Sorting all the animations according to the ID
-            for (i = 0; i < l; i++){
-                jsonAnimation = json[i];
-                animation = new SystemAnimation();
-                animation.read(jsonAnimation);
-                this.list[jsonAnimation.id] = animation;
-            }
-        });
+    async read()
+    {
+        let json = (await RPM.parseFileJSON(RPM.FILE_ANIMATIONS)).animations;
+        this.list = RPM.readJSONSystemList(json, SystemAnimation);
     }
 }

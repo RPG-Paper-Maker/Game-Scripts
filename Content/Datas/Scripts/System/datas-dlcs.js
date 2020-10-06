@@ -9,25 +9,18 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS DatasDLCs
-//
-// -------------------------------------------------------
+class DatasDLCs
+{
+    constructor()
+    {
 
-function DatasDLCs() {
-    this.read();
-}
-
-DatasDLCs.prototype = {
+    }
 
     /** Read the JSON file associated to dlcs
     */
-    read: function(){
-        RPM.openFile(this, RPM.FILE_DLCS, true, function(res){
-            let json = JSON.parse(res);
-            
-            RPM.PATH_DLCS = "file:///" + json.p;
-        });
+    async read()
+    {
+        let json = await RPM.parseFileJSON(RPM.FILE_DLCS);
+        RPM.PATH_DLCS = RPM.PATH_FILES + json.p;
     }
 }

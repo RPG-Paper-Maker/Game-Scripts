@@ -9,127 +9,118 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS DatasTitlescreenGameover
-//
-// -------------------------------------------------------
-
 /** @class
-*   All the titlescreen and gameover datas.
+*   All the titlescreen and gameover datas
 */
-function DatasTitlescreenGameover() {
-    this.read();
-}
+class DatasTitlescreenGameover
+{
+    constructor()
+    {
 
-// -------------------------------------------------------
+    }
 
-DatasTitlescreenGameover.prototype.read = function() {
-    RPM.openFile(this, RPM.FILE_TITLE_SCREEN_GAME_OVER, true, function(res) {
-        var i, l, j, json, jsonTab, obj;
+    // -------------------------------------------------------
 
-        json = JSON.parse(res);
+    async read()
+    {
+        let json = await RPM.parseFileJSON(RPM.FILE_TITLE_SCREEN_GAME_OVER);
 
         // Title screen
         this.isTitleBackgroundImage = RPM.defaultValue(json.itbi, true);
         this.titleBackgroundImageID = RPM.defaultValue(json.tb, 1);
         this.titleBackgroundVideoID = RPM.defaultValue(json.tbv, 1);
-        this.titleMusic = new SystemPlaySong(SongKind.Music);
-        this.titleMusic.read(json.tm);
-        jsonTab = RPM.defaultValue(json.tc, []);
-        l = jsonTab.length;
-        this.titleCommands = new Array(l);
-        for (i = 0; i < l; i++) {
-            obj = new SystemTitleCommand;
-            obj.read(jsonTab[i]);
-            this.titleCommands[i] = obj;
-        }
-        jsonTab = json.ts;
-        l = jsonTab.length;
+        this.titleMusic = new SystemPlaySong(SongKind.Music, json.tm);
+        this.titleCommands = RPM.readJSONSystemListByIndex(RPM.defaultValue(json
+            .tc, []), SystemTitleCommand);
+        let jsonList = json.ts;
+        let l = jsonList.length;
         this.titleSettings = [];
-        for (i = 0, j = 0; i < l; i++) {
-            obj = jsonTab[i];
-            if (obj.tso) {
+        let obj;
+        for (let i = 0, j = 0; i < l; i++)
+        {
+            obj = jsonList[i];
+            if (obj.tso)
+            {
                 this.titleSettings[j] = obj.id;
                 j++;
             }
         }
-    });
-};
-
-// -------------------------------------------------------
-
-DatasTitlescreenGameover.prototype.getCommandsNames = function() {
-    var i, l, list, obj, titleCommand;
-
-    l = this.titleCommands.length;
-    list = new Array(l);
-    for (i = 0; i < l; i++) {
-        titleCommand = this.titleCommands[i]
-        obj = new GraphicText(titleCommand.name, { align: Align.Center });
-        obj.datas = titleCommand;
-        list[i] = obj;
     }
 
-    return list;
-};
+    // -------------------------------------------------------
 
-// -------------------------------------------------------
-
-DatasTitlescreenGameover.prototype.getCommandsActions = function() {
-    var i, l, list;
-
-    l = this.titleCommands.length;
-    list = new Array(l);
-    for (i = 0; i < l; i++) {
-        list[i] = this.titleCommands[i].getAction();
+    getCommandsNames()
+    {
+        let l = this.titleCommands.length;
+        let list = new Array(l);
+        let titleCommand, obj;
+        for (let i = 0; i < l; i++)
+        {
+            titleCommand = this.titleCommands[i]
+            obj = new GraphicText(titleCommand.name, { align: Align.Center });
+            obj.datas = titleCommand;
+            list[i] = obj;
+        }
+        return list;
     }
 
-    return list;
-};
+    // -------------------------------------------------------
 
-// -------------------------------------------------------
-
-DatasTitlescreenGameover.prototype.getSettingsCommandsContent = function() {
-    var i, l, list;
-
-    l = this.titleSettings.length;
-    list = new Array(l);
-    for (i = 0; i < l; i++) {
-        list[i] = new GraphicSetting(this.titleSettings[i]);
+    getCommandsActions()
+    {
+        let l = this.titleCommands.length;
+        let list = new Array(l);
+        for (let i = 0; i < l; i++)
+        {
+            list[i] = this.titleCommands[i].getAction();
+        }
+        return list;
     }
 
-    return list;
-};
+    // -------------------------------------------------------
 
-// -------------------------------------------------------
+    getSettingsCommandsContent()
+    {
+        let l = this.titleSettings.length;
+        let list = new Array(l);
+        for (let i = 0; i < l; i++)
+        {
+            list[i] = new GraphicSetting(this.titleSettings[i]);
+        }
 
-DatasTitlescreenGameover.prototype.getSettingsCommandsActions = function() {
-    var i, l, list;
-
-    l = this.titleSettings.length;
-    list = new Array(l);
-    for (i = 0; i < l; i++) {
-        list[i] = this.getSettingsCommandsAction(this.titleSettings[i]);
+        return list;
     }
 
-    return list;
-};
+    // -------------------------------------------------------
 
-// -------------------------------------------------------
-
-DatasTitlescreenGameover.prototype.getSettingsCommandsAction = function(id) {
-    switch (id) {
-    case TitleSettingKind.KeyboardAssigment:
-        return DatasTitlescreenGameover.prototype.keyboardAssignment;
+    getSettingsCommandsActions()
+    {
+        let l = this.titleSettings.length;
+        let list = new Array(l);
+        for (let i = 0; i < l; i++)
+        {
+            list[i] = this.getSettingsCommandsAction(this.titleSettings[i]);
+        }
+        return list;
     }
-};
 
-// -------------------------------------------------------
+    // -------------------------------------------------------
 
-DatasTitlescreenGameover.prototype.keyboardAssignment = function() {
-    RPM.gameStack.push(new SceneKeyboardAssign());
+    getSettingsCommandsAction(id)
+    {
+        switch (id)
+        {
+        case TitleSettingKind.KeyboardAssigment:
+            return DatasTitlescreenGameover.prototype.keyboardAssignment;
+        }
+    }
 
-    return true;
-};
+    // -------------------------------------------------------
+
+    keyboardAssignment()
+    {
+        RPM.gameStack.push(new SceneKeyboardAssign());
+        return true;
+    }
+}
 

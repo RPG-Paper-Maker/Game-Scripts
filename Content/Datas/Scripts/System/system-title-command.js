@@ -16,9 +16,13 @@
 */
 class SystemTitleCommand extends SystemLang
 {
-    constructor()
+    constructor(json)
     {
         super();
+        if (json)
+        {
+            this.read(json);
+        }
     }
 
     // -------------------------------------------------------

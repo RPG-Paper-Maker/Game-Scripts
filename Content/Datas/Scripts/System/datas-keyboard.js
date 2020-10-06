@@ -9,112 +9,106 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS KeyBoardDatas
-//
-// -------------------------------------------------------
-
 /** @class
-*   All the keyBoard datas.
+*   All the keyBoard datas
 *   @property {SystemKeyBoard[]} list List of all the keys of the game according
-*   to ID.
-*   @property {Object} menuControls All the menu controls assigns.
+*   to ID
+*   @property {Object} menuControls All the menu controls assigns
 */
-function DatasKeyBoard(){
-    this.read();
-}
+class DatasKeyBoard
+{
+    constructor()
+    {
 
-/** Test if a key id can be equal to a keyboard system object.
-*   @static
-*   @param {number} key The key id that needs to be compared.
-*   @param {SystemKeyBoard} abr The keyBoard to compare to the key.
-*/
-DatasKeyBoard.isKeyEqual = function(key, abr){
-    var sc = abr.sc;
-
-    for (var i = 0, l = sc.length; i < l; i++){
-        var ll = sc[i].length;
-        if (ll === 1){
-            if (sc[i][0] === key)
-                return true;
-        }
-        else{
-            return false;
-        }
     }
 
-    return false;
-}
-
-// -------------------------------------------------------
-
-DatasKeyBoard.prototype = {
+    /** Test if a key id can be equal to a keyboard system object.
+    *   @static
+    *   @param {number} key The key id that needs to be compared.
+    *   @param {SystemKeyBoard} abr The keyBoard to compare to the key.
+    */
+    static isKeyEqual(key, abr)
+    {
+        let sc = abr.sc;
+        let ll;
+        for (let i = 0, l = sc.length; i < l; i++)
+        {
+            ll = sc[i].length;
+            if (ll === 1)
+            {
+                if (sc[i][0] === key)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return false;
+    }
 
     /** Read the JSON file associated to keyboard.
     */
-    read: function(){
-        RPM.openFile(this, RPM.FILE_KEYBOARD, true, function(res) {
-            var json, sc;
+    async read()
+    {
+        let json = await RPM.parseFileJSON(RPM.FILE_KEYBOARD);
 
-            json = JSON.parse(res);
-
-            // Shortcuts
-            var jsonList = json.list;
-            var i, l = jsonList.length;
-            this.list = new Array(l+1);
-            this.listOrdered = new Array(l);
-            for (i = 0; i < l; i++){
-                var jsonKey = jsonList[i];
-                var id = jsonKey.id;
-                var abbreviation = jsonKey.abr;
-                var key = new SystemKeyBoard();
-                key.read(jsonKey);
-                sc = RPM.settings.kb[id];
-                if (sc) {
-                    key.sc = sc;
-                }
-                this.list[id] = key;
-                this.listOrdered[i] = key;
-                this[abbreviation] = key;
+        // Shortcuts
+        let jsonList = json.list;
+        let l = jsonList.length;
+        this.list = new Array(l+1);
+        this.listOrdered = new Array(l);
+        let jsonKey, id, abbreviation, key, sc;
+        for (let i = 0; i < l; i++)
+        {
+            jsonKey = jsonList[i];
+            id = jsonKey.id;
+            abbreviation = jsonKey.abr;
+            key = new SystemKeyBoard(jsonKey);
+            sc = RPM.settings.kb[id];
+            if (sc) {
+                key.sc = sc;
             }
+            this.list[id] = key;
+            this.listOrdered[i] = key;
+            this[abbreviation] = key;
+        }
 
-            // Menu controls
-            this.menuControls = {};
-            this.menuControls["Action"] = this.list[json["a"]];
-            this.menuControls["Cancel"] = this.list[json["c"]];
-            this.menuControls["Up"] = this.list[json["u"]];
-            this.menuControls["Down"] = this.list[json["d"]];
-            this.menuControls["Left"] = this.list[json["l"]];
-            this.menuControls["Right"] = this.list[json["r"]];
-        });
-    },
+        // Menu controls
+        this.menuControls = {};
+        this.menuControls["Action"] = this.list[json["a"]];
+        this.menuControls["Cancel"] = this.list[json["c"]];
+        this.menuControls["Up"] = this.list[json["u"]];
+        this.menuControls["Down"] = this.list[json["d"]];
+        this.menuControls["Left"] = this.list[json["l"]];
+        this.menuControls["Right"] = this.list[json["r"]];
+    }
 
     // -------------------------------------------------------
 
-    getCommandsGraphics: function() {
-        var i, l, list;
-
-        l = this.listOrdered.length;
-        list = new Array(l);
-        for (i = 0; i < l; i++) {
+    getCommandsGraphics()
+    {
+        let l = this.listOrdered.length;
+        let list = new Array(l);
+        for (let i = 0; i < l; i++)
+        {
             list[i] = new GraphicKeyboard(this.listOrdered[i]);
         }
-
         return list;
-    },
+    }
 
     // -------------------------------------------------------
 
-    getCommandsActions: function() {
-        var i, l, list;
-
-        l = this.listOrdered.length;
-        list = new Array(l);
-        for (i = 0; i < l; i++) {
+    getCommandsActions()
+    {
+        let l = this.listOrdered.length;
+        let list = new Array(l);
+        for (let i = 0; i < l; i++)
+        {
             list[i] = SceneKeyboardAssign.prototype.updateKey;
         }
-
         return list;
     }
 }

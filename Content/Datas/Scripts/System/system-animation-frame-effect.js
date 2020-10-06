@@ -9,36 +9,40 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemAnimationFrameEffect
-//
-// -------------------------------------------------------
-
 /** @class
-*   An animation frame effect.
+*   An animation frame effect
 */
-function SystemAnimationFrameEffect() {
-
-}
-
-// -------------------------------------------------------
-
-SystemAnimationFrameEffect.prototype.read = function(json) {
-    this.isSE = RPM.defaultValue(json.ise, true);
-    if (this.isSE) {
-        this.se = new SystemPlaySong(SongKind.Sound);
-        this.se.read(json.se);
-    }
-    this.condition = RPM.defaultValue(json.c, AnimationEffectConditionKind.None);
-}
-
-// -------------------------------------------------------
-
-SystemAnimationFrameEffect.prototype.playSE = function(condition) {
-    if (this.isSE && (this.condition === AnimationEffectConditionKind.None ||
-        this.condition === condition))
+class SystemAnimationFrameEffect
+{
+    constructor(json)
     {
-        this.se.playSound();
+        if (json)
+        {
+            this.read(json);
+        }
+    }
+
+    // -------------------------------------------------------
+
+    read(json)
+    {
+        this.isSE = RPM.defaultValue(json.ise, true);
+        if (this.isSE)
+        {
+            this.se = new SystemPlaySong(SongKind.Sound, json.se);
+        }
+        this.condition = RPM.defaultValue(json.c, AnimationEffectConditionKind
+            .None);
+    }
+
+    // -------------------------------------------------------
+
+    playSE(condition)
+    {
+        if (this.isSE && (this.condition === AnimationEffectConditionKind.None
+            || this.condition === condition))
+        {
+            this.se.playSound();
+        }
     }
 }

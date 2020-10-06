@@ -51,12 +51,10 @@ class DatasGame
         this.monsters = new DatasMonsters();
         this.troops = new DatasTroops();
         this.battleSystem = new DatasBattleSystem();
-        /*
         this.titlescreenGameover = new DatasTitlescreenGameover();
         this.keyBoard = new DatasKeyBoard();
         this.animations = new DatasAnimations();
         this.dlcs = new DatasDLCs();
-        */
         this.loaded = false;
     }
 
@@ -79,16 +77,13 @@ class DatasGame
         await this.monsters.read();
         await this.troops.read();
         await this.battleSystem.read();
-        /*
         await this.titlescreenGameover.read();
         await this.keyBoard.read();
         await this.animations.read();
-        
-        await this.system.loadWindowSkins();
         await this.dlcs.read();
-        */
         await this.commonEvents.read();
         await this.system.getModelHero();
+        await this.system.loadWindowSkins();
         this.loaded = true;
     }
 
