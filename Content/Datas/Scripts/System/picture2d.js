@@ -154,7 +154,8 @@ class Picture2D extends Bitmap
     // -------------------------------------------------------
     /** Draw the picture on HUD
     */
-    draw (x, y, w, h, sx = 0, sy = 0, sw = this.oW, sh = this.oH, positionResize = true)
+    draw (x, y, w, h, sx = 0, sy = 0, sw = this.oW, sh = this.oH, positionResize
+        = true)
     {
         if (this.loaded && sw > 0 && sh > 0)
         {

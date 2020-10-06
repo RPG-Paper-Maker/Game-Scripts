@@ -16,51 +16,65 @@
 // -------------------------------------------------------
 
 /** @class
-*   A scene for the title screen.
+*   A scene for the title screen
 *   @extends SceneGame
 *   @property {WindowChoices} windowChoicesCommands A window choices for
-*   choosing a command.
+*   choosing a command
 */
-function SceneTitleScreen() {
-    var commandsNb;
-
+function SceneTitleScreen()
+{
     SceneGame.call(this);
 
-    RPM.songsManager.stopAll();
-
-    // Destroy pictures
-    RPM.displayedPictures = [];
-
-    // Creating background
-    if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage) {
-        this.pictureBackground = Picture2D.createWithID(RPM.datasGame
-            .titlescreenGameover.titleBackgroundImageID, PictureKind.TitleScreen);
-        this.pictureBackground.cover = true;
-    } else {
-        Platform.canvasVideos.classList.remove('hidden');
-        Platform.canvasVideos.src = RPM.datasGame.videos.list[RPM.datasGame
-            .titlescreenGameover.titleBackgroundVideoID].getPath()[1];
-        Platform.canvasVideos.play();
-    }
-
-    // Windows
-    commandsNb = RPM.datasGame.titlescreenGameover.titleCommands.length;
-    this.windowChoicesCommands = new WindowChoices(RPM.SCREEN_X / 2 - (
-        RPM.MEDIUM_SLOT_WIDTH / 2), RPM.SCREEN_Y - RPM.HUGE_SPACE - (commandsNb 
-        * RPM.MEDIUM_SLOT_HEIGHT), RPM.MEDIUM_SLOT_WIDTH, RPM.MEDIUM_SLOT_HEIGHT
-        , RPM.datasGame.titlescreenGameover.getCommandsNames(),
-        {
-            nbItemsMax: commandsNb,
-            listCallbacks: RPM.datasGame.titlescreenGameover.getCommandsActions(),
-            padding: [0, 0, 0, 0]
-        }
-    );
-
-    // Play title screen song
-    RPM.datasGame.titlescreenGameover.titleMusic.playMusic();
+    this.load();
 }
 
 SceneTitleScreen.prototype = {
+
+    load: async function()
+    {
+        this.loading = true;
+
+        // Stop all songs
+        RPM.songsManager.stopAll();
+
+        // Destroy pictures
+        RPM.displayedPictures = [];
+
+        // Creating background
+        if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage)
+        {
+            this.pictureBackground = await Picture2D.createWithID(RPM.datasGame
+                .titlescreenGameover.titleBackgroundImageID, PictureKind
+                .TitleScreen);
+            this.pictureBackground.cover = true;
+        } else
+        {
+            Platform.canvasVideos.classList.remove('hidden');
+            Platform.canvasVideos.src = RPM.datasGame.videos.list[RPM.datasGame
+                .titlescreenGameover.titleBackgroundVideoID].getPath()[1];
+            await Platform.canvasVideos.play();
+        }
+
+        // Windows
+        commandsNb = RPM.datasGame.titlescreenGameover.titleCommands.length;
+        this.windowChoicesCommands = new WindowChoices(RPM.SCREEN_X / 2 - (
+            RPM.MEDIUM_SLOT_WIDTH / 2), RPM.SCREEN_Y - RPM.HUGE_SPACE - (
+            commandsNb * RPM.MEDIUM_SLOT_HEIGHT), RPM.MEDIUM_SLOT_WIDTH, RPM
+            .MEDIUM_SLOT_HEIGHT, RPM.datasGame.titlescreenGameover
+            .getCommandsNames(),
+            {
+                nbItemsMax: commandsNb,
+                listCallbacks: RPM.datasGame.titlescreenGameover
+                    .getCommandsActions(),
+                padding: [0, 0, 0, 0]
+            }
+        );
+
+        // Play title screen song
+        await RPM.datasGame.titlescreenGameover.titleMusic.playMusic();
+
+        this.loading = false;
+    },
 
     update: function() {
 
@@ -99,8 +113,10 @@ SceneTitleScreen.prototype = {
 
     // -------------------------------------------------------
 
-    drawHUD: function() {
-        if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage) {
+    drawHUD: function()
+    {
+        if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage)
+        {
             this.pictureBackground.draw();
         }
 

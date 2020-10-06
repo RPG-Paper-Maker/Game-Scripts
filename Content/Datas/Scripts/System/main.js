@@ -89,4 +89,4 @@ RPM.tryCatch(RPM.load());
 //
 // -------------------------------------------------------
 
-//requestAnimationFrame(RPM.loop);
+requestAnimationFrame(RPM.loop);

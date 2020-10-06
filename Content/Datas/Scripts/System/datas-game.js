@@ -84,7 +84,6 @@ class DatasGame
         await this.commonEvents.read();
         await this.system.getModelHero();
         await this.system.loadWindowSkins();
-        this.loaded = true;
     }
 
     // -------------------------------------------------------

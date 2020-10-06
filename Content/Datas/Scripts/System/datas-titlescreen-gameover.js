@@ -56,8 +56,8 @@ class DatasTitlescreenGameover
         let titleCommand, obj;
         for (let i = 0; i < l; i++)
         {
-            titleCommand = this.titleCommands[i]
-            obj = new GraphicText(titleCommand.name, { align: Align.Center });
+            titleCommand = this.titleCommands[i];
+            obj = new GraphicText(titleCommand.name(), { align: Align.Center });
             obj.datas = titleCommand;
             list[i] = obj;
         }

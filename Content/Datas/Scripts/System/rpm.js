@@ -1556,7 +1556,7 @@ RPM.readJSONSystemList = function(jsonList, func, isConstructor = true)
 {
     let jsonElement;
     let l = jsonList.length;
-    let list = new Array(l + 1);
+    let list = [];
     for (let i = 0; i < l; i++)
     {
         jsonElement = jsonList[i];
@@ -1570,7 +1570,7 @@ RPM.readJSONSystemListByIndex = function(jsonList, func, isConstructor = true)
 {
     let jsonElement;
     let l = jsonList.length;
-    let list = new Array(l + 1);
+    let list = new Array(l);
     for (let i = 0; i < l; i++)
     {
         jsonElement = jsonList[i];
@@ -1642,6 +1642,9 @@ RPM.load = async function()
 {
     await RPM.settings.read();
     await RPM.datasGame.read();
+    RPM.gameStack.pushTitleScreen();
+    RPM.datasGame.loaded = true;
+    RPM.requestPaintHUD = true;
 }
 
 // -------------------------------------------------------
@@ -1683,7 +1686,7 @@ RPM.resizeGL = function(canvas)
 */
 RPM.update = function()
 {
-    // Update game timer
+    // Update game timer if there's a current game
     if (RPM.game)
     {
         RPM.game.playTime.update();
@@ -1693,9 +1696,9 @@ RPM.update = function()
     RPM.songsManager.update();
 
     // Repeat keypress as long as not blocking
-    var continuePressed = true;
-    var key;
-    for (var i = 0, l = RPM.keysPressed.length; i < l; i++){
+    let key, continuePressed;
+    for (let i = 0, l = RPM.keysPressed.length; i < l; i++)
+    {
         key = RPM.keysPressed[i];
         continuePressed = RPM.onKeyPressedRepeat(RPM.keysPressed[i]);
         if (!continuePressed)
@@ -1707,6 +1710,7 @@ RPM.update = function()
     // Update the top of the stack
     RPM.gameStack.update();
 
+    // Elapsed time
     RPM.elapsedTime = new Date().getTime() - RPM.lastUpdateTime;
     RPM.averageElapsedTime = (RPM.averageElapsedTime + RPM.elapsedTime) / 2;
     RPM.lastUpdateTime = new Date().getTime();
@@ -1746,9 +1750,9 @@ RPM.onKeyPressedRepeat = function(key)
 // -------------------------------------------------------
 
 /** Key pressed repeat handle for the current stack, but with
-*   a small wait after the first pressure (generally used for menus).
-*   @param {number} key The key ID pressed.
-*   @returns {boolean} false if the other keys are blocked after it.
+*   a small wait after the first pressure (generally used for menus)
+*   @param {number} key The key ID pressed
+*   @returns {boolean} false if the other keys are blocked after it
 */
 RPM.onKeyPressedAndRepeat = function(key)
 {
@@ -1757,8 +1761,8 @@ RPM.onKeyPressedAndRepeat = function(key)
 
 // -------------------------------------------------------
 
-/** Draw the 3D for the current stack.
-*   @param {Canvas} canvas The 3D canvas.
+/** Draw the 3D for the current stack
+*   @param {Canvas} canvas The 3D canvas
 */
 RPM.draw3D = function()
 {
@@ -1767,12 +1771,11 @@ RPM.draw3D = function()
 
 // -------------------------------------------------------
 
-/** Draw HUD for the current stack.
-*   @param {Canvas} canvas The HUD canvas.
+/** Draw HUD for the current stack
+*   @param {Canvas} canvas The HUD canvas
 */
-RPM.drawHUD = function(loading)
+RPM.drawHUD = function()
 {
-
     if (RPM.requestPaintHUD)
     {
         RPM.requestPaintHUD = false;
@@ -1780,66 +1783,27 @@ RPM.drawHUD = function(loading)
         Platform.ctx.lineWidth = 1;
         Platform.ctx.webkitImageSmoothingEnabled = false;
         Platform.ctx.imageSmoothingEnabled = false;
-        if (loading) 
+        if (RPM.gameStack.isLoading() && RPM.loadingScene) 
         {
-            if (RPM.loadingScene) 
-            {
-                RPM.loadingScene.drawHUD();
-            }
-        }
-        else {
+            RPM.loadingScene.drawHUD();
+        } else
+        {
             RPM.gameStack.drawHUD();
         }
     }
 }
 
 // -------------------------------------------------------
-
-/** Main loop of the game.
+/** Main loop of the game
 */
-
 RPM.loop = function()
 {
     requestAnimationFrame(RPM.loop);
 
-    // Loading datas game
-    if (RPM.datasGame && !RPM.datasGame.loaded) 
+    if (RPM.datasGame.loaded && !RPM.gameStack.isLoading())
     {
-        RPM.datasGame.updateLoadings();
-        RPM.drawHUD(true);
-        return;
+        RPM.update();
     }
-    if (!RPM.isLoading()) 
-    {
-        if (!RPM.gameStack.isEmpty()) 
-        {
-            // Callbacks
-            var callback = RPM.gameStack.top().callBackAfterLoading;
-            if (callback === null) 
-            {
-                RPM.update();
-                callback = RPM.gameStack.top().callBackAfterLoading;
-                if (callback === null) 
-                {
-                    RPM.draw3D();
-                    RPM.drawHUD(false);
-                }
-            } else 
-            {
-                if (!RPM.gameStack.top().isBattleMap) 
-                {
-                    RPM.renderer.clear();
-                    RPM.drawHUD(true);
-                }
-                if (callback) 
-                {
-                    RPM.gameStack.top().callBackAfterLoading = undefined;
-                    callback.call(RPM.gameStack.top());
-                }
-            }
-        }
-        else {
-            RPM.gameStack.pushTitleScreen();
-        }
-    }
+    RPM.draw3D();
+    RPM.drawHUD();
 }

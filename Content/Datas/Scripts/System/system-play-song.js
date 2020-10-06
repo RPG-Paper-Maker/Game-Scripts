@@ -45,13 +45,14 @@ class SystemPlaySong
             this.setDefault();
             return;
         }
-        this.songID = json.isbi ? SystemValue.create(json.vid) : 
-        this.volume = SystemValue.create(json.v);
+        this.songID = json.isbi ? new SystemValue(json.vid) : SystemValue
+            .createNumber(json.id);
+        this.volume = new SystemValue(json.v);
         this.isStart = json.is;
-        this.start = this.isStart ? SystemValue.create(json.s) : SystemValue
+        this.start = this.isStart ? new SystemValue(json.s) : SystemValue
             .createNumber(0);
         this.isEnd = json.ie;
-        this.end = this.isEnd ? SystemValue.create(json.e) : SystemValue
+        this.end = this.isEnd ? new SystemValue(json.e) : SystemValue
             .createNumber(0);
     }
 
@@ -102,7 +103,7 @@ class SystemPlaySong
     *   @param {number} [start=undefined] The start of the song to play
     *   @param {number} [volume=undefined] The volume to play
     */
-    playMusic(start, volume)
+    async playMusic(start, volume)
     {
         if (RPM.isUndefined(start))
         {
@@ -127,8 +128,8 @@ class SystemPlaySong
             SystemPlaySong.previousMusic = SystemPlaySong.currentPlayingMusic;
             SystemPlaySong.currentPlayingMusic = this;
         }
-        RPM.songsManager.playMusic(this.kind, this.songID.getValue(), volume, 
-            start, this.end ? this.end.getValue() : null);
+        await RPM.songsManager.playMusic(this.kind, this.songID.getValue(), 
+            volume, start, this.end ? this.end.getValue() : null);
         return 1;
     }
 

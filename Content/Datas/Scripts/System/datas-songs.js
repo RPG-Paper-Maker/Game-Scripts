@@ -26,7 +26,7 @@ class DatasSongs
     */
     async read()
     {
-        let json = (await RPM.parseFileJSON(RPM.FILE_PICTURES_DATAS)).list;
+        let json = (await RPM.parseFileJSON(RPM.FILE_SONGS_DATAS)).list;
         let l = RPM.countFields(SongKind) - 1;
         this.list = new Array(l);
         let i, j, m, n, jsonHash, k, jsonList, jsonSong, id, list, song;

@@ -28,7 +28,7 @@
 function SceneGame(){
     this.reactionInterpreters = new Array;
     this.parallelCommands = new Array;
-    this.callBackAfterLoading = null;
+    this.loading = false;
 }
 
 SceneGame.prototype = {

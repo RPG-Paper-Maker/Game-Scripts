@@ -174,11 +174,11 @@ class DatasSystem
     // -------------------------------------------------------
     /** Load the window skins pictures
     */
-    loadWindowSkins()
+    async loadWindowSkins()
     {
         for (let i = 1, l = this.windowSkins.length; i < l; i++)
         {
-            this.windowSkins[i].updatePicture();
+            await this.windowSkins[i].updatePicture();
         }
     }
 

@@ -9,43 +9,38 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS GameStack
-//
-// -------------------------------------------------------
-
 /** @class
-*   The game stack that is organizing the game scenes.
-*   @property {SceneGame[]} content The stack content.
+*   The game stack that is organizing the game scenes
+*   @property {SceneGame[]} content The stack content
 */
-function GameStack(){
-    this.content = [];
-    this.top = null;
-    this.subTop = null;
-    this.bot = null;
-}
+class GameStack
+{
+    constructor()
+    {
+        this.content = [];
+        this.top = null;
+        this.subTop = null;
+        this.bot = null;
+    }
 
-GameStack.prototype = {
-
-    /** Push a new scene in the stack.
-    *   @param {SceneGame} scene The scene to push.
+    // -------------------------------------------------------
+    /** Push a new scene in the stack
+    *   @param {SceneGame} scene The scene to push
     */
-    push: function(scene)
+    push(scene)
     {
         this.top = scene;
         this.subTop = this.at(this.content.length - 2);
         this.bot = this.at(0);
         this.content.push(scene);
         RPM.requestPaintHUD = true;
-    },
+    }
 
     // -------------------------------------------------------
-
-    /** Pop (remove) the last scene in the stack.
-    *   @returns {SceneGame} The last scene that is removed.
-    */
-    pop: function()
+    /** Pop (remove) the last scene in the stack
+     *   @returns {SceneGame} The last scene that is removed
+     */
+    pop()
     {
         this.top = this.at(this.content.length - 1);
         this.subTop = this.at(this.content.length - 2);
@@ -53,133 +48,132 @@ GameStack.prototype = {
         let scene = this.content.pop();
         scene.close();
         RPM.requestPaintHUD = true;
-        
         return scene;
-    },
+    }
 
     // -------------------------------------------------------
-
     /** Replace the last scene in the stack by a new scene.
-    *   @param {SceneGame} scene The scene to replace.
-    *   @returns {SceneGame} The last scene that is replaced.
-    */
-    replace: function(scene) {
-        var pop = this.pop();
-        this.push(scene);
-
-        return pop;
-    },
-
-    // -------------------------------------------------------
-
-    /** Get the scene at a specific index in the stack. 0 is the bottom of the
-    *   stack.
-    *   @param {number} i Index in the stack.
-    *   @returns {SceneGame} The scene in the index of the stack.
-    */
-    at: function(i) {
-        return RPM.defaultValue(this.content[i], null);
-    },
-
-    // -------------------------------------------------------
-
-    /** Check if the stack is empty.
-    *   @returns {boolean}
-    */
-    isEmpty: function() {
-        return this.top === null;
-    },
-
-    isLoading: function()
+     *   @param {SceneGame} scene The scene to replace.
+     *   @returns {SceneGame} The last scene that is replaced.
+     */
+    replace(scene)
     {
-        return this.isEmpty || this.top.loading;
-    },
-
-    // -------------------------------------------------------
-    /** Push the title screen when empty.
-    *   @returns {SceneTitleScreen}
-    */
-    pushTitleScreen: function() {
-        var scene = new SceneTitleScreen();
+        let pop = this.pop();
         this.push(scene);
+        return pop;
+    }
 
+    // -------------------------------------------------------
+    /** Get the scene at a specific index in the stack. 0 is the bottom of the
+     *   stack
+     *   @param {number} i Index in the stack
+     *   @returns {SceneGame} The scene in the index of the stack
+     */
+    at(i)
+    {
+        return RPM.defaultValue(this.content[i], null);
+    }
+
+    // -------------------------------------------------------
+    /** Check if the stack is empty
+     *   @returns {boolean}
+     */
+    isEmpty()
+    {
+        return this.top === null;
+    }
+
+    isLoading()
+    {
+        return this.isEmpty() || this.top.loading;
+    }
+
+    // -------------------------------------------------------
+    /** Push the title screen when empty
+     *   @returns {SceneTitleScreen}
+     */
+    pushTitleScreen()
+    {
+        let scene = new SceneTitleScreen();
+        this.push(scene);
         return scene;
-    },
+    }
 
     // -------------------------------------------------------
-
-    /** Update the stack.
+    /** Update the stack
     */
-    update: function() {
-        this.top().update();
-    },
+    update()
+    {
+        this.top.update();
+    }
 
     // -------------------------------------------------------
-
-    /** First key press handle for the current stack.
-    *   @param {number} key The key ID pressed.
+    /** First key press handle for the current stack
+    *   @param {number} key The key ID pressed
     */
-    onKeyPressed: function(key){
+    onKeyPressed(key)
+    {
         if (!this.isEmpty())
-            this.top().onKeyPressed(key);
-    },
+        {
+            this.top.onKeyPressed(key);
+        }
+    }
 
     // -------------------------------------------------------
-
-    /** First key release handle for the current stack.
-    *   @param {number} key The key ID released.
+    /** First key release handle for the current stack
+    *   @param {number} key The key ID released
     */
-    onKeyReleased: function(key){
+    onKeyReleased(key)
+    {
         if (!this.isEmpty())
-            this.top().onKeyReleased(key);
-    },
+        {
+            this.top.onKeyReleased(key);
+        }
+    }
 
     // -------------------------------------------------------
-
-    /** Key pressed repeat handle for the current stack.
-    *   @param {number} key The key ID pressed.
-    *   @returns {boolean} false if the other keys are blocked after it.
+    /** Key pressed repeat handle for the current stack
+    *   @param {number} key The key ID pressed
+    *   @returns {boolean} false if the other keys are blocked after it
     */
-    onKeyPressedRepeat: function(key){
-        if (!this.isEmpty())
-            return this.top().onKeyPressedRepeat(key);
-
-        return true;
-    },
+    onKeyPressedRepeat(key)
+    {
+        return this.isEmpty() ? true : this.top.onKeyPressedRepeat(key);
+    }
 
     // -------------------------------------------------------
-
     /** Key pressed repeat handle for the current stack, but with
-    *   a small wait after the first pressure (generally used for menus).
-    *   @param {number} key The key ID pressed.
-    *   @returns {boolean} false if the other keys are blocked after it.
+    *   a small wait after the first pressure (generally used for menus)
+    *   @param {number} key The key ID pressed
+    *   @returns {boolean} false if the other keys are blocked after it
     */
-    onKeyPressedAndRepeat: function(key){
-        if (!this.isEmpty())
-            return this.top().onKeyPressedAndRepeat(key);
+    onKeyPressedAndRepeat(key)
+    {
+        return this.isEmpty() ? true : this.top.onKeyPressedAndRepeat(key);
+    }
 
-        return true;
-    },
+    // -------------------------------------------------------
+    /** Draw the 3D for the current stack
+    *   @param {Canvas} canvas The 3D canvas
+    */
+    draw3D(canvas)
+    {
+        if (!this.isEmpty())
+        {
+            this.top.draw3D(canvas);
+        }
+    }
 
     // -------------------------------------------------------
 
-    /** Draw the 3D for the current stack.
-    *   @param {Canvas} canvas The 3D canvas.
+    /** Draw HUD for the current stack
     */
-    draw3D: function(canvas){
+    drawHUD()
+    {
         if (!this.isEmpty())
-            this.top().draw3D(canvas);
-    },
-
-    // -------------------------------------------------------
-
-    /** Draw HUD for the current stack.
-    */
-    drawHUD: function() {
-        if (!this.isEmpty()) {
-            var i, l, v;
-
+        {
             // Display < 0 index image command
+            let i, l, v;
             for (i = 0, l = RPM.displayedPictures.length; i < l; i++) 
             {
                 v = RPM.displayedPictures[i];
