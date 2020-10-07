@@ -9,20 +9,6 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS Player
-//
-//  A character in the team/hidden/reserve
-//
-//  @k          -> The kind of the character (hero or monster)
-//  @id         -> The id of the character
-//  @instid     -> The instance id of the character
-//  @sk         -> List of all the learned skills
-//  @equip      -> List of the equiped weapons/armors
-//
-// -------------------------------------------------------
-
 /** @class
 *   A character in the team/hidden/reserve.
 *   @property {CharacterKind} k The kind of the character (hero or monster).
@@ -31,81 +17,89 @@
 *   @param {GameSkill[]} sk List of all the learned skills.
 *   @param {GameItem[]} equip List of the equiped weapons/armors.
 */
-function GamePlayer(kind, id, instanceId, skills) {
-    if (typeof kind !== 'undefined') {
-        var i, l;
+class GamePlayer
+{
+    constructor(kind, id, instanceId, skills, json)
+    {
+        if (!RPM.isUndefined(kind))
+        {
+            this.k = kind;
+            this.id = id;
+            this.instid = instanceId;
+            this.character = this.getCharacterInformations();
+            this.name = this.character.name;
 
-        this.k = kind;
-        this.id = id;
-        this.instid = instanceId;
-        this.character = this.getCharacterInformations();
-        this.name = this.character.name;
+            // Skills
+            let l = skills.length;
+            this.sk = new Array(l);
+            let i;
+            for (i = 0; i < l; i++)
+            {
+                this.sk[i] = new GameSkill(skills[i].id);
+            }
 
-        // Skills
-        l = skills.length;
-        this.sk = new Array(l);
-        for (i = 0; i < l; i++){
-            var skill = skills[i];
-            this.sk[i] = new GameSkill(skill.id);
+            // Equip
+            l = RPM.datasGame.battleSystem.maxEquipmentID;
+            this.equip = new Array(l + 1);
+            for (i = 1; i <= l; i++)
+            {
+                this.equip[i] = null;
+            }
+
+            // Experience list
+            this.expList = this.character.createExpList();
+            this.levelingUp = false;
+            this.testedLevelUp = true;
+
+            // Read if possible
+            if (json)
+            {
+                this.read(json);
+            }
         }
+    }
 
-        // Equip
-        l = RPM.datasGame.battleSystem.maxEquipmentID;
-        this.equip = new Array(l + 1);
-        for (i = 1; i <= l; i++) {
-            this.equip[i] = null;
+    /** Get the max size of equipment kind names.
+    *   @static
+    *   @returns {number}
+    */
+    static getEquipmentLength()
+    {
+        // Adding equipments
+        let maxLength = 0;
+        let test, c;
+        for (let i = 0, l = RPM.datasGame.battleSystem.equipments.length - 1; i 
+            < l; i++)
+        {
+            text = new GraphicText(RPM.datasGame.battleSystem.equipments[i+1]);
+            text.updateContextFont();
+            c = Platform.ctx.measureText(text.text).width;
+            if (c > maxLength)
+            {
+                maxLength = c;
+            }
         }
-
-        // Experience list
-        this.expList = this.character.createExpList();
-
-        this.levelingUp = false;
-        this.testedLevelUp = true;
-    }
-}
-
-/** Get the max size of equipment kind names.
-*   @static
-*   @returns {number}
-*/
-GamePlayer.getEquipmentLength = function(){
-
-    // Adding equipments
-    var i, l = RPM.datasGame.battleSystem.equipments.length - 1;
-    var maxLength = 0;
-    for (i = 0; i < l; i++){
-        var text = new GraphicText(RPM.datasGame.battleSystem.equipments[i+1]);
-        text.updateContextFont();
-        var c = Platform.ctx.measureText(text.text).width;
-        if (c > maxLength) maxLength = c;
+        return maxLength;
     }
 
-    return maxLength;
-}
+    // -------------------------------------------------------
 
-// -------------------------------------------------------
-
-GamePlayer.getTemporaryPlayer = function(values) {
-    var player, statistics;
-    var i, l;
-
-    player = new GamePlayer();
-    statistics = RPM.datasGame.battleSystem.statistics;
-    for (i = 1, l = statistics.length; i < l; i++) {
-        player.initStatValue(statistics[i], values ? values[i] : 0);
+    static getTemporaryPlayer(values)
+    {
+        let player = new GamePlayer();
+        let statistics = RPM.datasGame.battleSystem.statistics;
+        for (let i = 1, l = statistics.length; i < l; i++)
+        {
+            player.initStatValue(statistics[i], values ? values[i] : 0);
+        }
+        return player;
     }
-
-    return player;
-};
-
-// -------------------------------------------------------
-
-GamePlayer.prototype = {
 
     /** Get a compressed object for saving the character in a file.
     *   @returns {Object}
     */
-    getSaveCharacter: function(){
+    getSaveCharacter()
+    {
         return {
             k: this.k,
             id: this.id,
@@ -114,39 +108,37 @@ GamePlayer.prototype = {
             stats: this.getSaveStat(),
             equip: this.getSaveEquip()
         };
-    },
+    }
 
     // -------------------------------------------------------
-
-    /** Get a compressed object for saving the stats in a file.
+    /** Get a compressed object for saving the stats in a file
     *   @returns {Object}
     */
-    getSaveStat: function(){
-        var i, l = RPM.datasGame.battleSystem.statistics.length - 1;
-        var list = new Array(l);
-        for (i = 0; i < l; i++){
-            var statistic = RPM.datasGame.battleSystem.statistics[i+1];
-            if (statistic.isFix) {
-                list[i] = [this[statistic.abbreviation],
-                           this[statistic.getBonusAbbreviation()]];
-            } else {
-                list[i] = [this[statistic.abbreviation],
-                           this[statistic.getBonusAbbreviation()],
-                           this[statistic.getMaxAbbreviation()]];
-            }
+    getSaveStat()
+    {
+        let l = RPM.datasGame.battleSystem.statistics.length - 1;
+        let list = new Array(l);
+        let statistic;
+        for (let i = 0; i < l; i++)
+        {
+            statistic = RPM.datasGame.battleSystem.statistics[i + 1];
+            list[i] = statistic.isFix ? [this[statistic.abbreviation], this[
+                statistic.getBonusAbbreviation()]] : [this[statistic
+                .abbreviation], this[statistic.getBonusAbbreviation()], this[
+                statistic.getMaxAbbreviation()]];
         }
         return list;
-    },
+    }
 
     // -------------------------------------------------------
-
-    /** Get a compressed object for saving the equipments in a file.
+    /** Get a compressed object for saving the equipments in a file
     *   @returns {Object}
     */
-    getSaveEquip: function(){
-        var i, l = this.equip.length;
-        var list = new Array(l);
-        for (i = 1; i < l; i++)
+    getSaveEquip()
+    {
+        let l = this.equip.length;
+        let list = new Array(l);
+        for (let i = 1; i < l; i++)
         {
             if (this.equip[i] !== null)
             {
@@ -154,67 +146,74 @@ GamePlayer.prototype = {
             }
         }
         return list;
-    },
+    }
 
     // -------------------------------------------------------
-
-    /** Check if the character is dead.
+    /** Check if the character is dead
     *   @returns {boolean}
     */
-    isDead: function(){
+    isDead()
+    {
         return RPM.evaluateFormula(RPM.datasGame.battleSystem.formulaIsDead
             .getValue(), this, null);
-    },
+    }
 
     // -------------------------------------------------------
-
-    /** Instanciate a character in a particular level.
-    *   @param {number} level The level of the new character.
+    /** Instanciate a character in a particular level
+    *   @param {number} level The level of the new character
     */
-    instanciate: function(level) {
-        var i, j, l, ll, skills, skill, statistics, statistic,
-            statisticsProgression, statisticProgression, nonFixStatistics,
-            elements, elementsOrder;
-
+    instanciate(level)
+    {
         // Skills
         this.sk = [];
-        skills = this.character.getSkills();
-        for (i = 0, l = skills.length; i < l; i++) {
+        let skills = this.character.getSkills();
+        let i, l, skill;
+        for (i = 0, l = skills.length; i < l; i++)
+        {
             skill = skills[i];
-            if (skill.level > level) {
+            if (skill.level > level)
+            {
                 break;
             }
             this.sk.push(new GameSkill(skill.id));
         }
 
         // Stats
-        statistics = RPM.datasGame.battleSystem.statistics;
-        statisticsProgression = this.character.getStatisticsProgression();
-        nonFixStatistics = new Array;
-        for (i = 1, l = statistics.length; i < l; i++) {
+        let statistics = RPM.datasGame.battleSystem.statistics;
+        let statisticsProgression = this.character.getStatisticsProgression();
+        let nonFixStatistics = new Array;
+        for (i = 1, l = statistics.length; i < l; i++)
+        {
             this[statistics[i].getBeforeAbbreviation()] = undefined;
         }
-        for (i = 1, l = statistics.length; i < l; i++) {
+        let j, m, statistic, statisticProgression;
+        for (i = 1, l = statistics.length; i < l; i++)
+        {
             statistic = statistics[i];
 
             // Default value
             this.initStatValue(statistic, 0);
             this[statistic.getBonusAbbreviation()] = 0;
 
-            if (i === RPM.datasGame.battleSystem.idLevelStatistic) {
+            if (i === RPM.datasGame.battleSystem.idLevelStatistic)
+            {
                 // Level
                 this[statistic.abbreviation] = level;
-            } else if (i === RPM.datasGame.battleSystem.idExpStatistic) {
+            } else if (i === RPM.datasGame.battleSystem.idExpStatistic)
+            {
                 // Experience
                 this[statistic.abbreviation] = this.expList[level];
-                this[statistic.getMaxAbbreviation()] = this.expList
-                    [level + 1];
-            } else {
+                this[statistic.getMaxAbbreviation()] = this.expList[level + 1];
+            } else
+            {
                 // Other stats
-                for (j = 0, ll = statisticsProgression.length; j < ll; j++) {
+                for (j = 0, m = statisticsProgression.length; j < m; j++)
+                {
                     statisticProgression = statisticsProgression[j];
-                    if (statisticProgression.id === i) {
-                        if (!statisticProgression.isFix) {
+                    if (statisticProgression.id === i)
+                    {
+                        if (!statisticProgression.isFix)
+                        {
                             nonFixStatistics.push(statisticProgression);
                         } else {
                             this.initStatValue(statistic, statisticProgression
@@ -227,56 +226,67 @@ GamePlayer.prototype = {
         }
 
         // Update formulas statistics
-        for (i = 0, l = nonFixStatistics.length; i < l; i++) {
-            for (j = 0; j < l; j++) {
+        for (i = 0, l = nonFixStatistics.length; i < l; i++)
+        {
+            for (j = 0; j < l; j++)
+            {
                 statisticProgression = nonFixStatistics[j];
                 this.initStatValue(statistics[statisticProgression.id],
                     statisticProgression.getValueAtLevel(level, this));
             }
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    getEquipmentStatsAndBonus: function(item, idEquipment) {
-        var statistics, list, bonus, characteristics, characteristic, result,
-            statistic, base, statisticsProgression, previewPlayer,
-            statisticProgression;
-        var i, j, k, l, ll;
-
-        statistics = RPM.datasGame.battleSystem.statistics;
-        l = statistics.length
-        list = new Array(l);
-        bonus = new Array(l);
-        for (i = 1; i < l; i++) {
+    getEquipmentStatsAndBonus(item, idEquipment)
+    {
+        let statistics = RPM.datasGame.battleSystem.statistics;
+        let l = statistics.length
+        let list = new Array(l);
+        let bonus = new Array(l);
+        let i;
+        for (i = 1; i < l; i++)
+        {
             list[i] = null;
             bonus[i] = null;
         }
-        for (k = 1, ll = this.equip.length; k < ll; k++) {
-            if (k === idEquipment) {
-                if (!item) {
+        let j, m, characteristics, characteristic, result, statistic, base;
+        for (j = 1, m = this.equip.length; j < m; j++)
+        {
+            if (j === idEquipment)
+            {
+                if (!item)
+                {
                     continue;
                 }
                 characteristics = item.characteristics;
-            } else {
-                if (this.equip[k] === null) {
+            } else
+            {
+                if (this.equip[j] === null)
+                {
                     continue;
                 }
-                characteristics = this.equip[k].getItemInformations()
+                characteristics = this.equip[j].getItemInformations()
                     .characteristics;
             }
-            if (characteristics) {
-                for (i = 0, l = characteristics.length; i < l; i++) {
+            if (characteristics)
+            {
+                for (i = 0, l = characteristics.length; i < l; i++)
+                {
                     characteristic = characteristics[i];
                     result = characteristic.getNewStatValue(this);
-                    if (result !== null) {
-                        if (list[result[0]] === null) {
+                    if (result !== null)
+                    {
+                        if (list[result[0]] === null)
+                        {
                             statistic = statistics[result[0]];
                             base = this[statistic.getAbbreviationNext()] - this[
                                 statistic.getBonusAbbreviation()];
-                            list[result[0]] = characteristic.operation ? 0 : base;
-                            bonus[result[0]] = characteristic.operation ? -base :
-                                0;
+                            list[result[0]] = characteristic.operation ? 0 : 
+                                base;
+                            bonus[result[0]] = characteristic.operation ? -base 
+                                : 0;
                         }
                         list[result[0]] += result[1];
                         bonus[result[0]] += result[1];
@@ -286,48 +296,56 @@ GamePlayer.prototype = {
         }
 
         // Same values for not changed stats
-        for (i = 1, l = statistics.length; i < l; i++) {
-            if (list[i] === null) {
+        for (i = 1, l = statistics.length; i < l; i++)
+        {
+            if (list[i] === null)
+            {
                 list[i] = this[statistics[i].getAbbreviationNext()];
             }
         }
 
         // Update formulas statistics
-        statisticsProgression = this.character.getStatisticsProgression();
-        previewPlayer = GamePlayer.getTemporaryPlayer(list);
-        for (i = 0, l = statisticsProgression.length; i < l; i++) {
-            for (j = 0; j < l; j++) {
+        let statisticsProgression = this.character.getStatisticsProgression();
+        let previewPlayer = GamePlayer.getTemporaryPlayer(list);
+        let statisticProgression;
+        for (i = 0, l = statisticsProgression.length; i < l; i++)
+        {
+            for (j = 0; j < l; j++)
+            {
                 statisticProgression = statisticsProgression[j];
                 list[statisticProgression.id] = statisticProgression
-                    .getValueAtLevel(this.getCurrentLevel(),
-                    previewPlayer, this.character.getProperty("finalLevel"
-                    )) + bonus[statisticProgression.id];
+                    .getValueAtLevel(this.getCurrentLevel(), previewPlayer, this
+                    .character.getProperty(SystemClass.PROPERTY_FINAL_LEVEL)) + 
+                    bonus[statisticProgression.id];
                 previewPlayer.initStatValue(statistics[statisticProgression.id],
                     list[statisticProgression.id]);
             }
         }
-
         return [list, bonus];
-    },
+    }
 
     // -------------------------------------------------------
 
-    updateEquipmentStats: function(list, bonus) {
-        var statistics, statistic, value, result, equipments;
-        var i, l;
-
-        if (!list || !bonus) {
+    updateEquipmentStats(list, bonus)
+    {
+        let result;
+        if (!list || !bonus)
+        {
             result = this.getEquipmentStatsAndBonus();
             list = result[0];
             bonus = result[1];
         }
-        statistics = RPM.datasGame.battleSystem.statistics;
-        for (i = 1, l = statistics.length; i < l; i++) {
+        let statistics = RPM.datasGame.battleSystem.statistics;
+        let statistic, value;
+        for (let i = 1, l = statistics.length; i < l; i++)
+        {
             statistic = statistics[i];
             value = list[i];
-            if (statistic.isFix) {
+            if (statistic.isFix)
+            {
                 this[statistic.abbreviation] = value;
-            } else {
+            } else
+            {
                 this[statistic.getMaxAbbreviation()] = value;
                 if (this[statistic.abbreviation] > this[statistic
                     .getMaxAbbreviation()])
@@ -338,54 +356,61 @@ GamePlayer.prototype = {
             }
             this[statistic.getBonusAbbreviation()] = bonus[i];
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    initStatValue: function(statistic, value) {
+    initStatValue(statistic, value)
+    {
         this[statistic.abbreviation] = value;
-        if (!statistic.isFix) {
+        if (!statistic.isFix)
+        {
             this[statistic.getMaxAbbreviation()] = value;
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    updateStatValue: function(statistic, value) {
-        var abr = statistic.isFix ? statistic.abbreviation : statistic
+    updateStatValue(statistic, value)
+    {
+        let abr = statistic.isFix ? statistic.abbreviation : statistic
             .getMaxAbbreviation();
-        if (typeof this[statistic.getBeforeAbbreviation()] === 'undefined') {
+        if (RPM.isUndefined(this[statistic.getBeforeAbbreviation()]))
+        {
             this[statistic.getBeforeAbbreviation()] = this[abr];
         }
         this[abr] = value;
         this[statistic.getBonusAbbreviation()] = 0;
-    },
+    }
 
     // -------------------------------------------------------
 
-    updateAllStatsValues: function() {
-        var skills, skill, statistics, statistic, statisticsProgression,
-            statisticProgression, nonFixStatistics, value, level;
-        var i, j, l, ll;
-
+    updateAllStatsValues()
+    {
         // Fix values : equipment influence etc
-        level = this.getCurrentLevel();
-        statistics = RPM.datasGame.battleSystem.statistics;
-        statisticsProgression = this.character.getStatisticsProgression();
-        nonFixStatistics = new Array;
-        for (i = 1, l = statistics.length; i < l; i++) {
+        let level = this.getCurrentLevel();
+        let statistics = RPM.datasGame.battleSystem.statistics;
+        let statisticsProgression = this.character.getStatisticsProgression();
+        let nonFixStatistics = new Array;
+        let i, l;
+        for (i = 1, l = statistics.length; i < l; i++)
+        {
             this[statistics[i].getBeforeAbbreviation()] = undefined;
         }
-        for (i = 1, l = statistics.length; i < l; i++) {
+        let j, m, statistic, statisticProgression;
+        for (i = 1, l = statistics.length; i < l; i++)
+        {
             statistic = statistics[i];
-
-            if (i !== RPM.datasGame.battleSystem.idLevelStatistic & i !==
-                RPM.datasGame.battleSystem.idExpStatistic)
+            if (i !== RPM.datasGame.battleSystem.idLevelStatistic & i !== RPM
+                .datasGame.battleSystem.idExpStatistic)
             {
-                for (j = 0, ll = statisticsProgression.length; j < ll; j++) {
+                for (j = 0, m = statisticsProgression.length; j < m; j++)
+                {
                     statisticProgression = statisticsProgression[j];
-                    if (statisticProgression.id === i) {
-                        if (!statisticProgression.isFix) {
+                    if (statisticProgression.id === i)
+                    {
+                        if (!statisticProgression.isFix)
+                        {
                             nonFixStatistics.push(statisticProgression);
                         } else {
                             this.updateStatValue(statistic, statisticProgression
@@ -398,8 +423,10 @@ GamePlayer.prototype = {
         }
 
         // Update formulas statistics
-        for (i = 0, l = nonFixStatistics.length; i < l; i++) {
-            for (j = 0; j < l; j++) {
+        for (i = 0, l = nonFixStatistics.length; i < l; i++)
+        {
+            for (j = 0; j < l; j++)
+            {
                 statisticProgression = nonFixStatistics[j];
                 statistic = statistics[statisticProgression.id];
                 this.updateStatValue(statistic, statisticProgression
@@ -408,30 +435,32 @@ GamePlayer.prototype = {
         }
 
         this.updateEquipmentStats();
-    },
+    }
 
     // -------------------------------------------------------
 
-    getBarAbbreviation: function(stat) {
+    getBarAbbreviation(stat)
+    {
         return this[stat.abbreviation] + " / " + this[stat.getMaxAbbreviation()];
-    },
+    }
 
     // -------------------------------------------------------
 
     /** Read the JSON associated to the character and items.
     *   @param {object} json Json object describing the character.
     */
-    read: function(json)
+    read(json)
     {
         // Stats
-        var jsonStats = json.stats;
-        var i, l = RPM.datasGame.battleSystem.statistics.length;
-        for (i = 1; i < l; i++){
-            var statistic = RPM.datasGame.battleSystem.statistics[i];
-            var value = jsonStats[i-1];
+        let jsonStats = json.stats;
+        let i, l, statistic, value;
+        for (i = 1, l = RPM.datasGame.battleSystem.statistics.length; i < l; i++){
+            statistic = RPM.datasGame.battleSystem.statistics[i];
+            value = jsonStats[i-1];
             this[statistic.abbreviation] = value[0];
             this[statistic.getBonusAbbreviation()] = value[1];
-            if (!statistic.isFix){
+            if (!statistic.isFix)
+            {
                 this[statistic.getMaxAbbreviation()] = value[2];
             }
         }
@@ -457,158 +486,176 @@ GamePlayer.prototype = {
             this.equip[i] = item;
         }
         this.updateEquipmentStats();
-    },
+    }
 
     // -------------------------------------------------------
-
     /** Get the character informations system.
     *   @returns {SystemHero|SystemMonster}
     */
-    getCharacterInformations: function(){
-        switch (this.k){
+    getCharacterInformations()
+    {
+        switch (this.k)
+        {
         case CharacterKind.Hero:
             return RPM.datasGame.heroes.list[this.id];
         case CharacterKind.Monster:
             return RPM.datasGame.monsters.list[this.id];
         }
-
         return null;
-    },
+    }
 
     // -------------------------------------------------------
 
-    getCurrentLevel: function() {
+    getCurrentLevel()
+    {
         return this[RPM.datasGame.battleSystem.getLevelStatistic().abbreviation];
-    },
+    }
 
     // -------------------------------------------------------
 
-    levelUp: function() {
+    levelUp()
+    {
         this[RPM.datasGame.battleSystem.getLevelStatistic().abbreviation]++;
 
         // Update statistics
         this.updateAllStatsValues();
-    },
+    }
 
     // -------------------------------------------------------
 
-    getRewardExperience: function() {
+    getRewardExperience()
+    {
         return this.character.getRewardExperience(this.getCurrentLevel());
-    },
+    }
 
     // -------------------------------------------------------
 
-    getRewardCurrencies: function() {
+    getRewardCurrencies()
+    {
         return this.character.getRewardCurrencies(this.getCurrentLevel());
-    },
+    }
 
     // -------------------------------------------------------
 
-    getRewardLoots: function() {
+    getRewardLoots()
+    {
         return this.character.getRewardLoots(this.getCurrentLevel());
-    },
+    }
 
     // -------------------------------------------------------
 
-    updateRemainingXP: function(fullTime) {
-        if (this.getCurrentLevel() < this.expList.length - 1) {
-            var current = this[RPM.datasGame.battleSystem.getExpStatistic()
+    updateRemainingXP(fullTime)
+    {
+        if (this.getCurrentLevel() < this.expList.length - 1)
+        {
+            let current = this[RPM.datasGame.battleSystem.getExpStatistic()
                 .abbreviation];
-            var max = this[RPM.datasGame.battleSystem.getExpStatistic()
+            let max = this[RPM.datasGame.battleSystem.getExpStatistic()
                 .getMaxAbbreviation()];
-            var xpForLvl = max - current;
-            var dif = this.totalRemainingXP - xpForLvl;
-
+            let xpForLvl = max - current;
+            let dif = this.totalRemainingXP - xpForLvl;
             this.remainingXP = (dif > 0) ? xpForLvl : this.totalRemainingXP;
             this.totalRemainingXP -= this.remainingXP;
             this.totalTimeXP = Math.floor(this.remainingXP / (max - this.expList
                 [this.getCurrentLevel()]) * fullTime);
-        } else {
+        } else
+        {
             this.remainingXP = 0;
             this.totalRemainingXP = 0;
             this.totalTimeXP = 0;
         }
         this.timeXP = new Date().getTime();
         this.obtainedXP = 0;
-    },
+    }
 
     // -------------------------------------------------------
 
-    updateObtainedExperience: function() {
-        var xpAbbreviation = RPM.datasGame.battleSystem.getExpStatistic()
+    updateObtainedExperience()
+    {
+        let xpAbbreviation = RPM.datasGame.battleSystem.getExpStatistic()
             .abbreviation;
-        var tick = new Date().getTime() - this.timeXP;
-        if (tick >= this.totalTimeXP) {
+        let tick = new Date().getTime() - this.timeXP;
+        if (tick >= this.totalTimeXP)
+        {
             this[xpAbbreviation] = this[xpAbbreviation] + this.remainingXP -
                 this.obtainedXP;
             this.remainingXP = 0;
             this.obtainedXP = 0;
-        } else {
-            var xp = Math.floor((tick / this.totalTimeXP * this.remainingXP)) -
+        } else
+        {
+            let xp = Math.floor((tick / this.totalTimeXP * this.remainingXP)) -
                 this.obtainedXP;
             this.obtainedXP += xp;
             this[xpAbbreviation] += xp;
         }
         this.testedLevelUp = false;
-    },
+    }
 
     // -------------------------------------------------------
 
-    updateExperience: function() {
-        var xpAbbreviation = RPM.datasGame.battleSystem.getExpStatistic()
+    updateExperience()
+    {
+        let xpAbbreviation = RPM.datasGame.battleSystem.getExpStatistic()
             .abbreviation;
-        var maxXPAbbreviation = RPM.datasGame.battleSystem.getExpStatistic()
+        let maxXPAbbreviation = RPM.datasGame.battleSystem.getExpStatistic()
             .getMaxAbbreviation();
-        var maxXP = this[maxXPAbbreviation];
+        let maxXP = this[maxXPAbbreviation];
         this.updateObtainedExperience();
         this.testedLevelUp = true;
-        var dif = this[xpAbbreviation] - maxXP;
-        if (dif >= 0) {
-            var newMaxXP = this.expList[this.getCurrentLevel() + 2];
-            var leveledUp = false;
-            if (newMaxXP) { // Go to next level
+        let dif = this[xpAbbreviation] - maxXP;
+        if (dif >= 0)
+        {
+            let newMaxXP = this.expList[this.getCurrentLevel() + 2];
+            let leveledUp = false;
+            if (newMaxXP)
+            {
+                // Go to next level
                 this[maxXPAbbreviation] = newMaxXP;
                 this.levelUp();
                 leveledUp = true;
-            } else if (this.getCurrentLevel() < this.expList.length - 1) {
+            } else if (this.getCurrentLevel() < this.expList.length - 1)
+            {
                 this.levelUp();
                 leveledUp = true;
             }
             this[xpAbbreviation] = maxXP;
             this.remainingXP = 0;
             this.obtainedXP = 0;
-
             return leveledUp;
         }
-
         return false;
-    },
+    }
 
     // -------------------------------------------------------
 
-    passExperience: function() {
+    passExperience()
+    {
         this.timeXP = this.totalTimeXP;
-    },
+    }
 
     // -------------------------------------------------------
 
-    pauseExperience: function() {
+    pauseExperience()
+    {
         this.totalTimeXP -= new Date().getTime() - this.timeXP;
-        if (this.totalTimeXP < 0) {
+        if (this.totalTimeXP < 0)
+        {
             this.totalTimeXP = 0;
         }
         this.obtainedXP = 0;
-    },
+    }
 
     // -------------------------------------------------------
 
-    unpauseExperience: function() {
+    unpauseExperience()
+    {
         this.timeXP = new Date().getTime();
-    },
+    }
 
     // -------------------------------------------------------
 
-    isExperienceUpdated: function() {
+    isExperienceUpdated()
+    {
         return this.testedLevelUp && this.totalRemainingXP === 0 && this
             .remainingXP === 0;
     }

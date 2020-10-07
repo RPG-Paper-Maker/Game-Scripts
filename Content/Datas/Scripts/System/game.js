@@ -9,12 +9,6 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS Game
-//
-// -------------------------------------------------------
-
 /** @class
 *   All the global informations of a particular game.
 *   @property {number} playTime The current time played since the beginning of
@@ -29,48 +23,61 @@
 *   @property {number} hero Hero informations.
 *   @property {number} mapsDatas All the informations for each maps.
 */
-function Game() {
-    this.currentSlot = -1;
-    this.hero = new MapObject(RPM.modelHero.system, new THREE.Vector3(RPM.modelHero
-        .position.x, RPM.modelHero.position.y, RPM.modelHero.position.z), true);
-}
-
-Game.getHeroInstanceInTab = function(tab, id) {
-    var i, l, hero;
-
-    for (i = 0, l = tab.length; i < l; i++) {
-        hero = tab[i];
-        if (hero.instid === id) {
-            return hero;
+class Game
+{
+    constructor(slot, json)
+    {
+        this.currentSlot = -1;
+        this.hero = new MapObject(RPM.modelHero.system, new THREE.Vector3(RPM
+            .modelHero.position.x, RPM.modelHero.position.y, RPM.modelHero
+            .position.z), true);
+        if (json)
+        {
+            this.read(slot, json);
         }
     }
 
-    return null;
-}
+    static getHeroInstanceInTab(tab, id)
+    {
+        let hero;
+        for (let i = 0, l = tab.length; i < l; i++)
+        {
+            hero = tab[i];
+            if (hero.instid === id)
+            {
+                return hero;
+            }
+        }
+        return null;
+    }
 
-Game.prototype = {
+    static getPathSave(slot)
+    {
+        return RPM.FILE_SAVE + RPM.STRING_SLASH + slot + RPM
+            .EXTENSION_JSON;
+    }
 
-    getHeroByInstanceID: function(id) {
-        var hero;
-
-        hero = Game.getHeroInstanceInTab(this.teamHeroes, id);
-        if (hero !== null) {
+    getHeroByInstanceID(id)
+    {
+        let hero = Game.getHeroInstanceInTab(this.teamHeroes, id);
+        if (hero !== null)
+        {
             return hero;
         }
         hero = Game.getHeroInstanceInTab(this.reserveHeroes, id);
-        if (hero !== null) {
+        if (hero !== null)
+        {
             return hero;
         }
         hero = Game.getHeroInstanceInTab(this.hiddenHeroes, id);
-
         return hero;
-    },
+    }
 
     // -------------------------------------------------------
-
-    /** Initialize a default game.
+    /** Initialize a default game
     */
-    initializeDefault: function(){
+    initializeDefault()
+    {
         this.teamHeroes = [];
         this.reserveHeroes = [];
         this.hiddenHeroes = [];
@@ -84,36 +91,41 @@ Game.prototype = {
         this.heroStatesOptions = [];
         this.startupStates = {};
         this.startupProperties = {};
-        EventCommandModifyTeam.instanciateTeam(GroupKind.Team,
-                                               CharacterKind.Hero, 1, 1, 1);
+        EventCommandModifyTeam.instanciateTeam(GroupKind.Team, CharacterKind
+            .Hero, 1, 1, 1);
         this.mapsDatas = {};
         this.hero.initializeProperties();
         this.playTime = new Chrono(0);
-    },
+    }
 
     // -------------------------------------------------------
-
     /** Initialize the default variables.
     */
-    initializeVariables: function(){
+    initializeVariables()
+    {
         this.variables = new Array(RPM.datasGame.variablesNumbers);
-        for (var i = 0; i < RPM.datasGame.variablesNumbers; i++)
+        for (let i = 0; i < RPM.datasGame.variablesNumbers; i++)
+        {
             this.variables[i] = null;
-    },
+        }
+    }
 
     // -------------------------------------------------------
 
-    useItem: function(gameItem) {
-        var q = gameItem.use();
-        if (!q) {
+    useItem(gameItem)
+    {
+        if (!gameItem.use())
+        {
             this.items.splice(this.items.indexOf(gameItem), 1);
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    getTeam: function(kind) {
-        switch (kind) {
+    getTeam(kind)
+    {
+        switch (kind)
+        {
         case GroupKind.Team:
             return this.teamHeroes;
         case GroupKind.Reserve:
@@ -121,183 +133,180 @@ Game.prototype = {
         case GroupKind.Hidden:
             return this.hiddenHeroes;
         }
-
         return null;
-    },
+    }
 
     // -------------------------------------------------------
 
-    getPotionsDatas: function(id, i, j, k)
+    getPotionsDatas(id, i, j, k)
     {
         return RPM.game.mapsDatas[id][i][j < 0 ? 0 : 1][Math.abs(j)][k];
-    },
+    }
 
     // -------------------------------------------------------
-
-    /** Read a game file.
-    *   @param {number} slot The number of the slot to load.
-    *   @param {Object} json json Json object describing the object.
+    /** Read a game file
+    *   @param {number} slot The number of the slot to load
+    *   @param {Object} json json Json object describing the object
     */
-    read: function(slot, json){
+    read(slot, json)
+    {
         this.currentSlot = slot;
         this.playTime = new Chrono(json.t);
         this.charactersInstances = json.inst;
         this.variables = json.vars;
 
         // Items
-        var itemsJson = json.itm;
-        var i, l = itemsJson.length;
-        this.items = new Array(l);
-        for (i = 0; i < l; i++){
-            var itemJson = itemsJson[i];
-            this.items[i] = new GameItem(itemJson.k, itemJson.id, itemJson.nb);
-        }
+        this.items = RPM.readJSONSystemListByIndex(json.itm, (json) =>
+            {
+                return new GameItem(json.k, json.id, json.nb);
+            },
+            false
+        );
 
         // Currencies
-        l = json.cur.length;
-        this.currencies = new Array(l);
-        for (i = 1; i < l; i++) {
-            this.currencies[i] = json.cur[i];
-        }
+        this.currencies = json.cur;
 
         // Heroes
-        var heroesJson = json.th;
-        l = heroesJson.length
-        this.teamHeroes = new Array(l);
-        var heroJson, character;
-        for (i = 0; i < l; i++){
-            heroJson = heroesJson[i];
-            character = new GamePlayer(heroJson.k, heroJson.id, heroJson.instid,
-                                       heroJson.sk);
-            character.read(heroJson);
-            this.teamHeroes[i] = character;
-        }
-        heroesJson = json.sh;
-        l = heroesJson.length
-        this.reserveHeroes = new Array(l);
-        for (i = 0; i < l; i++){
-            heroJson = heroesJson[i];
-            character = new GamePlayer(heroJson.k, heroJson.id, heroJson.instid,
-                                       heroJson.sk);
-            character.read(heroJson);
-            this.reserveHeroes[i] = character;
-        }
-        heroesJson = json.hh;
-        l = heroesJson.length
-        this.hiddenHeroes = new Array(l);
-        for (i = 0; i < l; i++){
-            heroJson = heroesJson[i];
-            character = new GamePlayer(heroJson.k, heroJson.id, heroJson.instid,
-                                       heroJson.sk);
-            character.read(heroJson);
-            this.hiddenHeroes[i] = character;
-        }
+        this.teamHeroes = RPM.readJSONSystemListByIndex(json.th, (json) =>
+            {
+                return new GamePlayer(json.k, json.id, json.instid, json.sk, 
+                    json);
+            },
+            false
+        );
+        this.reserveHeroes = RPM.readJSONSystemListByIndex(json.sh, (json) =>
+            {
+                return new GamePlayer(json.k, json.id, json.instid, json.sk, 
+                    json);
+            },
+            false
+        );
+        this.hiddenHeroes = RPM.readJSONSystemListByIndex(json.hh, (json) =>
+            {
+                return new GamePlayer(json.k, json.id, json.instid, json.sk, 
+                    json);
+            },
+            false
+        );
 
         // Map infos
         this.currentMapId = json.currentMapId;
         var positionHero = json.heroPosition;
-        this.hero.position.set(positionHero[0],
-                               positionHero[1],
-                               positionHero[2]);
+        this.hero.position.set(positionHero[0], positionHero[1], positionHero[2]);
         this.heroStates = json.heroStates;
         this.heroProperties = json.heroProp;
         this.heroStatesOptions = json.heroStatesOpts;
         this.startupStates = json.startS;
         this.startupProperties = json.startP;
         this.readMapsDatas(json.mapsDatas);
-    },
+    }
 
-    /** Read all the maps datas.
-    *   @param {Object} json Json object describing the maps datas.
+    /** Read all the maps datas
+    *   @param {Object} json Json object describing the maps datas
     */
-    readMapsDatas: function(json){
+    readMapsDatas(json)
+    {
         this.mapsDatas = json;
-    },
+    }
 
-    /** Save a game file.
+    /** Save a game file
     *   @param {number} slot The number of the slot to save.
     */
-    write: function(slot){
+    async write(slot)
+    {
         this.currentSlot = slot;
-        var i, l = this.teamHeroes.length;
-        var teamHeroes = new Array(l);
+        let l = this.teamHeroes.length;
+        let teamHeroes = new Array(l);
+        let i;
         for (i = 0; i < l; i++)
+        {
             teamHeroes[i] = this.teamHeroes[i].getSaveCharacter();
+        }
         l = this.reserveHeroes.length;
-        var reserveHeroes = new Array(l);
+        let reserveHeroes = new Array(l);
         for (i = 0; i < l; i++)
+        {
             reserveHeroes[i] = this.reserveHeroes[i].getSaveCharacter();
+        }
         l = this.hiddenHeroes.length;
-        var hiddenHeroes = new Array(l);
+        let hiddenHeroes = new Array(l);
         for (i = 0; i < l; i++)
+        {
             hiddenHeroes[i] = this.hiddenHeroes[i].getSaveCharacter();
-
-        RPM.openFile(this, RPM.FILE_SAVE, true, function(res){
-            var jsonList = JSON.parse(res);
-            jsonList[slot - 1] =
-            {
-                t: this.playTime.time,
-                th: teamHeroes,
-                sh: reserveHeroes,
-                hh: hiddenHeroes,
-                itm: this.items,
-                cur: this.currencies,
-                inst: this.charactersInstances,
-                vars: this.variables,
-                currentMapId: this.currentMapId,
-                heroPosition: [this.hero.position.x,
-                               this.hero.position.y,
-                               this.hero.position.z],
-                heroStates: this.heroStates,
-                heroProp: this.heroProperties,
-                heroStatesOpts: this.heroStatesOptions,
-                startS: this.startupStates,
-                startP: this.startupProperties,
-                mapsDatas : this.getCompressedMapsDatas()
-            };
-
-            RPM.saveFile(RPM.FILE_SAVE, jsonList);
+        }
+        await RPM.saveFile(getPathSave(slot),
+        {
+            t: this.playTime.time,
+            th: teamHeroes,
+            sh: reserveHeroes,
+            hh: hiddenHeroes,
+            itm: this.items,
+            cur: this.currencies,
+            inst: this.charactersInstances,
+            vars: this.variables,
+            currentMapId: this.currentMapId,
+            heroPosition: [this.hero.position.x, this.hero.position.y, this.hero
+                .position.z],
+            heroStates: this.heroStates,
+            heroProp: this.heroProperties,
+            heroStatesOpts: this.heroStatesOptions,
+            startS: this.startupStates,
+            startP: this.startupProperties,
+            mapsDatas : this.getCompressedMapsDatas()
         });
-    },
+    }
 
-    /** Get a compressed version of mapsDatas (don't retain meshs).
+    /** Get a compressed version of mapsDatas (don't retain meshs)
     *   @returns {Object}
     */
-    getCompressedMapsDatas: function() {
-        var obj = {}, i, j, k, l = Object.keys(this.mapsDatas).length, w, h, id,
-            datas, inf, objPortion, jp;
-        for (id in this.mapsDatas) {
+    getCompressedMapsDatas()
+    {
+        let obj = {};
+        let l = Object.keys(this.mapsDatas).length;
+        let i, jp, j, k, w, h, id, objPortion, inf, datas;
+        for (id in this.mapsDatas)
+        {
             l = this.mapsDatas[id].length;
             objPortion = new Array(l);
-            for (i = 0; i < l; i++) {
+            for (i = 0; i < l; i++)
+            {
                 objPortion[i] = new Array(2);
                 for (jp = 0; jp < 2; jp++)
                 {
                     h = this.mapsDatas[id][i][jp].length;
                     objPortion[i][jp] = new Array(h);
-                    for (j = (jp === 0 ? 1 : 0); j < h; j++) {
+                    for (j = (jp === 0 ? 1 : 0); j < h; j++)
+                    {
                         w = this.mapsDatas[id][i][jp][j].length;
                         objPortion[i][jp][j] = new Array(w);
-                        for (k = 0; k < w; k++) {
+                        for (k = 0; k < w; k++)
+                        {
                             inf = {};
                             datas = this.mapsDatas[id][i][jp][j][k];
-                            if (datas) {
-                                if (datas.si && datas.si.length) {
+                            if (datas)
+                            {
+                                if (datas.si && datas.si.length)
+                                {
                                     inf.si = datas.si;
                                 }
-                                if (datas.s && datas.s.length) {
+                                if (datas.s && datas.s.length)
+                                {
                                     inf.s = datas.s;
                                 }
-                                if (datas.pi && datas.pi.length) {
+                                if (datas.pi && datas.pi.length)
+                                {
                                     inf.pi = datas.pi;
                                 }
-                                if (datas.p && datas.p.length) {
+                                if (datas.p && datas.p.length)
+                                {
                                     inf.p = datas.p;
                                 }
-                                if (datas.soi && datas.soi.length) {
+                                if (datas.soi && datas.soi.length)
+                                {
                                     inf.soi = datas.soi;
                                 }
-                                if (datas.so && datas.so.length) {
+                                if (datas.so && datas.so.length)
+                                {
                                     inf.so = datas.so;
                                 }
                             }
@@ -308,7 +317,6 @@ Game.prototype = {
             }
             obj[id] = objPortion;
         }
-
         return obj;
     }
 }

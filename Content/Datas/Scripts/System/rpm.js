@@ -31,33 +31,36 @@ RPM.PATH_BR = "";
 RPM.ROOT_DIRECTORY_LOCAL = "."
 RPM.PATH_FILES = "file:///";
 RPM.PATH_DATAS = Platform.ROOT_DIRECTORY + "/Content/Datas/";
+RPM.EXTENSION_JSON = ".json";
 RPM.FILE_MAPS = RPM.PATH_DATAS + "Maps/";
-RPM.FILE_MAP_INFOS = "/infos.json";
-RPM.FILE_MAP_OBJECTS = "/objects.json";
-RPM.FILE_PICTURES_DATAS = RPM.PATH_DATAS + "pictures.json";
-RPM.FILE_VIDEOS_DATAS = RPM.PATH_DATAS + "videos.json";
-RPM.FILE_SONGS_DATAS = RPM.PATH_DATAS + "songs.json";
-RPM.FILE_SHAPES_DATAS = RPM.PATH_DATAS + "shapes.json";
-RPM.FILE_COMMON_EVENTS = RPM.PATH_DATAS + "commonEvents.json";
-RPM.FILE_ITEMS = RPM.PATH_DATAS + "items.json";
-RPM.FILE_SKILLS = RPM.PATH_DATAS + "skills.json";
-RPM.FILE_WEAPONS = RPM.PATH_DATAS + "weapons.json";
-RPM.FILE_ARMORS = RPM.PATH_DATAS + "armors.json";
-RPM.FILE_HEROES = RPM.PATH_DATAS + "heroes.json";
-RPM.FILE_MONSTERS = RPM.PATH_DATAS + "monsters.json";
-RPM.FILE_TROOPS = RPM.PATH_DATAS + "troops.json";
-RPM.FILE_BATTLE_SYSTEM = RPM.PATH_DATAS + "battleSystem.json";
-RPM.FILE_TITLE_SCREEN_GAME_OVER = RPM.PATH_DATAS + "titlescreenGameover.json";
-RPM.FILE_KEYBOARD = RPM.PATH_DATAS + "keyBoard.json";
-RPM.FILE_SYSTEM = RPM.PATH_DATAS + "system.json";
-RPM.FILE_CLASSES = RPM.PATH_DATAS + "classes.json";
-RPM.FILE_TILESETS_DATAS = RPM.PATH_DATAS + "tilesets.json";
-RPM.FILE_SPECIAL_ELEMENTS = RPM.PATH_DATAS + "specialElements.json";
-RPM.FILE_VARIABLES = RPM.PATH_DATAS + "variables.json";
-RPM.FILE_SETTINGS = RPM.PATH_DATAS + "settings.json";
-RPM.FILE_SAVE = RPM.PATH_DATAS + "saves.json";
-RPM.FILE_DLCS = RPM.PATH_DATAS + "dlcs.json";
-RPM.FILE_ANIMATIONS = RPM.PATH_DATAS + "animations.json";
+RPM.FILE_MAP_INFOS = "/infos" + RPM.EXTENSION_JSON;
+RPM.FILE_MAP_OBJECTS = "/objects" + RPM.EXTENSION_JSON;
+RPM.FILE_PICTURES_DATAS = RPM.PATH_DATAS + "pictures" + RPM.EXTENSION_JSON;
+RPM.FILE_VIDEOS_DATAS = RPM.PATH_DATAS + "videos" + RPM.EXTENSION_JSON;
+RPM.FILE_SONGS_DATAS = RPM.PATH_DATAS + "songs" + RPM.EXTENSION_JSON;
+RPM.FILE_SHAPES_DATAS = RPM.PATH_DATAS + "shapes" + RPM.EXTENSION_JSON;
+RPM.FILE_COMMON_EVENTS = RPM.PATH_DATAS + "commonEvents" + RPM.EXTENSION_JSON;
+RPM.FILE_ITEMS = RPM.PATH_DATAS + "items" + RPM.EXTENSION_JSON;
+RPM.FILE_SKILLS = RPM.PATH_DATAS + "skills" + RPM.EXTENSION_JSON;
+RPM.FILE_WEAPONS = RPM.PATH_DATAS + "weapons" + RPM.EXTENSION_JSON;
+RPM.FILE_ARMORS = RPM.PATH_DATAS + "armors" + RPM.EXTENSION_JSON;
+RPM.FILE_HEROES = RPM.PATH_DATAS + "heroes" + RPM.EXTENSION_JSON;
+RPM.FILE_MONSTERS = RPM.PATH_DATAS + "monsters" + RPM.EXTENSION_JSON;
+RPM.FILE_TROOPS = RPM.PATH_DATAS + "troops" + RPM.EXTENSION_JSON;
+RPM.FILE_BATTLE_SYSTEM = RPM.PATH_DATAS + "battleSystem" + RPM.EXTENSION_JSON;
+RPM.FILE_TITLE_SCREEN_GAME_OVER = RPM.PATH_DATAS + "titlescreenGameover" + RPM
+    .EXTENSION_JSON;
+RPM.FILE_KEYBOARD = RPM.PATH_DATAS + "keyBoard" + RPM.EXTENSION_JSON;
+RPM.FILE_SYSTEM = RPM.PATH_DATAS + "system" + RPM.EXTENSION_JSON;
+RPM.FILE_CLASSES = RPM.PATH_DATAS + "classes" + RPM.EXTENSION_JSON;
+RPM.FILE_TILESETS_DATAS = RPM.PATH_DATAS + "tilesets" + RPM.EXTENSION_JSON;
+RPM.FILE_SPECIAL_ELEMENTS = RPM.PATH_DATAS + "specialElements" + RPM
+    .EXTENSION_JSON;
+RPM.FILE_VARIABLES = RPM.PATH_DATAS + "variables" + RPM.EXTENSION_JSON;
+RPM.FILE_SETTINGS = RPM.PATH_DATAS + "settings" + RPM.EXTENSION_JSON;
+RPM.FILE_SAVE = RPM.PATH_DATAS + "saves" + RPM.EXTENSION_JSON;
+RPM.FILE_DLCS = RPM.PATH_DATAS + "dlcs" + RPM.EXTENSION_JSON;
+RPM.FILE_ANIMATIONS = RPM.PATH_DATAS + "animations" + RPM.EXTENSION_JSON;
 RPM.PATH_PICTURES = "/Content/Images";
 RPM.PATH_VIDEOS = "/Content/Videos";
 RPM.PATH_HUD = RPM.PATH_PICTURES + "/HUD/";
@@ -87,6 +90,7 @@ RPM.PATH_OBJ = RPM.PATH_SHAPES + "OBJ";
 RPM.PATH_MTL = RPM.PATH_SHAPES + "MTL";
 RPM.PATH_OBJ_COLLISIONS = RPM.PATH_SHAPES + "Collisions";
 RPM.PATH_SHADERS = RPM.PATH_DATAS + "Scripts/System/shaders/";
+RPM.PATH_SAVES = RPM.PATH_DATAS + "Saves";
 
 // -------------------------------------------------------
 //  CONSTANTS
@@ -108,6 +112,7 @@ RPM.PORTION_SIZE = 16;
 RPM.MAX_PICTURE_SIZE = 4096;
 RPM.SCREEN_X = 640;
 RPM.SCREEN_Y = 480;
+RPM.NONE_PADDING = [0, 0, 0, 0];
 RPM.VERY_SMALL_PADDING_BOX = [5, 5, 5, 5];
 RPM.SMALL_PADDING_BOX = [10, 10, 10, 10];
 RPM.MEDIUM_PADDING_BOX = [20, 20, 20, 20];
@@ -118,6 +123,7 @@ RPM.ONE_SECOND_MILLI = 1000;
 RPM.NUM_BOOL_TRUE = 1;
 RPM.NUM_BOOL_FALSE = 0;
 RPM.COEF_TEX = 0.2;
+RPM.LOADING_MIN_DELAY = 50;
 RPM.CLASS_HIDDEN = "hidden";
 RPM.STRING_RGBA = "rgba";
 RPM.STRING_EMPTY = "";
@@ -848,6 +854,12 @@ Tree.prototype = {
 //  FUNCTIONS
 // -------------------------------------------------------
 
+RPM.fileExists = function(url)
+{
+    const fs = require('fs');
+    return (fs.existsSync(url));
+}
+
 /** Read a json file
 *   @static
 *   @param {Object} base The class calling this function.
@@ -856,11 +868,10 @@ Tree.prototype = {
 RPM.openFile = async function(url)
 {
     const fs = require('fs').promises;
-
     return await fs.readFile(url, (e, data) => {
         if (e) 
         {
-            RPM.showError(e);
+            return null;
         } else
         {
             return data.toString();
@@ -880,11 +891,10 @@ RPM.parseFileJSON = async function(url)
 *   @param {string} url The path of the file.
 *   @param {Object} obj An object that can be stringified by JSON.
 */
-RPM.saveFile = function(url, obj)
+RPM.saveFile = async function(url, obj)
 {
-    const fs = require('fs');
-
-    fs.writeFile(url, JSON.stringify(obj), (e) => {
+    const fs = require('fs').promises;
+    return await fs.writeFile(url, JSON.stringify(obj), (e) => {
         if (e)
         {
             RPM.showError(e);
@@ -1632,6 +1642,8 @@ RPM.initialize = function()
     RPM.settings = new Settings();
     RPM.datasGame = new DatasGame();
     RPM.gameStack = new GameStack();
+    RPM.loadingDelay = 0;
+    RPM.clearHUD();
 }
 
 // -------------------------------------------------------
@@ -1645,6 +1657,18 @@ RPM.load = async function()
     RPM.gameStack.pushTitleScreen();
     RPM.datasGame.loaded = true;
     RPM.requestPaintHUD = true;
+}
+
+// -------------------------------------------------------
+
+/** Load the game stack and datas
+*/
+RPM.clearHUD = function()
+{
+    Platform.ctx.clearRect(0, 0, RPM.CANVAS_WIDTH, RPM.CANVAS_HEIGHT);
+    Platform.ctx.lineWidth = 1;
+    Platform.ctx.webkitImageSmoothingEnabled = false;
+    Platform.ctx.imageSmoothingEnabled = false;
 }
 
 // -------------------------------------------------------
@@ -1696,10 +1720,9 @@ RPM.update = function()
     RPM.songsManager.update();
 
     // Repeat keypress as long as not blocking
-    let key, continuePressed;
+    let continuePressed;
     for (let i = 0, l = RPM.keysPressed.length; i < l; i++)
     {
-        key = RPM.keysPressed[i];
         continuePressed = RPM.onKeyPressedRepeat(RPM.keysPressed[i]);
         if (!continuePressed)
         {
@@ -1709,11 +1732,6 @@ RPM.update = function()
 
     // Update the top of the stack
     RPM.gameStack.update();
-
-    // Elapsed time
-    RPM.elapsedTime = new Date().getTime() - RPM.lastUpdateTime;
-    RPM.averageElapsedTime = (RPM.averageElapsedTime + RPM.elapsedTime) / 2;
-    RPM.lastUpdateTime = new Date().getTime();
 }
 
 // -------------------------------------------------------
@@ -1779,15 +1797,17 @@ RPM.drawHUD = function()
     if (RPM.requestPaintHUD)
     {
         RPM.requestPaintHUD = false;
-        Platform.ctx.clearRect(0, 0, RPM.CANVAS_WIDTH, RPM.CANVAS_HEIGHT);
-        Platform.ctx.lineWidth = 1;
-        Platform.ctx.webkitImageSmoothingEnabled = false;
-        Platform.ctx.imageSmoothingEnabled = false;
         if (RPM.gameStack.isLoading() && RPM.loadingScene) 
         {
-            RPM.loadingScene.drawHUD();
+            RPM.loadingDelay += RPM.elapsedTime;
+            if (RPM.loadingDelay >= RPM.LOADING_MIN_DELAY)
+            {
+                RPM.loadingScene.drawHUD();
+            }
         } else
         {
+            RPM.loadingDelay = 0;
+            RPM.clearHUD();
             RPM.gameStack.drawHUD();
         }
     }
@@ -1800,10 +1820,18 @@ RPM.loop = function()
 {
     requestAnimationFrame(RPM.loop);
 
+    // Update if everything is loaded
     if (RPM.datasGame.loaded && !RPM.gameStack.isLoading())
     {
         RPM.update();
     }
+
+    // Elapsed time
+    RPM.elapsedTime = new Date().getTime() - RPM.lastUpdateTime;
+    RPM.averageElapsedTime = (RPM.averageElapsedTime + RPM.elapsedTime) / 2;
+    RPM.lastUpdateTime = new Date().getTime();
+
+    // Draw
     RPM.draw3D();
     RPM.drawHUD();
 }
