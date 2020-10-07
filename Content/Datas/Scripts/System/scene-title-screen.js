@@ -9,31 +9,21 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SceneTitleScreen : SceneGame
-//
-// -------------------------------------------------------
-
 /** @class
 *   A scene for the title screen
 *   @extends SceneGame
 *   @property {WindowChoices} windowChoicesCommands A window choices for
 *   choosing a command
 */
-function SceneTitleScreen()
+class SceneTitleScreen extends SceneGame
 {
-    SceneGame.call(this);
-
-    this.load();
-}
-
-SceneTitleScreen.prototype = {
-
-    load: async function()
+    constructor()
     {
-        this.loading = true;
+        super();
+    }
 
+    async load()
+    {
         // Stop all songs
         RPM.songsManager.stopAll();
 
@@ -56,7 +46,7 @@ SceneTitleScreen.prototype = {
         }
 
         // Windows
-        commandsNb = RPM.datasGame.titlescreenGameover.titleCommands.length;
+        let commandsNb = RPM.datasGame.titlescreenGameover.titleCommands.length;
         this.windowChoicesCommands = new WindowChoices(RPM.SCREEN_X / 2 - (
             RPM.MEDIUM_SLOT_WIDTH / 2), RPM.SCREEN_Y - RPM.HUGE_SPACE - (
             commandsNb * RPM.MEDIUM_SLOT_HEIGHT), RPM.MEDIUM_SLOT_WIDTH, RPM
@@ -74,57 +64,29 @@ SceneTitleScreen.prototype = {
         await RPM.datasGame.titlescreenGameover.titleMusic.playMusic();
 
         this.loading = false;
-    },
-
-    update: function() {
-
-    },
+    }
 
     // -------------------------------------------------------
 
-    onKeyPressed: function(key) {
+    onKeyPressed(key)
+    {
         this.windowChoicesCommands.onKeyPressed(key, this.windowChoicesCommands
             .getCurrentContent().datas);
-    },
+    }
 
-    // -------------------------------------------------------
-
-    onKeyReleased: function(key) {
-
-    },
-
-    // -------------------------------------------------------
-
-    onKeyPressedRepeat: function(key) {
-
-    },
-
-    // -------------------------------------------------------
-
-    onKeyPressedAndRepeat: function(key) {
+    onKeyPressedAndRepeat(key)
+    {
         this.windowChoicesCommands.onKeyPressedAndRepeat(key);
-    },
+    }
 
     // -------------------------------------------------------
 
-    draw3D: function(canvas) {
-
-    },
-
-    // -------------------------------------------------------
-
-    drawHUD: function()
+    drawHUD()
     {
         if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage)
         {
             this.pictureBackground.draw();
         }
-
         this.windowChoicesCommands.draw();
-    },
-
-    close: function()
-    {
-
     }
 }

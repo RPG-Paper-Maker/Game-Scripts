@@ -42,10 +42,10 @@ class GameStack
      */
     pop()
     {
+        let scene = this.content.pop();
         this.top = this.at(this.content.length - 1);
         this.subTop = this.at(this.content.length - 2);
         this.bot = this.at(0);
-        let scene = this.content.pop();
         scene.close();
         RPM.requestPaintHUD = true;
         return scene;

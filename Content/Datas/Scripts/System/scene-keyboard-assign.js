@@ -9,105 +9,106 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SceneKeyboardAssign : SceneGame
-//
-// -------------------------------------------------------
-
 /** @class
-*   A scene for the keyboard assign setting.
+*   A scene for the keyboard assign setting
 *   @extends SceneGame
 */
-function SceneKeyboardAssign() {
-    SceneGame.call(this);
+class SceneKeyboardAssign extends SceneGame
+{
+    static WINDOW_PRESS_WIDTH = 300;
+    static WINDOW_PRESS_HEIGHT = 200;
+    static MAX_WAIT_TIME_FIRST = 3000;
+    static MAX_WAIT_TIME = 1000;
 
-    // Creating background
-    if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage) {
-        this.pictureBackground = Picture2D.createWithID(RPM.datasGame
-            .titlescreenGameover.titleBackgroundImageID, PictureKind.TitleScreen);
-        this.pictureBackground.cover = true;
+    constructor()
+    {
+        super();
     }
 
-    // Creating windows
-    this.windowKeyboard = new WindowBox(RPM.HUGE_SPACE, RPM.HUGE_SPACE, RPM
-        .MEDIUM_SLOT_WIDTH, RPM.LARGE_SLOT_HEIGHT,
+    async load()
+    {
+        // Creating background
+        if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage)
         {
-            content: new GraphicText("KEYBOARD", { align: Align.Center }),
-            padding: RPM.SMALL_SLOT_PADDING
+            this.pictureBackground = await Picture2D.createWithID(RPM.datasGame
+                .titlescreenGameover.titleBackgroundImageID, PictureKind
+                .TitleScreen);
+            this.pictureBackground.cover = true;
         }
-    );
-    this.windowInformations = new WindowBox(RPM.HUGE_SPACE + RPM
-        .MEDIUM_SLOT_WIDTH + RPM.LARGE_SPACE, RPM.HUGE_SPACE, RPM.SCREEN_X - (2 
-        * RPM.HUGE_SPACE) - RPM.MEDIUM_SLOT_WIDTH - RPM.LARGE_SPACE, RPM
-        .LARGE_SLOT_HEIGHT, 
+
+        // Creating windows
+        this.windowKeyboard = new WindowBox(RPM.HUGE_SPACE, RPM.HUGE_SPACE, RPM
+            .MEDIUM_SLOT_WIDTH, RPM.LARGE_SLOT_HEIGHT,
+            {
+                content: new GraphicText("KEYBOARD", { align: Align.Center }),
+                padding: RPM.SMALL_SLOT_PADDING
+            }
+        );
+        this.windowInformations = new WindowBox(RPM.HUGE_SPACE + RPM
+            .MEDIUM_SLOT_WIDTH + RPM.LARGE_SPACE, RPM.HUGE_SPACE, RPM.SCREEN_X -
+            (2 * RPM.HUGE_SPACE) - RPM.MEDIUM_SLOT_WIDTH - RPM.LARGE_SPACE, RPM
+            .LARGE_SLOT_HEIGHT, 
+            {
+                content: new GraphicText("Select a keyboard shortcut to edit.",
+                    { align: Align.Center }),
+                padding: RPM.SMALL_SLOT_PADDING
+            }
+        );
+        this.windowChoicesMain = new WindowChoices(RPM.HUGE_SPACE, RPM
+            .HUGE_SPACE + RPM.LARGE_SLOT_HEIGHT + RPM.LARGE_SPACE, RPM.SCREEN_X 
+            - (2 * RPM.HUGE_SPACE), RPM.MEDIUM_SLOT_HEIGHT, RPM.datasGame
+            .keyBoard.getCommandsGraphics(),
+            {
+                nbItemsMax: 9,
+                listCallbacks: RPM.datasGame.keyBoard.getCommandsActions(),
+                bordersInsideVisible: false
+            }
+        );
+        this.windowPress = new WindowBox((RPM.SCREEN_X / 2) - (
+            SceneKeyboardAssign.WINDOW_PRESS_WIDTH / 2), (RPM.SCREEN_Y / 2) - (
+            SceneKeyboardAssign.WINDOW_PRESS_HEIGHT / 2), SceneKeyboardAssign
+            .WINDOW_PRESS_WIDTH, SceneKeyboardAssign.WINDOW_PRESS_HEIGHT,
+            {
+                padding: RPM.DIALOG_PADDING_BOX
+            }
+        );
+
+        // Initialize
+        this.showPress = false;
+        this.currentSC = [];
+        this.keysPressed = [];
+        this.compareWait = SceneKeyboardAssign.MAX_WAIT_TIME_FIRST;
+        
+        this.loading = false;
+    }
+
+    update()
+    {
+        if (this.showPress)
         {
-            content: new GraphicText("Select a keyboard shortcut to edit.", { 
-                align: Align.Center }),
-            padding: RPM.SMALL_SLOT_PADDING
-        }
-    );
-    this.windowChoicesMain = new WindowChoices(RPM.HUGE_SPACE, RPM.HUGE_SPACE + 
-        RPM.LARGE_SLOT_HEIGHT + RPM.LARGE_SPACE, RPM.SCREEN_X - (2 * RPM
-        .HUGE_SPACE), RPM.MEDIUM_SLOT_HEIGHT, RPM.datasGame.keyBoard
-        .getCommandsGraphics(),
-        {
-            nbItemsMax: 9,
-            listCallbacks: RPM.datasGame.keyBoard.getCommandsActions(),
-            bordersInsideVisible: false
-        }
-    );
-    this.windowPress = new WindowBox((RPM.SCREEN_X / 2) - (SceneKeyboardAssign
-        .WINDOW_PRESS_WIDTH / 2), (RPM.SCREEN_Y / 2) - (SceneKeyboardAssign
-        .WINDOW_PRESS_HEIGHT / 2), SceneKeyboardAssign.WINDOW_PRESS_WIDTH,
-        SceneKeyboardAssign.WINDOW_PRESS_HEIGHT,
-        {
-            padding: RPM.DIALOG_PADDING_BOX
-        }
-    );
-
-    // Initialize
-    this.showPress = false;
-    this.currentSC = [];
-    this.keysPressed = [];
-    this.compareWait = SceneKeyboardAssign.MAX_WAIT_TIME_FIRST;
-}
-
-SceneKeyboardAssign.WINDOW_PRESS_WIDTH = 300;
-SceneKeyboardAssign.WINDOW_PRESS_HEIGHT = 200;
-SceneKeyboardAssign.MAX_WAIT_TIME_FIRST = 3000;
-SceneKeyboardAssign.MAX_WAIT_TIME = 1000;
-
-
-
-// -------------------------------------------------------
-
-SceneKeyboardAssign.prototype = {
-
-    update: function() {
-        if (this.showPress) {
             if (this.keysPressed.length === 0 && new Date().getTime() - this
                 .waitTime >= this.compareWait)
             {
                 this.showPress = false;
 
                 // If nothing, go back to previous sc
-                if (this.currentSC.length === 0) {
+                if (this.currentSC.length === 0)
+                {
                     this.windowChoicesMain.getCurrentContent().updateShort(this
                         .originalSC);
                 } else {
                     RPM.settings.updateKeyboard(this.windowChoicesMain
                         .getCurrentContent().kb.id, this.currentSC);
                 }
-
                 RPM.requestPaintHUD = true;
             }
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    updateKey: function() {
+    updateKey()
+    {
         this.compareWait = SceneKeyboardAssign.MAX_WAIT_TIME_FIRST;
         this.waitTime = new Date().getTime();
         this.showPress = true;
@@ -116,89 +117,80 @@ SceneKeyboardAssign.prototype = {
         this.windowChoicesMain.getCurrentContent().updateShort(this
             .currentSC);
         this.nextOR = true;
-
         return true;
-    },
+    }
 
     // -------------------------------------------------------
 
-    onKeyPressed: function(key) {
-        if (this.showPress) {
-            var current;
-
+    onKeyPressed(key)
+    {
+        if (this.showPress)
+        {
             this.keysPressed.push(key);
-            if (this.nextOR) {
+            if (this.nextOR)
+            {
                 this.currentSC.push([]);
                 this.nextOR = false;
             }
-            current = this.currentSC[this.currentSC.length - 1];
-            if (current.indexOf(key) === -1) {
+            let current = this.currentSC[this.currentSC.length - 1];
+            if (current.indexOf(key) === -1)
+            {
                 this.compareWait = SceneKeyboardAssign.MAX_WAIT_TIME_FIRST;
                 this.currentSC[this.currentSC.length - 1].push(key);
                 this.windowChoicesMain.getCurrentContent().updateShort(this
                     .currentSC);
             }
-        } else {
+        } else
+        {
             this.windowChoicesMain.onKeyPressed(key, this);
-
-            if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
-                .Cancel) || DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard
-                .MainMenu))
+            if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard
+                .menuControls.Cancel) || DatasKeyBoard.isKeyEqual(key, RPM
+                .datasGame.keyBoard.MainMenu))
             {
                 RPM.datasGame.system.soundCancel.playSound();
                 RPM.gameStack.pop();
             }
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    onKeyReleased: function(key) {
+    onKeyReleased(key)
+    {
         this.keysPressed.splice(this.keysPressed.indexOf(key), 1);
-        if (this.keysPressed.length === 0 && this.currentSC.length > 0) {
+        if (this.keysPressed.length === 0 && this.currentSC.length > 0)
+        {
             this.compareWait = SceneKeyboardAssign.MAX_WAIT_TIME;
             this.nextOR = true;
             this.waitTime = new Date().getTime();
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    onKeyPressedRepeat: function(key) {
-
-    },
-
-    // -------------------------------------------------------
-
-    onKeyPressedAndRepeat: function(key) {
-        if (!this.showPress) {
+    onKeyPressedAndRepeat(key)
+    {
+        if (!this.showPress)
+        {
             this.windowChoicesMain.onKeyPressedAndRepeat(key);
             this.windowPress.content = this.windowChoicesMain.getCurrentContent();
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    draw3D: function(canvas) {
-
-    },
-
-    // -------------------------------------------------------
-
-    drawHUD: function() {
-        if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage) {
+    drawHUD()
+    {
+        if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage)
+        {
             this.pictureBackground.draw();
         }
         this.windowKeyboard.draw();
         this.windowInformations.draw();
         this.windowChoicesMain.draw();
-        if (this.showPress) {
+        if (this.showPress)
+        {
             this.windowPress.draw();
         }
-    },
-
-    close: function()
-    {
-
     }
 }

@@ -57,7 +57,7 @@ class SystemKeyBoard extends SystemLang
             originalSubList = this.sc[i];
             m = originalSubList.length;
             subList = new Array(m);
-            for (j = 0; j < ll; j++)
+            for (j = 0; j < m; j++)
             {
                 subList[j] = KeyEvent.getKeyString(originalSubList[j]);
             }

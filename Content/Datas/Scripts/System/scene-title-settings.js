@@ -9,66 +9,64 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SceneTitleSettings : SceneGame
-//
-// -------------------------------------------------------
-
 /** @class
-*   A scene for the title screen settings.
+*   A scene for the title screen settings
 *   @extends SceneGame
 */
-function SceneTitleSettings() {
-    SceneGame.call(this);
-
-    // Creating background
-    if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage) {
-        this.pictureBackground = Picture2D.createWithID(RPM.datasGame
-            .titlescreenGameover.titleBackgroundImageID, PictureKind.TitleScreen);
-        this.pictureBackground.cover = true;
+class SceneTitleSettings extends SceneGame
+{
+    constructor()
+    {
+        super();
     }
 
-    // Creating windows
-    this.windowSettings = new WindowBox(RPM.HUGE_SPACE, RPM.HUGE_SPACE, RPM
-        .MEDIUM_SLOT_WIDTH, RPM.LARGE_SLOT_HEIGHT,
+    async load()
+    {
+        // Creating background
+        if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage)
         {
-            content: new GraphicText("SETTINGS", { align: Align.Center }),
-            padding: RPM.SMALL_SLOT_PADDING
+            this.pictureBackground = await Picture2D.createWithID(RPM.datasGame
+                .titlescreenGameover.titleBackgroundImageID, PictureKind
+                .TitleScreen);
+            this.pictureBackground.cover = true;
         }
-    );
-    this.windowInformations = new WindowBox(RPM.HUGE_SPACE + RPM
-        .MEDIUM_SLOT_WIDTH + RPM.LARGE_SPACE, RPM.HUGE_SPACE, RPM.SCREEN_X - (2 
-        * RPM.HUGE_SPACE) - RPM.MEDIUM_SLOT_WIDTH - RPM.LARGE_SPACE, RPM
-        .LARGE_SLOT_HEIGHT,
-        {
-            padding: RPM.SMALL_SLOT_PADDING
-        }
-    );
-    this.windowChoicesMain = new WindowChoices(RPM.HUGE_SPACE, RPM.HUGE_SPACE + 
-        RPM.LARGE_SLOT_HEIGHT + RPM.LARGE_SPACE, RPM.SCREEN_X - (2 * RPM
-        .HUGE_SPACE), RPM.MEDIUM_SLOT_HEIGHT, RPM.datasGame.titlescreenGameover
-        .getSettingsCommandsContent(), 
-        {
-            nbItemsMax: 9,
-            listCallbacks: RPM.datasGame.titlescreenGameover
-                .getSettingsCommandsActions(),
-            bordersInsideVisible: false
-        }
-    );
 
-    this.windowInformations.content = this.windowChoicesMain.getCurrentContent();
-}
-
-SceneTitleSettings.prototype = {
-
-    update: function() {
-
-    },
+        // Creating windows
+        this.windowSettings = new WindowBox(RPM.HUGE_SPACE, RPM.HUGE_SPACE, RPM
+            .MEDIUM_SLOT_WIDTH, RPM.LARGE_SLOT_HEIGHT,
+            {
+                content: new GraphicText("SETTINGS", { align: Align.Center }),
+                padding: RPM.SMALL_SLOT_PADDING
+            }
+        );
+        this.windowInformations = new WindowBox(RPM.HUGE_SPACE + RPM
+            .MEDIUM_SLOT_WIDTH + RPM.LARGE_SPACE, RPM.HUGE_SPACE, RPM.SCREEN_X -
+            (2 * RPM.HUGE_SPACE) - RPM.MEDIUM_SLOT_WIDTH - RPM.LARGE_SPACE, RPM
+            .LARGE_SLOT_HEIGHT,
+            {
+                padding: RPM.SMALL_SLOT_PADDING
+            }
+        );
+        this.windowChoicesMain = new WindowChoices(RPM.HUGE_SPACE, RPM
+            .HUGE_SPACE + RPM.LARGE_SLOT_HEIGHT + RPM.LARGE_SPACE, RPM.SCREEN_X 
+            - (2 * RPM.HUGE_SPACE), RPM.MEDIUM_SLOT_HEIGHT, RPM.datasGame
+            .titlescreenGameover.getSettingsCommandsContent(), 
+            {
+                nbItemsMax: 9,
+                listCallbacks: RPM.datasGame.titlescreenGameover
+                    .getSettingsCommandsActions(),
+                bordersInsideVisible: false
+            }
+        );
+        this.windowInformations.content = this.windowChoicesMain
+            .getCurrentContent();
+        this.loading = false;
+    }
 
     // -------------------------------------------------------
 
-    onKeyPressed: function(key) {
+    onKeyPressed(key)
+    {
         this.windowChoicesMain.onKeyPressed(key);
         if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
             .Cancel) || DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard
@@ -77,47 +75,27 @@ SceneTitleSettings.prototype = {
             RPM.datasGame.system.soundCancel.playSound();
             RPM.gameStack.pop();
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    onKeyReleased: function(key) {
-
-    },
-
-    // -------------------------------------------------------
-
-    onKeyPressedRepeat: function(key) {
-
-    },
-
-    // -------------------------------------------------------
-
-    onKeyPressedAndRepeat: function(key) {
+    onKeyPressedAndRepeat(key)
+    {
         this.windowChoicesMain.onKeyPressedAndRepeat(key);
         this.windowInformations.content = this.windowChoicesMain
             .getCurrentContent();
-    },
+    }
 
     // -------------------------------------------------------
 
-    draw3D: function(canvas) {
-
-    },
-
-    // -------------------------------------------------------
-
-    drawHUD: function() {
-        if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage) {
+    drawHUD()
+    {
+        if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage)
+        {
             this.pictureBackground.draw();
         }
         this.windowSettings.draw();
         this.windowInformations.draw();
         this.windowChoicesMain.draw();
-    },
-
-    close: function()
-    {
-
     }
 }

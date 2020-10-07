@@ -166,7 +166,6 @@ class SongsManager
             return;
         }
         let sound = RPM.datasGame.songs.list[SongKind.Sound][id];
-        console.log(sound)
         if (sound)
         {
             sound = new Howl({

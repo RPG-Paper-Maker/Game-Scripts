@@ -49,6 +49,11 @@ document.addEventListener('keydown', function(event)
             {
                 RPM.keysPressed.push(key);
                 RPM.onKeyPressed(key);
+                // If is loading, that means a new scene was created, return
+                if (RPM.gameStack.isLoading())
+                {
+                    return;
+                }
             }
         }
 
