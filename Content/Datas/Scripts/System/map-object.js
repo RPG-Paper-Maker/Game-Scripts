@@ -808,7 +808,9 @@ MapObject.prototype = {
     addBBToScene: function() {
         if (RPM.datasGame.system.showBB) {
             for (var i = 0, l = this.meshBoundingBox.length; i < l; i++)
+            {
                 RPM.currentMap.scene.add(this.meshBoundingBox[i]);
+            }
         }
     },
 
@@ -827,7 +829,9 @@ MapObject.prototype = {
     removeBBFromScene: function() {
         if (RPM.datasGame.system.showBB) {
             for (var i = 0, l = this.meshBoundingBox.length; i < l; i++)
+            {
                 RPM.currentMap.scene.remove(this.meshBoundingBox[i]);
+            }
         }
 
         this.meshBoundingBox = new Array;
@@ -858,7 +862,7 @@ MapObject.prototype = {
                 states[i], parameters);
 
             for (j = 0, ll = reactions.length; j < ll; j++) {
-                SceneGame.prototype.addReaction.call(RPM.gameStack.top(), sender,
+                SceneGame.prototype.addReaction.call(RPM.gameStack.top, sender,
                     reactions[j], this, state, parameters, event);
                 this.receivedOneEvent = true;
                 test = true;

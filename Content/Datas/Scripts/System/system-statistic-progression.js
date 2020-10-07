@@ -34,7 +34,7 @@ class SystemStatisticProgression
         this.maxValue = new SystemValue(json.m);
         this.isFix = json.if;
         if (this.isFix) {
-            this.table = new SystemProgressionTable(json.t);
+            this.table = new SystemProgressionTable(undefined, json.t);
             this.random = new SystemValue(json.r);
         } else {
             this.formula = new SystemValue(json.f);

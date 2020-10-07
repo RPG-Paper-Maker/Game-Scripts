@@ -36,7 +36,7 @@ CollisionSquare.unionSquares = function(squares, l, w, h) {
     var boolGrid = new Array(l), result = new Array;
     var i, j, k, kk, a, b, c, m, tempW, tempH, temp;
     var square, s;
-
+    
     for (j = 0; j < h; j++) {
         k = j * w;
         for (i = 0; i < w; i++) {

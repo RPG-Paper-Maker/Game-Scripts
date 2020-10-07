@@ -186,10 +186,10 @@ class SystemObject
     {
         
         let events = this.events[idEvent];
+        let reactions = [];
         if (!RPM.isUndefined(events))
         {
-            let reactions = [];
-            let test, event, j, m;
+            let test, event, j, m, reaction;
             for (let i = 0, l = events.length; i < l; i++)
             {
                 test = true;

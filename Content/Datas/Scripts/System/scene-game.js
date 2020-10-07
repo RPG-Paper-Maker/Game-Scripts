@@ -27,12 +27,15 @@
 */
 class SceneGame
 {
-    constructor()
+    constructor(loading = true)
     {
         this.reactionInterpreters = new Array;
         this.parallelCommands = new Array;
-        this.loading = true;
-        RPM.tryCatch(this.load());
+        if (loading)
+        {
+            this.loading = true;
+            RPM.tryCatch(this.load());
+        }
     }
 
     async load()

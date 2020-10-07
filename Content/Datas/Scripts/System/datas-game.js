@@ -106,9 +106,9 @@ class DatasGame
         }
 
         // Shaders
-        json = await RPM.openFile(RPM.PATH_SHADERS + "fix.vert");
+        json = await RPM.openFile(RPM.PATH_SHADERS + "fix.vert")
         RPM.SHADER_FIX_VERTEX = json;
-        json = await RPM.openFile(RPM.PATH_SHADERS + "fix.frag");
+        json = await RPM.openFile(RPM.PATH_SHADERS + "fix.frag")
         RPM.SHADER_FIX_FRAGMENT = json;
     }
 

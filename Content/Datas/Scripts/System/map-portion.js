@@ -601,7 +601,7 @@ MapPortion.prototype = {
                 geometry.uvsNeedUpdate = true;
                 mesh = new THREE.Mesh(geometry, obj.material);
                 this.staticWallsList.push(mesh);
-                RPM.gameStack.top().scene.add(mesh);
+                RPM.gameStack.top.scene.add(mesh);
             }
         }
     },
@@ -747,13 +747,12 @@ MapPortion.prototype = {
                 geometry.uvsNeedUpdate = true;
                 mesh = new THREE.Mesh(geometry, obj.material);
                 this.staticObjects3DList.push(mesh);
-                RPM.gameStack.top().scene.add(mesh);
+                RPM.gameStack.top.scene.add(mesh);
             }
         }
     },
 
     // -------------------------------------------------------
-
     /** Read the JSON associated to the objects in the portion.
     *   @param {Object} json Json object describing the object.
     *   @param {boolean} isMapHero Indicates if this map is where the hero is

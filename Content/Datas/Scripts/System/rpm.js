@@ -868,15 +868,15 @@ RPM.fileExists = function(url)
 RPM.openFile = async function(url)
 {
     const fs = require('fs').promises;
-    return await fs.readFile(url, (e, data) => {
+    return (await fs.readFile(url, (e, data) => {
         if (e) 
         {
             return null;
         } else
         {
-            return data.toString();
+            return data;
         }
-    });
+    })).toString();
 }
 
 RPM.parseFileJSON = async function(url)
@@ -1394,20 +1394,17 @@ RPM.random = function(min, max) {
 */
 RPM.loadTexture = async function(path)
 {
-    let texture = (await new Promise((resolve, reject) => {
+    let texture = await new Promise((resolve, reject) => {
         RPM.textureLoader.load(path,
             (t) => {
                 resolve(t);
             },
-            (t) => {
-                resolve(t);
-            },
+            (t) => {},
             (t) => {
                 RPM.showErrorMessage("Could not load " + path);
-                resolve(t);
             }
         );
-    }));
+    });
     return RPM.createMaterial(texture);
 };
 
@@ -1824,14 +1821,12 @@ RPM.loop = function()
     if (RPM.datasGame.loaded && !RPM.gameStack.isLoading())
     {
         RPM.update();
+        RPM.draw3D();
     }
+    RPM.drawHUD();
 
     // Elapsed time
     RPM.elapsedTime = new Date().getTime() - RPM.lastUpdateTime;
     RPM.averageElapsedTime = (RPM.averageElapsedTime + RPM.elapsedTime) / 2;
     RPM.lastUpdateTime = new Date().getTime();
-
-    // Draw
-    RPM.draw3D();
-    RPM.drawHUD();
 }

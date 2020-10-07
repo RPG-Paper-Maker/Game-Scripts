@@ -28,7 +28,7 @@ MapInfos.prototype = {
     /** Read the JSON associated to the map infos.
     *   @param {Object} json Json object describing the object.
     */
-    read: function(json, map, callback) {
+    read: function(json) {
         this.id = json.id;
         this.name = json.name;
         this.length = json.l;
@@ -80,8 +80,8 @@ MapInfos.prototype = {
     updateBackgroundImage: function() 
     {
         let bgMat = RPM.createMaterial(RPM.textureLoader.load(RPM.datasGame
-            .pictures.get(PictureKind.Pictures, this.backgroundImageID).getPath(
-            PictureKind.Pictures)[0]), { flipY: true });
+            .pictures.get(PictureKind.Pictures, this.backgroundImageID)
+            .getPath()), { flipY: true });
         bgMat.depthTest = false;
         bgMat.depthWrite = false;
         this.sceneBackground = new Physijs.Scene();

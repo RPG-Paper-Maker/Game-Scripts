@@ -274,7 +274,7 @@ class SystemPicture
         {
             square = this.getCollisionAtPos(texture[0] + (i % w), texture[1] + 
                 Math.floor(i / w));
-            square[i] = square ? square.rect : null;
+            squares[i] = square ? square.rect : null;
         }
         return CollisionSquare.unionSquares(squares, l, w, h);
     }

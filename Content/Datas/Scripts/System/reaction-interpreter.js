@@ -101,8 +101,7 @@ ReactionInterpreter.prototype = {
     */
     update: function()
     {
-        if (this.isFinished() || RPM.currentMap.callBackAfterLoading !== null || 
-            !this.canExecute())
+        if (this.isFinished() || RPM.currentMap.loading || !this.canExecute())
         {
             return;
         }
@@ -146,7 +145,7 @@ ReactionInterpreter.prototype = {
     *   @returns {Node}
     */
     updateCommand: function() {
-        if (RPM.currentMap.callBackAfterLoading !== null)
+        if (RPM.currentMap.loading)
         {
             return this.currentCommand;
         }
@@ -290,8 +289,7 @@ ReactionInterpreter.prototype = {
     */
     onKeyPressed: function(key)
     {
-        if (!this.isFinished() && (RPM.currentMap.callBackAfterLoading === null 
-            && this.canExecute()))
+        if (!this.isFinished() && (!RPM.currentMap.loading && this.canExecute()))
         {
             this.currentCommand.data.onKeyPressed(this.currentCommandState, key);
         }
@@ -304,8 +302,7 @@ ReactionInterpreter.prototype = {
     */
     onKeyReleased: function(key)
     {
-        if (!this.isFinished() && (RPM.currentMap.callBackAfterLoading === null 
-            && this.canExecute()))
+        if (!this.isFinished() && (!RPM.currentMap.loading && this.canExecute()))
         {
             this.currentCommand.data.onKeyReleased(this.currentCommandState, key);
         }
@@ -319,8 +316,7 @@ ReactionInterpreter.prototype = {
     */
     onKeyPressedRepeat: function(key)
     {
-        if (!this.isFinished() && (RPM.currentMap.callBackAfterLoading === null 
-            && this.canExecute()))
+        if (!this.isFinished() && (!RPM.currentMap.loading && this.canExecute()))
         {
             return this.currentCommand.data.onKeyPressedRepeat(this
                 .currentCommandState, key);
@@ -336,8 +332,7 @@ ReactionInterpreter.prototype = {
     *   @returns {boolean} false if the other keys are blocked after it.
     */
     onKeyPressedAndRepeat: function(key){
-        if (!this.isFinished() && (RPM.currentMap.callBackAfterLoading === null 
-            && this.canExecute()))
+        if (!this.isFinished() && (!RPM.currentMap.loading && this.canExecute()))
         {
             return this.currentCommand.data.onKeyPressedAndRepeat(this
                 .currentCommandState, key);

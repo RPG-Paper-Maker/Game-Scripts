@@ -45,23 +45,23 @@ class SystemSkybox
     {
         return [
             RPM.createMaterial(RPM.textureLoader.load(RPM.datasGame.pictures.get
-                (PictureKind.Skyboxes, this.left).getPath(PictureKind.Skyboxes)
-                [0]), { flipY: true, flipX: true }),
+                (PictureKind.Skyboxes, this.left).getPath()), { flipY: true, 
+                flipX: true }),
             RPM.createMaterial(RPM.textureLoader.load(RPM.datasGame.pictures.get
-                (PictureKind.Skyboxes, this.right).getPath(PictureKind.Skyboxes)
-                [0]), { flipY: true, flipX: true }),
+                (PictureKind.Skyboxes, this.right).getPath()), { flipY: true, 
+                flipX: true }),
             RPM.createMaterial(RPM.textureLoader.load(RPM.datasGame.pictures.get
-                (PictureKind.Skyboxes, this.top).getPath(PictureKind.Skyboxes)
-                [0]), { flipY: true, flipX: true }),
+                (PictureKind.Skyboxes, this.top).getPath()), { flipY: true, 
+                flipX: true }),
             RPM.createMaterial(RPM.textureLoader.load(RPM.datasGame.pictures.get
-                (PictureKind.Skyboxes, this.bot).getPath(PictureKind.Skyboxes)
-                [0]), { flipY: true, flipX: true }),
+                (PictureKind.Skyboxes, this.bot).getPath()), { flipY: true, 
+                    flipX: true }),
             RPM.createMaterial(RPM.textureLoader.load(RPM.datasGame.pictures.get
-                (PictureKind.Skyboxes, this.front).getPath(PictureKind.Skyboxes)
-                [0]), { flipY: true, flipX: true }),
+                (PictureKind.Skyboxes, this.front).getPath()), { flipY: true, 
+                    flipX: true }),
             RPM.createMaterial(RPM.textureLoader.load(RPM.datasGame.pictures.get
-                (PictureKind.Skyboxes, this.back).getPath(PictureKind.Skyboxes)
-                [0]), { flipY: true, flipX: true })
+                (PictureKind.Skyboxes, this.back).getPath()), { flipY: true, 
+                flipX: true })
         ];
     }
 }

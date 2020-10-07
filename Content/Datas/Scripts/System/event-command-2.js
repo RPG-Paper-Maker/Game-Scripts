@@ -147,7 +147,7 @@ EventCommandStartBattle.prototype = {
             
             // Keep instance of battle state for results
             currentState.sceneBattle = sceneBattle;
-            currentState.mapScene = RPM.gameStack.top();
+            currentState.mapScene = RPM.gameStack.top;
             RPM.gameStack.push(sceneBattle);
 
             return 0; // Stay on this command as soon as we are in battle state
@@ -888,7 +888,6 @@ EventCommandTeleportObject.prototype = {
                         if (moved.isHero) {
                             RPM.game.hero.position = currentState.position;
                             if (RPM.currentMap.id !== id) {
-                                RPM.currentMap.closeMap();
                                 let map = new SceneMap(id);
                                 map.reactionInterpreters.push(RPM
                                     .currentReaction);

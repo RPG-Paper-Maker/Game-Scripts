@@ -29,10 +29,10 @@ class GameStack
     */
     push(scene)
     {
+        this.content.push(scene);
         this.top = scene;
         this.subTop = this.at(this.content.length - 2);
         this.bot = this.at(0);
-        this.content.push(scene);
         RPM.requestPaintHUD = true;
     }
 

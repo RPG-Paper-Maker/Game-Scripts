@@ -58,17 +58,17 @@ class SystemCameraProperties
         camera.verticalAngle = this.verticalAngle.getValue();
         camera.verticalRight = true;
         camera.targetPosition = new THREE.Vector3();
-        x = this.targetOffsetX.getValue();
+        let x = this.targetOffsetX.getValue();
         if (this.isSquareTargetOffsetX)
         {
             x *= RPM.SQUARE_SIZE;
         }
-        y = this.targetOffsetY.getValue();
+        let y = this.targetOffsetY.getValue();
         if (this.isSquareTargetOffsetY)
         {
             y *= RPM.SQUARE_SIZE;
         }
-        z = this.targetOffsetZ.getValue();
+        let z = this.targetOffsetZ.getValue();
         if (this.isSquareTargetOffsetZ)
         {
             z *= RPM.SQUARE_SIZE;

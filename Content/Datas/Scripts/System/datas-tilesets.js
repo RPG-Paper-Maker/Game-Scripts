@@ -32,7 +32,6 @@ class DatasTilesets
         this.autotiles = {};
         this.walls = {};
         this.mountains = {};
-        this.loading = [];
 
         // Sorting all the tilesets according to the ID
         let i, jsonTileset, tileset, idString;
@@ -66,8 +65,8 @@ class DatasTilesets
 
         // Load characters textures
         await this.loadPictures(PictureKind.Characters, "texturesCharacters");
-        //await this.loadPictures(PictureKind.Battlers, "texturesBattlers");
-        //await this.loadPictures(PictureKind.Objects3D, "texturesObjects3D");
+        await this.loadPictures(PictureKind.Battlers, "texturesBattlers");
+        await this.loadPictures(PictureKind.Objects3D, "texturesObjects3D");
     }
 
     // -------------------------------------------------------
@@ -88,7 +87,7 @@ class DatasTilesets
             if (picture)
             {
                 path = picture.getPath();
-                textures[i] = path ? RPM.loadTexture(path) : RPM
+                textures[i] = path ? (await RPM.loadTexture(path)) : RPM
                     .loadTextureEmpty();
             } else {
                 textures[i] = RPM.loadTextureEmpty();

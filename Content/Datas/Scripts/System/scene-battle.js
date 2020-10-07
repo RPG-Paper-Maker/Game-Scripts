@@ -74,7 +74,7 @@ function SceneBattle(troopID, canGameOver, canEscape, battleMap, transitionStart
     this.transitionColor = transitionStart === MapTransitionKind.Fade;
     this.transitionColorAlpha = 0;
     this.step = 0;
-    this.sceneMap = RPM.gameStack.top();
+    this.sceneMap = RPM.gameStack.top;
     this.sceneMapCameraDistance = this.sceneMap.camera.distance;
     this.actionDoNothing = new SystemMonsterAction();
     this.actionDoNothing.read({});
@@ -244,7 +244,7 @@ SceneBattle.prototype.endBattle = function() {
 
     RPM.currentMap.closeMap();
     RPM.gameStack.pop();
-    RPM.currentMap = RPM.gameStack.top();
+    RPM.currentMap = RPM.gameStack.top;
 };
 
 // -------------------------------------------------------

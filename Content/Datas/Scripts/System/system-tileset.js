@@ -179,14 +179,8 @@ class SystemTileset
         Platform.canvasRendering.height = RPM.MAX_PICTURE_SIZE;
         this.texturesAutotiles = new Array;
         let id, autotile, picture;
-        for (let i = 0, l = autotilesIDs.length; i < l; i++)
+        for (let i = 0, l = autotiles.length; i < l; i++)
         {
-            if (result !== null)
-            {
-                textureAutotile = result[0];
-                texture = result[1];
-                offset = result[2];
-            }
             id = autotilesIDs[i];
             autotile = autotiles[id];
             if (autotile)
@@ -204,6 +198,12 @@ class SystemTileset
             } else
             {
                 result = null;
+            }
+            if (result !== null)
+            {
+                textureAutotile = result[0];
+                texture = result[1];
+                offset = result[2];
             }
         }
         if (offset > 0)
@@ -329,8 +329,8 @@ class SystemTileset
     */
     async updateTextureAutotile(textureAutotile, texture)
     {
-        texture.image = RPM.createMaterial(await Picture2D.loadImage(Platform
-            .canvasRendering.toDataURL()));
+        texture.image = await Picture2D.loadImage(Platform.canvasRendering
+            .toDataURL());
         texture.needsUpdate = true;
         textureAutotile.texture = RPM.createMaterial(texture);
         this.texturesAutotiles.push(textureAutotile);
@@ -355,12 +355,6 @@ class SystemTileset
         let id, mountain, picture;
         for (let i = 0, l = mountainsIDs.length; i < l; i++)
         {
-            if (result !== null)
-            {
-                textureMountain = result[0];
-                texture = result[1];
-                offset = result[2];
-            }
             id = mountainsIDs[i];
             mountain = mountains[id];
             if (mountain)
@@ -373,6 +367,12 @@ class SystemTileset
             }
             result = await this.loadTextureMountain(textureMountain, texture, 
                 picture, offset, id);
+            if (result !== null)
+            {
+                textureMountain = result[0];
+                texture = result[1];
+                offset = result[2];
+            }
         }
         if (offset > 0) 
         {
@@ -492,8 +492,8 @@ class SystemTileset
     */
     async updateTextureMountain(textureMountain, texture)
     {
-        texture.image = RPM.createMaterial(await Picture2D.loadImage(Platform
-            .canvasRendering.toDataURL()));
+        texture.image = await Picture2D.loadImage(Platform.canvasRendering
+            .toDataURL());
         texture.needsUpdate = true;
         textureMountain.texture = RPM.createMaterial(texture);
         this.texturesMountains.push(textureMountain);
@@ -506,9 +506,8 @@ class SystemTileset
     {
         let specials = RPM.datasGame.specialElements.walls;
         let specialsIDs = this.walls;
-        let l = specials.length;
+        let l = specialsIDs.length;
         this.texturesWalls = new Array(l);
-        l = specialsIDs.length;
         let id, special, picture;
         for (let i = 0; i < l; i++)
         {
@@ -568,5 +567,6 @@ class SystemTileset
         texture.image = await Picture2D.loadImage(Platform.canvasRendering
             .toDataURL());
         texture.needsUpdate = true;
+        return RPM.createMaterial(texture);
     }
 }
