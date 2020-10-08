@@ -61,11 +61,11 @@ class SceneSaveLoadGame extends SceneGame
             path = Game.getPathSave(i);
             if (RPM.fileExists(path))
             {
-                json = await RPM.openFile(path);
+                json = JSON.parse(await RPM.openFile(path));
             }
             game = json === null ? { currentSlot: i, isNull: true } : new Game(i
                 , json);
-            this.initializeGame(game);
+            await this.initializeGame(game);
         }
         this.windowChoicesSlots.setContents(this.gamesDatas);
     }
@@ -84,9 +84,9 @@ class SceneSaveLoadGame extends SceneGame
 
     /** Initialize a game displaying
     */
-    initializeGame(game)
+    async initializeGame(game)
     {
-        this.gamesDatas[game.currentSlot - 1] = new GraphicSave(game);
+        this.gamesDatas[game.currentSlot - 1] = await GraphicSave.create(game);
         if (game.currentSlot - 1 === this.windowChoicesSlots
             .currentSelectedIndex)
         {
@@ -117,7 +117,7 @@ class SceneSaveLoadGame extends SceneGame
     {
         if (RPM.currentMap !== null)
         {
-            RPM.currentMap.super.update();
+            SceneGame.prototype.update.call(RPM.currentMap);
         }
         if (!this.windowInformations.content.game.isNull)
         {
@@ -131,7 +131,7 @@ class SceneSaveLoadGame extends SceneGame
     {
         if (RPM.currentMap !== null)
         {
-            RPM.currentMap.super.onKeyPressed(key);
+            SceneGame.prototype.onKeyPressed.call(RPM.currentMap, key);
         }
         if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
             .Cancel) || DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard
@@ -148,7 +148,7 @@ class SceneSaveLoadGame extends SceneGame
     {
         if (RPM.currentMap !== null)
         {
-            RPM.currentMap.super.onKeyReleased(key);
+            SceneGame.prototype.onKeyReleased.call(RPM.currentMap, key);
         }
     }
 
@@ -158,7 +158,7 @@ class SceneSaveLoadGame extends SceneGame
     {
         if (RPM.currentMap !== null)
         {
-            RPM.currentMap.super.onKeyPressedRepeat(key);
+            SceneGame.prototype.onKeyPressedRepeat.call(RPM.currentMap, key);
         }
     }
 
@@ -168,7 +168,7 @@ class SceneSaveLoadGame extends SceneGame
     {
         if (RPM.currentMap !== null)
         {
-            RPM.currentMap.super.onKeyPressedAndRepeat(key);
+            SceneGame.prototype.onKeyPressedAndRepeat.call(RPM.currentMap, key);
         }
         this.windowChoicesSlots.onKeyPressedAndRepeat(key);
         this.updateInformations.call(this, this.windowChoicesSlots

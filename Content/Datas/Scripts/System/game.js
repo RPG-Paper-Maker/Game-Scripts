@@ -53,7 +53,7 @@ class Game
 
     static getPathSave(slot)
     {
-        return RPM.FILE_SAVE + RPM.STRING_SLASH + slot + RPM
+        return RPM.PATH_SAVES + RPM.STRING_SLASH + slot + RPM
             .EXTENSION_JSON;
     }
 
@@ -164,7 +164,12 @@ class Game
         );
 
         // Currencies
-        this.currencies = json.cur;
+        let l = json.cur.length;
+        this.currencies = new Array(l);
+        for (let i = 1; i < l; i++)
+        {
+            this.currencies[i] = json.cur[i];
+        }
 
         // Heroes
         this.teamHeroes = RPM.readJSONSystemListByIndex(json.th, (json) =>
@@ -234,7 +239,7 @@ class Game
         {
             hiddenHeroes[i] = this.hiddenHeroes[i].getSaveCharacter();
         }
-        await RPM.saveFile(getPathSave(slot),
+        await RPM.saveFile(Game.getPathSave(slot),
         {
             t: this.playTime.time,
             th: teamHeroes,

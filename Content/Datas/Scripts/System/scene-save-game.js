@@ -9,82 +9,49 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SceneSaveGame : SceneSaveLoadGame
-//
-// -------------------------------------------------------
-
 /** @class
 *   @extends SceneSaveLoadGame
-*   A scene in the menu for saving a game.
+*   A scene in the menu for saving a game
 */
-function SceneSaveGame() {
-    SceneSaveLoadGame.call(this);
+class SceneSaveGame extends SceneSaveLoadGame
+{
+    constructor()
+    {
+        super();
+    }
 
-    SceneSaveLoadGame.prototype.setContents.call(this, new GraphicText(
-        "Save a game", { align: Align.Center }), new GraphicText(
-        "Select a slot where you want to save.", { align: Align.Center }));
-}
+    async load()
+    {
+        await super.load();
 
-SceneSaveGame.prototype = {
-
-    update: function(){
-        SceneSaveLoadGame.prototype.update.call(this);
-    },
+        this.setContents.call(this, new GraphicText("Save a game", { align: 
+            Align.Center }), new GraphicText(
+            "Select a slot where you want to save.", { align: Align.Center }));
+        this.loading = false;
+    }
 
     // -------------------------------------------------------
 
-    onKeyPressed: function(key){
-        var slot;
-
-        SceneSaveLoadGame.prototype.onKeyPressed.call(this, key);
+    onKeyPressed(key)
+    {
+        super.onKeyPressed(key);
 
         // If action, save in the selected slot
-        if (DatasKeyBoard.isKeyEqual(key,
-                                     RPM.datasGame.keyBoard.menuControls.Action))
+        if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
+            .Action))
         {
             RPM.datasGame.system.soundConfirmation.playSound();
-            slot = this.windowChoicesSlots.currentSelectedIndex + 1;
-            RPM.game.write(slot);
+            RPM.game.write(this.windowChoicesSlots.currentSelectedIndex + 1);
 
             // Pop to return in the precedent state
             RPM.gameStack.pop();
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    onKeyReleased: function(key){
-        SceneSaveLoadGame.prototype.onKeyReleased.call(this, key);
-    },
-
-    // -------------------------------------------------------
-
-    onKeyPressedRepeat: function(key){
-        SceneSaveLoadGame.prototype.onKeyPressedRepeat.call(this, key);
-    },
-
-    // -------------------------------------------------------
-
-    onKeyPressedAndRepeat: function(key){
-        SceneSaveLoadGame.prototype.onKeyPressedAndRepeat.call(this, key);
-    },
-
-    // -------------------------------------------------------
-
-    draw3D: function(canvas){
-
-    },
-
-    // -------------------------------------------------------
-
-    drawHUD: function(){
-        SceneSaveLoadGame.prototype.drawHUD.call(this);
-    },
-
-    close: function()
+    draw3D()
     {
-
+        RPM.currentMap.draw3D();
     }
 }
