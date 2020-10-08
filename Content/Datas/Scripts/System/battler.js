@@ -9,116 +9,116 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS Battler
-//
-// -------------------------------------------------------
-
 /** @class
-*   A battler in a battle (ally or ennemy).
+*   A battler in a battle (ally or ennemy)
 *   @property {WindowBox} rect (temporary)
-*   @property {Player} character The character properties.
-*   @property {boolean} active Indicate if the battler already attacked or not.
-*   @param {Player} character The character properties.
+*   @property {Player} character The character properties
+*   @property {boolean} active Indicate if the battler already attacked or not
+*   @param {Player} character The character properties
 */
-function Battler(character, position, camera) {
-    this.character = character;
-    this.arrowPosition = RPM.toScreenPosition(position, camera.threeCamera);
-    this.damagePosition = RPM.toScreenPosition(position, camera.threeCamera);
-    this.topPosition = RPM.toScreenPosition(position, camera.threeCamera);
-    this.midPosition = RPM.toScreenPosition(position, camera.threeCamera);
-    this.botPosition = RPM.toScreenPosition(position, camera.threeCamera);
-    this.active = true;
-    this.attackingFrame = 0;
-    this.attackingFrameTick = 0;
-    this.attackingFrameDuration = 350;
-    this.frame = 0;
-    this.step = BattlerStep.Normal;
-    this.width = 1;
-    this.height = 1;
-    this.position = position;
-    this.frameDuration = RPM.random(250, 300);
-    this.frameTick = 0;
-    this.frameArrow = 0;
-    this.frameArrowDuration = 125;
-    this.frameArrowTick = 0;
-    this.position = position;
-    this.selected = false;
-    this.lastCommandIndex = 0;
-    this.lastCommandOffset = 0;
-    this.lastSkillIndex = 0;
-    this.lastSkillOffset = 0;
-    this.lastItemIndex = 0;
-    this.lastItemOffset = 0;
-    this.itemsNumbers = [];
-    this.progressionAllyFront = SystemProgressionTable.createProgression(this
-        .position.x, this.position.x - Battler.OFFSET_SELECTED, 0);
-    this.progressionAllyBack = SystemProgressionTable.createProgression(this.
-        position.x - Battler.OFFSET_SELECTED, this.position.x, 0);
-    this.progressionEnemyFront = SystemProgressionTable.createProgression(this
-        .position.x, this.position.x + Battler.OFFSET_SELECTED, 0);
-    this.progressionEnemyBack = SystemProgressionTable.createProgression(this.
-        position.x + Battler.OFFSET_SELECTED, this.position.x, 0);
-    this.timerMove = 0;
-    this.timeDamage = Battler.TOTAL_TIME_DAMAGE;
+class Battler
+{
+    static OFFSET_SELECTED = 10;
+    static TIME_MOVE = 200;
+    static TOTAL_TIME_DAMAGE = 250;
 
-    var idBattler = RPM.datasGame.getHeroesMonsters(character.k).list[character.id]
-        .idBattler;
-    if (idBattler === -1) {
-        this.mesh = null;
-    }
-    else {
-        // Copy original material because there will be individual color changes
-        var originalMaterial = RPM.datasGame.tilesets.texturesBattlers[idBattler];
-        var material;
-
-        material = RPM.createMaterial(originalMaterial.map.clone(), { uniforms:
+    constructor(character, position, camera)
+    {
+        this.character = character;
+        this.arrowPosition = RPM.toScreenPosition(position, camera.threeCamera);
+        this.damagePosition = RPM.toScreenPosition(position, camera.threeCamera);
+        this.topPosition = RPM.toScreenPosition(position, camera.threeCamera);
+        this.midPosition = RPM.toScreenPosition(position, camera.threeCamera);
+        this.botPosition = RPM.toScreenPosition(position, camera.threeCamera);
+        this.active = true;
+        this.attackingFrame = 0;
+        this.attackingFrameTick = 0;
+        this.attackingFrameDuration = 350;
+        this.frame = 0;
+        this.step = BattlerStep.Normal;
+        this.width = 1;
+        this.height = 1;
+        this.position = position;
+        this.frameDuration = RPM.random(250, 300);
+        this.frameTick = 0;
+        this.frameArrow = 0;
+        this.frameArrowDuration = 125;
+        this.frameArrowTick = 0;
+        this.position = position;
+        this.selected = false;
+        this.lastCommandIndex = 0;
+        this.lastCommandOffset = 0;
+        this.lastSkillIndex = 0;
+        this.lastSkillOffset = 0;
+        this.lastItemIndex = 0;
+        this.lastItemOffset = 0;
+        this.itemsNumbers = [];
+        this.progressionAllyFront = SystemProgressionTable.createProgression(
+            this.position.x, this.position.x - Battler.OFFSET_SELECTED, 0);
+        this.progressionAllyBack = SystemProgressionTable.createProgression(
+            this.position.x - Battler.OFFSET_SELECTED, this.position.x, 0);
+        this.progressionEnemyFront = SystemProgressionTable.createProgression(
+            this.position.x, this.position.x + Battler.OFFSET_SELECTED, 0);
+        this.progressionEnemyBack = SystemProgressionTable.createProgression(
+            this.position.x + Battler.OFFSET_SELECTED, this.position.x, 0);
+        this.timerMove = 0;
+        this.timeDamage = Battler.TOTAL_TIME_DAMAGE;
+        let idBattler = RPM.datasGame.getHeroesMonsters(character.k).list[
+            character.id].idBattler;
+        if (idBattler === -1)
         {
-            texture: { type: "t", value: originalMaterial.map },
-            colorD: { type: "v4", value: RPM.screenTone.clone()}
-        }});
-        material.map.needsUpdate = true;
-
-        this.width = Math.floor(material.map.image.width / RPM.SQUARE_SIZE / RPM.FRAMES);
-        this.height = Math.floor(material.map.image.height / RPM.SQUARE_SIZE /
-            RPM.BATLLER_STEPS);
-        var sprite = Sprite.create(ElementMapKind.SpritesFace, [0, 0, this.width,
-            this.height]);
-        var geometry = sprite.createGeometry(this.width, this.height, false,
-            this.position)[0];
-        this.mesh = new THREE.Mesh(geometry, material);
-        this.mesh.position.set(position.x, position.y, position.z);
-        this.upPosition = new THREE.Vector3(position.x, position.y + (this
-            .height * RPM.SQUARE_SIZE), position.z);
-        this.halfPosition = new THREE.Vector3(position.x, position.y + (this
-            .height * RPM.SQUARE_SIZE / 2), position.z);
-        if (character.k === CharacterKind.Monster) {
-            this.mesh.scale.set(-1, 1, 1);
+            this.mesh = null;
         }
-        this.updateUVs();
+        else {
+            // Copy original material because there will be individual color changes
+            let originalMaterial = RPM.datasGame.tilesets.texturesBattlers[
+                idBattler];
+            let material = RPM.createMaterial(originalMaterial.map.clone(), { 
+                uniforms:
+                {
+                    texture: { type: "t", value: originalMaterial.map },
+                    colorD: { type: "v4", value: RPM.screenTone.clone()}
+                }
+            });
+            material.map.needsUpdate = true;
+            this.width = Math.floor(material.map.image.width / RPM.SQUARE_SIZE /
+                RPM.FRAMES);
+            this.height = Math.floor(material.map.image.height / RPM.SQUARE_SIZE
+                / RPM.BATLLER_STEPS);
+            let sprite = Sprite.create(ElementMapKind.SpritesFace, [0, 0, this
+                .width, this.height]);
+            let geometry = sprite.createGeometry(this.width, this.height, false,
+                this.position)[0];
+            this.mesh = new THREE.Mesh(geometry, material);
+            this.mesh.position.set(position.x, position.y, position.z);
+            this.upPosition = new THREE.Vector3(position.x, position.y + (this
+                .height * RPM.SQUARE_SIZE), position.z);
+            this.halfPosition = new THREE.Vector3(position.x, position.y + (this
+                .height * RPM.SQUARE_SIZE / 2), position.z);
+            if (character.k === CharacterKind.Monster)
+            {
+                this.mesh.scale.set(-1, 1, 1);
+            }
+            this.updateUVs();
+        }
     }
-}
-
-Battler.OFFSET_SELECTED = 10;
-Battler.TIME_MOVE = 200;
-Battler.TOTAL_TIME_DAMAGE = 250;
-
-Battler.prototype = {
-
-    setSelected: function(selected) {
+    
+    setSelected(selected)
+    {
         if (this.selected !== selected)
         {
             this.selected = selected;
             this.timerMove = new Date().getTime();
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    setActive: function(active) {
+    setActive(active)
+    {
         this.active = active;
-        if (active) {
+        if (active)
+        {
             this.mesh.material.uniforms.colorD.value.setX(RPM.screenTone.x);
             this.mesh.material.uniforms.colorD.value.setY(RPM.screenTone.y);
             this.mesh.material.uniforms.colorD.value.setZ(RPM.screenTone.z);
@@ -129,68 +129,76 @@ Battler.prototype = {
             this.mesh.material.uniforms.colorD.value.setZ(RPM.screenTone.z - 0.3);
             this.mesh.material.uniforms.colorD.value.setW(RPM.screenTone.w - 0.3);
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    setAttacking: function() {
+    setAttacking()
+    {
         this.attackingFrame = 0;
         this.step = BattlerStep.Attack;
         this.updateUVs();
-    },
+    }
 
     // -------------------------------------------------------
 
-    isStepAttacking: function() {
+    isStepAttacking()
+    {
         return this.step === BattlerStep.Attack || this.step === BattlerStep
             .Skill || this.step === BattlerStep.Item || this.step ===
             BattlerStep.Escape;
-    },
+    }
 
     // -------------------------------------------------------
 
-    isAttacking: function() {
+    isAttacking()
+    {
         return this.isStepAttacking() && this.attackingFrame !== RPM.FRAMES -1;
-    },
+    }
 
     // -------------------------------------------------------
 
-    setUsingSkill: function() {
+    setUsingSkill()
+    {
         this.attackingFrame = 0;
         this.step = BattlerStep.Skill;
         this.updateUVs();
-    },
+    }
 
     // -------------------------------------------------------
 
-    setUsingItem: function() {
+    setUsingItem()
+    {
         this.attackingFrame = 0;
         this.step = BattlerStep.Item;
         this.updateUVs();
-    },
+    }
 
     // -------------------------------------------------------
 
-    setEscaping: function() {
+    setEscaping()
+    {
         this.attackingFrame = 0;
         this.step = BattlerStep.Escape;
         this.updateUVs();
-    },
+    }
 
     // -------------------------------------------------------
 
-    setVictory: function() {
+    setVictory()
+    {
         this.frame = 0;
         this.step = BattlerStep.Victory;
         this.updateUVs();
-    },
+    }
 
     // -------------------------------------------------------
 
-    updateDead: function(attacked, user) {
-        var step = BattlerStep.Normal;
-
-        if (this.character.isDead()) {
+    updateDead(attacked, user)
+    {
+        let step = BattlerStep.Normal;
+        if (this.character.isDead())
+        {
             step = BattlerStep.Dead;
         } else if (attacked) {
             step = BattlerStep.Attacked;
@@ -200,12 +208,14 @@ Battler.prototype = {
             this.step = step;
             this.updateUVs();
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    update: function() {
-        if (this.mesh !== null) {
+    update()
+    {
+        if (this.mesh !== null)
+        {
             this.setActive(this.active);
             this.updateSelected();
             this.updateFrame();
@@ -214,31 +224,35 @@ Battler.prototype = {
             this.updateAttacking();
             this.updatePositions();
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    updateSelected: function() {
-        var newX, progression, time;
-
-        newX = this.mesh.position.x;
-        if (this.character.k === CharacterKind.Hero) {
+    updateSelected()
+    {
+        let newX = this.mesh.position.x;
+        let progression;
+        if (this.character.k === CharacterKind.Hero)
+        {
             progression = this.selected ? this.progressionAllyFront : this
                 .progressionAllyBack;
-        } else if (this.character.k === CharacterKind.Monster) {
+        } else if (this.character.k === CharacterKind.Monster)
+        {
             progression = this.selected ? this.progressionEnemyFront : this
                 .progressionEnemyBack;
         }
-
-        time = new Date().getTime() - this.timerMove;
-        if (time <= Battler.TIME_MOVE) {
+        let time = new Date().getTime() - this.timerMove;
+        if (time <= Battler.TIME_MOVE)
+        {
             this.moving = true;
             newX = progression.getProgressionAt(time, Battler.TIME_MOVE, true);
-        } else {
+        } else
+        {
             this.moving = false;
         }
 
-        if (this.mesh.position.x !== newX) {
+        if (this.mesh.position.x !== newX)
+        {
             this.mesh.position.setX(newX);
             this.upPosition.setX(newX);
             this.halfPosition.setX(newX);
@@ -246,11 +260,12 @@ Battler.prototype = {
             this.updateArrowPosition(RPM.currentMap.camera);
             RPM.requestPaintHUD = true;
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    updateFrame: function() {
+    updateFrame()
+    {
         if (this.timeDamage < Battler.TOTAL_TIME_DAMAGE)
         {
             this.timeDamage += RPM.elapsedTime;
@@ -260,7 +275,8 @@ Battler.prototype = {
             }
             RPM.requestPaintHUD = true;
         }
-        if (!this.attacking) {
+        if (!this.attacking)
+        {
             var frame = this.frame;
             this.frameTick += RPM.elapsedTime;
             if (this.frameTick >= this.frameDuration)
@@ -268,112 +284,129 @@ Battler.prototype = {
                 this.frame = (this.frame + 1) % RPM.FRAMES;
                 this.frameTick = 0;
             }
-            if (frame !== this.frame) {
+            if (frame !== this.frame)
+            {
                 this.updateUVs();
             }
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    updateArrow: function() {
+    updateArrow()
+    {
         this.frameArrowTick += RPM.elapsedTime;
-        if (this.frameArrowTick >= this.frameArrowDuration) {
+        if (this.frameArrowTick >= this.frameArrowDuration)
+        {
             this.frameArrow = (this.frameArrow + 1) % RPM.FRAMES;
             this.frameArrowTick = 0;
-            this.arrowPosition = RPM.toScreenPosition(this.mesh.position,
-                RPM.currentMap.camera.threeCamera);
+            this.arrowPosition = RPM.toScreenPosition(this.mesh.position, RPM
+                .currentMap.camera.threeCamera);
             RPM.requestPaintHUD = true;
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    updateDamages: function() {
-        this.damagePosition = RPM.toScreenPosition(this.upPosition,
-            RPM.currentMap.camera.threeCamera);
-    },
+    updateDamages()
+    {
+        this.damagePosition = RPM.toScreenPosition(this.upPosition, RPM
+            .currentMap.camera.threeCamera);
+    }
 
     // -------------------------------------------------------
 
-    updateAttacking: function() {
-        if (this.isStepAttacking()) {
-            var frame = this.attackingFrame;
+    updateAttacking()
+    {
+        if (this.isStepAttacking())
+        {
+            let frame = this.attackingFrame;
             this.attackingFrameTick += RPM.elapsedTime;
-            if (this.attackingFrameTick >= this.attackingFrameDuration) {
+            if (this.attackingFrameTick >= this.attackingFrameDuration)
+            {
                 this.attackingFrame = (this.attackingFrame + 1) % RPM.FRAMES;
                 this.attackingFrameTick = 0;
             }
 
-            if (frame !== this.attackingFrame) {
-                if (this.attackingFrame === 0) {
+            if (frame !== this.attackingFrame)
+            {
+                if (this.attackingFrame === 0)
+                {
                     this.step = BattlerStep.Normal;
                 }
-
                 this.updateUVs();
             }
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    updatePositions: function() {
-        this.topPosition = RPM.toScreenPosition(this.upPosition, RPM.currentMap
-            .camera.threeCamera);
-        this.midPosition = RPM.toScreenPosition(this.halfPosition, RPM.currentMap
-            .camera.threeCamera);
-        this.botPosition = RPM.toScreenPosition(this.mesh.position, RPM.currentMap
-            .camera.threeCamera);
-    },
+    updatePositions()
+    {
+        this.topPosition = RPM.toScreenPosition(this.upPosition, RPM
+            .currentMap.camera.threeCamera);
+        this.midPosition = RPM.toScreenPosition(this.halfPosition, RPM
+            .currentMap.camera.threeCamera);
+        this.botPosition = RPM.toScreenPosition(this.mesh.position, RPM
+            .currentMap.camera.threeCamera);
+    }
 
     // -------------------------------------------------------
 
-    updateArrowPosition: function(camera) {
+    updateArrowPosition(camera)
+    {
         this.arrowPosition = RPM.toScreenPosition(this.mesh.position, camera
             .threeCamera);
-    },
+    }
 
     // -------------------------------------------------------
 
-    addToScene: function(){
-        if (this.mesh !== null) {
+    addToScene()
+    {
+        if (this.mesh !== null)
+        {
             RPM.currentMap.scene.add(this.mesh);
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    removeFromScene: function(){
-        if (this.mesh !== null) {
+    removeFromScene()
+    {
+        if (this.mesh !== null)
+        {
             RPM.currentMap.scene.remove(this.mesh);
         }
-    },
+    }
 
     // -------------------------------------------------------
-
     /** Update the UVs coordinates according to frame and orientation.
     */
-    updateUVs: function(){
-        if (this.mesh !== null) {
-            var textureWidth = this.mesh.material.map.image.width;
-            var textureHeight = this.mesh.material.map.image.height;
-            var frame = 0;
-            switch (this.step) {
+    updateUVs()
+    {
+        if (this.mesh !== null)
+        {
+            let textureWidth = this.mesh.material.map.image.width;
+            let textureHeight = this.mesh.material.map.image.height;
+            let frame = 0;
+            switch (this.step)
+            {
             case BattlerStep.Normal:
             case BattlerStep.Victory:
             case BattlerStep.Dead:
-                frame = this.frame; break;
+                frame = this.frame;
+                break;
             case BattlerStep.Attack:
             case BattlerStep.Skill:
             case BattlerStep.Item:
             case BattlerStep.Escape:
-                frame = this.attackingFrame; break;
+                frame = this.attackingFrame;
+                break;
             }
-
-            var w = this.width * RPM.SQUARE_SIZE / textureWidth;
-            var h = this.height * RPM.SQUARE_SIZE / textureHeight;
-            var x = frame * w;
-            var y = this.step * h;
+            let w = this.width * RPM.SQUARE_SIZE / textureWidth;
+            let h = this.height * RPM.SQUARE_SIZE / textureHeight;
+            let x = frame * w;
+            let y = this.step * h;
 
             // Update geometry
             this.mesh.geometry.faceVertexUvs[0][0][0].set(x, y);
@@ -384,18 +417,20 @@ Battler.prototype = {
             this.mesh.geometry.faceVertexUvs[0][1][2].set(x, y + h);
             this.mesh.geometry.uvsNeedUpdate = true;
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    drawArrow: function() {
-        RPM.datasGame.system.getWindowSkin().drawArrowTarget(this.frameArrow, this
-            .arrowPosition.x, this.arrowPosition.y, false);
-    },
+    drawArrow()
+    {
+        RPM.datasGame.system.getWindowSkin().drawArrowTarget(this.frameArrow, 
+            this.arrowPosition.x, this.arrowPosition.y, false);
+    }
 
     // -------------------------------------------------------
 
-    drawDamages: function(damage, isCrit, isMiss) {
+    drawDamages(damage, isCrit, isMiss)
+    {
         RPM.datasGame.system.getWindowSkin().drawDamages(damage, this
             .damagePosition.x, this.damagePosition.y, isCrit, isMiss, this
             .timeDamage / Battler.TOTAL_TIME_DAMAGE);

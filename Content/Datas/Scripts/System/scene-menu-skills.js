@@ -245,7 +245,7 @@ class SceneMenuSkills extends SceneGame
         switch (this.substep)
         {
         case 0:
-            this.moveTabKey();
+            this.moveTabKey(key);
             break;
         case 1:
             this.windowBoxUseSkill.content.onKeyPressedAndRepeat(key);

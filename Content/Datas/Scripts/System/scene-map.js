@@ -79,7 +79,6 @@ class SceneMap extends SceneGame
             this.scene.add(RPM.BB_BOX);
             this.scene.add(RPM.BB_ORIENTED_BOX);
         }
-
         await this.readMapProperties();
         await this.initializeObjects();
         this.initializePortionsObjects();
@@ -121,12 +120,6 @@ class SceneMap extends SceneGame
             }
         }
         this.orientation = this.camera.getMapOrientation();
-
-        // Initialize battle
-        if (this.isBattleMap)
-        {
-            this.initialize();
-        }
     }
 
     // -------------------------------------------------------
@@ -737,7 +730,7 @@ class SceneMap extends SceneGame
         if (!this.loading)
         {
             // Send keyPressEvent to all the objects
-            if (!RPM.blockingHero)
+            if (!RPM.blockingHero && !this.isBattleMap)
             {
                 EventCommandSendEvent.sendEvent(null, 0, 1, true, 3, [null,
                     SystemValue.createNumber(key), SystemValue.createSwitch(
@@ -754,7 +747,7 @@ class SceneMap extends SceneGame
         if (!this.loading)
         {
             // Send keyReleaseEvent to all the objects
-            if (!RPM.blockingHero)
+            if (!RPM.blockingHero && !this.isBattleMap)
             {
                 EventCommandSendEvent.sendEvent(null, 0, 1, true, 4, [null,
                     SystemValue.createNumber(key), SystemValue.createSwitch(
@@ -770,7 +763,7 @@ class SceneMap extends SceneGame
     {
         if (!this.loading)
         {
-            if (!RPM.blockingHero)
+            if (!RPM.blockingHero && !this.isBattleMap)
             {
                 EventCommandSendEvent.sendEvent(null, 0, 1, true, 3, [null,
                     SystemValue.createNumber(key), SystemValue.createSwitch(
@@ -787,7 +780,7 @@ class SceneMap extends SceneGame
     {
         if (!this.loading)
         {
-            if (!RPM.blockingHero)
+            if (!RPM.blockingHero && !this.isBattleMap)
             {
                 EventCommandSendEvent.sendEvent(null, 0, 1, true, 3, [null,
                     SystemValue.createNumber(key), SystemValue.createSwitch(true

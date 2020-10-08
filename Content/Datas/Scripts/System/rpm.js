@@ -122,7 +122,7 @@ RPM.ONE_SECOND_MILLI = 1000;
 RPM.NUM_BOOL_TRUE = 1;
 RPM.NUM_BOOL_FALSE = 0;
 RPM.COEF_TEX = 0.2;
-RPM.LOADING_MIN_DELAY = 50;
+RPM.LOADING_MIN_DELAY = 100;
 RPM.CLASS_HIDDEN = "hidden";
 RPM.STRING_RGBA = "rgba";
 RPM.STRING_EMPTY = "";
@@ -925,7 +925,7 @@ RPM.createFont = function(fontSize, fontName, bold, italic) {
 RPM.describe = function(obj){
     var res = "";
     for (var p in obj)
-        res += cons.log(p + ": " + obj[p]);
+        res += console.log(p + ": " + obj[p]);
 
     return res;
 }
@@ -1818,10 +1818,16 @@ RPM.loop = function()
     requestAnimationFrame(RPM.loop);
 
     // Update if everything is loaded
-    if (RPM.datasGame.loaded && !RPM.gameStack.isLoading())
+    if (RPM.datasGame.loaded)
     {
-        RPM.update();
-        RPM.draw3D();
+        if (!RPM.gameStack.isLoading())
+        {
+            RPM.update();
+        }
+        if (!RPM.gameStack.isLoading())
+        {
+            RPM.draw3D();
+        }
     }
     RPM.drawHUD();
 

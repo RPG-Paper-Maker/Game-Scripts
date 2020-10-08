@@ -9,12 +9,6 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SceneBattle : SceneGame
-//
-// -------------------------------------------------------
-
 /** @class
 *   A scene for battling.
 *   @ SceneGame
@@ -58,425 +52,488 @@
 *   @property {GraphicText} textsDamages List of all the damages to display.
 */
 
-function SceneBattle(troopID, canGameOver, canEscape, battleMap, transitionStart
-    , transitionEnd, transitionStartColor, transitionEndColor)
+class SceneBattle extends SceneMap
 {
-    SceneMap.call(this, battleMap.idMap, true);
+    static TRANSITION_ZOOM_TIME = 500;
+    static TRANSITION_COLOR_VALUE = 0.1;
+    static TRANSITION_COLOR_END_WAIT = 600;
+    static TIME_END_WAIT = 1000;
+    static TIME_PROGRESSION_XP = 3000;
+    static TIME_LINEAR_MUSIC_END = 500;
+    static TIME_LINEAR_MUSIC_START = 500;
+    static TIME_ACTION_ANIMATION = 2000;
+    static CAMERA_TICK = 0.05;
+    static CAMERA_OFFSET = 3;
+    static START_CAMERA_DISTANCE = 10;
+    static WINDOW_PROFILE_WIDTH = 300;
+    static WINDOW_PROFILE_HEIGHT = 100;
+    static COMMANDS_NUMBER = 6;
+    static WINDOW_COMMANDS_WIDTH = 150;
+    static WINDOW_COMMANDS_SELECT_X = 25;
+    static WINDOW_COMMANDS_SELECT_Y = 100;
+    static WINDOW_COMMANDS_SELECT_WIDTH = 200;
+    static WINDOW_DESCRIPTIONS_X = 385;
+    static WINDOW_DESCRIPTIONS_Y = 100;
+    static WINDOW_DESCRIPTIONS_WIDTH = 360;
+    static WINDOW_DESCRIPTIONS_HEIGHT = 200;
+    static WINDOW_EXPERIENCE_X = 10;
+    static WINDOW_EXPERIENCE_Y = 80;
+    static WINDOW_EXPERIENCE_WIDTH = 300;
+    static WINDOW_EXPERIENCE_HEIGHT = 90;
+    static WINDOW_STATS_X = 250;
+    static WINDOW_STATS_Y = 90;
+    static WINDOW_STATS_WIDTH = 380;
+    static WINDOW_STATS_HEIGHT = 200;
 
-    this.troopID = troopID;
-    this.canGameOver = canGameOver;
-    this.canEscape = canEscape;
-    this.sysBattleMap = battleMap;
-    this.transitionStart = transitionStart;
-    this.transitionEnd = transitionEnd;
-    this.transitionStartColor = transitionStartColor;
-    this.transitionEndColor = transitionEndColor;
-    this.transitionColor = transitionStart === MapTransitionKind.Fade;
-    this.transitionColorAlpha = 0;
-    this.step = 0;
-    this.sceneMap = RPM.gameStack.top;
-    this.sceneMapCameraDistance = this.sceneMap.camera.distance;
-    this.actionDoNothing = new SystemMonsterAction();
-    this.actionDoNothing.read({});
-}
+    constructor(troopID, canGameOver, canEscape, battleMap, transitionStart, 
+        transitionEnd, transitionStartColor, transitionEndColor)
+    {
+        super(battleMap.idMap, true);
 
-SceneBattle.TRANSITION_ZOOM_TIME = 500;
-SceneBattle.TRANSITION_COLOR_VALUE = 0.1;
-SceneBattle.TRANSITION_COLOR_END_WAIT = 600;
-SceneBattle.TIME_END_WAIT = 1000;
-SceneBattle.TIME_PROGRESSION_XP = 3000;
-SceneBattle.TIME_LINEAR_MUSIC_END = 500;
-SceneBattle.TIME_LINEAR_MUSIC_START = 500;
-SceneBattle.TIME_ACTION_ANIMATION = 2000;
-SceneBattle.CAMERA_TICK = 0.05;
-SceneBattle.CAMERA_OFFSET = 3;
-SceneBattle.START_CAMERA_DISTANCE = 10;
-SceneBattle.WINDOW_PROFILE_WIDTH = 300;
-SceneBattle.WINDOW_PROFILE_HEIGHT = 100;
-SceneBattle.COMMANDS_NUMBER = 6;
-SceneBattle.WINDOW_COMMANDS_WIDTH = 150;
-SceneBattle.WINDOW_COMMANDS_SELECT_X = 25;
-SceneBattle.WINDOW_COMMANDS_SELECT_Y = 100;
-SceneBattle.WINDOW_COMMANDS_SELECT_WIDTH = 200;
-SceneBattle.WINDOW_DESCRIPTIONS_X = 385;
-SceneBattle.WINDOW_DESCRIPTIONS_Y = 100;
-SceneBattle.WINDOW_DESCRIPTIONS_WIDTH = 360;
-SceneBattle.WINDOW_DESCRIPTIONS_HEIGHT = 200;
-SceneBattle.WINDOW_EXPERIENCE_X = 10;
-SceneBattle.WINDOW_EXPERIENCE_Y = 80;
-SceneBattle.WINDOW_EXPERIENCE_WIDTH = 300;
-SceneBattle.WINDOW_EXPERIENCE_HEIGHT = 90;
-SceneBattle.WINDOW_STATS_X = 250;
-SceneBattle.WINDOW_STATS_Y = 90;
-SceneBattle.WINDOW_STATS_WIDTH = 380;
-SceneBattle.WINDOW_STATS_HEIGHT = 200;
-
-SceneBattle.prototype = Object.create(SceneMap.prototype);
-
-// -------------------------------------------------------
-
-/** Initialize and correct some camera settings for the battle start.
-*/
-SceneBattle.prototype.initializeCamera = function() {
-    this.camera = new Camera(this.mapProperties.cameraProperties, RPM.game.heroBattle);
-    this.cameraStep = 0;
-    this.cameraTick = SceneBattle.CAMERA_TICK;
-    this.cameraOffset = SceneBattle.CAMERA_OFFSET;
-    this.cameraON = this.transitionStart !== MapTransitionKind.Zoom;
-    this.cameraDistance = this.camera.distance;
-    this.transitionZoom = false;
-    if (!this.cameraON) {
-        this.camera.distance = SceneBattle.START_CAMERA_DISTANCE;
-        this.transitionZoom = true;
+        this.troopID = troopID;
+        this.canGameOver = canGameOver;
+        this.canEscape = canEscape;
+        this.sysBattleMap = battleMap;
+        this.transitionStart = transitionStart;
+        this.transitionEnd = transitionEnd;
+        this.transitionStartColor = transitionStartColor;
+        this.transitionEndColor = transitionEndColor;
+        this.transitionColor = transitionStart === MapTransitionKind.Fade;
+        this.transitionColorAlpha = 0;
+        this.step = 0;
+        this.sceneMap = RPM.gameStack.top;
+        this.sceneMapCameraDistance = this.sceneMap.camera.distance;
+        this.actionDoNothing = new SystemMonsterAction({});
     }
-    this.camera.update();
-};
 
-// -------------------------------------------------------
-
-/** Make the attacking group all actives.
-*/
-SceneBattle.prototype.activeGroup = function() {
-    var i, l;
-
-    for (i = 0, l = this.battlers[this.attackingGroup].length; i < l; i++) {
-        this.battlers[this.attackingGroup][i].setActive(true);
+    async load()
+    {
+        await super.load();
+        this.initialize();
     }
-};
 
-// -------------------------------------------------------
+    // -------------------------------------------------------
+    /** Initialize and correct some camera settings for the battle start.
+    */
+    initializeCamera()
+    {
+        this.camera = new Camera(this.mapProperties.cameraProperties, RPM.game
+            .heroBattle);
+        this.cameraStep = 0;
+        this.cameraTick = SceneBattle.CAMERA_TICK;
+        this.cameraOffset = SceneBattle.CAMERA_OFFSET;
+        this.cameraON = this.transitionStart !== MapTransitionKind.Zoom;
+        this.cameraDistance = this.camera.distance;
+        this.transitionZoom = false;
+        if (!this.cameraON)
+        {
+            this.camera.distance = SceneBattle.START_CAMERA_DISTANCE;
+            this.transitionZoom = true;
+        }
+        this.camera.update();
+    };
 
-/** Check if a player is defined (active and not dead).
-*   @param {CharacterKind} kind Kind of player.
-*   @param {number} index Index in the group.
-*   @returns {boolean}
-*/
-SceneBattle.prototype.isDefined = function(kind, index, target) {
-    return ((target || this.battlers[kind][index].active) && !this.battlers
-        [kind][index].character.isDead())
-};
-
-// -------------------------------------------------------
-
-/** Check if all the heroes or enemies are inactive.
-*   @returns {boolean}
-*/
-SceneBattle.prototype.isEndTurn = function() {
-    var i, l;
-
-    for (i = 0, l = this.battlers[this.attackingGroup].length; i < l; i++) {
-        if (this.isDefined(this.attackingGroup, i)) {
-            return false;
+    // -------------------------------------------------------
+    /** Make the attacking group all actives.
+    */
+    activeGroup()
+    {
+        for (let i = 0, l = this.battlers[this.attackingGroup].length; i < l; 
+            i++)
+        {
+            this.battlers[this.attackingGroup][i].setActive(true);
         }
     }
 
-    return true;
-};
+    // -------------------------------------------------------
+    /** Check if a player is defined (active and not dead).
+    *   @param {CharacterKind} kind Kind of player.
+    *   @param {number} index Index in the group.
+    *   @returns {boolean}
+    */
+    isDefined(kind, index, target)
+    {
+        return ((target || this.battlers[kind][index].active) && !this.battlers
+            [kind][index].character.isDead())
+    };
 
-// -------------------------------------------------------
+    // -------------------------------------------------------
+    /** Check if all the heroes or enemies are inactive
+    *   @returns {boolean}
+    */
+    isEndTurn()
+    {
+        for (let i = 0, l = this.battlers[this.attackingGroup].length; i < l; 
+            i++)
+        {
+            if (this.isDefined(this.attackingGroup, i))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 
-/** Check if all the heroes or enemies are dead.
-*   @param {CharacterKind} group Kind of player.
-*   @returns {boolean}
-*/
-SceneBattle.prototype.isGroupDead = function(group) {
-    var i, l;
+    // -------------------------------------------------------
+    /** Check if all the heroes or enemies are dead
+    *   @param {CharacterKind} group Kind of player
+    *   @returns {boolean}
+    */
+    isGroupDead(group)
+    {
+        for (let i = 0, l = this.battlers[group].length; i < l; i++)
+        {
+            if (!this.battlers[group][i].character.isDead())
+            {
+                return false;
+            }
+        }
+        return true;
+    };
 
-    for (i = 0, l = this.battlers[group].length; i < l; i++) {
-        if (!this.battlers[group][i].character.isDead()) {
-            return false;
+    // -------------------------------------------------------
+    /** Check if all the enemies are dead
+    *   @returns {boolean}
+    */
+    isWin()
+    {
+        return this.isGroupDead(CharacterKind.Monster);
+    }
+
+    // -------------------------------------------------------
+    /** Check if all the heroes are dead
+    *   @returns {boolean}
+    */
+    isLose()
+    {
+        return this.isGroupDead(CharacterKind.Hero);
+    }
+
+    // -------------------------------------------------------
+    /** Transition to game over scene
+    */
+    gameOver()
+    {
+        if (this.canGameOver)
+        {
+            RPM.gameStack.pop();
+            RPM.gameStack.replace(new SceneTitleScreen()); // TODO
+        } else
+        {
+            this.endBattle();
         }
     }
 
-    return true;
-};
-
-// -------------------------------------------------------
-
-/** Check if all the enemies are dead.
-*   @returns {boolean}
-*/
-SceneBattle.prototype.isWin = function() {
-    return this.isGroupDead(CharacterKind.Monster);
-};
-
-// -------------------------------------------------------
-
-/** Check if all the heroes are dead.
-*   @returns {boolean}
-*/
-SceneBattle.prototype.isLose = function() {
-    return this.isGroupDead(CharacterKind.Hero);
-};
-
-// -------------------------------------------------------
-
-/** Transition to game over scene.
-*/
-SceneBattle.prototype.gameOver = function() {
-    if (this.canGameOver) {
-        Platform.quit(); // TODO
-    } else {
+    // -------------------------------------------------------
+    /** Win the battle
+    */
+    win()
+    {
         this.endBattle();
     }
-};
 
-// -------------------------------------------------------
+    // -------------------------------------------------------
+    /** Win the battle
+    */
+    endBattle()
+    {
+        // Heroes
+        for (let i = 0, l = RPM.game.teamHeroes.length; i < l; i++)
+        {
+            this.battlers[CharacterKind.Hero][i].removeFromScene();
+        }
+        RPM.gameStack.pop();
+        RPM.currentMap = RPM.gameStack.top;
+    };
 
-/** Win the battle.
-*/
-SceneBattle.prototype.win = function() {
-    this.endBattle();
-};
+    // -------------------------------------------------------
 
-// -------------------------------------------------------
-
-/** Win the battle.
-*/
-SceneBattle.prototype.endBattle = function() {
-    var i, l;
-
-    // Heroes
-    l = RPM.game.teamHeroes.length;
-    for (i = 0; i < l; i++) {
-        this.battlers[CharacterKind.Hero][i].removeFromScene();
+    /** Change the step of the battle
+    *   @param {number} i Step of the battle
+    */
+    changeStep(i)
+    {
+        this.step = i;
+        this.subStep = 0;
+        this.initialize();
     }
 
-    RPM.gameStack.pop();
-    RPM.currentMap = RPM.gameStack.top;
-};
+    // -------------------------------------------------------
+    /** Initialize the current step
+    */
+    initialize()
+    {
+        this.loading = true;
+        this.loadInitialize();
+    };
 
-// -------------------------------------------------------
-
-/** Change the step of the battle.
-*   @param {number} i Step of the battle.
-*/
-SceneBattle.prototype.changeStep = function(i) {
-    this.step = i;
-    this.subStep = 0;
-    this.initialize();
-};
-
-// -------------------------------------------------------
-
-/** Initialize the current step.
-*/
-SceneBattle.prototype.initialize = function() {
-    switch (this.step) {
-    case 0:
-        this.initializeStep0(); break;
-    case 1:
-        this.initializeStep1(); break;
-    case 2:
-        this.initializeStep2(); break;
-    case 3:
-        this.initializeStep3(); break;
-    case 4:
-        this.initializeStep4(); break;
-    }
-    RPM.requestPaintHUD = true;
-};
-
-// -------------------------------------------------------
-
-SceneBattle.prototype.update = function() {
-    var i, l, battlers;
-
-    SceneMap.prototype.update.call(this);
-
-    // Heroes
-    battlers = this.battlers[CharacterKind.Hero];
-    for (i = 0, l = battlers.length; i < l; i++) {
-        battlers[i].update();
-    }
-    // Ennemies
-    battlers = this.battlers[CharacterKind.Monster];
-    for (i = 0, l = battlers.length; i < l; i++) {
-        battlers[i].update();
-    }
-
-    // Camera temp code for moving
-    this.moveStandardCamera();
-
-    switch(this.step) {
-    case 0:
-        this.updateStep0(); break;
-    case 1:
-        this.updateStep1(); break;
-    case 2:
-        this.updateStep2(); break;
-    case 3:
-        this.updateStep3(); break;
-    case 4:
-        this.updateStep4(); break;
-    }
-};
-
-// -------------------------------------------------------
-
-/** Do camera standard moves.
-*/
-SceneBattle.prototype.moveStandardCamera = function() {
-    if (this.cameraON) {
-        switch (this.cameraStep) {
+    async loadInitialize()
+    {
+        switch (this.step)
+        {
         case 0:
-            this.camera.distance -= this.cameraTick;
-            this.camera.targetOffset.x += this.cameraTick;
-            if (this.camera.distance <= this.cameraDistance - this
-                .cameraOffset) 
-            {
-                this.camera.distance = this.cameraDistance - this
-                    .cameraOffset;
-                this.camera.targetOffset.x = this.cameraOffset;
-                this.cameraStep = 1;
-            }
+            await this.initializeStep0();
             break;
         case 1:
-            this.camera.distance += this.cameraTick;
-            if (this.camera.distance >= this.cameraDistance + this
-                .cameraOffset) 
-            {
-                this.camera.distance = this.cameraDistance + this
-                    .cameraOffset;
-                this.cameraStep = 2;
-            }
+            await this.initializeStep1();
             break;
         case 2:
-            this.camera.distance -= this.cameraTick;
-            this.camera.targetOffset.x -= this.cameraTick;
-            if (this.camera.distance <= this.cameraDistance - this
-                .cameraOffset) 
-            {
-                this.camera.distance = this.cameraDistance - this
-                    .cameraOffset;
-                this.camera.targetOffset.x = -this.cameraOffset;
-                this.cameraStep = 3;
-            }
+            await this.initializeStep2();
             break;
         case 3:
-            this.camera.distance += this.cameraTick;
-            if (this.camera.distance >= this.cameraDistance + this
-                .cameraOffset) 
-            {
-                this.camera.distance = this.cameraDistance + this
-                    .cameraOffset;
-                this.cameraStep = 4;
-            }
+            await this.initializeStep3();
             break;
         case 4:
-            this.camera.distance -= this.cameraTick;
-            this.camera.targetOffset.x += this.cameraTick;
-            if (this.camera.distance <= this.cameraDistance) {
-                this.camera.distance = this.cameraDistance;
-                this.camera.targetOffset.x = 0;
-                this.cameraStep = 0;
-            }
+            await this.initializeStep4();
+            break;
+        }
+        this.loading = false;
+        RPM.requestPaintHUD = true;
+    }
+
+    // -------------------------------------------------------
+    update()
+    {
+        super.update();
+
+        // Heroes
+        let battlers = this.battlers[CharacterKind.Hero];
+        let i, l;
+        for (i = 0, l = battlers.length; i < l; i++)
+        {
+            battlers[i].update();
+        }
+        // Ennemies
+        battlers = this.battlers[CharacterKind.Monster];
+        for (i = 0, l = battlers.length; i < l; i++)
+        {
+            battlers[i].update();
+        }
+
+        // Camera temp code for moving
+        this.moveStandardCamera();
+
+        switch(this.step)
+        {
+        case 0:
+            this.updateStep0();
+            break;
+        case 1:
+            this.updateStep1();
+            break;
+        case 2:
+            this.updateStep2();
+            break;
+        case 3:
+            this.updateStep3();
+            break;
+        case 4:
+            this.updateStep4();
             break;
         }
     }
-};
 
-// -------------------------------------------------------
-
-SceneBattle.prototype.onKeyPressed = function(key) {
-    switch (this.step) {
-    case 0:
-        this.onKeyPressedStep0(key); break;
-    case 1:
-        this.onKeyPressedStep1(key); break;
-    case 2:
-        this.onKeyPressedStep2(key); break;
-    case 3:
-        this.onKeyPressedStep3(key); break;
-    case 4:
-        this.onKeyPressedStep4(key); break;
+    // -------------------------------------------------------
+    /** Do camera standard moves
+    */
+    moveStandardCamera()
+    {
+        if (this.cameraON)
+        {
+            switch (this.cameraStep)
+            {
+            case 0:
+                this.camera.distance -= this.cameraTick;
+                this.camera.targetOffset.x += this.cameraTick;
+                if (this.camera.distance <= this.cameraDistance - this
+                    .cameraOffset) 
+                {
+                    this.camera.distance = this.cameraDistance - this
+                        .cameraOffset;
+                    this.camera.targetOffset.x = this.cameraOffset;
+                    this.cameraStep = 1;
+                }
+                break;
+            case 1:
+                this.camera.distance += this.cameraTick;
+                if (this.camera.distance >= this.cameraDistance + this
+                    .cameraOffset) 
+                {
+                    this.camera.distance = this.cameraDistance + this
+                        .cameraOffset;
+                    this.cameraStep = 2;
+                }
+                break;
+            case 2:
+                this.camera.distance -= this.cameraTick;
+                this.camera.targetOffset.x -= this.cameraTick;
+                if (this.camera.distance <= this.cameraDistance - this
+                    .cameraOffset) 
+                {
+                    this.camera.distance = this.cameraDistance - this
+                        .cameraOffset;
+                    this.camera.targetOffset.x = -this.cameraOffset;
+                    this.cameraStep = 3;
+                }
+                break;
+            case 3:
+                this.camera.distance += this.cameraTick;
+                if (this.camera.distance >= this.cameraDistance + this
+                    .cameraOffset) 
+                {
+                    this.camera.distance = this.cameraDistance + this
+                        .cameraOffset;
+                    this.cameraStep = 4;
+                }
+                break;
+            case 4:
+                this.camera.distance -= this.cameraTick;
+                this.camera.targetOffset.x += this.cameraTick;
+                if (this.camera.distance <= this.cameraDistance)
+                {
+                    this.camera.distance = this.cameraDistance;
+                    this.camera.targetOffset.x = 0;
+                    this.cameraStep = 0;
+                }
+                break;
+            }
+        }
     }
-    SceneGame.prototype.onKeyPressed.call(this, key);
-};
 
-// -------------------------------------------------------
+    // -------------------------------------------------------
 
-SceneBattle.prototype.onKeyReleased = function(key) {
-    switch (this.step) {
-    case 0:
-        this.onKeyReleasedStep0(key); break;
-    case 1:
-        this.onKeyReleasedStep1(key); break;
-    case 2:
-        this.onKeyReleasedStep2(key); break;
-    case 3:
-        this.onKeyReleasedStep3(key); break;
-    case 4:
-        this.onKeyReleasedStep4(key); break;
+    onKeyPressed(key)
+    {
+        switch (this.step)
+        {
+        case 0:
+            this.onKeyPressedStep0(key);
+            break;
+        case 1:
+            this.onKeyPressedStep1(key);
+            break;
+        case 2:
+            this.onKeyPressedStep2(key);
+            break;
+        case 3:
+            this.onKeyPressedStep3(key);
+            break;
+        case 4:
+            this.onKeyPressedStep4(key);
+            break;
+        }
+        super.onKeyPressed(key);
     }
-    SceneGame.prototype.onKeyReleased.call(this, key);
-};
 
-// -------------------------------------------------------
+    // -------------------------------------------------------
 
-SceneBattle.prototype.onKeyPressedRepeat = function(key) {
-    switch (this.step) {
-    case 0:
-        this.onKeyPressedRepeatStep0(key); break;
-    case 1:
-        this.onKeyPressedRepeatStep1(key); break;
-    case 2:
-        this.onKeyPressedRepeatStep2(key); break;
-    case 3:
-        this.onKeyPressedRepeatStep3(key); break;
-    case 4:
-        this.onKeyPressedRepeatStep4(key); break;
+    onKeyReleased(key)
+    {
+        switch (this.step)
+        {
+        case 0:
+            this.onKeyReleasedStep0(key);
+            break;
+        case 1:
+            this.onKeyReleasedStep1(key);
+            break;
+        case 2:
+            this.onKeyReleasedStep2(key);
+            break;
+        case 3:
+            this.onKeyReleasedStep3(key);
+            break;
+        case 4:
+            this.onKeyReleasedStep4(key);
+            break;
+        }
+        super.onKeyReleased(key);
     }
-    SceneGame.prototype.onKeyPressedRepeat.call(this, key);
-};
 
-// -------------------------------------------------------
+    // -------------------------------------------------------
 
-SceneBattle.prototype.onKeyPressedAndRepeat = function(key) {
-    switch (this.step) {
-    case 0:
-        this.onKeyPressedAndRepeatStep0(key); break;
-    case 1:
-        this.onKeyPressedAndRepeatStep1(key); break;
-    case 2:
-        this.onKeyPressedAndRepeatStep2(key); break;
-    case 3:
-        this.onKeyPressedAndRepeatStep3(key); break;
-    case 4:
-        this.onKeyPressedAndRepeatStep4(key); break;
+    onKeyPressedRepeat(key)
+    {
+        switch (this.step)
+        {
+        case 0:
+            this.onKeyPressedRepeatStep0(key);
+            break;
+        case 1:
+            this.onKeyPressedRepeatStep1(key);
+            break;
+        case 2:
+            this.onKeyPressedRepeatStep2(key);
+            break;
+        case 3:
+            this.onKeyPressedRepeatStep3(key);
+            break;
+        case 4:
+            this.onKeyPressedRepeatStep4(key);
+            break;
+        }
+        super.onKeyPressedRepeat(key);
     }
-    SceneGame.prototype.onKeyPressedAndRepeat.call(this, key);
-};
 
-// -------------------------------------------------------
+    // -------------------------------------------------------
 
-SceneBattle.prototype.draw3D = function(canvas) {
-    if (this.transitionZoom || this.transitionColor) {
-        this.sceneMap.draw3D(canvas);
-    } else {
-        SceneMap.prototype.draw3D.call(this, canvas);
+    onKeyPressedAndRepeat(key)
+    {
+        switch (this.step)
+        {
+        case 0:
+            this.onKeyPressedAndRepeatStep0(key);
+            break;
+        case 1:
+            this.onKeyPressedAndRepeatStep1(key);
+            break;
+        case 2:
+            this.onKeyPressedAndRepeatStep2(key);
+            break;
+        case 3:
+            this.onKeyPressedAndRepeatStep3(key);
+            break;
+        case 4:
+            this.onKeyPressedAndRepeatStep4(key);
+            break;
+        }
+        super.onKeyPressedAndRepeat(key);
     }
-};
 
-// -------------------------------------------------------
+    // -------------------------------------------------------
 
-SceneBattle.prototype.drawHUD = function() {
-    switch (this.step) {
-    case 0:
-        this.drawHUDStep0(); break;
-    case 1:
-        this.drawHUDStep1(); break;
-    case 2:
-        this.drawHUDStep2(); break;
-    case 3:
-        this.drawHUDStep3(); break;
-    case 4:
-        this.drawHUDStep4(); break;
+    draw3D()
+    {
+        if (this.transitionZoom || this.transitionColor)
+        {
+            this.sceneMap.draw3D();
+        } else {
+            super.draw3D();
+        }
     }
-    SceneMap.prototype.drawHUD.call(this);
-};
 
-SceneBattle.prototype.close = function()
-{
+    // -------------------------------------------------------
 
-};
+    drawHUD()
+    {
+        switch (this.step)
+        {
+        case 0:
+            this.drawHUDStep0();
+            break;
+        case 1:
+            this.drawHUDStep1();
+            break;
+        case 2:
+            this.drawHUDStep2();
+            break;
+        case 3:
+            this.drawHUDStep3();
+            break;
+        case 4:
+            this.drawHUDStep4();
+            break;
+        }
+        super.drawHUD();
+    }
+}

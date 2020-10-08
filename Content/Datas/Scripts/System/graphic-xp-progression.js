@@ -9,42 +9,52 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS GraphicXPProgression
-//
-// -------------------------------------------------------
-
 /** @class
-*   The graphic displaying all the progression for each character.
+*   The graphic displaying all the progression for each character
 */
-function GraphicXPProgression() {
-    var i, l, player;
+class GraphicXPProgression
+{
+    constructor()
+    {
 
-    l = RPM.game.teamHeroes.length
-    this.graphicCharacters = new Array(l);
-    for (i = 0; i < l; i++) {
-        player = new GraphicPlayer(RPM.game.teamHeroes[i]);
-        this.graphicCharacters[i] = player;
     }
-}
 
-GraphicXPProgression.prototype = {
+    async load()
+    {
+        let l = RPM.game.teamHeroes.length
+        this.graphicCharacters = new Array(l);
+        for (let i = 0; i < l; i++)
+        {
+            this.graphicCharacters[i] = await GraphicPlayer.create(RPM.game
+                .teamHeroes[i]);
+        }
+    }
 
-    updateExperience: function() {
-        for (var i = 0, l = RPM.game.teamHeroes.length; i < l; i++) {
+    static async create()
+    {
+        let graphic = new GraphicXPProgress();
+        await RPM.tryCatch(graphic.load());
+        return graphic;
+    }
+
+    updateExperience()
+    {
+        for (let i = 0, l = RPM.game.teamHeroes.length; i < l; i++)
+        {
             this.graphicCharacters[i].updateExperience();
         }
-    },
+    }
 
-    /** Drawing the progression.
-    *   @param {number} x The x position to draw graphic.
-    *   @param {number} y The y position to draw graphic.
-    *   @param {number} w The width dimention to draw graphic.
-    *   @param {number} h The height dimention to draw graphic.
+    /** Drawing the progression
+    *   @param {number} x The x position to draw graphic
+    *   @param {number} y The y position to draw graphic
+    *   @param {number} w The width dimention to draw graphic
+    *   @param {number} h The height dimention to draw graphic
     */
-    drawBox: function(x, y, w, h) {
-        for (var i = 0, l = this.graphicCharacters.length; i < l; i++) {
+    drawBox(x, y, w, h)
+    {
+        for (let i = 0, l = this.graphicCharacters.length; i < l; i++)
+        {
             this.graphicCharacters[i].draw(x, y + (i * 90), w, 85);
         }
     }

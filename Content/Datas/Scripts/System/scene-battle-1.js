@@ -61,7 +61,18 @@ SceneBattle.prototype.initializeStep1 = function()
     this.windowChoicesItems.setContentsCallbacks(this.listItems);
     this.windowItemDescription.content = this.windowChoicesItems
         .getCurrentContent();
-};
+
+    
+    this.loading = true;
+    RPM.tryCatch(this.loadStep1);
+
+}
+
+SceneBattle.prototype.loadStep1 = async function()
+{
+this.loading = false;
+    RPM.requestPaintHUD = true;
+}
 
 // -------------------------------------------------------
 
