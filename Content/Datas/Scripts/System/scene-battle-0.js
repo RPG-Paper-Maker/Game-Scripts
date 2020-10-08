@@ -142,7 +142,7 @@ SceneBattle.prototype.initializeWindowCommands = async function()
     {
         skill = RPM.datasGame.skills.list[RPM.datasGame.battleSystem
             .battleCommandsOrder[i]];
-        listContent[i] = await GraphicTextIcon.create(skill.name, skill
+        listContent[i] = await GraphicTextIcon.create(skill.name(), skill
             .pictureID);
         listContent[i].skill = skill;
         listCallbacks[i] = SystemCommonSkillItem.prototype.useCommand;
@@ -190,14 +190,15 @@ SceneBattle.prototype.initializeWindowCommands = async function()
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.initializeWindowsEnd = function() {
+SceneBattle.prototype.initializeWindowsEnd = async function()
+{
     this.windowExperienceProgression = new WindowBox(SceneBattle
         .WINDOW_EXPERIENCE_X, SceneBattle.WINDOW_EXPERIENCE_Y, SceneBattle
         .WINDOW_EXPERIENCE_WIDTH, (SceneBattle.WINDOW_EXPERIENCE_HEIGHT * RPM
         .game.teamHeroes.length) + RPM.SMALL_PADDING_BOX[2] + RPM
         .SMALL_PADDING_BOX[3], 
         {
-            content: new GraphicXPProgression(),
+            content: await GraphicXPProgression.create(),
             padding: RPM.SMALL_PADDING_BOX
         }
     );

@@ -17,15 +17,15 @@
 //
 // -------------------------------------------------------
 
-SceneBattle.prototype.initializeStep3 = function() {
-    var i;
-
+SceneBattle.prototype.initializeStep3 = async function()
+{
     this.windowTopInformations.content = null;
     this.attackingGroup = CharacterKind.Monster;
 
     // Define which monster will attack
-    i = 0;
-    do {
+    let i = 0;
+    do
+    {
         this.user = this.battlers[CharacterKind.Monster][i];
         i++;
     } while (!this.isDefined(CharacterKind.Monster, i - 1));
@@ -38,24 +38,22 @@ SceneBattle.prototype.initializeStep3 = function() {
 
     this.time = new Date().getTime();
     this.timeEnemyAttack = new Date().getTime();
-};
+}
 
 // -------------------------------------------------------
 
 SceneBattle.prototype.defineAction = function()
 {
-    var i, l, actions, action, priorities, monster, systemActions, random, step,
-        value, character;
-
-    actions = [];
-    character = this.user.character;
-    monster = character.character;
-    systemActions = monster.actions;
-    priorities = 0;
+    let actions = [];
+    let character = this.user.character;
+    let monster = character.character;
+    let systemActions = monster.actions;
+    let priorities = 0;
     this.action = this.actionDoNothing;
     this.battleCommandKind = EffectSpecialActionKind.DoNothing;
 
     // List every possible actions
+    let i, l, action, stat, number;
     for (i = 0, l = systemActions.length; i < l; i++)
     {
         action = systemActions[i];
@@ -66,8 +64,6 @@ SceneBattle.prototype.defineAction = function()
         }
         if (action.isConditionStatistic)
         {
-            var stat;
-
             stat = RPM.datasGame.battleSystem.statistics[action.statisticID
                 .getValue()];
             if (!RPM.operators_compare[action.operationKindStatistic](character[
@@ -78,8 +74,8 @@ SceneBattle.prototype.defineAction = function()
             }
         }
         if (action.isConditionVariable && !RPM.operators_compare[action
-            .operationKindVariable](RPM.game.variables[action.variableID], action
-            .variableValueCompare.getValue()))
+            .operationKindVariable](RPM.game.variables[action.variableID], 
+            action.variableValueCompare.getValue()))
         {
             continue;
         }
@@ -101,8 +97,6 @@ SceneBattle.prototype.defineAction = function()
         }
         if (action.actionKind === MonsterActionKind.UseItem)
         {
-            var number;
-
             number = this.user.itemsNumbers[action.itemID.getValue()];
             if (!RPM.isUndefined(number) && number === 0)
             {
@@ -121,13 +115,15 @@ SceneBattle.prototype.defineAction = function()
     }
 
     // Random
-    random = RPM.random(0, 100);
-    step = 0;
+    let random = RPM.random(0, 100);
+    let step = 0;
+    let value;
     for (i = 0, l = actions.length; i < l; i++)
     {
         action = actions[i];
         value = (action.priority.getValue() / priorities) * 100;
-        if (random >= step && random <= (value + step)) {
+        if (random >= step && random <= (value + step))
+        {
             this.action = action;
             break;
         }
@@ -138,9 +134,8 @@ SceneBattle.prototype.defineAction = function()
     switch (this.action.actionKind)
     {
     case MonsterActionKind.UseSkill:
-        var effect;
-
-        effect = RPM.datasGame.skills.list[this.action.skillID.getValue()].effects[0];
+        let effect = RPM.datasGame.skills.list[this.action.skillID.getValue()]
+            .effects[0];
         if (effect)
         {
             this.battleCommandKind = effect.kind === EffectKind.SpecialActions ?
@@ -153,12 +148,10 @@ SceneBattle.prototype.defineAction = function()
             .getValue()];
         break;
     case MonsterActionKind.UseItem:
-        var id;
-
         this.battleCommandKind = EffectSpecialActionKind.OpenItems;
 
         // If item, use one
-        id = this.action.itemID.getValue();
+        let id = this.action.itemID.getValue();
         this.user.itemsNumbers[id] = (this.user.itemsNumbers[id] ? this.user
             .itemsNumbers[id] : this.action.itemNumberMax.getValue()) - 1;
         break;
@@ -166,20 +159,20 @@ SceneBattle.prototype.defineAction = function()
         this.battleCommandKind = EffectSpecialActionKind.DoNothing;
         break;
     }
-};
+}
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.defineTargets = function() {
+SceneBattle.prototype.defineTargets = function()
+{
     if (!this.action)
     {
         this.targets = [];
         return;
     }
 
-    var i, l, side, targetKind, target;
-
     // Verify if the target is not all allies or all enemies and define side
+    let targetKind, side;
     switch (this.action.actionKind)
     {
     case MonsterActionKind.UseSkill:
@@ -217,7 +210,8 @@ SceneBattle.prototype.defineTargets = function() {
     }
 
     // Select one enemy / ally according to target kind
-    l = this.battlers[side].length;
+    let l = this.battlers[side].length;
+    let i, target;
     switch (this.action.targetKind)
     {
     case MonsterActionTargetKind.Random:
@@ -230,8 +224,6 @@ SceneBattle.prototype.defineTargets = function() {
         target = this.battlers[side][i];
         break;
     case MonsterActionTargetKind.WeakEnemies:
-        var minHP, tempTarget,tempHP;
-
         i = 0;
         while (!this.isDefined(side, i))
         {
@@ -239,7 +231,8 @@ SceneBattle.prototype.defineTargets = function() {
             i = i % l;
         }
         target = this.battlers[side][i];
-        minHP = target.character.hp;
+        let minHP = target.character.hp;
+        let tempTarget, tempHP;
         while (i < l)
         {
             tempTarget = this.battlers[side][i];
@@ -256,48 +249,51 @@ SceneBattle.prototype.defineTargets = function() {
         break;
     }
     this.targets = [target];
-};
+}
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.updateStep3 = function(){
-    if (new Date().getTime() - this.time >= 500) {
+SceneBattle.prototype.updateStep3 = function()
+{
+    if (new Date().getTime() - this.time >= 500)
+    {
         if (this.action.actionKind !== MonsterActionKind.DoNothing)
         {
             this.user.setSelected(true);
         }
-        if (new Date().getTime() - this.timeEnemyAttack >= 1000) {
+        if (new Date().getTime() - this.timeEnemyAttack >= 1000)
+        {
             this.changeStep(2);
         }
     }
-};
+}
 
 // -------------------------------------------------------
 
 SceneBattle.prototype.onKeyPressedStep3 = function(key){
 
-};
+}
 
 // -------------------------------------------------------
 
 SceneBattle.prototype.onKeyReleasedStep3 = function(key){
 
-};
+}
 
 // -------------------------------------------------------
 
 SceneBattle.prototype.onKeyPressedRepeatStep3 = function(key){
 
-};
+}
 
 // -------------------------------------------------------
 
 SceneBattle.prototype.onKeyPressedAndRepeatStep3 = function(key){
 
-};
+}
 
 // -------------------------------------------------------
 
 SceneBattle.prototype.drawHUDStep3 = function(){
     this.windowTopInformations.draw();
-};
+}

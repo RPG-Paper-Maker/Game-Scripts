@@ -9,32 +9,39 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS GraphicLoots
-//
-// -------------------------------------------------------
-
 /** @class
-*   The graphic displaying all the items dropped at the end of a battle.
+*   The graphic displaying all the items dropped at the end of a battle
 */
-function GraphicLoots(loots, nb) {
-    var i, j, l, id, order, list;
+class GraphicLoots
+{
+    constructor(loots, nb)
+    {
+        this.loots = loots;
+        this.nb = nb;
+    }
 
-    order = [LootKind.Weapon, LootKind.Armor, LootKind.Item];
-    this.graphicsLoots = new Array(nb);
-
-    j = 0;
-    for (i = 0, l = order.length; i < l; i++) {
-        list = loots[order[i]];
-        for (id in list) {
-            this.graphicsLoots[j] = new GraphicItem(list[id]);
-            j++;
+    async load()
+    {
+        let order = [LootKind.Weapon, LootKind.Armor, LootKind.Item];
+        this.graphicsLoots = new Array(this.nb);
+        let list, id;
+        for (let i = 0, j = 0, l = order.length; i < l; i++)
+        {
+            list = this.loots[order[i]];
+            for (id in list)
+            {
+                this.graphicsLoots[j] = await GraphicItem.create(list[id]);
+                j++;
+            }
         }
     }
-}
 
-GraphicLoots.prototype = {
+    static async create(loots, nb)
+    {
+        let graphic = new GraphicLoots(loots, nb);
+        await RPM.tryCatch(graphic.load());
+        return graphic;
+    }
 
     /** Drawing the loots.
     *   @param {number} x The x position to draw graphic.
@@ -42,11 +49,11 @@ GraphicLoots.prototype = {
     *   @param {number} w The width dimention to draw graphic.
     *   @param {number} h The height dimention to draw graphic.
     */
-    drawBox: function(x, y, w, h) {
-        var i, l;
-
-        for (i = 0, l = this.graphicsLoots.length; i < l; i++) {
-            this.graphicsLoots[i].draw(x, y + (i * 30), w, 30);
+    drawBox(x, y, w, h)
+    {
+        for (let i = 0, l = this.graphicsLoots.length; i < l; i++)
+        {
+            this.graphicsLoots[i].drawChoice(x, y + (i * 30), w, 30);
         }
     }
 }

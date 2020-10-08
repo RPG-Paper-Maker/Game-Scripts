@@ -20,28 +20,28 @@
 //
 // -------------------------------------------------------
 
-SceneBattle.prototype.initializeStep2 = function() {
-    var i, j, l, ll, equipments, gameItem, weapon, effects, informationText,
-        content;
-
-    switch (this.battleCommandKind) {
+SceneBattle.prototype.initializeStep2 = async function()
+{
+    let informationText, content;
+    switch (this.battleCommandKind)
+    {
     case EffectSpecialActionKind.ApplyWeapons:
-        informationText = this.attackSkill.name;
+        informationText = this.attackSkill.name();
         break;
     case EffectSpecialActionKind.OpenSkills:
         content = this.attackingGroup === CharacterKind.Hero ? this
-            .windowChoicesSkills.getCurrentContent().skill : RPM.datasGame.skills
-            .list[this.action.skillID.getValue()];
-        informationText = content.name;
+            .windowChoicesSkills.getCurrentContent().skill : RPM.datasGame
+            .skills.list[this.action.skillID.getValue()];
+        informationText = content.name();
         break;
     case EffectSpecialActionKind.OpenItems:
         content = this.attackingGroup === CharacterKind.Hero ? this
-            .windowChoicesItems.getCurrentContent().item : RPM.datasGame.items.list
-            [this.action.itemID.getValue()];
-        informationText = content.name;
+            .windowChoicesItems.getCurrentContent().item : RPM.datasGame.items
+            .list[this.action.itemID.getValue()];
+        informationText = content.name();
         break;
     default:
-        informationText = "";
+        informationText = RPM.STRING_EMPTY;
         break;
     }
     this.windowTopInformations.content = new GraphicText(informationText, {
@@ -51,32 +51,40 @@ SceneBattle.prototype.initializeStep2 = function() {
     this.effects = [];
     this.frameUser = 0;
     this.frameTarget = 0;
-    switch (this.battleCommandKind) {
+    let i, l;
+    switch (this.battleCommandKind)
+    {
     case EffectSpecialActionKind.ApplyWeapons:
         if (this.attackingGroup === CharacterKind.Hero)
         {
-            equipments = this.user.character.equip;
-            for (i = 0, l = equipments.length; i < l; i++) {
+            let equipments = this.user.character.equip;
+            let j, m, gameItem, weapon;
+            for (i = 0, l = equipments.length; i < l; i++)
+            {
                 gameItem = equipments[i];
-                if (gameItem && gameItem.k === ItemKind.Weapon) {
+                if (gameItem && gameItem.k === ItemKind.Weapon)
+                {
                     weapon = gameItem.getItemInformations();
                     this.userAnimation = RPM.datasGame.animations.list[weapon
                         .animationUserID.getValue()];
                     this.targetAnimation = RPM.datasGame.animations.list[weapon
                         .animationTargetID.getValue()];
-                    for (j = 0, ll = weapon.effects.length; j < ll; j++) {
+                    for (j = 0, m = weapon.effects.length; j < m; j++)
+                    {
                         this.effects.push(weapon.effects[j]);
                     }
                 }
             }
         }
-        if (this.effects.length === 0) {
-            this.userAnimation = RPM.datasGame.animations.list[RPM.datasGame.skills
-                .list[1].animationUserID.getValue()];
-            this.targetAnimation = RPM.datasGame.animations.list[RPM.datasGame.skills
-                .list[1].animationTargetID.getValue()];
-            effects = this.attackSkill.effects;
-            for (i = 1, l = effects.length; i < l; i++) {
+        if (this.effects.length === 0)
+        {
+            this.userAnimation = RPM.datasGame.animations.list[RPM.datasGame
+                .skills.list[1].animationUserID.getValue()];
+            this.targetAnimation = RPM.datasGame.animations.list[RPM.datasGame
+                .skills.list[1].animationTargetID.getValue()];
+            let effects = this.attackSkill.effects;
+            for (i = 1, l = effects.length; i < l; i++)
+            {
                 this.effects.push(effects[i]);
             }
         }
@@ -92,7 +100,7 @@ SceneBattle.prototype.initializeStep2 = function() {
         this.user.setUsingSkill();
         break;
     case EffectSpecialActionKind.OpenItems:
-        var graphic = this.windowChoicesItems.getCurrentContent();
+        let graphic = this.windowChoicesItems.getCurrentContent();
         this.userAnimation = RPM.datasGame.animations.list[content
             .animationUserID.getValue()];
         this.targetAnimation = RPM.datasGame.animations.list[content
@@ -105,9 +113,10 @@ SceneBattle.prototype.initializeStep2 = function() {
         this.user.setUsingItem();
         break;
     case EffectSpecialActionKind.EndTurn:
-        var user;
         this.time -= SceneBattle.TIME_ACTION_ANIMATION;
-        for (i = 0, l = this.battlers[CharacterKind.Hero].length; i < l; i++) {
+        let user;
+        for (i = 0, l = this.battlers[CharacterKind.Hero].length; i < l; i++)
+        {
             user = this.battlers[CharacterKind.Hero][i];
             user.setActive(false);
             user.setSelected(false);
@@ -120,46 +129,55 @@ SceneBattle.prototype.initializeStep2 = function() {
         break;
     }
     this.currentEffectIndex = 0;
-    if (this.effects.length > 0) {
+    if (this.effects.length > 0)
+    {
         this.effects[this.currentEffectIndex].execute();
     }
-    if (this.userAnimation) {
+    if (this.userAnimation)
+    {
         this.userAnimationPicture = this.userAnimation.createPicture();
     }
-    if (this.targetAnimation) {
+    if (this.targetAnimation)
+    {
         this.targetAnimationPicture = this.targetAnimation.createPicture();
     }
-};
+}
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.getCondition = function() {
+SceneBattle.prototype.getCondition = function()
+{
     if (this.damages[0])
     {
-        if (this.damages[0][1]) {
+        if (this.damages[0][1])
+        {
             return AnimationEffectConditionKind.Critical;
         }
-        if (this.damages[0][2]) {
+        if (this.damages[0][2])
+        {
             return AnimationEffectConditionKind.Miss;
         }
     }
     return AnimationEffectConditionKind.Hit;
-};
+}
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.updateStep2 = function() {
-    var i, j, l, ll, isAnotherEffect, damage, effect;
-
-    switch (this.subStep) {
+SceneBattle.prototype.updateStep2 = function()
+{
+    let i, l;
+    switch (this.subStep)
+    {
     case 0: // Animation user
         // Before animation, wait for enemy moving
-        if (this.user.moving) {
+        if (this.user.moving)
+        {
             return;
         }
 
         // User animation if exists
-        if (this.userAnimation) {
+        if (this.userAnimation)
+        {
             this.frameUser++;
             this.userAnimation.playSounds(this.frameUser, this.getCondition());
             RPM.requestPaintHUD = true;
@@ -189,7 +207,8 @@ SceneBattle.prototype.updateStep2 = function() {
         this.frameTarget++;
         this.targetAnimation.playSounds(this.frameTarget, this.getCondition());
         RPM.requestPaintHUD = true;
-        if (this.frameTarget > this.targetAnimation.frames.length) {
+        if (this.frameTarget > this.targetAnimation.frames.length)
+        {
             this.time = new Date().getTime() - (SceneBattle
                 .TIME_ACTION_ANIMATION / 2);
             for (i = 0, l = this.targets.length; i < l; i++)
@@ -209,11 +228,12 @@ SceneBattle.prototype.updateStep2 = function() {
             }
             return;
         }
-
         if ((new Date().getTime() - this.time) >= SceneBattle
             .TIME_ACTION_ANIMATION)
         {
-            for (i = 0, l = this.targets.length; i < l; i++) {
+            let damage;
+            for (i = 0, l = this.targets.length; i < l; i++)
+            {
                 damage = this.damages[i];
                 if (damage)
                 {
@@ -225,19 +245,24 @@ SceneBattle.prototype.updateStep2 = function() {
 
             // Target and user test death
             this.user.updateDead(false);
-            for (i = 0, l = this.targets.length; i < l; i++) {
+            for (i = 0, l = this.targets.length; i < l; i++)
+            {
                 this.targets[i].updateDead(false);
             }
 
             // Testing end of battle
-            if (this.isWin()) {
+            let effect, isAnotherEffect;
+            if (this.isWin())
+            {
                 this.winning = true;
                 this.activeGroup();
                 this.changeStep(4);
-            } else if (this.isLose()) {
+            } else if (this.isLose())
+            {
                 this.winning = false;
                 this.changeStep(4);
-            } else {
+            } else
+            {
                 effect = this.effects[this.currentEffectIndex];
                 this.currentEffectIndex++;
                 for (l = this.effects.length; this.currentEffectIndex < l; this
@@ -246,15 +271,17 @@ SceneBattle.prototype.updateStep2 = function() {
                     this.targets = this.tempTargets;
                     effect = this.effects[this.currentEffectIndex];
                     effect.execute();
-                    if (effect.isAnimated()) {
+                    if (effect.isAnimated())
+                    {
                         break;
                     }
                 }
                 isAnotherEffect = this.currentEffectIndex < this.effects.length;
-                if (isAnotherEffect) {
+                if (isAnotherEffect)
+                {
                     this.time = new Date().getTime() - (SceneBattle
-                                                        .TIME_ACTION_ANIMATION / 2);
-                    for (j = 0, ll = this.targets.length; j < ll; j++)
+                        .TIME_ACTION_ANIMATION / 2);
+                    for (let j = 0, ll = this.targets.length; j < ll; j++)
                     {
                         this.targets[j].timeDamage = 0;
                     }
@@ -266,18 +293,24 @@ SceneBattle.prototype.updateStep2 = function() {
                 }
 
                 // Testing end of turn
-                if (this.isEndTurn()) {
+                if (this.isEndTurn())
+                {
                     this.activeGroup();
-                    if (this.attackingGroup === CharacterKind.Hero) {
+                    if (this.attackingGroup === CharacterKind.Hero)
+                    {
                         this.changeStep(3); // Attack of ennemies
-                    } else {
+                    } else
+                    {
                         this.turn++;
                         this.changeStep(1); // Attack of heroes
                     }
-                } else {
-                    if (this.attackingGroup === CharacterKind.Hero) {
+                } else
+                {
+                    if (this.attackingGroup === CharacterKind.Hero)
+                    {
                         this.changeStep(1); // Attack of heroes
-                    } else {
+                    } else
+                    {
                         this.changeStep(3); // Attack of ennemies
                     }
                 }
@@ -285,52 +318,56 @@ SceneBattle.prototype.updateStep2 = function() {
         }
         break;
     }
-};
+}
 
 // -------------------------------------------------------
 
 SceneBattle.prototype.onKeyPressedStep2 = function(key){
 
-};
+}
 
 // -------------------------------------------------------
 
 SceneBattle.prototype.onKeyReleasedStep2 = function(key){
 
-};
+}
 
 // -------------------------------------------------------
 
 SceneBattle.prototype.onKeyPressedRepeatStep2 = function(key){
 
-};
+}
 
 // -------------------------------------------------------
 
 SceneBattle.prototype.onKeyPressedAndRepeatStep2 = function(key){
 
-};
+}
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.drawHUDStep2 = function() {
-    var i, l;
-
+SceneBattle.prototype.drawHUDStep2 = function()
+{
     this.windowTopInformations.draw();
 
     // Draw animations
-    if (this.userAnimation) {
+    if (this.userAnimation)
+    {
         this.userAnimation.draw(this.userAnimationPicture, this.frameUser, this
             .user);
     }
-    if (this.targetAnimation) {
+    let i, l;
+    if (this.targetAnimation)
+    {
         if (this.targetAnimation.positionKind === AnimationPositionKind
             .ScreenCenter)
         {
             this.targetAnimation.draw(this.targetAnimationPicture, this
                 .frameTarget, null);
-        } else {
-            for (i = 0, l = this.targets.length; i < l; i++) {
+        } else
+        {
+            for (i = 0, l = this.targets.length; i < l; i++)
+            {
                 this.targetAnimation.draw(this.targetAnimationPicture, this
                     .frameTarget, this.targets[i]);
             }
@@ -342,9 +379,9 @@ SceneBattle.prototype.drawHUDStep2 = function() {
         !this.targetAnimation || this.frameTarget > this.targetAnimation.frames
         .length))
     {
-        var damage;
-
-        for (i = 0, l = this.damages.length; i < l; i++) {
+        let damage;
+        for (i = 0, l = this.damages.length; i < l; i++)
+        {
             damage = this.damages[i];
             this.targets[i].drawDamages(damage[0], damage[1], damage[2]);
         }

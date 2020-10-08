@@ -60,7 +60,7 @@ class DatasPictures
                     if (k === PictureKind.Icons || k === PictureKind.Pictures || 
                         k === PictureKind.Animations)
                     {
-                        picture.load();
+                        await picture.load();
                     }
                     if (id !== 0)
                     {

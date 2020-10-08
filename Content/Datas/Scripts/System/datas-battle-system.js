@@ -102,7 +102,7 @@ class DatasBattleSystem
         this.idExpStatistic = json.xp;
 
         // Formulas
-        this.formulaIsDead = SystemValue.create(json.fisdead);
+        this.formulaIsDead = new SystemValue(json.fisdead);
         this.formulaCrit = SystemValue.readOrDefaultMessage(json.fc);
 
         // Musics

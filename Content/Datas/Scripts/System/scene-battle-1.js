@@ -20,7 +20,7 @@
 //
 // -------------------------------------------------------
 
-SceneBattle.prototype.initializeStep1 = function() 
+SceneBattle.prototype.initializeStep1 = async function() 
 {
     // Check if everyone is dead to avoid infinite looping
     if (this.isLose())
@@ -29,7 +29,6 @@ SceneBattle.prototype.initializeStep1 = function()
         this.changeStep(4);
         return;
     }
-
     this.battleCommandKind = EffectSpecialActionKind.None;
     this.windowTopInformations.content = new GraphicText("Select an ally", {
         align: Align.Center });
@@ -39,7 +38,6 @@ SceneBattle.prototype.initializeStep1 = function()
     this.userTarget = false;
     this.all = false;
     this.targets = [];
-    var index = this.selectedUserTargetIndex();
     this.moveArrow();
     this.battlers[this.kindSelection][this.selectedUserTargetIndex()]
         .updateArrowPosition(this.camera);
@@ -47,62 +45,56 @@ SceneBattle.prototype.initializeStep1 = function()
     this.listItems = [];
 
     // Items
-    var ownedItem, item;
-    for (var i = 0, l = RPM.game.items.length; i < l; i++) {
+    let ownedItem, item;
+    for (let i = 0, l = RPM.game.items.length; i < l; i++)
+    {
         ownedItem = RPM.game.items[i];
         item = RPM.datasGame.items.list[ownedItem.id];
         if (ownedItem.k === ItemKind.Item && item.consumable && (item
             .avaialableKind === AvailableKind.Battle || item.availableKind ===
             AvailableKind.Always))
         {
-            this.listItems.push(new GraphicItem(ownedItem));
+            this.listItems.push(await GraphicItem.create(ownedItem));
         }
     }
     this.windowChoicesItems.setContentsCallbacks(this.listItems);
     this.windowItemDescription.content = this.windowChoicesItems
         .getCurrentContent();
-
-    
-    this.loading = true;
-    RPM.tryCatch(this.loadStep1);
-
-}
-
-SceneBattle.prototype.loadStep1 = async function()
-{
-this.loading = false;
-    RPM.requestPaintHUD = true;
 }
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.registerLastCommandIndex = function() {
+SceneBattle.prototype.registerLastCommandIndex = function()
+{
     this.user.lastCommandIndex = this.windowChoicesBattleCommands
         .currentSelectedIndex;
     this.user.lastCommandOffset = this.windowChoicesBattleCommands
         .offsetSelectedIndex;
-};
+}
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.registerLastSkillIndex = function() {
+SceneBattle.prototype.registerLastSkillIndex = function()
+{
     this.user.lastSkillIndex = this.windowChoicesSkills.currentSelectedIndex;
     this.user.lastSkillOffset = this.windowChoicesSkills.offsetSelectedIndex;
-};
+}
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.registerLastItemIndex = function() {
+SceneBattle.prototype.registerLastItemIndex = function()
+{
     this.user.lastItemIndex = this.windowChoicesItems.currentSelectedIndex;
     this.user.lastItemOffset = this.windowChoicesItems.offsetSelectedIndex;
-};
+}
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.selectTarget = function(targetKind) {
+SceneBattle.prototype.selectTarget = function(targetKind)
+{
     this.subStep = 2;
-
-    switch (targetKind) {
+    switch (targetKind)
+    {
     case TargetKind.User:
         this.kindSelection = CharacterKind.Hero;
         this.userTarget = true;
@@ -124,88 +116,96 @@ SceneBattle.prototype.selectTarget = function(targetKind) {
         this.all = true;
         break;
     }
-    this.selectedUserIndex = this.selectFirstIndex(CharacterKind.Hero,
-        this.selectedUserIndex);
-    if (!this.userTarget) {
+    this.selectedUserIndex = this.selectFirstIndex(CharacterKind.Hero, this
+        .selectedUserIndex);
+    if (!this.userTarget)
+    {
         this.selectedTargetIndex = this.selectFirstIndex(this.kindSelection, 0);
     }
     this.moveArrow();
-};
+}
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.selectFirstIndex = function(kind, index) {
-    while (!this.isDefined(kind, index)) {
-        if (index < (this.battlers[kind].length - 1)) {
+SceneBattle.prototype.selectFirstIndex = function(kind, index)
+{
+    while (!this.isDefined(kind, index))
+    {
+        if (index < (this.battlers[kind].length - 1))
+        {
             index++;
-        } else if (index === (this.battlers[kind].length - 1)) {
+        } else if (index === (this.battlers[kind].length - 1))
+        {
             index = 0;
         }
     }
-
     RPM.datasGame.system.soundCursor.playSound();
-
     return index;
-};
+}
 
 // -------------------------------------------------------
 
 /** Return the index of the array after going up.
 *   @returns {number}
 */
-SceneBattle.prototype.indexArrowUp = function() {
-    var index = this.selectedUserTargetIndex();
-    do {
+SceneBattle.prototype.indexArrowUp = function()
+{
+    let index = this.selectedUserTargetIndex();
+    do
+    {
         if (index > 0)
+        {
             index--;
+        }
         else if (index === 0)
+        {
             index = this.battlers[this.kindSelection].length - 1;
+        }
     } while (!this.isDefined(this.kindSelection, index, this.subStep === 2));
-
     return index;
-};
+}
 
 // -------------------------------------------------------
-
 /** Return the index of the array after going down.
 *   @returns {number}
 */
-SceneBattle.prototype.indexArrowDown = function() {
-    var index = this.selectedUserTargetIndex();
-    do {
+SceneBattle.prototype.indexArrowDown = function()
+{
+    let index = this.selectedUserTargetIndex();
+    do
+    {
         if (index < (this.battlers[this.kindSelection].length - 1))
+        {
             index++;
-        else if (index === (this.battlers[this.kindSelection].length - 1))
+        } else if (index === (this.battlers[this.kindSelection].length - 1))
+        {
             index = 0;
+        }
     } while (!this.isDefined(this.kindSelection, index, this.subStep === 2));
-
     return index;
-};
+}
 
 // -------------------------------------------------------
-
 /** Move the arrow.
 */
-SceneBattle.prototype.moveArrow = function() {
-    var window, graphics;
-
+SceneBattle.prototype.moveArrow = function()
+{
     // Updating window informations
-    window = this.subStep === 2 ? this.windowTargetInformations : this
+    let window = this.subStep === 2 ? this.windowTargetInformations : this
         .windowUserInformations;
-    graphics = this.graphicPlayers[this.kindSelection][this
+    let graphics = this.graphicPlayers[this.kindSelection][this
         .selectedUserTargetIndex()];
     window.content = this.subStep === 2 ? graphics.target : graphics.user;
     window.content.update();
-
     RPM.requestPaintHUD = true;
-};
+}
 
 // -------------------------------------------------------
-
-/** Return the index of the target.
+/** Return the index of the target
 *   @returns {number}
 */
-SceneBattle.prototype.selectedUserTargetIndex = function() {
+SceneBattle.prototype.selectedUserTargetIndex = function()
+{
     return (this.subStep === 2) ? this.selectedTargetIndex : this
         .selectedUserIndex;
 };
@@ -213,15 +213,14 @@ SceneBattle.prototype.selectedUserTargetIndex = function() {
 // -------------------------------------------------------
 
 SceneBattle.prototype.updateStep1 = function() {
-    // NOTHIN TO UPDATE
+
 };
 
 // -------------------------------------------------------
 
 SceneBattle.prototype.onKeyPressedStep1 = function(key) {
-    var i, l;
-
-    switch (this.subStep) {
+    switch (this.subStep)
+    {
     case 0:
         if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
             .Action))
@@ -256,13 +255,13 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
         }
         break;
     }
-};
+}
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.onAllySelected = function() {
-    var i, l;
-
+SceneBattle.prototype.onAllySelected = async function()
+{
+    this.loadingStep = true;
     this.subStep = 1;
     this.user = this.battlers[CharacterKind.Hero][this.selectedUserIndex];
     this.user.setSelected(true);
@@ -272,17 +271,18 @@ SceneBattle.prototype.onAllySelected = function() {
         .lastCommandOffset;
 
     // Update skills list
-    var skills = this.user.character.sk;
-    var ownedSkill, availableKind;
+    let skills = this.user.character.sk;
     this.listSkills = [];
-    for (i = 0, l = skills.length; i < l; i++) {
+    let ownedSkill, availableKind;
+    for (let i = 0, l = skills.length; i < l; i++)
+    {
         ownedSkill = skills[i];
         availableKind = RPM.datasGame.skills.list[ownedSkill.id]
             .availableKind;
-        if (availableKind === AvailableKind.Always || availableKind
-            === AvailableKind.Battle)
+        if (availableKind === AvailableKind.Always || availableKind === 
+            AvailableKind.Battle)
         {
-            this.listSkills.push(new GraphicSkill(ownedSkill));
+            this.listSkills.push(await GraphicSkill.create(ownedSkill));
         }
     }
     this.windowChoicesSkills.setContentsCallbacks(this.listSkills);
@@ -294,14 +294,16 @@ SceneBattle.prototype.onAllySelected = function() {
     this.windowChoicesItems.unselect();
     this.windowChoicesItems.offsetSelectedIndex = this.user.lastItemOffset;
     this.windowChoicesItems.select(this.user.lastItemIndex);
-
+    this.loadingStep = false;
     RPM.requestPaintHUD = true;
-};
+}
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.onAllyUnselected = function() {
-    switch (this.battleCommandKind) {
+SceneBattle.prototype.onAllyUnselected = function()
+{
+    switch (this.battleCommandKind)
+    {
     case EffectSpecialActionKind.OpenSkills:
         this.registerLastSkillIndex();
         break;
@@ -315,16 +317,17 @@ SceneBattle.prototype.onAllyUnselected = function() {
         break;
     }
     this.battleCommandKind = EffectSpecialActionKind.None;
-};
+}
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.onCommandSelected = function(key) {
-    var i, l;
-
-    switch (this.battleCommandKind) {
+SceneBattle.prototype.onCommandSelected = function(key)
+{
+    switch (this.battleCommandKind)
+    {
     case EffectSpecialActionKind.OpenSkills:
-        if (this.windowChoicesSkills.getCurrentContent().skill.isPossible()) {
+        if (this.windowChoicesSkills.getCurrentContent().skill.isPossible())
+        {
             this.selectTarget(this.windowSkillDescription.content.skill
                 .targetKind);
             this.registerLastSkillIndex();
@@ -339,35 +342,41 @@ SceneBattle.prototype.onCommandSelected = function(key) {
     }
     this.windowChoicesBattleCommands.onKeyPressed(key, this
         .windowChoicesBattleCommands.getCurrentContent().skill);
-    switch (this.battleCommandKind) {
+    let i, l;
+    switch (this.battleCommandKind)
+    {
     case EffectSpecialActionKind.ApplyWeapons:
-        var targetKind, equipments, gameItem;
-
         // Check weapon targetKind
         this.attackSkill = this.windowChoicesBattleCommands.getCurrentContent()
             .skill;
-        targetKind = null;
-        equipments = this.user.character.equip;
-        for (i = 0, l = equipments.length; i < l; i++) {
+        let targetKind = null;
+        let equipments = this.user.character.equip;
+        let gameItem;
+        for (i = 0, l = equipments.length; i < l; i++)
+        {
             gameItem = equipments[i];
-            if (gameItem && gameItem.k === ItemKind.Weapon) {
+            if (gameItem && gameItem.k === ItemKind.Weapon)
+            {
                 targetKind = gameItem.getItemInformations().targetKind;
                 break;
             }
         }
         // If no weapon
-        if (targetKind === null) {
+        if (targetKind === null)
+        {
             targetKind = this.attackSkill.targetKind;
         }
         this.selectTarget(targetKind);
         break;
     case EffectSpecialActionKind.OpenSkills:
-        if (this.listSkills.length === 0) {
+        if (this.listSkills.length === 0)
+        {
             this.battleCommandKind = EffectSpecialActionKind.None;
         }
         break;
     case EffectSpecialActionKind.OpenItems:
-        if (this.listItems.length === 0) {
+        if (this.listItems.length === 0)
+        {
             this.battleCommandKind = EffectSpecialActionKind.None;
         }
         break;
@@ -397,34 +406,37 @@ SceneBattle.prototype.onCommandSelected = function(key) {
         break;
     }
     this.registerLastCommandIndex();
-};
+}
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.onTargetsSelected = function() {
-    var i, l;
-
-    if (this.all) {
-        for (i = 0, l = this.battlers[this.kindSelection].length; i < l; i++) {
+SceneBattle.prototype.onTargetsSelected = function()
+{
+    if (this.all)
+    {
+        for (let i = 0, l = this.battlers[this.kindSelection].length; i < l; i++)
+        {
             this.targets.push(this.battlers[this.kindSelection][i]);
         }
-    } else {
+    } else
+    {
         this.targets.push(this.battlers[this.kindSelection][this
             .selectedUserTargetIndex()]);
     }
     this.windowChoicesBattleCommands.unselect();
     this.changeStep(2);
-};
+}
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.onTargetsUnselected = function() {
+SceneBattle.prototype.onTargetsUnselected = function()
+{
     this.subStep = 1;
     this.kindSelection = CharacterKind.Hero;
     this.userTarget = false;
     this.all = false;
     this.moveArrow();
-};
+}
 
 // -------------------------------------------------------
 
@@ -442,39 +454,44 @@ SceneBattle.prototype.onKeyPressedRepeatStep1 = function(key){
 
 SceneBattle.prototype.onKeyPressedAndRepeatStep1 = function(key){
     var index = this.selectedUserTargetIndex();
-    switch (this.subStep) {
+    switch (this.subStep)
+    {
     case 0:
     case 2:
-        if (!this.userTarget) {
-            if (DatasKeyBoard.isKeyEqual(key,RPM.datasGame.keyBoard.menuControls.Up
-                ) || DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard
+        if (!this.userTarget)
+        {
+            if (DatasKeyBoard.isKeyEqual(key,RPM.datasGame.keyBoard.menuControls
+                .Up) || DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard
                 .menuControls.Left))
             {
                 index = this.indexArrowUp();
             } else if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard
-                .menuControls.Down) || DatasKeyBoard.isKeyEqual(key, RPM.datasGame
-                .keyBoard.menuControls.Right))
+                .menuControls.Down) || DatasKeyBoard.isKeyEqual(key, RPM
+                .datasGame.keyBoard.menuControls.Right))
             {
                 index = this.indexArrowDown();
             }
         }
-
-        if (this.subStep === 0) {
-            if (this.selectedUserIndex !== index) {
+        if (this.subStep === 0)
+        {
+            if (this.selectedUserIndex !== index)
+            {
                 RPM.datasGame.system.soundCursor.playSound();
             }
             this.selectedUserIndex = index;
-        } else {
-            if (this.selectedUserIndex !== index) {
+        } else
+        {
+            if (this.selectedUserIndex !== index)
+            {
                 RPM.datasGame.system.soundCursor.playSound();
             }
             this.selectedTargetIndex = index;
         }
         this.moveArrow();
-
         break;
     case 1:
-        switch (this.battleCommandKind) {
+        switch (this.battleCommandKind)
+        {
         case EffectSpecialActionKind.OpenSkills:
             this.windowChoicesSkills.onKeyPressedAndRepeat(key);
             this.windowSkillDescription.content = this.windowChoicesSkills
@@ -491,34 +508,39 @@ SceneBattle.prototype.onKeyPressedAndRepeatStep1 = function(key){
         }
         break;
     }
-};
+}
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.drawHUDStep1 = function() {
-    var i, l;
-
+SceneBattle.prototype.drawHUDStep1 = function()
+{
     this.windowTopInformations.draw();
 
     // Draw heroes window informations
     this.windowUserInformations.draw();
-    if (this.subStep === 2) {
+    if (this.subStep === 2)
+    {
         this.windowTargetInformations.draw();
     }
 
     // Arrows
-    if (this.all) {
-        for (i = 0, l = this.battlers[this.kindSelection].length; i < l; i++) {
+    if (this.all)
+    {
+        for (let i = 0, l = this.battlers[this.kindSelection].length; i < l; i++)
+        {
             this.battlers[this.kindSelection][i].drawArrow();
         }
-    } else {
+    } else
+    {
         this.battlers[this.kindSelection][this.selectedUserTargetIndex()]
             .drawArrow();
     }
     // Commands
-    if (this.subStep === 1) {
+    if (this.subStep === 1)
+    {
         this.windowChoicesBattleCommands.draw();
-        switch (this.battleCommandKind) {
+        switch (this.battleCommandKind)
+        {
         case EffectSpecialActionKind.OpenSkills:
             this.windowChoicesSkills.draw();
             this.windowSkillDescription.draw();
@@ -529,4 +551,4 @@ SceneBattle.prototype.drawHUDStep1 = function() {
             break;
         }
     }
-};
+}

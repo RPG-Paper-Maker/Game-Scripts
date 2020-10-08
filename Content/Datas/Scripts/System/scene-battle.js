@@ -109,7 +109,9 @@ class SceneBattle extends SceneMap
     async load()
     {
         await super.load();
-        this.initialize();
+        this.loading = true;
+        await this.loadInitialize();
+        this.loading = false;
     }
 
     // -------------------------------------------------------
@@ -263,9 +265,10 @@ class SceneBattle extends SceneMap
     */
     initialize()
     {
-        this.loading = true;
-        this.loadInitialize();
-    };
+        this.loadingStep = true;
+        RPM.requestPaintHUD = false;
+        RPM.tryCatch(this.loadInitialize());
+    }
 
     async loadInitialize()
     {
@@ -287,7 +290,7 @@ class SceneBattle extends SceneMap
             await this.initializeStep4();
             break;
         }
-        this.loading = false;
+        this.loadingStep = false;
         RPM.requestPaintHUD = true;
     }
 
@@ -313,23 +316,26 @@ class SceneBattle extends SceneMap
         // Camera temp code for moving
         this.moveStandardCamera();
 
-        switch(this.step)
+        if (!this.loadingStep)
         {
-        case 0:
-            this.updateStep0();
-            break;
-        case 1:
-            this.updateStep1();
-            break;
-        case 2:
-            this.updateStep2();
-            break;
-        case 3:
-            this.updateStep3();
-            break;
-        case 4:
-            this.updateStep4();
-            break;
+            switch(this.step)
+            {
+            case 0:
+                this.updateStep0();
+                break;
+            case 1:
+                this.updateStep1();
+                break;
+            case 2:
+                this.updateStep2();
+                break;
+            case 3:
+                this.updateStep3();
+                break;
+            case 4:
+                this.updateStep4();
+                break;
+            }
         }
     }
 
@@ -404,100 +410,112 @@ class SceneBattle extends SceneMap
 
     onKeyPressed(key)
     {
-        switch (this.step)
+        if (!this.loadingStep)
         {
-        case 0:
-            this.onKeyPressedStep0(key);
-            break;
-        case 1:
-            this.onKeyPressedStep1(key);
-            break;
-        case 2:
-            this.onKeyPressedStep2(key);
-            break;
-        case 3:
-            this.onKeyPressedStep3(key);
-            break;
-        case 4:
-            this.onKeyPressedStep4(key);
-            break;
+            switch (this.step)
+            {
+            case 0:
+                this.onKeyPressedStep0(key);
+                break;
+            case 1:
+                this.onKeyPressedStep1(key);
+                break;
+            case 2:
+                this.onKeyPressedStep2(key);
+                break;
+            case 3:
+                this.onKeyPressedStep3(key);
+                break;
+            case 4:
+                this.onKeyPressedStep4(key);
+                break;
+            }
+            super.onKeyPressed(key);
         }
-        super.onKeyPressed(key);
     }
 
     // -------------------------------------------------------
 
     onKeyReleased(key)
     {
-        switch (this.step)
+        if (!this.loadingStep)
         {
-        case 0:
-            this.onKeyReleasedStep0(key);
-            break;
-        case 1:
-            this.onKeyReleasedStep1(key);
-            break;
-        case 2:
-            this.onKeyReleasedStep2(key);
-            break;
-        case 3:
-            this.onKeyReleasedStep3(key);
-            break;
-        case 4:
-            this.onKeyReleasedStep4(key);
-            break;
+            switch (this.step)
+            {
+            case 0:
+                this.onKeyReleasedStep0(key);
+                break;
+            case 1:
+                this.onKeyReleasedStep1(key);
+                break;
+            case 2:
+                this.onKeyReleasedStep2(key);
+                break;
+            case 3:
+                this.onKeyReleasedStep3(key);
+                break;
+            case 4:
+                this.onKeyReleasedStep4(key);
+                break;
+            }
+            super.onKeyReleased(key);
         }
-        super.onKeyReleased(key);
     }
 
     // -------------------------------------------------------
 
     onKeyPressedRepeat(key)
     {
-        switch (this.step)
+        if (!this.loadingStep)
         {
-        case 0:
-            this.onKeyPressedRepeatStep0(key);
-            break;
-        case 1:
-            this.onKeyPressedRepeatStep1(key);
-            break;
-        case 2:
-            this.onKeyPressedRepeatStep2(key);
-            break;
-        case 3:
-            this.onKeyPressedRepeatStep3(key);
-            break;
-        case 4:
-            this.onKeyPressedRepeatStep4(key);
-            break;
+            switch (this.step)
+            {
+            case 0:
+                this.onKeyPressedRepeatStep0(key);
+                break;
+            case 1:
+                this.onKeyPressedRepeatStep1(key);
+                break;
+            case 2:
+                this.onKeyPressedRepeatStep2(key);
+                break;
+            case 3:
+                this.onKeyPressedRepeatStep3(key);
+                break;
+            case 4:
+                this.onKeyPressedRepeatStep4(key);
+                break;
+            }
+            super.onKeyPressedRepeat(key);
         }
-        super.onKeyPressedRepeat(key);
     }
 
     // -------------------------------------------------------
 
     onKeyPressedAndRepeat(key)
     {
-        switch (this.step)
+        if (!this.loadingStep)
         {
-        case 0:
-            this.onKeyPressedAndRepeatStep0(key);
-            break;
-        case 1:
-            this.onKeyPressedAndRepeatStep1(key);
-            break;
-        case 2:
-            this.onKeyPressedAndRepeatStep2(key);
-            break;
-        case 3:
-            this.onKeyPressedAndRepeatStep3(key);
-            break;
-        case 4:
-            this.onKeyPressedAndRepeatStep4(key);
-            break;
+            switch (this.step)
+            {
+            case 0:
+                this.onKeyPressedAndRepeatStep0(key);
+                break;
+            case 1:
+                this.onKeyPressedAndRepeatStep1(key);
+                break;
+            case 2:
+                this.onKeyPressedAndRepeatStep2(key);
+                break;
+            case 3:
+                this.onKeyPressedAndRepeatStep3(key);
+                break;
+            case 4:
+                this.onKeyPressedAndRepeatStep4(key);
+                break;
+            }
+            super.onKeyPressedAndRepeat(key);
         }
-        super.onKeyPressedAndRepeat(key);
     }
 
     // -------------------------------------------------------

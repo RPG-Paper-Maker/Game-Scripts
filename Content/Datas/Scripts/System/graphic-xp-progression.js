@@ -32,7 +32,7 @@ class GraphicXPProgression
 
     static async create()
     {
-        let graphic = new GraphicXPProgress();
+        let graphic = new GraphicXPProgression();
         await RPM.tryCatch(graphic.load());
         return graphic;
     }
@@ -55,7 +55,7 @@ class GraphicXPProgression
     {
         for (let i = 0, l = this.graphicCharacters.length; i < l; i++)
         {
-            this.graphicCharacters[i].draw(x, y + (i * 90), w, 85);
+            this.graphicCharacters[i].drawChoice(x, y + (i * 90), w, 85);
         }
     }
 }

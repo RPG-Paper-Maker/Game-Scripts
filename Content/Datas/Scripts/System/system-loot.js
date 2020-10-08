@@ -54,8 +54,8 @@ class SystemLoot
         // Calculate number with proba
         let proba = this.probability.getValue();
         let totalNumber = this.number.getValue();
-        let rand;
-        for (let i = 0, number = 0; i < totalNumber; i++)
+        let i, rand, number;
+        for (i = 0, number = 0; i < totalNumber; i++)
         {
             rand = RPM.random(0, 100);
             if (rand <= proba)

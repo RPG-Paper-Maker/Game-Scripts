@@ -106,9 +106,9 @@ class SystemPicture
     // -------------------------------------------------------
     /** Read the JSON associated to the picture
     */
-    load()
+    async load()
     {
-        this.picture = Picture2D.create(this, this.kind);
+        this.picture = await Picture2D.create(this);
     }
 
     // -------------------------------------------------------

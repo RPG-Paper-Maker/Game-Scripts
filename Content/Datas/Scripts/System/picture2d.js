@@ -45,7 +45,6 @@ class Picture2D extends Bitmap
         } else
         {
             this.empty = true;
-            this.check();
         }
     }
 
