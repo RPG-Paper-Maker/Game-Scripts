@@ -9,21 +9,15 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS GameSkill
-//
-//  A skill learned by a owned character.
-//
-//  @id         -> The id of the skill
-//
-// -------------------------------------------------------
-
 /** @class
-*   A skill learned by a player.
-*   @property {number} id The ID of the skill.
-*   @param {number} id The ID of the skill.
+*   A skill learned by a player
+*   @property {number} id The ID of the skill
+*   @param {number} id The ID of the skill
 */
-function GameSkill(id){
-    this.id = id;
+class GameSkill
+{
+    constructor(id)
+    {
+        this.id = id;
+    }
 }

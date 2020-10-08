@@ -9,49 +9,59 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS GraphicSkill
-//
-// -------------------------------------------------------
-
 /** @class
-*   The graphic displaying the player skills informations in skill menu.
-*   @property {GraphicText} graphicName The skill name graphic.
-*   @param {GameSkill} gameSkill The current selected skill.
+*   The graphic displaying the player skills informations in skill menu
+*   @property {GraphicText} graphicName The skill name graphic
+*   @param {GameSkill} gameSkill The current selected skill
 */
-function GraphicSkill(gameSkill){
-    this.skill = RPM.datasGame.skills.list[gameSkill.id];
+class GraphicSkill
+{
+    constructor(gameSkill)
+    {
+        this.gameSkill = gameSkill;
+    }
 
-    // All the graphics
-    this.graphicName = new GraphicTextIcon(this.skill.name, this.skill.pictureID);
-    this.graphicCost = new GraphicText(this.skill.getCostString(), { align:
-        Align.Right });
-    this.graphicInformations = new GraphicSkillItem(this.skill);
-}
+    async load()
+    {
+        this.skill = RPM.datasGame.skills.list[this.gameSkill.id];
 
-GraphicSkill.prototype = {
+        // All the graphics
+        this.graphicName = await GraphicTextIcon.create(this.skill.name(), this
+            .skill.pictureID);
+        this.graphicCost = new GraphicText(this.skill.getCostString(), { align:
+            Align.Right });
+        this.graphicInformations = await GraphicSkillItem.create(this.skill);
+    }
 
-    /** Drawing the skill in choice box.
-    *   @param {Canvas.Context} context The canvas context.
-    *   @param {number} x The x position to draw graphic.
-    *   @param {number} y The y position to draw graphic.
-    *   @param {number} w The width dimention to draw graphic.
-    *   @param {number} h The height dimention to draw graphic.
+    static async create(gameSkill)
+    {
+        let graphic = new GraphicSkill(gameSkill);
+        await RPM.tryCatch(graphic.load());
+        return graphic;
+    }
+
+    /** Drawing the skill in choice box
+    *   @param {Canvas.Context} context The canvas context
+    *   @param {number} x The x position to draw graphic
+    *   @param {number} y The y position to draw graphic
+    *   @param {number} w The width dimention to draw graphic
+    *   @param {number} h The height dimention to draw graphic
     */
-    drawChoice: function(x, y, w, h) {
+    drawChoice(x, y, w, h)
+    {
         this.graphicName.draw(x, y, w, h);
         this.graphicCost.draw(x, y, w, h);
-    },
+    }
 
-    /** Drawing the skill description.
-    *   @param {Canvas.Context} context The canvas context.
-    *   @param {number} x The x position to draw graphic.
-    *   @param {number} y The y position to draw graphic.
-    *   @param {number} w The width dimention to draw graphic.
-    *   @param {number} h The height dimention to draw graphic.
+    /** Drawing the skill description
+    *   @param {Canvas.Context} context The canvas context
+    *   @param {number} x The x position to draw graphic
+    *   @param {number} y The y position to draw graphic
+    *   @param {number} w The width dimention to draw graphic
+    *   @param {number} h The height dimention to draw graphic
     */
-    drawBox: function(x, y, w, h) {
+    drawBox(x, y, w, h)
+    {
         this.graphicInformations.drawBox(x, y, w, h);
         this.graphicCost.draw(x, y, w, 0);
     }

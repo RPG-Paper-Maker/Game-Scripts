@@ -746,6 +746,24 @@ class SceneMap extends SceneGame
             super.onKeyPressed(key);
         }
     }
+
+    // -------------------------------------------------------
+
+    onKeyReleased(key)
+    {
+        if (!this.loading)
+        {
+            // Send keyReleaseEvent to all the objects
+            if (!RPM.blockingHero)
+            {
+                EventCommandSendEvent.sendEvent(null, 0, 1, true, 4, [null,
+                    SystemValue.createNumber(key), SystemValue.createSwitch(
+                    false), SystemValue.createSwitch(false)], true);
+            }
+            super.onKeyReleased(key);
+        }
+    }
+
     // -------------------------------------------------------
 
     onKeyPressedRepeat(key)

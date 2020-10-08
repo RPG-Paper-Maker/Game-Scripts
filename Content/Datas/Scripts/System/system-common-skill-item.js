@@ -80,7 +80,7 @@ class SystemCommonSkillItem extends SystemIcon
     */
     use()
     {
-        letisDoingSomething = false;
+        let isDoingSomething = false;
         let i, l;
         for (i = 0, l = this.effects.length; i < l; i++)
         {

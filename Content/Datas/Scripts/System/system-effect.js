@@ -353,7 +353,7 @@ class SystemEffect
             let max = damage + variance;
             if (damage < 0)
             {
-                temp = min;
+                let temp = min;
                 min = -max;
                 max = -temp;
             }
@@ -370,7 +370,7 @@ class SystemEffect
                     .getValue(), user, target);
                 options.push("critical: " + critical + "%");
             }
-            damageName = RPM.STRING_EMPTY;
+            let damageName = RPM.STRING_EMPTY;
             switch (this.damageKind)
             {
             case DamagesKind.Stat:

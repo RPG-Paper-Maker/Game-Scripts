@@ -285,9 +285,9 @@ class SceneMenu extends SceneGame
 
     // -------------------------------------------------------
 
-    draw3D(canvas)
+    draw3D()
     {
-        RPM.currentMap.draw3D(canvas);
+        RPM.currentMap.draw3D();
     }
 
     // -------------------------------------------------------

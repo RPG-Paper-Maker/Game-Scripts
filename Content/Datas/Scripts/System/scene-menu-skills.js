@@ -9,108 +9,107 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SceneMenuSkills : SceneGame
-//
-// -------------------------------------------------------
-
 /** @class
-*   A scene in the menu for describing players skills.
+*   A scene in the menu for describing players skills
 *   @extends SceneGame
-*   @property {WindowBox} windowTop Window on top with "Skills" text.
-*   @property {WindowTabs} windowChoicesTabs Window for each tabs.
-*   @property {WindowBox} windowInformations Window for skill informations.
-*   @property {WindowChoices} windowChoicesList Window for each skill.
+*   @property {WindowBox} windowTop Window on top with "Skills" text
+*   @property {WindowTabs} windowChoicesTabs Window for each tabs
+*   @property {WindowBox} windowInformations Window for skill informations
+*   @property {WindowChoices} windowChoicesList Window for each skill
 */
-function SceneMenuSkills() {
-    SceneGame.call(this);
-
-    var nbHeroes, i;
-    var listHeroes;
-
-    // Tab heroes
-    nbHeroes = RPM.game.teamHeroes.length;
-    listHeroes = new Array(nbHeroes);
-    this.positionChoice = new Array(nbHeroes);
-    for (i = 0; i < nbHeroes; i++) {
-        listHeroes[i] = new GraphicPlayerDescription(RPM.game.teamHeroes[i]);
-        this.positionChoice[i] = {
-            index: 0,
-            offset: 0
-        };
+class SceneMenuSkills extends SceneGame
+{   
+    constructor()
+    {
+        super();
     }
 
-    // All the windows
-    this.windowTop = new WindowBox(20, 20, 200, 30, 
+    async load()
+    {
+        // Tab heroes
+        let nbHeroes = RPM.game.teamHeroes.length;
+        let listHeroes = new Array(nbHeroes);
+        this.positionChoice = new Array(nbHeroes);
+        for (let i = 0; i < nbHeroes; i++)
         {
-            content: new GraphicText("Skills", { align: Align.Center })
+            listHeroes[i] = await GraphicPlayerDescription.create(RPM.game
+                .teamHeroes[i]);
+            this.positionChoice[i] = {
+                index: 0,
+                offset: 0
+            };
         }
-    );
-    this.windowChoicesTabs = new WindowChoices(50, 60, 110, RPM
-        .SMALL_SLOT_HEIGHT, listHeroes, 
-        {
-            orientation: OrientationWindow.Horizontal,
-            nbItemsMax: 4,
-            padding: [0, 0, 0, 0]
-        }
-    );
-    this.windowChoicesList = new WindowChoices(20, 100, 200, RPM
-        .SMALL_SLOT_HEIGHT, [],
-        {
-            nbItemsMax: SceneMenu.nbItemsToDisplay
-        }
-    );
-    this.windowInformations = new WindowBox(240, 100, 360, 200, 
-        {
-            padding: RPM.HUGE_PADDING_BOX
-        }
-    );
-    this.windowEmpty = new WindowBox(10, 100, RPM.SCREEN_X - 20, RPM
-        .SMALL_SLOT_HEIGHT,
-        {
-            content: new GraphicText("Empty", { align: Align.Center }),
-            padding: RPM.SMALL_SLOT_PADDING
-        }
-    );
-    this.windowBoxUseSkill = new WindowBox(240, 320, 360, 140,
-        {
-            content: new GraphicUserSkillItem(),
-            padding: RPM.SMALL_PADDING_BOX
-        }
-    );
 
-    // Update for changing tab
-    this.substep = 0;
-    this.updateForTab();
+        // All the windows
+        this.windowTop = new WindowBox(20, 20, 200, 30, 
+            {
+                content: new GraphicText("Skills", { align: Align.Center })
+            }
+        );
+        this.windowChoicesTabs = new WindowChoices(50, 60, 110, RPM
+            .SMALL_SLOT_HEIGHT, listHeroes, 
+            {
+                orientation: OrientationWindow.Horizontal,
+                nbItemsMax: 4,
+                padding: [0, 0, 0, 0]
+            }
+        );
+        this.windowChoicesList = new WindowChoices(20, 100, 200, RPM
+            .SMALL_SLOT_HEIGHT, [],
+            {
+                nbItemsMax: SceneMenu.nbItemsToDisplay
+            }
+        );
+        this.windowInformations = new WindowBox(240, 100, 360, 200, 
+            {
+                padding: RPM.HUGE_PADDING_BOX
+            }
+        );
+        this.windowEmpty = new WindowBox(10, 100, RPM.SCREEN_X - 20, RPM
+            .SMALL_SLOT_HEIGHT,
+            {
+                content: new GraphicText("Empty", { align: Align.Center }),
+                padding: RPM.SMALL_SLOT_PADDING
+            }
+        );
+        this.windowBoxUseSkill = new WindowBox(240, 320, 360, 140,
+            {
+                content: await GraphicUseSkillItem.create(),
+                padding: RPM.SMALL_PADDING_BOX
+            }
+        );
 
-    this.synchronize();
-}
+        // Update for changing tab
+        this.substep = 0;
+        await this.updateForTab();
+        this.synchronize();
 
-SceneMenuSkills.prototype = {
+        this.loading = false;
+        RPM.requestPaintHUD = true;
+    }
 
     /** Synchronize informations with selected hero.
     */
-    synchronize: function(){
-        this.windowInformations.content =
-             this.windowChoicesList.getCurrentContent();
-    },
+    synchronize()
+    {
+        this.windowInformations.content = this.windowChoicesList
+            .getCurrentContent();
+    }
 
     // -------------------------------------------------------
-
-    /** Update tab.
+    /** Update tab
     */
-    updateForTab: function(){
-        var i, l;
-        var indexTab = this.windowChoicesTabs.currentSelectedIndex;
+    async updateForTab()
+    {
+        let indexTab = this.windowChoicesTabs.currentSelectedIndex;
         RPM.currentMap.user = RPM.game.teamHeroes[indexTab];
-        var skills = RPM.currentMap.user.sk;
-        var list;
+        let skills = RPM.currentMap.user.sk;
 
         // Get the first skills of the hero
-        list = [];
-        for (i = 0, l = skills.length; i < l; i++) {
-            list.push(new GraphicSkill(skills[i]));
+        let list = [];
+        for (let i = 0, l = skills.length; i < l; i++)
+        {
+            list.push(await GraphicSkill.create(skills[i]));
         }
 
         // Update the list
@@ -120,36 +119,59 @@ SceneMenuSkills.prototype = {
             indexTab].offset;
         this.windowChoicesList.select(this.positionChoice[indexTab].index);
         RPM.currentMap.user = RPM.game.teamHeroes[indexTab];
-    },
+    }
+
+    async moveTabKey(key)
+    {
+        // Tab
+        let indexTab = this.windowChoicesTabs.currentSelectedIndex;
+        this.windowChoicesTabs.onKeyPressedAndRepeat(key);
+        if (indexTab !== this.windowChoicesTabs.currentSelectedIndex)
+        {
+            await this.updateForTab();
+        }
+
+        // List
+        this.windowChoicesList.onKeyPressedAndRepeat(key);
+        position = this.positionChoice[this.windowChoicesTabs
+            .currentSelectedIndex];
+        position.index = this.windowChoicesList.currentSelectedIndex;
+        position.offset = this.windowChoicesList.offsetSelectedIndex;
+
+        this.synchronize();
+    }
 
     // -------------------------------------------------------
 
-    update: function(){
+    update()
+    {
         SceneGame.prototype.update.call(RPM.currentMap);
 
-        if (this.windowChoicesList.currentSelectedIndex !== -1) {
+        if (this.windowChoicesList.currentSelectedIndex !== -1)
+        {
             this.windowBoxUseSkill.update();
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    onKeyPressed: function(key){
+    onKeyPressed(key)
+    {
         SceneGame.prototype.onKeyPressed.call(RPM.currentMap, key);
 
-        switch (this.substep) {
+        switch (this.substep)
+        {
         case 0:
-            if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
-                .Action))
+            if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard
+                .menuControls.Action))
             {
-                var targetKind, availableKind;
-
-                if (this.windowInformations.content === null) {
+                if (this.windowInformations.content === null)
+                {
                     return;
                 }
-
-                targetKind = this.windowInformations.content.skill.targetKind;
-                availableKind = this.windowInformations.content.skill
+                let targetKind = this.windowInformations.content.skill
+                    .targetKind;
+                let availableKind = this.windowInformations.content.skill
                     .availableKind;
                 if (this.windowInformations.content.skill.isPossible() && (
                     targetKind === TargetKind.Ally || targetKind === TargetKind
@@ -161,12 +183,13 @@ SceneMenuSkills.prototype = {
                     this.windowBoxUseSkill.content.setAll(targetKind ===
                         TargetKind.AllAllies);
                     RPM.requestPaintHUD = true;
-                } else {
+                } else
+                {
                     RPM.datasGame.system.soundImpossible.playSound();
                 }
             } else if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard
-                .menuControls.Cancel) || DatasKeyBoard.isKeyEqual(key,
-                RPM.datasGame.keyBoard.MainMenu))
+                .menuControls.Cancel) || DatasKeyBoard.isKeyEqual(key, RPM
+                .datasGame.keyBoard.MainMenu))
             {
                 RPM.datasGame.system.soundCancel.playSound();
                 RPM.currentMap.user = null;
@@ -174,13 +197,15 @@ SceneMenuSkills.prototype = {
             }
             break;
         case 1:
-            if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
-                .Action))
+            if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard
+                .menuControls.Action))
             {
-                if (this.windowInformations.content.skill.use()) {
+                if (this.windowInformations.content.skill.use())
+                {
                     this.windowInformations.content.skill.sound.playSound();
                     this.windowBoxUseSkill.content.updateStats();
-                    if (!this.windowInformations.content.skill.isPossible()) {
+                    if (!this.windowInformations.content.skill.isPossible())
+                    {
                         this.substep = 0;
                     }
                     RPM.requestPaintHUD = true;
@@ -195,78 +220,67 @@ SceneMenuSkills.prototype = {
             }
             break;
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    onKeyReleased: function(key){
+    onKeyReleased(key)
+    {
         SceneGame.prototype.onKeyReleased.call(RPM.currentMap, key);
-    },
+    }
 
     // -------------------------------------------------------
 
-    onKeyPressedRepeat: function(key){
+    onKeyPressedRepeat(key)
+    {
         SceneGame.prototype.onKeyPressedRepeat.call(RPM.currentMap, key);
-    },
+    }
 
     // -------------------------------------------------------
 
-    onKeyPressedAndRepeat: function(key) {
+    onKeyPressedAndRepeat(key)
+    {
         SceneGame.prototype.onKeyPressedAndRepeat.call(RPM.currentMap, key);
         
-        switch (this.substep) {
+        switch (this.substep)
+        {
         case 0:
-            var position;
-
-            // Tab
-            var indexTab = this.windowChoicesTabs.currentSelectedIndex;
-            this.windowChoicesTabs.onKeyPressedAndRepeat(key);
-            if (indexTab !== this.windowChoicesTabs.currentSelectedIndex)
-                this.updateForTab();
-
-            // List
-            this.windowChoicesList.onKeyPressedAndRepeat(key);
-            position = this.positionChoice[this.windowChoicesTabs
-                .currentSelectedIndex];
-            position.index = this.windowChoicesList.currentSelectedIndex;
-            position.offset = this.windowChoicesList.offsetSelectedIndex;
+            this.moveTabKey();
             break;
         case 1:
             this.windowBoxUseSkill.content.onKeyPressedAndRepeat(key);
             break;
         }
-
-        this.synchronize();
-    },
+    }
 
     // -------------------------------------------------------
 
-    draw3D: function(canvas){
-        RPM.currentMap.draw3D(canvas);
-    },
+    draw3D()
+    {
+        RPM.currentMap.draw3D();
+    }
 
     // -------------------------------------------------------
 
-    drawHUD: function(context){
+    drawHUD()
+    {
         // Draw the local map behind
-        RPM.currentMap.drawHUD(context);
+        RPM.currentMap.drawHUD();
 
         // Draw the menu
-        this.windowTop.draw(context);
-        this.windowChoicesTabs.draw(context);
-        this.windowChoicesList.draw(context);
-        if (this.windowChoicesList.listWindows.length > 0) {
+        this.windowTop.draw();
+        this.windowChoicesTabs.draw();
+        this.windowChoicesList.draw();
+        if (this.windowChoicesList.listWindows.length > 0)
+        {
             this.windowInformations.draw();
-            if (this.substep === 1) {
+            if (this.substep === 1)
+            {
                 this.windowBoxUseSkill.draw();
             }
-        } else {
+        } else
+        {
             this.windowEmpty.draw();
         }
-    },
-
-    close: function()
-    {
-
     }
 }

@@ -88,7 +88,7 @@ class SystemCost
         let target = GamePlayer.getTemporaryPlayer();
         let value = RPM.evaluateFormula(this.valueFormula.getValue(), user, 
             target);
-    
+        let currentValue;
         switch (this.kind)
         {
         case DamagesKind.Stat:

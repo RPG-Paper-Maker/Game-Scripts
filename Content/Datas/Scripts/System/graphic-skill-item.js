@@ -9,101 +9,121 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS GraphicSkillItem
-//
-// -------------------------------------------------------
-
 /** @class
 */
-function GraphicSkillItem(skillItem) {
-    var i, l, effect, txt, graphic, graphicIcon;
-    this.skillItem = skillItem;
+class GraphicSkillItem
+{
+    constructor(skillItem)
+    {
+        this.skillItem = skillItem;
+    }
 
-    // All the graphics
-    this.graphicElements = [];
-    this.graphicName = new GraphicTextIcon(skillItem.name, skillItem.pictureID);
-    if (skillItem.hasType) {
-        this.graphicType = new GraphicText(skillItem.getType().name, { fontSize:
-            RPM.MEDIUM_FONT_SIZE });
-    }
-    this.graphicDescription = new GraphicText(skillItem.description.name);
-    if (skillItem.hasTargetKind) {
-        this.graphicTarget = new GraphicText("Target: " + skillItem
-            .getTargetKindString(), { align: Align.Right, fontSize: RPM
-            .MEDIUM_FONT_SIZE });
-    }
-    this.graphicEffects = [];
-    for (i = 0, l = this.skillItem.effects.length; i < l; i++) {
-        effect = this.skillItem.effects[i];
-        txt = effect.toString();
-        if (txt) {
-            graphic = new GraphicText(txt, { fontSize: RPM.MEDIUM_FONT_SIZE });
-            this.graphicEffects.push(graphic);
+    async load()
+    {
+        // All the graphics
+        this.graphicElements = [];
+        this.graphicName = await GraphicTextIcon.create(this.skillItem.name(), 
+            this.skillItem.pictureID);
+        if (this.skillItem.hasType)
+        {
+            this.graphicType = new GraphicText(this.skillItem.getType().name, { 
+                fontSize: RPM.MEDIUM_FONT_SIZE });
         }
-        if (effect.isDamageElement) {
-            graphicIcon = Picture2D.create(RPM.datasGame.pictures.getIcon(
-                RPM.datasGame.battleSystem.elements[effect.damageElementID
-                .getValue()].pictureID), PictureKind.Icons)
-            this.graphicElements.push(graphicIcon);
-            if (txt) {
-                graphic.elementIcon = graphicIcon;
+        this.graphicDescription = new GraphicText(this.skillItem.description
+            .name());
+        if (this.skillItem.hasTargetKind)
+        {
+            this.graphicTarget = new GraphicText("Target: " + this.skillItem
+                .getTargetKindString(), { align: Align.Right, fontSize: RPM
+                .MEDIUM_FONT_SIZE });
+        }
+        this.graphicEffects = [];
+        let i, l, effect, txt, graphic, graphicIcon;
+        for (i = 0, l = this.skillItem.effects.length; i < l; i++)
+        {
+            effect = this.skillItem.effects[i];
+            txt = effect.toString();
+            if (txt)
+            {
+                graphic = new GraphicText(txt, { fontSize: RPM.MEDIUM_FONT_SIZE });
+                this.graphicEffects.push(graphic);
+            }
+            if (effect.isDamageElement)
+            {
+                graphicIcon = await Picture2D.create(RPM.datasGame.pictures
+                    .getIcon(RPM.datasGame.battleSystem.elements[effect
+                    .damageElementID.getValue()].pictureID));
+                this.graphicElements.push(graphicIcon);
+                if (txt)
+                {
+                    graphic.elementIcon = graphicIcon;
+                }
+            }
+        }
+        this.graphicCharacteristics = [];
+        for (i = 0, l = this.skillItem.characteristics.length; i < l; i++)
+        {
+            txt = this.skillItem.characteristics[i].toString();
+            if (txt)
+            {
+                this.graphicCharacteristics.push(new GraphicText(txt, { 
+                    fontSize: RPM.MEDIUM_FONT_SIZE }));
             }
         }
     }
-    this.graphicCharacteristics = [];
-    for (i = 0, l = this.skillItem.characteristics.length; i < l; i++) {
-        txt = this.skillItem.characteristics[i].toString();
-        if (txt) {
-            this.graphicCharacteristics.push(new GraphicText(txt, { fontSize:
-                RPM.MEDIUM_FONT_SIZE }));
-        }
+
+    static async create(skillItem)
+    {
+        let graphic = new GraphicSkillItem(skillItem);
+        await RPM.tryCatch(graphic.load());
+        return graphic;
     }
-}
 
-GraphicSkillItem.prototype = {
-
-    /** Drawing the skill description.
-    *   @param {Canvas.Context} context The canvas context.
-    *   @param {number} x The x position to draw graphic.
-    *   @param {number} y The y position to draw graphic.
-    *   @param {number} w The width dimention to draw graphic.
-    *   @param {number} h The height dimention to draw graphic.
+    /** Drawing the skill description
+    *   @param {Canvas.Context} context The canvas context
+    *   @param {number} x The x position to draw graphic
+    *   @param {number} y The y position to draw graphic
+    *   @param {number} w The width dimention to draw graphic
+    *   @param {number} h The height dimention to draw graphic
     */
-    drawBox: function(x, y, w, h) {
-        var i, l, offsetY, graphic, offsetX;
-
-        offsetY = 0;
+    drawBox(x, y, w, h)
+    {
+        let offsetY = 0;
         this.graphicName.draw(x, y + offsetY, w, 0);
         offsetY += this.graphicName.getMaxHeight();
-        if (this.skillItem.hasTargetKind) {
+        if (this.skillItem.hasTargetKind)
+        {
             this.graphicTarget.draw(x, y + offsetY, w, 0);
         }
-        offsetX = x + this.graphicName.getWidth() + this.graphicName.space;
+        let offsetX = x + this.graphicName.getWidth() + this.graphicName.space;
+        let i, l, graphic;
         for (i = 0, l = this.graphicElements.length; i < l; i++) {
             graphic = this.graphicElements[i];
             graphic.draw(offsetX, y - (graphic.h / 2));
             offsetX += this.graphicElements.w + this.graphicName.space;
         }
-        if (this.skillItem.hasType) {
-            this.graphicType.draw(x + this.graphicName.textIcon.icon.w + this
+        if (this.skillItem.hasType)
+        {
+            this.graphicType.draw(x + this.graphicName.graphicIcon.w + this
                 .graphicName.space, y + offsetY, w, 0);
         }
         offsetY += RPM.MEDIUM_FONT_SIZE + RPM.LARGE_SPACE;
         this.graphicDescription.draw(x, y + offsetY, w, 0);
         offsetY += this.graphicDescription.fontSize + RPM.LARGE_SPACE;
-        for (i = 0, l = this.graphicEffects.length; i < l; i++) {
+        for (i = 0, l = this.graphicEffects.length; i < l; i++)
+        {
             graphic = this.graphicEffects[i];
             graphic.draw(x, y + offsetY, w, 0);
-            if (graphic.elementIcon) {
+            if (graphic.elementIcon)
+            {
                 graphic.elementIcon.draw(x + graphic.measureText(), y + offsetY
                     - (graphic.elementIcon.h / 2));
             }
             offsetY += graphic.fontSize + RPM.MEDIUM_SPACE;
         }
         offsetY += RPM.LARGE_SPACE;
-        for (i = 0, l = this.graphicCharacteristics.length; i < l; i++) {
+        for (i = 0, l = this.graphicCharacteristics.length; i < l; i++)
+        {
             graphic = this.graphicCharacteristics[i];
             graphic.draw(x, y + offsetY, w, 0);
             offsetY += graphic.fontSize + RPM.MEDIUM_SPACE;
