@@ -16,7 +16,7 @@
 *   @property {string} mapName The map name
 *   @property {THREE.Scene} scene The 3D scene of the map
 *   @property {Camera} camera he camera of the scene
-*   @property {Object} mapInfos General map informations (real name, name,
+*   @property {Object} mapProperties General map informations (real name, name,
 *   width, height)
 *   @property {number[][]} allObjects All the objects portions according to ID
 *   @property {MapPortion[][][]} mapPortions All the portions in the visible ray
@@ -80,7 +80,7 @@ class SceneMap extends SceneGame
             this.scene.add(RPM.BB_ORIENTED_BOX);
         }
 
-        await this.readMapInfos();
+        await this.readMapProperties();
         await this.initializeObjects();
         this.initializePortionsObjects();
         await this.loadTextures();
@@ -93,12 +93,12 @@ class SceneMap extends SceneGame
 
     /** Read the map infos file
     */
-    async readMapInfos()
+    async readMapProperties()
     {
-        this.mapInfos = new MapInfos();
+        this.mapProperties = new MapProperties();
         let json = await RPM.parseFileJSON(RPM.FILE_MAPS + this.mapName + RPM
             .FILE_MAP_INFOS);
-        this.mapInfos.read(json);
+        this.mapProperties.read(json);
 
         // Camera initialization
         if (this.isBattleMap)
@@ -106,16 +106,16 @@ class SceneMap extends SceneGame
             this.initializeCamera();
         } else
         {
-            this.camera = new Camera(this.mapInfos.cameraProperties, RPM.game
-                .hero);
+            this.camera = new Camera(this.mapProperties.cameraProperties, RPM
+                .game.hero);
             this.camera.update();
             this.currentPortion = RPM.getPortion(this.camera.threeCamera
                 .position);
-            if (this.mapInfos.skyboxGeometry !== null)
+            if (this.mapProperties.skyboxGeometry !== null)
             {
                 this.previousCameraPosition = this.camera.threeCamera.position
                     .clone();
-                this.mapInfos.skyboxGeometry.translate(this.camera.threeCamera
+                this.mapProperties.skyboxGeometry.translate(this.camera.threeCamera
                     .position.x, this.camera.threeCamera.position.y, this.camera
                     .threeCamera.position.z);
             }
@@ -153,10 +153,10 @@ class SceneMap extends SceneGame
     {
         let mapsDatas = RPM.game.mapsDatas[this.id];
         let datas = null;
-        let l = Math.ceil(this.mapInfos.length / RPM.PORTION_SIZE);
-        let w = Math.ceil(this.mapInfos.width / RPM.PORTION_SIZE);
-        let d = Math.ceil(this.mapInfos.depth / RPM.PORTION_SIZE);
-        let h = Math.ceil(this.mapInfos.height / RPM.PORTION_SIZE);
+        let l = Math.ceil(this.mapProperties.length / RPM.PORTION_SIZE);
+        let w = Math.ceil(this.mapProperties.width / RPM.PORTION_SIZE);
+        let d = Math.ceil(this.mapProperties.depth / RPM.PORTION_SIZE);
+        let h = Math.ceil(this.mapProperties.height / RPM.PORTION_SIZE);
         var objectsPortions = new Array(l);
         let i, j, jp, k, jabs;
         for (i = 0; i < l; i++)
@@ -210,7 +210,7 @@ class SceneMap extends SceneGame
     */
     async loadTextures()
     {
-        let tileset = this.mapInfos.tileset;
+        let tileset = this.mapProperties.tileset;
         let path = tileset.getPath();
         this.textureTileset = path ? (await RPM.loadTexture(path)) : RPM
             .loadTextureEmpty();
@@ -228,9 +228,9 @@ class SceneMap extends SceneGame
     loadCollisions()
     {
         // Tileset
-        if (this.mapInfos.tileset.picture && this.textureTileset.map)
+        if (this.mapProperties.tileset.picture && this.textureTileset.map)
         {
-            this.mapInfos.tileset.picture.readCollisionsImage(this
+            this.mapProperties.tileset.picture.readCollisionsImage(this
                 .textureTileset.map.image);
         }
 
@@ -259,11 +259,11 @@ class SceneMap extends SceneGame
         }
 
         // Autotiles
-        this.loadSpecialsCollision(this.mapInfos.tileset.autotiles, PictureKind
+        this.loadSpecialsCollision(this.mapProperties.tileset.autotiles, PictureKind
             .Autotiles, RPM.datasGame.specialElements.autotiles);
 
         // Walls
-        this.loadSpecialsCollision(this.mapInfos.tileset.walls, PictureKind
+        this.loadSpecialsCollision(this.mapProperties.tileset.walls, PictureKind
             .Walls, RPM.datasGame.specialElements.walls);
     }
 
@@ -280,8 +280,8 @@ class SceneMap extends SceneGame
             RPM.game.hero.changeState();
 
             // Start music and background sound
-            this.mapInfos.music.playMusic();
-            this.mapInfos.backgroundSound.playMusic();
+            this.mapProperties.music.playMusic();
+            this.mapProperties.backgroundSound.playMusic();
 
             // Background color update
             this.updateBackgroundColor();
@@ -322,10 +322,10 @@ class SceneMap extends SceneGame
     */
     async loadPortion(realX, realY, realZ, x, y, z, wait, move)
     {
-        let lx = Math.ceil(this.mapInfos.length / RPM.PORTION_SIZE);
-        let lz = Math.ceil(this.mapInfos.width / RPM.PORTION_SIZE);
-        let ld = Math.ceil(this.mapInfos.depth / RPM.PORTION_SIZE);
-        let lh = Math.ceil(this.mapInfos.height / RPM.PORTION_SIZE);
+        let lx = Math.ceil(this.mapProperties.length / RPM.PORTION_SIZE);
+        let lz = Math.ceil(this.mapProperties.width / RPM.PORTION_SIZE);
+        let ld = Math.ceil(this.mapProperties.depth / RPM.PORTION_SIZE);
+        let lh = Math.ceil(this.mapProperties.height / RPM.PORTION_SIZE);
         let mapPortion = null;
         if (realX >= 0 && realX < lx && realY >= -ld && realY < lh &&
             realZ >= 0 && realZ < lz)
@@ -474,8 +474,8 @@ class SceneMap extends SceneGame
 
     isInMap(position)
     {
-        return (position[0] >= 0 && position[0] < this.mapInfos.length &&
-                position[2] >= 0 && position[2] < this.mapInfos.width);
+        return (position[0] >= 0 && position[0] < this.mapProperties.length &&
+                position[2] >= 0 && position[2] < this.mapProperties.width);
     }
 
     // -------------------------------------------------------
@@ -491,8 +491,8 @@ class SceneMap extends SceneGame
 
     updateBackgroundColor()
     {
-        this.mapInfos.updateBackgroundColor();
-        RPM.updateBackgroundColor(this.mapInfos.backgroundColor);
+        this.mapProperties.updateBackgroundColor();
+        RPM.updateBackgroundColor(this.mapProperties.backgroundColor);
     }
 
     loadSpecialsCollision(list, kind, specials)
@@ -649,10 +649,10 @@ class SceneMap extends SceneGame
     updatePortions(base, callback)
     {
         let limit = this.getMapPortionLimit();
-        let lx = Math.ceil(this.mapInfos.length / RPM.PORTION_SIZE);
-        let lz = Math.ceil(this.mapInfos.width / RPM.PORTION_SIZE);
-        let ld = Math.ceil(this.mapInfos.depth / RPM.PORTION_SIZE);
-        let lh = Math.ceil(this.mapInfos.height / RPM.PORTION_SIZE);
+        let lx = Math.ceil(this.mapProperties.length / RPM.PORTION_SIZE);
+        let lz = Math.ceil(this.mapProperties.width / RPM.PORTION_SIZE);
+        let ld = Math.ceil(this.mapProperties.depth / RPM.PORTION_SIZE);
+        let lh = Math.ceil(this.mapProperties.height / RPM.PORTION_SIZE);
         let i, j, k, x, y, z;
         for (i = -limit; i <= limit; i++)
         {
@@ -687,7 +687,7 @@ class SceneMap extends SceneGame
         {
             let posDif = this.camera.threeCamera.position.clone().sub(this
                 .previousCameraPosition);
-            this.mapInfos.skyboxGeometry.translate(posDif.x, posDif.y, posDif.z);
+            this.mapProperties.skyboxGeometry.translate(posDif.x, posDif.y, posDif.z);
             this.previousCameraPosition = this.camera.threeCamera.position.clone();
         }
 
@@ -698,7 +698,7 @@ class SceneMap extends SceneGame
 
         if (!this.isBattleMap) 
         {
-            this.mapInfos.startupObject.update();
+            this.mapProperties.startupObject.update();
 
             // Update the objects
             RPM.game.hero.update(angle);
@@ -750,7 +750,6 @@ class SceneMap extends SceneGame
 
     onKeyPressedRepeat(key)
     {
-        console.log(this.loading)
         if (!this.loading)
         {
             if (!RPM.blockingHero)
@@ -785,10 +784,10 @@ class SceneMap extends SceneGame
     draw3D()
     {
         RPM.renderer.clear();
-        if (this.mapInfos.sceneBackground !== null)
+        if (this.mapProperties.sceneBackground !== null)
         {
-            RPM.renderer.render(this.mapInfos.sceneBackground, this.mapInfos
-                .cameraBackground);
+            RPM.renderer.render(this.mapProperties.sceneBackground, this
+                .mapProperties.cameraBackground);
         }
         RPM.renderer.render(this.scene, this.camera.threeCamera);
     }
@@ -798,10 +797,10 @@ class SceneMap extends SceneGame
     */
     close()
     {
-        let l = Math.ceil(this.mapInfos.length / RPM.PORTION_SIZE);
-        let w = Math.ceil(this.mapInfos.width / RPM.PORTION_SIZE);
-        let d = Math.ceil(this.mapInfos.depth / RPM.PORTION_SIZE);
-        let h = Math.ceil(this.mapInfos.height / RPM.PORTION_SIZE);
+        let l = Math.ceil(this.mapProperties.length / RPM.PORTION_SIZE);
+        let w = Math.ceil(this.mapProperties.width / RPM.PORTION_SIZE);
+        let d = Math.ceil(this.mapProperties.depth / RPM.PORTION_SIZE);
+        let h = Math.ceil(this.mapProperties.height / RPM.PORTION_SIZE);
         let objectsPortions = RPM.game.mapsDatas[this.id];
         let i, j, k, portion;
         for (i = 0; i < l; i++)

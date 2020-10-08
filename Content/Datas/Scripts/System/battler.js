@@ -83,7 +83,7 @@ function Battler(character, position, camera) {
         this.width = Math.floor(material.map.image.width / RPM.SQUARE_SIZE / RPM.FRAMES);
         this.height = Math.floor(material.map.image.height / RPM.SQUARE_SIZE /
             RPM.BATLLER_STEPS);
-        var sprite = new Sprite(ElementMapKind.SpritesFace, [0, 0, this.width,
+        var sprite = Sprite.create(ElementMapKind.SpritesFace, [0, 0, this.width,
             this.height]);
         var geometry = sprite.createGeometry(this.width, this.height, false,
             this.position)[0];

@@ -9,76 +9,71 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS Land
-//
-// -------------------------------------------------------
-
 /** @class
-*   A land in the map.
-*   @property {number[]} texture Texture rect of the land.
+*   A land in the map
+*   @property {number[]} texture Texture rect of the land
 */
-function Land() {
-    MapElement.call(this);
+class Land extends MapElement
+{
+    constructor()
+    {
+        super();
+        this.up = true;
+    }
 
-    this.up = true;
-}
-
-Land.prototype = {
-
-    /** Read the JSON associated to the land.
-    *   @param {Object} json Json object describing the object.
+    /** Read the JSON associated to the land
+    *   @param {Object} json Json object describing the object
     */
-    read: function(json) {
-        MapElement.prototype.read.call(this, json);
+    read(json)
+    {
+        super.read(json);
 
-        var up = json.up;
+        this.up = json.up;
         this.texture = json.t;
-
-        if (this.texture.length === 2) {
-            this.texture.push(1); this.texture.push(1);
+        if (this.texture.length === 2)
+        {
+            this.texture.push(1);
+            this.texture.push(1);
         }
+    }
 
-        if (typeof(up) !== 'undefined')
-            this.up = up;
-    },
-
-    /** Return the rect index.
+    /** Return the rect index
     *   @returns {number}
     */
-    getIndex: function(width) {
+    getIndex(width)
+    {
         return this.texture[0] + (this.texture[1] * width);
-    },
+    }
 
     /** Update the geometry associated to this land.
     *   @returns {THREE.Geometry}
     */
-    updateGeometry: function(geometry, collision, position, width, height, x, y,
-                             w, h, i)
+    updateGeometry(geometry, collision, position, width, height, x, y, w, h, i)
     {
-        var localPosition = RPM.positionToBorderVector3(position);
-        var a = localPosition.x;
-        var yLayerOffset = RPM.positionLayer(position) * 0.05;
+        let localPosition = RPM.positionToBorderVector3(position);
+        let a = localPosition.x;
+        let yLayerOffset = RPM.positionLayer(position) * 0.05;
         if (!this.up)
+        {
             yLayerOffset *= -1;
-        var b = localPosition.y + yLayerOffset;
-        var c = localPosition.z;
-        var objCollision = null;
+        }
+        let b = localPosition.y + yLayerOffset;
+        let c = localPosition.z;
+        let objCollision = null;
 
         // Vertices
         geometry.vertices.push(new THREE.Vector3(a, b, c));
         geometry.vertices.push(new THREE.Vector3(a + RPM.SQUARE_SIZE, b, c));
-        geometry.vertices.push(new THREE.Vector3(a + RPM.SQUARE_SIZE, b,
-                                                 c + RPM.SQUARE_SIZE));
+        geometry.vertices.push(new THREE.Vector3(a + RPM.SQUARE_SIZE, b, c + RPM
+            .SQUARE_SIZE));
         geometry.vertices.push(new THREE.Vector3(a, b, c + RPM.SQUARE_SIZE));
-        var j = i * 4;
+        let j = i * 4;
         geometry.faces.push(new THREE.Face3(j, j + 1, j + 2));
         geometry.faces.push(new THREE.Face3(j, j + 2, j + 3));
 
         // Texture
-        var coefX = RPM.COEF_TEX / width;
-        var coefY = RPM.COEF_TEX / height;
+        let coefX = RPM.COEF_TEX / width;
+        let coefY = RPM.COEF_TEX / height;
         x += coefX;
         y += coefY;
         w -= (coefX * 2);
@@ -95,11 +90,13 @@ Land.prototype = {
         ]);
 
         // Collision
-        if (collision !== null) {
-            var rect = collision.rect;
-
-            if (!collision.hasAllDirections()) {
-                if (rect === null) {
+        if (collision !== null)
+        {
+            let rect = collision.rect;
+            if (!collision.hasAllDirections())
+            {
+                if (rect === null)
+                {
                     rect = [
                         a  + RPM.SQUARE_SIZE / 2,
                         b + 0.5,
@@ -110,7 +107,6 @@ Land.prototype = {
                         0
                     ]
                 }
-
                 objCollision = {
                     p: position,
                     l: localPosition,
@@ -118,7 +114,8 @@ Land.prototype = {
                     c: collision
                 }
             }
-            else if (rect !== null) {
+            else if (rect !== null)
+            {
                 objCollision = {
                     p: position,
                     l: localPosition,
@@ -135,7 +132,6 @@ Land.prototype = {
                 }
             }
         }
-
         return objCollision;
     }
 }

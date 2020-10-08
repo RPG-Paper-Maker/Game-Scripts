@@ -270,7 +270,6 @@ ReactionInterpreter.prototype = {
     },
 
     // -------------------------------------------------------
-
     /**
     */
     updateObjectMoveState: function() {

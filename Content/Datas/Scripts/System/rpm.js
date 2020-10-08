@@ -1627,7 +1627,7 @@ RPM.tryCatch = async function(func)
         return await func;
     } catch(e)
     {
-        window.onerror(null, null, null, null, e);
+        window.onerror(e.message, e.fileName, e.lineNumber, null, e);
     }
 }
 

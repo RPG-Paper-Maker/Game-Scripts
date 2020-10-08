@@ -410,7 +410,7 @@ EventCommandChangeState.prototype = {
                 {
                     currentState.map = new SceneMap(currentState.mapID, false, 
                         true);
-                    currentState.map.readMapInfos();
+                    currentState.map.readMapProperties();
                     currentState.map.initializeObjects();
                 }
             }
@@ -3052,7 +3052,7 @@ EventCommandChangeScreenTone.prototype.update = function(currentState, object,
             .finalDifBlue));
         RPM.screenTone.setW(RPM.screenTone.w + (timeRate * currentState
             .finalDifGrey));
-        RPM.updateBackgroundColor(RPM.currentMap.mapInfos.backgroundColor);
+        RPM.updateBackgroundColor(RPM.currentMap.mapProperties.backgroundColor);
 
         // If time = 0, then this is the end of the command
         if (currentState.timeLeft === 0) {

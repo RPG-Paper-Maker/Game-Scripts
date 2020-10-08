@@ -9,26 +9,22 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS MapInfos
-//
-// -------------------------------------------------------
-
 /** @class
-*   The properties of a map.
+*   The properties of a map
 */
-function MapInfos() {
-    this.sceneBackground = null;
-    this.skyboxGeometry = null;
-}
+class MapProperties
+{
+    constructor()
+    {
+        this.sceneBackground = null;
+        this.skyboxGeometry = null;
+    }
 
-MapInfos.prototype = {
-
-    /** Read the JSON associated to the map infos.
-    *   @param {Object} json Json object describing the object.
+    /** Read the JSON associated to the map infos
+    *   @param {Object} json Json object describing the object
     */
-    read: function(json) {
+    read(json)
+    {
         this.id = json.id;
         this.name = json.name;
         this.length = json.l;
@@ -38,22 +34,20 @@ MapInfos.prototype = {
 
         // Tileset: if not existing, by default select the first one
         this.tileset = RPM.datasGame.tilesets.list[json.tileset];
-        if (!this.tileset) {
+        if (!this.tileset)
+        {
             this.tileset = RPM.datasGame.tilesets.list[1];
         }
-
-        this.music = new SystemPlaySong(SongKind.Music);
-        this.music.read(json.music);
-        this.backgroundSound = new SystemPlaySong(SongKind.BackgroundSound);
-        this.backgroundSound.read(json.bgs);
-        this.cameraProperties = RPM.datasGame.system.cameraProperties[SystemValue
-            .readOrDefaultDatabase(json.cp, 1).getValue()];
+        this.music = new SystemPlaySong(SongKind.Music, json.music);
+        this.backgroundSound = new SystemPlaySong(SongKind.BackgroundSound, json
+            .bgs);
+        this.cameraProperties = RPM.datasGame.system.cameraProperties[
+            SystemValue.readOrDefaultDatabase(json.cp, 1).getValue()];
         this.isBackgroundColor = json.isky;
         this.isBackgroundImage = json.isi;
         if (this.isBackgroundColor)
         {
-            this.backgroundColorID = new SystemValue();
-            this.backgroundColorID.read(json.sky);
+            this.backgroundColorID = new SystemValue(json.sky);
         } else if (this.isBackgroundImage)
         {
             this.backgroundImageID = json.ipid;
@@ -65,19 +59,18 @@ MapInfos.prototype = {
             this.updateBackgroundSkybox();
         }
         this.updateBackgroundColor();
-        var startupReactions = new SystemObject();
-        startupReactions.read(json.so);
+        var startupReactions = new SystemObject(json.so);
         this.startupObject = new MapObject(startupReactions);
         this.startupObject.changeState();
-    },
+    }
 
-    updateBackgroundColor: function() 
+    updateBackgroundColor() 
     {
         this.backgroundColor = RPM.datasGame.system.colors[this
             .isBackgroundColor ? this.backgroundColorID.getValue() : 1];
-    },
+    }
 
-    updateBackgroundImage: function() 
+    updateBackgroundImage() 
     {
         let bgMat = RPM.createMaterial(RPM.textureLoader.load(RPM.datasGame
             .pictures.get(PictureKind.Pictures, this.backgroundImageID)
@@ -88,14 +81,14 @@ MapInfos.prototype = {
         this.cameraBackground = new THREE.Camera();
         this.sceneBackground.add(new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 
             2), bgMat));
-    },
+    }
 
-    updateBackgroundSkybox: function() 
+    updateBackgroundSkybox() 
     {
         let size = 10000 * RPM.SQUARE_SIZE / RPM.BASIC_SQUARE_SIZE;
         this.skyboxGeometry = new THREE.BoxGeometry(size, size, size);
-        let bgMesh = new THREE.Mesh(this.skyboxGeometry, RPM.datasGame.system
-            .skyboxes[this.backgroundSkyboxID.getValue()].createTextures());
-        RPM.currentMap.scene.add(bgMesh);
+        RPM.currentMap.scene.add(new THREE.Mesh(this.skyboxGeometry, RPM
+            .datasGame.system.skyboxes[this.backgroundSkyboxID.getValue()]
+            .createTextures()));
     }
 }

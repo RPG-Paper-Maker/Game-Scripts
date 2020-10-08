@@ -18,17 +18,20 @@ const app = remote.app;
 
 window.onerror = function (msg, url, line, column, err)
 {
+    if (Platform.error)
+    {
+        return;
+    }
+    Platform.error = true;
     let str = "";
-
     if (err.stack != null) 
     {
-        str += err.stack;
+        str += url + ": " + line + "\n" + err.stack;
     } else if (err.message != null) 
     {
-        str += err.message;
+        str += url + ": " + line + "\n" + err.message;
     }
     const fs = require('fs');
-
     fs.writeFile("log.txt", "ERROR LOG:\n\n" + str, (e) => {
         if (e)
         {
@@ -46,6 +49,7 @@ function Platform()
 }
 
 Platform.ROOT_DIRECTORY = app.getAppPath();
+Platform.error = false;
 Platform.screen = Screen.getPrimaryDisplay();
 Platform.screenWidth = Platform.screen.bounds.width;
 Platform.screenHeight = Platform.screen.bounds.height;

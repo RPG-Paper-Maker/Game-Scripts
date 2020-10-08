@@ -118,7 +118,7 @@ SceneBattle.prototype = Object.create(SceneMap.prototype);
 /** Initialize and correct some camera settings for the battle start.
 */
 SceneBattle.prototype.initializeCamera = function() {
-    this.camera = new Camera(this.mapInfos.cameraProperties, RPM.game.heroBattle);
+    this.camera = new Camera(this.mapProperties.cameraProperties, RPM.game.heroBattle);
     this.cameraStep = 0;
     this.cameraTick = SceneBattle.CAMERA_TICK;
     this.cameraOffset = SceneBattle.CAMERA_OFFSET;
@@ -242,7 +242,6 @@ SceneBattle.prototype.endBattle = function() {
         this.battlers[CharacterKind.Hero][i].removeFromScene();
     }
 
-    RPM.currentMap.closeMap();
     RPM.gameStack.pop();
     RPM.currentMap = RPM.gameStack.top;
 };

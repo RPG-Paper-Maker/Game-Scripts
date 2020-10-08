@@ -9,65 +9,67 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS Object3DCustom
-//
-// -------------------------------------------------------
-
 /** @class
-*   A 3D object custom in the map.
+*   A 3D object custom in the map
 */
-function Object3DCustom() {
-    MapElement.call(this);
-}
+class Object3DCustom extends MapElement
+{
+    constructor(json, datas)
+    {
+        super();
 
-Object3DCustom.prototype = {
+        if (json)
+        {
+            this.read(json, datas);
+        }
+    }
 
-    read: function(json, datas) {
-        MapElement.prototype.read.call(this, json);
+    read(json, datas)
+    {
+        super.read(json);
 
         this.id = datas.id;
         this.datas = datas;
-    },
+    }
 
-    /** Update the geometry of a group of sprite walls with the same material.
-    *   @param {THREE.Geometry} geometry of the sprites walls.
-    *   @param {number[]} position The position of the wall.
+    /** Update the geometry of a group of sprite walls with the same material
+    *   @param {THREE.Geometry} geometry of the sprites walls
+    *   @param {number[]} position The position of the wall
     *   @return {number}
     */
-    updateGeometry: function(geometry, position, c) {
-        var i, j, l, vecA, vecB, vecC, face, localPosition, size,
-            modelGeometry, vertices, uvs, objCollision, obj, w, h, d,
-            minPos, scale, scaleVec, angleY, angleX, angleZ, center;
-
-        localPosition = RPM.positionToVector3(position);
-        modelGeometry = RPM.datasGame.shapes.get(CustomShapeKind.OBJ, this.datas
-            .objID).geometry;
-        vertices = modelGeometry.vertices;
-        uvs = modelGeometry.uvs;
-        center = modelGeometry.center;
-        scale = this.datas.scale;
-        scaleVec = new THREE.Vector3(scale, scale, scale);
-        l = modelGeometry.vertices.length;
-        angleY = RPM.positionAngleY(position);
-        angleX = RPM.positionAngleX(position);
-        angleZ = RPM.positionAngleZ(position);
-        for (i = 0, j = 0; i < l; i += 3) {
+    updateGeometry(geometry, position, c)
+    {
+        let localPosition = RPM.positionToVector3(position);
+        let modelGeometry = RPM.datasGame.shapes.get(CustomShapeKind.OBJ, this
+            .datas.objID).geometry;
+        let vertices = modelGeometry.vertices;
+        let uvs = modelGeometry.uvs;
+        let center = modelGeometry.center;
+        let scale = this.datas.scale;
+        let scaleVec = new THREE.Vector3(scale, scale, scale);
+        let angleY = RPM.positionAngleY(position);
+        let angleX = RPM.positionAngleX(position);
+        let angleZ = RPM.positionAngleZ(position);
+        let vecA, vecB, vecC, face;
+        for (let i = 0, l = modelGeometry.vertices.length; i < l; i += 3)
+        {
             vecA = vertices[i].clone();
             vecB = vertices[i + 1].clone();
             vecC = vertices[i + 2].clone();
-            if (angleY !== 0.0) {
+            if (angleY !== 0.0)
+            {
                 Sprite.rotateVertex(vecA, center, angleY, Sprite.Y_AXIS);
                 Sprite.rotateVertex(vecB, center, angleY, Sprite.Y_AXIS);
                 Sprite.rotateVertex(vecC, center, angleY, Sprite.Y_AXIS);
             }
-            if (angleX !== 0.0) {
+            if (angleX !== 0.0)
+            {
                 Sprite.rotateVertex(vecA, center, angleX, Sprite.X_AXIS);
                 Sprite.rotateVertex(vecB, center, angleX, Sprite.X_AXIS);
                 Sprite.rotateVertex(vecC, center, angleX, Sprite.X_AXIS);
             }
-            if (angleZ !== 0.0) {
+            if (angleZ !== 0.0)
+            {
                 Sprite.rotateVertex(vecA, center, angleZ, Sprite.Z_AXIS);
                 Sprite.rotateVertex(vecB, center, angleZ, Sprite.Z_AXIS);
                 Sprite.rotateVertex(vecC, center, angleZ, Sprite.Z_AXIS);
@@ -92,13 +94,14 @@ Object3DCustom.prototype = {
         }
 
         // Collisions
-        objCollision = new Array;
-        if (this.datas.collisionKind === ObjectCollisionKind.Simplified) {
-            obj = this.datas.getObj().geometry;
-            w = obj.w * scale;
-            h = obj.h * scale;
-            d = obj.d * scale;
-            minPos = obj.minVertex.clone();
+        let objCollision = new Array;
+        if (this.datas.collisionKind === ObjectCollisionKind.Simplified)
+        {
+            let obj = this.datas.getObj().geometry;
+            let w = obj.w * scale;
+            let h = obj.h * scale;
+            let d = obj.d * scale;
+            let minPos = obj.minVertex.clone();
             minPos.multiply(scaleVec);
 
             objCollision.push({
@@ -125,7 +128,6 @@ Object3DCustom.prototype = {
                 k: true
             });
         }
-
         return [c, objCollision];
     }
 }
