@@ -18,18 +18,13 @@ const app = remote.app;
 
 window.onerror = function (msg, url, line, column, err)
 {
-    if (Platform.error)
-    {
-        return;
-    }
-    Platform.error = true;
-    let str = "";
+    let str = url ? url + ": " + line + "\n" : "";
     if (err.stack != null) 
     {
-        str += url + ": " + line + "\n" + err.stack;
+        str += err.stack;
     } else if (err.message != null) 
     {
-        str += url + ": " + line + "\n" + err.message;
+        str += err.message;
     }
     const fs = require('fs');
     fs.writeFile("log.txt", "ERROR LOG:\n\n" + str, (e) => {

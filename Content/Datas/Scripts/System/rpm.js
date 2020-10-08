@@ -1627,7 +1627,7 @@ RPM.tryCatch = async function(func)
         return await func;
     } catch(e)
     {
-        window.onerror(e.message, e.fileName, e.lineNumber, null, e);
+        window.onerror(null, null, null, null, e);
     }
 }
 
@@ -1792,17 +1792,18 @@ RPM.draw3D = function()
 RPM.drawHUD = function()
 {
     if (RPM.requestPaintHUD)
-    {
-        RPM.requestPaintHUD = false;
+    { 
         if (RPM.gameStack.isLoading() && RPM.loadingScene) 
         {
             RPM.loadingDelay += RPM.elapsedTime;
             if (RPM.loadingDelay >= RPM.LOADING_MIN_DELAY)
             {
+                RPM.requestPaintHUD = false;
                 RPM.loadingScene.drawHUD();
             }
         } else
         {
+            RPM.requestPaintHUD = false;
             RPM.loadingDelay = 0;
             RPM.clearHUD();
             RPM.gameStack.drawHUD();

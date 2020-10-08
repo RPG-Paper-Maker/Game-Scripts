@@ -62,6 +62,7 @@ class GraphicText extends Bitmap
         {})
     {
         super(x, y, w, h);
+        this.firstText = text;
 
         // Parameters
         this.align = align;
@@ -74,7 +75,7 @@ class GraphicText extends Bitmap
         this.strokeColor = strokeColor;
 
         this.setFontSize(fontSize);
-        this.setText(RPM.defaultValue(text, ""));
+        this.setText(RPM.defaultValue(text, RPM.STRING_EMPTY));
     }
 
     // -------------------------------------------------------

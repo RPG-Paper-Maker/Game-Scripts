@@ -9,12 +9,6 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS GraphicPlayer
-//
-// -------------------------------------------------------
-
 /** @class
 *   The graphic displaying the player minimal stats informations.
 *   @property {GraphicText} graphicName The player's name graphic.
@@ -28,126 +22,149 @@
 *   @property {number} maxStatNamesLength The max length of the stats for each column.
 *   @param {GamePlayer} gamePlayer The current selected player.
 */
-function GraphicPlayer(gamePlayer, reverse) {
-    var character, cl, levelStat, expStat, id, statistic, textName, text, c, txt;
-
-    this.gamePlayer = gamePlayer;
-    this.reverse = reverse;
-
-    // Informations
-    character = gamePlayer.getCharacterInformations();
-    cl = RPM.datasGame.classes.list[character.idClass];
-    levelStat = RPM.datasGame.battleSystem.getLevelStatistic();
-    expStat = RPM.datasGame.battleSystem.getExpStatistic();
-
-    // All the graphics
-    this.graphicName = new GraphicText(character.name);
-    this.graphicClass = new GraphicText(cl.name, { fontSize: 10 });
-    this.graphicLevelName = new GraphicText(levelStat.name);
-    this.graphicLevel = new GraphicText("" + gamePlayer[levelStat.abbreviation]);
-    if (expStat === null)
+class GraphicPlayer
+{
+    constructor(gamePlayer, reverse = false)
     {
-        this.graphicExpName = null;
-    } else
-    {
-        this.graphicExpName = new GraphicText(expStat.name, { fontSize: RPM
-            .MEDIUM_FONT_SIZE });
-        this.graphicExp = new GraphicText(gamePlayer.getBarAbbreviation(expStat),
-            { fontSize: RPM.MEDIUM_FONT_SIZE });
+        this.gamePlayer = gamePlayer;
+        this.reverse = reverse;
     }
+    
+    async load()
+    {
+        // Informations
+        let character = this.gamePlayer.getCharacterInformations();
+        let cl = RPM.datasGame.classes.list[character.idClass];
+        let levelStat = RPM.datasGame.battleSystem.getLevelStatistic();
+        let expStat = RPM.datasGame.battleSystem.getExpStatistic();
 
-    // Adding stats
-    this.listStatsNames = [];
-    this.listStats = [];
-    this.maxStatNamesLength = 0;
-    this.maxStatLength = 0;
-    var i, l = RPM.datasGame.battleSystem.statisticsOrder.length;
-    for (i = 0; i < l; i++) {
-        id = RPM.datasGame.battleSystem.statisticsOrder[i];
-        if (id !== RPM.datasGame.battleSystem.idLevelStatistic && id !== RPM.datasGame
-            .battleSystem.idExpStatistic)
+        // All the graphics
+        this.graphicName = new GraphicText(character.name);
+        this.graphicClass = new GraphicText(cl.name(), { fontSize: 10 });
+        this.graphicLevelName = new GraphicText(levelStat.name);
+        this.graphicLevel = new GraphicText(RPM.numToString(this.gamePlayer[
+            levelStat.abbreviation]));
+        if (expStat === null)
         {
-            statistic = RPM.datasGame.battleSystem.statistics[id];
+            this.graphicExpName = null;
+        } else
+        {
+            this.graphicExpName = new GraphicText(expStat.name, { fontSize: RPM
+                .MEDIUM_FONT_SIZE });
+            this.graphicExp = new GraphicText(this.gamePlayer.getBarAbbreviation
+                (expStat), { fontSize: RPM.MEDIUM_FONT_SIZE });
+        }
 
-            // Only display bars
-            if (!statistic.isFix) {
-                textName = new GraphicText(statistic.name + ":");
-                Platform.ctx.font = textName.font;
-                textName.updateContextFont(Platform.ctx);
-                c = Platform.ctx.measureText(textName.text).width;
-                if (c > this.maxStatNamesLength) {
-                    this.maxStatNamesLength = c;
-                }
-                this.listStatsNames.push(textName);
-                txt = "" + gamePlayer[statistic.abbreviation];
+        // Adding stats
+        this.listStatsNames = [];
+        this.listStats = [];
+        this.maxStatNamesLength = 0;
+        this.maxStatLength = 0;
+        let id, statistic, textName, c, txt, text;
+        for (let i = 0, l = RPM.datasGame.battleSystem.statisticsOrder.length; i
+            < l; i++)
+        {
+            id = RPM.datasGame.battleSystem.statisticsOrder[i];
+            if (id !== RPM.datasGame.battleSystem.idLevelStatistic && id !== RPM
+                .datasGame.battleSystem.idExpStatistic)
+            {
+                statistic = RPM.datasGame.battleSystem.statistics[id];
+
+                // Only display bars
                 if (!statistic.isFix)
-                    txt += "/" + gamePlayer[statistic.getMaxAbbreviation()];
-                text = new GraphicText(txt);
-                c = Platform.ctx.measureText(text.text).width;
-                if (c > this.maxStatNamesLength) {
-                    this.maxStatLength = c;
+                {
+                    textName = new GraphicText(statistic.name + RPM.STRING_COLON);
+                    Platform.ctx.font = textName.font;
+                    textName.updateContextFont(Platform.ctx);
+                    c = Platform.ctx.measureText(textName.text).width;
+                    if (c > this.maxStatNamesLength)
+                    {
+                        this.maxStatNamesLength = c;
+                    }
+                    this.listStatsNames.push(textName);
+                    txt = RPM.numToString(this.gamePlayer[statistic.abbreviation]);
+                    if (!statistic.isFix)
+                    {
+                        txt += RPM.STRING_SLASH + this.gamePlayer[statistic
+                            .getMaxAbbreviation()];
+                    }
+                    text = new GraphicText(txt);
+                    c = Platform.ctx.measureText(text.text).width;
+                    if (c > this.maxStatNamesLength)
+                    {
+                        this.maxStatLength = c;
+                    }
+                    this.listStats.push(text);
                 }
-                this.listStats.push(text);
             }
         }
-    }
 
-    // Faceset
-    this.faceset = Picture2D.create(RPM.datasGame.pictures.get(PictureKind
-        .Facesets, character.idFaceset), PictureKind.Facesets, function() {
-        if (reverse) {
-            this.setLeft();
-        } else {
-            this.setRight();
-        }
-        this.setBot(RPM.datasGame.system.getWindowSkin().borderBotRight[3]);
-    });
-    this.faceset.reverse = reverse;
-
-    // Battler
-    this.battler = Picture2D.create(RPM.datasGame.pictures.get(PictureKind
-        .Battlers, character.idBattler), PictureKind.Battlers);
-    this.battlerFrame = 0;
-    this.battlerFrameTick = 0;
-    this.battlerFrameDuration = 250;
-
-    // Level up
-    this.graphicLevelUp = new GraphicText("Level up!");
-
-    this.displayNameLevel = true;
-}
-
-GraphicPlayer.prototype = {
-
-    updateReverse: function(reverse) {
-        if (reverse) {
+        // Faceset
+        this.faceset = await Picture2D.create(RPM.datasGame.pictures.get(
+            PictureKind.Facesets, character.idFaceset));
+        if (this.reverse)
+        {
             this.faceset.setLeft();
         } else {
             this.faceset.setRight();
         }
+        this.faceset.setBot(RPM.datasGame.system.getWindowSkin().borderBotRight[3]);
+        this.faceset.reverse = this.reverse;
+
+        // Battler
+        this.battler = await Picture2D.create(RPM.datasGame.pictures.get(
+            PictureKind.Battlers, character.idBattler), PictureKind.Battlers);
+        this.battlerFrame = 0;
+        this.battlerFrameTick = 0;
+        this.battlerFrameDuration = 250;
+
+        // Level up
+        this.graphicLevelUp = new GraphicText("Level up!");
+
+        this.displayNameLevel = true;
+    }
+
+    static async create(gamePlayer, reverse = false)
+    {
+        let graphic = new GraphicPlayer(gamePlayer, reverse);
+        await RPM.tryCatch(graphic.load());
+        return graphic;
+    }
+
+    updateReverse(reverse)
+    {
+        if (reverse)
+        {
+            this.faceset.setLeft();
+        } else
+        {
+            this.faceset.setRight();
+        }
         this.faceset.reverse = reverse;
         this.reverse = reverse;
-    },
+    }
 
     // -------------------------------------------------------
 
-    update: function() {
-        var character, cl, levelStat, id, statistic, txt;
-
+    update()
+    {
         // Informations
-        character = this.gamePlayer.getCharacterInformations();
-        cl = RPM.datasGame.classes.list[character.idClass];
-        levelStat = RPM.datasGame.battleSystem.getLevelStatistic();
+        let character = this.gamePlayer.getCharacterInformations();
+        let cl = RPM.datasGame.classes.list[character.idClass];
+        let levelStat = RPM.datasGame.battleSystem.getLevelStatistic();
 
         // All the graphics
         this.graphicName.setText(character.name);
         this.graphicClass.setText(cl.name);
         this.graphicLevelName.setText(levelStat.name);
-        this.graphicLevel.setText("" + this.gamePlayer[levelStat.abbreviation]);
+        this.graphicLevel.setText(RPM.numToString(this.gamePlayer[levelStat
+            .abbreviation]));
 
         // Adding stats
-        var i, j = 0, l = RPM.datasGame.battleSystem.statisticsOrder.length;
-        for (i = 0; i < l; i++) {
+        let id, statistic, txt;
+        for (let i = 0, j = 0, l = RPM.datasGame.battleSystem.statisticsOrder
+            .length; i < l; i++)
+        {
             id = RPM.datasGame.battleSystem.statisticsOrder[i];
             if (id !== RPM.datasGame.battleSystem.idLevelStatistic && id !==
                 RPM.datasGame.battleSystem.idExpStatistic)
@@ -155,87 +172,89 @@ GraphicPlayer.prototype = {
                 statistic = RPM.datasGame.battleSystem.statistics[id];
 
                 // Only display bars
-                if (!statistic.isFix){
-                    txt = "" + this.gamePlayer[statistic.abbreviation];
-                    if (!statistic.isFix) {
-                        txt += "/" + this.gamePlayer["max" + statistic
-                            .abbreviation];
+                if (!statistic.isFix)
+                {
+                    txt = RPM.numToString(this.gamePlayer[statistic.abbreviation]);
+                    if (!statistic.isFix)
+                    {
+                        txt += RPM.STRING_SLASH + this.gamePlayer[statistic
+                            .getMaxAbbreviation()];
                     }
                     this.listStats[j++].setText(txt);
                 }
             }
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    updateExperience: function() {
-        this.graphicLevel.setText("" + this.gamePlayer[RPM.datasGame.battleSystem
-            .getLevelStatistic().abbreviation]);
-        this.graphicExp.setText("" + this.gamePlayer.getBarAbbreviation(RPM.datasGame
-            .battleSystem.getExpStatistic()));
-    },
+    updateExperience()
+    {
+        this.graphicLevel.setText(RPM.numToString(this.gamePlayer[RPM.datasGame
+            .battleSystem.getLevelStatistic().abbreviation]));
+        this.graphicExp.setText(RPM.numToString(this.gamePlayer
+            .getBarAbbreviation(RPM.datasGame.battleSystem.getExpStatistic())));
+    }
 
     // -------------------------------------------------------
 
-    initializeCharacter: function(noDisplayNameLevel) {
-        if (noDisplayNameLevel) {
+    initializeCharacter(noDisplayNameLevel)
+    {
+        if (noDisplayNameLevel)
+        {
             this.displayNameLevel = false;
         }
-
         this.graphicName.setFontSize(RPM.MEDIUM_FONT_SIZE);
         this.graphicLevelName.setFontSize(RPM.MEDIUM_FONT_SIZE);
         this.graphicLevel.setFontSize(RPM.MEDIUM_FONT_SIZE);
-        var i, l = this.listStatsNames.length;
-        for (i = 0; i < l; i++){
+        for (let i = 0, l = this.listStatsNames.length; i < l; i++)
+        {
             this.listStatsNames[i].setFontSize(RPM.SMALL_FONT_SIZE);
             this.listStats[i].setFontSize(RPM.SMALL_FONT_SIZE);
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    updateBattler: function() {
-        var frame = this.battlerFrame;
+    updateBattler()
+    {
+        let frame = this.battlerFrame;
         this.battlerFrameTick += RPM.elapsedTime;
-        if (this.battlerFrameTick >= this.battlerFrameDuration) {
+        if (this.battlerFrameTick >= this.battlerFrameDuration)
+        {
             this.battlerFrame = (this.battlerFrame + 1) % RPM.FRAMES;
             this.battlerFrameTick = 0;
         }
-        if (frame !== this.battlerFrame) {
+        if (frame !== this.battlerFrame) 
+        {
             RPM.requestPaintHUD = true;
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    drawCharacter: function(x, y, w, h) {
-        var yName, xLevelName, xLevel, yStats, xStat, yStat, wName, wLevelName,
-            wLevel, wStats, wStat, firstLineLength, xOffset, fontSize, coef,
-            wBattler, hBattler;
-
+    drawCharacter(x, y, w, h)
+    {
         // Measure widths
         Platform.ctx.font = this.graphicName.font;
-        wName = Platform.ctx.measureText(this.graphicName.text).width;
-        wLevelName = Platform.ctx.measureText(this.graphicLevelName.text).width;
-        wLevel = Platform.ctx.measureText(this.graphicLevelName.text).width;
-        xLevelName = x + wName + 10;
-        xLevel = xLevelName + wLevelName;
-        firstLineLength = xLevel + Platform.ctx.measureText(this.graphicLevel.text)
+        let wName = Platform.ctx.measureText(this.graphicName.text).width;
+        let wLevelName = Platform.ctx.measureText(this.graphicLevelName.text)
             .width;
+        let xLevelName = x + wName + 10;
+        let xLevel = xLevelName + wLevelName;
 
         // Battler
-        yName = y + 100;
-        coef = RPM.BASIC_SQUARE_SIZE / RPM.SQUARE_SIZE;
-        wBattler = this.battler.oW / RPM.FRAMES;
-        hBattler = this.battler.oH / RPM.BATLLER_STEPS;
+        let yName = y + 100;
+        let coef = RPM.BASIC_SQUARE_SIZE / RPM.SQUARE_SIZE;
+        let wBattler = this.battler.oW / RPM.FRAMES;
+        let hBattler = this.battler.oH / RPM.BATLLER_STEPS;
         this.battler.draw(x, yName - (hBattler * coef) - 15, wBattler * coef,
-            hBattler * coef, this.battlerFrame * wBattler, 0, wBattler,
-            hBattler);
+            hBattler * coef, this.battlerFrame * wBattler, 0, wBattler, hBattler);
 
         // Stats
-        yStats = yName;
-        if (this.displayNameLevel) {
+        let yStats = yName;
+        if (this.displayNameLevel)
+        {
             this.graphicName.draw(x, yName, 0, 0);
             this.graphicName.updateContextFont();
             this.graphicLevelName.draw(xLevelName, yName, 0, 0);
@@ -244,32 +263,30 @@ GraphicPlayer.prototype = {
             this.graphicLevel.updateContextFont();
             yStats += 15;
         }
-        var i, l = this.listStatsNames.length;
-        for (i = 0; i < l; i++) {
-            xStat = x;
+        let yStat;
+        for (let i = 0, l = this.listStatsNames.length; i < l; i++)
+        {
             yStat = yStats + (i * 12);
-            this.listStatsNames[i].draw(xStat, yStat, 0, 0);
-            this.listStats[i].draw(xStat + this.maxStatNamesLength +
-                10, yStat, 0, 0);
+            this.listStatsNames[i].draw(x, yStat, 0, 0);
+            this.listStats[i].draw(x + this.maxStatNamesLength + 10, yStat, 0, 
+                0);
         }
-    },
+    }
 
     // -------------------------------------------------------
-
     /** Drawing the player in choice box in the main menu.
     *   @param {number} x The x position to draw graphic.
     *   @param {number} y The y position to draw graphic.
     *   @param {number} w The width dimention to draw graphic.
     *   @param {number} h The height dimention to draw graphic.
     */
-    drawChoice: function(x, y, w, h) {
-        var xCharacter, yName, xLevelName, xLevel, yClass, coef, wBattler,
-            hBattler, xExp, yExp, xLevelUp;
-        xCharacter = x + 80;
-        yName = y + 20;
-        coef = RPM.BASIC_SQUARE_SIZE / RPM.SQUARE_SIZE;
-        wBattler = this.battler.oW / RPM.FRAMES;
-        hBattler = this.battler.oH / RPM.BATLLER_STEPS;
+    drawChoice(x, y, w, h)
+    {
+        let xCharacter = x + 80;
+        let yName = y + 20;
+        let coef = RPM.BASIC_SQUARE_SIZE / RPM.SQUARE_SIZE;
+        let wBattler = this.battler.oW / RPM.FRAMES;
+        let hBattler = this.battler.oH / RPM.BATLLER_STEPS;
 
         // Battler
         this.battler.draw(x + (80 - (wBattler * coef)) / 2, y + h - (hBattler *
@@ -279,32 +296,31 @@ GraphicPlayer.prototype = {
         // Stats
         this.graphicName.draw(xCharacter, yName, 0, 0);
         this.graphicName.updateContextFont();
-        xLevelName = xCharacter + Platform.ctx.measureText(this.graphicName.text)
-            .width + 10;
+        let xLevelName = xCharacter + Platform.ctx.measureText(this.graphicName
+            .text).width + 10;
         this.graphicLevelName.draw(xLevelName, yName, 0, 0);
         this.graphicLevelName.updateContextFont();
-        xLevel = xLevelName + Platform.ctx.measureText(this.graphicLevelName.text)
-            .width;
+        let xLevel = xLevelName + Platform.ctx.measureText(this.graphicLevelName
+            .text).width;
         this.graphicLevel.draw(xLevel, yName, 0, 0);
 
         // Level up
-        if (this.gamePlayer.levelingUp) {
-            xLevelUp = xLevel + Platform.ctx.measureText(this.graphicLevel.text)
-                .width + 10;
-            this.graphicLevelUp.draw(xLevelUp, yName, 0, 0);
+        if (this.gamePlayer.levelingUp)
+        {
+            this.graphicLevelUp.draw(xLevel + Platform.ctx.measureText(this
+                .graphicLevel.text).width + 10, yName, 0, 0);
         }
 
-        yClass = yName + 15;
+        let yClass = yName + 15;
         this.graphicClass.draw(xCharacter, yClass, 0, 0);
-        yExp = yClass + 29;
+        let yExp = yClass + 29;
         if (this.graphicExpName !== null)
         {
             this.graphicExpName.draw(xCharacter, yExp, 0, 0);
-            xExp = xCharacter + Platform.ctx.measureText(this.graphicExpName.text).width
-                + 10;
-            this.graphicExp.draw(xExp, yExp, 0, 0);
+            this.graphicExp.draw(xCharacter + Platform.ctx.measureText(this
+                .graphicExpName.text).width + 10, yExp, 0, 0);
         }
-    },
+    }
 
     /** Drawing the player informations in battles.
     *   @param {number} x The x position to draw graphic.
@@ -312,40 +328,39 @@ GraphicPlayer.prototype = {
     *   @param {number} w The width dimention to draw graphic.
     *   @param {number} h The height dimention to draw graphic.
     */
-    drawBox: function(x, y, w, h) {
-        var yName, xLevelName, xLevel, yStats, xStat, yStat, wName, wLevelName,
-            wLevel, wStats, wStat, firstLineLength, xOffset;
-
+    drawBox(x, y, w, h)
+    {
         // Measure widths
         this.graphicName.updateContextFontReal();
         this.graphicLevelName.updateContextFontReal();
         this.graphicLevel.updateContextFontReal();
-        wName = Platform.ctx.measureText(this.graphicName.text).width;
-        wLevelName = Platform.ctx.measureText(this.graphicLevelName.text).width;
-        wLevel = Platform.ctx.measureText(this.graphicLevelName.text).width;
-        xLevelName = x + wName + 10;
-        xLevel = xLevelName + wLevelName;
-        firstLineLength = xLevel + Platform.ctx.measureText(this.graphicLevel.text)
+        let wName = Platform.ctx.measureText(this.graphicName.text).width;
+        let wLevelName = Platform.ctx.measureText(this.graphicLevelName.text)
             .width;
-        xOffset = this.reverse ? w - Math.max(firstLineLength, this
+        let xLevelName = x + wName + 10;
+        let xLevel = xLevelName + wLevelName;
+        let firstLineLength = xLevel + Platform.ctx.measureText(this
+            .graphicLevel.text).width;
+        let xOffset = this.reverse ? w - Math.max(firstLineLength, this
             .maxStatNamesLength + 10 + this.maxStatLength) : 0;
-
-        yName = y + 10;
+        
+        let yName = y + 10;
         this.graphicName.draw(x + xOffset, yName, 0, 0);
         this.graphicName.updateContextFont();
         this.graphicLevelName.draw(xLevelName + xOffset, yName, 0, 0);
         this.graphicLevelName.updateContextFont();
         this.graphicLevel.draw(xLevel + xOffset, yName, 0, 0);
-        yStats = yName + 20;
+        let yStats = yName + 20;
 
         // Stats
-        var i, l = this.listStatsNames.length;
-        for (i = 0; i < l; i++){
+        let xStat, yStat;
+        for (let i = 0, l = this.listStatsNames.length; i < l; i++)
+        {
             xStat = x + xOffset;
             yStat = yStats + (i*20);
             this.listStatsNames[i].draw(xStat, yStat, 0, 0);
-            this.listStats[i].draw(xStat + this.maxStatNamesLength +
-                10, yStat, 0, 0);
+            this.listStats[i].draw(xStat + this.maxStatNamesLength + 10, yStat, 
+                0, 0);
         }
 
         // Faceset
