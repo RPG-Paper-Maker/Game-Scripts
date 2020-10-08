@@ -67,17 +67,14 @@ class GamePlayer
     {
         // Adding equipments
         let maxLength = 0;
-        let test, c;
+        let text;
         for (let i = 0, l = RPM.datasGame.battleSystem.equipments.length - 1; i 
             < l; i++)
         {
             text = new GraphicText(RPM.datasGame.battleSystem.equipments[i+1]);
             text.updateContextFont();
-            c = Platform.ctx.measureText(text.text).width;
-            if (c > maxLength)
-            {
-                maxLength = c;
-            }
+            maxLength = Math.max(Platform.ctx.measureText(text.text).width, 
+                maxLength);
         }
         return maxLength;
     }

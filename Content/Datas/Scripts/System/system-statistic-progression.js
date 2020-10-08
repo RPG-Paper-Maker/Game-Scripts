@@ -45,9 +45,9 @@ class SystemStatisticProgression
 
     getValueAtLevel(level, user, maxLevel)
     {
-        return this.isFix ? this.table.getProgressionAt(level, RPM.defaultValue(
-            maxLevel, user.character.getProperty(SystemClass
-            .PROPERTY_FINAL_LEVEL))) : RPM.evaluateFormula(this.formula
+        return this.isFix ? this.table.getProgressionAt(level, RPM.isUndefined(
+            maxLevel) ? user.character.getProperty(SystemClass
+            .PROPERTY_FINAL_LEVEL) : maxLevel) : RPM.evaluateFormula(this.formula
             .getValue(), user, null);
     }
 }
