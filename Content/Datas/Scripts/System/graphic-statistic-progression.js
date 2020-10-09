@@ -9,12 +9,6 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS GraphicStatisticProgression
-//
-// -------------------------------------------------------
-
 /** @class
 *   The graphic displaying all the stats in the player description state menu.
 *   @property {GraphicText} graphicNameCenter The player's name graphic (for
@@ -31,95 +25,98 @@
 *   @property {number} listLength The max length of the stats for each column.
 *   @param {GamePlayer} gamePlayer The current selected player.
 */
-function GraphicStatisticProgression(gamePlayer) {
-    var i, l, id, statistic, value, txt, graphic;
-
-    this.gamePlayer = gamePlayer;
-    this.listStatsProgression = new Array;
-    for (i = 0, l = RPM.datasGame.battleSystem.statisticsOrder.length; i < l;
-         i++)
+class GraphicStatisticProgression
+{
+    constructor(gamePlayer)
     {
-        id = RPM.datasGame.battleSystem.statisticsOrder[i];
-        if (id !== RPM.datasGame.battleSystem.idLevelStatistic &&
-            id !== RPM.datasGame.battleSystem.idExpStatistic)
+        this.gamePlayer = gamePlayer;
+        this.listStatsProgression = new Array;
+        let id, statistic, value, txt, graphic;
+        for (let i = 0, l = RPM.datasGame.battleSystem.statisticsOrder.length; 
+            i < l; i++)
         {
-            statistic = RPM.datasGame.battleSystem.statistics[id];
-            value = this.gamePlayer[statistic.getAbbreviationNext()] - this
-                .gamePlayer[statistic.getBeforeAbbreviation()];
-            txt = value >= 0 ? "+" : "-";
-            graphic = new GraphicText(txt + value);
-            if (value > 0) {
-                graphic.color = RPM.COLOR_GREEN;
-            } else if (value < 0) {
-                graphic.color = RPM.COLOR_RED;
+            id = RPM.datasGame.battleSystem.statisticsOrder[i];
+            if (id !== RPM.datasGame.battleSystem.idLevelStatistic && id !== RPM
+                .datasGame.battleSystem.idExpStatistic)
+            {
+                statistic = RPM.datasGame.battleSystem.statistics[id];
+                value = this.gamePlayer[statistic.getAbbreviationNext()] - this
+                    .gamePlayer[statistic.getBeforeAbbreviation()];
+                txt = value >= 0 ? "+" : "-";
+                graphic = new GraphicText(txt + value);
+                if (value > 0)
+                {
+                    graphic.color = RPM.COLOR_GREEN;
+                } else if (value < 0)
+                {
+                    graphic.color = RPM.COLOR_RED;
+                }
+                this.listStatsProgression.push(graphic);
             }
-            this.listStatsProgression.push(graphic);
         }
+        this.updateStatisticProgression();
     }
-    this.updateStatisticProgression();
-}
 
-GraphicStatisticProgression.prototype = {
-
-    updateStatisticProgression: function() {
-        var i, l, c, id, statistic, txt, graphicName, graphic;
-
+    updateStatisticProgression()
+    {
         this.listStatsNames = new Array;
         this.listStats = new Array;
         this.maxLength = 0;
         this.maxProgressionLength = 0;
-        for (i = 0, l = RPM.datasGame.battleSystem.statisticsOrder.length; i < l;
-             i++)
+        let id, statistic, graphic, txt;
+        for (let i = 0, l = RPM.datasGame.battleSystem.statisticsOrder.length; 
+            i < l; i++)
         {
             id = RPM.datasGame.battleSystem.statisticsOrder[i];
-            if (id !== RPM.datasGame.battleSystem.idLevelStatistic &&
-                id !== RPM.datasGame.battleSystem.idExpStatistic)
+            if (id !== RPM.datasGame.battleSystem.idLevelStatistic && id !== RPM
+                .datasGame.battleSystem.idExpStatistic)
             {
                 statistic = RPM.datasGame.battleSystem.statistics[id];
-                if (statistic.isRes) {
+                if (statistic.isRes)
+                {
                     continue;
                 }
-
-                graphicName = new GraphicText(statistic.name + ":");
-                Platform.ctx.font = graphicName.font;
-                graphicName.updateContextFont();
-                c = Platform.ctx.measureText(graphicName.text).width;
-                if (c > this.maxLength) {
-                    this.maxLength = c;
-                }
-                this.listStatsNames.push(graphicName);
-                txt = "";
-                if (this.gamePlayer.stepLevelUp === 0) {
+                graphic = new GraphicText(statistic.name + RPM.STRING_COLON);
+                Platform.ctx.font = graphic.font;
+                graphic.updateContextFont();
+                this.maxLength = Math.max(Platform.ctx.measureText(graphic.text)
+                    .width, this.maxLength);
+                this.listStatsNames.push(graphic);
+                txt = RPM.STRING_EMPTY;
+                if (this.gamePlayer.stepLevelUp === 0)
+                {
                     txt += statistic.isFix ? this.gamePlayer[statistic
                         .getBeforeAbbreviation()] : this.gamePlayer[statistic
                         .abbreviation];
-                    if (!statistic.isFix) {
-                        txt += "/" + this.gamePlayer[statistic
+                    if (!statistic.isFix)
+                    {
+                        txt += RPM.STRING_SLASH + this.gamePlayer[statistic
                             .getBeforeAbbreviation()];
                     }
                     txt += " -> ";
                 }
-                txt += "" + this.gamePlayer[statistic.abbreviation];
-                if (!statistic.isFix) {
-                    txt += "/" + this.gamePlayer[statistic.getMaxAbbreviation()];
+                txt += RPM.numToString(this.gamePlayer[statistic.abbreviation]);
+                if (!statistic.isFix)
+                {
+                    txt += RPM.STRING_SLASH + this.gamePlayer[statistic
+                        .getMaxAbbreviation()];
                 }
                 graphic = new GraphicText(txt);
                 Platform.ctx.font = graphic.font;
                 graphic.updateContextFont();
-                c = Platform.ctx.measureText(graphic.text).width;
-                if (c > this.maxProgressionLength) {
-                    this.maxProgressionLength = c;
-                }
+                this.maxProgressionLength = Math.max(Platform.ctx.measureText(
+                    graphic.text).width, this.maxProgressionLength);
                 this.listStats.push(graphic);
             }
         }
-    },
+    }
 
     // -------------------------------------------------------
 
-    getHeight: function() {
+    getHeight()
+    {
         return this.listStatsNames.length * 20;
-    },
+    }
 
     /** Drawing the player in choice box.
     *   @param {number} x The x position to draw graphic.
@@ -127,9 +124,10 @@ GraphicStatisticProgression.prototype = {
     *   @param {number} w The width dimention to draw graphic.
     *   @param {number} h The height dimention to draw graphic.
     */
-    drawChoice: function(x, y, w, h){
+    drawChoice(x, y, w, h)
+    {
         this.graphicNameCenter.draw(x, y, w, h);
-    },
+    }
 
     // -------------------------------------------------------
 
@@ -139,15 +137,16 @@ GraphicStatisticProgression.prototype = {
     *   @param {number} w The width dimention to draw graphic.
     *   @param {number} h The height dimention to draw graphic.
     */
-    drawBox: function(x, y, w, h){
-        var i, l, yStat;
-
-        for (i = 0, l = this.listStatsNames.length; i < l; i++) {
+    drawBox(x, y, w, h)
+    {
+        let yStat;
+        for (let i = 0, l = this.listStatsNames.length; i < l; i++)
+        {
             yStat = y + (i * 20);
             this.listStatsNames[i].draw(x, yStat, 0, 0);
             this.listStats[i].draw(x + this.maxLength + 10 , yStat, 0, 0);
-
-            if (this.gamePlayer.stepLevelUp === 0) {
+            if (this.gamePlayer.stepLevelUp === 0)
+            {
                 this.listStatsProgression[i].draw(x + this.maxLength + this
                     .maxProgressionLength + 20, yStat, 0, 0);
             }

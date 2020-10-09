@@ -26,6 +26,8 @@
 */
 class MapPortion
 {
+    static BB_MATERIAL = new THREE.MeshBasicMaterial();
+
     constructor(realX, realY, realZ)
     {
         this.realX = realX;
@@ -325,7 +327,8 @@ class MapPortion
 
     static createBox()
     {
-        let box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), RPM.BB_MATERIAL);
+        let box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), MapPortion
+            .BB_MATERIAL);
         box.previousTranslate = [0, 0, 0];
         box.previousRotate = [0, 0, 0];
         box.previousScale = [1, 1, 1];
@@ -336,7 +339,8 @@ class MapPortion
 
     static createOrientedBox()
     {
-        let box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), RPM.BB_MATERIAL);
+        let box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), MapPortion
+            .BB_MATERIAL);
         box.previousTranslate = [0, 0, 0];
         box.previousScale = [1, 1, 1];
         box.geometry.rotateY(Math.PI / 4);

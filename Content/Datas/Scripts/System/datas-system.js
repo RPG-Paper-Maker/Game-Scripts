@@ -60,7 +60,7 @@ class DatasSystem
 
         // Now that antialias is on or off, initialize GL stuff
         RPM.initializeGL();
-        RPM.resizeGL(Platform.canvas3D);
+        RPM.resizeGL();
         RPM.requestPaintHUD = true;
 
         // Other numbers
@@ -83,11 +83,11 @@ class DatasSystem
         // Debug bounding box
         this.showBB = RPM.defaultValue(json.bb, false);
         if (this.showBB)
-        {
-            RPM.BB_MATERIAL.color.setHex(0xff0000);
-            RPM.BB_MATERIAL.wireframe = true;
-            RPM.BB_MATERIAL.visible = true;
+        {   
+            MapPortion.BB_MATERIAL.color.setHex(0xff0000);
+            MapPortion.BB_MATERIAL.wireframe = true;
         }
+        MapPortion.BB_MATERIAL.visible = this.showBB;
 
         // Lists
         this.itemsTypes = RPM.readJSONSystemList(json.itemsTypes, (element) =>

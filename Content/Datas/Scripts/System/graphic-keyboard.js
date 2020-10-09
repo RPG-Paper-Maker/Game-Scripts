@@ -9,40 +9,42 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS GraphicKeybaord
-//
-// -------------------------------------------------------
-
 /** @class
-*   A class for all keyboard assign to display in screen.
+*   A class for all keyboard assign to display in screen
 */
-function GraphicKeyboard(kb) {
-    this.kb = kb;
-    this.graphicTextName = new GraphicText(kb.name());
-    this.graphicTextShort = new GraphicText(kb.toString(), { align: Align.Center });
-    this.graphicTextInformation = new GraphicText("Press any keys...", { align:
-        Align.Center });
-}
+class GraphicKeyboard
+{
+    constructor(kb)
+    {
+        this.kb = kb;
+        this.graphicTextName = new GraphicText(kb.name());
+        this.graphicTextShort = new GraphicText(kb.toString(), { align: Align
+            .Center });
+        this.graphicTextInformation = new GraphicText("Press any keys...", { 
+            align: Align.Center });
+    }
 
-// -------------------------------------------------------
+    // -------------------------------------------------------
 
-GraphicKeyboard.prototype.updateShort = function(sh) {
-    this.kb.sc = sh;
-    this.graphicTextShort.setText(this.kb.toString());
-}
+    updateShort(sh)
+    {
+        this.kb.sc = sh;
+        this.graphicTextShort.setText(this.kb.toString());
+    }
 
-// -------------------------------------------------------
+    // -------------------------------------------------------
 
-GraphicKeyboard.prototype.drawChoice = function(x, y, w, h) {
-    this.graphicTextName.draw(x, y, w, h);
-    this.graphicTextShort.draw(x + (w / 2), y, w / 2, h);
-};
+    drawChoice (x, y, w, h)
+    {
+        this.graphicTextName.draw(x, y, w, h);
+        this.graphicTextShort.draw(x + (w / 2), y, w / 2, h);
+    }
 
-// -------------------------------------------------------
+    // -------------------------------------------------------
 
-GraphicKeyboard.prototype.drawBox = function(x, y, w, h) {
-    this.graphicTextInformation.draw(x, y, w, (h / 2));
-    this.graphicTextShort.draw(x, y + (h / 2), w, (h / 2));
+    drawBox(x, y, w, h)
+    {
+        this.graphicTextInformation.draw(x, y, w, (h / 2));
+        this.graphicTextShort.draw(x, y + (h / 2), w, (h / 2));
+    }
 }

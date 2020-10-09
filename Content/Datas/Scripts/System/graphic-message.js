@@ -9,14 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS GraphicMessage : Bitmap
-//
-// -------------------------------------------------------
-
 /** @class
-*   A class for message show text command.
+*   A class for message show text command
 *   @extends Bitmap
 */
 class GraphicMessage extends Bitmap
@@ -26,97 +20,130 @@ class GraphicMessage extends Bitmap
         super();
 
         this.message = message;
-        this.faceset = Picture2D.create(RPM.datasGame.pictures.get(PictureKind
-            .Facesets, facesetID), PictureKind.Facesets);
+        this.facesetID = facesetID;
+    }
+
+    async load()
+    {
+        this.faceset = await Picture2D.create(RPM.datasGame.pictures.get(
+            PictureKind.Facesets, this.facesetID));
         this.graphics = [];
         this.positions = [];
         this.setMessage(this.message);
     }
 
-    setMessage(message) {
-        var i, l, c, cr, lastC, ll, root, ch, tag, node, currentNode, open,
-            notClosed, tagKind, split;
-    
+    static async create(message, facesetID)
+    {
+        let graphic = new GraphicMessage(message, facesetID);
+        await RPM.tryCatch(graphic.load());
+        return graphic;
+    }
+
+    setMessage(message)
+    {
         this.tree = new Tree(null);
-        root = this.tree.root;
-        currentNode = root;
-        lastC = 0;
-        notClosed = [];
-        for (c = 0, ll = message.length; c < ll; c++) {
+        let root = this.tree.root;
+        let currentNode = root;
+        let lastC = 0;
+        let notClosed = [];
+        let c, l, ch, open, cr, tag, tagKind, split;
+        for (c = 0, l = message.length; c < l; c++)
+        {
             ch = message.charAt(c);
-    
-            if (ch === RPM.STRING_NEW_LINE) {
+            if (ch === RPM.STRING_NEW_LINE)
+            {
                 // If text before..
-                if (c > lastC) {
-                    currentNode = this.updateTag(currentNode, TagKind.Text, message
-                        .substring(lastC, c), true, notClosed)
+                if (c > lastC)
+                {
+                    currentNode = this.updateTag(currentNode, TagKind.Text, 
+                        message.substring(lastC, c), true, notClosed);
                 }
-    
                 lastC = c + 1;
                 currentNode = this.updateTag(currentNode, TagKind.NewLine, null,
-                    true, notClosed)
-            } else if (ch === RPM.STRING_BRACKET_LEFT) {
+                    true, notClosed);
+            } else if (ch === RPM.STRING_BRACKET_LEFT)
+            {
                 open = message.charAt(c + 1) !== RPM.STRING_SLASH;
-    
+
                 // If text before..
-                if (c > lastC) {
-                    currentNode = this.updateTag(currentNode, TagKind.Text, message
-                        .substring(lastC, c), true, notClosed);
+                if (c > lastC)
+                {
+                    currentNode = this.updateTag(currentNode, TagKind.Text, 
+                        message.substring(lastC, c), true, notClosed);
                 }
-    
                 cr = c;
-                do {
+                do
+                {
                     cr++;
                     ch = message.charAt(cr);
                 } while (cr < ll && ch !== RPM.STRING_BRACKET_RIGHT);
                 tag = message.substring(c + (open ? 1 : 2), cr);
-                if (tag === RPM.TAG_BOLD) {
+                if (tag === RPM.TAG_BOLD)
+                {
                     tagKind = TagKind.Bold;
-                } else if (tag === RPM.TAG_ITALIC) {
+                } else if (tag === RPM.TAG_ITALIC)
+                {
                     tagKind = TagKind.Italic;
-                } else if (tag === RPM.TAG_LEFT) {
+                } else if (tag === RPM.TAG_LEFT)
+                {
                     tagKind = TagKind.Left;
-                } else if (tag === RPM.TAG_CENTER) {
+                } else if (tag === RPM.TAG_CENTER)
+                {
                     tagKind = TagKind.Center;
-                } else if (tag === RPM.TAG_RIGHT) {
+                } else if (tag === RPM.TAG_RIGHT)
+                {
                     tagKind = TagKind.Right;
-                } else if (tag.includes(RPM.TAG_SIZE)) {
+                } else if (tag.includes(RPM.TAG_SIZE))
+                {
                     tagKind = TagKind.Size;
-                } else if (tag.includes(RPM.TAG_FONT)) {
+                } else if (tag.includes(RPM.TAG_FONT))
+                {
                     tagKind = TagKind.Font;
-                } else if (tag.includes(RPM.TAG_TEXT_COLOR)) {
+                } else if (tag.includes(RPM.TAG_TEXT_COLOR))
+                {
                     tagKind = TagKind.TextColor;
-                } else if (tag.includes(RPM.TAG_BACK_COLOR)) {
+                } else if (tag.includes(RPM.TAG_BACK_COLOR))
+                {
                     tagKind = TagKind.BackColor;
-                } else if (tag.includes(RPM.TAG_STROKE_COLOR)) {
+                } else if (tag.includes(RPM.TAG_STROKE_COLOR))
+                {
                     tagKind = TagKind.StrokeColor;
-                } else if (tag.includes(RPM.TAG_VARIABLE)) {
+                } else if (tag.includes(RPM.TAG_VARIABLE))
+                {
                     tagKind = TagKind.Variable;
-                } else if (tag.includes(RPM.TAG_PARAMETER)) {
+                } else if (tag.includes(RPM.TAG_PARAMETER))
+                {
                     tagKind = TagKind.Parameter;
-                } else if (tag.includes(RPM.TAG_PROPERTY)) {
+                } else if (tag.includes(RPM.TAG_PROPERTY))
+                {
                     tagKind = TagKind.Property;
-                } else if (tag.includes(RPM.TAG_HERO_NAME)) {
+                } else if (tag.includes(RPM.TAG_HERO_NAME))
+                {
                     tagKind = TagKind.HeroName;
-                } else if (tag.includes(RPM.TAG_ICON)) {
+                } else if (tag.includes(RPM.TAG_ICON))
+                {
                     tagKind = TagKind.Icon;
-                } else {
+                } else
+                {
                     tagKind = TagKind.Text;
                 }
-                if (tagKind === TagKind.Text) {
-                    currentNode = this.updateTag(currentNode, TagKind.Text, message
-                        .substring(c, cr + 1), true, notClosed);
-                } else {
+                if (tagKind === TagKind.Text)
+                {
+                    currentNode = this.updateTag(currentNode, TagKind.Text, 
+                        message.substring(c, cr + 1), true, notClosed);
+                } else
+                {
                     split = tag.split(RPM.STRING_EQUAL);
-                    currentNode = this.updateTag(currentNode, tagKind, open && split
-                        .length > 1 ? parseInt(split[1]) : null, open, notClosed);
+                    currentNode = this.updateTag(currentNode, tagKind, open && 
+                        split.length > 1 ? parseInt(split[1]) : null, open, 
+                        notClosed);
                 }
-    
                 lastC = cr + 1;
                 c = cr;
             }
         }
-        if (ll === 0 || c > lastC) {
+        if (l === 0 || c > lastC)
+        {
             currentNode = this.updateTag(currentNode, TagKind.Text, message
                 .substring(lastC, c), true, notClosed);
         }
@@ -126,39 +153,45 @@ class GraphicMessage extends Bitmap
     
     updateTag(currentNode, tag, value, open, notClosed)
     {
-        if (open) {
-            var i;
-    
-            for (i = notClosed.length - 1; i >= 0; i--) {
+        if (open)
+        {
+            let currentNode;
+            for (let i = notClosed.length - 1; i >= 0; i--)
+            {
                 currentNode = currentNode.add(notClosed[i]);
                 notClosed.splice(i, 1);
             }
-            switch (tag) {
+            switch (tag)
+            {
             case TagKind.Variable:
             case TagKind.HeroName:
-                value = SystemValue.createVariable(value); break;
+                value = SystemValue.createVariable(value);
+                break;
             case TagKind.Parameter:
-                value = SystemValue.createParameter(value); break;
+                value = SystemValue.createParameter(value);
+                break;
             case TagKind.Property:
-                value = SystemValue.createProperty(value); break;
+                value = SystemValue.createProperty(value);
+                break;
             }
             currentNode.add([tag, value]);
-            if (tag !== TagKind.Text && tag !== TagKind.NewLine && tag !== TagKind
-                .Variable && tag !== TagKind.Icon && tag !== TagKind.Property && tag 
-                !== TagKind.Parameter && tag !== TagKind.HeroName)
+            if (tag !== TagKind.Text && tag !== TagKind.NewLine && tag !== 
+                TagKind.Variable && tag !== TagKind.Icon && tag !== TagKind
+                .Property && tag !== TagKind.Parameter && tag !== TagKind
+                .HeroName)
             {
                 currentNode = currentNode.lastChild;
             }
-        } else {
-            while (currentNode !== null && currentNode.data !== null && currentNode
-                .data[0] !== tag)
+        } else
+        {
+            while (currentNode !== null && currentNode.data !== null && 
+                currentNode.data[0] !== tag)
             {
                 notClosed.push(currentNode.data);
                 currentNode = currentNode.parent;
             }
             currentNode = currentNode.parent;
         }
-    
         return currentNode;
     }
     
@@ -166,14 +199,12 @@ class GraphicMessage extends Bitmap
     
     update()
     {
-        var i, c, l, result, align, currentAlign, width;
-    
         this.graphics = [];
         this.positions = [];
         this.heights = [];
         this.aligns = [];
         this.heights.push(0);
-        result = {
+        let result = {
             g: this.graphics,
             p: this.positions,
             a: this.aligns,
@@ -181,27 +212,35 @@ class GraphicMessage extends Bitmap
             ca: Align.Left,
             cb: false,
             ci: false,
-            cs: RPM.defaultValue(RPM.datasGame.system.dbOptions.vtSize, RPM.fontSize),
-            cf: RPM.defaultValue(RPM.datasGame.system.dbOptions.vtFont, RPM.fontName),
-            ctc: RPM.defaultValue(RPM.datasGame.system.dbOptions.vtcText, RPM.COLOR_WHITE),
-            cbc: RPM.defaultValue(RPM.datasGame.system.dbOptions.vtcBackground, null),
-            csc: RPM.defaultValue(RPM.datasGame.system.dbOptions.vtOutline, false) ? RPM
-                .defaultValue(RPM.datasGame.system.dbOptions.vtcOutline, null) : null
+            cs: RPM.defaultValue(RPM.datasGame.system.dbOptions.vtSize, RPM
+                .fontSize),
+            cf: RPM.defaultValue(RPM.datasGame.system.dbOptions.vtFont, RPM
+                .fontName),
+            ctc: RPM.defaultValue(RPM.datasGame.system.dbOptions.vtcText, RPM
+                .COLOR_WHITE),
+            cbc: RPM.defaultValue(RPM.datasGame.system.dbOptions.vtcBackground, 
+                null),
+            csc: RPM.defaultValue(RPM.datasGame.system.dbOptions.vtOutline, 
+                false) ? RPM.defaultValue(RPM.datasGame.system.dbOptions
+                .vtcOutline, null) : null
         };
     
         // Update nodes
         this.updateNodes(this.tree.root.firstChild, result);
     
         // Calculate width of align blocks for aligns settings
-        l = this.graphics.length;
         this.totalWidths = [];
-        for (i = 0; i < l; i++) {
+        let currentAlign, c, width, align;
+        for (let i = 0, l = this.graphics.length; i < l; i++)
+        {
             currentAlign = this.aligns[i];
             c = i;
             width = 0;
-            while (c < l) {
+            while (c < l)
+            {
                 align = this.aligns[c];
-                if (align !== currentAlign) {
+                if (align !== currentAlign)
+                {
                     break;
                 }
                 width += this.positions[c];
@@ -214,18 +253,19 @@ class GraphicMessage extends Bitmap
     
     // -------------------------------------------------------
     
-    updateNodes(node, result) {
-        var graphic, align, bold, italic, size, font, textColor, backColor,
-            strokeColor, tag, value;
-    
-        tag = node.data[0];
-        value = node.data[1];
-        switch (tag) {
+    updateNodes(node, result)
+    {
+        let tag = node.data[0];
+        let value = node.data[1];
+        let graphic;
+        switch (tag)
+        {
         case TagKind.NewLine:
             result.g.push(null);
             result.p.push(0);
             result.a.push(-1);
-            if (result.h[0] === 0) {
+            if (result.h[0] === 0)
+            {
                 result.h[0] = result.cs;
             }
             result.h.unshift(0);
@@ -235,36 +275,52 @@ class GraphicMessage extends Bitmap
         case TagKind.Parameter:
         case TagKind.Property:
         case TagKind.HeroName:
-            var text;
-    
-            switch (node.data[0]) {
+            let text;
+            switch (node.data[0])
+            {
             case TagKind.Text:
-                text = value; break;
+                text = value;
+                break;
             case TagKind.Variable:
-                text = "" + value.getValue(); break;
+                text = RPM.numToString(value.getValue());
+                break;
             case TagKind.Parameter:
-                text = "" + value.getValue(); break;
+                text = RPM.numToString(value.getValue());
+                break;
             case TagKind.Property:
-                text = "" + value.getValue(); break;
+                text = RPM.numToString(value.getValue());
+                break;
             case TagKind.HeroName:
-                text = "" + RPM.game.getHeroByInstanceID(value.getValue()).name; break;
+                text = RPM.game.getHeroByInstanceID(value.getValue()).name;
+                break;
             }
-            graphic = new GraphicText(text, { bold: result.cb, italic:
-                result.ci, fontSize: result.cs, fontName: result.cf, color: result
-                .ctc, backColor: result.cbc, strokeColor: result.csc } );
+            graphic = new GraphicText(text, 
+                {
+                    bold: result.cb,
+                    italic: result.ci,
+                    fontSize: result.cs,
+                    fontName: result.cf,
+                    color: result.ctc,
+                    backColor: result.cbc,
+                    strokeColor: result.csc
+                }
+            );
             result.g.push(graphic);
             result.p.push(graphic.measureText());
             result.a.push(result.ca);
-            if (graphic.fontSize > result.h[0]) {
+            if (graphic.fontSize > result.h[0])
+            {
                 result.h[0] = graphic.fontSize;
             }
             break;
         case TagKind.Icon:
-            graphic = RPM.datasGame.pictures.get(PictureKind.Icons, value).picture;
+            graphic = RPM.datasGame.pictures.get(PictureKind.Icons, value)
+                .picture;
             result.g.push(graphic);
             result.p.push(graphic.oW);
             result.a.push(result.ca);
-            if (RPM.fontSize > result.h[0]) {
+            if (RPM.fontSize > result.h[0])
+            {
                 result.h[0] = RPM.fontSize;
             }
             break;
@@ -309,11 +365,13 @@ class GraphicMessage extends Bitmap
             result.csc = RPM.datasGame.system.colors[value];
             break;
         }
-        if (node.firstChild !== null) {
+        if (node.firstChild !== null)
+        {
             this.updateNodes(node.firstChild, result);
         }
         // Handle closures
-        switch (node.data[0]) {
+        switch (node.data[0])
+        {
         case TagKind.Bold:
             result.cb = bold;
             break;
@@ -342,58 +400,61 @@ class GraphicMessage extends Bitmap
             break;
         }
         // Go next if possible
-        if (node.next !== null) {
+        if (node.next !== null)
+        {
             this.updateNodes(node.next, result);
         }
     }
     
     // -------------------------------------------------------
     
-    drawBehind(x, y, w, h) {
-        if (!RPM.datasGame.system.dbOptions.vfPosAbove) {
+    drawBehind(x, y, w, h)
+    {
+        if (!RPM.datasGame.system.dbOptions.vfPosAbove)
+        {
             this.drawFaceset(x, y, w, h);
         }
     }
     
     // -------------------------------------------------------
     
-    drawFaceset(x, y, w, h) {
-        this.faceset.draw(x + RPM.defaultValue(RPM.datasGame.system.dbOptions.fX, 0),
-            y - ((this.faceset.oH - h) / 2) + RPM.defaultValue(RPM.datasGame.system
-            .dbOptions.fY, 0));
+    drawFaceset(x, y, w, h)
+    {
+        this.faceset.draw(x + RPM.defaultValue(RPM.datasGame.system.dbOptions.fX
+            , 0), y - ((this.faceset.oH - h) / 2) + RPM.defaultValue(RPM
+            .datasGame.system.dbOptions.fY, 0));
     }
     
     // -------------------------------------------------------
     
-    drawBox(x, y, w, h) {
-        var i, j, c, l, newX, newY, offsetX, offsetY, align, graphic;
-    
-        x = RPM.defaultValue(x, this.oX);
-        y = RPM.defaultValue(y, this.oY);
-        w = RPM.defaultValue(w, this.oW);
-        h = RPM.defaultValue(h, this.oH);
-    
-        if (RPM.datasGame.system.dbOptions.vfPosAbove) {
+    drawBox(x = this.oX, y = this.oY, w = this.oW, h = this.oH)
+    {
+        if (RPM.datasGame.system.dbOptions.vfPosAbove)
+        {
             this.drawFaceset(x, y, w, h);
         }
-        newX = RPM.getScreenX(x + this.faceset.oW + RPM.HUGE_SPACE);
-        newY = RPM.getScreenY(y + RPM.HUGE_SPACE);
-        offsetY = 0;
-        align = -1;
-        c = this.heights.length - 1;
-        j = 0;
-    
+        let newX = RPM.getScreenX(x + this.faceset.oW + RPM.HUGE_SPACE);
+        let newY = RPM.getScreenY(y + RPM.HUGE_SPACE);
+        let offsetY = 0;
+        let align = -1;
+        let c = this.heights.length - 1;
+
         // Draw each graphics
-        for (i = 0, l = this.graphics.length; i < l; i ++) {
+        let graphic, offsetX;
+        for (let i = 0, j = 0, l = this.graphics.length; i < l; i ++)
+        {
             graphic = this.graphics[i];
     
             // New line
-            if (graphic === null) {
+            if (graphic === null)
+            {
                 offsetY += RPM.getScreenMinXY(this.heights[c--] * 2);
                 align = -1;
                 j++;
-            } else {
-                if (align !== this.aligns[i]) {
+            } else
+            {
+                if (align !== this.aligns[i])
+                {
                     align = this.aligns[i];
                     switch (align) {
                     case Align.Left:
@@ -410,13 +471,13 @@ class GraphicMessage extends Bitmap
                 }
                 if (graphic.path)
                 {
-                    graphic.draw(newX + offsetX, newY - (graphic.h / 2) + offsetY, 
-                        graphic.oW, graphic.oH, 0, 0, graphic.oW, graphic.oH, false);
-                }
-                else
+                    graphic.draw(newX + offsetX, newY - (graphic.h / 2) + 
+                        offsetY,  graphic.oW, graphic.oH, 0, 0, graphic.oW, 
+                        raphic.oH, false);
+                } else
                 {
-                    graphic.draw(newX + offsetX, newY + offsetY, graphic.oW, graphic
-                        .oH, false);
+                    graphic.draw(newX + offsetX, newY + offsetY, graphic.oW,
+                        graphic.oH, false);
                 }
                 offsetX += RPM.getScreenMinXY(this.positions[i]);
             }

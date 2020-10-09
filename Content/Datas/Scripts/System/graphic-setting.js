@@ -9,42 +9,40 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS GraphicSetting
-//
-// -------------------------------------------------------
-
 /** @class
 *   A class for all settings to display in screen.
 */
-function GraphicSetting(id) {
-    var textLeft, textInformation;
+class GraphicSetting
+{
+    constructor(id)
+    {
+        this.id = id;
+        let textLeft,textInformation;
+        switch (id)
+        {
+        case TitleSettingKind.KeyboardAssigment:
+            textLeft = "Keyboard assignement";
+            textInformation = "Update keyboard assignement preferences.";
+            this.graphicRight = new GraphicText("...", { align: Align.Center });
+            break;
+        }
+        this.graphicTextLeft = new GraphicText(textLeft);
+        this.graphicTextInformation = new GraphicText(textInformation, { align:
+            Align.Center });
+    }
+    
+    // -------------------------------------------------------
 
-    // Left text
-    this.id = id;
-    switch (id) {
-    case TitleSettingKind.KeyboardAssigment:
-        textLeft = "Keyboard assignement";
-        textInformation = "Update keyboard assignement preferences.";
-        this.graphicRight = new GraphicText("...", { align: Align.Center });
-        break;
+    drawChoice(x, y, w, h)
+    {
+        this.graphicTextLeft.draw(x, y, w, h);
+        this.graphicRight.draw(x + (w / 2), y, w / 2, h);
     }
 
-    this.graphicTextLeft = new GraphicText(textLeft);
-    this.graphicTextInformation = new GraphicText(textInformation, { align:
-        Align.Center });
-}
+    // -------------------------------------------------------
 
-// -------------------------------------------------------
-
-GraphicSetting.prototype.drawChoice = function(x, y, w, h) {
-    this.graphicTextLeft.draw(x, y, w, h);
-    this.graphicRight.draw(x + (w / 2), y, w / 2, h);
-};
-
-// -------------------------------------------------------
-
-GraphicSetting.prototype.drawBox = function(x, y, w, h) {
-    this.graphicTextInformation.draw(x, y, w, h);
+    drawBox(x, y, w, h)
+    {
+        this.graphicTextInformation.draw(x, y, w, h);
+    }
 }

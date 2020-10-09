@@ -10,25 +10,22 @@
 */
 
 /** @class
-*   A chrono in the game
+*   Datas structure of tree
+*   @property {Node} root Node representing the root of the tree
 */
-class Chrono
+class Tree
 {
-    constructor(start)
+    constructor(data)
     {
-        this.time = start;
-        this.lastTime = new Date().getTime();
+        this.root = new Node(null, data);
     }
 
-    update()
+    /** Add a new child
+    *   @param {Object} data Data of the new child
+    *   @returns {Node} The new child
+    */
+    add(data)
     {
-        let date = new Date().getTime();
-        this.time += date - this.lastTime;
-        this.lastTime = date;
-    }
-
-    getSeconds()
-    {
-        return Math.floor(this.time / 1000);
+        return this.root.add(data);
     }
 }

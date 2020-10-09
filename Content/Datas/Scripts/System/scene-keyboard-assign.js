@@ -69,6 +69,7 @@ class SceneKeyboardAssign extends SceneGame
             SceneKeyboardAssign.WINDOW_PRESS_HEIGHT / 2), SceneKeyboardAssign
             .WINDOW_PRESS_WIDTH, SceneKeyboardAssign.WINDOW_PRESS_HEIGHT,
             {
+                content: this.windowChoicesMain.getCurrentContent(),
                 padding: RPM.DIALOG_PADDING_BOX
             }
         );

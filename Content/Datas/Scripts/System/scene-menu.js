@@ -30,7 +30,6 @@ class SceneMenu extends SceneGame
 
     async load()
     {
-        this.lol = true
         RPM.isInMainMenu = true;
 
         // Initializing order index

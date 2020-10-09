@@ -9,12 +9,6 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SystemArmor
-//
-// -------------------------------------------------------
-
 /** @class
 *   An armor of the game
 *   @extends SystemCommonSkillItem

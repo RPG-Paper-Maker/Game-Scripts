@@ -1,5 +1,7 @@
 document.write(`<script src="Content/Datas/Scripts/System/platform.js"></script>`);
 document.write(`<script src="Content/Datas/Scripts/System/enums.js"></script>`);
+document.write(`<script src="Content/Datas/Scripts/System/node.js"></script>`);
+document.write(`<script src="Content/Datas/Scripts/System/tree.js"></script>`);
 document.write(`<script src="Content/Datas/Scripts/System/chrono.js"></script>`);
 document.write(`<script src="Content/Datas/Scripts/System/texture-several.js"></script>`);
 document.write(`<script src="Content/Datas/Scripts/System/songs-manager.js"></script>`);

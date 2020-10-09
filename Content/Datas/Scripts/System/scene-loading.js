@@ -18,6 +18,7 @@ class SceneLoading extends SceneGame
     constructor()
     {
         super();
+        
         this.text = new GraphicText("Loading...", { align: Align.Right, x: 590, 
             y: 450, w: 40, h: 20 });
     }
