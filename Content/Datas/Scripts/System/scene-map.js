@@ -78,6 +78,8 @@ class SceneMap extends SceneGame
         {
             this.scene.add(RPM.BB_BOX);
             this.scene.add(RPM.BB_ORIENTED_BOX);
+            //this.scene.add(RPM.BB_BOX_DETECTION);
+            //this.scene.add(RPM.BB_BOX_DEFAULT_DETECTION);
         }
         await this.readMapProperties();
         await this.initializeObjects();
@@ -298,7 +300,7 @@ class SceneMap extends SceneGame
                 {
                     await this.loadPortion(this.currentPortion[0] + i, this
                         .currentPortion[1] + j, this.currentPortion[2] + k, i, j
-                        , k);
+                        , k, true);
                 }
             }
         }
@@ -313,14 +315,13 @@ class SceneMap extends SceneGame
     *   @param {number} y The local y portion.
     *   @param {number} z The local z portion.
     */
-    async loadPortion(realX, realY, realZ, x, y, z, move = false)
+    async loadPortion(realX, realY, realZ, x, y, z, wait, move)
     {
         let lx = Math.ceil(this.mapProperties.length / RPM.PORTION_SIZE);
         let lz = Math.ceil(this.mapProperties.width / RPM.PORTION_SIZE);
         let ld = Math.ceil(this.mapProperties.depth / RPM.PORTION_SIZE);
         let lh = Math.ceil(this.mapProperties.height / RPM.PORTION_SIZE);
         let mapPortion = null;
-        this.removePortion(x, y, z);
         if (realX >= 0 && realX < lx && realY >= -ld && realY < lh &&
             realZ >= 0 && realZ < lz)
         {
@@ -333,7 +334,7 @@ class SceneMap extends SceneGame
                     .idMapStartHero);
             }
         }
-        this.setMapPortion(x, y, z, mapPortion);
+        this.setMapPortion(x, y, z, mapPortion, move);
     }
 
     // -------------------------------------------------------
@@ -341,7 +342,7 @@ class SceneMap extends SceneGame
     async loadPortionFromPortion(portion, x, y, z, move)
     {
         await this.loadPortion(portion[0] + x, portion[1] + y, portion[2] + z,
-            x, y, z, move);
+            x, y, z, false, move);
     }
 
     // -------------------------------------------------------
@@ -349,8 +350,8 @@ class SceneMap extends SceneGame
     removePortion(i, j, k)
     {
         let mapPortion = this.getMapPortion(i, j, k);
-        if (mapPortion)
-        {   
+        if (mapPortion !== null)
+        {
             mapPortion.cleanAll();
         }
     }
@@ -359,7 +360,7 @@ class SceneMap extends SceneGame
 
     setPortion(i, j, k, m, n, o)
     {
-        this.setMapPortion(i, j, k, this.getMapPortion(m, n, o));
+        this.setMapPortion(i, j, k, this.getMapPortion(m, n, o), true);
     }
 
     // -------------------------------------------------------
@@ -411,9 +412,13 @@ class SceneMap extends SceneGame
 
     // -------------------------------------------------------
 
-    setMapPortion(x, y, z, mapPortion)
+    setMapPortion(x, y, z, mapPortion, move)
     {
         let index = this.getPortionIndex(x, y, z);
+        let currentMapPortion = this.mapPortions[index];
+        if (currentMapPortion && !move) {
+            currentMapPortion.cleanAll();
+        }
         this.mapPortions[index] = mapPortion;
     }
 
@@ -831,6 +836,5 @@ class SceneMap extends SceneGame
         {
             this.scene.remove(this.scene.children[i]);
         }
-        RPM.currentMap = null;
     }
 }

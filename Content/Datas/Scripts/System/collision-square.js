@@ -155,10 +155,10 @@ class CollisionSquare
     read(json)
     {
         let rect = json.rec;
-        this.left = json.l;
-        this.right = json.r;
-        this.top = json.t;
-        this.bot = json.b;
+        this.left = RPM.defaultValue(json.l, true);
+        this.right = RPM.defaultValue(json.r, true);
+        this.top = RPM.defaultValue(json.t, true);
+        this.bot = RPM.defaultValue(json.b, true);
         if (!RPM.isUndefined(rect))
         {
             this.rect = rect === null ? null : [Math.round(rect[0] * RPM

@@ -75,10 +75,21 @@ class MapObject
     {
         switch (objectID)
         {
+        case -1:
+            
+            if (object.isInScene || object.isHero || object.isStartup)
+            {
+                RPM.tryCatch(callback.call(base, object));
+            } else // If not in scene, then search the id again in the current
+            //  loaded portions
+            {
+                await MapObject.getObjectAndPortion(object, objectID, base, 
+                    callback);
+            }
+            break;
         case 0: // Hero
             RPM.tryCatch(callback.call(base, RPM.game.hero));
             break;
-
         default: // Particular object
             await MapObject.getObjectAndPortion(object, objectID, base, callback);
             break;

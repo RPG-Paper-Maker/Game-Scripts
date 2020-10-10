@@ -101,7 +101,7 @@ class SystemDetection
             }
             list[i] = [
                 localPosition.x + x,
-                localPosition.y + RPM.positionTotalY(p),
+                localPosition.y + RPM.positionTotalY(p) + (RPM.SQUARE_SIZE / 2),
                 localPosition.z + z,
                 RPM.SQUARE_SIZE,
                 (box[1] * RPM.SQUARE_SIZE) + (box[2] / 100 * RPM.SQUARE_SIZE),

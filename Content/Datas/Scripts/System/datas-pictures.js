@@ -91,11 +91,6 @@ class DatasPictures
     getPictureCopy(kind, id)
     {
         let picture = this.get(kind, id);
-        console.log("a")
-        if (picture)
-        {
-            console.log(picture.picture.createCopy().empty)
-        }
         return picture ? picture.picture.createCopy() : new Picture2D;
     }
 

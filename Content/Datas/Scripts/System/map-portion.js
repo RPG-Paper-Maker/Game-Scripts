@@ -1442,12 +1442,12 @@ class MapPortion
                 }
             }
         }
-        let j, m;
+        let j, m, objCollision;
         for (i = 0, l = this.overflowMountains.length; i < l; i++)
         {
             objCollision = RPM.currentMap.getMapPortionByPosition(this
-                .overflowMountains[i]).getObjectCollisionAt(positionOverflow,
-                jpositionAfter, ElementMapKind.Mountains);
+                .overflowMountains[i]).getObjectCollisionAt(this
+                .overflowMountains[i], jpositionAfter, ElementMapKind.Mountains);
             for (j = 0, m = objCollision.length; j < m; j++)
             {
                 result = this.checkMountainCollision(jpositionAfter,
