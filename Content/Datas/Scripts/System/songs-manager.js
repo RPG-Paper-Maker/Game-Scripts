@@ -44,7 +44,7 @@ class SongsManager
     *   @param {SongKind} kind The kind of song to add
     *   @param {number} id The id of the song
     */
-    async playMusic(kind, id, volume, start, end)
+    playMusic(kind, id, volume, start, end)
     {
         if (id < 1)
         {
@@ -76,7 +76,7 @@ class SongsManager
             song = song.song;
             song.volume(volume);
             song.seek(start);
-            await song.play();
+            song.play();
             this.volumes[kind] = volume;
             this.starts[kind] = start;
             this.ends[kind] = end;

@@ -9,12 +9,6 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-// -------------------------------------------------------
-//
-//  CLASS SceneGame
-//
-// -------------------------------------------------------
-
 /** @class
 *   Abstract class for the game stack.
 *   @property {ReactionInterpreter[]} reactionInterpreters The reaction
@@ -97,7 +91,7 @@ class SceneGame
                 endingReactions.push(i);
             }
             // If changed map, STOP
-            if (RPM.currentMap.loading)
+            if (!RPM.currentMap || RPM.currentMap.loading)
             {
                 return;
             }

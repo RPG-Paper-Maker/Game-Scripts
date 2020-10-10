@@ -90,7 +90,10 @@ class Picture2D extends Bitmap
     {
         return (await new Promise((resolve, reject) => {
             let image = new Image()
-            image.onload = () => resolve(image);
+            image.onload = () => {
+                image.empty = false;
+                resolve(image);
+            }
             image.onerror = () => {
                 image.empty = true;
                 resolve(image);

@@ -601,7 +601,6 @@ let MonsterActionKind = {
     UseItem: 1,
     DoNothing: 2
 };
-
 Object.freeze(MonsterActionKind);
 
 /**
@@ -613,7 +612,6 @@ let MonsterActionTargetKind = {
     Random: 0,
     WeakEnemies: 1
 };
-
 Object.freeze(MonsterActionTargetKind);
 
 /**
@@ -629,5 +627,4 @@ let OperationKind = {
     GreaterThan: 4,
     LesserThan: 5
 };
-
 Object.freeze(OperationKind);

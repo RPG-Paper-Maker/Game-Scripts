@@ -132,6 +132,7 @@ class RPM
     static STRING_ZERO = "0";
     static UNDEFINED = 'undefined';
     static NUMBER = "number";
+    static STRING = "string";
     static TAG_BOLD = "b";
     static TAG_ITALIC = "i";
     static TAG_LEFT = "l";
@@ -875,6 +876,13 @@ class RPM
 
     // -------------------------------------------------------
 
+    static isString(value)
+    {
+        return typeof value === RPM.STRING;
+    }
+
+    // -------------------------------------------------------
+
     static numToBool(num)
     {
         return num === RPM.NUM_BOOL_TRUE;
@@ -1012,7 +1020,6 @@ class RPM
     }
 
     // -------------------------------------------------------
-
     /** Initialize the openGL stuff.
     */
     static initializeGL()
@@ -1030,7 +1037,6 @@ class RPM
     }
 
     // -------------------------------------------------------
-
     /** Set the camera aspect while resizing the window.
     */
     static resizeGL()
@@ -1045,10 +1051,9 @@ class RPM
     }
 
     // -------------------------------------------------------
-
     /** Update the current stack.
     */
-    static update = function()
+    static update()
     {
         // Update game timer if there's a current game
         if (RPM.game)
@@ -1075,11 +1080,10 @@ class RPM
     }
 
     // -------------------------------------------------------
-
     /** First key press handle for the current stack.
     *   @param {number} key The key ID pressed.
     */
-    static onKeyPressed = function(key)
+    static onKeyPressed(key)
     {
         RPM.gameStack.onKeyPressed(key);
     }
@@ -1089,7 +1093,7 @@ class RPM
     /** First key release handle for the current stack.
     *   @param {number} key The key ID released.
     */
-    static onKeyReleased = function(key)
+    static onKeyReleased(key)
     {
         RPM.gameStack.onKeyReleased(key);
     }
@@ -1100,7 +1104,7 @@ class RPM
     *   @param {number} key The key ID pressed.
     *   @returns {boolean} false if the other keys are blocked after it.
     */
-    static onKeyPressedRepeat = function(key)
+    static onKeyPressedRepeat(key)
     {
         return RPM.gameStack.onKeyPressedRepeat(key);
     }
@@ -1112,7 +1116,7 @@ class RPM
     *   @param {number} key The key ID pressed
     *   @returns {boolean} false if the other keys are blocked after it
     */
-    static onKeyPressedAndRepeat = function(key)
+    static onKeyPressedAndRepeat(key)
     {
         return RPM.gameStack.onKeyPressedAndRepeat(key);
     }
@@ -1120,9 +1124,8 @@ class RPM
     // -------------------------------------------------------
 
     /** Draw the 3D for the current stack
-    *   @param {Canvas} canvas The 3D canvas
     */
-    static draw3D = function()
+    static draw3D()
     {
         RPM.gameStack.draw3D();
     }
@@ -1130,7 +1133,6 @@ class RPM
     // -------------------------------------------------------
 
     /** Draw HUD for the current stack
-    *   @param {Canvas} canvas The HUD canvas
     */
     static drawHUD = function()
     {
@@ -1157,7 +1159,7 @@ class RPM
     // -------------------------------------------------------
     /** Main loop of the game
     */
-    static loop = function()
+    static loop()
     {
         requestAnimationFrame(RPM.loop);
 

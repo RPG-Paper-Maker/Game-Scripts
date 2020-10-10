@@ -37,7 +37,7 @@ SceneBattle.prototype.initializeStep0 = async function()
     this.initializeInformations();
     await this.initializeWindowCommands();
     await this.initializeWindowsEnd();
-    await this.initializeMusics();
+    this.initializeMusics();
 }
 
 // -------------------------------------------------------
@@ -213,13 +213,13 @@ SceneBattle.prototype.initializeWindowsEnd = async function()
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.initializeMusics = async function()
+SceneBattle.prototype.initializeMusics = function()
 {
     SceneBattle.musicMap = SystemPlaySong.currentPlayingMusic;
     let song = RPM.songsManager.currentSong[SongKind.Music];
     SceneBattle.musicMapTime = song === null ? 0 : song.seek() / RPM
         .ONE_SECOND_MILLI;
-    await RPM.datasGame.battleSystem.battleMusic.playMusic();
+    RPM.datasGame.battleSystem.battleMusic.playMusic();
 }
 
 // -------------------------------------------------------

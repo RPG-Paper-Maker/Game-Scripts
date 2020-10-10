@@ -103,7 +103,7 @@ class SystemPlaySong
     *   @param {number} [start=undefined] The start of the song to play
     *   @param {number} [volume=undefined] The volume to play
     */
-    async playMusic(start, volume)
+    playMusic(start, volume)
     {
         if (RPM.isUndefined(start))
         {
@@ -128,8 +128,8 @@ class SystemPlaySong
             SystemPlaySong.previousMusic = SystemPlaySong.currentPlayingMusic;
             SystemPlaySong.currentPlayingMusic = this;
         }
-        await RPM.songsManager.playMusic(this.kind, this.songID.getValue(), 
-            volume, start, this.end ? this.end.getValue() : null);
+        RPM.songsManager.playMusic(this.kind, this.songID.getValue(), volume, 
+            start, this.end ? this.end.getValue() : null);
         return 1;
     }
 

@@ -115,10 +115,6 @@ class SceneSaveLoadGame extends SceneGame
 
     update()
     {
-        if (RPM.currentMap !== null)
-        {
-            SceneGame.prototype.update.call(RPM.currentMap);
-        }
         if (!this.windowInformations.content.game.isNull)
         {
             this.windowInformations.content.update();
@@ -129,10 +125,6 @@ class SceneSaveLoadGame extends SceneGame
 
     onKeyPressed(key)
     {
-        if (RPM.currentMap !== null)
-        {
-            SceneGame.prototype.onKeyPressed.call(RPM.currentMap, key);
-        }
         if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
             .Cancel) || DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard
             .MainMenu))
@@ -144,32 +136,8 @@ class SceneSaveLoadGame extends SceneGame
 
     // -------------------------------------------------------
 
-    onKeyReleased(key)
-    {
-        if (RPM.currentMap !== null)
-        {
-            SceneGame.prototype.onKeyReleased.call(RPM.currentMap, key);
-        }
-    }
-
-    // -------------------------------------------------------
-
-    onKeyPressedRepeat(key)
-    {
-        if (RPM.currentMap !== null)
-        {
-            SceneGame.prototype.onKeyPressedRepeat.call(RPM.currentMap, key);
-        }
-    }
-
-    // -------------------------------------------------------
-
     onKeyPressedAndRepeat(key)
     {
-        if (RPM.currentMap !== null)
-        {
-            SceneGame.prototype.onKeyPressedAndRepeat.call(RPM.currentMap, key);
-        }
         this.windowChoicesSlots.onKeyPressedAndRepeat(key);
         this.updateInformations.call(this, this.windowChoicesSlots
             .currentSelectedIndex);

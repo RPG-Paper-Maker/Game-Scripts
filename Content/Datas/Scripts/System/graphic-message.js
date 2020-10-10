@@ -20,23 +20,11 @@ class GraphicMessage extends Bitmap
         super();
 
         this.message = message;
-        this.facesetID = facesetID;
-    }
-
-    async load()
-    {
-        this.faceset = await Picture2D.create(RPM.datasGame.pictures.get(
-            PictureKind.Facesets, this.facesetID));
+        let picture = RPM.datasGame.pictures.get(PictureKind.Facesets, facesetID);
+        this.faceset = picture ? picture.picture.createCopy() : new Picture2D();
         this.graphics = [];
         this.positions = [];
         this.setMessage(this.message);
-    }
-
-    static async create(message, facesetID)
-    {
-        let graphic = new GraphicMessage(message, facesetID);
-        await RPM.tryCatch(graphic.load());
-        return graphic;
     }
 
     setMessage(message)
@@ -76,7 +64,7 @@ class GraphicMessage extends Bitmap
                 {
                     cr++;
                     ch = message.charAt(cr);
-                } while (cr < ll && ch !== RPM.STRING_BRACKET_RIGHT);
+                } while (cr < l && ch !== RPM.STRING_BRACKET_RIGHT);
                 tag = message.substring(c + (open ? 1 : 2), cr);
                 if (tag === RPM.TAG_BOLD)
                 {
@@ -155,7 +143,6 @@ class GraphicMessage extends Bitmap
     {
         if (open)
         {
-            let currentNode;
             for (let i = notClosed.length - 1; i >= 0; i--)
             {
                 currentNode = currentNode.add(notClosed[i]);
@@ -257,7 +244,8 @@ class GraphicMessage extends Bitmap
     {
         let tag = node.data[0];
         let value = node.data[1];
-        let graphic;
+        let graphic, bold, italic, align, size, font, textColor, backColor, 
+            strokeColor;
         switch (tag)
         {
         case TagKind.NewLine:
@@ -315,7 +303,7 @@ class GraphicMessage extends Bitmap
             break;
         case TagKind.Icon:
             graphic = RPM.datasGame.pictures.get(PictureKind.Icons, value)
-                .picture;
+                .picture.createCopy();
             result.g.push(graphic);
             result.p.push(graphic.oW);
             result.a.push(result.ca);
@@ -461,10 +449,12 @@ class GraphicMessage extends Bitmap
                         offsetX = 0;
                         break;
                     case Align.Center:
-                        offsetX = (RPM.getScreenX(w) - RPM.getScreenMinXY(this.totalWidths[j]) - newX) / 2;
+                        offsetX = (RPM.getScreenX(w) - RPM.getScreenMinXY(this
+                            .totalWidths[j]) - newX) / 2;
                         break;
                     case Align.Right:
-                        offsetX = RPM.getScreenX(w) - RPM.getScreenMinXY(this.totalWidths[j]) - newX;
+                        offsetX = RPM.getScreenX(w) - RPM.getScreenMinXY(this
+                            .totalWidths[j]) - newX;
                         break;
                     }
                     j++;
@@ -473,7 +463,7 @@ class GraphicMessage extends Bitmap
                 {
                     graphic.draw(newX + offsetX, newY - (graphic.h / 2) + 
                         offsetY,  graphic.oW, graphic.oH, 0, 0, graphic.oW, 
-                        raphic.oH, false);
+                        graphic.oH, false);
                 } else
                 {
                     graphic.draw(newX + offsetX, newY + offsetY, graphic.oW,

@@ -57,8 +57,9 @@ class DatasPictures
                 {
                     id = jsonPicture.id;
                     picture = new SystemPicture(jsonPicture, k);
-                    if (k === PictureKind.Icons || k === PictureKind.Pictures || 
-                        k === PictureKind.Animations)
+                    if (k === PictureKind.Icons || k === PictureKind.Pictures ||
+                        k === PictureKind.Facesets || k === PictureKind
+                        .Animations)
                     {
                         await picture.load();
                     }
@@ -85,6 +86,17 @@ class DatasPictures
     {
         return (kind === PictureKind.None) ? new SystemPicture() : this.list
             [kind][id];
+    }
+
+    getPictureCopy(kind, id)
+    {
+        let picture = this.get(kind, id);
+        console.log("a")
+        if (picture)
+        {
+            console.log(picture.picture.createCopy().empty)
+        }
+        return picture ? picture.picture.createCopy() : new Picture2D;
     }
 
     // -------------------------------------------------------

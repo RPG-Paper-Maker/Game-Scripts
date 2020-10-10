@@ -61,7 +61,7 @@ class SceneTitleScreen extends SceneGame
         );
 
         // Play title screen song
-        await RPM.datasGame.titlescreenGameover.titleMusic.playMusic();
+        RPM.datasGame.titlescreenGameover.titleMusic.playMusic();
 
         this.loading = false;
     }

@@ -75,12 +75,8 @@ class MapObject
     {
         switch (objectID)
         {
-        case -1: // This object
-            callback.call(base, object);
-            break;
-
         case 0: // Hero
-            callback.call(base, RPM.game.hero);
+            RPM.tryCatch(callback.call(base, RPM.game.hero));
             break;
 
         default: // Particular object
@@ -123,7 +119,8 @@ class MapObject
         }
         if (moved !== null)
         {
-            callback.call(base, moved, objectID, 0, i, null, mapsDatas);
+            RPM.tryCatch(callback.call(base, moved, objectID, 0, i, null, 
+                mapsDatas));
             return;
         }
 
@@ -144,11 +141,12 @@ class MapObject
             }
             if (moved === null)
             {
-                callback.call(base, RPM.game.hero, objectID, 1, -1, null, 
-                    mapsDatas);
+                RPM.tryCatch(callback.call(base, RPM.game.hero, objectID, 1, -1, 
+                    null, mapsDatas));
             } else
             {
-                callback.call(base, moved, objectID, 1, i, objects, mapsDatas);
+                RPM.tryCatch(callback.call(base, moved, objectID, 1, i, objects, 
+                    mapsDatas));
             }
         } else
         {   // Load the file if not already in temp
@@ -160,11 +158,12 @@ class MapObject
             moved = mapPortion.getObjFromID(json, objectID);
             if (moved === null)
             {
-                callback.call(base, RPM.game.hero, objectID, 2, -1, null, 
-                    mapsDatas);
+                RPM.tryCatch(callback.call(base, RPM.game.hero, objectID, 2, -1, 
+                    null, mapsDatas));
             } else
             {
-                callback.call(base, moved, objectID, 2, -1, null, mapsDatas);
+                RPM.tryCatch(callback.call(base, moved, objectID, 2, -1, null, 
+                    mapsDatas));
             }
         }
     }
@@ -830,7 +829,6 @@ class MapObject
             }
 
             // Add or remove from scene
-            localPortion = RPM.currentMap.getLocalPortion(afterPortion);
             if (RPM.currentMap.isInPortion(RPM.currentMap.getLocalPortion(
                 afterPortion)))
             {

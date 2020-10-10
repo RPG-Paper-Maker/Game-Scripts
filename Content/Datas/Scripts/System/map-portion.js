@@ -920,10 +920,7 @@ class MapPortion
         // Objects
         for (i = 0, l = this.objectsList.length; i < l; i++)
         {
-            if (this.objectsList[i].mesh !== null)
-            {
-                RPM.currentMap.scene.remove(this.objectsList[i].mesh);
-            }
+            this.objectsList[i].removeFromScene();
         }
 
         // Remove moved objects from the scene
