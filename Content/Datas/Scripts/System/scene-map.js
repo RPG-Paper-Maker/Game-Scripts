@@ -752,8 +752,7 @@ class SceneMap extends SceneGame
             if (!RPM.blockingHero && !this.isBattleMap)
             {
                 EventCommandSendEvent.sendEvent(null, 0, 1, true, 4, [null,
-                    SystemValue.createNumber(key), SystemValue.createSwitch(
-                    false), SystemValue.createSwitch(false)], true);
+                    SystemValue.createNumber(key)], true);
             }
             super.onKeyReleased(key);
         }
