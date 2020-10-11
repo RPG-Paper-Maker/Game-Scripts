@@ -715,18 +715,19 @@ class MapPortion
     readObjects3D(json)
     {
         // Initialize
-        let l = RPM.currentMap.texturesObjects3D.length;
-        let hash = new Array(l);
+        let nbTextures = RPM.currentMap.texturesObjects3D.length;
+        let hash = new Array(nbTextures);
         let i;
-        for (i = 1; i <= l; i++)
+        for (i = 1; i <= nbTextures; i++)
         {
             hash[i] = null;
         }
 
         // Read all
         let jsonAll = json.a;
+        let l = jsonAll.length;
         let o, position, v, datas, obj3D, obj, geometry, material, count, result;
-        for (i = 0, l = jsonAll.length; i < l; i++)
+        for (i = 0; i < l; i++)
         {
             // Getting object 3D
             o = jsonAll[i];
@@ -789,7 +790,7 @@ class MapPortion
 
         // Add meshes
         let mesh;
-        for (i = 1; i <= l; i++)
+        for (i = 1; i <= nbTextures; i++)
         {
             obj = hash[i];
             if (obj !== null)
