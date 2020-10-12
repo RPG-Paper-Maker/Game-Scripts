@@ -18,14 +18,13 @@ THREE.OBJLoader.prototype = {
 
 		var loader = new THREE.FileLoader();
 
-		await new Promise((resolve, reject) => {
+		return await new Promise((resolve, reject) => {
 			loader.load(url, function ( text ) {
 				resolve(scope.parse(text));
-			}, () => {
+			},
+			() => {},
+			() => {
 				RPM.showErrorMessage("Could not load " + url);
-				resolve();
-			}, () => {
-				resolve()
 			});
 		});
 	},
