@@ -809,11 +809,8 @@ class RPM
         let position = vector.clone();
         camera.updateMatrixWorld(true);
         position.project(camera);
-
-        return {
-            x: (position.x * widthHalf) + widthHalf,
-            y: - (position.y * heightHalf) + heightHalf
-        };
+        return new THREE.Vector2((position.x * widthHalf) + widthHalf, - (
+            position.y * heightHalf) + heightHalf);
     }
 
     // -------------------------------------------------------

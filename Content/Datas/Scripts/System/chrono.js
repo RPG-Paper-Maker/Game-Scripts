@@ -11,6 +11,9 @@
 
 /** @class
 *   A chrono in the game
+*   @property {number} time The time in the chrono (in milliseconds)
+*   @property {number} lastTime The last time date (in milliseconds)
+*   @param {number} start The start time of the chrono (in milliseconds)
 */
 class Chrono
 {
@@ -20,15 +23,22 @@ class Chrono
         this.lastTime = new Date().getTime();
     }
 
+    // -------------------------------------------------------
+    /** Get time time in seconds
+    *   @returns {number}
+    */
+    getSeconds()
+    {
+        return Math.floor(this.time / 1000);
+    }
+
+    // -------------------------------------------------------
+    /** Update the chrono
+    */
     update()
     {
         let date = new Date().getTime();
         this.time += date - this.lastTime;
         this.lastTime = date;
-    }
-
-    getSeconds()
-    {
-        return Math.floor(this.time / 1000);
     }
 }

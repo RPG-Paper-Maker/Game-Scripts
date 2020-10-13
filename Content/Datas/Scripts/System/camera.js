@@ -12,13 +12,19 @@
 /** @class
 *   The camera of the current map
 *   @property {THREE.PerspectiveCamera} threeCamera The three.js camera
-*   @property {number} distance The x/z axis distance between the camera and
+*   @property {number} distance The distance between the camera and
 *   the target
 *   @property {number} height The y distance between the camera and the target
 *   @property {number} horizontalAngle The horizontal angle of the camera
-*   @property {THREE.Vector3} target The position of the target
-*   @param {number} d The camera distance
-*   @param {number} h The camera height
+*   @property {number} verticalAngle The vertical angle of the camera
+*   @property {boolean} verticalRight Used to loop the horizontal and vertical 
+*   angle
+*   @property {MapObject} target The camera target
+*   @property {THREE.Vector3} targetPosition The camera target position
+*   @property {THREE.Vector3} targetOffset The target offset position
+*   @param {SystemCameraProperties} cameraProperties The system camera 
+*   properties
+*   @param {MapObject} target The camera target
 */
 class Camera
 {
@@ -28,21 +34,50 @@ class Camera
         this.target = target;
     }
 
+    // -------------------------------------------------------
+    /** Get the map orientation according to the camera
+    *   @returns {Orientation}
+    */
+    getMapOrientation()
+    {
+        return RPM.mod(Math.round((this.horizontalAngle) / 90) - 1, 4);
+    }
+
+    // -------------------------------------------------------
+    /** Get the distance according to vertical angle
+    *   @returns {number}
+    */
     getDistance()
     {
         return this.distance * Math.sin(this.verticalAngle * Math.PI / 180.0);
     }
 
+    // -------------------------------------------------------
+    /** Get the height according to vertical angle
+    *   @returns {number}
+    */
     getHeight()
     {
         return this.distance * Math.cos(this.verticalAngle * Math.PI / 180.0);
     }
 
+    // -------------------------------------------------------
+    /** Get the horizontal angle between two positions
+    *   @param {THREE.Vector3} p1 The first position
+    *   @param {THREE.Vector3} p2 The second position
+    *   @returns {number}
+    */
     getHorizontalAngle(p1, p2)
     {
         return Math.atan2(p2.z - p1.z, p2.x - p1.x) * 180 / Math.PI;
     }
 
+    // -------------------------------------------------------
+    /** Get the vertical angle between two positions
+    *   @param {THREE.Vector3} p1 The first position
+    *   @param {THREE.Vector3} p2 The second position
+    *   @returns {number}
+    */
     getVerticalAngle(p2, p1)
     {
         let x = p1.x - p2.x;
@@ -51,6 +86,10 @@ class Camera
         return 90 + (Math.atan2(y, Math.sqrt(x * x + z * z)) * 180 / Math.PI);
     }
 
+    // -------------------------------------------------------
+    /** Add an angle to the vertical angle
+    *   @param {THREE.Vector3} a The angle to add
+    */
     addVerticalAngle(a)
     {
         if (this.verticalRight)
@@ -70,12 +109,18 @@ class Camera
         }
     }
 
+    // -------------------------------------------------------
+    /** Update the target position according to target and target offset
+    */
     updateTargetPosition()
     {
         this.targetPosition = this.target.position.clone().add(this
             .targetOffset);
     }
 
+    // -------------------------------------------------------
+    /** Update the three.js camera position
+    */
     updateCameraPosition()
     {
         let distance = this.getDistance();
@@ -86,17 +131,12 @@ class Camera
             .sin(this.horizontalAngle * Math.PI / 180.0));
     }
 
+    // -------------------------------------------------------
+    /** Update target offset position
+    */
     updateTargetOffset()
     {
         let distance = this.getDistance();
-        var x = this.threeCamera.position.x -
-                (distance * Math.cos((this.horizontalAngle + 180) *
-                                     Math.PI / 180.0));
-        var y = this.threeCamera.position.y - this.getHeight();
-        var z = this.threeCamera.position.z -
-                (distance * Math.sin((this.horizontalAngle + 180) *
-                                     Math.PI / 180.0));
-
         this.targetOffset.x += this.threeCamera.position.x - (distance * Math
             .cos((this.horizontalAngle + 180) * Math.PI / 180.0)) - this
             .targetPosition.x;
@@ -107,6 +147,9 @@ class Camera
             .targetPosition.z;
     }
 
+    // -------------------------------------------------------
+    /** Update horizontal and vertical angles
+    */
     updateAngles()
     {
         this.horizontalAngle = this.getHorizontalAngle(this.threeCamera.position
@@ -115,12 +158,25 @@ class Camera
             this.targetPosition);
     }
 
+    // -------------------------------------------------------
+    /** Update the distance
+    */
     updateDistance()
     {
         this.distance = this.threeCamera.position.distanceTo(this.targetPosition);
     }
 
-    /** Update the camera position and target
+    // -------------------------------------------------------
+    /** Update the three.js camera view
+    */
+    updateView()
+    {
+        this.threeCamera.lookAt(this.targetPosition);
+        RPM.currentMap.orientation = this.getMapOrientation();
+    }
+
+    // -------------------------------------------------------
+    /** Update all the parameters
     */
     update()
     {
@@ -132,18 +188,5 @@ class Camera
 
         // Update view
         this.updateView();
-    }
-
-    updateView()
-    {
-        this.threeCamera.lookAt(this.targetPosition);
-        RPM.currentMap.orientation = this.getMapOrientation();
-    }
-
-    /** Update the camera angle
-    */
-    getMapOrientation()
-    {
-        return RPM.mod(Math.round((this.horizontalAngle) / 90) - 1, 4);
     }
 }

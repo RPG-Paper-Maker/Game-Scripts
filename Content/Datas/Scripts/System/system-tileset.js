@@ -276,18 +276,18 @@ class SystemTileset
             let a, b, c, d, count, lA, lB, lC, lD;
             for (a = 0; a < Autotiles.COUNT_LIST; a++)
             {
-                lA = Autotiles.autotileBorder[Autotiles.listA[a]];
+                lA = Autotiles.AUTOTILE_BORDER[Autotiles.LIST_A[a]];
                 count = 0;
                 row++;
                 for (b = 0; b < Autotiles.COUNT_LIST; b++)
                 {
-                    lB = Autotiles.autotileBorder[Autotiles.listB[b]];
+                    lB = Autotiles.AUTOTILE_BORDER[Autotiles.LIST_B[b]];
                     for (c = 0; c < Autotiles.COUNT_LIST; c++)
                     {
-                        lC = Autotiles.autotileBorder[Autotiles.listC[c]];
+                        lC = Autotiles.AUTOTILE_BORDER[Autotiles.LIST_C[c]];
                         for (d = 0; d < Autotiles.COUNT_LIST; d++)
                         {
-                            lD = Autotiles.autotileBorder[Autotiles.listD[d]];
+                            lD = Autotiles.AUTOTILE_BORDER[Autotiles.LIST_D[d]];
 
                             // Draw
                             Platform.ctxr.drawImage(img, (lA % 4 * sDiv) + 

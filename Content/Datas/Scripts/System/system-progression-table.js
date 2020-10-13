@@ -26,7 +26,7 @@ class SystemProgressionTable
         }
     }
 
-    static createProgression(i, f, equation)
+    static create(i, f, equation)
     {
         let progression = new SystemProgressionTable();
         progression.initialize(i, f, equation);

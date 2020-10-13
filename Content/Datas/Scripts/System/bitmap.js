@@ -84,7 +84,7 @@ class Bitmap
     }
 
     // -------------------------------------------------------
-    /** Set the position to the top
+    /** Set the position to the left
     */
     setLeft()
     {

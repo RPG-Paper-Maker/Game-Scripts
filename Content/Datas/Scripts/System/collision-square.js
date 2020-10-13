@@ -12,10 +12,10 @@
 /** @class
 *   A collision settings in a texture square
 *   @property {number[]} rect Percentage of the rect limitation
-*   @property {boolean} left
-*   @property {boolean} right
-*   @property {boolean} top
-*   @property {boolean} bot
+*   @property {boolean} left The left direction
+*   @property {boolean} right The right direction
+*   @property {boolean} top The top direction
+*   @property {boolean} bot The bot direction
 */
 class CollisionSquare
 {
@@ -26,9 +26,17 @@ class CollisionSquare
         this.right = true;
         this.top = true;
         this.bot = true;
-        this.bb = null;
     }
 
+    // -------------------------------------------------------
+    /** Union of the collision squares
+    *   @static
+    *   @param {number[][]} squares All the squares and their corresponding 
+    *   rects
+    *   @param {number} l The squares numbers
+    *   @param {number} w The number of squares width
+    *   @param {number} h The number of squares height
+    */
     static unionSquares(squares, l, w, h)
     {
         let boolGrid = new Array(l);
@@ -142,6 +150,13 @@ class CollisionSquare
         return result;
     }
     
+    // -------------------------------------------------------
+    /** Get the BB according to rect and size
+    *   @static
+    *   @param {number[]} rect The rect
+    *   @param {number} w The number of squares width
+    *   @param {number} h The number of squares height
+    */
     static getBB(rect, w, h)
     {
         return [(rect[0] - ((w * RPM.SQUARE_SIZE) - rect[0] - rect[2])) / 2, (h 
@@ -149,8 +164,9 @@ class CollisionSquare
             , 0, 0, 0];
     }
 
-    /** Read the JSON associated to the collision square.
-    *   @param {Object} json Json object describing the object.
+    // -------------------------------------------------------
+    /** Read the JSON associated to the collision square
+    *   @param {Object} json Json object describing the collision square
     */
     read(json)
     {
@@ -169,7 +185,9 @@ class CollisionSquare
     }
 
     // -------------------------------------------------------
-
+    /** Indicate if all the direction are OK
+    *   @returns {boolean}
+    */
     hasAllDirections()
     {
         return this.left && this.right && this.top && this.bot;

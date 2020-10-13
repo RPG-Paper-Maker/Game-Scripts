@@ -260,7 +260,7 @@ class SongsManager
     // -------------------------------------------------------
     initializeProgressionMusic(i, f, equation, end)
     {
-        this.progressionMusic = SystemProgressionTable.createProgression(i, f,
+        this.progressionMusic = SystemProgressionTable.create(i, f,
             equation);
         this.progressionMusicTime = new Date().getTime();
         this.progressionMusicEnd = end;
