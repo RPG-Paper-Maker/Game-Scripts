@@ -77,6 +77,7 @@ class DatasSongs
     /** Get the corresponding song
     *   @param {SongKind} kind The song kind
     *   @param {number} id The song id
+    *   @returns {SystemSong}
     */
     get(kind, id)
     {

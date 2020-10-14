@@ -11,16 +11,34 @@
 
 /** @class
 *   All the battle system datas
-*   @property {SystemStatistic[]} statistics List of all the statistics.
-*   @property {string[]} equipments List of all the equipments name.
-*   @property {SystemElement[]} elements List of all the elements.
+*   @property {SystemElement[]} elements List of all the elements by ID
+*   @property {SystemElement[]} elementsOrder List of all the elements by index
+*   @property {SystemStatistic[]} statistics List of all the statistics by ID
+*   @property {SystemStatistic[]} statistics List of all the statistics by index
+*   @property {SystemStatistic[]} statisticsElements List of all the statistics 
+*   elements
+*   @property {SystemStatistic[]} statisticsElementsPercent List of all the 
+*   statistics elements percents
+*   @property {string[]} equipments List of all the equipments name by ID
+*   @property {string[]} equipmentsOrder List of all the equipments name by 
+*   index
+*   @property {number} maxEquipmentID Max equipment ID in the list
 *   @property {SystemWeaponArmorKind[]} weaponsKind List of all the weapons
-*   kind.
-*   @property {SystemWeaponArmorKind[]} armorsKind List of all the armors kind.
-*   @property {number[]} battleCommands List of all the battle
-*   commands (skill ID).
-*   @property {number} idLevelStatistic Id of the level statistic.
-*   @property {number} idExpStatistic Id of the experience statistic.
+*   kind by ID
+*   @property {SystemWeaponArmorKind[]} armorsKind List of all the armors kind 
+*   by ID
+*   @property {number[]} battleCommands List of all the battle commands (skill 
+*   ID) by ID
+*   @property {number[]} battleCommandsOrder List of all the battle commands (
+*   skill ID) by index
+*   @property {SystemBattleMap[]} battleMaps List of all the battle maps by ID
+*   @property {number} idLevelStatistic Id of the level statistic
+*   @property {number} idExpStatistic Id of the experience statistic
+*   @property {SystemValue} formulaIsDead The formula is dead
+*   @property {SystemValue} formulaCrit The formula for critical hit
+*   @property {SystemPlaySong} battleMusic The battle music
+*   @property {SystemPlaySong} battleLevelUp The battle level up music
+*   @property {SystemPlaySong} battleVictory The battle victory music
 */
 class DatasBattleSystem
 {
@@ -29,6 +47,7 @@ class DatasBattleSystem
 
     }
 
+    // -------------------------------------------------------
     /** Read the JSON file associated to battle system.
     */
     async read()

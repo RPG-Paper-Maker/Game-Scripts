@@ -21,6 +21,7 @@ class DatasWeapons
 
     }
 
+    // -------------------------------------------------------
     /** Read the JSON file associated to weapons
     */
     async read()

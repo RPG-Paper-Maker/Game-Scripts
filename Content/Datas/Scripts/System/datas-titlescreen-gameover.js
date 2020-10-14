@@ -11,6 +11,13 @@
 
 /** @class
 *   All the titlescreen and gameover datas
+*   @property {boolean} isTitleBackgroundImage Indicate if the background is an 
+*   image
+*   @property {number} titleBackgroundImageID The background image ID
+*   @property {number} titleBackgroundVideoID The background video ID
+*   @property {SystemPlaySong} titleMusic The title music
+*   @property {SystemTitleCommand[]} titleCommands The title commands
+*   @property {number[]} titleSettings The title settings IDs
 */
 class DatasTitlescreenGameover
 {
@@ -20,7 +27,8 @@ class DatasTitlescreenGameover
     }
 
     // -------------------------------------------------------
-
+    /** Read the JSON file associated to title screen and game over
+    */
     async read()
     {
         let json = await RPM.parseFileJSON(RPM.FILE_TITLE_SCREEN_GAME_OVER);
@@ -48,7 +56,9 @@ class DatasTitlescreenGameover
     }
 
     // -------------------------------------------------------
-
+    /** Get the commands graphic names
+    *   @returns {GraphicText[]}
+    */
     getCommandsNames()
     {
         let l = this.titleCommands.length;
@@ -65,7 +75,9 @@ class DatasTitlescreenGameover
     }
 
     // -------------------------------------------------------
-
+    /** Get the commands actions functions
+    *   @returns {function[]}
+    */
     getCommandsActions()
     {
         let l = this.titleCommands.length;
@@ -78,7 +90,9 @@ class DatasTitlescreenGameover
     }
 
     // -------------------------------------------------------
-
+    /** Get the commands settings content graphic
+    *   @returns {GraphicSetting[]}
+    */
     getSettingsCommandsContent()
     {
         let l = this.titleSettings.length;
@@ -87,12 +101,13 @@ class DatasTitlescreenGameover
         {
             list[i] = new GraphicSetting(this.titleSettings[i]);
         }
-
         return list;
     }
 
     // -------------------------------------------------------
-
+    /** Get the settings commands actions functions
+    *   @returns {function[]}
+    */
     getSettingsCommandsActions()
     {
         let l = this.titleSettings.length;
@@ -105,7 +120,10 @@ class DatasTitlescreenGameover
     }
 
     // -------------------------------------------------------
-
+    /** Get the settings commands action function according to ID
+    *   @param {number} id The action ID
+    *   @returns {function}
+    */
     getSettingsCommandsAction(id)
     {
         switch (id)
@@ -116,7 +134,9 @@ class DatasTitlescreenGameover
     }
 
     // -------------------------------------------------------
-
+    /** The setting action keyboard assignment
+    *   @returns {boolean}
+    */
     keyboardAssignment()
     {
         RPM.gameStack.push(new SceneKeyboardAssign());

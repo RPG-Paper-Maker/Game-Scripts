@@ -11,8 +11,9 @@
 
 /** @class
 *   All the keyBoard datas
-*   @property {SystemKeyBoard[]} list List of all the keys of the game according
-*   to ID
+*   @property {SystemKeyBoard[]} list List of all the keys of the game by ID
+*   @property {SystemKeyBoard[]} listOrdered List of all the keys of the game 
+*   by index
 *   @property {Object} menuControls All the menu controls assigns
 */
 class DatasKeyBoard
@@ -22,10 +23,12 @@ class DatasKeyBoard
 
     }
 
-    /** Test if a key id can be equal to a keyboard system object.
+    // -------------------------------------------------------
+    /** Test if a key id can be equal to a keyboard system object
     *   @static
-    *   @param {number} key The key id that needs to be compared.
-    *   @param {SystemKeyBoard} abr The keyBoard to compare to the key.
+    *   @param {number} key The key id that needs to be compared
+    *   @param {SystemKeyBoard} abr The keyBoard to compare to the key
+    *   @returns {boolean}
     */
     static isKeyEqual(key, abr)
     {
@@ -49,7 +52,8 @@ class DatasKeyBoard
         return false;
     }
 
-    /** Read the JSON file associated to keyboard.
+    // -------------------------------------------------------
+    /** Read the JSON file associated to keyboard
     */
     async read()
     {
@@ -87,7 +91,9 @@ class DatasKeyBoard
     }
 
     // -------------------------------------------------------
-
+    /** Get the graphics commands
+    *   @returns {GraphicKeyboard[]}
+    */
     getCommandsGraphics()
     {
         let l = this.listOrdered.length;
@@ -100,7 +106,9 @@ class DatasKeyBoard
     }
 
     // -------------------------------------------------------
-
+    /** Get the actions commands
+    *   @returns {function[]}
+    */
     getCommandsActions()
     {
         let l = this.listOrdered.length;

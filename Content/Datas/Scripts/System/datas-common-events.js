@@ -11,19 +11,25 @@
 
 /** @class
 *   All the battle system datas
-*   @property {SystemEvent[]} eventsSystem List of all the events system
-*   @property {SystemEvent[]} eventsUser List of all the events user
+*   @property {string} [DatasCommonEvents.PROPERTY_STOCKED="stocked"] The 
+*   property stocked for reorder function
+*   @property {SystemEvent[]} eventsSystem List of all the events system by ID
+*   @property {SystemEvent[]} eventsUser List of all the events user by ID
 *   @property {SystemCommonReaction[]} commonReactions List of all the common
-*   reactions
-*   @property {SystemObject[]} commonObjects List of all the common objects
+*   reactions by ID
+*   @property {SystemObject[]} commonObjects List of all the common objects by 
+*   ID
 */
 class DatasCommonEvents
 {
+    static PROPERTY_STOCKED = "stocked";
+
     constructor()
     {
 
     }
 
+    // -------------------------------------------------------
     /** Read the JSON file associated to common events
     */
     async read()
@@ -54,7 +60,6 @@ class DatasCommonEvents
     }
 
     // -------------------------------------------------------
-
     /** Reorder the models in the right order for inheritance
     *   @param {JSON} jsonObject The json corresponding to the current object
     *   to analyze
@@ -64,7 +69,8 @@ class DatasCommonEvents
     */
     modelReOrder(jsonObject, reorderedList, jsonObjects, objectsLength)
     {
-        if (jsonObject && !jsonObject.hasOwnProperty("stocked"))
+        if (jsonObject && !jsonObject.hasOwnProperty(DatasCommonEvents
+            .PROPERTY_STOCKED))
         {
             // If id = -1, we can add to the list
             let id = jsonObject.hId;

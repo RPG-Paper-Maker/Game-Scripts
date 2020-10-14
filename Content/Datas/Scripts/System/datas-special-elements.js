@@ -11,10 +11,14 @@
 
 /** @class
 *   All the special elements datas
+*   @property {SystemSpecialElement[]} autotiles List of all the autotiles of 
+*   the game according to ID
 *   @property {SystemSpecialElement[]} walls List of all the walls of the game
 *   according to ID
-*   @property {SystemSpecialElement[]} autotiles List of all the autotiles of the game
-*    according to ID
+*   @property {SystemMountain[]} mountains List of all the mountains of 
+*   the game according to ID
+*   @property {SystemObject3D[]} objects List of all the objects of the 
+*   game according to ID
 */
 class DatasSpecialElements
 {
@@ -24,7 +28,7 @@ class DatasSpecialElements
     }
 
     // -------------------------------------------------------
-    /** Read the JSON file associated to pictures.
+    /** Read the JSON file associated to special elements
     */
     async read()
     {

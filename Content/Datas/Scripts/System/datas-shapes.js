@@ -22,7 +22,7 @@ class DatasShapes
     }
 
     // -------------------------------------------------------
-    /** Read the JSON file associated to pictures.
+    /** Read the JSON file associated to shapes
     */
     async read()
     {
@@ -80,6 +80,7 @@ class DatasShapes
     /** Get the corresponding shape
     *   @param {CustomShapeKind} kind The shape kind
     *   @param {number} id The shape id
+    *   @returns {SystemShape}
     */
     get(kind, id)
     {

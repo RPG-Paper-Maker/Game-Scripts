@@ -11,14 +11,35 @@
 
 /** @class
 *   All the system datas
-*   @property {string[]} itemsTypes List of all the possible types of items of
-*   the game according to ID.
+
+*   @property {SystemLang} projectName The project name
+*   @property {boolean} antialias Indicate if there is antialiasing
+*   @property {number} mountainCollisionHeight The height limit for collision
+*   @property {number} mountainCollisionAngle The angle limit for collision
+*   @property {SystemValue} mapFrameDuration Time in milliseconds for a frame 
+*   in map
 *   @property {number} idMapStartHero Id of the map where the hero is in the
-*   beginning of a game.
+*   beginning of a game
 *   @property {number} idObjectStartHero Id of the object where the hero is in
-*   the beginning of a game.
-*   @property {SystemCurrency[]} currencies List of all the currencies of the
-*   game according to ID.
+*   the beginning of a game
+*   @property {boolean} showBB Indicate if the collision boxes 
+*   @property {string[]} itemsTypes List of all the types of items by ID
+*   @property {SystemColor[]} colors List of all the colors by ID
+*   @property {SystemCurrency[]} currencies List of all the currencies by ID
+*   @property {SystemWindowSkin[]} windowSkins List of all the windowSkins by ID
+*   @property {SystemCameraProperties[]} cameraProperties List of all the 
+*   camera properties by ID
+*   @property {SystemDetection[]} detections List of all the detections by ID
+*   @property {SystemSkybox[]} skyboxes List of all the skyboxes by ID
+*   @property {number[]} fontSizes List of all the font sizes by ID
+*   @property {string[]} fontNames List of all the font names by ID
+*   @property {number[]} speeds List of all the speeds by ID
+*   @property {number[]} frequencies List of all the frequencies by ID
+*   @property {SystemPlaySong} soundCursor The cursor sound
+*   @property {SystemPlaySong} soundConfirmation The confirmation sound
+*   @property {SystemPlaySong} soundCancel The cancel sound
+*   @property {SystemPlaySong} soundImpossible The impossible sound
+*   @property {EventCommand} dbOptions The window box options
 */
 class DatasSystem
 {
@@ -27,6 +48,7 @@ class DatasSystem
 
     }
 
+    // -------------------------------------------------------
     /** Read the JSON file associated to system
     */
     async read()
@@ -119,14 +141,10 @@ class DatasSystem
         }, false);
         
         // Sounds
-        this.soundCursor = new SystemPlaySong(SongKind.Sound);
-        this.soundCursor.read(json.scu);
-        this.soundConfirmation = new SystemPlaySong(SongKind.Sound);
-        this.soundConfirmation.read(json.sco);
-        this.soundCancel = new SystemPlaySong(SongKind.Sound);
-        this.soundCancel.read(json.sca);
-        this.soundImpossible = new SystemPlaySong(SongKind.Sound);
-        this.soundImpossible.read(json.si);
+        this.soundCursor = new SystemPlaySong(SongKind.Sound, json.scu);
+        this.soundConfirmation = new SystemPlaySong(SongKind.Sound, json.sco);
+        this.soundCancel = new SystemPlaySong(SongKind.Sound, json.sca);
+        this.soundImpossible = new SystemPlaySong(SongKind.Sound, json.si);
 
         // Window skin options
         this.dbOptions = EventCommand.getEventCommand(json.dbo);

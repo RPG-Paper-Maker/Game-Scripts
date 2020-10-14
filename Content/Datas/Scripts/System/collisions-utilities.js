@@ -20,14 +20,29 @@ class CollisionsUtilities
     }
 
     // -------------------------------------------------------
-
+    /** Indicate if a point is inside a rectangle
+    *   @static
+    *   @param {THREE.Vector2} p The point to test
+    *   @param {number} x1 The x left point of the rectangle
+    *   @param {number} x2 The x right point of the rectangle
+    *   @param {number} y1 The y top point of the rectangle
+    *   @param {number} y2 The y bottom point of the rectangle
+    *   @returns {boolean}
+    */
     static isPointOnRectangle = function(p, x1, x2, y1, y2)
     {
         return p.x >= x1 && p.x <= x2 && p.y >= y1 && p.y <= y2;
     }
 
     // -------------------------------------------------------
-
+    /** Indicate if a point is inside a triangle
+    *   @static
+    *   @param {THREE.Vector2} p The point to test
+    *   @param {number} p0 One of the point of the triangle
+    *   @param {number} p1 One of the point of the triangle
+    *   @param {number} p2 One of the point of the triangle
+    *   @returns {boolean}
+    */
     static isPointOnTriangle = function(p, p0, p1, p2)
     {
         let a = 1/2 * (-p1.y * p2.x + p0.y * (-p1.x + p2.x) + p0.x * (p1.y - p2
@@ -41,7 +56,14 @@ class CollisionsUtilities
     }
 
     // -------------------------------------------------------
-
+    /** Get the orthogonal projection between two vectors
+    *   @static
+    *   @param {THREE.Vector2} p The point to test
+    *   @param {number} p0 One of the point of the triangle
+    *   @param {number} p1 One of the point of the triangle
+    *   @param {number} p2 One of the point of the triangle
+    *   @returns {number}
+    */
     static orthogonalProjection(u, v)
     {
         let lu = u.length();
@@ -51,7 +73,15 @@ class CollisionsUtilities
     }
 
     // -------------------------------------------------------
-
+    /** Indicate if min and max are overlapping
+    *   @static
+    *   @param {THREE.Vector2} p The point to test
+    *   @param {number} minA
+    *   @param {number} maxA
+    *   @param {number} minB
+    *   @param {number} maxB
+    *   @returns {boolean}
+    */
     static isOverlapping = function(minA, maxA, minB, maxB)
     {
         let minOverlap = null;
@@ -92,7 +122,12 @@ class CollisionsUtilities
     }
 
     // -------------------------------------------------------
-
+    /** Check collision between two OBB
+    *   @static
+    *   @param {THREE.Geometry} shapeA First shape
+    *   @param {THREE.Geometry} shapeB Second shape
+    *   @returns {boolean}
+    */
     static obbVSobb(shapeA, shapeB)
     {
         let facesA = shapeA.faces;
@@ -113,7 +148,15 @@ class CollisionsUtilities
     }
 
     // -------------------------------------------------------
-
+    /** Check the faces for OBB collision
+    *   @static
+    *   @param {THREE.Face3[]} shapes The faces to check
+    *   @param {THREE.Vector3[]} verticesA First vertices to check
+    *   @param {THREE.Vector3[]} verticesB Second vertices to check
+    *   @param {number} lA The first vertices length
+    *   @param {number} lB The second vertices length
+    *   @returns {boolean}
+    */
     static checkFaces(faces, verticesA, verticesB, lA, lB)
     {
         for (let i = 0, l = faces.length; i < l; i++)
@@ -128,7 +171,15 @@ class CollisionsUtilities
     }
 
     // -------------------------------------------------------
-
+    /** Check if vertices overlap on one of the faces normal
+    *   @static
+    *   @param {THREE.Vector3[]} verticesA First vertices to check
+    *   @param {THREE.Vector3[]} verticesB Second vertices to check
+    *   @param {number} lA The first vertices length
+    *   @param {number} lB The second vertices length
+    *   @param {Vector3} normal The face normal
+    *   @returns {boolean}
+    */
     static overlapOnThisNormal(verticesA, verticesB, lA, lB, normal)
     {
         // We test each vertex of A

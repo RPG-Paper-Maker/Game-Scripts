@@ -11,18 +11,34 @@
 
 /** @class
 *   All the tilesets datas
+*   @property {string} [PROPERTY_TEXTURES_CHARACTERS="texturesCharacter"] 
+*   Property string used for textures characters
+*   @property {string} [PROPERTY_TEXTURES_BATTLERS="texturesBattlers"] 
+*   Property string used for textures battlers
+*   @property {string} [PROPERTY_TEXTURES_OBJECTS_3D="texturesObjects3D"] 
+*   Property string used for textures 3D objects
 *   @property {SystemTileset[]} list List of all the tilesets of the game
 *   according to ID
+*   @property {Object} autotiles Tilesets according to string autotiles
+*   @property {Object} walls Tilesets according to string walls
+*   @property {Object} mountains Tilesets according to string mountains
+*   @property {THREE.Material[]} texturesCharacters The textures for character
+*   @property {THREE.Material[]} texturesBattlers The textures for battlers
+*   @property {THREE.Material[]} texturesObjects3D The textures for 3D objects
 */
 class DatasTilesets
 {
+    static PROPERTY_TEXTURES_CHARACTERS = "texturesCharacters";
+    static PROPERTY_TEXTURES_BATTLERS = "texturesBattlers";
+    static PROPERTY_TEXTURES_OBJECTS_3D = "texturesObjects3D";
+
     constructor()
     {
 
     }
 
     // -------------------------------------------------------
-    /** Read the JSON file associated to tilesets.
+    /** Read the JSON file associated to tilesets
     */
     async read()
     {
@@ -62,11 +78,12 @@ class DatasTilesets
             }
             await tileset.loadSpecials();
         }
-
-        // Load characters textures
-        await this.loadPictures(PictureKind.Characters, "texturesCharacters");
-        await this.loadPictures(PictureKind.Battlers, "texturesBattlers");
-        await this.loadPictures(PictureKind.Objects3D, "texturesObjects3D");
+        await this.loadPictures(PictureKind.Characters, DatasTilesets
+            .PROPERTY_TEXTURES_CHARACTERS);
+        await this.loadPictures(PictureKind.Battlers, DatasTilesets
+            .PROPERTY_TEXTURES_BATTLERS);
+        await this.loadPictures(PictureKind.Objects3D, DatasTilesets
+            .PROPERTY_TEXTURES_OBJECTS_3D);
     }
 
     // -------------------------------------------------------

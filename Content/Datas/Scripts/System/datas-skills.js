@@ -21,6 +21,7 @@ class DatasSkills
 
     }
 
+    // -------------------------------------------------------
     /** Read the JSON file associated to skills
     */
     async read()

@@ -11,22 +11,30 @@
 
 /** @class
 *   All the global informations of the game
-*   @property {Object} settings All the general settings
+*   @property {number} [DatasGame.VARIABLES_PER_PAGE=25] The number of 
+*   variables per page
+*   @property {DatasSystem} system System datas
 *   @property {DatasPictures} pictures Pictures datas
+*   @property {DatasSongs} songs Songs datas
+*   @property {DatasVideos} videos Videos datas
+*   @property {DatasShapes} shapes Shapes datas
 *   @property {DatasCommonEvents} commonEvents Common events datas
+*   @property {DatasSpecialElements} specialElements Special elements datas
+*   @property {DatasTilesets} tilesets Tilesets datas
 *   @property {DatasItems} items Items datas
 *   @property {DatasSkills} skills Skills datas
 *   @property {DatasWeapons} weapons Weapons datas
 *   @property {DatasArmors} armors Armors datas
 *   @property {DatasClasses} classes Classes datas
-*   @property {DatasSpecialElements} specialElements Special elements datas
-*   @property {DatasTilesets} tileset Tilesets datas
 *   @property {DatasHeroes} heroes Heroes datas
 *   @property {DatasMonsters} monsters Monsters datas
 *   @property {DatasTroops} troops Troops datas
-*   @property {DatasSystem} system System datas
 *   @property {DatasBattleSystem} battleSystem Battle System datas
+*   @property {DatasTitlescreenGameover} titlescreenGameover Title screen and 
+*   game over datas
 *   @property {DatasKeyBoard} keyBoard KeyBoard datas
+*   @property {DatasAnimations} animations Animations datas
+*   @property {boolean} loaded Indicate if the datas are all loaded
 */
 class DatasGame
 {
@@ -54,10 +62,12 @@ class DatasGame
         this.titlescreenGameover = new DatasTitlescreenGameover();
         this.keyBoard = new DatasKeyBoard();
         this.animations = new DatasAnimations();
-        this.dlcs = new DatasDLCs();
         this.loaded = false;
     }
 
+    // -------------------------------------------------------
+    /** Read the JSON files of all the datas
+    */
     async read()
     {
         await this.system.read();
@@ -80,14 +90,13 @@ class DatasGame
         await this.titlescreenGameover.read();
         await this.keyBoard.read();
         await this.animations.read();
-        await this.dlcs.read();
         await this.commonEvents.read();
         await this.system.getModelHero();
         await this.system.loadWindowSkins();
     }
 
     // -------------------------------------------------------
-    /** Read the JSON files associated to the settings
+    /** Read the JSON files associated to the settings (variables, shaders, dlcs)
     */
     async readSettings()
     {
@@ -110,6 +119,10 @@ class DatasGame
         RPM.SHADER_FIX_VERTEX = json;
         json = await RPM.openFile(RPM.PATH_SHADERS + "fix.frag")
         RPM.SHADER_FIX_FRAGMENT = json;
+
+        // DLCs
+        json = await RPM.parseFileJSON(RPM.FILE_DLCS);
+        RPM.PATH_DLCS = RPM.PATH_FILES + json.p;
     }
 
     // -------------------------------------------------------

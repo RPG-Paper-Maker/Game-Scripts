@@ -21,6 +21,7 @@ class DatasMonsters
 
     }
 
+    // -------------------------------------------------------
     /** Read the JSON file associated to monsters
     */
     async read()

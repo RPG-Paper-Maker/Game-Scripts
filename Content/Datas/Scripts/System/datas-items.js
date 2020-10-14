@@ -21,6 +21,7 @@ class DatasItems
 
     }
 
+    // -------------------------------------------------------
     /** Read the JSON file associated to items
     */
     async read()

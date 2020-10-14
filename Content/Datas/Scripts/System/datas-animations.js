@@ -21,6 +21,7 @@ class DatasAnimations
 
     }
 
+    // -------------------------------------------------------
     /** Read the JSON file associated to troops.
     */
     async read()

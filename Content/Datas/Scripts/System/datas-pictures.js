@@ -81,6 +81,7 @@ class DatasPictures
     /** Get the corresponding picture
     *   @param {PictureKind} kind The picture kind
     *   @param {number} id The picture id
+    *   @returns {SystemPicture}
     */
     get(kind, id)
     {
@@ -88,6 +89,12 @@ class DatasPictures
             [kind][id];
     }
 
+    // -------------------------------------------------------
+    /** Get a copy of the picture 2D
+    *   @param {PictureKind} kind The picture kind
+    *   @param {number} id The picture id
+    *   @returns {Picture2D}
+    */
     getPictureCopy(kind, id)
     {
         let picture = this.get(kind, id);
@@ -97,6 +104,7 @@ class DatasPictures
     // -------------------------------------------------------
     /** Get the corresponding icon picture
     *   @param {number} id The picture id of the icon
+    *   @returns {SystemPicture}
     */
     getIcon(id)
     {

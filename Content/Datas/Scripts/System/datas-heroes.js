@@ -22,6 +22,7 @@ class DatasHeroes
 
     }
 
+    // -------------------------------------------------------
     /** Read the JSON file associated to heroes
     */
     async read()

@@ -21,6 +21,7 @@ class DatasArmors
 
     }
 
+    // -------------------------------------------------------
     /** Read the JSON file associated to armors
     */
     async read()

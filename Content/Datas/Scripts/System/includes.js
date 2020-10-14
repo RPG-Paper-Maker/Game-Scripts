@@ -26,7 +26,6 @@ document.write(`<script src="Content/Datas/Scripts/System/datas-battle-system.js
 document.write(`<script src="Content/Datas/Scripts/System/datas-titlescreen-gameover.js"></script>`);
 document.write(`<script src="Content/Datas/Scripts/System/datas-keyboard.js"></script>`);
 document.write(`<script src="Content/Datas/Scripts/System/datas-animations.js"></script>`);
-document.write(`<script src="Content/Datas/Scripts/System/datas-dlcs.js"></script>`);
 document.write(`<script src="Content/Datas/Scripts/System/datas-game.js"></script>`);
 document.write(`<script src="Content/Datas/Scripts/System/settings.js"></script>`);
 document.write(`<script src="Content/Datas/Scripts/System/system-lang.js"></script>`);
