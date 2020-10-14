@@ -18,6 +18,7 @@ class Floor extends Land
     constructor(json)
     {
         super();
+        
         if (json)
         {
             this.read(json);

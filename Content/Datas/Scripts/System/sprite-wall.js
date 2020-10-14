@@ -19,6 +19,7 @@ class SpriteWall extends MapElement
     constructor(json)
     {
         super();
+        
         if (json)
         {
             this.read(json);

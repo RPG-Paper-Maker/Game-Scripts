@@ -99,7 +99,7 @@ class Sprite extends MapElement
     {
         super.read(json);
 
-        this.front = json.f;
+        this.front = RPM.defaultValue(json.f, true);
         this.kind = json.k;
         this.textureRect = json.t;
     }

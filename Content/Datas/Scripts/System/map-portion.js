@@ -529,7 +529,7 @@ class MapPortion
     readSpritesGlobals(json)
     {
         let material = RPM.currentMap.textureTileset;
-        let staticGeometry = new THREE.Geometry(), geometry;
+        let staticGeometry = new THREE.Geometry();
         let count = 0;
         staticGeometry.faceVertexUvs[0] = [];
         if (material && material.map)

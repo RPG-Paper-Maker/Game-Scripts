@@ -18,7 +18,6 @@ class Land extends MapElement
     constructor()
     {
         super();
-        this.up = true;
     }
 
     /** Read the JSON associated to the land
@@ -28,7 +27,7 @@ class Land extends MapElement
     {
         super.read(json);
 
-        this.up = json.up;
+        this.up = RPM.defaultValue(json.up, true);
         this.texture = json.t;
         if (this.texture.length === 2)
         {
