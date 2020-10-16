@@ -4052,7 +4052,7 @@ class EventCommandDisplayAPicture extends EventCommand
         this.pictureID = SystemValue.createValueCommand(command, iterator);
         iterator.i++;
         this.index = SystemValue.createValueCommand(command, iterator);
-        this.centered = !RPM.numToBool(command[iterator.i++]);
+        this.centered = RPM.numToBool(command[iterator.i++]);
         if (this.centered)
         {
             this.originX = RPM.SCREEN_X / 2;
