@@ -27,6 +27,7 @@ class Frame
         this.value = value;
     }
 
+    // -------------------------------------------------------
     /** Update frame according to tick and duration, return true if frame is 
     *   different
     *   @returns {boolean}

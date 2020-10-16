@@ -27,6 +27,13 @@ class GameItem
         this.nb = nb;
     }
 
+    // -------------------------------------------------------
+    /** Find an item in the inventory
+    *   @static
+    *   @param {ItemKind} kind The kind of item
+    *   @param {number} id The item ID
+    *   @returns {Object}
+    */
     static findItem(kind, id)
     {
         let item;
@@ -41,6 +48,11 @@ class GameItem
         return null;
     }
 
+    // -------------------------------------------------------
+    /** Remove item from inventory
+    *   @param {number} nb Number of item to remove
+    *   @returns {Object}
+    */
     remove(nb)
     {
         this.nb -= nb;
@@ -51,7 +63,10 @@ class GameItem
     }
 
     // -------------------------------------------------------
-
+    /** Add item in inventory
+    *   @param {number} nb Number of item to add
+    *   @returns {Object}
+    */
     add(nb)
     {
         if (this.nb === 0)
@@ -62,8 +77,8 @@ class GameItem
     }
 
     // -------------------------------------------------------
-    /** Get the item informations system.
-    *   @returns {SystemItem|SystemWeapon|SystemArmor}
+    /** Get the item informations system
+    *   @returns {SystemCommonSkillItem}
     */
     getItemInformations()
     {
@@ -113,7 +128,7 @@ class GameItem
     }
 
     // -------------------------------------------------------
-    /** Add the number of the item.
+    /** Add the number of the item
     */
     addItems()
     {
@@ -137,7 +152,6 @@ class GameItem
     }
 
     // -------------------------------------------------------
-
     /** Multiply the number of the item
     */
     multItems()
@@ -148,7 +162,6 @@ class GameItem
     }
 
     // -------------------------------------------------------
-
     /** Modify the number of the item
     */
     divItems()
@@ -159,8 +172,7 @@ class GameItem
     }
 
     // -------------------------------------------------------
-
-    /** Modulo the number of the item.
+    /** Modulo the number of the item
     */
     moduloItems()
     {
@@ -170,7 +182,9 @@ class GameItem
     }
 
     // -------------------------------------------------------
-
+    /** Use one item and check if the is at least one item left
+    *   @returns {boolean}
+    */
     use()
     {
         return this.nb-- > 0;

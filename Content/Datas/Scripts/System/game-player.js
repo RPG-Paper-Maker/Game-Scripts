@@ -10,22 +10,32 @@
 */
 
 /** @class
-*   A character in the team/hidden/reserve.
-*   @property {CharacterKind} k The kind of the character (hero or monster).
+*   A character in the team/hidden/reserve
+*   @property {CharacterKind} k The kind of the character (hero or monster)
 *   @property {number} id The ID of the character
-*   @property {number} instid The instance id of the character.
-*   @param {GameSkill[]} sk List of all the learned skills.
-*   @param {GameItem[]} equip List of the equiped weapons/armors.
+*   @property {number} instid The instance id of the character
+*   @property {SystemHero} character The system character
+*   @property {string} name The character name
+*   @property {GameSkill[]} sk List of all the learned skills
+*   @property {GameItem[]} equip List of the equiped weapons/armors
+*   @property {number[]} expList The exp list for each level
+*   @property {boolean} levelingUp Indicate if leveling up
+*   @property {boolean} testedLevelUp Indicate if the level up was tested
+*   @param {CharacterKind} kind The kind of the character (hero or monster)
+*   @param {number} id The ID of the character
+*   @param {number} instanceID The instance id of the character
+*   @param {GameSkill[]} skills List of all the learned skills
+*   @param {object} [json=undefined] Json object describing the items
 */
 class GamePlayer
 {
-    constructor(kind, id, instanceId, skills, json)
+    constructor(kind, id, instanceID, skills, json)
     {
         if (!RPM.isUndefined(kind))
         {
             this.k = kind;
             this.id = id;
-            this.instid = instanceId;
+            this.instid = instanceID;
             this.character = this.getCharacterInformations();
             this.name = this.character.name;
 
@@ -59,7 +69,8 @@ class GamePlayer
         }
     }
 
-    /** Get the max size of equipment kind names.
+    // -------------------------------------------------------
+    /** Get the max size of equipment kind names
     *   @static
     *   @returns {number}
     */
@@ -80,7 +91,11 @@ class GamePlayer
     }
 
     // -------------------------------------------------------
-
+    /** Get the max size of equipment kind names
+    *   @static
+    *   @param {number[]} values The values
+    *   @returns {GamePlayer}
+    */
     static getTemporaryPlayer(values)
     {
         let player = new GamePlayer();
@@ -92,7 +107,8 @@ class GamePlayer
         return player;
     }
 
-    /** Get a compressed object for saving the character in a file.
+    // -------------------------------------------------------
+    /** Get a compressed object for saving the character in a file
     *   @returns {Object}
     */
     getSaveCharacter()
@@ -108,8 +124,8 @@ class GamePlayer
     }
 
     // -------------------------------------------------------
-    /** Get a compressed object for saving the stats in a file
-    *   @returns {Object}
+    /** Get the statistics for save character
+    *   @returns {number[]}
     */
     getSaveStat()
     {
@@ -128,8 +144,8 @@ class GamePlayer
     }
 
     // -------------------------------------------------------
-    /** Get a compressed object for saving the equipments in a file
-    *   @returns {Object}
+    /** Get the equips for save character
+    *   @returns {number[][]}
     */
     getSaveEquip()
     {
@@ -235,8 +251,12 @@ class GamePlayer
     }
 
     // -------------------------------------------------------
-
-    getEquipmentStatsAndBonus(item, idEquipment)
+    /** Get the stats thanks to equipments
+    *   @param {SystemItem} item The system item
+    *   @param {number} equipmentID The equipment ID
+    *   @returns {number[][]}
+    */
+    getEquipmentStatsAndBonus(item, equipmentID)
     {
         let statistics = RPM.datasGame.battleSystem.statistics;
         let l = statistics.length
@@ -251,7 +271,7 @@ class GamePlayer
         let j, m, characteristics, characteristic, result, statistic, base;
         for (j = 1, m = this.equip.length; j < m; j++)
         {
-            if (j === idEquipment)
+            if (j === equipmentID)
             {
                 if (!item)
                 {
@@ -322,7 +342,11 @@ class GamePlayer
     }
 
     // -------------------------------------------------------
-
+    /** Update stats with equipment stats
+    *   @param {number[]} list The stats list
+    *   @param {number[]} bonus The bonus list
+    *   @returns {number[][]}
+    */
     updateEquipmentStats(list, bonus)
     {
         let result;
@@ -356,7 +380,10 @@ class GamePlayer
     }
 
     // -------------------------------------------------------
-
+    /** Initialize stat value
+    *   @param {SystemStatistic} statistic The statistic
+    *   @param {number} bonus The value
+    */
     initStatValue(statistic, value)
     {
         this[statistic.abbreviation] = value;
@@ -367,7 +394,10 @@ class GamePlayer
     }
 
     // -------------------------------------------------------
-
+    /** Update stats value
+    *   @param {SystemStatistic} statistic The statistic
+    *   @param {number} bonus The value
+    */
     updateStatValue(statistic, value)
     {
         let abr = statistic.isFix ? statistic.abbreviation : statistic
@@ -381,7 +411,8 @@ class GamePlayer
     }
 
     // -------------------------------------------------------
-
+    /** Update all the stats values
+    */
     updateAllStatsValues()
     {
         // Fix values : equipment influence etc
@@ -435,16 +466,17 @@ class GamePlayer
     }
 
     // -------------------------------------------------------
-
+    /** Get the bar abbreviation
+    *   @param {SystemStatistic} stat The statistic
+    */
     getBarAbbreviation(stat)
     {
         return this[stat.abbreviation] + " / " + this[stat.getMaxAbbreviation()];
     }
 
     // -------------------------------------------------------
-
-    /** Read the JSON associated to the character and items.
-    *   @param {object} json Json object describing the character.
+    /** Read the JSON associated to the character and items
+    *   @param {object} json Json object describing the items
     */
     read(json)
     {
@@ -486,8 +518,8 @@ class GamePlayer
     }
 
     // -------------------------------------------------------
-    /** Get the character informations system.
-    *   @returns {SystemHero|SystemMonster}
+    /** Get the character informations system
+    *   @returns {SystemHero}
     */
     getCharacterInformations()
     {
@@ -502,14 +534,17 @@ class GamePlayer
     }
 
     // -------------------------------------------------------
-
+    /** Get the current level
+    *   @returns {number}
+    */
     getCurrentLevel()
     {
         return this[RPM.datasGame.battleSystem.getLevelStatistic().abbreviation];
     }
 
     // -------------------------------------------------------
-
+    /** Apply level up
+    */
     levelUp()
     {
         this[RPM.datasGame.battleSystem.getLevelStatistic().abbreviation]++;
@@ -519,28 +554,36 @@ class GamePlayer
     }
 
     // -------------------------------------------------------
-
+    /** Get the experience reward
+    *   @returns {number}
+    */
     getRewardExperience()
     {
         return this.character.getRewardExperience(this.getCurrentLevel());
     }
 
     // -------------------------------------------------------
-
+    /** Get the currencies reward
+    *   @returns {Object}
+    */
     getRewardCurrencies()
     {
         return this.character.getRewardCurrencies(this.getCurrentLevel());
     }
 
     // -------------------------------------------------------
-
+    /** Get the loots reward
+    *   @returns {Object[]}
+    */
     getRewardLoots()
     {
         return this.character.getRewardLoots(this.getCurrentLevel());
     }
 
     // -------------------------------------------------------
-
+    /** Update remaining xp according to full time
+    *   @param {number} fullTime Full time in milliseconds
+    */
     updateRemainingXP(fullTime)
     {
         if (this.getCurrentLevel() < this.expList.length - 1)
@@ -566,7 +609,8 @@ class GamePlayer
     }
 
     // -------------------------------------------------------
-
+    /** Update obtained experience
+    */
     updateObtainedExperience()
     {
         let xpAbbreviation = RPM.datasGame.battleSystem.getExpStatistic()
@@ -589,7 +633,9 @@ class GamePlayer
     }
 
     // -------------------------------------------------------
-
+    /** Update experience and check if leveling up
+    *   @returns {boolean}
+    */
     updateExperience()
     {
         let xpAbbreviation = RPM.datasGame.battleSystem.getExpStatistic()
@@ -624,14 +670,16 @@ class GamePlayer
     }
 
     // -------------------------------------------------------
-
+    /** Pass the progressive experience and directly update experience
+    */
     passExperience()
     {
         this.timeXP = this.totalTimeXP;
     }
 
     // -------------------------------------------------------
-
+    /** Pause experience (when leveling up)
+    */
     pauseExperience()
     {
         this.totalTimeXP -= new Date().getTime() - this.timeXP;
@@ -643,14 +691,17 @@ class GamePlayer
     }
 
     // -------------------------------------------------------
-
+    /** Unpause experience
+    */
     unpauseExperience()
     {
         this.timeXP = new Date().getTime();
     }
 
     // -------------------------------------------------------
-
+    /** Check if experience is updated
+    *   @returns {boolean}
+    */
     isExperienceUpdated()
     {
         return this.testedLevelUp && this.totalRemainingXP === 0 && this

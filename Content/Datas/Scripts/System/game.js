@@ -10,18 +10,26 @@
 */
 
 /** @class
-*   All the global informations of a particular game.
-*   @property {number} playTime The current time played since the beginning of
-*   the game in seconds.
-*   @property {number[]} teamHeroes List of all the heroes in the team.
-*   @property {number[]} reserveHeroes List of all the heroes in the reserve.
-*   @property {number[]} hiddenHeroes List of all the hidden heroes.
-*   @property {number[]} items List of all the items, weapons, and armors in the
-*   inventory.
-*   @property {number[]} currencies List of all the currencies.
-*   @property {number} charactersInstances IDs of the last instance character.
-*   @property {number} hero Hero informations.
-*   @property {number} mapsDatas All the informations for each maps.
+*   All the global informations of a particular game
+*   @property {number} currentSlot The current slot
+*   @property {MapObject} hero The game map hero
+*   @property {GamePlayer[]} teamHeroes List of all the heroes in the team
+*   @property {GamePlayer[]} reserveHeroes List of all the heroes in the reserve
+*   @property {GamePlayer[]} hiddenHeroes List of all the hidden heroes
+*   @property {GameItem[]} items List of all the items, weapons, and armors in 
+*   the inventory
+*   @property {number[]} currencies List of all the currencies
+*   @property {number} charactersInstances ID of the last instance character
+*   @property {any[]} variables List of variables by ID
+*   @property {number} currentMapID The current map ID
+*   @property {number[]} heroStates The current hero states list
+*   @property {number[]} heroProperties The current hero properties list by ID
+*   @property {Object[]} heroStatesOptions The current states options list
+*   @property {Object} startupStates The current map startup states
+*   @property {Object} startupProperties The current map startup properties
+*   @property {Obejct} mapsDatas All the informations for each maps
+*   @property {Chrono} playTime The current time played since the beginning of
+*   the game in seconds
 */
 class Game
 {
@@ -37,6 +45,13 @@ class Game
         }
     }
 
+    // -------------------------------------------------------
+    /** Get the hero in a tab with instance ID
+    *   @static
+    *   @param {GamePlayer[]} tab The heroes tab
+    *   @param {number} id The instance ID
+    *   @returns {GamePlayer}
+    */
     static getHeroInstanceInTab(tab, id)
     {
         let hero;
@@ -51,12 +66,23 @@ class Game
         return null;
     }
 
+    // -------------------------------------------------------
+    /** Get the path save according to slot
+    *   @static
+    *   @param {number} slot The slot
+    *   @returns {string}
+    */
     static getPathSave(slot)
     {
         return RPM.PATH_SAVES + RPM.STRING_SLASH + slot + RPM
             .EXTENSION_JSON;
     }
 
+    // -------------------------------------------------------
+    /** Get the hero with instance ID
+    *   @param {number} id The instance ID
+    *   @returns {GamePlayer}
+    */
     getHeroByInstanceID(id)
     {
         let hero = Game.getHeroInstanceInTab(this.teamHeroes, id);
@@ -85,7 +111,7 @@ class Game
         this.currencies = RPM.datasGame.system.getDefaultCurrencies();
         this.charactersInstances = 0;
         this.initializeVariables();
-        this.currentMapId = RPM.datasGame.system.idMapStartHero;
+        this.currentMapID = RPM.datasGame.system.idMapStartHero;
         this.heroStates = [1];
         this.heroProperties = [];
         this.heroStatesOptions = [];
@@ -99,7 +125,7 @@ class Game
     }
 
     // -------------------------------------------------------
-    /** Initialize the default variables.
+    /** Initialize the default variables
     */
     initializeVariables()
     {
@@ -111,7 +137,9 @@ class Game
     }
 
     // -------------------------------------------------------
-
+    /** Use an item and remove it from inventory
+    *   @param {GameItem} gameItem The item
+    */
     useItem(gameItem)
     {
         if (!gameItem.use())
@@ -121,7 +149,10 @@ class Game
     }
 
     // -------------------------------------------------------
-
+    /** Get the team according to group kind
+    *   @param {GroupKind} kind The group kind
+    *   @returns {GamePlayer[]}
+    */
     getTeam(kind)
     {
         switch (kind)
@@ -137,7 +168,13 @@ class Game
     }
 
     // -------------------------------------------------------
-
+    /** Get the portions datas according to id and position
+    *   @param {number} id The map id
+    *   @param {number} i The portion x
+    *   @param {number} j The portion y
+    *   @param {number} k The portion z
+    *   @returns {Object}
+    */
     getPotionsDatas(id, i, j, k)
     {
         return RPM.game.mapsDatas[id][i][j < 0 ? 0 : 1][Math.abs(j)][k];
@@ -146,7 +183,7 @@ class Game
     // -------------------------------------------------------
     /** Read a game file
     *   @param {number} slot The number of the slot to load
-    *   @param {Object} json json Json object describing the object
+    *   @param {Object} json Json object describing the game
     */
     read(slot, json)
     {
@@ -195,7 +232,7 @@ class Game
         );
 
         // Map infos
-        this.currentMapId = json.currentMapId;
+        this.currentMapID = json.currentMapId;
         var positionHero = json.heroPosition;
         this.hero.position.set(positionHero[0], positionHero[1], positionHero[2]);
         this.heroStates = json.heroStates;
@@ -206,6 +243,7 @@ class Game
         this.readMapsDatas(json.mapsDatas);
     }
 
+    // -------------------------------------------------------
     /** Read all the maps datas
     *   @param {Object} json Json object describing the maps datas
     */
@@ -214,8 +252,9 @@ class Game
         this.mapsDatas = json;
     }
 
+    // -------------------------------------------------------
     /** Save a game file
-    *   @param {number} slot The number of the slot to save.
+    *   @param {number} slot The number of the slot to save
     */
     async write(slot)
     {
@@ -249,7 +288,7 @@ class Game
             cur: this.currencies,
             inst: this.charactersInstances,
             vars: this.variables,
-            currentMapId: this.currentMapId,
+            currentMapId: this.currentMapID,
             heroPosition: [this.hero.position.x, this.hero.position.y, this.hero
                 .position.z],
             heroStates: this.heroStates,
@@ -261,6 +300,7 @@ class Game
         });
     }
 
+    // -------------------------------------------------------
     /** Get a compressed version of mapsDatas (don't retain meshs)
     *   @returns {Object}
     */

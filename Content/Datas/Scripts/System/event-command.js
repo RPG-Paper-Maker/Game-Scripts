@@ -2950,7 +2950,7 @@ class EventCommandMoveObject extends EventCommand
                 } else if (object.isStartup)
                 {
                     return;
-                } else 
+                } else
                 {
                     let portion = SceneMap.getGlobalPortion(RPM.currentMap
                         .allObjects[object.system.id]);

@@ -68,7 +68,7 @@ class SceneMap extends SceneGame
         RPM.currentMap = this;
         if (!this.isBattleMap)
         {
-            RPM.game.currentMapId = this.id;
+            RPM.game.currentMapID = this.id;
         }
         this.scene = new Physijs.Scene();
 

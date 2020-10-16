@@ -70,7 +70,7 @@ class SceneLoadGame extends SceneSaveLoadGame
 
                 // Pop load and title screen from the stack
                 RPM.gameStack.pop();
-                RPM.gameStack.replace(new SceneMap(RPM.game.currentMapId));
+                RPM.gameStack.replace(new SceneMap(RPM.game.currentMapID));
             }
         }
     }

@@ -15,7 +15,7 @@
 *   @property {number} autotileID The autotile ID
 *   @property {number} tileID The tile ID kind to draw according to other 
 *   autotiles outside
-*   @param {Object} json Json object describing the autotile
+*   @param {Object} [json=undefined] Json object describing the autotile
 */
 class Autotile extends Land
 {

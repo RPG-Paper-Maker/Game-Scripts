@@ -12,6 +12,9 @@
 /** @class
 *   The game stack that is organizing the game scenes
 *   @property {SceneGame[]} content The stack content
+*   @property {SceneGame[]} top The stack top content
+*   @property {SceneGame[]} subTop The stack top - 1 content
+*   @property {SceneGame[]} bot The stack bot content
 */
 class GameStack
 {
@@ -70,9 +73,9 @@ class GameStack
     }
 
     // -------------------------------------------------------
-    /** Replace the last scene in the stack by a new scene.
-    *   @param {SceneGame} scene The scene to replace.
-    *   @returns {SceneGame} The last scene that is replaced.
+    /** Replace the last scene in the stack by a new scene
+    *   @param {SceneGame} scene The scene to replace
+    *   @returns {SceneGame} The last scene that is replaced
     */
     replace(scene)
     {
@@ -101,6 +104,10 @@ class GameStack
         return this.top === null;
     }
 
+    // -------------------------------------------------------
+    /** Check if top content is loading
+    *   @returns {boolean}
+    */
     isLoading()
     {
         return this.isEmpty() || this.top.loading;
@@ -172,18 +179,16 @@ class GameStack
 
     // -------------------------------------------------------
     /** Draw the 3D for the current stack
-    *   @param {Canvas} canvas The 3D canvas
     */
-    draw3D(canvas)
+    draw3D()
     {
         if (!this.isEmpty())
         {
-            this.top.draw3D(canvas);
+            this.top.draw3D();
         }
     }
 
     // -------------------------------------------------------
-
     /** Draw HUD for the current stack
     */
     drawHUD()

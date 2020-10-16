@@ -10,8 +10,9 @@
 */
 
 /** @class
-*   @extends Land
 *   A floor in the map
+*   @extends Land
+*   @param {Object} [json=undefined] Json object describing the floor
 */
 class Floor extends Land
 {
@@ -25,24 +26,33 @@ class Floor extends Land
         }
     }
 
+    // -------------------------------------------------------
     /** Read the JSON associated to the floor
-    *   @param {Object} json Json object describing the object
+    *   @param {Object} json Json object describing the floor
     */
     read(json)
     {
         super.read(json);
     }
 
-    /** Update the geometry associated to this floor
-    *   @returns {THREE.Geometry}
+    // -------------------------------------------------------
+    /** Update the geometry associated to this floor and return the 
+    *   collision result
+    *   @param {THREE.Geometry} geometry The geometry asoociated to the 
+    *   autotiles
+    *   @param {number[]} position The json position
+    *   @param {number} width The texture total width
+    *   @param {number} height The texture total height
+    *   @param {number} count The faces count
+    *   @returns {Object}
     */
-    updateGeometry(geometry, position, width, height, i)
+    updateGeometry(geometry, position, width, height, count)
     {
         return (width === 0 || height === 0) ? null : super.updateGeometry(
             geometry, RPM.currentMap.mapProperties.tileset.picture
             .getCollisionAt(this.texture), position, width, height, (this
             .texture[0] * RPM.SQUARE_SIZE) / width,(this.texture[1] * RPM
             .SQUARE_SIZE) / height, (this.texture[2] * RPM.SQUARE_SIZE) / width,
-            (this.texture[3] * RPM.SQUARE_SIZE) / height, i);
+            (this.texture[3] * RPM.SQUARE_SIZE) / height, count);
     }
 }
