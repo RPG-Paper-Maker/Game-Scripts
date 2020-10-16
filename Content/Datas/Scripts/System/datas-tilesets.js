@@ -11,11 +11,11 @@
 
 /** @class
 *   All the tilesets datas
-*   @property {string} [PROPERTY_TEXTURES_CHARACTERS="texturesCharacter"] 
+*   @property {string} [DatasTilesets.PROPERTY_TEXTURES_CHARACTERS="texturesCharacter"] 
 *   Property string used for textures characters
-*   @property {string} [PROPERTY_TEXTURES_BATTLERS="texturesBattlers"] 
+*   @property {string} [DatasTilesets.PROPERTY_TEXTURES_BATTLERS="texturesBattlers"] 
 *   Property string used for textures battlers
-*   @property {string} [PROPERTY_TEXTURES_OBJECTS_3D="texturesObjects3D"] 
+*   @property {string} [DatasTilesets.PROPERTY_TEXTURES_OBJECTS_3D="texturesObjects3D"] 
 *   Property string used for textures 3D objects
 *   @property {SystemTileset[]} list List of all the tilesets of the game
 *   according to ID

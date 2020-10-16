@@ -38,8 +38,8 @@ class GameStack
 
     // -------------------------------------------------------
     /** Pop (remove) the last scene in the stack
-     *   @returns {SceneGame} The last scene that is removed
-     */
+    *   @returns {SceneGame} The last scene that is removed
+    */
     pop()
     {
         let scene = this.content.pop();
@@ -52,10 +52,28 @@ class GameStack
     }
 
     // -------------------------------------------------------
+    /** Pop (remove) all the scene in the stack
+    */
+    popAll()
+    {
+        let scene;
+        for (let i = this.content.length - 1; i >= 0; i--)
+        {
+            scene = this.content.pop();
+            scene.close();
+        }
+        this.top = null;
+        this.subTop = null;
+        this.bot = null;
+        RPM.requestPaintHUD = true;
+        return scene;
+    }
+
+    // -------------------------------------------------------
     /** Replace the last scene in the stack by a new scene.
-     *   @param {SceneGame} scene The scene to replace.
-     *   @returns {SceneGame} The last scene that is replaced.
-     */
+    *   @param {SceneGame} scene The scene to replace.
+    *   @returns {SceneGame} The last scene that is replaced.
+    */
     replace(scene)
     {
         let pop = this.pop();
@@ -65,10 +83,10 @@ class GameStack
 
     // -------------------------------------------------------
     /** Get the scene at a specific index in the stack. 0 is the bottom of the
-     *   stack
-     *   @param {number} i Index in the stack
-     *   @returns {SceneGame} The scene in the index of the stack
-     */
+    *   stack
+    *   @param {number} i Index in the stack
+    *   @returns {SceneGame} The scene in the index of the stack
+    */
     at(i)
     {
         return RPM.defaultValue(this.content[i], null);
@@ -76,8 +94,8 @@ class GameStack
 
     // -------------------------------------------------------
     /** Check if the stack is empty
-     *   @returns {boolean}
-     */
+    *   @returns {boolean}
+    */
     isEmpty()
     {
         return this.top === null;

@@ -15,6 +15,12 @@
 //
 // -------------------------------------------------------
 
+/** @class
+*   An event command
+*   @property {boolean} isDirectNode Indicate if this node is directly
+*   going to the next node (takes only one frame)
+*   @property {boolean} parallel Indicate if this command is run in parallel
+*/
 class EventCommand
 {
     constructor()
@@ -23,6 +29,10 @@ class EventCommand
         this.parallel = false;
     }
 
+    // -------------------------------------------------------
+    /** Get the event command and read json
+    *   @returns {EventCommand}
+    */
     static getEventCommand(json)
     {
         let command = json.command;
@@ -141,7 +151,7 @@ class EventCommand
 
     // -------------------------------------------------------
     /** Initialize the current state
-    *   @returns {Object} The current state (clicked)
+    *   @returns {Object} The current state
     */
     initialize()
     {
@@ -161,7 +171,7 @@ class EventCommand
     }
 
     // -------------------------------------------------------
-    /** Update clicked to true
+    /** First key press handle for the current stack
     *   @param {Object} currentState The current state of the event
     *   @param {number} key The key ID pressed
     */
@@ -171,28 +181,39 @@ class EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** First key release handle for the current stack
+    *   @param {Object} currentState The current state of the event
+    *   @param {number} key The key ID pressed
+    */
     onKeyReleased(currentState, key)
     {
 
     }
 
     // -------------------------------------------------------
-
+    /** Key pressed repeat handle for the current stack
+    *   @param {Object} currentState The current state of the event
+    *   @param {number} key The key ID pressed
+    *   @returns {boolean}
+    */
     onKeyPressedRepeat(currentState, key)
     {
         return true;
     }
 
     // -------------------------------------------------------
-
+    /** Key pressed repeat handle for the current stack, but with
+    *   a small wait after the first pressure (generally used for menus)
+    *   @param {Object} currentState The current state of the event
+    *   @param {number} key The key ID pressed
+    */
     onKeyPressedAndRepeat(currentState, key)
     {
 
     }
 
     // -------------------------------------------------------
-    /** Draw the dialog box
+    /** Draw the HUD
     *   @param {Object} currentState The current state of the event
     */
     drawHUD(currentState)
@@ -208,11 +229,15 @@ class EventCommand
 // -------------------------------------------------------
 
 /** @class
-*   An event command for displaying text.
-*   @property {boolean} isDirectNode Indicates if this node is directly
-*   going to the next node (takes only one frame).
-*   @property {WindowBox} window Window containins the message to display.
-*   @param {JSON} command Direct JSON command to parse.
+*   An event command for displaying text
+*   @extends EventCommand
+*   @property {SystemValue} interlocutor The interlocutor text value
+*   @property {number} facesetID The faceset ID
+*   @property {string} message The message to parse
+*   @property {WindowBox} windowMain Window containing the message to display
+*   @property {WindowBox} windowInterlocutor Window containing the interlocutor 
+*   to display
+*   @param {Object} command Direct JSON command to parse
 */
 class EventCommandShowText extends EventCommand
 {
@@ -246,8 +271,8 @@ class EventCommandShowText extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Initialize the current state.
-    *   @returns {Object} The current state (clicked).
+    /** Initialize the current state
+    *   @returns {Object} The current state
     */
     initialize()
     {
@@ -283,11 +308,11 @@ class EventCommandShowText extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Update and check if the event is finished.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
     */
     update(currentState, object, state)
     {
@@ -307,9 +332,9 @@ class EventCommandShowText extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Update clicked to true.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {number} key The key ID pressed.
+    /** First key press handle for the current stack
+    *   @param {Object} currentState The current state of the event
+    *   @param {number} key The key ID pressed
     */
     onKeyPressed(currentState, key)
     {
@@ -321,8 +346,8 @@ class EventCommandShowText extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Draw the dialog box.
-    *   @param {Object} currentState The current state of the event.
+    /** Draw the HUD
+    *   @param {Object} currentState The current state of the event
     */
     drawHUD(currentState)
     {
@@ -347,11 +372,21 @@ class EventCommandShowText extends EventCommand
 // -------------------------------------------------------
 
 /** @class
-*   An event command for changing variables values.
-*   @property {boolean} isDirectNode Indicates if this node is directly
-*   going to the next node (takes only one frame).
-*   @property {JSON} command Direct JSON command to parse.
-*   @param {JSON} command Direct JSON command to parse.
+*   An event command for changing variables values
+*   @extends EventCommand
+*   @property {number} selection The selection begining
+*   @property {number} nbSelection The selection number
+*   @property {number} operation The operation number
+*   @property {number} valueKind The kind of value
+*   @property {SystemValue} valueNumber The value number
+*   @property {SystemValue} valueRandomA The value number random start
+*   @property {SystemValue} valueRandomB The value number random end
+*   @property {SystemValue} valueMessage The value message
+*   @property {SystemValue} valueSwitch The value switch
+*   @property {SystemValue} valueMapObject The value map object
+*   @property {VariableMapObjectCharacteristicKind} valueMapObjectChar The kind 
+*   of map object value
+*   @param {Object} command Direct JSON command to parse
 */
 class EventCommandChangeVariables extends EventCommand
 {
@@ -398,6 +433,10 @@ class EventCommandChangeVariables extends EventCommand
         }
     }
 
+    // -------------------------------------------------------
+    /** Initialize the current state
+    *   @returns {Object} The current state
+    */
     initialize()
     {
         return {
@@ -405,11 +444,12 @@ class EventCommandChangeVariables extends EventCommand
         };
     }
 
-    /** Parse command and change the variable values, and then finish.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
+    // -------------------------------------------------------
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
     */
     update(currentState, object, state)
     {
@@ -486,10 +526,9 @@ class EventCommandChangeVariables extends EventCommand
 // -------------------------------------------------------
 
 /** @class
-*   An event command for ending the game.
-*   @property {boolean} isDirectNode Indicates if this node is directly
-*   going to the next node (takes only one frame).
-*   @param {JSON} command Direct JSON command to parse.
+*   An event command for ending the game
+*   @extends EventCommand
+*   @param {Object} command Direct JSON command to parse
 */
 class EventCommandEndGame extends EventCommand
 {
@@ -498,15 +537,17 @@ class EventCommandEndGame extends EventCommand
         super();
     }
 
-    /** Quit the game.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
+    // -------------------------------------------------------
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
     */
     update(currentState, object, state)
     {
-        Platform.quit();
+        RPM.gameStack.popAll();
+        RPM.gameStack.pushTitleScreen();
     }
 }
 
@@ -517,10 +558,9 @@ class EventCommandEndGame extends EventCommand
 // -------------------------------------------------------
 
 /** @class
-*   An event command for loop event command block.
-*   @property {boolean} isDirectNode Indicates if this node is directly
-*   going to the next node (takes only one frame).
-*   @param {JSON} command Direct JSON command to parse.
+*   An event command for loop event command block
+*   @extends EventCommand
+*   @param {Object} command Direct JSON command to parse
 */
 class EventCommandWhile extends EventCommand
 {
@@ -529,17 +569,21 @@ class EventCommandWhile extends EventCommand
         super();
     }
 
-    /** Go inside the loop block.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
+    // -------------------------------------------------------
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
     */
     update(currentState, object, state)
     {
         return -1;
     }
 
+    // -------------------------------------------------------
+    /** Get the number of nodes to pass
+    */
     goToNextCommand()
     {
         return 2;
@@ -553,10 +597,9 @@ class EventCommandWhile extends EventCommand
 // -------------------------------------------------------
 
 /** @class
-*   An event command for leaving while event command.
-*   @property {boolean} isDirectNode Indicates if this node is directly
-*   going to the next node (takes only one frame).
-*   @param {JSON} command Direct JSON command to parse.
+*   An event command for leaving while event command
+*   @extends EventCommand
+*   @param {Object} command Direct JSON command to parse
 */
 class EventCommandWhileBreak extends EventCommand
 {
@@ -565,11 +608,12 @@ class EventCommandWhileBreak extends EventCommand
         super();
     }
 
-    /** Go outside the loop block.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
+    // -------------------------------------------------------
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
     */
     update(currentState, object, state)
     {
@@ -584,11 +628,10 @@ class EventCommandWhileBreak extends EventCommand
 // -------------------------------------------------------
 
 /** @class
-*   An event command for entering a number inside a variable.
-*   @property {boolean} isDirectNode Indicates if this node is directly
-*   going to the next node (takes only one frame).
-*   @property {number} id Id of the variable.
-*   @param {JSON} command Direct JSON command to parse.
+*   An event command for entering a number inside a variable
+*   @extends EventCommand
+*   @property {number} id ID of the variable
+*   @param {Object} command Direct JSON command to parse
 */
 class EventCommandInputNumber extends EventCommand
 {
@@ -601,23 +644,24 @@ class EventCommandInputNumber extends EventCommand
         this.isDirectNode = false;
     }
 
-    /** Initialize the current state.
-    *   @returns {Object} The current state (entered, confirmed).
+    // -------------------------------------------------------
+    /** Initialize the current state
+    *   @returns {Object} The current state
     */
     initialize()
     {
         return {
-            entered: "",
+            entered: RPM.STRING_EMPTY,
             confirmed: false
         }
     }
 
     // -------------------------------------------------------
-    /** Finish after confirmation.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
     */
     update(currentState, object, state)
     {
@@ -630,9 +674,9 @@ class EventCommandInputNumber extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Update confirmed to true, or update text entered.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {number} key The key ID pressed.
+    /** First key press handle for the current stack
+    *   @param {Object} currentState The current state of the event
+    *   @param {number} key The key ID pressed
     */
     onKeyPressed(currentState, key)
     {
@@ -649,8 +693,8 @@ class EventCommandInputNumber extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Draw number entered.
-    *   @param {Object} currentState The current state of the event.
+    /** Draw the HUD
+    *   @param {Object} currentState The current state of the event
     */
     drawHUD(currentState)
     {
@@ -666,11 +710,48 @@ class EventCommandInputNumber extends EventCommand
 // -------------------------------------------------------
 
 /** @class
-*   An event command for condition event command block.
-*   @property {boolean} isDirectNode Indicates if this node is directly
-*   going to the next node (takes only one frame).
-*   @property {boolean} hasElse Boolean indicating if there an else node or not.
-*   @property {JSON} command Direct JSON command to parse.
+*   An event command for condition event command block
+*   @extends EventCommand
+*   @property {boolean} hasElse Indicate if there is an else node or not
+*   @property {number} kind The kind of condition
+*   @property {SystemValue} variableParamProp The variable param prop value
+*   @property {OperationKind} variableParamPropOperationKind The variable param 
+*   prop operation kind
+*   @property {SystemValue} variableParamPropValue The variable param prop value
+*   @property {number} heroesSelection The heroes selection
+*   @property {SystemValue} heroInstanceID The hero instance ID value
+*   @property {boolean} heroesInTeam Indicate if heroes in team selection
+*   @property {number} heroesInTeamSelection The heroes in team selection
+*   @property {number} heroesKind The kind of heroes
+*   @property {SystemValue} heroesNamed The heroes name value
+*   @property {number} heroesInTeamValue The heroes in team value
+*   @property {SystemValue} heroesSkillID The heroes skill ID value
+*   @property {number} heroesEquipedKind The heroes equiped kind
+*   @property {SystemValue} heroesEquipedWeaponID The heroes equiped weapon ID
+*   @property {SystemValue} heroesEquipedArmorID The heroes equiped armor ID
+*   @property {SystemValue} heroesStatusID The heroes status ID
+*   @property {SystemValue} heroesStatisticID The heroes statistic ID
+*   @property {OperationKind} heroesStatisticOperation The heroes statistic 
+*   kind operation
+*   @property {SystemValue} heroesStatisticValue The heroes statistic value
+*   @property {SystemValue} currencyID The currency ID value
+*   @property {OperationKind} operationCurrency The currency operation kind
+*   @property {SystemValue} currencyValue The currency value
+*   @property {SystemValue} itemID The item ID value
+*   @property {OperationKind} operationItem The item operation kind
+*   @property {SystemValue} itemValue The item value
+*   @property {SystemValue} weaponID The weapon ID value
+*   @property {OperationKind} operationWeapon The weapon operation kind
+*   @property {SystemValue} weaponValue The weapon value
+*   @property {boolean} weaponEquiped Indicate if weapon is equiped
+*   @property {SystemValue} armorID The armor ID value
+*   @property {OperationKind} operationArmor The armor operation kind
+*   @property {SystemValue} armorValue The armor value
+*   @property {boolean} armorEquiped Indicate if armor is equiped
+*   @property {SystemValue} keyID The key ID value
+*   @property {SystemValue} keyValue The key value
+*   @property {SystemValue} script The script value
+*   @param {Object} command Direct JSON command to parse
 */
 class EventCommandIf extends EventCommand
 {
@@ -779,6 +860,12 @@ class EventCommandIf extends EventCommand
         }
     }
 
+    // -------------------------------------------------------
+    /** Apply callback with all the heroes
+    *   @param {SystemHero[]} tab The heroes list
+    *   @param {function} callback The callback
+    *   @returns {boolean}
+    */
     allTheHeroes(tab, callback)
     {
         for (let i = 0, l = tab.length; i < l; i++)
@@ -792,7 +879,11 @@ class EventCommandIf extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Apply callback with none of the heroes
+    *   @param {SystemHero[]} tab The heroes list
+    *   @param {function} callback The callback
+    *   @returns {boolean}
+    */
     noneOfTheHeroes(tab, callback)
     {
         for (let i = 0, l = tab.length; i < l; i++)
@@ -806,7 +897,11 @@ class EventCommandIf extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Apply callback with at least one hero
+    *   @param {SystemHero[]} tab The heroes list
+    *   @param {function} callback The callback
+    *   @returns {boolean}
+    */
     atLeastOneHero(tab, callback)
     {
         for (let i = 0, l = tab.length; i < l; i++)
@@ -820,7 +915,12 @@ class EventCommandIf extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Apply callback with the hero with instance ID
+    *   @param {SystemHero[]} tab The heroes list
+    *   @param {number} id The hero instance id
+    *   @param {function} callback The callback
+    *   @returns {boolean}
+    */
     theHeroeWithInstanceID(tab, id, callback)
     {
         let hero;
@@ -836,7 +936,11 @@ class EventCommandIf extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Apply callback according to heroes selection
+    *   @param {SystemHero[]} tab The heroes list
+    *   @param {function} callback The callback
+    *   @returns {boolean}
+    */
     getResult(tab, callback)
     {
         switch (this.heroesSelection)
@@ -854,11 +958,11 @@ class EventCommandIf extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Check where to go according to the condition.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
     */
     update(currentState, object, state)
     {
@@ -1083,7 +1187,7 @@ class EventCommandIf extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Returns the number of node to pass.
+    /** Returns the number of node to pass
     *   @returns {number}
     */
     goToNextCommand()
@@ -1099,10 +1203,9 @@ class EventCommandIf extends EventCommand
 // -------------------------------------------------------
 
 /** @class
-*   An event command for condition else event command block.
-*   @property {boolean} isDirectNode Indicates if this node is directly
-*   going to the next node (takes only one frame).
-*   @param {JSON} command Direct JSON command to parse.
+*   An event command for condition else event command block
+*   @extends EventCommand
+*   @param {Object} command Direct JSON command to parse
 */
 class EventCommandElse extends EventCommand
 {
@@ -1111,11 +1214,12 @@ class EventCommandElse extends EventCommand
         super();
     }
 
-    /** Go inside the else block.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
+    // -------------------------------------------------------
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
     */
     update(currentState, object, state)
     {
@@ -1123,7 +1227,7 @@ class EventCommandElse extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Returns the number of node to pass.
+    /** Returns the number of node to pass
     *   @returns {number}
     */
     goToNextCommand()
@@ -1139,10 +1243,9 @@ class EventCommandElse extends EventCommand
 // -------------------------------------------------------
 
 /** @class
-*   An event command for opening the main menu.
-*   @property {boolean} isDirectNode Indicates if this node is directly
-*   going to the next node (takes only one frame).
-*   @param {JSON} command Direct JSON command to parse.
+*   An event command for opening the main menu
+*   @extends EventCommand
+*   @param {Object} command Direct JSON command to parse
 */
 class EventCommandOpenMainMenu extends EventCommand
 {
@@ -1153,8 +1256,9 @@ class EventCommandOpenMainMenu extends EventCommand
         this.isDirectNode = false;
     }
 
-    /** Initialize the current state.
-    *   @returns {Object} The current state (opened).
+    // -------------------------------------------------------
+    /** Initialize the current state
+    *   @returns {Object} The current state
     */
     initialize()
     {
@@ -1164,11 +1268,11 @@ class EventCommandOpenMainMenu extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Open the menu.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
     */
     update(currentState, object, state)
     {
@@ -1189,10 +1293,9 @@ class EventCommandOpenMainMenu extends EventCommand
 // -------------------------------------------------------
 
 /** @class
-*   An event command for opening the saves menu.
-*   @property {boolean} isDirectNode Indicates if this node is directly
-*   going to the next node (takes only one frame).
-*   @param {JSON} command Direct JSON command to parse.
+*   An event command for opening the saves menu
+*   @extends EventCommand
+*   @param {Object} command Direct JSON command to parse
 */
 class EventCommandOpenSavesMenu extends EventCommand
 {
@@ -1203,8 +1306,9 @@ class EventCommandOpenSavesMenu extends EventCommand
         this.isDirectNode = false;
     }
 
-    /** Initialize the current state.
-    *   @returns {Object} The current state (opened).
+    // -------------------------------------------------------
+    /** Initialize the current state
+    *   @returns {Object} The current state
     */
     initialize()
     {
@@ -1214,12 +1318,11 @@ class EventCommandOpenSavesMenu extends EventCommand
     }
 
     // -------------------------------------------------------
-
-    /** Open the menu.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
     */
     update(currentState, object, state)
     {
@@ -1240,11 +1343,13 @@ class EventCommandOpenSavesMenu extends EventCommand
 // -------------------------------------------------------
 
 /** @class
-*   An event command for modifying the inventory.
-*   @property {boolean} isDirectNode Indicates if this node is directly
-*   going to the next node (takes only one frame).
-*   @property {JSON} command Direct JSON command to parse.
-*   @param {JSON} command Direct JSON command to parse.
+*   An event command for modifying the inventory
+*   @extends EventCommand
+*   @property {ItemKind} itemKind The item kind
+*   @property {SystemValue} itemID The item ID
+*   @property {number} operation The operation kind
+*   @property {SystemValue} value The number of items value
+*   @param {Object} command Direct JSON command to parse
 */
 class EventCommandModifyInventory extends EventCommand
 {
@@ -1262,11 +1367,11 @@ class EventCommandModifyInventory extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Update the inventory and finish.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
     */
     update(currentState, object, state)
     {
@@ -1306,11 +1411,17 @@ class EventCommandModifyInventory extends EventCommand
 // -------------------------------------------------------
 
 /** @class
-*   An event command for modifying team.
-*   @property {boolean} isDirectNode Indicates if this node is directly
-*   going to the next node (takes only one frame).
-*   @property {JSON} command Direct JSON command to parse.
-*   @param {JSON} command Direct JSON command to parse.
+*   An event command for modifying team
+*   @extends EventCommand
+*   @property {number} addingKind The kind of adding
+*   @property {SystemValue} instanceLevel The instance level ID
+*   @property {GroupKind} instanceTeam The instance team group
+*   @property {number} stockVariableID The stock variable ID
+*   @property {CharacterKind} instanceKind The instance character kind
+*   @property {CharacterKind} addRemoveKind The add remove character kind
+*   @property {SystemValue} addRemoveID The add remove ID value
+*   @property {GroupKind} addRemoveTeam The add remove team group kind
+*   @param {Object} command Direct JSON command to parse
 */
 class EventCommandModifyTeam extends EventCommand
 {
@@ -1340,13 +1451,14 @@ class EventCommandModifyTeam extends EventCommand
         }
     }
 
-    /** Instanciate a new character in a group.
+    // -------------------------------------------------------
+    /** Instanciate a new character in a group
     *   @static
-    *   @param {GroupKind} where In which group we should instanciate.
-    *   @param {CharacterKind} type The type of character to instanciate.
-    *   @param {number} id The ID of the character to instanciate.
+    *   @param {GroupKind} where In which group we should instanciate
+    *   @param {CharacterKind} type The type of character to instanciate
+    *   @param {number} id The ID of the character to instanciate
     *   @param {number} stockID The ID of the variable where we will stock the
-    *   instantiate ID.
+    *   instantiate ID
     */
     static instanciateTeam(where, type, id, level, stockID)
     {
@@ -1372,14 +1484,15 @@ class EventCommandModifyTeam extends EventCommand
         group.push(player);
     }
 
-    /** Add or remove a character in a group.
-    *   @param {CharacterKind} kind The type of character to instanciate.
-    *   @param {number} id The ID of the character to instanciate.
-    *   @param {GroupKind} where In which group we should instanciate.
+    // -------------------------------------------------------
+    /** Add or remove a character in a group
+    *   @param {CharacterKind} kind The type of character to instanciate
+    *   @param {number} id The ID of the character to instanciate
+    *   @param {GroupKind} where In which group we should instanciate
     */
     addRemove(kind, id, where)
     {
-        // Serching for the id
+        // Searching for the ID
         let groups = [RPM.game.teamHeroes, RPM.game.reserveHeroes, RPM.game
             .hiddenHeroes];
         let group = null;
@@ -1412,11 +1525,11 @@ class EventCommandModifyTeam extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Parsing, modifying the team and finishing.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
     */
     update(currentState, object, state)
     {
@@ -1443,15 +1556,25 @@ class EventCommandModifyTeam extends EventCommand
 // -------------------------------------------------------
 
 /** @class
-*   An event command for battle processing.
-*   @property {boolean} isDirectNode Indicates if this node is directly
-*   going to the next node (takes only one frame).
+*   An event command for battle processing
+*   @extends EventCommand
+*   @property {SystemValue} battleMapID The battle map (system) ID value
+*   @property {SystemValue} mapID The map ID value
+*   @property {SystemValue} x The x value
+*   @property {SystemValue} y The y value
+*   @property {SystemValue} yPlus The y plus value
+*   @property {SystemValue} z The z value
 *   @property {boolean} canEscape Boolean indicating if the player can escape
-*   this battle.
+*   this battle
 *   @property {boolean} canGameOver Boolean indicating if there a win/lose node
-*   or not.
-*   @property {JSON} command Direct JSON command to parse.
-*   @param {JSON} command Direct JSON command to parse.
+*   or not
+*   @property {SystemValue} troopID The troop ID value
+*   @property {number} transitionStart Transition start num bool
+*   @property {SystemValue} transitionStartColor The transition start color ID 
+*   value
+*   @property {number} transitionEnd Transition end num bool
+*   @property {SystemValue} transitionEndColor The transition end color ID value
+*   @param {Object} command Direct JSON command to parse
 */
 class EventCommandStartBattle extends EventCommand
 {
@@ -1463,7 +1586,7 @@ class EventCommandStartBattle extends EventCommand
             i: 0
         }
         this.battleMapID = null;
-        this.idMap = null;
+        this.mapID = null;
         this.x = null;
         this.y = null;
         this.yPlus = null;
@@ -1491,14 +1614,14 @@ class EventCommandStartBattle extends EventCommand
             this.battleMapID = SystemValue.createValueCommand(command, iterator);
             break;
         case 1: // Select
-            this.idMap = SystemValue.createNumber(command[iterator.i++]);
+            this.mapID = SystemValue.createNumber(command[iterator.i++]);
             this.x = SystemValue.createNumber(command[iterator.i++]);
             this.y = SystemValue.createNumber(command[iterator.i++]);
             this.yPlus = SystemValue.createNumber(command[iterator.i++]);
             this.z = SystemValue.createNumber(command[iterator.i++]);
             break;
         case 2: // Numbers
-            this.idMap = SystemValue.createValueCommand(command, iterator);
+            this.mapID = SystemValue.createValueCommand(command, iterator);
             this.x = SystemValue.createValueCommand(command, iterator);
             this.y = SystemValue.createValueCommand(command, iterator);
             this.yPlus = SystemValue.createValueCommand(command, iterator);
@@ -1522,8 +1645,9 @@ class EventCommandStartBattle extends EventCommand
         this.isDirectNode = false;
     }
 
-    /** Initialize the current state.
-    *   @returns {Object} The current state (sceneBattle).
+    // -------------------------------------------------------
+    /** Initialize the current state
+    *   @returns {Object} The current state
     */
     initialize()
     {
@@ -1534,11 +1658,11 @@ class EventCommandStartBattle extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Parsing and starting a battle scene.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
     */
     update(currentState, object, state)
     {
@@ -1546,7 +1670,7 @@ class EventCommandStartBattle extends EventCommand
         if (currentState.sceneBattle === null)
         {
             let battleMap = (this.battleMapID === null) ? SystemBattleMap.create
-                (this.idMap.getValue(), [this.x.getValue(), this.y.getValue(), 
+                (this.mapID.getValue(), [this.x.getValue(), this.y.getValue(), 
                 this.yPlus.getValue(), this.z.getValue()]) : RPM.datasGame
                 .battleSystem.battleMaps[this.battleMapID.getValue()];
             RPM.game.heroBattle = {
@@ -1584,10 +1708,9 @@ class EventCommandStartBattle extends EventCommand
 // -------------------------------------------------------
 
 /** @class
-*   An event command for after a battle winning.
-*   @property {boolean} isDirectNode Indicates if this node is directly
-*   going to the next node (takes only one frame).
-*   @param {JSON} command Direct JSON command to parse.
+*   An event command for after a battle winning
+*   @extends EventCommand
+*   @param {Object} command Direct JSON command to parse
 */
 class EventCommandIfWin extends EventCommand
 {
@@ -1596,11 +1719,12 @@ class EventCommandIfWin extends EventCommand
         super();
     }
 
-    /** Go inside the ifWin node.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
+    // -------------------------------------------------------
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
     */
     update(currentState, object, state)
     {
@@ -1608,7 +1732,7 @@ class EventCommandIfWin extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Returns the number of node to pass.
+    /** Returns the number of node to pass
     *   @returns {number}
     */
     goToNextCommand()
@@ -1624,10 +1748,9 @@ class EventCommandIfWin extends EventCommand
 // -------------------------------------------------------
 
 /** @class
-*   An event command for after a battle winning.
-*   @property {boolean} isDirectNode Indicates if this node is directly
-*   going to the next node (takes only one frame).
-*   @param {JSON} command Direct JSON command to parse.
+*   An event command for after a battle winning
+*   @extends EventCommand
+*   @param {Object} command Direct JSON command to parse
 */
 class EventCommandIfLose extends EventCommand
 {
@@ -1636,11 +1759,12 @@ class EventCommandIfLose extends EventCommand
         super();
     }
 
-    /** Go inside the ifLose node.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
+    // -------------------------------------------------------
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
     */
     update(currentState, object, state)
     {
@@ -1648,7 +1772,7 @@ class EventCommandIfLose extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Returns the number of node to pass.
+    /** Returns the number of node to pass
     *   @returns {number}
     */
     goToNextCommand()
@@ -1664,12 +1788,13 @@ class EventCommandIfLose extends EventCommand
 // -------------------------------------------------------
 
 /** @class
-*   An event command for changing an object state.
-*   @property {boolean} isDirectNode Indicates if this node is directly
-*   going to the next node (takes only one frame).
-*   @property {number} idState The ID of the state to change.
-*   @property {number} operationKind Index of operation.
-*   @param {JSON} command Direct JSON command to parse.
+*   An event command for changing an object state
+*   @extends EventCommand
+*   @property {SystemValue} mapID The map ID value
+*   @property {SystemValue} objectID The object ID value
+*   @property {number} idState The ID of the state to change
+*   @property {number} operationKind Index of operation
+*   @param {Object} command Direct JSON command to parse
 */
 class EventCommandChangeState extends EventCommand
 {
@@ -1686,11 +1811,12 @@ class EventCommandChangeState extends EventCommand
         this.operationKind = command[iterator.i++];
     }
 
-    /** Add a state to an object.
+    // -------------------------------------------------------
+    /** Add a state to an object
     *   @static
-    *   @param {Object} portionDatas Datas inside a portion.
-    *   @param {number} index Index in the portion datas.
-    *   @param {number} state ID of the state.
+    *   @param {Object} portionDatas Datas inside a portion
+    *   @param {number} index Index in the portion datas
+    *   @param {number} state ID of the state
     */
     static addState(portionDatas, index, state)
     {
@@ -1703,11 +1829,11 @@ class EventCommandChangeState extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Remove a state from an object.
+    /** Remove a state from an object
     *   @static
-    *   @param {Object} portionDatas Datas inside a portion.
-    *   @param {number} index Index in the portion datas.
-    *   @param {number} state ID of the state.
+    *   @param {Object} portionDatas Datas inside a portion
+    *   @param {number} index Index in the portion datas
+    *   @param {number} state ID of the state
     */
     static removeState(portionDatas, index, state)
     {
@@ -1721,11 +1847,11 @@ class EventCommandChangeState extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Remove all the states from an object.
+    /** Remove all the states from an object
     *   @static
-    *   @param {Object} portionDatas Datas inside a portion.
-    *   @param {number} index Index in the portion datas.
-    *   @param {number} state ID of the state.
+    *   @param {Object} portionDatas Datas inside a portion
+    *   @param {number} index Index in the portion datas
+    *   @param {number} state ID of the state
     */
     static removeAll(portionDatas, index)
     {
@@ -1733,11 +1859,11 @@ class EventCommandChangeState extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Remove states from datas.
+    /** Remove states from datas
     *   @static
-    *   @param {Object} portionDatas Datas inside a portion.
-    *   @param {number} index Index in the portion datas.
-    *   @param {number} state ID of the state.
+    *   @param {Object} portionDatas Datas inside a portion
+    *   @param {number} index Index in the portion datas
+    *   @param {number} state ID of the state
     */
     static removeFromDatas(portionDatas, index, states)
     {
@@ -1749,7 +1875,11 @@ class EventCommandChangeState extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Add state in ID's list
+    *   @static
+    *   @param {number[]} states The states IDs
+    *   @param {number} state ID of the state
+    */
     static addStateSpecial(states, state)
     {
         if (states.indexOf(state) === -1)
@@ -1759,7 +1889,11 @@ class EventCommandChangeState extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Remove state in ID's list
+    *   @static
+    *   @param {number[]} states The states IDs
+    *   @param {number} state ID of the state
+    */
     static removeStateSpecial(states, state)
     {
         let indexState = states.indexOf(state);
@@ -1768,6 +1902,10 @@ class EventCommandChangeState extends EventCommand
         }
     }
 
+    // -------------------------------------------------------
+    /** Initialize the current state
+    *   @returns {Object} The current state
+    */
     initialize()
     { 
         return {
@@ -1778,11 +1916,12 @@ class EventCommandChangeState extends EventCommand
         }; 
     }
 
-    /** Change the state of the object and finish.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
+    // -------------------------------------------------------
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
     */
     update(currentState, object, state)
     {
@@ -1899,15 +2038,16 @@ class EventCommandChangeState extends EventCommand
 // -------------------------------------------------------
 
 /** @class
-*   An event command for sending an event.
-*   @property {boolean} isDirectNode Indicates if this node is directly
-*   going to the next node (takes only one frame).
-*   @property {number} targetKind The kind of target.
-*   @property {number} idTarget ID of target.
-*   @property {boolean} isSystem Boolean indicating if it is an event system.
-*   @property {number} eventId ID of the event.
-*   @property {SystemParameter[]} parameters List of all the parameters.
-*   @param {JSON} command Direct JSON command to parse.
+*   An event command for sending an event
+*   @extends EventCommand
+*   @property {number} targetKind The kind of target
+*   @property {boolean} senderNoReceiver Indicate if the sender should not 
+*   receive event
+*   @property {number} targetID The target ID
+*   @property {boolean} isSystem Indicate if it is an event system
+*   @property {number} eventID The event ID
+*   @property {SystemParameter[]} parameters List of all the parameters
+*   @param {Object} command Direct JSON command to parse
 */
 class EventCommandSendEvent extends EventCommand
 {
@@ -1926,21 +2066,20 @@ class EventCommandSendEvent extends EventCommand
         switch (this.targetKind)
         {
         case 1:
-            this.idTarget = SystemValue.createValueCommand(command, iterator);
+            this.targetID = SystemValue.createValueCommand(command, iterator);
             this.senderNoReceiver = RPM.numToBool(command[iterator.i++]);
             break;
         case 2:
-            this.idTarget = SystemValue.createValueCommand(command, iterator);
+            this.targetID = SystemValue.createValueCommand(command, iterator);
             break;
         }
-
         this.isSystem = !RPM.numToBool(command[iterator.i++]);
-        this.eventId = command[iterator.i++];
+        this.eventID = command[iterator.i++];
 
         // Parameters
         let events = this.isSystem ? RPM.datasGame.commonEvents.eventsSystem :
                 RPM.datasGame.commonEvents.eventsUser;
-        let parameters = events[this.eventId].parameters;
+        let parameters = events[this.eventID].parameters;
         this.parameters = [];
         let parameter, paramID, k;
         while (iterator.i < l)
@@ -1961,38 +2100,40 @@ class EventCommandSendEvent extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Send an event.
+    /** Send an event
     *   @static
-    *   @param {MapObject} sender The sender of this event.
-    *   @param {number} targetKind The kind of target.
-    *   @param {number} idTarget ID of target.
-    *   @param {boolean} isSystem Boolean indicating if it is an event system.
-    *   @param {number} eventId ID of the event.
-    *   @param {SystemParameter[]} parameters List of all the parameters.
+    *   @param {MapObject} sender The sender of this event
+    *   @param {number} targetKind The kind of target
+    *   @param {number} targetID The target ID
+    *   @param {boolean} isSystem Boolean indicating if it is an event system
+    *   @param {number} eventID The event ID
+    *   @param {SystemParameter[]} parameters List of all the parameters
+    *   @param {boolean} senderNoReceiver Indicate if the sender should not 
+    *   receive event
     */
-    static sendEvent(sender, targetKind, idTarget, isSystem, idEvent, parameters
+    static sendEvent(sender, targetKind, targetID, isSystem, eventID, parameters
         , senderNoReceiver)
     {
         switch (targetKind)
         {
         case 0: // Send to all
             EventCommandSendEvent.sendEventDetection(sender, -1, isSystem, 
-                idEvent, parameters);
+                eventID, parameters);
             break;
         case 1: // Send to detection
-            EventCommandSendEvent.sendEventDetection(sender, idTarget, isSystem,
-                idEvent, parameters, senderNoReceiver);
+            EventCommandSendEvent.sendEventDetection(sender, targetID, isSystem,
+                eventID, parameters, senderNoReceiver);
             break;
         case 2: // Send to a particular object
-            if (idTarget === -1)
+            if (targetID === -1)
             {
                 // Send to sender
-                sender.receiveEvent(sender, isSystem, idEvent, parameters, 
+                sender.receiveEvent(sender, isSystem, eventID, parameters, 
                     sender.states);
-            } else if (idTarget === 0)
+            } else if (targetID === 0)
             {
                 // Send to the hero
-                RPM.game.hero.receiveEvent(sender, isSystem, idEvent, parameters
+                RPM.game.hero.receiveEvent(sender, isSystem, eventID, parameters
                     , RPM.game.heroStates);
             } else
             {
@@ -2006,9 +2147,9 @@ class EventCommandSendEvent extends EventCommand
                     for (a = 0, l = objects.min.length; a < l; a++)
                     {
                         object = objects.min[a];
-                        if (object.system.id === idTarget)
+                        if (object.system.id === targetID)
                         {
-                            object.receiveEvent(sender, isSystem, idEvent,
+                            object.receiveEvent(sender, isSystem, eventID,
                                 parameters, object.states);
                             break;
                         }
@@ -2016,9 +2157,9 @@ class EventCommandSendEvent extends EventCommand
                     for (a = 0, l = objects.mout.length; a < l; a++)
                     {
                         object = objects.mout[a];
-                        if (object.system.id === idTarget)
+                        if (object.system.id === targetID)
                         {
-                            object.receiveEvent(sender, isSystem, idEvent,
+                            object.receiveEvent(sender, isSystem, eventID,
                                 parameters, object.states);
                             break;
                         }
@@ -2032,16 +2173,16 @@ class EventCommandSendEvent extends EventCommand
                             a++)
                         {
                             object = mapPortion.objectsList[a];
-                            if (object.system.id === idTarget)
+                            if (object.system.id === targetID)
                             {
-                                object.receiveEvent(sender, isSystem, idEvent,
+                                object.receiveEvent(sender, isSystem, eventID,
                                     parameters, object.states);
                                 break;
                             }
                         }
-                        if (mapPortion.heroID === idTarget)
+                        if (mapPortion.heroID === targetID)
                         {
-                            RPM.game.hero.receiveEvent(sender, isSystem, idEvent
+                            RPM.game.hero.receiveEvent(sender, isSystem, eventID
                                 , parameters, RPM.game.heroStates);
                         }
                     }
@@ -2052,8 +2193,17 @@ class EventCommandSendEvent extends EventCommand
     }
 
     // -------------------------------------------------------
-
-    static sendEventDetection(sender, idTarget, isSystem, idEvent, parameters, 
+    /** Send an event
+    *   @static
+    *   @param {MapObject} sender The sender of this event
+    *   @param {number} targetID The target ID
+    *   @param {boolean} isSystem Boolean indicating if it is an event system
+    *   @param {number} eventID The event ID
+    *   @param {SystemParameter[]} parameters List of all the parameters
+    *   @param {boolean} senderNoReceiver Indicate if the sender should not 
+    *   receive event
+    */
+    static sendEventDetection(sender, targetID, isSystem, eventID, parameters, 
         senderNoReceiver)
     {
         RPM.currentMap.updatePortions(this, function(x, y, z, i, j, k)
@@ -2061,17 +2211,17 @@ class EventCommandSendEvent extends EventCommand
             let objects = RPM.game.getPotionsDatas(RPM.currentMap.id, x, y, z);
 
             // Moved objects
-            EventCommandSendEvent.sendEventObjects(objects.min, objects, sender, 
-                idTarget, isSystem, idEvent, parameters, senderNoReceiver);
-            EventCommandSendEvent.sendEventObjects(objects.mout, objects, sender
-                , idTarget, isSystem, idEvent, parameters, senderNoReceiver);
+            EventCommandSendEvent.sendEventObjects(objects.min, sender, targetID
+                , isSystem, eventID, parameters, senderNoReceiver);
+            EventCommandSendEvent.sendEventObjects(objects.mout, sender, 
+                targetID, isSystem, eventID, parameters, senderNoReceiver);
 
             // Static
             let mapPortion = RPM.currentMap.getMapPortion(i, j, k);
             if (mapPortion)
             {
                 EventCommandSendEvent.sendEventObjects(mapPortion.objectsList,
-                    objects, sender, idTarget, isSystem, idEvent, parameters, 
+                    sender, targetID, isSystem, eventID, parameters, 
                     senderNoReceiver);
             }
         });
@@ -2079,24 +2229,34 @@ class EventCommandSendEvent extends EventCommand
         // And the hero!
         if (!senderNoReceiver || sender !== RPM.game.hero)
         {
-            if (idTarget !== -1)
+            if (targetID !== -1)
             {
                 // Check according to detection model
-                if (!RPM.datasGame.system.detections[idTarget].checkCollision(
+                if (!RPM.datasGame.system.detections[targetID].checkCollision(
                     sender, RPM.game.hero))
                 {
                     return;
                 }
             }
-            RPM.game.hero.receiveEvent(sender, isSystem, idEvent, parameters, 
+            RPM.game.hero.receiveEvent(sender, isSystem, eventID, parameters, 
                 RPM.game.heroStates);
         }
     }
 
     // -------------------------------------------------------
-
-    static sendEventObjects(objects, portionDatas, sender, idTarget, isSystem, 
-        idEvent, parameters, senderNoReceiver)
+    /** Send an event
+    *   @static
+    *   @param {MapObject[]} objects The list of objects to send event
+    *   @param {MapObject} sender The sender of this event
+    *   @param {number} targetID The target ID
+    *   @param {boolean} isSystem Boolean indicating if it is an event system
+    *   @param {number} eventID The event ID
+    *   @param {SystemParameter[]} parameters List of all the parameters
+    *   @param {boolean} senderNoReceiver Indicate if the sender should not 
+    *   receive event
+    */
+    static sendEventObjects(objects, sender, targetID, isSystem, eventID, 
+        parameters, senderNoReceiver)
     {
         let object;
         for (let i = 0, l = objects.length; i < l; i++)
@@ -2106,10 +2266,10 @@ class EventCommandSendEvent extends EventCommand
             {
                 continue;
             }
-            if (idTarget !== -1)
+            if (targetID !== -1)
             {
                 // Check according to detection model
-                if (!RPM.datasGame.system.detections[idTarget].checkCollision(
+                if (!RPM.datasGame.system.detections[targetID].checkCollision(
                     sender, object))
                 {
                     continue;
@@ -2117,20 +2277,22 @@ class EventCommandSendEvent extends EventCommand
             }
 
             // Make the object receive the event
-            object.receiveEvent(sender, isSystem, idEvent, parameters, object.states);
+            object.receiveEvent(sender, isSystem, eventID, parameters, object
+                .states);
         }
     }
 
-    /** Send the event and finish.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
+    // -------------------------------------------------------
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
     */
     update(currentState, object, state)
     {
-        EventCommandSendEvent.sendEvent(object, this.targetKind, this.idTarget
-            .getValue(), this.isSystem, this.eventId, this.parameters, this
+        EventCommandSendEvent.sendEvent(object, this.targetKind, this.targetID
+            .getValue(), this.isSystem, this.eventID, this.parameters, this
             .senderNoReceiver);
         return 1;
     }
@@ -2143,17 +2305,17 @@ class EventCommandSendEvent extends EventCommand
 // -------------------------------------------------------
 
 /** @class
-*   An event command for teleporting an object.
-*   @property {boolean} isDirectNode Indicates if this node is directly
-*   going to the next node (takes only one frame).
-*   @property {number} objectID The ID of the object to teleport.
-*   @property {number} idMap The ID of the map.
-*   @property {number} x The x coordinate of the map.
-*   @property {number} y The y coordinate of the map.
-*   @property {number} yPlus The y plus coordinate of the map.
-*   @property {number} z The z coordinate of the map.
-*   @property {number} objectIDPosition The ID of the object to teleport on.
-*   @param {JSON} command Direct JSON command to parse.
+*   An event command for teleporting an object
+*   @extends EventCommand
+*   @property {SystemValue} objectID The ID of the object to teleport value
+*   @property {SystemValue} objectIDPosition The ID value of the object to 
+*   teleport on
+*   @property {SystemValue} mapID The map ID value
+*   @property {SystemValue} x The x coordinate of the map value
+*   @property {SystemValue} y The y coordinate of the map value
+*   @property {SystemValue} yPlus The y plus coordinate of the map value
+*   @property {SystemValue} z The z coordinate of the map value
+*   @param {Object} command Direct JSON command to parse
 */
 class EventCommandTeleportObject extends EventCommand
 {
@@ -2170,18 +2332,18 @@ class EventCommandTeleportObject extends EventCommand
 
         // Position
         this.objectIDPosition = null;
-        this.idMap = null;
+        this.mapID = null;
         switch (command[iterator.i++])
         {
         case 0:
-            this.idMap = SystemValue.createNumber(command[iterator.i++]);
+            this.mapID = SystemValue.createNumber(command[iterator.i++]);
             this.x = SystemValue.createNumber(command[iterator.i++]);
             this.y = SystemValue.createNumber(command[iterator.i++]);
             this.yPlus = SystemValue.createNumber(command[iterator.i++]);
             this.z = SystemValue.createNumber(command[iterator.i++]);
             break;
         case 1:
-            this.idMap = SystemValue.createValueCommand(command, iterator);
+            this.mapID = SystemValue.createValueCommand(command, iterator);
             this.x = SystemValue.createValueCommand(command, iterator);
             this.y = SystemValue.createValueCommand(command, iterator);
             this.yPlus = SystemValue.createValueCommand(command, iterator);
@@ -2198,8 +2360,9 @@ class EventCommandTeleportObject extends EventCommand
         this.isDirectNode = false;
     }
 
-    /** Initialize the current state.
-    *   @returns {Object} The current state (waitingFileRead, teleported).
+    // -------------------------------------------------------
+    /** Initialize the current state
+    *   @returns {Object} The current state
     */
     initialize()
     {
@@ -2211,11 +2374,12 @@ class EventCommandTeleportObject extends EventCommand
         }
     }
 
-    /** Teleport the object.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
+    // -------------------------------------------------------
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
     */
     update(currentState, object, state)
     {
@@ -2252,9 +2416,9 @@ class EventCommandTeleportObject extends EventCommand
                     moved) =>
                 {
                     // If needs teleport hero in another map
-                    if (this.idMap !== null)
+                    if (this.mapID !== null)
                     {
-                        let id = this.idMap.getValue();
+                        let id = this.mapID.getValue();
 
                         // If hero set the current map
                         if (moved.isHero)
@@ -2289,18 +2453,17 @@ class EventCommandTeleportObject extends EventCommand
 // -------------------------------------------------------
 
 /** @class
-*   An event command for moving object.
-*   @property {boolean} isDirectNode Indicates if this node is directly
-*   going to the next node (takes only one frame).
-*   @property {number} objectID The ID of the object.
-*   @property {boolean} isIgnore Ignore a move if impossible.
+*   An event command for moving object
+*   @extends EventCommand
+*   @property {SystemValue} objectID The ID of the object
+*   @property {boolean} isIgnore Ignore a move if impossible
 *   @property {boolean} isWaitEnd Wait then of all the moves to end the command
-*   (parallel command).
+*   (parallel command)
 *   @property {boolean} isCameraOrientation Take the orientation of the came in
-*   count.
-*   @property {function[]} moves All the moves callbacks.
-*   @property {Object[]} parameters Parameters for ach moves callbacks.
-*   @param {JSON} command Direct JSON command to parse.
+*   count
+*   @property {function[]} moves All the moves callbacks
+*   @property {Object[]} parameters Parameters for ach moves callbacks
+*   @param {Object} command Direct JSON command to parse
 */
 class EventCommandMoveObject extends EventCommand
 {
@@ -2400,6 +2563,12 @@ class EventCommandMoveObject extends EventCommand
         this.parallel = !this.isWaitEnd;
     }
 
+    // -------------------------------------------------------
+    /** Get the opposite orientation
+    *   @static
+    *   @param {Orientation} orientation The orientation
+    *   @returns {Orientation} The current state
+    */
     static oppositeOrientation(orientation)
     {
         switch (orientation)
@@ -2415,8 +2584,9 @@ class EventCommandMoveObject extends EventCommand
         }
     }
 
-    /** Initialize the current state.
-    *   @returns {Object} The current state (position, distance).
+    // -------------------------------------------------------
+    /** Initialize the current state
+    *   @returns {Object} The current state
     */
     initialize()
     {
@@ -2436,11 +2606,11 @@ class EventCommandMoveObject extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Function to move north.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The object to move.
-    *   @param {bool} square Indicate if it is a square move.
-    *   @param {Orientation} orientation The orientation where to move.
+    /** Function to move north
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The object to move
+    *   @param {bool} square Indicate if it is a square move
+    *   @param {Orientation} orientation The orientation where to move
     */
     move(currentState, object, square, orientation)
     {
@@ -2517,17 +2687,19 @@ class EventCommandMoveObject extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Change the frequency tick of the object
+    *   @param {MapObject} object The object to move
+    */
     moveFrequency(object)
     {
         object.moveFrequencyTick = object.frequency.getValue() * 1000;
     }
 
     // -------------------------------------------------------
-    /** Function to move north.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The object to move.
-    *   @param {Object} parameters The parameters.
+    /** Function to move north
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The object to move
+    *   @param {Object} parameters The parameters
     */
     moveNorth(currentState, object, parameters)
     {
@@ -2536,10 +2708,10 @@ class EventCommandMoveObject extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Function to move south.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The object to move.
-    *   @param {Object} parameters The parameters.
+    /** Function to move south
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The object to move
+    *   @param {Object} parameters The parameters
     */
     moveSouth(currentState, object, parameters)
     {
@@ -2548,10 +2720,10 @@ class EventCommandMoveObject extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Function to move west.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The object to move.
-    *   @param {Object} parameters The parameters.
+    /** Function to move west
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The object to move
+    *   @param {Object} parameters The parameters
     */
     moveWest(currentState, object, parameters)
     {
@@ -2560,11 +2732,10 @@ class EventCommandMoveObject extends EventCommand
     }
 
     // -------------------------------------------------------
-
-    /** Function to move east.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The object to move.
-    *   @param {Object} parameters The parameters.
+    /** Function to move east
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The object to move
+    *   @param {Object} parameters The parameters
     */
     moveEast(currentState, object, parameters)
     {
@@ -2573,10 +2744,10 @@ class EventCommandMoveObject extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Function to move north west.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The object to move.
-    *   @param {Object} parameters The parameters.
+    /** Function to move north west
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The object to move
+    *   @param {Object} parameters The parameters
     */
     moveNorthWest(currentState, object, parameters)
     {
@@ -2589,10 +2760,10 @@ class EventCommandMoveObject extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Function to move north west.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The object to move.
-    *   @param {Object} parameters The parameters.
+    /** Function to move north west
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The object to move
+    *   @param {Object} parameters The parameters
     */
     moveNorthEast(currentState, object, parameters)
     {
@@ -2604,10 +2775,10 @@ class EventCommandMoveObject extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Function to move north west.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The object to move.
-    *   @param {Object} parameters The parameters.
+    /** Function to move north west
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The object to move
+    *   @param {Object} parameters The parameters
     */
     moveSouthWest(currentState, object, parameters)
     {
@@ -2620,10 +2791,10 @@ class EventCommandMoveObject extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Function to move north west.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The object to move.
-    *   @param {Object} parameters The parameters.
+    /** Function to move north west
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The object to move
+    *   @param {Object} parameters The parameters
     */
     moveSouthEast(currentState, object, parameters)
     {
@@ -2636,10 +2807,10 @@ class EventCommandMoveObject extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Function to move random.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The object to move.
-    *   @param {Object} parameters The parameters.
+    /** Function to move random
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The object to move
+    *   @param {Object} parameters The parameters
     */
     moveRandom(currentState, object, parameters)
     {
@@ -2656,30 +2827,34 @@ class EventCommandMoveObject extends EventCommand
         }
     }
 
-    /** Function to move north west.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The object to move.
-    *   @param {Object} parameters The parameters.
+    // -------------------------------------------------------
+    /** Function to move hero
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The object to move
+    *   @param {Object} parameters The parameters
     */
     moveHero(currentState, object, parameters)
     {
         return this.moveHeroAndOpposite(currentState, object, parameters, false);
     }
 
-    /** Function to move north west.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The object to move.
-    *   @param {Object} parameters The parameters.
+    // -------------------------------------------------------
+    /** Function to move opposite to hero
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The object to move
+    *   @param {Object} parameters The parameters
     */
     moveOppositeHero(currentState, object, parameters)
     {
         return this.moveHeroAndOpposite(currentState, object, parameters, true);
     }
 
-    /** Function to move north west.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The object to move.
-    *   @param {Object} parameters The parameters.
+    // -------------------------------------------------------
+    /** Function to move hero and opposite hero
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The object to move
+    *   @param {Object} parameters The parameters
+    *   @param {boolean} opposite Indicate if opposite
     */
     moveHeroAndOpposite(currentState, object, parameters, opposite)
     {
@@ -2699,10 +2874,11 @@ class EventCommandMoveObject extends EventCommand
         return Orientation.None;
     }
 
-    /** Function to move north west.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The object to move.
-    *   @param {Object} parameters The parameters.
+    // -------------------------------------------------------
+    /** Function to move front
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The object to move
+    *   @param {Object} parameters The parameters
     */
     moveFront(currentState, object, parameters)
     {
@@ -2717,10 +2893,11 @@ class EventCommandMoveObject extends EventCommand
         return Orientation.None;
     }
 
-    /** Function to move north west.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The object to move.
-    *   @param {Object} parameters The parameters.
+    // -------------------------------------------------------
+    /** Function to move back
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The object to move
+    *   @param {Object} parameters The parameters
     */
     moveBack(currentState, object, parameters)
     {
@@ -2737,7 +2914,11 @@ class EventCommandMoveObject extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Function to change graphics
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The object to move
+    *   @param {Object} parameters The parameters
+    */
     changeGraphics(currentState, object, parameters)
     {
         if (object)
@@ -2804,10 +2985,10 @@ class EventCommandMoveObject extends EventCommand
         return Orientation.None;
     }
 
-    /** Function to move north west.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The object to move.
-    *   @param {Object} parameters The parameters.
+    // -------------------------------------------------------
+    /** Get the hero orientation
+    *   @param {MapObject} object The object to move
+    *   @returns {Orientation}
     */
     getHeroOrientation(object)
     {
@@ -2835,11 +3016,11 @@ class EventCommandMoveObject extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Move the object(s).
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
     */
     update(currentState, object, state)
     {
@@ -2882,7 +3063,10 @@ class EventCommandMoveObject extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Get the current orientation
+    *   @param {Object} currentState The current state of the event
+    *   @returns {Orientation}
+    */
     getCurrentOrientation(currentState)
     {
         if (this.moves.length === 0)
@@ -2900,11 +3084,10 @@ class EventCommandMoveObject extends EventCommand
 // -------------------------------------------------------
 
 /** @class
-*   An event command for displaying text.
-*   @property {boolean} isDirectNode Indicates if this node is directly
-*   going to the next node (takes only one frame).
-*   @property {number} milliseconds The number of milliseconds to wait.
-*   @param {JSON} command Direct JSON command to parse.
+*   An event command for displaying text
+*   @extends EventCommand
+*   @property {number} milliseconds The number of milliseconds to wait
+*   @param {Object} command Direct JSON command to parse
 */
 class EventCommandWait extends EventCommand
 {
@@ -2919,8 +3102,9 @@ class EventCommandWait extends EventCommand
         this.isDirectNode = false;
     }
 
-    /** Initialize the current state.
-    *   @returns {Object} The current state (clicked).
+    // -------------------------------------------------------
+    /** Initialize the current state
+    *   @returns {Object} The current state
     */
     initialize() {
         return {
@@ -2930,11 +3114,11 @@ class EventCommandWait extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Update and check if the event is finished.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
     */
     update(currentState, object, state)
     {
@@ -2950,13 +3134,25 @@ class EventCommandWait extends EventCommand
 // -------------------------------------------------------
 
 /** @class
-*   An event command for displaying text.
-*   @property {boolean} isDirectNode Indicates if this node is directly
-*   going to the next node (takes only one frame).
-*   @property {SystemValue} targetID The ID of the camera target.
-*   @property {number} operation The operation used for the transformations.
-*   @property {SystemValue} time The time to wait.
-*   @param {JSON} command Direct JSON command to parse.
+*   An event command for displaying text
+*   @extends EventCommand
+*   @property {SystemValue} targetID The ID of the camera target
+*   @property {OperationKind} operation The operation used for the transformations
+*   @property {bool} moveTargetOffset Indicate if move target offset
+*   @property {bool} cameraOrientation Indicate if camera orientation
+*   @property {SystemValue} x The x value
+*   @property {bool} xSquare Indicate if x value is square
+*   @property {SystemValue} y The y value
+*   @property {bool} ySquare Indicate if y value is square
+*   @property {SystemValue} z The z value
+*   @property {bool} zSquare Indicate if z value is square
+*   @property {bool} rotationTargetOffset Indicate if rotation target offset
+*   @property {SystemValue} h The horizontal angle value
+*   @property {SystemValue} v The vertical angle value
+*   @property {SystemValue} distance The distance value
+*   @property {boolean} isWaitEnd Indicate if wait end of the command
+*   @property {SystemValue} time The time to wait value
+*   @param {Object} command Direct JSON command to parse
 */
 class EventCommandMoveCamera extends EventCommand
 {
@@ -2972,8 +3168,7 @@ class EventCommandMoveCamera extends EventCommand
         if (!RPM.numToBool(command[iterator.i++])) // Unchanged
         {
             this.targetID = null;
-        }
-        else
+        } else
         {
             this.targetID = SystemValue.createValueCommand(command, iterator);
         }
@@ -3007,8 +3202,9 @@ class EventCommandMoveCamera extends EventCommand
         this.parallel = !this.isWaitEnd;
     }
 
-    /** Initialize the current state.
-    *   @returns {Object} The current state (clicked).
+    // -------------------------------------------------------
+    /** Initialize the current state
+    *   @returns {Object} The current state
     */
     initialize()
     {
@@ -3040,11 +3236,11 @@ class EventCommandMoveCamera extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Update and check if the event is finished.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
     */
     update(currentState, object, state)
     {
@@ -3170,11 +3366,11 @@ class EventCommandMoveCamera extends EventCommand
 // -------------------------------------------------------
 
 /** @class
-*   An event command for playing a music.
-*   @property {boolean} isDirectNode Indicates if this node is directly
-*   going to the next node (takes only one frame).
+*   An event command for playing a music
+*   @extends EventCommand
+*   @property {SystemPlaySong} song The play song
+*   @param {Object} command Direct JSON command to parse
 */
-
 class EventCommandPlayMusic extends EventCommand
 {
     constructor(command)
@@ -3185,16 +3381,21 @@ class EventCommandPlayMusic extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Parse a play song command
+    *   @static
+    *   @param {Object} that The event command to parse
+    *   @param {Object} command Direct JSON command to parse
+    *   @param {SongKind} kind The song kind
+    */
     static parsePlaySong(that, command, kind)
     {
         let iterator = {
             i: 0
         }
         let isIDprimitive = RPM.numToBool(command[iterator.i++]);
-        let idValue = SystemValue.createValueCommand(command, iterator);
+        let valueID = SystemValue.createValueCommand(command, iterator);
         let id = SystemValue.createNumber(command[iterator.i++]);
-        let songID = isIDprimitive ? idValue : id;
+        let songID = isIDprimitive ? valueID : id;
         let volume = SystemValue.createValueCommand(command, iterator);
         let isStart = RPM.numToBool(command[iterator.i++]);
         let start = SystemValue.createValueCommand(command, iterator);
@@ -3206,20 +3407,22 @@ class EventCommandPlayMusic extends EventCommand
         that.song.updateValues(songID, volume, isStart, start, isEnd, end);
     }
 
+    // -------------------------------------------------------
+    /** Initialize the current state
+    *   @returns {Object} The current state
+    */
     initialize()
     {
         return this.song.initialize();
     }
 
     // -------------------------------------------------------
-
-    /** Update and check if the event is finished.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
     */
-
     update(currentState, object, state)
     {
         return this.song.playMusic();
@@ -3233,11 +3436,11 @@ class EventCommandPlayMusic extends EventCommand
 // -------------------------------------------------------
 
 /** @class
-*   An event command for stopping the music.
-*   @property {boolean} isDirectNode Indicates if this node is directly
-*   going to the next node (takes only one frame).
+*   An event command for stopping the music
+*   @extends EventCommand
+*   @property {SystemValue} seconds The time in seconds value
+*   @param {Object} command Direct JSON command to parse
 */
-
 class EventCommandStopMusic extends EventCommand
 {
     constructor(command)
@@ -3250,7 +3453,11 @@ class EventCommandStopMusic extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Parse a stop song command
+    *   @static
+    *   @param {Object} that The event command to parse
+    *   @param {Object} command Direct JSON command to parse
+    */
     static parseStopSong(that, command)
     {
         let iterator = {
@@ -3260,13 +3467,22 @@ class EventCommandStopMusic extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Stop the song
+    *   @static
+    *   @param {Object} that The event command to parse
+    *   @param {SongKind} kind The song kind
+    *   @param {number} time The date seconds value in the first call of stop
+    */
     static stopSong(that, kind, time)
     {
         return RPM.songsManager.stopSong(kind, time, that.seconds.getValue()) ? 
             1 : 0;
     }
 
+    // -------------------------------------------------------
+    /** Initialize the current state
+    *   @returns {Object} The current state
+    */
     initialize()
     {
         return {
@@ -3276,11 +3492,11 @@ class EventCommandStopMusic extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Update and check if the event is finished.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
     */
     update(currentState, object, state)
     {
@@ -3297,11 +3513,11 @@ class EventCommandStopMusic extends EventCommand
 // -------------------------------------------------------
 
 /** @class
-*   An event command for playing a backgroundsound.
-*   @property {boolean} isDirectNode Indicates if this node is directly
-*   going to the next node (takes only one frame).
+*   An event command for playing a backgroundsound
+*   @extends EventCommand
+*   @property {SystemPlaySong} song The play song
+*   @param {Object} command Direct JSON command to parse
 */
-
 class EventCommandPlayBackgroundSound extends EventCommand
 {
     constructor(command)
@@ -3312,17 +3528,21 @@ class EventCommandPlayBackgroundSound extends EventCommand
             .BackgroundSound);
     }
 
+    // -------------------------------------------------------
+    /** Initialize the current state
+    *   @returns {Object} The current state
+    */
     initialize()
     {
         return this.song.initialize();
     }
 
     // -------------------------------------------------------
-    /** Update and check if the event is finished.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
     */
     update(currentState, object, state)
     {
@@ -3337,11 +3557,11 @@ class EventCommandPlayBackgroundSound extends EventCommand
 // -------------------------------------------------------
 
 /** @class
-*   An event command for stopping the background sound.
-*   @property {boolean} isDirectNode Indicates if this node is directly
-*   going to the next node (takes only one frame).
+*   An event command for stopping the background sound
+*   @extends EventCommand
+*   @property {SystemValue} seconds The time in seconds value
+*   @param {Object} command Direct JSON command to parse
 */
-
 class EventCommandStopBackgroundSound extends EventCommand
 {
     constructor(command)
@@ -3352,6 +3572,10 @@ class EventCommandStopBackgroundSound extends EventCommand
         this.parallel = true;
     }
 
+    // -------------------------------------------------------
+    /** Initialize the current state
+    *   @returns {Object} The current state
+    */
     initialize()
     {
         return {
@@ -3361,11 +3585,11 @@ class EventCommandStopBackgroundSound extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Update and check if the event is finished.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
     */
     update(currentState, object, state)
     {
@@ -3382,11 +3606,11 @@ class EventCommandStopBackgroundSound extends EventCommand
 // -------------------------------------------------------
 
 /** @class
-*   An event command for playing a backgroundsound.
-*   @property {boolean} isDirectNode Indicates if this node is directly
-*   going to the next node (takes only one frame).
+*   An event command for playing a backgroundsound
+*   @extends EventCommand
+*   @property {SystemPlaySong} song The play song
+*   @param {Object} command Direct JSON command to parse
 */
-
 class EventCommandPlaySound extends EventCommand
 {
     constructor(command)
@@ -3396,27 +3620,25 @@ class EventCommandPlaySound extends EventCommand
         EventCommandPlayMusic.parsePlaySong(this, command, SongKind.Sound);
     }
 
+    // -------------------------------------------------------
+    /** Initialize the current state
+    *   @returns {Object} The current state
+    */
     initialize()
     {
         return this.song.initialize();
     }
 
     // -------------------------------------------------------
-
-    play() {
-        return this.song.playSound();
-    }
-
-    // -------------------------------------------------------
-    /** Update and check if the event is finished.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
     */
     update(currentState, object, state)
     {
-        this.play();
+        this.song.playSound();
         return 1;
     }
 }
@@ -3428,11 +3650,11 @@ class EventCommandPlaySound extends EventCommand
 // -------------------------------------------------------
 
 /** @class
-*   An event command for playing a music effect.
-*   @property {boolean} isDirectNode Indicates if this node is directly
-*   going to the next node (takes only one frame).
+*   An event command for playing a music effect
+*   @extends EventCommand
+*   @property {SystemPlaySong} song The play song
+*   @param {Object} command Direct JSON command to parse
 */
-
 class EventCommandPlayMusicEffect extends EventCommand
 {
     constructor(command)
@@ -3443,17 +3665,21 @@ class EventCommandPlayMusicEffect extends EventCommand
         this.parallel = true;
     }
 
+    // -------------------------------------------------------
+    /** Initialize the current state
+    *   @returns {Object} The current state
+    */
     initialize()
     {
         return this.song.initialize();
     }
 
     // -------------------------------------------------------
-    /** Update and check if the event is finished.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
     */
     update(currentState, object, state)
     {
@@ -3468,8 +3694,12 @@ class EventCommandPlayMusicEffect extends EventCommand
 // -------------------------------------------------------
 
 /** @class
-*   An event command for changing a property value.
-*   @param {JSON} command Direct JSON command to parse.
+*   An event command for changing a property value
+*   @extends EventCommand
+*   @property {SystemValue} propertyID The property ID value
+*   @property {OperationKind} operationKind The operation kind
+*   @property {SystemValue} newValue The new value
+*   @param {Object} command Direct JSON command to parse
 */
 class EventCommandChangeProperty extends EventCommand
 {
@@ -3485,6 +3715,13 @@ class EventCommandChangeProperty extends EventCommand
         this.newValue = SystemValue.createValueCommand(command, iterator);
     }
 
+    // -------------------------------------------------------
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
+    */
     update(currentState, object, state)
     {
         let propertyID = this.propertyID.getValue();
@@ -3531,6 +3768,16 @@ class EventCommandChangeProperty extends EventCommand
 //
 // -------------------------------------------------------
 
+/** @class
+*   An event command for displaying a choice
+*   @extends EventCommand
+*   @property {SystemValue} cancelAutoIndex The cancel auto index value
+*   @property {SystemLang[]} choices The choiches content texts
+*   @property {WindowChoices} windowChoices The window choices
+*   @property {boolean} showText Indicate if there is also a show text command 
+*   before this display choice
+*   @param {Object} command Direct JSON command to parse
+*/
 class EventCommandDisplayChoice extends EventCommand
 {
     constructor(command)
@@ -3591,6 +3838,10 @@ class EventCommandDisplayChoice extends EventCommand
         );
     }
 
+    // -------------------------------------------------------
+    /** Set the show text property
+    *   @param {boolean} showText The show text value
+    */
     setShowText(showText)
     {
         this.showText = showText;
@@ -3602,6 +3853,10 @@ class EventCommandDisplayChoice extends EventCommand
         }
     }
 
+    // -------------------------------------------------------
+    /** Initialize the current state
+    *   @returns {Object} The current state
+    */
     initialize()
     {
         this.windowChoices.unselect();
@@ -3611,11 +3866,12 @@ class EventCommandDisplayChoice extends EventCommand
         };
     }
 
-    /** Go inside the else block.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
+    // -------------------------------------------------------
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
     */
     update(currentState, object, state)
     {
@@ -3623,16 +3879,19 @@ class EventCommandDisplayChoice extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Returns the number of node to pass.
+    /** Returns the number of node to pass
     *   @returns {number}
     */
-    goToNextCommand ()
+    goToNextCommand()
     {
         return 1;
     }
 
     // -------------------------------------------------------
-
+    /** First key press handle for the current stack
+    *   @param {Object} currentState The current state of the event
+    *   @param {number} key The key ID pressed
+    */
     onKeyPressed(currentState, key)
     {
         if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
@@ -3646,13 +3905,21 @@ class EventCommandDisplayChoice extends EventCommand
         }
     }
 
+    // -------------------------------------------------------
+    /** Key pressed repeat handle for the current stack, but with
+    *   a small wait after the first pressure (generally used for menus)
+    *   @param {Object} currentState The current state of the event
+    *   @param {number} key The key ID pressed
+    */
     onKeyPressedAndRepeat(currentState, key)
     {
         this.windowChoices.onKeyPressedAndRepeat(key);
     }
 
     // -------------------------------------------------------
-
+    /** Draw the HUD
+    *   @param {Object} currentState The current state of the event
+    */
     drawHUD(currentState)
     {
         // Display text command if existing
@@ -3670,6 +3937,12 @@ class EventCommandDisplayChoice extends EventCommand
 //
 // -------------------------------------------------------
 
+/** @class
+*   An event command representing one of the choice
+*   @extends EventCommand
+*   @property {number} index The choice index
+*   @param {Object} command Direct JSON command to parse
+*/
 class EventCommandChoice extends EventCommand
 {
     constructor(command)
@@ -3681,11 +3954,12 @@ class EventCommandChoice extends EventCommand
         this.parallel = false;
     }
 
-    /** Go inside the else block.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
+    // -------------------------------------------------------
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
     */
     update(currentState, object, state)
     {
@@ -3693,7 +3967,7 @@ class EventCommandChoice extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Returns the number of node to pass.
+    /** Returns the number of node to pass
     *   @returns {number}
     */
     goToNextCommand()
@@ -3708,6 +3982,13 @@ class EventCommandChoice extends EventCommand
 //
 // -------------------------------------------------------
 
+/** @class
+*   An event command for script
+*   @extends EventCommand
+*   @property {boolean} isDynamic Indicate if script is a dynamic value
+*   @property {SystemValue} script The script value
+*   @param {Object} command Direct JSON command to parse
+*/
 class EventCommandScript extends EventCommand
 {
     constructor(command)
@@ -3723,6 +4004,13 @@ class EventCommandScript extends EventCommand
             iterator.i]));
     }
 
+    // -------------------------------------------------------
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
+    */
     update(currentState, object, state)
     {
         let res = new Function("$that", "$object", this.script.getValue())($that
@@ -3737,6 +4025,21 @@ class EventCommandScript extends EventCommand
 //
 // -------------------------------------------------------
 
+/** @class
+*   An event command for displaying a picture
+*   @extends EventCommand
+*   @property {SystemValue} pictureID The picture ID value
+*   @property {SystemValue} index The index value
+*   @property {SystemValue} centered Indicate if the picture is centered
+*   @property {SystemValue} originX The origin X according to centered value
+*   @property {SystemValue} originY The origin Y according to centered value
+*   @property {SystemValue} x The x value
+*   @property {SystemValue} y The y value
+*   @property {SystemValue} zoom The zoom value
+*   @property {SystemValue} opacity The opacity value
+*   @property {SystemValue} angle The angle value
+*   @param {Object} command Direct JSON command to parse
+*/
 class EventCommandDisplayAPicture extends EventCommand
 {
     constructor(command)
@@ -3766,7 +4069,12 @@ class EventCommandDisplayAPicture extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
+    */
     update(currentState, object, state)
     {
         let currentIndex = this.index.getValue();
@@ -3811,6 +4119,20 @@ class EventCommandDisplayAPicture extends EventCommand
 //
 // -------------------------------------------------------
 
+/** @class
+*   An event command for setting / moving / turning a picture
+*   @extends EventCommand
+*   @property {SystemValue} index The index value
+*   @property {SystemValue} pictureID The picture ID value
+*   @property {SystemValue} zoom The zoom value
+*   @property {SystemValue} opacity The opacity value
+*   @property {SystemValue} x The x value
+*   @property {SystemValue} y The y value
+*   @property {SystemValue} angle The angle value
+*   @property {SystemValue} time The time value
+*   @property {boolean} waitEnd Indicate if wait end of the command
+*   @param {Object} command Direct JSON command to parse
+*/
 class EventCommandSetMoveTurnAPicture extends EventCommand
 {
     constructor(command)
@@ -3853,7 +4175,9 @@ class EventCommandSetMoveTurnAPicture extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Initialize the current state
+    *   @returns {Object} The current state
+    */
     initialize()
     {
         let time = this.time.getValue() * 1000;
@@ -3919,7 +4243,12 @@ class EventCommandSetMoveTurnAPicture extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
+    */
     update(currentState, object, state)
     {
         // If no picture corresponds, go to next command
@@ -3995,6 +4324,12 @@ class EventCommandSetMoveTurnAPicture extends EventCommand
 //
 // -------------------------------------------------------
 
+/** @class
+*   An event command for removing a picture
+*   @extends EventCommand
+*   @property {SystemValue} index The index value
+*   @param {Object} command Direct JSON command to parse
+*/
 class EventCommandRemoveAPicture extends EventCommand
 {
     constructor(command)
@@ -4007,6 +4342,13 @@ class EventCommandRemoveAPicture extends EventCommand
         this.index = SystemValue.createValueCommand(command, iterator);
     }
 
+    // -------------------------------------------------------
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
+    */
     update(currentState, object, state)
     {
         let currentIndex = this.index.getValue();
@@ -4029,6 +4371,29 @@ class EventCommandRemoveAPicture extends EventCommand
 //
 // -------------------------------------------------------
 
+/** @class
+*   An event command for setting the dialog box options
+*   @extends EventCommand
+*   @property {SystemValue} windowSkinID The window skin ID value
+*   @property {SystemValue} x The x value
+*   @property {SystemValue} y The y value
+*   @property {SystemValue} w The w value
+*   @property {SystemValue} h The h value
+*   @property {SystemValue} pLeft The position left value
+*   @property {SystemValue} pTop The position top value
+*   @property {SystemValue} pRight The position right value
+*   @property {SystemValue} pBottom The position bottom value
+*   @property {boolean} fPosAbove Indicate if faceset position is above window
+*   @property {SystemValue} fX The faceset position x value
+*   @property {SystemValue} fY  The faceset position y value
+*   @property {boolean} tOutline Indicate if text has outline
+*   @property {SystemValue} tcText The text color ID value
+*   @property {SystemValue} tcOutline The text color ID outline value
+*   @property {SystemValue} tcBackground The text color ID background value
+*   @property {SystemValue} tSize The text size ID
+*   @property {SystemValue} tFont The text font ID
+*   @param {Object} command Direct JSON command to parse
+*/
 class EventCommandSetDialogBoxOptions extends EventCommand
 {
     constructor(command)
@@ -4088,7 +4453,7 @@ class EventCommandSetDialogBoxOptions extends EventCommand
         }
         if (RPM.numToBool(command[iterator.i++]))
         {
-            this.tOutline = command[iterator.i++] !== RPM.NUM_BOOL_TRUE;
+            this.tOutline = !RPM.numToBool(command[iterator.i++]);
         }
         if (RPM.numToBool(command[iterator.i++]))
         {
@@ -4113,7 +4478,12 @@ class EventCommandSetDialogBoxOptions extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
+    */
     update(currentState, object, state)
     {
         if (!RPM.isUndefined(this.windowSkinID))
@@ -4203,6 +4573,11 @@ class EventCommandSetDialogBoxOptions extends EventCommand
 //
 // -------------------------------------------------------
 
+/** @class
+*   An event command for going to title screen
+*   @extends EventCommand
+*   @param {Object} command Direct JSON command to parse
+*/
 class EventCommandTitleScreen extends EventCommand
 {
     constructor(command)
@@ -4211,10 +4586,15 @@ class EventCommandTitleScreen extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
+    */
     update(currentState, object, state)
     {
-        RPM.gameStack.pop();
+        RPM.gameStack.popAll();
         RPM.gameStack.pushTitleScreen();
         return 1;
     }
@@ -4226,6 +4606,19 @@ class EventCommandTitleScreen extends EventCommand
 //
 // -------------------------------------------------------
 
+/** @class
+*   An event command for changing screen tone
+*   @extends EventCommand
+*   @property {SystemValue} r The red color value
+*   @property {SystemValue} g The green color value
+*   @property {SystemValue} b The blue color value
+*   @property {SystemValue} grey The grey color value
+*   @property {boolean} subColor Indicate if the is a sub color
+*   @property {SystemValue} colorID The color ID value
+*   @property {boolean} waitEnd Indicate if wait end of the command
+*   @property {SystemValue} time The time value for changing screen tone
+*   @param {Object} command Direct JSON command to parse
+*/
 class EventCommandChangeScreenTone extends EventCommand
 {
     constructor(command)
@@ -4255,7 +4648,9 @@ class EventCommandChangeScreenTone extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Initialize the current state
+    *   @returns {Object} The current state
+    */
     initialize()
     {
         let time = this.time.getValue() * 1000;
@@ -4277,7 +4672,12 @@ class EventCommandChangeScreenTone extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
+    */
     update(currentState, object, state)
     {
         if (currentState.parallel)
@@ -4328,6 +4728,12 @@ class EventCommandChangeScreenTone extends EventCommand
 //
 // -------------------------------------------------------
 
+/** @class
+*   An event command for removing a specific object from map
+*   @extends EventCommand
+*   @property {SystemValue} objectID The object ID value to remove
+*   @param {Object} command Direct JSON command to parse
+*/
 class EventCommandRemoveObjectFromMap extends EventCommand
 {
     constructor(command)
@@ -4341,7 +4747,9 @@ class EventCommandRemoveObjectFromMap extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Initialize the current state
+    *   @returns {Object} The current state
+    */
     initialize()
     {
         return {
@@ -4351,7 +4759,12 @@ class EventCommandRemoveObjectFromMap extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
+    */
     update(currentState, object, state)
     {
         let objectID = this.objectID.getValue();
@@ -4404,6 +4817,11 @@ class EventCommandRemoveObjectFromMap extends EventCommand
 //
 // -------------------------------------------------------
 
+/** @class
+*   An event command for stopping a reaction
+*   @extends EventCommand
+*   @param {Object} command Direct JSON command to parse
+*/
 class EventCommandStopReaction extends EventCommand
 {
     constructor(command)
@@ -4412,7 +4830,12 @@ class EventCommandStopReaction extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
+    */
     update(currentState, object, state)
     {
         return -3;
@@ -4425,6 +4848,12 @@ class EventCommandStopReaction extends EventCommand
 //
 // -------------------------------------------------------
 
+/** @class
+*   An event command for allowing or forbidding saves
+*   @extends EventCommand
+*   @property {SystemValue} allow The switch value
+*   @param {Object} command Direct JSON command to parse
+*/
 class EventCommandAllowForbidSaves extends EventCommand
 {
     constructor(command)
@@ -4438,7 +4867,12 @@ class EventCommandAllowForbidSaves extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
+    */
     update(currentState, object, state)
     {
         RPM.allowSaves = this.allow.getValue();
@@ -4452,6 +4886,12 @@ class EventCommandAllowForbidSaves extends EventCommand
 //
 // -------------------------------------------------------
 
+/** @class
+*   An event command for allowing forbidding main menu
+*   @extends EventCommand
+*   @property {SystemValue} allow The switch value
+*   @param {Object} command Direct JSON command to parse
+*/
 class EventCommandAllowForbidMainMenu extends EventCommand
 {
     constructor(command)
@@ -4465,7 +4905,12 @@ class EventCommandAllowForbidMainMenu extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
+    */
     update(currentState, object, state)
     {
         RPM.allowMainMenu = this.allow.getValue();
@@ -4479,6 +4924,13 @@ class EventCommandAllowForbidMainMenu extends EventCommand
 //
 // -------------------------------------------------------
 
+/** @class
+*   An event command for calling a common reaction
+*   @extends EventCommand
+*   @property {number} commonReactionID The common reaction ID
+*   @property {SystemValue[]} parameters The reaction parameters according to ID
+*   @param {Object} command Direct JSON command to parse
+*/
 class EventCommandCallACommonReaction extends EventCommand
 {
     constructor(command)
@@ -4501,7 +4953,9 @@ class EventCommandCallACommonReaction extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Initialize the current state
+    *   @returns {Object} The current state
+    */
     initialize()
     {
         return {
@@ -4510,12 +4964,18 @@ class EventCommandCallACommonReaction extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
+    */
     update(currentState, object, state)
     {
         if (!currentState.interpreter)
         {
-            let reaction = RPM.datasGame.commonEvents.commonReactions[this.commonReactionID];
+            let reaction = RPM.datasGame.commonEvents.commonReactions[this
+                .commonReactionID];
 
             // Correct parameters for default values
             let v, parameter, k;
@@ -4546,7 +5006,10 @@ class EventCommandCallACommonReaction extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** First key press handle for the current stack
+    *   @param {Object} currentState The current state of the event
+    *   @param {number} key The key ID pressed
+    */
     onKeyPressed(currentState, key)
     {
         if (currentState.interpreter && currentState.interpreter.currentCommand)
@@ -4558,7 +5021,10 @@ class EventCommandCallACommonReaction extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** First key release handle for the current stack
+    *   @param {Object} currentState The current state of the event
+    *   @param {number} key The key ID pressed
+    */
     onKeyReleased(currentState, key)
     {
         if (currentState.interpreter && currentState.interpreter.currentCommand)
@@ -4570,7 +5036,11 @@ class EventCommandCallACommonReaction extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Key pressed repeat handle for the current stack
+    *   @param {Object} currentState The current state of the event
+    *   @param {number} key The key ID pressed
+    *   @returns {boolean}
+    */
     onKeyPressedRepeat(currentState, key)
     {
         if (currentState.interpreter && currentState.interpreter.currentCommand)
@@ -4583,7 +5053,11 @@ class EventCommandCallACommonReaction extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Key pressed repeat handle for the current stack, but with
+    *   a small wait after the first pressure (generally used for menus)
+    *   @param {Object} currentState The current state of the event
+    *   @param {number} key The key ID pressed
+    */
     onKeyPressedAndRepeat(currentState, key)
     {
         if (currentState.interpreter && currentState.interpreter.currentCommand)
@@ -4595,8 +5069,8 @@ class EventCommandCallACommonReaction extends EventCommand
     }
 
     // -------------------------------------------------------
-    /** Draw the dialog box.
-    *   @param {Object} currentState The current state of the event.
+    /** Draw the HUD
+    *   @param {Object} currentState The current state of the event
     */
     drawHUD(currentState)
     {
@@ -4615,6 +5089,12 @@ class EventCommandCallACommonReaction extends EventCommand
 //
 // -------------------------------------------------------
 
+/** @class
+*   An event command for label
+*   @extends EventCommand
+*   @property {SysytemValue} label The label value
+*   @param {Object} command Direct JSON command to parse
+*/
 class EventCommandLabel extends EventCommand
 {
     constructor(command)
@@ -4634,6 +5114,12 @@ class EventCommandLabel extends EventCommand
 //
 // -------------------------------------------------------
 
+/** @class
+*   An event command for jumping to a label node
+*   @extends EventCommand
+*   @property {SysytemValue} label The label value
+*   @param {Object} command Direct JSON command to parse
+*/
 class EventCommandJumpToLabel extends EventCommand
 {
     constructor(command)
@@ -4647,7 +5133,12 @@ class EventCommandJumpToLabel extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
+    */
     update(currentState, object, state)
     {
         return this.label.getValue();
@@ -4660,6 +5151,11 @@ class EventCommandJumpToLabel extends EventCommand
 //
 // -------------------------------------------------------
 
+/** @class
+*   An event command for a comment (ignored)
+*   @extends EventCommand
+*   @param {Object} command Direct JSON command to parse
+*/
 class EventCommandComment extends EventCommand
 {
     constructor(command)
@@ -4674,6 +5170,22 @@ class EventCommandComment extends EventCommand
 //
 // -------------------------------------------------------
 
+/** @class
+*   An event command for changing a statistic
+*   @extends EventCommand
+*   @property {SystemValue} statisticID The statistic ID value
+*   @property {number} selection The kind of selection
+*   @property {SystemValue} heInstanceID The hero or enemy instance ID value
+*   @property {GroupKind} groupIndex The group index
+*   @property {OperationKind} operation The operation kind
+*   @property {number} value The kind of selection for the value
+*   @property {SystemValue} vNumber The number value
+*   @property {SystemValue} vFormula The formula value
+*   @property {boolean} vMax Indicate if value is max stat value
+*   @property {boolean} canAboveMax Indicate if value can go above maximum stat 
+*   value
+*   @param {Object} command Direct JSON command to parse
+*/
 class EventCommandChangeAStatistic extends EventCommand
 {
     constructor(command)
@@ -4720,7 +5232,12 @@ class EventCommandChangeAStatistic extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
+    */
     update(currentState, object, state)
     {
         let stat = RPM.datasGame.battleSystem.statistics[this.statisticID
@@ -4771,6 +5288,16 @@ class EventCommandChangeAStatistic extends EventCommand
 //
 // -------------------------------------------------------
 
+/** @class
+*   An event command for changing a skill
+*   @extends EventCommand
+*   @property {SystemValue} skillID The skill ID value
+*   @property {number} selection The selection kind
+*   @property {SystemValue} heInstanceID The hero enemy instance ID value
+*   @property {GroupKind} groupIndex The group index
+*   @property {number} operation The operation kind
+*   @param {Object} command Direct JSON command to parse
+*/
 class EventCommandChangeASkill extends EventCommand
 {
     constructor(command)
@@ -4799,7 +5326,12 @@ class EventCommandChangeASkill extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
+    */
     update(currentState, object, state)
     {
         let skillID = this.skillID.getValue();
@@ -4844,6 +5376,15 @@ class EventCommandChangeASkill extends EventCommand
 //
 // -------------------------------------------------------
 
+/** @class
+*   An event command for changing a hero name
+*   @extends EventCommand
+*   @property {SystemValue} name The name value
+*   @property {number} selection The selection kind
+*   @property {SystemValue} heInstanceID The hero enemy instance ID value
+*   @property {GroupKind} groupIndex The group index
+*   @param {Object} command Direct JSON command to parse
+*/
 class EventCommandChangeName extends EventCommand
 {
     constructor(command)
@@ -4869,7 +5410,12 @@ class EventCommandChangeName extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
+    */
     update(currentState, object, state)
     {
         let name = this.name.getValue();
@@ -4900,6 +5446,20 @@ class EventCommandChangeName extends EventCommand
 //
 // -------------------------------------------------------
 
+/** @class
+*   An event command for changing a property value
+*   @extends EventCommand
+
+*   @property {SystemValue} equipmentID The equipment ID value
+*   @property {boolean} isWeapon Indicate if is a weapon
+*   @property {SystemValue} weaponArmorID The weapon or armor ID value
+*   @property {number} selection The selection kind
+*   @property {SystemValue} heInstanceID The hero enemy instance ID value
+*   @property {GroupKind} groupIndex The group index
+*   @property {boolean} isApplyInInventory Indicate if apply equipment if is in 
+*   inventory
+*   @param {Object} command Direct JSON command to parse
+*/
 class EventCommandChangeEquipment extends EventCommand
 {
     constructor(command)
@@ -4928,7 +5488,12 @@ class EventCommandChangeEquipment extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
+    */
     update(currentState, object, state)
     {
         let equipmentID = this.equipmentID.getValue();
@@ -4977,6 +5542,14 @@ class EventCommandChangeEquipment extends EventCommand
 //
 // -------------------------------------------------------
 
+/** @class
+*   An event command for modifying a currency value
+*   @extends EventCommand
+*   @property {SystemValue} currencyID The currency ID value
+*   @property {OperationKind} operation The operation kind
+*   @property {SystemValue} value The value
+*   @param {Object} command Direct JSON command to parse
+*/
 class EventCommandModifyCurrency extends EventCommand
 {
     constructor(command)
@@ -4992,7 +5565,12 @@ class EventCommandModifyCurrency extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
+    */
     update(currentState, object, state)
     {
         let currencyID = this.currencyID.getValue();
@@ -5008,6 +5586,14 @@ class EventCommandModifyCurrency extends EventCommand
 //
 // -------------------------------------------------------
 
+/** @class
+*   An event command for displaying an animation
+*   @extends EventCommand
+*   @property {SystemValue} objectID The object ID value
+*   @property {SystemValue} animationID The animation ID value
+*   @property {boolean} isWaitEnd Indicate if wait end of the command
+*   @param {Object} command Direct JSON command to parse
+*/
 class EventCommandDisplayAnAnimation extends EventCommand
 {
     constructor(command)
@@ -5024,6 +5610,10 @@ class EventCommandDisplayAnAnimation extends EventCommand
         this.parallel = !this.isWaitEnd;
     }
 
+    // -------------------------------------------------------
+    /** Initialize the current state
+    *   @returns {Object} The current state
+    */
     initialize()
     {
         let animation = RPM.datasGame.animations.list[this.animationID.getValue()];
@@ -5039,7 +5629,12 @@ class EventCommandDisplayAnAnimation extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
+    */
     update(currentState, object, state)
     {
         if (currentState.parallel)
@@ -5075,7 +5670,9 @@ class EventCommandDisplayAnAnimation extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Draw the HUD
+    *   @param {Object} currentState The current state of the event
+    */
     drawHUD(currentState)
     {
         if (currentState.object !== null)
@@ -5092,6 +5689,15 @@ class EventCommandDisplayAnAnimation extends EventCommand
 //
 // -------------------------------------------------------
 
+/** @class
+*   An event command for shaking screen
+*   @extends EventCommand
+*   @property {SystemValue} offset The offset value
+*   @property {SystemValue} shakeNumber The shakes number value
+*   @property {boolean} isWaitEnd Indicate if wait end of the command
+*   @property {SystemValue} time The time value
+*   @param {Object} command Direct JSON command to parse
+*/
 class EventCommandShakeScreen extends EventCommand
 {
     constructor(command)
@@ -5109,6 +5715,12 @@ class EventCommandShakeScreen extends EventCommand
         this.parallel = !this.isWaitEnd;
     }
 
+    // -------------------------------------------------------
+    /** Update the target offset
+    *   @static
+    *   @param {Object} currentState The current state of the event
+    *   @param {number} timeRate The time rate
+    */
     static updateTargetOffset(currentState, timeRate)
     {
         let value = timeRate * currentState.finalDifPos;
@@ -5118,6 +5730,10 @@ class EventCommandShakeScreen extends EventCommand
             .camera.horizontalAngle * Math.PI / 180.0);
     }
 
+    // -------------------------------------------------------
+    /** Initialize the current state
+    *   @returns {Object} The current state
+    */
     initialize()
     {
         let t = this.time.getValue();
@@ -5151,7 +5767,12 @@ class EventCommandShakeScreen extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
+    */
     update(currentState, object, state)
     {
         if (currentState.parallel)
@@ -5205,6 +5826,14 @@ class EventCommandShakeScreen extends EventCommand
 //
 // -------------------------------------------------------
 
+/** @class
+*   An event command for flashing screen
+*   @extends EventCommand
+*   @property {SystemValue} colorID The color ID value
+*   @property {boolean} isWaitEnd Indicate if wait end of command
+*   @property {SystemValue} time The time value
+*   @param {Object} command Direct JSON command to parse
+*/
 class EventCommandFlashScreen extends EventCommand
 {
     constructor(command)
@@ -5221,6 +5850,10 @@ class EventCommandFlashScreen extends EventCommand
         this.parallel = !this.isWaitEnd;
     }
 
+    // -------------------------------------------------------
+    /** Initialize the current state
+    *   @returns {Object} The current state
+    */
     initialize()
     {
         let time = this.time.getValue() * 1000;
@@ -5236,7 +5869,12 @@ class EventCommandFlashScreen extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Update and check if the event is finished
+    *   @param {Object} currentState The current state of the event
+    *   @param {MapObject} object The current object reacting
+    *   @param {number} state The state ID
+    *   @returns {number} The number of node to pass
+    */
     update(currentState, object, state)
     {
         if (currentState.parallel)
@@ -5265,7 +5903,9 @@ class EventCommandFlashScreen extends EventCommand
     }
 
     // -------------------------------------------------------
-
+    /** Draw the HUD
+    *   @param {Object} currentState The current state of the event
+    */
     drawHUD(currentState)
     {
         Platform.ctx.fillStyle = currentState.color;
