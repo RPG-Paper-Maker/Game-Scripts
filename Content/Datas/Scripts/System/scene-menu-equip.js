@@ -35,8 +35,7 @@ class SceneMenuEquip extends SceneGame
         let listHeroes = new Array(nbHeroes);
         for (let i = 0; i < nbHeroes; i++)
         {
-            listHeroes[i] = await GraphicPlayerDescription.create(RPM.game
-                .teamHeroes[i]);
+            listHeroes[i] = new GraphicPlayerDescription(RPM.game.teamHeroes[i]);
         }
 
         // Equipment
@@ -77,7 +76,7 @@ class SceneMenuEquip extends SceneGame
         );
 
         // Updates
-        await this.updateForTab();
+        this.updateForTab();
 
         this.loading = false;
         RPM.requestPaintHUD = true;
@@ -85,7 +84,7 @@ class SceneMenuEquip extends SceneGame
 
     /** Update tab
     */
-    async updateForTab()
+    updateForTab()
     {
         // update equipment
         let equipLength = GamePlayer.getEquipmentLength();
@@ -100,14 +99,14 @@ class SceneMenuEquip extends SceneGame
         this.windowChoicesEquipment.setContents(list);
         this.selectedEquipment = -1;
         this.windowChoicesList.unselect();
-        await this.updateEquipmentList();
+        this.updateEquipmentList();
         this.updateInformations();
     }
 
     // -------------------------------------------------------
     /** Update the equipment list
     */
-    async updateEquipmentList()
+    updateEquipmentList()
     {
         let idEquipment = RPM.datasGame.battleSystem.equipmentsOrder[this
             .windowChoicesEquipment.currentSelectedIndex];
@@ -125,7 +124,7 @@ class SceneMenuEquip extends SceneGame
                     nbItem = item.nb;
                     if (nbItem > 0)
                     {
-                        list.push(await GraphicItem.create(item, nbItem));
+                        list.push(new GraphicItem(item, nbItem));
                     }
                 }
             }
@@ -162,7 +161,7 @@ class SceneMenuEquip extends SceneGame
             .list);
     }
 
-    async moveTabKey(key)
+    moveTabKey(key)
     {
         // Tab
         let indexTab = this.windowChoicesTabs.currentSelectedIndex;
@@ -181,7 +180,7 @@ class SceneMenuEquip extends SceneGame
             if (indexEquipment !== this.windowChoicesEquipment
                 .currentSelectedIndex)
             {
-                await this.updateEquipmentList();
+                this.updateEquipmentList();
             }
         } else
         {

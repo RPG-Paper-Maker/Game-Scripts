@@ -10,16 +10,19 @@
 */
 
 /** @class
+*   The graphic displaying a save
+*   @property {Game} game The game save
+*   @property {GraphicText} graphicSlot The graphic text slot
+*   @property {GraphicText} graphicEmpty The graphic text empty
+*   @property {GraphicText} graphicTimer The graphic text timer
+*   @property {GraphicPlayer[]} graphicCharacters The graphic players list for 
+*   characters
 */
 class GraphicSave
 {
     constructor(game)
     {
         this.game = game;
-    }
-
-    async load()
-    {
         this.graphicSlot = new GraphicText("Slot " + this.game.currentSlot, { 
             align: Align.Center });
         if (this.game.isNull)
@@ -34,20 +37,16 @@ class GraphicSave
             let player;
             for (let i = 0; i < l; i++)
             {
-                player = await GraphicPlayer.create(this.game.teamHeroes[i]);
+                player = new GraphicPlayer(this.game.teamHeroes[i]);
                 player.initializeCharacter();
                 this.graphicCharacters[i] = player;
             }
         }
     }
 
-    static async create(game)
-    {
-        let graphic = new GraphicSave(game);
-        await RPM.tryCatch(graphic.load());
-        return graphic;
-    }
-
+    // -------------------------------------------------------
+    /** Update the battler graphics
+    */
     update()
     {
         for (let i = 0, l = this.graphicCharacters.length; i < l; i++)
@@ -56,22 +55,24 @@ class GraphicSave
         }
     }
 
-    /**
-    *   @param {number} x The x position to draw graphic.
-    *   @param {number} y The y position to draw graphic.
-    *   @param {number} w The width dimention to draw graphic.
-    *   @param {number} h The height dimention to draw graphic.
+    // -------------------------------------------------------
+    /** Drawing the save slot
+    *   @param {number} x The x position to draw graphic
+    *   @param {number} y The y position to draw graphic
+    *   @param {number} w The width dimention to draw graphic
+    *   @param {number} h The height dimention to draw graphic
     */
     drawChoice(x, y, w, h)
     {
         this.graphicSlot.draw(x, y, w, h);
     }
 
-    /** Drawing the save informations.
-    *   @param {number} x The x position to draw graphic.
-    *   @param {number} y The y position to draw graphic.
-    *   @param {number} w The width dimention to draw graphic.
-    *   @param {number} h The height dimention to draw graphic.
+    // -------------------------------------------------------
+    /** Drawing the save informations
+    *   @param {number} x The x position to draw graphic
+    *   @param {number} y The y position to draw graphic
+    *   @param {number} w The width dimention to draw graphic
+    *   @param {number} h The height dimention to draw graphic
     */
     drawBox(x, y, w, h)
     {

@@ -11,32 +11,23 @@
 
 /** @class
 *   The graphic displaying all the progression for each character
+*   @property {GraphicPlayer} graphicCharacters The graphics player list
 */
 class GraphicXPProgression
 {
     constructor()
     {
-
-    }
-
-    async load()
-    {
         let l = RPM.game.teamHeroes.length
         this.graphicCharacters = new Array(l);
         for (let i = 0; i < l; i++)
         {
-            this.graphicCharacters[i] = await GraphicPlayer.create(RPM.game
-                .teamHeroes[i]);
+            this.graphicCharacters[i] = new GraphicPlayer(RPM.game.teamHeroes[i]);
         }
     }
 
-    static async create()
-    {
-        let graphic = new GraphicXPProgression();
-        await RPM.tryCatch(graphic.load());
-        return graphic;
-    }
-
+    // -------------------------------------------------------
+    /** Update graphics experience
+    */
     updateExperience()
     {
         for (let i = 0, l = RPM.game.teamHeroes.length; i < l; i++)
@@ -45,6 +36,7 @@ class GraphicXPProgression
         }
     }
 
+    // -------------------------------------------------------
     /** Drawing the progression
     *   @param {number} x The x position to draw graphic
     *   @param {number} y The y position to draw graphic

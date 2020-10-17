@@ -11,35 +11,26 @@
 
 /** @class
 *   The graphic displaying the player skills informations in skill menu
-*   @property {GraphicText} graphicName The skill name graphic
+*   @property {GraphicTextIcon} graphicName The graphic text icon for skill name
+*   @property {GraphicText} graphicCost The graphic text for skill cost
+*   @property {GraphicSkillItem} graphicInformations The graphic skill 
+*   informations
 *   @param {GameSkill} gameSkill The current selected skill
 */
 class GraphicSkill
 {
     constructor(gameSkill)
     {
-        this.gameSkill = gameSkill;
-    }
-
-    async load()
-    {
-        this.skill = RPM.datasGame.skills.list[this.gameSkill.id];
+        let skill = RPM.datasGame.skills.list[gameSkill.id];
 
         // All the graphics
-        this.graphicName = await GraphicTextIcon.create(this.skill.name(), this
-            .skill.pictureID);
-        this.graphicCost = new GraphicText(this.skill.getCostString(), { align:
-            Align.Right });
-        this.graphicInformations = await GraphicSkillItem.create(this.skill);
+        this.graphicName = new GraphicTextIcon(skill.name(), skill.pictureID);
+        this.graphicCost = new GraphicText(skill.getCostString(), { align: Align
+            .Right });
+        this.graphicInformations = new GraphicSkillItem(this.skill);
     }
 
-    static async create(gameSkill)
-    {
-        let graphic = new GraphicSkill(gameSkill);
-        await RPM.tryCatch(graphic.load());
-        return graphic;
-    }
-
+    // -------------------------------------------------------
     /** Drawing the skill in choice box
     *   @param {Canvas.Context} context The canvas context
     *   @param {number} x The x position to draw graphic
@@ -53,6 +44,7 @@ class GraphicSkill
         this.graphicCost.draw(x, y, w, h);
     }
 
+    // -------------------------------------------------------
     /** Drawing the skill description
     *   @param {Canvas.Context} context The canvas context
     *   @param {number} x The x position to draw graphic

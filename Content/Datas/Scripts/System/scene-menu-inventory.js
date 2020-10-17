@@ -71,7 +71,7 @@ class SceneMenuInventory extends SceneGame
         );
         this.windowBoxUseItem = new WindowBox(240, 320, 360, 140,
             {
-                content: await GraphicUseSkillItem.create(),
+                content: new GraphicUseSkillItem(),
                 padding: RPM.SMALL_PADDING_BOX
             }
         );
@@ -87,7 +87,7 @@ class SceneMenuInventory extends SceneGame
 
         // Update for changing tab
         this.substep = 0;
-        await this.updateForTab();
+        this.updateForTab();
         this.synchronize();
 
         this.loading = false;
@@ -105,7 +105,7 @@ class SceneMenuInventory extends SceneGame
     // -------------------------------------------------------
     /** Update tab.
     */
-    async updateForTab()
+    updateForTab()
     {
         let indexTab = this.windowChoicesTabs.currentSelectedIndex;
         let nbItems = RPM.game.items.length;
@@ -122,7 +122,7 @@ class SceneMenuInventory extends SceneGame
                 indexTab === 4 && ownedItem.k === ItemKind.Weapon) || (indexTab 
                 === 5 && ownedItem.k === ItemKind.Armor))
             {
-                list.push(await GraphicItem.create(ownedItem));
+                list.push(new GraphicItem(ownedItem));
             }
         }
         this.windowChoicesList.setContentsCallbacks(list);
@@ -132,7 +132,7 @@ class SceneMenuInventory extends SceneGame
         this.windowChoicesList.select(this.positionChoice[indexTab].index);
     }
 
-    async useItem()
+    useItem()
     {
         RPM.game.useItem(this.windowInformations.content.gameItem);
         if (this.windowInformations.content.gameItem.nb > 0)
@@ -140,20 +140,20 @@ class SceneMenuInventory extends SceneGame
             this.windowInformations.content.updateNb();
         } else
         {
-            await this.updateForTab();
+            this.updateForTab();
         }
         this.windowBoxUseItem.content.updateStats();
         RPM.requestPaintHUD = true;
     }
 
-    async moveTabKey(key)
+    moveTabKey(key)
     {
         // Tab
         let indexTab = this.windowChoicesTabs.currentSelectedIndex;
         this.windowChoicesTabs.onKeyPressedAndRepeat(key);
         if (indexTab !== this.windowChoicesTabs.currentSelectedIndex)
         {
-            await this.updateForTab();
+            this.updateForTab();
         }
 
         // List

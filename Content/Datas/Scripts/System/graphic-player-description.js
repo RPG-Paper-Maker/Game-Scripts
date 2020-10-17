@@ -10,30 +10,32 @@
 */
 
 /** @class
-*   The graphic displaying all the stats in the player description state menu.
+*   The graphic displaying all the stats in the player description state menu
+*   @property {GamePlayer} gamePlayer The current selected player
 *   @property {GraphicText} graphicNameCenter The player's name graphic (for
-*   menu choices).
+*   menu choices)
 *   @property {GraphicText} graphicName The player's name graphic (for
-*   menu description).
-*   @property {GraphicText} graphicClass The player's class name graphic.
-*   @property {GraphicText} graphicLevelName The player's level name graphic.
-*   @property {GraphicText} graphicLevel The player's level graphic.
+*   menu description)
+*   @property {GraphicText} graphicClass The player's class name graphic
+*   @property {GraphicText} graphicLevelName The player's level name graphic
+*   @property {GraphicText} graphicLevel The player's level graphic
+*   @property {GraphicText} graphicExpName The graphic text for experience name
+*   @property {GraphicText} graphicExp The graphic text for experience stat
 *   @property {GraphicText} listStatsNames All the player's stats names
-*   graphics.
+*   graphics
 *   @property {GraphicText} listStats All the player's stats values
-*   graphics.
-*   @property {number} listLength The max length of the stats for each column.
-*   @param {GamePlayer} gamePlayer The current selected player.
+*   graphics
+*   @property {number} listLength The max length of the stats for each column
+*   @property {Picture2D} battler The player battler
+*   @property {Frame} battlerFrame The battler frame
+*   @param {GamePlayer} gamePlayer The current selected player
 */
 class GraphicPlayerDescription
 {
     constructor(gamePlayer)
     {
         this.gamePlayer = gamePlayer;
-    }
 
-    async load()
-    {
         // Informations
         let character = this.gamePlayer.getCharacterInformations();
         let cl = RPM.datasGame.classes.list[character.idClass];
@@ -102,20 +104,14 @@ class GraphicPlayerDescription
         this.listLength.push(maxLength);
 
         // Battler
-        this.battler = await Picture2D.create(RPM.datasGame.pictures.get(
-            PictureKind.Battlers, character.idBattler), PictureKind.Battlers);
-        this.battlerFrame = 0;
-        this.battlerFrameTick = 0;
-        this.battlerFrameDuration = 250;
+        this.battler = RPM.datasGame.pictures.getPictureCopy(PictureKind
+            .Battlers, character.idBattler);
+        this.battlerFrame = new Frame(250);
     }
 
-    static async create(gamePlayer)
-    {
-        let graphic = new GraphicPlayerDescription(gamePlayer);
-        await RPM.tryCatch(graphic.load());
-        return graphic;
-    }
-
+    // -------------------------------------------------------
+    /** Initialize the statistic progression
+    */
     initializeStatisticProgression()
     {
         this.listStatsProgression = new Array;
@@ -156,7 +152,8 @@ class GraphicPlayerDescription
     }
 
     // -------------------------------------------------------
-
+    /** Update the statistic progression
+    */
     updateStatisticProgression()
     {
         this.listStatsNames = new Array;
@@ -202,24 +199,23 @@ class GraphicPlayerDescription
     }
 
     // -------------------------------------------------------
-
+    /** Update the battler frame
+    */
     updateBattler()
     {
-        let frame = this.battlerFrame;
-        this.battlerFrameTick += RPM.elapsedTime;
-        if (this.battlerFrameTick >= this.battlerFrameDuration)
-        {
-            this.battlerFrame = (this.battlerFrame + 1) % RPM.FRAMES;
-            this.battlerFrameTick = 0;
-        }
-        if (frame !== this.battlerFrame)
+        if (this.battlerFrame.update())
         {
             RPM.requestPaintHUD = true;
         }
     }
 
     // -------------------------------------------------------
-
+    /** Drawing the statistic progression
+    *   @param {number} x The x position to draw graphic
+    *   @param {number} y The y position to draw graphic
+    *   @param {number} w The width dimention to draw graphic
+    *   @param {number} h The height dimention to draw graphic
+    */
     drawStatisticProgression(x, y, w, h)
     {
         for (let i = 0, l = this.listStatsNames.length; i < l; i++)
@@ -229,6 +225,7 @@ class GraphicPlayerDescription
         }
     }
 
+    // -------------------------------------------------------
     /** Drawing the player in choice box
     *   @param {number} x The x position to draw graphic
     *   @param {number} y The y position to draw graphic
@@ -240,6 +237,7 @@ class GraphicPlayerDescription
         this.graphicNameCenter.draw(x, y, w, h);
     }
 
+    // -------------------------------------------------------
     /** Drawing the player description
     *   @param {number} x The x position to draw graphic
     *   @param {number} y The y position to draw graphic

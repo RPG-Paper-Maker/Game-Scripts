@@ -11,6 +11,11 @@
 
 /** @class
 *   A class for all keyboard assign to display in screen
+*   @property {SystemKeyBoard} kb The system keyboard
+*   @property {GraphicText} graphicTextName The graphic text for name
+*   @property {GraphicText} graphicTextShort The graphic text for short
+*   @property {GraphicText} graphicTextInformation The graphic text for 
+*   information
 */
 class GraphicKeyboard
 {
@@ -25,7 +30,9 @@ class GraphicKeyboard
     }
 
     // -------------------------------------------------------
-
+    /** Update short sc
+    *   @param {number[]} sh The short list 
+    */
     updateShort(sh)
     {
         this.kb.sc = sh;
@@ -33,7 +40,12 @@ class GraphicKeyboard
     }
 
     // -------------------------------------------------------
-
+    /** Drawing the keyboard in choice box
+    *   @param {number} x The x position to draw graphic
+    *   @param {number} y The y position to draw graphic
+    *   @param {number} w The width dimention to draw graphic
+    *   @param {number} h The height dimention to draw graphic
+    */
     drawChoice (x, y, w, h)
     {
         this.graphicTextName.draw(x, y, w, h);
@@ -41,7 +53,12 @@ class GraphicKeyboard
     }
 
     // -------------------------------------------------------
-
+    /** Drawing the keyboard description
+    *   @param {number} x The x position to draw graphic
+    *   @param {number} y The y position to draw graphic
+    *   @param {number} w The width dimention to draw graphic
+    *   @param {number} h The height dimention to draw graphic
+    */
     drawBox(x, y, w, h)
     {
         this.graphicTextInformation.draw(x, y, w, (h / 2));

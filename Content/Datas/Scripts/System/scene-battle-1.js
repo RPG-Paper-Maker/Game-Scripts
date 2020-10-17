@@ -54,7 +54,7 @@ SceneBattle.prototype.initializeStep1 = async function()
             .avaialableKind === AvailableKind.Battle || item.availableKind ===
             AvailableKind.Always))
         {
-            this.listItems.push(await GraphicItem.create(ownedItem));
+            this.listItems.push(new GraphicItem(ownedItem));
         }
     }
     this.windowChoicesItems.setContentsCallbacks(this.listItems);
@@ -259,7 +259,7 @@ SceneBattle.prototype.onKeyPressedStep1 = function(key) {
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.onAllySelected = async function()
+SceneBattle.prototype.onAllySelected = function()
 {
     this.loadingStep = true;
     this.subStep = 1;
@@ -282,7 +282,7 @@ SceneBattle.prototype.onAllySelected = async function()
         if (availableKind === AvailableKind.Always || availableKind === 
             AvailableKind.Battle)
         {
-            this.listSkills.push(await GraphicSkill.create(ownedSkill));
+            this.listSkills.push(new GraphicSkill(ownedSkill));
         }
     }
     this.windowChoicesSkills.setContentsCallbacks(this.listSkills);

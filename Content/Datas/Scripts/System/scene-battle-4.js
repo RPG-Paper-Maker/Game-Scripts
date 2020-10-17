@@ -22,7 +22,7 @@
 //
 // -------------------------------------------------------
 
-SceneBattle.prototype.initializeStep4 = async function()
+SceneBattle.prototype.initializeStep4 = function()
 {
     // If loosing, directly go to end transition
     if (!this.winning)
@@ -38,7 +38,7 @@ SceneBattle.prototype.initializeStep4 = async function()
         Align.Center });
 
     // Rewards
-    await this.prepareRewards();
+    this.prepareRewards();
     let id;
     for (id in this.currencies)
     {
@@ -78,7 +78,7 @@ SceneBattle.prototype.initializeStep4 = async function()
     this.windowLoots = new WindowBox(RPM.SCREEN_X - 20 - w, RPM.SCREEN_Y - 20 - 
         h, w, h,
         {
-            content: await GraphicLoots.create(this.loots, this.lootsNumber),
+            content: new GraphicLoots(this.loots, this.lootsNumber),
             padding: RPM.SMALL_PADDING_BOX
         }
     )
@@ -86,7 +86,7 @@ SceneBattle.prototype.initializeStep4 = async function()
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.prepareRewards = async function()
+SceneBattle.prototype.prepareRewards = function()
 {
     // Experience + currencies + loots
     this.xp = 0;
@@ -138,8 +138,7 @@ SceneBattle.prototype.prepareRewards = async function()
     }
 
     // Prepare graphics
-    this.graphicRewardTop = await GraphicRewardsTop.create(this.xp, this
-        .currencies);
+    this.graphicRewardTop = new GraphicRewardsTop(this.xp, this.currencies);
 }
 
 // -------------------------------------------------------

@@ -10,13 +10,15 @@
 */
 
 /** @class
-*   A class for all settings to display in screen.
+*   A class for all settings to display in screen
+*    @property {GraphicText} graphicRight The graphic text on the right
+*    @property {GraphicText} graphicTextLeft The graphic text on the left
+*    @property {GraphicText} graphicTextInformation The graphic text information
 */
 class GraphicSetting
 {
     constructor(id)
     {
-        this.id = id;
         let textLeft,textInformation;
         switch (id)
         {
@@ -32,7 +34,12 @@ class GraphicSetting
     }
     
     // -------------------------------------------------------
-
+    /** Drawing the choice
+    *   @param {number} x The x position to draw graphic
+    *   @param {number} y The y position to draw graphic
+    *   @param {number} w The width dimention to draw graphic
+    *   @param {number} h The height dimention to draw graphic
+    */
     drawChoice(x, y, w, h)
     {
         this.graphicTextLeft.draw(x, y, w, h);
@@ -40,7 +47,12 @@ class GraphicSetting
     }
 
     // -------------------------------------------------------
-
+    /** Drawing the settings informations
+    *   @param {number} x The x position to draw graphic
+    *   @param {number} y The y position to draw graphic
+    *   @param {number} w The width dimention to draw graphic
+    *   @param {number} h The height dimention to draw graphic
+    */
     drawBox(x, y, w, h)
     {
         this.graphicTextInformation.draw(x, y, w, h);

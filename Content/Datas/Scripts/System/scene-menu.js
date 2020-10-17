@@ -60,7 +60,7 @@ class SceneMenu extends SceneGame
         let graphicsHeroes = new Array(nbHeroes);
         for (let i = 0; i < nbHeroes; i++)
         {
-            graphicsHeroes[i] = await GraphicPlayer.create(RPM.game.teamHeroes[i]);
+            graphicsHeroes[i] = new GraphicPlayer(RPM.game.teamHeroes[i]);
         }
 
         // All the windows
@@ -83,7 +83,7 @@ class SceneMenu extends SceneGame
         );
         this.windowTimeCurrencies = new WindowBox(20, 0, 150, 0,
             {
-                content: await GraphicTimeCurrencies.create(),
+                content: new GraphicTimeCurrencies(),
                 padding: RPM.HUGE_PADDING_BOX
             }
         );

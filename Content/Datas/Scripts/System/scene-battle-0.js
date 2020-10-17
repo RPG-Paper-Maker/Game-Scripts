@@ -32,17 +32,17 @@ SceneBattle.prototype.initializeStep0 = async function()
     this.graphicPlayers = new Array(2);
     this.time = new Date().getTime();
     this.turn = 1;
-    await this.initializeAlliesBattlers();
-    await this.initializeEnemiesBattlers();
+    this.initializeAlliesBattlers();
+    this.initializeEnemiesBattlers();
     this.initializeInformations();
-    await this.initializeWindowCommands();
-    await this.initializeWindowsEnd();
+    this.initializeWindowCommands();
+    this.initializeWindowsEnd();
     this.initializeMusics();
 }
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.initializeAlliesBattlers = async function()
+SceneBattle.prototype.initializeAlliesBattlers = function()
 {
     let l = RPM.game.teamHeroes.length;
     this.battlers[CharacterKind.Hero] = new Array(l);
@@ -64,15 +64,15 @@ SceneBattle.prototype.initializeAlliesBattlers = async function()
 
         // Graphic player
         this.graphicPlayers[CharacterKind.Hero][i] = {
-            user: await GraphicPlayer.create(battler.character, false),
-            target: await GraphicPlayer.create(battler.character, true)
+            user: new GraphicPlayer(battler.character, false),
+            target: new GraphicPlayer(battler.character, true)
         };
     }
 }
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.initializeEnemiesBattlers = async function()
+SceneBattle.prototype.initializeEnemiesBattlers = function()
 {
     let troop = RPM.datasGame.troops.list[this.troopID];
     let l = troop.list.length;
@@ -97,7 +97,7 @@ SceneBattle.prototype.initializeEnemiesBattlers = async function()
 
         // Graphic player
         this.graphicPlayers[CharacterKind.Monster][i] = {
-            target: await GraphicPlayer.create(battler.character, true)
+            target: new GraphicPlayer(battler.character, true)
         };
     }
 }
@@ -132,7 +132,7 @@ SceneBattle.prototype.initializeInformations = function()
 
 // -------------------------------------------------------
 
-SceneBattle.prototype.initializeWindowCommands = async function()
+SceneBattle.prototype.initializeWindowCommands = function()
 {
     let l = RPM.datasGame.battleSystem.battleCommandsOrder.length;
     let listContent = new Array(l);
@@ -142,8 +142,7 @@ SceneBattle.prototype.initializeWindowCommands = async function()
     {
         skill = RPM.datasGame.skills.list[RPM.datasGame.battleSystem
             .battleCommandsOrder[i]];
-        listContent[i] = await GraphicTextIcon.create(skill.name(), skill
-            .pictureID);
+        listContent[i] = new GraphicTextIcon(skill.name(), skill.pictureID);
         listContent[i].skill = skill;
         listCallbacks[i] = SystemCommonSkillItem.prototype.useCommand;
     }
@@ -198,7 +197,7 @@ SceneBattle.prototype.initializeWindowsEnd = async function()
         .game.teamHeroes.length) + RPM.SMALL_PADDING_BOX[2] + RPM
         .SMALL_PADDING_BOX[3], 
         {
-            content: await GraphicXPProgression.create(),
+            content: new GraphicXPProgression(),
             padding: RPM.SMALL_PADDING_BOX
         }
     );

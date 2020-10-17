@@ -59,7 +59,7 @@ class DatasPictures
                     picture = new SystemPicture(jsonPicture, k);
                     if (k === PictureKind.Icons || k === PictureKind.Pictures ||
                         k === PictureKind.Facesets || k === PictureKind
-                        .Animations)
+                        .Animations || k === PictureKind.Battlers)
                     {
                         await picture.load();
                     }

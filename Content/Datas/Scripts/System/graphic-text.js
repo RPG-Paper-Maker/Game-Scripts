@@ -47,7 +47,6 @@
 *   @param {SystemColor} [opts.strokeColor=RPM.defaultValue(RPM.datasGame.system.dbOptions.tOutline, false)? RPM.defaultValue(RPM.datasGame.system.dbOptions.vtcOutline, null) : null] 
 *   The stroke color of the text
 */
-
 class GraphicText extends Bitmap
 {
     constructor(text = "", { x = 0, y = 0, w = 0, h = 0, align = Align.Left, 

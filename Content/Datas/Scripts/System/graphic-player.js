@@ -10,17 +10,30 @@
 */
 
 /** @class
-*   The graphic displaying the player minimal stats informations.
-*   @property {GraphicText} graphicName The player's name graphic.
-*   @property {GraphicText} graphicClass The player's class name graphic.
-*   @property {GraphicText} graphicLevelName The player's level name graphic.
-*   @property {GraphicText} graphicLevel The player's level graphic.
+*   The graphic displaying the player minimal stats informations
+*   @property {GamePlayer} gamePlayer The current selected player
+*   @property {boolean} reverse Indicate if the faceset should be reversed
+*   @property {GraphicText} graphicName The player's name graphic
+*   @property {GraphicText} graphicClass The player's class name graphic
+*   @property {GraphicText} graphicLevelName The player's level name graphic
+*   @property {GraphicText} graphicLevel The player's level graphic
+*   @property {GraphicText} graphicExpName The graphic text for experience name
+*   @property {GraphicText} graphicExp The graphic text for experience stat
 *   @property {GraphicText} listStatsNames All the player's stats names
-*   graphics.
+*   graphics
 *   @property {GraphicText} listStats All the player's stats values
-*   graphics.
-*   @property {number} maxStatNamesLength The max length of the stats for each column.
-*   @param {GamePlayer} gamePlayer The current selected player.
+*   graphics
+*   @property {number} maxStatNamesLength The max length of the stats namles 
+*   for each column
+*   @property {number} maxStatLength The max length of the stats for each column
+*   @property {Picture2D} faceset The player faceset
+*   @property {Picture2D} battler The player battler
+*   @property {Frame} battlerFrame The battler frame
+*   @property {GraphicText} graphicLevelUp The graphic text for level up
+*   @property {boolean} displayNameLevel Indicate if leveling up should be 
+*   displayed
+*   @param {GamePlayer} gamePlayer The current selected player
+*   @param {boolean} [reverse=false] Indicate if the faceset should be reversed
 */
 class GraphicPlayer
 {
@@ -28,10 +41,7 @@ class GraphicPlayer
     {
         this.gamePlayer = gamePlayer;
         this.reverse = reverse;
-    }
-    
-    async load()
-    {
+
         // Informations
         let character = this.gamePlayer.getCharacterInformations();
         let cl = RPM.datasGame.classes.list[character.idClass];
@@ -100,23 +110,23 @@ class GraphicPlayer
         }
 
         // Faceset
-        this.faceset = await Picture2D.create(RPM.datasGame.pictures.get(
-            PictureKind.Facesets, character.idFaceset));
+        this.faceset = RPM.datasGame.pictures.getPictureCopy(PictureKind
+            .Facesets, character.idFaceset);
         if (this.reverse)
         {
             this.faceset.setLeft();
-        } else {
+        } else
+        {
             this.faceset.setRight();
         }
-        this.faceset.setBot(RPM.datasGame.system.getWindowSkin().borderBotRight[3]);
+        this.faceset.setBot(RPM.datasGame.system.getWindowSkin().borderBotRight[
+            3]);
         this.faceset.reverse = this.reverse;
 
         // Battler
-        this.battler = await Picture2D.create(RPM.datasGame.pictures.get(
-            PictureKind.Battlers, character.idBattler), PictureKind.Battlers);
-        this.battlerFrame = 0;
-        this.battlerFrameTick = 0;
-        this.battlerFrameDuration = 250;
+        this.battler = RPM.datasGame.pictures.getPictureCopy(PictureKind
+            .Battlers, character.idBattler);
+        this.battlerFrame = new Frame(250);
 
         // Level up
         this.graphicLevelUp = new GraphicText("Level up!");
@@ -124,13 +134,10 @@ class GraphicPlayer
         this.displayNameLevel = true;
     }
 
-    static async create(gamePlayer, reverse = false)
-    {
-        let graphic = new GraphicPlayer(gamePlayer, reverse);
-        await RPM.tryCatch(graphic.load());
-        return graphic;
-    }
-
+    // -------------------------------------------------------
+    /** Update the reverse value for faceset
+    *   @param {boolean} reverse The reverse value
+    */
     updateReverse(reverse)
     {
         if (reverse)
@@ -145,7 +152,8 @@ class GraphicPlayer
     }
 
     // -------------------------------------------------------
-
+    /** Update the graphics
+    */
     update()
     {
         // Informations
@@ -187,7 +195,8 @@ class GraphicPlayer
     }
 
     // -------------------------------------------------------
-
+    /** Update experience graphics
+    */
     updateExperience()
     {
         this.graphicLevel.setText(RPM.numToString(this.gamePlayer[RPM.datasGame
@@ -197,7 +206,10 @@ class GraphicPlayer
     }
 
     // -------------------------------------------------------
-
+    /** Initialize character graphics font size
+    *   @param {boolean} noDisplayNameLevel Indicate if the level up should be 
+    *   displayed or not
+    */
     initializeCharacter(noDisplayNameLevel)
     {
         if (noDisplayNameLevel)
@@ -215,24 +227,23 @@ class GraphicPlayer
     }
 
     // -------------------------------------------------------
-
+    /** Update battler frame
+    */
     updateBattler()
     {
-        let frame = this.battlerFrame;
-        this.battlerFrameTick += RPM.elapsedTime;
-        if (this.battlerFrameTick >= this.battlerFrameDuration)
-        {
-            this.battlerFrame = (this.battlerFrame + 1) % RPM.FRAMES;
-            this.battlerFrameTick = 0;
-        }
-        if (frame !== this.battlerFrame) 
+        if (this.battlerFrame.update()) 
         {
             RPM.requestPaintHUD = true;
         }
     }
 
     // -------------------------------------------------------
-
+    /** Drawing the character
+    *   @param {number} x The x position to draw graphic
+    *   @param {number} y The y position to draw graphic
+    *   @param {number} w The width dimention to draw graphic
+    *   @param {number} h The height dimention to draw graphic
+    */
     drawCharacter(x, y, w, h)
     {
         // Measure widths
@@ -274,11 +285,11 @@ class GraphicPlayer
     }
 
     // -------------------------------------------------------
-    /** Drawing the player in choice box in the main menu.
-    *   @param {number} x The x position to draw graphic.
-    *   @param {number} y The y position to draw graphic.
-    *   @param {number} w The width dimention to draw graphic.
-    *   @param {number} h The height dimention to draw graphic.
+    /** Drawing the player in choice box in the main menu
+    *   @param {number} x The x position to draw graphic
+    *   @param {number} y The y position to draw graphic
+    *   @param {number} w The width dimention to draw graphic
+    *   @param {number} h The height dimention to draw graphic
     */
     drawChoice(x, y, w, h)
     {
@@ -322,11 +333,12 @@ class GraphicPlayer
         }
     }
 
-    /** Drawing the player informations in battles.
-    *   @param {number} x The x position to draw graphic.
-    *   @param {number} y The y position to draw graphic.
-    *   @param {number} w The width dimention to draw graphic.
-    *   @param {number} h The height dimention to draw graphic.
+    // -------------------------------------------------------
+    /** Drawing the player informations in battles
+    *   @param {number} x The x position to draw graphic
+    *   @param {number} y The y position to draw graphic
+    *   @param {number} w The width dimention to draw graphic
+    *   @param {number} h The height dimention to draw graphic
     */
     drawBox(x, y, w, h)
     {

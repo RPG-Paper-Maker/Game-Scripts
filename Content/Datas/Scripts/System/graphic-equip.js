@@ -11,12 +11,12 @@
 
 /** @class
 *   The graphic displaying all the equipment information in the equip menu
+*   @property {number} length Max length of equipment kind name
 *   @property {GraphicText} graphicEquipmentName All the equipment kind names
 *   graphics
 *   @property {GraphicText} graphicEquipment All the equipment names graphics
-*   @property {number} equipmentLength The max length of the equipment names
 *   @param {GamePlayer} gamePlayer The current selected player
-*   @param {number} index Index of the equiped item
+*   @param {number} id The equipment ID
 *   @param {number} length Max length of equipment kind name
 */
 class GraphicEquip
@@ -33,6 +33,7 @@ class GraphicEquip
             .getItemInformations().name());
     }
 
+    // -------------------------------------------------------
     /** Drawing the equipment kind and equipment name
     *   @param {number} x The x position to draw graphic
     *   @param {number} y The y position to draw graphic

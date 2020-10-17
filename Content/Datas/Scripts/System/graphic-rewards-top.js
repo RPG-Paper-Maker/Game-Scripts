@@ -16,16 +16,9 @@ class GraphicRewardsTop
 {
     constructor(xp, currencies)
     {
-        this.xp = xp;
-        this.currencies = currencies;
-    }
-
-    async load()
-    {
         // Experience
         this.graphicXP = new GraphicText(RPM.datasGame.battleSystem
-            .getExpStatistic().name + RPM.STRING_COLON + RPM.STRING_SPACE + this
-            .xp);
+            .getExpStatistic().name + RPM.STRING_COLON + RPM.STRING_SPACE + xp);
         Platform.ctx.font = this.graphicXP.font;
         this.graphicXP.updateContextFont();
         this.graphicXPLength = Platform.ctx.measureText(this.graphicXP.text)
@@ -33,23 +26,15 @@ class GraphicRewardsTop
 
         // Currencies
         this.graphicCurrencies = [];
-        for (let id in this.currencies)
+        for (let id in currencies)
         {
-            this.graphicCurrencies.push(await GraphicTextIcon.create(RPM
-                .numToString(this.currencies[id]), RPM.datasGame.system
-                .currencies[id].pictureID, Align.Left, Align.Left));
+            this.graphicCurrencies.push(new GraphicTextIcon(RPM.numToString(
+                currencies[id]), RPM.datasGame.system.currencies[id].pictureID, 
+                Align.Left, Align.Left));
         }
     }
 
-    static async create(xp, currencies)
-    {
-        let graphic = new GraphicRewardsTop(xp, currencies);
-        await RPM.tryCatch(graphic.load());
-        return graphic;
-    }
-
     // -------------------------------------------------------
-
     /** Drawing the progression
     *   @param {number} x The x position to draw graphic
     *   @param {number} y The y position to draw graphic

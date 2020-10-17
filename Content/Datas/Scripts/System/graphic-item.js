@@ -10,39 +10,31 @@
 */
 
 /** @class
-*   The graphic displaying all the items information in the inventory menu.
-*   @property {GraphicText} graphicName The item name graphic.
-*   @property {GraphicText} graphicNb The item numbers graphic.
-*   @param {GameItem} gameItem The current selected item.
-*   @param {number} nbItem The number of occurence of the selected item.
+*   The graphic displaying all the items information in the inventory menu
+*   @property {GameItem} gameItem The current selected item
+*   @property {GraphicText} graphicName The item name graphic
+*   @property {GraphicText} graphicNb The item numbers graphic
+*   @param {GameItem} gameItem The current selected item
+*   @param {number} nbItem The number of occurence of the selected item
 */
 class GraphicItem
 {
     constructor(gameItem, nbItem)
     {
         this.gameItem = gameItem;
-        this.nbItem = nbItem;
-    }
-
-    async load()
-    {
         this.item = this.gameItem.getItemInformations();
 
         // All the graphics
-        this.graphicName = await GraphicTextIcon.create(this.item.name(), this
+        this.graphicName = new GraphicTextIcon(this.item.name(), this
             .item.pictureID);
         this.graphicNb = new GraphicText("x" + (RPM.isUndefined(this.nbItem) ? 
             this.gameItem.nb : this.nbItem), { align: Align.Right });
-        this.graphicInformations = await GraphicSkillItem.create(this.item);
+        this.graphicInformations = new GraphicSkillItem(this.item);
     }
 
-    static async create(gameItem, nbItem)
-    {
-        let graphic = new GraphicItem(gameItem, nbItem);
-        await RPM.tryCatch(graphic.load());
-        return graphic;
-    }
-
+    // -------------------------------------------------------
+    /** Update the game item number
+    */
     updateNb()
     {
         this.graphicNb.setText("x" + this.gameItem.nb);
@@ -61,11 +53,12 @@ class GraphicItem
         this.graphicNb.draw(x, y, w, h);
     }
 
-    /** Drawing the item description.
-    *   @param {number} x The x position to draw graphic.
-    *   @param {number} y The y position to draw graphic.
-    *   @param {number} w The width dimention to draw graphic.
-    *   @param {number} h The height dimention to draw graphic.
+    // -------------------------------------------------------
+    /** Drawing the item description
+    *   @param {number} x The x position to draw graphic
+    *   @param {number} y The y position to draw graphic
+    *   @param {number} w The width dimention to draw graphic
+    *   @param {number} h The height dimention to draw graphic
     */
     drawBox(x, y, w, h)
     {

@@ -16,34 +16,30 @@
 // -------------------------------------------------------
 
 /** @class
+*   The graphic displaying a skill or an item use
+*   @property {GraphicPlayer} graphicCharacters The graphic player list
+*   @property {boolean} all Indicate if all the targets are selected
+*   @property {number} indexArrow The arrow index
 */
 class GraphicUseSkillItem
 {
     constructor()
     {
-
-    }
-
-    async load()
-    {
         this.graphicCharacters = new Array;
         let player;
         for (let i = 0, l = RPM.game.teamHeroes.length; i < l; i++)
         {
-            player = await GraphicPlayer.create(RPM.game.teamHeroes[i]);
+            player = new GraphicPlayer(RPM.game.teamHeroes[i]);
             player.initializeCharacter(true);
             this.graphicCharacters.push(player);
         }
         this.setAll(false);
     }
 
-    static async create()
-    {
-        let graphic = new GraphicUseSkillItem();
-        await RPM.tryCatch(graphic.load());
-        return graphic;
-    }
-
+    // -------------------------------------------------------
+    /** Set if all targets are selected or not
+    *   @param {boolean} b Indicate if all the targets are selected
+    */
     setAll(b)
     {
         this.all = b;
@@ -63,7 +59,8 @@ class GraphicUseSkillItem
     }
 
     // -------------------------------------------------------
-
+    /** Update the battler frame
+    */
     update()
     {
         for (let i = 0, l = this.graphicCharacters.length; i < l; i++)
@@ -73,7 +70,8 @@ class GraphicUseSkillItem
     }
 
     // -------------------------------------------------------
-
+    /** Udpate the battler
+    */
     updateStats()
     {
         for (let i = 0, l = this.graphicCharacters.length; i < l; i++)
@@ -83,21 +81,25 @@ class GraphicUseSkillItem
     }
 
     // -------------------------------------------------------
-
+    /** Move arrow left
+    */
     goLeft()
     {
         this.moveArrow(this.indexArrow - 1);
     }
 
     // -------------------------------------------------------
-
+    /** Move arrow right
+    */
     goRight()
     {
         this.moveArrow(this.indexArrow + 1);
     }
 
     // -------------------------------------------------------
-
+    /** Move an arrow according to index
+    *   @param {number} index The corresponding index
+    */
     moveArrow(index)
     {
         if (!this.isAll)
@@ -113,7 +115,10 @@ class GraphicUseSkillItem
     }
 
     // -------------------------------------------------------
-
+    /** Key pressed repeat handle, but with a small wait after the first 
+    *   pressure
+    *   @param {number} key The key ID pressed
+    */
     onKeyPressedAndRepeat(key)
     {
         if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
@@ -128,7 +133,12 @@ class GraphicUseSkillItem
     }
 
     // -------------------------------------------------------
-
+    /** Draw an arrow at a specific index
+    *   @param {number} index The corresponding index
+    *   @param {number} x The x position
+    *   @param {number} y The y position
+    *   @param {number} h The h size
+    */
     drawArrowAtIndex(index, x, y, h)
     {
         RPM.datasGame.system.getWindowSkin().drawArrowTarget(this
@@ -137,7 +147,7 @@ class GraphicUseSkillItem
     }
 
     // -------------------------------------------------------
-    /** Drawing the save informations
+    /** Drawing the skill or item use informations
     *   @param {number} x The x position to draw graphic
     *   @param {number} y The y position to draw graphic
     *   @param {number} w The width dimention to draw graphic

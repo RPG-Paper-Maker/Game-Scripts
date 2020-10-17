@@ -32,8 +32,7 @@ class SceneMenuSkills extends SceneGame
         this.positionChoice = new Array(nbHeroes);
         for (let i = 0; i < nbHeroes; i++)
         {
-            listHeroes[i] = await GraphicPlayerDescription.create(RPM.game
-                .teamHeroes[i]);
+            listHeroes[i] = new GraphicPlayerDescription(RPM.game.teamHeroes[i]);
             this.positionChoice[i] = {
                 index: 0,
                 offset: 0
@@ -74,14 +73,14 @@ class SceneMenuSkills extends SceneGame
         );
         this.windowBoxUseSkill = new WindowBox(240, 320, 360, 140,
             {
-                content: await GraphicUseSkillItem.create(),
+                content: new GraphicUseSkillItem.create(),
                 padding: RPM.SMALL_PADDING_BOX
             }
         );
 
         // Update for changing tab
         this.substep = 0;
-        await this.updateForTab();
+        this.updateForTab();
         this.synchronize();
 
         this.loading = false;
@@ -99,7 +98,7 @@ class SceneMenuSkills extends SceneGame
     // -------------------------------------------------------
     /** Update tab
     */
-    async updateForTab()
+    updateForTab()
     {
         let indexTab = this.windowChoicesTabs.currentSelectedIndex;
         RPM.currentMap.user = RPM.game.teamHeroes[indexTab];
@@ -109,7 +108,7 @@ class SceneMenuSkills extends SceneGame
         let list = [];
         for (let i = 0, l = skills.length; i < l; i++)
         {
-            list.push(await GraphicSkill.create(skills[i]));
+            list.push(new GraphicSkill(skills[i]));
         }
 
         // Update the list
@@ -121,14 +120,14 @@ class SceneMenuSkills extends SceneGame
         RPM.currentMap.user = RPM.game.teamHeroes[indexTab];
     }
 
-    async moveTabKey(key)
+    moveTabKey(key)
     {
         // Tab
         let indexTab = this.windowChoicesTabs.currentSelectedIndex;
         this.windowChoicesTabs.onKeyPressedAndRepeat(key);
         if (indexTab !== this.windowChoicesTabs.currentSelectedIndex)
         {
-            await this.updateForTab();
+            this.updateForTab();
         }
 
         // List

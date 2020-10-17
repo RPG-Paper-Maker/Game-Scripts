@@ -10,24 +10,24 @@
 */
 
 /** @class
-*   The graphic displaying all currencies and play time in scene menu.
+*   The graphic displaying all currencies and play time in scene menu
+*   @property {GraphicTextIcon[]} currencies The graphic text icon list of 
+*   currencies
+*   @property {number} time The time in seconds
+*   @property {GraphicText} graphicPlayTime The graphic text for play time
+*   @property {number} height The graphic height
 */
 class GraphicTimeCurrencies
 {
     constructor()
-    {
-
-    }
-
-    async load()
     {
         // Currencies
         this.currencies = [];
         let graphic;
         for (let id in RPM.game.currencies)
         {
-            graphic = await GraphicTextIcon.create(RPM.numToString(RPM.game
-                .currencies[id]), RPM.datasGame.system.currencies[id].pictureID,
+            graphic = new GraphicTextIcon(RPM.numToString(RPM.game.currencies[id
+                ]), RPM.datasGame.system.currencies[id].pictureID,
                 {
                     side: Align.Right,
                     align: Align.Right
@@ -53,15 +53,9 @@ class GraphicTimeCurrencies
         this.height += 20 + this.graphicPlayTime.fontSize;
     }
 
-    static async create()
-    {
-        let graphic = new GraphicTimeCurrencies();
-        await RPM.tryCatch(graphic.load());
-        return graphic;
-    }
-
     // -------------------------------------------------------
-
+    /** Update the play time
+    */
     update()
     {
         if (RPM.game.playTime.getSeconds() !== this.time)
@@ -71,6 +65,7 @@ class GraphicTimeCurrencies
         }
     }
 
+    // -------------------------------------------------------
     /** Drawing the content
     *   @param {number} x The x position to draw graphic
     *   @param {number} y The y position to draw graphic

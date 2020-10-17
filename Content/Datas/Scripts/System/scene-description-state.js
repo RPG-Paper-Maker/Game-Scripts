@@ -30,8 +30,7 @@ class SceneDescriptionState extends SceneGame
         let listHeroes = new Array(nbHeroes);
         for (let i = 0; i < nbHeroes; i++)
         {
-            listHeroes[i] = await GraphicPlayerDescription.create(RPM.game
-                .teamHeroes[i]);
+            listHeroes[i] = new GraphicPlayerDescription(RPM.game.teamHeroes[i]);
         }
 
         // All the windows

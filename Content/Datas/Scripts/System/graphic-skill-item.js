@@ -10,20 +10,30 @@
 */
 
 /** @class
+*   The graphic for skill or item displaying
+*   @property {SystemCommonSkillItem} skillItem The system skill / item
+*   @property {Picture2D[]} graphicElements The Pictures 2D for elements
+*   @property {GraphicTextIcon} graphicName The graphic text and icon for skill 
+*   / item
+*   @property {GraphicText} graphicType The graphic text for skill / item type
+*   @property {GraphicText} graphicDescription The graphic text for skill / 
+*   item description
+*   @property {GraphicText} graphicTarget The graphic text for skill / item 
+*   description
+*   @property {GraphicText[]} graphicEffects The graphic text list for skill / 
+*   item effects
+*   @property {GraphicText[]} graphicCharacteristics The graphic text list for 
+*   skill / item characteristics
 */
 class GraphicSkillItem
 {
     constructor(skillItem)
     {
         this.skillItem = skillItem;
-    }
-
-    async load()
-    {
         // All the graphics
         this.graphicElements = [];
-        this.graphicName = await GraphicTextIcon.create(this.skillItem.name(), 
-            this.skillItem.pictureID);
+        this.graphicName = new GraphicTextIcon(this.skillItem.name(), this
+            .skillItem.pictureID);
         if (this.skillItem.hasType)
         {
             this.graphicType = new GraphicText(this.skillItem.getType().name, { 
@@ -50,9 +60,9 @@ class GraphicSkillItem
             }
             if (effect.isDamageElement)
             {
-                graphicIcon = await Picture2D.create(RPM.datasGame.pictures
-                    .getIcon(RPM.datasGame.battleSystem.elements[effect
-                    .damageElementID.getValue()].pictureID));
+                graphicIcon = RPM.datasGame.pictures.getPictureCopy(PictureKind
+                    .Icons, RPM.datasGame.battleSystem.elements[effect
+                    .damageElementID.getValue()].pictureID);
                 this.graphicElements.push(graphicIcon);
                 if (txt)
                 {
@@ -72,13 +82,7 @@ class GraphicSkillItem
         }
     }
 
-    static async create(skillItem)
-    {
-        let graphic = new GraphicSkillItem(skillItem);
-        await RPM.tryCatch(graphic.load());
-        return graphic;
-    }
-
+    // -------------------------------------------------------
     /** Drawing the skill description
     *   @param {Canvas.Context} context The canvas context
     *   @param {number} x The x position to draw graphic

@@ -10,20 +10,17 @@
 */
 
 /** @class
-*   The graphic displaying all the stats in the player description state menu.
-*   @property {GraphicText} graphicNameCenter The player's name graphic (for
-*   menu choices).
-*   @property {GraphicText} graphicName The player's name graphic (for
-*   menu description).
-*   @property {GraphicText} graphicClass The player's class name graphic.
-*   @property {GraphicText} graphicLevelName The player's level name graphic.
-*   @property {GraphicText} graphicLevel The player's level graphic.
+*   The graphic displaying all the stats in the player description state menu
+*   @property {GamePlayer} gamePlayer The current selected player
+*   @property {GraphicText} listStatsProgression All the graphic text for stats 
+*   progression
 *   @property {GraphicText} listStatsNames All the player's stats names
-*   graphics.
-*   @property {GraphicText} listStats All the player's stats values
-*   graphics.
-*   @property {number} listLength The max length of the stats for each column.
-*   @param {GamePlayer} gamePlayer The current selected player.
+*   graphics
+*   @property {GraphicText} listStats All the player's stats values graphics
+*   @property {number} maxLength The max length of the stats for each column
+*   @property {number} maxProgressionLength The max stat progression length for 
+*   each column
+*   @param {GamePlayer} gamePlayer The current selected player
 */
 class GraphicStatisticProgression
 {
@@ -57,6 +54,9 @@ class GraphicStatisticProgression
         this.updateStatisticProgression();
     }
 
+    // -------------------------------------------------------
+    /** Update the statistic progression graphics
+    */
     updateStatisticProgression()
     {
         this.listStatsNames = new Array;
@@ -112,30 +112,20 @@ class GraphicStatisticProgression
     }
 
     // -------------------------------------------------------
-
+    /** Get the stat names list height
+    *   @returns {number}
+    */
     getHeight()
     {
         return this.listStatsNames.length * 20;
     }
 
-    /** Drawing the player in choice box.
-    *   @param {number} x The x position to draw graphic.
-    *   @param {number} y The y position to draw graphic.
-    *   @param {number} w The width dimention to draw graphic.
-    *   @param {number} h The height dimention to draw graphic.
-    */
-    drawChoice(x, y, w, h)
-    {
-        this.graphicNameCenter.draw(x, y, w, h);
-    }
-
     // -------------------------------------------------------
-
-    /** Drawing the player description.
-    *   @param {number} x The x position to draw graphic.
-    *   @param {number} y The y position to draw graphic.
-    *   @param {number} w The width dimention to draw graphic.
-    *   @param {number} h The height dimention to draw graphic.
+    /** Drawing the player description
+    *   @param {number} x The x position to draw graphic
+    *   @param {number} y The y position to draw graphic
+    *   @param {number} w The width dimention to draw graphic
+    *   @param {number} h The height dimention to draw graphic
     */
     drawBox(x, y, w, h)
     {

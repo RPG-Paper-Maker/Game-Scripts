@@ -65,7 +65,7 @@ class SceneSaveLoadGame extends SceneGame
             }
             game = json === null ? { currentSlot: i, isNull: true } : new Game(i
                 , json);
-            await this.initializeGame(game);
+            this.initializeGame(game);
         }
         this.windowChoicesSlots.setContents(this.gamesDatas);
     }
@@ -84,9 +84,9 @@ class SceneSaveLoadGame extends SceneGame
 
     /** Initialize a game displaying
     */
-    async initializeGame(game)
+    initializeGame(game)
     {
-        this.gamesDatas[game.currentSlot - 1] = await GraphicSave.create(game);
+        this.gamesDatas[game.currentSlot - 1] = new GraphicSave(game);
         if (game.currentSlot - 1 === this.windowChoicesSlots
             .currentSelectedIndex)
         {

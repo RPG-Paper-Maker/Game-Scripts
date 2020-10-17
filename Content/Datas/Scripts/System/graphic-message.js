@@ -12,6 +12,11 @@
 /** @class
 *   A class for message show text command
 *   @extends Bitmap
+*   @property {string} message The complete text to parse
+*   @property {Picture2D} faceset The faceset picture
+*   @property {Bitmap[]} graphics All the graphics
+*   @property {number[]} positions All the positions according to graphics
+*   @property {Tree} tree The text tree parsing
 */
 class GraphicMessage extends Bitmap
 {
@@ -20,13 +25,17 @@ class GraphicMessage extends Bitmap
         super();
 
         this.message = message;
-        let picture = RPM.datasGame.pictures.get(PictureKind.Facesets, facesetID);
-        this.faceset = picture ? picture.picture.createCopy() : new Picture2D();
+        this.faceset = RPM.datasGame.pictures.getPictureCopy(PictureKind
+            .Facesets, facesetID);
         this.graphics = [];
         this.positions = [];
         this.setMessage(this.message);
     }
 
+    // -------------------------------------------------------
+    /** Set message (parse)
+    *   @param {string} message The message to parse
+    */
     setMessage(message)
     {
         this.tree = new Tree(null);
@@ -138,7 +147,14 @@ class GraphicMessage extends Bitmap
     }
     
     // -------------------------------------------------------
-    
+    /** Update tag
+    *   @param {Node} currentNode The current node
+    *   @param {TagKind} tag The tag kind
+    *   @param {string} value The name 
+    *   @param {boolean} open Indicate if open tag
+    *   @param {Node[]} notClosed List of unclosed nodes
+    *   @returns {Node} 
+    */
     updateTag(currentNode, tag, value, open, notClosed)
     {
         if (open)
@@ -183,7 +199,8 @@ class GraphicMessage extends Bitmap
     }
     
     // -------------------------------------------------------
-    
+    /** Update all
+    */
     update()
     {
         this.graphics = [];
@@ -239,7 +256,10 @@ class GraphicMessage extends Bitmap
     }
     
     // -------------------------------------------------------
-    
+    /** Update the nodes
+    *   @param {Node} node The current node
+    *   @param {Object} result The result object
+    */
     updateNodes(node, result)
     {
         let tag = node.data[0];
@@ -395,7 +415,12 @@ class GraphicMessage extends Bitmap
     }
     
     // -------------------------------------------------------
-    
+    /** Drawing the faceset behind
+    *   @param {number} x The x position to draw graphic
+    *   @param {number} y The y position to draw graphic
+    *   @param {number} w The width dimention to draw graphic
+    *   @param {number} h The height dimention to draw graphic
+    */
     drawBehind(x, y, w, h)
     {
         if (!RPM.datasGame.system.dbOptions.vfPosAbove)
@@ -405,7 +430,12 @@ class GraphicMessage extends Bitmap
     }
     
     // -------------------------------------------------------
-    
+    /** Drawing the faceset
+    *   @param {number} x The x position to draw graphic
+    *   @param {number} y The y position to draw graphic
+    *   @param {number} w The width dimention to draw graphic
+    *   @param {number} h The height dimention to draw graphic
+    */
     drawFaceset(x, y, w, h)
     {
         this.faceset.draw(x + RPM.defaultValue(RPM.datasGame.system.dbOptions.fX
@@ -414,7 +444,12 @@ class GraphicMessage extends Bitmap
     }
     
     // -------------------------------------------------------
-    
+    /** Drawing the message box
+    *   @param {number} x The x position to draw graphic
+    *   @param {number} y The y position to draw graphic
+    *   @param {number} w The width dimention to draw graphic
+    *   @param {number} h The height dimention to draw graphic
+    */
     drawBox(x = this.oX, y = this.oY, w = this.oW, h = this.oH)
     {
         if (RPM.datasGame.system.dbOptions.vfPosAbove)
