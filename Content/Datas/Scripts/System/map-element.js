@@ -11,12 +11,12 @@
 
 /** @class
 *   An element in the map
+*   @property {number} xOffset The x offset of the object according to layer
+*   @property {number} yOffset The y offset of the object according to layer
+*   @property {number} zOffset The z offset of the object according to layer
 *   @property {Orientation} orientation The orientation according to layer
 *   @property {CameraUpDown} upDown The camera up down orientation according to
 *   layer
-*   @property {number} xOffset The offset of the object according to layer
-*   @property {number} yOffset The offset of the object according to layer
-*   @property {number} zOffset The offset of the object according to layer
 */
 class MapElement
 {
@@ -27,8 +27,9 @@ class MapElement
         this.zOffset = 0;
     }
 
-    /** Read the JSON associated to the map element.
-    *   @param {Object} json Json object describing the object.
+    // -------------------------------------------------------
+    /** Read the JSON associated to the map element
+    *   @param {Object} json Json object describing the map element
     */
     read(json)
     {
@@ -37,12 +38,16 @@ class MapElement
         this.zOffset = json.zOff;
     }
 
+    // -------------------------------------------------------
     /** Scale the vertices correctly
     *   @param {THREE.Vector3} vecA The A vertex to rotate
     *   @param {THREE.Vector3} vecB The B vertex to rotate
     *   @param {THREE.Vector3} vecC The C vertex to rotate
     *   @param {THREE.Vector3} vecD The D vertex to rotate
     *   @param {THREE.Vector3} center The center to rotate around
+    *   @param {number[]} position The json position
+    *   @param {THREE.Vector3} size The scale size
+    *   @param {ElementMapKind} kind The element map kind
     */
     scale(vecA, vecB, vecC, vecD, center, position, size, kind)
     {

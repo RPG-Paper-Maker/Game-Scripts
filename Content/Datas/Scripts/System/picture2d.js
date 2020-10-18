@@ -12,7 +12,6 @@
 /** @class
 *   A class for pictures drawable in HUD
 *   @extends Bitmap
-*   @property {string} path The path to the ressource
 *   @property {number} [zoom=1.0] The zoom value of the picture
 *   @property {number} [opacity=1.0] The opacity value of the picture
 *   @property {number} [angle=0.0] The angle value of the picture
@@ -20,7 +19,10 @@
 *   canvas
 *   @property {boolean} [stretch=false] Indicate if the picture is stretched if 
 *   necessary
-*   @param {string} path The path to the ressource
+*   @property {string} path The path to the ressource
+*   @property {boolean} loaded Indicate if the file is loaded
+*   @property {boolean} empty Indicate if the file is empty
+*   @param {string} [path=""] The path to the ressource
 *   @param {number} [x=0] Coords of the bitma
 *   @param {number} [y=0] Coords of the bitmap
 *   @param {number} [w=0] Coords of the bitmap
@@ -155,6 +157,16 @@ class Picture2D extends Bitmap
     
     // -------------------------------------------------------
     /** Draw the picture on HUD
+    *   @param {number} x The x position
+    *   @param {number} y The y position
+    *   @param {number} w The w position
+    *   @param {number} h The h position
+    *   @param {number} [sx=0] The source x position
+    *   @param {number} [sy=0] The source x position
+    *   @param {number} [sw=this.oW] The source width size
+    *   @param {number} [sh=this.oH] The source height size
+    *   @param {boolean} [positionResize=true] Indicate if the position resize 
+    *   (screen resolution)
     */
     draw (x, y, w, h, sx = 0, sy = 0, sw = this.oW, sh = this.oH, positionResize
         = true)

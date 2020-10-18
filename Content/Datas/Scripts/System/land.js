@@ -11,6 +11,7 @@
 
 /** @class
 *   A land in the map
+*   @property {boolean} up Indicate if the layer is up or down
 *   @property {number[]} texture Texture rect of the land
 */
 class Land extends MapElement
@@ -20,8 +21,9 @@ class Land extends MapElement
         super();
     }
 
+    // -------------------------------------------------------
     /** Read the JSON associated to the land
-    *   @param {Object} json Json object describing the object
+    *   @param {Object} json Json object describing the land
     */
     read(json)
     {
@@ -36,6 +38,7 @@ class Land extends MapElement
         }
     }
 
+    // -------------------------------------------------------
     /** Return the rect index
     *   @returns {number}
     */
@@ -44,10 +47,24 @@ class Land extends MapElement
         return this.texture[0] + (this.texture[1] * width);
     }
 
-    /** Update the geometry associated to this land.
-    *   @returns {THREE.Geometry}
+    // -------------------------------------------------------
+    /** Update the geometry associated to this land and return the collision 
+    *   result
+    *   @param {THREE.Geometry} geometry The geometry asoociated to the 
+    *   autotiles
+    *   @param {CollisionSquare} collision The collision square
+    *   @param {number[]} position The json position
+    *   @param {number} width The texture total width
+    *   @param {number} height The texture total height
+    *   @param {number} x The x texture position
+    *   @param {number} y The y texture position
+    *   @param {number} w The w texture size
+    *   @param {number} h The h texture size
+    *   @param {number} count The faces count
+    *   @returns {Object}
     */
-    updateGeometry(geometry, collision, position, width, height, x, y, w, h, i)
+    updateGeometry(geometry, collision, position, width, height, x, y, w, h, 
+        count)
     {
         let localPosition = RPM.positionToBorderVector3(position);
         let a = localPosition.x;
@@ -66,7 +83,7 @@ class Land extends MapElement
         geometry.vertices.push(new THREE.Vector3(a + RPM.SQUARE_SIZE, b, c + RPM
             .SQUARE_SIZE));
         geometry.vertices.push(new THREE.Vector3(a, b, c + RPM.SQUARE_SIZE));
-        let j = i * 4;
+        let j = count * 4;
         geometry.faces.push(new THREE.Face3(j, j + 1, j + 2));
         geometry.faces.push(new THREE.Face3(j, j + 2, j + 3));
 

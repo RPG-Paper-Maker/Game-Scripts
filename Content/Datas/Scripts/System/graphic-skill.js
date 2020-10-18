@@ -21,12 +21,13 @@ class GraphicSkill
 {
     constructor(gameSkill)
     {
-        let skill = RPM.datasGame.skills.list[gameSkill.id];
+        this.skill = RPM.datasGame.skills.list[gameSkill.id];
 
         // All the graphics
-        this.graphicName = new GraphicTextIcon(skill.name(), skill.pictureID);
-        this.graphicCost = new GraphicText(skill.getCostString(), { align: Align
-            .Right });
+        this.graphicName = new GraphicTextIcon(this.skill.name(), this.skill
+            .pictureID);
+        this.graphicCost = new GraphicText(this.skill.getCostString(), { align: 
+            Align.Right });
         this.graphicInformations = new GraphicSkillItem(this.skill);
     }
 

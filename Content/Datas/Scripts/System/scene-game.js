@@ -41,17 +41,6 @@ class SceneGame
     */
     update()
     {
-        // Check diagonal moves
-        let i, l;
-        for (i = 0, l = this.reactionInterpreters.length; i < l; i++)
-        {
-            this.reactionInterpreters[i].updateObjectMoveState();
-        }
-        for (i = 0, l = this.parallelCommands.length; i < l; i++)
-        {
-            this.parallelCommands[i].updateObjectMoveState();
-        }
-
         // Parallel reactions
         SceneGame.prototype.updateInterpreters.call(this);
 

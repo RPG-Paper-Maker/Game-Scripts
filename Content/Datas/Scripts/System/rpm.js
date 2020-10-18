@@ -10,13 +10,174 @@
 */
 
 /** @class
-*   Utility class with a lot of functions.
+*   Utility class with a lot of functions
+*    @property {string} [RPM.PATH_BR=""]
+*    @property {string} [RPM.ROOT_DIRECTORY_LOCAL="."]
+*    @property {string} [RPM.PATH_FILES="file:///"]
+*    @property {string} [RPM.PATH_DATAS=Platform.ROOT_DIRECTORY + "/Content/Datas/"]
+*    @property {string} [RPM.EXTENSION_JSON=".json"]
+*    @property {string} [RPM.FILE_MAPS=RPM.PATH_DATAS + "Maps/"]
+*    @property {string} [RPM.FILE_MAP_INFOS="/infos" + RPM.EXTENSION_JSON]
+*    @property {string} [RPM.FILE_MAP_OBJECTS="/objects" + RPM.EXTENSION_JSON]
+*    @property {string} [RPM.FILE_PICTURES_DATAS=RPM.PATH_DATAS + "pictures" + RPM.EXTENSION_JSON]
+*    @property {string} [RPM.FILE_VIDEOS_DATAS=RPM.PATH_DATAS + "videos" + RPM.EXTENSION_JSON]
+*    @property {string} [RPM.FILE_SONGS_DATAS=RPM.PATH_DATAS + "songs" + RPM.EXTENSION_JSON]
+*    @property {string} [RPM.FILE_SHAPES_DATAS=RPM.PATH_DATAS + "shapes" + RPM.EXTENSION_JSON]
+*    @property {string} [RPM.FILE_COMMON_EVENTS=RPM.PATH_DATAS + "commonEvents" + RPM.EXTENSION_JSON]
+*    @property {string} [RPM.FILE_ITEMS=RPM.PATH_DATAS + "items" + RPM.EXTENSION_JSON]
+*    @property {string} [RPM.FILE_SKILLS=RPM.PATH_DATAS + "skills" + RPM.EXTENSION_JSON]
+*    @property {string} [RPM.FILE_WEAPONS=RPM.PATH_DATAS + "weapons" + RPM.EXTENSION_JSON]
+*    @property {string} [RPM.FILE_ARMORS=RPM.PATH_DATAS + "armors" + RPM.EXTENSION_JSON]
+*    @property {string} [RPM.FILE_HEROES=RPM.PATH_DATAS + "heroes" + RPM.EXTENSION_JSON]
+*    @property {string} [RPM.FILE_MONSTERS=RPM.PATH_DATAS + "monsters" + RPM.EXTENSION_JSON]
+*    @property {string} [RPM.FILE_TROOPS=RPM.PATH_DATAS + "troops" + RPM.EXTENSION_JSON]
+*    @property {string} [RPM.FILE_BATTLE_SYSTEM=RPM.PATH_DATAS + "battleSystem" + RPM.EXTENSION_JSON]
+*    @property {string} [RPM.FILE_TITLE_SCREEN_GAME_OVER=RPM.PATH_DATAS + "titlescreenGameover" + RPM.EXTENSION_JSON]
+*    @property {string} [RPM.FILE_KEYBOARD=RPM.PATH_DATAS + "keyBoard" + RPM.EXTENSION_JSON]
+*    @property {string} [RPM.FILE_SYSTEM=RPM.PATH_DATAS + "system" + RPM.EXTENSION_JSON]
+*    @property {string} [RPM.FILE_CLASSES=RPM.PATH_DATAS + "classes" + RPM.EXTENSION_JSON]
+*    @property {string} [RPM.FILE_TILESETS_DATAS=RPM.PATH_DATAS + "tilesets" + RPM.EXTENSION_JSON]
+*    @property {string} [RPM.FILE_SPECIAL_ELEMENTS=RPM.PATH_DATAS + "specialElements" + RPM.EXTENSION_JSON]
+*    @property {string} [RPM.FILE_VARIABLES=RPM.PATH_DATAS + "variables" + RPM.EXTENSION_JSON]
+*    @property {string} [RPM.FILE_SETTINGS=RPM.PATH_DATAS + "settings" + RPM.EXTENSION_JSON]
+*    @property {string} [RPM.FILE_DLCS=RPM.PATH_DATAS + "dlcs" + RPM.EXTENSION_JSON]
+*    @property {string} [RPM.FILE_ANIMATIONS=RPM.PATH_DATAS + "animations" + RPM.EXTENSION_JSON]
+*    @property {string} [RPM.PATH_PICTURES="/Content/Images"]
+*    @property {string} [RPM.PATH_VIDEOS="/Content/Videos"]
+*    @property {string} [RPM.PATH_HUD=RPM.PATH_PICTURES + "/HUD/"]
+*    @property {string} [RPM.PATH_TEXTURES2D=RPM.PATH_PICTURES + "/Textures2D/"]
+*    @property {string} [RPM.PATH_BARS=RPM.PATH_HUD + "Bars"]
+*    @property {string} [RPM.PATH_FACESETS=RPM.PATH_HUD + "Facesets"]
+*    @property {string} [RPM.PATH_ICONS=RPM.PATH_HUD + "Icons"]
+*    @property {string} [RPM.PATH_WINDOW_SKINS=RPM.PATH_HUD + "WindowSkins"]
+*    @property {string} [RPM.PATH_TITLE_SCREEN=RPM.PATH_HUD + "TitleScreen"]
+*    @property {string} [RPM.PATH_HUD_PICTURES=RPM.PATH_HUD + "Pictures"]
+*    @property {string} [RPM.PATH_ANIMATIONS=RPM.PATH_HUD + "Animations"]
+*    @property {string} [RPM.PATH_AUTOTILES=RPM.PATH_TEXTURES2D + "Autotiles"]
+*    @property {string} [RPM.PATH_CHARACTERS=RPM.PATH_TEXTURES2D + "Characters"]
+*    @property {string} [RPM.PATH_TILESETS=RPM.PATH_TEXTURES2D + "Tilesets"]
+*    @property {string} [RPM.PATH_WALLS=RPM.PATH_TEXTURES2D + "Walls"]
+*    @property {string} [RPM.PATH_BATTLERS=RPM.PATH_TEXTURES2D + "Battlers"]
+*    @property {string} [RPM.PATH_OBJECTS_3D=RPM.PATH_TEXTURES2D + "Objects3D"]
+*    @property {string} [RPM.PATH_MOUNTAINS=RPM.PATH_TEXTURES2D + "Mountains"]
+*    @property {string} [RPM.PATH_SKYBOXES=RPM.PATH_TEXTURES2D + "SkyBoxes"]
+*    @property {string} [RPM.PATH_SONGS="/Content/Songs/"]
+*    @property {string} [RPM.PATH_MUSICS=RPM.PATH_SONGS + "Musics"]
+*    @property {string} [RPM.PATH_BACKGROUND_SOUNDS=RPM.PATH_SONGS + "BackgroundSounds"]
+*    @property {string} [RPM.PATH_SOUNDS=RPM.PATH_SONGS + "Sounds"]
+*    @property {string} [RPM.PATH_MUSIC_EFFECTS=RPM.PATH_SONGS + "MusicEffects"]
+*    @property {string} [RPM.PATH_SHAPES="/Content/Shapes/"]
+*    @property {string} [RPM.PATH_OBJ=RPM.PATH_SHAPES + "OBJ"]
+*    @property {string} [RPM.PATH_MTL=RPM.PATH_SHAPES + "MTL"]
+*    @property {string} [RPM.PATH_OBJ_COLLISIONS=RPM.PATH_SHAPES + "Collisions"]
+*    @property {string} [RPM.PATH_SHADERS=RPM.PATH_DATAS + "Scripts/System/shaders/"]
+*    @property {string} [RPM.PATH_SAVES=RPM.PATH_DATAS + "Saves"]
+*    @property {string} [RPM.SMALL_FONT_SIZE=8]
+*    @property {string} [RPM.MEDIUM_FONT_SIZE=10]
+*    @property {string} [RPM.BASIC_SQUARE_SIZE=32]
+*    @property {string} [RPM.BATLLER_STEPS=9]
+*    @property {string} [RPM.SMALL_SLOT_HEIGHT=30]
+*    @property {string} [RPM.MEDIUM_SLOT_WIDTH=200]
+*    @property {string} [RPM.MEDIUM_SLOT_HEIGHT=40]
+*    @property {string} [RPM.LARGE_SLOT_HEIGHT=60]
+*    @property {string} [RPM.MEDIUM_SPACE=5]
+*    @property {string} [RPM.LARGE_SPACE=10]
+*    @property {string} [RPM.HUGE_SPACE=20]
+*    @property {string} [RPM.PORTIONS_RAY_FAR=0]
+*    @property {string} [RPM.PORTION_SIZE=16]
+*    @property {string} [RPM.MAX_PICTURE_SIZE=4096]
+*    @property {string} [RPM.SCREEN_X=640]
+*    @property {string} [RPM.SCREEN_Y=480]
+*    @property {string} [RPM.NONE_PADDING=[0, 0, 0, 0]]
+*    @property {string} [RPM.VERY_SMALL_PADDING_BOX=[5, 5, 5, 5]]
+*    @property {string} [RPM.SMALL_PADDING_BOX=[10, 10, 10, 10]]
+*    @property {string} [RPM.MEDIUM_PADDING_BOX=[20, 20, 20, 20]]
+*    @property {string} [RPM.HUGE_PADDING_BOX=[30, 30, 30, 30]]
+*    @property {string} [RPM.DIALOG_PADDING_BOX=[30, 50, 30, 50]]
+*    @property {string} [RPM.SMALL_SLOT_PADDING=[10, 5, 10, 5]]
+*    @property {string} [RPM.ONE_SECOND_MILLI=1000]
+*    @property {string} [RPM.NUM_BOOL_TRUE=1]
+*    @property {string} [RPM.NUM_BOOL_FALSE=0]
+*    @property {string} [RPM.COEF_TEX=0.2]
+*    @property {string} [RPM.LOADING_MIN_DELAY=100]
+*    @property {string} [RPM.CLASS_HIDDEN="hidden"]
+*    @property {string} [RPM.STRING_RGBA="rgba"]
+*    @property {string} [RPM.STRING_EMPTY=""]
+*    @property {string} [RPM.STRING_PARENTHESIS_LEFT="("]
+*    @property {string} [RPM.STRING_PARENTHESIS_RIGHT=")"]
+*    @property {string} [RPM.STRING_BRACKET_LEFT="["]
+*    @property {string} [RPM.STRING_BRACKET_RIGHT="]"]
+*    @property {string} [RPM.STRING_COMA=","]
+*    @property {string} [RPM.STRING_COLON=":"]
+*    @property {string} [RPM.STRING_SLASH="/"]
+*    @property {string} [RPM.STRING_NEW_LINE="\n"]
+*    @property {string} [RPM.STRING_EQUAL="="]
+*    @property {string} [RPM.STRING_DASH="-"]
+*    @property {string} [RPM.STRING_SPACE=" "]
+*    @property {string} [RPM.STRING_ZERO="0"]
+*    @property {string} [RPM.UNDEFINED='undefined']
+*    @property {string} [RPM.NUMBER="number"]
+*    @property {string} [RPM.STRING="string"]
+*    @property {string} [RPM.TAG_BOLD="b"]
+*    @property {string} [RPM.TAG_ITALIC="i"]
+*    @property {string} [RPM.TAG_LEFT="l"]
+*    @property {string} [RPM.TAG_CENTER="c"]
+*    @property {string} [RPM.TAG_RIGHT="r"]
+*    @property {string} [RPM.TAG_SIZE="size"]
+*    @property {string} [RPM.TAG_FONT="font"]
+*    @property {string} [RPM.TAG_TEXT_COLOR="textcolor"]
+*    @property {string} [RPM.TAG_BACK_COLOR="backcolor"]
+*    @property {string} [RPM.TAG_STROKE_COLOR="strokecolor"]
+*    @property {string} [RPM.TAG_VARIABLE="var"]
+*    @property {string} [RPM.TAG_PARAMETER="par"]
+*    @property {string} [RPM.TAG_PROPERTY="pro"]
+*    @property {string} [RPM.TAG_HERO_NAME="hname"]
+*    @property {string} [RPM.TAG_ICON="ico"]
+*    @property {string} [RPM.DEFAULT_FONT="sans-serif"]
+*    @property {string} [RPM.JSON_KEY="k"]
+*    @property {string} [RPM.JSON_VALUE="v"]
+*    @property {string} [RPM.COLOR_GREEN=SystemColor.createColor(25, 214, 25)]
+*    @property {string} [RPM.COLOR_RED=SystemColor.createColor(216, 33, 17)]
+*    @property {string} [RPM.COLOR_WHITE=SystemColor.createColor(255, 255, 255)]
+*    @property {string} [RPM.COLOR_BLACK=SystemColor.createColor(0, 0, 0)]
+*    @property {string} [RPM.elapsedTime=0]
+*    @property {string} [RPM.averageElapsedTime=0]
+*    @property {string} [RPM.lastUpdateTime=new Date().getTime()]
+*    @property {string} [RPM.keysPressed=new Array]
+*    @property {string} [RPM.picturesLoading=new Array]
+*    @property {string} [RPM.picturesLoaded=new Array]
+*    @property {string} [RPM.fontSize=13]
+*    @property {string} [RPM.fontName="sans-serif"]
+*    @property {string} [RPM.escaped=false]
+*    @property {string} [RPM.blockingHero=false]
+*    @property {string} [RPM.game=null]
+*    @property {string} [RPM.DIALOG_ERROR=null]
+*    @property {string} [RPM.textureLoader=new THREE.TextureLoader()]
+*    @property {string} [RPM.requestPaintHUD=true]
+*    @property {string} [RPM.currentObject=null]
+*    @property {string} [RPM.currentParameters=null]
+*    @property {string} [RPM.currentMap=null]
+*    @property {string} [RPM.currentReaction=null]
+*    @property {string} [RPM.displayedPictures=[]]
+*    @property {string} [RPM.screenTone=new THREE.Vector4(0, 0, 0, 1)]
+*    @property {string} [RPM.allowSaves=true]
+*    @property {string} [RPM.allowMainMenu=true]
+*    @property {string} [RPM.isInMainMenu=false]
+*    @property {string} [RPM.BB_BOX=MapPortion.createBox()]
+*    @property {string} [RPM.BB_BOX_DETECTION=MapPortion.createBox()]
+*    @property {string} [RPM.BB_BOX_DEFAULT_DETECTION=MapPortion.createBox()]
+*    @property {string} [RPM.BB_ORIENTED_BOX=MapPortion.createOrientedBox()]
+*    @property {string} [RPM.OBJ_LOADER=new THREE.OBJLoader()]
+*    @property {string} [RPM.CUBE_TEXTURE_LOADER=new THREE.CubeTextureLoader()]
+*    @property {string} RPM.operators_compare
+*    @property {string} RPM.operators_numbers
 */
 class RPM
 {
     // -------------------------------------------------------
     //  PATHS
     // -------------------------------------------------------
+
     static PATH_BR = "";
     static ROOT_DIRECTORY_LOCAL = "."
     static PATH_FILES = "file:///";
@@ -84,9 +245,11 @@ class RPM
     static PATH_OBJ_COLLISIONS = RPM.PATH_SHAPES + "Collisions";
     static PATH_SHADERS = RPM.PATH_DATAS + "Scripts/System/shaders/";
     static PATH_SAVES = RPM.PATH_DATAS + "Saves";
+
     // -------------------------------------------------------
     //  CONSTANTS
     // -------------------------------------------------------
+
     static SMALL_FONT_SIZE = 8;
     static MEDIUM_FONT_SIZE = 10;
     static BASIC_SQUARE_SIZE = 32;
@@ -151,16 +314,20 @@ class RPM
     static DEFAULT_FONT = "sans-serif";
     static JSON_KEY = "k";
     static JSON_VALUE = "v";
+
     // -------------------------------------------------------
     //  COLORS
     // -------------------------------------------------------
+
     static COLOR_GREEN = SystemColor.createColor(25, 214, 25);
     static COLOR_RED = SystemColor.createColor(216, 33, 17);
     static COLOR_WHITE = SystemColor.createColor(255, 255, 255);
     static COLOR_BLACK = SystemColor.createColor(0, 0, 0);
+
     // -------------------------------------------------------
     //  OTHERS
     // -------------------------------------------------------
+
     static elapsedTime = 0;
     static averageElapsedTime = 0;
     static lastUpdateTime = new Date().getTime();
@@ -218,16 +385,23 @@ class RPM
     //  FUNCTIONS
     // -------------------------------------------------------
 
+    // -------------------------------------------------------
+    /** Check if a file exists
+    *   @static
+    *   @param {string} url The path of the file
+    *   @returns {boolean}
+    */
     static fileExists = function(url)
     {
         const fs = require('fs');
         return (fs.existsSync(url));
     }
 
-    /** Read a json file
+    // -------------------------------------------------------
+    /** Open an existing file
     *   @static
-    *   @param {Object} base The class calling this function.
-    *   @param {string} url The path of the file.
+    *   @param {string} url The path of the file
+    *   @returns {string}
     */
     static openFile = async function(url)
     {
@@ -243,6 +417,12 @@ class RPM
         })).toString();
     }
 
+    // -------------------------------------------------------
+    /** Open and parse an existing file
+    *   @static
+    *   @param {string} url The path of the file
+    *   @returns {string}
+    */
     static parseFileJSON = async function(url)
     {
         return JSON.parse(await RPM.openFile(url));
@@ -251,8 +431,8 @@ class RPM
     // -------------------------------------------------------
     /** Write a json file
     *   @static
-    *   @param {string} url The path of the file.
-    *   @param {Object} obj An object that can be stringified by JSON.
+    *   @param {string} url The path of the file
+    *   @param {Object} obj An object that can be stringified by JSON
     */
     static saveFile = async function(url, obj)
     {
@@ -267,10 +447,12 @@ class RPM
 
     // -------------------------------------------------------
     /** Link the fontSize and the fontName to a string that can be used by the
-    *   canvasHUD.
+    *   canvasHUD
     *   @static
-    *   @param {number} fontSize The fontSize.
-    *   @param {string} fontName The fontName.
+    *   @param {number} fontSize The fontSize
+    *   @param {string} fontName The fontName
+    *   @param {boolean} bold Indicate if the text is bold
+    *   @param {boolean} italic Indicate if the text is italic
     *   @returns {string}
     */
     static createFont = function(fontSize, fontName, bold, italic) {
@@ -279,9 +461,9 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Describe a javascript object.
+    /** Describe a javascript object
     *   @static
-    *   @param {Object} obj The javascript object.
+    *   @param {Object} obj The javascript object
     *   @returns {string}
     */
     static describe(obj)
@@ -295,9 +477,9 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Show alert dialog box.
+    /** Show alert dialog box
     *   @static
-    *   @param {string} text text to display.
+    *   @param {string} text text to display
     */
     static show(text)
     {
@@ -305,9 +487,9 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Return a string of the date by passing all the seconds.
+    /** Return a string of the date by passing all the seconds
     *   @static
-    *   @param {number} total Total number of seconds.
+    *   @param {number} total Total number of seconds
     *   @returns {string}
     */
     static getStringDate(total)
@@ -318,10 +500,10 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Return the string of a number and parse with 0 according to a given size.
+    /** Return the string of a number and parse with 0 according to a given size
     *   @static
-    *   @param {number} num Number.
-    *   @param {number} size Max number to display.
+    *   @param {number} num Number
+    *   @param {number} size Max number to display
     *   @returns {string}
     */
     static formatNumber(num, size)
@@ -330,9 +512,9 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Generate the map name according to the ID.
+    /** Generate the map name according to the ID
     *   @static
-    *   @param {number} id ID of the map.
+    *   @param {number} id ID of the map
     *   @returns {string}
     */
     static generateMapName(id)
@@ -341,9 +523,9 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Transform a json position to index position on X/Z axis.
+    /** Transform a json position to index position on X/Z axis
     *   @static
-    *   @param {number[]} position The json position.
+    *   @param {number[]} position The json position
     *   @returns {number}
     */
     static positionJSONToIndex(position)
@@ -354,9 +536,9 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Transform a quare position to index position on X/Z axis.
+    /** Transform a quare position to index position on X/Z axis
     *   @static
-    *   @param {number[]} position The json position.
+    *   @param {number[]} position The json position
     *   @returns {number}
     */
     static positionToIndex(position)
@@ -367,9 +549,9 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Transform a json position to a THREE.Vector3.
+    /** Transform a json position to a THREE.Vector3
     *   @static
-    *   @param {number[]} position The json position.
+    *   @param {number[]} position The json position
     *   @returns {THREE.Vector3}
     */
     static positionToVector3(position)
@@ -381,9 +563,9 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Transform a json position to a THREE.Vector3.
+    /** Transform a json position to a THREE.Vector3
     *   @static
-    *   @param {number[]} position The json position.
+    *   @param {number[]} position The json position
     *   @returns {THREE.Vector3}
     */
     static positionToBorderVector3(position)
@@ -394,9 +576,9 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Get the complete number of Y of a position.
+    /** Get the complete number of Y of a position
     *   @static
-    *   @param {number[]} position The json position.
+    *   @param {number[]} position The json position
     *   @returns {number}
     */
     static positionTotalY(position)
@@ -406,9 +588,9 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Extract the layer from position.
+    /** Extract the layer from position
     *   @static
-    *   @param {number[]} position The json position.
+    *   @param {number[]} position The json position
     *   @returns number
     */
     static positionLayer(position)
@@ -417,9 +599,9 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Extract the x center from position.
+    /** Extract the x center from position
     *   @static
-    *   @param {number[]} position The json position.
+    *   @param {number[]} position The json position
     *   @returns number
     */
     static positionCenterX(position)
@@ -428,9 +610,9 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Extract the z center from position.
+    /** Extract the z center from position
     *   @static
-    *   @param {number[]} position The json position.
+    *   @param {number[]} position The json position
     *   @returns number
     */
     static positionCenterZ = function(position)
@@ -439,9 +621,9 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Extract the angle from position.
+    /** Extract the angle from position
     *   @static
-    *   @param {number[]} position The json position.
+    *   @param {number[]} position The json position
     *   @returns number
     */
     static positionAngleY(position)
@@ -450,9 +632,9 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Extract the angle from position.
+    /** Extract the angle from position
     *   @static
-    *   @param {number[]} position The json position.
+    *   @param {number[]} position The json position
     *   @returns number
     */
     static positionAngleX(position)
@@ -461,9 +643,9 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Extract the angle from position.
+    /** Extract the angle from position
     *   @static
-    *   @param {number[]} position The json position.
+    *   @param {number[]} position The json position
     *   @returns number
     */
     static positionAngleZ(position)
@@ -472,9 +654,9 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Get the pixel position transformation according to screen size.
+    /** Get the pixel position transformation according to screen size
     *   @static
-    *   @param {number} x The position on screen.
+    *   @param {number} x The position on screen
     *   @returns {number}
     */
     static getScreenX(x)
@@ -483,9 +665,9 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Get the pixel position transformation according to screen size.
+    /** Get the pixel position transformation according to screen size
     *   @static
-    *   @param {number} y The position on screen.
+    *   @param {number} y The position on screen
     *   @returns {number}
     */
     static getScreenY(y)
@@ -494,9 +676,9 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Get the pixel position transformation according to screen size.
+    /** Get the pixel position transformation according to screen size
     *   @static
-    *   @param {number} xy The position on screen.
+    *   @param {number} xy The position on screen
     *   @returns {number}
     */
 
@@ -506,9 +688,9 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Get the pixel position transformation according to screen size.
+    /** Get the min pixel position transformation according to screen size
     *   @static
-    *   @param {number} xy The position on screen.
+    *   @param {number} xy The position on screen
     *   @returns {number}
     */
 
@@ -518,10 +700,10 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Get the pixel position transformation according to screen size, but without
-    *   rounding it.
+    /** Get the pixel position transformation according to screen size, but 
+    *   without rounding it
     *   @static
-    *   @param {number} x The position on screen.
+    *   @param {number} x The position on screen
     *   @returns {number}
     */
     static getDoubleScreenX(x)
@@ -530,10 +712,10 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Get the pixel position transformation according to screen size, but without
-    *   rounding it.
+    /** Get the pixel position transformation according to screen size, but 
+    *   without rounding it
     *   @static
-    *   @param {number} y The position on screen.
+    *   @param {number} y The position on screen
     *   @returns {number}
     */
     static getDoubleScreenY(y)
@@ -542,9 +724,9 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Get the position according to the square size.
+    /** Get the position according to the square size
     *   @static
-    *   @param {number} x The position.
+    *   @param {number} x The position
     *   @returns {number}
     */
     static getSquare(x)
@@ -553,8 +735,9 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Get the numberof fields of an object.
+    /** Get the number of fields of an object
     *   @static
+    *   @param {Object} obj The object to count fields
     *   @returns {number}
     */
     static countFields(obj)
@@ -579,11 +762,12 @@ class RPM
             }
         }
         return c;
-    };
+    }
 
     // -------------------------------------------------------
-    /** Check if the array is empty.
+    /** Check if an array is empty
     *   @static
+    *   @param {any[]} array The array to test
     *   @returns {boolean}
     */
     static isEmpty(array)
@@ -592,27 +776,44 @@ class RPM
     }
 
     // -------------------------------------------------------
-
+    /** Get the cos
+    *   @static
+    *   @param {number} w The value
+    *   @returns {number}
+    */
     static cos(w)
     {
         return parseFloat(Math.cos(w).toFixed(10));
     }
 
     // -------------------------------------------------------
+    /** Get the sin
+    *   @static
+    *   @param {number} w The value
+    *   @returns {number}
+    */
     static sin(w)
     {
         return parseFloat(Math.sin(w).toFixed(10));
     }
 
     // -------------------------------------------------------
-
+    /** Get portion according to a position
+    *   @static
+    *   @param {THREE.Vector3} position The position
+    *   @returns {number[]}
+    */
     static getPortion(position)
     {
         return RPM.getPortionArray(RPM.getPosition(position));
     }
 
     // -------------------------------------------------------
-
+    /** Get portion according to array position
+    *   @static
+    *   @param {number[]} p The array position
+    *   @returns {number[]}
+    */
     static getPortionArray(p)
     {
         return [
@@ -623,7 +824,11 @@ class RPM
     }
 
     // -------------------------------------------------------
-
+    /** Get an array position according to position
+    *   @static
+    *   @param {THREE.Vector3} position The position
+    *   @returns {number[]}
+    */
     static getPosition(position)
     {
         return [
@@ -634,7 +839,12 @@ class RPM
     }
 
     // -------------------------------------------------------
-
+    /** Check if two portions are equals
+    *   @static
+    *   @param {number[]} portion1
+    *   @param {number[]} portion2
+    *   @returns {boolean}
+    */
     static arePortionEquals(portion1, portion2)
     {
         return (portion1[0] === portion2[0] && portion1[1] === portion2[1] &&
@@ -642,9 +852,9 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Show an error.
+    /** Show an error object
     *   @static
-    *   @param {Error} error The error message.
+    *   @param {Error} e The error message
     */
     static showError(e)
     {
@@ -653,9 +863,9 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Show an error message.
+    /** Show an error message
     *   @static
-    *   @param {string} msg The error message.
+    *   @param {string} msg The error message
     */
     static showErrorMessage(msg)
     {
@@ -676,10 +886,11 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Give a modulo without negative value.
+    /** Give a modulo without negative value
     *   @static
     *   @param {number} x
     *   @param {number} m
+    *   @returns {number}
     */
     static mod(x, m)
     {
@@ -688,9 +899,10 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Get the list max ID.
+    /** Get the list max ID
     *   @static
-    *   @param {number[]} list A list containing only IDs.
+    *   @param {number[]} list A list containing only IDs
+    *   @returns {number}
     */
     static getMaxID(list)
     {
@@ -703,9 +915,10 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Create a new array list initialed with null everywhere.
+    /** Create a new array list initialed with null everywhere
     *   @static
-    *   @param {number} size The list size.
+    *   @param {number} size The list size
+    *   @returns {any[]}
     */
     static fillNullList(size)
     {
@@ -718,10 +931,11 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Create a random number between min and max.
+    /** Create a random number between min and max
     *   @static
     *   @param {number} min
     *   @param {number} max
+    *   @returns {number}
     */
     static random(min, max)
     {
@@ -731,7 +945,7 @@ class RPM
     // -------------------------------------------------------
     /** Load a texture
     *   @param {string} path The path of the texture
-    *   @retuns {THREE.MeshBasicMaterial}
+    *   @returns {THREE.MeshBasicMaterial}
     */
     static async loadTexture(path)
     {
@@ -750,8 +964,8 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Load a texture empty.
-    *   @retuns {THREE.MeshBasicMaterial}
+    /** Load a texture empty
+    *   @returns {THREE.MeshBasicMaterial}
     */
     static loadTextureEmpty()
     {
@@ -794,14 +1008,22 @@ class RPM
     }
 
     // -------------------------------------------------------
-
+    /** Update the background color
+    *   @static
+    *   @param {SystemColor} color
+    */
     static updateBackgroundColor(color)
     {
         RPM.renderer.setClearColor(color.getHex(RPM.screenTone), color.alpha);
     }
 
     // -------------------------------------------------------
-
+    /** Convert 3D vector to a 2D point on screen
+    *   @static
+    *   @param {THREE.Vector3} vector The 3D vector
+    *   @param {THREE.Camera} camera The three.js camera
+    *   @returns {THREE.Vector2}
+    */
     static toScreenPosition(vector, camera)
     {
         let widthHalf = RPM.CANVAS_WIDTH / 2;
@@ -814,7 +1036,12 @@ class RPM
     }
 
     // -------------------------------------------------------
-
+    /** Get random value according to value and variance
+    *   @static
+    *   @param {number} value
+    *   @param {number} variance
+    *   @returns {number}
+    */
     static variance(value, variance)
     {
         let v = Math.round(value * variance / 100);
@@ -822,7 +1049,14 @@ class RPM
     }
 
     // -------------------------------------------------------
-
+    /** Eval a formula
+    *   @static
+    *   @param {string} formula The formula
+    *   @param {GamePlayer} user The user
+    *   @param {GamePlayer} target The target
+    *   @param {number} damage Damage value
+    *   @returns {any}
+    */
     static evaluateFormula(formula, user, target, damage)
     {
         return new Function("u", "t", "damage", "$that", "return " + formula)(
@@ -830,70 +1064,125 @@ class RPM
     }
 
     // -------------------------------------------------------
-
+    /** Eval a script
+    *   @static
+    *   @param {string} script The script
+    *   @returns {any}
+    */
     static evaluateScript(script)
     {
         return new Function("$that", script)($that);
     }
 
     // -------------------------------------------------------
-
+    /** Check if formula contains user string
+    *   @static
+    *   @param {string} formula The formula
+    *   @returns {boolean}
+    */
     static formulaContainsUser(formula)
     {
         return formula.contains("u");
     }
 
     // -------------------------------------------------------
-
+    /** Check if formula contains target string
+    *   @static
+    *   @param {string} formula The formula
+    *   @returns {boolean}
+    */
     static formulaContainsTarget(formula)
     {
         return formula.contains("t");
     }
 
     // -------------------------------------------------------
-
+    /** Return default value if undefined, else the value
+    *   @static
+    *   @param {any} value The value
+    *   @param {any} defaultValue The default value
+    *   @returns {any}
+    */
     static defaultValue(value, defaultValue)
     {
         return RPM.isUndefined(value) ? defaultValue : value;
     }
 
     // -------------------------------------------------------
-
+    /** Check if the value is undefined
+    *   @static
+    *   @param {any} value The value
+    *   @returns {boolean}
+    */
     static isUndefined(value)
     {
         return typeof value === RPM.UNDEFINED;
     }
 
     // -------------------------------------------------------
-
+    /** Check if the value is a number
+    *   @static
+    *   @param {any} value The value
+    *   @returns {boolean}
+    */
     static isNumber(value)
     {
         return typeof value === RPM.NUMBER;
     }
 
     // -------------------------------------------------------
-
+    /** Check if the value is a string
+    *   @static
+    *   @param {any} value The value
+    *   @returns {boolean}
+    */
     static isString(value)
     {
         return typeof value === RPM.STRING;
     }
 
     // -------------------------------------------------------
-
+    /** Convert a number to boolean
+    *   @static
+    *   @param {number} num The number
+    *   @returns {boolean}
+    */
     static numToBool(num)
     {
         return num === RPM.NUM_BOOL_TRUE;
     }
 
     // -------------------------------------------------------
-
+    /** Convert a boolean to number
+    *   @static
+    *   @param {boolean} b The boolean
+    *   @returns {number}
+    */
     static boolToNum(b)
     {
         return b ? RPM.NUM_BOOL_TRUE : RPM.NUM_BOOL_FALSE;
     }
 
     // -------------------------------------------------------
+    /** Convert number to string
+    *   @static
+    *   @param {number} n The number
+    *   @returns {string}
+    */
+    static numToString(n)
+    {
+        return RPM.STRING_EMPTY + n;
+    }
 
+    // -------------------------------------------------------
+    /** Get the index of an object in a array containing a property with a 
+    *   specific value
+    *   @static
+    *   @param {Object[]} array The array to check
+    *   @param {string} attr The attribute of the object to check
+    *   @param {any} value The value to check on the object attribute 
+    *   @returns {number}
+    */
     static indexOfProp(array, attr, value)
     {
         for (let i = 0, l = array.length; i < l; i ++) 
@@ -906,11 +1195,15 @@ class RPM
         return -1;
     }
 
-    static numToString(n)
-    {
-        return RPM.STRING_EMPTY + n;
-    }
-
+    // -------------------------------------------------------
+    /** Read a json list and create a system list sorted by ID
+    *   @static
+    *   @param {Object[]} jsonList The json list to read
+    *   @param {function} func The function to apply
+    *   @param {boolean} [isConstructor=true] Indicate if the function is a 
+    *   constructor class
+    *   @returns {any[]}
+    */
     static readJSONSystemList(jsonList, func, isConstructor = true)
     {
         let jsonElement;
@@ -925,6 +1218,15 @@ class RPM
         return list;
     }
 
+    // -------------------------------------------------------
+    /** Read a json list and create a system list sorted by index
+    *   @static
+    *   @param {Object[]} jsonList The json list to read
+    *   @param {function} func The function to apply
+    *   @param {boolean} [isConstructor=true] Indicate if the function is a 
+    *   constructor class
+    *   @returns {any[]}
+    */
     static readJSONSystemListByIndex(jsonList, func, isConstructor = true)
     {
         let jsonElement;
@@ -939,6 +1241,18 @@ class RPM
         return list;
     }
 
+    // -------------------------------------------------------
+    /** Read a json list and create a system list by ID and another list by 
+    *   index (containing IDs), and return the max possible ID
+    *   @static
+    *   @param {Object[]} jsonList The json list to 
+    *   @param {any[]} listIDs The system list by ID
+    *   @param {number[]} listIndexes The IDs list by index
+    *   @param {function} func The function to apply
+    *   @param {boolean} [isConstructor=true] Indicate if the function is a 
+    *   constructor class
+    *   @returns {number}
+    */
     static readJSONSystemListByIDIndex(jsonList, listIDs, listIndexes, func,
         isConstructor = true)
     {
@@ -957,6 +1271,15 @@ class RPM
         return maxID;
     }
 
+    // -------------------------------------------------------
+    /** Read a json list and create a hash list
+    *   @static
+    *   @param {Object[]} jsonList The json list to read
+    *   @param {function} func The function to apply
+    *   @param {boolean} [isConstructor=true] Indicate if the function is a 
+    *   constructor class
+    *   @returns {any[]}
+    */
     static readJSONSystemListHash(jsonList, func, isConstructor = true)
     {
         let list = [];
@@ -970,6 +1293,12 @@ class RPM
         return list;
     }
 
+    // -------------------------------------------------------
+    /** Try catch for async functions
+    *   @static
+    *   @param {function} func The async function to apply
+    *   @returns {any}
+    */
     static async tryCatch(func)
     {
         try
@@ -981,6 +1310,7 @@ class RPM
         }
     }
 
+    // -------------------------------------------------------
     /** Initialize the game stack and datas
     */
     static initialize()
@@ -1006,7 +1336,7 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Load the game stack and datas
+    /** Clear the HUD canvas
     */
     static clearHUD()
     {
@@ -1017,7 +1347,7 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Initialize the openGL stuff.
+    /** Initialize the openGL stuff
     */
     static initializeGL()
     {
@@ -1034,7 +1364,7 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Set the camera aspect while resizing the window.
+    /** Set the camera aspect while resizing the window
     */
     static resizeGL()
     {
@@ -1048,7 +1378,7 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** Update the current stack.
+    /** Update the current stack
     */
     static update()
     {
@@ -1077,8 +1407,8 @@ class RPM
     }
 
     // -------------------------------------------------------
-    /** First key press handle for the current stack.
-    *   @param {number} key The key ID pressed.
+    /** First key press handle for the current stack
+    *   @param {number} key The key ID pressed
     */
     static onKeyPressed(key)
     {
@@ -1086,9 +1416,8 @@ class RPM
     }
 
     // -------------------------------------------------------
-
-    /** First key release handle for the current stack.
-    *   @param {number} key The key ID released.
+    /** First key release handle for the current stack
+    *   @param {number} key The key ID released
     */
     static onKeyReleased(key)
     {
@@ -1096,10 +1425,9 @@ class RPM
     }
 
     // -------------------------------------------------------
-
-    /** Key pressed repeat handle for the current stack.
-    *   @param {number} key The key ID pressed.
-    *   @returns {boolean} false if the other keys are blocked after it.
+    /** Key pressed repeat handle for the current stack
+    *   @param {number} key The key ID pressed
+    *   @returns {boolean} false if the other keys are blocked after it
     */
     static onKeyPressedRepeat(key)
     {
@@ -1107,7 +1435,6 @@ class RPM
     }
 
     // -------------------------------------------------------
-
     /** Key pressed repeat handle for the current stack, but with
     *   a small wait after the first pressure (generally used for menus)
     *   @param {number} key The key ID pressed
@@ -1119,7 +1446,6 @@ class RPM
     }
 
     // -------------------------------------------------------
-
     /** Draw the 3D for the current stack
     */
     static draw3D()
@@ -1128,7 +1454,6 @@ class RPM
     }
 
     // -------------------------------------------------------
-
     /** Draw HUD for the current stack
     */
     static drawHUD = function()

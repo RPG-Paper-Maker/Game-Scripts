@@ -73,7 +73,7 @@ class SceneMenuSkills extends SceneGame
         );
         this.windowBoxUseSkill = new WindowBox(240, 320, 360, 140,
             {
-                content: new GraphicUseSkillItem.create(),
+                content: new GraphicUseSkillItem(),
                 padding: RPM.SMALL_PADDING_BOX
             }
         );
@@ -132,7 +132,7 @@ class SceneMenuSkills extends SceneGame
 
         // List
         this.windowChoicesList.onKeyPressedAndRepeat(key);
-        position = this.positionChoice[this.windowChoicesTabs
+        let position = this.positionChoice[this.windowChoicesTabs
             .currentSelectedIndex];
         position.index = this.windowChoicesList.currentSelectedIndex;
         position.offset = this.windowChoicesList.offsetSelectedIndex;

@@ -11,6 +11,26 @@
 
 /** @class
 *   A mountain in the map
+*   @extends MapElement
+*   @property {number} [Mountain.X_LEFT_OFFSET=0] Offset for x left
+*   @property {number} [Mountain.X_MID_OFFSET=1] Offset for x mid
+*   @property {number} [Mountain.X_RIGHT_OFFSET=2] Offset for x right
+*   @property {number} [Mountain.X_MIX_OFFSET=3] Offset for x mix
+*   @property {number} [Mountain.Y_TOP_OFFSET=0] Offset for y top
+*   @property {number} [Mountain.Y_MID_OFFSET=1] Offset for y mid
+*   @property {number} [Mountain.Y_BOT_OFFSET=2] Offset for y bot
+*   @property {number} [Mountain.Y_MIX_OFFSET=3] Offset for y mix
+*   @property {number} mountainID The mountain ID
+*   @property {number} widthSquares The width in squares
+*   @property {number} widthPixels The width in pixels
+*   @property {number} heightSquares The height in squares
+*   @property {number} heightPixels The height in pixels
+*   @property {boolean} top Indicate there's another mountain on top
+*   @property {boolean} bot Indicate there's another mountain on bot
+*   @property {boolean} left Indicate there's another mountain on left
+*   @property {boolean} right Indicate there's another mountain on right
+*   @property {number} angle The angle of the mountain
+*   @param {Object} [json=undefined] Json object describing the mountain
 */
 class Mountain extends MapElement
 {
@@ -32,6 +52,10 @@ class Mountain extends MapElement
         }
     }
 
+    // -------------------------------------------------------
+    /** Read the JSON associated to the mountain
+    *   @param {Object} json Json object describing the mountain
+    */
     read(json)
     {
         super.read(json);
@@ -52,14 +76,18 @@ class Mountain extends MapElement
     }
 
     // -------------------------------------------------------
-
+    /** Get the total squares width
+    *   @returns {number}
+    */
     getTotalSquaresWidth()
     {
         return this.widthSquares + (this.getWidthOnlyPixelsPlus() > 0 ? 1 : 0);
     }
 
     // -------------------------------------------------------
-
+    /** Get the total squares height
+    *   @returns {number}
+    */
     getTotalSquaresHeight(yPlus)
     {
         return this.heightSquares + (this.getHeightOnlyPixelsPlus() + yPlus > 0
@@ -67,28 +95,36 @@ class Mountain extends MapElement
     }
 
     // -------------------------------------------------------
-
+    /** Get the squares number width with pixels plus
+    *   @returns {number}
+    */
     getWidthOnlyPixelsPlus()
     {
         return Math.round(this.widthPixels * RPM.SQUARE_SIZE / 100);
     }
 
     // -------------------------------------------------------
-
+    /** Get the squares number height with pixels plus
+    *   @returns {number}
+    */
     getHeightOnlyPixelsPlus()
     {
         return Math.round(this.heightPixels * RPM.SQUARE_SIZE / 100);
     }
 
     // -------------------------------------------------------
-
+    /** Get the total width in pixels
+    *   @returns {number}
+    */
     getWidthTotalPixels()
     {
         return this.widthSquares * RPM.SQUARE_SIZE + this.getWidthOnlyPixelsPlus();
     }
 
     // -------------------------------------------------------
-
+    /** Get the total height in pixels
+    *   @returns {number}
+    */
     getHeightTotalPixels()
     {
         return this.heightSquares * RPM.SQUARE_SIZE + this
@@ -96,14 +132,39 @@ class Mountain extends MapElement
     }
 
     // -------------------------------------------------------
-
+    /** Get the system special element mountain
+    *   @returns {SystemSpecialElement}
+    */
     getSystem()
     {
         return RPM.datasGame.specialElements.mountains[this.mountainID];
     }
 
     // -------------------------------------------------------
-
+    /** Draw the entire faces
+    *   @param {boolean} left Indicate if left
+    *   @param {boolean} right Indicate if right
+    *   @param {number} angle The angle
+    *   @param {THREE.Vector3} center The position center
+    *   @param {number} width The width in squares
+    *   @param {number} height The height in squares
+    *   @param {number} w The w in coordinates
+    *   @param {number} faceHeight The face height
+    *   @param {number} wp The width pixels
+    *   @param {number} xLeft The x left position
+    *   @param {number} xRight The x right position
+    *   @param {number} yTop The y top position
+    *   @param {number} yBot The y bot position
+    *   @param {number} zFront The z front position
+    *   @param {number} zBack The z back position
+    *   @param {number} yOffset The y offset
+    *   @param {THREE.Vector3} vecFrontA The front vector position A
+    *   @param {THREE.Vector3} vecBackA The back vector position A
+    *   @param {THREE.Vector3} vecFrontB The front vector position B
+    *   @param {THREE.Vector3} vecBackB The back vector position B
+    *   @param {THREE.geometry} geometry The geometry
+    *   @param {number} count The faces count
+    */
     drawEntireFaces(left, right, angle, center, width, height, w, faceHeight, wp
         , xLeft, xRight, yTop, yBot, zFront, zBack, yOffset, vecFrontA, vecBackA
         , vecFrontB, vecBackB, geometry, count)
@@ -205,7 +266,36 @@ class Mountain extends MapElement
     }
 
     // -------------------------------------------------------
-
+    /** Draw the side corner
+    *   @param {number} xKind The xKind position
+    *   @param {number} yKind The yKind position
+    *   @param {number} angle The angle
+    *   @param {THREE.Vector3} center The position center
+    *   @param {number} width The width in squares
+    *   @param {number} height The height in squares
+    *   @param {number} w The w in coordinates
+    *   @param {number} faceHeight The face height
+    *   @param {number} wp The width pixels
+    *   @param {number} xLeft The x left position
+    *   @param {number} xRight The x right position
+    *   @param {number} xLeftTop The x left top position
+    *   @param {number} xRightTop The x right top position
+    *   @param {number} xLeftBot The x left bot position
+    *   @param {number} xRightBot The x right bot position
+    *   @param {number} yTop The y top position
+    *   @param {number} yBot The y bot position
+    *   @param {number} zFront The z front position
+    *   @param {number} zBack The z back position
+    *   @param {number} zFrontLeft The z front left position
+    *   @param {number} zFrontRight The z front right position
+    *   @param {number} zBackLeft The z back left position
+    *   @param {number} zBackRight The z back right position
+    *   @param {number} yOffset The y offset
+    *   @param {THREE.geometry} geometry The geometry
+    *   @param {number} count The faces count
+    *   @param {number} xCornerOffsetTop The x corner offset top
+    *   @param {number} xCornerOffsetBot The x corner offset bot
+    */
     drawSideCorner(xKind, yKind, angle, center, width, height, w, faceHeight, wp
         , xLeft, xRight, xLeftTop, xRightTop, xLeftBot, xRightBot, yTop, yBot, 
         zFront, zBack, zFrontLeft, zFrontRight, zBackLeft, zBackRight, yOffset, 
@@ -227,7 +317,32 @@ class Mountain extends MapElement
     }
 
     // -------------------------------------------------------
-
+    /** Draw a face
+    *   @param {number} xKind The xKind position
+    *   @param {number} yKind The yKind position
+    *   @param {number} angle The angle
+    *   @param {THREE.Vector3} center The position center
+    *   @param {number} width The width in squares
+    *   @param {number} height The height in squares
+    *   @param {number} w The w in coordinates
+    *   @param {number} faceHeight The face height
+    *   @param {number} xLeftTop The x left top position
+    *   @param {number} xRightTop The x right top position
+    *   @param {number} xLeftBot The x left bot position
+    *   @param {number} xRightBot The x right bot position
+    *   @param {number} yTop The y top position
+    *   @param {number} yBot The y bot position
+    *   @param {number} zFrontLeft The z front left position
+    *   @param {number} zFrontRight The z front right position
+    *   @param {number} zBackLeft The z back left position
+    *   @param {number} zBackRight The z back right position
+    *   @param {number} yOffset The y offset
+    *   @param {THREE.geometry} geometry The geometry
+    *   @param {number} count The faces count
+    *   @param {number} xCornerOffsetTop The x corner offset top
+    *   @param {number} xCornerOffsetBot The x corner offset bot
+    *   @param {boolean} isCorner Indicate if corner
+    */
     drawFace(xKind, yKind, angle, center, width, height, w, faceHeight, xLeftTop
         , xRightTop, xLeftBot, xRightBot, yTop, yBot, zFrontLeft, zFrontRight, 
         zBackLeft, zBackRight, yOffset, geometry, count, xCornerOffsetTop, 
@@ -287,12 +402,14 @@ class Mountain extends MapElement
     }
 
     // -------------------------------------------------------
-    /** Update the geometry of a group of sprite walls with the same material.
-    *   @param {THREE.Geometry} geometry of the sprites walls.
-    *   @param {number[]} position The position of the wall.
-    *   @return {number}
+    /** Update the geometry of a group of mountains with the same material
+    *   @param {THREE.Geometry} geometry The geometry of mountains
+    *   @param {number[]} texture The texture mountain
+    *   @param {number[]} position The json position
+    *   @param {number} count The faces count
+    *   @return {any[]}
     */
-    updateGeometry(geometry, texture, position, c)
+    updateGeometry(geometry, texture, position, count)
     {
         // General configurations
         let yOffset = texture.getOffset(this.mountainID, null) * 4 * RPM
@@ -320,34 +437,34 @@ class Mountain extends MapElement
         // Bot
         if (!this.bot)
         {
-            c = this.drawEntireFaces(this.left, this.right, 0, center, width,
-                height, w, faceHeight, wp, xLeft, xRight, yTop, yBot, zFront,
+            count = this.drawEntireFaces(this.left, this.right, 0, center, width
+                , height, w, faceHeight, wp, xLeft, xRight, yTop, yBot, zFront,
                 zBack, yOffset, vecFrontA, vecBackA, vecFrontB, vecBackB,
-                geometry, c);
+                geometry, count);
         }
         // Top
         if (!this.top)
         {
-            c = this.drawEntireFaces(this.right, this.left, 180, center,width,
-                height, w, faceHeight, wp, xLeft, xRight, yTop, yBot, zFront,
-                zBack, yOffset, vecFrontA, vecBackA, vecFrontB, vecBackB,
-                geometry, c);
+            count = this.drawEntireFaces(this.right, this.left, 180, center, 
+                width, height, w, faceHeight, wp, xLeft, xRight, yTop, yBot, 
+                zFront, zBack, yOffset, vecFrontA, vecBackA, vecFrontB, vecBackB
+                , geometry, count);
         }
         // Left
         if (!this.left)
         {
-            c = this.drawEntireFaces(this.top, this.bot, -90, center, width,
+            count = this.drawEntireFaces(this.top, this.bot, -90, center, width,
                 height, w, faceHeight, wp, xLeft, xRight, yTop, yBot, zFront,
                 zBack, yOffset, vecFrontA, vecBackA, vecFrontB, vecBackB,
-                geometry, c);
+                geometry, count);
         }
         // Right
         if (!this.right)
         {
-            c = this.drawEntireFaces(this.bot, this.top, 90, center, width,
+            count = this.drawEntireFaces(this.bot, this.top, 90, center, width,
                 height, w, faceHeight, wp, xLeft, xRight, yTop, yBot, zFront,
                 zBack, yOffset, vecFrontA, vecBackA, vecFrontB, vecBackB,
-                geometry, c);
+                geometry, count);
         }
 
         // Collisions
@@ -378,40 +495,6 @@ class Mountain extends MapElement
                 k: true
             }
         ];
-        return [c, objCollision];
-    }
-}
-
-/** @class
-*   Mountains with the same textures
-*/
-class Mountains
-{
-    constructor(texture)
-    {
-        this.texture = texture;
-        this.width = texture.texture.map.image.width;
-        this.height = texture.texture.map.image.height;
-        this.geometry = new THREE.Geometry();
-        this.geometry.faceVertexUvs[0] = [];
-        this.count = 0;
-        this.mesh = null;
-    }
-
-    /** Update the geometry of the mountains according to a mountain
-    */
-    updateGeometry(position, mountain)
-    {
-        let res = mountain.updateGeometry(this.geometry, this.texture, position,
-            this.count);
-        this.count = res[0];
-        return res[1];
-    }
-
-    /** Create a mesh with material and geometry
-    */
-    createMesh()
-    {
-        this.mesh = new THREE.Mesh(this.geometry, this.texture.texture);
+        return [count, objCollision];
     }
 }

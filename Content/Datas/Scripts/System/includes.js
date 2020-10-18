@@ -102,6 +102,7 @@ document.write(`<script src="Content/Datas/Scripts/System/autotiles.js"></script
 document.write(`<script src="Content/Datas/Scripts/System/sprite.js"></script>`);
 document.write(`<script src="Content/Datas/Scripts/System/sprite-wall.js"></script>`);
 document.write(`<script src="Content/Datas/Scripts/System/mountain.js"></script>`);
+document.write(`<script src="Content/Datas/Scripts/System/mountains.js"></script>`);
 document.write(`<script src="Content/Datas/Scripts/System/object-3d-box.js"></script>`);
 document.write(`<script src="Content/Datas/Scripts/System/object-3d-custom.js"></script>`);
 document.write(`<script src="Content/Datas/Scripts/System/collision-square.js"></script>`);

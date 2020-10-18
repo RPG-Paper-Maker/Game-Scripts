@@ -168,7 +168,7 @@ class SceneMenuEquip extends SceneGame
         this.windowChoicesTabs.onKeyPressedAndRepeat(key);
         if (indexTab !== this.windowChoicesTabs.currentSelectedIndex)
         {
-            await this.updateForTab();
+            this.updateForTab();
         }
 
         // Equipment

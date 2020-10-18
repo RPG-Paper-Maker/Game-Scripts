@@ -25,10 +25,10 @@ class GraphicItem
         this.item = this.gameItem.getItemInformations();
 
         // All the graphics
-        this.graphicName = new GraphicTextIcon(this.item.name(), this
-            .item.pictureID);
-        this.graphicNb = new GraphicText("x" + (RPM.isUndefined(this.nbItem) ? 
-            this.gameItem.nb : this.nbItem), { align: Align.Right });
+        this.graphicName = new GraphicTextIcon(this.item.name(), this.item
+            .pictureID);
+        this.graphicNb = new GraphicText("x" + (RPM.isUndefined(nbItem) ? this
+            .gameItem.nb : nbItem), { align: Align.Right });
         this.graphicInformations = new GraphicSkillItem(this.item);
     }
 

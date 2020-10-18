@@ -10,16 +10,38 @@
 */
 
 /** @class
-*   A portion of the map.
-*   @property {THREE.Vector3} positionOrigin The position of the origin of the
-*   portion.
+*   A portion of the map
+*   @property {THREE.MeshBasicMaterial} BB_MATERIAL
+*   @property {number} realX The real x portion
+*   @property {number} realY The real y portion
+*   @property {number} realZ The real z portion
 *   @property {THREE.Mesh} staticFloorsMesh The mesh used for drawing all the
-*   floors.
-*   @property {THREE.Mesh[]} staticSpritesList List of all the static sprites in
-*   the scene.
-*   @property {MapObject[]} objectsList List of all the objects in the portion.
+*   floors
+*   @property {THREE.Mesh[]} staticSpritesMesh List of all the static sprites in
+*   the scene
+*   @property {number[][][]} squareNonEmpty List of all y floors according to x 
+*   and y square
+*   @property {Object[]} boundingBoxesLands Bounding boxes for lands acording 
+*   to index
+*   @property {Object[]} boundingBoxesSprites Bounding boxes for sprites 
+*   acording to index
+*   @property {Object[]} boundingBoxesMountains Bounding boxes for mountains 
+*   acording to index
+*   @property {Object[]} boundingBoxesObjects3D Bounding boxes for 3D objects 
+*   acording to index
+*   @property {THREE.Mesh[]} staticAutotilesList List of all the static 
+*   autotiles in the map portion
+*   @property {THREE.Mesh[]} staticMountainsList List of all the static 
+*   mountains in the map portion
+*   @property {MapObject[]} objectsList List of all the objects in the portion
 *   @property {THREE.Mesh[]} faceSpritesList List of all the face sprites in the
-*   scene.
+*   scene
+*   @property {THREE.Mesh[]} staticWallsList List of all the static walls in 
+*   the map portion
+*   @property {THREE.Mesh[]} staticObjects3DList List of all the static 3D 
+*   objects in the map portion
+*   @property {number[][]} overflowMountains Position of overflow mountians
+*   @property {THREE.Mesh[]} heroID The hero ID if in this portions
 *   @param {number} realX The real x portion
 *   @param {number} realY The real y portion
 *   @param {number} realZ The real z portion
@@ -68,7 +90,13 @@ class MapPortion
     }
 
     // -------------------------------------------------------
-
+    /** Check collision ray
+    *   @static
+    *   @param {THREE.Vector3} positionBefore The position before collision
+    *   @param {THREE.Vector3} positionAfter The position after collision
+    *   @param {MapObject} object The map object to test collision
+    *   @returns {boolean}
+    */
     static checkCollisionRay(positionBefore, positionAfter, object)
     {
         let direction = new THREE.Vector3();
@@ -133,8 +161,8 @@ class MapPortion
                     {
                         result = mapPortion.checkCollision(jpositionBefore, [
                             jpositionAfter[0] + i, jpositionAfter[1] + j,
-                            jpositionAfter[2] + k], positionBefore, 
-                            positionAfter, object, direction, testedCollisions);
+                            jpositionAfter[2] + k], positionAfter, object, 
+                            direction, testedCollisions);
                         if (result[0])
                         {
                             block = true;
@@ -156,7 +184,7 @@ class MapPortion
 
         // Check collision inside & with other objects
         if (object !== RPM.game.hero && object.checkCollisionObject(RPM.game
-            .hero, positionAfter))
+            .hero))
             {
             return [true, null];
         }
@@ -170,7 +198,7 @@ class MapPortion
                 mapPortion = RPM.currentMap.getMapPortionByPortion([portion[0] +
                     i, portion[1], portion[2] + j]);
                 if (mapPortion !== null && mapPortion.checkObjectsCollision(
-                    object, positionAfter))
+                    object))
                 {
                     return [true, null];
                 }
@@ -243,7 +271,11 @@ class MapPortion
     }
 
     // -------------------------------------------------------
-
+    /** Apply transform for lands bounding box
+    *   @static
+    *   @param {THREE.Mesh} box The mesh bounding box
+    *   @param {number[]} boundingBox The bounding box list parameters
+    */
     static applyBoxLandTransforms(box, boundingBox)
     {
         // Cancel previous geometry transforms
@@ -269,7 +301,11 @@ class MapPortion
     }
 
     // -------------------------------------------------------
-
+    /** Apply transform for sprite bounding box
+    *   @static
+    *   @param {THREE.Mesh} box The mesh bounding box
+    *   @param {number[]} boundingBox The bounding box list parameters
+    */
     static applyBoxSpriteTransforms(box, boundingBox)
     {
         // Cancel previous geometry transforms
@@ -298,7 +334,11 @@ class MapPortion
     }
 
     // -------------------------------------------------------
-
+    /** Apply transform for oriented bounding box
+    *   @static
+    *   @param {THREE.Mesh} box The mesh bounding box
+    *   @param {number[]} boundingBox The bounding box list parameters
+    */
     static applyOrientedBoxTransforms(box, boundingBox)
     {
         let size = Math.floor(boundingBox[3] / Math.sqrt(2));
@@ -324,7 +364,10 @@ class MapPortion
     }
 
     // -------------------------------------------------------
-
+    /** Create a box for bounding box
+    *   @static
+    *   @returns {THREE.Mesh}
+    */
     static createBox()
     {
         let box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), MapPortion
@@ -336,7 +379,10 @@ class MapPortion
     }
 
     // -------------------------------------------------------
-
+    /** Create an oriented box for bounding box
+    *   @static
+    *   @returns {THREE.Mesh}
+    */
     static createOrientedBox()
     {
         let box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), MapPortion
@@ -347,8 +393,9 @@ class MapPortion
         return box;
     }
 
-    /** Read the JSON associated to the map portion.
-    *   @param {Object} json Json object describing the object.
+    // -------------------------------------------------------
+    /** Read the JSON associated to the map portion
+    *   @param {Object} json Json object describing the map portion
     *   @param {boolean} isMapHero Indicates if this map is where the hero is
     *   at the beginning of the game.
     */
@@ -369,8 +416,8 @@ class MapPortion
     }
 
     // -------------------------------------------------------
-    /** Read the JSON associated to the lands in the portion.
-    *   @param {Object} json Json object describing the object.
+    /** Read the JSON associated to the lands in the portion
+    *   @param {Object} json Json object describing the lands
     */
     readLands(json)
     {
@@ -379,8 +426,8 @@ class MapPortion
     }
 
     // -------------------------------------------------------
-    /** Read the JSON associated to the floors in the portion.
-    *   @param {Object} json Json object describing the object.
+    /** Read the JSON associated to the floors in the portion
+    *   @param {Object} json Json object describing the floors
     */
     readFloors(json)
     {
@@ -447,7 +494,7 @@ class MapPortion
 
     // -------------------------------------------------------
     /** Read the JSON associated to the autotiles in the portion
-    *   @param {Object} json Json object describing the object
+    *   @param {Object} json Json object describing the autotiles
     */
     readAutotiles(json)
     {
@@ -512,8 +559,8 @@ class MapPortion
     }
 
     // -------------------------------------------------------
-    /** Read the JSON associated to the sprites in the portion.
-    *   @param {Object} json Json object describing the object.
+    /** Read the JSON associated to the sprites in the portion
+    *   @param {Object} json Json object describing the sprites
     */
     readSprites(json)
     {
@@ -522,9 +569,8 @@ class MapPortion
     }
 
     // -------------------------------------------------------
-
-    /** Read the JSON associated to the sprites in the portion.
-    *   @param {Object} json Json object describing the object.
+    /** Read the JSON associated to the sprites globals in the portion
+    *   @param {Object} json Json object describing the sprites globals
     */
     readSpritesGlobals(json)
     {
@@ -570,8 +616,8 @@ class MapPortion
     }
 
     // -------------------------------------------------------
-    /** Read the JSON associated to the sprites in the portion.
-    *   @param {Object} json Json object describing the object.
+    /** Read the JSON associated to the sprites walls in the portion
+    *   @param {Object} json Json object describing the sprites walls
     */
     readSpritesWalls(json)
     {
@@ -644,8 +690,8 @@ class MapPortion
     }
 
     // -------------------------------------------------------
-    /** Read the JSON associated to the mountains in the portion.
-    *   @param {Object} json Json object describing the object.
+    /** Read the JSON associated to the mountains in the portion
+    *   @param {Object} json Json object describing the mountains
     */
     readMountains(json)
     {
@@ -710,7 +756,7 @@ class MapPortion
 
     // -------------------------------------------------------
     /** Read the JSON associated to the objects 3D in the portion
-    *   @param {Object} json Json object describing the object
+    *   @param {Object} json Json object describing the objects 3D
     */
     readObjects3D(json)
     {
@@ -806,7 +852,7 @@ class MapPortion
 
     // -------------------------------------------------------
     /** Read the JSON associated to the objects in the portion
-    *   @param {Object} json Json object describing the object
+    *   @param {Object} json Json object describing the objects
     *   @param {boolean} isMapHero Indicates if this map is where the hero is
     *   at the beginning of the game
     */
@@ -879,7 +925,6 @@ class MapPortion
     }
 
     // -------------------------------------------------------
-
     /** Remove all the objects from the scene
     */
     cleanAll()
@@ -936,9 +981,9 @@ class MapPortion
     }
 
     // -------------------------------------------------------
-
-    /** Search for the object with the ID.
-    *   @param {number} id The ID of the object.
+    /** Search for the object with the ID
+    *   @param {Object} json Json object describing the objects
+    *   @param {number} id The ID of the object
     *   @returns {MapObject}
     */
     getObjFromID(json, id)
@@ -973,9 +1018,8 @@ class MapPortion
     }
 
     // -------------------------------------------------------
-
-    /** Get hero model.
-    *   @param {Object} json Json object describing the object.
+    /** Get hero model
+    *   @param {Object} json Json object describing the objects
     *   @returns {MapObject}
     */
     getHeroModel(json)
@@ -1000,9 +1044,8 @@ class MapPortion
     }
 
     // -------------------------------------------------------
-
-    /** Update the face sprites orientation.
-    *   @param {number} angle The angle on the Y axis.
+    /** Update the face sprites orientation
+    *   @param {number} angle The angle on the Y axis
     */
     updateFaceSprites(angle)
     {
@@ -1018,9 +1061,9 @@ class MapPortion
     }
 
     // -------------------------------------------------------
-
-    /** Update the face sprites orientation.
-    *   @param {number} angle The angle on the Y axis.
+    /** Update the collision sprite
+    *   @param {Object[]} collisions The collisions objects
+    *   @param {number[]} position The json position of the sprite
     */
     updateCollisionSprite(collisions, position)
     {
@@ -1053,7 +1096,12 @@ class MapPortion
     }
 
     // -------------------------------------------------------
-
+    /** Update the collision sprite
+    *   @param {Object[]} boundingBoxes The bounding boxes list to update 
+    *   @param {Object[]} collisions The collisions objects
+    *   @param {number[]} position The json position of the sprite
+    *   @param {boolean} side Indicate if collision side
+    */
     updateCollision(boundingBoxes, collisions, position, side)
     {
         let i, l, objCollision, centeredPosition, minW, maxW, minH, maxH, minD, 
@@ -1109,7 +1157,11 @@ class MapPortion
     }
 
     // -------------------------------------------------------
-
+    /** Get the object collision according to position
+    *   @param {number[]} positionSource The source json position
+    *   @param {number[]} positionTarget The target json position
+    *   @param {ElementMapKind} kind The element map kind
+    */
     getObjectCollisionAt(positionSource, positionTarget, kind)
     {
         let result = new Array;
@@ -1145,7 +1197,9 @@ class MapPortion
     }
 
     // -------------------------------------------------------
-
+    /** Add a position to non empty
+    *   @param {number[]} position The position to add
+    */
     addToNonEmpty(position)
     {
         this.squareNonEmpty[position[0] % RPM.PORTION_SIZE][position[3] % RPM
@@ -1153,7 +1207,10 @@ class MapPortion
     }
 
     // -------------------------------------------------------
-
+    /** Check if position if in this map portion
+    *   @param {number[]} position The position to check
+    *   @returns {boolean}
+    */
     isPositionIn(position)
     {
         return this.realX === Math.floor(position[0] / RPM.PORTION_SIZE) && this
@@ -1162,12 +1219,18 @@ class MapPortion
     }
 
     // -------------------------------------------------------
-
-    /** Check if there is a collision at this position.
+    /** Check if there is a collision at this position
+    *   @param {number[]} jpositionBefore The json position before collision
+    *   @param {number[]} jpositionAfter The json position after collision
+    *   @param {THREE.Vector3} positionAfter The position after collision
+    *   @param {MapObject} object The map object collision test
+    *   @param {THREE.Vector3} direction The direction collision
+    *   @param {Object[]} testedCollisions The object collisions that were 
+    *   already tested
     *   @returns {boolean}
     */
-    checkCollision(jpositionBefore, jpositionAfter, positionBefore, 
-        positionAfter, object, direction, testedCollisions)
+    checkCollision(jpositionBefore, jpositionAfter, positionAfter, object, 
+        direction, testedCollisions)
     {
         // Check mountain collision first for elevation
         let result = this.checkMountainsCollision(jpositionAfter, positionAfter,
@@ -1186,8 +1249,14 @@ class MapPortion
     }
 
     // -------------------------------------------------------
-    /** Check if there is a collision with floors at this position.
-    *   @returns {boolean}
+    /** Check if there is a collision with lands at this position
+    *   @param {number[]} jpositionBefore The json position before collision
+    *   @param {number[]} jpositionAfter The json position after collision
+    *   @param {MapObject} object The map object collision test
+    *   @param {THREE.Vector3} direction The direction collision
+    *   @param {Object[]} testedCollisions The object collisions that were 
+    *   already tested
+    *   @returns {boolean} 
     */
     checkLandsCollision(jpositionBefore, jpositionAfter, object, direction, 
         testedCollisions)
@@ -1221,9 +1290,12 @@ class MapPortion
         return false;
     }
 
-    // -------------------------------------------------------
-    /** Check if there is a collision with floors at this position.
-    *   @returns {boolean}
+   // -------------------------------------------------------
+    /** Check if there is a collision with lands with directions
+    *   @param {number[]} jpositionBefore The json position before collision
+    *   @param {number[]} jpositionAfter The json position after collision
+    *   @param {THREE.Vector3} direction The direction collision
+    *   @returns {boolean} 
     */
     checkLandsCollisionInside(jpositionBefore, jpositionAfter, direction)
     {
@@ -1250,6 +1322,9 @@ class MapPortion
 
     // -------------------------------------------------------
     /** Check intersection between ray and an object
+    *   @param {Object} collision The collision object
+    *   @param {number[]} boundingBox The bounding box values
+    *   @param {MapObject} object The map object to check
     *   @returns {boolean}
     */
     checkIntersectionLand(collision, boundingBox, object)
@@ -1265,6 +1340,12 @@ class MapPortion
 
     // -------------------------------------------------------
     /** Check directions
+    *   @param {number[]} jpositionBefore The json position before collision
+    *   @param {number[]} jpositionAfter The json position after collision
+    *   @param {Object} collision The collision object
+    *   @param {number[]} boundingBox The bounding box values
+    *   @param {THREE.Vector3} direction The direction collision
+    *   @param {MapObject} object The map object collision test
     *   @returns {boolean}
     */
     checkDirections(jpositionBefore, jpositionAfter, collision, boundingBox, 
@@ -1301,7 +1382,11 @@ class MapPortion
     }
 
     // -------------------------------------------------------
-    /** Check directions
+    /** Check directions inside
+    *   @param {number[]} jpositionBefore The json position before collision
+    *   @param {number[]} jpositionAfter The json position after collision
+    *   @param {Object} collision The collision object
+    *   @param {THREE.Vector3} direction The direction collision
     *   @returns {boolean}
     */
     checkDirectionsInside(jpositionBefore, jpositionAfter, collision, direction)
@@ -1334,7 +1419,11 @@ class MapPortion
     }
 
     // -------------------------------------------------------
-    /** Check if there is a collision with sprites at this position.
+    /** Check if there is a collision with sprites at this position
+    *   @param {number[]} jpositionAfter The json position after collision
+    *   @param {Object[]} testedCollisions The object collisions that were 
+    *   already tested
+    *   @param {MapObject} object The map object collision test
     *   @returns {boolean}
     */
     checkSpritesCollision(jpositionAfter, testedCollisions, object)
@@ -1363,6 +1452,9 @@ class MapPortion
 
     // -------------------------------------------------------
     /** Check intersection between ray and an object
+    *   @param {number[]} boundingBox The bounding box values
+    *   @param {boolean} fix Indicate if the sprite is fix or not
+    *   @param {MapObject} object The map object collision test
     *   @returns {boolean}
     */
     checkIntersectionSprite(boundingBox, fix, object)
@@ -1376,8 +1468,7 @@ class MapPortion
             MapPortion.applyBoxSpriteTransforms(RPM.BB_BOX, boundingBox);
             return CollisionsUtilities.obbVSobb(object.currentBoundingBox
                 .geometry, RPM.BB_BOX.geometry);
-        }
-        else
+        } else
         {
             MapPortion.applyOrientedBoxTransforms(RPM.BB_ORIENTED_BOX, 
                 boundingBox);
@@ -1388,6 +1479,10 @@ class MapPortion
 
     // -------------------------------------------------------
     /** Check if there is a collision with sprites at this position
+    *   @param {number[]} jpositionAfter The json position after collision
+    *   @param {Object[]} testedCollisions The object collisions that were 
+    *   already tested
+    *   @param {MapObject} object The map object collision test
     *   @returns {boolean}
     */
     checkObjects3DCollision(jpositionAfter, testedCollisions, object)
@@ -1416,6 +1511,11 @@ class MapPortion
 
     // -------------------------------------------------------
     /** Check if there is a collision with mountains at this position
+    *   @param {number[]} jpositionAfter The json position after collision
+    *   @param {THREE.Vector3} positionAfter The position after collision
+    *   @param {Object[]} testedCollisions The object collisions that were 
+    *   already tested
+    *   @param {MapObject} object The map object collision test
     *   @returns {boolean}
     */
     checkMountainsCollision(jpositionAfter, positionAfter, testedCollisions, 
@@ -1469,6 +1569,14 @@ class MapPortion
 
     // -------------------------------------------------------
     /** Check if there is a collision with mountains at this position
+    *   @param {number[]} jpositionAfter The json position after collision
+    *   @param {THREE.Vector3} positionAfter The position after collision
+    *   @param {Object[]} testedCollisions The object collisions that were 
+    *   already tested
+    *   @param {MapObject} object The map object collision test
+    *   @param {Object} objCollision The object collision
+    *   @param {number} yMountain The y mountain collision
+    *   @param {boolean} block The block mountain collision
     *   @returns {boolean}
     */
     checkMountainCollision(jpositionAfter, positionAfter, testedCollisions, 
@@ -1500,7 +1608,13 @@ class MapPortion
     }
 
     // -------------------------------------------------------
-
+    /** Check intersection with a mountain
+    *   @param {number[]} jpositionAfter The json position after collision
+    *   @param {THREE.Vector3} positionAfter The position after collision
+    *   @param {Object} objCollision The object collision
+    *   @param {MapObject} object The map object collision test
+    *   @returns {boolean}
+    */
     checkIntersectionMountain(jpositionAfter, positionAfter, objCollision, 
         object)
     {
@@ -1705,23 +1819,25 @@ class MapPortion
 
     // -------------------------------------------------------
     /** Check collision with objects
+    *   @param {MapObject} object The map object collision test
     *   @returns {boolean}
     */
-    checkObjectsCollision(object, position)
+    checkObjectsCollision(object)
     {
         let datas = RPM.currentMap.getObjectsAtPortion(this.realX, this.realY,
             this.realZ);
-
-        return this.checkObjectsCollisionList(this.objectsList, object, position
-            ) || this.checkObjectsCollisionList(datas.min, object, position) ||
-            this.checkObjectsCollisionList(datas.mout, object, position);
+        return this.checkObjectsCollisionList(this.objectsList, object) || this
+            .checkObjectsCollisionList(datas.min, object) || this
+            .checkObjectsCollisionList(datas.mout, object);
     }
 
     // -------------------------------------------------------
     /** Check collision with objects
+    *   @param {MapObject[]} list The map objects list to test
+    *   @param {MapObject} object The map object collision test
     *   @returns {boolean}
     */
-    checkObjectsCollisionList(list, object, position)
+    checkObjectsCollisionList(list, object)
     {
         let obj;
         for (let i = 0, l = list.length; i < l; i++)
@@ -1729,7 +1845,7 @@ class MapPortion
             obj = list[i];
             if (obj !== object && object.isInRect(obj))
             {
-                if (object.checkCollisionObject(obj, position))
+                if (object.checkCollisionObject(obj))
                 {
                     return true;
                 }

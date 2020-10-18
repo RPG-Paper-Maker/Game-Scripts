@@ -11,6 +11,10 @@
 
 /** @class
 *   A 3D object custom in the map
+*   @property {number} id The ID
+*   @property {SystemObject3D} datas The system object 3D
+*   @param {Object} json Json object describing the object 3D custom
+*   @param {SystemObject3D} datas The system object 3D
 */
 class Object3DCustom extends MapElement
 {
@@ -24,6 +28,11 @@ class Object3DCustom extends MapElement
         }
     }
 
+    // -------------------------------------------------------
+    /** Read the JSON associated to the object 3D custom
+    *   @param {Object} json Json object describing the object 3D custom
+    *   @param {SystemObject3D} datas The system object 3D
+    */
     read(json, datas)
     {
         super.read(json);
@@ -32,12 +41,15 @@ class Object3DCustom extends MapElement
         this.datas = datas;
     }
 
-    /** Update the geometry of a group of sprite walls with the same material
-    *   @param {THREE.Geometry} geometry of the sprites walls
-    *   @param {number[]} position The position of the wall
-    *   @return {number}
+    // -------------------------------------------------------
+    /** Update the geometry of a group of objects 3D cutom with the same 
+    *   material
+    *   @param {THREE.Geometry} geometry Geometry of the object 3D custom
+    *   @param {number[]} position The json position of the object 3D custom
+    *   @param {number} count The faces count
+    *   @return {any[]}
     */
-    updateGeometry(geometry, position, c)
+    updateGeometry(geometry, position, count)
     {
         let localPosition = RPM.positionToVector3(position);
         let modelGeometry = RPM.datasGame.shapes.get(CustomShapeKind.OBJ, this
@@ -88,9 +100,9 @@ class Object3DCustom extends MapElement
             geometry.vertices.push(vecA);
             geometry.vertices.push(vecB);
             geometry.vertices.push(vecC);
-            geometry.faces.push(new THREE.Face3(c, c + 1, c + 2));
+            geometry.faces.push(new THREE.Face3(count, count + 1, count + 2));
             geometry.faceVertexUvs[0].push(face);
-            c += 3;
+            count += 3;
         }
 
         // Collisions
@@ -103,7 +115,6 @@ class Object3DCustom extends MapElement
             let d = obj.d * scale;
             let minPos = obj.minVertex.clone();
             minPos.multiply(scaleVec);
-
             objCollision.push({
                 p: position,
                 l: localPosition,
@@ -128,6 +139,6 @@ class Object3DCustom extends MapElement
                 k: true
             });
         }
-        return [c, objCollision];
+        return [count, objCollision];
     }
 }

@@ -30,13 +30,14 @@ class Frame
     // -------------------------------------------------------
     /** Update frame according to tick and duration, return true if frame is 
     *   different
+    *   @param {number} [duration=this.duration] The frame duration
     *   @returns {boolean}
     */
-    update()
+    update(duration = this.duration)
     {
         let frame = this.value;
         this.tick += RPM.elapsedTime;
-        if (this.tick >= this.duration)
+        if (this.tick >= duration)
         {
             this.value = (this.value + 1) % RPM.FRAMES;
             this.tick = 0;

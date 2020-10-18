@@ -11,22 +11,51 @@
 
 /** @class
 *   Element movable in local map
-*   @property {SystemObject} system System infos
-*   @property {number} speed Speed coef
-*   @property {Orientation} orientationEye Where the character is looking
+*   @property {number} [MapObject.SPEED_NORMAL=0.004666] Normal speed coef
+*   @property {SystemObject} system The system infos
+*   @property {THREE.Vector3} position The current object position
+*   @property {THREE.Vector3} previousPosition The previous position before 
+*   last move
 *   @property {THREE.Mesh} mesh The current mesh used for this object
-*   @param {THREE.Mesh} mesh The current mesh used for this object
-*   @param {SystemObject} system System infos
+*   @property {THREE.Mesh[]} meshBoundingBox The meshs bounding box used for 
+*   collisions
+*   @property {THREE.Mesh} currentBoundingBox The current bounding box mesh
+*   @property {Object} boundingBoxSettings The bounding box settings
+*   @property {Frame} frame The animation move frame
+*   @property {Orientation} orientationEye Orientation where the character is 
+*   looking at
+*   @property {Orientation} orientation The orientation according to camera
+*   @property {number} width The width by number of squares
+*   @property {number} height The height by number of squares
+*   @property {boolean} moving Indicate if the object is moving
+*   @property {number} moveFrequencyTick The move frequency tick
+*   @property {boolean} isHero Indicate if this obejct is the hero
+*   @property {boolean} isStartup Indicate if this object is a startup
+*   @property {boolean} isInScene Indicate if this object mesh is in the scene
+*   @property {boolean} receivedOneEvent Indicate if this object receive one 
+*   event per frame
+*   @property {Object} movingState The current state (for moving command)
+*   @property {Orientation} previousOrientation The previous orientation before 
+*   last move
+*   @property {EventCommandMoveObject} otherMoveCommand The other move command 
+*   for calculating diagonal move
+*   @property {number} yMountain The last y mountain pixel
+*   @property {number[]} properties The properties values according to ID 
+*   @property {Object[]} statesInstance The states instances values according 
+*   to ID
+*   @property {any[][]} timeEventsEllapsed Informations about time events
+*   @property {number[]} states The states IDs  
+*   @property {SystemObjectState} currentState The current system object state
+*   @property {Object} currentStateInstance The current instance object state
+*   @property {SystemValue} speed Speed coef
+*   @property {SystemValue} frequency Frequency value
+*   @param {SystemObject} system The system informations
+*   @param {THREE.Vector3} position The current object position
+*   @param {boolean} isHero Indicate if the object is the hero
 */
 class MapObject
 {
-    /** Normal speed coef.
-    *   @constant
-    *   @static
-    *   @default 0.004666
-    */
     static SPEED_NORMAL = 0.004666;
-    static FRAME_DURATION = 150;
 
     constructor(system, position, isHero)
     {
@@ -37,15 +66,12 @@ class MapObject
         this.meshBoundingBox = null;
         this.currentBoundingBox = null;
         this.boundingBoxSettings = null;
-        this.frame = 0;
+        this.frame = new Frame(0);
         this.orientationEye = Orientation.South;
         this.orientation = this.orientationEye;
         this.width = 1;
         this.height = 1;
         this.moving = false;
-        this.movingHorizontal = null;
-        this.movingVertical = null;
-        this.frameTick = 0;
         this.moveFrequencyTick = 0;
         this.isHero = RPM.defaultValue(isHero, false);
         this.isStartup = RPM.isUndefined(position);
@@ -63,13 +89,13 @@ class MapObject
     }
 
     // -------------------------------------------------------
-    /** Update the object with a particular ID.
+    /** Update the object with a particular ID
     *   @static
-    *   @param {MapObject} object This object.
-    *   @param {number} objectID The object ID searched.
-    *   @param {Object} base The base module for the callback.
+    *   @param {MapObject} object This object
+    *   @param {number} objectID The object ID searched
+    *   @param {Object} base The base module for the callback
     *   @param {function} callback The function to call after having found the
-    *   object.
+    *   object
     */
     static async updateObjectWithID(object, objectID, base, callback) 
     {
@@ -97,7 +123,14 @@ class MapObject
     }
 
     // -------------------------------------------------------
-
+    /** Get the direct object and portion
+    *   @static
+    *   @param {MapObject} object This object
+    *   @param {number} objectID The object ID searched
+    *   @param {Object} base The base module for the callback
+    *   @param {function} callback The function to call after having found the
+    *   object
+    */
     static async getObjectAndPortion(object, objectID, base, callback) 
     {
         switch (objectID)
@@ -179,6 +212,9 @@ class MapObject
         }
     }
 
+    // -------------------------------------------------------
+    /** Initialize objet properties
+    */
     initializeProperties()
     {
         let mapProp, mapStatesOpts;
@@ -244,6 +280,9 @@ class MapObject
         }
     }
 
+    // -------------------------------------------------------
+    /** Initialize time events (reactions to event time)
+    */
     initializeTimeEvents()
     {
         let l = this.system.timeEvents.length;
@@ -255,6 +294,9 @@ class MapObject
         }
     }
 
+    // -------------------------------------------------------
+    /** Update time events
+    */
     updateTimeEvents() 
     {
         // First run detection state
@@ -295,7 +337,8 @@ class MapObject
         }
     }
 
-    /** Update the current state (graphics to display). Also update the mesh.
+    // -------------------------------------------------------
+    /** Update the current state (graphics to display), also update the mesh
     */
     changeState()
     {
@@ -363,7 +406,7 @@ class MapObject
             this.speed = RPM.datasGame.system.speeds[this.currentState.speedID];
             this.frequency = RPM.datasGame.system.frequencies[this.currentState
                 .frequencyID];
-            this.frame = this.currentStateInstance.indexX >= RPM.FRAMES ? RPM
+            this.frame.value = this.currentStateInstance.indexX >= RPM.FRAMES ? RPM
                 .FRAMES - 1 : this.currentStateInstance.indexX;
             this.orientationEye = this.currentStateInstance.indexY;
             this.updateOrientation();
@@ -419,8 +462,9 @@ class MapObject
         this.addToScene();
     }
 
-    /** Read the JSON associated to the object.
-    *   @param {Object} json Json object describing the object.
+    // -------------------------------------------------------
+    /** Read the JSON associated to the object
+    *   @param {Object} json Json object describing the object
     */
     read(json)
     {
@@ -428,9 +472,11 @@ class MapObject
         this.system = new SystemObject(json.v);
     }
 
-    /** Simulate moving object position.
-    *   @param {Orientation} orientation Where to move.
-    *   @param {number} distance The distance.
+    // -------------------------------------------------------
+    /** Simulate moving object position
+    *   @param {Orientation} orientation The orientation to move
+    *   @param {number} distance The distance
+    *   @param {number} angle The angle
     *   @returns {THREE.Vector3}
     */
     getFuturPosition(orientation, distance, angle)
@@ -549,7 +595,10 @@ class MapObject
     }
 
     // -------------------------------------------------------
-
+    /** Check collision with another object
+    *   @param {MapObject} object The other map object
+    *   @returns {boolean}
+    */
     checkCollisionObject(object)
     {
         let i, j, l, m;
@@ -568,7 +617,9 @@ class MapObject
     }
 
     // -------------------------------------------------------
-
+    /** Check the collision detection
+    *   @returns {THREE.Vector3}
+    */
     checkCollisionDetection()
     {
         let i, l;
@@ -597,7 +648,10 @@ class MapObject
     }
 
     // -------------------------------------------------------
-
+    /** Check if two objects can be in the same floor rect (need test collision)
+    *   @param {MapObject} object The other map object
+    *   @returns {boolean}
+    */
     isInRect(object)
     {
         return (this.position.x - Math.floor(this.width * RPM.SQUARE_SIZE / 2)) 
@@ -611,8 +665,8 @@ class MapObject
     }
 
     // -------------------------------------------------------
-    /** Only updates the bounding box mesh position.
-    *   @param {THREE.Vector3} position Position to update.
+    /** Only updates the bounding box mesh position
+    *   @param {THREE.Vector3} position Position to update
     */
     updateBB(position)
     {
@@ -697,11 +751,13 @@ class MapObject
     }
 
     // -------------------------------------------------------
-
-    /** Move the object (one step).
-    *   @param {Orientation} orientation Where to move.
-    *   @param {number} limit Max distance to go.
-    *   @returns {number} Distance cross.
+    /** Move the object (one step)
+    *   @param {Orientation} orientation Orientation to move
+    *   @param {number} limit Max distance to go
+    *   @param {number} angle The angle
+    *   @param {number} isCameraOrientation Indicate if this should take 
+    *   account of camera orientation
+    *   @returns {number[]}
     */
     move(orientation, limit, angle, isCameraOrientation)
     {
@@ -777,7 +833,8 @@ class MapObject
     }
 
     // -------------------------------------------------------
-
+    /** Remove datas move temp
+    */
     removeMoveTemp()
     {
         if (!this.isHero)
@@ -820,7 +877,8 @@ class MapObject
     }
 
     // -------------------------------------------------------
-
+    /** Add to datas move temp
+    */
     addMoveTemp()
     {
         if (!this.isHero)
@@ -852,7 +910,8 @@ class MapObject
     }
 
     // -------------------------------------------------------
-
+    /** Add object mesh to scene
+    */
     addToScene()
     {
         if (!this.isInScene && this.mesh !== null)
@@ -863,7 +922,8 @@ class MapObject
     }
 
     // -------------------------------------------------------
-
+    /** Add bounding boxes mesh to scene
+    */
     addBBToScene()
     {
         if (RPM.datasGame.system.showBB)
@@ -876,7 +936,8 @@ class MapObject
     }
 
     // -------------------------------------------------------
-
+    /** remove object mesh from scene
+    */
     removeFromScene()
     {
         if (this.isInScene)
@@ -888,7 +949,8 @@ class MapObject
     }
 
     // -------------------------------------------------------
-
+    /** Remove bounding boxes mesh from scene
+    */
     removeBBFromScene()
     {
         if (RPM.datasGame.system.showBB)
@@ -902,15 +964,16 @@ class MapObject
     }
 
     // -------------------------------------------------------
-
-    /** Receive an event.
-    *   @param {MapObject} sender The sender of this event.
-    *   @param {boolean} isSystem Boolean indicating if it is an event system.
-    *   @param {number} eventId ID of the event.
-    *   @param {SystemParameter[]} parameters List of all the parameters.
-    *   @param {numbers[]} states List of all the current states of the object.
+    /** Receive an event
+    *   @param {MapObject} sender The sender of this event
+    *   @param {boolean} isSystem Indicate if it is an event system
+    *   @param {number} eventID The event ID
+    *   @param {SystemParameter[]} parameters List of all the parameters
+    *   @param {number[]} states List of all the current states of the object
+    *   @param {number[]} event The time events list
+    *   @returns {boolean}
     */
-    receiveEvent(sender, isSystem, idEvent, parameters, states, event)
+    receiveEvent(sender, isSystem, eventID, parameters, states, event)
     {
         // Option only one event per frame
         if (this.system.eventFrame && this.receivedOneEvent)
@@ -923,7 +986,7 @@ class MapObject
         for (i = 0, l = states.length; i < l; i++)
         {
             state = states[i];
-            reactions = this.system.getReactions(isSystem, idEvent, states[i], 
+            reactions = this.system.getReactions(isSystem, eventID, states[i], 
                 parameters);
             for (j = 0, m = reactions.length; j < m; j++)
             {
@@ -941,7 +1004,8 @@ class MapObject
     }
 
     // -------------------------------------------------------
-    /** Update the object graphics
+    /** Update according to camera angle
+    *   @param {number} angle The camera angle
     */
     update(angle)
     {
@@ -957,25 +1021,20 @@ class MapObject
         // Graphic updates
         if (this.mesh !== null)
         {
-            let frame = this.frame;
+            let frame = false;
             let orientation = this.orientation;
             if (this.moving)
             {
                 // If moving, update frame
                 if (this.currentState.moveAnimation)
                 {
-                    this.frameTick += RPM.elapsedTime;
-                    if (this.frameTick >= (RPM.datasGame.system.mapFrameDuration
-                        .getValue() / this.speed.getValue()))
-                    {
-                        this.frame = (this.frame + 1) % RPM.FRAMES;
-                        this.frameTick = 0;
-                    }
+                    frame = this.frame.update(RPM.datasGame.system
+                        .mapFrameDuration.getValue() / this.speed.getValue());
                 }
 
                 // Update mesh position
-                let offset = (this.currentState.pixelOffset && this.frame % 2 
-                    !== 0) ? 1 : 0;
+                let offset = (this.currentState.pixelOffset && this.frame.value 
+                    % 2 !== 0) ? 1 : 0;
                 this.mesh.position.set(this.position.x, this.position.y + offset
                     , this.position.z);
                 //this.updateBBPosition(this.position);
@@ -983,7 +1042,7 @@ class MapObject
                 this.previousPosition = this.position;
             } else
             {
-                this.frame = this.currentStateInstance.indexX;
+                this.frame.value = this.currentStateInstance.indexX;
 
                 // Update angle
                 if (this.currentState.setWithCamera)
@@ -998,7 +1057,7 @@ class MapObject
             this.updateAngle(angle);
 
             // Update mesh
-            if (frame !== this.frame || orientation !== this.orientation)
+            if (frame || orientation !== this.orientation)
             {
                 this.updateUVs();
             }
@@ -1013,7 +1072,8 @@ class MapObject
     }
 
     // -------------------------------------------------------
-
+    /** Update moving state
+    */
     updateMovingState()
     {
         if (!this.removed && this.currentState && this.currentState
@@ -1029,28 +1089,8 @@ class MapObject
     }
 
     // -------------------------------------------------------
-
-    /** Update the move states to know if diagonal move is needed.
-    */
-    updateMoveStates(orientation)
-    {
-        /*
-        switch (orientation) {
-        case Orientation.South:
-        case Orientation.North:
-            this.movingVertical = orientation;
-            break;
-        case Orientation.West:
-        case Orientation.East:
-            this.movingHorizontal = orientation;
-            break;
-        }*/
-    }
-
-    // -------------------------------------------------------
-
-    /** Update the Y angle (for face sprites).
-    *   @param {number} angle The angle on the Y axis.
+    /** Update sprite faces angles
+    *   @param {number} angle The camera angle
     */
     updateAngle(angle)
     {
@@ -1070,8 +1110,7 @@ class MapObject
     }
 
     // -------------------------------------------------------
-
-    /** Update the UVs coordinates according to frame and orientation.
+    /** Update the UVs coordinates according to frame and orientation
     */
     updateUVs()
     {
@@ -1093,8 +1132,8 @@ class MapObject
                 {
                     w = this.width * RPM.SQUARE_SIZE / textureWidth;
                     h = this.height * RPM.SQUARE_SIZE / textureHeight;
-                    x = (this.frame >= RPM.FRAMES ? RPM.FRAMES - 1 : this.frame)
-                        * w;
+                    x = (this.frame.value >= RPM.FRAMES ? RPM.FRAMES - 1 : this
+                        .frame.value) * w;
                     y = this.orientation * h;
                 }
                 let coefX = RPM.COEF_TEX / textureWidth;
@@ -1117,8 +1156,7 @@ class MapObject
     }
 
     // -------------------------------------------------------
-
-    /** Update the material.
+    /** Update the material
     */
     updateMaterial()
     {
@@ -1134,14 +1172,18 @@ class MapObject
     }
 
     // -------------------------------------------------------
-
+    /** Get the state index
+    *   @returns {number}
+    */
     getStateIndex()
     {
-        return this.frame + (this.orientation * RPM.FRAMES);
+        return this.frame.value + (this.orientation * RPM.FRAMES);
     }
 
     // -------------------------------------------------------
-
+    /** Check if graphics is none
+    *   @returns {boolean}
+    */
     isNone()
     {
         return this.currentState.graphicKind === ElementMapKind.None || this

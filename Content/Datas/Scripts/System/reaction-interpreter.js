@@ -10,23 +10,30 @@
 */
 
 /** @class
-*   A reaction command interpreter.
+*   A reaction command interpreter
 *   @property {MapObject} currentSender Current event sender (null for system
-*   events).
+*   events)
 *   @property {SystemReaction} currentReaction Current reaction excecuted (only
-*   one per state).
-*   @property {MapObject} currentMapObject Current map object.
-*   @property {number} currentState Current state of map object reaction.
-*   @property {Node} currentCommand A node of a command Reaction.
-*   @property {Object} currentCommandState Current state of the current command.
-*   @param {MapObject} sender Current event sender (null for system
-*   events).
-*   @param {SystemReaction} reaction Current reaction excecuted (only
-*   one per state).
-*   @param {MapObject} object Current map object.
-*   @param {number} state Current state of map object reaction.
-*   @param {SystemParameter[]} parameters All the parameters coming with
-*   this reaction.
+*   one per state)
+*   @property {MapObject} currentMapObject Current map object
+*   @property {number} currentState Current state of map object reaction
+*   @property {SystemParameter[]} currentParameters All the parameters coming 
+*   with this reaction
+*   @property {Node} currentCommand A node of a command reaction
+*   @property {Object} currentCommandState Current state of the current command
+*   @property {number[]} currentTimeState The current time events
+*   @property {boolean} isInMainMenu Indicate if this reaction was executed in 
+*   main menu
+*   @param {MapObject} sender Current event sender (null for system events)
+*   @param {SystemReaction} reaction Current reaction excecuted (only one per 
+*   state)
+*   @param {MapObject} object Current map object
+*   @param {number} state Current state of map object reaction
+*   @param {SystemParameter[]} parameters All the parameters coming with this 
+*   reaction
+*   @param {number[]} event The current time events
+*   @param {EventCommand} [command=reaction.getFirstCommand()] The current 
+*   command (by default the first reaction command)
 */
 class ReactionInterpreter
 {
@@ -46,8 +53,9 @@ class ReactionInterpreter
         RPM.requestPaintHUD = true;
     }
 
+    // -------------------------------------------------------
     /** Check if the current reaction is finished (no more commands to
-    *   excecute).
+    *   excecute)
     *   @returns {boolean}
     */
     isFinished()
@@ -55,11 +63,18 @@ class ReactionInterpreter
         return (this.currentCommand === null)
     }
 
+    // -------------------------------------------------------
+    /** Check if the command can be executed
+    *   @returns {boolean}
+    */
     canExecute()
     {
         return this.isInMainMenu || this.isInMainMenu === RPM.isInMainMenu;
     }
 
+    // -------------------------------------------------------
+    /** Update current object and parameters (for variables)
+    */
     updateObjectParameters()
     {
         // Update global variables for getValue()
@@ -68,7 +83,8 @@ class ReactionInterpreter
     }
 
     // -------------------------------------------------------
-
+    /** Update if finished
+    */
     updateFinish()
     {
         if (this.currentTimeState)
@@ -82,8 +98,7 @@ class ReactionInterpreter
     }
 
     // -------------------------------------------------------
-
-    /** Update the current commands.
+    /** Update the current commands
     */
     update()
     {
@@ -127,7 +142,7 @@ class ReactionInterpreter
     }
 
     // -------------------------------------------------------
-    /** Update a command and return the next command to excecute (if finished).
+    /** Update a command and return the next command to excecute (if finished)
     *   @returns {Node}
     */
     updateCommand()
@@ -205,9 +220,10 @@ class ReactionInterpreter
 
     // -------------------------------------------------------
     /** Update a command that corresponds to the end of a block and return the
-    *   next command to excecute (if finished).
-    *   @param {Node} command The command before updating.
-    *   @returns {Node} value The next command after updating.
+    *   next command to excecute (if finished)
+    *   @param {Node} command The command before updating
+    *   @param {Node} value The next command after updating
+    *   @returns {Node}
     */
     endOfBlock(command, value)
     {
@@ -245,8 +261,8 @@ class ReactionInterpreter
     }
 
     // -------------------------------------------------------
-    /** After the end of a block, go to the next command.
-    *   @param {Node} command The command before updating.
+    /** After the end of a block, go to the next command
+    *   @param {Node} command The command before updating
     *   @returns {Node}
     */
     goToNextCommand(node)
@@ -260,21 +276,8 @@ class ReactionInterpreter
     }
 
     // -------------------------------------------------------
-    /**
-    */
-    updateObjectMoveState()
-    {
-        if (!this.isFinished() && this.currentMapObject && this.currentCommand
-            .data instanceof EventCommandMoveObject)
-        {
-            this.currentMapObject.updateMoveStates(this.currentCommand.data.
-                getCurrentOrientation(this.currentCommandState));
-        }
-    }
-
-    // -------------------------------------------------------
-    /** First key press handle for the current command.
-    *   @param {number} key The key ID pressed.
+    /** First key press handle for the current command
+    *   @param {number} key The key ID pressed
     */
     onKeyPressed(key)
     {
@@ -285,8 +288,8 @@ class ReactionInterpreter
     }
 
     // -------------------------------------------------------
-    /** First key release handle for the current command.
-    *   @param {number} key The key ID released.
+    /** First key release handle for the current command
+    *   @param {number} key The key ID released
     */
     onKeyReleased(key)
     {
@@ -297,9 +300,9 @@ class ReactionInterpreter
     }
 
     // -------------------------------------------------------
-    /** Key pressed repeat handle for the current command.
-    *   @param {number} key The key ID pressed.
-    *   @returns {boolean} false if the other keys are blocked after it.
+    /** Key pressed repeat handle for the current command
+    *   @param {number} key The key ID pressed
+    *   @returns {boolean} false if the other keys are blocked after it
     */
     onKeyPressedRepeat(key)
     {
@@ -312,10 +315,10 @@ class ReactionInterpreter
     }
 
     // -------------------------------------------------------
-    /** Key pressed repeat handle for the current command, but with
-    *   a small wait after the first pressure (generally used for menus).
-    *   @param {number} key The key ID pressed.
-    *   @returns {boolean} false if the other keys are blocked after it.
+    /** Key pressed repeat handle for the current command, but with a small 
+    *   wait after the first pressure (generally used for menus)
+    *   @param {number} key The key ID pressed
+    *   @returns {boolean} false if the other keys are blocked after it
     */
     onKeyPressedAndRepeat(key)
     {
@@ -328,8 +331,7 @@ class ReactionInterpreter
     }
 
     // -------------------------------------------------------
-    /** Draw HUD for the current command.
-    *   @param {Canvas.Context} context The canvas context.
+    /** Draw HUD for the current command
     */
     drawHUD()
     {

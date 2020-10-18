@@ -28,6 +28,7 @@ class Node
         this.next = null;
     }
 
+    // -------------------------------------------------------
     /** Add a new child
     *   @param {Object} data Data of the new child
     *   @returns {Node} The new child
@@ -46,6 +47,7 @@ class Node
         return node;
     }
 
+    // -------------------------------------------------------
     /** Check if this node is the root of the tree
     *   @returns {boolean}
     */
@@ -54,6 +56,7 @@ class Node
         return this.parent === null;
     }
 
+    // -------------------------------------------------------
     /** Get the next parent child
     *   @returns {Node}
     */

@@ -11,6 +11,17 @@
 
 /** @class
 *   A 3D object box in the map
+*   @extends MapElement
+*   @property {THREE.Vector3[]} Object3DBox.VERTICES A box local vertices
+*   @property {THREE.Vector3[]} Object3DBox.NB_VERTICES A number of vertices
+*   @property {number[][]} Object3DBox.TEXTURES A textures values
+*   @property {number[]} Object3DBox.TEXTURES_VALUES The textures coordinates 
+*   values
+*   @property {number[]} Object3DBox.INDEXES The texture indexes
+*   @property {number} id The ID
+*   @property {SystemObject3D} datas The system object 3D
+*   @param {Object} json Json object describing the object 3D custom
+*   @param {SystemObject3D} datas The system object 3D
 */
 class Object3DBox extends MapElement
 {
@@ -51,9 +62,7 @@ class Object3DBox extends MapElement
         new THREE.Vector3(1.0, 1.0, 1.0),
         new THREE.Vector3(0.0, 1.0, 1.0)
     ];
-    
     static NB_VERTICES = 24;
-    
     static TEXTURES = [
         // Front
         [1, 5],
@@ -91,11 +100,9 @@ class Object3DBox extends MapElement
         [2, 5],
         [1, 5]
     ];
-    
     static TEXTURES_VALUES = [
         0.0, 0.25, 0.5, 0.75, 1.0, 0.333333333333333, 0.666666666666666, 1.0
     ];
-    
     static INDEXES = [
         0, 1, 2, 0, 2, 3,
         4, 5, 6, 4, 6, 7,
@@ -115,6 +122,11 @@ class Object3DBox extends MapElement
         }
     }
 
+    // -------------------------------------------------------
+    /** Read the JSON associated to the object 3D box
+    *   @param {Object} json Json object describing the object 3D box
+    *   @param {SystemObject3D} datas The system object 3D
+    */
     read(json, datas)
     {
         super.read(json);
@@ -123,12 +135,14 @@ class Object3DBox extends MapElement
         this.datas = datas;
     }
 
-    /** Update the geometry of a group of sprite walls with the same material.
-    *   @param {THREE.Geometry} geometry of the sprites walls.
-    *   @param {number[]} position The position of the wall.
-    *   @return {number}
+    // -------------------------------------------------------
+    /** Update the geometry of a group of object 3D with the same material
+    *   @param {THREE.Geometry} geometry Geometry of the object 3D
+    *   @param {number[]} position The position of object 3D
+    *   @param {number} count The faces count
+    *   @return {any[]}
     */
-    updateGeometry(geometry, position, c)
+    updateGeometry(geometry, position, count)
     {
         let coef = 0.01;
         let localPosition = RPM.positionToVector3(position);
@@ -213,8 +227,8 @@ class Object3DBox extends MapElement
                 Sprite.rotateSprite(vecA, vecB, vecC, vecD, center, angleZ,
                     Sprite.Z_AXIS);
             }
-            c = Sprite.addStaticSpriteToGeometry(geometry, vecA, vecB, vecC,
-                vecD, faceA, faceB, c);
+            count = Sprite.addStaticSpriteToGeometry(geometry, vecA, vecB, vecC,
+                vecD, faceA, faceB, count);
         }
 
         // Collisions
@@ -245,6 +259,6 @@ class Object3DBox extends MapElement
                 k: true
             });
         }
-        return [c, objCollision];
+        return [count, objCollision];
     }
 }
