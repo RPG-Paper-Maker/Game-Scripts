@@ -12,7 +12,6 @@
 /** @class
 *   Abstract class for the game save and loading menus
 *   @extends SceneGame
-*   @property {Game[]} gamesDatas List of all games datas
 *   @property {WindowBox} windowTop A Window for displaying informations on top
 *   @property {WindowChoices} windowChoicesSlots A window choices for choosing
 *   a slot
@@ -20,6 +19,7 @@
 *   informations about the selected slot
 *   @property {WindowBox} windowBot A Window for displaying informations on
 *   bottom
+*   @property {Game[]} gamesDatas List of all games datas
 */
 class SceneSaveLoadGame extends SceneGame
 {
@@ -28,6 +28,9 @@ class SceneSaveLoadGame extends SceneGame
         super();
     }
 
+    // -------------------------------------------------------
+    /** Load async stuff
+    */
     async load()
     {
         // Initialize windows
@@ -71,7 +74,10 @@ class SceneSaveLoadGame extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Get an object representing an empty game
+    *   @param {number} i The slot number
+    *   @returns {Object} 
+    */
     getEmptyGame(i)
     {
         return {
@@ -81,8 +87,8 @@ class SceneSaveLoadGame extends SceneGame
     }
 
     // -------------------------------------------------------
-
     /** Initialize a game displaying
+    *   @param {Game} game The game 
     */
     initializeGame(game)
     {
@@ -95,7 +101,9 @@ class SceneSaveLoadGame extends SceneGame
     }
 
     // -------------------------------------------------------
-    /** Set the contents in the bottom and top bars.
+    /** Set the contents in the bottom and top bars
+    *   @param {Object} top A graphic content for top
+    *   @param {Object} bot A graphic content for bot
     */
     setContents(top, bot)
     {
@@ -104,7 +112,8 @@ class SceneSaveLoadGame extends SceneGame
     }
 
     // -------------------------------------------------------
-    /** Update the information to display inside the save informations.
+    /** Update the information to display inside the save informations
+    *   @param {number} i The slot index 
     */
     updateInformations(i)
     {
@@ -112,7 +121,8 @@ class SceneSaveLoadGame extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Update the scene
+    */
     update()
     {
         if (!this.windowInformations.content.game.isNull)
@@ -122,7 +132,9 @@ class SceneSaveLoadGame extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene key pressed
+    *   @param {number} key The key ID
+    */
     onKeyPressed(key)
     {
         if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
@@ -135,7 +147,10 @@ class SceneSaveLoadGame extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene pressed and repeat key
+    *   @param {number} key The key ID
+    *   @returns {boolean}
+    */
     onKeyPressedAndRepeat(key)
     {
         this.windowChoicesSlots.onKeyPressedAndRepeat(key);
@@ -144,7 +159,8 @@ class SceneSaveLoadGame extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Draw the HUD scene
+    */
     drawHUD()
     {
         this.windowTop.draw();

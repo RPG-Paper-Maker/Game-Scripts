@@ -12,12 +12,16 @@
 /** @class
 *   A scene for the main menu
 *   @extends SceneGame
-*   @property {WindowChoices} windowChoicesCommands A window choices for
-*   choosing a command.
-*   @property {WindowChoices} windowChoicesTeam A Window for displaying
-*   informations about team.
-*   @property {GraphicText} textPlayTime A text for displaying play time.
-*   @property {number} selectedOrder Index of the selected hero to order.
+*   @property {WindowChoices} [SceneMenunbItemsToDisplay=12] The number of 
+*   slots to display 
+*   @property {number} selectedOrder Index of the selected hero to order
+*   @property {WindowChoices} windowChoicesCommands The window choices for
+*   choosing a command
+*   @property {WindowChoices} windowChoicesTeam The window for displaying
+*   informations about team
+*   @property {WindowBox} windowTimeCurrencies The window for displaying time 
+*   and currencies
+*   @property {number} selectedOrder Index of the selected hero to order
 */
 class SceneMenu extends SceneGame
 {
@@ -25,11 +29,8 @@ class SceneMenu extends SceneGame
 
     constructor()
     {
-        super();
-    }
+        super(false);
 
-    async load()
-    {
         RPM.isInMainMenu = true;
 
         // Initializing order index
@@ -95,12 +96,10 @@ class SceneMenu extends SceneGame
 
         // Play a sound when opening the menu
         RPM.datasGame.system.soundCursor.playSound();
-
-        this.loading = false;
-        RPM.requestPaintHUD = true;
     }
 
-    /** Callback function for opening inventory.
+    // -------------------------------------------------------
+    /** Callback function for opening inventory
     */
     openInventory()
     {
@@ -109,7 +108,7 @@ class SceneMenu extends SceneGame
     }
 
     // -------------------------------------------------------
-    /** Callback function for opening skills menu.
+    /** Callback function for opening skills menu
     */
     openSkills()
     {
@@ -118,7 +117,7 @@ class SceneMenu extends SceneGame
     }
 
     // -------------------------------------------------------
-    /** Callback function for opening equipment menu.
+    /** Callback function for opening equipment menu
     */
     openEquip()
     {
@@ -127,7 +126,7 @@ class SceneMenu extends SceneGame
     }
 
     // -------------------------------------------------------
-    /** Callback function for opening player description state menu.
+    /** Callback function for opening player description state menu
     */
     openState()
     {
@@ -136,8 +135,7 @@ class SceneMenu extends SceneGame
     }
 
     // -------------------------------------------------------
-
-    /** Callback function for reordering heroes.
+    /** Callback function for reordering heroes
     */
     openOrder()
     {
@@ -146,7 +144,7 @@ class SceneMenu extends SceneGame
     }
 
     // -------------------------------------------------------
-    /** Callback function for opening save menu.
+    /** Callback function for opening save menu
     */
     openSave()
     {
@@ -159,8 +157,7 @@ class SceneMenu extends SceneGame
     }
 
     // -------------------------------------------------------
-
-    /** Callback function for quiting the game.
+    /** Callback function for quiting the game
     */
     exit()
     {
@@ -169,7 +166,8 @@ class SceneMenu extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Update the scene
+    */
     update()
     {
         SceneGame.prototype.update.call(RPM.currentMap);
@@ -183,7 +181,9 @@ class SceneMenu extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene key pressed
+    *   @param {number} key The key ID
+    */
     onKeyPressed(key)
     {
         SceneGame.prototype.onKeyPressed.call(RPM.currentMap, key);
@@ -249,21 +249,29 @@ class SceneMenu extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene key released
+    *   @param {number} key The key ID
+    */
     onKeyReleased(key)
     {
         SceneGame.prototype.onKeyReleased.call(RPM.currentMap, key);
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene pressed repeat key
+    *   @param {number} key The key ID
+    *   @returns {boolean}
+    */
     onKeyPressedRepeat(key)
     {
         SceneGame.prototype.onKeyPressedRepeat.call(RPM.currentMap, key);
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene pressed and repeat key
+    *   @param {number} key The key ID
+    *   @returns {boolean}
+    */
     onKeyPressedAndRepeat(key)
     {
         SceneGame.prototype.onKeyPressedAndRepeat.call(RPM.currentMap, key);
@@ -283,14 +291,16 @@ class SceneMenu extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Draw the 3D scene
+    */
     draw3D()
     {
         RPM.currentMap.draw3D();
     }
 
     // -------------------------------------------------------
-
+    /** Draw the HUD scene
+    */
     drawHUD()
     {
         // Draw the local map behind
@@ -304,6 +314,9 @@ class SceneMenu extends SceneGame
         this.windowTimeCurrencies.draw();
     }
 
+    // -------------------------------------------------------
+    /** Close the scene
+    */
     close()
     {
         RPM.isInMainMenu = false;

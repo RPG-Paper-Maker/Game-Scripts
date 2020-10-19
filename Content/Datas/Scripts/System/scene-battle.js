@@ -10,48 +10,161 @@
 */
 
 /** @class
-*   A scene for battling.
-*   @ SceneGame
+*   A scene for battling
 *   @extends SceneGame
-*   @property {boolean} winning Boolean indicating whether the player won the
-*       battle or not.
-*   @property {number} troopID Current troop that the allies are fighting.
-*   @property {boolean} canEscape Boolean indicating if the player can escape
-*       this battle.
-*   @property {boolean} canGameOver Boolean indicating if there a win/lose node
-*       or not.
-*   @property {SceneMap} battleMap The current scene used for battle map.
+*   @property {number} [SceneBattle.TRANSITION_ZOOM_TIME=500] The time in 
+*   milliseconds for zooming in transition
+*   @property {number} [SceneBattle.TRANSITION_COLOR_VALUE=0.1] The color 
+*   value for transition
+*   @property {number} [SceneBattle.TRANSITION_COLOR_END_WAIT=600] The 
+*   transition color to wait at the end
+*   @property {number} [SceneBattle.TIME_END_WAIT=1000] The time in 
+*   milliseconds to wait at the end of the battle
+*   @property {number} [SceneBattle.TIME_PROGRESSION_XP=3000] The time in 
+*   milliseconds for progression xp
+*   @property {number} [SceneBattle.TIME_LINEAR_MUSIC_END=500] The linear music 
+*   end time in milliseconds
+*   @property {number} [SceneBattle.TIME_LINEAR_MUSIC_START=500] The linear 
+*   music start time in milliseconds
+*   @property {number} [SceneBattle.TIME_ACTION_ANIMATION=2000] The time in 
+*   milliseconds for action animation
+*   @property {number} [SceneBattle.CAMERA_TICK=0.05] The camera tick
+*   @property {number} [SceneBattle.CAMERA_OFFSET=3] The camera small move 
+*   offset in pixels
+*   @property {number} [SceneBattle.START_CAMERA_DISTANCE=10] The start camera 
+*   distance
+*   @property {number} [SceneBattle.WINDOW_PROFILE_WIDTH=300] The window 
+*   profile width
+*   @property {number} [SceneBattle.WINDOW_PROFILE_HEIGHT=100] The window 
+*   profile height
+*   @property {number} [SceneBattle.COMMANDS_NUMBER=6] The max commands number
+*   @property {number} [SceneBattle.WINDOW_COMMANDS_WIDTH=150] The window 
+*   commands width
+*   @property {number} [SceneBattle.WINDOW_COMMANDS_SELECT_X=25] The window 
+*   commands select x
+*   @property {number} [SceneBattle.WINDOW_COMMANDS_SELECT_Y=100] The window 
+*   commands select y
+*   @property {number} [SceneBattle.WINDOW_COMMANDS_SELECT_WIDTH=200] The 
+*   window commands select width
+*   @property {number} [SceneBattle.WINDOW_DESCRIPTIONS_X=385] The window 
+*   descriptions x
+*   @property {number} [SceneBattle.WINDOW_DESCRIPTIONS_Y=100] The window 
+*   descriptions y
+*   @property {number} [SceneBattle.WINDOW_DESCRIPTIONS_WIDTH=360] The window 
+*   descriptions width
+*   @property {number} [SceneBattle.WINDOW_DESCRIPTIONS_HEIGHT=200] The window 
+*   descriptions height
+*   @property {number} [SceneBattle.WINDOW_EXPERIENCE_X=10] The window 
+*   experience x
+*   @property {number} [SceneBattle.WINDOW_EXPERIENCE_Y=80] The window 
+*   experience y
+*   @property {number} [SceneBattle.WINDOW_EXPERIENCE_WIDTH=300] The window 
+*   experience width
+*   @property {number} [SceneBattle.WINDOW_EXPERIENCE_HEIGHT=90] The window 
+*   experience height
+*   @property {number} [SceneBattle.WINDOW_STATS_X=250] The window stats x
+*   @property {number} [SceneBattle.WINDOW_STATS_Y=90] The window stats y
+*   @property {number} [SceneBattle.WINDOW_STATS_WIDTH=380] The window stats 
+*   width
+*   @property {number} [SceneBattle.WINDOW_STATS_HEIGHT=200] The window stats 
+*   height
+*   @property {number} troopID Current troop ID that the allies are fighting
+*   @property {boolean} canGameOver Indicate if there is a win/lose node or not
+*   @property {boolean} canEscape Indicate if the player can escape this battle
 *   @property {MapTransitionKind} transitionStart The kind of transition for 
-*       the battle start.
-*   @property {MapTransitionKind} transitionEnd The kind of transition for 
-*       the battle end.
-*   @property {boolean} transitionZoom Boolean used for knowing when to zoom
-*       in or out.
+*   the battle start
+*   @property {MapTransitionKind} transitionEnd The kind of transition for the 
+*   battle end
+*   @property {SystemColor} transitionStartColor The system color for start 
+*   transition
+*   @property {SystemColor} transitionEndColor The system color for end 
+*   transition
+*   @property {boolean} transitionColor Indicate if the transition is by color
+*   @property {number} transitionColorAlpha The alpha transition color value
+*   @property {number} step Main step of the battle
+*   @property {number} subStep Sub step of the battle (used for menus or other 
+*   sub-steps)
+*   @property {SceneMap} sceneMap The scene map where the battle was run
+*   @property {number} sceneMapCameraDistance The scene map camera distance
+*   @property {SystemMonsterAction} actionDoNothing A system monster action 
+*   reprensenting action doing nothing
+*   @property {number} cameraStep The camera step (for moving)
+*   @property {number} cameraTick The camera tick
+*   @property {number} cameraOffset The camera offset
+*   @property {boolean} cameraON Indicate if the transition is camera zoom
+*   @property {number} cameraDistance The camera distance
+*   @property {boolean} transitionZoom Indicate when to zoom in or out
+*   @property {boolean} loadingStep Indicate if there is a loading step
+*   @property {boolean} winning Indicate if the battle is won
 *   @property {CharacterKind} kindSelection Indicating which group is currently
-*       selected.
-*   @property {CharacterKind} attackingGroup Indicating which group is currently
-*       attacking.
-*   @property {number} step Main step of the battle.
-*   @property {number} subStep Sub step of the battle (used for menus or
-*       other sub-steps).
-*   @property {number} selectedUserIndex Index of the selected user.
-*   @property {number} distanceCenterAlly The distance between the center of map
-*       battle and ally.
-*   @property {number} time A chronometer.
-*   @property {Player[]} targets List of all the current targets.
-*   @property {Array.<Array.<Player>>} battlers Battlers of all the
-*       allies/enemies.
+*       selected
+*   @property {number} selectedUserIndex Index of the selected user
+*   @property {number} selectedTargetIndex Index of the selected target
+*   @property {EffectSpecialActionKind} battleCommandKind The current battle 
+*   command kind
+*   @property {Battler[]} targets List of all the current targets
+*   @property {any[]} damages Informations about damages
+*   @property {Array.<Array.<Battler>>} battlers Battlers of all the allies / 
+*   enemies
+*   @property {Object[]} graphicPlayers The graphics used for user and target(s)
+*   @property {number} time A chronometer for several steps of battle
+*   @property {number} turn The turn number
 *   @property {WindowBox} windowTopInformations The window on top that shows
-*       specific informations.
-*   @property {WindowBox} windowCharacterInformations The window on bot that
-*       shows characteristics informations.
-*   @property {WindowChoice} windowChoicesBattleCommands The window for battle
-*       commands.
-*   @property {WindowBox} arrowSelection The arrow used to select
-*       allies/ennemies.
-*   @property {GraphicText} textsDamages List of all the damages to display.
+*   specific informations
+*   @property {WindowBox} windowUserInformations The window on bot that shows 
+*   user characteristics informations
+*   @property {WindowBox} windowTargetInformations The window on bot that shows 
+*   target characteristics informations
+*   @property {WindowChoices} windowChoicesBattleCommands The window for battle
+*   commands
+*   @property {WindowChoices} windowChoicesSkills The window choices for skills
+*   @property {WindowBox} windowSkillDescription The window description for 
+*   selected skill
+*   @property {WindowChoices} windowChoicesItems The window choices for items
+*   @property {WindowBox} windowItemDescription The window description for 
+*   selected item
+*   @property {WindowBox} windowExperienceProgression The window experience 
+*   progression
+*   @property {WindowBox} windowStatisticProgression The window statistic 
+*   progression
+*   @property {CharacterKind} attackingGroup Indicating which group is 
+*   currently attacking
+*   @property {boolean} userTarget Indicate if the user is a target
+*   @property {boolean} all Indicate if the targets are all the enemies
+*   @property {GraphicSkill[]} listSkills The graphics list for each skill
+*   @property {GraphicItem[]} listItems The graphics list for each item
+*   @property {boolean} transitionEnded Indicate if the transition ended
+*   @property {SystemEffect[]} effects The current weapon / skill system effects
+*   @property {number} frameUser The frame user
+*   @property {number} frameTarget The frame target
+*   @property {SystemAnimation} userAnimation The system animation for user
+*   @property {SystemAnimation} targetAnimation The system animation for target   
+*   @property {Battler} user The user battler
+*   @property {number} currentEffectIndex The current effect index
+*   @property {number} timeEnemyAttack A chronometer for enemy attack
+*   @property {SystemMonsterAction} action The current system action
+*   @property {SystemSkill} attackSkill The system skill
+*   @property {boolean} finishedXP Indicate if the xp progression is finished
+*   @property {number} priorityIndex The priority index
+*   @property {WindowBox} windowLoots The window box for loots
+*   @property {number} xp The total xp
+*   @property {Object} currencies The total currencies
+*   @property {Object[]} loots The total loots
+*   @property {number} lootsNumber The total loots number
+*   @property {GraphicRewardsTop} graphicRewardTop The graphic reward on top
+*   @param {number} troopID Current troop ID that the allies are fighting
+*   @param {boolean} canGameOver Indicate if there is a win/lose node or not
+*   @param {boolean} canEscape Indicate if the player can escape this battle
+*   @param {SystemBattleMap} battleMap The system battle map
+*   @param {MapTransitionKind} transitionStart The kind of transition for 
+*   the battle start
+*   @param {MapTransitionKind} transitionEnd The kind of transition for the 
+*   battle end
+*   @param {SystemColor} transitionStartColor The system color for start 
+*   transition
+*   @param {SystemColor} transitionEndColor The system color for end 
+*   transition
 */
-
 class SceneBattle extends SceneMap
 {
     static TRANSITION_ZOOM_TIME = 500;
@@ -93,7 +206,6 @@ class SceneBattle extends SceneMap
         this.troopID = troopID;
         this.canGameOver = canGameOver;
         this.canEscape = canEscape;
-        this.sysBattleMap = battleMap;
         this.transitionStart = transitionStart;
         this.transitionEnd = transitionEnd;
         this.transitionStartColor = transitionStartColor;
@@ -106,16 +218,8 @@ class SceneBattle extends SceneMap
         this.actionDoNothing = new SystemMonsterAction({});
     }
 
-    async load()
-    {
-        await super.load();
-        this.loading = true;
-        await this.loadInitialize();
-        this.loading = false;
-    }
-
     // -------------------------------------------------------
-    /** Initialize and correct some camera settings for the battle start.
+    /** Initialize and correct some camera settings for the battle start
     */
     initializeCamera()
     {
@@ -136,7 +240,7 @@ class SceneBattle extends SceneMap
     };
 
     // -------------------------------------------------------
-    /** Make the attacking group all actives.
+    /** Make the attacking group all actives
     */
     activeGroup()
     {
@@ -148,16 +252,17 @@ class SceneBattle extends SceneMap
     }
 
     // -------------------------------------------------------
-    /** Check if a player is defined (active and not dead).
-    *   @param {CharacterKind} kind Kind of player.
-    *   @param {number} index Index in the group.
+    /** Check if a player is defined (active and not dead)
+    *   @param {CharacterKind} kind Kind of player
+    *   @param {number} index Index in the group
+    *   @param {boolean} target Indicate if the player is a target
     *   @returns {boolean}
     */
     isDefined(kind, index, target)
     {
         return ((target || this.battlers[kind][index].active) && !this.battlers
             [kind][index].character.isDead())
-    };
+    }
 
     // -------------------------------------------------------
     /** Check if all the heroes or enemies are inactive
@@ -246,7 +351,7 @@ class SceneBattle extends SceneMap
         }
         RPM.gameStack.pop();
         RPM.currentMap = RPM.gameStack.top;
-    };
+    }
 
     // -------------------------------------------------------
 
@@ -265,36 +370,30 @@ class SceneBattle extends SceneMap
     */
     initialize()
     {
-        this.loadingStep = true;
-        RPM.requestPaintHUD = false;
-        RPM.tryCatch(this.loadInitialize());
-    }
-
-    async loadInitialize()
-    {
         switch (this.step)
         {
         case 0:
-            await this.initializeStep0();
+            this.initializeStep0();
             break;
         case 1:
-            await this.initializeStep1();
+            this.initializeStep1();
             break;
         case 2:
-            await this.initializeStep2();
+            this.initializeStep2();
             break;
         case 3:
-            await this.initializeStep3();
+            this.initializeStep3();
             break;
         case 4:
-            await this.initializeStep4();
+            this.initializeStep4();
             break;
         }
-        this.loadingStep = false;
         RPM.requestPaintHUD = true;
     }
 
     // -------------------------------------------------------
+    /** Update battle according to step
+    */
     update()
     {
         super.update();
@@ -316,26 +415,24 @@ class SceneBattle extends SceneMap
         // Camera temp code for moving
         this.moveStandardCamera();
 
-        if (!this.loadingStep)
+        // Update according to step
+        switch(this.step)
         {
-            switch(this.step)
-            {
-            case 0:
-                this.updateStep0();
-                break;
-            case 1:
-                this.updateStep1();
-                break;
-            case 2:
-                this.updateStep2();
-                break;
-            case 3:
-                this.updateStep3();
-                break;
-            case 4:
-                this.updateStep4();
-                break;
-            }
+        case 0:
+            this.updateStep0();
+            break;
+        case 1:
+            this.updateStep1();
+            break;
+        case 2:
+            this.updateStep2();
+            break;
+        case 3:
+            this.updateStep3();
+            break;
+        case 4:
+            this.updateStep4();
+            break;
         }
     }
 
@@ -407,119 +504,116 @@ class SceneBattle extends SceneMap
     }
 
     // -------------------------------------------------------
-
+    /** Handle battle key pressed according to step
+    *   @param {number} key The key ID
+    */
     onKeyPressed(key)
     {
-        if (!this.loadingStep)
+        switch (this.step)
         {
-            switch (this.step)
-            {
-            case 0:
-                this.onKeyPressedStep0(key);
-                break;
-            case 1:
-                this.onKeyPressedStep1(key);
-                break;
-            case 2:
-                this.onKeyPressedStep2(key);
-                break;
-            case 3:
-                this.onKeyPressedStep3(key);
-                break;
-            case 4:
-                this.onKeyPressedStep4(key);
-                break;
-            }
-            super.onKeyPressed(key);
+        case 0:
+            this.onKeyPressedStep0(key);
+            break;
+        case 1:
+            this.onKeyPressedStep1(key);
+            break;
+        case 2:
+            this.onKeyPressedStep2(key);
+            break;
+        case 3:
+            this.onKeyPressedStep3(key);
+            break;
+        case 4:
+            this.onKeyPressedStep4(key);
+            break;
         }
+        super.onKeyPressed(key);
     }
 
     // -------------------------------------------------------
-
+    /** Handle battle key released according to step
+    *   @param {number} key The key ID
+    */
     onKeyReleased(key)
     {
-        if (!this.loadingStep)
+        switch (this.step)
         {
-            switch (this.step)
-            {
-            case 0:
-                this.onKeyReleasedStep0(key);
-                break;
-            case 1:
-                this.onKeyReleasedStep1(key);
-                break;
-            case 2:
-                this.onKeyReleasedStep2(key);
-                break;
-            case 3:
-                this.onKeyReleasedStep3(key);
-                break;
-            case 4:
-                this.onKeyReleasedStep4(key);
-                break;
-            }
-            super.onKeyReleased(key);
+        case 0:
+            this.onKeyReleasedStep0(key);
+            break;
+        case 1:
+            this.onKeyReleasedStep1(key);
+            break;
+        case 2:
+            this.onKeyReleasedStep2(key);
+            break;
+        case 3:
+            this.onKeyReleasedStep3(key);
+            break;
+        case 4:
+            this.onKeyReleasedStep4(key);
+            break;
         }
+        super.onKeyReleased(key);
     }
 
     // -------------------------------------------------------
-
+    /** Handle battle key pressed repeat according to step
+    *   @param {number} key The key ID
+    */
     onKeyPressedRepeat(key)
     {
-        if (!this.loadingStep)
+        switch (this.step)
         {
-            switch (this.step)
-            {
-            case 0:
-                this.onKeyPressedRepeatStep0(key);
-                break;
-            case 1:
-                this.onKeyPressedRepeatStep1(key);
-                break;
-            case 2:
-                this.onKeyPressedRepeatStep2(key);
-                break;
-            case 3:
-                this.onKeyPressedRepeatStep3(key);
-                break;
-            case 4:
-                this.onKeyPressedRepeatStep4(key);
-                break;
-            }
-            super.onKeyPressedRepeat(key);
+        case 0:
+            this.onKeyPressedRepeatStep0(key);
+            break;
+        case 1:
+            this.onKeyPressedRepeatStep1(key);
+            break;
+        case 2:
+            this.onKeyPressedRepeatStep2(key);
+            break;
+        case 3:
+            this.onKeyPressedRepeatStep3(key);
+            break;
+        case 4:
+            this.onKeyPressedRepeatStep4(key);
+            break;
         }
+        super.onKeyPressedRepeat(key);
     }
 
     // -------------------------------------------------------
-
+    /** Handle battle key pressed and repeat according to step
+    *   @param {number} key The key ID
+    */
     onKeyPressedAndRepeat(key)
     {
-        if (!this.loadingStep)
+        switch (this.step)
         {
-            switch (this.step)
-            {
-            case 0:
-                this.onKeyPressedAndRepeatStep0(key);
-                break;
-            case 1:
-                this.onKeyPressedAndRepeatStep1(key);
-                break;
-            case 2:
-                this.onKeyPressedAndRepeatStep2(key);
-                break;
-            case 3:
-                this.onKeyPressedAndRepeatStep3(key);
-                break;
-            case 4:
-                this.onKeyPressedAndRepeatStep4(key);
-                break;
-            }
-            super.onKeyPressedAndRepeat(key);
+        case 0:
+            this.onKeyPressedAndRepeatStep0(key);
+            break;
+        case 1:
+            this.onKeyPressedAndRepeatStep1(key);
+            break;
+        case 2:
+            this.onKeyPressedAndRepeatStep2(key);
+            break;
+        case 3:
+            this.onKeyPressedAndRepeatStep3(key);
+            break;
+        case 4:
+            this.onKeyPressedAndRepeatStep4(key);
+            break;
         }
+        super.onKeyPressedAndRepeat(key);
     }
 
     // -------------------------------------------------------
-
+    /** Draw the battle 3D scene
+    */
     draw3D()
     {
         if (this.transitionZoom || this.transitionColor)
@@ -531,7 +625,8 @@ class SceneBattle extends SceneMap
     }
 
     // -------------------------------------------------------
-
+    /** Draw the battle HUD according to step
+    */
     drawHUD()
     {
         switch (this.step)

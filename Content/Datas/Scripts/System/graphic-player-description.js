@@ -254,8 +254,8 @@ class GraphicPlayerDescription
 
         // Battler
         this.battler.draw(x + (80 - (wBattler * coef)) / 2, y + 80 - (hBattler *
-            coef) - 15, wBattler * coef, hBattler * coef, this.battlerFrame *
-            wBattler, 0, wBattler, hBattler);
+            coef) - 15, wBattler * coef, hBattler * coef, this.battlerFrame
+            .value * wBattler, 0, wBattler, hBattler);
 
         // Name, level, exp
         yName = y + 10;

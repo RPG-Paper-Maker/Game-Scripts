@@ -12,17 +12,21 @@
 /** @class
 *   A scene for the loading
 *   @extends SceneGame
+*   @property {GraphicText} text The graphic text displaying loading
 */
 class SceneLoading extends SceneGame
 {
     constructor()
     {
-        super();
+        super(false);
         
         this.text = new GraphicText("Loading...", { align: Align.Right, x: 590, 
             y: 450, w: 40, h: 20 });
     }
 
+    // -------------------------------------------------------
+    /** Draw the HUD scene
+    */
     drawHUD()
     {
         this.text.draw();

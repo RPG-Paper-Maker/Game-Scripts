@@ -14,22 +14,19 @@
 *   @extends SceneGame
 *   @property {WindowBox} windowTop Window on top with "Equip" text
 *   @property {WindowTabs} windowChoicesTabs Window for each tabs
-*   @property {WindowBox} windowInformations Window for equip stats
-*   informations
 *   @property {WindowChoices} windowChoicesEquipment Window for each equipment
 *   slot
 *   @property {WindowChoices} windowChoicesList Window for each weapon/armor
+*   @property {WindowBox} windowInformations Window for equip stats
+*   informations
 *   @property {number} selectedEquipment Index of selected equipment
 */
 class SceneMenuEquip extends SceneGame
 {
     constructor()
     {
-        super();
-    }
-    
-    async load()
-    {
+        super(false);
+
         // Tab heroes
         let nbHeroes = RPM.game.teamHeroes.length;
         let listHeroes = new Array(nbHeroes);
@@ -77,11 +74,9 @@ class SceneMenuEquip extends SceneGame
 
         // Updates
         this.updateForTab();
-
-        this.loading = false;
-        RPM.requestPaintHUD = true;
     }
 
+    // -------------------------------------------------------
     /** Update tab
     */
     updateForTab()
@@ -133,7 +128,7 @@ class SceneMenuEquip extends SceneGame
     }
 
     // -------------------------------------------------------
-    /** Update the informations to display for equipment stats.
+    /** Update the informations to display for equipment stats
     */
     updateInformations()
     {
@@ -161,6 +156,10 @@ class SceneMenuEquip extends SceneGame
             .list);
     }
 
+    // -------------------------------------------------------
+    /** Move tab according to key
+    *   @param {number} key The key ID 
+    */
     moveTabKey(key)
     {
         // Tab
@@ -193,6 +192,7 @@ class SceneMenuEquip extends SceneGame
         }
     }
 
+    // -------------------------------------------------------
     /** Remove the equipment of the character
     */
     remove()
@@ -242,7 +242,8 @@ class SceneMenuEquip extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Update the stats
+    */
     updateStats()
     {
         RPM.game.teamHeroes[this.windowChoicesTabs.currentSelectedIndex]
@@ -250,14 +251,17 @@ class SceneMenuEquip extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Update the scene
+    */
     update()
     {
         SceneGame.prototype.update.call(RPM.currentMap);
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene key pressed
+    *   @param {number} key The key ID
+    */
     onKeyPressed(key)
     {
         SceneGame.prototype.onKeyPressed.call(RPM.currentMap, key);
@@ -315,21 +319,29 @@ class SceneMenuEquip extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene key released
+    *   @param {number} key The key ID
+    */
     onKeyReleased(key)
     {
         SceneGame.prototype.onKeyReleased.call(RPM.currentMap, key);
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene pressed repeat key
+    *   @param {number} key The key ID
+    *   @returns {boolean}
+    */
     onKeyPressedRepeat(key)
     {
         SceneGame.prototype.onKeyPressedRepeat.call(RPM.currentMap, key);
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene pressed and repeat key
+    *   @param {number} key The key ID
+    *   @returns {boolean}
+    */
     onKeyPressedAndRepeat(key)
     {
         SceneGame.prototype.onKeyPressedAndRepeat.call(RPM.currentMap, key);
@@ -338,14 +350,16 @@ class SceneMenuEquip extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Draw the 3D scene
+    */
     draw3D()
     {
         RPM.currentMap.draw3D();
     }
 
     // -------------------------------------------------------
-
+    /** Draw the HUD scene
+    */
     drawHUD()
     {
         // Draw the local map behind

@@ -20,11 +20,8 @@ class SceneDescriptionState extends SceneGame
 {
     constructor()
     {
-        super();
-    }
+        super(false);
 
-    async load()
-    {
         // Tab heroes
         let nbHeroes = RPM.game.teamHeroes.length;
         let listHeroes = new Array(nbHeroes);
@@ -52,12 +49,10 @@ class SceneDescriptionState extends SceneGame
             }
         );
         this.synchronize();
-
-        this.loading = false;
-        RPM.requestPaintHUD = true;
     }
 
-    /** Synchronize informations with selected hero.
+    // -------------------------------------------------------
+    /** Synchronize informations with selected hero
     */
     synchronize()
     {
@@ -66,7 +61,8 @@ class SceneDescriptionState extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Update the scene
+    */
     update()
     {
         SceneGame.prototype.update.call(RPM.currentMap);
@@ -75,7 +71,9 @@ class SceneDescriptionState extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene key pressed
+    *   @param {number} key The key ID
+    */
     onKeyPressed(key)
     {
         SceneGame.prototype.onKeyPressed.call(RPM.currentMap, key);
@@ -90,21 +88,29 @@ class SceneDescriptionState extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene key released
+    *   @param {number} key The key ID
+    */
     onKeyReleased(key)
     {
         SceneGame.prototype.onKeyReleased.call(RPM.currentMap, key);
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene pressed repeat key
+    *   @param {number} key The key ID
+    *   @returns {boolean}
+    */
     onKeyPressedRepeat(key)
     {
         SceneGame.prototype.onKeyPressedRepeat.call(RPM.currentMap, key);
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene pressed and repeat key
+    *   @param {number} key The key ID
+    *   @returns {boolean}
+    */
     onKeyPressedAndRepeat(key)
     {
         SceneGame.prototype.onKeyPressedAndRepeat.call(RPM.currentMap, key);
@@ -114,14 +120,16 @@ class SceneDescriptionState extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Draw the 3D scene
+    */
     draw3D()
     {
         RPM.currentMap.draw3D();
     }
 
     // -------------------------------------------------------
-
+    /** Draw the HUD scene
+    */
     drawHUD()
     {
         // Draw the local map behind

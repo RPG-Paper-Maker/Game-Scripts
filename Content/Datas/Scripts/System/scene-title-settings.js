@@ -12,6 +12,11 @@
 /** @class
 *   A scene for the title screen settings
 *   @extends SceneGame
+*   @property {Picture2D} pictureBackground The title screen background picture
+*   @property {WindowBox} windowSettings The window box for displaying settings
+*   @property {WindoBox} windowInformations The window box for displaying 
+*   informations
+*   @property {WindowChoices} windowChoicesMain The main window choices
 */
 class SceneTitleSettings extends SceneGame
 {
@@ -20,6 +25,9 @@ class SceneTitleSettings extends SceneGame
         super();
     }
 
+    // -------------------------------------------------------
+    /** Load async stuff
+    */
     async load()
     {
         // Creating background
@@ -64,7 +72,9 @@ class SceneTitleSettings extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene key pressed
+    *   @param {number} key The key ID
+    */
     onKeyPressed(key)
     {
         this.windowChoicesMain.onKeyPressed(key);
@@ -78,7 +88,10 @@ class SceneTitleSettings extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene pressed and repeat key
+    *   @param {number} key The key ID
+    *   @returns {boolean}
+    */
     onKeyPressedAndRepeat(key)
     {
         this.windowChoicesMain.onKeyPressedAndRepeat(key);
@@ -87,7 +100,8 @@ class SceneTitleSettings extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Draw the HUD scene
+    */
     drawHUD()
     {
         if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage)

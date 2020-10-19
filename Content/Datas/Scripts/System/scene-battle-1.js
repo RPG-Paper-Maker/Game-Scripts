@@ -20,7 +20,10 @@
 //
 // -------------------------------------------------------
 
-SceneBattle.prototype.initializeStep1 = async function() 
+// -------------------------------------------------------
+/** Initialize step
+*/
+SceneBattle.prototype.initializeStep1 = function() 
 {
     // Check if everyone is dead to avoid infinite looping
     if (this.isLose())
@@ -63,7 +66,8 @@ SceneBattle.prototype.initializeStep1 = async function()
 }
 
 // -------------------------------------------------------
-
+/** Register the last command index and offset in the user
+*/
 SceneBattle.prototype.registerLastCommandIndex = function()
 {
     this.user.lastCommandIndex = this.windowChoicesBattleCommands
@@ -73,7 +77,8 @@ SceneBattle.prototype.registerLastCommandIndex = function()
 }
 
 // -------------------------------------------------------
-
+/** Register the laster skill index and offset in the user
+*/
 SceneBattle.prototype.registerLastSkillIndex = function()
 {
     this.user.lastSkillIndex = this.windowChoicesSkills.currentSelectedIndex;
@@ -81,7 +86,8 @@ SceneBattle.prototype.registerLastSkillIndex = function()
 }
 
 // -------------------------------------------------------
-
+/** Register the last item index and offset in the user
+*/
 SceneBattle.prototype.registerLastItemIndex = function()
 {
     this.user.lastItemIndex = this.windowChoicesItems.currentSelectedIndex;
@@ -89,7 +95,9 @@ SceneBattle.prototype.registerLastItemIndex = function()
 }
 
 // -------------------------------------------------------
-
+/** Select a target
+*   @param {TargetKind} targetKind The target kind 
+*/
 SceneBattle.prototype.selectTarget = function(targetKind)
 {
     this.subStep = 2;
@@ -126,7 +134,10 @@ SceneBattle.prototype.selectTarget = function(targetKind)
 }
 
 // -------------------------------------------------------
-
+/** Select the first index according to target kind
+*   @param {TargetKind} kind The target kind
+*   @param {number} index The index (last registered)
+*/
 SceneBattle.prototype.selectFirstIndex = function(kind, index)
 {
     while (!this.isDefined(kind, index))
@@ -144,8 +155,7 @@ SceneBattle.prototype.selectFirstIndex = function(kind, index)
 }
 
 // -------------------------------------------------------
-
-/** Return the index of the array after going up.
+/** Get the index of the array after going up
 *   @returns {number}
 */
 SceneBattle.prototype.indexArrowUp = function()
@@ -166,7 +176,7 @@ SceneBattle.prototype.indexArrowUp = function()
 }
 
 // -------------------------------------------------------
-/** Return the index of the array after going down.
+/** Get the index of the array after going down
 *   @returns {number}
 */
 SceneBattle.prototype.indexArrowDown = function()
@@ -186,7 +196,7 @@ SceneBattle.prototype.indexArrowDown = function()
 }
 
 // -------------------------------------------------------
-/** Move the arrow.
+/** Move the arrow
 */
 SceneBattle.prototype.moveArrow = function()
 {
@@ -201,67 +211,20 @@ SceneBattle.prototype.moveArrow = function()
 }
 
 // -------------------------------------------------------
-/** Return the index of the target
+/** Get the index of the target
 *   @returns {number}
 */
 SceneBattle.prototype.selectedUserTargetIndex = function()
 {
     return (this.subStep === 2) ? this.selectedTargetIndex : this
         .selectedUserIndex;
-};
-
-// -------------------------------------------------------
-
-SceneBattle.prototype.updateStep1 = function() {
-
-};
-
-// -------------------------------------------------------
-
-SceneBattle.prototype.onKeyPressedStep1 = function(key) {
-    switch (this.subStep)
-    {
-    case 0:
-        if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
-            .Action))
-        {
-            RPM.datasGame.system.soundConfirmation.playSound();
-            this.onAllySelected();
-        }
-        break;
-    case 1:
-        if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
-            .Action))
-        {
-            this.onCommandSelected(key);
-        } else if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard
-            .menuControls.Cancel))
-        {
-            RPM.datasGame.system.soundCancel.playSound();
-            this.onAllyUnselected();
-        }
-        break;
-    case 2:
-        if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
-            .Action))
-        {
-            RPM.datasGame.system.soundConfirmation.playSound();
-            this.onTargetsSelected();
-        } else if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard
-            .menuControls.Cancel))
-        {
-            RPM.datasGame.system.soundCancel.playSound();
-            this.onTargetsUnselected();
-        }
-        break;
-    }
 }
 
 // -------------------------------------------------------
-
+/** When an ally is selected
+*/
 SceneBattle.prototype.onAllySelected = function()
 {
-    this.loadingStep = true;
     this.subStep = 1;
     this.user = this.battlers[CharacterKind.Hero][this.selectedUserIndex];
     this.user.setSelected(true);
@@ -294,12 +257,12 @@ SceneBattle.prototype.onAllySelected = function()
     this.windowChoicesItems.unselect();
     this.windowChoicesItems.offsetSelectedIndex = this.user.lastItemOffset;
     this.windowChoicesItems.select(this.user.lastItemIndex);
-    this.loadingStep = false;
     RPM.requestPaintHUD = true;
 }
 
 // -------------------------------------------------------
-
+/** When an ally is unselected
+*/
 SceneBattle.prototype.onAllyUnselected = function()
 {
     switch (this.battleCommandKind)
@@ -320,7 +283,9 @@ SceneBattle.prototype.onAllyUnselected = function()
 }
 
 // -------------------------------------------------------
-
+/** When a command is selected
+*   @param {number} key The key pressed ID
+*/
 SceneBattle.prototype.onCommandSelected = function(key)
 {
     switch (this.battleCommandKind)
@@ -409,7 +374,8 @@ SceneBattle.prototype.onCommandSelected = function(key)
 }
 
 // -------------------------------------------------------
-
+/** When targets are selected
+*/
 SceneBattle.prototype.onTargetsSelected = function()
 {
     if (this.all)
@@ -428,7 +394,8 @@ SceneBattle.prototype.onTargetsSelected = function()
 }
 
 // -------------------------------------------------------
-
+/** When targets are unselected
+*/
 SceneBattle.prototype.onTargetsUnselected = function()
 {
     this.subStep = 1;
@@ -439,19 +406,75 @@ SceneBattle.prototype.onTargetsUnselected = function()
 }
 
 // -------------------------------------------------------
+/** Update the battle
+*/
+SceneBattle.prototype.updateStep1 = function() {
 
+}
+
+// -------------------------------------------------------
+/** Handle key pressed
+*   @param {number} key The key ID 
+*/
+SceneBattle.prototype.onKeyPressedStep1 = function(key) {
+    switch (this.subStep)
+    {
+    case 0:
+        if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
+            .Action))
+        {
+            RPM.datasGame.system.soundConfirmation.playSound();
+            this.onAllySelected();
+        }
+        break;
+    case 1:
+        if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
+            .Action))
+        {
+            this.onCommandSelected(key);
+        } else if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard
+            .menuControls.Cancel))
+        {
+            RPM.datasGame.system.soundCancel.playSound();
+            this.onAllyUnselected();
+        }
+        break;
+    case 2:
+        if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
+            .Action))
+        {
+            RPM.datasGame.system.soundConfirmation.playSound();
+            this.onTargetsSelected();
+        } else if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard
+            .menuControls.Cancel))
+        {
+            RPM.datasGame.system.soundCancel.playSound();
+            this.onTargetsUnselected();
+        }
+        break;
+    }
+}
+
+// -------------------------------------------------------
+/** Handle key released
+*   @param {number} key The key ID 
+*/
 SceneBattle.prototype.onKeyReleasedStep1 = function(key){
 
-};
+}
 
 // -------------------------------------------------------
-
+/** Handle key repeat pressed
+*   @param {number} key The key ID 
+*/
 SceneBattle.prototype.onKeyPressedRepeatStep1 = function(key){
 
-};
+}
 
 // -------------------------------------------------------
-
+/** Handle key pressed and repeat
+*   @param {number} key The key ID 
+*/
 SceneBattle.prototype.onKeyPressedAndRepeatStep1 = function(key){
     var index = this.selectedUserTargetIndex();
     switch (this.subStep)
@@ -511,7 +534,8 @@ SceneBattle.prototype.onKeyPressedAndRepeatStep1 = function(key){
 }
 
 // -------------------------------------------------------
-
+/** Draw the battle HUD
+*/
 SceneBattle.prototype.drawHUDStep1 = function()
 {
     this.windowTopInformations.draw();

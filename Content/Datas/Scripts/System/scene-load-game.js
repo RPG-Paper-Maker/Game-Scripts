@@ -11,7 +11,8 @@
 
 /** @class
 *   @extends SceneSaveLoadGame
-*   A scene in the menu for loading a game.
+*   A scene in the menu for loading a game
+*   @property {Picture2D} pictureBackground The title screen background picture
 */
 class SceneLoadGame extends SceneSaveLoadGame
 {
@@ -20,6 +21,9 @@ class SceneLoadGame extends SceneSaveLoadGame
         super();
     }
 
+    // -------------------------------------------------------
+    /** Load async stuff
+    */
     async load()
     {
         await super.load();
@@ -34,12 +38,13 @@ class SceneLoadGame extends SceneSaveLoadGame
                 .TitleScreen);
             this.pictureBackground.cover = true;
         }
-
         this.loading = false;
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene key pressed
+    *   @param {number} key The key ID
+    */
     onKeyPressed(key)
     {
         super.onKeyPressed(key);
@@ -75,6 +80,9 @@ class SceneLoadGame extends SceneSaveLoadGame
         }
     }
 
+    // -------------------------------------------------------
+    /** Draw the HUD scene
+    */
     drawHUD()
     {
         if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage)

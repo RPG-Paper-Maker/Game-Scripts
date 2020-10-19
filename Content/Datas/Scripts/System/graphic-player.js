@@ -260,7 +260,8 @@ class GraphicPlayer
         let wBattler = this.battler.oW / RPM.FRAMES;
         let hBattler = this.battler.oH / RPM.BATLLER_STEPS;
         this.battler.draw(x, yName - (hBattler * coef) - 15, wBattler * coef,
-            hBattler * coef, this.battlerFrame * wBattler, 0, wBattler, hBattler);
+            hBattler * coef, this.battlerFrame.value * wBattler, 0, wBattler, 
+            hBattler);
 
         // Stats
         let yStats = yName;
@@ -301,8 +302,8 @@ class GraphicPlayer
 
         // Battler
         this.battler.draw(x + (80 - (wBattler * coef)) / 2, y + h - (hBattler *
-            coef) - 15, wBattler * coef, hBattler * coef, this.battlerFrame *
-            wBattler, 0, wBattler, hBattler);
+            coef) - 15, wBattler * coef, hBattler * coef, this.battlerFrame
+            .value * wBattler, 0, wBattler, hBattler);
 
         // Stats
         this.graphicName.draw(xCharacter, yName, 0, 0);

@@ -18,7 +18,10 @@
 //
 // -------------------------------------------------------
 
-SceneBattle.prototype.initializeStep0 = async function()
+// -------------------------------------------------------
+/** Initialize step
+*/
+SceneBattle.prototype.initializeStep0 = function()
 {
     RPM.escaped = false;
     this.winning = false;
@@ -41,7 +44,8 @@ SceneBattle.prototype.initializeStep0 = async function()
 }
 
 // -------------------------------------------------------
-
+/** Initialize allies battlers
+*/
 SceneBattle.prototype.initializeAlliesBattlers = function()
 {
     let l = RPM.game.teamHeroes.length;
@@ -71,7 +75,8 @@ SceneBattle.prototype.initializeAlliesBattlers = function()
 }
 
 // -------------------------------------------------------
-
+/** Initialize enemies battlers
+*/
 SceneBattle.prototype.initializeEnemiesBattlers = function()
 {
     let troop = RPM.datasGame.troops.list[this.troopID];
@@ -103,7 +108,8 @@ SceneBattle.prototype.initializeEnemiesBattlers = function()
 }
 
 // -------------------------------------------------------
-
+/** Initialize informations (boxes)
+*/
 SceneBattle.prototype.initializeInformations = function()
 {
     this.windowTopInformations = new WindowBox(0, RPM.HUGE_SPACE, RPM.SCREEN_X, 
@@ -131,7 +137,8 @@ SceneBattle.prototype.initializeInformations = function()
 }
 
 // -------------------------------------------------------
-
+/** Initialize window commands
+*/
 SceneBattle.prototype.initializeWindowCommands = function()
 {
     let l = RPM.datasGame.battleSystem.battleCommandsOrder.length;
@@ -188,7 +195,8 @@ SceneBattle.prototype.initializeWindowCommands = function()
 }
 
 // -------------------------------------------------------
-
+/** Initialize windows end
+*/
 SceneBattle.prototype.initializeWindowsEnd = async function()
 {
     this.windowExperienceProgression = new WindowBox(SceneBattle
@@ -211,7 +219,8 @@ SceneBattle.prototype.initializeWindowsEnd = async function()
 }
 
 // -------------------------------------------------------
-
+/** Initialize musics
+*/
 SceneBattle.prototype.initializeMusics = function()
 {
     SceneBattle.musicMap = SystemPlaySong.currentPlayingMusic;
@@ -222,7 +231,8 @@ SceneBattle.prototype.initializeMusics = function()
 }
 
 // -------------------------------------------------------
-
+/** Update the battle
+*/
 SceneBattle.prototype.updateStep0 = function()
 {
     RPM.requestPaintHUD = true;
@@ -240,7 +250,8 @@ SceneBattle.prototype.updateStep0 = function()
 }
 
 // -------------------------------------------------------
-
+/** Update transtion start fade
+*/
 SceneBattle.prototype.updateTransitionStartFade = function()
 {
     if (this.transitionColor)
@@ -273,7 +284,8 @@ SceneBattle.prototype.updateTransitionStartFade = function()
 }
 
 // -------------------------------------------------------
-
+/** Update transition start zoom
+*/
 SceneBattle.prototype.updateTransitionStartZoom = function()
 {
     let offset;
@@ -313,35 +325,44 @@ SceneBattle.prototype.updateTransitionStartZoom = function()
 }
 
 // -------------------------------------------------------
-
+/** Handle key pressed
+*   @param {number} key The key ID 
+*/
 SceneBattle.prototype.onKeyPressedStep0 = function(key)
 {
 
 }
 
 // -------------------------------------------------------
-
+/** Handle key released
+*   @param {number} key The key ID 
+*/
 SceneBattle.prototype.onKeyReleasedStep0 = function(key)
 {
 
 }
 
 // -------------------------------------------------------
-
+/** Handle key repeat pressed
+*   @param {number} key The key ID 
+*/
 SceneBattle.prototype.onKeyPressedRepeatStep0 = function(key)
 {
 
 }
 
 // -------------------------------------------------------
-
+/** Handle key pressed and repeat
+*   @param {number} key The key ID 
+*/
 SceneBattle.prototype.onKeyPressedAndRepeatStep0 = function(key)
 {
 
 }
 
 // -------------------------------------------------------
-
+/** Draw the battle HUD
+*/
 SceneBattle.prototype.drawHUDStep0 = function()
 {
     if (this.transitionStart === 1)

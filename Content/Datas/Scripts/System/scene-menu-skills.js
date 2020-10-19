@@ -12,20 +12,22 @@
 /** @class
 *   A scene in the menu for describing players skills
 *   @extends SceneGame
+*   @property {Object[]} positionChoice The position choices index + offset for 
+*   each player
 *   @property {WindowBox} windowTop Window on top with "Skills" text
 *   @property {WindowTabs} windowChoicesTabs Window for each tabs
-*   @property {WindowBox} windowInformations Window for skill informations
 *   @property {WindowChoices} windowChoicesList Window for each skill
+*   @property {WindowBox} windowInformations Window for skill informations
+*   @property {WindowBox} windowEmpty The window box empty
+*   @property {WindowBox} windowBoxUseSkill The window box for using skill
+*   @property {number} substep The subset for using skill
 */
 class SceneMenuSkills extends SceneGame
 {   
     constructor()
     {
-        super();
-    }
+        super(false);
 
-    async load()
-    {
         // Tab heroes
         let nbHeroes = RPM.game.teamHeroes.length;
         let listHeroes = new Array(nbHeroes);
@@ -82,12 +84,10 @@ class SceneMenuSkills extends SceneGame
         this.substep = 0;
         this.updateForTab();
         this.synchronize();
-
-        this.loading = false;
-        RPM.requestPaintHUD = true;
     }
 
-    /** Synchronize informations with selected hero.
+    // -------------------------------------------------------
+    /** Synchronize informations with selected hero
     */
     synchronize()
     {
@@ -120,6 +120,10 @@ class SceneMenuSkills extends SceneGame
         RPM.currentMap.user = RPM.game.teamHeroes[indexTab];
     }
 
+    // -------------------------------------------------------
+    /** Move tab according to key
+    *   @param {number} key The key ID 
+    */
     moveTabKey(key)
     {
         // Tab
@@ -141,7 +145,8 @@ class SceneMenuSkills extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Update the scene
+    */
     update()
     {
         SceneGame.prototype.update.call(RPM.currentMap);
@@ -153,7 +158,9 @@ class SceneMenuSkills extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene key pressed
+    *   @param {number} key The key ID
+    */
     onKeyPressed(key)
     {
         SceneGame.prototype.onKeyPressed.call(RPM.currentMap, key);
@@ -222,21 +229,29 @@ class SceneMenuSkills extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene key released
+    *   @param {number} key The key ID
+    */
     onKeyReleased(key)
     {
         SceneGame.prototype.onKeyReleased.call(RPM.currentMap, key);
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene pressed repeat key
+    *   @param {number} key The key ID
+    *   @returns {boolean}
+    */
     onKeyPressedRepeat(key)
     {
         SceneGame.prototype.onKeyPressedRepeat.call(RPM.currentMap, key);
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene pressed and repeat key
+    *   @param {number} key The key ID
+    *   @returns {boolean}
+    */
     onKeyPressedAndRepeat(key)
     {
         SceneGame.prototype.onKeyPressedAndRepeat.call(RPM.currentMap, key);
@@ -253,14 +268,16 @@ class SceneMenuSkills extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Draw the 3D scene
+    */
     draw3D()
     {
         RPM.currentMap.draw3D();
     }
 
     // -------------------------------------------------------
-
+    /** Draw the HUD scene
+    */
     drawHUD()
     {
         // Draw the local map behind

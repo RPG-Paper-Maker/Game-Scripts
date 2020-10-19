@@ -12,20 +12,40 @@
 /** @class
 *   A scene for a local map
 *   @extends SceneGame
-*   @property {number} id The ID of the map
+*   @property {number} id The map ID
+*   @property {number} isBattleMap Indicate if this map is a battle one
 *   @property {string} mapName The map name
 *   @property {THREE.Scene} scene The 3D scene of the map
-*   @property {Camera} camera he camera of the scene
-*   @property {Object} mapProperties General map informations (real name, name,
-*   width, height)
+*   @property {number[][]} collisions The collisions squares arrays
+*   @property {MapProperties} mapProperties The map properties
+*   @property {Camera} camera The map camera
+*   @property {number[]} currentPortion The current portion (according to 
+*   camera position)
+*   @property {THREE.Vector3} previousCameraPosition The previous camera position
+*   @property {Orientation} orientation The camera orientation
 *   @property {number[][]} allObjects All the objects portions according to ID
-*   @property {MapPortion[][][]} mapPortions All the portions in the visible ray
-*   of the map
-*   @param {number} id The ID of the map
+*   @property {boolean} portionsObjectsUpdated Indicate if the portions objects 
+*   are loaded
+*   @property {THREE.MeshBasicMaterial} textureTileset The tileset material
+*   @property {THREE.MeshBasicMaterial[]} texturesAutotiles The autotiles 
+*   materials
+*   @property {THREE.MeshBasicMaterial[]} texturesWalls The walls materials
+*   @property {THREE.MeshBasicMaterial[]} texturesMountains The mountains 
+*   materials
+*   @property {THREE.MeshBasicMaterial[]} texturesObjects3D The 3D objects 
+*   materials
+*   @property {THREE.MeshBasicMaterial[]} texturesCharacters The characters 
+*   materials
+*   @property {MapPortion[]} mapPortions All the portions in the visible ray
+*   of the map (according to an index)
+*   @param {number} id The map ID
+*   @param {number} isBattleMap Indicate if this map is a battle one
+*   @param {boolean} [minimal=false] Indicate if the map should be partialy 
+*   loaded (only for getting objects infos)
 */
 class SceneMap extends SceneGame
 {
-    constructor(id, isBattleMap, minimal)
+    constructor(id, isBattleMap, minimal = false)
     {
         super(false);
 
@@ -40,6 +60,7 @@ class SceneMap extends SceneGame
         }
     }
 
+    // -------------------------------------------------------
     /** Get the portion file name
     *   @static
     *   @param {number} x The global x portion
@@ -53,7 +74,11 @@ class SceneMap extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Get the global portion of a json position
+    *   @static
+    *   @param {number[]} position The json position
+    *   @returns {number[]}
+    */
     static getGlobalPortion(position)
     {
         return [
@@ -63,6 +88,9 @@ class SceneMap extends SceneGame
         ];
     }
 
+    // -------------------------------------------------------
+    /** Load async stuff
+    */
     async load()
     {
         RPM.currentMap = this;
@@ -92,7 +120,8 @@ class SceneMap extends SceneGame
         this.loading = false;
     }
 
-    /** Read the map infos file
+    // -------------------------------------------------------
+    /** Read the map properties file
     */
     async readMapProperties()
     {
@@ -142,7 +171,7 @@ class SceneMap extends SceneGame
     }
 
     // -------------------------------------------------------
-    /** All the objects moved or/and with changed states.
+    /** Initialize all the objects moved or / and with changed states
     */
     initializePortionsObjects()
     {
@@ -219,7 +248,8 @@ class SceneMap extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Load the collisions settings
+    */
     loadCollisions()
     {
         // Tileset
@@ -283,6 +313,11 @@ class SceneMap extends SceneGame
         }
     }
 
+    // -------------------------------------------------------
+    /** Get the portion file name
+    *   @param {boolean} noNewPortion Indicate if the map portions array needs 
+    *   to be initialized
+    */
     async loadPortions(noNewPortion)
     {
         this.currentPortion = RPM.getPortion(this.camera.threeCamera.position);
@@ -300,7 +335,7 @@ class SceneMap extends SceneGame
                 {
                     await this.loadPortion(this.currentPortion[0] + i, this
                         .currentPortion[1] + j, this.currentPortion[2] + k, i, j
-                        , k, true);
+                        , k);
                 }
             }
         }
@@ -308,14 +343,16 @@ class SceneMap extends SceneGame
 
     // -------------------------------------------------------
     /** Load a portion
-    *   @param {number} realX The global x portion.
-    *   @param {number} realY The global y portion.
-    *   @param {number} realZ The global z portion.
-    *   @param {number} x The local x portion.
-    *   @param {number} y The local y portion.
-    *   @param {number} z The local z portion.
+    *   @param {number} realX The global x portion
+    *   @param {number} realY The global y portion
+    *   @param {number} realZ The global z portion
+    *   @param {number} x The local x portion
+    *   @param {number} y The local y portion
+    *   @param {number} z The local z portion
+    *   @param {boolean} move Indicate if the portion was moved or completely 
+    *   loaded
     */
-    async loadPortion(realX, realY, realZ, x, y, z, wait, move)
+    async loadPortion(realX, realY, realZ, x, y, z, move)
     {
         let lx = Math.ceil(this.mapProperties.length / RPM.PORTION_SIZE);
         let lz = Math.ceil(this.mapProperties.width / RPM.PORTION_SIZE);
@@ -338,18 +375,31 @@ class SceneMap extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Load a portion from a portion
+    *   @param {number[]} portion The portion
+    *   @param {number} x The local x portion
+    *   @param {number} y The local y portion
+    *   @param {number} z The local z portion
+    *   @param {boolean} move Indicate if the portion was moved or completely 
+    *   loaded
+    */
     async loadPortionFromPortion(portion, x, y, z, move)
     {
         await this.loadPortion(portion[0] + x, portion[1] + y, portion[2] + z,
-            x, y, z, false, move);
+            x, y, z, move);
     }
 
     // -------------------------------------------------------
-
-    removePortion(i, j, k)
+    /** Remove a portion
+    *   @param {number} x The local x portion
+    *   @param {number} y The local y portion
+    *   @param {number} z The local z portion
+    *   @param {boolean} move Indicate if the portion was moved or completely 
+    *   loaded
+    */
+    removePortion(x, y, z)
     {
-        let mapPortion = this.getMapPortion(i, j, k);
+        let mapPortion = this.getMapPortion(x, y, z);
         if (mapPortion !== null)
         {
             mapPortion.cleanAll();
@@ -357,61 +407,28 @@ class SceneMap extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Set a portion
+    *   @param {number} i The previous x portion
+    *   @param {number} j The previous y portion
+    *   @param {number} k The previous z portion
+    *   @param {number} m The new x portion
+    *   @param {number} n The new y portion
+    *   @param {number} o The new z portion
+    */
     setPortion(i, j, k, m, n, o)
     {
         this.setMapPortion(i, j, k, this.getMapPortion(m, n, o), true);
     }
 
     // -------------------------------------------------------
-    /** Get the objects at a specific portion.
-     */
-    getObjectsAtPortion(i, j, k)
-    {
-        return RPM.game.getPotionsDatas(this.id, i, j, k);
-    }
-
-    // -------------------------------------------------------
-
-    getMapPortion(x, y, z)
-    {
-        return this.getBrutMapPortion(this.getPortionIndex(x, y, z));
-    }
-
-    // -------------------------------------------------------
-
-    getMapPortionByPortion(portion)
-    {
-        return this.getMapPortion(portion[0], portion[1], portion[2]);
-    }
-
-    // -------------------------------------------------------
-
-    getMapPortionByPosition(position)
-    {
-        return this.getMapPortionByPortion(this.getLocalPortion(SceneMap
-            .getGlobalPortion(position)));
-    }
-
-    // -------------------------------------------------------
-
-    getBrutMapPortion(index)
-    {
-        return this.mapPortions[index];
-    }
-
-    // -------------------------------------------------------
-
-    getPortionIndex(x, y, z)
-    {
-        let size = this.getMapPortionSize();
-        let limit = this.getMapPortionLimit();
-
-        return ((x + limit) * size * size) + ((y + limit) * size) + (z + limit);
-    }
-
-    // -------------------------------------------------------
-
+    /** Set a portion
+    *   @param {number} x The local x portion
+    *   @param {number} y The local y portion
+    *   @param {number} z The local z portion
+    *   @param {MapPortion} mapPortion The new map portion
+    *   @param {boolean} move Indicate if the portion was moved or completely 
+    *   loaded
+    */
     setMapPortion(x, y, z, mapPortion, move)
     {
         let index = this.getPortionIndex(x, y, z);
@@ -423,7 +440,79 @@ class SceneMap extends SceneGame
     }
 
     // -------------------------------------------------------
+    /** Get the objects at a specific portion
+    *   @param {number} i The global x portion
+    *   @param {number} j The global y portion
+    *   @param {number} k The global z portion
+    *   @returns {Object[]}
+    */
+    getObjectsAtPortion(i, j, k)
+    {
+        return RPM.game.getPotionsDatas(this.id, i, j, k);
+    }
 
+    // -------------------------------------------------------
+    /** Get a map portion at local postions
+    *   @param {number} x The local x portion
+    *   @param {number} y The local y portion
+    *   @param {number} z The local z portion
+    *   @returns {MapPortion}
+    */
+    getMapPortion(x, y, z)
+    {
+        return this.getBrutMapPortion(this.getPortionIndex(x, y, z));
+    }
+
+    // -------------------------------------------------------
+    /** Get a map portion at local portion
+    *   @param {number[]} portion The local portion
+    *   @returns {MapPortion}
+    */
+    getMapPortionByPortion(portion)
+    {
+        return this.getMapPortion(portion[0], portion[1], portion[2]);
+    }
+
+    // -------------------------------------------------------
+    /** Get a map portion at json position
+    *   @param {number[]} position The json position
+    *   @returns {MapPortion}
+    */
+    getMapPortionByPosition(position)
+    {
+        return this.getMapPortionByPortion(this.getLocalPortion(SceneMap
+            .getGlobalPortion(position)));
+    }
+
+    // -------------------------------------------------------
+    /** Get map portion according to portion index
+    *   @param {number} index The portion index
+    *   @returns {MapPortion}
+    */
+    getBrutMapPortion(index)
+    {
+        return this.mapPortions[index];
+    }
+
+    // -------------------------------------------------------
+    /** Get portion index according to local position
+    *   @param {number} x The local x portion
+    *   @param {number} y The local y portion
+    *   @param {number} z The local z portion
+    *   @returns {number}
+    */
+    getPortionIndex(x, y, z)
+    {
+        let size = this.getMapPortionSize();
+        let limit = this.getMapPortionLimit();
+        return ((x + limit) * size * size) + ((y + limit) * size) + (z + limit);
+    }
+
+    // -------------------------------------------------------
+    /** Set a local portion with a global portion
+    *   @param {number[]} portion The global portion
+    *   @returns {number[]}
+    */
     getLocalPortion(portion)
     {
         return [
@@ -434,21 +523,27 @@ class SceneMap extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Get the map portion limit
+    *   @returns {number}
+    */
     getMapPortionLimit()
     {
         return RPM.PORTIONS_RAY_NEAR + RPM.PORTIONS_RAY_FAR;
     }
 
     // -------------------------------------------------------
-
+    /** Get the map portions size
+    *   @returns {number}
+    */
     getMapPortionSize()
     {
         return (this.getMapPortionLimit() * 2) + 1;
     }
 
     // -------------------------------------------------------
-
+    /** Get the map portion total size
+    *   @returns {number}
+    */
     getMapPortionTotalSize()
     {
         let size = this.getMapPortionSize();
@@ -456,7 +551,10 @@ class SceneMap extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Check if a local portion if in the limit
+    *   @param {number} portion The local portion
+    *   @returns {boolean}
+    */
     isInPortion(portion)
     {
         let limit = this.getMapPortionLimit();
@@ -466,7 +564,10 @@ class SceneMap extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Check if a json position is in the map
+    *   @param {number[]} position The json position
+    *   @returns {boolean}
+    */
     isInMap(position)
     {
         return (position[0] >= 0 && position[0] < this.mapProperties.length &&
@@ -475,6 +576,7 @@ class SceneMap extends SceneGame
 
     // -------------------------------------------------------
     /** Get the hero position according to battle map
+    *   @returns {THREE.Vector3} 
     */
     getHeroPosition()
     {
@@ -483,13 +585,20 @@ class SceneMap extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Update the background color
+    */
     updateBackgroundColor()
     {
         this.mapProperties.updateBackgroundColor();
         RPM.updateBackgroundColor(this.mapProperties.backgroundColor);
     }
 
+    // -------------------------------------------------------
+    /** Load collision for special elements
+    *   @param {number[]} list The IDs list
+    *   @param {PictureKind} kind The picture kind
+    *   @param {SystemSpecialElement[]} specials The specials list
+    */
     loadSpecialsCollision(list, kind, specials)
     {
         let pictures = RPM.datasGame.pictures.list[kind];
@@ -509,7 +618,8 @@ class SceneMap extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Update moving portions
+    */
     updateMovingPortions()
     {
         let newPortion = RPM.getPortion(this.camera.threeCamera.position);
@@ -523,7 +633,8 @@ class SceneMap extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Update moving portions for east and west
+    */
     updateMovingPortionsEastWest(newPortion)
     {
         let r = this.getMapPortionLimit();
@@ -562,7 +673,8 @@ class SceneMap extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Update moving portions for north and south
+    */
     updateMovingPortionsNorthSouth(newPortion)
     {
         let r = this.getMapPortionLimit();
@@ -601,7 +713,8 @@ class SceneMap extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Update moving portions for up and down
+    */
     updateMovingPortionsUpDown(newPortion)
     {
         let r = this.getMapPortionLimit();
@@ -640,7 +753,8 @@ class SceneMap extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Update portions according to a callback
+    */
     updatePortions(base, callback)
     {
         let limit = this.getMapPortionLimit();
@@ -669,7 +783,8 @@ class SceneMap extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Update the scene
+    */
     update()
     {
         this.updateMovingPortions();
@@ -726,7 +841,9 @@ class SceneMap extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene key pressed
+    *   @param {number} key The key ID
+    */
     onKeyPressed(key)
     {
         if (!this.loading)
@@ -743,7 +860,9 @@ class SceneMap extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene key released
+    *   @param {number} key The key ID
+    */
     onKeyReleased(key)
     {
         if (!this.loading)
@@ -759,7 +878,10 @@ class SceneMap extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene pressed repeat key
+    *   @param {number} key The key ID
+    *   @returns {boolean}
+    */
     onKeyPressedRepeat(key)
     {
         if (!this.loading)
@@ -776,7 +898,10 @@ class SceneMap extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene pressed and repeat key
+    *   @param {number} key The key ID
+    *   @returns {boolean}
+    */
     onKeyPressedAndRepeat(key)
     {
         if (!this.loading)
@@ -792,7 +917,8 @@ class SceneMap extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Draw the 3D scene
+    */
     draw3D()
     {
         RPM.renderer.clear();

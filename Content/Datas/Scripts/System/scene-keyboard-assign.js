@@ -12,6 +12,24 @@
 /** @class
 *   A scene for the keyboard assign setting
 *   @extends SceneGame
+*   @property {number} [SceneKeyboardAssign.WINDOW_PRESS_WIDTH=300] The window 
+*   press width
+*   @property {number} [SceneKeyboardAssign.WINDOW_PRESS_HEIGHT=200] The window 
+*   press height
+*   @property {number} [SceneKeyboardAssign.MAX_WAIT_TIME_FIRST=3000] The max 
+*   wait time in milliseconds first
+*   @property {number} [SceneKeyboardAssign.MAX_WAIT_TIME=1000] The max wait 
+*   time in milliseconds
+*   @property {Picture2D} pictureBackground The title screen background picture
+*   @property {WindowBox} windowKeyboard The window box used for keyboard
+*   @property {WindowBox} windowInformations The window box used for 
+*   informations
+*   @property {WindowChoices} windowChoicesMain The main window choices
+*   @property {WindowBox} windowPress The window box for pressing a new key
+*   @property {boolean} showPress Indicate if the HUD should display press box
+*   @property {number[][]} currentSC The current pressed shortcut
+*   @property {number[]} keysPressed The current key pressed
+*   @property {number} compareWait Wait time in milliseconds;
 */
 class SceneKeyboardAssign extends SceneGame
 {
@@ -25,6 +43,9 @@ class SceneKeyboardAssign extends SceneGame
         super();
     }
 
+    // -------------------------------------------------------
+    /** Load async stuff
+    */
     async load()
     {
         // Creating background
@@ -83,6 +104,25 @@ class SceneKeyboardAssign extends SceneGame
         this.loading = false;
     }
 
+    // -------------------------------------------------------
+    /** Update the key
+    */
+    updateKey()
+    {
+        this.compareWait = SceneKeyboardAssign.MAX_WAIT_TIME_FIRST;
+        this.waitTime = new Date().getTime();
+        this.showPress = true;
+        this.originalSC = this.windowChoicesMain.getCurrentContent().kb.sc;
+        this.currentSC = [];
+        this.windowChoicesMain.getCurrentContent().updateShort(this
+            .currentSC);
+        this.nextOR = true;
+        return true;
+    }
+
+    // -------------------------------------------------------
+    /** Update the scene
+    */
     update()
     {
         if (this.showPress)
@@ -107,22 +147,9 @@ class SceneKeyboardAssign extends SceneGame
     }
 
     // -------------------------------------------------------
-
-    updateKey()
-    {
-        this.compareWait = SceneKeyboardAssign.MAX_WAIT_TIME_FIRST;
-        this.waitTime = new Date().getTime();
-        this.showPress = true;
-        this.originalSC = this.windowChoicesMain.getCurrentContent().kb.sc;
-        this.currentSC = [];
-        this.windowChoicesMain.getCurrentContent().updateShort(this
-            .currentSC);
-        this.nextOR = true;
-        return true;
-    }
-
-    // -------------------------------------------------------
-
+    /** Handle scene key pressed
+    *   @param {number} key The key ID
+    */
     onKeyPressed(key)
     {
         if (this.showPress)
@@ -155,7 +182,9 @@ class SceneKeyboardAssign extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene key released
+    *   @param {number} key The key ID
+    */
     onKeyReleased(key)
     {
         this.keysPressed.splice(this.keysPressed.indexOf(key), 1);
@@ -168,7 +197,10 @@ class SceneKeyboardAssign extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene pressed and repeat key
+    *   @param {number} key The key ID
+    *   @returns {boolean}
+    */
     onKeyPressedAndRepeat(key)
     {
         if (!this.showPress)
@@ -179,7 +211,8 @@ class SceneKeyboardAssign extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Draw the HUD scene
+    */
     drawHUD()
     {
         if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage)

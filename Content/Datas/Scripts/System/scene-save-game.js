@@ -20,6 +20,9 @@ class SceneSaveGame extends SceneSaveLoadGame
         super();
     }
 
+    // -------------------------------------------------------
+    /** Load async stuff
+    */
     async load()
     {
         await super.load();
@@ -31,7 +34,9 @@ class SceneSaveGame extends SceneSaveLoadGame
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene key pressed
+    *   @param {number} key The key ID
+    */
     onKeyPressed(key)
     {
         super.onKeyPressed(key);
@@ -49,7 +54,8 @@ class SceneSaveGame extends SceneSaveLoadGame
     }
 
     // -------------------------------------------------------
-
+    /** Draw the 3D scene
+    */
     draw3D()
     {
         RPM.currentMap.draw3D();

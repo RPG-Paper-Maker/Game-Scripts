@@ -20,7 +20,10 @@
 //
 // -------------------------------------------------------
 
-SceneBattle.prototype.initializeStep2 = async function()
+// -------------------------------------------------------
+/** Initialize step
+*/
+SceneBattle.prototype.initializeStep2 = function()
 {
     let informationText, content;
     switch (this.battleCommandKind)
@@ -144,7 +147,9 @@ SceneBattle.prototype.initializeStep2 = async function()
 }
 
 // -------------------------------------------------------
-
+/** Get the animation efect condition kind
+*   @returns {AnimationEffectConditionKind}
+*/
 SceneBattle.prototype.getCondition = function()
 {
     if (this.damages[0])
@@ -162,7 +167,8 @@ SceneBattle.prototype.getCondition = function()
 }
 
 // -------------------------------------------------------
-
+/** Update the battle
+*/
 SceneBattle.prototype.updateStep2 = function()
 {
     let i, l;
@@ -321,31 +327,40 @@ SceneBattle.prototype.updateStep2 = function()
 }
 
 // -------------------------------------------------------
-
+/** Handle key pressed
+*   @param {number} key The key ID 
+*/
 SceneBattle.prototype.onKeyPressedStep2 = function(key){
 
 }
 
 // -------------------------------------------------------
-
+/** Handle key released
+*   @param {number} key The key ID 
+*/
 SceneBattle.prototype.onKeyReleasedStep2 = function(key){
 
 }
 
 // -------------------------------------------------------
-
+/** Handle key repeat pressed
+*   @param {number} key The key ID 
+*/
 SceneBattle.prototype.onKeyPressedRepeatStep2 = function(key){
 
 }
 
 // -------------------------------------------------------
-
+/** Handle key pressed and repeat
+*   @param {number} key The key ID 
+*/
 SceneBattle.prototype.onKeyPressedAndRepeatStep2 = function(key){
 
 }
 
 // -------------------------------------------------------
-
+/** Draw the battle HUD
+*/
 SceneBattle.prototype.drawHUDStep2 = function()
 {
     this.windowTopInformations.draw();
@@ -386,4 +401,4 @@ SceneBattle.prototype.drawHUDStep2 = function()
             this.targets[i].drawDamages(damage[0], damage[1], damage[2]);
         }
     }
-};
+}

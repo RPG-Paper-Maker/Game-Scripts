@@ -17,7 +17,10 @@
 //
 // -------------------------------------------------------
 
-SceneBattle.prototype.initializeStep3 = async function()
+// -------------------------------------------------------
+/** Initialize step
+*/
+SceneBattle.prototype.initializeStep3 = function()
 {
     this.windowTopInformations.content = null;
     this.attackingGroup = CharacterKind.Monster;
@@ -41,7 +44,8 @@ SceneBattle.prototype.initializeStep3 = async function()
 }
 
 // -------------------------------------------------------
-
+/** Define the action to do
+*/
 SceneBattle.prototype.defineAction = function()
 {
     let actions = [];
@@ -162,7 +166,8 @@ SceneBattle.prototype.defineAction = function()
 }
 
 // -------------------------------------------------------
-
+/** Define the targets
+*/
 SceneBattle.prototype.defineTargets = function()
 {
     if (!this.action)
@@ -252,7 +257,8 @@ SceneBattle.prototype.defineTargets = function()
 }
 
 // -------------------------------------------------------
-
+/** Update the battle
+*/
 SceneBattle.prototype.updateStep3 = function()
 {
     if (new Date().getTime() - this.time >= 500)
@@ -269,31 +275,40 @@ SceneBattle.prototype.updateStep3 = function()
 }
 
 // -------------------------------------------------------
-
+/** Handle key pressed
+*   @param {number} key The key ID 
+*/
 SceneBattle.prototype.onKeyPressedStep3 = function(key){
 
 }
 
 // -------------------------------------------------------
-
+/** Handle key released
+*   @param {number} key The key ID 
+*/
 SceneBattle.prototype.onKeyReleasedStep3 = function(key){
 
 }
 
 // -------------------------------------------------------
-
+/** Handle key repeat pressed
+*   @param {number} key The key ID 
+*/
 SceneBattle.prototype.onKeyPressedRepeatStep3 = function(key){
 
 }
 
 // -------------------------------------------------------
-
+/** Handle key pressed and repeat
+*   @param {number} key The key ID 
+*/
 SceneBattle.prototype.onKeyPressedAndRepeatStep3 = function(key){
 
 }
 
 // -------------------------------------------------------
-
+/** Draw the battle HUD
+*/
 SceneBattle.prototype.drawHUDStep3 = function(){
     this.windowTopInformations.draw();
 }

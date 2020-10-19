@@ -22,6 +22,9 @@
 //
 // -------------------------------------------------------
 
+// -------------------------------------------------------
+/** Initialize step
+*/
 SceneBattle.prototype.initializeStep4 = function()
 {
     // If loosing, directly go to end transition
@@ -85,7 +88,8 @@ SceneBattle.prototype.initializeStep4 = function()
 }
 
 // -------------------------------------------------------
-
+/** Prepare the rewards (xp, currencies, loots)
+*/
 SceneBattle.prototype.prepareRewards = function()
 {
     // Experience + currencies + loots
@@ -142,7 +146,8 @@ SceneBattle.prototype.prepareRewards = function()
 }
 
 // -------------------------------------------------------
-
+/** Update the team progression xp
+*/
 SceneBattle.prototype.updateTeamXP = function()
 {
     this.finishedXP = true;
@@ -185,7 +190,8 @@ SceneBattle.prototype.updateTeamXP = function()
 }
 
 // -------------------------------------------------------
-
+/** Pause the team progression xp
+*/
 SceneBattle.prototype.pauseTeamXP = function()
 {
     for (let i = 0, l = RPM.game.teamHeroes.length; i < l; i++)
@@ -195,7 +201,8 @@ SceneBattle.prototype.pauseTeamXP = function()
 }
 
 // -------------------------------------------------------
-
+/** Unpause the team progression xp
+*/
 SceneBattle.prototype.unpauseTeamXP = function()
 {
     for (let i = 0, l = RPM.game.teamHeroes.length; i < l; i++)
@@ -206,7 +213,8 @@ SceneBattle.prototype.unpauseTeamXP = function()
 }
 
 // -------------------------------------------------------
-
+/** Play map music
+*/
 SceneBattle.prototype.playMapMusic = function()
 {
     SceneBattle.musicMap.playMusic(SceneBattle.musicMapTime, 0);
@@ -215,7 +223,8 @@ SceneBattle.prototype.playMapMusic = function()
 }
 
 // -------------------------------------------------------
-
+/** Prepare the end transition
+*/
 SceneBattle.prototype.prepareEndTransition = function()
 {
     this.transitionEnded = false;
@@ -226,7 +235,8 @@ SceneBattle.prototype.prepareEndTransition = function()
 }
 
 // -------------------------------------------------------
-
+/** Update the battle
+*/
 SceneBattle.prototype.updateStep4 = function()
 {
     switch (this.subStep)
@@ -348,7 +358,9 @@ SceneBattle.prototype.updateStep4 = function()
 }
 
 // -------------------------------------------------------
-
+/** Handle key pressed
+*   @param {number} key The key ID 
+*/
 SceneBattle.prototype.onKeyPressedStep4 = function(key)
 {
     switch (this.subStep)
@@ -397,28 +409,35 @@ SceneBattle.prototype.onKeyPressedStep4 = function(key)
 }
 
 // -------------------------------------------------------
-
+/** Handle key released
+*   @param {number} key The key ID 
+*/
 SceneBattle.prototype.onKeyReleasedStep4 = function(key)
 {
 
 }
 
 // -------------------------------------------------------
-
+/** Handle key repeat pressed
+*   @param {number} key The key ID 
+*/
 SceneBattle.prototype.onKeyPressedRepeatStep4 = function(key)
 {
 
 }
 
 // -------------------------------------------------------
-
+/** Handle key pressed and repeat
+*   @param {number} key The key ID 
+*/
 SceneBattle.prototype.onKeyPressedAndRepeatStep4 = function(key)
 {
 
 }
 
 // -------------------------------------------------------
-
+/** Draw the battle HUD
+*/
 SceneBattle.prototype.drawHUDStep4 = function()
 {
     if (this.subStep !== 3)
@@ -449,4 +468,4 @@ SceneBattle.prototype.drawHUDStep4 = function()
         }
         break;
     }
-};
+}

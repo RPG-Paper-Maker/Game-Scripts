@@ -14,18 +14,20 @@
 *   @extends SceneGame
 *   @property {WindowBox} windowTop Window on top with "Inventory" text
 *   @property {WindowTabs} windowChoicesTabs Window for each tabs
-*   @property {WindowBox} windowInformations Window for item informations
 *   @property {WindowChoices} windowChoicesList Window for each items
+*   @property {WindowBox} windowInformations Window for item informations
+*   @property {WindowBox} windowEmpty The window box empty
+*   @property {WindowBox} windowBoxUseItem The window box for using item
+*   @property {Object[]} positionChoice The position choices index + offset for 
+*   each type of item
+*   @property {number} substep The subset for using item
 */
 class SceneMenuInventory extends SceneGame
 {
     constructor()
     {
-        super();
-    }
+        super(false);
 
-    async load()
-    {
         // Initializing the top menu for item kinds
         let menuKind = [
             new GraphicText("All", { align: Align.Center }),
@@ -89,12 +91,10 @@ class SceneMenuInventory extends SceneGame
         this.substep = 0;
         this.updateForTab();
         this.synchronize();
-
-        this.loading = false;
-        RPM.requestPaintHUD = true;
     }
 
-    /** Update informations to display.
+    // -------------------------------------------------------
+    /** Update informations to display
     */
     synchronize()
     {
@@ -103,7 +103,7 @@ class SceneMenuInventory extends SceneGame
     }
 
     // -------------------------------------------------------
-    /** Update tab.
+    /** Update tab
     */
     updateForTab()
     {
@@ -132,6 +132,9 @@ class SceneMenuInventory extends SceneGame
         this.windowChoicesList.select(this.positionChoice[indexTab].index);
     }
 
+    // -------------------------------------------------------
+    /** use the current item
+    */
     useItem()
     {
         RPM.game.useItem(this.windowInformations.content.gameItem);
@@ -146,6 +149,10 @@ class SceneMenuInventory extends SceneGame
         RPM.requestPaintHUD = true;
     }
 
+    // -------------------------------------------------------
+    /** Move tab according to key
+    *   @param {number} key The key ID 
+    */
     moveTabKey(key)
     {
         // Tab
@@ -167,7 +174,8 @@ class SceneMenuInventory extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Update the scene
+    */
     update()
     {
         SceneGame.prototype.update.call(RPM.currentMap);
@@ -179,7 +187,9 @@ class SceneMenuInventory extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene key pressed
+    *   @param {number} key The key ID
+    */
     onKeyPressed(key)
     {
         SceneGame.prototype.onKeyPressed.call(RPM.currentMap, key);
@@ -241,21 +251,29 @@ class SceneMenuInventory extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene key released
+    *   @param {number} key The key ID
+    */
     onKeyReleased(key)
     {
         SceneGame.prototype.onKeyReleased.call(RPM.currentMap, key);
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene pressed repeat key
+    *   @param {number} key The key ID
+    *   @returns {boolean}
+    */
     onKeyPressedRepeat(key)
     {
         SceneGame.prototype.onKeyPressedRepeat.call(RPM.currentMap, key);
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene pressed and repeat key
+    *   @param {number} key The key ID
+    *   @returns {boolean}
+    */
     onKeyPressedAndRepeat(key)
     {
         SceneGame.prototype.onKeyPressedAndRepeat.call(RPM.currentMap, key);
@@ -272,14 +290,16 @@ class SceneMenuInventory extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Draw the 3D scene
+    */
     draw3D()
     {
         RPM.currentMap.draw3D();
     }
 
     // -------------------------------------------------------
-
+    /** Draw the HUD scene
+    */
     drawHUD()
     {
         // Draw the local map behind

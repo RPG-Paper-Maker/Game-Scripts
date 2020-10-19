@@ -12,6 +12,7 @@
 /** @class
 *   A scene for the title screen
 *   @extends SceneGame
+*   @property {Picture2D} pictureBackground The title screen background picture
 *   @property {WindowChoices} windowChoicesCommands A window choices for
 *   choosing a command
 */
@@ -22,6 +23,9 @@ class SceneTitleScreen extends SceneGame
         super();
     }
 
+    // -------------------------------------------------------
+    /** Load async stuff
+    */
     async load()
     {
         // Stop all songs
@@ -67,20 +71,28 @@ class SceneTitleScreen extends SceneGame
     }
 
     // -------------------------------------------------------
-
+    /** Handle scene key pressed
+    *   @param {number} key The key ID
+    */
     onKeyPressed(key)
     {
         this.windowChoicesCommands.onKeyPressed(key, this.windowChoicesCommands
             .getCurrentContent().datas);
     }
 
+    // -------------------------------------------------------
+    /** Handle scene pressed and repeat key
+    *   @param {number} key The key ID
+    *   @returns {boolean}
+    */
     onKeyPressedAndRepeat(key)
     {
         this.windowChoicesCommands.onKeyPressedAndRepeat(key);
     }
 
     // -------------------------------------------------------
-
+    /** Draw the HUD scene
+    */
     drawHUD()
     {
         if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage)
