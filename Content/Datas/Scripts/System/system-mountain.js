@@ -12,7 +12,7 @@
 /** @class
 *   A mountain of the game
 *   @extends SystemSpecialElement
-*   @property {number} id The mountain id
+*   @property {number} id The ID
 *   @property {MountainCollisionKind} collisionKind The collision kind
 *   @param {Object} [json=undefined] Json object describing the mountain
 */
@@ -41,7 +41,7 @@ class SystemMountain extends SystemSpecialElement
 
     // -------------------------------------------------------
     /** Check if the collision is always forced
-    *   @returns {MountainCollisionKind}
+    *   @returns {boolean}
     */
     forceAlways()
     {
@@ -50,7 +50,7 @@ class SystemMountain extends SystemSpecialElement
 
     // -------------------------------------------------------
     /** Check if the collision is never forced
-    *   @returns {MountainCollisionKind}
+    *   @returns {boolean}
     */
     forceNever()
     {

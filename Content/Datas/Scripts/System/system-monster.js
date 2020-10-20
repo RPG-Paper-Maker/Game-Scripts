@@ -13,6 +13,10 @@
 /** @class
 *   A monster of the game
 *   @extends SystemHero
+*   @property {Object} rewards An object containing experience, currencies, and 
+*   loots
+*   @property {SystemMonsterAction[]} actions The monster actions list
+*   @param {Object} [json=undefined] Json object describing the monster
 */
 class SystemMonster extends SystemHero
 {
@@ -26,7 +30,9 @@ class SystemMonster extends SystemHero
     }
 
     // -------------------------------------------------------
-
+    /** Read the JSON associated to the monster
+    *   @param {Object} json Json object describing the monster
+    */
     read(json)
     {
         super.read(json);
@@ -64,7 +70,10 @@ class SystemMonster extends SystemHero
     }
 
     // -------------------------------------------------------
-
+    /** Get the experience reward
+    *   @param {number} level The monster level
+    *   @returns {number}
+    */
     getRewardExperience(level)
     {
         return this.rewards.xp.getProgressionAt(level, this.getProperty(
@@ -72,7 +81,10 @@ class SystemMonster extends SystemHero
     }
 
     // -------------------------------------------------------
-
+    /** Get the currencies reward
+    *   @param {number} level The monster level
+    *   @returns {Object}
+    */
     getRewardCurrencies(level)
     {
         let currencies = {};
@@ -87,7 +99,10 @@ class SystemMonster extends SystemHero
     }
 
     // -------------------------------------------------------
-
+    /** Get the loots reward
+    *   @param {number} level The monster level
+    *   @returns {Object[]}
+    */
     getRewardLoots(level)
     {
         let list = new Array(3);

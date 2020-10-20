@@ -11,8 +11,10 @@
 
 /** @class
 *   A sprite in the map
+*   @extends MapElement
 *   @property {number} id The picture ID of the sprite
 *   @property {SpriteWallKind} kind The kind of wall (border or not)
+*   @param {Object} [json=undefined] Json object describing the wall
 */
 class SpriteWall extends MapElement
 {
@@ -26,8 +28,9 @@ class SpriteWall extends MapElement
         }
     }
 
-    /** Read the JSON associated to the sprite wall.
-    *   @param {Object} json Json object describing the object.
+    // -------------------------------------------------------
+    /** Read the JSON associated to the sprite wall
+    *   @param {Object} json Json object describing the wall
     */
     read(json)
     {
@@ -37,14 +40,16 @@ class SpriteWall extends MapElement
         this.kind = json.k;
     }
 
-    /** Update the geometry of a group of sprite walls with the same material.
-    *   @param {THREE.Geometry} geometry of the sprites walls.
-    *   @param {number[]} position The position of the wall.
-    *   @param {number} width The width of the texture.
-    *   @param {number} height The height of the texture.
-    *   @return {number}
+    // -------------------------------------------------------
+    /** Update the geometry of a group of sprite walls with the same material
+    *   @param {THREE.Geometry} geometry The geometry
+    *   @param {number[]} position The json position
+    *   @param {number} width The total width of the texture
+    *   @param {number} height The total height of the texture
+    *   @param {number} count The faces count
+    *   @return {any[]}
     */
-    updateGeometry(geometry, position, width, height, c)
+    updateGeometry(geometry, position, width, height, count)
     {
         let vecA = new THREE.Vector3(-0.5, 1.0, 0.0);
         let vecB = new THREE.Vector3(0.5, 1.0, 0.0);
@@ -88,9 +93,9 @@ class SpriteWall extends MapElement
             new THREE.Vector2(x + w, y + h)
         ];
         let texFaceB = [
-            new THREE.Vector2(x,y),
-            new THREE.Vector2(x+w,y+h),
-            new THREE.Vector2(x,y+h)
+            new THREE.Vector2(x, y),
+            new THREE.Vector2(x + w, y + h),
+            new THREE.Vector2(x, y + h)
         ];
 
         // Collision
@@ -131,9 +136,10 @@ class SpriteWall extends MapElement
             });
         }
 
+        // Add sprite to geometry
         Sprite.rotateSprite(vecA, vecB, vecC, vecD, center, angle, Sprite.Y_AXIS);
-        c = Sprite.addStaticSpriteToGeometry(geometry, vecA, vecB, vecC, vecD, 
-            texFaceA, texFaceB, c);
-        return [c, objCollision];
+        count = Sprite.addStaticSpriteToGeometry(geometry, vecA, vecB, vecC, 
+            vecD, texFaceA, texFaceB, count);
+        return [count, objCollision];
     }
 }

@@ -11,14 +11,16 @@
 
 /** @class
 *   A shape of the game
+*   @property {number} id The shape ID
+*   @property {string} name The shape name
 *   @property {boolean} isBR Indicate if the shape is a BR (Basic Ressource)
 *   @property {boolean} dlc Indicate if the shape is a DLC
-*   @param {Object} json Json object describing the shape
-*   @param {CustomShapeKind} kind The kind of custom shape
+*   @param {Object} [json=undefined] Json object describing the shape
+*   @param {CustomShapeKind} [kind=CustomShapeKin] The kind of custom shape
 */
 class SystemShape
 {
-    constructor(json, kind)
+    constructor(json, kind = CustomShapeKind.OBJ)
     {
         this.kind = kind;
         if (json)
@@ -31,8 +33,6 @@ class SystemShape
     /** Get the folder associated to a kind of custom shape
     *   @static
     *   @param {CustomShapeKind} kind The kind of custom shape
-    *   @param {number} id The shape id
-    *   @param {string} name The shape name
     *   @param {boolean} isBR Indicate if the shape is a BR
     *   @param {boolean} dlc Indicate if the shape is a DLC
     *   @returns {string}
@@ -59,7 +59,7 @@ class SystemShape
         case CustomShapeKind.Collisions:
             return RPM.PATH_OBJ_COLLISIONS;
         }
-        return "";
+        return RPM.STRING_EMPTY;
     }
 
     // -------------------------------------------------------
@@ -84,7 +84,6 @@ class SystemShape
     }
 
     // -------------------------------------------------------
-
     /** Get the absolute path associated to this picture
     *   @returns {string}
     */

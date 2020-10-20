@@ -12,8 +12,20 @@
 /** @class
 *   A 3D object of the game
 *   @extends SystemSpecialElement
-*   @property {number} id The object 3D id
-*   @property {ShapeKind} shapeKind The shape kind of the 3D object
+*   @property {number} id The ID
+*   @property {ShapeKind} shapeKind The shape kind
+*   @property {number} objID The .obj ID
+*   @property {number} mtlID The .mtl ID
+*   @property {ObjectCollisionKind} collisionKind The object collision kind
+*   @property {number} collisionCustomID The custom collision ID
+*   @property {number} scale The scale
+*   @property {number} widthSquare The square width
+*   @property {number} widthPixel The pixel width
+*   @property {number} heightSquare The square height
+*   @property {number} heightPixel The pixel height
+*   @property {number} depthSquare The square depth
+*   @property {number} depthPixel The pixel depth
+*   @property {boolean} stretch Indicate if the texture is stretch
 *   @param {Object} [json=undefined] Json object describing the object 3D
 */
 class SystemObject3D extends SystemSpecialElement
@@ -109,7 +121,7 @@ class SystemObject3D extends SystemSpecialElement
     }
 
     // -------------------------------------------------------
-    /** Get the width in squares
+    /** Get the size vector
     *   @returns {THREE.Vector3}
     */
     getSizeVector()

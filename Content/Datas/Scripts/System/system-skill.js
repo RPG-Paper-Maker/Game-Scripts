@@ -12,8 +12,6 @@
 /** @class
 *   A skill of the game
 *   @extends SystemCommonSkillItem
-*   @property {boolean} hasType Indicate if the skill has a type
-*   @property {string} name The name of the skill
 *   @param {Object} [json=undefined] Json object describing the skill
 */
 class SystemSkill extends SystemCommonSkillItem

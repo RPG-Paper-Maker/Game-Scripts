@@ -13,7 +13,7 @@
 *   A value in the system
 *   @property {number} kind The kind of value
 *   @property {number} value The value
-
+*   @param {Object} [json=undefined] Json object describing the value
 */
 class SystemValue
 {

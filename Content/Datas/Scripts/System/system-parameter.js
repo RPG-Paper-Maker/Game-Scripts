@@ -12,6 +12,7 @@
 /** @class
 *   A parameter of a reaction
 *   @property {SystemValue} value The value of the parameter
+*   @param {Object} [json=undefined] Json object describing the parameter value
 */
 class SystemParameter
 {
@@ -23,8 +24,10 @@ class SystemParameter
         }
     }
 
+    // -------------------------------------------------------
     /** Read the parameters
-    *   @param {Object} json Json object describing the object
+    *   @static 
+    *   @param {Object} json Json object describing the parameters
     *   @returns {SystemParameter[]}
     */
     static readParameters(json)
@@ -59,24 +62,27 @@ class SystemParameter
         return parameters;
     }
 
-    /** Read the JSON associated to the parameter value.
-    *   @param {Object} json Json object describing the object.
+    // -------------------------------------------------------
+    /** Read the JSON associated to the parameter value
+    *   @param {Object} json Json object describing the parameter value
     */
     read(json)
     {
         this.value = new SystemValue(json.d);
     }
 
-    /** Read the JSON associated to the parameter default value.
-    *   @param {Object} json Json object describing the object.
+    // -------------------------------------------------------
+    /** Read the JSON associated to the parameter default value
+    *   @param {Object} json Json object describing the default value
     */
     readDefault(json)
     {
         this.value = new SystemValue(json);
     }
 
-    /** Check if the parameter is equal to another one.
-    *   @param {SystemParameter()} parameter The parameter to compare.
+    // -------------------------------------------------------
+    /** Check if the parameter is equal to another one
+    *   @param {SystemParameter} parameter The parameter to compare
     *   @returns {boolean}
     */
     isEqual(parameter)

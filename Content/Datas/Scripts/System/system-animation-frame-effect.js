@@ -11,6 +11,11 @@
 
 /** @class
 *   An animation frame effect
+*   @property {boolean} isSE Indicate if the effect is a sound effect
+*   @property {SystemPlaySong} se The sound effect to play
+*   @property {AnimationEffectConditionKind} condition The animation effect 
+*   condition 
+*   @param {Object} [json=undefined] Json object describing the animation frame effect
 */
 class SystemAnimationFrameEffect
 {
@@ -23,7 +28,9 @@ class SystemAnimationFrameEffect
     }
 
     // -------------------------------------------------------
-
+    /** Read the JSON associated to the animation frame effect
+    *   @param {Object} json Json object describing the animation frame effect
+    */
     read(json)
     {
         this.isSE = RPM.defaultValue(json.ise, true);
@@ -36,7 +43,10 @@ class SystemAnimationFrameEffect
     }
 
     // -------------------------------------------------------
-
+    /** Play the sound effect according to a condition
+    *   @param {AnimationEffectConditionKind} condition The animation effect 
+    *   condition kind
+    */
     playSE(condition)
     {
         if (this.isSE && (this.condition === AnimationEffectConditionKind.None

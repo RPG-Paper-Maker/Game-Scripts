@@ -33,6 +33,7 @@
 *   @property {number[]} textCritical The critical text rect
 *   @property {number[]} textHeal The heal text rect
 *   @property {number[]} textMiss The miss text rect
+*   @param {Object} [json=undefined] Json object describing the window skin
 */
 class SystemWindowSkin
 {
@@ -249,7 +250,7 @@ class SystemWindowSkin
     */
     drawDamagesNumber(damage, x, y, rect, zoom)
     {
-        let digits = ("" + damage).split("").map(Number);
+        let digits = RPM.numToBool(damage).split(RPM.STRING_EMPTY).map(Number);
         let width = rect[2] / 10;
         let height = rect[3];
         this.picture.stretch = false;

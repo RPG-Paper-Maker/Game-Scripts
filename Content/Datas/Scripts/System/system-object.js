@@ -20,6 +20,7 @@
 *   @property {SystemProperty[]} properties List of all properties of the object
 *   @property {SystemObjectEvent[]} events List of all the event that the object
 *   can react on
+*   @property {SystemEvent[]} timeEvents The time events list
 *   @param {Object} [json=undefined] Json object describing the object
 */
 class SystemObject
@@ -148,7 +149,6 @@ class SystemObject
                 this.events[element.idEvent] = [element];
             }
         }
-
         this.timeEvents = this.getTimeEvents();
     }
 
@@ -181,6 +181,7 @@ class SystemObject
     *   @param {number} idEvent ID of the event
     *   @param {number} state The ID of the state
     *   @param {SystemValue[]} parameters List of all the parameters
+    *   @returns {SystemObjectReaction[]}
     */
     getReactions(isSystem, idEvent, state, parameters)
     {

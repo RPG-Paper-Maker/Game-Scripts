@@ -12,6 +12,7 @@
 /** @class
 *   A troop of the game
 *   @property {Object[]} list list of the monsters (ids, level)
+*   @param {Object} [json=undefined] Json object describing the troop
 */
 class SystemTroop
 {

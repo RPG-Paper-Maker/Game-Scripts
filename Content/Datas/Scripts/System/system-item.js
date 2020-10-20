@@ -12,9 +12,6 @@
 /** @class
 *   An item of the game
 *   @extends SystemCommonSkillItem
-*   @property {string} name The name of the item
-*   @property {number} idType The id of the item's type
-*   @property {boolean} consumable Indicate if the item is consumable
 *   @param {Object} [json=undefined] Json object describing the item
 */
 class SystemItem extends SystemCommonSkillItem

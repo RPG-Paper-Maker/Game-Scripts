@@ -11,16 +11,21 @@
 
 /** @class
 *   A tileset of the game
-*   @property {SystemPicture} picture The picture used for this tileset
-*   @property {number} width
-*   @property {number} height
-*   @property {number[]} autotiles All the IDs of used autotiles for this
-*   tileset
-*   @property {number[]} mountains All the IDs of used mountains for this
-*   tileset
-*   @property {number[]} walls All the IDs of used walls for this tileset
 *   @property {CollisionSquare[]} collisions List of all the collisions
 *   according to the position on the texture
+*   @property {boolean} ownsAutotiles Indicate if this tileset contains 
+*   autotiles
+*   @property {boolean} ownsMountains Indicate if this tileset contains 
+*   mountains
+*   @property {boolean} ownsWalls Indicate if this tileset contains walls
+*   @property {number} id The tileset ID
+*   @property {SystemPicture} picture The picture used for this tileset
+*   @property {number[]} autotiles All the IDs of used autotiles for this
+*   tileset
+*   @property {number[]} walls All the IDs of used walls for this tileset
+*   @property {number[]} mountains All the IDs of used mountains for this
+*   tileset
+*   @property {number[]} objects All the IDs of used 3D objects for this tileset
 */
 class SystemTileset
 {
@@ -36,6 +41,7 @@ class SystemTileset
         }
     }
 
+    // -------------------------------------------------------
     /** Read the JSON associated to the tileset
     *   @param {Object} json Json object describing the tileset
     */
@@ -129,6 +135,7 @@ class SystemTileset
 
     // -------------------------------------------------------
     /** Get the max possible offset of an autotile texture
+    *   @returns {number} 
     */
     getMaxAutotilesOffsetTexture()
     {
@@ -137,6 +144,7 @@ class SystemTileset
 
     // -------------------------------------------------------
     /** Get the max possible offset of a mountain texture
+    *   @returns {number} 
     */
     getMaxMountainOffsetTexture()
     {
@@ -219,6 +227,7 @@ class SystemTileset
     *   @param {SystemPicture} picture The picture to paint
     *   @param {number} offset The offset
     *   @param {number} id The picture id
+    *   @returns {any[]}
     */
     async loadTextureAutotile(textureAutotile, texture, picture, offset, id)
     {
@@ -387,6 +396,7 @@ class SystemTileset
     *   @param {SystemPicture} picture The picture to paint
     *   @param {number} offset The offset
     *   @param {number} id The picture id
+    *   @returns {any[]}
     */
     async loadTextureMountain(textureMountain, texture, picture, offset, id)
     {
@@ -485,7 +495,6 @@ class SystemTileset
     }
 
     // -------------------------------------------------------
-
     /** Update texture of a TextureSeveral
     *   @param {TextureSeveral} textureMountain The mountain several texture
     *   @param {THREE.Texture} texture The texture to paint on
@@ -535,6 +544,7 @@ class SystemTileset
     /** Load a wall texture
     *   @param {SystemPicture} picture The picture to load
     *   @param {number} id The picture id
+    *   @returns {THREE.ShaderMaterial}
     */
     async loadTextureWall(picture, id)
     {

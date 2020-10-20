@@ -12,7 +12,9 @@
 /** @class
 *   A title command of the game
 *   @extends SystemLang
-*   @property {}
+*   @property {TitleCommandKind} kind The title command kind
+*   @property {string} script The script formula
+*   @param {Object} [json=undefined] Json object describing the title screen command
 */
 class SystemTitleCommand extends SystemLang
 {

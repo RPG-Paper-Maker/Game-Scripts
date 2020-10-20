@@ -11,6 +11,12 @@
 
 /** @class
 *   A skybox of the game
+*   @property {number} front The front picture ID
+*   @property {number} back The back picture ID
+*   @property {number} top The top picture ID
+*   @property {number} bot The bot picture ID
+*   @property {number} left The left picture ID
+*   @property {number} right The right picture ID
 *   @param {Object} [json=undefined] Json object describing the skybox
 */
 class SystemSkybox
@@ -39,7 +45,7 @@ class SystemSkybox
     
     // -------------------------------------------------------
     /** Create the textures for the background
-    *   @returns {THREE.Material[]} 
+    *   @returns {THREE.MeshBasicMaterial[]} 
     */
     createTextures = function() 
     {

@@ -11,6 +11,9 @@
 
 /** @class
 *   A battle map of the game
+*   @property {number} idMap The map ID
+*   @property {number[]} position The json position
+*   @param {Object} [json=undefined] Json object describing the battle map
 */
 class SystemBattleMap
 {
@@ -22,14 +25,21 @@ class SystemBattleMap
         }
     }
 
+    // -------------------------------------------------------
+    /** Create a system battle map
+    *   @static 
+    *   @param {number} idMap The map ID
+    *   @param {number[]} position The json position
+    */
     static create(idMap, position)
     {
         this.idMap = idMap;
         this.position = position;
     }
 
-    /** Read the JSON associated to the element
-    *   @param {Object} json Json object describing the object
+    // -------------------------------------------------------
+    /** Read the JSON associated to the battle map
+    *   @param {Object} json Json object describing the battle map
     */
     read(json)
     {

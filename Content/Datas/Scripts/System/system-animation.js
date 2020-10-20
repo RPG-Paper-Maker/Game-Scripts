@@ -11,6 +11,12 @@
 
 /** @class
 *   An animation of a skill / item / weapon or for display animation command
+*   @property {number} pictureID The animation picture ID
+*   @property {AnimationPositionKind} positionKind The animation position kind
+*   @property {SystemAnimationFrame[]} frames The system animation frames by ID
+*   @property {number} rows The number of rows in the animation texture
+*   @property {number} cols The number of columns in the animation texture
+*   @param {Object} [json=undefined] Json object describing the animation
 */
 class SystemAnimation
 {
@@ -23,7 +29,9 @@ class SystemAnimation
     }
 
     // -------------------------------------------------------
-
+    /** Read the JSON associated to the animation
+    *   @param {Object} json Json object describing the animation
+    */
     read(json)
     {
         this.pictureID = RPM.defaultValue(json.pid, 1);
@@ -35,15 +43,20 @@ class SystemAnimation
     }
 
     // -------------------------------------------------------
-
+    /** Create an animation picture copy
+    *   @returns {Picture2D}
+    */
     createPicture()
     {
-        return RPM.datasGame.pictures.get(PictureKind.Animations, this.pictureID
-            ).picture.createCopy();
+        return RPM.datasGame.pictures.getPictureCopy(PictureKind.Animations, 
+            this.pictureID);
     }
 
     // -------------------------------------------------------
-
+    /** Play the sounds according to frame and condition
+    *   @param {number} frame The frame
+    *   @param {AnimationEffectConditionKind} condition The condition 
+    */
     playSounds(frame, condition)
     {
         if (frame > 0 && frame < this.frames.length)
@@ -53,7 +66,11 @@ class SystemAnimation
     }
 
     // -------------------------------------------------------
-
+    /** Draw the animation
+    *   @param {Picture2D} picture The picture associated to the animation
+    *   @param {number} frame The frame
+    *   @param {Battler} battler The battler target
+    */
     draw(picture, frame, battler)
     {
         if (frame > 0 && frame < this.frames.length)
@@ -72,10 +89,7 @@ class SystemAnimation
                 position = battler.botPosition;
                 break;
             case AnimationPositionKind.ScreenCenter:
-                position = {
-                    x: 0,
-                    y: 0
-                };
+                position = new THREE.Vector2(0, 0);
                 break;
             }
             

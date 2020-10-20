@@ -939,7 +939,7 @@ class RPM
     // -------------------------------------------------------
     /** Load a texture
     *   @param {string} path The path of the texture
-    *   @returns {THREE.MeshBasicMaterial}
+    *   @returns {THREE.ShaderMaterial}
     */
     static async loadTexture(path)
     {
@@ -974,7 +974,7 @@ class RPM
 
     // -------------------------------------------------------
     /** Create a material from texture.
-    *   @retuns {THREE.MeshBasicMaterial}
+    *   @returns {THREE.ShaderMaterial}
     */
     static createMaterial(texture, opts)
     {

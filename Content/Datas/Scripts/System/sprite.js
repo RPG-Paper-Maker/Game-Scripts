@@ -11,7 +11,17 @@
 
 /** @class
 *   A sprite in the map
+*   @extends MapElement
+*   @property {THREE.Vector3} [Sprite.Y_AXIS=new THREE.Vector3(0, 1, 0)] The 
+*   unit Y axis vector
+*   @property {THREE.Vector3} [Sprite.X_AXIS=new THREE.Vector3(1, 0, 0)] The 
+*   unit X axis vector
+*   @property {THREE.Vector3} [Sprite.Z_AXIS=new THREE.Vector3(0, 0, 1)] The 
+*   unit Z axis vector
+*   @property {boolean} front Indicate if the sprite is in front (for layers)
+*   @property {ElementMapKind} kind The element map kind
 *   @property {number[]} textureRect Texture UV coords
+*   @param {Object} [json=undefined] Json object describing the sprite
 */
 class Sprite extends MapElement
 {
@@ -30,6 +40,12 @@ class Sprite extends MapElement
         }
     }
     
+    // -------------------------------------------------------
+    /** Create a new sprite
+    *   @static
+    *   @param {ElementMapKind} kind The element map kind
+    *   @param {number[]} texture Texture UV coords
+    */
     static create(kind, texture)
     {
         let sprite = new Sprite();
@@ -38,11 +54,13 @@ class Sprite extends MapElement
         return sprite;
     }
 
-    /** @static
-    *   Rotate a vertex around a specified center.
-    *   @param {THREE.Vector3} vec The vertex to rotate.
-    *   @param {THREE.Vector3} center The center to rotate around.
-    *   @param {number} angle The angle in degree.
+    // -------------------------------------------------------
+    /** Rotate a vertex around a specified center
+    *   @static
+    *   @param {THREE.Vector3} vec The vertex to rotate
+    *   @param {THREE.Vector3} center The center to rotate around
+    *   @param {number} angle The angle in degree
+    *   @param {THREE.Vector3} axis The vector axis
     */
     static rotateVertex(vec, center, angle, axis)
     {
@@ -51,14 +69,16 @@ class Sprite extends MapElement
         vec.add(center);
     }
 
-    /** @static
-    *   Rotate the four vertices of a sprite around a specified center.
-    *   @param {THREE.Vector3} vecA The A vertex to rotate.
-    *   @param {THREE.Vector3} vecB The B vertex to rotate.
-    *   @param {THREE.Vector3} vecC The C vertex to rotate.
-    *   @param {THREE.Vector3} vecD The D vertex to rotate.
-    *   @param {THREE.Vector3} center The center to rotate around.
-    *   @param {number} angle The angle in degree.
+    // -------------------------------------------------------
+    /** Rotate the four vertices of a sprite around a specified center
+    *   @static
+    *   @param {THREE.Vector3} vecA The A vertex to rotate
+    *   @param {THREE.Vector3} vecB The B vertex to rotate
+    *   @param {THREE.Vector3} vecC The C vertex to rotate
+    *   @param {THREE.Vector3} vecD The D vertex to rotate
+    *   @param {THREE.Vector3} center The center to rotate around
+    *   @param {number} angle The angle in degree
+    *   @param {THREE.Vector3} axis The vector axis
     */
     static rotateSprite(vecA, vecB, vecC, vecD, center, angle, axis)
     {
@@ -68,32 +88,36 @@ class Sprite extends MapElement
         Sprite.rotateVertex(vecD, center, angle, axis);
     }
 
-    /** @static
-    *   Rotate the four vertices of a sprite around a specified center.
-    *   @param {THREE.Vector3} vecA The A vertex to rotate.
-    *   @param {THREE.Vector3} vecB The B vertex to rotate.
-    *   @param {THREE.Vector3} vecC The C vertex to rotate.
-    *   @param {THREE.Vector3} vecD The D vertex to rotate.
-    *   @param {THREE.Vector3} center The center to rotate around.
-    *   @param {number} angle The angle in degree.
-    *   @returns {number} Offset for index buffer.
+    // -------------------------------------------------------
+    /** Add a static sprite to the geometry
+    *   @static
+    *   @param {THREE.Geometry} geometry The geometry
+    *   @param {THREE.Vector3} vecA The A vertex
+    *   @param {THREE.Vector3} vecB The B vertex
+    *   @param {THREE.Vector3} vecC The C vertex
+    *   @param {THREE.Vector3} vecD The D vertex
+    *   @param {THREE.Vector2} texFaceA The texture face A
+    *   @param {THREE.Vector2} texFaceB The texture face B
+    *   @param {number} count The faces count
+    *   @returns {number}
     */
     static addStaticSpriteToGeometry(geometry, vecA, vecB, vecC, vecD, texFaceA, 
-        texFaceB, c)
+        texFaceB, count)
     {
         geometry.vertices.push(vecA);
         geometry.vertices.push(vecB);
         geometry.vertices.push(vecC);
         geometry.vertices.push(vecD);
-        geometry.faces.push(new THREE.Face3(c, c + 1, c + 2));
-        geometry.faces.push(new THREE.Face3(c, c + 2, c + 3));
+        geometry.faces.push(new THREE.Face3(count, count + 1, count + 2));
+        geometry.faces.push(new THREE.Face3(count, count + 2, count + 3));
         geometry.faceVertexUvs[0].push(texFaceA);
         geometry.faceVertexUvs[0].push(texFaceB);
-        return c + 4;
+        return count + 4;
     }
 
-    /** Read the JSON associated to the sprite.
-    *   @param {Object} json Json object describing the object.
+    // -------------------------------------------------------
+    /** Read the JSON associated to the sprite
+    *   @param {Object} json Json object describing the sprite
     */
     read(json)
     {
@@ -104,10 +128,19 @@ class Sprite extends MapElement
         this.textureRect = json.t;
     }
 
-    /** Update the geometry associated to this land.
-    *   @returns {THREE.Geometry}
+    // -------------------------------------------------------
+    /** Update the geometry associated to this 
+    *   @param {THREE.Geometry} geometry The geometry
+    *   @param {number} width The total texture width
+    *   @param {number} height The total texture height
+    *   @param {number[]} position The json position
+    *   @param {number} count The faces count
+    *   @param {boolean} tileset Indicate if the texture is tileset
+    *   @param {THREE.Vector3} localPosition The local position
+    *   @returns {any[]}
     */
-    updateGeometry(geometry, width, height, position, c, tileset, localPosition)
+    updateGeometry(geometry, width, height, position, count, tileset, 
+        localPosition)
     {
         let vecA = new THREE.Vector3(-0.5, 1.0, 0.0);
         let vecB = new THREE.Vector3(0.5, 1.0, 0.0);
@@ -227,8 +260,8 @@ class Sprite extends MapElement
         let vecSimpleB = vecB.clone();
         let vecSimpleC = vecC.clone();
         let vecSimpleD = vecD.clone();
-        c = Sprite.addStaticSpriteToGeometry(geometry, vecSimpleA, vecSimpleB, 
-            vecSimpleC, vecSimpleD, texFaceA, texFaceB, c);
+        count = Sprite.addStaticSpriteToGeometry(geometry, vecSimpleA, 
+            vecSimpleB, vecSimpleC, vecSimpleD, texFaceA, texFaceB, count);
 
         // Double sprite
         if (this.kind === ElementMapKind.SpritesDouble || this.kind === 
@@ -240,8 +273,8 @@ class Sprite extends MapElement
             let vecDoubleD = vecD.clone();
             Sprite.rotateSprite(vecDoubleA, vecDoubleB, vecDoubleC, vecDoubleD,
                 center, 90, Sprite.Y_AXIS);
-            c = Sprite.addStaticSpriteToGeometry(geometry, vecDoubleA, 
-                vecDoubleB, vecDoubleC, vecDoubleD, texFaceA, texFaceB, c);
+            count = Sprite.addStaticSpriteToGeometry(geometry, vecDoubleA, 
+                vecDoubleB, vecDoubleC, vecDoubleD, texFaceA, texFaceB, count);
 
             // Quadra sprite
             if (this.kind === ElementMapKind.SpritesQuadra)
@@ -258,20 +291,24 @@ class Sprite extends MapElement
                     vecQuadra1D, center, 45, Sprite.Y_AXIS);
                 Sprite.rotateSprite(vecQuadra2A, vecQuadra2B, vecQuadra2C,
                     vecQuadra2D, center, -45, Sprite.Y_AXIS);
-                c = Sprite.addStaticSpriteToGeometry(geometry, vecQuadra1A,
-                    vecQuadra1B, vecQuadra1C, vecQuadra1D, texFaceA, texFaceB, c);
-                c = Sprite.addStaticSpriteToGeometry(geometry, vecQuadra2A,
-                    vecQuadra2B, vecQuadra2C, vecQuadra2D, texFaceA, texFaceB, c);
+                count = Sprite.addStaticSpriteToGeometry(geometry, vecQuadra1A,
+                    vecQuadra1B, vecQuadra1C, vecQuadra1D, texFaceA, texFaceB, 
+                    count);
+                count = Sprite.addStaticSpriteToGeometry(geometry, vecQuadra2A,
+                    vecQuadra2B, vecQuadra2C, vecQuadra2D, texFaceA, texFaceB, 
+                    count);
             }
         }
-        return [c, objCollision];
+        return [count, objCollision];
     }
 
-    /** Create the geometry associated to this sprite.
-    *   @param {number} width The texture total width.
-    *   @param {number} height The texture total height.
-    *   @param {number[]} position The position of the sprite.
-    *   @returns {THREE.Geometry}
+    // -------------------------------------------------------
+    /** Create the geometry associated to this sprite
+    *   @param {number} width The texture total width
+    *   @param {number} height The texture total height
+    *   @param {boolean} tileset Indicate if the texture is tileset
+    *   @param {number[]} position The json position
+    *   @returns {any[]}
     */
     createGeometry(width, height, tileset, position)
     {

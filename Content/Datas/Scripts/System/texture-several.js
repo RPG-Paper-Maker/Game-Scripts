@@ -54,6 +54,7 @@ class TextureSeveral
     /** Check which point is on top
     *   @param {number[]} rect
     *   @param {number[]} point
+    *   @returns {boolean}
     */
     isSup(rect, point)
     {
@@ -77,6 +78,7 @@ class TextureSeveral
     /** Check which point is on bot
     *   @param {number[]} rect
     *   @param {number[]} point
+    *   @returns {boolean}
     */
     isInf(rect, point)
     {
@@ -100,6 +102,7 @@ class TextureSeveral
     /** Check if a couple (id, rect) is inside this texture
     *   @param {number} id
     *   @param {number[]} rect
+    *   @returns {boolean}
     */
     isInTexture(id, rect)
     {
@@ -135,6 +138,7 @@ class TextureSeveral
     /** Get the offset of couple (id, rect)
     *   @param {number} id
     *   @param {number[]} rect
+    *   @returns {number}
     */
     getOffset(id, rect)
     {

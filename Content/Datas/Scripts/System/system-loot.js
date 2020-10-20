@@ -11,6 +11,13 @@
 
 /** @class
 *   A loot of the game
+*   @property {LootKind} kind The kind of loot
+*   @property {SystemValue} lootID The loot ID value
+*   @property {SystemValue} number The number value
+*   @property {SystemValue} probability The probability value
+*   @property {SystemValue} initial The initial value
+*   @property {SystemValue} final The final value
+*   @param {Object} [json=undefined] Json object describing the loot
 */
 class SystemLoot
 {
@@ -22,8 +29,9 @@ class SystemLoot
         }
     }
 
+    // -------------------------------------------------------
     /** Read the JSON associated to the loot
-    *   @param {Object} json Json object describing the object
+    *   @param {Object} json Json object describing the loot
     */
     read(json)
     {
@@ -36,14 +44,20 @@ class SystemLoot
     }
 
     // -------------------------------------------------------
-
+    /** Check if a loot is available at a particular level
+    *   @param {number} level The level
+    *   @returns {boolean}
+    */
     isAvailable(level)
     {
         return level >= this.initial.getValue() && level <= this.final.getValue();
     }
 
     // -------------------------------------------------------
-
+    /** Get the current loot at a particular level
+    *   @param {number} level The level
+    *   @returns {GameItem}
+    */
     currenLoot(level)
     {
         if (!this.isAvailable(level))

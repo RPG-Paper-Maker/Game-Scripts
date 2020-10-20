@@ -12,7 +12,11 @@
 /** @class
 *   An hero of the game
 *   @property {string} name The name of the hero
-*   @property {number} idClass The class ID of the hero
+*   @property {number} idClass The class ID
+*   @property {number} idBattler The battler ID
+*   @property {number} idFaceset The faceset ID
+*   @property {SystemClass} classInherit The inherit class
+*   @param {Object} [json=undefined] Json object describing the hero
 */
 class SystemHero
 {
@@ -24,8 +28,9 @@ class SystemHero
         }
     }
 
+    // -------------------------------------------------------
     /** Read the JSON associated to the hero
-    *   @param {Object} json Json object describing the object
+    *   @param {Object} json Json object describing the hero
     */
     read(json)
     {
@@ -38,7 +43,8 @@ class SystemHero
     }
 
     // -------------------------------------------------------
-
+    /** Check if the class ID exists
+    */
     check()
     {
         if (!RPM.datasGame.classes.list[this.idClass])
@@ -50,7 +56,10 @@ class SystemHero
     }
 
     // -------------------------------------------------------
-
+    /** Get the property according to class inherit and this hero
+    *   @param {string} prop The property name
+    *   @returns {number}
+    */
     getProperty(prop)
     {
         return RPM.datasGame.classes.list[this.idClass].getProperty(prop,
@@ -58,7 +67,9 @@ class SystemHero
     }
 
     // -------------------------------------------------------
-
+    /** Get the experience table according to class inherit and this hero
+    *   @returns {Object}
+    */
     getExperienceTable()
     {
         return RPM.datasGame.classes.list[this.idClass].getExperienceTable(this
@@ -66,15 +77,19 @@ class SystemHero
     }
 
     // -------------------------------------------------------
-
+    /** Get the statistics progression according to class inherit and this hero
+    *   @returns {SystemProgression[]}
+    */
     getStatisticsProgression()
     {
-        return RPM.datasGame.classes.list[this.idClass].getStatisticsProgression(
-            this.classInherit);
+        return RPM.datasGame.classes.list[this.idClass].getStatisticsProgression
+            (this.classInherit);
     }
     
     // -------------------------------------------------------
-
+    /** Get the skills according to class inherit and this hero
+    *   @returns {SystemClassSkill[]}
+    */
     getSkills()
     {
         return RPM.datasGame.classes.list[this.idClass].getSkills(this
@@ -82,7 +97,9 @@ class SystemHero
     }
 
     // -------------------------------------------------------
-
+    /** Create the experience list according to base and inflation
+    *   @returns {number[]}
+    */
     createExpList()
     {
         let finalLevel = this.getProperty(SystemClass.PROPERTY_FINAL_LEVEL);

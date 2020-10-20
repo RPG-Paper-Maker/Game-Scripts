@@ -13,9 +13,9 @@
 *   An event that an object can react on
 *   @property {boolean} isSystem Boolean indicating if it is an event system
 *   @property {number} idEvent ID of the event
-*   @property {SystemValue[]} parameters All the parameters values
-*   @property {SystemReaction[]} reactions List of all the reactions according
-*   to states id
+*   @property {SystemParameter[]} parameters All the parameters values
+*   @property {SystemObjectReaction[]} reactions List of all the reactions 
+*   according to states ID
 *   @param {Object} [json=undefined] Json object describing the object event
 */
 class SystemObjectEvent

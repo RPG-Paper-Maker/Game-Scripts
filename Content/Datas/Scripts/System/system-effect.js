@@ -59,7 +59,6 @@ class SystemEffect
 {
     constructor(json)
     {
-        this.currentCommonReactionState = null;
         if (json)
         {
             this.read(json);
@@ -144,6 +143,7 @@ class SystemEffect
 
     // -------------------------------------------------------
     /** Execute the effect
+    *   @returns {boolean} 
     */
     execute()
     {

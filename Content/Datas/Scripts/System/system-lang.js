@@ -11,15 +11,15 @@
 
 /** @class
 *   A name that can have several translations
+*   @property {Object} [SystemLang.EMPTY_NAMES={names:["",""]}] The default 
+*   json for no names
 *   @property {string[]} [names=[]] The different names list according to lang 
 *   ID
-*   @param {Object} [json=undefined] Json object describing the lang
+*   @param {Object} [json=undefined] Json object describing the name in sevaral 
+*   langs
 */
 class SystemLang
 {
-    /** The default json for no names
-    *   @member {Object} [WindowChoices.EMPTY_NAMES={names:["",""]}]
-    */
     static EMPTY_NAMES = 
     {
         names: ["", ""]
@@ -53,7 +53,7 @@ class SystemLang
     }
 
     // -------------------------------------------------------
-    /** DECRIPTION TODO
+    /** Update lang according to a command list and iterator
     */
     getCommand(command, iterator)
     {

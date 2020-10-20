@@ -18,6 +18,7 @@
 *   @property {number[]} jsonCollisions The json used for the picture collision
 *   @property {boolean} collisionsRepeat Indicate if collision is repeated (for 
 *   characters)
+*   @property {CollisionSquare[]} collisions The collisions squares
 *   @param {Object} [json=undefined] Json object describing the picture
 *   @param {Object} [kind=PictureKind.Pictures] The kind of picture
 */
@@ -183,6 +184,7 @@ class SystemPicture
     // -------------------------------------------------------
     /** Get a specific collision square according to texture
     *   @param {number[]} pos Texture position
+    *   @returns {CollisionSquare}
     */
     getCollisionAt(pos)
     {
@@ -193,6 +195,7 @@ class SystemPicture
     /** Get a specific collision square according to texture
     *   @param {number} x Texture x position
     *   @param {number} y Texture y position
+    *   @returns {CollisionSquare} 
     */
     getCollisionAtPos(x, y)
     {
@@ -202,6 +205,7 @@ class SystemPicture
     // -------------------------------------------------------
     /** Get a specific collision square according to index
     *   @param {number} index The index positions
+    *   @returns {CollisionSquare}
     */
     getCollisionAtIndex(index)
     {
@@ -212,6 +216,7 @@ class SystemPicture
     // -------------------------------------------------------
     /** Get a specific collision for wall
     *   @param {number[]} texture Texture position
+    *   @returns {number[][]}
     */
     getSquaresForWall(texture)
     {
@@ -262,6 +267,7 @@ class SystemPicture
     // -------------------------------------------------------
     /** Get a specific collision square according to texture
     *   @param {number[]} texture Texture position
+    *   @returns {number[][]}
     */
     getSquaresForTexture(texture)
     {
@@ -282,6 +288,7 @@ class SystemPicture
     // -------------------------------------------------------
     /** Get a specific collision square according to texture
     *   @param {Image} image The image texture
+    *   @returns {number[][][]}
     */
     getSquaresForStates(image)
     {

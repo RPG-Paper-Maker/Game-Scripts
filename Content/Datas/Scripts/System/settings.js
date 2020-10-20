@@ -11,6 +11,7 @@
 
 /** @class
 *   All settings
+*   @property {Object} kb The keyboard assignments according to ID
 */
 class Settings
 {

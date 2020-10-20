@@ -11,6 +11,7 @@
 
 /** @class
 *   Something at least including an icon
+*   @extends {SystemLang}
 *   @property {number} pictureID The icon picture ID
 *   @param {Object} [json=undefined] Json object describing the icon
 */
@@ -25,6 +26,7 @@ class SystemIcon extends SystemLang
         }
     }
 
+    // -------------------------------------------------------
     /** Read the JSON associated to the icon
     *   @param {Object} json Json object describing the icon
     */

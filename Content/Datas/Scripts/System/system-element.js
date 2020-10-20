@@ -11,7 +11,8 @@
 
 /** @class
 *   An element of the game
-*   @property {string} name The name of the element
+*   @property {SystemValue[]} efficiency The efficiency list
+*   @param {Object} [json=undefined] Json object describing the element
 */
 class SystemElement extends SystemIcon
 {
@@ -24,6 +25,10 @@ class SystemElement extends SystemIcon
         }
     }
 
+    // -------------------------------------------------------
+    /** Read the JSON associated to the element
+    *   @param {Object} json Json object describing the element
+    */
     read(json)
     {
         super.read(json);

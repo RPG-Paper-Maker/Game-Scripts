@@ -35,6 +35,7 @@ class SystemColor
     *   @param {number} g The green color between 0 and 255
     *   @param {number} b The blue color between 0 and 255
     *   @param {number} a The alpha value between 0 and 255
+    *   @returns {SystemColor}
     */
     static createColor(r, g, b, a)
     {
@@ -49,6 +50,7 @@ class SystemColor
     *   @param {THREE.Vector3} x The x position
     *   @param {THREE.Vector3} y The y position
     *   @param {number} aThe alpha value between 0 and 1
+    *   @returns {THREE.Vector3}
     */
     static mix(x, y, a)
     {

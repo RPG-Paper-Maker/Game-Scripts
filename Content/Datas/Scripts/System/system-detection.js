@@ -11,7 +11,8 @@
 
 /** @class
 *   A detection of the game
-*   @property {number[][]} boxes List of boxes for detection 
+*   @property {number[][]} boxes List of boxes for detection
+*   @param {Object} [json=undefined] Json object describing the detection
 */
 class SystemDetection
 {

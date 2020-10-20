@@ -11,6 +11,17 @@
 
 /** @class
 *   The manager for songs
+*   @property {number} musicEffectStep The music effect step
+*   @property {boolean} isProgressionMusicEnd Indicate if the progression music 
+*   is end
+*   @property {boolean} isMusicNone Indicate if music is none
+*   @property {number[]} volumes Current volumes according to song kind
+*   @property {number[]} starts Current starts time according to song kind
+*   @property {number} ends The current ends time according to song kind
+*   @property {Howl[]} currentSong The howl current song
+*   @property {SystemProgressionTable} progressionMusic The system progression 
+*   music
+*   @property {number} progressionMusicEnd The progression music end
 */
 class SongsManager
 {
@@ -41,8 +52,11 @@ class SongsManager
 
     // -------------------------------------------------------
     /** Play a music
-    *   @param {SongKind} kind The kind of song to add
+    *   @param {SongKind} kind The kind of the song
     *   @param {number} id The id of the song
+    *   @param {number} volume The volume of the song
+    *   @param {number} start The start of the song
+    *   @param {number} end The end of the song
     */
     playMusic(kind, id, volume, start, end)
     {
@@ -130,7 +144,7 @@ class SongsManager
     *   @param {number} time The date seconds value in the first call of
     *   unpause
     *   @param {number} seconds The seconds needed for entirely play the song
-    *   @returns {boolean} Indicates if the song is played with all volume
+    *   @returns {boolean} Indicate if the song is played with all volume
     */
     unpauseSong(kind, time, seconds)
     {
@@ -180,6 +194,7 @@ class SongsManager
     /** Play a music effect
     *   @param {number} id The id of the sound
     *   @param {number} volume The volume of the sound
+    *   @param {Object} currentState The current state command
     */
     playMusicEffect(id, volume, currentState)
     {
@@ -225,6 +240,7 @@ class SongsManager
 
     // -------------------------------------------------------
     /** Update songs positions or other stuff
+    *   @param {SongKind} kind The song kind 
     */
     updateByKind(kind) 
     {
@@ -239,7 +255,7 @@ class SongsManager
     }
 
     // -------------------------------------------------------
-    /** Update songs positions or other stuffs.
+    /** Update songs positions or other stuffs
     */
     update()
     {
@@ -249,6 +265,9 @@ class SongsManager
     }
 
     // -------------------------------------------------------
+    /** Stop the music (with progression)
+    *   @param {number} time The time to stop
+    */
     stopMusic(time)
     {
         this.isMusicNone = true;
@@ -258,6 +277,12 @@ class SongsManager
     }
 
     // -------------------------------------------------------
+    /** Initialize progression music (for stop)
+    *   @param {number} i The initial volume
+    *   @param {number} f The final volume
+    *   @param {number} equation The equation kind
+    *   @param {number} end The end of the song
+    */
     initializeProgressionMusic(i, f, equation, end)
     {
         this.progressionMusic = SystemProgressionTable.create(i, f,
@@ -268,6 +293,8 @@ class SongsManager
     }
 
     // -------------------------------------------------------
+    /** Update the progression music
+    */
     updateProgressionMusic()
     {
         if (!this.isProgressionMusicEnd)
@@ -294,6 +321,9 @@ class SongsManager
         }
     }
 
+    // -------------------------------------------------------
+    /** Stop all the songs
+    */
     stopAll() 
     {
         if (this.currentSong[SongKind.Music] !== null)

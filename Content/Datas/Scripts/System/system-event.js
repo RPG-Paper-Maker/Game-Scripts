@@ -11,7 +11,7 @@
 
 /** @class
 *   An event that can be called
-*   @property {SystemParameters[]} parameters A list of parameters
+*   @property {SystemParameters[]} parameters The parameters list
 *   @param {Object} [json=undefined] json object describing the event
 */
 class SystemEvent

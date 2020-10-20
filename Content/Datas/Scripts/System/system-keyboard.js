@@ -11,7 +11,9 @@
 
 /** @class
 *   A key shortcut of the game
-*   @property {number[][]} sc The shortcut values
+*   @extends {SystemLang}
+*   @property {number[][]} sc The shortcut value
+*   @param {Object} [json=undefined] Json object describing the keyboard
 */
 class SystemKeyBoard extends SystemLang
 {
@@ -24,8 +26,9 @@ class SystemKeyBoard extends SystemLang
         }
     }
 
-    /** Read the JSON associated to the key
-    *   @param {Object} json Json object describing the object
+    // -------------------------------------------------------
+    /** Read the JSON associated to the keyboard
+    *   @param {Object} json Json object describing the keyboard
     */
     read(json)
     {
@@ -46,7 +49,9 @@ class SystemKeyBoard extends SystemLang
     }
 
     // -------------------------------------------------------
-
+    /** Get the string representation of the keyboard
+    *   @returns {string}
+    */
     toString()
     {
         let l = this.sc.length;

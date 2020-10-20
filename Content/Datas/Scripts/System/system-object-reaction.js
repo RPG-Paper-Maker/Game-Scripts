@@ -13,10 +13,10 @@
 *   A reaction to an event
 *   @property {string[]} [labels=[]] List of all labels
 *   @property {number} idEvent The event ID
-*   @property {boolean} blockingHero Indicates if this reaction is blocking
-*   the hero
+*   @property {boolean} blockingHero Indicate if this reaction is blocking the 
+*   hero
 *   @property {Tree} commands All the commands
-*   @param {Object} json Json object describing the object reaction
+*   @param {Object} [json=undefined] Json object describing the object reaction
 */
 class SystemObjectReaction
 {
@@ -89,7 +89,6 @@ class SystemObjectReaction
     }
 
     // -------------------------------------------------------
-
     /** Get the first node command of the reaction
     *   @returns {Node}
     */

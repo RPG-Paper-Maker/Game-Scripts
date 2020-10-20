@@ -11,7 +11,20 @@
 
 /** @class
 *   A class of the game
-*   @property {string} name The name of the class
+*   @extends SystemLang
+*   @property {string} [SystemClass.PROPERTY_FINAL_LEVEL="finalLevel"] The 
+*   final level string property
+*   @property {string} [SystemClass.PROPERTY_EXPERIENCE_BASE="experienceBase"] 
+*   The experience base property
+*   @property {string} [SystemClass.PROPERTY_EXPERIENCE_INFLATION="experienceInflation"]
+*   The experience inflation property
+*   @property {number} initialLevel The initial level
+*   @property {number} finalLevel The final level
+*   @property {number} experienceBase The experience base
+*   @property {number} experienceInflation The experience inflation
+*   @property {Object} experienceTable The experience table
+*   @property {SystemStatisticProgression[]} statisticsProgression The 
+*   statistics progression
 *   @property {SystemClassSkill[]} skills The skills to learn of the class
 *   @param {Object} [json=undefined] Json object describing the class
 */
@@ -64,29 +77,41 @@ class SystemClass extends SystemLang
     }
     
     // -------------------------------------------------------
-    
+    /** Get property according to upClass
+    *   @param {string} prop The property name
+    *   @param {SystemClass} upClass The up class
+    *   @returns {any}
+    */
     getProperty(prop, upClass)
     {
         return upClass[prop] === -1 ? this[prop] : upClass[prop];
     }
     
     // -------------------------------------------------------
-    
+    /** Get the experience table
+    *   @param {SystemClass} upClass The up class
+    *   @returns {Object}
+    */
     getExperienceTable(upClass)
     {
         let list = {};
         let level;
-        for (level in this.experienceTable) {
+        for (level in this.experienceTable)
+        {
             list[level] = this.experienceTable[level];
         }
-        for (level in upClass.experienceTable) {
+        for (level in upClass.experienceTable)
+        {
             list[level] = upClass.experienceTable[level];
         }
         return list;
     }
     
     // -------------------------------------------------------
-    
+    /** Get the statistics progression
+    *   @param {SystemClass} upClass The up class
+    *   @returns {SystemStatisticProgression[]}
+    */
     getStatisticsProgression(upClass)
     {
         let list = [];
@@ -118,7 +143,10 @@ class SystemClass extends SystemLang
     }
     
     // -------------------------------------------------------
-    
+    /** Get the skills
+    *   @param {SystemClass} upClass The up class
+    *   @returns {SystemClassSkill[]}
+    */
     getSkills(upClass)
     {
         return this.skills.concat(upClass.skills);

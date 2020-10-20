@@ -14,6 +14,8 @@
 *   @property {string} name The name of the weapon / armor kind
 *   @property {boolean[]} equipments List of booleans indicating which equipment
 *   is ok
+*   @param {Object} [json=undefined] Json object describing the weapon / armor 
+*   kind
 */
 class SystemWeaponArmorKind
 {

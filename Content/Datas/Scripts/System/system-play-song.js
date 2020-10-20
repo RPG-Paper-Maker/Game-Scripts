@@ -11,18 +11,23 @@
 
 /** @class
 *   A way to play a song
+*   @property {number} [SystemPlaySong.previousMusic=null] The music that was 
+*   previously played (before the current)
+*   @property {number} [SystemPlaySong.currentPlayingMusic=null] The current 
+*   playing music
+*   @property {SongKind} kind The kind of song to play
+*   @property {SystemValue} songID The song ID value
+*   @property {SystemValue} volume The volume value
+*   @property {boolean} isStart Indicate if is start
+*   @property {SystemValue} start The start value
+*   @property {boolean} isEnd Indicate if is end
+*   @property {SystemValue} end The end value
 *   @param {SongKind} kind The kind of song to play
 *   @param {Object} [json=undefined] Json object describing the play song
 */
 class SystemPlaySong
 {
-    /** The music that was previously played (before the current)
-    *   @member {number} [SystemPlaySong.previousMusic=null]
-    */
     static previousMusic = null;
-    /** The current playing music
-    *   @member {number} [SystemPlaySong.currentPlayingMusic=null]
-    */
     static currentPlayingMusic = null;
 
     constructor(kind, json)
@@ -68,8 +73,7 @@ class SystemPlaySong
     }
 
     // -------------------------------------------------------
-    /** Read the JSON associated to the play song
-    *   @returns {Object}
+    /** Initialize (for music effects)
     */
     initialize()
     {
@@ -80,7 +84,7 @@ class SystemPlaySong
     }
 
     // -------------------------------------------------------
-    /** Read the JSON associated to the play song
+    /** Update all the specified values
     *   @param {SystemValue} songID The song ID
     *   @param {SystemValue} volume The volume to play
     *   @param {boolean} isStart Indicate if there's a start value

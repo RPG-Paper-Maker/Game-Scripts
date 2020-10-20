@@ -11,13 +11,14 @@
 
 /** @class
 *   A song of the game
-*   @property {PictureKind} kind The kind of picture
-*   @property {number} id The song id
+*   @property {SongKind} kind The kind of song
+*   @property {number} id The song ID
 *   @property {string} name The song name
 *   @property {boolean} isBR Indicate if the pciture is a BR (Basic Ressource)
 *   @property {boolean} isDLC Indicate if the pciture is a DLC
-*   @param {SongKind} [kind=SongKind.Music] The kind of picture
+*   @property {Howl} song The loaded Howl song
 *   @param {Object} [json=undefined] Json object describing the song
+*   @param {SongKind} [kind=SongKind.Music] The kind of song
 */
 class SystemSong
 {
@@ -40,11 +41,6 @@ class SystemSong
     */
     static getFolder(kind, isBR, dlc)
     {
-        var folder = isBR ? RPM.PATH_BR : (dlc ? RPM.PATH_DLCS + "/" + dlc : RPM
-            .ROOT_DIRECTORY_LOCAL);
-        var dir = SystemSong.getLocalFolder(kind);
-        var path = folder + dir;
-
         return (isBR ? RPM.PATH_BR : (dlc ? RPM.PATH_DLCS + RPM.STRING_SLASH + 
             dlc : RPM.ROOT_DIRECTORY_LOCAL)) + SystemSong.getLocalFolder(kind);
     }

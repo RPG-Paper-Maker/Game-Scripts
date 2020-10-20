@@ -12,6 +12,7 @@
 /** @class
 *   Datas structure of tree
 *   @property {Node} root Node representing the root of the tree
+*   @param {Object} data The data
 */
 class Tree
 {
@@ -20,6 +21,7 @@ class Tree
         this.root = new Node(null, data);
     }
 
+    // -------------------------------------------------------
     /** Add a new child
     *   @param {Object} data Data of the new child
     *   @returns {Node} The new child
