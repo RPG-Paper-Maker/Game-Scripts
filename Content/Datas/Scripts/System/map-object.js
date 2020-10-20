@@ -1042,6 +1042,7 @@ class MapObject
                 this.previousPosition = this.position;
             } else
             {
+                frame = this.frame.value !== this.currentStateInstance.indexX;
                 this.frame.value = this.currentStateInstance.indexX;
 
                 // Update angle
