@@ -33,9 +33,9 @@ class MapElement
     */
     read(json)
     {
-        this.xOffset = json.xOff;
-        this.yOffset = json.yOff;
-        this.zOffset = json.zOff;
+        this.xOffset = RPM.defaultValue(json.xOff, 0);
+        this.yOffset = RPM.defaultValue(json.yOff, 0);
+        this.zOffset = RPM.defaultValue(json.zOff, 0);
     }
 
     // -------------------------------------------------------
