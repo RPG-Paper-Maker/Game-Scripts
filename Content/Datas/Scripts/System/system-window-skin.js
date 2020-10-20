@@ -250,7 +250,7 @@ class SystemWindowSkin
     */
     drawDamagesNumber(damage, x, y, rect, zoom)
     {
-        let digits = RPM.numToBool(damage).split(RPM.STRING_EMPTY).map(Number);
+        let digits = RPM.numToString(damage).split(RPM.STRING_EMPTY).map(Number);
         let width = rect[2] / 10;
         let height = rect[3];
         this.picture.stretch = false;

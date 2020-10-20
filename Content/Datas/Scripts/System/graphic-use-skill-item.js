@@ -142,7 +142,7 @@ class GraphicUseSkillItem
     drawArrowAtIndex(index, x, y, h)
     {
         RPM.datasGame.system.getWindowSkin().drawArrowTarget(this
-            .graphicCharacters[index].battlerFrame, x + 32 + (index * 85), y + h
+            .graphicCharacters[index].battlerFrame.value, x + 32 + (index * 85), y + h
             - 20);
     }
 

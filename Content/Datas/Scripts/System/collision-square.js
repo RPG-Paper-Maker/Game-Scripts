@@ -36,6 +36,7 @@ class CollisionSquare
     *   @param {number} l The squares numbers
     *   @param {number} w The number of squares width
     *   @param {number} h The number of squares height
+    *   @returns {number[][]}
     */
     static unionSquares(squares, l, w, h)
     {

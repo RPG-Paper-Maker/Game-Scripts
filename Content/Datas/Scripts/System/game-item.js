@@ -182,11 +182,11 @@ class GameItem
     }
 
     // -------------------------------------------------------
-    /** Use one item and check if the is at least one item left
+    /** Use one item and check if there is at least one item left
     *   @returns {boolean}
     */
     use()
     {
-        return this.nb-- > 0;
+        return --this.nb > 0;
     }
 }

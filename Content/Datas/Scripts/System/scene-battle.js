@@ -219,6 +219,17 @@ class SceneBattle extends SceneMap
     }
 
     // -------------------------------------------------------
+    /** Load async stuff
+    */
+    async load()
+    {
+        await super.load();
+        this.initialize();
+        RPM.requestPaintHUD = true;
+        this.loading = false;
+    }
+
+    // -------------------------------------------------------
     /** Initialize and correct some camera settings for the battle start
     */
     initializeCamera()
