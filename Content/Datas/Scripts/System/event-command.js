@@ -4145,8 +4145,8 @@ class EventCommandSetMoveTurnAPicture extends EventCommand
         this.index = SystemValue.createValueCommand(command, iterator);
         if (RPM.numToBool(command[iterator.i++]))
         {
-            iterator.i++; 
             this.pictureID = SystemValue.createValueCommand(command, iterator);
+            iterator.i++; 
         }
         if (RPM.numToBool(command[iterator.i++]))
         {
@@ -4183,7 +4183,8 @@ class EventCommandSetMoveTurnAPicture extends EventCommand
         let time = this.time.getValue() * 1000;
         let index = this.index.getValue();
         let obj, picture;
-        for (let i = 0, l = RPM.displayedPictures.length; i < l; i++)
+        let i, l;
+        for (i = 0, l = RPM.displayedPictures.length; i < l; i++)
         {
             obj = RPM.displayedPictures[i];
             if (index === obj[0])
