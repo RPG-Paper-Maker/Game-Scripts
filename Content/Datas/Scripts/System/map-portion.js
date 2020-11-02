@@ -489,6 +489,7 @@ class MapPortion
         // Creating the plane
         geometry.uvsNeedUpdate = true;
         this.staticFloorsMesh = new THREE.Mesh(geometry, material);
+        this.staticFloorsMesh.renderOrder = 0;
         RPM.currentMap.scene.add(this.staticFloorsMesh);
     }
 
@@ -597,6 +598,7 @@ class MapPortion
                     plane = new THREE.Mesh(geometry, material);
                     plane.position.set(localPosition.x, localPosition.y, 
                         localPosition.z);
+                    plane.renderOrder = 999;
                     this.faceSpritesList.push(plane);
                     RPM.currentMap.scene.add(plane);
                 } else
@@ -612,6 +614,7 @@ class MapPortion
         }
         staticGeometry.uvsNeedUpdate = true;
         this.staticSpritesMesh = new THREE.Mesh(staticGeometry, material);
+        this.staticSpritesMesh.renderOrder = 999;
         RPM.currentMap.scene.add(this.staticSpritesMesh);
     }
 
@@ -845,6 +848,7 @@ class MapPortion
                 geometry.uvsNeedUpdate = true;
                 mesh = new THREE.Mesh(geometry, obj.material);
                 this.staticObjects3DList.push(mesh);
+                mesh.renderOrder = 999;
                 RPM.gameStack.top.scene.add(mesh);
             }
         }

@@ -996,7 +996,7 @@ class RPM
             fragmentShader: RPM.SHADER_FIX_FRAGMENT,
             transparent: true,
             side: THREE.DoubleSide,
-            transparent: 0.999 // Force three.js to use sortObjects for semi transparent potencial meshs
+            transparent: 0.999
         });
         material.map = texture;
         return material;
