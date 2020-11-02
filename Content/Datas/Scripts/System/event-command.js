@@ -2423,7 +2423,6 @@ class EventCommandTeleportObject extends EventCommand
                         // If hero set the current map
                         if (moved.isHero)
                         {
-                            console.log(currentState.position)
                             RPM.game.hero.position = currentState.position;
                             if (RPM.currentMap.id !== id)
                             {

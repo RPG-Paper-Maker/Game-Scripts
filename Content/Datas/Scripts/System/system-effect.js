@@ -302,7 +302,6 @@ class SystemEffect
                 null, RPM.datasGame.commonEvents.commonReactions[this
                 .commonReaction.commonReactionID], null, null, this
                 .commonReaction.parameters));
-
             break;
         case EffectKind.SpecialActions:
             RPM.currentMap.battleCommandKind = this.specialActionKind;

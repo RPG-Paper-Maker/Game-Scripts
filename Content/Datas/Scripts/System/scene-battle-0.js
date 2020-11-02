@@ -291,11 +291,10 @@ SceneBattle.prototype.updateTransitionStartZoom = function()
     let offset;
     if (this.transitionZoom)
     {
-        offset = SceneBattle.START_CAMERA_DISTANCE / this.sceneMapCameraDistance
-            * SceneBattle.TRANSITION_ZOOM_TIME;
-        this.sceneMap.camera.distance = (1 - (((new Date().getTime() - this.time
-            ) - offset) / (SceneBattle.TRANSITION_ZOOM_TIME - offset))) * this
-            .sceneMapCameraDistance;
+        this.sceneMap.camera.distance = ((this.sceneMapCameraDistance - 
+            SceneBattle.START_CAMERA_DISTANCE) * (1 - ((new Date().getTime() - 
+            this.time) / SceneBattle.TRANSITION_ZOOM_TIME))) + SceneBattle
+            .START_CAMERA_DISTANCE;
         if (this.sceneMap.camera.distance <= SceneBattle.START_CAMERA_DISTANCE)
         {
             this.sceneMap.camera.distance = SceneBattle.START_CAMERA_DISTANCE;

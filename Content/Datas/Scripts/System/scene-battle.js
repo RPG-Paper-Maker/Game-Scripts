@@ -520,6 +520,7 @@ class SceneBattle extends SceneMap
     */
     onKeyPressed(key)
     {
+        super.onKeyPressed(key);
         switch (this.step)
         {
         case 0:
@@ -538,7 +539,6 @@ class SceneBattle extends SceneMap
             this.onKeyPressedStep4(key);
             break;
         }
-        super.onKeyPressed(key);
     }
 
     // -------------------------------------------------------
@@ -547,6 +547,7 @@ class SceneBattle extends SceneMap
     */
     onKeyReleased(key)
     {
+        super.onKeyReleased(key);
         switch (this.step)
         {
         case 0:
@@ -565,7 +566,6 @@ class SceneBattle extends SceneMap
             this.onKeyReleasedStep4(key);
             break;
         }
-        super.onKeyReleased(key);
     }
 
     // -------------------------------------------------------
@@ -574,6 +574,7 @@ class SceneBattle extends SceneMap
     */
     onKeyPressedRepeat(key)
     {
+        super.onKeyPressedRepeat(key);
         switch (this.step)
         {
         case 0:
@@ -592,7 +593,6 @@ class SceneBattle extends SceneMap
             this.onKeyPressedRepeatStep4(key);
             break;
         }
-        super.onKeyPressedRepeat(key);
     }
 
     // -------------------------------------------------------
@@ -601,6 +601,7 @@ class SceneBattle extends SceneMap
     */
     onKeyPressedAndRepeat(key)
     {
+        super.onKeyPressedAndRepeat(key);
         switch (this.step)
         {
         case 0:
@@ -619,7 +620,6 @@ class SceneBattle extends SceneMap
             this.onKeyPressedAndRepeatStep4(key);
             break;
         }
-        super.onKeyPressedAndRepeat(key);
     }
 
     // -------------------------------------------------------
