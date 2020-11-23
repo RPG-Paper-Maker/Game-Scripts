@@ -12,20 +12,20 @@
 /** @class
 *   A class of the game
 *   @extends SystemLang
-*   @property {string} [SystemClass.PROPERTY_FINAL_LEVEL="finalLevel"] The 
+*   @property {string} [Class.PROPERTY_FINAL_LEVEL="finalLevel"] The
 *   final level string property
-*   @property {string} [SystemClass.PROPERTY_EXPERIENCE_BASE="experienceBase"] 
+*   @property {string} [Class.PROPERTY_EXPERIENCE_BASE="experienceBase"]
 *   The experience base property
-*   @property {string} [SystemClass.PROPERTY_EXPERIENCE_INFLATION="experienceInflation"]
+*   @property {string} [Class.PROPERTY_EXPERIENCE_INFLATION="experienceInflation"]
 *   The experience inflation property
 *   @property {number} initialLevel The initial level
 *   @property {number} finalLevel The final level
 *   @property {number} experienceBase The experience base
 *   @property {number} experienceInflation The experience inflation
 *   @property {Object} experienceTable The experience table
-*   @property {SystemStatisticProgression[]} statisticsProgression The 
+*   @property {StatisticProgression[]} statisticsProgression The
 *   statistics progression
-*   @property {SystemClassSkill[]} skills The skills to learn of the class
+*   @property {ClassSkill[]} skills The skills to learn of the class
 *   @param {Object} [json=undefined] Json object describing the class
 */
 class SystemClass extends SystemLang
@@ -69,11 +69,11 @@ class SystemClass extends SystemLang
     
         // Statistic progression
         this.statisticsProgression = RPM.readJSONSystemListByIndex(RPM
-            .defaultValue(json.stats, []), SystemStatisticProgression);
+            .defaultValue(json.stats, []), StatisticProgression);
     
         // Skills
         this.skills = RPM.readJSONSystemListByIndex(RPM
-            .defaultValue(json.skills, []), SystemClassSkill);
+            .defaultValue(json.skills, []), ClassSkill);
     }
     
     // -------------------------------------------------------
@@ -110,7 +110,7 @@ class SystemClass extends SystemLang
     // -------------------------------------------------------
     /** Get the statistics progression
     *   @param {SystemClass} upClass The up class
-    *   @returns {SystemStatisticProgression[]}
+    *   @returns {StatisticProgression[]}
     */
     getStatisticsProgression(upClass)
     {
@@ -145,7 +145,7 @@ class SystemClass extends SystemLang
     // -------------------------------------------------------
     /** Get the skills
     *   @param {SystemClass} upClass The up class
-    *   @returns {SystemClassSkill[]}
+    *   @returns {ClassSkill[]}
     */
     getSkills(upClass)
     {

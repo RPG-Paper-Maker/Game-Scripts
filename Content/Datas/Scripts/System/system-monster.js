@@ -40,8 +40,8 @@ class SystemMonster extends SystemHero
         this.rewards = {};
 
         // Experience
-        this.rewards.xp = new SystemProgressionTable(this.getProperty(
-            SystemClass.PROPERTY_FINAL_LEVEL), json.xp);
+        this.rewards.xp = new ProgressionTable(this.getProperty(
+            Class.PROPERTY_FINAL_LEVEL), json.xp);
 
         // Currencies
         let jsonCurrencies = json.cur;
@@ -51,7 +51,7 @@ class SystemMonster extends SystemHero
         for (let i = 0; i < l; i++)
         {
             hash = jsonCurrencies[i];
-            progression = new SystemProgressionTable(hash.k, hash.v);
+            progression = new ProgressionTable(hash.k, hash.v);
             this.rewards.currencies[i] = progression;
         }
         // Loots
@@ -77,7 +77,7 @@ class SystemMonster extends SystemHero
     getRewardExperience(level)
     {
         return this.rewards.xp.getProgressionAt(level, this.getProperty(
-            SystemClass.PROPERTY_FINAL_LEVEL));
+            Class.PROPERTY_FINAL_LEVEL));
     }
 
     // -------------------------------------------------------
@@ -93,7 +93,7 @@ class SystemMonster extends SystemHero
         {
             progression = this.rewards.currencies[i];
             currencies[progression.id] = progression.getProgressionAt(level, 
-                this.getProperty(SystemClass.PROPERTY_FINAL_LEVEL));
+                this.getProperty(Class.PROPERTY_FINAL_LEVEL));
         }
         return currencies;
     }

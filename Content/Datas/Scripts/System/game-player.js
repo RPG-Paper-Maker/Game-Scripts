@@ -332,7 +332,7 @@ class GamePlayer
                 statisticProgression = statisticsProgression[j];
                 list[statisticProgression.id] = statisticProgression
                     .getValueAtLevel(this.getCurrentLevel(), previewPlayer, this
-                    .character.getProperty(SystemClass.PROPERTY_FINAL_LEVEL)) + 
+                    .character.getProperty(Class.PROPERTY_FINAL_LEVEL)) +
                     bonus[statisticProgression.id];
                 previewPlayer.initStatValue(statistics[statisticProgression.id],
                     list[statisticProgression.id]);

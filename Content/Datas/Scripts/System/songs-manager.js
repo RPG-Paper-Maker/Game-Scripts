@@ -19,7 +19,7 @@
 *   @property {number[]} starts Current starts time according to song kind
 *   @property {number} ends The current ends time according to song kind
 *   @property {Howl[]} currentSong The howl current song
-*   @property {SystemProgressionTable} progressionMusic The system progression 
+*   @property {ProgressionTable} progressionMusic The system progression
 *   music
 *   @property {number} progressionMusicEnd The progression music end
 */
@@ -285,7 +285,7 @@ class SongsManager
     */
     initializeProgressionMusic(i, f, equation, end)
     {
-        this.progressionMusic = SystemProgressionTable.create(i, f,
+        this.progressionMusic = ProgressionTable.create(i, f,
             equation);
         this.progressionMusicTime = new Date().getTime();
         this.progressionMusicEnd = end;

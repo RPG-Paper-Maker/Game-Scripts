@@ -27,6 +27,6 @@ class DatasClasses
     async read()
     {
         let json = (await RPM.parseFileJSON(RPM.FILE_CLASSES)).classes;
-        this.list = RPM.readJSONSystemList(json, SystemClass);
+        this.list = RPM.readJSONSystemList(json, Class);
     }
 }

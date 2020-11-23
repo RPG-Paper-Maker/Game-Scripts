@@ -9,6 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import {BaseSystem, DynamicValue} from ".";
+import {RPM} from "../core";
+
 /** @class
  *   A progression table
  *   @property {number} id The ID
@@ -20,25 +23,35 @@
  *   @param {Object} [json=undefined] Json object describing the progression
  *   table
  */
-class SystemProgressionTable {
-    constructor(id, json) {
+export class ProgressionTable extends BaseSystem{
+
+    id: number;
+    initialValue: DynamicValue;
+    finalValue: DynamicValue;
+    equation: number;
+    table: Record<string, any>;
+    start : number;
+    change: number;
+    duration: number;
+
+    constructor(id= undefined, json = undefined) {
+        super(json, id);
+    }
+
+    public setup(id: number) {
         if (!RPM.isUndefined(id)) {
             this.id = id;
         }
-        if (json) {
-            this.read(json);
-        }
     }
-
     // -------------------------------------------------------
     /** Create a new system progression table
      *   @param {SystemValue} i The initial value
      *   @param {SystemValue} f The final value
      *   @param {number} equation The equation kind
-     *   @returns {SystemProgressionTable}
+     *   @returns {ProgressionTable}
      */
     static create(i, f, equation) {
-        let progression = new SystemProgressionTable();
+        let progression = new ProgressionTable();
         progression.initialize(i, f, equation);
         return progression;
     }
@@ -231,4 +244,6 @@ class SystemProgressionTable {
         x--;
         return this.change * (x * x * x * x * x + 1) + this.start;
     }
+
+
 }

@@ -9,6 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import {BaseSystem, Class, DynamicValue, ProgressionTable} from ".";
+import {RPM} from "../core";
+
 /** @class
  *   A statistic progression of the game
  *   @property {number} id The id of the statistic
@@ -20,11 +23,25 @@
  *   @param {Object} [json=undefined] Json object describing the statistic
  *   progression
  */
-class SystemStatisticProgression {
+export class StatisticProgression extends BaseSystem {
+
+    id: number;
+    maxValue: DynamicValue;
+    isFix: boolean;
+    table: ProgressionTable;
+    random: DynamicValue;
+    formula: DynamicValue;
+
     constructor(json) {
-        if (json) {
-            this.read(json);
-        }
+        super(json);
+    }
+
+    public setup() {
+        this.id = 0;
+        this.maxValue = null;
+        this.isFix = false;
+        this.random = null;
+        this.formula = null;
     }
 
     // -------------------------------------------------------
@@ -36,7 +53,7 @@ class SystemStatisticProgression {
         this.maxValue = new DynamicValue(json.m);
         this.isFix = json.if;
         if (this.isFix) {
-            this.table = new SystemProgressionTable(undefined, json.t);
+            this.table = new ProgressionTable(undefined, json.t);
             this.random = new DynamicValue(json.r);
         } else {
             this.formula = new DynamicValue(json.f);
@@ -51,7 +68,7 @@ class SystemStatisticProgression {
      */
     getValueAtLevel(level, user, maxLevel) {
         return this.isFix ? this.table.getProgressionAt(level, RPM.isUndefined(
-            maxLevel) ? user.character.getProperty(SystemClass
+            maxLevel) ? user.character.getProperty(Class
             .PROPERTY_FINAL_LEVEL) : maxLevel) : RPM.evaluateFormula(this
             .formula.getValue(), user, null);
     }

@@ -11,3 +11,7 @@ export * from "./DynamicValue";
 export * from "./CommonSkillItem";
 export * from "./Armor";
 export * from "./BattleMap";
+export * from "./Class";
+export * from "./ClassSkill";
+export * from "./StatisticProgression";
+export * from "./ProgressionTable";
