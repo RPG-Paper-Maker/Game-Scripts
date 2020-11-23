@@ -1031,7 +1031,7 @@ export class RPM {
      *   @param {number} damage Damage value
      *   @returns {any}
      */
-    static evaluateFormula(formula, user, target, damage) {
+    static evaluateFormula(formula, user, target, damage?) {
         return new Function("u", "t", "damage", "$that", "return " + formula)(
             user, target, damage, $that);
     }

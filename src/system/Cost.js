@@ -18,7 +18,7 @@
  *   @property {string} valueFormula The formula to apply
  *   @param {Object} [json=undefined] Json object describing the cost
  */
-class SystemCost {
+class Cost {
     constructor(json) {
         if (json) {
             this.read(json);

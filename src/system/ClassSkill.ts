@@ -9,17 +9,26 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import {BaseSystem} from ".";
+
 /** @class
  *   A skill to learn for a specific class
  *   @property {number} id The ID of the skill
  *   @property {number} level The level to reach to learn this skill
  *   @param {Object} [json=undefined] Json object describing the class skill
  */
-class SystemClassSkill {
+export class ClassSkill extends BaseSystem {
+
+    id: number;
+    level: number;
+
     constructor(json) {
-        if (json) {
-            this.read(json);
-        }
+        super(json);
+    }
+
+    public setup() {
+        this.id = 0;
+        this.level = 0;
     }
 
     // -------------------------------------------------------

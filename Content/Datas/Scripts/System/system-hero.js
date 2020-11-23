@@ -38,7 +38,7 @@ class SystemHero
         this.idClass = json.class;
         this.idBattler = RPM.defaultValue(json.bid, -1);
         this.idFaceset = RPM.defaultValue(json.fid, -1);
-        this.classInherit = new SystemClass(json.ci);
+        this.classInherit = new Class(json.ci);
         this.check();
     }
 
@@ -88,7 +88,7 @@ class SystemHero
     
     // -------------------------------------------------------
     /** Get the skills according to class inherit and this hero
-    *   @returns {SystemClassSkill[]}
+    *   @returns {ClassSkill[]}
     */
     getSkills()
     {
@@ -102,10 +102,10 @@ class SystemHero
     */
     createExpList()
     {
-        let finalLevel = this.getProperty(SystemClass.PROPERTY_FINAL_LEVEL);
-        let experienceBase = this.getProperty(SystemClass
+        let finalLevel = this.getProperty(Class.PROPERTY_FINAL_LEVEL);
+        let experienceBase = this.getProperty(Class
             .PROPERTY_EXPERIENCE_BASE);
-        let experienceInflation = this.getProperty(SystemClass
+        let experienceInflation = this.getProperty(Class
             .PROPERTY_EXPERIENCE_INFLATION);
         let experienceTable = this.getExperienceTable();
         let expList = new Array(finalLevel + 1);

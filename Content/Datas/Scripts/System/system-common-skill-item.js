@@ -27,7 +27,7 @@
 *   @property {SystemValue} animationUserID The animation user ID value
 *   @property {SystemValue} animationTargetID The animation target ID value
 *   @property {SystemValue} price The price value
-*   @property {SystemCost[]} costs The costs list
+*   @property {Cost[]} costs The costs list
 *   @property {SystemEffect[]} effects The effects list
 *   @property {SystemCharacteristic[]} characteristics The characteristics list
 *   @param {Object} [json=undefined] Json object describing the common
@@ -68,7 +68,7 @@ class SystemCommonSkillItem extends SystemIcon
         this.animationTargetID = SystemValue.readOrNone(json.atid);
         this.price = SystemValue.readOrDefaultNumber(json.p);
         let costs = RPM.defaultValue(json.cos, []);
-        this.costs = RPM.readJSONSystemListByIndex(costs, SystemCost);
+        this.costs = RPM.readJSONSystemListByIndex(costs, Cost);
         let effects = RPM.defaultValue(json.e, []);
         this.effects = RPM.readJSONSystemListByIndex(effects, SystemEffect);
         let characteristics = RPM.defaultValue(json.car, []);

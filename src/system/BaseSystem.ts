@@ -4,13 +4,15 @@
  */
 export abstract class BaseSystem {
 
+
     /**
      *
-     * @param {JSON} json
+     * @param {any} json
+     * @param {any} args
      * @protected
      */
-    protected constructor(json = undefined) {
-        this.setup();
+    protected constructor(json = undefined, ...args : any) {
+        this.setup(args);
         if (json) {
             this.read(json);
         }
@@ -19,8 +21,9 @@ export abstract class BaseSystem {
     /**
      * Assign the members
      * @note was used due to Super calling method overwriting data with inheritance call;
+     * @fix adjusted the args parameters to be flexible and accepts arguments
      */
-    abstract setup();
+    abstract setup(...args: any);
 
     /**
      * Read the json data

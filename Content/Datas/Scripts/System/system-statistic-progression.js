@@ -14,7 +14,7 @@
 *   @property {number} id The id of the statistic
 *   @property {SystemValue} maxValue The max value
 *   @property {boolean} isFix Indicate if the statistic progression is fix
-*   @property {SystemProgressionTable} table The system progression table
+*   @property {ProgressionTable} table The system progression table
 *   @property {SystemValue} random The random value
 *   @property {SystemValue} formula The formula
 *   @param {Object} [json=undefined] Json object describing the statistic 
@@ -40,7 +40,7 @@ class SystemStatisticProgression
         this.maxValue = new SystemValue(json.m);
         this.isFix = json.if;
         if (this.isFix) {
-            this.table = new SystemProgressionTable(undefined, json.t);
+            this.table = new ProgressionTable(undefined, json.t);
             this.random = new SystemValue(json.r);
         } else {
             this.formula = new SystemValue(json.f);
@@ -56,7 +56,7 @@ class SystemStatisticProgression
     getValueAtLevel(level, user, maxLevel)
     {
         return this.isFix ? this.table.getProgressionAt(level, RPM.isUndefined(
-            maxLevel) ? user.character.getProperty(SystemClass
+            maxLevel) ? user.character.getProperty(Class
             .PROPERTY_FINAL_LEVEL) : maxLevel) : RPM.evaluateFormula(this
             .formula.getValue(), user, null);
     }

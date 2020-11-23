@@ -39,13 +39,13 @@
 *   @property {number} lastItemOffset The last selected offset item
 *   @property {number} itemsNumbers Number of items used according to ID (for 
 *   actions AI)
-*   @property {SystemProgressionTable} progressionAllyFront The progression for 
+*   @property {ProgressionTable} progressionAllyFront The progression for
 *   ally to move front
-*   @property {SystemProgressionTable} progressionAllyBack The progression for 
+*   @property {ProgressionTable} progressionAllyBack The progression for
 *   ally to move back
-*   @property {SystemProgressionTable} progressionEnemyFront The progression for 
+*   @property {ProgressionTable} progressionEnemyFront The progression for
 *   enemy to move front
-*   @property {SystemProgressionTable} progressionEnemyBack The progression for 
+*   @property {ProgressionTable} progressionEnemyBack The progression for
 *   enemy to move back
 *   @property {number} timerMove The time to move front / back
 *   @property {number} timeDamage The time to display damage
@@ -88,13 +88,13 @@ class Battler
         this.lastItemIndex = 0;
         this.lastItemOffset = 0;
         this.itemsNumbers = [];
-        this.progressionAllyFront = SystemProgressionTable.create(
+        this.progressionAllyFront = ProgressionTable.create(
             this.position.x, this.position.x - Battler.OFFSET_SELECTED, 0);
-        this.progressionAllyBack = SystemProgressionTable.create(
+        this.progressionAllyBack = ProgressionTable.create(
             this.position.x - Battler.OFFSET_SELECTED, this.position.x, 0);
-        this.progressionEnemyFront = SystemProgressionTable.create(
+        this.progressionEnemyFront = ProgressionTable.create(
             this.position.x, this.position.x + Battler.OFFSET_SELECTED, 0);
-        this.progressionEnemyBack = SystemProgressionTable.create(
+        this.progressionEnemyBack = ProgressionTable.create(
             this.position.x + Battler.OFFSET_SELECTED, this.position.x, 0);
         this.timerMove = 0;
         this.timeDamage = Battler.TOTAL_TIME_DAMAGE;
