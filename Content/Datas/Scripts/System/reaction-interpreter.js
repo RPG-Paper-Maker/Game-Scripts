@@ -11,25 +11,25 @@
 
 /** @class
 *   A reaction command interpreter
-*   @property {MapObject} currentSender Current event sender (null for system
+*   @property {MapObject} currentSender Current event sender (null for System
 *   events)
 *   @property {SystemReaction} currentReaction Current reaction excecuted (only
 *   one per state)
 *   @property {MapObject} currentMapObject Current map object
 *   @property {number} currentState Current state of map object reaction
-*   @property {SystemParameter[]} currentParameters All the parameters coming 
+*   @property {Parameter[]} currentParameters All the parameters coming
 *   with this reaction
 *   @property {Node} currentCommand A node of a command reaction
 *   @property {Object} currentCommandState Current state of the current command
 *   @property {number[]} currentTimeState The current time events
 *   @property {boolean} isInMainMenu Indicate if this reaction was executed in 
 *   main menu
-*   @param {MapObject} sender Current event sender (null for system events)
+*   @param {MapObject} sender Current event sender (null for System events)
 *   @param {SystemReaction} reaction Current reaction excecuted (only one per 
 *   state)
 *   @param {MapObject} object Current map object
 *   @param {number} state Current state of map object reaction
-*   @param {SystemParameter[]} parameters All the parameters coming with this 
+*   @param {Parameter[]} parameters All the parameters coming with this
 *   reaction
 *   @param {number[]} event The current time events
 *   @param {EventCommand} [command=reaction.getFirstCommand()] The current 

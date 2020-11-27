@@ -11,7 +11,7 @@
 
 import {Platform} from "."
 import * as THREE from "three";
-import * as System from "../system";
+import * as System from "../System";
 
 /*
     RPG Paper Maker Copyright (C) 2017-2020 Wano
@@ -49,7 +49,7 @@ import * as System from "../system";
  *    @property {string} [RPM.FILE_BATTLE_SYSTEM=RPM.PATH_DATAS + "battleSystem" + RPM.EXTENSION_JSON]
  *    @property {string} [RPM.FILE_TITLE_SCREEN_GAME_OVER=RPM.PATH_DATAS + "titlescreenGameover" + RPM.EXTENSION_JSON]
  *    @property {string} [RPM.FILE_KEYBOARD=RPM.PATH_DATAS + "keyBoard" + RPM.EXTENSION_JSON]
- *    @property {string} [RPM.FILE_SYSTEM=RPM.PATH_DATAS + "system" + RPM.EXTENSION_JSON]
+ *    @property {string} [RPM.FILE_SYSTEM=RPM.PATH_DATAS + "System" + RPM.EXTENSION_JSON]
  *    @property {string} [RPM.FILE_CLASSES=RPM.PATH_DATAS + "classes" + RPM.EXTENSION_JSON]
  *    @property {string} [RPM.FILE_TILESETS_DATAS=RPM.PATH_DATAS + "tilesets" + RPM.EXTENSION_JSON]
  *    @property {string} [RPM.FILE_SPECIAL_ELEMENTS=RPM.PATH_DATAS + "specialElements" + RPM.EXTENSION_JSON]
@@ -1156,7 +1156,7 @@ export class RPM {
     }
 
     // -------------------------------------------------------
-    /** Read a json list and create a system list sorted by ID
+    /** Read a json list and create a System list sorted by ID
      *   @static
      *   @param {Object[]} jsonList The json list to read
      *   @param {function} func The function to apply
@@ -1177,7 +1177,7 @@ export class RPM {
     }
 
     // -------------------------------------------------------
-    /** Read a json list and create a system list sorted by index
+    /** Read a json list and create a System list sorted by index
      *   @static
      *   @param {Object[]} jsonList The json list to read
      *   @param {function} func The function to apply
@@ -1198,11 +1198,11 @@ export class RPM {
     }
 
     // -------------------------------------------------------
-    /** Read a json list and create a system list by ID and another list by
+    /** Read a json list and create a System list by ID and another list by
      *   index (containing IDs), and return the max possible ID
      *   @static
      *   @param {Object[]} jsonList The json list to
-     *   @param {any[]} listIDs The system list by ID
+     *   @param {any[]} listIDs The System list by ID
      *   @param {number[]} listIndexes The IDs list by index
      *   @param {function} func The function to apply
      *   @param {boolean} [isConstructor=true] Indicate if the function is a

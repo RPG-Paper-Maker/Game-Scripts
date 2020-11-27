@@ -17,7 +17,7 @@ import {RPM} from "../core";
  *   @property {number} id The id of the statistic
  *   @property {SystemValue} maxValue The max value
  *   @property {boolean} isFix Indicate if the statistic progression is fix
- *   @property {SystemProgressionTable} table The system progression table
+ *   @property {SystemProgressionTable} table The System progression table
  *   @property {SystemValue} random The random value
  *   @property {SystemValue} formula The formula
  *   @param {Object} [json=undefined] Json object describing the statistic

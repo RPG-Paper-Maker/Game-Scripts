@@ -193,7 +193,7 @@ export class GameStack {
                 v[1].draw();
             }
 
-            // Draw system HUD
+            // Draw System HUD
             this.top.drawHUD();
 
             // Display >= 0 index image command

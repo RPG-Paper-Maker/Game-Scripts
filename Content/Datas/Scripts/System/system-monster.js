@@ -12,13 +12,13 @@
 
 /** @class
 *   A monster of the game
-*   @extends SystemHero
+*   @extends Hero
 *   @property {Object} rewards An object containing experience, currencies, and 
 *   loots
 *   @property {SystemMonsterAction[]} actions The monster actions list
 *   @param {Object} [json=undefined] Json object describing the monster
 */
-class SystemMonster extends SystemHero
+class SystemMonster extends Hero
 {
     constructor(json)
     {

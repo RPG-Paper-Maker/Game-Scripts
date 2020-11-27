@@ -12,20 +12,22 @@
 
 /** @class
  *   A monster of the game
- *   @extends SystemHero
+ *   @extends Hero
  *   @property {Object} rewards An object containing experience, currencies, and
  *   loots
  *   @property {SystemMonsterAction[]} actions The monster actions list
  *   @param {Object} [json=undefined] Json object describing the monster
  */
-class SystemMonster extends SystemHero {
+
+// TODO : it doesn't make senses it extends hero the hero should be extending another one.
+export class Monster extends Hero {
+
     constructor(json) {
         super();
         if (json) {
             this.read(json);
         }
     }
-
     // -------------------------------------------------------
     /** Read the JSON associated to the monster
      *   @param {Object} json Json object describing the monster

@@ -14,7 +14,7 @@
 *   @property {CharacterKind} k The kind of the character (hero or monster)
 *   @property {number} id The ID of the character
 *   @property {number} instid The instance id of the character
-*   @property {SystemHero} character The system character
+*   @property {Hero} character The System character
 *   @property {string} name The character name
 *   @property {GameSkill[]} sk List of all the learned skills
 *   @property {GameItem[]} equip List of the equiped weapons/armors
@@ -252,7 +252,7 @@ class GamePlayer
 
     // -------------------------------------------------------
     /** Get the stats thanks to equipments
-    *   @param {SystemItem} item The system item
+    *   @param {SystemItem} item The System item
     *   @param {number} equipmentID The equipment ID
     *   @returns {number[][]}
     */
@@ -518,8 +518,8 @@ class GamePlayer
     }
 
     // -------------------------------------------------------
-    /** Get the character informations system
-    *   @returns {SystemHero}
+    /** Get the character informations System
+    *   @returns {Hero}
     */
     getCharacterInformations()
     {

@@ -19,7 +19,7 @@
 *   @property {number[]} starts Current starts time according to song kind
 *   @property {number} ends The current ends time according to song kind
 *   @property {Howl[]} currentSong The howl current song
-*   @property {ProgressionTable} progressionMusic The system progression
+*   @property {ProgressionTable} progressionMusic The System progression
 *   music
 *   @property {number} progressionMusicEnd The progression music end
 */

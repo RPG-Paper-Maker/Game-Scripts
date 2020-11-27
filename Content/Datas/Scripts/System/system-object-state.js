@@ -98,7 +98,7 @@ class SystemObjectState
     }
 
     // -------------------------------------------------------
-    /** Create a new instance of the system object state
+    /** Create a new instance of the System object state
     *   @returns {Object}
     */
     copyInstance()

@@ -16,7 +16,7 @@ import {BaseSystem} from ".";
 
 // TODO : This class actually impose a lots of typing error I Have to mention that to Wano so the typing get simplified.
 /** @class
- *   A value in the system
+ *   A value in the System
  *   @property {number} kind The kind of value
  *   @property {number} value The value
  *   @param {Object} [json=undefined] Json object describing the value

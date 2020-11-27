@@ -15,3 +15,8 @@ export * from "./Class";
 export * from "./ClassSkill";
 export * from "./StatisticProgression";
 export * from "./ProgressionTable";
+export * from "./Parameter";
+export * from "./Event";
+export * from "./Hero";
+export * from "./Element";
+export * from "./RewardStruct";

@@ -20,7 +20,7 @@
 *   @property {SystemProperty[]} properties List of all properties of the object
 *   @property {SystemObjectEvent[]} events List of all the event that the object
 *   can react on
-*   @property {SystemEvent[]} timeEvents The time events list
+*   @property {Event[]} timeEvents The time events list
 *   @param {Object} [json=undefined] Json object describing the object
 */
 class SystemObject
@@ -154,7 +154,7 @@ class SystemObject
 
     // -------------------------------------------------------
     /** Get all the time events
-    *   @returns {SystemEvent[]}
+    *   @returns {Event[]}
     */
     getTimeEvents()
     {
@@ -177,7 +177,7 @@ class SystemObject
 
     // -------------------------------------------------------
     /** Get the reactions corresponding to a given event and parameters
-    *   @param {boolean} isSystem Boolean indicating if it is an event system
+    *   @param {boolean} isSystem Boolean indicating if it is an event System
     *   @param {number} idEvent ID of the event
     *   @param {number} state The ID of the state
     *   @param {SystemValue[]} parameters List of all the parameters

@@ -9,17 +9,25 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import {DynamicValue, Icon} from ".";
+import {RPM} from "../core";
+
 /** @class
  *   An element of the game
  *   @property {SystemValue[]} efficiency The efficiency list
  *   @param {Object} [json=undefined] Json object describing the element
  */
-class SystemElement extends Icon {
+export class Element extends Icon {
+
+    efficiency: DynamicValue[];
+
     constructor(json) {
-        super();
-        if (json) {
-            this.read(json);
-        }
+        super(json);
+    }
+
+    public setup() {
+        super.setup();
+        this.efficiency = [];
     }
 
     // -------------------------------------------------------

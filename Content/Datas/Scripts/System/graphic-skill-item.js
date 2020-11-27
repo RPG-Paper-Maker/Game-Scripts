@@ -11,7 +11,7 @@
 
 /** @class
 *   The graphic for skill or item displaying
-*   @property {SystemCommonSkillItem} skillItem The system skill / item
+*   @property {SystemCommonSkillItem} skillItem The System skill / item
 *   @property {Picture2D[]} graphicElements The Pictures 2D for elements
 *   @property {GraphicTextIcon} graphicName The graphic text and icon for skill 
 *   / item

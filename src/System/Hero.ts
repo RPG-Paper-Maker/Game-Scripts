@@ -9,6 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import {BaseSystem, Class} from ".";
+import {RPM} from "../core";
+
 /** @class
  *   An hero of the game
  *   @property {string} name The name of the hero
@@ -18,11 +21,24 @@
  *   @property {SystemClass} classInherit The inherit class
  *   @param {Object} [json=undefined] Json object describing the hero
  */
-class SystemHero {
+export class Hero extends BaseSystem {
+
+    name: string;
+    idClass: number;
+    idBattler: number;
+    idFaceset: number;
+    classInherit: Class;
+
     constructor(json) {
-        if (json) {
-            this.read(json);
-        }
+        super(json);
+    }
+
+    public setup() {
+        this.name = "";
+        this.idClass = 0;
+        this.idBattler =0;
+        this.idFaceset =0;
+        this.classInherit = null;
     }
 
     // -------------------------------------------------------

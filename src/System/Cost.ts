@@ -9,6 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import {BaseSystem, DynamicValue} from ".";
+import {Enum, RPM} from "../core";
+import DamagesKind = Enum.DamagesKind;
+
 /** @class
  *   A cost of a common skill item
  *   @property {DamagesKind} kind The kind of damage to apply cost
@@ -18,11 +22,20 @@
  *   @property {string} valueFormula The formula to apply
  *   @param {Object} [json=undefined] Json object describing the cost
  */
-class Cost {
+class Cost extends BaseSystem {
+
+    kind: number;
+    statisticID: DynamicValue;
+    currencyID: DynamicValue;
+    variableID: number;
+    valueFormula: DynamicValue;
+
     constructor(json) {
-        if (json) {
-            this.read(json);
-        }
+        super(json);
+    }
+
+    public setup() {
+
     }
 
     // -------------------------------------------------------
