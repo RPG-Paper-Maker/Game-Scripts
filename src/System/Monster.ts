@@ -10,22 +10,25 @@
 */
 
 
+import {Class, Hero, Loot, MonsterAction, ProgressionTable, RewardStruct} from ".";
+import {Enum, RPM} from "../core";
+import LootKind = Enum.LootKind;
+
 /** @class
  *   A monster of the game
- *   @extends SystemHero
+ *   @extends Hero
  *   @property {Object} rewards An object containing experience, currencies, and
  *   loots
  *   @property {SystemMonsterAction[]} actions The monster actions list
  *   @param {Object} [json=undefined] Json object describing the monster
  */
-class SystemMonster extends SystemHero {
-    constructor(json) {
-        super();
-        if (json) {
-            this.read(json);
-        }
-    }
+export class Monster extends Hero {
 
+    rewards: RewardStruct;
+    actions: MonsterAction[];
+    constructor(json= undefined) {
+        super(json);
+    }
     // -------------------------------------------------------
     /** Read the JSON associated to the monster
      *   @param {Object} json Json object describing the monster
@@ -33,7 +36,7 @@ class SystemMonster extends SystemHero {
     read(json) {
         super.read(json);
 
-        this.rewards = {};
+        this.rewards = {} as RewardStruct;
 
         // Experience
         this.rewards.xp = new ProgressionTable(this.getProperty(
@@ -51,12 +54,12 @@ class SystemMonster extends SystemHero {
         }
         // Loots
         this.rewards.loots = RPM.readJSONSystemListByIndex(RPM.defaultValue(json
-            .loots, []), SystemLoot);
+            .loots, []), Loot);
 
         // Actions
         this.actions = RPM.readJSONSystemListByIndex(RPM.defaultValue(json
                 .a, []), (jsonAction) => {
-                let action = new SystemMonsterAction(jsonAction);
+                let action = new MonsterAction(jsonAction);
                 action.monster = this;
                 return action;
             }, false

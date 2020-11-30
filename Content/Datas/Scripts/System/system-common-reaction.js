@@ -12,7 +12,7 @@
 /** @class
 *   A common reaction
 *   @extends SystemObjectReaction
-*   @property {SystemParameter[]} parameters 
+*   @property {Parameter[]} parameters
 *   @param {Object} [json=undefined] Json object describing the common reaction
 */
 class SystemCommonReaction extends SystemObjectReaction
@@ -34,6 +34,6 @@ class SystemCommonReaction extends SystemObjectReaction
     {
         super.read(json);
 
-        this.parameters = SystemParameter.readParameters(json);
+        this.parameters = Parameter.readParameters(json);
     }
 }

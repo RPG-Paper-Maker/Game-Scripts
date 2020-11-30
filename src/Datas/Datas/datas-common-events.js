@@ -10,11 +10,11 @@
 */
 
 /** @class
- *   All the battle system datas
+ *   All the battle System datas
  *   @property {string} [DatasCommonEvents.PROPERTY_STOCKED="stocked"] The
  *   property stocked for reorder function
- *   @property {SystemEvent[]} eventsSystem List of all the events system by ID
- *   @property {SystemEvent[]} eventsUser List of all the events user by ID
+ *   @property {Event[]} eventsSystem List of all the events System by ID
+ *   @property {Event[]} eventsUser List of all the events user by ID
  *   @property {SystemCommonReaction[]} commonReactions List of all the common
  *   reactions by ID
  *   @property {SystemObject[]} commonObjects List of all the common objects by
@@ -35,8 +35,8 @@ class DatasCommonEvents {
 
         // Lists
         this.eventsSystem = RPM.readJSONSystemList(json.eventsSystem,
-            SystemEvent);
-        this.eventsUser = RPM.readJSONSystemList(json.eventsUser, SystemEvent);
+            Event);
+        this.eventsUser = RPM.readJSONSystemList(json.eventsUser, Event);
         this.commonReactions = RPM.readJSONSystemList(json.commonReactors,
             SystemCommonReaction);
 

@@ -9,6 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import {Enum, RPM} from "../core";
+import MountainCollisionKind = Enum.MountainCollisionKind;
+import {SpecialElement} from ".";
+
 /** @class
  *   A mountain of the game
  *   @extends SystemSpecialElement
@@ -16,12 +20,19 @@
  *   @property {MountainCollisionKind} collisionKind The collision kind
  *   @param {Object} [json=undefined] Json object describing the mountain
  */
-class SystemMountain extends SystemSpecialElement {
+export class Mountain extends SpecialElement {
+
+    id: number;
+    collisionKind: number;
+
     constructor(json) {
-        super();
-        if (json) {
-            this.read(json);
-        }
+        super(json);
+    }
+
+    public setup() {
+        super.setup();
+        this.id = 0;
+        this.collisionKind = 0;
     }
 
     // -------------------------------------------------------

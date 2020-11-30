@@ -11,7 +11,7 @@
 
 /** @class
  *   All the monsters datas
- *   @property {SystemMonster[]} list List of all the monsters of the game
+ *   @property {Monster[]} list List of all the monsters of the game
  *   according to ID
  */
 class DatasMonsters {
@@ -24,6 +24,6 @@ class DatasMonsters {
      */
     async read() {
         let json = (await RPM.parseFileJSON(RPM.FILE_MONSTERS)).monsters;
-        this.list = RPM.readJSONSystemList(json, SystemMonster);
+        this.list = RPM.readJSONSystemList(json, Monster);
     }
 }

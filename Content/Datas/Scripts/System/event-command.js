@@ -862,7 +862,7 @@ class EventCommandIf extends EventCommand
 
     // -------------------------------------------------------
     /** Apply callback with all the heroes
-    *   @param {SystemHero[]} tab The heroes list
+    *   @param {Hero[]} tab The heroes list
     *   @param {function} callback The callback
     *   @returns {boolean}
     */
@@ -880,7 +880,7 @@ class EventCommandIf extends EventCommand
 
     // -------------------------------------------------------
     /** Apply callback with none of the heroes
-    *   @param {SystemHero[]} tab The heroes list
+    *   @param {Hero[]} tab The heroes list
     *   @param {function} callback The callback
     *   @returns {boolean}
     */
@@ -898,7 +898,7 @@ class EventCommandIf extends EventCommand
 
     // -------------------------------------------------------
     /** Apply callback with at least one hero
-    *   @param {SystemHero[]} tab The heroes list
+    *   @param {Hero[]} tab The heroes list
     *   @param {function} callback The callback
     *   @returns {boolean}
     */
@@ -916,7 +916,7 @@ class EventCommandIf extends EventCommand
 
     // -------------------------------------------------------
     /** Apply callback with the hero with instance ID
-    *   @param {SystemHero[]} tab The heroes list
+    *   @param {Hero[]} tab The heroes list
     *   @param {number} id The hero instance id
     *   @param {function} callback The callback
     *   @returns {boolean}
@@ -937,7 +937,7 @@ class EventCommandIf extends EventCommand
 
     // -------------------------------------------------------
     /** Apply callback according to heroes selection
-    *   @param {SystemHero[]} tab The heroes list
+    *   @param {Hero[]} tab The heroes list
     *   @param {function} callback The callback
     *   @returns {boolean}
     */
@@ -1558,7 +1558,7 @@ class EventCommandModifyTeam extends EventCommand
 /** @class
 *   An event command for battle processing
 *   @extends EventCommand
-*   @property {SystemValue} battleMapID The battle map (system) ID value
+*   @property {SystemValue} battleMapID The battle map (System) ID value
 *   @property {SystemValue} mapID The map ID value
 *   @property {SystemValue} x The x value
 *   @property {SystemValue} y The y value
@@ -2044,9 +2044,9 @@ class EventCommandChangeState extends EventCommand
 *   @property {boolean} senderNoReceiver Indicate if the sender should not 
 *   receive event
 *   @property {number} targetID The target ID
-*   @property {boolean} isSystem Indicate if it is an event system
+*   @property {boolean} isSystem Indicate if it is an event System
 *   @property {number} eventID The event ID
-*   @property {SystemParameter[]} parameters List of all the parameters
+*   @property {Parameter[]} parameters List of all the parameters
 *   @param {Object} command Direct JSON command to parse
 */
 class EventCommandSendEvent extends EventCommand
@@ -2105,9 +2105,9 @@ class EventCommandSendEvent extends EventCommand
     *   @param {MapObject} sender The sender of this event
     *   @param {number} targetKind The kind of target
     *   @param {number} targetID The target ID
-    *   @param {boolean} isSystem Boolean indicating if it is an event system
+    *   @param {boolean} isSystem Boolean indicating if it is an event System
     *   @param {number} eventID The event ID
-    *   @param {SystemParameter[]} parameters List of all the parameters
+    *   @param {Parameter[]} parameters List of all the parameters
     *   @param {boolean} senderNoReceiver Indicate if the sender should not 
     *   receive event
     */
@@ -2197,9 +2197,9 @@ class EventCommandSendEvent extends EventCommand
     *   @static
     *   @param {MapObject} sender The sender of this event
     *   @param {number} targetID The target ID
-    *   @param {boolean} isSystem Boolean indicating if it is an event system
+    *   @param {boolean} isSystem Boolean indicating if it is an event System
     *   @param {number} eventID The event ID
-    *   @param {SystemParameter[]} parameters List of all the parameters
+    *   @param {Parameter[]} parameters List of all the parameters
     *   @param {boolean} senderNoReceiver Indicate if the sender should not 
     *   receive event
     */
@@ -2249,9 +2249,9 @@ class EventCommandSendEvent extends EventCommand
     *   @param {MapObject[]} objects The list of objects to send event
     *   @param {MapObject} sender The sender of this event
     *   @param {number} targetID The target ID
-    *   @param {boolean} isSystem Boolean indicating if it is an event system
+    *   @param {boolean} isSystem Boolean indicating if it is an event System
     *   @param {number} eventID The event ID
-    *   @param {SystemParameter[]} parameters List of all the parameters
+    *   @param {Parameter[]} parameters List of all the parameters
     *   @param {boolean} senderNoReceiver Indicate if the sender should not 
     *   receive event
     */

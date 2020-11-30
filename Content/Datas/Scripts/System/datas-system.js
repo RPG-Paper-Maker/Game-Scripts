@@ -10,7 +10,7 @@
 */
 
 /** @class
-*   All the system datas
+*   All the System datas
 
 *   @property {SystemLang} projectName The project name
 *   @property {boolean} antialias Indicate if there is antialiasing
@@ -25,11 +25,11 @@
 *   @property {boolean} showBB Indicate if the collision boxes 
 *   @property {string[]} itemsTypes List of all the types of items by ID
 *   @property {SystemColor[]} colors List of all the colors by ID
-*   @property {SystemCurrency[]} currencies List of all the currencies by ID
+*   @property {Currency[]} currencies List of all the currencies by ID
 *   @property {SystemWindowSkin[]} windowSkins List of all the windowSkins by ID
 *   @property {SystemCameraProperties[]} cameraProperties List of all the 
 *   camera properties by ID
-*   @property {SystemDetection[]} detections List of all the detections by ID
+*   @property {Detection[]} detections List of all the detections by ID
 *   @property {SystemSkybox[]} skyboxes List of all the skyboxes by ID
 *   @property {number[]} fontSizes List of all the font sizes by ID
 *   @property {string[]} fontNames List of all the font names by ID
@@ -49,7 +49,7 @@ class DatasSystem
     }
 
     // -------------------------------------------------------
-    /** Read the JSON file associated to system
+    /** Read the JSON file associated to System
     */
     async read()
     {
@@ -117,11 +117,11 @@ class DatasSystem
             return element.name;
         }, false);
         this.colors = RPM.readJSONSystemList(json.colors, SystemColor);
-        this.currencies = RPM.readJSONSystemList(json.currencies, SystemCurrency);
+        this.currencies = RPM.readJSONSystemList(json.currencies, Currency);
         this.windowSkins = RPM.readJSONSystemList(json.wskins, SystemWindowSkin);
         this.cameraProperties = RPM.readJSONSystemList(json.cp, 
             SystemCameraProperties);
-        this.detections = RPM.readJSONSystemList(json.d, SystemDetection);
+        this.detections = RPM.readJSONSystemList(json.d, Detection);
         this.skyboxes = RPM.readJSONSystemList(json.sb, SystemSkybox);
         this.fontSizes = RPM.readJSONSystemList(json.fs, (element) =>
         {
@@ -215,7 +215,7 @@ class DatasSystem
     }
 
     // -------------------------------------------------------
-    /** Get the current system window skin
+    /** Get the current System window skin
     *   @returns {SystemWindowSkin}
     */
     getWindowSkin()

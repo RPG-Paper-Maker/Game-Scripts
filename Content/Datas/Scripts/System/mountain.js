@@ -132,8 +132,8 @@ class Mountain extends MapElement
     }
 
     // -------------------------------------------------------
-    /** Get the system special element mountain
-    *   @returns {SystemSpecialElement}
+    /** Get the System special element mountain
+    *   @returns {SpecialElement}
     */
     getSystem()
     {

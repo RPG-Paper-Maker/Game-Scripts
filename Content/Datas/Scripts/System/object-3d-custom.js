@@ -12,9 +12,9 @@
 /** @class
 *   A 3D object custom in the map
 *   @property {number} id The ID
-*   @property {SystemObject3D} datas The system object 3D
+*   @property {SystemObject3D} datas The System object 3D
 *   @param {Object} json Json object describing the object 3D custom
-*   @param {SystemObject3D} datas The system object 3D
+*   @param {SystemObject3D} datas The System object 3D
 */
 class Object3DCustom extends MapElement
 {
@@ -31,7 +31,7 @@ class Object3DCustom extends MapElement
     // -------------------------------------------------------
     /** Read the JSON associated to the object 3D custom
     *   @param {Object} json Json object describing the object 3D custom
-    *   @param {SystemObject3D} datas The system object 3D
+    *   @param {SystemObject3D} datas The System object 3D
     */
     read(json, datas)
     {

@@ -12,7 +12,7 @@
 /** @class
 *   Element movable in local map
 *   @property {number} [MapObject.SPEED_NORMAL=0.004666] Normal speed coef
-*   @property {SystemObject} system The system infos
+*   @property {SystemObject} System The System infos
 *   @property {THREE.Vector3} position The current object position
 *   @property {THREE.Vector3} previousPosition The previous position before 
 *   last move
@@ -45,11 +45,11 @@
 *   to ID
 *   @property {any[][]} timeEventsEllapsed Informations about time events
 *   @property {number[]} states The states IDs  
-*   @property {SystemObjectState} currentState The current system object state
+*   @property {SystemObjectState} currentState The current System object state
 *   @property {Object} currentStateInstance The current instance object state
 *   @property {SystemValue} speed Speed coef
 *   @property {SystemValue} frequency Frequency value
-*   @param {SystemObject} system The system informations
+*   @param {SystemObject} System The System informations
 *   @param {THREE.Vector3} position The current object position
 *   @param {boolean} isHero Indicate if the object is the hero
 */
@@ -966,9 +966,9 @@ class MapObject
     // -------------------------------------------------------
     /** Receive an event
     *   @param {MapObject} sender The sender of this event
-    *   @param {boolean} isSystem Indicate if it is an event system
+    *   @param {boolean} isSystem Indicate if it is an event System
     *   @param {number} eventID The event ID
-    *   @param {SystemParameter[]} parameters List of all the parameters
+    *   @param {Parameter[]} parameters List of all the parameters
     *   @param {number[]} states List of all the current states of the object
     *   @param {number[]} event The time events list
     *   @returns {boolean}

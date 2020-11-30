@@ -10,22 +10,26 @@
 */
 
 /** @class
- *   An event that can be called
- *   @property {SystemParameters[]} parameters The parameters list
- *   @param {Object} [json=undefined] json object describing the event
+ *   A common reaction
+ *   @extends SystemObjectReaction
+ *   @property {Parameter[]} parameters
+ *   @param {Object} [json=undefined] Json object describing the common reaction
  */
-class SystemEvent {
+class SystemCommonReaction extends SystemObjectReaction {
     constructor(json) {
+        super();
         if (json) {
             this.read(json);
         }
     }
 
     // -------------------------------------------------------
-    /** Read the JSON associated to the event
-     *   @param {Object} json Json object describing the event
+    /** Read the JSON associated to the common reaction
+     *   @param {Object} json Json object describing the common reaction
      */
     read(json) {
-        this.parameters = SystemParameter.readParameters(json);
+        super.read(json);
+
+        this.parameters = Parameter.readParameters(json);
     }
 }

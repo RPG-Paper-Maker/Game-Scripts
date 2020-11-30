@@ -11,9 +11,9 @@
 
 /** @class
  *   An event that an object can react on
- *   @property {boolean} isSystem Boolean indicating if it is an event system
+ *   @property {boolean} isSystem Boolean indicating if it is an event System
  *   @property {number} idEvent ID of the event
- *   @property {SystemParameter[]} parameters All the parameters values
+ *   @property {Parameter[]} parameters All the parameters values
  *   @property {SystemObjectReaction[]} reactions List of all the reactions
  *   according to states ID
  *   @param {Object} [json=undefined] Json object describing the object event
@@ -34,7 +34,7 @@ class SystemObjectEvent {
         this.idEvent = json.id;
 
         // Parameters
-        this.parameters = SystemParameter.readParametersWithDefault(json, (this
+        this.parameters = Parameter.readParametersWithDefault(json, (this
             .isSystem ? RPM.datasGame.commonEvents.eventsSystem : RPM.datasGame
             .commonEvents.eventsUser)[this.idEvent].parameters);
 

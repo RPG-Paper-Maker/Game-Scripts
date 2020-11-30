@@ -26,7 +26,7 @@ class SystemBattleMap
     }
 
     // -------------------------------------------------------
-    /** Create a system battle map
+    /** Create a System battle map
     *   @static 
     *   @param {number} idMap The map ID
     *   @param {number[]} position The json position

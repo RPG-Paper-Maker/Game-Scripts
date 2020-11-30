@@ -19,9 +19,9 @@
 *   values
 *   @property {number[]} Object3DBox.INDEXES The texture indexes
 *   @property {number} id The ID
-*   @property {SystemObject3D} datas The system object 3D
+*   @property {SystemObject3D} datas The System object 3D
 *   @param {Object} json Json object describing the object 3D custom
-*   @param {SystemObject3D} datas The system object 3D
+*   @param {SystemObject3D} datas The System object 3D
 */
 class Object3DBox extends MapElement
 {
@@ -125,7 +125,7 @@ class Object3DBox extends MapElement
     // -------------------------------------------------------
     /** Read the JSON associated to the object 3D box
     *   @param {Object} json Json object describing the object 3D box
-    *   @param {SystemObject3D} datas The system object 3D
+    *   @param {SystemObject3D} datas The System object 3D
     */
     read(json, datas)
     {

@@ -21,3 +21,4 @@ export * from "./Autotiles";
 export * from "./Bitmap";
 export * from "./Anchor2D";
 export * from "./Rectangle";
+export * from "./Picture2D";

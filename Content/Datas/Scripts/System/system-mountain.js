@@ -11,12 +11,12 @@
 
 /** @class
 *   A mountain of the game
-*   @extends SystemSpecialElement
+*   @extends SpecialElement
 *   @property {number} id The ID
 *   @property {MountainCollisionKind} collisionKind The collision kind
 *   @param {Object} [json=undefined] Json object describing the mountain
 */
-class SystemMountain extends SystemSpecialElement
+class SystemMountain extends SpecialElement
 {
     constructor(json)
     {

@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-// TODO : fix the system stuff
+// TODO : fix the System stuff
 import {CommonSkillItem} from ".";
 import {RPM} from "../core";
 

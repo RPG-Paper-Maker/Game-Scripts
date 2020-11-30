@@ -10,9 +10,9 @@
 */
 
 /** @class
-*   All the battle system datas
-*   @property {SystemElement[]} elements List of all the elements by ID
-*   @property {SystemElement[]} elementsOrder List of all the elements by index
+*   All the battle System datas
+*   @property {Element[]} elements List of all the elements by ID
+*   @property {Element[]} elementsOrder List of all the elements by index
 *   @property {SystemStatistic[]} statistics List of all the statistics by ID
 *   @property {SystemStatistic[]} statistics List of all the statistics by index
 *   @property {SystemStatistic[]} statisticsElements List of all the statistics 
@@ -48,7 +48,7 @@ class DatasBattleSystem
     }
 
     // -------------------------------------------------------
-    /** Read the JSON file associated to battle system.
+    /** Read the JSON file associated to battle System.
     */
     async read()
     {
@@ -58,7 +58,7 @@ class DatasBattleSystem
         this.elements = []
         this.elementsOrder = [];
         RPM.readJSONSystemListByIDIndex(json.elements, this.elements, this
-            .elementsOrder, SystemElement);
+            .elementsOrder, Element);
 
         // Statistics
         this.statistics = [];

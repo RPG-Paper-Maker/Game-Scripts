@@ -35,7 +35,7 @@ class SystemProgressionTable
     }
 
     // -------------------------------------------------------
-    /** Create a new system progression table
+    /** Create a new System progression table
     *   @param {SystemValue} i The initial value
     *   @param {SystemValue} f The final value
     *   @param {number} equation The equation kind

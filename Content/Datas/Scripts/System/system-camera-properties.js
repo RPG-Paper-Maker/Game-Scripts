@@ -64,7 +64,7 @@ class SystemCameraProperties
     }
 
     // -------------------------------------------------------
-    /** Initialize a camera according this system properties
+    /** Initialize a camera according this System properties
     *   @param {Camera} camera The camera
     */
     initializeCamera(camera)

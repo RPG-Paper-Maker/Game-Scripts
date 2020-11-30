@@ -53,7 +53,7 @@ class Picture2D extends Bitmap
     // -------------------------------------------------------
     /** Create a picture and then load it
     *   @static
-    *   @param {SystemPicture} picture The picture to load
+    *   @param {Picture} picture The picture to load
     *   @param {number} x The x position
     *   @param {number} y The y position
     *   @param {number} w The w size

@@ -13,7 +13,7 @@
 *   An animation of a skill / item / weapon or for display animation command
 *   @property {number} pictureID The animation picture ID
 *   @property {AnimationPositionKind} positionKind The animation position kind
-*   @property {SystemAnimationFrame[]} frames The system animation frames by ID
+*   @property {SystemAnimationFrame[]} frames The System animation frames by ID
 *   @property {number} rows The number of rows in the animation texture
 *   @property {number} cols The number of columns in the animation texture
 *   @param {Object} [json=undefined] Json object describing the animation
