@@ -16,7 +16,7 @@
  */
 import {RPM} from "../core/rpm";
 import {BaseData} from ".";
-import * as System from "../system";
+import * as System from "../System";
 
 class Animations extends BaseData {
     public list: System.Animation[];

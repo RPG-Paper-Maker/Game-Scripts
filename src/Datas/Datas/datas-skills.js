@@ -11,7 +11,7 @@
 
 /** @class
  *   All the skills datas
- *   @property {SystemSkill[]} list List of all the skills of the game according
+ *   @property {Skill[]} list List of all the skills of the game according
  *   to ID
  */
 class DatasSkills {
@@ -24,6 +24,6 @@ class DatasSkills {
      */
     async read() {
         let json = (await RPM.parseFileJSON(RPM.FILE_SKILLS)).skills;
-        this.list = RPM.readJSONSystemList(json, SystemSkill);
+        this.list = RPM.readJSONSystemList(json, Skill);
     }
 }

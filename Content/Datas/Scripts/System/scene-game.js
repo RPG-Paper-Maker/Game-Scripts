@@ -112,7 +112,7 @@ class SceneGame
     *   @param {SystemReaction} reaction The reaction to add
     *   @param {MapObject} object The object reacting
     *   @param {number} state The state ID
-    *   @param {SystemParameter[]} parameters All the parameters coming with
+    *   @param {Parameter[]} parameters All the parameters coming with
     *   this reaction
     *   @param {number[]} event The time events values
     *   @param {boolean} moving Indicate if command is a moving one

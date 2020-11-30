@@ -13,7 +13,7 @@
  *   All the global informations of the game
  *   @property {number} [DatasGame.VARIABLES_PER_PAGE=25] The number of
  *   variables per page
- *   @property {DatasSystem} system System datas
+ *   @property {DatasSystem} System System datas
  *   @property {DatasPictures} pictures Pictures datas
  *   @property {DatasSongs} songs Songs datas
  *   @property {DatasVideos} videos Videos datas
@@ -124,7 +124,7 @@ class DatasGame {
     // -------------------------------------------------------
     /** Get the list of heros or monsters according to kind
      *   @param {CharacterKind} kind The kind of character
-     *   @returns {SystemHero[]}
+     *   @returns {Hero[]}
      */
     getHeroesMonsters(kind) {
         return (kind === CharacterKind.Hero) ? this.heroes : this.monsters;

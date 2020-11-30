@@ -32,19 +32,19 @@
 *   @param {number} [opts.w=0] The w coords of the text
 *   @param {number} [opts.h=0] The h coords of the text
 *   @param {Align} [opts.align=Align.Left] Alignement of the text
-*   @param {number} [opts.fontSize=RPM.defaultValue(RPM.datasGame.system.dbOptions.vtSize, RPM.fontSize)] 
+*   @param {number} [opts.fontSize=RPM.defaultValue(RPM.datasGame.System.dbOptions.vtSize, RPM.fontSize)]
 *   The font height used for the text
-*   @param {string} [opts.fontName=RPM.defaultValue(RPM.datasGame.system.dbOptions.vtFont, RPM.fontName)]
+*   @param {string} [opts.fontName=RPM.defaultValue(RPM.datasGame.System.dbOptions.vtFont, RPM.fontName)]
 *   The font name used for the text
 *   @param {AlignVertical} [opts.verticalAlign=AlignVertical.Center] Vertical 
 *   alignement of the text
-*   @param {SystemColor} [opts.color=RPM.defaultValue(RPM.datasGame.system.dbOptions.vtcText] 
+*   @param {SystemColor} [opts.color=RPM.defaultValue(RPM.datasGame.System.dbOptions.vtcText]
 *   The color used for the text
 *   @param {boolean} [opts.bold=false] If checked, make the text bold
 *   @param {boolean} [opts.italic=false] If checked, make the text italic
-*   @param {SystemColor} [opts.backColor=RPM.defaultValue(RPM.datasGame.system.dbOptions.vtcBackground, null)] 
+*   @param {SystemColor} [opts.backColor=RPM.defaultValue(RPM.datasGame.System.dbOptions.vtcBackground, null)]
 *   The background color behind the text
-*   @param {SystemColor} [opts.strokeColor=RPM.defaultValue(RPM.datasGame.system.dbOptions.tOutline, false)? RPM.defaultValue(RPM.datasGame.system.dbOptions.vtcOutline, null) : null] 
+*   @param {SystemColor} [opts.strokeColor=RPM.defaultValue(RPM.datasGame.System.dbOptions.tOutline, false)? RPM.defaultValue(RPM.datasGame.System.dbOptions.vtcOutline, null) : null]
 *   The stroke color of the text
 */
 class GraphicText extends Bitmap

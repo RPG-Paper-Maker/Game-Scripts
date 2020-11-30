@@ -19,7 +19,7 @@
 *   mountains
 *   @property {boolean} ownsWalls Indicate if this tileset contains walls
 *   @property {number} id The tileset ID
-*   @property {SystemPicture} picture The picture used for this tileset
+*   @property {Picture} picture The picture used for this tileset
 *   @property {number[]} autotiles All the IDs of used autotiles for this
 *   tileset
 *   @property {number[]} walls All the IDs of used walls for this tileset
@@ -224,7 +224,7 @@ class SystemTileset
     /** Load an autotile ID and add it to context rendering
     *   @param {TextureSeveral} textureAutotile The autotile several texture
     *   @param {THREE.Texture} texture The texture to paint on
-    *   @param {SystemPicture} picture The picture to paint
+    *   @param {Picture} picture The picture to paint
     *   @param {number} offset The offset
     *   @param {number} id The picture id
     *   @returns {any[]}
@@ -393,7 +393,7 @@ class SystemTileset
     /** Load a mountain ID and add it to context rendering
     *   @param {TextureSeveral} textureMountain The mountain several texture
     *   @param {THREE.Texture} texture The texture to paint on
-    *   @param {SystemPicture} picture The picture to paint
+    *   @param {Picture} picture The picture to paint
     *   @param {number} offset The offset
     *   @param {number} id The picture id
     *   @returns {any[]}
@@ -542,7 +542,7 @@ class SystemTileset
 
     // -------------------------------------------------------
     /** Load a wall texture
-    *   @param {SystemPicture} picture The picture to load
+    *   @param {Picture} picture The picture to load
     *   @param {number} id The picture id
     *   @returns {THREE.ShaderMaterial}
     */

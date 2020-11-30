@@ -9,6 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import {BaseSystem, DynamicValue} from ".";
+import {RPM} from "../core";
+
 /** @class
  *   A loot of the game
  *   @property {LootKind} kind The kind of loot
@@ -19,11 +22,26 @@
  *   @property {SystemValue} final The final value
  *   @param {Object} [json=undefined] Json object describing the loot
  */
-class SystemLoot {
-    constructor(json) {
-        if (json) {
-            this.read(json);
-        }
+export class Loot extends BaseSystem {
+
+    kind: number;
+    lootID: DynamicValue;
+    number: DynamicValue;
+    probability: DynamicValue;
+    initial: DynamicValue;
+    final: DynamicValue;
+
+    constructor(json = undefined) {
+        super(json);
+    }
+
+    public setup() {
+        this.kind = null;
+        this.lootID = null;
+        this.number = null;
+        this.probability = null;
+        this.initial = null;
+        this.final = null;
     }
 
     // -------------------------------------------------------

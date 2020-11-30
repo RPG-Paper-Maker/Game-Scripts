@@ -11,7 +11,7 @@
 
 /** @class
 *   A class for all keyboard assign to display in screen
-*   @property {SystemKeyBoard} kb The system keyboard
+*   @property {SystemKeyBoard} kb The System keyboard
 *   @property {GraphicText} graphicTextName The graphic text for name
 *   @property {GraphicText} graphicTextShort The graphic text for short
 *   @property {GraphicText} graphicTextInformation The graphic text for 

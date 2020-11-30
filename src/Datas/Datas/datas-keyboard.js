@@ -22,7 +22,7 @@ class DatasKeyBoard {
     }
 
     // -------------------------------------------------------
-    /** Test if a key id can be equal to a keyboard system object
+    /** Test if a key id can be equal to a keyboard System object
      *   @static
      *   @param {number} key The key id that needs to be compared
      *   @param {SystemKeyBoard} abr The keyBoard to compare to the key

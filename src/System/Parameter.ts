@@ -9,34 +9,44 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import {BaseSystem, DynamicValue} from ".";
+import {Enum, RPM} from "../core";
+import PrimitiveValueKind = Enum.PrimitiveValueKind;
+
 /** @class
  *   A parameter of a reaction
  *   @property {SystemValue} value The value of the parameter
  *   @param {Object} [json=undefined] Json object describing the parameter value
  */
-class SystemParameter {
-    constructor(json) {
-        if (json) {
-            this.read(json);
-        }
+export class Parameter extends BaseSystem {
+
+    value: DynamicValue;
+    kind: number;
+
+    constructor(json= undefined) {
+        super(json);
+    }
+
+    public setup() {
+        this.value = null;
     }
 
     // -------------------------------------------------------
     /** Read the parameters
      *   @static
      *   @param {Object} json Json object describing the parameters
-     *   @returns {SystemParameter[]}
+     *   @returns {Parameter[]}
      */
     static readParameters(json) {
         return RPM.readJSONSystemList(RPM.defaultValue(json.p, []),
-            SystemParameter);
+            Parameter);
     }
 
     // -------------------------------------------------------
     /** Read the parameters with default values
      *   @param {Object} json Json object describing the object
-     *   @param {SystemParameter[]} list List of all the parameters default
-     *   @returns {SystemParameter[]}
+     *   @param {Parameter[]} list List of all the parameters default
+     *   @returns {Parameter[]}
      */
     static readParametersWithDefault(json, list) {
         let jsonParameters = json.p;
@@ -45,7 +55,7 @@ class SystemParameter {
         let jsonParameter, parameter;
         for (let i = 0, l = jsonParameters.length; i < l; i++) {
             jsonParameter = jsonParameters[i];
-            parameter = new SystemParameter();
+            parameter = new Parameter();
             parameter.readDefault(jsonParameter.v);
             if (parameter.value.kind === PrimitiveValueKind.Default) {
                 parameter = list[i + 1];
@@ -73,7 +83,7 @@ class SystemParameter {
 
     // -------------------------------------------------------
     /** Check if the parameter is equal to another one
-     *   @param {SystemParameter} parameter The parameter to compare
+     *   @param {Parameter} parameter The parameter to compare
      *   @returns {boolean}
      */
     isEqual(parameter) {

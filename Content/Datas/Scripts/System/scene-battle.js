@@ -75,9 +75,9 @@
 *   the battle start
 *   @property {MapTransitionKind} transitionEnd The kind of transition for the 
 *   battle end
-*   @property {SystemColor} transitionStartColor The system color for start 
+*   @property {SystemColor} transitionStartColor The System color for start
 *   transition
-*   @property {SystemColor} transitionEndColor The system color for end 
+*   @property {SystemColor} transitionEndColor The System color for end
 *   transition
 *   @property {boolean} transitionColor Indicate if the transition is by color
 *   @property {number} transitionColorAlpha The alpha transition color value
@@ -86,7 +86,7 @@
 *   sub-steps)
 *   @property {SceneMap} sceneMap The scene map where the battle was run
 *   @property {number} sceneMapCameraDistance The scene map camera distance
-*   @property {SystemMonsterAction} actionDoNothing A system monster action 
+*   @property {MonsterAction} actionDoNothing A System monster action
 *   reprensenting action doing nothing
 *   @property {number} cameraStep The camera step (for moving)
 *   @property {number} cameraTick The camera tick
@@ -134,16 +134,16 @@
 *   @property {GraphicSkill[]} listSkills The graphics list for each skill
 *   @property {GraphicItem[]} listItems The graphics list for each item
 *   @property {boolean} transitionEnded Indicate if the transition ended
-*   @property {SystemEffect[]} effects The current weapon / skill system effects
+*   @property {SystemEffect[]} effects The current weapon / skill System effects
 *   @property {number} frameUser The frame user
 *   @property {number} frameTarget The frame target
-*   @property {SystemAnimation} userAnimation The system animation for user
-*   @property {SystemAnimation} targetAnimation The system animation for target   
+*   @property {SystemAnimation} userAnimation The System animation for user
+*   @property {SystemAnimation} targetAnimation The System animation for target
 *   @property {Battler} user The user battler
 *   @property {number} currentEffectIndex The current effect index
 *   @property {number} timeEnemyAttack A chronometer for enemy attack
-*   @property {SystemMonsterAction} action The current system action
-*   @property {SystemSkill} attackSkill The system skill
+*   @property {MonsterAction} action The current System action
+*   @property {Skill} attackSkill The System skill
 *   @property {boolean} finishedXP Indicate if the xp progression is finished
 *   @property {number} priorityIndex The priority index
 *   @property {WindowBox} windowLoots The window box for loots
@@ -155,14 +155,14 @@
 *   @param {number} troopID Current troop ID that the allies are fighting
 *   @param {boolean} canGameOver Indicate if there is a win/lose node or not
 *   @param {boolean} canEscape Indicate if the player can escape this battle
-*   @param {SystemBattleMap} battleMap The system battle map
+*   @param {SystemBattleMap} battleMap The System battle map
 *   @param {MapTransitionKind} transitionStart The kind of transition for 
 *   the battle start
 *   @param {MapTransitionKind} transitionEnd The kind of transition for the 
 *   battle end
-*   @param {SystemColor} transitionStartColor The system color for start 
+*   @param {SystemColor} transitionStartColor The System color for start
 *   transition
-*   @param {SystemColor} transitionEndColor The system color for end 
+*   @param {SystemColor} transitionEndColor The System color for end
 *   transition
 */
 class SceneBattle extends SceneMap
@@ -215,7 +215,7 @@ class SceneBattle extends SceneMap
         this.step = 0;
         this.sceneMap = RPM.gameStack.top;
         this.sceneMapCameraDistance = this.sceneMap.camera.distance;
-        this.actionDoNothing = new SystemMonsterAction({});
+        this.actionDoNothing = new MonsterAction({});
     }
 
     // -------------------------------------------------------

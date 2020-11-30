@@ -17,7 +17,7 @@
 *   Property string used for textures battlers
 *   @property {string} [DatasTilesets.PROPERTY_TEXTURES_OBJECTS_3D="texturesObjects3D"] 
 *   Property string used for textures 3D objects
-*   @property {SystemTileset[]} list List of all the tilesets of the game
+*   @property {Tileset[]} list List of all the tilesets of the game
 *   according to ID
 *   @property {Object} autotiles Tilesets according to string autotiles
 *   @property {Object} walls Tilesets according to string walls
@@ -54,7 +54,7 @@ class DatasTilesets
         for (i = 0; i < l; i++)
         {
             jsonTileset = json[i];
-            tileset = new SystemTileset(jsonTileset);
+            tileset = new Tileset(jsonTileset);
             this.list[jsonTileset.id] = tileset;
 
             // Autotiles, walls
@@ -115,7 +115,7 @@ class DatasTilesets
 
     // -------------------------------------------------------
     /** Get the autotiles textures
-    *   @param {SystemTileset} tileset The tileset
+    *   @param {Tileset} tileset The tileset
     *   @returns {THREE.Material[]}
     */
     getTexturesAutotiles(tileset)
@@ -125,7 +125,7 @@ class DatasTilesets
 
     // -------------------------------------------------------
     /** Get the mountains textures
-    *   @param {SystemTileset} tileset The tileset
+    *   @param {Tileset} tileset The tileset
     *   @returns {THREE.Material[]}
     */
     getTexturesMountains(tileset)
@@ -135,7 +135,7 @@ class DatasTilesets
 
     // -------------------------------------------------------
     /** Get the walls textures
-    *   @param {SystemTileset} tileset The tileset
+    *   @param {Tileset} tileset The tileset
     *   @returns {THREE.Material[]}
     */
     getTexturesWalls(tileset)

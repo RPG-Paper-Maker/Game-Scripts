@@ -11,7 +11,7 @@
 
 /** @class
 *   All the pictures datas
-*   @property {SystemPicture[]} list List of all the pictures of the game
+*   @property {Picture[]} list List of all the pictures of the game
 *   according to ID and PictureKind
 */
 class DatasPictures
@@ -56,7 +56,7 @@ class DatasPictures
                 if (jsonPicture)
                 {
                     id = jsonPicture.id;
-                    picture = new SystemPicture(jsonPicture, k);
+                    picture = new Picture(jsonPicture, k);
                     if (k === PictureKind.Icons || k === PictureKind.Pictures ||
                         k === PictureKind.Facesets || k === PictureKind
                         .Animations || k === PictureKind.Battlers)
@@ -81,11 +81,11 @@ class DatasPictures
     /** Get the corresponding picture
     *   @param {PictureKind} kind The picture kind
     *   @param {number} id The picture id
-    *   @returns {SystemPicture}
+    *   @returns {Picture}
     */
     get(kind, id)
     {
-        return (kind === PictureKind.None) ? new SystemPicture() : this.list
+        return (kind === PictureKind.None) ? new Picture() : this.list
             [kind][id];
     }
 
@@ -104,7 +104,7 @@ class DatasPictures
     // -------------------------------------------------------
     /** Get the corresponding icon picture
     *   @param {number} id The picture id of the icon
-    *   @returns {SystemPicture}
+    *   @returns {Picture}
     */
     getIcon(id)
     {

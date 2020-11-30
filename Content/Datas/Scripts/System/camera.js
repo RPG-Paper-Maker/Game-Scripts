@@ -22,7 +22,7 @@
 *   @property {MapObject} target The camera target
 *   @property {THREE.Vector3} targetPosition The camera target position
 *   @property {THREE.Vector3} targetOffset The target offset position
-*   @param {SystemCameraProperties} cameraProperties The system camera 
+*   @param {SystemCameraProperties} cameraProperties The System camera
 *   properties
 *   @param {MapObject} target The camera target
 */

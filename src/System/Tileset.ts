@@ -9,6 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import {BaseSystem} from ".";
+import {Autotiles, Enum, Platform, RPM, TextureBundle} from "../core";
+import PictureKind = Enum.PictureKind;
+import {Picture2D} from "../core/Picture2D";
+import THREE from "three";
+
 /** @class
  *   A tileset of the game
  *   @property {CollisionSquare[]} collisions List of all the collisions
@@ -27,15 +33,31 @@
  *   tileset
  *   @property {number[]} objects All the IDs of used 3D objects for this tileset
  */
-class SystemTileset {
+export class Tileset extends BaseSystem {
+
+    collisions: CollisionSquare[];
+    ownsAutotiles: boolean;
+    ownsMountains: boolean;
+    ownsWalls: boolean;
+    id: number;
+    picture: SystemPicture;
+    autotiles: number[];
+    walls: number[];
+    mountains: number[];
+    objects: number[];
+    texturesAutotiles: number[];
+    texturesMountains: number[];
+    texturesWalls: THREE.MeshBasicMaterial[] | THREE.ShaderMaterial[];
+
     constructor(json) {
+        super(json);
+    }
+
+    public setup() {
         this.collisions = null;
         this.ownsAutotiles = false;
         this.ownsMountains = false;
         this.ownsWalls = false;
-        if (json) {
-            this.read(json);
-        }
     }
 
     // -------------------------------------------------------

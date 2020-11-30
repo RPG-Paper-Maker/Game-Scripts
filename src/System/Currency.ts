@@ -9,12 +9,14 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import {Icon} from ".";
+
 /** @class
  *   A currency of the game
  *   @extends SystemIcon
  *   @param {Object} [json=undefined] Json object describing the currency
  */
-class SystemCurrency extends Icon {
+export class Currency extends Icon {
     constructor(json) {
         super(json);
     }

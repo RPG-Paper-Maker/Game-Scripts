@@ -12,13 +12,13 @@
 
 /** @class
 *   A monster of the game
-*   @extends SystemHero
+*   @extends Hero
 *   @property {Object} rewards An object containing experience, currencies, and 
 *   loots
-*   @property {SystemMonsterAction[]} actions The monster actions list
+*   @property {MonsterAction[]} actions The monster actions list
 *   @param {Object} [json=undefined] Json object describing the monster
 */
-class SystemMonster extends SystemHero
+class SystemMonster extends Hero
 {
     constructor(json)
     {
@@ -56,13 +56,13 @@ class SystemMonster extends SystemHero
         }
         // Loots
         this.rewards.loots = RPM.readJSONSystemListByIndex(RPM.defaultValue(json
-            .loots, []), SystemLoot);
+            .loots, []), Loot);
 
         // Actions
         this.actions = RPM.readJSONSystemListByIndex(RPM.defaultValue(json
             .a, []), (jsonAction) =>
             {
-                let action = new SystemMonsterAction(jsonAction);
+                let action = new MonsterAction(jsonAction);
                 action.monster = this;
                 return action;
             }, false

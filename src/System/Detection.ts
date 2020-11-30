@@ -9,16 +9,25 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import {BaseSystem} from ".";
+import {Enum, RPM} from "../core";
+import Orientation = Enum.Orientation;
+
 /** @class
  *   A detection of the game
  *   @property {number[][]} boxes List of boxes for detection
  *   @param {Object} [json=undefined] Json object describing the detection
  */
-class SystemDetection {
+class Detection extends BaseSystem {
+
+    boxes: number[][];
+
     constructor(json) {
-        if (json) {
-            this.read(json);
-        }
+        super(json);
+    }
+
+    public setup() {
+        this.boxes = [];
     }
 
     // -------------------------------------------------------

@@ -20,10 +20,10 @@
 *   @property {number} width The map width
 *   @property {number} height The map height
 *   @property {number} depth The map depth
-*   @property {SystemTileset} tileset The system tileset map
+*   @property {Tileset} tileset The System tileset map
 *   @property {SystemPlaySong} music The beginning music
 *   @property {SystemPlaySong} backgroundSound The beginning background sound
-*   @property {SystemCameraProperties} cameraProperties The system camera 
+*   @property {SystemCameraProperties} cameraProperties The System camera
 *   properties of the map
 *   @property {boolean} isBackgroundColor Indicate if background is a color
 *   @property {boolean} isBackgroundImage Indicate if background is an image
@@ -31,7 +31,7 @@
 *   @property {number} backgroundImageID The background image ID
 *   @property {SystemValue} backgroundSkyboxID = The skybox background ID value 
 *   @property {MapObject} startupObject The map object startup
-*   @property {SystemColor} backgroundColor The background system color
+*   @property {SystemColor} backgroundColor The background System color
 *   @property {THREE.Camera} cameraBackground The camera for background when 
 *   image
 */

@@ -9,17 +9,26 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import {BaseSystem} from ".";
+import {RPM} from "../core";
+
 /** @class
  *   A special element (autotile, wall, object3D, mountain) of the game
  *   @property {number} pictureID The picture ID of the special element
  *   @param {Object} [json=undefined] Json object describing the special element
  */
-class SystemSpecialElement {
+export class SpecialElement extends BaseSystem {
+
+    pictureID: number;
+
     constructor(json) {
-        if (json) {
-            this.read(json);
-        }
+        super(json);
     }
+
+    public setup() {
+        this.pictureID = 0;
+    }
+
 
     // -------------------------------------------------------
     /** Read the JSON associated to the special element

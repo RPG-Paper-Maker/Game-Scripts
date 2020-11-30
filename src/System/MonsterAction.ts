@@ -9,6 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import {BaseSystem, DynamicValue, Monster} from ".";
+import {Enum, RPM} from "../core";
+import MonsterActionKind = Enum.MonsterActionKind;
+import OperationKind = Enum.OperationKind;
+import MonsterActionTargetKind = Enum.MonsterActionTargetKind;
+
 /** @class
  *   A monster action of the game
  *   @property {MonsterActionKind} actionKind The action kind
@@ -39,11 +45,58 @@
  *   @property {SystemValue} script The script formula
  *   @param {Object} [json=undefined] Json object describing the monster action
  */
-class SystemMonsterAction {
-    constructor(json) {
-        if (json) {
-            this.read(json);
-        }
+export class MonsterAction extends BaseSystem {
+
+    actionKind: number;
+    skillID: DynamicValue;
+    itemID: DynamicValue;
+    itemNumberMax: DynamicValue;
+    priority: DynamicValue;
+    targetKind: number;
+    isConditionTurn: boolean;
+    operationKindTurn: number;
+    turnValueCompare: DynamicValue;
+    isConditionStatistic: boolean;
+    statisticID: DynamicValue;
+    operationKindStatistic: number;
+    statisticValueCompare: DynamicValue;
+    isConditionVariable: boolean;
+    variableID: number;
+    operationKindVariable: number;
+    variableValueCompare: DynamicValue;
+    isConditionStatus: boolean;
+    statusID: DynamicValue;
+    isConditionScript: boolean;
+    script: DynamicValue;
+    monster: Monster;
+
+    constructor(json = undefined) {
+        super(json);
+    }
+
+    public setup() {
+        this.actionKind = 0;
+        this.skillID = null;
+        this.itemID = null;
+        this.itemNumberMax = null;
+        this.priority = null;
+        this.targetKind = 0;
+        this.isConditionTurn = false;
+        this.operationKindTurn = 0;
+        this.turnValueCompare = null;
+        this.isConditionStatistic = null;
+        this.statisticID = null;
+        this.operationKindStatistic = null;
+        this.statisticValueCompare = null;
+        this.isConditionVariable = false;
+        this.variableID = 0;
+        this.operationKindVariable = 0;
+        this.variableValueCompare = null;
+        this.isConditionStatus = false;
+        this.statusID = null;
+        this.isConditionScript = false;
+        this.script = null;
+        this.monster = null;
     }
 
     // -------------------------------------------------------
