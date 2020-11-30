@@ -1,5 +1,5 @@
-import {Vector2} from "../core/Vector2";
-import {Node} from "../core";
+import {Vector2} from "../Core/Vector2";
+//import {Node} from "../Core";
 
 /**
  * The Graphics class who manage UI
@@ -7,12 +7,12 @@ import {Node} from "../core";
  * @author Nio Kasgami
  * TODO : maybe use viewports?
  */
-export class UI extends Node {
+export class UI /*extends Node*/ {
 
-    private _layers: LayeredSprite;
-    private _transform: Vector2;
+    //private _layers: LayeredSprite;
+    //private _transform: Vector2;
 
     constructor(parent, data) {
-        super(parent, data);
+        //super(parent, data);
     }
 }

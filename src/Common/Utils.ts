@@ -1,6 +1,23 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
 
-import {Constants} from ".";
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
 
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+import { Constants } from ".";
+import { Platform } from "../Core";
+import electron from 'electron';
+const remote = electron.remote;
+const console = remote.getGlobal('console');
+
+/**
+ * The static class containing all the utils functions.
+ */
 export class Utils {
 
     constructor() {
@@ -39,7 +56,6 @@ export class Utils {
                 .STRING_COLON + this.formatNumber(Math.floor(total % 60), 2));
     }
 
-    // -------------------------------------------------------
     /** Return the string of a number and parse with 0 according to a given size
      *   @static
      *   @param {number} num Number
@@ -61,5 +77,32 @@ export class Utils {
             list[i] = null;
         }
         return list;
+    }
+
+    /** Show an error object
+     *   @static
+     *   @param {Error} e The error message
+     */
+    static showError(e: Error) {
+        Utils.showErrorMessage(e.message + Constants.STRING_NEW_LINE + e.stack);
+    }
+
+    /** Show an error message
+     *   @static
+     *   @param {string} msg The error message
+     */
+    static showErrorMessage(msg: string) {
+        if (Platform.DESKTOP) {
+            const dialog = require('electron').remote.dialog;
+            dialog.showMessageBoxSync(
+                {
+                    title: 'Error',
+                    type: 'error',
+                    message: msg
+                }
+            );
+        } else {
+            console.alert(msg);
+        }
     }
 }

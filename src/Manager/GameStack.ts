@@ -11,18 +11,20 @@
 
 /** @class
  *   The game stack that is organizing the game scenes
- *   @property {SceneGame[]} content The stack content
- *   @property {SceneGame[]} top The stack top content
- *   @property {SceneGame[]} subTop The stack top - 1 content
- *   @property {SceneGame[]} bot The stack bot content
+ *   @property {Scene.Game[]} content The stack content
+ *   @property {Scene.Game} top The stack top content
+ *   @property {Scene.Game} subTop The stack top - 1 content
+ *   @property {Scene.Game} bot The stack bot content
  */
-import {RPM} from "../core";
+import { Scene } from "..";
+import { Utils } from "../Common";
+import { Bitmap } from "../Core";
 
 export class GameStack {
-    content: SceneGame[];
-    top: SceneGame[];
-    subTop: SceneGame[];
-    bot: SceneGame[];
+    public top: Scene.Game;
+    public subTop: Scene.Game;
+    public bot: Scene.Game;
+    private content: Scene.Game[];
 
     constructor() {
         this.content = [];
@@ -33,35 +35,36 @@ export class GameStack {
 
     // -------------------------------------------------------
     /** Push a new scene in the stack
-     *   @param {SceneGame} scene The scene to push
+     *   @param {Scene.Game} scene The scene to push
      */
-    push(scene) {
+    push(scene: Scene.Game) {
         this.content.push(scene);
         this.top = scene;
         this.subTop = this.at(this.content.length - 2);
         this.bot = this.at(0);
-        RPM.requestPaintHUD = true;
+        Bitmap.requestPaintHUD = true;
     }
 
     // -------------------------------------------------------
     /** Pop (remove) the last scene in the stack
-     *   @returns {SceneGame} The last scene that is removed
+     *   @returns {Scene.Game} The last scene that is removed
      */
-    pop() {
+    pop(): Scene.Game {
         let scene = this.content.pop();
         this.top = this.at(this.content.length - 1);
         this.subTop = this.at(this.content.length - 2);
         this.bot = this.at(0);
         scene.close();
-        RPM.requestPaintHUD = true;
+        Bitmap.requestPaintHUD = true;
         return scene;
     }
 
     // -------------------------------------------------------
     /** Pop (remove) all the scene in the stack
+     * @returns Scene.Game
      */
-    popAll() {
-        let scene;
+    popAll(): Scene.Game {
+        let scene: Scene.Game;
         for (let i = this.content.length - 1; i >= 0; i--) {
             scene = this.content.pop();
             scene.close();
@@ -69,7 +72,7 @@ export class GameStack {
         this.top = null;
         this.subTop = null;
         this.bot = null;
-        RPM.requestPaintHUD = true;
+        Bitmap.requestPaintHUD = true;
         return scene;
     }
 
@@ -78,7 +81,7 @@ export class GameStack {
      *   @param {SceneGame} scene The scene to replace
      *   @returns {SceneGame} The last scene that is replaced
      */
-    replace(scene) {
+    replace(scene: Scene.Game): Scene.Game {
         let pop = this.pop();
         this.push(scene);
         return pop;
@@ -90,15 +93,15 @@ export class GameStack {
      *   @param {number} i Index in the stack
      *   @returns {SceneGame} The scene in the index of the stack
      */
-    at(i) {
-        return RPM.defaultValue(this.content[i], null);
+    at(i: number): Scene.Game {
+        return Utils.defaultValue(this.content[i], null);
     }
 
     // -------------------------------------------------------
     /** Check if the stack is empty
      *   @returns {boolean}
      */
-    isEmpty() {
+    isEmpty(): boolean {
         return this.top === null;
     }
 
@@ -106,7 +109,7 @@ export class GameStack {
     /** Check if top content is loading
      *   @returns {boolean}
      */
-    isLoading() {
+    isLoading(): boolean {
         return this.isEmpty() || this.top.loading;
     }
 
@@ -134,7 +137,7 @@ export class GameStack {
     /** First key press handle for the current stack
      *   @param {number} key The key ID pressed
      */
-    onKeyPressed(key) {
+    onKeyPressed(key: number) {
         if (!this.isEmpty()) {
             this.top.onKeyPressed(key);
         }
@@ -144,7 +147,7 @@ export class GameStack {
     /** First key release handle for the current stack
      *   @param {number} key The key ID released
      */
-    onKeyReleased(key) {
+    onKeyReleased(key: number) {
         if (!this.isEmpty()) {
             this.top.onKeyReleased(key);
         }
@@ -155,7 +158,7 @@ export class GameStack {
      *   @param {number} key The key ID pressed
      *   @returns {boolean} false if the other keys are blocked after it
      */
-    onKeyPressedRepeat(key) {
+    onKeyPressedRepeat(key: number): boolean {
         return this.isEmpty() ? true : this.top.onKeyPressedRepeat(key);
     }
 
@@ -165,7 +168,7 @@ export class GameStack {
      *   @param {number} key The key ID pressed
      *   @returns {boolean} false if the other keys are blocked after it
      */
-    onKeyPressedAndRepeat(key) {
+    onKeyPressedAndRepeat(key: number): boolean {
         return this.isEmpty() ? true : this.top.onKeyPressedAndRepeat(key);
     }
 
@@ -182,6 +185,7 @@ export class GameStack {
     /** Draw HUD for the current stack
      */
     drawHUD() {
+        /*
         if (!this.isEmpty()) {
             // Display < 0 index image command
             let i, l, v;
@@ -200,6 +204,6 @@ export class GameStack {
             for (; i < l; i++) {
                 RPM.displayedPictures[i][1].draw();
             }
-        }
+        }*/
     }
 }

@@ -25,7 +25,7 @@ function createWindow () {
             enableRemoteModule: true
         }
     });
-    //window.webContents.openDevTools();
+    window.webContents.openDevTools();
     ipc.on('window-error', function(event, err) {
         dialog.showMessageBoxSync({ title: 'Error', type: 'error', message: err });
         window.close()

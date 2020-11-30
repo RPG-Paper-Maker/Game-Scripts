@@ -1,4 +1,15 @@
-import {Constants} from ".";
+/*
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+import { Constants, Globals } from ".";
 
 /**
  * The static class for Math related function
@@ -128,5 +139,67 @@ export class Mathf {
     static variance(value, variance) {
         let v = Math.round(value * variance / 100);
         return this.random(value - v, value + v);
+    }
+
+    // -------------------------------------------------------
+    /** Get the pixel position transformation according to screen size
+     *   @static
+     *   @param {number} x The position on screen
+     *   @returns {number}
+     */
+    static getScreenX(x) {
+        return Math.ceil(Mathf.getDoubleScreenX(x));
+    }
+
+    // -------------------------------------------------------
+    /** Get the pixel position transformation according to screen size
+     *   @static
+     *   @param {number} y The position on screen
+     *   @returns {number}
+     */
+    static getScreenY(y) {
+        return Math.ceil(Mathf.getDoubleScreenY(y));
+    }
+
+    // -------------------------------------------------------
+    /** Get the pixel position transformation according to screen size
+     *   @static
+     *   @param {number} xy The position on screen
+     *   @returns {number}
+     */
+    static getScreenXY(xy) {
+        return Math.ceil((Globals.WINDOW_X + Globals.WINDOW_Y) / 2 * xy);
+    }
+
+    // -------------------------------------------------------
+    /** Get the min pixel position transformation according to screen size
+     *   @static
+     *   @param {number} xy The position on screen
+     *   @returns {number}
+     */
+    static getScreenMinXY(xy) {
+        return Math.ceil(xy * Math.min(Globals.WINDOW_X, Globals.WINDOW_Y));
+    }
+
+    // -------------------------------------------------------
+    /** Get the pixel position transformation according to screen size, but
+     *   without rounding it
+     *   @static
+     *   @param {number} x The position on screen
+     *   @returns {number}
+     */
+    static getDoubleScreenX(x) {
+        return Globals.WINDOW_X * x;
+    }
+
+    // -------------------------------------------------------
+    /** Get the pixel position transformation according to screen size, but
+     *   without rounding it
+     *   @static
+     *   @param {number} y The position on screen
+     *   @returns {number}
+     */
+    static getDoubleScreenY(y) {
+        return Globals.WINDOW_Y * y;
     }
 }

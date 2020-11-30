@@ -14,12 +14,11 @@
  *   @property {SystemAnimation[]} list List of all the animations of the game
  *   according to ID
  */
-import {RPM} from "../core/rpm";
-import {BaseData} from ".";
-import * as System from "../System";
+import { Base } from ".";
+//import * as System from "../System";
 
-class Animations extends BaseData {
-    public list: System.Animation[];
+class Animations extends Base {
+    public list: number[];
 
     constructor() {
         super();
@@ -29,7 +28,8 @@ class Animations extends BaseData {
     /** Read the JSON file associated to troops.
      */
     async read() {
+        /*
         let json = (await RPM.parseFileJSON(RPM.FILE_ANIMATIONS)).animations;
-        this.list = RPM.readJSONSystemList(json, System.Animation);
+        this.list = RPM.readJSONSystemList(json, System.Animation);*/
     }
 }
