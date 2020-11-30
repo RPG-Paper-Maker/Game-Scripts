@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import {BaseSystem, Class} from ".";
+import {BaseSystem, Class, RewardStruct} from ".";
 import {RPM} from "../core";
 
 /** @class
@@ -28,6 +28,7 @@ export class Hero extends BaseSystem {
     idBattler: number;
     idFaceset: number;
     classInherit: Class;
+    rewards: RewardStruct;
 
     constructor(json) {
         super(json);

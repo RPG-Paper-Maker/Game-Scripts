@@ -11,7 +11,7 @@
 
 /** @class
  *   A 3D object of the game
- *   @extends SystemSpecialElement
+ *   @extends SpecialElement
  *   @property {number} id The ID
  *   @property {ShapeKind} shapeKind The shape kind
  *   @property {number} objID The .obj ID
@@ -28,7 +28,7 @@
  *   @property {boolean} stretch Indicate if the texture is stretch
  *   @param {Object} [json=undefined] Json object describing the object 3D
  */
-class SystemObject3D extends SystemSpecialElement {
+class SystemObject3D extends SpecialElement {
     constructor(json) {
         super();
         if (json) {

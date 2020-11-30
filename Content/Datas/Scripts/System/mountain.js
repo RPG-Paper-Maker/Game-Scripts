@@ -133,7 +133,7 @@ class Mountain extends MapElement
 
     // -------------------------------------------------------
     /** Get the System special element mountain
-    *   @returns {SystemSpecialElement}
+    *   @returns {SpecialElement}
     */
     getSystem()
     {

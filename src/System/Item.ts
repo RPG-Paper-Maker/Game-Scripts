@@ -9,17 +9,18 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import {CommonSkillItem} from ".";
+import {RPM} from "../core";
+
 /** @class
  *   An item of the game
  *   @extends CommonSkillItem
  *   @param {Object} [json=undefined] Json object describing the item
  */
-class SystemItem extends CommonSkillItem {
-    constructor(json) {
-        super();
-        if (json) {
-            this.read(json);
-        }
+export class Item extends CommonSkillItem {
+
+    constructor(json = undefined) {
+        super(json);
     }
 
     // -------------------------------------------------------

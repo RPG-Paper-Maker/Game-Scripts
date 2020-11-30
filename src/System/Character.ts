@@ -6,7 +6,7 @@ import {BaseSystem, ProgressionTable, RewardStruct} from ".";
 /**
  * The superclass who manage Characters in game.
  * @abstract
- * @cancelled
+ * @deprecated Hero is the superclass instead.
  */
 export abstract class Character extends BaseSystem {
 

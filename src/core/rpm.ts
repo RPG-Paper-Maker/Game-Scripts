@@ -957,11 +957,15 @@ export class RPM {
             });
     }
 
+    public static SQUARE_SIZE = 0;
+    public static FRAMES = 0;
+    public static PATH_DLCS = "";
+
     // -------------------------------------------------------
     /** Create a material from texture.
      *   @returns {THREE.ShaderMaterial}
      */
-    static createMaterial(texture, opts) {
+    static createMaterial(texture, opts?: any) {
         opts = RPM.defaultValue(opts, {})
         texture.magFilter = THREE.NearestFilter;
         texture.minFilter = THREE.NearestFilter;

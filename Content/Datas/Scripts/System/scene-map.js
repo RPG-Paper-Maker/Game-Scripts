@@ -597,7 +597,7 @@ class SceneMap extends SceneGame
     /** Load collision for special elements
     *   @param {number[]} list The IDs list
     *   @param {PictureKind} kind The picture kind
-    *   @param {SystemSpecialElement[]} specials The specials list
+    *   @param {SpecialElement[]} specials The specials list
     */
     loadSpecialsCollision(list, kind, specials)
     {

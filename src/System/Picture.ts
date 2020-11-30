@@ -9,6 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import {BaseSystem} from ".";
+import {Enum, RPM} from "../core";
+import PictureKind = Enum.PictureKind;
+import {Picture2D} from "../core";
+
 /** @class
  *   A picture of the game
  *   @property {PictureKind} kind The kind of picture
@@ -22,12 +27,32 @@
  *   @param {Object} [json=undefined] Json object describing the picture
  *   @param {Object} [kind=PictureKind.Pictures] The kind of picture
  */
-class SystemPicture {
+export class Picture extends BaseSystem {
+
+    kind: number;
+    name: string;
+    isBR: boolean;
+    isDLC: boolean;
+    dlc: string;
+    jsonCollisions: number[];
+    collisionsRepeat: boolean;
+    collisions: CollisionSquare[];
+    picture: Picture2D;
+    width: number;
+    height: number;
+
     constructor(json, kind = PictureKind.Pictures) {
+        super(json,kind);
+    }
+
+    public setup(kind: number) {
         this.kind = kind;
-        if (json) {
-            this.read(json);
-        }
+        this.name = "";
+        this.isBR = false;
+        this.isDLC = false;
+        this.jsonCollisions = [];
+        this.collisionsRepeat = false;
+        this.collisions = [];
     }
 
     // -------------------------------------------------------
@@ -35,12 +60,12 @@ class SystemPicture {
      *   @static
      *   @param {PictureKind} kind The kind of picture
      *   @param {boolean} isBR Indicate if the picture is a BR
-     *   @param {boolean} isDLC Indicate if the picture is a DLC
+     *   @param {boolean} dlc Indicate if the picture is a DLC
      *   @returns {string}
      */
     static getFolder = function (kind, isBR, dlc) {
         return (isBR ? RPM.PATH_BR : (dlc ? RPM.PATH_DLCS + RPM.STRING_SLASH +
-            dlc : RPM.ROOT_DIRECTORY_LOCAL)) + SystemPicture.getLocalFolder(kind);
+            dlc : RPM.ROOT_DIRECTORY_LOCAL)) + Picture.getLocalFolder(kind);
     }
 
     // -------------------------------------------------------
@@ -109,7 +134,7 @@ class SystemPicture {
      *   @returns {string}
      */
     getPath() {
-        return SystemPicture.getFolder(this.kind, this.isBR, this.dlc) + RPM
+        return Picture.getFolder(this.kind, this.isBR, this.dlc) + RPM
             .STRING_SLASH + this.name;
     }
 

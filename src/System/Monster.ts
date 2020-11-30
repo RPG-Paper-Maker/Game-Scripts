@@ -10,6 +10,10 @@
 */
 
 
+import {Class, Hero, Loot, MonsterAction, ProgressionTable, RewardStruct} from ".";
+import {Enum, RPM} from "../core";
+import LootKind = Enum.LootKind;
+
 /** @class
  *   A monster of the game
  *   @extends Hero
@@ -18,15 +22,12 @@
  *   @property {SystemMonsterAction[]} actions The monster actions list
  *   @param {Object} [json=undefined] Json object describing the monster
  */
-
-// TODO : it doesn't make senses it extends hero the hero should be extending another one.
 export class Monster extends Hero {
 
-    constructor(json) {
-        super();
-        if (json) {
-            this.read(json);
-        }
+    rewards: RewardStruct;
+    actions: MonsterAction[];
+    constructor(json= undefined) {
+        super(json);
     }
     // -------------------------------------------------------
     /** Read the JSON associated to the monster
@@ -35,7 +36,7 @@ export class Monster extends Hero {
     read(json) {
         super.read(json);
 
-        this.rewards = {};
+        this.rewards = {} as RewardStruct;
 
         // Experience
         this.rewards.xp = new ProgressionTable(this.getProperty(
@@ -53,12 +54,12 @@ export class Monster extends Hero {
         }
         // Loots
         this.rewards.loots = RPM.readJSONSystemListByIndex(RPM.defaultValue(json
-            .loots, []), SystemLoot);
+            .loots, []), Loot);
 
         // Actions
         this.actions = RPM.readJSONSystemListByIndex(RPM.defaultValue(json
                 .a, []), (jsonAction) => {
-                let action = new SystemMonsterAction(jsonAction);
+                let action = new MonsterAction(jsonAction);
                 action.monster = this;
                 return action;
             }, false

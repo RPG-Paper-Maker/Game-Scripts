@@ -252,7 +252,7 @@ class GamePlayer
 
     // -------------------------------------------------------
     /** Get the stats thanks to equipments
-    *   @param {SystemItem} item The System item
+    *   @param {Item} item The System item
     *   @param {number} equipmentID The equipment ID
     *   @returns {number[][]}
     */

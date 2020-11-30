@@ -11,7 +11,7 @@
 
 /** @class
 *   All the items datas
-*   @property {SystemItem[]} list List of all the items of the game according
+*   @property {Item[]} list List of all the items of the game according
 *   to ID
 */
 class DatasItems
@@ -27,6 +27,6 @@ class DatasItems
     async read()
     {
         let json = (await RPM.parseFileJSON(RPM.FILE_ITEMS)).items;
-        this.list = RPM.readJSONSystemList(json, SystemItem);
+        this.list = RPM.readJSONSystemList(json, Item);
     }
 }

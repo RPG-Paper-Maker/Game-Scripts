@@ -86,7 +86,7 @@
 *   sub-steps)
 *   @property {SceneMap} sceneMap The scene map where the battle was run
 *   @property {number} sceneMapCameraDistance The scene map camera distance
-*   @property {SystemMonsterAction} actionDoNothing A System monster action
+*   @property {MonsterAction} actionDoNothing A System monster action
 *   reprensenting action doing nothing
 *   @property {number} cameraStep The camera step (for moving)
 *   @property {number} cameraTick The camera tick
@@ -142,8 +142,8 @@
 *   @property {Battler} user The user battler
 *   @property {number} currentEffectIndex The current effect index
 *   @property {number} timeEnemyAttack A chronometer for enemy attack
-*   @property {SystemMonsterAction} action The current System action
-*   @property {SystemSkill} attackSkill The System skill
+*   @property {MonsterAction} action The current System action
+*   @property {Skill} attackSkill The System skill
 *   @property {boolean} finishedXP Indicate if the xp progression is finished
 *   @property {number} priorityIndex The priority index
 *   @property {WindowBox} windowLoots The window box for loots
@@ -215,7 +215,7 @@ class SceneBattle extends SceneMap
         this.step = 0;
         this.sceneMap = RPM.gameStack.top;
         this.sceneMapCameraDistance = this.sceneMap.camera.distance;
-        this.actionDoNothing = new SystemMonsterAction({});
+        this.actionDoNothing = new MonsterAction({});
     }
 
     // -------------------------------------------------------

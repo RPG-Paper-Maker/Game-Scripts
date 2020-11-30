@@ -1,8 +1,8 @@
-import {ProgressionTable} from ".";
+import {Loot, MonsterAction, ProgressionTable} from ".";
 
 export interface RewardStruct {
-    xp: number;
+    xp: ProgressionTable;
     currencies: ProgressionTable[];
-    loots: Loots[];
+    loots: Loot[];
     actions: MonsterAction[];
 }

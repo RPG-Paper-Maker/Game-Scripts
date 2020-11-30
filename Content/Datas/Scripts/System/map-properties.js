@@ -20,7 +20,7 @@
 *   @property {number} width The map width
 *   @property {number} height The map height
 *   @property {number} depth The map depth
-*   @property {SystemTileset} tileset The System tileset map
+*   @property {Tileset} tileset The System tileset map
 *   @property {SystemPlaySong} music The beginning music
 *   @property {SystemPlaySong} backgroundSound The beginning background sound
 *   @property {SystemCameraProperties} cameraProperties The System camera
