@@ -9,10 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Mathf } from "../Common";
+import { Mathf } from "../Common/index.js";
 
-/**
- * The data class for anchors
+/** @class
+ *  The data class for anchors
  */
 export class Anchor2D {
 
@@ -47,6 +47,4 @@ export class Anchor2D {
         this.x = Mathf.clamp(anchors.x, 0, 1);
         this.y = Mathf.clamp(anchors.y, 0, 1);
     }
-
-
 }

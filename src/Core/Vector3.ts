@@ -9,12 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import * as THREE from "../Vendor/three.js";
+
 /**
  * The data class who hold 3D coordinates.
  * @author Nio Kasgami
  */
-import * as THREE from "../Vendor/three.js";
-
 export class Vector3 extends THREE.Vector3 {
 
     public x: number;

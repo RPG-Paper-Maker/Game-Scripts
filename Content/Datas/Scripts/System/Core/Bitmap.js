@@ -1,4 +1,3 @@
-"use strict";
 /*
     RPG Paper Maker Copyright (C) 2017-2020 Wano
 
@@ -9,8 +8,6 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Bitmap = void 0;
 /** @class
  *   A bitmap is something that can be drawn on the HUD. It can be a window,
  *   a text, an image...
@@ -23,8 +20,9 @@ exports.Bitmap = void 0;
  *   @param {number} [w=0] w coord of the bitmap
  *   @param {number} [h=0] h coord of the bitmap
  */
-const Common_1 = require("../Common");
-class Bitmap {
+import { ScreenResolution } from "../Common/index.js";
+import { Stack } from "../Manager/index.js";
+export class Bitmap {
     constructor(x = 0, y = 0, w = 0, h = 0) {
         this.setX(x);
         this.setY(y);
@@ -39,8 +37,9 @@ class Bitmap {
      */
     setX(x, min = false) {
         this.oX = x;
-        this.x = min ? Common_1.Mathf.getScreenMinXY(x) : Common_1.Mathf.getScreenX(x);
-        Bitmap.requestPaintHUD = true;
+        this.x = min ? ScreenResolution.getScreenMinXY(x) : ScreenResolution
+            .getScreenX(x);
+        Stack.requestPaintHUD = true;
     }
     // -------------------------------------------------------
     /** Set the y value
@@ -50,8 +49,9 @@ class Bitmap {
      */
     setY(y, min = false) {
         this.oY = y;
-        this.y = min ? Common_1.Mathf.getScreenMinXY(y) : Common_1.Mathf.getScreenY(y);
-        Bitmap.requestPaintHUD = true;
+        this.y = min ? ScreenResolution.getScreenMinXY(y) : ScreenResolution
+            .getScreenY(y);
+        Stack.requestPaintHUD = true;
     }
     // -------------------------------------------------------
     /** Set the w value
@@ -61,8 +61,9 @@ class Bitmap {
      */
     setW(w, min = false) {
         this.oW = w;
-        this.w = min ? Common_1.Mathf.getScreenMinXY(w) : Common_1.Mathf.getScreenX(w);
-        Bitmap.requestPaintHUD = true;
+        this.w = min ? ScreenResolution.getScreenMinXY(w) : ScreenResolution
+            .getScreenX(w);
+        Stack.requestPaintHUD = true;
     }
     // -------------------------------------------------------
     /** Set the h value
@@ -72,8 +73,9 @@ class Bitmap {
      */
     setH(h, min = false) {
         this.oH = h;
-        this.h = min ? Common_1.Mathf.getScreenMinXY(h) : Common_1.Mathf.getScreenY(h);
-        Bitmap.requestPaintHUD = true;
+        this.h = min ? ScreenResolution.getScreenMinXY(h) : ScreenResolution
+            .getScreenY(h);
+        Stack.requestPaintHUD = true;
     }
     // -------------------------------------------------------
     /** Set the position to the left
@@ -81,7 +83,7 @@ class Bitmap {
     setLeft() {
         this.oX = 0;
         this.x = 0;
-        Bitmap.requestPaintHUD = true;
+        Stack.requestPaintHUD = true;
     }
     // -------------------------------------------------------
     /** Set the position to the top
@@ -89,19 +91,19 @@ class Bitmap {
     setTop() {
         this.oY = 0;
         this.y = 0;
-        Bitmap.requestPaintHUD = true;
+        Stack.requestPaintHUD = true;
     }
     // -------------------------------------------------------
     /** Set the position to the right
      */
     setRight(offset) {
-        this.setX(Common_1.Constants.SCREEN_X - this.oW - (offset ? offset : 0));
+        this.setX(ScreenResolution.SCREEN_X - this.oW - (offset ? offset : 0));
     }
     // -------------------------------------------------------
     /** Set the position to the bot
      */
     setBot(offset) {
-        this.setY(Common_1.Constants.SCREEN_Y - this.oH - (offset ? offset : 0));
+        this.setY(ScreenResolution.SCREEN_Y - this.oH - (offset ? offset : 0));
     }
     // -------------------------------------------------------
     /** Set all the coords values
@@ -117,5 +119,3 @@ class Bitmap {
         this.setH(h);
     }
 }
-exports.Bitmap = Bitmap;
-Bitmap.requestPaintHUD = false;

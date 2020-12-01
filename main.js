@@ -17,8 +17,8 @@ let window;
 function createWindow () {    
     window = new BrowserWindow({
         title: "",
-        width: 640,
-        height: 480,
+        width: 1000,
+        height: 800,
         resizable: false,
         webPreferences: {
             nodeIntegration: true,

@@ -1,4 +1,3 @@
-"use strict";
 /*
     RPG Paper Maker Copyright (C) 2017-2020 Wano
 
@@ -9,17 +8,14 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Constants = void 0;
 /** @class
  *  The common class for constants
  */
-class Constants {
+export class Constants {
     constructor() {
         throw new Error("This is a static class!");
     }
 }
-exports.Constants = Constants;
 Constants.SMALL_FONT_SIZE = 8;
 Constants.MEDIUM_FONT_SIZE = 10;
 Constants.SQUARE_SIZE = 32;
@@ -34,8 +30,6 @@ Constants.HUGE_SPACE = 20;
 Constants.PORTIONS_RAY_FAR = 0;
 Constants.PORTION_SIZE = 16;
 Constants.MAX_PICTURE_SIZE = 4096;
-Constants.SCREEN_X = 640;
-Constants.SCREEN_Y = 480;
 Constants.NONE_PADDING = [0, 0, 0, 0];
 Constants.VERY_SMALL_PADDING_BOX = [5, 5, 5, 5];
 Constants.SMALL_PADDING_BOX = [10, 10, 10, 10];
@@ -47,7 +41,6 @@ Constants.ONE_SECOND_MILLI = 1000;
 Constants.NUM_BOOL_TRUE = 1;
 Constants.NUM_BOOL_FALSE = 0;
 Constants.COEF_TEX = 0.2;
-Constants.LOADING_MIN_DELAY = 100;
 Constants.CLASS_HIDDEN = "hidden";
 Constants.STRING_RGBA = "rgba";
 Constants.STRING_EMPTY = "";

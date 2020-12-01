@@ -21,7 +21,6 @@ exports.Game = void 0;
  *   @param {boolean} [loading=true] Indicate if the scene should load async
  *   stuff
  */
-//import { Globals } from "../Common/Globals";
 class Game {
     constructor(loading = true) {
         /*

@@ -1,4 +1,3 @@
-"use strict";
 /*
     RPG Paper Maker Copyright (C) 2017-2020 Wano
 
@@ -9,15 +8,14 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-Object.defineProperty(exports, "__esModule", { value: true });
 /** @class
  *   All the animations datas
  *   @property {SystemAnimation[]} list List of all the animations of the game
  *   according to ID
  */
-const _1 = require(".");
+import { Base } from "./index.js";
 //import * as System from "../System";
-class Animations extends _1.Base {
+class Animations extends Base {
     constructor() {
         super();
     }

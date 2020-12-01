@@ -1,11 +1,8 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Persistence = void 0;
 /**
  * The static class who manage persistence data across savefiles.
  * @usage Could be used for newGame+ or achievement.
  */
-class Persistence {
+export class Persistence {
     constructor(props) {
         throw new Error("This is a static class");
     }
@@ -30,5 +27,4 @@ class Persistence {
         return this.persistencePath.hasOwnProperty(name);
     }
 }
-exports.Persistence = Persistence;
 Persistence.persistencePath = {};

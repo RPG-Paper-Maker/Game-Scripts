@@ -1,5 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 /*
 const rect = new Core.Rectangle(100, 100, 10, 10);
 const anchor = Core.Anchor2D;

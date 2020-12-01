@@ -8,7 +8,6 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-
 /** @class
  *   Abstract class for the game stack
  *   @property {ReactionInterpreter[]} reactionInterpreters The reaction
@@ -19,14 +18,7 @@
  *   @param {boolean} [loading=true] Indicate if the scene should load async
  *   stuff
  */
-//import { Globals } from "../Common/Globals";
-
-export class Game
-{
-    public reactionInterpreters: number;
-    public parallelCommands: number;
-    public loading: boolean;
-
+export class Base {
     constructor(loading = true) {
         /*
         this.reactionInterpreters = new Array;
@@ -37,14 +29,12 @@ export class Game
         }
         */
     }
-
     // -------------------------------------------------------
     /** Load async stuff
      */
     async load() {
         this.loading = false;
     }
-
     // -------------------------------------------------------
     /** Update all the reactions interpreters
      */
@@ -82,7 +72,6 @@ export class Game
             this.reactionInterpreters.splice(endingReactions[i], 1);
         }*/
     }
-
     // -------------------------------------------------------
     /** Update all the parallel commands
      */
@@ -102,7 +91,6 @@ export class Game
         }
         */
     }
-
     // -------------------------------------------------------
     /** Add a reaction in the interpreter list
      *   @param {MapObject} sender The sender of this reaction
@@ -143,48 +131,43 @@ export class Game
         return null;
         */
     }
-
     // -------------------------------------------------------
     /** Update the scene
      */
     update() {
         // Parallel reactions
-        Game.prototype.updateInterpreters.call(this);
-
+        Base.prototype.updateInterpreters.call(this);
         // Parallel comands
-        Game.prototype.updateParallelCommands.call(this);
+        Base.prototype.updateParallelCommands.call(this);
     }
-
     // -------------------------------------------------------
     /** Handle scene key pressed
      *   @param {number} key The key ID
      */
-    onKeyPressed(key: number) {
+    onKeyPressed(key) {
         /*
         for (let i = 0, l = this.reactionInterpreters.length; i < l; i++) {
             this.reactionInterpreters[i].onKeyPressed(key);
         }
         */
     }
-
     // -------------------------------------------------------
     /** Handle scene key released
      *   @param {number} key The key ID
      */
-    onKeyReleased(key: number) {
+    onKeyReleased(key) {
         /*
         for (let i = 0, l = this.reactionInterpreters.length; i < l; i++) {
             this.reactionInterpreters[i].onKeyReleased(key);
         }
         */
     }
-
     // -------------------------------------------------------
     /** Handle scene pressed repeat key
      *   @param {number} key The key ID
      *   @returns {boolean}
      */
-    onKeyPressedRepeat(key: number): boolean {
+    onKeyPressedRepeat(key) {
         /*
         for (let i = 0, l = this.reactionInterpreters.length; i < l; i++) {
             this.reactionInterpreters[i].onKeyPressedRepeat(key);
@@ -192,13 +175,12 @@ export class Game
         */
         return true;
     }
-
     // -------------------------------------------------------
     /** Handle scene pressed and repeat key
      *   @param {number} key The key ID
      *   @returns {boolean}
      */
-    onKeyPressedAndRepeat(key: number): boolean {
+    onKeyPressedAndRepeat(key) {
         /*
         for (let i = 0, l = this.reactionInterpreters.length; i < l; i++) {
             this.reactionInterpreters[i].onKeyPressedAndRepeat(key);
@@ -206,14 +188,11 @@ export class Game
         */
         return true;
     }
-
     // -------------------------------------------------------
     /** Draw the 3D scene
      */
     draw3D() {
-
     }
-
     // -------------------------------------------------------
     /** Draw the HUD scene
      */
@@ -228,11 +207,9 @@ export class Game
         }
         */
     }
-
     // -------------------------------------------------------
     /** Close the scene
      */
     close() {
-
     }
 }

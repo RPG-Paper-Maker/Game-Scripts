@@ -2,27 +2,22 @@
  * The class who handles plugins of RPG Paper Maker
  * @author Nio Kasgami
  */
-export class PluginManager {
-
-    static plugins: Record<string, any> = {};
-
+export class Plugins {
     constructor() {
         throw new Error("This is a static class");
     }
-
     static load() {
         // @todo let Wano implement the logics since I have no idea of how to do it.
         // @todo should it be Async?
     }
-
-    static register(plugin: string, parameters: any) {
+    static register(plugin, parameters) {
         if (this.plugins.hasOwnProperty(plugin)) {
             throw new Error("Duplicate error: " + plugin + " is an duplicate of " + this.plugins[plugin].name);
-        } else {
+        }
+        else {
             this.plugins[plugin] = parameters;
         }
     }
-
     /**
      * Return the plugin object
      * @param plugin
@@ -31,17 +26,17 @@ export class PluginManager {
     static fetch(plugin) {
         if (!this.plugins.hasOwnProperty(plugin)) {
             throw new Error("Unindenfied plugin error: " + plugin + " doesn't exist in the current workspace!");
-        } else {
+        }
+        else {
             return this.plugins[plugin];
         }
     }
-
     /**
      * check whether the plugin exist or not.
      * @param id
      * @returns {boolean}
      */
-    static exists(id): boolean {
+    static exists(id) {
         for (const plugins in this.plugins) {
             if (this.plugins.hasOwnProperty(plugins)) {
                 if (this.plugins[plugins].id === id) {
@@ -51,7 +46,6 @@ export class PluginManager {
         }
         return false;
     }
-
     /**
      * return the plugin parameters
      * @param plugin
@@ -60,7 +54,6 @@ export class PluginManager {
     static parameters(plugin) {
         return this.plugins[plugin].parameters;
     }
-
     /**
      * Merge the two plugins to extends their plugins data.
      * @usage This function is used to extends the parameters of other plugins See Patch System
@@ -68,9 +61,10 @@ export class PluginManager {
      * @param {string} parent
      * @param {string} child
      */
-    static merge(parent: string, child: string) {
+    static merge(parent, child) {
         const par = this.plugins[parent].parameter;
         const chi = this.plugins[child].parameter;
-        this.plugins[parent].parameters = {...par, ...chi};
+        this.plugins[parent].parameters = { ...par, ...chi };
     }
 }
+Plugins.plugins = {};

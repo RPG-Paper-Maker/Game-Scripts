@@ -15,6 +15,4 @@
 export class Globals {
 
     static blockingHero :boolean = false;
-    static WINDOW_X: number;
-    static WINDOW_Y: number;
 }

@@ -1,4 +1,3 @@
-"use strict";
 /*
     RPG Paper Maker Copyright (C) 2017-2020 Wano
 
@@ -9,33 +8,75 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Utils = void 0;
-const _1 = require(".");
-const Core_1 = require("../Core");
-const electron_1 = __importDefault(require("electron"));
-const remote = electron_1.default.remote;
-const console = remote.getGlobal('console');
+import { Constants } from "./index.js";
 /**
  * The static class containing all the utils functions.
  */
-class Utils {
+export class Utils {
     constructor() {
         throw new Error("This is a static class!");
     }
+    /** Return default value if undefined, else the value
+    *   @static
+    *   @param {any} value The value
+    *   @param {any} defaultValue The default value
+    *   @returns {any}
+    */
     static defaultValue(value, defaultValue) {
         return this.isUndefined(value) ? defaultValue : value;
     }
+    /** Check if the value is undefined
+    *   @static
+    *   @param {any} value The value
+    *   @returns {boolean}
+    */
     static isUndefined(value) {
-        return typeof value === _1.Constants.UNDEFINED;
+        return typeof value === Constants.UNDEFINED;
+    }
+    /** Check if the value is a number
+    *   @static
+    *   @param {any} value The value
+    *   @returns {boolean}
+    */
+    static isNumber(value) {
+        return typeof value === Constants.NUMBER;
+    }
+    /** Check if the value is a string
+     *   @static
+     *   @param {any} value The value
+     *   @returns {boolean}
+     */
+    static isString(value) {
+        return typeof value === Constants.STRING;
+    }
+    /** Convert a number to boolean
+     *   @static
+     *   @param {number} num The number
+     *   @returns {boolean}
+     */
+    static numToBool(num) {
+        return num === Constants.NUM_BOOL_TRUE;
+    }
+    /** Convert a boolean to number
+     *   @static
+     *   @param {boolean} b The boolean
+     *   @returns {number}
+     */
+    static boolToNum(b) {
+        return b ? Constants.NUM_BOOL_TRUE : Constants.NUM_BOOL_FALSE;
+    }
+    /** Convert number to string
+     *   @static
+     *   @param {number} n The number
+     *   @returns {string}
+     */
+    static numToString(n) {
+        return Constants.STRING_EMPTY + n;
     }
     /** Try catch for async functions
      *   @static
      *   @param {function} func The async function to apply
-     *   @returns {any}
+     *   @returns {Promise<any>}
      */
     static async tryCatch(func) {
         try {
@@ -51,9 +92,8 @@ class Utils {
      *   @returns {string}
      */
     static getStringDate(total) {
-        return (this.formatNumber(Math.floor(total / 3600), 4) + _1.Constants.STRING_COLON
-            + this.formatNumber(Math.floor((total % 3600) / 60), 2) + _1.Constants
-            .STRING_COLON + this.formatNumber(Math.floor(total % 60), 2));
+        return (this.formatNumber(Math.floor(total / 3600), 4) + Constants
+            .STRING_COLON + this.formatNumber(Math.floor((total % 3600) / 60), 2) + Constants.STRING_COLON + this.formatNumber(Math.floor(total % 60), 2));
     }
     /** Return the string of a number and parse with 0 according to a given size
      *   @static
@@ -76,29 +116,17 @@ class Utils {
         }
         return list;
     }
-    /** Show an error object
-     *   @static
-     *   @param {Error} e The error message
-     */
-    static showError(e) {
-        Utils.showErrorMessage(e.message + _1.Constants.STRING_NEW_LINE + e.stack);
-    }
-    /** Show an error message
-     *   @static
-     *   @param {string} msg The error message
-     */
-    static showErrorMessage(msg) {
-        if (Core_1.Platform.DESKTOP) {
-            const dialog = require('electron').remote.dialog;
-            dialog.showMessageBoxSync({
-                title: 'Error',
-                type: 'error',
-                message: msg
-            });
-        }
-        else {
-            console.alert(msg);
-        }
-    }
 }
-exports.Utils = Utils;
+/** Link the fontSize and the fontName to a string that can be used by the
+*   canvasHUD
+*   @static
+*   @param {number} fontSize The fontSize
+*   @param {string} fontName The fontName
+*   @param {boolean} bold Indicate if the text is bold
+*   @param {boolean} italic Indicate if the text is italic
+*   @returns {string}
+*/
+Utils.createFont = function (fontSize, fontName, bold, italic) {
+    return (bold ? "bold " : "") + (italic ? "italic " : "") + fontSize +
+        "px " + fontName;
+};

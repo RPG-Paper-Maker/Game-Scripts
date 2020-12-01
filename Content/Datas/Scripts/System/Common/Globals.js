@@ -1,4 +1,3 @@
-"use strict";
 /*
     RPG Paper Maker Copyright (C) 2017-2020 Wano
 
@@ -9,12 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Globals = void 0;
 /** @class
  *  Temp class
  */
-class Globals {
+export class Globals {
 }
-exports.Globals = Globals;
 Globals.blockingHero = false;

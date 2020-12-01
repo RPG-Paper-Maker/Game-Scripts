@@ -1,4 +1,3 @@
-"use strict";
 /*
     RPG Paper Maker Copyright (C) 2017-2020 Wano
 
@@ -9,24 +8,20 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Paths = void 0;
-const Core_1 = require("../Core");
+import { Platform } from "./index.js";
 /**
  * The static class containing Path related constant
  * can be accessed through import
  * @example import {Path} from "../Constants";
  */
-class Paths {
+export class Paths {
     constructor() {
         throw new Error("This is a static class");
     }
 }
-exports.Paths = Paths;
-Paths.BR = "";
 Paths.ROOT_DIRECTORY_LOCAL = ".";
 Paths.FILES = "file:///";
-Paths.DATAS = Core_1.Platform.ROOT_DIRECTORY + "/Content/Datas/";
+Paths.DATAS = Platform.ROOT_DIRECTORY + "/Content/Datas/";
 Paths.FILE_MAPS = Paths.DATAS + "Maps";
 Paths.FILE_MAP_INFOS = "/infos.json";
 Paths.FILE_MAP_OBJECTS = "/objects.json";

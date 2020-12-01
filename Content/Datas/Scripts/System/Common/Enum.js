@@ -8,14 +8,14 @@
     See RPG Paper Maker EULA here:
         http=//rpg-paper-maker.com/index.php/eula.
 */
-
-namespace Enum {
+var Enum;
+(function (Enum) {
     /**
      *   Enum for the different command moves kind.
      *   @enum {number}
      *   @readonly
      */
-    export let CommandMoveKind = {
+    Enum.CommandMoveKind = {
         MoveNorth: 0,
         MoveSouth: 1,
         MoveWest: 2,
@@ -30,15 +30,14 @@ namespace Enum {
         MoveFront: 11,
         MoveBack: 12,
         ChangeGraphics: 13
-    }
-    Object.freeze(CommandMoveKind);
-
+    };
+    Object.freeze(Enum.CommandMoveKind);
     /**
      *   Enum for the different event commands kind.
      *   @enum {number}
      *   @readonly
      */
-    export let EventCommandKind = {
+    Enum.EventCommandKind = {
         None: 0,
         ShowText: 1,
         ChangeVariables: 2,
@@ -97,88 +96,80 @@ namespace Enum {
         ShakeScreen: 55,
         FlashScreen: 56
     };
-    Object.freeze(EventCommandKind);
-
+    Object.freeze(Enum.EventCommandKind);
     /**
      *   Enum for the different items kind.
      *   @enum {number}
      *   @readonly
      */
-    export let ItemKind = {
+    Enum.ItemKind = {
         Item: 0,
         Weapon: 1,
         Armor: 2
     };
-    Object.freeze(ItemKind);
-
+    Object.freeze(Enum.ItemKind);
     /**
      *   Enum for the different players kind.
      *   @enum {number}
      *   @readonly
      */
-    export let CharacterKind = {
+    Enum.CharacterKind = {
         Hero: 0,
         Monster: 1
-    }
-
-    Object.freeze(CharacterKind);
-
+    };
+    Object.freeze(Enum.CharacterKind);
     /**
      *   Enum for the different groups kind.
      *   @enum {number}
      *   @readonly
      */
-    export let GroupKind = {
+    Enum.GroupKind = {
         Team: 0,
         Reserve: 1,
         Hidden: 2
-    }
-    Object.freeze(GroupKind);
-
+    };
+    Object.freeze(Enum.GroupKind);
     /**
      *   Enum for the different horizontal aligns kind.
      *   @enum {string}
      *   @readonly
      */
-    export let Align = {
-        Left: "left",
-        Right: "right",
-        Center: "center"
-    }
-    Object.freeze(Align);
-
+    let Align;
+    (function (Align) {
+        Align["Left"] = "left";
+        Align["Right"] = "right";
+        Align["Center"] = "center";
+    })(Align = Enum.Align || (Enum.Align = {}));
     /**
      *   Enum for the different vertical aligns kind.
      *   @enum {string}
      *   @readonly
      */
-    export let AlignVertical = {
-        Bot: 0,
-        Top: 1,
-        Center: 2
-    }
-    Object.freeze(AlignVertical);
-
+    let AlignVertical;
+    (function (AlignVertical) {
+        AlignVertical[AlignVertical["Bot"] = 0] = "Bot";
+        AlignVertical[AlignVertical["Top"] = 1] = "Top";
+        AlignVertical[AlignVertical["Center"] = 2] = "Center";
+    })(AlignVertical = Enum.AlignVertical || (Enum.AlignVertical = {}));
     /**
      *   Enum for the different orientations kind.
      *   @enum {string}
      *   @readonly
      */
-    export let Orientation = {
+    Enum.Orientation = {
         South: 0,
         West: 1,
         North: 2,
         East: 3,
         None: 4
-    }
-    Object.freeze(Orientation);
-
+    };
+    Object.freeze(Enum.Orientation);
     /**
      *   Enum for the different map elements kind.
      *   @enum {number}
      *   @readonly
      */
-    export let ElementMapKind = {
+    Enum.ElementMapKind = {
         None: 0,
         Floors: 1,
         Autotiles: 2,
@@ -192,27 +183,25 @@ namespace Enum {
         Object3D: 10,
         Mountains: 11
     };
-    Object.freeze(ElementMapKind);
-
+    Object.freeze(Enum.ElementMapKind);
     /**
      *   Enum for the different sprite walls kind.
      *   @enum {number}
      *   @readonly
      */
-    export let SpriteWallKind = {
+    Enum.SpriteWallKind = {
         Left: 0,
         Middle: 1,
         Right: 2,
         LeftRight: 3
     };
-    Object.freeze(SpriteWallKind);
-
+    Object.freeze(Enum.SpriteWallKind);
     /**
      *   Enum for the different pictures kind.
      *   @enum {number}
      *   @readonly
      */
-    export let PictureKind = {
+    Enum.PictureKind = {
         None: 0,
         Bars: 1,
         Icons: 2,
@@ -230,27 +219,25 @@ namespace Enum {
         Animations: 14,
         Skyboxes: 15
     };
-    Object.freeze(PictureKind);
-
+    Object.freeze(Enum.PictureKind);
     /**
      *   Enum for the different songs kind.
      *   @enum {number}
      *   @readonly
      */
-    export let SongKind = {
+    Enum.SongKind = {
         None: 0,
         Music: 1,
         BackgroundSound: 2,
         Sound: 3,
         MusicEffect: 4
     };
-    Object.freeze(SongKind);
-
+    Object.freeze(Enum.SongKind);
     /** Enum for the different primitive values kind.
      *   @enum {number}
      *   @readonly
      */
-    export let PrimitiveValueKind = {
+    Enum.PrimitiveValueKind = {
         None: 0,
         Anything: 1,
         Default: 2,
@@ -265,25 +252,23 @@ namespace Enum {
         KeyBoard: 11,
         NumberDouble: 12
     };
-    Object.freeze(PrimitiveValueKind);
-
+    Object.freeze(Enum.PrimitiveValueKind);
     /**
      *   Enum for the different window orientations.
      *   @enum {number}
      *   @readonly
      */
-    export let OrientationWindow = {
+    Enum.OrientationWindow = {
         Vertical: 0,
         Horizontal: 1
     };
-    Object.freeze(OrientationWindow);
-
+    Object.freeze(Enum.OrientationWindow);
     /**
      *   Enum for the different battler steps.
      *   @enum {number}
      *   @readonly
      */
-    export let BattlerStep = {
+    Enum.BattlerStep = {
         Normal: 0,
         Attack: 1,
         Skill: 2,
@@ -294,38 +279,35 @@ namespace Enum {
         Victory: 7,
         Dead: 8
     };
-    Object.freeze(BattlerStep);
-
+    Object.freeze(Enum.BattlerStep);
     /**
      *   Enum for the different loots kind.
      *   @enum {number}
      *   @readonly
      */
-    export let LootKind = {
+    Enum.LootKind = {
         Item: 0,
         Weapon: 1,
         Armor: 2
     };
-    Object.freeze(LootKind);
-
+    Object.freeze(Enum.LootKind);
     /**
      *   Enum for the different damages kind.
      *   @enum {number}
      *   @readonly
      */
-    export let DamagesKind = {
+    Enum.DamagesKind = {
         Stat: 0,
         Currency: 1,
         Variable: 2
     };
-    Object.freeze(DamagesKind);
-
+    Object.freeze(Enum.DamagesKind);
     /**
      *   Enum for the different effect kind.
      *   @enum {number}
      *   @readonly
      */
-    export let EffectKind = {
+    Enum.EffectKind = {
         Damages: 0,
         Status: 1,
         AddRemoveSkill: 2,
@@ -334,14 +316,13 @@ namespace Enum {
         SpecialActions: 5,
         Script: 6
     };
-    Object.freeze(EffectKind);
-
+    Object.freeze(Enum.EffectKind);
     /**
      *   Enum for the different effect special action kind.
      *   @enum {number}
      *   @readonly
      */
-    export let EffectSpecialActionKind = {
+    Enum.EffectSpecialActionKind = {
         None: -1,
         ApplyWeapons: 0,
         OpenSkills: 1,
@@ -350,28 +331,26 @@ namespace Enum {
         EndTurn: 4,
         DoNothing: 5
     };
-    Object.freeze(EffectSpecialActionKind);
-
+    Object.freeze(Enum.EffectSpecialActionKind);
     /**
      *   Enum for the different characteristic kind.
      *   @enum {number}
      *   @readonly
      */
-    export let CharacteristicKind = {
+    Enum.CharacteristicKind = {
         IncreaseDecrease: 0,
         Script: 1,
         AllowForbidEquip: 2,
         AllowForbidChange: 3,
         BeginEquipment: 4
     };
-    Object.freeze(CharacteristicKind);
-
+    Object.freeze(Enum.CharacteristicKind);
     /**
      *   Enum for the different increase / decrease kind.
      *   @enum {number}
      *   @readonly
      */
-    export let IncreaseDecreaseKind = {
+    Enum.IncreaseDecreaseKind = {
         StatValue: 0,
         ElementRes: 1,
         StatusRes: 2,
@@ -380,14 +359,13 @@ namespace Enum {
         SkillCost: 5,
         Variable: 6
     };
-    Object.freeze(IncreaseDecreaseKind);
-
+    Object.freeze(Enum.IncreaseDecreaseKind);
     /**
      *   Enum for the different target kind.
      *   @enum {number}
      *   @readonly
      */
-    export let TargetKind = {
+    Enum.TargetKind = {
         None: 0,
         User: 1,
         Enemy: 2,
@@ -395,27 +373,25 @@ namespace Enum {
         AllEnemies: 4,
         AllAllies: 5
     };
-    Object.freeze(TargetKind);
-
+    Object.freeze(Enum.TargetKind);
     /**
      *   Enum for the different available kind.
      *   @enum {number}
      *   @readonly
      */
-    export let AvailableKind = {
+    Enum.AvailableKind = {
         Battle: 0,
         MainMenu: 1,
         Always: 2,
         Never: 3
     };
-    Object.freeze(AvailableKind);
-
+    Object.freeze(Enum.AvailableKind);
     /**
      *   Enum for the different shape kind.
      *   @enum {number}
      *   @readonly
      */
-    export let ShapeKind = {
+    Enum.ShapeKind = {
         Box: 0,
         Sphere: 1,
         Cylinder: 2,
@@ -423,100 +399,92 @@ namespace Enum {
         Capsule: 4,
         Custom: 5
     };
-    Object.freeze(ShapeKind);
-
+    Object.freeze(Enum.ShapeKind);
     /**
      *   Enum for the different custom shape kind.
      *   @enum {number}
      *   @readonly
      */
-    export let CustomShapeKind = {
+    Enum.CustomShapeKind = {
         None: 0,
         OBJ: 1,
         MTL: 2,
         Collisions: 3
     };
-    Object.freeze(CustomShapeKind);
-
+    Object.freeze(Enum.CustomShapeKind);
     /**
      *   Enum for the different object collision kind.
      *   @enum {number}
      *   @readonly
      */
-    export let ObjectCollisionKind = {
+    Enum.ObjectCollisionKind = {
         None: 0,
         Perfect: 1,
         Simplified: 2,
         Custom: 3
     };
-    Object.freeze(ObjectCollisionKind);
-
+    Object.freeze(Enum.ObjectCollisionKind);
     /**
      *   Enum for the map transitions.
      *   @enum {number}
      *   @readonly
      */
-    export let MapTransitionKind = {
+    Enum.MapTransitionKind = {
         None: 0,
         Fade: 1,
         Zoom: 2
     };
-    Object.freeze(MapTransitionKind);
-
+    Object.freeze(Enum.MapTransitionKind);
     /**
      *   Enum for the map transitions.
      *   @enum {number}
      *   @readonly
      */
-    export let MountainCollisionKind = {
+    Enum.MountainCollisionKind = {
         Default: 0,
         Always: 1,
         Never: 2
     };
-    Object.freeze(MountainCollisionKind);
-
+    Object.freeze(Enum.MountainCollisionKind);
     /**
      *   Enum for the title commands.
      *   @enum {number}
      *   @readonly
      */
-    export let TitleCommandKind = {
+    Enum.TitleCommandKind = {
         NewGame: 0,
         LoadGame: 1,
         Settings: 2,
         Exit: 3,
         Script: 4
     };
-    Object.freeze(TitleCommandKind);
-
+    Object.freeze(Enum.TitleCommandKind);
     /**
      *   Enum for the title settings.
      *   @enum {number}
      *   @readonly
      */
-    export let TitleSettingKind = {
+    Enum.TitleSettingKind = {
         KeyboardAssigment: 0
     };
-    Object.freeze(TitleSettingKind);
-
+    Object.freeze(Enum.TitleSettingKind);
     /**
      *   Enum for the object moving.
      *   @enum {number}
      *   @readonly
      */
-    export let ObjectMovingKind = {
+    Enum.ObjectMovingKind = {
         Fix: 0,
         Random: 1,
         Route: 2
     };
-    Object.freeze(ObjectMovingKind);
-
+    Object.freeze(Enum.ObjectMovingKind);
     /**
      *   Enum for the tags.
      *   @enum {number}
      *   @readonly
      */
-    export let TagKind = {
+    Enum.TagKind = {
         NewLine: 0,
         Text: 1,
         Bold: 2,
@@ -535,27 +503,25 @@ namespace Enum {
         HeroName: 15,
         Icon: 16
     };
-    Object.freeze(TagKind);
-
+    Object.freeze(Enum.TagKind);
     /**
      *   Enum for the condition heroes.
      *   @enum {number}
      *   @readonly
      */
-    export let ConditionHeroesKind = {
+    Enum.ConditionHeroesKind = {
         AllTheHeroes: 0,
         NoneOfTheHeroes: 1,
         AtLeastOneHero: 2,
         TheHeroeWithInstanceID: 3
     };
-    Object.freeze(ConditionHeroesKind);
-
+    Object.freeze(Enum.ConditionHeroesKind);
     /**
      *   Enum for the variables map object characteristics.
      *   @enum {number}
      *   @readonly
      */
-    export let VariableMapObjectCharacteristicKind = {
+    Enum.VariableMapObjectCharacteristicKind = {
         XSquarePosition: 0,
         YSquarePosition: 1,
         ZSquarePosition: 2,
@@ -564,63 +530,58 @@ namespace Enum {
         ZPixelPosition: 5,
         Orientation: 6
     };
-    Object.freeze(VariableMapObjectCharacteristicKind);
-
+    Object.freeze(Enum.VariableMapObjectCharacteristicKind);
     /**
      *   Enum for the animation position kind.
      *   @enum {number}
      *   @readonly
      */
-    export let AnimationPositionKind = {
+    Enum.AnimationPositionKind = {
         Top: 0,
         Middle: 1,
         Bottom: 2,
         ScreenCenter: 3
     };
-    Object.freeze(AnimationPositionKind);
-
+    Object.freeze(Enum.AnimationPositionKind);
     /**
      *   Enum for the animation effect condition kind.
      *   @enum {number}
      *   @readonly
      */
-    export let AnimationEffectConditionKind = {
+    Enum.AnimationEffectConditionKind = {
         None: 0,
         Hit: 1,
         Miss: 2,
         Critical: 3
     };
-    Object.freeze(AnimationEffectConditionKind);
-
+    Object.freeze(Enum.AnimationEffectConditionKind);
     /**
      *   Enum for the monster action kind.
      *   @enum {number}
      *   @readonly
      */
-    export let MonsterActionKind = {
+    Enum.MonsterActionKind = {
         UseSkill: 0,
         UseItem: 1,
         DoNothing: 2
     };
-    Object.freeze(MonsterActionKind);
-
+    Object.freeze(Enum.MonsterActionKind);
     /**
      *   Enum for the monster action target kind.
      *   @enum {number}
      *   @readonly
      */
-    export let MonsterActionTargetKind = {
+    Enum.MonsterActionTargetKind = {
         Random: 0,
         WeakEnemies: 1
     };
-    Object.freeze(MonsterActionTargetKind);
-
+    Object.freeze(Enum.MonsterActionTargetKind);
     /**
      *   Enum for the operation kind.
      *   @enum {number}
      *   @readonly
      */
-    export let OperationKind = {
+    Enum.OperationKind = {
         EqualTo: 0,
         NotEqualTo: 1,
         GreaterThanOrEqualTo: 2,
@@ -628,6 +589,6 @@ namespace Enum {
         GreaterThan: 4,
         LesserThan: 5
     };
-    Object.freeze(OperationKind);
-}
-export {Enum}
+    Object.freeze(Enum.OperationKind);
+})(Enum || (Enum = {}));
+export { Enum };

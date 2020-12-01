@@ -1,1 +1,1 @@
-export * from "./GameStack";
+export * from "./Stack.js";

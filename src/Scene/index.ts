@@ -9,4 +9,5 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-export * from "./Game";
+export * from "./Base.js";
+export * from "./Loading.js";

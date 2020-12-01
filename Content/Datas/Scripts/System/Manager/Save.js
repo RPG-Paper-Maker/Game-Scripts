@@ -1,10 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Save = void 0;
 /**
  * The static class who manage saving and Loading in the game
  */
-class Save {
+export class Save {
     constructor() {
         return new Error("This is a static class");
     }
@@ -17,7 +14,6 @@ class Save {
         return this._maxSaveSlots;
     }
 }
-exports.Save = Save;
 // TODO : implements autosave?
 Save._isAutosaveEnabled = false;
 Save._saveExtension = ".rpm";

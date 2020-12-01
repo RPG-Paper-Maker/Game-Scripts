@@ -9,4 +9,4 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-export * from "./Base";
+export * from "./Base.js";

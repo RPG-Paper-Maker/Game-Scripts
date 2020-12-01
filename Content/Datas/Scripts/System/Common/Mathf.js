@@ -1,4 +1,3 @@
-"use strict";
 /*
     RPG Paper Maker Copyright (C) 2017-2020 Wano
 
@@ -9,18 +8,15 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Mathf = void 0;
-const _1 = require(".");
-/**
- * The static class for Math related function
+import { Constants } from "./index.js";
+/** @class
+ * The static class for Math related function.
  */
-class Mathf {
+export class Mathf {
     constructor() {
         throw new Error("This is a static class!");
     }
-    // -------------------------------------------------------
-    /** Check if an array is empty
+    /** Check if an array is empty.
      *   @static
      *   @param {any[]} array The array to test
      *   @returns {boolean}
@@ -28,24 +24,23 @@ class Mathf {
     static isEmpty(array) {
         return array[0] == null;
     }
-    // -------------------------------------------------------
-    /** Get the cos
+    /** Get the cos.
      *   @static
-     *   @param {number} w The value
+     *   @param {number} v The value
      *   @returns {number}
      */
-    static cos(w) {
-        return parseFloat(Math.cos(w).toFixed(10));
+    static cos(v) {
+        return parseFloat(Math.cos(v).toFixed(10));
     }
-    /** Get the sin
+    /** Get the sin.
      *   @static
-     *   @param {number} w The value
+     *   @param {number} v The value
      *   @returns {number}
      */
-    static sin(w) {
-        return parseFloat(Math.sin(w).toFixed(10));
+    static sin(v) {
+        return parseFloat(Math.sin(v).toFixed(10));
     }
-    /** Get portion according to a position
+    /** Get portion according to a position.
      *   @static
      *   @param {THREE.Vector3} position The position
      *   @returns {number[]}
@@ -53,31 +48,31 @@ class Mathf {
     static getPortion(position) {
         return this.getPortionArray(this.getPosition(position));
     }
-    /** Get portion according to array position
+    /** Get portion according to array position.
      *   @static
      *   @param {number[]} p The array position
      *   @returns {number[]}
      */
     static getPortionArray(p) {
         return [
-            Math.floor(p[0] / _1.Constants.PORTION_SIZE),
-            Math.floor(p[1] / _1.Constants.PORTION_SIZE),
-            Math.floor(p[2] / _1.Constants.PORTION_SIZE)
+            Math.floor(p[0] / Constants.PORTION_SIZE),
+            Math.floor(p[1] / Constants.PORTION_SIZE),
+            Math.floor(p[2] / Constants.PORTION_SIZE)
         ];
     }
-    /** Get an array position according to position
+    /** Get an array position according to position.
      *   @static
      *   @param {THREE.Vector3} position The position
      *   @returns {number[]}
      */
     static getPosition(position) {
         return [
-            Math.floor(position.x / _1.Constants.SQUARE_SIZE),
-            Math.floor(position.y / _1.Constants.SQUARE_SIZE),
-            Math.floor(position.z / _1.Constants.SQUARE_SIZE)
+            Math.floor(position.x / Constants.SQUARE_SIZE),
+            Math.floor(position.y / Constants.SQUARE_SIZE),
+            Math.floor(position.z / Constants.SQUARE_SIZE)
         ];
     }
-    /** Give a modulo without negative value
+    /** Give a modulo without negative value.
      *   @static
      *   @param {number} x
      *   @param {number} m
@@ -87,7 +82,7 @@ class Mathf {
         let r = x % m;
         return r < 0 ? r + m : r;
     }
-    /** Get the list max ID
+    /** Get the list max ID.
      *   @static
      *   @param {number[]} list A list containing only IDs
      *   @returns {number}
@@ -99,7 +94,7 @@ class Mathf {
         }
         return max;
     }
-    /** Create a random number between min and max
+    /** Create a random number between min and max.
      *   @static
      *   @param {number} min
      *   @param {number} max
@@ -128,61 +123,4 @@ class Mathf {
         let v = Math.round(value * variance / 100);
         return this.random(value - v, value + v);
     }
-    // -------------------------------------------------------
-    /** Get the pixel position transformation according to screen size
-     *   @static
-     *   @param {number} x The position on screen
-     *   @returns {number}
-     */
-    static getScreenX(x) {
-        return Math.ceil(Mathf.getDoubleScreenX(x));
-    }
-    // -------------------------------------------------------
-    /** Get the pixel position transformation according to screen size
-     *   @static
-     *   @param {number} y The position on screen
-     *   @returns {number}
-     */
-    static getScreenY(y) {
-        return Math.ceil(Mathf.getDoubleScreenY(y));
-    }
-    // -------------------------------------------------------
-    /** Get the pixel position transformation according to screen size
-     *   @static
-     *   @param {number} xy The position on screen
-     *   @returns {number}
-     */
-    static getScreenXY(xy) {
-        return Math.ceil((_1.Globals.WINDOW_X + _1.Globals.WINDOW_Y) / 2 * xy);
-    }
-    // -------------------------------------------------------
-    /** Get the min pixel position transformation according to screen size
-     *   @static
-     *   @param {number} xy The position on screen
-     *   @returns {number}
-     */
-    static getScreenMinXY(xy) {
-        return Math.ceil(xy * Math.min(_1.Globals.WINDOW_X, _1.Globals.WINDOW_Y));
-    }
-    // -------------------------------------------------------
-    /** Get the pixel position transformation according to screen size, but
-     *   without rounding it
-     *   @static
-     *   @param {number} x The position on screen
-     *   @returns {number}
-     */
-    static getDoubleScreenX(x) {
-        return _1.Globals.WINDOW_X * x;
-    }
-    // -------------------------------------------------------
-    /** Get the pixel position transformation according to screen size, but
-     *   without rounding it
-     *   @static
-     *   @param {number} y The position on screen
-     *   @returns {number}
-     */
-    static getDoubleScreenY(y) {
-        return _1.Globals.WINDOW_Y * y;
-    }
 }
-exports.Mathf = Mathf;

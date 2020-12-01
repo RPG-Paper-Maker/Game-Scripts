@@ -15,8 +15,7 @@ exports.KeyEvent = void 0;
  *   The key event class used to convert Qt keys to web keys.
  */
 class KeyEvent {
-    // -------------------------------------------------------
-    /** Convert Qt key to DOM
+    /** Convert Qt key to DOM.
      *   @static
      *   @param {number} key The qt key to convert
      *   @returns {number}
@@ -141,8 +140,7 @@ class KeyEvent {
                 return key;
         }
     }
-    // -------------------------------------------------------
-    /** Check if the pressed key is a PAD number
+    /** Check if the pressed key is a PAD number.
      *   @static
      *   @param {number} key The key ID
      *   @returns {boolean}
@@ -150,8 +148,7 @@ class KeyEvent {
     static isKeyNumberPADPressed(key) {
         return key >= KeyEvent.DOM_VK_NUMPAD0 && key <= KeyEvent.DOM_VK_NUMPAD9;
     }
-    // -------------------------------------------------------
-    /** Check if the pressed key is a number with shift
+    /** Check if the pressed key is a number with shift.
      *   @static
      *   @param {number} key The key ID
      *   @returns {boolean}
@@ -160,8 +157,7 @@ class KeyEvent {
         let shift = KeyEvent.keysPressed.indexOf(KeyEvent.DOM_VK_SHIFT) !== -1;
         return shift && key >= KeyEvent.DOM_VK_0 && key <= KeyEvent.DOM_VK_9;
     }
-    // -------------------------------------------------------
-    /** Check if the pressed key is a number
+    /** Check if the pressed key is a number.
      *   @static
      *   @param {number} key The key ID
      *   @returns {boolean}
@@ -170,8 +166,7 @@ class KeyEvent {
         return KeyEvent.isKeyNumberPADPressed(key) || KeyEvent
             .isKeyNumberTopPressed(key);
     }
-    // -------------------------------------------------------
-    /** Get the char associated to the key
+    /** Get the char associated to the key.
      *   @static
      *   @param {number} key The key ID
      *   @returns {string}
@@ -193,7 +188,6 @@ class KeyEvent {
             return "";
         }
     }
-    // -------------------------------------------------------
     /** Get the string associated to the key
      *   @static
      *   @param {number} key The key ID
