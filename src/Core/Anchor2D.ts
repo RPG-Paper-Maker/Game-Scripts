@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Mathf } from "../Common/index.js";
+import { Mathf } from "../Common";
 
 /** @class
  *  The data class for anchors

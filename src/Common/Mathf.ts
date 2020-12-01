@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants } from "./index.js";
-import * as THREE from "../Vendor/three.js"
+import { Constants } from ".";
+import * as THREE from "../Vendor/three"
 
 /** @class
  * The static class for Math related function.

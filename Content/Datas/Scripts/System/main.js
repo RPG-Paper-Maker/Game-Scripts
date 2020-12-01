@@ -9,6 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Stack } from "./Manager/index.js";
+//import { Utils } from "./Common/Utils.js";
+console.log(Stack.averageElapsedTime);
 /** Initialize the game stack and datas
 */
 function initialize() {
@@ -17,7 +19,7 @@ function initialize() {
     RPM.settings = new Settings();
     RPM.datasGame = new DatasGame();*/
     Stack.loadingDelay = 0;
-    //Stack.clearHUD();
+    Stack.clearHUD();
 }
 /** Load the game stack and datas
  */
@@ -26,7 +28,7 @@ async function load() {
     //await RPM.datasGame.read();
     //RPM.gameStack.pushTitleScreen();
     //RPM.datasGame.loaded = true;
-    //Stack.requestPaintHUD = true;
+    Stack.requestPaintHUD = true;
 }
 /** Initialize the openGL stuff
  */
@@ -74,8 +76,77 @@ function loop() {
     }*/
     //Stack.drawHUD();
     // Elapsed time
-    //Stack.elapsedTime = new Date().getTime() - Stack.lastUpdateTime;
-    //Stack.averageElapsedTime = (Stack.averageElapsedTime + Stack.elapsedTime) / 
-    //    2;
-    //Stack.lastUpdateTime = new Date().getTime();
+    Stack.elapsedTime = new Date().getTime() - Stack.lastUpdateTime;
+    Stack.averageElapsedTime = (Stack.averageElapsedTime + Stack.elapsedTime) /
+        2;
+    Stack.lastUpdateTime = new Date().getTime();
 }
+// -------------------------------------------------------
+//
+// INITIALIZATION
+//
+// -------------------------------------------------------
+initialize();
+// -------------------------------------------------------
+//
+// INPUTS CONFIG
+//
+// -------------------------------------------------------
+document.addEventListener('keydown', function (event) {
+    /*
+    if (RPM.datasGame.loaded && !RPM.gameStack.isLoading())
+    {
+        let key = event.keyCode;
+
+        // On pressing F12, quit game
+        if (key === KeyEvent.DOM_VK_F12)
+        {
+            Platform.quit();
+        }
+        // If not repeat, call simple press RPM event
+        if (!event.repeat)
+        {
+            if (RPM.keysPressed.indexOf(key) === -1)
+            {
+                RPM.keysPressed.push(key);
+                RPM.onKeyPressed(key);
+                // If is loading, that means a new scene was created, return
+                if (RPM.gameStack.isLoading())
+                {
+                    return;
+                }
+            }
+        }
+
+        // Also always call pressed and repeat RPM event
+        RPM.onKeyPressedAndRepeat(key);
+    }*/
+}, false);
+// -------------------------------------------------------
+document.addEventListener('keyup', function (event) {
+    /*
+    if (RPM.datasGame.loaded && !RPM.gameStack.isLoading())
+    {
+        let key = event.keyCode;
+        // Remove this key from pressed keys list
+        RPM.keysPressed.splice(RPM.keysPressed.indexOf(key), 1);
+
+        // Call release RPM event
+        RPM.onKeyReleased(key);
+    } else
+    {
+        RPM.keysPressed = [];
+    }*/
+}, false);
+// -------------------------------------------------------
+//
+// START LOADING GAME FILES
+//
+// -------------------------------------------------------
+//Utils.tryCatch(load());
+// -------------------------------------------------------
+//
+// START LOOP
+//
+// -------------------------------------------------------
+//requestAnimationFrame(RPM.loop);

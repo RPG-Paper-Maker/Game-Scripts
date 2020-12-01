@@ -8,7 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
+export * as Graphic from "./Graphic/index.js";
 export * as Core from "./Core/index.js";
 export * as Manager from "./Manager/index.js";
 export * as Scene from "./Scene/index.js";
-//export * as System from "./System";
+export * as Common from "./Common/index.js";

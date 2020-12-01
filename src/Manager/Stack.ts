@@ -16,10 +16,10 @@
  *   @property {Scene.Base} subTop The stack top - 1 content
  *   @property {Scene.Base} bot The stack bot content
  */
-import { Scene } from "../index.js";
-import { Utils, Platform, ScreenResolution } from "../Common/index.js";
+import { Scene } from "..";
+import { Utils, Platform, ScreenResolution } from "../Common";
 
-export class Stack {
+class Stack {
     public static requestPaintHUD: boolean = false;
     public static sceneLoading: Scene.Loading;
     public static loadingDelay = 0;
@@ -241,3 +241,5 @@ export class Stack {
         }
     }
 }
+
+export { Stack };

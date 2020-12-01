@@ -9,11 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as Graphic from "./index.js"
-import { Enum, Utils, Constants, ScreenResolution, Platform } from "../Common/index.js";
+import * as Graphic from "."
+import { Enum, Utils, Constants, ScreenResolution, Platform } from "../Common";
 import Align = Enum.Align;
 import AlignVertical = Enum.AlignVertical;
-import { Stack } from "../Manager/index.js";
+import { Stack } from "../Manager";
 
 /** @class
 *   A class for all the texts to display in HUD

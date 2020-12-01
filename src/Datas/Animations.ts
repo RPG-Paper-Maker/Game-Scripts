@@ -14,7 +14,7 @@
  *   @property {SystemAnimation[]} list List of all the animations of the game
  *   according to ID
  */
-import { Base } from "./index.js";
+import { Base } from ".";
 //import * as System from "../System";
 
 class Animations extends Base {

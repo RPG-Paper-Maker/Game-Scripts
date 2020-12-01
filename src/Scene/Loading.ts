@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as Scene from "./index.js"
-import * as Graphic from "../Graphic/index.js"
-import { Enum } from "../Common/index.js";
+import * as Scene from "."
+import * as Graphic from "../Graphic"
+import { Enum } from "../Common";
 import Align = Enum.Align;
 
 /** @class

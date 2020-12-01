@@ -9,7 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-export * as Core from "./Core/index.js";
-export * as Manager from "./Manager/index.js";
-export * as Scene from "./Scene/index.js";
-//export * as System from "./System";
+export * as Graphic from "./Graphic";
+export * as Core from "./Core";
+export * as Manager from "./Manager";
+export * as Scene from "./Scene";
+export * as Common from "./Common";

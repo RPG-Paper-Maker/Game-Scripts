@@ -16,8 +16,8 @@
 
 //export * from "./Node";
 //export * from "./Tree";
-export * from "./Anchor2D.js";
-export * from "./Bitmap.js";
+export * from "./Anchor2D";
+export * from "./Bitmap";
 //export * from "./rpm";
 //export * from "./MapElement";
 //export * from "./Land";

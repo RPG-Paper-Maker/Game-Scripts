@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import * as THREE from "../Vendor/three.js";
+import * as THREE from "../Vendor/three";
 /**
  * The data class who hold 2D coordinates.
  * @author Nio Kasgami

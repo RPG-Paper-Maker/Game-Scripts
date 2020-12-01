@@ -9,12 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-export * from "./Constants.js";
-export * from "./Enum.js";
-export * from "./Globals.js";
-export * from "./KeyEvent.js";
-export * from "./Mathf.js";
-export * from "./Paths.js";
-export * from "./Platform.js";
-export * from "./ScreenResolution.js";
-export * from "./Utils.js";
+export * from "./Constants";
+export * from "./Enum";
+export * from "./Globals";
+export * from "./KeyEvent";
+export * from "./Mathf";
+export * from "./Paths";
+export * from "./Platform";
+export * from "./ScreenResolution";
+export * from "./Utils";

@@ -21,8 +21,8 @@
  *   @param {number} [w=0] w coord of the bitmap
  *   @param {number} [h=0] h coord of the bitmap
  */
-import { ScreenResolution } from "../Common/index.js"
-import { Stack } from "../Manager/index.js"
+import { ScreenResolution } from "../Common"
+import { Stack } from "../Manager"
 
 export class Bitmap {
 

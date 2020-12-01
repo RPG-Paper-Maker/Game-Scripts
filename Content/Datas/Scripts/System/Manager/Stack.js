@@ -17,7 +17,7 @@
  */
 import { Scene } from "../index.js";
 import { Utils, Platform, ScreenResolution } from "../Common/index.js";
-export class Stack {
+class Stack {
     constructor() {
         throw new Error("This is a static class");
     }
@@ -216,3 +216,4 @@ Stack.top = null;
 Stack.subTop = null;
 Stack.bot = null;
 Stack.content = [];
+export { Stack };

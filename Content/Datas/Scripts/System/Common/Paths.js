@@ -8,7 +8,6 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Platform } from "./index.js";
 /**
  * The static class containing Path related constant
  * can be accessed through import
@@ -21,7 +20,7 @@ export class Paths {
 }
 Paths.ROOT_DIRECTORY_LOCAL = ".";
 Paths.FILES = "file:///";
-Paths.DATAS = Platform.ROOT_DIRECTORY + "/Content/Datas/";
+Paths.DATAS = "/Content/Datas/";
 Paths.FILE_MAPS = Paths.DATAS + "Maps";
 Paths.FILE_MAP_INFOS = "/infos.json";
 Paths.FILE_MAP_OBJECTS = "/objects.json";

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants } from "./index.js";
+import { Constants } from ".";
 
 /**
  * The static class containing all the utils functions.
