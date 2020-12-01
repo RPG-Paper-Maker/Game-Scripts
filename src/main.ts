@@ -10,17 +10,15 @@
 */
 
 import { Stack } from "./Manager"
-//import { Utils } from "./Common/Utils.js";
+import { Utils } from "./Common/Utils.js";
+import { Datas } from ".";
 
-console.log(Stack.averageElapsedTime);
+let loadedDatas = false;
 
 /** Initialize the game stack and datas
 */
 function initialize() {
-    /*
-    RPM.songsManager = new SongsManager();
-    RPM.settings = new Settings();
-    RPM.datasGame = new DatasGame();*/
+    //RPM.songsManager = new SongsManager();
     Stack.loadingDelay = 0;
     Stack.clearHUD();
 }
@@ -28,7 +26,8 @@ function initialize() {
 /** Load the game stack and datas
  */
 async function load() {
-    //await RPM.settings.read();
+    console.log("ok")
+    await Datas.Settings.read();
     //await RPM.datasGame.read();
     //RPM.gameStack.pushTitleScreen();
     //RPM.datasGame.loaded = true;
@@ -163,7 +162,7 @@ document.addEventListener('keyup', function(event)
 //
 // -------------------------------------------------------
 
-//Utils.tryCatch(load());
+Utils.tryCatch(load);
 
 // -------------------------------------------------------
 //
@@ -171,4 +170,4 @@ document.addEventListener('keyup', function(event)
 //
 // -------------------------------------------------------
 
-//requestAnimationFrame(RPM.loop);
+requestAnimationFrame(loop);

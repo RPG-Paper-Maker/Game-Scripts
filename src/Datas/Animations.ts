@@ -9,14 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Base } from ".";
+
 /** @class
  *   All the animations datas
  *   @property {SystemAnimation[]} list List of all the animations of the game
  *   according to ID
  */
-import { Base } from ".";
-//import * as System from "../System";
-
 class Animations extends Base {
     public list: number[];
 
@@ -33,3 +32,5 @@ class Animations extends Base {
         this.list = RPM.readJSONSystemList(json, System.Animation);*/
     }
 }
+
+export { Animations }

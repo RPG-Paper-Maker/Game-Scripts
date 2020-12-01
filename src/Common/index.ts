@@ -12,6 +12,7 @@
 export * from "./Constants";
 export * from "./Enum";
 export * from "./Globals";
+export * from "./IO";
 export * from "./KeyEvent";
 export * from "./Mathf";
 export * from "./Paths";

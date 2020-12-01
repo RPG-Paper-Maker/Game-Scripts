@@ -9,22 +9,21 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Stack } from "./Manager/index.js";
-//import { Utils } from "./Common/Utils.js";
-console.log(Stack.averageElapsedTime);
+import { Utils } from "./Common/Utils.js";
+import { Datas } from "./index.js";
+let loadedDatas = false;
 /** Initialize the game stack and datas
 */
 function initialize() {
-    /*
-    RPM.songsManager = new SongsManager();
-    RPM.settings = new Settings();
-    RPM.datasGame = new DatasGame();*/
+    //RPM.songsManager = new SongsManager();
     Stack.loadingDelay = 0;
     Stack.clearHUD();
 }
 /** Load the game stack and datas
  */
 async function load() {
-    //await RPM.settings.read();
+    console.log("ok");
+    await Datas.Settings.read();
     //await RPM.datasGame.read();
     //RPM.gameStack.pushTitleScreen();
     //RPM.datasGame.loaded = true;
@@ -143,10 +142,10 @@ document.addEventListener('keyup', function (event) {
 // START LOADING GAME FILES
 //
 // -------------------------------------------------------
-//Utils.tryCatch(load());
+Utils.tryCatch(load);
 // -------------------------------------------------------
 //
 // START LOOP
 //
 // -------------------------------------------------------
-//requestAnimationFrame(RPM.loop);
+requestAnimationFrame(loop);

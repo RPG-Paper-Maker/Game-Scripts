@@ -96,7 +96,7 @@ export class Utils {
      */
     static async tryCatch(func: Function): Promise<any> {
         try {
-            return await func;
+            return await func();
         } catch (e) {
             window.onerror(null, null, null, null, e);
         }
