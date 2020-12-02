@@ -82,8 +82,8 @@ Platform.quit = function () {
 };
 // Display error to main process
 window.onerror = function (msg, url, line, column, err) {
-    let str = url ? url + Constants.STRING_COLON + Constants.STRING_EMPTY + line
-        + Constants.STRING_NEW_LINE : Constants.STRING_EMPTY;
+    let str = url ? url + Constants.STRING_COLON + " " + line + Constants
+        .STRING_NEW_LINE : "";
     if (err.stack != null) {
         str += err.stack;
     }

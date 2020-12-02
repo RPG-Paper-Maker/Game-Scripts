@@ -15,3 +15,5 @@
 export * from "./Anchor2D.js";
 export * from "./Bitmap.js";
 export * from "./Camera.js";
+export * from "./Game.js";
+export * from "./MapObject.js";

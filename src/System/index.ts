@@ -10,4 +10,5 @@
 */
 
 export * from "./Base";
+export * from "./DynamicValue";
 export * from "./Translatable";

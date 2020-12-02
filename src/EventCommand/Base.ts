@@ -10,7 +10,7 @@
 */
 
 import * as EventCommand from "."
-import { Game } from "..";
+import { MapObject } from "../Core";
 
 interface StructIterator {
     i: number
@@ -169,7 +169,7 @@ abstract class Base {
      * @param {number} state The state ID
      * @returns {number} The number of node to pass
      */
-    update(currentState: Object, object: Game.MapObject, state: number) {
+    update(currentState: Object, object: MapObject, state: number): number {
         return 1;
     }
 

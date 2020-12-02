@@ -10,5 +10,6 @@
 */
 
 export * from "./Base";
+export * from "./Keyboards";
 export * from "./Settings";
 export * from "./Systems";

@@ -9,4 +9,5 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 export * from "./Base.js";
+export * from "./DynamicValue.js";
 export * from "./Translatable.js";

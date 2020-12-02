@@ -251,13 +251,13 @@ class Stack {
         }
     }
 }
+Stack.top = null;
+Stack.subTop = null;
+Stack.bot = null;
+Stack.content = [];
 Stack.requestPaintHUD = false;
 Stack.loadingDelay = 0;
 Stack.elapsedTime = 0;
 Stack.averageElapsedTime = 0;
 Stack.lastUpdateTime = new Date().getTime();
-Stack.top = null;
-Stack.subTop = null;
-Stack.bot = null;
-Stack.content = [];
 export { Stack };

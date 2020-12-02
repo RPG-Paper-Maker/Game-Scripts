@@ -9,5 +9,6 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 export * from "./Base.js";
+export * from "./Keyboards.js";
 export * from "./Settings.js";
 export * from "./Systems.js";

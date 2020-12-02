@@ -50,6 +50,9 @@ class Systems {
     public static FRAMES: number;
     public static projectName: System.Translatable;
     public static antialias: boolean;
+    public static mountainCollisionHeight: System.DynamicValue;
+    public static mountainCollisionAngle: System.DynamicValue;
+    public static mapFrameDuration: System.DynamicValue;
 
     constructor()
     {
@@ -95,14 +98,14 @@ class Systems {
         this.SQUARE_SIZE = json.ss;
         this.PORTIONS_RAY_NEAR = 3; // TODO: json.pr
         this.FRAMES = json.frames;
-        /*
-        this.mountainCollisionHeight = SystemValue.readOrDefaultNumber(json.mch, 
-            4);
-        this.mountainCollisionAngle = SystemValue.readOrDefaultNumberDouble(json
-            .mca, 45);
-        this.mapFrameDuration = SystemValue.readOrDefaultNumber(json.mfd, 150);
+        this.mountainCollisionHeight = System.DynamicValue.readOrDefaultNumber(
+            json.mch, 4);
+        this.mountainCollisionAngle = System.DynamicValue
+            .readOrDefaultNumberDouble(json.mca, 45);
+        this.mapFrameDuration = System.DynamicValue.readOrDefaultNumber(json.mfd, 150);
 
         // Path BR
+        /*
         RPM.PATH_BR = RPM.PATH_FILES + json.pathBR;
 
         // Hero beginning

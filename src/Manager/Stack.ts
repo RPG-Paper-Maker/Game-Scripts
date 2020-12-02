@@ -11,7 +11,7 @@
 
 import { Scene, Datas } from "..";
 import { Utils, Platform, ScreenResolution } from "../Common";
-import { Camera } from "../Core";
+import { Camera, Game } from "../Core";
 import { THREE } from "../Libs";
 
 /** @class
@@ -23,16 +23,17 @@ import { THREE } from "../Libs";
  */
 class Stack {
 
+    public static top: Scene.Base = null;
+    public static subTop: Scene.Base = null;
+    public static bot: Scene.Base = null;
+    public static content: Scene.Base[] = [];
     public static requestPaintHUD: boolean = false;
     public static sceneLoading: Scene.Loading;
     public static loadingDelay = 0;
     public static elapsedTime = 0;
     public static averageElapsedTime = 0;
     public static lastUpdateTime = new Date().getTime();
-    public static top: Scene.Base = null;
-    public static subTop: Scene.Base = null;
-    public static bot: Scene.Base = null;
-    public static content: Scene.Base[] = [];
+    public static game: Game;
 
     constructor() {
         throw new Error("This is a static class");

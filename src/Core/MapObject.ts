@@ -55,7 +55,9 @@
 */
 class MapObject
 {
-    static SPEED_NORMAL = 0.004666;
+    public static SPEED_NORMAL = 0.004666;
+
+    public properties: any[];
 
     constructor(system, position, isHero)
     {

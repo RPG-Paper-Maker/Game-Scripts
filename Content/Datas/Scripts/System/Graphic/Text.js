@@ -69,7 +69,7 @@ export class Text extends Graphic.Base {
         this.backColor = backColor;
         this.strokeColor = strokeColor;
         this.setFontSize(fontSize);
-        this.setText(Utils.defaultValue(text, Constants.STRING_EMPTY));
+        this.setText(Utils.defaultValue(text, ""));
     }
     /** Set the font size and the final font
     *   @param {number} fontSize The new font size

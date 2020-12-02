@@ -43,7 +43,6 @@ Constants.NUM_BOOL_FALSE = 0;
 Constants.COEF_TEX = 0.2;
 Constants.CLASS_HIDDEN = "hidden";
 Constants.STRING_RGBA = "rgba";
-Constants.STRING_EMPTY = "";
 Constants.STRING_PARENTHESIS_LEFT = "(";
 Constants.STRING_PARENTHESIS_RIGHT = ")";
 Constants.STRING_BRACKET_LEFT = "[";

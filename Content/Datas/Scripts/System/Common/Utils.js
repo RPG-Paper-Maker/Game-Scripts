@@ -72,7 +72,7 @@ export class Utils {
      *   @returns {string}
      */
     static numToString(n) {
-        return Constants.STRING_EMPTY + n;
+        return "" + n;
     }
     /** Try catch for async functions
      *   @static

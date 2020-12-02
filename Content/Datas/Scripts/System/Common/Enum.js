@@ -15,120 +15,122 @@ var Enum;
      *   @enum {number}
      *   @readonly
      */
-    Enum.CommandMoveKind = {
-        MoveNorth: 0,
-        MoveSouth: 1,
-        MoveWest: 2,
-        MoveEast: 3,
-        MoveNorthWest: 4,
-        MoveNorthEast: 5,
-        MoveSouthWest: 6,
-        MoveSouthEast: 7,
-        MoveRandom: 8,
-        MoveHero: 9,
-        MoveOppositeHero: 10,
-        MoveFront: 11,
-        MoveBack: 12,
-        ChangeGraphics: 13
-    };
-    Object.freeze(Enum.CommandMoveKind);
+    let CommandMoveKind;
+    (function (CommandMoveKind) {
+        CommandMoveKind[CommandMoveKind["MoveNorth"] = 0] = "MoveNorth";
+        CommandMoveKind[CommandMoveKind["MoveSouth"] = 1] = "MoveSouth";
+        CommandMoveKind[CommandMoveKind["MoveWest"] = 2] = "MoveWest";
+        CommandMoveKind[CommandMoveKind["MoveEast"] = 3] = "MoveEast";
+        CommandMoveKind[CommandMoveKind["MoveNorthWest"] = 4] = "MoveNorthWest";
+        CommandMoveKind[CommandMoveKind["MoveNorthEast"] = 5] = "MoveNorthEast";
+        CommandMoveKind[CommandMoveKind["MoveSouthWest"] = 6] = "MoveSouthWest";
+        CommandMoveKind[CommandMoveKind["MoveSouthEast"] = 7] = "MoveSouthEast";
+        CommandMoveKind[CommandMoveKind["MoveRandom"] = 8] = "MoveRandom";
+        CommandMoveKind[CommandMoveKind["MoveHero"] = 9] = "MoveHero";
+        CommandMoveKind[CommandMoveKind["MoveOppositeHero"] = 10] = "MoveOppositeHero";
+        CommandMoveKind[CommandMoveKind["MoveFront"] = 11] = "MoveFront";
+        CommandMoveKind[CommandMoveKind["MoveBack"] = 12] = "MoveBack";
+        CommandMoveKind[CommandMoveKind["ChangeGraphics"] = 13] = "ChangeGraphics";
+    })(CommandMoveKind = Enum.CommandMoveKind || (Enum.CommandMoveKind = {}));
     /**
      *   Enum for the different event commands kind.
      *   @enum {number}
      *   @readonly
      */
-    Enum.EventCommandKind = {
-        None: 0,
-        ShowText: 1,
-        ChangeVariables: 2,
-        EndGame: 3,
-        While: 4,
-        EndWhile: 5,
-        WhileBreak: 6,
-        InputNumber: 7,
-        If: 8,
-        Else: 9,
-        EndIf: 10,
-        OpenMainMenu: 11,
-        OpenSavesMenu: 12,
-        ModifyInventory: 13,
-        ModifyTeam: 14,
-        StartBattle: 15,
-        IfWin: 16,
-        IfLose: 17,
-        ChangeState: 18,
-        SendEvent: 19,
-        TeleportObject: 20,
-        MoveObject: 21,
-        Wait: 22,
-        MoveCamera: 23,
-        PlayMusic: 24,
-        StopMusic: 25,
-        PlayBackgroundSound: 26,
-        StopBackgroundSound: 27,
-        PlaySound: 28,
-        PlayMusicEffect: 29,
-        ChangeProperty: 30,
-        DisplayChoice: 31,
-        Choice: 32,
-        EndChoice: 33,
-        Script: 34,
-        DisplayAPicture: 35,
-        SetMoveTurnAPicture: 36,
-        RemoveAPicture: 37,
-        SetDialogBoxOptions: 38,
-        TitleScreen: 39,
-        ChangeScreenTone: 40,
-        RemoveObjectFromMap: 41,
-        StopReaction: 42,
-        AllowForbidSaves: 43,
-        AllowForbidMainMenu: 44,
-        CallACommonReaction: 45,
-        Label: 46,
-        JumpLabel: 47,
-        Comment: 48,
-        ChangeAStatistic: 49,
-        ChangeASkill: 50,
-        ChangeName: 51,
-        ChangeEquipment: 52,
-        ModifyCurrency: 53,
-        DisplayAnAnimation: 54,
-        ShakeScreen: 55,
-        FlashScreen: 56
-    };
-    Object.freeze(Enum.EventCommandKind);
+    let EventCommandKind;
+    (function (EventCommandKind) {
+        EventCommandKind[EventCommandKind["None"] = 0] = "None";
+        EventCommandKind[EventCommandKind["ShowText"] = 1] = "ShowText";
+        EventCommandKind[EventCommandKind["ChangeVariables"] = 2] = "ChangeVariables";
+        EventCommandKind[EventCommandKind["EndGame"] = 3] = "EndGame";
+        EventCommandKind[EventCommandKind["While"] = 4] = "While";
+        EventCommandKind[EventCommandKind["EndWhile"] = 5] = "EndWhile";
+        EventCommandKind[EventCommandKind["WhileBreak"] = 6] = "WhileBreak";
+        EventCommandKind[EventCommandKind["InputNumber"] = 7] = "InputNumber";
+        EventCommandKind[EventCommandKind["If"] = 8] = "If";
+        EventCommandKind[EventCommandKind["Else"] = 9] = "Else";
+        EventCommandKind[EventCommandKind["EndIf"] = 10] = "EndIf";
+        EventCommandKind[EventCommandKind["OpenMainMenu"] = 11] = "OpenMainMenu";
+        EventCommandKind[EventCommandKind["OpenSavesMenu"] = 12] = "OpenSavesMenu";
+        EventCommandKind[EventCommandKind["ModifyInventory"] = 13] = "ModifyInventory";
+        EventCommandKind[EventCommandKind["ModifyTeam"] = 14] = "ModifyTeam";
+        EventCommandKind[EventCommandKind["StartBattle"] = 15] = "StartBattle";
+        EventCommandKind[EventCommandKind["IfWin"] = 16] = "IfWin";
+        EventCommandKind[EventCommandKind["IfLose"] = 17] = "IfLose";
+        EventCommandKind[EventCommandKind["ChangeState"] = 18] = "ChangeState";
+        EventCommandKind[EventCommandKind["SendEvent"] = 19] = "SendEvent";
+        EventCommandKind[EventCommandKind["TeleportObject"] = 20] = "TeleportObject";
+        EventCommandKind[EventCommandKind["MoveObject"] = 21] = "MoveObject";
+        EventCommandKind[EventCommandKind["Wait"] = 22] = "Wait";
+        EventCommandKind[EventCommandKind["MoveCamera"] = 23] = "MoveCamera";
+        EventCommandKind[EventCommandKind["PlayMusic"] = 24] = "PlayMusic";
+        EventCommandKind[EventCommandKind["StopMusic"] = 25] = "StopMusic";
+        EventCommandKind[EventCommandKind["PlayBackgroundSound"] = 26] = "PlayBackgroundSound";
+        EventCommandKind[EventCommandKind["StopBackgroundSound"] = 27] = "StopBackgroundSound";
+        EventCommandKind[EventCommandKind["PlaySound"] = 28] = "PlaySound";
+        EventCommandKind[EventCommandKind["PlayMusicEffect"] = 29] = "PlayMusicEffect";
+        EventCommandKind[EventCommandKind["ChangeProperty"] = 30] = "ChangeProperty";
+        EventCommandKind[EventCommandKind["DisplayChoice"] = 31] = "DisplayChoice";
+        EventCommandKind[EventCommandKind["Choice"] = 32] = "Choice";
+        EventCommandKind[EventCommandKind["EndChoice"] = 33] = "EndChoice";
+        EventCommandKind[EventCommandKind["Script"] = 34] = "Script";
+        EventCommandKind[EventCommandKind["DisplayAPicture"] = 35] = "DisplayAPicture";
+        EventCommandKind[EventCommandKind["SetMoveTurnAPicture"] = 36] = "SetMoveTurnAPicture";
+        EventCommandKind[EventCommandKind["RemoveAPicture"] = 37] = "RemoveAPicture";
+        EventCommandKind[EventCommandKind["SetDialogBoxOptions"] = 38] = "SetDialogBoxOptions";
+        EventCommandKind[EventCommandKind["TitleScreen"] = 39] = "TitleScreen";
+        EventCommandKind[EventCommandKind["ChangeScreenTone"] = 40] = "ChangeScreenTone";
+        EventCommandKind[EventCommandKind["RemoveObjectFromMap"] = 41] = "RemoveObjectFromMap";
+        EventCommandKind[EventCommandKind["StopReaction"] = 42] = "StopReaction";
+        EventCommandKind[EventCommandKind["AllowForbidSaves"] = 43] = "AllowForbidSaves";
+        EventCommandKind[EventCommandKind["AllowForbidMainMenu"] = 44] = "AllowForbidMainMenu";
+        EventCommandKind[EventCommandKind["CallACommonReaction"] = 45] = "CallACommonReaction";
+        EventCommandKind[EventCommandKind["Label"] = 46] = "Label";
+        EventCommandKind[EventCommandKind["JumpLabel"] = 47] = "JumpLabel";
+        EventCommandKind[EventCommandKind["Comment"] = 48] = "Comment";
+        EventCommandKind[EventCommandKind["ChangeAStatistic"] = 49] = "ChangeAStatistic";
+        EventCommandKind[EventCommandKind["ChangeASkill"] = 50] = "ChangeASkill";
+        EventCommandKind[EventCommandKind["ChangeName"] = 51] = "ChangeName";
+        EventCommandKind[EventCommandKind["ChangeEquipment"] = 52] = "ChangeEquipment";
+        EventCommandKind[EventCommandKind["ModifyCurrency"] = 53] = "ModifyCurrency";
+        EventCommandKind[EventCommandKind["DisplayAnAnimation"] = 54] = "DisplayAnAnimation";
+        EventCommandKind[EventCommandKind["ShakeScreen"] = 55] = "ShakeScreen";
+        EventCommandKind[EventCommandKind["FlashScreen"] = 56] = "FlashScreen";
+    })(EventCommandKind = Enum.EventCommandKind || (Enum.EventCommandKind = {}));
+    ;
     /**
      *   Enum for the different items kind.
      *   @enum {number}
      *   @readonly
      */
-    Enum.ItemKind = {
-        Item: 0,
-        Weapon: 1,
-        Armor: 2
-    };
-    Object.freeze(Enum.ItemKind);
+    let ItemKind;
+    (function (ItemKind) {
+        ItemKind[ItemKind["Item"] = 0] = "Item";
+        ItemKind[ItemKind["Weapon"] = 1] = "Weapon";
+        ItemKind[ItemKind["Armor"] = 2] = "Armor";
+    })(ItemKind = Enum.ItemKind || (Enum.ItemKind = {}));
+    ;
     /**
      *   Enum for the different players kind.
      *   @enum {number}
      *   @readonly
      */
-    Enum.CharacterKind = {
-        Hero: 0,
-        Monster: 1
-    };
-    Object.freeze(Enum.CharacterKind);
+    let CharacterKind;
+    (function (CharacterKind) {
+        CharacterKind[CharacterKind["Hero"] = 0] = "Hero";
+        CharacterKind[CharacterKind["Monster"] = 1] = "Monster";
+    })(CharacterKind = Enum.CharacterKind || (Enum.CharacterKind = {}));
     /**
      *   Enum for the different groups kind.
      *   @enum {number}
      *   @readonly
      */
-    Enum.GroupKind = {
-        Team: 0,
-        Reserve: 1,
-        Hidden: 2
-    };
-    Object.freeze(Enum.GroupKind);
+    let GroupKind;
+    (function (GroupKind) {
+        GroupKind[GroupKind["Team"] = 0] = "Team";
+        GroupKind[GroupKind["Reserve"] = 1] = "Reserve";
+        GroupKind[GroupKind["Hidden"] = 2] = "Hidden";
+    })(GroupKind = Enum.GroupKind || (Enum.GroupKind = {}));
     /**
      *   Enum for the different horizontal aligns kind.
      *   @enum {string}
@@ -156,439 +158,470 @@ var Enum;
      *   @enum {string}
      *   @readonly
      */
-    Enum.Orientation = {
-        South: 0,
-        West: 1,
-        North: 2,
-        East: 3,
-        None: 4
-    };
-    Object.freeze(Enum.Orientation);
+    let Orientation;
+    (function (Orientation) {
+        Orientation[Orientation["South"] = 0] = "South";
+        Orientation[Orientation["West"] = 1] = "West";
+        Orientation[Orientation["North"] = 2] = "North";
+        Orientation[Orientation["East"] = 3] = "East";
+        Orientation[Orientation["None"] = 4] = "None";
+    })(Orientation = Enum.Orientation || (Enum.Orientation = {}));
     /**
      *   Enum for the different map elements kind.
      *   @enum {number}
      *   @readonly
      */
-    Enum.ElementMapKind = {
-        None: 0,
-        Floors: 1,
-        Autotiles: 2,
-        Water: 3,
-        SpritesFace: 4,
-        SpritesFix: 5,
-        SpritesDouble: 6,
-        SpritesQuadra: 7,
-        SpritesWall: 8,
-        Object: 9,
-        Object3D: 10,
-        Mountains: 11
-    };
-    Object.freeze(Enum.ElementMapKind);
+    let ElementMapKind;
+    (function (ElementMapKind) {
+        ElementMapKind[ElementMapKind["None"] = 0] = "None";
+        ElementMapKind[ElementMapKind["Floors"] = 1] = "Floors";
+        ElementMapKind[ElementMapKind["Autotiles"] = 2] = "Autotiles";
+        ElementMapKind[ElementMapKind["Water"] = 3] = "Water";
+        ElementMapKind[ElementMapKind["SpritesFace"] = 4] = "SpritesFace";
+        ElementMapKind[ElementMapKind["SpritesFix"] = 5] = "SpritesFix";
+        ElementMapKind[ElementMapKind["SpritesDouble"] = 6] = "SpritesDouble";
+        ElementMapKind[ElementMapKind["SpritesQuadra"] = 7] = "SpritesQuadra";
+        ElementMapKind[ElementMapKind["SpritesWall"] = 8] = "SpritesWall";
+        ElementMapKind[ElementMapKind["Object"] = 9] = "Object";
+        ElementMapKind[ElementMapKind["Object3D"] = 10] = "Object3D";
+        ElementMapKind[ElementMapKind["Mountains"] = 11] = "Mountains";
+    })(ElementMapKind = Enum.ElementMapKind || (Enum.ElementMapKind = {}));
+    ;
     /**
      *   Enum for the different sprite walls kind.
      *   @enum {number}
      *   @readonly
      */
-    Enum.SpriteWallKind = {
-        Left: 0,
-        Middle: 1,
-        Right: 2,
-        LeftRight: 3
-    };
-    Object.freeze(Enum.SpriteWallKind);
+    let SpriteWallKind;
+    (function (SpriteWallKind) {
+        SpriteWallKind[SpriteWallKind["Left"] = 0] = "Left";
+        SpriteWallKind[SpriteWallKind["Middle"] = 1] = "Middle";
+        SpriteWallKind[SpriteWallKind["Right"] = 2] = "Right";
+        SpriteWallKind[SpriteWallKind["LeftRight"] = 3] = "LeftRight";
+    })(SpriteWallKind = Enum.SpriteWallKind || (Enum.SpriteWallKind = {}));
+    ;
     /**
      *   Enum for the different pictures kind.
      *   @enum {number}
      *   @readonly
      */
-    Enum.PictureKind = {
-        None: 0,
-        Bars: 1,
-        Icons: 2,
-        Autotiles: 3,
-        Characters: 4,
-        Mountains: 5,
-        Tilesets: 6,
-        Walls: 7,
-        Battlers: 8,
-        Facesets: 9,
-        WindowSkins: 10,
-        TitleScreen: 11,
-        Objects3D: 12,
-        Pictures: 13,
-        Animations: 14,
-        Skyboxes: 15
-    };
-    Object.freeze(Enum.PictureKind);
+    let PictureKind;
+    (function (PictureKind) {
+        PictureKind[PictureKind["None"] = 0] = "None";
+        PictureKind[PictureKind["Bars"] = 1] = "Bars";
+        PictureKind[PictureKind["Icons"] = 2] = "Icons";
+        PictureKind[PictureKind["Autotiles"] = 3] = "Autotiles";
+        PictureKind[PictureKind["Characters"] = 4] = "Characters";
+        PictureKind[PictureKind["Mountains"] = 5] = "Mountains";
+        PictureKind[PictureKind["Tilesets"] = 6] = "Tilesets";
+        PictureKind[PictureKind["Walls"] = 7] = "Walls";
+        PictureKind[PictureKind["Battlers"] = 8] = "Battlers";
+        PictureKind[PictureKind["Facesets"] = 9] = "Facesets";
+        PictureKind[PictureKind["WindowSkins"] = 10] = "WindowSkins";
+        PictureKind[PictureKind["TitleScreen"] = 11] = "TitleScreen";
+        PictureKind[PictureKind["Objects3D"] = 12] = "Objects3D";
+        PictureKind[PictureKind["Pictures"] = 13] = "Pictures";
+        PictureKind[PictureKind["Animations"] = 14] = "Animations";
+        PictureKind[PictureKind["Skyboxes"] = 15] = "Skyboxes";
+    })(PictureKind = Enum.PictureKind || (Enum.PictureKind = {}));
+    ;
     /**
      *   Enum for the different songs kind.
      *   @enum {number}
      *   @readonly
      */
-    Enum.SongKind = {
-        None: 0,
-        Music: 1,
-        BackgroundSound: 2,
-        Sound: 3,
-        MusicEffect: 4
-    };
-    Object.freeze(Enum.SongKind);
+    let SongKind;
+    (function (SongKind) {
+        SongKind[SongKind["None"] = 0] = "None";
+        SongKind[SongKind["Music"] = 1] = "Music";
+        SongKind[SongKind["BackgroundSound"] = 2] = "BackgroundSound";
+        SongKind[SongKind["Sound"] = 3] = "Sound";
+        SongKind[SongKind["MusicEffect"] = 4] = "MusicEffect";
+    })(SongKind = Enum.SongKind || (Enum.SongKind = {}));
+    ;
     /** Enum for the different primitive values kind.
      *   @enum {number}
      *   @readonly
      */
-    Enum.PrimitiveValueKind = {
-        None: 0,
-        Anything: 1,
-        Default: 2,
-        Number: 3,
-        Variable: 4,
-        Parameter: 5,
-        Property: 6,
-        DataBase: 7,
-        Message: 8,
-        Script: 9,
-        Switch: 10,
-        KeyBoard: 11,
-        NumberDouble: 12
-    };
-    Object.freeze(Enum.PrimitiveValueKind);
+    let PrimitiveValueKind;
+    (function (PrimitiveValueKind) {
+        PrimitiveValueKind[PrimitiveValueKind["None"] = 0] = "None";
+        PrimitiveValueKind[PrimitiveValueKind["Anything"] = 1] = "Anything";
+        PrimitiveValueKind[PrimitiveValueKind["Default"] = 2] = "Default";
+        PrimitiveValueKind[PrimitiveValueKind["Number"] = 3] = "Number";
+        PrimitiveValueKind[PrimitiveValueKind["Variable"] = 4] = "Variable";
+        PrimitiveValueKind[PrimitiveValueKind["Parameter"] = 5] = "Parameter";
+        PrimitiveValueKind[PrimitiveValueKind["Property"] = 6] = "Property";
+        PrimitiveValueKind[PrimitiveValueKind["DataBase"] = 7] = "DataBase";
+        PrimitiveValueKind[PrimitiveValueKind["Message"] = 8] = "Message";
+        PrimitiveValueKind[PrimitiveValueKind["Script"] = 9] = "Script";
+        PrimitiveValueKind[PrimitiveValueKind["Switch"] = 10] = "Switch";
+        PrimitiveValueKind[PrimitiveValueKind["KeyBoard"] = 11] = "KeyBoard";
+        PrimitiveValueKind[PrimitiveValueKind["NumberDouble"] = 12] = "NumberDouble";
+    })(PrimitiveValueKind = Enum.PrimitiveValueKind || (Enum.PrimitiveValueKind = {}));
+    ;
     /**
      *   Enum for the different window orientations.
      *   @enum {number}
      *   @readonly
      */
-    Enum.OrientationWindow = {
-        Vertical: 0,
-        Horizontal: 1
-    };
-    Object.freeze(Enum.OrientationWindow);
+    let OrientationWindow;
+    (function (OrientationWindow) {
+        OrientationWindow[OrientationWindow["Vertical"] = 0] = "Vertical";
+        OrientationWindow[OrientationWindow["Horizontal"] = 1] = "Horizontal";
+    })(OrientationWindow = Enum.OrientationWindow || (Enum.OrientationWindow = {}));
+    ;
     /**
      *   Enum for the different battler steps.
      *   @enum {number}
      *   @readonly
      */
-    Enum.BattlerStep = {
-        Normal: 0,
-        Attack: 1,
-        Skill: 2,
-        Item: 3,
-        Escape: 4,
-        Defense: 5,
-        Attacked: 6,
-        Victory: 7,
-        Dead: 8
-    };
-    Object.freeze(Enum.BattlerStep);
+    let BattlerStep;
+    (function (BattlerStep) {
+        BattlerStep[BattlerStep["Normal"] = 0] = "Normal";
+        BattlerStep[BattlerStep["Attack"] = 1] = "Attack";
+        BattlerStep[BattlerStep["Skill"] = 2] = "Skill";
+        BattlerStep[BattlerStep["Item"] = 3] = "Item";
+        BattlerStep[BattlerStep["Escape"] = 4] = "Escape";
+        BattlerStep[BattlerStep["Defense"] = 5] = "Defense";
+        BattlerStep[BattlerStep["Attacked"] = 6] = "Attacked";
+        BattlerStep[BattlerStep["Victory"] = 7] = "Victory";
+        BattlerStep[BattlerStep["Dead"] = 8] = "Dead";
+    })(BattlerStep = Enum.BattlerStep || (Enum.BattlerStep = {}));
+    ;
     /**
      *   Enum for the different loots kind.
      *   @enum {number}
      *   @readonly
      */
-    Enum.LootKind = {
-        Item: 0,
-        Weapon: 1,
-        Armor: 2
-    };
-    Object.freeze(Enum.LootKind);
+    let LootKind;
+    (function (LootKind) {
+        LootKind[LootKind["Item"] = 0] = "Item";
+        LootKind[LootKind["Weapon"] = 1] = "Weapon";
+        LootKind[LootKind["Armor"] = 2] = "Armor";
+    })(LootKind = Enum.LootKind || (Enum.LootKind = {}));
+    ;
     /**
      *   Enum for the different damages kind.
      *   @enum {number}
      *   @readonly
      */
-    Enum.DamagesKind = {
-        Stat: 0,
-        Currency: 1,
-        Variable: 2
-    };
-    Object.freeze(Enum.DamagesKind);
+    let DamagesKind;
+    (function (DamagesKind) {
+        DamagesKind[DamagesKind["Stat"] = 0] = "Stat";
+        DamagesKind[DamagesKind["Currency"] = 1] = "Currency";
+        DamagesKind[DamagesKind["Variable"] = 2] = "Variable";
+    })(DamagesKind = Enum.DamagesKind || (Enum.DamagesKind = {}));
+    ;
     /**
      *   Enum for the different effect kind.
      *   @enum {number}
      *   @readonly
      */
-    Enum.EffectKind = {
-        Damages: 0,
-        Status: 1,
-        AddRemoveSkill: 2,
-        PerformSkill: 3,
-        CommonReaction: 4,
-        SpecialActions: 5,
-        Script: 6
-    };
-    Object.freeze(Enum.EffectKind);
+    let EffectKind;
+    (function (EffectKind) {
+        EffectKind[EffectKind["Damages"] = 0] = "Damages";
+        EffectKind[EffectKind["Status"] = 1] = "Status";
+        EffectKind[EffectKind["AddRemoveSkill"] = 2] = "AddRemoveSkill";
+        EffectKind[EffectKind["PerformSkill"] = 3] = "PerformSkill";
+        EffectKind[EffectKind["CommonReaction"] = 4] = "CommonReaction";
+        EffectKind[EffectKind["SpecialActions"] = 5] = "SpecialActions";
+        EffectKind[EffectKind["Script"] = 6] = "Script";
+    })(EffectKind = Enum.EffectKind || (Enum.EffectKind = {}));
+    ;
     /**
      *   Enum for the different effect special action kind.
      *   @enum {number}
      *   @readonly
      */
-    Enum.EffectSpecialActionKind = {
-        None: -1,
-        ApplyWeapons: 0,
-        OpenSkills: 1,
-        OpenItems: 2,
-        Escape: 3,
-        EndTurn: 4,
-        DoNothing: 5
-    };
-    Object.freeze(Enum.EffectSpecialActionKind);
+    let EffectSpecialActionKind;
+    (function (EffectSpecialActionKind) {
+        EffectSpecialActionKind[EffectSpecialActionKind["None"] = -1] = "None";
+        EffectSpecialActionKind[EffectSpecialActionKind["ApplyWeapons"] = 0] = "ApplyWeapons";
+        EffectSpecialActionKind[EffectSpecialActionKind["OpenSkills"] = 1] = "OpenSkills";
+        EffectSpecialActionKind[EffectSpecialActionKind["OpenItems"] = 2] = "OpenItems";
+        EffectSpecialActionKind[EffectSpecialActionKind["Escape"] = 3] = "Escape";
+        EffectSpecialActionKind[EffectSpecialActionKind["EndTurn"] = 4] = "EndTurn";
+        EffectSpecialActionKind[EffectSpecialActionKind["DoNothing"] = 5] = "DoNothing";
+    })(EffectSpecialActionKind = Enum.EffectSpecialActionKind || (Enum.EffectSpecialActionKind = {}));
+    ;
     /**
      *   Enum for the different characteristic kind.
      *   @enum {number}
      *   @readonly
      */
-    Enum.CharacteristicKind = {
-        IncreaseDecrease: 0,
-        Script: 1,
-        AllowForbidEquip: 2,
-        AllowForbidChange: 3,
-        BeginEquipment: 4
-    };
-    Object.freeze(Enum.CharacteristicKind);
+    let CharacteristicKind;
+    (function (CharacteristicKind) {
+        CharacteristicKind[CharacteristicKind["IncreaseDecrease"] = 0] = "IncreaseDecrease";
+        CharacteristicKind[CharacteristicKind["Script"] = 1] = "Script";
+        CharacteristicKind[CharacteristicKind["AllowForbidEquip"] = 2] = "AllowForbidEquip";
+        CharacteristicKind[CharacteristicKind["AllowForbidChange"] = 3] = "AllowForbidChange";
+        CharacteristicKind[CharacteristicKind["BeginEquipment"] = 4] = "BeginEquipment";
+    })(CharacteristicKind = Enum.CharacteristicKind || (Enum.CharacteristicKind = {}));
+    ;
     /**
      *   Enum for the different increase / decrease kind.
      *   @enum {number}
      *   @readonly
      */
-    Enum.IncreaseDecreaseKind = {
-        StatValue: 0,
-        ElementRes: 1,
-        StatusRes: 2,
-        ExperienceGain: 3,
-        CurrencyGain: 4,
-        SkillCost: 5,
-        Variable: 6
-    };
-    Object.freeze(Enum.IncreaseDecreaseKind);
+    let IncreaseDecreaseKind;
+    (function (IncreaseDecreaseKind) {
+        IncreaseDecreaseKind[IncreaseDecreaseKind["StatValue"] = 0] = "StatValue";
+        IncreaseDecreaseKind[IncreaseDecreaseKind["ElementRes"] = 1] = "ElementRes";
+        IncreaseDecreaseKind[IncreaseDecreaseKind["StatusRes"] = 2] = "StatusRes";
+        IncreaseDecreaseKind[IncreaseDecreaseKind["ExperienceGain"] = 3] = "ExperienceGain";
+        IncreaseDecreaseKind[IncreaseDecreaseKind["CurrencyGain"] = 4] = "CurrencyGain";
+        IncreaseDecreaseKind[IncreaseDecreaseKind["SkillCost"] = 5] = "SkillCost";
+        IncreaseDecreaseKind[IncreaseDecreaseKind["Variable"] = 6] = "Variable";
+    })(IncreaseDecreaseKind = Enum.IncreaseDecreaseKind || (Enum.IncreaseDecreaseKind = {}));
+    ;
     /**
      *   Enum for the different target kind.
      *   @enum {number}
      *   @readonly
      */
-    Enum.TargetKind = {
-        None: 0,
-        User: 1,
-        Enemy: 2,
-        Ally: 3,
-        AllEnemies: 4,
-        AllAllies: 5
-    };
-    Object.freeze(Enum.TargetKind);
+    let TargetKind;
+    (function (TargetKind) {
+        TargetKind[TargetKind["None"] = 0] = "None";
+        TargetKind[TargetKind["User"] = 1] = "User";
+        TargetKind[TargetKind["Enemy"] = 2] = "Enemy";
+        TargetKind[TargetKind["Ally"] = 3] = "Ally";
+        TargetKind[TargetKind["AllEnemies"] = 4] = "AllEnemies";
+        TargetKind[TargetKind["AllAllies"] = 5] = "AllAllies";
+    })(TargetKind = Enum.TargetKind || (Enum.TargetKind = {}));
+    ;
     /**
      *   Enum for the different available kind.
      *   @enum {number}
      *   @readonly
      */
-    Enum.AvailableKind = {
-        Battle: 0,
-        MainMenu: 1,
-        Always: 2,
-        Never: 3
-    };
-    Object.freeze(Enum.AvailableKind);
+    let AvailableKind;
+    (function (AvailableKind) {
+        AvailableKind[AvailableKind["Battle"] = 0] = "Battle";
+        AvailableKind[AvailableKind["MainMenu"] = 1] = "MainMenu";
+        AvailableKind[AvailableKind["Always"] = 2] = "Always";
+        AvailableKind[AvailableKind["Never"] = 3] = "Never";
+    })(AvailableKind = Enum.AvailableKind || (Enum.AvailableKind = {}));
+    ;
     /**
      *   Enum for the different shape kind.
      *   @enum {number}
      *   @readonly
      */
-    Enum.ShapeKind = {
-        Box: 0,
-        Sphere: 1,
-        Cylinder: 2,
-        Cone: 3,
-        Capsule: 4,
-        Custom: 5
-    };
-    Object.freeze(Enum.ShapeKind);
+    let ShapeKind;
+    (function (ShapeKind) {
+        ShapeKind[ShapeKind["Box"] = 0] = "Box";
+        ShapeKind[ShapeKind["Sphere"] = 1] = "Sphere";
+        ShapeKind[ShapeKind["Cylinder"] = 2] = "Cylinder";
+        ShapeKind[ShapeKind["Cone"] = 3] = "Cone";
+        ShapeKind[ShapeKind["Capsule"] = 4] = "Capsule";
+        ShapeKind[ShapeKind["Custom"] = 5] = "Custom";
+    })(ShapeKind = Enum.ShapeKind || (Enum.ShapeKind = {}));
+    ;
     /**
      *   Enum for the different custom shape kind.
      *   @enum {number}
      *   @readonly
      */
-    Enum.CustomShapeKind = {
-        None: 0,
-        OBJ: 1,
-        MTL: 2,
-        Collisions: 3
-    };
-    Object.freeze(Enum.CustomShapeKind);
+    let CustomShapeKind;
+    (function (CustomShapeKind) {
+        CustomShapeKind[CustomShapeKind["None"] = 0] = "None";
+        CustomShapeKind[CustomShapeKind["OBJ"] = 1] = "OBJ";
+        CustomShapeKind[CustomShapeKind["MTL"] = 2] = "MTL";
+        CustomShapeKind[CustomShapeKind["Collisions"] = 3] = "Collisions";
+    })(CustomShapeKind = Enum.CustomShapeKind || (Enum.CustomShapeKind = {}));
+    ;
     /**
      *   Enum for the different object collision kind.
      *   @enum {number}
      *   @readonly
      */
-    Enum.ObjectCollisionKind = {
-        None: 0,
-        Perfect: 1,
-        Simplified: 2,
-        Custom: 3
-    };
-    Object.freeze(Enum.ObjectCollisionKind);
+    let ObjectCollisionKind;
+    (function (ObjectCollisionKind) {
+        ObjectCollisionKind[ObjectCollisionKind["None"] = 0] = "None";
+        ObjectCollisionKind[ObjectCollisionKind["Perfect"] = 1] = "Perfect";
+        ObjectCollisionKind[ObjectCollisionKind["Simplified"] = 2] = "Simplified";
+        ObjectCollisionKind[ObjectCollisionKind["Custom"] = 3] = "Custom";
+    })(ObjectCollisionKind = Enum.ObjectCollisionKind || (Enum.ObjectCollisionKind = {}));
+    ;
     /**
      *   Enum for the map transitions.
      *   @enum {number}
      *   @readonly
      */
-    Enum.MapTransitionKind = {
-        None: 0,
-        Fade: 1,
-        Zoom: 2
-    };
-    Object.freeze(Enum.MapTransitionKind);
+    let MapTransitionKind;
+    (function (MapTransitionKind) {
+        MapTransitionKind[MapTransitionKind["None"] = 0] = "None";
+        MapTransitionKind[MapTransitionKind["Fade"] = 1] = "Fade";
+        MapTransitionKind[MapTransitionKind["Zoom"] = 2] = "Zoom";
+    })(MapTransitionKind = Enum.MapTransitionKind || (Enum.MapTransitionKind = {}));
+    ;
     /**
      *   Enum for the map transitions.
      *   @enum {number}
      *   @readonly
      */
-    Enum.MountainCollisionKind = {
-        Default: 0,
-        Always: 1,
-        Never: 2
-    };
-    Object.freeze(Enum.MountainCollisionKind);
+    let MountainCollisionKind;
+    (function (MountainCollisionKind) {
+        MountainCollisionKind[MountainCollisionKind["Default"] = 0] = "Default";
+        MountainCollisionKind[MountainCollisionKind["Always"] = 1] = "Always";
+        MountainCollisionKind[MountainCollisionKind["Never"] = 2] = "Never";
+    })(MountainCollisionKind = Enum.MountainCollisionKind || (Enum.MountainCollisionKind = {}));
+    ;
     /**
      *   Enum for the title commands.
      *   @enum {number}
      *   @readonly
      */
-    Enum.TitleCommandKind = {
-        NewGame: 0,
-        LoadGame: 1,
-        Settings: 2,
-        Exit: 3,
-        Script: 4
-    };
-    Object.freeze(Enum.TitleCommandKind);
+    let TitleCommandKind;
+    (function (TitleCommandKind) {
+        TitleCommandKind[TitleCommandKind["NewGame"] = 0] = "NewGame";
+        TitleCommandKind[TitleCommandKind["LoadGame"] = 1] = "LoadGame";
+        TitleCommandKind[TitleCommandKind["Settings"] = 2] = "Settings";
+        TitleCommandKind[TitleCommandKind["Exit"] = 3] = "Exit";
+        TitleCommandKind[TitleCommandKind["Script"] = 4] = "Script";
+    })(TitleCommandKind = Enum.TitleCommandKind || (Enum.TitleCommandKind = {}));
+    ;
     /**
      *   Enum for the title settings.
      *   @enum {number}
      *   @readonly
      */
-    Enum.TitleSettingKind = {
-        KeyboardAssigment: 0
-    };
-    Object.freeze(Enum.TitleSettingKind);
+    let TitleSettingKind;
+    (function (TitleSettingKind) {
+        TitleSettingKind[TitleSettingKind["KeyboardAssigment"] = 0] = "KeyboardAssigment";
+    })(TitleSettingKind = Enum.TitleSettingKind || (Enum.TitleSettingKind = {}));
+    ;
     /**
      *   Enum for the object moving.
      *   @enum {number}
      *   @readonly
      */
-    Enum.ObjectMovingKind = {
-        Fix: 0,
-        Random: 1,
-        Route: 2
-    };
-    Object.freeze(Enum.ObjectMovingKind);
+    let ObjectMovingKind;
+    (function (ObjectMovingKind) {
+        ObjectMovingKind[ObjectMovingKind["Fix"] = 0] = "Fix";
+        ObjectMovingKind[ObjectMovingKind["Random"] = 1] = "Random";
+        ObjectMovingKind[ObjectMovingKind["Route"] = 2] = "Route";
+    })(ObjectMovingKind = Enum.ObjectMovingKind || (Enum.ObjectMovingKind = {}));
+    ;
     /**
      *   Enum for the tags.
      *   @enum {number}
      *   @readonly
      */
-    Enum.TagKind = {
-        NewLine: 0,
-        Text: 1,
-        Bold: 2,
-        Italic: 3,
-        Left: 4,
-        Center: 5,
-        Right: 6,
-        Size: 7,
-        Font: 8,
-        TextColor: 9,
-        BackColor: 10,
-        StrokeColor: 11,
-        Variable: 12,
-        Parameter: 13,
-        Property: 14,
-        HeroName: 15,
-        Icon: 16
-    };
-    Object.freeze(Enum.TagKind);
+    let TagKind;
+    (function (TagKind) {
+        TagKind[TagKind["NewLine"] = 0] = "NewLine";
+        TagKind[TagKind["Text"] = 1] = "Text";
+        TagKind[TagKind["Bold"] = 2] = "Bold";
+        TagKind[TagKind["Italic"] = 3] = "Italic";
+        TagKind[TagKind["Left"] = 4] = "Left";
+        TagKind[TagKind["Center"] = 5] = "Center";
+        TagKind[TagKind["Right"] = 6] = "Right";
+        TagKind[TagKind["Size"] = 7] = "Size";
+        TagKind[TagKind["Font"] = 8] = "Font";
+        TagKind[TagKind["TextColor"] = 9] = "TextColor";
+        TagKind[TagKind["BackColor"] = 10] = "BackColor";
+        TagKind[TagKind["StrokeColor"] = 11] = "StrokeColor";
+        TagKind[TagKind["Variable"] = 12] = "Variable";
+        TagKind[TagKind["Parameter"] = 13] = "Parameter";
+        TagKind[TagKind["Property"] = 14] = "Property";
+        TagKind[TagKind["HeroName"] = 15] = "HeroName";
+        TagKind[TagKind["Icon"] = 16] = "Icon";
+    })(TagKind = Enum.TagKind || (Enum.TagKind = {}));
+    ;
     /**
      *   Enum for the condition heroes.
      *   @enum {number}
      *   @readonly
      */
-    Enum.ConditionHeroesKind = {
-        AllTheHeroes: 0,
-        NoneOfTheHeroes: 1,
-        AtLeastOneHero: 2,
-        TheHeroeWithInstanceID: 3
-    };
-    Object.freeze(Enum.ConditionHeroesKind);
+    let ConditionHeroesKind;
+    (function (ConditionHeroesKind) {
+        ConditionHeroesKind[ConditionHeroesKind["AllTheHeroes"] = 0] = "AllTheHeroes";
+        ConditionHeroesKind[ConditionHeroesKind["NoneOfTheHeroes"] = 1] = "NoneOfTheHeroes";
+        ConditionHeroesKind[ConditionHeroesKind["AtLeastOneHero"] = 2] = "AtLeastOneHero";
+        ConditionHeroesKind[ConditionHeroesKind["TheHeroeWithInstanceID"] = 3] = "TheHeroeWithInstanceID";
+    })(ConditionHeroesKind = Enum.ConditionHeroesKind || (Enum.ConditionHeroesKind = {}));
+    ;
     /**
      *   Enum for the variables map object characteristics.
      *   @enum {number}
      *   @readonly
      */
-    Enum.VariableMapObjectCharacteristicKind = {
-        XSquarePosition: 0,
-        YSquarePosition: 1,
-        ZSquarePosition: 2,
-        XPixelPosition: 3,
-        YPixelPosition: 4,
-        ZPixelPosition: 5,
-        Orientation: 6
-    };
-    Object.freeze(Enum.VariableMapObjectCharacteristicKind);
+    let VariableMapObjectCharacteristicKind;
+    (function (VariableMapObjectCharacteristicKind) {
+        VariableMapObjectCharacteristicKind[VariableMapObjectCharacteristicKind["XSquarePosition"] = 0] = "XSquarePosition";
+        VariableMapObjectCharacteristicKind[VariableMapObjectCharacteristicKind["YSquarePosition"] = 1] = "YSquarePosition";
+        VariableMapObjectCharacteristicKind[VariableMapObjectCharacteristicKind["ZSquarePosition"] = 2] = "ZSquarePosition";
+        VariableMapObjectCharacteristicKind[VariableMapObjectCharacteristicKind["XPixelPosition"] = 3] = "XPixelPosition";
+        VariableMapObjectCharacteristicKind[VariableMapObjectCharacteristicKind["YPixelPosition"] = 4] = "YPixelPosition";
+        VariableMapObjectCharacteristicKind[VariableMapObjectCharacteristicKind["ZPixelPosition"] = 5] = "ZPixelPosition";
+        VariableMapObjectCharacteristicKind[VariableMapObjectCharacteristicKind["Orientation"] = 6] = "Orientation";
+    })(VariableMapObjectCharacteristicKind = Enum.VariableMapObjectCharacteristicKind || (Enum.VariableMapObjectCharacteristicKind = {}));
+    ;
     /**
      *   Enum for the animation position kind.
      *   @enum {number}
      *   @readonly
      */
-    Enum.AnimationPositionKind = {
-        Top: 0,
-        Middle: 1,
-        Bottom: 2,
-        ScreenCenter: 3
-    };
-    Object.freeze(Enum.AnimationPositionKind);
+    let AnimationPositionKind;
+    (function (AnimationPositionKind) {
+        AnimationPositionKind[AnimationPositionKind["Top"] = 0] = "Top";
+        AnimationPositionKind[AnimationPositionKind["Middle"] = 1] = "Middle";
+        AnimationPositionKind[AnimationPositionKind["Bottom"] = 2] = "Bottom";
+        AnimationPositionKind[AnimationPositionKind["ScreenCenter"] = 3] = "ScreenCenter";
+    })(AnimationPositionKind = Enum.AnimationPositionKind || (Enum.AnimationPositionKind = {}));
+    ;
     /**
      *   Enum for the animation effect condition kind.
      *   @enum {number}
      *   @readonly
      */
-    Enum.AnimationEffectConditionKind = {
-        None: 0,
-        Hit: 1,
-        Miss: 2,
-        Critical: 3
-    };
-    Object.freeze(Enum.AnimationEffectConditionKind);
+    let AnimationEffectConditionKind;
+    (function (AnimationEffectConditionKind) {
+        AnimationEffectConditionKind[AnimationEffectConditionKind["None"] = 0] = "None";
+        AnimationEffectConditionKind[AnimationEffectConditionKind["Hit"] = 1] = "Hit";
+        AnimationEffectConditionKind[AnimationEffectConditionKind["Miss"] = 2] = "Miss";
+        AnimationEffectConditionKind[AnimationEffectConditionKind["Critical"] = 3] = "Critical";
+    })(AnimationEffectConditionKind = Enum.AnimationEffectConditionKind || (Enum.AnimationEffectConditionKind = {}));
+    ;
     /**
      *   Enum for the monster action kind.
      *   @enum {number}
      *   @readonly
      */
-    Enum.MonsterActionKind = {
-        UseSkill: 0,
-        UseItem: 1,
-        DoNothing: 2
-    };
-    Object.freeze(Enum.MonsterActionKind);
+    let MonsterActionKind;
+    (function (MonsterActionKind) {
+        MonsterActionKind[MonsterActionKind["UseSkill"] = 0] = "UseSkill";
+        MonsterActionKind[MonsterActionKind["UseItem"] = 1] = "UseItem";
+        MonsterActionKind[MonsterActionKind["DoNothing"] = 2] = "DoNothing";
+    })(MonsterActionKind = Enum.MonsterActionKind || (Enum.MonsterActionKind = {}));
+    ;
     /**
      *   Enum for the monster action target kind.
      *   @enum {number}
      *   @readonly
      */
-    Enum.MonsterActionTargetKind = {
-        Random: 0,
-        WeakEnemies: 1
-    };
-    Object.freeze(Enum.MonsterActionTargetKind);
+    let MonsterActionTargetKind;
+    (function (MonsterActionTargetKind) {
+        MonsterActionTargetKind[MonsterActionTargetKind["Random"] = 0] = "Random";
+        MonsterActionTargetKind[MonsterActionTargetKind["WeakEnemies"] = 1] = "WeakEnemies";
+    })(MonsterActionTargetKind = Enum.MonsterActionTargetKind || (Enum.MonsterActionTargetKind = {}));
+    ;
     /**
      *   Enum for the operation kind.
      *   @enum {number}
      *   @readonly
      */
-    Enum.OperationKind = {
-        EqualTo: 0,
-        NotEqualTo: 1,
-        GreaterThanOrEqualTo: 2,
-        LesserThanOrEqualTo: 3,
-        GreaterThan: 4,
-        LesserThan: 5
-    };
-    Object.freeze(Enum.OperationKind);
+    let OperationKind;
+    (function (OperationKind) {
+        OperationKind[OperationKind["EqualTo"] = 0] = "EqualTo";
+        OperationKind[OperationKind["NotEqualTo"] = 1] = "NotEqualTo";
+        OperationKind[OperationKind["GreaterThanOrEqualTo"] = 2] = "GreaterThanOrEqualTo";
+        OperationKind[OperationKind["LesserThanOrEqualTo"] = 3] = "LesserThanOrEqualTo";
+        OperationKind[OperationKind["GreaterThan"] = 4] = "GreaterThan";
+        OperationKind[OperationKind["LesserThan"] = 5] = "LesserThan";
+    })(OperationKind = Enum.OperationKind || (Enum.OperationKind = {}));
+    ;
 })(Enum || (Enum = {}));
 export { Enum };

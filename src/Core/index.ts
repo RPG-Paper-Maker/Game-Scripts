@@ -16,3 +16,5 @@
 export * from "./Anchor2D";
 export * from "./Bitmap";
 export * from "./Camera";
+export * from "./Game";
+export * from "./MapObject";

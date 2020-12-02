@@ -41,7 +41,6 @@ export class Constants {
     public static readonly COEF_TEX = 0.2;
     public static readonly CLASS_HIDDEN = "hidden";
     public static readonly STRING_RGBA = "rgba";
-    public static readonly STRING_EMPTY = "";
     public static readonly STRING_PARENTHESIS_LEFT = "(";
     public static readonly STRING_PARENTHESIS_RIGHT = ")";
     public static readonly STRING_BRACKET_LEFT = "[";
