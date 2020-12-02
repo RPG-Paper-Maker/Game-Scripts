@@ -53,10 +53,11 @@ IO.openFile = async function (url) {
 IO.parseFileJSON = async function (url) {
     return JSON.parse(await IO.openFile(url));
 };
-/** Write a json file.
- *   @static
- *   @param {string} url The path of the file
- *   @param {Object} obj An object that can be stringified by JSON
+/**
+ *  Write a json file.
+ *  @static
+ *  @param {string} url The path of the file
+ *  @param {Object} obj An object that can be stringified by JSON
  */
 IO.saveFile = async function (url, obj) {
     const fs = require('fs').promises;

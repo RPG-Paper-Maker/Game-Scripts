@@ -10,5 +10,6 @@
 */
 
 export * from "./Base";
+export * from "./Color";
 export * from "./DynamicValue";
 export * from "./Translatable";

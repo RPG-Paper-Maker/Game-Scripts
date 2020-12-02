@@ -5571,7 +5571,7 @@ Object.defineProperty(Material.prototype, 'needsUpdate', {
  *  morphTargets: <bool>
  * }
  */
-function MeshBasicMaterial(parameters) {
+function MeshBasicMaterial(parameters = undefined) {
     Material.call(this);
     this.type = 'MeshBasicMaterial';
     this.color = new Color(0xffffff); // emissive
@@ -5592,6 +5592,7 @@ function MeshBasicMaterial(parameters) {
     this.wireframeLinejoin = 'round';
     this.skinning = false;
     this.morphTargets = false;
+    this.visible = this.visible;
     this.setValues(parameters);
 }
 MeshBasicMaterial.prototype = Object.create(Material.prototype);

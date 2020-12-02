@@ -8,4 +8,4 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-export * from "./MapObject.js.js.js.js.js";
+export * from "./MapObject.js.js.js.js.js.js.js.js";

@@ -56,15 +56,17 @@ class IO {
      *  @param {string} url The path of the file
      *  @returns {Promise<Record<string, any>>}
      */
-    static parseFileJSON = async function(url: string): Promise<Record<string, any>>
+    static parseFileJSON = async function(url: string): Promise<Record<string, 
+        any>>
     {
         return JSON.parse(await IO.openFile(url));
     }
 
-    /** Write a json file.
-     *   @static
-     *   @param {string} url The path of the file
-     *   @param {Object} obj An object that can be stringified by JSON
+    /** 
+     *  Write a json file.
+     *  @static
+     *  @param {string} url The path of the file
+     *  @param {Object} obj An object that can be stringified by JSON
      */
     static saveFile = async function(url: string, obj: Object)
     {

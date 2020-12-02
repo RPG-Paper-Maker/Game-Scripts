@@ -10,6 +10,7 @@
 */
 import { IO, Paths, Platform, ScreenResolution, Utils } from "../Common/index.js";
 import * as System from "../System/index.js";
+import { Manager } from "../index.js";
 /** @class
 *   All the System datas.
 *   @property {SystemLang} projectName The project name
@@ -84,28 +85,24 @@ class Systems {
             .readOrDefaultNumberDouble(json.mca, 45);
         this.mapFrameDuration = System.DynamicValue.readOrDefaultNumber(json.mfd, 150);
         // Path BR
-        /*
-        RPM.PATH_BR = RPM.PATH_FILES + json.pathBR;
-
+        this.PATH_BR = Paths.FILES + json.pathBR;
         // Hero beginning
-        this.idMapStartHero = json.idMapHero;
-        this.idObjectStartHero = json.idObjHero;
-
+        this.ID_MAP_START_HERO = json.idMapHero;
+        this.ID_OBJECT_START_HERO = json.idObjHero;
         // Debug bounding box
-        this.showBB = RPM.defaultValue(json.bb, false);
-        if (this.showBB)
-        {
-            MapPortion.BB_MATERIAL.color.setHex(0xff0000);
-            MapPortion.BB_MATERIAL.wireframe = true;
+        let showBB = Utils.defaultValue(json.bb, false);
+        if (showBB) {
+            Manager.Collisions.BB_MATERIAL.color.setHex(0xff0000);
+            Manager.Collisions.BB_MATERIAL.wireframe = true;
         }
-        MapPortion.BB_MATERIAL.visible = this.showBB;
-
+        Manager.Collisions.BB_MATERIAL.visible = showBB;
         // Lists
-        this.itemsTypes = RPM.readJSONSystemList(json.itemsTypes, (element) =>
-        {
-            return element.name;
-        }, false);
-        this.colors = RPM.readJSONSystemList(json.colors, SystemColor);
+        this.itemsTypes = Utils.readJSONSystemList(json.itemsTypes, { func: (element) => {
+                return element.name;
+            } });
+        this.colors = Utils.readJSONSystemList(json.colors, { cons: System.Color });
+        console.log(this.colors);
+        /*
         this.currencies = RPM.readJSONSystemList(json.currencies, Currency);
         this.windowSkins = RPM.readJSONSystemList(json.wskins, SystemWindowSkin);
         this.cameraProperties = RPM.readJSONSystemList(json.cp,

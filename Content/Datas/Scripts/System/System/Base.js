@@ -21,5 +21,13 @@ class Base {
             this.read(json);
         }
     }
+    /**
+     *  Assign the members
+     *  @note was used due to Super calling method overwriting data with
+     *  inheritance call;
+     *  @fix adjusted the args parameters to be flexible and accepts arguments
+     */
+    setup(...args) {
+    }
 }
 export { Base };

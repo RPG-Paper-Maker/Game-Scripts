@@ -26,21 +26,14 @@ interface StructJSONDynamicValue
  *   The class who handle dynamic value.
  *   @property {PrimitiveValueKind} kind The kind of value
  *   @property {any} value The value
- *   @param {Object} [json=undefined] Json object describing the value
+ *   @param {Record<string, any>} [json=undefined] Json object describing the value
  */
 class DynamicValue extends System.Base {
     kind: PrimitiveValueKind;
     value: any;
 
-    constructor(json = undefined) {
+    constructor(json?: Record<string, any>) {
         super(json);
-    }
-
-    /** 
-     *  Assign the default members.
-     */
-    public setup() {
-
     }
 
     /** 

@@ -152,4 +152,99 @@ export class Utils {
         return (bold ? "bold " : "") + (italic ? "italic " : "") + fontSize + 
             "px " + fontName;
     }
+
+    /** 
+     *  Read a json list and create a System list sorted by ID.
+     *  @static
+     *  @param {Object[]} jsonList The json list to read
+     *  @param {function} opts.func The function to apply
+     *  @param {function} opts.cons The function to apply
+     *  @param {boolean} [isConstructor=true] Indicate if the function is a
+     *  constructor class
+     *  @returns {any[]}
+     */
+    static readJSONSystemList(jsonList: Record<string, any>[], 
+        { cons = undefined, func = undefined }: { cons?: any, func?: any }): 
+        any[] {
+        let jsonElement: any;
+        let l = jsonList.length;
+        let list = [];
+        for (let i = 0; i < l; i++) {
+            jsonElement = jsonList[i];
+            list[jsonElement.id] = Utils.isUndefined(cons) ? func.call(null, 
+                jsonElement) : new cons(jsonElement);
+        }
+        return list;
+    }
+
+    /** 
+     *  Read a json list and create a System list sorted by index
+     *  @static
+     *  @param {Object[]} jsonList The json list to read
+     *  @param {function} func The function to apply
+     *  @param {boolean} [isConstructor=true] Indicate if the function is a
+     *  constructor class
+     *  @returns {any[]}
+     */
+    private static readJSONSystemListByIndex(jsonList: Record<string, any>[], 
+        cons: FunctionConstructor = undefined, func: Function = undefined): 
+        any[] {
+        let jsonElement: Record<string, any>;
+        let l = jsonList.length;
+        let list = new Array(l);
+        for (let i = 0; i < l; i++) {
+            jsonElement = jsonList[i];
+            list[i] = Utils.isUndefined(cons) ? func.call(null, jsonElement) : 
+                cons.call(jsonElement);
+        }
+        return list;
+    }
+
+    // -------------------------------------------------------
+    /** Read a json list and create a System list by ID and another list by
+     *   index (containing IDs), and return the max possible ID
+     *   @static
+     *   @param {Object[]} jsonList The json list to
+     *   @param {any[]} listIDs The System list by ID
+     *   @param {number[]} listIndexes The IDs list by index
+     *   @param {function} func The function to apply
+     *   @param {boolean} [isConstructor=true] Indicate if the function is a
+     *   constructor class
+     *   @returns {number}
+     */
+    static readJSONSystemListByIDIndex(jsonList, listIDs, listIndexes, func,
+                                       isConstructor = true) {
+        let l = jsonList.length;
+        let maxID = 0;
+        let id, jsonElement;
+        for (let i = 0; i < l; i++) {
+            jsonElement = jsonList[i];
+            id = jsonElement.id;
+            listIDs[id] = isConstructor ? new func(jsonElement) : func.call(null
+                , jsonElement);
+            listIndexes[i] = id;
+            maxID = Math.max(id, maxID);
+        }
+        return maxID;
+    }
+
+    // -------------------------------------------------------
+    /** Read a json list and create a hash list
+     *   @static
+     *   @param {Object[]} jsonList The json list to read
+     *   @param {function} func The function to apply
+     *   @param {boolean} [isConstructor=true] Indicate if the function is a
+     *   constructor class
+     *   @returns {any[]}
+     */
+    static readJSONSystemListHash(jsonList, func, isConstructor = true) {
+        let list = [];
+        let jsonElement;
+        for (let i = 0, l = jsonList.length; i < l; i++) {
+            jsonElement = jsonList[i];
+            list[jsonElement[Constants.JSON_KEY]] = isConstructor ? new func(
+                jsonElement[Constants.JSON_VALUE]) : func.call(null, jsonElement);
+        }
+        return list;
+    }
 }

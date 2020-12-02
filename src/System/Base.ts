@@ -31,7 +31,10 @@ abstract class Base {
      *  inheritance call;
      *  @fix adjusted the args parameters to be flexible and accepts arguments
      */
-    abstract setup(...args: any): void;
+    setup(...args: any): void
+    {
+        
+    }
 
     /**
      *  Read the json data

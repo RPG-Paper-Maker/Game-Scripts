@@ -11,6 +11,7 @@
 
 import { IO, Paths, Platform, ScreenResolution, Utils } from "../Common";
 import * as System from "../System";
+import { Manager } from "..";
 
 /** @class
 *   All the System datas.
@@ -48,11 +49,16 @@ class Systems {
     public static SQUARE_SIZE: number;
     public static PORTIONS_RAY_NEAR: number;
     public static FRAMES: number;
+    public static PATH_BR: string;
+    public static ID_MAP_START_HERO: number;
+    public static ID_OBJECT_START_HERO: number;
     public static projectName: System.Translatable;
     public static antialias: boolean;
     public static mountainCollisionHeight: System.DynamicValue;
     public static mountainCollisionAngle: System.DynamicValue;
     public static mapFrameDuration: System.DynamicValue;
+    private static itemsTypes: string[];
+    private static colors: System.Color[]
 
     constructor()
     {
@@ -102,31 +108,33 @@ class Systems {
             json.mch, 4);
         this.mountainCollisionAngle = System.DynamicValue
             .readOrDefaultNumberDouble(json.mca, 45);
-        this.mapFrameDuration = System.DynamicValue.readOrDefaultNumber(json.mfd, 150);
+        this.mapFrameDuration = System.DynamicValue.readOrDefaultNumber(json.mfd
+            , 150);
 
         // Path BR
-        /*
-        RPM.PATH_BR = RPM.PATH_FILES + json.pathBR;
+        this.PATH_BR = Paths.FILES + json.pathBR;
 
         // Hero beginning
-        this.idMapStartHero = json.idMapHero;
-        this.idObjectStartHero = json.idObjHero;
+        this.ID_MAP_START_HERO = json.idMapHero;
+        this.ID_OBJECT_START_HERO = json.idObjHero;
 
         // Debug bounding box
-        this.showBB = RPM.defaultValue(json.bb, false);
-        if (this.showBB)
+        let showBB = Utils.defaultValue(json.bb, false);
+        if (showBB)
         {   
-            MapPortion.BB_MATERIAL.color.setHex(0xff0000);
-            MapPortion.BB_MATERIAL.wireframe = true;
+            Manager.Collisions.BB_MATERIAL.color.setHex(0xff0000);
+            Manager.Collisions.BB_MATERIAL.wireframe = true;
         }
-        MapPortion.BB_MATERIAL.visible = this.showBB;
+        Manager.Collisions.BB_MATERIAL.visible = showBB;
 
         // Lists
-        this.itemsTypes = RPM.readJSONSystemList(json.itemsTypes, (element) =>
+        this.itemsTypes = Utils.readJSONSystemList(json.itemsTypes, { func: (
+            element: Record<string, any>) =>
         {
             return element.name;
-        }, false);
-        this.colors = RPM.readJSONSystemList(json.colors, SystemColor);
+        }});
+        this.colors = Utils.readJSONSystemList(json.colors, { cons: System.Color });
+        /*
         this.currencies = RPM.readJSONSystemList(json.currencies, Currency);
         this.windowSkins = RPM.readJSONSystemList(json.wskins, SystemWindowSkin);
         this.cameraProperties = RPM.readJSONSystemList(json.cp, 

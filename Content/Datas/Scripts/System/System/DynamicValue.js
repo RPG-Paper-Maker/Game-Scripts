@@ -17,16 +17,11 @@ import { Stack } from "../Manager/index.js";
  *   The class who handle dynamic value.
  *   @property {PrimitiveValueKind} kind The kind of value
  *   @property {any} value The value
- *   @param {Object} [json=undefined] Json object describing the value
+ *   @param {Record<string, any>} [json=undefined] Json object describing the value
  */
 class DynamicValue extends System.Base {
-    constructor(json = undefined) {
+    constructor(json) {
         super(json);
-    }
-    /**
-     *  Assign the default members.
-     */
-    setup() {
     }
     /**
      *  Create a new value from kind and value.

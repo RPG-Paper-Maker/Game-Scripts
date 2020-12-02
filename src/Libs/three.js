@@ -8886,7 +8886,7 @@ Object.defineProperty( Material.prototype, 'needsUpdate', {
  * }
  */
 
-function MeshBasicMaterial( parameters ) {
+function MeshBasicMaterial( parameters = undefined ) {
 
 	Material.call( this );
 
@@ -8918,6 +8918,8 @@ function MeshBasicMaterial( parameters ) {
 
 	this.skinning = false;
 	this.morphTargets = false;
+
+	this.visible = this.visible;
 
 	this.setValues( parameters );
 
