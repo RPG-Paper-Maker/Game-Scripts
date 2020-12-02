@@ -20,12 +20,13 @@ export class Utils {
         throw new Error("This is a static class!");
     }
 
-    /** Return default value if undefined, else the value
-    *   @static
-    *   @param {any} value The value
-    *   @param {any} defaultValue The default value
-    *   @returns {any}
-    */
+    /** 
+     *  Return default value if undefined, else the value
+     *  @static
+     *  @param {any} value The value
+     *  @param {any} defaultValue The default value
+     *  @returns {any}
+     */
     public static defaultValue<T>(value: T, defaultValue: T): T {
         return this.isUndefined(value) ? defaultValue : value;
     }

@@ -9,6 +9,4 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-export * from "./Base";
-export * from "./Settings";
-export * from "./Systems";
+export * as THREE from "./three.js";

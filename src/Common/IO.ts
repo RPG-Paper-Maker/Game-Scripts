@@ -19,7 +19,8 @@ class IO {
         throw new Error("This is a static class");
     }
 
-    /** Check if a file exists.
+    /** 
+     *  Check if a file exists.
      *  @static
      *  @param {string} url The path of the file
      *  @returns {boolean}
@@ -29,10 +30,11 @@ class IO {
         return (fs.existsSync(url));
     }
 
-    /** Open an existing file.
-     *   @static
-     *   @param {string} url The path of the file
-     *   @returns {string}
+    /** 
+     *  Open an existing file.
+     *  @static
+     *  @param {string} url The path of the file
+     *  @returns {string}
      */
     static openFile = async function(url: string): Promise<string>
     {
@@ -48,12 +50,13 @@ class IO {
         })).toString();
     }
 
-    /** Open and parse an existing file.
-     *   @static
-     *   @param {string} url The path of the file
-     *   @returns {string}
+    /** 
+     *  Open and parse an existing file.
+     *  @static
+     *  @param {string} url The path of the file
+     *  @returns {Promise<Record<string, any>>}
      */
-    static parseFileJSON = async function(url: string): Promise<Object>
+    static parseFileJSON = async function(url: string): Promise<Record<string, any>>
     {
         return JSON.parse(await IO.openFile(url));
     }

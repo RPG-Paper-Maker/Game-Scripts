@@ -12,56 +12,51 @@
 import { IO, Paths, Platform, Utils, Enum } from "../Common";
 import TitleSettingKind = Enum.TitleSettingKind;
 
-interface StructKeyboards {
-    [key: string]: number;
-} 
-
 /** @class
  *  All settings
- *  @property {StructKeyboards} kb The keyboard assignments according to ID
+ *  @property {Record<string, number>} kb The keyboard assignments according to ID
  */
 class Settings {
 
-    public static kb: StructKeyboards;
+    public static kb: Record<string, number>;
 
     constructor() {
         throw new Error("This is a static class!");
     }
 
     /** Read the settings file.
+     *  @static
      */
-    static async read()
-    {
+    static async read() {
         let json = await IO.parseFileJSON(Platform.ROOT_DIRECTORY + Paths
             .FILE_SETTINGS);
-        Settings.kb = {};
+        this.kb = {};
         let jsonObjs = json[Utils.numToString(TitleSettingKind.KeyboardAssigment)];
-        for (let id in jsonObjs)
-        {
-            Settings.kb[id] = jsonObjs[id];
+        for (let id in jsonObjs) {
+            this.kb[id] = jsonObjs[id];
         }
     }
 
     /** Write the settings file.
+     *  @static
      */
-    static write()
-    {
+    static write() {
         let json = {};
         let jsonObjs = {};
-        for (let id in Settings.kb) {
-            jsonObjs[id] = Settings.kb[id];
+        for (let id in this.kb) {
+            jsonObjs[id] = this.kb[id];
         }
         json[Utils.numToString(TitleSettingKind.KeyboardAssigment)] = jsonObjs;
         IO.saveFile(Platform.ROOT_DIRECTORY + Paths.FILE_SETTINGS, json);
     }
 
     /** Update Keyboard settings.
+     *  @static
      */
-    static updateKeyboard(id: number, sc: number)
-    {
-        Settings.kb[id] = sc;
-        Settings.write();
+    static updateKeyboard(id: number, sc: number) {
+        this.kb[id] = sc;
+        this.write();
     }
 }
 
-export { StructKeyboards, Settings }
+export { Settings }

@@ -36,60 +36,60 @@ export class Platform {
         throw new Error("This class is static.")
     }
 
-    /** Set window title
-     *   @static
-     *   @param {string} title The title to display
+    /** 
+     *  Set window title.
+     *  @static
+     *  @param {string} title The title to display
      */
     static setWindowTitle = function (title: string) {
         ipc.send('change-window-title', title);
     }
 
-    /** Set window size
-     *   @static
-     *   @param {number} w The window width
-     *   @param {number} h The window height
-     *   @param {boolean} f Indicate if the window is fullscreen
+    /** 
+     *  Set window size.
+     *  @static
+     *  @param {number} w The window width
+     *  @param {number} h The window height
+     *  @param {boolean} f Indicate if the window is fullscreen
      */
     static setWindowSize = function (w: number, h: number, f: boolean) {
         ipc.send('change-window-size', w, h, f);
     }
 
-    /** Quit app
-     *   @static
+    /** 
+     *  Quit app.
+     *  @static
      */
     static quit = function () {
         window.close();
     }
 
-    /** Show an error object
-     *   @static
-     *   @param {Error} e The error message
+    /** 
+     *  Show an error object.
+     *  @static
+     *  @param {Error} e The error message
      */
     static showError(e: Error) {
         Platform.showErrorMessage(e.message + Constants.STRING_NEW_LINE + e
             .stack);
     }
 
-    /** Show an error message
-     *   @static
-     *   @param {string} msg The error message
+    /** 
+     *  Show an error message.
+     *  @static
+     *  @param {string} msg The error message
      */
     static showErrorMessage(msg: string) {
-        if (Platform.DESKTOP) {
-            const dialog = require('electron').remote.dialog;
-            dialog.showMessageBoxSync(
-                {
-                    title: 'Error',
-                    type: 'error',
-                    message: msg
-                }
-            );
-        } else {
-            console.log(msg);
-        }
+        const dialog = require('electron').remote.dialog;
+        dialog.showMessageBoxSync({
+            title: 'Error',
+            type: 'error',
+            message: msg
+        });
     }
 }
 
+// Display error to main process
 window.onerror = function (msg, url, line, column, err) {
     let str = url ? url + Constants.STRING_COLON + Constants.STRING_EMPTY + line
         + Constants.STRING_NEW_LINE : Constants.STRING_EMPTY;

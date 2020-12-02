@@ -16,12 +16,13 @@ export class Utils {
     constructor() {
         throw new Error("This is a static class!");
     }
-    /** Return default value if undefined, else the value
-    *   @static
-    *   @param {any} value The value
-    *   @param {any} defaultValue The default value
-    *   @returns {any}
-    */
+    /**
+     *  Return default value if undefined, else the value
+     *  @static
+     *  @param {any} value The value
+     *  @param {any} defaultValue The default value
+     *  @returns {any}
+     */
     static defaultValue(value, defaultValue) {
         return this.isUndefined(value) ? defaultValue : value;
     }

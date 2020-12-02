@@ -12,20 +12,6 @@
  * Ambient module "core"
  * @example import * as core from "Core"
  */
-//export * from "./Node.js";
-//export * from "./Tree.js";
 export * from "./Anchor2D.js";
 export * from "./Bitmap.js";
-//export * from "./rpm.js";
-//export * from "./MapElement.js";
-//export * from "./Land.js";
-//export * from "./Sprite.js";
-//export * from "./Mountain.js";
-//export * from "./Mountains.js";
-//export * from "./TextureBundle.js";
-//export * from "./Floor.js";
-//export * from "./SpriteWall.js";
-//export * from "./Autotile.js";
-//export * from "./Autotiles.js";
-//export * from "./Rectangle.js";
-//export * from "./Picture2D.js";
+export * from "./Camera.js";

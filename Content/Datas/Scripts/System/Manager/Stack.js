@@ -8,97 +8,107 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-/** @class
- *   The game stack that is organizing the game scenes
- *   @property {Scene.Base[]} content The stack content
- *   @property {Scene.Base} top The stack top content
- *   @property {Scene.Base} subTop The stack top - 1 content
- *   @property {Scene.Base} bot The stack bot content
- */
-import { Scene } from "../index.js";
+import { Scene, Datas } from "../index.js";
 import { Utils, Platform, ScreenResolution } from "../Common/index.js";
+import { THREE } from "../Libs/index.js";
+/** @class
+ *  The game stack that is organizing the game scenes.
+ *  @property {Scene.Base[]} content The stack content
+ *  @property {Scene.Base} top The stack top content
+ *  @property {Scene.Base} subTop The stack top - 1 content
+ *  @property {Scene.Base} bot The stack bot content
+ */
 class Stack {
     constructor() {
         throw new Error("This is a static class");
     }
-    /** Push a new scene in the stack
-     *   @param {Scene.Base} scene The scene to push
+    /**
+     *  Push a new scene in the stack.
+     *  @param {Scene.Base} scene The scene to push
      */
     static push(scene) {
-        Stack.content.push(scene);
-        Stack.top = scene;
-        Stack.subTop = Stack.at(Stack.content.length - 2);
-        Stack.bot = Stack.at(0);
-        Stack.requestPaintHUD = true;
+        this.content.push(scene);
+        this.top = scene;
+        this.subTop = this.at(this.content.length - 2);
+        this.bot = this.at(0);
+        this.requestPaintHUD = true;
     }
-    /** Pop (remove) the last scene in the stack
-     *   @returns {Scene.Base} The last scene that is removed
+    /**
+     *  Pop (remove) the last scene in the stack.
+     *  @returns {Scene.Base} The last scene that is removed
      */
     static pop() {
-        let scene = Stack.content.pop();
-        Stack.top = Stack.at(Stack.content.length - 1);
-        Stack.subTop = Stack.at(Stack.content.length - 2);
-        Stack.bot = Stack.at(0);
+        let scene = this.content.pop();
+        this.top = this.at(this.content.length - 1);
+        this.subTop = this.at(this.content.length - 2);
+        this.bot = this.at(0);
         scene.close();
-        Stack.requestPaintHUD = true;
+        this.requestPaintHUD = true;
         return scene;
     }
-    /** Pop (remove) all the scene in the stack
-     * @returns Scene.Base
+    /**
+     *  Pop (remove) all the scene in the stack.
+     *  @returns Scene.Base
      */
     static popAll() {
         let scene;
-        for (let i = Stack.content.length - 1; i >= 0; i--) {
-            scene = Stack.content.pop();
+        for (let i = this.content.length - 1; i >= 0; i--) {
+            scene = this.content.pop();
             scene.close();
         }
-        Stack.top = null;
-        Stack.subTop = null;
-        Stack.bot = null;
-        Stack.requestPaintHUD = true;
+        this.top = null;
+        this.subTop = null;
+        this.bot = null;
+        this.requestPaintHUD = true;
         return scene;
     }
-    /** Replace the last scene in the stack by a new scene
-     *   @param {SceneGame} scene The scene to replace
-     *   @returns {SceneGame} The last scene that is replaced
+    /**
+     *  Replace the last scene in the stack by a new scene.
+     *  @param {SceneGame} scene The scene to replace
+     *  @returns {SceneGame} The last scene that is replaced
      */
     static replace(scene) {
-        let pop = Stack.pop();
-        Stack.push(scene);
+        let pop = this.pop();
+        this.push(scene);
         return pop;
     }
-    /** Get the scene at a specific index in the stack. 0 is the bottom of the
-     *   stack
-     *   @param {number} i Index in the stack
-     *   @returns {SceneGame} The scene in the index of the stack
+    /**
+     *  Get the scene at a specific index in the stack. 0 is the bottom of the
+     *  stack.
+     *  @param {number} i Index in the stack
+     *  @returns {SceneGame} The scene in the index of the stack
      */
     static at(i) {
-        return Utils.defaultValue(Stack.content[i], null);
+        return Utils.defaultValue(this.content[i], null);
     }
-    /** Check if the stack is empty
-     *   @returns {boolean}
+    /**
+     *  Check if the stack is empty
+     *  @returns {boolean}
      */
     static isEmpty() {
-        return Stack.top === null;
+        return this.top === null;
     }
-    /** Check if top content is loading
-     *   @returns {boolean}
+    /**
+     *  Check if top content is loading
+     *  @returns {boolean}
      */
     static isLoading() {
-        return Stack.isEmpty() || Stack.top.loading;
+        return this.isEmpty() || this.top.loading;
     }
-    /** Push the title screen when empty
-     *   @returns {SceneTitleScreen}
+    /**
+     *  Push the title screen when empty
+     *  @returns {SceneTitleScreen}
      */
     static pushTitleScreen() {
         /*
         let scene = new SceneTitleScreen();
-        Stack.push(scene);
+        this.push(scene);
         return scene;
         *
          */
     }
-    /** Clear the HUD canvas
+    /**
+     *  Clear the HUD canvas.
      */
     static clearHUD() {
         Platform.ctx.clearRect(0, 0, ScreenResolution.CANVAS_WIDTH, ScreenResolution
@@ -106,7 +116,35 @@ class Stack {
         Platform.ctx.lineWidth = 1;
         Platform.ctx.imageSmoothingEnabled = false;
     }
-    /** Update the stack
+    /**
+     *  Initialize the openGL stuff.
+     */
+    static initializeGL() {
+        Scene.Base.renderer = new THREE.WebGLRenderer({ antialias: Datas.Systems
+                .antialias, alpha: true });
+        Scene.Base.renderer.autoClear = false;
+        Scene.Base.renderer.setSize(ScreenResolution.CANVAS_WIDTH, ScreenResolution
+            .CANVAS_HEIGHT, true);
+        if (Datas.Systems.antialias) {
+            Scene.Base.renderer.setPixelRatio(2);
+        }
+        Platform.canvas3D.appendChild(Scene.Base.renderer.domElement);
+    }
+    /**
+     *  Set the camera aspect while resizing the window.
+     */
+    static resizeGL() {
+        Scene.Base.renderer.setSize(ScreenResolution.CANVAS_WIDTH, ScreenResolution.CANVAS_HEIGHT, true);
+        let camera;
+        for (let i = 0, l = this.content.length; i < l; i++) {
+            camera = this.content[i].camera;
+            if (!Utils.isUndefined(camera)) {
+                camera.resizeGL();
+            }
+        }
+    }
+    /**
+     *  Update the stack.
      */
     static update() {
         // Update game timer if there's a current game
@@ -129,62 +167,68 @@ class Stack {
                 break;
             }
         }*/
-        Stack.top.update();
+        this.top.update();
     }
-    /** First key press handle for the current stack
-     *   @param {number} key The key ID pressed
+    /**
+     *  First key press handle for the current stack.
+     *  @param {number} key The key ID pressed
      */
     static onKeyPressed(key) {
-        if (!Stack.isEmpty()) {
-            Stack.top.onKeyPressed(key);
+        if (!this.isEmpty()) {
+            this.top.onKeyPressed(key);
         }
     }
-    /** First key release handle for the current stack
-     *   @param {number} key The key ID released
+    /**
+     *  First key release handle for the current stack.
+     *  @param {number} key The key ID released
      */
     static onKeyReleased(key) {
-        if (!Stack.isEmpty()) {
-            Stack.top.onKeyReleased(key);
+        if (!this.isEmpty()) {
+            this.top.onKeyReleased(key);
         }
     }
-    /** Key pressed repeat handle for the current stack
-     *   @param {number} key The key ID pressed
-     *   @returns {boolean} false if the other keys are blocked after it
+    /**
+     *  Key pressed repeat handle for the current stack.
+     *  @param {number} key The key ID pressed
+     *  @returns {boolean} false if the other keys are blocked after it
      */
     static onKeyPressedRepeat(key) {
-        return Stack.isEmpty() ? true : Stack.top.onKeyPressedRepeat(key);
+        return this.isEmpty() ? true : this.top.onKeyPressedRepeat(key);
     }
-    /** Key pressed repeat handle for the current stack, but with
-     *   a small wait after the first pressure (generally used for menus)
-     *   @param {number} key The key ID pressed
-     *   @returns {boolean} false if the other keys are blocked after it
+    /**
+     *  Key pressed repeat handle for the current stack, but with
+     *  a small wait after the first pressure (generally used for menus).
+     *  @param {number} key The key ID pressed
+     *  @returns {boolean} false if the other keys are blocked after it
      */
     static onKeyPressedAndRepeat(key) {
-        return Stack.isEmpty() ? true : Stack.top.onKeyPressedAndRepeat(key);
+        return this.isEmpty() ? true : this.top.onKeyPressedAndRepeat(key);
     }
-    /** Draw the 3D for the current stack
+    /**
+     *  Draw the 3D for the current stack.
      */
     static draw3D() {
-        if (!Stack.isEmpty()) {
-            Stack.top.draw3D();
+        if (!this.isEmpty()) {
+            this.top.draw3D();
         }
     }
-    /** Draw HUD for the current stack
+    /**
+     *  Draw HUD for the current stack.
      */
     static drawHUD() {
-        if (Stack.requestPaintHUD) {
-            if (Stack.isLoading() && Stack.sceneLoading) {
-                Stack.loadingDelay += Stack.elapsedTime;
-                if (Stack.loadingDelay >= Scene.Loading.MIN_DELAY) {
-                    Stack.requestPaintHUD = false;
-                    Stack.sceneLoading.drawHUD();
+        if (this.requestPaintHUD) {
+            if (this.isLoading() && this.sceneLoading) {
+                this.loadingDelay += this.elapsedTime;
+                if (this.loadingDelay >= Scene.Loading.MIN_DELAY) {
+                    this.requestPaintHUD = false;
+                    this.sceneLoading.drawHUD();
                 }
             }
             else {
-                Stack.requestPaintHUD = false;
-                Stack.loadingDelay = 0;
-                Stack.clearHUD();
-                if (!Stack.isEmpty()) {
+                this.requestPaintHUD = false;
+                this.loadingDelay = 0;
+                this.clearHUD();
+                if (!this.isEmpty()) {
                     // Display < 0 index image command
                     /*
                     let i, l, v;
@@ -196,7 +240,7 @@ class Stack {
                         v[1].draw();
                     }*/
                     // Draw System HUD
-                    Stack.top.drawHUD();
+                    this.top.drawHUD();
                     // Display >= 0 index image command
                     /*
                     for (; i < l; i++) {

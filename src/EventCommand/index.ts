@@ -10,5 +10,3 @@
 */
 
 export * from "./Base";
-export * from "./Settings";
-export * from "./Systems";

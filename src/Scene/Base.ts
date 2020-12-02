@@ -9,8 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Camera } from "../Core";
+import { THREE } from "../Libs";
+
 /** @class
- *   Abstract class for the game stack
+ *   Abstract class for the game stack.
  *   @property {ReactionInterpreter[]} reactionInterpreters The reaction
  *   interpreters for parallel reactions
  *   @property {EventCommand[]} parallelCommands Commands that are still running
@@ -19,8 +22,11 @@
  *   @param {boolean} [loading=true] Indicate if the scene should load async
  *   stuff
  */
-export class Base
+class Base
 {
+    public static renderer: THREE.WebGLRenderer;
+
+    public camera: Camera
     public reactionInterpreters: number;
     public parallelCommands: number;
     public loading: boolean;
@@ -36,8 +42,8 @@ export class Base
         */
     }
 
-    // -------------------------------------------------------
-    /** Load async stuff
+    /** 
+     *  Load async stuff.
      */
     async load() {
         this.loading = false;
@@ -234,3 +240,5 @@ export class Base
 
     }
 }
+
+export { Base }

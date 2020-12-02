@@ -17,7 +17,8 @@ class IO {
         throw new Error("This is a static class");
     }
 }
-/** Check if a file exists.
+/**
+ *  Check if a file exists.
  *  @static
  *  @param {string} url The path of the file
  *  @returns {boolean}
@@ -26,10 +27,11 @@ IO.fileExists = function (url) {
     const fs = require('fs');
     return (fs.existsSync(url));
 };
-/** Open an existing file.
- *   @static
- *   @param {string} url The path of the file
- *   @returns {string}
+/**
+ *  Open an existing file.
+ *  @static
+ *  @param {string} url The path of the file
+ *  @returns {string}
  */
 IO.openFile = async function (url) {
     const fs = require('fs').promises;
@@ -42,10 +44,11 @@ IO.openFile = async function (url) {
         }
     })).toString();
 };
-/** Open and parse an existing file.
- *   @static
- *   @param {string} url The path of the file
- *   @returns {string}
+/**
+ *  Open and parse an existing file.
+ *  @static
+ *  @param {string} url The path of the file
+ *  @returns {Promise<Record<string, any>>}
  */
 IO.parseFileJSON = async function (url) {
     return JSON.parse(await IO.openFile(url));

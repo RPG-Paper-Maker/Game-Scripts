@@ -8,25 +8,28 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-/** @class
-*   All the System datas
 
+import { IO, Paths, Platform, ScreenResolution, Utils } from "../Common";
+import * as System from "../System";
+
+/** @class
+*   All the System datas.
 *   @property {SystemLang} projectName The project name
 *   @property {boolean} antialias Indicate if there is antialiasing
 *   @property {number} mountainCollisionHeight The height limit for collision
 *   @property {number} mountainCollisionAngle The angle limit for collision
-*   @property {SystemValue} mapFrameDuration Time in milliseconds for a frame
+*   @property {SystemValue} mapFrameDuration Time in milliseconds for a frame 
 *   in map
 *   @property {number} idMapStartHero Id of the map where the hero is in the
 *   beginning of a game
 *   @property {number} idObjectStartHero Id of the object where the hero is in
 *   the beginning of a game
-*   @property {boolean} showBB Indicate if the collision boxes
+*   @property {boolean} showBB Indicate if the collision boxes 
 *   @property {string[]} itemsTypes List of all the types of items by ID
 *   @property {SystemColor[]} colors List of all the colors by ID
 *   @property {Currency[]} currencies List of all the currencies by ID
 *   @property {SystemWindowSkin[]} windowSkins List of all the windowSkins by ID
-*   @property {SystemCameraProperties[]} cameraProperties List of all the
+*   @property {SystemCameraProperties[]} cameraProperties List of all the 
 *   camera properties by ID
 *   @property {Detection[]} detections List of all the detections by ID
 *   @property {SystemSkybox[]} skyboxes List of all the skyboxes by ID
@@ -40,18 +43,29 @@
 *   @property {SystemPlaySong} soundImpossible The impossible sound
 *   @property {EventCommand} dbOptions The window box options
 */
-class System {
-    constructor() {
+class Systems {
+
+    public static SQUARE_SIZE: number;
+    public static PORTIONS_RAY_NEAR: number;
+    public static FRAMES: number;
+    public static projectName: System.Translatable;
+    public static antialias: boolean;
+
+    constructor()
+    {
+        throw new Error("This is a static class!");
     }
-    // -------------------------------------------------------
-    /** Read the JSON file associated to System
-    */
-    async read() {
-        /*
-        let json = await RPM.parseFileJSON(RPM.FILE_SYSTEM);
+
+    /** 
+     *  Read the JSON file associated to System.
+     */
+    static async read()
+    {
+        let json = await IO.parseFileJSON(Platform.ROOT_DIRECTORY + Paths
+            .FILE_SYSTEM);
         
         // Project name
-        this.projectName = new SystemLang(json.pn);
+        this.projectName = new System.Translatable(json.pn);
         Platform.setWindowTitle(this.projectName.name());
 
         // Screen resolution + antialiasing
@@ -66,25 +80,23 @@ class System {
         Platform.setWindowSize(w, h, !isScreenWindow);
         Platform.canvasHUD.width = w;
         Platform.canvasHUD.height = h;
-        Platform.canvas3D.width = w;
-        Platform.canvas3D.height = h;
+        Platform.canvas3D.style.width = w;
+        Platform.canvas3D.style.height = h;
         Platform.canvasVideos.height = h;
-        RPM.CANVAS_WIDTH = w;
-        RPM.CANVAS_HEIGHT = h;
-        RPM.WINDOW_X = RPM.CANVAS_WIDTH / RPM.SCREEN_X;
-        RPM.WINDOW_Y = RPM.CANVAS_HEIGHT / RPM.SCREEN_Y;
-        this.antialias = json.aa;
-
-        // Now that antialias is on or off, initialize GL stuff
-        RPM.initializeGL();
-        RPM.resizeGL();
-        RPM.requestPaintHUD = true;
+        ScreenResolution.CANVAS_WIDTH = w;
+        ScreenResolution.CANVAS_HEIGHT = h;
+        ScreenResolution.WINDOW_X = ScreenResolution.CANVAS_WIDTH / 
+            ScreenResolution.SCREEN_X;
+        ScreenResolution.WINDOW_Y = ScreenResolution.CANVAS_HEIGHT / 
+            ScreenResolution.SCREEN_Y;
+        this.antialias = Utils.defaultValue(json.aa, false);
 
         // Other numbers
-        RPM.SQUARE_SIZE = json.ss;
-        RPM.PORTIONS_RAY_NEAR = 3; // TODO: json.pr
-        RPM.FRAMES = json.frames;
-        this.mountainCollisionHeight = SystemValue.readOrDefaultNumber(json.mch,
+        this.SQUARE_SIZE = json.ss;
+        this.PORTIONS_RAY_NEAR = 3; // TODO: json.pr
+        this.FRAMES = json.frames;
+        /*
+        this.mountainCollisionHeight = SystemValue.readOrDefaultNumber(json.mch, 
             4);
         this.mountainCollisionAngle = SystemValue.readOrDefaultNumberDouble(json
             .mca, 45);
@@ -100,7 +112,7 @@ class System {
         // Debug bounding box
         this.showBB = RPM.defaultValue(json.bb, false);
         if (this.showBB)
-        {
+        {   
             MapPortion.BB_MATERIAL.color.setHex(0xff0000);
             MapPortion.BB_MATERIAL.wireframe = true;
         }
@@ -114,7 +126,7 @@ class System {
         this.colors = RPM.readJSONSystemList(json.colors, SystemColor);
         this.currencies = RPM.readJSONSystemList(json.currencies, Currency);
         this.windowSkins = RPM.readJSONSystemList(json.wskins, SystemWindowSkin);
-        this.cameraProperties = RPM.readJSONSystemList(json.cp,
+        this.cameraProperties = RPM.readJSONSystemList(json.cp, 
             SystemCameraProperties);
         this.detections = RPM.readJSONSystemList(json.d, Detection);
         this.skyboxes = RPM.readJSONSystemList(json.sb, SystemSkybox);
@@ -149,10 +161,12 @@ class System {
         RPM.loadingScene = new SceneLoading();
         */
     }
+
     // -------------------------------------------------------
     /** Update the RPM.modelHero global variable by loading the hero model
     */
-    async getModelHero() {
+    async getModelHero()
+    {
         /*
         let mapName = RPM.generateMapName(this.idMapStartHero);
         let json = (await RPM.parseFileJSON(RPM.FILE_MAPS + mapName + RPM
@@ -184,21 +198,25 @@ class System {
             globalPortion[2])).getHeroModel(json);
             */
     }
+
     // -------------------------------------------------------
     /** Load the window skins pictures
     */
-    async loadWindowSkins() {
+    async loadWindowSkins()
+    {
         /*
         for (let i = 1, l = this.windowSkins.length; i < l; i++)
         {
             await this.windowSkins[i].updatePicture();
         }*/
     }
+
     // -------------------------------------------------------
     /** Get the default array currencies for a default game
     *   @returns {number[]}
     */
-    getDefaultCurrencies() {
+    getDefaultCurrencies()
+    {
         /*
         let list = [];
         for (let id in this.currencies)
@@ -208,13 +226,16 @@ class System {
         return list;
         */
     }
+
     // -------------------------------------------------------
     /** Get the current System window skin
     *   @returns {SystemWindowSkin}
     */
-    getWindowSkin() {
+    getWindowSkin()
+    {
         /*
         return this.windowSkins[this.dbOptions.windowSkinID.getValue()];*/
     }
 }
-export { System };
+
+export { Systems }

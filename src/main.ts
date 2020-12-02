@@ -26,41 +26,15 @@ function initialize() {
 /** Load the game stack and datas
  */
 async function load() {
-    console.log("ok")
     await Datas.Settings.read();
-    //await RPM.datasGame.read();
+    await Datas.Systems.read();
     //RPM.gameStack.pushTitleScreen();
     //RPM.datasGame.loaded = true;
+    // Now that antialias is on or off, initialize GL stuff
+    Stack.initializeGL();
+    Stack.resizeGL();
     Stack.requestPaintHUD = true;
-}
-
-/** Initialize the openGL stuff
- */
-function initializeGL() {
-    // Create the renderer
-    /*
-    RPM.renderer = new THREE.WebGLRenderer({antialias: RPM.datasGame.system
-        .antialias, alpha: true});
-    RPM.renderer.autoClear = false;
-    RPM.renderer.setSize(RPM.CANVAS_WIDTH, RPM.CANVAS_HEIGHT);
-    if (RPM.datasGame.system.antialias)
-    {
-        RPM.renderer.setPixelRatio(2);
-    }
-    Platform.canvas3D.appendChild(RPM.renderer.domElement);*/
-}
-
-/** Set the camera aspect while resizing the window
- */
-function resizeGL() {
-    /*
-    RPM.renderer.setSize(RPM.CANVAS_WIDTH, RPM.CANVAS_HEIGHT);
-    let camera = RPM.gameStack.camera;
-    if (!RPM.isUndefined(camera))
-    {
-        camera.threeCamera.aspect = RPM.CANVAS_WIDTH / RPM.CANVAS_HEIGHT;
-        camera.threeCamera.updateProjectionMatrix();
-    }*/
+    console.log("ok")
 }
 
 /** Main loop of the game

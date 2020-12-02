@@ -21,30 +21,27 @@ export class Platform {
     constructor() {
         throw new Error("This class is static.");
     }
-    /** Show an error object
-     *   @static
-     *   @param {Error} e The error message
+    /**
+     *  Show an error object.
+     *  @static
+     *  @param {Error} e The error message
      */
     static showError(e) {
         Platform.showErrorMessage(e.message + Constants.STRING_NEW_LINE + e
             .stack);
     }
-    /** Show an error message
-     *   @static
-     *   @param {string} msg The error message
+    /**
+     *  Show an error message.
+     *  @static
+     *  @param {string} msg The error message
      */
     static showErrorMessage(msg) {
-        if (Platform.DESKTOP) {
-            const dialog = require('electron').remote.dialog;
-            dialog.showMessageBoxSync({
-                title: 'Error',
-                type: 'error',
-                message: msg
-            });
-        }
-        else {
-            console.log(msg);
-        }
+        const dialog = require('electron').remote.dialog;
+        dialog.showMessageBoxSync({
+            title: 'Error',
+            type: 'error',
+            message: msg
+        });
     }
 }
 Platform.ROOT_DIRECTORY = app.getAppPath();
@@ -58,28 +55,32 @@ Platform.canvasVideos = document.getElementById('video-container');
 Platform.canvasRendering = document.getElementById('rendering');
 Platform.ctx = Platform.canvasHUD.getContext('2d');
 Platform.ctxr = Platform.canvasRendering.getContext("2d");
-/** Set window title
- *   @static
- *   @param {string} title The title to display
+/**
+ *  Set window title.
+ *  @static
+ *  @param {string} title The title to display
  */
 Platform.setWindowTitle = function (title) {
     ipc.send('change-window-title', title);
 };
-/** Set window size
- *   @static
- *   @param {number} w The window width
- *   @param {number} h The window height
- *   @param {boolean} f Indicate if the window is fullscreen
+/**
+ *  Set window size.
+ *  @static
+ *  @param {number} w The window width
+ *  @param {number} h The window height
+ *  @param {boolean} f Indicate if the window is fullscreen
  */
 Platform.setWindowSize = function (w, h, f) {
     ipc.send('change-window-size', w, h, f);
 };
-/** Quit app
- *   @static
+/**
+ *  Quit app.
+ *  @static
  */
 Platform.quit = function () {
     window.close();
 };
+// Display error to main process
 window.onerror = function (msg, url, line, column, err) {
     let str = url ? url + Constants.STRING_COLON + Constants.STRING_EMPTY + line
         + Constants.STRING_NEW_LINE : Constants.STRING_EMPTY;

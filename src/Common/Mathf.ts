@@ -10,7 +10,7 @@
 */
 
 import { Constants } from ".";
-import * as THREE from "../Vendor/three"
+import { THREE } from "../Libs";
 
 /** @class
  * The static class for Math related function.
