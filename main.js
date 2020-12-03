@@ -27,8 +27,8 @@ function createWindow () {
     });
     window.webContents.openDevTools();
     ipc.on('window-error', function(event, err) {
+        window.webContents.openDevTools();
         dialog.showMessageBoxSync({ title: 'Error', type: 'error', message: err });
-        window.close()
     });
     ipc.on('change-window-title', function(event, title) {
         window.setTitle(title);

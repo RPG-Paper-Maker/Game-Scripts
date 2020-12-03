@@ -13,21 +13,24 @@ import { System } from "..";
 import { THREE } from "../Libs";
 
 /** @class
-*   @property {number} red The red color between 0 and 255
-*   @property {number} green The green color between 0 and 255
-*   @property {number} blue The blue color between 0 and 255
-*   @property {number} alpha The alpha value between 0 and 1
-*   @property {string} rgb The rgb value used for ctx
-*   @property {THREE.Color} color The three.js color
-*   @param {Record<string, any>} [json=undefined] Json object describing the color
-*/
+ *  The system color class.
+ *  @extends {System.Base} 
+ *  @property {number} red The red color between 0 and 255
+ *  @property {number} green The green color between 0 and 255
+ *  @property {number} blue The blue color between 0 and 255
+ *  @property {number} alpha The alpha value between 0 and 1
+ *  @property {string} rgb The rgb value used for ctx
+ *  @property {THREE.Color} color The three.js color
+ *  @param {Record<string, any>} [json=undefined] Json object describing the color
+ */
 class Color extends System.Base {
-    red: number;
-    green: number;
-    blue: number;
-    alpha: number;
-    rgb: string;
-    color: THREE.Color
+    
+    public red: number;
+    public green: number;
+    public blue: number;
+    public alpha: number;
+    public rgb: string;
+    public color: THREE.Color
 
     constructor(json?: Record<string, any>) {
         super(json);

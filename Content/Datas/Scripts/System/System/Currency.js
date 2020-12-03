@@ -8,16 +8,15 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-
-import {Icon} from ".";
-
+import { Icon } from "./Icon.js";
 /** @class
- *   A currency of the game
- *   @extends SystemIcon
- *   @param {Object} [json=undefined] Json object describing the currency
+ *  A currency of the game.
+ *  @extends {System.Icon}
+ *  @param {Record<string, any>} [json=undefined] Json object describing the currency
  */
-export class Currency extends Icon {
+class Currency extends Icon {
     constructor(json) {
         super(json);
     }
 }
+export { Currency };

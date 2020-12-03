@@ -9,6 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { System, Datas } from "..";
+import { Enum, ScreenResolution, Utils, Platform } from "../Common";
+import PictureKind = Enum.PictureKind;
+import { Stack } from "../Manager";
+import { Bitmap } from "./Bitmap";
+
 /** @class
  *   A class for pictures drawable in HUD
  *   @extends Bitmap
@@ -28,23 +34,19 @@
  *   @param {number} [w=0] Coords of the bitmap
  *   @param {number} [h=0] Coords of the bitmap
  */
-import {Bitmap} from ".";
-import {Platform} from ".";
+class Picture2D extends Bitmap {
 
-export class Picture2D extends Bitmap {
-
-    zoom: number;
-    opacity: number;
-    angle: number;
-    cover: boolean;
-    stretch: boolean;
-    path: string;
-    loaded: boolean;
-    empty: boolean;
-    image: any;
-    centered: boolean;
-    reverse: boolean;
-
+    public zoom: number;
+    public opacity: number;
+    public angle: number;
+    public cover: boolean;
+    public stretch: boolean;
+    public path: string;
+    public loaded: boolean;
+    public empty: boolean;
+    public image: HTMLImageElement;
+    public centered: boolean;
+    public reverse: boolean;
 
     constructor(path = "", x = 0, y = 0, w = 0, h = 0) {
         super(x, y, w, h);
@@ -63,90 +65,92 @@ export class Picture2D extends Bitmap {
         }
     }
 
-    // -------------------------------------------------------
-    /** Create a picture and then load it
-     *   @static
-     *   @param {SystemPicture} picture The picture to load
-     *   @param {number} x The x position
-     *   @param {number} y The y position
-     *   @param {number} w The w size
-     *   @param {number} h The h size
+    /** 
+     *  Create a picture and then load it
+     *  @static
+     *  @param {System.Picture} picture The picture to load
+     *  @param {number} x The x position
+     *  @param {number} y The y position
+     *  @param {number} w The w size
+     *  @param {number} h The h size
      */
-    static async create(picture, x = 0, y = 0, w = 0, h = 0) {
+    static async create(picture: System.Picture, x: number = 0, y: number = 0, 
+        w: number = 0, h: number = 0) {
         let pic = picture ? new Picture2D(picture.getPath(), x, y, w, h) : new
         Picture2D();
         await pic.load();
         return pic;
     }
 
-    // -------------------------------------------------------
-    /** Create a picture from kind and id and then load it
-     *   @static
-     *   @param {number} id The picture id to load
-     *   @param {PictureKind} kind The picture kind to load
-     *   @param {number} x The x position
-     *   @param {number} y The y position
-     *   @param {number} w The w size
-     *   @param {number} h The h size
+    /** 
+     *  Create a picture from kind and id and then load it
+     *  @static
+     *  @param {number} id The picture id to load
+     *  @param {PictureKind} kind The picture kind to load
+     *  @param {number} x The x position
+     *  @param {number} y The y position
+     *  @param {number} w The w size
+     *  @param {number} h The h size
      */
-    static async createWithID(id, kind, x = 0, y = 0, w = 0, h = 0) {
-        return (await Picture2D.create(RPM.datasGame.pictures.get(kind, id)
-            , x, y, w, h));
+    static async createWithID(id: number, kind: PictureKind, x: number = 0, y: 
+        number = 0, w: number = 0, h: number = 0) {
+        return (await Picture2D.create(Datas.Pictures.get(kind, id), x, y, w, h));
     }
 
-    // -------------------------------------------------------
-    /** Load the image
-     *   @static
-     *   @param {string} path The image path
+    /** 
+     *  Load the image.
+     *  @static
+     *  @param {string} path The image path
+     *  @returns {Promise<HTMLImageElement>}
      */
-    static async loadImage(path) {
+    static async loadImage(path: string): Promise<HTMLImageElement> {
         return (await new Promise((resolve, reject) => {
             let image: any = new Image()
             image.onload = () => {
-                image.empty = false;
                 resolve(image);
             }
             image.onerror = () => {
-                image.empty = true;
                 resolve(image);
             }
             image.src = path;
         }));
     }
 
-    // -------------------------------------------------------
-    /** Load the picture and then check
+    /** 
+     *  Load the picture and then check.
+     *  @async
      */
     async load() {
         if (this.path) {
             // Try loading
             this.image = await Picture2D.loadImage(this.path);
-            this.empty = this.image.empty;
+            this.empty = this.image.width == 0;
 
             // If not empty, configure bitmap size
             if (!this.empty) {
                 this.oW = this.image.width;
                 this.oH = this.image.height;
                 if (this.cover) {
-                    this.w = RPM.CANVAS_WIDTH;
-                    this.h = RPM.CANVAS_HEIGHT;
+                    this.w = ScreenResolution.CANVAS_WIDTH;
+                    this.h = ScreenResolution.CANVAS_HEIGHT;
                 } else if (this.stretch) {
-                    this.w = RPM.getScreenX(this.image.width);
-                    this.h = RPM.getScreenY(this.image.height);
+                    this.w = ScreenResolution.getScreenX(this.image.width);
+                    this.h = ScreenResolution.getScreenY(this.image.height);
                 } else {
-                    this.w = RPM.getScreenMinXY(this.image.width);
-                    this.h = RPM.getScreenMinXY(this.image.height);
+                    this.w = ScreenResolution.getScreenMinXY(this.image.width);
+                    this.h = ScreenResolution.getScreenMinXY(this.image.height);
                 }
-                RPM.requestPaintHUD = true;
+                Stack.requestPaintHUD = true;
                 this.loaded = true;
             }
         }
     }
 
-    // -------------------------------------------------------
-    /** Create a copy of a picture2D
+    /** 
+     *  Create a copy of a picture2D.
+     *  @returns {Picture2D}
      */
-    createCopy() {
+    createCopy(): Picture2D {
         let picture = new Picture2D();
         picture.empty = this.empty;
         picture.path = this.path;
@@ -158,31 +162,34 @@ export class Picture2D extends Bitmap {
         return picture;
     }
 
-    // -------------------------------------------------------
-    /** Draw the picture on HUD
-     *   @param {number} x The x position
-     *   @param {number} y The y position
-     *   @param {number} w The w position
-     *   @param {number} h The h position
-     *   @param {number} [sx=0] The source x position
-     *   @param {number} [sy=0] The source x position
-     *   @param {number} [sw=this.oW] The source width size
-     *   @param {number} [sh=this.oH] The source height size
-     *   @param {boolean} [positionResize=true] Indicate if the position resize
-     *   (screen resolution)
+    /** 
+     *  Draw the picture on HUD
+     *  @param {number} x The x position
+     *  @param {number} y The y position
+     *  @param {number} w The w position
+     *  @param {number} h The h position
+     *  @param {number} [sx=0] The source x position
+     *  @param {number} [sy=0] The source x position
+     *  @param {number} [sw=this.oW] The source width size
+     *  @param {number} [sh=this.oH] The source height size
+     *  @param {boolean} [positionResize=true] Indicate if the position resize
+     *  (screen resolution)
      */
-    draw(x, y, w, h, sx = 0, sy = 0, sw = this.oW, sh = this.oH, positionResize
+    draw(x: number, y: number, w: number, h: number, sx: number = 0, sy: number 
+        = 0, sw: number = this.oW, sh: number = this.oH, positionResize: boolean
         = true) {
         if (this.loaded && sw > 0 && sh > 0) {
             // Default values
-            x = RPM.isUndefined(x) ? this.x : (positionResize ? RPM.getScreenX(
-                x) : x);
-            y = RPM.isUndefined(y) ? this.y : (positionResize ? RPM.getScreenY(
-                y) : y);
-            w = RPM.isUndefined(w) ? this.w * this.zoom : (this.stretch ? RPM
-                .getScreenX(w) : RPM.getScreenMinXY(w));
-            h = RPM.isUndefined(h) ? this.h * this.zoom : (this.stretch ? RPM
-                .getScreenY(h) : RPM.getScreenMinXY(h));
+            x = Utils.isUndefined(x) ? this.x : (positionResize ? 
+                ScreenResolution.getScreenX(x) : x);
+            y = Utils.isUndefined(y) ? this.y : (positionResize ? 
+                ScreenResolution.getScreenY(y) : y);
+            w = Utils.isUndefined(w) ? this.w * this.zoom : (this.stretch ? 
+                ScreenResolution.getScreenX(w) : ScreenResolution.getScreenMinXY
+                (w));
+            h = Utils.isUndefined(h) ? this.h * this.zoom : (this.stretch ? 
+                ScreenResolution.getScreenY(h) : ScreenResolution.getScreenMinXY
+                (h));
 
             // Draw the image according to all parameters
             let angle = this.angle * Math.PI / 180;
@@ -219,3 +226,5 @@ export class Picture2D extends Bitmap {
         }
     }
 }
+
+export { Picture2D }

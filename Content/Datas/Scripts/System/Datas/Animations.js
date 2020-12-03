@@ -8,15 +8,14 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./index.js";
 /** @class
  *   All the animations datas
  *   @property {SystemAnimation[]} list List of all the animations of the game
  *   according to ID
  */
-class Animations extends Base {
+class Animations {
     constructor() {
-        super();
+        throw new Error("This is a static class!");
     }
     // -------------------------------------------------------
     /** Read the JSON file associated to troops.

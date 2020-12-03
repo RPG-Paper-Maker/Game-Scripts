@@ -22,7 +22,7 @@ class KeyBoards
 
     constructor()
     {
-
+        throw new Error("This is a static class!");
     }
 
     // -------------------------------------------------------

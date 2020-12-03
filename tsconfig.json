@@ -10,8 +10,7 @@
     "esModuleInterop": true,
     "skipLibCheck": false,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "./Content/Datas/Scripts/System",
-    "allowJs": true
+    "outDir": "./Content/Datas/Scripts/System"
   },
-  "include": ["./src"]
+  "include": ["./src/**/*.ts"]
 }

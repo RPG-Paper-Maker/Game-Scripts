@@ -8,17 +8,18 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import * as System from "./index.js";
 import { Utils } from "../Common/index.js";
+import { Base } from "./Base.js";
 /** @class
  *  A name that can have several translations.
+ *  @extends {System.Base}
  *  @property {string[]} [names=[]] The different names list according to lang
  *  ID
  *  @param {Record<string, any>} [json=undefined] Json object describing the
  *  name in sevaral langs
  */
-class Translatable extends System.Base {
-    constructor(json = undefined) {
+class Translatable extends Base {
+    constructor(json) {
         super(json);
     }
     /**

@@ -9,9 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Stack } from "./Manager"
-import { Utils } from "./Common/Utils.js";
-import { Datas } from ".";
+import { Datas, Manager } from ".";
+import { Utils } from "./Common";
 
 let loadedDatas = false;
 
@@ -19,8 +18,8 @@ let loadedDatas = false;
 */
 function initialize() {
     //RPM.songsManager = new SongsManager();
-    Stack.loadingDelay = 0;
-    Stack.clearHUD();
+    Manager.Stack.loadingDelay = 0;
+    Manager.Stack.clearHUD();
 }
 
 /** Load the game stack and datas
@@ -30,10 +29,9 @@ async function load() {
     await Datas.Systems.read();
     //RPM.gameStack.pushTitleScreen();
     //RPM.datasGame.loaded = true;
-    // Now that antialias is on or off, initialize GL stuff
-    Stack.initializeGL();
-    Stack.resizeGL();
-    Stack.requestPaintHUD = true;
+    Manager.GL.initialize();
+    Manager.GL.resize();
+    Manager.Stack.requestPaintHUD = true;
     console.log("ok")
 }
 
@@ -59,10 +57,11 @@ function loop()
     //Stack.drawHUD();
 
     // Elapsed time
-    Stack.elapsedTime = new Date().getTime() - Stack.lastUpdateTime;
-    Stack.averageElapsedTime = (Stack.averageElapsedTime + Stack.elapsedTime) / 
-        2;
-    Stack.lastUpdateTime = new Date().getTime();
+    Manager.Stack.elapsedTime = new Date().getTime() - Manager.Stack
+        .lastUpdateTime;
+    Manager.Stack.averageElapsedTime = (Manager.Stack.averageElapsedTime + 
+        Manager.Stack.elapsedTime) / 2;
+    Manager.Stack.lastUpdateTime = new Date().getTime();
 }
 
 // -------------------------------------------------------

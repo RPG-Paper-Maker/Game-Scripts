@@ -24,8 +24,6 @@ import { THREE } from "../Libs";
  */
 class Base
 {
-    public static renderer: THREE.WebGLRenderer;
-
     public camera: Camera
     public reactionInterpreters: number;
     public parallelCommands: number;

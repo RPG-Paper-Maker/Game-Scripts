@@ -23,7 +23,16 @@ abstract class Base {
         throw new Error("This is a static class!");
     }
 
-    static get(id: number, list: unknown[], name: string): unknown {
+    /** 
+     *  Get an element in a list by ID safely.
+     *  @static
+     *  @param {number} id The ID to select
+     *  @param {T[]} list The list to browse
+     *  @param {string} name The name of the element to describe in the error 
+     *  message
+     *  @returns {T}
+     */
+    static get<T>(id: number, list: T[], name: string): T {
         let v = list[id];
         if (Utils.isUndefined(v)) {
             Platform.showErrorMessage(Base.STRING_ERROR_GET_1 + Utils

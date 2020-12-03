@@ -10,5 +10,6 @@
 */
 export * from "./Base.js";
 export * from "./Keyboards.js";
+export * from "./Pictures.js";
 export * from "./Settings.js";
 export * from "./Systems.js";

@@ -10,7 +10,7 @@
 */
 import { IO, Paths, Platform, ScreenResolution, Utils } from "../Common/index.js";
 import * as System from "../System/index.js";
-import { Manager } from "../index.js";
+import { Manager, Datas } from "../index.js";
 /** @class
 *   All the System datas.
 *   @property {SystemLang} projectName The project name
@@ -45,6 +45,33 @@ import { Manager } from "../index.js";
 class Systems {
     constructor() {
         throw new Error("This is a static class!");
+    }
+    /**
+     *  Get the item type by ID safely.
+     *  @static
+     *  @param {number} id
+     *  @returns {string}
+     */
+    static getItemType(id) {
+        return Datas.Base.get(id, this.itemsTypes, "item type");
+    }
+    /**
+     *  Get the color by ID safely.
+     *  @static
+     *  @param {number} id
+     *  @returns {System.Color}
+     */
+    static getColor(id) {
+        return Datas.Base.get(id, this.colors, "color");
+    }
+    /**
+     *  Get the currency by ID safely.
+     *  @static
+     *  @param {number} id
+     *  @returns {string}
+     */
+    static getCurrency(id) {
+        return Datas.Base.get(id, this.currencies, "currency");
     }
     /**
      *  Read the JSON file associated to System.
@@ -86,6 +113,9 @@ class Systems {
         this.mapFrameDuration = System.DynamicValue.readOrDefaultNumber(json.mfd, 150);
         // Path BR
         this.PATH_BR = Paths.FILES + json.pathBR;
+        // Path DLC
+        this.PATH_DLCS = Paths.FILES + (await IO.parseFileJSON(Platform
+            .ROOT_DIRECTORY + Paths.FILE_DLCS)).p;
         // Hero beginning
         this.ID_MAP_START_HERO = json.idMapHero;
         this.ID_OBJECT_START_HERO = json.idObjHero;
@@ -101,10 +131,10 @@ class Systems {
                 return element.name;
             } });
         this.colors = Utils.readJSONSystemList(json.colors, { cons: System.Color });
-        console.log(this.colors);
+        this.currencies = Utils.readJSONSystemList(json.currencies, { cons: System.Currency });
+        this.windowSkins = Utils.readJSONSystemList(json.wskins, { cons: System.WindowSkin });
+        console.log(this.windowSkins);
         /*
-        this.currencies = RPM.readJSONSystemList(json.currencies, Currency);
-        this.windowSkins = RPM.readJSONSystemList(json.wskins, SystemWindowSkin);
         this.cameraProperties = RPM.readJSONSystemList(json.cp,
             SystemCameraProperties);
         this.detections = RPM.readJSONSystemList(json.d, Detection);

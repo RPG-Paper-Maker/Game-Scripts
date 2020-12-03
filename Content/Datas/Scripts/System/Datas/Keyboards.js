@@ -17,6 +17,7 @@
 */
 class KeyBoards {
     constructor() {
+        throw new Error("This is a static class!");
     }
     // -------------------------------------------------------
     /** Test if a key id can be equal to a keyboard System object

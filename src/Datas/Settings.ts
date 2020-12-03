@@ -24,10 +24,12 @@ class Settings {
         throw new Error("This is a static class!");
     }
 
-    /** Read the settings file.
+    /** 
+     *  Read the settings file.
      *  @static
      */
     static async read() {
+        // Settings
         let json = await IO.parseFileJSON(Platform.ROOT_DIRECTORY + Paths
             .FILE_SETTINGS);
         this.kb = {};
@@ -37,7 +39,8 @@ class Settings {
         }
     }
 
-    /** Write the settings file.
+    /** 
+     *  Write the settings file.
      *  @static
      */
     static write() {
@@ -50,7 +53,8 @@ class Settings {
         IO.saveFile(Platform.ROOT_DIRECTORY + Paths.FILE_SETTINGS, json);
     }
 
-    /** Update Keyboard settings.
+    /** 
+     *  Update Keyboard settings.
      *  @static
      */
     static updateKeyboard(id: number, sc: number) {

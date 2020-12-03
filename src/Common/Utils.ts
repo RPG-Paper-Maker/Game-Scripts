@@ -247,4 +247,27 @@ export class Utils {
         }
         return list;
     }
+
+    /** 
+     *  Get the number of fields of an object
+     *  @static
+     *  @param {Object} obj The object to count fields
+     *  @returns {number}
+     */
+    static countFields(obj: Record<string, any>): number {
+        if (obj.__count__ !== undefined) { // Old FF
+            return obj.__count__;
+        }
+        if (Object.keys) { // ES5
+            return Object.keys(obj).length;
+        }
+        // Everything else:
+        let c = 0;
+        for (let p in obj) {
+            if (obj.hasOwnProperty(p)) {
+                c += 1;
+            }
+        }
+        return c;
+    }
 }

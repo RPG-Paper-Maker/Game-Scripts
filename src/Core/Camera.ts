@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ScreenResolution } from "../Common/index.js";
-import { THREE } from "../Libs/index.js";
+import { ScreenResolution } from "../Common";
+import { THREE } from "../Libs";
 
 /** @class
 *   The camera of the current map

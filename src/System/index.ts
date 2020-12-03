@@ -11,5 +11,9 @@
 
 export * from "./Base";
 export * from "./Color";
+export * from "./Currency";
 export * from "./DynamicValue";
+export * from "./Icon";
+export * from "./Picture";
 export * from "./Translatable";
+export * from "./WindowSkin";

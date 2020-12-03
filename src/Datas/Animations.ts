@@ -9,18 +9,16 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from ".";
-
 /** @class
  *   All the animations datas
  *   @property {SystemAnimation[]} list List of all the animations of the game
  *   according to ID
  */
-class Animations extends Base {
+class Animations {
     public list: number[];
 
     constructor() {
-        super();
+        throw new Error("This is a static class!");
     }
 
     // -------------------------------------------------------

@@ -12,7 +12,20 @@
 import { Mathf } from "../Common";
 
 /** @class
- *  The data class for anchors
+ *  The data class for anchors.
+ *  @property {{x: number, y: number}} [MIDDLE_TOP={x: 0, y: 1}]
+ *  @property {{x: number, y: number}} [MIDDLE={x: 0.5, y: 0.5}]
+ *  @property {{x: number, y: number}} [MIDDLE_BOTTOM={x: 0.5, y: 0}]
+ *  @property {{x: number, y: number}} [LEFT_TOP={x: 0, y: 1}]
+ *  @property {{x: number, y: number}} [LEFT_MIDDLE={x: 0, y: 0.5}]
+ *  @property {{x: number, y: number}} [LEFT_BOTTOM={x: 0, y: 0}]
+ *  @property {{x: number, y: number}} [RIGHT_TOP={x: 1, y: 1}]
+ *  @property {{x: number, y: number}} [RIGHT_MIDDLE={x: 1, y: 0.5}]
+ *  @property {{x: number, y: number}} [RIGHT_BOTTOM={x: 1, y: 0}]
+ *  @property {number} x the x anchors (capped from 0 to 1)
+ *  @property {number} y the y anchors (capped from 0 to 1)
+ *  @param {number} x the x anchors (capped from 0 to 1)
+ *  @param {number} y the y anchors (capped from 0 to 1)
  */
 export class Anchor2D {
 
@@ -29,19 +42,14 @@ export class Anchor2D {
     public x: number;
     public y: number;
 
-    /**
-     * The data class for 2D anchors
-     * @param x the x anchors (capped from 0 to 1)
-     * @param y the y anchors (capped from 0 to 1)
-     */
     constructor(x = 0.5, y = 0) {
         this.x = Mathf.clamp(x, 0, 1);
         this.y = Mathf.clamp(y, 0, 1);
     }
 
     /**
-     * Set the anchors using object format. (can also use premade)
-     * @param {{x: number, y: number}} anchors
+     *  Set the anchors using object format (can also use premade).
+     *  @param {{x: number, y: number}} anchors
      */
     public set(anchors: { x: number, y: number }) {
         this.x = Mathf.clamp(anchors.x, 0, 1);

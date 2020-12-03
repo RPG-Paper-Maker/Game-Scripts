@@ -10,5 +10,9 @@
 */
 export * from "./Base.js";
 export * from "./Color.js";
+export * from "./Currency.js";
 export * from "./DynamicValue.js";
+export * from "./Icon.js";
+export * from "./Picture.js";
 export * from "./Translatable.js";
+export * from "./WindowSkin.js";

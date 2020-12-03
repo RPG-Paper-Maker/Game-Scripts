@@ -11,7 +11,7 @@
 
 import { IO, Paths, Platform, ScreenResolution, Utils } from "../Common";
 import * as System from "../System";
-import { Manager } from "..";
+import { Manager, Datas } from "..";
 
 /** @class
 *   All the System datas.
@@ -50,6 +50,7 @@ class Systems {
     public static PORTIONS_RAY_NEAR: number;
     public static FRAMES: number;
     public static PATH_BR: string;
+    public static PATH_DLCS: string;
     public static ID_MAP_START_HERO: number;
     public static ID_OBJECT_START_HERO: number;
     public static projectName: System.Translatable;
@@ -59,17 +60,47 @@ class Systems {
     public static mapFrameDuration: System.DynamicValue;
     private static itemsTypes: string[];
     private static colors: System.Color[]
+    private static currencies: System.Currency[];
+    private static windowSkins: System.WindowSkin[];
 
-    constructor()
-    {
+    constructor() {
         throw new Error("This is a static class!");
+    }
+
+    /** 
+     *  Get the item type by ID safely.
+     *  @static
+     *  @param {number} id
+     *  @returns {string}
+     */
+    static getItemType(id: number): string {
+        return Datas.Base.get(id, this.itemsTypes, "item type");
+    }
+
+    /** 
+     *  Get the color by ID safely.
+     *  @static
+     *  @param {number} id
+     *  @returns {System.Color}
+     */
+    static getColor(id: number): System.Color {
+        return Datas.Base.get(id, this.colors, "color");
+    }
+
+    /** 
+     *  Get the currency by ID safely.
+     *  @static
+     *  @param {number} id
+     *  @returns {string}
+     */
+    static getCurrency(id: number): System.Currency {
+        return Datas.Base.get(id, this.currencies, "currency");
     }
 
     /** 
      *  Read the JSON file associated to System.
      */
-    static async read()
-    {
+    static async read() {
         let json = await IO.parseFileJSON(Platform.ROOT_DIRECTORY + Paths
             .FILE_SYSTEM);
         
@@ -114,6 +145,10 @@ class Systems {
         // Path BR
         this.PATH_BR = Paths.FILES + json.pathBR;
 
+        // Path DLC
+        this.PATH_DLCS = Paths.FILES + (await IO.parseFileJSON(Platform
+            .ROOT_DIRECTORY + Paths.FILE_DLCS)).p;
+
         // Hero beginning
         this.ID_MAP_START_HERO = json.idMapHero;
         this.ID_OBJECT_START_HERO = json.idObjHero;
@@ -134,9 +169,12 @@ class Systems {
             return element.name;
         }});
         this.colors = Utils.readJSONSystemList(json.colors, { cons: System.Color });
+        this.currencies = Utils.readJSONSystemList(json.currencies, { cons: 
+            System.Currency });
+        this.windowSkins = Utils.readJSONSystemList(json.wskins, { cons: 
+            System.WindowSkin });
+            console.log(this.windowSkins)
         /*
-        this.currencies = RPM.readJSONSystemList(json.currencies, Currency);
-        this.windowSkins = RPM.readJSONSystemList(json.wskins, SystemWindowSkin);
         this.cameraProperties = RPM.readJSONSystemList(json.cp, 
             SystemCameraProperties);
         this.detections = RPM.readJSONSystemList(json.d, Detection);
@@ -171,6 +209,7 @@ class Systems {
         // Initialize loading scene now that basics are loaded
         RPM.loadingScene = new SceneLoading();
         */
+       
     }
 
     // -------------------------------------------------------

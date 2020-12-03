@@ -9,10 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Scene, Datas } from "..";
+import { Scene } from "..";
 import { Utils, Platform, ScreenResolution } from "../Common";
-import { Camera, Game } from "../Core";
-import { THREE } from "../Libs";
+import { Game } from "../Core";
 
 /** @class
  *  The game stack that is organizing the game scenes.
@@ -140,38 +139,6 @@ class Stack {
         .CANVAS_HEIGHT);
         Platform.ctx.lineWidth = 1;
         Platform.ctx.imageSmoothingEnabled = false;
-    }
-
-    /** 
-     *  Initialize the openGL stuff.
-     */
-    static initializeGL() {
-        Scene.Base.renderer = new THREE.WebGLRenderer({antialias: Datas.Systems
-            .antialias, alpha: true});
-        Scene.Base.renderer.autoClear = false;
-        Scene.Base.renderer.setSize(ScreenResolution.CANVAS_WIDTH, ScreenResolution
-            .CANVAS_HEIGHT, true);
-        if (Datas.Systems.antialias)
-        {
-            Scene.Base.renderer.setPixelRatio(2);
-        }
-        Platform.canvas3D.appendChild(Scene.Base.renderer.domElement);
-    }
-
-    /** 
-     *  Set the camera aspect while resizing the window.
-     */
-    static resizeGL() {
-        Scene.Base.renderer.setSize(ScreenResolution.CANVAS_WIDTH, 
-            ScreenResolution.CANVAS_HEIGHT, true);
-        let camera: Camera
-        for (let i = 0, l = this.content.length; i < l; i++) {
-            camera = this.content[i].camera;
-            if (!Utils.isUndefined(camera))
-            {
-                camera.resizeGL();
-            }
-        }
     }
 
     /** 

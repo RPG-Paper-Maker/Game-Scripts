@@ -21,16 +21,17 @@ interface StructJSONDynamicValue
     v: any;
 }
 
-// TODO : This class actually impose a lots of typing error I Have to mention that to Wano so the typing get simplified.
 /** @class
- *   The class who handle dynamic value.
- *   @property {PrimitiveValueKind} kind The kind of value
- *   @property {any} value The value
- *   @param {Record<string, any>} [json=undefined] Json object describing the value
+ *  The class who handle dynamic value.
+ *  @extends {System.Base}
+ *  @property {PrimitiveValueKind} kind The kind of value
+ *  @property {any} value The value
+ *  @param {Record<string, any>} [json=undefined] Json object describing the value
  */
 class DynamicValue extends System.Base {
-    kind: PrimitiveValueKind;
-    value: any;
+    
+    public kind: PrimitiveValueKind;
+    public value: any;
 
     constructor(json?: Record<string, any>) {
         super(json);
