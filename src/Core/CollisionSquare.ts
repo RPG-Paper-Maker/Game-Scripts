@@ -9,7 +9,6 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Rectangle } from "./Rectangle";
 import { Datas } from "..";
 import { Utils } from "../Common";
 

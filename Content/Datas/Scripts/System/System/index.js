@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 export * from "./Base.js";
+export * from "./CameraProperties.js";
 export * from "./Color.js";
 export * from "./Currency.js";
 export * from "./DynamicValue.js";

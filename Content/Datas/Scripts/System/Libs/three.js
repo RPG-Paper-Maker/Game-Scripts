@@ -8886,7 +8886,7 @@ Object.defineProperty( Material.prototype, 'needsUpdate', {
  * }
  */
 
-function MeshBasicMaterial( parameters = undefined ) {
+function MeshBasicMaterial( parameters ) {
 
 	Material.call( this );
 
@@ -8918,8 +8918,6 @@ function MeshBasicMaterial( parameters = undefined ) {
 
 	this.skinning = false;
 	this.morphTargets = false;
-
-	this.visible = this.visible;
 
 	this.setValues( parameters );
 
@@ -11987,7 +11985,7 @@ function PerspectiveCamera( fov = 50, aspect = 1, near = 0.1, far = 2000 ) {
 
 	this.filmGauge = 35;	// width of the film (default in millimeters)
 	this.filmOffset = 0;	// horizontal film offset (same unit as gauge)
-	this.updateProjectionMatrix = PerspectiveCamera.prototype.updateProjectionMatrix;
+
 	this.updateProjectionMatrix();
 
 }

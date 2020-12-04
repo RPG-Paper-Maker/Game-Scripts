@@ -16,6 +16,7 @@ export class Constants {
         throw new Error("This is a static class!");
     }
 }
+Constants.BASIC_SQUARE_SIZE = 32;
 Constants.SMALL_FONT_SIZE = 8;
 Constants.MEDIUM_FONT_SIZE = 10;
 Constants.SQUARE_SIZE = 32;

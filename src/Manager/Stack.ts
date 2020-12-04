@@ -33,6 +33,7 @@ class Stack {
     public static averageElapsedTime = 0;
     public static lastUpdateTime = new Date().getTime();
     public static game: Game;
+    public static currentMap: Scene.Map;
 
     constructor() {
         throw new Error("This is a static class");

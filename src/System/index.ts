@@ -10,8 +10,10 @@
 */
 
 export * from "./Base";
+export * from "./CameraProperties";
 export * from "./Color";
 export * from "./Currency";
+export * from "./Detection";
 export * from "./DynamicValue";
 export * from "./Icon";
 export * from "./Picture";

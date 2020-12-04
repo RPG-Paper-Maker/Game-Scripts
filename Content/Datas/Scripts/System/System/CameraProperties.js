@@ -8,11 +8,12 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-
-import {BaseSystem} from "./BaseSystem";
-import {DynamicValue} from ".";
-import {RPM} from "../Core";
-
+import { Base } from "./Base.js";
+import { DynamicValue } from "./DynamicValue.js";
+import { Utils, ScreenResolution, Constants } from "../Common/index.js";
+import { THREE } from "../Libs/index.js";
+import { Datas } from "../index.js";
+const { Howl, Howler } = require('./Content/Datas/Scripts/System/Libs/howler.js');
 /** @class
  *   A camera properties of the game
  *   @property {number} distance The distance between the target position and
@@ -33,85 +34,57 @@ import {RPM} from "../Core";
  *   @property {number} fov The field of fiew
  *   @property {number} near The near
  *   @property {number} far The far
- *   @param {Object} [json=undefined] Json object describing the camera
+ *   @param {Record<string, any>} [json=undefined] Json object describing the camera
  *   properties
  */
-export class CameraProperties extends BaseSystem {
-
-    // TODO : convert those values to Vector3?
-    // TODO : create an Angle.ts class?
-    distance: DynamicValue;
-    horizontalAngle: DynamicValue;
-    verticalAngle: DynamicValue;
-    targetOffsetX: DynamicValue;
-    targetOffsetY: DynamicValue;
-    targetOffsetZ: DynamicValue;
-    isSquareTargetOffsetX: boolean;
-    isSquareTargetOffsetY: boolean;
-    isSquareTargetOffsetZ: boolean;
-    fov: DynamicValue;
-    near: DynamicValue;
-    far: DynamicValue;
-
-    // TODO :  targetOffset: Vector3;
+export class CameraProperties extends Base {
     constructor(json) {
         super(json);
     }
-
-    public setup() {
-        this.distance = 0;
-        this.horizontalAngle = 0;
-        this.verticalAngle = 0;
-        this.targetOffsetX = 0;
-        this.targetOffsetY = 0;
-        this.targetOffsetZ = 0;
-    }
-
-    // -------------------------------------------------------
-    /** Read the JSON associated to the camera properties
-     *   @param {Object} json Json object describing the camera properties
+    /**
+     *  Read the JSON associated to the camera properties.
+     *  @param {Record<string, any>} json Json object describing the camera
+     *  properties
      */
     read(json) {
         this.distance = DynamicValue.readOrDefaultNumberDouble(json.d, 250);
-        this.horizontalAngle = DynamicValue.readOrDefaultNumberDouble(json.ha,
-            -90);
+        this.horizontalAngle = DynamicValue.readOrDefaultNumberDouble(json.ha, -90);
         this.verticalAngle = DynamicValue.readOrDefaultNumberDouble(json.va, 55);
         this.targetOffsetX = DynamicValue.readOrDefaultNumber(json.tox, 0);
         this.targetOffsetY = DynamicValue.readOrDefaultNumber(json.toy, 0);
         this.targetOffsetZ = DynamicValue.readOrDefaultNumber(json.toz, 0);
-        this.isSquareTargetOffsetX = RPM.defaultValue(json.istox, true);
-        this.isSquareTargetOffsetY = RPM.defaultValue(json.istoy, true);
-        this.isSquareTargetOffsetZ = RPM.defaultValue(json.istoz, true);
+        this.isSquareTargetOffsetX = Utils.defaultValue(json.istox, true);
+        this.isSquareTargetOffsetY = Utils.defaultValue(json.istoy, true);
+        this.isSquareTargetOffsetZ = Utils.defaultValue(json.istoz, true);
         this.fov = DynamicValue.readOrDefaultNumberDouble(json.fov, 45);
         this.near = DynamicValue.readOrDefaultNumberDouble(json.n, 1);
         this.far = DynamicValue.readOrDefaultNumberDouble(json.f, 100000);
     }
-
-    // -------------------------------------------------------
-    /** Initialize a camera according this System properties
-     *   @param {Camera} camera The camera
+    /**
+     *  Initialize a camera according this System properties
+     *  @param {Camera} camera The camera
      */
     initializeCamera(camera) {
-        camera.threeCamera = new THREE.PerspectiveCamera(this.fov.getValue(),
-            RPM.CANVAS_WIDTH / RPM.CANVAS_HEIGHT, this.near.getValue(), this.far
-                .getValue());
-        camera.distance = this.distance.getValue() * (RPM.SQUARE_SIZE / RPM
-            .BASIC_SQUARE_SIZE);
+        camera.perspectiveCamera = new THREE.PerspectiveCamera(this.fov
+            .getValue(), ScreenResolution.CANVAS_WIDTH / ScreenResolution
+            .CANVAS_HEIGHT, this.near.getValue(), this.far.getValue());
+        camera.distance = this.distance.getValue() * (Datas.Systems.SQUARE_SIZE
+            / Constants.BASIC_SQUARE_SIZE);
         camera.horizontalAngle = this.horizontalAngle.getValue();
         camera.verticalAngle = this.verticalAngle.getValue();
         camera.verticalRight = true;
         camera.targetPosition = new THREE.Vector3();
         let x = this.targetOffsetX.getValue();
         if (this.isSquareTargetOffsetX) {
-            x *= RPM.SQUARE_SIZE;
+            x *= Datas.Systems.SQUARE_SIZE;
         }
         let y = this.targetOffsetY.getValue();
         if (this.isSquareTargetOffsetY) {
-            y *= RPM.SQUARE_SIZE;
+            y *= Datas.Systems.SQUARE_SIZE;
         }
         let z = this.targetOffsetZ.getValue();
         if (this.isSquareTargetOffsetZ) {
-            z *= RPM.SQUARE_SIZE;
+            z *= Datas.Systems.SQUARE_SIZE;
         }
         camera.targetOffset = new THREE.Vector3(x, y, z);
     }

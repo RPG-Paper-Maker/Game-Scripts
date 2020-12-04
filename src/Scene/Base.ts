@@ -10,7 +10,6 @@
 */
 
 import { Camera } from "../Core";
-import { THREE } from "../Libs";
 
 /** @class
  *   Abstract class for the game stack.

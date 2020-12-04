@@ -20,6 +20,7 @@ import { THREE } from "../Libs";
  */
 class Collisions {
 
+    // @ts-ignore
     public static BB_MATERIAL = new THREE.MeshBasicMaterial();
 
     constructor() {

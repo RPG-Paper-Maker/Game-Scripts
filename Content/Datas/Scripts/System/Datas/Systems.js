@@ -74,6 +74,24 @@ class Systems {
         return Datas.Base.get(id, this.currencies, "currency");
     }
     /**
+     *  Get the window skin by ID safely.
+     *  @static
+     *  @param {number} id
+     *  @returns {string}
+     */
+    static getWindowSkin(id) {
+        return Datas.Base.get(id, this.windowSkins, "window skin");
+    }
+    /**
+     *  Get the camera properties by ID safely.
+     *  @static
+     *  @param {number} id
+     *  @returns {string}
+     */
+    static getCameraProperties(id) {
+        return Datas.Base.get(id, this.cameraProperties, "camera properties");
+    }
+    /**
      *  Read the JSON file associated to System.
      */
     static async read() {
@@ -133,42 +151,40 @@ class Systems {
         this.colors = Utils.readJSONSystemList(json.colors, { cons: System.Color });
         this.currencies = Utils.readJSONSystemList(json.currencies, { cons: System.Currency });
         this.windowSkins = Utils.readJSONSystemList(json.wskins, { cons: System.WindowSkin });
-        console.log(this.windowSkins);
+        this.cameraProperties = Utils.readJSONSystemList(json.cp, { cons: System.CameraProperties });
         /*
-        this.cameraProperties = RPM.readJSONSystemList(json.cp,
-            SystemCameraProperties);
-        this.detections = RPM.readJSONSystemList(json.d, Detection);
-        this.skyboxes = RPM.readJSONSystemList(json.sb, SystemSkybox);
-        this.fontSizes = RPM.readJSONSystemList(json.fs, (element) =>
-        {
-            return SystemValue.readOrDefaultNumber(element.s, 0);
-        }, false);
-        this.fontNames = RPM.readJSONSystemList(json.fn, (element) =>
-        {
-            return SystemValue.readOrDefaultMessage(element.f, RPM.DEFAULT_FONT);
-        }, false);
-        this.speeds = RPM.readJSONSystemList(json.sf, (element) =>
-        {
-            return SystemValue.readOrDefaultNumberDouble(element.v, 1);
-        }, false);
-        this.frequencies = RPM.readJSONSystemList(json.f, (element) =>
-        {
-            return SystemValue.readOrDefaultNumberDouble(element.v, 1);
-        }, false);
-        
-        // Sounds
-        this.soundCursor = new SystemPlaySong(SongKind.Sound, json.scu);
-        this.soundConfirmation = new SystemPlaySong(SongKind.Sound, json.sco);
-        this.soundCancel = new SystemPlaySong(SongKind.Sound, json.sca);
-        this.soundImpossible = new SystemPlaySong(SongKind.Sound, json.si);
+    this.detections = RPM.readJSONSystemList(json.d, Detection);
+    this.skyboxes = RPM.readJSONSystemList(json.sb, SystemSkybox);
+    this.fontSizes = RPM.readJSONSystemList(json.fs, (element) =>
+    {
+        return SystemValue.readOrDefaultNumber(element.s, 0);
+    }, false);
+    this.fontNames = RPM.readJSONSystemList(json.fn, (element) =>
+    {
+        return SystemValue.readOrDefaultMessage(element.f, RPM.DEFAULT_FONT);
+    }, false);
+    this.speeds = RPM.readJSONSystemList(json.sf, (element) =>
+    {
+        return SystemValue.readOrDefaultNumberDouble(element.v, 1);
+    }, false);
+    this.frequencies = RPM.readJSONSystemList(json.f, (element) =>
+    {
+        return SystemValue.readOrDefaultNumberDouble(element.v, 1);
+    }, false);
+    
+    // Sounds
+    this.soundCursor = new SystemPlaySong(SongKind.Sound, json.scu);
+    this.soundConfirmation = new SystemPlaySong(SongKind.Sound, json.sco);
+    this.soundCancel = new SystemPlaySong(SongKind.Sound, json.sca);
+    this.soundImpossible = new SystemPlaySong(SongKind.Sound, json.si);
 
-        // Window skin options
-        this.dbOptions = EventCommand.getEventCommand(json.dbo);
-        this.dbOptions.update();
+    // Window skin options
+    this.dbOptions = EventCommand.getEventCommand(json.dbo);
+    this.dbOptions.update();
 
-        // Initialize loading scene now that basics are loaded
-        RPM.loadingScene = new SceneLoading();
-        */
+    // Initialize loading scene now that basics are loaded
+    RPM.loadingScene = new SceneLoading();
+    */
     }
     // -------------------------------------------------------
     /** Update the RPM.modelHero global variable by loading the hero model

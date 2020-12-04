@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { THREE } from "../Libs";
+import { THREE } from "../Libs"
 
 /**
  * The data class who hold 2D coordinates.

@@ -10,3 +10,4 @@
 */
 export * from "./Base.js";
 export * from "./Loading.js";
+export * from "./Map.js";

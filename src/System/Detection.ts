@@ -9,50 +9,47 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import {BaseSystem} from ".";
-import {Enum, RPM} from "../Core";
-import Orientation = Enum.Orientation;
+import { Base } from "./Base";
+import { Utils } from "../Common";
+import { MapObject } from "../Core";
 
 /** @class
  *   A detection of the game
  *   @property {number[][]} boxes List of boxes for detection
- *   @param {Object} [json=undefined] Json object describing the detection
+ *   @param {Record<string, any>} [json=undefined] Json object describing the detection
  */
-class Detection extends BaseSystem {
+class Detection extends Base {
 
     boxes: number[][];
 
-    constructor(json) {
+    constructor(json?: Record<string, any>) {
         super(json);
     }
 
-    public setup() {
-        this.boxes = [];
-    }
-
-    // -------------------------------------------------------
-    /** Read the JSON associated to the detection
-     *   @param {Object} json Json object describing the detection
+    /** 
+     *  Read the JSON associated to the detection
+     *  @param {Record<string, any>} json Json object describing the detection
      */
-    read(json) {
-        let jsonList = RPM.defaultValue(json.b, []);
+    read(json: Record<string, any>) {
+        let jsonList = Utils.defaultValue(json.b, []);
         let l = jsonList.length;
         this.boxes = new Array(l);
         let jsonElement;
         for (let i = 0; i < l; i++) {
             jsonElement = jsonList[i];
-            this.boxes[i] = [jsonElement.k, RPM.defaultValue(jsonElement.v.bhs,
-                1), RPM.defaultValue(jsonElement.v.bhp, 0)];
+            this.boxes[i] = [jsonElement.k, Utils.defaultValue(jsonElement.v.bhs
+                , 1), Utils.defaultValue(jsonElement.v.bhp, 0)];
         }
     }
 
-    // -------------------------------------------------------
-    /** Check the collision between sender and object
-     *   @param {MapObject} sender The object that sent test collision
-     *   @param {MapObject} object The object to test the collision
-     *   @returns {boolean}
+    /** 
+     *  Check the collision between sender and object
+     *  @param {MapObject} sender The object that sent test collision
+     *  @param {MapObject} object The object to test the collision
+     *  @returns {boolean}
      */
-    checkCollision(sender, object) {
+    checkCollision(sender: MapObject, object: MapObject) {
+        /*
         let boundingBoxes = this.getBoundingBoxes(sender);
         for (let i = 0, l = boundingBoxes.length; i < l; i++) {
             MapPortion.applyBoxSpriteTransforms(RPM.BB_BOX_DETECTION,
@@ -61,7 +58,7 @@ class Detection extends BaseSystem {
                 return true;
             }
         }
-        return false;
+        return false;*/
     }
 
     // -------------------------------------------------------
@@ -70,6 +67,7 @@ class Detection extends BaseSystem {
      *   @returns {number[][]}
      */
     getBoundingBoxes(sender) {
+        /*
         let orientation = sender.orientationEye;
         let localPosition = sender.position;
         let l = this.boxes.length;
@@ -110,6 +108,8 @@ class Detection extends BaseSystem {
                 0
             ];
         }
-        return list;
+        return list;*/
     }
 }
+
+export { Detection }

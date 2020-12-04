@@ -10,6 +10,19 @@
 */
 import { Datas, Manager } from "./index.js";
 import { Utils } from "./Common/index.js";
+/*
+const {Howl, Howler} = require('./Content/Datas/Scripts/System/Libs/howler.js');
+
+let song = new Howl({
+    src: ["/home/wano/Documents/RPG-Paper-Maker/Basic-Ressources/Content/Songs/Musics/Town1.mp3"],
+    loop: true,
+    html5: true
+});
+song.play();
+*/
+const { THREE } = require('./Content/Datas/Scripts/System/Libs/three-m.js');
+let s = new THREE.PerspectiveCamera();
+console.log(s);
 let loadedDatas = false;
 /** Initialize the game stack and datas
 */

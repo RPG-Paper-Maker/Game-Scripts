@@ -11,3 +11,4 @@
 
 export * from "./Base";
 export * from "./Loading";
+export * from "./Map";

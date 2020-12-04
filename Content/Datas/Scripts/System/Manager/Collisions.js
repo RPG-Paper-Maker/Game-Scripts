@@ -143,5 +143,6 @@ class Collisions {
         */
     }
 }
+// @ts-ignore
 Collisions.BB_MATERIAL = new THREE.MeshBasicMaterial();
 export { Collisions };

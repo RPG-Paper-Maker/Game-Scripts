@@ -9,6 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { THREE } from "../Libs";
+
 /** @class
 *   Element movable in local map
 *   @property {number} [MapObject.SPEED_NORMAL=0.004666] Normal speed coef
@@ -57,6 +59,7 @@ class MapObject
 {
     public static SPEED_NORMAL = 0.004666;
 
+    public position: THREE.Vector3;
     public properties: any[];
 
     constructor(system, position, isHero)

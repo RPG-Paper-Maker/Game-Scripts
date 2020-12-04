@@ -12,7 +12,7 @@
 /** @class
  *   The key event class used to convert Qt keys to web keys.
  */
-export class KeyEvent {
+class KeyEvent {
 
     static keysPressed: number[] = [];
     static DOM_VK_CANCEL = 3;
@@ -559,3 +559,5 @@ export class KeyEvent {
         return text;
     }
 }
+
+export { KeyEvent }

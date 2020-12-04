@@ -15,7 +15,7 @@ import { THREE } from "../Libs";
 /** @class
  * The static class for Math related function.
  */
-export class Mathf {
+class Mathf {
 
     constructor() {
         throw new Error("This is a static class!");
@@ -139,3 +139,5 @@ export class Mathf {
         return this.random(value - v, value + v);
     }
 }
+
+export { Mathf }

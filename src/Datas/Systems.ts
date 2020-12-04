@@ -62,6 +62,8 @@ class Systems {
     private static colors: System.Color[]
     private static currencies: System.Currency[];
     private static windowSkins: System.WindowSkin[];
+    private static cameraProperties: System.CameraProperties[];
+    private static detections: System.Detection[];
 
     constructor() {
         throw new Error("This is a static class!");
@@ -95,6 +97,36 @@ class Systems {
      */
     static getCurrency(id: number): System.Currency {
         return Datas.Base.get(id, this.currencies, "currency");
+    }
+
+    /** 
+     *  Get the window skin by ID safely.
+     *  @static
+     *  @param {number} id
+     *  @returns {string}
+     */
+    static getWindowSkin(id: number): System.WindowSkin {
+        return Datas.Base.get(id, this.windowSkins, "window skin");
+    }
+
+    /** 
+     *  Get the camera properties by ID safely.
+     *  @static
+     *  @param {number} id
+     *  @returns {string}
+     */
+    static getCameraProperties(id: number): System.CameraProperties {
+        return Datas.Base.get(id, this.cameraProperties, "camera properties");
+    }
+
+    /** 
+     *  Get the detection by ID safely.
+     *  @static
+     *  @param {number} id
+     *  @returns {string}
+     */
+    static getDetection(id: number): System.Detection {
+        return Datas.Base.get(id, this.detections, "detections");
     }
 
     /** 
@@ -160,24 +192,32 @@ class Systems {
             Manager.Collisions.BB_MATERIAL.color.setHex(0xff0000);
             Manager.Collisions.BB_MATERIAL.wireframe = true;
         }
+        // @ts-ignore
         Manager.Collisions.BB_MATERIAL.visible = showBB;
 
         // Lists
-        this.itemsTypes = Utils.readJSONSystemList(json.itemsTypes, { func: (
-            element: Record<string, any>) =>
+        this.itemsTypes = [];
+        this.colors = [];
+        this.currencies = [];
+        this.windowSkins = [];
+        this.cameraProperties = [];
+        this.detections = [];
+        Utils.readJSONSystemList({ list: json.itemsTypes, listIDs: this
+            .itemsTypes, func: (element: Record<string, any>) =>
         {
             return element.name;
         }});
-        this.colors = Utils.readJSONSystemList(json.colors, { cons: System.Color });
-        this.currencies = Utils.readJSONSystemList(json.currencies, { cons: 
-            System.Currency });
-        this.windowSkins = Utils.readJSONSystemList(json.wskins, { cons: 
-            System.WindowSkin });
-            console.log(this.windowSkins)
+        Utils.readJSONSystemList({ list: json.colors, listIDs: this.colors, cons
+            : System.Color });
+        Utils.readJSONSystemList({ list: json.currencies, listIDs: this
+            .currencies, cons: System.Currency });
+        Utils.readJSONSystemList({ list: json.wskins, listIDs: this.windowSkins, 
+            cons: System.WindowSkin });
+        Utils.readJSONSystemList({ list: json.cp, listIDs: this.cameraProperties
+            , cons: System.CameraProperties });
+        Utils.readJSONSystemList({ list: json.d, listIDs: this.detections, cons: 
+            System.Detection });
         /*
-        this.cameraProperties = RPM.readJSONSystemList(json.cp, 
-            SystemCameraProperties);
-        this.detections = RPM.readJSONSystemList(json.d, Detection);
         this.skyboxes = RPM.readJSONSystemList(json.sb, SystemSkybox);
         this.fontSizes = RPM.readJSONSystemList(json.fs, (element) =>
         {

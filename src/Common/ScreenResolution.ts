@@ -13,7 +13,7 @@
  *  A static class for having a quick access to screen resolution variables and 
  *  functions
  */
-export class ScreenResolution {
+class ScreenResolution {
     public static readonly SCREEN_X: number = 640;
     public static readonly SCREEN_Y: number = 480;
     public static CANVAS_WIDTH: number;
@@ -83,3 +83,5 @@ export class ScreenResolution {
         return ScreenResolution.WINDOW_Y * y;
     }
 }
+
+export { ScreenResolution }

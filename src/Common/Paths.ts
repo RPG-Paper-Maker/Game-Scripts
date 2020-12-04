@@ -14,7 +14,7 @@
  * can be accessed through import
  * @example import {Path} from "../Constants";
  */
-export class Paths {
+class Paths {
 
     public static readonly ROOT_DIRECTORY_LOCAL = "."
     public static readonly FILES = "file:///";
@@ -83,3 +83,5 @@ export class Paths {
         throw new Error("This is a static class");
     }
 }
+
+export { Paths }

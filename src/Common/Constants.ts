@@ -12,8 +12,9 @@
 /** @class
  *  The common class for constants
  */
-export class Constants {
+class Constants {
 
+    public static readonly BASIC_SQUARE_SIZE = 32;
     public static readonly SMALL_FONT_SIZE = 8;
     public static readonly MEDIUM_FONT_SIZE = 10;
     public static readonly SQUARE_SIZE = 32;
@@ -79,3 +80,5 @@ export class Constants {
         throw new Error("This is a static class!");
     }
 }
+
+export { Constants }

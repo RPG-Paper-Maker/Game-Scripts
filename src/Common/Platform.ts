@@ -19,7 +19,7 @@ const app = remote.app;
 /** @class
  *  A class replaced according to te platform used (desktop, browser, mobile...).
  */
-export class Platform {
+class Platform {
     public static readonly ROOT_DIRECTORY = app.getAppPath();
     public static readonly screen = ElectronScreen.getPrimaryDisplay();
     public static readonly screenWidth = Platform.screen.bounds.width;
@@ -109,3 +109,5 @@ window.onerror = function (msg, url, line, column, err) {
     // Send it to main process to open a dialog box
     ipc.send('window-error', str);
 }
+
+export { Platform }
