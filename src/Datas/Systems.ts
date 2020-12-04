@@ -9,9 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { IO, Paths, Platform, ScreenResolution, Utils } from "../Common";
+import { IO, Paths, Platform, ScreenResolution, Utils, Constants, Enum } from "../Common";
 import * as System from "../System";
-import { Manager, Datas } from "..";
+import { Manager, Datas, Scene, EventCommand } from "..";
+import SongKind = Enum.SongKind;
 
 /** @class
 *   All the System datas.
@@ -64,69 +65,19 @@ class Systems {
     private static windowSkins: System.WindowSkin[];
     private static cameraProperties: System.CameraProperties[];
     private static detections: System.Detection[];
+    private static skyboxes: System.Skybox[];
+    private static fontSizes: System.DynamicValue[];
+    private static fontNames: System.DynamicValue[];
+    private static speeds: System.DynamicValue[];
+    private static frequencies: System.DynamicValue[];
+    public static soundCursor: System.PlaySong;
+    public static soundConfirmation: System.PlaySong;
+    public static soundCancel: System.PlaySong;
+    public static soundImpossible: System.PlaySong;
+    public static dbOptions: EventCommand.SetDialogBoxOptions;
 
     constructor() {
         throw new Error("This is a static class!");
-    }
-
-    /** 
-     *  Get the item type by ID safely.
-     *  @static
-     *  @param {number} id
-     *  @returns {string}
-     */
-    static getItemType(id: number): string {
-        return Datas.Base.get(id, this.itemsTypes, "item type");
-    }
-
-    /** 
-     *  Get the color by ID safely.
-     *  @static
-     *  @param {number} id
-     *  @returns {System.Color}
-     */
-    static getColor(id: number): System.Color {
-        return Datas.Base.get(id, this.colors, "color");
-    }
-
-    /** 
-     *  Get the currency by ID safely.
-     *  @static
-     *  @param {number} id
-     *  @returns {string}
-     */
-    static getCurrency(id: number): System.Currency {
-        return Datas.Base.get(id, this.currencies, "currency");
-    }
-
-    /** 
-     *  Get the window skin by ID safely.
-     *  @static
-     *  @param {number} id
-     *  @returns {string}
-     */
-    static getWindowSkin(id: number): System.WindowSkin {
-        return Datas.Base.get(id, this.windowSkins, "window skin");
-    }
-
-    /** 
-     *  Get the camera properties by ID safely.
-     *  @static
-     *  @param {number} id
-     *  @returns {string}
-     */
-    static getCameraProperties(id: number): System.CameraProperties {
-        return Datas.Base.get(id, this.cameraProperties, "camera properties");
-    }
-
-    /** 
-     *  Get the detection by ID safely.
-     *  @static
-     *  @param {number} id
-     *  @returns {string}
-     */
-    static getDetection(id: number): System.Detection {
-        return Datas.Base.get(id, this.detections, "detections");
     }
 
     /** 
@@ -202,6 +153,9 @@ class Systems {
         this.windowSkins = [];
         this.cameraProperties = [];
         this.detections = [];
+        this.skyboxes = [];
+        this.fontSizes = [];
+        this.fontNames = [];
         Utils.readJSONSystemList({ list: json.itemsTypes, listIDs: this
             .itemsTypes, func: (element: Record<string, any>) =>
         {
@@ -217,44 +171,159 @@ class Systems {
             , cons: System.CameraProperties });
         Utils.readJSONSystemList({ list: json.d, listIDs: this.detections, cons: 
             System.Detection });
-        /*
-        this.skyboxes = RPM.readJSONSystemList(json.sb, SystemSkybox);
-        this.fontSizes = RPM.readJSONSystemList(json.fs, (element) =>
+        Utils.readJSONSystemList({ list: json.sb, listIDs: this.skyboxes, cons: 
+            System.Skybox });
+        Utils.readJSONSystemList({ list: json.fs, listIDs: this.fontSizes, func: 
+            (element: Record<string, any>) =>
         {
-            return SystemValue.readOrDefaultNumber(element.s, 0);
-        }, false);
-        this.fontNames = RPM.readJSONSystemList(json.fn, (element) =>
+            return System.DynamicValue.readOrDefaultNumber(element.s, 0);
+        }});
+        Utils.readJSONSystemList({ list: json.fn, listIDs: this.fontNames, func:
+            (element: Record<string, any>) =>
         {
-            return SystemValue.readOrDefaultMessage(element.f, RPM.DEFAULT_FONT);
-        }, false);
-        this.speeds = RPM.readJSONSystemList(json.sf, (element) =>
+            return System.DynamicValue.readOrDefaultMessage(element.f, Constants
+                .DEFAULT_FONT);
+        }});
+        Utils.readJSONSystemList({ list: json.sf, listIDs: this.speeds, func: 
+            (element: Record<string, any>) =>
         {
-            return SystemValue.readOrDefaultNumberDouble(element.v, 1);
-        }, false);
-        this.frequencies = RPM.readJSONSystemList(json.f, (element) =>
+            return System.DynamicValue.readOrDefaultNumberDouble(element.v, 1);
+        }});
+        Utils.readJSONSystemList({ list: json.f, listIDs: this.frequencies, func
+            : (element: Record<string, any>) =>
         {
-            return SystemValue.readOrDefaultNumberDouble(element.v, 1);
-        }, false);
+            return System.DynamicValue.readOrDefaultNumberDouble(element.v, 1);
+        }});
         
         // Sounds
-        this.soundCursor = new SystemPlaySong(SongKind.Sound, json.scu);
-        this.soundConfirmation = new SystemPlaySong(SongKind.Sound, json.sco);
-        this.soundCancel = new SystemPlaySong(SongKind.Sound, json.sca);
-        this.soundImpossible = new SystemPlaySong(SongKind.Sound, json.si);
+        this.soundCursor = new System.PlaySong(SongKind.Sound, json.scu);
+        this.soundConfirmation = new System.PlaySong(SongKind.Sound, json.sco);
+        this.soundCancel = new System.PlaySong(SongKind.Sound, json.sca);
+        this.soundImpossible = new System.PlaySong(SongKind.Sound, json.si);
 
         // Window skin options
-        this.dbOptions = EventCommand.getEventCommand(json.dbo);
+        this.dbOptions = <EventCommand.SetDialogBoxOptions> Manager
+            .EventReaction.getEventCommand(json.dbo);
         this.dbOptions.update();
 
         // Initialize loading scene now that basics are loaded
-        RPM.loadingScene = new SceneLoading();
-        */
-       
+        Manager.Stack.sceneLoading = new Scene.Loading();
+        Manager.Stack.requestPaintHUD = true;
     }
 
-    // -------------------------------------------------------
-    /** Update the RPM.modelHero global variable by loading the hero model
-    */
+    /** 
+     *  Get the item type by ID safely.
+     *  @static
+     *  @param {number} id
+     *  @returns {string}
+     */
+    static getItemType(id: number): string {
+        return Datas.Base.get(id, this.itemsTypes, "item type");
+    }
+
+    /** 
+     *  Get the color by ID safely.
+     *  @static
+     *  @param {number} id
+     *  @returns {System.Color}
+     */
+    static getColor(id: number): System.Color {
+        return Datas.Base.get(id, this.colors, "color");
+    }
+
+    /** 
+     *  Get the currency by ID safely.
+     *  @static
+     *  @param {number} id
+     *  @returns {string}
+     */
+    static getCurrency(id: number): System.Currency {
+        return Datas.Base.get(id, this.currencies, "currency");
+    }
+
+    /** 
+     *  Get the window skin by ID safely.
+     *  @static
+     *  @param {number} id
+     *  @returns {string}
+     */
+    static getWindowSkin(id: number): System.WindowSkin {
+        return Datas.Base.get(id, this.windowSkins, "window skin");
+    }
+
+    /** 
+     *  Get the camera properties by ID safely.
+     *  @static
+     *  @param {number} id
+     *  @returns {string}
+     */
+    static getCameraProperties(id: number): System.CameraProperties {
+        return Datas.Base.get(id, this.cameraProperties, "camera properties");
+    }
+
+    /** 
+     *  Get the detection by ID safely.
+     *  @static
+     *  @param {number} id
+     *  @returns {string}
+     */
+    static getDetection(id: number): System.Detection {
+        return Datas.Base.get(id, this.detections, "detections");
+    }
+
+    /** 
+     *  Get the skybox by ID safely.
+     *  @static
+     *  @param {number} id
+     *  @returns {string}
+     */
+    static getSkybox(id: number): System.Skybox {
+        return Datas.Base.get(id, this.skyboxes, "skybox");
+    }
+
+    /** 
+     *  Get the font size by ID safely.
+     *  @static
+     *  @param {number} id
+     *  @returns {string}
+     */
+    static getFontSize(id: number): System.DynamicValue {
+        return Datas.Base.get(id, this.fontSizes, "font size");
+    }
+
+    /** 
+     *  Get the font name by ID safely.
+     *  @static
+     *  @param {number} id
+     *  @returns {string}
+     */
+    static getFontName(id: number): System.DynamicValue {
+        return Datas.Base.get(id, this.fontNames, "font name");
+    }
+
+    /** 
+     *  Get the speed by ID safely.
+     *  @static
+     *  @param {number} id
+     *  @returns {string}
+     */
+    static getSpeed(id: number): System.DynamicValue {
+        return Datas.Base.get(id, this.speeds, "speed");
+    }
+
+    /** 
+     *  Get the frequency by ID safely.
+     *  @static
+     *  @param {number} id
+     *  @returns {string}
+     */
+    static getFrequency(id: number): System.DynamicValue {
+        return Datas.Base.get(id, this.frequencies, "frequency");
+    }
+
+    /** 
+     *  Get the system object of hero.
+     */
     async getModelHero()
     {
         /*

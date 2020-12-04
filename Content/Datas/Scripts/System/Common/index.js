@@ -10,7 +10,6 @@
 */
 export * from "./Constants.js";
 export * from "./Enum.js";
-export * from "./Globals.js";
 export * from "./IO.js";
 export * from "./KeyEvent.js";
 export * from "./Mathf.js";

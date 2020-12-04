@@ -9,6 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Base } from "./Base"
+import { Utils } from "../Common";
+
 /** @class
 *   A skybox of the game
 *   @property {number} front The front picture ID
@@ -17,30 +20,35 @@
 *   @property {number} bot The bot picture ID
 *   @property {number} left The left picture ID
 *   @property {number} right The right picture ID
-*   @param {Object} [json=undefined] Json object describing the skybox
+*   @param {Record<string, any>} [json=undefined] Json object describing the 
+*   skybox
 */
-class SystemSkybox
+class Skybox extends Base
 {
-    constructor(json)
+    public front: number;
+    public back: number;
+    public top: number;
+    public bot: number;
+    public left: number;
+    public right: number;
+
+    constructor(json?: Record<string, any>)
     {
-        if (json)
-        {
-            this.read(json);
-        }
+        super(json)
     }
 
-    // -------------------------------------------------------
-    /** Read the JSON associated to the skybox
-    *   @param {Object} json Json object describing the skybox
-    */
-    read(json)
+    /** 
+     *  Read the JSON associated to the skybox
+     *  @param {Record<string, any>} json Json object describing the skybox
+     */
+    read(json: Record<string, any>)
     {
-        this.front = RPM.defaultValue(json.fid, 1);
-        this.back = RPM.defaultValue(json.bid, 1);
-        this.top = RPM.defaultValue(json.tid, 1);
-        this.bot = RPM.defaultValue(json.boid, 1);
-        this.left = RPM.defaultValue(json.lid, 1);
-        this.right = RPM.defaultValue(json.rid, 1);
+        this.front = Utils.defaultValue(json.fid, 1);
+        this.back = Utils.defaultValue(json.bid, 1);
+        this.top = Utils.defaultValue(json.tid, 1);
+        this.bot = Utils.defaultValue(json.boid, 1);
+        this.left = Utils.defaultValue(json.lid, 1);
+        this.right = Utils.defaultValue(json.rid, 1);
     }
     
     // -------------------------------------------------------
@@ -49,6 +57,7 @@ class SystemSkybox
     */
     createTextures = function() 
     {
+        /*
         return [
             RPM.createMaterial(RPM.textureLoader.load(RPM.datasGame.pictures.get
                 (PictureKind.Skyboxes, this.left).getPath()), { flipY: true, 
@@ -68,6 +77,8 @@ class SystemSkybox
             RPM.createMaterial(RPM.textureLoader.load(RPM.datasGame.pictures.get
                 (PictureKind.Skyboxes, this.back).getPath()), { flipY: true, 
                 flipX: true })
-        ];
+        ];*/
     }
 }
+
+export { Skybox }

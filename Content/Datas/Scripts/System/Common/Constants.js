@@ -11,7 +11,7 @@
 /** @class
  *  The common class for constants
  */
-export class Constants {
+class Constants {
     constructor() {
         throw new Error("This is a static class!");
     }
@@ -77,3 +77,4 @@ Constants.TAG_ICON = "ico";
 Constants.DEFAULT_FONT = "sans-serif";
 Constants.JSON_KEY = "k";
 Constants.JSON_VALUE = "v";
+export { Constants };

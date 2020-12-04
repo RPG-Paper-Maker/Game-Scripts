@@ -12,7 +12,7 @@
  *  A static class for having a quick access to screen resolution variables and
  *  functions
  */
-export class ScreenResolution {
+class ScreenResolution {
     constructor() {
         throw new Error("This is a static class");
     }
@@ -70,3 +70,4 @@ export class ScreenResolution {
 }
 ScreenResolution.SCREEN_X = 640;
 ScreenResolution.SCREEN_Y = 480;
+export { ScreenResolution };

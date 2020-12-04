@@ -13,7 +13,7 @@
  * can be accessed through import
  * @example import {Path} from "../Constants";
  */
-export class Paths {
+class Paths {
     constructor() {
         throw new Error("This is a static class");
     }
@@ -80,3 +80,4 @@ Paths.PLUGINS = Paths.SCRIPTS + "Plugins/";
 Paths.SYSTEM = Paths.SCRIPTS + "System/";
 Paths.SHADERS = Paths.SYSTEM + "shaders/";
 Paths.SAVES = Paths.DATAS + "Saves";
+export { Paths };

@@ -11,7 +11,7 @@
 /** @class
  *   The key event class used to convert Qt keys to web keys.
  */
-export class KeyEvent {
+class KeyEvent {
     /** Convert Qt key to DOM.
      *   @static
      *   @param {number} key The qt key to convert
@@ -550,3 +550,4 @@ KeyEvent.EXCLAMATION = 33;
 KeyEvent.ALT_GR = 16781571;
 KeyEvent.LESS_THAN = 60;
 KeyEvent.GREATER_THAN = 62;
+export { KeyEvent };

@@ -17,7 +17,7 @@ const app = remote.app;
 /** @class
  *  A class replaced according to te platform used (desktop, browser, mobile...).
  */
-export class Platform {
+class Platform {
     constructor() {
         throw new Error("This class is static.");
     }
@@ -100,3 +100,4 @@ window.onerror = function (msg, url, line, column, err) {
     // Send it to main process to open a dialog box
     ipc.send('window-error', str);
 };
+export { Platform };

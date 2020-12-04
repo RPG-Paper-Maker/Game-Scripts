@@ -17,5 +17,7 @@ export * from "./Detection";
 export * from "./DynamicValue";
 export * from "./Icon";
 export * from "./Picture";
+export * from "./PlaySong";
+export * from "./Skybox";
 export * from "./Translatable";
 export * from "./WindowSkin";

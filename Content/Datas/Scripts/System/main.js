@@ -20,18 +20,16 @@ let song = new Howl({
 });
 song.play();
 */
-const { THREE } = require('./Content/Datas/Scripts/System/Libs/three-m.js');
-let s = new THREE.PerspectiveCamera();
-console.log(s);
 let loadedDatas = false;
-/** Initialize the game stack and datas
-*/
+/**
+ *  Initialize the game stack and datas
+ */
 function initialize() {
-    //RPM.songsManager = new SongsManager();
     Manager.Stack.loadingDelay = 0;
     Manager.Stack.clearHUD();
 }
-/** Load the game stack and datas
+/**
+ *  Load the game stack and datas
  */
 async function load() {
     await Datas.Settings.read();
@@ -41,26 +39,22 @@ async function load() {
     Manager.GL.initialize();
     Manager.GL.resize();
     Manager.Stack.requestPaintHUD = true;
-    console.log("ok");
 }
-/** Main loop of the game
+/**
+ *  Main loop of the game
  */
 function loop() {
     requestAnimationFrame(loop);
     // Update if everything is loaded
-    /*
-    if (RPM.datasGame.loaded)
-    {
-        if (!RPM.gameStack.isLoading())
-        {
-            Stack.update();
+    if (loadedDatas) {
+        if (!Manager.Stack.isLoading()) {
+            Manager.Stack.update();
         }
-        if (!Stack.isLoading())
-        {
-            Stack.draw3D();
+        if (!Manager.Stack.isLoading()) {
+            Manager.Stack.draw3D();
         }
-    }*/
-    //Stack.drawHUD();
+    }
+    Manager.Stack.drawHUD();
     // Elapsed time
     Manager.Stack.elapsedTime = new Date().getTime() - Manager.Stack
         .lastUpdateTime;

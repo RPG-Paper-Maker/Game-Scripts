@@ -8,7 +8,7 @@
     "noEmit": false,
     "strict": false,
     "esModuleInterop": true,
-    "skipLibCheck": false,
+    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./Content/Datas/Scripts/System"
   },

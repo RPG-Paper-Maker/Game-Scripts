@@ -23,10 +23,10 @@
 *   music
 *   @property {number} progressionMusicEnd The progression music end
 */
-class SongsManager
+class Songs
 {
-    constructor()
-    {
+    constructor() {
+        /*
         this.musicEffectStep = 0;
         this.isProgressionMusicEnd = true;
         this.isMusicNone = true;
@@ -48,6 +48,7 @@ class SongsManager
         this.currentSong[SongKind.BackgroundSound] = null;
         this.currentSong[SongKind.MusicEffect] = null;
         this.progressionMusic = null;
+        */
     }
 
     // -------------------------------------------------------
@@ -58,8 +59,9 @@ class SongsManager
     *   @param {number} start The start of the song
     *   @param {number} end The end of the song
     */
-    playMusic(kind, id, volume, start, end)
+    static playMusic(kind, id, volume, start, end)
     {
+        /*
         if (id < 1)
         {
             switch (kind)
@@ -96,6 +98,7 @@ class SongsManager
             this.ends[kind] = end;
             this.currentSong[kind] = song;
         }
+        */
     }
 
     // -------------------------------------------------------
@@ -107,8 +110,9 @@ class SongsManager
     *   of stoppped
     *   @returns {boolean} Indicates if the song is stopped
     */
-    stopSong(kind, time, seconds, pause)
+    static stopSong(kind, time, seconds, pause)
     {
+        /*
         let current = new Date().getTime();
         let ellapsedTime = current - time;
         let currentSong = this.currentSong[kind];
@@ -136,6 +140,7 @@ class SongsManager
                 (seconds * 1000)) * 100))) / 100);
             return false;
         }
+        */
     }
 
     // -------------------------------------------------------
@@ -146,8 +151,9 @@ class SongsManager
     *   @param {number} seconds The seconds needed for entirely play the song
     *   @returns {boolean} Indicate if the song is played with all volume
     */
-    unpauseSong(kind, time, seconds)
+    static unpauseSong(kind, time, seconds)
     {
+        /*
         let current = new Date().getTime();
         let ellapsedTime = current - time;
         let currentSong = this.currentSong[kind];
@@ -166,6 +172,7 @@ class SongsManager
                 1000)));
             return false;
         }
+        */
     }
 
     // -------------------------------------------------------
@@ -173,8 +180,9 @@ class SongsManager
     *   @param {number} id The id of the sound
     *   @param {number} volume The volume of the sound
     */
-    playSound(id, volume)
+    static playSound(id, volume)
     {
+        /*
         if (id === -1)
         {
             return;
@@ -188,6 +196,7 @@ class SongsManager
             });
             sound.play();
         }
+        */
     }
 
     // -------------------------------------------------------
@@ -196,8 +205,9 @@ class SongsManager
     *   @param {number} volume The volume of the sound
     *   @param {Object} currentState The current state command
     */
-    playMusicEffect(id, volume, currentState)
+    static playMusicEffect(id, volume, currentState): boolean
     {
+        /*
         if (id === -1 || currentState.end)
         {
             return true;
@@ -235,6 +245,7 @@ class SongsManager
                 return true;
             }
         }
+        */
         return false;
     }
 
@@ -242,8 +253,9 @@ class SongsManager
     /** Update songs positions or other stuff
     *   @param {SongKind} kind The song kind 
     */
-    updateByKind(kind) 
+    static updateByKind(kind) 
     {
+        /*
         let song = this.currentSong[kind];
         if (song !== null && song.playing()) 
         {
@@ -252,28 +264,33 @@ class SongsManager
                 song.seek(this.starts[kind]);
             }
         }
+        */
     }
 
     // -------------------------------------------------------
     /** Update songs positions or other stuffs
     */
-    update()
+    static update()
     {
+        /*
         this.updateByKind(SongKind.Music);
         this.updateByKind(SongKind.BackgroundSound);
         this.updateProgressionMusic();
+        */
     }
 
     // -------------------------------------------------------
     /** Stop the music (with progression)
     *   @param {number} time The time to stop
     */
-    stopMusic(time)
+    static stopMusic(time)
     {
+        /*
         this.isMusicNone = true;
         this.stopSong(SongKind.Music, time, 0, false)
         this.initializeProgressionMusic(this.currentSong[SongKind.Music] ===  
             null ? 0 : this.currentSong[SongKind.Music].volume(), 0, 0, time);
+            */
     }
 
     // -------------------------------------------------------
@@ -283,20 +300,23 @@ class SongsManager
     *   @param {number} equation The equation kind
     *   @param {number} end The end of the song
     */
-    initializeProgressionMusic(i, f, equation, end)
+    static initializeProgressionMusic(i, f, equation, end)
     {
+        /*
         this.progressionMusic = ProgressionTable.create(i, f,
             equation);
         this.progressionMusicTime = new Date().getTime();
         this.progressionMusicEnd = end;
         this.isProgressionMusicEnd = false;
+        */
     }
 
     // -------------------------------------------------------
     /** Update the progression music
     */
-    updateProgressionMusic()
+    static updateProgressionMusic()
     {
+        /*
         if (!this.isProgressionMusicEnd)
         {
             let tick = new Date().getTime() - this.progressionMusicTime;
@@ -319,13 +339,15 @@ class SongsManager
                 }
             }
         }
+        */
     }
 
     // -------------------------------------------------------
     /** Stop all the songs
     */
-    stopAll() 
+    static stopAll() 
     {
+        /*
         if (this.currentSong[SongKind.Music] !== null)
         {
             this.currentSong[SongKind.Music].stop();
@@ -342,5 +364,8 @@ class SongsManager
             this.currentSong[SongKind.MusicEffect] = null;
             this.musicEffectStep = 0;
         }
+        */
     }
 }
+
+export { Songs }
