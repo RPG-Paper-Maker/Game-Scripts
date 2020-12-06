@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { System } from "..";
+import { Base } from "./Base";
 import { THREE } from "../Libs";
 
 /** @class
@@ -23,8 +23,9 @@ import { THREE } from "../Libs";
  *  @property {THREE.Color} color The three.js color
  *  @param {Record<string, any>} [json=undefined] Json object describing the color
  */
-class Color extends System.Base {
+class Color extends Base {
     
+    public static white = Color.createColor(255, 255, 255);
     public red: number;
     public green: number;
     public blue: number;
@@ -45,9 +46,8 @@ class Color extends System.Base {
      *  @param {number} a The alpha value between 0 and 255
      *  @returns {Color}
      */
-    static createColor(r: number, g: number, b: number, a?: number): System
-        .Color {
-        let color = new System.Color();
+    static createColor(r: number, g: number, b: number, a?: number): Color {
+        let color = new Color();
         color.initialize(r, g, b, a);
         return color;
     }

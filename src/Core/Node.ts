@@ -9,13 +9,21 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-export class Node {
+/** @class
+ *  Datas structure of tree.
+ *  @property {Object} data Data of the node
+ *  @property {Node} parent Parent of the node
+ *  @property {Node} firstChild The first child of the node
+ *  @property {Node} lastChild The last child of the node
+ *  @property {Node} next The next parent child
+ */
+class Node {
 
-    data: Record<string, any>;
-    parent: Node;
-    firstChild: Node;
-    lastChild: Node;
-    next: Node;
+    public data: Record<string, any>;
+    public parent: Node;
+    public firstChild: Node;
+    public lastChild: Node;
+    public next: Node;
 
     constructor(parent: Node, data: Record<string, any>) {
         this.data = data;
@@ -25,9 +33,8 @@ export class Node {
         this.next = null;
     }
 
-
     /**
-     * Add a new child
+     * Add a new child.
      * @param data
      */
     public add(data: Record<string, any>): Node {
@@ -41,22 +48,24 @@ export class Node {
         return node;
     }
 
-    // -------------------------------------------------------
-    /** Check if this node is the root of the tree
-     *   @returns {boolean}
+    /** 
+     *  Check if this node is the root of the tree.
+     *  @returns {boolean}
      */
-    public isRoot() {
+    public isRoot(): boolean {
         return this.parent === null;
     }
 
-    // -------------------------------------------------------
-    /** Get the next parent child
-     *   @returns {Node}
+    /** 
+     *  Get the next parent child
+     *  @returns {Node}
      */
-    public getNext() {
+    public getNext(): Node {
         if (this.next === null) {
             return (this.parent.isRoot()) ? null : this.parent;
         }
         return this.next;
     }
 }
+
+export { Node }

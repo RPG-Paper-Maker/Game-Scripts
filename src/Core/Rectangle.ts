@@ -23,7 +23,7 @@ import { Anchor2D } from "./Anchor2D";
  *  @param {number} [width=1]
  *  @param {number} [height=1]
  */
-export class Rectangle {
+class Rectangle {
 
     public x: number;
     public y: number;
@@ -101,5 +101,4 @@ export class Rectangle {
     }
 }
 
-
-
+export { Rectangle }

@@ -14,6 +14,8 @@
  */
 class Constants {
 
+    public static readonly FONT_SIZE = 13;
+    public static readonly FONT_NAME = "sans-serif";
     public static readonly BASIC_SQUARE_SIZE = 32;
     public static readonly SMALL_FONT_SIZE = 8;
     public static readonly MEDIUM_FONT_SIZE = 10;
@@ -75,6 +77,7 @@ class Constants {
     public static readonly DEFAULT_FONT = "sans-serif";
     public static readonly JSON_KEY = "k";
     public static readonly JSON_VALUE = "v";
+    public static readonly EXTENSION_JSON = ".json";
 
     constructor() {
         throw new Error("This is a static class!");

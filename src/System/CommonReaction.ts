@@ -9,13 +9,15 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Reaction } from "./Reaction";
+
 /** @class
 *   A common reaction
-*   @extends SystemObjectReaction
+*   @extends System.Reaction
 *   @property {Parameter[]} parameters
 *   @param {Object} [json=undefined] Json object describing the common reaction
 */
-class SystemCommonReaction extends SystemObjectReaction
+class CommonReaction extends Reaction
 {
     constructor(json)
     {

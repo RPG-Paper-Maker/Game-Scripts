@@ -1,0 +1,99 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+import { Base } from "./Base";
+import { Tree, Node } from "../Core";
+import { Manager, EventCommand } from "..";
+
+/** @class
+ *   A reaction to an event.
+ *   @property {string[]} [labels=[]] List of all labels
+ *   @property {number} idEvent The event ID
+ *   @property {boolean} blockingHero Indicate if this reaction is blocking the 
+ *   hero
+ *   @property {Tree} commands All the commands
+ *   @param {Record<string, any>} [json=undefined] Json object describing the object reaction
+ */
+class Reaction extends Base {
+
+    public labels: string[];
+    public idEvent: number;
+    public blockingHero: boolean;
+    public commands: Tree;
+
+    constructor(json?: Record<string, any>) {
+        super(json);
+    }
+
+    /** 
+     *  Read the JSON associated to the object reaction.
+     *  @param {Record<string, any>} json Json object describing the object 
+     *  reaction
+     */
+    read(json: Record<string, any>) {
+        this.labels = [];
+        this.idEvent = json.id;
+
+        // Options
+        this.blockingHero = json.bh;
+
+        // Read commands
+        let jsonCommands = json.c;
+        let commands = new Tree("root");
+        this.readChildrenJSON(jsonCommands, commands);
+        this.commands = commands;
+    }
+
+    /** 
+     *  Read the JSON children associated to the object reaction.
+     *  @param {Record<string, any>} jsonCommands Json object describing the 
+     *  object
+     *  @param {Tree} commands All the commands (final result)
+     */
+    readChildrenJSON(jsonCommands: Record<string, any>, commands: Tree) {
+        let choice = null;
+        let command: EventCommand.Base, node: Node;
+        for (let i = 0, l = jsonCommands.length; i < l; i++) {
+            command = Manager.EventReaction.getEventCommand(jsonCommands[i]);
+
+            // Comment
+            if (command instanceof EventCommand.Comment) {
+                continue;
+            }
+
+            // Add node
+            node = commands.add(command);
+
+            // If text before choice, make a link
+            if (command instanceof EventCommandShowText) {
+                choice = command;
+            } else if (command instanceof EventCommandDisplayChoice) {
+                command.setShowText(choice);
+                choice = null;
+            } else if (command instanceof EventCommandLabel) // Label {
+                this.labels.push([command.label, node]);
+            }
+            if (jsonCommands[i].children) {
+                this.readChildrenJSON(jsonCommands[i].children, node);
+            }
+        }
+    }
+
+    /** 
+     *  Get the first node command of the reaction
+     *  @returns {Node}
+     */
+    getFirstCommand(): Node {
+        return this.commands.root.firstChild;
+    }
+}
+
+export { Reaction }

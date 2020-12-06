@@ -9,30 +9,29 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import {BaseSystem, Parameter} from ".";
+import { Base } from "./Base";
+import { Parameter } from "./Parameter";
 
 /** @class
- *   An event that can be called
+ *   An event that can be called.
  *   @property {SystemParameters[]} parameters The parameters list
- *   @param {Object} [json=undefined] json object describing the event
+ *   @param {Record<string, any>} [json] json object describing the event
  */
-export class Event extends BaseSystem {
+class Event extends Base {
 
     parameters: Parameter[];
 
-    constructor(json) {
+    constructor(json?: Record<string, any>) {
         super(json);
     }
 
-    public setup() {
-        this.parameters = [];
-    }
-
-    // -------------------------------------------------------
-    /** Read the JSON associated to the event
-     *   @param {Object} json Json object describing the event
+    /** 
+     *  Read the JSON associated to the event.
+     *  @param {Record<string, any>} json Json object describing the event
      */
-    read(json) {
+    read(json: Record<string, any>) {
         this.parameters = Parameter.readParameters(json);
     }
 }
+
+export { Event }

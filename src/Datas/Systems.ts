@@ -13,6 +13,7 @@ import { IO, Paths, Platform, ScreenResolution, Utils, Constants, Enum } from ".
 import * as System from "../System";
 import { Manager, Datas, Scene, EventCommand } from "..";
 import SongKind = Enum.SongKind;
+import { Position, Portion } from "../Core";
 
 /** @class
 *   All the System datas.
@@ -82,6 +83,7 @@ class Systems {
 
     /** 
      *  Read the JSON file associated to System.
+     *  @static
      */
     static async read() {
         let json = await IO.parseFileJSON(Platform.ROOT_DIRECTORY + Paths
@@ -323,77 +325,67 @@ class Systems {
 
     /** 
      *  Get the system object of hero.
+     *  @static
+     *  @async
      */
-    async getModelHero()
+    static async getModelHero()
     {
-        /*
-        let mapName = RPM.generateMapName(this.idMapStartHero);
-        let json = (await RPM.parseFileJSON(RPM.FILE_MAPS + mapName + RPM
-            .FILE_MAP_OBJECTS)).objs;
-        let jsonObject, position;
-        for (let i = 0, l = json.length; i < l; i++)
-        {
+        let mapName = Scene.Map.generateMapName(this.ID_MAP_START_HERO);
+        let json = (await IO.parseFileJSON(Platform.ROOT_DIRECTORY + Paths
+            .FILE_MAPS + mapName + Paths.FILE_MAP_OBJECTS)).objs;
+        let jsonObject: Record<string, any>, position: Position;
+        for (let i = 0, l = json.length; i < l; i++) {
             jsonObject = json[i];
-            if (jsonObject.id === this.idObjectStartHero)
-            {
-                position = jsonObject.p;
+            if (jsonObject.id === this.ID_OBJECT_START_HERO) {
+                position = Position.createFromArray(jsonObject.p);
                 break;
             }
         }
-        if (RPM.isUndefined(position))
-        {
-            RPM.showErrorMessage("Can't find hero in object linking. Please"
+        if (Utils.isUndefined(position)) {
+            Platform.showErrorMessage("Can't find hero in object linking. Please"
                 + " remove the hero object from your map and recreate it." +
                 "\nIf possible, report that you got this error and " +
                 "describe the steps for having this because we are trying "
                 + "to fix this issue.");
         }
-        let globalPortion = SceneMap.getGlobalPortion(position);
-        let fileName = SceneMap.getPortionName(globalPortion[0], globalPortion[1
-            ], globalPortion[2]);
-        json = await RPM.parseFileJSON(RPM.FILE_MAPS + mapName + RPM
+        let globalPortion = position.getGlobalPortion();
+        let fileName = globalPortion.getFileName();
+        json = await IO.parseFileJSON(Paths.FILE_MAPS + mapName + Constants
             .STRING_SLASH + fileName);
-        RPM.modelHero = (new MapPortion(globalPortion[0], globalPortion[1],
-            globalPortion[2])).getHeroModel(json);
-            */
+        this.modelHero = (new MapPortion(globalPortion)).getHeroModel(json);
     }
 
-    // -------------------------------------------------------
-    /** Load the window skins pictures
-    */
-    async loadWindowSkins()
-    {
-        /*
-        for (let i = 1, l = this.windowSkins.length; i < l; i++)
-        {
+    /** 
+     *  Load the window skins pictures
+     *  @static
+     */
+    static async loadWindowSkins() {
+        for (let i = 1, l = this.windowSkins.length; i < l; i++) {
             await this.windowSkins[i].updatePicture();
-        }*/
+        }
     }
 
-    // -------------------------------------------------------
-    /** Get the default array currencies for a default game
-    *   @returns {number[]}
-    */
-    getDefaultCurrencies()
-    {
-        /*
+    /** 
+     *  Get the default array currencies for a default game.
+     *  @static
+     *  @returns {number[]}
+     */
+    static getDefaultCurrencies(): number[] {
         let list = [];
-        for (let id in this.currencies)
-        {
+        for (let id in this.currencies) {
             list[id] = 0;
         }
         return list;
-        */
     }
 
-    // -------------------------------------------------------
-    /** Get the current System window skin
-    *   @returns {SystemWindowSkin}
-    */
-    getWindowSkin()
+    /** 
+     *  Get the current System window skin.
+     *  @static
+     *  @returns {SystemWindowSkin}
+     */
+    static getCurrentWindowSkin(): System.WindowSkin
     {
-        /*
-        return this.windowSkins[this.dbOptions.windowSkinID.getValue()];*/
+        return this.dbOptions.v_windowSkin;
     }
 }
 

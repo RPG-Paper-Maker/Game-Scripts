@@ -10,8 +10,9 @@
 */
 
 import { Base } from "./Base";
-import { Enum } from "../Common";
+import { Enum, Utils, Constants } from "../Common";
 import Orientation = Enum.Orientation;
+import { Portion, Position } from "../Core";
 
 /** @class
 *   A scene for a local map
@@ -67,34 +68,29 @@ class Map extends Base
         }*/
     }
 
-    // -------------------------------------------------------
-    /** Get the portion file name
-    *   @static
-    *   @param {number} x The global x portion
-    *   @param {number} y The global y portion
-    *   @param {number} z The global z portion
-    *   @returns {string}
-    */
-    static getPortionName(x, y, z)
-    {
-        //return (x + "_" + y + "_" + z + RPM.EXTENSION_JSON);
+    /** 
+     *  Generate the map name according to the ID.
+     *  @static
+     *  @param {number} id ID of the map
+     *  @returns {string}
+     */
+    static generateMapName(id: number): string {
+        return "MAP" + Utils.formatNumber(id, 4);
     }
 
-    // -------------------------------------------------------
-    /** Get the global portion of a json position
-    *   @static
-    *   @param {number[]} position The json position
-    *   @returns {number[]}
-    */
-    static getGlobalPortion(position)
+    /** 
+     *  Get the global portion of a json position
+     *  @static
+     *  @param {Position} position The json position
+     *  @returns {Portion}
+     */
+    static getGlobalPortion(position: Position): Portion
     {
-        /*
-        return [
-            Math.floor(position[0] / RPM.PORTION_SIZE),
-            Math.floor(position[1] / RPM.PORTION_SIZE),
-            Math.floor(position[3] / RPM.PORTION_SIZE)
-        ];
-        */
+        return new Portion(
+            Math.floor(position.x / Constants.PORTION_SIZE),
+            Math.floor(position.y / Constants.PORTION_SIZE),
+            Math.floor(position.z / Constants.PORTION_SIZE)
+        );
     }
 
     // -------------------------------------------------------

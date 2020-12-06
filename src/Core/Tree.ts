@@ -9,31 +9,30 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-
-import {Node} from ".";
+import { Node } from "./Node";
 
 /** @class
  *   Datas structure of tree
  *   @property {Node} root Node representing the root of the tree
- *   @param {Object} data The data
+ *   @param {any} data The data
  */
 export class Tree {
     public root: Node;
 
     /**
-     * The data of the visual tree
-     * @param {Record<string, any>} data
+     * The data of the visual tree.
+     * @param {any} data
      */
-    constructor(data: Record<string, any>) {
+    constructor(data: any) {
         this.root = new Node(null, data);
     }
 
     /**
-     * Add a new child
+     * Add a new child.
      * @param {Record<string, any>} data
      * @returns {Node}
      */
-    public add(data: Record<string, any>) {
+    public add(data: Record<string, any>): Node {
         return this.root.add(data);
     }
 }

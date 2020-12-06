@@ -9,6 +9,17 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-export * from "./Base";
-export * from "./Comment";
-export * from "./SetDialogBoxOptions";
+import { Base } from "./Base";
+
+/** @class
+*   An event command for a comment (ignored).
+*   @extends EventCommand.Base
+*   @param {any[]} command Direct JSON command to parse
+*/
+class Comment extends Base {
+    constructor(command: any[]) {
+        super();
+    }    
+}
+
+export { Comment }
