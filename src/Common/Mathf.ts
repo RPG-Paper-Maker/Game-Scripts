@@ -21,13 +21,207 @@ class Mathf {
         throw new Error("This is a static class!");
     }
 
+    /**
+     * Potential Hotspot/Nullipotent
+     * @author DoubleX @interface
+     * @param {(T, number, T[]): boolean} splitCallback - The callback in the
+     *                                                    Array split method
+     * @param {any} splitThis? - The context of splitCallback
+     * @returns {[T[]]} - The fully splitted array from array
+     */
+    static split<T>(array: T[], splitCallback: (elem: T, i: number, self: T[]) => boolean, splitThis?: any): [T[]] {
+        const newArray: [T[]] = [];
+        let newGroup: T[] = [];
+        // forEach is tested to be the fastest among sandboxes including NW.js
+        array.forEach((elem: T, i: number) => {
+            // It's ok to call undefined context with previously bound callbacks
+            if (splitCallback.call(splitThis, elem, i, array)) {
+                newArray.push(newGroup); // It's ok for 1st group to be empty
+                newGroup = [];
+            } else newGroup.push(elem);
+            //
+        });
+        newArray.push(newGroup); // It's ok for the last group to be empty
+        //
+        return newArray;
+    } // split
+
+    /**
+     * Potential Hotspot/Nullipotent
+     * @author DoubleX @interface
+     * @param {T[]} array1 - The 1st array to be checked against
+     * @param {T[]} array2 - The 2nd array to be checked against
+     * @returns {boolean} If array1's a proper subset of array2
+     */
+    static isProperSubsetOf<T>(array1: T[], array2: T[]): boolean {
+        return this.isSubsetOf(array1, array2) && !this.isSubsetOf(array2, array1);
+    }; // isProperSubsetOf
+
+    /**
+     * Potential Hotspot/Nullipotent
+     * @author DoubleX @interface
+     * @param {T[]} array1 - The 1st array to be checked against
+     * @param {T[]} array2 - The 2nd array to be checked against
+     * @returns {boolean} If array1's a proper superset of array2
+     */
+    static isProperSupersetOf<T>(array1: T[], array2: T[]): boolean {
+        return this.isSupersetOf(array1, array2) && !this.isSupersetOf(array2, array1);
+    }; // isProperSupersetOf
+
+    /**
+     * Potential Hotspot/Nullipotent
+     * @author DoubleX @interface
+     * @param {T[]} array1 - The 1st array to be checked against
+     * @param {T[]} array2 - The 2nd array to be checked against
+     * @returns {boolean} If array1's a superset of array2
+     */
+    static isSupersetOf<T>(array1: T[], array2: T[]): boolean {
+        return this.isSubsetOf(array2, array1);
+    }; // isSupersetOf
+
+    /**
+     * Potential Hotspot/Nullipotent
+     * @author DoubleX @interface
+     * @param {[*]} arr - The array to be checked against
+     * @param {T[]} array1 - The 1st array to be checked against
+     * @param {T[]} array2 - The 2nd array to be checked against
+     * @returns {boolean} If array1's a subset of array2
+     */
+    static isSubsetOf<T>(array1: T[], array2: T[]): boolean {
+        return this.isEmpty(this.difference(array1, array2));
+    }; // isSubsetOf
+
+    /**
+     * Potential Hotspot/Nullipotent
+     * @author DoubleX @interface
+     * @param {T[]} array1 - The 1st array to have symmetric difference with
+     * @param {T[]} array2 - The 2nd array to have symmetric difference with
+     * @returns {T[]} The symmetric difference of array1 and array2
+     */
+    static symmetricDifference<T>(array1: T[], array2: T[]): T[] {
+        return this.union(this.difference(array1, array2), this.difference(array2, array1));
+    }; // symmetricDifference
+
+    /**
+     * This method changes the original array
+     * Potential Hotspot/Nullipotent
+     * @author DoubleX @interface
+     * @param {T[]} array1 - The 1st array to have symmetric difference with
+     * @param {T[]} array2 - The 2nd array to have symmetric difference with
+     * @returns {T[]} The symmetric difference of array1 and array2
+     */
+    static symmetricDifferenceInPlace<T>(array1: T[], array2: T[]): T[] {
+        return this.unionInPlace(this.differenceInPlace(array1, array2), this.difference(array2, array1));
+    }; // symmetricDifferenceInPlace
+
+    /**
+     * Potential Hotspot/Nullipotent
+     * @author DoubleX @interface
+     * @param {T[]} array1 - The 1st array to have union with
+     * @param {T[]} array2 - The 2nd array to have union with
+     * @returns {T[]} The union of array1 and array2
+     */
+    static union<T>(array1: T[], array2: T[]): T[] {
+        return array1.concat(this.difference(array2, array1));
+    }; // union
+
+    /**
+     * This method changes the original array
+     * Potential Hotspot/Nullipotent
+     * @author DoubleX @interface
+     * @param {T[]} array1 - The 1st array to have union with
+     * @param {T[]} array2 - The 2nd array to have union with
+     * @returns {T[]} The union of array1 and array2
+     */
+    static unionInPlace<T>(array1: T[], array2: T[]): T[] {
+        array1.push(...this.difference(array2, array1));
+        return array1;
+    }; // unionInPlace
+
+    /**
+     * Potential Hotspot/Nullipotent
+     * @author DoubleX @interface
+     * @param {T[]} array1 - The 1st array to have difference with
+     * @param {T[]} array2 - The 2nd array to have difference with
+     * @returns {T[]} The difference of array1 and array2
+     */
+    static difference<T>(array1: T[], array2: T[]): T[] {
+        return array1.filter((elem: T) => this.excludes(array2, elem, 0));
+    }; // difference
+
+    /**
+     * This method changes the original array
+     * Potential Hotspot/Nullipotent
+     * @author DoubleX @interface
+     * @param {T[]} array1 - The 1st array to have difference with
+     * @param {T[]} array2 - The 2nd array to have difference with
+     * @returns {T[]} The difference of array1 and array2
+     */
+    static differenceInPlace<T>(array1: T[], array2: T[]): T[] {
+        for (let i: number = 0; ; i++) {
+            while (array1[i] && array2.includes(array1[i])) array1.splice(i, 1);
+            if (!array1[i]) return array1;
+        }
+    }; // differenceInPlace
+
+    /**
+     * Potential Hotspot/Nullipotent
+     * @author DoubleX @interface
+     * @param {T[]} array1 - The 1st array to have intersection with
+     * @param {T[]} array2 - The 2nd array to have intersection with
+     * @returns {T[]} The intersection of array1 and array2
+     */
+    static intersection<T>(array1: T[], array2: T[]): T[] {
+        // The 2nd argument of includes doesn't match with that of filter
+        return array1.filter((elem: T) => array2.includes(elem));
+        //
+    }; // intersection
+
+    /**
+     * This method changes the original array
+     * Potential Hotspot/Nullipotent
+     * @author DoubleX @interface
+     * @param {T[]} array1 - The 1st array to have intersection with
+     * @param {T[]} array2 - The 2nd array to have intersection with
+     * @returns {T[]} The intersection of array1 and array2
+     */
+    static intersectionInPlace<T>(array1: T[], array2: T[]): T[] {
+        for (let i: number = 0; ; i++) {
+            while (array1[i] && this.excludes(array2, array1[i], 0)) {
+                array1.splice(i, 1);
+            }
+            if (!array1[i]) return array1;
+        }
+    }; // intersectionInPlace
+
+    /**
+     * Potential Hotspot/Nullipotent
+     * @author DoubleX @interface
+     * @param {T[]} array - The array to be checked against
+     * @param {*} elem - The element to be checked against
+     * @param {index} fromI - The index in this at which to begin searching
+     * @returns {boolean} If array doesn't have elem
+     */
+    static excludes<T>(array: T[], elem: T, fromI: number): boolean {
+        return !array.includes(elem, fromI);
+    }; // excludes
+
+    /**
+     * Potential Hotspot/Idempotent
+     * @author DoubleX @interface
+     * @param {T[]} array - The array to be cleared
+     */
+    static clear<T>(array: T[]): void { array.length = 0; };
+
     /** Check if an array is empty.
      *   @static
      *   @param {any[]} array The array to test
      *   @returns {boolean}
      */
     static isEmpty<T>(array: T[]): boolean {
-        return array[0] == null;
+        // Edited to fix the bug of nonempty array with 1st element being null
+        return array.length === 0;
+        //
     }
 
     /** Get the cos.
