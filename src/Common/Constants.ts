@@ -14,8 +14,8 @@
  */
 class Constants {
 
-    public static readonly FONT_SIZE = 13;
-    public static readonly FONT_NAME = "sans-serif";
+    public static readonly DEFAULT_FONT_SIZE = 13;
+    public static readonly DEFAULT_FONT_NAME = "sans-serif";
     public static readonly BASIC_SQUARE_SIZE = 32;
     public static readonly SMALL_FONT_SIZE = 8;
     public static readonly MEDIUM_FONT_SIZE = 10;
@@ -59,22 +59,6 @@ class Constants {
     public static readonly UNDEFINED = 'undefined';
     public static readonly NUMBER = "number";
     public static readonly STRING = "string";
-    public static readonly TAG_BOLD = "b";
-    public static readonly TAG_ITALIC = "i";
-    public static readonly TAG_LEFT = "l";
-    public static readonly TAG_CENTER = "c";
-    public static readonly TAG_RIGHT = "r";
-    public static readonly TAG_SIZE = "size";
-    public static readonly TAG_FONT = "font";
-    public static readonly TAG_TEXT_COLOR = "textcolor";
-    public static readonly TAG_BACK_COLOR = "backcolor";
-    public static readonly TAG_STROKE_COLOR = "strokecolor";
-    public static readonly TAG_VARIABLE = "var";
-    public static readonly TAG_PARAMETER = "par";
-    public static readonly TAG_PROPERTY = "pro";
-    public static readonly TAG_HERO_NAME = "hname";
-    public static readonly TAG_ICON = "ico";
-    public static readonly DEFAULT_FONT = "sans-serif";
     public static readonly JSON_KEY = "k";
     public static readonly JSON_VALUE = "v";
     public static readonly EXTENSION_JSON = ".json";

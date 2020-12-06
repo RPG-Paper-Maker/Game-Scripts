@@ -19,13 +19,13 @@
  */
 class Node {
 
-    public data: Record<string, any>;
+    public data: any;
     public parent: Node;
     public firstChild: Node;
     public lastChild: Node;
     public next: Node;
 
-    constructor(parent: Node, data: Record<string, any>) {
+    constructor(parent: Node, data: any) {
         this.data = data;
         this.parent = parent;
         this.firstChild = null;
@@ -37,7 +37,7 @@ class Node {
      * Add a new child.
      * @param data
      */
-    public add(data: Record<string, any>): Node {
+    public add(data: any): Node {
         let node = new Node(this, data);
         if (this.firstChild === null) {
             this.firstChild = node;

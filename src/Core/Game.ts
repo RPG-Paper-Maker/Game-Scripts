@@ -9,6 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Player } from "./Player";
+
 /** @class
 *   All the global informations of a particular game
 *   @property {number} currentSlot The current slot
@@ -33,7 +35,11 @@
 */
 class Game
 {
+    public teamHeroes: Player[];
+    public reserveHeroes: Player[];
+    public hiddenHeroes: Player[];
     public variables: any[];
+
     constructor(slot, json)
     {
         /*
@@ -47,27 +53,22 @@ class Game
         }*/
     }
 
-    // -------------------------------------------------------
-    /** Get the hero in a tab with instance ID
-    *   @static
-    *   @param {GamePlayer[]} tab The heroes tab
-    *   @param {number} id The instance ID
-    *   @returns {GamePlayer}
-    */
-    static getHeroInstanceInTab(tab, id)
-    {
-        /*
-        let hero;
-        for (let i = 0, l = tab.length; i < l; i++)
-        {
+    /** 
+     *  Get the hero in a tab with instance ID.
+     *  @static
+     *  @param {Player[]} tab The heroes tab
+     *  @param {number} id The instance ID
+     *  @returns {GamePlayer}
+     */
+    static getHeroInstanceInTab(tab: Player[], id: number): Player {
+        let hero: Player;
+        for (let i = 0, l = tab.length; i < l; i++) {
             hero = tab[i];
-            if (hero.instid === id)
-            {
+            if (hero.instid === id) {
                 return hero;
             }
         }
         return null;
-        */
     }
 
     // -------------------------------------------------------
@@ -84,26 +85,21 @@ class Game
             */
     }
 
-    // -------------------------------------------------------
-    /** Get the hero with instance ID
-    *   @param {number} id The instance ID
-    *   @returns {GamePlayer}
-    */
-    getHeroByInstanceID(id)
-    {
-        /*
+    /** 
+     *  Get the hero with instance ID
+     *  @param {number} id The instance ID
+     *  @returns {Player}
+     */
+    getHeroByInstanceID(id: number): Player {
         let hero = Game.getHeroInstanceInTab(this.teamHeroes, id);
-        if (hero !== null)
-        {
+        if (hero !== null) {
             return hero;
         }
         hero = Game.getHeroInstanceInTab(this.reserveHeroes, id);
-        if (hero !== null)
-        {
+        if (hero !== null) {
             return hero;
         }
-        hero = Game.getHeroInstanceInTab(this.hiddenHeroes, id);
-        return hero;*/
+        return Game.getHeroInstanceInTab(this.hiddenHeroes, id);
     }
 
     // -------------------------------------------------------

@@ -10,7 +10,7 @@
 */
 
 export * from "./Base";
-export * from "./Keyboards";
+export * from "./Keyboard";
 export * from "./Pictures";
 export * from "./Settings";
 export * from "./Systems";

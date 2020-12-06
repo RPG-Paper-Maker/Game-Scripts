@@ -22,6 +22,7 @@ export * from "./MapObject";
 export * from "./MapPortion";
 export * from "./Node";
 export * from "./Picture2D";
+export * from "./Player";
 export * from "./Portion";
 export * from "./Position";
 export * from "./Rectangle";

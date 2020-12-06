@@ -9,28 +9,35 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Enum } from "../Common";
+import CharacterKind = Enum.CharacterKind;
+
 /** @class
-*   A character in the team/hidden/reserve
-*   @property {CharacterKind} k The kind of the character (hero or monster)
-*   @property {number} id The ID of the character
-*   @property {number} instid The instance id of the character
-*   @property {Hero} character The System character
-*   @property {string} name The character name
-*   @property {GameSkill[]} sk List of all the learned skills
-*   @property {GameItem[]} equip List of the equiped weapons/armors
-*   @property {number[]} expList The exp list for each level
-*   @property {boolean} levelingUp Indicate if leveling up
-*   @property {boolean} testedLevelUp Indicate if the level up was tested
-*   @param {CharacterKind} kind The kind of the character (hero or monster)
-*   @param {number} id The ID of the character
-*   @param {number} instanceID The instance id of the character
-*   @param {GameSkill[]} skills List of all the learned skills
-*   @param {object} [json=undefined] Json object describing the items
-*/
-class GamePlayer
+ *  A character in the team/hidden/reserve.
+ *  @property {CharacterKind} k The kind of the character (hero or monster)
+ *  @property {number} id The ID of the character
+ *  @property {number} instid The instance id of the character
+ *  @property {Hero} character The System character
+ *  @property {string} name The character name
+ *  @property {GameSkill[]} sk List of all the learned skills
+ *  @property {GameItem[]} equip List of the equiped weapons/armors
+ *  @property {number[]} expList The exp list for each level
+ *  @property {boolean} levelingUp Indicate if leveling up
+ *  @property {boolean} testedLevelUp Indicate if the level up was tested
+ *  @param {CharacterKind} kind The kind of the character (hero or monster)
+ *  @param {number} id The ID of the character
+ *  @param {number} instanceID The instance id of the character
+ *  @param {GameSkill[]} skills List of all the learned skills
+ *  @param {object} [json=undefined] Json object describing the items
+ */
+class Player
 {
-    constructor(kind, id, instanceID, skills, json)
+    public instid: number;
+    public name: string;
+
+    constructor(kind: CharacterKind, id: number, instanceID: number, skills, json)
     {
+        /*
         if (!RPM.isUndefined(kind))
         {
             this.k = kind;
@@ -67,6 +74,7 @@ class GamePlayer
                 this.read(json);
             }
         }
+        */
     }
 
     // -------------------------------------------------------
@@ -76,6 +84,7 @@ class GamePlayer
     */
     static getEquipmentLength()
     {
+        /*
         // Adding equipments
         let maxLength = 0;
         let text;
@@ -88,6 +97,7 @@ class GamePlayer
                 maxLength);
         }
         return maxLength;
+        */
     }
 
     // -------------------------------------------------------
@@ -98,6 +108,7 @@ class GamePlayer
     */
     static getTemporaryPlayer(values)
     {
+        /*
         let player = new GamePlayer();
         let statistics = RPM.datasGame.battleSystem.statistics;
         for (let i = 1, l = statistics.length; i < l; i++)
@@ -105,6 +116,7 @@ class GamePlayer
             player.initStatValue(statistics[i], values ? values[i] : 0);
         }
         return player;
+        */
     }
 
     // -------------------------------------------------------
@@ -113,6 +125,7 @@ class GamePlayer
     */
     getSaveCharacter()
     {
+        /*
         return {
             k: this.k,
             id: this.id,
@@ -121,6 +134,7 @@ class GamePlayer
             stats: this.getSaveStat(),
             equip: this.getSaveEquip()
         };
+        */
     }
 
     // -------------------------------------------------------
@@ -129,6 +143,7 @@ class GamePlayer
     */
     getSaveStat()
     {
+        /*
         let l = RPM.datasGame.battleSystem.statistics.length - 1;
         let list = new Array(l);
         let statistic;
@@ -141,6 +156,7 @@ class GamePlayer
                 statistic.getMaxAbbreviation()]];
         }
         return list;
+        */
     }
 
     // -------------------------------------------------------
@@ -149,6 +165,7 @@ class GamePlayer
     */
     getSaveEquip()
     {
+        /*
         let l = this.equip.length;
         let list = new Array(l);
         for (let i = 1; i < l; i++)
@@ -159,6 +176,7 @@ class GamePlayer
             }
         }
         return list;
+        */
     }
 
     // -------------------------------------------------------
@@ -167,8 +185,10 @@ class GamePlayer
     */
     isDead()
     {
+        /*
         return RPM.evaluateFormula(RPM.datasGame.battleSystem.formulaIsDead
             .getValue(), this, null);
+            */
     }
 
     // -------------------------------------------------------
@@ -177,6 +197,7 @@ class GamePlayer
     */
     instanciate(level)
     {
+        /*
         // Skills
         this.sk = [];
         let skills = this.character.getSkills();
@@ -248,6 +269,7 @@ class GamePlayer
                     statisticProgression.getValueAtLevel(level, this));
             }
         }
+        */
     }
 
     // -------------------------------------------------------
@@ -258,6 +280,7 @@ class GamePlayer
     */
     getEquipmentStatsAndBonus(item, equipmentID)
     {
+        /*
         let statistics = RPM.datasGame.battleSystem.statistics;
         let l = statistics.length
         let list = new Array(l);
@@ -339,6 +362,7 @@ class GamePlayer
             }
         }
         return [list, bonus];
+        */
     }
 
     // -------------------------------------------------------
@@ -349,6 +373,7 @@ class GamePlayer
     */
     updateEquipmentStats(list, bonus)
     {
+        /*
         let result;
         if (!list || !bonus)
         {
@@ -377,6 +402,7 @@ class GamePlayer
             }
             this[statistic.getBonusAbbreviation()] = bonus[i];
         }
+        */
     }
 
     // -------------------------------------------------------
@@ -386,11 +412,13 @@ class GamePlayer
     */
     initStatValue(statistic, value)
     {
+        /*
         this[statistic.abbreviation] = value;
         if (!statistic.isFix)
         {
             this[statistic.getMaxAbbreviation()] = value;
         }
+        */
     }
 
     // -------------------------------------------------------
@@ -400,6 +428,7 @@ class GamePlayer
     */
     updateStatValue(statistic, value)
     {
+        /*
         let abr = statistic.isFix ? statistic.abbreviation : statistic
             .getMaxAbbreviation();
         if (RPM.isUndefined(this[statistic.getBeforeAbbreviation()]))
@@ -408,6 +437,7 @@ class GamePlayer
         }
         this[abr] = value;
         this[statistic.getBonusAbbreviation()] = 0;
+        */
     }
 
     // -------------------------------------------------------
@@ -415,6 +445,7 @@ class GamePlayer
     */
     updateAllStatsValues()
     {
+        /*
         // Fix values : equipment influence etc
         let level = this.getCurrentLevel();
         let statistics = RPM.datasGame.battleSystem.statistics;
@@ -463,6 +494,7 @@ class GamePlayer
         }
 
         this.updateEquipmentStats();
+        */
     }
 
     // -------------------------------------------------------
@@ -471,7 +503,7 @@ class GamePlayer
     */
     getBarAbbreviation(stat)
     {
-        return this[stat.abbreviation] + " / " + this[stat.getMaxAbbreviation()];
+        //return this[stat.abbreviation] + " / " + this[stat.getMaxAbbreviation()];
     }
 
     // -------------------------------------------------------
@@ -480,6 +512,7 @@ class GamePlayer
     */
     read(json)
     {
+        /*
         // Stats
         let jsonStats = json.stats;
         let i, l, statistic, value;
@@ -515,6 +548,7 @@ class GamePlayer
             this.equip[i] = item;
         }
         this.updateEquipmentStats();
+        */
     }
 
     // -------------------------------------------------------
@@ -523,6 +557,7 @@ class GamePlayer
     */
     getCharacterInformations()
     {
+        /*
         switch (this.k)
         {
         case CharacterKind.Hero:
@@ -531,6 +566,7 @@ class GamePlayer
             return RPM.datasGame.monsters.list[this.id];
         }
         return null;
+        */
     }
 
     // -------------------------------------------------------
@@ -539,7 +575,7 @@ class GamePlayer
     */
     getCurrentLevel()
     {
-        return this[RPM.datasGame.battleSystem.getLevelStatistic().abbreviation];
+        //return this[RPM.datasGame.battleSystem.getLevelStatistic().abbreviation];
     }
 
     // -------------------------------------------------------
@@ -547,10 +583,12 @@ class GamePlayer
     */
     levelUp()
     {
+        /*
         this[RPM.datasGame.battleSystem.getLevelStatistic().abbreviation]++;
 
         // Update statistics
         this.updateAllStatsValues();
+        */
     }
 
     // -------------------------------------------------------
@@ -559,7 +597,7 @@ class GamePlayer
     */
     getRewardExperience()
     {
-        return this.character.getRewardExperience(this.getCurrentLevel());
+        //return this.character.getRewardExperience(this.getCurrentLevel());
     }
 
     // -------------------------------------------------------
@@ -568,7 +606,7 @@ class GamePlayer
     */
     getRewardCurrencies()
     {
-        return this.character.getRewardCurrencies(this.getCurrentLevel());
+        //return this.character.getRewardCurrencies(this.getCurrentLevel());
     }
 
     // -------------------------------------------------------
@@ -577,7 +615,7 @@ class GamePlayer
     */
     getRewardLoots()
     {
-        return this.character.getRewardLoots(this.getCurrentLevel());
+        //return this.character.getRewardLoots(this.getCurrentLevel());
     }
 
     // -------------------------------------------------------
@@ -586,6 +624,7 @@ class GamePlayer
     */
     updateRemainingXP(fullTime)
     {
+        /*
         if (this.getCurrentLevel() < this.expList.length - 1)
         {
             let current = this[RPM.datasGame.battleSystem.getExpStatistic()
@@ -606,6 +645,7 @@ class GamePlayer
         }
         this.timeXP = new Date().getTime();
         this.obtainedXP = 0;
+        */
     }
 
     // -------------------------------------------------------
@@ -613,6 +653,7 @@ class GamePlayer
     */
     updateObtainedExperience()
     {
+        /*
         let xpAbbreviation = RPM.datasGame.battleSystem.getExpStatistic()
             .abbreviation;
         let tick = new Date().getTime() - this.timeXP;
@@ -630,6 +671,7 @@ class GamePlayer
             this[xpAbbreviation] += xp;
         }
         this.testedLevelUp = false;
+        */
     }
 
     // -------------------------------------------------------
@@ -638,6 +680,7 @@ class GamePlayer
     */
     updateExperience()
     {
+        /*
         let xpAbbreviation = RPM.datasGame.battleSystem.getExpStatistic()
             .abbreviation;
         let maxXPAbbreviation = RPM.datasGame.battleSystem.getExpStatistic()
@@ -667,6 +710,7 @@ class GamePlayer
             return leveledUp;
         }
         return false;
+        */
     }
 
     // -------------------------------------------------------
@@ -674,7 +718,7 @@ class GamePlayer
     */
     passExperience()
     {
-        this.timeXP = this.totalTimeXP;
+        //this.timeXP = this.totalTimeXP;
     }
 
     // -------------------------------------------------------
@@ -682,12 +726,14 @@ class GamePlayer
     */
     pauseExperience()
     {
+        /*
         this.totalTimeXP -= new Date().getTime() - this.timeXP;
         if (this.totalTimeXP < 0)
         {
             this.totalTimeXP = 0;
         }
         this.obtainedXP = 0;
+        */
     }
 
     // -------------------------------------------------------
@@ -695,7 +741,7 @@ class GamePlayer
     */
     unpauseExperience()
     {
-        this.timeXP = new Date().getTime();
+        //this.timeXP = new Date().getTime();
     }
 
     // -------------------------------------------------------
@@ -704,7 +750,11 @@ class GamePlayer
     */
     isExperienceUpdated()
     {
+        /*
         return this.testedLevelUp && this.totalRemainingXP === 0 && this
             .remainingXP === 0;
+            */
     }
 }
+
+export { Player }

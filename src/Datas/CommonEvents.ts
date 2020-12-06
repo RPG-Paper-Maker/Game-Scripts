@@ -46,9 +46,8 @@ class DatasCommonEvents {
         this.eventsSystem = [];
         Utils.readJSONSystemList({ list: json.eventsSystem, listIDs: this
             .eventsSystem, cons: System.Event });
-            Utils.readJSONSystemList({ list: json.eventsUser, listIDs: this
-                .eventsUser, cons: System.Event });
-        this.eventsUser = RPM.readJSONSystemList(json.eventsUser, Event);
+        Utils.readJSONSystemList({ list: json.eventsUser, listIDs: this
+            .eventsUser, cons: System.Event });
         this.commonReactions = RPM.readJSONSystemList(json.commonReactors, 
             SystemCommonReaction);
 

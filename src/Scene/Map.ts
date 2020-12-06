@@ -78,21 +78,6 @@ class Map extends Base
         return "MAP" + Utils.formatNumber(id, 4);
     }
 
-    /** 
-     *  Get the global portion of a json position
-     *  @static
-     *  @param {Position} position The json position
-     *  @returns {Portion}
-     */
-    static getGlobalPortion(position: Position): Portion
-    {
-        return new Portion(
-            Math.floor(position.x / Constants.PORTION_SIZE),
-            Math.floor(position.y / Constants.PORTION_SIZE),
-            Math.floor(position.z / Constants.PORTION_SIZE)
-        );
-    }
-
     // -------------------------------------------------------
     /** Load async stuff
     */

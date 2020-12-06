@@ -135,6 +135,7 @@ namespace Enum {
      *   @readonly
      */
     export enum Align {
+        None = " none",
         Left = "left",
         Right = "right",
         Center=  "center"

@@ -10,8 +10,10 @@
 */
 
 import { Base } from "./Base";
-import { System } from "..";
-import { WindowBox } from "../Core";
+import { System, Graphic, Datas, Manager } from "..";
+import { WindowBox, MapObject } from "../Core";
+import { Utils, Constants, Enum } from "../Common";
+import Align = Enum.Align;
 
 /** @class
 *   An event command for displaying text
@@ -41,55 +43,50 @@ class ShowText extends Base {
         }
         this.interlocutor = System.DynamicValue.createValueCommand(command, iterator);
         this.facesetID = command[iterator.i++];
-        this.message = command[iterator.i++];
+        this.message = Utils.numToString(command[iterator.i++]);
         this.windowMain = new WindowBox(0, 0, 0, 0,
             {
-                content: new GraphicMessage(RPM.numToString(this.message), this
-                    .facesetID),
-                padding: RPM.HUGE_PADDING_BOX
+                content: new Graphic.Message(this.message, this.facesetID),
+                padding: Constants.HUGE_PADDING_BOX
             }
         );
-        this.windowInterlocutor = new WindowBox(this.windowMain.oX + (RPM
-            .MEDIUM_SLOT_HEIGHT / 2), this.windowMain.oY - (RPM
-            .MEDIUM_SLOT_HEIGHT / 2), RPM.MEDIUM_SLOT_WIDTH, RPM
+        this.windowInterlocutor = new WindowBox(this.windowMain.oX + (Constants
+            .MEDIUM_SLOT_HEIGHT / 2), this.windowMain.oY - (Constants
+            .MEDIUM_SLOT_HEIGHT / 2), Constants.MEDIUM_SLOT_WIDTH, Constants
             .MEDIUM_SLOT_HEIGHT,
             {
-                content: new GraphicText(RPM.STRING_EMPTY, { align: Align.Center }),
-                padding: RPM.SMALL_SLOT_PADDING
+                content: new Graphic.Text("", { align: Align.Center }),
+                padding: Constants.SMALL_SLOT_PADDING
             }
         );
         this.isDirectNode = false;
     }
 
-    // -------------------------------------------------------
-    /** Initialize the current state
-    *   @returns {Object} The current state
-    */
-    initialize()
-    {
-        this.windowMain.setX(RPM.defaultValue(RPM.datasGame.system.dbOptions.vx,
-            0));
-        this.windowMain.setY(RPM.defaultValue(RPM.datasGame.system.dbOptions.vy,
-            0));
-        this.windowMain.setW(RPM.defaultValue(RPM.datasGame.system.dbOptions.vw,
-            0));
-        this.windowMain.setH(RPM.defaultValue(RPM.datasGame.system.dbOptions.vh,
-            0));
-        this.windowInterlocutor.setX(this.windowMain.oX + (RPM
+    /** 
+     *  Initialize the current state.
+     *  @returns {Record<string, any>} The current state
+     */
+    initialize(): Record<string, any> {
+        this.windowMain.setX(Utils.defaultValue(Datas.Systems.dbOptions.v_x, 0));
+        this.windowMain.setY(Utils.defaultValue(Datas.Systems.dbOptions.v_y, 0));
+        this.windowMain.setW(Utils.defaultValue(Datas.Systems.dbOptions.v_w, 0));
+        this.windowMain.setH(Utils.defaultValue(Datas.Systems.dbOptions.v_h, 0));
+        this.windowInterlocutor.setX(this.windowMain.oX + (Constants
             .MEDIUM_SLOT_HEIGHT / 2));
-        this.windowInterlocutor.setY(this.windowMain.oY - (RPM
+        this.windowInterlocutor.setY(this.windowMain.oY - (Constants
             .MEDIUM_SLOT_HEIGHT / 2));
-        this.windowMain.padding[0] = RPM.defaultValue(RPM.datasGame.system
-            .dbOptions.vpLeft, 0);
-        this.windowMain.padding[1] = RPM.defaultValue(RPM.datasGame.system
-            .dbOptions.vpTop, 0);
-        this.windowMain.padding[2] = RPM.defaultValue(RPM.datasGame.system
-            .dbOptions.vpRight, 0);
-        this.windowMain.padding[3] = RPM.defaultValue(RPM.datasGame.system
-            .dbOptions.vpBottom, 0);
+        this.windowMain.padding[0] = Utils.defaultValue(Datas.Systems.dbOptions
+            .v_pLeft, 0);
+        this.windowMain.padding[1] = Utils.defaultValue(Datas.Systems.dbOptions
+            .v_pTop, 0);
+        this.windowMain.padding[2] = Utils.defaultValue(Datas.Systems.dbOptions
+            .v_pRight, 0);
+        this.windowMain.padding[3] = Utils.defaultValue(Datas.Systems.dbOptions
+            .v_pBottom, 0);
         this.windowMain.updateDimensions();
         this.windowMain.content.update();
-        this.windowInterlocutor.content.setText(this.interlocutor.getValue());
+        (<Graphic.Text> this.windowInterlocutor.content).setText(this
+            .interlocutor.getValue());
         return {
             clicked: false,
             frame: 0,
@@ -98,60 +95,56 @@ class ShowText extends Base {
         }
     }
 
-    // -------------------------------------------------------
-    /** Update and check if the event is finished
-    *   @param {Object} currentState The current state of the event
-    *   @param {MapObject} object The current object reacting
-    *   @param {number} state The state ID
-    *   @returns {number} The number of node to pass
-    */
-    update(currentState, object, state)
+    /**
+     *  Update and check if the event is finished.
+     *  @param {Record<string, any>} currentState The current state of the event
+     *  @param {MapObject} object The current object reacting
+     *  @param {number} state The state ID
+     *  @returns {number} The number of node to pass
+     */
+    update(currentState: Record<string, any>, object: MapObject, state: number): 
+        number
     {
-        if (currentState.clicked)
-        {
+        if (currentState.clicked) {
             return 1;
         }
-        currentState.frameTick += RPM.elapsedTime;
-        if (currentState.frameTick >= currentState.frameDuration)
-        {
-            currentState.frame = (currentState.frame + 1) % RPM.FRAMES;
+        currentState.frameTick += Manager.Stack.elapsedTime;
+        if (currentState.frameTick >= currentState.frameDuration) {
+            currentState.frame = (currentState.frame + 1) % Datas.Systems.FRAMES;
             currentState.frameTick = 0;
-            RPM.requestPaintHUD = true;
+            Manager.Stack.requestPaintHUD = true;
         }
-        this.windowInterlocutor.content.setText(this.interlocutor.getValue());
+        (<Graphic.Text> this.windowInterlocutor.content).setText(this
+            .interlocutor.getValue());
         return 0;
     }
 
-    // -------------------------------------------------------
-    /** First key press handle for the current stack
-    *   @param {Object} currentState The current state of the event
-    *   @param {number} key The key ID pressed
-    */
-    onKeyPressed(currentState, key)
-    {
-        if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
-            .Action))
-        {
+    /** 
+     *  First key press handle for the current stack
+     *  @param {Record<string, any>} currentState The current state of the event
+     *  @param {number} key The key ID pressed
+     */
+    onKeyPressed(currentState: Record<string, any>, key: number) {
+        if (Datas.Keyboard.isKeyEqual(key, Datas.Keyboard.menuControls.Action)) {
             currentState.clicked = true;
         }
     }
 
-    // -------------------------------------------------------
-    /** Draw the HUD
-    *   @param {Object} currentState The current state of the event
-    */
-    drawHUD(currentState)
-    {
+    /** 
+     *  Draw the HUD
+     *  @param {Record<string ,any>} currentState The current state of the event
+     */
+    drawHUD(currentState: Record<string ,any>) {
         this.windowMain.draw();
-        if (this.windowInterlocutor.content.text)
-        {
+        if ((<Graphic.Text> this.windowInterlocutor.content).text) {
             this.windowInterlocutor.draw();
         }
-        if (currentState)
-        {
-            RPM.datasGame.system.getWindowSkin().drawArrowMessage(currentState
+        if (currentState) {
+            Datas.Systems.getCurrentWindowSkin().drawArrowMessage(currentState
                 .frame, this.windowMain.oX + (this.windowMain.oW / 2), this
                 .windowMain.oY + (this.windowMain.oH - 40));
         }
     }
 }
+
+export { ShowText }

@@ -71,13 +71,14 @@ class Text extends Base {
 
     constructor(text = "", { x = 0, y = 0, w = 0, h = 0, align = Align.Left, 
         fontSize = Utils.defaultValue(Datas.Systems.dbOptions.v_tSize, Constants
-        .FONT_SIZE), fontName = Utils.defaultValue(Datas.Systems.dbOptions
-        .v_tFont, Constants.FONT_NAME), verticalAlign = AlignVertical.Center, 
-        color = Utils.defaultValue(Datas.Systems.dbOptions.v_tcText, System
-        .Color.white), bold = false, italic = false, backColor = Utils
-        .defaultValue(Datas.Systems.dbOptions.v_tcBackground, null), strokeColor
-        = Utils.defaultValue(Datas.Systems.dbOptions.tOutline, false) ? Utils
-        .defaultValue(Datas.Systems.dbOptions.v_tcOutline, null) : null} = {})
+        .DEFAULT_FONT_SIZE), fontName = Utils.defaultValue(Datas.Systems
+        .dbOptions.v_tFont, Constants.DEFAULT_FONT_NAME), verticalAlign = 
+        AlignVertical.Center, color = Utils.defaultValue(Datas.Systems.dbOptions
+        .v_tcText, System.Color.white), bold = false, italic = false, backColor 
+        = Utils.defaultValue(Datas.Systems.dbOptions.v_tcBackground, null), 
+        strokeColor = Utils.defaultValue(Datas.Systems.dbOptions.tOutline, false
+        ) ? Utils.defaultValue(Datas.Systems.dbOptions.v_tcOutline, null) : null
+        } = {})
     {
         super(x, y, w, h);
 
@@ -159,8 +160,7 @@ class Text extends Base {
         number = this.oH, positionResize: boolean = true): void
     {
         // If position resize checked, resize it
-        if (positionResize)
-        {
+        if (positionResize) {
             x = ScreenResolution.getScreenX(x);
             y = ScreenResolution.getScreenY(y);
         }
@@ -172,8 +172,7 @@ class Text extends Base {
         let textWidth = ScreenResolution.getScreenX(this.textWidth);
         let textHeight = ScreenResolution.getScreenY(this.fontSize + (this
             .strokeColor === null ? 0 : 2));
-        switch(this.align)
-        {
+        switch(this.align) {
         case Align.Left:
             break;
         case Align.Right:
@@ -186,8 +185,7 @@ class Text extends Base {
             break;
         }
         y += ScreenResolution.getScreenY(this.fontSize) / 3;
-        switch(this.verticalAlign)
-        {
+        switch(this.verticalAlign) {
         case AlignVertical.Bot:
             y += h;
             break;
@@ -199,27 +197,24 @@ class Text extends Base {
         }
 
         // Draw background color
-        if (this.backColor !== null)
-        {
+        if (this.backColor !== null) {
             Platform.ctx.fillStyle = this.backColor.rgb;
             Platform.ctx.fillRect(xBack, y - textHeight, textWidth, textHeight);
         }
 
         // Set context options
         Platform.ctx.font = this.font;
-        Platform.ctx.textAlign = this.align;
+        Platform.ctx.textAlign = <CanvasTextAlign> this.align;
         let lineHeight = this.fontSize * 2;
         let lines = this.text.split(Constants.STRING_NEW_LINE);
         let i: number, l = lines.length;
 
         // Stroke text
         let yOffset;
-        if (this.strokeColor !== null)
-        {
+        if (this.strokeColor !== null) {
             Platform.ctx.strokeStyle = this.strokeColor.rgb;
             yOffset = 0;
-            for (i = 0; i < l; i++)
-            {
+            for (i = 0; i < l; i++) {
                 Platform.ctx.strokeText(lines[i], x - 1, y - 1 + yOffset);
                 Platform.ctx.strokeText(lines[i], x - 1, y  + 1 + yOffset);
                 Platform.ctx.strokeText(lines[i], x + 1, y - 1 + yOffset);
@@ -231,8 +226,7 @@ class Text extends Base {
         // Drawing the text
         Platform.ctx.fillStyle = this.color.rgb;
         yOffset = 0;
-        for (i = 0; i < l; i++)
-        {
+        for (i = 0; i < l; i++) {
             Platform.ctx.fillText(lines[i], x, y + yOffset);
             yOffset += lineHeight;
         }

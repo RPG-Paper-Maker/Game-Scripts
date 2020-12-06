@@ -9,6 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Enum } from "../Common";
+
 /** @class
 *   All the keyBoard datas
 *   @property {SystemKeyBoard[]} list List of all the keys of the game by ID
@@ -16,9 +18,10 @@
 *   by index
 *   @property {Object} menuControls All the menu controls assigns
 */
-class KeyBoards
+class Keyboard
 {
     public static list: any; // todo
+    public static menuControls: Record<string, any>; // todo
 
     constructor()
     {
@@ -132,4 +135,4 @@ class KeyBoards
     }
 }
 
-export { KeyBoards }
+export { Keyboard }

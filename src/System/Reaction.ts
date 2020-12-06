@@ -73,7 +73,7 @@ class Reaction extends Base {
             node = commands.add(command);
 
             // If text before choice, make a link
-            if (command instanceof EventCommandShowText) {
+            if (command instanceof EventCommand.ShowText) {
                 choice = command;
             } else if (command instanceof EventCommandDisplayChoice) {
                 command.setShowText(choice);
