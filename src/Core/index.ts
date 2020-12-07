@@ -28,3 +28,4 @@ export * from "./Position";
 export * from "./Rectangle";
 export * from "./Tree";
 export * from "./WindowBox";
+export * from "./WindowChoices";

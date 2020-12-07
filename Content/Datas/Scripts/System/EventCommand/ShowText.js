@@ -8,13 +8,11 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-
-import { Base } from "./Base";
-import { System, Graphic, Datas, Manager } from "..";
-import { WindowBox, MapObject } from "../Core";
-import { Utils, Constants, Enum } from "../Common";
-import Align = Enum.Align;
-
+import { Base } from "./Base.js";
+import { System, Graphic, Datas, Manager } from "../index.js";
+import { WindowBox } from "../Core/index.js";
+import { Utils, Constants, Enum } from "../Common/index.js";
+var Align = Enum.Align;
 /** @class
 *   An event command for displaying text
 *   @extends EventCommand.Base
@@ -22,51 +20,37 @@ import Align = Enum.Align;
 *   @property {number} facesetID The faceset ID
 *   @property {string} message The message to parse
 *   @property {WindowBox} windowMain Window containing the message to display
-*   @property {WindowBox} windowInterlocutor Window containing the interlocutor 
+*   @property {WindowBox} windowInterlocutor Window containing the interlocutor
 *   to display
 *   @param {any[]} command Direct JSON command to parse
 */
 class ShowText extends Base {
-
-    public interlocutor: System.DynamicValue;
-    public facesetID: number;
-    public message: string;
-    public windowMain: WindowBox;
-    public windowInterlocutor: WindowBox;
-
-    constructor(command: any[])
-    {
+    constructor(command) {
         super();
-
         let iterator = {
             i: 0
-        }
+        };
         this.interlocutor = System.DynamicValue.createValueCommand(command, iterator);
         this.facesetID = command[iterator.i++];
         this.message = Utils.numToString(command[iterator.i++]);
-        this.windowMain = new WindowBox(0, 0, 0, 0,
-            {
-                content: new Graphic.Message(this.message, this.facesetID),
-                padding: Constants.HUGE_PADDING_BOX
-            }
-        );
+        this.windowMain = new WindowBox(0, 0, 0, 0, {
+            content: new Graphic.Message(this.message, this.facesetID),
+            padding: Constants.HUGE_PADDING_BOX
+        });
         this.windowInterlocutor = new WindowBox(this.windowMain.oX + (Constants
             .MEDIUM_SLOT_HEIGHT / 2), this.windowMain.oY - (Constants
             .MEDIUM_SLOT_HEIGHT / 2), Constants.MEDIUM_SLOT_WIDTH, Constants
-            .MEDIUM_SLOT_HEIGHT,
-            {
-                content: new Graphic.Text("", { align: Align.Center }),
-                padding: Constants.SMALL_SLOT_PADDING
-            }
-        );
+            .MEDIUM_SLOT_HEIGHT, {
+            content: new Graphic.Text("", { align: Align.Center }),
+            padding: Constants.SMALL_SLOT_PADDING
+        });
         this.isDirectNode = false;
     }
-
-    /** 
+    /**
      *  Initialize the current state.
      *  @returns {Record<string, any>} The current state
      */
-    initialize(): Record<string, any> {
+    initialize() {
         this.windowMain.setX(Utils.defaultValue(Datas.Systems.dbOptions.v_x, 0));
         this.windowMain.setY(Utils.defaultValue(Datas.Systems.dbOptions.v_y, 0));
         this.windowMain.setW(Utils.defaultValue(Datas.Systems.dbOptions.v_w, 0));
@@ -85,16 +69,15 @@ class ShowText extends Base {
             .v_pBottom, 0);
         this.windowMain.updateDimensions();
         this.windowMain.content.update();
-        (<Graphic.Text> this.windowInterlocutor.content).setText(this
+        this.windowInterlocutor.content.setText(this
             .interlocutor.getValue());
         return {
             clicked: false,
             frame: 0,
             frameTick: 0,
             frameDuration: 150
-        }
+        };
     }
-
     /**
      *  Update and check if the event is finished.
      *  @param {Record<string, any>} currentState The current state of the event
@@ -102,9 +85,7 @@ class ShowText extends Base {
      *  @param {number} state The state ID
      *  @returns {number} The number of node to pass
      */
-    update(currentState: Record<string, any>, object: MapObject, state: number): 
-        number
-    {
+    update(currentState, object, state) {
         if (currentState.clicked) {
             return 1;
         }
@@ -114,29 +95,27 @@ class ShowText extends Base {
             currentState.frameTick = 0;
             Manager.Stack.requestPaintHUD = true;
         }
-        (<Graphic.Text> this.windowInterlocutor.content).setText(this
+        this.windowInterlocutor.content.setText(this
             .interlocutor.getValue());
         return 0;
     }
-
-    /** 
+    /**
      *  First key press handle for the current stack
      *  @param {Record<string, any>} currentState The current state of the event
      *  @param {number} key The key ID pressed
      */
-    onKeyPressed(currentState: Record<string, any>, key: number) {
+    onKeyPressed(currentState, key) {
         if (Datas.Keyboard.isKeyEqual(key, Datas.Keyboard.menuControls.Action)) {
             currentState.clicked = true;
         }
     }
-
-    /** 
+    /**
      *  Draw the HUD
      *  @param {Record<string ,any>} currentState The current state of the event
      */
-    drawHUD(currentState?: Record<string ,any>) {
+    drawHUD(currentState) {
         this.windowMain.draw();
-        if ((<Graphic.Text> this.windowInterlocutor.content).text) {
+        if (this.windowInterlocutor.content.text) {
             this.windowInterlocutor.draw();
         }
         if (currentState) {
@@ -146,5 +125,4 @@ class ShowText extends Base {
         }
     }
 }
-
-export { ShowText }
+export { ShowText };

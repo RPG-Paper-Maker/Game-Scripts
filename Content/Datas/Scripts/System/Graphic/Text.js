@@ -8,58 +8,56 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import * as Graphic from "./index.js";
 import { Enum, Utils, Constants, ScreenResolution, Platform } from "../Common/index.js";
 var Align = Enum.Align;
 var AlignVertical = Enum.AlignVertical;
 import { Stack } from "../Manager/index.js";
+import { Base } from "./Base.js";
+import { Datas, System } from "../index.js";
 /** @class
-*   A class for all the texts to display in HUD
-*   @extends Bitmap
-*   @property {string} text The brut text to display
-*   @property {Align} align Alignement of the text
-*   @property {number} fontSize The font height used for the text
-*   @property {string} fontName The font name used for the text
-*   @property {AlignVertical} verticalAlign Vertical alignement of the text
-*   @property {SystemColor} color The color used for the text
-*   @property {boolean} bold If checked, make the text bold
-*   @property {boolean} italic If checked, make the text italic
-*   @property {SystemColor} backColor The background color behind the text
-*   @property {SystemColor} strokeColor The stroke color of the text
-*   @property {string} font The font used for the text (combining fontSize +
-*   fontName)
-*   @property {number} textWidth The font text width (without resizing)
-*   @param {string} [text=""] The brut text to display
-*   @param {Object} [opts={}] Options
-*   @param {number} [opts.x=0] The x coords of the text
-*   @param {number} [opts.y=0] The y coords of the text
-*   @param {number} [opts.w=0] The w coords of the text
-*   @param {number} [opts.h=0] The h coords of the text
-*   @param {Align} [opts.align=Align.Left] Alignement of the text
-*   @param {number} [opts.fontSize=RPM.defaultValue(RPM.datasGame.System.dbOptions.vtSize, RPM.fontSize)]
-*   The font height used for the text
-*   @param {string} [opts.fontName=RPM.defaultValue(RPM.datasGame.System.dbOptions.vtFont, RPM.fontName)]
-*   The font name used for the text
-*   @param {AlignVertical} [opts.verticalAlign=AlignVertical.Center] Vertical
-*   alignement of the text
-*   @param {SystemColor} [opts.color=RPM.defaultValue(RPM.datasGame.System.dbOptions.vtcText]
-*   The color used for the text
-*   @param {boolean} [opts.bold=false] If checked, make the text bold
-*   @param {boolean} [opts.italic=false] If checked, make the text italic
-*   @param {SystemColor} [opts.backColor=RPM.defaultValue(RPM.datasGame.System.dbOptions.vtcBackground, null)]
-*   The background color behind the text
-*   @param {SystemColor} [opts.strokeColor=RPM.defaultValue(RPM.datasGame.System.dbOptions.tOutline, false)? RPM.defaultValue(RPM.datasGame.System.dbOptions.vtcOutline, null) : null]
-*   The stroke color of the text
-*/
-export class Text extends Graphic.Base {
-    constructor(text = "", { x = 0, y = 0, w = 0, h = 0, align = Align.Left, fontSize = Utils.defaultValue(15 /*Datas.System.dbOptions.vtSize*/, /*RPM
-    .fontSize*/ 15), fontName = Utils.defaultValue(/*RPM.datasGame.system.dbOptions
-    .vtFont*/ "Arial", /*RPM.fontName*/ "Arial"), verticalAlign = AlignVertical.Center, color = Utils.defaultValue(/*RPM.datasGame.system.dbOptions.vtcText*/ "", /*RPM.COLOR_WHITE*/ ""), bold = false, italic = false, backColor = Utils.defaultValue(/*RPM
-    .datasGame.system.dbOptions.vtcBackground*/ null, null), strokeColor = Utils
-        .defaultValue(/*RPM.datasGame.system.dbOptions.tOutline*/ false, false) ? Utils
-        .defaultValue(/*RPM.datasGame.system.dbOptions.vtcOutline*/ null, null) : null } = {}) {
+ *  A class for all the texts to display in HUD.
+ *  @extends Bitmap
+ *  @property {string} text The brut text to display
+ *  @property {Align} align Alignement of the text
+ *  @property {number} fontSize The font height used for the text
+ *  @property {string} fontName The font name used for the text
+ *  @property {AlignVertical} verticalAlign Vertical alignement of the text
+ *  @property {SystemColor} color The color used for the text
+ *  @property {boolean} bold If checked, make the text bold
+ *  @property {boolean} italic If checked, make the text italic
+ *  @property {SystemColor} backColor The background color behind the text
+ *  @property {SystemColor} strokeColor The stroke color of the text
+ *  @property {string} font The font used for the text (combining fontSize +
+ *  fontName)
+ *  @property {number} textWidth The font text width (without resizing)
+ *  @param {string} [text=""] The brut text to display
+ *  @param {Object} [opts={}] Options
+ *  @param {number} [opts.x=0] The x coords of the text
+ *  @param {number} [opts.y=0] The y coords of the text
+ *  @param {number} [opts.w=0] The w coords of the text
+ *  @param {number} [opts.h=0] The h coords of the text
+ *  @param {Align} [opts.align=Align.Left] Alignement of the text
+ *  @param {number} [opts.fontSize=RPM.defaultValue(RPM.datasGame.System.dbOptions.vtSize, RPM.fontSize)]
+ *  The font height used for the text
+ *  @param {string} [opts.fontName=RPM.defaultValue(RPM.datasGame.System.dbOptions.vtFont, RPM.fontName)]
+ *  The font name used for the text
+ *  @param {AlignVertical} [opts.verticalAlign=AlignVertical.Center] Vertical
+ *  alignement of the text
+ *  @param {SystemColor} [opts.color=RPM.defaultValue(RPM.datasGame.System.dbOptions.vtcText]
+ *  The color used for the text
+ *  @param {boolean} [opts.bold=false] If checked, make the text bold
+ *  @param {boolean} [opts.italic=false] If checked, make the text italic
+ *  @param {SystemColor} [opts.backColor=RPM.defaultValue(RPM.datasGame.System.dbOptions.vtcBackground, null)]
+ *  The background color behind the text
+ *  @param {SystemColor} [opts.strokeColor=RPM.defaultValue(RPM.datasGame.System.dbOptions.tOutline, false)? RPM.defaultValue(RPM.datasGame.System.dbOptions.vtcOutline, null) : null]
+ *  The stroke color of the text
+ */
+class Text extends Base {
+    constructor(text = "", { x = 0, y = 0, w = 0, h = 0, align = Align.Left, fontSize = Utils.defaultValue(Datas.Systems.dbOptions.v_tSize, Constants
+        .DEFAULT_FONT_SIZE), fontName = Utils.defaultValue(Datas.Systems
+        .dbOptions.v_tFont, Constants.DEFAULT_FONT_NAME), verticalAlign = AlignVertical.Center, color = Utils.defaultValue(Datas.Systems.dbOptions
+        .v_tcText, System.Color.white), bold = false, italic = false, backColor = Utils.defaultValue(Datas.Systems.dbOptions.v_tcBackground, null), strokeColor = Utils.defaultValue(Datas.Systems.dbOptions.tOutline, false) ? Utils.defaultValue(Datas.Systems.dbOptions.v_tcOutline, null) : null } = {}) {
         super(x, y, w, h);
-        //this.firstText = text;
         this.align = align;
         this.fontName = fontName;
         this.verticalAlign = verticalAlign;
@@ -71,9 +69,10 @@ export class Text extends Graphic.Base {
         this.setFontSize(fontSize);
         this.setText(Utils.defaultValue(text, ""));
     }
-    /** Set the font size and the final font
-    *   @param {number} fontSize The new font size
-    */
+    /**
+     *  Set the font size and the final font.
+     *  @param {number} fontSize The new font size
+     */
     setFontSize(fontSize) {
         this.fontSize = fontSize;
         // Create fonts without resizing (screen resolution) + with resize
@@ -81,9 +80,10 @@ export class Text extends Graphic.Base {
             .italic);
         this.font = Utils.createFont(ScreenResolution.getScreenMinXY(fontSize), this.fontName, this.bold, this.italic);
     }
-    /** Set the current displayed text
-    *   @param {string} text The new text
-    */
+    /**
+     *  Set the current displayed text.
+     *  @param {string} text The new text
+     */
     setText(text) {
         if (this.text !== text) {
             this.text = text;
@@ -91,33 +91,37 @@ export class Text extends Graphic.Base {
             Stack.requestPaintHUD = true;
         }
     }
-    /** Update the context font (without window resizing), this function is
-    *   used before a context.measureText
-    */
+    /**
+     *  Update the context font (without window resizing), this function is
+     *  used before a context.measureText.
+     */
     updateContextFont() {
         Platform.ctx.font = this.oFont;
     }
-    /** Update the context font with resizing
-    */
+    /**
+     *  Update the context font with resizing.
+     */
     updateContextFontReal() {
         Platform.ctx.font = this.font;
     }
-    /** Measure text width and stock results in the instance
-    */
+    /**
+     *  Measure text width and stock results in the instance.
+     */
     measureText() {
         this.updateContextFont();
         this.textWidth = Platform.ctx.measureText(this.text).width + (this
             .strokeColor === null ? 0 : 2);
         return this.textWidth;
     }
-    /** Drawing the text in choice box
-    *   @param {number} [x=this.oX] The x position to draw graphic
-    *   @param {number} [y=this.oY] The y position to draw graphic
-    *   @param {number} [w=this.oW] The width dimention to draw graphic
-    *   @param {number} [h=this.oH] The height dimention to draw graphic
-    *   @param {boolean} [positionResize=true] If checked, resize postion
-    *   according to screen resolution
-    */
+    /**
+     *  Drawing the text in choice box.
+     *  @param {number} [x=this.oX] The x position to draw graphic
+     *  @param {number} [y=this.oY] The y position to draw graphic
+     *  @param {number} [w=this.oW] The width dimention to draw graphic
+     *  @param {number} [h=this.oH] The height dimention to draw graphic
+     *  @param {boolean} [positionResize=true] If checked, resize postion
+     *  according to screen resolution
+     */
     drawChoice(x = this.oX, y = this.oY, w = this.oW, h = this.oH, positionResize = true) {
         // If position resize checked, resize it
         if (positionResize) {
@@ -186,26 +190,29 @@ export class Text extends Graphic.Base {
             yOffset += lineHeight;
         }
     }
-    /** Drawing the text in box (duplicate of drawChoice)
-    *   @param {number} [x=this.oX] The x position to draw graphic
-    *   @param {number} [y=this.oY] The y position to draw graphic
-    *   @param {number} [w=this.oW] The width dimention to draw graphic
-    *   @param {number} [h=this.oH] The height dimention to draw graphic
-    *   @param {boolean} [positionResize=true] If checked, resize postion
-    *   according to screen resolution
-    */
+    /**
+     *  Drawing the text in box (duplicate of drawChoice).
+     *  @param {number} [x=this.oX] The x position to draw graphic
+     *  @param {number} [y=this.oY] The y position to draw graphic
+     *  @param {number} [w=this.oW] The width dimention to draw graphic
+     *  @param {number} [h=this.oH] The height dimention to draw graphic
+     *  @param {boolean} [positionResize=true] If checked, resize postion
+     *  according to screen resolution
+     */
     drawBox(x = this.oX, y = this.oY, w = this.oW, h = this.oH, positionResize = true) {
         this.drawChoice(x, y, w, h, positionResize);
     }
-    /** Drawing the text (duplicate of drawChoice)
-    *   @param {number} [x=this.oX] The x position to draw graphic
-    *   @param {number} [y=this.oY] The y position to draw graphic
-    *   @param {number} [w=this.oW] The width dimention to draw graphic
-    *   @param {number} [h=this.oH] The height dimention to draw graphic
-    *   @param {boolean} [positionResize=true] If checked, resize postion
-    *   according to screen resolution
-    */
+    /**
+     *  Drawing the text (duplicate of drawChoice).
+     *  @param {number} [x=this.oX] The x position to draw graphic
+     *  @param {number} [y=this.oY] The y position to draw graphic
+     *  @param {number} [w=this.oW] The width dimention to draw graphic
+     *  @param {number} [h=this.oH] The height dimention to draw graphic
+     *  @param {boolean} [positionResize=true] If checked, resize postion
+     *  according to screen resolution
+     */
     draw(x = this.oX, y = this.oY, w = this.oW, h = this.oH, positionResize = true) {
         this.drawChoice(x, y, w, h, positionResize);
     }
 }
+export { Text };

@@ -8,13 +8,10 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-
-import { THREE } from "../Libs";
-import { Portion } from "./Portion";
-import { MapObject } from "./MapObject";
-import { Position } from "./Position";
-import { System, Datas } from "..";
-
+import { THREE } from "../Libs/index.js";
+import { MapObject } from "./MapObject.js";
+import { Position } from "./Position.js";
+import { System, Datas } from "../index.js";
 /** @class
 *   A portion of the map
 *   @property {THREE.MeshBasicMaterial} BB_MATERIAL
@@ -25,26 +22,26 @@ import { System, Datas } from "..";
 *   floors
 *   @property {THREE.Mesh[]} staticSpritesMesh List of all the static sprites in
 *   the scene
-*   @property {number[][][]} squareNonEmpty List of all y floors according to x 
+*   @property {number[][][]} squareNonEmpty List of all y floors according to x
 *   and y square
-*   @property {Object[]} boundingBoxesLands Bounding boxes for lands acording 
+*   @property {Object[]} boundingBoxesLands Bounding boxes for lands acording
 *   to index
-*   @property {Object[]} boundingBoxesSprites Bounding boxes for sprites 
+*   @property {Object[]} boundingBoxesSprites Bounding boxes for sprites
 *   acording to index
-*   @property {Object[]} boundingBoxesMountains Bounding boxes for mountains 
+*   @property {Object[]} boundingBoxesMountains Bounding boxes for mountains
 *   acording to index
-*   @property {Object[]} boundingBoxesObjects3D Bounding boxes for 3D objects 
+*   @property {Object[]} boundingBoxesObjects3D Bounding boxes for 3D objects
 *   acording to index
-*   @property {THREE.Mesh[]} staticAutotilesList List of all the static 
+*   @property {THREE.Mesh[]} staticAutotilesList List of all the static
 *   autotiles in the map portion
-*   @property {THREE.Mesh[]} staticMountainsList List of all the static 
+*   @property {THREE.Mesh[]} staticMountainsList List of all the static
 *   mountains in the map portion
 *   @property {MapObject[]} objectsList List of all the objects in the portion
 *   @property {THREE.Mesh[]} faceSpritesList List of all the face sprites in the
 *   scene
-*   @property {THREE.Mesh[]} staticWallsList List of all the static walls in 
+*   @property {THREE.Mesh[]} staticWallsList List of all the static walls in
 *   the map portion
-*   @property {THREE.Mesh[]} staticObjects3DList List of all the static 3D 
+*   @property {THREE.Mesh[]} staticObjects3DList List of all the static 3D
 *   objects in the map portion
 *   @property {number[][]} overflowMountains Position of overflow mountians
 *   @property {THREE.Mesh[]} heroID The hero ID if in this portions
@@ -52,13 +49,8 @@ import { System, Datas } from "..";
 *   @param {number} realY The real y portion
 *   @param {number} realZ The real z portion
 */
-class MapPortion
-{
-    // @ts-ignore
-    static BB_MATERIAL = new THREE.MeshBasicMaterial();
-
-    constructor(portion: Portion)
-    {
+class MapPortion {
+    constructor(portion) {
         /*
         this.realX = realX;
         this.realY = realY;
@@ -97,7 +89,6 @@ class MapPortion
         this.heroID = -1;
         */
     }
-
     // -------------------------------------------------------
     /** Check collision ray
     *   @static
@@ -106,8 +97,7 @@ class MapPortion
     *   @param {MapObject} object The map object to test collision
     *   @returns {boolean}
     */
-    static checkCollisionRay(positionBefore, positionAfter, object)
-    {
+    static checkCollisionRay(positionBefore, positionAfter, object) {
         /*
         let direction = new THREE.Vector3();
         direction.subVectors(positionAfter, positionBefore).normalize();
@@ -162,7 +152,7 @@ class MapPortion
                 for (k = startK; k <= endK; k++)
                 {
                     positionAfterPlus.set(positionAfter.x + i * RPM.SQUARE_SIZE,
-                        positionAfter.y + j * RPM.SQUARE_SIZE, positionAfter.z + 
+                        positionAfter.y + j * RPM.SQUARE_SIZE, positionAfter.z +
                         k * RPM.SQUARE_SIZE);
                     portion = RPM.currentMap.getLocalPortion(RPM.getPortion(
                         positionAfterPlus));
@@ -171,7 +161,7 @@ class MapPortion
                     {
                         result = mapPortion.checkCollision(jpositionBefore, [
                             jpositionAfter[0] + i, jpositionAfter[1] + j,
-                            jpositionAfter[2] + k], positionAfter, object, 
+                            jpositionAfter[2] + k], positionAfter, object,
                             direction, testedCollisions);
                         if (result[0])
                         {
@@ -218,7 +208,7 @@ class MapPortion
         // Check empty square or square mountain height possible down
         mapPortion = RPM.currentMap.getMapPortionByPortion(portion);
         let floors;
-        if (mapPortion !== null) 
+        if (mapPortion !== null)
         {
             floors = mapPortion.squareNonEmpty[jpositionAfter[0] % RPM
                 .PORTION_SIZE][jpositionAfter[2] % RPM.PORTION_SIZE];
@@ -248,7 +238,7 @@ class MapPortion
                     {
                         temp = floors[i];
                         if (temp <= (positionAfter.y + RPM.datasGame.system
-                            .mountainCollisionHeight.getValue()) && temp >= 
+                            .mountainCollisionHeight.getValue()) && temp >=
                             limitY)
                         {
                             if (maxY === null)
@@ -280,14 +270,12 @@ class MapPortion
         return [true, null];
         */
     }
-
     /** Read the JSON associated to the map portion
     *   @param {Object} json Json object describing the map portion
     *   @param {boolean} isMapHero Indicates if this map is where the hero is
     *   at the beginning of the game.
     */
-    read(json, isMapHero)
-    {
+    read(json, isMapHero) {
         /*
         this.readLands(json.lands);
         this.readSprites(json.sprites);
@@ -303,25 +291,21 @@ class MapPortion
         this.overflow = json.overflow;
         */
     }
-
     // -------------------------------------------------------
     /** Read the JSON associated to the lands in the portion
     *   @param {Object} json Json object describing the lands
     */
-    readLands(json)
-    {
+    readLands(json) {
         /*
         this.readFloors(json.floors);
         this.readAutotiles(json.autotiles);
         */
     }
-
     // -------------------------------------------------------
     /** Read the JSON associated to the floors in the portion
     *   @param {Object} json Json object describing the floors
     */
-    readFloors(json)
-    {
+    readFloors(json) {
         /*
         let material = RPM.currentMap.textureTileset;
         let width = material.map ? material.map.image.width : 0;
@@ -385,13 +369,11 @@ class MapPortion
         RPM.currentMap.scene.add(this.staticFloorsMesh);
         */
     }
-
     // -------------------------------------------------------
     /** Read the JSON associated to the autotiles in the portion
     *   @param {Object} json Json object describing the autotiles
     */
-    readAutotiles(json)
-    {
+    readAutotiles(json) {
         /*
         if (!json)
         {
@@ -410,7 +392,7 @@ class MapPortion
         }
 
         // Read and update geometry
-        let l, jsonAutotile, position, autotile, indexPos, index, 
+        let l, jsonAutotile, position, autotile, indexPos, index,
             textureAutotile, autotiles, objCollision;
         for (i = 0, l = json.length; i < l; i++)
         {
@@ -453,25 +435,21 @@ class MapPortion
         }
         */
     }
-
     // -------------------------------------------------------
     /** Read the JSON associated to the sprites in the portion
     *   @param {Object} json Json object describing the sprites
     */
-    readSprites(json)
-    {
+    readSprites(json) {
         /*
         this.readSpritesWalls(json.walls);
         this.readSpritesGlobals(json.list);
         */
     }
-
     // -------------------------------------------------------
     /** Read the JSON associated to the sprites globals in the portion
     *   @param {Object} json Json object describing the sprites globals
     */
-    readSpritesGlobals(json)
-    {
+    readSpritesGlobals(json) {
         /*
         let material = RPM.currentMap.textureTileset;
         let staticGeometry = new THREE.Geometry();
@@ -494,7 +472,7 @@ class MapPortion
                     geometry = result[0];
                     collisions = result[1][1];
                     plane = new THREE.Mesh(geometry, material);
-                    plane.position.set(localPosition.x, localPosition.y, 
+                    plane.position.set(localPosition.x, localPosition.y,
                         localPosition.z);
                     plane.renderOrder = 999;
                     this.faceSpritesList.push(plane);
@@ -516,13 +494,11 @@ class MapPortion
         RPM.currentMap.scene.add(this.staticSpritesMesh);
         */
     }
-
     // -------------------------------------------------------
     /** Read the JSON associated to the sprites walls in the portion
     *   @param {Object} json Json object describing the sprites walls
     */
-    readSpritesWalls(json)
-    {
+    readSpritesWalls(json) {
         /*
         let wallsIds = RPM.currentMap.texturesWalls.length;
         let hash = new Array(wallsIds);
@@ -592,13 +568,11 @@ class MapPortion
         }
         */
     }
-
     // -------------------------------------------------------
     /** Read the JSON associated to the mountains in the portion
     *   @param {Object} json Json object describing the mountains
     */
-    readMountains(json)
-    {
+    readMountains(json) {
         /*
         if (!json)
         {
@@ -618,7 +592,7 @@ class MapPortion
 
         // Read and update geometry
         let jsonAll = json.a;
-        let l, jsonMountain, position, mountain, indexPos, index, 
+        let l, jsonMountain, position, mountain, indexPos, index,
             textureMountain, mountains, objCollision;
         for (i = 0, l = jsonAll.length; i < l; i++)
         {
@@ -659,13 +633,11 @@ class MapPortion
         this.overflowMountains = json.o;
         */
     }
-
     // -------------------------------------------------------
     /** Read the JSON associated to the objects 3D in the portion
     *   @param {Object} json Json object describing the objects 3D
     */
-    readObjects3D(json)
-    {
+    readObjects3D(json) {
         /*
         // Initialize
         let nbTextures = RPM.currentMap.texturesObjects3D.length;
@@ -758,15 +730,13 @@ class MapPortion
         }
         */
     }
-
     // -------------------------------------------------------
     /** Read the JSON associated to the objects in the portion
     *   @param {Object} json Json object describing the objects
     *   @param {boolean} isMapHero Indicates if this map is where the hero is
     *   at the beginning of the game
     */
-    readObjects(json, isMapHero)
-    {
+    readObjects(json, isMapHero) {
         /*
         let datas = RPM.currentMap.getObjectsAtPortion(this.realX, this.realY,
             this.realZ);
@@ -834,12 +804,10 @@ class MapPortion
         }
         */
     }
-
     // -------------------------------------------------------
     /** Remove all the objects from the scene
     */
-    cleanAll()
-    {
+    cleanAll() {
         /*
         let datas = RPM.game.getPotionsDatas(RPM.currentMap.id, this.realX, this
             .realY, this.realZ);
@@ -892,15 +860,13 @@ class MapPortion
         }
         */
     }
-
     // -------------------------------------------------------
     /** Search for the object with the ID
     *   @param {Object} json Json object describing the objects
     *   @param {number} id The ID of the object
     *   @returns {MapObject}
     */
-    getObjFromID(json, id)
-    {
+    getObjFromID(json, id) {
         /*
         if (json.objs && json.objs.list)
         {
@@ -909,7 +875,7 @@ class MapPortion
         {
             return null;
         }
-        let jsonObject, position, jsonObjectValue, object, localPosition, 
+        let jsonObject, position, jsonObjectValue, object, localPosition,
             mapObject;
         for (let i = 0, l = json.length; i < l; i++)
         {
@@ -931,17 +897,14 @@ class MapPortion
         return null;
         */
     }
-
-    /** 
+    /**
      *  Get hero model
      *  @param {Record<string, any>} json Json object describing the objects
      *  @returns {MapObject}
      */
-    getHeroModel(json: Record<string, any>): MapObject
-    {
+    getHeroModel(json) {
         json = json.objs.list;
-        let jsonObject: Record<string, any>, position: Position, jsonObjectValue
-            : Record<string, any>, object: System.MapObject;
+        let jsonObject, position, jsonObjectValue, object;
         for (let i = 0, l = json.length; i < l; i++) {
             jsonObject = json[i];
             position = Position.createFromArray(jsonObject.k);
@@ -953,13 +916,11 @@ class MapPortion
         }
         return null;
     }
-
-    /** 
+    /**
      *  Update the face sprites orientation
      *  @param {number} angle The angle on the Y axis
      */
-    updateFaceSprites(angle)
-    {
+    updateFaceSprites(angle) {
         /*
         let i, l;
         for (i = 0, l = this.faceSpritesList.length; i < l; i++)
@@ -972,14 +933,12 @@ class MapPortion
         }
         */
     }
-
     // -------------------------------------------------------
     /** Update the collision sprite
     *   @param {Object[]} collisions The collisions objects
     *   @param {number[]} position The json position of the sprite
     */
-    updateCollisionSprite(collisions, position)
-    {
+    updateCollisionSprite(collisions, position) {
         /*
         let i, l, a, b, c, z, objCollision, positionPlus;
         for (i = 0, l = collisions.length; i < l; i++)
@@ -1008,18 +967,16 @@ class MapPortion
             }
         }*/
     }
-
     // -------------------------------------------------------
     /** Update the collision sprite
-    *   @param {Object[]} boundingBoxes The bounding boxes list to update 
+    *   @param {Object[]} boundingBoxes The bounding boxes list to update
     *   @param {Object[]} collisions The collisions objects
     *   @param {number[]} position The json position of the sprite
     *   @param {boolean} side Indicate if collision side
     */
-    updateCollision(boundingBoxes, collisions, position, side)
-    {
+    updateCollision(boundingBoxes, collisions, position, side) {
         /*
-        let i, l, objCollision, centeredPosition, minW, maxW, minH, maxH, minD, 
+        let i, l, objCollision, centeredPosition, minW, maxW, minH, maxH, minD,
             maxD, a, b, c, positionPlus, objCollisionPlus;
         for (i = 0, l = collisions.length; i < l; i++)
         {
@@ -1071,15 +1028,13 @@ class MapPortion
         }
         */
     }
-
     // -------------------------------------------------------
     /** Get the object collision according to position
     *   @param {number[]} positionSource The source json position
     *   @param {number[]} positionTarget The target json position
     *   @param {ElementMapKind} kind The element map kind
     */
-    getObjectCollisionAt(positionSource, positionTarget, kind)
-    {
+    getObjectCollisionAt(positionSource, positionTarget, kind) {
         /*
         let result = new Array;
         switch (kind)
@@ -1113,33 +1068,28 @@ class MapPortion
         return result;
         */
     }
-
     // -------------------------------------------------------
     /** Add a position to non empty
     *   @param {number[]} position The position to add
     */
-    addToNonEmpty(position)
-    {
+    addToNonEmpty(position) {
         /*
         this.squareNonEmpty[position[0] % RPM.PORTION_SIZE][position[3] % RPM
             .PORTION_SIZE].push(RPM.positionTotalY(position));
             */
     }
-
     // -------------------------------------------------------
     /** Check if position if in this map portion
     *   @param {number[]} position The position to check
     *   @returns {boolean}
     */
-    isPositionIn(position)
-    {
+    isPositionIn(position) {
         /*
         return this.realX === Math.floor(position[0] / RPM.PORTION_SIZE) && this
-            .realY === Math.floor(position[1] / RPM.PORTION_SIZE) && this.realZ 
+            .realY === Math.floor(position[1] / RPM.PORTION_SIZE) && this.realZ
             === Math.floor(position[2] / RPM.PORTION_SIZE);
             */
     }
-
     // -------------------------------------------------------
     /** Check if there is a collision at this position
     *   @param {number[]} jpositionBefore The json position before collision
@@ -1147,13 +1097,11 @@ class MapPortion
     *   @param {THREE.Vector3} positionAfter The position after collision
     *   @param {MapObject} object The map object collision test
     *   @param {THREE.Vector3} direction The direction collision
-    *   @param {Object[]} testedCollisions The object collisions that were 
+    *   @param {Object[]} testedCollisions The object collisions that were
     *   already tested
     *   @returns {boolean}
     */
-    checkCollision(jpositionBefore, jpositionAfter, positionAfter, object, 
-        direction, testedCollisions)
-    {
+    checkCollision(jpositionBefore, jpositionAfter, positionAfter, object, direction, testedCollisions) {
         /*
         // Check mountain collision first for elevation
         let result = this.checkMountainsCollision(jpositionAfter, positionAfter,
@@ -1167,24 +1115,21 @@ class MapPortion
         return [(this.checkLandsCollision(jpositionBefore, jpositionAfter,
             object, direction, testedCollisions) || this.checkSpritesCollision(
             jpositionAfter, testedCollisions, object) || this
-            .checkObjects3DCollision(jpositionAfter, testedCollisions, object)), 
+            .checkObjects3DCollision(jpositionAfter, testedCollisions, object)),
             result[1]];
             */
     }
-
     // -------------------------------------------------------
     /** Check if there is a collision with lands at this position
     *   @param {number[]} jpositionBefore The json position before collision
     *   @param {number[]} jpositionAfter The json position after collision
     *   @param {MapObject} object The map object collision test
     *   @param {THREE.Vector3} direction The direction collision
-    *   @param {Object[]} testedCollisions The object collisions that were 
+    *   @param {Object[]} testedCollisions The object collisions that were
     *   already tested
-    *   @returns {boolean} 
+    *   @returns {boolean}
     */
-    checkLandsCollision(jpositionBefore, jpositionAfter, object, direction, 
-        testedCollisions)
-    {
+    checkLandsCollision(jpositionBefore, jpositionAfter, object, direction, testedCollisions) {
         /*
         let index = RPM.positionToIndex(jpositionAfter);
         let lands = this.boundingBoxesLands[index];
@@ -1202,7 +1147,7 @@ class MapPortion
                         boundingBox = objCollision.b;
                         collision = objCollision.c;
                         if (this.checkIntersectionLand(collision, boundingBox,
-                            object) || this.checkDirections(jpositionBefore, 
+                            object) || this.checkDirections(jpositionBefore,
                             jpositionAfter, collision, boundingBox, direction,
                             object))
                         {
@@ -1215,16 +1160,14 @@ class MapPortion
         return false;
         */
     }
-
-   // -------------------------------------------------------
+    // -------------------------------------------------------
     /** Check if there is a collision with lands with directions
     *   @param {number[]} jpositionBefore The json position before collision
     *   @param {number[]} jpositionAfter The json position after collision
     *   @param {THREE.Vector3} direction The direction collision
-    *   @returns {boolean} 
+    *   @returns {boolean}
     */
-    checkLandsCollisionInside(jpositionBefore, jpositionAfter, direction)
-    {
+    checkLandsCollisionInside(jpositionBefore, jpositionAfter, direction) {
         /*
         let lands = this.boundingBoxesLands[RPM.positionToIndex(jpositionBefore)];
         if (lands !== null)
@@ -1236,7 +1179,7 @@ class MapPortion
                 if (objCollision !== null)
                 {
                     collision = objCollision.c;
-                    if (this.checkDirectionsInside(jpositionBefore, 
+                    if (this.checkDirectionsInside(jpositionBefore,
                         jpositionAfter, collision, direction))
                     {
                         return true;
@@ -1247,7 +1190,6 @@ class MapPortion
         return false;
         */
     }
-
     // -------------------------------------------------------
     /** Check intersection between ray and an object
     *   @param {Object} collision The collision object
@@ -1255,8 +1197,7 @@ class MapPortion
     *   @param {MapObject} object The map object to check
     *   @returns {boolean}
     */
-    checkIntersectionLand(collision, boundingBox, object)
-    {
+    checkIntersectionLand(collision, boundingBox, object) {
         /*
         if (collision !== null)
         {
@@ -1267,7 +1208,6 @@ class MapPortion
             RPM.BB_BOX.geometry);
             */
     }
-
     // -------------------------------------------------------
     /** Check directions
     *   @param {number[]} jpositionBefore The json position before collision
@@ -1278,15 +1218,13 @@ class MapPortion
     *   @param {MapObject} object The map object collision test
     *   @returns {boolean}
     */
-    checkDirections(jpositionBefore, jpositionAfter, collision, boundingBox, 
-        direction, object)
-    {
+    checkDirections(jpositionBefore, jpositionAfter, collision, boundingBox, direction, object) {
         /*
         if (collision === null)
         {
             return false;
         }
-        if (jpositionBefore[0] !== jpositionAfter[0] || jpositionBefore[1] !== 
+        if (jpositionBefore[0] !== jpositionAfter[0] || jpositionBefore[1] !==
             jpositionAfter[1] || jpositionBefore[2] !== jpositionAfter[2])
         {
             if (this.checkIntersectionLand(null, boundingBox, object))
@@ -1312,7 +1250,6 @@ class MapPortion
         return false;
         */
     }
-
     // -------------------------------------------------------
     /** Check directions inside
     *   @param {number[]} jpositionBefore The json position before collision
@@ -1321,14 +1258,13 @@ class MapPortion
     *   @param {THREE.Vector3} direction The direction collision
     *   @returns {boolean}
     */
-    checkDirectionsInside(jpositionBefore, jpositionAfter, collision, direction)
-    {
+    checkDirectionsInside(jpositionBefore, jpositionAfter, collision, direction) {
         /*
         if (collision === null)
         {
             return false;
         }
-        if (jpositionBefore[0] !== jpositionAfter[0] || jpositionBefore[1] !== 
+        if (jpositionBefore[0] !== jpositionAfter[0] || jpositionBefore[1] !==
             jpositionAfter[1] || jpositionBefore[2] !== jpositionAfter[2])
         {
             if (direction.x > 0)
@@ -1351,17 +1287,15 @@ class MapPortion
         return false;
         */
     }
-
     // -------------------------------------------------------
     /** Check if there is a collision with sprites at this position
     *   @param {number[]} jpositionAfter The json position after collision
-    *   @param {Object[]} testedCollisions The object collisions that were 
+    *   @param {Object[]} testedCollisions The object collisions that were
     *   already tested
     *   @param {MapObject} object The map object collision test
     *   @returns {boolean}
     */
-    checkSpritesCollision(jpositionAfter, testedCollisions, object)
-    {
+    checkSpritesCollision(jpositionAfter, testedCollisions, object) {
         /*
         let sprites = this.boundingBoxesSprites[RPM.positionToIndex(
             jpositionAfter)];
@@ -1374,7 +1308,7 @@ class MapPortion
                 if (testedCollisions.indexOf(objCollision) === -1)
                 {
                     testedCollisions.push(objCollision);
-                    if (this.checkIntersectionSprite(objCollision.b, 
+                    if (this.checkIntersectionSprite(objCollision.b,
                         objCollision.k, object))
                     {
                         return true;
@@ -1385,7 +1319,6 @@ class MapPortion
         return false;
         */
     }
-
     // -------------------------------------------------------
     /** Check intersection between ray and an object
     *   @param {number[]} boundingBox The bounding box values
@@ -1393,8 +1326,7 @@ class MapPortion
     *   @param {MapObject} object The map object collision test
     *   @returns {boolean}
     */
-    checkIntersectionSprite(boundingBox, fix, object)
-    {
+    checkIntersectionSprite(boundingBox, fix, object) {
         /*
         if (boundingBox === null)
         {
@@ -1407,24 +1339,22 @@ class MapPortion
                 .geometry, RPM.BB_BOX.geometry);
         } else
         {
-            MapPortion.applyOrientedBoxTransforms(RPM.BB_ORIENTED_BOX, 
+            MapPortion.applyOrientedBoxTransforms(RPM.BB_ORIENTED_BOX,
                 boundingBox);
             return CollisionsUtilities.obbVSobb(object.currentBoundingBox
                 .geometry, RPM.BB_ORIENTED_BOX.geometry);
         }
         */
     }
-
     // -------------------------------------------------------
     /** Check if there is a collision with sprites at this position
     *   @param {number[]} jpositionAfter The json position after collision
-    *   @param {Object[]} testedCollisions The object collisions that were 
+    *   @param {Object[]} testedCollisions The object collisions that were
     *   already tested
     *   @param {MapObject} object The map object collision test
     *   @returns {boolean}
     */
-    checkObjects3DCollision(jpositionAfter, testedCollisions, object)
-    {
+    checkObjects3DCollision(jpositionAfter, testedCollisions, object) {
         /*
         let objects3D = this.boundingBoxesObjects3D[RPM.positionToIndex(
             jpositionAfter)];
@@ -1437,7 +1367,7 @@ class MapPortion
                 if (testedCollisions.indexOf(objCollision) === -1)
                 {
                     testedCollisions.push(objCollision);
-                    if (this.checkIntersectionSprite(objCollision.b, 
+                    if (this.checkIntersectionSprite(objCollision.b,
                         objCollision.k, object))
                     {
                         return true;
@@ -1448,19 +1378,16 @@ class MapPortion
         return false;
         */
     }
-
     // -------------------------------------------------------
     /** Check if there is a collision with mountains at this position
     *   @param {number[]} jpositionAfter The json position after collision
     *   @param {THREE.Vector3} positionAfter The position after collision
-    *   @param {Object[]} testedCollisions The object collisions that were 
+    *   @param {Object[]} testedCollisions The object collisions that were
     *   already tested
     *   @param {MapObject} object The map object collision test
     *   @returns {boolean}
     */
-    checkMountainsCollision(jpositionAfter, positionAfter, testedCollisions, 
-        object)
-    {
+    checkMountainsCollision(jpositionAfter, positionAfter, testedCollisions, object) {
         /*
         let yMountain = null;
         let mountains = this.boundingBoxesMountains[RPM.positionToIndex(
@@ -1471,7 +1398,7 @@ class MapPortion
         {
             for (i = 0, l = mountains.length; i < l; i++)
             {
-                result = this.checkMountainCollision(jpositionAfter, 
+                result = this.checkMountainCollision(jpositionAfter,
                     positionAfter, testedCollisions, object, mountains[i],
                     yMountain, block);
                 if (result[0])
@@ -1508,12 +1435,11 @@ class MapPortion
         return [block && (yMountain === null), yMountain];
         */
     }
-
     // -------------------------------------------------------
     /** Check if there is a collision with mountains at this position
     *   @param {number[]} jpositionAfter The json position after collision
     *   @param {THREE.Vector3} positionAfter The position after collision
-    *   @param {Object[]} testedCollisions The object collisions that were 
+    *   @param {Object[]} testedCollisions The object collisions that were
     *   already tested
     *   @param {MapObject} object The map object collision test
     *   @param {Object} objCollision The object collision
@@ -1521,9 +1447,7 @@ class MapPortion
     *   @param {boolean} block The block mountain collision
     *   @returns {boolean}
     */
-    checkMountainCollision(jpositionAfter, positionAfter, testedCollisions, 
-        object, objCollision, yMountain, block)
-    {
+    checkMountainCollision(jpositionAfter, positionAfter, testedCollisions, object, objCollision, yMountain, block) {
         /*
         if (testedCollisions.indexOf(objCollision) === -1)
         {
@@ -1550,7 +1474,6 @@ class MapPortion
         return [false, block, yMountain]
         */
     }
-
     // -------------------------------------------------------
     /** Check intersection with a mountain
     *   @param {number[]} jpositionAfter The json position after collision
@@ -1559,9 +1482,7 @@ class MapPortion
     *   @param {MapObject} object The map object collision test
     *   @returns {boolean}
     */
-    checkIntersectionMountain(jpositionAfter, positionAfter, objCollision, 
-        object)
-    {
+    checkIntersectionMountain(jpositionAfter, positionAfter, objCollision, object) {
         /*
         let mountain = objCollision.t;
         let forceAlways = mountain.getSystem().forceAlways();
@@ -1576,7 +1497,7 @@ class MapPortion
         // if w = 0, check height
         if (objCollision.rw === 0)
         {
-            let pass = forceAlways || -(!forceNever && ((y + objCollision.rh) <= 
+            let pass = forceAlways || -(!forceNever && ((y + objCollision.rh) <=
                 (positionAfter.y + RPM.datasGame.system.mountainCollisionHeight
                 .getValue())));
             if (CollisionsUtilities.isPointOnRectangle(point, x, x + RPM
@@ -1587,9 +1508,9 @@ class MapPortion
             {
                 if (!pass)
                 {
-                    return [this.checkIntersectionSprite([x + (RPM.SQUARE_SIZE / 
+                    return [this.checkIntersectionSprite([x + (RPM.SQUARE_SIZE /
                         2), y + (RPM.SQUARE_SIZE / 2), z + (RPM.SQUARE_SIZE / 2)
-                        , RPM.SQUARE_SIZE, objCollision.rh, RPM.SQUARE_SIZE, 0, 
+                        , RPM.SQUARE_SIZE, objCollision.rh, RPM.SQUARE_SIZE, 0,
                         0, 0], true, object), null];
                 }
             }
@@ -1762,14 +1683,12 @@ class MapPortion
         return [false, null];
         */
     }
-
     // -------------------------------------------------------
     /** Check collision with objects
     *   @param {MapObject} object The map object collision test
     *   @returns {boolean}
     */
-    checkObjectsCollision(object)
-    {
+    checkObjectsCollision(object) {
         /*
         let datas = RPM.currentMap.getObjectsAtPortion(this.realX, this.realY,
             this.realZ);
@@ -1778,15 +1697,13 @@ class MapPortion
             .checkObjectsCollisionList(datas.mout, object);
             */
     }
-
     // -------------------------------------------------------
     /** Check collision with objects
     *   @param {MapObject[]} list The map objects list to test
     *   @param {MapObject} object The map object collision test
     *   @returns {boolean}
     */
-    checkObjectsCollisionList(list, object)
-    {
+    checkObjectsCollisionList(list, object) {
         /*
         let obj;
         for (let i = 0, l = list.length; i < l; i++)
@@ -1804,5 +1721,6 @@ class MapPortion
         */
     }
 }
-
-export { MapPortion }
+// @ts-ignore
+MapPortion.BB_MATERIAL = new THREE.MeshBasicMaterial();
+export { MapPortion };

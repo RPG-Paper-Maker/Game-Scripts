@@ -138,6 +138,7 @@ var Enum;
      */
     let Align;
     (function (Align) {
+        Align["None"] = " none";
         Align["Left"] = "left";
         Align["Right"] = "right";
         Align["Center"] = "center";

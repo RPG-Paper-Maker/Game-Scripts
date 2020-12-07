@@ -65,10 +65,11 @@ class Position extends Portion {
         );
     }
 
-    /** Transform a json position to a THREE.Vector3
-     *   @static
-     *   @param {number[]} position The json position
-     *   @returns {THREE.Vector3}
+    /** 
+     *  Transform a json position to a THREE.Vector3.
+     *  @static
+     *  @param {number[]} position The json position
+     *  @returns {THREE.Vector3}
      */
     toVector3(): THREE.Vector3 {
         return new THREE.Vector3(

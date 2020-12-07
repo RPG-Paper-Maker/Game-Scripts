@@ -8,17 +8,14 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-
-import { Base } from "./Base";
-import { Datas, System } from "..";
-import { Utils } from "../Common";
-import { DefaultLoadingManager } from "../Libs/three";
-
+import { Base } from "./Base.js";
+import { Datas, System } from "../index.js";
+import { Utils } from "../Common/index.js";
 /** @class
  *  An object
  *  @property {number} id The ID of the object
  *  @property {string} name The name of the object
- *  @property {boolean} eventFrame Indicated if it only execute one reaction 
+ *  @property {boolean} eventFrame Indicated if it only execute one reaction
  *  per frame
  *  @property {SystemObjectState[]} states List of all the possible states of
  *  the object
@@ -29,24 +26,14 @@ import { DefaultLoadingManager } from "../Libs/three";
  *  @param {Record<string, any>} [json=undefined] Json object describing the object
  */
 class MapObject extends Base {
-
-    public id: number;
-    public name: number;
-    public isEventFrame: boolean;
-    public states: System.State[];
-    public properties: System.Property[];
-    public events: Record<number, System.Event[]>
-    public timeEvents: System.Event[];
-
-    constructor(json?: Record<string, any>) {
+    constructor(json) {
         super(json);
     }
-
-    /** 
+    /**
      *  Read the JSON associated to the object
      *  @param {Record<string, any>} json Json object describing the object
      */
-    read(json: Record<string, any>) {
+    read(json) {
         this.id = json.id;
         this.name = json.name;
         this.isEventFrame = json.ooepf;
@@ -54,28 +41,24 @@ class MapObject extends Base {
         this.properties = [];
         this.events = {};
         let hId = json.hId;
-        let i: number, l: number;
+        let i, l;
         if (hId !== -1) {
             let inheritedObject = Datas.CommonEvents.commonObjects[hId];
-
             // Only one event per frame inheritance is a priority
             this.isEventFrame = inheritedObject.isEventFrame;
-
             // States
             let states = Utils.defaultValue(inheritedObject.states, []);
             for (i = 0, l = states.length; i < l; i++) {
                 this.states.push(states[i]);
             }
-
             // Properties
             let properties = Utils.defaultValue(inheritedObject.properties, []);
             for (i = 0, l = properties.length; i < l; i++) {
                 this.properties.push(properties[i]);
             }
-
             // Events
             let events = inheritedObject.events;
-            let eventsList: System.Event[], realEventsList: System.Event[];
+            let eventsList, realEventsList;
             for (let idEvent in events) {
                 eventsList = events[idEvent];
                 realEventsList = new Array;
@@ -85,10 +68,9 @@ class MapObject extends Base {
                 this.events[idEvent] = realEventsList;
             }
         }
-
         // States
         let jsonList = Utils.defaultValue(json.states, []);
-        let jsonElement: Record<string, any>, id: number, j: number, m: number;
+        let jsonElement, id, j, m;
         for (i = 0, l = jsonList.length; i < l; i++) {
             jsonElement = jsonList[i];
             id = jsonElement.id;
@@ -99,10 +81,9 @@ class MapObject extends Base {
             }
             this.states[j] = new System.State(jsonElement);
         }
-
         // Properties
         jsonList = Utils.defaultValue(json.p, []);
-        let property: System.Property;
+        let property;
         for (i = 0, l = jsonList.length; i < l; i++) {
             jsonElement = jsonList[i];
             property = new System.Property(jsonElement);
@@ -114,16 +95,13 @@ class MapObject extends Base {
             }
             this.properties[j] = property;
         }
-
         // Events
         jsonList = Utils.defaultValue(json.events, []);
-        let event: System.Event, list: System.Event[];
-        for (i = 0, l = jsonList.length; i < l; i++)
-        {
+        let event, list;
+        for (i = 0, l = jsonList.length; i < l; i++) {
             jsonElement = jsonList[i];
             event = new System.Event(jsonElement);
-            if (this.events.hasOwnProperty(event.idEvent))
-            {
+            if (this.events.hasOwnProperty(event.idEvent)) {
                 list = this.events[event.idEvent];
                 for (j = 0, m = list.length; j < m; j++) {
                     if (list[j].isEqual(event)) {
@@ -132,25 +110,26 @@ class MapObject extends Base {
                 }
                 if (j < list.length) {
                     list[j].addReactions(event.reactions);
-                } else {
+                }
+                else {
                     list.push(event);
                 }
-            } else {
+            }
+            else {
                 this.events[event.idEvent] = [event];
             }
         }
         this.timeEvents = this.getTimeEvents();
     }
-
-    /** 
+    /**
      *  Get all the time events.
      *  @returns {System.Event[]}
      */
-    getTimeEvents(): System.Event[] {
+    getTimeEvents() {
         let completeList = this.events[1];
         let list = [];
         if (completeList) {
-            let event: System.Event;
+            let event;
             for (let i = 0, l = completeList.length; i < l; i++) {
                 event = completeList[i];
                 if (event.isSystem) {
@@ -160,8 +139,7 @@ class MapObject extends Base {
         }
         return list;
     }
-
-    /** 
+    /**
      *  Get the reactions corresponding to a given event and parameters.
      *  @param {boolean} isSystem Boolean indicating if it is an event System
      *  @param {number} idEvent ID of the event
@@ -169,14 +147,11 @@ class MapObject extends Base {
      *  @param {System.DynamicValue[]} parameters List of all the parameters
      *  @returns {System.Reaction[]}
      */
-    getReactions(isSystem: boolean, idEvent: number, state: number, parameters: 
-        System.DynamicValue[]): System.Reaction[]
-    {
+    getReactions(isSystem, idEvent, state, parameters) {
         let events = this.events[idEvent];
         let reactions = [];
         if (!Utils.isUndefined(events)) {
-            let test: boolean, event: System.Event, j: number, m: number, 
-                reaction: System.Reaction;
+            let test, event, j, m, reaction;
             for (let i = 0, l = events.length; i < l; i++) {
                 test = true;
                 event = events[i];
@@ -199,5 +174,4 @@ class MapObject extends Base {
         return reactions;
     }
 }
-
-export { MapObject }
+export { MapObject };

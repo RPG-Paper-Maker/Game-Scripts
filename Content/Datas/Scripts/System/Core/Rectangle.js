@@ -21,7 +21,7 @@ import { Anchor2D } from "./Anchor2D.js";
  *  @param {number} [width=1]
  *  @param {number} [height=1]
  */
-export class Rectangle {
+class Rectangle {
     constructor(x = 0, y = 0, width = 1, height = 1) {
         this.x = x;
         this.y = y;
@@ -84,3 +84,4 @@ export class Rectangle {
         this.anchor.set(anchorPreset);
     }
 }
+export { Rectangle };

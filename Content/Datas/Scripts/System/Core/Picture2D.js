@@ -140,10 +140,10 @@ class Picture2D extends Bitmap {
     }
     /**
      *  Draw the picture on HUD
-     *  @param {number} x The x position
-     *  @param {number} y The y position
-     *  @param {number} w The w position
-     *  @param {number} h The h position
+     *  @param {number} [x=undefined] The x position
+     *  @param {number} [y=undefined] The y position
+     *  @param {number} [w=undefined] The w position
+     *  @param {number} [h=undefined] The h position
      *  @param {number} [sx=0] The source x position
      *  @param {number} [sy=0] The source x position
      *  @param {number} [sw=this.oW] The source width size
@@ -151,7 +151,7 @@ class Picture2D extends Bitmap {
      *  @param {boolean} [positionResize=true] Indicate if the position resize
      *  (screen resolution)
      */
-    draw(x, y, w, h, sx = 0, sy = 0, sw = this.oW, sh = this.oH, positionResize = true) {
+    draw(x = undefined, y = undefined, w = undefined, h = undefined, sx = 0, sy = 0, sw = this.oW, sh = this.oH, positionResize = true) {
         if (this.loaded && sw > 0 && sh > 0) {
             // Default values
             x = Utils.isUndefined(x) ? this.x : (positionResize ?

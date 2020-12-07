@@ -16,6 +16,8 @@ class Constants {
         throw new Error("This is a static class!");
     }
 }
+Constants.DEFAULT_FONT_SIZE = 13;
+Constants.DEFAULT_FONT_NAME = "sans-serif";
 Constants.BASIC_SQUARE_SIZE = 32;
 Constants.SMALL_FONT_SIZE = 8;
 Constants.MEDIUM_FONT_SIZE = 10;
@@ -59,22 +61,7 @@ Constants.STRING_ZERO = "0";
 Constants.UNDEFINED = 'undefined';
 Constants.NUMBER = "number";
 Constants.STRING = "string";
-Constants.TAG_BOLD = "b";
-Constants.TAG_ITALIC = "i";
-Constants.TAG_LEFT = "l";
-Constants.TAG_CENTER = "c";
-Constants.TAG_RIGHT = "r";
-Constants.TAG_SIZE = "size";
-Constants.TAG_FONT = "font";
-Constants.TAG_TEXT_COLOR = "textcolor";
-Constants.TAG_BACK_COLOR = "backcolor";
-Constants.TAG_STROKE_COLOR = "strokecolor";
-Constants.TAG_VARIABLE = "var";
-Constants.TAG_PARAMETER = "par";
-Constants.TAG_PROPERTY = "pro";
-Constants.TAG_HERO_NAME = "hname";
-Constants.TAG_ICON = "ico";
-Constants.DEFAULT_FONT = "sans-serif";
 Constants.JSON_KEY = "k";
 Constants.JSON_VALUE = "v";
+Constants.EXTENSION_JSON = ".json";
 export { Constants };

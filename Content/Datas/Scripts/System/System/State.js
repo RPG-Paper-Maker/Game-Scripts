@@ -8,15 +8,13 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-
-import { Base } from "./Base";
-import { Enum, Utils } from "../Common";
-import ObjectMovingKind = Enum.ObjectMovingKind;
-import EventCommandKind = Enum.EventCommandKind;
-import PrimitiveValueKind = Enum.PrimitiveValueKind;
-import CommandMoveKind = Enum.CommandMoveKind;
-import { System, EventCommand, Manager } from "..";
-
+import { Base } from "./Base.js";
+import { Enum, Utils } from "../Common/index.js";
+var ObjectMovingKind = Enum.ObjectMovingKind;
+var EventCommandKind = Enum.EventCommandKind;
+var PrimitiveValueKind = Enum.PrimitiveValueKind;
+var CommandMoveKind = Enum.CommandMoveKind;
+import { System, Manager } from "../index.js";
 /** @class
  *   A possible state of an object.
  *   @property {number} id state ID
@@ -26,7 +24,7 @@ import { System, EventCommand, Manager } from "..";
  *   @property {number} indexX Index x in the graphic
  *   @property {number} indexY Index y in the graphic
  *   @property {ObjectMovingKind} objectMovingKind The object moving kind
- *   @property {SystemObjectReaction} route An object reaction for the route 
+ *   @property {SystemObjectReaction} route An object reaction for the route
  *   moving
  *   @property {number} speedID The speed ID
  *   @property {number} frequencyID The frequencyID
@@ -49,62 +47,36 @@ import { System, EventCommand, Manager } from "..";
  *   @param {Record<string, any>} json Json object describing the object state
  */
 class State extends Base {
-
-    public id: number;
-    public graphicID: number;
-    public graphicKind: number;
-    public rectTileset: number[];
-    public indexX: number;
-    public indexY: number;
-    public objectMovingKind: ObjectMovingKind;
-    public route: System.Reaction;
-    public speedID: number;
-    public frequencyID: number;
-    public moveAnimation: boolean;
-    public stopAnimation: boolean;
-    public climbAnimation: boolean;
-    public directionFix: boolean;
-    public through: boolean;
-    public setWithCamera: boolean;
-    public pixelOffset: boolean;
-    public keepPosition: boolean;
-    public detection: EventCommand.Base;
-
-    constructor(json?: Record<string, any>)
-    {
+    constructor(json) {
         super(json);
     }
-
-    /** 
+    /**
      *  Read the JSON associated to the object state.
-     *  @param {Record<string, any>} json Json object describing the object 
+     *  @param {Record<string, any>} json Json object describing the object
      *  state
      */
-    read(json: Record<string, any>)
-    {
+    read(json) {
         this.id = json.id;
         this.graphicID = json.gid;
         this.graphicKind = json.gk;
         if (this.graphicID === 0) {
             this.rectTileset = json.rt;
-        } else {
+        }
+        else {
             this.indexX = json.x;
             this.indexY = json.y;
         }
         this.objectMovingKind = Utils.defaultValue(json.omk, ObjectMovingKind
             .Fix);
-        this.route = new System.Reaction(
-            {
-                bh: false,
-                c: [Utils.defaultValue(json.ecr,
-                    {
-                        kind: EventCommandKind.MoveObject,
-                        command: [PrimitiveValueKind.DataBase, -1, 1, 1, 0, 
-                            CommandMoveKind.MoveRandom, 0]
-                    })
-                ]
-            }
-        );
+        this.route = new System.Reaction({
+            bh: false,
+            c: [Utils.defaultValue(json.ecr, {
+                    kind: EventCommandKind.MoveObject,
+                    command: [PrimitiveValueKind.DataBase, -1, 1, 1, 0,
+                        CommandMoveKind.MoveRandom, 0]
+                })
+            ]
+        });
         this.speedID = Utils.defaultValue(json.s, 1);
         this.frequencyID = Utils.defaultValue(json.f, 1);
         this.moveAnimation = json.move;
@@ -121,19 +93,17 @@ class State extends Base {
                 .detection);
         }
     }
-
-    /** 
+    /**
      *  Create a new instance of the System object state.
      *  @returns {Object}
      */
-    copyInstance(): Record<string ,any> {
+    copyInstance() {
         return {
             graphicID: this.graphicID,
             rectTileset: this.rectTileset,
             indexX: this.indexX,
             indexY: this.indexY
-        }
+        };
     }
 }
-
-export { State }
+export { State };

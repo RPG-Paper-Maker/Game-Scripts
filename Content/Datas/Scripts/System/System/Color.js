@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { System } from "../index.js";
+import { Base } from "./Base.js";
 import { THREE } from "../Libs/index.js";
 /** @class
  *  The system color class.
@@ -21,7 +21,7 @@ import { THREE } from "../Libs/index.js";
  *  @property {THREE.Color} color The three.js color
  *  @param {Record<string, any>} [json=undefined] Json object describing the color
  */
-class Color extends System.Base {
+class Color extends Base {
     constructor(json) {
         super(json);
     }
@@ -35,7 +35,7 @@ class Color extends System.Base {
      *  @returns {Color}
      */
     static createColor(r, g, b, a) {
-        let color = new System.Color();
+        let color = new Color();
         color.initialize(r, g, b, a);
         return color;
     }
@@ -90,4 +90,5 @@ class Color extends System.Base {
         return this.color.getHex();
     }
 }
+Color.white = Color.createColor(255, 255, 255);
 export { Color };

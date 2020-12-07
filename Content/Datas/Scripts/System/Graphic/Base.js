@@ -9,8 +9,23 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Bitmap } from "../Core/index.js";
-/** @class
+/**
+ *  @class
  *  The abstract class who model the Structure of graphics (inside window boxes).
  */
-export class Base extends Bitmap {
+class Base extends Bitmap {
+    /** Drawing the stuff behind the window box.
+     *  @param {number} x The x position to draw graphic
+     *  @param {number} y The y position to draw graphic
+     *  @param {number} w The width dimention to draw graphic
+     *  @param {number} h The height dimention to draw graphic
+     */
+    drawBehind(x, y, w, h) {
+    }
+    /**
+     *  Update the content.
+     */
+    update() {
+    }
 }
+export { Base };

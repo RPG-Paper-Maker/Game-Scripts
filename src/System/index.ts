@@ -12,6 +12,7 @@
 export * from "./Base";
 export * from "./CameraProperties";
 export * from "./Color";
+export * from "./CommonEvent";
 export * from "./CommonReaction";
 export * from "./Currency";
 export * from "./Detection";
@@ -22,6 +23,7 @@ export * from "./MapObject";
 export * from "./Parameter";
 export * from "./Picture";
 export * from "./PlaySong";
+export * from "./Property";
 export * from "./Reaction";
 export * from "./Skybox";
 export * from "./State";

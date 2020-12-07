@@ -42,26 +42,22 @@ class Game {
             this.read(slot, json);
         }*/
     }
-    // -------------------------------------------------------
-    /** Get the hero in a tab with instance ID
-    *   @static
-    *   @param {GamePlayer[]} tab The heroes tab
-    *   @param {number} id The instance ID
-    *   @returns {GamePlayer}
-    */
+    /**
+     *  Get the hero in a tab with instance ID.
+     *  @static
+     *  @param {Player[]} tab The heroes tab
+     *  @param {number} id The instance ID
+     *  @returns {GamePlayer}
+     */
     static getHeroInstanceInTab(tab, id) {
-        /*
         let hero;
-        for (let i = 0, l = tab.length; i < l; i++)
-        {
+        for (let i = 0, l = tab.length; i < l; i++) {
             hero = tab[i];
-            if (hero.instid === id)
-            {
+            if (hero.instid === id) {
                 return hero;
             }
         }
         return null;
-        */
     }
     // -------------------------------------------------------
     /** Get the path save according to slot
@@ -75,25 +71,21 @@ class Game {
             .EXTENSION_JSON;
             */
     }
-    // -------------------------------------------------------
-    /** Get the hero with instance ID
-    *   @param {number} id The instance ID
-    *   @returns {GamePlayer}
-    */
+    /**
+     *  Get the hero with instance ID
+     *  @param {number} id The instance ID
+     *  @returns {Player}
+     */
     getHeroByInstanceID(id) {
-        /*
         let hero = Game.getHeroInstanceInTab(this.teamHeroes, id);
-        if (hero !== null)
-        {
+        if (hero !== null) {
             return hero;
         }
         hero = Game.getHeroInstanceInTab(this.reserveHeroes, id);
-        if (hero !== null)
-        {
+        if (hero !== null) {
             return hero;
         }
-        hero = Game.getHeroInstanceInTab(this.hiddenHeroes, id);
-        return hero;*/
+        return Game.getHeroInstanceInTab(this.hiddenHeroes, id);
     }
     // -------------------------------------------------------
     /** Initialize a default game

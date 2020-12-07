@@ -11,5 +11,7 @@
 
 export * from "./Base";
 export * from "./Comment";
+export * from "./DisplayChoice";
+export * from "./Label";
 export * from "./SetDialogBoxOptions";
 export * from "./ShowText";

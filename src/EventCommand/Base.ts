@@ -95,7 +95,7 @@ abstract class Base {
      *  Draw the HUD.
      *  @param {Object} currentState The current state of the event
      */
-    drawHUD(currentState: Object) {
+    drawHUD(currentState?: Object) {
 
     }
 }

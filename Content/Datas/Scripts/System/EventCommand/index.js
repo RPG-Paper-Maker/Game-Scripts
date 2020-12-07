@@ -9,4 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 export * from "./Base.js";
+export * from "./Comment.js";
+export * from "./DisplayChoice.js";
+export * from "./Label.js";
 export * from "./SetDialogBoxOptions.js";
+export * from "./ShowText.js";

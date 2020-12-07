@@ -13,7 +13,7 @@ import { IO, Paths, Platform, ScreenResolution, Utils, Constants, Enum } from ".
 import * as System from "../System";
 import { Manager, Datas, Scene, EventCommand } from "..";
 import SongKind = Enum.SongKind;
-import { Position, Portion } from "../Core";
+import { Position, MapPortion, MapObject } from "../Core";
 
 /** @class
 *   All the System datas.
@@ -76,6 +76,7 @@ class Systems {
     public static soundCancel: System.PlaySong;
     public static soundImpossible: System.PlaySong;
     public static dbOptions: EventCommand.SetDialogBoxOptions;
+    public static modelHero: MapObject;
 
     constructor() {
         throw new Error("This is a static class!");
@@ -184,7 +185,7 @@ class Systems {
             (element: Record<string, any>) =>
         {
             return System.DynamicValue.readOrDefaultMessage(element.f, Constants
-                .DEFAULT_FONT);
+                .DEFAULT_FONT_NAME);
         }});
         Utils.readJSONSystemList({ list: json.sf, listIDs: this.speeds, func: 
             (element: Record<string, any>) =>

@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
+import { Utils } from "../Common/index.js";
 /** @class
 *   A scene for a local map
 *   @extends SceneGame
@@ -57,31 +58,14 @@ class Map extends Base {
             RPM.tryCatch(this.load());
         }*/
     }
-    // -------------------------------------------------------
-    /** Get the portion file name
-    *   @static
-    *   @param {number} x The global x portion
-    *   @param {number} y The global y portion
-    *   @param {number} z The global z portion
-    *   @returns {string}
-    */
-    static getPortionName(x, y, z) {
-        //return (x + "_" + y + "_" + z + RPM.EXTENSION_JSON);
-    }
-    // -------------------------------------------------------
-    /** Get the global portion of a json position
-    *   @static
-    *   @param {number[]} position The json position
-    *   @returns {number[]}
-    */
-    static getGlobalPortion(position) {
-        /*
-        return [
-            Math.floor(position[0] / RPM.PORTION_SIZE),
-            Math.floor(position[1] / RPM.PORTION_SIZE),
-            Math.floor(position[3] / RPM.PORTION_SIZE)
-        ];
-        */
+    /**
+     *  Generate the map name according to the ID.
+     *  @static
+     *  @param {number} id ID of the map
+     *  @returns {string}
+     */
+    static generateMapName(id) {
+        return "MAP" + Utils.formatNumber(id, 4);
     }
     // -------------------------------------------------------
     /** Load async stuff
