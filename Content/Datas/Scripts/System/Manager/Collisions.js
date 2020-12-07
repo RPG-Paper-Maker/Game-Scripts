@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { THREE } from "../Libs/index.js";
+import { THREE } from "../../Libs/index.js";
 /** @class
  *  The game stack that is organizing the game scenes.
  *  @property {Scene.Base[]} content The stack content

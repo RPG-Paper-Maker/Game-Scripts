@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
-import { THREE } from "../Libs/index.js";
+import { THREE } from "../../Libs/index.js";
 /** @class
  *  The system color class.
  *  @extends {System.Base}

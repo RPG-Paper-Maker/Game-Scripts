@@ -10,7 +10,6 @@
 */
 
 export * as Graphic from "./Graphic";
-export * as Libs from "./Libs";
 export * as Core from "./Core";
 export * as Datas from "./Datas";
 export * as EventCommand from "./EventCommand";

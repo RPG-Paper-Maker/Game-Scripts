@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { THREE } from "../Libs";
+import { THREE } from "../../Libs";
 import { Datas } from "..";
 import { ScreenResolution, Platform, Utils, IO, Paths } from "../Common";
 import { Stack } from "./Stack";

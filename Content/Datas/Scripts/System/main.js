@@ -10,6 +10,7 @@
 */
 import { Datas, Manager } from "./index.js";
 import { Utils } from "./Common/index.js";
+import { THREE } from "../Libs/index.js";
 /*
 const {Howl, Howler} = require('./Content/Datas/Scripts/System/Libs/howler.js');
 
@@ -39,6 +40,8 @@ async function load() {
     Manager.GL.initialize();
     Manager.GL.resize();
     Manager.Stack.requestPaintHUD = true;
+    console.log("ok");
+    console.log(new THREE.Vector3(0, 0, 0));
 }
 /**
  *  Main loop of the game

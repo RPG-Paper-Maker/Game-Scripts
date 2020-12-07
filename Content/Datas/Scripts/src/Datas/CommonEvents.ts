@@ -10,7 +10,6 @@
 */
 
 import { IO, Paths, Utils } from "../Common";
-import { Path } from "../Libs/three";
 import { System, Datas } from "..";
 
 /** @class

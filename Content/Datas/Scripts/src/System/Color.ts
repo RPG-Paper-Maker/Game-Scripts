@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { THREE } from "../Libs";
+import { THREE } from "../../Libs";
 
 /** @class
  *  The system color class.

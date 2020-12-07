@@ -12,10 +12,9 @@
 import { Base } from "./Base";
 import { DynamicValue } from "./DynamicValue";
 import { Utils, ScreenResolution, Constants } from "../Common";
-import { THREE } from "../Libs"
+import { THREE } from "../../Libs"
 import { Camera } from "../Core";
 import { Datas } from "..";
-const {Howl, Howler} = require('./Content/Datas/Scripts/System/Libs/howler.js');
 
 /** @class
  *   A camera properties of the game

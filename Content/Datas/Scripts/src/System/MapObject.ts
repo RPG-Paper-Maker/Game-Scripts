@@ -12,7 +12,6 @@
 import { Base } from "./Base";
 import { Datas, System } from "..";
 import { Utils } from "../Common";
-import { DefaultLoadingManager } from "../Libs/three";
 
 /** @class
  *  An object

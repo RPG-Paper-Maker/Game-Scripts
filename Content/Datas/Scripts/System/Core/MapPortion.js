@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { THREE } from "../Libs/index.js";
+import { THREE } from "../../Libs/index.js";
 import { MapObject } from "./MapObject.js";
 import { Position } from "./Position.js";
 import { System, Datas } from "../index.js";

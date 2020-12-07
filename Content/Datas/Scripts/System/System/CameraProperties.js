@@ -11,9 +11,8 @@
 import { Base } from "./Base.js";
 import { DynamicValue } from "./DynamicValue.js";
 import { Utils, ScreenResolution, Constants } from "../Common/index.js";
-import { THREE } from "../Libs/index.js";
+import { THREE } from "../../Libs/index.js";
 import { Datas } from "../index.js";
-const { Howl, Howler } = require('./Content/Datas/Scripts/System/Libs/howler.js');
 /** @class
  *   A camera properties of the game
  *   @property {number} distance The distance between the target position and

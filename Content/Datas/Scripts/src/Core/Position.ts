@@ -11,7 +11,7 @@
 
 import { Portion } from "./Portion";
 import { Constants, Utils } from "../Common";
-import { THREE } from "../Libs";
+import { THREE } from "../../Libs";
 
 /** @class
  *  The data class for position.

@@ -10,7 +10,7 @@
 */
 
 import { ScreenResolution, Enum, Mathf } from "../Common";
-import { THREE } from "../Libs";
+import { THREE } from "../../Libs";
 import { System, Manager } from "..";
 import { MapObject } from "./MapObject";
 import Orientation = Enum.Orientation;

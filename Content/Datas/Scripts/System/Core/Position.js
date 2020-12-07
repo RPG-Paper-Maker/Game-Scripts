@@ -10,7 +10,7 @@
 */
 import { Portion } from "./Portion.js";
 import { Constants, Utils } from "../Common/index.js";
-import { THREE } from "../Libs/index.js";
+import { THREE } from "../../Libs/index.js";
 /** @class
  *  The data class for position.
  */

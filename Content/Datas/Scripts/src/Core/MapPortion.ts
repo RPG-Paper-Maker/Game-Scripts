@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { THREE } from "../Libs";
+import { THREE } from "../../Libs";
 import { Portion } from "./Portion";
 import { MapObject } from "./MapObject";
 import { Position } from "./Position";

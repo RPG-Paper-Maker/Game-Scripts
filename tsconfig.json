@@ -12,5 +12,5 @@
     "forceConsistentCasingInFileNames": true,
     "outDir": "./Content/Datas/Scripts/System"
   },
-  "include": ["./src/**/*.ts"]
+  "include": ["./Content/Datas/Scripts/src/**/*.ts"]
 }
