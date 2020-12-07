@@ -10,7 +10,7 @@
 */
 
 import { Constants } from ".";
-import { THREE } from "../Libs";
+import { THREE } from "../../Libs";
 
 /** @class
  * The static class for Math related function.
@@ -29,8 +29,10 @@ class Mathf {
      * @param {any} splitThis? - The context of splitCallback
      * @returns {[T[]]} - The fully splitted array from array
      */
-    static split<T>(array: T[], splitCallback: (elem: T, i: number, self: T[]) => boolean, splitThis?: any): [T[]] {
-        const newArray: [T[]] = [];
+    static split<T>(array: T[], splitCallback: (elem: T, i: number, self: T[]) 
+        => boolean, splitThis?: any): T[][]
+    {
+        const newArray: T[][] = [];
         let newGroup: T[] = [];
         // forEach is tested to be the fastest among sandboxes including NW.js
         array.forEach((elem: T, i: number) => {
