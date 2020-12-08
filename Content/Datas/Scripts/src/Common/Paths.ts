@@ -41,7 +41,7 @@ class Paths {
     public static readonly FILE_KEYBOARD = Paths.DATAS + "keyBoard.json";
     public static readonly FILE_SYSTEM = Paths.DATAS + "system.json";
     public static readonly FILE_CLASSES = Paths.DATAS + "classes.json";
-    public static readonly FILE_TILESETS_DATAS = Paths.DATAS + "tilesets.json";
+    public static readonly FILE_TILESETS = Paths.DATAS + "tilesets.json";
     public static readonly FILE_SPECIAL_ELEMENTS = Paths.DATAS + "specialElements.json";
     public static readonly FILE_VARIABLES = Paths.DATAS + "variables.json";
     public static readonly FILE_SETTINGS = Paths.DATAS + "settings.json";

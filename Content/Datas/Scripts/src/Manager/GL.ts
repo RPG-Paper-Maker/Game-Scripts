@@ -10,7 +10,7 @@
 */
 
 import { THREE } from "../../Libs";
-import { Datas } from "..";
+import { Datas, System } from "..";
 import { ScreenResolution, Platform, Utils, IO, Paths } from "../Common";
 import { Stack } from "./Stack";
 import { Camera } from "../Core";
@@ -22,6 +22,8 @@ class GL {
     public static SHADER_FIX_VERTEX: string;
     public static SHADER_FIX_FRAGMENT: string;
     public static renderer: THREE.WebGLRenderer;
+    public static textureLoader = new THREE.TextureLoader();
+    public static screenTone: THREE.Vector4;
 
     constructor() {
         throw new Error("This is a static class");
@@ -71,6 +73,81 @@ class GL {
                 camera.resizeGL();
             }
         }
+    }
+
+    /** 
+     *  Load a texture.
+     *  @param {string} path The path of the texture
+     *  @returns {Promise<THREE.MeshStandardMaterial>}
+     */
+    static async loadTexture(path: string): Promise<THREE.MeshStandardMaterial> {
+        let texture: THREE.Texture = await (new Promise((resolve, reject) => {
+            this.textureLoader.load(path,
+                (t: THREE.Texture) => {
+                    resolve(t);
+                },
+                () => {},
+                () => {
+                    Platform.showErrorMessage("Could not load " + path);
+                }
+            );
+        }));
+        return this.createMaterial(texture);
+    }
+
+    /** 
+     *  Load a texture empty.
+     *  @returns {THREE.MeshStandardMaterial}
+     */
+    static loadTextureEmpty(): THREE.MeshStandardMaterial {
+        // @ts-ignore
+        return new THREE.MeshBasicMaterial(
+        {
+            transparent: true,
+            side: THREE.DoubleSide,
+            flatShading: THREE.FlatShading,
+            alphaTest: 0.5
+        });
+    }
+
+    /** 
+     *  Create a material from texture.
+     *  @returns {THREE.MeshStandardMaterial}
+     */
+    static createMaterial(texture: THREE.Texture, opts: { flipX?: boolean, 
+        flipY?: boolean, uniforms?: Record<string, any> } = {}): THREE
+        .MeshStandardMaterial
+    {
+        texture.magFilter = THREE.NearestFilter;
+        texture.minFilter = THREE.NearestFilter;
+        texture.flipY = opts.flipY;
+        if (!opts.uniforms) {
+            opts.uniforms = {
+                texture: { type: "t", value: texture },
+                colorD: { type: "v4", value: this.screenTone },
+                reverseH: { type: "b", value: opts.flipX },
+            };
+        }
+        let material = new THREE.ShaderMaterial({
+            uniforms:       opts.uniforms,
+            vertexShader:   this.SHADER_FIX_VERTEX,
+            fragmentShader: this.SHADER_FIX_FRAGMENT,
+            side: THREE.DoubleSide,
+            transparent: false
+        });
+        // @ts-ignore
+        material.map = texture;
+        // @ts-ignore
+        return material;
+    }
+
+    /** 
+     *  Update the background color
+     *  @static
+     *  @param {System.Color} color
+     */
+    static updateBackgroundColor(color: System.Color) {
+        this.renderer.setClearColor(color.getHex(this.screenTone), color.alpha);
     }
 }
 

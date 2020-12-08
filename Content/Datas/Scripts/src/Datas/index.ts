@@ -16,6 +16,8 @@ export * from "./Pictures";
 export * from "./Settings";
 export * from "./Shapes";
 export * from "./Songs";
+export * from "./SpecialElements";
 export * from "./Systems";
+export * from "./Tilesets";
 export * from "./Variables";
 export * from "./Videos";

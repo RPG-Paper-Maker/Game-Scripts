@@ -60,5 +60,69 @@ class GL {
             }
         }
     }
+    /**
+     *  Load a texture.
+     *  @param {string} path The path of the texture
+     *  @returns {Promise<THREE.MeshStandardMaterial>}
+     */
+    static async loadTexture(path) {
+        let texture = await (new Promise((resolve, reject) => {
+            this.textureLoader.load(path, (t) => {
+                resolve(t);
+            }, () => { }, () => {
+                Platform.showErrorMessage("Could not load " + path);
+            });
+        }));
+        return this.createMaterial(texture);
+    }
+    /**
+     *  Load a texture empty.
+     *  @returns {THREE.MeshStandardMaterial}
+     */
+    static loadTextureEmpty() {
+        // @ts-ignore
+        return new THREE.MeshBasicMaterial({
+            transparent: true,
+            side: THREE.DoubleSide,
+            flatShading: THREE.FlatShading,
+            alphaTest: 0.5
+        });
+    }
+    /**
+     *  Create a material from texture.
+     *  @returns {THREE.MeshStandardMaterial}
+     */
+    static createMaterial(texture, opts = {}) {
+        texture.magFilter = THREE.NearestFilter;
+        texture.minFilter = THREE.NearestFilter;
+        texture.flipY = opts.flipY;
+        if (!opts.uniforms) {
+            opts.uniforms = {
+                texture: { type: "t", value: texture },
+                colorD: { type: "v4", value: this.screenTone },
+                reverseH: { type: "b", value: opts.flipX },
+            };
+        }
+        let material = new THREE.ShaderMaterial({
+            uniforms: opts.uniforms,
+            vertexShader: this.SHADER_FIX_VERTEX,
+            fragmentShader: this.SHADER_FIX_FRAGMENT,
+            side: THREE.DoubleSide,
+            transparent: false
+        });
+        // @ts-ignore
+        material.map = texture;
+        // @ts-ignore
+        return material;
+    }
+    /**
+     *  Update the background color
+     *  @static
+     *  @param {System.Color} color
+     */
+    static updateBackgroundColor(color) {
+        this.renderer.setClearColor(color.getHex(this.screenTone), color.alpha);
+    }
 }
+GL.textureLoader = new THREE.TextureLoader();
 export { GL };

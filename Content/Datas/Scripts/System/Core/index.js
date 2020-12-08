@@ -13,10 +13,14 @@
  * @example import * as core from "Core"
  */
 export * from "./Anchor2D.js";
+export * from "./Autotile.js";
+export * from "./Autotiles.js";
 export * from "./Bitmap.js";
 export * from "./Camera.js";
 export * from "./CollisionSquare.js";
 export * from "./Game.js";
+export * from "./Land.js";
+export * from "./MapElement.js";
 export * from "./MapObject.js";
 export * from "./MapPortion.js";
 export * from "./Node.js";
@@ -25,6 +29,7 @@ export * from "./Player.js";
 export * from "./Portion.js";
 export * from "./Position.js";
 export * from "./Rectangle.js";
+export * from "./TextureBundle.js";
 export * from "./Tree.js";
 export * from "./WindowBox.js";
 export * from "./WindowChoices.js";

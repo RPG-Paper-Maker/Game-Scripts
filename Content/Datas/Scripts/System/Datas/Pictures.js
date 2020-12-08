@@ -79,6 +79,14 @@ class Pictures {
             .get(id, this.list[kind], "picture " + System.Picture
             .pictureKindToString(kind));
     }
+    /**
+     *  Get the corresponding picture list by kind.
+     *  @param {PictureKind} kind The picture kind
+     *  @returns {Picture}
+     */
+    static getListByKind(kind) {
+        return this.list[kind];
+    }
     /** Get a copy of the picture 2D.
     *   @param {PictureKind} kind The picture kind
     *   @param {number} id The picture id

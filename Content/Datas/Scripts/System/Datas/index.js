@@ -15,6 +15,8 @@ export * from "./Pictures.js";
 export * from "./Settings.js";
 export * from "./Shapes.js";
 export * from "./Songs.js";
+export * from "./SpecialElements.js";
 export * from "./Systems.js";
+export * from "./Tilesets.js";
 export * from "./Variables.js";
 export * from "./Videos.js";

@@ -21,16 +21,14 @@ class Videos {
 
     private static list: System.Video[];
 
-    constructor()
-    {
+    constructor() {
 
     }
 
     /** 
      *  Read the JSON file associated to videos
      */
-    static async read()
-    {
+    static async read() {
         let json = (await IO.parseFileJSON(Paths.FILE_VIDEOS)).list;
         this.list = [];
         Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System
@@ -42,8 +40,7 @@ class Videos {
      *  @param {number} id
      *  @returns {System.Video}
      */
-    static get(id: number): System.Video
-    {
+    static get(id: number): System.Video {
         return Datas.Base.get(id, this.list, "video");
     }
 }

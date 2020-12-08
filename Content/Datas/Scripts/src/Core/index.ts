@@ -14,10 +14,14 @@
  * @example import * as core from "Core"
  */
 export * from "./Anchor2D";
+export * from "./Autotile";
+export * from "./Autotiles";
 export * from "./Bitmap";
 export * from "./Camera";
 export * from "./CollisionSquare";
 export * from "./Game";
+export * from "./Land";
+export * from "./MapElement";
 export * from "./MapObject";
 export * from "./MapPortion";
 export * from "./Node";
@@ -26,6 +30,7 @@ export * from "./Player";
 export * from "./Portion";
 export * from "./Position";
 export * from "./Rectangle";
+export * from "./TextureBundle";
 export * from "./Tree";
 export * from "./WindowBox";
 export * from "./WindowChoices";

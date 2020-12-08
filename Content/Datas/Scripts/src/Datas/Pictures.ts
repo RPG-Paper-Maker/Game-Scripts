@@ -91,6 +91,16 @@ class Pictures
             .pictureKindToString(kind));
     }
 
+    /** 
+     *  Get the corresponding picture list by kind.
+     *  @param {PictureKind} kind The picture kind
+     *  @returns {Picture}
+     */
+    static getListByKind(kind: PictureKind): System.Picture[]
+    {
+        return this.list[kind];
+    }
+
     /** Get a copy of the picture 2D.
     *   @param {PictureKind} kind The picture kind
     *   @param {number} id The picture id

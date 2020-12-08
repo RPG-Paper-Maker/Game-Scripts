@@ -44,11 +44,13 @@ async function load() {
     await Datas.Songs.read();
     await Datas.Videos.read();
     await Datas.Shapes.read();
-    //RPM.gameStack.pushTitleScreen();
-    //RPM.datasGame.loaded = true;
     Manager.GL.load();
     Manager.GL.initialize();
     Manager.GL.resize();
+    await Datas.SpecialElements.read();
+    await Datas.Tilesets.read();
+    //RPM.gameStack.pushTitleScreen();
+    //RPM.datasGame.loaded = true;
     Manager.Stack.requestPaintHUD = true;
 }
 
