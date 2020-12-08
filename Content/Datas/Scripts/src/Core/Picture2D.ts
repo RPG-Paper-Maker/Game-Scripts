@@ -48,7 +48,9 @@ class Picture2D extends Bitmap {
     public centered: boolean;
     public reverse: boolean;
 
-    constructor(path = "", x = 0, y = 0, w = 0, h = 0) {
+    constructor(path: string = "", x: number = 0, y: number = 0, w: number = 0, 
+        h: number = 0)
+    {
         super(x, y, w, h);
 
         this.zoom = 1.0;
@@ -75,7 +77,8 @@ class Picture2D extends Bitmap {
      *  @param {number} h The h size
      */
     static async create(picture: System.Picture, x: number = 0, y: number = 0, 
-        w: number = 0, h: number = 0) {
+        w: number = 0, h: number = 0)
+    {
         let pic = picture ? new Picture2D(picture.getPath(), x, y, w, h) : new
         Picture2D();
         await pic.load();

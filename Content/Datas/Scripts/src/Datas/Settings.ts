@@ -30,8 +30,7 @@ class Settings {
      */
     static async read() {
         // Settings
-        let json = await IO.parseFileJSON(Platform.ROOT_DIRECTORY + Paths
-            .FILE_SETTINGS);
+        let json = await IO.parseFileJSON(Paths.FILE_SETTINGS);
         this.kb = {};
         let jsonObjs = json[Utils.numToString(TitleSettingKind.KeyboardAssigment)];
         for (let id in jsonObjs) {
@@ -50,7 +49,7 @@ class Settings {
             jsonObjs[id] = this.kb[id];
         }
         json[Utils.numToString(TitleSettingKind.KeyboardAssigment)] = jsonObjs;
-        IO.saveFile(Platform.ROOT_DIRECTORY + Paths.FILE_SETTINGS, json);
+        IO.saveFile(Paths.FILE_SETTINGS, json);
     }
 
     /** 

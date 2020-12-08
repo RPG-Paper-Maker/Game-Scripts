@@ -10,15 +10,16 @@
 */
 import { Enum, Constants, Paths, Utils, Platform } from "../Common/index.js";
 var PictureKind = Enum.PictureKind;
-import { System, Datas } from "../index.js";
+import { Datas } from "../index.js";
 import { Picture2D, CollisionSquare } from "../Core/index.js";
+import { Base } from "./Base.js";
 /** @class
  *  A picture of the game.
  *  @extends {System.Base}
  *  @property {PictureKind} kind The kind of picture
  *  @property {string} name The picture name
  *  @property {boolean} isBR Indicate if the picture is a BR (Basic Ressource)
- *  @property {boolean} isDLC Indicate if the picture is a DLC
+ *  @property {string} dlc The dlc name
  *  @property {Record<string, any>[]} jsonCollisions The json used for the picture collision
  *  @property {boolean} collisionsRepeat Indicate if collision is repeated (for
  *  characters)
@@ -26,16 +27,17 @@ import { Picture2D, CollisionSquare } from "../Core/index.js";
  *  @param {Object} [json=undefined] Json object describing the picture
  *  @param {PictureKind} [kind=PictureKind.Pictures] The kind of picture
  */
-class Picture extends System.Base {
-    constructor(json, kind = PictureKind.Pictures) {
+class Picture extends Base {
+    constructor(json, kind = PictureKind
+        .Pictures) {
         super(json, kind);
     }
     /**
      *  Assign the default members.
-     *  @param {PictureKind} kind
+     *  @param {any[]} args
      */
-    setup(kind) {
-        this.kind = kind;
+    setup(args) {
+        this.kind = args[0];
     }
     /**
      *  Get string of picture kind.
@@ -75,9 +77,10 @@ class Picture extends System.Base {
             case PictureKind.Skyboxes:
                 return "skybox";
         }
+        return "";
     }
     /**
-     *  Get the folder associated to a kind of picture
+     *  Get the folder associated to a kind of picture.
      *  @static
      *  @param {PictureKind} kind The kind of picture
      *  @param {boolean} isBR Indicate if the picture is a BR
@@ -87,7 +90,7 @@ class Picture extends System.Base {
     static getFolder(kind, isBR, dlc) {
         return (isBR ? Datas.Systems.PATH_BR : (dlc ? Datas.Systems.PATH_DLCS +
             Constants.STRING_SLASH + dlc : Paths.ROOT_DIRECTORY_LOCAL)) +
-            System.Picture.getLocalFolder(kind);
+            this.getLocalFolder(kind);
     }
     /**
      *  Get the local folder associated to a kind of picture.
@@ -135,6 +138,7 @@ class Picture extends System.Base {
      *  @param {Object} json Json object describing the picture
      */
     read(json) {
+        this.id = json.id;
         this.name = json.name;
         this.isBR = json.br;
         this.dlc = Utils.defaultValue(json.d, "");
@@ -153,8 +157,7 @@ class Picture extends System.Base {
      *  @returns {string}
      */
     getPath() {
-        return Picture.getFolder(this.kind, this.isBR, this.dlc) + Constants
-            .STRING_SLASH + this.name;
+        return this.id === -1 ? "" : Picture.getFolder(this.kind, this.isBR, this.dlc) + Constants.STRING_SLASH + this.name;
     }
     /**
      *  Read collisions according to image size.

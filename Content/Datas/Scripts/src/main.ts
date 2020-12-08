@@ -39,8 +39,14 @@ function initialize() {
 async function load() {
     await Datas.Settings.read();
     await Datas.Systems.read();
+    await Datas.Variables.read();
+    await Datas.Pictures.read();
+    await Datas.Songs.read();
+    await Datas.Videos.read();
+    await Datas.Shapes.read();
     //RPM.gameStack.pushTitleScreen();
     //RPM.datasGame.loaded = true;
+    Manager.GL.load();
     Manager.GL.initialize();
     Manager.GL.resize();
     Manager.Stack.requestPaintHUD = true;

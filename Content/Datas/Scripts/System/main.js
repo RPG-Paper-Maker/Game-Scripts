@@ -10,7 +10,6 @@
 */
 import { Datas, Manager } from "./index.js";
 import { Utils } from "./Common/index.js";
-import { THREE } from "../Libs/index.js";
 /*
 const {Howl, Howler} = require('./Content/Datas/Scripts/System/Libs/howler.js');
 
@@ -35,13 +34,17 @@ function initialize() {
 async function load() {
     await Datas.Settings.read();
     await Datas.Systems.read();
+    await Datas.Variables.read();
+    await Datas.Pictures.read();
+    await Datas.Songs.read();
+    await Datas.Videos.read();
+    await Datas.Shapes.read();
     //RPM.gameStack.pushTitleScreen();
     //RPM.datasGame.loaded = true;
+    Manager.GL.load();
     Manager.GL.initialize();
     Manager.GL.resize();
     Manager.Stack.requestPaintHUD = true;
-    console.log("ok");
-    console.log(new THREE.Vector3(0, 0, 0));
 }
 /**
  *  Main loop of the game

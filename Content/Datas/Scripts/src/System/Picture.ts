@@ -11,8 +11,9 @@
 
 import { Enum, Constants, Paths, Utils, Platform } from "../Common";
 import PictureKind = Enum.PictureKind;
-import { System, Datas } from "..";
+import { Datas } from "..";
 import { Picture2D, CollisionSquare } from "../Core";
+import { Base } from "./Base";
 
 /** @class
  *  A picture of the game.
@@ -20,7 +21,7 @@ import { Picture2D, CollisionSquare } from "../Core";
  *  @property {PictureKind} kind The kind of picture
  *  @property {string} name The picture name
  *  @property {boolean} isBR Indicate if the picture is a BR (Basic Ressource)
- *  @property {boolean} isDLC Indicate if the picture is a DLC
+ *  @property {string} dlc The dlc name
  *  @property {Record<string, any>[]} jsonCollisions The json used for the picture collision
  *  @property {boolean} collisionsRepeat Indicate if collision is repeated (for
  *  characters)
@@ -28,12 +29,12 @@ import { Picture2D, CollisionSquare } from "../Core";
  *  @param {Object} [json=undefined] Json object describing the picture
  *  @param {PictureKind} [kind=PictureKind.Pictures] The kind of picture
  */
-class Picture extends System.Base {
+class Picture extends Base {
 
+    public id: number;
     public kind: PictureKind;
     public name: string;
     public isBR: boolean;
-    public isDLC: boolean;
     public dlc: string;
     public jsonCollisions: Record<string, any>[];
     public collisionsRepeat: boolean;
@@ -42,16 +43,18 @@ class Picture extends System.Base {
     public width: number;
     public height: number;
 
-    constructor(json?: Record<string, any>, kind = PictureKind.Pictures) {
+    constructor(json?: Record<string, any>, kind: PictureKind = PictureKind
+        .Pictures)
+    {
         super(json, kind);
     }
 
     /** 
      *  Assign the default members.
-     *  @param {PictureKind} kind
+     *  @param {any[]} args
      */
-    public setup(kind: PictureKind) {
-        this.kind = kind;
+    public setup(args: any[]) {
+        this.kind = args[0];
     }
 
     /** 
@@ -59,8 +62,7 @@ class Picture extends System.Base {
      *  @param {PictureKind} kind The picture kind
      *  @returns {string}
      */
-    static pictureKindToString(kind: PictureKind): string
-    {
+    static pictureKindToString(kind: PictureKind): string {
         switch (kind) {
             case PictureKind.Bars:
                 return "bar";
@@ -93,10 +95,11 @@ class Picture extends System.Base {
             case PictureKind.Skyboxes:
                 return "skybox";
         }
+        return "";
     }
 
     /** 
-     *  Get the folder associated to a kind of picture
+     *  Get the folder associated to a kind of picture.
      *  @static
      *  @param {PictureKind} kind The kind of picture
      *  @param {boolean} isBR Indicate if the picture is a BR
@@ -106,7 +109,7 @@ class Picture extends System.Base {
     static getFolder(kind: PictureKind, isBR: boolean, dlc: string): string {
         return (isBR ? Datas.Systems.PATH_BR : (dlc ? Datas.Systems.PATH_DLCS + 
             Constants.STRING_SLASH + dlc : Paths.ROOT_DIRECTORY_LOCAL)) + 
-            System.Picture.getLocalFolder(kind);
+            this.getLocalFolder(kind);
     }
 
     /** 
@@ -156,6 +159,7 @@ class Picture extends System.Base {
      *  @param {Object} json Json object describing the picture
      */
     read(json: Record<string, any>) {
+        this.id = json.id;
         this.name = json.name;
         this.isBR = json.br;
         this.dlc = Utils.defaultValue(json.d, "");
@@ -176,8 +180,8 @@ class Picture extends System.Base {
      *  @returns {string}
      */
     getPath(): string {
-        return Picture.getFolder(this.kind, this.isBR, this.dlc) + Constants
-            .STRING_SLASH + this.name;
+        return this.id === -1 ? "" : Picture.getFolder(this.kind, this.isBR, 
+            this.dlc) + Constants.STRING_SLASH + this.name;
     }
 
     /** 

@@ -13,4 +13,8 @@ export * from "./CommonEvents.js";
 export * from "./Keyboard.js";
 export * from "./Pictures.js";
 export * from "./Settings.js";
+export * from "./Shapes.js";
+export * from "./Songs.js";
 export * from "./Systems.js";
+export * from "./Variables.js";
+export * from "./Videos.js";

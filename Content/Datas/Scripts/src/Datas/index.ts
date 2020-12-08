@@ -14,4 +14,8 @@ export * from "./CommonEvents";
 export * from "./Keyboard";
 export * from "./Pictures";
 export * from "./Settings";
+export * from "./Shapes";
+export * from "./Songs";
 export * from "./Systems";
+export * from "./Variables";
+export * from "./Videos";

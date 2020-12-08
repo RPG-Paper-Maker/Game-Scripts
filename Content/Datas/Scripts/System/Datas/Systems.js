@@ -53,8 +53,7 @@ class Systems {
      *  @static
      */
     static async read() {
-        let json = await IO.parseFileJSON(Platform.ROOT_DIRECTORY + Paths
-            .FILE_SYSTEM);
+        let json = await IO.parseFileJSON(Paths.FILE_SYSTEM);
         // Project name
         this.projectName = new System.Translatable(json.pn);
         Platform.setWindowTitle(this.projectName.name());
@@ -90,8 +89,8 @@ class Systems {
         // Path BR
         this.PATH_BR = Paths.FILES + json.pathBR;
         // Path DLC
-        this.PATH_DLCS = Paths.FILES + (await IO.parseFileJSON(Platform
-            .ROOT_DIRECTORY + Paths.FILE_DLCS)).p;
+        this.PATH_DLCS = Paths.FILES + (await IO.parseFileJSON(Paths.FILE_DLCS))
+            .p;
         // Hero beginning
         this.ID_MAP_START_HERO = json.idMapHero;
         this.ID_OBJECT_START_HERO = json.idObjHero;

@@ -9,6 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Platform } from "./Platform";
+
 /**
  * The static class containing Path related constant
  * can be accessed through import
@@ -18,7 +20,7 @@ class Paths {
 
     public static readonly ROOT_DIRECTORY_LOCAL = "."
     public static readonly FILES = "file:///";
-    public static readonly DATAS = "/Content/Datas/";
+    public static readonly DATAS = Platform.ROOT_DIRECTORY + "/Content/Datas/";
     public static readonly FILE_MAPS = Paths.DATAS + "Maps";
     public static readonly FILE_MAP_INFOS = "/infos.json";
     public static readonly FILE_MAP_OBJECTS = "/objects.json";
@@ -76,7 +78,7 @@ class Paths {
     public static readonly SCRIPTS = Paths.DATAS + "Scripts/";
     public static readonly PLUGINS = Paths.SCRIPTS + "Plugins/";
     public static readonly SYSTEM = Paths.SCRIPTS + "System/";
-    public static readonly SHADERS = Paths.SYSTEM + "shaders/";
+    public static readonly SHADERS = Paths.SCRIPTS + "Shaders/";
     public static readonly SAVES = Paths.DATAS + "Saves";
 
     constructor() {
