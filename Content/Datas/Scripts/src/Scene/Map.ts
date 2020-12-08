@@ -12,6 +12,7 @@
 import { Base } from "./Base";
 import { Enum, Utils, Constants } from "../Common";
 import Orientation = Enum.Orientation;
+import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 
 /** @class
 *   A scene for a local map
@@ -52,6 +53,10 @@ class Map extends Base
     public orientation: Orientation;
     public user: any;
     public isBattleMap: boolean;
+    public tempTargets: any[];
+    public targets: any[];
+    public damages: any[];
+    public battleCommandKind: EffectSpecialActionKind;
 
     constructor(id, isBattleMap, minimal = false)
     {

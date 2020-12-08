@@ -23,6 +23,11 @@ import { Base } from "./Base";
  */
 class Translatable extends Base {
 
+    public static EMPTY_NAMES = 
+    {
+        names: ["", ""]
+    }
+
     public names: string[];
 
     constructor(json?: Record<string, any>) {

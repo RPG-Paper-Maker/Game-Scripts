@@ -26,10 +26,10 @@ import { System, Datas } from "..";
 class CommonEvents {
 
     public static PROPERTY_STOCKED = "stocked";
-    public static eventsSystem: System.Event[];
-    public static eventsUser: System.Event[];
-    public static commonReactions: System.CommonReaction[];
-    public static commonObjects: System.MapObject[];
+    private static eventsSystem: System.Event[];
+    private static eventsUser: System.Event[];
+    private static commonReactions: System.CommonReaction[];
+    private static commonObjects: System.MapObject[];
 
     constructor() {
         throw new Error("This is a static class!");
@@ -105,6 +105,42 @@ class CommonEvents {
             jsonObject.stocked = true;
             reorderedList.push(jsonObject);
         }
+    }
+
+    /** 
+     *  Get the event system by ID.
+     *  @param {number} id
+     *  @returns {System.Event}
+     */
+    static getEventSystem(id: number): System.Event {
+        return Datas.Base.get(id, this.eventsSystem, "event system");
+    }
+
+    /** 
+     *  Get the event user by ID.
+     *  @param {number} id
+     *  @returns {System.Event}
+     */
+    static getEventUser(id: number): System.Event {
+        return Datas.Base.get(id, this.eventsUser, "event user");
+    }
+
+    /** 
+     *  Get the common reaction by ID.
+     *  @param {number} id
+     *  @returns {System.CommonReaction}
+     */
+    static getCommonReaction(id: number): System.CommonReaction {
+        return Datas.Base.get(id, this.commonReactions, "common reaction");
+    }
+
+    /** 
+     *  Get the common object by ID.
+     *  @param {number} id
+     *  @returns {System.MapObject}
+     */
+    static getCommonObject(id: number): System.MapObject {
+        return Datas.Base.get(id, this.commonObjects, "common object");
     }
 }
 

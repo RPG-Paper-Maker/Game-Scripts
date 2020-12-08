@@ -17,16 +17,18 @@ import { System } from "..";
  *  @property {System.Item[]} list List of all the items of the game according
  *  to ID
  */
-class DatasItems {
+class Items {
 
-    private static list: System.Item;
+    private static list: System.Item[];
 
     constructor() {
-
+        throw new Error("This is a static class!");
     }
 
     /**
-     *  Read the JSON file associated to items
+     *  Read the JSON file associated to items.
+     *  @static
+     *  @async
      */
     static async read() {
         let json = (await IO.parseFileJSON(Paths.FILE_ITEMS)).items;
@@ -35,3 +37,5 @@ class DatasItems {
             .Item });
     }
 }
+
+export { Items }

@@ -52,4 +52,7 @@ class Translatable extends Base {
         this.names[id] = name;
     }
 }
+Translatable.EMPTY_NAMES = {
+    names: ["", ""]
+};
 export { Translatable };

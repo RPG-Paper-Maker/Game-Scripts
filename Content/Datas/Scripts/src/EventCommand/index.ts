@@ -10,6 +10,7 @@
 */
 
 export * from "./Base";
+export * from "./CallACommonReaction";
 export * from "./Comment";
 export * from "./DisplayChoice";
 export * from "./Label";

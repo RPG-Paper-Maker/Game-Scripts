@@ -9,44 +9,41 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import {CommonSkillItem} from ".";
-import {RPM} from "../Core";
+import { CommonSkillItem } from "./CommonSkillItem";
 
 /** @class
- *   A skill of the game
- *   @extends CommonSkillItem
- *   @param {Object} [json=undefined] Json object describing the skill
+ *  A skill of the game.
+ *  @extends CommonSkillItem
+ *  @param {Record<string, any>} [json=undefined] Json object describing the skill
  */
-export class Skill extends CommonSkillItem {
+class Skill extends CommonSkillItem {
+
     constructor(json) {
         super(json);
     }
 
-    setup(){
-        super.setup();
-        this.hasType = false;
-    }
-
-    // -------------------------------------------------------
-    /** Read the JSON associated to the skill
-     *   @param {Object} json Json object describing the skill
+    /** 
+     *  Read the JSON associated to the skill.
+     *  @param {Record<string, any>} json Json object describing the skill
      */
-    read(json) {
+    read(json: Record<string, any>) {
         super.read(json);
     }
 
-    // -------------------------------------------------------
-    /** Get the string representation of costs
-     *   @returns {string}
+    /** 
+     *  Get the string representation of costs.
+     *  @returns {string}
      */
-    getCostString() {
-        let result = RPM.STRING_EMPTY;
+    getCostString(): string {
+        let result = "";
         for (let i = 0, l = this.costs.length; i < l; i++) {
             result += this.costs[i].toString();
             if (i === l - 1) {
-                result += RPM.STRING_SPACE;
+                result += " ";
             }
         }
         return result;
     }
 }
+
+export { Skill }

@@ -87,6 +87,38 @@ class CommonEvents {
             reorderedList.push(jsonObject);
         }
     }
+    /**
+     *  Get the event system by ID.
+     *  @param {number} id
+     *  @returns {System.Event}
+     */
+    static getEventSystem(id) {
+        return Datas.Base.get(id, this.eventsSystem, "event system");
+    }
+    /**
+     *  Get the event user by ID.
+     *  @param {number} id
+     *  @returns {System.Event}
+     */
+    static getEventUser(id) {
+        return Datas.Base.get(id, this.eventsUser, "event user");
+    }
+    /**
+     *  Get the common reaction by ID.
+     *  @param {number} id
+     *  @returns {System.CommonReaction}
+     */
+    static getCommonReaction(id) {
+        return Datas.Base.get(id, this.commonReactions, "common reaction");
+    }
+    /**
+     *  Get the common object by ID.
+     *  @param {number} id
+     *  @returns {System.MapObject}
+     */
+    static getCommonObject(id) {
+        return Datas.Base.get(id, this.commonObjects, "common object");
+    }
 }
 CommonEvents.PROPERTY_STOCKED = "stocked";
 export { CommonEvents };

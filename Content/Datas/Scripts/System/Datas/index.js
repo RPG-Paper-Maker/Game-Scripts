@@ -8,15 +8,20 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
+export * from "./Armors.js";
 export * from "./Base.js";
+export * from "./BattleSystems.js";
 export * from "./CommonEvents.js";
+export * from "./Items.js";
 export * from "./Keyboard.js";
 export * from "./Pictures.js";
 export * from "./Settings.js";
 export * from "./Shapes.js";
+export * from "./Skills.js";
 export * from "./Songs.js";
 export * from "./SpecialElements.js";
 export * from "./Systems.js";
 export * from "./Tilesets.js";
 export * from "./Variables.js";
 export * from "./Videos.js";
+export * from "./Weapons.js";

@@ -35,6 +35,7 @@ class Player
 {
     public instid: number;
     public name: string;
+    public kind: CharacterKind;
 
     constructor(kind?: CharacterKind, id?: number, instanceID?: number, skills?, json?)
     {
@@ -107,15 +108,12 @@ class Player
     *   @param {number[]} values The values
     *   @returns {GamePlayer}
     */
-    static getTemporaryPlayer(values?: number[]): Player
-    {
+    static getTemporaryPlayer(values?: number[]): Player {
         let player = new Player();
-        /*
-        let statistics = Datas.datasGame.battleSystem.statistics;
-        for (let i = 1, l = statistics.length; i < l; i++)
-        {
+        let statistics = Datas.BattleSystems.statistics;
+        for (let i = 1, l = statistics.length; i < l; i++) {
             player.initStatValue(statistics[i], values ? values[i] : 0);
-        }*/
+        }
         return player;
     }
 

@@ -10,6 +10,7 @@
 */
 
 import { Camera } from "../Core";
+import { Manager } from "..";
 
 /** @class
  *   Abstract class for the game stack.
@@ -24,7 +25,7 @@ import { Camera } from "../Core";
 class Base
 {
     public camera: Camera
-    public reactionInterpreters: number;
+    public reactionInterpreters: Manager.EventReaction[];
     public parallelCommands: number;
     public loading: boolean;
 

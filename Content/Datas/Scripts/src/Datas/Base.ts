@@ -16,7 +16,7 @@ import { Utils, Platform } from "../Common";
  */
 abstract class Base {
     
-    public static readonly STRING_ERROR_GET_1 = "Impossible to get the system ID ";
+    public static readonly STRING_ERROR_GET_1 = "Impossible to get the system ";
     public static readonly STRING_ERROR_GET_2 = ". Please check if this ID exists in the software.";
 
     constructor() {
@@ -32,11 +32,12 @@ abstract class Base {
      *  message
      *  @returns {T}
      */
-    static get<T>(id: number, list: T[], name: string): T {
+    static get<T>(id: number, list: T[], name: string, isID: boolean = true): T {
         let v = list[id];
         if (Utils.isUndefined(v)) {
-            Platform.showErrorMessage(Base.STRING_ERROR_GET_1 + Utils
-                .formatNumber(id, 4) + ": " + name + Base.STRING_ERROR_GET_2);
+            Platform.showErrorMessage(Base.STRING_ERROR_GET_1 + (isID ? "ID": 
+                "index") + " " + Utils.formatNumber(id, 4) + ": " + name + Base
+                .STRING_ERROR_GET_2);
         } else {
             return v;
         }

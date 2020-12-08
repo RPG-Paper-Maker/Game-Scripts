@@ -25,17 +25,18 @@ class Base {
      *  message
      *  @returns {T}
      */
-    static get(id, list, name) {
+    static get(id, list, name, isID = true) {
         let v = list[id];
         if (Utils.isUndefined(v)) {
-            Platform.showErrorMessage(Base.STRING_ERROR_GET_1 + Utils
-                .formatNumber(id, 4) + ": " + name + Base.STRING_ERROR_GET_2);
+            Platform.showErrorMessage(Base.STRING_ERROR_GET_1 + (isID ? "ID" :
+                "index") + " " + Utils.formatNumber(id, 4) + ": " + name + Base
+                .STRING_ERROR_GET_2);
         }
         else {
             return v;
         }
     }
 }
-Base.STRING_ERROR_GET_1 = "Impossible to get the system ID ";
+Base.STRING_ERROR_GET_1 = "Impossible to get the system ";
 Base.STRING_ERROR_GET_2 = ". Please check if this ID exists in the software.";
 export { Base };

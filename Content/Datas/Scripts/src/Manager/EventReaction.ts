@@ -44,8 +44,9 @@ class EventReaction
 {
     public static currentObject: MapObject;
     public static currentParameters: any;
+    public static blockingHero: boolean;
 
-    constructor(sender, reaction, object, state, parameters, event, command = 
+    constructor(sender, reaction, object, state, parameters?, event?, command = 
         reaction.getFirstCommand())
     {
         /*

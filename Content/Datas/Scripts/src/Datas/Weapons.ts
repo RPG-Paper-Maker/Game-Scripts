@@ -9,24 +9,33 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-/** @class
-*   All the weapons datas
-*   @property {SystemWeapon[]} list List of all the weapons of the game
-*   according to ID
-*/
-class DatasWeapons
-{
-    constructor()
-    {
+import { IO, Paths, Utils } from "../Common";
+import { System } from "..";
 
+/** @class
+ *  All the weapons datas
+ *  @property {System.Weapon[]} list List of all the weapons of the game
+ *  according to ID
+ */
+class Weapons {
+
+    private static list: System.Weapon[];
+
+    constructor() {
+        throw new Error("This is a static class!");
     }
 
-    // -------------------------------------------------------
-    /** Read the JSON file associated to weapons
-    */
-    async read()
-    {
-        let json = (await RPM.parseFileJSON(RPM.FILE_WEAPONS)).weapons;
-        this.list = RPM.readJSONSystemList(json, SystemWeapon);
+    /** 
+     *  Read the JSON file associated to weapons
+     *  @static
+     *  @async
+     */
+    static async read() {
+        let json = (await IO.parseFileJSON(Paths.FILE_WEAPONS)).weapons;
+        this.list = [];
+        Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System
+            .Weapon });
     }
 }
+
+export { Weapons }

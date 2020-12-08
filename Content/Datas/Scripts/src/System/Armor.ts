@@ -8,45 +8,39 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-// TODO : fix the System stuff
-import {CommonSkillItem} from ".";
-import {RPM} from "../Core";
+
+import { CommonSkillItem } from "./CommonSkillItem";
+import { WeaponArmorKind } from "./WeaponArmorKind";
+import { Datas } from "..";
 
 /** @class
- *   An armor of the game
- *   @extends SystemCommonSkillItem
- *   @property {boolean} hasEffect Indicate if the armor has an effect
- *   @property {string} name The name of the armor
- *   @property {number} idType The kind of armor (ID)
- *   @param {Object} [json=undefined] Json object describing the armor
+ *  An armor of the game.
+ *  @extends SystemCommonSkillItem
+ *  @property {boolean} hasEffect Indicate if the armor has an effect
+ *  @property {string} name The name of the armor
+ *  @property {number} idType The kind of armor (ID)
+ *  @param {Object} [json=undefined] Json object describing the armor
  */
-export class Armor extends CommonSkillItem {
-    hasEffect: boolean;
-    idType: number;
+class Armor extends CommonSkillItem {
 
-    constructor(json) {
+    constructor(json?: Record<string, any>) {
         super(json);
     }
 
-    public setup() {
-        super.setup();
-        this.hasEffect = false;
-        this.idType = 0;
-    }
-
-    // -------------------------------------------------------
-    /** Read the JSON associated to the armor
-     *   @param {Object} json Json object describing the armor
+    /** 
+     *  Read the JSON associated to the armor.
+     *  @param {Record<string, any>} json Json object describing the armor
      */
-    read(json) {
+    read(json: Record<string, any>) {
         super.read(json);
     }
 
-    // -------------------------------------------------------
-    /** Get the armor type
-     *   @returns {SystemWeaponArmorKind}
+    /** Get the armor type.
+     *  @returns {System.WeaponArmorKind}
      */
-    getType() {
-        return RPM.datasGame.battleSystem.armorsKind[this.type];
+    getType(): WeaponArmorKind {
+        return Datas.BattleSystems.getArmorKind(this.type);
     }
 }
+
+export { Armor }

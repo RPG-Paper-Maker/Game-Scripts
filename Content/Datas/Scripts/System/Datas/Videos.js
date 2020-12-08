@@ -17,6 +17,7 @@ import { System, Datas } from "../index.js";
  */
 class Videos {
     constructor() {
+        throw new Error("This is a static class!");
     }
     /**
      *  Read the JSON file associated to videos

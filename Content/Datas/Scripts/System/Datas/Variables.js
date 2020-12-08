@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { IO, Paths } from "../Common/index.js";
+import { Datas } from "../index.js";
 /** @class
 *   All the variables datas.
 */
@@ -32,6 +33,14 @@ class Variables {
                 this.variablesNames[variable.id] = variable.name;
             }
         }
+    }
+    /**
+     *  Get the variable name by ID.
+     *  @param {number} id
+     *  @returns {string}
+     */
+    static get(id) {
+        return Datas.Base.get(id, this.variablesNames, "variable name");
     }
 }
 Variables.VARIABLES_PER_PAGE = 25;

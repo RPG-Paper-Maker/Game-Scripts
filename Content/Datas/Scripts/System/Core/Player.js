@@ -8,6 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
+import { Datas } from "../index.js";
 /** @class
  *  A character in the team/hidden/reserve.
  *  @property {CharacterKind} k The kind of the character (hero or monster)
@@ -95,15 +96,12 @@ class Player {
     *   @returns {GamePlayer}
     */
     static getTemporaryPlayer(values) {
-        /*
-        let player = new GamePlayer();
-        let statistics = RPM.datasGame.battleSystem.statistics;
-        for (let i = 1, l = statistics.length; i < l; i++)
-        {
+        let player = new Player();
+        let statistics = Datas.BattleSystems.statistics;
+        for (let i = 1, l = statistics.length; i < l; i++) {
             player.initStatValue(statistics[i], values ? values[i] : 0);
         }
         return player;
-        */
     }
     // -------------------------------------------------------
     /** Get a compressed object for saving the character in a file

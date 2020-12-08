@@ -13,7 +13,7 @@ import { Enum, Utils, Interpreter } from "../Common";
 import DamagesKind = Enum.DamagesKind;
 import { Base } from "./Base";
 import { DynamicValue } from "./DynamicValue";
-import { Manager } from "..";
+import { Manager, Datas } from "..";
 import { Player } from "../Core";
 
 /** @class
@@ -59,7 +59,7 @@ class Cost extends Base {
     }
 
     /** 
-     *  Use the cost
+     *  Use the cost.
      */
     use() {
         let user = Manager.Stack.currentMap.user ? (Manager.Stack.currentMap
@@ -70,69 +70,73 @@ class Cost extends Base {
             user, target);
         switch (this.kind) {
             case DamagesKind.Stat:
-                user[RPM.datasGame.battleSystem.statistics[this.statisticID
-                    .getValue()].abbreviation] -= value;
+                user[Datas.BattleSystems.getStatistic(this.statisticID
+                    .getValue()).abbreviation] -= value;
                 break;
             case DamagesKind.Currency:
-                RPM.game.currencies[this.currencyID.getValue()] -= value;
+                Manager.Stack.game.currencies[this.currencyID.getValue()] -= 
+                    value;
                 break;
             case DamagesKind.Variable:
-                RPM.game.variables[this.variableID] -= value;
+                Manager.Stack.game.variables[this.variableID] -= value;
                 break;
         }
     }
 
-    // -------------------------------------------------------
-    /** Check if the cost is possible
-     *   @returns {boolean}
+    /** 
+     *  Check if the cost is possible.
+     *  @returns {boolean}
      */
-    isPossible() {
-        let user = RPM.currentMap.user ? (RPM.currentMap.isBattleMap ? RPM
-            .currentMap.user.character : RPM.currentMap.user) : GamePlayer
-            .getTemporaryPlayer();
-        let target = GamePlayer.getTemporaryPlayer();
-        let value = RPM.evaluateFormula(this.valueFormula.getValue(), user,
-            target);
-        let currentValue;
+    isPossible(): boolean {
+        let user = Manager.Stack.currentMap.user ? (Manager.Stack.currentMap
+            .isBattleMap ? Manager.Stack.currentMap.user.character : Manager
+            .Stack.currentMap.user) : Player.getTemporaryPlayer();
+        let target = Player.getTemporaryPlayer();
+        let value = Interpreter.evaluateFormula(this.valueFormula.getValue(), 
+            user, target);
+        let currentValue: number;
         switch (this.kind) {
             case DamagesKind.Stat:
-                currentValue = user[RPM.datasGame.battleSystem.statistics[this
-                    .statisticID.getValue()].abbreviation];
+                currentValue = user[Datas.BattleSystems.getStatistic(this
+                    .statisticID.getValue()).abbreviation];
                 break;
             case DamagesKind.Currency:
-                currentValue = RPM.game.currencies[this.currencyID.getValue()];
+                currentValue = Manager.Stack.game.getCurrency(this.currencyID
+                    .getValue());
                 break;
             case DamagesKind.Variable:
-                currentValue = RPM.game.variables[this.variableID];
+                currentValue = Manager.Stack.game.getVariable(this.variableID);
                 break;
         }
         return (currentValue - value >= 0);
     }
 
-    // -------------------------------------------------------
-    /** Get the string representing the cost
-     *   @returns {string}
+    /** 
+     *  Get the string representing the cost.
+     *  @returns {string}
      */
-    toString() {
-        let user = RPM.currentMap.user ? (RPM.currentMap.isBattleMap ? RPM
-            .currentMap.user.character : RPM.currentMap.user) : GamePlayer
-            .getTemporaryPlayer();
-        let target = GamePlayer.getTemporaryPlayer();
-        let result = RPM.evaluateFormula(this.valueFormula.getValue(), user,
-            target) + RPM.STRING_SPACE;
+    toString(): string {
+        let user = Manager.Stack.currentMap.user ? (Manager.Stack.currentMap
+            .isBattleMap ? Manager.Stack.currentMap.user.character : Manager
+            .Stack.currentMap.user) : Player.getTemporaryPlayer();
+        let target = Player.getTemporaryPlayer();
+        let result = Interpreter.evaluateFormula(this.valueFormula.getValue(), 
+            user, target) + " ";
         switch (this.kind) {
             case DamagesKind.Stat:
-                result += RPM.datasGame.battleSystem.statistics[this.statisticID
-                    .getValue()].name;
+                result += Datas.BattleSystems.getStatistic(this.statisticID
+                    .getValue()).name;
                 break;
             case DamagesKind.Currency:
-                result += RPM.datasGame.system.currencies[this.currencyID.getValue()
-                    ].name;
+                result += Datas.Systems.getCurrency(this.currencyID.getValue())
+                    .name;
                 break;
             case DamagesKind.Variable:
-                result += RPM.datasGame.variablesNames[this.variableID];
+                result += Datas.Variables.get(this.variableID);
                 break;
         }
         return result;
     }
 }
+
+export { Cost }

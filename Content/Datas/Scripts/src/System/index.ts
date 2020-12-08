@@ -11,6 +11,7 @@
 
 export * from "./Armor";
 export * from "./Base";
+export * from "./BattleMap";
 export * from "./CameraProperties";
 export * from "./Characteristic";
 export * from "./Color";
@@ -21,6 +22,7 @@ export * from "./Cost";
 export * from "./Currency";
 export * from "./Detection";
 export * from "./DynamicValue";
+export * from "./Effect";
 export * from "./Element";
 export * from "./Event";
 export * from "./Icon";
@@ -39,7 +41,10 @@ export * from "./Skybox";
 export * from "./Song";
 export * from "./SpecialElement";
 export * from "./State";
+export * from "./Statistic";
 export * from "./Tileset";
 export * from "./Translatable";
 export * from "./Video";
+export * from "./Weapon";
+export * from "./WeaponArmorKind";
 export * from "./WindowSkin";

@@ -9,8 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { IO, Paths, Utils } from "../Common";
-import { System } from "..";
+import { IO, Paths, Utils, Enum } from "../Common";
+import { System, Datas } from "..";
+import SongKind = Enum.SongKind;
 
 /** @class
  *  All the battle System datas.
@@ -46,7 +47,26 @@ import { System } from "..";
 class BattleSystems {
 
     private static elements: System.Element[];
-    private static elementsOrder: System.Element[];
+    private static elementsOrder: number[];
+    public static statistics: System.Statistic[];
+    public static statisticsOrder: number[];
+    public static statisticsElements: number[];
+    public static statisticsElementsPercent: number[];
+    private static equipments: string[];
+    public static equipmentsOrder: number[];
+    private static maxEquipmentID: number;
+    private static weaponsKind: System.WeaponArmorKind[];
+    private static armorsKind: System.WeaponArmorKind[];
+    private static battleCommands: number[];
+    public static battleCommandsOrder: number[];
+    private static battleMaps: System.BattleMap[];
+    public static idLevelStatistic: number;
+    public static idExpStatistic: number;
+    public static formulaIsDead: System.DynamicValue;
+    public static formulaCrit: System.DynamicValue;
+    public static battleMusic: System.PlaySong;
+    public static battleLevelUp: System.PlaySong;
+    public static battleVictory: System.PlaySong;
         
     constructor() {
         throw new Error("This is a static class!");
@@ -67,20 +87,21 @@ class BattleSystems {
         // Statistics
         this.statistics = [];
         this.statisticsOrder = [];
-        let maxID = RPM.readJSONSystemListByIDIndex(json.statistics, this
-            .statistics, this.statisticsOrder, SystemStatistic);
+        let maxID = Utils.readJSONSystemList({ list: json.statistics, listIDs: 
+            this.statistics, listIndexes: this.statisticsOrder, cons: System
+            .Statistic });
 
         // Add elements res to statistics
         this.statisticsElements = [];
         this.statisticsElementsPercent = [];
-        let id, name, index = this.statisticsOrder.length;
-        for (let i = 0, l = this.elementsOrder.length; i < l; i++)
-        {
+        let index = this.statisticsOrder.length;
+        let id: number, name: string;
+        for (let i = 0, l = this.elementsOrder.length; i < l; i++) {
             id = this.elementsOrder[i];
-            name = this.elements[id].name;
-            this.statistics[maxID + (i * 2) + 1] = SystemStatistic
+            name = this.elements[id].name();
+            this.statistics[maxID + (i * 2) + 1] = System.Statistic
                 .createElementRes(id, name);
-            this.statistics[maxID + (i * 2) + 2] = SystemStatistic
+            this.statistics[maxID + (i * 2) + 2] = System.Statistic
                 .createElementResPercent(id, name);
             this.statisticsOrder[index + (i * 2)] = maxID + (i * 2) + 1;
             this.statisticsOrder[index + (i * 2) + 1] = maxID + (i * 2) + 2;
@@ -91,68 +112,131 @@ class BattleSystems {
         // Equipments
         this.equipments = [];
         this.equipmentsOrder = [];
-        this.maxEquipmentID = RPM.readJSONSystemListByIDIndex(json.equipments, 
-            this.equipments, this.equipmentsOrder, (jsonEquipment) =>
-            {
+        this.maxEquipmentID = Utils.readJSONSystemList({ list: json.equipments, 
+            listIDs: this.equipments, listIndexes: this.equipmentsOrder, func: 
+            (jsonEquipment: Record<string, any>) => {
                 return jsonEquipment.names[1];
-            }, false
-        );
-
-        // Weapons kind
-        this.weaponsKind = RPM.readJSONSystemList(json.weaponsKind, 
-            SystemWeaponArmorKind);
+            }
+        });
+        SongKind
+        Utils.readJSONSystemList({ list: json.weapons, listIDs: this.weaponsKind
+            , cons: System.WeaponArmorKind });
 
         // Armors kind
-        this.armorsKind = RPM.readJSONSystemList(json.armorsKind, 
-            SystemWeaponArmorKind);
+        this.armorsKind = [];
+        Utils.readJSONSystemList({ list: json.armorsKind, listIDs: this
+            .armorsKind, cons: System.WeaponArmorKind });
 
         // Battle commands
         this.battleCommands = [];
         this.battleCommandsOrder = [];
-        RPM.readJSONSystemListByIDIndex(json.battleCommands, this.battleCommands
-            , this.battleCommandsOrder, (jsonBattleCommand) =>
+        Utils.readJSONSystemList({ list: json.battleCommands, listIDs: this
+            .battleCommands, listIndexes: this.battleCommandsOrder, func: (
+            jsonBattleCommand: Record<string, any>) =>
             {
                 return jsonBattleCommand.s;
-            }, false
-        );
+            }
+        });
 
         // Battle maps
-        this.battleMaps = RPM.readJSONSystemList(json.battleMaps, 
-            SystemBattleMap);
+        this.battleMaps = [];
+        Utils.readJSONSystemList({ list: json.battleMaps, listIDs: this
+            .battleMaps, cons: System.BattleMap });
 
         // Ids of specific statistics
         this.idLevelStatistic = json.lv;
         this.idExpStatistic = json.xp;
 
         // Formulas
-        this.formulaIsDead = new SystemValue(json.fisdead);
-        this.formulaCrit = SystemValue.readOrDefaultMessage(json.fc);
+        this.formulaIsDead = new System.DynamicValue(json.fisdead);
+        this.formulaCrit = System.DynamicValue.readOrDefaultMessage(json.fc);
 
         // Musics
-        this.battleMusic = new SystemPlaySong(SongKind.Music, json.bmusic);
-        this.battleLevelUp = new SystemPlaySong(SongKind.Sound, json.blevelup);
-        this.battleVictory = new SystemPlaySong(SongKind.Music, json.bvictory);
+        this.battleMusic = new System.PlaySong(SongKind.Music, json.bmusic);
+        this.battleLevelUp = new System.PlaySong(SongKind.Sound, json.blevelup);
+        this.battleVictory = new System.PlaySong(SongKind.Music, json.bvictory);
     }
 
-    // -------------------------------------------------------
-
-    /** Get the statistic corresponding to the level
-    *   @returns {SystemStatistic}
-    */
-    getLevelStatistic()
-    {
+    /** 
+     *  Get the statistic corresponding to the level.
+     *  @static
+     *  @returns {System.Statistic}
+     */
+    static getLevelStatistic(): System.Statistic {
         return this.statistics[this.idLevelStatistic];
     }
 
-    // -------------------------------------------------------
-
-    /** Get the statistic corresponding to the experience
-    *   @returns {SystemStatistic}
-    */
-    getExpStatistic()
-    {
+    /** 
+     *  Get the statistic corresponding to the experience.
+     *  @static
+     *  @returns {System.Statistic}
+     */
+    static getExpStatistic(): System.Statistic {
         let stat = this.statistics[this.idExpStatistic];
-        return (RPM.isUndefined(stat) || stat.isRes) ? null : stat;
+        return (Utils.isUndefined(stat) || stat.isRes) ? null : stat;
+    }
+
+    /** 
+     *  Get the element by ID.
+     *  @param {number} id
+     *  @returns {System.Element}
+     */
+    static getElement(id: number): System.Element {
+        return Datas.Base.get(id, this.elements, "element");
+    }
+
+    /** 
+     *  Get the statistic by ID.
+     *  @param {number} id
+     *  @returns {System.Statistic}
+     */
+    static getStatistic(id: number): System.Statistic {
+        return Datas.Base.get(id, this.statistics, "statistic");
+    }
+
+    /** 
+     *  Get the equipment by ID.
+     *  @param {number} id
+     *  @returns {string}
+     */
+    static getEquipment(id: number): string {
+        return Datas.Base.get(id, this.equipments, "equipment");
+    }
+
+    /** 
+     *  Get the weapon kind by ID.
+     *  @param {number} id
+     *  @returns {System.WeaponArmorKind}
+     */
+    static getWeaponKind(id: number): System.WeaponArmorKind {
+        return Datas.Base.get(id, this.weaponsKind, "weapon kind");
+    }
+
+    /** 
+     *  Get the armor kind by ID.
+     *  @param {number} id
+     *  @returns {System.WeaponArmorKind}
+     */
+    static getArmorKind(id: number): System.WeaponArmorKind {
+        return Datas.Base.get(id, this.armorsKind, "armor kind");
+    }
+
+    /** 
+     *  Get the battle command by ID.
+     *  @param {number} id
+     *  @returns {number}
+     */
+    static getBattleCommand(id: number): number {
+        return Datas.Base.get(id, this.battleCommands, "battle command");
+    }
+
+    /** 
+     *  Get the battle map by ID.
+     *  @param {number} id
+     *  @returns {System.BattleMap}
+     */
+    static getBattleMap(id: number): System.BattleMap {
+        return Datas.Base.get(id, this.battleMaps, "battle map");
     }
 }
 

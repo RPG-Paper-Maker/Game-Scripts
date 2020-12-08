@@ -24,13 +24,10 @@ class Interpreter {
     }
 
     /** 
-     *  Check if a file exists.
-     *  @static
-     *  @param {string} url The path of the file
-     *  @returns {boolean}
+     *  
      */
-    static evaluateFormula = function(formula, u, t) {
-        return new Function("$that", 'console.log("lol")');
+    static evaluateFormula(formula, user?, target?, damage?): any {
+        return new Function("$that", 'console.log("test interpreter")');
     }
 }
 

@@ -49,6 +49,10 @@ async function load() {
     Manager.GL.resize();
     await Datas.SpecialElements.read();
     await Datas.Tilesets.read();
+    await Datas.Items.read();
+    await Datas.Skills.read();
+    await Datas.Weapons.read();
+    await Datas.Armors.read();
     //RPM.gameStack.pushTitleScreen();
     //RPM.datasGame.loaded = true;
     Manager.Stack.requestPaintHUD = true;

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum } from "../Common";
+import { Enum, Utils } from "../Common";
 import TargetKind = Enum.TargetKind;
 import AvailableKind = Enum.AvailableKind;
 import SongKind = Enum.SongKind;
@@ -17,6 +17,9 @@ import { Icon } from "./Icon";
 import { Translatable } from "./Translatable";
 import { DynamicValue } from "./DynamicValue";
 import { PlaySong } from "./PlaySong";
+import { Cost } from "./Cost";
+import { Characteristic } from "./Characteristic";
+import { Effect } from "./Effect";
 
 /** @class
  *  A common class for skills, items, weapons, armors.
@@ -39,9 +42,9 @@ import { PlaySong } from "./PlaySong";
  *  @property {SystemCost[]} costs The costs list
  *  @property {SystemEffect[]} effects The effects list
  *  @property {SystemCharacteristic[]} characteristics The characteristics list
- *  @param {Object} [json=undefined] Json object describing the common
+ *  @param {Record<string, any>} [json=undefined] Json object describing the common
  */
-export class CommonSkillItem extends Icon {
+class CommonSkillItem extends Icon {
 
     public hasType: boolean;
     public hasTargetKind: boolean;
@@ -62,58 +65,46 @@ export class CommonSkillItem extends Icon {
     public characteristics: Characteristic[];
     public animationUserID: DynamicValue;
 
-    constructor(json) {
+    constructor(json?: Record<string, any>) {
         super(json);
     }
 
-    public setup() {
-        super.setup();
-        this.hasType = true;
-        this.hasTargetKind = true;
-        this.type = 1;
-        this.consumable = false;
-        this.oneHand = true;
-        this.description = null;
-        this.targetKind = TargetKind.None;
-        this.targetConditionFormula = null;
-        this.availableKind = AvailableKind.Never;
-
-    }
-
-    // -------------------------------------------------------
-    /** Read the JSON associated to the common
-     *   @param {Object} json Json object describing the common
+    /** 
+     *  Read the JSON associated to the common.
+     *  @param {Record<string, any>} json Json object describing the common
      */
-    read(json) {
+    read(json: Record<string, any>) {
         super.read(json);
 
-        this.type = RPM.defaultValue(json.t, 1);
-        this.consumable = RPM.defaultValue(json.con, false);
-        this.oneHand = RPM.defaultValue(json.oh, true);
-        this.description = new Lang(RPM.defaultValue(json.d, Lang
-            .EMPTY_NAMES));
-        this.targetKind = RPM.defaultValue(json.tk, TargetKind.None);
+        this.type = Utils.defaultValue(json.t, 1);
+        this.consumable = Utils.defaultValue(json.con, false);
+        this.oneHand = Utils.defaultValue(json.oh, true);
+        this.description = new Translatable(Utils.defaultValue(json.d, 
+            Translatable.EMPTY_NAMES));
+        this.targetKind = Utils.defaultValue(json.tk, TargetKind.None);
         this.targetConditionFormula = DynamicValue.readOrNone(json.tcf);
         this.conditionFormula = DynamicValue.readOrNone(json.cf);
-        this.availableKind = RPM.defaultValue(json.ak, AvailableKind.Never);
-        this.sound = new PlaySong(SongKind.sound, json.s);
+        this.availableKind = Utils.defaultValue(json.ak, AvailableKind.Never);
+        this.sound = new PlaySong(SongKind.Sound, json.s);
         this.animationUserID = DynamicValue.readOrNone(json.auid);
         this.animationTargetID = DynamicValue.readOrNone(json.atid);
         this.price = DynamicValue.readOrDefaultNumber(json.p);
-        let costs = RPM.defaultValue(json.cos, []);
-        this.costs = RPM.readJSONSystemListByIndex(costs, SystemCost);
-        let effects = RPM.defaultValue(json.e, []);
-        this.effects = RPM.readJSONSystemListByIndex(effects, SystemEffect);
-        let characteristics = RPM.defaultValue(json.car, []);
-        this.characteristics = RPM.readJSONSystemListByIndex(characteristics,
-            SystemCharacteristic);
+        this.costs = [];
+        Utils.readJSONSystemList({ list: Utils.defaultValue(json.cos, []), 
+            listIndexes: this.costs, cons: Cost });
+        this.effects = [];
+        Utils.readJSONSystemList({ list: Utils.defaultValue(json.e, []), 
+            listIndexes: this.effects, cons: Effect });
+        this.characteristics = [];
+        Utils.readJSONSystemList({ list: Utils.defaultValue(json.car, []),
+            listIndexes: this.characteristics, cons: Characteristic });
     }
 
-    // -------------------------------------------------------
-    /** Use the command if possible
-     *   @returns {boolean}
+    /** 
+     *  Use the command if possible.
+     *  @returns {boolean}
      */
-    useCommand() {
+    useCommand(): boolean {
         let possible = this.isPossible();
         if (possible) {
             this.use();
@@ -121,13 +112,13 @@ export class CommonSkillItem extends Icon {
         return possible;
     }
 
-    // -------------------------------------------------------
-    /** Execute the effects and costs
-     *   @returns {boolean}
+    /** 
+     *  Execute the effects and costs.
+     *  @returns {boolean}
      */
-    use() {
+    use(): boolean {
         let isDoingSomething = false;
-        let i, l;
+        let i: number, l: number;
         for (i = 0, l = this.effects.length; i < l; i++) {
             isDoingSomething = isDoingSomething || this.effects[i].execute();
         }
@@ -139,8 +130,8 @@ export class CommonSkillItem extends Icon {
         return isDoingSomething;
     }
 
-    // -------------------------------------------------------
-    /** Use the costs
+    /**
+     *  Use the costs.
      */
     cost() {
         for (let i = 0, l = this.costs.length; i < l; i++) {
@@ -148,11 +139,10 @@ export class CommonSkillItem extends Icon {
         }
     }
 
-    // -------------------------------------------------------
-    /** Check if the costs are possible
-     *   @returns {boolean}
+    /** Check if the costs are possible.
+     *  @returns {boolean}
      */
-    isPossible() {
+    isPossible(): boolean {
         for (let i = 0, l = this.costs.length; i < l; i++) {
             if (!this.costs[i].isPossible()) {
                 return false;
@@ -161,11 +151,11 @@ export class CommonSkillItem extends Icon {
         return true;
     }
 
-    // -------------------------------------------------------
-    /** Get the target kind string
-     *   @returns {string}
+    /** 
+     *  Get the target kind string.
+     *  @returns {string}
      */
-    getTargetKindString() {
+    getTargetKindString(): string {
         switch (this.targetKind) {
             case TargetKind.None:
                 return "None";
@@ -180,6 +170,8 @@ export class CommonSkillItem extends Icon {
             case TargetKind.AllAllies:
                 return "All allies";
         }
-        return RPM.STRING_EMPTY;
+        return "";
     }
 }
+
+export { CommonSkillItem }

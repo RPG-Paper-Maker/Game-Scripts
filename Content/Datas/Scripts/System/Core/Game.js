@@ -8,6 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
+import { Datas } from "../index.js";
 /** @class
 *   All the global informations of a particular game
 *   @property {number} currentSlot The current slot
@@ -41,6 +42,22 @@ class Game {
         {
             this.read(slot, json);
         }*/
+    }
+    /**
+     *  Get the variable by ID
+     *  @param {number} id
+     *  @returns {any}
+     */
+    getVariable(id) {
+        return Datas.Base.get(id, this.variables, "variable");
+    }
+    /**
+     *  Get the currency by ID
+     *  @param {number} id
+     *  @returns {any}
+     */
+    getCurrency(id) {
+        return Datas.Base.get(id, this.currencies, "currency");
     }
     /**
      *  Get the hero in a tab with instance ID.

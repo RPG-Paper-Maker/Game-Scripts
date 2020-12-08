@@ -9,14 +9,14 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Scene } from "..";
+import { Map } from "./Map";
 
 /** @class
 *   A scene for the loading
 *   @extends SceneGame
 *   @property {GraphicText} text The graphic text displaying loading
 */
-class Battle extends Scene.Map {
+class Battle extends Map {
 
     public user: any;
     

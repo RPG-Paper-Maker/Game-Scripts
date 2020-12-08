@@ -40,10 +40,10 @@ class MapObject extends Base {
         this.states = [];
         this.properties = [];
         this.events = {};
-        let hId = json.hId;
+        let hID = json.hId;
         let i, l;
-        if (hId !== -1) {
-            let inheritedObject = Datas.CommonEvents.commonObjects[hId];
+        if (hID !== -1) {
+            let inheritedObject = Datas.CommonEvents.getCommonObject(hID);
             // Only one event per frame inheritance is a priority
             this.isEventFrame = inheritedObject.isEventFrame;
             // States

@@ -10,6 +10,7 @@
 */
 
 import { Player } from "./Player";
+import { Datas } from "..";
 
 /** @class
 *   All the global informations of a particular game
@@ -33,12 +34,13 @@ import { Player } from "./Player";
 *   @property {Chrono} playTime The current time played since the beginning of
 *   the game in seconds
 */
-class Game
-{
+class Game {
+
     public teamHeroes: Player[];
     public reserveHeroes: Player[];
     public hiddenHeroes: Player[];
     public variables: any[];
+    public currencies: any[];
 
     constructor(slot, json)
     {
@@ -51,6 +53,24 @@ class Game
         {
             this.read(slot, json);
         }*/
+    }
+
+    /** 
+     *  Get the variable by ID
+     *  @param {number} id
+     *  @returns {any}
+     */
+    getVariable(id: number): any {
+        return Datas.Base.get(id, this.variables, "variable");
+    }
+
+    /** 
+     *  Get the currency by ID
+     *  @param {number} id
+     *  @returns {any}
+     */
+    getCurrency(id: number): any {
+        return Datas.Base.get(id, this.currencies, "currency");
     }
 
     /** 

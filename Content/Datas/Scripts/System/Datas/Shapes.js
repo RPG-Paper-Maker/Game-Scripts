@@ -18,6 +18,7 @@ var CustomShapeKind = Enum.CustomShapeKind;
  */
 class Shapes {
     constructor() {
+        throw new Error("This is a static class!");
     }
     /**
      *  Read the JSON file associated to shapes.

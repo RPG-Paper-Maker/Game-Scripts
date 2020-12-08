@@ -9,31 +9,33 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { CommonSkillItem } from "./CommonSkillItem";
+import { Datas } from "..";
+
 /** @class
  *  An item of the game.
  *  @extends CommonSkillItem
- *  @param {Object} [json=undefined] Json object describing the item
+ *  @param {Record<string, any>} [json=undefined] Json object describing the item
  */
 class Item extends CommonSkillItem {
 
-    constructor(json = undefined) {
+    constructor(json?: Record<string, any>) {
         super(json);
     }
 
-    // -------------------------------------------------------
-    /** Read the JSON associated to the item
-     *   @param {Object} json Json object describing the item
+    /** 
+     *  Read the JSON associated to the item.
+     *  @param {Record<string, any>} json Json object describing the item
      */
-    read(json) {
+    read(json: Record<string, any>) {
         super.read(json);
     }
 
-    // -------------------------------------------------------
-    /** Get the item type
-     *   @returns {string}
+    /** Get the item type.
+     *  @returns {string}
      */
-    getType() {
-        return RPM.datasGame.system.itemsTypes[this.type];
+    getType(): string {
+        return Datas.Systems.getItemType(this.type);
     }
 }
 

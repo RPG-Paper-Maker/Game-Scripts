@@ -10,6 +10,7 @@
 */
 
 import { IO, Paths, Platform } from "../Common";
+import { Datas } from "..";
 
 /** @class
 *   All the variables datas.
@@ -41,6 +42,15 @@ class Variables {
                 this.variablesNames[variable.id] = variable.name;
             }
         }
+    }
+
+    /** 
+     *  Get the variable name by ID.
+     *  @param {number} id
+     *  @returns {string}
+     */
+    static get(id: number): string {
+        return Datas.Base.get(id, this.variablesNames, "variable name");
     }
 }
 

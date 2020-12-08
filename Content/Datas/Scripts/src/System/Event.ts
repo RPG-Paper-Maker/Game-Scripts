@@ -44,8 +44,8 @@ class Event extends Base {
 
         // Parameters
         this.parameters = System.Parameter.readParametersWithDefault(json, (this
-            .isSystem ? Datas.CommonEvents.eventsSystem : Datas.CommonEvents
-            .eventsUser)[this.idEvent].parameters);
+            .isSystem ? Datas.CommonEvents.getEventSystem(this.idEvent) : Datas
+            .CommonEvents.getEventUser(this.idEvent)).parameters);
 
         // Reactions
         let jsonReactions = json.r;

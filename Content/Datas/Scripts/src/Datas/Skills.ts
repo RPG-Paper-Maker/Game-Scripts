@@ -9,24 +9,43 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { IO, Paths, Utils } from "../Common";
+import { System, Datas } from "..";
+
 /** @class
 *   All the skills datas
 *   @property {Skill[]} list List of all the skills of the game according
 *   to ID
 */
-class DatasSkills
-{
+class Skills {
+
+    private static list: System.Skill[];
+    
     constructor()
     {
-
+        throw new Error("This is a static class!");
     }
 
-    // -------------------------------------------------------
-    /** Read the JSON file associated to skills
-    */
-    async read()
-    {
-        let json = (await RPM.parseFileJSON(RPM.FILE_SKILLS)).skills;
-        this.list = RPM.readJSONSystemList(json, Skill);
+    /** 
+     *  Read the JSON file associated to skills.
+     *  @static
+     *  @async
+     */
+    static async read() {
+        let json = (await IO.parseFileJSON(Paths.FILE_SKILLS)).skills;
+        this.list = [];
+        Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System
+            .Skill });
+    }
+
+    /** 
+     *  Get the skill by ID.
+     *  @param {number} id
+     *  @returns {System.Skill}
+     */
+    static get(id: number): System.Skill {
+        return Datas.Base.get(id, this.list, "skill");
     }
 }
+
+export { Skills }
