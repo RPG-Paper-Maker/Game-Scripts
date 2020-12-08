@@ -23,7 +23,7 @@ class Shapes {
     private static list: System.Shape[][];
 
     constructor() {
-
+        throw new Error("This is a static class!");
     }
 
     /** 

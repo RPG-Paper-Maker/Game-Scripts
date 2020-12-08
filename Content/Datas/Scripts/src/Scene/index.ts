@@ -10,5 +10,6 @@
 */
 
 export * from "./Base";
+export * from "./Battle";
 export * from "./Loading";
 export * from "./Map";

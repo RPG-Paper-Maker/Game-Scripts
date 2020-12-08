@@ -9,15 +9,20 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+export * from "./Armors";
 export * from "./Base";
+export * from "./BattleSystems";
 export * from "./CommonEvents";
+export * from "./Items";
 export * from "./Keyboard";
 export * from "./Pictures";
 export * from "./Settings";
 export * from "./Shapes";
+export * from "./Skills";
 export * from "./Songs";
 export * from "./SpecialElements";
 export * from "./Systems";
 export * from "./Tilesets";
 export * from "./Variables";
 export * from "./Videos";
+export * from "./Weapons";

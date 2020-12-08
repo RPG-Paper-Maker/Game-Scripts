@@ -12,7 +12,6 @@
 import { Base } from "./Base";
 import { Enum, Utils, Constants } from "../Common";
 import Orientation = Enum.Orientation;
-import { Portion, Position } from "../Core";
 
 /** @class
 *   A scene for a local map
@@ -51,6 +50,8 @@ import { Portion, Position } from "../Core";
 class Map extends Base
 {
     public orientation: Orientation;
+    public user: any;
+    public isBattleMap: boolean;
 
     constructor(id, isBattleMap, minimal = false)
     {

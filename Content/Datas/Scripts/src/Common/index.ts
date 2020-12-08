@@ -11,6 +11,7 @@
 
 export * from "./Constants";
 export * from "./Enum";
+export * from "./Interpreter";
 export * from "./IO";
 export * from "./KeyEvent";
 export * from "./Mathf";

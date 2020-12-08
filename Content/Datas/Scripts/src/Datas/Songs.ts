@@ -23,7 +23,7 @@ class Songs {
     private static list: System.Song[][];
 
     constructor() {
-
+        throw new Error("This is a static class!");
     }
 
     /** 

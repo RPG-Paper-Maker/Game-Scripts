@@ -11,6 +11,7 @@
 
 import { Enum } from "../Common";
 import CharacterKind = Enum.CharacterKind;
+import { Datas } from "..";
 
 /** @class
  *  A character in the team/hidden/reserve.
@@ -35,7 +36,7 @@ class Player
     public instid: number;
     public name: string;
 
-    constructor(kind: CharacterKind, id: number, instanceID: number, skills, json)
+    constructor(kind?: CharacterKind, id?: number, instanceID?: number, skills?, json?)
     {
         /*
         if (!RPM.isUndefined(kind))
@@ -106,17 +107,16 @@ class Player
     *   @param {number[]} values The values
     *   @returns {GamePlayer}
     */
-    static getTemporaryPlayer(values)
+    static getTemporaryPlayer(values?: number[]): Player
     {
+        let player = new Player();
         /*
-        let player = new GamePlayer();
-        let statistics = RPM.datasGame.battleSystem.statistics;
+        let statistics = Datas.datasGame.battleSystem.statistics;
         for (let i = 1, l = statistics.length; i < l; i++)
         {
             player.initStatValue(statistics[i], values ? values[i] : 0);
-        }
+        }*/
         return player;
-        */
     }
 
     // -------------------------------------------------------

@@ -22,7 +22,7 @@ class Videos {
     private static list: System.Video[];
 
     constructor() {
-
+        throw new Error("This is a static class!");
     }
 
     /** 

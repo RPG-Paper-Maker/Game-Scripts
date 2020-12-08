@@ -9,41 +9,41 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import {BaseSystem, DynamicValue} from ".";
-import {Enum, RPM} from "../Core";
+import { Enum, Utils, Interpreter } from "../Common";
 import DamagesKind = Enum.DamagesKind;
+import { Base } from "./Base";
+import { DynamicValue } from "./DynamicValue";
+import { Manager } from "..";
+import { Player } from "../Core";
 
 /** @class
- *   A cost of a common skill item
- *   @property {DamagesKind} kind The kind of damage to apply cost
- *   @property {number} statisticID The statistic ID to apply cost
- *   @property {number} currencyID The currency ID to apply cost
- *   @property {number} variableID The variable ID to apply cost
- *   @property {string} valueFormula The formula to apply
- *   @param {Object} [json=undefined] Json object describing the cost
+ *  A cost of a common skill item.
+ *  @property {DamagesKind} kind The kind of damage to apply cost
+ *  @property {number} statisticID The statistic ID to apply cost
+ *  @property {number} currencyID The currency ID to apply cost
+ *  @property {number} variableID The variable ID to apply cost
+ *  @property {string} valueFormula The formula to apply
+ *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  cost
  */
-class Cost extends BaseSystem {
+class Cost extends Base {
 
-    kind: number;
-    statisticID: DynamicValue;
-    currencyID: DynamicValue;
-    variableID: number;
-    valueFormula: DynamicValue;
+    public kind: number;
+    public statisticID: DynamicValue;
+    public currencyID: DynamicValue;
+    public variableID: number;
+    public valueFormula: DynamicValue;
 
-    constructor(json) {
+    constructor(json?: Record<string, any>) {
         super(json);
     }
 
-    public setup() {
-
-    }
-
-    // -------------------------------------------------------
-    /** Read the JSON associated to the cost
-     *   @param {Object} json Json object describing the cost
+    /** 
+     *  Read the JSON associated to the cost.
+     *  @param {Record<string, any>} json Json object describing the cost
      */
-    read(json) {
-        this.kind = RPM.defaultValue(json.k, DamagesKind.Stat);
+    read(json: Record<string, any>) {
+        this.kind = Utils.defaultValue(json.k, DamagesKind.Stat);
         switch (this.kind) {
             case DamagesKind.Stat:
                 this.statisticID = DynamicValue.readOrDefaultDatabase(json.sid);
@@ -52,22 +52,22 @@ class Cost extends BaseSystem {
                 this.currencyID = DynamicValue.readOrDefaultDatabase(json.cid);
                 break;
             case DamagesKind.Variable:
-                this.variableID = RPM.defaultValue(json.vid, 1);
+                this.variableID = Utils.defaultValue(json.vid, 1);
                 break;
         }
         this.valueFormula = DynamicValue.readOrDefaultMessage(json.vf);
     }
 
-    // -------------------------------------------------------
-    /** Use the cost
+    /** 
+     *  Use the cost
      */
     use() {
-        let user = RPM.currentMap.user ? (RPM.currentMap.isBattleMap ? RPM
-            .currentMap.user.character : RPM.currentMap.user) : GamePlayer
-            .getTemporaryPlayer();
-        let target = GamePlayer.getTemporaryPlayer();
-        let value = RPM.evaluateFormula(this.valueFormula.getValue(), user,
-            target);
+        let user = Manager.Stack.currentMap.user ? (Manager.Stack.currentMap
+            .isBattleMap ? Manager.Stack.currentMap.user.character : Manager
+            .Stack.currentMap.user) : Player.getTemporaryPlayer();
+        let target = Player.getTemporaryPlayer();
+        let value = Interpreter.evaluateFormula(this.valueFormula.getValue(), 
+            user, target);
         switch (this.kind) {
             case DamagesKind.Stat:
                 user[RPM.datasGame.battleSystem.statistics[this.statisticID
