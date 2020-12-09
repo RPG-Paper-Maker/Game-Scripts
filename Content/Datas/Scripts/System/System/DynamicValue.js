@@ -237,11 +237,11 @@ class DynamicValue extends System.Base {
         // If keyBoard
         if (this.kind === PrimitiveValueKind.KeyBoard && value.kind !==
             PrimitiveValueKind.KeyBoard) {
-            return Datas.Keyboard.isKeyEqual(value.value, Datas.Keyboard.list[this.value]);
+            return Datas.Keyboards.isKeyEqual(value.value, Datas.Keyboards.get(this.value));
         }
         else if (value.kind === PrimitiveValueKind.KeyBoard && this.kind !==
             PrimitiveValueKind.KeyBoard) {
-            return Datas.Keyboard.isKeyEqual(this.value, Datas.Keyboard.list[value.value]);
+            return Datas.Keyboards.isKeyEqual(this.value, Datas.Keyboards.get(value.value));
         }
         else if (this.kind === PrimitiveValueKind.Anything || value.kind ===
             PrimitiveValueKind.Anything) {

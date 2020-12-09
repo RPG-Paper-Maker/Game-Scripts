@@ -199,18 +199,6 @@ class Text extends Base {
      *  @param {boolean} [positionResize=true] If checked, resize postion
      *  according to screen resolution
      */
-    drawBox(x = this.oX, y = this.oY, w = this.oW, h = this.oH, positionResize = true) {
-        this.drawChoice(x, y, w, h, positionResize);
-    }
-    /**
-     *  Drawing the text (duplicate of drawChoice).
-     *  @param {number} [x=this.oX] The x position to draw graphic
-     *  @param {number} [y=this.oY] The y position to draw graphic
-     *  @param {number} [w=this.oW] The width dimention to draw graphic
-     *  @param {number} [h=this.oH] The height dimention to draw graphic
-     *  @param {boolean} [positionResize=true] If checked, resize postion
-     *  according to screen resolution
-     */
     draw(x = this.oX, y = this.oY, w = this.oW, h = this.oH, positionResize = true) {
         this.drawChoice(x, y, w, h, positionResize);
     }

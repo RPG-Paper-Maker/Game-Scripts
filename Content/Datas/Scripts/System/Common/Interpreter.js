@@ -8,8 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Datas, Common, Core, EventCommand, Graphic, Manager, System } from "../index.js";
-import { Scene } from "../../Libs/three.js";
+import { Datas, Common, Core, EventCommand, Graphic, Manager, System, Scene } from "../index.js";
+import { THREE } from "../../Libs/index.js";
+const { Howl } = require('./Content/Datas/Scripts/Libs/howler.js');
 /** @class
  *  The interpreter to evaluate formulas or simple scripts without having to
  *  import.
@@ -22,9 +23,8 @@ class Interpreter {
      *  Evaluate a formula.
      */
     static evaluate(formula, { user, target, damage, addReturn = true } = {}) {
-        return new Function("Common", "Core", "Datas", "EventCommand", "Graphic", "Manager", "Scene", "System", "u", "t", "damage", "return " +
-            formula)(this.common, this.core, this.datas, this.eventCommand, this
-            .graphic, this.manager, this.scene, this.system, user, target, damage);
+        return new Function("Common", "Core", "Datas", "EventCommand", "Graphic", "Manager", "Scene", "System", "THREE", "Howl", "u", "t", "damage", addReturn ? "return " : "" + formula)(this.common, this.core, this
+            .datas, this.eventCommand, this.graphic, this.manager, this.scene, this.system, this.three, this.howl, user, target, damage);
     }
 }
 Interpreter.common = Common;
@@ -35,4 +35,6 @@ Interpreter.graphic = Graphic;
 Interpreter.manager = Manager;
 Interpreter.scene = Scene;
 Interpreter.system = System;
+Interpreter.three = THREE;
+Interpreter.howl = Howl;
 export { Interpreter };

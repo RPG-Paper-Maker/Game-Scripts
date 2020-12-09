@@ -30,6 +30,7 @@ export * from "./Event";
 export * from "./Hero";
 export * from "./Icon";
 export * from "./Item";
+export * from "./Keyboard";
 export * from "./Loot";
 export * from "./MapObject";
 export * from "./Monster";

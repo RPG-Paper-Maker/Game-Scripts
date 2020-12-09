@@ -10,18 +10,7 @@
 */
 
 import { Datas, Manager } from ".";
-import { Utils, Interpreter } from "./Common";
-
-/*
-const {Howl, Howler} = require('./Content/Datas/Scripts/System/Libs/howler.js');
-
-let song = new Howl({
-    src: ["/home/wano/Documents/RPG-Paper-Maker/Basic-Ressources/Content/Songs/Musics/Town1.mp3"],
-    loop: true,
-    html5: true
-});
-song.play();
-*/
+import { Utils } from "./Common";
 
 let loadedDatas = false;
 
@@ -59,6 +48,7 @@ async function load() {
     await Datas.Troops.read();
     await Datas.BattleSystems.read();
     await Datas.TitlescreenGameover.read();
+    await Datas.Keyboards.read();
     //RPM.gameStack.pushTitleScreen();
     //RPM.datasGame.loaded = true;
     Manager.Stack.requestPaintHUD = true;

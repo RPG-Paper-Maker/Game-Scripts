@@ -351,7 +351,7 @@ class WindowChoices extends Bitmap
     onKeyPressed(key: number, base: Object)
     {
         if (this.currentSelectedIndex !== -1) {
-            if (Datas.Keyboard.isKeyEqual(key, Datas.Keyboard.menuControls
+            if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
                 .Action))
             {
                 let callback = this.listCallBacks[this.currentSelectedIndex];
@@ -387,22 +387,22 @@ class WindowChoices extends Bitmap
 
                 // Go up or go down according to key and orientation
                 if (this.orientation === OrientationWindow.Vertical) {
-                    if (Datas.Keyboard.isKeyEqual(key, Datas.Keyboard
+                    if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
                         .menuControls.Down))
                     {
                         this.goDown();
-                    } else if (Datas.Keyboard.isKeyEqual(key, Datas.Keyboard
+                    } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
                         .menuControls.Up))
                     {
                         this.goUp();
                     }
                 } else {
-                    if (Datas.Keyboard.isKeyEqual(key, Datas.Keyboard
+                    if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
                         .menuControls.Right))
                     {
                         this.goDown();
                     }
-                    else if (Datas.Keyboard.isKeyEqual(key, Datas.Keyboard
+                    else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
                         .menuControls.Left))
                     {
                         this.goUp();

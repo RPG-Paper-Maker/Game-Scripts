@@ -440,8 +440,23 @@ class Message extends Graphic.Base {
      *  @param {number} w The width dimention to draw graphic
      *  @param {number} h The height dimention to draw graphic
      */
-    drawBox(x: number = this.oX, y: number = this.oY, w: number = this.oW, h: 
-        number = this.oH)
+    drawChoice(x: number = this.oX, y: number = this.oY, w: number = this.oW, h: 
+        number = this.oH, positionResize: boolean = true)
+    {
+        this.draw(x, y, w, h, positionResize);
+    }
+
+    /** 
+     *  Drawing the message.
+     *  @param {number} [x=this.oX] The x position to draw graphic
+     *  @param {number} [y=this.oY] The y position to draw graphic
+     *  @param {number} [w=this.oW] The width dimention to draw graphic
+     *  @param {number} [h=this.oH] The height dimention to draw graphic
+     *  @param {boolean} [positionResize=true] If checked, resize postion 
+     *  according to screen resolution
+     */
+    draw(x: number = this.oX, y: number = this.oY, w: number = this.oW, h: 
+        number = this.oH, positionResize: boolean = true)
     {
         if (Datas.Systems.dbOptions.v_fPosAbove) {
             this.drawFaceset(x, y, w, h);
@@ -494,21 +509,6 @@ class Message extends Graphic.Base {
                 offsetX += ScreenResolution.getScreenMinXY(this.positions[i]);
             }
         }
-    }
-
-    /** 
-     *  Drawing the message.
-     *  @param {number} [x=this.oX] The x position to draw graphic
-     *  @param {number} [y=this.oY] The y position to draw graphic
-     *  @param {number} [w=this.oW] The width dimention to draw graphic
-     *  @param {number} [h=this.oH] The height dimention to draw graphic
-     *  @param {boolean} [positionResize=true] If checked, resize postion 
-     *  according to screen resolution
-     */
-    draw(x: number = this.oX, y: number = this.oY, w: number = this.oW, h: 
-        number = this.oH, positionResize: boolean = true)
-    {
-        this.drawBox(x, y, w, h);
     }
 }
 

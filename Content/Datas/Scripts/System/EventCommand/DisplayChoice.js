@@ -116,10 +116,10 @@ class DisplayChoice extends Base {
      *  @param {number} key The key ID pressed
      */
     onKeyPressed(currentState, key) {
-        if (Datas.Keyboard.isKeyEqual(key, Datas.Keyboard.menuControls.Action)) {
+        if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Action)) {
             currentState.index = this.windowChoices.currentSelectedIndex;
         }
-        else if (Datas.Keyboard.isKeyEqual(key, Datas.Keyboard.menuControls
+        else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
             .Cancel)) {
             currentState.index = this.cancelAutoIndex.getValue() - 1;
         }

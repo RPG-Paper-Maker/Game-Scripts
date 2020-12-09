@@ -9,9 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Common, Core, EventCommand, Graphic, Manager, System } from "..";
-import { Scene } from "../../Libs/three";
+import { Datas, Common, Core, EventCommand, Graphic, Manager, System, Scene } from "..";
 import { Player } from "../Core";
+import { THREE } from "../../Libs";
+const { Howl } = require('./Content/Datas/Scripts/Libs/howler.js');
 
 /** @class
  *  The interpreter to evaluate formulas or simple scripts without having to 
@@ -27,6 +28,8 @@ class Interpreter {
     private static manager: typeof Manager = Manager;
     private static scene: typeof Scene = Scene;
     private static system: typeof System = System;
+    private static three: typeof THREE = THREE;
+    private static howl: typeof Howl = Howl;
 
     constructor() {
         throw new Error("This is a static class");
@@ -40,10 +43,10 @@ class Interpreter {
         = {}): any
     {
         return new Function("Common", "Core", "Datas", "EventCommand", "Graphic"
-            , "Manager", "Scene", "System", "u", "t", "damage", "return " + 
-            formula)(this.common, this.core, this.datas, this.eventCommand, this
-            .graphic, this.manager, this.scene, this.system, user, target, 
-            damage);
+            , "Manager", "Scene", "System", "THREE", "Howl", "u", "t", "damage", 
+            addReturn ? "return " : "" + formula)(this.common, this.core, this
+            .datas, this.eventCommand, this.graphic, this.manager, this.scene, 
+            this.system, this.three, this.howl, user, target, damage);
     }
 }
 

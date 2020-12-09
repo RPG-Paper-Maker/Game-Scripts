@@ -32,6 +32,7 @@ class Skills {
     }
     /**
      *  Get the skill by ID.
+     *  @static
      *  @param {number} id
      *  @returns {System.Skill}
      */

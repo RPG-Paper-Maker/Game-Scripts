@@ -178,10 +178,10 @@ class WindowBox extends Bitmap {
                 Platform.ctx.clip();
             }
             if (isChoice) {
-                this.content.draw(contentDimension[0], contentDimension[1], 
+                this.content.drawChoice(contentDimension[0], contentDimension[1], 
                     contentDimension[2], contentDimension[3]);
             } else {
-                this.content.drawBox(contentDimension[0], contentDimension[1], 
+                this.content.draw(contentDimension[0], contentDimension[1], 
                     contentDimension[2], contentDimension[3]);
             }
             if (!isChoice && this.limitContent) {

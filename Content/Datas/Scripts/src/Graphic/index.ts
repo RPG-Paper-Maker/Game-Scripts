@@ -10,6 +10,7 @@
 */
 
 export * from "./Base";
+export * from "./Keyboard";
 export * from "./Message";
 export * from "./Setting";
 export * from "./Text";

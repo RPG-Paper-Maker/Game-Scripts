@@ -16,7 +16,7 @@ export * from "./Classes";
 export * from "./CommonEvents";
 export * from "./Heroes";
 export * from "./Items";
-export * from "./Keyboard";
+export * from "./Keyboards";
 export * from "./Monsters";
 export * from "./Pictures";
 export * from "./Settings";

@@ -8,55 +8,65 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { System, Datas, Graphic, Scene } from "../index.js.js.js";
-import { IO, Paths } from "../Common/index.js.js.js";
+
+import { System, Datas, Graphic, Scene } from "..";
+import { IO, Paths } from "../Common";
+
 /** @class
- *  All the keyBoard datas.
+ *  All the keyBoards datas.
  *  @property {System.KeyBoard[]} list List of all the keys of the game by ID
- *  @property {System.KeyBoard[]} listOrdered List of all the keys of the game
+ *  @property {System.KeyBoard[]} listOrdered List of all the keys of the game 
  *  by index
  *  @property {Record<string, any>} menuControls All the menu controls assigns
  */
-class Keyboard {
+class Keyboards {
+
+    private static list: System.Keyboard[];
+    public static listOrdered: System.Keyboard[];
+    public static menuControls: Record<string, any>;
+
     constructor() {
         throw new Error("This is a static class!");
     }
-    /**
+
+    /** 
      *  Test if a key id can be equal to a keyboard System object.
      *  @static
      *  @param {number} key The key id that needs to be compared
      *  @param {System.KeyBoard} abr The keyBoard to compare to the key
      *  @returns {boolean}
      */
-    static isKeyEqual(key, abr) {
+    static isKeyEqual(key: number, abr: System.Keyboard): boolean {
         let sc = abr.sc;
-        let m;
+        let m: number;
         for (let i = 0, l = sc.length; i < l; i++) {
             m = sc[i].length;
             if (m === 1) {
                 if (sc[i][0] === key) {
                     return true;
                 }
-            }
-            else {
+            } else {
                 return false;
             }
         }
         return false;
     }
-    /**
+
+    /** 
      *  Read the JSON file associated to keyboard.
      *  @static
      *  @async
      */
     static async read() {
         let json = await IO.parseFileJSON(Paths.FILE_KEYBOARD);
+
         // Shortcuts
         let jsonList = json.list;
         let l = jsonList.length;
         this.list = new Array(l + 1);
         this.listOrdered = new Array(l);
-        let jsonKey, id, abbreviation, key, sc;
+        let jsonKey: Record<string, any>, id: number, abbreviation: string, key: 
+            System.Keyboard, sc: number[][];
         for (let i = 0; i < l; i++) {
             jsonKey = jsonList[i];
             id = jsonKey.id;
@@ -70,6 +80,7 @@ class Keyboard {
             this.listOrdered[i] = key;
             this[abbreviation] = key;
         }
+
         // Menu controls
         this.menuControls = {};
         this.menuControls["Action"] = this.list[json["a"]];
@@ -79,21 +90,23 @@ class Keyboard {
         this.menuControls["Left"] = this.list[json["l"]];
         this.menuControls["Right"] = this.list[json["r"]];
     }
-    /**
+
+    /** 
      *  Get the keyboard by ID.
      *  @static
      *  @param {number} id
      *  @returns {System.Keyboard}
      */
-    static get(id) {
+    static get(id: number): System.Keyboard {
         return Datas.Base.get(id, this.list, "keyboard");
     }
-    /**
+
+    /** 
      *  Get the graphics commands.
      *  @static
      *  @returns {GraphicKeyboard[]}
      */
-    static getCommandsGraphics() {
+    static getCommandsGraphics(): Graphic.Keyboard[] {
         let l = this.listOrdered.length;
         let list = new Array(l);
         for (let i = 0; i < l; i++) {
@@ -101,12 +114,13 @@ class Keyboard {
         }
         return list;
     }
-    /**
+
+    /** 
      *  Get the actions commands.
      *  @static
      *  @returns {Function[]}
      */
-    static getCommandsActions() {
+    static getCommandsActions(): Function[] {
         let l = this.listOrdered.length;
         let list = new Array(l);
         for (let i = 0; i < l; i++) {
@@ -115,4 +129,5 @@ class Keyboard {
         return list;
     }
 }
-export { Keyboard };
+
+export { Keyboards }

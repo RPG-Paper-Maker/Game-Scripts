@@ -60,10 +60,7 @@ class CommonEvents {
      *  Reorder the models in the right order for inheritance.
      *  @param {Record<string, any>} jsonObject The json corresponding to the
      *  current object to analyze
-     *  @param {Record<string, any>[]} reorderedList The reordered list we are
-     *  updating
-     *  @param {Record<string, any>[]} jsonObjects The brutal JSON list of
-     *  objects
+     *  @pa Datasects
      *  @param {number} objectsLength The number of objects to identify
      */
     static modelReOrder(jsonObject, reorderedList, jsonObjects, objectsLength) {

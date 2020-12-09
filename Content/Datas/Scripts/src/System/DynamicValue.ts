@@ -15,7 +15,7 @@ import { System, Manager, Datas } from "..";
 import { StructIterator } from "../EventCommand";
 import { Stack } from "../Manager";
 
-interface StructJSONDynamicValue
+interface StructJSON
 {
     k: PrimitiveValueKind;
     v: any;
@@ -175,7 +175,7 @@ class DynamicValue extends System.Base {
      *  @param {number} [n=0] The default value
      *  @returns {System.DynamicValue}
      */
-    static readOrDefaultNumber(json: StructJSONDynamicValue, n: number = 0): 
+    static readOrDefaultNumber(json: StructJSON, n: number = 0): 
         System.DynamicValue {
         return Utils.isUndefined(json) ? System.DynamicValue.createNumber(n) : 
             System.DynamicValue.readFromJSON(json);
@@ -188,7 +188,7 @@ class DynamicValue extends System.Base {
      *  @param {number} [n=0] The default value
      *  @returns {System.DynamicValue}
      */
-    static readOrDefaultNumberDouble(json: StructJSONDynamicValue, n: number = 0
+    static readOrDefaultNumberDouble(json: StructJSON, n: number = 0
         ): System.DynamicValue {
         return Utils.isUndefined(json) ? System.DynamicValue.createNumberDouble(
             n) : System.DynamicValue.readFromJSON(json);
@@ -201,7 +201,7 @@ class DynamicValue extends System.Base {
      *  @param {number} [id=1] The default value
      *  @returns {System.DynamicValue}
      */
-    static readOrDefaultDatabase(json: StructJSONDynamicValue, id: number = 1): 
+    static readOrDefaultDatabase(json: StructJSON, id: number = 1): 
         System.DynamicValue {
         return Utils.isUndefined(json) ? System.DynamicValue.create(
             PrimitiveValueKind.DataBase, id) : System.DynamicValue.readFromJSON(
@@ -215,7 +215,7 @@ class DynamicValue extends System.Base {
      *  @param {string} [m=""] The default value
      *  @returns {System.DynamicValue}
      */
-    static readOrDefaultMessage(json: StructJSONDynamicValue, m: string = ""): 
+    static readOrDefaultMessage(json: StructJSON, m: string = ""): 
         System.DynamicValue {
         return Utils.isUndefined(json) ? System.DynamicValue.create(
             PrimitiveValueKind.Message, m) : System.DynamicValue.readFromJSON(
@@ -228,7 +228,7 @@ class DynamicValue extends System.Base {
      *  @param {StructJSONDynamicValue} json The json value
      *  @returns {System.DynamicValue}
      */
-    static readOrNone(json: StructJSONDynamicValue): System.DynamicValue {
+    static readOrNone(json: StructJSON): System.DynamicValue {
         return Utils.isUndefined(json) ? System.DynamicValue.createNone() : 
             System.DynamicValue.readFromJSON(json);
     }
@@ -239,7 +239,7 @@ class DynamicValue extends System.Base {
      *  @param {StructJSONDynamicValue} json The json value
      *  @returns {System.DynamicValue}
      */
-    static readFromJSON(json: StructJSONDynamicValue): System.DynamicValue {
+    static readFromJSON(json: StructJSON): System.DynamicValue {
         let value = new System.DynamicValue();
         value.read(json);
         return value;
@@ -249,7 +249,7 @@ class DynamicValue extends System.Base {
      *  Read the JSON associated to the value
      *  @param {StructJSONDynamicValue} json Json object describing the value
      */
-    read(json: StructJSONDynamicValue) {
+    read(json: StructJSON) {
         this.kind = json.k;
         this.value = json.v;
     }
@@ -281,12 +281,12 @@ class DynamicValue extends System.Base {
         // If keyBoard
         if (this.kind === PrimitiveValueKind.KeyBoard && value.kind !==
             PrimitiveValueKind.KeyBoard) {
-            return Datas.Keyboard.isKeyEqual(value.value, Datas.Keyboard.list[
-                this.value]);
+            return Datas.Keyboards.isKeyEqual(value.value, Datas.Keyboards.get(
+                this.value));
         } else if (value.kind === PrimitiveValueKind.KeyBoard && this.kind !==
             PrimitiveValueKind.KeyBoard) {
-            return Datas.Keyboard.isKeyEqual(this.value, Datas.Keyboard.list[
-                value.value]);
+            return Datas.Keyboards.isKeyEqual(this.value, Datas.Keyboards.get(
+                value.value));
         } else if (this.kind === PrimitiveValueKind.Anything || value.kind ===
             PrimitiveValueKind.Anything) {
             return true;
@@ -296,4 +296,4 @@ class DynamicValue extends System.Base {
     }
 }
 
-export { StructJSONDynamicValue, DynamicValue }
+export { StructJSON, DynamicValue }

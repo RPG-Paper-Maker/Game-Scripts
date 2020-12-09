@@ -25,7 +25,7 @@ class Settings {
     static async read() {
         // Settings
         let json = await IO.parseFileJSON(Paths.FILE_SETTINGS);
-        this.kb = {};
+        this.kb = [];
         let jsonObjs = json[Utils.numToString(TitleSettingKind.KeyboardAssigment)];
         for (let id in jsonObjs) {
             this.kb[id] = jsonObjs[id];
@@ -46,6 +46,8 @@ class Settings {
     }
     /**
      *  Update Keyboard settings.
+     *  @param {number} id
+     *  @param {number[][]} sc
      *  @static
      */
     static updateKeyboard(id, sc) {
