@@ -12,6 +12,7 @@
 export * from "./Armors";
 export * from "./Base";
 export * from "./BattleSystems";
+export * from "./Classes";
 export * from "./CommonEvents";
 export * from "./Items";
 export * from "./Keyboard";

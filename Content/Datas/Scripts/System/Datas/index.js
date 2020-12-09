@@ -11,6 +11,7 @@
 export * from "./Armors.js";
 export * from "./Base.js";
 export * from "./BattleSystems.js";
+export * from "./Classes.js";
 export * from "./CommonEvents.js";
 export * from "./Items.js";
 export * from "./Keyboard.js";

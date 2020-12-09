@@ -195,8 +195,8 @@ class Effect extends Base {
             .Stack.currentMap.user) : Player.getTemporaryPlayer();
         Manager.Stack.currentMap.tempTargets = Manager.Stack.currentMap.targets;
         if (this.isTemporarilyChangeTarget) {
-            Manager.Stack.currentMap.targets = Interpreter.evaluateFormula(this
-                .temporarilyChangeTargetFormula.getValue(), user, null);
+            Manager.Stack.currentMap.targets = Interpreter.evaluate(this
+                .temporarilyChangeTargetFormula.getValue(), { user: user });
         }
         let targets = Manager.Stack.currentMap.targets;
         let result = false;
@@ -218,8 +218,9 @@ class Effect extends Base {
 
                     // Calculate damages
                     if (this.isDamagePrecision) {
-                        precision = Interpreter.evaluateFormula(this
-                            .damagePrecisionFormula.getValue(), user, target);
+                        precision = Interpreter.evaluate(this
+                            .damagePrecisionFormula.getValue(), { user: user, 
+                            target: target });
                         random = Mathf.random(0, 100);
                         if (precision < random) {
                             damage = null;
@@ -227,12 +228,12 @@ class Effect extends Base {
                         }
                     }
                     if (damage !== null) {
-                        damage = Interpreter.evaluateFormula(this.damageFormula
-                            .getValue(), user, target);
+                        damage = Interpreter.evaluate(this.damageFormula
+                            .getValue(), { user: user, target: target });
                         if (this.isDamageVariance) {
-                            variance = Math.round(damage * Interpreter
-                                .evaluateFormula(this.damageVarianceFormula
-                                .getValue(), user, target) / 100);
+                            variance = Math.round(damage * Interpreter.evaluate(
+                                this.damageVarianceFormula.getValue(), { user: 
+                                user, target: target }) / 100);
                             damage = Mathf.random(damage - variance, damage + 
                                 variance);
                         }
@@ -248,26 +249,27 @@ class Effect extends Base {
                             damage -= fixRes;
                         }
                         if (this.isDamageCritical) {
-                            critical = Interpreter.evaluateFormula(this
-                                .damageCriticalFormula.getValue(), user, target);
+                            critical = Interpreter.evaluate(this
+                                .damageCriticalFormula.getValue(), { user :user, 
+                                target: target });
                             random = Mathf.random(0, 100);
                             if (random <= critical) {
-                                damage = Interpreter.evaluateFormula(Interpreter
-                                    .evaluateFormula(Datas.BattleSystems
-                                    .formulaCrit.getValue(), user, target, 
-                                    damage));
+                                damage = Interpreter.evaluate(Interpreter
+                                    .evaluate(Datas.BattleSystems.formulaCrit
+                                    .getValue(), { user: user, target: target, 
+                                    damage: damage }));
                                 crit = true;
                             }
                         }
                         if (this.isDamagesMinimum) {
-                            damage = Math.max(damage, Interpreter
-                                .evaluateFormula(this.damagesMinimumFormula
-                                .getValue(), user, target));
+                            damage = Math.max(damage, Interpreter.evaluate(this
+                                .damagesMinimumFormula.getValue(), { user: user, 
+                                target: target }));
                         }
                         if (this.isDamagesMaximum) {
-                            damage = Math.min(damage, Interpreter
-                                .evaluateFormula(this.damagesMaximumFormula
-                                .getValue(), user, target));
+                            damage = Math.min(damage, Interpreter.evaluate(this
+                                .damagesMaximumFormula.getValue(), { user: user, 
+                                target: target }));
                         }
                         damage = Math.round(damage);
                     }
@@ -378,8 +380,8 @@ class Effect extends Base {
         let target = Player.getTemporaryPlayer();
         switch (this.kind) {
             case EffectKind.Damages:
-                let damage = Interpreter.evaluateFormula(this.damageFormula
-                    .getValue(), user, target);
+                let damage = Interpreter.evaluate(this.damageFormula.getValue(), 
+                    { user: user, target: target });
                 if (damage === 0) {
                     return "";
                 }
@@ -387,9 +389,9 @@ class Effect extends Base {
                 let critical = 0;
                 let variance = 0;
                 if (this.isDamageVariance) {
-                    variance = Math.round(damage * Interpreter.evaluateFormula(
-                        this.damageVarianceFormula.getValue(), user, target) / 
-                        100);
+                    variance = Math.round(damage * Interpreter.evaluate(this
+                        .damageVarianceFormula.getValue(), { user: user, target: 
+                        target }) / 100);
                 }
                 let min = damage - variance;
                 let max = damage + variance;
@@ -400,13 +402,13 @@ class Effect extends Base {
                 }
                 let options = [];
                 if (this.isDamagePrecision) {
-                    precision = Interpreter.evaluateFormula(this
-                        .damagePrecisionFormula.getValue(), user, target);
+                    precision = Interpreter.evaluate(this.damagePrecisionFormula
+                        .getValue(), { user: user, target: target });
                     options.push("precision: " + precision + "%");
                 }
                 if (this.isDamageCritical) {
-                    critical = Interpreter.evaluateFormula(this
-                        .damageCriticalFormula.getValue(), user, target);
+                    critical = Interpreter.evaluate(this.damageCriticalFormula
+                        .getValue(), { user: user, target: target });
                     options.push("critical: " + critical + "%");
                 }
                 let damageName = "";
@@ -428,8 +430,9 @@ class Effect extends Base {
                     .length > 0 ? " [" + options.join(" - ") +  "]" : "");
             case EffectKind.Status:
                 return (this.isAddStatus ? "Add" : "Remove") + " " + 
-                    " [precision: " + Interpreter.evaluateFormula(this
-                    .statusPrecisionFormula.getValue(), user, target) + "%]";
+                    " [precision: " + Interpreter.evaluate(this
+                    .statusPrecisionFormula.getValue(), { user: user, target: 
+                    target }) + "%]";
             case EffectKind.AddRemoveSkill:
                 return (this.isAddSkill ? "Add" : "Remove") + " skill " + Datas
                     .Skills.get(this.addSkillID.getValue()).name;

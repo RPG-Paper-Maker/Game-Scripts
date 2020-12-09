@@ -10,7 +10,7 @@
 */
 
 import { Datas, Manager } from ".";
-import { Utils } from "./Common";
+import { Utils, Interpreter } from "./Common";
 
 /*
 const {Howl, Howler} = require('./Content/Datas/Scripts/System/Libs/howler.js');
@@ -53,6 +53,9 @@ async function load() {
     await Datas.Skills.read();
     await Datas.Weapons.read();
     await Datas.Armors.read();
+    await Datas.Classes.read();
+
+    Interpreter.evaluate('console.log(Datas.Systems.PATH_BR)');
     //RPM.gameStack.pushTitleScreen();
     //RPM.datasGame.loaded = true;
     Manager.Stack.requestPaintHUD = true;

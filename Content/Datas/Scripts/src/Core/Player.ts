@@ -11,7 +11,7 @@
 
 import { Enum } from "../Common";
 import CharacterKind = Enum.CharacterKind;
-import { Datas } from "..";
+import { Datas, System } from "..";
 
 /** @class
  *  A character in the team/hidden/reserve.
@@ -31,11 +31,12 @@ import { Datas } from "..";
  *  @param {GameSkill[]} skills List of all the learned skills
  *  @param {object} [json=undefined] Json object describing the items
  */
-class Player
-{
+class Player {
+    
     public instid: number;
     public name: string;
     public kind: CharacterKind;
+    public system: System.Hero;
 
     constructor(kind?: CharacterKind, id?: number, instanceID?: number, skills?, json?)
     {

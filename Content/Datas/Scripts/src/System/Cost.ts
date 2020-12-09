@@ -66,8 +66,8 @@ class Cost extends Base {
             .isBattleMap ? Manager.Stack.currentMap.user.character : Manager
             .Stack.currentMap.user) : Player.getTemporaryPlayer();
         let target = Player.getTemporaryPlayer();
-        let value = Interpreter.evaluateFormula(this.valueFormula.getValue(), 
-            user, target);
+        let value = Interpreter.evaluate(this.valueFormula.getValue(), { user: 
+            user, target: target });
         switch (this.kind) {
             case DamagesKind.Stat:
                 user[Datas.BattleSystems.getStatistic(this.statisticID
@@ -92,8 +92,8 @@ class Cost extends Base {
             .isBattleMap ? Manager.Stack.currentMap.user.character : Manager
             .Stack.currentMap.user) : Player.getTemporaryPlayer();
         let target = Player.getTemporaryPlayer();
-        let value = Interpreter.evaluateFormula(this.valueFormula.getValue(), 
-            user, target);
+        let value = Interpreter.evaluate(this.valueFormula.getValue(), { user: 
+            user, target: target });
         let currentValue: number;
         switch (this.kind) {
             case DamagesKind.Stat:
@@ -120,8 +120,8 @@ class Cost extends Base {
             .isBattleMap ? Manager.Stack.currentMap.user.character : Manager
             .Stack.currentMap.user) : Player.getTemporaryPlayer();
         let target = Player.getTemporaryPlayer();
-        let result = Interpreter.evaluateFormula(this.valueFormula.getValue(), 
-            user, target) + " ";
+        let result = Interpreter.evaluate(this.valueFormula.getValue(), { user: 
+            user, target: target }) + " ";
         switch (this.kind) {
             case DamagesKind.Stat:
                 result += Datas.BattleSystems.getStatistic(this.statisticID
