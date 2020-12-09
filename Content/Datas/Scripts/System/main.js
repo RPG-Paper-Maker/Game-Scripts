@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Datas, Manager } from "./index.js";
-import { Utils, Interpreter } from "./Common/index.js";
+import { Utils } from "./Common/index.js";
 /*
 const {Howl, Howler} = require('./Content/Datas/Scripts/System/Libs/howler.js');
 
@@ -49,7 +49,8 @@ async function load() {
     await Datas.Weapons.read();
     await Datas.Armors.read();
     await Datas.Classes.read();
-    Interpreter.evaluate('console.log(Datas.Systems.PATH_BR)');
+    await Datas.Heroes.read();
+    await Datas.Monsters.read();
     //RPM.gameStack.pushTitleScreen();
     //RPM.datasGame.loaded = true;
     Manager.Stack.requestPaintHUD = true;

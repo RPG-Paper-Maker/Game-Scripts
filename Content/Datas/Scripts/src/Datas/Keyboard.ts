@@ -9,22 +9,18 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum } from "../Common";
-
 /** @class
-*   All the keyBoard datas
-*   @property {SystemKeyBoard[]} list List of all the keys of the game by ID
+*   All the keyBoard datas.
+*   @property {System.KeyBoard[]} list List of all the keys of the game by ID
 *   @property {SystemKeyBoard[]} listOrdered List of all the keys of the game 
 *   by index
 *   @property {Object} menuControls All the menu controls assigns
 */
-class Keyboard
-{
+class Keyboard {
     public static list: any; // todo
     public static menuControls: Record<string, any>; // todo
 
-    constructor()
-    {
+    constructor() {
         throw new Error("This is a static class!");
     }
 

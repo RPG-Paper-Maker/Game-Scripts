@@ -32,6 +32,7 @@ class Classes {
     }
     /**
      *  Get the class by ID.
+     *  @static
      *  @param {number} id
      *  @returns {System.Class}
      */

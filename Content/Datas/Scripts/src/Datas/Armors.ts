@@ -10,7 +10,7 @@
 */
 
 import { IO, Paths, Utils } from "../Common";
-import { System } from "..";
+import { System, Datas } from "..";
 
 /** @class
  *  All the armors datas.
@@ -35,6 +35,16 @@ class Armors {
         this.list = [];
         Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System
             .Armor });
+    }
+
+    /** 
+     *  Get the armor by ID.
+     *  @static
+     *  @param {number} id
+     *  @returns {System.Armor}
+     */
+    static get(id: number): System.Armor {
+        return Datas.Base.get(id, this.list, "armor");
     }
 }
 

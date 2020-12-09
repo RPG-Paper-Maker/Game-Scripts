@@ -8,44 +8,36 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-
-import { IO, Paths, Utils } from "../Common";
-import { System, Datas } from "..";
-
+import { System, Datas } from "../index.js";
+import { IO, Paths, Utils } from "../Common/index.js";
 /** @class
- *  All the items datas.
- *  @property {System.Item[]} list List of all the items of the game according
- *  to ID
+ *  All the monsters datas.
+ *  @property {System.Monster[]} list List of all the monsters of the game
+ *  according to ID
  */
-class Items {
-
-    private static list: System.Item[];
-
+class Monsters {
     constructor() {
         throw new Error("This is a static class!");
     }
-
     /**
-     *  Read the JSON file associated to items.
+     *  Read the JSON file associated to monsters.
      *  @static
      *  @async
      */
     static async read() {
-        let json = (await IO.parseFileJSON(Paths.FILE_ITEMS)).items;
+        let json = (await IO.parseFileJSON(Paths.FILE_MONSTERS)).monsters;
         this.list = [];
         Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System
-            .Item });
+                .Monster });
     }
-
-    /** 
-     *  Get the item by ID.
+    /**
+     *  Get the monster by ID.
      *  @static
      *  @param {number} id
-     *  @returns {System.Item}
+     *  @returns {System.Monster}
      */
-    static get(id: number): System.Item {
-        return Datas.Base.get(id, this.list, "item");
+    static get(id) {
+        return Datas.Base.get(id, this.list, "monster");
     }
 }
-
-export { Items }
+export { Monsters };

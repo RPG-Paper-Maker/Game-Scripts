@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { IO, Paths, Utils } from "../Common/index.js";
-import { System } from "../index.js";
+import { System, Datas } from "../index.js";
 /** @class
  *  All the armors datas.
  *  @property {SystemArmor[]} list List of all the armors of the game according
@@ -29,6 +29,15 @@ class Armors {
         this.list = [];
         Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System
                 .Armor });
+    }
+    /**
+     *  Get the armor by ID.
+     *  @static
+     *  @param {number} id
+     *  @returns {System.Armor}
+     */
+    static get(id) {
+        return Datas.Base.get(id, this.list, "armor");
     }
 }
 export { Armors };

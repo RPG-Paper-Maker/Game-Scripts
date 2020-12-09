@@ -54,8 +54,8 @@ async function load() {
     await Datas.Weapons.read();
     await Datas.Armors.read();
     await Datas.Classes.read();
-
-    Interpreter.evaluate('console.log(Datas.Systems.PATH_BR)');
+    await Datas.Heroes.read();
+    await Datas.Monsters.read();
     //RPM.gameStack.pushTitleScreen();
     //RPM.datasGame.loaded = true;
     Manager.Stack.requestPaintHUD = true;

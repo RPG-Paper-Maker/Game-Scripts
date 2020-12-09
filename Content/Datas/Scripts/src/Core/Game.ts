@@ -11,6 +11,7 @@
 
 import { Player } from "./Player";
 import { Datas } from "..";
+import { Item } from "./Item";
 
 /** @class
 *   All the global informations of a particular game
@@ -41,6 +42,7 @@ class Game {
     public hiddenHeroes: Player[];
     public variables: any[];
     public currencies: any[];
+    public items: Item[];
 
     constructor(slot, json)
     {

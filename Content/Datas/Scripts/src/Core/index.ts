@@ -20,6 +20,7 @@ export * from "./Bitmap";
 export * from "./Camera";
 export * from "./CollisionSquare";
 export * from "./Game";
+export * from "./Item";
 export * from "./Land";
 export * from "./MapElement";
 export * from "./MapObject";

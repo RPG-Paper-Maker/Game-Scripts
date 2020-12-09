@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { IO, Paths, Utils } from "../Common/index.js";
-import { System } from "../index.js";
+import { System, Datas } from "../index.js";
 /** @class
  *  All the items datas.
  *  @property {System.Item[]} list List of all the items of the game according
@@ -29,6 +29,15 @@ class Items {
         this.list = [];
         Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System
                 .Item });
+    }
+    /**
+     *  Get the item by ID.
+     *  @static
+     *  @param {number} id
+     *  @returns {System.Item}
+     */
+    static get(id) {
+        return Datas.Base.get(id, this.list, "item");
     }
 }
 export { Items };

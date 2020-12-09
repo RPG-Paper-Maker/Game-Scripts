@@ -19,6 +19,7 @@ export * from "./Bitmap.js";
 export * from "./Camera.js";
 export * from "./CollisionSquare.js";
 export * from "./Game.js";
+export * from "./Item.js";
 export * from "./Land.js";
 export * from "./MapElement.js";
 export * from "./MapObject.js";
