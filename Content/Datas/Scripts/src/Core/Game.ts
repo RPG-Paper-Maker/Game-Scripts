@@ -44,7 +44,7 @@ class Game {
     public currencies: any[];
     public items: Item[];
 
-    constructor(slot, json)
+    constructor(slot?, json?)
     {
         /*
         this.currentSlot = -1;

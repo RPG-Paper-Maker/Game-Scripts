@@ -10,5 +10,10 @@
 */
 export * from "./Base.js";
 export * from "./Battle.js";
+export * from "./KeyboardAssign.js";
+export * from "./LoadGame.js";
 export * from "./Loading.js";
 export * from "./Map.js";
+export * from "./SaveGame.js";
+export * from "./SaveLoadGame.js";
+export * from "./TitleSettings.js";

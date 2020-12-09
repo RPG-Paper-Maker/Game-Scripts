@@ -31,7 +31,7 @@ class SpecialElements {
     public static objects: System.Object3D[];
 
     constructor() {
-
+        throw new Error("This is a static class!");
     }
 
     /**

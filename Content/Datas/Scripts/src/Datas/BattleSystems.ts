@@ -81,15 +81,16 @@ class BattleSystems {
         // Elements
         this.elements = [];
         this.elementsOrder = [];
-        Utils.readJSONSystemList({ list: json.elements, listIDs: this.elements, 
-            listIndexes: this.elementsOrder, cons: System.Element });
+        Utils.readJSONSystemList({ list: Utils.defaultValue(json.elements, []), 
+            listIDs: this.elements, listIndexes: this.elementsOrder, indexesIDs: 
+            true, cons: System.Element });
 
         // Statistics
         this.statistics = [];
         this.statisticsOrder = [];
-        let maxID = Utils.readJSONSystemList({ list: json.statistics, listIDs: 
-            this.statistics, listIndexes: this.statisticsOrder, cons: System
-            .Statistic });
+        let maxID = Utils.readJSONSystemList({ list: Utils.defaultValue(json
+            .statistics, []), listIDs: this.statistics, listIndexes: this
+            .statisticsOrder, indexesIDs: true, cons: System.Statistic });
 
         // Add elements res to statistics
         this.statisticsElements = [];
@@ -112,27 +113,30 @@ class BattleSystems {
         // Equipments
         this.equipments = [];
         this.equipmentsOrder = [];
-        this.maxEquipmentID = Utils.readJSONSystemList({ list: json.equipments, 
-            listIDs: this.equipments, listIndexes: this.equipmentsOrder, func: 
-            (jsonEquipment: Record<string, any>) => {
+        this.maxEquipmentID = Utils.readJSONSystemList({ list: Utils
+            .defaultValue(json.equipments, []), listIDs: this.equipments, 
+            listIndexes: this.equipmentsOrder, indexesIDs: true, func: (
+            jsonEquipment: Record<string, any>) => 
+            {
                 return jsonEquipment.names[1];
             }
         });
-        SongKind
-        Utils.readJSONSystemList({ list: json.weapons, listIDs: this.weaponsKind
-            , cons: System.WeaponArmorKind });
+        this.weaponsKind = [];
+        Utils.readJSONSystemList({ list: Utils.defaultValue(json.weapons, []), 
+            listIDs: this.weaponsKind, cons: System.WeaponArmorKind });
 
         // Armors kind
         this.armorsKind = [];
-        Utils.readJSONSystemList({ list: json.armorsKind, listIDs: this
-            .armorsKind, cons: System.WeaponArmorKind });
+        Utils.readJSONSystemList({ list: Utils.defaultValue(json.armorsKind, [])
+            , listIDs: this.armorsKind, cons: System.WeaponArmorKind });
 
         // Battle commands
         this.battleCommands = [];
         this.battleCommandsOrder = [];
-        Utils.readJSONSystemList({ list: json.battleCommands, listIDs: this
-            .battleCommands, listIndexes: this.battleCommandsOrder, func: (
-            jsonBattleCommand: Record<string, any>) =>
+        Utils.readJSONSystemList({ list: Utils.defaultValue(json.battleCommands, 
+            []), listIDs: this.battleCommands, listIndexes: this
+            .battleCommandsOrder, indexesIDs: true, func: (jsonBattleCommand: 
+            Record<string, any>) =>
             {
                 return jsonBattleCommand.s;
             }
@@ -140,8 +144,8 @@ class BattleSystems {
 
         // Battle maps
         this.battleMaps = [];
-        Utils.readJSONSystemList({ list: json.battleMaps, listIDs: this
-            .battleMaps, cons: System.BattleMap });
+        Utils.readJSONSystemList({ list: Utils.defaultValue(json.battleMaps, []), 
+            listIDs: this.battleMaps, cons: System.BattleMap });
 
         // Ids of specific statistics
         this.idLevelStatistic = json.lv;

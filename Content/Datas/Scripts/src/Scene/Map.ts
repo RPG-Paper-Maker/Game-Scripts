@@ -58,7 +58,7 @@ class Map extends Base
     public damages: any[];
     public battleCommandKind: EffectSpecialActionKind;
 
-    constructor(id, isBattleMap, minimal = false)
+    constructor(id, isBattleMap = false, minimal = false)
     {
         super(false);
 

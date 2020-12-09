@@ -11,4 +11,5 @@
 
 export * from "./Base";
 export * from "./Message";
+export * from "./Setting";
 export * from "./Text";

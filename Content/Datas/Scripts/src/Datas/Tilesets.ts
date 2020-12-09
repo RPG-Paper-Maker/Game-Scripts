@@ -43,7 +43,7 @@ class Tilesets {
     private static mountains: Record<string, System.Tileset>;
 
     constructor() {
-
+        throw new Error("This is a static class!");
     }
 
     /** 

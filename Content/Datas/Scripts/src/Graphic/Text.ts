@@ -68,6 +68,7 @@ class Text extends Base {
     public oFont: string;
     public font: string;
     public textWidth: number;
+    public datas: any;
 
     constructor(text = "", { x = 0, y = 0, w = 0, h = 0, align = Align.Left, 
         fontSize = Utils.defaultValue(Datas.Systems.dbOptions.v_tSize, Constants

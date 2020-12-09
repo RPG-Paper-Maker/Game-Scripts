@@ -25,6 +25,8 @@ export * from "./Songs.js";
 export * from "./SpecialElements.js";
 export * from "./Systems.js";
 export * from "./Tilesets.js";
+export * from "./TitleScreenGameOver.js";
+export * from "./Troops.js";
 export * from "./Variables.js";
 export * from "./Videos.js";
 export * from "./Weapons.js";

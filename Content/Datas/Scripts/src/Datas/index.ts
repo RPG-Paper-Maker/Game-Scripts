@@ -26,6 +26,8 @@ export * from "./Songs";
 export * from "./SpecialElements";
 export * from "./Systems";
 export * from "./Tilesets";
+export * from "./TitleScreenGameOver";
+export * from "./Troops";
 export * from "./Variables";
 export * from "./Videos";
 export * from "./Weapons";

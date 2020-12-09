@@ -11,5 +11,10 @@
 
 export * from "./Base";
 export * from "./Battle";
+export * from "./KeyboardAssign";
+export * from "./LoadGame";
 export * from "./Loading";
 export * from "./Map";
+export * from "./SaveGame";
+export * from "./SaveLoadGame";
+export * from "./TitleSettings";

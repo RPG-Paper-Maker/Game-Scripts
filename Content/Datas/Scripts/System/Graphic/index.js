@@ -10,4 +10,5 @@
 */
 export * from "./Base.js";
 export * from "./Message.js";
+export * from "./Setting.js";
 export * from "./Text.js";

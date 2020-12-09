@@ -30,6 +30,7 @@ var PictureKind = Enum.PictureKind;
  */
 class Tilesets {
     constructor() {
+        throw new Error("This is a static class!");
     }
     /**
      *  Read the JSON file associated to tilesets.

@@ -45,7 +45,7 @@ import { Utils } from "../Common/index.js";
 *   loaded (only for getting objects infos)
 */
 class Map extends Base {
-    constructor(id, isBattleMap, minimal = false) {
+    constructor(id, isBattleMap = false, minimal = false) {
         super(false);
         /*
         this.id = id;

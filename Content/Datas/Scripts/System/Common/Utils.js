@@ -128,7 +128,7 @@ class Utils {
      *  @param {function} opts.cons The function to apply
      *  @returns {number}
      */
-    static readJSONSystemList({ list, listIDs, listIndexes, listHash, cons, func }) {
+    static readJSONSystemList({ list, listIDs, listIndexes, indexesIDs = false, listHash, cons, func }) {
         let jsonElement;
         let maxID = 0;
         let id, element;
@@ -142,7 +142,7 @@ class Utils {
                     listIDs[jsonElement.id] = element;
                 }
                 if (!Utils.isUndefined(listIndexes)) {
-                    listIndexes[i] = element;
+                    listIndexes[i] = indexesIDs ? id : element;
                 }
             }
             else {

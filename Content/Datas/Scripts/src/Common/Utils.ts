@@ -164,9 +164,10 @@ class Utils {
      *  @param {function} opts.cons The function to apply
      *  @returns {number}
      */
-    static readJSONSystemList({ list, listIDs, listIndexes, listHash, cons, 
-        func }: { list: Record<string, any>[], listIDs?: any[], listIndexes?: 
-        any[], listHash?: any[], cons?: any, func?: any }): number
+    static readJSONSystemList({ list, listIDs, listIndexes, indexesIDs = false, 
+        listHash, cons, func }: { list: Record<string, any>[], listIDs?: any[], 
+        listIndexes?: any[], indexesIDs?: boolean, listHash?: any[], cons?: any,
+        func?: any }): number
     {
         let jsonElement: any;
         let maxID = 0;
@@ -181,7 +182,7 @@ class Utils {
                     listIDs[jsonElement.id] = element;
                 }
                 if (!Utils.isUndefined(listIndexes)) {
-                    listIndexes[i] = element;
+                    listIndexes[i] = indexesIDs ? id : element;
                 }
             } else {
                 listHash[jsonElement[Constants.JSON_KEY]] = Utils.isUndefined(

@@ -51,9 +51,13 @@ async function load() {
     await Datas.Classes.read();
     await Datas.Heroes.read();
     await Datas.Monsters.read();
+    await Datas.Troops.read();
+    await Datas.BattleSystems.read();
+    await Datas.TitlescreenGameover.read();
     //RPM.gameStack.pushTitleScreen();
     //RPM.datasGame.loaded = true;
     Manager.Stack.requestPaintHUD = true;
+    console.log("ok");
 }
 /**
  *  Main loop of the game
