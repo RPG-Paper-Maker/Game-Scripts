@@ -16,6 +16,7 @@ let loadedDatas = false;
  */
 function initialize() {
     Manager.Stack.loadingDelay = 0;
+    Manager.Songs.initialize();
     Manager.Stack.clearHUD();
 }
 /**

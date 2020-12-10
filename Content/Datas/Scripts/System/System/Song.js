@@ -107,7 +107,7 @@ class Song extends Base {
      */
     load() {
         if (this.id !== -1) {
-            this.song = new Howl({
+            this.howl = new Howl({
                 src: [this.getPath()],
                 loop: this.kind !== SongKind.MusicEffect,
                 html5: true
