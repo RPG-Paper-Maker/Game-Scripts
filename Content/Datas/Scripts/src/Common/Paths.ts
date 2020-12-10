@@ -21,7 +21,7 @@ class Paths {
     public static readonly ROOT_DIRECTORY_LOCAL = "."
     public static readonly FILES = "file:///";
     public static readonly DATAS = Platform.ROOT_DIRECTORY + "/Content/Datas/";
-    public static readonly FILE_MAPS = Paths.DATAS + "Maps";
+    public static readonly FILE_MAPS = Paths.DATAS + "Maps/";
     public static readonly FILE_MAP_INFOS = "/infos.json";
     public static readonly FILE_MAP_OBJECTS = "/objects.json";
     public static readonly FILE_PICTURES = Paths.DATAS + "pictures.json";

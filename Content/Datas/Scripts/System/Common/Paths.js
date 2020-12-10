@@ -22,7 +22,7 @@ class Paths {
 Paths.ROOT_DIRECTORY_LOCAL = ".";
 Paths.FILES = "file:///";
 Paths.DATAS = Platform.ROOT_DIRECTORY + "/Content/Datas/";
-Paths.FILE_MAPS = Paths.DATAS + "Maps";
+Paths.FILE_MAPS = Paths.DATAS + "Maps/";
 Paths.FILE_MAP_INFOS = "/infos.json";
 Paths.FILE_MAP_OBJECTS = "/objects.json";
 Paths.FILE_PICTURES = Paths.DATAS + "pictures.json";

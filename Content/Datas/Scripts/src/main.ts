@@ -50,6 +50,9 @@ async function load() {
     await Datas.TitlescreenGameover.read();
     await Datas.Keyboards.read();
     await Datas.Animations.read();
+    await Datas.CommonEvents.read();
+    await Datas.Systems.getModelHero();
+    await Datas.Systems.loadWindowSkins();
     //RPM.gameStack.pushTitleScreen();
     //RPM.datasGame.loaded = true;
     Manager.Stack.requestPaintHUD = true;

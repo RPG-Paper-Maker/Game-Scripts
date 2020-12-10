@@ -34,9 +34,11 @@ class CommonEvents {
         let json = await IO.parseFileJSON(Paths.FILE_COMMON_EVENTS);
         // Lists
         this.eventsSystem = [];
+        this.eventsUser = [];
+        this.commonReactions = [];
+        this.commonObjects = [];
         Utils.readJSONSystemList({ list: json.eventsSystem, listIDs: this
                 .eventsSystem, cons: System.Event });
-        this.eventsUser = [];
         Utils.readJSONSystemList({ list: json.eventsUser, listIDs: this
                 .eventsUser, cons: System.Event });
         Utils.readJSONSystemList({ list: json.commonReactors, listIDs: this
@@ -52,7 +54,6 @@ class CommonEvents {
             this.modelReOrder(jsonObject, reorderedList, jsonObjects, l);
         }
         // Now, we can create all the models without problem
-        this.commonObjects = [];
         Utils.readJSONSystemList({ list: reorderedList, listIDs: this
                 .commonObjects, cons: System.MapObject });
     }

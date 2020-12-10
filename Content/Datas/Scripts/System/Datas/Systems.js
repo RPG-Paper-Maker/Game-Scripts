@@ -256,8 +256,8 @@ class Systems {
      */
     static async getModelHero() {
         let mapName = Scene.Map.generateMapName(this.ID_MAP_START_HERO);
-        let json = (await IO.parseFileJSON(Platform.ROOT_DIRECTORY + Paths
-            .FILE_MAPS + mapName + Paths.FILE_MAP_OBJECTS)).objs;
+        let json = (await IO.parseFileJSON(Paths.FILE_MAPS + mapName + Paths
+            .FILE_MAP_OBJECTS)).objs;
         let jsonObject, position;
         for (let i = 0, l = json.length; i < l; i++) {
             jsonObject = json[i];

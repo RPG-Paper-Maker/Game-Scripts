@@ -11,6 +11,7 @@
 
 import { Base } from "./Base";
 import { System, Datas } from "..";
+import { Utils } from "../Common";
 
 /** @class
  *  An event that an object can react on.
@@ -39,13 +40,11 @@ class Event extends Base {
      *  @param {Record<string, any>} json Json object describing the object event
      */
     read(json: Record<string, any>) {
-        this.isSystem = json.sys;
+        this.isSystem = Utils.defaultValue(json.sys, true);
         this.idEvent = json.id;
 
         // Parameters
-        this.parameters = System.Parameter.readParametersWithDefault(json, (this
-            .isSystem ? Datas.CommonEvents.getEventSystem(this.idEvent) : Datas
-            .CommonEvents.getEventUser(this.idEvent)).parameters);
+        this.parameters = System.Parameter.readParameters(json);
 
         // Reactions
         let jsonReactions = json.r;
