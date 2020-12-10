@@ -81,37 +81,33 @@ class Stack {
         return Utils.defaultValue(this.content[i], null);
     }
     /**
-     *  Check if the stack is empty
+     *  Check if the stack is empty.
      *  @returns {boolean}
      */
     static isEmpty() {
         return this.top === null;
     }
     /**
-     *  Check if top content is loading
+     *  Check if top content is loading.
      *  @returns {boolean}
      */
     static isLoading() {
         return this.isEmpty() || this.top.loading;
     }
     /**
-     *  Push the title screen when empty
-     *  @returns {SceneTitleScreen}
+     *  Push the title screen when empty.
+     *  @returns {Scene.TitleScreen}
      */
     static pushTitleScreen() {
-        /*
-        let scene = new SceneTitleScreen();
+        let scene = new Scene.TitleScreen();
         this.push(scene);
         return scene;
-        *
-         */
     }
     /**
      *  Clear the HUD canvas.
      */
     static clearHUD() {
-        Platform.ctx.clearRect(0, 0, ScreenResolution.CANVAS_WIDTH, ScreenResolution
-            .CANVAS_HEIGHT);
+        Platform.ctx.clearRect(0, 0, ScreenResolution.CANVAS_WIDTH, ScreenResolution.CANVAS_HEIGHT);
         Platform.ctx.lineWidth = 1;
         Platform.ctx.imageSmoothingEnabled = false;
     }
@@ -119,11 +115,10 @@ class Stack {
      *  Update the stack.
      */
     static update() {
-        // Update game timer if there's a current game
         /*
-        if (RPM.game)
-        {
-            RPM.game.playTime.update();
+        // Update game timer if there's a current game
+        if (this.game !== null) {
+            this.game.playTime.update();
         }
 
         // Update songs manager
@@ -202,22 +197,20 @@ class Stack {
                 this.clearHUD();
                 if (!this.isEmpty()) {
                     // Display < 0 index image command
-                    /*
                     let i, l, v;
-                    for (i = 0, l = RPM.displayedPictures.length; i < l; i++) {
-                        v = RPM.displayedPictures[i];
+                    for (i = 0, l = this.displayedPictures.length; i < l; i++) {
+                        v = this.displayedPictures[i];
                         if (v[0] >= 0) {
                             break;
                         }
                         v[1].draw();
-                    }*/
+                    }
                     // Draw System HUD
                     this.top.drawHUD();
                     // Display >= 0 index image command
-                    /*
                     for (; i < l; i++) {
-                        RPM.displayedPictures[i][1].draw();
-                    }*/
+                        this.displayedPictures[i][1].draw();
+                    }
                 }
             }
         }
@@ -232,4 +225,6 @@ Stack.loadingDelay = 0;
 Stack.elapsedTime = 0;
 Stack.averageElapsedTime = 0;
 Stack.lastUpdateTime = new Date().getTime();
+Stack.game = null;
+Stack.displayedPictures = [];
 export { Stack };

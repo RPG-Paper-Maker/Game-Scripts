@@ -10,7 +10,8 @@
 */
 
 import { Camera } from "../Core";
-import { Manager } from "..";
+import { Manager, EventCommand } from "..";
+import { Utils } from "../Common";
 
 /** @class
  *   Abstract class for the game stack.
@@ -22,22 +23,20 @@ import { Manager } from "..";
  *   @param {boolean} [loading=true] Indicate if the scene should load async
  *   stuff
  */
-class Base
-{
+class Base {
+    
     public camera: Camera
     public reactionInterpreters: Manager.EventReaction[];
-    public parallelCommands: number;
+    public parallelCommands: EventCommand.Base[];
     public loading: boolean;
 
     constructor(loading = true) {
-        /*
         this.reactionInterpreters = new Array;
         this.parallelCommands = new Array;
         if (loading) {
             this.loading = true;
-            RPM.tryCatch(this.load());
+            Utils.tryCatch(this.load, this);
         }
-        */
     }
 
     /** 

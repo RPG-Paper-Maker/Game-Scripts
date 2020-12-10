@@ -113,7 +113,7 @@ class PlaySong extends Base {
      *  @param {number} [start=undefined] The start of the song to play
      *  @param {number} [volume=undefined] The volume to play
      */
-    playMusic(start:number, volume: number) {
+    playMusic(start?:number, volume?: number) {
         if (Utils.isUndefined(start)) {
             start = this.start ? this.start.getValue() : null;
         }

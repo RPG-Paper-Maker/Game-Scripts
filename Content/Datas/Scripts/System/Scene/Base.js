@@ -8,6 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
+import { Utils } from "../Common/index.js";
 /** @class
  *   Abstract class for the game stack.
  *   @property {ReactionInterpreter[]} reactionInterpreters The reaction
@@ -20,14 +21,12 @@
  */
 class Base {
     constructor(loading = true) {
-        /*
         this.reactionInterpreters = new Array;
         this.parallelCommands = new Array;
         if (loading) {
             this.loading = true;
-            RPM.tryCatch(this.load());
+            Utils.tryCatch(this.load, this);
         }
-        */
     }
     /**
      *  Load async stuff.

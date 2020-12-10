@@ -12,14 +12,14 @@ import { Datas, Manager } from "./index.js";
 import { Utils } from "./Common/index.js";
 let loadedDatas = false;
 /**
- *  Initialize the game stack and datas
+ *  Initialize the game stack and datas.
  */
 function initialize() {
     Manager.Stack.loadingDelay = 0;
     Manager.Stack.clearHUD();
 }
 /**
- *  Load the game stack and datas
+ *  Load the game stack and datas.
  */
 async function load() {
     await Datas.Settings.read();
@@ -49,13 +49,12 @@ async function load() {
     await Datas.CommonEvents.read();
     await Datas.Systems.getModelHero();
     await Datas.Systems.loadWindowSkins();
-    //RPM.gameStack.pushTitleScreen();
-    //RPM.datasGame.loaded = true;
+    Manager.Stack.pushTitleScreen();
+    loadedDatas = true;
     Manager.Stack.requestPaintHUD = true;
-    console.log("ok");
 }
 /**
- *  Main loop of the game
+ *  Main loop of the game.
  */
 function loop() {
     requestAnimationFrame(loop);

@@ -17,4 +17,5 @@ export * from "./Loading";
 export * from "./Map";
 export * from "./SaveGame";
 export * from "./SaveLoadGame";
+export * from "./TitleScreen";
 export * from "./TitleSettings";

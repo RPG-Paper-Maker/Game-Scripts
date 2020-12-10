@@ -38,9 +38,9 @@ class CommonEvents {
         this.commonReactions = [];
         this.commonObjects = [];
         Utils.readJSONSystemList({ list: json.eventsSystem, listIDs: this
-                .eventsSystem, cons: System.Event });
+                .eventsSystem, cons: System.CommonEvent });
         Utils.readJSONSystemList({ list: json.eventsUser, listIDs: this
-                .eventsUser, cons: System.Event });
+                .eventsUser, cons: System.CommonEvent });
         Utils.readJSONSystemList({ list: json.commonReactors, listIDs: this
                 .commonReactions, cons: System.CommonReaction });
         // Common objects

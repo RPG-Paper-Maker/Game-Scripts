@@ -40,11 +40,13 @@ class Event extends Base {
      *  @param {Record<string, any>} json Json object describing the object event
      */
     read(json: Record<string, any>) {
-        this.isSystem = Utils.defaultValue(json.sys, true);
+        this.isSystem = json.sys;
         this.idEvent = json.id;
 
         // Parameters
-        this.parameters = System.Parameter.readParameters(json);
+        this.parameters = System.Parameter.readParametersWithDefault(json, (this
+            .isSystem ? Datas.CommonEvents.getEventSystem(this.idEvent) : Datas
+            .CommonEvents.getEventUser(this.idEvent)).parameters);
 
         // Reactions
         let jsonReactions = json.r;

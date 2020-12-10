@@ -17,6 +17,8 @@ import { Bitmap } from "../Core"
  */
 abstract class Base extends Bitmap {
 
+    public datas: Object;
+
     /** Drawing the stuff behind the window box.
      *  @param {number} x The x position to draw graphic
      *  @param {number} y The y position to draw graphic

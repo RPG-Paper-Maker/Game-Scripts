@@ -79,9 +79,9 @@ class Utils {
      *   @param {function} func The async function to apply
      *   @returns {Promise<any>}
      */
-    static async tryCatch(func) {
+    static async tryCatch(func, that) {
         try {
-            return await func();
+            return await func.call(that);
         }
         catch (e) {
             window.onerror(null, null, null, null, e);
