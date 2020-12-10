@@ -12,6 +12,7 @@
 import { Player } from "./Player";
 import { Datas } from "..";
 import { Item } from "./Item";
+import { Chrono } from "./Chrono";
 
 /** @class
 *   All the global informations of a particular game
@@ -43,6 +44,7 @@ class Game {
     public variables: any[];
     public currencies: any[];
     public items: Item[];
+    public playTime = new Chrono();
 
     constructor(slot?, json?)
     {

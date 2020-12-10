@@ -16,6 +16,8 @@ const ipc = electron.ipcRenderer;
 const ElectronScreen = remote.screen;
 const app = remote.app;
 
+let firstError = true;
+
 /** @class
  *  A class replaced according to te platform used (desktop, browser, mobile...).
  */
@@ -80,34 +82,40 @@ class Platform {
      *  @param {string} msg The error message
      */
     static showErrorMessage(msg: string) {
-        const dialog = require('electron').remote.dialog;
-        dialog.showMessageBoxSync({
-            title: 'Error',
-            type: 'error',
-            message: msg
-        });
+        if (firstError) {
+            firstError = false;
+            const dialog = require('electron').remote.dialog;
+            dialog.showMessageBoxSync({
+                title: 'Error',
+                type: 'error',
+                message: msg
+            });
+        }
     }
 }
 
 // Display error to main process
 window.onerror = function (msg, url, line, column, err) {
-    let str = url ? url + Constants.STRING_COLON + " " + line + Constants
-        .STRING_NEW_LINE : "";
-    if (err.stack != null) {
-        str += err.stack;
-    } else if (err.message != null) {
-        str += err.message;
-    }
-    const fs = require('fs');
-    fs.writeFile("log.txt", "ERROR LOG" + Constants.STRING_COLON + Constants
-        .STRING_NEW_LINE + Constants.STRING_NEW_LINE + str, (e: Error) => {
-        if (e) {
-            Platform.showError(e);
+    if (firstError) {
+        firstError = false;
+        let str = url ? url + Constants.STRING_COLON + " " + line + Constants
+            .STRING_NEW_LINE : "";
+        if (err.stack != null) {
+            str += err.stack;
+        } else if (err.message != null) {
+            str += err.message;
         }
-    });
+        const fs = require('fs');
+        fs.writeFile("log.txt", "ERROR LOG" + Constants.STRING_COLON + Constants
+            .STRING_NEW_LINE + Constants.STRING_NEW_LINE + str, (e: Error) => {
+            if (e) {
+                Platform.showError(e);
+            }
+        });
 
-    // Send it to main process to open a dialog box
-    ipc.send('window-error', str);
+        // Send it to main process to open a dialog box
+        ipc.send('window-error', str);
+    }
 }
 
 export { Platform }

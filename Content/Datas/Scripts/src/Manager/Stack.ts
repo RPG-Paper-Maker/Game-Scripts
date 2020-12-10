@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Scene } from "..";
-import { Utils, Platform, ScreenResolution } from "../Common";
+import { Scene, Manager } from "..";
+import { Utils, Platform, ScreenResolution, KeyEvent } from "../Common";
 import { Game, Picture2D } from "../Core";
 
 /** @class
@@ -144,25 +144,23 @@ class Stack {
      *  Update the stack.
      */
     static update() {
-        /*
         // Update game timer if there's a current game
         if (this.game !== null) {
+            console.log(this.game)
             this.game.playTime.update();
         }
 
         // Update songs manager
-        RPM.songsManager.update();
+        Manager.Songs.update();
 
         // Repeat keypress as long as not blocking
-        let continuePressed;
-        for (let i = 0, l = RPM.keysPressed.length; i < l; i++)
-        {
-            continuePressed = RPM.onKeyPressedRepeat(RPM.keysPressed[i]);
-            if (!continuePressed)
-            {
+        let continuePressed: boolean;
+        for (let i = 0, l = KeyEvent.keysPressed.length; i < l; i++) {
+            continuePressed = this.onKeyPressedRepeat(KeyEvent.keysPressed[i]);
+            if (!continuePressed) {
                 break;
             }
-        }*/
+        }
         this.top.update();
     }
 

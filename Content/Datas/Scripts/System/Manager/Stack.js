@@ -8,8 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Scene } from "../index.js";
-import { Utils, Platform, ScreenResolution } from "../Common/index.js";
+import { Scene, Manager } from "../index.js";
+import { Utils, Platform, ScreenResolution, KeyEvent } from "../Common/index.js";
 /** @class
  *  The game stack that is organizing the game scenes.
  *  @property {Scene.Base[]} content The stack content
@@ -115,25 +115,21 @@ class Stack {
      *  Update the stack.
      */
     static update() {
-        /*
         // Update game timer if there's a current game
         if (this.game !== null) {
+            console.log(this.game);
             this.game.playTime.update();
         }
-
         // Update songs manager
-        RPM.songsManager.update();
-
+        Manager.Songs.update();
         // Repeat keypress as long as not blocking
         let continuePressed;
-        for (let i = 0, l = RPM.keysPressed.length; i < l; i++)
-        {
-            continuePressed = RPM.onKeyPressedRepeat(RPM.keysPressed[i]);
-            if (!continuePressed)
-            {
+        for (let i = 0, l = KeyEvent.keysPressed.length; i < l; i++) {
+            continuePressed = this.onKeyPressedRepeat(KeyEvent.keysPressed[i]);
+            if (!continuePressed) {
                 break;
             }
-        }*/
+        }
         this.top.update();
     }
     /**

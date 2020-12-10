@@ -24,7 +24,7 @@ const { Howl } = require('./Content/Datas/Scripts/Libs/howler.js');
 *   @property {number[]} volumes Current volumes according to song kind
 *   @property {number[]} starts Current starts time according to song kind
 *   @property {number} ends The current ends time according to song kind
-*   @property {Howl[]} currentSong The howl current song
+*   @property {Howl[]} currentHowl The howl current song
 *   @property {ProgressionTable} progressionMusic The System progression
 *   music
 *   @property {number} progressionMusicEnd The progression music end
@@ -34,10 +34,10 @@ class Songs {
     public static musicEffectStep = 0;
     public static isProgressionMusicEnd = true;
     public static isMusicNone = true;
-    public static volumes = [];
-    public static starts = [];
-    public static ends = [];
-    public static currentSong = [];
+    public static volumes: number[] = [];
+    public static starts: number[] = [];
+    public static ends: number[] = [];
+    public static currentHowl: typeof Howl[] = [];
     public static progressionMusic = null;
     public static progressionMusicTime: number;
     public static progressionMusicEnd: number;
@@ -59,9 +59,9 @@ class Songs {
         this.ends[SongKind.Music] = null;
         this.ends[SongKind.BackgroundSound] = null;
         this.ends[SongKind.MusicEffect] = null;
-        this.currentSong[SongKind.Music] = null;
-        this.currentSong[SongKind.BackgroundSound] = null;
-        this.currentSong[SongKind.MusicEffect] = null;
+        this.currentHowl[SongKind.Music] = null;
+        this.currentHowl[SongKind.BackgroundSound] = null;
+        this.currentHowl[SongKind.MusicEffect] = null;
     }
 
     /** 
@@ -92,8 +92,8 @@ class Songs {
             case SongKind.BackgroundSound:
                 break;
         }
-        if (this.currentSong[kind] !== null) {
-            this.currentSong[kind].stop();
+        if (this.currentHowl[kind] !== null) {
+            this.currentHowl[kind].stop();
         }
         let song = Datas.Songs.get(kind, id);
         if (song) {
@@ -104,7 +104,7 @@ class Songs {
             this.volumes[kind] = volume;
             this.starts[kind] = start;
             this.ends[kind] = end;
-            this.currentSong[kind] = song;
+            this.currentHowl[kind] = howl;
         }
     }
 
@@ -123,21 +123,21 @@ class Songs {
     {
         let current = new Date().getTime();
         let ellapsedTime = current - time;
-        let currentSong = this.currentSong[kind];
-        if (currentSong === null) {
+        let currentHowl = this.currentHowl[kind];
+        if (currentHowl === null) {
             return true;
         }
         if (ellapsedTime >= (seconds * 1000)) {
-            currentSong.volume(0);
+            currentHowl.volume(0);
             if (pause) {
-                currentSong.pause();
+                currentHowl.pause();
             } else {
-                currentSong.stop();
-                this.currentSong[kind] = null;
+                currentHowl.stop();
+                this.currentHowl[kind] = null;
             }
             return true;
         } else {
-            currentSong.volume((this.volumes[kind] * (100 - ((ellapsedTime /
+            currentHowl.volume((this.volumes[kind] * (100 - ((ellapsedTime /
                 (seconds * 1000)) * 100))) / 100);
             return false;
         }
@@ -155,15 +155,15 @@ class Songs {
     static unpauseSong(kind: SongKind, time: number, seconds: number): boolean {
         let current = new Date().getTime();
         let ellapsedTime = current - time;
-        let currentSong = this.currentSong[kind];
-        if (currentSong === null) {
+        let currentHowl = this.currentHowl[kind];
+        if (currentHowl === null) {
             return true;
         }
         if (ellapsedTime >= (seconds * 1000)) {
-            currentSong.volume(this.volumes[kind]);
+            currentHowl.volume(this.volumes[kind]);
             return true;
         } else {
-            currentSong.volume(this.volumes[kind] * (ellapsedTime / (seconds * 
+            currentHowl.volume(this.volumes[kind] * (ellapsedTime / (seconds * 
                 1000)));
             return false;
         }
@@ -212,11 +212,11 @@ class Songs {
             }
         }
         if (this.musicEffectStep === 2) {
-            if (this.currentSong[SongKind.MusicEffect] === null || !this
-                .currentSong[SongKind.MusicEffect].playing()) 
+            if (this.currentHowl[SongKind.MusicEffect] === null || !this
+                .currentHowl[SongKind.MusicEffect].playing()) 
             {
-                if (this.currentSong[SongKind.Music] !== null) {
-                    this.currentSong[SongKind.Music].play();
+                if (this.currentHowl[SongKind.Music] !== null) {
+                    this.currentHowl[SongKind.Music].play();
                 }
                 currentState.timePlay = new Date().getTime();
                 this.musicEffectStep++;
@@ -237,10 +237,10 @@ class Songs {
      *  @param {SongKind} kind The song kind 
      */
     static updateByKind(kind: SongKind) {
-        let song = this.currentSong[kind];
-        if (song !== null && song.playing()) {
-            if (this.ends[kind] && song.seek() >= this.ends[kind]) {
-                song.seek(this.starts[kind]);
+        let howl = this.currentHowl[kind];
+        if (howl !== null && howl.playing()) {
+            if (this.ends[kind] && howl.seek() >= this.ends[kind]) {
+                howl.seek(this.starts[kind]);
             }
         }
     }
@@ -261,8 +261,8 @@ class Songs {
     static stopMusic(time: number) {
         this.isMusicNone = true;
         this.stopSong(SongKind.Music, time, 0, false)
-        this.initializeProgressionMusic(this.currentSong[SongKind.Music] ===  
-            null ? 0 : this.currentSong[SongKind.Music].volume(), 0, 0, time);
+        this.initializeProgressionMusic(this.currentHowl[SongKind.Music] ===  
+            null ? 0 : this.currentHowl[SongKind.Music].volume(), 0, 0, time);
     }
 
     /** 
@@ -292,14 +292,14 @@ class Songs {
                 tick = this.progressionMusicEnd;
                 this.isProgressionMusicEnd = true;
             }
-            let song = this.currentSong[SongKind.Music];
-            if (song) {
-                song.volume(this.progressionMusic.getProgressionAt(tick, this
+            let howl = this.currentHowl[SongKind.Music];
+            if (howl) {
+                howl.volume(this.progressionMusic.getProgressionAt(tick, this
                     .progressionMusicEnd) / 100);
-                if (song.volume() === 0) {
-                    song.stop();
-                } else if (!this.isMusicNone && !song.playing()) {
-                    song.play();
+                if (howl.volume() === 0) {
+                    howl.stop();
+                } else if (!this.isMusicNone && !howl.playing()) {
+                    howl.play();
                 }
             }
         }
@@ -309,17 +309,17 @@ class Songs {
      *  Stop all the songs
      */
     static stopAll() {
-        if (this.currentSong[SongKind.Music] !== null) {
-            this.currentSong[SongKind.Music].stop();
-            this.currentSong[SongKind.Music] = null;
+        if (this.currentHowl[SongKind.Music] !== null) {
+            this.currentHowl[SongKind.Music].stop();
+            this.currentHowl[SongKind.Music] = null;
         }
-        if (this.currentSong[SongKind.BackgroundSound] !== null) {
-            this.currentSong[SongKind.BackgroundSound].stop();
-            this.currentSong[SongKind.BackgroundSound] = null;
+        if (this.currentHowl[SongKind.BackgroundSound] !== null) {
+            this.currentHowl[SongKind.BackgroundSound].stop();
+            this.currentHowl[SongKind.BackgroundSound] = null;
         }
-        if (this.currentSong[SongKind.MusicEffect] !== null) {
-            this.currentSong[SongKind.MusicEffect].stop();
-            this.currentSong[SongKind.MusicEffect] = null;
+        if (this.currentHowl[SongKind.MusicEffect] !== null) {
+            this.currentHowl[SongKind.MusicEffect].stop();
+            this.currentHowl[SongKind.MusicEffect] = null;
             this.musicEffectStep = 0;
         }
     }

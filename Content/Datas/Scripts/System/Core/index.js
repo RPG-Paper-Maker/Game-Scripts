@@ -18,6 +18,7 @@ export * from "./Autotiles.js";
 export * from "./Bitmap.js";
 export * from "./Battler.js";
 export * from "./Camera.js";
+export * from "./Chrono.js";
 export * from "./CollisionSquare.js";
 export * from "./Frame.js";
 export * from "./Game.js";

@@ -19,6 +19,7 @@ export * from "./Autotiles";
 export * from "./Bitmap";
 export * from "./Battler";
 export * from "./Camera";
+export * from "./Chrono";
 export * from "./CollisionSquare";
 export * from "./Frame";
 export * from "./Game";

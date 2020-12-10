@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Datas } from "../index.js";
+import { Chrono } from "./Chrono.js";
 /** @class
 *   All the global informations of a particular game
 *   @property {number} currentSlot The current slot
@@ -33,6 +34,7 @@ import { Datas } from "../index.js";
 */
 class Game {
     constructor(slot, json) {
+        this.playTime = new Chrono();
         /*
         this.currentSlot = -1;
         this.hero = new MapObject(RPM.modelHero.system, new THREE.Vector3(RPM

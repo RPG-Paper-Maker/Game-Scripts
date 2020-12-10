@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Datas, Manager } from "./index.js";
-import { Utils } from "./Common/index.js";
+import { Utils, KeyEvent, Platform } from "./Common/index.js";
 let loadedDatas = false;
 /**
  *  Initialize the game stack and datas.
@@ -88,50 +88,39 @@ initialize();
 //
 // -------------------------------------------------------
 document.addEventListener('keydown', function (event) {
-    /*
-    if (RPM.datasGame.loaded && !RPM.gameStack.isLoading())
-    {
+    if (loadedDatas && !Manager.Stack.isLoading()) {
         let key = event.keyCode;
-
         // On pressing F12, quit game
-        if (key === KeyEvent.DOM_VK_F12)
-        {
+        if (key === KeyEvent.DOM_VK_F12) {
             Platform.quit();
         }
         // If not repeat, call simple press RPM event
-        if (!event.repeat)
-        {
-            if (RPM.keysPressed.indexOf(key) === -1)
-            {
-                RPM.keysPressed.push(key);
-                RPM.onKeyPressed(key);
+        if (!event.repeat) {
+            if (KeyEvent.keysPressed.indexOf(key) === -1) {
+                KeyEvent.keysPressed.push(key);
+                Manager.Stack.onKeyPressed(key);
                 // If is loading, that means a new scene was created, return
-                if (RPM.gameStack.isLoading())
-                {
+                if (Manager.Stack.isLoading()) {
                     return;
                 }
             }
         }
-
         // Also always call pressed and repeat RPM event
-        RPM.onKeyPressedAndRepeat(key);
-    }*/
+        Manager.Stack.onKeyPressedAndRepeat(key);
+    }
 }, false);
 // -------------------------------------------------------
 document.addEventListener('keyup', function (event) {
-    /*
-    if (RPM.datasGame.loaded && !RPM.gameStack.isLoading())
-    {
+    if (loadedDatas && !Manager.Stack.isLoading()) {
         let key = event.keyCode;
         // Remove this key from pressed keys list
-        RPM.keysPressed.splice(RPM.keysPressed.indexOf(key), 1);
-
+        KeyEvent.keysPressed.splice(KeyEvent.keysPressed.indexOf(key), 1);
         // Call release RPM event
-        RPM.onKeyReleased(key);
-    } else
-    {
-        RPM.keysPressed = [];
-    }*/
+        Manager.Stack.onKeyReleased(key);
+    }
+    else {
+        KeyEvent.keysPressed = [];
+    }
 }, false);
 // -------------------------------------------------------
 //
