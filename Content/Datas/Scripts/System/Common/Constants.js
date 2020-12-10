@@ -22,7 +22,6 @@ Constants.BASIC_SQUARE_SIZE = 32;
 Constants.SMALL_FONT_SIZE = 8;
 Constants.MEDIUM_FONT_SIZE = 10;
 Constants.SQUARE_SIZE = 32;
-Constants.BATLLER_STEPS = 9;
 Constants.SMALL_SLOT_HEIGHT = 30;
 Constants.MEDIUM_SLOT_WIDTH = 200;
 Constants.MEDIUM_SLOT_HEIGHT = 40;

@@ -8,22 +8,36 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
+import { System, Datas } from "../index.js";
+import { IO, Paths, Utils } from "../Common/index.js";
 /** @class
- *   All the animations datas
- *   @property {SystemAnimation[]} list List of all the animations of the game
- *   according to ID
+ *  All the animations datas.
+ *  @property {SystemAnimation[]} list List of all the animations of the game
+ *  according to ID
  */
 class Animations {
     constructor() {
         throw new Error("This is a static class!");
     }
-    // -------------------------------------------------------
-    /** Read the JSON file associated to troops.
+    /**
+     *  Read the JSON file associated to troops.
+     *  @static
+     *  @async
      */
-    async read() {
-        /*
-        let json = (await RPM.parseFileJSON(RPM.FILE_ANIMATIONS)).animations;
-        this.list = RPM.readJSONSystemList(json, System.Animation);*/
+    static async read() {
+        let json = (await IO.parseFileJSON(Paths.FILE_ANIMATIONS)).animations;
+        this.list = [];
+        Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System
+                .Animation });
+    }
+    /**
+     *  Get the animation by ID.
+     *  @static
+     *  @param {number} id
+     *  @returns {System.Animation}
+     */
+    static get(id) {
+        return Datas.Base.get(id, this.list, "animation");
     }
 }
 export { Animations };

@@ -8,6 +8,10 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
+export * from "./Animation.js";
+export * from "./AnimationFrame.js";
+export * from "./AnimationFrameEffect.js";
+export * from "./AnimationFrameElement.js";
 export * from "./Armor.js";
 export * from "./Base.js";
 export * from "./BattleMap.js";
@@ -32,6 +36,7 @@ export * from "./Item.js";
 export * from "./Keyboard.js";
 export * from "./Loot.js";
 export * from "./MapObject.js";
+export * from "./MapProperties.js";
 export * from "./Monster.js";
 export * from "./MonsterAction.js";
 export * from "./Mountain.js";

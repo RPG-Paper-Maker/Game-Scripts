@@ -74,6 +74,15 @@ class Tilesets {
             .PROPERTY_TEXTURES_OBJECTS_3D);
     }
     /**
+     *  Get the tileset by ID.
+     *  @static
+     *  @param {number} id
+     *  @returns {System.Tileset}
+     */
+    static get(id) {
+        return Datas.Base.get(id, this.list, "tileset");
+    }
+    /**
      *  Load pictures.
      *  @param {PictureKind} pictureKind The picture kind
      *  @param {string} texturesName The field name textures

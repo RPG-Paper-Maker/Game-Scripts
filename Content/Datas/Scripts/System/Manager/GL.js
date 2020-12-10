@@ -123,6 +123,22 @@ class GL {
     static updateBackgroundColor(color) {
         this.renderer.setClearColor(color.getHex(this.screenTone), color.alpha);
     }
+    /**
+     *  Convert 3D vector to a 2D point on screen.
+     *  @static
+     *  @param {THREE.Vector3} vector The 3D vector
+     *  @param {THREE.Camera} camera The three.js camera
+     *  @returns {THREE.Vector2}
+     */
+    static toScreenPosition(vector, camera) {
+        let widthHalf = ScreenResolution.CANVAS_WIDTH / 2;
+        let heightHalf = ScreenResolution.CANVAS_HEIGHT / 2;
+        let position = vector.clone();
+        // @ts-ignore
+        camera.updateMatrixWorld(true);
+        position.project(camera);
+        return new THREE.Vector2((position.x * widthHalf) + widthHalf, -(position.y * heightHalf) + heightHalf);
+    }
 }
 GL.textureLoader = new THREE.TextureLoader();
 export { GL };

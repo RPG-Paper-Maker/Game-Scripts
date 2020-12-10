@@ -41,6 +41,9 @@ class Tilesets {
     private static autotiles: Record<string, System.Tileset>;
     private static walls: Record<string, System.Tileset>;
     private static mountains: Record<string, System.Tileset>;
+    public static texturesCharacters: THREE.MeshStandardMaterial;
+    public static texturesBattlers: THREE.MeshStandardMaterial;
+    public static texturesObjects3D: THREE.MeshStandardMaterial;
 
     constructor() {
         throw new Error("This is a static class!");
@@ -89,6 +92,16 @@ class Tilesets {
             .PROPERTY_TEXTURES_BATTLERS);
         await this.loadPictures(PictureKind.Objects3D, Datas.Tilesets
             .PROPERTY_TEXTURES_OBJECTS_3D);
+    }
+
+    /** 
+     *  Get the tileset by ID.
+     *  @static
+     *  @param {number} id
+     *  @returns {System.Tileset}
+     */
+    static get(id: number): System.Tileset {
+        return Datas.Base.get(id, this.list, "tileset");
     }
 
     /** 

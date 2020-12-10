@@ -49,6 +49,7 @@ async function load() {
     await Datas.BattleSystems.read();
     await Datas.TitlescreenGameover.read();
     await Datas.Keyboards.read();
+    await Datas.Animations.read();
     //RPM.gameStack.pushTitleScreen();
     //RPM.datasGame.loaded = true;
     Manager.Stack.requestPaintHUD = true;

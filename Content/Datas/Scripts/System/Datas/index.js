@@ -8,6 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
+export * from "./Animations.js";
 export * from "./Armors.js";
 export * from "./Base.js";
 export * from "./BattleSystems.js";

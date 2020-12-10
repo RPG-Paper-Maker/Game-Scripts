@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+export * from "./Animations";
 export * from "./Armors";
 export * from "./Base";
 export * from "./BattleSystems";

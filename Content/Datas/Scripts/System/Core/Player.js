@@ -8,6 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
+import { Enum, Interpreter } from "../Common/index.js";
+var CharacterKind = Enum.CharacterKind;
 import { Datas } from "../index.js";
 /** @class
  *  A character in the team/hidden/reserve.
@@ -103,6 +105,18 @@ class Player {
         }
         return player;
     }
+    /**
+     *  Get the player informations System.
+     *  @returns {System.Hero}
+     */
+    getPlayerSystem() {
+        switch (this.kind) {
+            case CharacterKind.Hero:
+                return Datas.Heroes.get(this.id);
+            case CharacterKind.Monster:
+                return Datas.Monsters.get(this.id);
+        }
+    }
     // -------------------------------------------------------
     /** Get a compressed object for saving the character in a file
     *   @returns {Object}
@@ -157,15 +171,12 @@ class Player {
         return list;
         */
     }
-    // -------------------------------------------------------
-    /** Check if the character is dead
-    *   @returns {boolean}
-    */
+    /**
+     *  Check if the character is dead.
+     *  @returns {boolean}
+     */
     isDead() {
-        /*
-        return RPM.evaluateFormula(RPM.datasGame.battleSystem.formulaIsDead
-            .getValue(), this, null);
-            */
+        return Interpreter.evaluate(Datas.BattleSystems.formulaIsDead.getValue(), { user: this });
     }
     // -------------------------------------------------------
     /** Instanciate a character in a particular level
@@ -509,22 +520,6 @@ class Player {
             this.equip[i] = item;
         }
         this.updateEquipmentStats();
-        */
-    }
-    // -------------------------------------------------------
-    /** Get the character informations System
-    *   @returns {Hero}
-    */
-    getCharacterInformations() {
-        /*
-        switch (this.k)
-        {
-        case CharacterKind.Hero:
-            return RPM.datasGame.heroes.list[this.id];
-        case CharacterKind.Monster:
-            return RPM.datasGame.monsters.list[this.id];
-        }
-        return null;
         */
     }
     // -------------------------------------------------------

@@ -9,34 +9,37 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-/** @class
- *   A sprite in the map
- *   @extends MapElement
- *   @property {THREE.Vector3} [Sprite.Y_AXIS=new THREE.Vector3(0, 1, 0)] The
- *   unit Y axis vector
- *   @property {THREE.Vector3} [Sprite.X_AXIS=new THREE.Vector3(1, 0, 0)] The
- *   unit X axis vector
- *   @property {THREE.Vector3} [Sprite.Z_AXIS=new THREE.Vector3(0, 0, 1)] The
- *   unit Z axis vector
- *   @property {boolean} front Indicate if the sprite is in front (for layers)
- *   @property {ElementMapKind} kind The element map kind
- *   @property {number[]} textureRect Texture UV coords
- *   @param {Object} [json=undefined] Json object describing the sprite
- */
-
-import {Enum, MapElement} from ".";
-import * as THREE from "../Vendor/three.js";
+import { Enum, Utils, Constants } from "../Common";
 import ElementMapKind = Enum.ElementMapKind;
+import { MapElement } from "./MapElement";
+import { THREE } from "../../Libs";
+import { Position } from "./Position";
+import { Datas, Manager } from "..";
 
-export class Sprite extends MapElement {
-    static Y_AXIS = new THREE.Vector3(0, 1, 0);
-    static X_AXIS = new THREE.Vector3(1, 0, 0);
-    static Z_AXIS = new THREE.Vector3(0, 0, 1);
+/** @class
+ *  A sprite in the map.
+ *  @extends MapElement
+ *  @property {THREE.Vector3} [Sprite.Y_AXIS=new THREE.Vector3(0, 1, 0)] The
+ *  unit Y axis vector
+ *  @property {THREE.Vector3} [Sprite.X_AXIS=new THREE.Vector3(1, 0, 0)] The
+ *  unit X axis vector
+ *  @property {THREE.Vector3} [Sprite.Z_AXIS=new THREE.Vector3(0, 0, 1)] The
+ *  unit Z axis vector
+ *  @property {boolean} front Indicate if the sprite is in front (for layers)
+ *  @property {ElementMapKind} kind The element map kind
+ *  @property {number[]} textureRect Texture UV coords
+ *  @param {Record<string, any>} [json=undefined] Json object describing the sprite
+ */
+class Sprite extends MapElement {
 
-    kind: typeof ElementMapKind;
-    textureRect: number[];
+    public static Y_AXIS = new THREE.Vector3(0, 1, 0);
+    public static X_AXIS = new THREE.Vector3(1, 0, 0);
+    public static Z_AXIS = new THREE.Vector3(0, 0, 1);
 
-    constructor(json?) {
+    public kind: ElementMapKind;
+    public textureRect: number[];
+
+    constructor(json?: Record<string, any>) {
         super();
 
         this.front = true;
@@ -45,35 +48,38 @@ export class Sprite extends MapElement {
         }
     }
 
-    // -------------------------------------------------------
-    /** Create a new sprite
-     *   @static
-     *   @param {ElementMapKind} kind The element map kind
-     *   @param {number[]} texture Texture UV coords
+    /** 
+     *  Create a new sprite.
+     *  @static
+     *  @param {ElementMapKind} kind The element map kind
+     *  @param {number[]} texture Texture UV coords
      */
-    static create(kind, texture) {
+    static create(kind: ElementMapKind, texture: number[]): Sprite {
         let sprite = new Sprite();
         sprite.kind = kind;
         sprite.textureRect = texture;
         return sprite;
     }
 
-    // -------------------------------------------------------
-    /** Rotate a vertex around a specified center
-     *   @static
-     *   @param {THREE.Vector3} vec The vertex to rotate
-     *   @param {THREE.Vector3} center The center to rotate around
-     *   @param {number} angle The angle in degree
-     *   @param {THREE.Vector3} axis The vector axis
+    /** 
+     *  Rotate a vertex around a specified center.
+     *  @static
+     *  @param {THREE.Vector3} vec The vertex to rotate
+     *  @param {THREE.Vector3} center The center to rotate around
+     *  @param {number} angle The angle in degree
+     *  @param {THREE.Vector3} axis The vector axis
      */
-    static rotateVertex(vec, center, angle, axis) {
+    static rotateVertex(vec: THREE.Vector3, center: THREE.Vector3, angle: number
+        , axis: THREE.Vector3)
+    {
+        // @ts-ignore
         vec.sub(center);
         vec.applyAxisAngle(axis, angle * Math.PI / 180.0);
+        // @ts-ignore
         vec.add(center);
     }
 
-    // -------------------------------------------------------
-    /** Rotate the four vertices of a sprite around a specified center
+    /** Rotate the four vertices of a sprite around a specified center.
      *   @static
      *   @param {THREE.Vector3} vecA The A vertex to rotate
      *   @param {THREE.Vector3} vecB The B vertex to rotate
@@ -83,28 +89,34 @@ export class Sprite extends MapElement {
      *   @param {number} angle The angle in degree
      *   @param {THREE.Vector3} axis The vector axis
      */
-    static rotateSprite(vecA, vecB, vecC, vecD, center, angle, axis) {
+    static rotateSprite(vecA: THREE.Vector3, vecB: THREE.Vector3, vecC: THREE
+        .Vector3, vecD: THREE.Vector3, center: THREE.Vector3, angle: number, 
+        axis: THREE.Vector3)
+    {
         Sprite.rotateVertex(vecA, center, angle, axis);
         Sprite.rotateVertex(vecB, center, angle, axis);
         Sprite.rotateVertex(vecC, center, angle, axis);
         Sprite.rotateVertex(vecD, center, angle, axis);
     }
 
-    // -------------------------------------------------------
-    /** Add a static sprite to the geometry
-     *   @static
-     *   @param {THREE.Geometry} geometry The geometry
-     *   @param {THREE.Vector3} vecA The A vertex
-     *   @param {THREE.Vector3} vecB The B vertex
-     *   @param {THREE.Vector3} vecC The C vertex
-     *   @param {THREE.Vector3} vecD The D vertex
-     *   @param {THREE.Vector2} texFaceA The texture face A
-     *   @param {THREE.Vector2} texFaceB The texture face B
-     *   @param {number} count The faces count
-     *   @returns {number}
+    /** 
+     *  Add a static sprite to the geometry.
+     *  @static
+     *  @param {THREE.Geometry} geometry The geometry
+     *  @param {THREE.Vector3} vecA The A vertex
+     *  @param {THREE.Vector3} vecB The B vertex
+     *  @param {THREE.Vector3} vecC The C vertex
+     *  @param {THREE.Vector3} vecD The D vertex
+     *  @param {THREE.Vector2[]} texFaceA The texture face A
+     *  @param {THREE.Vector2[]} texFaceB The texture face B
+     *  @param {number} count The faces count
+     *  @returns {number}
      */
-    static addStaticSpriteToGeometry(geometry, vecA, vecB, vecC, vecD, texFaceA,
-                                     texFaceB, count) {
+    static addStaticSpriteToGeometry(geometry: THREE.Geometry, vecA: THREE
+        .Vector3, vecB: THREE.Vector3, vecC: THREE.Vector3, vecD: THREE.Vector3, 
+        texFaceA: THREE.Vector2[], texFaceB: THREE.Vector2[], count: number): 
+        number
+    {
         geometry.vertices.push(vecA);
         geometry.vertices.push(vecB);
         geometry.vertices.push(vecC);
@@ -116,54 +128,60 @@ export class Sprite extends MapElement {
         return count + 4;
     }
 
-    // -------------------------------------------------------
-    /** Read the JSON associated to the sprite
-     *   @param {Object} json Json object describing the sprite
+    /** 
+     *  Read the JSON associated to the sprite.
+     *  @param {Record<string, any>} json Json object describing the sprite
      */
-    read(json) {
+    read(json: Record<string, any>) {
         super.read(json);
 
-        this.front = RPM.defaultValue(json.f, true);
+        this.front = Utils.defaultValue(json.f, true);
         this.kind = json.k;
         this.textureRect = json.t;
     }
 
-    // -------------------------------------------------------
-    /** Update the geometry associated to this
-     *   @param {THREE.Geometry} geometry The geometry
-     *   @param {number} width The total texture width
-     *   @param {number} height The total texture height
-     *   @param {number[]} position The json position
-     *   @param {number} count The faces count
-     *   @param {boolean} tileset Indicate if the texture is tileset
-     *   @param {THREE.Vector3} localPosition The local position
-     *   @returns {any[]}
+    /** 
+     *  Update the geometry associated to this.
+     *  @param {THREE.Geometry} geometry The geometry
+     *  @param {number} width The total texture width
+     *  @param {number} height The total texture height
+     *  @param {number[]} position The position
+     *  @param {number} count The faces count
+     *  @param {boolean} tileset Indicate if the texture is tileset
+     *  @param {THREE.Vector3} localPosition The local position
+     *  @returns {any[]}
      */
-    updateGeometry(geometry, width, height, position, count, tileset,
-                   localPosition) {
+    updateGeometry(geometry: THREE.Geometry, width: number, height: number, 
+        position: Position, count: number, tileset: boolean, localPosition: 
+        THREE.Vector3): any[]
+    {
         let vecA = new THREE.Vector3(-0.5, 1.0, 0.0);
         let vecB = new THREE.Vector3(0.5, 1.0, 0.0);
         let vecC = new THREE.Vector3(0.5, 0.0, 0.0);
         let vecD = new THREE.Vector3(-0.5, 0.0, 0.0);
         let center = new THREE.Vector3(0, 0, 0);
-        let size = new THREE.Vector3(this.textureRect[2] * RPM.SQUARE_SIZE, this
-            .textureRect[3] * RPM.SQUARE_SIZE, 1.0);
+        let size = new THREE.Vector3(this.textureRect[2] * Datas.Systems
+            .SQUARE_SIZE, this.textureRect[3] * Datas.Systems.SQUARE_SIZE, 1.0);
 
         // For static sprites
         super.scale(vecA, vecB, vecC, vecD, center, position, size, this.kind);
         if (localPosition !== null) {
+            // @ts-ignore
             vecA.add(localPosition);
+            // @ts-ignore
             vecB.add(localPosition);
+            // @ts-ignore
             vecC.add(localPosition);
+            // @ts-ignore
             vecD.add(localPosition);
+            // @ts-ignore
             center.add(localPosition);
         } else {
-            localPosition = tileset ? RPM.positionToVector3(position) : new
-            THREE.Vector3();
+            localPosition = tileset ? position.toVector3() : new THREE.Vector3();
         }
-        let angleY = RPM.positionAngleY(position);
-        let angleX = RPM.positionAngleX(position);
-        let angleZ = RPM.positionAngleZ(position);
+        let angleY = position.angleY;
+        let angleX = position.angleX;
+        let angleZ = position.angleZ;
         if (this.kind !== ElementMapKind.SpritesFace) {
             if (angleY !== 0.0) {
                 Sprite.rotateSprite(vecA, vecB, vecC, vecD, center, angleY,
@@ -180,12 +198,12 @@ export class Sprite extends MapElement {
         }
 
         // Getting UV coordinates
-        let x = (this.textureRect[0] * RPM.SQUARE_SIZE) / width;
-        let y = (this.textureRect[1] * RPM.SQUARE_SIZE) / height;
-        let w = (this.textureRect[2] * RPM.SQUARE_SIZE) / width;
-        let h = (this.textureRect[3] * RPM.SQUARE_SIZE) / height;
-        let coefX = RPM.COEF_TEX / width;
-        let coefY = RPM.COEF_TEX / height;
+        let x = (this.textureRect[0] * Datas.Systems.SQUARE_SIZE) / width;
+        let y = (this.textureRect[1] * Datas.Systems.SQUARE_SIZE) / height;
+        let w = (this.textureRect[2] * Datas.Systems.SQUARE_SIZE) / width;
+        let h = (this.textureRect[3] * Datas.Systems.SQUARE_SIZE) / height;
+        let coefX = Constants.COEF_TEX / width;
+        let coefY = Constants.COEF_TEX / height;
         x += coefX;
         y += coefY;
         w -= (coefX * 2);
@@ -208,9 +226,9 @@ export class Sprite extends MapElement {
         w = Math.floor(this.textureRect[2] / 2);
         h = Math.floor(this.textureRect[3] / 2);
         if (tileset) {
-            let collisions = RPM.currentMap.mapProperties.tileset.picture
+            let collisions = Manager.Stack.currentMap.mapProperties.tileset.picture
                 .getSquaresForTexture(this.textureRect);
-            let rect;
+            let rect: number[];
             for (let i = 0, l = collisions.length; i < l; i++) {
                 rect = collisions[i];
                 objCollision.push({
@@ -218,11 +236,11 @@ export class Sprite extends MapElement {
                     l: localPosition,
                     b: [
                         (localPosition.x - (Math.floor(this.textureRect[2] / 2)
-                            * RPM.SQUARE_SIZE)) - ((this.textureRect[2] % 2) *
-                            Math.round(RPM.SQUARE_SIZE / 2)) + rect[0] + Math
-                            .round(rect[2] / 2),
-                        localPosition.y + (this.textureRect[3] * RPM.SQUARE_SIZE
-                        ) - rect[1] - Math.round(rect[3] / 2),
+                            * Datas.Systems.SQUARE_SIZE)) - ((this.textureRect[2
+                            ] % 2) * Math.round(Datas.Systems.SQUARE_SIZE / 2)) 
+                            + rect[0] + Math.round(rect[2] / 2),
+                        localPosition.y + (this.textureRect[3] * Datas.Systems
+                            .SQUARE_SIZE) - rect[1] - Math.round(rect[3] / 2),
                         localPosition.z,
                         rect[2],
                         rect[3],
@@ -290,15 +308,17 @@ export class Sprite extends MapElement {
         return [count, objCollision];
     }
 
-    // -------------------------------------------------------
-    /** Create the geometry associated to this sprite
-     *   @param {number} width The texture total width
-     *   @param {number} height The texture total height
-     *   @param {boolean} tileset Indicate if the texture is tileset
-     *   @param {number[]} position The json position
-     *   @returns {any[]}
+    /** 
+     *  Create the geometry associated to this sprite
+     *  @param {number} width The texture total width
+     *  @param {number} height The texture total height
+     *  @param {boolean} tileset Indicate if the texture is tileset
+     *  @param {Position} position The position
+     *  @returns {any[]}
      */
-    createGeometry(width, height, tileset, position) {
+    createGeometry(width: number, height: number, tileset: boolean, position: 
+        Position): any[]
+    {
         let geometry = new THREE.Geometry();
         geometry.faceVertexUvs[0] = [];
         geometry.uvsNeedUpdate = true;
@@ -306,3 +326,5 @@ export class Sprite extends MapElement {
             0, tileset, null)];
     }
 }
+
+export { Sprite }

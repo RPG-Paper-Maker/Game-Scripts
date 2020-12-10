@@ -64,6 +64,21 @@ class ProgressionTable extends Base {
     }
 
     /** 
+     *  Create a new System progression table from numbers values.
+     *  @static
+     *  @param {number} i The initial value
+     *  @param {number} f The final value
+     *  @param {number} equation The equation kind
+     *  @returns {ProgressionTable}
+     */
+    static createFromNumbers(i: number, f: number, equation: number): 
+        ProgressionTable
+    {
+        return this.create(DynamicValue.createNumber(i), DynamicValue
+            .createNumber(f), equation);
+    }
+
+    /** 
      *  Read the JSON associated to the progression table.
      *  @param {Record<string, any>} json Json object describing the progression table
      */

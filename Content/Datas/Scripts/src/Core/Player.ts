@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum } from "../Common";
+import { Enum, Interpreter } from "../Common";
 import CharacterKind = Enum.CharacterKind;
 import { Datas, System } from "..";
 
@@ -33,6 +33,7 @@ import { Datas, System } from "..";
  */
 class Player {
     
+    public id: number;
     public instid: number;
     public name: string;
     public kind: CharacterKind;
@@ -118,6 +119,19 @@ class Player {
         return player;
     }
 
+    /** 
+     *  Get the player informations System.
+     *  @returns {System.Hero}
+     */
+    getPlayerSystem(): System.Hero {
+        switch (this.kind) {
+            case CharacterKind.Hero:
+                return Datas.Heroes.get(this.id);
+            case CharacterKind.Monster:
+                return Datas.Monsters.get(this.id);
+        }
+    }
+
     // -------------------------------------------------------
     /** Get a compressed object for saving the character in a file
     *   @returns {Object}
@@ -178,16 +192,13 @@ class Player {
         */
     }
 
-    // -------------------------------------------------------
-    /** Check if the character is dead
-    *   @returns {boolean}
-    */
-    isDead()
-    {
-        /*
-        return RPM.evaluateFormula(RPM.datasGame.battleSystem.formulaIsDead
-            .getValue(), this, null);
-            */
+    /** 
+     *  Check if the character is dead.
+     *  @returns {boolean}
+     */
+    isDead(): boolean {
+        return Interpreter.evaluate(Datas.BattleSystems.formulaIsDead.getValue()
+            , { user: this });
     }
 
     // -------------------------------------------------------
@@ -547,24 +558,6 @@ class Player {
             this.equip[i] = item;
         }
         this.updateEquipmentStats();
-        */
-    }
-
-    // -------------------------------------------------------
-    /** Get the character informations System
-    *   @returns {Hero}
-    */
-    getCharacterInformations()
-    {
-        /*
-        switch (this.k)
-        {
-        case CharacterKind.Hero:
-            return RPM.datasGame.heroes.list[this.id];
-        case CharacterKind.Monster:
-            return RPM.datasGame.monsters.list[this.id];
-        }
-        return null;
         */
     }
 

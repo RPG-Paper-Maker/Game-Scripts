@@ -9,6 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+export * from "./Animation";
+export * from "./AnimationFrame";
+export * from "./AnimationFrameEffect";
+export * from "./AnimationFrameElement";
 export * from "./Armor";
 export * from "./Base";
 export * from "./BattleMap";
@@ -33,6 +37,7 @@ export * from "./Item";
 export * from "./Keyboard";
 export * from "./Loot";
 export * from "./MapObject";
+export * from "./MapProperties";
 export * from "./Monster";
 export * from "./MonsterAction";
 export * from "./Mountain";

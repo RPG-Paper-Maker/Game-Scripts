@@ -62,7 +62,7 @@ class MapObject
     public position: THREE.Vector3;
     public properties: any[];
 
-    constructor(system, position, isHero)
+    constructor(system, position?, isHero?)
     {
         /*
         this.system = system;
