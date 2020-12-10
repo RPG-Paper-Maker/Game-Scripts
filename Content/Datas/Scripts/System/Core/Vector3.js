@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { THREE } from "../../Libs/index.js";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /**
  * The data class who hold 3D coordinates.
  * @author Nio Kasgami

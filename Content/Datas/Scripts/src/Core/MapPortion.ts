@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { THREE } from "../../Libs";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Portion } from "./Portion";
 import { MapObject } from "./MapObject";
 import { Position } from "./Position";
@@ -52,9 +52,8 @@ import { System, Datas } from "..";
 *   @param {number} realY The real y portion
 *   @param {number} realZ The real z portion
 */
-class MapPortion
+class MapPortion 
 {
-    // @ts-ignore
     static BB_MATERIAL = new THREE.MeshBasicMaterial();
 
     constructor(portion: Portion)

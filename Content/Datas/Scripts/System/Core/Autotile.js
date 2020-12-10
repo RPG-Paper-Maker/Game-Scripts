@@ -11,6 +11,7 @@
 import { Enum } from "../Common/index.js";
 var PictureKind = Enum.PictureKind;
 import { Land } from "./Land.js";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Datas } from "../index.js";
 /** @class
  *  @extends Land

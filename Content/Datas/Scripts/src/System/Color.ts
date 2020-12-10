@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { THREE } from "../../Libs";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /** @class
  *  The system color class.
@@ -31,7 +31,7 @@ class Color extends Base {
     public blue: number;
     public alpha: number;
     public rgb: string;
-    public color: THREE.Color
+    public color: typeof THREE.Color
 
     constructor(json?: Record<string, any>) {
         super(json);
@@ -60,7 +60,9 @@ class Color extends Base {
      *  @param {number} aThe alpha value between 0 and 1
      *  @returns {THREE.Vector3}
      */
-    static mix(x: THREE.Vector3, y: THREE.Vector3, a: number): THREE.Vector3 {
+    static mix(x: typeof THREE.Vector3, y: typeof THREE.Vector3, a: number): 
+        typeof THREE.Vector3
+    {
         return x.clone().multiplyScalar(1 - a).add(y.clone().multiplyScalar(a));
     }
 
@@ -95,7 +97,7 @@ class Color extends Base {
      *  @param {THREE.Vector4} tone The tone value
      *  @returns {number}
      */
-    getHex(tone: THREE.Vector4): number {
+    getHex(tone: typeof THREE.Vector4): number {
         if (tone) {
             let rgb = new THREE.Vector3(Math.max(Math.min(this.color.r + tone.x,
                 1), -1), Math.max(Math.min(this.color.g + tone.y, 1), -1), Math

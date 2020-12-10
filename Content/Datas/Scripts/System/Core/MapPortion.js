@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { THREE } from "../../Libs/index.js";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { MapObject } from "./MapObject.js";
 import { Position } from "./Position.js";
 import { System, Datas } from "../index.js";
@@ -1721,6 +1721,5 @@ class MapPortion {
         */
     }
 }
-// @ts-ignore
 MapPortion.BB_MATERIAL = new THREE.MeshBasicMaterial();
 export { MapPortion };

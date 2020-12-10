@@ -8,6 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
 *   Element movable in local map
 *   @property {number} [MapObject.SPEED_NORMAL=0.004666] Normal speed coef

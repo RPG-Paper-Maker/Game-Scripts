@@ -13,6 +13,7 @@ var PictureKind = Enum.PictureKind;
 import { Datas } from "../index.js";
 import { Picture2D, CollisionSquare } from "../Core/index.js";
 import { Base } from "./Base.js";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  A picture of the game.
  *  @extends {System.Base}

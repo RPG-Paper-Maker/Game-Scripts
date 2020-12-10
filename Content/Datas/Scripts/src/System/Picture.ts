@@ -14,6 +14,7 @@ import PictureKind = Enum.PictureKind;
 import { Datas } from "..";
 import { Picture2D, CollisionSquare } from "../Core";
 import { Base } from "./Base";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /** @class
  *  A picture of the game.
@@ -188,7 +189,7 @@ class Picture extends Base {
      *  Read collisions according to image size.
      *  @param {THREE.Image} image The image texture
      */
-    readCollisionsImage(image: any) {
+    readCollisionsImage(image: typeof THREE.Image) {
         this.width = Math.floor(image.width / Datas.Systems.SQUARE_SIZE);
         this.height = Math.floor(image.height / Datas.Systems.SQUARE_SIZE);
         this.readCollisions();

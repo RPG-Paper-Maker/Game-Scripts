@@ -10,7 +10,7 @@
 */
 
 import { ScreenResolution, Enum, Mathf } from "../Common";
-import { THREE } from "../../Libs";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { System, Manager } from "..";
 import { MapObject } from "./MapObject";
 import Orientation = Enum.Orientation;
@@ -34,12 +34,12 @@ import Orientation = Enum.Orientation;
 */
 class Camera
 {
-    public perspectiveCamera: THREE.PerspectiveCamera;
-    public orthographicCamera: THREE.OrthographicCamera;
+    public perspectiveCamera: typeof THREE.PerspectiveCamera;
+    public orthographicCamera: typeof THREE.OrthographicCamera;
     public isPerspective: boolean;
     public target: MapObject;
-    public targetPosition: THREE.Vector3;
-    public targetOffset: THREE.Vector3;
+    public targetPosition: typeof THREE.Vector3;
+    public targetOffset: typeof THREE.Vector3;
     public distance: number;
     public horizontalAngle: number;
     public verticalAngle: number;
@@ -57,7 +57,6 @@ class Camera
         if (this.isPerspective) {
             this.perspectiveCamera.aspect = ScreenResolution.CANVAS_WIDTH / 
                 ScreenResolution.CANVAS_HEIGHT;
-            // @ts-ignore
             this.perspectiveCamera.updateProjectionMatrix();
         }
     }
@@ -92,7 +91,9 @@ class Camera
      *  @param {THREE.Vector3} p2 The second position
      *  @returns {number}
      */
-    getHorizontalAngle(p1: THREE.Vector3, p2: THREE.Vector3): number {
+    getHorizontalAngle(p1: typeof THREE.Vector3, p2: typeof THREE.Vector3): 
+        number
+    {
         return Math.atan2(p2.z - p1.z, p2.x - p1.x) * 180 / Math.PI;
     }
 
@@ -102,7 +103,7 @@ class Camera
      *  @param {THREE.Vector3} p2 The second position
      *  @returns {number}
      */
-    getVerticalAngle(p1: THREE.Vector3, p2: THREE.Vector3): number {
+    getVerticalAngle(p1: typeof THREE.Vector3, p2: typeof THREE.Vector3): number {
         let x = p2.x - p1.x;
         let y = p2.y - p1.y;
         let z = p2.z - p1.z;
@@ -139,8 +140,7 @@ class Camera
      *  Get the perspective or orthographic camera.
      *  @returns {THREE.Camera}
      */
-    getThreeCamera(): THREE.Camera {
-        // @ts-ignore
+    getThreeCamera(): typeof THREE.Camera {
         return this.isPerspective ? this.perspectiveCamera : this
             .orthographicCamera;
     }
@@ -151,12 +151,9 @@ class Camera
     updateCameraPosition() {
         let distance = this.getDistance();
         let camera = this.getThreeCamera();
-        // @ts-ignore
         camera.position.x = this.targetPosition.x - (distance * Math
             .cos(this.horizontalAngle * Math.PI / 180.0));
-        // @ts-ignore
         camera.position.y = this.targetPosition.y + this.getHeight();
-        // @ts-ignore
         camera.position.z = this.targetPosition.z - (distance * Math
             .sin(this.horizontalAngle * Math.PI / 180.0));
     }
@@ -167,13 +164,10 @@ class Camera
     updateTargetOffset() {
         let distance = this.getDistance();
         let camera = this.getThreeCamera();
-        // @ts-ignore
         this.targetOffset.x += camera.position.x - (distance * Math.cos((this
             .horizontalAngle + 180) * Math.PI / 180.0)) - this.targetPosition.x;
-        // @ts-ignore
         this.targetOffset.y += camera.position.y - this.getHeight() - this
             .targetPosition.y;
-        // @ts-ignore
         this.targetOffset.z += camera.position.z - (distance * Math.sin((this
             .horizontalAngle + 180) * Math.PI / 180.0)) - this.targetPosition.z;
     }
@@ -183,10 +177,8 @@ class Camera
      */
     updateAngles() {
         let camera = this.getThreeCamera();
-        // @ts-ignore
         this.horizontalAngle = this.getHorizontalAngle(camera.position, this
             .targetPosition);
-        // @ts-ignore
         this.verticalAngle = this.getVerticalAngle(camera.position, this
             .targetPosition);
     }
@@ -195,7 +187,6 @@ class Camera
      *  Update the distance.
      */
     updateDistance() {
-        // @ts-ignore
         this.distance = this.getThreeCamera().position.distanceTo(this
             .targetPosition);
     }
@@ -204,7 +195,6 @@ class Camera
      * Update the three.js camera view.
      */
     updateView() {
-        // @ts-ignore
         this.getThreeCamera().lookAt(this.targetPosition);
         Manager.Stack.currentMap.orientation = this.getMapOrientation();
     }

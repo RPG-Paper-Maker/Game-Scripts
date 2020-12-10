@@ -145,7 +145,6 @@ class Systems {
             Manager.Collisions.BB_MATERIAL.color.setHex(0xff0000);
             Manager.Collisions.BB_MATERIAL.wireframe = true;
         }
-        // @ts-ignore
         Manager.Collisions.BB_MATERIAL.visible = showBB;
 
         // Lists

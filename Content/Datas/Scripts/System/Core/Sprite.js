@@ -11,7 +11,7 @@
 import { Enum, Utils, Constants } from "../Common/index.js";
 var ElementMapKind = Enum.ElementMapKind;
 import { MapElement } from "./MapElement.js";
-import { THREE } from "../../Libs/index.js";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Datas, Manager } from "../index.js";
 /** @class
  *  A sprite in the map.
@@ -56,10 +56,8 @@ class Sprite extends MapElement {
      *  @param {THREE.Vector3} axis The vector axis
      */
     static rotateVertex(vec, center, angle, axis) {
-        // @ts-ignore
         vec.sub(center);
         vec.applyAxisAngle(axis, angle * Math.PI / 180.0);
-        // @ts-ignore
         vec.add(center);
     }
     /** Rotate the four vertices of a sprite around a specified center.
@@ -134,15 +132,10 @@ class Sprite extends MapElement {
         // For static sprites
         super.scale(vecA, vecB, vecC, vecD, center, position, size, this.kind);
         if (localPosition !== null) {
-            // @ts-ignore
             vecA.add(localPosition);
-            // @ts-ignore
             vecB.add(localPosition);
-            // @ts-ignore
             vecC.add(localPosition);
-            // @ts-ignore
             vecD.add(localPosition);
-            // @ts-ignore
             center.add(localPosition);
         }
         else {

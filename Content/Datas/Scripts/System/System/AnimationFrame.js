@@ -12,6 +12,7 @@ import { Base } from "./Base.js";
 import { AnimationFrameElement } from "./AnimationFrameElement.js";
 import { AnimationFrameEffect } from "./AnimationFrameEffect.js";
 import { Utils } from "../Common/index.js";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  An animation frame.
  *  @property {AnimationFrameElements[]} elements The frame elements by

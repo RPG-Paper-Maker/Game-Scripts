@@ -11,7 +11,7 @@
 
 import { MapElement } from "./MapElement";
 import { Utils, Constants } from "../Common";
-import { THREE } from "../../Libs";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { CollisionSquare } from "./CollisionSquare";
 import { Position } from "./Position";
 import { Datas } from "..";
@@ -71,7 +71,7 @@ class Land extends MapElement {
      *  @param {number} count The faces count
      *  @returns {StructCollision}
      */
-    updateGeometry(geometry: THREE.Geometry, collision: CollisionSquare, 
+    updateGeometry(geometry: typeof THREE.Geometry, collision: CollisionSquare, 
         position: Position, width: number, height: number, x: number, y: number, 
         w: number, h: number, count: number): StructMapElementCollision
     {

@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { THREE } from "../../Libs/index.js";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  The game stack that is organizing the game scenes.
  *  @property {Scene.Base[]} content The stack content
@@ -143,6 +143,5 @@ class Collisions {
         */
     }
 }
-// @ts-ignore
 Collisions.BB_MATERIAL = new THREE.MeshBasicMaterial();
 export { Collisions };

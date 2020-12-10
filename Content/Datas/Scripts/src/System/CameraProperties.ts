@@ -12,7 +12,7 @@
 import { Base } from "./Base";
 import { DynamicValue } from "./DynamicValue";
 import { Utils, ScreenResolution, Constants } from "../Common";
-import { THREE } from "../../Libs"
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Camera } from "../Core";
 import { Datas } from "..";
 

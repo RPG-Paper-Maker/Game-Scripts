@@ -13,7 +13,7 @@ var PictureKind = Enum.PictureKind;
 import { Base } from "./Base.js";
 import { TextureBundle, Picture2D, Autotiles } from "../Core/index.js";
 import { Datas, Manager } from "../index.js";
-import { THREE } from "../../Libs/index.js";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  A tileset of the game.
  *  @property {CollisionSquare[]} collisions List of all the collisions

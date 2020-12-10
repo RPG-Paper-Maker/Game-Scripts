@@ -11,7 +11,7 @@
 
 import { Portion } from "./Portion";
 import { Constants, Utils } from "../Common";
-import { THREE } from "../../Libs";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /** @class
  *  The data class for position.
@@ -71,7 +71,7 @@ class Position extends Portion {
      *  @param {number[]} position The json position
      *  @returns {THREE.Vector3}
      */
-    toVector3(): THREE.Vector3 {
+    toVector3(): typeof THREE.Vector3 {
         return new THREE.Vector3(
             (this.x * Constants.SQUARE_SIZE) + (this.centerX / 100 * Constants
                 .SQUARE_SIZE), 

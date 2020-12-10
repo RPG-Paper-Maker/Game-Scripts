@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { THREE } from "../../Libs";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /** @class
  *  Several textures in a single file.
@@ -24,7 +24,7 @@ import { THREE } from "../../Libs";
 class TextureBundle {
 
     public list: any[][];
-    public texture: THREE.MeshStandardMaterial;
+    public texture: typeof THREE.MeshStandardMaterial;
     public beginID: number;
     public beginPoint: number[];
     public endID: number;

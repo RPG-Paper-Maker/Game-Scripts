@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { THREE } from "../../Libs";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Datas, System } from "..";
 import { ScreenResolution, Platform, Utils, IO, Paths } from "../Common";
 import { Stack } from "./Stack";
@@ -21,9 +21,9 @@ import { Camera } from "../Core";
 class GL {
     public static SHADER_FIX_VERTEX: string;
     public static SHADER_FIX_FRAGMENT: string;
-    public static renderer: THREE.WebGLRenderer;
+    public static renderer: typeof THREE.WebGLRenderer;
     public static textureLoader = new THREE.TextureLoader();
-    public static screenTone: THREE.Vector4;
+    public static screenTone: typeof THREE.Vector4;
 
     constructor() {
         throw new Error("This is a static class");
@@ -80,10 +80,12 @@ class GL {
      *  @param {string} path The path of the texture
      *  @returns {Promise<THREE.MeshStandardMaterial>}
      */
-    static async loadTexture(path: string): Promise<THREE.MeshStandardMaterial> {
-        let texture: THREE.Texture = await (new Promise((resolve, reject) => {
+    static async loadTexture(path: string): Promise<typeof THREE
+        .MeshStandardMaterial>
+    {
+        let texture: typeof THREE.Texture = await (new Promise((resolve, reject) => {
             this.textureLoader.load(path,
-                (t: THREE.Texture) => {
+                (t: typeof THREE.Texture) => {
                     resolve(t);
                 },
                 () => {},
@@ -99,8 +101,7 @@ class GL {
      *  Load a texture empty.
      *  @returns {THREE.MeshStandardMaterial}
      */
-    static loadTextureEmpty(): THREE.MeshStandardMaterial {
-        // @ts-ignore
+    static loadTextureEmpty(): typeof THREE.MeshStandardMaterial {
         return new THREE.MeshBasicMaterial(
         {
             transparent: true,
@@ -114,8 +115,8 @@ class GL {
      *  Create a material from texture.
      *  @returns {THREE.MeshStandardMaterial}
      */
-    static createMaterial(texture: THREE.Texture, opts: { flipX?: boolean, 
-        flipY?: boolean, uniforms?: Record<string, any> } = {}): THREE
+    static createMaterial(texture: typeof THREE.Texture, opts: { flipX?: boolean
+        , flipY?: boolean, uniforms?: Record<string, any> } = {}): typeof THREE
         .MeshStandardMaterial
     {
         texture.magFilter = THREE.NearestFilter;
@@ -135,9 +136,7 @@ class GL {
             side: THREE.DoubleSide,
             transparent: false
         });
-        // @ts-ignore
         material.map = texture;
-        // @ts-ignore
         return material;
     }
 
@@ -157,13 +156,12 @@ class GL {
      *  @param {THREE.Camera} camera The three.js camera
      *  @returns {THREE.Vector2}
      */
-    static toScreenPosition(vector: THREE.Vector3, camera: THREE.Camera): THREE
-        .Vector2 
+    static toScreenPosition(vector: typeof THREE.Vector3, camera: typeof THREE
+        .Camera): typeof THREE.Vector2 
     {
         let widthHalf = ScreenResolution.CANVAS_WIDTH / 2;
         let heightHalf = ScreenResolution.CANVAS_HEIGHT / 2;
         let position = vector.clone();
-        // @ts-ignore
         camera.updateMatrixWorld(true);
         position.project(camera);
         return new THREE.Vector2((position.x * widthHalf) + widthHalf, - (

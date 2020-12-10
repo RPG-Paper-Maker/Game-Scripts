@@ -10,7 +10,7 @@
 */
 
 import { Constants } from ".";
-import { THREE } from "../../Libs";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /** @class
  * The static class for Math related function.
@@ -249,7 +249,7 @@ class Mathf {
      *   @param {THREE.Vector3} position The position
      *   @returns {number[]}
      */
-    static getPortion(position: THREE.Vector3): number[] {
+    static getPortion(position: typeof THREE.Vector3): number[] {
         return this.getPortionArray(this.getPosition(position));
     }
 
@@ -271,7 +271,7 @@ class Mathf {
      *   @param {THREE.Vector3} position The position
      *   @returns {number[]}
      */
-    static getPosition(position: THREE.Vector3): number[] {
+    static getPosition(position: typeof THREE.Vector3): number[] {
         return [
             Math.floor(position.x / Constants.SQUARE_SIZE),
             Math.floor(position.y / Constants.SQUARE_SIZE),

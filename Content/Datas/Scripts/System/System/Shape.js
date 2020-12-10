@@ -12,7 +12,7 @@ import { Enum, Constants, Paths, Utils, Platform } from "../Common/index.js";
 var CustomShapeKind = Enum.CustomShapeKind;
 import { Base } from "./Base.js";
 import { Datas } from "../index.js";
-import { THREE } from "../../Libs/index.js";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  A shape of the game.
  *  @property {number} id The shape ID
@@ -205,6 +205,5 @@ class Shape extends Base {
             .dlc) + Constants.STRING_SLASH + this.name;
     }
 }
-// @ts-ignore
 Shape.loader = new THREE.FileLoader();
 export { Shape };

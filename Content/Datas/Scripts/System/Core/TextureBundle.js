@@ -8,6 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  Several textures in a single file.
  *  @property {number[][]} list List of each offset point, default is an empty

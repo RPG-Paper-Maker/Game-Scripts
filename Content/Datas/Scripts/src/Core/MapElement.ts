@@ -11,13 +11,13 @@
 
 import { Enum, Utils } from "../Common";
 import ElementMapKind = Enum.ElementMapKind;
-import { THREE } from "../../Libs";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Position } from "./Position";
 import { Datas } from "..";
 
 interface StructMapElementCollision {
     p: Position,
-    l: THREE.Vector3,
+    l: typeof THREE.Vector3,
     b: number[],
     c: any
 }
@@ -64,9 +64,9 @@ class MapElement {
      *  @param {THREE.Vector3} size The scale size
      *  @param {ElementMapKind} kind The element map kind
      */
-    scale(vecA: THREE.Vector3, vecB: THREE.Vector3, vecC: THREE.Vector3, vecD: 
-        THREE.Vector3, center: THREE.Vector3, position: Position, size: THREE
-        .Vector3, kind: ElementMapKind)
+    scale(vecA: typeof THREE.Vector3, vecB: typeof THREE.Vector3, vecC: typeof 
+        THREE.Vector3, vecD: typeof THREE.Vector3, center: typeof THREE.Vector3, 
+        position: Position, size: typeof THREE.Vector3, kind: ElementMapKind)
     {
         let zPlus =  position.layer * 0.05;
 
@@ -85,21 +85,13 @@ class MapElement {
         let pos = center.clone();
         pos.add(offset);
         center.setY(center.y + (size.y / 2));
-        // @ts-ignore
         vecA.multiply(size);
-        // @ts-ignore
         vecB.multiply(size);
-        // @ts-ignore
         vecC.multiply(size);
-        // @ts-ignore
         vecD.multiply(size);
-        // @ts-ignore
         vecA.add(pos);
-        // @ts-ignore
         vecB.add(pos);
-        // @ts-ignore
         vecC.add(pos);
-        // @ts-ignore
         vecD.add(pos);
     }
 }

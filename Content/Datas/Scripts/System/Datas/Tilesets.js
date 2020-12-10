@@ -11,6 +11,7 @@
 import { IO, Paths, Enum } from "../Common/index.js";
 import { System, Datas, Manager } from "../index.js";
 var PictureKind = Enum.PictureKind;
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  All the tilesets datas.
  *  @property {string} [DatasTilesets.PROPERTY_TEXTURES_CHARACTERS="texturesCharacter"]

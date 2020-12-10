@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { ScreenResolution, Mathf } from "../Common/index.js";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Manager } from "../index.js";
 /** @class
 *   The camera of the current map
@@ -39,7 +40,6 @@ class Camera {
         if (this.isPerspective) {
             this.perspectiveCamera.aspect = ScreenResolution.CANVAS_WIDTH /
                 ScreenResolution.CANVAS_HEIGHT;
-            // @ts-ignore
             this.perspectiveCamera.updateProjectionMatrix();
         }
     }
@@ -115,7 +115,6 @@ class Camera {
      *  @returns {THREE.Camera}
      */
     getThreeCamera() {
-        // @ts-ignore
         return this.isPerspective ? this.perspectiveCamera : this
             .orthographicCamera;
     }
@@ -125,12 +124,9 @@ class Camera {
     updateCameraPosition() {
         let distance = this.getDistance();
         let camera = this.getThreeCamera();
-        // @ts-ignore
         camera.position.x = this.targetPosition.x - (distance * Math
             .cos(this.horizontalAngle * Math.PI / 180.0));
-        // @ts-ignore
         camera.position.y = this.targetPosition.y + this.getHeight();
-        // @ts-ignore
         camera.position.z = this.targetPosition.z - (distance * Math
             .sin(this.horizontalAngle * Math.PI / 180.0));
     }
@@ -140,13 +136,10 @@ class Camera {
     updateTargetOffset() {
         let distance = this.getDistance();
         let camera = this.getThreeCamera();
-        // @ts-ignore
         this.targetOffset.x += camera.position.x - (distance * Math.cos((this
             .horizontalAngle + 180) * Math.PI / 180.0)) - this.targetPosition.x;
-        // @ts-ignore
         this.targetOffset.y += camera.position.y - this.getHeight() - this
             .targetPosition.y;
-        // @ts-ignore
         this.targetOffset.z += camera.position.z - (distance * Math.sin((this
             .horizontalAngle + 180) * Math.PI / 180.0)) - this.targetPosition.z;
     }
@@ -155,10 +148,8 @@ class Camera {
      */
     updateAngles() {
         let camera = this.getThreeCamera();
-        // @ts-ignore
         this.horizontalAngle = this.getHorizontalAngle(camera.position, this
             .targetPosition);
-        // @ts-ignore
         this.verticalAngle = this.getVerticalAngle(camera.position, this
             .targetPosition);
     }
@@ -166,7 +157,6 @@ class Camera {
      *  Update the distance.
      */
     updateDistance() {
-        // @ts-ignore
         this.distance = this.getThreeCamera().position.distanceTo(this
             .targetPosition);
     }
@@ -174,7 +164,6 @@ class Camera {
      * Update the three.js camera view.
      */
     updateView() {
-        // @ts-ignore
         this.getThreeCamera().lookAt(this.targetPosition);
         Manager.Stack.currentMap.orientation = this.getMapOrientation();
     }

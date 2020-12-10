@@ -10,7 +10,7 @@
 */
 
 import { Player } from "./Player";
-import { THREE } from "../../Libs";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Enum, Mathf } from "../Common";
 import { Frame } from "./Frame";
 import BattlerStep = Enum.BattlerStep;
@@ -79,12 +79,12 @@ class Battler {
     public static STEPS = 9;
 
     public player: Player;
-    public position: THREE.Vector3;
-    public arrowPosition: THREE.Vector2;
-    public damagePosition: THREE.Vector2;
-    public topPosition: THREE.Vector2;
-    public midPosition: THREE.Vector2;
-    public botPosition: THREE.Vector2;
+    public position: typeof THREE.Vector3;
+    public arrowPosition: typeof THREE.Vector2;
+    public damagePosition: typeof THREE.Vector2;
+    public topPosition: typeof THREE.Vector2;
+    public midPosition: typeof THREE.Vector2;
+    public botPosition: typeof THREE.Vector2;
     public active: boolean;
     public frame: Frame;
     public frameAttacking: Frame;
@@ -106,9 +106,9 @@ class Battler {
     public progressionEnemyBack: ProgressionTable;
     public timerMove: number;
     public timeDamage: number;
-    public mesh: THREE.Mesh;
-    public upPosition: THREE.Vector3;
-    public halfPosition: THREE.Vector3;
+    public mesh: typeof THREE.Mesh;
+    public upPosition: typeof THREE.Vector3;
+    public halfPosition: typeof THREE.Vector3;
     public moving: boolean;
     public attacking: boolean;
 
@@ -175,14 +175,12 @@ class Battler {
             let geometry = sprite.createGeometry(this.width, this.height, false,
                 position)[0];
             this.mesh = new THREE.Mesh(geometry, material);
-            // @ts-ignore
             this.mesh.position.set(position.x, position.y, position.z);
             this.upPosition = new THREE.Vector3(position.x, position.y + (this
                 .height * Datas.Systems.SQUARE_SIZE), position.z);
             this.halfPosition = new THREE.Vector3(position.x, position.y + (this
                 .height * Datas.Systems.SQUARE_SIZE / 2), position.z);
             if (player.kind === CharacterKind.Monster) {
-                // @ts-ignore
                 this.mesh.scale.set(-1, 1, 1);
             }
             this.updateUVs();
@@ -331,7 +329,6 @@ class Battler {
      *  Update the selected move progress.
      */
     updateSelected() {
-        // @ts-ignore
         let newX = this.mesh.position.x;
         let progression: ProgressionTable;
         if (this.player.kind === CharacterKind.Hero) {
@@ -348,9 +345,7 @@ class Battler {
         } else {
             this.moving = false;
         }
-        // @ts-ignore
         if (this.mesh.position.x !== newX) {
-            // @ts-ignore
             this.mesh.position.setX(newX);
             this.upPosition.setX(newX);
             this.halfPosition.setX(newX);
@@ -380,7 +375,6 @@ class Battler {
      */
     updateArrow() {
         if (this.frameArrow.update()) {
-            // @ts-ignore
             this.arrowPosition = Manager.GL.toScreenPosition(this.mesh.position, 
                 Manager.Stack.currentMap.camera.getThreeCamera());
             Manager.Stack.requestPaintHUD = true;
@@ -415,7 +409,6 @@ class Battler {
             .Stack.currentMap.camera.getThreeCamera());
         this.midPosition = Manager.GL.toScreenPosition(this.halfPosition, 
             Manager.Stack.currentMap.camera.getThreeCamera());
-        // @ts-ignore
         this.botPosition = Manager.GL.toScreenPosition(this.mesh.position, 
             Manager.Stack.currentMap.camera.getThreeCamera());
     }
@@ -424,7 +417,6 @@ class Battler {
      *  Update the arrow position.
      */
     updateArrowPosition(camera: Camera) {
-        // @ts-ignore
         this.arrowPosition = Manager.GL.toScreenPosition(this.mesh.position, 
             camera.getThreeCamera());
     }
@@ -434,7 +426,6 @@ class Battler {
      */
     addToScene() {
         if (this.mesh !== null) {
-            // @ts-ignore
             Manager.Stack.currentMap.scene.add(this.mesh);
         }
     }
@@ -444,7 +435,6 @@ class Battler {
      */
     removeFromScene() {
         if (this.mesh !== null) {
-            // @ts-ignore
             Manager.Stack.currentMap.scene.remove(this.mesh);
         }
     }

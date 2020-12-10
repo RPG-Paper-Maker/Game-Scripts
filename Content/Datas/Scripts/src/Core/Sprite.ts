@@ -12,7 +12,7 @@
 import { Enum, Utils, Constants } from "../Common";
 import ElementMapKind = Enum.ElementMapKind;
 import { MapElement } from "./MapElement";
-import { THREE } from "../../Libs";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Position } from "./Position";
 import { Datas, Manager } from "..";
 
@@ -69,13 +69,11 @@ class Sprite extends MapElement {
      *  @param {number} angle The angle in degree
      *  @param {THREE.Vector3} axis The vector axis
      */
-    static rotateVertex(vec: THREE.Vector3, center: THREE.Vector3, angle: number
-        , axis: THREE.Vector3)
+    static rotateVertex(vec: typeof THREE.Vector3, center: typeof THREE.Vector3, 
+        angle: number, axis: typeof THREE.Vector3)
     {
-        // @ts-ignore
         vec.sub(center);
         vec.applyAxisAngle(axis, angle * Math.PI / 180.0);
-        // @ts-ignore
         vec.add(center);
     }
 
@@ -89,9 +87,9 @@ class Sprite extends MapElement {
      *   @param {number} angle The angle in degree
      *   @param {THREE.Vector3} axis The vector axis
      */
-    static rotateSprite(vecA: THREE.Vector3, vecB: THREE.Vector3, vecC: THREE
-        .Vector3, vecD: THREE.Vector3, center: THREE.Vector3, angle: number, 
-        axis: THREE.Vector3)
+    static rotateSprite(vecA: typeof THREE.Vector3, vecB: typeof THREE.Vector3, 
+        vecC: typeof THREE.Vector3, vecD: typeof THREE.Vector3, center: typeof 
+        THREE.Vector3, angle: number, axis: typeof THREE.Vector3)
     {
         Sprite.rotateVertex(vecA, center, angle, axis);
         Sprite.rotateVertex(vecB, center, angle, axis);
@@ -112,10 +110,10 @@ class Sprite extends MapElement {
      *  @param {number} count The faces count
      *  @returns {number}
      */
-    static addStaticSpriteToGeometry(geometry: THREE.Geometry, vecA: THREE
-        .Vector3, vecB: THREE.Vector3, vecC: THREE.Vector3, vecD: THREE.Vector3, 
-        texFaceA: THREE.Vector2[], texFaceB: THREE.Vector2[], count: number): 
-        number
+    static addStaticSpriteToGeometry(geometry: typeof THREE.Geometry, vecA: 
+        typeof THREE.Vector3, vecB: typeof THREE.Vector3, vecC: typeof THREE
+        .Vector3, vecD: typeof THREE.Vector3, texFaceA: typeof THREE.Vector2[], 
+        texFaceB: typeof THREE.Vector2[], count: number): number
     {
         geometry.vertices.push(vecA);
         geometry.vertices.push(vecB);
@@ -151,9 +149,9 @@ class Sprite extends MapElement {
      *  @param {THREE.Vector3} localPosition The local position
      *  @returns {any[]}
      */
-    updateGeometry(geometry: THREE.Geometry, width: number, height: number, 
-        position: Position, count: number, tileset: boolean, localPosition: 
-        THREE.Vector3): any[]
+    updateGeometry(geometry: typeof THREE.Geometry, width: number, height: 
+        number, position: Position, count: number, tileset: boolean, 
+        localPosition: typeof THREE.Vector3): any[]
     {
         let vecA = new THREE.Vector3(-0.5, 1.0, 0.0);
         let vecB = new THREE.Vector3(0.5, 1.0, 0.0);
@@ -166,15 +164,10 @@ class Sprite extends MapElement {
         // For static sprites
         super.scale(vecA, vecB, vecC, vecD, center, position, size, this.kind);
         if (localPosition !== null) {
-            // @ts-ignore
             vecA.add(localPosition);
-            // @ts-ignore
             vecB.add(localPosition);
-            // @ts-ignore
             vecC.add(localPosition);
-            // @ts-ignore
             vecD.add(localPosition);
-            // @ts-ignore
             center.add(localPosition);
         } else {
             localPosition = tileset ? position.toVector3() : new THREE.Vector3();

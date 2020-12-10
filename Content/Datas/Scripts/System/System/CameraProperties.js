@@ -11,7 +11,7 @@
 import { Base } from "./Base.js";
 import { DynamicValue } from "./DynamicValue.js";
 import { Utils, ScreenResolution, Constants } from "../Common/index.js";
-import { THREE } from "../../Libs/index.js";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Datas } from "../index.js";
 /** @class
  *   A camera properties of the game

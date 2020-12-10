@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { THREE } from "../../Libs";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /** @class
  *  The game stack that is organizing the game scenes.
@@ -20,7 +20,6 @@ import { THREE } from "../../Libs";
  */
 class Collisions {
 
-    // @ts-ignore
     public static BB_MATERIAL = new THREE.MeshBasicMaterial();
 
     constructor() {

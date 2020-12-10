@@ -14,7 +14,7 @@ var PictureKind = Enum.PictureKind;
 import { Base } from "./Base.js";
 import { AnimationFrame } from "./AnimationFrame.js";
 import { Datas } from "../index.js";
-import { THREE } from "../../Libs/index.js";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  An animation of a skill / item / weapon or for display animation command.
  *  @property {number} pictureID The animation picture ID

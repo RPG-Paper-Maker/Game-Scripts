@@ -14,7 +14,7 @@ import { Enum, Utils, Constants } from "../Common";
 import Orientation = Enum.Orientation;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 import { System } from "..";
-import { THREE } from "../../Libs";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /** @class
 *   A scene for a local map
@@ -60,7 +60,7 @@ class Map extends Base
     public damages: any[];
     public battleCommandKind: EffectSpecialActionKind;
     public mapProperties: System.MapProperties;
-    public scene: THREE.Scene;
+    public scene: typeof THREE.Scene;
 
     constructor(id, isBattleMap = false, minimal = false)
     {

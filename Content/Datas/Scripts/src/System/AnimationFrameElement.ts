@@ -12,7 +12,7 @@
 import { Base } from "./Base";
 import { Utils } from "../Common";
 import { Picture2D } from "../Core";
-import { THREE } from "../../Libs";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /** @class
  *  An animation frame element.
@@ -64,7 +64,9 @@ class AnimationFrameElement extends Base {
      *  @param {number} rows The number of rows in the animation texture
      *  @param {number} cols The number of columns in the animation texture
      */
-    draw(picture: Picture2D, position: THREE.Vector2, rows: number, cols: number) {
+    draw(picture: Picture2D, position: typeof THREE.Vector2, rows: number, cols:
+        number)
+    {
         picture.zoom = this.zoom;
         picture.opacity = this.opacity;
         picture.angle = this.angle;

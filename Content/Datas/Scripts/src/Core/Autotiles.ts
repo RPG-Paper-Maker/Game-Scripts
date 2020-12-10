@@ -10,7 +10,7 @@
 */
 
 import { TextureBundle } from "./TextureBundle";
-import { THREE } from "../../Libs";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Autotile } from "./Autotile";
 import { Position } from "./Position";
 
@@ -60,8 +60,8 @@ class Autotiles {
     public texture: TextureBundle;
     public width: number;
     public height: number;
-    public geometry: THREE.Geometry;
-    public mesh: THREE.Mesh;
+    public geometry: typeof THREE.Geometry;
+    public mesh: typeof THREE.Mesh;
     public index: number;
 
     constructor(texture: TextureBundle) {

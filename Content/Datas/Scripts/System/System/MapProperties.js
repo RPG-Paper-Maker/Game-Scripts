@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
-import { THREE } from "../../Libs/index.js";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Datas, Core, Manager } from "../index.js";
 import { PlaySong } from "./PlaySong.js";
 import { DynamicValue } from "./DynamicValue.js";
@@ -99,13 +99,10 @@ class MapProperties extends Base {
     updateBackgroundImage() {
         let bgMat = Manager.GL.createMaterial(Manager.GL.textureLoader.load(Datas.Pictures.get(PictureKind.Pictures, this.backgroundImageID)
             .getPath()), { flipY: true });
-        // @ts-ignore
         bgMat.depthTest = false;
-        // @ts-ignore
         bgMat.depthWrite = false;
         this.sceneBackground = new THREE.Scene();
         this.cameraBackground = new THREE.Camera();
-        // @ts-ignore
         this.sceneBackground.add(new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), bgMat));
     }
     /**
@@ -115,7 +112,6 @@ class MapProperties extends Base {
         let size = 10000 * Datas.Systems.SQUARE_SIZE / Constants
             .BASIC_SQUARE_SIZE;
         this.skyboxGeometry = new THREE.BoxGeometry(size, size, size);
-        // @ts-ignore
         Manager.Stack.currentMap.scene.add(new THREE.Mesh(this.skyboxGeometry, Datas.Systems.getSkybox(this.backgroundSkyboxID.getValue())
             .createTextures()));
     }

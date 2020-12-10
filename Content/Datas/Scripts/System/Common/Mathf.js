@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Constants } from "./index.js";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  * The static class for Math related function.
  */

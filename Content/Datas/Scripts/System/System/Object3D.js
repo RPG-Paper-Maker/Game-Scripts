@@ -14,7 +14,7 @@ var ShapeKind = Enum.ShapeKind;
 var ObjectCollisionKind = Enum.ObjectCollisionKind;
 var CustomShapeKind = Enum.CustomShapeKind;
 import { Datas } from "../index.js";
-import { THREE } from "../../Libs/index.js";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  A 3D object of the game.
  *  @extends System.SpecialElement

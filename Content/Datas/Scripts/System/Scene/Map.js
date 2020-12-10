@@ -10,6 +10,7 @@
 */
 import { Base } from "./Base.js";
 import { Utils } from "../Common/index.js";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
 *   A scene for a local map
 *   @extends SceneGame

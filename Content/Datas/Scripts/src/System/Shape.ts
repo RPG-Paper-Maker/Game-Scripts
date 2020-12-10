@@ -13,7 +13,7 @@ import { Enum, Constants, Paths, Utils, Platform } from "../Common";
 import CustomShapeKind = Enum.CustomShapeKind;
 import { Base } from "./Base";
 import { Datas } from "..";
-import { THREE } from "../../Libs";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /** @class
  *  A shape of the game.
@@ -26,8 +26,7 @@ import { THREE } from "../../Libs";
  */
 class Shape extends Base {
     
-    // @ts-ignore
-    public static loader: THREE.FileLoader = new THREE.FileLoader();
+    public static loader = new THREE.FileLoader();
     public id: number;
     public kind: CustomShapeKind;
     public name: string;
@@ -86,7 +85,7 @@ class Shape extends Base {
 		let uv_pattern = /^vt\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/;
         let face_pattern = /^f\s+((-?\d+)\/(-?\d+)\/(-?\d+))\s+((-?\d+)\/(-?\d+)\/(-?\d+))\s+((-?\d+)\/(-?\d+)\/(-?\d+))(?:\s+((-?\d+)\/(-?\d+)\/(-?\d+)))?/;
 		let lines = text.split( '\n' );
-        let arg1: string[], arg2: string[], arg3: string[], temp3D: THREE
+        let arg1: string[], arg2: string[], arg3: string[], temp3D: typeof THREE
             .Vector3, j: number, n: number, lineList: string[], line: string, 
             result: string[];
 		for (let i = 0; i < lines.length; i++) {

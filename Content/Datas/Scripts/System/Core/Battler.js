@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { THREE } from "../../Libs/index.js";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Enum, Mathf } from "../Common/index.js";
 import { Frame } from "./Frame.js";
 var BattlerStep = Enum.BattlerStep;
@@ -127,14 +127,12 @@ class Battler {
                     .width, this.height]);
             let geometry = sprite.createGeometry(this.width, this.height, false, position)[0];
             this.mesh = new THREE.Mesh(geometry, material);
-            // @ts-ignore
             this.mesh.position.set(position.x, position.y, position.z);
             this.upPosition = new THREE.Vector3(position.x, position.y + (this
                 .height * Datas.Systems.SQUARE_SIZE), position.z);
             this.halfPosition = new THREE.Vector3(position.x, position.y + (this
                 .height * Datas.Systems.SQUARE_SIZE / 2), position.z);
             if (player.kind === CharacterKind.Monster) {
-                // @ts-ignore
                 this.mesh.scale.set(-1, 1, 1);
             }
             this.updateUVs();
@@ -271,7 +269,6 @@ class Battler {
      *  Update the selected move progress.
      */
     updateSelected() {
-        // @ts-ignore
         let newX = this.mesh.position.x;
         let progression;
         if (this.player.kind === CharacterKind.Hero) {
@@ -290,9 +287,7 @@ class Battler {
         else {
             this.moving = false;
         }
-        // @ts-ignore
         if (this.mesh.position.x !== newX) {
-            // @ts-ignore
             this.mesh.position.setX(newX);
             this.upPosition.setX(newX);
             this.halfPosition.setX(newX);
@@ -321,7 +316,6 @@ class Battler {
      */
     updateArrow() {
         if (this.frameArrow.update()) {
-            // @ts-ignore
             this.arrowPosition = Manager.GL.toScreenPosition(this.mesh.position, Manager.Stack.currentMap.camera.getThreeCamera());
             Manager.Stack.requestPaintHUD = true;
         }
@@ -350,14 +344,12 @@ class Battler {
         this.topPosition = Manager.GL.toScreenPosition(this.upPosition, Manager
             .Stack.currentMap.camera.getThreeCamera());
         this.midPosition = Manager.GL.toScreenPosition(this.halfPosition, Manager.Stack.currentMap.camera.getThreeCamera());
-        // @ts-ignore
         this.botPosition = Manager.GL.toScreenPosition(this.mesh.position, Manager.Stack.currentMap.camera.getThreeCamera());
     }
     /**
      *  Update the arrow position.
      */
     updateArrowPosition(camera) {
-        // @ts-ignore
         this.arrowPosition = Manager.GL.toScreenPosition(this.mesh.position, camera.getThreeCamera());
     }
     /**
@@ -365,7 +357,6 @@ class Battler {
      */
     addToScene() {
         if (this.mesh !== null) {
-            // @ts-ignore
             Manager.Stack.currentMap.scene.add(this.mesh);
         }
     }
@@ -374,7 +365,6 @@ class Battler {
      */
     removeFromScene() {
         if (this.mesh !== null) {
-            // @ts-ignore
             Manager.Stack.currentMap.scene.remove(this.mesh);
         }
     }

@@ -17,7 +17,7 @@ import { Base } from "./Base";
 import { AnimationFrame } from "./AnimationFrame";
 import { Picture2D, Battler } from "../Core";
 import { Datas } from "..";
-import { THREE } from "../../Libs";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /** @class
  *  An animation of a skill / item / weapon or for display animation command.
@@ -85,7 +85,7 @@ class Animation extends Base {
     draw(picture: Picture2D, frame: number, battler: Battler) {
         if (frame > 0 && frame < this.frames.length) {
             // Change position according to kind
-            let position: THREE.Vector2;
+            let position: typeof THREE.Vector2;
             switch (this.positionKind) {
                 case AnimationPositionKind.Top:
                     position = battler.topPosition;

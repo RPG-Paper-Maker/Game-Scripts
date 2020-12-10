@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { THREE } from "../../Libs/index.js";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Datas } from "../index.js";
 import { ScreenResolution, Platform, Utils, IO, Paths } from "../Common/index.js";
 import { Stack } from "./Stack.js";
@@ -80,7 +80,6 @@ class GL {
      *  @returns {THREE.MeshStandardMaterial}
      */
     static loadTextureEmpty() {
-        // @ts-ignore
         return new THREE.MeshBasicMaterial({
             transparent: true,
             side: THREE.DoubleSide,
@@ -110,9 +109,7 @@ class GL {
             side: THREE.DoubleSide,
             transparent: false
         });
-        // @ts-ignore
         material.map = texture;
-        // @ts-ignore
         return material;
     }
     /**
@@ -134,7 +131,6 @@ class GL {
         let widthHalf = ScreenResolution.CANVAS_WIDTH / 2;
         let heightHalf = ScreenResolution.CANVAS_HEIGHT / 2;
         let position = vector.clone();
-        // @ts-ignore
         camera.updateMatrixWorld(true);
         position.project(camera);
         return new THREE.Vector2((position.x * widthHalf) + widthHalf, -(position.y * heightHalf) + heightHalf);

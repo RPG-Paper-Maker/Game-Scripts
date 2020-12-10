@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Enum, Utils } from "../Common/index.js";
-import { THREE } from "../../Libs/index.js";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Datas } from "../index.js";
 /** @class
  *  An element in the map.
@@ -61,21 +61,13 @@ class MapElement {
         let pos = center.clone();
         pos.add(offset);
         center.setY(center.y + (size.y / 2));
-        // @ts-ignore
         vecA.multiply(size);
-        // @ts-ignore
         vecB.multiply(size);
-        // @ts-ignore
         vecC.multiply(size);
-        // @ts-ignore
         vecD.multiply(size);
-        // @ts-ignore
         vecA.add(pos);
-        // @ts-ignore
         vecB.add(pos);
-        // @ts-ignore
         vecC.add(pos);
-        // @ts-ignore
         vecD.add(pos);
     }
 }

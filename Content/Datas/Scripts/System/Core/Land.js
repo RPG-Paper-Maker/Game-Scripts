@@ -10,7 +10,7 @@
 */
 import { MapElement } from "./MapElement.js";
 import { Utils, Constants } from "../Common/index.js";
-import { THREE } from "../../Libs/index.js";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Datas } from "../index.js";
 /** @class
  *  A land in the map.

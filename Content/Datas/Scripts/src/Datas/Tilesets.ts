@@ -12,7 +12,7 @@
 import { IO, Paths, Enum } from "../Common";
 import { System, Datas, Manager } from "..";
 import PictureKind = Enum.PictureKind;
-import { THREE } from "../../Libs";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { TextureBundle } from "../Core";
 
 /** @class
@@ -41,9 +41,9 @@ class Tilesets {
     private static autotiles: Record<string, System.Tileset>;
     private static walls: Record<string, System.Tileset>;
     private static mountains: Record<string, System.Tileset>;
-    public static texturesCharacters: THREE.MeshStandardMaterial;
-    public static texturesBattlers: THREE.MeshStandardMaterial;
-    public static texturesObjects3D: THREE.MeshStandardMaterial;
+    public static texturesCharacters: typeof THREE.MeshStandardMaterial;
+    public static texturesBattlers: typeof THREE.MeshStandardMaterial;
+    public static texturesObjects3D: typeof THREE.MeshStandardMaterial;
 
     constructor() {
         throw new Error("This is a static class!");
@@ -151,7 +151,9 @@ class Tilesets {
      *  @param {System.Tileset} tileset The tileset
      *  @returns {THREE.MeshStandardMaterial[]}
      */
-    static getTexturesWalls(tileset: System.Tileset): THREE.MeshStandardMaterial[] {
+    static getTexturesWalls(tileset: System.Tileset): typeof THREE
+        .MeshStandardMaterial[]
+    {
         return this.walls[tileset.getWallsString()].texturesWalls;
     }
 }
