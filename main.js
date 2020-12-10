@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-const { app, BrowserWindow, dialog } = require('electron')
+const { app, BrowserWindow, globalShortcut, dialog } = require('electron')
 
 let ipc = require('electron').ipcMain;
 let window;
@@ -25,7 +25,7 @@ function createWindow () {
             enableRemoteModule: true
         }
     });
-    window.webContents.openDevTools();
+    //window.webContents.openDevTools();
     ipc.on('window-error', function(event, err) {
         window.webContents.openDevTools();
         dialog.showMessageBoxSync({ title: 'Error', type: 'error', message: err });
@@ -48,7 +48,11 @@ function createWindow () {
     window.removeMenu();
 }
 
-app.whenReady().then(createWindow)
+app.whenReady().then(()=>
+globalShortcut.register('Alt+CommandOrControl+I', () => {
+    window.webContents.openDevTools();
+  })
+).then(createWindow)
 app.commandLine.appendSwitch('high-dpi-support', 'true');
 app.commandLine.appendSwitch('force-device-scale-factor', '1');
 
