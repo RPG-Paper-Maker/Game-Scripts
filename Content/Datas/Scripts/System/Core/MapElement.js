@@ -71,4 +71,5 @@ class MapElement {
         vecD.add(pos);
     }
 }
+MapElement.COEF_TEX = 0.2;
 export { MapElement };

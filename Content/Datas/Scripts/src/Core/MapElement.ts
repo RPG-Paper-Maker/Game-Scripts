@@ -16,10 +16,18 @@ import { Position } from "./Position";
 import { Datas } from "..";
 
 interface StructMapElementCollision {
-    p: Position,
-    l: typeof THREE.Vector3,
     b: number[],
-    c: any
+    p?: Position,
+    l?: typeof THREE.Vector3,
+    c?: any,
+    w?: number,
+    h?: number,
+    d?: number,
+    rw?: number,
+    rh?: number,
+    m?: number,
+    t?: MapElement,
+    k?: boolean
 }
 
 /** @class
@@ -32,10 +40,13 @@ interface StructMapElementCollision {
  *  layer
  */
 class MapElement {
-    xOffset: number;
-    yOffset: number;
-    zOffset: number;
-    front: boolean;
+
+    public static readonly COEF_TEX = 0.2;
+
+    public xOffset: number;
+    public yOffset: number;
+    public zOffset: number;
+    public front: boolean;
 
     constructor() {
         this.xOffset = 0;

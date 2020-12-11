@@ -13,6 +13,7 @@ import { TextureBundle } from "./TextureBundle";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Autotile } from "./Autotile";
 import { Position } from "./Position";
+import { StructMapElementCollision } from "./MapElement";
 
 /** @class
  *  Autotiles grouped with the same textures.
@@ -29,12 +30,13 @@ import { Position } from "./Position";
  *  @property {number} index The faces index (count)
  */
 class Autotiles {
-    static COUNT_LIST = 5;
-    static LIST_A = ["A1", "A2", "A3", "A4", "A5"];
-    static LIST_B = ["B1", "B2", "B3", "B4", "B5"];
-    static LIST_C = ["C1", "C2", "C3", "C4", "C5"];
-    static LIST_D = ["D1", "D2", "D3", "D4", "D5"];
-    static AUTOTILE_BORDER = {
+
+    public static COUNT_LIST = 5;
+    public static LIST_A = ["A1", "A2", "A3", "A4", "A5"];
+    public static LIST_B = ["B1", "B2", "B3", "B4", "B5"];
+    public static LIST_C = ["C1", "C2", "C3", "C4", "C5"];
+    public static LIST_D = ["D1", "D2", "D3", "D4", "D5"];
+    public static AUTOTILE_BORDER = {
         "A1": 2,
         "B1": 3,
         "C1": 6,
@@ -79,8 +81,11 @@ class Autotiles {
      *  position.
      *  @param {Position} position The position
      *  @param {Autotile} autotile The autotile to add to geometry
+     *  @returns {StructMapElementCollision}
      */
-    updateGeometry(position: Position, autotile: Autotile) {
+    updateGeometry(position: Position, autotile: Autotile): 
+        StructMapElementCollision
+    {
         return this.width === null || this.height === 0 ? null : autotile
             .updateGeometryAutotile(this.geometry, this.texture, position, this
             .width, this.height, this.index++);

@@ -28,7 +28,6 @@ class Constants {
     public static readonly ONE_SECOND_MILLI = 1000;
     public static readonly NUM_BOOL_TRUE = 1;
     public static readonly NUM_BOOL_FALSE = 0;
-    public static readonly COEF_TEX = 0.2;
     public static readonly CLASS_HIDDEN = "hidden";
     public static readonly STRING_RGBA = "rgba";
     public static readonly STRING_PARENTHESIS_LEFT = "(";

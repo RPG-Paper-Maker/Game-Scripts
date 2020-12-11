@@ -11,7 +11,7 @@
 
 import { Enum, Utils, Constants } from "../Common";
 import ElementMapKind = Enum.ElementMapKind;
-import { MapElement } from "./MapElement";
+import { MapElement, StructMapElementCollision } from "./MapElement";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Position } from "./Position";
 import { Datas, Manager } from "..";
@@ -151,7 +151,7 @@ class Sprite extends MapElement {
      */
     updateGeometry(geometry: typeof THREE.Geometry, width: number, height: 
         number, position: Position, count: number, tileset: boolean, 
-        localPosition: typeof THREE.Vector3): any[]
+        localPosition: typeof THREE.Vector3): [number, StructMapElementCollision[]]
     {
         let vecA = new THREE.Vector3(-0.5, 1.0, 0.0);
         let vecB = new THREE.Vector3(0.5, 1.0, 0.0);
@@ -195,8 +195,8 @@ class Sprite extends MapElement {
         let y = (this.textureRect[1] * Datas.Systems.SQUARE_SIZE) / height;
         let w = (this.textureRect[2] * Datas.Systems.SQUARE_SIZE) / width;
         let h = (this.textureRect[3] * Datas.Systems.SQUARE_SIZE) / height;
-        let coefX = Constants.COEF_TEX / width;
-        let coefY = Constants.COEF_TEX / height;
+        let coefX = MapElement.COEF_TEX / width;
+        let coefY = MapElement.COEF_TEX / height;
         x += coefX;
         y += coefY;
         w -= (coefX * 2);
@@ -215,7 +215,7 @@ class Sprite extends MapElement {
         ];
 
         // Collision
-        let objCollision = new Array;
+        let objCollision: StructMapElementCollision[] = new Array;
         w = Math.floor(this.textureRect[2] / 2);
         h = Math.floor(this.textureRect[3] / 2);
         if (tileset) {

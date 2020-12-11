@@ -38,6 +38,7 @@ class Autotiles {
      *  position.
      *  @param {Position} position The position
      *  @param {Autotile} autotile The autotile to add to geometry
+     *  @returns {StructMapElementCollision}
      */
     updateGeometry(position, autotile) {
         return this.width === null || this.height === 0 ? null : autotile

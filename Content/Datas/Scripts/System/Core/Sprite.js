@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Enum, Utils, Constants } from "../Common/index.js";
+import { Enum, Utils } from "../Common/index.js";
 var ElementMapKind = Enum.ElementMapKind;
 import { MapElement } from "./MapElement.js";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
@@ -160,8 +160,8 @@ class Sprite extends MapElement {
         let y = (this.textureRect[1] * Datas.Systems.SQUARE_SIZE) / height;
         let w = (this.textureRect[2] * Datas.Systems.SQUARE_SIZE) / width;
         let h = (this.textureRect[3] * Datas.Systems.SQUARE_SIZE) / height;
-        let coefX = Constants.COEF_TEX / width;
-        let coefY = Constants.COEF_TEX / height;
+        let coefX = MapElement.COEF_TEX / width;
+        let coefY = MapElement.COEF_TEX / height;
         x += coefX;
         y += coefY;
         w -= (coefX * 2);

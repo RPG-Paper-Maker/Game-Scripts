@@ -71,9 +71,10 @@ class Land extends MapElement {
      *  @param {number} count The faces count
      *  @returns {StructCollision}
      */
-    updateGeometry(geometry: typeof THREE.Geometry, collision: CollisionSquare, 
-        position: Position, width: number, height: number, x: number, y: number, 
-        w: number, h: number, count: number): StructMapElementCollision
+    updateGeometryLand(geometry: typeof THREE.Geometry, collision: 
+        CollisionSquare, position: Position, width: number, height: number, x: 
+        number, y: number, w: number, h: number, count: number): 
+        StructMapElementCollision
     {
         let localPosition = position.toVector3();
         let a = localPosition.x;
@@ -98,8 +99,8 @@ class Land extends MapElement {
         geometry.faces.push(new THREE.Face3(j, j + 2, j + 3));
 
         // Texture
-        let coefX = Constants.COEF_TEX / width;
-        let coefY = Constants.COEF_TEX / height;
+        let coefX = MapElement.COEF_TEX / width;
+        let coefY = MapElement.COEF_TEX / height;
         x += coefX;
         y += coefY;
         w -= (coefX * 2);

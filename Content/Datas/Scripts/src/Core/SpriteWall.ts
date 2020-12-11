@@ -9,24 +9,27 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { MapElement, StructMapElementCollision } from "./MapElement";
+import { Position } from "./Position";
+import { Datas } from "..";
+import { Enum } from "../Common";
+import PictureKind = Enum.PictureKind;
+import { Sprite } from "./Sprite";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+
 /** @class
- *   A sprite in the map
+ *   A sprite in the map.
  *   @extends MapElement
  *   @property {number} id The picture ID of the sprite
  *   @property {SpriteWallKind} kind The kind of wall (border or not)
- *   @param {Object} [json=undefined] Json object describing the wall
+ *   @param {Record<string, any>} [json=undefined] Json object describing the wall
  */
-import {MapElement, Sprite} from ".";
-import * as THREE from "../Vendor/three.js";
-import {Enum} from ".";
-import SpriteWallKind = Enum.SpriteWallKind;
-import PictureKind = Enum.PictureKind;
+class SpriteWall extends MapElement {
 
-export class SpriteWall extends MapElement {
-    id: number;
-    kind: any;
+    public id: number;
+    public kind: any;
 
-    constructor(json?) {
+    constructor(json?: Record<string, any>) {
         super();
 
         if (json) {
@@ -34,35 +37,38 @@ export class SpriteWall extends MapElement {
         }
     }
 
-    // -------------------------------------------------------
-    /** Read the JSON associated to the sprite wall
-     *   @param {Object} json Json object describing the wall
+    /** 
+     *  Read the JSON associated to the sprite wall.
+     *  @param {Record<string, any>} json Json object describing the wall
      */
-    read(json) {
+    read(json: Record<string, any>) {
         super.read(json);
 
         this.id = json.w;
         this.kind = json.k;
     }
 
-    // -------------------------------------------------------
-    /** Update the geometry of a group of sprite walls with the same material
-     *   @param {THREE.Geometry} geometry The geometry
-     *   @param {number[]} position The json position
-     *   @param {number} width The total width of the texture
-     *   @param {number} height The total height of the texture
-     *   @param {number} count The faces count
-     *   @return {any[]}
+    /** 
+     *  Update the geometry of a group of sprite walls with the same material.
+     *  @param {THREE.Geometry} geometry The geometry
+     *  @param {Position} position The position
+     *  @param {number} width The total width of the texture
+     *  @param {number} height The total height of the texture
+     *  @param {number} count The faces count
+     *  @return {any[]}
      */
-    updateGeometry(geometry, position, width, height, count) {
+    updateGeometry(geometry: typeof THREE.Geometry, position: Position, width: 
+        number, height: number, count: number): [number, 
+        StructMapElementCollision[]]
+    {
         let vecA = new THREE.Vector3(-0.5, 1.0, 0.0);
         let vecB = new THREE.Vector3(0.5, 1.0, 0.0);
         let vecC = new THREE.Vector3(0.5, 0.0, 0.0);
         let vecD = new THREE.Vector3(-0.5, 0.0, 0.0)
         let center = new THREE.Vector3();
-        let size = new THREE.Vector3(RPM.SQUARE_SIZE, height, 0);
-        let angle = RPM.positionAngleY(position);
-        let localPosition = RPM.positionToVector3(position);
+        let size = new THREE.Vector3(Datas.Systems.SQUARE_SIZE, height, 0);
+        let angle = position.angleY;
+        let localPosition = position.toVector3();
 
         // Scale
         vecA.multiply(size);
@@ -78,13 +84,14 @@ export class SpriteWall extends MapElement {
         center.add(localPosition);
 
         // Getting UV coordinates
-        let textureRect: number[] = [this.kind, 0, 1, Math.floor(height / RPM.SQUARE_SIZE)];
-        let x: number = (textureRect[0] * RPM.SQUARE_SIZE) / width;
+        let textureRect: number[] = [this.kind, 0, 1, Math.floor(height / Datas
+            .Systems.SQUARE_SIZE)];
+        let x: number = (textureRect[0] * Datas.Systems.SQUARE_SIZE) / width;
         let y = textureRect[1];
-        let w = RPM.SQUARE_SIZE / width;
+        let w = Datas.Systems.SQUARE_SIZE / width;
         let h = 1.0;
-        let coefX: number = RPM.COEF_TEX / width;
-        let coefY: number = RPM.COEF_TEX / height;
+        let coefX: number = MapElement.COEF_TEX / width;
+        let coefY: number = MapElement.COEF_TEX / height;
         x += coefX;
         y += coefY;
         w -= (coefX * 2);
@@ -103,17 +110,16 @@ export class SpriteWall extends MapElement {
         ];
 
         // Collision
-        let objCollision = [];
-        let collisions = [];
-        let wall = RPM.datasGame.specialElements.walls[this.id];
+        let objCollision: StructMapElementCollision[] = [];
+        let collisions: number[][] = [];
+        let wall = Datas.SpecialElements.getWall(this.id);
         if (wall) {
-            let picture = RPM.datasGame.pictures.get(PictureKind.Walls, wall
-                .pictureID);
+            let picture = Datas.Pictures.get(PictureKind.Walls, wall.pictureID);
             if (picture) {
                 collisions = picture.getSquaresForWall(textureRect);
             }
         }
-        let rect;
+        let rect: number[];
         for (let i = 0, l = collisions.length; i < l; i++) {
             rect = collisions[i];
             objCollision.push({
@@ -121,7 +127,7 @@ export class SpriteWall extends MapElement {
                 l: localPosition,
                 b: [
                     localPosition.x,
-                    localPosition.y + Math.floor((textureRect[3] * RPM
+                    localPosition.y + Math.floor((textureRect[3] * Datas.Systems
                         .SQUARE_SIZE - rect[1]) / 2),
                     localPosition.z,
                     rect[2],

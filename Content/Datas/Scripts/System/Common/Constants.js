@@ -30,7 +30,6 @@ Constants.MAX_PICTURE_SIZE = 4096;
 Constants.ONE_SECOND_MILLI = 1000;
 Constants.NUM_BOOL_TRUE = 1;
 Constants.NUM_BOOL_FALSE = 0;
-Constants.COEF_TEX = 0.2;
 Constants.CLASS_HIDDEN = "hidden";
 Constants.STRING_RGBA = "rgba";
 Constants.STRING_PARENTHESIS_LEFT = "(";

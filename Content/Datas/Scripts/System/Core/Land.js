@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { MapElement } from "./MapElement.js";
-import { Utils, Constants } from "../Common/index.js";
+import { Utils } from "../Common/index.js";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Datas } from "../index.js";
 /** @class
@@ -58,7 +58,7 @@ class Land extends MapElement {
      *  @param {number} count The faces count
      *  @returns {StructCollision}
      */
-    updateGeometry(geometry, collision, position, width, height, x, y, w, h, count) {
+    updateGeometryLand(geometry, collision, position, width, height, x, y, w, h, count) {
         let localPosition = position.toVector3();
         let a = localPosition.x;
         let yLayerOffset = position.layer * 0.05;
@@ -78,8 +78,8 @@ class Land extends MapElement {
         geometry.faces.push(new THREE.Face3(j, j + 1, j + 2));
         geometry.faces.push(new THREE.Face3(j, j + 2, j + 3));
         // Texture
-        let coefX = Constants.COEF_TEX / width;
-        let coefY = Constants.COEF_TEX / height;
+        let coefX = MapElement.COEF_TEX / width;
+        let coefY = MapElement.COEF_TEX / height;
         x += coefX;
         y += coefY;
         w -= (coefX * 2);
