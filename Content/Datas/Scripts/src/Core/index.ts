@@ -32,6 +32,8 @@ export * from "./MapPortion";
 export * from "./Mountain";
 export * from "./Mountains";
 export * from "./Node";
+export * from "./Object3DBox";
+export * from "./Object3DCustom";
 export * from "./Picture2D";
 export * from "./Player";
 export * from "./Portion";
