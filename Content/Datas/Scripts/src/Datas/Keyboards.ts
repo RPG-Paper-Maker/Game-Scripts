@@ -23,7 +23,8 @@ class Keyboards {
 
     private static list: System.Keyboard[];
     public static listOrdered: System.Keyboard[];
-    public static menuControls: Record<string, any>;
+    public static menuControls: Record<string, any> = {};
+    public static controls: Record<string, any> = {};
 
     constructor() {
         throw new Error("This is a static class!");
@@ -78,11 +79,10 @@ class Keyboards {
             }
             this.list[id] = key;
             this.listOrdered[i] = key;
-            this[abbreviation] = key;
+            this.controls[abbreviation] = key;
         }
 
         // Menu controls
-        this.menuControls = {};
         this.menuControls["Action"] = this.list[json["a"]];
         this.menuControls["Cancel"] = this.list[json["c"]];
         this.menuControls["Up"] = this.list[json["u"]];

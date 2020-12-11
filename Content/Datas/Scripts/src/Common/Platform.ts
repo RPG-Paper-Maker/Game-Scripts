@@ -90,6 +90,7 @@ class Platform {
                 type: 'error',
                 message: msg
             });
+            throw new Error(msg);
         }
     }
 }
@@ -115,6 +116,7 @@ window.onerror = function (msg, url, line, column, err) {
 
         // Send it to main process to open a dialog box
         ipc.send('window-error', str);
+        throw err;
     }
 }
 

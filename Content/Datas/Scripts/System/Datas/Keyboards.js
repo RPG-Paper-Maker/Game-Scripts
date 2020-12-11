@@ -68,10 +68,9 @@ class Keyboards {
             }
             this.list[id] = key;
             this.listOrdered[i] = key;
-            this[abbreviation] = key;
+            this.controls[abbreviation] = key;
         }
         // Menu controls
-        this.menuControls = {};
         this.menuControls["Action"] = this.list[json["a"]];
         this.menuControls["Cancel"] = this.list[json["c"]];
         this.menuControls["Up"] = this.list[json["u"]];
@@ -115,4 +114,6 @@ class Keyboards {
         return list;
     }
 }
+Keyboards.menuControls = {};
+Keyboards.controls = {};
 export { Keyboards };

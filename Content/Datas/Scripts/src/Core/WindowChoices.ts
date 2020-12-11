@@ -348,7 +348,7 @@ class WindowChoices extends Bitmap
      *  @param {number} key The key ID pressed
      *  @param {Object} base The base object to apply with callback
      */
-    onKeyPressed(key: number, base: Object)
+    onKeyPressed(key: number, base?: Object)
     {
         if (this.currentSelectedIndex !== -1) {
             if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls

@@ -9,107 +9,93 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
+import { Datas, Graphic, Manager } from "../index.js";
+import { Picture2D, WindowBox, WindowChoices } from "../Core/index.js";
+import { Enum, Constants, ScreenResolution } from "../Common/index.js";
+var PictureKind = Enum.PictureKind;
+var Align = Enum.Align;
 /** @class
-*   A scene for the title screen settings
-*   @extends SceneGame
-*   @property {Picture2D} pictureBackground The title screen background picture
-*   @property {WindowBox} windowSettings The window box for displaying settings
-*   @property {WindoBox} windowInformations The window box for displaying
-*   informations
-*   @property {WindowChoices} windowChoicesMain The main window choices
-*/
+ *  A scene for the title screen settings.
+ *  @extends SceneGame
+ *  @property {Picture2D} pictureBackground The title screen background picture
+ *  @property {WindowBox} windowSettings The window box for displaying settings
+ *  @property {WindoBox} windowInformations The window box for displaying
+ *  informations
+ *  @property {WindowChoices} windowChoicesMain The main window choices
+ */
 class TitleSettings extends Base {
     constructor() {
         super();
     }
-    // -------------------------------------------------------
-    /** Load async stuff
-    */
+    /**
+     *  Load async stuff.
+     */
     async load() {
-        /*
         // Creating background
-        if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage)
-        {
-            this.pictureBackground = await Picture2D.createWithID(RPM.datasGame
-                .titlescreenGameover.titleBackgroundImageID, PictureKind
+        if (Datas.TitlescreenGameover.isTitleBackgroundImage) {
+            this.pictureBackground = await Picture2D.createWithID(Datas
+                .TitlescreenGameover.titleBackgroundImageID, PictureKind
                 .TitleScreen);
             this.pictureBackground.cover = true;
         }
-
         // Creating windows
-        this.windowSettings = new WindowBox(RPM.HUGE_SPACE, RPM.HUGE_SPACE, RPM
-            .MEDIUM_SLOT_WIDTH, RPM.LARGE_SLOT_HEIGHT,
-            {
-                content: new GraphicText("SETTINGS", { align: Align.Center }),
-                padding: RPM.SMALL_SLOT_PADDING
-            }
-        );
-        this.windowInformations = new WindowBox(RPM.HUGE_SPACE + RPM
-            .MEDIUM_SLOT_WIDTH + RPM.LARGE_SPACE, RPM.HUGE_SPACE, RPM.SCREEN_X -
-            (2 * RPM.HUGE_SPACE) - RPM.MEDIUM_SLOT_WIDTH - RPM.LARGE_SPACE, RPM
-            .LARGE_SLOT_HEIGHT,
-            {
-                padding: RPM.SMALL_SLOT_PADDING
-            }
-        );
-        this.windowChoicesMain = new WindowChoices(RPM.HUGE_SPACE, RPM
-            .HUGE_SPACE + RPM.LARGE_SLOT_HEIGHT + RPM.LARGE_SPACE, RPM.SCREEN_X
-            - (2 * RPM.HUGE_SPACE), RPM.MEDIUM_SLOT_HEIGHT, RPM.datasGame
-            .titlescreenGameover.getSettingsCommandsContent(),
-            {
-                nbItemsMax: 9,
-                listCallbacks: RPM.datasGame.titlescreenGameover
-                    .getSettingsCommandsActions(),
-                bordersInsideVisible: false
-            }
-        );
+        this.windowSettings = new WindowBox(Constants.HUGE_SPACE, Constants
+            .HUGE_SPACE, Constants.MEDIUM_SLOT_WIDTH, Constants
+            .LARGE_SLOT_HEIGHT, {
+            content: new Graphic.Text("SETTINGS", { align: Align.Center }),
+            padding: Constants.SMALL_SLOT_PADDING
+        });
+        this.windowInformations = new WindowBox(Constants.HUGE_SPACE + Constants
+            .MEDIUM_SLOT_WIDTH + Constants.LARGE_SPACE, Constants.HUGE_SPACE, ScreenResolution.SCREEN_X - (2 * Constants.HUGE_SPACE) - Constants
+            .MEDIUM_SLOT_WIDTH - Constants.LARGE_SPACE, Constants
+            .LARGE_SLOT_HEIGHT, {
+            padding: Constants.SMALL_SLOT_PADDING
+        });
+        this.windowChoicesMain = new WindowChoices(Constants.HUGE_SPACE, Constants.HUGE_SPACE + Constants.LARGE_SLOT_HEIGHT + Constants
+            .LARGE_SPACE, ScreenResolution.SCREEN_X - (2 * Constants.HUGE_SPACE), Constants.MEDIUM_SLOT_HEIGHT, Datas.TitlescreenGameover
+            .getSettingsCommandsContent(), {
+            nbItemsMax: 9,
+            listCallbacks: Datas.TitlescreenGameover
+                .getSettingsCommandsActions(),
+            bordersInsideVisible: false
+        });
         this.windowInformations.content = this.windowChoicesMain
             .getCurrentContent();
         this.loading = false;
-        */
     }
-    // -------------------------------------------------------
-    /** Handle scene key pressed
-    *   @param {number} key The key ID
-    */
+    /**
+     *  Handle scene key pressed.
+     *  @param {number} key The key ID
+     */
     onKeyPressed(key) {
-        /*
         this.windowChoicesMain.onKeyPressed(key);
-        if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
-            .Cancel) || DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard
-            .MainMenu))
-        {
-            RPM.datasGame.system.soundCancel.playSound();
-            RPM.gameStack.pop();
+        if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Cancel)
+            || Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.controls.MainMenu)) {
+            Datas.Systems.soundCancel.playSound();
+            Manager.Stack.pop();
         }
-        */
     }
-    // -------------------------------------------------------
-    /** Handle scene pressed and repeat key
-    *   @param {number} key The key ID
-    *   @returns {boolean}
-    */
+    /**
+     *  Handle scene pressed and repeat key.
+     *  @param {number} key The key ID
+     *  @returns {boolean}
+     */
     onKeyPressedAndRepeat(key) {
-        /*
         this.windowChoicesMain.onKeyPressedAndRepeat(key);
         this.windowInformations.content = this.windowChoicesMain
             .getCurrentContent();
-            */
         return true;
     }
-    // -------------------------------------------------------
-    /** Draw the HUD scene
-    */
+    /**
+     *  Draw the HUD scene.
+     */
     drawHUD() {
-        /*
-        if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage)
-        {
+        if (Datas.TitlescreenGameover.isTitleBackgroundImage) {
             this.pictureBackground.draw();
         }
         this.windowSettings.draw();
         this.windowInformations.draw();
         this.windowChoicesMain.draw();
-        */
     }
 }
 export { TitleSettings };

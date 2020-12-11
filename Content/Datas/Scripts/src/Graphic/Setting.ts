@@ -10,71 +10,62 @@
 */
 
 import { Base } from "./Base";
+import { Enum } from "../Common";
+import TitleSettingKind = Enum.TitleSettingKind;
+import Align = Enum.Align;
+import { Graphic } from "..";
 
 /** @class
-*   A class for all settings to display in screen
-*    @property {GraphicText} graphicRight The graphic text on the right
-*    @property {GraphicText} graphicTextLeft The graphic text on the left
-*    @property {GraphicText} graphicTextInformation The graphic text information
-*/
+ *  A class for all settings to display in screen.
+ *  @property {GraphicText} graphicRight The graphic text on the right
+ *  @property {GraphicText} graphicTextLeft The graphic text on the left
+ *  @property {GraphicText} graphicTextInformation The graphic text information
+ *  @param {number} id 
+ */
 class Setting extends Base {
 
-    constructor(id)
-    {
+    public graphicRight: Graphic.Text;
+    public graphicTextLeft: Graphic.Text;
+    public graphicTextInformation: Graphic.Text;
+
+    constructor(id: number) {
         super();
-        /*
-        let textLeft,textInformation;
-        switch (id)
-        {
-        case TitleSettingKind.KeyboardAssigment:
-            textLeft = "Keyboard assignement";
-            textInformation = "Update keyboard assignement preferences.";
-            this.graphicRight = new GraphicText("...", { align: Align.Center });
-            break;
+
+        let textLeft: string,textInformation: string;
+        switch (id) {
+            case TitleSettingKind.KeyboardAssigment:
+                textLeft = "Keyboard assignement";
+                textInformation = "Update keyboard assignement preferences.";
+                this.graphicRight = new Graphic.Text("...", { align: Align
+                    .Center });
+                break;
         }
-        this.graphicTextLeft = new GraphicText(textLeft);
-        this.graphicTextInformation = new GraphicText(textInformation, { align:
+        this.graphicTextLeft = new Graphic.Text(textLeft);
+        this.graphicTextInformation = new Graphic.Text(textInformation, { align:
             Align.Center });
-            */
     }
     
-    // -------------------------------------------------------
-    /** Drawing the choice
-    *   @param {number} x The x position to draw graphic
-    *   @param {number} y The y position to draw graphic
-    *   @param {number} w The width dimention to draw graphic
-    *   @param {number} h The height dimention to draw graphic
+    /** 
+     *  Drawing the choice.
+     *  @param {number} x The x position to draw graphic
+     *  @param {number} y The y position to draw graphic
+     *  @param {number} w The width dimention to draw graphic
+     *  @param {number} h The height dimention to draw graphic
     */
-    drawChoice(x, y, w, h)
-    {
-        /*
+    drawChoice(x: number, y: number, w: number, h: number) {
         this.graphicTextLeft.draw(x, y, w, h);
         this.graphicRight.draw(x + (w / 2), y, w / 2, h);
-        */
     }
 
-    // -------------------------------------------------------
-    /** Drawing the settings informations
-    *   @param {number} x The x position to draw graphic
-    *   @param {number} y The y position to draw graphic
-    *   @param {number} w The width dimention to draw graphic
-    *   @param {number} h The height dimention to draw graphic
+    /** 
+     *  Drawing the settings informations.
+     *  @param {number} x The x position to draw graphic
+     *  @param {number} y The y position to draw graphic
+     *  @param {number} w The width dimention to draw graphic
+     *  @param {number} h The height dimention to draw graphic
     */
-    drawBox(x, y, w, h)
-    {
-        //this.graphicTextInformation.draw(x, y, w, h);
-    }
-
-    // -------------------------------------------------------
-    /** Drawing the settings informations
-    *   @param {number} x The x position to draw graphic
-    *   @param {number} y The y position to draw graphic
-    *   @param {number} w The width dimention to draw graphic
-    *   @param {number} h The height dimention to draw graphic
-    */
-    draw(x, y, w, h)
-    {
-        this.drawChoice(x, y, w, h);
+    draw(x: number, y: number, w: number, h: number) {
+        this.graphicTextInformation.draw(x, y, w, h);
     }
 }
 
