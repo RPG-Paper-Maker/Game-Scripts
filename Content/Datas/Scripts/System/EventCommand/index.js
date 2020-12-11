@@ -10,9 +10,11 @@
 */
 export * from "./Base.js";
 export * from "./CallACommonReaction.js";
+export * from "./Choice.js";
 export * from "./Comment.js";
 export * from "./DisplayChoice.js";
 export * from "./Label.js";
 export * from "./ModifyTeam.js";
 export * from "./SetDialogBoxOptions.js";
 export * from "./ShowText.js";
+export * from "./While.js";

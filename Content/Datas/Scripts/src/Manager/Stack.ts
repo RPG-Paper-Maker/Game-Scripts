@@ -35,6 +35,7 @@ class Stack {
     public static game: Game = null;
     public static currentMap: Scene.Map;
     public static displayedPictures: any[][] = [];
+    public static isInMainMenu: boolean = false;
 
     constructor() {
         throw new Error("This is a static class");

@@ -27,7 +27,7 @@ class Base {
     
     public camera: Camera
     public reactionInterpreters: Manager.EventReaction[];
-    public parallelCommands: EventCommand.Base[];
+    public parallelCommands: Manager.EventReaction[];
     public loading: boolean;
 
     constructor(loading = true) {

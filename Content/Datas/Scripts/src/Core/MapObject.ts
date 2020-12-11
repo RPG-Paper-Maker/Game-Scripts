@@ -64,6 +64,7 @@ class MapObject
     public properties: any[];
     public system: System.MapObject;
     public isHero: boolean;
+    public movingState: Record<string, any>;
 
     constructor(system, position?, isHero = false)
     {

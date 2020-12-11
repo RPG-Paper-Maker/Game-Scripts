@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { Tree, Node } from "../Core";
-import { Manager, EventCommand } from "..";
+import { Manager, EventCommand, System } from "..";
 
 /** @class
  *   A reaction to an event.
@@ -24,7 +24,7 @@ import { Manager, EventCommand } from "..";
  */
 class Reaction extends Base {
 
-    public labels: any[][];
+    public labels: [System.DynamicValue, Node][];
     public idEvent: number;
     public blockingHero: boolean;
     public commands: Tree;

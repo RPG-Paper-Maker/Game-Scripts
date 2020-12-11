@@ -222,4 +222,5 @@ Stack.averageElapsedTime = 0;
 Stack.lastUpdateTime = new Date().getTime();
 Stack.game = null;
 Stack.displayedPictures = [];
+Stack.isInMainMenu = false;
 export { Stack };

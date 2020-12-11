@@ -11,9 +11,11 @@
 
 export * from "./Base";
 export * from "./CallACommonReaction";
+export * from "./Choice";
 export * from "./Comment";
 export * from "./DisplayChoice";
 export * from "./Label";
 export * from "./ModifyTeam";
 export * from "./SetDialogBoxOptions";
 export * from "./ShowText";
+export * from "./While";
