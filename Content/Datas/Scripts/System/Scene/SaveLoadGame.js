@@ -10,7 +10,7 @@
 */
 import { Base } from "./Base.js";
 import { WindowBox, WindowChoices, Game } from "../Core/index.js";
-import { ScreenResolution, Constants } from "../Common/index.js";
+import { ScreenResolution } from "../Common/index.js";
 import { Graphic, Datas, Manager } from "../index.js";
 /** @class
  *  Abstract class for the game save and loading menus.
@@ -43,12 +43,12 @@ class SaveLoadGame extends Base {
         // Initialize windows
         this.windowTop = new WindowBox(20, 20, ScreenResolution.SCREEN_X - 40, 30);
         this.windowInformations = new WindowBox(120, 100, 500, 300, {
-            padding: Constants.MEDIUM_PADDING_BOX
+            padding: WindowBox.MEDIUM_PADDING_BOX
         });
         this.windowChoicesSlots = new WindowChoices(10, 100, 100, 50, this
             .gamesDatas, {
             nbItemsMax: 4,
-            padding: Constants.NONE_PADDING
+            padding: WindowBox.NONE_PADDING
         });
         this.windowBot = new WindowBox(20, ScreenResolution.SCREEN_Y - 50, ScreenResolution.SCREEN_X - 40, 30);
         this.updateInformations(this.windowChoicesSlots.currentSelectedIndex);

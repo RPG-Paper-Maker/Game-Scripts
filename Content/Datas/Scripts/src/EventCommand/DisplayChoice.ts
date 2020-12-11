@@ -10,9 +10,9 @@
 */
 
 import { Base } from "./Base";
-import { System, Graphic, Datas, EventCommand } from "..";
-import { Constants, ScreenResolution, Enum } from "../Common";
-import { WindowChoices, MapObject } from "../Core";
+import { System, Graphic, Datas } from "..";
+import { ScreenResolution, Enum } from "../Common";
+import { WindowChoices, MapObject, WindowBox } from "../Core";
 import Align = Enum.Align;
 import { ShowText } from "./ShowText";
 
@@ -64,7 +64,7 @@ class DisplayChoice extends Base {
         // Determine slots width
         l = this.choices.length;
         let graphics = new Array(l);
-        let w = Constants.MEDIUM_SLOT_WIDTH;
+        let w = WindowBox.MEDIUM_SLOT_WIDTH;
         let graphic: Graphic.Text;
         for (let i = 0; i < l; i++) {
             graphic = new Graphic.Text(this.choices[i], { align: Align.Center });
@@ -73,12 +73,12 @@ class DisplayChoice extends Base {
                 w = graphic.textWidth;
             }
         }
-        w += Constants.SMALL_SLOT_PADDING[0] + Constants.SMALL_SLOT_PADDING[2];
+        w += WindowBox.SMALL_SLOT_PADDING[0] + WindowBox.SMALL_SLOT_PADDING[2];
 
         // Window
         this.windowChoices = new WindowChoices((ScreenResolution.SCREEN_X - w) / 
-            2, ScreenResolution.SCREEN_Y - 10 - 150 - (l * Constants
-            .MEDIUM_SLOT_HEIGHT), w, Constants.MEDIUM_SLOT_HEIGHT, graphics, 
+            2, ScreenResolution.SCREEN_Y - 10 - 150 - (l * WindowBox
+            .MEDIUM_SLOT_HEIGHT), w, WindowBox.MEDIUM_SLOT_HEIGHT, graphics, 
             {
                 nbItemsMax: l
             }

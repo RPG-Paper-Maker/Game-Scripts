@@ -10,7 +10,7 @@
 */
 import { Base } from "./Base.js";
 import { Manager, Datas } from "../index.js";
-import { Picture2D, WindowChoices } from "../Core/index.js";
+import { Picture2D, WindowChoices, WindowBox } from "../Core/index.js";
 import { Enum, Platform, ScreenResolution, Constants } from "../Common/index.js";
 var PictureKind = Enum.PictureKind;
 /** @class
@@ -48,8 +48,8 @@ class TitleScreen extends Base {
         // Windows
         let commandsNb = Datas.TitlescreenGameover.titleCommands.length;
         this.windowChoicesCommands = new WindowChoices(ScreenResolution.SCREEN_X
-            / 2 - (Constants.MEDIUM_SLOT_WIDTH / 2), ScreenResolution.SCREEN_Y -
-            Constants.HUGE_SPACE - (commandsNb * Constants.MEDIUM_SLOT_HEIGHT), Constants.MEDIUM_SLOT_WIDTH, Constants.MEDIUM_SLOT_HEIGHT, Datas
+            / 2 - (WindowBox.MEDIUM_SLOT_WIDTH / 2), ScreenResolution.SCREEN_Y -
+            Constants.HUGE_SPACE - (commandsNb * WindowBox.MEDIUM_SLOT_HEIGHT), WindowBox.MEDIUM_SLOT_WIDTH, WindowBox.MEDIUM_SLOT_HEIGHT, Datas
             .TitlescreenGameover.getCommandsNames(), {
             nbItemsMax: commandsNb,
             listCallbacks: Datas.TitlescreenGameover.getCommandsActions(),

@@ -10,7 +10,7 @@
 */
 
 import { Bitmap } from "./Bitmap";
-import { Enum, Constants } from "../Common";
+import { Enum } from "../Common";
 import OrientationWindow = Enum.OrientationWindow;
 import { Graphic, Manager, Datas } from "..";
 import { WindowBox } from "./WindowBox";
@@ -84,7 +84,7 @@ class WindowChoices extends Bitmap
 
     constructor (x: number, y: number, w: number, h: number, listContents, { 
         listCallbacks = null, orientation = OrientationWindow.Vertical, 
-        nbItemsMax = listContents.length, padding = Constants.SMALL_SLOT_PADDING
+        nbItemsMax = listContents.length, padding = WindowBox.SMALL_SLOT_PADDING
         , space = 0, currentSelectedIndex = 0, bordersInsideVisible = true }: { 
         listCallbacks?: Function[], orientation?: OrientationWindow, nbItemsMax?
         : number, padding?: number[], space?: number, currentSelectedIndex?: 

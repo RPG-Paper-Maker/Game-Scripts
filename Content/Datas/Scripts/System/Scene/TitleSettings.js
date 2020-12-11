@@ -40,19 +40,19 @@ class TitleSettings extends Base {
         }
         // Creating windows
         this.windowSettings = new WindowBox(Constants.HUGE_SPACE, Constants
-            .HUGE_SPACE, Constants.MEDIUM_SLOT_WIDTH, Constants
+            .HUGE_SPACE, WindowBox.MEDIUM_SLOT_WIDTH, WindowBox
             .LARGE_SLOT_HEIGHT, {
             content: new Graphic.Text("SETTINGS", { align: Align.Center }),
-            padding: Constants.SMALL_SLOT_PADDING
+            padding: WindowBox.SMALL_SLOT_PADDING
         });
-        this.windowInformations = new WindowBox(Constants.HUGE_SPACE + Constants
-            .MEDIUM_SLOT_WIDTH + Constants.LARGE_SPACE, Constants.HUGE_SPACE, ScreenResolution.SCREEN_X - (2 * Constants.HUGE_SPACE) - Constants
-            .MEDIUM_SLOT_WIDTH - Constants.LARGE_SPACE, Constants
+        this.windowInformations = new WindowBox(Constants.HUGE_SPACE + WindowBox
+            .MEDIUM_SLOT_WIDTH + Constants.LARGE_SPACE, Constants.HUGE_SPACE, ScreenResolution.SCREEN_X - (2 * Constants.HUGE_SPACE) - WindowBox
+            .MEDIUM_SLOT_WIDTH - Constants.LARGE_SPACE, WindowBox
             .LARGE_SLOT_HEIGHT, {
-            padding: Constants.SMALL_SLOT_PADDING
+            padding: WindowBox.SMALL_SLOT_PADDING
         });
-        this.windowChoicesMain = new WindowChoices(Constants.HUGE_SPACE, Constants.HUGE_SPACE + Constants.LARGE_SLOT_HEIGHT + Constants
-            .LARGE_SPACE, ScreenResolution.SCREEN_X - (2 * Constants.HUGE_SPACE), Constants.MEDIUM_SLOT_HEIGHT, Datas.TitlescreenGameover
+        this.windowChoicesMain = new WindowChoices(Constants.HUGE_SPACE, Constants.HUGE_SPACE + WindowBox.LARGE_SLOT_HEIGHT + Constants
+            .LARGE_SPACE, ScreenResolution.SCREEN_X - (2 * Constants.HUGE_SPACE), WindowBox.MEDIUM_SLOT_HEIGHT, Datas.TitlescreenGameover
             .getSettingsCommandsContent(), {
             nbItemsMax: 9,
             listCallbacks: Datas.TitlescreenGameover

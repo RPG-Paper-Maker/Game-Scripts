@@ -10,8 +10,8 @@
 */
 import { Base } from "./Base.js";
 import { System, Graphic, Datas } from "../index.js";
-import { Constants, ScreenResolution, Enum } from "../Common/index.js";
-import { WindowChoices } from "../Core/index.js";
+import { ScreenResolution, Enum } from "../Common/index.js";
+import { WindowChoices, WindowBox } from "../Core/index.js";
 var Align = Enum.Align;
 /** @class
 *   An event command for displaying a choice
@@ -52,7 +52,7 @@ class DisplayChoice extends Base {
         // Determine slots width
         l = this.choices.length;
         let graphics = new Array(l);
-        let w = Constants.MEDIUM_SLOT_WIDTH;
+        let w = WindowBox.MEDIUM_SLOT_WIDTH;
         let graphic;
         for (let i = 0; i < l; i++) {
             graphic = new Graphic.Text(this.choices[i], { align: Align.Center });
@@ -61,11 +61,11 @@ class DisplayChoice extends Base {
                 w = graphic.textWidth;
             }
         }
-        w += Constants.SMALL_SLOT_PADDING[0] + Constants.SMALL_SLOT_PADDING[2];
+        w += WindowBox.SMALL_SLOT_PADDING[0] + WindowBox.SMALL_SLOT_PADDING[2];
         // Window
         this.windowChoices = new WindowChoices((ScreenResolution.SCREEN_X - w) /
-            2, ScreenResolution.SCREEN_Y - 10 - 150 - (l * Constants
-            .MEDIUM_SLOT_HEIGHT), w, Constants.MEDIUM_SLOT_HEIGHT, graphics, {
+            2, ScreenResolution.SCREEN_Y - 10 - 150 - (l * WindowBox
+            .MEDIUM_SLOT_HEIGHT), w, WindowBox.MEDIUM_SLOT_HEIGHT, graphics, {
             nbItemsMax: l
         });
     }

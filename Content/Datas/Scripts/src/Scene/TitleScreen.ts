@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { Manager, Datas } from "..";
-import { Picture2D, WindowChoices } from "../Core";
+import { Picture2D, WindowChoices, WindowBox } from "../Core";
 import { Enum, Platform, ScreenResolution, Constants } from "../Common";
 import PictureKind = Enum.PictureKind;
 
@@ -58,9 +58,9 @@ class TitleScreen extends Base {
         // Windows
         let commandsNb = Datas.TitlescreenGameover.titleCommands.length;
         this.windowChoicesCommands = new WindowChoices(ScreenResolution.SCREEN_X
-            / 2 - (Constants.MEDIUM_SLOT_WIDTH / 2), ScreenResolution.SCREEN_Y -
-            Constants.HUGE_SPACE - (commandsNb * Constants.MEDIUM_SLOT_HEIGHT), 
-            Constants.MEDIUM_SLOT_WIDTH, Constants.MEDIUM_SLOT_HEIGHT, Datas
+            / 2 - (WindowBox.MEDIUM_SLOT_WIDTH / 2), ScreenResolution.SCREEN_Y -
+            Constants.HUGE_SPACE - (commandsNb * WindowBox.MEDIUM_SLOT_HEIGHT), 
+            WindowBox.MEDIUM_SLOT_WIDTH, WindowBox.MEDIUM_SLOT_HEIGHT, Datas
             .TitlescreenGameover.getCommandsNames(),
             {
                 nbItemsMax: commandsNb,

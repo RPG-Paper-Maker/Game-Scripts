@@ -12,7 +12,7 @@
 import { Base } from "./Base";
 import { System, Graphic, Datas, Manager } from "..";
 import { WindowBox, MapObject } from "../Core";
-import { Utils, Constants, Enum } from "../Common";
+import { Utils, Enum } from "../Common";
 import Align = Enum.Align;
 
 /** @class
@@ -47,16 +47,16 @@ class ShowText extends Base {
         this.windowMain = new WindowBox(0, 0, 0, 0,
             {
                 content: new Graphic.Message(this.message, this.facesetID),
-                padding: Constants.HUGE_PADDING_BOX
+                padding: WindowBox.HUGE_PADDING_BOX
             }
         );
-        this.windowInterlocutor = new WindowBox(this.windowMain.oX + (Constants
-            .MEDIUM_SLOT_HEIGHT / 2), this.windowMain.oY - (Constants
-            .MEDIUM_SLOT_HEIGHT / 2), Constants.MEDIUM_SLOT_WIDTH, Constants
+        this.windowInterlocutor = new WindowBox(this.windowMain.oX + (WindowBox
+            .MEDIUM_SLOT_HEIGHT / 2), this.windowMain.oY - (WindowBox
+            .MEDIUM_SLOT_HEIGHT / 2), WindowBox.MEDIUM_SLOT_WIDTH, WindowBox
             .MEDIUM_SLOT_HEIGHT,
             {
                 content: new Graphic.Text("", { align: Align.Center }),
-                padding: Constants.SMALL_SLOT_PADDING
+                padding: WindowBox.SMALL_SLOT_PADDING
             }
         );
         this.isDirectNode = false;
@@ -71,9 +71,9 @@ class ShowText extends Base {
         this.windowMain.setY(Utils.defaultValue(Datas.Systems.dbOptions.v_y, 0));
         this.windowMain.setW(Utils.defaultValue(Datas.Systems.dbOptions.v_w, 0));
         this.windowMain.setH(Utils.defaultValue(Datas.Systems.dbOptions.v_h, 0));
-        this.windowInterlocutor.setX(this.windowMain.oX + (Constants
+        this.windowInterlocutor.setX(this.windowMain.oX + (WindowBox
             .MEDIUM_SLOT_HEIGHT / 2));
-        this.windowInterlocutor.setY(this.windowMain.oY - (Constants
+        this.windowInterlocutor.setY(this.windowMain.oY - (WindowBox
             .MEDIUM_SLOT_HEIGHT / 2));
         this.windowMain.padding[0] = Utils.defaultValue(Datas.Systems.dbOptions
             .v_pLeft, 0);

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Bitmap } from "./Bitmap.js";
-import { Enum, Constants } from "../Common/index.js";
+import { Enum } from "../Common/index.js";
 var OrientationWindow = Enum.OrientationWindow;
 import { Manager, Datas } from "../index.js";
 import { WindowBox } from "./WindowBox.js";
@@ -61,7 +61,7 @@ import { WindowBox } from "./WindowBox.js";
  *  will have an individual window box
  */
 class WindowChoices extends Bitmap {
-    constructor(x, y, w, h, listContents, { listCallbacks = null, orientation = OrientationWindow.Vertical, nbItemsMax = listContents.length, padding = Constants.SMALL_SLOT_PADDING, space = 0, currentSelectedIndex = 0, bordersInsideVisible = true } = {}) {
+    constructor(x, y, w, h, listContents, { listCallbacks = null, orientation = OrientationWindow.Vertical, nbItemsMax = listContents.length, padding = WindowBox.SMALL_SLOT_PADDING, space = 0, currentSelectedIndex = 0, bordersInsideVisible = true } = {}) {
         super(x, y, w, h);
         // Parameters
         this.orientation = orientation;

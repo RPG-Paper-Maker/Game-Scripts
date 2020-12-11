@@ -53,20 +53,20 @@ class KeyboardAssign extends Base {
         }
         // Creating windows
         this.windowKeyboard = new WindowBox(Constants.HUGE_SPACE, Constants
-            .HUGE_SPACE, Constants.MEDIUM_SLOT_WIDTH, Constants
+            .HUGE_SPACE, WindowBox.MEDIUM_SLOT_WIDTH, WindowBox
             .LARGE_SLOT_HEIGHT, {
             content: new Graphic.Text("KEYBOARD", { align: Align.Center }),
-            padding: Constants.SMALL_SLOT_PADDING
+            padding: WindowBox.SMALL_SLOT_PADDING
         });
-        this.windowInformations = new WindowBox(Constants.HUGE_SPACE + Constants
-            .MEDIUM_SLOT_WIDTH + Constants.LARGE_SPACE, Constants.HUGE_SPACE, ScreenResolution.SCREEN_X - (2 * Constants.HUGE_SPACE) - Constants
-            .MEDIUM_SLOT_WIDTH - Constants.LARGE_SPACE, Constants
+        this.windowInformations = new WindowBox(Constants.HUGE_SPACE + WindowBox
+            .MEDIUM_SLOT_WIDTH + Constants.LARGE_SPACE, Constants.HUGE_SPACE, ScreenResolution.SCREEN_X - (2 * Constants.HUGE_SPACE) - WindowBox
+            .MEDIUM_SLOT_WIDTH - Constants.LARGE_SPACE, WindowBox
             .LARGE_SLOT_HEIGHT, {
             content: new Graphic.Text("Select a keyboard shortcut to edit.", { align: Align.Center }),
-            padding: Constants.SMALL_SLOT_PADDING
+            padding: WindowBox.SMALL_SLOT_PADDING
         });
-        this.windowChoicesMain = new WindowChoices(Constants.HUGE_SPACE, Constants.HUGE_SPACE + Constants.LARGE_SLOT_HEIGHT + Constants
-            .LARGE_SPACE, ScreenResolution.SCREEN_X - (2 * Constants.HUGE_SPACE), Constants.MEDIUM_SLOT_HEIGHT, Datas.Keyboards.getCommandsGraphics(), {
+        this.windowChoicesMain = new WindowChoices(Constants.HUGE_SPACE, Constants.HUGE_SPACE + WindowBox.LARGE_SLOT_HEIGHT + Constants
+            .LARGE_SPACE, ScreenResolution.SCREEN_X - (2 * Constants.HUGE_SPACE), WindowBox.MEDIUM_SLOT_HEIGHT, Datas.Keyboards.getCommandsGraphics(), {
             nbItemsMax: 9,
             listCallbacks: Datas.Keyboards.getCommandsActions(),
             bordersInsideVisible: false
@@ -75,7 +75,7 @@ class KeyboardAssign extends Base {
             .SCREEN_Y / 2) - (Scene.KeyboardAssign.WINDOW_PRESS_HEIGHT / 2), Scene.KeyboardAssign.WINDOW_PRESS_WIDTH, Scene.KeyboardAssign
             .WINDOW_PRESS_HEIGHT, {
             content: this.windowChoicesMain.getCurrentContent(),
-            padding: Constants.DIALOG_PADDING_BOX
+            padding: WindowBox.DIALOG_PADDING_BOX
         });
         // Initialize
         this.showPress = false;

@@ -43,6 +43,19 @@ import { Platform, ScreenResolution } from "../Common";
  *  cut according to padding
  */
 class WindowBox extends Bitmap {
+
+    public static readonly NONE_PADDING = [0, 0, 0, 0];
+    public static readonly VERY_SMALL_PADDING_BOX = [5, 5, 5, 5];
+    public static readonly SMALL_PADDING_BOX = [10, 10, 10, 10];
+    public static readonly MEDIUM_PADDING_BOX = [20, 20, 20, 20];
+    public static readonly HUGE_PADDING_BOX = [30, 30, 30, 30];
+    public static readonly DIALOG_PADDING_BOX = [30, 50, 30, 50];
+    public static readonly SMALL_SLOT_PADDING = [10, 5, 10, 5];
+    public static readonly SMALL_SLOT_HEIGHT = 30;
+    public static readonly MEDIUM_SLOT_WIDTH = 200;
+    public static readonly MEDIUM_SLOT_HEIGHT = 40;
+    public static readonly LARGE_SLOT_HEIGHT = 60;
+
     public content: Graphic.Base;
     public padding: number[];
     public limitContent: boolean;
