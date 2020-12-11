@@ -10,94 +10,88 @@
 */
 
 import { SaveLoadGame } from "./SaveLoadGame";
+import { Graphic, Datas, Manager, Scene } from "..";
+import { Enum, Constants, Platform } from "../Common";
+import Align = Enum.Align;
+import PictureKind = Enum.PictureKind;
+import { Picture2D } from "../Core";
 
 /** @class
-*   @extends SceneSaveLoadGame
-*   A scene in the menu for loading a game
-*   @property {Picture2D} pictureBackground The title screen background picture
-*/
-class LoadGame extends SaveLoadGame
-{
+ *  @extends SceneSaveLoadGame
+ *  A scene in the menu for loading a game
+ *  @property {Picture2D} pictureBackground The title screen background picture
+ */
+class LoadGame extends SaveLoadGame {
+
+    public pictureBackground: Picture2D;
+
     constructor()
     {
         super();
     }
 
-    // -------------------------------------------------------
-    /** Load async stuff
-    */
-    async load()
-    {
-        /*
+    /** 
+     *  Load async stuff.
+     */
+    async load() {
         await super.load();
 
-        this.setContents(new GraphicText("Load a game", { align: Align.Center })
-            , new GraphicText("Select a slot you want to load.", { align: Align
-            .Center }));
-        if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage)
-        {
-            this.pictureBackground = await Picture2D.createWithID(RPM.datasGame
-                .titlescreenGameover.titleBackgroundImageID, PictureKind
+        this.setContents(new Graphic.Text("Load a game", { align: Align.Center }
+            ), new Graphic.Text("Select a slot you want to load.", { align: 
+            Align.Center }));
+        if (Datas.TitlescreenGameover.isTitleBackgroundImage) {
+            this.pictureBackground = await Picture2D.createWithID(Datas
+                .TitlescreenGameover.titleBackgroundImageID, PictureKind
                 .TitleScreen);
             this.pictureBackground.cover = true;
         }
+
         this.loading = false;
-        */
     }
 
-    // -------------------------------------------------------
-    /** Handle scene key pressed
-    *   @param {number} key The key ID
-    */
-    onKeyPressed(key)
-    {
-        /*
+    /** 
+     *  Handle scene key pressed
+     *  @param {number} key The key ID
+     */
+    onKeyPressed(key: number) {
         super.onKeyPressed(key);
 
         // If action, load the selected slot
-        if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
-            .Action))
-        {
-            RPM.game = this.windowChoicesSlots.getCurrentContent().game;
-            if (RPM.game.isNull)
-            {
-                RPM.game = null;
-                RPM.datasGame.system.soundImpossible.playSound();
-            } else
-            {
-                RPM.datasGame.system.soundConfirmation.playSound();
+        if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Action)) {
+            Manager.Stack.game = (<Graphic.Save> this.windowChoicesSlots
+                .getCurrentContent()).game;
+            if (Manager.Stack.game.isEmpty) {
+                Manager.Stack.game = null;
+                Datas.Systems.soundImpossible.playSound();
+            } else {
+                Datas.Systems.soundConfirmation.playSound();
 
                 // Initialize properties for hero
-                RPM.game.hero.initializeProperties();
+                Manager.Stack.game.hero.initializeProperties();
 
                 // Stop video if existing
-                if (!RPM.datasGame.titlescreenGameover.isTitleBackgroundVideo)
-                {
-                    Platform.canvasVideos.classList.add("hidden");
+                if (!Datas.TitlescreenGameover.isTitleBackgroundImage) {
+                    Platform.canvasVideos.classList.add(Constants.CLASS_HIDDEN);
                     Platform.canvasVideos.pause();
-                    Platform.canvasVideos.src = RPM.STRING_EMPTY;
+                    Platform.canvasVideos.src = "";
                 }
 
                 // Pop load and title screen from the stack
-                RPM.gameStack.pop();
-                RPM.gameStack.replace(new SceneMap(RPM.game.currentMapID));
+                Manager.Stack.pop();
+                Manager.Stack.replace(new Scene.Map(Manager.Stack.game
+                    .currentMapID));
             }
         }
-        */
     }
 
-    // -------------------------------------------------------
-    /** Draw the HUD scene
-    */
-    drawHUD()
-    {
-        /*
-        if (RPM.datasGame.titlescreenGameover.isTitleBackgroundImage)
-        {
+    /** 
+     *  Draw the HUD scene
+     */
+    drawHUD() {
+        if (Datas.TitlescreenGameover.isTitleBackgroundImage) {
             this.pictureBackground.draw();
         }
         super.drawHUD();
-        */
     }
 }
 

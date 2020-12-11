@@ -116,15 +116,15 @@ export class Bitmap {
 
     /** Set the position to the right
      */
-    setRight(offset: number) {
-        this.setX(ScreenResolution.SCREEN_X - this.oW - (offset ? offset : 0));
+    setRight(offset: number = 0) {
+        this.setX(ScreenResolution.SCREEN_X - this.oW - offset);
     }
 
     // -------------------------------------------------------
     /** Set the position to the bot
      */
-    setBot(offset: number) {
-        this.setY(ScreenResolution.SCREEN_Y - this.oH - (offset ? offset : 0));
+    setBot(offset: number = 0) {
+        this.setY(ScreenResolution.SCREEN_Y - this.oH - offset);
     }
 
     // -------------------------------------------------------

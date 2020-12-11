@@ -11,5 +11,7 @@
 export * from "./Base.js";
 export * from "./Keyboard.js";
 export * from "./Message.js";
+export * from "./Player.js";
+export * from "./Save.js";
 export * from "./Setting.js";
 export * from "./Text.js";

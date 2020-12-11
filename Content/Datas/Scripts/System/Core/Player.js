@@ -109,7 +109,7 @@ class Player {
      *  Get the player informations System.
      *  @returns {System.Hero}
      */
-    getPlayerSystem() {
+    getSystem() {
         switch (this.kind) {
             case CharacterKind.Hero:
                 return Datas.Heroes.get(this.id);
@@ -472,12 +472,13 @@ class Player {
         this.updateEquipmentStats();
         */
     }
-    // -------------------------------------------------------
-    /** Get the bar abbreviation
-    *   @param {SystemStatistic} stat The statistic
-    */
+    /**
+     *  Get the bar abbreviation
+     *   @param {SystemStatistic} stat The statistic
+     *   @returns {string}
+     */
     getBarAbbreviation(stat) {
-        //return this[stat.abbreviation] + " / " + this[stat.getMaxAbbreviation()];
+        return this[stat.abbreviation] + " / " + this[stat.getMaxAbbreviation()];
     }
     // -------------------------------------------------------
     /** Read the JSON associated to the character and items

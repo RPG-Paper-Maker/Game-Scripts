@@ -32,7 +32,6 @@ export * from "./Picture2D.js";
 export * from "./Player.js";
 export * from "./Portion.js";
 export * from "./Position.js";
-export * from "./Rectangle.js";
 export * from "./Sprite.js";
 export * from "./TextureBundle.js";
 export * from "./Tree.js";

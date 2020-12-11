@@ -19,7 +19,6 @@ class Constants {
     public static readonly BASIC_SQUARE_SIZE = 32;
     public static readonly SMALL_FONT_SIZE = 8;
     public static readonly MEDIUM_FONT_SIZE = 10;
-    public static readonly SQUARE_SIZE = 32;
     public static readonly SMALL_SLOT_HEIGHT = 30;
     public static readonly MEDIUM_SLOT_WIDTH = 200;
     public static readonly MEDIUM_SLOT_HEIGHT = 40;

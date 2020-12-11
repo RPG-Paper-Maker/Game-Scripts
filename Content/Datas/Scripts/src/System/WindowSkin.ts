@@ -10,7 +10,7 @@
 */
 
 import { System, Datas } from "..";
-import { Rectangle, Picture2D } from "../Core";
+import { Picture2D } from "../Core";
 import { Enum, Utils, ScreenResolution } from "../Common";
 import PictureKind = Enum.PictureKind;
 

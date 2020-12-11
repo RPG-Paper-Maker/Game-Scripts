@@ -106,7 +106,6 @@ class TitlescreenGameover {
      */
     static getSettingsCommandsContent(): Graphic.Setting[] {
         let l = this.titleSettings.length;
-        console.log(this.titleSettings)
         let list = new Array(l);
         for (let i = 0; i < l; i++) {
             list[i] = new Graphic.Setting(this.titleSettings[i]);

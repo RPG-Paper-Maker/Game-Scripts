@@ -33,7 +33,6 @@ export * from "./Picture2D";
 export * from "./Player";
 export * from "./Portion";
 export * from "./Position";
-export * from "./Rectangle";
 export * from "./Sprite";
 export * from "./TextureBundle";
 export * from "./Tree";

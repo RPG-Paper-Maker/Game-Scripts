@@ -10,6 +10,7 @@
 */
 import { Portion } from "./Portion.js";
 import { Constants, Utils } from "../Common/index.js";
+import { Datas } from "../index.js";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  The data class for position.
@@ -48,10 +49,10 @@ class Position extends Portion {
      *  @returns {THREE.Vector3}
      */
     toVector3() {
-        return new THREE.Vector3((this.x * Constants.SQUARE_SIZE) + (this.centerX / 100 * Constants
-            .SQUARE_SIZE), (this.y * Constants.SQUARE_SIZE) + (this.yPixels * Constants
-            .SQUARE_SIZE / 100), (this.z * Constants.SQUARE_SIZE) + (this.centerZ / 100 * Constants
-            .SQUARE_SIZE));
+        return new THREE.Vector3((this.x * Datas.Systems.SQUARE_SIZE) + (this.centerX / 100 * Datas
+            .Systems.SQUARE_SIZE), (this.y * Datas.Systems.SQUARE_SIZE) + (this.yPixels * Datas.Systems
+            .SQUARE_SIZE / 100), (this.z * Datas.Systems.SQUARE_SIZE) + (this.centerZ / 100 * Datas
+            .Systems.SQUARE_SIZE));
     }
 }
 export { Position };

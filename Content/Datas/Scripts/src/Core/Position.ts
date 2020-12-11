@@ -11,6 +11,7 @@
 
 import { Portion } from "./Portion";
 import { Constants, Utils } from "../Common";
+import { Datas } from "..";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /** @class
@@ -73,12 +74,12 @@ class Position extends Portion {
      */
     toVector3(): typeof THREE.Vector3 {
         return new THREE.Vector3(
-            (this.x * Constants.SQUARE_SIZE) + (this.centerX / 100 * Constants
-                .SQUARE_SIZE), 
-            (this.y * Constants.SQUARE_SIZE) + (this.yPixels * Constants
+            (this.x * Datas.Systems.SQUARE_SIZE) + (this.centerX / 100 * Datas
+                .Systems.SQUARE_SIZE), 
+            (this.y * Datas.Systems.SQUARE_SIZE) + (this.yPixels * Datas.Systems
                 .SQUARE_SIZE / 100), 
-            (this.z * Constants.SQUARE_SIZE) + (this.centerZ / 100 * Constants
-                .SQUARE_SIZE)
+            (this.z * Datas.Systems.SQUARE_SIZE) + (this.centerZ / 100 * Datas
+                .Systems.SQUARE_SIZE)
         );
     }
 }

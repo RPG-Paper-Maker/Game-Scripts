@@ -14,5 +14,6 @@ export * from "./CallACommonReaction";
 export * from "./Comment";
 export * from "./DisplayChoice";
 export * from "./Label";
+export * from "./ModifyTeam";
 export * from "./SetDialogBoxOptions";
 export * from "./ShowText";

@@ -96,14 +96,14 @@ export class Bitmap {
     // -------------------------------------------------------
     /** Set the position to the right
      */
-    setRight(offset) {
-        this.setX(ScreenResolution.SCREEN_X - this.oW - (offset ? offset : 0));
+    setRight(offset = 0) {
+        this.setX(ScreenResolution.SCREEN_X - this.oW - offset);
     }
     // -------------------------------------------------------
     /** Set the position to the bot
      */
-    setBot(offset) {
-        this.setY(ScreenResolution.SCREEN_Y - this.oH - (offset ? offset : 0));
+    setBot(offset = 0) {
+        this.setY(ScreenResolution.SCREEN_Y - this.oH - offset);
     }
     // -------------------------------------------------------
     /** Set all the coords values

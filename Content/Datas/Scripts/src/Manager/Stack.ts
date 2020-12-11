@@ -146,7 +146,6 @@ class Stack {
     static update() {
         // Update game timer if there's a current game
         if (this.game !== null) {
-            console.log(this.game)
             this.game.playTime.update();
         }
 

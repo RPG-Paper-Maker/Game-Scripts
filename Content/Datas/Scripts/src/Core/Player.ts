@@ -38,6 +38,7 @@ class Player {
     public name: string;
     public kind: CharacterKind;
     public system: System.Hero;
+    public levelingUp: boolean;
 
     constructor(kind?: CharacterKind, id?: number, instanceID?: number, skills?, json?)
     {
@@ -123,7 +124,7 @@ class Player {
      *  Get the player informations System.
      *  @returns {System.Hero}
      */
-    getPlayerSystem(): System.Hero {
+    getSystem(): System.Hero {
         switch (this.kind) {
             case CharacterKind.Hero:
                 return Datas.Heroes.get(this.id);
@@ -507,13 +508,13 @@ class Player {
         */
     }
 
-    // -------------------------------------------------------
-    /** Get the bar abbreviation
-    *   @param {SystemStatistic} stat The statistic
-    */
-    getBarAbbreviation(stat)
-    {
-        //return this[stat.abbreviation] + " / " + this[stat.getMaxAbbreviation()];
+    /** 
+     *  Get the bar abbreviation
+     *   @param {SystemStatistic} stat The statistic
+     *   @returns {string}
+     */
+    getBarAbbreviation(stat: System.Statistic): string {
+        return this[stat.abbreviation] + " / " + this[stat.getMaxAbbreviation()];
     }
 
     // -------------------------------------------------------

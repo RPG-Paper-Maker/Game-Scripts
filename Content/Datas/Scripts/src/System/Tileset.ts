@@ -150,7 +150,7 @@ class Tileset extends Base {
      *  @returns {number}
      */
     getMaxAutotilesOffsetTexture(): number {
-        return Math.floor(Constants.MAX_PICTURE_SIZE / (9 * Constants
+        return Math.floor(Constants.MAX_PICTURE_SIZE / (9 * Datas.Systems
             .SQUARE_SIZE));
     }
 
@@ -159,7 +159,7 @@ class Tileset extends Base {
      *  @returns {number}
      */
     getMaxMountainOffsetTexture(): number {
-        return Math.floor(Constants.MAX_PICTURE_SIZE / (4 * Constants
+        return Math.floor(Constants.MAX_PICTURE_SIZE / (4 * Datas.Systems
             .SQUARE_SIZE));
     }
 

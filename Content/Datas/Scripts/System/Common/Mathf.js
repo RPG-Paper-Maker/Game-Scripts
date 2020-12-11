@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Constants } from "./index.js";
+import { Datas } from "../index.js";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  * The static class for Math related function.
@@ -266,9 +267,9 @@ class Mathf {
      */
     static getPosition(position) {
         return [
-            Math.floor(position.x / Constants.SQUARE_SIZE),
-            Math.floor(position.y / Constants.SQUARE_SIZE),
-            Math.floor(position.z / Constants.SQUARE_SIZE)
+            Math.floor(position.x / Datas.Systems.SQUARE_SIZE),
+            Math.floor(position.y / Datas.Systems.SQUARE_SIZE),
+            Math.floor(position.z / Datas.Systems.SQUARE_SIZE)
         ];
     }
     /** Give a modulo without negative value.

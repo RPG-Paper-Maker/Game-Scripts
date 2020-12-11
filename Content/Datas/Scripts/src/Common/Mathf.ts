@@ -10,6 +10,7 @@
 */
 
 import { Constants } from ".";
+import { Datas } from "..";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /** @class
@@ -273,9 +274,9 @@ class Mathf {
      */
     static getPosition(position: typeof THREE.Vector3): number[] {
         return [
-            Math.floor(position.x / Constants.SQUARE_SIZE),
-            Math.floor(position.y / Constants.SQUARE_SIZE),
-            Math.floor(position.z / Constants.SQUARE_SIZE)
+            Math.floor(position.x / Datas.Systems.SQUARE_SIZE),
+            Math.floor(position.y / Datas.Systems.SQUARE_SIZE),
+            Math.floor(position.z / Datas.Systems.SQUARE_SIZE)
         ];
     }
 

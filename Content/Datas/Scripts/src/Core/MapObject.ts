@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { System } from "..";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /** @class
@@ -61,12 +62,15 @@ class MapObject
 
     public position: typeof THREE.Vector3;
     public properties: any[];
+    public system: System.MapObject;
+    public isHero: boolean;
 
-    constructor(system, position?, isHero?)
+    constructor(system, position?, isHero = false)
     {
-        /*
         this.system = system;
         this.position = position;
+        this.isHero = isHero;
+        /*
         this.previousPosition = position;
         this.mesh = null;
         this.meshBoundingBox = null;
@@ -79,7 +83,6 @@ class MapObject
         this.height = 1;
         this.moving = false;
         this.moveFrequencyTick = 0;
-        this.isHero = RPM.defaultValue(isHero, false);
         this.isStartup = RPM.isUndefined(position);
         this.isInScene = false;
         this.receivedOneEvent = false;
