@@ -9,7 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
-import { Utils } from "../Common/index.js";
+import { Utils, Constants } from "../Common/index.js";
+import { Datas } from "../index.js";
+import { Portion } from "../Core/index.js";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
 *   A scene for a local map
@@ -435,7 +437,7 @@ class Map extends Base {
     *   @returns {MapPortion}
     */
     getMapPortion(x, y, z) {
-        //return this.getBrutMapPortion(this.getPortionIndex(x, y, z));
+        return this.getBrutMapPortion(this.getPortionIndex(x, y, z));
     }
     // -------------------------------------------------------
     /** Get a map portion at local portion
@@ -443,7 +445,7 @@ class Map extends Base {
     *   @returns {MapPortion}
     */
     getMapPortionByPortion(portion) {
-        //return this.getMapPortion(portion[0], portion[1], portion[2]);
+        return this.getMapPortion(portion[0], portion[1], portion[2]);
     }
     // -------------------------------------------------------
     /** Get a map portion at json position
@@ -452,9 +454,8 @@ class Map extends Base {
     */
     getMapPortionByPosition(position) {
         /*
-        return this.getMapPortionByPortion(this.getLocalPortion(SceneMap
-            .getGlobalPortion(position)));
-            */
+        return this.getMapPortionByPortion(this.getLocalPortion(Scene.Map
+            .getGlobalPortion(position)));*/
     }
     // -------------------------------------------------------
     /** Get map portion according to portion index
@@ -462,7 +463,7 @@ class Map extends Base {
     *   @returns {MapPortion}
     */
     getBrutMapPortion(index) {
-        //return this.mapPortions[index];
+        return this.mapPortions[index];
     }
     // -------------------------------------------------------
     /** Get portion index according to local position
@@ -484,27 +485,21 @@ class Map extends Base {
     *   @returns {number[]}
     */
     getLocalPortion(portion) {
-        /*
-        return [
-            portion[0] - this.currentPortion[0],
-            portion[1] - this.currentPortion[1],
-            portion[2] - this.currentPortion[2]
-        ];
-        */
+        return new Portion(portion.x - this.currentPortion[0], portion.y - this.currentPortion[1], portion.z - this.currentPortion[2]);
     }
     // -------------------------------------------------------
     /** Get the map portion limit
     *   @returns {number}
     */
     getMapPortionLimit() {
-        //return RPM.PORTIONS_RAY_NEAR + RPM.PORTIONS_RAY_FAR;
+        return Datas.Systems.PORTIONS_RAY_NEAR + Constants.PORTIONS_RAY_FAR;
     }
     // -------------------------------------------------------
     /** Get the map portions size
     *   @returns {number}
     */
     getMapPortionSize() {
-        //return (this.getMapPortionLimit() * 2) + 1;
+        return (this.getMapPortionLimit() * 2) + 1;
     }
     // -------------------------------------------------------
     /** Get the map portion total size
@@ -516,18 +511,16 @@ class Map extends Base {
         return size * size * size;
         */
     }
-    // -------------------------------------------------------
-    /** Check if a local portion if in the limit
-    *   @param {number} portion The local portion
+    /**
+     *  Check if a local portion if in the limit
+    *   @param {Portion} portion The local portion
     *   @returns {boolean}
     */
     isInPortion(portion) {
-        /*
         let limit = this.getMapPortionLimit();
-        return (portion[0] >= -limit && portion[0] <= limit &&
-                portion[1] >= -limit && portion[1] <= limit &&
-                portion[2] >= -limit && portion[2] <= limit);
-                */
+        return (portion.x >= -limit && portion.x <= limit && portion.y >= -limit
+            && portion.y <= limit &&
+            portion.z >= -limit && portion.z <= limit);
     }
     // -------------------------------------------------------
     /** Check if a json position is in the map

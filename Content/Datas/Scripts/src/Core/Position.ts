@@ -27,23 +27,23 @@ class Position extends Portion {
     public angleX: number;
     public angleZ: number;
 
-    constructor(x: number = 0, y: number = 0, z: number = 0, yPixels: number, 
-        layer: number, centerX: number, centerZ: number, angleY: number, angleX: 
-        number, angleZ: number)
+    constructor(x: number = 0, y: number = 0, z: number = 0, yPixels: number = 0
+        , layer: number = 0, centerX: number = 0, centerZ: number = 0, angleY: 
+        number = 0, angleX: number = 0, angleZ: number = 0)
     {
         super(x, y, z);
 
-        this.yPixels = Utils.defaultValue(yPixels, 0);
-        this.layer = Utils.defaultValue(layer, 0);
-        this.centerX = Utils.defaultValue(centerX, 0);
-        this.centerZ = Utils.defaultValue(centerZ, 0);
-        this.angleY = Utils.defaultValue(angleY, 0);
-        this.angleX = Utils.defaultValue(angleX, 0);
-        this.angleZ = Utils.defaultValue(angleZ, 0);
+        this.yPixels = yPixels;
+        this.layer = layer;
+        this.centerX = centerX;
+        this.centerZ = centerZ;
+        this.angleY = angleY;
+        this.angleX = angleX;
+        this.angleZ = angleZ;
     }
 
     /**
-     *  Create a rectangle from an array.
+     *  Create a position from an array.
      *  @static
      *  @param {number[]} array
      *  @returns {Position}
@@ -53,12 +53,23 @@ class Position extends Portion {
             array[5], array[6], array[7], array[8], array[9]);
     }
 
+    /**
+     *  Create a position from a three.js vector3.
+     *  @static
+     *  @param {THREE.Vector3} position
+     *  @returns {Position}
+     */
+    static createFromVector3(position: typeof THREE.Vector3): Position {
+        return new Position(Math.floor(position.x / Datas.Systems.SQUARE_SIZE),
+            Math.floor(position.y / Datas.Systems.SQUARE_SIZE), Math.floor(
+            position.z / Datas.Systems.SQUARE_SIZE));
+    }
+
     /** 
      *  Get the global portion of a json position.
      *  @returns {Portion}
      */
-    getGlobalPortion(): Portion
-    {
+    getGlobalPortion(): Portion {
         return new Portion(
             Math.floor(this.x / Constants.PORTION_SIZE),
             Math.floor(this.y / Constants.PORTION_SIZE),

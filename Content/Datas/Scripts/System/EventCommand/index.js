@@ -15,6 +15,7 @@ export * from "./Comment.js";
 export * from "./DisplayChoice.js";
 export * from "./Label.js";
 export * from "./ModifyTeam.js";
+export * from "./MoveObject.js";
 export * from "./SetDialogBoxOptions.js";
 export * from "./ShowText.js";
 export * from "./While.js";

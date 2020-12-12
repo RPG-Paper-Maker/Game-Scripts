@@ -338,15 +338,13 @@ class Game {
         }
     }
     /**
-     *  Get the portions datas according to id and position
+     *  Get the portions datas according to id and position.
      *  @param {number} id The map id
-     *  @param {number} i The portion x
-     *  @param {number} j The portion y
-     *  @param {number} k The portion z
-     *  @returns {Object}
+     *  @param {Portion} portion The portion
+     *  @returns {Record<string, any>}
     */
-    getPotionsDatas(id, i, j, k) {
-        return this.mapsDatas[id][i][j < 0 ? 0 : 1][Math.abs(j)][k];
+    getPotionsDatas(id, portion) {
+        return this.mapsDatas[id][portion.x][portion.y < 0 ? 0 : 1][Math.abs(portion.y)][portion.z];
     }
 }
 export { Game };

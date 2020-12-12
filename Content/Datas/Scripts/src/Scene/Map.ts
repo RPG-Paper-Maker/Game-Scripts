@@ -13,7 +13,8 @@ import { Base } from "./Base";
 import { Enum, Utils, Constants } from "../Common";
 import Orientation = Enum.Orientation;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
-import { System } from "..";
+import { System, Datas, Scene } from "..";
+import { Position, Portion, MapPortion } from "../Core";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /** @class
@@ -52,6 +53,8 @@ const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 */
 class Map extends Base
 {
+    public id: number;
+    public mapName: string;
     public orientation: Orientation;
     public user: any;
     public isBattleMap: boolean;
@@ -61,9 +64,14 @@ class Map extends Base
     public battleCommandKind: EffectSpecialActionKind;
     public mapProperties: System.MapProperties;
     public scene: typeof THREE.Scene;
+    public allObjects: Position[];
+    public currentPortion: Portion;
+    public mapPortions: MapPortion[];
+    public textureTileset: typeof THREE.MeshBasicMaterial;
+    public texturesCharacters: typeof THREE.MeshBasicMaterial[];
+    public collisions: number[][];
 
-    constructor(id, isBattleMap = false, minimal = false)
-    {
+    constructor(id, isBattleMap = false, minimal = false) {
         super(false);
 
         /*
@@ -482,9 +490,9 @@ class Map extends Base
     *   @param {number} z The local z portion
     *   @returns {MapPortion}
     */
-    getMapPortion(x, y, z)
+    getMapPortion(x, y, z): MapPortion
     {
-        //return this.getBrutMapPortion(this.getPortionIndex(x, y, z));
+        return this.getBrutMapPortion(this.getPortionIndex(x, y, z));
     }
 
     // -------------------------------------------------------
@@ -492,9 +500,9 @@ class Map extends Base
     *   @param {number[]} portion The local portion
     *   @returns {MapPortion}
     */
-    getMapPortionByPortion(portion)
+    getMapPortionByPortion(portion): MapPortion
     {
-        //return this.getMapPortion(portion[0], portion[1], portion[2]);
+        return this.getMapPortion(portion[0], portion[1], portion[2]);
     }
 
     // -------------------------------------------------------
@@ -505,9 +513,9 @@ class Map extends Base
     getMapPortionByPosition(position)
     {
         /*
-        return this.getMapPortionByPortion(this.getLocalPortion(SceneMap
-            .getGlobalPortion(position)));
-            */
+        return this.getMapPortionByPortion(this.getLocalPortion(Scene.Map
+            .getGlobalPortion(position)));*/
+            
     }
 
     // -------------------------------------------------------
@@ -515,9 +523,9 @@ class Map extends Base
     *   @param {number} index The portion index
     *   @returns {MapPortion}
     */
-    getBrutMapPortion(index)
+    getBrutMapPortion(index): MapPortion
     {
-        //return this.mapPortions[index];
+        return this.mapPortions[index];
     }
 
     // -------------------------------------------------------
@@ -541,33 +549,31 @@ class Map extends Base
     *   @param {number[]} portion The global portion
     *   @returns {number[]}
     */
-    getLocalPortion(portion)
+    getLocalPortion(portion: Portion): Portion
     {
-        /*
-        return [
-            portion[0] - this.currentPortion[0],
-            portion[1] - this.currentPortion[1],
-            portion[2] - this.currentPortion[2]
-        ];
-        */
+        return new Portion(
+            portion.x - this.currentPortion[0],
+            portion.y - this.currentPortion[1],
+            portion.z - this.currentPortion[2]
+        );
     }
 
     // -------------------------------------------------------
     /** Get the map portion limit
     *   @returns {number}
     */
-    getMapPortionLimit()
+    getMapPortionLimit(): number
     {
-        //return RPM.PORTIONS_RAY_NEAR + RPM.PORTIONS_RAY_FAR;
+        return Datas.Systems.PORTIONS_RAY_NEAR + Constants.PORTIONS_RAY_FAR;
     }
 
     // -------------------------------------------------------
     /** Get the map portions size
     *   @returns {number}
     */
-    getMapPortionSize()
+    getMapPortionSize(): number
     {
-        //return (this.getMapPortionLimit() * 2) + 1;
+        return (this.getMapPortionLimit() * 2) + 1;
     }
 
     // -------------------------------------------------------
@@ -582,19 +588,17 @@ class Map extends Base
         */
     }
 
-    // -------------------------------------------------------
-    /** Check if a local portion if in the limit
-    *   @param {number} portion The local portion
+    /** 
+     *  Check if a local portion if in the limit
+    *   @param {Portion} portion The local portion
     *   @returns {boolean}
     */
-    isInPortion(portion)
+    isInPortion(portion: Portion): boolean
     {
-        /*
         let limit = this.getMapPortionLimit();
-        return (portion[0] >= -limit && portion[0] <= limit &&
-                portion[1] >= -limit && portion[1] <= limit &&
-                portion[2] >= -limit && portion[2] <= limit);
-                */
+        return (portion.x >= -limit && portion.x <= limit && portion.y >= -limit 
+            && portion.y <= limit &&
+                portion.z >= -limit && portion.z <= limit);
     }
 
     // -------------------------------------------------------

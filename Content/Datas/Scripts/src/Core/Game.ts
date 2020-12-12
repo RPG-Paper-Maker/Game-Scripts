@@ -17,6 +17,7 @@ import { MapObject } from "./MapObject";
 import { Paths, Constants, Utils, IO, Enum } from "../Common";
 import GroupKind = Enum.GroupKind;
 import CharacterKind = Enum.CharacterKind;
+import { Portion } from "./Portion";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /** @class
@@ -58,7 +59,7 @@ class Game {
     public currentMapID: number;
     public heroStates: number[];
     public heroProperties: number[];
-    public heroStatesOptions: number[];
+    public heroStatesOptions: Record<string, any>[];
     public startupStates: Record<string, any>;
     public startupProperties: Record<string, any>;
     public mapsDatas: Record<string, any>;
@@ -388,15 +389,16 @@ class Game {
     }
 
     /** 
-     *  Get the portions datas according to id and position
+     *  Get the portions datas according to id and position.
      *  @param {number} id The map id
-     *  @param {number} i The portion x
-     *  @param {number} j The portion y
-     *  @param {number} k The portion z
-     *  @returns {Object}
+     *  @param {Portion} portion The portion
+     *  @returns {Record<string, any>}
     */
-    getPotionsDatas(id: number, i: number, j: number, k: number): Object {
-        return this.mapsDatas[id][i][j < 0 ? 0 : 1][Math.abs(j)][k];
+    getPotionsDatas(id: number, portion: Portion): Record<string, 
+        any>
+    {
+        return this.mapsDatas[id][portion.x][portion.y < 0 ? 0 : 1][Math.abs(
+            portion.y)][portion.z];
     }
 }
 

@@ -95,12 +95,12 @@ class Systems {
         this.ID_MAP_START_HERO = json.idMapHero;
         this.ID_OBJECT_START_HERO = json.idObjHero;
         // Debug bounding box
-        let showBB = Utils.defaultValue(json.bb, false);
-        if (showBB) {
+        this.showBB = Utils.defaultValue(json.bb, false);
+        if (this.showBB) {
             Manager.Collisions.BB_MATERIAL.color.setHex(0xff0000);
             Manager.Collisions.BB_MATERIAL.wireframe = true;
         }
-        Manager.Collisions.BB_MATERIAL.visible = showBB;
+        Manager.Collisions.BB_MATERIAL.visible = this.showBB;
         // Lists
         this.itemsTypes = [];
         this.colors = [];

@@ -9,31 +9,40 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Portion } from "./Portion.js";
-import { Constants, Utils } from "../Common/index.js";
+import { Constants } from "../Common/index.js";
 import { Datas } from "../index.js";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  The data class for position.
  */
 class Position extends Portion {
-    constructor(x = 0, y = 0, z = 0, yPixels, layer, centerX, centerZ, angleY, angleX, angleZ) {
+    constructor(x = 0, y = 0, z = 0, yPixels = 0, layer = 0, centerX = 0, centerZ = 0, angleY = 0, angleX = 0, angleZ = 0) {
         super(x, y, z);
-        this.yPixels = Utils.defaultValue(yPixels, 0);
-        this.layer = Utils.defaultValue(layer, 0);
-        this.centerX = Utils.defaultValue(centerX, 0);
-        this.centerZ = Utils.defaultValue(centerZ, 0);
-        this.angleY = Utils.defaultValue(angleY, 0);
-        this.angleX = Utils.defaultValue(angleX, 0);
-        this.angleZ = Utils.defaultValue(angleZ, 0);
+        this.yPixels = yPixels;
+        this.layer = layer;
+        this.centerX = centerX;
+        this.centerZ = centerZ;
+        this.angleY = angleY;
+        this.angleX = angleX;
+        this.angleZ = angleZ;
     }
     /**
-     *  Create a rectangle from an array.
+     *  Create a position from an array.
      *  @static
      *  @param {number[]} array
      *  @returns {Position}
      */
     static createFromArray(array) {
         return new Position(array[0], array[1], array[3], array[2], array[4], array[5], array[6], array[7], array[8], array[9]);
+    }
+    /**
+     *  Create a position from a three.js vector3.
+     *  @static
+     *  @param {THREE.Vector3} position
+     *  @returns {Position}
+     */
+    static createFromVector3(position) {
+        return new Position(Math.floor(position.x / Datas.Systems.SQUARE_SIZE), Math.floor(position.y / Datas.Systems.SQUARE_SIZE), Math.floor(position.z / Datas.Systems.SQUARE_SIZE));
     }
     /**
      *  Get the global portion of a json position.

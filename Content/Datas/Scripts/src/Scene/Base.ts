@@ -115,7 +115,10 @@ class Base {
      *   @param {number[]} event The time events values
      *   @param {boolean} moving Indicate if command is a moving one
      */
-    addReaction(sender, reaction, object, state, parameters, event, moving) {
+    addReaction(sender, reaction, object, state, parameters, event, moving?):
+        Manager.EventReaction
+    {
+        return new Manager.EventReaction(null, null, null, null); // REMOVE
         /*
         if (reaction.getFirstCommand() !== null) {
             let excecuted = false;

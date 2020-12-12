@@ -8,6 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
+import { Manager } from "../index.js";
 import { Utils } from "../Common/index.js";
 /** @class
  *   Abstract class for the game stack.
@@ -102,6 +103,7 @@ class Base {
      *   @param {boolean} moving Indicate if command is a moving one
      */
     addReaction(sender, reaction, object, state, parameters, event, moving) {
+        return new Manager.EventReaction(null, null, null, null); // REMOVE
         /*
         if (reaction.getFirstCommand() !== null) {
             let excecuted = false;
