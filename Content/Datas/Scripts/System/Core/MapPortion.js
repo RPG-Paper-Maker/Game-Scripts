@@ -376,7 +376,10 @@ class MapPortion {
             Manager.Stack.currentMap.scene.add(mountains.mesh);
         }
         // Handle overflow
-        this.overflowMountains = json.o;
+        jsonMountain = json.o;
+        for (i = 0, l = jsonMountain.length; i < l; i++) {
+            this.overflowMountains.push(Position.createFromArray(jsonMountain[i]));
+        }
     }
     /**
      *  Read the JSON associated to the objects 3D in the portion.
@@ -695,6 +698,7 @@ class MapPortion {
      *  @param {Position} positionSource The source json position
      *  @param {Position} positionTarget The target json position
      *  @param {ElementMapKind} kind The element map kind
+     *  @returns {StructMapElementCollision[]}
      */
     getObjectCollisionAt(positionSource, positionTarget, kind) {
         let result = new Array;
@@ -715,7 +719,6 @@ class MapPortion {
                         objCollision.top = c < 0;
                         objCollision.bot = c > 0;
                         objCollision.a = a;
-                        objCollision.c = c;
                         result.push(objCollision);
                     }
                 }

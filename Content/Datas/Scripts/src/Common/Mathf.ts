@@ -335,6 +335,60 @@ class Mathf {
         let v = Math.round(value * variance / 100);
         return this.random(value - v, value + v);
     }
+
+    /** 
+     *  Indicate if a point is inside a rectangle.
+     *  @static
+     *  @param {THREE.Vector2} p The point to test
+     *  @param {number} x1 The x left point of the rectangle
+     *  @param {number} x2 The x right point of the rectangle
+     *  @param {number} y1 The y top point of the rectangle
+     *  @param {number} y2 The y bottom point of the rectangle
+     *  @returns {boolean}
+     */
+    static isPointOnRectangle(p: typeof THREE.Vector2, x1: number, x2: number, 
+        y1: number, y2: number): boolean
+    {
+        return p.x >= x1 && p.x <= x2 && p.y >= y1 && p.y <= y2;
+    }
+
+    /** 
+     *  Indicate if a point is inside a triangle.
+     *  @static
+     *  @param {THREE.Vector2} p The point to test
+     *  @param {THREE.Vector2} p0 One of the point of the triangle
+     *  @param {THREE.Vector2} p1 One of the point of the triangle
+     *  @param {THREE.Vector2} p2 One of the point of the triangle
+     *  @returns {boolean}
+     */
+    static isPointOnTriangle(p: typeof THREE.Vector2, p0: typeof THREE.Vector2, 
+        p1: typeof THREE.Vector2, p2: typeof THREE.Vector2): boolean
+    {
+        let a = 1/2 * (-p1.y * p2.x + p0.y * (-p1.x + p2.x) + p0.x * (p1.y - p2
+            .y) + p1.x * p2.y);
+        let sign = a < 0 ? -1 : 1;
+        let s = (p0.y * p2.x - p0.x * p2.y + (p2.y - p0.y) * p.x + (p0.x - p2.x)
+            * p.y) * sign;
+        let t = (p0.x * p1.y - p0.y * p1.x + (p0.y - p1.y) * p.x + (p1.x - p0.x)
+            * p.y) * sign;
+        return s > 0 && t > 0 && (s + t) < 2 * a * sign;
+    }
+
+    /** 
+     *  Get the orthogonal projection between two vectors.
+     *  @static
+     *  @param {THREE.Vector3} u
+     *  @param {THREE.Vector3} v
+     *  @returns {number}
+     */
+    static orthogonalProjection(u: typeof THREE.Vector3, v: typeof THREE.Vector3
+        ): number
+    {
+        let lu = u.length();
+        let lv = v.length();
+        let dot = u.dot(v);
+        return (dot / (lu * lv)) * lu;
+    }
 }
 
 export { Mathf }

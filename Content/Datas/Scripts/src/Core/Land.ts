@@ -135,7 +135,7 @@ class Land extends MapElement {
                     p: position,
                     l: localPosition,
                     b: rect,
-                    c: collision
+                    cs: collision
                 }
             } else if (rect !== null) {
                 objCollision = {
@@ -150,7 +150,7 @@ class Land extends MapElement {
                         1,
                         0
                     ],
-                    c: null
+                    cs: null
                 }
             }
         }

@@ -491,19 +491,9 @@ class Map extends Base
     *   @param {number} z The local z portion
     *   @returns {MapPortion}
     */
-    getMapPortion(x, y, z): MapPortion
+    getMapPortion(portion: Portion): MapPortion
     {
-        return this.getBrutMapPortion(this.getPortionIndex(x, y, z));
-    }
-
-    // -------------------------------------------------------
-    /** Get a map portion at local portion
-    *   @param {number[]} portion The local portion
-    *   @returns {MapPortion}
-    */
-    getMapPortionByPortion(portion): MapPortion
-    {
-        return this.getMapPortion(portion[0], portion[1], portion[2]);
+        return this.getBrutMapPortion(this.getPortionIndex(portion));
     }
 
     // -------------------------------------------------------
@@ -536,13 +526,12 @@ class Map extends Base
     *   @param {number} z The local z portion
     *   @returns {number}
     */
-    getPortionIndex(x, y, z)
+    getPortionIndex(portion: Portion): number
     {
-        /*
         let size = this.getMapPortionSize();
         let limit = this.getMapPortionLimit();
-        return ((x + limit) * size * size) + ((y + limit) * size) + (z + limit);
-        */
+        return ((portion.x + limit) * size * size) + ((portion.y + limit) * size
+            ) + ( + limit);
     }
 
     // -------------------------------------------------------

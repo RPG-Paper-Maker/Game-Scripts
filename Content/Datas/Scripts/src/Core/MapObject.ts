@@ -204,8 +204,7 @@ class MapObject
         let localPortion = Manager.Stack.currentMap.getLocalPortion(globalPortion);
         let mapPortion: MapPortion;
         if (Manager.Stack.currentMap.isInPortion(localPortion)) {
-            mapPortion = Manager.Stack.currentMap.getMapPortionByPortion(
-                localPortion);
+            mapPortion = Manager.Stack.currentMap.getMapPortion(localPortion);
             let objects = mapPortion.objectsList;
             for (i = 0, l = objects.length; i < l; i++) {
                 if (objects[i].system.id === objectID) {
@@ -580,7 +579,7 @@ class MapObject
         let i: number, l: number, result: [boolean, number];
         for (i = 0, l = this.meshBoundingBox.length; i < l; i++) {
             this.currentBoundingBox = this.meshBoundingBox[i];
-            result = Manager.Collisions.checkCollisionRay(this.position, 
+            result = Manager.Collisions.checkRay(this.position, 
                 position, this);
             if (result[0]) {
                 blocked = true;
@@ -597,7 +596,7 @@ class MapObject
             position.setY(yMountain);
             for (i = 0, l = this.meshBoundingBox.length; i < l; i++) {
                 this.currentBoundingBox = this.meshBoundingBox[i];
-                result = Manager.Collisions.checkCollisionRay(this.position, 
+                result = Manager.Collisions.checkRay(this.position, 
                     position, this);
                 if (result[0]) {
                     position = this.position;
@@ -862,8 +861,8 @@ class MapObject
             movedObjects = objects.m;
             if (movedObjects.indexOf(this) === -1) {
                 movedObjects.push(this);
-                movedObjects = Manager.Stack.currentMap.getMapPortionByPortion(
-                    Manager.Stack.currentMap.getLocalPortion(originalPortion))
+                movedObjects = Manager.Stack.currentMap.getMapPortion(Manager
+                    .Stack.currentMap.getLocalPortion(originalPortion))
                     .objectsList;
                 index = movedObjects.indexOf(this);
                 if (index !== -1) {

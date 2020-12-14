@@ -14,12 +14,14 @@ import ElementMapKind = Enum.ElementMapKind;
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Position } from "./Position";
 import { Datas } from "..";
+import { CollisionSquare } from "./CollisionSquare";
 
 interface StructMapElementCollision {
     b?: number[],
     p?: Position,
     l?: typeof THREE.Vector3,
-    c?: any,
+    c?: typeof THREE.Vector3,
+    cs?: CollisionSquare,
     w?: number,
     h?: number,
     d?: number,

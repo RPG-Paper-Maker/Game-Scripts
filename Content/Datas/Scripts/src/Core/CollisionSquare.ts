@@ -13,12 +13,12 @@ import { Datas } from "..";
 import { Utils } from "../Common";
 
 /** @class
-*   A collision settings in a texture square
-*   @property {Rectangle} rect Percentage of the rect limitation
-*   @property {boolean} left The left direction
-*   @property {boolean} right The right direction
-*   @property {boolean} top The top direction
-*   @property {boolean} bot The bot direction
+ *  A collision settings in a texture square.
+ *  @property {Rectangle} rect Percentage of the rect limitation
+ *  @property {boolean} left The left direction
+ *  @property {boolean} right The right direction
+ *  @property {boolean} top The top direction
+ *  @property {boolean} bot The bot direction
 */
 class CollisionSquare {
     public rect: number[];
@@ -112,10 +112,10 @@ class CollisionSquare {
                         for (a = i; a < i + tempW; a++)
                         {
                             if (!(boolGrid[a + kk] && squares[a + kk - w][1] +
-                                squares[a + kk - w][3] === Datas.Systems.SQUARE_SIZE &&
-                                squares[a + kk][1] === 0 && squares[a + kk][0] 
-                                === squares[a + kk - w][0] && squares[a + kk][2]
-                                === squares[a + kk - w][2]))
+                                squares[a + kk - w][3] === Datas.Systems
+                                .SQUARE_SIZE && squares[a + kk][1] === 0 && 
+                                squares[a + kk][0] === squares[a + kk - w][0] &&
+                                squares[a + kk][2] === squares[a + kk - w][2]))
                             {
                                 c = false;
                             }
@@ -151,26 +151,24 @@ class CollisionSquare {
      *  @param {number} w The number of squares width
      *  @param {number} h The number of squares height
      */
-    static getBB(rect: number[], w: number, h: number): number[]
-    {
-        return [(rect[0] - ((w * Datas.Systems.SQUARE_SIZE) - rect[0] - rect[2])) / 2, (h 
-            * Datas.Systems.SQUARE_SIZE) - rect[1] - (rect[3] / 2), 0, rect[2], rect[3], 1
-            , 0, 0, 0];
+    static getBB(rect: number[], w: number, h: number): number[] {
+        return [(rect[0] - ((w * Datas.Systems.SQUARE_SIZE) - rect[0] - rect[2])
+            ) / 2, (h * Datas.Systems.SQUARE_SIZE) - rect[1] - (rect[3] / 2), 0, 
+            rect[2], rect[3], 1, 0, 0, 0];
     }
 
     /** 
      *  Read the JSON associated to the collision square.
-     *  @param {Record<string, any>} json Json object describing the collision square
+     *  @param {Record<string, any>} json Json object describing the collision 
+     *  square
      */
-    read(json: Record<string, any>)
-    {
+    read(json: Record<string, any>) {
         let rect = json.rec;
         this.left = Utils.defaultValue(json.l, true);
         this.right = Utils.defaultValue(json.r, true);
         this.top = Utils.defaultValue(json.t, true);
         this.bot = Utils.defaultValue(json.b, true);
-        if (!Utils.isUndefined(rect))
-        {
+        if (!Utils.isUndefined(rect)) {
             this.rect = rect === null ? null : [Math.round(rect[0] * Datas
                 .Systems.SQUARE_SIZE / 100), Math.round(rect[1] * Datas.Systems
                 .SQUARE_SIZE / 100), Math.round(rect[2] * Datas.Systems
@@ -180,11 +178,10 @@ class CollisionSquare {
     }
 
     /** 
-     *  Indicate if all the direction are OK
+     *  Indicate if all the direction are OK.
      *  @returns {boolean}
      */
-    hasAllDirections(): boolean
-    {
+    hasAllDirections(): boolean {
         return this.left && this.right && this.top && this.bot;
     }
 }

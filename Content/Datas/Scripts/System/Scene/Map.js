@@ -434,16 +434,8 @@ class Map extends Base {
     *   @param {number} z The local z portion
     *   @returns {MapPortion}
     */
-    getMapPortion(x, y, z) {
-        return this.getBrutMapPortion(this.getPortionIndex(x, y, z));
-    }
-    // -------------------------------------------------------
-    /** Get a map portion at local portion
-    *   @param {number[]} portion The local portion
-    *   @returns {MapPortion}
-    */
-    getMapPortionByPortion(portion) {
-        return this.getMapPortion(portion[0], portion[1], portion[2]);
+    getMapPortion(portion) {
+        return this.getBrutMapPortion(this.getPortionIndex(portion));
     }
     // -------------------------------------------------------
     /** Get a map portion at json position
@@ -470,12 +462,10 @@ class Map extends Base {
     *   @param {number} z The local z portion
     *   @returns {number}
     */
-    getPortionIndex(x, y, z) {
-        /*
+    getPortionIndex(portion) {
         let size = this.getMapPortionSize();
         let limit = this.getMapPortionLimit();
-        return ((x + limit) * size * size) + ((y + limit) * size) + (z + limit);
-        */
+        return ((portion.x + limit) * size * size) + ((portion.y + limit) * size) + (+limit);
     }
     // -------------------------------------------------------
     /** Set a local portion with a global portion

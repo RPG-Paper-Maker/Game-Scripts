@@ -45,6 +45,17 @@ class Position extends Portion {
         return new Position(Math.floor(position.x / Datas.Systems.SQUARE_SIZE), Math.floor(position.y / Datas.Systems.SQUARE_SIZE), Math.floor(position.z / Datas.Systems.SQUARE_SIZE));
     }
     /**
+     *  Test if a position is equal to another.
+     *  @returns {boolean}
+     */
+    equals(position) {
+        return super.equals(position) && this.yPixels === position.yPixels &&
+            this.layer === position.layer && this.centerX === position.centerX
+            && this.centerZ === position.centerZ && this.angleY === position
+            .angleY && this.angleX === position.angleX && this.angleZ ===
+            position.angleZ;
+    }
+    /**
      *  Get the complete number of Y of a position.
      *   @returns {number}
      */

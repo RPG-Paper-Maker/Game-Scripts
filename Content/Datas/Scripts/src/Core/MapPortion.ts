@@ -443,7 +443,10 @@ class MapPortion {
         }
 
         // Handle overflow
-        this.overflowMountains = json.o;
+        jsonMountain = json.o;
+        for (i = 0, l = jsonMountain.length; i < l; i++) {
+            this.overflowMountains.push(Position.createFromArray(jsonMountain[i]));
+        }
     }
 
     /** 
@@ -803,11 +806,12 @@ class MapPortion {
      *  @param {Position} positionSource The source json position
      *  @param {Position} positionTarget The target json position
      *  @param {ElementMapKind} kind The element map kind
+     *  @returns {StructMapElementCollision[]}
      */
     getObjectCollisionAt(positionSource: Position, positionTarget: Position, 
-        kind: ElementMapKind)
+        kind: ElementMapKind): StructMapElementCollision[]
     {
-        let result = new Array;
+        let result: StructMapElementCollision[] = new Array;
         switch (kind) {
             case ElementMapKind.Mountains:
                 let a = positionTarget.x - positionSource.x;
@@ -825,7 +829,6 @@ class MapPortion {
                         objCollision.top = c < 0;
                         objCollision.bot = c > 0;
                         objCollision.a = a;
-                        objCollision.c = c;
                         result.push(objCollision);
                     }
                 }
