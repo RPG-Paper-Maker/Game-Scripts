@@ -957,7 +957,7 @@ class MapObject
      *  @returns {boolean}
     */
     receiveEvent(sender: MapObject, isSystem: boolean, eventID: number, 
-        parameters: System.DynamicValue[], states: number[], events: [System
+        parameters: System.DynamicValue[], states: number[], events?: [System
         .Event, number]): boolean
     {
         // Option only one event per frame
@@ -989,7 +989,7 @@ class MapObject
      *  Update according to camera angle.
      *  @param {number} angle The camera angle
      */
-    update(angle: number) {
+    update(angle: number = 0) {
         if (this.removed) {
             return;
         }

@@ -858,7 +858,7 @@ class MapObject {
      *  Update according to camera angle.
      *  @param {number} angle The camera angle
      */
-    update(angle) {
+    update(angle = 0) {
         if (this.removed) {
             return;
         }

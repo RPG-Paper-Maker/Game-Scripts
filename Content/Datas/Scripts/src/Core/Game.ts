@@ -48,6 +48,7 @@ class Game {
 
     public slot: number;
     public hero: MapObject;
+    public heroBattle: MapObject;
     public playTime: Chrono;
     public charactersInstances: number;
     public variables: any[];

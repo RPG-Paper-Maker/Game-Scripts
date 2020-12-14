@@ -9,9 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
-import { Utils } from "../Common/index.js";
+import { Utils, Enum } from "../Common/index.js";
+var Orientation = Enum.Orientation;
+import { Datas, Manager } from "../index.js";
 /** @class
- *   A detection of the game
+ *   A detection of the game.
  *   @property {number[][]} boxes List of boxes for detection
  *   @param {Record<string, any>} [json=undefined] Json object describing the detection
  */
@@ -20,7 +22,7 @@ class Detection extends Base {
         super(json);
     }
     /**
-     *  Read the JSON associated to the detection
+     *  Read the JSON associated to the detection.
      *  @param {Record<string, any>} json Json object describing the detection
      */
     read(json) {
@@ -34,30 +36,28 @@ class Detection extends Base {
         }
     }
     /**
-     *  Check the collision between sender and object
+     *  Check the collision between sender and object.
      *  @param {MapObject} sender The object that sent test collision
      *  @param {MapObject} object The object to test the collision
      *  @returns {boolean}
      */
     checkCollision(sender, object) {
-        /*
         let boundingBoxes = this.getBoundingBoxes(sender);
         for (let i = 0, l = boundingBoxes.length; i < l; i++) {
-            MapPortion.applyBoxSpriteTransforms(RPM.BB_BOX_DETECTION,
-                boundingBoxes[i]);
+            Manager.Collisions.applyBoxSpriteTransforms(Manager.Collisions
+                .BB_BOX_DETECTION, boundingBoxes[i]);
             if (object.checkCollisionDetection()) {
                 return true;
             }
         }
-        return false;*/
+        return false;
     }
-    // -------------------------------------------------------
-    /** Get the sender bounding box
-     *   @param {MapObject} sender The object that sent test collision
-     *   @returns {number[][]}
+    /**
+     *  Get the sender bounding box.
+     *  @param {MapObject} sender The object that sent test collision
+     *  @returns {number[][]}
      */
     getBoundingBoxes(sender) {
-        /*
         let orientation = sender.orientationEye;
         let localPosition = sender.position;
         let l = this.boxes.length;
@@ -66,39 +66,39 @@ class Detection extends Base {
         for (let i = 0; i < l; i++) {
             box = this.boxes[i];
             p = box[0];
-
             // Update position according to sender orientation
             switch (orientation) {
                 case Orientation.South:
-                    x = p[0] * RPM.SQUARE_SIZE;
-                    z = p[3] * RPM.SQUARE_SIZE;
+                    x = p.x * Datas.Systems.SQUARE_SIZE;
+                    z = p.z * Datas.Systems.SQUARE_SIZE;
                     break;
                 case Orientation.West:
-                    x = -p[3] * RPM.SQUARE_SIZE;
-                    z = p[0] * RPM.SQUARE_SIZE;
+                    x = -p.z * Datas.Systems.SQUARE_SIZE;
+                    z = p.x * Datas.Systems.SQUARE_SIZE;
                     break;
                 case Orientation.North:
-                    x = -p[0] * RPM.SQUARE_SIZE;
-                    z = -p[3] * RPM.SQUARE_SIZE;
+                    x = -p.x * Datas.Systems.SQUARE_SIZE;
+                    z = -p.z * Datas.Systems.SQUARE_SIZE;
                     break;
                 case Orientation.East:
-                    x = p[3] * RPM.SQUARE_SIZE;
-                    z = -p[0] * RPM.SQUARE_SIZE;
+                    x = p.z * Datas.Systems.SQUARE_SIZE;
+                    z = -p.x * Datas.Systems.SQUARE_SIZE;
                     break;
             }
             list[i] = [
                 localPosition.x + x,
-                localPosition.y + RPM.positionTotalY(p) + (RPM.SQUARE_SIZE / 2),
+                localPosition.y + p.getTotalY() + (Datas.Systems.SQUARE_SIZE / 2),
                 localPosition.z + z,
-                RPM.SQUARE_SIZE,
-                (box[1] * RPM.SQUARE_SIZE) + (box[2] / 100 * RPM.SQUARE_SIZE),
-                RPM.SQUARE_SIZE,
+                Datas.Systems.SQUARE_SIZE,
+                (box[1] * Datas.Systems.SQUARE_SIZE) + (box[2] / 100 * Datas
+                    .Systems.SQUARE_SIZE),
+                Datas.Systems.SQUARE_SIZE,
                 0,
                 0,
                 0
             ];
         }
-        return list;*/
+        return list;
     }
 }
 export { Detection };

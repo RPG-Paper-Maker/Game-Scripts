@@ -9,10 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { MapObject, Node } from "../Core";
+import { MapObject, Node, Portion } from "../Core";
 import { Enum, Utils, Platform } from "../Common";
 import EventCommandKind = Enum.EventCommandKind;
-import { EventCommand, System, Manager } from "..";
+import { EventCommand, System, Manager, Datas } from "..";
 
 /** @class
  *  A reaction command interpreter.
@@ -196,6 +196,183 @@ class EventReaction {
                 */
         }
         return null;
+    }
+
+    /** 
+     *  Send an event.
+     *  @static
+     *  @param {MapObject} sender The sender of this event
+     *  @param {number} targetKind The kind of target
+     *  @param {number} targetID The target ID
+     *  @param {boolean} isSystem Boolean indicating if it is an event System
+     *  @param {number} eventID The event ID
+     *  @param {Parameter[]} parameters List of all the parameters
+     *  @param {boolean} senderNoReceiver Indicate if the sender should not 
+     *  receive event
+     */
+    static sendEvent(sender: MapObject, targetKind: number, targetID: number, 
+        isSystem: boolean, eventID: number, parameters: System.DynamicValue[], 
+        senderNoReceiver: boolean)
+    {
+        switch (targetKind) {
+            case 0: // Send to all
+                Manager.EventReaction.sendEventDetection(sender, -1, isSystem, 
+                    eventID, parameters);
+                break;
+            case 1: // Send to detection
+                Manager.EventReaction.sendEventDetection(sender, targetID, isSystem,
+                    eventID, parameters, senderNoReceiver);
+                break;
+            case 2: // Send to a particular object
+                if (targetID === -1) {
+                    // Send to sender
+                    sender.receiveEvent(sender, isSystem, eventID, parameters, 
+                        sender.states);
+                } else if (targetID === 0) {
+                    // Send to the hero
+                    Manager.Stack.game.hero.receiveEvent(sender, isSystem, 
+                        eventID, parameters, Manager.Stack.game.heroStates);
+                } else {
+                    Manager.Stack.currentMap.updatePortions(this, function(x: 
+                        number, y: number, z: number, i: number, j: number, k: 
+                        number)
+                    {
+                        let objects = Manager.Stack.game.getPotionsDatas(Manager
+                            .Stack.currentMap.id, new Portion(x, y, z));
+
+                        // Moved objects
+                        let a: number, l: number, object: MapObject;
+                        for (a = 0, l = objects.min.length; a < l; a++) {
+                            object = objects.min[a];
+                            if (object.system.id === targetID) {
+                                object.receiveEvent(sender, isSystem, eventID,
+                                    parameters, object.states);
+                                break;
+                            }
+                        }
+                        for (a = 0, l = objects.mout.length; a < l; a++) {
+                            object = objects.mout[a];
+                            if (object.system.id === targetID) {
+                                object.receiveEvent(sender, isSystem, eventID,
+                                    parameters, object.states);
+                                break;
+                            }
+                        }
+
+                        // Static
+                        let mapPortion = Manager.Stack.currentMap.getMapPortion(
+                            new Portion(i, j, k));
+                        if (mapPortion) {
+                            for (a = 0, l = mapPortion.objectsList.length; a < l; 
+                                a++)
+                            {
+                                object = mapPortion.objectsList[a];
+                                if (object.system.id === targetID) {
+                                    object.receiveEvent(sender, isSystem, 
+                                        eventID, parameters, object.states);
+                                    break;
+                                }
+                            }
+                            if (mapPortion.heroID === targetID) {
+                                Manager.Stack.game.hero.receiveEvent(sender, 
+                                    isSystem, eventID, parameters, Manager.Stack
+                                    .game.heroStates);
+                            }
+                        }
+                    });
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    /** 
+     *  Send an event detection
+     *  @static
+     *  @param {MapObject} sender The sender of this event
+     *  @param {number} targetID The target ID
+     *  @param {boolean} isSystem Boolean indicating if it is an event System
+     *  @param {number} eventID The event ID
+     *  @param {Parameter[]} parameters List of all the parameters
+     *  @param {boolean} senderNoReceiver Indicate if the sender should not 
+     *  receive event
+     */
+    static sendEventDetection(sender: MapObject, targetID: number, isSystem: 
+        boolean, eventID: number, parameters: System.DynamicValue[], 
+        senderNoReceiver: boolean = false)
+    {
+        Manager.Stack.currentMap.updatePortions(this, function(x: number, y: 
+            number, z: number, i: number, j: number, k: number) {
+            let objects = Manager.Stack.game.getPotionsDatas(Manager.Stack
+                .currentMap.id, new Portion(x, y, z));
+
+            // Moved objects
+            Manager.EventReaction.sendEventObjects(objects.min, sender, targetID
+                , isSystem, eventID, parameters, senderNoReceiver);
+            Manager.EventReaction.sendEventObjects(objects.mout, sender, 
+                targetID, isSystem, eventID, parameters, senderNoReceiver);
+
+            // Static
+            let mapPortion = Manager.Stack.currentMap.getMapPortion(new Portion(
+                i, j, k));
+            if (mapPortion) {
+                Manager.EventReaction.sendEventObjects(mapPortion.objectsList,
+                    sender, targetID, isSystem, eventID, parameters, 
+                    senderNoReceiver);
+            }
+        });
+
+        // And the hero!
+        if (!senderNoReceiver || sender !== Manager.Stack.game.hero) {
+            if (targetID !== -1) {
+                // Check according to detection model
+                if (!Datas.Systems.getDetection(targetID).checkCollision(sender, 
+                    Manager.Stack.game.hero))
+                {
+                    return;
+                }
+            }
+            Manager.Stack.game.hero.receiveEvent(sender, isSystem, eventID, 
+                parameters, Manager.Stack.game.heroStates);
+        }
+    }
+
+    /** 
+     *  Send an event to objects.
+     *  @static
+     *  @param {MapObject[]} objects The list of objects to send event
+     *  @param {MapObject} sender The sender of this event
+     *  @param {number} targetID The target ID
+     *  @param {boolean} isSystem Boolean indicating if it is an event System
+     *  @param {number} eventID The event ID
+     *  @param {Parameter[]} parameters List of all the parameters
+     *  @param {boolean} senderNoReceiver Indicate if the sender should not 
+     *  receive event
+     */
+    static sendEventObjects(objects: MapObject[], sender: MapObject, targetID: 
+        number, isSystem: boolean, eventID: number, parameters: System
+        .DynamicValue[], senderNoReceiver: boolean)
+    {
+        let object: MapObject;
+        for (let i = 0, l = objects.length; i < l; i++) {
+            object = objects[i];
+            if (senderNoReceiver && sender === object) {
+                continue;
+            }
+            if (targetID !== -1) {
+                // Check according to detection model
+                if (!Datas.Systems.getDetection(targetID).checkCollision(sender, 
+                    object))
+                {
+                    continue;
+                }
+            }
+
+            // Make the object receive the event
+            object.receiveEvent(sender, isSystem, eventID, parameters, object
+                .states);
+        }
     }
 
     /** 
