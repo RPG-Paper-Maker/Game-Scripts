@@ -143,8 +143,8 @@ class Systems {
         this.soundCancel = new System.PlaySong(SongKind.Sound, json.sca);
         this.soundImpossible = new System.PlaySong(SongKind.Sound, json.si);
         // Window skin options
-        this.dbOptions = Manager
-            .EventReaction.getEventCommand(json.dbo);
+        this.dbOptions = Manager.Events
+            .getEventCommand(json.dbo);
         this.dbOptions.update();
         // Initialize loading scene now that basics are loaded
         Manager.Stack.sceneLoading = new Scene.Loading();

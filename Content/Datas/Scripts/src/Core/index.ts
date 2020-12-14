@@ -21,6 +21,7 @@ export * from "./Battler";
 export * from "./Camera";
 export * from "./Chrono";
 export * from "./CollisionSquare";
+export * from "./ReactionInterpreter";
 export * from "./Floor";
 export * from "./Frame";
 export * from "./Game";

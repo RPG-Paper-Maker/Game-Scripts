@@ -89,7 +89,7 @@ class State extends Base {
         this.keepPosition = json.pos;
         this.detection = Utils.defaultValue(json.ecd, null);
         if (this.detection !== null) {
-            this.detection = Manager.EventReaction.getEventCommand(this
+            this.detection = Manager.Events.getEventCommand(this
                 .detection);
         }
     }

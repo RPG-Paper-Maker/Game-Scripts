@@ -8,6 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
+import { ReactionInterpreter } from "../Core/index.js";
 import { Manager } from "../index.js";
 import { Utils } from "../Common/index.js";
 /** @class
@@ -42,11 +43,11 @@ class Base {
         // Index of all the finished parallel reactions
         let endingReactions = new Array;
         // Updating blocking hero
-        Manager.EventReaction.blockingHero = false;
+        ReactionInterpreter.blockingHero = false;
         let i, l;
         for (i = 0, l = this.reactionInterpreters.length; i < l; i++) {
             if (this.reactionInterpreters[i].currentReaction.blockingHero) {
-                Manager.EventReaction.blockingHero = true;
+                ReactionInterpreter.blockingHero = true;
                 break;
             }
         }
@@ -97,7 +98,7 @@ class Base {
      *  @param {number[]} event The time events values
      *  @param {boolean} moving Indicate if command is a moving one
      */
-    addReaction(sender, reaction, object, state, parameters, event, moving) {
+    addReaction(sender, reaction, object, state, parameters, event, moving = false) {
         if (reaction.getFirstCommand() !== null) {
             let excecuted = false;
             let reactionInterpreter;
@@ -110,7 +111,7 @@ class Base {
                 }
             }
             if (!excecuted) {
-                reactionInterpreter = new Manager.EventReaction(sender, reaction, object, state, parameters, event);
+                reactionInterpreter = new ReactionInterpreter(sender, reaction, object, state, parameters, event);
                 this.reactionInterpreters.push(reactionInterpreter);
                 if (!moving) {
                     if (object.movingState !== null) {

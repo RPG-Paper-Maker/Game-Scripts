@@ -15,7 +15,7 @@ var DamagesKind = Enum.DamagesKind;
 var EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 var CharacterKind = Enum.CharacterKind;
 import { System, Manager, Datas } from "../index.js";
-import { Player } from "../Core/index.js";
+import { Player, ReactionInterpreter } from "../Core/index.js";
 /** @class
  *  An effect of a common skill item.
  *  @property {EffectKind} kind The kind of effect
@@ -127,7 +127,7 @@ class Effect extends Base {
                 break;
             case EffectKind.CommonReaction:
                 this.commonReaction = (Utils
-                    .isUndefined(json.cr) ? null : Manager.EventReaction
+                    .isUndefined(json.cr) ? null : Manager.Events
                     .getEventCommand(json.cr));
                 break;
             case EffectKind.SpecialActions:
@@ -285,9 +285,8 @@ class Effect extends Base {
             case EffectKind.PerformSkill:
                 break;
             case EffectKind.CommonReaction:
-                Manager.Stack.currentMap.reactionInterpreters.push(new Manager
-                    .EventReaction(null, Datas.CommonEvents.getCommonReaction(this.commonReaction.commonReactionID), null, null, this
-                    .commonReaction.parameters));
+                Manager.Stack.currentMap.reactionInterpreters.push(new ReactionInterpreter(null, Datas.CommonEvents
+                    .getCommonReaction(this.commonReaction.commonReactionID), null, null, this.commonReaction.parameters));
                 break;
             case EffectKind.SpecialActions:
                 Manager.Stack.currentMap.battleCommandKind = this

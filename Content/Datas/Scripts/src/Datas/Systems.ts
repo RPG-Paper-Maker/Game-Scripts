@@ -204,8 +204,8 @@ class Systems {
         this.soundImpossible = new System.PlaySong(SongKind.Sound, json.si);
 
         // Window skin options
-        this.dbOptions = <EventCommand.SetDialogBoxOptions> Manager
-            .EventReaction.getEventCommand(json.dbo);
+        this.dbOptions = <EventCommand.SetDialogBoxOptions> Manager.Events
+            .getEventCommand(json.dbo);
         this.dbOptions.update();
 
         // Initialize loading scene now that basics are loaded

@@ -1,6 +1,6 @@
 import { Base } from "./Base";
-import { System, Datas, Manager } from "..";
-import { MapObject } from "../Core";
+import { System, Datas } from "..";
+import { MapObject, ReactionInterpreter } from "../Core";
 import { Enum } from "../Common";
 import PrimitiveValueKind = Enum.PrimitiveValueKind;
 
@@ -70,11 +70,11 @@ class CallACommonReaction extends Base {
                 }
                 this.parameters[id] = parameter;
             }
-            currentState.interpreter = new Manager.EventReaction(object, Datas
+            currentState.interpreter = new ReactionInterpreter(object, Datas
                 .CommonEvents.getCommonReaction(this.commonReactionID), null, 
                 null, this.parameters);
         }
-        Manager.EventReaction.blockingHero = currentState.interpreter
+        ReactionInterpreter.blockingHero = currentState.interpreter
             .currentReaction.blockingHero;
         currentState.interpreter.update();
         if (currentState.interpreter.isFinished()) {

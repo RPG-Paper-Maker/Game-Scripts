@@ -10,8 +10,9 @@
 */
 import { Enum, Utils } from "../Common/index.js";
 var PrimitiveValueKind = Enum.PrimitiveValueKind;
-import { System, Manager, Datas } from "../index.js";
+import { System, Datas } from "../index.js";
 import { Stack } from "../Manager/index.js";
+import { ReactionInterpreter } from "../Core/index.js";
 /** @class
  *  The class who handle dynamic value.
  *  @extends {System.Base}
@@ -220,10 +221,10 @@ class DynamicValue extends System.Base {
             case PrimitiveValueKind.Variable:
                 return Stack.game.variables[this.value];
             case PrimitiveValueKind.Parameter:
-                return Manager.EventReaction.currentParameters[this.value]
+                return ReactionInterpreter.currentParameters[this.value]
                     .getValue();
             case PrimitiveValueKind.Property:
-                return Manager.EventReaction.currentObject.properties[this.value];
+                return ReactionInterpreter.currentObject.properties[this.value];
             default:
                 return this.value;
         }

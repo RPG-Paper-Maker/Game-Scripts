@@ -50,7 +50,7 @@ class Reaction extends Base {
         let choice = null;
         let command, node;
         for (let i = 0, l = jsonCommands.length; i < l; i++) {
-            command = Manager.EventReaction.getEventCommand(jsonCommands[i]);
+            command = Manager.Events.getEventCommand(jsonCommands[i]);
             // Comment
             if (command instanceof EventCommand.Comment) {
                 continue;

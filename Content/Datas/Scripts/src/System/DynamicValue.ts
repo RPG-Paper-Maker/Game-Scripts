@@ -11,9 +11,10 @@
 
 import { Enum, Utils } from "../Common";
 import PrimitiveValueKind = Enum.PrimitiveValueKind;
-import { System, Manager, Datas } from "..";
+import { System, Datas } from "..";
 import { StructIterator } from "../EventCommand";
 import { Stack } from "../Manager";
+import { ReactionInterpreter } from "../Core";
 
 interface StructJSON
 {
@@ -263,10 +264,10 @@ class DynamicValue extends System.Base {
             case PrimitiveValueKind.Variable:
                 return Stack.game.variables[this.value];
             case PrimitiveValueKind.Parameter:
-                return  Manager.EventReaction.currentParameters[this.value]
+                return ReactionInterpreter.currentParameters[this.value]
                     .getValue();
             case PrimitiveValueKind.Property:
-                return Manager.EventReaction.currentObject.properties[this.value];
+                return ReactionInterpreter.currentObject.properties[this.value];
             default:
                 return this.value;
         }

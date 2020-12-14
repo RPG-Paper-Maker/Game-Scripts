@@ -15,7 +15,7 @@ import Orientation = Enum.Orientation;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 import PictureKind = Enum.PictureKind;
 import { System, Datas, Scene, Manager } from "..";
-import { Position, Portion, MapPortion, TextureBundle, Camera } from "../Core";
+import { Position, Portion, MapPortion, TextureBundle, Camera, ReactionInterpreter } from "../Core";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /** @class
@@ -769,8 +769,8 @@ class Map extends Base {
     onKeyPressed(key: number) {
         if (!this.loading) {
             // Send keyPressEvent to all the objects
-            if (!Manager.EventReaction.blockingHero && !this.isBattleMap) {
-                Manager.EventReaction.sendEvent(null, 0, 1, true, 3, [null,
+            if (!ReactionInterpreter.blockingHero && !this.isBattleMap) {
+                Manager.Events.sendEvent(null, 0, 1, true, 3, [null,
                     System.DynamicValue.createNumber(key), System.DynamicValue
                     .createSwitch(false), System.DynamicValue.createSwitch(false
                     )], true);
@@ -786,8 +786,8 @@ class Map extends Base {
     onKeyReleased(key: number) {
         if (!this.loading) {
             // Send keyReleaseEvent to all the objects
-            if (!Manager.EventReaction.blockingHero && !this.isBattleMap) {
-                Manager.EventReaction.sendEvent(null, 0, 1, true, 4, [null,
+            if (!ReactionInterpreter.blockingHero && !this.isBattleMap) {
+                Manager.Events.sendEvent(null, 0, 1, true, 4, [null,
                     System.DynamicValue.createNumber(key)], true);
             }
             super.onKeyReleased(key);
@@ -801,8 +801,8 @@ class Map extends Base {
      */
     onKeyPressedRepeat(key: number): boolean {
         if (!this.loading) {
-            if (!Manager.EventReaction.blockingHero && !this.isBattleMap) {
-                Manager.EventReaction.sendEvent(null, 0, 1, true, 3, [null,
+            if (!ReactionInterpreter.blockingHero && !this.isBattleMap) {
+                Manager.Events.sendEvent(null, 0, 1, true, 3, [null,
                     System.DynamicValue.createNumber(key), System.DynamicValue
                     .createSwitch(true), System.DynamicValue.createSwitch(true)]
                     , true);
@@ -819,8 +819,8 @@ class Map extends Base {
      */
     onKeyPressedAndRepeat(key: number): boolean {
         if (!this.loading) {
-            if (!Manager.EventReaction.blockingHero && !this.isBattleMap) {
-                Manager.EventReaction.sendEvent(null, 0, 1, true, 3, [null,
+            if (!ReactionInterpreter.blockingHero && !this.isBattleMap) {
+                Manager.Events.sendEvent(null, 0, 1, true, 3, [null,
                     System.DynamicValue.createNumber(key), System.DynamicValue
                     .createSwitch(true), System.DynamicValue.createSwitch(false)
                     ], true);

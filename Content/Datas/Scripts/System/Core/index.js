@@ -20,6 +20,7 @@ export * from "./Battler.js";
 export * from "./Camera.js";
 export * from "./Chrono.js";
 export * from "./CollisionSquare.js";
+export * from "./ReactionInterpreter.js";
 export * from "./Floor.js";
 export * from "./Frame.js";
 export * from "./Game.js";

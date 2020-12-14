@@ -1,5 +1,6 @@
 import { Base } from "./Base.js";
-import { System, Datas, Manager } from "../index.js";
+import { System, Datas } from "../index.js";
+import { ReactionInterpreter } from "../Core/index.js";
 import { Enum } from "../Common/index.js";
 var PrimitiveValueKind = Enum.PrimitiveValueKind;
 /** @class
@@ -56,10 +57,10 @@ class CallACommonReaction extends Base {
                 }
                 this.parameters[id] = parameter;
             }
-            currentState.interpreter = new Manager.EventReaction(object, Datas
+            currentState.interpreter = new ReactionInterpreter(object, Datas
                 .CommonEvents.getCommonReaction(this.commonReactionID), null, null, this.parameters);
         }
-        Manager.EventReaction.blockingHero = currentState.interpreter
+        ReactionInterpreter.blockingHero = currentState.interpreter
             .currentReaction.blockingHero;
         currentState.interpreter.update();
         if (currentState.interpreter.isFinished()) {

@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Camera, Node } from "../Core";
-import { Manager, EventCommand } from "..";
+import { Camera, Node, ReactionInterpreter, MapObject } from "../Core";
+import { Manager, EventCommand, System } from "..";
 import { Utils } from "../Common";
 
 /** @class
@@ -25,8 +25,8 @@ import { Utils } from "../Common";
  */
 class Base {
     
-    public reactionInterpreters: Manager.EventReaction[];
-    public parallelCommands: Manager.EventReaction[];
+    public reactionInterpreters: ReactionInterpreter[];
+    public parallelCommands: ReactionInterpreter[];
     public loading: boolean;
     public camera: Camera;
 
@@ -54,17 +54,17 @@ class Base {
         let endingReactions = new Array;
 
         // Updating blocking hero
-        Manager.EventReaction.blockingHero = false;
+        ReactionInterpreter.blockingHero = false;
         let i: number, l: number;
         for (i = 0, l = this.reactionInterpreters.length; i < l; i++) {
             if (this.reactionInterpreters[i].currentReaction.blockingHero) {
-                Manager.EventReaction.blockingHero = true;
+                ReactionInterpreter.blockingHero = true;
                 break;
             }
         }
 
         // Updating all reactions
-        let interpreter: Manager.EventReaction;
+        let interpreter: ReactionInterpreter;
         for (i = 0, l = this.reactionInterpreters.length; i < l; i++) {
             interpreter = this.reactionInterpreters[i];
             interpreter.update();
@@ -113,12 +113,13 @@ class Base {
      *  @param {number[]} event The time events values
      *  @param {boolean} moving Indicate if command is a moving one
      */
-    addReaction(sender, reaction, object, state, parameters, event, moving?):
-        Manager.EventReaction
+    addReaction(sender: MapObject, reaction: System.Reaction, object: MapObject, 
+        state: number, parameters: System.DynamicValue[], event: [System.Event, 
+        number], moving: boolean = false): ReactionInterpreter
     {
         if (reaction.getFirstCommand() !== null) {
             let excecuted = false;
-            let reactionInterpreter: Manager.EventReaction;
+            let reactionInterpreter: ReactionInterpreter;
             for (let i = 0, l = this.reactionInterpreters.length; i < l; i++) {
                 reactionInterpreter = this.reactionInterpreters[i];
                 if (reactionInterpreter.currentMapObject === object &&
@@ -128,7 +129,7 @@ class Base {
                 }
             }
             if (!excecuted) {
-                reactionInterpreter = new Manager.EventReaction(sender, reaction,
+                reactionInterpreter = new ReactionInterpreter(sender, reaction,
                     object, state, parameters, event);
                 this.reactionInterpreters.push(reactionInterpreter);
                 if (!moving) {

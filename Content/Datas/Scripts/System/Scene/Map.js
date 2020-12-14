@@ -12,7 +12,7 @@ import { Base } from "./Base.js";
 import { Enum, Utils, Constants, IO, Paths } from "../Common/index.js";
 var PictureKind = Enum.PictureKind;
 import { System, Datas, Scene, Manager } from "../index.js";
-import { Portion, MapPortion, Camera } from "../Core/index.js";
+import { Portion, MapPortion, Camera, ReactionInterpreter } from "../Core/index.js";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  A scene for a local map.
@@ -665,8 +665,8 @@ class Map extends Base {
     onKeyPressed(key) {
         if (!this.loading) {
             // Send keyPressEvent to all the objects
-            if (!Manager.EventReaction.blockingHero && !this.isBattleMap) {
-                Manager.EventReaction.sendEvent(null, 0, 1, true, 3, [null,
+            if (!ReactionInterpreter.blockingHero && !this.isBattleMap) {
+                Manager.Events.sendEvent(null, 0, 1, true, 3, [null,
                     System.DynamicValue.createNumber(key), System.DynamicValue
                         .createSwitch(false), System.DynamicValue.createSwitch(false)], true);
             }
@@ -680,8 +680,8 @@ class Map extends Base {
     onKeyReleased(key) {
         if (!this.loading) {
             // Send keyReleaseEvent to all the objects
-            if (!Manager.EventReaction.blockingHero && !this.isBattleMap) {
-                Manager.EventReaction.sendEvent(null, 0, 1, true, 4, [null,
+            if (!ReactionInterpreter.blockingHero && !this.isBattleMap) {
+                Manager.Events.sendEvent(null, 0, 1, true, 4, [null,
                     System.DynamicValue.createNumber(key)], true);
             }
             super.onKeyReleased(key);
@@ -694,8 +694,8 @@ class Map extends Base {
      */
     onKeyPressedRepeat(key) {
         if (!this.loading) {
-            if (!Manager.EventReaction.blockingHero && !this.isBattleMap) {
-                Manager.EventReaction.sendEvent(null, 0, 1, true, 3, [null,
+            if (!ReactionInterpreter.blockingHero && !this.isBattleMap) {
+                Manager.Events.sendEvent(null, 0, 1, true, 3, [null,
                     System.DynamicValue.createNumber(key), System.DynamicValue
                         .createSwitch(true), System.DynamicValue.createSwitch(true)], true);
             }
@@ -710,8 +710,8 @@ class Map extends Base {
      */
     onKeyPressedAndRepeat(key) {
         if (!this.loading) {
-            if (!Manager.EventReaction.blockingHero && !this.isBattleMap) {
-                Manager.EventReaction.sendEvent(null, 0, 1, true, 3, [null,
+            if (!ReactionInterpreter.blockingHero && !this.isBattleMap) {
+                Manager.Events.sendEvent(null, 0, 1, true, 3, [null,
                     System.DynamicValue.createNumber(key), System.DynamicValue
                         .createSwitch(true), System.DynamicValue.createSwitch(false)
                 ], true);
