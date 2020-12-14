@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Camera } from "../Core";
 import { Color, MonsterAction } from "../System";
 import { Map } from "./Map";
 
@@ -218,7 +219,15 @@ class Battle extends Map
     public step:number;
     public sceneMapCameraDistance:number; //Remove Scene Prefix
     public actionDoNothing:MonsterAction;
+    //Camera
     public cameraStep:number;
+    public cameraTick:number;
+    public cameraON:boolean;
+    public cameraDistance:number;
+    public cameraOffset:number;
+    //Transition
+    public transitionColor:Color;
+
 
     constructor(troopID, canGameOver, canEscape, battleMap, transitionStart, 
         transitionEnd, transitionStartColor, transitionEndColor)
@@ -240,6 +249,7 @@ class Battle extends Map
         this.transitionEnd = transitionEnd;
         this.transitionStartColor = transitionStartColor;
         this.transitionEndColor = transitionEndColor;
+        //TODO: Bug?
         this.transitionColor = transitionStart === MapTransitionKind.Fade;
         this.transitionColorAlpha = 0;
         this.step = 0;
