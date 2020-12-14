@@ -8,12 +8,12 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { MapElement } from "./MapElement.js";
 import { Datas } from "../index.js";
 import { Enum } from "../Common/index.js";
 var CustomShapeKind = Enum.CustomShapeKind;
 var ObjectCollisionKind = Enum.ObjectCollisionKind;
 import { Sprite } from "./Sprite.js";
+import { Object3D } from "./Object3D.js";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  A 3D object custom in the map.
@@ -22,7 +22,7 @@ const THREE = require('./Content/Datas/Scripts/Libs/three.js');
  *  @param {Record<string, any>} json Json object describing the object 3D custom
  *  @param {SystemObject3D} datas The System object 3D
  */
-class Object3DCustom extends MapElement {
+class Object3DCustom extends Object3D {
     constructor(json, datas) {
         super();
         this.datas = datas;

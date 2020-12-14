@@ -310,7 +310,7 @@ class Sprite extends MapElement {
      *  @returns {any[]}
      */
     createGeometry(width: number, height: number, tileset: boolean, position: 
-        Position): any[]
+        Position): [typeof THREE.Geometry, [number, StructMapElementCollision[]]]
     {
         let geometry = new THREE.Geometry();
         geometry.faceVertexUvs[0] = [];

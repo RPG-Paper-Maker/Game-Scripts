@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Portion } from "./Portion.js";
-import { Constants } from "../Common/index.js";
+import { Constants, Mathf } from "../Common/index.js";
 import { Datas } from "../index.js";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
@@ -45,6 +45,14 @@ class Position extends Portion {
         return new Position(Math.floor(position.x / Datas.Systems.SQUARE_SIZE), Math.floor(position.y / Datas.Systems.SQUARE_SIZE), Math.floor(position.z / Datas.Systems.SQUARE_SIZE));
     }
     /**
+     *  Get the complete number of Y of a position.
+     *   @returns {number}
+     */
+    getTotalY() {
+        return (this.y * Datas.Systems.SQUARE_SIZE) + (this.yPixels * Datas
+            .Systems.SQUARE_SIZE / 100);
+    }
+    /**
      *  Get the global portion of a json position.
      *  @returns {Portion}
      */
@@ -53,7 +61,6 @@ class Position extends Portion {
     }
     /**
      *  Transform a json position to a THREE.Vector3.
-     *  @static
      *  @param {number[]} position The json position
      *  @returns {THREE.Vector3}
      */
@@ -62,6 +69,16 @@ class Position extends Portion {
             .Systems.SQUARE_SIZE), (this.y * Datas.Systems.SQUARE_SIZE) + (this.yPixels * Datas.Systems
             .SQUARE_SIZE / 100), (this.z * Datas.Systems.SQUARE_SIZE) + (this.centerZ / 100 * Datas
             .Systems.SQUARE_SIZE));
+    }
+    /**
+     *  Transform a position to index position on X/Z axis (used for map
+     *  portion bounding boxes).
+     *  @returns {number}
+     */
+    toIndex() {
+        return (this.x % Constants.PORTION_SIZE) + (Mathf.mod(this.y, Constants
+            .PORTION_SIZE) * Constants.PORTION_SIZE) + ((this.z % Constants
+            .PORTION_SIZE) * Constants.PORTION_SIZE * Constants.PORTION_SIZE);
     }
 }
 export { Position };

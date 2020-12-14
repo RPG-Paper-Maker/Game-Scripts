@@ -129,3 +129,4 @@ class SpriteWall extends MapElement {
         return [count, objCollision];
     }
 }
+export { SpriteWall };

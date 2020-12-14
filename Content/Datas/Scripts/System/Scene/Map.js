@@ -10,7 +10,7 @@
 */
 import { Base } from "./Base.js";
 import { Utils, Constants } from "../Common/index.js";
-import { Datas } from "../index.js";
+import { Datas, Manager } from "../index.js";
 import { Portion } from "../Core/index.js";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
@@ -419,15 +419,13 @@ class Map extends Base {
         this.mapPortions[index] = mapPortion;
         */
     }
-    // -------------------------------------------------------
-    /** Get the objects at a specific portion
-    *   @param {number} i The global x portion
-    *   @param {number} j The global y portion
-    *   @param {number} k The global z portion
-    *   @returns {Object[]}
-    */
-    getObjectsAtPortion(i, j, k) {
-        //return RPM.game.getPotionsDatas(this.id, i, j, k);
+    /**
+     *  Get the objects at a specific portion.
+     *  @param {Portion} portion
+     *  @returns {Record<string, any>}
+     */
+    getObjectsAtPortion(portion) {
+        return Manager.Stack.game.getPotionsDatas(this.id, portion);
     }
     // -------------------------------------------------------
     /** Get a map portion at local postions
@@ -522,16 +520,14 @@ class Map extends Base {
             && portion.y <= limit &&
             portion.z >= -limit && portion.z <= limit);
     }
-    // -------------------------------------------------------
-    /** Check if a json position is in the map
-    *   @param {number[]} position The json position
-    *   @returns {boolean}
-    */
+    /**
+     *  Check if a position is in the map.
+     *  @param {Position} position The json position
+     *  @returns {boolean}
+     */
     isInMap(position) {
-        /*
-        return (position[0] >= 0 && position[0] < this.mapProperties.length &&
-                position[2] >= 0 && position[2] < this.mapProperties.width);
-                */
+        return (position.x >= 0 && position.x < this.mapProperties.length &&
+            position.z >= 0 && position.z < this.mapProperties.width);
     }
     // -------------------------------------------------------
     /** Get the hero position according to battle map

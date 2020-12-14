@@ -9,17 +9,18 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { MapElement, StructMapElementCollision } from "./MapElement";
+import { StructMapElementCollision } from "./MapElement";
 import { System, Datas } from "..";
 import { Position } from "./Position";
 import { Sprite } from "./Sprite";
 import { Enum } from "../Common";
 import ObjectCollisionKind = Enum.ObjectCollisionKind;
+import { Object3D } from "./Object3D";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /** @class
  *  A 3D object box in the map.
- *  @extends MapElement
+ *  @extends Object3D
  *  @property {THREE.Vector3[]} Object3DBox.VERTICES A box local vertices
  *  @property {THREE.Vector3[]} Object3DBox.NB_VERTICES A number of vertices
  *  @property {number[][]} Object3DBox.TEXTURES A textures values
@@ -32,7 +33,7 @@ const THREE = require('./Content/Datas/Scripts/Libs/three.js');
  *  custom
  *  @param {System.Object3D} datas The System object 3D
 */
-class Object3DBox extends MapElement {
+class Object3DBox extends Object3D {
 
     public static VERTICES = [
         // Front
@@ -149,7 +150,7 @@ class Object3DBox extends MapElement {
      *  @param {THREE.Geometry} geometry Geometry of the object 3D
      *  @param {Position} position The position of object 3D
      *  @param {number} count The faces count
-     *  @return {any[]}
+     *  @return {[number, StructMapElementCollision[]]}
     */
     updateGeometry(geometry: typeof THREE.Geometry, position: Position, count: 
         number): [number, StructMapElementCollision[]]

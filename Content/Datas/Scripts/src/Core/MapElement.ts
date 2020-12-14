@@ -16,7 +16,7 @@ import { Position } from "./Position";
 import { Datas } from "..";
 
 interface StructMapElementCollision {
-    b: number[],
+    b?: number[],
     p?: Position,
     l?: typeof THREE.Vector3,
     c?: any,
@@ -27,7 +27,12 @@ interface StructMapElementCollision {
     rh?: number,
     m?: number,
     t?: MapElement,
-    k?: boolean
+    k?: boolean,
+    left?: boolean,
+    right?: boolean,
+    top?: boolean,
+    bot?: boolean,
+    a?: number
 }
 
 /** @class

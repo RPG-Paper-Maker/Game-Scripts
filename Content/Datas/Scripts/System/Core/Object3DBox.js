@@ -8,15 +8,15 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { MapElement } from "./MapElement.js";
 import { Datas } from "../index.js";
 import { Sprite } from "./Sprite.js";
 import { Enum } from "../Common/index.js";
 var ObjectCollisionKind = Enum.ObjectCollisionKind;
+import { Object3D } from "./Object3D.js";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  A 3D object box in the map.
- *  @extends MapElement
+ *  @extends Object3D
  *  @property {THREE.Vector3[]} Object3DBox.VERTICES A box local vertices
  *  @property {THREE.Vector3[]} Object3DBox.NB_VERTICES A number of vertices
  *  @property {number[][]} Object3DBox.TEXTURES A textures values
@@ -29,7 +29,7 @@ const THREE = require('./Content/Datas/Scripts/Libs/three.js');
  *  custom
  *  @param {System.Object3D} datas The System object 3D
 */
-class Object3DBox extends MapElement {
+class Object3DBox extends Object3D {
     constructor(json, datas) {
         super();
         this.datas = datas;
@@ -51,7 +51,7 @@ class Object3DBox extends MapElement {
      *  @param {THREE.Geometry} geometry Geometry of the object 3D
      *  @param {Position} position The position of object 3D
      *  @param {number} count The faces count
-     *  @return {any[]}
+     *  @return {[number, StructMapElementCollision[]]}
     */
     updateGeometry(geometry, position, count) {
         let coef = 0.01;

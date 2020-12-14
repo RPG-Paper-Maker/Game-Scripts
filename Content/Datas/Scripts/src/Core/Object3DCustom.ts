@@ -9,13 +9,14 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { MapElement, StructMapElementCollision } from "./MapElement";
+import { StructMapElementCollision } from "./MapElement";
 import { System, Datas } from "..";
 import { Position } from "./Position";
 import { Enum } from "../Common";
 import CustomShapeKind = Enum.CustomShapeKind;
 import ObjectCollisionKind = Enum.ObjectCollisionKind;
 import { Sprite } from "./Sprite";
+import { Object3D } from "./Object3D";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /** @class
@@ -25,7 +26,7 @@ const THREE = require('./Content/Datas/Scripts/Libs/three.js');
  *  @param {Record<string, any>} json Json object describing the object 3D custom
  *  @param {SystemObject3D} datas The System object 3D
  */
-class Object3DCustom extends MapElement {
+class Object3DCustom extends Object3D {
 
     public id: number;
     public datas: System.Object3D;

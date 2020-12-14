@@ -97,7 +97,7 @@ class TextureBundle {
      *  @param {number[]} rect
      *  @returns {boolean}
      */
-    isInTexture(id: number, rect: number[]): boolean {
+    isInTexture(id: number, rect?: number[]): boolean {
         if (id >= this.beginID && id <= this.endID) {
             if (id === this.beginID) {
                 return id === this.endID ? (this.isSup(rect, this.beginPoint) &&

@@ -10,7 +10,7 @@
 */
 
 import { Portion } from "./Portion";
-import { Constants, Utils } from "../Common";
+import { Constants, Utils, Mathf } from "../Common";
 import { Datas } from "..";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
@@ -66,6 +66,15 @@ class Position extends Portion {
     }
 
     /** 
+     *  Get the complete number of Y of a position.
+     *   @returns {number}
+     */
+    getTotalY(): number {
+        return (this.y * Datas.Systems.SQUARE_SIZE) + (this.yPixels * Datas
+            .Systems.SQUARE_SIZE / 100);
+    }
+
+    /** 
      *  Get the global portion of a json position.
      *  @returns {Portion}
      */
@@ -79,7 +88,6 @@ class Position extends Portion {
 
     /** 
      *  Transform a json position to a THREE.Vector3.
-     *  @static
      *  @param {number[]} position The json position
      *  @returns {THREE.Vector3}
      */
@@ -92,6 +100,17 @@ class Position extends Portion {
             (this.z * Datas.Systems.SQUARE_SIZE) + (this.centerZ / 100 * Datas
                 .Systems.SQUARE_SIZE)
         );
+    }
+
+    /** 
+     *  Transform a position to index position on X/Z axis (used for map 
+     *  portion bounding boxes).
+     *  @returns {number}
+     */
+    toIndex(): number {
+        return (this.x % Constants.PORTION_SIZE) + (Mathf.mod(this.y, Constants
+            .PORTION_SIZE) * Constants.PORTION_SIZE) + ((this.z % Constants
+            .PORTION_SIZE) * Constants.PORTION_SIZE * Constants.PORTION_SIZE);
     }
 }
 

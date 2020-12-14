@@ -77,6 +77,7 @@ class Mountain extends MapElement {
      */
     read(json: Record<string, any>) {
         super.read(json);
+        
         this.mountainID = Utils.defaultValue(json.sid, -1);
         this.widthSquares = Utils.defaultValue(json.ws, 0);
         this.widthPixels = Utils.defaultValue(json.wp, 0);

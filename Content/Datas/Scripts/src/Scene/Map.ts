@@ -13,8 +13,8 @@ import { Base } from "./Base";
 import { Enum, Utils, Constants } from "../Common";
 import Orientation = Enum.Orientation;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
-import { System, Datas, Scene } from "..";
-import { Position, Portion, MapPortion } from "../Core";
+import { System, Datas, Scene, Manager } from "..";
+import { Position, Portion, MapPortion, TextureBundle } from "../Core";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /** @class
@@ -69,6 +69,10 @@ class Map extends Base
     public mapPortions: MapPortion[];
     public textureTileset: typeof THREE.MeshBasicMaterial;
     public texturesCharacters: typeof THREE.MeshBasicMaterial[];
+    public texturesAutotiles: TextureBundle[];
+    public texturesWalls: typeof THREE.MeshBasicMaterial[];
+    public texturesMountains: TextureBundle[];
+    public texturesObjects3D: typeof THREE.MeshBasicMaterial[];
     public collisions: number[][];
 
     constructor(id, isBattleMap = false, minimal = false) {
@@ -471,16 +475,13 @@ class Map extends Base
         */
     }
 
-    // -------------------------------------------------------
-    /** Get the objects at a specific portion
-    *   @param {number} i The global x portion
-    *   @param {number} j The global y portion
-    *   @param {number} k The global z portion
-    *   @returns {Object[]}
-    */
-    getObjectsAtPortion(i, j, k)
-    {
-        //return RPM.game.getPotionsDatas(this.id, i, j, k);
+    /** 
+     *  Get the objects at a specific portion.
+     *  @param {Portion} portion
+     *  @returns {Record<string, any>}
+     */
+    getObjectsAtPortion(portion: Portion): Record<string, any> {
+        return Manager.Stack.game.getPotionsDatas(this.id, portion);
     }
 
     // -------------------------------------------------------
@@ -601,17 +602,14 @@ class Map extends Base
                 portion.z >= -limit && portion.z <= limit);
     }
 
-    // -------------------------------------------------------
-    /** Check if a json position is in the map
-    *   @param {number[]} position The json position
-    *   @returns {boolean}
-    */
-    isInMap(position)
-    {
-        /*
-        return (position[0] >= 0 && position[0] < this.mapProperties.length &&
-                position[2] >= 0 && position[2] < this.mapProperties.width);
-                */
+    /** 
+     *  Check if a position is in the map.
+     *  @param {Position} position The json position
+     *  @returns {boolean}
+     */
+    isInMap(position: Position): boolean {
+        return (position.x >= 0 && position.x < this.mapProperties.length &&
+            position.z >= 0 && position.z < this.mapProperties.width);
     }
 
     // -------------------------------------------------------
