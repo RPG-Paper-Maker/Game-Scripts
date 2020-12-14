@@ -158,6 +158,8 @@ class Systems {
         this.skyboxes = [];
         this.fontSizes = [];
         this.fontNames = [];
+        this.speeds = [];
+        this.frequencies = [];
         Utils.readJSONSystemList({ list: json.itemsTypes, listIDs: this
             .itemsTypes, func: (element: Record<string, any>) =>
         {

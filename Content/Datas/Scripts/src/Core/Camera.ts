@@ -32,8 +32,8 @@ import Orientation = Enum.Orientation;
 *   properties
 *   @param {MapObject} target The camera target
 */
-class Camera
-{
+class Camera {
+    
     public perspectiveCamera: typeof THREE.PerspectiveCamera;
     public orthographicCamera: typeof THREE.OrthographicCamera;
     public isPerspective: boolean;

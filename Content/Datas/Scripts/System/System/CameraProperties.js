@@ -64,6 +64,7 @@ export class CameraProperties extends Base {
      *  @param {Camera} camera The camera
      */
     initializeCamera(camera) {
+        camera.isPerspective = true;
         camera.perspectiveCamera = new THREE.PerspectiveCamera(this.fov
             .getValue(), ScreenResolution.CANVAS_WIDTH / ScreenResolution
             .CANVAS_HEIGHT, this.near.getValue(), this.far.getValue());

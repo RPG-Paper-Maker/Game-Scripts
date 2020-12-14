@@ -397,7 +397,7 @@ class MapObject {
             let result = sprite.createGeometry(this.width, this.height, false, this.position);
             let geometry = result[0];
             let objCollision = result[1];
-            this.mesh = new THREE.ConvexMesh(geometry, material);
+            this.mesh = new THREE.Mesh(geometry, material);
             this.mesh.position.set(this.position.x, this.position.y, this
                 .position.z);
             this.boundingBoxSettings = objCollision[1][0];
