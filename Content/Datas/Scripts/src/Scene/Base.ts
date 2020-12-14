@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Camera } from "../Core";
+import { Camera, Node } from "../Core";
 import { Manager, EventCommand } from "..";
 import { Utils } from "../Common";
 
@@ -25,10 +25,10 @@ import { Utils } from "../Common";
  */
 class Base {
     
-    public camera: Camera
     public reactionInterpreters: Manager.EventReaction[];
     public parallelCommands: Manager.EventReaction[];
     public loading: boolean;
+    public camera: Camera;
 
     constructor(loading = true) {
         this.reactionInterpreters = new Array;
@@ -46,25 +46,25 @@ class Base {
         this.loading = false;
     }
 
-    // -------------------------------------------------------
-    /** Update all the reactions interpreters
+    /** 
+     *  Update all the reactions interpreters.
      */
     updateInterpreters() {
-        /*
         // Index of all the finished parallel reactions
         let endingReactions = new Array;
 
         // Updating blocking hero
-        Globals.blockingHero = false;
-        let i, l, interpreter;
+        Manager.EventReaction.blockingHero = false;
+        let i: number, l: number;
         for (i = 0, l = this.reactionInterpreters.length; i < l; i++) {
             if (this.reactionInterpreters[i].currentReaction.blockingHero) {
-                RPM.blockingHero = true;
+                Manager.EventReaction.blockingHero = true;
                 break;
             }
         }
 
         // Updating all reactions
+        let interpreter: Manager.EventReaction;
         for (i = 0, l = this.reactionInterpreters.length; i < l; i++) {
             interpreter = this.reactionInterpreters[i];
             interpreter.update();
@@ -73,7 +73,7 @@ class Base {
                 endingReactions.push(i);
             }
             // If changed map, STOP
-            if (!RPM.currentMap || RPM.currentMap.loading) {
+            if (!Manager.Stack.currentMap || Manager.Stack.currentMap.loading) {
                 return;
             }
         }
@@ -81,16 +81,15 @@ class Base {
         // Deleting finished reactions
         for (i = endingReactions.length - 1; i >= 0; i--) {
             this.reactionInterpreters.splice(endingReactions[i], 1);
-        }*/
+        }
     }
 
-    // -------------------------------------------------------
-    /** Update all the parallel commands
+    /** 
+     *  Update all the parallel commands.
      */
     updateParallelCommands() {
-        /*
         let endingCommands = new Array; // Index of all the finished commands
-        let i, l, previousCommand, command;
+        let i: number, l: number, previousCommand: Node, command: Node;
         for (i = 0, l = this.parallelCommands.length; i < l; i++) {
             previousCommand = this.parallelCommands[i].currentCommand;
             command = this.parallelCommands[i].updateCommand();
@@ -101,28 +100,25 @@ class Base {
         for (i = endingCommands.length - 1; i >= 0; i--) {
             this.parallelCommands.splice(endingCommands[i], 1);
         }
-        */
     }
 
-    // -------------------------------------------------------
-    /** Add a reaction in the interpreter list
-     *   @param {MapObject} sender The sender of this reaction
-     *   @param {SystemReaction} reaction The reaction to add
-     *   @param {MapObject} object The object reacting
-     *   @param {number} state The state ID
-     *   @param {SystemParameter[]} parameters All the parameters coming with
-     *   this reaction
-     *   @param {number[]} event The time events values
-     *   @param {boolean} moving Indicate if command is a moving one
+    /** 
+     *  Add a reaction in the interpreter list.
+     *  @param {MapObject} sender The sender of this reaction
+     *  @param {System.Reaction} reaction The reaction to add
+     *  @param {MapObject} object The object reacting
+     *  @param {number} state The state ID
+     *  @param {System.Parameter[]} parameters All the parameters coming with
+     *  this reaction
+     *  @param {number[]} event The time events values
+     *  @param {boolean} moving Indicate if command is a moving one
      */
     addReaction(sender, reaction, object, state, parameters, event, moving?):
         Manager.EventReaction
     {
-        return new Manager.EventReaction(null, null, null, null); // REMOVE
-        /*
         if (reaction.getFirstCommand() !== null) {
             let excecuted = false;
-            let reactionInterpreter;
+            let reactionInterpreter: Manager.EventReaction;
             for (let i = 0, l = this.reactionInterpreters.length; i < l; i++) {
                 reactionInterpreter = this.reactionInterpreters[i];
                 if (reactionInterpreter.currentMapObject === object &&
@@ -132,7 +128,7 @@ class Base {
                 }
             }
             if (!excecuted) {
-                reactionInterpreter = new ReactionInterpreter(sender, reaction,
+                reactionInterpreter = new Manager.EventReaction(sender, reaction,
                     object, state, parameters, event);
                 this.reactionInterpreters.push(reactionInterpreter);
                 if (!moving) {
@@ -145,11 +141,10 @@ class Base {
             }
         }
         return null;
-        */
     }
 
-    // -------------------------------------------------------
-    /** Update the scene
+    /** 
+     *  Update the scene.
      */
     update() {
         // Parallel reactions
@@ -159,82 +154,72 @@ class Base {
         Base.prototype.updateParallelCommands.call(this);
     }
 
-    // -------------------------------------------------------
-    /** Handle scene key pressed
-     *   @param {number} key The key ID
+    /** 
+     *  Handle scene key pressed.
+     *  @param {number} key The key ID
      */
     onKeyPressed(key: number) {
-        /*
         for (let i = 0, l = this.reactionInterpreters.length; i < l; i++) {
             this.reactionInterpreters[i].onKeyPressed(key);
         }
-        */
     }
 
-    // -------------------------------------------------------
-    /** Handle scene key released
-     *   @param {number} key The key ID
+    /** 
+     *  Handle scene key released.
+     *  @param {number} key The key ID
      */
     onKeyReleased(key: number) {
-        /*
         for (let i = 0, l = this.reactionInterpreters.length; i < l; i++) {
             this.reactionInterpreters[i].onKeyReleased(key);
         }
-        */
     }
 
-    // -------------------------------------------------------
-    /** Handle scene pressed repeat key
-     *   @param {number} key The key ID
-     *   @returns {boolean}
+    /** 
+     *  Handle scene pressed repeat key.
+     *  @param {number} key The key ID
+     *  @returns {boolean}
      */
     onKeyPressedRepeat(key: number): boolean {
-        /*
         for (let i = 0, l = this.reactionInterpreters.length; i < l; i++) {
             this.reactionInterpreters[i].onKeyPressedRepeat(key);
         }
-        */
         return true;
     }
 
-    // -------------------------------------------------------
-    /** Handle scene pressed and repeat key
-     *   @param {number} key The key ID
-     *   @returns {boolean}
+    /** 
+     *  Handle scene pressed and repeat key.
+     *  @param {number} key The key ID
+     *  @returns {boolean}
      */
     onKeyPressedAndRepeat(key: number): boolean {
-        /*
         for (let i = 0, l = this.reactionInterpreters.length; i < l; i++) {
             this.reactionInterpreters[i].onKeyPressedAndRepeat(key);
         }
-        */
         return true;
     }
 
-    // -------------------------------------------------------
-    /** Draw the 3D scene
+    /** 
+     *  Draw the 3D scene.
      */
     draw3D() {
 
     }
 
-    // -------------------------------------------------------
-    /** Draw the HUD scene
+    /** 
+     *  Draw the HUD scene.
      */
     drawHUD() {
-        /*
-        let i, l;
+        let i: number, l: number;
         for (i = 0, l = this.reactionInterpreters.length; i < l; i++) {
             this.reactionInterpreters[i].drawHUD();
         }
         for (i = 0, l = this.parallelCommands.length; i < l; i++) {
             this.parallelCommands[i].drawHUD();
         }
-        */
     }
 
-    // -------------------------------------------------------
-    /** Close the scene
+    /** 
+     *  Close the scene.
      */
     close() {
 
