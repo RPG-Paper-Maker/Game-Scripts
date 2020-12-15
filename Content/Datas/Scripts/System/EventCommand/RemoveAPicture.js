@@ -9,18 +9,20 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
+import { System, Manager } from "../index.js";
 /** @class
- *  An event command representing one of the choice.
+ *  An event command for removing a picture.
  *  @extends EventCommand.Base
- *  @property {number} index The choice index
+ *  @property {System.DynamicValue} index The index value
  *  @param {any[]} command Direct JSON command to parse
  */
-class Choice extends Base {
+class RemoveAPicture extends Base {
     constructor(command) {
         super();
-        this.index = command[0];
-        this.isDirectNode = true;
-        this.parallel = false;
+        let iterator = {
+            i: 0
+        };
+        this.index = System.DynamicValue.createValueCommand(command, iterator);
     }
     /**
      *  Update and check if the event is finished.
@@ -30,14 +32,15 @@ class Choice extends Base {
      *  @returns {number} The number of node to pass
      */
     update(currentState, object, state) {
-        return -1;
-    }
-    /**
-     *  Returns the number of node to pass.
-     *  @returns {number}
-     */
-    goToNextCommand() {
+        let currentIndex = this.index.getValue();
+        for (let i = 0, l = Manager.Stack.displayedPictures.length; i < l; i++) {
+            if (currentIndex === Manager.Stack.displayedPictures[i][0]) {
+                Manager.Stack.displayedPictures.splice(i, 1);
+                break;
+            }
+        }
+        Manager.Stack.requestPaintHUD = true;
         return 1;
     }
 }
-export { Choice };
+export { RemoveAPicture };

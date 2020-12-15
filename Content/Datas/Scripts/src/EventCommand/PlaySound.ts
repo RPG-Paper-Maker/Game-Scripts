@@ -10,27 +10,36 @@
 */
 
 import { Base } from "./Base";
+import { EventCommand, System } from "..";
+import { Enum } from "../Common";
+import SongKind = Enum.SongKind;
 import { MapObject } from "../Core";
 
 /** @class
- *  An event command representing one of the choice.
+ *  An event command for playing a backgroundsound.
  *  @extends EventCommand.Base
- *  @property {number} index The choice index
+ *  @property {System.PlaySong} song The play song
  *  @param {any[]} command Direct JSON command to parse
  */
-class Choice extends Base {
+class PlaySound extends Base {
 
-    public index: number;
-
+    public song: System.PlaySong;
+    
     constructor(command: any[]) {
         super();
 
-        this.index = command[0];
-        this.isDirectNode = true;
-        this.parallel = false;
+        EventCommand.PlayMusic.parsePlaySong(this, command, SongKind.Sound);
     }
 
     /** 
+     *  Initialize the current state.
+     *  @returns {Record<string, any>} The current state
+     */
+    initialize(): Record<string, any> {
+        return this.song.initialize();
+    }
+
+    /**
      *  Update and check if the event is finished.
      *  @param {Record<string, any>} currentState The current state of the event
      *  @param {MapObject} object The current object reacting
@@ -40,16 +49,9 @@ class Choice extends Base {
     update(currentState: Record<string, any>, object: MapObject, state: number): 
         number
     {
-        return -1;
-    }
-
-    /** 
-     *  Returns the number of node to pass.
-     *  @returns {number}
-     */
-    goToNextCommand(): number {
+        this.song.playSound();
         return 1;
     }
 }
 
-export { Choice }
+export { PlaySound }

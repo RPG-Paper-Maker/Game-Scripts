@@ -34,7 +34,7 @@ class Stack {
     public static lastUpdateTime = new Date().getTime();
     public static game: Game = null;
     public static currentMap: Scene.Map;
-    public static displayedPictures: any[][] = [];
+    public static displayedPictures: [number, Picture2D][] = [];
     public static isInMainMenu: boolean = false;
 
     constructor() {
@@ -229,7 +229,7 @@ class Stack {
                 this.clearHUD();
                 if (!this.isEmpty()) {
                     // Display < 0 index image command
-                    let i: number, l: number, v: any[];
+                    let i: number, l: number, v: [number, Picture2D];
                     for (i = 0, l = this.displayedPictures.length; i < l; i++) {
                         v = this.displayedPictures[i];
                         if (v[0] >= 0) {

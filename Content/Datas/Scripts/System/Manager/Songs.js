@@ -99,7 +99,7 @@ class Songs {
      *  of stoppped
      *  @returns {boolean} Indicates if the song is stopped
      */
-    static stopSong(kind, time, seconds, pause) {
+    static stopSong(kind, time, seconds, pause = false) {
         let current = new Date().getTime();
         let ellapsedTime = current - time;
         let currentHowl = this.currentHowl[kind];

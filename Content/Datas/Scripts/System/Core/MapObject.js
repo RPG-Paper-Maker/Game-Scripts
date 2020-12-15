@@ -108,14 +108,16 @@ class MapObject {
                 if (thisObject.isInScene || thisObject.isHero || thisObject
                     .isStartup) {
                     return {
-                        object: thisObject
+                        object: thisObject,
+                        id: thisObject.system.id
                     };
                 }
                 objectID = thisObject.system.id;
                 break;
             case 0: // Hero
                 return {
-                    object: Manager.Stack.game.hero
+                    object: Manager.Stack.game.hero,
+                    id: Manager.Stack.game.hero.system.id
                 };
             default:
                 break;
@@ -137,6 +139,7 @@ class MapObject {
         if (moved !== null) {
             return {
                 object: moved,
+                id: objectID,
                 kind: 0,
                 index: i,
                 list: null,
@@ -158,6 +161,7 @@ class MapObject {
             if (moved === null) {
                 return {
                     object: Manager.Stack.game.hero,
+                    id: objectID,
                     kind: 1,
                     index: -1,
                     list: null,
@@ -167,6 +171,7 @@ class MapObject {
             else {
                 return {
                     object: moved,
+                    id: objectID,
                     kind: 1,
                     index: i,
                     list: objects,
@@ -183,6 +188,7 @@ class MapObject {
             if (moved === null) {
                 return {
                     object: Manager.Stack.game.hero,
+                    id: objectID,
                     kind: 2,
                     index: -1,
                     list: null,
@@ -192,6 +198,7 @@ class MapObject {
             else {
                 return {
                     object: moved,
+                    id: objectID,
                     kind: 2,
                     index: -1,
                     list: null,

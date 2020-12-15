@@ -8,12 +8,12 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Base } from "./Base.js";
 import { Enum, Utils, Constants, IO, Paths } from "../Common/index.js";
 var PictureKind = Enum.PictureKind;
 import { System, Datas, Scene, Manager } from "../index.js";
 import { Portion, MapPortion, Camera, ReactionInterpreter } from "../Core/index.js";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  A scene for a local map.
  *  @extends SceneGame
@@ -758,4 +758,6 @@ class Map extends Base {
         }
     }
 }
+Map.allowMainMenu = true;
+Map.allowSaves = true;
 export { Map };

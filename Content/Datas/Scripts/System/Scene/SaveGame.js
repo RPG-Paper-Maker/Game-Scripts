@@ -57,3 +57,4 @@ class SaveGame extends SaveLoadGame {
         //RPM.currentMap.draw3D();
     }
 }
+export { SaveGame };

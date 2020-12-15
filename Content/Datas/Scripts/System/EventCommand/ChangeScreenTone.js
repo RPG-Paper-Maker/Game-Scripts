@@ -9,18 +9,63 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
+import { System, Datas, Manager } from "../index.js";
+import { Utils } from "../Common/index.js";
 /** @class
- *  An event command representing one of the choice.
- *  @extends EventCommand.Base
- *  @property {number} index The choice index
+ *  An event command for changing screen tone.
+ *  @extends EventCommand
+ *  @property {System.DynamicValue} r The red color value
+ *  @property {System.DynamicValue} g The green color value
+ *  @property {System.DynamicValue} b The blue color value
+ *  @property {System.DynamicValue} grey The grey color value
+ *  @property {boolean} subColor Indicate if the is a sub color
+ *  @property {System.DynamicValue} colorID The color ID value
+ *  @property {boolean} waitEnd Indicate if wait end of the command
+ *  @property {System.DynamicValue} time The time value for changing screen tone
  *  @param {any[]} command Direct JSON command to parse
- */
-class Choice extends Base {
+*/
+class ChangeScreenTone extends Base {
     constructor(command) {
         super();
-        this.index = command[0];
+        if (!command) {
+            return;
+        }
+        let iterator = {
+            i: 0
+        };
+        this.r = System.DynamicValue.createValueCommand(command, iterator);
+        this.g = System.DynamicValue.createValueCommand(command, iterator);
+        this.b = System.DynamicValue.createValueCommand(command, iterator);
+        this.grey = System.DynamicValue.createValueCommand(command, iterator);
+        if (Utils.numToBool(command[iterator.i++])) {
+            this.subColor = Utils.numToBool(command[iterator.i++]);
+            this.colorID = System.DynamicValue.createValueCommand(command, iterator);
+        }
+        this.waitEnd = Utils.numToBool(command[iterator.i++]);
+        this.time = System.DynamicValue.createValueCommand(command, iterator);
         this.isDirectNode = true;
-        this.parallel = false;
+        this.parallel = !this.waitEnd;
+    }
+    /**
+     *  Initialize the current state.
+     *  @returns {Record<string, any>} The current state
+     */
+    initialize() {
+        let time = this.time.getValue() * 1000;
+        let color = this.colorID ? Datas.Systems.getColor(this.colorID
+            .getValue()) : null;
+        return {
+            parallel: this.waitEnd,
+            finalDifRed: Math.max(Math.min((this.r.getValue() + (color ? color
+                .red : 0)) / 255, 1), -1) - Manager.GL.screenTone.x,
+            finalDifGreen: Math.max(Math.min((this.g.getValue() + (color ? color
+                .green : 0)) / 255, 1), -1) - Manager.GL.screenTone.y,
+            finalDifBlue: Math.max(Math.min((this.b.getValue() + (color ? color
+                .blue : 0)) / 255, 1), -1) - Manager.GL.screenTone.z,
+            finalDifGrey: Math.max(Math.min(1 - (this.grey.getValue() / 100), 1), -1) - Manager.GL.screenTone.w,
+            time: time,
+            timeLeft: time
+        };
     }
     /**
      *  Update and check if the event is finished.
@@ -28,16 +73,41 @@ class Choice extends Base {
      *  @param {MapObject} object The current object reacting
      *  @param {number} state The state ID
      *  @returns {number} The number of node to pass
-     */
+    */
     update(currentState, object, state) {
-        return -1;
-    }
-    /**
-     *  Returns the number of node to pass.
-     *  @returns {number}
-     */
-    goToNextCommand() {
+        if (currentState.parallel) {
+            // Updating the time left
+            let timeRate, dif;
+            if (currentState.time === 0) {
+                timeRate = 1;
+            }
+            else {
+                dif = Manager.Stack.elapsedTime;
+                currentState.timeLeft -= Manager.Stack.elapsedTime;
+                if (currentState.timeLeft < 0) {
+                    dif += currentState.timeLeft;
+                    currentState.timeLeft = 0;
+                }
+                timeRate = dif / currentState.time;
+            }
+            // Update values
+            Manager.GL.screenTone.setX(Manager.GL.screenTone.x + (timeRate *
+                currentState.finalDifRed));
+            Manager.GL.screenTone.setY(Manager.GL.screenTone.y + (timeRate *
+                currentState.finalDifGreen));
+            Manager.GL.screenTone.setZ(Manager.GL.screenTone.z + (timeRate *
+                currentState.finalDifBlue));
+            Manager.GL.screenTone.setW(Manager.GL.screenTone.w + (timeRate *
+                currentState.finalDifGrey));
+            Manager.GL.updateBackgroundColor(Manager.Stack.currentMap
+                .mapProperties.backgroundColor);
+            // If time = 0, then this is the end of the command
+            if (currentState.timeLeft === 0) {
+                return 1;
+            }
+            return 0;
+        }
         return 1;
     }
 }
-export { Choice };
+export { ChangeScreenTone };

@@ -174,6 +174,23 @@ class Utils {
         }
         return c;
     }
+    /**
+     *  Get the index of an object in a array containing a property with a
+     *  specific value.
+     *  @static
+     *  @param {Object[]} array The array to check
+     *  @param {string} attr The attribute of the object to check
+     *  @param {any} value The value to check on the object attribute
+     *  @returns {number}
+     */
+    static indexOfProp(array, attr, value) {
+        for (let i = 0, l = array.length; i < l; i++) {
+            if (array[i][attr] === value) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }
 /** Link the fontSize and the fontName to a string that can be used by the
 *   canvasHUD

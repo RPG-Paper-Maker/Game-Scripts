@@ -10,24 +10,26 @@
 */
 
 import { Base } from "./Base";
+import { System, Manager } from "..";
 import { MapObject } from "../Core";
 
 /** @class
- *  An event command representing one of the choice.
+ *  An event command for removing a picture.
  *  @extends EventCommand.Base
- *  @property {number} index The choice index
+ *  @property {System.DynamicValue} index The index value
  *  @param {any[]} command Direct JSON command to parse
  */
-class Choice extends Base {
-
-    public index: number;
+class RemoveAPicture extends Base {
+    
+    public index: System.DynamicValue;
 
     constructor(command: any[]) {
         super();
 
-        this.index = command[0];
-        this.isDirectNode = true;
-        this.parallel = false;
+        let iterator = {
+            i: 0
+        }
+        this.index = System.DynamicValue.createValueCommand(command, iterator);
     }
 
     /** 
@@ -40,16 +42,16 @@ class Choice extends Base {
     update(currentState: Record<string, any>, object: MapObject, state: number): 
         number
     {
-        return -1;
-    }
-
-    /** 
-     *  Returns the number of node to pass.
-     *  @returns {number}
-     */
-    goToNextCommand(): number {
+        let currentIndex = this.index.getValue();
+        for (let i = 0, l = Manager.Stack.displayedPictures.length; i < l; i++) {
+            if (currentIndex === Manager.Stack.displayedPictures[i][0]) {
+                Manager.Stack.displayedPictures.splice(i, 1);
+                break;
+            }
+        }
+        Manager.Stack.requestPaintHUD = true;
         return 1;
     }
 }
 
-export { Choice }
+export { RemoveAPicture }

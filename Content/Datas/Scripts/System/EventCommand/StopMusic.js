@@ -9,18 +9,54 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
+import { EventCommand, System, Manager } from "../index.js";
+import { Enum } from "../Common/index.js";
+var SongKind = Enum.SongKind;
 /** @class
- *  An event command representing one of the choice.
+ *  An event command for stopping the music.
  *  @extends EventCommand.Base
- *  @property {number} index The choice index
+ *  @property {System.DynamicValue} seconds The time in seconds value
  *  @param {any[]} command Direct JSON command to parse
  */
-class Choice extends Base {
+class StopMusic extends Base {
     constructor(command) {
         super();
-        this.index = command[0];
+        EventCommand.StopMusic.parseStopSong(this, command);
         this.isDirectNode = true;
-        this.parallel = false;
+        this.parallel = true;
+    }
+    /**
+     *  Parse a stop song command.
+     *  @static
+     *  @param {any} that The event command to parse
+     *  @param {any[]} command Direct JSON command to parse
+     */
+    static parseStopSong(that, command) {
+        let iterator = {
+            i: 0
+        };
+        that.seconds = System.DynamicValue.createValueCommand(command, iterator);
+    }
+    /**
+     *  Stop the song.
+     *  @static
+     *  @param {any} that The event command to parse
+     *  @param {SongKind} kind The song kind
+     *  @param {number} time The date seconds value in the first call of stop
+     */
+    static stopSong(that, kind, time) {
+        return Manager.Songs.stopSong(kind, time, that.seconds.getValue()) ? 1 :
+            0;
+    }
+    /**
+     *  Initialize the current state.
+     *  @returns {Record<string, any>} The current state
+     */
+    initialize() {
+        return {
+            parallel: false,
+            time: new Date().getTime()
+        };
     }
     /**
      *  Update and check if the event is finished.
@@ -30,14 +66,8 @@ class Choice extends Base {
      *  @returns {number} The number of node to pass
      */
     update(currentState, object, state) {
-        return -1;
-    }
-    /**
-     *  Returns the number of node to pass.
-     *  @returns {number}
-     */
-    goToNextCommand() {
-        return 1;
+        let stopped = EventCommand.StopMusic.stopSong(this, SongKind.Music, currentState.time);
+        return currentState.parallel ? stopped : 1;
     }
 }
-export { Choice };
+export { StopMusic };

@@ -9,10 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
+import { Position } from "../Core/index.js";
 /** @class
  *  A battle map of the game.
  *  @property {number} idMap The map ID
- *  @property {number[]} position The json position
+ *  @property {Position} position The position
  *  @param {Record<string, any>} [json=undefined] Json object describing the battle map
  */
 class BattleMap extends Base {
@@ -29,7 +30,7 @@ class BattleMap extends Base {
     static create(idMap, position) {
         let map = new BattleMap();
         map.idMap = idMap;
-        map.position = position;
+        map.position = Position.createFromArray(position);
         return map;
     }
     /**

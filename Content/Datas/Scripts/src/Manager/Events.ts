@@ -31,120 +31,115 @@ class Events {
     static getEventCommand(json: Record<string, any>): EventCommand.Base {
         let command = json.command;
         switch(json.kind) {
-            /*
             case EventCommandKind.ShowText:
-                return new EventCommandShowText(command);
+                return new EventCommand.ShowText(command);
             case EventCommandKind.ChangeVariables:
-                return new EventCommandChangeVariables(command);
+                return new EventCommand.ChangeVariables(command);
             case EventCommandKind.EndGame:
-                return new EventCommandEndGame(command);
+                return new EventCommand.EndGame(command);
             case EventCommandKind.While:
-                return new EventCommandWhile(command);
+                return new EventCommand.While(command);
             case EventCommandKind.WhileBreak:
-                return new EventCommandWhileBreak(command);
+                return new EventCommand.WhileBreak(command);
             case EventCommandKind.InputNumber:
-                return new EventCommandInputNumber(command);
+                return new EventCommand.InputNumber(command);
             case EventCommandKind.If:
-                return new EventCommandIf(command);
+                return new EventCommand.If(command);
             case EventCommandKind.Else:
-                return new EventCommandElse(command);
+                return new EventCommand.Else(command);
             case EventCommandKind.OpenMainMenu:
-                return new EventCommandOpenMainMenu(command);
+                return new EventCommand.OpenMainMenu(command);
             case EventCommandKind.OpenSavesMenu:
-                return new EventCommandOpenSavesMenu(command);
+                return new EventCommand.OpenSavesMenu(command);
             case EventCommandKind.ModifyInventory:
-                return new EventCommandModifyInventory(command);
+                return new EventCommand.ModifyInventory(command);
             case EventCommandKind.ModifyTeam:
-                return new EventCommandModifyTeam(command);
+                return new EventCommand.ModifyTeam(command);
             case EventCommandKind.StartBattle:
-                return new EventCommandStartBattle(command);
+                return new EventCommand.StartBattle(command);
             case EventCommandKind.IfWin:
-                return new EventCommandIfWin(command);
+                return new EventCommand.IfWin(command);
             case EventCommandKind.IfLose:
-                return new EventCommandIfLose(command);
+                return new EventCommand.IfLose(command);
             case EventCommandKind.ChangeState:
-                return new EventCommandChangeState(command);
+                return new EventCommand.ChangeState(command);
             case EventCommandKind.SendEvent:
-                return new EventCommandSendEvent(command);
+                return new EventCommand.SendEvent(command);
             case EventCommandKind.TeleportObject:
-                return new EventCommandTeleportObject(command);
+                return new EventCommand.TeleportObject(command);
             case EventCommandKind.MoveObject:
-                return new EventCommandMoveObject(command);
+                return new EventCommand.MoveObject(command);
             case EventCommandKind.Wait:
-                return new EventCommandWait(command);
+                return new EventCommand.Wait(command);
             case EventCommandKind.MoveCamera:
-                return new EventCommandMoveCamera(command);
+                return new EventCommand.MoveCamera(command);
             case EventCommandKind.PlayMusic:
-                return new EventCommandPlayMusic(command);
+                return new EventCommand.PlayMusic(command);
             case EventCommandKind.StopMusic:
-                return new EventCommandStopMusic(command);
+                return new EventCommand.StopMusic(command);
             case EventCommandKind.PlayBackgroundSound:
-                return new EventCommandPlayBackgroundSound(command);
+                return new EventCommand.PlayBackgroundSound(command);
             case EventCommandKind.StopBackgroundSound:
-                return new EventCommandStopBackgroundSound(command);
+                return new EventCommand.StopBackgroundSound(command);
             case EventCommandKind.PlaySound:
-                return new EventCommandPlaySound(command);
+                return new EventCommand.PlaySound(command);
             case EventCommandKind.PlayMusicEffect:
-                return new EventCommandPlayMusicEffect(command);
+                return new EventCommand.PlayMusicEffect(command);
             case EventCommandKind.ChangeProperty:
-                return new EventCommandChangeProperty(command);
+                return new EventCommand.ChangeProperty(command);
             case EventCommandKind.DisplayChoice:
-                return new EventCommandDisplayChoice(command);
+                return new EventCommand.DisplayChoice(command);
             case EventCommandKind.Choice:
-                return new EventCommandChoice(command);
+                return new EventCommand.Choice(command);
             case EventCommandKind.Script:
-                return new EventCommandScript(command);
+                return new EventCommand.Script(command);
             case EventCommandKind.DisplayAPicture:
-                return new EventCommandDisplayAPicture(command);
+                return new EventCommand.DisplayAPicture(command);
             case EventCommandKind.SetMoveTurnAPicture:
-                return new EventCommandSetMoveTurnAPicture(command);
+                return new EventCommand.SetMoveTurnAPicture(command);
             case EventCommandKind.RemoveAPicture:
-                return new EventCommandRemoveAPicture(command);
-                */
+                return new EventCommand.RemoveAPicture(command);
             case EventCommandKind.SetDialogBoxOptions:
                 return new EventCommand.SetDialogBoxOptions(command);
-                /*
             case EventCommandKind.TitleScreen:
-                return new EventCommandTitleScreen(command);
+                return new EventCommand.TitleScreen(command);
             case EventCommandKind.ChangeScreenTone:
-                return new EventCommandChangeScreenTone(command);
+                return new EventCommand.ChangeScreenTone(command);
             case EventCommandKind.RemoveObjectFromMap:
-                return new EventCommandRemoveObjectFromMap(command);
+                return new EventCommand.RemoveObjectFromMap(command);
             case EventCommandKind.StopReaction:
-                return new EventCommandStopReaction(command);
+                return new EventCommand.StopReaction(command);
             case EventCommandKind.AllowForbidSaves:
-                return new EventCommandAllowForbidSaves(command);
+                return new EventCommand.AllowForbidSaves(command);
             case EventCommandKind.AllowForbidMainMenu:
-                return new EventCommandAllowForbidMainMenu(command);
+                return new EventCommand.AllowForbidMainMenu(command);
             case EventCommandKind.CallACommonReaction:
-                return new EventCommandCallACommonReaction(command);
+                return new EventCommand.CallACommonReaction(command);
             case EventCommandKind.Label:
-                return new EventCommandLabel(command);
+                return new EventCommand.Label(command);
             case EventCommandKind.JumpLabel:
-                return new EventCommandJumpToLabel(command);
+                return new EventCommand.JumpToLabel(command);
             case EventCommandKind.Comment:
-                return new EventCommandComment();
+                return new EventCommand.Comment(command);
             case EventCommandKind.ChangeAStatistic:
-                return new EventCommandChangeAStatistic(command);
+                return new EventCommand.ChangeAStatistic(command);
             case EventCommandKind.ChangeASkill:
-                return new EventCommandChangeASkill(command);
+                return new EventCommand.ChangeASkill(command);
             case EventCommandKind.ChangeName:
-                return new EventCommandChangeName(command);
+                return new EventCommand.ChangeName(command);
             case EventCommandKind.ChangeEquipment:
-                return new EventCommandChangeEquipment(command);
+                return new EventCommand.ChangeEquipment(command);
             case EventCommandKind.ModifyCurrency:
-                return new EventCommandModifyCurrency(command);
+                return new EventCommand.ModifyCurrency(command);
             case EventCommandKind.DisplayAnAnimation:
-                return new EventCommandDisplayAnAnimation(command);
+                return new EventCommand.DisplayAnAnimation(command);
             case EventCommandKind.ShakeScreen:
-                return new EventCommandShakeScreen(command);
+                return new EventCommand.ShakeScreen(command);
             case EventCommandKind.FlashScreen:
-                return new EventCommandFlashScreen(command);
+                return new EventCommand.FlashScreen(command);
             default:
                 return null;
-                */
         }
-        return null;
     }
 
     /** 

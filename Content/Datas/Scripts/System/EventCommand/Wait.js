@@ -9,35 +9,41 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
+import { System } from "../index.js";
 /** @class
- *  An event command representing one of the choice.
+ *  An event command for displaying text.
  *  @extends EventCommand.Base
- *  @property {number} index The choice index
+ *  @property {number} milliseconds The number of milliseconds to wait
  *  @param {any[]} command Direct JSON command to parse
  */
-class Choice extends Base {
+class Wait extends Base {
     constructor(command) {
         super();
-        this.index = command[0];
-        this.isDirectNode = true;
-        this.parallel = false;
+        let iterator = {
+            i: 0
+        };
+        this.milliseconds = System.DynamicValue.createValueCommand(command, iterator);
+        this.isDirectNode = false;
     }
     /**
-     *  Update and check if the event is finished.
+     *  Initialize the current state.
+     *  @returns {Record<string, any>} The current state
+     */
+    initialize() {
+        return {
+            milliseconds: this.milliseconds.getValue() * 1000,
+            currentTime: new Date().getTime()
+        };
+    }
+    /**
+     *  Update and check if the event is finished
      *  @param {Record<string, any>} currentState The current state of the event
      *  @param {MapObject} object The current object reacting
      *  @param {number} state The state ID
      *  @returns {number} The number of node to pass
      */
     update(currentState, object, state) {
-        return -1;
-    }
-    /**
-     *  Returns the number of node to pass.
-     *  @returns {number}
-     */
-    goToNextCommand() {
-        return 1;
+        return (currentState.currentTime + currentState.milliseconds <= new Date().getTime()) ? 1 : 0;
     }
 }
-export { Choice };
+export { Wait };

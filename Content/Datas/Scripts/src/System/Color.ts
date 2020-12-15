@@ -97,7 +97,7 @@ class Color extends Base {
      *  @param {THREE.Vector4} tone The tone value
      *  @returns {number}
      */
-    getHex(tone: typeof THREE.Vector4): number {
+    getHex(tone?: typeof THREE.Vector4): number {
         if (tone) {
             let rgb = new THREE.Vector3(Math.max(Math.min(this.color.r + tone.x,
                 1), -1), Math.max(Math.min(this.color.g + tone.y, 1), -1), Math

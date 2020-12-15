@@ -10,24 +10,35 @@
 */
 
 import { Base } from "./Base";
+import { EventCommand } from "..";
 import { MapObject } from "../Core";
+import { Enum } from "../Common";
+import SongKind = Enum.SongKind;
 
 /** @class
- *  An event command representing one of the choice.
- *  @extends EventCommand.Base
- *  @property {number} index The choice index
- *  @param {any[]} command Direct JSON command to parse
+ *  An event command for stopping the background sound
+ *  @extends EventCommand
+ *  @property {System.DynamicValue} seconds The time in seconds value
+ *  @param {Object} command Direct JSON command to parse
  */
-class Choice extends Base {
-
-    public index: number;
-
+class StopBackgroundSound extends Base {
+    
     constructor(command: any[]) {
         super();
 
-        this.index = command[0];
-        this.isDirectNode = true;
-        this.parallel = false;
+        EventCommand.StopMusic.parseStopSong(this, command);
+        this.parallel = true;
+    }
+
+    /** 
+     *  Initialize the current state.
+     *  @returns {Record<string, any>} The current state
+     */
+    initialize(): Record<string, any> {
+        return {
+            parallel: false,
+            time: new Date().getTime()
+        };
     }
 
     /** 
@@ -36,20 +47,14 @@ class Choice extends Base {
      *  @param {MapObject} object The current object reacting
      *  @param {number} state The state ID
      *  @returns {number} The number of node to pass
-     */
+    */
     update(currentState: Record<string, any>, object: MapObject, state: number): 
         number
     {
-        return -1;
-    }
-
-    /** 
-     *  Returns the number of node to pass.
-     *  @returns {number}
-     */
-    goToNextCommand(): number {
-        return 1;
+        let stopped = EventCommand.StopMusic.stopSong(this, SongKind
+            .BackgroundSound, currentState.time);
+        return currentState.parallel ? stopped : 1;
     }
 }
 
-export { Choice }
+export { StopBackgroundSound }

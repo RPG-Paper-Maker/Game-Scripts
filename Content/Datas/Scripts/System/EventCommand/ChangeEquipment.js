@@ -8,72 +8,85 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
+import { Base } from "./Base.js";
+import { System, Manager } from "../index.js";
+import { Utils, Enum } from "../Common/index.js";
+import { Item } from "../Core/index.js";
+var ItemKind = Enum.ItemKind;
 /** @class
- *  An event command
- *  @property {boolean} isDirectNode Indicate if this node is directly
- *  going to the next node (takes only one frame)
- *  @property {boolean} parallel Indicate if this command is run in parallel
- */
-class Base {
-    constructor() {
-        this.isDirectNode = true;
-        this.parallel = false;
+ *  An event command for changing a property value.
+ *  @extends EventCommand.Base
+ *  @property {System.DynamicValue} equipmentID The equipment ID value
+ *  @property {boolean} isWeapon Indicate if is a weapon
+ *  @property {System.DynamicValue} weaponArmorID The weapon or armor ID value
+ *  @property {number} selection The selection kind
+ *  @property {System.DynamicValue} heInstanceID The hero enemy instance ID value
+ *  @property {GroupKind} groupIndex The group index
+ *  @property {boolean} isApplyInInventory Indicate if apply equipment if is in
+ *  inventory
+ *  @param {any[]} command Direct JSON command to parse
+*/
+class ChangeEquipment extends Base {
+    constructor(command) {
+        super();
+        let iterator = {
+            i: 0
+        };
+        this.equipmentID = System.DynamicValue.createValueCommand(command, iterator);
+        this.isWeapon = Utils.numToBool(command[iterator.i++]);
+        this.weaponArmorID = System.DynamicValue.createValueCommand(command, iterator);
+        // Selection
+        this.selection = command[iterator.i++];
+        switch (this.selection) {
+            case 0:
+                this.heInstanceID = System.DynamicValue.createValueCommand(command, iterator);
+                break;
+            case 1:
+                this.groupIndex = command[iterator.i++];
+                break;
+        }
+        this.isApplyInInventory = Utils.numToBool(command[iterator.i++]);
     }
     /**
-     * Initialize the current state.
-     * @returns {Object} The current state
-     */
-    initialize() {
-        return null;
-    }
-    /**
-     * Update and check if the event is finished.
-     * @param {Record<string, any>} currentState The current state of the event
-     * @param {MapObject} object The current object reacting
-     * @param {number} state The state ID
-     * @returns {number} The number of node to pass
-     */
+     *  Update and check if the event is finished.
+     *  @param {Record<string, any>} currentState The current state of the event
+     *  @param {MapObject} object The current object reacting
+     *  @param {number} state The state ID
+     *  @returns {number} The number of node to pass
+    */
     update(currentState, object, state) {
+        let equipmentID = this.equipmentID.getValue();
+        let kind = this.isWeapon ? ItemKind.Weapon : ItemKind.Armor;
+        let weaponArmorID = this.weaponArmorID.getValue();
+        let targets;
+        switch (this.selection) {
+            case 0:
+                targets = [Manager.Stack.game.getHeroByInstanceID(this
+                        .heInstanceID.getValue())];
+                break;
+            case 1:
+                targets = Manager.Stack.game.getTeam(this.groupIndex);
+                break;
+        }
+        let target, item;
+        for (let i = 0, l = targets.length; i < l; i++) {
+            target = targets[i];
+            item = Item.findItem(kind, weaponArmorID);
+            if (item === null) {
+                if (this.isApplyInInventory) {
+                    break; // Don't apply because not in inventory
+                }
+                item = new Item(kind, weaponArmorID, 0);
+            }
+            if (target.equip[equipmentID] !== null) {
+                target.equip[equipmentID].add(1);
+            }
+            target.equip[equipmentID] = item;
+            if (this.isApplyInInventory) {
+                item.remove(1);
+            }
+        }
         return 1;
     }
-    /**
-     *  First key press handle for the current stack.
-     *  @param {Object} currentState The current state of the event
-     *  @param {number} key The key ID pressed
-     */
-    onKeyPressed(currentState, key) {
-    }
-    /**
-     *  First key release handle for the current stack.
-     *  @param {Object} currentState The current state of the event
-     *  @param {number} key The key ID pressed
-    */
-    onKeyReleased(currentState, key) {
-    }
-    /**
-     *  Key pressed repeat handle for the current stack.
-     *  @param {Object} currentState The current state of the event
-     *  @param {number} key The key ID pressed
-     *  @returns {boolean}
-     */
-    onKeyPressedRepeat(currentState, key) {
-        return true;
-    }
-    /**
-     *  Key pressed repeat handle for the current stack, but with
-     *  a small wait after the first pressure (generally used for menus).
-     *  @param {Object} currentState The current state of the event
-     *  @param {number} key The key ID pressed
-     *  @returns {boolean}
-     */
-    onKeyPressedAndRepeat(currentState, key) {
-        return true;
-    }
-    /**
-     *  Draw the HUD.
-     *  @param {Object} currentState The current state of the event
-     */
-    drawHUD(currentState) {
-    }
 }
-export { Base };
+export { ChangeEquipment };

@@ -9,18 +9,47 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
+import { System, Datas, Manager } from "../index.js";
+import { Utils, ScreenResolution, Enum } from "../Common/index.js";
+var PictureKind = Enum.PictureKind;
 /** @class
- *  An event command representing one of the choice.
+ *  An event command for displaying a picture.
  *  @extends EventCommand.Base
- *  @property {number} index The choice index
+ *  @property {System.DynamicValue} pictureID The picture ID value
+ *  @property {System.DynamicValue} index The index value
+ *  @property {System.DynamicValue} centered Indicate if the picture is centered
+ *  @property {System.DynamicValue} originX The origin X according to centered value
+ *  @property {System.DynamicValue} originY The origin Y according to centered value
+ *  @property {System.DynamicValue} x The x value
+ *  @property {System.DynamicValue} y The y value
+ *  @property {System.DynamicValue} zoom The zoom value
+ *  @property {System.DynamicValue} opacity The opacity value
+ *  @property {System.DynamicValue} angle The angle value
  *  @param {any[]} command Direct JSON command to parse
- */
-class Choice extends Base {
+*/
+class DisplayAPicture extends Base {
     constructor(command) {
         super();
-        this.index = command[0];
-        this.isDirectNode = true;
-        this.parallel = false;
+        let iterator = {
+            i: 0
+        };
+        this.pictureID = System.DynamicValue.createValueCommand(command, iterator);
+        iterator.i++;
+        this.index = System.DynamicValue.createValueCommand(command, iterator);
+        this.centered = Utils.numToBool(command[iterator.i++]);
+        if (this.centered) {
+            this.originX = ScreenResolution.SCREEN_X / 2;
+            this.originY = ScreenResolution.SCREEN_Y / 2;
+        }
+        else {
+            this.originX = 0;
+            this.originY = 0;
+        }
+        this.x = System.DynamicValue.createValueCommand(command, iterator);
+        this.y = System.DynamicValue.createValueCommand(command, iterator);
+        this.zoom = System.DynamicValue.createValueCommand(command, iterator);
+        this.opacity = System.DynamicValue.createValueCommand(command, iterator);
+        this.angle = System.DynamicValue.createValueCommand(command, iterator);
     }
     /**
      *  Update and check if the event is finished.
@@ -28,16 +57,38 @@ class Choice extends Base {
      *  @param {MapObject} object The current object reacting
      *  @param {number} state The state ID
      *  @returns {number} The number of node to pass
-     */
+    */
     update(currentState, object, state) {
-        return -1;
-    }
-    /**
-     *  Returns the number of node to pass.
-     *  @returns {number}
-     */
-    goToNextCommand() {
+        let currentIndex = this.index.getValue();
+        let picture = Datas.Pictures.getPictureCopy(PictureKind.Pictures, this
+            .pictureID.getValue());
+        picture.setX(this.originX + this.x.getValue());
+        picture.setY(this.originY + this.y.getValue());
+        picture.centered = this.centered;
+        picture.zoom = this.zoom.getValue() / 100;
+        picture.opacity = this.opacity.getValue() / 100;
+        picture.angle = this.angle.getValue();
+        let value = [currentIndex, picture];
+        let ok = false;
+        let index;
+        for (let i = 0, l = Manager.Stack.displayedPictures.length; i < l; i++) {
+            index = Manager.Stack.displayedPictures[i][0];
+            if (currentIndex === index) {
+                Manager.Stack.displayedPictures[i] = value;
+                ok = true;
+                break;
+            }
+            else if (currentIndex < index) {
+                Manager.Stack.displayedPictures.splice(i, 0, value);
+                ok = true;
+                break;
+            }
+        }
+        if (!ok) {
+            Manager.Stack.displayedPictures.push(value);
+        }
+        Manager.Stack.requestPaintHUD = true;
         return 1;
     }
 }
-export { Choice };
+export { DisplayAPicture };

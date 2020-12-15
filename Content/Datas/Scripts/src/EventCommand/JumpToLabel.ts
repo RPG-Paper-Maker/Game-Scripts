@@ -9,95 +9,41 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Base } from "./Base";
+import { System } from "..";
 import { MapObject } from "../Core";
 
-interface StructIterator {
-    i: number
-}
-
 /** @class
- *  An event command
- *  @property {boolean} isDirectNode Indicate if this node is directly
- *  going to the next node (takes only one frame)
- *  @property {boolean} parallel Indicate if this command is run in parallel
- */
-abstract class Base {
+ *  An event command for jumping to a label node.
+ *  @extends EventCommand
+ *  @property {System.DynamicValue} label The label value
+ *  @param {Object} command Direct JSON command to parse
+*/
+class JumpToLabel extends Base {
 
-    public isDirectNode: boolean;
-    public parallel: boolean;
+    public label: System.DynamicValue;
 
-    constructor() {
-        this.isDirectNode = true;
-        this.parallel = false;
+    constructor(command: any[]) {
+        super();
+
+        let iterator = {
+            i: 0
+        }
+        this.label = System.DynamicValue.createValueCommand(command, iterator);
     }
 
     /** 
-     * Initialize the current state.
-     * @returns {Object} The current state
-     */
-    initialize(): Object {
-        return null;
-    }
-
-    /** 
-     * Update and check if the event is finished.
-     * @param {Record<string, any>} currentState The current state of the event
-     * @param {MapObject} object The current object reacting
-     * @param {number} state The state ID
-     * @returns {number} The number of node to pass
-     */
-    update(currentState?: Record<string, any>, object?: MapObject, state?: 
-        number): number
-    {
-        return 1;
-    }
-
-    /** 
-     *  First key press handle for the current stack.
-     *  @param {Object} currentState The current state of the event
-     *  @param {number} key The key ID pressed
-     */
-    onKeyPressed(currentState: Object, key: number) {
-
-    }
-
-    /** 
-     *  First key release handle for the current stack.
-     *  @param {Object} currentState The current state of the event
-     *  @param {number} key The key ID pressed
+     *  Update and check if the event is finished.
+     *  @param {Record<string, any>} currentState The current state of the event
+     *  @param {MapObject} object The current object reacting
+     *  @param {number} state The state ID
+     *  @returns {number} The number of node to pass
     */
-    onKeyReleased(currentState: Object, key: number) {
-
-    }
-
-    /** 
-     *  Key pressed repeat handle for the current stack.
-     *  @param {Object} currentState The current state of the event
-     *  @param {number} key The key ID pressed
-     *  @returns {boolean}
-     */
-    onKeyPressedRepeat(currentState: Object, key: number): boolean {
-        return true;
-    }
-
-    /** 
-     *  Key pressed repeat handle for the current stack, but with
-     *  a small wait after the first pressure (generally used for menus).
-     *  @param {Object} currentState The current state of the event
-     *  @param {number} key The key ID pressed
-     *  @returns {boolean}
-     */
-    onKeyPressedAndRepeat(currentState: Object, key: number): boolean {
-        return true;
-    }
-
-    /** 
-     *  Draw the HUD.
-     *  @param {Object} currentState The current state of the event
-     */
-    drawHUD(currentState?: Object) {
-
+    update(currentState: Record<string, any>, object: MapObject, state: number): 
+        number
+    {
+        return this.label.getValue();
     }
 }
 
-export { StructIterator, Base }
+export { JumpToLabel }

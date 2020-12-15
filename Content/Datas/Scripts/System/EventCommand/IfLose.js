@@ -10,17 +10,13 @@
 */
 import { Base } from "./Base.js";
 /** @class
- *  An event command representing one of the choice.
+ *  An event command for after a battle winning.
  *  @extends EventCommand.Base
- *  @property {number} index The choice index
  *  @param {any[]} command Direct JSON command to parse
  */
-class Choice extends Base {
+class IfLose extends Base {
     constructor(command) {
         super();
-        this.index = command[0];
-        this.isDirectNode = true;
-        this.parallel = false;
     }
     /**
      *  Update and check if the event is finished.
@@ -28,7 +24,7 @@ class Choice extends Base {
      *  @param {MapObject} object The current object reacting
      *  @param {number} state The state ID
      *  @returns {number} The number of node to pass
-     */
+    */
     update(currentState, object, state) {
         return -1;
     }
@@ -37,7 +33,7 @@ class Choice extends Base {
      *  @returns {number}
      */
     goToNextCommand() {
-        return 1;
+        return 2;
     }
 }
-export { Choice };
+export { IfLose };

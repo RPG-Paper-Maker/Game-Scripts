@@ -11,23 +11,17 @@
 
 import { Base } from "./Base";
 import { MapObject } from "../Core";
+import { Manager } from "..";
 
 /** @class
- *  An event command representing one of the choice.
+ *  An event command for going to title screen.
  *  @extends EventCommand.Base
- *  @property {number} index The choice index
  *  @param {any[]} command Direct JSON command to parse
  */
-class Choice extends Base {
-
-    public index: number;
-
+class TitleScreen extends Base {
+    
     constructor(command: any[]) {
         super();
-
-        this.index = command[0];
-        this.isDirectNode = true;
-        this.parallel = false;
     }
 
     /** 
@@ -40,16 +34,10 @@ class Choice extends Base {
     update(currentState: Record<string, any>, object: MapObject, state: number): 
         number
     {
-        return -1;
-    }
-
-    /** 
-     *  Returns the number of node to pass.
-     *  @returns {number}
-     */
-    goToNextCommand(): number {
+        Manager.Stack.popAll();
+        Manager.Stack.pushTitleScreen();
         return 1;
     }
 }
 
-export { Choice }
+export { TitleScreen }

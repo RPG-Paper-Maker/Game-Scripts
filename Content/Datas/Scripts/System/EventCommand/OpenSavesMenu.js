@@ -9,18 +9,25 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
+import { Scene, Manager } from "../index.js";
 /** @class
- *  An event command representing one of the choice.
+ *  An event command for opening the saves menu.
  *  @extends EventCommand.Base
- *  @property {number} index The choice index
  *  @param {any[]} command Direct JSON command to parse
- */
-class Choice extends Base {
+*/
+class OpenSavesMenu extends Base {
     constructor(command) {
         super();
-        this.index = command[0];
-        this.isDirectNode = true;
-        this.parallel = false;
+        this.isDirectNode = false;
+    }
+    /**
+     *  Initialize the current state.
+     *  @returns {Record<string, any>} The current state
+     */
+    initialize() {
+        return {
+            opened: false
+        };
     }
     /**
      *  Update and check if the event is finished.
@@ -28,16 +35,14 @@ class Choice extends Base {
      *  @param {MapObject} object The current object reacting
      *  @param {number} state The state ID
      *  @returns {number} The number of node to pass
-     */
+    */
     update(currentState, object, state) {
-        return -1;
-    }
-    /**
-     *  Returns the number of node to pass.
-     *  @returns {number}
-     */
-    goToNextCommand() {
-        return 1;
+        if (!Scene.Map.allowSaves || currentState.opened) {
+            return 1;
+        }
+        Manager.Stack.push(new Scene.SaveGame());
+        currentState.opened = true;
+        return 0;
     }
 }
-export { Choice };
+export { OpenSavesMenu };

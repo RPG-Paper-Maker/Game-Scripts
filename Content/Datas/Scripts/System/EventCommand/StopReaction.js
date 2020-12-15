@@ -10,17 +10,13 @@
 */
 import { Base } from "./Base.js";
 /** @class
- *  An event command representing one of the choice.
+ *  An event command for stopping a reaction.
  *  @extends EventCommand.Base
- *  @property {number} index The choice index
  *  @param {any[]} command Direct JSON command to parse
  */
-class Choice extends Base {
+class StopReaction extends Base {
     constructor(command) {
         super();
-        this.index = command[0];
-        this.isDirectNode = true;
-        this.parallel = false;
     }
     /**
      *  Update and check if the event is finished.
@@ -28,16 +24,9 @@ class Choice extends Base {
      *  @param {MapObject} object The current object reacting
      *  @param {number} state The state ID
      *  @returns {number} The number of node to pass
-     */
+    */
     update(currentState, object, state) {
-        return -1;
-    }
-    /**
-     *  Returns the number of node to pass.
-     *  @returns {number}
-     */
-    goToNextCommand() {
-        return 1;
+        return -3;
     }
 }
-export { Choice };
+export { StopReaction };

@@ -8,72 +8,32 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
+import { Base } from "./Base.js";
+import { System, Scene } from "../index.js";
 /** @class
- *  An event command
- *  @property {boolean} isDirectNode Indicate if this node is directly
- *  going to the next node (takes only one frame)
- *  @property {boolean} parallel Indicate if this command is run in parallel
- */
-class Base {
-    constructor() {
-        this.isDirectNode = true;
-        this.parallel = false;
+ *  An event command for allowing or forbidding saves.
+ *  @extends EventCommand.Base
+ *  @property {System.DynamicValue} allow The switch value
+ *  @param {Object} command Direct JSON command to parse
+*/
+class AllowForbidSaves extends Base {
+    constructor(command) {
+        super();
+        let iterator = {
+            i: 0
+        };
+        this.allow = System.DynamicValue.createValueCommand(command, iterator);
     }
     /**
-     * Initialize the current state.
-     * @returns {Object} The current state
-     */
-    initialize() {
-        return null;
-    }
-    /**
-     * Update and check if the event is finished.
-     * @param {Record<string, any>} currentState The current state of the event
-     * @param {MapObject} object The current object reacting
-     * @param {number} state The state ID
-     * @returns {number} The number of node to pass
-     */
+     *  Update and check if the event is finished.
+     *  @param {Record<string, any>} currentState The current state of the event
+     *  @param {MapObject} object The current object reacting
+     *  @param {number} state The state ID
+     *  @returns {number} The number of node to pass
+    */
     update(currentState, object, state) {
+        Scene.Map.allowSaves = this.allow.getValue();
         return 1;
     }
-    /**
-     *  First key press handle for the current stack.
-     *  @param {Object} currentState The current state of the event
-     *  @param {number} key The key ID pressed
-     */
-    onKeyPressed(currentState, key) {
-    }
-    /**
-     *  First key release handle for the current stack.
-     *  @param {Object} currentState The current state of the event
-     *  @param {number} key The key ID pressed
-    */
-    onKeyReleased(currentState, key) {
-    }
-    /**
-     *  Key pressed repeat handle for the current stack.
-     *  @param {Object} currentState The current state of the event
-     *  @param {number} key The key ID pressed
-     *  @returns {boolean}
-     */
-    onKeyPressedRepeat(currentState, key) {
-        return true;
-    }
-    /**
-     *  Key pressed repeat handle for the current stack, but with
-     *  a small wait after the first pressure (generally used for menus).
-     *  @param {Object} currentState The current state of the event
-     *  @param {number} key The key ID pressed
-     *  @returns {boolean}
-     */
-    onKeyPressedAndRepeat(currentState, key) {
-        return true;
-    }
-    /**
-     *  Draw the HUD.
-     *  @param {Object} currentState The current state of the event
-     */
-    drawHUD(currentState) {
-    }
 }
-export { Base };
+export { AllowForbidSaves };

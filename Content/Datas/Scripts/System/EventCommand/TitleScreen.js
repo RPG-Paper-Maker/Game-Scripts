@@ -9,18 +9,15 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
+import { Manager } from "../index.js";
 /** @class
- *  An event command representing one of the choice.
+ *  An event command for going to title screen.
  *  @extends EventCommand.Base
- *  @property {number} index The choice index
  *  @param {any[]} command Direct JSON command to parse
  */
-class Choice extends Base {
+class TitleScreen extends Base {
     constructor(command) {
         super();
-        this.index = command[0];
-        this.isDirectNode = true;
-        this.parallel = false;
     }
     /**
      *  Update and check if the event is finished.
@@ -30,14 +27,9 @@ class Choice extends Base {
      *  @returns {number} The number of node to pass
      */
     update(currentState, object, state) {
-        return -1;
-    }
-    /**
-     *  Returns the number of node to pass.
-     *  @returns {number}
-     */
-    goToNextCommand() {
+        Manager.Stack.popAll();
+        Manager.Stack.pushTitleScreen();
         return 1;
     }
 }
-export { Choice };
+export { TitleScreen };

@@ -9,18 +9,60 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
+import { System, Datas, Manager } from "../index.js";
+import { Utils, Enum } from "../Common/index.js";
+var PrimitiveValueKind = Enum.PrimitiveValueKind;
 /** @class
- *  An event command representing one of the choice.
+ *  An event command for sending an event.
  *  @extends EventCommand.Base
- *  @property {number} index The choice index
+ *  @property {number} targetKind The kind of target
+ *  @property {boolean} senderNoReceiver Indicate if the sender should not
+ *  receive event
+ *  @property {System.DynamicValue} targetID The target ID
+ *  @property {boolean} isSystem Indicate if it is an event System
+ *  @property {number} eventID The event ID
+ *  @property {System.DynamicValue[]} parameters List of all the parameters
  *  @param {any[]} command Direct JSON command to parse
- */
-class Choice extends Base {
+*/
+class SendEvent extends Base {
     constructor(command) {
         super();
-        this.index = command[0];
-        this.isDirectNode = true;
-        this.parallel = false;
+        let iterator = {
+            i: 0
+        };
+        // Target
+        let l = command.length;
+        this.targetKind = command[iterator.i++];
+        this.senderNoReceiver = false;
+        switch (this.targetKind) {
+            case 1:
+                this.targetID = System.DynamicValue.createValueCommand(command, iterator);
+                this.senderNoReceiver = Utils.numToBool(command[iterator.i++]);
+                break;
+            case 2:
+                this.targetID = System.DynamicValue.createValueCommand(command, iterator);
+                break;
+        }
+        this.isSystem = !Utils.numToBool(command[iterator.i++]);
+        this.eventID = command[iterator.i++];
+        // Parameters
+        let parameters = (this.isSystem ? Datas.CommonEvents.getEventSystem(this
+            .eventID) : Datas.CommonEvents.getEventUser(this.eventID))
+            .parameters;
+        this.parameters = [];
+        let parameter, paramID, k;
+        while (iterator.i < l) {
+            paramID = command[iterator.i++];
+            k = command[iterator.i++];
+            if (k <= PrimitiveValueKind.Default) {
+                // If default value
+                parameter = k === PrimitiveValueKind.Default ? parameters[paramID].value : System.DynamicValue.create(k, null);
+            }
+            else {
+                parameter = System.DynamicValue.create(k, command[iterator.i++]);
+            }
+            this.parameters[paramID] = parameter;
+        }
     }
     /**
      *  Update and check if the event is finished.
@@ -28,16 +70,12 @@ class Choice extends Base {
      *  @param {MapObject} object The current object reacting
      *  @param {number} state The state ID
      *  @returns {number} The number of node to pass
-     */
+    */
     update(currentState, object, state) {
-        return -1;
-    }
-    /**
-     *  Returns the number of node to pass.
-     *  @returns {number}
-     */
-    goToNextCommand() {
+        Manager.Events.sendEvent(object, this.targetKind, this.targetID
+            .getValue(), this.isSystem, this.eventID, this.parameters, this
+            .senderNoReceiver);
         return 1;
     }
 }
-export { Choice };
+export { SendEvent };

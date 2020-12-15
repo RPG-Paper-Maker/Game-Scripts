@@ -119,7 +119,7 @@ class Songs {
      *  @returns {boolean} Indicates if the song is stopped
      */
     static stopSong(kind: SongKind, time: number, seconds: number, pause: 
-        boolean): boolean
+        boolean = false): boolean
     {
         let current = new Date().getTime();
         let ellapsedTime = current - time;

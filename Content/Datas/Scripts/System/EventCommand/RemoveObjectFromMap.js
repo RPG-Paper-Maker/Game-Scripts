@@ -9,18 +9,31 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
+import { System, Manager } from "../index.js";
+import { MapObject, Portion } from "../Core/index.js";
 /** @class
- *  An event command representing one of the choice.
+ *  An event command for removing a specific object from map.
  *  @extends EventCommand.Base
- *  @property {number} index The choice index
+ *  @property {System.DynamicValue} objectID The object ID value to remove
  *  @param {any[]} command Direct JSON command to parse
  */
-class Choice extends Base {
+class RemoveObjectFromMap extends Base {
     constructor(command) {
         super();
-        this.index = command[0];
-        this.isDirectNode = true;
-        this.parallel = false;
+        let iterator = {
+            i: 0
+        };
+        this.objectID = System.DynamicValue.createValueCommand(command, iterator);
+    }
+    /**
+     *  Initialize the current state.
+     *  @returns {Record<string, any>} The current state
+     */
+    initialize() {
+        return {
+            started: false,
+            finished: false
+        };
     }
     /**
      *  Update and check if the event is finished.
@@ -28,16 +41,42 @@ class Choice extends Base {
      *  @param {MapObject} object The current object reacting
      *  @param {number} state The state ID
      *  @returns {number} The number of node to pass
-     */
+    */
     update(currentState, object, state) {
-        return -1;
-    }
-    /**
-     *  Returns the number of node to pass.
-     *  @returns {number}
-     */
-    goToNextCommand() {
-        return 1;
+        let objectID = this.objectID.getValue();
+        if (!currentState.started) {
+            currentState.started = true;
+            (async () => {
+                let result = await MapObject.searchInMap(objectID, objectID);
+                if (result.datas.r.indexOf(result.id) === -1) {
+                    switch (result.kind) {
+                        case 0:
+                            result.datas.m.splice(result.index, 1);
+                            let index = result.datas.min.indexOf(result.object);
+                            if (index === -1) {
+                                result.datas = Manager.Stack.game
+                                    .getPotionsDatas(Manager.Stack.currentMap.id, Portion.createFromVector3(result.object
+                                    .position));
+                                result.datas.mout.splice(result.datas.mout
+                                    .indexOf(result.object), 1);
+                            }
+                            else {
+                                result.datas.min.splice(index, 1);
+                            }
+                            break;
+                        case 1:
+                            if (result.index > -1) {
+                                result.list.splice(result.index, 1);
+                            }
+                            break;
+                    }
+                    result.object.removed = true;
+                    result.object.removeFromScene();
+                }
+                currentState.finished = true;
+            })();
+        }
+        return currentState.finished ? 1 : 0;
     }
 }
-export { Choice };
+export { RemoveObjectFromMap };

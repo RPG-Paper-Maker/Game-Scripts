@@ -8,72 +8,84 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
+import { Base } from "./Base.js";
+import { System, Datas, Manager } from "../index.js";
+import { Utils, Platform, ScreenResolution } from "../Common/index.js";
 /** @class
- *  An event command
- *  @property {boolean} isDirectNode Indicate if this node is directly
- *  going to the next node (takes only one frame)
- *  @property {boolean} parallel Indicate if this command is run in parallel
+ *  An event command for flashing screen.
+ *  @extends EventCommand
+ *  @property {System.DynamicValue} colorID The color ID value
+ *  @property {boolean} isWaitEnd Indicate if wait end of command
+ *  @property {System.DynamicValue} time The time value
+ *  @param {Object} command Direct JSON command to parse
  */
-class Base {
-    constructor() {
-        this.isDirectNode = true;
-        this.parallel = false;
+class FlashScreen extends Base {
+    constructor(command) {
+        super();
+        let iterator = {
+            i: 0
+        };
+        this.colorID = System.DynamicValue.createValueCommand(command, iterator);
+        this.isWaitEnd = Utils.numToBool(command[iterator.i++]);
+        this.time = System.DynamicValue.createValueCommand(command, iterator);
+        this.isDirectNode = !this.isWaitEnd;
+        this.parallel = !this.isWaitEnd;
     }
     /**
-     * Initialize the current state.
-     * @returns {Object} The current state
+     *  Initialize the current state.
+     *  @returns {Record<string, any>} The current state
      */
     initialize() {
-        return null;
+        let time = this.time.getValue() * 1000;
+        let color = Datas.Systems.getColor(this.colorID.getValue());
+        return {
+            parallel: this.isWaitEnd,
+            time: time,
+            timeLeft: time,
+            color: color.getHex(),
+            finalDifA: -color.alpha,
+            a: color.alpha
+        };
     }
     /**
-     * Update and check if the event is finished.
-     * @param {Record<string, any>} currentState The current state of the event
-     * @param {MapObject} object The current object reacting
-     * @param {number} state The state ID
-     * @returns {number} The number of node to pass
+     *  Update and check if the event is finished.
+     *  @param {Record<string, any>} currentState The current state of the event
+     *  @param {MapObject} object The current object reacting
+     *  @param {number} state The state ID
+     *  @returns {number} The number of node to pass
      */
     update(currentState, object, state) {
+        if (currentState.parallel) {
+            let timeRate, dif;
+            if (currentState.time === 0) {
+                timeRate = 1;
+            }
+            else {
+                dif = Manager.Stack.elapsedTime;
+                currentState.timeLeft -= Manager.Stack.elapsedTime;
+                if (currentState.timeLeft < 0) {
+                    dif += currentState.timeLeft;
+                    currentState.timeLeft = 0;
+                }
+                timeRate = dif / currentState.time;
+            }
+            // Update values
+            currentState.a = currentState.a + (timeRate * currentState
+                .finalDifA);
+            Manager.Stack.requestPaintHUD = true;
+            return currentState.timeLeft === 0 ? 1 : 0;
+        }
         return 1;
     }
     /**
-     *  First key press handle for the current stack.
-     *  @param {Object} currentState The current state of the event
-     *  @param {number} key The key ID pressed
-     */
-    onKeyPressed(currentState, key) {
-    }
-    /**
-     *  First key release handle for the current stack.
-     *  @param {Object} currentState The current state of the event
-     *  @param {number} key The key ID pressed
-    */
-    onKeyReleased(currentState, key) {
-    }
-    /**
-     *  Key pressed repeat handle for the current stack.
-     *  @param {Object} currentState The current state of the event
-     *  @param {number} key The key ID pressed
-     *  @returns {boolean}
-     */
-    onKeyPressedRepeat(currentState, key) {
-        return true;
-    }
-    /**
-     *  Key pressed repeat handle for the current stack, but with
-     *  a small wait after the first pressure (generally used for menus).
-     *  @param {Object} currentState The current state of the event
-     *  @param {number} key The key ID pressed
-     *  @returns {boolean}
-     */
-    onKeyPressedAndRepeat(currentState, key) {
-        return true;
-    }
-    /**
-     *  Draw the HUD.
-     *  @param {Object} currentState The current state of the event
+     *  Draw the HUD
+     *  @param {Record<string, any>} currentState The current state of the event
      */
     drawHUD(currentState) {
+        Platform.ctx.fillStyle = currentState.color;
+        Platform.ctx.globalAlpha = currentState.a;
+        Platform.ctx.fillRect(0, 0, ScreenResolution.CANVAS_WIDTH, ScreenResolution.CANVAS_HEIGHT);
+        Platform.ctx.globalAlpha = 1.0;
     }
 }
-export { Base };
+export { FlashScreen };

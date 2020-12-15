@@ -9,18 +9,27 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
+import { System } from "../index.js";
+import { Item } from "../Core/index.js";
 /** @class
- *  An event command representing one of the choice.
+ *  An event command for modifying the inventory.
  *  @extends EventCommand.Base
- *  @property {number} index The choice index
+ *  @property {ItemKind} itemKind The item kind
+ *  @property {System.DynamicValue} itemID The item ID
+ *  @property {number} operation The operation kind
+ *  @property {System.DynamicValue} value The number of items value
  *  @param {any[]} command Direct JSON command to parse
- */
-class Choice extends Base {
+*/
+class ModifyInventory extends Base {
     constructor(command) {
         super();
-        this.index = command[0];
-        this.isDirectNode = true;
-        this.parallel = false;
+        let iterator = {
+            i: 0
+        };
+        this.itemKind = command[iterator.i++];
+        this.itemID = System.DynamicValue.createValueCommand(command, iterator);
+        this.operation = command[iterator.i++];
+        this.value = System.DynamicValue.createValueCommand(command, iterator);
     }
     /**
      *  Update and check if the event is finished.
@@ -28,16 +37,32 @@ class Choice extends Base {
      *  @param {MapObject} object The current object reacting
      *  @param {number} state The state ID
      *  @returns {number} The number of node to pass
-     */
+    */
     update(currentState, object, state) {
-        return -1;
-    }
-    /**
-     *  Returns the number of node to pass.
-     *  @returns {number}
-     */
-    goToNextCommand() {
+        let item = new Item(this.itemKind, this.itemID.getValue(), this.value
+            .getValue());
+        // Doing the coresponding operation
+        switch (this.operation) {
+            case 0:
+                item.equalItems();
+                break;
+            case 1:
+                item.addItems();
+                break;
+            case 2:
+                item.removeItems();
+                break;
+            case 3:
+                item.multItems();
+                break;
+            case 4:
+                item.divItems();
+                break;
+            case 5:
+                item.moduloItems();
+                break;
+        }
         return 1;
     }
 }
-export { Choice };
+export { ModifyInventory };

@@ -72,3 +72,4 @@ class InputNumber extends Base {
             .CANVAS_WIDTH / 2, ScreenResolution.CANVAS_HEIGHT / 2);
     }
 }
+export { InputNumber };

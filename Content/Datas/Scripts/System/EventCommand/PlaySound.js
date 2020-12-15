@@ -9,18 +9,26 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
+import { EventCommand } from "../index.js";
+import { Enum } from "../Common/index.js";
+var SongKind = Enum.SongKind;
 /** @class
- *  An event command representing one of the choice.
+ *  An event command for playing a backgroundsound.
  *  @extends EventCommand.Base
- *  @property {number} index The choice index
+ *  @property {System.PlaySong} song The play song
  *  @param {any[]} command Direct JSON command to parse
  */
-class Choice extends Base {
+class PlaySound extends Base {
     constructor(command) {
         super();
-        this.index = command[0];
-        this.isDirectNode = true;
-        this.parallel = false;
+        EventCommand.PlayMusic.parsePlaySong(this, command, SongKind.Sound);
+    }
+    /**
+     *  Initialize the current state.
+     *  @returns {Record<string, any>} The current state
+     */
+    initialize() {
+        return this.song.initialize();
     }
     /**
      *  Update and check if the event is finished.
@@ -30,14 +38,8 @@ class Choice extends Base {
      *  @returns {number} The number of node to pass
      */
     update(currentState, object, state) {
-        return -1;
-    }
-    /**
-     *  Returns the number of node to pass.
-     *  @returns {number}
-     */
-    goToNextCommand() {
+        this.song.playSound();
         return 1;
     }
 }
-export { Choice };
+export { PlaySound };

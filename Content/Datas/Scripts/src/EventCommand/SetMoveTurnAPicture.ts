@@ -10,24 +10,132 @@
 */
 
 import { Base } from "./Base";
-import { MapObject } from "../Core";
+import { System, Manager, Datas } from "..";
+import { Utils, Enum, ScreenResolution } from "../Common";
+import { Picture2D, MapObject } from "../Core";
+import PictureKind = Enum.PictureKind;
 
 /** @class
- *  An event command representing one of the choice.
+ *  An event command for setting / moving / turning a picture.
  *  @extends EventCommand.Base
- *  @property {number} index The choice index
+ *  @property {System.DynamicValue} index The index value
+ *  @property {System.DynamicValue} pictureID The picture ID value
+ *  @property {System.DynamicValue} zoom The zoom value
+ *  @property {System.DynamicValue} opacity The opacity value
+ *  @property {System.DynamicValue} x The x value
+ *  @property {System.DynamicValue} y The y value
+ *  @property {System.DynamicValue} angle The angle value
+ *  @property {System.DynamicValue} time The time value
+ *  @property {boolean} waitEnd Indicate if wait end of the command
  *  @param {any[]} command Direct JSON command to parse
- */
-class Choice extends Base {
-
-    public index: number;
+*/
+class SetMoveTurnAPicture extends Base {
+    
+    public index: System.DynamicValue;
+    public pictureID: System.DynamicValue;
+    public zoom: System.DynamicValue;
+    public opacity: System.DynamicValue;
+    public x: System.DynamicValue;
+    public y: System.DynamicValue;
+    public angle: System.DynamicValue;
+    public time: System.DynamicValue;
+    public waitEnd: boolean;
 
     constructor(command: any[]) {
         super();
 
-        this.index = command[0];
+        let iterator = {
+            i: 0
+        }
+        this.index = System.DynamicValue.createValueCommand(command, iterator);
+        if (Utils.numToBool(command[iterator.i++])) {
+            this.pictureID = System.DynamicValue.createValueCommand(command, 
+                iterator);
+            iterator.i++; 
+        }
+        if (Utils.numToBool(command[iterator.i++])) {
+            this.zoom = System.DynamicValue.createValueCommand(command, iterator);
+        }
+        if (Utils.numToBool(command[iterator.i++])) {
+            this.opacity = System.DynamicValue.createValueCommand(command, 
+                iterator);
+        }
+        if (Utils.numToBool(command[iterator.i++])) {
+            this.x = System.DynamicValue.createValueCommand(command, iterator);
+        }
+        if (Utils.numToBool(command[iterator.i++])) {
+            this.y = System.DynamicValue.createValueCommand(command, iterator);
+        }
+        if (Utils.numToBool(command[iterator.i++])) {
+            this.angle = System.DynamicValue.createValueCommand(command, 
+                iterator);
+        }
+        this.time = System.DynamicValue.createValueCommand(command, iterator);
+        this.waitEnd = Utils.numToBool(command[iterator.i++]);
         this.isDirectNode = true;
-        this.parallel = false;
+        this.parallel = !this.waitEnd;
+    }
+
+    /** 
+     *  Initialize the current state.
+     *  @returns {Record<string, any>} The current state
+     */
+    initialize(): Record<string, any> {
+        let time = this.time.getValue() * 1000;
+        let index = this.index.getValue();
+        let obj: [number, Picture2D], picture: Picture2D;
+        let i: number, l: number;
+        for (i = 0, l = Manager.Stack.displayedPictures.length; i < l; i++) {
+            obj = Manager.Stack.displayedPictures[i];
+            if (index === obj[0]) {
+                picture = obj[1];
+                break;
+            }
+        }
+        if (picture) {
+            // If new picture ID, create a new picture
+            if (this.pictureID) {
+                let prevX = picture.oX;
+                let prevY = picture.oY;
+                let prevW = picture.oW;
+                let prevH = picture.oH;
+                let prevCentered = picture.centered;
+                let prevZoom = picture.zoom;
+                let prevOpacity = picture.opacity;
+                let prevAngle = picture.angle;
+                picture = Datas.Pictures.getPictureCopy(PictureKind.Pictures, 
+                    this.pictureID.getValue());
+                if (prevCentered) {
+                    prevX += (prevW - picture.oW) / 2;
+                    prevY += (prevH - picture.oH) / 2;
+                }
+                picture.setX(prevX);
+                picture.setY(prevY);
+                picture.centered = prevCentered;
+                picture.zoom = prevZoom;
+                picture.opacity = prevOpacity;
+                picture.angle = prevAngle;
+                Manager.Stack.displayedPictures[i][1] = picture;
+            }
+        } else {
+            return {};
+        }
+        return {
+            parallel: this.waitEnd,
+            picture: picture,
+            finalDifZoom: this.zoom ? (this.zoom.getValue() / 100) - picture
+                .zoom : null,
+            finalDifOpacity: this.opacity ? (this.opacity.getValue() / 100) -
+                picture.opacity : null,
+            finalDifX: this.x ? (picture.centered ? ScreenResolution.SCREEN_X / 
+                2 : 0) + this.x.getValue() - picture.oX : null,
+            finalDifY: this.y ? (picture.centered ? ScreenResolution.SCREEN_Y / 
+                2 : 0) + this.y.getValue() - picture.oY : null,
+            finalDifAngle: this.angle ? this.angle.getValue() - picture.angle : 
+                null,
+            time: time,
+            timeLeft: time
+        }
     }
 
     /** 
@@ -40,16 +148,60 @@ class Choice extends Base {
     update(currentState: Record<string, any>, object: MapObject, state: number): 
         number
     {
-        return -1;
-    }
+        // If no picture corresponds, go to next command
+        if (!currentState.picture) {
+            return 1;
+        }
+        if (currentState.parallel) {
+            // Updating the time left
+            let timeRate: number, dif: number;
+            if (currentState.time === 0) {
+                timeRate = 1;
+            } else {
+                dif = Manager.Stack.elapsedTime;
+                currentState.timeLeft -= Manager.Stack.elapsedTime;
+                if (currentState.timeLeft < 0) {
+                    dif += currentState.timeLeft;
+                    currentState.timeLeft = 0;
+                }
+                timeRate = dif / currentState.time;
+            }
 
-    /** 
-     *  Returns the number of node to pass.
-     *  @returns {number}
-     */
-    goToNextCommand(): number {
+            // Set
+            if (this.zoom) {
+                currentState.picture.zoom += timeRate * currentState
+                    .finalDifZoom;
+            }
+            if (this.opacity) {
+                currentState.picture.opacity += timeRate * currentState
+                    .finalDifOpacity;
+            }
+
+            // Move
+            if (this.x) {
+                currentState.picture.setX(currentState.picture.oX + (timeRate *
+                    currentState.finalDifX));
+            }
+            if (this.y) {
+                currentState.picture.setY(currentState.picture.oY + (timeRate *
+                    currentState.finalDifY));
+            }
+
+            // Turn
+            if (this.angle) {
+                currentState.picture.angle += timeRate * currentState
+                    .finalDifAngle;
+            }
+            Manager.Stack.requestPaintHUD = true;
+
+            // If time = 0, then this is the end of the command
+            if (currentState.timeLeft === 0) {
+                return 1;
+            }
+            return 0;
+        }
         return 1;
     }
 }
 
-export { Choice }
+export { SetMoveTurnAPicture }

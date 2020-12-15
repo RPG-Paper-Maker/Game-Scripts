@@ -9,95 +9,95 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { MapObject } from "../Core";
-
-interface StructIterator {
-    i: number
-}
+import { Base } from "./Base";
+import { System, Manager } from "..";
+import { MapObject, Skill } from "../Core";
+import { Player } from "../Core";
+import { Utils } from "../Common";
 
 /** @class
- *  An event command
- *  @property {boolean} isDirectNode Indicate if this node is directly
- *  going to the next node (takes only one frame)
- *  @property {boolean} parallel Indicate if this command is run in parallel
- */
-abstract class Base {
+ *  An event command for changing a skill.
+ *  @extends EventCommand.Base
+ *  @property {System.DynamicValue} skillID The skill ID value
+ *  @property {number} selection The selection kind
+ *  @property {System.DynamicValue} heInstanceID The hero enemy instance ID 
+ *  value
+ *  @property {GroupKind} groupIndex The group index
+ *  @property {number} operation The operation kind
+ *  @param {any[]} command Direct JSON command to parse
+*/
+class ChangeASkill extends Base {
 
-    public isDirectNode: boolean;
-    public parallel: boolean;
+    public skillID: System.DynamicValue;
+    public selection: number;
+    public heInstanceID: System.DynamicValue;
+    public groupIndex: number;
+    public operation: number;
 
-    constructor() {
-        this.isDirectNode = true;
-        this.parallel = false;
+    constructor(command: any[]) {
+        super();
+
+        var iterator = {
+            i: 0
+        }
+        this.skillID = System.DynamicValue.createValueCommand(command, iterator);
+    
+        // Selection
+        this.selection = command[iterator.i++];
+        switch (this.selection) {
+            case 0:
+                this.heInstanceID = System.DynamicValue.createValueCommand(
+                    command, iterator);
+                break;
+            case 1:
+                this.groupIndex = command[iterator.i++];
+                break;
+        }
+        
+        // Operation
+        this.operation = command[iterator.i++];
     }
 
     /** 
-     * Initialize the current state.
-     * @returns {Object} The current state
-     */
-    initialize(): Object {
-        return null;
-    }
-
-    /** 
-     * Update and check if the event is finished.
-     * @param {Record<string, any>} currentState The current state of the event
-     * @param {MapObject} object The current object reacting
-     * @param {number} state The state ID
-     * @returns {number} The number of node to pass
-     */
-    update(currentState?: Record<string, any>, object?: MapObject, state?: 
-        number): number
-    {
-        return 1;
-    }
-
-    /** 
-     *  First key press handle for the current stack.
-     *  @param {Object} currentState The current state of the event
-     *  @param {number} key The key ID pressed
-     */
-    onKeyPressed(currentState: Object, key: number) {
-
-    }
-
-    /** 
-     *  First key release handle for the current stack.
-     *  @param {Object} currentState The current state of the event
-     *  @param {number} key The key ID pressed
+     *  Update and check if the event is finished.
+     *  @param {Record<string, any>} currentState The current state of the event
+     *  @param {MapObject} object The current object reacting
+     *  @param {number} state The state ID
+     *  @returns {number} The number of node to pass
     */
-    onKeyReleased(currentState: Object, key: number) {
-
-    }
-
-    /** 
-     *  Key pressed repeat handle for the current stack.
-     *  @param {Object} currentState The current state of the event
-     *  @param {number} key The key ID pressed
-     *  @returns {boolean}
-     */
-    onKeyPressedRepeat(currentState: Object, key: number): boolean {
-        return true;
-    }
-
-    /** 
-     *  Key pressed repeat handle for the current stack, but with
-     *  a small wait after the first pressure (generally used for menus).
-     *  @param {Object} currentState The current state of the event
-     *  @param {number} key The key ID pressed
-     *  @returns {boolean}
-     */
-    onKeyPressedAndRepeat(currentState: Object, key: number): boolean {
-        return true;
-    }
-
-    /** 
-     *  Draw the HUD.
-     *  @param {Object} currentState The current state of the event
-     */
-    drawHUD(currentState?: Object) {
-
+    update(currentState: Record<string, any>, object: MapObject, state: number): 
+        number
+    {
+        let skillID = this.skillID.getValue();
+        let targets: Player[];
+        switch (this.selection) {
+            case 0:
+                targets = [Manager.Stack.game.getHeroByInstanceID(this
+                    .heInstanceID.getValue())];
+                break;
+            case 1:
+                targets = Manager.Stack.game.getTeam(this.groupIndex);
+                break;
+        }
+        let target: Player, index: number;
+        for (let i = 0, l = targets.length; i < l; i++) {
+            target = targets[i];
+            index = Utils.indexOfProp(target.sk, "id", skillID);
+            switch (this.operation) {
+                case 0:
+                    if (index === -1) {
+                        target.sk.push(new Skill(skillID));
+                    }
+                    break;
+                case 1:
+                    if (index !== -1) {
+                        target.sk.splice(index, 1);
+                    }
+                    break;
+            }
+        }
+        return 1;
     }
 }
 
-export { StructIterator, Base }
+export { ChangeASkill }

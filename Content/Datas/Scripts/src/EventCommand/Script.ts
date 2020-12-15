@@ -10,24 +10,32 @@
 */
 
 import { Base } from "./Base";
+import { System } from "..";
+import { Utils, Interpreter } from "../Common";
 import { MapObject } from "../Core";
 
 /** @class
- *  An event command representing one of the choice.
- *  @extends EventCommand.Base
- *  @property {number} index The choice index
+ *  An event command for script.
+ *  @extends EventCommand
+ *  @property {boolean} isDynamic Indicate if script is a dynamic value
+ *  @property {System.DynamicValue} script The script value
  *  @param {any[]} command Direct JSON command to parse
- */
-class Choice extends Base {
+*/
+class Script extends Base {
 
-    public index: number;
+    public isDynamic: boolean;
+    public script: System.DynamicValue; 
 
     constructor(command: any[]) {
         super();
 
-        this.index = command[0];
-        this.isDirectNode = true;
-        this.parallel = false;
+        let iterator = {
+            i: 0
+        }
+        this.isDynamic = Utils.numToBool(command[iterator.i++]);
+        this.script = this.isDynamic ? System.DynamicValue.createValueCommand(
+            command, iterator) : System.DynamicValue.createMessage(Utils
+            .numToString(command[iterator.i]));
     }
 
     /** 
@@ -36,20 +44,14 @@ class Choice extends Base {
      *  @param {MapObject} object The current object reacting
      *  @param {number} state The state ID
      *  @returns {number} The number of node to pass
-     */
+    */
     update(currentState: Record<string, any>, object: MapObject, state: number): 
         number
     {
-        return -1;
-    }
-
-    /** 
-     *  Returns the number of node to pass.
-     *  @returns {number}
-     */
-    goToNextCommand(): number {
-        return 1;
+        let res = Interpreter.evaluate(this.script.getValue(), { thisObject: 
+            object, addReturn: false });
+        return Utils.isUndefined(res) ? 1 : res;
     }
 }
 
-export { Choice }
+export { Script }

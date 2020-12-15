@@ -13,21 +13,14 @@ import { Base } from "./Base";
 import { MapObject } from "../Core";
 
 /** @class
- *  An event command representing one of the choice.
+ *  An event command for stopping a reaction.
  *  @extends EventCommand.Base
- *  @property {number} index The choice index
  *  @param {any[]} command Direct JSON command to parse
  */
-class Choice extends Base {
-
-    public index: number;
-
+class StopReaction extends Base {
+    
     constructor(command: any[]) {
         super();
-
-        this.index = command[0];
-        this.isDirectNode = true;
-        this.parallel = false;
     }
 
     /** 
@@ -36,20 +29,12 @@ class Choice extends Base {
      *  @param {MapObject} object The current object reacting
      *  @param {number} state The state ID
      *  @returns {number} The number of node to pass
-     */
+    */
     update(currentState: Record<string, any>, object: MapObject, state: number): 
         number
     {
-        return -1;
-    }
-
-    /** 
-     *  Returns the number of node to pass.
-     *  @returns {number}
-     */
-    goToNextCommand(): number {
-        return 1;
+        return -3;
     }
 }
 
-export { Choice }
+export { StopReaction }
