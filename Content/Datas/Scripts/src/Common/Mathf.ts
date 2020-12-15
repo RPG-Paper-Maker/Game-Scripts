@@ -18,6 +18,26 @@ const THREE = require('./Content/Datas/Scripts/Libs/three.js');
  */
 class Mathf {
 
+    static OPERATORS_COMPARE =
+    [
+        function(a: number, b: number) { return a === b },
+        function(a: number, b: number) { return a !== b },
+        function(a: number, b: number) { return a >= b },
+        function(a: number, b: number) { return a <= b },
+        function(a: number, b: number) { return a > b },
+        function(a: number, b: number) { return a < b }
+    ];
+
+    static OPERATORS_NUMBERS =
+    [
+        function(a: number, b: number) { return b },
+        function(a: number, b: number) { return a + b },
+        function(a: number, b: number) { return a - b },
+        function(a: number, b: number) { return a * b },
+        function(a: number, b: number) { return a / b },
+        function(a: number, b: number) { return a % b }
+    ];
+
     constructor() {
         throw new Error("This is a static class!");
     }

@@ -22,9 +22,9 @@ class Interpreter {
     /**
      *  Evaluate a formula.
      */
-    static evaluate(formula, { user, target, damage, addReturn = true } = {}) {
-        return new Function("Common", "Core", "Datas", "EventCommand", "Graphic", "Manager", "Scene", "System", "THREE", "Howl", "u", "t", "damage", addReturn ? "return " : "" + formula)(this.common, this.core, this
-            .datas, this.eventCommand, this.graphic, this.manager, this.scene, this.system, this.three, this.howl, user, target, damage);
+    static evaluate(formula, { user, target, damage, thisObject, addReturn = true } = {}) {
+        return new Function("Common", "Core", "Datas", "EventCommand", "Graphic", "Manager", "Scene", "System", "THREE", "Howl", "u", "t", "damage", "$object", addReturn ? "return " : "" + formula)(this.common, this
+            .core, this.datas, this.eventCommand, this.graphic, this.manager, this.scene, this.system, this.three, this.howl, user, target, damage, thisObject);
     }
 }
 Interpreter.common = Common;

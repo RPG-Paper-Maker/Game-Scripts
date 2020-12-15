@@ -48,13 +48,13 @@ class BattleSystems {
 
     private static elements: System.Element[];
     private static elementsOrder: number[];
-    public static statistics: System.Statistic[];
+    private static statistics: System.Statistic[];
     public static statisticsOrder: number[];
     public static statisticsElements: number[];
     public static statisticsElementsPercent: number[];
     private static equipments: string[];
     public static equipmentsOrder: number[];
-    private static maxEquipmentID: number;
+    public static maxEquipmentID: number;
     private static weaponsKind: System.WeaponArmorKind[];
     private static armorsKind: System.WeaponArmorKind[];
     private static battleCommands: number[];

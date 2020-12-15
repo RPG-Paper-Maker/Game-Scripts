@@ -22,6 +22,7 @@ export * from "./Camera";
 export * from "./Chrono";
 export * from "./CollisionSquare";
 export * from "./ReactionInterpreter";
+export * from "./Skill";
 export * from "./Floor";
 export * from "./Frame";
 export * from "./Game";

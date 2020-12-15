@@ -369,4 +369,20 @@ class Mathf {
         return (dot / (lu * lv)) * lu;
     }
 }
+Mathf.OPERATORS_COMPARE = [
+    function (a, b) { return a === b; },
+    function (a, b) { return a !== b; },
+    function (a, b) { return a >= b; },
+    function (a, b) { return a <= b; },
+    function (a, b) { return a > b; },
+    function (a, b) { return a < b; }
+];
+Mathf.OPERATORS_NUMBERS = [
+    function (a, b) { return b; },
+    function (a, b) { return a + b; },
+    function (a, b) { return a - b; },
+    function (a, b) { return a * b; },
+    function (a, b) { return a / b; },
+    function (a, b) { return a % b; }
+];
 export { Mathf };

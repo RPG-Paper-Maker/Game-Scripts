@@ -1155,4 +1155,4 @@ class MapObject
     }
 }
 
-export { MapObject }
+export { StructSearchResult, MapObject }

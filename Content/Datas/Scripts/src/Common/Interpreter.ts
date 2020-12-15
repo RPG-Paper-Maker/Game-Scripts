@@ -10,7 +10,7 @@
 */
 
 import { Datas, Common, Core, EventCommand, Graphic, Manager, System, Scene } from "..";
-import { Player } from "../Core";
+import { Player, MapObject } from "../Core";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 const { Howl } = require('./Content/Datas/Scripts/Libs/howler.js');
 
@@ -38,15 +38,16 @@ class Interpreter {
     /** 
      *  Evaluate a formula.
      */
-    static evaluate(formula: string, { user, target, damage, addReturn = true }: 
-        { user?: Player, target?: Player, damage?: number, addReturn?: boolean} 
-        = {}): any
+    static evaluate(formula: string, { user, target, damage, thisObject, 
+        addReturn = true }: { user?: Player, target?: Player, damage?: number, 
+        thisObject?: MapObject, addReturn?: boolean} = {}): any
     {
         return new Function("Common", "Core", "Datas", "EventCommand", "Graphic"
-            , "Manager", "Scene", "System", "THREE", "Howl", "u", "t", "damage", 
-            addReturn ? "return " : "" + formula)(this.common, this.core, this
-            .datas, this.eventCommand, this.graphic, this.manager, this.scene, 
-            this.system, this.three, this.howl, user, target, damage);
+            , "Manager", "Scene", "System", "THREE", "Howl", "u", "t", "damage",
+            "$object", addReturn ? "return " : "" + formula)(this.common, this
+            .core, this.datas, this.eventCommand, this.graphic, this.manager, 
+            this.scene, this.system, this.three, this.howl, user, target, damage
+            , thisObject);
     }
 }
 

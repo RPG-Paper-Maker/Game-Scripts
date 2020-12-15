@@ -18,6 +18,8 @@ import { Map } from "./Map";
 */
 class Battle extends Map {
 
+    public static escaped: boolean;
+
     public user: any;
     
     constructor(id: number, isBattleMap: boolean) {
