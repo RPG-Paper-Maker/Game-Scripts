@@ -141,8 +141,7 @@ class MapProperties extends Base {
     /** 
      *  Update the background skybox
      */
-    updateBackgroundSkybox() 
-    {
+    updateBackgroundSkybox() {
         let size = 10000 * Datas.Systems.SQUARE_SIZE / Constants
             .BASIC_SQUARE_SIZE;
         this.skyboxGeometry = new THREE.BoxGeometry(size, size, size);

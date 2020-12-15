@@ -128,6 +128,7 @@ class MapPortion {
      *  at the beginning of the game.
      */
     read(json: Record<string, any>, isMapHero: boolean) {
+        /*
         this.readLands(json.lands);
         this.readSprites(json.sprites);
         if (json.moun) {
@@ -137,6 +138,7 @@ class MapPortion {
             this.readObjects3D(json.objs3d);
         }
         this.readObjects(json.objs.list, isMapHero);
+        */
     }
 
     /** 

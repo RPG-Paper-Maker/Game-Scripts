@@ -795,7 +795,7 @@ class MapObject {
      */
     addToScene() {
         if (!this.isInScene && this.mesh !== null) {
-            Manager.Stack.currentMap.scene.add(this.mesh);
+            //Manager.Stack.currentMap.scene.add(this.mesh);
             this.isInScene = true;
         }
     }
@@ -805,7 +805,7 @@ class MapObject {
     addBBToScene() {
         if (Datas.Systems.showBB) {
             for (let i = 0, l = this.meshBoundingBox.length; i < l; i++) {
-                Manager.Stack.currentMap.scene.add(this.meshBoundingBox[i]);
+                //Manager.Stack.currentMap.scene.add(this.meshBoundingBox[i]);
             }
         }
     }
@@ -814,7 +814,7 @@ class MapObject {
      */
     removeFromScene() {
         if (this.isInScene) {
-            Manager.Stack.currentMap.scene.remove(this.mesh);
+            //Manager.Stack.currentMap.scene.remove(this.mesh);
             this.removeBBFromScene();
             this.isInScene = false;
         }

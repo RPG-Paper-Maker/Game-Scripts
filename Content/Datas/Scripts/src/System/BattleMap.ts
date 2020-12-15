@@ -10,7 +10,6 @@
 */
 
 import { Base } from "./Base";
-import { System } from "..";
 import { Position } from "../Core";
 
 /** @class

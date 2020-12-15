@@ -111,6 +111,7 @@ class Map extends Base {
         if (Datas.Systems.showBB) {
             this.scene.add(Manager.Collisions.BB_BOX);
             this.scene.add(Manager.Collisions.BB_ORIENTED_BOX);
+            
             //this.scene.add(Manager.collisions.BB_BOX_DETECTION);
             //this.scene.add(Manager.collisions.BB_BOX_DEFAULT_DETECTION);
         }
@@ -838,10 +839,11 @@ class Map extends Base {
      */
     draw3D() {
         Manager.GL.renderer.clear();
+        /*
         if (this.mapProperties.sceneBackground !== null) {
             Manager.GL.renderer.render(this.mapProperties.sceneBackground, this
                 .mapProperties.cameraBackground);
-        }
+        }*/
         Manager.GL.renderer.render(this.scene, this.camera.getThreeCamera());
     }
 

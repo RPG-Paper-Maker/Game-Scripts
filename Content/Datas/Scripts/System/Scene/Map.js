@@ -725,10 +725,11 @@ class Map extends Base {
      */
     draw3D() {
         Manager.GL.renderer.clear();
+        /*
         if (this.mapProperties.sceneBackground !== null) {
             Manager.GL.renderer.render(this.mapProperties.sceneBackground, this
                 .mapProperties.cameraBackground);
-        }
+        }*/
         Manager.GL.renderer.render(this.scene, this.camera.getThreeCamera());
     }
     /**

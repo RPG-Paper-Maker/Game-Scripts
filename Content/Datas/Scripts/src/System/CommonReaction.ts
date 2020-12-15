@@ -16,7 +16,8 @@ import { System } from "..";
  *  A common reaction.
  *  @extends System.Reaction
  *  @property {Parameter[]} parameters
- *  @param {Record<string, any>} [json=undefined] Json object describing the common reaction
+ *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  common reaction
  */
 class CommonReaction extends Reaction {
 

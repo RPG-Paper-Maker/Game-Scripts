@@ -357,7 +357,7 @@ class Battler {
      */
     addToScene() {
         if (this.mesh !== null) {
-            Manager.Stack.currentMap.scene.add(this.mesh);
+            //Manager.Stack.currentMap.scene.add(this.mesh);
         }
     }
     /**

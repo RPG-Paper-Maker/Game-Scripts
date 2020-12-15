@@ -23,7 +23,7 @@ class GL {
     public static SHADER_FIX_FRAGMENT: string;
     public static renderer: typeof THREE.WebGLRenderer;
     public static textureLoader = new THREE.TextureLoader();
-    public static screenTone: typeof THREE.Vector4;
+    public static screenTone = new THREE.Vector4(0, 0, 0, 1);
 
     constructor() {
         throw new Error("This is a static class");
@@ -43,7 +43,7 @@ class GL {
         {
             this.renderer.setPixelRatio(2);
         }
-        Platform.canvas3D.appendChild(this.renderer.domElement);
+        document.body.appendChild(this.renderer.domElement);
     }
 
     /** 
@@ -124,7 +124,7 @@ class GL {
         texture.flipY = opts.flipY;
         if (!opts.uniforms) {
             opts.uniforms = {
-                texture: { type: "t", value: texture },
+                t: { type: "t", value: texture },
                 colorD: { type: "v4", value: this.screenTone },
                 reverseH: { type: "b", value: opts.flipX },
             };
@@ -134,7 +134,7 @@ class GL {
             vertexShader:   this.SHADER_FIX_VERTEX,
             fragmentShader: this.SHADER_FIX_FRAGMENT,
             side: THREE.DoubleSide,
-            transparent: false
+            transparent: true
         });
         material.map = texture;
         return material;

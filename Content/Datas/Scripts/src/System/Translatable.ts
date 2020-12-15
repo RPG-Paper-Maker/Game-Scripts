@@ -23,8 +23,7 @@ import { Base } from "./Base";
  */
 class Translatable extends Base {
 
-    public static EMPTY_NAMES = 
-    {
+    public static EMPTY_NAMES = {
         names: ["", ""]
     }
 

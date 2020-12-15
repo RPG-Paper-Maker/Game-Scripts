@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { Class } from "./Class";
-import { Utils, Platform } from "../Common";
+import { Utils } from "../Common";
 import { Datas } from "..";
 import { StatisticProgression } from "./StatisticProgression";
 import { ClassSkill } from "./ClassSkill";
