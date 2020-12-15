@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Base } from "./Base";
 import { Enum, Utils, Constants, IO, Paths } from "../Common";
 import Orientation = Enum.Orientation;
@@ -16,7 +17,6 @@ import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 import PictureKind = Enum.PictureKind;
 import { System, Datas, Scene, Manager } from "..";
 import { Position, Portion, MapPortion, TextureBundle, Camera, ReactionInterpreter } from "../Core";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /** @class
  *  A scene for a local map.
@@ -53,6 +53,9 @@ const THREE = require('./Content/Datas/Scripts/Libs/three.js');
  *  loaded (only for getting objects infos)
 */
 class Map extends Base {
+
+    public static allowMainMenu = true;
+    public static allowSaves = true;
 
     public id: number;
     public mapName: string;

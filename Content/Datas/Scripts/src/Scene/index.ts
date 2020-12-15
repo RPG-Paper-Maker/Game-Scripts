@@ -15,6 +15,7 @@ export * from "./KeyboardAssign";
 export * from "./LoadGame";
 export * from "./Loading";
 export * from "./Map";
+export * from "./Menu";
 export * from "./SaveGame";
 export * from "./SaveLoadGame";
 export * from "./TitleScreen";

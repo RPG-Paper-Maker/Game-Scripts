@@ -10,27 +10,93 @@
 */
 
 import { Base } from "./Base";
-import { MapObject } from "../Core";
+import { System, Datas, Manager, Scene } from "..";
+import { MapObject, Position, ReactionInterpreter } from "../Core";
 
 /** @class
- *  An event command representing one of the choice.
+ *  An event command for teleporting an object.
  *  @extends EventCommand.Base
- *  @property {number} index The choice index
+ *  @property {System.DynamicValue} objectID The ID of the object to teleport value
+ *  @property {System.DynamicValue} objectIDPosition The ID value of the object to 
+ *  teleport on
+ *  @property {System.DynamicValue} mapID The map ID value
+ *  @property {System.DynamicValue} x The x coordinate of the map value
+ *  @property {System.DynamicValue} y The y coordinate of the map value
+ *  @property {System.DynamicValue} yPlus The y plus coordinate of the map value
+ *  @property {System.DynamicValue} z The z coordinate of the map value
  *  @param {any[]} command Direct JSON command to parse
  */
-class Choice extends Base {
+class TeleportObject extends Base {
 
-    public index: number;
+    public objectID: System.DynamicValue;
+    public objectIDPosition: System.DynamicValue;
+    public mapID: System.DynamicValue;
+    public x: System.DynamicValue;
+    public y: System.DynamicValue;
+    public yPlus: System.DynamicValue;
+    public z: System.DynamicValue;
 
     constructor(command: any[]) {
         super();
 
-        this.index = command[0];
-        this.isDirectNode = true;
-        this.parallel = false;
+        let iterator = {
+            i: 0
+        }
+
+        // Object ID
+        this.objectID = System.DynamicValue.createValueCommand(command, iterator);
+
+        // Position
+        this.objectIDPosition = null;
+        this.mapID = null;
+        switch (command[iterator.i++]) {
+            case 0:
+                this.mapID = System.DynamicValue.createNumber(command[iterator
+                    .i++]);
+                this.x = System.DynamicValue.createNumber(command[iterator.i++]);
+                this.y = System.DynamicValue.createNumber(command[iterator.i++]);
+                this.yPlus = System.DynamicValue.createNumber(command[iterator
+                    .i++]);
+                this.z = System.DynamicValue.createNumber(command[iterator.i++]);
+                break;
+            case 1:
+                this.mapID = System.DynamicValue.createValueCommand(command, 
+                    iterator);
+                this.x = System.DynamicValue.createValueCommand(command, 
+                    iterator);
+                this.y = System.DynamicValue.createValueCommand(command, 
+                    iterator);
+                this.yPlus = System.DynamicValue.createValueCommand(command, 
+                    iterator);
+                this.z = System.DynamicValue.createValueCommand(command, 
+                    iterator);
+                break;
+            case 2:
+                this.objectIDPosition = System.DynamicValue.createValueCommand(
+                    command, iterator);
+                break;
+        }
+
+        // Options
+        // TODO
+
+        this.isDirectNode = false;
     }
 
     /** 
+     *  Initialize the current state.
+     *  @returns {Record<string, any>} The current state
+     */
+    initialize(): Record<string, any> {
+        return {
+            position: null,
+            waitingPosition: false,
+            waitingObject: false,
+            teleported: false
+        }
+    }
+
+    /**
      *  Update and check if the event is finished.
      *  @param {Record<string, any>} currentState The current state of the event
      *  @param {MapObject} object The current object reacting
@@ -40,16 +106,53 @@ class Choice extends Base {
     update(currentState: Record<string, any>, object: MapObject, state: number): 
         number
     {
-        return -1;
-    }
+        if (!currentState.waitingObject) {
+            let objectID = this.objectID.getValue();
+            if (!currentState.waitingPosition) {
+                // Set object's position
+                if (this.objectIDPosition === null) {
+                    currentState.position = new Position(this.x.getValue(), this
+                        .y.getValue(), this.z.getValue(), this.yPlus.getValue() 
+                        * 100 / Datas.Systems.SQUARE_SIZE).toVector3();
+                } else {
+                    (async () => {
+                        currentState.position = (await MapObject.searchInMap(
+                            this.objectIDPosition.getValue(), object)).object
+                            .position;
+                    })();
+                }
+                currentState.waitingPosition = true;
+            }
+            if (currentState.position !== null) {
+                (async () => {
+                    let moved = (await MapObject.searchInMap(objectID, objectID)
+                        ).object;
+                    // If needs teleport hero in another map
+                    if (this.mapID !== null) {
+                        let id = this.mapID.getValue();
 
-    /** 
-     *  Returns the number of node to pass.
-     *  @returns {number}
-     */
-    goToNextCommand(): number {
-        return 1;
+                        // If hero set the current map
+                        if (moved.isHero) {
+                            Manager.Stack.game.hero.position = currentState
+                                .position;
+                            if (Manager.Stack.currentMap.id !== id) {
+                                let map = new Scene.Map(id);
+                                map.reactionInterpreters.push(
+                                    ReactionInterpreter.currentReaction);
+                                Manager.Stack.replace(map);
+                            } else {
+                                await Manager.Stack.currentMap.loadPortions(true);
+                            }
+                        }
+                    }
+                    moved.teleport(currentState.position);
+                    currentState.teleported = true;
+                })();
+                currentState.waitingObject = true;
+            }
+        }
+        return currentState.teleported ? 1 : 0;
     }
 }
 
-export { Choice }
+export { TeleportObject }

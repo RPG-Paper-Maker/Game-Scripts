@@ -29,7 +29,7 @@ import { Player, MapObject } from "../Core";
  *  @property {GroupKind} addRemoveTeam The add remove team group kind
  *  @param {any[]} command Direct JSON command to parse
 */
-class EventCommandModifyTeam extends Base {
+class ModifyTeam extends Base {
 
     public addingKind: number;
     public instanceLevel: System.DynamicValue;
@@ -123,3 +123,5 @@ class EventCommandModifyTeam extends Base {
         return 1;
     }
 }
+
+export { ModifyTeam }
