@@ -59,7 +59,7 @@ class Land extends MapElement {
      *  @returns {StructCollision}
      */
     updateGeometryLand(geometry, collision, position, width, height, x, y, w, h, count) {
-        let localPosition = position.toVector3();
+        let localPosition = position.toVector3(false);
         let a = localPosition.x;
         let yLayerOffset = position.layer * 0.05;
         if (!this.up) {

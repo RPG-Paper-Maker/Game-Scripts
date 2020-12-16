@@ -334,7 +334,7 @@ class Mountain extends MapElement {
         let height = Constants.MAX_PICTURE_SIZE;
         let faceHeight = Math.sqrt((wp * wp) + (hp * hp));
         let w = Datas.Systems.SQUARE_SIZE / width;
-        let localPosition = position.toVector3();
+        let localPosition = position.toVector3(false);
         let center = new THREE.Vector3(localPosition.x + (Datas.Systems
             .SQUARE_SIZE / 2), localPosition.y + (hp / 2), localPosition.z + (Datas.Systems.SQUARE_SIZE / 2));
         let xLeft = localPosition.x;

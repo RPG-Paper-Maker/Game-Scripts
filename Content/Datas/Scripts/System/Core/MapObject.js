@@ -401,7 +401,7 @@ class MapObject {
             }
             let sprite = Sprite.create(this.currentState.graphicKind, [x, y,
                 this.width, this.height]);
-            let result = sprite.createGeometry(this.width, this.height, false, this.position);
+            let result = sprite.createGeometry(this.width, this.height, false, Position.createFromVector3(this.position));
             let geometry = result[0];
             let objCollision = result[1];
             this.mesh = new THREE.Mesh(geometry, material);
@@ -773,8 +773,7 @@ class MapObject {
                 .currentMap.id, afterPortion);
             let originalPortion = Manager.Stack.currentMap.allObjects[this
                 .system.id].getGlobalPortion();
-            if (originalPortion[0] !== afterPortion[0] || originalPortion[1] !==
-                afterPortion[1] || originalPortion[2] !== afterPortion[2]) {
+            if (!originalPortion.equals(afterPortion)) {
                 objects.mout.push(this);
             }
             else {
@@ -795,7 +794,7 @@ class MapObject {
      */
     addToScene() {
         if (!this.isInScene && this.mesh !== null) {
-            //Manager.Stack.currentMap.scene.add(this.mesh);
+            Manager.Stack.currentMap.scene.add(this.mesh);
             this.isInScene = true;
         }
     }
@@ -805,7 +804,7 @@ class MapObject {
     addBBToScene() {
         if (Datas.Systems.showBB) {
             for (let i = 0, l = this.meshBoundingBox.length; i < l; i++) {
-                //Manager.Stack.currentMap.scene.add(this.meshBoundingBox[i]);
+                Manager.Stack.currentMap.scene.add(this.meshBoundingBox[i]);
             }
         }
     }
@@ -814,7 +813,7 @@ class MapObject {
      */
     removeFromScene() {
         if (this.isInScene) {
-            //Manager.Stack.currentMap.scene.remove(this.mesh);
+            Manager.Stack.currentMap.scene.remove(this.mesh);
             this.removeBBFromScene();
             this.isInScene = false;
         }

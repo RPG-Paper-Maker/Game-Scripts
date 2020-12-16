@@ -13,7 +13,7 @@ import { Base } from "./Base.js";
 import { Enum, Utils, Constants, IO, Paths } from "../Common/index.js";
 var PictureKind = Enum.PictureKind;
 import { System, Datas, Scene, Manager } from "../index.js";
-import { Portion, MapPortion, Camera, ReactionInterpreter } from "../Core/index.js";
+import { Position, Portion, MapPortion, Camera, ReactionInterpreter } from "../Core/index.js";
 /** @class
  *  A scene for a local map.
  *  @extends SceneGame
@@ -134,7 +134,8 @@ class Map extends Base {
         let jsonObject;
         for (let i = 0; i < l; i++) {
             jsonObject = json[i];
-            this.allObjects[jsonObject.id] = jsonObject.p;
+            this.allObjects[jsonObject.id] = Position.createFromArray(jsonObject
+                .p);
         }
     }
     /**
@@ -269,8 +270,8 @@ class Map extends Base {
         for (i = -limit; i <= limit; i++) {
             for (j = -limit; j <= limit; j++) {
                 for (k = -limit; k <= limit; k++) {
-                    await this.loadPortion(this.currentPortion[0] + i, this
-                        .currentPortion[1] + j, this.currentPortion[2] + k, i, j, k);
+                    await this.loadPortion(this.currentPortion.x + i, this
+                        .currentPortion.y + j, this.currentPortion.z + k, i, j, k);
                 }
             }
         }
@@ -400,7 +401,7 @@ class Map extends Base {
     getPortionIndex(portion) {
         let size = this.getMapPortionSize();
         let limit = this.getMapPortionLimit();
-        return ((portion.x + limit) * size * size) + ((portion.y + limit) * size) + (+limit);
+        return ((portion.x + limit) * size * size) + ((portion.y + limit) * size) + (portion.z + limit);
     }
     /**
      *  Set a local portion with a global portion.
@@ -408,7 +409,7 @@ class Map extends Base {
      *  @returns {Portion}
      */
     getLocalPortion(portion) {
-        return new Portion(portion.x - this.currentPortion[0], portion.y - this.currentPortion[1], portion.z - this.currentPortion[2]);
+        return new Portion(portion.x - this.currentPortion.x, portion.y - this.currentPortion.y, portion.z - this.currentPortion.z);
     }
     /**
      *  Get the map portion limit.
@@ -515,7 +516,7 @@ class Map extends Base {
                 }
             }
         }
-        else if (newPortion[0] < this.currentPortion[0]) {
+        else if (newPortion.x < this.currentPortion.x) {
             for (k = -r; k <= r; k++) {
                 for (j = -r; j <= r; j++) {
                     i = r;
@@ -546,7 +547,7 @@ class Map extends Base {
                 }
             }
         }
-        else if (newPortion[2] < this.currentPortion[2]) {
+        else if (newPortion.z < this.currentPortion.z) {
             for (k = -r; k <= r; k++) {
                 for (i = -r; i <= r; i++) {
                     j = r;
@@ -577,7 +578,7 @@ class Map extends Base {
                 }
             }
         }
-        else if (newPortion[1] < this.currentPortion[1]) {
+        else if (newPortion.y < this.currentPortion.y) {
             for (i = -r; i <= r; i++) {
                 for (j = -r; j <= r; j++) {
                     k = r;
@@ -649,7 +650,7 @@ class Map extends Base {
                     movedObjects[p].update(angle);
                 }
                 // Update face sprites
-                let mapPortion = this.getMapPortion(i, j, k);
+                let mapPortion = this.getMapPortion(new Portion(i, j, k));
                 if (mapPortion) {
                     mapPortion.updateFaceSprites(angle);
                 }
@@ -725,11 +726,10 @@ class Map extends Base {
      */
     draw3D() {
         Manager.GL.renderer.clear();
-        /*
         if (this.mapProperties.sceneBackground !== null) {
             Manager.GL.renderer.render(this.mapProperties.sceneBackground, this
                 .mapProperties.cameraBackground);
-        }*/
+        }
         Manager.GL.renderer.render(this.scene, this.camera.getThreeCamera());
     }
     /**

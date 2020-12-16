@@ -28,8 +28,8 @@ class Collisions {
     public static BB_MATERIAL = new THREE.MeshBasicMaterial();
     public static BB_BOX = Collisions.createBox();
     public static BB_ORIENTED_BOX = Collisions.createOrientedBox();
-    public static BB_BOX_DETECTION = new THREE.MeshBasicMaterial();
-    public static BB_BOX_DEFAULT_DETECTION = new THREE.MeshBasicMaterial();
+    public static BB_BOX_DETECTION = Collisions.createBox();
+    public static BB_BOX_DEFAULT_DETECTION = Collisions.createBox();
 
     constructor() {
         throw new Error("This is a static class");

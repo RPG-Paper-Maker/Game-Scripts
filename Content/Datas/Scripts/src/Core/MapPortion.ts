@@ -128,7 +128,6 @@ class MapPortion {
      *  at the beginning of the game.
      */
     read(json: Record<string, any>, isMapHero: boolean) {
-        /*
         this.readLands(json.lands);
         this.readSprites(json.sprites);
         if (json.moun) {
@@ -138,7 +137,6 @@ class MapPortion {
             this.readObjects3D(json.objs3d);
         }
         this.readObjects(json.objs.list, isMapHero);
-        */
     }
 
     /** 
@@ -236,7 +234,7 @@ class MapPortion {
             StructMapElementCollision;
         for (i = 0, l = json.length; i < l; i++) {
             jsonAutotile = json[i];
-            position = jsonAutotile.k;
+            position = Position.createFromArray(jsonAutotile.k);
             autotile = new Autotile(jsonAutotile.v);
             indexPos = position.toIndex();
             texture = null;
@@ -669,7 +667,7 @@ class MapPortion {
             typeof THREE.Vector3, mapObject: MapObject;
         for (let i = 0, l = json.length; i < l; i++) {
             jsonObject = json[i];
-            position = jsonObject.k;
+            position = Position.createFromArray(jsonObject.k);
             jsonObjectValue = jsonObject.v;
             object = new System.MapObject;
             if (jsonObjectValue.id === id) {

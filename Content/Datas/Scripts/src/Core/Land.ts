@@ -76,7 +76,7 @@ class Land extends MapElement {
         number, y: number, w: number, h: number, count: number): 
         StructMapElementCollision
     {
-        let localPosition = position.toVector3();
+        let localPosition = position.toVector3(false);
         let a = localPosition.x;
         let yLayerOffset = position.layer * 0.05;
         if (!this.up) {

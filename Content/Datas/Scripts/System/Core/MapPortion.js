@@ -103,7 +103,6 @@ class MapPortion {
      *  at the beginning of the game.
      */
     read(json, isMapHero) {
-        /*
         this.readLands(json.lands);
         this.readSprites(json.sprites);
         if (json.moun) {
@@ -113,7 +112,6 @@ class MapPortion {
             this.readObjects3D(json.objs3d);
         }
         this.readObjects(json.objs.list, isMapHero);
-        */
     }
     /**
      *  Read the JSON associated to the lands in the portion.
@@ -198,7 +196,7 @@ class MapPortion {
         let l, jsonAutotile, position, autotile, indexPos, index, textureAutotile, autotiles, objCollision;
         for (i = 0, l = json.length; i < l; i++) {
             jsonAutotile = json[i];
-            position = jsonAutotile.k;
+            position = Position.createFromArray(jsonAutotile.k);
             autotile = new Autotile(jsonAutotile.v);
             indexPos = position.toIndex();
             texture = null;
@@ -581,7 +579,7 @@ class MapPortion {
         let jsonObject, position, jsonObjectValue, object, localPosition, mapObject;
         for (let i = 0, l = json.length; i < l; i++) {
             jsonObject = json[i];
-            position = jsonObject.k;
+            position = Position.createFromArray(jsonObject.k);
             jsonObjectValue = jsonObject.v;
             object = new System.MapObject;
             if (jsonObjectValue.id === id) {

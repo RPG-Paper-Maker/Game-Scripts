@@ -156,12 +156,10 @@ class Object3DBox extends Object3D {
         number): [number, StructMapElementCollision[]]
     {
         let coef = 0.01;
-        let localPosition = position.toVector3();
-        localPosition.setX(localPosition.x - (Datas.Systems.SQUARE_SIZE / 2) + 
-            coef);
+        let localPosition = position.toVector3(false);
+        localPosition.setX(localPosition.x +  coef);
         localPosition.setY(localPosition.y + coef);
-        localPosition.setZ(localPosition.z - (Datas.Systems.SQUARE_SIZE / 2) + 
-            coef);
+        localPosition.setZ(localPosition.z + coef);
         let angleY = position.angleY;
         let angleX = position.angleX;
         let angleZ = position.angleZ;

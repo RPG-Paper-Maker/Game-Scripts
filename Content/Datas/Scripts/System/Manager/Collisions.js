@@ -924,6 +924,6 @@ class Collisions {
 Collisions.BB_MATERIAL = new THREE.MeshBasicMaterial();
 Collisions.BB_BOX = Collisions.createBox();
 Collisions.BB_ORIENTED_BOX = Collisions.createOrientedBox();
-Collisions.BB_BOX_DETECTION = new THREE.MeshBasicMaterial();
-Collisions.BB_BOX_DEFAULT_DETECTION = new THREE.MeshBasicMaterial();
+Collisions.BB_BOX_DETECTION = Collisions.createBox();
+Collisions.BB_BOX_DEFAULT_DETECTION = Collisions.createBox();
 export { Collisions };

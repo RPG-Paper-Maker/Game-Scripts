@@ -172,6 +172,7 @@ class Sprite extends MapElement {
         } else {
             localPosition = tileset ? position.toVector3() : new THREE.Vector3();
         }
+
         let angleY = position.angleY;
         let angleX = position.angleX;
         let angleZ = position.angleZ;

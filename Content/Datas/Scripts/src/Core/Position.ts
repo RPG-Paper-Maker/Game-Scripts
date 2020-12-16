@@ -28,7 +28,7 @@ class Position extends Portion {
     public angleZ: number;
 
     constructor(x: number = 0, y: number = 0, z: number = 0, yPixels: number = 0
-        , layer: number = 0, centerX: number = 0, centerZ: number = 0, angleY: 
+        , layer: number = 0, centerX: number = 50, centerZ: number = 50, angleY: 
         number = 0, angleX: number = 0, angleZ: number = 0)
     {
         super(x, y, z);
@@ -99,18 +99,17 @@ class Position extends Portion {
     }
 
     /** 
-     *  Transform a json position to a THREE.Vector3.
-     *  @param {number[]} position The json position
+     *  Transform a position to a THREE.Vector3.
      *  @returns {THREE.Vector3}
      */
-    toVector3(): typeof THREE.Vector3 {
+    toVector3(center: boolean = true): typeof THREE.Vector3 {
         return new THREE.Vector3(
-            (this.x * Datas.Systems.SQUARE_SIZE) + (this.centerX / 100 * Datas
-                .Systems.SQUARE_SIZE), 
+            (this.x * Datas.Systems.SQUARE_SIZE) + (center ? (this.centerX / 100 
+                * Datas.Systems.SQUARE_SIZE) : 0), 
             (this.y * Datas.Systems.SQUARE_SIZE) + (this.yPixels * Datas.Systems
                 .SQUARE_SIZE / 100), 
-            (this.z * Datas.Systems.SQUARE_SIZE) + (this.centerZ / 100 * Datas
-                .Systems.SQUARE_SIZE)
+            (this.z * Datas.Systems.SQUARE_SIZE) + (center ? (this.centerZ / 100
+                * Datas.Systems.SQUARE_SIZE) : 0)
         );
     }
 

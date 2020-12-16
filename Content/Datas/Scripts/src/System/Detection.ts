@@ -39,8 +39,9 @@ class Detection extends Base {
         let jsonElement: Record<string, any>;
         for (let i = 0; i < l; i++) {
             jsonElement = jsonList[i];
-            this.boxes[i] = [jsonElement.k, Utils.defaultValue(jsonElement.v.bhs
-                , 1), Utils.defaultValue(jsonElement.v.bhp, 0)];
+            this.boxes[i] = [Position.createFromArray(jsonElement.k), Utils
+                .defaultValue(jsonElement.v.bhs, 1), Utils.defaultValue(
+                jsonElement.v.bhp, 0)];
         }
     }
 

@@ -10,6 +10,7 @@
 */
 import { Base } from "./Base.js";
 import { Utils, Enum } from "../Common/index.js";
+import { Position } from "../Core/index.js";
 var Orientation = Enum.Orientation;
 import { Datas, Manager } from "../index.js";
 /** @class
@@ -32,7 +33,8 @@ class Detection extends Base {
         let jsonElement;
         for (let i = 0; i < l; i++) {
             jsonElement = jsonList[i];
-            this.boxes[i] = [jsonElement.k, Utils.defaultValue(jsonElement.v.bhs, 1), Utils.defaultValue(jsonElement.v.bhp, 0)];
+            this.boxes[i] = [Position.createFromArray(jsonElement.k), Utils
+                    .defaultValue(jsonElement.v.bhs, 1), Utils.defaultValue(jsonElement.v.bhp, 0)];
         }
     }
     /**

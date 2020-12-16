@@ -265,41 +265,6 @@ class Mathf {
         return parseFloat(Math.sin(v).toFixed(10));
     }
 
-    /** Get portion according to a position.
-     *   @static
-     *   @param {THREE.Vector3} position The position
-     *   @returns {number[]}
-     */
-    static getPortion(position: typeof THREE.Vector3): number[] {
-        return this.getPortionArray(this.getPosition(position));
-    }
-
-    /** Get portion according to array position.
-     *   @static
-     *   @param {number[]} p The array position
-     *   @returns {number[]}
-     */
-    static getPortionArray(p: number[]): number[] {
-        return [
-            Math.floor(p[0] / Constants.PORTION_SIZE),
-            Math.floor(p[1] / Constants.PORTION_SIZE),
-            Math.floor(p[2] / Constants.PORTION_SIZE)
-        ];
-    }
-
-    /** Get an array position according to position.
-     *   @static
-     *   @param {THREE.Vector3} position The position
-     *   @returns {number[]}
-     */
-    static getPosition(position: typeof THREE.Vector3): number[] {
-        return [
-            Math.floor(position.x / Datas.Systems.SQUARE_SIZE),
-            Math.floor(position.y / Datas.Systems.SQUARE_SIZE),
-            Math.floor(position.z / Datas.Systems.SQUARE_SIZE)
-        ];
-    }
-
     /** Give a modulo without negative value.
      *   @static
      *   @param {number} x
