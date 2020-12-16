@@ -142,5 +142,12 @@ class CommonSkillItem extends Icon {
         }
         return "";
     }
+    /**
+     *  Get the weapon kind.
+     *  @returns {System/WeaponArmorKind}
+     */
+    getType() {
+        return null;
+    }
 }
 export { CommonSkillItem };

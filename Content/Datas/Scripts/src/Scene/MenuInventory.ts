@@ -1,0 +1,307 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2020 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+import { Base } from "./Base";
+import { Graphic, Datas, Scene, Manager, System } from "..";
+import { Enum, ScreenResolution } from "../Common";
+import Align = Enum.Align;
+import OrientationWindow = Enum.OrientationWindow;
+import ItemKind = Enum.ItemKind;
+import TargetKind = Enum.TargetKind;
+import AvailableKind = Enum.AvailableKind;
+import { WindowBox, WindowChoices, Item } from "../Core";
+import { StructPositionChoice } from ".";
+
+/** @class
+ *  A scene in the menu for describing inventory.
+ *  @extends Scene.Base
+ *  @property {WindowBox} windowTop Window on top with "Inventory" text
+ *  @property {WindowTabs} windowChoicesTabs Window for each tabs
+ *  @property {WindowChoices} windowChoicesList Window for each items
+ *  @property {WindowBox} windowInformations Window for item informations
+ *  @property {WindowBox} windowEmpty The window box empty
+ *  @property {WindowBox} windowBoxUseItem The window box for using item
+ *  @property {Object[]} positionChoice The position choices index + offset for 
+ *  each type of item
+ *  @property {number} substep The subset for using item
+*/
+class MenuInventory extends Base {
+
+    public windowTop: WindowBox;
+    public windowChoicesTabs: WindowChoices;
+    public windowChoicesList: WindowChoices;
+    public windowInformations: WindowBox;
+    public windowEmpty: WindowBox;
+    public windowBoxUseItem: WindowBox;
+    public positionChoice: StructPositionChoice[];
+    public substep: number;
+
+    constructor() {
+        super(false);
+
+        // Initializing the top menu for item kinds
+        let menuKind = [
+            new Graphic.Text("All", { align: Align.Center }),
+            new Graphic.Text("Consumables", { align: Align.Center }),
+            new Graphic.Text(Datas.Systems.getItemType(1), { align: Align.Center }),
+            new Graphic.Text(Datas.Systems.getItemType(2), { align: Align.Center }),
+            new Graphic.Text("Weapons", { align: Align.Center }),
+            new Graphic.Text("Armors", { align: Align.Center })
+        ];
+
+        // All the windows
+        this.windowTop = new WindowBox(20, 20, 200, 30, {
+                content: new Graphic.Text("Inventory", { align: Align.Center })
+            }
+        );
+        this.windowChoicesTabs = new WindowChoices(5, 60, 105, WindowBox
+            .SMALL_SLOT_HEIGHT, menuKind, {
+                orientation: OrientationWindow.Horizontal,
+                nbItemsMax: 6
+            }
+        );
+        this.windowChoicesList = new WindowChoices(20, 100, 200, WindowBox
+            .SMALL_SLOT_HEIGHT, [], {
+                nbItemsMax: Scene.Menu.SLOTS_TO_DISPLAY,
+            }
+        );
+        this.windowInformations = new WindowBox(240, 100, 360, 200, {
+                padding: WindowBox.HUGE_PADDING_BOX
+            }
+        );
+        this.windowEmpty = new WindowBox(10, 100, ScreenResolution.SCREEN_X - 20
+            , WindowBox.SMALL_SLOT_HEIGHT, {
+                content: new Graphic.Text("Empty", { align: Align.Center }),
+                padding: WindowBox.SMALL_SLOT_PADDING
+            }
+        );
+        this.windowBoxUseItem = new WindowBox(240, 320, 360, 140, {
+                content: new Graphic.UseSkillItem(),
+                padding: WindowBox.SMALL_PADDING_BOX
+            }
+        );
+        let l = menuKind.length;
+        this.positionChoice = new Array(l);
+        for (let i = 0; i < l; i++) {
+            this.positionChoice[i] = {
+                index: 0,
+                offset: 0
+            };
+        }
+
+        // Update for changing tab
+        this.substep = 0;
+        this.updateForTab();
+        this.synchronize();
+    }
+
+    /** 
+     *  Update informations to display.
+     */
+    synchronize() {
+        this.windowInformations.content = this.windowChoicesList
+            .getCurrentContent();
+    }
+
+    /** 
+     *  Update tab.
+     */
+    updateForTab() {
+        let indexTab = this.windowChoicesTabs.currentSelectedIndex;
+        let nbItems = Manager.Stack.game.items.length;
+        let list = [];
+        let ownedItem: Item, item: System.Item;
+        for (let i = 0; i < nbItems; i++) {
+            ownedItem = Manager.Stack.game.items[i];
+            item = Datas.Items.get(ownedItem.id);
+            if (indexTab === 0 || (indexTab === 1 && (ownedItem.kind === 
+                ItemKind.Item && item.consumable)) || (indexTab === 2 && (
+                ownedItem.kind === ItemKind.Item && item.type === 1)) || (
+                indexTab === 3 && (ownedItem.kind === ItemKind.Item && item.type 
+                === 2)) || (indexTab === 4 && ownedItem.kind === ItemKind.Weapon
+                ) || (indexTab === 5 && ownedItem.kind === ItemKind.Armor))
+            {
+                list.push(new Graphic.Item(ownedItem));
+            }
+        }
+        this.windowChoicesList.setContentsCallbacks(list);
+        this.windowChoicesList.unselect();
+        this.windowChoicesList.offsetSelectedIndex = this.positionChoice[
+            indexTab].offset;
+        this.windowChoicesList.select(this.positionChoice[indexTab].index);
+    }
+
+    /** 
+     *  Use the current item.
+     */
+    useItem() {
+        let graphic = <Graphic.Item> this.windowInformations.content;
+        Manager.Stack.game.useItem(graphic.item);
+        if (graphic.item.nb > 0) {
+            graphic.updateNb();
+        } else {
+            this.updateForTab();
+        }
+        (<Graphic.UseSkillItem> this.windowBoxUseItem.content).updateStats();
+        Manager.Stack.requestPaintHUD = true;
+    }
+
+    /** 
+     *  Move tab according to key.
+     *  @param {number} key The key ID 
+     */
+    moveTabKey(key: number) {
+        // Tab
+        let indexTab = this.windowChoicesTabs.currentSelectedIndex;
+        this.windowChoicesTabs.onKeyPressedAndRepeat(key);
+        if (indexTab !== this.windowChoicesTabs.currentSelectedIndex) {
+            this.updateForTab();
+        }
+
+        // List
+        this.windowChoicesList.onKeyPressedAndRepeat(key);
+        let position = this.positionChoice[this.windowChoicesTabs
+            .currentSelectedIndex];
+        position.index = this.windowChoicesList.currentSelectedIndex;
+        position.offset = this.windowChoicesList.offsetSelectedIndex;
+
+        this.synchronize();
+    }
+
+    /** 
+     *  Update the scene.
+     */
+    update() {
+        Scene.Base.prototype.update.call(Manager.Stack.currentMap);
+
+        if (this.windowChoicesList.currentSelectedIndex !== -1) {
+            this.windowBoxUseItem.update();
+        }
+    }
+
+    /** 
+     *  Handle scene key pressed.
+     *  @param {number} key The key ID
+     */
+    onKeyPressed(key: number) {
+        Scene.Base.prototype.onKeyPressed.call(Manager.Stack.currentMap, key);
+        let graphic = <Graphic.Item> this.windowInformations.content;
+        switch (this.substep) {
+            case 0:
+                if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
+                    .Action))
+                {
+                    if (this.windowInformations.content === null) {
+                        return;
+                    }
+                    let targetKind = graphic.system.targetKind;
+                    let availableKind = graphic.system.availableKind;
+                    if (graphic.system.consumable && (targetKind === TargetKind
+                        .Ally || targetKind === TargetKind.AllAllies) && (
+                        availableKind === AvailableKind.Always || availableKind 
+                        === AvailableKind.MainMenu))
+                    {
+                        Datas.Systems.soundConfirmation.playSound();
+                        this.substep = 1;
+                        (<Graphic.UseSkillItem> this.windowBoxUseItem.content)
+                            .setAll(targetKind === TargetKind.AllAllies);
+                        Manager.Stack.requestPaintHUD = true;
+                    } else {
+                        Datas.Systems.soundImpossible.playSound();
+                    }
+                } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
+                    .menuControls.Cancel) || Datas.Keyboards.isKeyEqual(key, 
+                    Datas.Keyboards.controls.MainMenu))
+                {
+                    Datas.Systems.soundCancel.playSound();
+                    Manager.Stack.pop();
+                }
+                break;
+            case 1:
+                if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
+                    .Action))
+                {
+                    if (graphic.system.isPossible() && graphic.system.use()) {
+                        this.useItem();
+                    }
+                } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
+                    .menuControls.Cancel) || Datas.Keyboards.isKeyEqual(key, 
+                    Datas.Keyboards.controls.MainMenu))
+                {
+                    Datas.Systems.soundCancel.playSound();
+                    this.substep = 0;
+                    Manager.Stack.requestPaintHUD = true;
+                }
+                break;
+        }
+    }
+
+    /** 
+     *  Handle scene key released.
+     *  @param {number} key The key ID
+     */
+    onKeyReleased(key: number) {
+        Scene.Base.prototype.onKeyReleased.call(Manager.Stack.currentMap, key);
+    }
+
+    /** 
+     *  Handle scene pressed repeat key.
+     *  @param {number} key The key ID
+     *  @returns {boolean}
+     */
+    onKeyPressedRepeat(key: number): boolean {
+        return Scene.Base.prototype.onKeyPressedRepeat.call(Manager.Stack
+            .currentMap, key);
+    }
+
+    /** 
+     *  Handle scene pressed and repeat key.
+     *  @param {number} key The key ID
+     *  @returns {boolean}
+     */
+    onKeyPressedAndRepeat(key: number): boolean {
+        let res = Scene.Base.prototype.onKeyPressedAndRepeat.call(Manager.Stack
+            .currentMap, key);
+        switch (this.substep) {
+            case 0:
+                this.moveTabKey(key);
+                break;
+            case 1:
+                (<Graphic.UseSkillItem> this.windowBoxUseItem.content)
+                    .onKeyPressedAndRepeat(key);
+                break;
+        }
+        return res;
+    }
+
+    /** 
+     *  Draw the HUD scene.
+     */
+    drawHUD() {
+        // Draw the local map behind
+        Manager.Stack.currentMap.drawHUD();
+
+        // Draw the menu
+        this.windowTop.draw();
+        this.windowChoicesTabs.draw();
+        this.windowChoicesList.draw();
+        if (this.windowChoicesList.listWindows.length > 0) {
+            this.windowInformations.draw();
+            if (this.substep === 1) {
+                this.windowBoxUseItem.draw();
+            }
+        } else {
+            this.windowEmpty.draw();
+        }
+    }
+}
+
+export { MenuInventory }

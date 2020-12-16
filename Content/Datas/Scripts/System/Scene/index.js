@@ -15,6 +15,7 @@ export * from "./LoadGame.js";
 export * from "./Loading.js";
 export * from "./Map.js";
 export * from "./Menu.js";
+export * from "./MenuInventory.js";
 export * from "./SaveGame.js";
 export * from "./SaveLoadGame.js";
 export * from "./TitleScreen.js";

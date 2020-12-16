@@ -20,6 +20,7 @@ import { PlaySong } from "./PlaySong";
 import { Cost } from "./Cost";
 import { Characteristic } from "./Characteristic";
 import { Effect } from "./Effect";
+import { System } from "..";
 
 /** @class
  *  A common class for skills, items, weapons, armors.
@@ -171,6 +172,14 @@ class CommonSkillItem extends Icon {
                 return "All allies";
         }
         return "";
+    }
+
+    /** 
+     *  Get the weapon kind.
+     *  @returns {System/WeaponArmorKind}
+     */
+    getType(): System.WeaponArmorKind {
+        return null;
     }
 }
 

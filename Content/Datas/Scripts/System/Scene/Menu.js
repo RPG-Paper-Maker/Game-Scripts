@@ -13,6 +13,7 @@ import { Scene, Manager, Graphic, Datas } from "../index.js";
 import { Enum, ScreenResolution } from "../Common/index.js";
 var Align = Enum.Align;
 import { WindowChoices, WindowBox } from "../Core/index.js";
+;
 /** @class
  *  A scene for the main menu.
  *  @extends Scene.Base
@@ -87,10 +88,8 @@ class Menu extends Base {
      *  Callback function for opening inventory.
      */
     openInventory() {
-        /*
-        RPM.gameStack.push(new SceneMenuInventory());
+        Manager.Stack.push(new Scene.MenuInventory());
         return true;
-        */
     }
     // -------------------------------------------------------
     /** Callback function for opening skills menu

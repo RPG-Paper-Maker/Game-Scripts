@@ -29,7 +29,7 @@ class Item extends CommonSkillItem {
     /** Get the item type.
      *  @returns {string}
      */
-    getType() {
+    getStringType() {
         return Datas.Systems.getItemType(this.type);
     }
 }

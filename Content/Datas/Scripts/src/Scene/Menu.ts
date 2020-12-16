@@ -15,6 +15,11 @@ import { Enum, ScreenResolution } from "../Common";
 import Align = Enum.Align;
 import { WindowChoices, WindowBox } from "../Core";
 
+interface StructPositionChoice {
+    index: number,
+    offset: number
+};
+
 /** @class
  *  A scene for the main menu.
  *  @extends Scene.Base
@@ -109,10 +114,8 @@ class Menu extends Base {
      *  Callback function for opening inventory.
      */
     openInventory() {
-        /*
-        RPM.gameStack.push(new SceneMenuInventory());
+        Manager.Stack.push(new Scene.MenuInventory());
         return true;
-        */
     }
 
     // -------------------------------------------------------
@@ -317,4 +320,4 @@ class Menu extends Base {
     }
 }
 
-export { Menu }
+export { StructPositionChoice, Menu }

@@ -187,7 +187,7 @@ class WindowSkin extends System.Base {
      *  @param {boolean} positionResize Indicate if the position picture needs
      *  to be resize (resolution)
      */
-    drawArrowTarget(frame, x, y, positionResize) {
+    drawArrowTarget(frame, x, y, positionResize = false) {
         let width = this.arrowTargetSelection[2] / Datas.Systems.FRAMES;
         this.picture.draw(x - (width / 2), y, width, this.arrowTargetSelection[3], this.arrowTargetSelection[0] + (frame * width), this
             .arrowTargetSelection[1], width, this.arrowTargetSelection[3], positionResize);
