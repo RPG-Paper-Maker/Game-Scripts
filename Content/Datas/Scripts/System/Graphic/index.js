@@ -15,3 +15,5 @@ export * from "./Player.js";
 export * from "./Save.js";
 export * from "./Setting.js";
 export * from "./Text.js";
+export * from "./TextIcon.js";
+export * from "./TimeCurrencies.js";

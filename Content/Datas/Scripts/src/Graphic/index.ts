@@ -16,3 +16,5 @@ export * from "./Player";
 export * from "./Save";
 export * from "./Setting";
 export * from "./Text";
+export * from "./TextIcon";
+export * from "./TimeCurrencies";
