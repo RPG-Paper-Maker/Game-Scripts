@@ -57,9 +57,7 @@ class RemoveObjectFromMap extends Base {
         let objectID = this.objectID.getValue();
         if (!currentState.started) {
             currentState.started = true;
-            (async () => {
-                let result: StructSearchResult = await MapObject.searchInMap(
-                    objectID, objectID);
+            MapObject.search(objectID, (result: StructSearchResult) => {
                 if (result.datas.r.indexOf(result.id) === -1) {
                     switch (result.kind) {
                         case 0:
@@ -86,7 +84,7 @@ class RemoveObjectFromMap extends Base {
                     result.object.removeFromScene();
                 }
                 currentState.finished = true;
-            })();
+            }, object);
         }
         return currentState.finished ? 1 : 0;
     }

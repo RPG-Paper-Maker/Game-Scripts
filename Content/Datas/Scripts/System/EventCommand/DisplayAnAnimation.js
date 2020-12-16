@@ -60,9 +60,9 @@ class DisplayAnAnimation extends Base {
         if (currentState.parallel) {
             if (!currentState.waitingObject) {
                 let objectID = this.objectID.getValue();
-                (async () => {
-                    currentState.object = (await MapObject.searchInMap(objectID, object)).object;
-                })();
+                MapObject.search(objectID, (result) => {
+                    currentState.object = result.object;
+                }, object);
                 currentState.waitingObject = true;
             }
             if (currentState.object !== null) {

@@ -148,15 +148,31 @@ class MapObject
     }
 
     /** 
-     *  Get the direct object and some other informations.
+     *  Search an object in the map.
      *  @static
-     *  @async
+     *  @param {number} objectID The object ID searched
+     */
+    static search(objectID: number, callback: Function, thisObject?: MapObject) {
+        let result = this.searchInMap(objectID, thisObject);
+        if (result === null) {
+            (async() => {
+                result = await this.searchOutMap(objectID);
+                callback.call(null, result);
+            })();
+        } else {
+            callback.call(null, result);
+        }
+    }
+
+    /** 
+     *  Search an object that is already loaded. Return null if not found.
+     *  @static
      *  @param {number} objectID The object ID searched
      *  @param {MapObject} object This object
      *  @returns {Promise<StructSearchResult>}
      */
-    static async searchInMap(objectID: number, thisObject?: MapObject): Promise<
-        StructSearchResult>
+    static searchInMap(objectID: number, thisObject?: MapObject): 
+        StructSearchResult
     {
         switch (objectID) {
             case -1: // This object
@@ -236,30 +252,43 @@ class MapObject
                 }
             }
         } else { // Load the file if not already in temp
-            let json = await IO.parseFileJSON(Paths.FILE_MAPS + Manager.Stack
-                .currentMap.mapName + Constants.STRING_SLASH + globalPortion
-                .getFileName());
-            mapPortion = new MapPortion(globalPortion);
-            moved = mapPortion.getObjFromID(json, objectID);
-            if (moved === null) {
-                return {
-                    object: Manager.Stack.game.hero,
-                    id: objectID,
-                    kind: 2,
-                    index: -1,
-                    list: null,
-                    datas: mapsDatas
-                }
-            } else
-            {
-                return {
-                    object: moved,
-                    id: objectID,
-                    kind: 2,
-                    index: -1,
-                    list: null,
-                    datas: mapsDatas
-                }
+            return null;
+        }
+    }
+
+    /** 
+     *  Search an object that is not loaded yet.
+     *  @static
+     *  @param {number} objectID The object ID searched
+     *  @returns {Promise<StructSearchResult>}
+     */
+    static async searchOutMap(objectID: number): Promise<StructSearchResult> {
+        let globalPortion = Manager.Stack.currentMap.allObjects[objectID]
+            .getGlobalPortion();
+        let mapsDatas = Manager.Stack.game.getPotionsDatas(Manager.Stack
+            .currentMap.id, globalPortion);
+        let json = await IO.parseFileJSON(Paths.FILE_MAPS + Manager.Stack
+            .currentMap.mapName + Constants.STRING_SLASH + globalPortion
+            .getFileName());
+        let mapPortion = new MapPortion(globalPortion);
+        let moved = mapPortion.getObjFromID(json, objectID);
+        if (moved === null) {
+            return {
+                object: Manager.Stack.game.hero,
+                id: objectID,
+                kind: 2,
+                index: -1,
+                list: null,
+                datas: mapsDatas
+            }
+        } else {
+            return {
+                object: moved,
+                id: objectID,
+                kind: 2,
+                index: -1,
+                list: null,
+                datas: mapsDatas
             }
         }
     }

@@ -13,7 +13,7 @@ const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Base } from "./Base";
 import { Utils, Mathf } from "../Common";
 import { System, Manager, Datas } from "..";
-import { MapObject } from "../Core";
+import { MapObject, StructSearchResult } from "../Core";
 
 /** @class
  *  An event command for displaying text.
@@ -149,10 +149,10 @@ class MoveCamera extends Base {
                 if (currentState.targetID === null) {
                     currentState.target = false;
                 } else {
-                    (async () => {
-                        currentState.target = (await MapObject.searchInMap(
-                            currentState.targetID, object)).object;
-                    })();
+                    MapObject.search(currentState.targetID, (result: 
+                        StructSearchResult) => {
+                        currentState.target = result.object;
+                    }, object);
                 }
                 currentState.waitingObject = true;
             }

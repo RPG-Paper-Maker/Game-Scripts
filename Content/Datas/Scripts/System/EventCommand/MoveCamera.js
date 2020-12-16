@@ -116,9 +116,9 @@ class MoveCamera extends Base {
                     currentState.target = false;
                 }
                 else {
-                    (async () => {
-                        currentState.target = (await MapObject.searchInMap(currentState.targetID, object)).object;
-                    })();
+                    MapObject.search(currentState.targetID, (result) => {
+                        currentState.target = result.object;
+                    }, object);
                 }
                 currentState.waitingObject = true;
             }

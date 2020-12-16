@@ -102,9 +102,7 @@ class ChangeVariables extends Base {
                     break;
                 case 4: // Map object characteristic
                     let objectID = this.valueMapObject.getValue();
-                    (async () => {
-                        let result = await MapObject
-                            .searchInMap(objectID, object);
+                    MapObject.search(objectID, (result) => {
                         let obj = result.object;
                         switch (this.valueMapObjectChar) {
                             case VariableMapObjectCharacteristicKind.XSquarePosition:
@@ -129,7 +127,7 @@ class ChangeVariables extends Base {
                                 currentState.value = obj.orientation;
                                 break;
                         }
-                    })();
+                    }, object);
             }
         }
         // Apply new value to variable(s)

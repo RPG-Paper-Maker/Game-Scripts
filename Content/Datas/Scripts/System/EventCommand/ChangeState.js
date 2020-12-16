@@ -140,9 +140,9 @@ class ChangeState extends Base {
             if (currentState.map.allObjects && currentState.map
                 .portionsObjectsUpdated) {
                 if (currentState.map === Manager.Stack.currentMap) {
-                    (async () => {
-                        currentState.object = (await MapObject.searchInMap(currentState.objectID, object)).object;
-                    })();
+                    MapObject.search(currentState.objectID, (result) => {
+                        currentState.object = result.object;
+                    }, object);
                 }
                 else {
                     currentState.object = {};
