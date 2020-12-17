@@ -9,52 +9,48 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { SaveLoadGame } from "./SaveLoadGame.js";
+import { Graphic, Datas, Manager } from "../index.js";
+import { Enum } from "../Common/index.js";
+var Align = Enum.Align;
 /** @class
  *  A scene in the menu for saving a game.
- *  @extends SceneSaveLoadGame
+ *  @extends Scene.SaveLoadGame
  */
 class SaveGame extends SaveLoadGame {
     constructor() {
         super();
     }
-    // -------------------------------------------------------
-    /** Load async stuff
-    */
+    /**
+     *  Load async stuff.
+     *  @async
+     */
     async load() {
-        /*
         await super.load();
-
-        this.setContents.call(this, new GraphicText("Save a game", { align:
-            Align.Center }), new GraphicText(
-            "Select a slot where you want to save.", { align: Align.Center }));
+        this.setContents.call(this, new Graphic.Text("Save a game", { align: Align.Center }), new Graphic.Text("Select a slot where you want to save.", { align: Align.Center }));
         this.loading = false;
-        */
     }
-    // -------------------------------------------------------
-    /** Handle scene key pressed
-    *   @param {number} key The key ID
-    */
+    /**
+     *  Save current game in the selected slot.
+     */
+    async save() {
+        Datas.Systems.soundConfirmation.playSound();
+        await Manager.Stack.game.save(this.windowChoicesSlots
+            .currentSelectedIndex + 1);
+        Manager.Stack.pop();
+        this.loading = false;
+    }
+    /**
+     *  Handle scene key pressed.
+     *   @param {number} key The key ID
+     */
     onKeyPressed(key) {
-        /*
         super.onKeyPressed(key);
-
+        console.log(key);
         // If action, save in the selected slot
-        if (DatasKeyBoard.isKeyEqual(key, RPM.datasGame.keyBoard.menuControls
-            .Action))
-        {
-            RPM.datasGame.system.soundConfirmation.playSound();
-            RPM.game.write(this.windowChoicesSlots.currentSelectedIndex + 1);
-
-            // Pop to return in the precedent state
-            RPM.gameStack.pop();
+        if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Action)) {
+            this.loading = true;
+            this.save();
         }
-        */
-    }
-    // -------------------------------------------------------
-    /** Draw the 3D scene
-    */
-    draw3D() {
-        //RPM.currentMap.draw3D();
     }
 }
 export { SaveGame };

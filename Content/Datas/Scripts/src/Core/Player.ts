@@ -469,11 +469,13 @@ class Player {
         for (i = 0, l = Datas.BattleSystems.statisticsOrder.length; i < l; i++) {
             let id = Datas.BattleSystems.statisticsOrder[i];
             statistic = Datas.BattleSystems.getStatistic(id);
-            value = jsonStats[id-1];
-            this[statistic.abbreviation] = value[0];
-            this[statistic.getBonusAbbreviation()] = value[1];
-            if (!statistic.isFix) {
-                this[statistic.getMaxAbbreviation()] = value[2];
+            value = jsonStats[id];
+            if (value) {
+                this[statistic.abbreviation] = value[0];
+                this[statistic.getBonusAbbreviation()] = value[1];
+                if (!statistic.isFix) {
+                    this[statistic.getMaxAbbreviation()] = value[2];
+                }
             }
         }
 

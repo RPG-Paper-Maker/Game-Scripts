@@ -109,18 +109,15 @@ class Menu extends Base {
         this.windowChoicesTeam.select(0);
         return true;
     }
-    // -------------------------------------------------------
-    /** Callback function for opening save menu
-    */
+    /**
+     *  Callback function for opening save menu.
+     */
     openSave() {
-        /*
-        if (RPM.allowSaves)
-        {
-            RPM.gameStack.push(new SceneSaveGame());
+        if (Scene.Map.allowSaves) {
+            Manager.Stack.push(new Scene.SaveGame());
             return true;
         }
         return false;
-        */
     }
     /**
      *  Callback function for quiting the game.

@@ -54,7 +54,7 @@ class Game {
         let json = null;
         let path = this.getPathSave();
         if (IO.fileExists(path)) {
-            json = IO.parseFileJSON(await IO.openFile(path));
+            json = await IO.parseFileJSON(path);
         }
         if (json === null) {
             return;
@@ -77,18 +77,18 @@ class Game {
         // Heroes
         this.teamHeroes = [];
         Utils.readJSONSystemList({ list: json.th, listIndexes: this.teamHeroes, func: (json) => {
-                return new Player(json.k, json.id, json.instid, json.sk, json);
+                return new Player(json.kind, json.id, json.instid, json.sk, json);
             }
         });
         this.reserveHeroes = [];
         Utils.readJSONSystemList({ list: json.sh, listIndexes: this
                 .reserveHeroes, func: (json) => {
-                return new Player(json.k, json.id, json.instid, json.sk, json);
+                return new Player(json.kind, json.id, json.instid, json.sk, json);
             }
         });
         this.hiddenHeroes = [];
         Utils.readJSONSystemList({ list: json.hh, listIndexes: this.hiddenHeroes, func: (json) => {
-                return new Player(json.k, json.id, json.instid, json.sk, json);
+                return new Player(json.kind, json.id, json.instid, json.sk, json);
             }
         });
         // Map infos
@@ -107,9 +107,9 @@ class Game {
      *  Save a game file.
      *  @async
      */
-    async save() {
-        if (this.isEmpty) {
-            return;
+    async save(slot) {
+        if (!Utils.isUndefined(slot)) {
+            this.slot = slot;
         }
         let l = this.teamHeroes.length;
         let teamHeroes = new Array(l);
@@ -127,7 +127,7 @@ class Game {
         for (i = 0; i < l; i++) {
             hiddenHeroes[i] = this.hiddenHeroes[i].getSaveCharacter();
         }
-        await IO.saveFile(this.getPathSave(), {
+        await IO.saveFile(this.getPathSave(slot), {
             t: this.playTime.time,
             th: teamHeroes,
             sh: reserveHeroes,
@@ -219,6 +219,7 @@ class Game {
         this.mapsDatas = {};
         this.hero.initializeProperties();
         this.playTime = new Chrono(0);
+        this.isEmpty = false;
     }
     /**
      *  Initialize the default variables.
@@ -255,11 +256,12 @@ class Game {
     }
     /**
      *  Get the path save according to slot.
+     *  @param {number} [slot=undefined]
      *  @returns {string}
     */
-    getPathSave() {
-        return Paths.SAVES + Constants.STRING_SLASH + this.slot + Constants
-            .EXTENSION_JSON;
+    getPathSave(slot) {
+        return Paths.SAVES + Constants.STRING_SLASH + (Utils.isUndefined(slot) ?
+            this.slot : slot) + Constants.EXTENSION_JSON;
     }
     /**
      *  Get the variable by ID.

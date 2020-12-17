@@ -140,19 +140,15 @@ class Menu extends Base {
         return true;
     }
 
-    // -------------------------------------------------------
-    /** Callback function for opening save menu
-    */
-    openSave()
-    {
-        /*
-        if (RPM.allowSaves)
-        {
-            RPM.gameStack.push(new SceneSaveGame());
+    /** 
+     *  Callback function for opening save menu.
+     */
+    openSave() {
+        if (Scene.Map.allowSaves) {
+            Manager.Stack.push(new Scene.SaveGame());
             return true;
         }
         return false;
-        */
     }
 
     /** 
