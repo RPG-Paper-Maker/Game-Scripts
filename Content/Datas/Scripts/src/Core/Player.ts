@@ -50,6 +50,7 @@ class Player {
     public totalTimeXP: number;
     public timeXP: number;
     public obtainedXP: number;
+    public stepLevelUp: number;
 
     constructor(kind?: CharacterKind, id?: number, instanceID?: number, skills?: 
         Skill[], json?: Record<string, any>)
@@ -143,7 +144,7 @@ class Player {
      *  Get a compressed object for saving the character in a file.
      *  @returns {Record<string, any>}
      */
-    getSaveCharacter() {
+    getSaveCharacter(): Record<string, any> {
         return {
             kind: this.kind,
             id: this.id,
@@ -163,8 +164,9 @@ class Player {
         let list = new Array(l);
         let statistic: System.Statistic;
         for (let i = 0; i < l; i++) {
-            statistic = Datas.BattleSystems.getStatistic(i);
-            list[i] = statistic.isFix ? [this[statistic.abbreviation], this[
+            let id = Datas.BattleSystems.statisticsOrder[i];
+            statistic = Datas.BattleSystems.getStatistic(id);
+            list[id] = statistic.isFix ? [this[statistic.abbreviation], this[
                 statistic.getBonusAbbreviation()]] : [this[statistic
                 .abbreviation], this[statistic.getBonusAbbreviation()], this[
                 statistic.getMaxAbbreviation()]];
@@ -225,15 +227,16 @@ class Player {
         let j: number, m: number, statistic: System.Statistic, 
             statisticProgression: System.StatisticProgression;
         for (i = 0, l = statistics.length; i < l; i++) {
-            statistic = Datas.BattleSystems.getStatistic(statistics[i]);
+            let id = statistics[i];
+            statistic = Datas.BattleSystems.getStatistic(id);
 
             // Default value
             this.initStatValue(statistic, 0);
             this[statistic.getBonusAbbreviation()] = 0;
-            if (i === Datas.BattleSystems.idLevelStatistic) {
+            if (id === Datas.BattleSystems.idLevelStatistic) {
                 // Level
                 this[statistic.abbreviation] = level;
-            } else if (i === Datas.BattleSystems.idExpStatistic) {
+            } else if (id === Datas.BattleSystems.idExpStatistic) {
                 // Experience
                 this[statistic.abbreviation] = this.expList[level];
                 this[statistic.getMaxAbbreviation()] = this.expList[level + 1];
@@ -323,8 +326,9 @@ class Player {
 
         // Same values for not changed stats
         for (i = 1, l = statistics.length; i < l; i++) {
-            if (list[i] === null) {
-                list[i] = this[Datas.BattleSystems.getStatistic(statistics[i])
+            let id = statistics[i];
+            if (list[id] === null) {
+                list[id] = this[Datas.BattleSystems.getStatistic(id)
                     .getAbbreviationNext()];
             }
         }
@@ -362,8 +366,9 @@ class Player {
         let statistics = Datas.BattleSystems.statisticsOrder;
         let statistic: System.Statistic, value: number;
         for (let i = 0, l = statistics.length; i < l; i++) {
-            statistic = Datas.BattleSystems.getStatistic(statistics[i]);
-            value = list[i];
+            let id = statistics[i];
+            statistic = Datas.BattleSystems.getStatistic(id);
+            value = list[id];
             if (statistic.isFix) {
                 this[statistic.abbreviation] = value;
             } else {
@@ -375,7 +380,7 @@ class Player {
                         .getMaxAbbreviation()];
                 }
             }
-            this[statistic.getBonusAbbreviation()] = bonus[i];
+            this[statistic.getBonusAbbreviation()] = bonus[id];
         }
     }
 
@@ -422,13 +427,14 @@ class Player {
         let j: number, m: number, statistic: System.Statistic, 
             statisticProgression: System.StatisticProgression;
         for (i = 0, l = statistics.length; i < l; i++) {
-            statistic = Datas.BattleSystems.getStatistic(statistics[i]);
-            if (i !== Datas.BattleSystems.idLevelStatistic && i !== Datas
+            let id = statistics[i];
+            statistic = Datas.BattleSystems.getStatistic(id);
+            if (id !== Datas.BattleSystems.idLevelStatistic && id !== Datas
                 .BattleSystems.idExpStatistic)
             {
                 for (j = 0, m = statisticsProgression.length; j < m; j++) {
                     statisticProgression = statisticsProgression[j];
-                    if (statisticProgression.id === i) {
+                    if (statisticProgression.id === id) {
                         if (!statisticProgression.isFix) {
                             nonFixStatistics.push(statisticProgression);
                         } else {
@@ -472,9 +478,9 @@ class Player {
         let jsonStats = json.stats;
         let i: number, l: number, statistic: System.Statistic, value: number[];
         for (i = 1, l = Datas.BattleSystems.statisticsOrder.length; i < l; i++) {
-            statistic = Datas.BattleSystems.getStatistic(Datas.BattleSystems
-                .statisticsOrder[i]);
-            value = jsonStats[i-1];
+            let id = Datas.BattleSystems.statisticsOrder[i];
+            statistic = Datas.BattleSystems.getStatistic(id);
+            value = jsonStats[id-1];
             this[statistic.abbreviation] = value[0];
             this[statistic.getBonusAbbreviation()] = value[1];
             if (!statistic.isFix) {

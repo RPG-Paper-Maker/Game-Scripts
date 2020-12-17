@@ -365,9 +365,8 @@ class Player extends Base {
         let yStats = yName + 20;
 
         // Stats
-        let xStat, yStat;
-        for (let i = 0, l = this.listStatsNames.length; i < l; i++)
-        {
+        let xStat: number, yStat: number;
+        for (let i = 0, l = this.listStatsNames.length; i < l; i++) {
             xStat = x + xOffset;
             yStat = yStats + (i*20);
             this.listStatsNames[i].draw(xStat, yStat, 0, 0);

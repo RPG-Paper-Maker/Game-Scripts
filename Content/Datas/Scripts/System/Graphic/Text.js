@@ -56,7 +56,7 @@ class Text extends Base {
     constructor(text = "", { x = 0, y = 0, w = 0, h = 0, align = Align.Left, fontSize = Utils.defaultValue(Datas.Systems.dbOptions.v_tSize, Constants
         .DEFAULT_FONT_SIZE), fontName = Utils.defaultValue(Datas.Systems
         .dbOptions.v_tFont, Constants.DEFAULT_FONT_NAME), verticalAlign = AlignVertical.Center, color = Utils.defaultValue(Datas.Systems.dbOptions
-        .v_tcText, System.Color.white), bold = false, italic = false, backColor = Utils.defaultValue(Datas.Systems.dbOptions.v_tcBackground, null), strokeColor = Utils.defaultValue(Datas.Systems.dbOptions.tOutline, false) ? Utils.defaultValue(Datas.Systems.dbOptions.v_tcOutline, null) : null } = {}) {
+        .v_tcText, System.Color.WHITE), bold = false, italic = false, backColor = Utils.defaultValue(Datas.Systems.dbOptions.v_tcBackground, null), strokeColor = Utils.defaultValue(Datas.Systems.dbOptions.tOutline, false) ? Utils.defaultValue(Datas.Systems.dbOptions.v_tcOutline, null) : null } = {}) {
         super(x, y, w, h);
         this.align = align;
         this.fontName = fontName;

@@ -118,15 +118,12 @@ class Menu extends Base {
         return true;
     }
 
-    // -------------------------------------------------------
-    /** Callback function for opening skills menu
-    */
-    openSkills()
-    {
-        /*
-        RPM.gameStack.push(new SceneMenuSkills());
+    /** 
+     *  Callback function for opening skills menu.
+     */
+    openSkills() {
+        Manager.Stack.push(new Scene.MenuSkills());
         return true;
-        */
     }
 
     // -------------------------------------------------------

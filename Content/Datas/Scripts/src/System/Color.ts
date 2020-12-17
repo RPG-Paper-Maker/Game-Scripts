@@ -10,6 +10,7 @@
 */
 
 import { Base } from "./Base";
+import { System } from "..";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /** @class
@@ -25,7 +26,11 @@ const THREE = require('./Content/Datas/Scripts/Libs/three.js');
  */
 class Color extends Base {
     
-    public static white = Color.createColor(255, 255, 255);
+    public static GREEN = System.Color.createColor(25, 214, 25);
+    public static RED = System.Color.createColor(216, 33, 17);
+    public static WHITE = System.Color.createColor(255, 255, 255);
+    public static BLACK = System.Color.createColor(0, 0, 0);
+
     public red: number;
     public green: number;
     public blue: number;

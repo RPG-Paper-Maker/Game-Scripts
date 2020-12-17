@@ -198,7 +198,7 @@ class Message extends Graphic.Base {
             cf: Utils.defaultValue(Datas.Systems.dbOptions.v_tFont, Constants
                 .DEFAULT_FONT_NAME),
             ctc: Utils.defaultValue(Datas.Systems.dbOptions.v_tcText, System
-                .Color.white),
+                .Color.WHITE),
             cbc: Utils.defaultValue(Datas.Systems.dbOptions.v_tcBackground, null),
             csc: Utils.defaultValue(Datas.Systems.dbOptions.v_tOutline, false) ?
                 Utils.defaultValue(Datas.Systems.dbOptions.v_tcOutline, null) :

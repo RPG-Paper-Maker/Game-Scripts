@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
+import { System } from "../index.js";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  The system color class.
@@ -90,5 +91,8 @@ class Color extends Base {
         return this.color.getHex();
     }
 }
-Color.white = Color.createColor(255, 255, 255);
+Color.GREEN = System.Color.createColor(25, 214, 25);
+Color.RED = System.Color.createColor(216, 33, 17);
+Color.WHITE = System.Color.createColor(255, 255, 255);
+Color.BLACK = System.Color.createColor(0, 0, 0);
 export { Color };

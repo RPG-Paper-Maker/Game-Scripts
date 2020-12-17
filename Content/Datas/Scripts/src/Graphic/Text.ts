@@ -75,7 +75,7 @@ class Text extends Base {
         .DEFAULT_FONT_SIZE), fontName = Utils.defaultValue(Datas.Systems
         .dbOptions.v_tFont, Constants.DEFAULT_FONT_NAME), verticalAlign = 
         AlignVertical.Center, color = Utils.defaultValue(Datas.Systems.dbOptions
-        .v_tcText, System.Color.white), bold = false, italic = false, backColor 
+        .v_tcText, System.Color.WHITE), bold = false, italic = false, backColor 
         = Utils.defaultValue(Datas.Systems.dbOptions.v_tcBackground, null), 
         strokeColor = Utils.defaultValue(Datas.Systems.dbOptions.tOutline, false
         ) ? Utils.defaultValue(Datas.Systems.dbOptions.v_tcOutline, null) : null
