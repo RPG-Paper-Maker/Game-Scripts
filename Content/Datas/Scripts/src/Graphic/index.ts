@@ -9,6 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+export * from "./Equip";
+export * from "./EquipStats";
 export * from "./Base";
 export * from "./Item";
 export * from "./Keyboard";

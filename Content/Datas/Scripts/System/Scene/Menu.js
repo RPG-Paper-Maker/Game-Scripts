@@ -88,14 +88,12 @@ class Menu extends Base {
         Manager.Stack.push(new Scene.MenuSkills());
         return true;
     }
-    // -------------------------------------------------------
-    /** Callback function for opening equipment menu
-    */
+    /**
+     *  Callback function for opening equipment menu.
+     */
     openEquip() {
-        /*
-        RPM.gameStack.push(new SceneMenuEquip());
+        Manager.Stack.push(new Scene.MenuEquip());
         return true;
-        */
     }
     // -------------------------------------------------------
     /** Callback function for opening player description state menu

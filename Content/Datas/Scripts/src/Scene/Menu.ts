@@ -116,15 +116,12 @@ class Menu extends Base {
         return true;
     }
 
-    // -------------------------------------------------------
-    /** Callback function for opening equipment menu
-    */
-    openEquip()
-    {
-        /*
-        RPM.gameStack.push(new SceneMenuEquip());
+    /** 
+     *  Callback function for opening equipment menu.
+     */
+    openEquip() {
+        Manager.Stack.push(new Scene.MenuEquip());
         return true;
-        */
     }
 
     // -------------------------------------------------------

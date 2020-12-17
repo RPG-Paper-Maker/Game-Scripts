@@ -192,7 +192,7 @@ class Player {
                 // Other stats
                 for (j = 0, m = statisticsProgression.length; j < m; j++) {
                     statisticProgression = statisticsProgression[j];
-                    if (statisticProgression.id === i) {
+                    if (statisticProgression.id === id) {
                         if (!statisticProgression.isFix) {
                             nonFixStatistics.push(statisticProgression);
                         }
@@ -216,7 +216,7 @@ class Player {
     }
     /**
      *  Get the stats thanks to equipments.
-     *  @param {System.Item} item The System item
+     *  @param {System.CommonSkillItem} item The System item
      *  @param {number} equipmentID The equipment ID
      *  @returns {number[][]}
      */
@@ -265,7 +265,7 @@ class Player {
             }
         }
         // Same values for not changed stats
-        for (i = 1, l = statistics.length; i < l; i++) {
+        for (i = 0, l = statistics.length; i < l; i++) {
             let id = statistics[i];
             if (list[id] === null) {
                 list[id] = this[Datas.BattleSystems.getStatistic(id)
@@ -406,7 +406,7 @@ class Player {
         // Stats
         let jsonStats = json.stats;
         let i, l, statistic, value;
-        for (i = 1, l = Datas.BattleSystems.statisticsOrder.length; i < l; i++) {
+        for (i = 0, l = Datas.BattleSystems.statisticsOrder.length; i < l; i++) {
             let id = Datas.BattleSystems.statisticsOrder[i];
             statistic = Datas.BattleSystems.getStatistic(id);
             value = jsonStats[id - 1];

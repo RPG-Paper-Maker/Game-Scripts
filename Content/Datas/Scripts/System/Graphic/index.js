@@ -8,6 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
+export * from "./Equip.js";
+export * from "./EquipStats.js";
 export * from "./Base.js";
 export * from "./Item.js";
 export * from "./Keyboard.js";
