@@ -95,14 +95,12 @@ class Menu extends Base {
         Manager.Stack.push(new Scene.MenuEquip());
         return true;
     }
-    // -------------------------------------------------------
-    /** Callback function for opening player description state menu
-    */
+    /**
+     *  Callback function for opening player description state menu.
+     */
     openState() {
-        /*
-        RPM.gameStack.push(new SceneDescriptionState());
+        Manager.Stack.push(new Scene.MenuDescriptionState());
         return true;
-        */
     }
     /**
      *  Callback function for reordering heroes.
@@ -124,14 +122,12 @@ class Menu extends Base {
         return false;
         */
     }
-    // -------------------------------------------------------
-    /** Callback function for quiting the game
-    */
+    /**
+     *  Callback function for quiting the game.
+     */
     exit() {
-        /*
-        RPM.gameStack.replace(new SceneTitleScreen());
+        Manager.Stack.replace(new Scene.TitleScreen());
         return true;
-        */
     }
     /**
      *  Update the scene.

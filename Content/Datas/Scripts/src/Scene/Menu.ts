@@ -124,15 +124,12 @@ class Menu extends Base {
         return true;
     }
 
-    // -------------------------------------------------------
-    /** Callback function for opening player description state menu
-    */
-    openState()
-    {
-        /*
-        RPM.gameStack.push(new SceneDescriptionState());
+    /** 
+     *  Callback function for opening player description state menu.
+     */
+    openState() {
+        Manager.Stack.push(new Scene.MenuDescriptionState());
         return true;
-        */
     }
 
     /** 
@@ -158,15 +155,12 @@ class Menu extends Base {
         */
     }
 
-    // -------------------------------------------------------
-    /** Callback function for quiting the game
-    */
-    exit()
-    {
-        /*
-        RPM.gameStack.replace(new SceneTitleScreen());
+    /** 
+     *  Callback function for quiting the game.
+     */
+    exit() {
+        Manager.Stack.replace(new Scene.TitleScreen());
         return true;
-        */
     }
 
     /** 
