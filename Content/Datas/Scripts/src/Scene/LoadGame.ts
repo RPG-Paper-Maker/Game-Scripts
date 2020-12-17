@@ -17,9 +17,8 @@ import PictureKind = Enum.PictureKind;
 import { Picture2D } from "../Core";
 
 /** @class
- *  @extends SceneSaveLoadGame
- *  A scene in the menu for loading a game
- *  @property {Picture2D} pictureBackground The title screen background picture
+ *  A scene in the menu for loading a game.
+ *  @extends Scene.SaveLoadGame
  */
 class LoadGame extends SaveLoadGame {
 

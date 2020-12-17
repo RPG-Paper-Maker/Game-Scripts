@@ -13,20 +13,10 @@ import { ScreenResolution, Utils, Platform } from "../Common/index.js";
 import { Stack } from "../Manager/index.js";
 import { Bitmap } from "./Bitmap.js";
 /** @class
- *   A class for pictures drawable in HUD
+ *   A class for pictures drawable in HUD.
  *   @extends Bitmap
- *   @property {number} [zoom=1.0] The zoom value of the picture
- *   @property {number} [opacity=1.0] The opacity value of the picture
- *   @property {number} [angle=0.0] The angle value of the picture
- *   @property {boolean} [cover=false] Indicate if the picture cover the entire
- *   canvas
- *   @property {boolean} [stretch=false] Indicate if the picture is stretched if
- *   necessary
- *   @property {string} path The path to the ressource
- *   @property {boolean} loaded Indicate if the file is loaded
- *   @property {boolean} empty Indicate if the file is empty
  *   @param {string} [path=""] The path to the ressource
- *   @param {number} [x=0] Coords of the bitma
+ *   @param {number} [x=0] Coords of the bitmap
  *   @param {number} [y=0] Coords of the bitmap
  *   @param {number} [w=0] Coords of the bitmap
  *   @param {number} [h=0] Coords of the bitmap

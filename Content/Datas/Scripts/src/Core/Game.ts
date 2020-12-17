@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Player } from "./Player";
 import { Datas } from "..";
 import { Item } from "./Item";
@@ -18,31 +19,10 @@ import { Paths, Constants, Utils, IO, Enum } from "../Common";
 import GroupKind = Enum.GroupKind;
 import CharacterKind = Enum.CharacterKind;
 import { Portion } from "./Portion";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /** @class
- *  All the global informations of a particular game
- *  @property {number} currentSlot The current slot
- *  @property {MapObject} hero The game map hero
- *  @property {GamePlayer[]} teamHeroes List of all the heroes in the team
- *  @property {GamePlayer[]} reserveHeroes List of all the heroes in the reserve
- *  @property {GamePlayer[]} hiddenHeroes List of all the hidden heroes
- *  @property {GameItem[]} items List of all the items, weapons, and armors in 
- *  the inventory
- *  @property {number[]} currencies List of all the currencies
- *  @property {number} charactersInstances ID of the last instance character
- *  @property {any[]} variables List of variables by ID
- *  @property {number} currentMapID The current map ID
- *  @property {number[]} heroStates The current hero states list
- *  @property {number[]} heroProperties The current hero properties list by ID
- *  @property {Object[]} heroStatesOptions The current states options list
- *  @property {Object} startupStates The current map startup states
- *  @property {Object} startupProperties The current map startup properties
- *  @property {Obejct} mapsDatas All the informations for each maps
- *  @property {Chrono} playTime The current time played since the beginning of
- *  the game in seconds
+ *  All the global informations of a particular game.
  *  @param {number} slot The number of the slot to load
- *  @param {Record<string, any>} json Json object describing the game
  */
 class Game {
 

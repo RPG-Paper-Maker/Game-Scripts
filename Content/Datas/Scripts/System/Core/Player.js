@@ -15,21 +15,11 @@ import { Skill } from "./Skill.js";
 import { Item } from "./Item.js";
 /** @class
  *  A character in the team/hidden/reserve.
- *  @property {CharacterKind} k The kind of the character (hero or monster)
- *  @property {number} id The ID of the character
- *  @property {number} instid The instance id of the character
- *  @property {Hero} character The System character
- *  @property {string} name The character name
- *  @property {GameSkill[]} sk List of all the learned skills
- *  @property {GameItem[]} equip List of the equiped weapons/armors
- *  @property {number[]} expList The exp list for each level
- *  @property {boolean} levelingUp Indicate if leveling up
- *  @property {boolean} testedLevelUp Indicate if the level up was tested
- *  @param {CharacterKind} kind The kind of the character (hero or monster)
- *  @param {number} id The ID of the character
- *  @param {number} instanceID The instance id of the character
- *  @param {GameSkill[]} skills List of all the learned skills
- *  @param {object} [json=undefined] Json object describing the items
+ *  @param {CharacterKind} [kind=undefined] The kind of the character (hero or monster)
+ *  @param {number} [id=undefined] The ID of the character
+ *  @param {number} [instanceID=undefined] The instance id of the character
+ *  @param {Skill[]} [skills=undefined] List of all the learned skills
+ *  @param {Record<string, any>} [json=undefined] Json object describing the items
  */
 class Player {
     constructor(kind, id, instanceID, skills, json) {

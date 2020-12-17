@@ -8,26 +8,15 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { ScreenResolution, Mathf } from "../Common/index.js";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { ScreenResolution, Mathf } from "../Common/index.js";
 import { Manager } from "../index.js";
 /** @class
-*   The camera of the current map
-*   @property {THREE.PerspectiveCamera} threeCamera The three.js camera
-*   @property {number} distance The distance between the camera and
-*   the target
-*   @property {number} height The y distance between the camera and the target
-*   @property {number} horizontalAngle The horizontal angle of the camera
-*   @property {number} verticalAngle The vertical angle of the camera
-*   @property {boolean} verticalRight Used to loop the horizontal and vertical
-*   angle
-*   @property {MapObject} target The camera target
-*   @property {THREE.Vector3} targetPosition The camera target position
-*   @property {THREE.Vector3} targetOffset The target offset position
-*   @param {SystemCameraProperties} cameraProperties The System camera
-*   properties
-*   @param {MapObject} target The camera target
-*/
+ *  The camera of the current map.
+ *  @param {System.CameraProperties} cameraProperties The System camera
+ *  properties
+ *  @param {MapObject} target The camera target
+ */
 class Camera {
     constructor(cameraProperties, target) {
         cameraProperties.initializeCamera(this);

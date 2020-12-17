@@ -9,13 +9,14 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { System } from "..";
 import { StructMapElementCollision, MapElement } from "./MapElement";
 import { Position } from "./Position";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /** @class
  *  The abstract class who model the Structure of RPM datas.
+ *  @extends MapElement
  */
 abstract class Object3D extends MapElement {
     

@@ -15,10 +15,9 @@ import { MapObject } from "../Core";
 
 /** @class
  *  An event command for jumping to a label node.
- *  @extends EventCommand
- *  @property {System.DynamicValue} label The label value
- *  @param {Object} command Direct JSON command to parse
-*/
+ *  @extends EventCommand.Base
+ *  @param {any[]} command Direct JSON command to parse
+ */
 class JumpToLabel extends Base {
 
     public label: System.DynamicValue;

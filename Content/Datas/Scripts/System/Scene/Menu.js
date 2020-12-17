@@ -17,16 +17,6 @@ import { WindowChoices, WindowBox } from "../Core/index.js";
 /** @class
  *  A scene for the main menu.
  *  @extends Scene.Base
- *  @property {WindowChoices} [SceneMenunbItemsToDisplay=12] The number of
- *  slots to display
- *  @property {number} selectedOrder Index of the selected hero to order
- *  @property {WindowChoices} windowChoicesCommands The window choices for
- *  choosing a command
- *  @property {WindowChoices} windowChoicesTeam The window for displaying
- *  informations about team
- *  @property {WindowBox} windowTimeCurrencies The window for displaying time
- *  and currencies
- *  @property {number} selectedOrder Index of the selected hero to order
  */
 class Menu extends Base {
     constructor() {

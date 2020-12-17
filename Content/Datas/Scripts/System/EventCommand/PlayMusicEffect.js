@@ -15,7 +15,6 @@ var SongKind = Enum.SongKind;
 /** @class
  *  An event command for playing a music effect.
  *  @extends EventCommand.Base
- *  @property {System.PlaySong} song The play song
  *  @param {any[]} command Direct JSON command to parse
  */
 class PlayMusicEffect extends Base {

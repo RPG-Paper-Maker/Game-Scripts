@@ -9,10 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 /**
- * The superclass that define all the System classes structure
- * @abstract
- * @param {Record<string, any>} [json=undefined]
- * @param {any} args
+ *  The superclass that define all the System classes structure.
+ *  @abstract
+ *  @param {Record<string, any>} [json=undefined]
+ *  @param {any} args
  */
 class Base {
     constructor(json = undefined, ...args) {

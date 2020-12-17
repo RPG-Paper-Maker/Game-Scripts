@@ -14,15 +14,7 @@ import { ScreenResolution } from "../Common/index.js";
 import { Graphic, Datas, Manager } from "../index.js";
 /** @class
  *  Abstract class for the game save and loading menus.
- *  @extends SceneGame
- *  @property {WindowBox} windowTop A Window for displaying informations on top
- *  @property {WindowChoices} windowChoicesSlots A window choices for choosing
- *  a slot
- *  @property {WindowBox} windowInformations A Window for displaying
- *  informations about the selected slot
- *  @property {WindowBox} windowBot A Window for displaying informations on
- *  bottom
- *  @property {Game[]} gamesDatas List of all games datas
+ *  @extends Scene.Base
  */
 class SaveLoadGame extends Base {
     constructor() {

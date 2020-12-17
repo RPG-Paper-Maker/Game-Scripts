@@ -17,6 +17,7 @@ import { Camera } from "../Core";
 
 /** @class
  *  The GL class handling some 3D stuff.
+ *  @static
  */
 class GL {
     public static SHADER_FIX_VERTEX: string;

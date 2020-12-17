@@ -13,8 +13,7 @@ var SongKind = Enum.SongKind;
 import { System, Datas } from "../index.js";
 /** @class
 *   All the songs datas
-*   @property {SystemSong[]} list List of all the songs of the game
-*   according to ID and SongKind
+*   @static
 */
 class Songs {
     constructor() {

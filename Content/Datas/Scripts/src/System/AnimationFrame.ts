@@ -19,9 +19,7 @@ const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /** @class
  *  An animation frame.
- *  @property {AnimationFrameElements[]} elements The frame elements by
- *  index
- *  @property {AnimationFrameEffect} effects The frame effects by index
+ *  @extends System.Base
  *  @param {Record<string, any>} [json=undefined] Json object describing the animation frame
  */
 class AnimationFrame extends Base {

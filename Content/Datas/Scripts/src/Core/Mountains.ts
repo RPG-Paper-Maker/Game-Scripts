@@ -9,14 +9,15 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { TextureBundle } from "./TextureBundle";
 import { Mountain } from "./Mountain";
 import { StructMapElementCollision } from "./MapElement";
 import { Position } from "./Position";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /** @class
  *  The wrapper class for handle mountains sharing the same texture.
+ *  @param {TextureBundle} texture
  */
 class Mountains {
     

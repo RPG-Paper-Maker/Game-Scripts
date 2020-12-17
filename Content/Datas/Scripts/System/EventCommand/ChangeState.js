@@ -13,12 +13,8 @@ import { System, EventCommand, Manager, Scene } from "../index.js";
 import { MapObject } from "../Core/index.js";
 /** @class
  *  An event command for changing an object state.
- *  @extends EventCommand
- *  @property {System.DynamicValue} mapID The map ID value
- *  @property {System.DynamicValue} objectID The object ID value
- *  @property {number} idState The ID of the state to change
- *  @property {number} operationKind Index of operation
- *  @param {Object} command Direct JSON command to parse
+ *  @extends EventCommand.Base
+ *  @param {any[]} command Direct JSON command to parse
  */
 class ChangeState extends Base {
     constructor(command) {

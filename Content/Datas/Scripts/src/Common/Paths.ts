@@ -11,10 +11,10 @@
 
 import { Platform } from "./Platform";
 
-/**
- * The static class containing Path related constant
- * can be accessed through import
- * @example import {Path} from "../Constants";
+/** @class
+ *  @static
+ *  The static class containing all the files paths.
+ *  @example import { Paths } from "../Common"
  */
 class Paths {
 

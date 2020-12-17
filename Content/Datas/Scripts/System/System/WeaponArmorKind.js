@@ -11,9 +11,7 @@
 import { Translatable } from "./Translatable.js";
 /** @class
  *  A weapon/armor kind of the game.
- *  @property {string} name The name of the weapon / armor kind
- *  @property {boolean[]} equipments List of booleans indicating which equipment
- *  is ok
+ *  @extends System.Translatable
  *  @param {Record<string, any>} [json=undefined] Json object describing the
  *  weapon / armor kind
  */

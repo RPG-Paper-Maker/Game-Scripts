@@ -19,19 +19,6 @@ import { Datas, System } from "..";
 /** @class
  *  A class for all the texts to display in HUD.
  *  @extends Bitmap
- *  @property {string} text The brut text to display
- *  @property {Align} align Alignement of the text
- *  @property {number} fontSize The font height used for the text
- *  @property {string} fontName The font name used for the text
- *  @property {AlignVertical} verticalAlign Vertical alignement of the text
- *  @property {SystemColor} color The color used for the text
- *  @property {boolean} bold If checked, make the text bold
- *  @property {boolean} italic If checked, make the text italic
- *  @property {SystemColor} backColor The background color behind the text
- *  @property {SystemColor} strokeColor The stroke color of the text
- *  @property {string} font The font used for the text (combining fontSize + 
- *  fontName)
- *  @property {number} textWidth The font text width (without resizing)
  *  @param {string} [text=""] The brut text to display
  *  @param {Object} [opts={}] Options
  *  @param {number} [opts.x=0] The x coords of the text

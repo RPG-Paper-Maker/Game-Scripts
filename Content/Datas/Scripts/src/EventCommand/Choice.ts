@@ -15,7 +15,6 @@ import { MapObject } from "../Core";
 /** @class
  *  An event command representing one of the choice.
  *  @extends EventCommand.Base
- *  @property {number} index The choice index
  *  @param {any[]} command Direct JSON command to parse
  */
 class Choice extends Base {

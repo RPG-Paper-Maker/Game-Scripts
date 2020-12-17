@@ -11,8 +11,9 @@
 
 import { Constants } from ".";
 
-/**
- * The static class containing all the utils functions.
+/** @class
+ *  @static
+ *  The static class containing all the utils functions.
  */
 class Utils {
 
@@ -21,7 +22,7 @@ class Utils {
     }
 
     /** 
-     *  Return default value if undefined, else the value
+     *  Return default value if undefined, else the value.
      *  @static
      *  @param {any} value The value
      *  @param {any} defaultValue The default value

@@ -13,21 +13,9 @@ import { System, Datas, Manager } from "../index.js";
 import { Utils, Mathf, Interpreter } from "../Common/index.js";
 /** @class
  *  An event command for changing a statistic.
- *  @extends EventCommand
- *  @property {System.DynamicValue} statisticID The statistic ID value
- *  @property {number} selection The kind of selection
- *  @property {System.DynamicValue} heInstanceID The hero or enemy instance ID
- *  value
- *  @property {GroupKind} groupIndex The group index
- *  @property {OperationKind} operation The operation kind
- *  @property {number} value The kind of selection for the value
- *  @property {System.DynamicValue} vNumber The number value
- *  @property {System.DynamicValue} vFormula The formula value
- *  @property {boolean} vMax Indicate if value is max stat value
- *  @property {boolean} canAboveMax Indicate if value can go above maximum stat
- *  value
+ *  @extends EventCommand.Base
  *  @param {Object} command Direct JSON command to parse
-*/
+ */
 class ChangeAStatistic extends Base {
     constructor(command) {
         super();

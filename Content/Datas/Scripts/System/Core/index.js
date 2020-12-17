@@ -12,7 +12,6 @@
  * Ambient module "core"
  * @example import * as core from "Core"
  */
-export * from "./Anchor2D.js";
 export * from "./Autotile.js";
 export * from "./Autotiles.js";
 export * from "./Bitmap.js";

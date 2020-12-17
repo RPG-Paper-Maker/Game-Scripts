@@ -11,8 +11,7 @@
 import { Base } from "./Base.js";
 /** @class
  *  A skill to learn for a specific class.
- *  @property {number} id The ID of the skill
- *  @property {number} level The level to reach to learn this skill
+ *  @extends System.Base
  *  @param {Record<string, any>} [json=undefined] Json object describing the
  *  class skill
  */

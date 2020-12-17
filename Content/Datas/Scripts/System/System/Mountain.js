@@ -13,9 +13,7 @@ var MountainCollisionKind = Enum.MountainCollisionKind;
 import { SpecialElement } from "./SpecialElement.js";
 /** @class
  *  A mountain of the game.
- *  @extends SystemSpecialElement
- *  @property {number} id The ID
- *  @property {MountainCollisionKind} collisionKind The collision kind
+ *  @extends System.SpecialElement
  *  @param {Record<string, any>} [json=undefined] Json object describing the
  *  mountain
  */

@@ -17,10 +17,9 @@ import { Object3D } from "./Object3D.js";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  A 3D object custom in the map.
- *  @property {number} id The ID
- *  @property {System.Object3D} datas The System object 3D
+ *  @extends Object3D
  *  @param {Record<string, any>} json Json object describing the object 3D custom
- *  @param {SystemObject3D} datas The System object 3D
+ *  @param {System.Object3D} datas The System object 3D
  */
 class Object3DCustom extends Object3D {
     constructor(json, datas) {

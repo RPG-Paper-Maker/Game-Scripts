@@ -16,35 +16,9 @@ import { System, Datas, Scene, Manager } from "../index.js";
 import { Position, Portion, MapPortion, Camera, ReactionInterpreter } from "../Core/index.js";
 /** @class
  *  A scene for a local map.
- *  @extends SceneGame
- *  @property {number} id The map ID
- *  @property {number} isBattleMap Indicate if this map is a battle one
- *  @property {string} mapName The map name
- *  @property {THREE.Scene} scene The 3D scene of the map
- *  @property {number[][]} collisions The collisions squares arrays
- *  @property {MapProperties} mapProperties The map properties
- *  @property {Camera} camera The map camera
- *  @property {number[]} currentPortion The current portion (according to
- *  camera position)
- *  @property {THREE.Vector3} previousCameraPosition The previous camera position
- *  @property {Orientation} orientation The camera orientation
- *  @property {number[][]} allObjects All the objects portions according to ID
- *  @property {boolean} portionsObjectsUpdated Indicate if the portions objects
- *  are loaded
- *  @property {THREE.MeshBasicMaterial} textureTileset The tileset material
- *  @property {THREE.MeshBasicMaterial[]} texturesAutotiles The autotiles
- *  materials
- *  @property {THREE.MeshBasicMaterial[]} texturesWalls The walls materials
- *  @property {THREE.MeshBasicMaterial[]} texturesMountains The mountains
- *  materials
- *  @property {THREE.MeshBasicMaterial[]} texturesObjects3D The 3D objects
- *  materials
- *  @property {THREE.MeshBasicMaterial[]} texturesCharacters The characters
- *  materials
- *  @property {MapPortion[]} mapPortions All the portions in the visible ray
- *  of the map (according to an index)
+ *  @extends Scene.Base
  *  @param {number} id The map ID
- *  @param {number} isBattleMap Indicate if this map is a battle one
+ *  @param {boolean} [isBattleMap=false] Indicate if this map is a battle one
  *  @param {boolean} [minimal=false] Indicate if the map should be partialy
  *  loaded (only for getting objects infos)
 */

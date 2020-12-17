@@ -12,7 +12,7 @@ import { Base } from "./Base.js";
 import { Utils } from "../Common/index.js";
 /** @class
  *  A special element (autotile, wall, object3D, mountain) of the game.
- *  @property {number} pictureID The picture ID of the special element
+ *  @extends System.Base
  *  @param {Record<string, any>} [json=undefined] Json object describing the
  *  special element
  */

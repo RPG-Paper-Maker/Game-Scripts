@@ -18,14 +18,11 @@ import { ClassSkill } from "./ClassSkill";
 
 /** @class
  *  An hero of the game.
- *  @property {string} name The name of the hero
- *  @property {number} idClass The class ID
- *  @property {number} idBattler The battler ID
- *  @property {number} idFaceset The faceset ID
- *  @property {System.Class} classInherit The inherit class
- *  @param {Record<string, any>} [json=undefined] Json object describing the hero
+ *  @extends System.Base
+ *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  hero
  */
-export class Hero extends Base {
+class Hero extends Base {
 
     name: string;
     idClass: number;
@@ -109,3 +106,5 @@ export class Hero extends Base {
         return expList;
     }
 }
+
+export { Hero }

@@ -14,11 +14,8 @@ import { Enum } from "../Common/index.js";
 var Align = Enum.Align;
 /** @class
  *  The graphic displaying the player skills informations in skill menu.
- *  @property {GraphicTextIcon} graphicName The graphic text icon for skill name
- *  @property {GraphicText} graphicCost The graphic text for skill cost
- *  @property {GraphicSkillItem} graphicInformations The graphic skill
- *  informations
- *  @param {GameSkill} gameSkill The current selected skill
+ *  @extends Graphic.Base
+ *  @param {Skill} skill The current selected skill
  */
 class Skill extends Base {
     constructor(skill) {

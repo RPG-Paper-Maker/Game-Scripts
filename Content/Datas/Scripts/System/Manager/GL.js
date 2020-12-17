@@ -14,6 +14,7 @@ import { ScreenResolution, Platform, Utils, IO, Paths } from "../Common/index.js
 import { Stack } from "./Stack.js";
 /** @class
  *  The GL class handling some 3D stuff.
+ *  @static
  */
 class GL {
     constructor() {

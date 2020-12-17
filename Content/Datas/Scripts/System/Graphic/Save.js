@@ -14,12 +14,8 @@ import { Enum, Utils } from "../Common/index.js";
 var Align = Enum.Align;
 /** @class
  *  The graphic displaying a save.
- *  @property {Game} game The game save
- *  @property {GraphicText} graphicSlot The graphic text slot
- *  @property {GraphicText} graphicEmpty The graphic text empty
- *  @property {GraphicText} graphicTimer The graphic text timer
- *  @property {GraphicPlayer[]} graphicCharacters The graphic players list for
- *  characters
+ *  @extends Graphic.Base
+ *  @param {Game} game
  */
 class Save extends Base {
     constructor(game) {

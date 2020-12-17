@@ -15,10 +15,7 @@ import { Enum, Platform, ScreenResolution, Constants } from "../Common/index.js"
 var PictureKind = Enum.PictureKind;
 /** @class
  *  A scene for the title screen.
- *  @extends SceneGame
- *  @property {Picture2D} pictureBackground The title screen background picture
- *  @property {WindowChoices} windowChoicesCommands A window choices for
- *  choosing a command
+ *  @extends Scene.Base
  */
 class TitleScreen extends Base {
     constructor() {

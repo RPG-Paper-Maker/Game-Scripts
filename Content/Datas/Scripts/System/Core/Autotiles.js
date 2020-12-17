@@ -11,17 +11,7 @@
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  Autotiles grouped with the same textures.
- *  @property {number} [Autotiles.COUNT_LIST=5] The tiles list sizes
- *  @property {number[]} Autotiles.LIST_A The tiles list A
- *  @property {number[]} Autotiles.LIST_B The tiles list B
- *  @property {number[]} Autotiles.LIST_C The tiles list C
- *  @property {number[]} Autotiles.LIST_D The tiles list D
- *  @property {THREE.Texture} texture The autotiles texture
- *  @property {number} width The texture total width
- *  @property {number} height The texture total height
- *  @property {THREE.Geometry} geometry The autotiles geometry
- *  @property {THREE.Mesh} mesh The autotiles mesh
- *  @property {number} index The faces index (count)
+ *  @param {TextureBundle} texture
  */
 class Autotiles {
     constructor(texture) {

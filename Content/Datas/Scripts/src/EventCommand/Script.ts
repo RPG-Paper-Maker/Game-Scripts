@@ -16,11 +16,9 @@ import { MapObject } from "../Core";
 
 /** @class
  *  An event command for script.
- *  @extends EventCommand
- *  @property {boolean} isDynamic Indicate if script is a dynamic value
- *  @property {System.DynamicValue} script The script value
+ *  @extends EventCommand.Base
  *  @param {any[]} command Direct JSON command to parse
-*/
+ */
 class Script extends Base {
 
     public isDynamic: boolean;

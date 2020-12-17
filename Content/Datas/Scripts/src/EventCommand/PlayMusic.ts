@@ -18,7 +18,6 @@ import { MapObject } from "../Core";
 /** @class
  *  An event command for playing a music.
  *  @extends EventCommand.Base
- *  @property {System.PlaySong} song The play song
  *  @param {any[]} command Direct JSON command to parse
  */
 class PlayMusic extends Base {

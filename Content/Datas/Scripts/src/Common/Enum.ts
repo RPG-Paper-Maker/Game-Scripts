@@ -6,7 +6,7 @@
 
     Use Commercial edition for commercial use of your games.
     See RPG Paper Maker EULA here:
-        http=//rpg-paper-maker.com/index.php/eula.
+        http://rpg-paper-maker.com/index.php/eula.
 */
 
 namespace Enum {

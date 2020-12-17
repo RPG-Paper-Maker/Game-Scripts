@@ -12,8 +12,7 @@ import { IO, Paths, Utils } from "../Common/index.js";
 import { System, Datas } from "../index.js";
 /** @class
  *  All the armors datas.
- *  @property {SystemArmor[]} list List of all the armors of the game according
- *  to ID
+ *  @static
  */
 class Armors {
     constructor() {

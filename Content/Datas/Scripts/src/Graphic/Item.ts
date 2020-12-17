@@ -16,12 +16,9 @@ import Align = Enum.Align;
 
 /** @class
  *  The graphic displaying all the items information in the inventory menu.
- *  @property {GameItem} gameItem The current selected item
- *  @property {GraphicText} graphicName The item name graphic
- *  @property {GraphicText} graphicNb The item numbers graphic
- *  @param {GameItem} gameItem The current selected item
+ *  @param {Item} item The current selected item
  *  @param {number} nbItem The number of occurence of the selected item
-*/
+ */
 class Item extends Base {
 
     public item: Core.Item;

@@ -17,16 +17,12 @@ import PictureKind = Enum.PictureKind;
 
 /** @class
  *  A skybox of the game.
- *  @property {number} front The front picture ID
- *  @property {number} back The back picture ID
- *  @property {number} top The top picture ID
- *  @property {number} bot The bot picture ID
- *  @property {number} left The left picture ID
- *  @property {number} right The right picture ID
+ *  @extends System.Base
  *  @param {Record<string, any>} [json=undefined] Json object describing the 
  *  skybox
  */
 class Skybox extends Base {
+    
     public front: number;
     public back: number;
     public top: number;

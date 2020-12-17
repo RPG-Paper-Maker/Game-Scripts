@@ -19,8 +19,7 @@ import { StructMapElementCollision } from "./MapElement"
 
 /** @class
  *  A land in the map.
- *  @property {boolean} up Indicate if the layer is up or down
- *  @property {number[]} texture Texture rect of the land
+ *  @extends MapElement
  */
 class Land extends MapElement {
     

@@ -16,10 +16,7 @@ import { MapObject } from "../Core";
 
 /** @class
  *  An event command for flashing screen.
- *  @extends EventCommand
- *  @property {System.DynamicValue} colorID The color ID value
- *  @property {boolean} isWaitEnd Indicate if wait end of command
- *  @property {System.DynamicValue} time The time value
+ *  @extends EventCommand.Base
  *  @param {Object} command Direct JSON command to parse
  */
 class FlashScreen extends Base {

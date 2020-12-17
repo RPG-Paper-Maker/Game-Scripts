@@ -17,24 +17,6 @@ var Align = Enum.Align;
 /** @class
  *  A scene for the keyboard assign setting.
  *  @extends Scene.Base
- *  @property {number} [SceneKeyboardAssign.WINDOW_PRESS_WIDTH=300] The window
- *  press width
- *  @property {number} [SceneKeyboardAssign.WINDOW_PRESS_HEIGHT=200] The window
- *  press height
- *  @property {number} [SceneKeyboardAssign.MAX_WAIT_TIME_FIRST=3000] The max
- *  wait time in milliseconds first
- *  @property {number} [SceneKeyboardAssign.MAX_WAIT_TIME=1000] The max wait
- *  time in milliseconds
- *  @property {Picture2D} pictureBackground The title screen background picture
- *  @property {WindowBox} windowKeyboard The window box used for keyboard
- *  @property {WindowBox} windowInformations The window box used for
- *  informations
- *  @property {WindowChoices} windowChoicesMain The main window choices
- *  @property {WindowBox} windowPress The window box for pressing a new key
- *  @property {boolean} showPress Indicate if the HUD should display press box
- *  @property {number[][]} currentSC The current pressed shortcut
- *  @property {number[]} keysPressed The current key pressed
- *  @property {number} compareWait Wait time in milliseconds;
  */
 class KeyboardAssign extends Base {
     constructor() {

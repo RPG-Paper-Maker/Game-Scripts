@@ -13,7 +13,6 @@ import { System } from "../index.js";
 /** @class
  *  A common reaction.
  *  @extends System.Reaction
- *  @property {Parameter[]} parameters
  *  @param {Record<string, any>} [json=undefined] Json object describing the
  *  common reaction
  */

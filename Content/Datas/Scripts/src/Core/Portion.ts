@@ -15,9 +15,9 @@ import { Datas } from "..";
 
 /** @class
  *  The data class for portion.
- *  @property {number} x
- *  @property {number} y
- *  @property {number} z
+ *  @param {number} x
+ *  @param {number} y
+ *  @param {number} z
  */
 class Portion {
 
@@ -25,8 +25,7 @@ class Portion {
     public y: number;
     public z: number;
 
-    constructor(x: number = 0, y: number = 0, z: number = 0)
-    {
+    constructor(x: number = 0, y: number = 0, z: number = 0) {
         this.x = x;
         this.y = y;
         this.z = z;

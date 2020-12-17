@@ -8,17 +8,11 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Enum, Utils } from "../Common/index.js";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { Enum, Utils } from "../Common/index.js";
 import { Datas } from "../index.js";
 /** @class
  *  An element in the map.
- *  @property {number} xOffset The x offset of the object according to layer
- *  @property {number} yOffset The y offset of the object according to layer
- *  @property {number} zOffset The z offset of the object according to layer
- *  @property {Orientation} orientation The orientation according to layer
- *  @property {CameraUpDown} upDown The camera up down orientation according to
- *  layer
  */
 class MapElement {
     constructor() {

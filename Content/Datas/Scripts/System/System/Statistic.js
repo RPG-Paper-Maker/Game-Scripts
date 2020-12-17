@@ -11,11 +11,9 @@
 import { Base } from "./Base.js";
 /** @class
  *  A statistic of the game.
- *  @property {string} name The name of the statistic
- *  @property {string} abbreviation The abbreviation of the statistic
- *  (for javascript code)
- *  @property {boolean} isFix Indicate if this statistic is fix (no bar)
- *  @param {Record<string, any>} [json=undefined] Json object describing the statistic
+ *  @extends System.Base
+ *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  statistic
  */
 class Statistic extends Base {
     constructor(json) {

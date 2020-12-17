@@ -12,11 +12,6 @@ import { Datas } from "../index.js";
 import { Utils } from "../Common/index.js";
 /** @class
  *  A collision settings in a texture square.
- *  @property {Rectangle} rect Percentage of the rect limitation
- *  @property {boolean} left The left direction
- *  @property {boolean} right The right direction
- *  @property {boolean} top The top direction
- *  @property {boolean} bot The bot direction
 */
 class CollisionSquare {
     constructor() {

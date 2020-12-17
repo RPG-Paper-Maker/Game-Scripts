@@ -17,11 +17,9 @@ import { Utils, Enum } from "../Common/index.js";
 var LootKind = Enum.LootKind;
 /** @class
  *  A monster of the game.
- *  @extends SystemHero
- *  @property {StructReward} rewards An object containing experience, currencies
- *  , and loots
- *  @property {System.MonsterAction[]} actions The monster actions list
- *  @param {Record<string, any>} [json=undefined] Json object describing the monster
+ *  @extends System.Hero
+ *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  monster
  */
 class Monster extends Hero {
     constructor(json) {

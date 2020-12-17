@@ -17,16 +17,8 @@ import { MapObject } from "../Core/index.js";
 /** @class
  *  An event command for moving object.
  *  @extends EventCommand.Base
- *  @property {System.DynamicValue} objectID The ID of the object
- *  @property {boolean} isIgnore Ignore a move if impossible
- *  @property {boolean} isWaitEnd Wait then of all the moves to end the command
- *  (parallel command)
- *  @property {boolean} isCameraOrientation Take the orientation of the came in
- *  count
- *  @property {Function[]} moves All the moves callbacks
- *  @property {Record<string, any>[]} parameters Parameters for ach moves callbacks
  *  @param {any[]} command Direct JSON command to parse
-*/
+ */
 class MoveObject extends Base {
     constructor(command) {
         super();

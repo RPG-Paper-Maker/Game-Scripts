@@ -12,13 +12,12 @@
 import { SaveLoadGame } from "./SaveLoadGame";
 
 /** @class
-*   @extends SceneSaveLoadGame
-*   A scene in the menu for saving a game
-*/
-class SaveGame extends SaveLoadGame
-{
-    constructor()
-    {
+ *  A scene in the menu for saving a game.
+ *  @extends SceneSaveLoadGame
+ */
+class SaveGame extends SaveLoadGame {
+
+    constructor() {
         super();
     }
 

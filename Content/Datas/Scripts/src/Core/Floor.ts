@@ -9,11 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Land } from "./Land";
 import { Position } from "./Position";
 import { Manager, Datas } from "..";
 import { StructMapElementCollision } from "./MapElement";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /** @class
  *  A floor in the map.

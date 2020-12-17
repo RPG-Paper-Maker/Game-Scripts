@@ -13,8 +13,9 @@ import { IO, Paths, Platform } from "../Common";
 import { Datas } from "..";
 
 /** @class
-*   All the variables datas.
-*/
+ *  All the variables datas.
+ *  @static
+ */
 class Variables {
 
     public static VARIABLES_PER_PAGE = 25;

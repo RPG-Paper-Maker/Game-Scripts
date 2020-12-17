@@ -13,9 +13,8 @@ import { IO, Paths, Utils } from "../Common";
 import { System, Datas } from "..";
 
 /** @class
- *  All the videos datas
- *  @property {System.Video[]} list List of all the videos of the game
- *  according to ID
+ *  All the videos datas.
+ *  @static
  */
 class Videos {
 

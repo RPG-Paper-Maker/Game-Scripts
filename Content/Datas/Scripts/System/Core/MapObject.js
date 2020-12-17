@@ -8,6 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { System, Manager, Datas } from "../index.js";
 import { Frame } from "./Frame.js";
 import { Enum, Utils, IO, Paths, Constants, Platform, Mathf } from "../Common/index.js";
@@ -20,51 +21,12 @@ import { Sprite } from "./Sprite.js";
 import { Position } from "./Position.js";
 import { CollisionSquare } from "./CollisionSquare.js";
 import { MapElement } from "./MapElement.js";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
- *  Element movable in local map.
- *  @property {number} [MapObject.SPEED_NORMAL=0.004666] Normal speed coef
- *  @property {SystemObject} System The System infos
- *  @property {THREE.Vector3} position The current object position
- *  @property {THREE.Vector3} previousPosition The previous position before
- *  last move
- *  @property {THREE.Mesh} mesh The current mesh used for this object
- *  @property {THREE.Mesh[]} meshBoundingBox The meshs bounding box used for
- *  collisions
- *  @property {THREE.Mesh} currentBoundingBox The current bounding box mesh
- *  @property {Object} boundingBoxSettings The bounding box settings
- *  @property {Frame} frame The animation move frame
- *  @property {Orientation} orientationEye Orientation where the character is
- *  looking at
- *  @property {Orientation} orientation The orientation according to camera
- *  @property {number} width The width by number of squares
- *  @property {number} height The height by number of squares
- *  @property {boolean} moving Indicate if the object is moving
- *  @property {number} moveFrequencyTick The move frequency tick
- *  @property {boolean} isHero Indicate if this obejct is the hero
- *  @property {boolean} isStartup Indicate if this object is a startup
- *  @property {boolean} isInScene Indicate if this object mesh is in the scene
- *  @property {boolean} receivedOneEvent Indicate if this object receive one
- *  event per frame
- *  @property {Object} movingState The current state (for moving command)
- *  @property {Orientation} previousOrientation The previous orientation before
- *  last move
- *  @property {EventCommandMoveObject} otherMoveCommand The other move command
- *  for calculating diagonal move
- *  @property {number} yMountain The last y mountain pixel
- *  @property {number[]} properties The properties values according to ID
- *  @property {Object[]} statesInstance The states instances values according
- *  to ID
- *  @property {any[][]} timeEventsEllapsed Informations about time events
- *  @property {number[]} states The states IDs
- *  @property {SystemObjectState} currentState The current System object state
- *  @property {Object} currentStateInstance The current instance object state
- *  @property {SystemValue} speed Speed coef
- *  @property {SystemValue} frequency Frequency value
+ *  Object in local map that can move.
  *  @param {SystemObject} System The System informations
  *  @param {THREE.Vector3} position The current object position
  *  @param {boolean} isHero Indicate if the object is the hero
-*/
+ */
 class MapObject {
     constructor(system, position, isHero = false) {
         this.system = system;

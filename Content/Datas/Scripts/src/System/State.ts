@@ -18,35 +18,9 @@ import CommandMoveKind = Enum.CommandMoveKind;
 import { System, EventCommand, Manager } from "..";
 
 /** @class
- *   A possible state of an object.
- *   @property {number} id state ID
- *   @property {number} graphicID ID of the graphic texture
- *   @property {MapEditorSubSelectionKind} graphicKind The kind of graphic
- *   @property {number[]} rectTileset Rect for tileset in the graphic
- *   @property {number} indexX Index x in the graphic
- *   @property {number} indexY Index y in the graphic
- *   @property {ObjectMovingKind} objectMovingKind The object moving kind
- *   @property {SystemObjectReaction} route An object reaction for the route 
- *   moving
- *   @property {number} speedID The speed ID
- *   @property {number} frequencyID The frequencyID
- *   @property {boolean} moveAnimation Indicate if the abject is animated when
- *   moving
- *   @property {boolean} stopAnimation Indicate if the abject is animated when
- *   not moving
- *   @property {boolean} climbAnimation Indicate if the abject is animated when
- *   climbing
- *   @property {boolean} directionFix Indicate if the abject is looking the
- *   object sending reaction to him
- *   @property {boolean} through Indicate if the abject can be passed through
- *   @property {boolean} setWithAnimation Indicate if the abject orientation is
- *   updated according to the camera
- *   @property {boolean} pixelOffset Indicate if there is a pixel offset for
- *   impair frames when moving
- *   @property {boolean} keepPosition Indicate if the object should keep the
- *   position after moving (after changing map / save)
- *   @property {EventCommand} detection The event command used for detection
- *   @param {Record<string, any>} json Json object describing the object state
+ *  A possible state of an object.
+ *  @extends System.Base
+ *  @param {Record<string, any>} json Json object describing the object state
  */
 class State extends Base {
 

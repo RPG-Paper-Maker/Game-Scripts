@@ -11,8 +11,6 @@
 
 /** @class
  *  A chrono in the game.
- *  @property {number} time The time in the chrono (in milliseconds)
- *  @property {number} lastTime The last time date (in milliseconds)
  *  @param {number} start The start time of the chrono (in milliseconds)
  */
 class Chrono {

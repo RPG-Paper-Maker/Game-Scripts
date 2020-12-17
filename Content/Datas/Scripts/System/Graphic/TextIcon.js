@@ -15,14 +15,7 @@ var PictureKind = Enum.PictureKind;
 import { Graphic, Datas } from "../index.js";
 /** @class
  *  The graphic displaying a text and an icon.
- *  @property {string} text The brut text to display
- *  @property {number} iconID The icon ID
- *  @property {Align} side The side to display icon
- *  @property {Align} align The complete graphic align
- *  @property {number} space The space between icon and text
- *  @property {Picture2D} graphicIcon The picture 2D icon
- *  @property {GraphicText} graphicText The graphic text
- *  @property {number} length The text length
+ *  @extends Graphic.Base
  *  @param {string} text The brut text to display
  *  @param {number} iconID The icon ID
  *  @param {Object} [opts={}] Options
@@ -30,7 +23,7 @@ import { Graphic, Datas } from "../index.js";
  *  @param {Align} [opts.align=Align.left] The complete graphic align
  *  @param {number} [opts.space=RPM.MEDIUM_SPACE] The space between icon and
  *  text
-*/
+ */
 class TextIcon extends Base {
     constructor(text, iconID, { side = Align.Left, align = Align
         .Left, space = Constants.MEDIUM_SPACE } = {}) {

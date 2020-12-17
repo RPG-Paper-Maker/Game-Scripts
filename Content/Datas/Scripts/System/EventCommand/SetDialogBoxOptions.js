@@ -12,26 +12,8 @@ import { Base } from "./Base.js";
 import { Utils } from "../Common/index.js";
 import { System, Datas } from "../index.js";
 /** @class
- *  An event command for setting the dialog box options
- *  @extends EventCommand
- *  @property {System.DynamicValue} windowSkinID The window skin ID value
- *  @property {System.DynamicValue} x The x value
- *  @property {System.DynamicValue} y The y value
- *  @property {System.DynamicValue} w The w value
- *  @property {System.DynamicValue} h The h value
- *  @property {System.DynamicValue} pLeft The position left value
- *  @property {System.DynamicValue} pTop The position top value
- *  @property {System.DynamicValue} pRight The position right value
- *  @property {System.DynamicValue} pBottom The position bottom value
- *  @property {boolean} fPosAbove Indicate if faceset position is above window
- *  @property {System.DynamicValue} fX The faceset position x value
- *  @property {System.DynamicValue} fY  The faceset position y value
- *  @property {boolean} tOutline Indicate if text has outline
- *  @property {System.DynamicValue} tcText The text color ID value
- *  @property {System.DynamicValue} tcOutline The text color ID outline value
- *  @property {System.DynamicValue} tcBackground The text color ID background value
- *  @property {System.DynamicValue} tSize The text size ID
- *  @property {System.DynamicValue} tFont The text font ID
+ *  An event command for setting the dialog box options.
+ *  @extends EventCommand.Base
  *  @param {any[]} command Direct JSON command to parse
  */
 class SetDialogBoxOptions extends Base {

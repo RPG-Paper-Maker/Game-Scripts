@@ -12,6 +12,7 @@ import { Datas, Common, Core, EventCommand, Graphic, Manager, System, Scene } fr
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 const { Howl } = require('./Content/Datas/Scripts/Libs/howler.js');
 /** @class
+ *  @static
  *  The interpreter to evaluate formulas or simple scripts without having to
  *  import.
  */

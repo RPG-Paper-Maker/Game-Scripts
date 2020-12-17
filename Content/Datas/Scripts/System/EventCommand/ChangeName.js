@@ -12,13 +12,9 @@ import { Base } from "./Base.js";
 import { System, Manager } from "../index.js";
 /** @class
  *  An event command for changing a hero name.
- *  @extends EventCommand
- *  @property {System.DynamicValue} name The name value
- *  @property {number} selection The selection kind
- *  @property {System.DynamicValue} heInstanceID The hero enemy instance ID value
- *  @property {GroupKind} groupIndex The group index
+ *  @extends EventCommand.Base
  *  @param {any[]} command Direct JSON command to parse
-*/
+ */
 class ChangeName extends Base {
     constructor(command) {
         super();

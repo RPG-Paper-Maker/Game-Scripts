@@ -13,8 +13,7 @@ import { System, Datas } from "../index.js";
 var CustomShapeKind = Enum.CustomShapeKind;
 /** @class
  *  All the shapes datas.
- *  @property {System.Shape[]} list List of all the shapes of the game
- *  according to ID and ShapeKind.
+ *  @static
  */
 class Shapes {
     constructor() {

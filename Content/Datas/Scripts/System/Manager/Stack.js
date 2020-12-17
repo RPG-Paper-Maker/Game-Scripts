@@ -12,10 +12,7 @@ import { Scene, Manager } from "../index.js";
 import { Utils, Platform, ScreenResolution, KeyEvent } from "../Common/index.js";
 /** @class
  *  The game stack that is organizing the game scenes.
- *  @property {Scene.Base[]} content The stack content
- *  @property {Scene.Base} top The stack top content
- *  @property {Scene.Base} subTop The stack top - 1 content
- *  @property {Scene.Base} bot The stack bot content
+ *  @static
  */
 class Stack {
     constructor() {

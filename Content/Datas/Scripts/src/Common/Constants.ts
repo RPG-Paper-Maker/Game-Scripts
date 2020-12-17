@@ -10,7 +10,8 @@
 */
 
 /** @class
- *  The common class for constants
+ *  @static
+ *  The common class for constants.
  */
 class Constants {
 

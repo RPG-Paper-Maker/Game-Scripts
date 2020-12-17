@@ -17,11 +17,8 @@ import AnimationEffectConditionKind = Enum.AnimationEffectConditionKind;
 
 /** @class
  *  An event command for displaying an animation.
- *  @extends EventCommand
- *  @property {System.DynamicValue} objectID The object ID value
- *  @property {System.DynamicValue} animationID The animation ID value
- *  @property {boolean} isWaitEnd Indicate if wait end of the command
- *  @param {Object} command Direct JSON command to parse
+ *  @extends EventCommand.Base
+ *  @param {any[]} command Direct JSON command to parse
  */
 class DisplayAnAnimation extends Base {
 

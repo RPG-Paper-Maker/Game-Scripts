@@ -12,13 +12,10 @@ import { Base } from "./Base.js";
 import { Tree } from "../Core/index.js";
 import { Manager, EventCommand } from "../index.js";
 /** @class
- *   A reaction to an event.
- *   @property {string[]} [labels=[]] List of all labels
- *   @property {number} idEvent The event ID
- *   @property {boolean} blockingHero Indicate if this reaction is blocking the
- *   hero
- *   @property {Tree} commands All the commands
- *   @param {Record<string, any>} [json=undefined] Json object describing the object reaction
+ *  A reaction to an event.
+ *  @extends System.Base
+ *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  object reaction
  */
 class Reaction extends Base {
     constructor(json) {

@@ -16,6 +16,7 @@ import { EventCommand, System, Manager, Datas } from "..";
 
 /** @class
  *  A static class for some events functions.
+ *  @static
  */
 class Events {
 

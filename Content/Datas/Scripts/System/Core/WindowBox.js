@@ -14,21 +14,6 @@ import { Platform, ScreenResolution } from "../Common/index.js";
 /** @class
  *  A class for window boxes.
  *  @extends Bitmap
- *  @property {Bitmap} content Content (containing a draw function) to
- *  display inside the window.
- *  @property {number[]} padding Padding of the box
- *  @property {boolean} limitContent If checked, the content will be
- *  cut according to padding
- *  @property {number} bordersOpacity Opacity of borders beetween 0 and 1,
- *  default is 1
- *  @property {number} backgroundOpacity Opacity of background beetween 0 and 1
- *  , default is 1
- *  @property {boolean} selected If checked, the background will change,
- *  default is false
- *  @property {boolean} bordersVisible If checked, show the borders, default
- *  is true
- *  @property {number[]} contentDimension Dimension of content
- *  @property {number[]} windowDimension Dimensions of the window
  *  @param {number} x The x coords
  *  @param {number} y The y coords
  *  @param {number} w The w coords

@@ -13,10 +13,7 @@ import { System, Datas, Manager } from "../index.js";
 import { Utils, Platform, ScreenResolution } from "../Common/index.js";
 /** @class
  *  An event command for flashing screen.
- *  @extends EventCommand
- *  @property {System.DynamicValue} colorID The color ID value
- *  @property {boolean} isWaitEnd Indicate if wait end of command
- *  @property {System.DynamicValue} time The time value
+ *  @extends EventCommand.Base
  *  @param {Object} command Direct JSON command to parse
  */
 class FlashScreen extends Base {

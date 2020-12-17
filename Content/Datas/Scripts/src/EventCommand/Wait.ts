@@ -16,7 +16,6 @@ import { MapObject } from "../Core";
 /** @class
  *  An event command for displaying text.
  *  @extends EventCommand.Base
- *  @property {number} milliseconds The number of milliseconds to wait
  *  @param {any[]} command Direct JSON command to parse
  */
 class Wait extends Base {

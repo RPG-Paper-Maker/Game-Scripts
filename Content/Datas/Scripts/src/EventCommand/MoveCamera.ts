@@ -18,24 +18,8 @@ import { MapObject, StructSearchResult } from "../Core";
 /** @class
  *  An event command for displaying text.
  *  @extends EventCommand.Base
- *  @property {System.DynamicValue} targetID The ID of the camera target
- *  @property {OperationKind} operation The operation used for the transformations
- *  @property {bool} moveTargetOffset Indicate if move target offset
- *  @property {bool} cameraOrientation Indicate if camera orientation
- *  @property {System.DynamicValue} x The x value
- *  @property {bool} xSquare Indicate if x value is square
- *  @property {System.DynamicValue} y The y value
- *  @property {bool} ySquare Indicate if y value is square
- *  @property {System.DynamicValue} z The z value
- *  @property {bool} zSquare Indicate if z value is square
- *  @property {bool} rotationTargetOffset Indicate if rotation target offset
- *  @property {System.DynamicValue} h The horizontal angle value
- *  @property {System.DynamicValue} v The vertical angle value
- *  @property {System.DynamicValue} distance The distance value
- *  @property {boolean} isWaitEnd Indicate if wait end of the command
- *  @property {System.DynamicValue} time The time to wait value
  *  @param {any[]} command Direct JSON command to parse
-*/
+ */
 class MoveCamera extends Base {
 
     public targetID: System.DynamicValue;

@@ -9,8 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 /** @class
+ *  @static
  *  A static class for having a quick access to screen resolution variables and
- *  functions
+ *  functions;
  */
 class ScreenResolution {
     constructor() {

@@ -21,18 +21,10 @@ const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  A 3D object box in the map.
  *  @extends Object3D
- *  @property {THREE.Vector3[]} Object3DBox.VERTICES A box local vertices
- *  @property {THREE.Vector3[]} Object3DBox.NB_VERTICES A number of vertices
- *  @property {number[][]} Object3DBox.TEXTURES A textures values
- *  @property {number[]} Object3DBox.TEXTURES_VALUES The textures coordinates 
- *  values
- *  @property {number[]} Object3DBox.INDEXES The texture indexes
- *  @property {number} id The ID
- *  @property {System.Object3D} datas The System object 3D
  *  @param {Record<string, any>} json Json object describing the object 3D 
  *  custom
  *  @param {System.Object3D} datas The System object 3D
-*/
+ */
 class Object3DBox extends Object3D {
 
     public static VERTICES = [

@@ -14,10 +14,8 @@ import { Translatable } from "./Translatable";
 /** @class
  *  Something at least including an icon.
  *  @extends {System.Translatable}
- *  @property {number} pictureID The icon picture ID
  *  @param {Object} [json=undefined] Json object describing the icon
  */
-
 class Icon extends Translatable {
     
     public pictureID: number;

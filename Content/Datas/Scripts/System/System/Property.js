@@ -11,11 +11,11 @@
 import { Base } from "./Base.js";
 import { System } from "../index.js";
 /** @class
-*   A property of an object.
-*   @property {number} id The ID of the property
-*   @property {SystemValue} initialValue The initial value of the property
-*   @param {Record<string, any>} [json=undefined] Json object describing the property
-*/
+ *  A property of an object.
+ *  @extends System.Base
+ *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  property
+ */
 class Property extends Base {
     constructor(json) {
         super(json);

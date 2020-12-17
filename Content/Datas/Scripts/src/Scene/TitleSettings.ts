@@ -18,12 +18,7 @@ import Align = Enum.Align;
 
 /** @class
  *  A scene for the title screen settings.
- *  @extends SceneGame
- *  @property {Picture2D} pictureBackground The title screen background picture
- *  @property {WindowBox} windowSettings The window box for displaying settings
- *  @property {WindoBox} windowInformations The window box for displaying 
- *  informations
- *  @property {WindowChoices} windowChoicesMain The main window choices
+ *  @extends Scene.Base
  */
 class TitleSettings extends Base {
 

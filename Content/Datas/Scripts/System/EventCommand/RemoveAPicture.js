@@ -13,7 +13,6 @@ import { System, Manager } from "../index.js";
 /** @class
  *  An event command for removing a picture.
  *  @extends EventCommand.Base
- *  @property {System.DynamicValue} index The index value
  *  @param {any[]} command Direct JSON command to parse
  */
 class RemoveAPicture extends Base {

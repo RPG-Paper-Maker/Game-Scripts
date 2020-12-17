@@ -18,20 +18,9 @@ import PictureKind = Enum.PictureKind;
 
 /** @class
  *  The graphic for skill or item displaying.
- *  @property {SystemCommonSkillItem} skillItem The System skill / item
- *  @property {Picture2D[]} graphicElements The Pictures 2D for elements
- *  @property {GraphicTextIcon} graphicName The graphic text and icon for skill 
- *  / item
- *  @property {GraphicText} graphicType The graphic text for skill / item type
- *  @property {GraphicText} graphicDescription The graphic text for skill / 
- *  item description
- *  @property {GraphicText} graphicTarget The graphic text for skill / item 
- *  description
- *  @property {GraphicText[]} graphicEffects The graphic text list for skill / 
- *  item effects
- *  @property {GraphicText[]} graphicCharacteristics The graphic text list for 
- *  skill / item characteristics
-*/
+ *  @extends Graphic.Base
+ *  @param {System.CommonSkillItem} system
+ */
 class SkillItem extends Base {
 
     public system: System.CommonSkillItem;

@@ -16,19 +16,9 @@ import { ProgressionTable } from "../System";
 const { Howl } = require('./Content/Datas/Scripts/Libs/howler.js');
 
 /** @class
-*   The manager for songs.
-*   @property {number} musicEffectStep The music effect step
-*   @property {boolean} isProgressionMusicEnd Indicate if the progression music 
-*   is end
-*   @property {boolean} isMusicNone Indicate if music is none
-*   @property {number[]} volumes Current volumes according to song kind
-*   @property {number[]} starts Current starts time according to song kind
-*   @property {number} ends The current ends time according to song kind
-*   @property {Howl[]} currentHowl The howl current song
-*   @property {ProgressionTable} progressionMusic The System progression
-*   music
-*   @property {number} progressionMusicEnd The progression music end
-*/
+ *  The manager for songs.
+ *  @static
+ */
 class Songs {
 
     public static musicEffectStep = 0;

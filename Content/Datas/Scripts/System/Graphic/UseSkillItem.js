@@ -13,9 +13,7 @@ import { Graphic, Manager, Datas } from "../index.js";
 import { Mathf } from "../Common/index.js";
 /** @class
  *  The graphic displaying a skill or an item use.
- *  @property {GraphicPlayer} graphicCharacters The graphic player list
- *  @property {boolean} all Indicate if all the targets are selected
- *  @property {number} indexArrow The arrow index
+ *  @extends Graphic.Base
  */
 class UseSkillItem extends Base {
     constructor() {

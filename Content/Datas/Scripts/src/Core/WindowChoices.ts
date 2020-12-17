@@ -18,31 +18,6 @@ import { WindowBox } from "./WindowBox";
 /** @class
  *  A class for window choices.
  *  @extends Bitmap
- *  @property {Object[]} listContents List of all the graphic contents to 
- *  display
- *  @property {function[]} listCallbacks List of all the callback functions to 
- *  excecute when pressed.
- *  @property {OrientationWindow} orientation The orientation of the window
- *  (horizontal or vertical)
- *  @property {number} nbItemsMax Max number of items to display on the choice 
- *  box
- *  @property {number[]} padding Padding of the box
- *  @property {number} space Space between each choice in the box
- *  @property {number} currentSelectedIndex The current selected index position 
- *  in the choice box
- *  @property {boolean} bordersInsideVisible If checked, each choice 
- *  will have an individual window box
- *  @property {number} offsetSelectedIndex offset index position when going out 
- *  of the total box size   
- *  @property {number} choiceWidth A choice box width
- *  @property {number} choiceHeight A choice box height
- *  @property {number} startTime A time variable used for delaying going up/down 
- *  while keeping keyboard pressed
- *  @property {number} size Max number of choices according to max number + 
- *  current number 
- *  @property {WindowBox} windowMain The main window box when there is no border
- *  inside
- *  @property {WindowBox[]} listWindows List of all the windows to display
  *  @param {number} x The x coords
  *  @param {number} y The y coords
  *  @param {number} w The w coords
@@ -62,8 +37,8 @@ import { WindowBox } from "./WindowBox";
  *  @param {boolean} [opts.bordersInsideVisible=true] If checked, each choice 
  *  will have an individual window box
  */
-class WindowChoices extends Bitmap
-{
+class WindowChoices extends Bitmap {
+    
     public static TIME_WAIT_PRESS = 50;
 
     public orientation: OrientationWindow;

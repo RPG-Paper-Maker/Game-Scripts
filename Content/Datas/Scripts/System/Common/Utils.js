@@ -9,15 +9,16 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Constants } from "./index.js";
-/**
- * The static class containing all the utils functions.
+/** @class
+ *  @static
+ *  The static class containing all the utils functions.
  */
 class Utils {
     constructor() {
         throw new Error("This is a static class!");
     }
     /**
-     *  Return default value if undefined, else the value
+     *  Return default value if undefined, else the value.
      *  @static
      *  @param {any} value The value
      *  @param {any} defaultValue The default value

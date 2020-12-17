@@ -15,17 +15,8 @@ var PictureKind = Enum.PictureKind;
 /** @class
  *  An event command for setting / moving / turning a picture.
  *  @extends EventCommand.Base
- *  @property {System.DynamicValue} index The index value
- *  @property {System.DynamicValue} pictureID The picture ID value
- *  @property {System.DynamicValue} zoom The zoom value
- *  @property {System.DynamicValue} opacity The opacity value
- *  @property {System.DynamicValue} x The x value
- *  @property {System.DynamicValue} y The y value
- *  @property {System.DynamicValue} angle The angle value
- *  @property {System.DynamicValue} time The time value
- *  @property {boolean} waitEnd Indicate if wait end of the command
  *  @param {any[]} command Direct JSON command to parse
-*/
+ */
 class SetMoveTurnAPicture extends Base {
     constructor(command) {
         super();

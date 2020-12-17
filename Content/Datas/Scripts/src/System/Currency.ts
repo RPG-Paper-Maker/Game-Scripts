@@ -14,7 +14,8 @@ import { Icon } from "./Icon";
 /** @class
  *  A currency of the game.
  *  @extends {System.Icon}
- *  @param {Record<string, any>} [json=undefined] Json object describing the currency
+ *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  currency
  */
 class Currency extends Icon {
     

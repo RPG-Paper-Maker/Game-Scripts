@@ -14,8 +14,7 @@ import { System, Datas } from "..";
 
 /** @class
 *   All the skills datas
-*   @property {Skill[]} list List of all the skills of the game according
-*   to ID
+*   @static
 */
 class Skills {
 

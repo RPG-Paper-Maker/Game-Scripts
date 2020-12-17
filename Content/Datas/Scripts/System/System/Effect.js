@@ -18,49 +18,9 @@ import { System, Manager, Datas } from "../index.js";
 import { Player, ReactionInterpreter } from "../Core/index.js";
 /** @class
  *  An effect of a common skill item.
- *  @property {EffectKind} kind The kind of effect
- *  @property {DamageKind} damageKind The damage kind
- *  @property {SystemValue} damageStatisticID The damage statistic ID value
- *  @property {SystemValue} damageCurrencyID The damage currency ID value
- *  @property {SystemValue} damageVariableID The damage variable ID value
- *  @property {SystemValue} damageFormula The damage formula value
- *  @property {boolean} isDamagesMinimum Indicate if damages minimum exists
- *  @property {SystemValue} damagesMinimumFormula The damage minimum formula
- *  value
- *  @property {boolean} isDamagesMaximum Indicate if damages maximum exists
- *  @property {SystemValue} damagesMaximumFormula The damage maximum formula
- *  value
- *  @property {boolean} isDamageElement Indicate if damages element exists
- *  @property {SystemValue} damageElementID The damage element ID value
- *  @property {boolean} isDamageVariance Indicate if damages variance exists
- *  @property {SystemValue} damageVarianceFormula The damage variance formula
- *  value
- *  @property {boolean} isDamageCritical Indicate if damages critical exists
- *  @property {SystemValue} damageCriticalFormula The damage critical formula
- *  value
- *  @property {boolean} isDamagePrecision Indicate if damages precision exists
- *  @property {SystemValue} damagePrecisionFormula The damage precision formula
- *  value
- *  @property {boolean} isDamageStockVariableID Indicate if damages stock
- *  variable ID exists
- *  @property {SystemValue} damageStockVariableID The damage stock variable ID
- *  value
- *  @property {boolean} isAddStatus Indicate if add status exists
- *  @property {SystemValue} statusID The status ID value
- *  @property {SystemValue} statusPrecisionFormula The status precision formula
- *  value
- *  @property {boolean} isAddSkill Indicate if add skill exists
- *  @property {SystemValue} addSkillID The add skill ID value
- *  @property {SystemValue} performSkillID The perform skill ID value
- *  @property {EventCommand} commonReaction The common reaction to execute
- *  @property {EffectSpecialActionKind} specialActionKind The special action
- *  kind
- *  @property {SystemValue} scriptFormula The script formula value
- *  @property {boolean} isTemporarilyChangeTarget Indicate if temporarily
- *  change target exists
- *  @property {SystemValue} temporarilyChangeTargetFormula The temporarily
- *  change target formula value
- *  @param {Record<string, any>} [json=undefined] Json object describing the effect
+ *  @extends System.Base
+ *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  effect
  */
 class Effect extends Base {
     constructor(json) {

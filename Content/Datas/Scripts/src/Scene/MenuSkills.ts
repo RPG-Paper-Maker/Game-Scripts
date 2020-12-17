@@ -21,17 +21,8 @@ import AvailableKind = Enum.AvailableKind;
 
 /** @class
  *  A scene in the menu for describing players skills.
- *  @extends SceneGame
- *  @property {Object[]} positionChoice The position choices index + offset for 
- *  each player
- *  @property {WindowBox} windowTop Window on top with "Skills" text
- *  @property {WindowTabs} windowChoicesTabs Window for each tabs
- *  @property {WindowChoices} windowChoicesList Window for each skill
- *  @property {WindowBox} windowInformations Window for skill informations
- *  @property {WindowBox} windowEmpty The window box empty
- *  @property {WindowBox} windowBoxUseSkill The window box for using skill
- *  @property {number} substep The subset for using skill
-*/
+ *  @extends Scene.Base
+ */
 class MenuSkills extends Base {
 
     public positionChoice: StructPositionChoice[];

@@ -16,14 +16,8 @@ import { Class } from "./Class.js";
 /** @class
  *  A statistic progression of the game.
  *  @extends System.Base
- *  @property {number} id The id of the statistic
- *  @property {SystemValue} maxValue The max value
- *  @property {boolean} isFix Indicate if the statistic progression is fix
- *  @property {SystemProgressionTable} table The System progression table
- *  @property {SystemValue} random The random value
- *  @property {SystemValue} formula The formula
- *  @param {Record<string, any>} [json=undefined] Json object describing the statistic
- *  progression
+ *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  statistic progression
  */
 class StatisticProgression extends Base {
     constructor(json) {

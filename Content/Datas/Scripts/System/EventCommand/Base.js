@@ -9,10 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 /** @class
- *  An event command
- *  @property {boolean} isDirectNode Indicate if this node is directly
- *  going to the next node (takes only one frame)
- *  @property {boolean} parallel Indicate if this command is run in parallel
+ *  An abstract event command.
  */
 class Base {
     constructor() {

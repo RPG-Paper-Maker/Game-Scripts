@@ -13,20 +13,11 @@ import { Enum, Utils } from "../Common/index.js";
 var SongKind = Enum.SongKind;
 import { System, Manager } from "../index.js";
 /** @class
- *   A way to play a song
- *   @property {number} [SystemPlaySong.previousMusic=null] The music that was
- *   previously played (before the current)
- *   @property {number} [SystemPlaySong.currentPlayingMusic=null] The current
- *   playing music
- *   @property {SongKind} kind The kind of song to play
- *   @property {SystemValue} songID The song ID value
- *   @property {SystemValue} volume The volume value
- *   @property {boolean} isStart Indicate if is start
- *   @property {SystemValue} start The start value
- *   @property {boolean} isEnd Indicate if is end
- *   @property {SystemValue} end The end value
- *   @param {SongKind} kind The kind of song to play
- *   @param {Record<string, any>} [json=undefined] Json object describing the play song
+ *  A way to play a song.
+ *  @extends System.Base
+ *  @param {SongKind} kind The kind of song to play
+ *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  play song
  */
 class PlaySong extends Base {
     constructor(kind, json) {

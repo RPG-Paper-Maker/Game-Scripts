@@ -18,18 +18,8 @@ import PictureKind = Enum.PictureKind;
 /** @class
  *  An event command for displaying a picture.
  *  @extends EventCommand.Base
- *  @property {System.DynamicValue} pictureID The picture ID value
- *  @property {System.DynamicValue} index The index value
- *  @property {System.DynamicValue} centered Indicate if the picture is centered
- *  @property {System.DynamicValue} originX The origin X according to centered value
- *  @property {System.DynamicValue} originY The origin Y according to centered value
- *  @property {System.DynamicValue} x The x value
- *  @property {System.DynamicValue} y The y value
- *  @property {System.DynamicValue} zoom The zoom value
- *  @property {System.DynamicValue} opacity The opacity value
- *  @property {System.DynamicValue} angle The angle value
  *  @param {any[]} command Direct JSON command to parse
-*/
+ */
 class DisplayAPicture extends Base {
     
     public pictureID: System.DynamicValue;

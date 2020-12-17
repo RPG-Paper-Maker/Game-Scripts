@@ -10,8 +10,9 @@
 */
 
 /** @class
+ *  @static
  *  A static class for having a quick access to screen resolution variables and 
- *  functions
+ *  functions;
  */
 class ScreenResolution {
     public static readonly SCREEN_X: number = 640;

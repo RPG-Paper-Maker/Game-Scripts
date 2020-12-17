@@ -15,11 +15,10 @@ import { Enum } from "../Common";
 import Align = Enum.Align;
 
 /** @class
-*   A scene for the loading
+*   A scene for the loading.
 *   @extends SceneGame
-*   @property {GraphicText} text The graphic text displaying loading
 */
-export class Loading extends Scene.Base {
+class Loading extends Scene.Base {
     public static readonly MIN_DELAY: number = 100;
 
     public text: Graphic.Text;
@@ -37,3 +36,5 @@ export class Loading extends Scene.Base {
         this.text.draw();
     }
 }
+
+export { Loading }

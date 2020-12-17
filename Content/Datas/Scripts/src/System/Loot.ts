@@ -16,13 +16,9 @@ import { Mathf } from "../Common";
 
 /** @class
  *  A loot of the game.
- *  @property {LootKind} kind The kind of loot
- *  @property {System.DynamicValue} lootID The loot ID value
- *  @property {System.DynamicValue} number The number value
- *  @property {System.DynamicValue} probability The probability value
- *  @property {System.DynamicValue} initial The initial value
- *  @property {System.DynamicValue} final The final value
- *  @param {Record<string, any>} [json=undefined] Json object describing the loot
+ *  @extends System.Base
+ *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  loot
  */
 class Loot extends Base {
 

@@ -16,6 +16,7 @@ const ElectronScreen = remote.screen;
 const app = remote.app;
 let firstError = true;
 /** @class
+ *  @static
  *  A class replaced according to te platform used (desktop, browser, mobile...).
  */
 class Platform {

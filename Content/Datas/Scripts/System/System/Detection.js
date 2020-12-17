@@ -14,9 +14,10 @@ import { Position } from "../Core/index.js";
 var Orientation = Enum.Orientation;
 import { Datas, Manager } from "../index.js";
 /** @class
- *   A detection of the game.
- *   @property {number[][]} boxes List of boxes for detection
- *   @param {Record<string, any>} [json=undefined] Json object describing the detection
+ *  A detection of the game.
+ *  @extends System.Base
+ *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  detection
  */
 class Detection extends Base {
     constructor(json) {

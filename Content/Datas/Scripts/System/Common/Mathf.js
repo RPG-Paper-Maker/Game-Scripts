@@ -10,7 +10,8 @@
 */
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
- * The static class for Math related function.
+ *  @static
+ *  The static class for Math related function.
  */
 class Mathf {
     constructor() {

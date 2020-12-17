@@ -14,7 +14,7 @@ import { Utils } from "../Common";
 
 /** @class
  *  A special element (autotile, wall, object3D, mountain) of the game.
- *  @property {number} pictureID The picture ID of the special element
+ *  @extends System.Base
  *  @param {Record<string, any>} [json=undefined] Json object describing the 
  *  special element
  */

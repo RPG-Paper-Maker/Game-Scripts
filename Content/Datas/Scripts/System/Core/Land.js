@@ -14,8 +14,7 @@ const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Datas } from "../index.js";
 /** @class
  *  A land in the map.
- *  @property {boolean} up Indicate if the layer is up or down
- *  @property {number[]} texture Texture rect of the land
+ *  @extends MapElement
  */
 class Land extends MapElement {
     constructor() {

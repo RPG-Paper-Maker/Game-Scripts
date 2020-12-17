@@ -14,14 +14,6 @@ import { MapObject, Position, ReactionInterpreter } from "../Core/index.js";
 /** @class
  *  An event command for teleporting an object.
  *  @extends EventCommand.Base
- *  @property {System.DynamicValue} objectID The ID of the object to teleport value
- *  @property {System.DynamicValue} objectIDPosition The ID value of the object to
- *  teleport on
- *  @property {System.DynamicValue} mapID The map ID value
- *  @property {System.DynamicValue} x The x coordinate of the map value
- *  @property {System.DynamicValue} y The y coordinate of the map value
- *  @property {System.DynamicValue} yPlus The y plus coordinate of the map value
- *  @property {System.DynamicValue} z The z coordinate of the map value
  *  @param {any[]} command Direct JSON command to parse
  */
 class TeleportObject extends Base {

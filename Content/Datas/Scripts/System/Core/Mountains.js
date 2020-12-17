@@ -11,6 +11,7 @@
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  The wrapper class for handle mountains sharing the same texture.
+ *  @param {TextureBundle} texture
  */
 class Mountains {
     constructor(texture) {

@@ -23,16 +23,7 @@ import { StructPositionChoice } from ".";
 /** @class
  *  A scene in the menu for describing inventory.
  *  @extends Scene.Base
- *  @property {WindowBox} windowTop Window on top with "Inventory" text
- *  @property {WindowTabs} windowChoicesTabs Window for each tabs
- *  @property {WindowChoices} windowChoicesList Window for each items
- *  @property {WindowBox} windowInformations Window for item informations
- *  @property {WindowBox} windowEmpty The window box empty
- *  @property {WindowBox} windowBoxUseItem The window box for using item
- *  @property {Object[]} positionChoice The position choices index + offset for 
- *  each type of item
- *  @property {number} substep The subset for using item
-*/
+ */
 class MenuInventory extends Base {
 
     public windowTop: WindowBox;

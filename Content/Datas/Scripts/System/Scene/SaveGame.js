@@ -10,9 +10,9 @@
 */
 import { SaveLoadGame } from "./SaveLoadGame.js";
 /** @class
-*   @extends SceneSaveLoadGame
-*   A scene in the menu for saving a game
-*/
+ *  A scene in the menu for saving a game.
+ *  @extends SceneSaveLoadGame
+ */
 class SaveGame extends SaveLoadGame {
     constructor() {
         super();

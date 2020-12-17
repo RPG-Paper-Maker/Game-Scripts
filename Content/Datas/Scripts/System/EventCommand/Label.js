@@ -11,11 +11,10 @@
 import { Base } from "./Base.js";
 import { System } from "../index.js";
 /** @class
-*   An event command for label
-*   @extends EventCommand
-*   @property {SysytemValue} label The label value
-*   @param {any[]} command Direct JSON command to parse
-*/
+ *  An event command for label.
+ *  @extends EventCommand.Base
+ *  @param {any[]} command Direct JSON command to parse
+ */
 class Label extends Base {
     constructor(command) {
         super();

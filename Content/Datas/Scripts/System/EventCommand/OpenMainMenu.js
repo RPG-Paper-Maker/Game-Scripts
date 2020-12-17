@@ -14,7 +14,7 @@ import { Scene, Manager } from "../index.js";
  *  An event command for opening the main menu.
  *  @extends EventCommand.Base
  *  @param {any[]} command Direct JSON command to parse
-*/
+ */
 class OpenMainMenu extends Base {
     constructor(command) {
         super();

@@ -16,25 +16,9 @@ import { MapObject } from "../Core";
 
 /** @class
  *  An event command for battle processing.
- *  @extends EventCommand
- *  @property {System.DynamicValue} battleMapID The battle map (System) ID value
- *  @property {System.DynamicValue} mapID The map ID value
- *  @property {System.DynamicValue} x The x value
- *  @property {System.DynamicValue} y The y value
- *  @property {System.DynamicValue} yPlus The y plus value
- *  @property {System.DynamicValue} z The z value
- *  @property {boolean} canEscape Boolean indicating if the player can escape
- *  this battle
- *  @property {boolean} canGameOver Boolean indicating if there a win/lose node
- *  or not
- *  @property {System.DynamicValue} troopID The troop ID value
- *  @property {number} transitionStart Transition start num bool
- *  @property {System.DynamicValue} transitionStartColor The transition start color ID 
- *  value
- *  @property {number} transitionEnd Transition end num bool
- *  @property {System.DynamicValue} transitionEndColor The transition end color ID value
+ *  @extends EventCommand.Base
  *  @param {any[]} command Direct JSON command to parse
-*/
+ */
 class StartBattle extends Base {
 
     public battleMapID: System.DynamicValue;

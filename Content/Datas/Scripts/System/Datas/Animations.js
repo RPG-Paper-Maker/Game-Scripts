@@ -12,8 +12,7 @@ import { System, Datas } from "../index.js";
 import { IO, Paths, Utils } from "../Common/index.js";
 /** @class
  *  All the animations datas.
- *  @property {SystemAnimation[]} list List of all the animations of the game
- *  according to ID
+ *  @static
  */
 class Animations {
     constructor() {

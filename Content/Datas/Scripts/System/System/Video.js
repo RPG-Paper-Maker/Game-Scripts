@@ -13,10 +13,9 @@ import { Datas, System } from "../index.js";
 import { Constants, Paths, Utils } from "../Common/index.js";
 /** @class
  *  A video of the game.
- *  @property {string} name The video name
- *  @property {boolean} isBR Indicate if the video is a BR (Basic Ressource)
- *  @property {boolean} dlc Indicate if the video is a DLC
- *  @param {Record<string, any>} [json=undefined] Json object describing the video
+ *  @extends System.Base
+ *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  video
  */
 class Video extends Base {
     constructor(json) {

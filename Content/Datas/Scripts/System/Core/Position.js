@@ -14,6 +14,17 @@ import { Datas } from "../index.js";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  The data class for position.
+ *  @extends Portion
+ *  @param {number} x The x position square
+ *  @param {number} y The y position square
+ *  @param {number} z The z position square
+ *  @param {number} yPixels The y position pixels to add to the square y
+ *  @param {number} layer The layer position
+ *  @param {number} centerX The center X position on the square in %
+ *  @param {number} centerZ The center Z position on the square in %
+ *  @param {number} angleY The angle on Y axis in degree
+ *  @param {number} angleX The angle on X axis in degree
+ *  @param {number} angleZ The angle on Z axis in degree
  */
 class Position extends Portion {
     constructor(x = 0, y = 0, z = 0, yPixels = 0, layer = 0, centerX = 50, centerZ = 50, angleY = 0, angleX = 0, angleZ = 0) {

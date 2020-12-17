@@ -16,12 +16,8 @@ import Align = Enum.Align;
 
 /** @class
  *  The graphic displaying all currencies and play time in scene menu.
- *  @property {GraphicTextIcon[]} currencies The graphic text icon list of 
- *  currencies
- *  @property {number} time The time in seconds
- *  @property {GraphicText} graphicPlayTime The graphic text for play time
- *  @property {number} height The graphic height
-*/
+ *  @extends Graphic.Base
+ */
 class TimeCurrencies extends Base {
 
     public currencies: Graphic.TextIcon[];

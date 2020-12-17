@@ -16,10 +16,8 @@ import { Datas } from "../index.js";
 /** @class
  *  @extends Land
  *  An autotile in the map
- *  @property {number} autotileID The autotile ID
- *  @property {number} tileID The tile ID kind to draw according to other
- *  autotiles outside
- *  @param {Record<string, any>} [json=undefined] Json object describing the autotile
+ *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  autotile
  */
 class Autotile extends Land {
     constructor(json) {

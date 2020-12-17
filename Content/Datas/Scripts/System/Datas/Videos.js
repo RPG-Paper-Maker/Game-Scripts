@@ -11,9 +11,8 @@
 import { IO, Paths, Utils } from "../Common/index.js";
 import { System, Datas } from "../index.js";
 /** @class
- *  All the videos datas
- *  @property {System.Video[]} list List of all the videos of the game
- *  according to ID
+ *  All the videos datas.
+ *  @static
  */
 class Videos {
     constructor() {

@@ -14,16 +14,10 @@ import { WindowBox } from "../Core/index.js";
 import { Utils, Enum } from "../Common/index.js";
 var Align = Enum.Align;
 /** @class
-*   An event command for displaying text
-*   @extends EventCommand.Base
-*   @property {SystemValue} interlocutor The interlocutor text value
-*   @property {number} facesetID The faceset ID
-*   @property {string} message The message to parse
-*   @property {WindowBox} windowMain Window containing the message to display
-*   @property {WindowBox} windowInterlocutor Window containing the interlocutor
-*   to display
-*   @param {any[]} command Direct JSON command to parse
-*/
+ *  An event command for displaying text.
+ *  @extends EventCommand.Base
+ *  @param {any[]} command Direct JSON command to parse
+ */
 class ShowText extends Base {
     constructor(command) {
         super();

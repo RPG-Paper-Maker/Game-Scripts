@@ -23,29 +23,7 @@ import { Color } from "./Color";
 
 /** @class
  *  The properties of a map.
- *  @property {THREE.Scene} sceneBackground The scene used for background 
- *  image
- *  @property {THREE.BoxGeometry} skyboxGeometry The geometry for skybox
- *  @property {number} id The map ID
- *  @property {string} name The map name
- *  @property {number} length The map length
- *  @property {number} width The map width
- *  @property {number} height The map height
- *  @property {number} depth The map depth
- *  @property {Tileset} tileset The System tileset map
- *  @property {SystemPlaySong} music The beginning music
- *  @property {SystemPlaySong} backgroundSound The beginning background sound
- *  @property {SystemCameraProperties} cameraProperties The System camera
- *  properties of the map
- *  @property {boolean} isBackgroundColor Indicate if background is a color
- *  @property {boolean} isBackgroundImage Indicate if background is an image
- *  @property {SystemValue} backgroundColorID The background color ID value
- *  @property {number} backgroundImageID The background image ID
- *  @property {SystemValue} backgroundSkyboxID = The skybox background ID value 
- *  @property {MapObject} startupObject The map object startup
- *  @property {SystemColor} backgroundColor The background System color
- *  @property {THREE.Camera} cameraBackground The camera for background when 
- *  image
+ *  @extends System.Base
  */
 class MapProperties extends Base {
 
@@ -82,8 +60,7 @@ class MapProperties extends Base {
      *  @param {Record<string, any>} json Json object describing the map 
      *  properties
      */
-    read(json: Record<string, any>)
-    {
+    read(json: Record<string, any>) {
         this.id = json.id;
         this.name = json.name;
         this.length = json.l;

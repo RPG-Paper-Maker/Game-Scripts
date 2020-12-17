@@ -14,8 +14,7 @@ var PictureKind = Enum.PictureKind;
 import { Picture2D } from "../Core/index.js";
 /** @class
 *   All the pictures datas.
-*   @property {Picture[]} list List of all the pictures of the game
-*   according to ID and PictureKind
+*   @static
 */
 class Pictures {
     constructor() {

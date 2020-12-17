@@ -17,11 +17,8 @@ var Align = Enum.Align;
 /** @class
  *  A class for message show text command.
  *  @extends Bitmap
- *  @property {string} message The complete text to parse
- *  @property {Picture2D} faceset The faceset picture
- *  @property {Bitmap[]} graphics All the graphics
- *  @property {number[]} positions All the positions according to graphics
- *  @property {Tree} tree The text tree parsing
+ *  @param {string} message The complete text to parse
+ *  @param {number} facesetID The faceset picture ID
  */
 class Message extends Graphic.Base {
     constructor(message, facesetID) {

@@ -15,21 +15,9 @@ import { Mathf, Enum, Utils } from "../Common/index.js";
 var VariableMapObjectCharacteristicKind = Enum.VariableMapObjectCharacteristicKind;
 /** @class
  *  An event command for changing variables values.
- *  @extends EventCommand
- *  @property {number} selection The selection begining
- *  @property {number} nbSelection The selection number
- *  @property {number} operation The operation number
- *  @property {number} valueKind The kind of value
- *  @property {System.DynamicValue} valueNumber The value number
- *  @property {System.DynamicValue} valueRandomA The value number random start
- *  @property {System.DynamicValue} valueRandomB The value number random end
- *  @property {System.DynamicValue} valueMessage The value message
- *  @property {System.DynamicValue} valueSwitch The value switch
- *  @property {System.DynamicValue} valueMapObject The value map object
- *  @property {VariableMapObjectCharacteristicKind} valueMapObjectChar The kind
- *  of map object value
+ *  @extends EventCommand.Base
  *  @param {any[]} command Direct JSON command to parse
-*/
+ */
 class ChangeVariables extends Base {
     constructor(command) {
         super();

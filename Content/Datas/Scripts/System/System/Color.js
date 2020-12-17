@@ -14,12 +14,6 @@ const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  The system color class.
  *  @extends {System.Base}
- *  @property {number} red The red color between 0 and 255
- *  @property {number} green The green color between 0 and 255
- *  @property {number} blue The blue color between 0 and 255
- *  @property {number} alpha The alpha value between 0 and 1
- *  @property {string} rgb The rgb value used for ctx
- *  @property {THREE.Color} color The three.js color
  *  @param {Record<string, any>} [json=undefined] Json object describing the color
  */
 class Color extends Base {

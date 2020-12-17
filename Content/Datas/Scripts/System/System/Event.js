@@ -12,11 +12,7 @@ import { Base } from "./Base.js";
 import { System, Datas } from "../index.js";
 /** @class
  *  An event that an object can react on.
- *  @property {boolean} isSystem Boolean indicating if it is an event System
- *  @property {number} idEvent ID of the event
- *  @property {System.Parameter[]} parameters All the parameters values
- *  @property {Record<number, System.Reaction>} reactions List of all the reactions
- *  according to states ID
+ *  @extends System.Base
  *  @param {Record<string, any>} [json=undefined] Json object describing the
  *  object event
  */

@@ -16,25 +16,9 @@ var Align = Enum.Align;
 var PictureKind = Enum.PictureKind;
 /** @class
  *  The graphic displaying all the stats in the player description state menu.
- *  @property {GamePlayer} gamePlayer The current selected player
- *  @property {GraphicText} graphicNameCenter The player's name graphic (for
- *  menu choices)
- *  @property {GraphicText} graphicName The player's name graphic (for
- *  menu description)
- *  @property {GraphicText} graphicClass The player's class name graphic
- *  @property {GraphicText} graphicLevelName The player's level name graphic
- *  @property {GraphicText} graphicLevel The player's level graphic
- *  @property {GraphicText} graphicExpName The graphic text for experience name
- *  @property {GraphicText} graphicExp The graphic text for experience stat
- *  @property {GraphicText} listStatsNames All the player's stats names
- *  graphics
- *  @property {GraphicText} listStats All the player's stats values
- *  graphics
- *  @property {number} listLength The max length of the stats for each column
- *  @property {Picture2D} battler The player battler
- *  @property {Frame} battlerFrame The battler frame
- *  @param {GamePlayer} gamePlayer The current selected player
-*/
+ *  @extends Graphic.Base
+ *  @param {Player} player The current selected player
+ */
 class PlayerDescription extends Base {
     constructor(player) {
         super();

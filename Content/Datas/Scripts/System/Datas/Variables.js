@@ -11,8 +11,9 @@
 import { IO, Paths } from "../Common/index.js";
 import { Datas } from "../index.js";
 /** @class
-*   All the variables datas.
-*/
+ *  All the variables datas.
+ *  @static
+ */
 class Variables {
     constructor() {
         throw new Error("This is a static class!");

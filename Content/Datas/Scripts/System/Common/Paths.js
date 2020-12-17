@@ -9,10 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Platform } from "./Platform.js";
-/**
- * The static class containing Path related constant
- * can be accessed through import
- * @example import {Path} from "../Constants";
+/** @class
+ *  @static
+ *  The static class containing all the files paths.
+ *  @example import { Paths } from "../Common/index.js"
  */
 class Paths {
     constructor() {

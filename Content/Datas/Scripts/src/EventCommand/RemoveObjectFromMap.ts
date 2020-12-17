@@ -17,7 +17,6 @@ import { Constants } from "../Common";
 /** @class
  *  An event command for removing a specific object from map.
  *  @extends EventCommand.Base
- *  @property {System.DynamicValue} objectID The object ID value to remove
  *  @param {any[]} command Direct JSON command to parse
  */
 class RemoveObjectFromMap extends Base {

@@ -11,13 +11,6 @@
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  Several textures in a single file.
- *  @property {number[][]} list List of each offset point, default is an empty
- *  @property {THREE.Material} texture The generated texture, default is null
- *  @property {number} beginID The begining texture ID
- *  @property {number[]} beginPoint The begining texture point offset
- *  @property {number} endID The ending texture ID
- *  @property {number[]} endPoint The ending texture point offset
- *  array
  */
 class TextureBundle {
     constructor() {

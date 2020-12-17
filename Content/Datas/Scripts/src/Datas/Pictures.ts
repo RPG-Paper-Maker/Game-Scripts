@@ -16,8 +16,7 @@ import { Picture2D } from "../Core";
 
 /** @class
 *   All the pictures datas.
-*   @property {Picture[]} list List of all the pictures of the game
-*   according to ID and PictureKind
+*   @static
 */
 class Pictures
 {

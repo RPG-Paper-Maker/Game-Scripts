@@ -13,9 +13,8 @@ import { System, Scene } from "../index.js";
 /** @class
  *  An event command for allowing forbidding main menu.
  *  @extends EventCommand.Base
- *  @property {System.DynamicValue} allow The switch value
  *  @param {any[]} command Direct JSON command to parse
-*/
+ */
 class AllowForbidMainMenu extends Base {
     constructor(command) {
         super();

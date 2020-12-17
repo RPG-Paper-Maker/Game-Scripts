@@ -14,12 +14,8 @@ import { Item } from "../Core/index.js";
 /** @class
  *  An event command for modifying the inventory.
  *  @extends EventCommand.Base
- *  @property {ItemKind} itemKind The item kind
- *  @property {System.DynamicValue} itemID The item ID
- *  @property {number} operation The operation kind
- *  @property {System.DynamicValue} value The number of items value
  *  @param {any[]} command Direct JSON command to parse
-*/
+ */
 class ModifyInventory extends Base {
     constructor(command) {
         super();
