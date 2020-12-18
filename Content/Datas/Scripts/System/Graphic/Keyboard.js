@@ -31,6 +31,7 @@ class Keyboard extends Base {
      *  Update short sc.
      *  @param {number[][]} sh The short list
      */
+    
     updateShort(sh) {
         this.kb.sc = sh;
         this.graphicTextShort.setText(this.kb.toString());

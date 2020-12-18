@@ -12,6 +12,7 @@
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /**
  * The data class who hold 2D coordinates.
+ * It's used as an API bridge between the user and Three.js 
  * @author Nio Kasgami
  */
 export class Vector2 extends THREE.Vector2 {
@@ -26,5 +27,10 @@ export class Vector2 extends THREE.Vector2 {
      */
     constructor(x = 0, y = 0) {
         super(x, y);
+    }
+
+    reset(){
+        this.x = 0;
+        this.y = 0;
     }
 }

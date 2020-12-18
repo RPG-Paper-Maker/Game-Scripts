@@ -20,24 +20,24 @@ const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 class Mathf {
 
     static OPERATORS_COMPARE =
-    [
-        function(a: number, b: number) { return a === b },
-        function(a: number, b: number) { return a !== b },
-        function(a: number, b: number) { return a >= b },
-        function(a: number, b: number) { return a <= b },
-        function(a: number, b: number) { return a > b },
-        function(a: number, b: number) { return a < b }
-    ];
+        [
+            function (a: number, b: number) { return a === b },
+            function (a: number, b: number) { return a !== b },
+            function (a: number, b: number) { return a >= b },
+            function (a: number, b: number) { return a <= b },
+            function (a: number, b: number) { return a > b },
+            function (a: number, b: number) { return a < b }
+        ];
 
     static OPERATORS_NUMBERS =
-    [
-        function(a: number, b: number) { return b },
-        function(a: number, b: number) { return a + b },
-        function(a: number, b: number) { return a - b },
-        function(a: number, b: number) { return a * b },
-        function(a: number, b: number) { return a / b },
-        function(a: number, b: number) { return a % b }
-    ];
+        [
+            function (a: number, b: number) { return b },
+            function (a: number, b: number) { return a + b },
+            function (a: number, b: number) { return a - b },
+            function (a: number, b: number) { return a * b },
+            function (a: number, b: number) { return a / b },
+            function (a: number, b: number) { return a % b }
+        ];
 
     constructor() {
         throw new Error("This is a static class!");
@@ -51,9 +51,8 @@ class Mathf {
      * @param {any} splitThis? - The context of splitCallback
      * @returns {[T[]]} - The fully splitted array from array
      */
-    static split<T>(array: T[], splitCallback: (elem: T, i: number, self: T[]) 
-        => boolean, splitThis?: any): T[][]
-    {
+    static split<T>(array: T[], splitCallback: (elem: T, i: number, self: T[])
+        => boolean, splitThis?: any): T[][] {
         const newArray: T[][] = [];
         let newGroup: T[] = [];
         // forEach is tested to be the fastest among sandboxes including NW.js
@@ -332,9 +331,8 @@ class Mathf {
      *  @param {number} y2 The y bottom point of the rectangle
      *  @returns {boolean}
      */
-    static isPointOnRectangle(p: typeof THREE.Vector2, x1: number, x2: number, 
-        y1: number, y2: number): boolean
-    {
+    static isPointOnRectangle(p: typeof THREE.Vector2, x1: number, x2: number,
+        y1: number, y2: number): boolean {
         return p.x >= x1 && p.x <= x2 && p.y >= y1 && p.y <= y2;
     }
 
@@ -347,10 +345,9 @@ class Mathf {
      *  @param {THREE.Vector2} p2 One of the point of the triangle
      *  @returns {boolean}
      */
-    static isPointOnTriangle(p: typeof THREE.Vector2, p0: typeof THREE.Vector2, 
-        p1: typeof THREE.Vector2, p2: typeof THREE.Vector2): boolean
-    {
-        let a = 1/2 * (-p1.y * p2.x + p0.y * (-p1.x + p2.x) + p0.x * (p1.y - p2
+    static isPointOnTriangle(p: typeof THREE.Vector2, p0: typeof THREE.Vector2,
+        p1: typeof THREE.Vector2, p2: typeof THREE.Vector2): boolean {
+        let a = 1 / 2 * (-p1.y * p2.x + p0.y * (-p1.x + p2.x) + p0.x * (p1.y - p2
             .y) + p1.x * p2.y);
         let sign = a < 0 ? -1 : 1;
         let s = (p0.y * p2.x - p0.x * p2.y + (p2.y - p0.y) * p.x + (p0.x - p2.x)
@@ -368,12 +365,68 @@ class Mathf {
      *  @returns {number}
      */
     static orthogonalProjection(u: typeof THREE.Vector3, v: typeof THREE.Vector3
-        ): number
-    {
+    ): number {
         let lu = u.length();
         let lv = v.length();
         let dot = u.dot(v);
         return (dot / (lu * lv)) * lu;
+    }
+
+    /**
+     * Convert a value to a percent.
+     *
+     * @export
+     * @param {number} a
+     * @param {number} b
+     * @return {number}
+     */
+    static percentOf(a: number, b: number, large: boolean = false): number {
+        return a / b * (large ? 100 : 1);
+    }
+
+    /**
+     * Convert a value to a rounded percent.
+     * 
+     * @export
+     * @param {number} a The value to convert 
+     * @param {number} b The target max value
+     * @param {boolean} large convert the percent to a small value (0 ~ 1) or a large value (0 ~ 100)
+     * @return {number} 
+     */
+    static roundedPercentOf(a: number, b: number, large: boolean = false): number {
+        return Math.round(this.percentOf(a, b, large));
+    }
+
+    /**
+     * Convert a percent to a number
+     *
+     * @export
+     * @param {number} a
+     * @param {number} b
+     * @param {boolean} [large=false]
+     * @return {*}  {number}
+     */
+    static numberOf(a: number, b: number, large = true): number {
+        if (a > 1 && !large || b > 1 && !large) {
+            throw new Error("value out of range! (0~1) please enable large mode if you want to use integer!");
+        }
+        return a * b / (large ? 100 : 1);
+    }
+
+    /**
+     * Convert a percent to a rounded number
+     *
+     * @export
+     * @param {number} a
+     * @param {number} b
+     * @param {boolean} [large=true]
+     * @return {*}  {number}
+     */
+    static roundedNumberOf(a: number, b: number, large = true): number {
+        if (a > 1 && !large || b > 1 && !large) {
+            throw new Error("value out of range! (0~1) please enable large mode if you want to use integer!");
+        }
+        return Math.round(this.numberOf(a, b));
     }
 }
 
