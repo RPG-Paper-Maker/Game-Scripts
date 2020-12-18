@@ -13,6 +13,7 @@ const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /**
  * The data class who hold 3D coordinates.
+ * It's used as an API bridge between the user and Three.js 
  * @author Nio Kasgami
  */
 export class Vector3 extends THREE.Vector3 {
