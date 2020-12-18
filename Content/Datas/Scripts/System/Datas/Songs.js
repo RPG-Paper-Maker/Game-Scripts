@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { IO, Paths, Enum } from "../Common/index.js";
+import { IO, Paths, Enum } from "../Common";
 var SongKind = Enum.SongKind;
-import { System, Datas } from "../index.js";
+import { System, Datas } from "..";
 /** @class
 *   All the songs datas
 *   @property {SystemSong[]} list List of all the songs of the game

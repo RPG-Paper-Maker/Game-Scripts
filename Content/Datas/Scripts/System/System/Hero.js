@@ -8,10 +8,10 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base.js";
-import { Class } from "./Class.js";
-import { Utils } from "../Common/index.js";
-import { Datas } from "../index.js";
+import { Base } from "./Base";
+import { Class } from "./Class";
+import { Utils } from "../Common";
+import { Datas } from "..";
 /** @class
  *  An hero of the game.
  *  @property {string} name The name of the hero

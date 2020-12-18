@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Platform } from "./Platform.js";
+import { Platform } from "./Platform";
 /**
  * The static class containing Path related constant
  * can be accessed through import

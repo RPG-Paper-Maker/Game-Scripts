@@ -9,10 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
-import { Base } from "./Base.js";
-import { Utils, Mathf } from "../Common/index.js";
-import { System, Manager, Datas } from "../index.js";
-import { MapObject } from "../Core/index.js";
+import { Base } from "./Base";
+import { Utils, Mathf } from "../Common";
+import { System, Manager, Datas } from "..";
+import { MapObject } from "../Core";
 /** @class
  *  An event command for displaying text.
  *  @extends EventCommand.Base

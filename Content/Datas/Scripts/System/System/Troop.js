@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base.js";
+import { Base } from "./Base";
 /** @class
  *  A troop of the game.
  *  @property {Object[]} list list of the monsters (ids, level).

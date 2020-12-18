@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Enum, Utils } from "../Common/index.js";
+import { Enum, Utils } from "../Common";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
-import { Datas } from "../index.js";
+import { Datas } from "..";
 /** @class
  *  An element in the map.
  *  @property {number} xOffset The x offset of the object according to layer

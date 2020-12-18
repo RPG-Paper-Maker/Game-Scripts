@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { SaveLoadGame } from "./SaveLoadGame.js";
+import { SaveLoadGame } from "./SaveLoadGame";
 /** @class
 *   @extends SceneSaveLoadGame
 *   A scene in the menu for saving a game

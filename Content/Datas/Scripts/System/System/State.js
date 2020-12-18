@@ -8,13 +8,13 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base.js";
-import { Enum, Utils } from "../Common/index.js";
+import { Base } from "./Base";
+import { Enum, Utils } from "../Common";
 var ObjectMovingKind = Enum.ObjectMovingKind;
 var EventCommandKind = Enum.EventCommandKind;
 var PrimitiveValueKind = Enum.PrimitiveValueKind;
 var CommandMoveKind = Enum.CommandMoveKind;
-import { System, Manager } from "../index.js";
+import { System, Manager } from "..";
 /** @class
  *   A possible state of an object.
  *   @property {number} id state ID

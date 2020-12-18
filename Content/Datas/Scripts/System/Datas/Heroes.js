@@ -8,8 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { System, Datas } from "../index.js";
-import { IO, Paths, Utils } from "../Common/index.js";
+import { System, Datas } from "..";
+import { IO, Paths, Utils } from "../Common";
 /** @class
  *  All the heroes datas.
  *  @property {System.Hero[]} list List of all the heroes of the game according

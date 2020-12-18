@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base.js";
+import { Base } from "./Base";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  The system color class.

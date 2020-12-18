@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base.js";
-import { Utils } from "../Common/index.js";
-import { System, Datas } from "../index.js";
+import { Base } from "./Base";
+import { Utils } from "../Common";
+import { System, Datas } from "..";
 /** @class
  *  An event command for setting the dialog box options
  *  @extends EventCommand

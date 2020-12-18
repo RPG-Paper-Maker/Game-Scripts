@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { ScreenResolution, Mathf } from "../Common/index.js";
+import { ScreenResolution, Mathf } from "../Common";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
-import { Manager } from "../index.js";
+import { Manager } from "..";
 /** @class
 *   The camera of the current map
 *   @property {THREE.PerspectiveCamera} threeCamera The three.js camera

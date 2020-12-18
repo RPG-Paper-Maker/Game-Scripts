@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base.js";
+import { Base } from "./Base";
 /** @class
  *  A statistic of the game.
  *  @property {string} name The name of the statistic

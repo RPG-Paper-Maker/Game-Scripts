@@ -8,8 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base.js";
-import { Manager } from "../index.js";
+import { Base } from "./Base";
+import { Manager } from "..";
 /** @class
  *  An event command for going to title screen.
  *  @extends EventCommand.Base

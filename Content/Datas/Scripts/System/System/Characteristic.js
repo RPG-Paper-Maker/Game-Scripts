@@ -8,13 +8,13 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Enum, Utils, Interpreter } from "../Common/index.js";
+import { Enum, Utils, Interpreter } from "../Common";
 var CharacteristicKind = Enum.CharacteristicKind;
 var IncreaseDecreaseKind = Enum.IncreaseDecreaseKind;
-import { Base } from "./Base.js";
-import { DynamicValue } from "./DynamicValue.js";
-import { Player } from "../Core/index.js";
-import { Datas, Manager } from "../index.js";
+import { Base } from "./Base";
+import { DynamicValue } from "./DynamicValue";
+import { Player } from "../Core";
+import { Datas, Manager } from "..";
 /** @class
  *  A characteristic of a common skill item.
  *  @property {CharacteristicKind} kind The characterisitic kind

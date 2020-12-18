@@ -8,8 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Translatable } from "./Translatable.js";
-import { KeyEvent } from "../Common/index.js";
+import { Translatable } from "./Translatable";
+import { KeyEvent } from "../Common";
 /** @class
  *  A key shortcut of the game.
  *  @extends {System.Translatable}

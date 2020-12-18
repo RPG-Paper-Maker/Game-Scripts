@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { ReactionInterpreter } from "../Core/index.js";
-import { Manager } from "../index.js";
-import { Utils } from "../Common/index.js";
+import { ReactionInterpreter } from "../Core";
+import { Manager } from "..";
+import { Utils } from "../Common";
 /** @class
  *   Abstract class for the game stack.
  *   @property {ReactionInterpreter[]} reactionInterpreters The reaction

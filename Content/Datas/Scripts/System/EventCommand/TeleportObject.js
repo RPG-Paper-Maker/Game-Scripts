@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base.js";
-import { System, Datas, Manager, Scene } from "../index.js";
-import { MapObject, Position, ReactionInterpreter } from "../Core/index.js";
+import { Base } from "./Base";
+import { System, Datas, Manager, Scene } from "..";
+import { MapObject, Position, ReactionInterpreter } from "../Core";
 /** @class
  *  An event command for teleporting an object.
  *  @extends EventCommand.Base

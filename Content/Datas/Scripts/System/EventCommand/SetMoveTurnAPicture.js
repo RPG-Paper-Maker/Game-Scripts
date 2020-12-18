@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base.js";
-import { System, Manager, Datas } from "../index.js";
-import { Utils, Enum, ScreenResolution } from "../Common/index.js";
+import { Base } from "./Base";
+import { System, Manager, Datas } from "..";
+import { Utils, Enum, ScreenResolution } from "../Common";
 var PictureKind = Enum.PictureKind;
 /** @class
  *  An event command for setting / moving / turning a picture.

@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base.js";
-import { Manager } from "../index.js";
-import { KeyEvent, Platform, ScreenResolution } from "../Common/index.js";
+import { Base } from "./Base";
+import { Manager } from "..";
+import { KeyEvent, Platform, ScreenResolution } from "../Common";
 /** @class
  *  An event command for entering a number inside a variable.
  *  @extends EventCommand

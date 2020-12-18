@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Enum, Utils } from "../Common/index.js";
+import { Enum, Utils } from "../Common";
 var MountainCollisionKind = Enum.MountainCollisionKind;
-import { SpecialElement } from "./SpecialElement.js";
+import { SpecialElement } from "./SpecialElement";
 /** @class
  *  A mountain of the game.
  *  @extends SystemSpecialElement

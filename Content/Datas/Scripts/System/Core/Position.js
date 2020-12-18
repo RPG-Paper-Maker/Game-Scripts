@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Portion } from "./Portion.js";
-import { Constants, Mathf } from "../Common/index.js";
-import { Datas } from "../index.js";
+import { Portion } from "./Portion";
+import { Constants, Mathf } from "../Common";
+import { Datas } from "..";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  The data class for position.

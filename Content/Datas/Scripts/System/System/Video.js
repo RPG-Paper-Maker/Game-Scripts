@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base.js";
-import { Datas, System } from "../index.js";
-import { Constants, Paths, Utils } from "../Common/index.js";
+import { Base } from "./Base";
+import { Datas, System } from "..";
+import { Constants, Paths, Utils } from "../Common";
 /** @class
  *  A video of the game.
  *  @property {string} name The video name

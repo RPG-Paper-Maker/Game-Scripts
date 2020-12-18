@@ -8,10 +8,10 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Portion } from "../Core/index.js";
-import { Enum } from "../Common/index.js";
+import { Portion } from "../Core";
+import { Enum } from "../Common";
 var EventCommandKind = Enum.EventCommandKind;
-import { EventCommand, Manager, Datas } from "../index.js";
+import { EventCommand, Manager, Datas } from "..";
 /** @class
  *  A static class for some events functions.
  */

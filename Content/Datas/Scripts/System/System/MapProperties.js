@@ -8,13 +8,13 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base.js";
+import { Base } from "./Base";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
-import { Datas, Core, Manager } from "../index.js";
-import { PlaySong } from "./PlaySong.js";
-import { DynamicValue } from "./DynamicValue.js";
-import { MapObject } from "./MapObject.js";
-import { Enum, Constants } from "../Common/index.js";
+import { Datas, Core, Manager } from "..";
+import { PlaySong } from "./PlaySong";
+import { DynamicValue } from "./DynamicValue";
+import { MapObject } from "./MapObject";
+import { Enum, Constants } from "../Common";
 var SongKind = Enum.SongKind;
 var PictureKind = Enum.PictureKind;
 /** @class

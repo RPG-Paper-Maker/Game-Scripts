@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base.js";
-import { System, Manager } from "../index.js";
-import { Mathf } from "../Common/index.js";
+import { Base } from "./Base";
+import { System, Manager } from "..";
+import { Mathf } from "../Common";
 /** @class
 *   An event command for modifying a currency value
 *   @extends EventCommand

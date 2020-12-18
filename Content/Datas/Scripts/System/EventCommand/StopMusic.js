@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base.js";
-import { EventCommand, System, Manager } from "../index.js";
-import { Enum } from "../Common/index.js";
+import { Base } from "./Base";
+import { EventCommand, System, Manager } from "..";
+import { Enum } from "../Common";
 var SongKind = Enum.SongKind;
 /** @class
  *  An event command for stopping the music.

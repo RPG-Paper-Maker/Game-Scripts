@@ -8,10 +8,10 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { MapElement } from "./index.js";
-import { Sprite } from "./index.js";
-import { Utils, Constants } from "../Common/index.js";
-import { Datas } from "../index.js";
+import { MapElement } from ".";
+import { Sprite } from ".";
+import { Utils, Constants } from "../Common";
+import { Datas } from "..";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  A mountain in the map.

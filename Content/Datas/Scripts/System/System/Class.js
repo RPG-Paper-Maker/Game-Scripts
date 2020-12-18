@@ -8,10 +8,10 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Translatable } from "./Translatable.js";
-import { StatisticProgression } from "./StatisticProgression.js";
-import { ClassSkill } from "./ClassSkill.js";
-import { Utils } from "../Common/index.js";
+import { Translatable } from "./Translatable";
+import { StatisticProgression } from "./StatisticProgression";
+import { ClassSkill } from "./ClassSkill";
+import { Utils } from "../Common";
 /** @class
  *  A class of the game.
  *  @extends System.Translatable

@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Mathf } from "../Common/index.js";
+import { Mathf } from "../Common";
 /** @class
  *  The data class for anchors.
  *  @property {{x: number, y: number}} [MIDDLE_TOP={x: 0, y: 1}]
@@ -26,6 +26,11 @@ import { Mathf } from "../Common/index.js";
  *  @param {number} y the y anchors (capped from 0 to 1)
  */
 export class Anchor2D {
+    /**
+     * The system
+     * @param x
+     * @param y
+     */
     constructor(x = 0.5, y = 0) {
         this.x = Mathf.clamp(x, 0, 1);
         this.y = Mathf.clamp(y, 0, 1);

@@ -8,11 +8,11 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Enum, Interpreter, Utils, Platform } from "../Common/index.js";
+import { Enum, Interpreter, Utils, Platform } from "../Common";
 var CharacterKind = Enum.CharacterKind;
-import { Datas, System, Graphic } from "../index.js";
-import { Skill } from "./Skill.js";
-import { Item } from "./Item.js";
+import { Datas, System, Graphic } from "..";
+import { Skill } from "./Skill";
+import { Item } from "./Item";
 /** @class
  *  A character in the team/hidden/reserve.
  *  @property {CharacterKind} k The kind of the character (hero or monster)

@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
-import { Datas } from "../index.js";
-import { ScreenResolution, Platform, Utils, IO, Paths } from "../Common/index.js";
-import { Stack } from "./Stack.js";
+import { Datas } from "..";
+import { ScreenResolution, Platform, Utils, IO, Paths } from "../Common";
+import { Stack } from "./Stack";
 /** @class
  *  The GL class handling some 3D stuff.
  */

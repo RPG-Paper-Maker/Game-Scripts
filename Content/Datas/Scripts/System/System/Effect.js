@@ -8,14 +8,14 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base.js";
-import { Utils, Enum, Constants, Interpreter, Mathf } from "../Common/index.js";
+import { Base } from "./Base";
+import { Utils, Enum, Constants, Interpreter, Mathf } from "../Common";
 var EffectKind = Enum.EffectKind;
 var DamagesKind = Enum.DamagesKind;
 var EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 var CharacterKind = Enum.CharacterKind;
-import { System, Manager, Datas } from "../index.js";
-import { Player, ReactionInterpreter } from "../Core/index.js";
+import { System, Manager, Datas } from "..";
+import { Player, ReactionInterpreter } from "../Core";
 /** @class
  *  An effect of a common skill item.
  *  @property {EffectKind} kind The kind of effect

@@ -8,8 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { System, Datas } from "../index.js";
-import { IO, Paths, Utils } from "../Common/index.js";
+import { System, Datas } from "..";
+import { IO, Paths, Utils } from "../Common";
 /** @class
  *  All the troops datas.
  *  @property {System.Troop[]} list List of all the troops of the game according

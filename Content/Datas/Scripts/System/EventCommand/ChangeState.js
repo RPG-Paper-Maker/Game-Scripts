@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base.js";
-import { System, EventCommand, Manager, Scene } from "../index.js";
-import { MapObject } from "../Core/index.js";
+import { Base } from "./Base";
+import { System, EventCommand, Manager, Scene } from "..";
+import { MapObject } from "../Core";
 /** @class
  *  An event command for changing an object state.
  *  @extends EventCommand

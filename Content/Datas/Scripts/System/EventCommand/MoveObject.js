@@ -8,12 +8,12 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base.js";
-import { System, Manager, Datas, EventCommand } from "../index.js";
-import { Enum, Utils, Mathf } from "../Common/index.js";
+import { Base } from "./Base";
+import { System, Manager, Datas, EventCommand } from "..";
+import { Enum, Utils, Mathf } from "../Common";
 var CommandMoveKind = Enum.CommandMoveKind;
 var Orientation = Enum.Orientation;
-import { MapObject } from "../Core/index.js";
+import { MapObject } from "../Core";
 /** @class
  *  An event command for moving object.
  *  @extends EventCommand.Base

@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Translatable } from "./Translatable.js";
+import { Translatable } from "./Translatable";
 /** @class
  *  A weapon/armor kind of the game.
  *  @property {string} name The name of the weapon / armor kind

@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Node } from "./index.js";
-import { Utils, Platform } from "../Common/index.js";
-import { EventCommand, Manager } from "../index.js";
+import { Node } from ".";
+import { Utils, Platform } from "../Common";
+import { EventCommand, Manager } from "..";
 /** @class
  *  A reaction command interpreter.
  *  @property {MapObject} currentSender Current event sender (null for System

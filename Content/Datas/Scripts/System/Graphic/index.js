@@ -8,10 +8,10 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-export * from "./Base.js";
-export * from "./Keyboard.js";
-export * from "./Message.js";
-export * from "./Player.js";
-export * from "./Save.js";
-export * from "./Setting.js";
-export * from "./Text.js";
+export * from "./Base";
+export * from "./Keyboard";
+export * from "./Message";
+export * from "./Player";
+export * from "./Save";
+export * from "./Setting";
+export * from "./Text";

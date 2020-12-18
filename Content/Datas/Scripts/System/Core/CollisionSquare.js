@@ -8,8 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Datas } from "../index.js";
-import { Utils } from "../Common/index.js";
+import { Datas } from "..";
+import { Utils } from "../Common";
 /** @class
  *  A collision settings in a texture square.
  *  @property {Rectangle} rect Percentage of the rect limitation
