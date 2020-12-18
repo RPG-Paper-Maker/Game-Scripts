@@ -8,10 +8,10 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Enum, Constants, Paths, Utils, Platform } from "../Common/index.js";
+import { Enum, Constants, Paths, Utils, Platform } from "../Common";
 var CustomShapeKind = Enum.CustomShapeKind;
-import { Base } from "./Base.js";
-import { Datas } from "../index.js";
+import { Base } from "./Base";
+import { Datas } from "..";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  A shape of the game.

@@ -8,8 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { IO, Paths, Enum } from "../Common/index.js";
-import { System, Datas } from "../index.js";
+import { IO, Paths, Enum } from "../Common";
+import { System, Datas } from "..";
 var CustomShapeKind = Enum.CustomShapeKind;
 /** @class
  *  All the shapes datas.

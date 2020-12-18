@@ -8,11 +8,11 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Enum, Constants, Platform } from "../Common/index.js";
+import { Enum, Constants, Platform } from "../Common";
 var PictureKind = Enum.PictureKind;
-import { Base } from "./Base.js";
-import { TextureBundle, Picture2D, Autotiles } from "../Core/index.js";
-import { Datas, Manager } from "../index.js";
+import { Base } from "./Base";
+import { TextureBundle, Picture2D, Autotiles } from "../Core";
+import { Datas, Manager } from "..";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  A tileset of the game.

@@ -9,14 +9,14 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
-import { Enum, Mathf } from "../Common/index.js";
-import { Frame } from "./Frame.js";
+import { Enum, Mathf } from "../Common";
+import { Frame } from "./Frame";
 var BattlerStep = Enum.BattlerStep;
 var CharacterKind = Enum.CharacterKind;
 var ElementMapKind = Enum.ElementMapKind;
-import { ProgressionTable } from "../System/index.js";
-import { Manager, Datas } from "../index.js";
-import { Sprite } from "./Sprite.js";
+import { ProgressionTable } from "../System";
+import { Manager, Datas } from "..";
+import { Sprite } from "./Sprite";
 /** @class
  *  A battler in a battle (ally or ennemy).
  *  @param {Player} player The character properties

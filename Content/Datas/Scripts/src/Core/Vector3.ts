@@ -9,7 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import {THREE_TYPE} from "../globals";
+
+const THREE: typeof THREE_TYPE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /**
  * The data class who hold 3D coordinates.

@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Datas, Common, Core, EventCommand, Graphic, Manager, System, Scene } from "../index.js";
+import { Datas, Common, Core, EventCommand, Graphic, Manager, System, Scene } from "..";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 const { Howl } = require('./Content/Datas/Scripts/Libs/howler.js');
 /** @class

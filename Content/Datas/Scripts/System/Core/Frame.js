@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Manager, Datas } from "../index.js";
+import { Manager, Datas } from "..";
 /** @class
  *  A frame for updating animations (characters, battlers, etc.).
  *  @param {number} duration The frame duration

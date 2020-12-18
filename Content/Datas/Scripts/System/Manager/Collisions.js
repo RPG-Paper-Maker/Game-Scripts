@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Mathf, Constants, Enum } from "../Common/index.js";
-import { Position, Portion } from "../Core/index.js";
-import { Datas, Manager } from "../index.js";
+import { Mathf, Constants, Enum } from "../Common";
+import { Position, Portion } from "../Core";
+import { Datas, Manager } from "..";
 var ElementMapKind = Enum.ElementMapKind;
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
