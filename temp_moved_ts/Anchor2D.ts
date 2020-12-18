@@ -42,6 +42,11 @@ export class Anchor2D {
     public x: number;
     public y: number;
 
+    /**
+     * The system
+     * @param x 
+     * @param y 
+     */
     constructor(x = 0.5, y = 0) {
         this.x = Mathf.clamp(x, 0, 1);
         this.y = Mathf.clamp(y, 0, 1);
