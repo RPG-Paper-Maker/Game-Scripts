@@ -335,6 +335,59 @@ class Mathf {
         let dot = u.dot(v);
         return (dot / (lu * lv)) * lu;
     }
+    /**
+ * Convert a value to a percent.
+ *
+ * @export
+ * @param {number} a
+ * @param {number} b
+ * @return {number}
+ */
+    static percentOf(a, b, large = false) {
+        return a / b * (large ? 100 : 1);
+    }
+    /**
+     * Convert a value to a rounded percent.
+     *
+     * @export
+     * @param {number} a The value to convert
+     * @param {number} b The target max value
+     * @param {boolean} large convert the percent to a small value (0 ~ 1) or a large value (0 ~ 100)
+     * @return {number}
+     */
+    static roundedPercentOf(a, b, large = false) {
+        return Math.round(this.percentOf(a, b, large));
+    }
+    /**
+     * Convert a percent to a number
+     *
+     * @export
+     * @param {number} a
+     * @param {number} b
+     * @param {boolean} [large=false]
+     * @return {*}  {number}
+     */
+    static numberOf(a, b, large = true) {
+        if (a > 1 && !large || b > 1 && !large) {
+            throw new Error("value out of range! (0~1) please enable large mode if you want to use integer!");
+        }
+        return a * b / (large ? 100 : 1);
+    }
+    /**
+     * Convert a percent to a rounded number
+     *
+     * @export
+     * @param {number} a
+     * @param {number} b
+     * @param {boolean} [large=true]
+     * @return {*}  {number}
+     */
+    static roundedNumberOf(a, b, large = true) {
+        if (a > 1 && !large || b > 1 && !large) {
+            throw new Error("value out of range! (0~1) please enable large mode if you want to use integer!");
+        }
+        return Math.round(this.numberOf(a, b));
+    }
 }
 Mathf.OPERATORS_COMPARE = [
     function (a, b) { return a === b; },

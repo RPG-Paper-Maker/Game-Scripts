@@ -12,7 +12,7 @@ import { Base } from "./Base.js";
 import { Utils, Enum } from "../Common/index.js";
 import { Position } from "../Core/index.js";
 var Orientation = Enum.Orientation;
-import { Datas, Manager } from "../index.js";
+import { Datas, Manager } from "..";
 /** @class
  *  A detection of the game.
  *  @extends System.Base

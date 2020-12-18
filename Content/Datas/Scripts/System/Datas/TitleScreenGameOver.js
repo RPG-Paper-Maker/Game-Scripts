@@ -8,8 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { System, Graphic, Datas, Manager, Scene } from "../index.js";
-import { IO, Paths, Utils, Enum } from "../Common/index.js";
+import { System, Graphic, Datas, Manager, Scene } from "..";
+import { IO, Paths, Utils, Enum } from "../Common";
 var SongKind = Enum.SongKind;
 var Align = Enum.Align;
 var TitleSettingKind = Enum.TitleSettingKind;

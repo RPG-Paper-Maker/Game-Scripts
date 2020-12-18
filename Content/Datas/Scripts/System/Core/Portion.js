@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
-import { Constants } from "../Common/index.js";
-import { Datas } from "../index.js";
+import { Constants } from "../Common";
+import { Datas } from "..";
 /** @class
  *  The data class for portion.
  *  @param {number} x

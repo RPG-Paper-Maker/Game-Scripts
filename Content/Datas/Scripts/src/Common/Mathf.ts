@@ -10,8 +10,8 @@
 */
 
 import { Constants } from ".";
-import { Datas } from "..";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { Datas, Core } from "..";
+
 
 /** @class
  *  @static
@@ -20,24 +20,24 @@ const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 class Mathf {
 
     static OPERATORS_COMPARE =
-        [
-            function (a: number, b: number) { return a === b },
-            function (a: number, b: number) { return a !== b },
-            function (a: number, b: number) { return a >= b },
-            function (a: number, b: number) { return a <= b },
-            function (a: number, b: number) { return a > b },
-            function (a: number, b: number) { return a < b }
-        ];
+    [
+        function(a: number, b: number) { return a === b },
+        function(a: number, b: number) { return a !== b },
+        function(a: number, b: number) { return a >= b },
+        function(a: number, b: number) { return a <= b },
+        function(a: number, b: number) { return a > b },
+        function(a: number, b: number) { return a < b }
+    ];
 
     static OPERATORS_NUMBERS =
-        [
-            function (a: number, b: number) { return b },
-            function (a: number, b: number) { return a + b },
-            function (a: number, b: number) { return a - b },
-            function (a: number, b: number) { return a * b },
-            function (a: number, b: number) { return a / b },
-            function (a: number, b: number) { return a % b }
-        ];
+    [
+        function(a: number, b: number) { return b },
+        function(a: number, b: number) { return a + b },
+        function(a: number, b: number) { return a - b },
+        function(a: number, b: number) { return a * b },
+        function(a: number, b: number) { return a / b },
+        function(a: number, b: number) { return a % b }
+    ];
 
     constructor() {
         throw new Error("This is a static class!");
@@ -51,8 +51,9 @@ class Mathf {
      * @param {any} splitThis? - The context of splitCallback
      * @returns {[T[]]} - The fully splitted array from array
      */
-    static split<T>(array: T[], splitCallback: (elem: T, i: number, self: T[])
-        => boolean, splitThis?: any): T[][] {
+    static split<T>(array: T[], splitCallback: (elem: T, i: number, self: T[]) 
+        => boolean, splitThis?: any): T[][]
+    {
         const newArray: T[][] = [];
         let newGroup: T[] = [];
         // forEach is tested to be the fastest among sandboxes including NW.js
@@ -324,30 +325,32 @@ class Mathf {
     /** 
      *  Indicate if a point is inside a rectangle.
      *  @static
-     *  @param {THREE.Vector2} p The point to test
+     *  @param {Core.Vector2} p The point to test
      *  @param {number} x1 The x left point of the rectangle
      *  @param {number} x2 The x right point of the rectangle
      *  @param {number} y1 The y top point of the rectangle
      *  @param {number} y2 The y bottom point of the rectangle
      *  @returns {boolean}
      */
-    static isPointOnRectangle(p: typeof THREE.Vector2, x1: number, x2: number,
-        y1: number, y2: number): boolean {
+    static isPointOnRectangle(p: Core.Vector2, x1: number, x2: number, 
+        y1: number, y2: number): boolean
+    {
         return p.x >= x1 && p.x <= x2 && p.y >= y1 && p.y <= y2;
     }
 
     /** 
      *  Indicate if a point is inside a triangle.
      *  @static
-     *  @param {THREE.Vector2} p The point to test
-     *  @param {THREE.Vector2} p0 One of the point of the triangle
-     *  @param {THREE.Vector2} p1 One of the point of the triangle
-     *  @param {THREE.Vector2} p2 One of the point of the triangle
+     *  @param {Core.Vector2} p The point to test
+     *  @param {Core.Vector2} p0 One of the point of the triangle
+     *  @param {Core.Vector2} p1 One of the point of the triangle
+     *  @param {Core.Vector2} p2 One of the point of the triangle
      *  @returns {boolean}
      */
-    static isPointOnTriangle(p: typeof THREE.Vector2, p0: typeof THREE.Vector2,
-        p1: typeof THREE.Vector2, p2: typeof THREE.Vector2): boolean {
-        let a = 1 / 2 * (-p1.y * p2.x + p0.y * (-p1.x + p2.x) + p0.x * (p1.y - p2
+    static isPointOnTriangle(p: Core.Vector2, p0: Core.Vector2, 
+        p1: Core.Vector2, p2: Core.Vector2): boolean
+    {
+        let a = 1/2 * (-p1.y * p2.x + p0.y * (-p1.x + p2.x) + p0.x * (p1.y - p2
             .y) + p1.x * p2.y);
         let sign = a < 0 ? -1 : 1;
         let s = (p0.y * p2.x - p0.x * p2.y + (p2.y - p0.y) * p.x + (p0.x - p2.x)
@@ -360,19 +363,20 @@ class Mathf {
     /** 
      *  Get the orthogonal projection between two vectors.
      *  @static
-     *  @param {THREE.Vector3} u
-     *  @param {THREE.Vector3} v
+     *  @param {Core.Vector3} u
+     *  @param {Core.Vector3} v
      *  @returns {number}
      */
-    static orthogonalProjection(u: typeof THREE.Vector3, v: typeof THREE.Vector3
-    ): number {
+    static orthogonalProjection(u: Core.Vector3, v: Core.Vector3
+        ): number
+    {
         let lu = u.length();
         let lv = v.length();
         let dot = u.dot(v);
         return (dot / (lu * lv)) * lu;
     }
 
-    /**
+        /**
      * Convert a value to a percent.
      *
      * @export

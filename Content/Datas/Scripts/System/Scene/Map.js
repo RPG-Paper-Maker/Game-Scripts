@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
-import { Base } from "./Base.js";
-import { Enum, Utils, Constants, IO, Paths } from "../Common/index.js";
+import { Base } from "./Base";
+import { Enum, Utils, Constants, IO, Paths } from "../Common";
 var PictureKind = Enum.PictureKind;
 import { System, Datas, Scene, Manager } from "../index.js";
 import { Position, Portion, MapPortion, Camera, ReactionInterpreter } from "../Core/index.js";

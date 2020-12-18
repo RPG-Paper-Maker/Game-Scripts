@@ -8,8 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Datas, Manager } from "./index.js";
-import { Utils, KeyEvent, Platform } from "./Common/index.js";
+import { Datas, Manager } from ".";
+import { Utils, KeyEvent, Platform } from "./Common";
 let loadedDatas = false;
 /**
  *  Initialize the game stack and datas.

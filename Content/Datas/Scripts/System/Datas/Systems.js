@@ -8,11 +8,11 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { IO, Paths, Platform, ScreenResolution, Utils, Constants, Enum } from "../Common/index.js";
-import * as System from "../System/index.js";
-import { Manager, Datas, Scene } from "../index.js";
+import { IO, Paths, Platform, ScreenResolution, Utils, Constants, Enum } from "../Common";
+import * as System from "../System";
+import { Manager, Datas, Scene } from "..";
 var SongKind = Enum.SongKind;
-import { Position, MapPortion } from "../Core/index.js";
+import { Position, MapPortion } from "../Core";
 /** @class
 *   All the System datas.
 *   @static

@@ -8,10 +8,10 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Enum, Utils } from "../Common/index.js";
+import { Enum, Utils } from "../Common";
 var PrimitiveValueKind = Enum.PrimitiveValueKind;
-import { Base } from "./Base.js";
-import { DynamicValue } from "./DynamicValue.js";
+import { Base } from "./Base";
+import { DynamicValue } from "./DynamicValue";
 /** @class
  *  A parameter of a reaction.
  *  @extends System.Base

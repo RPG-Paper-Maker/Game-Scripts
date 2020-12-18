@@ -46,3 +46,5 @@ export * from "./TextureBundle";
 export * from "./Tree";
 export * from "./WindowBox";
 export * from "./WindowChoices";
+export * from "./Vector3";
+export * from "./Vector2";
