@@ -9,11 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { ScreenResolution, Enum, Mathf } from "../Common";
+//const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import {THREE} from "../Globals";
 import { System, Manager } from "..";
 import { MapObject } from "./MapObject";
 import Orientation = Enum.Orientation;
+import { Vector3 } from ".";
 
 /** @class
  *  The camera of the current map.
@@ -23,12 +25,12 @@ import Orientation = Enum.Orientation;
  */
 class Camera {
     
-    public perspectiveCamera: typeof THREE.PerspectiveCamera;
-    public orthographicCamera: typeof THREE.OrthographicCamera;
+    public perspectiveCamera: THREE.PerspectiveCamera;
+    public orthographicCamera:  THREE.OrthographicCamera;
     public isPerspective: boolean;
     public target: MapObject;
-    public targetPosition: typeof THREE.Vector3;
-    public targetOffset: typeof THREE.Vector3;
+    public targetPosition: Vector3;
+    public targetOffset:   Vector3;
     public distance: number;
     public horizontalAngle: number;
     public verticalAngle: number;
@@ -80,7 +82,7 @@ class Camera {
      *  @param {THREE.Vector3} p2 The second position
      *  @returns {number}
      */
-    getHorizontalAngle(p1: typeof THREE.Vector3, p2: typeof THREE.Vector3): 
+    getHorizontalAngle(p1: THREE.Vector3, p2: THREE.Vector3): 
         number
     {
         return Math.atan2(p2.z - p1.z, p2.x - p1.x) * 180 / Math.PI;
@@ -92,7 +94,7 @@ class Camera {
      *  @param {THREE.Vector3} p2 The second position
      *  @returns {number}
      */
-    getVerticalAngle(p1: typeof THREE.Vector3, p2: typeof THREE.Vector3): number {
+    getVerticalAngle(p1: Vector3, p2:  Vector3): number {
         let x = p2.x - p1.x;
         let y = p2.y - p1.y;
         let z = p2.z - p1.z;
@@ -129,7 +131,7 @@ class Camera {
      *  Get the perspective or orthographic camera.
      *  @returns {THREE.Camera}
      */
-    getThreeCamera(): typeof THREE.Camera {
+    getThreeCamera(): THREE.Camera {
         return this.isPerspective ? this.perspectiveCamera : this
             .orthographicCamera;
     }
