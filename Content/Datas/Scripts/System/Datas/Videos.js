@@ -33,7 +33,7 @@ class Videos {
      *  @returns {System.Video}
      */
     static get(id) {
-        return Datas.Base.get(id, this.list, "video");
+        return id === -1 ? new System.Video() : Datas.Base.get(id, this.list, "video");
     }
 }
 export { Videos };

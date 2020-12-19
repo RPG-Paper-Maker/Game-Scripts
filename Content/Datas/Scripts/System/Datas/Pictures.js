@@ -74,9 +74,9 @@ class Pictures {
      *  @returns {Picture}
      */
     static get(kind, id) {
-        return (kind === PictureKind.None) ? new System.Picture() : Datas.Base
-            .get(id, this.list[kind], "picture " + System.Picture
-            .pictureKindToString(kind));
+        return (kind === PictureKind.None || id === -1) ? new System.Picture()
+            : Datas.Base.get(id, this.list[kind], "picture " + System.Picture
+                .pictureKindToString(kind));
     }
     /**
      *  Get the corresponding picture list by kind.
@@ -93,7 +93,7 @@ class Pictures {
     */
     static getPictureCopy(kind, id) {
         let picture = this.get(kind, id);
-        return picture ? picture.picture.createCopy() : new Picture2D;
+        return picture && picture.picture ? picture.picture.createCopy() : new Picture2D;
     }
 }
 export { Pictures };

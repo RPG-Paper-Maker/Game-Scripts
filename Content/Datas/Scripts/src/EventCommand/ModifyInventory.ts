@@ -35,6 +35,7 @@ class ModifyInventory extends Base {
         this.itemID = System.DynamicValue.createValueCommand(command, iterator);
         this.operation = command[iterator.i++];
         this.value = System.DynamicValue.createValueCommand(command, iterator);
+        console.log(this)
     }
 
     /** 

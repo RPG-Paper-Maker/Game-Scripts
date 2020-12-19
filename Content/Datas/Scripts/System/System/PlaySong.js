@@ -21,8 +21,9 @@ import { System, Manager } from "../index.js";
  */
 class PlaySong extends Base {
     constructor(kind, json) {
-        super(json);
+        super();
         this.kind = kind;
+        this.read(json);
     }
     /**
      *  Read the JSON associated to the play song.

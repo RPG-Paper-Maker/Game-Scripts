@@ -27,7 +27,7 @@ class Item extends Base {
     public graphicNb: Graphic.Text;
     public graphicInformations: Graphic.SkillItem;
 
-    constructor(item: Core.Item, nbItem: number = 0) {
+    constructor(item: Core.Item, nbItem?: number) {
         super();
 
         this.item = item;

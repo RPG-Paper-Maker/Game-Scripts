@@ -22,6 +22,7 @@ import { System, Manager } from "..";
  *  play song
  */
 class PlaySong extends Base {
+    
     static previousMusic: PlaySong = null;
     static currentPlayingMusic: PlaySong = null;
 
@@ -34,9 +35,9 @@ class PlaySong extends Base {
     end: System.DynamicValue;
 
     constructor(kind: SongKind, json?: Record<string, any>) {
-        super(json);
-
+        super();
         this.kind = kind;
+        this.read(json);
     }
 
     /** 

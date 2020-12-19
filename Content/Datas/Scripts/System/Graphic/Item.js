@@ -18,7 +18,7 @@ var Align = Enum.Align;
  *  @param {number} nbItem The number of occurence of the selected item
  */
 class Item extends Base {
-    constructor(item, nbItem = 0) {
+    constructor(item, nbItem) {
         super();
         this.item = item;
         this.system = item.getItemInformations();

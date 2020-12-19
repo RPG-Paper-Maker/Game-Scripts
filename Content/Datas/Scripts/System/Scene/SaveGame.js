@@ -45,7 +45,6 @@ class SaveGame extends SaveLoadGame {
      */
     onKeyPressed(key) {
         super.onKeyPressed(key);
-        console.log(key);
         // If action, save in the selected slot
         if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Action)) {
             this.loading = true;

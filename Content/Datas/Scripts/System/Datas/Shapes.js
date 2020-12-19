@@ -69,9 +69,9 @@ class Shapes {
      *  @returns {System.Shape}
      */
     static get(kind, id) {
-        return kind === CustomShapeKind.None ? new System.Shape() : Datas.Base
-            .get(id, this.list[kind], "song " + System.Shape
-            .customShapeKindToString(kind));
+        return kind === CustomShapeKind.None || id === -1 ? new System.Shape() :
+            Datas.Base.get(id, this.list[kind], "song " + System.Shape
+                .customShapeKindToString(kind));
     }
 }
 export { Shapes };

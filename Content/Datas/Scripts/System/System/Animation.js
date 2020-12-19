@@ -17,6 +17,7 @@ import { Datas } from "../index.js";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  An animation of a skill / item / weapon or for display animation command.
+ *  @extends System.Base
  *  @param {Record<string, any>} [json=undefined] Json object describing the
  *  animation
  */

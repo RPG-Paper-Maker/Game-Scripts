@@ -81,30 +81,34 @@ class MapObject {
      *  @returns {Promise<StructSearchResult>}
      */
     static searchInMap(objectID, thisObject) {
+        let object = null;
         switch (objectID) {
             case -1: // This object
                 if (thisObject.isInScene || thisObject.isHero || thisObject
                     .isStartup) {
-                    return {
-                        object: thisObject,
-                        id: thisObject.system.id
-                    };
+                    object = thisObject;
                 }
                 objectID = thisObject.system.id;
                 break;
             case 0: // Hero
-                return {
-                    object: Manager.Stack.game.hero,
-                    id: Manager.Stack.game.hero.system.id
-                };
+                object = Manager.Stack.game.hero,
+                    objectID = Manager.Stack.game.hero.system.id;
             default:
                 break;
         }
-        // First search in the moved objects
+        // Check if direct
         let globalPortion = Manager.Stack.currentMap.allObjects[objectID]
             .getGlobalPortion();
         let mapsDatas = Manager.Stack.game.getPotionsDatas(Manager.Stack
             .currentMap.id, globalPortion);
+        if (objectID !== null) {
+            return {
+                object: object,
+                id: objectID,
+                datas: mapsDatas
+            };
+        }
+        // First search in the moved objects
         let movedObjects = mapsDatas.m;
         let moved = null;
         let i, l;

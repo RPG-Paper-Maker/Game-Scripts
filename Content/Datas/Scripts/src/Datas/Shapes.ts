@@ -82,8 +82,8 @@ class Shapes {
      *  @returns {System.Shape}
      */
     static get(kind: CustomShapeKind, id: number): System.Shape {
-        return kind === CustomShapeKind.None ? new System.Shape() : Datas.Base
-            .get(id, this.list[kind], "song " + System.Shape
+        return kind === CustomShapeKind.None || id === -1 ? new System.Shape() : 
+            Datas.Base.get(id, this.list[kind], "song " + System.Shape
             .customShapeKindToString(kind));
     }
 }

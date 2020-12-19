@@ -40,7 +40,8 @@ class Videos {
      *  @returns {System.Video}
      */
     static get(id: number): System.Video {
-        return Datas.Base.get(id, this.list, "video");
+        return id === -1 ? new System.Video() : Datas.Base.get(id, this.list, 
+            "video");
     }
 }
 

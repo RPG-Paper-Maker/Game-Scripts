@@ -40,12 +40,7 @@ class Platform {
     static showErrorMessage(msg) {
         if (firstError) {
             firstError = false;
-            const dialog = require('electron').remote.dialog;
-            dialog.showMessageBoxSync({
-                title: 'Error',
-                type: 'error',
-                message: msg
-            });
+            ipc.send('window-error', msg);
             throw new Error(msg);
         }
     }

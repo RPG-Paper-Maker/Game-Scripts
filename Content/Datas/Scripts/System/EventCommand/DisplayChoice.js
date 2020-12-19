@@ -10,7 +10,7 @@
 */
 import { Base } from "./Base.js";
 import { System, Graphic, Datas } from "../index.js";
-import { ScreenResolution, Enum } from "../Common/index.js";
+import { ScreenResolution, Enum, Constants } from "../Common/index.js";
 import { WindowChoices, WindowBox } from "../Core/index.js";
 var Align = Enum.Align;
 /** @class
@@ -31,18 +31,12 @@ class DisplayChoice extends Base {
         let next;
         while (iterator.i < l) {
             next = command[iterator.i];
-            if (next === "") {
-                iterator.i++;
-                if (lang !== null) {
-                    this.choices.push(lang.name());
-                }
+            iterator.i++;
+            if (next !== Constants.STRING_DASH) {
                 lang = new System.Translatable();
-                iterator.i++;
+                lang.getCommand(command, iterator);
+                this.choices.push(lang.name());
             }
-            lang.getCommand(command, iterator);
-        }
-        if (lang !== null) {
-            this.choices.push(lang.name());
         }
         // Determine slots width
         l = this.choices.length;

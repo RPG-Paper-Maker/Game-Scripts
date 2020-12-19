@@ -10,6 +10,7 @@
 */
 /**
  *  The class who handles plugins of RPG Paper Maker.
+ *  @static
  *  @author Nio Kasgami
  */
 class Plugins {
