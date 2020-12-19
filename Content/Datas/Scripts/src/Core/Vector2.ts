@@ -9,9 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import {THREE_TYPE} from "../globals";
+import { THREE } from "../Globals";
 
-const THREE: typeof THREE_TYPE  = require('./Content/Datas/Scripts/Libs/src/Three.js');
 /**
  * The data class who hold 2D coordinates.
  * It's used as an API bridge between the user and Three.js 
@@ -28,10 +27,10 @@ export class Vector2 extends THREE.Vector2 {
      * @param y the y axis
      */
     constructor(x = 0, y = 0) {
-        super(x, y); 
+        super(x, y);
     }
 
-    reset(){
+    reset() {
         this.x = 0;
         this.y = 0;
     }

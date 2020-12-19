@@ -6,6 +6,7 @@
  */
 
 import * as three from "three";
+import * as howler from "howler";
 
-
-export var THREE_TYPE = three;
+export const THREE_TYPE: typeof three;
+export const HOWLER_TYPE: typeof howler;

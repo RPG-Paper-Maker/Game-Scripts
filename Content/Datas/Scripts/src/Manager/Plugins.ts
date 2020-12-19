@@ -16,7 +16,10 @@
  */
 class Plugins {
 
-    static plugins: Record<string, any> = {};
+    /**
+     * the object containing all the plugins.
+     */
+    private static plugins: Record<string, any> = {};
 
     constructor() {
         throw new Error("This is a static class");
@@ -40,7 +43,7 @@ class Plugins {
      * @param plugin
      * @returns {any}
      */
-    static fetch(plugin) {
+    static fetch(plugin: string): any {
         if (!this.plugins.hasOwnProperty(plugin)) {
             throw new Error("Unindenfied plugin error: " + plugin + " doesn't exist in the current workspace!");
         } else {
@@ -53,7 +56,7 @@ class Plugins {
      * @param id
      * @returns {boolean}
      */
-    static exists(id): boolean {
+    static exists(id: string): boolean {
         for (const plugins in this.plugins) {
             if (this.plugins.hasOwnProperty(plugins)) {
                 if (this.plugins[plugins].id === id) {
@@ -69,7 +72,7 @@ class Plugins {
      * @param plugin
      * @returns {any}
      */
-    static parameters(plugin) {
+    static parameters(plugin): any {
         return this.plugins[plugin].parameters;
     }
 
@@ -83,7 +86,7 @@ class Plugins {
     static merge(parent: string, child: string) {
         const par = this.plugins[parent].parameter;
         const chi = this.plugins[child].parameter;
-        this.plugins[parent].parameters = {...par, ...chi};
+        this.plugins[parent].parameters = { ...par, ...chi };
     }
 }
 
