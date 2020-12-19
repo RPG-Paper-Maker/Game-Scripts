@@ -11,23 +11,10 @@
 
 import { Mathf } from "../Common";
 
-/** @class
- *  The data class for anchors.
- *  @property {{x: number, y: number}} [MIDDLE_TOP={x: 0, y: 1}]
- *  @property {{x: number, y: number}} [MIDDLE={x: 0.5, y: 0.5}]
- *  @property {{x: number, y: number}} [MIDDLE_BOTTOM={x: 0.5, y: 0}]
- *  @property {{x: number, y: number}} [LEFT_TOP={x: 0, y: 1}]
- *  @property {{x: number, y: number}} [LEFT_MIDDLE={x: 0, y: 0.5}]
- *  @property {{x: number, y: number}} [LEFT_BOTTOM={x: 0, y: 0}]
- *  @property {{x: number, y: number}} [RIGHT_TOP={x: 1, y: 1}]
- *  @property {{x: number, y: number}} [RIGHT_MIDDLE={x: 1, y: 0.5}]
- *  @property {{x: number, y: number}} [RIGHT_BOTTOM={x: 1, y: 0}]
- *  @property {number} x the x anchors (capped from 0 to 1)
- *  @property {number} y the y anchors (capped from 0 to 1)
- *  @param {number} x the x anchors (capped from 0 to 1)
- *  @param {number} y the y anchors (capped from 0 to 1)
+/**
+ * The data class who manage Sprite anchor in 2D
  */
-export class Anchor2D {
+class Anchor2D {
 
     public static readonly MIDDLE_TOP = {x: 0, y: 1};
     public static readonly MIDDLE = {x: 0.5, y: 0.5};
@@ -43,7 +30,7 @@ export class Anchor2D {
     public y: number;
 
     /**
-     * The system
+     * The data class who manage sprite anchor in 2D
      * @param x 
      * @param y 
      */
