@@ -51,7 +51,9 @@ class PlaySong extends Base {
         this.songID = System.DynamicValue.createNumber(-1);
         this.volume = System.DynamicValue.createNumber(100);
         this.isStart = false;
+        this.start = System.DynamicValue.createNumber(0);
         this.isEnd = false;
+        this.end = null;
     }
     /**
      *  Initialize (for music effects).

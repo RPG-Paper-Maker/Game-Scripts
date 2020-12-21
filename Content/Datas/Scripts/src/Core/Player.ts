@@ -43,14 +43,14 @@ class Player {
     public stepLevelUp: number;
 
     constructor(kind?: CharacterKind, id?: number, instanceID?: number, skills?: 
-        Skill[], json?: Record<string, any>)
+        Skill[], name?: string, json?: Record<string, any>)
     {
         if (!Utils.isUndefined(kind)) {
             this.kind = kind;
             this.id = id;
             this.instid = instanceID;
             this.system = this.getSystem();
-            this.name = this.system.name;
+            this.name = Utils.isUndefined(name) ? this.system.name : name;
 
             // Skills
             let l = skills.length;
@@ -138,6 +138,7 @@ class Player {
         return {
             kind: this.kind,
             id: this.id,
+            name: this.name,
             instid: this.instid,
             sk: this.sk,
             stats: this.getSaveStat(),

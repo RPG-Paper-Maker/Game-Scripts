@@ -26,12 +26,13 @@ class SaveLoadGame extends Base {
     async load() {
         // Initialize games
         this.gamesDatas = [null, null, null, null];
-        let game;
+        let currentGame = Manager.Stack.game;
         for (let i = 1; i <= 4; i++) {
-            game = new Game(i);
-            await game.load();
-            this.initializeGame(game);
+            Manager.Stack.game = new Game(i);
+            await Manager.Stack.game.load();
+            this.initializeGame(Manager.Stack.game);
         }
+        Manager.Stack.game = currentGame;
         // Initialize windows
         this.windowTop = new WindowBox(20, 20, ScreenResolution.SCREEN_X - 40, 30);
         this.windowInformations = new WindowBox(120, 100, 500, 300, {

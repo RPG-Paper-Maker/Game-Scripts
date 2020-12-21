@@ -48,7 +48,7 @@ class PlayMusic extends Base {
         let volume = System.DynamicValue.createValueCommand(command, iterator);
         let isStart = Utils.numToBool(command[iterator.i++]);
         let start = System.DynamicValue.createValueCommand(command, iterator);
-        start = isStart ? start : null;
+        start = isStart ? start : System.DynamicValue.createNumber(0);
         let isEnd = Utils.numToBool(command[iterator.i++]);
         let end = System.DynamicValue.createValueCommand(command, iterator);
         end = isEnd ? end : null;

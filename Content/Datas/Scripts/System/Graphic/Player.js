@@ -30,7 +30,7 @@ class Player extends Base {
         let levelStat = Datas.BattleSystems.getLevelStatistic();
         let expStat = Datas.BattleSystems.getExpStatistic();
         // All the graphics
-        this.graphicName = new Graphic.Text(hero.name);
+        this.graphicName = new Graphic.Text(this.player.name);
         this.graphicClass = new Graphic.Text(cl.name(), { fontSize: 10 });
         this.graphicLevelName = new Graphic.Text(levelStat.name);
         this.graphicLevel = new Graphic.Text(Utils.numToString(this.player[levelStat.abbreviation]));

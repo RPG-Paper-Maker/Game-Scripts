@@ -110,6 +110,8 @@ class MenuInventory extends Base {
         }
         else {
             this.updateForTab();
+            this.substep = 0;
+            Manager.Stack.requestPaintHUD = true;
         }
         this.windowBoxUseItem.content.updateStats();
         Manager.Stack.requestPaintHUD = true;

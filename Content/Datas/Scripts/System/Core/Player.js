@@ -22,13 +22,13 @@ import { Item } from "./Item.js";
  *  @param {Record<string, any>} [json=undefined] Json object describing the items
  */
 class Player {
-    constructor(kind, id, instanceID, skills, json) {
+    constructor(kind, id, instanceID, skills, name, json) {
         if (!Utils.isUndefined(kind)) {
             this.kind = kind;
             this.id = id;
             this.instid = instanceID;
             this.system = this.getSystem();
-            this.name = this.system.name;
+            this.name = Utils.isUndefined(name) ? this.system.name : name;
             // Skills
             let l = skills.length;
             this.sk = new Array(l);
@@ -104,6 +104,7 @@ class Player {
         return {
             kind: this.kind,
             id: this.id,
+            name: this.name,
             instid: this.instid,
             sk: this.sk,
             stats: this.getSaveStat(),

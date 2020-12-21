@@ -10,7 +10,7 @@
 */
 import { Enum } from "../Common/index.js";
 var SongKind = Enum.SongKind;
-import { Datas } from "../index.js";
+import { Datas, System } from "../index.js";
 import { ProgressionTable } from "../System/index.js";
 import { Howl } from "../Globals.js";
 /** @class
@@ -90,6 +90,7 @@ class Songs {
      *  @returns {boolean} Indicates if the song is stopped
      */
     static stopSong(kind, time, seconds, pause = false) {
+        System.PlaySong.currentPlayingMusic = null;
         let current = new Date().getTime();
         let ellapsedTime = current - time;
         let currentHowl = this.currentHowl[kind];

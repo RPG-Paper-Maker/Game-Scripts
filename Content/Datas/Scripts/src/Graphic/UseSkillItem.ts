@@ -94,10 +94,10 @@ class UseSkillItem extends Base {
      */
     moveArrow(index: number) {
         if (!this.all) {
-            this.indexArrow = Mathf.mod(index, this.graphicCharacters.length);
             if (this.indexArrow !== index) {
                 Datas.Systems.soundCursor.playSound();
             }
+            this.indexArrow = Mathf.mod(index, this.graphicCharacters.length);
             Manager.Stack.currentMap.targets = [Manager.Stack.game.teamHeroes[
                 this.indexArrow]];
             Manager.Stack.requestPaintHUD = true;
