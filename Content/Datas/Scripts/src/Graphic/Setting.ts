@@ -17,9 +17,7 @@ import { Graphic } from "..";
 
 /** @class
  *  A class for all settings to display in screen.
- *  @property {GraphicText} graphicRight The graphic text on the right
- *  @property {GraphicText} graphicTextLeft The graphic text on the left
- *  @property {GraphicText} graphicTextInformation The graphic text information
+ *  @extends Graphic.Base
  *  @param {number} id 
  */
 class Setting extends Base {

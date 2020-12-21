@@ -19,29 +19,7 @@ var SongKind = Enum.SongKind;
 var PictureKind = Enum.PictureKind;
 /** @class
  *  The properties of a map.
- *  @property {THREE.Scene} sceneBackground The scene used for background
- *  image
- *  @property {THREE.BoxGeometry} skyboxGeometry The geometry for skybox
- *  @property {number} id The map ID
- *  @property {string} name The map name
- *  @property {number} length The map length
- *  @property {number} width The map width
- *  @property {number} height The map height
- *  @property {number} depth The map depth
- *  @property {Tileset} tileset The System tileset map
- *  @property {SystemPlaySong} music The beginning music
- *  @property {SystemPlaySong} backgroundSound The beginning background sound
- *  @property {SystemCameraProperties} cameraProperties The System camera
- *  properties of the map
- *  @property {boolean} isBackgroundColor Indicate if background is a color
- *  @property {boolean} isBackgroundImage Indicate if background is an image
- *  @property {SystemValue} backgroundColorID The background color ID value
- *  @property {number} backgroundImageID The background image ID
- *  @property {SystemValue} backgroundSkyboxID = The skybox background ID value
- *  @property {MapObject} startupObject The map object startup
- *  @property {SystemColor} backgroundColor The background System color
- *  @property {THREE.Camera} cameraBackground The camera for background when
- *  image
+ *  @extends System.Base
  */
 class MapProperties extends Base {
     constructor() {

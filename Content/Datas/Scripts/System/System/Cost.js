@@ -16,11 +16,7 @@ import { Manager, Datas } from "..";
 import { Player } from "../Core";
 /** @class
  *  A cost of a common skill item.
- *  @property {DamagesKind} kind The kind of damage to apply cost
- *  @property {number} statisticID The statistic ID to apply cost
- *  @property {number} currencyID The currency ID to apply cost
- *  @property {number} variableID The variable ID to apply cost
- *  @property {string} valueFormula The formula to apply
+ *  @extends System.Base
  *  @param {Record<string, any>} [json=undefined] Json object describing the
  *  cost
  */

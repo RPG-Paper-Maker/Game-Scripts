@@ -12,8 +12,7 @@ import { System, Datas } from "..";
 import { IO, Paths, Utils } from "../Common";
 /** @class
  *  All the troops datas.
- *  @property {System.Troop[]} list List of all the troops of the game according
- *  to ID
+ *  @static
  */
 class Troops {
     constructor() {

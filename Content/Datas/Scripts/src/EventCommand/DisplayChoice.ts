@@ -11,21 +11,16 @@
 
 import { Base } from "./Base";
 import { System, Graphic, Datas } from "..";
-import { ScreenResolution, Enum } from "../Common";
+import { ScreenResolution, Enum, Constants } from "../Common";
 import { WindowChoices, MapObject, WindowBox } from "../Core";
 import Align = Enum.Align;
 import { ShowText } from "./ShowText";
 
 /** @class
-*   An event command for displaying a choice
-*   @extends EventCommand
-*   @property {SystemValue} cancelAutoIndex The cancel auto index value
-*   @property {SystemLang[]} choices The choiches content texts
-*   @property {WindowChoices} windowChoices The window choices
-*   @property {boolean} showText Indicate if there is also a show text command 
-*   before this display choice
-*   @param {any[]} command Direct JSON command to parse
-*/
+ *  An event command for displaying a choice.
+ *  @extends EventCommand.Base
+ *  @param {any[]} command Direct JSON command to parse
+ */
 class DisplayChoice extends Base {
 
     public cancelAutoIndex: System.DynamicValue;
@@ -47,18 +42,12 @@ class DisplayChoice extends Base {
         let next: string;
         while (iterator.i < l) {
             next = command[iterator.i];
-            if (next === "") {
-                iterator.i++;
-                if (lang !== null) {
-                    this.choices.push(lang.name());
-                }
+            iterator.i++;
+            if (next !== Constants.STRING_DASH) {
                 lang = new System.Translatable();
-                iterator.i++;
+                lang.getCommand(command, iterator);
+                this.choices.push(lang.name());
             }
-            lang.getCommand(command, iterator);
-        }
-        if (lang !== null) {
-            this.choices.push(lang.name());
         }
 
         // Determine slots width

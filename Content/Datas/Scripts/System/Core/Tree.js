@@ -10,11 +10,10 @@
 */
 import { Node } from "./Node";
 /** @class
- *   Datas structure of tree
- *   @property {Node} root Node representing the root of the tree
- *   @param {any} data The data
+ *  Datas structure of tree.
+ *  @param {any} data The data
  */
-export class Tree {
+class Tree {
     /**
      * The data of the visual tree.
      * @param {any} data
@@ -31,3 +30,4 @@ export class Tree {
         return this.root.add(data);
     }
 }
+export { Tree };

@@ -13,10 +13,9 @@ import { EventCommand } from "..";
 import { Enum } from "../Common";
 var SongKind = Enum.SongKind;
 /** @class
- *  An event command for stopping the background sound
- *  @extends EventCommand
- *  @property {System.DynamicValue} seconds The time in seconds value
- *  @param {Object} command Direct JSON command to parse
+ *  An event command for stopping the background sound.
+ *  @extends EventCommand.Base
+ *  @param {any[]} command Direct JSON command to parse
  */
 class StopBackgroundSound extends Base {
     constructor(command) {

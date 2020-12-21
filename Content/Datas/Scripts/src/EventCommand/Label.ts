@@ -13,11 +13,10 @@ import { Base } from "./Base";
 import { System } from "..";
 
 /** @class
-*   An event command for label
-*   @extends EventCommand
-*   @property {SysytemValue} label The label value
-*   @param {any[]} command Direct JSON command to parse
-*/
+ *  An event command for label.
+ *  @extends EventCommand.Base
+ *  @param {any[]} command Direct JSON command to parse
+ */
 class Label extends Base {
 
     public name: System.DynamicValue;

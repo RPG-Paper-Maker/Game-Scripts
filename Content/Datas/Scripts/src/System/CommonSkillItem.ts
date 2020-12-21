@@ -20,28 +20,11 @@ import { PlaySong } from "./PlaySong";
 import { Cost } from "./Cost";
 import { Characteristic } from "./Characteristic";
 import { Effect } from "./Effect";
+import { System } from "..";
 
 /** @class
  *  A common class for skills, items, weapons, armors.
  *  @extends System.Icon
- *  @property {boolean} [hasType=true] Indicate if the common has a type
- *  @property {boolean} [hasTargetKind=true] Indicate if the common has a
- *  target kind
- *  @property {number} type The type of common
- *  @property {boolean} consumable Indicate if the common is consumable
- *  @property {boolean} oneHand Indicate if the common is one hand
- *  @property {SystemLang} description The description
- *  @property {TargetKind} targetKind The target kind
- *  @property {SystemValue} targetConditionFormula The target condition formula
- *  @property {SystemValue} conditionFormula The condition formula
- *  @property {AvailableKind} availableKind The kind of available
- *  @property {SystemPlaySong} sound The sound menu
- *  @property {SystemValue} animationUserID The animation user ID value
- *  @property {SystemValue} animationTargetID The animation target ID value
- *  @property {SystemValue} price The price value
- *  @property {SystemCost[]} costs The costs list
- *  @property {SystemEffect[]} effects The effects list
- *  @property {SystemCharacteristic[]} characteristics The characteristics list
  *  @param {Record<string, any>} [json=undefined] Json object describing the common
  */
 class CommonSkillItem extends Icon {
@@ -171,6 +154,14 @@ class CommonSkillItem extends Icon {
                 return "All allies";
         }
         return "";
+    }
+
+    /** 
+     *  Get the weapon kind.
+     *  @returns {System/WeaponArmorKind}
+     */
+    getType(): System.WeaponArmorKind {
+        return null;
     }
 }
 

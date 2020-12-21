@@ -14,14 +14,6 @@ import { MapObject, Position, ReactionInterpreter } from "../Core";
 /** @class
  *  An event command for teleporting an object.
  *  @extends EventCommand.Base
- *  @property {System.DynamicValue} objectID The ID of the object to teleport value
- *  @property {System.DynamicValue} objectIDPosition The ID value of the object to
- *  teleport on
- *  @property {System.DynamicValue} mapID The map ID value
- *  @property {System.DynamicValue} x The x coordinate of the map value
- *  @property {System.DynamicValue} y The y coordinate of the map value
- *  @property {System.DynamicValue} yPlus The y plus coordinate of the map value
- *  @property {System.DynamicValue} z The z coordinate of the map value
  *  @param {any[]} command Direct JSON command to parse
  */
 class TeleportObject extends Base {
@@ -90,21 +82,19 @@ class TeleportObject extends Base {
                         * 100 / Datas.Systems.SQUARE_SIZE).toVector3();
                 }
                 else {
-                    (async () => {
-                        currentState.position = (await MapObject.searchInMap(this.objectIDPosition.getValue(), object)).object
-                            .position;
-                    })();
+                    MapObject.search(this.objectIDPosition.getValue(), (result) => {
+                        currentState.position = result.object.position;
+                    }, object);
                 }
                 currentState.waitingPosition = true;
             }
             if (currentState.position !== null) {
-                (async () => {
-                    let moved = (await MapObject.searchInMap(objectID, objectID)).object;
+                MapObject.search(objectID, async (result) => {
                     // If needs teleport hero in another map
                     if (this.mapID !== null) {
                         let id = this.mapID.getValue();
                         // If hero set the current map
-                        if (moved.isHero) {
+                        if (result.object.isHero) {
                             Manager.Stack.game.hero.position = currentState
                                 .position;
                             if (Manager.Stack.currentMap.id !== id) {
@@ -117,9 +107,9 @@ class TeleportObject extends Base {
                             }
                         }
                     }
-                    moved.teleport(currentState.position);
+                    result.object.teleport(currentState.position);
                     currentState.teleported = true;
-                })();
+                }, object);
                 currentState.waitingObject = true;
             }
         }

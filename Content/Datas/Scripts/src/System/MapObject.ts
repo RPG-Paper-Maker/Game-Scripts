@@ -14,18 +14,10 @@ import { Datas, System } from "..";
 import { Utils } from "../Common";
 
 /** @class
- *  An object
- *  @property {number} id The ID of the object
- *  @property {string} name The name of the object
- *  @property {boolean} eventFrame Indicated if it only execute one reaction 
- *  per frame
- *  @property {SystemObjectState[]} states List of all the possible states of
- *  the object
- *  @property {SystemProperty[]} properties List of all properties of the object
- *  @property {SystemObjectEvent[]} events List of all the event that the object
- *  can react on
- *  @property {Event[]} timeEvents The time events list
- *  @param {Record<string, any>} [json=undefined] Json object describing the object
+ *  An object in the map.
+ *  @extends System.Base
+ *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  object
  */
 class MapObject extends Base {
 

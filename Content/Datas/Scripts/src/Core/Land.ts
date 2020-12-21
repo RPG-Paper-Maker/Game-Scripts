@@ -19,8 +19,7 @@ import { StructMapElementCollision } from "./MapElement"
 
 /** @class
  *  A land in the map.
- *  @property {boolean} up Indicate if the layer is up or down
- *  @property {number[]} texture Texture rect of the land
+ *  @extends MapElement
  */
 class Land extends MapElement {
     
@@ -76,7 +75,7 @@ class Land extends MapElement {
         number, y: number, w: number, h: number, count: number): 
         StructMapElementCollision
     {
-        let localPosition = position.toVector3();
+        let localPosition = position.toVector3(false);
         let a = localPosition.x;
         let yLayerOffset = position.layer * 0.05;
         if (!this.up) {

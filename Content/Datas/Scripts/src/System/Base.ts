@@ -11,10 +11,10 @@
 
 
 /**
- * The superclass that define all the System classes structure
- * @abstract
- * @param {Record<string, any>} [json=undefined]
- * @param {any} args
+ *  The superclass that define all the System classes structure.
+ *  @abstract
+ *  @param {Record<string, any>} [json=undefined]
+ *  @param {any} args
  */
 abstract class Base {
 

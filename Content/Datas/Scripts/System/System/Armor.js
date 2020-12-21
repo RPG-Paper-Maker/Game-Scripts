@@ -12,11 +12,9 @@ import { CommonSkillItem } from "./CommonSkillItem";
 import { Datas } from "..";
 /** @class
  *  An armor of the game.
- *  @extends SystemCommonSkillItem
- *  @property {boolean} hasEffect Indicate if the armor has an effect
- *  @property {string} name The name of the armor
- *  @property {number} idType The kind of armor (ID)
- *  @param {Object} [json=undefined] Json object describing the armor
+ *  @extends System.CommonSkillItem
+ *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  armor
  */
 class Armor extends CommonSkillItem {
     constructor(json) {

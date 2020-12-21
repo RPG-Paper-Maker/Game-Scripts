@@ -14,8 +14,7 @@ import { System, Datas } from "..";
 
 /** @class
  *  All the armors datas.
- *  @property {SystemArmor[]} list List of all the armors of the game according
- *  to ID
+ *  @static
  */
 class Armors {
 

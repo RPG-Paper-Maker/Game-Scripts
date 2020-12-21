@@ -16,8 +16,7 @@ import { Picture2D } from "../Core";
 
 /** @class
 *   All the pictures datas.
-*   @property {Picture[]} list List of all the pictures of the game
-*   according to ID and PictureKind
+*   @static
 */
 class Pictures
 {
@@ -84,10 +83,9 @@ class Pictures
      *  @param {number} id The picture id
      *  @returns {Picture}
      */
-    static get(kind: PictureKind, id: number): System.Picture
-    {
-        return (kind === PictureKind.None) ? new System.Picture() : Datas.Base
-            .get(id, this.list[kind], "picture " + System.Picture
+    static get(kind: PictureKind, id: number): System.Picture {
+        return (kind === PictureKind.None || id === - 1) ? new System.Picture() 
+            : Datas.Base.get(id, this.list[kind], "picture " + System.Picture
             .pictureKindToString(kind));
     }
 
@@ -96,8 +94,7 @@ class Pictures
      *  @param {PictureKind} kind The picture kind
      *  @returns {Picture}
      */
-    static getListByKind(kind: PictureKind): System.Picture[]
-    {
+    static getListByKind(kind: PictureKind): System.Picture[] {
         return this.list[kind];
     }
 
@@ -106,10 +103,10 @@ class Pictures
     *   @param {number} id The picture id
     *   @returns {Picture2D}
     */
-    static getPictureCopy(kind: PictureKind, id: number): Picture2D
-    {
+    static getPictureCopy(kind: PictureKind, id: number): Picture2D {
         let picture = this.get(kind, id);
-        return picture ? picture.picture.createCopy() : new Picture2D;
+        return picture && picture.picture ? picture.picture.createCopy() : new 
+            Picture2D;
     }
 }
 

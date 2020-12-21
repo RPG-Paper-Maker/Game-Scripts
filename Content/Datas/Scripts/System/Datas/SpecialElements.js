@@ -12,14 +12,7 @@ import { IO, Paths, Utils } from "../Common";
 import { System, Datas } from "..";
 /** @class
  *  All the special elements datas.
- *  @property {SpecialElement[]} autotiles List of all the autotiles of
- *  the game according to ID
- *  @property {SpecialElement[]} walls List of all the walls of the game
- *  according to ID
- *  @property {Mountain[]} mountains List of all the mountains of
- *  the game according to ID
- *  @property {SystemObject3D[]} objects List of all the objects of the
- *  game according to ID
+ *  @static
  */
 class SpecialElements {
     constructor() {

@@ -14,12 +14,7 @@ var Align = Enum.Align;
 import { Base } from "./Base";
 /** @class
  *  A class for all keyboard assign to display in screen.
- *  @property {System.KeyBoard} kb The System keyboard
- *  @property {Graphic.Text} graphicTextName The graphic text for name
- *  @property {Graphic.Text} graphicTextShort The graphic text for short
- *  @property {Graphic.Text} graphicTextInformation The graphic text for
- *  information
- *  @param {System.Keyboard}
+ *  @param {System.Keyboard} kb
  */
 class Keyboard extends Base {
     constructor(kb) {

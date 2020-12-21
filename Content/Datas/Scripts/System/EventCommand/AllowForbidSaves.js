@@ -13,9 +13,8 @@ import { System, Scene } from "..";
 /** @class
  *  An event command for allowing or forbidding saves.
  *  @extends EventCommand.Base
- *  @property {System.DynamicValue} allow The switch value
- *  @param {Object} command Direct JSON command to parse
-*/
+ *  @param {any[]} command Direct JSON command to parse
+ */
 class AllowForbidSaves extends Base {
     constructor(command) {
         super();

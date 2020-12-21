@@ -15,6 +15,7 @@ const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 const { Howl } = require('./Content/Datas/Scripts/Libs/howler.js');
 
 /** @class
+ *  @static
  *  The interpreter to evaluate formulas or simple scripts without having to 
  *  import.
  */
@@ -44,7 +45,7 @@ class Interpreter {
     {
         return new Function("Common", "Core", "Datas", "EventCommand", "Graphic"
             , "Manager", "Scene", "System", "THREE", "Howl", "u", "t", "damage",
-            "$object", addReturn ? "return " : "" + formula)(this.common, this
+            "$object", (addReturn ? "return " : "") + formula)(this.common, this
             .core, this.datas, this.eventCommand, this.graphic, this.manager, 
             this.scene, this.system, this.three, this.howl, user, target, damage
             , thisObject);

@@ -13,17 +13,9 @@ import { System, Datas, Manager } from "..";
 import { Utils } from "../Common";
 /** @class
  *  An event command for changing screen tone.
- *  @extends EventCommand
- *  @property {System.DynamicValue} r The red color value
- *  @property {System.DynamicValue} g The green color value
- *  @property {System.DynamicValue} b The blue color value
- *  @property {System.DynamicValue} grey The grey color value
- *  @property {boolean} subColor Indicate if the is a sub color
- *  @property {System.DynamicValue} colorID The color ID value
- *  @property {boolean} waitEnd Indicate if wait end of the command
- *  @property {System.DynamicValue} time The time value for changing screen tone
+ *  @extends EventCommand.Base
  *  @param {any[]} command Direct JSON command to parse
-*/
+ */
 class ChangeScreenTone extends Base {
     constructor(command) {
         super();

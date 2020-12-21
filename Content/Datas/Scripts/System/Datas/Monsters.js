@@ -12,8 +12,7 @@ import { System, Datas } from "..";
 import { IO, Paths, Utils } from "../Common";
 /** @class
  *  All the monsters datas.
- *  @property {System.Monster[]} list List of all the monsters of the game
- *  according to ID
+ *  @static
  */
 class Monsters {
     constructor() {

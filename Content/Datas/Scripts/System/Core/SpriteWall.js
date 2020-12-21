@@ -15,11 +15,10 @@ var PictureKind = Enum.PictureKind;
 import { Sprite } from "./Sprite";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
- *   A sprite in the map.
- *   @extends MapElement
- *   @property {number} id The picture ID of the sprite
- *   @property {SpriteWallKind} kind The kind of wall (border or not)
- *   @param {Record<string, any>} [json=undefined] Json object describing the wall
+ *  A sprite in the map.
+ *  @extends MapElement
+ *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  wall
  */
 class SpriteWall extends MapElement {
     constructor(json) {

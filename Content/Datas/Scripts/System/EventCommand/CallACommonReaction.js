@@ -16,8 +16,6 @@ var PrimitiveValueKind = Enum.PrimitiveValueKind;
 /** @class
  *  An event command for calling a common reaction.
  *  @extends EventCommand.Base
- *  @property {number} commonReactionID The common reaction ID
- *  @property {SystemValue[]} parameters The reaction parameters according to ID
  *  @param {any[]} command Direct JSON command to parse
  */
 class CallACommonReaction extends Base {

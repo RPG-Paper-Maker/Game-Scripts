@@ -14,9 +14,20 @@ import { Datas } from "..";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  The data class for position.
+ *  @extends Portion
+ *  @param {number} x The x position square
+ *  @param {number} y The y position square
+ *  @param {number} z The z position square
+ *  @param {number} yPixels The y position pixels to add to the square y
+ *  @param {number} layer The layer position
+ *  @param {number} centerX The center X position on the square in %
+ *  @param {number} centerZ The center Z position on the square in %
+ *  @param {number} angleY The angle on Y axis in degree
+ *  @param {number} angleX The angle on X axis in degree
+ *  @param {number} angleZ The angle on Z axis in degree
  */
 class Position extends Portion {
-    constructor(x = 0, y = 0, z = 0, yPixels = 0, layer = 0, centerX = 0, centerZ = 0, angleY = 0, angleX = 0, angleZ = 0) {
+    constructor(x = 0, y = 0, z = 0, yPixels = 0, layer = 0, centerX = 50, centerZ = 50, angleY = 0, angleX = 0, angleZ = 0) {
         super(x, y, z);
         this.yPixels = yPixels;
         this.layer = layer;
@@ -71,15 +82,14 @@ class Position extends Portion {
         return new Portion(Math.floor(this.x / Constants.PORTION_SIZE), Math.floor(this.y / Constants.PORTION_SIZE), Math.floor(this.z / Constants.PORTION_SIZE));
     }
     /**
-     *  Transform a json position to a THREE.Vector3.
-     *  @param {number[]} position The json position
+     *  Transform a position to a THREE.Vector3.
      *  @returns {THREE.Vector3}
      */
-    toVector3() {
-        return new THREE.Vector3((this.x * Datas.Systems.SQUARE_SIZE) + (this.centerX / 100 * Datas
-            .Systems.SQUARE_SIZE), (this.y * Datas.Systems.SQUARE_SIZE) + (this.yPixels * Datas.Systems
-            .SQUARE_SIZE / 100), (this.z * Datas.Systems.SQUARE_SIZE) + (this.centerZ / 100 * Datas
-            .Systems.SQUARE_SIZE));
+    toVector3(center = true) {
+        return new THREE.Vector3((this.x * Datas.Systems.SQUARE_SIZE) + (center ? (this.centerX / 100
+            * Datas.Systems.SQUARE_SIZE) : 0), (this.y * Datas.Systems.SQUARE_SIZE) + (this.yPixels * Datas.Systems
+            .SQUARE_SIZE / 100), (this.z * Datas.Systems.SQUARE_SIZE) + (center ? (this.centerZ / 100
+            * Datas.Systems.SQUARE_SIZE) : 0));
     }
     /**
      *  Transform a position to index position on X/Z axis (used for map

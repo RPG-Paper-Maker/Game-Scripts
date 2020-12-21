@@ -19,50 +19,7 @@ import { Manager, Datas } from "..";
 import { Sprite } from "./Sprite";
 /** @class
  *  A battler in a battle (ally or ennemy).
- *  @property {number} [Battler.OFFSET_SELECTED=10] The pixel offset when the
- *  battler is selected
- *  @property {number} [Battler.TIME_MOVE=200] The time in milliseconds when
- *  the battler moves to selection offset
- *  @property {number} [Battler.TOTAL_TIME_DAMAGE=250] The total time in
- *  milliseconds for displaying damages animation
- *  @property {GamePlayer} character The character properties
- *  @property {THREE.Vector2} arrowPosition The target arrow position on screen
- *  @property {THREE.Vector2} damagePosition The damage position on screen
- *  @property {THREE.Vector2} topPosition The top animation position on screen
- *  @property {THREE.Vector2} midPosition The mid animaion position on screen
- *  @property {THREE.Vector2} botPosition The bot animation position on screen
- *  @property {boolean} active Indicate if the battler already attacked or not
- *  @property {Frame} frame The battler frame
- *  @property {Frame} frameAttacking The attacking battler frame
- *  @property {Frame} frameArrow The target arrow frame
- *  @property {BattlerStep} step The battler step
- *  @property {number} width The battler textures width in squares
- *  @property {number} height The battler textures height in squares
- *  @property {boolean} selected Indicate if the battler is selected
- *  @property {number} lastCommandIndex The last selected index command
- *  @property {number} lastCommandOffset The last selected offset command
- *  @property {number} lastSkillIndex The last selected index skill
- *  @property {number} lastSkillOffset The last selected offset skill
- *  @property {number} lastItemIndex The last selected index item
- *  @property {number} lastItemOffset The last selected offset item
- *  @property {number} itemsNumbers Number of items used according to ID (for
- *  actions AI)
- *  @property {ProgressionTable} progressionAllyFront The progression for
- *  ally to move front
- *  @property {ProgressionTable} progressionAllyBack The progression for
- *  ally to move back
- *  @property {ProgressionTable} progressionEnemyFront The progression for
- *  enemy to move front
- *  @property {ProgressionTable} progressionEnemyBack The progression for
- *  enemy to move back
- *  @property {number} timerMove The time to move front / back
- *  @property {number} timeDamage The time to display damage
- *  @property {THREE.Mesh} mesh The battler mesh
- *  @property {THREE.Vector3} upPosition The vector position up to the battler
- *  @property {THREE.Vector3} halfPosition The vector position halp to the
- *  @property {boolean} moving Indicate if the battler is moving (
- *  selection)
- *  @param {GamePlayer} character The character properties
+ *  @param {Player} player The character properties
  *  @param {THREE.Vector3} position The battler position
  *  @param {Camera} camera the camera associated to the battle
  */

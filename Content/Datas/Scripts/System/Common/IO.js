@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 /** @class
- *  The Input and Output class who handles loading and saving
- *  @TODO : handle Server In Out input as well?  such as Web loading?
+ *  @static
+ *  The Input and Output class who handles loading and saving.
  */
 class IO {
     constructor() {

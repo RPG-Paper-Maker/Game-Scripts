@@ -19,16 +19,8 @@ import { Datas, Manager } from "..";
 /** @class
  *  A sprite in the map.
  *  @extends MapElement
- *  @property {THREE.Vector3} [Sprite.Y_AXIS=new THREE.Vector3(0, 1, 0)] The
- *  unit Y axis vector
- *  @property {THREE.Vector3} [Sprite.X_AXIS=new THREE.Vector3(1, 0, 0)] The
- *  unit X axis vector
- *  @property {THREE.Vector3} [Sprite.Z_AXIS=new THREE.Vector3(0, 0, 1)] The
- *  unit Z axis vector
- *  @property {boolean} front Indicate if the sprite is in front (for layers)
- *  @property {ElementMapKind} kind The element map kind
- *  @property {number[]} textureRect Texture UV coords
- *  @param {Record<string, any>} [json=undefined] Json object describing the sprite
+ *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  sprite
  */
 class Sprite extends MapElement {
 
@@ -172,6 +164,7 @@ class Sprite extends MapElement {
         } else {
             localPosition = tileset ? position.toVector3() : new THREE.Vector3();
         }
+
         let angleY = position.angleY;
         let angleX = position.angleX;
         let angleZ = position.angleZ;

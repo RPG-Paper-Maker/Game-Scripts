@@ -13,8 +13,9 @@ import { DynamicValue } from "./DynamicValue";
 import { Utils } from "../Common";
 /** @class
  *  An element of the game.
- *  @property {SystemValue[]} efficiency The efficiency list
- *  @param {Record<string, any>} [json=undefined] Json object describing the element
+ *  @extends System.Base
+ *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  element
  */
 class Element extends Icon {
     constructor(json) {

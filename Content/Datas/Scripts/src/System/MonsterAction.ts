@@ -19,32 +19,7 @@ import { Monster } from "./Monster";
 
 /** @class
  *  A monster action of the game.
- *  @property {MonsterActionKind} actionKind The action kind
- *  @property {SystemValue} skillID The skill ID value
- *  @property {SystemValue} itemID The item ID value
- *  @property {SystemValue} itemNumberMax The max item number value that can be
- *  used
- *  @property {SystemValue} priority The action priority
- *  @property {MonsterActionTargetKind} targetKind The monster action target
- *  kind
- *  @property {boolean} isConditionTurn Indicate if the condition is by turn
- *  @property {OperationKind} operationKindTurn The turn operation kind
- *  @property {SystemValue} turnValueCompare The turn value compare
- *  @property {boolean} isConditionStatistic Indicate if the condition is by
- *  statistic
- *  @property {SystemValue} statisticID The statistic ID value
- *  @property {OperationKind} operationKindStatistic The statistic operation
- *  kind
- *  @property {SystemValue} statisticValueCompare The statistic value compare
- *  @property {boolean} isConditionVariable Indicate if the condition is by
- *  variable
- *  @property {number} variableID The variable ID
- *  @property {OperationKind} operationKindVariable The variable operation kind
- *  @property {SystemValue} variableValueCompare The varaible value compare
- *  @property {boolean} isConditionStatus Indicate if the condition is by status
- *  @property {SystemValue} statusID The status ID value
- *  @property {boolean} isConditionScript Indicate if the condition is by script
- *  @property {SystemValue} script The script formula
+ *  @extends System.Base
  *  @param {Record<string, any>} [json=undefined] Json object describing the 
  *  monster action
  */

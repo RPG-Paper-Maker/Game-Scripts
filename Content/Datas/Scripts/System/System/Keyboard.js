@@ -13,7 +13,6 @@ import { KeyEvent } from "../Common";
 /** @class
  *  A key shortcut of the game.
  *  @extends {System.Translatable}
- *  @property {number[][]} sc The shortcut value
  *  @param {Record<string, any>} [json=undefined] Json object describing the
  *  keyboard
  */

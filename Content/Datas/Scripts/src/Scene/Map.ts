@@ -20,35 +20,9 @@ import { Position, Portion, MapPortion, TextureBundle, Camera, ReactionInterpret
 
 /** @class
  *  A scene for a local map.
- *  @extends SceneGame
- *  @property {number} id The map ID
- *  @property {number} isBattleMap Indicate if this map is a battle one
- *  @property {string} mapName The map name
- *  @property {THREE.Scene} scene The 3D scene of the map
- *  @property {number[][]} collisions The collisions squares arrays
- *  @property {MapProperties} mapProperties The map properties
- *  @property {Camera} camera The map camera
- *  @property {number[]} currentPortion The current portion (according to 
- *  camera position)
- *  @property {THREE.Vector3} previousCameraPosition The previous camera position
- *  @property {Orientation} orientation The camera orientation
- *  @property {number[][]} allObjects All the objects portions according to ID
- *  @property {boolean} portionsObjectsUpdated Indicate if the portions objects 
- *  are loaded
- *  @property {THREE.MeshBasicMaterial} textureTileset The tileset material
- *  @property {THREE.MeshBasicMaterial[]} texturesAutotiles The autotiles 
- *  materials
- *  @property {THREE.MeshBasicMaterial[]} texturesWalls The walls materials
- *  @property {THREE.MeshBasicMaterial[]} texturesMountains The mountains 
- *  materials
- *  @property {THREE.MeshBasicMaterial[]} texturesObjects3D The 3D objects 
- *  materials
- *  @property {THREE.MeshBasicMaterial[]} texturesCharacters The characters 
- *  materials
- *  @property {MapPortion[]} mapPortions All the portions in the visible ray
- *  of the map (according to an index)
+ *  @extends Scene.Base
  *  @param {number} id The map ID
- *  @param {number} isBattleMap Indicate if this map is a battle one
+ *  @param {boolean} [isBattleMap=false] Indicate if this map is a battle one
  *  @param {boolean} [minimal=false] Indicate if the map should be partialy 
  *  loaded (only for getting objects infos)
 */
@@ -175,7 +149,8 @@ class Map extends Base {
         let jsonObject: Record<string, any>;
         for (let i = 0; i < l; i++) {
             jsonObject = json[i];
-            this.allObjects[jsonObject.id] = jsonObject.p;
+            this.allObjects[jsonObject.id] = Position.createFromArray(jsonObject
+                .p);
         }
     }
 
@@ -313,7 +288,7 @@ class Map extends Base {
      *  @param {boolean} noNewPortion Indicate if the map portions array needs 
      *  to be initialized
      */
-    async loadPortions(noNewPortion = false) {
+    async loadPortions(noNewPortion: boolean = false) {
         this.currentPortion = Portion.createFromVector3(this.camera
             .getThreeCamera().position);
         let limit = this.getMapPortionLimit();
@@ -324,9 +299,9 @@ class Map extends Base {
         for (i = -limit; i <= limit; i++) {
             for (j = -limit; j <= limit; j++) {
                 for (k = -limit; k <= limit; k++) {
-                    await this.loadPortion(this.currentPortion[0] + i, this
-                        .currentPortion[1] + j, this.currentPortion[2] + k, i, j
-                        , k);
+                    await this.loadPortion(this.currentPortion.x + i, this
+                        .currentPortion.y + j, this.currentPortion.z + k, i, j, 
+                        k);
                 }
             }
         }
@@ -476,7 +451,7 @@ class Map extends Base {
         let size = this.getMapPortionSize();
         let limit = this.getMapPortionLimit();
         return ((portion.x + limit) * size * size) + ((portion.y + limit) * size
-            ) + ( + limit);
+            ) + (portion.z + limit);
     }
 
     /** 
@@ -486,9 +461,9 @@ class Map extends Base {
      */
     getLocalPortion(portion: Portion): Portion {
         return new Portion(
-            portion.x - this.currentPortion[0],
-            portion.y - this.currentPortion[1],
-            portion.z - this.currentPortion[2]
+            portion.x - this.currentPortion.x,
+            portion.y - this.currentPortion.y,
+            portion.z - this.currentPortion.z
         );
     }
 
@@ -607,7 +582,7 @@ class Map extends Base {
                     this.loadPortionFromPortion(newPortion, r, k, j, true);
                 }
             }
-        } else if (newPortion[0] < this.currentPortion[0]) {
+        } else if (newPortion.x < this.currentPortion.x) {
             for (k = -r; k <= r; k++) {
                 for (j = -r; j <= r; j++) {
                     i = r;
@@ -638,7 +613,7 @@ class Map extends Base {
                     this.loadPortionFromPortion(newPortion, i, k, r, true);
                 }
             }
-        } else if (newPortion[2] < this.currentPortion[2]) {
+        } else if (newPortion.z < this.currentPortion.z) {
             for (k = -r; k <= r; k++) {
                 for (i = -r; i <= r; i++) {
                     j = r;
@@ -669,7 +644,7 @@ class Map extends Base {
                     this.loadPortionFromPortion(newPortion, i, r, j, true);
                 }
             }
-        } else if (newPortion[1] < this.currentPortion[1]) {
+        } else if (newPortion.y < this.currentPortion.y) {
             for (i = -r; i <= r; i++) {
                 for (j = -r; j <= r; j++) {
                     k = r;
@@ -732,7 +707,6 @@ class Map extends Base {
         let vector = new THREE.Vector3();
         this.camera.getThreeCamera().getWorldDirection(vector);
         let angle = Math.atan2(vector.x,vector.z) + (180 * Math.PI / 180.0);
-
         if (!this.isBattleMap) {
             this.mapProperties.startupObject.update();
 
@@ -754,7 +728,7 @@ class Map extends Base {
                 }
 
                 // Update face sprites
-                let mapPortion = this.getMapPortion(i, j, k);
+                let mapPortion = this.getMapPortion(new Portion(i, j, k));
                 if (mapPortion) {
                     mapPortion.updateFaceSprites(angle);
                 }

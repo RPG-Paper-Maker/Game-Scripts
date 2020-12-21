@@ -15,11 +15,8 @@ import { MapObject } from "../Core";
 var AnimationEffectConditionKind = Enum.AnimationEffectConditionKind;
 /** @class
  *  An event command for displaying an animation.
- *  @extends EventCommand
- *  @property {System.DynamicValue} objectID The object ID value
- *  @property {System.DynamicValue} animationID The animation ID value
- *  @property {boolean} isWaitEnd Indicate if wait end of the command
- *  @param {Object} command Direct JSON command to parse
+ *  @extends EventCommand.Base
+ *  @param {any[]} command Direct JSON command to parse
  */
 class DisplayAnAnimation extends Base {
     constructor(command) {
@@ -60,9 +57,9 @@ class DisplayAnAnimation extends Base {
         if (currentState.parallel) {
             if (!currentState.waitingObject) {
                 let objectID = this.objectID.getValue();
-                (async () => {
-                    currentState.object = (await MapObject.searchInMap(objectID, object)).object;
-                })();
+                MapObject.search(objectID, (result) => {
+                    currentState.object = result.object;
+                }, object);
                 currentState.waitingObject = true;
             }
             if (currentState.object !== null) {

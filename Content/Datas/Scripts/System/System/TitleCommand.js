@@ -17,9 +17,8 @@ import { Scene } from "..";
 /** @class
  *  A title command of the game.
  *  @extends System.Translatable
- *  @property {TitleCommandKind} kind The title command kind
- *  @property {string} script The script formula
- *  @param {Record<string, any>} [json=undefined] Json object describing the title screen command
+ *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  title screen command
  */
 class TitleCommand extends Translatable {
     constructor(json) {

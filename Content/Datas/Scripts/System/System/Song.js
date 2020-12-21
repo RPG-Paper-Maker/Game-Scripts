@@ -14,16 +14,12 @@ var SongKind = Enum.SongKind;
 import { Datas } from "..";
 const { Howl } = require('./Content/Datas/Scripts/Libs/howler.js');
 /** @class
-*   A song of the game
-*   @property {SongKind} kind The kind of song
-*   @property {number} id The song ID
-*   @property {string} name The song name
-*   @property {boolean} isBR Indicate if the pciture is a BR (Basic Ressource)
-*   @property {boolean} isDLC Indicate if the pciture is a DLC
-*   @property {Howl} song The loaded Howl song
-*   @param {Record<string ,any>} [json=undefined] Json object describing the song
-*   @param {SongKind} [kind=SongKind.Music] The kind of song
-*/
+ *  A song of the game.
+ *  @extends System.Base
+ *  @param {Record<string ,any>} [json=undefined] Json object describing the
+ *  song
+ *  @param {SongKind} [kind=SongKind.Music] The kind of song
+ */
 class Song extends Base {
     constructor(json, kind = SongKind.Music) {
         super(json, kind);

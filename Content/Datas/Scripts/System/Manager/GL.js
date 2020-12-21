@@ -14,6 +14,7 @@ import { ScreenResolution, Platform, Utils, IO, Paths } from "../Common";
 import { Stack } from "./Stack";
 /** @class
  *  The GL class handling some 3D stuff.
+ *  @static
  */
 class GL {
     constructor() {
@@ -32,7 +33,7 @@ class GL {
         if (Datas.Systems.antialias) {
             this.renderer.setPixelRatio(2);
         }
-        Platform.canvas3D.appendChild(this.renderer.domElement);
+        document.body.appendChild(this.renderer.domElement);
     }
     /**
      *  Load shaders stuff.
@@ -97,7 +98,7 @@ class GL {
         texture.flipY = opts.flipY;
         if (!opts.uniforms) {
             opts.uniforms = {
-                texture: { type: "t", value: texture },
+                t: { type: "t", value: texture },
                 colorD: { type: "v4", value: this.screenTone },
                 reverseH: { type: "b", value: opts.flipX },
             };
@@ -107,7 +108,7 @@ class GL {
             vertexShader: this.SHADER_FIX_VERTEX,
             fragmentShader: this.SHADER_FIX_FRAGMENT,
             side: THREE.DoubleSide,
-            transparent: false
+            transparent: true
         });
         material.map = texture;
         return material;
@@ -137,4 +138,5 @@ class GL {
     }
 }
 GL.textureLoader = new THREE.TextureLoader();
+GL.screenTone = new THREE.Vector4(0, 0, 0, 1);
 export { GL };

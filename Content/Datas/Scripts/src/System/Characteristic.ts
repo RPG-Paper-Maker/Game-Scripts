@@ -20,33 +20,9 @@ import { Datas, Manager } from "..";
 
 /** @class
  *  A characteristic of a common skill item.
- *  @property {CharacteristicKind} kind The characterisitic kind
- *  @property {boolean} isIncreaseDecrease Indicate if increase / decrease
- *  exists
- *  @property {IncreaseDecreaseKind} increaseDecreaseKind The increase /
- *  decrease kind
- *  @property {SystemValue} statisticValueID The statistic value ID
- *  @property {SystemValue} elementResID The element res ID value
- *  @property {SystemValue} statusResID The status res ID value
- *  @property {SystemValue} currencyGainID The currency gain ID value
- *  @property {SystemValue} skillCostID The skill cost ID value
- *  @property {boolean} isAllSkillCost Indicate if all skill cost exists
- *  @property {SystemValue} variableID The variable ID value
- *  @property {boolean} operation Indicate operation exists
- *  @property {SystemValue} value The value
- *  @property {boolean} unit Indicate if unit exists
- *  @property {SystemValue} script The script value
- *  @property {boolean} isAllowEquip Indicate if allow equip exists
- *  @property {boolean} isAllowEquipWeapon Indicate if allow equip weapon exists
- *  @property {SystemValue} equipWeaponTypeID The equip weapon type ID value
- *  @property {SystemValue} equipArmorTypeID The equip armor type ID value
- *  @property {boolean} isAllowChangeEquipment Indicate if allow change
- *  equipment exists
- *  @property {SystemValue} changeEquipmentID The change equipment ID value
- *  @property {SystemValue} beginEquipmentID The begin equipment ID value
- *  @property {boolean} isBeginWeapon Indicate if begin weapon exists
- *  @property {SystemValue} beginWeaponArmorID The begin weapon armor ID value
- *  @param {Record<string, any>} [json=undefined] Json object describing the characteristic
+ *  @extends System.Base
+ *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  characteristic
  */
 class Characteristic extends Base {
     public kind: number;

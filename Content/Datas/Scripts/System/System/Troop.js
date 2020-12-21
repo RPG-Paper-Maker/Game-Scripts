@@ -11,8 +11,9 @@
 import { Base } from "./Base";
 /** @class
  *  A troop of the game.
- *  @property {Object[]} list list of the monsters (ids, level).
- *  @param {Record<string, any>} [json=undefined] Json object describing the troop
+ *  @extends System.Base
+ *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  troop
  */
 class Troop extends Base {
     constructor(json) {

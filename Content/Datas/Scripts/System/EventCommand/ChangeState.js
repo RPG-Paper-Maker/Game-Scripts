@@ -13,12 +13,8 @@ import { System, EventCommand, Manager, Scene } from "..";
 import { MapObject } from "../Core";
 /** @class
  *  An event command for changing an object state.
- *  @extends EventCommand
- *  @property {System.DynamicValue} mapID The map ID value
- *  @property {System.DynamicValue} objectID The object ID value
- *  @property {number} idState The ID of the state to change
- *  @property {number} operationKind Index of operation
- *  @param {Object} command Direct JSON command to parse
+ *  @extends EventCommand.Base
+ *  @param {any[]} command Direct JSON command to parse
  */
 class ChangeState extends Base {
     constructor(command) {
@@ -140,9 +136,9 @@ class ChangeState extends Base {
             if (currentState.map.allObjects && currentState.map
                 .portionsObjectsUpdated) {
                 if (currentState.map === Manager.Stack.currentMap) {
-                    (async () => {
-                        currentState.object = (await MapObject.searchInMap(currentState.objectID, object)).object;
-                    })();
+                    MapObject.search(currentState.objectID, (result) => {
+                        currentState.object = result.object;
+                    }, object);
                 }
                 else {
                     currentState.object = {};

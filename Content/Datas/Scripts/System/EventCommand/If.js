@@ -15,50 +15,9 @@ var ConditionHeroesKind = Enum.ConditionHeroesKind;
 var ItemKind = Enum.ItemKind;
 /** @class
  *  An event command for condition event command block.
- *  @extends EventCommand
- *  @property {boolean} hasElse Indicate if there is an else node or not
- *  @property {number} kind The kind of condition
- *  @property {System.DynamicValue} variableParamProp The variable param prop
- *  value
- *  @property {OperationKind} variableParamPropOperationKind The variable param
- *  prop operation kind
- *  @property {System.DynamicValue} variableParamPropValue The variable param
- *  prop value
- *  @property {number} heroesSelection The heroes selection
- *  @property {System.DynamicValue} heroInstanceID The hero instance ID value
- *  @property {boolean} heroesInTeam Indicate if heroes in team selection
- *  @property {number} heroesInTeamSelection The heroes in team selection
- *  @property {number} heroesKind The kind of heroes
- *  @property {System.DynamicValue} heroesNamed The heroes name value
- *  @property {number} heroesInTeamValue The heroes in team value
- *  @property {System.DynamicValue} heroesSkillID The heroes skill ID value
- *  @property {number} heroesEquipedKind The heroes equiped kind
- *  @property {System.DynamicValue} heroesEquipedWeaponID The heroes equiped
- *  weapon ID
- *  @property {System.DynamicValue} heroesEquipedArmorID The heroes equiped
- *  armor ID
- *  @property {System.DynamicValue} heroesStatusID The heroes status ID
- *  @property {System.DynamicEventCommandValue} heroesStatisticValue The heroes statistic
- *  value
- *  @property {System.DynamicValue} currencyID The currency ID value
- *  @property {OperationKind} operationCurrency The currency operation kind
- *  @property {System.DynamicValue} currencyValue The currency value
- *  @property {System.DynamicValue} itemID The item ID value
- *  @property {OperationKind} operationItem The item operation kind
- *  @property {System.DynamicValue} itemValue The item value
- *  @property {System.DynamicValue} weaponID The weapon ID value
- *  @property {OperationKind} operationWeapon The weapon operation kind
- *  @property {System.DynamicValue} weaponValue The weapon value
- *  @property {boolean} weaponEquiped Indicate if weapon is equiped
- *  @property {System.DynamicValue} armorID The armor ID value
- *  @property {OperationKind} operationArmor The armor operation kind
- *  @property {System.DynamicValue} armorValue The armor value
- *  @property {boolean} armorEquiped Indicate if armor is equiped
- *  @property {System.DynamicValue} keyID The key ID value
- *  @property {System.DynamicValue} keyValue The key value
- *  @property {System.DynamicValue} script The script value
+ *  @extends EventCommand.Base
  *  @param {any[]} command Direct JSON command to parse
-*/
+ */
 class If extends Base {
     constructor(command) {
         super();

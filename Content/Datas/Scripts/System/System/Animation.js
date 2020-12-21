@@ -17,11 +17,7 @@ import { Datas } from "..";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  An animation of a skill / item / weapon or for display animation command.
- *  @property {number} pictureID The animation picture ID
- *  @property {AnimationPositionKind} positionKind The animation position kind
- *  @property {SystemAnimationFrame[]} frames The System animation frames by ID
- *  @property {number} rows The number of rows in the animation texture
- *  @property {number} cols The number of columns in the animation texture
+ *  @extends System.Base
  *  @param {Record<string, any>} [json=undefined] Json object describing the
  *  animation
  */

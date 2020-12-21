@@ -17,11 +17,8 @@ import { Mathf, Utils } from "../Common";
 /** @class
  *  An event command for changing a property value.
  *  @extends EventCommand.Base
- *  @property {System.DynamicValue} propertyID The property ID value
- *  @property {OperationKind} operationKind The operation kind
- *  @property {System.DynamicValue} newValue The new value
  *  @param {any[]} command Direct JSON command to parse
-*/
+ */
 class ChangeProperty extends Base {
 
     public propertyID: System.DynamicValue;

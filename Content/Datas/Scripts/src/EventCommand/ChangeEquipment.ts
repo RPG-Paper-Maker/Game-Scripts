@@ -18,16 +18,8 @@ import ItemKind = Enum.ItemKind;
 /** @class
  *  An event command for changing a property value.
  *  @extends EventCommand.Base
- *  @property {System.DynamicValue} equipmentID The equipment ID value
- *  @property {boolean} isWeapon Indicate if is a weapon
- *  @property {System.DynamicValue} weaponArmorID The weapon or armor ID value
- *  @property {number} selection The selection kind
- *  @property {System.DynamicValue} heInstanceID The hero enemy instance ID value
- *  @property {GroupKind} groupIndex The group index
- *  @property {boolean} isApplyInInventory Indicate if apply equipment if is in 
- *  inventory
  *  @param {any[]} command Direct JSON command to parse
-*/
+ */
 class ChangeEquipment extends Base {
 
     public equipmentID: System.DynamicValue;

@@ -14,7 +14,6 @@ import { Parameter } from "./Parameter";
 
 /** @class
  *   An event that can be called.
- *   @property {SystemParameters[]} parameters The parameters list
  *   @param {Record<string, any>} [json] json object describing the event
  */
 class CommonEvent extends Base {

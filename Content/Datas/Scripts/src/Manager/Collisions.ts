@@ -17,19 +17,16 @@ import ElementMapKind = Enum.ElementMapKind;
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /** @class
- *  The game stack that is organizing the game scenes.
- *  @property {Scene.Base[]} content The stack content
- *  @property {Scene.Base} top The stack top content
- *  @property {Scene.Base} subTop The stack top - 1 content
- *  @property {Scene.Base} bot The stack bot content
+ *  The collisions manager.
+ *  @static
  */
 class Collisions {
 
     public static BB_MATERIAL = new THREE.MeshBasicMaterial();
     public static BB_BOX = Collisions.createBox();
     public static BB_ORIENTED_BOX = Collisions.createOrientedBox();
-    public static BB_BOX_DETECTION = new THREE.MeshBasicMaterial();
-    public static BB_BOX_DEFAULT_DETECTION = new THREE.MeshBasicMaterial();
+    public static BB_BOX_DETECTION = Collisions.createBox();
+    public static BB_BOX_DEFAULT_DETECTION = Collisions.createBox();
 
     constructor() {
         throw new Error("This is a static class");

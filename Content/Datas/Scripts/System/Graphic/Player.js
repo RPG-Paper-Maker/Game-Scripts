@@ -15,30 +15,10 @@ import { Utils, Constants, Platform, Enum } from "../Common";
 var PictureKind = Enum.PictureKind;
 /** @class
  *  The graphic displaying the player minimal stats informations.
- *  @property {Player} gamePlayer The current selected player
- *  @property {boolean} reverse Indicate if the faceset should be reversed
- *  @property {Graphic.Text} graphicName The player's name graphic
- *  @property {Graphic.Text} graphicClass The player's class name graphic
- *  @property {Graphic.Text} graphicLevelName The player's level name graphic
- *  @property {Graphic.Text} graphicLevel The player's level graphic
- *  @property {Graphic.Text} graphicExpName The graphic text for experience name
- *  @property {Graphic.Text} graphicExp The graphic text for experience stat
- *  @property {Graphic.Text} listStatsNames All the player's stats names
- *  graphics
- *  @property {Graphic.Text} listStats All the player's stats values
- *  graphics
- *  @property {number} maxStatNamesLength The max length of the stats namles
- *  for each column
- *  @property {number} maxStatLength The max length of the stats for each column
- *  @property {Picture2D} faceset The player faceset
- *  @property {Picture2D} battler The player battler
- *  @property {Frame} battlerFrame The battler frame
- *  @property {Graphic.Text} graphicLevelUp The graphic text for level up
- *  @property {boolean} displayNameLevel Indicate if leveling up should be
- *  displayed
- *  @param {Player} gamePlayer The current selected player
+ *  @extends Graphic.Base
+ *  @param {Player} player The current selected player
  *  @param {boolean} [reverse=false] Indicate if the faceset should be reversed
-*/
+ */
 class Player extends Base {
     constructor(player, reverse = false) {
         super();

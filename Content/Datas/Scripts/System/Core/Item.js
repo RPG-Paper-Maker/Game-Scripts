@@ -13,9 +13,6 @@ var ItemKind = Enum.ItemKind;
 import { Manager, Datas } from "..";
 /** @class
  *  An item in the inventory.
- *  @property {ItemKind} k Kind of item (item, weapon, or armor)
- *  @property {number} id The ID of the item
- *  @property {number} nb The occurence of the item in the inventory
  *  @param {ItemKind} kind Kind of item (item, weapon, or armor)
  *  @param {number} id The ID of the item
  *  @param {number} nb The occurence of the item in the inventory

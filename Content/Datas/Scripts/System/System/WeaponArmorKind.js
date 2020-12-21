@@ -11,11 +11,9 @@
 import { Translatable } from "./Translatable";
 /** @class
  *  A weapon/armor kind of the game.
- *  @property {string} name The name of the weapon / armor kind
- *  @property {boolean[]} equipments List of booleans indicating which equipment
- *  is ok
- *  @param {Record<string, any>} [json=undefined] Json object describing the weapon / armor
- *  kind
+ *  @extends System.Translatable
+ *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  weapon / armor kind
  */
 class WeaponArmorKind extends Translatable {
     constructor(json) {

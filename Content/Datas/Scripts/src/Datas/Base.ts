@@ -13,6 +13,7 @@ import { Utils, Platform } from "../Common";
 
 /** @class
  *  The abstract class who model the Structure of RPM datas.
+ *  @static
  */
 abstract class Base {
     

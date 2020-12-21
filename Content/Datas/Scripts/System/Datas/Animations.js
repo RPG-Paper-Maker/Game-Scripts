@@ -12,8 +12,7 @@ import { System, Datas } from "..";
 import { IO, Paths, Utils } from "../Common";
 /** @class
  *  All the animations datas.
- *  @property {SystemAnimation[]} list List of all the animations of the game
- *  according to ID
+ *  @static
  */
 class Animations {
     constructor() {

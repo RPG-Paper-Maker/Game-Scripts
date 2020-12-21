@@ -12,8 +12,7 @@ import { System, Datas } from "..";
 import { IO, Paths, Utils } from "../Common";
 /** @class
  *  All the classes datas.
- *  @property {System.Class[]} list List of all the classes of the game according
- *  to ID
+ *  @static
  */
 class Classes {
     constructor() {

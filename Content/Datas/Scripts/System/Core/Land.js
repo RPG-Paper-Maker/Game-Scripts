@@ -14,8 +14,7 @@ const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Datas } from "..";
 /** @class
  *  A land in the map.
- *  @property {boolean} up Indicate if the layer is up or down
- *  @property {number[]} texture Texture rect of the land
+ *  @extends MapElement
  */
 class Land extends MapElement {
     constructor() {
@@ -59,7 +58,7 @@ class Land extends MapElement {
      *  @returns {StructCollision}
      */
     updateGeometryLand(geometry, collision, position, width, height, x, y, w, h, count) {
-        let localPosition = position.toVector3();
+        let localPosition = position.toVector3(false);
         let a = localPosition.x;
         let yLayerOffset = position.layer * 0.05;
         if (!this.up) {

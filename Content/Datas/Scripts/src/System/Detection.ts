@@ -16,9 +16,10 @@ import Orientation = Enum.Orientation;
 import { Datas, Manager } from "..";
 
 /** @class
- *   A detection of the game.
- *   @property {number[][]} boxes List of boxes for detection
- *   @param {Record<string, any>} [json=undefined] Json object describing the detection
+ *  A detection of the game.
+ *  @extends System.Base
+ *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  detection
  */
 class Detection extends Base {
 
@@ -39,8 +40,9 @@ class Detection extends Base {
         let jsonElement: Record<string, any>;
         for (let i = 0; i < l; i++) {
             jsonElement = jsonList[i];
-            this.boxes[i] = [jsonElement.k, Utils.defaultValue(jsonElement.v.bhs
-                , 1), Utils.defaultValue(jsonElement.v.bhp, 0)];
+            this.boxes[i] = [Position.createFromArray(jsonElement.k), Utils
+                .defaultValue(jsonElement.v.bhs, 1), Utils.defaultValue(
+                jsonElement.v.bhp, 0)];
         }
     }
 

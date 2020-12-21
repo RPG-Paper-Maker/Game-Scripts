@@ -15,13 +15,7 @@ var Align = Enum.Align;
 var TitleSettingKind = Enum.TitleSettingKind;
 /** @class
  *  All the titlescreen and gameover datas.
- *  @property {boolean} isTitleBackgroundImage Indicate if the background is an
- *  image
- *  @property {number} titleBackgroundImageID The background image ID
- *  @property {number} titleBackgroundVideoID The background video ID
- *  @property {SystemPlaySong} titleMusic The title music
- *  @property {SystemTitleCommand[]} titleCommands The title commands
- *  @property {number[]} titleSettings The title settings IDs
+ *  @static
  */
 class TitlescreenGameover {
     constructor() {

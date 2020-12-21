@@ -16,7 +16,6 @@ import { MapObject } from "../Core";
 /** @class
  *  An event command for removing a picture.
  *  @extends EventCommand.Base
- *  @property {System.DynamicValue} index The index value
  *  @param {any[]} command Direct JSON command to parse
  */
 class RemoveAPicture extends Base {

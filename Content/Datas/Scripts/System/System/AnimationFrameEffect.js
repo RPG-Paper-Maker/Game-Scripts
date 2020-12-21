@@ -15,10 +15,7 @@ import { Base } from "./Base";
 import { PlaySong } from "./PlaySong";
 /** @class
  *  An animation frame effect.
- *  @property {boolean} isSE Indicate if the effect is a sound effect
- *  @property {SystemPlaySong} se The sound effect to play
- *  @property {AnimationEffectConditionKind} condition The animation effect
- *  condition
+ *  @extends System.Base
  *  @param {Record<string, any>} [json=undefined] Json object describing the
  *  animation frame effect
  */

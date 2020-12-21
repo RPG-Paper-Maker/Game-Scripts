@@ -13,7 +13,8 @@ import { Datas } from "..";
 /** @class
  *  A weapon of the game.
  *  @extends System.Armor
- *  @param {Record<string, any>} [json=undefined] Json object describing the weapon
+ *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  weapon
  */
 class Weapon extends Armor {
     constructor(json) {

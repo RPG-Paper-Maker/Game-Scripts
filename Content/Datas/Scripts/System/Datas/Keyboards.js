@@ -12,10 +12,7 @@ import { System, Datas, Graphic, Scene } from "..";
 import { IO, Paths } from "../Common";
 /** @class
  *  All the keyBoards datas.
- *  @property {System.KeyBoard[]} list List of all the keys of the game by ID
- *  @property {System.KeyBoard[]} listOrdered List of all the keys of the game
- *  by index
- *  @property {Record<string, any>} menuControls All the menu controls assigns
+ *  @static
  */
 class Keyboards {
     constructor() {

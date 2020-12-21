@@ -13,11 +13,6 @@ import { Manager } from "..";
 import { Utils } from "../Common";
 /** @class
  *   Abstract class for the game stack.
- *   @property {ReactionInterpreter[]} reactionInterpreters The reaction
- *   interpreters for parallel reactions
- *   @property {EventCommand[]} parallelCommands Commands that are still running
- *   without blocking any other command
- *   @property {boolean} loading Indicate if the scene is loading
  *   @param {boolean} [loading=true] Indicate if the scene should load async
  *   stuff
  */

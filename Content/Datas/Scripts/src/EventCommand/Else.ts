@@ -16,7 +16,7 @@ import { MapObject } from "../Core";
  *  An event command for condition else event command block.
  *  @extends EventCommand.Base
  *  @param {any[]} command Direct JSON command to parse
-*/
+ */
 class Else extends Base {
 
     constructor(command: any[]) {

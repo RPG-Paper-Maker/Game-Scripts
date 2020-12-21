@@ -17,19 +17,6 @@ import { Datas, System } from "..";
 /** @class
  *  A class for all the texts to display in HUD.
  *  @extends Bitmap
- *  @property {string} text The brut text to display
- *  @property {Align} align Alignement of the text
- *  @property {number} fontSize The font height used for the text
- *  @property {string} fontName The font name used for the text
- *  @property {AlignVertical} verticalAlign Vertical alignement of the text
- *  @property {SystemColor} color The color used for the text
- *  @property {boolean} bold If checked, make the text bold
- *  @property {boolean} italic If checked, make the text italic
- *  @property {SystemColor} backColor The background color behind the text
- *  @property {SystemColor} strokeColor The stroke color of the text
- *  @property {string} font The font used for the text (combining fontSize +
- *  fontName)
- *  @property {number} textWidth The font text width (without resizing)
  *  @param {string} [text=""] The brut text to display
  *  @param {Object} [opts={}] Options
  *  @param {number} [opts.x=0] The x coords of the text
@@ -56,7 +43,7 @@ class Text extends Base {
     constructor(text = "", { x = 0, y = 0, w = 0, h = 0, align = Align.Left, fontSize = Utils.defaultValue(Datas.Systems.dbOptions.v_tSize, Constants
         .DEFAULT_FONT_SIZE), fontName = Utils.defaultValue(Datas.Systems
         .dbOptions.v_tFont, Constants.DEFAULT_FONT_NAME), verticalAlign = AlignVertical.Center, color = Utils.defaultValue(Datas.Systems.dbOptions
-        .v_tcText, System.Color.white), bold = false, italic = false, backColor = Utils.defaultValue(Datas.Systems.dbOptions.v_tcBackground, null), strokeColor = Utils.defaultValue(Datas.Systems.dbOptions.tOutline, false) ? Utils.defaultValue(Datas.Systems.dbOptions.v_tcOutline, null) : null } = {}) {
+        .v_tcText, System.Color.WHITE), bold = false, italic = false, backColor = Utils.defaultValue(Datas.Systems.dbOptions.v_tcBackground, null), strokeColor = Utils.defaultValue(Datas.Systems.dbOptions.tOutline, false) ? Utils.defaultValue(Datas.Systems.dbOptions.v_tcOutline, null) : null } = {}) {
         super(x, y, w, h);
         this.align = align;
         this.fontName = fontName;

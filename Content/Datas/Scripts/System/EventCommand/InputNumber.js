@@ -13,8 +13,7 @@ import { Manager } from "..";
 import { KeyEvent, Platform, ScreenResolution } from "../Common";
 /** @class
  *  An event command for entering a number inside a variable.
- *  @extends EventCommand
- *  @property {number} id ID of the variable
+ *  @extends EventCommand.Base
  *  @param {any[]} command Direct JSON command to parse
  */
 class InputNumber extends Base {

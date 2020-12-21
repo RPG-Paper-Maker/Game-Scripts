@@ -13,14 +13,7 @@ import { Utils } from "../Common";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  An animation frame element.
- *  @property {number} x The x position
- *  @property {number} y The y postion
- *  @property {number} texRow The texture row
- *  @property {number} texCol The texture column
- *  @property {number} zoom The zoom value
- *  @property {number} angle The angle value
- *  @property {boolean} flip Indicate if the texture if flipped
- *  @property {number} opacity The opacity value
+ *  @extends System.Base
  *  @param {Record<string, any>}
  */
 class AnimationFrameElement extends Base {

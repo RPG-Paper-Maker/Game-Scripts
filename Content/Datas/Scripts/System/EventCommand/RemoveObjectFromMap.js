@@ -14,7 +14,6 @@ import { MapObject, Portion } from "../Core";
 /** @class
  *  An event command for removing a specific object from map.
  *  @extends EventCommand.Base
- *  @property {System.DynamicValue} objectID The object ID value to remove
  *  @param {any[]} command Direct JSON command to parse
  */
 class RemoveObjectFromMap extends Base {
@@ -46,8 +45,7 @@ class RemoveObjectFromMap extends Base {
         let objectID = this.objectID.getValue();
         if (!currentState.started) {
             currentState.started = true;
-            (async () => {
-                let result = await MapObject.searchInMap(objectID, objectID);
+            MapObject.search(objectID, (result) => {
                 if (result.datas.r.indexOf(result.id) === -1) {
                     switch (result.kind) {
                         case 0:
@@ -74,7 +72,7 @@ class RemoveObjectFromMap extends Base {
                     result.object.removeFromScene();
                 }
                 currentState.finished = true;
-            })();
+            }, object);
         }
         return currentState.finished ? 1 : 0;
     }

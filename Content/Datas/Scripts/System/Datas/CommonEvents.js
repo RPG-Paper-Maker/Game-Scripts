@@ -12,14 +12,7 @@ import { IO, Paths, Utils } from "../Common";
 import { System, Datas } from "..";
 /** @class
  *  All the battle System datas.
- *  @property {string} [DatasCommonEvents.PROPERTY_STOCKED="stocked"] The
- *  property stocked for reorder function
- *  @property {Event[]} eventsSystem List of all the events System by ID
- *  @property {Event[]} eventsUser List of all the events user by ID
- *  @property {SystemCommonReaction[]} commonReactions List of all the common
- *  reactions by ID
- *  @property {SystemObject[]} commonObjects List of all the common objects by
- *  ID
+ *  @static
  */
 class CommonEvents {
     constructor() {

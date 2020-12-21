@@ -15,14 +15,8 @@ import { Utils } from "../Common";
 /** @class
  *  An event command for changing a skill.
  *  @extends EventCommand.Base
- *  @property {System.DynamicValue} skillID The skill ID value
- *  @property {number} selection The selection kind
- *  @property {System.DynamicValue} heInstanceID The hero enemy instance ID
- *  value
- *  @property {GroupKind} groupIndex The group index
- *  @property {number} operation The operation kind
  *  @param {any[]} command Direct JSON command to parse
-*/
+ */
 class ChangeASkill extends Base {
     constructor(command) {
         super();

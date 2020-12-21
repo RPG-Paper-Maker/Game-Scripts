@@ -9,22 +9,18 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-/** @class
- *   A bitmap is something that can be drawn on the HUD. It can be a window,
- *   a text, an image...
- *   @property {number} x x coord of the bitmap
- *   @property {number} y y coord of the bitmap
- *   @property {number} w w coord of the bitmap
- *   @property {number} h h coord of the bitmap
- *   @param {number} [x=0] x coord of the bitmap
- *   @param {number} [y=0] y coord of the bitmap
- *   @param {number} [w=0] w coord of the bitmap
- *   @param {number} [h=0] h coord of the bitmap
- */
 import { ScreenResolution } from "../Common"
 import { Stack } from "../Manager"
 
-export class Bitmap {
+/** @class
+ *  A bitmap is something that can be drawn on the HUD. It can be a window,
+ *  a text, an image...
+ *  @param {number} [x=0] x coord of the bitmap
+ *  @param {number} [y=0] y coord of the bitmap
+ *  @param {number} [w=0] w coord of the bitmap
+ *  @param {number} [h=0] h coord of the bitmap
+ */
+class Bitmap {
 
     public oX: number;
     public oY: number;
@@ -42,11 +38,11 @@ export class Bitmap {
         this.setH(h);
     }
 
-    // -------------------------------------------------------
-    /** Set the x value
-     *   @param {number} x The x value
-     *   @param {boolean} [min=false] If checked, transform screen value with min
-     *   x y
+    /** 
+     *  Set the x value.
+     *  @param {number} x The x value
+     *  @param {boolean} [min=false] If checked, transform screen value with min
+     *  x y
      */
     setX(x: number, min: boolean = false) {
         this.oX = x;
@@ -55,11 +51,11 @@ export class Bitmap {
         Stack.requestPaintHUD = true;
     }
 
-    // -------------------------------------------------------
-    /** Set the y value
-     *   @param {number} y The y value
-     *   @param {boolean} [min=false] If checked, transform screen value with min
-     *   x y
+    /** 
+     *  Set the y value.
+     *  @param {number} y The y value
+     *  @param {boolean} [min=false] If checked, transform screen value with min
+     *  x y
      */
     setY(y: number, min: boolean = false) {
         this.oY = y;
@@ -68,11 +64,11 @@ export class Bitmap {
         Stack.requestPaintHUD = true;
     }
 
-    // -------------------------------------------------------
-    /** Set the w value
-     *   @param {number} w The w value
-     *   @param {boolean} [min=false] If checked, transform screen value with min
-     *   x y
+    /** 
+     *  Set the w value.
+     *  @param {number} w The w value
+     *  @param {boolean} [min=false] If checked, transform screen value with min
+     *  x y
      */
     setW(w: number, min: boolean = false) {
         this.oW = w;
@@ -81,11 +77,11 @@ export class Bitmap {
         Stack.requestPaintHUD = true;
     }
 
-    // -------------------------------------------------------
-    /** Set the h value
-     *   @param {number} h The h value
-     *   @param {boolean} [min=false] If checked, transform screen value with min
-     *   x y
+    /** 
+     *  Set the h value.
+     *  @param {number} h The h value
+     *  @param {boolean} [min=false] If checked, transform screen value with min
+     *  x y
      */
     setH(h: number, min: boolean = false) {
         this.oH = h;
@@ -94,8 +90,8 @@ export class Bitmap {
         Stack.requestPaintHUD = true;
     }
 
-    // -------------------------------------------------------
-    /** Set the position to the left
+    /** 
+     *  Set the position to the left.
      */
     setLeft() {
         this.oX = 0;
@@ -103,8 +99,8 @@ export class Bitmap {
         Stack.requestPaintHUD = true;
     }
 
-    // -------------------------------------------------------
-    /** Set the position to the top
+    /** 
+     *  Set the position to the top.
      */
     setTop() {
         this.oY = 0;
@@ -112,27 +108,26 @@ export class Bitmap {
         Stack.requestPaintHUD = true;
     }
 
-    // -------------------------------------------------------
-
-    /** Set the position to the right
+    /** 
+     *  Set the position to the right.
      */
     setRight(offset: number = 0) {
         this.setX(ScreenResolution.SCREEN_X - this.oW - offset);
     }
 
-    // -------------------------------------------------------
-    /** Set the position to the bot
+    /** 
+     *  Set the position to the bot.
      */
     setBot(offset: number = 0) {
         this.setY(ScreenResolution.SCREEN_Y - this.oH - offset);
     }
 
-    // -------------------------------------------------------
-    /** Set all the coords values
-     *   @param {number} x The x value
-     *   @param {number} y The y value
-     *   @param {number} w The w value
-     *   @param {number} h The h value
+    /** 
+     *  Set all the coords values.
+     *  @param {number} x The x value
+     *  @param {number} y The y value
+     *  @param {number} w The w value
+     *  @param {number} h The h value
      */
     setCoords(x: number, y: number, w: number, h: number) {
         this.setX(x);
@@ -141,3 +136,5 @@ export class Bitmap {
         this.setH(h);
     }
 }
+
+export { Bitmap }

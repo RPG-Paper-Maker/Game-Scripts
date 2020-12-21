@@ -11,8 +11,8 @@
 import { IO, Paths, Utils, Enum } from "../Common";
 var TitleSettingKind = Enum.TitleSettingKind;
 /** @class
- *  All settings
- *  @property {Record<string, number>} kb The keyboard assignments according to ID
+ *  All the settings datas.
+ *  @static
  */
 class Settings {
     constructor() {

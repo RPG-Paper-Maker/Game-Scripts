@@ -13,8 +13,6 @@ import { Base } from "./Base";
 /** @class
  *  A name that can have several translations.
  *  @extends {System.Base}
- *  @property {string[]} [names=[]] The different names list according to lang
- *  ID
  *  @param {Record<string, any>} [json=undefined] Json object describing the
  *  name in sevaral langs
  */

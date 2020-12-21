@@ -12,13 +12,10 @@ import { Base } from "./Base";
 import { System, Manager } from "..";
 import { Mathf } from "../Common";
 /** @class
-*   An event command for modifying a currency value
-*   @extends EventCommand
-*   @property {System.DynamicValue} currencyID The currency ID value
-*   @property {OperationKind} operation The operation kind
-*   @property {System.DynamicValue} value The value
-*   @param {Object} command Direct JSON command to parse
-*/
+ *  An event command for modifying a currency value.
+ *  @extends EventCommand.Base
+ *  @param {any[]} command Direct JSON command to parse
+ */
 class ModifyCurrency extends Base {
     constructor(command) {
         super();

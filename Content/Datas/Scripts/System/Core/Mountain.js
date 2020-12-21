@@ -16,24 +16,6 @@ const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  A mountain in the map.
  *  @extends MapElement
- *  @property {number} [Mountain.X_LEFT_OFFSET=0] Offset for x left
- *  @property {number} [Mountain.X_MID_OFFSET=1] Offset for x mid
- *  @property {number} [Mountain.X_RIGHT_OFFSET=2] Offset for x right
- *  @property {number} [Mountain.X_MIX_OFFSET=3] Offset for x mix
- *  @property {number} [Mountain.Y_TOP_OFFSET=0] Offset for y top
- *  @property {number} [Mountain.Y_MID_OFFSET=1] Offset for y mid
- *  @property {number} [Mountain.Y_BOT_OFFSET=2] Offset for y bot
- *  @property {number} [Mountain.Y_MIX_OFFSET=3] Offset for y mix
- *  @property {number} mountainID The mountain ID
- *  @property {number} widthSquares The width in squares
- *  @property {number} widthPixels The width in pixels
- *  @property {number} heightSquares The height in squares
- *  @property {number} heightPixels The height in pixels
- *  @property {boolean} top Indicate there's another mountain on top
- *  @property {boolean} bot Indicate there's another mountain on bot
- *  @property {boolean} left Indicate there's another mountain on left
- *  @property {boolean} right Indicate there's another mountain on right
- *  @property {number} angle The angle of the mountain
  *  @param {Record<string, any>} [json=undefined] Json object describing the mountain
  */
 class Mountain extends MapElement {
@@ -334,7 +316,7 @@ class Mountain extends MapElement {
         let height = Constants.MAX_PICTURE_SIZE;
         let faceHeight = Math.sqrt((wp * wp) + (hp * hp));
         let w = Datas.Systems.SQUARE_SIZE / width;
-        let localPosition = position.toVector3();
+        let localPosition = position.toVector3(false);
         let center = new THREE.Vector3(localPosition.x + (Datas.Systems
             .SQUARE_SIZE / 2), localPosition.y + (hp / 2), localPosition.z + (Datas.Systems.SQUARE_SIZE / 2));
         let xLeft = localPosition.x;

@@ -9,7 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { System, EventCommand, Manager, Scene, Datas } from "..";
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { System, EventCommand, Manager, Datas } from "..";
 import { Frame } from "./Frame";
 import { Enum, Utils, IO, Paths, Constants, Platform, Mathf } from "../Common";
 import Orientation = Enum.Orientation;
@@ -17,68 +18,28 @@ import ElementMapKind = Enum.ElementMapKind;
 import PictureKind = Enum.PictureKind;
 import ObjectMovingKind = Enum.ObjectMovingKind;
 import { MapPortion } from "./MapPortion";
-import { Land } from "./Land";
 import { Sprite } from "./Sprite";
 import { Position } from "./Position";
 import { CollisionSquare } from "./CollisionSquare";
 import { MapElement } from "./MapElement";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 interface StructSearchResult {
-    object: MapObject;
-    id: number;
-    kind?: number;
-    index?: number;
-    list?: MapObject[];
-    datas?: Record<string, any>
+    object: MapObject,
+    id: number,
+    datas: Record<string, any>,
+    kind?: number,
+    index?: number,
+    list?: MapObject[]
 }
 
 /** @class
- *  Element movable in local map.
- *  @property {number} [MapObject.SPEED_NORMAL=0.004666] Normal speed coef
- *  @property {SystemObject} System The System infos
- *  @property {THREE.Vector3} position The current object position
- *  @property {THREE.Vector3} previousPosition The previous position before 
- *  last move
- *  @property {THREE.Mesh} mesh The current mesh used for this object
- *  @property {THREE.Mesh[]} meshBoundingBox The meshs bounding box used for 
- *  collisions
- *  @property {THREE.Mesh} currentBoundingBox The current bounding box mesh
- *  @property {Object} boundingBoxSettings The bounding box settings
- *  @property {Frame} frame The animation move frame
- *  @property {Orientation} orientationEye Orientation where the character is 
- *  looking at
- *  @property {Orientation} orientation The orientation according to camera
- *  @property {number} width The width by number of squares
- *  @property {number} height The height by number of squares
- *  @property {boolean} moving Indicate if the object is moving
- *  @property {number} moveFrequencyTick The move frequency tick
- *  @property {boolean} isHero Indicate if this obejct is the hero
- *  @property {boolean} isStartup Indicate if this object is a startup
- *  @property {boolean} isInScene Indicate if this object mesh is in the scene
- *  @property {boolean} receivedOneEvent Indicate if this object receive one 
- *  event per frame
- *  @property {Object} movingState The current state (for moving command)
- *  @property {Orientation} previousOrientation The previous orientation before 
- *  last move
- *  @property {EventCommandMoveObject} otherMoveCommand The other move command 
- *  for calculating diagonal move
- *  @property {number} yMountain The last y mountain pixel
- *  @property {number[]} properties The properties values according to ID 
- *  @property {Object[]} statesInstance The states instances values according 
- *  to ID
- *  @property {any[][]} timeEventsEllapsed Informations about time events
- *  @property {number[]} states The states IDs  
- *  @property {SystemObjectState} currentState The current System object state
- *  @property {Object} currentStateInstance The current instance object state
- *  @property {SystemValue} speed Speed coef
- *  @property {SystemValue} frequency Frequency value
+ *  Object in local map that can move.
  *  @param {SystemObject} System The System informations
  *  @param {THREE.Vector3} position The current object position
  *  @param {boolean} isHero Indicate if the object is the hero
-*/
-class MapObject
-{
+ */
+class MapObject {
+    
     public static SPEED_NORMAL = 0.004666;
 
     public system: System.MapObject;
@@ -148,42 +109,63 @@ class MapObject
     }
 
     /** 
-     *  Get the direct object and some other informations.
+     *  Search an object in the map.
      *  @static
-     *  @async
+     *  @param {number} objectID The object ID searched
+     */
+    static search(objectID: number, callback: Function, thisObject?: MapObject) {
+        let result = this.searchInMap(objectID, thisObject);
+        if (result === null) {
+            (async() => {
+                result = await this.searchOutMap(objectID);
+                callback.call(null, result);
+            })();
+        } else {
+            callback.call(null, result);
+        }
+    }
+
+    /** 
+     *  Search an object that is already loaded. Return null if not found.
+     *  @static
      *  @param {number} objectID The object ID searched
      *  @param {MapObject} object This object
      *  @returns {Promise<StructSearchResult>}
      */
-    static async searchInMap(objectID: number, thisObject?: MapObject): Promise<
-        StructSearchResult>
+    static searchInMap(objectID: number, thisObject?: MapObject): 
+        StructSearchResult
     {
+        let object = null;
         switch (objectID) {
             case -1: // This object
                 if (thisObject.isInScene || thisObject.isHero || thisObject
                     .isStartup)
                 {
-                    return {
-                        object: thisObject,
-                        id: thisObject.system.id
-                    };
+                    object = thisObject;
                 }
                 objectID = thisObject.system.id;
                 break;
             case 0: // Hero
-                return {
-                    object: Manager.Stack.game.hero,
-                    id: Manager.Stack.game.hero.system.id
-                };
+                object = Manager.Stack.game.hero,
+                objectID = Manager.Stack.game.hero.system.id
             default:
                 break;
         }
 
-        // First search in the moved objects
+        // Check if direct
         let globalPortion = Manager.Stack.currentMap.allObjects[objectID]
             .getGlobalPortion();
         let mapsDatas = Manager.Stack.game.getPotionsDatas(Manager.Stack
             .currentMap.id, globalPortion);
+        if (objectID !== null) {
+            return {
+                object: object,
+                id: objectID,
+                datas: mapsDatas
+            };
+        }
+
+        // First search in the moved objects
         let movedObjects = mapsDatas.m;
         let moved = null;
         let i: number, l: number;
@@ -236,30 +218,43 @@ class MapObject
                 }
             }
         } else { // Load the file if not already in temp
-            let json = await IO.parseFileJSON(Paths.FILE_MAPS + Manager.Stack
-                .currentMap.mapName + Constants.STRING_SLASH + globalPortion
-                .getFileName());
-            mapPortion = new MapPortion(globalPortion);
-            moved = mapPortion.getObjFromID(json, objectID);
-            if (moved === null) {
-                return {
-                    object: Manager.Stack.game.hero,
-                    id: objectID,
-                    kind: 2,
-                    index: -1,
-                    list: null,
-                    datas: mapsDatas
-                }
-            } else
-            {
-                return {
-                    object: moved,
-                    id: objectID,
-                    kind: 2,
-                    index: -1,
-                    list: null,
-                    datas: mapsDatas
-                }
+            return null;
+        }
+    }
+
+    /** 
+     *  Search an object that is not loaded yet.
+     *  @static
+     *  @param {number} objectID The object ID searched
+     *  @returns {Promise<StructSearchResult>}
+     */
+    static async searchOutMap(objectID: number): Promise<StructSearchResult> {
+        let globalPortion = Manager.Stack.currentMap.allObjects[objectID]
+            .getGlobalPortion();
+        let mapsDatas = Manager.Stack.game.getPotionsDatas(Manager.Stack
+            .currentMap.id, globalPortion);
+        let json = await IO.parseFileJSON(Paths.FILE_MAPS + Manager.Stack
+            .currentMap.mapName + Constants.STRING_SLASH + globalPortion
+            .getFileName());
+        let mapPortion = new MapPortion(globalPortion);
+        let moved = mapPortion.getObjFromID(json, objectID);
+        if (moved === null) {
+            return {
+                object: Manager.Stack.game.hero,
+                id: objectID,
+                kind: 2,
+                index: -1,
+                list: null,
+                datas: mapsDatas
+            }
+        } else {
+            return {
+                object: moved,
+                id: objectID,
+                kind: 2,
+                index: -1,
+                list: null,
+                datas: mapsDatas
             }
         }
     }
@@ -470,7 +465,7 @@ class MapObject
             let sprite = Sprite.create(this.currentState.graphicKind, [x, y, 
                 this.width, this.height]);
             let result = sprite.createGeometry(this.width, this.height, false,
-                this.position);
+                Position.createFromVector3(this.position));
             let geometry = result[0];
             let objCollision = result[1];
             this.mesh = new THREE.Mesh(geometry, material);
@@ -891,9 +886,7 @@ class MapObject
                 .currentMap.id, afterPortion);
             let originalPortion = Manager.Stack.currentMap.allObjects[this
                 .system.id].getGlobalPortion();
-            if (originalPortion[0] !== afterPortion[0] || originalPortion[1] !==
-                afterPortion[1] || originalPortion[2] !== afterPortion[2])
-            {
+            if (!originalPortion.equals(afterPortion)) {
                 objects.mout.push(this);
             } else {
                 objects.min.push(this);   

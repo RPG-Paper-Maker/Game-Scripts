@@ -12,8 +12,7 @@ import { IO, Paths, Utils } from "../Common";
 import { System, Datas } from "..";
 /** @class
  *  All the weapons datas
- *  @property {System.Weapon[]} list List of all the weapons of the game
- *  according to ID
+ *  @static
  */
 class Weapons {
     constructor() {

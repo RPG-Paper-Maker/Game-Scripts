@@ -9,22 +9,20 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Base } from "./Base"
-import { Utils } from "../Common";
+import { Utils, Enum } from "../Common";
+import { Manager, Datas } from "..";
+import PictureKind = Enum.PictureKind;
 
 /** @class
-*   A skybox of the game
-*   @property {number} front The front picture ID
-*   @property {number} back The back picture ID
-*   @property {number} top The top picture ID
-*   @property {number} bot The bot picture ID
-*   @property {number} left The left picture ID
-*   @property {number} right The right picture ID
-*   @param {Record<string, any>} [json=undefined] Json object describing the 
-*   skybox
-*/
-class Skybox extends Base
-{
+ *  A skybox of the game.
+ *  @extends System.Base
+ *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  skybox
+ */
+class Skybox extends Base {
+    
     public front: number;
     public back: number;
     public top: number;
@@ -32,17 +30,15 @@ class Skybox extends Base
     public left: number;
     public right: number;
 
-    constructor(json?: Record<string, any>)
-    {
+    constructor(json?: Record<string, any>) {
         super(json)
     }
 
     /** 
-     *  Read the JSON associated to the skybox
+     *  Read the JSON associated to the skybox.
      *  @param {Record<string, any>} json Json object describing the skybox
      */
-    read(json: Record<string, any>)
-    {
+    read(json: Record<string, any>) {
         this.front = Utils.defaultValue(json.fid, 1);
         this.back = Utils.defaultValue(json.bid, 1);
         this.top = Utils.defaultValue(json.tid, 1);
@@ -51,33 +47,31 @@ class Skybox extends Base
         this.right = Utils.defaultValue(json.rid, 1);
     }
     
-    // -------------------------------------------------------
-    /** Create the textures for the background
-    *   @returns {THREE.MeshBasicMaterial[]} 
-    */
-    createTextures = function() 
-    {
-        /*
+    /** 
+     *  Create the textures for the background
+     *  @returns {THREE.MeshBasicMaterial[]} 
+     */
+    createTextures(): typeof THREE.MeshBasicMaterial[] {
         return [
-            RPM.createMaterial(RPM.textureLoader.load(RPM.datasGame.pictures.get
-                (PictureKind.Skyboxes, this.left).getPath()), { flipY: true, 
-                flipX: true }),
-            RPM.createMaterial(RPM.textureLoader.load(RPM.datasGame.pictures.get
-                (PictureKind.Skyboxes, this.right).getPath()), { flipY: true, 
-                flipX: true }),
-            RPM.createMaterial(RPM.textureLoader.load(RPM.datasGame.pictures.get
-                (PictureKind.Skyboxes, this.top).getPath()), { flipY: true, 
-                flipX: true }),
-            RPM.createMaterial(RPM.textureLoader.load(RPM.datasGame.pictures.get
-                (PictureKind.Skyboxes, this.bot).getPath()), { flipY: true, 
-                    flipX: true }),
-            RPM.createMaterial(RPM.textureLoader.load(RPM.datasGame.pictures.get
-                (PictureKind.Skyboxes, this.front).getPath()), { flipY: true, 
-                    flipX: true }),
-            RPM.createMaterial(RPM.textureLoader.load(RPM.datasGame.pictures.get
-                (PictureKind.Skyboxes, this.back).getPath()), { flipY: true, 
-                flipX: true })
-        ];*/
+            Manager.GL.createMaterial(Manager.GL.textureLoader.load(Datas
+                .Pictures.get(PictureKind.Skyboxes, this.left).getPath()), { 
+                flipY: true, flipX: true }),
+            Manager.GL.createMaterial(Manager.GL.textureLoader.load(Datas
+                .Pictures.get(PictureKind.Skyboxes, this.right).getPath()), { 
+                flipY: true, flipX: true }),
+            Manager.GL.createMaterial(Manager.GL.textureLoader.load(Datas
+                .Pictures.get(PictureKind.Skyboxes, this.top).getPath()), { 
+                flipY: true, flipX: true }),
+            Manager.GL.createMaterial(Manager.GL.textureLoader.load(Datas
+                .Pictures.get(PictureKind.Skyboxes, this.bot).getPath()), { 
+                flipY: true, flipX: true }),
+            Manager.GL.createMaterial(Manager.GL.textureLoader.load(Datas
+                .Pictures.get(PictureKind.Skyboxes, this.front).getPath()), { 
+                flipY: true, flipX: true }),
+            Manager.GL.createMaterial(Manager.GL.textureLoader.load(Datas
+                .Pictures.get(PictureKind.Skyboxes, this.back).getPath()), { 
+                flipY: true, flipX: true })
+        ];
     }
 }
 

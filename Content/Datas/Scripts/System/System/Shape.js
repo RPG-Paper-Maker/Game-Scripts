@@ -15,11 +15,9 @@ import { Datas } from "..";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  A shape of the game.
- *  @property {number} id The shape ID
- *  @property {string} name The shape name
- *  @property {boolean} isBR Indicate if the shape is a BR (Basic Ressource)
- *  @property {boolean} dlc Indicate if the shape is a DLC
- *  @param {Record<string, any>} [json=undefined] Json object describing the shape
+ *  @extends System.Base
+ *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  shape
  *  @param {CustomShapeKind} [kind=CustomShapeKin] The kind of custom shape
  */
 class Shape extends Base {

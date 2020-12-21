@@ -14,8 +14,7 @@ import { System, Datas } from "..";
 
 /** @class
  *  All the items datas.
- *  @property {System.Item[]} list List of all the items of the game according
- *  to ID
+ *  @static
  */
 class Items {
 

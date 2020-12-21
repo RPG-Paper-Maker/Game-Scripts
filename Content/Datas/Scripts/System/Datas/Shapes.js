@@ -13,8 +13,7 @@ import { System, Datas } from "..";
 var CustomShapeKind = Enum.CustomShapeKind;
 /** @class
  *  All the shapes datas.
- *  @property {System.Shape[]} list List of all the shapes of the game
- *  according to ID and ShapeKind.
+ *  @static
  */
 class Shapes {
     constructor() {
@@ -70,9 +69,9 @@ class Shapes {
      *  @returns {System.Shape}
      */
     static get(kind, id) {
-        return kind === CustomShapeKind.None ? new System.Shape() : Datas.Base
-            .get(id, this.list[kind], "song " + System.Shape
-            .customShapeKindToString(kind));
+        return kind === CustomShapeKind.None || id === -1 ? new System.Shape() :
+            Datas.Base.get(id, this.list[kind], "song " + System.Shape
+                .customShapeKindToString(kind));
     }
 }
 export { Shapes };

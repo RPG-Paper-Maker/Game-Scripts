@@ -17,15 +17,8 @@ const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  A picture of the game.
  *  @extends {System.Base}
- *  @property {PictureKind} kind The kind of picture
- *  @property {string} name The picture name
- *  @property {boolean} isBR Indicate if the picture is a BR (Basic Ressource)
- *  @property {string} dlc The dlc name
- *  @property {Record<string, any>[]} jsonCollisions The json used for the picture collision
- *  @property {boolean} collisionsRepeat Indicate if collision is repeated (for
- *  characters)
- *  @property {CollisionSquare[]} collisions The collisions squares
- *  @param {Object} [json=undefined] Json object describing the picture
+ *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  picture
  *  @param {PictureKind} [kind=PictureKind.Pictures] The kind of picture
  */
 class Picture extends Base {

@@ -32,40 +32,7 @@ import { Object3D } from "./Object3D";
 
 /** @class
  *  A portion of the map.
- *  @property {THREE.MeshBasicMaterial} BB_MATERIAL
- *  @property {number} realX The real x portion
- *  @property {number} realY The real y portion
- *  @property {number} realZ The real z portion
- *  @property {THREE.Mesh} staticFloorsMesh The mesh used for drawing all the
- *  floors
- *  @property {THREE.Mesh[]} staticSpritesMesh List of all the static sprites in
- *  the scene
- *  @property {number[][][]} squareNonEmpty List of all y floors according to x 
- *  and y square
- *  @property {Object[]} boundingBoxesLands Bounding boxes for lands acording 
- *  to index
- *  @property {Object[]} boundingBoxesSprites Bounding boxes for sprites 
- *  acording to index
- *  @property {Object[]} boundingBoxesMountains Bounding boxes for mountains 
- *  acording to index
- *  @property {Object[]} boundingBoxesObjects3D Bounding boxes for 3D objects 
- *  acording to index
- *  @property {THREE.Mesh[]} staticAutotilesList List of all the static 
- *  autotiles in the map portion
- *  @property {THREE.Mesh[]} staticMountainsList List of all the static 
- *  mountains in the map portion
- *  @property {MapObject[]} objectsList List of all the objects in the portion
- *  @property {THREE.Mesh[]} faceSpritesList List of all the face sprites in the
- *  scene
- *  @property {THREE.Mesh[]} staticWallsList List of all the static walls in 
- *  the map portion
- *  @property {THREE.Mesh[]} staticObjects3DList List of all the static 3D 
- *  objects in the map portion
- *  @property {number[][]} overflowMountains Position of overflow mountians
- *  @property {THREE.Mesh[]} heroID The hero ID if in this portions
- *  @param {number} realX The real x portion
- *  @param {number} realY The real y portion
- *  @param {number} realZ The real z portion
+ *  @param {Portion} portion
 */
 class MapPortion {
 
@@ -234,7 +201,7 @@ class MapPortion {
             StructMapElementCollision;
         for (i = 0, l = json.length; i < l; i++) {
             jsonAutotile = json[i];
-            position = jsonAutotile.k;
+            position = Position.createFromArray(jsonAutotile.k);
             autotile = new Autotile(jsonAutotile.v);
             indexPos = position.toIndex();
             texture = null;
@@ -667,7 +634,7 @@ class MapPortion {
             typeof THREE.Vector3, mapObject: MapObject;
         for (let i = 0, l = json.length; i < l; i++) {
             jsonObject = json[i];
-            position = jsonObject.k;
+            position = Position.createFromArray(jsonObject.k);
             jsonObjectValue = jsonObject.v;
             object = new System.MapObject;
             if (jsonObjectValue.id === id) {

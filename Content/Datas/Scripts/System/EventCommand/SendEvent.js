@@ -15,15 +15,8 @@ var PrimitiveValueKind = Enum.PrimitiveValueKind;
 /** @class
  *  An event command for sending an event.
  *  @extends EventCommand.Base
- *  @property {number} targetKind The kind of target
- *  @property {boolean} senderNoReceiver Indicate if the sender should not
- *  receive event
- *  @property {System.DynamicValue} targetID The target ID
- *  @property {boolean} isSystem Indicate if it is an event System
- *  @property {number} eventID The event ID
- *  @property {System.DynamicValue[]} parameters List of all the parameters
  *  @param {any[]} command Direct JSON command to parse
-*/
+ */
 class SendEvent extends Base {
     constructor(command) {
         super();

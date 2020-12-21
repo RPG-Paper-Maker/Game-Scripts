@@ -16,12 +16,8 @@ import { MapObject, Item } from "../Core";
 /** @class
  *  An event command for modifying the inventory.
  *  @extends EventCommand.Base
- *  @property {ItemKind} itemKind The item kind
- *  @property {System.DynamicValue} itemID The item ID
- *  @property {number} operation The operation kind
- *  @property {System.DynamicValue} value The number of items value
  *  @param {any[]} command Direct JSON command to parse
-*/
+ */
 class ModifyInventory extends Base {
 
     public itemKind: number;
@@ -39,6 +35,7 @@ class ModifyInventory extends Base {
         this.itemID = System.DynamicValue.createValueCommand(command, iterator);
         this.operation = command[iterator.i++];
         this.value = System.DynamicValue.createValueCommand(command, iterator);
+        console.log(this)
     }
 
     /** 

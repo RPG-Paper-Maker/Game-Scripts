@@ -13,9 +13,9 @@ import { Constants } from "../Common";
 import { Datas } from "..";
 /** @class
  *  The data class for portion.
- *  @property {number} x
- *  @property {number} y
- *  @property {number} z
+ *  @param {number} x
+ *  @param {number} y
+ *  @param {number} z
  */
 class Portion {
     constructor(x = 0, y = 0, z = 0) {

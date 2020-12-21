@@ -16,8 +16,6 @@ import { ReactionInterpreter } from "../Core";
 /** @class
  *  The class who handle dynamic value.
  *  @extends {System.Base}
- *  @property {PrimitiveValueKind} kind The kind of value
- *  @property {any} value The value
  *  @param {Record<string, any>} [json=undefined] Json object describing the value
  */
 class DynamicValue extends System.Base {

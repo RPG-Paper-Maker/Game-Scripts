@@ -9,7 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 /** @class
- *   The key event class used to convert Qt keys to web keys.
+ *  @static
+ *  The key event class used to convert Qt keys to web keys.
  */
 class KeyEvent {
     /** Convert Qt key to DOM.

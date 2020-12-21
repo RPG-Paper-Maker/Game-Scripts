@@ -11,7 +11,6 @@
 
 /** @class
  *  A skill learned by a player.
- *  @property {number} id The ID of the skill
  *  @param {number} id The ID of the skill
  */
 class Skill {

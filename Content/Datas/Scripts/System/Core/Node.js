@@ -10,11 +10,8 @@
 */
 /** @class
  *  Datas structure of tree.
- *  @property {Object} data Data of the node
- *  @property {Node} parent Parent of the node
- *  @property {Node} firstChild The first child of the node
- *  @property {Node} lastChild The last child of the node
- *  @property {Node} next The next parent child
+ *  @param {Node} parent Parent of the node
+ *  @param {any} data Data of the node
  */
 class Node {
     constructor(parent, data) {

@@ -16,13 +16,9 @@ import { MapObject } from "../Core";
 
 /** @class
  *  An event command for shaking screen.
- *  @extends EventCommand
- *  @property {System.DynamicValue} offset The offset value
- *  @property {System.DynamicValue} shakeNumber The shakes number value
- *  @property {boolean} isWaitEnd Indicate if wait end of the command
- *  @property {System.DynamicValue} time The time value
- *  @param {Object} command Direct JSON command to parse
-*/
+ *  @extends EventCommand.Base
+ *  @param {any[]} command Direct JSON command to parse
+ */
 class ShakeScreen extends Base {
 
     public offset: System.DynamicValue;

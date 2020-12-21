@@ -15,8 +15,7 @@ import { System, Datas } from "..";
 
 /** @class
 *   All the songs datas
-*   @property {SystemSong[]} list List of all the songs of the game
-*   according to ID and SongKind
+*   @static
 */
 class Songs {
 
@@ -80,8 +79,9 @@ class Songs {
      *  @returns {System.Song}
      */
     static get(kind: SongKind, id: number): System.Song {
-        return kind === SongKind.None ? new System.Song() : Datas.Base.get(id, 
-            this.list[kind], "song " + System.Song.songKindToString(kind));
+        return kind === SongKind.None || id === -1 ? new System.Song() : Datas
+            .Base.get(id, this.list[kind], "song " + System.Song
+            .songKindToString(kind));
     }
 }
 

@@ -16,21 +16,8 @@ import { Datas, Manager } from "..";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  A tileset of the game.
- *  @property {CollisionSquare[]} collisions List of all the collisions
- *  according to the position on the texture
- *  @property {boolean} ownsAutotiles Indicate if this tileset contains
- *  autotiles
- *  @property {boolean} ownsMountains Indicate if this tileset contains
- *  mountains
- *  @property {boolean} ownsWalls Indicate if this tileset contains walls
- *  @property {number} id The tileset ID
- *  @property {SystemPicture} picture The picture used for this tileset
- *  @property {number[]} autotiles All the IDs of used autotiles for this
- *  tileset
- *  @property {number[]} walls All the IDs of used walls for this tileset
- *  @property {number[]} mountains All the IDs of used mountains for this
- *  tileset
- *  @property {number[]} objects All the IDs of used 3D objects for this tileset
+ *  @extends System.Base
+ *  @param {Record<string, any>} json Json object describing the tileset
  */
 class Tileset extends Base {
     constructor(json) {

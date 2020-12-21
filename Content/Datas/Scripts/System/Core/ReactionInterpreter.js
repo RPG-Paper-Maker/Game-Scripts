@@ -13,30 +13,17 @@ import { Utils, Platform } from "../Common";
 import { EventCommand, Manager } from "..";
 /** @class
  *  A reaction command interpreter.
- *  @property {MapObject} currentSender Current event sender (null for System
- *  events)
- *  @property {SystemReaction} currentReaction Current reaction excecuted (only
- *  one per state)
- *  @property {MapObject} currentMapObject Current map object
- *  @property {number} currentState Current state of map object reaction
- *  @property {Parameter[]} currentParameters All the parameters coming
- *  with this reaction
- *  @property {Node} currentCommand A node of a command reaction
- *  @property {Object} currentCommandState Current state of the current command
- *  @property {number[]} currentTimeState The current time events
- *  @property {boolean} isInMainMenu Indicate if this reaction was executed in
- *  main menu
  *  @param {MapObject} sender Current event sender (null for System events)
- *  @param {SystemReaction} reaction Current reaction excecuted (only one per
+ *  @param {System.Reaction} reaction Current reaction excecuted (only one per
  *  state)
  *  @param {MapObject} object Current map object
  *  @param {number} state Current state of map object reaction
- *  @param {Parameter[]} parameters All the parameters coming with this
- *  reaction
- *  @param {number[]} event The current time events
- *  @param {EventCommand} [command=reaction.getFirstCommand()] The current
- *  command (by default the first reaction command)
-*/
+ *  @param {System.DynamicValue[]} parameters All the parameters coming with
+ *  this reaction
+ *  @param {[System.Event, number]} event The current time events
+ *  @param {Node} [command=reaction.getFirstCommand()] The current command (by
+ *  default the first reaction command)
+ */
 class ReactionInterpreter {
     constructor(sender, reaction, object, state, parameters, event, command = reaction.getFirstCommand()) {
         this.currentSender = sender;

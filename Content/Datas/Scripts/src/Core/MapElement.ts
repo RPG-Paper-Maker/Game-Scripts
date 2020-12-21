@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Enum, Utils } from "../Common";
 import ElementMapKind = Enum.ElementMapKind;
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Position } from "./Position";
 import { Datas } from "..";
 import { CollisionSquare } from "./CollisionSquare";
@@ -39,12 +39,6 @@ interface StructMapElementCollision {
 
 /** @class
  *  An element in the map.
- *  @property {number} xOffset The x offset of the object according to layer
- *  @property {number} yOffset The y offset of the object according to layer
- *  @property {number} zOffset The z offset of the object according to layer
- *  @property {Orientation} orientation The orientation according to layer
- *  @property {CameraUpDown} upDown The camera up down orientation according to
- *  layer
  */
 class MapElement {
 

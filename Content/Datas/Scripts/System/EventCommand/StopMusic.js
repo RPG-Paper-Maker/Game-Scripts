@@ -15,7 +15,6 @@ var SongKind = Enum.SongKind;
 /** @class
  *  An event command for stopping the music.
  *  @extends EventCommand.Base
- *  @property {System.DynamicValue} seconds The time in seconds value
  *  @param {any[]} command Direct JSON command to parse
  */
 class StopMusic extends Base {

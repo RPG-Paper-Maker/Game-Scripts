@@ -14,11 +14,8 @@ import { Datas, Manager } from "..";
 var ElementMapKind = Enum.ElementMapKind;
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
- *  The game stack that is organizing the game scenes.
- *  @property {Scene.Base[]} content The stack content
- *  @property {Scene.Base} top The stack top content
- *  @property {Scene.Base} subTop The stack top - 1 content
- *  @property {Scene.Base} bot The stack bot content
+ *  The collisions manager.
+ *  @static
  */
 class Collisions {
     constructor() {
@@ -924,6 +921,6 @@ class Collisions {
 Collisions.BB_MATERIAL = new THREE.MeshBasicMaterial();
 Collisions.BB_BOX = Collisions.createBox();
 Collisions.BB_ORIENTED_BOX = Collisions.createOrientedBox();
-Collisions.BB_BOX_DETECTION = new THREE.MeshBasicMaterial();
-Collisions.BB_BOX_DEFAULT_DETECTION = new THREE.MeshBasicMaterial();
+Collisions.BB_BOX_DETECTION = Collisions.createBox();
+Collisions.BB_BOX_DEFAULT_DETECTION = Collisions.createBox();
 export { Collisions };

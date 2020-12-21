@@ -15,14 +15,10 @@ import { System } from "..";
 
 /** @class
  *  A progression table.
- *  @property {number} id The ID
- *  @property {SystemValue} initialValue The initial value
- *  @property {SystemValue} finalValue The final value
- *  @property {number} equation The equation kind
- *  @property {Object} table The table progression
+ *  @extends System.Base
  *  @param {number} [id=undefined] The ID
- *  @param {Record<string, any>} [json=undefined] Json object describing the progression
- *  table
+ *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  progression table
  */
 class ProgressionTable extends Base {
 

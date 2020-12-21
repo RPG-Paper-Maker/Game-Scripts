@@ -17,21 +17,9 @@ import { Utils } from "../Common";
 /** @class
  *  A class of the game.
  *  @extends System.Translatable
- *  @property {string} [Class.PROPERTY_FINAL_LEVEL="finalLevel"] The
- *  final level string property
- *  @property {string} [Class.PROPERTY_EXPERIENCE_BASE="experienceBase"]
- *  The experience base property
- *  @property {string} [Class.PROPERTY_EXPERIENCE_INFLATION="experienceInflation"]
- *  The experience inflation property
- *  @property {number} initialLevel The initial level
- *  @property {number} finalLevel The final level
- *  @property {number} experienceBase The experience base
- *  @property {number} experienceInflation The experience inflation
- *  @property {Object} experienceTable The experience table
- *  @property {SystemStatisticProgression[]} statisticsProgression The
- *  statistics progression
- *  @property {SystemClassSkill[]} skills The skills to learn of the class
- *  @param {Record<string, any>} [json=undefined] Json object describing the class
+ *  @extends System.Base
+ *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  class
  */
 class Class extends Translatable {
 

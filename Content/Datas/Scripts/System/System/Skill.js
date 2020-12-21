@@ -11,8 +11,9 @@
 import { CommonSkillItem } from "./CommonSkillItem";
 /** @class
  *  A skill of the game.
- *  @extends CommonSkillItem
- *  @param {Record<string, any>} [json=undefined] Json object describing the skill
+ *  @extends System.CommonSkillItem
+ *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  skill
  */
 class Skill extends CommonSkillItem {
     constructor(json) {

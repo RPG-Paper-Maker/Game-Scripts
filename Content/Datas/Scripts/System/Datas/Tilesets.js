@@ -14,20 +14,7 @@ var PictureKind = Enum.PictureKind;
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  All the tilesets datas.
- *  @property {string} [DatasTilesets.PROPERTY_TEXTURES_CHARACTERS="texturesCharacter"]
- *  Property string used for textures characters
- *  @property {string} [DatasTilesets.PROPERTY_TEXTURES_BATTLERS="texturesBattlers"]
- *  Property string used for textures battlers
- *  @property {string} [DatasTilesets.PROPERTY_TEXTURES_OBJECTS_3D="texturesObjects3D"]
- *  Property string used for textures 3D objects
- *  @property {Tileset[]} list List of all the tilesets of the game
- *  according to ID
- *  @property {Object} autotiles Tilesets according to string autotiles
- *  @property {Object} walls Tilesets according to string walls
- *  @property {Object} mountains Tilesets according to string mountains
- *  @property {THREE.Material[]} texturesCharacters The textures for character
- *  @property {THREE.Material[]} texturesBattlers The textures for battlers
- *  @property {THREE.Material[]} texturesObjects3D The textures for 3D objects
+ *  @static
  */
 class Tilesets {
     constructor() {

@@ -13,9 +13,10 @@ var PrimitiveValueKind = Enum.PrimitiveValueKind;
 import { Base } from "./Base";
 import { DynamicValue } from "./DynamicValue";
 /** @class
- *   A parameter of a reaction
- *   @property {SystemValue} value The value of the parameter
- *   @param {Record<string, any>} [json=undefined] Json object describing the parameter value
+ *  A parameter of a reaction.
+ *  @extends System.Base
+ *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  parameter value
  */
 class Parameter extends Base {
     constructor(json) {

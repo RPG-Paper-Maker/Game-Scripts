@@ -13,7 +13,7 @@
  * Ambient module "core"
  * @example import * as core from "Core"
  */
-export * from "./Anchor2D";
+
 export * from "./Autotile";
 export * from "./Autotiles";
 export * from "./Bitmap";

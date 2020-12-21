@@ -12,17 +12,9 @@ import { Base } from "./Base";
 import { System, Manager } from "..";
 /** @class
  *  An event command for modifying team.
- *  @extends EventCommand
- *  @property {number} addingKind The kind of adding
- *  @property {SystemValue} instanceLevel The instance level ID
- *  @property {GroupKind} instanceTeam The instance team group
- *  @property {number} stockVariableID The stock variable ID
- *  @property {CharacterKind} instanceKind The instance character kind
- *  @property {CharacterKind} addRemoveKind The add remove character kind
- *  @property {SystemValue} addRemoveID The add remove ID value
- *  @property {GroupKind} addRemoveTeam The add remove team group kind
+ *  @extends EventCommand.Base
  *  @param {any[]} command Direct JSON command to parse
-*/
+ */
 class ModifyTeam extends Base {
     constructor(command) {
         super();

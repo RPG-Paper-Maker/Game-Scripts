@@ -13,31 +13,11 @@ import { Picture2D } from "../Core";
 import { Enum, Utils, ScreenResolution } from "../Common";
 var PictureKind = Enum.PictureKind;
 /** @class
-*   A window skin of the game
-*   @property {number} pictureID The picture ID used for the window skin
-*   @property {number[]} borderTopLeft The top left border rect
-*   @property {number[]} borderTopRight The top right border rect
-*   @property {number[]} borderBotLeft The bot left border rect
-*   @property {number[]} borderBotRight The bot right border rect
-*   @property {number[]} borderLeft The left border rect
-*   @property {number[]} borderRight The right border rect
-*   @property {number[]} borderTop The top border rect
-*   @property {number[]} borderBot The bot border rect
-*   @property {number[]} background The background rect
-*   @property {number[]} backgroundSelection The background when window is
-*   selected rect
-*   @property {boolean} backgroundRepeat If checked, the window skin background
-*   is repeated, if not, it's stretched
-*   @property {number[]} arrowEndMessage The arrow for end of messages rect
-*   @property {number[]} arrowTargetSelection The arrow for target selection
-*   rect
-*   @property {number[]} arrowUpDown The arrow for up and down rect
-*   @property {number[]} textNormal The normal text rect
-*   @property {number[]} textCritical The critical text rect
-*   @property {number[]} textHeal The heal text rect
-*   @property {number[]} textMiss The miss text rect
-*   @param {Record<string, any>} [json=undefined] Json object describing the window skin
-*/
+ *  A window skin of the game.
+ *  @extends System.Base
+ *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  window skin
+ */
 class WindowSkin extends System.Base {
     constructor(json) {
         super(json);
@@ -187,7 +167,7 @@ class WindowSkin extends System.Base {
      *  @param {boolean} positionResize Indicate if the position picture needs
      *  to be resize (resolution)
      */
-    drawArrowTarget(frame, x, y, positionResize) {
+    drawArrowTarget(frame, x, y, positionResize = false) {
         let width = this.arrowTargetSelection[2] / Datas.Systems.FRAMES;
         this.picture.draw(x - (width / 2), y, width, this.arrowTargetSelection[3], this.arrowTargetSelection[0] + (frame * width), this
             .arrowTargetSelection[1], width, this.arrowTargetSelection[3], positionResize);

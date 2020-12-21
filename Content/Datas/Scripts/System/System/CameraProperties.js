@@ -14,27 +14,10 @@ import { Utils, ScreenResolution, Constants } from "../Common";
 const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Datas } from "..";
 /** @class
- *   A camera properties of the game
- *   @property {number} distance The distance between the target position and
- *   the camera position
- *   @property {number} horizontalAngle The horizontal angle between target and
- *   camera
- *   @property {number} verticalAngle The vertical angle between target and
- *   camera
- *   @property {number} targetOffsetX The target offset x position
- *   @property {number} targetOffsetY The target offset y position
- *   @property {number} targetOffsetZ The target offset z position
- *   @property {boolean} isSquareTargetOffsetX Indicate if the current target x
- *   offset is square value
- *   @property {number} isSquareTargetOffsetY Indicate if the current target y
- *   offset is square value
- *   @property {number} isSquareTargetOffsetZ Indicate if the current target z
- *   offset is square value
- *   @property {number} fov The field of fiew
- *   @property {number} near The near
- *   @property {number} far The far
- *   @param {Record<string, any>} [json=undefined] Json object describing the camera
- *   properties
+ *  A camera properties of the game.
+ *  @extends System.Base
+ *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  camera properties
  */
 export class CameraProperties extends Base {
     constructor(json) {

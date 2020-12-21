@@ -11,9 +11,8 @@
 import { IO, Paths, Utils } from "../Common";
 import { System, Datas } from "..";
 /** @class
- *  All the videos datas
- *  @property {System.Video[]} list List of all the videos of the game
- *  according to ID
+ *  All the videos datas.
+ *  @static
  */
 class Videos {
     constructor() {
@@ -34,7 +33,7 @@ class Videos {
      *  @returns {System.Video}
      */
     static get(id) {
-        return Datas.Base.get(id, this.list, "video");
+        return id === -1 ? new System.Video() : Datas.Base.get(id, this.list, "video");
     }
 }
 export { Videos };

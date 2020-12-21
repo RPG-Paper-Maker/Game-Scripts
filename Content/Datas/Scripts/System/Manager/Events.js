@@ -14,6 +14,7 @@ var EventCommandKind = Enum.EventCommandKind;
 import { EventCommand, Manager, Datas } from "..";
 /** @class
  *  A static class for some events functions.
+ *  @static
  */
 class Events {
     constructor() {

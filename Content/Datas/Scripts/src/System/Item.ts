@@ -34,7 +34,7 @@ class Item extends CommonSkillItem {
     /** Get the item type.
      *  @returns {string}
      */
-    getType(): string {
+    getStringType(): string {
         return Datas.Systems.getItemType(this.type);
     }
 }

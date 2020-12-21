@@ -10,14 +10,13 @@
 */
 
 import { Base } from "./Base";
-import { System } from "..";
 import { Position } from "../Core";
 
 /** @class
  *  A battle map of the game.
- *  @property {number} idMap The map ID
- *  @property {Position} position The position
- *  @param {Record<string, any>} [json=undefined] Json object describing the battle map
+ *  @extends System.Base
+ *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  battle map
  */
 class BattleMap extends Base {
 
