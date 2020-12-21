@@ -8,10 +8,11 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
-import { Datas } from "..";
-import { ScreenResolution, Platform, Utils, IO, Paths } from "../Common";
-import { Stack } from "./Stack";
+import { THREE } from "../Globals.js";
+import { Datas } from "../index.js";
+import { ScreenResolution, Platform, Utils, IO, Paths } from "../Common/index.js";
+import { Stack } from "./Stack.js";
+import { Vector2 } from "../Core/index.js";
 /** @class
  *  The GL class handling some 3D stuff.
  *  @static
@@ -64,7 +65,7 @@ class GL {
     /**
      *  Load a texture.
      *  @param {string} path The path of the texture
-     *  @returns {Promise<THREE.MeshStandardMaterial>}
+     *  @returns {Promise<THREE.Material>}
      */
     static async loadTexture(path) {
         let texture = await (new Promise((resolve, reject) => {
@@ -78,19 +79,21 @@ class GL {
     }
     /**
      *  Load a texture empty.
-     *  @returns {THREE.MeshStandardMaterial}
+     *  @returns {THREE.Material}
      */
     static loadTextureEmpty() {
-        return new THREE.MeshBasicMaterial({
+        return new THREE.ShaderMaterial({
             transparent: true,
             side: THREE.DoubleSide,
-            flatShading: THREE.FlatShading,
-            alphaTest: 0.5
+            alphaTest: 0.5,
+            uniforms: {
+                t: { value: undefined }
+            }
         });
     }
     /**
      *  Create a material from texture.
-     *  @returns {THREE.MeshStandardMaterial}
+     *  @returns {THREE.ShaderMaterial}
      */
     static createMaterial(texture, opts = {}) {
         texture.magFilter = THREE.NearestFilter;
@@ -110,8 +113,16 @@ class GL {
             side: THREE.DoubleSide,
             transparent: true
         });
-        material.map = texture;
         return material;
+    }
+    /**
+     *  Get material THREE.Texture (if exists).
+     *  @param {THREE.ShaderMaterial}
+     *  @returns {THREE.Texture}
+     */
+    static getMaterialTexture(material) {
+        return material && material.uniforms.t.value ? material.uniforms.t.value
+            : null;
     }
     /**
      *  Update the background color
@@ -124,9 +135,9 @@ class GL {
     /**
      *  Convert 3D vector to a 2D point on screen.
      *  @static
-     *  @param {THREE.Vector3} vector The 3D vector
+     *  @param {Vector3} vector The 3D vector
      *  @param {THREE.Camera} camera The three.js camera
-     *  @returns {THREE.Vector2}
+     *  @returns {Vector2}
      */
     static toScreenPosition(vector, camera) {
         let widthHalf = ScreenResolution.CANVAS_WIDTH / 2;
@@ -134,7 +145,7 @@ class GL {
         let position = vector.clone();
         camera.updateMatrixWorld(true);
         position.project(camera);
-        return new THREE.Vector2((position.x * widthHalf) + widthHalf, -(position.y * heightHalf) + heightHalf);
+        return new Vector2((position.x * widthHalf) + widthHalf, -(position.y * heightHalf) + heightHalf);
     }
 }
 GL.textureLoader = new THREE.TextureLoader();

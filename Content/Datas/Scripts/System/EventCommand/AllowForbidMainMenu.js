@@ -8,8 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
-import { System, Scene } from "..";
+import { Base } from "./Base.js";
+import { System, Scene } from "../index.js";
 /** @class
  *  An event command for allowing forbidding main menu.
  *  @extends EventCommand.Base

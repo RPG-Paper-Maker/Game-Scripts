@@ -9,11 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { THREE } from "../Globals";
 import { Datas, System } from "..";
 import { ScreenResolution, Platform, Utils, IO, Paths } from "../Common";
 import { Stack } from "./Stack";
-import { Camera } from "../Core";
+import { Camera, Vector3, Vector2 } from "../Core";
 
 /** @class
  *  The GL class handling some 3D stuff.
@@ -22,7 +22,7 @@ import { Camera } from "../Core";
 class GL {
     public static SHADER_FIX_VERTEX: string;
     public static SHADER_FIX_FRAGMENT: string;
-    public static renderer: typeof THREE.WebGLRenderer;
+    public static renderer: THREE.WebGLRenderer;
     public static textureLoader = new THREE.TextureLoader();
     public static screenTone = new THREE.Vector4(0, 0, 0, 1);
 
@@ -79,14 +79,12 @@ class GL {
     /** 
      *  Load a texture.
      *  @param {string} path The path of the texture
-     *  @returns {Promise<THREE.MeshStandardMaterial>}
+     *  @returns {Promise<THREE.Material>}
      */
-    static async loadTexture(path: string): Promise<typeof THREE
-        .MeshStandardMaterial>
-    {
-        let texture: typeof THREE.Texture = await (new Promise((resolve, reject) => {
+    static async loadTexture(path: string): Promise<THREE.ShaderMaterial> {
+        let texture: THREE.Texture = await (new Promise((resolve, reject) => {
             this.textureLoader.load(path,
-                (t: typeof THREE.Texture) => {
+                (t: THREE.Texture) => {
                     resolve(t);
                 },
                 () => {},
@@ -100,25 +98,26 @@ class GL {
 
     /** 
      *  Load a texture empty.
-     *  @returns {THREE.MeshStandardMaterial}
+     *  @returns {THREE.Material}
      */
-    static loadTextureEmpty(): typeof THREE.MeshStandardMaterial {
-        return new THREE.MeshBasicMaterial(
-        {
+    static loadTextureEmpty(): THREE.ShaderMaterial {
+        return new THREE.ShaderMaterial({
             transparent: true,
             side: THREE.DoubleSide,
-            flatShading: THREE.FlatShading,
-            alphaTest: 0.5
+            alphaTest: 0.5,
+            uniforms: {
+                t: { value: undefined }
+            }
         });
     }
 
     /** 
      *  Create a material from texture.
-     *  @returns {THREE.MeshStandardMaterial}
+     *  @returns {THREE.ShaderMaterial}
      */
-    static createMaterial(texture: typeof THREE.Texture, opts: { flipX?: boolean
-        , flipY?: boolean, uniforms?: Record<string, any> } = {}): typeof THREE
-        .MeshStandardMaterial
+    static createMaterial(texture: THREE.Texture, opts: { flipX?: boolean
+        , flipY?: boolean, uniforms?: Record<string, any> } = {}): THREE
+        .ShaderMaterial
     {
         texture.magFilter = THREE.NearestFilter;
         texture.minFilter = THREE.NearestFilter;
@@ -137,8 +136,17 @@ class GL {
             side: THREE.DoubleSide,
             transparent: true
         });
-        material.map = texture;
         return material;
+    }
+
+    /** 
+     *  Get material THREE.Texture (if exists).
+     *  @param {THREE.ShaderMaterial}
+     *  @returns {THREE.Texture}
+     */
+    static getMaterialTexture(material: THREE.ShaderMaterial): THREE.Texture {
+        return material && material.uniforms.t.value ? material.uniforms.t.value
+            : null;
     }
 
     /** 
@@ -153,19 +161,17 @@ class GL {
     /** 
      *  Convert 3D vector to a 2D point on screen.
      *  @static
-     *  @param {THREE.Vector3} vector The 3D vector
+     *  @param {Vector3} vector The 3D vector
      *  @param {THREE.Camera} camera The three.js camera
-     *  @returns {THREE.Vector2}
+     *  @returns {Vector2}
      */
-    static toScreenPosition(vector: typeof THREE.Vector3, camera: typeof THREE
-        .Camera): typeof THREE.Vector2 
-    {
+    static toScreenPosition(vector: Vector3, camera: THREE.Camera): Vector2 {
         let widthHalf = ScreenResolution.CANVAS_WIDTH / 2;
         let heightHalf = ScreenResolution.CANVAS_HEIGHT / 2;
         let position = vector.clone();
         camera.updateMatrixWorld(true);
         position.project(camera);
-        return new THREE.Vector2((position.x * widthHalf) + widthHalf, - (
+        return new Vector2((position.x * widthHalf) + widthHalf, - (
             position.y * heightHalf) + heightHalf);
     }
 }

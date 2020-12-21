@@ -8,11 +8,10 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
-import { Base } from "./Base";
-import { Utils, Mathf } from "../Common";
-import { System, Manager, Datas } from "..";
-import { MapObject } from "../Core";
+import { Base } from "./Base.js";
+import { Utils, Mathf } from "../Common/index.js";
+import { System, Manager, Datas } from "../index.js";
+import { MapObject, Vector3 } from "../Core/index.js";
 /** @class
  *  An event command for displaying text.
  *  @extends EventCommand.Base
@@ -75,7 +74,7 @@ class MoveCamera extends Base {
         let finalDistance = operation(Manager.Stack.currentMap.camera.distance, this.distance.getValue());
         return {
             parallel: this.isWaitEnd,
-            finalPosition: new THREE.Vector3(finalX, finalY, finalZ),
+            finalPosition: new Vector3(finalX, finalY, finalZ),
             finalDifH: finalH - Manager.Stack.currentMap.camera.horizontalAngle,
             finalDifV: finalV - Manager.Stack.currentMap.camera.verticalAngle,
             finalDistance: finalDistance - Manager.Stack.currentMap.camera
@@ -130,28 +129,28 @@ class MoveCamera extends Base {
                     currentState.editedTarget = true;
                 }
                 // Updating the time left
-                let timeRate;
+                let timeRate, difNb;
                 if (currentState.time === 0) {
                     timeRate = 1;
                 }
                 else {
-                    dif = Manager.Stack.elapsedTime;
+                    difNb = Manager.Stack.elapsedTime;
                     currentState.timeLeft -= Manager.Stack.elapsedTime;
                     if (currentState.timeLeft < 0) {
                         dif += currentState.timeLeft;
                         currentState.timeLeft = 0;
                     }
-                    timeRate = dif / currentState.time;
+                    timeRate = difNb / currentState.time;
                 }
                 // Move
-                let positionOffset = new THREE.Vector3(timeRate * currentState.finalDifPosition.x, timeRate * currentState.finalDifPosition.y, timeRate * currentState.finalDifPosition.z);
+                let positionOffset = new Vector3(timeRate * currentState.finalDifPosition.x, timeRate * currentState.finalDifPosition.y, timeRate * currentState.finalDifPosition.z);
                 Manager.Stack.currentMap.camera.getThreeCamera().position.add(positionOffset);
                 if (this.moveTargetOffset) {
                     Manager.Stack.currentMap.camera.targetOffset.add(positionOffset);
                 }
                 else {
                     if (currentState.moveChangeTargetDif) {
-                        positionOffset = new THREE.Vector3(timeRate * (currentState.finalDifPosition.x - currentState
+                        positionOffset = new Vector3(timeRate * (currentState.finalDifPosition.x - currentState
                             .moveChangeTargetDif.x), timeRate * (currentState
                             .finalDifPosition.y - currentState
                             .moveChangeTargetDif.y), timeRate * (currentState

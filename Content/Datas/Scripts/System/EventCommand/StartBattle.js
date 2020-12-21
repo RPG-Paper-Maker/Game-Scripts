@@ -8,10 +8,10 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
-import { System, Datas, Manager } from "..";
-import { Utils } from "../Common";
-import { MapObject } from "../Core";
+import { Base } from "./Base.js";
+import { System, Datas, Manager } from "../index.js";
+import { Utils } from "../Common/index.js";
+import { MapObject } from "../Core/index.js";
 /** @class
  *  An event command for battle processing.
  *  @extends EventCommand.Base
@@ -100,7 +100,7 @@ class StartBattle extends Base {
                     .getValue(), this.yPlus.getValue(), this.z.getValue()]) : Datas
                 .BattleSystems.getBattleMap(this.battleMapID.getValue());
             Manager.Stack.game.heroBattle = new MapObject(null, battleMap
-                .position);
+                .position.toVector3());
             // Defining the battle state instance
             /*
             let sceneBattle = new Scene.Battle(this.troopID.getValue(), this

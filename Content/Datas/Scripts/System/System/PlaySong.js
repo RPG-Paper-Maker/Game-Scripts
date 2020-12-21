@@ -8,10 +8,10 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
-import { Enum, Utils } from "../Common";
+import { Base } from "./Base.js";
+import { Enum, Utils } from "../Common/index.js";
 var SongKind = Enum.SongKind;
-import { System, Manager } from "..";
+import { System, Manager } from "../index.js";
 /** @class
  *  A way to play a song.
  *  @extends System.Base

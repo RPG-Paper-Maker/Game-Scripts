@@ -11,8 +11,7 @@
 
 import { Datas, Common, Core, EventCommand, Graphic, Manager, System, Scene } from "..";
 import { Player, MapObject } from "../Core";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
-const { Howl } = require('./Content/Datas/Scripts/Libs/howler.js');
+import { THREE, Howl } from "../Globals";
 
 /** @class
  *  @static

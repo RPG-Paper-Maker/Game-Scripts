@@ -8,11 +8,12 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { MapElement } from ".";
-import { Sprite } from ".";
-import { Utils, Constants } from "../Common";
-import { Datas } from "..";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { MapElement } from "./index.js";
+import { Sprite } from "./index.js";
+import { Utils, Constants } from "../Common/index.js";
+import { Datas } from "../index.js";
+import { Vector3 } from "./Vector3.js";
+import { Vector2 } from "./Vector2.js";
 /** @class
  *  A mountain in the map.
  *  @extends MapElement
@@ -102,7 +103,7 @@ class Mountain extends MapElement {
      *  @param {boolean} left Indicate if left
      *  @param {boolean} right Indicate if right
      *  @param {number} angle The angle
-     *  @param {THREE.Vector3} center The position center
+     *  @param {Vector3} center The position center
      *  @param {number} width The width in squares
      *  @param {number} height The height in squares
      *  @param {number} w The w in coordinates
@@ -115,10 +116,10 @@ class Mountain extends MapElement {
      *  @param {number} zFront The z front position
      *  @param {number} zBack The z back position
      *  @param {number} yOffset The y offset
-     *  @param {THREE.Vector3} vecFrontA The front vector position A
-     *  @param {THREE.Vector3} vecBackA The back vector position A
-     *  @param {THREE.Vector3} vecFrontB The front vector position B
-     *  @param {THREE.Vector3} vecBackB The back vector position B
+     *  @param {Vector3} vecFrontA The front vector position A
+     *  @param {Vector3} vecBackA The back vector position A
+     *  @param {Vector3} vecFrontB The front vector position B
+     *  @param {Vector3} vecBackB The back vector position B
      *  @param {THREE.geometry} geometry The geometry
      *  @param {number} count The faces count
      *  @returns {number}
@@ -183,7 +184,7 @@ class Mountain extends MapElement {
      *  @param {number} xKind The xKind position
      *  @param {number} yKind The yKind position
      *  @param {number} angle The angle
-     *  @param {THREE.Vector3} center The position center
+     *  @param {Vector3} center The position center
      *  @param {number} width The width in squares
      *  @param {number} height The height in squares
      *  @param {number} w The w in coordinates
@@ -223,7 +224,7 @@ class Mountain extends MapElement {
      *  @param {number} xKind The xKind position
      *  @param {number} yKind The yKind position
      *  @param {number} angle The angle
-     *  @param {THREE.Vector3} center The position center
+     *  @param {Vector3} center The position center
      *  @param {number} width The width in squares
      *  @param {number} height The height in squares
      *  @param {number} w The w in coordinates
@@ -262,37 +263,37 @@ class Mountain extends MapElement {
         // Textures and vertices
         let texA, texB, texC, texD;
         if (isCorner) {
-            texA = new THREE.Vector2(((xKind * Datas.Systems.SQUARE_SIZE) + ((Datas.Systems.SQUARE_SIZE - xCornerOffsetTop) / 2)) / width +
+            texA = new Vector2(((xKind * Datas.Systems.SQUARE_SIZE) + ((Datas.Systems.SQUARE_SIZE - xCornerOffsetTop) / 2)) / width +
                 coefX, y);
-            texB = new THREE.Vector2((((xKind + 1) * Datas.Systems.SQUARE_SIZE)
+            texB = new Vector2((((xKind + 1) * Datas.Systems.SQUARE_SIZE)
                 - ((Datas.Systems.SQUARE_SIZE - xCornerOffsetTop) / 2)) / width
                 - coefX, y);
-            texC = new THREE.Vector2((((xKind + 1) * Datas.Systems.SQUARE_SIZE)
+            texC = new Vector2((((xKind + 1) * Datas.Systems.SQUARE_SIZE)
                 - ((Datas.Systems.SQUARE_SIZE - xCornerOffsetBot) / 2)) / width
                 - coefX, y + h);
-            texD = new THREE.Vector2((((xKind) * Datas.Systems.SQUARE_SIZE) + ((Datas.Systems.SQUARE_SIZE - xCornerOffsetBot) / 2)) / width +
+            texD = new Vector2((((xKind) * Datas.Systems.SQUARE_SIZE) + ((Datas.Systems.SQUARE_SIZE - xCornerOffsetBot) / 2)) / width +
                 coefX, y + h);
         }
         else { // Triangle form for corners
-            texA = new THREE.Vector2(x, y);
-            texB = new THREE.Vector2(x + w, y);
-            texC = new THREE.Vector2(x + w, y + h);
-            texD = new THREE.Vector2(x, y + h);
+            texA = new Vector2(x, y);
+            texB = new Vector2(x + w, y);
+            texC = new Vector2(x + w, y + h);
+            texD = new Vector2(x, y + h);
         }
         let texFaceA = [
-            new THREE.Vector2(texA.x, texA.y),
-            new THREE.Vector2(texB.x, texB.y),
-            new THREE.Vector2(texC.x, texC.y)
+            new Vector2(texA.x, texA.y),
+            new Vector2(texB.x, texB.y),
+            new Vector2(texC.x, texC.y)
         ];
         let texFaceB = [
-            new THREE.Vector2(texA.x, texA.y),
-            new THREE.Vector2(texC.x, texC.y),
-            new THREE.Vector2(texD.x, texD.y)
+            new Vector2(texA.x, texA.y),
+            new Vector2(texC.x, texC.y),
+            new Vector2(texD.x, texD.y)
         ];
-        let vecA = new THREE.Vector3(xLeftTop, yTop, zBackLeft);
-        let vecB = new THREE.Vector3(xRightTop, yTop, zBackRight);
-        let vecC = new THREE.Vector3(xRightBot, yBot, zFrontRight);
-        let vecD = new THREE.Vector3(xLeftBot, yBot, zFrontLeft);
+        let vecA = new Vector3(xLeftTop, yTop, zBackLeft);
+        let vecB = new Vector3(xRightTop, yTop, zBackRight);
+        let vecC = new Vector3(xRightBot, yBot, zFrontRight);
+        let vecD = new Vector3(xLeftBot, yBot, zFrontLeft);
         // Rotate and draw sprite side
         Sprite.rotateSprite(vecA, vecB, vecC, vecD, center, angle, Sprite.Y_AXIS);
         count = Sprite.addStaticSpriteToGeometry(geometry, vecA, vecB, vecC, vecD, texFaceA, texFaceB, count);
@@ -317,7 +318,7 @@ class Mountain extends MapElement {
         let faceHeight = Math.sqrt((wp * wp) + (hp * hp));
         let w = Datas.Systems.SQUARE_SIZE / width;
         let localPosition = position.toVector3(false);
-        let center = new THREE.Vector3(localPosition.x + (Datas.Systems
+        let center = new Vector3(localPosition.x + (Datas.Systems
             .SQUARE_SIZE / 2), localPosition.y + (hp / 2), localPosition.z + (Datas.Systems.SQUARE_SIZE / 2));
         let xLeft = localPosition.x;
         let xRight = localPosition.x + Datas.Systems.SQUARE_SIZE;
@@ -325,10 +326,10 @@ class Mountain extends MapElement {
         let yBot = localPosition.y;
         let zFront = localPosition.z + Datas.Systems.SQUARE_SIZE + wp;
         let zBack = zFront - wp;
-        let vecFrontB = new THREE.Vector3(xLeft, yBot, zFront);
-        let vecBackB = new THREE.Vector3(xLeft, yTop, zBack);
-        let vecFrontA = new THREE.Vector3(xLeft - wp, yBot, zBack);
-        let vecBackA = new THREE.Vector3(xLeft, yTop, zBack);
+        let vecFrontB = new Vector3(xLeft, yBot, zFront);
+        let vecBackB = new Vector3(xLeft, yTop, zBack);
+        let vecFrontA = new Vector3(xLeft - wp, yBot, zBack);
+        let vecBackA = new Vector3(xLeft, yTop, zBack);
         // Bot
         if (!this.bot) {
             count = this.drawEntireFaces(this.left, this.right, 0, center, width, height, w, faceHeight, wp, xLeft, xRight, yTop, yBot, zFront, zBack, yOffset, vecFrontA, vecBackA, vecFrontB, vecBackB, geometry, count);

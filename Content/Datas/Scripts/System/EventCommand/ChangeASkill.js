@@ -8,10 +8,10 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
-import { System, Manager } from "..";
-import { Skill } from "../Core";
-import { Utils } from "../Common";
+import { Base } from "./Base.js";
+import { System, Manager } from "../index.js";
+import { Skill } from "../Core/index.js";
+import { Utils } from "../Common/index.js";
 /** @class
  *  An event command for changing a skill.
  *  @extends EventCommand.Base

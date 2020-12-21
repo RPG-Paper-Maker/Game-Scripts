@@ -9,12 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { THREE } from "../Globals";
 import { Portion } from "./Portion";
 import { MapObject } from "./MapObject";
 import { Position } from "./Position";
 import { System, Datas, Manager } from "..";
-import { StructMapElementCollision, MapElement } from "./MapElement";
+import { StructMapElementCollision } from "./MapElement";
 import { Constants, Enum, Utils } from "../Common";
 import { Floor } from "./Floor";
 import { Autotiles } from "./Autotiles";
@@ -29,6 +29,7 @@ import { Mountain } from "./Mountain";
 import { Object3DBox } from "./Object3DBox";
 import { Object3DCustom } from "./Object3DCustom";
 import { Object3D } from "./Object3D";
+import { Vector3 } from "./Vector3";
 
 /** @class
  *  A portion of the map.
@@ -37,19 +38,19 @@ import { Object3D } from "./Object3D";
 class MapPortion {
 
     public portion: Portion;
-    public staticFloorsMesh: typeof THREE.Mesh;
-    public staticSpritesMesh: typeof THREE.Mesh;
+    public staticFloorsMesh: THREE.Mesh;
+    public staticSpritesMesh: THREE.Mesh;
     public squareNonEmpty: number[][][];
     public boundingBoxesLands: StructMapElementCollision[][];
     public boundingBoxesSprites: StructMapElementCollision[][];
     public boundingBoxesMountains: StructMapElementCollision[][];
     public boundingBoxesObjects3D: StructMapElementCollision[][];
     public staticAutotilesList: Autotiles[];
-    public staticMountainsList: typeof THREE.Mesh[];
+    public staticMountainsList: Mountains[];
     public objectsList: MapObject[];
-    public faceSpritesList: typeof THREE.Mesh[];
-    public staticWallsList: typeof THREE.Mesh[];
-    public staticObjects3DList: typeof THREE.Mesh[];
+    public faceSpritesList: THREE.Mesh[];
+    public staticWallsList: THREE.Mesh[];
+    public staticObjects3DList: THREE.Mesh[];
     public overflowMountains: Position[];
     public heroID: number;
 
@@ -121,8 +122,9 @@ class MapPortion {
      */
     readFloors(json: Record<string, any>) {
         let material = Manager.Stack.currentMap.textureTileset;
-        let width = material.map ? material.map.image.width : 0;
-        let height = material.map ? material.map.image.height : 0;
+        let texture = Manager.GL.getMaterialTexture(material);
+        let width = texture ? texture.image.width : 0;
+        let height = texture ? texture.image.height : 0;
         let geometry = new THREE.Geometry();
         geometry.faceVertexUvs[0] = [];
         let layers: [Position, Floor][] = [];
@@ -216,7 +218,7 @@ class MapPortion {
                     break;
                 }
             }
-            if (texture !== null && texture.texture !== null) {
+            if (texture !== null && texture.material !== null) {
                 objCollision = autotiles.updateGeometry(position, autotile);
                 if (objCollision !== null) {
                     this.boundingBoxesLands[indexPos].push(objCollision);
@@ -250,12 +252,13 @@ class MapPortion {
         let staticGeometry = new THREE.Geometry();
         let count = 0;
         staticGeometry.faceVertexUvs[0] = [];
-        if (material && material.map) {
+        let texture = Manager.GL.getMaterialTexture(material);
+        if (texture) {
             let s: Record<string, any>, position: Position, sprite: Sprite, 
-                localPosition: typeof THREE.Vector3, result: [typeof THREE
+                localPosition: Vector3, result: [THREE
                 .Geometry, [number, StructMapElementCollision[]]], geometry: 
-                typeof THREE.Geometry, collisions: StructMapElementCollision[], 
-                plane: typeof THREE.Mesh, resultUpdate: [number, 
+                THREE.Geometry, collisions: StructMapElementCollision[], 
+                plane: THREE.Mesh, resultUpdate: [number, 
                 StructMapElementCollision[]];
             for (let i = 0, l = json.length; i < l; i++) {
                 s = json[i];
@@ -263,8 +266,8 @@ class MapPortion {
                 sprite = new Sprite(s.v);
                 localPosition = position.toVector3();
                 if (sprite.kind === ElementMapKind.SpritesFace) {
-                    result = sprite.createGeometry(material.map.image.width,
-                        material.map.image.height, true, position);
+                    result = sprite.createGeometry(texture.image.width, texture
+                        .image.height, true, position);
                     geometry = result[0];
                     collisions = result[1][1];
                     plane = new THREE.Mesh(geometry, material);
@@ -274,9 +277,9 @@ class MapPortion {
                     this.faceSpritesList.push(plane);
                     Manager.Stack.currentMap.scene.add(plane);
                 } else {
-                    resultUpdate = sprite.updateGeometry(staticGeometry, 
-                        material.map.image.width, material.map.image.height, 
-                        position, count, true, localPosition);
+                    resultUpdate = sprite.updateGeometry(staticGeometry, texture
+                        .image.width, texture.image.height, position, count, 
+                        true, localPosition);
                     count = resultUpdate[0];
                     collisions = resultUpdate[1];
                 }
@@ -304,8 +307,8 @@ class MapPortion {
             hash[i] = null;
         }
         let l: number, s: Record<string, any>, position: Position, sprite: 
-            SpriteWall, obj: Record<string, any>, geometry: typeof THREE
-            .Geometry, material: typeof THREE.MeshBasicMaterial, count: number
+            SpriteWall, obj: Record<string, any>, geometry: THREE
+            .Geometry, material: THREE.ShaderMaterial, count: number
             , result: [number, StructMapElementCollision[]];
         for (i = 0, l = json.length; i < l; i++) {
             // Getting sprite
@@ -333,9 +336,10 @@ class MapPortion {
                     material = obj.material;
                     count = obj.c;
                 }
-                if (material && material.map) {
-                    result = sprite.updateGeometry(geometry, position, material
-                        .map.image.width, material.map.image.height, count);
+                let texture = Manager.GL.getMaterialTexture(material);
+                if (texture) {
+                    result = sprite.updateGeometry(geometry, position, texture
+                        .image.width, texture.image.height, count);
                     obj.c = result[0];
                     this.updateCollisionSprite(result[1], position);
                 }
@@ -343,7 +347,7 @@ class MapPortion {
         }
 
         // Add to scene
-        let mesh: typeof THREE.Mesh;
+        let mesh: THREE.Mesh;
         for (i = 0; i < wallsIds; i++) {
             obj = hash[i];
             if (obj !== null) {
@@ -395,7 +399,7 @@ class MapPortion {
                     break;
                 }
             }
-            if (texture !== null && texture.texture !== null) {
+            if (texture !== null && texture.material !== null) {
                 objCollision = mountains.updateGeometry(position, mountain);
                 this.updateCollision(this.boundingBoxesMountains, objCollision,
                     position, true);
@@ -434,9 +438,8 @@ class MapPortion {
         let l = jsonAll.length;
         let o: Record<string, any>, position: Position, v: Record<string, any>, 
             datas: System.Object3D, obj3D: Object3D, obj: Record<string, any>, 
-            geometry: typeof THREE.Geometry, material: typeof THREE
-            .MeshBasicMaterial, count: number, result: [number, 
-            StructMapElementCollision[]];
+            geometry: THREE.Geometry, material: THREE.ShaderMaterial, count: 
+            number, result: [number, StructMapElementCollision[]];
         for (i = 0; i < l; i++) {
             // Getting object 3D
             o = jsonAll[i];
@@ -481,7 +484,7 @@ class MapPortion {
                         material = obj.material;
                         count = obj.c;
                     }
-                    if (material && material.map) {
+                    if (Manager.GL.getMaterialTexture(material)) {
                         result = obj3D.updateGeometry(geometry, position, count);
                         obj.c = result[0];
                         this.updateCollision(this.boundingBoxesObjects3D, result
@@ -492,7 +495,7 @@ class MapPortion {
         }
 
         // Add meshes
-        let mesh: typeof THREE.Geometry;
+        let mesh: THREE.Mesh;
         for (i = 1; i <= nbTextures; i++) {
             obj = hash[i];
             if (obj !== null) {
@@ -522,7 +525,7 @@ class MapPortion {
         // Read
         let i: number, j: number, l: number, jsonObject: Record<string, any>, 
             position: Position, object: System.MapObject, id: number, index: 
-            number, localPosition: typeof THREE.Vector3, mapObject: MapObject;
+            number, localPosition: Vector3, mapObject: MapObject;
         for (i = 0, l = json.length; i < l; i++) {
             jsonObject = json[i];
             position = Position.createFromArray(jsonObject.k);
@@ -631,7 +634,7 @@ class MapPortion {
         }
         let jsonObject: Record<string, any>, position: Position, jsonObjectValue
             : Record<string, any>, object: System.MapObject, localPosition: 
-            typeof THREE.Vector3, mapObject: MapObject;
+            Vector3, mapObject: MapObject;
         for (let i = 0, l = json.length; i < l; i++) {
             jsonObject = json[i];
             position = Position.createFromArray(jsonObject.k);

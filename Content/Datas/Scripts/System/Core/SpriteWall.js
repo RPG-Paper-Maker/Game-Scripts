@@ -8,12 +8,13 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { MapElement } from "./MapElement";
-import { Datas } from "..";
-import { Enum } from "../Common";
+import { MapElement } from "./MapElement.js";
+import { Datas } from "../index.js";
+import { Enum } from "../Common/index.js";
 var PictureKind = Enum.PictureKind;
-import { Sprite } from "./Sprite";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { Sprite } from "./Sprite.js";
+import { Vector3 } from "./Vector3.js";
+import { Vector2 } from "./Vector2.js";
 /** @class
  *  A sprite in the map.
  *  @extends MapElement
@@ -46,12 +47,12 @@ class SpriteWall extends MapElement {
      *  @return {any[]}
      */
     updateGeometry(geometry, position, width, height, count) {
-        let vecA = new THREE.Vector3(-0.5, 1.0, 0.0);
-        let vecB = new THREE.Vector3(0.5, 1.0, 0.0);
-        let vecC = new THREE.Vector3(0.5, 0.0, 0.0);
-        let vecD = new THREE.Vector3(-0.5, 0.0, 0.0);
-        let center = new THREE.Vector3();
-        let size = new THREE.Vector3(Datas.Systems.SQUARE_SIZE, height, 0);
+        let vecA = new Vector3(-0.5, 1.0, 0.0);
+        let vecB = new Vector3(0.5, 1.0, 0.0);
+        let vecC = new Vector3(0.5, 0.0, 0.0);
+        let vecD = new Vector3(-0.5, 0.0, 0.0);
+        let center = new Vector3();
+        let size = new Vector3(Datas.Systems.SQUARE_SIZE, height, 0);
         let angle = position.angleY;
         let localPosition = position.toVector3();
         // Scale
@@ -80,14 +81,14 @@ class SpriteWall extends MapElement {
         h -= (coefY * 2);
         // Texture UV coordinates for each triangle faces
         let texFaceA = [
-            new THREE.Vector2(x, y),
-            new THREE.Vector2(x + w, y),
-            new THREE.Vector2(x + w, y + h)
+            new Vector2(x, y),
+            new Vector2(x + w, y),
+            new Vector2(x + w, y + h)
         ];
         let texFaceB = [
-            new THREE.Vector2(x, y),
-            new THREE.Vector2(x + w, y + h),
-            new THREE.Vector2(x, y + h)
+            new Vector2(x, y),
+            new Vector2(x + w, y + h),
+            new Vector2(x, y + h)
         ];
         // Collision
         let objCollision = [];

@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Enum, Utils } from "../Common/index.js";
 import { Datas } from "../index.js";
+import { Vector3 } from "./Vector3.js";
 /** @class
  *  An element in the map.
  */
@@ -31,13 +31,13 @@ class MapElement {
     }
     /**
      *  Scale the vertices correctly.
-     *  @param {THREE.Vector3} vecA The A vertex to rotate
-     *  @param {THREE.Vector3} vecB The B vertex to rotate
-     *  @param {THREE.Vector3} vecC The C vertex to rotate
-     *  @param {THREE.Vector3} vecD The D vertex to rotate
-     *  @param {THREE.Vector3} center The center to rotate around
+     *  @param {Vector3} vecA The A vertex to rotate
+     *  @param {Vector3} vecB The B vertex to rotate
+     *  @param {Vector3} vecC The C vertex to rotate
+     *  @param {Vector3} vecD The D vertex to rotate
+     *  @param {Vector3} center The center to rotate around
      *  @param {Position} position The json position
-     *  @param {THREE.Vector3} size The scale size
+     *  @param {Vector3} size The scale size
      *  @param {ElementMapKind} kind The element map kind
      */
     scale(vecA, vecB, vecC, vecD, center, position, size, kind) {
@@ -46,7 +46,7 @@ class MapElement {
         if (kind !== Enum.ElementMapKind.SpritesFace && !this.front) {
             zPlus *= -1;
         }
-        let offset = new THREE.Vector3(0, 0, zPlus);
+        let offset = new Vector3(0, 0, zPlus);
         // Center
         center.setX(this.xOffset * Datas.Systems.SQUARE_SIZE);
         center.setY(this.yOffset * Datas.Systems.SQUARE_SIZE);

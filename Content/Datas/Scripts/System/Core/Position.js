@@ -8,10 +8,10 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Portion } from "./Portion";
-import { Constants, Mathf } from "../Common";
-import { Datas } from "..";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { Portion } from "./Portion.js";
+import { Constants, Mathf } from "../Common/index.js";
+import { Datas } from "../index.js";
+import { Vector3 } from "./Vector3.js";
 /** @class
  *  The data class for position.
  *  @extends Portion
@@ -49,7 +49,7 @@ class Position extends Portion {
     /**
      *  Create a position from a three.js vector3.
      *  @static
-     *  @param {THREE.Vector3} position
+     *  @param {Vector3} position
      *  @returns {Position}
      */
     static createFromVector3(position) {
@@ -82,11 +82,11 @@ class Position extends Portion {
         return new Portion(Math.floor(this.x / Constants.PORTION_SIZE), Math.floor(this.y / Constants.PORTION_SIZE), Math.floor(this.z / Constants.PORTION_SIZE));
     }
     /**
-     *  Transform a position to a THREE.Vector3.
-     *  @returns {THREE.Vector3}
+     *  Transform a position to a Vector3.
+     *  @returns {Vector3}
      */
     toVector3(center = true) {
-        return new THREE.Vector3((this.x * Datas.Systems.SQUARE_SIZE) + (center ? (this.centerX / 100
+        return new Vector3((this.x * Datas.Systems.SQUARE_SIZE) + (center ? (this.centerX / 100
             * Datas.Systems.SQUARE_SIZE) : 0), (this.y * Datas.Systems.SQUARE_SIZE) + (this.yPixels * Datas.Systems
             .SQUARE_SIZE / 100), (this.z * Datas.Systems.SQUARE_SIZE) + (center ? (this.centerZ / 100
             * Datas.Systems.SQUARE_SIZE) : 0));

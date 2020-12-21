@@ -9,10 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as Scene from "."
-import * as Graphic from "../Graphic"
 import { Enum } from "../Common";
 import Align = Enum.Align;
+import { Scene, Graphic } from "..";
 
 /** @class
 *   A scene for the loading.

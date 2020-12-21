@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { THREE } from "../Globals.js";
 import { Player } from "./Player.js";
 import { Datas } from "../index.js";
 import { Item } from "./Item.js";

@@ -8,9 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
-import { Constants } from "../Common";
-import { Datas } from "..";
+import { Constants } from "../Common/index.js";
+import { Datas } from "../index.js";
 /** @class
  *  The data class for portion.
  *  @param {number} x

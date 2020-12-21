@@ -9,11 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { THREE } from "../Globals";
 import { TextureBundle } from "./TextureBundle";
 import { Mountain } from "./Mountain";
 import { StructMapElementCollision } from "./MapElement";
 import { Position } from "./Position";
+import { Manager } from "..";
 
 /** @class
  *  The wrapper class for handle mountains sharing the same texture.
@@ -21,17 +22,18 @@ import { Position } from "./Position";
  */
 class Mountains {
     
-    public texture: TextureBundle;
+    public bundle: TextureBundle;
     public width: number;
     public height: number;
-    public geometry: typeof THREE.Geometry;
+    public geometry: THREE.Geometry;
     public count: number;
-    public mesh: typeof THREE.Mesh;
+    public mesh: THREE.Mesh;
 
-    constructor(texture: TextureBundle) {
-        this.texture = texture;
-        this.width = texture.texture.map.image.width;
-        this.height = texture.texture.map.image.height;
+    constructor(bundle: TextureBundle) {
+        this.bundle = bundle;
+        let texture = Manager.GL.getMaterialTexture(bundle.material);
+        this.width = texture.image.width;
+        this.height = texture.image.height;
         this.geometry = new THREE.Geometry();
         this.geometry.faceVertexUvs[0] = [];
         this.count = 0;
@@ -46,7 +48,7 @@ class Mountains {
     updateGeometry(position: Position, mountain: Mountain): 
         StructMapElementCollision[]
     {
-        let res = mountain.updateGeometry(this.geometry, this.texture, position,
+        let res = mountain.updateGeometry(this.geometry, this.bundle, position,
             this.count);
         this.count = res[0];
         return res[1];
@@ -55,8 +57,8 @@ class Mountains {
     /** 
      *  Create a mesh with material and geometry.
      */
-    createMesh(): typeof THREE.Mesh {
-        this.mesh = new THREE.Mesh(this.geometry, this.texture.texture);
+    createMesh() {
+        this.mesh = new THREE.Mesh(this.geometry, this.bundle.material);
     }
 }
 

@@ -8,13 +8,13 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { SpecialElement } from "./SpecialElement";
-import { Enum, Utils } from "../Common";
+import { SpecialElement } from "./SpecialElement.js";
+import { Enum, Utils } from "../Common/index.js";
 var ShapeKind = Enum.ShapeKind;
 var ObjectCollisionKind = Enum.ObjectCollisionKind;
 var CustomShapeKind = Enum.CustomShapeKind;
-import { Datas } from "..";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { Datas } from "../index.js";
+import { Vector3 } from "../Core/index.js";
 /** @class
  *  A 3D object of the game.
  *  @extends System.SpecialElement
@@ -94,10 +94,10 @@ class Object3D extends SpecialElement {
     }
     /**
      *  Get the size vector.
-     *  @returns {THREE.Vector3}
+     *  @returns {Vector3}
      */
     getSizeVector() {
-        return new THREE.Vector3(this.widthPixels(), this.heightPixels(), this
+        return new Vector3(this.widthPixels(), this.heightPixels(), this
             .depthPixels());
     }
     /**

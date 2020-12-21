@@ -8,10 +8,12 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { MapElement } from "./MapElement";
-import { Utils } from "../Common";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
-import { Datas } from "..";
+import { MapElement } from "./MapElement.js";
+import { Utils } from "../Common/index.js";
+import { THREE } from "../Globals.js";
+import { Datas } from "../index.js";
+import { Vector3 } from "./Vector3.js";
+import { Vector2 } from "./Vector2.js";
 /** @class
  *  A land in the map.
  *  @extends MapElement
@@ -68,10 +70,10 @@ class Land extends MapElement {
         let c = localPosition.z;
         let objCollision = null;
         // Vertices
-        geometry.vertices.push(new THREE.Vector3(a, b, c));
-        geometry.vertices.push(new THREE.Vector3(a + Datas.Systems.SQUARE_SIZE, b, c));
-        geometry.vertices.push(new THREE.Vector3(a + Datas.Systems.SQUARE_SIZE, b, c + Datas.Systems.SQUARE_SIZE));
-        geometry.vertices.push(new THREE.Vector3(a, b, c + Datas.Systems
+        geometry.vertices.push(new Vector3(a, b, c));
+        geometry.vertices.push(new Vector3(a + Datas.Systems.SQUARE_SIZE, b, c));
+        geometry.vertices.push(new Vector3(a + Datas.Systems.SQUARE_SIZE, b, c + Datas.Systems.SQUARE_SIZE));
+        geometry.vertices.push(new Vector3(a, b, c + Datas.Systems
             .SQUARE_SIZE));
         let j = count * 4;
         geometry.faces.push(new THREE.Face3(j, j + 1, j + 2));
@@ -84,14 +86,14 @@ class Land extends MapElement {
         w -= (coefX * 2);
         h -= (coefY * 2);
         geometry.faceVertexUvs[0].push([
-            new THREE.Vector2(x, y),
-            new THREE.Vector2(x + w, y),
-            new THREE.Vector2(x + w, y + h)
+            new Vector2(x, y),
+            new Vector2(x + w, y),
+            new Vector2(x + w, y + h)
         ]);
         geometry.faceVertexUvs[0].push([
-            new THREE.Vector2(x, y),
-            new THREE.Vector2(x + w, y + h),
-            new THREE.Vector2(x, y + h)
+            new Vector2(x, y),
+            new Vector2(x + w, y + h),
+            new Vector2(x, y + h)
         ]);
         // Collision
         if (collision !== null) {

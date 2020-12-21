@@ -15,7 +15,8 @@ import { Datas } from "..";
 import { Enum } from "../Common";
 import PictureKind = Enum.PictureKind;
 import { Sprite } from "./Sprite";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { Vector3 } from "./Vector3";
+import { Vector2 } from "./Vector2";
 
 /** @class
  *  A sprite in the map.
@@ -56,16 +57,16 @@ class SpriteWall extends MapElement {
      *  @param {number} count The faces count
      *  @return {any[]}
      */
-    updateGeometry(geometry: typeof THREE.Geometry, position: Position, width: 
+    updateGeometry(geometry: THREE.Geometry, position: Position, width: 
         number, height: number, count: number): [number, 
         StructMapElementCollision[]]
     {
-        let vecA = new THREE.Vector3(-0.5, 1.0, 0.0);
-        let vecB = new THREE.Vector3(0.5, 1.0, 0.0);
-        let vecC = new THREE.Vector3(0.5, 0.0, 0.0);
-        let vecD = new THREE.Vector3(-0.5, 0.0, 0.0)
-        let center = new THREE.Vector3();
-        let size = new THREE.Vector3(Datas.Systems.SQUARE_SIZE, height, 0);
+        let vecA = new Vector3(-0.5, 1.0, 0.0);
+        let vecB = new Vector3(0.5, 1.0, 0.0);
+        let vecC = new Vector3(0.5, 0.0, 0.0);
+        let vecD = new Vector3(-0.5, 0.0, 0.0)
+        let center = new Vector3();
+        let size = new Vector3(Datas.Systems.SQUARE_SIZE, height, 0);
         let angle = position.angleY;
         let localPosition = position.toVector3();
 
@@ -98,14 +99,14 @@ class SpriteWall extends MapElement {
 
         // Texture UV coordinates for each triangle faces
         let texFaceA = [
-            new THREE.Vector2(x, y),
-            new THREE.Vector2(x + w, y),
-            new THREE.Vector2(x + w, y + h)
+            new Vector2(x, y),
+            new Vector2(x + w, y),
+            new Vector2(x + w, y + h)
         ];
         let texFaceB = [
-            new THREE.Vector2(x, y),
-            new THREE.Vector2(x + w, y + h),
-            new THREE.Vector2(x, y + h)
+            new Vector2(x, y),
+            new Vector2(x + w, y + h),
+            new Vector2(x, y + h)
         ];
 
         // Collision

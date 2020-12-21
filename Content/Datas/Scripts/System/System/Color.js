@@ -10,7 +10,8 @@
 */
 import { Base } from "./Base.js";
 import { System } from "../index.js";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { THREE } from "../Globals.js";
+import { Vector3 } from "../Core/index.js";
 /** @class
  *  The system color class.
  *  @extends {System.Base}
@@ -37,10 +38,10 @@ class Color extends Base {
     /**
      *  Used for mixing vectors according to alpha in getHex algorithm.
      *  @static
-     *  @param {THREE.Vector3} x The x position
-     *  @param {THREE.Vector3} y The y position
+     *  @param {Vector3} x The x position
+     *  @param {Vector3} y The y position
      *  @param {number} aThe alpha value between 0 and 1
-     *  @returns {THREE.Vector3}
+     *  @returns {Vector3}
      */
     static mix(x, y, a) {
         return x.clone().multiplyScalar(1 - a).add(y.clone().multiplyScalar(a));
@@ -74,11 +75,11 @@ class Color extends Base {
      */
     getHex(tone) {
         if (tone) {
-            let rgb = new THREE.Vector3(Math.max(Math.min(this.color.r + tone.x, 1), -1), Math.max(Math.min(this.color.g + tone.y, 1), -1), Math
+            let rgb = new Vector3(Math.max(Math.min(this.color.r + tone.x, 1), -1), Math.max(Math.min(this.color.g + tone.y, 1), -1), Math
                 .max(Math.min(this.color.b + tone.z, 1), -1));
-            let w = new THREE.Vector3(0.2125, 0.7154, 0.0721);
+            let w = new Vector3(0.2125, 0.7154, 0.0721);
             let intensity = rgb.dot(w);
-            let m = Color.mix(new THREE.Vector3(intensity, intensity, intensity), rgb, tone.w);
+            let m = Color.mix(new Vector3(intensity, intensity, intensity), rgb, tone.w);
             return new THREE.Color(Math.min(Math.max(0, m.x), 1), Math.min(Math
                 .max(0, m.y), 1), Math.min(Math.max(0, m.z), 1)).getHex();
         }

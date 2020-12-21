@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Icon } from "./Icon";
+import { Icon } from "./Icon.js";
 /** @class
  *  A currency of the game.
  *  @extends {System.Icon}

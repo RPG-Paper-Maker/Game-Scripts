@@ -8,13 +8,13 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Enum, Utils } from "../Common";
+import { Enum, Utils } from "../Common/index.js";
 var AnimationPositionKind = Enum.AnimationPositionKind;
 var PictureKind = Enum.PictureKind;
-import { Base } from "./Base";
-import { AnimationFrame } from "./AnimationFrame";
-import { Datas } from "..";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { Base } from "./Base.js";
+import { AnimationFrame } from "./AnimationFrame.js";
+import { Vector2 } from "../Core/index.js";
+import { Datas } from "../index.js";
 /** @class
  *  An animation of a skill / item / weapon or for display animation command.
  *  @extends System.Base
@@ -77,7 +77,7 @@ class Animation extends Base {
                     position = battler.botPosition;
                     break;
                 case AnimationPositionKind.ScreenCenter:
-                    position = new THREE.Vector2(0, 0);
+                    position = new Vector2(0, 0);
                     break;
             }
             // Draw

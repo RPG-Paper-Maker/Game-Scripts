@@ -8,12 +8,11 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Enum, Constants, Paths, Utils, Platform } from "../Common";
+import { Enum, Constants, Paths, Utils, Platform } from "../Common/index.js";
 var PictureKind = Enum.PictureKind;
-import { Datas } from "..";
-import { Picture2D, CollisionSquare } from "../Core";
-import { Base } from "./Base";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { Datas } from "../index.js";
+import { Picture2D, CollisionSquare } from "../Core/index.js";
+import { Base } from "./Base.js";
 /** @class
  *  A picture of the game.
  *  @extends {System.Base}
@@ -155,7 +154,7 @@ class Picture extends Base {
     }
     /**
      *  Read collisions according to image size.
-     *  @param {THREE.Image} image The image texture
+     *  @param {HTMLImageElement} image The image texture
      */
     readCollisionsImage(image) {
         this.width = Math.floor(image.width / Datas.Systems.SQUARE_SIZE);

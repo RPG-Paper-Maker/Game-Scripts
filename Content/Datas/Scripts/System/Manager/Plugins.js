@@ -78,5 +78,8 @@ class Plugins {
         this.plugins[parent].parameters = { ...par, ...chi };
     }
 }
+/**
+ * the object containing all the plugins.
+ */
 Plugins.plugins = {};
 export { Plugins };

@@ -8,11 +8,10 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Enum } from "../Common";
+import { Enum } from "../Common/index.js";
 var PictureKind = Enum.PictureKind;
-import { Land } from "./Land";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
-import { Datas } from "..";
+import { Land } from "./Land.js";
+import { Datas } from "../index.js";
 /** @class
  *  @extends Land
  *  An autotile in the map

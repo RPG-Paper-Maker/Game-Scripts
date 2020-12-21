@@ -8,14 +8,13 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  Several textures in a single file.
  */
 class TextureBundle {
     constructor() {
         this.list = [];
-        this.texture = null;
+        this.material = null;
     }
     /**
      *  Set the begining texture.

@@ -14,7 +14,7 @@ import PictureKind = Enum.PictureKind;
 import { Base } from "./Base";
 import { CollisionSquare, TextureBundle, Picture2D, Autotiles } from "../Core";
 import { System, Datas, Manager } from "..";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { THREE } from "../Globals";
 
 /** @class
  *  A tileset of the game.
@@ -35,7 +35,7 @@ class Tileset extends Base {
     public objects: number[];
     public texturesAutotiles: TextureBundle[];
     public texturesMountains: TextureBundle[];
-    public texturesWalls: typeof THREE.MeshStandardMaterial[];
+    public texturesWalls: THREE.ShaderMaterial[];
 
     constructor(json?: Record<string, any>) {
         super(json);
@@ -216,7 +216,7 @@ class Tileset extends Base {
      *  @param {number} id The picture id
      *  @returns {any[]}
      */
-    async loadTextureAutotile(textureAutotile: TextureBundle, texture: typeof 
+    async loadTextureAutotile(textureAutotile: TextureBundle, texture: 
         THREE.Texture, picture: System.Picture, offset: number, id: number): 
         Promise<any[]>
     {
@@ -322,13 +322,13 @@ class Tileset extends Base {
      *  @param {TextureBundle} textureAutotile The autotile several texture
      *  @param {THREE.Texture} texture The texture to paint on
      */
-    async updateTextureAutotile(textureAutotile: TextureBundle, texture: typeof 
+    async updateTextureAutotile(textureAutotile: TextureBundle, texture: 
         THREE.Texture)
     {
         texture.image = await Picture2D.loadImage(Platform.canvasRendering
             .toDataURL());
         texture.needsUpdate = true;
-        textureAutotile.texture = Manager.GL.createMaterial(texture);
+        textureAutotile.material = Manager.GL.createMaterial(texture);
         this.texturesAutotiles.push(textureAutotile);
     }
 
@@ -379,7 +379,7 @@ class Tileset extends Base {
      *  @param {number} id The picture id
      *  @returns {any[]}
      */
-    async loadTextureMountain(textureMountain: TextureBundle, texture: typeof 
+    async loadTextureMountain(textureMountain: TextureBundle, texture: 
         THREE.Texture, picture: System.Picture, offset: number, id: number): 
         Promise<any[]>
     {
@@ -477,13 +477,13 @@ class Tileset extends Base {
      *  @param {TextureBundle} textureMountain The mountain several texture
      *  @param {THREE.Texture} texture The texture to paint on
      */
-    async updateTextureMountain(textureMountain: TextureBundle, texture: typeof 
+    async updateTextureMountain(textureMountain: TextureBundle, texture: 
         THREE.Texture)
     {
         texture.image = await Picture2D.loadImage(Platform.canvasRendering
             .toDataURL());
         texture.needsUpdate = true;
-        textureMountain.texture = Manager.GL.createMaterial(texture);
+        textureMountain.material = Manager.GL.createMaterial(texture);
         this.texturesMountains.push(textureMountain);
     }
 
@@ -520,8 +520,8 @@ class Tileset extends Base {
      *  @param {number} id The picture id
      *  @returns {THREE.ShaderMaterial}
      */
-    async loadTextureWall(picture: System.Picture, id: number): Promise<typeof 
-        THREE.MeshStandardMaterial>
+    async loadTextureWall(picture: System.Picture, id: number): Promise<
+        THREE.ShaderMaterial>
     {
         let picture2D = await Picture2D.create(picture);
         let texture = new THREE.Texture();

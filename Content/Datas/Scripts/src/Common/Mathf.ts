@@ -11,6 +11,7 @@
 
 import { Constants } from ".";
 import { Datas, Core } from "..";
+import { Vector2, Vector3 } from "../Core";
 
 
 /** @class
@@ -325,15 +326,15 @@ class Mathf {
     /** 
      *  Indicate if a point is inside a rectangle.
      *  @static
-     *  @param {Core.Vector2} p The point to test
+     *  @param {Vector2} p The point to test
      *  @param {number} x1 The x left point of the rectangle
      *  @param {number} x2 The x right point of the rectangle
      *  @param {number} y1 The y top point of the rectangle
      *  @param {number} y2 The y bottom point of the rectangle
      *  @returns {boolean}
      */
-    static isPointOnRectangle(p: Core.Vector2, x1: number, x2: number, 
-        y1: number, y2: number): boolean
+    static isPointOnRectangle(p: Vector2, x1: number, x2: number, y1: number, y2
+        : number): boolean
     {
         return p.x >= x1 && p.x <= x2 && p.y >= y1 && p.y <= y2;
     }
@@ -341,14 +342,14 @@ class Mathf {
     /** 
      *  Indicate if a point is inside a triangle.
      *  @static
-     *  @param {Core.Vector2} p The point to test
-     *  @param {Core.Vector2} p0 One of the point of the triangle
-     *  @param {Core.Vector2} p1 One of the point of the triangle
-     *  @param {Core.Vector2} p2 One of the point of the triangle
+     *  @param {Vector2} p The point to test
+     *  @param {Vector2} p0 One of the point of the triangle
+     *  @param {Vector2} p1 One of the point of the triangle
+     *  @param {Vector2} p2 One of the point of the triangle
      *  @returns {boolean}
      */
-    static isPointOnTriangle(p: Core.Vector2, p0: Core.Vector2, 
-        p1: Core.Vector2, p2: Core.Vector2): boolean
+    static isPointOnTriangle(p: Vector2, p0: Vector2, 
+        p1: Vector2, p2: Vector2): boolean
     {
         let a = 1/2 * (-p1.y * p2.x + p0.y * (-p1.x + p2.x) + p0.x * (p1.y - p2
             .y) + p1.x * p2.y);
@@ -363,13 +364,11 @@ class Mathf {
     /** 
      *  Get the orthogonal projection between two vectors.
      *  @static
-     *  @param {Core.Vector3} u
-     *  @param {Core.Vector3} v
+     *  @param {Vector3} u
+     *  @param {Vector3} v
      *  @returns {number}
      */
-    static orthogonalProjection(u: Core.Vector3, v: Core.Vector3
-        ): number
-    {
+    static orthogonalProjection(u: Vector3, v: Vector3): number {
         let lu = u.length();
         let lv = v.length();
         let dot = u.dot(v);

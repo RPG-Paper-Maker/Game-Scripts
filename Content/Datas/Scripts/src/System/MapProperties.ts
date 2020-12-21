@@ -10,11 +10,11 @@
 */
 
 import { Base } from "./Base";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
-import { Datas, System, Core, Manager } from "..";
+import { THREE } from "../Globals";
+import { Datas, System, Manager } from "..";
 import { PlaySong } from "./PlaySong";
 import { DynamicValue } from "./DynamicValue";
-import { MapObject } from "./MapObject";
+import { MapObject } from "../Core/MapObject";
 import { Enum, Constants } from "../Common";
 import SongKind = Enum.SongKind;
 import PictureKind = Enum.PictureKind;
@@ -43,10 +43,10 @@ class MapProperties extends Base {
     public backgroundColor: Color;
     public backgroundImageID: number;
     public backgroundSkyboxID: DynamicValue;
-    public startupObject: Core.MapObject;
-    public cameraBackground: typeof THREE.Camera;
-    public sceneBackground: typeof THREE.Scene;
-    public skyboxGeometry: typeof THREE.BoxGeometry;
+    public startupObject: MapObject;
+    public cameraBackground: THREE.Camera;
+    public sceneBackground: THREE.Scene;
+    public skyboxGeometry: THREE.BoxGeometry;
 
     constructor() {
         super();
@@ -87,8 +87,8 @@ class MapProperties extends Base {
             this.updateBackgroundSkybox();
         }
         this.updateBackgroundColor();
-        var startupReactions = new MapObject(json.so);
-        this.startupObject = new Core.MapObject(startupReactions);
+        var startupReactions = new System.MapObject(json.so);
+        this.startupObject = new MapObject(startupReactions);
         this.startupObject.changeState();
     }
 

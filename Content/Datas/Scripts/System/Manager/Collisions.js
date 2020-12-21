@@ -8,11 +8,11 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Mathf, Constants, Enum } from "../Common";
-import { Position, Portion } from "../Core";
-import { Datas, Manager } from "..";
+import { Mathf, Constants, Enum } from "../Common/index.js";
+import { Position, Portion, Vector3, Vector2 } from "../Core/index.js";
+import { Datas, Manager } from "../index.js";
 var ElementMapKind = Enum.ElementMapKind;
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { THREE } from "../Globals.js";
 /** @class
  *  The collisions manager.
  *  @static
@@ -29,9 +29,9 @@ class Collisions {
     static createBox() {
         let box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), this
             .BB_MATERIAL);
-        box.previousTranslate = [0, 0, 0];
-        box.previousRotate = [0, 0, 0];
-        box.previousScale = [1, 1, 1];
+        box['previousTranslate'] = [0, 0, 0];
+        box['previousRotate'] = [0, 0, 0];
+        box['previousScale'] = [1, 1, 1];
         return box;
     }
     /**
@@ -42,8 +42,8 @@ class Collisions {
     static createOrientedBox() {
         let box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), this
             .BB_MATERIAL);
-        box.previousTranslate = [0, 0, 0];
-        box.previousScale = [1, 1, 1];
+        box['previousTranslate'] = [0, 0, 0];
+        box['previousScale'] = [1, 1, 1];
         box.geometry.rotateY(Math.PI / 4);
         return box;
     }
@@ -55,19 +55,18 @@ class Collisions {
      */
     static applyBoxLandTransforms(box, boundingBox) {
         // Cancel previous geometry transforms
-        box.geometry.translate(-box.previousTranslate[0], -box.previousTranslate[1], -box.previousTranslate[2]);
-        box.geometry.rotateZ(-box.previousRotate[2] * Math.PI / 180.0);
-        box.geometry.rotateX(-box.previousRotate[1] * Math.PI / 180.0);
-        box.geometry.rotateY(-box.previousRotate[0] * Math.PI / 180.0);
-        box.geometry.scale(1 / box.previousScale[0], 1 / box.previousScale[1], 1
-            / box.previousScale[2]);
+        box.geometry.translate(-box['previousTranslate[0]'], -box['previousTranslate'][1], -box['previousTranslate'][2]);
+        box.geometry.rotateZ(-box['previousRotate'][2] * Math.PI / 180.0);
+        box.geometry.rotateX(-box['previousRotate'][1] * Math.PI / 180.0);
+        box.geometry.rotateY(-box['previousRotate'][0] * Math.PI / 180.0);
+        box.geometry.scale(1 / box['previousScale'][0], 1 / box['previousScale'][1], 1 / box['previousScale'][2]);
         // Update to the new ones
         box.geometry.scale(boundingBox[3], 1, boundingBox[4]);
         box.geometry.translate(boundingBox[0], boundingBox[1], boundingBox[2]);
         // Register previous transforms to current
-        box.previousTranslate = [boundingBox[0], boundingBox[1], boundingBox[2]];
-        box.previousRotate = [0, 0, 0];
-        box.previousScale = [boundingBox[3], 1, boundingBox[4]];
+        box['previousTranslate'] = [boundingBox[0], boundingBox[1], boundingBox[2]];
+        box['previousRotate'] = [0, 0, 0];
+        box['previousScale'] = [boundingBox[3], 1, boundingBox[4]];
         // Update geometry now
         box.updateMatrixWorld();
     }
@@ -79,12 +78,11 @@ class Collisions {
      */
     static applyBoxSpriteTransforms(box, boundingBox) {
         // Cancel previous geometry transforms
-        box.geometry.translate(-box.previousTranslate[0], -box.previousTranslate[1], -box.previousTranslate[2]);
-        box.geometry.rotateZ(-box.previousRotate[2] * Math.PI / 180.0);
-        box.geometry.rotateX(-box.previousRotate[1] * Math.PI / 180.0);
-        box.geometry.rotateY(-box.previousRotate[0] * Math.PI / 180.0);
-        box.geometry.scale(1 / box.previousScale[0], 1 / box.previousScale[1], 1
-            / box.previousScale[2]);
+        box.geometry.translate(-box['previousTranslate'][0], -box['previousTranslate'][1], -box['previousTranslate'][2]);
+        box.geometry.rotateZ(-box['previousRotate'][2] * Math.PI / 180.0);
+        box.geometry.rotateX(-box['previousRotate'][1] * Math.PI / 180.0);
+        box.geometry.rotateY(-box['previousRotate'][0] * Math.PI / 180.0);
+        box.geometry.scale(1 / box['previousScale'][0], 1 / box['previousScale'][1], 1 / box['previousScale'][2]);
         // Update to the new ones
         box.geometry.scale(boundingBox[3], boundingBox[4], boundingBox[5]);
         box.geometry.rotateY(boundingBox[6] * Math.PI / 180.0);
@@ -92,9 +90,9 @@ class Collisions {
         box.geometry.rotateZ(boundingBox[8] * Math.PI / 180.0);
         box.geometry.translate(boundingBox[0], boundingBox[1], boundingBox[2]);
         // Register previous transforms to current
-        box.previousTranslate = [boundingBox[0], boundingBox[1], boundingBox[2]];
-        box.previousRotate = [boundingBox[6], boundingBox[7], boundingBox[8]];
-        box.previousScale = [boundingBox[3], boundingBox[4], boundingBox[5]];
+        box['previousTranslate'] = [boundingBox[0], boundingBox[1], boundingBox[2]];
+        box['previousRotate'] = [boundingBox[6], boundingBox[7], boundingBox[8]];
+        box['previousScale'] = [boundingBox[3], boundingBox[4], boundingBox[5]];
         // Update geometry now
         box.updateMatrixWorld();
     }
@@ -107,17 +105,16 @@ class Collisions {
     static applyOrientedBoxTransforms(box, boundingBox) {
         let size = Math.floor(boundingBox[3] / Math.sqrt(2));
         // Cancel previous geometry transforms
-        box.geometry.translate(-box.previousTranslate[0], -box.previousTranslate[1], -box.previousTranslate[2]);
+        box.geometry.translate(-box['previousTranslate'][0], -box['previousTranslate'][1], -box['previousTranslate'][2]);
         box.geometry.rotateY(-Math.PI / 4);
-        box.geometry.scale(1 / box.previousScale[0], 1 / box.previousScale[1], 1
-            / box.previousScale[2]);
+        box.geometry.scale(1 / box['previousScale'][0], 1 / box['previousScale'][1], 1 / box['previousScale'][2]);
         // Update to the new ones
         box.geometry.scale(size, boundingBox[4], size);
         box.geometry.rotateY(Math.PI / 4);
         box.geometry.translate(boundingBox[0], boundingBox[1], boundingBox[2]);
         // Register previous transforms to current
-        box.previousTranslate = [boundingBox[0], boundingBox[1], boundingBox[2]];
-        box.previousScale = [size, boundingBox[4], size];
+        box['previousTranslate'] = [boundingBox[0], boundingBox[1], boundingBox[2]];
+        box['previousScale'] = [size, boundingBox[4], size];
         // Update geometry now
         box.updateMatrixWorld();
     }
@@ -183,8 +180,8 @@ class Collisions {
      *  Check the faces for OBB collision.
      *  @static
      *  @param {THREE.Face3[]} shapes The faces to check
-     *  @param {THREE.Vector3[]} verticesA First vertices to check
-     *  @param {THREE.Vector3[]} verticesB Second vertices to check
+     *  @param {Vector3[]} verticesA First vertices to check
+     *  @param {Vector3[]} verticesB Second vertices to check
      *  @param {number} lA The first vertices length
      *  @param {number} lB The second vertices length
      *  @returns {boolean}
@@ -201,11 +198,11 @@ class Collisions {
     /**
      *  Check if vertices overlap on one of the faces normal.
      *  @static
-     *  @param {THREE.Vector3[]} verticesA First vertices to check
-     *  @param {THREE.Vector3[]} verticesB Second vertices to check
+     *  @param {Vector3[]} verticesA First vertices to check
+     *  @param {Vector3[]} verticesB Second vertices to check
      *  @param {number} lA The first vertices length
      *  @param {number} lB The second vertices length
-     *  @param {THREE.Vector3} normal The face normal
+     *  @param {Vector3} normal The face normal
      *  @returns {boolean}
      */
     static overlapOnThisNormal(verticesA, verticesB, lA, lB, normal) {
@@ -242,17 +239,17 @@ class Collisions {
     /**
      *  Check collision ray.
      *  @static
-     *  @param {THREE.Vector3} positionBefore The position before collision
-     *  @param {THREE.Vector3} positionAfter The position after collision
+     *  @param {Vector3} positionBefore The position before collision
+     *  @param {Vector3} positionAfter The position after collision
      *  @param {MapObject} object The map object to test collision
      *  @returns {boolean}
      */
     static checkRay(positionBefore, positionAfter, object) {
-        let direction = new THREE.Vector3();
+        let direction = new Vector3();
         direction.subVectors(positionAfter, positionBefore).normalize();
         let jpositionBefore = Position.createFromVector3(positionBefore);
         let jpositionAfter = Position.createFromVector3(positionAfter);
-        let positionAfterPlus = new THREE.Vector3();
+        let positionAfterPlus = new Vector3();
         let testedCollisions = [];
         let yMountain = null;
         // Squares to inspect according to the direction of the object
@@ -391,9 +388,9 @@ class Collisions {
      *  @param {MapPortion} mapPortion The map portion to check
      *  @param {Position} jpositionBefore The json position before collision
      *  @param {Position} jpositionAfter The json position after collision
-     *  @param {THREE.Vector3} positionAfter The position after collision
+     *  @param {Vector3} positionAfter The position after collision
      *  @param {MapObject} object The map object collision test
-     *  @param {THREE.Vector3} direction The direction collision
+     *  @param {Vector3} direction The direction collision
      *  @param {StructMapElementCollision[]} testedCollisions The object
      *  collisions that were already tested
      *  @returns {boolean}
@@ -414,7 +411,7 @@ class Collisions {
      *  @param {Position} jpositionBefore The json position before collision
      *  @param {Position} jpositionAfter The json position after collision
      *  @param {MapObject} object The map object collision test
-     *  @param {THREE.Vector3} direction The direction collision
+     *  @param {Vector3} direction The direction collision
      *  @param {StructMapElementCollision[]} testedCollisions The object
      *  collisions that were already tested
      *  @returns {boolean}
@@ -446,7 +443,7 @@ class Collisions {
      *  @param {MapPortion} mapPortion The map portion to check
      *  @param {Position} jpositionBefore The json position before collision
      *  @param {Position} jpositionAfter The json position after collision
-     *  @param {THREE.Vector3} direction The direction collision
+     *  @param {Vector3} direction The direction collision
      *  @returns {boolean}
     */
     static checkLandsInside(mapPortion, jpositionBefore, jpositionAfter, direction) {
@@ -478,8 +475,7 @@ class Collisions {
             return false;
         }
         this.applyBoxLandTransforms(this.BB_BOX, boundingBox);
-        return this.obbVSobb(object.currentBoundingBox.geometry, this.BB_BOX
-            .geometry);
+        return this.obbVSobb(object.currentBoundingBox.geometry, this.BB_BOX.geometry);
     }
     /**
      *  Check directions
@@ -488,7 +484,7 @@ class Collisions {
      *  @param {Position} jpositionAfter The json position after collision
      *  @param {StructMapElementCollision} collision The collision object
      *  @param {number[]} boundingBox The bounding box values
-     *  @param {THREE.Vector3} direction The direction collision
+     *  @param {Vector3} direction The direction collision
      *  @param {MapObject} object The map object collision test
      *  @returns {boolean}
     */
@@ -520,7 +516,7 @@ class Collisions {
      *  @param {Position} jpositionBefore The json position before collision
      *  @param {Position} jpositionAfter The json position after collision
      *  @param {StructMapElementCollision} collision The collision object
-     *  @param {THREE.Vector3} direction The direction collision
+     *  @param {Vector3} direction The direction collision
      *  @returns {boolean}
     */
     static checkDirectionsInside(jpositionBefore, jpositionAfter, collision, direction) {
@@ -583,13 +579,13 @@ class Collisions {
         }
         if (fix) {
             this.applyBoxSpriteTransforms(this.BB_BOX, boundingBox);
-            return this.obbVSobb(object.currentBoundingBox.geometry, this.BB_BOX
-                .geometry);
+            return this.obbVSobb(object.currentBoundingBox
+                .geometry, this.BB_BOX.geometry);
         }
         else {
             this.applyOrientedBoxTransforms(this.BB_ORIENTED_BOX, boundingBox);
-            return this.obbVSobb(object.currentBoundingBox.geometry, this
-                .BB_ORIENTED_BOX.geometry);
+            return this.obbVSobb(object.currentBoundingBox
+                .geometry, this.BB_ORIENTED_BOX.geometry);
         }
     }
     /**
@@ -623,7 +619,7 @@ class Collisions {
      *  @static
      *  @param {MapPortion} mapPortion The map portion to check
      *  @param {Position} jpositionAfter The json position after collision
-     *  @param {THREE.Vector3} positionAfter The position after collision
+     *  @param {Vector3} positionAfter The position after collision
      *  @param {StructMapElementCollision[]} testedCollisions The object collisions that were
      *  already tested
      *  @param {MapObject} object The map object collision test
@@ -671,7 +667,7 @@ class Collisions {
      *  @static
      *  @param {MapPortion} mapPortion The map portion to check
      *  @param {Position} jpositionAfter The json position after collision
-     *  @param {THREE.Vector3} positionAfter The position after collision
+     *  @param {Vector3} positionAfter The position after collision
      *  @param {StructMapElementCollision[]} testedCollisions The object
      *  collisions that were already tested
      *  @param {MapObject} object The map object collision test
@@ -705,7 +701,7 @@ class Collisions {
      *  @static
      *  @param {MapPortion} mapPortion The map portion to check
      *  @param {Position} jpositionAfter The json position after collision
-     *  @param {THREE.Vector3} positionAfter The position after collision
+     *  @param {Vector3} positionAfter The position after collision
      *  @param {StructMapElementCollision} objCollision The object collision
      *  @param {MapObject} object The map object collision test
      *  @returns {[boolean, number]}
@@ -714,7 +710,7 @@ class Collisions {
         let mountain = objCollision.t;
         let forceAlways = mountain.getSystem().forceAlways();
         let forceNever = mountain.getSystem().forceNever();
-        let point = new THREE.Vector2(positionAfter.x, positionAfter.z);
+        let point = new Vector2(positionAfter.x, positionAfter.z);
         let x = objCollision.l.x;
         let y = objCollision.l.y;
         let z = objCollision.l.z;
@@ -744,26 +740,26 @@ class Collisions {
             let ptA, ptB, ptC, pA, pB, pC;
             if (objCollision.left && !mountain.left) {
                 if (objCollision.top && !mountain.top) {
-                    ptA = new THREE.Vector2(x - w, z);
-                    ptB = new THREE.Vector2(x, z);
-                    ptC = new THREE.Vector2(x, z - w);
+                    ptA = new Vector2(x - w, z);
+                    ptB = new Vector2(x, z);
+                    ptC = new Vector2(x, z - w);
                     if (Mathf.isPointOnTriangle(point, ptA, ptB, ptC)) {
-                        pA = new THREE.Vector3(ptA.x, y, ptA.y);
-                        pB = new THREE.Vector3(ptB.x, y + h, ptB.y);
-                        pC = new THREE.Vector3(ptC.x, y, ptC.y);
+                        pA = new Vector3(ptA.x, y, ptA.y);
+                        pB = new Vector3(ptB.x, y + h, ptB.y);
+                        pC = new Vector3(ptC.x, y, ptC.y);
                     }
                     else {
                         return [false, null];
                     }
                 }
                 else if (objCollision.bot && !mountain.bot) {
-                    ptA = new THREE.Vector2(x - w, z + Datas.Systems.SQUARE_SIZE);
-                    ptB = new THREE.Vector2(x, z + Datas.Systems.SQUARE_SIZE);
-                    ptC = new THREE.Vector2(x, z + Datas.Systems.SQUARE_SIZE + w);
+                    ptA = new Vector2(x - w, z + Datas.Systems.SQUARE_SIZE);
+                    ptB = new Vector2(x, z + Datas.Systems.SQUARE_SIZE);
+                    ptC = new Vector2(x, z + Datas.Systems.SQUARE_SIZE + w);
                     if (Mathf.isPointOnTriangle(point, ptA, ptB, ptC)) {
-                        pA = new THREE.Vector3(ptA.x, y, ptA.y);
-                        pB = new THREE.Vector3(ptB.x, y + h, ptB.y);
-                        pC = new THREE.Vector3(ptC.x, y, ptC.y);
+                        pA = new Vector3(ptA.x, y, ptA.y);
+                        pB = new Vector3(ptB.x, y + h, ptB.y);
+                        pC = new Vector3(ptC.x, y, ptC.y);
                     }
                     else {
                         return [false, null];
@@ -772,9 +768,9 @@ class Collisions {
                 else {
                     if (Mathf.isPointOnRectangle(point, x - w, x, z, z + Datas
                         .Systems.SQUARE_SIZE)) {
-                        pA = new THREE.Vector3(x - w, y, z);
-                        pB = new THREE.Vector3(x, y + h, z);
-                        pC = new THREE.Vector3(x, y + h, z + Datas.Systems.SQUARE_SIZE);
+                        pA = new Vector3(x - w, y, z);
+                        pB = new Vector3(x, y + h, z);
+                        pC = new Vector3(x, y + h, z + Datas.Systems.SQUARE_SIZE);
                     }
                     else {
                         return [false, null];
@@ -783,29 +779,29 @@ class Collisions {
             }
             else if (objCollision.right && !mountain.right) {
                 if (objCollision.top && !mountain.top) {
-                    ptA = new THREE.Vector2(x + Datas.Systems.SQUARE_SIZE, z - w);
-                    ptB = new THREE.Vector2(x + Datas.Systems.SQUARE_SIZE, z);
-                    ptC = new THREE.Vector2(x + Datas.Systems.SQUARE_SIZE + w, z);
+                    ptA = new Vector2(x + Datas.Systems.SQUARE_SIZE, z - w);
+                    ptB = new Vector2(x + Datas.Systems.SQUARE_SIZE, z);
+                    ptC = new Vector2(x + Datas.Systems.SQUARE_SIZE + w, z);
                     if (Mathf.isPointOnTriangle(point, ptA, ptB, ptC)) {
-                        pA = new THREE.Vector3(ptA.x, y, ptA.y);
-                        pB = new THREE.Vector3(ptB.x, y + h, ptB.y);
-                        pC = new THREE.Vector3(ptC.x, y, ptC.y);
+                        pA = new Vector3(ptA.x, y, ptA.y);
+                        pB = new Vector3(ptB.x, y + h, ptB.y);
+                        pC = new Vector3(ptC.x, y, ptC.y);
                     }
                     else {
                         return [false, null];
                     }
                 }
                 else if (objCollision.bot && !mountain.bot) {
-                    ptA = new THREE.Vector2(x + Datas.Systems.SQUARE_SIZE, z +
+                    ptA = new Vector2(x + Datas.Systems.SQUARE_SIZE, z +
                         Datas.Systems.SQUARE_SIZE + w);
-                    ptB = new THREE.Vector2(x + Datas.Systems.SQUARE_SIZE, z +
+                    ptB = new Vector2(x + Datas.Systems.SQUARE_SIZE, z +
                         Datas.Systems.SQUARE_SIZE);
-                    ptC = new THREE.Vector2(x + Datas.Systems.SQUARE_SIZE + w, z
+                    ptC = new Vector2(x + Datas.Systems.SQUARE_SIZE + w, z
                         + Datas.Systems.SQUARE_SIZE);
                     if (Mathf.isPointOnTriangle(point, ptA, ptB, ptC)) {
-                        pA = new THREE.Vector3(ptA.x, y, ptA.y);
-                        pB = new THREE.Vector3(ptB.x, y + h, ptB.y);
-                        pC = new THREE.Vector3(ptC.x, y, ptC.y);
+                        pA = new Vector3(ptA.x, y, ptA.y);
+                        pB = new Vector3(ptB.x, y + h, ptB.y);
+                        pC = new Vector3(ptC.x, y, ptC.y);
                     }
                     else {
                         return [false, null];
@@ -815,11 +811,11 @@ class Collisions {
                     if (Mathf.isPointOnRectangle(point, x + Datas.Systems
                         .SQUARE_SIZE, x + Datas.Systems.SQUARE_SIZE + w, z, z +
                         Datas.Systems.SQUARE_SIZE)) {
-                        pA = new THREE.Vector3(x + Datas.Systems.SQUARE_SIZE, y
+                        pA = new Vector3(x + Datas.Systems.SQUARE_SIZE, y
                             + h, z + Datas.Systems.SQUARE_SIZE);
-                        pB = new THREE.Vector3(x + Datas.Systems.SQUARE_SIZE, y
+                        pB = new Vector3(x + Datas.Systems.SQUARE_SIZE, y
                             + h, z);
-                        pC = new THREE.Vector3(x + Datas.Systems.SQUARE_SIZE + w, y, z);
+                        pC = new Vector3(x + Datas.Systems.SQUARE_SIZE + w, y, z);
                     }
                     else {
                         return [false, null];
@@ -830,9 +826,9 @@ class Collisions {
                 if (objCollision.top && !mountain.top) {
                     if (Mathf.isPointOnRectangle(point, x, x + Datas.Systems
                         .SQUARE_SIZE, z - w, z)) {
-                        pA = new THREE.Vector3(x, y + h, z);
-                        pB = new THREE.Vector3(x, y, z - w);
-                        pC = new THREE.Vector3(x + Datas.Systems.SQUARE_SIZE, y, z - w);
+                        pA = new Vector3(x, y + h, z);
+                        pB = new Vector3(x, y, z - w);
+                        pC = new Vector3(x + Datas.Systems.SQUARE_SIZE, y, z - w);
                     }
                     else {
                         return [false, null];
@@ -842,10 +838,10 @@ class Collisions {
                     if (Mathf.isPointOnRectangle(point, x, x + Datas.Systems
                         .SQUARE_SIZE, z + Datas.Systems.SQUARE_SIZE, z + Datas
                         .Systems.SQUARE_SIZE + w)) {
-                        pA = new THREE.Vector3(x + Datas.Systems.SQUARE_SIZE, y, z + Datas.Systems.SQUARE_SIZE + w);
-                        pB = new THREE.Vector3(x, y, z + Datas.Systems
+                        pA = new Vector3(x + Datas.Systems.SQUARE_SIZE, y, z + Datas.Systems.SQUARE_SIZE + w);
+                        pB = new Vector3(x, y, z + Datas.Systems
                             .SQUARE_SIZE + w);
-                        pC = new THREE.Vector3(x, y + h, z + Datas.Systems
+                        pC = new Vector3(x, y + h, z + Datas.Systems
                             .SQUARE_SIZE);
                     }
                     else {
@@ -858,8 +854,8 @@ class Collisions {
             }
             // Get the intersection point for updating mountain y
             let plane = new THREE.Plane();
-            let ray = new THREE.Ray(new THREE.Vector3(positionAfter.x, y, positionAfter.z), new THREE.Vector3(0, 1, 0));
-            let newPosition = new THREE.Vector3();
+            let ray = new THREE.Ray(new Vector3(positionAfter.x, y, positionAfter.z), new Vector3(0, 1, 0));
+            let newPosition = new Vector3();
             plane.setFromCoplanarPoints(pA, pB, pC);
             ray.intersectPlane(plane, newPosition);
             // If going down, check if there's a blocking floor

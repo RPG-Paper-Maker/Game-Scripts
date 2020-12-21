@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { THREE } from "../Globals.js";
 import { System, Manager, Datas } from "../index.js";
 import { Frame } from "./Frame.js";
 import { Enum, Utils, IO, Paths, Constants, Platform, Mathf } from "../Common/index.js";
@@ -21,10 +21,11 @@ import { Sprite } from "./Sprite.js";
 import { Position } from "./Position.js";
 import { CollisionSquare } from "./CollisionSquare.js";
 import { MapElement } from "./MapElement.js";
+import { Vector3 } from "./Vector3.js";
 /** @class
  *  Object in local map that can move.
  *  @param {SystemObject} System The System informations
- *  @param {THREE.Vector3} position The current object position
+ *  @param {Vector3} position The current object position
  *  @param {boolean} isHero Indicate if the object is the hero
  */
 class MapObject {
@@ -369,8 +370,8 @@ class MapObject {
             .textureTileset : Manager.Stack.currentMap.texturesCharacters[this
             .currentStateInstance.graphicID]);
         this.meshBoundingBox = new Array;
-        if (this.currentState !== null && !this.isNone() && material && material
-            .map) {
+        let texture = Manager.GL.getMaterialTexture(material);
+        if (this.currentState !== null && !this.isNone() && texture) {
             this.speed = Datas.Systems.getSpeed(this.currentState.speedID);
             this.frequency = Datas.Systems.getFrequency(this.currentState
                 .frequencyID);
@@ -389,10 +390,10 @@ class MapObject {
             else {
                 x = 0;
                 y = 0;
-                this.width = material.map.image.width / Datas.Systems
-                    .SQUARE_SIZE / Datas.Systems.FRAMES;
-                this.height = material.map.image.height / Datas.Systems
-                    .SQUARE_SIZE / 4;
+                this.width = texture.image.width / Datas.Systems.SQUARE_SIZE /
+                    Datas.Systems.FRAMES;
+                this.height = texture.image.height / Datas.Systems.SQUARE_SIZE /
+                    4;
             }
             let sprite = Sprite.create(this.currentState.graphicKind, [x, y,
                 this.width, this.height]);
@@ -434,10 +435,10 @@ class MapObject {
      *  @param {Orientation} orientation The orientation to move
      *  @param {number} distance The distance
      *  @param {number} angle The angle
-     *  @returns {THREE.Vector3}
+     *  @returns {Vector3}
      */
     getFuturPosition(orientation, distance, angle) {
-        let position = new THREE.Vector3(this.previousPosition.x, this
+        let position = new Vector3(this.previousPosition.x, this
             .previousPosition.y, this.previousPosition.z);
         // The speed depends on the time elapsed since the last update
         let w = Manager.Stack.currentMap.mapProperties.length * Datas.Systems
@@ -539,7 +540,9 @@ class MapObject {
         let i, j, l, m;
         for (i = 0, l = this.meshBoundingBox.length; i < l; i++) {
             for (j = 0, m = object.meshBoundingBox.length; j < m; j++) {
-                if (Manager.Collisions.obbVSobb(this.meshBoundingBox[i].geometry, object.meshBoundingBox[j].geometry)) {
+                if (Manager.Collisions.obbVSobb(this
+                    .meshBoundingBox[i].geometry, object
+                    .meshBoundingBox[j].geometry)) {
                     return true;
                 }
             }
@@ -548,12 +551,13 @@ class MapObject {
     }
     /**
      *  Check the collision detection.
-     *  @returns {THREE.Vector3}
+     *  @returns {Vector3}
      */
     checkCollisionDetection() {
         let i, l;
         for (i = 0, l = this.meshBoundingBox.length; i < l; i++) {
-            if (Manager.Collisions.obbVSobb(this.meshBoundingBox[i].geometry, Manager.Collisions.BB_BOX_DETECTION.geometry)) {
+            if (Manager.Collisions.obbVSobb(this.meshBoundingBox[i].geometry, Manager.Collisions
+                .BB_BOX_DETECTION.geometry)) {
                 return true;
             }
         }
@@ -564,8 +568,8 @@ class MapObject {
                     .SQUARE_SIZE, Datas.Systems.SQUARE_SIZE, Datas.Systems
                     .SQUARE_SIZE, 0, 0, 0]);
             if (Manager.Collisions.obbVSobb(Manager.Collisions
-                .BB_BOX_DEFAULT_DETECTION.geometry, Manager.Collisions
-                .BB_BOX_DETECTION.geometry)) {
+                .BB_BOX_DEFAULT_DETECTION.geometry, Manager
+                .Collisions.BB_BOX_DETECTION.geometry)) {
                 return true;
             }
         }
@@ -587,7 +591,7 @@ class MapObject {
     }
     /**
      *  Only updates the bounding box mesh position.
-     *  @param {THREE.Vector3} position Position to update
+     *  @param {Vector3} position Position to update
      */
     updateBB(position) {
         if (this.currentStateInstance.graphicID !== 0) {
@@ -631,7 +635,7 @@ class MapObject {
     }
     /**
      *  Only updates the bounding box mesh position.
-     *  @param {THREE.Vector3} position Position to update
+     *  @param {Vector3} position Position to update
      */
     updateBBPosition(position) {
         for (let i = 0, l = this.meshBoundingBox.length; i < l; i++) {
@@ -704,7 +708,7 @@ class MapObject {
     }
     /**
      *  Teleport the object.
-     *  @param {THREE.Vector3} position Position to teleport
+     *  @param {Vector3} position Position to teleport
      */
     teleport(position) {
         if (this.removed) {
@@ -892,9 +896,9 @@ class MapObject {
                     this.updateOrientation();
                 }
             }
-            this.upPosition = new THREE.Vector3(this.position.x, this.position.y
+            this.upPosition = new Vector3(this.position.x, this.position.y
                 + (this.height * Datas.Systems.SQUARE_SIZE), this.position.z);
-            this.halfPosition = new THREE.Vector3(this.position.x, this.position
+            this.halfPosition = new Vector3(this.position.x, this.position
                 .y + (this.height * Datas.Systems.SQUARE_SIZE / 2), this
                 .position.z);
             this.updateAngle(angle);
@@ -943,9 +947,10 @@ class MapObject {
      */
     updateUVs() {
         if (this.mesh !== null && !this.isNone()) {
-            if (this.mesh.material && this.mesh.material.map) {
-                let textureWidth = this.mesh.material.map.image.width;
-                let textureHeight = this.mesh.material.map.image.height;
+            let texture = Manager.GL.getMaterialTexture(this.mesh.material);
+            if (texture) {
+                let textureWidth = texture.image.width;
+                let textureHeight = texture.image.height;
                 let w, h, x, y;
                 if (this.currentStateInstance.graphicID === 0) {
                     w = this.width * Datas.Systems.SQUARE_SIZE / textureWidth;

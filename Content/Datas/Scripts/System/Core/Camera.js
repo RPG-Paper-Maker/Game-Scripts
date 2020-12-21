@@ -8,7 +8,6 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { ScreenResolution, Mathf } from "../Common/index.js";
 import { Manager } from "../index.js";
 /** @class
@@ -55,8 +54,8 @@ class Camera {
     }
     /**
      *  Get the horizontal angle between two positions.
-     *  @param {THREE.Vector3} p1 The first position
-     *  @param {THREE.Vector3} p2 The second position
+     *  @param {Vector3} p1 The first position
+     *  @param {Vector3} p2 The second position
      *  @returns {number}
      */
     getHorizontalAngle(p1, p2) {
@@ -64,8 +63,8 @@ class Camera {
     }
     /**
      *  Get the vertical angle between two positions.
-     *  @param {THREE.Vector3} p1 The first position
-     *  @param {THREE.Vector3} p2 The second position
+     *  @param {Vector3} p1 The first position
+     *  @param {Vector3} p2 The second position
      *  @returns {number}
      */
     getVerticalAngle(p1, p2) {

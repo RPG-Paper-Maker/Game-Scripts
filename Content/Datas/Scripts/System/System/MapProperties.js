@@ -8,13 +8,13 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
-import { Datas, Core, Manager } from "..";
-import { PlaySong } from "./PlaySong";
-import { DynamicValue } from "./DynamicValue";
-import { MapObject } from "./MapObject";
-import { Enum, Constants } from "../Common";
+import { Base } from "./Base.js";
+import { THREE } from "../Globals.js";
+import { Datas, System, Manager } from "../index.js";
+import { PlaySong } from "./PlaySong.js";
+import { DynamicValue } from "./DynamicValue.js";
+import { MapObject } from "../Core/MapObject.js";
+import { Enum, Constants } from "../Common/index.js";
 var SongKind = Enum.SongKind;
 var PictureKind = Enum.PictureKind;
 /** @class
@@ -60,8 +60,8 @@ class MapProperties extends Base {
             this.updateBackgroundSkybox();
         }
         this.updateBackgroundColor();
-        var startupReactions = new MapObject(json.so);
-        this.startupObject = new Core.MapObject(startupReactions);
+        var startupReactions = new System.MapObject(json.so);
+        this.startupObject = new MapObject(startupReactions);
         this.startupObject.changeState();
     }
     /**

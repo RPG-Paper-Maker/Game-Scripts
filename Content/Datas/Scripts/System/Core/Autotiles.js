@@ -8,16 +8,18 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { THREE } from "../Globals.js";
+import { Manager } from "../index.js";
 /** @class
  *  Autotiles grouped with the same textures.
  *  @param {TextureBundle} texture
  */
 class Autotiles {
-    constructor(texture) {
-        this.texture = texture;
-        this.width = texture.texture.map ? texture.texture.map.image.width : 0;
-        this.height = texture.texture.map ? texture.texture.map.image.height : 0;
+    constructor(bundle) {
+        this.bundle = bundle;
+        let texture = Manager.GL.getMaterialTexture(bundle.material);
+        this.width = texture ? texture.image.width : 0;
+        this.height = texture ? texture.image.height : 0;
         this.geometry = new THREE.Geometry();
         this.geometry.faceVertexUvs[0] = [];
         this.mesh = null;
@@ -32,14 +34,14 @@ class Autotiles {
      */
     updateGeometry(position, autotile) {
         return this.width === null || this.height === 0 ? null : autotile
-            .updateGeometryAutotile(this.geometry, this.texture, position, this
+            .updateGeometryAutotile(this.geometry, this.bundle, position, this
             .width, this.height, this.index++);
     }
     /**
      *  Create a mesh with material and geometry.
      */
     createMesh() {
-        this.mesh = new THREE.Mesh(this.geometry, this.texture.texture);
+        this.mesh = new THREE.Mesh(this.geometry, this.bundle.material);
     }
 }
 Autotiles.COUNT_LIST = 5;

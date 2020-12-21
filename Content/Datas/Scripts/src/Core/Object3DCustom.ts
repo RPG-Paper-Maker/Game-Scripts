@@ -17,7 +17,9 @@ import CustomShapeKind = Enum.CustomShapeKind;
 import ObjectCollisionKind = Enum.ObjectCollisionKind;
 import { Sprite } from "./Sprite";
 import { Object3D } from "./Object3D";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { THREE } from "../Globals";
+import { Vector3 } from "./Vector3";
+import { Vector2 } from "./Vector2";
 
 /** @class
  *  A 3D object custom in the map.
@@ -58,7 +60,7 @@ class Object3DCustom extends Object3D {
      *  @param {number} count The faces count
      *  @return {any[]}
     */
-    updateGeometry(geometry: typeof THREE.Geometry, position: Position, count: 
+    updateGeometry(geometry: THREE.Geometry, position: Position, count: 
         number) : [number, StructMapElementCollision[]]
     {
         let localPosition = position.toVector3();
@@ -68,12 +70,11 @@ class Object3DCustom extends Object3D {
         let uvs = modelGeometry.uvs;
         let center = modelGeometry.center;
         let scale = this.datas.scale;
-        let scaleVec = new THREE.Vector3(scale, scale, scale);
+        let scaleVec = new Vector3(scale, scale, scale);
         let angleY = position.angleY;
         let angleX = position.angleX;
         let angleZ = position.angleZ;
-        let vecA: typeof THREE.Vector3, vecB: typeof THREE.Vector3, vecC: typeof 
-            THREE.Vector3, face: typeof THREE.Vector2[];
+        let vecA: Vector3, vecB: Vector3, vecC: Vector3, face: Vector2[];
         for (let i = 0, l = modelGeometry.vertices.length; i < l; i += 3) {
             vecA = vertices[i].clone();
             vecB = vertices[i + 1].clone();

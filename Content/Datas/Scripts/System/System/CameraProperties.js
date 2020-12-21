@@ -8,11 +8,12 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
-import { DynamicValue } from "./DynamicValue";
-import { Utils, ScreenResolution, Constants } from "../Common";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
-import { Datas } from "..";
+import { Base } from "./Base.js";
+import { DynamicValue } from "./DynamicValue.js";
+import { Utils, ScreenResolution, Constants } from "../Common/index.js";
+import { THREE } from "../Globals.js";
+import { Vector3 } from "../Core/index.js";
+import { Datas } from "../index.js";
 /** @class
  *  A camera properties of the game.
  *  @extends System.Base
@@ -56,7 +57,7 @@ export class CameraProperties extends Base {
         camera.horizontalAngle = this.horizontalAngle.getValue();
         camera.verticalAngle = this.verticalAngle.getValue();
         camera.verticalRight = true;
-        camera.targetPosition = new THREE.Vector3();
+        camera.targetPosition = new Vector3();
         let x = this.targetOffsetX.getValue();
         if (this.isSquareTargetOffsetX) {
             x *= Datas.Systems.SQUARE_SIZE;
@@ -69,6 +70,6 @@ export class CameraProperties extends Base {
         if (this.isSquareTargetOffsetZ) {
             z *= Datas.Systems.SQUARE_SIZE;
         }
-        camera.targetOffset = new THREE.Vector3(x, y, z);
+        camera.targetOffset = new Vector3(x, y, z);
     }
 }

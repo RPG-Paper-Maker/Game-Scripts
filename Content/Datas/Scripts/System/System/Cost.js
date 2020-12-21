@@ -8,12 +8,12 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Enum, Utils, Interpreter } from "../Common";
+import { Enum, Utils, Interpreter } from "../Common/index.js";
 var DamagesKind = Enum.DamagesKind;
-import { Base } from "./Base";
-import { DynamicValue } from "./DynamicValue";
-import { Manager, Datas } from "..";
-import { Player } from "../Core";
+import { Base } from "./Base.js";
+import { DynamicValue } from "./DynamicValue.js";
+import { Manager, Datas } from "../index.js";
+import { Player } from "../Core/index.js";
 /** @class
  *  A cost of a common skill item.
  *  @extends System.Base

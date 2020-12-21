@@ -44,3 +44,5 @@ export * from "./TextureBundle.js";
 export * from "./Tree.js";
 export * from "./WindowBox.js";
 export * from "./WindowChoices.js";
+export * from "./Vector3.js";
+export * from "./Vector2.js";

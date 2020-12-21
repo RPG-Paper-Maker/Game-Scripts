@@ -8,11 +8,10 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
-import { AnimationFrameElement } from "./AnimationFrameElement";
-import { AnimationFrameEffect } from "./AnimationFrameEffect";
-import { Utils } from "../Common";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { Base } from "./Base.js";
+import { AnimationFrameElement } from "./AnimationFrameElement.js";
+import { AnimationFrameEffect } from "./AnimationFrameEffect.js";
+import { Utils } from "../Common/index.js";
 /** @class
  *  An animation frame.
  *  @extends System.Base
@@ -47,7 +46,7 @@ class AnimationFrame extends Base {
     /**
      *  Draw the animation frame.
      *  @param {Picture2D} picture The picture associated to the animation
-     *  @param {THREE.Vector2} position The position on screen for animation
+     *  @param {Vector2} position The position on screen for animation
      *  @param {number} rows The number of rows in the animation texture
      *  @param {number} cols The number of columns in the animation texture
      */

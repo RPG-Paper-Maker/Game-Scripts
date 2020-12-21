@@ -8,11 +8,11 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Enum, Utils } from "../Common";
+import { Enum, Utils } from "../Common/index.js";
 var SongKind = Enum.SongKind;
 var AnimationEffectConditionKind = Enum.AnimationEffectConditionKind;
-import { Base } from "./Base";
-import { PlaySong } from "./PlaySong";
+import { Base } from "./Base.js";
+import { PlaySong } from "./PlaySong.js";
 /** @class
  *  An animation frame effect.
  *  @extends System.Base

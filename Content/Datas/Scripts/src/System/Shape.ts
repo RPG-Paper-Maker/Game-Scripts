@@ -13,7 +13,8 @@ import { Enum, Constants, Paths, Utils, Platform } from "../Common";
 import CustomShapeKind = Enum.CustomShapeKind;
 import { Base } from "./Base";
 import { Datas } from "..";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { THREE } from "../Globals";
+import { Vector3, Vector2 } from "../Core";
 
 /** @class
  *  A shape of the game.
@@ -75,15 +76,15 @@ class Shape extends Base {
         let uvs = [];
         let v = [];
         let t = [];
-        let minVertex = new THREE.Vector3();
-        let maxVertex = new THREE.Vector3();
+        let minVertex = new Vector3();
+        let maxVertex = new Vector3();
         let firstVertex = true;
 		let vertex_pattern = /^v\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/;
 		let normal_pattern = /^vn\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/;
 		let uv_pattern = /^vt\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/;
         let face_pattern = /^f\s+((-?\d+)\/(-?\d+)\/(-?\d+))\s+((-?\d+)\/(-?\d+)\/(-?\d+))\s+((-?\d+)\/(-?\d+)\/(-?\d+))(?:\s+((-?\d+)\/(-?\d+)\/(-?\d+)))?/;
 		let lines = text.split( '\n' );
-        let arg1: string[], arg2: string[], arg3: string[], temp3D: typeof THREE
+        let arg1: string[], arg2: string[], arg3: string[], temp3D: THREE
             .Vector3, j: number, n: number, lineList: string[], line: string, 
             result: string[];
 		for (let i = 0; i < lines.length; i++) {
@@ -93,7 +94,7 @@ class Shape extends Base {
 				continue;
 			} else if ((result = vertex_pattern.exec(line)) !== null) {
 				// ["v 1.0 2.0 3.0", "1.0", "2.0", "3.0"]
-                temp3D = new THREE.Vector3(parseFloat(result[1]), parseFloat(
+                temp3D = new Vector3(parseFloat(result[1]), parseFloat(
                     result[2]), parseFloat(result[3]));
                 v.push(temp3D);
                 if (firstVertex) {
@@ -130,7 +131,7 @@ class Shape extends Base {
 				);
 			} else if ((result = uv_pattern.exec(line)) !== null) {
 				// ["vt 0.1 0.2", "0.1", "0.2"]
-                t.push(new THREE.Vector2(parseFloat(result[1]), 1.0 - parseFloat
+                t.push(new Vector2(parseFloat(result[1]), 1.0 - parseFloat
                     (result[2])));
             } else if ((result = face_pattern.exec(line)) !== null) {
 				// ["f 1/1/1 2/2/2 3/3/3", " 1/1/1", "1", "1", "1", " 2/2/2", "2", "2", "2", " 3/3/3", "3", "3", "3", undefined, undefined, undefined, undefined]
@@ -153,7 +154,7 @@ class Shape extends Base {
         object.uvs = uvs;
         object.minVertex = minVertex;
         object.maxVertex = maxVertex;
-        object.center = new THREE.Vector3(((maxVertex.x - minVertex.x) / 2) +
+        object.center = new Vector3(((maxVertex.x - minVertex.x) / 2) +
             minVertex.x, ((maxVertex.y - minVertex.y) / 2) + minVertex.y, ((
             maxVertex.z - minVertex.z) / 2) + minVertex.z);
         object.w = maxVertex.x - minVertex.x;

@@ -8,11 +8,11 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
-import { Enum, Constants, Paths, Utils } from "../Common";
+import { Base } from "./Base.js";
+import { Enum, Constants, Paths, Utils } from "../Common/index.js";
 var SongKind = Enum.SongKind;
-import { Datas } from "..";
-const { Howl } = require('./Content/Datas/Scripts/Libs/howler.js');
+import { Datas } from "../index.js";
+import { Howl } from "../Globals.js";
 /** @class
  *  A song of the game.
  *  @extends System.Base

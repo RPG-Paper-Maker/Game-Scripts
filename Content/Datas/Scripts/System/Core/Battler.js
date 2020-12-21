@@ -8,19 +8,20 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
-import { Enum, Mathf } from "../Common";
-import { Frame } from "./Frame";
+import { THREE } from "../Globals.js";
+import { Enum, Mathf } from "../Common/index.js";
+import { Frame } from "./Frame.js";
 var BattlerStep = Enum.BattlerStep;
 var CharacterKind = Enum.CharacterKind;
 var ElementMapKind = Enum.ElementMapKind;
-import { ProgressionTable } from "../System";
-import { Manager, Datas } from "..";
-import { Sprite } from "./Sprite";
+import { ProgressionTable } from "../System/index.js";
+import { Manager, Datas } from "../index.js";
+import { Sprite } from "./Sprite.js";
+import { Vector3 } from "./Vector3.js";
 /** @class
  *  A battler in a battle (ally or ennemy).
  *  @param {Player} player The character properties
- *  @param {THREE.Vector3} position The battler position
+ *  @param {Vector3} position The battler position
  *  @param {Camera} camera the camera associated to the battle
  */
 class Battler {
@@ -67,27 +68,26 @@ class Battler {
             // Copy original material because there will be individual color 
             // changes
             let originalMaterial = Datas.Tilesets.texturesBattlers[idBattler];
-            let material = Manager.GL.createMaterial(originalMaterial.map
-                .clone(), {
+            let texture = Manager.GL.getMaterialTexture(originalMaterial);
+            let material = Manager.GL.createMaterial(texture.clone(), {
                 uniforms: {
-                    texture: { type: "t", value: originalMaterial.map },
-                    colorD: { type: "v4", value: Manager.GL.screenTone
-                            .clone() }
+                    t: { type: "t", value: texture },
+                    colorD: { type: "v4", value: Manager.GL.screenTone.clone() }
                 }
             });
-            material.map.needsUpdate = true;
-            this.width = Math.floor(material.map.image.width / Datas.Systems
+            texture = Manager.GL.getMaterialTexture(material);
+            this.width = Math.floor(texture.image.width / Datas.Systems
                 .SQUARE_SIZE / Datas.Systems.FRAMES);
-            this.height = Math.floor(material.map.image.height / Datas.Systems
+            this.height = Math.floor(texture.image.height / Datas.Systems
                 .SQUARE_SIZE / Battler.STEPS);
             let sprite = Sprite.create(ElementMapKind.SpritesFace, [0, 0, this
                     .width, this.height]);
             let geometry = sprite.createGeometry(this.width, this.height, false, position)[0];
             this.mesh = new THREE.Mesh(geometry, material);
             this.mesh.position.set(position.x, position.y, position.z);
-            this.upPosition = new THREE.Vector3(position.x, position.y + (this
+            this.upPosition = new Vector3(position.x, position.y + (this
                 .height * Datas.Systems.SQUARE_SIZE), position.z);
-            this.halfPosition = new THREE.Vector3(position.x, position.y + (this
+            this.halfPosition = new Vector3(position.x, position.y + (this
                 .height * Datas.Systems.SQUARE_SIZE / 2), position.z);
             if (player.kind === CharacterKind.Monster) {
                 this.mesh.scale.set(-1, 1, 1);
@@ -111,25 +111,18 @@ class Battler {
      */
     setActive(active) {
         this.active = active;
+        let material = this.mesh.material;
         if (active) {
-            this.mesh.material.uniforms.colorD.value.setX(Manager.GL.screenTone
-                .x);
-            this.mesh.material.uniforms.colorD.value.setY(Manager.GL.screenTone.
-                y);
-            this.mesh.material.uniforms.colorD.value.setZ(Manager.GL.screenTone
-                .z);
-            this.mesh.material.uniforms.colorD.value.setW(Manager.GL.screenTone
-                .w);
+            material.uniforms.colorD.value.setX(Manager.GL.screenTone.x);
+            material.uniforms.colorD.value.setY(Manager.GL.screenTone.y);
+            material.uniforms.colorD.value.setZ(Manager.GL.screenTone.z);
+            material.uniforms.colorD.value.setW(Manager.GL.screenTone.w);
         }
         else {
-            this.mesh.material.uniforms.colorD.value.setX(Manager.GL.screenTone
-                .x - 0.3);
-            this.mesh.material.uniforms.colorD.value.setY(Manager.GL.screenTone
-                .y - 0.3);
-            this.mesh.material.uniforms.colorD.value.setZ(Manager.GL.screenTone
-                .z - 0.3);
-            this.mesh.material.uniforms.colorD.value.setW(Manager.GL.screenTone
-                .w - 0.3);
+            material.uniforms.colorD.value.setX(Manager.GL.screenTone.x - 0.3);
+            material.uniforms.colorD.value.setY(Manager.GL.screenTone.y - 0.3);
+            material.uniforms.colorD.value.setZ(Manager.GL.screenTone.z - 0.3);
+            material.uniforms.colorD.value.setW(Manager.GL.screenTone.w - 0.3);
         }
     }
     /**
@@ -330,8 +323,10 @@ class Battler {
      */
     updateUVs() {
         if (this.mesh !== null) {
-            let textureWidth = this.mesh.material.map.image.width;
-            let textureHeight = this.mesh.material.map.image.height;
+            let texture = Manager.GL.getMaterialTexture(this
+                .mesh.material);
+            let textureWidth = texture.image.width;
+            let textureHeight = texture.image.height;
             let frame = 0;
             switch (this.step) {
                 case BattlerStep.Normal:
@@ -352,11 +347,15 @@ class Battler {
             let y = this.step * h;
             // Update geometry
             this.mesh.geometry.faceVertexUvs[0][0][0].set(x, y);
-            this.mesh.geometry.faceVertexUvs[0][0][1].set(x + w, y);
-            this.mesh.geometry.faceVertexUvs[0][0][2].set(x + w, y + h);
+            this.mesh.geometry.faceVertexUvs[0][0][1].set(x +
+                w, y);
+            this.mesh.geometry.faceVertexUvs[0][0][2].set(x +
+                w, y + h);
             this.mesh.geometry.faceVertexUvs[0][1][0].set(x, y);
-            this.mesh.geometry.faceVertexUvs[0][1][1].set(x + w, y + h);
-            this.mesh.geometry.faceVertexUvs[0][1][2].set(x, y + h);
+            this.mesh.geometry.faceVertexUvs[0][1][1].set(x +
+                w, y + h);
+            this.mesh.geometry.faceVertexUvs[0][1][2].set(x, y
+                + h);
             this.mesh.geometry.uvsNeedUpdate = true;
         }
     }

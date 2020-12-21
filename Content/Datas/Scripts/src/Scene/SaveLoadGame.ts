@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { WindowBox, WindowChoices, Game } from "../Core";
-import { ScreenResolution, Constants } from "../Common";
+import { ScreenResolution } from "../Common";
 import { Graphic, Datas, Manager } from "..";
 
 /** @class

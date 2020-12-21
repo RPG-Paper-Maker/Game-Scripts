@@ -8,12 +8,12 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
-import { Base } from "./Base";
-import { Enum, Utils, Constants, IO, Paths } from "../Common";
+import { THREE } from "../Globals.js";
+import { Base } from "./Base.js";
+import { Enum, Utils, Constants, IO, Paths } from "../Common/index.js";
 var PictureKind = Enum.PictureKind;
 import { System, Datas, Scene, Manager } from "../index.js";
-import { Position, Portion, MapPortion, Camera, ReactionInterpreter } from "../Core/index.js";
+import { Position, Portion, MapPortion, Camera, ReactionInterpreter, Vector3 } from "../Core/index.js";
 /** @class
  *  A scene for a local map.
  *  @extends Scene.Base
@@ -183,19 +183,20 @@ class Map extends Base {
      */
     loadCollisions() {
         // Tileset
-        if (this.mapProperties.tileset.picture && this.textureTileset.map) {
-            this.mapProperties.tileset.picture.readCollisionsImage(this
-                .textureTileset.map.image);
+        let texture = Manager.GL.getMaterialTexture(this.textureTileset);
+        if (this.mapProperties.tileset.picture && texture) {
+            this.mapProperties.tileset.picture.readCollisionsImage(texture.image);
         }
         // Characters
         let pictures = Datas.Pictures.getListByKind(PictureKind.Characters);
         let l = pictures.length;
         this.collisions[PictureKind.Characters] = new Array(l);
-        let picture, image, p;
+        let material, image, p;
         for (let i = 1; i < l; i++) {
-            picture = this.texturesCharacters[i];
-            if (picture.map) {
-                image = picture.map.image;
+            material = this.texturesCharacters[i];
+            let texture = Manager.GL.getMaterialTexture(material);
+            if (texture) {
+                image = texture.image;
             }
             p = pictures[i];
             if (p) {
@@ -428,7 +429,7 @@ class Map extends Base {
     }
     /**
      *  Get the hero position according to battle map.
-     *  @returns {THREE.Vector3}
+     *  @returns {Vector3}
      */
     getHeroPosition() {
         return this.isBattleMap ? Manager.Stack.game.heroBattle.position :
@@ -605,7 +606,7 @@ class Map extends Base {
                 .clone();
         }
         // Getting the Y angle of the camera
-        let vector = new THREE.Vector3();
+        let vector = new Vector3();
         this.camera.getThreeCamera().getWorldDirection(vector);
         let angle = Math.atan2(vector.x, vector.z) + (180 * Math.PI / 180.0);
         if (!this.isBattleMap) {

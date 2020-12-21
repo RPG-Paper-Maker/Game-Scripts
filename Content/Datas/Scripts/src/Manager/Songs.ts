@@ -13,7 +13,7 @@ import { Enum } from "../Common";
 import SongKind = Enum.SongKind;
 import { Datas } from "..";
 import { ProgressionTable } from "../System";
-const { Howl } = require('./Content/Datas/Scripts/Libs/howler.js');
+import { Howl } from "../Globals";
 
 /** @class
  *  The manager for songs.

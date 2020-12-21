@@ -8,10 +8,10 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
-import { System, Datas } from "..";
-import { ReactionInterpreter } from "../Core";
-import { Enum } from "../Common";
+import { Base } from "./Base.js";
+import { System, Datas } from "../index.js";
+import { ReactionInterpreter } from "../Core/index.js";
+import { Enum } from "../Common/index.js";
 var PrimitiveValueKind = Enum.PrimitiveValueKind;
 /** @class
  *  An event command for calling a common reaction.

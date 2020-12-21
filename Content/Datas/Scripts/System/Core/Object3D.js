@@ -8,7 +8,6 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { MapElement } from "./MapElement.js";
 /** @class
  *  The abstract class who model the Structure of RPM datas.

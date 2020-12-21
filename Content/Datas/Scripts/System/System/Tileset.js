@@ -8,12 +8,12 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Enum, Constants, Platform } from "../Common";
+import { Enum, Constants, Platform } from "../Common/index.js";
 var PictureKind = Enum.PictureKind;
-import { Base } from "./Base";
-import { TextureBundle, Picture2D, Autotiles } from "../Core";
-import { Datas, Manager } from "..";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { Base } from "./Base.js";
+import { TextureBundle, Picture2D, Autotiles } from "../Core/index.js";
+import { Datas, Manager } from "../index.js";
+import { THREE } from "../Globals.js";
 /** @class
  *  A tileset of the game.
  *  @extends System.Base
@@ -279,7 +279,7 @@ class Tileset extends Base {
         texture.image = await Picture2D.loadImage(Platform.canvasRendering
             .toDataURL());
         texture.needsUpdate = true;
-        textureAutotile.texture = Manager.GL.createMaterial(texture);
+        textureAutotile.material = Manager.GL.createMaterial(texture);
         this.texturesAutotiles.push(textureAutotile);
     }
     /**
@@ -411,7 +411,7 @@ class Tileset extends Base {
         texture.image = await Picture2D.loadImage(Platform.canvasRendering
             .toDataURL());
         texture.needsUpdate = true;
-        textureMountain.texture = Manager.GL.createMaterial(texture);
+        textureMountain.material = Manager.GL.createMaterial(texture);
         this.texturesMountains.push(textureMountain);
     }
     /**

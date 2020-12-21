@@ -8,22 +8,22 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
-import { MapObject } from "./MapObject";
-import { Position } from "./Position";
-import { System, Datas, Manager } from "..";
-import { Constants, Enum, Utils } from "../Common";
-import { Floor } from "./Floor";
-import { Autotiles } from "./Autotiles";
-import { Autotile } from "./Autotile";
-import { Sprite } from "./Sprite";
+import { THREE } from "../Globals.js";
+import { MapObject } from "./MapObject.js";
+import { Position } from "./Position.js";
+import { System, Datas, Manager } from "../index.js";
+import { Constants, Enum, Utils } from "../Common/index.js";
+import { Floor } from "./Floor.js";
+import { Autotiles } from "./Autotiles.js";
+import { Autotile } from "./Autotile.js";
+import { Sprite } from "./Sprite.js";
 var ElementMapKind = Enum.ElementMapKind;
 var ShapeKind = Enum.ShapeKind;
-import { SpriteWall } from "./SpriteWall";
-import { Mountains } from "./Mountains";
-import { Mountain } from "./Mountain";
-import { Object3DBox } from "./Object3DBox";
-import { Object3DCustom } from "./Object3DCustom";
+import { SpriteWall } from "./SpriteWall.js";
+import { Mountains } from "./Mountains.js";
+import { Mountain } from "./Mountain.js";
+import { Object3DBox } from "./Object3DBox.js";
+import { Object3DCustom } from "./Object3DCustom.js";
 /** @class
  *  A portion of the map.
  *  @param {Portion} portion
@@ -94,8 +94,9 @@ class MapPortion {
      */
     readFloors(json) {
         let material = Manager.Stack.currentMap.textureTileset;
-        let width = material.map ? material.map.image.width : 0;
-        let height = material.map ? material.map.image.height : 0;
+        let texture = Manager.GL.getMaterialTexture(material);
+        let width = texture ? texture.image.width : 0;
+        let height = texture ? texture.image.height : 0;
         let geometry = new THREE.Geometry();
         geometry.faceVertexUvs[0] = [];
         let layers = [];
@@ -176,7 +177,7 @@ class MapPortion {
                     break;
                 }
             }
-            if (texture !== null && texture.texture !== null) {
+            if (texture !== null && texture.material !== null) {
                 objCollision = autotiles.updateGeometry(position, autotile);
                 if (objCollision !== null) {
                     this.boundingBoxesLands[indexPos].push(objCollision);
@@ -207,7 +208,8 @@ class MapPortion {
         let staticGeometry = new THREE.Geometry();
         let count = 0;
         staticGeometry.faceVertexUvs[0] = [];
-        if (material && material.map) {
+        let texture = Manager.GL.getMaterialTexture(material);
+        if (texture) {
             let s, position, sprite, localPosition, result, geometry, collisions, plane, resultUpdate;
             for (let i = 0, l = json.length; i < l; i++) {
                 s = json[i];
@@ -215,7 +217,8 @@ class MapPortion {
                 sprite = new Sprite(s.v);
                 localPosition = position.toVector3();
                 if (sprite.kind === ElementMapKind.SpritesFace) {
-                    result = sprite.createGeometry(material.map.image.width, material.map.image.height, true, position);
+                    result = sprite.createGeometry(texture.image.width, texture
+                        .image.height, true, position);
                     geometry = result[0];
                     collisions = result[1][1];
                     plane = new THREE.Mesh(geometry, material);
@@ -225,7 +228,8 @@ class MapPortion {
                     Manager.Stack.currentMap.scene.add(plane);
                 }
                 else {
-                    resultUpdate = sprite.updateGeometry(staticGeometry, material.map.image.width, material.map.image.height, position, count, true, localPosition);
+                    resultUpdate = sprite.updateGeometry(staticGeometry, texture
+                        .image.width, texture.image.height, position, count, true, localPosition);
                     count = resultUpdate[0];
                     collisions = resultUpdate[1];
                 }
@@ -277,9 +281,10 @@ class MapPortion {
                     material = obj.material;
                     count = obj.c;
                 }
-                if (material && material.map) {
-                    result = sprite.updateGeometry(geometry, position, material
-                        .map.image.width, material.map.image.height, count);
+                let texture = Manager.GL.getMaterialTexture(material);
+                if (texture) {
+                    result = sprite.updateGeometry(geometry, position, texture
+                        .image.width, texture.image.height, count);
                     obj.c = result[0];
                     this.updateCollisionSprite(result[1], position);
                 }
@@ -331,7 +336,7 @@ class MapPortion {
                     break;
                 }
             }
-            if (texture !== null && texture.texture !== null) {
+            if (texture !== null && texture.material !== null) {
                 objCollision = mountains.updateGeometry(position, mountain);
                 this.updateCollision(this.boundingBoxesMountains, objCollision, position, true);
             }
@@ -407,7 +412,7 @@ class MapPortion {
                         material = obj.material;
                         count = obj.c;
                     }
-                    if (material && material.map) {
+                    if (Manager.GL.getMaterialTexture(material)) {
                         result = obj3D.updateGeometry(geometry, position, count);
                         obj.c = result[0];
                         this.updateCollision(this.boundingBoxesObjects3D, result[1], position, datas.shapeKind === ShapeKind.Custom);

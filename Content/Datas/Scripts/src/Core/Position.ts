@@ -10,9 +10,9 @@
 */
 
 import { Portion } from "./Portion";
-import { Constants, Utils, Mathf } from "../Common";
+import { Constants, Mathf } from "../Common";
 import { Datas } from "..";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { Vector3 } from "./Vector3";
 
 /** @class
  *  The data class for position.
@@ -67,10 +67,10 @@ class Position extends Portion {
     /**
      *  Create a position from a three.js vector3.
      *  @static
-     *  @param {THREE.Vector3} position
+     *  @param {Vector3} position
      *  @returns {Position}
      */
-    static createFromVector3(position: typeof THREE.Vector3): Position {
+    static createFromVector3(position: Vector3): Position {
         return new Position(Math.floor(position.x / Datas.Systems.SQUARE_SIZE),
             Math.floor(position.y / Datas.Systems.SQUARE_SIZE), Math.floor(
             position.z / Datas.Systems.SQUARE_SIZE));
@@ -110,11 +110,11 @@ class Position extends Portion {
     }
 
     /** 
-     *  Transform a position to a THREE.Vector3.
-     *  @returns {THREE.Vector3}
+     *  Transform a position to a Vector3.
+     *  @returns {Vector3}
      */
-    toVector3(center: boolean = true): typeof THREE.Vector3 {
-        return new THREE.Vector3(
+    toVector3(center: boolean = true): Vector3 {
+        return new Vector3(
             (this.x * Datas.Systems.SQUARE_SIZE) + (center ? (this.centerX / 100 
                 * Datas.Systems.SQUARE_SIZE) : 0), 
             (this.y * Datas.Systems.SQUARE_SIZE) + (this.yPixels * Datas.Systems

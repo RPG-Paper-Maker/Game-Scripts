@@ -8,12 +8,13 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Datas } from "..";
-import { Sprite } from "./Sprite";
-import { Enum } from "../Common";
+import { Datas } from "../index.js";
+import { Sprite } from "./Sprite.js";
+import { Enum } from "../Common/index.js";
 var ObjectCollisionKind = Enum.ObjectCollisionKind;
-import { Object3D } from "./Object3D";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { Object3D } from "./Object3D.js";
+import { Vector3 } from "./Vector3.js";
+import { Vector2 } from "./Vector2.js";
 /** @class
  *  A 3D object box in the map.
  *  @extends Object3D
@@ -55,9 +56,9 @@ class Object3DBox extends Object3D {
         let angleX = position.angleX;
         let angleZ = position.angleZ;
         let size = this.datas.getSizeVector();
-        let center = new THREE.Vector3(localPosition.x + Math.floor(Datas
+        let center = new Vector3(localPosition.x + Math.floor(Datas
             .Systems.SQUARE_SIZE / 2), localPosition.y + (size.y / 2), localPosition.z + Math.floor(Datas.Systems.SQUARE_SIZE / 2));
-        let centerReal = new THREE.Vector3(localPosition.x + Math.floor(size.x /
+        let centerReal = new Vector3(localPosition.x + Math.floor(size.x /
             2), localPosition.y + (size.y / 2), localPosition.z + Math.floor(size.z / 2));
         Sprite.rotateVertex(centerReal, center, angleY, Sprite.Y_AXIS);
         Sprite.rotateVertex(centerReal, center, angleX, Sprite.X_AXIS);
@@ -99,14 +100,14 @@ class Object3DBox extends Object3D {
             texC = Object3DBox.TEXTURES[i + 2];
             texD = Object3DBox.TEXTURES[i + 3];
             faceA = [
-                new THREE.Vector2(textures[texA[0]], textures[texA[1]]),
-                new THREE.Vector2(textures[texB[0]], textures[texB[1]]),
-                new THREE.Vector2(textures[texC[0]], textures[texC[1]])
+                new Vector2(textures[texA[0]], textures[texA[1]]),
+                new Vector2(textures[texB[0]], textures[texB[1]]),
+                new Vector2(textures[texC[0]], textures[texC[1]])
             ];
             faceB = [
-                new THREE.Vector2(textures[texA[0]], textures[texA[1]]),
-                new THREE.Vector2(textures[texC[0]], textures[texC[1]]),
-                new THREE.Vector2(textures[texD[0]], textures[texD[1]])
+                new Vector2(textures[texA[0]], textures[texA[1]]),
+                new Vector2(textures[texC[0]], textures[texC[1]]),
+                new Vector2(textures[texD[0]], textures[texD[1]])
             ];
             if (angleY !== 0.0) {
                 Sprite.rotateSprite(vecA, vecB, vecC, vecD, center, angleY, Sprite.Y_AXIS);
@@ -151,35 +152,35 @@ class Object3DBox extends Object3D {
 }
 Object3DBox.VERTICES = [
     // Front
-    new THREE.Vector3(0.0, 1.0, 1.0),
-    new THREE.Vector3(1.0, 1.0, 1.0),
-    new THREE.Vector3(1.0, 0.0, 1.0),
-    new THREE.Vector3(0.0, 0.0, 1.0),
+    new Vector3(0.0, 1.0, 1.0),
+    new Vector3(1.0, 1.0, 1.0),
+    new Vector3(1.0, 0.0, 1.0),
+    new Vector3(0.0, 0.0, 1.0),
     // Back
-    new THREE.Vector3(1.0, 1.0, 0.0),
-    new THREE.Vector3(0.0, 1.0, 0.0),
-    new THREE.Vector3(0.0, 0.0, 0.0),
-    new THREE.Vector3(1.0, 0.0, 0.0),
+    new Vector3(1.0, 1.0, 0.0),
+    new Vector3(0.0, 1.0, 0.0),
+    new Vector3(0.0, 0.0, 0.0),
+    new Vector3(1.0, 0.0, 0.0),
     // Left
-    new THREE.Vector3(0.0, 1.0, 0.0),
-    new THREE.Vector3(0.0, 1.0, 1.0),
-    new THREE.Vector3(0.0, 0.0, 1.0),
-    new THREE.Vector3(0.0, 0.0, 0.0),
+    new Vector3(0.0, 1.0, 0.0),
+    new Vector3(0.0, 1.0, 1.0),
+    new Vector3(0.0, 0.0, 1.0),
+    new Vector3(0.0, 0.0, 0.0),
     // Right
-    new THREE.Vector3(1.0, 1.0, 1.0),
-    new THREE.Vector3(1.0, 1.0, 0.0),
-    new THREE.Vector3(1.0, 0.0, 0.0),
-    new THREE.Vector3(1.0, 0.0, 1.0),
+    new Vector3(1.0, 1.0, 1.0),
+    new Vector3(1.0, 1.0, 0.0),
+    new Vector3(1.0, 0.0, 0.0),
+    new Vector3(1.0, 0.0, 1.0),
     // Bottom
-    new THREE.Vector3(0.0, 0.0, 1.0),
-    new THREE.Vector3(1.0, 0.0, 1.0),
-    new THREE.Vector3(1.0, 0.0, 0.0),
-    new THREE.Vector3(0.0, 0.0, 0.0),
+    new Vector3(0.0, 0.0, 1.0),
+    new Vector3(1.0, 0.0, 1.0),
+    new Vector3(1.0, 0.0, 0.0),
+    new Vector3(0.0, 0.0, 0.0),
     // Top
-    new THREE.Vector3(0.0, 1.0, 0.0),
-    new THREE.Vector3(1.0, 1.0, 0.0),
-    new THREE.Vector3(1.0, 1.0, 1.0),
-    new THREE.Vector3(0.0, 1.0, 1.0)
+    new Vector3(0.0, 1.0, 0.0),
+    new Vector3(1.0, 1.0, 0.0),
+    new Vector3(1.0, 1.0, 1.0),
+    new Vector3(0.0, 1.0, 1.0)
 ];
 Object3DBox.NB_VERTICES = 24;
 Object3DBox.TEXTURES = [

@@ -9,18 +9,18 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Enum, Utils } from "../Common";
 import ElementMapKind = Enum.ElementMapKind;
 import { Position } from "./Position";
 import { Datas } from "..";
 import { CollisionSquare } from "./CollisionSquare";
+import { Vector3 } from "./Vector3";
 
 interface StructMapElementCollision {
     b?: number[],
     p?: Position,
-    l?: typeof THREE.Vector3,
-    c?: typeof THREE.Vector3,
+    l?: Vector3,
+    c?: Vector3,
     cs?: CollisionSquare,
     w?: number,
     h?: number,
@@ -67,18 +67,17 @@ class MapElement {
 
     /** 
      *  Scale the vertices correctly.
-     *  @param {THREE.Vector3} vecA The A vertex to rotate
-     *  @param {THREE.Vector3} vecB The B vertex to rotate
-     *  @param {THREE.Vector3} vecC The C vertex to rotate
-     *  @param {THREE.Vector3} vecD The D vertex to rotate
-     *  @param {THREE.Vector3} center The center to rotate around
+     *  @param {Vector3} vecA The A vertex to rotate
+     *  @param {Vector3} vecB The B vertex to rotate
+     *  @param {Vector3} vecC The C vertex to rotate
+     *  @param {Vector3} vecD The D vertex to rotate
+     *  @param {Vector3} center The center to rotate around
      *  @param {Position} position The json position
-     *  @param {THREE.Vector3} size The scale size
+     *  @param {Vector3} size The scale size
      *  @param {ElementMapKind} kind The element map kind
      */
-    scale(vecA: typeof THREE.Vector3, vecB: typeof THREE.Vector3, vecC: typeof 
-        THREE.Vector3, vecD: typeof THREE.Vector3, center: typeof THREE.Vector3, 
-        position: Position, size: typeof THREE.Vector3, kind: ElementMapKind)
+    scale(vecA: Vector3, vecB: Vector3, vecC: Vector3, vecD: Vector3, center: 
+        Vector3, position: Position, size: Vector3, kind: ElementMapKind)
     {
         let zPlus =  position.layer * 0.05;
 
@@ -86,7 +85,7 @@ class MapElement {
         if (kind !== Enum.ElementMapKind.SpritesFace && !this.front) {
             zPlus *= -1;
         }
-        let offset = new THREE.Vector3(0, 0, zPlus);
+        let offset = new Vector3(0, 0, zPlus);
 
         // Center
         center.setX(this.xOffset * Datas.Systems.SQUARE_SIZE);

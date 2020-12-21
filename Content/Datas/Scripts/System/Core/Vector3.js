@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { THREE } from "../Globals.js";
 /**
  * The data class who hold 3D coordinates.
  * It's used as an API bridge between the user and Three.js
@@ -24,10 +24,5 @@ export class Vector3 extends THREE.Vector3 {
      */
     constructor(x = 0, y = 0, z = 0, freeze = false) {
         super(x, y, z);
-    }
-    reset() {
-        this.x = 0;
-        this.y = 0;
-        this.z = 0;
     }
 }

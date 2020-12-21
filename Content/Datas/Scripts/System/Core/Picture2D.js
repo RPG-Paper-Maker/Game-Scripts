@@ -8,10 +8,10 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Datas } from "..";
-import { ScreenResolution, Utils, Platform } from "../Common";
-import { Stack } from "../Manager";
-import { Bitmap } from "./Bitmap";
+import { Datas } from "../index.js";
+import { ScreenResolution, Utils, Platform } from "../Common/index.js";
+import { Stack } from "../Manager/index.js";
+import { Bitmap } from "./Bitmap.js";
 /** @class
  *   A class for pictures drawable in HUD.
  *   @extends Bitmap

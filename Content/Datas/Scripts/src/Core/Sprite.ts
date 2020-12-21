@@ -9,12 +9,14 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Utils, Constants } from "../Common";
+import { Enum, Utils } from "../Common";
 import ElementMapKind = Enum.ElementMapKind;
 import { MapElement, StructMapElementCollision } from "./MapElement";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { THREE } from "../Globals";
 import { Position } from "./Position";
-import { Datas, Manager } from "..";
+import { Datas, Manager, Core } from "..";
+import { Vector3 } from "./Vector3";
+import { Vector2 } from "./Vector2";
 
 /** @class
  *  A sprite in the map.
@@ -24,9 +26,9 @@ import { Datas, Manager } from "..";
  */
 class Sprite extends MapElement {
 
-    public static Y_AXIS = new THREE.Vector3(0, 1, 0);
-    public static X_AXIS = new THREE.Vector3(1, 0, 0);
-    public static Z_AXIS = new THREE.Vector3(0, 0, 1);
+    public static Y_AXIS = new Vector3(0, 1, 0);
+    public static X_AXIS = new Vector3(1, 0, 0);
+    public static Z_AXIS = new Vector3(0, 0, 1);
 
     public kind: ElementMapKind;
     public textureRect: number[];
@@ -56,13 +58,13 @@ class Sprite extends MapElement {
     /** 
      *  Rotate a vertex around a specified center.
      *  @static
-     *  @param {THREE.Vector3} vec The vertex to rotate
-     *  @param {THREE.Vector3} center The center to rotate around
+     *  @param {Vector3} vec The vertex to rotate
+     *  @param {Vector3} center The center to rotate around
      *  @param {number} angle The angle in degree
-     *  @param {THREE.Vector3} axis The vector axis
+     *  @param {Vector3} axis The vector axis
      */
-    static rotateVertex(vec: typeof THREE.Vector3, center: typeof THREE.Vector3, 
-        angle: number, axis: typeof THREE.Vector3)
+    static rotateVertex(vec: Vector3, center: Vector3, 
+        angle: number, axis: Vector3)
     {
         vec.sub(center);
         vec.applyAxisAngle(axis, angle * Math.PI / 180.0);
@@ -71,17 +73,17 @@ class Sprite extends MapElement {
 
     /** Rotate the four vertices of a sprite around a specified center.
      *   @static
-     *   @param {THREE.Vector3} vecA The A vertex to rotate
-     *   @param {THREE.Vector3} vecB The B vertex to rotate
-     *   @param {THREE.Vector3} vecC The C vertex to rotate
-     *   @param {THREE.Vector3} vecD The D vertex to rotate
-     *   @param {THREE.Vector3} center The center to rotate around
+     *   @param {Vector3} vecA The A vertex to rotate
+     *   @param {Vector3} vecB The B vertex to rotate
+     *   @param {Vector3} vecC The C vertex to rotate
+     *   @param {Vector3} vecD The D vertex to rotate
+     *   @param {Vector3} center The center to rotate around
      *   @param {number} angle The angle in degree
-     *   @param {THREE.Vector3} axis The vector axis
+     *   @param {Vector3} axis The vector axis
      */
-    static rotateSprite(vecA: typeof THREE.Vector3, vecB: typeof THREE.Vector3, 
-        vecC: typeof THREE.Vector3, vecD: typeof THREE.Vector3, center: typeof 
-        THREE.Vector3, angle: number, axis: typeof THREE.Vector3)
+    static rotateSprite(vecA: Vector3, vecB: Vector3, 
+        vecC: Vector3, vecD: Vector3, center: 
+        Vector3, angle: number, axis: Vector3)
     {
         Sprite.rotateVertex(vecA, center, angle, axis);
         Sprite.rotateVertex(vecB, center, angle, axis);
@@ -93,19 +95,19 @@ class Sprite extends MapElement {
      *  Add a static sprite to the geometry.
      *  @static
      *  @param {THREE.Geometry} geometry The geometry
-     *  @param {THREE.Vector3} vecA The A vertex
-     *  @param {THREE.Vector3} vecB The B vertex
-     *  @param {THREE.Vector3} vecC The C vertex
-     *  @param {THREE.Vector3} vecD The D vertex
-     *  @param {THREE.Vector2[]} texFaceA The texture face A
-     *  @param {THREE.Vector2[]} texFaceB The texture face B
+     *  @param {Vector3} vecA The A vertex
+     *  @param {Vector3} vecB The B vertex
+     *  @param {Vector3} vecC The C vertex
+     *  @param {Vector3} vecD The D vertex
+     *  @param {Vector2[]} texFaceA The texture face A
+     *  @param {Vector2[]} texFaceB The texture face B
      *  @param {number} count The faces count
      *  @returns {number}
      */
-    static addStaticSpriteToGeometry(geometry: typeof THREE.Geometry, vecA: 
-        typeof THREE.Vector3, vecB: typeof THREE.Vector3, vecC: typeof THREE
-        .Vector3, vecD: typeof THREE.Vector3, texFaceA: typeof THREE.Vector2[], 
-        texFaceB: typeof THREE.Vector2[], count: number): number
+    static addStaticSpriteToGeometry(geometry: THREE.Geometry, vecA: Core
+        .Vector3, vecB: Vector3, vecC: Vector3, vecD: Vector3, 
+        texFaceA: Vector2[], texFaceB: Vector2[], count: number): 
+        number
     {
         geometry.vertices.push(vecA);
         geometry.vertices.push(vecB);
@@ -138,19 +140,19 @@ class Sprite extends MapElement {
      *  @param {number[]} position The position
      *  @param {number} count The faces count
      *  @param {boolean} tileset Indicate if the texture is tileset
-     *  @param {THREE.Vector3} localPosition The local position
+     *  @param {Vector3} localPosition The local position
      *  @returns {any[]}
      */
-    updateGeometry(geometry: typeof THREE.Geometry, width: number, height: 
+    updateGeometry(geometry: THREE.Geometry, width: number, height: 
         number, position: Position, count: number, tileset: boolean, 
-        localPosition: typeof THREE.Vector3): [number, StructMapElementCollision[]]
+        localPosition: Vector3): [number, StructMapElementCollision[]]
     {
-        let vecA = new THREE.Vector3(-0.5, 1.0, 0.0);
-        let vecB = new THREE.Vector3(0.5, 1.0, 0.0);
-        let vecC = new THREE.Vector3(0.5, 0.0, 0.0);
-        let vecD = new THREE.Vector3(-0.5, 0.0, 0.0);
-        let center = new THREE.Vector3(0, 0, 0);
-        let size = new THREE.Vector3(this.textureRect[2] * Datas.Systems
+        let vecA = new Vector3(-0.5, 1.0, 0.0);
+        let vecB = new Vector3(0.5, 1.0, 0.0);
+        let vecC = new Vector3(0.5, 0.0, 0.0);
+        let vecD = new Vector3(-0.5, 0.0, 0.0);
+        let center = new Vector3(0, 0, 0);
+        let size = new Vector3(this.textureRect[2] * Datas.Systems
             .SQUARE_SIZE, this.textureRect[3] * Datas.Systems.SQUARE_SIZE, 1.0);
 
         // For static sprites
@@ -162,7 +164,7 @@ class Sprite extends MapElement {
             vecD.add(localPosition);
             center.add(localPosition);
         } else {
-            localPosition = tileset ? position.toVector3() : new THREE.Vector3();
+            localPosition = tileset ? position.toVector3() : new Vector3();
         }
 
         let angleY = position.angleY;
@@ -197,14 +199,14 @@ class Sprite extends MapElement {
 
         // Texture UV coordinates for each triangle faces
         let texFaceA = [
-            new THREE.Vector2(x, y),
-            new THREE.Vector2(x + w, y),
-            new THREE.Vector2(x + w, y + h)
+            new Vector2(x, y),
+            new Vector2(x + w, y),
+            new Vector2(x + w, y + h)
         ];
         let texFaceB = [
-            new THREE.Vector2(x, y),
-            new THREE.Vector2(x + w, y + h),
-            new THREE.Vector2(x, y + h)
+            new Vector2(x, y),
+            new Vector2(x + w, y + h),
+            new Vector2(x, y + h)
         ];
 
         // Collision
@@ -303,7 +305,7 @@ class Sprite extends MapElement {
      *  @returns {any[]}
      */
     createGeometry(width: number, height: number, tileset: boolean, position: 
-        Position): [typeof THREE.Geometry, [number, StructMapElementCollision[]]]
+        Position): [THREE.Geometry, [number, StructMapElementCollision[]]]
     {
         let geometry = new THREE.Geometry();
         geometry.faceVertexUvs[0] = [];

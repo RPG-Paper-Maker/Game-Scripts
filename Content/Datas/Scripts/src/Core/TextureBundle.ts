@@ -9,15 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
-
 /** @class
  *  Several textures in a single file.
  */
 class TextureBundle {
 
     public list: any[][];
-    public texture: typeof THREE.MeshStandardMaterial;
+    public material: THREE.ShaderMaterial;
     public beginID: number;
     public beginPoint: number[];
     public endID: number;
@@ -25,7 +23,7 @@ class TextureBundle {
 
     constructor() {
         this.list = [];
-        this.texture = null;
+        this.material = null;
     }
 
     /** 

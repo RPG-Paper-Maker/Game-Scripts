@@ -10,8 +10,6 @@
 */
 
 import { ScreenResolution, Enum, Mathf } from "../Common";
-//const THREE = require('./Content/Datas/Scripts/Libs/three.js');
-import {THREE} from "../Globals";
 import { System, Manager } from "..";
 import { MapObject } from "./MapObject";
 import Orientation = Enum.Orientation;
@@ -78,11 +76,11 @@ class Camera {
 
     /** 
      *  Get the horizontal angle between two positions.
-     *  @param {THREE.Vector3} p1 The first position
-     *  @param {THREE.Vector3} p2 The second position
+     *  @param {Vector3} p1 The first position
+     *  @param {Vector3} p2 The second position
      *  @returns {number}
      */
-    getHorizontalAngle(p1: THREE.Vector3, p2: THREE.Vector3): 
+    getHorizontalAngle(p1: Vector3, p2: Vector3): 
         number
     {
         return Math.atan2(p2.z - p1.z, p2.x - p1.x) * 180 / Math.PI;
@@ -90,8 +88,8 @@ class Camera {
 
     /** 
      *  Get the vertical angle between two positions.
-     *  @param {THREE.Vector3} p1 The first position
-     *  @param {THREE.Vector3} p2 The second position
+     *  @param {Vector3} p1 The first position
+     *  @param {Vector3} p2 The second position
      *  @returns {number}
      */
     getVerticalAngle(p1: Vector3, p2:  Vector3): number {

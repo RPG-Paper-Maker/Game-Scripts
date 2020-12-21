@@ -8,11 +8,12 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Enum, Constants, Paths, Utils, Platform } from "../Common";
+import { Enum, Constants, Paths, Utils, Platform } from "../Common/index.js";
 var CustomShapeKind = Enum.CustomShapeKind;
-import { Base } from "./Base";
-import { Datas } from "..";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { Base } from "./Base.js";
+import { Datas } from "../index.js";
+import { THREE } from "../Globals.js";
+import { Vector3, Vector2 } from "../Core/index.js";
 /** @class
  *  A shape of the game.
  *  @extends System.Base
@@ -59,8 +60,8 @@ class Shape extends Base {
         let uvs = [];
         let v = [];
         let t = [];
-        let minVertex = new THREE.Vector3();
-        let maxVertex = new THREE.Vector3();
+        let minVertex = new Vector3();
+        let maxVertex = new Vector3();
         let firstVertex = true;
         let vertex_pattern = /^v\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/;
         let normal_pattern = /^vn\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/;
@@ -76,7 +77,7 @@ class Shape extends Base {
             }
             else if ((result = vertex_pattern.exec(line)) !== null) {
                 // ["v 1.0 2.0 3.0", "1.0", "2.0", "3.0"]
-                temp3D = new THREE.Vector3(parseFloat(result[1]), parseFloat(result[2]), parseFloat(result[3]));
+                temp3D = new Vector3(parseFloat(result[1]), parseFloat(result[2]), parseFloat(result[3]));
                 v.push(temp3D);
                 if (firstVertex) {
                     minVertex = temp3D.clone();
@@ -110,7 +111,7 @@ class Shape extends Base {
             }
             else if ((result = uv_pattern.exec(line)) !== null) {
                 // ["vt 0.1 0.2", "0.1", "0.2"]
-                t.push(new THREE.Vector2(parseFloat(result[1]), 1.0 - parseFloat(result[2])));
+                t.push(new Vector2(parseFloat(result[1]), 1.0 - parseFloat(result[2])));
             }
             else if ((result = face_pattern.exec(line)) !== null) {
                 // ["f 1/1/1 2/2/2 3/3/3", " 1/1/1", "1", "1", "1", " 2/2/2", "2", "2", "2", " 3/3/3", "3", "3", "3", undefined, undefined, undefined, undefined]
@@ -133,7 +134,7 @@ class Shape extends Base {
         object.uvs = uvs;
         object.minVertex = minVertex;
         object.maxVertex = maxVertex;
-        object.center = new THREE.Vector3(((maxVertex.x - minVertex.x) / 2) +
+        object.center = new Vector3(((maxVertex.x - minVertex.x) / 2) +
             minVertex.x, ((maxVertex.y - minVertex.y) / 2) + minVertex.y, ((maxVertex.z - minVertex.z) / 2) + minVertex.z);
         object.w = maxVertex.x - minVertex.x;
         object.h = maxVertex.y - minVertex.y;
