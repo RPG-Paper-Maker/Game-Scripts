@@ -10,14 +10,16 @@
 */
 import { Datas, Manager } from "./index.js";
 import { Utils, KeyEvent, Platform } from "./Common/index.js";
-let loadedDatas = false;
+let loaded = false;
 /**
  *  Initialize the game stack and datas.
  */
-function initialize() {
+async function initialize() {
+    await Manager.Plugins.load();
     Manager.Stack.loadingDelay = 0;
     Manager.Songs.initialize();
     Manager.Stack.clearHUD();
+    await load();
 }
 /**
  *  Load the game stack and datas.
@@ -51,7 +53,7 @@ async function load() {
     await Datas.Systems.getModelHero();
     await Datas.Systems.loadWindowSkins();
     Manager.Stack.pushTitleScreen();
-    loadedDatas = true;
+    loaded = true;
     Manager.Stack.requestPaintHUD = true;
 }
 /**
@@ -60,7 +62,7 @@ async function load() {
 function loop() {
     requestAnimationFrame(loop);
     // Update if everything is loaded
-    if (loadedDatas) {
+    if (loaded) {
         if (!Manager.Stack.isLoading()) {
             Manager.Stack.update();
         }
@@ -81,14 +83,14 @@ function loop() {
 // INITIALIZATION
 //
 // -------------------------------------------------------
-initialize();
+Utils.tryCatch(initialize);
 // -------------------------------------------------------
 //
 // INPUTS CONFIG
 //
 // -------------------------------------------------------
 document.addEventListener('keydown', function (event) {
-    if (loadedDatas && !Manager.Stack.isLoading()) {
+    if (loaded && !Manager.Stack.isLoading()) {
         let key = event.keyCode;
         // On pressing F12, quit game
         if (key === KeyEvent.DOM_VK_F12) {
@@ -111,7 +113,7 @@ document.addEventListener('keydown', function (event) {
 }, false);
 // -------------------------------------------------------
 document.addEventListener('keyup', function (event) {
-    if (loadedDatas && !Manager.Stack.isLoading()) {
+    if (loaded && !Manager.Stack.isLoading()) {
         let key = event.keyCode;
         // Remove this key from pressed keys list
         KeyEvent.keysPressed.splice(KeyEvent.keysPressed.indexOf(key), 1);
@@ -122,12 +124,6 @@ document.addEventListener('keyup', function (event) {
         KeyEvent.keysPressed = [];
     }
 }, false);
-// -------------------------------------------------------
-//
-// START LOADING GAME FILES
-//
-// -------------------------------------------------------
-Utils.tryCatch(load);
 // -------------------------------------------------------
 //
 // START LOOP

@@ -10,7 +10,7 @@
 */
 
 import { Enum, Utils } from "../Common";
-import PrimitiveValueKind = Enum.PrimitiveValueKind;
+import DynamicValueKind = Enum.DynamicValueKind;
 import { Base } from "./Base";
 import { System } from "..";
 import { DynamicValue } from "./DynamicValue";
@@ -60,7 +60,7 @@ class Parameter extends Base {
             jsonParameter = jsonParameters[i];
             parameter = new Parameter();
             parameter.readDefault(jsonParameter.v);
-            if (parameter.value.kind === PrimitiveValueKind.Default) {
+            if (parameter.value.kind === DynamicValueKind.Default) {
                 parameter = list[i + 1];
             }
             parameters[jsonParameter.id] = parameter;

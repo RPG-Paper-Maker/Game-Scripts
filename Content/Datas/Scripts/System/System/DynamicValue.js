@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Enum, Utils } from "../Common/index.js";
-var PrimitiveValueKind = Enum.PrimitiveValueKind;
+var DynamicValueKind = Enum.DynamicValueKind;
 import { System, Datas } from "../index.js";
 import { Stack } from "../Manager/index.js";
 import { ReactionInterpreter } from "../Core/index.js";
@@ -25,21 +25,21 @@ class DynamicValue extends System.Base {
     /**
      *  Create a new value from kind and value.
      *  @static
-     *  @param {PrimitiveValueKind} [k=PrimitiveValueKind.None] The kind of value
+     *  @param {DynamicValueKind} [k=DynamicValueKind.None] The kind of value
      *  @param {any} [v=0] The value
      *  @returns {SystemValue}
      */
-    static create(k = PrimitiveValueKind.None, v = 0) {
+    static create(k = DynamicValueKind.None, v = 0) {
         let systemValue = new System.DynamicValue();
         systemValue.kind = k;
         switch (k) {
-            case PrimitiveValueKind.None:
+            case DynamicValueKind.None:
                 systemValue.value = null;
                 break;
-            case PrimitiveValueKind.Message:
+            case DynamicValueKind.Message:
                 systemValue.value = Utils.numToString(v);
                 break;
-            case PrimitiveValueKind.Switch:
+            case DynamicValueKind.Switch:
                 systemValue.value = Utils.numToBool(v);
                 break;
             default:
@@ -66,7 +66,7 @@ class DynamicValue extends System.Base {
      *  @returns {System.DynamicValue}
      */
     static createNone() {
-        return System.DynamicValue.create(PrimitiveValueKind.None, null);
+        return System.DynamicValue.create(DynamicValueKind.None, null);
     }
     /**
      *  Create a new value number.
@@ -75,7 +75,7 @@ class DynamicValue extends System.Base {
      *  @returns {System.DynamicValue}
      */
     static createNumber(n) {
-        return System.DynamicValue.create(PrimitiveValueKind.Number, n);
+        return System.DynamicValue.create(DynamicValueKind.Number, n);
     }
     /**
      *  Create a new value message.
@@ -84,7 +84,7 @@ class DynamicValue extends System.Base {
      *  @returns {System.DynamicValue}
      */
     static createMessage(m) {
-        return System.DynamicValue.create(PrimitiveValueKind.Message, m);
+        return System.DynamicValue.create(DynamicValueKind.Message, m);
     }
     /**
      *  Create a new value decimal number.
@@ -93,7 +93,7 @@ class DynamicValue extends System.Base {
      *  @returns {System.DynamicValue}
      */
     static createNumberDouble(n) {
-        return System.DynamicValue.create(PrimitiveValueKind.NumberDouble, n);
+        return System.DynamicValue.create(DynamicValueKind.NumberDouble, n);
     }
     /**
      *  Create a new value keyBoard.
@@ -102,7 +102,7 @@ class DynamicValue extends System.Base {
      *  @returns {System.DynamicValue}
      */
     static createKeyBoard(k) {
-        return System.DynamicValue.create(PrimitiveValueKind.KeyBoard, k);
+        return System.DynamicValue.create(DynamicValueKind.KeyBoard, k);
     }
     /**
      *  Create a new value switch.
@@ -111,7 +111,7 @@ class DynamicValue extends System.Base {
      *  @returns {System.DynamicValue}
      */
     static createSwitch(b) {
-        return System.DynamicValue.create(PrimitiveValueKind.Switch, Utils.boolToNum(b));
+        return System.DynamicValue.create(DynamicValueKind.Switch, Utils.boolToNum(b));
     }
     /**
      *  Create a new value variable.
@@ -120,7 +120,7 @@ class DynamicValue extends System.Base {
      *  @returns {System.DynamicValue}
      */
     static createVariable(id) {
-        return System.DynamicValue.create(PrimitiveValueKind.Variable, id);
+        return System.DynamicValue.create(DynamicValueKind.Variable, id);
     }
     /**
      *  Create a new value parameter.
@@ -129,7 +129,7 @@ class DynamicValue extends System.Base {
      *  @returns {System.DynamicValue}
      */
     static createParameter(id) {
-        return System.DynamicValue.create(PrimitiveValueKind.Parameter, id);
+        return System.DynamicValue.create(DynamicValueKind.Parameter, id);
     }
     /**
      *  Create a new value property.
@@ -138,7 +138,7 @@ class DynamicValue extends System.Base {
      *  @returns {System.DynamicValue}
      */
     static createProperty(id) {
-        return System.DynamicValue.create(PrimitiveValueKind.Property, id);
+        return System.DynamicValue.create(DynamicValueKind.Property, id);
     }
     /**
      *  Try to read a number value, if not possible put default value.
@@ -169,7 +169,7 @@ class DynamicValue extends System.Base {
      *  @returns {System.DynamicValue}
      */
     static readOrDefaultDatabase(json, id = 1) {
-        return Utils.isUndefined(json) ? System.DynamicValue.create(PrimitiveValueKind.DataBase, id) : System.DynamicValue.readFromJSON(json);
+        return Utils.isUndefined(json) ? System.DynamicValue.create(DynamicValueKind.DataBase, id) : System.DynamicValue.readFromJSON(json);
     }
     /**
      *  Try to read a message value, if not possible put default value.
@@ -179,7 +179,7 @@ class DynamicValue extends System.Base {
      *  @returns {System.DynamicValue}
      */
     static readOrDefaultMessage(json, m = "") {
-        return Utils.isUndefined(json) ? System.DynamicValue.create(PrimitiveValueKind.Message, m) : System.DynamicValue.readFromJSON(json);
+        return Utils.isUndefined(json) ? System.DynamicValue.create(DynamicValueKind.Message, m) : System.DynamicValue.readFromJSON(json);
     }
     /**
      *  Try to read a value, if not possible put none value.
@@ -209,6 +209,27 @@ class DynamicValue extends System.Base {
     read(json) {
         this.kind = json.k;
         this.value = json.v;
+        switch (this.kind) {
+            case DynamicValueKind.CustomStructure:
+                this.customStructure = {};
+                let jsonList = Utils.defaultValue(json.cs.p, []);
+                let parameter, jsonParameter;
+                for (let i = 0, l = jsonList.length; i < l; i++) {
+                    jsonParameter = jsonList[i];
+                    parameter = System.DynamicValue.readOrDefaultNumber(jsonParameter.v);
+                    this.customStructure[jsonParameter.name] = parameter;
+                }
+                break;
+            case DynamicValueKind.CustomList:
+                this.customList = [];
+                Utils.readJSONSystemList({ list: Utils.defaultValue(json.cl.l, []), listIndexes: this.customList, func: (jsonParameter) => {
+                        return System.DynamicValue.readOrDefaultNumber(jsonParameter.v);
+                    }
+                });
+                break;
+            default:
+                break;
+        }
     }
     /**
      *  Get the value
@@ -216,13 +237,17 @@ class DynamicValue extends System.Base {
      */
     getValue() {
         switch (this.kind) {
-            case PrimitiveValueKind.Variable:
+            case DynamicValueKind.Variable:
                 return Stack.game.variables[this.value];
-            case PrimitiveValueKind.Parameter:
+            case DynamicValueKind.Parameter:
                 return ReactionInterpreter.currentParameters[this.value]
                     .getValue();
-            case PrimitiveValueKind.Property:
+            case DynamicValueKind.Property:
                 return ReactionInterpreter.currentObject.properties[this.value];
+            case DynamicValueKind.CustomStructure:
+                return this.customStructure;
+            case DynamicValueKind.CustomList:
+                return this.customList;
             default:
                 return this.value;
         }
@@ -234,16 +259,16 @@ class DynamicValue extends System.Base {
      */
     isEqual(value) {
         // If keyBoard
-        if (this.kind === PrimitiveValueKind.KeyBoard && value.kind !==
-            PrimitiveValueKind.KeyBoard) {
+        if (this.kind === DynamicValueKind.KeyBoard && value.kind !==
+            DynamicValueKind.KeyBoard) {
             return Datas.Keyboards.isKeyEqual(value.value, Datas.Keyboards.get(this.value));
         }
-        else if (value.kind === PrimitiveValueKind.KeyBoard && this.kind !==
-            PrimitiveValueKind.KeyBoard) {
+        else if (value.kind === DynamicValueKind.KeyBoard && this.kind !==
+            DynamicValueKind.KeyBoard) {
             return Datas.Keyboards.isKeyEqual(this.value, Datas.Keyboards.get(value.value));
         }
-        else if (this.kind === PrimitiveValueKind.Anything || value.kind ===
-            PrimitiveValueKind.Anything) {
+        else if (this.kind === DynamicValueKind.Anything || value.kind ===
+            DynamicValueKind.Anything) {
             return true;
         }
         // If any other value, compare the direct values

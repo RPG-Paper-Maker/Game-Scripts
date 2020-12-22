@@ -238,7 +238,7 @@ namespace Enum {
      *   @enum {number}
      *   @readonly
      */
-    export enum PrimitiveValueKind {
+    export enum DynamicValueKind {
         None,
         Anything,
         Default,
@@ -251,7 +251,42 @@ namespace Enum {
         Script,
         Switch,
         KeyBoard,
-        NumberDouble
+        NumberDouble,
+        Font,
+        Class,
+        Hero,
+        Monster,
+        Troop,
+        Item,
+        Weapon,
+        Armor,
+        Skill,
+        Animation,
+        Status,
+        Tileset,
+        FontSize,
+        FontName,
+        Color,
+        WindowSkin,
+        Currency,
+        Speed,
+        Detection,
+        CameraProperty,
+        Frequency,
+        Skybox,
+        BattleMap,
+        Element,
+        CommonStatistic,
+        WeaponsKind,
+        ArmorsKind,
+        CommonBattleCommand,
+        CommonEquipment,
+        Event,
+        State,
+        CommonReaction,
+        Model,
+        CustomStructure,
+        CustomList
     };
 
     /**

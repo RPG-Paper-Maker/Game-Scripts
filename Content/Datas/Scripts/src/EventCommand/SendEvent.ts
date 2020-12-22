@@ -12,7 +12,7 @@
 import { Base } from "./Base";
 import { System, Datas, Manager } from "..";
 import { Utils, Enum } from "../Common";
-import PrimitiveValueKind = Enum.PrimitiveValueKind;
+import DynamicValueKind = Enum.DynamicValueKind;
 import { MapObject } from "../Core";
 
 /** @class
@@ -60,13 +60,13 @@ class SendEvent extends Base {
             .parameters;
         this.parameters = [];
         let parameter: System.DynamicValue, paramID: number, k: 
-            PrimitiveValueKind;
+            DynamicValueKind;
         while (iterator.i < l) {
             paramID = command[iterator.i++];
             k = command[iterator.i++];
-            if (k <= PrimitiveValueKind.Default) {
+            if (k <= DynamicValueKind.Default) {
                 // If default value
-                parameter = k === PrimitiveValueKind.Default ? parameters[
+                parameter = k === DynamicValueKind.Default ? parameters[
                     paramID].value : System.DynamicValue.create(k, null);
             } else {
                 parameter = System.DynamicValue.create(k, command[iterator.i++]);

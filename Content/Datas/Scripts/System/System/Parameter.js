@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Enum, Utils } from "../Common/index.js";
-var PrimitiveValueKind = Enum.PrimitiveValueKind;
+var DynamicValueKind = Enum.DynamicValueKind;
 import { Base } from "./Base.js";
 import { DynamicValue } from "./DynamicValue.js";
 /** @class
@@ -49,7 +49,7 @@ class Parameter extends Base {
             jsonParameter = jsonParameters[i];
             parameter = new Parameter();
             parameter.readDefault(jsonParameter.v);
-            if (parameter.value.kind === PrimitiveValueKind.Default) {
+            if (parameter.value.kind === DynamicValueKind.Default) {
                 parameter = list[i + 1];
             }
             parameters[jsonParameter.id] = parameter;

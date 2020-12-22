@@ -12,7 +12,7 @@ import { Base } from "./Base.js";
 import { System, Datas } from "../index.js";
 import { ReactionInterpreter } from "../Core/index.js";
 import { Enum } from "../Common/index.js";
-var PrimitiveValueKind = Enum.PrimitiveValueKind;
+var DynamicValueKind = Enum.DynamicValueKind;
 /** @class
  *  An event command for calling a common reaction.
  *  @extends EventCommand.Base
@@ -58,9 +58,9 @@ class CallACommonReaction extends Base {
             for (let id in reaction.parameters) {
                 v = reaction.parameters[id].value;
                 parameter = this.parameters[id];
-                k = parameter ? parameter.kind : PrimitiveValueKind.None;
-                if (k <= PrimitiveValueKind.Default) {
-                    parameter = k === PrimitiveValueKind.Default ? v : System
+                k = parameter ? parameter.kind : DynamicValueKind.None;
+                if (k <= DynamicValueKind.Default) {
+                    parameter = k === DynamicValueKind.Default ? v : System
                         .DynamicValue.create(k, null);
                 }
                 this.parameters[id] = parameter;

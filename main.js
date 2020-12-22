@@ -17,15 +17,14 @@ let window;
 function createWindow () {    
     window = new BrowserWindow({
         title: "",
-        width: 1000,
-        height: 800,
+        width: 640,
+        height: 480,
         resizable: false,
         webPreferences: {
             nodeIntegration: true,
             enableRemoteModule: true
         }
     });
-    //window.webContents.openDevTools();
     ipc.on('window-error', function(event, err) {
         window.webContents.openDevTools();
         dialog.showMessageBoxSync({ title: 'Error', type: 'error', message: err });

@@ -11,7 +11,7 @@
 import { Base } from "./Base.js";
 import { System, Datas, Manager } from "../index.js";
 import { Utils, Enum } from "../Common/index.js";
-var PrimitiveValueKind = Enum.PrimitiveValueKind;
+var DynamicValueKind = Enum.DynamicValueKind;
 /** @class
  *  An event command for sending an event.
  *  @extends EventCommand.Base
@@ -47,9 +47,9 @@ class SendEvent extends Base {
         while (iterator.i < l) {
             paramID = command[iterator.i++];
             k = command[iterator.i++];
-            if (k <= PrimitiveValueKind.Default) {
+            if (k <= DynamicValueKind.Default) {
                 // If default value
-                parameter = k === PrimitiveValueKind.Default ? parameters[paramID].value : System.DynamicValue.create(k, null);
+                parameter = k === DynamicValueKind.Default ? parameters[paramID].value : System.DynamicValue.create(k, null);
             }
             else {
                 parameter = System.DynamicValue.create(k, command[iterator.i++]);

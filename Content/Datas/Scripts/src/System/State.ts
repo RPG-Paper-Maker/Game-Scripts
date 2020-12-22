@@ -13,7 +13,7 @@ import { Base } from "./Base";
 import { Enum, Utils } from "../Common";
 import ObjectMovingKind = Enum.ObjectMovingKind;
 import EventCommandKind = Enum.EventCommandKind;
-import PrimitiveValueKind = Enum.PrimitiveValueKind;
+import DynamicValueKind = Enum.DynamicValueKind;
 import CommandMoveKind = Enum.CommandMoveKind;
 import { System, EventCommand, Manager } from "..";
 
@@ -73,7 +73,7 @@ class State extends Base {
                 c: [Utils.defaultValue(json.ecr,
                     {
                         kind: EventCommandKind.MoveObject,
-                        command: [PrimitiveValueKind.DataBase, -1, 1, 1, 0, 
+                        command: [DynamicValueKind.DataBase, -1, 1, 1, 0, 
                             CommandMoveKind.MoveRandom, 0]
                     })
                 ]

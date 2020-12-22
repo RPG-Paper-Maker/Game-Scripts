@@ -44,6 +44,7 @@ export * from "./Object3D.js";
 export * from "./Parameter.js";
 export * from "./Picture.js";
 export * from "./PlaySong.js";
+export * from "./Plugin.js";
 export * from "./ProgressionTable.js";
 export * from "./Property.js";
 export * from "./Reaction.js";
