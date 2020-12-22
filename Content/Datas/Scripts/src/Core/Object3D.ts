@@ -9,7 +9,6 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { System } from "..";
 import { StructMapElementCollision, MapElement } from "./MapElement";
 import { Position } from "./Position";
@@ -42,7 +41,7 @@ abstract class Object3D extends MapElement {
      *  @param {number} count The faces count
      *  @return {[number, StructMapElementCollision[]]}
      */
-    abstract updateGeometry(geometry: typeof THREE.Geometry, position: Position, 
+    abstract updateGeometry(geometry: THREE.Geometry, position: Position, 
         count: number): [number, StructMapElementCollision[]];
 }
 

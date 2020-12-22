@@ -10,7 +10,7 @@
 */
 
 import { System, Datas } from "..";
-import { Paths, IO, Enum, Platform } from "../Common";
+import { Paths, IO, Enum } from "../Common";
 import PictureKind = Enum.PictureKind;
 import { Picture2D } from "../Core";
 

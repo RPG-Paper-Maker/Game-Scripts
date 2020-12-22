@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { THREE } from "../Globals";
 import { System, EventCommand, Manager, Datas } from "..";
 import { Frame } from "./Frame";
 import { Enum, Utils, IO, Paths, Constants, Platform, Mathf } from "../Common";
@@ -22,6 +22,7 @@ import { Sprite } from "./Sprite";
 import { Position } from "./Position";
 import { CollisionSquare } from "./CollisionSquare";
 import { MapElement } from "./MapElement";
+import { Vector3 } from "./Vector3";
 
 interface StructSearchResult {
     object: MapObject,
@@ -35,7 +36,7 @@ interface StructSearchResult {
 /** @class
  *  Object in local map that can move.
  *  @param {SystemObject} System The System informations
- *  @param {THREE.Vector3} position The current object position
+ *  @param {Vector3} position The current object position
  *  @param {boolean} isHero Indicate if the object is the hero
  */
 class MapObject {
@@ -43,13 +44,13 @@ class MapObject {
     public static SPEED_NORMAL = 0.004666;
 
     public system: System.MapObject;
-    public position: typeof THREE.Vector3;
+    public position: Vector3;
     public isHero: boolean;
     public movingState: Record<string, any>;
-    public previousPosition: typeof THREE.Vector3;
-    public mesh: typeof THREE.Mesh;
-    public meshBoundingBox: typeof THREE.Mesh;
-    public currentBoundingBox: typeof THREE.Mesh;
+    public previousPosition: Vector3;
+    public mesh: THREE.Mesh;
+    public meshBoundingBox: THREE.Mesh[];
+    public currentBoundingBox: THREE.Mesh;
     public boundingBoxSettings: Record<string, any>;
     public frame: Frame;
     public orientationEye: Orientation;
@@ -74,10 +75,10 @@ class MapObject {
     public currentState: System.State;
     public currentStateInstance: Record<string, any>;
     public removed: boolean;
-    public upPosition: typeof THREE.Vector3;
-    public halfPosition: typeof THREE.Vector3;
+    public upPosition: Vector3;
+    public halfPosition: Vector3;
 
-    constructor(system: System.MapObject, position?: typeof THREE.Vector3, 
+    constructor(system: System.MapObject, position?: Vector3, 
         isHero: boolean = false)
     {
         this.system = system;
@@ -437,9 +438,8 @@ class MapObject {
             .textureTileset : Manager.Stack.currentMap.texturesCharacters[this
             .currentStateInstance.graphicID]);
         this.meshBoundingBox = new Array;
-        if (this.currentState !== null && !this.isNone() && material && material
-            .map)
-        {
+        let texture = Manager.GL.getMaterialTexture(material);
+        if (this.currentState !== null && !this.isNone() && texture) {
             this.speed = Datas.Systems.getSpeed(this.currentState.speedID);
             this.frequency = Datas.Systems.getFrequency(this.currentState
                 .frequencyID);
@@ -457,10 +457,10 @@ class MapObject {
             } else {
                 x = 0;
                 y = 0;
-                this.width = material.map.image.width / Datas.Systems
-                    .SQUARE_SIZE / Datas.Systems.FRAMES;
-                this.height = material.map.image.height / Datas.Systems
-                    .SQUARE_SIZE / 4;
+                this.width = texture.image.width / Datas.Systems.SQUARE_SIZE / 
+                    Datas.Systems.FRAMES;
+                this.height = texture.image.height / Datas.Systems.SQUARE_SIZE / 
+                    4;
             }
             let sprite = Sprite.create(this.currentState.graphicKind, [x, y, 
                 this.width, this.height]);
@@ -504,12 +504,12 @@ class MapObject {
      *  @param {Orientation} orientation The orientation to move
      *  @param {number} distance The distance
      *  @param {number} angle The angle
-     *  @returns {THREE.Vector3}
+     *  @returns {Vector3}
      */
     getFuturPosition(orientation: Orientation, distance: number, angle: number): 
-        typeof THREE.Vector3
+        Vector3
     {
-        let position = new THREE.Vector3(this.previousPosition.x, this
+        let position = new Vector3(this.previousPosition.x, this
             .previousPosition.y, this.previousPosition.z);
 
         // The speed depends on the time elapsed since the last update
@@ -620,8 +620,9 @@ class MapObject {
         let i: number, j: number, l: number, m: number;
         for (i = 0, l = this.meshBoundingBox.length; i < l; i++) {
             for (j = 0, m = object.meshBoundingBox.length; j < m; j++) {
-                if (Manager.Collisions.obbVSobb(this.meshBoundingBox[i].geometry
-                    , object.meshBoundingBox[j].geometry))
+                if (Manager.Collisions.obbVSobb(<THREE.Geometry>this
+                    .meshBoundingBox[i].geometry, <THREE.Geometry>object
+                    .meshBoundingBox[j].geometry))
                 {
                     return true;
                 }
@@ -632,13 +633,14 @@ class MapObject {
 
     /** 
      *  Check the collision detection.
-     *  @returns {THREE.Vector3}
+     *  @returns {Vector3}
      */
-    checkCollisionDetection(): typeof THREE.Vector3 {
+    checkCollisionDetection(): boolean {
         let i: number, l: number;
         for (i = 0, l = this.meshBoundingBox.length; i < l; i++) {
-            if (Manager.Collisions.obbVSobb(this.meshBoundingBox[i].geometry,
-                Manager.Collisions.BB_BOX_DETECTION.geometry))
+            if (Manager.Collisions.obbVSobb(<THREE.Geometry>this.meshBoundingBox
+                [i].geometry, <THREE.Geometry>Manager.Collisions
+                .BB_BOX_DETECTION.geometry))
             {
                 return true;
             }
@@ -650,9 +652,9 @@ class MapObject {
                 Datas.Systems.SQUARE_SIZE / 2), this.position.z, Datas.Systems
                 .SQUARE_SIZE, Datas.Systems.SQUARE_SIZE, Datas.Systems
                 .SQUARE_SIZE, 0, 0, 0]);
-            if (Manager.Collisions.obbVSobb(Manager.Collisions
-                .BB_BOX_DEFAULT_DETECTION.geometry, Manager.Collisions
-                .BB_BOX_DETECTION.geometry))
+            if (Manager.Collisions.obbVSobb(<THREE.Geometry>Manager.Collisions
+                .BB_BOX_DEFAULT_DETECTION.geometry, <THREE.Geometry>Manager
+                .Collisions.BB_BOX_DETECTION.geometry))
             {
                 return true;
             }
@@ -680,9 +682,9 @@ class MapObject {
 
     /** 
      *  Only updates the bounding box mesh position.
-     *  @param {THREE.Vector3} position Position to update
+     *  @param {Vector3} position Position to update
      */
-    updateBB(position: typeof THREE.Vector3) {
+    updateBB(position: Vector3) {
         if (this.currentStateInstance.graphicID !== 0) {
             this.boundingBoxSettings.squares = Manager.Stack.currentMap
                 .collisions[PictureKind.Characters][this.currentStateInstance
@@ -690,7 +692,7 @@ class MapObject {
         }
         this.boundingBoxSettings.b = new Array;
         this.removeBBFromScene();
-        let box: typeof THREE.Mesh;
+        let box: THREE.Mesh;
         for (let i = 0, l = this.boundingBoxSettings.squares.length; i < l; i++) {
             this.boundingBoxSettings.b.push(CollisionSquare.getBB(this
                 .boundingBoxSettings.squares[i], this.width, this.height));
@@ -728,9 +730,9 @@ class MapObject {
 
     /** 
      *  Only updates the bounding box mesh position.
-     *  @param {THREE.Vector3} position Position to update
+     *  @param {Vector3} position Position to update
      */
-    updateBBPosition(position: typeof THREE.Vector3) {
+    updateBBPosition(position: Vector3) {
         for (let i = 0, l = this.meshBoundingBox.length; i < l; i++) {
             if (this.currentState.graphicKind === ElementMapKind.SpritesFix) {
                 Manager.Collisions.applyBoxSpriteTransforms(this.meshBoundingBox
@@ -814,9 +816,9 @@ class MapObject {
 
     /** 
      *  Teleport the object.
-     *  @param {THREE.Vector3} position Position to teleport
+     *  @param {Vector3} position Position to teleport
      */
-    teleport(position: typeof THREE.Vector3) {
+    teleport(position: Vector3) {
         if (this.removed) {
             return;
         }
@@ -1027,9 +1029,9 @@ class MapObject {
                     this.updateOrientation();
                 }
             }
-            this.upPosition = new THREE.Vector3(this.position.x, this.position.y 
+            this.upPosition = new Vector3(this.position.x, this.position.y 
                 + (this.height * Datas.Systems.SQUARE_SIZE), this.position.z);
-            this.halfPosition = new THREE.Vector3(this.position.x, this.position
+            this.halfPosition = new Vector3(this.position.x, this.position
                 .y + (this.height * Datas.Systems.SQUARE_SIZE / 2), this
                 .position.z);
             this.updateAngle(angle);
@@ -1087,9 +1089,11 @@ class MapObject {
      */
     updateUVs() {
         if (this.mesh !== null && !this.isNone()) {
-            if (this.mesh.material && this.mesh.material.map) {
-                let textureWidth = this.mesh.material.map.image.width;
-                let textureHeight = this.mesh.material.map.image.height;
+            let texture = Manager.GL.getMaterialTexture(<THREE.ShaderMaterial>
+                this.mesh.material);
+            if (texture) {
+                let textureWidth = texture.image.width;
+                let textureHeight = texture.image.height;
                 let w: number, h: number, x: number, y: number;
                 if (this.currentStateInstance.graphicID === 0) {
                     w = this.width * Datas.Systems.SQUARE_SIZE / textureWidth;
@@ -1113,13 +1117,19 @@ class MapObject {
                 h -= (coefY * 2);
 
                 // Update geometry
-                this.mesh.geometry.faceVertexUvs[0][0][0].set(x, y);
-                this.mesh.geometry.faceVertexUvs[0][0][1].set(x + w, y);
-                this.mesh.geometry.faceVertexUvs[0][0][2].set(x + w, y + h);
-                this.mesh.geometry.faceVertexUvs[0][1][0].set(x, y);
-                this.mesh.geometry.faceVertexUvs[0][1][1].set(x + w, y + h);
-                this.mesh.geometry.faceVertexUvs[0][1][2].set(x, y + h);
-                this.mesh.geometry.uvsNeedUpdate = true;
+                (<THREE.Geometry>this.mesh.geometry).faceVertexUvs[0][0][0].set(
+                    x, y);
+                (<THREE.Geometry>this.mesh.geometry).faceVertexUvs[0][0][1].set(
+                    x + w, y);
+                (<THREE.Geometry>this.mesh.geometry).faceVertexUvs[0][0][2].set(
+                    x + w, y + h);
+                (<THREE.Geometry>this.mesh.geometry).faceVertexUvs[0][1][0].set(
+                    x, y);
+                (<THREE.Geometry>this.mesh.geometry).faceVertexUvs[0][1][1].set(
+                    x + w, y + h);
+                (<THREE.Geometry>this.mesh.geometry).faceVertexUvs[0][1][2].set(
+                    x, y + h);
+                (<THREE.Geometry>this.mesh.geometry).uvsNeedUpdate = true;
             }
         }
     }

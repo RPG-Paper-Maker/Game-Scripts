@@ -12,7 +12,6 @@
 import { Base } from "./Base";
 import { System, Manager } from "..";
 import { MapObject, StructSearchResult, Portion } from "../Core";
-import { Constants } from "../Common";
 
 /** @class
  *  An event command for removing a specific object from map.

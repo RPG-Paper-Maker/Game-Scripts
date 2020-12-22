@@ -8,16 +8,18 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { THREE } from "../Globals.js";
+import { Manager } from "../index.js";
 /** @class
  *  The wrapper class for handle mountains sharing the same texture.
  *  @param {TextureBundle} texture
  */
 class Mountains {
-    constructor(texture) {
-        this.texture = texture;
-        this.width = texture.texture.map.image.width;
-        this.height = texture.texture.map.image.height;
+    constructor(bundle) {
+        this.bundle = bundle;
+        let texture = Manager.GL.getMaterialTexture(bundle.material);
+        this.width = texture.image.width;
+        this.height = texture.image.height;
         this.geometry = new THREE.Geometry();
         this.geometry.faceVertexUvs[0] = [];
         this.count = 0;
@@ -29,7 +31,7 @@ class Mountains {
      *  @param {Mountain} mountain The moutain to update
      */
     updateGeometry(position, mountain) {
-        let res = mountain.updateGeometry(this.geometry, this.texture, position, this.count);
+        let res = mountain.updateGeometry(this.geometry, this.bundle, position, this.count);
         this.count = res[0];
         return res[1];
     }
@@ -37,7 +39,7 @@ class Mountains {
      *  Create a mesh with material and geometry.
      */
     createMesh() {
-        this.mesh = new THREE.Mesh(this.geometry, this.texture.texture);
+        this.mesh = new THREE.Mesh(this.geometry, this.bundle.material);
     }
 }
 export { Mountains };

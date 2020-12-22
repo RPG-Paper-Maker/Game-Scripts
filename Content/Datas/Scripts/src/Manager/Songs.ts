@@ -11,9 +11,9 @@
 
 import { Enum } from "../Common";
 import SongKind = Enum.SongKind;
-import { Datas } from "..";
+import { Datas, System } from "..";
 import { ProgressionTable } from "../System";
-const { Howl } = require('./Content/Datas/Scripts/Libs/howler.js');
+import { Howl } from "../Globals";
 
 /** @class
  *  The manager for songs.
@@ -111,6 +111,7 @@ class Songs {
     static stopSong(kind: SongKind, time: number, seconds: number, pause: 
         boolean = false): boolean
     {
+        System.PlaySong.currentPlayingMusic = null;
         let current = new Date().getTime();
         let ellapsedTime = current - time;
         let currentHowl = this.currentHowl[kind];

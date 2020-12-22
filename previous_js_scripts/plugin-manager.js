@@ -15,8 +15,7 @@
  *  @property {Record<string, any>} [PluginManager.plugins = {}] The plugins 
  *  according to plugin name
  */
-class PluginManager
-{
+class PluginManager {
     static plugins = {};
 
     constructor() {
@@ -30,8 +29,7 @@ class PluginManager
      */
     static async load() {
         let pluginsNames = (await RPM.parseFileJSON(RPM.FILE_SCRIPTS)).plugins;
-        for (let i = 0, l = pluginsNames.length; i < l; i++)
-        {
+        for (let i = 0, l = pluginsNames.length; i < l; i++) {
             await PluginManager.loadPlugin(pluginsNames[i]);
         }
     }

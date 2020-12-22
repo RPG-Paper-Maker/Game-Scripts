@@ -13,7 +13,7 @@ import { Base } from "./Base";
 import { Enum, Constants, Paths, Utils } from "../Common";
 import SongKind = Enum.SongKind;
 import { Datas } from "..";
-const { Howl } = require('./Content/Datas/Scripts/Libs/howler.js');
+import { Howl } from "../Globals";
 
 /** @class
  *  A song of the game.

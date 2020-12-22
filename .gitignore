@@ -8,5 +8,6 @@ Content/Videos
 Content/Datas/*.json
 Content/Datas/Maps
 Content/Datas/Saves
+Content/Datas/Scripts/Plugins
 log.txt
 .idea

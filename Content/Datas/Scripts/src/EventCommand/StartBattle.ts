@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { System, Datas, Manager, Scene } from "..";
+import { System, Datas, Manager } from "..";
 import { Utils } from "../Common";
 import { MapObject } from "../Core";
 
@@ -135,7 +135,7 @@ class StartBattle extends Base {
                 .getValue(), this.yPlus.getValue(), this.z.getValue()]) : Datas
                 .BattleSystems.getBattleMap(this.battleMapID.getValue());
             Manager.Stack.game.heroBattle = new MapObject(null, battleMap
-                .position);
+                .position.toVector3());
 
             // Defining the battle state instance
             /*

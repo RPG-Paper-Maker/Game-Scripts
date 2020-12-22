@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { THREE } from "../Globals";
 import { Base } from "./Base"
 import { Utils, Enum } from "../Common";
 import { Manager, Datas } from "..";
@@ -49,9 +49,9 @@ class Skybox extends Base {
     
     /** 
      *  Create the textures for the background
-     *  @returns {THREE.MeshBasicMaterial[]} 
+     *  @returns {THREE.ShaderMaterial[]} 
      */
-    createTextures(): typeof THREE.MeshBasicMaterial[] {
+    createTextures(): THREE.ShaderMaterial[] {
         return [
             Manager.GL.createMaterial(Manager.GL.textureLoader.load(Datas
                 .Pictures.get(PictureKind.Skyboxes, this.left).getPath()), { 

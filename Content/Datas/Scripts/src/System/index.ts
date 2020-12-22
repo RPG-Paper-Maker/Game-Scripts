@@ -45,6 +45,7 @@ export * from "./Object3D";
 export * from "./Parameter";
 export * from "./Picture";
 export * from "./PlaySong";
+export * from "./Plugin";
 export * from "./ProgressionTable";
 export * from "./Property";
 export * from "./Reaction";

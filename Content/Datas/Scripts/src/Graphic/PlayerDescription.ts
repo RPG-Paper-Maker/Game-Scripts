@@ -51,9 +51,9 @@ class PlayerDescription extends Base {
         let expStat = Datas.BattleSystems.getExpStatistic();
 
         // All the graphics
-        this.graphicNameCenter = new Graphic.Text(system.name, { align: Align
+        this.graphicNameCenter = new Graphic.Text(this.player.name, { align: Align
             .Center });
-        this.graphicName = new Graphic.Text(system.name);
+        this.graphicName = new Graphic.Text(this.player.name);
         this.graphicClass = new Graphic.Text(cl.name(), { fontSize: Constants
             .MEDIUM_FONT_SIZE });
         this.graphicLevelName = new Graphic.Text(levelStat.name);

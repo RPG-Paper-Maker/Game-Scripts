@@ -244,22 +244,57 @@ var Enum;
      *   @enum {number}
      *   @readonly
      */
-    let PrimitiveValueKind;
-    (function (PrimitiveValueKind) {
-        PrimitiveValueKind[PrimitiveValueKind["None"] = 0] = "None";
-        PrimitiveValueKind[PrimitiveValueKind["Anything"] = 1] = "Anything";
-        PrimitiveValueKind[PrimitiveValueKind["Default"] = 2] = "Default";
-        PrimitiveValueKind[PrimitiveValueKind["Number"] = 3] = "Number";
-        PrimitiveValueKind[PrimitiveValueKind["Variable"] = 4] = "Variable";
-        PrimitiveValueKind[PrimitiveValueKind["Parameter"] = 5] = "Parameter";
-        PrimitiveValueKind[PrimitiveValueKind["Property"] = 6] = "Property";
-        PrimitiveValueKind[PrimitiveValueKind["DataBase"] = 7] = "DataBase";
-        PrimitiveValueKind[PrimitiveValueKind["Message"] = 8] = "Message";
-        PrimitiveValueKind[PrimitiveValueKind["Script"] = 9] = "Script";
-        PrimitiveValueKind[PrimitiveValueKind["Switch"] = 10] = "Switch";
-        PrimitiveValueKind[PrimitiveValueKind["KeyBoard"] = 11] = "KeyBoard";
-        PrimitiveValueKind[PrimitiveValueKind["NumberDouble"] = 12] = "NumberDouble";
-    })(PrimitiveValueKind = Enum.PrimitiveValueKind || (Enum.PrimitiveValueKind = {}));
+    let DynamicValueKind;
+    (function (DynamicValueKind) {
+        DynamicValueKind[DynamicValueKind["None"] = 0] = "None";
+        DynamicValueKind[DynamicValueKind["Anything"] = 1] = "Anything";
+        DynamicValueKind[DynamicValueKind["Default"] = 2] = "Default";
+        DynamicValueKind[DynamicValueKind["Number"] = 3] = "Number";
+        DynamicValueKind[DynamicValueKind["Variable"] = 4] = "Variable";
+        DynamicValueKind[DynamicValueKind["Parameter"] = 5] = "Parameter";
+        DynamicValueKind[DynamicValueKind["Property"] = 6] = "Property";
+        DynamicValueKind[DynamicValueKind["DataBase"] = 7] = "DataBase";
+        DynamicValueKind[DynamicValueKind["Message"] = 8] = "Message";
+        DynamicValueKind[DynamicValueKind["Script"] = 9] = "Script";
+        DynamicValueKind[DynamicValueKind["Switch"] = 10] = "Switch";
+        DynamicValueKind[DynamicValueKind["KeyBoard"] = 11] = "KeyBoard";
+        DynamicValueKind[DynamicValueKind["NumberDouble"] = 12] = "NumberDouble";
+        DynamicValueKind[DynamicValueKind["Font"] = 13] = "Font";
+        DynamicValueKind[DynamicValueKind["Class"] = 14] = "Class";
+        DynamicValueKind[DynamicValueKind["Hero"] = 15] = "Hero";
+        DynamicValueKind[DynamicValueKind["Monster"] = 16] = "Monster";
+        DynamicValueKind[DynamicValueKind["Troop"] = 17] = "Troop";
+        DynamicValueKind[DynamicValueKind["Item"] = 18] = "Item";
+        DynamicValueKind[DynamicValueKind["Weapon"] = 19] = "Weapon";
+        DynamicValueKind[DynamicValueKind["Armor"] = 20] = "Armor";
+        DynamicValueKind[DynamicValueKind["Skill"] = 21] = "Skill";
+        DynamicValueKind[DynamicValueKind["Animation"] = 22] = "Animation";
+        DynamicValueKind[DynamicValueKind["Status"] = 23] = "Status";
+        DynamicValueKind[DynamicValueKind["Tileset"] = 24] = "Tileset";
+        DynamicValueKind[DynamicValueKind["FontSize"] = 25] = "FontSize";
+        DynamicValueKind[DynamicValueKind["FontName"] = 26] = "FontName";
+        DynamicValueKind[DynamicValueKind["Color"] = 27] = "Color";
+        DynamicValueKind[DynamicValueKind["WindowSkin"] = 28] = "WindowSkin";
+        DynamicValueKind[DynamicValueKind["Currency"] = 29] = "Currency";
+        DynamicValueKind[DynamicValueKind["Speed"] = 30] = "Speed";
+        DynamicValueKind[DynamicValueKind["Detection"] = 31] = "Detection";
+        DynamicValueKind[DynamicValueKind["CameraProperty"] = 32] = "CameraProperty";
+        DynamicValueKind[DynamicValueKind["Frequency"] = 33] = "Frequency";
+        DynamicValueKind[DynamicValueKind["Skybox"] = 34] = "Skybox";
+        DynamicValueKind[DynamicValueKind["BattleMap"] = 35] = "BattleMap";
+        DynamicValueKind[DynamicValueKind["Element"] = 36] = "Element";
+        DynamicValueKind[DynamicValueKind["CommonStatistic"] = 37] = "CommonStatistic";
+        DynamicValueKind[DynamicValueKind["WeaponsKind"] = 38] = "WeaponsKind";
+        DynamicValueKind[DynamicValueKind["ArmorsKind"] = 39] = "ArmorsKind";
+        DynamicValueKind[DynamicValueKind["CommonBattleCommand"] = 40] = "CommonBattleCommand";
+        DynamicValueKind[DynamicValueKind["CommonEquipment"] = 41] = "CommonEquipment";
+        DynamicValueKind[DynamicValueKind["Event"] = 42] = "Event";
+        DynamicValueKind[DynamicValueKind["State"] = 43] = "State";
+        DynamicValueKind[DynamicValueKind["CommonReaction"] = 44] = "CommonReaction";
+        DynamicValueKind[DynamicValueKind["Model"] = 45] = "Model";
+        DynamicValueKind[DynamicValueKind["CustomStructure"] = 46] = "CustomStructure";
+        DynamicValueKind[DynamicValueKind["CustomList"] = 47] = "CustomList";
+    })(DynamicValueKind = Enum.DynamicValueKind || (Enum.DynamicValueKind = {}));
     ;
     /**
      *   Enum for the different window orientations.

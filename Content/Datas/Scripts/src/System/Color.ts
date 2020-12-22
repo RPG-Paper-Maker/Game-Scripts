@@ -10,8 +10,9 @@
 */
 
 import { Base } from "./Base";
-import { System } from "..";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { System, Core } from "..";
+import { THREE } from "../Globals";
+import { Vector3 } from "../Core";
 
 /** @class
  *  The system color class.
@@ -30,7 +31,7 @@ class Color extends Base {
     public blue: number;
     public alpha: number;
     public rgb: string;
-    public color: typeof THREE.Color
+    public color: THREE.Color
 
     constructor(json?: Record<string, any>) {
         super(json);
@@ -54,14 +55,12 @@ class Color extends Base {
     /** 
      *  Used for mixing vectors according to alpha in getHex algorithm.
      *  @static
-     *  @param {THREE.Vector3} x The x position
-     *  @param {THREE.Vector3} y The y position
+     *  @param {Vector3} x The x position
+     *  @param {Vector3} y The y position
      *  @param {number} aThe alpha value between 0 and 1
-     *  @returns {THREE.Vector3}
+     *  @returns {Vector3}
      */
-    static mix(x: typeof THREE.Vector3, y: typeof THREE.Vector3, a: number): 
-        typeof THREE.Vector3
-    {
+    static mix(x: Vector3, y: Vector3, a: number): Vector3 {
         return x.clone().multiplyScalar(1 - a).add(y.clone().multiplyScalar(a));
     }
 
@@ -96,14 +95,14 @@ class Color extends Base {
      *  @param {THREE.Vector4} tone The tone value
      *  @returns {number}
      */
-    getHex(tone?: typeof THREE.Vector4): number {
+    getHex(tone?: THREE.Vector4): number {
         if (tone) {
-            let rgb = new THREE.Vector3(Math.max(Math.min(this.color.r + tone.x,
+            let rgb = new Vector3(Math.max(Math.min(this.color.r + tone.x,
                 1), -1), Math.max(Math.min(this.color.g + tone.y, 1), -1), Math
                 .max(Math.min(this.color.b + tone.z, 1), -1));
-            let w = new THREE.Vector3(0.2125, 0.7154, 0.0721);
+            let w = new Vector3(0.2125, 0.7154, 0.0721);
             let intensity = rgb.dot(w);
-            let m = Color.mix(new THREE.Vector3(intensity, intensity,
+            let m = Color.mix(new Vector3(intensity, intensity,
                 intensity), rgb, tone.w);
             return new THREE.Color(Math.min(Math.max(0, m.x), 1), Math.min(Math
                 .max(0, m.y), 1), Math.min(Math.max(0, m.z), 1)).getHex();

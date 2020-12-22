@@ -11,8 +11,7 @@
 
 import { Base } from "./Base";
 import { Utils } from "../Common";
-import { Picture2D } from "../Core";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { Picture2D, Vector2 } from "../Core";
 
 /** @class
  *  An animation frame element.
@@ -53,13 +52,11 @@ class AnimationFrameElement extends Base {
     /** 
      *  Draw the animation element.
      *  @param {Picture2D} picture The picture associated to the animation
-     *  @param {THREE.Vector2} position The position on screen for animation
+     *  @param {Vector2} position The position on screen for animation
      *  @param {number} rows The number of rows in the animation texture
      *  @param {number} cols The number of columns in the animation texture
      */
-    draw(picture: Picture2D, position: typeof THREE.Vector2, rows: number, cols:
-        number)
-    {
+    draw(picture: Picture2D, position: Vector2, rows: number, cols: number) {
         picture.zoom = this.zoom;
         picture.opacity = this.opacity;
         picture.angle = this.angle;

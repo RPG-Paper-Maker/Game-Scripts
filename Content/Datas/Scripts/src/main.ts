@@ -12,15 +12,17 @@
 import { Datas, Manager } from ".";
 import { Utils, KeyEvent, Platform } from "./Common";
 
-let loadedDatas = false;
+let loaded = false;
 
 /** 
  *  Initialize the game stack and datas.
  */
-function initialize() {
+async function initialize() {
+    await Manager.Plugins.load();
     Manager.Stack.loadingDelay = 0;
     Manager.Songs.initialize();
     Manager.Stack.clearHUD();
+    await load();
 }
 
 /** 
@@ -55,7 +57,7 @@ async function load() {
     await Datas.Systems.getModelHero();
     await Datas.Systems.loadWindowSkins();
     Manager.Stack.pushTitleScreen();
-    loadedDatas = true;
+    loaded = true;
     Manager.Stack.requestPaintHUD = true;
 }
 
@@ -66,7 +68,7 @@ function loop() {
     requestAnimationFrame(loop);
 
     // Update if everything is loaded
-    if (loadedDatas) {
+    if (loaded) {
         if (!Manager.Stack.isLoading()) {
             Manager.Stack.update();
         }
@@ -90,7 +92,7 @@ function loop() {
 //
 // -------------------------------------------------------
 
-initialize();
+Utils.tryCatch(initialize);
 
 // -------------------------------------------------------
 //
@@ -100,7 +102,7 @@ initialize();
 
 document.addEventListener('keydown', function(event)
 {
-    if (loadedDatas && !Manager.Stack.isLoading()) {
+    if (loaded && !Manager.Stack.isLoading()) {
         let key = event.keyCode;
 
         // On pressing F12, quit game
@@ -128,7 +130,7 @@ document.addEventListener('keydown', function(event)
 
 document.addEventListener('keyup', function(event) 
 {
-    if (loadedDatas && !Manager.Stack.isLoading()) {
+    if (loaded && !Manager.Stack.isLoading()) {
         let key = event.keyCode;
         // Remove this key from pressed keys list
         KeyEvent.keysPressed.splice(KeyEvent.keysPressed.indexOf(key), 1);
@@ -140,14 +142,6 @@ document.addEventListener('keyup', function(event)
         KeyEvent.keysPressed = [];
     }
 }, false);
-
-// -------------------------------------------------------
-//
-// START LOADING GAME FILES
-//
-// -------------------------------------------------------
-
-Utils.tryCatch(load);
 
 // -------------------------------------------------------
 //

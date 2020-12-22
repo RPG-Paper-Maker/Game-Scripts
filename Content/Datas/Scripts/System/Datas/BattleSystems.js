@@ -62,8 +62,7 @@ class BattleSystems {
             }
         });
         this.weaponsKind = [];
-        Utils.readJSONSystemList({ list: Utils.defaultValue(json.weapons, []),
-            listIDs: this.weaponsKind, cons: System.WeaponArmorKind });
+        Utils.readJSONSystemList({ list: Utils.defaultValue(json.weaponsKind, []), listIDs: this.weaponsKind, cons: System.WeaponArmorKind });
         // Armors kind
         this.armorsKind = [];
         Utils.readJSONSystemList({ list: Utils.defaultValue(json.armorsKind, []),

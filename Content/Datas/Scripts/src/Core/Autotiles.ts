@@ -10,10 +10,11 @@
 */
 
 import { TextureBundle } from "./TextureBundle";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { THREE } from "../Globals";
 import { Autotile } from "./Autotile";
 import { Position } from "./Position";
 import { StructMapElementCollision } from "./MapElement";
+import { Manager } from "..";
 
 /** @class
  *  Autotiles grouped with the same textures.
@@ -49,17 +50,18 @@ class Autotiles {
         "D2": 23,
     };
 
-    public texture: TextureBundle;
+    public bundle: TextureBundle;
     public width: number;
     public height: number;
-    public geometry: typeof THREE.Geometry;
-    public mesh: typeof THREE.Mesh;
+    public geometry: THREE.Geometry;
+    public mesh: THREE.Mesh;
     public index: number;
 
-    constructor(texture: TextureBundle) {
-        this.texture = texture;
-        this.width = texture.texture.map ? texture.texture.map.image.width : 0;
-        this.height = texture.texture.map ? texture.texture.map.image.height : 0;
+    constructor(bundle: TextureBundle) {
+        this.bundle = bundle;
+        let texture = Manager.GL.getMaterialTexture(bundle.material);
+        this.width = texture ? texture.image.width : 0;
+        this.height = texture ? texture.image.height : 0;
         this.geometry = new THREE.Geometry();
         this.geometry.faceVertexUvs[0] = [];
         this.mesh = null;
@@ -77,7 +79,7 @@ class Autotiles {
         StructMapElementCollision
     {
         return this.width === null || this.height === 0 ? null : autotile
-            .updateGeometryAutotile(this.geometry, this.texture, position, this
+            .updateGeometryAutotile(this.geometry, this.bundle, position, this
             .width, this.height, this.index++);
     }
 
@@ -85,7 +87,7 @@ class Autotiles {
      *  Create a mesh with material and geometry.
      */
     createMesh() {
-        this.mesh = new THREE.Mesh(this.geometry, this.texture.texture);
+        this.mesh = new THREE.Mesh(this.geometry, this.bundle.material);
     }
 }
 

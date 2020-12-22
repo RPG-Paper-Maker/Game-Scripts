@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { IO, Paths, Platform, Utils, Enum } from "../Common";
+import { IO, Paths, Utils, Enum } from "../Common";
 import TitleSettingKind = Enum.TitleSettingKind;
 
 /** @class

@@ -9,7 +9,6 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { Land } from "./Land";
 import { Position } from "./Position";
 import { Manager, Datas } from "..";
@@ -49,7 +48,7 @@ class Floor extends Land {
      *  @param {number} count The faces count
      *  @returns {StructMapElementCollision}
      */
-    updateGeometry(geometry: typeof THREE.Geometry, position: Position, width: 
+    updateGeometry(geometry: THREE.Geometry, position: Position, width: 
         number, height: number, count: number): StructMapElementCollision
     {
         return (width === 0 || height === 0) ? null : super.updateGeometryLand(

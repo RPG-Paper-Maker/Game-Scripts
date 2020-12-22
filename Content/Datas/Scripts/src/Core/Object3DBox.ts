@@ -16,7 +16,8 @@ import { Sprite } from "./Sprite";
 import { Enum } from "../Common";
 import ObjectCollisionKind = Enum.ObjectCollisionKind;
 import { Object3D } from "./Object3D";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { Vector3 } from "./Vector3";
+import { Vector2 } from "./Vector2";
 
 /** @class
  *  A 3D object box in the map.
@@ -29,40 +30,40 @@ class Object3DBox extends Object3D {
 
     public static VERTICES = [
         // Front
-        new THREE.Vector3(0.0, 1.0, 1.0),
-        new THREE.Vector3(1.0, 1.0, 1.0),
-        new THREE.Vector3(1.0, 0.0, 1.0),
-        new THREE.Vector3(0.0, 0.0, 1.0),
+        new Vector3(0.0, 1.0, 1.0),
+        new Vector3(1.0, 1.0, 1.0),
+        new Vector3(1.0, 0.0, 1.0),
+        new Vector3(0.0, 0.0, 1.0),
     
         // Back
-        new THREE.Vector3(1.0, 1.0, 0.0),
-        new THREE.Vector3(0.0, 1.0, 0.0),
-        new THREE.Vector3(0.0, 0.0, 0.0),
-        new THREE.Vector3(1.0, 0.0, 0.0),
+        new Vector3(1.0, 1.0, 0.0),
+        new Vector3(0.0, 1.0, 0.0),
+        new Vector3(0.0, 0.0, 0.0),
+        new Vector3(1.0, 0.0, 0.0),
     
         // Left
-        new THREE.Vector3(0.0, 1.0, 0.0),
-        new THREE.Vector3(0.0, 1.0, 1.0),
-        new THREE.Vector3(0.0, 0.0, 1.0),
-        new THREE.Vector3(0.0, 0.0, 0.0),
+        new Vector3(0.0, 1.0, 0.0),
+        new Vector3(0.0, 1.0, 1.0),
+        new Vector3(0.0, 0.0, 1.0),
+        new Vector3(0.0, 0.0, 0.0),
     
         // Right
-        new THREE.Vector3(1.0, 1.0, 1.0),
-        new THREE.Vector3(1.0, 1.0, 0.0),
-        new THREE.Vector3(1.0, 0.0, 0.0),
-        new THREE.Vector3(1.0, 0.0, 1.0),
+        new Vector3(1.0, 1.0, 1.0),
+        new Vector3(1.0, 1.0, 0.0),
+        new Vector3(1.0, 0.0, 0.0),
+        new Vector3(1.0, 0.0, 1.0),
     
         // Bottom
-        new THREE.Vector3(0.0, 0.0, 1.0),
-        new THREE.Vector3(1.0, 0.0, 1.0),
-        new THREE.Vector3(1.0, 0.0, 0.0),
-        new THREE.Vector3(0.0, 0.0, 0.0),
+        new Vector3(0.0, 0.0, 1.0),
+        new Vector3(1.0, 0.0, 1.0),
+        new Vector3(1.0, 0.0, 0.0),
+        new Vector3(0.0, 0.0, 0.0),
     
         // Top
-        new THREE.Vector3(0.0, 1.0, 0.0),
-        new THREE.Vector3(1.0, 1.0, 0.0),
-        new THREE.Vector3(1.0, 1.0, 1.0),
-        new THREE.Vector3(0.0, 1.0, 1.0)
+        new Vector3(0.0, 1.0, 0.0),
+        new Vector3(1.0, 1.0, 0.0),
+        new Vector3(1.0, 1.0, 1.0),
+        new Vector3(0.0, 1.0, 1.0)
     ];
     public static NB_VERTICES = 24;
     public static TEXTURES = [
@@ -144,7 +145,7 @@ class Object3DBox extends Object3D {
      *  @param {number} count The faces count
      *  @return {[number, StructMapElementCollision[]]}
     */
-    updateGeometry(geometry: typeof THREE.Geometry, position: Position, count: 
+    updateGeometry(geometry: THREE.Geometry, position: Position, count: 
         number): [number, StructMapElementCollision[]]
     {
         let coef = 0.01;
@@ -156,10 +157,10 @@ class Object3DBox extends Object3D {
         let angleX = position.angleX;
         let angleZ = position.angleZ;
         let size = this.datas.getSizeVector();
-        let center = new THREE.Vector3(localPosition.x + Math.floor(Datas
+        let center = new Vector3(localPosition.x + Math.floor(Datas
             .Systems.SQUARE_SIZE / 2), localPosition.y + (size.y / 2), 
             localPosition.z + Math.floor(Datas.Systems.SQUARE_SIZE / 2));
-        let centerReal = new THREE.Vector3(localPosition.x + Math.floor(size.x /
+        let centerReal = new Vector3(localPosition.x + Math.floor(size.x /
             2), localPosition.y + (size.y / 2), localPosition.z + Math.floor(
             size.z / 2));
         Sprite.rotateVertex(centerReal, center, angleY, Sprite.Y_AXIS);
@@ -185,10 +186,9 @@ class Object3DBox extends Object3D {
         }
 
         // Vertices + faces / indexes
-        let vecA: typeof THREE.Vector3, vecB: typeof THREE.Vector3, vecC: typeof 
-            THREE.Vector3, vecD: typeof THREE.Vector3, texA: number[], texB: 
-            number[], texC: number[], texD: number[], faceA: typeof THREE
-            .Vector2[], faceB: typeof THREE.Vector2[];
+        let vecA: Vector3, vecB: Vector3, vecC: Vector3, vecD: 
+            Vector3, texA: number[], texB: number[], texC: number[], texD: 
+            number[], faceA: Vector2[], faceB: Vector2[];
         for (let i = 0; i < Object3DBox.NB_VERTICES; i += 4) {
             vecA = Object3DBox.VERTICES[i].clone();
             vecB = Object3DBox.VERTICES[i + 1].clone();
@@ -207,14 +207,14 @@ class Object3DBox extends Object3D {
             texC = Object3DBox.TEXTURES[i + 2];
             texD = Object3DBox.TEXTURES[i + 3];
             faceA = [
-                new THREE.Vector2(textures[texA[0]], textures[texA[1]]),
-                new THREE.Vector2(textures[texB[0]], textures[texB[1]]),
-                new THREE.Vector2(textures[texC[0]], textures[texC[1]])
+                new Vector2(textures[texA[0]], textures[texA[1]]),
+                new Vector2(textures[texB[0]], textures[texB[1]]),
+                new Vector2(textures[texC[0]], textures[texC[1]])
             ];
             faceB = [
-                new THREE.Vector2(textures[texA[0]], textures[texA[1]]),
-                new THREE.Vector2(textures[texC[0]], textures[texC[1]]),
-                new THREE.Vector2(textures[texD[0]], textures[texD[1]])
+                new Vector2(textures[texA[0]], textures[texA[1]]),
+                new Vector2(textures[texC[0]], textures[texC[1]]),
+                new Vector2(textures[texD[0]], textures[texD[1]])
             ];
             if (angleY !== 0.0) {
                 Sprite.rotateSprite(vecA, vecB, vecC, vecD, center, angleY,

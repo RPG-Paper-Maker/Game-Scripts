@@ -15,9 +15,8 @@ import PictureKind = Enum.PictureKind;
 import AnimationEffectConditionKind = Enum.AnimationEffectConditionKind;
 import { Base } from "./Base";
 import { AnimationFrame } from "./AnimationFrame";
-import { Picture2D, Battler } from "../Core";
+import { Picture2D, Battler, Vector2 } from "../Core";
 import { Datas } from "..";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 
 /** @class
  *  An animation of a skill / item / weapon or for display animation command.
@@ -81,7 +80,7 @@ class Animation extends Base {
     draw(picture: Picture2D, frame: number, battler: Battler) {
         if (frame > 0 && frame < this.frames.length) {
             // Change position according to kind
-            let position: typeof THREE.Vector2;
+            let position: Vector2;
             switch (this.positionKind) {
                 case AnimationPositionKind.Top:
                     position = battler.topPosition;
@@ -93,7 +92,7 @@ class Animation extends Base {
                     position = battler.botPosition;
                     break;
                 case AnimationPositionKind.ScreenCenter:
-                    position = new THREE.Vector2(0, 0);
+                    position = new Vector2(0, 0);
                     break;
             }
 

@@ -9,14 +9,14 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { THREE } from "../Globals";
 import { Base } from "./Base";
 import { Enum, Utils, Constants, IO, Paths } from "../Common";
 import Orientation = Enum.Orientation;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 import PictureKind = Enum.PictureKind;
 import { System, Datas, Scene, Manager } from "..";
-import { Position, Portion, MapPortion, TextureBundle, Camera, ReactionInterpreter } from "../Core";
+import { Position, Portion, MapPortion, TextureBundle, Camera, ReactionInterpreter, Vector3 } from "../Core";
 
 /** @class
  *  A scene for a local map.
@@ -41,18 +41,18 @@ class Map extends Base {
     public damages: any[];
     public battleCommandKind: EffectSpecialActionKind;
     public mapProperties: System.MapProperties;
-    public scene: typeof THREE.Scene;
+    public scene: THREE.Scene;
     public allObjects: Position[];
     public currentPortion: Portion;
     public mapPortions: MapPortion[];
-    public textureTileset: typeof THREE.MeshBasicMaterial;
-    public texturesCharacters: typeof THREE.MeshBasicMaterial[];
+    public textureTileset: THREE.ShaderMaterial;
+    public texturesCharacters: THREE.ShaderMaterial[];
     public texturesAutotiles: TextureBundle[];
-    public texturesWalls: typeof THREE.MeshBasicMaterial[];
+    public texturesWalls: THREE.ShaderMaterial[];
     public texturesMountains: TextureBundle[];
-    public texturesObjects3D: typeof THREE.MeshBasicMaterial[];
+    public texturesObjects3D: THREE.ShaderMaterial[];
     public collisions: number[][][][];
-    public previousCameraPosition: typeof THREE.Vector3;
+    public previousCameraPosition: Vector3;
     public portionsObjectsUpdated: boolean;
 
     constructor(id: number, isBattleMap: boolean = false, minimal: boolean = 
@@ -229,21 +229,22 @@ class Map extends Base {
      */
     loadCollisions() {
         // Tileset
-        if (this.mapProperties.tileset.picture && this.textureTileset.map) {
-            this.mapProperties.tileset.picture.readCollisionsImage(this
-                .textureTileset.map.image);
+        let texture = Manager.GL.getMaterialTexture(this.textureTileset);
+        if (this.mapProperties.tileset.picture && texture) {
+            this.mapProperties.tileset.picture.readCollisionsImage(texture.image);
         }
 
         // Characters
         let pictures = Datas.Pictures.getListByKind(PictureKind.Characters);
         let l = pictures.length;
         this.collisions[PictureKind.Characters] = new Array(l);
-        let picture: typeof THREE.MeshBasicMaterial, image: HTMLImageElement, p: 
-            System.Picture;
+        let material: THREE.ShaderMaterial, image: HTMLImageElement, p: System
+            .Picture;
         for (let i = 1; i < l; i++) {
-            picture = this.texturesCharacters[i];
-            if (picture.map) {
-                image = picture.map.image;
+            material = this.texturesCharacters[i];
+            let texture = Manager.GL.getMaterialTexture(material);
+            if (texture) {
+                image = texture.image;
             }
             p = pictures[i];
             if (p) {
@@ -515,7 +516,7 @@ class Map extends Base {
 
     /** 
      *  Get the hero position according to battle map.
-     *  @returns {THREE.Vector3} 
+     *  @returns {Vector3} 
      */
     getHeroPosition() {
         return this.isBattleMap ? Manager.Stack.game.heroBattle.position : 
@@ -704,7 +705,7 @@ class Map extends Base {
         }
 
         // Getting the Y angle of the camera
-        let vector = new THREE.Vector3();
+        let vector = new Vector3();
         this.camera.getThreeCamera().getWorldDirection(vector);
         let angle = Math.atan2(vector.x,vector.z) + (180 * Math.PI / 180.0);
         if (!this.isBattleMap) {

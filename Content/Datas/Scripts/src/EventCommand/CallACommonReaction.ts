@@ -13,7 +13,7 @@ import { Base } from "./Base";
 import { System, Datas } from "..";
 import { MapObject, ReactionInterpreter } from "../Core";
 import { Enum } from "../Common";
-import PrimitiveValueKind = Enum.PrimitiveValueKind;
+import DynamicValueKind = Enum.DynamicValueKind;
 
 /** @class
  *  An event command for calling a common reaction.
@@ -68,13 +68,13 @@ class CallACommonReaction extends Base {
 
             // Correct parameters for default values
             let v: System.DynamicValue, parameter: System.DynamicValue, k: 
-                PrimitiveValueKind;
+                DynamicValueKind;
             for (let id in reaction.parameters) {
                 v = reaction.parameters[id].value;
                 parameter = this.parameters[id];
-                k = parameter ? parameter.kind : PrimitiveValueKind.None;
-                if (k <= PrimitiveValueKind.Default) {
-                    parameter = k === PrimitiveValueKind.Default ? v : System
+                k = parameter ? parameter.kind : DynamicValueKind.None;
+                if (k <= DynamicValueKind.Default) {
+                    parameter = k === DynamicValueKind.Default ? v : System
                         .DynamicValue.create(k, null);
                 }
                 this.parameters[id] = parameter;

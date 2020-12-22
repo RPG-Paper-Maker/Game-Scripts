@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { IO, Paths, Platform } from "../Common";
+import { IO, Paths } from "../Common";
 import { Datas } from "..";
 
 /** @class

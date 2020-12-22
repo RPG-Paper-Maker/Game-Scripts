@@ -14,8 +14,9 @@ import { Enum, Utils } from "../Common";
 import ShapeKind = Enum.ShapeKind;
 import ObjectCollisionKind = Enum.ObjectCollisionKind;
 import CustomShapeKind = Enum.CustomShapeKind;
-import { Datas, System } from "..";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { Datas, System, Core } from "..";
+import { THREE } from "../Globals";
+import { Vector3 } from "../Core";
 
 /** @class
  *  A 3D object of the game.
@@ -121,10 +122,10 @@ class Object3D extends SpecialElement {
 
     /** 
      *  Get the size vector.
-     *  @returns {THREE.Vector3}
+     *  @returns {Vector3}
      */
-    getSizeVector(): typeof THREE.Vector3 {
-        return new THREE.Vector3(this.widthPixels(), this.heightPixels(), this
+    getSizeVector(): Vector3 {
+        return new Vector3(this.widthPixels(), this.heightPixels(), this
             .depthPixels());
     }
 

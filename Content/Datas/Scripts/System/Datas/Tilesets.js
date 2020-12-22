@@ -11,7 +11,6 @@
 import { IO, Paths, Enum } from "../Common";
 import { System, Datas, Manager } from "..";
 var PictureKind = Enum.PictureKind;
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 /** @class
  *  All the tilesets datas.
  *  @static
@@ -105,7 +104,7 @@ class Tilesets {
     /**
      *  Get the mountains textures.
      *  @param {System.Tileset} tileset The tileset
-     *  @returns {THREE.MeshStandardMaterial[]}
+     *  @returns {THREE.ShaderMaterial[]}
      */
     static getTexturesMountains(tileset) {
         return this.mountains[tileset.getMountainsString()].texturesMountains;
@@ -113,7 +112,7 @@ class Tilesets {
     /**
      *  Get the walls textures.
      *  @param {System.Tileset} tileset The tileset
-     *  @returns {THREE.MeshStandardMaterial[]}
+     *  @returns {THREE.ShaderMaterial[]}
      */
     static getTexturesWalls(tileset) {
         return this.walls[tileset.getWallsString()].texturesWalls;

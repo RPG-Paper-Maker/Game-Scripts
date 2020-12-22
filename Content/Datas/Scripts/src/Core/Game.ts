@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
+import { THREE } from "../Globals";
 import { Player } from "./Player";
 import { Datas } from "..";
 import { Item } from "./Item";
@@ -93,7 +93,7 @@ class Game {
         this.items = [];
         Utils.readJSONSystemList({ list: json.itm, listIndexes: this.items, 
             func: (json: Record<string, any>) => {
-                return new Item(json.k, json.id, json.nb);
+                return new Item(json.kind, json.id, json.nb);
             }
         });
 
@@ -108,19 +108,22 @@ class Game {
         this.teamHeroes = [];
         Utils.readJSONSystemList({ list: json.th, listIndexes: this.teamHeroes, 
             func: (json: Record<string, any>) => {
-                return new Player(json.kind, json.id, json.instid, json.sk, json);
+                return new Player(json.kind, json.id, json.instid, json.sk, json
+                    .name, json);
             }
         });
         this.reserveHeroes = [];
         Utils.readJSONSystemList({ list: json.sh, listIndexes: this
             .reserveHeroes, func: (json: Record<string, any>) => {
-                return new Player(json.kind, json.id, json.instid, json.sk, json);
+                return new Player(json.kind, json.id, json.instid, json.sk, json
+                    .name, json);
             }
         });
         this.hiddenHeroes = [];
         Utils.readJSONSystemList({ list: json.hh, listIndexes: this.hiddenHeroes
             , func: (json: Record<string, any>) => {
-                return new Player(json.kind, json.id, json.instid, json.sk, json);
+                return new Player(json.kind, json.id, json.instid, json.sk, json
+                    .name, json);
             }
         });
 

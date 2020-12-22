@@ -12,7 +12,6 @@
 import { IO, Paths, Enum } from "../Common";
 import { System, Datas, Manager } from "..";
 import PictureKind = Enum.PictureKind;
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { TextureBundle } from "../Core";
 
 /** @class
@@ -28,9 +27,9 @@ class Tilesets {
     private static autotiles: Record<string, System.Tileset>;
     private static walls: Record<string, System.Tileset>;
     private static mountains: Record<string, System.Tileset>;
-    public static texturesCharacters: typeof THREE.MeshStandardMaterial;
-    public static texturesBattlers: typeof THREE.MeshStandardMaterial;
-    public static texturesObjects3D: typeof THREE.MeshStandardMaterial;
+    public static texturesCharacters: THREE.ShaderMaterial[];
+    public static texturesBattlers: THREE.ShaderMaterial[];
+    public static texturesObjects3D: THREE.ShaderMaterial[];
 
     constructor() {
         throw new Error("This is a static class!");
@@ -127,7 +126,7 @@ class Tilesets {
     /**
      *  Get the mountains textures.
      *  @param {System.Tileset} tileset The tileset
-     *  @returns {THREE.MeshStandardMaterial[]}
+     *  @returns {THREE.ShaderMaterial[]}
      */
     static getTexturesMountains(tileset: System.Tileset): TextureBundle[] {
         return this.mountains[tileset.getMountainsString()].texturesMountains;
@@ -136,11 +135,9 @@ class Tilesets {
     /** 
      *  Get the walls textures.
      *  @param {System.Tileset} tileset The tileset
-     *  @returns {THREE.MeshStandardMaterial[]}
+     *  @returns {THREE.ShaderMaterial[]}
      */
-    static getTexturesWalls(tileset: System.Tileset): typeof THREE
-        .MeshStandardMaterial[]
-    {
+    static getTexturesWalls(tileset: System.Tileset): THREE.ShaderMaterial[] {
         return this.walls[tileset.getWallsString()].texturesWalls;
     }
 }

@@ -12,7 +12,6 @@
 import { Enum } from "../Common";
 import PictureKind = Enum.PictureKind;
 import { Land } from "./Land";
-const THREE = require('./Content/Datas/Scripts/Libs/three.js');
 import { TextureBundle } from "./TextureBundle";
 import { Position } from "./Position";
 import { StructMapElementCollision } from "./MapElement"
@@ -60,7 +59,7 @@ class Autotile extends Land {
      *  @param {number} count The faces count
      *  @returns {StructMapElementCollision}
      */
-    updateGeometryAutotile(geometry: typeof THREE.Geometry, texture: 
+    updateGeometryAutotile(geometry: THREE.Geometry, texture: 
         TextureBundle, position: Position, width: number, height: number, count: 
         number): StructMapElementCollision
     {

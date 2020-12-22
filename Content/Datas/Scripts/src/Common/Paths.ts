@@ -47,6 +47,9 @@ class Paths {
     public static readonly FILE_SETTINGS = Paths.DATAS + "settings.json";
     public static readonly FILE_DLCS = Paths.DATAS + "dlcs.json";
     public static readonly FILE_ANIMATIONS = Paths.DATAS + "animations.json";
+    public static readonly FILE_SCRIPTS = Paths.DATAS + "scripts.json";
+    public static readonly FILE_PLUGIN_CODE = "code.js";
+    public static readonly FILE_PLUGIN_DETAILS = "details.json";
     public static readonly PICTURES = "/Content/Images";
     public static readonly VIDEOS = "/Content/Videos";
     public static readonly HUD = Paths.PICTURES + "/HUD/";
