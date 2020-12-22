@@ -244,6 +244,70 @@ class DynamicValue extends System.Base {
                     .getValue();
             case DynamicValueKind.Property:
                 return ReactionInterpreter.currentObject.properties[this.value];
+            case DynamicValueKind.Class:
+                return Datas.Classes.get(this.value);
+            case DynamicValueKind.Hero:
+                return Datas.Heroes.get(this.value);
+            case DynamicValueKind.Monster:
+                return Datas.Monsters.get(this.value);
+            case DynamicValueKind.Troop:
+                return Datas.Troops.get(this.value);
+            case DynamicValueKind.Item:
+                return Datas.Items.get(this.value);
+            case DynamicValueKind.Weapon:
+                return Datas.Weapons.get(this.value);
+            case DynamicValueKind.Armor:
+                return Datas.Armors.get(this.value);
+            case DynamicValueKind.Skill:
+                return Datas.Skills.get(this.value);
+            case DynamicValueKind.Animation:
+                return Datas.Animations.get(this.value);
+            case DynamicValueKind.Status:
+            //return Datas.Status.get(this.value);
+            case DynamicValueKind.Tileset:
+                return Datas.Tilesets.get(this.value);
+            case DynamicValueKind.FontSize:
+                return Datas.Systems.getFontSize(this.value);
+            case DynamicValueKind.FontName:
+                return Datas.Systems.getFontName(this.value);
+            case DynamicValueKind.Color:
+                return Datas.Systems.getColor(this.value);
+            case DynamicValueKind.WindowSkin:
+                return Datas.Systems.getWindowSkin(this.value);
+            case DynamicValueKind.Currency:
+                return Datas.Systems.getCurrency(this.value);
+            case DynamicValueKind.Speed:
+                return Datas.Systems.getSpeed(this.value);
+            case DynamicValueKind.Detection:
+                return Datas.Systems.getDetection(this.value);
+            case DynamicValueKind.CameraProperty:
+                return Datas.Systems.getCameraProperties(this.value);
+            case DynamicValueKind.Frequency:
+                return Datas.Systems.getFrequency(this.value);
+            case DynamicValueKind.Skybox:
+                return Datas.Systems.getSkybox(this.value);
+            case DynamicValueKind.BattleMap:
+                return Datas.BattleSystems.getBattleMap(this.value);
+            case DynamicValueKind.Element:
+                return Datas.BattleSystems.getElement(this.value);
+            case DynamicValueKind.CommonStatistic:
+                return Datas.BattleSystems.getStatistic(this.value);
+            case DynamicValueKind.WeaponsKind:
+                return Datas.BattleSystems.getWeaponKind(this.value);
+            case DynamicValueKind.ArmorsKind:
+                return Datas.BattleSystems.getArmorKind(this.value);
+            case DynamicValueKind.CommonBattleCommand:
+                return Datas.BattleSystems.getBattleCommand(this.value);
+            case DynamicValueKind.CommonEquipment:
+                return Datas.BattleSystems.getEquipment(this.value);
+            case DynamicValueKind.Event:
+                return Datas.CommonEvents.getEventUser(this.value);
+            case DynamicValueKind.State:
+                return this.value;
+            case DynamicValueKind.CommonReaction:
+                return Datas.CommonEvents.getCommonReaction(this.value);
+            case DynamicValueKind.Model:
+                return Datas.CommonEvents.getCommonObject(this.value);
             case DynamicValueKind.CustomStructure:
                 return this.customStructure;
             case DynamicValueKind.CustomList:
