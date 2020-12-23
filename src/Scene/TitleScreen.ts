@@ -42,10 +42,8 @@ class TitleScreen extends Base {
         if (Datas.TitlescreenGameover.isTitleBackgroundImage) {
             this.pictureBackground = await Picture2D.createWithID(Datas
                 .TitlescreenGameover.titleBackgroundImageID, PictureKind
-                .TitleScreen);
-            this.pictureBackground.cover = true;
-        } else
-        {
+                .TitleScreen, { cover: true });
+        } else {
             Platform.canvasVideos.classList.remove('hidden');
             Platform.canvasVideos.src = Datas.Videos.get(Datas
                 .TitlescreenGameover.titleBackgroundVideoID).getPath();

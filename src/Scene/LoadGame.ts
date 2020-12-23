@@ -41,8 +41,7 @@ class LoadGame extends SaveLoadGame {
         if (Datas.TitlescreenGameover.isTitleBackgroundImage) {
             this.pictureBackground = await Picture2D.createWithID(Datas
                 .TitlescreenGameover.titleBackgroundImageID, PictureKind
-                .TitleScreen);
-            this.pictureBackground.cover = true;
+                .TitleScreen, { cover: true });
         }
 
         this.loading = false;

@@ -23,17 +23,33 @@ declare class Picture2D extends Bitmap {
     image: HTMLImageElement;
     centered: boolean;
     reverse: boolean;
-    constructor(path?: string, x?: number, y?: number, w?: number, h?: number);
+    constructor(path?: string, { x, y, w, h, zoom, opacity, angle, cover, stretch }?: {
+        x?: number;
+        y?: number;
+        w?: number;
+        h?: number;
+        zoom?: number;
+        opacity?: number;
+        angle?: number;
+        cover?: boolean;
+        stretch?: boolean;
+    });
     /**
      *  Create a picture and then load it
      *  @static
      *  @param {System.Picture} picture The picture to load
-     *  @param {number} x The x position
-     *  @param {number} y The y position
-     *  @param {number} w The w size
-     *  @param {number} h The h size
      */
-    static create(picture: System.Picture, x?: number, y?: number, w?: number, h?: number): Promise<Picture2D>;
+    static create(picture: System.Picture, opts?: {
+        x?: number;
+        y?: number;
+        w?: number;
+        h?: number;
+        zoom?: number;
+        opacity?: number;
+        angle?: number;
+        cover?: boolean;
+        stretch?: boolean;
+    }): Promise<Picture2D>;
     /**
      *  Create a picture from kind and id and then load it
      *  @static
@@ -44,7 +60,17 @@ declare class Picture2D extends Bitmap {
      *  @param {number} w The w size
      *  @param {number} h The h size
      */
-    static createWithID(id: number, kind: PictureKind, x?: number, y?: number, w?: number, h?: number): Promise<Picture2D>;
+    static createWithID(id: number, kind: PictureKind, opts?: {
+        x?: number;
+        y?: number;
+        w?: number;
+        h?: number;
+        zoom?: number;
+        opacity?: number;
+        angle?: number;
+        cover?: boolean;
+        stretch?: boolean;
+    }): Promise<Picture2D>;
     /**
      *  Load the image.
      *  @static

@@ -52,8 +52,7 @@ class WindowSkin extends System.Base {
      */
     async updatePicture() {
         this.picture = await Picture2D.create(Datas.Pictures.get(PictureKind
-            .WindowSkins, this.pictureID), PictureKind.WindowSkins);
-        this.picture.stretch = true;
+            .WindowSkins, this.pictureID), { stretch: true });
     }
     /**
      *  Draw any element of the window skin box with the cut picture.

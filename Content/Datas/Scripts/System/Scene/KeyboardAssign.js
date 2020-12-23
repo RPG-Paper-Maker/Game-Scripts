@@ -30,8 +30,7 @@ class KeyboardAssign extends Base {
         if (Datas.TitlescreenGameover.isTitleBackgroundImage) {
             this.pictureBackground = await Picture2D.createWithID(Datas
                 .TitlescreenGameover.titleBackgroundImageID, PictureKind
-                .TitleScreen);
-            this.pictureBackground.cover = true;
+                .TitleScreen, { cover: true });
         }
         // Creating windows
         this.windowKeyboard = new WindowBox(Constants.HUGE_SPACE, Constants

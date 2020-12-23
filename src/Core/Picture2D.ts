@@ -38,16 +38,17 @@ class Picture2D extends Bitmap {
     public centered: boolean;
     public reverse: boolean;
 
-    constructor(path: string = "", x: number = 0, y: number = 0, w: number = 0, 
-        h: number = 0)
+    constructor(path: string = "", { x = 0, y = 0, w = 0, h = 0, zoom = 1.0, 
+        opacity = 1.0, angle = 0.0, cover = false, stretch = false } 
+        = {})
     {
         super(x, y, w, h);
 
-        this.zoom = 1.0;
-        this.opacity = 1.0;
-        this.angle = 0.0;
-        this.cover = false;
-        this.stretch = false;
+        this.zoom = zoom;
+        this.opacity = opacity;
+        this.angle = angle;
+        this.cover = cover;
+        this.stretch = stretch;
         if (path) {
             this.path = path;
             this.loaded = false;
@@ -61,16 +62,13 @@ class Picture2D extends Bitmap {
      *  Create a picture and then load it
      *  @static
      *  @param {System.Picture} picture The picture to load
-     *  @param {number} x The x position
-     *  @param {number} y The y position
-     *  @param {number} w The w size
-     *  @param {number} h The h size
      */
-    static async create(picture: System.Picture, x: number = 0, y: number = 0, 
-        w: number = 0, h: number = 0)
+    static async create(picture: System.Picture, opts: { x?: number, y?: number, 
+        w?: number, h?: number, zoom?: number, opacity?: number, angle?: number, 
+        cover?: boolean, stretch?: boolean } = {})
     {
-        let pic = picture ? new Picture2D(picture.getPath(), x, y, w, h) : new
-        Picture2D();
+        let pic = picture ? new Picture2D(picture.getPath(), opts) : new
+            Picture2D();
         await pic.load();
         return pic;
     }
@@ -85,9 +83,11 @@ class Picture2D extends Bitmap {
      *  @param {number} w The w size
      *  @param {number} h The h size
      */
-    static async createWithID(id: number, kind: PictureKind, x: number = 0, y: 
-        number = 0, w: number = 0, h: number = 0) {
-        return (await Picture2D.create(Datas.Pictures.get(kind, id), x, y, w, h));
+    static async createWithID(id: number, kind: PictureKind, opts: { x?: number, 
+        y?: number, w?: number, h?: number, zoom?: number, opacity?: number, 
+        angle?: number, cover?: boolean, stretch?: boolean } = {})
+    {
+        return (await Picture2D.create(Datas.Pictures.get(kind, id), opts));
     }
 
     /** 
