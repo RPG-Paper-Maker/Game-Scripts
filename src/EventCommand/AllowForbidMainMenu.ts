@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { System, Scene } from "..";
+import { System, Scene } from "../index";
 import { MapObject } from "../Core";
 
 /** @class

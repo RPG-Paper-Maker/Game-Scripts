@@ -17,7 +17,7 @@ import BattlerStep = Enum.BattlerStep;
 import CharacterKind = Enum.CharacterKind;
 import ElementMapKind = Enum.ElementMapKind;
 import { ProgressionTable } from "../System";
-import { Manager, Datas } from "..";
+import { Manager, Datas } from "../index";
 import { Camera } from "./Camera";
 import { Sprite } from "./Sprite";
 import { Position } from "./Position";

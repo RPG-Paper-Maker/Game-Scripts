@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { MapObject } from "../Core";
-import { Scene, Manager } from "..";
+import { Scene, Manager } from "../index";
 
 /** @class
  *  An event command for opening the saves menu.

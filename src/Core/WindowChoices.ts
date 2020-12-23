@@ -12,7 +12,7 @@
 import { Bitmap } from "./Bitmap";
 import { Enum } from "../Common";
 import OrientationWindow = Enum.OrientationWindow;
-import { Graphic, Manager, Datas } from "..";
+import { Graphic, Manager, Datas } from "../index";
 import { WindowBox } from "./WindowBox";
 
 /** @class

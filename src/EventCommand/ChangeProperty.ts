@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { System, Manager } from "..";
+import { System, Manager } from "../index";
 import { MapObject } from "../Core";
 import { Mathf, Utils } from "../Common";
 
@@ -81,4 +81,4 @@ class ChangeProperty extends Base {
     }
 }
 
-export { ChangeProperty }
+export { ChangeProp
