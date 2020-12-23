@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Scene, Manager } from "..";
+import { Scene, Manager } from "../index";
 import { Utils, Platform, ScreenResolution, KeyEvent } from "../Common";
 import { Game, Picture2D } from "../Core";
 

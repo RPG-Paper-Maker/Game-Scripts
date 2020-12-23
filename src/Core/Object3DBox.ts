@@ -10,7 +10,7 @@
 */
 
 import { StructMapElementCollision } from "./MapElement";
-import { System, Datas } from "..";
+import { System, Datas } from "../index";
 import { Position } from "./Position";
 import { Sprite } from "./Sprite";
 import { Enum } from "../Common";

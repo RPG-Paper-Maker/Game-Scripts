@@ -12,7 +12,7 @@
 import { Enum, Utils } from "../Common";
 import ElementMapKind = Enum.ElementMapKind;
 import { Position } from "./Position";
-import { Datas } from "..";
+import { Datas } from "../index";
 import { CollisionSquare } from "./CollisionSquare";
 import { Vector3 } from "./Vector3";
 

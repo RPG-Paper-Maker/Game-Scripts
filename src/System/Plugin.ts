@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { Utils } from "../Common";
-import { System } from "..";
+import { System } from "../index";
 
 /** @class
  *  A custom plugin in the game.

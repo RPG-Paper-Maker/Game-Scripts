@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants } from ".";
+import { Constants } from "./index";
 
 /** @class
  *  @static

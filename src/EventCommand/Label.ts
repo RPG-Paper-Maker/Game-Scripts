@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { System } from "..";
+import { System } from "../index";
 
 /** @class
  *  An event command for label.

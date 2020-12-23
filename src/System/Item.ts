@@ -10,7 +10,7 @@
 */
 
 import { CommonSkillItem } from "./CommonSkillItem";
-import { Datas } from "..";
+import { Datas } from "../index";
 
 /** @class
  *  An item of the game.

@@ -11,7 +11,7 @@
 
 import { IO, Paths, Enum } from "../Common";
 import SongKind = Enum.SongKind;
-import { System, Datas } from "..";
+import { System, Datas } from "../index";
 
 /** @class
 *   All the songs datas

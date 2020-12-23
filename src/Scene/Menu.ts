@@ -294,4 +294,4 @@ class Menu extends Base {
     }
 }
 
-export { StructPositionChoice, 
+export { StructPositionChoice, Menu }

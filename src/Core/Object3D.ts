@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { System } from "..";
+import { System } from "../index";
 import { StructMapElementCollision, MapElement } from "./MapElement";
 import { Position } from "./Position";
 

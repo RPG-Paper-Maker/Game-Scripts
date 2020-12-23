@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { System, Manager } from "..";
+import { System, Manager } from "../index";
 import { Utils, Enum } from "../Common";
 import { MapObject, Player, Item } from "../Core";
 import ItemKind = Enum.ItemKind;

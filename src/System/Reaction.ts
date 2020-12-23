@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { Tree, Node } from "../Core";
-import { Manager, EventCommand, System } from "..";
+import { Manager, EventCommand, System } from "../index";
 
 /** @class
  *  A reaction to an event.

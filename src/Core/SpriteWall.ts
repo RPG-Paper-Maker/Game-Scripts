@@ -11,7 +11,7 @@
 
 import { MapElement, StructMapElementCollision } from "./MapElement";
 import { Position } from "./Position";
-import { Datas } from "..";
+import { Datas } from "../index";
 import { Enum } from "../Common";
 import PictureKind = Enum.PictureKind;
 import { Sprite } from "./Sprite";

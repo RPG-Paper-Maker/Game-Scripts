@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Common, Core, EventCommand, Graphic, Manager, System, Scene } from "..";
+import { Datas, Common, Core, EventCommand, Graphic, Manager, System, Scene } from "../index";
 import { Player, MapObject } from "../Core";
 import { THREE, Howl } from "../Globals";
 

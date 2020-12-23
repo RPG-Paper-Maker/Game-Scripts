@@ -19,6 +19,6 @@
     "outDir": "./Content/Datas/Scripts/System"
   },
   "include": [
-    "./Content/Datas/Scripts/src/**/*.ts"
+    "./src/**/*.ts"
   ],
 }

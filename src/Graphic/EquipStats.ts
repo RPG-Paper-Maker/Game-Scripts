@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { Player } from "../Core";
-import { System, Graphic, Datas } from "..";
+import { System, Graphic, Datas } from "../index";
 import { Constants, Platform, Utils } from "../Common";
 
 /** @class

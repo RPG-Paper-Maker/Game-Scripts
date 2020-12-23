@@ -15,7 +15,7 @@ import { Enum, Utils, Constants, IO, Paths } from "../Common";
 import Orientation = Enum.Orientation;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 import PictureKind = Enum.PictureKind;
-import { System, Datas, Scene, Manager } from "..";
+import { System, Datas, Scene, Manager } from "../index";
 import { Position, Portion, MapPortion, TextureBundle, Camera, ReactionInterpreter, Vector3 } from "../Core";
 
 /** @class

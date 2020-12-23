@@ -11,7 +11,7 @@
 
 import { THREE } from "../Globals";
 import { Player } from "./Player";
-import { Datas } from "..";
+import { Datas } from "../index";
 import { Item } from "./Item";
 import { Chrono } from "./Chrono";
 import { MapObject } from "./MapObject";

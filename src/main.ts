@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Manager } from ".";
+import { Datas, Manager } from "./index";
 import { Utils, KeyEvent, Platform } from "./Common";
 
 let loaded = false;

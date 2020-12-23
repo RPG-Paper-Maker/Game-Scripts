@@ -16,7 +16,7 @@ import { Base } from "./Base";
 import { DynamicValue } from "./DynamicValue";
 import { Player } from "../Core";
 import { Statistic } from "./Statistic";
-import { Datas, Manager } from "..";
+import { Datas, Manager } from "../index";
 
 /** @class
  *  A characteristic of a common skill item.

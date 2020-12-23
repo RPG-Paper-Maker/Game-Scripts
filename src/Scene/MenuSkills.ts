@@ -10,8 +10,8 @@
 */
 
 import { Base } from "./Base";
-import { Manager, Graphic, Scene, Datas } from "..";
-import { StructPositionChoice } from ".";
+import { Manager, Graphic, Scene, Datas } from "../index";
+import { StructPositionChoice } from "./index";
 import { WindowBox, WindowChoices } from "../Core";
 import { Enum, ScreenResolution } from "../Common";
 import Align = Enum.Align;

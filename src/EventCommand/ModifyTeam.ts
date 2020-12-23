@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { System, Manager } from "..";
+import { System, Manager } from "../index";
 import { Enum } from "../Common";
 import GroupKind = Enum.GroupKind;
 import CharacterKind = Enum.CharacterKind;

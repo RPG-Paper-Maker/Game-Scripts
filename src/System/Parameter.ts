@@ -12,7 +12,7 @@
 import { Enum, Utils } from "../Common";
 import DynamicValueKind = Enum.DynamicValueKind;
 import { Base } from "./Base";
-import { System } from "..";
+import { System } from "../index";
 import { DynamicValue } from "./DynamicValue";
 
 /** @class

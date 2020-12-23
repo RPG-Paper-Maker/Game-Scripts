@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { System, Datas } from "..";
+import { System, Datas } from "../index";
 import { Utils } from "../Common";
 
 /** @class

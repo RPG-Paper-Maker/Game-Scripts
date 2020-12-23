@@ -10,7 +10,7 @@
 */
 
 import { IO, Paths, Utils, Enum } from "../Common";
-import { System, Datas } from "..";
+import { System, Datas } from "../index";
 import SongKind = Enum.SongKind;
 
 /** @class

@@ -12,7 +12,7 @@
 import { Enum, Constants, Paths, Utils, Platform } from "../Common";
 import CustomShapeKind = Enum.CustomShapeKind;
 import { Base } from "./Base";
-import { Datas } from "..";
+import { Datas } from "../index";
 import { THREE } from "../Globals";
 import { Vector3, Vector2 } from "../Core";
 

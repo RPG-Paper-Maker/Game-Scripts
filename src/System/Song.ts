@@ -12,7 +12,7 @@
 import { Base } from "./Base";
 import { Enum, Constants, Paths, Utils } from "../Common";
 import SongKind = Enum.SongKind;
-import { Datas } from "..";
+import { Datas } from "../index";
 import { Howl } from "../Globals";
 
 /** @class

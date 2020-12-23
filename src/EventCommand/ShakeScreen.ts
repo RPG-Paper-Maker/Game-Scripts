@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { System, Manager, EventCommand } from "..";
+import { System, Manager, EventCommand } from "../index";
 import { Utils } from "../Common";
 import { MapObject } from "../Core";
 

@@ -11,7 +11,7 @@
 
 import { Enum, Constants, Paths, Utils, Platform } from "../Common";
 import PictureKind = Enum.PictureKind;
-import { Datas } from "..";
+import { Datas } from "../index";
 import { Picture2D, CollisionSquare } from "../Core";
 import { Base } from "./Base";
 import { THREE } from "../Globals";

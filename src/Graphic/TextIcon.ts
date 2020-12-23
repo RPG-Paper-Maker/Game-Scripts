@@ -14,7 +14,7 @@ import { Enum, Constants, Platform } from "../Common";
 import Align = Enum.Align;
 import PictureKind = Enum.PictureKind;
 import { Picture2D } from "../Core";
-import { Graphic, Datas } from "..";
+import { Graphic, Datas } from "../index";
 
 /** @class
  *  The graphic displaying a text and an icon.

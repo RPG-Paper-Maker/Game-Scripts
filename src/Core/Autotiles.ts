@@ -14,7 +14,7 @@ import { THREE } from "../Globals";
 import { Autotile } from "./Autotile";
 import { Position } from "./Position";
 import { StructMapElementCollision } from "./MapElement";
-import { Manager } from "..";
+import { Manager } from "../index";
 
 /** @class
  *  Autotiles grouped with the same textures.

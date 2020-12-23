@@ -11,7 +11,7 @@
 
 import { IO, Paths, Platform, ScreenResolution, Utils, Constants, Enum } from "../Common";
 import * as System from "../System";
-import { Manager, Datas, Scene, EventCommand } from "..";
+import { Manager, Datas, Scene, EventCommand } from "../index";
 import SongKind = Enum.SongKind;
 import { Position, MapPortion, MapObject } from "../Core";
 

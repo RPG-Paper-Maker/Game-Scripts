@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { EventCommand } from "..";
+import { EventCommand } from "../index";
 import { MapObject } from "../Core";
 import { Enum } from "../Common";
 import SongKind = Enum.SongKind;

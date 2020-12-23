@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Manager, Datas } from "..";
+import { Manager, Datas } from "../index";
 
 /** @class
  *  A frame for updating animations (characters, battlers, etc.).

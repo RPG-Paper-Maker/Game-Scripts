@@ -9,10 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { StructMapElementCollision, MapElement } from ".";
-import { Sprite } from ".";
+import { StructMapElementCollision, MapElement } from "./index";
+import { Sprite } from "./index";
 import { Utils, Constants } from "../Common";
-import { Datas, System, Core } from "..";
+import { Datas, System, Core } from "../index";
 import { Position } from "./Position";
 import { TextureBundle } from "./TextureBundle";
 import { Vector3 } from "./Vector3";
