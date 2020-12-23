@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { Scene, Manager, Graphic, Datas } from "..";
+import { Scene, Manager, Graphic, Datas } from "../index";
 import { Enum, ScreenResolution } from "../Common";
 import Align = Enum.Align;
 import { WindowChoices, WindowBox } from "../Core";
@@ -294,4 +294,4 @@ class Menu extends Base {
     }
 }
 
-export { StructPositionChoice, Menu }
+export { StructPositionChoice, 

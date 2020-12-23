@@ -20,7 +20,7 @@ import { PlaySong } from "./PlaySong";
 import { Cost } from "./Cost";
 import { Characteristic } from "./Characteristic";
 import { Effect } from "./Effect";
-import { System } from "..";
+import { System } from "../index";
 
 /** @class
  *  A common class for skills, items, weapons, armors.
@@ -165,4 +165,4 @@ class CommonSkillItem extends Icon {
     }
 }
 
-export { CommonSkillItem }
+export { CommonSkill
