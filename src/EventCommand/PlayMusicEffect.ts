@@ -53,4 +53,4 @@ class PlayMusicEffect extends Base {
     }
 }
 
-export { PlayMusicEf
+export { PlayMusicEffect }

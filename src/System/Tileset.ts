@@ -13,7 +13,7 @@ import { Enum, Constants, Platform } from "../Common";
 import PictureKind = Enum.PictureKind;
 import { Base } from "./Base";
 import { CollisionSquare, TextureBundle, Picture2D, Autotiles } from "../Core";
-import { System, Datas, Manager } from "..";
+import { System, Datas, Manager } from "../index";
 import { THREE } from "../Globals";
 
 /** @class

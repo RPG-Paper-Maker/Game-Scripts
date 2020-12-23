@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { System, EventCommand, Manager, Scene } from "..";
+import { System, EventCommand, Manager, Scene } from "../index";
 import { MapObject, StructSearchResult, Portion, Position } from "../Core";
 
 /** @class

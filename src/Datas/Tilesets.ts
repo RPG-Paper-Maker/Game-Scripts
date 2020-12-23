@@ -10,7 +10,7 @@
 */
 
 import { IO, Paths, Enum } from "../Common";
-import { System, Datas, Manager } from "..";
+import { System, Datas, Manager } from "../index";
 import PictureKind = Enum.PictureKind;
 import { TextureBundle } from "../Core";
 

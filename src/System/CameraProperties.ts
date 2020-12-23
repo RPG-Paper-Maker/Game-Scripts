@@ -14,7 +14,7 @@ import { DynamicValue } from "./DynamicValue";
 import { Utils, ScreenResolution, Constants } from "../Common";
 import { THREE } from "../Globals";
 import { Camera, Vector3 } from "../Core";
-import { Datas } from "..";
+import { Datas } from "../index";
 
 /** @class
  *  A camera properties of the game.

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { System, Datas, Graphic, Scene } from "..";
+import { System, Datas, Graphic, Scene } from "../index";
 import { IO, Paths } from "../Common";
 
 /** @class

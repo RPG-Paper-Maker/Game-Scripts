@@ -11,7 +11,7 @@
 
 import { Enum } from "../Common";
 import Align = Enum.Align;
-import { Scene, Graphic } from "..";
+import { Scene, Graphic } from "../index";
 
 /** @class
 *   A scene for the loading.

@@ -10,7 +10,7 @@
 */
 
 import { Camera, Node, ReactionInterpreter, MapObject } from "../Core";
-import { Manager, System } from "..";
+import { Manager, System } from "../index";
 import { Utils } from "../Common";
 
 /** @class

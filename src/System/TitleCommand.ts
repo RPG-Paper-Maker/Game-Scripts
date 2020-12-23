@@ -12,9 +12,9 @@
 import { Translatable } from "./Translatable";
 import { Enum, Utils, Platform, Constants, Interpreter } from "../Common";
 import TitleCommandKind = Enum.TitleCommandKind;
-import { Datas, Manager } from "..";
+import { Datas, Manager } from "../index";
 import { Game } from "../Core";
-import { Scene } from "..";
+import { Scene } from "../index";
 
 /** @class
  *  A title command of the game.

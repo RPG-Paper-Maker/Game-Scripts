@@ -13,7 +13,7 @@ import { Enum, Utils, Interpreter } from "../Common";
 import DamagesKind = Enum.DamagesKind;
 import { Base } from "./Base";
 import { DynamicValue } from "./DynamicValue";
-import { Manager, Datas } from "..";
+import { Manager, Datas } from "../index";
 import { Player } from "../Core";
 
 /** @class

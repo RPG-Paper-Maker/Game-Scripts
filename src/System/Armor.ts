@@ -11,7 +11,7 @@
 
 import { CommonSkillItem } from "./CommonSkillItem";
 import { WeaponArmorKind } from "./WeaponArmorKind";
-import { Datas } from "..";
+import { Datas } from "../index";
 
 /** @class
  *  An armor of the game.

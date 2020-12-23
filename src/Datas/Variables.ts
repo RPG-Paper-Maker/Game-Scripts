@@ -10,7 +10,7 @@
 */
 
 import { IO, Paths } from "../Common";
-import { Datas } from "..";
+import { Datas } from "../index";
 
 /** @class
  *  All the variables datas.

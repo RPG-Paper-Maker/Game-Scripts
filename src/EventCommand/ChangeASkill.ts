@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { System, Manager } from "..";
+import { System, Manager } from "../index";
 import { MapObject, Skill } from "../Core";
 import { Player } from "../Core";
 import { Utils } from "../Common";

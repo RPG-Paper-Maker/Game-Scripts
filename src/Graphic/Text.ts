@@ -14,7 +14,7 @@ import Align = Enum.Align;
 import AlignVertical = Enum.AlignVertical;
 import { Stack } from "../Manager";
 import { Base } from "./Base";
-import { Datas, System } from "..";
+import { Datas, System } from "../index";
 
 /** @class
  *  A class for all the texts to display in HUD.

@@ -12,7 +12,7 @@
 import { Base } from "./Base";
 import { Enum, Utils } from "../Common";
 import SongKind = Enum.SongKind;
-import { System, Manager } from "..";
+import { System, Manager } from "../index";
 
 /** @class
  *  A way to play a song.

@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { Manager, Graphic, Scene, Datas } from "..";
+import { Manager, Graphic, Scene, Datas } from "../index";
 import { WindowBox, WindowChoices } from "../Core";
 import { Enum } from "../Common";
 import Align = Enum.Align;

@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { Player } from "../Core";
-import { Graphic, Datas } from "..";
+import { Graphic, Datas } from "../index";
 
 /** @class
  *  The graphic displaying all the equipment information in the equip menu.

@@ -13,7 +13,7 @@ import { THREE } from "../Globals";
 import { Portion } from "./Portion";
 import { MapObject } from "./MapObject";
 import { Position } from "./Position";
-import { System, Datas, Manager } from "..";
+import { System, Datas, Manager } from "../index";
 import { StructMapElementCollision } from "./MapElement";
 import { Constants, Enum, Utils } from "../Common";
 import { Floor } from "./Floor";

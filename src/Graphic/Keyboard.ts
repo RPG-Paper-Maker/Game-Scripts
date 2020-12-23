@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { System, Graphic } from "..";
+import { System, Graphic } from "../index";
 import { Enum } from "../Common";
 import Align = Enum.Align;
 import { Base } from "./Base";

@@ -10,7 +10,7 @@
 */
 
 import { SaveLoadGame } from "./SaveLoadGame";
-import { Graphic, Datas, Manager, Scene } from "..";
+import { Graphic, Datas, Manager, Scene } from "../index";
 import { Enum, Constants, Platform } from "../Common";
 import Align = Enum.Align;
 import PictureKind = Enum.PictureKind;

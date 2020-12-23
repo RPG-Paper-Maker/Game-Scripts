@@ -13,7 +13,7 @@ import { Base } from "./Base";
 import { Enum } from "../Common";
 import TitleSettingKind = Enum.TitleSettingKind;
 import Align = Enum.Align;
-import { Graphic } from "..";
+import { Graphic } from "../index";
 
 /** @class
  *  A class for all settings to display in screen.

@@ -16,7 +16,7 @@ import AnimationEffectConditionKind = Enum.AnimationEffectConditionKind;
 import { Base } from "./Base";
 import { AnimationFrame } from "./AnimationFrame";
 import { Picture2D, Battler, Vector2 } from "../Core";
-import { Datas } from "..";
+import { Datas } from "../index";
 
 /** @class
  *  An animation of a skill / item / weapon or for display animation command.

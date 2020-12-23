@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Graphic, Core, Datas, System, Manager } from "..";
+import { Graphic, Core, Datas, System, Manager } from "../index";
 import { Picture2D, Frame, Battler } from "../Core";
 import { Base } from "./Base";
 import { Utils, Constants, Platform, Enum } from "../Common";

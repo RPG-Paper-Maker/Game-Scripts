@@ -11,7 +11,7 @@
 
 import { Enum, Interpreter, Utils, Platform } from "../Common";
 import CharacterKind = Enum.CharacterKind;
-import { Datas, System, Graphic } from "..";
+import { Datas, System, Graphic } from "../index";
 import { Skill } from "./Skill";
 import { Item } from "./Item";
 

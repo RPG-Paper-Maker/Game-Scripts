@@ -14,7 +14,7 @@ import ElementMapKind = Enum.ElementMapKind;
 import { MapElement, StructMapElementCollision } from "./MapElement";
 import { THREE } from "../Globals";
 import { Position } from "./Position";
-import { Datas, Manager, Core } from "..";
+import { Datas, Manager, Core } from "../index";
 import { Vector3 } from "./Vector3";
 import { Vector2 } from "./Vector2";
 

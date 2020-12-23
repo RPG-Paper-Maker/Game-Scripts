@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { Graphic, Manager, Datas } from "..";
+import { Graphic, Manager, Datas } from "../index";
 import { Mathf } from "../Common";
 
 /** @class

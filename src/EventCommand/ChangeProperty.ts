@@ -81,4 +81,4 @@ class ChangeProperty extends Base {
     }
 }
 
-export { ChangeProp
+export { ChangeProperty }

@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { System, Manager, Datas, EventCommand } from "..";
+import { System, Manager, Datas, EventCommand } from "../index";
 import { Enum, Utils, Mathf } from "../Common";
 import CommandMoveKind = Enum.CommandMoveKind;
 import Orientation = Enum.Orientation;
