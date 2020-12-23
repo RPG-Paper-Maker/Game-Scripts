@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base.js";
-import { Tree } from "../Core/index.js";
-import { Manager, EventCommand } from "../index.js";
+import { Base } from "./Base";
+import { Tree } from "../Core";
+import { Manager, EventCommand } from "..";
 /** @class
  *  A reaction to an event.
  *  @extends System.Base

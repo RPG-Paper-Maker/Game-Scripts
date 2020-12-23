@@ -8,20 +8,20 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { THREE } from "../Globals.js";
-import { System, Manager, Datas } from "../index.js";
-import { Frame } from "./Frame.js";
-import { Enum, Utils, IO, Paths, Constants, Platform, Mathf } from "../Common/index.js";
+import { THREE } from "../Globals";
+import { System, Manager, Datas } from "..";
+import { Frame } from "./Frame";
+import { Enum, Utils, IO, Paths, Constants, Platform, Mathf } from "../Common";
 var Orientation = Enum.Orientation;
 var ElementMapKind = Enum.ElementMapKind;
 var PictureKind = Enum.PictureKind;
 var ObjectMovingKind = Enum.ObjectMovingKind;
-import { MapPortion } from "./MapPortion.js";
-import { Sprite } from "./Sprite.js";
-import { Position } from "./Position.js";
-import { CollisionSquare } from "./CollisionSquare.js";
-import { MapElement } from "./MapElement.js";
-import { Vector3 } from "./Vector3.js";
+import { MapPortion } from "./MapPortion";
+import { Sprite } from "./Sprite";
+import { Position } from "./Position";
+import { CollisionSquare } from "./CollisionSquare";
+import { MapElement } from "./MapElement";
+import { Vector3 } from "./Vector3";
 /** @class
  *  Object in local map that can move.
  *  @param {SystemObject} System The System informations

@@ -1,0 +1,96 @@
+import { Enum } from "../Common";
+import { System } from "..";
+import { MapObject } from "./MapObject";
+import Orientation = Enum.Orientation;
+import { Vector3 } from ".";
+/** @class
+ *  The camera of the current map.
+ *  @param {System.CameraProperties} cameraProperties The System camera
+ *  properties
+ *  @param {MapObject} target The camera target
+ */
+declare class Camera {
+    perspectiveCamera: THREE.PerspectiveCamera;
+    orthographicCamera: THREE.OrthographicCamera;
+    isPerspective: boolean;
+    target: MapObject;
+    targetPosition: Vector3;
+    targetOffset: Vector3;
+    distance: number;
+    horizontalAngle: number;
+    verticalAngle: number;
+    verticalRight: boolean;
+    constructor(cameraProperties: System.CameraProperties, target: MapObject);
+    /**
+     *  Configure camera when resizing window.
+     */
+    resizeGL(): void;
+    /**
+     *  Get the map orientation according to the camera.
+     *  @returns {Orientation}
+     */
+    getMapOrientation(): Orientation;
+    /**
+     *  Get the distance according to vertical angle.
+     *  @returns {number}
+     */
+    getDistance(): number;
+    /**
+     *  Get the height according to vertical angle.
+     *  @returns {number}
+     */
+    getHeight(): number;
+    /**
+     *  Get the horizontal angle between two positions.
+     *  @param {Vector3} p1 The first position
+     *  @param {Vector3} p2 The second position
+     *  @returns {number}
+     */
+    getHorizontalAngle(p1: Vector3, p2: Vector3): number;
+    /**
+     *  Get the vertical angle between two positions.
+     *  @param {Vector3} p1 The first position
+     *  @param {Vector3} p2 The second position
+     *  @returns {number}
+     */
+    getVerticalAngle(p1: Vector3, p2: Vector3): number;
+    /**
+     *  Add an angle to the vertical angle.
+     *  @param {number} a The angle to add
+     */
+    addVerticalAngle(a: number): void;
+    /**
+     *  Update the target position according to target and target offset.
+     */
+    updateTargetPosition(): void;
+    /**
+     *  Get the perspective or orthographic camera.
+     *  @returns {THREE.Camera}
+     */
+    getThreeCamera(): THREE.Camera;
+    /**
+     *  Update the three.js camera position.
+     */
+    updateCameraPosition(): void;
+    /**
+     *  Update target offset position.
+     */
+    updateTargetOffset(): void;
+    /**
+     *  Update horizontal and vertical angles.
+     */
+    updateAngles(): void;
+    /**
+     *  Update the distance.
+     */
+    updateDistance(): void;
+    /**
+     * Update the three.js camera view.
+     */
+    updateView(): void;
+    /**
+     * Update all the parameters.
+     */
+    update(): void;
+}
+export { Camera };

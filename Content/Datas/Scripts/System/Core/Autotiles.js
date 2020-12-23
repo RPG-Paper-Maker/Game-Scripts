@@ -8,8 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { THREE } from "../Globals.js";
-import { Manager } from "../index.js";
+import { THREE } from "../Globals";
+import { Manager } from "..";
 /** @class
  *  Autotiles grouped with the same textures.
  *  @param {TextureBundle} texture

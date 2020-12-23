@@ -8,8 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { IO, Paths, Constants } from "../Common/index.js";
-import { System } from "../index.js";
+import { IO, Paths, Constants } from "../Common";
+import { System } from "..";
 /** @class
  *  The class who handles plugins of RPG Paper Maker.
  *  @static
@@ -67,6 +67,7 @@ class Plugins {
      * Return the plugin object
      * @param plugin
      * @returns {any}
+     * @deprecated use Plugins.getParameters(pluginName); or Plugins.getParameter(pluginName, parameterName); instead
      */
     static fetch(plugin) {
         /*
@@ -79,23 +80,22 @@ class Plugins {
     }
     /**
      * check whether the plugin exist or not.
+     * It's used for compatbilities purpose
      * @param id
      * @returns {boolean}
      */
-    static exists(id) {
-        /*
-        for (const plugins in this.plugins) {
-            if (this.plugins.hasOwnProperty(plugins)) {
-                if (this.plugins[plugins].id === id) {
+    static exists(pluginName) {
+        for (const plugin in this.plugins) {
+            if (this.plugins.hasOwnProperty(plugin)) {
+                if (this.plugins[plugin].name === pluginName) {
                     return true;
                 }
             }
         }
-        */
         return false;
     }
     /**
-     *  Get a plugin parameters.
+     *  Get plugin parameters.
      *  @param {string} pluginName
      *  @returns {Record<string, DynamicValue>}
      */
@@ -110,6 +110,13 @@ class Plugins {
      */
     static getParameter(pluginName, parameter) {
         return this.getParameters(pluginName)[parameter].getValue();
+    }
+    /**
+     * Check whether or not the plugin is enabled or not.
+     * @param pluginName
+     */
+    static isEnabled(pluginName) {
+        return this.plugins[pluginName].isOn;
     }
     /**
      * Merge the two plugins to extends their plugins data.

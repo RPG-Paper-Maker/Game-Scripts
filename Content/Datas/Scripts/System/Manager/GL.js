@@ -8,11 +8,11 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { THREE } from "../Globals.js";
-import { Datas } from "../index.js";
-import { ScreenResolution, Platform, Utils, IO, Paths } from "../Common/index.js";
-import { Stack } from "./Stack.js";
-import { Vector2 } from "../Core/index.js";
+import { THREE } from "../Globals";
+import { Datas } from "..";
+import { ScreenResolution, Platform, Utils, IO, Paths } from "../Common";
+import { Stack } from "./Stack";
+import { Vector2 } from "../Core";
 /** @class
  *  The GL class handling some 3D stuff.
  *  @static

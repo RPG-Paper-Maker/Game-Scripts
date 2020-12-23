@@ -8,19 +8,19 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-export * from "./Equip.js";
-export * from "./EquipStats.js";
-export * from "./Base.js";
-export * from "./Item.js";
-export * from "./Keyboard.js";
-export * from "./Message.js";
-export * from "./Player.js";
-export * from "./PlayerDescription.js";
-export * from "./Save.js";
-export * from "./Setting.js";
-export * from "./Skill.js";
-export * from "./SkillItem.js";
-export * from "./Text.js";
-export * from "./TextIcon.js";
-export * from "./TimeCurrencies.js";
-export * from "./UseSkillItem.js";
+export * from "./Equip";
+export * from "./EquipStats";
+export * from "./Base";
+export * from "./Item";
+export * from "./Keyboard";
+export * from "./Message";
+export * from "./Player";
+export * from "./PlayerDescription";
+export * from "./Save";
+export * from "./Setting";
+export * from "./Skill";
+export * from "./SkillItem";
+export * from "./Text";
+export * from "./TextIcon";
+export * from "./TimeCurrencies";
+export * from "./UseSkillItem";

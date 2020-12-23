@@ -8,8 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base.js";
-import { Parameter } from "./Parameter.js";
+import { Base } from "./Base";
+import { Parameter } from "./Parameter";
 /** @class
  *   An event that can be called.
  *   @param {Record<string, any>} [json] json object describing the event

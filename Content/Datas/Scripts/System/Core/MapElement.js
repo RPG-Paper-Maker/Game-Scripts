@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Enum, Utils } from "../Common/index.js";
-import { Datas } from "../index.js";
-import { Vector3 } from "./Vector3.js";
+import { Enum, Utils } from "../Common";
+import { Datas } from "..";
+import { Vector3 } from "./Vector3";
 /** @class
  *  An element in the map.
  */
