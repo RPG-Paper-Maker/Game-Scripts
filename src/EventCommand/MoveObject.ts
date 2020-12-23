@@ -187,7 +187,7 @@ class MoveObject extends Base {
                 if (this.isIgnore) {
                     currentState.position = null;
                     object.moving = true;
-                    return false;
+                    return true;
                 }
                 object.move(orientation, 0, angle, this.isCameraOrientation);
                 this.moveFrequency(object);
@@ -223,7 +223,7 @@ class MoveObject extends Base {
             if (this.isIgnore && distances[0] === 0) {
                 currentState.position = null;
                 object.moving = true;
-                return false;
+                return true;
             }
             if (square && currentState.distance === currentState.normalDistance) {
                 object.position = currentState.position;
