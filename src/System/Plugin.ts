@@ -21,14 +21,17 @@ import { System } from "../index";
  */
 class Plugin extends Base {
 
+    public id: number;
     public name: string;
     public isOn: boolean;
     public author: string;
     public version: string;
     public parameters: Record<string, System.DynamicValue>;
 
-    constructor(json?: Record<string, any>) {
+    constructor(id: number, json?: Record<string, any>) {
         super(json);
+
+        this.id = id;
     }
 
     /** 
@@ -37,20 +40,21 @@ class Plugin extends Base {
      */
     read(json: Record<string, any>) {
         this.name = json.name;
-        this.isOn = Utils.defaultValue(json.io, true);
-        this.author = Utils.defaultValue(json.a, "");
-        this.version = Utils.defaultValue(json.v, "1.0.0");
+        this.isOn = Utils.defaultValue(json.isOn, true);
+        this.author = Utils.defaultValue(json.author, "");
+        this.version = Utils.defaultValue(json.version, "1.0.0");
         this.parameters = {};
-        let jsonList = Utils.defaultValue(json.p, []);
+        let jsonList = Utils.defaultValue(json.parameters, []);
         let parameter: System.DynamicValue, jsonParameter: Record<string, any>;
         for (let i = 0, l = jsonList.length; i < l; i++) {
             jsonParameter = jsonList[i];
-            parameter = System.DynamicValue.readOrDefaultNumber(jsonParameter.dv);
+            parameter = System.DynamicValue.readOrDefaultNumber(jsonParameter
+                .defaultValue);
             this.parameters[jsonParameter.name] = parameter;
         }
         /*
         this.commands = [];
-        Utils.readJSONSystemList({ list: Utils.defaultValue(json.co, []), 
+        Utils.readJSONSystemList({ list: Utils.defaultValue(json.commands, []), 
             listIndexes: this.commands, cons: System.PluginCommand });
         */
     }

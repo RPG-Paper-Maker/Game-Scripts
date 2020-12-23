@@ -20,8 +20,8 @@ interface StructJSON
 {
     k: DynamicValueKind,
     v: any,
-    cs?: Record<string, any>,
-    cl?: Record<string, any>
+    customStructure?: Record<string, any>,
+    customList?: Record<string, any>
 }
 
 /** @class
@@ -259,24 +259,25 @@ class DynamicValue extends System.Base {
         switch (this.kind) {
             case DynamicValueKind.CustomStructure:
                 this.customStructure = {};
-                let jsonList = Utils.defaultValue(json.cs.p, []);
+                let jsonList = Utils.defaultValue(json.customStructure
+                    .properties, []);
                 let parameter: System.DynamicValue, jsonParameter: Record<string
                     , any>;
                 for (let i = 0, l = jsonList.length; i < l; i++) {
                     jsonParameter = jsonList[i];
                     parameter = System.DynamicValue.readOrDefaultNumber(
-                        jsonParameter.v);
+                        jsonParameter.value);
                     this.customStructure[jsonParameter.name] = parameter;
                 }
                 break;
             case DynamicValueKind.CustomList:
                 this.customList = [];
-                Utils.readJSONSystemList({ list: Utils.defaultValue(json.cl.l, 
-                    []), listIndexes: this.customList, func: (jsonParameter: 
-                        Record<string ,any>) =>
+                Utils.readJSONSystemList({ list: Utils.defaultValue(json
+                    .customList.list, []), listIndexes: this.customList, func: (
+                    jsonParameter: Record<string ,any>) =>
                     {
                         return System.DynamicValue.readOrDefaultNumber(
-                            jsonParameter.v); 
+                            jsonParameter.value); 
                     }
                 });
                 break;

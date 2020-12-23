@@ -32,9 +32,9 @@ class Plugins {
      * @async
      */
     static async load() {
-        let pluginsNames = (await IO.parseFileJSON(Paths.FILE_SCRIPTS)).plugins;
-        for (let i = 0, l = pluginsNames.length; i < l; i++) {
-            await this.loadPlugin(pluginsNames[i]);
+        let plugins = (await IO.parseFileJSON(Paths.FILE_SCRIPTS)).plugins;
+        for (let i = 0, l = plugins.length; i < l; i++) {
+            await this.loadPlugin(plugins[i]);
         }
     }
 
@@ -43,13 +43,13 @@ class Plugins {
      *  @param {string} pluginName The plugin name to load
      *  @returns {Promise<boolean>}
      */
-    static async loadPlugin(pluginName: string): Promise<boolean> {
-        let json = await IO.parseFileJSON(Paths.PLUGINS + pluginName + 
+    static async loadPlugin(pluginJSON: Record<string, any>): Promise<boolean> {
+        let json = await IO.parseFileJSON(Paths.PLUGINS + pluginJSON.name + 
             Constants.STRING_SLASH + Paths.FILE_PLUGIN_DETAILS);
-        let plugin = new System.Plugin(json);
+        let plugin = new System.Plugin(pluginJSON.id, json);
         this.register(plugin);
         return (await new Promise((resolve, reject) => {
-            let url = Paths.PLUGINS + pluginName + Constants.STRING_SLASH + 
+            let url = Paths.PLUGINS + pluginJSON.name + Constants.STRING_SLASH + 
                 Paths.FILE_PLUGIN_CODE;
             let script = document.createElement("script");
             script.type = "module";
@@ -148,4 +148,3 @@ class Plugins {
 }
 
 export { Plugins }
-
