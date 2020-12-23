@@ -8,11 +8,11 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Enum, Constants, Paths, Utils, Platform } from "../Common/index.js";
+import { Enum, Constants, Paths, Utils, Platform } from "../Common";
 var PictureKind = Enum.PictureKind;
-import { Datas } from "../index.js";
-import { Picture2D, CollisionSquare } from "../Core/index.js";
-import { Base } from "./Base.js";
+import { Datas } from "..";
+import { Picture2D, CollisionSquare } from "../Core";
+import { Base } from "./Base";
 /** @class
  *  A picture of the game.
  *  @extends {System.Base}

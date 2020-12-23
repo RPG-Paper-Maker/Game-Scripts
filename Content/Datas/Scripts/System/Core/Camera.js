@@ -8,8 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { ScreenResolution, Mathf } from "../Common/index.js";
-import { Manager } from "../index.js";
+import { ScreenResolution, Mathf } from "../Common";
+import { Manager } from "..";
 /** @class
  *  The camera of the current map.
  *  @param {System.CameraProperties} cameraProperties The System camera

@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Icon } from "./Icon.js";
-import { DynamicValue } from "./DynamicValue.js";
-import { Utils } from "../Common/index.js";
+import { Icon } from "./Icon";
+import { DynamicValue } from "./DynamicValue";
+import { Utils } from "../Common";
 /** @class
  *  An element of the game.
  *  @extends System.Base

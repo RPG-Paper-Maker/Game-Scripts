@@ -76,6 +76,7 @@ class Plugins {
      * Return the plugin object
      * @param plugin
      * @returns {any}
+     * @deprecated use Plugins.getParameters(pluginName); or Plugins.getParameter(pluginName, parameterName); instead
      */
     static fetch(plugin: string): any {
         /*
@@ -89,24 +90,23 @@ class Plugins {
 
     /**
      * check whether the plugin exist or not.
+     * It's used for compatbilities purpose 
      * @param id
      * @returns {boolean}
      */
-    static exists(id: string): boolean {
-        /*
-        for (const plugins in this.plugins) {
-            if (this.plugins.hasOwnProperty(plugins)) {
-                if (this.plugins[plugins].id === id) {
+    static exists(pluginName: string): boolean {   
+        for (const plugin in this.plugins) {
+            if (this.plugins.hasOwnProperty(plugin)) {
+                if (this.plugins[plugin].name === pluginName) {
                     return true;
                 }
             }
         }
-        */
         return false;
     }
 
     /**
-     *  Get a plugin parameters.
+     *  Get plugin parameters.
      *  @param {string} pluginName 
      *  @returns {Record<string, DynamicValue>}
      */
@@ -125,6 +125,13 @@ class Plugins {
     }
 
     /**
+     * Check whether or not the plugin is enabled or not.
+     * @param pluginName 
+     */
+    static isEnabled(pluginName: string): boolean {
+        return this.plugins[pluginName].isOn;
+    }
+    /**
      * Merge the two plugins to extends their plugins data.
      * @usage This function is used to extends the parameters of other plugins See Patch System
      * @experimental This is a experimental features that is yet to be support in RPM
@@ -141,3 +148,4 @@ class Plugins {
 }
 
 export { Plugins }
+

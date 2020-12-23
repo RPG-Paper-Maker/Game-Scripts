@@ -8,10 +8,10 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base.js";
-import { System, Graphic, Datas } from "../index.js";
-import { ScreenResolution, Enum, Constants } from "../Common/index.js";
-import { WindowChoices, WindowBox } from "../Core/index.js";
+import { Base } from "./Base";
+import { System, Graphic, Datas } from "..";
+import { ScreenResolution, Enum, Constants } from "../Common";
+import { WindowChoices, WindowBox } from "../Core";
 var Align = Enum.Align;
 /** @class
  *  An event command for displaying a choice.

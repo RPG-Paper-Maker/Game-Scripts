@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base.js";
-import { Graphic, Manager, Datas } from "../index.js";
-import { Mathf } from "../Common/index.js";
+import { Base } from "./Base";
+import { Graphic, Manager, Datas } from "..";
+import { Mathf } from "../Common";
 /** @class
  *  The graphic displaying a skill or an item use.
  *  @extends Graphic.Base

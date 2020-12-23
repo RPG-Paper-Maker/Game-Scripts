@@ -8,8 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Constants } from "../Common/index.js";
-import { Datas } from "../index.js";
+import { Constants } from "../Common";
+import { Datas } from "..";
 /** @class
  *  The data class for portion.
  *  @param {number} x

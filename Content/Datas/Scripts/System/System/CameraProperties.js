@@ -8,12 +8,12 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base.js";
-import { DynamicValue } from "./DynamicValue.js";
-import { Utils, ScreenResolution, Constants } from "../Common/index.js";
-import { THREE } from "../Globals.js";
-import { Vector3 } from "../Core/index.js";
-import { Datas } from "../index.js";
+import { Base } from "./Base";
+import { DynamicValue } from "./DynamicValue";
+import { Utils, ScreenResolution, Constants } from "../Common";
+import { THREE } from "../Globals";
+import { Vector3 } from "../Core";
+import { Datas } from "..";
 /** @class
  *  A camera properties of the game.
  *  @extends System.Base

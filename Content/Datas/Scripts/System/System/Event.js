@@ -8,8 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base.js";
-import { System, Datas } from "../index.js";
+import { Base } from "./Base";
+import { System, Datas } from "..";
 /** @class
  *  An event that an object can react on.
  *  @extends System.Base

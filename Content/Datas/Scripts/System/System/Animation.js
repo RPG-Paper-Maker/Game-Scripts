@@ -8,13 +8,13 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Enum, Utils } from "../Common/index.js";
+import { Enum, Utils } from "../Common";
 var AnimationPositionKind = Enum.AnimationPositionKind;
 var PictureKind = Enum.PictureKind;
-import { Base } from "./Base.js";
-import { AnimationFrame } from "./AnimationFrame.js";
-import { Vector2 } from "../Core/index.js";
-import { Datas } from "../index.js";
+import { Base } from "./Base";
+import { AnimationFrame } from "./AnimationFrame";
+import { Vector2 } from "../Core";
+import { Datas } from "..";
 /** @class
  *  An animation of a skill / item / weapon or for display animation command.
  *  @extends System.Base

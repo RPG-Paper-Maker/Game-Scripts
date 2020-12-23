@@ -1,18 +1,24 @@
 {
   "compilerOptions": {
     "target": "es2020",
-    "module": "es2020",
+    "module": "esNext",
     "moduleResolution": "node",
-    "lib": ["ES6", "ES5", "ES2015.Iterable", "DOM", "DOM.Iterable"],
-    "declaration": false,
+    "lib": [
+      "ES6",
+      "ES5",
+      "ES2015.Iterable",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "declaration": true,
     "noEmit": false,
     "strict": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "./Content/Datas/Scripts/System",
-
+    "outDir": "./Content/Datas/Scripts/System"
   },
-  "include": ["./Content/Datas/Scripts/src/**/*.ts"],
-
+  "include": [
+    "./Content/Datas/Scripts/src/**/*.ts"
+  ],
 }

@@ -8,13 +8,13 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { SpecialElement } from "./SpecialElement.js";
-import { Enum, Utils } from "../Common/index.js";
+import { SpecialElement } from "./SpecialElement";
+import { Enum, Utils } from "../Common";
 var ShapeKind = Enum.ShapeKind;
 var ObjectCollisionKind = Enum.ObjectCollisionKind;
 var CustomShapeKind = Enum.CustomShapeKind;
-import { Datas } from "../index.js";
-import { Vector3 } from "../Core/index.js";
+import { Datas } from "..";
+import { Vector3 } from "../Core";
 /** @class
  *  A 3D object of the game.
  *  @extends System.SpecialElement

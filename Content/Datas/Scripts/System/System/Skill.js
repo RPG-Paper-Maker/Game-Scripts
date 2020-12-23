@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { CommonSkillItem } from "./CommonSkillItem.js";
+import { CommonSkillItem } from "./CommonSkillItem";
 /** @class
  *  A skill of the game.
  *  @extends System.CommonSkillItem
