@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { IO, Paths, Constants } from "../Common/index.js";
+import { IO, Paths, Constants, Utils } from "../Common/index.js";
 import { System } from "../index.js";
 /** @class
  *  The class who handles plugins of RPG Paper Maker.
@@ -25,7 +25,8 @@ class Plugins {
      *  @async
      */
     static async load() {
-        let plugins = (await IO.parseFileJSON(Paths.FILE_SCRIPTS)).plugins;
+        let plugins = Utils.defaultValue((await IO.parseFileJSON(Paths
+            .FILE_SCRIPTS)).plugins, []);
         for (let i = 0, l = plugins.length; i < l; i++) {
             await this.loadPlugin(plugins[i]);
         }
