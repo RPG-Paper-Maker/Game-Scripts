@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { Graphic, Datas, Scene, Manager, System } from "..";
+import { Graphic, Datas, Scene, Manager, System } from "../index";
 import { Enum, ScreenResolution } from "../Common";
 import Align = Enum.Align;
 import OrientationWindow = Enum.OrientationWindow;
@@ -18,7 +18,7 @@ import ItemKind = Enum.ItemKind;
 import TargetKind = Enum.TargetKind;
 import AvailableKind = Enum.AvailableKind;
 import { WindowBox, WindowChoices, Item } from "../Core";
-import { StructPositionChoice } from ".";
+import { StructPositionChoice } from "./index";
 
 /** @class
  *  A scene in the menu for describing inventory.

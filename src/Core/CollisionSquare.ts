@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas } from "..";
+import { Datas } from "../index";
 import { Utils } from "../Common";
 
 /** @class

@@ -10,7 +10,7 @@
 */
 
 import { Bitmap } from "./Bitmap";
-import { Graphic, Datas } from "..";
+import { Graphic, Datas } from "../index";
 import { Platform, ScreenResolution } from "../Common";
 
 /** @class

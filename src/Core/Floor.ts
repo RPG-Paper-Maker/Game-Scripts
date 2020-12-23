@@ -11,7 +11,7 @@
 
 import { Land } from "./Land";
 import { Position } from "./Position";
-import { Manager, Datas } from "..";
+import { Manager, Datas } from "../index";
 import { StructMapElementCollision } from "./MapElement";
 
 /** @class

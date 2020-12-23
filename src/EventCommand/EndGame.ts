@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { MapObject } from "../Core";
-import { Manager } from "..";
+import { Manager } from "../index";
 
 /** @class
  *  An event command for ending the game.

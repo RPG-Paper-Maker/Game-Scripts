@@ -10,7 +10,7 @@
 */
 
 import { IO, Paths, Constants } from "../Common";
-import { System } from "..";
+import { System } from "../index";
 import { DynamicValue } from "../System";
 
 /** @class

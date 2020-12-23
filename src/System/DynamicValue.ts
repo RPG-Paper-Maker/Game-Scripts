@@ -11,7 +11,7 @@
 
 import { Enum, Utils } from "../Common";
 import DynamicValueKind = Enum.DynamicValueKind;
-import { System, Datas } from "..";
+import { System, Datas } from "../index";
 import { StructIterator } from "../EventCommand";
 import { Stack } from "../Manager";
 import { ReactionInterpreter } from "../Core";

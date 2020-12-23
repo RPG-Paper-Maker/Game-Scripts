@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { System, Manager, Datas, Scene } from "..";
+import { System, Manager, Datas, Scene } from "../index";
 import { Utils, Enum, Mathf, KeyEvent, Interpreter } from "../Common";
 import ConditionHeroesKind = Enum.ConditionHeroesKind;
 import ItemKind = Enum.ItemKind;

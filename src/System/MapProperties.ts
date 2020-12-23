@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { THREE } from "../Globals";
-import { Datas, System, Manager } from "..";
+import { Datas, System, Manager } from "../index";
 import { PlaySong } from "./PlaySong";
 import { DynamicValue } from "./DynamicValue";
 import { MapObject } from "../Core/MapObject";

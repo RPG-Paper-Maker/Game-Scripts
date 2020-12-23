@@ -13,7 +13,7 @@ import { Base } from "./Base";
 import { Utils, Enum } from "../Common";
 import { MapObject, Position } from "../Core";
 import Orientation = Enum.Orientation;
-import { Datas, Manager } from "..";
+import { Datas, Manager } from "../index";
 
 /** @class
  *  A detection of the game.

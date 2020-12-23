@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants } from ".";
-import { Datas, Core } from "..";
+import { Constants } from "./index";
+import { Datas, Core } from "../index";
 import { Vector2, Vector3 } from "../Core";
 
 

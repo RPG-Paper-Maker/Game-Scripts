@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { Utils } from "../Common";
-import { System, Datas } from "..";
+import { System, Datas } from "../index";
 import { MapObject } from "../Core";
 
 /** @class

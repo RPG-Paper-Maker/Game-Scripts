@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { MapObject, Node } from ".";
+import { MapObject, Node } from "./index";
 import { Utils, Platform } from "../Common";
-import { EventCommand, System, Manager } from "..";
+import { EventCommand, System, Manager } from "../index";
 
 /** @class
  *  A reaction command interpreter.

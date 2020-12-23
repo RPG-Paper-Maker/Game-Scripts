@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { System, Manager } from "..";
+import { System, Manager } from "../index";
 import { StructSearchResult, MapObject, Position } from "../Core";
 import { Mathf, Enum, Utils } from "../Common";
 import VariableMapObjectCharacteristicKind = Enum.VariableMapObjectCharacteristicKind;

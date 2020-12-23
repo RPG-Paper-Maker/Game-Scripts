@@ -11,7 +11,7 @@
 
 import { Mathf, Constants, Enum } from "../Common";
 import { MapObject, Position, Portion, MapPortion, StructMapElementCollision, CollisionSquare, Mountain, Vector3, Vector2 } from "../Core";
-import { Datas, Manager, System, Core } from "..";
+import { Datas, Manager, System, Core } from "../index";
 import ElementMapKind = Enum.ElementMapKind;
 
 import { THREE } from "../Globals";

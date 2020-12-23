@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { System, Core } from "..";
+import { System, Core } from "../index";
 import { THREE } from "../Globals";
 import { Vector3 } from "../Core";
 

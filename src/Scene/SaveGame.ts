@@ -10,7 +10,7 @@
 */
 
 import { SaveLoadGame } from "./SaveLoadGame";
-import { Graphic, Datas, Manager } from "..";
+import { Graphic, Datas, Manager } from "../index";
 import { Enum } from "../Common";
 import Align = Enum.Align;
 

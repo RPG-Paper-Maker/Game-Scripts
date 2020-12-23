@@ -12,7 +12,7 @@
 import { MapObject, Portion } from "../Core";
 import { Enum } from "../Common";
 import EventCommandKind = Enum.EventCommandKind;
-import { EventCommand, System, Manager, Datas } from "..";
+import { EventCommand, System, Manager, Datas } from "../index";
 
 /** @class
  *  A static class for some events functions.

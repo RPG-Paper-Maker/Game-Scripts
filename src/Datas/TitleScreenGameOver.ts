@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { System, Graphic, Datas, Manager, Scene } from "..";
+import { System, Graphic, Datas, Manager, Scene } from "../index";
 import { IO, Paths, Utils, Enum } from "../Common";
 import SongKind = Enum.SongKind;
 import Align = Enum.Align;

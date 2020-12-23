@@ -14,7 +14,7 @@ import { TextureBundle } from "./TextureBundle";
 import { Mountain } from "./Mountain";
 import { StructMapElementCollision } from "./MapElement";
 import { Position } from "./Position";
-import { Manager } from "..";
+import { Manager } from "../index";
 
 /** @class
  *  The wrapper class for handle mountains sharing the same texture.

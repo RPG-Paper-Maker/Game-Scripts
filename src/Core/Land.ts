@@ -14,7 +14,7 @@ import { Utils } from "../Common";
 import { THREE } from "../Globals";
 import { CollisionSquare } from "./CollisionSquare";
 import { Position } from "./Position";
-import { Datas } from "..";
+import { Datas } from "../index";
 import { StructMapElementCollision } from "./MapElement"
 import { Vector3 } from "./Vector3";
 import { Vector2 } from "./Vector2";

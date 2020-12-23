@@ -15,7 +15,7 @@ import { Land } from "./Land";
 import { TextureBundle } from "./TextureBundle";
 import { Position } from "./Position";
 import { StructMapElementCollision } from "./MapElement"
-import { Datas } from "..";
+import { Datas } from "../index";
 
 /** @class
  *  @extends Land

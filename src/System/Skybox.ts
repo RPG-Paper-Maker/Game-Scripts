@@ -12,7 +12,7 @@
 import { THREE } from "../Globals";
 import { Base } from "./Base"
 import { Utils, Enum } from "../Common";
-import { Manager, Datas } from "..";
+import { Manager, Datas } from "../index";
 import PictureKind = Enum.PictureKind;
 
 /** @class

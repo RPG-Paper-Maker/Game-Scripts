@@ -15,7 +15,7 @@ import ObjectMovingKind = Enum.ObjectMovingKind;
 import EventCommandKind = Enum.EventCommandKind;
 import DynamicValueKind = Enum.DynamicValueKind;
 import CommandMoveKind = Enum.CommandMoveKind;
-import { System, EventCommand, Manager } from "..";
+import { System, EventCommand, Manager } from "../index";
 
 /** @class
  *  A possible state of an object.

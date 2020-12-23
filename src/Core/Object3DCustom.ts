@@ -10,7 +10,7 @@
 */
 
 import { StructMapElementCollision } from "./MapElement";
-import { System, Datas } from "..";
+import { System, Datas } from "../index";
 import { Position } from "./Position";
 import { Enum } from "../Common";
 import CustomShapeKind = Enum.CustomShapeKind;

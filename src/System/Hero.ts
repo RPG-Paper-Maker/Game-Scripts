@@ -12,7 +12,7 @@
 import { Base } from "./Base";
 import { Class } from "./Class";
 import { Utils } from "../Common";
-import { Datas } from "..";
+import { Datas } from "../index";
 import { StatisticProgression } from "./StatisticProgression";
 import { ClassSkill } from "./ClassSkill";
 

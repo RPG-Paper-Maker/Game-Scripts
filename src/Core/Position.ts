@@ -11,7 +11,7 @@
 
 import { Portion } from "./Portion";
 import { Constants, Mathf } from "../Common";
-import { Datas } from "..";
+import { Datas } from "../index";
 import { Vector3 } from "./Vector3";
 
 /** @class

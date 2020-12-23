@@ -10,7 +10,7 @@
 */
 
 import { Reaction } from "./Reaction";
-import { System } from "..";
+import { System } from "../index";
 
 /** @class
  *  A common reaction.

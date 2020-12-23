@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { DynamicValue } from "./DynamicValue";
-import { System } from "..";
+import { System } from "../index";
 
 /** @class
  *  A progression table.

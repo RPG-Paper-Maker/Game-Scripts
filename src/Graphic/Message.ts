@@ -10,7 +10,7 @@
 */
 
 import { Bitmap, Picture2D, Tree, Node } from "../Core";
-import { Datas, System, Graphic, Manager } from "..";
+import { Datas, System, Graphic, Manager } from "../index";
 import { Enum, Constants, Utils, ScreenResolution } from "../Common";
 import PictureKind = Enum.PictureKind;
 import TagKind = Enum.TagKind;

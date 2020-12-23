@@ -11,7 +11,7 @@
 
 import { Enum } from "../Common";
 import SongKind = Enum.SongKind;
-import { Datas, System } from "..";
+import { Datas, System } from "../index";
 import { ProgressionTable } from "../System";
 import { Howl } from "../Globals";
 

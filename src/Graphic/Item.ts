@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { System, Graphic, Core } from "..";
+import { System, Graphic, Core } from "../index";
 import { Utils, Enum } from "../Common";
 import Align = Enum.Align;
 

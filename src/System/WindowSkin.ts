@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { System, Datas } from "..";
+import { System, Datas } from "../index";
 import { Picture2D } from "../Core";
 import { Enum, Utils, ScreenResolution } from "../Common";
 import PictureKind = Enum.PictureKind;

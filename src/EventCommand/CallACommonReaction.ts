@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { System, Datas } from "..";
+import { System, Datas } from "../index";
 import { MapObject, ReactionInterpreter } from "../Core";
 import { Enum } from "../Common";
 import DynamicValueKind = Enum.DynamicValueKind;

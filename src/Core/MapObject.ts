@@ -10,7 +10,7 @@
 */
 
 import { THREE } from "../Globals";
-import { System, EventCommand, Manager, Datas } from "..";
+import { System, EventCommand, Manager, Datas } from "../index";
 import { Frame } from "./Frame";
 import { Enum, Utils, IO, Paths, Constants, Platform, Mathf } from "../Common";
 import Orientation = Enum.Orientation;

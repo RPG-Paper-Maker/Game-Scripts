@@ -10,7 +10,7 @@
 */
 
 import { Armor } from "./Armor";
-import { Datas, System } from "..";
+import { Datas, System } from "../index";
 
 /** @class
  *  A weapon of the game.

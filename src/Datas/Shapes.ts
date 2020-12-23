@@ -10,7 +10,7 @@
 */
 
 import { IO, Paths, Enum } from "../Common";
-import { System, Datas } from "..";
+import { System, Datas } from "../index";
 import CustomShapeKind = Enum.CustomShapeKind;
 
 /** @class

@@ -10,7 +10,7 @@
 */
 
 import { THREE } from "../Globals";
-import { Datas, System } from "..";
+import { Datas, System } from "../index";
 import { ScreenResolution, Platform, Utils, IO, Paths } from "../Common";
 import { Stack } from "./Stack";
 import { Camera, Vector3, Vector2 } from "../Core";

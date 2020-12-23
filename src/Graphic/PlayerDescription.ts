@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { Player, Picture2D, Frame, Battler } from "../Core";
-import { Graphic, Datas, System, Manager } from "..";
+import { Graphic, Datas, System, Manager } from "../index";
 import { Enum, Constants, Utils, Platform } from "../Common";
 import Align = Enum.Align;
 import PictureKind = Enum.PictureKind;

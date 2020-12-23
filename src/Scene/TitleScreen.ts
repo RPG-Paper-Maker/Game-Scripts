@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { Manager, Datas } from "..";
+import { Manager, Datas } from "../index";
 import { Picture2D, WindowChoices, WindowBox } from "../Core";
 import { Enum, Platform, ScreenResolution, Constants } from "../Common";
 import PictureKind = Enum.PictureKind;

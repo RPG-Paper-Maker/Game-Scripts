@@ -10,7 +10,7 @@
 */
 
 import { Utils } from "../Common";
-import { EventCommand } from "..";
+import { EventCommand } from "../index";
 import { Base } from "./Base";
 
 /** @class

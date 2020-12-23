@@ -11,7 +11,7 @@
 
 import { Enum } from "../Common";
 import ItemKind = Enum.ItemKind;
-import { Manager, System, Datas } from "..";
+import { Manager, System, Datas } from "../index";
 
 /** @class
  *  An item in the inventory.

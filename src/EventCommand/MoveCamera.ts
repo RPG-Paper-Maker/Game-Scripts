@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { Utils, Mathf } from "../Common";
-import { System, Manager, Datas } from "..";
+import { System, Manager, Datas } from "../index";
 import { MapObject, StructSearchResult, Vector3 } from "../Core";
 
 /** @class

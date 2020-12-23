@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { System, Datas, Manager } from "..";
+import { System, Datas, Manager } from "../index";
 import { Utils, ScreenResolution, Enum } from "../Common";
 import { MapObject, Picture2D } from "../Core";
 import PictureKind = Enum.PictureKind;

@@ -10,7 +10,7 @@
 */
 
 import { IO, Paths, Utils } from "../Common";
-import { System, Datas } from "..";
+import { System, Datas } from "../index";
 
 /** @class
 *   All the skills datas

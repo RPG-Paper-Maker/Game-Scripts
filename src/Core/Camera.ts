@@ -10,10 +10,10 @@
 */
 
 import { ScreenResolution, Enum, Mathf } from "../Common";
-import { System, Manager } from "..";
+import { System, Manager } from "../index";
 import { MapObject } from "./MapObject";
 import Orientation = Enum.Orientation;
-import { Vector3 } from ".";
+import { Vector3 } from "./index";
 
 /** @class
  *  The camera of the current map.

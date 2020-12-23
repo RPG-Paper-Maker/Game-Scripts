@@ -10,8 +10,8 @@
 */
 
 import { Constants } from "../Common";
-import { Datas } from "..";
-import { Vector3 } from ".";
+import { Datas } from "../index";
+import { Vector3 } from "./index";
 
 /** @class
  *  The data class for portion.

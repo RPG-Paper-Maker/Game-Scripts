@@ -165,4 +165,4 @@ class CommonSkillItem extends Icon {
     }
 }
 
-export { CommonSkill
+export { CommonSkillItem }

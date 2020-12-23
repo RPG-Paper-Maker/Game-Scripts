@@ -12,7 +12,7 @@
 import { Base } from "./Base";
 import { WindowBox, WindowChoices, Game } from "../Core";
 import { ScreenResolution } from "../Common";
-import { Graphic, Datas, Manager } from "..";
+import { Graphic, Datas, Manager } from "../index";
 
 /** @class
  *  Abstract class for the game save and loading menus.
