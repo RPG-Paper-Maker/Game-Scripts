@@ -8,8 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Datas, Common, Core, EventCommand, Graphic, Manager, System, Scene } from "../index.js";
-import { THREE, Howl } from "../Globals.js";
+import { Datas, Common, Core, EventCommand, Graphic, Manager, System, Scene } from "..";
+import { THREE, Howl } from "../Globals";
 /** @class
  *  @static
  *  The interpreter to evaluate formulas or simple scripts without having to

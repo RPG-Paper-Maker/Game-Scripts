@@ -8,22 +8,22 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { THREE } from "../Globals.js";
-import { MapObject } from "./MapObject.js";
-import { Position } from "./Position.js";
-import { System, Datas, Manager } from "../index.js";
-import { Constants, Enum, Utils } from "../Common/index.js";
-import { Floor } from "./Floor.js";
-import { Autotiles } from "./Autotiles.js";
-import { Autotile } from "./Autotile.js";
-import { Sprite } from "./Sprite.js";
+import { THREE } from "../Globals";
+import { MapObject } from "./MapObject";
+import { Position } from "./Position";
+import { System, Datas, Manager } from "..";
+import { Constants, Enum, Utils } from "../Common";
+import { Floor } from "./Floor";
+import { Autotiles } from "./Autotiles";
+import { Autotile } from "./Autotile";
+import { Sprite } from "./Sprite";
 var ElementMapKind = Enum.ElementMapKind;
 var ShapeKind = Enum.ShapeKind;
-import { SpriteWall } from "./SpriteWall.js";
-import { Mountains } from "./Mountains.js";
-import { Mountain } from "./Mountain.js";
-import { Object3DBox } from "./Object3DBox.js";
-import { Object3DCustom } from "./Object3DCustom.js";
+import { SpriteWall } from "./SpriteWall";
+import { Mountains } from "./Mountains";
+import { Mountain } from "./Mountain";
+import { Object3DBox } from "./Object3DBox";
+import { Object3DCustom } from "./Object3DCustom";
 /** @class
  *  A portion of the map.
  *  @param {Portion} portion

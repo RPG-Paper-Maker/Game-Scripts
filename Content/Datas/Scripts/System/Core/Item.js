@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Enum } from "../Common/index.js";
+import { Enum } from "../Common";
 var ItemKind = Enum.ItemKind;
-import { Manager, Datas } from "../index.js";
+import { Manager, Datas } from "..";
 /** @class
  *  An item in the inventory.
  *  @param {ItemKind} kind Kind of item (item, weapon, or armor)

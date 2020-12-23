@@ -8,10 +8,10 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Graphic } from "../index.js";
-import { Enum } from "../Common/index.js";
+import { Graphic } from "..";
+import { Enum } from "../Common";
 var Align = Enum.Align;
-import { Base } from "./Base.js";
+import { Base } from "./Base";
 /** @class
  *  A class for all keyboard assign to display in screen.
  *  @param {System.Keyboard} kb
