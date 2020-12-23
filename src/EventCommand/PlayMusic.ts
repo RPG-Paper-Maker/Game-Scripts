@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { EventCommand, System } from "..";
+import { EventCommand, System } from "../index";
 import { Enum, Utils } from "../Common";
 import SongKind = Enum.SongKind;
 import { MapObject } from "../Core";
@@ -78,4 +78,4 @@ class PlayMusic extends Base {
     }
 }
 
-export { PlayMusic }
+export { PlayM

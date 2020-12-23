@@ -15,7 +15,7 @@ import EffectKind = Enum.EffectKind;
 import DamagesKind = Enum.DamagesKind;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 import CharacterKind = Enum.CharacterKind;
-import { System, EventCommand, Manager, Datas } from "..";
+import { System, EventCommand, Manager, Datas } from "../index";
 import { Player, ReactionInterpreter } from "../Core";
 import { Statistic } from "./Statistic";
 
