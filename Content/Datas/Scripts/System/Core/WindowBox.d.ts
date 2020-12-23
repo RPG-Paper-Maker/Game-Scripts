@@ -1,5 +1,5 @@
-import { Bitmap } from "./Bitmap";
-import { Graphic } from "..";
+import { Bitmap } from "./Bitmap.js";
+import { Graphic } from "../index.js";
 /** @class
  *  A class for window boxes.
  *  @extends Bitmap

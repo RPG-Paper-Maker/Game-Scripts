@@ -1,4 +1,4 @@
-import { Translatable } from "./Translatable";
+import { Translatable } from "./Translatable.js";
 /** @class
  *  A weapon/armor kind of the game.
  *  @extends System.Translatable

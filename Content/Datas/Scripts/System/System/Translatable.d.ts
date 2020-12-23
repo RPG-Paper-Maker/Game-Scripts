@@ -1,5 +1,5 @@
-import { EventCommand } from "..";
-import { Base } from "./Base";
+import { EventCommand } from "../index.js";
+import { Base } from "./Base.js";
 /** @class
  *  A name that can have several translations.
  *  @extends {System.Base}

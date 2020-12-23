@@ -1,4 +1,4 @@
-import { MapObject } from "../Core";
+import { MapObject } from "../Core/index.js";
 interface StructIterator {
     i: number;
 }

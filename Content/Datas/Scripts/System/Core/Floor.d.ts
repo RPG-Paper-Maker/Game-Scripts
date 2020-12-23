@@ -1,6 +1,6 @@
-import { Land } from "./Land";
-import { Position } from "./Position";
-import { StructMapElementCollision } from "./MapElement";
+import { Land } from "./Land.js";
+import { Position } from "./Position.js";
+import { StructMapElementCollision } from "./MapElement.js";
 /** @class
  *  A floor in the map.
  *  @extends Land

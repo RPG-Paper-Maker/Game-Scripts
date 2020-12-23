@@ -1,5 +1,5 @@
-import { SaveLoadGame } from "./SaveLoadGame";
-import { Picture2D } from "../Core";
+import { SaveLoadGame } from "./SaveLoadGame.js";
+import { Picture2D } from "../Core/index.js";
 /** @class
  *  A scene in the menu for loading a game.
  *  @extends Scene.SaveLoadGame

@@ -1,9 +1,9 @@
-import { Base } from "./Base";
-import { AnimationFrameElement } from "./AnimationFrameElement";
-import { AnimationFrameEffect } from "./AnimationFrameEffect";
-import { Enum } from "../Common";
+import { Base } from "./Base.js";
+import { AnimationFrameElement } from "./AnimationFrameElement.js";
+import { AnimationFrameEffect } from "./AnimationFrameEffect.js";
+import { Enum } from "../Common/index.js";
 import AnimationEffectConditionKind = Enum.AnimationEffectConditionKind;
-import { Picture2D, Vector2 } from "../Core";
+import { Picture2D, Vector2 } from "../Core/index.js";
 /** @class
  *  An animation frame.
  *  @extends System.Base

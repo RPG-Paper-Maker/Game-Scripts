@@ -1,4 +1,4 @@
-import { System } from "..";
+import { System } from "../index.js";
 /** @class
  *  All the heroes datas.
  *  @static

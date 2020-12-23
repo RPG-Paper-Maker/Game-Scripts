@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
-import { Utils } from "../Common";
-import { System } from "..";
+import { Base } from "./Base.js";
+import { Utils } from "../Common/index.js";
+import { System } from "../index.js";
 /** @class
  *  A custom plugin in the game.
  *  @extends System.Base
@@ -18,8 +18,9 @@ import { System } from "..";
  *  plugin
  */
 class Plugin extends Base {
-    constructor(json) {
+    constructor(id, json) {
         super(json);
+        this.id = id;
     }
     /**
      *  Read the JSON associated to the plugin.
@@ -27,22 +28,26 @@ class Plugin extends Base {
      */
     read(json) {
         this.name = json.name;
-        this.isOn = Utils.defaultValue(json.io, true);
-        this.author = Utils.defaultValue(json.a, "");
-        this.version = Utils.defaultValue(json.v, "1.0.0");
+        this.isOn = Utils.defaultValue(json.isOn, true);
+        this.author = Utils.defaultValue(json.author, "");
+        this.version = Utils.defaultValue(json.version, "1.0.0");
         this.parameters = {};
-        let jsonList = Utils.defaultValue(json.p, []);
-        let parameter, jsonParameter;
-        for (let i = 0, l = jsonList.length; i < l; i++) {
-            jsonParameter = jsonList[i];
-            parameter = System.DynamicValue.readOrDefaultNumber(jsonParameter.dv);
-            this.parameters[jsonParameter.name] = parameter;
+        let jsonList = Utils.defaultValue(json.parameters, []);
+        let obj, jsonObj;
+        let i, l;
+        for (i = 0, l = jsonList.length; i < l; i++) {
+            jsonObj = jsonList[i];
+            obj = System.DynamicValue.readOrDefaultNumber(jsonObj.defaultValue);
+            this.parameters[jsonObj.name] = obj;
         }
-        /*
-        this.commands = [];
-        Utils.readJSONSystemList({ list: Utils.defaultValue(json.co, []),
-            listIndexes: this.commands, cons: System.PluginCommand });
-        */
+        this.commands = {};
+        this.commandsNames = [];
+        jsonList = Utils.defaultValue(json.commands, []);
+        for (i = 0, l = jsonList.length; i < l; i++) {
+            jsonObj = jsonList[i];
+            this.commands[jsonObj.name] = null;
+            this.commandsNames[jsonObj.id] = jsonObj.name;
+        }
     }
 }
 export { Plugin };

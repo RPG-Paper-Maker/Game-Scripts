@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
-import { System, Manager, Datas, Scene } from "..";
-import { Utils, Enum, Mathf, KeyEvent, Interpreter } from "../Common";
+import { Base } from "./Base.js";
+import { System, Manager, Datas, Scene } from "../index.js";
+import { Utils, Enum, Mathf, KeyEvent, Interpreter } from "../Common/index.js";
 var ConditionHeroesKind = Enum.ConditionHeroesKind;
 var ItemKind = Enum.ItemKind;
 /** @class

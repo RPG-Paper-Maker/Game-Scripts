@@ -8,10 +8,10 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Portion } from "./Portion";
-import { Constants, Mathf } from "../Common";
-import { Datas } from "..";
-import { Vector3 } from "./Vector3";
+import { Portion } from "./Portion.js";
+import { Constants, Mathf } from "../Common/index.js";
+import { Datas } from "../index.js";
+import { Vector3 } from "./Vector3.js";
 /** @class
  *  The data class for position.
  *  @extends Portion

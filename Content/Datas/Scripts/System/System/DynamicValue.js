@@ -8,11 +8,11 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Enum, Utils } from "../Common";
+import { Enum, Utils } from "../Common/index.js";
 var DynamicValueKind = Enum.DynamicValueKind;
-import { System, Datas } from "..";
-import { Stack } from "../Manager";
-import { ReactionInterpreter } from "../Core";
+import { System, Datas } from "../index.js";
+import { Stack } from "../Manager/index.js";
+import { ReactionInterpreter } from "../Core/index.js";
 /** @class
  *  The class who handle dynamic value.
  *  @extends {System.Base}
@@ -212,18 +212,20 @@ class DynamicValue extends System.Base {
         switch (this.kind) {
             case DynamicValueKind.CustomStructure:
                 this.customStructure = {};
-                let jsonList = Utils.defaultValue(json.cs.p, []);
+                let jsonList = Utils.defaultValue(json.customStructure
+                    .properties, []);
                 let parameter, jsonParameter;
                 for (let i = 0, l = jsonList.length; i < l; i++) {
                     jsonParameter = jsonList[i];
-                    parameter = System.DynamicValue.readOrDefaultNumber(jsonParameter.v);
+                    parameter = System.DynamicValue.readOrDefaultNumber(jsonParameter.value);
                     this.customStructure[jsonParameter.name] = parameter;
                 }
                 break;
             case DynamicValueKind.CustomList:
                 this.customList = [];
-                Utils.readJSONSystemList({ list: Utils.defaultValue(json.cl.l, []), listIndexes: this.customList, func: (jsonParameter) => {
-                        return System.DynamicValue.readOrDefaultNumber(jsonParameter.v);
+                Utils.readJSONSystemList({ list: Utils.defaultValue(json
+                        .customList.list, []), listIndexes: this.customList, func: (jsonParameter) => {
+                        return System.DynamicValue.readOrDefaultNumber(jsonParameter.value);
                     }
                 });
                 break;

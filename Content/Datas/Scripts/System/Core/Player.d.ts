@@ -1,8 +1,8 @@
-import { Enum } from "../Common";
+import { Enum } from "../Common/index.js";
 import CharacterKind = Enum.CharacterKind;
-import { System } from "..";
-import { Skill } from "./Skill";
-import { Item } from "./Item";
+import { System } from "../index.js";
+import { Skill } from "./Skill.js";
+import { Item } from "./Item.js";
 /** @class
  *  A character in the team/hidden/reserve.
  *  @param {CharacterKind} [kind=undefined] The kind of the character (hero or monster)

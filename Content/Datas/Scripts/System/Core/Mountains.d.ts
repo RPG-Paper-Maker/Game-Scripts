@@ -1,7 +1,7 @@
-import { TextureBundle } from "./TextureBundle";
-import { Mountain } from "./Mountain";
-import { StructMapElementCollision } from "./MapElement";
-import { Position } from "./Position";
+import { TextureBundle } from "./TextureBundle.js";
+import { Mountain } from "./Mountain.js";
+import { StructMapElementCollision } from "./MapElement.js";
+import { Position } from "./Position.js";
 /** @class
  *  The wrapper class for handle mountains sharing the same texture.
  *  @param {TextureBundle} texture

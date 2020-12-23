@@ -8,8 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Reaction } from "./Reaction";
-import { System } from "..";
+import { Reaction } from "./Reaction.js";
+import { System } from "../index.js";
 /** @class
  *  A common reaction.
  *  @extends System.Reaction

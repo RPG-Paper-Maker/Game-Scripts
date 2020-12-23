@@ -1,5 +1,5 @@
-import { Armor } from "./Armor";
-import { System } from "..";
+import { Armor } from "./Armor.js";
+import { System } from "../index.js";
 /** @class
  *  A weapon of the game.
  *  @extends System.Armor

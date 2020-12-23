@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Bitmap } from "../Core";
+import { Bitmap } from "../Core/index.js";
 /**
  *  @class
  *  The abstract class who model the Structure of graphics (inside window boxes).

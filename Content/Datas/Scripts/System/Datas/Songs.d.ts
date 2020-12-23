@@ -1,6 +1,6 @@
-import { Enum } from "../Common";
+import { Enum } from "../Common/index.js";
 import SongKind = Enum.SongKind;
-import { System } from "..";
+import { System } from "../index.js";
 /** @class
 *   All the songs datas
 *   @static

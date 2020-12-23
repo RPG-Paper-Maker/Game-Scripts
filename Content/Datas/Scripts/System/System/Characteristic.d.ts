@@ -1,6 +1,6 @@
-import { Base } from "./Base";
-import { DynamicValue } from "./DynamicValue";
-import { Player } from "../Core";
+import { Base } from "./Base.js";
+import { DynamicValue } from "./DynamicValue.js";
+import { Player } from "../Core/index.js";
 /** @class
  *  A characteristic of a common skill item.
  *  @extends System.Base

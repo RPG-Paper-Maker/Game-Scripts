@@ -1,8 +1,8 @@
-import { Bitmap } from "./Bitmap";
-import { Enum } from "../Common";
+import { Bitmap } from "./Bitmap.js";
+import { Enum } from "../Common/index.js";
 import OrientationWindow = Enum.OrientationWindow;
-import { Graphic } from "..";
-import { WindowBox } from "./WindowBox";
+import { Graphic } from "../index.js";
+import { WindowBox } from "./WindowBox.js";
 /** @class
  *  A class for window choices.
  *  @extends Bitmap

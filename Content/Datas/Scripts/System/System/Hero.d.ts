@@ -1,7 +1,7 @@
-import { Base } from "./Base";
-import { Class } from "./Class";
-import { StatisticProgression } from "./StatisticProgression";
-import { ClassSkill } from "./ClassSkill";
+import { Base } from "./Base.js";
+import { Class } from "./Class.js";
+import { StatisticProgression } from "./StatisticProgression.js";
+import { ClassSkill } from "./ClassSkill.js";
 /** @class
  *  An hero of the game.
  *  @extends System.Base

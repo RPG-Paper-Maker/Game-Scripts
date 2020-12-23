@@ -8,8 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { IO, Paths, Constants } from "../Common";
-import { System } from "..";
+import { IO, Paths, Constants } from "../Common/index.js";
+import { System } from "../index.js";
 /** @class
  *  The class who handles plugins of RPG Paper Maker.
  *  @static
@@ -20,28 +20,31 @@ class Plugins {
         throw new Error("This is a static class");
     }
     /**
-     * Load all the game plugins.
-     * @static
-     * @async
+     *  Load all the game plugins.
+     *  @static
+     *  @async
      */
     static async load() {
-        let pluginsNames = (await IO.parseFileJSON(Paths.FILE_SCRIPTS)).plugins;
-        for (let i = 0, l = pluginsNames.length; i < l; i++) {
-            await this.loadPlugin(pluginsNames[i]);
+        let plugins = (await IO.parseFileJSON(Paths.FILE_SCRIPTS)).plugins;
+        for (let i = 0, l = plugins.length; i < l; i++) {
+            await this.loadPlugin(plugins[i]);
         }
     }
     /**
      *  Load a particular plugin.
-     *  @param {string} pluginName The plugin name to load
+     *  @static
+     *  @async
+     *  @param {Record<string, any>} pluginJSON
      *  @returns {Promise<boolean>}
      */
-    static async loadPlugin(pluginName) {
-        let json = await IO.parseFileJSON(Paths.PLUGINS + pluginName +
+    static async loadPlugin(pluginJSON) {
+        let json = await IO.parseFileJSON(Paths.PLUGINS + pluginJSON.name +
             Constants.STRING_SLASH + Paths.FILE_PLUGIN_DETAILS);
-        let plugin = new System.Plugin(json);
+        let plugin = new System.Plugin(pluginJSON.id, json);
         this.register(plugin);
+        console.log(this.plugins);
         return (await new Promise((resolve, reject) => {
-            let url = Paths.PLUGINS + pluginName + Constants.STRING_SLASH +
+            let url = Paths.PLUGINS + pluginJSON.name + Constants.STRING_SLASH +
                 Paths.FILE_PLUGIN_CODE;
             let script = document.createElement("script");
             script.type = "module";
@@ -52,6 +55,7 @@ class Plugins {
     }
     /**
      *  Register plugin parameters.
+     *  @static
      *  @param {System.Plugin} plugin
      */
     static register(plugin) {
@@ -61,41 +65,62 @@ class Plugins {
         }
         else {
             this.plugins[plugin.name] = plugin;
+            this.pluginsNames[plugin.id] = plugin.name;
         }
     }
     /**
-     * Return the plugin object
-     * @param plugin
-     * @returns {any}
-     * @deprecated use Plugins.getParameters(pluginName); or Plugins.getParameter(pluginName, parameterName); instead
+     *  Register a plugin command.
+     *  @static
+     *  @param {string} pluginName
+     *  @param {string} commandName
+     *  @param {Function} command
      */
-    static fetch(plugin) {
-        /*
-        if (!this.plugins.hasOwnProperty(plugin)) {
-            throw new Error("Unindenfied plugin error: " + plugin + " doesn't exist in the current workspace!");
-        } else {
-            return this.plugins[plugin];
-        }
-        */
+    static registerCommand(pluginName, commandName, command) {
+        this.fetch(pluginName).commands[commandName] = command;
     }
     /**
-     * check whether the plugin exist or not.
-     * It's used for compatbilities purpose
-     * @param id
-     * @returns {boolean}
+     *  Execute a plugin command.
+     *  @static
+     *  @param {number} pluginID
+     *  @param {number} commandID
+     *  @param {any[]} args
+     */
+    static executeCommand(pluginID, commandID, args) {
+        let plugin = this.fetch(this.pluginsNames[pluginID]);
+        plugin.commands[plugin.commandsNames[commandID]].apply(this, args);
+    }
+    /**
+     *  Return the plugin object.
+     *  @static
+     *  @param {string} pluginName
+     *  @returns {System.Plugin}
+     */
+    static fetch(pluginName) {
+        if (!this.plugins.hasOwnProperty(pluginName)) {
+            throw new Error("Unindenfied plugin error: " + pluginName + " doesn't exist in the current workspace!");
+        }
+        else {
+            return this.plugins[pluginName];
+        }
+    }
+    /**
+     *  Check whether the plugin exist or not. It's used for compatbilities
+     *  purpose.
+     *  @static
+     *  @param {string} pluginName
+     *  @returns {boolean}
      */
     static exists(pluginName) {
-        for (const plugin in this.plugins) {
-            if (this.plugins.hasOwnProperty(plugin)) {
-                if (this.plugins[plugin].name === pluginName) {
-                    return true;
-                }
+        for (const pluginNameExisting in this.plugins) {
+            if (pluginNameExisting === pluginName) {
+                return true;
             }
         }
         return false;
     }
     /**
      *  Get plugin parameters.
+     *  @static
      *  @param {string} pluginName
      *  @returns {Record<string, DynamicValue>}
      */
@@ -104,6 +129,7 @@ class Plugins {
     }
     /**
      *  Get a plugin parameter.
+     *  @static
      *  @param {string} pluginName
      *  @param {string} parameter
      *  @returns {any}
@@ -112,18 +138,23 @@ class Plugins {
         return this.getParameters(pluginName)[parameter].getValue();
     }
     /**
-     * Check whether or not the plugin is enabled or not.
-     * @param pluginName
+     *  Check whether or not the plugin is enabled or not.
+     *  @static
+     *  @param {string} pluginName
+     *  @returns {boolean}
      */
     static isEnabled(pluginName) {
         return this.plugins[pluginName].isOn;
     }
     /**
-     * Merge the two plugins to extends their plugins data.
-     * @usage This function is used to extends the parameters of other plugins See Patch System
-     * @experimental This is a experimental features that is yet to be support in RPM
-     * @param {string} parent
-     * @param {string} child
+     *  Merge the two plugins to extends their plugins data.
+     *  @static
+     *  @usage This function is used to extends the parameters of other plugins.
+     *  See Patch System.
+     *  @experimental This is a experimental features that is yet to be support
+     *  in RPM.
+     *  @param {string} parent
+     *  @param {string} child
      */
     static merge(parent, child) {
         /*
@@ -134,4 +165,5 @@ class Plugins {
     }
 }
 Plugins.plugins = {};
+Plugins.pluginsNames = [];
 export { Plugins };

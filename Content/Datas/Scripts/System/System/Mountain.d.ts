@@ -1,4 +1,4 @@
-import { SpecialElement } from "./SpecialElement";
+import { SpecialElement } from "./SpecialElement.js";
 /** @class
  *  A mountain of the game.
  *  @extends System.SpecialElement

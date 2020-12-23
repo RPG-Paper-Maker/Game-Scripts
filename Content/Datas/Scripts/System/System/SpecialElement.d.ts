@@ -1,4 +1,4 @@
-import { Base } from "./Base";
+import { Base } from "./Base.js";
 /** @class
  *  A special element (autotile, wall, object3D, mountain) of the game.
  *  @extends System.Base

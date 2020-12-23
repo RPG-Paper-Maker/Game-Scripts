@@ -8,8 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
-import { System, Manager } from "..";
+import { Base } from "./Base.js";
+import { System, Manager } from "../index.js";
 /** @class
  *  An event command for changing a hero name.
  *  @extends EventCommand.Base

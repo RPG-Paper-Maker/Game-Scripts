@@ -1,7 +1,7 @@
-import { System } from "..";
-import { Enum } from "../Common";
+import { System } from "../index.js";
+import { Enum } from "../Common/index.js";
 import PictureKind = Enum.PictureKind;
-import { Bitmap } from "./Bitmap";
+import { Bitmap } from "./Bitmap.js";
 /** @class
  *   A class for pictures drawable in HUD.
  *   @extends Bitmap

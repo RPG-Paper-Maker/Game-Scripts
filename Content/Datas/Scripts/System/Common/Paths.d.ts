@@ -1,7 +1,7 @@
 /** @class
  *  @static
  *  The static class containing all the files paths.
- *  @example import { Paths } from "../Common"
+ *  @example import { Paths } from "../Common/index.js"
  */
 declare class Paths {
     static readonly ROOT_DIRECTORY_LOCAL = ".";

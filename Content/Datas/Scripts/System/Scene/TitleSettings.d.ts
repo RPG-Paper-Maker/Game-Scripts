@@ -1,5 +1,5 @@
-import { Base } from "./Base";
-import { Picture2D, WindowBox, WindowChoices } from "../Core";
+import { Base } from "./Base.js";
+import { Picture2D, WindowBox, WindowChoices } from "../Core/index.js";
 /** @class
  *  A scene for the title screen settings.
  *  @extends Scene.Base

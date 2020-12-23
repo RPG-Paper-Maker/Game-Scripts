@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { THREE } from "../Globals";
+import { THREE } from "../Globals.js";
 /**
  * The data class who hold 2D coordinates.
  * It's used as an API bridge between the user and Three.js

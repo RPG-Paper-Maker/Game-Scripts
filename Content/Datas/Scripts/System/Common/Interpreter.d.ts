@@ -1,4 +1,4 @@
-import { Player, MapObject } from "../Core";
+import { Player, MapObject } from "../Core/index.js";
 /** @class
  *  @static
  *  The interpreter to evaluate formulas or simple scripts without having to

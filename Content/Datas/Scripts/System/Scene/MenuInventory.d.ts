@@ -1,6 +1,6 @@
-import { Base } from "./Base";
-import { WindowBox, WindowChoices } from "../Core";
-import { StructPositionChoice } from ".";
+import { Base } from "./Base.js";
+import { WindowBox, WindowChoices } from "../Core/index.js";
+import { StructPositionChoice } from "./index.js";
 /** @class
  *  A scene in the menu for describing inventory.
  *  @extends Scene.Base

@@ -1,4 +1,4 @@
-import { Icon } from "./Icon";
+import { Icon } from "./Icon.js";
 /** @class
  *  A currency of the game.
  *  @extends {System.Icon}

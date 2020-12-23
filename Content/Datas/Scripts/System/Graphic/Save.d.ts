@@ -1,6 +1,6 @@
-import { Game } from "../Core";
-import { Graphic } from "..";
-import { Base } from "./Base";
+import { Game } from "../Core/index.js";
+import { Graphic } from "../index.js";
+import { Base } from "./Base.js";
 /** @class
  *  The graphic displaying a save.
  *  @extends Graphic.Base

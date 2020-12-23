@@ -1,5 +1,5 @@
-import { Translatable } from "./Translatable";
-import { Enum } from "../Common";
+import { Translatable } from "./Translatable.js";
+import { Enum } from "../Common/index.js";
 import TitleCommandKind = Enum.TitleCommandKind;
 /** @class
  *  A title command of the game.

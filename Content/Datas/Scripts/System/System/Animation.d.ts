@@ -1,8 +1,8 @@
-import { Enum } from "../Common";
+import { Enum } from "../Common/index.js";
 import AnimationEffectConditionKind = Enum.AnimationEffectConditionKind;
-import { Base } from "./Base";
-import { AnimationFrame } from "./AnimationFrame";
-import { Picture2D, Battler } from "../Core";
+import { Base } from "./Base.js";
+import { AnimationFrame } from "./AnimationFrame.js";
+import { Picture2D, Battler } from "../Core/index.js";
 /** @class
  *  An animation of a skill / item / weapon or for display animation command.
  *  @extends System.Base

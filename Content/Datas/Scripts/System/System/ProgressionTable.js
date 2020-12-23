@@ -8,8 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
-import { DynamicValue } from "./DynamicValue";
+import { Base } from "./Base.js";
+import { DynamicValue } from "./DynamicValue.js";
 /** @class
  *  A progression table.
  *  @extends System.Base

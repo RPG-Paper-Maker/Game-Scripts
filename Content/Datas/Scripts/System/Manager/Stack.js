@@ -8,8 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Scene, Manager } from "..";
-import { Utils, Platform, ScreenResolution, KeyEvent } from "../Common";
+import { Scene, Manager } from "../index.js";
+import { Utils, Platform, ScreenResolution, KeyEvent } from "../Common/index.js";
 /** @class
  *  The game stack that is organizing the game scenes.
  *  @static

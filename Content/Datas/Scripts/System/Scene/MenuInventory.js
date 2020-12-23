@@ -8,15 +8,15 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
-import { Graphic, Datas, Scene, Manager } from "..";
-import { Enum, ScreenResolution } from "../Common";
+import { Base } from "./Base.js";
+import { Graphic, Datas, Scene, Manager } from "../index.js";
+import { Enum, ScreenResolution } from "../Common/index.js";
 var Align = Enum.Align;
 var OrientationWindow = Enum.OrientationWindow;
 var ItemKind = Enum.ItemKind;
 var TargetKind = Enum.TargetKind;
 var AvailableKind = Enum.AvailableKind;
-import { WindowBox, WindowChoices } from "../Core";
+import { WindowBox, WindowChoices } from "../Core/index.js";
 /** @class
  *  A scene in the menu for describing inventory.
  *  @extends Scene.Base

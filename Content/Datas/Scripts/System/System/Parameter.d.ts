@@ -1,5 +1,5 @@
-import { Base } from "./Base";
-import { System } from "..";
+import { Base } from "./Base.js";
+import { System } from "../index.js";
 /** @class
  *  A parameter of a reaction.
  *  @extends System.Base

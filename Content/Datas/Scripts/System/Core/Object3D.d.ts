@@ -1,6 +1,6 @@
-import { System } from "..";
-import { StructMapElementCollision, MapElement } from "./MapElement";
-import { Position } from "./Position";
+import { System } from "../index.js";
+import { StructMapElementCollision, MapElement } from "./MapElement.js";
+import { Position } from "./Position.js";
 /** @class
  *  The abstract class who model the Structure of RPM datas.
  *  @extends MapElement

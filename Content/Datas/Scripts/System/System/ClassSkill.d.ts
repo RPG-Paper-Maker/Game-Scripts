@@ -1,4 +1,4 @@
-import { Base } from "./Base";
+import { Base } from "./Base.js";
 /** @class
  *  A skill to learn for a specific class.
  *  @extends System.Base

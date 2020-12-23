@@ -8,16 +8,16 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { THREE } from "../Globals";
-import { Enum, Mathf } from "../Common";
-import { Frame } from "./Frame";
+import { THREE } from "../Globals.js";
+import { Enum, Mathf } from "../Common/index.js";
+import { Frame } from "./Frame.js";
 var BattlerStep = Enum.BattlerStep;
 var CharacterKind = Enum.CharacterKind;
 var ElementMapKind = Enum.ElementMapKind;
-import { ProgressionTable } from "../System";
-import { Manager, Datas } from "..";
-import { Sprite } from "./Sprite";
-import { Vector3 } from "./Vector3";
+import { ProgressionTable } from "../System/index.js";
+import { Manager, Datas } from "../index.js";
+import { Sprite } from "./Sprite.js";
+import { Vector3 } from "./Vector3.js";
 /** @class
  *  A battler in a battle (ally or ennemy).
  *  @param {Player} player The character properties

@@ -1,4 +1,4 @@
-import { System, Graphic } from "..";
+import { System, Graphic } from "../index.js";
 /** @class
  *  All the keyBoards datas.
  *  @static

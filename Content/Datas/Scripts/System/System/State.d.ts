@@ -1,7 +1,7 @@
-import { Base } from "./Base";
-import { Enum } from "../Common";
+import { Base } from "./Base.js";
+import { Enum } from "../Common/index.js";
 import ObjectMovingKind = Enum.ObjectMovingKind;
-import { System, EventCommand } from "..";
+import { System, EventCommand } from "../index.js";
 /** @class
  *  A possible state of an object.
  *  @extends System.Base

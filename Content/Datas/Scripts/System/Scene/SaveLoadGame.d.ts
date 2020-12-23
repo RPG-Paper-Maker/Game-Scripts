@@ -1,6 +1,6 @@
-import { Base } from "./Base";
-import { WindowBox, WindowChoices, Game } from "../Core";
-import { Graphic } from "..";
+import { Base } from "./Base.js";
+import { WindowBox, WindowChoices, Game } from "../Core/index.js";
+import { Graphic } from "../index.js";
 /** @class
  *  Abstract class for the game save and loading menus.
  *  @extends Scene.Base

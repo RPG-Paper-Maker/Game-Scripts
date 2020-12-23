@@ -1,5 +1,5 @@
-import { Camera, ReactionInterpreter, MapObject } from "../Core";
-import { System } from "..";
+import { Camera, ReactionInterpreter, MapObject } from "../Core/index.js";
+import { System } from "../index.js";
 /** @class
  *   Abstract class for the game stack.
  *   @param {boolean} [loading=true] Indicate if the scene should load async

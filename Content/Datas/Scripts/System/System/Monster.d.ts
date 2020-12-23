@@ -1,7 +1,7 @@
-import { Hero } from "./Hero";
-import { ProgressionTable } from "./ProgressionTable";
-import { Loot } from "./Loot";
-import { MonsterAction } from "./MonsterAction";
+import { Hero } from "./Hero.js";
+import { ProgressionTable } from "./ProgressionTable.js";
+import { Loot } from "./Loot.js";
+import { MonsterAction } from "./MonsterAction.js";
 interface StructReward {
     xp: ProgressionTable;
     currencies: ProgressionTable[];

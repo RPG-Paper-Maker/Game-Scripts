@@ -1,5 +1,5 @@
-import { Base } from "./Base";
-import { Picture2D, Vector2 } from "../Core";
+import { Base } from "./Base.js";
+import { Picture2D, Vector2 } from "../Core/index.js";
 /** @class
  *  An animation frame element.
  *  @extends System.Base

@@ -8,8 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Datas } from "..";
-import { Utils } from "../Common";
+import { Datas } from "../index.js";
+import { Utils } from "../Common/index.js";
 /** @class
  *  A collision settings in a texture square.
 */

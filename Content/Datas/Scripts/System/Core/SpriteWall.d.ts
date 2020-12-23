@@ -1,5 +1,5 @@
-import { MapElement, StructMapElementCollision } from "./MapElement";
-import { Position } from "./Position";
+import { MapElement, StructMapElementCollision } from "./MapElement.js";
+import { Position } from "./Position.js";
 /** @class
  *  A sprite in the map.
  *  @extends MapElement

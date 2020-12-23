@@ -1,5 +1,5 @@
-import { MapObject, Node } from ".";
-import { System } from "..";
+import { MapObject, Node } from "./index.js";
+import { System } from "../index.js";
 /** @class
  *  A reaction command interpreter.
  *  @param {MapObject} sender Current event sender (null for System events)

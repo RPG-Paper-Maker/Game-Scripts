@@ -1,4 +1,4 @@
-import { Base } from "./Base";
+import { Base } from "./Base.js";
 /** @class
  *  A skybox of the game.
  *  @extends System.Base

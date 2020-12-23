@@ -7,7 +7,7 @@
 /**
  * import the definitions file to get proper ESmodule typing without
  */
-import { THREE_TYPE } from "./Definitions";
+import { THREE_TYPE } from "./Definitions.js";
 /**
  * @module Three.js
  */

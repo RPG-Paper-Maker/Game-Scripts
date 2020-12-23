@@ -1,8 +1,8 @@
-import { Enum } from "../Common";
+import { Enum } from "../Common/index.js";
 import Align = Enum.Align;
 import AlignVertical = Enum.AlignVertical;
-import { Base } from "./Base";
-import { System } from "..";
+import { Base } from "./Base.js";
+import { System } from "../index.js";
 /** @class
  *  A class for all the texts to display in HUD.
  *  @extends Bitmap

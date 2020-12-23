@@ -1,5 +1,5 @@
-import { Enum } from "../Common";
-import { System } from "..";
+import { Enum } from "../Common/index.js";
+import { System } from "../index.js";
 import CustomShapeKind = Enum.CustomShapeKind;
 /** @class
  *  All the shapes datas.

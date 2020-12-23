@@ -1,6 +1,6 @@
-import { Enum } from "../Common";
+import { Enum } from "../Common/index.js";
 import ItemKind = Enum.ItemKind;
-import { System } from "..";
+import { System } from "../index.js";
 /** @class
  *  An item in the inventory.
  *  @param {ItemKind} kind Kind of item (item, weapon, or armor)

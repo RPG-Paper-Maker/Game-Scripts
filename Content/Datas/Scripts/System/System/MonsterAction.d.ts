@@ -1,6 +1,6 @@
-import { Base } from "./Base";
-import { DynamicValue } from "./DynamicValue";
-import { Monster } from "./Monster";
+import { Base } from "./Base.js";
+import { DynamicValue } from "./DynamicValue.js";
+import { Monster } from "./Monster.js";
 /** @class
  *  A monster action of the game.
  *  @extends System.Base

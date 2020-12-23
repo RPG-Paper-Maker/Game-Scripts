@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Map } from "./Map";
+import { Map } from "./Map.js";
 /** @class
 *   A scene for the loading
 *   @extends SceneGame

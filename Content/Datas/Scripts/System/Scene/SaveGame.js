@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { SaveLoadGame } from "./SaveLoadGame";
-import { Graphic, Datas, Manager } from "..";
-import { Enum } from "../Common";
+import { SaveLoadGame } from "./SaveLoadGame.js";
+import { Graphic, Datas, Manager } from "../index.js";
+import { Enum } from "../Common/index.js";
 var Align = Enum.Align;
 /** @class
  *  A scene in the menu for saving a game.

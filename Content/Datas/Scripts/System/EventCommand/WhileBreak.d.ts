@@ -1,5 +1,5 @@
-import { Base } from "./Base";
-import { MapObject } from "../Core";
+import { Base } from "./Base.js";
+import { MapObject } from "../Core/index.js";
 /** @class
  *  An event command for leaving while event command.
  *  @extends EventCommand.Base

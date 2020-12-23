@@ -1,4 +1,4 @@
-import { Base } from "./Base";
+import { Base } from "./Base.js";
 /** @class
  *  An event command for a comment (ignored).
  *  @extends EventCommand.Base

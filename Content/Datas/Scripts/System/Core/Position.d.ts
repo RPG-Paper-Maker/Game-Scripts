@@ -1,5 +1,5 @@
-import { Portion } from "./Portion";
-import { Vector3 } from "./Vector3";
+import { Portion } from "./Portion.js";
+import { Vector3 } from "./Vector3.js";
 /** @class
  *  The data class for position.
  *  @extends Portion

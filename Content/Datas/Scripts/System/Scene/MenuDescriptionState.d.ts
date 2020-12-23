@@ -1,5 +1,5 @@
-import { Base } from "./Base";
-import { WindowBox, WindowChoices } from "../Core";
+import { Base } from "./Base.js";
+import { WindowBox, WindowChoices } from "../Core/index.js";
 /** @class
  *  A scene in the menu for describing players statistics.
  *  @extends Scene.Base

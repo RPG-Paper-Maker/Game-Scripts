@@ -1,4 +1,4 @@
-import { Scene, Graphic } from "..";
+import { Scene, Graphic } from "../index.js";
 /** @class
 *   A scene for the loading.
 *   @extends SceneGame

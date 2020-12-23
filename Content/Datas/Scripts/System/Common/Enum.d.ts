@@ -82,7 +82,8 @@ declare namespace Enum {
         ModifyCurrency = 53,
         DisplayAnAnimation = 54,
         ShakeScreen = 55,
-        FlashScreen = 56
+        FlashScreen = 56,
+        Plugin = 57
     }
     /**
      *   Enum for the different items kind.

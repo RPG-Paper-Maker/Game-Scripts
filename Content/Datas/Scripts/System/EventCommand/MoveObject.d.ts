@@ -1,9 +1,9 @@
-import { Base } from "./Base";
-import { System } from "..";
-import { Enum } from "../Common";
+import { Base } from "./Base.js";
+import { System } from "../index.js";
+import { Enum } from "../Common/index.js";
 import CommandMoveKind = Enum.CommandMoveKind;
 import Orientation = Enum.Orientation;
-import { MapObject } from "../Core";
+import { MapObject } from "../Core/index.js";
 /** @class
  *  An event command for moving object.
  *  @extends EventCommand.Base

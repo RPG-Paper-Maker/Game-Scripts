@@ -94,7 +94,8 @@ namespace Enum {
         ModifyCurrency,
         DisplayAnAnimation,
         ShakeScreen,
-        FlashScreen
+        FlashScreen,
+        Plugin
     };
 
     /**

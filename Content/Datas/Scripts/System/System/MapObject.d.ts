@@ -1,5 +1,5 @@
-import { Base } from "./Base";
-import { System } from "..";
+import { Base } from "./Base.js";
+import { System } from "../index.js";
 /** @class
  *  An object in the map.
  *  @extends System.Base

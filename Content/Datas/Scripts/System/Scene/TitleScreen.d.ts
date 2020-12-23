@@ -1,5 +1,5 @@
-import { Base } from "./Base";
-import { Picture2D, WindowChoices } from "../Core";
+import { Base } from "./Base.js";
+import { Picture2D, WindowChoices } from "../Core/index.js";
 /** @class
  *  A scene for the title screen.
  *  @extends Scene.Base

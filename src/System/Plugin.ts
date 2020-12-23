@@ -27,6 +27,8 @@ class Plugin extends Base {
     public author: string;
     public version: string;
     public parameters: Record<string, System.DynamicValue>;
+    public commands: Record<string, Function>;
+    public commandsNames: string[];
 
     constructor(id: number, json?: Record<string, any>) {
         super(json);
@@ -45,18 +47,21 @@ class Plugin extends Base {
         this.version = Utils.defaultValue(json.version, "1.0.0");
         this.parameters = {};
         let jsonList = Utils.defaultValue(json.parameters, []);
-        let parameter: System.DynamicValue, jsonParameter: Record<string, any>;
-        for (let i = 0, l = jsonList.length; i < l; i++) {
-            jsonParameter = jsonList[i];
-            parameter = System.DynamicValue.readOrDefaultNumber(jsonParameter
-                .defaultValue);
-            this.parameters[jsonParameter.name] = parameter;
+        let obj: System.DynamicValue, jsonObj: Record<string, any>;
+        let i: number, l: number;
+        for (i = 0, l = jsonList.length; i < l; i++) {
+            jsonObj = jsonList[i];
+            obj = System.DynamicValue.readOrDefaultNumber(jsonObj.defaultValue);
+            this.parameters[jsonObj.name] = obj;
         }
-        /*
-        this.commands = [];
-        Utils.readJSONSystemList({ list: Utils.defaultValue(json.commands, []), 
-            listIndexes: this.commands, cons: System.PluginCommand });
-        */
+        this.commands = {};
+        this.commandsNames = [];
+        jsonList = Utils.defaultValue(json.commands, []);
+        for (i = 0, l = jsonList.length; i < l; i++) {
+            jsonObj = jsonList[i];
+            this.commands[jsonObj.name] = null;
+            this.commandsNames[jsonObj.id] = jsonObj.name;
+        }
     }
 }
 

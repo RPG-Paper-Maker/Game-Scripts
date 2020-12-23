@@ -1,6 +1,6 @@
-import { Base } from "./Base";
-import { System } from "..";
-import { WindowBox, MapObject } from "../Core";
+import { Base } from "./Base.js";
+import { System } from "../index.js";
+import { WindowBox, MapObject } from "../Core/index.js";
 /** @class
  *  An event command for displaying text.
  *  @extends EventCommand.Base

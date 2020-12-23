@@ -1,10 +1,10 @@
-import { Enum } from "../Common";
+import { Enum } from "../Common/index.js";
 import ElementMapKind = Enum.ElementMapKind;
-import { MapElement, StructMapElementCollision } from "./MapElement";
-import { Position } from "./Position";
-import { Core } from "..";
-import { Vector3 } from "./Vector3";
-import { Vector2 } from "./Vector2";
+import { MapElement, StructMapElementCollision } from "./MapElement.js";
+import { Position } from "./Position.js";
+import { Core } from "../index.js";
+import { Vector3 } from "./Vector3.js";
+import { Vector2 } from "./Vector2.js";
 /** @class
  *  A sprite in the map.
  *  @extends MapElement

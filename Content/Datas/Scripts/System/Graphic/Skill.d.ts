@@ -1,5 +1,5 @@
-import { Base } from "./Base";
-import { Graphic, System, Core } from "..";
+import { Base } from "./Base.js";
+import { Graphic, System, Core } from "../index.js";
 /** @class
  *  The graphic displaying the player skills informations in skill menu.
  *  @extends Graphic.Base

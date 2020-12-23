@@ -1,8 +1,8 @@
-import { StructMapElementCollision } from "./MapElement";
-import { System } from "..";
-import { Position } from "./Position";
-import { Object3D } from "./Object3D";
-import { Vector3 } from "./Vector3";
+import { StructMapElementCollision } from "./MapElement.js";
+import { System } from "../index.js";
+import { Position } from "./Position.js";
+import { Object3D } from "./Object3D.js";
+import { Vector3 } from "./Vector3.js";
 /** @class
  *  A 3D object box in the map.
  *  @extends Object3D

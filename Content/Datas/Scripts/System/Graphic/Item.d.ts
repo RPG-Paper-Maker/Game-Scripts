@@ -1,5 +1,5 @@
-import { Base } from "./Base";
-import { System, Graphic, Core } from "..";
+import { Base } from "./Base.js";
+import { System, Graphic, Core } from "../index.js";
 /** @class
  *  The graphic displaying all the items information in the inventory menu.
  *  @param {Item} item The current selected item

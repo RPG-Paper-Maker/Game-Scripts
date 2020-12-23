@@ -1,4 +1,4 @@
-import { SaveLoadGame } from "./SaveLoadGame";
+import { SaveLoadGame } from "./SaveLoadGame.js";
 /** @class
  *  A scene in the menu for saving a game.
  *  @extends Scene.SaveLoadGame

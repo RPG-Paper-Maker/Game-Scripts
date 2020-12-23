@@ -1,4 +1,4 @@
-import { CommonSkillItem } from "./CommonSkillItem";
+import { CommonSkillItem } from "./CommonSkillItem.js";
 /** @class
  *  An item of the game.
  *  @extends CommonSkillItem

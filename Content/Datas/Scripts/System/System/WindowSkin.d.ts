@@ -1,5 +1,5 @@
-import { System } from "..";
-import { Picture2D } from "../Core";
+import { System } from "../index.js";
+import { Picture2D } from "../Core/index.js";
 /** @class
  *  A window skin of the game.
  *  @extends System.Base

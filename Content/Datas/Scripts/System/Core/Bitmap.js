@@ -8,8 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { ScreenResolution } from "../Common";
-import { Stack } from "../Manager";
+import { ScreenResolution } from "../Common/index.js";
+import { Stack } from "../Manager/index.js";
 /** @class
  *  A bitmap is something that can be drawn on the HUD. It can be a window,
  *  a text, an image...

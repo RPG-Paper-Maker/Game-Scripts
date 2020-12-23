@@ -1,7 +1,7 @@
-import { Base } from "./Base";
-import { System } from "..";
-import { WindowChoices, MapObject } from "../Core";
-import { ShowText } from "./ShowText";
+import { Base } from "./Base.js";
+import { System } from "../index.js";
+import { WindowChoices, MapObject } from "../Core/index.js";
+import { ShowText } from "./ShowText.js";
 /** @class
  *  An event command for displaying a choice.
  *  @extends EventCommand.Base

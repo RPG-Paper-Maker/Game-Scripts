@@ -138,6 +138,8 @@ class Events {
                 return new EventCommand.ShakeScreen(command);
             case EventCommandKind.FlashScreen:
                 return new EventCommand.FlashScreen(command);
+            case EventCommandKind.Plugin:
+                return new EventCommand.Plugin(command);
             default:
                 return null;
         }

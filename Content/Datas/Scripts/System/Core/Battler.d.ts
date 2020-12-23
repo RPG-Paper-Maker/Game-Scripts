@@ -1,12 +1,12 @@
-import { Player } from "./Player";
-import { Enum } from "../Common";
-import { Frame } from "./Frame";
+import { Player } from "./Player.js";
+import { Enum } from "../Common/index.js";
+import { Frame } from "./Frame.js";
 import BattlerStep = Enum.BattlerStep;
-import { ProgressionTable } from "../System";
-import { Camera } from "./Camera";
-import { Position } from "./Position";
-import { Vector3 } from "./Vector3";
-import { Vector2 } from "./Vector2";
+import { ProgressionTable } from "../System/index.js";
+import { Camera } from "./Camera.js";
+import { Position } from "./Position.js";
+import { Vector3 } from "./Vector3.js";
+import { Vector2 } from "./Vector2.js";
 /** @class
  *  A battler in a battle (ally or ennemy).
  *  @param {Player} player The character properties

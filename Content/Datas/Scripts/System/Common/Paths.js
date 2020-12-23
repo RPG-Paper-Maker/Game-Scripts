@@ -8,11 +8,11 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Platform } from "./Platform";
+import { Platform } from "./Platform.js";
 /** @class
  *  @static
  *  The static class containing all the files paths.
- *  @example import { Paths } from "../Common"
+ *  @example import { Paths } from "../Common/index.js"
  */
 class Paths {
     constructor() {

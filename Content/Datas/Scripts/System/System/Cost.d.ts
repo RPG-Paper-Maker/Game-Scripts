@@ -1,5 +1,5 @@
-import { Base } from "./Base";
-import { DynamicValue } from "./DynamicValue";
+import { Base } from "./Base.js";
+import { DynamicValue } from "./DynamicValue.js";
 /** @class
  *  A cost of a common skill item.
  *  @extends System.Base

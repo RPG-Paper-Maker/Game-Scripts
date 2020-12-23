@@ -1,12 +1,12 @@
-import { Enum } from "../Common";
+import { Enum } from "../Common/index.js";
 import DynamicValueKind = Enum.DynamicValueKind;
-import { System } from "..";
-import { StructIterator } from "../EventCommand";
+import { System } from "../index.js";
+import { StructIterator } from "../EventCommand/index.js";
 interface StructJSON {
     k: DynamicValueKind;
     v: any;
-    cs?: Record<string, any>;
-    cl?: Record<string, any>;
+    customStructure?: Record<string, any>;
+    customList?: Record<string, any>;
 }
 /** @class
  *  The class who handle dynamic value.

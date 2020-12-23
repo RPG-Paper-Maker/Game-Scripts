@@ -8,10 +8,10 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
-import { AnimationFrameElement } from "./AnimationFrameElement";
-import { AnimationFrameEffect } from "./AnimationFrameEffect";
-import { Utils } from "../Common";
+import { Base } from "./Base.js";
+import { AnimationFrameElement } from "./AnimationFrameElement.js";
+import { AnimationFrameEffect } from "./AnimationFrameEffect.js";
+import { Utils } from "../Common/index.js";
 /** @class
  *  An animation frame.
  *  @extends System.Base

@@ -1,4 +1,4 @@
-import { Map } from "./Map";
+import { Map } from "./Map.js";
 /** @class
 *   A scene for the loading
 *   @extends SceneGame

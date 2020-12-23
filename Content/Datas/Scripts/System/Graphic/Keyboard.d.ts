@@ -1,5 +1,5 @@
-import { System, Graphic } from "..";
-import { Base } from "./Base";
+import { System, Graphic } from "../index.js";
+import { Base } from "./Base.js";
 /** @class
  *  A class for all keyboard assign to display in screen.
  *  @param {System.Keyboard} kb

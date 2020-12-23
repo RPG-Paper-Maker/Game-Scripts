@@ -1,9 +1,9 @@
-import { Base } from "./Base";
-import { System } from "..";
-import { Enum } from "../Common";
+import { Base } from "./Base.js";
+import { System } from "../index.js";
+import { Enum } from "../Common/index.js";
 import GroupKind = Enum.GroupKind;
 import CharacterKind = Enum.CharacterKind;
-import { MapObject } from "../Core";
+import { MapObject } from "../Core/index.js";
 /** @class
  *  An event command for modifying team.
  *  @extends EventCommand.Base

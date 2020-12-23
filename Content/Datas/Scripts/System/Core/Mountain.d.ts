@@ -1,8 +1,8 @@
-import { StructMapElementCollision, MapElement } from ".";
-import { System, Core } from "..";
-import { Position } from "./Position";
-import { TextureBundle } from "./TextureBundle";
-import { Vector3 } from "./Vector3";
+import { StructMapElementCollision, MapElement } from "./index.js";
+import { System, Core } from "../index.js";
+import { Position } from "./Position.js";
+import { TextureBundle } from "./TextureBundle.js";
+import { Vector3 } from "./Vector3.js";
 /** @class
  *  A mountain in the map.
  *  @extends MapElement

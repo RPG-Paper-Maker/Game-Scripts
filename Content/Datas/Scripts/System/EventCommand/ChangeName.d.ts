@@ -1,6 +1,6 @@
-import { Base } from "./Base";
-import { System } from "..";
-import { MapObject } from "../Core";
+import { Base } from "./Base.js";
+import { System } from "../index.js";
+import { MapObject } from "../Core/index.js";
 /** @class
  *  An event command for changing a hero name.
  *  @extends EventCommand.Base

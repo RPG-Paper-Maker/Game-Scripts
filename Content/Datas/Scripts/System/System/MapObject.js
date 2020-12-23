@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
-import { Datas, System } from "..";
-import { Utils } from "../Common";
+import { Base } from "./Base.js";
+import { Datas, System } from "../index.js";
+import { Utils } from "../Common/index.js";
 /** @class
  *  An object in the map.
  *  @extends System.Base

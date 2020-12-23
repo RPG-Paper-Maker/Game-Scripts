@@ -1,5 +1,5 @@
-import { CommonSkillItem } from "./CommonSkillItem";
-import { WeaponArmorKind } from "./WeaponArmorKind";
+import { CommonSkillItem } from "./CommonSkillItem.js";
+import { WeaponArmorKind } from "./WeaponArmorKind.js";
 /** @class
  *  An armor of the game.
  *  @extends System.CommonSkillItem

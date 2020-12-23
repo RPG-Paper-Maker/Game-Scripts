@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { ReactionInterpreter } from "../Core";
-import { Manager } from "..";
-import { Utils } from "../Common";
+import { ReactionInterpreter } from "../Core/index.js";
+import { Manager } from "../index.js";
+import { Utils } from "../Common/index.js";
 /** @class
  *   Abstract class for the game stack.
  *   @param {boolean} [loading=true] Indicate if the scene should load async

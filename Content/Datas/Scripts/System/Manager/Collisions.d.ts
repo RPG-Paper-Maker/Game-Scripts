@@ -1,4 +1,4 @@
-import { MapObject, Position, MapPortion, StructMapElementCollision, Vector3 } from "../Core";
+import { MapObject, Position, MapPortion, StructMapElementCollision, Vector3 } from "../Core/index.js";
 /** @class
  *  The collisions manager.
  *  @static

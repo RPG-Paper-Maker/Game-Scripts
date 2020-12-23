@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
-import { System, Manager } from "..";
-import { MapObject, Portion } from "../Core";
+import { Base } from "./Base.js";
+import { System, Manager } from "../index.js";
+import { MapObject, Portion } from "../Core/index.js";
 /** @class
  *  An event command for removing a specific object from map.
  *  @extends EventCommand.Base

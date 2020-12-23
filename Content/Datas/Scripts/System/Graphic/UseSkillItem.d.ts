@@ -1,5 +1,5 @@
-import { Base } from "./Base";
-import { Graphic } from "..";
+import { Base } from "./Base.js";
+import { Graphic } from "../index.js";
 /** @class
  *  The graphic displaying a skill or an item use.
  *  @extends Graphic.Base

@@ -1,10 +1,10 @@
-import { Base } from "./Base";
-import { System } from "..";
-import { PlaySong } from "./PlaySong";
-import { DynamicValue } from "./DynamicValue";
-import { MapObject } from "../Core/MapObject";
-import { CameraProperties } from "./CameraProperties";
-import { Color } from "./Color";
+import { Base } from "./Base.js";
+import { System } from "../index.js";
+import { PlaySong } from "./PlaySong.js";
+import { DynamicValue } from "./DynamicValue.js";
+import { MapObject } from "../Core/MapObject.js";
+import { CameraProperties } from "./CameraProperties.js";
+import { Color } from "./Color.js";
 /** @class
  *  The properties of a map.
  *  @extends System.Base

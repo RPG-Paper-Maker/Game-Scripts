@@ -46,6 +46,7 @@ export * from "./PlayBackgroundSound";
 export * from "./PlayMusic";
 export * from "./PlayMusicEffect";
 export * from "./PlaySound";
+export * from "./Plugin";
 export * from "./RemoveAPicture";
 export * from "./RemoveObjectFromMap";
 export * from "./Script";

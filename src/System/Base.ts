@@ -18,7 +18,7 @@
  */
 abstract class Base {
 
-    protected constructor(json = undefined, ...args : any) {
+    protected constructor(json = undefined, ...args: any) {
         this.setup(args);
         if (json) {
             this.read(json);

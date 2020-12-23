@@ -1,5 +1,5 @@
-import { Base } from "./Base";
-import { Graphic } from "..";
+import { Base } from "./Base.js";
+import { Graphic } from "../index.js";
 /** @class
  *  A class for all settings to display in screen.
  *  @extends Graphic.Base

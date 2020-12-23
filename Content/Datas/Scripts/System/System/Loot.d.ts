@@ -1,6 +1,6 @@
-import { Base } from "./Base";
-import { DynamicValue } from "./DynamicValue";
-import { Item } from "../Core";
+import { Base } from "./Base.js";
+import { DynamicValue } from "./DynamicValue.js";
+import { Item } from "../Core/index.js";
 /** @class
  *  A loot of the game.
  *  @extends System.Base

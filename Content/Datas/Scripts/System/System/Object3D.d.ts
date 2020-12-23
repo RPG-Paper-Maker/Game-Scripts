@@ -1,9 +1,9 @@
-import { SpecialElement } from "./SpecialElement";
-import { Enum } from "../Common";
+import { SpecialElement } from "./SpecialElement.js";
+import { Enum } from "../Common/index.js";
 import ShapeKind = Enum.ShapeKind;
 import ObjectCollisionKind = Enum.ObjectCollisionKind;
-import { System } from "..";
-import { Vector3 } from "../Core";
+import { System } from "../index.js";
+import { Vector3 } from "../Core/index.js";
 /** @class
  *  A 3D object of the game.
  *  @extends System.SpecialElement

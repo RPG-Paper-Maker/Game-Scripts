@@ -8,8 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
-import { Utils } from "../Common";
+import { Base } from "./Base.js";
+import { Utils } from "../Common/index.js";
 /** @class
  *  A special element (autotile, wall, object3D, mountain) of the game.
  *  @extends System.Base

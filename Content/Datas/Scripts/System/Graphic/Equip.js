@@ -8,8 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
-import { Graphic, Datas } from "..";
+import { Base } from "./Base.js";
+import { Graphic, Datas } from "../index.js";
 /** @class
  *  The graphic displaying all the equipment information in the equip menu.
  *  @extends Graphic.Base

@@ -8,11 +8,11 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Mathf, Constants, Enum } from "../Common";
-import { Position, Portion, Vector3, Vector2 } from "../Core";
-import { Datas, Manager } from "..";
+import { Mathf, Constants, Enum } from "../Common/index.js";
+import { Position, Portion, Vector3, Vector2 } from "../Core/index.js";
+import { Datas, Manager } from "../index.js";
 var ElementMapKind = Enum.ElementMapKind;
-import { THREE } from "../Globals";
+import { THREE } from "../Globals.js";
 /** @class
  *  The collisions manager.
  *  @static

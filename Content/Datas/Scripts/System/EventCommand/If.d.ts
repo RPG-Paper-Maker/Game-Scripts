@@ -1,6 +1,6 @@
-import { Base } from "./Base";
-import { System } from "..";
-import { Player, MapObject } from "../Core";
+import { Base } from "./Base.js";
+import { System } from "../index.js";
+import { Player, MapObject } from "../Core/index.js";
 /** @class
  *  An event command for condition event command block.
  *  @extends EventCommand.Base

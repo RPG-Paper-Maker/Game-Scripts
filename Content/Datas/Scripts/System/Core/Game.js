@@ -8,13 +8,13 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { THREE } from "../Globals";
-import { Player } from "./Player";
-import { Datas } from "..";
-import { Item } from "./Item";
-import { Chrono } from "./Chrono";
-import { MapObject } from "./MapObject";
-import { Paths, Constants, Utils, IO, Enum } from "../Common";
+import { THREE } from "../Globals.js";
+import { Player } from "./Player.js";
+import { Datas } from "../index.js";
+import { Item } from "./Item.js";
+import { Chrono } from "./Chrono.js";
+import { MapObject } from "./MapObject.js";
+import { Paths, Constants, Utils, IO, Enum } from "../Common/index.js";
 var GroupKind = Enum.GroupKind;
 var CharacterKind = Enum.CharacterKind;
 /** @class

@@ -1,7 +1,7 @@
-import { Land } from "./Land";
-import { TextureBundle } from "./TextureBundle";
-import { Position } from "./Position";
-import { StructMapElementCollision } from "./MapElement";
+import { Land } from "./Land.js";
+import { TextureBundle } from "./TextureBundle.js";
+import { Position } from "./Position.js";
+import { StructMapElementCollision } from "./MapElement.js";
 /** @class
  *  @extends Land
  *  An autotile in the map

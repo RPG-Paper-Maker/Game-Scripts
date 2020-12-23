@@ -1,6 +1,6 @@
-import { Translatable } from "./Translatable";
-import { StatisticProgression } from "./StatisticProgression";
-import { ClassSkill } from "./ClassSkill";
+import { Translatable } from "./Translatable.js";
+import { StatisticProgression } from "./StatisticProgression.js";
+import { ClassSkill } from "./ClassSkill.js";
 /** @class
  *  A class of the game.
  *  @extends System.Translatable
