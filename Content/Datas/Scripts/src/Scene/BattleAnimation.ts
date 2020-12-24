@@ -12,6 +12,7 @@
 
 import { Text } from "../Graphic";
 import { Battle } from "./Battle";
+import {Enum} from "../Common/Enum";
 
 // -------------------------------------------------------
 //
@@ -38,17 +39,17 @@ public initialize ()
     let informationText, content;
     switch (this.battle.battleCommandKind)
     {
-    case EffectSpecialActionKind.ApplyWeapons:
+    case Enum.EffectSpecialActionKind.ApplyWeapons:
         informationText = this.battle.attackSkill.name();
         break;
-    case EffectSpecialActionKind.OpenSkills:
-        content = this.battle.attackingGroup === CharacterKind.Hero ? this
+    case Enum.EffectSpecialActionKind.OpenSkills:
+        content = this.battle.attackingGroup === Enum.CharacterKind.Hero ? this.battle
             .windowChoicesSkills.getCurrentContent().skill : RPM.datasGame
             .skills.list[this.battle.action.skillID.getValue()];
         informationText = content.name();
         break;
-    case EffectSpecialActionKind.OpenItems:
-        content = this.battle.attackingGroup === CharacterKind.Hero ? this
+    case Enum.EffectSpecialActionKind.OpenItems:
+        content = this.battle.attackingGroup === Enum.CharacterKind.Hero ? this.battle
             .windowChoicesItems.getCurrentContent().item : RPM.datasGame.items
             .list[this.battle.action.itemID.getValue()];
         informationText = content.name();
@@ -67,15 +68,15 @@ public initialize ()
     let i, l;
     switch (this.battle.battleCommandKind)
     {
-    case EffectSpecialActionKind.ApplyWeapons:
-        if (this.battle.attackingGroup === CharacterKind.Hero)
+    case Enum.EffectSpecialActionKind.ApplyWeapons:
+        if (this.battle.attackingGroup === Enum.CharacterKind.Hero)
         {
             let equipments = this.battle.user.character.equip;
             let j, m, gameItem, weapon;
             for (i = 0, l = equipments.length; i < l; i++)
             {
                 gameItem = equipments[i];
-                if (gameItem && gameItem.k === ItemKind.Weapon)
+                if (gameItem && gameItem.k === Enum.ItemKind.Weapon)
                 {
                     weapon = gameItem.getItemInformations();
                     this.battle.userAnimation = RPM.datasGame.animations.list[weapon
@@ -103,7 +104,7 @@ public initialize ()
         }
         this.battle.user.setAttacking();
         break;
-    case EffectSpecialActionKind.OpenSkills:
+    case Enum.EffectSpecialActionKind.OpenSkills:
         this.battle.userAnimation = RPM.datasGame.animations.list[content
             .animationUserID.getValue()];
         this.battle.targetAnimation = RPM.datasGame.animations.list[content
@@ -112,31 +113,31 @@ public initialize ()
         content.cost();
         this.battle.user.setUsingSkill();
         break;
-    case EffectSpecialActionKind.OpenItems:
+    case Enum.EffectSpecialActionKind.OpenItems:
         let graphic = this.battle.windowChoicesItems.getCurrentContent();
         this.battle.userAnimation = RPM.datasGame.animations.list[content
             .animationUserID.getValue()];
         this.battle.targetAnimation = RPM.datasGame.animations.list[content
             .animationTargetID.getValue()];
         this.battle.effects = content.effects;
-        if (this.battle.attackingGroup === CharacterKind.Hero)
+        if (this.battle.attackingGroup === Enum.CharacterKind.Hero)
         {
             RPM.game.useItem(graphic.gameItem);
         }
         this.battle.user.setUsingItem();
         break;
-    case EffectSpecialActionKind.EndTurn:
-        this.battle.time -= SceneBattle.TIME_ACTION_ANIMATION;
+    case Enum.EffectSpecialActionKind.EndTurn:
+        this.battle.time -= Battle.TIME_ACTION_ANIMATION;
         let user;
-        for (i = 0, l = this.battle.battlers[CharacterKind.Hero].length; i < l; i++)
+        for (i = 0, l = this.battle.battlers[Enum.CharacterKind.Hero].length; i < l; i++)
         {
-            user = this.battle.battlers[CharacterKind.Hero][i];
+            user = this.battle.battlers[Enum.CharacterKind.Hero][i];
             user.setActive(false);
             user.setSelected(false);
         }
         this.battle.subStep = 2;
         break;
-    case EffectSpecialActionKind.DoNothing:
+    case Enum.EffectSpecialActionKind.DoNothing:
         this.battle.time -= SceneBattle.TIME_ACTION_ANIMATION;
         this.battle.subStep = 2;
         break;
@@ -158,22 +159,22 @@ public initialize ()
 
 // -------------------------------------------------------
 /** Get the animation efect condition kind
-*   @returns {AnimationEffectConditionKind}
+*   @returns {Enum.AnimationEffectConditionKind}
 */
-public getCondition (): AnimationEffectConditionKind
+public getCondition (): Enum.AnimationEffectConditionKind
 {
     if (this.battle.damages[0])
     {
         if (this.battle.damages[0][1])
         {
-            return AnimationEffectConditionKind.Critical;
+            return Enum.AnimationEffectConditionKind.Critical;
         }
         if (this.battle.damages[0][2])
         {
-            return AnimationEffectConditionKind.Miss;
+            return Enum.AnimationEffectConditionKind.Miss;
         }
     }
-    return AnimationEffectConditionKind.Hit;
+    return Enum.AnimationEffectConditionKind.Hit;
 }
 
 // -------------------------------------------------------
@@ -281,7 +282,7 @@ public update ()
             {
                 effect = this.battle.effects[this.battle.currentEffectIndex];
                 this.battle.currentEffectIndex++;
-                for (l = this.battle.effects.length; this.battle.currentEffectIndex < l; this
+                for (l = this.battle.effects.length; this.battle.currentEffectIndex < l; this.battle
                     .currentEffectIndex++)
                 {
                     this.battle.targets = this.battle.tempTargets;
@@ -312,7 +313,7 @@ public update ()
                 if (this.battle.isEndTurn())
                 {
                     this.battle.activeGroup();
-                    if (this.battle.attackingGroup === CharacterKind.Hero)
+                    if (this.battle.attackingGroup === Enum.CharacterKind.Hero)
                     {
                         this.battle.changeStep(3); // Attack of ennemies
                     } else
@@ -322,7 +323,7 @@ public update ()
                     }
                 } else
                 {
-                    if (this.battle.attackingGroup === CharacterKind.Hero)
+                    if (this.battle.attackingGroup === Enum.CharacterKind.Hero)
                     {
                         this.battle.changeStep(1); // Attack of heroes
                     } else
@@ -384,7 +385,7 @@ public drawHUDStep ()
     let i, l;
     if (this.battle.targetAnimation)
     {
-        if (this.battle.targetAnimation.positionKind === AnimationPositionKind
+        if (this.battle.targetAnimation.positionKind === Enum.AnimationPositionKind
             .ScreenCenter)
         {
             this.battle.targetAnimation.draw(this.battle.targetAnimationPicture, this.battle

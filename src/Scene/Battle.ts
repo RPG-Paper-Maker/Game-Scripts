@@ -11,7 +11,7 @@
 
 import { Battler, Camera, WindowBox, WindowChoices } from "../Core";
 import { Player } from "../Graphic";
-import { Animation, BattleMap, Color, MonsterAction, Skill } from "../System";
+import { Animation, BattleMap, Color, Effect, MonsterAction, Skill } from "../System";
 import { BattleAnimation } from "./BattleAnimation";
 import { BattleEnemyAttack } from "./BattleEnemyAttack";
 import { BattleInitialize } from "./BattleInitialize";
@@ -234,6 +234,7 @@ class Battle extends Map {
     //Lists
     public listSkills:any[]; //Graphic Skill[]
     public listItems:any[];
+    public effects:Effect[];
 
     //Command
     public battleCommandKind: EffectSpecialActionKind;
@@ -251,6 +252,8 @@ class Battle extends Map {
     public userAnimation:Animation;
     public targetAnimation:Animation;
 
+    public action:MonsterAction;
+
 
 
     //Transition
@@ -260,9 +263,15 @@ class Battle extends Map {
     public transitionEndColor: Color;
     public transitionColorAlpha: number;
     public transitionColor: boolean;
+    /**Whether to zoom during a transition */
     public transitionZoom: boolean;
+    /**Indicate whether the transition has ended */
+    public transitionEnded:boolean;
+    /** Time Transition time */
+    public timeTransition:number;
 
     //Step
+    /**What step (initialization, animation, selection, victory) of battle the game is on */
     public step: number;
     public subStep:number;
 
@@ -300,7 +309,9 @@ class Battle extends Map {
     public battleMap: BattleMap;
     public currentEffectIndex:number;
     public priorityIndex:number;
+    public lootsNumber:number;
 
+    //Attack
     public attackSkill:Skill;
     public attackingGroup:CharacterKind;
 
@@ -482,16 +493,16 @@ class Battle extends Map {
                 this.battleInitialize.initialize();
                 break;
             case 1:
-                this.initializeStep1();
+                this.battleSelection.initialize();
                 break;
             case 2:
-                this.initializeStep2();
+                this.battleAnimation.initialize();
                 break;
             case 3:
-                this.initializeStep3();
+                this.battleEnemyAttack.initialize();
                 break;
             case 4:
-                this.initializeStep4();
+                this.battleVictory.initialize();
                 break;
         }
         RPM.requestPaintHUD = true;
@@ -527,13 +538,13 @@ class Battle extends Map {
                 this.battleSelection.update();
                 break;
             case 2:
-                this.updateStep2();
+                this.battleAnimation.update();
                 break;
             case 3:
-                this.updateStep3();
+                this.battleEnemyAttack.update();
                 break;
             case 4:
-                this.updateStep4();
+                this.battleVictory.update();
                 break;
         }
     }
@@ -611,13 +622,13 @@ class Battle extends Map {
                 this.battleSelection.onKeyPressedStep(key);
                 break;
             case 2:
-                this.onKeyPressedStep2(key);
+                this.battleAnimation.onKeyPressedStep2(key);
                 break;
             case 3:
-                this.onKeyPressedStep3(key);
+                this.battleEnemyAttack.onKeyPressedStep3(key);
                 break;
             case 4:
-                this.onKeyPressedStep4(key);
+                this.battleVictory.onKeyPressedStep4(key);
                 break;
         }
     }
@@ -633,16 +644,16 @@ class Battle extends Map {
                 this.battleInitialize.onKeyReleasedStep(key);
                 break;
             case 1:
-                this.battleSelection.onKeyReleasedStep1(key);
+                this.battleSelection.onKeyReleasedStep(key);
                 break;
             case 2:
-                this.onKeyReleasedStep2(key);
+                this.battleAnimation.onKeyReleasedStep(key);
                 break;
             case 3:
-                this.onKeyReleasedStep3(key);
+                this.battleEnemyAttack.onKeyReleasedStep(key);
                 break;
             case 4:
-                this.onKeyReleasedStep4(key);
+                this.battleVictory.onKeyReleasedStep(key);
                 break;
         }
     }
@@ -664,10 +675,10 @@ class Battle extends Map {
                 this.battleAnimation.onKeyPressedRepeatStep(key);
                 break;
             case 3:
-                this.onKeyPressedRepeatStep3(key);
+                this.battleEnemyAttack.onKeyPressedRepeatStep(key);
                 break;
             case 4:
-                this.onKeyPressedRepeatStep4(key);
+                this.battleVictory.onKeyPressedRepeatStep(key);
                 break;
         }
     }
@@ -689,10 +700,10 @@ class Battle extends Map {
                 this.battleAnimation.onKeyPressedAndRepeatStep(key);
                 break;
             case 3:
-                this.onKeyPressedAndRepeatStep3(key);
+                this.battleEnemyAttack.onKeyPressedAndRepeatStep(key);
                 break;
             case 4:
-                this.onKeyPressedAndRepeatStep4(key);
+                this.battleVictory.onKeyPressedAndRepeatStep(key);
                 break;
         }
     }
@@ -723,10 +734,10 @@ class Battle extends Map {
                 this.battleAnimation.drawHUDStep();
                 break;
             case 3:
-                this.drawHUDStep3();
+                this.battleEnemyAttack.drawHUDStep();
                 break;
             case 4:
-                this.drawHUDStep4();
+                this.battleVictory.drawHUDStep();
                 break;
         }
         super.drawHUD();
