@@ -608,7 +608,7 @@ class Battle extends Map {
                 this.battleInitialize.onKeyPressedStep(key);
                 break;
             case 1:
-                this.onKeyPressedStep1(key);
+                this.battleSelection.onKeyPressedStep(key);
                 break;
             case 2:
                 this.onKeyPressedStep2(key);
@@ -633,7 +633,7 @@ class Battle extends Map {
                 this.battleInitialize.onKeyReleasedStep(key);
                 break;
             case 1:
-                this.onKeyReleasedStep1(key);
+                this.battleSelection.onKeyReleasedStep1(key);
                 break;
             case 2:
                 this.onKeyReleasedStep2(key);
@@ -658,10 +658,10 @@ class Battle extends Map {
                 this.battleInitialize.onKeyPressedRepeatStep(key);
                 break;
             case 1:
-                this.onKeyPressedRepeatStep1(key);
+                this.battleSelection.onKeyPressedRepeatStep(key);
                 break;
             case 2:
-                this.onKeyPressedRepeatStep2(key);
+                this.battleAnimation.onKeyPressedRepeatStep(key);
                 break;
             case 3:
                 this.onKeyPressedRepeatStep3(key);
