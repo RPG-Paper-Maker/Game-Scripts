@@ -18,6 +18,8 @@ import { BattleInitialize } from "./BattleInitialize";
 import { BattleSelection } from "./BattleSelection";
 import { BattleVictory } from "./BattleVictory";
 import { Map } from "./Map";
+import {Enum} from "../Common/Enum"
+import { TitleScreen } from "./TitleScreen";
 
 /** @class
 *   A scene for battling
@@ -81,9 +83,9 @@ import { Map } from "./Map";
 *   @property {number} troopID Current troop ID that the allies are fighting
 *   @property {boolean} canGameOver Indicate if there is a win/lose node or not
 *   @property {boolean} canEscape Indicate if the player can escape this battle
-*   @property {MapTransitionKind} transitionStart The kind of transition for 
+*   @property {Enum.MapTransitionKind} transitionStart The kind of transition for 
 *   the battle start
-*   @property {MapTransitionKind} transitionEnd The kind of transition for the 
+*   @property {Enum.MapTransitionKind} transitionEnd The kind of transition for the 
 *   battle end
 *   @property {SystemColor} transitionStartColor The System color for start
 *   transition
@@ -106,11 +108,11 @@ import { Map } from "./Map";
 *   @property {boolean} transitionZoom Indicate when to zoom in or out
 *   @property {boolean} loadingStep Indicate if there is a loading step
 *   @property {boolean} winning Indicate if the battle is won
-*   @property {CharacterKind} kindSelection Indicating which group is currently
+*   @property {Enum.CharacterKind} kindSelection Indicating which group is currently
 *       selected
 *   @property {number} selectedUserIndex Index of the selected user
 *   @property {number} selectedTargetIndex Index of the selected target
-*   @property {EffectSpecialActionKind} battleCommandKind The current battle 
+*   @property {Enum.EffectSpecialActionKind} battleCommandKind The current battle 
 *   command kind
 *   @property {Battler[]} targets List of all the current targets
 *   @property {any[]} damages Informations about damages
@@ -137,7 +139,7 @@ import { Map } from "./Map";
 *   progression
 *   @property {WindowBox} windowStatisticProgression The window statistic 
 *   progression
-*   @property {CharacterKind} attackingGroup Indicating which group is 
+*   @property {Enum.CharacterKind} attackingGroup Indicating which group is 
 *   currently attacking
 *   @property {boolean} userTarget Indicate if the user is a target
 *   @property {boolean} all Indicate if the targets are all the enemies
@@ -166,9 +168,9 @@ import { Map } from "./Map";
 *   @param {boolean} canGameOver Indicate if there is a win/lose node or not
 *   @param {boolean} canEscape Indicate if the player can escape this battle
 *   @param {SystemBattleMap} battleMap The System battle map
-*   @param {MapTransitionKind} transitionStart The kind of transition for 
+*   @param {Enum.MapTransitionKind} transitionStart The kind of transition for 
 *   the battle start
-*   @param {MapTransitionKind} transitionEnd The kind of transition for the 
+*   @param {Enum.MapTransitionKind} transitionEnd The kind of transition for the 
 *   battle end
 *   @param {SystemColor} transitionStartColor The System color for start
 *   transition
@@ -227,7 +229,7 @@ class Battle extends Map {
     public userTarget:boolean;
 
     //Selection
-    public kindSelection: CharacterKind;
+    public kindSelection: Enum.CharacterKind;
     public selectedUserIndex: number;
     public selectedTargetIndex: number;
 
@@ -237,7 +239,7 @@ class Battle extends Map {
     public effects:Effect[];
 
     //Command
-    public battleCommandKind: EffectSpecialActionKind;
+    public battleCommandKind: Enum.EffectSpecialActionKind;
 
     //Battle Information
     public graphicPlayers: Player;
@@ -313,7 +315,7 @@ class Battle extends Map {
 
     //Attack
     public attackSkill:Skill;
-    public attackingGroup:CharacterKind;
+    public attackingGroup:Enum.CharacterKind;
 
 
 
@@ -339,7 +341,7 @@ class Battle extends Map {
         this.transitionStartColor = transitionStartColor;
         this.transitionEndColor = transitionEndColor;
         //TODO: Bug?
-        this.transitionColor = transitionStart === MapTransitionKind.Fade;
+        this.transitionColor = transitionStart === Enum.MapTransitionKind.Fade;
         this.transitionColorAlpha = 0;
         this.step = 0;
         this.sceneMap = RPM.gameStack.top;
@@ -366,7 +368,7 @@ class Battle extends Map {
         this.cameraStep = 0;
         this.cameraTick = Battle.CAMERA_TICK;
         this.cameraOffset = Battle.CAMERA_OFFSET;
-        this.cameraON = this.transitionStart !== MapTransitionKind.Zoom;
+        this.cameraON = this.transitionStart !== Enum.MapTransitionKind.Zoom;
         this.cameraDistance = this.camera.distance;
         this.transitionZoom = false;
         if (!this.cameraON) {
@@ -388,12 +390,12 @@ class Battle extends Map {
 
     // -------------------------------------------------------
     /** Check if a player is defined (active and not dead)
-    *   @param {CharacterKind} kind Kind of player
+    *   @param {Enum.CharacterKind} kind Kind of player
     *   @param {number} index Index in the group
     *   @param {boolean} target Indicate if the player is a target
     *   @returns {boolean}
     */
-    isDefined(kind: CharacterKind, index: number, target: boolean): boolean {
+    isDefined(kind: Enum.CharacterKind, index: number, target: boolean): boolean {
         return ((target || this.battlers[kind][index].active) && !this.battlers
         [kind][index].character.isDead())
     }
@@ -414,10 +416,10 @@ class Battle extends Map {
 
     // -------------------------------------------------------
     /** Check if all the heroes or enemies are dead
-    *   @param {CharacterKind} group Kind of player
+    *   @param {Enum.CharacterKind} group Kind of player
     *   @returns {boolean}
     */
-    isGroupDead(group: CharacterKind): boolean {
+    isGroupDead(group: Enum.CharacterKind): boolean {
         for (let i = 0, l = this.battlers[group].length; i < l; i++) {
             if (!this.battlers[group][i].character.isDead()) {
                 return false;
@@ -431,7 +433,7 @@ class Battle extends Map {
     *   @returns {boolean}
     */
     isWin(): boolean {
-        return this.isGroupDead(CharacterKind.Monster);
+        return this.isGroupDead(Enum.CharacterKind.Monster);
     }
 
     // -------------------------------------------------------
@@ -439,7 +441,7 @@ class Battle extends Map {
     *   @returns {boolean}
     */
     isLose(): boolean {
-        return this.isGroupDead(CharacterKind.Hero);
+        return this.isGroupDead(Enum.CharacterKind.Hero);
     }
 
     // -------------------------------------------------------
@@ -448,7 +450,7 @@ class Battle extends Map {
     gameOver() {
         if (this.canGameOver) {
             RPM.gameStack.pop();
-            RPM.gameStack.replace(new SceneTitleScreen()); // TODO
+            RPM.gameStack.replace(new TitleScreen()); // TODO
         } else {
             this.endBattle();
         }
@@ -467,7 +469,7 @@ class Battle extends Map {
     endBattle() {
         // Heroes
         for (let i = 0, l = RPM.game.teamHeroes.length; i < l; i++) {
-            this.battlers[CharacterKind.Hero][i].removeFromScene();
+            this.battlers[Enum.CharacterKind.Hero][i].removeFromScene();
         }
         RPM.gameStack.pop();
         RPM.currentMap = RPM.gameStack.top;
@@ -515,13 +517,13 @@ class Battle extends Map {
         super.update();
 
         // Heroes
-        let battlers = this.battlers[CharacterKind.Hero];
+        let battlers = this.battlers[Enum.CharacterKind.Hero];
         let i, l;
         for (i = 0, l = battlers.length; i < l; i++) {
             battlers[i].update();
         }
         // Ennemies
-        battlers = this.battlers[CharacterKind.Monster];
+        battlers = this.battlers[Enum.CharacterKind.Monster];
         for (i = 0, l = battlers.length; i < l; i++) {
             battlers[i].update();
         }
@@ -622,13 +624,13 @@ class Battle extends Map {
                 this.battleSelection.onKeyPressedStep(key);
                 break;
             case 2:
-                this.battleAnimation.onKeyPressedStep2(key);
+                this.battleAnimation.onKeyPressedStep(key);
                 break;
             case 3:
-                this.battleEnemyAttack.onKeyPressedStep3(key);
+                this.battleEnemyAttack.onKeyPressedStep(key);
                 break;
             case 4:
-                this.battleVictory.onKeyPressedStep4(key);
+                this.battleVictory.onKeyPressedStep(key);
                 break;
         }
     }
