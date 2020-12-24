@@ -16,7 +16,7 @@ import { Map } from "./Map";
 *   @extends SceneGame
 *   @property {GraphicText} text The graphic text displaying loading
 */
-class Battle extends Map {
+class OldBattle extends Map {
 
     public user: any;
     
@@ -25,4 +25,4 @@ class Battle extends Map {
     }
 }
 
-export { Battle }
+export { OldBattle }
