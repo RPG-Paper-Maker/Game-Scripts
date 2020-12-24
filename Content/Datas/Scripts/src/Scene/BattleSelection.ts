@@ -10,6 +10,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Battle } from "./Battle";
+
 // -------------------------------------------------------
 //
 //  CLASS BattleSelection
@@ -21,6 +23,10 @@
 //
 // -------------------------------------------------------
 class BattleSelection {
-
-
+    battle:Battle
+    public constructor(battle:Battle) {
+        this.battle = battle;
+    }
 }
+
+export {BattleSelection}

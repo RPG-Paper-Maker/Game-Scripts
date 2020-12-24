@@ -21,8 +21,7 @@
 // -------------------------------------------------------
 /** Initialize step
 */
-SceneBattle.prototype.initializeStep0 = function()
-{
+SceneBattle.prototype.initializeStep0 = function () {
     RPM.escaped = false;
     this.winning = false;
     this.kindSelection = CharacterKind.Hero;
@@ -46,19 +45,17 @@ SceneBattle.prototype.initializeStep0 = function()
 // -------------------------------------------------------
 /** Initialize allies battlers
 */
-SceneBattle.prototype.initializeAlliesBattlers = function()
-{
+SceneBattle.prototype.initializeAlliesBattlers = function () {
     let l = RPM.game.teamHeroes.length;
     this.battlers[CharacterKind.Hero] = new Array(l);
     this.graphicPlayers[CharacterKind.Hero] = new Array(l);
     let position, character, battler;
-    for (let i = 0; i < l; i++)
-    {
+    for (let i = 0; i < l; i++) {
         // Battlers
         position = new THREE.Vector3(RPM.game.heroBattle.position.x + (2 *
             RPM.SQUARE_SIZE) + (i * RPM.SQUARE_SIZE / 2), RPM.game
-            .heroBattle.position.y,  RPM.game.heroBattle.position.z - RPM
-            .SQUARE_SIZE + (i * RPM.SQUARE_SIZE));
+                .heroBattle.position.y, RPM.game.heroBattle.position.z - RPM
+                    .SQUARE_SIZE + (i * RPM.SQUARE_SIZE));
         character = RPM.game.teamHeroes[i];
         battler = new Battler(character, position, this.camera);
         battler.updateDead(false);
@@ -77,21 +74,19 @@ SceneBattle.prototype.initializeAlliesBattlers = function()
 // -------------------------------------------------------
 /** Initialize enemies battlers
 */
-SceneBattle.prototype.initializeEnemiesBattlers = function()
-{
+SceneBattle.prototype.initializeEnemiesBattlers = function () {
     let troop = RPM.datasGame.troops.list[this.troopID];
     let l = troop.list.length;
     this.battlers[CharacterKind.Monster] = new Array(l);
     this.graphicPlayers[CharacterKind.Monster] = new Array(l);
     let enemy, position, instancied, battler;
-    for (i = 0; i < l; i++)
-    {
+    for (i = 0; i < l; i++) {
         // Battlers
         enemy = troop.list[i];
         position = new THREE.Vector3(RPM.game.heroBattle.position.x - (2 *
             RPM.SQUARE_SIZE) - (i * RPM.SQUARE_SIZE * 3 / 4), RPM.game
-            .heroBattle.position.y, RPM.game.heroBattle.position.z - RPM
-            .SQUARE_SIZE + (i * RPM.SQUARE_SIZE));
+                .heroBattle.position.y, RPM.game.heroBattle.position.z - RPM
+                    .SQUARE_SIZE + (i * RPM.SQUARE_SIZE));
         instancied = new GamePlayer(CharacterKind.Monster, enemy.id, RPM
             .game.charactersInstances++, []);
         instancied.instanciate(enemy.level);
@@ -110,10 +105,9 @@ SceneBattle.prototype.initializeEnemiesBattlers = function()
 // -------------------------------------------------------
 /** Initialize informations (boxes)
 */
-SceneBattle.prototype.initializeInformations = function()
-{
-    this.windowTopInformations = new WindowBox(0, RPM.HUGE_SPACE, RPM.SCREEN_X, 
-        RPM.SMALL_SLOT_HEIGHT, 
+SceneBattle.prototype.initializeInformations = function () {
+    this.windowTopInformations = new WindowBox(0, RPM.HUGE_SPACE, RPM.SCREEN_X,
+        RPM.SMALL_SLOT_HEIGHT,
         {
             padding: RPM.SMALL_SLOT_PADDING
         }
@@ -139,55 +133,53 @@ SceneBattle.prototype.initializeInformations = function()
 // -------------------------------------------------------
 /** Initialize window commands
 */
-SceneBattle.prototype.initializeWindowCommands = function()
-{
+SceneBattle.prototype.initializeWindowCommands = function () {
     let l = RPM.datasGame.battleSystem.battleCommandsOrder.length;
     let listContent = new Array(l);
     let listCallbacks = new Array(l);
     let skill;
-    for (let i = 0; i < l; i++)
-    {
+    for (let i = 0; i < l; i++) {
         skill = RPM.datasGame.skills.list[RPM.datasGame.battleSystem
             .battleCommandsOrder[i]];
         listContent[i] = new GraphicTextIcon(skill.name(), skill.pictureID);
         listContent[i].skill = skill;
         listCallbacks[i] = SystemCommonSkillItem.prototype.useCommand;
     }
-    this.windowChoicesBattleCommands = new WindowChoices(RPM.HUGE_SPACE, 
-        RPM.SCREEN_Y - RPM.HUGE_SPACE - (l * RPM.SMALL_SLOT_HEIGHT), 
-        SceneBattle.WINDOW_COMMANDS_WIDTH, RPM.SMALL_SLOT_HEIGHT, 
-        listContent, 
-        { 
+    this.windowChoicesBattleCommands = new WindowChoices(RPM.HUGE_SPACE,
+        RPM.SCREEN_Y - RPM.HUGE_SPACE - (l * RPM.SMALL_SLOT_HEIGHT),
+        SceneBattle.WINDOW_COMMANDS_WIDTH, RPM.SMALL_SLOT_HEIGHT,
+        listContent,
+        {
             nbItemsMax: SceneBattle.COMMANDS_NUMBER,
             listCallbacks: listCallbacks
         }
     );
     this.windowChoicesSkills = new WindowChoices(SceneBattle
-        .WINDOW_COMMANDS_SELECT_X, SceneBattle.WINDOW_COMMANDS_SELECT_Y, 
+        .WINDOW_COMMANDS_SELECT_X, SceneBattle.WINDOW_COMMANDS_SELECT_Y,
         SceneBattle.WINDOW_COMMANDS_SELECT_WIDTH, RPM.SMALL_SLOT_HEIGHT, [],
-        { 
+        {
             nbItemsMax: SceneBattle.COMMANDS_NUMBER
         }
     );
     this.windowSkillDescription = new WindowBox(RPM.SCREEN_X - SceneBattle
-        .WINDOW_DESCRIPTIONS_X, SceneBattle.WINDOW_DESCRIPTIONS_Y, 
+        .WINDOW_DESCRIPTIONS_X, SceneBattle.WINDOW_DESCRIPTIONS_Y,
         SceneBattle.WINDOW_DESCRIPTIONS_WIDTH, SceneBattle
-        .WINDOW_DESCRIPTIONS_HEIGHT, 
+        .WINDOW_DESCRIPTIONS_HEIGHT,
         {
             padding: RPM.HUGE_PADDING_BOX
         }
     );
     this.windowChoicesItems = new WindowChoices(SceneBattle
-        .WINDOW_COMMANDS_SELECT_X, SceneBattle.WINDOW_COMMANDS_SELECT_Y, 
-        SceneBattle.WINDOW_COMMANDS_SELECT_WIDTH, RPM.SMALL_SLOT_HEIGHT, [], 
-        { 
+        .WINDOW_COMMANDS_SELECT_X, SceneBattle.WINDOW_COMMANDS_SELECT_Y,
+        SceneBattle.WINDOW_COMMANDS_SELECT_WIDTH, RPM.SMALL_SLOT_HEIGHT, [],
+        {
             nbItemsMax: SceneBattle.COMMANDS_NUMBER
         }
     );
     this.windowItemDescription = new WindowBox(RPM.SCREEN_X - SceneBattle
-        .WINDOW_DESCRIPTIONS_X, SceneBattle.WINDOW_DESCRIPTIONS_Y, 
+        .WINDOW_DESCRIPTIONS_X, SceneBattle.WINDOW_DESCRIPTIONS_Y,
         SceneBattle.WINDOW_DESCRIPTIONS_WIDTH, SceneBattle
-        .WINDOW_DESCRIPTIONS_HEIGHT, 
+        .WINDOW_DESCRIPTIONS_HEIGHT,
         {
             padding: RPM.HUGE_PADDING_BOX
         }
@@ -197,19 +189,18 @@ SceneBattle.prototype.initializeWindowCommands = function()
 // -------------------------------------------------------
 /** Initialize windows end
 */
-SceneBattle.prototype.initializeWindowsEnd = async function()
-{
+SceneBattle.prototype.initializeWindowsEnd = async function () {
     this.windowExperienceProgression = new WindowBox(SceneBattle
         .WINDOW_EXPERIENCE_X, SceneBattle.WINDOW_EXPERIENCE_Y, SceneBattle
         .WINDOW_EXPERIENCE_WIDTH, (SceneBattle.WINDOW_EXPERIENCE_HEIGHT * RPM
-        .game.teamHeroes.length) + RPM.SMALL_PADDING_BOX[2] + RPM
-        .SMALL_PADDING_BOX[3], 
+            .game.teamHeroes.length) + RPM.SMALL_PADDING_BOX[2] + RPM
+                .SMALL_PADDING_BOX[3],
         {
             content: new GraphicXPProgression(),
             padding: RPM.SMALL_PADDING_BOX
         }
     );
-    this.windowStatisticProgression = new WindowBox(SceneBattle.WINDOW_STATS_X, 
+    this.windowStatisticProgression = new WindowBox(SceneBattle.WINDOW_STATS_X,
         SceneBattle.WINDOW_STATS_Y, SceneBattle.WINDOW_STATS_WIDTH, SceneBattle
         .WINDOW_STATS_HEIGHT,
         {
@@ -221,8 +212,7 @@ SceneBattle.prototype.initializeWindowsEnd = async function()
 // -------------------------------------------------------
 /** Initialize musics
 */
-SceneBattle.prototype.initializeMusics = function()
-{
+SceneBattle.prototype.initializeMusics = function () {
     SceneBattle.musicMap = SystemPlaySong.currentPlayingMusic;
     let song = RPM.songsManager.currentSong[SongKind.Music];
     SceneBattle.musicMapTime = song === null ? 0 : song.seek() / RPM
@@ -233,18 +223,14 @@ SceneBattle.prototype.initializeMusics = function()
 // -------------------------------------------------------
 /** Update the battle
 */
-SceneBattle.prototype.updateStep0 = function()
-{
+SceneBattle.prototype.updateStep0 = function () {
     RPM.requestPaintHUD = true;
 
-    if (this.transitionStart === MapTransitionKind.Fade)
-    {
+    if (this.transitionStart === MapTransitionKind.Fade) {
         this.updateTransitionStartFade();
-    } else if (this.transitionStart === MapTransitionKind.Zoom)
-    {
+    } else if (this.transitionStart === MapTransitionKind.Zoom) {
         this.updateTransitionStartZoom();
-    } else
-    {
+    } else {
         this.changeStep(1);
     }
 }
@@ -252,13 +238,10 @@ SceneBattle.prototype.updateStep0 = function()
 // -------------------------------------------------------
 /** Update transtion start fade
 */
-SceneBattle.prototype.updateTransitionStartFade = function()
-{
-    if (this.transitionColor)
-    {
+SceneBattle.prototype.updateTransitionStartFade = function () {
+    if (this.transitionColor) {
         this.transitionColorAlpha += SceneBattle.TRANSITION_COLOR_VALUE;
-        if (this.transitionColorAlpha >= 1)
-        {
+        if (this.transitionColorAlpha >= 1) {
             this.transitionColorAlpha = 1;
             this.transitionColor = false;
             this.timeTransition = new Date().getTime();
@@ -267,15 +250,12 @@ SceneBattle.prototype.updateTransitionStartFade = function()
         return;
     }
     if (new Date().getTime() - this.timeTransition < SceneBattle
-        .TRANSITION_COLOR_END_WAIT)
-    {
+        .TRANSITION_COLOR_END_WAIT) {
         return;
     }
-    if (this.transitionColorAlpha > 0)
-    {
+    if (this.transitionColorAlpha > 0) {
         this.transitionColorAlpha -= SceneBattle.TRANSITION_COLOR_VALUE;
-        if (this.transitionColorAlpha <= 0)
-        {
+        if (this.transitionColorAlpha <= 0) {
             this.transitionColorAlpha = 0;
         }
         return;
@@ -286,17 +266,14 @@ SceneBattle.prototype.updateTransitionStartFade = function()
 // -------------------------------------------------------
 /** Update transition start zoom
 */
-SceneBattle.prototype.updateTransitionStartZoom = function()
-{
+SceneBattle.prototype.updateTransitionStartZoom = function () {
     let offset;
-    if (this.transitionZoom)
-    {
-        this.sceneMap.camera.distance = ((this.sceneMapCameraDistance - 
-            SceneBattle.START_CAMERA_DISTANCE) * (1 - ((new Date().getTime() - 
-            this.time) / SceneBattle.TRANSITION_ZOOM_TIME))) + SceneBattle
-            .START_CAMERA_DISTANCE;
-        if (this.sceneMap.camera.distance <= SceneBattle.START_CAMERA_DISTANCE)
-        {
+    if (this.transitionZoom) {
+        this.sceneMap.camera.distance = ((this.sceneMapCameraDistance -
+            SceneBattle.START_CAMERA_DISTANCE) * (1 - ((new Date().getTime() -
+                this.time) / SceneBattle.TRANSITION_ZOOM_TIME))) + SceneBattle
+                .START_CAMERA_DISTANCE;
+        if (this.sceneMap.camera.distance <= SceneBattle.START_CAMERA_DISTANCE) {
             this.sceneMap.camera.distance = SceneBattle.START_CAMERA_DISTANCE;
             this.transitionZoom = false;
             this.updateBackgroundColor();
@@ -305,18 +282,15 @@ SceneBattle.prototype.updateTransitionStartZoom = function()
         this.sceneMap.camera.update();
         return;
     }
-    if (this.camera.distance < this.cameraDistance)
-    {
+    if (this.camera.distance < this.cameraDistance) {
         offset = SceneBattle.START_CAMERA_DISTANCE / this.cameraDistance *
             SceneBattle.TRANSITION_ZOOM_TIME;
-        this.camera.distance = (((new Date().getTime() - this.time) - offset) / 
+        this.camera.distance = (((new Date().getTime() - this.time) - offset) /
             (SceneBattle.TRANSITION_ZOOM_TIME - offset)) * this.cameraDistance;
-        if (this.camera.distance >= this.cameraDistance)
-        {
+        if (this.camera.distance >= this.cameraDistance) {
             this.camera.distance = this.cameraDistance;
             this.cameraON = true;
-        } else
-        {
+        } else {
             return;
         }
     }
@@ -327,8 +301,7 @@ SceneBattle.prototype.updateTransitionStartZoom = function()
 /** Handle key pressed
 *   @param {number} key The key ID 
 */
-SceneBattle.prototype.onKeyPressedStep0 = function(key)
-{
+SceneBattle.prototype.onKeyPressedStep0 = function (key) {
 
 }
 
@@ -336,8 +309,7 @@ SceneBattle.prototype.onKeyPressedStep0 = function(key)
 /** Handle key released
 *   @param {number} key The key ID 
 */
-SceneBattle.prototype.onKeyReleasedStep0 = function(key)
-{
+SceneBattle.prototype.onKeyReleasedStep0 = function (key) {
 
 }
 
@@ -345,8 +317,7 @@ SceneBattle.prototype.onKeyReleasedStep0 = function(key)
 /** Handle key repeat pressed
 *   @param {number} key The key ID 
 */
-SceneBattle.prototype.onKeyPressedRepeatStep0 = function(key)
-{
+SceneBattle.prototype.onKeyPressedRepeatStep0 = function (key) {
 
 }
 
@@ -354,23 +325,20 @@ SceneBattle.prototype.onKeyPressedRepeatStep0 = function(key)
 /** Handle key pressed and repeat
 *   @param {number} key The key ID 
 */
-SceneBattle.prototype.onKeyPressedAndRepeatStep0 = function(key)
-{
+SceneBattle.prototype.onKeyPressedAndRepeatStep0 = function (key) {
 
 }
 
 // -------------------------------------------------------
 /** Draw the battle HUD
 */
-SceneBattle.prototype.drawHUDStep0 = function()
-{
-    if (this.transitionStart === 1)
-    {
-        Platform.ctx.fillStyle = RPM.STRING_RGBA + RPM.STRING_PARENTHESIS_LEFT + 
+SceneBattle.prototype.drawHUDStep0 = function () {
+    if (this.transitionStart === 1) {
+        Platform.ctx.fillStyle = RPM.STRING_RGBA + RPM.STRING_PARENTHESIS_LEFT +
             this.transitionStartColor.red + RPM.STRING_COMA + this
-            .transitionStartColor.green + RPM.STRING_COMA + this
-            .transitionStartColor.blue + RPM.STRING_COMA + this
-            .transitionColorAlpha + RPM.STRING_PARENTHESIS_RIGHT;
+                .transitionStartColor.green + RPM.STRING_COMA + this
+                    .transitionStartColor.blue + RPM.STRING_COMA + this
+                .transitionColorAlpha + RPM.STRING_PARENTHESIS_RIGHT;
         Platform.ctx.fillRect(0, 0, RPM.CANVAS_WIDTH, RPM.CANVAS_HEIGHT);
     }
 }

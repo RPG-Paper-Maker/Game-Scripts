@@ -9,8 +9,14 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Camera } from "../Core";
-import { Color, MonsterAction } from "../System";
+import { Battler, Camera, WindowBox, WindowChoices } from "../Core";
+import { Player } from "../Graphic";
+import { BattleMap, Color, MonsterAction } from "../System";
+import { BattleAnimation } from "./BattleAnimation";
+import { BattleEnemyAttack } from "./BattleEnemyAttack";
+import { BattleInitialize } from "./BattleInitialize";
+import { BattleSelection } from "./BattleSelection";
+import { BattleVictory } from "./BattleVictory";
 import { Map } from "./Map";
 
 /** @class
@@ -170,9 +176,8 @@ import { Map } from "./Map";
 *   transition
 */
 
-class Battle extends Map
-{
-    
+class Battle extends Map {
+
     static TRANSITION_ZOOM_TIME = 500;
     static TRANSITION_COLOR_VALUE = 0.1;
     static TRANSITION_COLOR_END_WAIT = 600;
@@ -204,42 +209,99 @@ class Battle extends Map
     static WINDOW_STATS_WIDTH = 380;
     static WINDOW_STATS_HEIGHT = 200;
 
+
+    public battleInitialize: BattleInitialize;
     public battleSelection: BattleSelection; //Step 1
-    public battleAnimation:BattleAnimation; //Step 2
+    public battleAnimation: BattleAnimation; //Step 2
     public battleEnemyAttack: BattleEnemyAttack; //Step 3
     public battleVictory: BattleVictory; //Step 4
-    public troopID:number;
-    public canGameOver:boolean;
-    public canEscape:boolean;
-    public transitionStart:number; //TODO: Add Enum
-    public transitionStartColor:Color;
-    public transitionEnd:number;
-    public transitionEndColor:Color;
-    public transitionColorAlpha:number;
-    public step:number;
-    public sceneMapCameraDistance:number; //Remove Scene Prefix
-    public actionDoNothing:MonsterAction;
-    //Camera
-    public cameraStep:number;
-    public cameraTick:number;
-    public cameraON:boolean;
-    public cameraDistance:number;
-    public cameraOffset:number;
+
+    // Flags
+    public troopID: number;
+    public canGameOver: boolean;
+    public canEscape: boolean;
+    public winning: boolean;
+    public loadingStep: boolean;
+    public finishedXP: boolean;
+
+    //Selection
+    public kindSelection: CharacterKind;
+    public selectedUserIndex: number;
+    public selectedTargetIndex: number;
+
+    //Command
+    public battleCommandKind: EffectSpecialActionKind;
+
+    //Battle Information
+    public graphicPlayers: Player;
+    public targets: Battler[];
+    public battlers:Battler[][];
+    public damages: any[];
+    public time: number;
+    public timeEnemyAttack:number;
+    public turn: number;
+
+
+
     //Transition
-    public transitionColor:Color;
+    public transitionStart: number; //TODO: Add Enum
+    public transitionStartColor: Color;
+    public transitionEnd: number;
+    public transitionEndColor: Color;
+    public transitionColorAlpha: number;
+    public transitionColor: boolean;
+    public transitionZoom: boolean;
+
+    //Step
+    public step: number;
+    public subStep:number;
+    public sceneMapCameraDistance: number; //Remove Scene Prefix
+    public actionDoNothing: MonsterAction;
+
+    //Camera
+    public cameraStep: number;
+    public cameraTick: number;
+    public cameraON: boolean;
+    public cameraDistance: number;
+    public cameraOffset: number;
+
+    //Window
+    public windowTopInformations: WindowBox;
+    public windowTargetInformations: WindowBox;
+    public windowUserInformations: WindowBox;
+    public windowChoicesBattleCommands: WindowChoices;
+    public windowChoicesSkills: WindowChoices;
+    public windowChoicesItems: WindowChoices;
+    public windowSkillDescription: WindowBox;
+    public windowItemDescription: WindowBox;
+    public windowExperienceProgression: WindowBox;
+    public windowStatisticProgression: WindowBox;
 
 
-    constructor(troopID, canGameOver, canEscape, battleMap, transitionStart, 
-        transitionEnd, transitionStartColor, transitionEndColor)
-    {
+
+
+    public sceneMap: Map;
+    public loots: Object[];
+    public currencies: Object;
+    public xp: number;
+    public battleMap: BattleMap;
+    public currentEffectIndex:number;
+    public priorityIndex:number;
+
+
+
+
+    constructor(troopID, canGameOver, canEscape, battleMap, transitionStart,
+        transitionEnd, transitionStartColor, transitionEndColor) {
         super(battleMap.idMap, true);
 
 
         // Battle Handlers
-        this.battleSelection = new BattleSelection(); 
-        this.battleAnimation = new BattleAnimation(); //Step 2
-        this.battleEnemyAttack = new BattleEnemyAttack();
-        this.battleVictory = new BattleVictory(); //Step 4
+        this.battleInitialize = new BattleInitialize(this)
+        this.battleSelection = new BattleSelection(this);
+        this.battleAnimation = new BattleAnimation(this); //Step 2
+        this.battleEnemyAttack = new BattleEnemyAttack(this);
+        this.battleVictory = new BattleVictory(this); //Step 4
 
         // ====
         this.troopID = troopID;
@@ -261,8 +323,7 @@ class Battle extends Map
     // -------------------------------------------------------
     /** Load async stuff
     */
-    async load()
-    {
+    async load() {
         await super.load();
         this.initialize();
         RPM.requestPaintHUD = true;
@@ -272,19 +333,17 @@ class Battle extends Map
     // -------------------------------------------------------
     /** Initialize and correct some camera settings for the battle start
     */
-    initializeCamera()
-    {
+    initializeCamera() {
         this.camera = new Camera(this.mapProperties.cameraProperties, RPM.game
             .heroBattle);
         this.cameraStep = 0;
-        this.cameraTick = SceneBattle.CAMERA_TICK;
-        this.cameraOffset = SceneBattle.CAMERA_OFFSET;
+        this.cameraTick = Battle.CAMERA_TICK;
+        this.cameraOffset = Battle.CAMERA_OFFSET;
         this.cameraON = this.transitionStart !== MapTransitionKind.Zoom;
         this.cameraDistance = this.camera.distance;
         this.transitionZoom = false;
-        if (!this.cameraON)
-        {
-            this.camera.distance = SceneBattle.START_CAMERA_DISTANCE;
+        if (!this.cameraON) {
+            this.camera.distance = Battle.START_CAMERA_DISTANCE;
             this.transitionZoom = true;
         }
         this.camera.update();
@@ -293,11 +352,9 @@ class Battle extends Map
     // -------------------------------------------------------
     /** Make the attacking group all actives
     */
-    activeGroup()
-    {
-        for (let i = 0, l = this.battlers[this.attackingGroup].length; i < l; 
-            i++)
-        {
+    activeGroup() {
+        for (let i = 0, l = this.battlers[this.attackingGroup].length; i < l;
+            i++) {
             this.battlers[this.attackingGroup][i].setActive(true);
         }
     }
@@ -309,23 +366,19 @@ class Battle extends Map
     *   @param {boolean} target Indicate if the player is a target
     *   @returns {boolean}
     */
-    isDefined(kind, index, target)
-    {
+    isDefined(kind, index, target) {
         return ((target || this.battlers[kind][index].active) && !this.battlers
-            [kind][index].character.isDead())
+        [kind][index].character.isDead())
     }
 
     // -------------------------------------------------------
     /** Check if all the heroes or enemies are inactive
     *   @returns {boolean}
     */
-    isEndTurn()
-    {
-        for (let i = 0, l = this.battlers[this.attackingGroup].length; i < l; 
-            i++)
-        {
-            if (this.isDefined(this.attackingGroup, i))
-            {
+    isEndTurn() {
+        for (let i = 0, l = this.battlers[this.attackingGroup].length; i < l;
+            i++) {
+            if (this.isDefined(this.attackingGroup, i)) {
                 return false;
             }
         }
@@ -337,12 +390,9 @@ class Battle extends Map
     *   @param {CharacterKind} group Kind of player
     *   @returns {boolean}
     */
-    isGroupDead(group)
-    {
-        for (let i = 0, l = this.battlers[group].length; i < l; i++)
-        {
-            if (!this.battlers[group][i].character.isDead())
-            {
+    isGroupDead(group) {
+        for (let i = 0, l = this.battlers[group].length; i < l; i++) {
+            if (!this.battlers[group][i].character.isDead()) {
                 return false;
             }
         }
@@ -353,8 +403,7 @@ class Battle extends Map
     /** Check if all the enemies are dead
     *   @returns {boolean}
     */
-    isWin()
-    {
+    isWin() {
         return this.isGroupDead(CharacterKind.Monster);
     }
 
@@ -362,22 +411,18 @@ class Battle extends Map
     /** Check if all the heroes are dead
     *   @returns {boolean}
     */
-    isLose()
-    {
+    isLose() {
         return this.isGroupDead(CharacterKind.Hero);
     }
 
     // -------------------------------------------------------
     /** Transition to game over scene
     */
-    gameOver()
-    {
-        if (this.canGameOver)
-        {
+    gameOver() {
+        if (this.canGameOver) {
             RPM.gameStack.pop();
             RPM.gameStack.replace(new SceneTitleScreen()); // TODO
-        } else
-        {
+        } else {
             this.endBattle();
         }
     }
@@ -385,19 +430,16 @@ class Battle extends Map
     // -------------------------------------------------------
     /** Win the battle
     */
-    win()
-    {
+    win() {
         this.endBattle();
     }
 
     // -------------------------------------------------------
     /** Win the battle
     */
-    endBattle()
-    {
+    endBattle() {
         // Heroes
-        for (let i = 0, l = RPM.game.teamHeroes.length; i < l; i++)
-        {
+        for (let i = 0, l = RPM.game.teamHeroes.length; i < l; i++) {
             this.battlers[CharacterKind.Hero][i].removeFromScene();
         }
         RPM.gameStack.pop();
@@ -409,8 +451,7 @@ class Battle extends Map
     /** Change the step of the battle
     *   @param {number} i Step of the battle
     */
-    changeStep(i)
-    {
+    changeStep(i) {
         this.step = i;
         this.subStep = 0;
         this.initialize();
@@ -419,25 +460,23 @@ class Battle extends Map
     // -------------------------------------------------------
     /** Initialize the current step
     */
-    initialize()
-    {
-        switch (this.step)
-        {
-        case 0:
-            this.initializeStep0();
-            break;
-        case 1:
-            this.initializeStep1();
-            break;
-        case 2:
-            this.initializeStep2();
-            break;
-        case 3:
-            this.initializeStep3();
-            break;
-        case 4:
-            this.initializeStep4();
-            break;
+    initialize() {
+        switch (this.step) {
+            case 0:
+                this.battleInitialize.initialize();
+                break;
+            case 1:
+                this.initializeStep1();
+                break;
+            case 2:
+                this.initializeStep2();
+                break;
+            case 3:
+                this.initializeStep3();
+                break;
+            case 4:
+                this.initializeStep4();
+                break;
         }
         RPM.requestPaintHUD = true;
     }
@@ -445,21 +484,18 @@ class Battle extends Map
     // -------------------------------------------------------
     /** Update battle according to step
     */
-    update()
-    {
+    update() {
         super.update();
 
         // Heroes
         let battlers = this.battlers[CharacterKind.Hero];
         let i, l;
-        for (i = 0, l = battlers.length; i < l; i++)
-        {
+        for (i = 0, l = battlers.length; i < l; i++) {
             battlers[i].update();
         }
         // Ennemies
         battlers = this.battlers[CharacterKind.Monster];
-        for (i = 0, l = battlers.length; i < l; i++)
-        {
+        for (i = 0, l = battlers.length; i < l; i++) {
             battlers[i].update();
         }
 
@@ -467,89 +503,80 @@ class Battle extends Map
         this.moveStandardCamera();
 
         // Update according to step
-        switch(this.step)
-        {
-        case 0:
-            this.updateStep0();
-            break;
-        case 1:
-            this.updateStep1();
-            break;
-        case 2:
-            this.updateStep2();
-            break;
-        case 3:
-            this.updateStep3();
-            break;
-        case 4:
-            this.updateStep4();
-            break;
+        switch (this.step) {
+            case 0:
+                this.battleInitialize.update();
+                break;
+            case 1:
+                this.updateStep1();
+                break;
+            case 2:
+                this.updateStep2();
+                break;
+            case 3:
+                this.updateStep3();
+                break;
+            case 4:
+                this.updateStep4();
+                break;
         }
     }
 
     // -------------------------------------------------------
     /** Do camera standard moves
     */
-    moveStandardCamera()
-    {
-        if (this.cameraON)
-        {
-            switch (this.cameraStep)
-            {
-            case 0:
-                this.camera.distance -= this.cameraTick;
-                this.camera.targetOffset.x += this.cameraTick;
-                if (this.camera.distance <= this.cameraDistance - this
-                    .cameraOffset) 
-                {
-                    this.camera.distance = this.cameraDistance - this
-                        .cameraOffset;
-                    this.camera.targetOffset.x = this.cameraOffset;
-                    this.cameraStep = 1;
-                }
-                break;
-            case 1:
-                this.camera.distance += this.cameraTick;
-                if (this.camera.distance >= this.cameraDistance + this
-                    .cameraOffset) 
-                {
-                    this.camera.distance = this.cameraDistance + this
-                        .cameraOffset;
-                    this.cameraStep = 2;
-                }
-                break;
-            case 2:
-                this.camera.distance -= this.cameraTick;
-                this.camera.targetOffset.x -= this.cameraTick;
-                if (this.camera.distance <= this.cameraDistance - this
-                    .cameraOffset) 
-                {
-                    this.camera.distance = this.cameraDistance - this
-                        .cameraOffset;
-                    this.camera.targetOffset.x = -this.cameraOffset;
-                    this.cameraStep = 3;
-                }
-                break;
-            case 3:
-                this.camera.distance += this.cameraTick;
-                if (this.camera.distance >= this.cameraDistance + this
-                    .cameraOffset) 
-                {
-                    this.camera.distance = this.cameraDistance + this
-                        .cameraOffset;
-                    this.cameraStep = 4;
-                }
-                break;
-            case 4:
-                this.camera.distance -= this.cameraTick;
-                this.camera.targetOffset.x += this.cameraTick;
-                if (this.camera.distance <= this.cameraDistance)
-                {
-                    this.camera.distance = this.cameraDistance;
-                    this.camera.targetOffset.x = 0;
-                    this.cameraStep = 0;
-                }
-                break;
+    moveStandardCamera() {
+        if (this.cameraON) {
+            switch (this.cameraStep) {
+                case 0:
+                    this.camera.distance -= this.cameraTick;
+                    this.camera.targetOffset.x += this.cameraTick;
+                    if (this.camera.distance <= this.cameraDistance - this
+                        .cameraOffset) {
+                        this.camera.distance = this.cameraDistance - this
+                            .cameraOffset;
+                        this.camera.targetOffset.x = this.cameraOffset;
+                        this.cameraStep = 1;
+                    }
+                    break;
+                case 1:
+                    this.camera.distance += this.cameraTick;
+                    if (this.camera.distance >= this.cameraDistance + this
+                        .cameraOffset) {
+                        this.camera.distance = this.cameraDistance + this
+                            .cameraOffset;
+                        this.cameraStep = 2;
+                    }
+                    break;
+                case 2:
+                    this.camera.distance -= this.cameraTick;
+                    this.camera.targetOffset.x -= this.cameraTick;
+                    if (this.camera.distance <= this.cameraDistance - this
+                        .cameraOffset) {
+                        this.camera.distance = this.cameraDistance - this
+                            .cameraOffset;
+                        this.camera.targetOffset.x = -this.cameraOffset;
+                        this.cameraStep = 3;
+                    }
+                    break;
+                case 3:
+                    this.camera.distance += this.cameraTick;
+                    if (this.camera.distance >= this.cameraDistance + this
+                        .cameraOffset) {
+                        this.camera.distance = this.cameraDistance + this
+                            .cameraOffset;
+                        this.cameraStep = 4;
+                    }
+                    break;
+                case 4:
+                    this.camera.distance -= this.cameraTick;
+                    this.camera.targetOffset.x += this.cameraTick;
+                    if (this.camera.distance <= this.cameraDistance) {
+                        this.camera.distance = this.cameraDistance;
+                        this.camera.targetOffset.x = 0;
+                        this.cameraStep = 0;
+                    }
+                    break;
             }
         }
     }
@@ -558,26 +585,24 @@ class Battle extends Map
     /** Handle battle key pressed according to step
     *   @param {number} key The key ID
     */
-    onKeyPressed(key)
-    {
+    onKeyPressed(key) {
         super.onKeyPressed(key);
-        switch (this.step)
-        {
-        case 0:
-            this.onKeyPressedStep0(key);
-            break;
-        case 1:
-            this.onKeyPressedStep1(key);
-            break;
-        case 2:
-            this.onKeyPressedStep2(key);
-            break;
-        case 3:
-            this.onKeyPressedStep3(key);
-            break;
-        case 4:
-            this.onKeyPressedStep4(key);
-            break;
+        switch (this.step) {
+            case 0:
+                this.battleInitialize.onKeyPressedStep(key);
+                break;
+            case 1:
+                this.onKeyPressedStep1(key);
+                break;
+            case 2:
+                this.onKeyPressedStep2(key);
+                break;
+            case 3:
+                this.onKeyPressedStep3(key);
+                break;
+            case 4:
+                this.onKeyPressedStep4(key);
+                break;
         }
     }
 
@@ -585,26 +610,24 @@ class Battle extends Map
     /** Handle battle key released according to step
     *   @param {number} key The key ID
     */
-    onKeyReleased(key)
-    {
+    onKeyReleased(key) {
         super.onKeyReleased(key);
-        switch (this.step)
-        {
-        case 0:
-            this.onKeyReleasedStep0(key);
-            break;
-        case 1:
-            this.onKeyReleasedStep1(key);
-            break;
-        case 2:
-            this.onKeyReleasedStep2(key);
-            break;
-        case 3:
-            this.onKeyReleasedStep3(key);
-            break;
-        case 4:
-            this.onKeyReleasedStep4(key);
-            break;
+        switch (this.step) {
+            case 0:
+                this.battleInitialize.onKeyReleasedStep(key);
+                break;
+            case 1:
+                this.onKeyReleasedStep1(key);
+                break;
+            case 2:
+                this.onKeyReleasedStep2(key);
+                break;
+            case 3:
+                this.onKeyReleasedStep3(key);
+                break;
+            case 4:
+                this.onKeyReleasedStep4(key);
+                break;
         }
     }
 
@@ -612,26 +635,24 @@ class Battle extends Map
     /** Handle battle key pressed repeat according to step
     *   @param {number} key The key ID
     */
-    onKeyPressedRepeat(key)
-    {
+    onKeyPressedRepeat(key) {
         super.onKeyPressedRepeat(key);
-        switch (this.step)
-        {
-        case 0:
-            this.onKeyPressedRepeatStep0(key);
-            break;
-        case 1:
-            this.onKeyPressedRepeatStep1(key);
-            break;
-        case 2:
-            this.onKeyPressedRepeatStep2(key);
-            break;
-        case 3:
-            this.onKeyPressedRepeatStep3(key);
-            break;
-        case 4:
-            this.onKeyPressedRepeatStep4(key);
-            break;
+        switch (this.step) {
+            case 0:
+                this.battleInitialize.onKeyPressedRepeatStep(key);
+                break;
+            case 1:
+                this.onKeyPressedRepeatStep1(key);
+                break;
+            case 2:
+                this.onKeyPressedRepeatStep2(key);
+                break;
+            case 3:
+                this.onKeyPressedRepeatStep3(key);
+                break;
+            case 4:
+                this.onKeyPressedRepeatStep4(key);
+                break;
         }
     }
 
@@ -639,36 +660,32 @@ class Battle extends Map
     /** Handle battle key pressed and repeat according to step
     *   @param {number} key The key ID
     */
-    onKeyPressedAndRepeat(key)
-    {
+    onKeyPressedAndRepeat(key) {
         super.onKeyPressedAndRepeat(key);
-        switch (this.step)
-        {
-        case 0:
-            this.onKeyPressedAndRepeatStep0(key);
-            break;
-        case 1:
-            this.onKeyPressedAndRepeatStep1(key);
-            break;
-        case 2:
-            this.onKeyPressedAndRepeatStep2(key);
-            break;
-        case 3:
-            this.onKeyPressedAndRepeatStep3(key);
-            break;
-        case 4:
-            this.onKeyPressedAndRepeatStep4(key);
-            break;
+        switch (this.step) {
+            case 0:
+                this.battleInitialize.onKeyPressedAndRepeatStep(key);
+                break;
+            case 1:
+                this.onKeyPressedAndRepeatStep1(key);
+                break;
+            case 2:
+                this.onKeyPressedAndRepeatStep2(key);
+                break;
+            case 3:
+                this.onKeyPressedAndRepeatStep3(key);
+                break;
+            case 4:
+                this.onKeyPressedAndRepeatStep4(key);
+                break;
         }
     }
 
     // -------------------------------------------------------
     /** Draw the battle 3D scene
     */
-    draw3D()
-    {
-        if (this.transitionZoom || this.transitionColor)
-        {
+    draw3D() {
+        if (this.transitionZoom || this.transitionColor) {
             this.sceneMap.draw3D();
         } else {
             super.draw3D();
@@ -678,26 +695,25 @@ class Battle extends Map
     // -------------------------------------------------------
     /** Draw the battle HUD according to step
     */
-    drawHUD()
-    {
-        switch (this.step)
-        {
-        case 0:
-            this.drawHUDStep0();
-            break;
-        case 1:
-            this.drawHUDStep1();
-            break;
-        case 2:
-            this.drawHUDStep2();
-            break;
-        case 3:
-            this.drawHUDStep3();
-            break;
-        case 4:
-            this.drawHUDStep4();
-            break;
+    drawHUD() {
+        switch (this.step) {
+            case 0:
+                this.battleInitialize.drawHUDStep();
+                break;
+            case 1:
+                this.drawHUDStep1();
+                break;
+            case 2:
+                this.drawHUDStep2();
+                break;
+            case 3:
+                this.drawHUDStep3();
+                break;
+            case 4:
+                this.drawHUDStep4();
+                break;
         }
         super.drawHUD();
     }
 }
+export { Battle }
