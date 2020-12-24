@@ -46,14 +46,14 @@ initialize ()
     if (!this.battle.winning)
     {
         this.battle.windowTopInformations.content = new Text("Defeat...", { 
-            align: Align.Center });
+            align: Enum.Align.Center });
         this.battle.subStep = 4;
         return;
     }
 
     // Change information bar content
     this.battle.windowTopInformations.content = new Text("Victory!", { align:
-        Align.Center });
+        Enum.Align.Center });
 
     // Rewards
     this.prepareRewards();

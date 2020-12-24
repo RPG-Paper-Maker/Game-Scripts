@@ -59,7 +59,7 @@ public initialize ()
         break;
     }
     this.battle.windowTopInformations.content = new Text(informationText, {
-        align: Align.Center });
+        align: Enum.Align.Center });
     this.battle.time = new Date().getTime();
     this.battle.damages = [];
     this.battle.effects = [];

@@ -44,7 +44,7 @@ class BattleSelection {
         }
         this.battle.battleCommandKind = Enum.EffectSpecialActionKind.None;
         this.battle.windowTopInformations.content = new GraphicText("Select an ally", {
-            align: Align.Center
+            align: Enum.Align.Center
         });
         this.battle.selectedUserIndex = this.selectFirstIndex(Enum.CharacterKind.Hero, 0);
         this.battle.kindSelection = Enum.CharacterKind.Hero;
@@ -294,7 +294,7 @@ class BattleSelection {
                 // Check weapon Enum.TargetKind
                 this.battle.attackSkill = this.battle.windowChoicesBattleCommands.getCurrentContent()
                     .skill;
-                let Enum.TargetKind = null;
+                let targetKind = null;
                 let equipments = this.battle.user.character.equip;
                 let gameItem;
                 for (i = 0, l = equipments.length; i < l; i++) {
@@ -305,10 +305,10 @@ class BattleSelection {
                     }
                 }
                 // If no weapon
-                if (Enum.TargetKind === null) {
-                    Enum.TargetKind = this.battle.attackSkill.targetKind;
+                if (targetKind === null) {
+                    targetKind = this.battle.attackSkill.targetKind;
                 }
-                this.selectTarget(Enum.TargetKind);
+                this.selectTarget(targetKind);
                 break;
             case Enum.EffectSpecialActionKind.OpenSkills:
                 if (this.battle.listSkills.length === 0) {
