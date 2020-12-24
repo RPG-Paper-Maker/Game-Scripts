@@ -206,7 +206,6 @@ class Map extends Base {
         }
         Manager.Stack.game.mapsDatas[this.id] = objectsPortions;
         this.portionsObjectsUpdated = true;
-
     }
 
     /** 

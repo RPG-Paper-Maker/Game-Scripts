@@ -158,7 +158,7 @@ class MapObject {
             .getGlobalPortion();
         let mapsDatas = Manager.Stack.game.getPotionsDatas(Manager.Stack
             .currentMap.id, globalPortion);
-        if (objectID !== null) {
+        if (object !== null) {
             return {
                 object: object,
                 id: objectID,

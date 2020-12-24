@@ -155,8 +155,11 @@ class ChangeState extends Base {
                 } else {
                     currentState.map = new Scene.Map(currentState.mapID, false, 
                         true);
-                    currentState.map.readMapProperties();
-                    currentState.map.initializeObjects();
+                    (async() => {
+                        await currentState.map.readMapProperties();
+                        await currentState.map.initializeObjects();
+                        currentState.map.initializePortionsObjects();
+                    })();
                 }
             }
             if (currentState.map.allObjects && currentState.map
