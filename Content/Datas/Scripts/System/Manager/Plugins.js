@@ -43,7 +43,6 @@ class Plugins {
             Constants.STRING_SLASH + Paths.FILE_PLUGIN_DETAILS);
         let plugin = new System.Plugin(pluginJSON.id, json);
         this.register(plugin);
-        console.log(this.plugins);
         return (await new Promise((resolve, reject) => {
             let url = Paths.PLUGINS + pluginJSON.name + Constants.STRING_SLASH +
                 Paths.FILE_PLUGIN_CODE;

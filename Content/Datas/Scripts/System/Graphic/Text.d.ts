@@ -30,6 +30,7 @@ import { System } from "../index.js";
  */
 declare class Text extends Base {
     text: string;
+    lines: string[];
     align: Align;
     fontSize: number;
     fontName: string;
@@ -42,7 +43,9 @@ declare class Text extends Base {
     oFont: string;
     font: string;
     textWidth: number;
+    textHeight: number;
     datas: any;
+    lastW: number;
     constructor(text?: string, { x, y, w, h, align, fontSize, fontName, verticalAlign, color, bold, italic, backColor, strokeColor }?: {
         x?: number;
         y?: number;
@@ -58,6 +61,7 @@ declare class Text extends Base {
         backColor?: System.Color;
         strokeColor?: System.Color;
     });
+    wrapText(maxWidth: number): void;
     /**
      *  Set the font size and the final font.
      *  @param {number} fontSize The new font size
@@ -80,7 +84,7 @@ declare class Text extends Base {
     /**
      *  Measure text width and stock results in the instance.
      */
-    measureText(): number;
+    measureText(): void;
     /**
      *  Drawing the text in choice box.
      *  @param {number} [x=this.oX] The x position to draw graphic

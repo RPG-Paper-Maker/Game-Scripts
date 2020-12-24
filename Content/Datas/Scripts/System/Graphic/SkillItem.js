@@ -13,6 +13,7 @@ import { Graphic, Datas } from "../index.js";
 import { Constants, Enum } from "../Common/index.js";
 var Align = Enum.Align;
 var PictureKind = Enum.PictureKind;
+var AlignVertical = Enum.AlignVertical;
 /** @class
  *  The graphic for skill or item displaying.
  *  @extends Graphic.Base
@@ -31,7 +32,9 @@ class SkillItem extends Base {
                 fontSize: Constants.MEDIUM_FONT_SIZE
             });
         }
-        this.graphicDescription = new Graphic.Text(system.description.name());
+        this.graphicDescription = new Graphic.Text(system.description.name(), {
+            verticalAlign: AlignVertical.Top
+        });
         if (this.system.hasTargetKind) {
             this.graphicTarget = new Graphic.Text("Target: " + system
                 .getTargetKindString(), { align: Align.Right, fontSize: Constants.MEDIUM_FONT_SIZE });
@@ -101,15 +104,16 @@ class SkillItem extends Base {
                 .graphicName.space, y + offsetY, w, 0);
         }
         offsetY += Constants.MEDIUM_FONT_SIZE + Constants.LARGE_SPACE;
-        this.graphicDescription.draw(x, y + offsetY, w, 0);
-        offsetY += this.graphicDescription.fontSize + Constants.LARGE_SPACE;
+        this.graphicDescription.draw(x, y + offsetY, w, h);
+        offsetY += this.graphicDescription.textHeight + Constants.LARGE_SPACE;
         let graphicText;
         for (i = 0, l = this.graphicEffects.length; i < l; i++) {
             graphicText = this.graphicEffects[i];
             graphicText.draw(x, y + offsetY, w, 0);
             if (graphicText['elementIcon']) {
-                graphicText['elementIcon'].draw(x + graphicText.measureText(), y
-                    + offsetY - (graphicText['elementIcon'].h / 2));
+                graphicText.measureText();
+                graphicText['elementIcon'].draw(x + graphicText.textWidth, y +
+                    offsetY - (graphicText['elementIcon'].h / 2));
             }
             offsetY += graphicText.fontSize + Constants.MEDIUM_SPACE;
         }

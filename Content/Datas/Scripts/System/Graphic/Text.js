@@ -40,11 +40,12 @@ import { Datas, System } from "../index.js";
  *  The stroke color of the text
  */
 class Text extends Base {
-    constructor(text = "", { x = 0, y = 0, w = 0, h = 0, align = Align.Left, fontSize = Utils.defaultValue(Datas.Systems.dbOptions.v_tSize, Constants
+    constructor(text = '', { x = 0, y = 0, w = 0, h = 0, align = Align.Left, fontSize = Utils.defaultValue(Datas.Systems.dbOptions.v_tSize, Constants
         .DEFAULT_FONT_SIZE), fontName = Utils.defaultValue(Datas.Systems
         .dbOptions.v_tFont, Constants.DEFAULT_FONT_NAME), verticalAlign = AlignVertical.Center, color = Utils.defaultValue(Datas.Systems.dbOptions
         .v_tcText, System.Color.WHITE), bold = false, italic = false, backColor = Utils.defaultValue(Datas.Systems.dbOptions.v_tcBackground, null), strokeColor = Utils.defaultValue(Datas.Systems.dbOptions.tOutline, false) ? Utils.defaultValue(Datas.Systems.dbOptions.v_tcOutline, null) : null } = {}) {
         super(x, y, w, h);
+        this.lastW = 0;
         this.align = align;
         this.fontName = fontName;
         this.verticalAlign = verticalAlign;
@@ -54,7 +55,45 @@ class Text extends Base {
         this.backColor = backColor;
         this.strokeColor = strokeColor;
         this.setFontSize(fontSize);
-        this.setText(Utils.defaultValue(text, ""));
+        this.setText(Utils.defaultValue(text, ''));
+    }
+    wrapText(maxWidth) {
+        this.updateContextFontReal();
+        maxWidth = ScreenResolution.getScreenX(maxWidth);
+        let text = this.text.replace('\\n', Constants.STRING_NEW_LINE);
+        let lines = text.split(Constants.STRING_NEW_LINE);
+        let words = [];
+        let i, j, l, m, tempWords;
+        for (i = 0, l = lines.length; i < l; i++) {
+            tempWords = lines[i].split(' ');
+            for (j = 0, m = tempWords.length; j < m; j++) {
+                words.push(tempWords[j]);
+            }
+            if (i < l - 1) {
+                words.push(Constants.STRING_NEW_LINE);
+            }
+        }
+        this.lines = [];
+        let currentLine = words[0];
+        for (let i = 1, l = words.length; i < l; i++) {
+            let word = words[i];
+            if (word === Constants.STRING_NEW_LINE) {
+                this.lines.push(currentLine);
+                currentLine = words[++i];
+                continue;
+            }
+            let width = Platform.ctx.measureText(currentLine + ' ' + word)
+                .width + (this.strokeColor === null ? 0 : 2);
+            if (width < maxWidth) {
+                currentLine += " " + word;
+            }
+            else {
+                this.lines.push(currentLine);
+                currentLine = word;
+            }
+        }
+        this.lines.push(currentLine);
+        this.measureText();
     }
     /**
      *  Set the font size and the final font.
@@ -74,6 +113,7 @@ class Text extends Base {
     setText(text) {
         if (this.text !== text) {
             this.text = text;
+            this.lines = this.text.split(Constants.STRING_NEW_LINE);
             this.measureText();
             Stack.requestPaintHUD = true;
         }
@@ -96,9 +136,16 @@ class Text extends Base {
      */
     measureText() {
         this.updateContextFont();
-        this.textWidth = Platform.ctx.measureText(this.text).width + (this
-            .strokeColor === null ? 0 : 2);
-        return this.textWidth;
+        this.textWidth = 0;
+        let l = this.lines.length;
+        let size;
+        for (let i = 0; i < l; i++) {
+            size = Platform.ctx.measureText(this.lines[i]);
+            if (size.width > this.textWidth) {
+                this.textWidth = size.width;
+            }
+        }
+        this.textHeight = (this.fontSize + (this.fontSize / 3)) * l;
     }
     /**
      *  Drawing the text in choice box.
@@ -110,6 +157,11 @@ class Text extends Base {
      *  according to screen resolution
      */
     drawChoice(x = this.oX, y = this.oY, w = this.oW, h = this.oH, positionResize = true) {
+        // Wrap text if != 0
+        if (this.lastW !== w && w !== 0) {
+            this.lastW = w;
+            this.wrapText(w);
+        }
         // If position resize checked, resize it
         if (positionResize) {
             x = ScreenResolution.getScreenX(x);
@@ -154,18 +206,17 @@ class Text extends Base {
         Platform.ctx.font = this.font;
         Platform.ctx.textAlign = this.align;
         let lineHeight = this.fontSize * 2;
-        let lines = this.text.split(Constants.STRING_NEW_LINE);
-        let i, l = lines.length;
+        let i, l = this.lines.length;
         // Stroke text
         let yOffset;
         if (this.strokeColor !== null) {
             Platform.ctx.strokeStyle = this.strokeColor.rgb;
             yOffset = 0;
             for (i = 0; i < l; i++) {
-                Platform.ctx.strokeText(lines[i], x - 1, y - 1 + yOffset);
-                Platform.ctx.strokeText(lines[i], x - 1, y + 1 + yOffset);
-                Platform.ctx.strokeText(lines[i], x + 1, y - 1 + yOffset);
-                Platform.ctx.strokeText(lines[i], x + 1, y + 1 + yOffset);
+                Platform.ctx.strokeText(this.lines[i], x - 1, y - 1 + yOffset);
+                Platform.ctx.strokeText(this.lines[i], x - 1, y + 1 + yOffset);
+                Platform.ctx.strokeText(this.lines[i], x + 1, y - 1 + yOffset);
+                Platform.ctx.strokeText(this.lines[i], x + 1, y + 1 + yOffset);
                 yOffset += lineHeight;
             }
         }
@@ -173,7 +224,7 @@ class Text extends Base {
         Platform.ctx.fillStyle = this.color.rgb;
         yOffset = 0;
         for (i = 0; i < l; i++) {
-            Platform.ctx.fillText(lines[i], x, y + yOffset);
+            Platform.ctx.fillText(this.lines[i], x, y + yOffset);
             yOffset += lineHeight;
         }
     }
