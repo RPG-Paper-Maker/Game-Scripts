@@ -11,7 +11,7 @@
 
 import { Battler, Camera, WindowBox, WindowChoices } from "../Core";
 import { Player } from "../Graphic";
-import { BattleMap, Color, MonsterAction } from "../System";
+import { Animation, BattleMap, Color, MonsterAction, Skill } from "../System";
 import { BattleAnimation } from "./BattleAnimation";
 import { BattleEnemyAttack } from "./BattleEnemyAttack";
 import { BattleInitialize } from "./BattleInitialize";
@@ -223,11 +223,17 @@ class Battle extends Map {
     public winning: boolean;
     public loadingStep: boolean;
     public finishedXP: boolean;
+    public all:boolean;
+    public userTarget:boolean;
 
     //Selection
     public kindSelection: CharacterKind;
     public selectedUserIndex: number;
     public selectedTargetIndex: number;
+
+    //Lists
+    public listSkills:any[]; //Graphic Skill[]
+    public listItems:any[];
 
     //Command
     public battleCommandKind: EffectSpecialActionKind;
@@ -240,6 +246,10 @@ class Battle extends Map {
     public time: number;
     public timeEnemyAttack:number;
     public turn: number;
+
+    //Animation
+    public userAnimation:Animation;
+    public targetAnimation:Animation;
 
 
 
@@ -255,8 +265,11 @@ class Battle extends Map {
     //Step
     public step: number;
     public subStep:number;
+
     public sceneMapCameraDistance: number; //Remove Scene Prefix
     public actionDoNothing: MonsterAction;
+    public frameUser:number;
+    public frameTarget:number;
 
     //Camera
     public cameraStep: number;
@@ -287,6 +300,9 @@ class Battle extends Map {
     public battleMap: BattleMap;
     public currentEffectIndex:number;
     public priorityIndex:number;
+
+    public attackSkill:Skill;
+    public attackingGroup:CharacterKind;
 
 
 
@@ -366,7 +382,7 @@ class Battle extends Map {
     *   @param {boolean} target Indicate if the player is a target
     *   @returns {boolean}
     */
-    isDefined(kind, index, target) {
+    isDefined(kind: CharacterKind, index: number, target: boolean): boolean {
         return ((target || this.battlers[kind][index].active) && !this.battlers
         [kind][index].character.isDead())
     }
@@ -375,7 +391,7 @@ class Battle extends Map {
     /** Check if all the heroes or enemies are inactive
     *   @returns {boolean}
     */
-    isEndTurn() {
+    isEndTurn(): boolean {
         for (let i = 0, l = this.battlers[this.attackingGroup].length; i < l;
             i++) {
             if (this.isDefined(this.attackingGroup, i)) {
@@ -390,7 +406,7 @@ class Battle extends Map {
     *   @param {CharacterKind} group Kind of player
     *   @returns {boolean}
     */
-    isGroupDead(group) {
+    isGroupDead(group: CharacterKind): boolean {
         for (let i = 0, l = this.battlers[group].length; i < l; i++) {
             if (!this.battlers[group][i].character.isDead()) {
                 return false;
@@ -403,7 +419,7 @@ class Battle extends Map {
     /** Check if all the enemies are dead
     *   @returns {boolean}
     */
-    isWin() {
+    isWin(): boolean {
         return this.isGroupDead(CharacterKind.Monster);
     }
 
@@ -411,7 +427,7 @@ class Battle extends Map {
     /** Check if all the heroes are dead
     *   @returns {boolean}
     */
-    isLose() {
+    isLose(): boolean {
         return this.isGroupDead(CharacterKind.Hero);
     }
 
@@ -451,7 +467,7 @@ class Battle extends Map {
     /** Change the step of the battle
     *   @param {number} i Step of the battle
     */
-    changeStep(i) {
+    changeStep(i: number) {
         this.step = i;
         this.subStep = 0;
         this.initialize();
@@ -508,7 +524,7 @@ class Battle extends Map {
                 this.battleInitialize.update();
                 break;
             case 1:
-                this.updateStep1();
+                this.battleSelection.update();
                 break;
             case 2:
                 this.updateStep2();
@@ -585,7 +601,7 @@ class Battle extends Map {
     /** Handle battle key pressed according to step
     *   @param {number} key The key ID
     */
-    onKeyPressed(key) {
+    onKeyPressed(key: number) {
         super.onKeyPressed(key);
         switch (this.step) {
             case 0:
@@ -610,7 +626,7 @@ class Battle extends Map {
     /** Handle battle key released according to step
     *   @param {number} key The key ID
     */
-    onKeyReleased(key) {
+    onKeyReleased(key: number) {
         super.onKeyReleased(key);
         switch (this.step) {
             case 0:
@@ -635,7 +651,7 @@ class Battle extends Map {
     /** Handle battle key pressed repeat according to step
     *   @param {number} key The key ID
     */
-    onKeyPressedRepeat(key) {
+    onKeyPressedRepeat(key: number) {
         super.onKeyPressedRepeat(key);
         switch (this.step) {
             case 0:
@@ -660,17 +676,17 @@ class Battle extends Map {
     /** Handle battle key pressed and repeat according to step
     *   @param {number} key The key ID
     */
-    onKeyPressedAndRepeat(key) {
+    onKeyPressedAndRepeat(key: number) {
         super.onKeyPressedAndRepeat(key);
         switch (this.step) {
             case 0:
                 this.battleInitialize.onKeyPressedAndRepeatStep(key);
                 break;
             case 1:
-                this.onKeyPressedAndRepeatStep1(key);
+                this.battleSelection.onKeyPressedAndRepeatStep(key);
                 break;
             case 2:
-                this.onKeyPressedAndRepeatStep2(key);
+                this.battleAnimation.onKeyPressedAndRepeatStep(key);
                 break;
             case 3:
                 this.onKeyPressedAndRepeatStep3(key);
@@ -701,10 +717,10 @@ class Battle extends Map {
                 this.battleInitialize.drawHUDStep();
                 break;
             case 1:
-                this.drawHUDStep1();
+                this.battleSelection.drawHUDStep();
                 break;
             case 2:
-                this.drawHUDStep2();
+                this.battleAnimation.drawHUDStep();
                 break;
             case 3:
                 this.drawHUDStep3();
