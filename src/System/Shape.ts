@@ -94,8 +94,10 @@ class Shape extends Base {
 				continue;
 			} else if ((result = vertex_pattern.exec(line)) !== null) {
 				// ["v 1.0 2.0 3.0", "1.0", "2.0", "3.0"]
-                temp3D = new Vector3(parseFloat(result[1]), parseFloat(
-                    result[2]), parseFloat(result[3]));
+                temp3D = new Vector3(parseFloat(result[1]) * Datas.Systems
+                    .SQUARE_SIZE, parseFloat(result[2]) * Datas.Systems
+                    .SQUARE_SIZE, parseFloat(result[3]) * Datas.Systems
+                    .SQUARE_SIZE);
                 v.push(temp3D);
                 if (firstVertex) {
                     minVertex = temp3D.clone();
@@ -125,9 +127,9 @@ class Shape extends Base {
 			} else if ((result = normal_pattern.exec(line)) !== null) {
 				// ["vn 1.0 2.0 3.0", "1.0", "2.0", "3.0"]
 				normals.push(
-					parseFloat( result[ 1 ] ),
-					parseFloat( result[ 2 ] ),
-					parseFloat( result[ 3 ] )
+					parseFloat(result[1]),
+					parseFloat(result[2]),
+					parseFloat(result[3])
 				);
 			} else if ((result = uv_pattern.exec(line)) !== null) {
 				// ["vt 0.1 0.2", "0.1", "0.2"]
