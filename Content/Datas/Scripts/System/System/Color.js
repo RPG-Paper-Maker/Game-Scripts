@@ -71,7 +71,7 @@ class Color extends Base {
     /**
      *  Get the hex value of the color.
      *  @param {THREE.Vector4} tone The tone value
-     *  @returns {number}
+     *  @returns {string}
      */
     getHex(tone) {
         if (tone) {
@@ -80,10 +80,10 @@ class Color extends Base {
             let w = new Vector3(0.2125, 0.7154, 0.0721);
             let intensity = rgb.dot(w);
             let m = Color.mix(new Vector3(intensity, intensity, intensity), rgb, tone.w);
-            return new THREE.Color(Math.min(Math.max(0, m.x), 1), Math.min(Math
-                .max(0, m.y), 1), Math.min(Math.max(0, m.z), 1)).getHex();
+            return "#" + new THREE.Color(Math.min(Math.max(0, m.x), 1), Math.min(Math
+                .max(0, m.y), 1), Math.min(Math.max(0, m.z), 1)).getHexString();
         }
-        return this.color.getHex();
+        return "#" + this.color.getHexString();
     }
 }
 Color.GREEN = System.Color.createColor(25, 214, 25);

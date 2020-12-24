@@ -93,9 +93,9 @@ class Color extends Base {
     /** 
      *  Get the hex value of the color.
      *  @param {THREE.Vector4} tone The tone value
-     *  @returns {number}
+     *  @returns {string}
      */
-    getHex(tone?: THREE.Vector4): number {
+    getHex(tone?: THREE.Vector4): string {
         if (tone) {
             let rgb = new Vector3(Math.max(Math.min(this.color.r + tone.x,
                 1), -1), Math.max(Math.min(this.color.g + tone.y, 1), -1), Math
@@ -104,10 +104,10 @@ class Color extends Base {
             let intensity = rgb.dot(w);
             let m = Color.mix(new Vector3(intensity, intensity,
                 intensity), rgb, tone.w);
-            return new THREE.Color(Math.min(Math.max(0, m.x), 1), Math.min(Math
-                .max(0, m.y), 1), Math.min(Math.max(0, m.z), 1)).getHex();
+            return "#" + new THREE.Color(Math.min(Math.max(0, m.x), 1), Math.min(Math
+                .max(0, m.y), 1), Math.min(Math.max(0, m.z), 1)).getHexString();
         }
-        return this.color.getHex();
+        return "#" + this.color.getHexString();
     }
 }
 

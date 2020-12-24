@@ -52,8 +52,8 @@ declare class Color extends Base {
     /**
      *  Get the hex value of the color.
      *  @param {THREE.Vector4} tone The tone value
-     *  @returns {number}
+     *  @returns {string}
      */
-    getHex(tone?: THREE.Vector4): number;
+    getHex(tone?: THREE.Vector4): string;
 }
 export { Color };
