@@ -20,7 +20,7 @@ You should also have TypeScript installed:
 
 ## How to run
 
-First, complete the `Content` folder thanks to any recent project you want to test here (copy every file in `resources/app/Content` folder of any project you created with RPG Paper Maker, except the `Content/Datas/Scripts` folder).
+First, complete the `Content` folder thanks to any recent project you want to test here (copy every file in `resources/app/Content` folder of any project you created with RPG Paper Maker, except the `Content/Datas/Scripts` folder). You can use `./copy-project.sh` for it (you need to set the path variable in this file).
 
 When it's done, just run:
 

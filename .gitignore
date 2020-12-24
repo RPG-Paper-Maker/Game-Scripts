@@ -11,3 +11,6 @@ Content/Datas/Saves
 Content/Datas/Scripts/Plugins
 log.txt
 .idea
+
+#exept
+!Content/Datas/Scripts/Plugins/empty
