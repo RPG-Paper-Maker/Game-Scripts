@@ -10,9 +10,15 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Battle } from "./Battle"
-import {Enum} from "../Common/Enum";
-
+import { Scene, System, Datas, Manager } from "..";
+import { Enum, Mathf, Interpreter, Utils } from "../Common";
+import CharacterKind = Enum.CharacterKind;
+import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
+import EffectKind = Enum.EffectKind;
+import MonsterActionKind = Enum.MonsterActionKind
+import TargetKind = Enum.TargetKind;
+import MonsterActionTargetKind = Enum.MonsterActionTargetKind;
+import { Battler } from "../Core";
 
 // -------------------------------------------------------
 //
@@ -24,25 +30,25 @@ import {Enum} from "../Common/Enum";
 
 class BattleEnemyAttack {
 
-    battle: Battle
-    public constructor(battle: Battle) {
+    public battle: Scene.Battle
+
+    public constructor(battle: Scene.Battle) {
         this.battle = battle;
     }
 
-
-    // -------------------------------------------------------
-    /** Initialize step
-    */
+    /** 
+     *  Initialize step.
+     */
     initialize() {
         this.battle.windowTopInformations.content = null;
-        this.battle.attackingGroup = Enum.CharacterKind.Monster;
+        this.battle.attackingGroup = CharacterKind.Monster;
 
         // Define which monster will attack
         let i = 0;
         do {
-            this.battle.user = this.battle.battlers[Enum.CharacterKind.Monster][i];
+            this.battle.user = this.battle.battlers[CharacterKind.Monster][i];
             i++;
-        } while (!this.battle.isDefined(Enum.CharacterKind.Monster, i - 1));
+        } while (!this.battle.isDefined(CharacterKind.Monster, i - 1));
 
         // Define action
         this.defineAction();
@@ -54,55 +60,57 @@ class BattleEnemyAttack {
         this.battle.timeEnemyAttack = new Date().getTime();
     }
 
-    // -------------------------------------------------------
-    /** Define the action to do
-    */
+    /** 
+     *  Define the action to do.
+     */
     defineAction() {
         let actions = [];
-        let character = this.battle.user.character;
-        let monster = character.character;
+        let player = this.battle.user.player;
+        let monster = <System.Monster>player.system;
         let systemActions = monster.actions;
         let priorities = 0;
         this.battle.action = this.battle.actionDoNothing;
-        this.battle.battleCommandKind = Enum.EffectSpecialActionKind.DoNothing;
+        this.battle.battleCommandKind = EffectSpecialActionKind.DoNothing;
 
         // List every possible actions
-        let i, l, action, stat, number;
+        let i: number, l: number, action: System.MonsterAction, stat: System
+            .Statistic, number: number;
         for (i = 0, l = systemActions.length; i < l; i++) {
             action = systemActions[i];
-            if (action.isConditionTurn && !RPM.operators_compare[action
-                .operationKindTurn](this.battle.turn, action.turnValueCompare.getValue())) {
+            if (action.isConditionTurn && !Mathf.OPERATORS_COMPARE[action
+                .operationKindTurn](this.battle.turn, action.turnValueCompare
+                .getValue())) {
                 continue;
             }
             if (action.isConditionStatistic) {
-                stat = RPM.datasGame.battleSystem.statistics[action.statisticID
-                    .getValue()];
-                if (!RPM.operators_compare[action.operationKindStatistic](character[
-                    stat.abbreviation] / character[stat.getMaxAbbreviation()] * 100,
-                    action.statisticValueCompare.getValue())) {
+                stat = Datas.BattleSystems.getStatistic(action.statisticID
+                    .getValue());
+                if (!Mathf.OPERATORS_COMPARE[action.operationKindStatistic](
+                    player[stat.abbreviation] / player[stat.getMaxAbbreviation()]
+                    * 100, action.statisticValueCompare.getValue())) {
                     continue;
                 }
             }
-            if (action.isConditionVariable && !RPM.operators_compare[action
-                .operationKindVariable](RPM.game.variables[action.variableID],
-                    action.variableValueCompare.getValue())) {
+            if (action.isConditionVariable && !Mathf.OPERATORS_COMPARE[action
+                .operationKindVariable](Manager.Stack.game.variables[action
+                .variableID], action.variableValueCompare.getValue())) {
                 continue;
             }
             if (action.isConditionStatus) {
                 // TODO
             }
-            if (action.isConditionScript && !RPM.evaluateScript(action.script
+            if (action.isConditionScript && !Interpreter.evaluate(action.script
                 .getValue())) {
                 continue;
             }
-            if (action.actionKind === Enum.MonsterActionKind.UseSkill) {
-                if (!RPM.datasGame.skills.list[action.skillID.getValue()].isPossible()) {
+            if (action.actionKind === MonsterActionKind.UseSkill) {
+                if (!Datas.Skills.get(action.skillID.getValue()).isPossible()) {
                     continue;
                 }
             }
-            if (action.actionKind === Enum.MonsterActionKind.UseItem) {
+            if (action.actionKind === MonsterActionKind.UseItem) {
                 number = this.battle.user.itemsNumbers[action.itemID.getValue()];
-                if (!RPM.isUndefined(number) && number === 0) {
+                if (!Utils.isUndefined(number) && number === 0) {
                     continue;
                 }
             }
@@ -118,9 +126,9 @@ class BattleEnemyAttack {
         }
 
         // Random
-        let random = RPM.random(0, 100);
+        let random = Mathf.random(0, 100);
         let step = 0;
-        let value;
+        let value: number;
         for (i = 0, l = actions.length; i < l; i++) {
             action = actions[i];
             value = (action.priority.getValue() / priorities) * 100;
@@ -133,35 +141,39 @@ class BattleEnemyAttack {
 
         // Define battle command kind
         switch (this.battle.action.actionKind) {
-            case Enum.MonsterActionKind.UseSkill:
-                let effect = RPM.datasGame.skills.list[this.battle.action.skillID.getValue()]
-                    .effects[0];
+            case MonsterActionKind.UseSkill:
+                let effect = Datas.Skills.get(this.battle.action.skillID
+                    .getValue()).effects[0];
                 if (effect) {
-                    this.battle.battleCommandKind = effect.kind === EffectKind.SpecialActions ?
-                        effect.specialActionKind : Enum.EffectSpecialActionKind.OpenSkills;
+                    this.battle.battleCommandKind = effect.kind === EffectKind
+                        .SpecialActions ? effect.specialActionKind : 
+                        EffectSpecialActionKind.OpenSkills;
                 } else {
-                    this.battle.battleCommandKind = Enum.EffectSpecialActionKind.OpenSkills;
+                    this.battle.battleCommandKind = EffectSpecialActionKind
+                        .OpenSkills;
                 }
-                this.battle.attackSkill = RPM.datasGame.skills.list[this.battle.action.skillID
-                    .getValue()];
+                this.battle.attackSkill = Datas.Skills.get(this.battle.action
+                    .skillID.getValue());
                 break;
-            case Enum.MonsterActionKind.UseItem:
-                this.battle.battleCommandKind = Enum.EffectSpecialActionKind.OpenItems;
+            case MonsterActionKind.UseItem:
+                this.battle.battleCommandKind = EffectSpecialActionKind
+                    .OpenItems;
 
                 // If item, use one
                 let id = this.battle.action.itemID.getValue();
-                this.battle.user.itemsNumbers[id] = (this.battle.user.itemsNumbers[id] ? this.battle.user
-                    .itemsNumbers[id] : this.battle.action.itemNumberMax.getValue()) - 1;
+                this.battle.user.itemsNumbers[id] = (this.battle.user
+                    .itemsNumbers[id] ? this.battle.user.itemsNumbers[id] : this
+                    .battle.action.itemNumberMax.getValue()) - 1;
                 break;
-            case Enum.MonsterActionKind.DoNothing:
-                this.battle.battleCommandKind = Enum.EffectSpecialActionKind.DoNothing;
+            case MonsterActionKind.DoNothing:
+                this.battle.battleCommandKind = EffectSpecialActionKind.DoNothing;
                 break;
         }
     }
 
-    // -------------------------------------------------------
-    /** Define the targets
-    */
+    /** 
+     *  Define the targets
+     */
     defineTargets() {
         if (!this.battle.action) {
             this.battle.targets = [];
@@ -169,66 +181,66 @@ class BattleEnemyAttack {
         }
 
         // Verify if the target is not all allies or all enemies and define side
-        let Enum.TargetKind, side;
+        let targetKind: TargetKind, side: CharacterKind;
         switch (this.battle.action.actionKind) {
-            case Enum.MonsterActionKind.UseSkill:
-                Enum.TargetKind = RPM.datasGame.skills.list[this.battle.action.skillID.getValue()]
-                    .Enum.TargetKind;
+            case MonsterActionKind.UseSkill:
+                targetKind = Datas.Skills.get(this.battle.action.skillID
+                    .getValue()).targetKind;
                 break;
-            case Enum.MonsterActionKind.UseItem:
-                Enum.TargetKind = RPM.datasGame.items.list[this.battle.action.itemID.getValue()]
-                    .Enum.TargetKind;
+            case MonsterActionKind.UseItem:
+                targetKind = Datas.Items.get(this.battle.action.itemID
+                    .getValue()).targetKind;
                 break;
-            case Enum.MonsterActionKind.DoNothing:
+            case MonsterActionKind.DoNothing:
                 this.battle.targets = [];
                 return;
         }
-        switch (Enum.TargetKind) {
-            case Enum.TargetKind.None:
+        switch (targetKind) {
+            case TargetKind.None:
                 this.battle.targets = [];
                 return;
-            case Enum.TargetKind.User:
+            case TargetKind.User:
                 this.battle.targets = [this.battle.user];
                 return;
-            case Enum.TargetKind.Enemy:
-                side = Enum.CharacterKind.Hero;
+            case TargetKind.Enemy:
+                side = CharacterKind.Hero;
                 break;
-            case Enum.TargetKind.Ally:
-                side = Enum.CharacterKind.Monster;
+            case TargetKind.Ally:
+                side = CharacterKind.Monster;
                 break;
-            case Enum.TargetKind.AllEnemies:
-                this.battle.targets = this.battle.battlers[Enum.CharacterKind.Hero];
+            case TargetKind.AllEnemies:
+                this.battle.targets = this.battle.battlers[CharacterKind.Hero];
                 return;
-            case Enum.TargetKind.AllAllies:
-                this.battle.targets = this.battle.battlers[Enum.CharacterKind.Monster];
+            case TargetKind.AllAllies:
+                this.battle.targets = this.battle.battlers[CharacterKind.Monster];
                 return;
         }
 
         // Select one enemy / ally according to target kind
         let l = this.battle.battlers[side].length;
-        let i, target;
-        switch (this.battle.action.Enum.TargetKind) {
-            case Enum.MonsterActionTargetKind.Random:
-                i = RPM.random(0, l - 1);
+        let i: number, target: Battler;
+        switch (this.battle.action.targetKind) {
+            case MonsterActionTargetKind.Random:
+                i = Mathf.random(0, l - 1);
                 while (!this.battle.isDefined(side, i)) {
                     i++;
                     i = i % l;
                 }
                 target = this.battle.battlers[side][i];
                 break;
-            case Enum.MonsterAction.TargetKind.WeakEnemies:
+            case MonsterActionTargetKind.WeakEnemies:
                 i = 0;
                 while (!this.battle.isDefined(side, i)) {
                     i++;
                     i = i % l;
                 }
                 target = this.battle.battlers[side][i];
-                let minHP = target.character.hp;
-                let tempTarget, tempHP;
+                let minHP = target.player['hp'];
+                let tempTarget: Battler, tempHP: Battler;
                 while (i < l) {
                     tempTarget = this.battle.battlers[side][i];
                     if (this.battle.isDefined(side, i)) {
-                        tempHP = tempTarget.character.hp;
+                        tempHP = tempTarget.player['hp'];
                         if (tempHP < minHP) {
                             target = tempTarget;
                         }
@@ -240,12 +252,12 @@ class BattleEnemyAttack {
         this.battle.targets = [target];
     }
 
-    // -------------------------------------------------------
-    /** Update the battle
-    */
+    /** 
+     *  Update the battle
+     */
     update() {
         if (new Date().getTime() - this.battle.time >= 500) {
-            if (this.battle.action.actionKind !== Enum.MonsterActionKind.DoNothing) {
+            if (this.battle.action.actionKind !== MonsterActionKind.DoNothing) {
                 this.battle.user.setSelected(true);
             }
             if (new Date().getTime() - this.battle.timeEnemyAttack >= 1000) {
@@ -254,41 +266,43 @@ class BattleEnemyAttack {
         }
     }
 
-    // -------------------------------------------------------
-    /** Handle key pressed
-    *   @param {number} key The key ID 
-    */
+    /** 
+     *  Handle key pressed.
+     *  @param {number} key The key ID 
+     */
     onKeyPressedStep(key: number) {
 
     }
 
-    // -------------------------------------------------------
-    /** Handle key released
-    *   @param {number} key The key ID 
-    */
+    /** 
+     *  Handle key released.
+     *   @param {number} key The key ID 
+     */
     onKeyReleasedStep(key: number) {
 
     }
 
-    // -------------------------------------------------------
-    /** Handle key repeat pressed
-    *   @param {number} key The key ID 
-    */
-    onKeyPressedRepeatStep(key: number) {
-
+    /**
+     *  Handle key repeat pressed.
+     *  @param {number} key The key ID 
+     *  @returns {boolean}
+     */
+    onKeyPressedRepeatStep(key: number): boolean {
+        return true;
     }
 
-    // -------------------------------------------------------
-    /** Handle key pressed and repeat
-    *   @param {number} key The key ID 
-    */
-    onKeyPressedAndRepeatStep(key: number) {
-
+    /** 
+     *  Handle key pressed and repeat.
+     *  @param {number} key The key ID
+     *  @returns {boolean}
+     */
+    onKeyPressedAndRepeatStep(key: number): boolean {
+        return true;
     }
 
-    // -------------------------------------------------------
-    /** Draw the battle HUD
-    */
+    /** 
+     *  Draw the battle HUD.
+     */
     drawHUDStep() {
         this.battle.windowTopInformations.draw();
     }
