@@ -539,9 +539,9 @@ class Player {
 
     /** 
      *  Get the loots reward.
-     *  @returns {Record<string, any>[]}
+     *  @returns {Record<string, Item>[]}
      */
-    getRewardLoots(): Record<string, number>[] {
+    getRewardLoots(): Record<string, Item>[] {
         return (<System.Monster> this.system).getRewardLoots(this
             .getCurrentLevel());
     }

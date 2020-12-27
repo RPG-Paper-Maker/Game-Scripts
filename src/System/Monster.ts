@@ -108,22 +108,22 @@ class Monster extends Hero {
     /** 
      *  Get the loots reward.
      *  @param {number} level The monster level
-     *  @returns {Record<string, number>[]}
+     *  @returns {Record<string, Item>[]}
      */
-    getRewardLoots(level: number): Record<string, number>[] {
+    getRewardLoots(level: number): Record<string, Item>[] {
         let list = new Array(3);
         list[LootKind.Item] = {};
         list[LootKind.Weapon] = {};
         list[LootKind.Armor] = {};
-        let loot: Item, loots: Record<string, number>;
+        let loot: Item, loots: Record<string, Item>;
         for (let i = 0, l = this.rewards.loots.length; i < l; i++) {
             loot = this.rewards.loots[i].currenLoot(level);
             if (loot !== null) {
                 loots = list[loot.kind];
                 if (loots.hasOwnProperty(loot.id)) {
-                    loots[loot.id] += loot.nb;
+                    loots[loot.id].nb += loot.nb;
                 } else {
-                    loots[loot.id] = loot.nb;
+                    loots[loot.id] = loot;
                 }
             }
         }

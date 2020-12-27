@@ -18,7 +18,7 @@ import Align = Enum.Align;
 
 /** @class
  *  A class for message show text command.
- *  @extends Bitmap
+ *  @extends Graphic.Base
  *  @param {string} message The complete text to parse
  *  @param {number} facesetID The faceset picture ID
  */

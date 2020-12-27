@@ -47,7 +47,6 @@ class BattleInitialize {
         this.battle.selectedTargetIndex = 0;
         this.battle.battleCommandKind = EffectSpecialActionKind.None;
         this.battle.targets = [];
-        this.battle.damages = [];
         this.battle.battlers = new Array(2);
         this.battle.graphicPlayers = new Array(2);
         this.battle.time = new Date().getTime();

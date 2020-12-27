@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Battler, Camera, WindowBox, WindowChoices, Picture2D } from "../Core";
+import { Battler, Camera, WindowBox, WindowChoices, Picture2D, Item } from "../Core";
 import { Graphic, System, Scene, Manager } from "..";
 import { Enum } from "../Common";
 import CharacterKind = Enum.CharacterKind;
@@ -162,7 +162,7 @@ class Battle extends Map {
     public musicMapTime: number;
 
     public sceneMap: Scene.Map;
-    public loots: Record<string, any>[];
+    public loots: Record<string, Item>[];
     public currencies: Record<string, any>;
     public xp: number;
     public battleMap: System.BattleMap;

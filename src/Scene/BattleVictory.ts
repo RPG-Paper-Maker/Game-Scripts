@@ -109,7 +109,7 @@ class BattleVictory {
         this.battle.lootsNumber = 0;
         let battlers = this.battle.battlers[CharacterKind.Monster];
         let i: number, j: number, l: number, m: number, player: Player, id: 
-            string, list: Record<string, number>[], loots: Record<string, number>,
+            string, list: Record<string, Item>[], loots: Record<string, Item>,
             currencies: Record<string, number>;
         for (i = 0, l = battlers.length; i < l; i++) {
             player = battlers[i].player;
@@ -127,7 +127,7 @@ class BattleVictory {
                 loots = list[j];
                 for (id in loots) {
                     if (this.battle.loots[j].hasOwnProperty(id)) {
-                        this.battle.loots[j][id] += loots[id];
+                        this.battle.loots[j][id].nb += loots[id].nb;
                     } else {
                         this.battle.loots[j][id] = loots[id];
                         this.battle.lootsNumber++;
@@ -138,7 +138,7 @@ class BattleVictory {
         for (i = 0, l = this.battle.loots.length; i < l; i++) {
             for (id in this.battle.loots[i]) {
                 this.battle.loots[i][id] = new Item(i, parseInt(id), this.battle
-                    .loots[i][id]);
+                    .loots[i][id].nb);
             }
         }
 
@@ -162,15 +162,15 @@ class BattleVictory {
                     this.battle.user = battler;
                     player.levelingUp = true;
                     this.battle.finishedXP = false;
-                    (<Graphic.XPProgression>this.battle.windowExperienceProgression)
-                        .content.updateExperience();
+                    (<Graphic.XPProgression>this.battle.windowExperienceProgression
+                        .content).updateExperience();
                     this.battle.priorityIndex = i + 1 % Manager.Stack.game
                         .teamHeroes.length;
                     this.pauseTeamXP();
                     this.battle.finishedXP = false;
                     player.stepLevelUp = 0;
                     this.battle.windowStatisticProgression.content = new
-                        Graphic.StatisticProgression(this.battle.user);
+                        Graphic.StatisticProgression(this.battle.user.player);
                     y = 90 + (i * 90);
                     h = (<Graphic.StatisticProgression>this.battle
                         .windowStatisticProgression.content).getHeight() + 
