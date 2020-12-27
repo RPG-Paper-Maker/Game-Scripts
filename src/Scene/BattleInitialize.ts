@@ -10,11 +10,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Platform } from "../Common/Platform";
-import { Battler, WindowBox, WindowChoices } from "../Core";
-import { Player } from "../Graphic";
-import { CommonSkillItem, PlaySong } from "../System";
-import {Battle} from "./Battle"
+import { Scene } from "..";
+
 
 // -------------------------------------------------------
 //
@@ -24,12 +21,14 @@ import {Battle} from "./Battle"
 //  allies/ennemies comming.
 //
 // -------------------------------------------------------
-class BattleInitialize {
-    public battle: Battle;
 
-    constructor(battle: Battle) {
+class BattleInitialize {
+    public battle: Scene.Battle;
+
+    constructor(battle: Scene.Battle) {
         this.battle = battle;
     }
+    
     initialize() {
         RPM.escaped = false;
         this.battle.winning = false;
@@ -339,4 +338,4 @@ class BattleInitialize {
 
 }
 
-export {BattleInitialize}
+export { BattleInitialize }
