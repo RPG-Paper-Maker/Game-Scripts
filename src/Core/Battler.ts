@@ -246,7 +246,7 @@ class Battler {
      *  @param {boolean} attacked Indicate if the battler is attacked
      *  @param {Player} user The attack / skill / item user
      */
-    updateDead(attacked: boolean, user: Player) {
+    updateDead(attacked: boolean, user?: Player) {
         let step = BattlerStep.Normal;
         if (this.player.isDead()) {
             step = BattlerStep.Dead;

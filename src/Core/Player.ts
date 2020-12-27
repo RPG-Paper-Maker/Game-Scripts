@@ -14,6 +14,7 @@ import CharacterKind = Enum.CharacterKind;
 import { Datas, System, Graphic } from "../index";
 import { Skill } from "./Skill";
 import { Item } from "./Item";
+import { Battler } from "./Battler";
 
 /** @class
  *  A character in the team/hidden/reserve.
@@ -41,6 +42,7 @@ class Player {
     public timeXP: number;
     public obtainedXP: number;
     public stepLevelUp: number;
+    public battler: Battler;
 
     constructor(kind?: CharacterKind, id?: number, instanceID?: number, skills?: 
         Skill[], name?: string, json?: Record<string, any>)

@@ -14,6 +14,8 @@ import { Graphic, System, Scene, Manager } from "..";
 import { Enum } from "../Common";
 import CharacterKind = Enum.CharacterKind;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
+import MapTransitionKind = Enum.MapTransitionKind;
+import BattleStep = Enum.BattleStep
 import { Map } from "./Map";
 
 /** @class
@@ -64,6 +66,7 @@ class Battle extends Map {
     public static WINDOW_STATS_Y = 90;
     public static WINDOW_STATS_WIDTH = 380;
     public static WINDOW_STATS_HEIGHT = 200;
+    public static escapedLastBattle = false;
 
     // Battle steps
     public battleInitialize: Scene.BattleInitialize;
@@ -96,7 +99,7 @@ class Battle extends Map {
     public battleCommandKind: EffectSpecialActionKind;
 
     //Battle Information
-    public graphicPlayers: Graphic.Player;
+    public graphicPlayers: Graphic.Player[][];
     public targets: Battler[];
     public battlers: Battler[][];
     public damages: a[];
@@ -110,9 +113,9 @@ class Battle extends Map {
     public action: System.MonsterAction;
 
     //Transition
-    public transitionStart: number; //TODO: Add Enum
+    public transitionStart: MapTransitionKind;
     public transitionStartColor: System.Color;
-    public transitionEnd: number;
+    public transitionEnd: MapTransitionKind;
     public transitionEndColor: System.Color;
     public transitionColorAlpha: number;
     public transitionColor: boolean;
@@ -140,7 +143,7 @@ class Battle extends Map {
     public cameraDistance: number;
     public cameraOffset: number;
 
-    //Window
+    //Windows
     public windowTopInformations: WindowBox;
     public windowTargetInformations: WindowBox;
     public windowUserInformations: WindowBox;
@@ -151,6 +154,10 @@ class Battle extends Map {
     public windowItemDescription: WindowBox;
     public windowExperienceProgression: WindowBox;
     public windowStatisticProgression: WindowBox;
+
+    // Musics
+    public musicMap: System.PlaySong;
+    public musicMapTime: number;
 
     public sceneMap: Scene.Map;
     public loots: Record<string, any>[];
@@ -175,9 +182,9 @@ class Battle extends Map {
         // Battle Handlers
         this.battleInitialize = new Scene.BattleInitialize(this)
         this.battleSelection = new Scene.BattleSelection(this);
-        this.battleAnimation = new Scene.BattleAnimation(this); //Step 2
+        this.battleAnimation = new Scene.BattleAnimation(this);
         this.battleEnemyAttack = new Scene.BattleEnemyAttack(this);
-        this.battleVictory = new Scene.BattleVictory(this); //Step 4
+        this.battleVictory = new Scene.BattleVictory(this);
 
         // ====
         this.troopID = troopID;
@@ -189,7 +196,7 @@ class Battle extends Map {
         this.transitionEndColor = transitionEndColor;
         this.transitionColor = transitionStart === Enum.MapTransitionKind.Fade;
         this.transitionColorAlpha = 0;
-        this.step = 0;
+        this.step = BattleStep.Initialize;
         this.sceneMap = <Scene.Map>Manager.Stack.top;
         this.mapCameraDistance = this.sceneMap.camera.distance;
         this.actionDoNothing = new System.MonsterAction({});
@@ -323,9 +330,9 @@ class Battle extends Map {
 
     /** 
      *  Change the step of the battle.
-     *  @param {number} i Step of the battle
+     *  @param {BattleStep} i Step of the battle
      */
-    changeStep(i: number) {
+    changeStep(i: BattleStep) {
         this.step = i;
         this.subStep = 0;
         this.initialize();
@@ -336,19 +343,19 @@ class Battle extends Map {
      */
     initialize() {
         switch (this.step) {
-            case 0:
+            case BattleStep.Initialize:
                 this.battleInitialize.initialize();
                 break;
-            case 1:
+            case BattleStep.Selection:
                 this.battleSelection.initialize();
                 break;
-            case 2:
+            case BattleStep.Animation:
                 this.battleAnimation.initialize();
                 break;
-            case 3:
+            case BattleStep.EnemyAttack:
                 this.battleEnemyAttack.initialize();
                 break;
-            case 4:
+            case BattleStep.Victory:
                 this.battleVictory.initialize();
                 break;
         }
@@ -378,19 +385,19 @@ class Battle extends Map {
 
         // Update according to step
         switch (this.step) {
-            case 0:
+            case BattleStep.Initialize:
                 this.battleInitialize.update();
                 break;
-            case 1:
+            case BattleStep.Selection:
                 this.battleSelection.update();
                 break;
-            case 2:
+            case BattleStep.Animation:
                 this.battleAnimation.update();
                 break;
-            case 3:
+            case BattleStep.EnemyAttack:
                 this.battleEnemyAttack.update();
                 break;
-            case 4:
+            case BattleStep.Victory:
                 this.battleVictory.update();
                 break;
         }
@@ -462,19 +469,19 @@ class Battle extends Map {
     onKeyPressed(key: number) {
         super.onKeyPressed(key);
         switch (this.step) {
-            case 0:
+            case BattleStep.Initialize:
                 this.battleInitialize.onKeyPressedStep(key);
                 break;
-            case 1:
+            case BattleStep.Selection:
                 this.battleSelection.onKeyPressedStep(key);
                 break;
-            case 2:
+            case BattleStep.Animation:
                 this.battleAnimation.onKeyPressedStep(key);
                 break;
-            case 3:
+            case BattleStep.EnemyAttack:
                 this.battleEnemyAttack.onKeyPressedStep(key);
                 break;
-            case 4:
+            case BattleStep.Victory:
                 this.battleVictory.onKeyPressedStep(key);
                 break;
         }
@@ -487,19 +494,19 @@ class Battle extends Map {
     onKeyReleased(key: number) {
         super.onKeyReleased(key);
         switch (this.step) {
-            case 0:
+            case BattleStep.Initialize:
                 this.battleInitialize.onKeyReleasedStep(key);
                 break;
-            case 1:
+            case BattleStep.Selection:
                 this.battleSelection.onKeyReleasedStep(key);
                 break;
-            case 2:
+            case BattleStep.Animation:
                 this.battleAnimation.onKeyReleasedStep(key);
                 break;
-            case 3:
+            case BattleStep.EnemyAttack:
                 this.battleEnemyAttack.onKeyReleasedStep(key);
                 break;
-            case 4:
+            case BattleStep.Victory:
                 this.battleVictory.onKeyReleasedStep(key);
                 break;
         }
@@ -513,19 +520,19 @@ class Battle extends Map {
     onKeyPressedRepeat(key: number): boolean {
         let res = super.onKeyPressedRepeat(key);
         switch (this.step) {
-            case 0:
+            case BattleStep.Initialize:
                 res = res && this.battleInitialize.onKeyPressedRepeatStep(key);
                 break;
-            case 1:
+            case BattleStep.Selection:
                 res = res && this.battleSelection.onKeyPressedRepeatStep(key);
                 break;
-            case 2:
+            case BattleStep.Animation:
                 res = res && this.battleAnimation.onKeyPressedRepeatStep(key);
                 break;
-            case 3:
+            case BattleStep.EnemyAttack:
                 res = res && this.battleEnemyAttack.onKeyPressedRepeatStep(key);
                 break;
-            case 4:
+            case BattleStep.Victory:
                 res = res && this.battleVictory.onKeyPressedRepeatStep(key);
                 break;
         }
@@ -540,19 +547,19 @@ class Battle extends Map {
     onKeyPressedAndRepeat(key: number): boolean {
         let res = super.onKeyPressedAndRepeat(key);
         switch (this.step) {
-            case 0:
+            case BattleStep.Initialize:
                 res = res && this.battleInitialize.onKeyPressedAndRepeatStep(key);
                 break;
-            case 1:
+            case BattleStep.Selection:
                 res = res && this.battleSelection.onKeyPressedAndRepeatStep(key);
                 break;
-            case 2:
+            case BattleStep.Animation:
                 res = res && this.battleAnimation.onKeyPressedAndRepeatStep(key);
                 break;
-            case 3:
+            case BattleStep.EnemyAttack:
                 res = res && this.battleEnemyAttack.onKeyPressedAndRepeatStep(key);
                 break;
-            case 4:
+            case BattleStep.Victory:
                 res = res && this.battleVictory.onKeyPressedAndRepeatStep(key);
                 break;
         }
@@ -575,23 +582,24 @@ class Battle extends Map {
      */
     drawHUD() {
         switch (this.step) {
-            case 0:
+            case BattleStep.Initialize:
                 this.battleInitialize.drawHUDStep();
                 break;
-            case 1:
+            case BattleStep.Selection:
                 this.battleSelection.drawHUDStep();
                 break;
-            case 2:
+            case BattleStep.Animation:
                 this.battleAnimation.drawHUDStep();
                 break;
-            case 3:
+            case BattleStep.EnemyAttack:
                 this.battleEnemyAttack.drawHUDStep();
                 break;
-            case 4:
+            case BattleStep.Victory:
                 this.battleVictory.drawHUDStep();
                 break;
         }
         super.drawHUD();
     }
 }
+
 export { Battle }

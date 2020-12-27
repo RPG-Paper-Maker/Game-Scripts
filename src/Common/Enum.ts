@@ -626,6 +626,19 @@ namespace Enum {
         GreaterThan,
         LesserThan
     };
+
+    /**
+     *   Enum for the battle step.
+     *   @enum {number}
+     *   @readonly
+     */
+    export enum BattleStep {
+        Initialize,
+        Selection,
+        Animation,
+        EnemyAttack,
+        Victory
+    };
 }
 
 export { Enum }

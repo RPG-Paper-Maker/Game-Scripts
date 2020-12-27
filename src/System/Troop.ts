@@ -11,6 +11,11 @@
 
 import { Base } from "./Base";
 
+interface StructTroopElement {
+    id: number,
+    level: number
+}
+
 /** @class
  *  A troop of the game.
  *  @extends System.Base
@@ -19,7 +24,7 @@ import { Base } from "./Base";
  */
 class Troop extends Base {
 
-    public list: {id: number, level: number}[];
+    public list: StructTroopElement[];
 
     constructor(json?: Record<string, any>) {
         super(json);
@@ -44,4 +49,4 @@ class Troop extends Base {
     }
 }
 
-export { Troop }
+export { StructTroopElement, Troop }
