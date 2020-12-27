@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Battler, Camera, WindowBox, WindowChoices } from "../Core";
+import { Battler, Camera, WindowBox, WindowChoices, Picture2D } from "../Core";
 import { Graphic, System, Scene, Manager } from "..";
 import { Enum } from "../Common";
 import CharacterKind = Enum.CharacterKind;
@@ -92,7 +92,7 @@ class Battle extends Map {
 
     //Lists
     public listSkills: Graphic.Skill[];
-    public listItems: a[];
+    public listItems: Graphic.Item[];
     public effects: System.Effect[];
 
     //Command
@@ -109,6 +109,8 @@ class Battle extends Map {
     public userAnimation: System.Animation;
     public targetAnimation: System.Animation;
     public action: System.MonsterAction;
+    public userAnimationPicture: Picture2D;
+    public targetAnimationPicture: Picture2D;
 
     //Transition
     public transitionStart: MapTransitionKind;

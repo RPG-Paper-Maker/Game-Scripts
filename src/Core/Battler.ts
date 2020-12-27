@@ -71,6 +71,9 @@ class Battler {
     public halfPosition: Vector3;
     public moving: boolean;
     public attacking: boolean;
+    public damages: number;
+    public isDamagesMiss: boolean;
+    public isDamagesCritical: boolean;
 
     constructor(player: Player, position: Position, camera: Camera) {
         this.player = player;
@@ -444,10 +447,10 @@ class Battler {
     /** 
      *  Draw the damages on top of the battler.
      */
-    drawDamages(damage: number, isCrit: boolean, isMiss: boolean) {
-        Datas.Systems.getCurrentWindowSkin().drawDamages(damage, this
-            .damagePosition.x, this.damagePosition.y, isCrit, isMiss, this
-            .timeDamage / Battler.TOTAL_TIME_DAMAGE);
+    drawDamages() {
+        Datas.Systems.getCurrentWindowSkin().drawDamages(this.damages, this
+            .damagePosition.x, this.damagePosition.y, this.isDamagesCritical, 
+            this.isDamagesMiss, this.timeDamage / Battler.TOTAL_TIME_DAMAGE);
     }
 }
 

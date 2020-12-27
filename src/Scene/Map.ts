@@ -38,7 +38,6 @@ class Map extends Base {
     public isBattleMap: boolean;
     public tempTargets: any[];
     public targets: Battler[];
-    public damages: any[];
     public battleCommandKind: EffectSpecialActionKind;
     public mapProperties: System.MapProperties;
     public scene: THREE.Scene;
