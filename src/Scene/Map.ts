@@ -16,7 +16,7 @@ import Orientation = Enum.Orientation;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 import PictureKind = Enum.PictureKind;
 import { System, Datas, Scene, Manager } from "../index";
-import { Position, Portion, MapPortion, TextureBundle, Camera, ReactionInterpreter, Vector3 } from "../Core";
+import { Position, Portion, MapPortion, TextureBundle, Camera, ReactionInterpreter, Vector3, Player, Battler } from "../Core";
 
 /** @class
  *  A scene for a local map.
@@ -34,10 +34,10 @@ class Map extends Base {
     public id: number;
     public mapName: string;
     public orientation: Orientation;
-    public user: any;
+    public user: Battler;
     public isBattleMap: boolean;
     public tempTargets: any[];
-    public targets: any[];
+    public targets: Battler[];
     public damages: any[];
     public battleCommandKind: EffectSpecialActionKind;
     public mapProperties: System.MapProperties;

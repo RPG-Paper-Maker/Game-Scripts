@@ -100,9 +100,7 @@ class Battle extends Map {
 
     //Battle Information
     public graphicPlayers: Graphic.Player[][];
-    public targets: Battler[];
     public battlers: Battler[][];
-    public damages: a[];
     public time: number;
     public timeEnemyAttack: number;
     public turn: number;

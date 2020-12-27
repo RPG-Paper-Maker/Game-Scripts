@@ -19,7 +19,6 @@ import MapTransitionKind = Enum.MapTransitionKind;
 import BattleStep = Enum.BattleStep;
 import { Vector3, Player, Battler, Position, WindowBox, WindowChoices } from "../Core";
 import { StructTroopElement } from "../System";
-import { Base } from "./Base";
 
 // -------------------------------------------------------
 //
