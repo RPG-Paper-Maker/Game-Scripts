@@ -100,6 +100,7 @@ class Battle extends Map {
 
     //Battle Information
     public graphicPlayers: Graphic.Player[][];
+    public graphicRewardTop: Graphic.RewardsTop;
     public battlers: Battler[][];
     public time: number;
     public timeEnemyAttack: number;
@@ -154,6 +155,7 @@ class Battle extends Map {
     public windowItemDescription: WindowBox;
     public windowExperienceProgression: WindowBox;
     public windowStatisticProgression: WindowBox;
+    public windowLoots: WindowBox;
 
     // Musics
     public musicMap: System.PlaySong;
