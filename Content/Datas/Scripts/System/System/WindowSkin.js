@@ -211,7 +211,8 @@ class WindowSkin extends System.Base {
      */
     drawDamages(damage, x, y, isCrit, isMiss, zoom) {
         if (isMiss) {
-            this.drawElement(this.textMiss, x - this.textMiss[2] / 2, y, null, null, zoom);
+            this.drawElement(this.textMiss, x - this.textMiss[2] / 2, y, this
+                .textMiss[2], this.textMiss[3], zoom);
         }
         else if (damage < 0) {
             this.drawDamagesNumber(damage, x, y, this.textHeal, zoom);
