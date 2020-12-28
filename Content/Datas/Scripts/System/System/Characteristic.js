@@ -138,9 +138,8 @@ class Characteristic extends Base {
      *  @returns {string}
      */
     toString() {
-        let user = Manager.Stack.currentMap.user ? (Manager.Stack.currentMap
-            .isBattleMap ? Manager.Stack.currentMap.user.character : Manager
-            .Stack.currentMap.user) : Player.getTemporaryPlayer();
+        let user = Manager.Stack.currentMap.user ? Manager.Stack.currentMap.user
+            .player : Player.getTemporaryPlayer();
         let target = Player.getTemporaryPlayer();
         let result = "";
         switch (this.kind) {

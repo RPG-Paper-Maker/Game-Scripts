@@ -3,6 +3,7 @@ import CharacterKind = Enum.CharacterKind;
 import { System } from "../index.js";
 import { Skill } from "./Skill.js";
 import { Item } from "./Item.js";
+import { Battler } from "./Battler.js";
 /** @class
  *  A character in the team/hidden/reserve.
  *  @param {CharacterKind} [kind=undefined] The kind of the character (hero or monster)
@@ -28,6 +29,7 @@ declare class Player {
     timeXP: number;
     obtainedXP: number;
     stepLevelUp: number;
+    battler: Battler;
     constructor(kind?: CharacterKind, id?: number, instanceID?: number, skills?: Skill[], name?: string, json?: Record<string, any>);
     /**
      *  Get the max size of equipment kind names.
@@ -132,9 +134,9 @@ declare class Player {
     getRewardCurrencies(): Record<string, number>;
     /**
      *  Get the loots reward.
-     *  @returns {Record<string, any>[]}
+     *  @returns {Record<string, Item>[]}
      */
-    getRewardLoots(): Record<string, any>[];
+    getRewardLoots(): Record<string, Item>[];
     /**
      *  Update remaining xp according to full time.
      *  @param {number} fullTime Full time in milliseconds

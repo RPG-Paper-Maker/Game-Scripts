@@ -34,6 +34,9 @@ abstract class Base {
      *  @returns {T}
      */
     static get<T>(id: number, list: T[], name: string, isID: boolean = true): T {
+        if (id === null) {
+            return null;
+        }
         let v = list[id];
         if (Utils.isUndefined(v)) {
             Platform.showErrorMessage(Base.STRING_ERROR_GET_1 + (isID ? "ID": 

@@ -16,7 +16,7 @@ import DamagesKind = Enum.DamagesKind;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 import CharacterKind = Enum.CharacterKind;
 import { System, EventCommand, Manager, Datas } from "../index";
-import { Player, ReactionInterpreter } from "../Core";
+import { Player, ReactionInterpreter, Battler } from "../Core";
 import { Statistic } from "./Statistic";
 
 /** @class
@@ -150,9 +150,8 @@ class Effect extends Base {
      *  @returns {boolean} 
      */
     execute(): boolean {
-        let user = Manager.Stack.currentMap.user ? (Manager.Stack.currentMap
-            .isBattleMap ? Manager.Stack.currentMap.user.character : Manager
-            .Stack.currentMap.user) : Player.getTemporaryPlayer();
+        let user = Manager.Stack.currentMap.user ? Manager.Stack.currentMap.user
+            .player : Player.getTemporaryPlayer();
         Manager.Stack.currentMap.tempTargets = Manager.Stack.currentMap.targets;
         if (this.isTemporarilyChangeTarget) {
             Manager.Stack.currentMap.targets = Interpreter.evaluate(this
@@ -163,18 +162,16 @@ class Effect extends Base {
         switch (this.kind) {
             case EffectKind.Damages: {
                 let l = targets.length;
-                Manager.Stack.currentMap.damages = new Array(l);
                 let damage: number, miss: boolean, crit: boolean, target: Player
                     , precision: number, random: number, variance: number, 
                     fixRes: number, percentRes: number, element: number, 
                     critical: number, stat: Statistic, abbreviation: string, max
-                    : number, before: number, currencyID: number;
+                    : number, before: number, currencyID: number, battler: Battler;
                 for (let i = 0; i < l; i++) {
                     damage = 0;
                     miss = false;
                     crit = false;
-                    target = Manager.Stack.currentMap.isBattleMap ? targets[i]
-                        .character : targets[i];
+                    target = targets[i].player;
 
                     // Calculate damages
                     if (this.isDamagePrecision) {
@@ -240,8 +237,10 @@ class Effect extends Base {
 
                     // For diplaying result in HUD
                     if (Manager.Stack.currentMap.isBattleMap) {
-                        Manager.Stack.currentMap.damages[i] = [damage, crit, 
-                            miss];
+                        battler = targets[i];
+                        battler.damages = damage;
+                        battler.isDamagesMiss = miss;
+                        battler.isDamagesCritical = crit;
                     }
 
                     // Result accoring to damage kind
@@ -334,9 +333,8 @@ class Effect extends Base {
      *  @returns {string}
      */
     toString(): string {
-        let user = Manager.Stack.currentMap.user ? (Manager.Stack.currentMap
-            .isBattleMap ? Manager.Stack.currentMap.user.character : Manager
-            .Stack.currentMap.user) : Player.getTemporaryPlayer();
+        let user = Manager.Stack.currentMap.user ? Manager.Stack.currentMap.user
+            .player : Player.getTemporaryPlayer();
         let target = Player.getTemporaryPlayer();
         switch (this.kind) {
             case EffectKind.Damages:

@@ -65,7 +65,7 @@ class ReactionInterpreter {
      *  @returns {boolean}
      */
     isFinished(): boolean {
-        return (this.currentCommand === null)
+        return (this.currentCommand === null || this.currentCommand.data === null);
     }
 
     /** 

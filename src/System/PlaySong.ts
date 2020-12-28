@@ -117,10 +117,8 @@ class PlaySong extends Base {
         }
 
         // If same music ID and same
-        if (PlaySong.currentPlayingMusic !== null && this.songID.getValue() === 
-            PlaySong.currentPlayingMusic.songID.getValue() && start === PlaySong
-            .currentPlayingMusic.start.getValue())
-        {
+        if (this.songID.getValue() === PlaySong.currentPlayingMusic.songID
+            .getValue() && start === PlaySong.currentPlayingMusic.start.getValue()) {
             return 1;
         }
 

@@ -2,7 +2,7 @@ import { Base } from "./Base.js";
 import { Enum } from "../Common/index.js";
 import Align = Enum.Align;
 import { Picture2D } from "../Core/index.js";
-import { Graphic } from "../index.js";
+import { Graphic, System } from "../index.js";
 /** @class
  *  The graphic displaying a text and an icon.
  *  @extends Graphic.Base
@@ -17,6 +17,7 @@ import { Graphic } from "../index.js";
 declare class TextIcon extends Base {
     text: string;
     iconID: number;
+    system: System.Base;
     side: Align;
     align: Align;
     space: number;

@@ -43,7 +43,7 @@ class ReactionInterpreter {
      *  @returns {boolean}
      */
     isFinished() {
-        return (this.currentCommand === null);
+        return (this.currentCommand === null || this.currentCommand.data === null);
     }
     /**
      *  Check if the command can be executed.

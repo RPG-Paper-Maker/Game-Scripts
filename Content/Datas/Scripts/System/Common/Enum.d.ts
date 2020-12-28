@@ -577,5 +577,17 @@ declare namespace Enum {
         GreaterThan = 4,
         LesserThan = 5
     }
+    /**
+     *   Enum for the battle step.
+     *   @enum {number}
+     *   @readonly
+     */
+    enum BattleStep {
+        Initialize = 0,
+        Selection = 1,
+        Animation = 2,
+        EnemyAttack = 3,
+        Victory = 4
+    }
 }
 export { Enum };

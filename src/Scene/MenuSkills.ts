@@ -12,7 +12,7 @@
 import { Base } from "./Base";
 import { Manager, Graphic, Scene, Datas } from "../index";
 import { StructPositionChoice } from "./index";
-import { WindowBox, WindowChoices } from "../Core";
+import { WindowBox, WindowChoices, Battler } from "../Core";
 import { Enum, ScreenResolution } from "../Common";
 import Align = Enum.Align;
 import OrientationWindow = Enum.OrientationWindow;
@@ -102,8 +102,9 @@ class MenuSkills extends Base {
      */
     updateForTab() {
         let indexTab = this.windowChoicesTabs.currentSelectedIndex;
-        Manager.Stack.currentMap.user = Manager.Stack.game.teamHeroes[indexTab];
-        let skills = Manager.Stack.currentMap.user.sk;
+        Manager.Stack.currentMap.user = new Battler(Manager.Stack.game
+            .teamHeroes[indexTab]);
+        let skills = Manager.Stack.currentMap.user.player.sk;
 
         // Get the first skills of the hero
         let list = [];
@@ -117,7 +118,8 @@ class MenuSkills extends Base {
         this.windowChoicesList.offsetSelectedIndex = this.positionChoice[
             indexTab].offset;
         this.windowChoicesList.select(this.positionChoice[indexTab].index);
-        Manager.Stack.currentMap.user = Manager.Stack.game.teamHeroes[indexTab];
+        Manager.Stack.currentMap.user = new Battler(Manager.Stack.game
+            .teamHeroes[indexTab]);
     }
 
     /** 

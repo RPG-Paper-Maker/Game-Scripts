@@ -471,7 +471,7 @@ class Player {
     }
     /**
      *  Get the loots reward.
-     *  @returns {Record<string, any>[]}
+     *  @returns {Record<string, Item>[]}
      */
     getRewardLoots() {
         return this.system.getRewardLoots(this

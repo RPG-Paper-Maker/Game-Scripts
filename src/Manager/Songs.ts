@@ -40,6 +40,7 @@ class Songs {
      *  Initialize all the lists according to SongKind.
      */
     static initialize() {
+        System.PlaySong.currentPlayingMusic = new System.PlaySong(SongKind.Music);
         this.volumes[SongKind.Music] = 0;
         this.volumes[SongKind.BackgroundSound] = 0;
         this.volumes[SongKind.MusicEffect] = 0;
@@ -111,7 +112,7 @@ class Songs {
     static stopSong(kind: SongKind, time: number, seconds: number, pause: 
         boolean = false): boolean
     {
-        System.PlaySong.currentPlayingMusic = null;
+        System.PlaySong.currentPlayingMusic = new System.PlaySong(SongKind.Music);
         let current = new Date().getTime();
         let ellapsedTime = current - time;
         let currentHowl = this.current[kind];

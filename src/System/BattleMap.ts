@@ -31,13 +31,13 @@ class BattleMap extends Base {
      *  Create a System battle map.
      *  @static
      *  @param {number} idMap The map ID
-     *  @param {number[]} position The json position
+     *  @param {Position} position The json position
      *  @returns {System.BattleMap}
      */
-    static create(idMap: number, position: number[]): BattleMap {
+    static create(idMap: number, position: Position): BattleMap {
         let map = new BattleMap();
         map.idMap = idMap;
-        map.position = Position.createFromArray(position);
+        map.position = position;
         return map;
     }
 
@@ -47,7 +47,7 @@ class BattleMap extends Base {
      */
     read(json: Record<string, any>) {
         this.idMap = json.idm;
-        this.position = json.p;
+        this.position = Position.createFromArray(json.p);
     }
 }
 

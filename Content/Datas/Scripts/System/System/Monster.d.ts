@@ -2,6 +2,7 @@ import { Hero } from "./Hero.js";
 import { ProgressionTable } from "./ProgressionTable.js";
 import { Loot } from "./Loot.js";
 import { MonsterAction } from "./MonsterAction.js";
+import { Item } from "../Core/index.js";
 interface StructReward {
     xp: ProgressionTable;
     currencies: ProgressionTable[];
@@ -37,8 +38,8 @@ declare class Monster extends Hero {
     /**
      *  Get the loots reward.
      *  @param {number} level The monster level
-     *  @returns {Record<string, number>[]}
+     *  @returns {Record<string, Item>[]}
      */
-    getRewardLoots(level: number): Record<string, number>[];
+    getRewardLoots(level: number): Record<string, Item>[];
 }
 export { StructReward, Monster };

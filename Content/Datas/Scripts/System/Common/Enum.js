@@ -660,5 +660,19 @@ var Enum;
         OperationKind[OperationKind["LesserThan"] = 5] = "LesserThan";
     })(OperationKind = Enum.OperationKind || (Enum.OperationKind = {}));
     ;
+    /**
+     *   Enum for the battle step.
+     *   @enum {number}
+     *   @readonly
+     */
+    let BattleStep;
+    (function (BattleStep) {
+        BattleStep[BattleStep["Initialize"] = 0] = "Initialize";
+        BattleStep[BattleStep["Selection"] = 1] = "Selection";
+        BattleStep[BattleStep["Animation"] = 2] = "Animation";
+        BattleStep[BattleStep["EnemyAttack"] = 3] = "EnemyAttack";
+        BattleStep[BattleStep["Victory"] = 4] = "Victory";
+    })(BattleStep = Enum.BattleStep || (Enum.BattleStep = {}));
+    ;
 })(Enum || (Enum = {}));
 export { Enum };

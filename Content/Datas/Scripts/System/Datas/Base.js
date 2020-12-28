@@ -27,6 +27,9 @@ class Base {
      *  @returns {T}
      */
     static get(id, list, name, isID = true) {
+        if (id === null) {
+            return null;
+        }
         let v = list[id];
         if (Utils.isUndefined(v)) {
             Platform.showErrorMessage(Base.STRING_ERROR_GET_1 + (isID ? "ID" :

@@ -4,7 +4,7 @@ import Orientation = Enum.Orientation;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 import PictureKind = Enum.PictureKind;
 import { System } from "../index.js";
-import { Position, Portion, MapPortion, TextureBundle, Vector3 } from "../Core/index.js";
+import { Position, Portion, MapPortion, TextureBundle, Vector3, Battler } from "../Core/index.js";
 /** @class
  *  A scene for a local map.
  *  @extends Scene.Base
@@ -19,11 +19,10 @@ declare class Map extends Base {
     id: number;
     mapName: string;
     orientation: Orientation;
-    user: any;
+    user: Battler;
     isBattleMap: boolean;
     tempTargets: any[];
-    targets: any[];
-    damages: any[];
+    targets: Battler[];
     battleCommandKind: EffectSpecialActionKind;
     mapProperties: System.MapProperties;
     scene: THREE.Scene;

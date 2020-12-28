@@ -1,4 +1,8 @@
 import { Base } from "./Base.js";
+interface StructTroopElement {
+    id: number;
+    level: number;
+}
 /** @class
  *  A troop of the game.
  *  @extends System.Base
@@ -6,10 +10,7 @@ import { Base } from "./Base.js";
  *  troop
  */
 declare class Troop extends Base {
-    list: {
-        id: number;
-        level: number;
-    }[];
+    list: StructTroopElement[];
     constructor(json?: Record<string, any>);
     /**
      *  Read the JSON associated to the troop.
@@ -17,4 +18,4 @@ declare class Troop extends Base {
      */
     read(json: Record<string, any>): void;
 }
-export { Troop };
+export { StructTroopElement, Troop };

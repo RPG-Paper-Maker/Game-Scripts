@@ -12,6 +12,7 @@
 import { Base } from "./Base";
 import { Graphic, Manager, Datas } from "../index";
 import { Mathf } from "../Common";
+import { Battler } from "../Core";
 
 /** @class
  *  The graphic displaying a skill or an item use.
@@ -46,13 +47,13 @@ class UseSkillItem extends Base {
             let l = Manager.Stack.game.teamHeroes.length;
             Manager.Stack.currentMap.targets = new Array(l);
             for (let i = 0; i < l; i++) {
-                Manager.Stack.currentMap.targets[i] = Manager.Stack.game
-                    .teamHeroes[i];
+                Manager.Stack.currentMap.targets[i] = new Battler(Manager.Stack
+                    .game.teamHeroes[i]);
             }
         } else {
             this.indexArrow = 0;
-            Manager.Stack.currentMap.targets = [Manager.Stack.game.teamHeroes[
-                this.indexArrow]];
+            Manager.Stack.currentMap.targets = [new Battler(Manager.Stack.game
+                .teamHeroes[this.indexArrow])];
         }
     }
 
@@ -98,8 +99,8 @@ class UseSkillItem extends Base {
                 Datas.Systems.soundCursor.playSound();
             }
             this.indexArrow = Mathf.mod(index, this.graphicCharacters.length);
-            Manager.Stack.currentMap.targets = [Manager.Stack.game.teamHeroes[
-                this.indexArrow]];
+            Manager.Stack.currentMap.targets = [new Battler(Manager.Stack.game
+                .teamHeroes[this.indexArrow])];
             Manager.Stack.requestPaintHUD = true;
         }
     }

@@ -58,9 +58,8 @@ class Cost extends Base {
      *  Use the cost.
      */
     use() {
-        let user = Manager.Stack.currentMap.user ? (Manager.Stack.currentMap
-            .isBattleMap ? Manager.Stack.currentMap.user.character : Manager
-            .Stack.currentMap.user) : Player.getTemporaryPlayer();
+        let user = Manager.Stack.currentMap.user ? Manager.Stack.currentMap.user
+            .player : Player.getTemporaryPlayer();
         let target = Player.getTemporaryPlayer();
         let value = Interpreter.evaluate(this.valueFormula.getValue(), { user: 
             user, target: target });
@@ -84,9 +83,8 @@ class Cost extends Base {
      *  @returns {boolean}
      */
     isPossible(): boolean {
-        let user = Manager.Stack.currentMap.user ? (Manager.Stack.currentMap
-            .isBattleMap ? Manager.Stack.currentMap.user.character : Manager
-            .Stack.currentMap.user) : Player.getTemporaryPlayer();
+        let user = Manager.Stack.currentMap.user ? Manager.Stack.currentMap.user
+            .player : Player.getTemporaryPlayer();
         let target = Player.getTemporaryPlayer();
         let value = Interpreter.evaluate(this.valueFormula.getValue(), { user: 
             user, target: target });
@@ -112,9 +110,8 @@ class Cost extends Base {
      *  @returns {string}
      */
     toString(): string {
-        let user = Manager.Stack.currentMap.user ? (Manager.Stack.currentMap
-            .isBattleMap ? Manager.Stack.currentMap.user.character : Manager
-            .Stack.currentMap.user) : Player.getTemporaryPlayer();
+        let user = Manager.Stack.currentMap.user ? Manager.Stack.currentMap.user
+            .player : Player.getTemporaryPlayer();
         let target = Player.getTemporaryPlayer();
         let result = Interpreter.evaluate(this.valueFormula.getValue(), { user: 
             user, target: target }) + " ";

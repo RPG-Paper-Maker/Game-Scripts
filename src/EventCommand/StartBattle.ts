@@ -10,9 +10,9 @@
 */
 
 import { Base } from "./Base";
-import { System, Datas, Manager } from "../index";
+import { System, Datas, Manager, Scene } from "../index";
 import { Utils } from "../Common";
-import { MapObject } from "../Core";
+import { MapObject, Position } from "../Core";
 
 /** @class
  *  An event command for battle processing.
@@ -126,31 +126,28 @@ class StartBattle extends Base {
      *  @returns {number} The number of node to pass
     */
     update(currentState: Record<string, any>, object: MapObject, state: number): 
-        number
-    {
+        number {
         // Initializing battle
         if (currentState.sceneBattle === null) {
             let battleMap = (this.battleMapID === null) ? System.BattleMap
-                .create(this.mapID.getValue(), [this.x.getValue(), this.y
-                .getValue(), this.yPlus.getValue(), this.z.getValue()]) : Datas
-                .BattleSystems.getBattleMap(this.battleMapID.getValue());
-            Manager.Stack.game.heroBattle = new MapObject(null, battleMap
-                .position.toVector3());
+                .create(this.mapID.getValue(), new Position(this.x.getValue(), 
+                this.y.getValue(), this.yPlus.getValue(), this.z.getValue())) : 
+                Datas.BattleSystems.getBattleMap(this.battleMapID.getValue());
+            Manager.Stack.game.heroBattle = new MapObject(Manager.Stack.game
+                .hero.system, battleMap.position.toVector3(), true);
 
             // Defining the battle state instance
-            /*
             let sceneBattle = new Scene.Battle(this.troopID.getValue(), this
                 .canGameOver, this.canEscape, battleMap, this.transitionStart, 
-                this.transitionEnd, this.transitionStartColor ? RPM.datasGame
-                .system.colors[this.transitionStartColor.getValue()] : null, 
-                this.transitionEndColor ? RPM.datasGame.system.colors[this
-                .transitionEndColor.getValue()] : null);
+                this.transitionEnd, this.transitionStartColor ? Datas.Systems
+                .getColor(this.transitionStartColor.getValue()) : null, 
+                this.transitionEndColor ? Datas.Systems.getColor(this
+                .transitionEndColor.getValue()) : null);
             
             // Keep instance of battle state for results
             currentState.sceneBattle = sceneBattle;
-            currentState.mapScene = RPM.gameStack.top;
-            RPM.gameStack.push(sceneBattle);
-            */
+            currentState.mapScene = Manager.Stack.top;
+            Manager.Stack.push(sceneBattle);
             return 0; // Stay on this command as soon as we are in battle state
         }
 

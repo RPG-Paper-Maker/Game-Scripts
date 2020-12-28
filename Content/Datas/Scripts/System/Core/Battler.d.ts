@@ -51,7 +51,10 @@ declare class Battler {
     halfPosition: Vector3;
     moving: boolean;
     attacking: boolean;
-    constructor(player: Player, position: Position, camera: Camera);
+    damages: number;
+    isDamagesMiss: boolean;
+    isDamagesCritical: boolean;
+    constructor(player: Player, position?: Position, camera?: Camera);
     /**
      *  Set the selected state.
      *  @param {boolean} selected Indicate if the battler is selected
@@ -97,7 +100,7 @@ declare class Battler {
      *  @param {boolean} attacked Indicate if the battler is attacked
      *  @param {Player} user The attack / skill / item user
      */
-    updateDead(attacked: boolean, user: Player): void;
+    updateDead(attacked: boolean, user?: Player): void;
     /**
      *  Update the battler.
      */
@@ -149,6 +152,6 @@ declare class Battler {
     /**
      *  Draw the damages on top of the battler.
      */
-    drawDamages(damage: number, isCrit: boolean, isMiss: boolean): void;
+    drawDamages(): void;
 }
 export { Battler };

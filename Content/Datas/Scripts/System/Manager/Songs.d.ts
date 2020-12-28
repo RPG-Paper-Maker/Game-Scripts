@@ -12,7 +12,7 @@ declare class Songs {
     static volumes: number[];
     static starts: number[];
     static ends: number[];
-    static currentHowl: typeof Howl[];
+    static current: typeof Howl[];
     static progressionMusic: any;
     static progressionMusicTime: number;
     static progressionMusicEnd: number;

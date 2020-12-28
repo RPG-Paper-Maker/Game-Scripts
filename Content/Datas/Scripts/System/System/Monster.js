@@ -84,7 +84,7 @@ class Monster extends Hero {
     /**
      *  Get the loots reward.
      *  @param {number} level The monster level
-     *  @returns {Record<string, number>[]}
+     *  @returns {Record<string, Item>[]}
      */
     getRewardLoots(level) {
         let list = new Array(3);
@@ -97,10 +97,10 @@ class Monster extends Hero {
             if (loot !== null) {
                 loots = list[loot.kind];
                 if (loots.hasOwnProperty(loot.id)) {
-                    loots[loot.id] += loot.nb;
+                    loots[loot.id].nb += loot.nb;
                 }
                 else {
-                    loots[loot.id] = loot.nb;
+                    loots[loot.id] = loot;
                 }
             }
         }

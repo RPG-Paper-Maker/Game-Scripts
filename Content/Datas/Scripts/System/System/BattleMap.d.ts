@@ -14,10 +14,10 @@ declare class BattleMap extends Base {
      *  Create a System battle map.
      *  @static
      *  @param {number} idMap The map ID
-     *  @param {number[]} position The json position
+     *  @param {Position} position The json position
      *  @returns {System.BattleMap}
      */
-    static create(idMap: number, position: number[]): BattleMap;
+    static create(idMap: number, position: Position): BattleMap;
     /**
      *  Read the JSON associated to the battle map.
      *  @param {Record<string, any>} json Json object describing the battle map

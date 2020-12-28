@@ -458,7 +458,7 @@ class If extends Base {
                     , { thisObject: object });
                 break;
             case 8:
-                result = Scene.Battle.escaped;
+                result = Scene.Battle.escapedLastBattle;
                 break;
             default:
                 break;

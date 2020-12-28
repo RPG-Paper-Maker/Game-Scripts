@@ -10,7 +10,7 @@
 */
 import { Base } from "./Base.js";
 import { Manager, Graphic, Scene, Datas } from "../index.js";
-import { WindowBox, WindowChoices } from "../Core/index.js";
+import { WindowBox, WindowChoices, Battler } from "../Core/index.js";
 import { Enum, ScreenResolution } from "../Common/index.js";
 var Align = Enum.Align;
 var OrientationWindow = Enum.OrientationWindow;
@@ -77,8 +77,9 @@ class MenuSkills extends Base {
      */
     updateForTab() {
         let indexTab = this.windowChoicesTabs.currentSelectedIndex;
-        Manager.Stack.currentMap.user = Manager.Stack.game.teamHeroes[indexTab];
-        let skills = Manager.Stack.currentMap.user.sk;
+        Manager.Stack.currentMap.user = new Battler(Manager.Stack.game
+            .teamHeroes[indexTab]);
+        let skills = Manager.Stack.currentMap.user.player.sk;
         // Get the first skills of the hero
         let list = [];
         for (let i = 0, l = skills.length; i < l; i++) {
@@ -89,7 +90,8 @@ class MenuSkills extends Base {
         this.windowChoicesList.unselect();
         this.windowChoicesList.offsetSelectedIndex = this.positionChoice[indexTab].offset;
         this.windowChoicesList.select(this.positionChoice[indexTab].index);
-        Manager.Stack.currentMap.user = Manager.Stack.game.teamHeroes[indexTab];
+        Manager.Stack.currentMap.user = new Battler(Manager.Stack.game
+            .teamHeroes[indexTab]);
     }
     /**
      *  Move tab according to key.

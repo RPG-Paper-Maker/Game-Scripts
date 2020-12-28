@@ -28,6 +28,9 @@ class Battler {
     constructor(player, position, camera) {
         this.itemsNumbers = [];
         this.player = player;
+        if (!position) {
+            return;
+        }
         this.position = position.toVector3();
         this.arrowPosition = Manager.GL.toScreenPosition(this.position, camera
             .getThreeCamera());
@@ -84,11 +87,10 @@ class Battler {
                     .width, this.height]);
             let geometry = sprite.createGeometry(this.width, this.height, false, position)[0];
             this.mesh = new THREE.Mesh(geometry, material);
-            this.mesh.position.set(position.x, position.y, position.z);
-            this.upPosition = new Vector3(position.x, position.y + (this
-                .height * Datas.Systems.SQUARE_SIZE), position.z);
-            this.halfPosition = new Vector3(position.x, position.y + (this
-                .height * Datas.Systems.SQUARE_SIZE / 2), position.z);
+            this.mesh.position.set(this.position.x, this.position.y, this
+                .position.z);
+            this.upPosition = new Vector3(this.position.x, this.position.y + (this.height * Datas.Systems.SQUARE_SIZE), this.position.z);
+            this.halfPosition = new Vector3(this.position.x, this.position.y + (this.height * Datas.Systems.SQUARE_SIZE / 2), this.position.z);
             if (player.kind === CharacterKind.Monster) {
                 this.mesh.scale.set(-1, 1, 1);
             }
@@ -369,10 +371,9 @@ class Battler {
     /**
      *  Draw the damages on top of the battler.
      */
-    drawDamages(damage, isCrit, isMiss) {
-        Datas.Systems.getCurrentWindowSkin().drawDamages(damage, this
-            .damagePosition.x, this.damagePosition.y, isCrit, isMiss, this
-            .timeDamage / Battler.TOTAL_TIME_DAMAGE);
+    drawDamages() {
+        Datas.Systems.getCurrentWindowSkin().drawDamages(this.damages, this
+            .damagePosition.x, this.damagePosition.y, this.isDamagesCritical, this.isDamagesMiss, this.timeDamage / Battler.TOTAL_TIME_DAMAGE);
     }
 }
 Battler.OFFSET_SELECTED = 10;

@@ -14,7 +14,7 @@ import { Enum, Constants, Platform } from "../Common";
 import Align = Enum.Align;
 import PictureKind = Enum.PictureKind;
 import { Picture2D } from "../Core";
-import { Graphic, Datas } from "../index";
+import { Graphic, Datas, System } from "../index";
 
 /** @class
  *  The graphic displaying a text and an icon.
@@ -31,6 +31,7 @@ class TextIcon extends Base {
 
     public text: string;
     public iconID: number;
+    public system: System.Base;
     public side: Align;
     public align: Align;
     public space: number;

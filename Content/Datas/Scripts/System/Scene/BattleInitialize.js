@@ -1,4 +1,3 @@
-
 /*
     RPG Paper Maker Copyright (C) 2017-2020 Wano
 
@@ -9,17 +8,14 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-
-import { Scene, Graphic, Manager, Datas, System } from "..";
-import { Enum, Constants, ScreenResolution, Platform } from "../Common";
-import CharacterKind = Enum.CharacterKind;
-import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
-import SongKind = Enum.SongKind;
-import MapTransitionKind = Enum.MapTransitionKind;
-import BattleStep = Enum.BattleStep;
-import { Vector3, Player, Battler, Position, WindowBox, WindowChoices } from "../Core";
-import { StructTroopElement } from "../System";
-
+import { Scene, Graphic, Manager, Datas, System } from "../index.js";
+import { Enum, Constants, ScreenResolution, Platform } from "../Common/index.js";
+var CharacterKind = Enum.CharacterKind;
+var EffectSpecialActionKind = Enum.EffectSpecialActionKind;
+var SongKind = Enum.SongKind;
+var MapTransitionKind = Enum.MapTransitionKind;
+var BattleStep = Enum.BattleStep;
+import { Vector3, Player, Battler, Position, WindowBox, WindowChoices } from "../Core/index.js";
 // -------------------------------------------------------
 //
 //  CLASS Battle
@@ -28,15 +24,11 @@ import { StructTroopElement } from "../System";
 //  allies/ennemies comming.
 //
 // -------------------------------------------------------
-
 class BattleInitialize {
-    public battle: Scene.Battle;
-
-    constructor(battle: Scene.Battle) {
+    constructor(battle) {
         this.battle = battle;
     }
-
-    /** 
+    /**
      *  Initialize step.
      */
     initialize() {
@@ -58,37 +50,33 @@ class BattleInitialize {
         this.initializeWindowsEnd();
         this.initializeMusic();
     }
-
-    /** 
+    /**
      *  Initialize allies battlers.
      */
     initializeAlliesBattlers() {
         let l = Manager.Stack.game.teamHeroes.length;
         this.battle.battlers[CharacterKind.Hero] = new Array(l);
         this.battle.graphicPlayers[CharacterKind.Hero] = new Array(l);
-        let position: Vector3, player: Player, battler: Battler;
+        let position, player, battler;
         for (let i = 0; i < l; i++) {
             // Battlers
             position = new Vector3(Manager.Stack.game.heroBattle.position.x + (2
-                * Datas.Systems.SQUARE_SIZE) + (i * Datas.Systems.SQUARE_SIZE / 
+                * Datas.Systems.SQUARE_SIZE) + (i * Datas.Systems.SQUARE_SIZE /
                 2), Manager.Stack.game.heroBattle.position.y, Manager.Stack.game
                 .heroBattle.position.z - Datas.Systems.SQUARE_SIZE + (i * Datas
                 .Systems.SQUARE_SIZE));
             player = Manager.Stack.game.teamHeroes[i];
-            battler = new Battler(player, Position.createFromVector3(position), 
-                this.battle.camera);
+            battler = new Battler(player, Position.createFromVector3(position), this.battle.camera);
             battler.updateDead(false);
             player.battler = battler;
             battler.addToScene();
             this.battle.battlers[CharacterKind.Hero][i] = battler;
-
             // Graphic player
             this.battle.graphicPlayers[CharacterKind.Hero][i] = new Graphic
                 .Player(player);
         }
     }
-
-    /** 
+    /**
      *  Initialize enemies battlers.
      */
     initializeEnemiesBattlers() {
@@ -96,69 +84,57 @@ class BattleInitialize {
         let l = troop.list.length;
         this.battle.battlers[CharacterKind.Monster] = new Array(l);
         this.battle.graphicPlayers[CharacterKind.Monster] = new Array(l);
-        let troopElement: StructTroopElement, position: Vector3, player: Player,
-            battler: Battler;
+        let troopElement, position, player, battler;
         for (let i = 0; i < l; i++) {
             // Battlers
             troopElement = troop.list[i];
             position = new Vector3(Manager.Stack.game.heroBattle.position.x - (2
-                * Datas.Systems.SQUARE_SIZE) - (i * Datas.Systems.SQUARE_SIZE * 
+                * Datas.Systems.SQUARE_SIZE) - (i * Datas.Systems.SQUARE_SIZE *
                 3 / 4), Manager.Stack.game.heroBattle.position.y, Manager.Stack
-                .game.heroBattle.position.z - Datas.Systems.SQUARE_SIZE + (i * 
+                .game.heroBattle.position.z - Datas.Systems.SQUARE_SIZE + (i *
                 Datas.Systems.SQUARE_SIZE));
             player = new Player(CharacterKind.Monster, troopElement.id, Manager
                 .Stack.game.charactersInstances++, []);
             player.instanciate(troopElement.level);
-            battler = new Battler(player, Position.createFromVector3(position), 
-                this.battle.camera);
+            battler = new Battler(player, Position.createFromVector3(position), this.battle.camera);
             player.battler = battler;
             battler.addToScene();
             this.battle.battlers[CharacterKind.Monster][i] = battler;
-
             // Graphic player
             this.battle.graphicPlayers[CharacterKind.Monster][i] = new Graphic
                 .Player(player, true);
-        
         }
     }
-
-    /** 
+    /**
      *  Initialize informations (boxes).
      */
     initializeInformation() {
         this.battle.windowTopInformations = new WindowBox(0, Constants
-            .HUGE_SPACE, ScreenResolution.SCREEN_X, WindowBox.SMALL_SLOT_HEIGHT,
-            {
-                padding: WindowBox.SMALL_SLOT_PADDING
-            }
-        );
+            .HUGE_SPACE, ScreenResolution.SCREEN_X, WindowBox.SMALL_SLOT_HEIGHT, {
+            padding: WindowBox.SMALL_SLOT_PADDING
+        });
         this.battle.windowUserInformations = new WindowBox(ScreenResolution
             .SCREEN_X - Scene.Battle.WINDOW_PROFILE_WIDTH, ScreenResolution
             .SCREEN_Y - Scene.Battle.WINDOW_PROFILE_HEIGHT, Scene.Battle
-            .WINDOW_PROFILE_WIDTH, Scene.Battle.WINDOW_PROFILE_HEIGHT,
-            {
-                padding: WindowBox.SMALL_PADDING_BOX,
-                limitContent: false
-            }
-        );
+            .WINDOW_PROFILE_WIDTH, Scene.Battle.WINDOW_PROFILE_HEIGHT, {
+            padding: WindowBox.SMALL_PADDING_BOX,
+            limitContent: false
+        });
         this.battle.windowTargetInformations = new WindowBox(0, ScreenResolution
             .SCREEN_Y - Scene.Battle.WINDOW_PROFILE_HEIGHT, Scene.Battle
-            .WINDOW_PROFILE_WIDTH, Scene.Battle.WINDOW_PROFILE_HEIGHT,
-            {
-                padding: WindowBox.SMALL_PADDING_BOX,
-                limitContent: false
-            }
-        );
+            .WINDOW_PROFILE_WIDTH, Scene.Battle.WINDOW_PROFILE_HEIGHT, {
+            padding: WindowBox.SMALL_PADDING_BOX,
+            limitContent: false
+        });
     }
-
     /**
      *  Initialize window commands.
      */
-    public initializeWindowCommands() {
+    initializeWindowCommands() {
         let l = Datas.BattleSystems.battleCommandsOrder.length;
-        let listContent: Graphic.TextIcon[] = new Array(l);
+        let listContent = new Array(l);
         let listCallbacks = new Array(l);
-        let skill: System.Skill;
+        let skill;
         for (let i = 0; i < l; i++) {
             skill = Datas.Skills.get(Datas.BattleSystems.battleCommandsOrder[i]);
             listContent[i] = new Graphic.TextIcon(skill.name(), skill.pictureID);
@@ -166,65 +142,50 @@ class BattleInitialize {
             listCallbacks[i] = System.CommonSkillItem.prototype.useCommand;
         }
         this.battle.windowChoicesBattleCommands = new WindowChoices(Constants
-            .HUGE_SPACE, ScreenResolution.SCREEN_Y - Constants.HUGE_SPACE - (l * 
-            WindowBox.SMALL_SLOT_HEIGHT), Scene.Battle.WINDOW_COMMANDS_WIDTH, 
-            WindowBox.SMALL_SLOT_HEIGHT, listContent, {
-                nbItemsMax: Scene.Battle.COMMANDS_NUMBER,
-                listCallbacks: listCallbacks
-            }
-        );
+            .HUGE_SPACE, ScreenResolution.SCREEN_Y - Constants.HUGE_SPACE - (l *
+            WindowBox.SMALL_SLOT_HEIGHT), Scene.Battle.WINDOW_COMMANDS_WIDTH, WindowBox.SMALL_SLOT_HEIGHT, listContent, {
+            nbItemsMax: Scene.Battle.COMMANDS_NUMBER,
+            listCallbacks: listCallbacks
+        });
         this.battle.windowChoicesSkills = new WindowChoices(Scene.Battle
-            .WINDOW_COMMANDS_SELECT_X, Scene.Battle.WINDOW_COMMANDS_SELECT_Y,
-            Scene.Battle.WINDOW_COMMANDS_SELECT_WIDTH, WindowBox
+            .WINDOW_COMMANDS_SELECT_X, Scene.Battle.WINDOW_COMMANDS_SELECT_Y, Scene.Battle.WINDOW_COMMANDS_SELECT_WIDTH, WindowBox
             .SMALL_SLOT_HEIGHT, [], {
-                nbItemsMax: Scene.Battle.COMMANDS_NUMBER
-            }
-        );
+            nbItemsMax: Scene.Battle.COMMANDS_NUMBER
+        });
         this.battle.windowSkillDescription = new WindowBox(ScreenResolution
             .SCREEN_X - Scene.Battle.WINDOW_DESCRIPTIONS_X, Scene.Battle
-            .WINDOW_DESCRIPTIONS_Y, Scene.Battle.WINDOW_DESCRIPTIONS_WIDTH, 
-            Scene.Battle.WINDOW_DESCRIPTIONS_HEIGHT, {
-                padding: WindowBox.HUGE_PADDING_BOX
-            }
-        );
+            .WINDOW_DESCRIPTIONS_Y, Scene.Battle.WINDOW_DESCRIPTIONS_WIDTH, Scene.Battle.WINDOW_DESCRIPTIONS_HEIGHT, {
+            padding: WindowBox.HUGE_PADDING_BOX
+        });
         this.battle.windowChoicesItems = new WindowChoices(Scene.Battle
-            .WINDOW_COMMANDS_SELECT_X, Scene.Battle.WINDOW_COMMANDS_SELECT_Y,
-            Scene.Battle.WINDOW_COMMANDS_SELECT_WIDTH, WindowBox
+            .WINDOW_COMMANDS_SELECT_X, Scene.Battle.WINDOW_COMMANDS_SELECT_Y, Scene.Battle.WINDOW_COMMANDS_SELECT_WIDTH, WindowBox
             .SMALL_SLOT_HEIGHT, [], {
-                nbItemsMax: Scene.Battle.COMMANDS_NUMBER
-            }
-        );
+            nbItemsMax: Scene.Battle.COMMANDS_NUMBER
+        });
         this.battle.windowItemDescription = new WindowBox(ScreenResolution
             .SCREEN_X - Scene.Battle.WINDOW_DESCRIPTIONS_X, Scene.Battle
-            .WINDOW_DESCRIPTIONS_Y, Scene.Battle.WINDOW_DESCRIPTIONS_WIDTH, 
-            Scene.Battle.WINDOW_DESCRIPTIONS_HEIGHT, {
-                padding: WindowBox.HUGE_PADDING_BOX
-            }
-        );
+            .WINDOW_DESCRIPTIONS_Y, Scene.Battle.WINDOW_DESCRIPTIONS_WIDTH, Scene.Battle.WINDOW_DESCRIPTIONS_HEIGHT, {
+            padding: WindowBox.HUGE_PADDING_BOX
+        });
     }
-
     // -------------------------------------------------------
     /** Initialize windows end
     */
     initializeWindowsEnd() {
         this.battle.windowExperienceProgression = new WindowBox(Scene.Battle
             .WINDOW_EXPERIENCE_X, Scene.Battle.WINDOW_EXPERIENCE_Y, Scene.Battle
-            .WINDOW_EXPERIENCE_WIDTH, (Scene.Battle.WINDOW_EXPERIENCE_HEIGHT * 
-            Manager.Stack.game.teamHeroes.length) + WindowBox.SMALL_PADDING_BOX[
-            2] + WindowBox.SMALL_PADDING_BOX[3], {
-                content: new Graphic.XPProgression(),
-                padding: WindowBox.SMALL_PADDING_BOX
-            }
-        );
+            .WINDOW_EXPERIENCE_WIDTH, (Scene.Battle.WINDOW_EXPERIENCE_HEIGHT *
+            Manager.Stack.game.teamHeroes.length) + WindowBox.SMALL_PADDING_BOX[2] + WindowBox.SMALL_PADDING_BOX[3], {
+            content: new Graphic.XPProgression(),
+            padding: WindowBox.SMALL_PADDING_BOX
+        });
         this.battle.windowStatisticProgression = new WindowBox(Scene.Battle
             .WINDOW_STATS_X, Scene.Battle.WINDOW_STATS_Y, Scene.Battle
             .WINDOW_STATS_WIDTH, Scene.Battle.WINDOW_STATS_HEIGHT, {
-                padding: WindowBox.HUGE_PADDING_BOX
-            }
-        );
+            padding: WindowBox.HUGE_PADDING_BOX
+        });
     }
-
-    /** 
+    /**
      *  Initialize musics.
      */
     initializeMusic() {
@@ -234,25 +195,25 @@ class BattleInitialize {
             .ONE_SECOND_MILLI;
         Datas.BattleSystems.battleMusic.playMusic();
     }
-
-    /** 
+    /**
      *  Update the battle.
      */
     update() {
         Manager.Stack.requestPaintHUD = true;
         if (this.battle.transitionStart === MapTransitionKind.Fade) {
             this.updateTransitionStartFade();
-        } else if (this.battle.transitionStart === MapTransitionKind.Zoom) {
+        }
+        else if (this.battle.transitionStart === MapTransitionKind.Zoom) {
             this.updateTransitionStartZoom();
-        } else {
+        }
+        else {
             this.battle.changeStep(1);
         }
     }
-
-    /** 
+    /**
      * Update transtion start fade.
      */
-    public updateTransitionStartFade() {
+    updateTransitionStartFade() {
         if (this.battle.transitionColor) {
             this.battle.transitionColorAlpha += Scene.Battle
                 .TRANSITION_COLOR_VALUE;
@@ -278,17 +239,16 @@ class BattleInitialize {
         }
         this.battle.changeStep(BattleStep.Selection);
     }
-
     /**
      *  Update transition start zoom.
      */
-    public updateTransitionStartZoom() {
-        let offset: number;
+    updateTransitionStartZoom() {
+        let offset;
         if (this.battle.transitionZoom) {
             this.battle.sceneMap.camera.distance = ((this.battle
-                .mapCameraDistance - Scene.Battle.START_CAMERA_DISTANCE) * (1 - 
+                .mapCameraDistance - Scene.Battle.START_CAMERA_DISTANCE) * (1 -
                 ((new Date().getTime() - this.battle.time) / Scene.Battle
-                .TRANSITION_ZOOM_TIME))) + Scene.Battle.START_CAMERA_DISTANCE;
+                    .TRANSITION_ZOOM_TIME))) + Scene.Battle.START_CAMERA_DISTANCE;
             if (this.battle.sceneMap.camera.distance <= Scene.Battle
                 .START_CAMERA_DISTANCE) {
                 this.battle.sceneMap.camera.distance = Scene.Battle
@@ -309,63 +269,54 @@ class BattleInitialize {
             if (this.battle.camera.distance >= this.battle.cameraDistance) {
                 this.battle.camera.distance = this.battle.cameraDistance;
                 this.battle.cameraON = true;
-            } else {
+            }
+            else {
                 return;
             }
         }
         this.battle.changeStep(BattleStep.Selection);
     }
-    
-    /** 
+    /**
      *  Handle key pressed.
-     *   @param {number} key The key ID 
+     *   @param {number} key The key ID
      */
-    onKeyPressedStep(key: number) {
-
+    onKeyPressedStep(key) {
     }
-
-    /** 
+    /**
      *  Handle key released.
-     *  @param {number} key The key ID 
+     *  @param {number} key The key ID
      */
-    onKeyReleasedStep(key: number) {
-
+    onKeyReleasedStep(key) {
     }
-
-    /** 
+    /**
      *  Handle key repeat pressed.
      *  @param {number} key The key ID
      *  @returns {boolean}
      */
-    onKeyPressedRepeatStep(key: number): boolean {
+    onKeyPressedRepeatStep(key) {
         return true;
     }
-
-    /** 
+    /**
      *  Handle key pressed and repeat.
      *  @param {number} key The key ID
      *  @returns {boolean}
      */
-    onKeyPressedAndRepeatStep(key: number): boolean {
+    onKeyPressedAndRepeatStep(key) {
         return true;
     }
-
-    /** 
+    /**
      *  Draw the battle HUD
     */
     drawHUDStep() {
         if (this.battle.transitionStart === 1) {
             Platform.ctx.fillStyle = Constants.STRING_RGBA + Constants
-                .STRING_PARENTHESIS_LEFT + this.battle.transitionStartColor.red 
+                .STRING_PARENTHESIS_LEFT + this.battle.transitionStartColor.red
                 + Constants.STRING_COMA + this.battle.transitionStartColor.green
-                + Constants.STRING_COMA + this.battle.transitionStartColor.blue 
-                + Constants.STRING_COMA + this.battle.transitionColorAlpha + 
+                + Constants.STRING_COMA + this.battle.transitionStartColor.blue
+                + Constants.STRING_COMA + this.battle.transitionColorAlpha +
                 Constants.STRING_PARENTHESIS_RIGHT;
-            Platform.ctx.fillRect(0, 0, ScreenResolution.CANVAS_WIDTH, 
-                ScreenResolution.CANVAS_HEIGHT);
+            Platform.ctx.fillRect(0, 0, ScreenResolution.CANVAS_WIDTH, ScreenResolution.CANVAS_HEIGHT);
         }
     }
-
 }
-
-export { BattleInitialize }
+export { BattleInitialize };
