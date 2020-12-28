@@ -388,8 +388,8 @@ class Collisions {
         }
 
         // Check objects collisions
-        portion = Scene.Map.current.getLocalPortion(Portion
-            .createFromVector3(positionAfter));
+        portion = Scene.Map.current.getLocalPortion(Portion.createFromVector3(
+            positionAfter));
         for (i = 0; i < 2; i++) {
             for (j = 0; j < 2; j++) {
                 mapPortion = Scene.Map.current.getMapPortion(new Portion(
@@ -996,6 +996,8 @@ class Collisions {
                 (Math.floor(positionAfter.x / Datas.Systems.SQUARE_SIZE), Math
                 .ceil(positionAfter.y / Datas.Systems.SQUARE_SIZE), Math.floor(
                 positionAfter.z / Datas.Systems.SQUARE_SIZE)) : jpositionAfter;
+            mapPortion = Scene.Map.current.getMapPortion(Scene.Map.current
+                .getLocalPortion(jposition.getGlobalPortion()));
             let isFloor = mapPortion.boundingBoxesLands[jposition.toIndex()]
                 .length > 0;
             if (isFloor && (newPosition.y - positionAfter.y) < 0) {
@@ -1012,7 +1014,6 @@ class Collisions {
                     .length > 0;
                 return [!isFloor, null];
             }
-
             return [!forceAlways && (Math.abs(newPosition.y - positionAfter.y) >
                 Datas.Systems.mountainCollisionHeight.getValue()), newPosition.y];
         }

@@ -321,8 +321,7 @@ class Collisions {
             return [true, null];
         }
         // Check objects collisions
-        portion = Scene.Map.current.getLocalPortion(Portion
-            .createFromVector3(positionAfter));
+        portion = Scene.Map.current.getLocalPortion(Portion.createFromVector3(positionAfter));
         for (i = 0; i < 2; i++) {
             for (j = 0; j < 2; j++) {
                 mapPortion = Scene.Map.current.getMapPortion(new Portion(portion.x + i, portion.y, portion.z + j));
@@ -862,6 +861,8 @@ class Collisions {
             // If going down, check if there's a blocking floor
             let jposition = (newPosition.y - positionAfter.y) < 0 ? new Position(Math.floor(positionAfter.x / Datas.Systems.SQUARE_SIZE), Math
                 .ceil(positionAfter.y / Datas.Systems.SQUARE_SIZE), Math.floor(positionAfter.z / Datas.Systems.SQUARE_SIZE)) : jpositionAfter;
+            mapPortion = Scene.Map.current.getMapPortion(Scene.Map.current
+                .getLocalPortion(jposition.getGlobalPortion()));
             let isFloor = mapPortion.boundingBoxesLands[jposition.toIndex()]
                 .length > 0;
             if (isFloor && (newPosition.y - positionAfter.y) < 0) {
