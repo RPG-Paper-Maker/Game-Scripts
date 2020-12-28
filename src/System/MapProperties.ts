@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { THREE } from "../Globals";
-import { Datas, System, Manager } from "../index";
+import { Datas, System, Manager, Scene } from "../index";
 import { PlaySong } from "./PlaySong";
 import { DynamicValue } from "./DynamicValue";
 import { MapObject } from "../Core/MapObject";
@@ -122,9 +122,8 @@ class MapProperties extends Base {
         let size = 10000 * Datas.Systems.SQUARE_SIZE / Constants
             .BASIC_SQUARE_SIZE;
         this.skyboxGeometry = new THREE.BoxGeometry(size, size, size);
-        Manager.Stack.currentMap.scene.add(new THREE.Mesh(this.skyboxGeometry, 
-            Datas.Systems.getSkybox(this.backgroundSkyboxID.getValue())
-            .createTextures()));
+        Scene.Map.current.scene.add(new THREE.Mesh(this.skyboxGeometry, Datas
+            .Systems.getSkybox(this.backgroundSkyboxID.getValue()).createTextures()));
     }
 }
 

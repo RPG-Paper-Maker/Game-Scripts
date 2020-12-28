@@ -12,7 +12,7 @@ import { Enum, Utils } from "../Common/index.js";
 var ElementMapKind = Enum.ElementMapKind;
 import { MapElement } from "./MapElement.js";
 import { THREE } from "../Globals.js";
-import { Datas, Manager } from "../index.js";
+import { Datas, Scene } from "../index.js";
 import { Vector3 } from "./Vector3.js";
 import { Vector2 } from "./Vector2.js";
 /** @class
@@ -176,7 +176,7 @@ class Sprite extends MapElement {
         w = Math.floor(this.textureRect[2] / 2);
         h = Math.floor(this.textureRect[3] / 2);
         if (tileset) {
-            let collisions = Manager.Stack.currentMap.mapProperties.tileset.picture
+            let collisions = Scene.Map.current.mapProperties.tileset.picture
                 .getSquaresForTexture(this.textureRect);
             let rect;
             for (let i = 0, l = collisions.length; i < l; i++) {

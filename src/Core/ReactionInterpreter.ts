@@ -11,7 +11,7 @@
 
 import { MapObject, Node } from "./index";
 import { Utils, Platform } from "../Common";
-import { EventCommand, System, Manager } from "../index";
+import { EventCommand, System, Manager, Scene } from "../index";
 
 /** @class
  *  A reaction command interpreter.
@@ -102,7 +102,7 @@ class ReactionInterpreter {
      *  Update the current commands
      */
     update() {
-        if (this.isFinished() || Manager.Stack.currentMap.loading || !this
+        if (this.isFinished() || Scene.Map.current.loading || !this
             .canExecute())
         {
             return;
@@ -117,7 +117,7 @@ class ReactionInterpreter {
                     this.currentParameters, this.currentTimeState, this
                     .currentCommand);
                 interpreter.currentCommandState.parallel = true;
-                Manager.Stack.currentMap.parallelCommands.push(interpreter);
+                Scene.Map.current.parallelCommands.push(interpreter);
             }
             newCommand = this.updateCommand();
             if (newCommand !== this.currentCommand) {
@@ -141,7 +141,7 @@ class ReactionInterpreter {
      *  @returns {Node}
      */
     updateCommand(): Node {
-        if (Manager.Stack.currentMap.loading) {
+        if (Scene.Map.current.loading) {
             return this.currentCommand;
         }
         this.updateObjectParameters();
@@ -244,7 +244,7 @@ class ReactionInterpreter {
      *  @param {number} key The key ID pressed
      */
     onKeyPressed(key: number) {
-        if (!this.isFinished() && (!Manager.Stack.currentMap.loading && this
+        if (!this.isFinished() && (!Scene.Map.current.loading && this
             .canExecute()))
         {
             this.currentCommand.data.onKeyPressed(this.currentCommandState, key);
@@ -256,7 +256,7 @@ class ReactionInterpreter {
      *  @param {number} key The key ID released
      */
     onKeyReleased(key: number) {
-        if (!this.isFinished() && (!Manager.Stack.currentMap.loading && this
+        if (!this.isFinished() && (!Scene.Map.current.loading && this
             .canExecute()))
         {
             this.currentCommand.data.onKeyReleased(this.currentCommandState, key);
@@ -269,7 +269,7 @@ class ReactionInterpreter {
      *  @returns {boolean} false if the other keys are blocked after it
      */
     onKeyPressedRepeat(key: number): boolean {
-        if (!this.isFinished() && (!Manager.Stack.currentMap.loading && this
+        if (!this.isFinished() && (!Scene.Map.current.loading && this
             .canExecute()))
         {
             return this.currentCommand.data.onKeyPressedRepeat(this
@@ -285,7 +285,7 @@ class ReactionInterpreter {
      *  @returns {boolean} false if the other keys are blocked after it
     */
     onKeyPressedAndRepeat(key: number): boolean {
-        if (!this.isFinished() && (!Manager.Stack.currentMap.loading && this
+        if (!this.isFinished() && (!Scene.Map.current.loading && this
             .canExecute()))
         {
             return this.currentCommand.data.onKeyPressedAndRepeat(this

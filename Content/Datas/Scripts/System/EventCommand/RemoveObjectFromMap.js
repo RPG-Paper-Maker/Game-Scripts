@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
-import { System, Manager } from "../index.js";
-import { MapObject, Portion } from "../Core/index.js";
+import { System, Scene } from "../index.js";
+import { MapObject, Portion, Game } from "../Core/index.js";
 /** @class
  *  An event command for removing a specific object from map.
  *  @extends EventCommand.Base
@@ -52,8 +52,8 @@ class RemoveObjectFromMap extends Base {
                             result.datas.m.splice(result.index, 1);
                             let index = result.datas.min.indexOf(result.object);
                             if (index === -1) {
-                                result.datas = Manager.Stack.game
-                                    .getPotionsDatas(Manager.Stack.currentMap.id, Portion.createFromVector3(result.object
+                                result.datas = Game.current
+                                    .getPotionsDatas(Scene.Map.current.id, Portion.createFromVector3(result.object
                                     .position));
                                 result.datas.mout.splice(result.datas.mout
                                     .indexOf(result.object), 1);

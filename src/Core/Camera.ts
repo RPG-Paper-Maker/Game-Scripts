@@ -10,7 +10,7 @@
 */
 
 import { ScreenResolution, Enum, Mathf } from "../Common";
-import { System, Manager } from "../index";
+import { System, Scene } from "../index";
 import { MapObject } from "./MapObject";
 import Orientation = Enum.Orientation;
 import { Vector3 } from "./index";
@@ -185,7 +185,7 @@ class Camera {
      */
     updateView() {
         this.getThreeCamera().lookAt(this.targetPosition);
-        Manager.Stack.currentMap.orientation = this.getMapOrientation();
+        Scene.Map.current.orientation = this.getMapOrientation();
     }
 
     /** 

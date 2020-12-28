@@ -17,7 +17,7 @@ import OrientationWindow = Enum.OrientationWindow;
 import ItemKind = Enum.ItemKind;
 import TargetKind = Enum.TargetKind;
 import AvailableKind = Enum.AvailableKind;
-import { WindowBox, WindowChoices, Item } from "../Core";
+import { WindowBox, WindowChoices, Item, Game } from "../Core";
 import { StructPositionChoice } from "./index";
 
 /** @class
@@ -107,11 +107,11 @@ class MenuInventory extends Base {
      */
     updateForTab() {
         let indexTab = this.windowChoicesTabs.currentSelectedIndex;
-        let nbItems = Manager.Stack.game.items.length;
+        let nbItems = Game.current.items.length;
         let list = [];
         let ownedItem: Item, item: System.Item;
         for (let i = 0; i < nbItems; i++) {
-            ownedItem = Manager.Stack.game.items[i];
+            ownedItem = Game.current.items[i];
             item = Datas.Items.get(ownedItem.id);
             if (indexTab === 0 || (indexTab === 1 && (ownedItem.kind === 
                 ItemKind.Item && item.consumable)) || (indexTab === 2 && (
@@ -135,7 +135,7 @@ class MenuInventory extends Base {
      */
     useItem() {
         let graphic = <Graphic.Item> this.windowInformations.content;
-        Manager.Stack.game.useItem(graphic.item);
+        Game.current.useItem(graphic.item);
         if (graphic.item.nb > 0) {
             graphic.updateNb();
         } else {
@@ -173,7 +173,7 @@ class MenuInventory extends Base {
      *  Update the scene.
      */
     update() {
-        Scene.Base.prototype.update.call(Manager.Stack.currentMap);
+        Scene.Base.prototype.update.call(Scene.Map.current);
 
         if (this.windowChoicesList.currentSelectedIndex !== -1) {
             this.windowBoxUseItem.update();
@@ -185,7 +185,7 @@ class MenuInventory extends Base {
      *  @param {number} key The key ID
      */
     onKeyPressed(key: number) {
-        Scene.Base.prototype.onKeyPressed.call(Manager.Stack.currentMap, key);
+        Scene.Base.prototype.onKeyPressed.call(Scene.Map.current, key);
         let graphic = <Graphic.Item> this.windowInformations.content;
         switch (this.substep) {
             case 0:
@@ -242,7 +242,7 @@ class MenuInventory extends Base {
      *  @param {number} key The key ID
      */
     onKeyReleased(key: number) {
-        Scene.Base.prototype.onKeyReleased.call(Manager.Stack.currentMap, key);
+        Scene.Base.prototype.onKeyReleased.call(Scene.Map.current, key);
     }
 
     /** 
@@ -251,8 +251,7 @@ class MenuInventory extends Base {
      *  @returns {boolean}
      */
     onKeyPressedRepeat(key: number): boolean {
-        return Scene.Base.prototype.onKeyPressedRepeat.call(Manager.Stack
-            .currentMap, key);
+        return Scene.Base.prototype.onKeyPressedRepeat.call(Scene.Map.current, key);
     }
 
     /** 
@@ -261,8 +260,8 @@ class MenuInventory extends Base {
      *  @returns {boolean}
      */
     onKeyPressedAndRepeat(key: number): boolean {
-        let res = Scene.Base.prototype.onKeyPressedAndRepeat.call(Manager.Stack
-            .currentMap, key);
+        let res = Scene.Base.prototype.onKeyPressedAndRepeat.call(Scene.Map
+            .current, key);
         switch (this.substep) {
             case 0:
                 this.moveTabKey(key);
@@ -280,7 +279,7 @@ class MenuInventory extends Base {
      */
     drawHUD() {
         // Draw the local map behind
-        Manager.Stack.currentMap.drawHUD();
+        Scene.Map.current.drawHUD();
 
         // Draw the menu
         this.windowTop.draw();

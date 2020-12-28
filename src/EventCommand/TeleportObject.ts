@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { System, Datas, Manager, Scene } from "../index";
-import { MapObject, Position, ReactionInterpreter, StructSearchResult } from "../Core";
+import { MapObject, Position, ReactionInterpreter, StructSearchResult, Game } from "../Core";
 
 /** @class
  *  An event command for teleporting an object.
@@ -122,15 +122,15 @@ class TeleportObject extends Base {
 
                         // If hero set the current map
                         if (result.object.isHero) {
-                            Manager.Stack.game.hero.position = currentState
+                            Game.current.hero.position = currentState
                                 .position;
-                            if (Manager.Stack.currentMap.id !== id) {
+                            if (Scene.Map.current.id !== id) {
                                 let map = new Scene.Map(id);
                                 map.reactionInterpreters.push(
                                     ReactionInterpreter.currentReaction);
                                 Manager.Stack.replace(map);
                             } else {
-                                await Manager.Stack.currentMap.loadPortions(true);
+                                await Scene.Map.current.loadPortions(true);
                             }
                         }
                     }

@@ -10,11 +10,11 @@
 */
 
 import { Base } from "./Base";
-import { System, Manager } from "../index";
+import { System } from "../index";
 import { Enum } from "../Common";
 import GroupKind = Enum.GroupKind;
 import CharacterKind = Enum.CharacterKind;
-import { Player, MapObject } from "../Core";
+import { Player, MapObject, Game } from "../Core";
 
 /** @class
  *  An event command for modifying team.
@@ -66,7 +66,7 @@ class ModifyTeam extends Base {
      */
     addRemove(kind: CharacterKind, id: number, groupKind: GroupKind) {
         // Searching for the ID
-        let groups = Manager.Stack.game.getGroups();
+        let groups = Game.current.getGroups();
         let group = null;
         let i: number, j: number, l: number, m: number, g: Player[], player: 
             Player;
@@ -103,7 +103,7 @@ class ModifyTeam extends Base {
     {
         switch (this.addingKind) {
             case 0:
-                Manager.Stack.game.instanciateTeam(this.instanceTeam, this
+                Game.current.instanciateTeam(this.instanceTeam, this
                     .instanceKind, this.instanceID, this.instanceLevel
                     .getValue(), this.stockVariableID);
                 break;

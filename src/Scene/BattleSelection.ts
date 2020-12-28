@@ -19,7 +19,7 @@ import Align = Enum.Align;
 import ItemKind = Enum.ItemKind;
 import AvailableKind = Enum.AvailableKind;
 import TargetKind = Enum.TargetKind;
-import { Item, Skill } from "../Core";
+import { Item, Skill, Game } from "../Core";
 
 // -------------------------------------------------------
 //
@@ -68,8 +68,8 @@ class BattleSelection {
 
         // Items
         let ownedItem: Item, item: System.Item;
-        for (let i = 0, l = Manager.Stack.game.items.length; i < l; i++) {
-            ownedItem = Manager.Stack.game.items[i];
+        for (let i = 0, l = Game.current.items.length; i < l; i++) {
+            ownedItem = Game.current.items[i];
             item = Datas.Items.get(ownedItem.id);
             if (ownedItem.kind === ItemKind.Item && item.consumable && (item
                 .availableKind === AvailableKind.Battle || item.availableKind 

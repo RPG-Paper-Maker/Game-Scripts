@@ -10,7 +10,7 @@
 */
 import { Base } from "./Base.js";
 import { Utils, Mathf } from "../Common/index.js";
-import { System, Manager, Datas } from "../index.js";
+import { System, Manager, Datas, Scene } from "../index.js";
 import { MapObject, Vector3 } from "../Core/index.js";
 /** @class
  *  An event command for displaying text.
@@ -60,24 +60,24 @@ class MoveCamera extends Base {
     initialize() {
         let time = this.time.getValue() * 1000;
         let operation = Mathf.OPERATORS_NUMBERS[this.operation];
-        let finalX = operation(Manager.Stack.currentMap.camera.getThreeCamera()
+        let finalX = operation(Scene.Map.current.camera.getThreeCamera()
             .position.x, this.x.getValue() * (this.xSquare ? Datas.Systems
             .SQUARE_SIZE : 1));
-        let finalY = operation(Manager.Stack.currentMap.camera.getThreeCamera()
+        let finalY = operation(Scene.Map.current.camera.getThreeCamera()
             .position.y, this.y.getValue() * (this.ySquare ? Datas.Systems
             .SQUARE_SIZE : 1));
-        let finalZ = operation(Manager.Stack.currentMap.camera.getThreeCamera()
+        let finalZ = operation(Scene.Map.current.camera.getThreeCamera()
             .position.z, this.z.getValue() * (this.zSquare ? Datas.Systems
             .SQUARE_SIZE : 1));
-        let finalH = operation(Manager.Stack.currentMap.camera.horizontalAngle, this.h.getValue());
-        let finalV = operation(Manager.Stack.currentMap.camera.verticalAngle, this.v.getValue());
-        let finalDistance = operation(Manager.Stack.currentMap.camera.distance, this.distance.getValue());
+        let finalH = operation(Scene.Map.current.camera.horizontalAngle, this.h.getValue());
+        let finalV = operation(Scene.Map.current.camera.verticalAngle, this.v.getValue());
+        let finalDistance = operation(Scene.Map.current.camera.distance, this.distance.getValue());
         return {
             parallel: this.isWaitEnd,
             finalPosition: new Vector3(finalX, finalY, finalZ),
-            finalDifH: finalH - Manager.Stack.currentMap.camera.horizontalAngle,
-            finalDifV: finalV - Manager.Stack.currentMap.camera.verticalAngle,
-            finalDistance: finalDistance - Manager.Stack.currentMap.camera
+            finalDifH: finalH - Scene.Map.current.camera.horizontalAngle,
+            finalDifV: finalV - Scene.Map.current.camera.verticalAngle,
+            finalDistance: finalDistance - Scene.Map.current.camera
                 .distance,
             time: time,
             timeLeft: time,
@@ -109,22 +109,21 @@ class MoveCamera extends Base {
                 let dif;
                 if (!currentState.editedTarget) {
                     if (currentState.target) {
-                        Manager.Stack.currentMap.camera.targetOffset.add(Manager
-                            .Stack.currentMap.camera.target.position.clone().sub(currentState.target.position));
-                        dif = currentState.target.position.clone().sub(Manager
-                            .Stack.currentMap.camera.target.position);
+                        Scene.Map.current.camera.targetOffset.add(Scene.Map
+                            .current.camera.target.position.clone().sub(currentState.target.position));
+                        dif = currentState.target.position.clone().sub(Scene.Map
+                            .current.camera.target.position);
                         currentState.finalPosition.add(dif);
-                        Manager.Stack.currentMap.camera.target = currentState
+                        Scene.Map.current.camera.target = currentState
                             .target;
                         if (!this.moveTargetOffset) {
                             currentState.moveChangeTargetDif = currentState
-                                .finalPosition.clone().sub(dif).sub(Manager
-                                .Stack.currentMap.camera.getThreeCamera()
-                                .position);
+                                .finalPosition.clone().sub(dif).sub(Scene.Map
+                                .current.camera.getThreeCamera().position);
                         }
                     }
                     currentState.finalDifPosition = currentState.finalPosition
-                        .sub(Manager.Stack.currentMap.camera.getThreeCamera()
+                        .sub(Scene.Map.current.camera.getThreeCamera()
                         .position);
                     currentState.editedTarget = true;
                 }
@@ -144,9 +143,9 @@ class MoveCamera extends Base {
                 }
                 // Move
                 let positionOffset = new Vector3(timeRate * currentState.finalDifPosition.x, timeRate * currentState.finalDifPosition.y, timeRate * currentState.finalDifPosition.z);
-                Manager.Stack.currentMap.camera.getThreeCamera().position.add(positionOffset);
+                Scene.Map.current.camera.getThreeCamera().position.add(positionOffset);
                 if (this.moveTargetOffset) {
-                    Manager.Stack.currentMap.camera.targetOffset.add(positionOffset);
+                    Scene.Map.current.camera.targetOffset.add(positionOffset);
                 }
                 else {
                     if (currentState.moveChangeTargetDif) {
@@ -156,25 +155,25 @@ class MoveCamera extends Base {
                             .moveChangeTargetDif.y), timeRate * (currentState
                             .finalDifPosition.z - currentState
                             .moveChangeTargetDif.z));
-                        Manager.Stack.currentMap.camera.targetOffset.add(positionOffset);
+                        Scene.Map.current.camera.targetOffset.add(positionOffset);
                     }
                 }
-                Manager.Stack.currentMap.camera.updateTargetPosition();
-                Manager.Stack.currentMap.camera.updateAngles();
-                Manager.Stack.currentMap.camera.updateDistance();
+                Scene.Map.current.camera.updateTargetPosition();
+                Scene.Map.current.camera.updateAngles();
+                Scene.Map.current.camera.updateDistance();
                 // Rotation
-                Manager.Stack.currentMap.camera.horizontalAngle += timeRate *
+                Scene.Map.current.camera.horizontalAngle += timeRate *
                     currentState.finalDifH;
-                Manager.Stack.currentMap.camera.addVerticalAngle(timeRate *
+                Scene.Map.current.camera.addVerticalAngle(timeRate *
                     currentState.finalDifV);
                 if (this.rotationTargetOffset) {
-                    Manager.Stack.currentMap.camera.updateTargetOffset();
+                    Scene.Map.current.camera.updateTargetOffset();
                 }
                 // Zoom
-                Manager.Stack.currentMap.camera.distance += timeRate *
+                Scene.Map.current.camera.distance += timeRate *
                     currentState.finalDistance;
                 // Update
-                Manager.Stack.currentMap.camera.update();
+                Scene.Map.current.camera.update();
                 // If time = 0, then this is the end of the command
                 return currentState.timeLeft === 0 ? 1 : 0;
             }

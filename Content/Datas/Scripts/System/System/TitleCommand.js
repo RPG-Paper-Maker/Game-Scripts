@@ -65,8 +65,8 @@ class TitleCommand extends Translatable {
         }
         Manager.Songs.stopAll();
         // Create a new game
-        Manager.Stack.game = new Game();
-        Manager.Stack.game.initializeDefault();
+        Game.current = new Game();
+        Game.current.initializeDefault();
         // Add local map to stack
         Manager.Stack.replace(new Scene.Map(Datas.Systems.ID_MAP_START_HERO));
         return true;

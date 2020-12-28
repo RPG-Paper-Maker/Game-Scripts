@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
-import { System, Manager } from "../index.js";
-import { MapObject, Position } from "../Core/index.js";
+import { System } from "../index.js";
+import { MapObject, Position, Game } from "../Core/index.js";
 import { Mathf, Enum, Utils } from "../Common/index.js";
 var VariableMapObjectCharacteristicKind = Enum.VariableMapObjectCharacteristicKind;
 /** @class
@@ -121,9 +121,8 @@ class ChangeVariables extends Base {
         // Apply new value to variable(s)
         if (!Utils.isUndefined(currentState.value)) {
             for (let i = 0, l = this.nbSelection; i < l; i++) {
-                Manager.Stack.game.variables[this.selection + i] = Mathf
-                    .OPERATORS_NUMBERS[this.operation](Manager.Stack.game
-                    .variables[this.selection + i], currentState.value);
+                Game.current.variables[this.selection + i] = Mathf
+                    .OPERATORS_NUMBERS[this.operation](Game.current.variables[this.selection + i], currentState.value);
             }
         }
         return Utils.isUndefined(currentState.value) ? 0 : 1;

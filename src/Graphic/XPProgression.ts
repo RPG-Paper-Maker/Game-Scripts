@@ -10,7 +10,8 @@
 */
 
 import { Base } from "./Base";
-import { Graphic, Manager } from "..";
+import { Graphic } from "..";
+import { Game } from "../Core";
 
 /** @class
  *  The graphic displaying all the progression for each character.
@@ -22,10 +23,10 @@ class XPProgression extends Base {
     constructor() {
         super();
 
-        let l = Manager.Stack.game.teamHeroes.length;
+        let l = Game.current.teamHeroes.length;
         this.graphicCharacters = new Array(l);
         for (let i = 0; i < l; i++) {
-            this.graphicCharacters[i] = new Graphic.Player(Manager.Stack.game
+            this.graphicCharacters[i] = new Graphic.Player(Game.current
                 .teamHeroes[i]);
         }
     }
@@ -34,7 +35,7 @@ class XPProgression extends Base {
      *  Update graphics experience.
      */
     updateExperience() {
-        for (let i = 0, l = Manager.Stack.game.teamHeroes.length; i < l; i++) {
+        for (let i = 0, l = Game.current.teamHeroes.length; i < l; i++) {
             this.graphicCharacters[i].updateExperience();
         }
     }

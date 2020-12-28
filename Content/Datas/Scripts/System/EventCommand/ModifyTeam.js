@@ -9,7 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
-import { System, Manager } from "../index.js";
+import { System } from "../index.js";
+import { Game } from "../Core/index.js";
 /** @class
  *  An event command for modifying team.
  *  @extends EventCommand.Base
@@ -45,7 +46,7 @@ class ModifyTeam extends Base {
      */
     addRemove(kind, id, groupKind) {
         // Searching for the ID
-        let groups = Manager.Stack.game.getGroups();
+        let groups = Game.current.getGroups();
         let group = null;
         let i, j, l, m, g, player;
         for (i = 0, l = groups.length; i < l; i++) {
@@ -78,7 +79,7 @@ class ModifyTeam extends Base {
     update(currentState, object, state) {
         switch (this.addingKind) {
             case 0:
-                Manager.Stack.game.instanciateTeam(this.instanceTeam, this
+                Game.current.instanciateTeam(this.instanceTeam, this
                     .instanceKind, this.instanceID, this.instanceLevel
                     .getValue(), this.stockVariableID);
                 break;

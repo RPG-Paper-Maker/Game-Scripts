@@ -1,5 +1,5 @@
 import { Scene } from "../index.js";
-import { Game, Picture2D } from "../Core/index.js";
+import { Picture2D } from "../Core/index.js";
 /** @class
  *  The game stack that is organizing the game scenes.
  *  @static
@@ -15,8 +15,6 @@ declare class Stack {
     static elapsedTime: number;
     static averageElapsedTime: number;
     static lastUpdateTime: number;
-    static game: Game;
-    static currentMap: Scene.Map;
     static displayedPictures: [number, Picture2D][];
     static isInMainMenu: boolean;
     constructor();

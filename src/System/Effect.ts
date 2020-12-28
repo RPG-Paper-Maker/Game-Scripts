@@ -15,8 +15,8 @@ import EffectKind = Enum.EffectKind;
 import DamagesKind = Enum.DamagesKind;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 import CharacterKind = Enum.CharacterKind;
-import { System, EventCommand, Manager, Datas } from "../index";
-import { Player, ReactionInterpreter, Battler } from "../Core";
+import { System, EventCommand, Manager, Datas, Scene } from "../index";
+import { Player, ReactionInterpreter, Battler, Game } from "../Core";
 import { Statistic } from "./Statistic";
 
 /** @class
@@ -150,14 +150,14 @@ class Effect extends Base {
      *  @returns {boolean} 
      */
     execute(): boolean {
-        let user = Manager.Stack.currentMap.user ? Manager.Stack.currentMap.user
-            .player : Player.getTemporaryPlayer();
-        Manager.Stack.currentMap.tempTargets = Manager.Stack.currentMap.targets;
+        let user = Scene.Map.current.user ? Scene.Map.current.user.player : 
+            Player.getTemporaryPlayer();
+        Scene.Map.current.tempTargets = Scene.Map.current.targets;
         if (this.isTemporarilyChangeTarget) {
-            Manager.Stack.currentMap.targets = Interpreter.evaluate(this
+            Scene.Map.current.targets = Interpreter.evaluate(this
                 .temporarilyChangeTargetFormula.getValue(), { user: user });
         }
-        let targets = Manager.Stack.currentMap.targets;
+        let targets = Scene.Map.current.targets;
         let result = false;
         switch (this.kind) {
             case EffectKind.Damages: {
@@ -231,12 +231,12 @@ class Effect extends Base {
                         damage = Math.round(damage);
                     }
                     if (this.isDamageStockVariableID) {
-                        Manager.Stack.game.variables[this.damageStockVariableID]
+                        Game.current.variables[this.damageStockVariableID]
                             = damage === null ? 0 : damage;
                     }
 
                     // For diplaying result in HUD
-                    if (Manager.Stack.currentMap.isBattleMap) {
+                    if (Scene.Map.current.isBattleMap) {
                         battler = targets[i];
                         battler.damages = damage;
                         battler.isDamagesMiss = miss;
@@ -264,32 +264,32 @@ class Effect extends Base {
                         case DamagesKind.Currency:
                             currencyID = this.damageCurrencyID.getValue();
                             if (target.kind === CharacterKind.Hero) {
-                                before = Manager.Stack.game.currencies[
+                                before = Game.current.currencies[
                                     currencyID];
-                                Manager.Stack.game.currencies[currencyID] -= 
+                                Game.current.currencies[currencyID] -= 
                                     damage;
-                                if (Manager.Stack.game.currencies[currencyID] < 
+                                if (Game.current.currencies[currencyID] < 
                                     0)
                                 {
-                                    Manager.Stack.game.currencies[currencyID] = 
+                                    Game.current.currencies[currencyID] = 
                                         0;
                                 }
-                                result = result || (before !== Manager.Stack
-                                    .game.currencies[currencyID] && damage !== 0);
+                                result = result || (before !== Game.current
+                                    .currencies[currencyID] && damage !== 0);
                             }    
                             break;
                         case DamagesKind.Variable:
-                            before = Manager.Stack.game.variables[this
+                            before = Game.current.variables[this
                                 .damageVariableID];
-                            Manager.Stack.game.variables[this.damageVariableID] 
+                            Game.current.variables[this.damageVariableID] 
                                 -= damage;
-                            if (Manager.Stack.game.variables[this
+                            if (Game.current.variables[this
                                 .damageVariableID] < 0)
                             {
-                                Manager.Stack.game.variables[this
+                                Game.current.variables[this
                                     .damageVariableID] = 0;
                             }
-                            result = result || (before !== Manager.Stack.game
+                            result = result || (before !== Game.current
                                 .variables[this.damageVariableID] && damage !== 
                                 0);
                             break;
@@ -304,13 +304,13 @@ class Effect extends Base {
             case EffectKind.PerformSkill:
                 break;
             case EffectKind.CommonReaction:
-                Manager.Stack.currentMap.reactionInterpreters.push(new 
+                Scene.Map.current.reactionInterpreters.push(new 
                     ReactionInterpreter(null, Datas.CommonEvents
                     .getCommonReaction(this.commonReaction.commonReactionID), 
                     null, null, this.commonReaction.parameters));
                 break;
             case EffectKind.SpecialActions:
-                Manager.Stack.currentMap.battleCommandKind = this
+                Scene.Map.current.battleCommandKind = this
                     .specialActionKind;
                 break;
             case EffectKind.Script:
@@ -333,7 +333,7 @@ class Effect extends Base {
      *  @returns {string}
      */
     toString(): string {
-        let user = Manager.Stack.currentMap.user ? Manager.Stack.currentMap.user
+        let user = Scene.Map.current.user ? Scene.Map.current.user
             .player : Player.getTemporaryPlayer();
         let target = Player.getTemporaryPlayer();
         switch (this.kind) {

@@ -16,7 +16,7 @@ import Orientation = Enum.Orientation;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 import PictureKind = Enum.PictureKind;
 import { System, Datas, Scene, Manager } from "../index";
-import { Position, Portion, MapPortion, TextureBundle, Camera, ReactionInterpreter, Vector3, Player, Battler } from "../Core";
+import { Position, Portion, MapPortion, TextureBundle, Camera, ReactionInterpreter, Vector3, Player, Battler, Game } from "../Core";
 
 /** @class
  *  A scene for a local map.
@@ -28,6 +28,7 @@ import { Position, Portion, MapPortion, TextureBundle, Camera, ReactionInterpret
 */
 class Map extends Base {
 
+    public static current: Scene.Map;
     public static allowMainMenu = true;
     public static allowSaves = true;
 
@@ -73,9 +74,9 @@ class Map extends Base {
      *  Load async stuff.
      */
     async load() {
-        Manager.Stack.currentMap = this;
+        Scene.Map.current = this;
         if (!this.isBattleMap) {
-            Manager.Stack.game.currentMapID = this.id;
+            Game.current.currentMapID = this.id;
         }
         this.scene = new THREE.Scene();
 
@@ -123,8 +124,8 @@ class Map extends Base {
      *  Initialize the map objects.
      */
     initializeCamera() {
-        this.camera = new Camera(this.mapProperties.cameraProperties, Manager
-            .Stack.game.hero);
+        this.camera = new Camera(this.mapProperties.cameraProperties, Game
+            .current.hero);
         this.camera.update();
         this.currentPortion = Portion.createFromVector3(this.camera
             .getThreeCamera().position);
@@ -157,7 +158,7 @@ class Map extends Base {
      *  Initialize all the objects moved or / and with changed states.
      */
     initializePortionsObjects() {
-        let mapsDatas = Manager.Stack.game.mapsDatas[this.id];
+        let mapsDatas = Game.current.mapsDatas[this.id];
         let datas = null;
         let l = Math.ceil(this.mapProperties.length / Constants.PORTION_SIZE);
         let w = Math.ceil(this.mapProperties.width / Constants.PORTION_SIZE);
@@ -203,7 +204,7 @@ class Map extends Base {
                 }
             }
         }
-        Manager.Stack.game.mapsDatas[this.id] = objectsPortions;
+        Game.current.mapsDatas[this.id] = objectsPortions;
         this.portionsObjectsUpdated = true;
     }
 
@@ -271,7 +272,7 @@ class Map extends Base {
 
         // Hero initialize
         if (!this.isBattleMap) {
-            Manager.Stack.game.hero.changeState();
+            Game.current.hero.changeState();
 
             // Start music and background sound
             this.mapProperties.music.playMusic();
@@ -409,7 +410,7 @@ class Map extends Base {
      *  @returns {Record<string, any>}
      */
     getObjectsAtPortion(portion: Portion): Record<string, any> {
-        return Manager.Stack.game.getPotionsDatas(this.id, portion);
+        return Game.current.getPotionsDatas(this.id, portion);
     }
 
     /** 
@@ -517,8 +518,8 @@ class Map extends Base {
      *  @returns {Vector3} 
      */
     getHeroPosition() {
-        return this.isBattleMap ? Manager.Stack.game.heroBattle.position : 
-            Manager.Stack.game.hero.position;
+        return this.isBattleMap ? Game.current.heroBattle.position : 
+            Game.current.hero.position;
     }
 
     /** 
@@ -710,11 +711,11 @@ class Map extends Base {
             this.mapProperties.startupObject.update();
 
             // Update the objects
-            Manager.Stack.game.hero.update(angle);
+            Game.current.hero.update(angle);
             this.updatePortions(this, function(x: number, y: number, z: number, 
                 i: number, j: number, k: number)
             {
-                let objects = Manager.Stack.game.getPotionsDatas(this.id, new 
+                let objects = Game.current.getPotionsDatas(this.id, new 
                     Portion(x, y, z));
                 let movedObjects = objects.min;
                 let p: number, l: number;
@@ -826,7 +827,7 @@ class Map extends Base {
         let w = Math.ceil(this.mapProperties.width / Constants.PORTION_SIZE);
         let d = Math.ceil(this.mapProperties.depth / Constants.PORTION_SIZE);
         let h = Math.ceil(this.mapProperties.height / Constants.PORTION_SIZE);
-        let objectsPortions = Manager.Stack.game.mapsDatas[this.id];
+        let objectsPortions = Game.current.mapsDatas[this.id];
         let i: number, j: number, k: number, portion: Record<string, any>;
         for (i = 0; i < l; i++) {
             for (j = -d; j < h; j++) {

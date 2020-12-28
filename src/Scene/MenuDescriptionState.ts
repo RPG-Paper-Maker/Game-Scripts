@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { Manager, Graphic, Scene, Datas } from "../index";
-import { WindowBox, WindowChoices } from "../Core";
+import { WindowBox, WindowChoices, Game } from "../Core";
 import { Enum } from "../Common";
 import Align = Enum.Align;
 import OrientationWindow = Enum.OrientationWindow;
@@ -30,10 +30,10 @@ class MenuDescriptionState extends Base {
         super(false);
 
         // Tab heroes
-        let nbHeroes = Manager.Stack.game.teamHeroes.length;
+        let nbHeroes = Game.current.teamHeroes.length;
         let listHeroes = new Array(nbHeroes);
         for (let i = 0; i < nbHeroes; i++) {
-            listHeroes[i] = new Graphic.PlayerDescription(Manager.Stack.game
+            listHeroes[i] = new Graphic.PlayerDescription(Game.current
                 .teamHeroes[i]);
         }
 
@@ -67,7 +67,7 @@ class MenuDescriptionState extends Base {
      *  Update the scene
      */
     update() {
-        Scene.Base.prototype.update.call(Manager.Stack.currentMap);
+        Scene.Base.prototype.update.call(Scene.Map.current);
         (<Graphic.PlayerDescription> this.windowInformations.content)
             .updateBattler();
     }
@@ -77,7 +77,7 @@ class MenuDescriptionState extends Base {
      *  @param {number} key The key ID
      */
     onKeyPressed(key: number) {
-        Scene.Base.prototype.onKeyPressed.call(Manager.Stack.currentMap, key);
+        Scene.Base.prototype.onKeyPressed.call(Scene.Map.current, key);
         if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Cancel)
             || Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.controls.MainMenu))
         {
@@ -91,7 +91,7 @@ class MenuDescriptionState extends Base {
      *  @param {number} key The key ID
      */
     onKeyReleased(key: number) {
-        Scene.Base.prototype.onKeyReleased.call(Manager.Stack.currentMap, key);
+        Scene.Base.prototype.onKeyReleased.call(Scene.Map.current, key);
     }
 
     /** 
@@ -100,8 +100,7 @@ class MenuDescriptionState extends Base {
      *  @returns {boolean}
      */
     onKeyPressedRepeat(key: number): boolean {
-        return Scene.Base.prototype.onKeyPressedRepeat.call(Manager.Stack
-            .currentMap, key);
+        return Scene.Base.prototype.onKeyPressedRepeat.call(Scene.Map.current, key);
     }
 
     /** 
@@ -110,8 +109,8 @@ class MenuDescriptionState extends Base {
      *  @returns {boolean}
      */
     onKeyPressedAndRepeat(key: number): boolean {
-        let res = Scene.Base.prototype.onKeyPressedAndRepeat.call(Manager.Stack
-            .currentMap, key);
+        let res = Scene.Base.prototype.onKeyPressedAndRepeat.call(Scene.Map
+            .current, key);
         this.windowChoicesTabs.onKeyPressedAndRepeat(key);
         this.synchronize();
         return res;
@@ -122,7 +121,7 @@ class MenuDescriptionState extends Base {
      */
     drawHUD() {
         // Draw the local map behind
-        Manager.Stack.currentMap.drawHUD();
+        Scene.Map.current.drawHUD();
 
         // Draw the menu
         this.windowTop.draw();

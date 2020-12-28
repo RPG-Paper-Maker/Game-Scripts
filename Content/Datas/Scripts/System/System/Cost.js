@@ -12,8 +12,8 @@ import { Enum, Utils, Interpreter } from "../Common/index.js";
 var DamagesKind = Enum.DamagesKind;
 import { Base } from "./Base.js";
 import { DynamicValue } from "./DynamicValue.js";
-import { Manager, Datas } from "../index.js";
-import { Player } from "../Core/index.js";
+import { Datas, Scene } from "../index.js";
+import { Player, Game } from "../Core/index.js";
 /** @class
  *  A cost of a common skill item.
  *  @extends System.Base
@@ -47,8 +47,8 @@ class Cost extends Base {
      *  Use the cost.
      */
     use() {
-        let user = Manager.Stack.currentMap.user ? Manager.Stack.currentMap.user
-            .player : Player.getTemporaryPlayer();
+        let user = Scene.Map.current.user ? Scene.Map.current.user.player :
+            Player.getTemporaryPlayer();
         let target = Player.getTemporaryPlayer();
         let value = Interpreter.evaluate(this.valueFormula.getValue(), { user: user, target: target });
         switch (this.kind) {
@@ -57,11 +57,11 @@ class Cost extends Base {
                     .getValue()).abbreviation] -= value;
                 break;
             case DamagesKind.Currency:
-                Manager.Stack.game.currencies[this.currencyID.getValue()] -=
+                Game.current.currencies[this.currencyID.getValue()] -=
                     value;
                 break;
             case DamagesKind.Variable:
-                Manager.Stack.game.variables[this.variableID] -= value;
+                Game.current.variables[this.variableID] -= value;
                 break;
         }
     }
@@ -70,7 +70,7 @@ class Cost extends Base {
      *  @returns {boolean}
      */
     isPossible() {
-        let user = Manager.Stack.currentMap.user ? Manager.Stack.currentMap.user
+        let user = Scene.Map.current.user ? Scene.Map.current.user
             .player : Player.getTemporaryPlayer();
         let target = Player.getTemporaryPlayer();
         let value = Interpreter.evaluate(this.valueFormula.getValue(), { user: user, target: target });
@@ -81,11 +81,11 @@ class Cost extends Base {
                     .statisticID.getValue()).abbreviation];
                 break;
             case DamagesKind.Currency:
-                currentValue = Manager.Stack.game.getCurrency(this.currencyID
+                currentValue = Game.current.getCurrency(this.currencyID
                     .getValue());
                 break;
             case DamagesKind.Variable:
-                currentValue = Manager.Stack.game.getVariable(this.variableID);
+                currentValue = Game.current.getVariable(this.variableID);
                 break;
         }
         return (currentValue - value >= 0);
@@ -95,7 +95,7 @@ class Cost extends Base {
      *  @returns {string}
      */
     toString() {
-        let user = Manager.Stack.currentMap.user ? Manager.Stack.currentMap.user
+        let user = Scene.Map.current.user ? Scene.Map.current.user
             .player : Player.getTemporaryPlayer();
         let target = Player.getTemporaryPlayer();
         let result = Interpreter.evaluate(this.valueFormula.getValue(), { user: user, target: target }) + " ";

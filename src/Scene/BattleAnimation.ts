@@ -19,7 +19,7 @@ import ItemKind = Enum.ItemKind;
 import AnimationEffectConditionKind = Enum.AnimationEffectConditionKind;
 import BattleStep = Enum.BattleStep;
 import AnimationPositionKind = Enum.AnimationPositionKind;
-import { Item, Battler } from "../Core";
+import { Item, Battler, Game } from "../Core";
 
 // -------------------------------------------------------
 //
@@ -124,7 +124,7 @@ class BattleAnimation {
                     .animationTargetID.getValue());
                 this.battle.effects = content.effects;
                 if (this.battle.attackingGroup === CharacterKind.Hero) {
-                    Manager.Stack.game.useItem(graphic.item);
+                    Game.current.useItem(graphic.item);
                 }
                 this.battle.user.setUsingItem();
                 break;

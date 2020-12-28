@@ -26,6 +26,8 @@ import { Portion } from "./Portion";
  */
 class Game {
 
+    public static current: Game = null;
+
     public slot: number;
     public hero: MapObject;
     public heroBattle: MapObject;

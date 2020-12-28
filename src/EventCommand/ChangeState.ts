@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { System, EventCommand, Manager, Scene } from "../index";
-import { MapObject, StructSearchResult, Portion, Position } from "../Core";
+import { MapObject, StructSearchResult, Game } from "../Core";
 
 /** @class
  *  An event command for changing an object state.
@@ -148,10 +148,9 @@ class ChangeState extends Base {
     {
         if (!currentState.waitingObject) {
             if (currentState.map === null) {
-                if (currentState.mapID === -1 || currentState.mapID === Manager
-                    .Stack.currentMap.id || currentState.objectID === -1)
-                {
-                    currentState.map = Manager.Stack.currentMap;
+                if (currentState.mapID === -1 || currentState.mapID === Scene
+                    .Map.current.id || currentState.objectID === -1) {
+                    currentState.map = Scene.Map.current;
                 } else {
                     currentState.map = new Scene.Map(currentState.mapID, false, 
                         true);
@@ -165,7 +164,7 @@ class ChangeState extends Base {
             if (currentState.map.allObjects && currentState.map
                 .portionsObjectsUpdated)
             {
-                if (currentState.map === Manager.Stack.currentMap) {
+                if (currentState.map === Scene.Map.current) {
                     MapObject.search(currentState.objectID, (result: 
                         StructSearchResult) =>
                     {
@@ -180,20 +179,18 @@ class ChangeState extends Base {
         if (currentState.waitingObject && currentState.object !== null) {
             if (currentState.object.isHero || currentState.object.isStartup) 
             {
-                let states = currentState.object.isHero ? Manager.Stack.game
-                    .heroStates : Manager.Stack.game.startupStates[Manager.Stack
-                    .currentMap.id];
+                let states = currentState.object.isHero ? Game.current
+                    .heroStates : Game.current.startupStates[Scene.Map.current.id];
                 switch (this.operationKind) {
                     case 0: // Replacing
                         if (currentState.object.isHero) {
-                            Manager.Stack.game.heroStates = [];
+                            Game.current.heroStates = [];
                         } else {
-                            Manager.Stack.game.startupStates[Manager.Stack
-                                .currentMap.id] = [];
+                            Game.current.startupStates[Scene.Map.current.id] = [];
                         }
-                        states = currentState.object.isHero ? Manager.Stack.game
-                            .heroStates : Manager.Stack.game.startupStates[
-                            Manager.Stack.currentMap.id];
+                        states = currentState.object.isHero ? Game.current
+                            .heroStates : Game.current.startupStates[
+                            Scene.Map.current.id];
                         EventCommand.ChangeState.addStateSpecial(states, this
                             .idState.getValue());
                         break;
@@ -211,7 +208,7 @@ class ChangeState extends Base {
                     currentState.objectID;
                 let portion = currentState.map.allObjects[objectID]
                     .getGlobalPortion();
-                let portionDatas = Manager.Stack.game.getPotionsDatas(
+                let portionDatas = Game.current.getPotionsDatas(
                     currentState.map.id, portion);
                 let indexState = portionDatas.si.indexOf(objectID);
                 if (indexState === -1) {
@@ -236,7 +233,7 @@ class ChangeState extends Base {
                         break;
                 }
             }
-            if (currentState.map === Manager.Stack.currentMap) {
+            if (currentState.map === Scene.Map.current) {
                 currentState.object.changeState();
             }
             return 1;

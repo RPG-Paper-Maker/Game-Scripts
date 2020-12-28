@@ -16,7 +16,7 @@ import { Base } from "./Base";
 import { DynamicValue } from "./DynamicValue";
 import { Player } from "../Core";
 import { Statistic } from "./Statistic";
-import { Datas, Manager } from "../index";
+import { Datas, Manager, Scene } from "../index";
 
 /** @class
  *  A characteristic of a common skill item.
@@ -176,8 +176,8 @@ class Characteristic extends Base {
      *  @returns {string}
      */
     toString(): string {
-        let user = Manager.Stack.currentMap.user ? Manager.Stack.currentMap.user
-            .player : Player.getTemporaryPlayer();
+        let user = Scene.Map.current.user ? Scene.Map.current.user.player : 
+            Player.getTemporaryPlayer();
         let target = Player.getTemporaryPlayer();
         let result = "";
         switch (this.kind) {

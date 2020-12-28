@@ -10,7 +10,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Scene, System, Datas, Manager } from "..";
+import { Scene, System, Datas } from "..";
 import { Enum, Mathf, Interpreter, Utils } from "../Common";
 import CharacterKind = Enum.CharacterKind;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
@@ -18,7 +18,7 @@ import EffectKind = Enum.EffectKind;
 import MonsterActionKind = Enum.MonsterActionKind
 import TargetKind = Enum.TargetKind;
 import MonsterActionTargetKind = Enum.MonsterActionTargetKind;
-import { Battler } from "../Core";
+import { Battler, Game } from "../Core";
 
 // -------------------------------------------------------
 //
@@ -92,7 +92,7 @@ class BattleEnemyAttack {
                 }
             }
             if (action.isConditionVariable && !Mathf.OPERATORS_COMPARE[action
-                .operationKindVariable](Manager.Stack.game.variables[action
+                .operationKindVariable](Game.current.variables[action
                 .variableID], action.variableValueCompare.getValue())) {
                 continue;
             }

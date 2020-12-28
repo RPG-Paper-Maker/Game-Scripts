@@ -9,7 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
-import { System, Manager } from "../index.js";
+import { System } from "../index.js";
+import { Game } from "../Core/index.js";
 import { Mathf } from "../Common/index.js";
 /** @class
  *  An event command for modifying a currency value.
@@ -35,8 +36,8 @@ class ModifyCurrency extends Base {
     */
     update(currentState, object, state) {
         let currencyID = this.currencyID.getValue();
-        Manager.Stack.game.currencies[currencyID] = Mathf.OPERATORS_NUMBERS[this
-            .operation](Manager.Stack.game.currencies[currencyID], this.value
+        Game.current.currencies[currencyID] = Mathf.OPERATORS_NUMBERS[this
+            .operation](Game.current.currencies[currencyID], this.value
             .getValue());
         return 1;
     }

@@ -11,7 +11,8 @@
 
 import { Enum } from "../Common";
 import ItemKind = Enum.ItemKind;
-import { Manager, System, Datas } from "../index";
+import { System, Datas } from "../index";
+import { Game } from "./Game";
 
 /** @class
  *  An item in the inventory.
@@ -40,8 +41,8 @@ class Item {
      */
     static findItem(kind: ItemKind, id: number): Item {
         let item: Item;
-        for (let i = 0, l = Manager.Stack.game.items.length; i < l; i++) {
-            item = Manager.Stack.game.items[i];
+        for (let i = 0, l = Game.current.items.length; i < l; i++) {
+            item = Game.current.items[i];
             if (item.kind === kind && item.id === id) {
                 return item;
             }
@@ -56,7 +57,7 @@ class Item {
     remove(nb: number) {
         this.nb -= nb;
         if (this.nb <= 0) {
-            Manager.Stack.game.items.splice(Manager.Stack.game.items.indexOf(
+            Game.current.items.splice(Game.current.items.indexOf(
                 this), 1);
         }
     }
@@ -67,7 +68,7 @@ class Item {
      */
     add(nb: number) {
         if (this.nb === 0) {
-            Manager.Stack.game.items.push(this);
+            Game.current.items.push(this);
         }
         this.nb += nb;
     }
@@ -95,8 +96,8 @@ class Item {
      */
     modifyItems(callback: Function): boolean {
         let item: Item;
-        for (let i = 0, l = Manager.Stack.game.items.length; i < l; i++) {
-            item = Manager.Stack.game.items[i];
+        for (let i = 0, l = Game.current.items.length; i < l; i++) {
+            item = Game.current.items[i];
             if (item.kind === this.kind && item.id === this.id) {
                 // If the item already is in the inventory...
                 callback.call(this, item, i);
@@ -111,7 +112,7 @@ class Item {
      */
     equalItems() {
         if (!this.modifyItems(function(item: Item) {item.nb = this.nb;})) {
-            Manager.Stack.game.items.push(this);
+            Game.current.items.push(this);
         }
     }
 
@@ -120,7 +121,7 @@ class Item {
      */
     addItems() {
         if (!this.modifyItems(function(item: Item) {item.nb += this.nb;})) {
-            Manager.Stack.game.items.push(this);
+            Game.current.items.push(this);
         }
     }
 
@@ -131,7 +132,7 @@ class Item {
         this.modifyItems(function(item: Item, index: number) {
             item.nb -= this.nb;
             if (item.nb <= 0) {
-                Manager.Stack.game.items.splice(index, 1);
+                Game.current.items.splice(index, 1);
             }
         });
     }

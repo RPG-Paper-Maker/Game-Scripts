@@ -17,7 +17,7 @@ import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 import SongKind = Enum.SongKind;
 import MapTransitionKind = Enum.MapTransitionKind;
 import BattleStep = Enum.BattleStep;
-import { Vector3, Player, Battler, Position, WindowBox, WindowChoices } from "../Core";
+import { Vector3, Player, Battler, Position, WindowBox, WindowChoices, Game } from "../Core";
 import { StructTroopElement } from "../System";
 
 // -------------------------------------------------------
@@ -63,18 +63,18 @@ class BattleInitialize {
      *  Initialize allies battlers.
      */
     initializeAlliesBattlers() {
-        let l = Manager.Stack.game.teamHeroes.length;
+        let l = Game.current.teamHeroes.length;
         this.battle.battlers[CharacterKind.Hero] = new Array(l);
         this.battle.graphicPlayers[CharacterKind.Hero] = new Array(l);
         let position: Vector3, player: Player, battler: Battler;
         for (let i = 0; i < l; i++) {
             // Battlers
-            position = new Vector3(Manager.Stack.game.heroBattle.position.x + (2
+            position = new Vector3(Game.current.heroBattle.position.x + (2
                 * Datas.Systems.SQUARE_SIZE) + (i * Datas.Systems.SQUARE_SIZE / 
-                2), Manager.Stack.game.heroBattle.position.y, Manager.Stack.game
+                2), Game.current.heroBattle.position.y, Game.current
                 .heroBattle.position.z - Datas.Systems.SQUARE_SIZE + (i * Datas
                 .Systems.SQUARE_SIZE));
-            player = Manager.Stack.game.teamHeroes[i];
+            player = Game.current.teamHeroes[i];
             battler = new Battler(player, Position.createFromVector3(position), 
                 this.battle.camera);
             battler.updateDead(false);
@@ -101,13 +101,13 @@ class BattleInitialize {
         for (let i = 0; i < l; i++) {
             // Battlers
             troopElement = troop.list[i];
-            position = new Vector3(Manager.Stack.game.heroBattle.position.x - (2
+            position = new Vector3(Game.current.heroBattle.position.x - (2
                 * Datas.Systems.SQUARE_SIZE) - (i * Datas.Systems.SQUARE_SIZE * 
-                3 / 4), Manager.Stack.game.heroBattle.position.y, Manager.Stack
-                .game.heroBattle.position.z - Datas.Systems.SQUARE_SIZE + (i * 
-                Datas.Systems.SQUARE_SIZE));
-            player = new Player(CharacterKind.Monster, troopElement.id, Manager
-                .Stack.game.charactersInstances++, []);
+                3 / 4), Game.current.heroBattle.position.y, Game.current
+                .heroBattle.position.z - Datas.Systems.SQUARE_SIZE + (i * Datas
+                    .Systems.SQUARE_SIZE));
+            player = new Player(CharacterKind.Monster, troopElement.id, Game
+                .current.charactersInstances++, []);
             player.instanciate(troopElement.level);
             battler = new Battler(player, Position.createFromVector3(position), 
                 this.battle.camera);
@@ -210,7 +210,7 @@ class BattleInitialize {
         this.battle.windowExperienceProgression = new WindowBox(Scene.Battle
             .WINDOW_EXPERIENCE_X, Scene.Battle.WINDOW_EXPERIENCE_Y, Scene.Battle
             .WINDOW_EXPERIENCE_WIDTH, (Scene.Battle.WINDOW_EXPERIENCE_HEIGHT * 
-            Manager.Stack.game.teamHeroes.length) + WindowBox.SMALL_PADDING_BOX[
+            Game.current.teamHeroes.length) + WindowBox.SMALL_PADDING_BOX[
             2] + WindowBox.SMALL_PADDING_BOX[3], {
                 content: new Graphic.XPProgression(),
                 padding: WindowBox.SMALL_PADDING_BOX

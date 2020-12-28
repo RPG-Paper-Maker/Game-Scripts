@@ -3,7 +3,7 @@ import { Enum } from "../Common/index.js";
 import Orientation = Enum.Orientation;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 import PictureKind = Enum.PictureKind;
-import { System } from "../index.js";
+import { System, Scene } from "../index.js";
 import { Position, Portion, MapPortion, TextureBundle, Vector3, Battler } from "../Core/index.js";
 /** @class
  *  A scene for a local map.
@@ -14,6 +14,7 @@ import { Position, Portion, MapPortion, TextureBundle, Vector3, Battler } from "
  *  loaded (only for getting objects infos)
 */
 declare class Map extends Base {
+    static current: Scene.Map;
     static allowMainMenu: boolean;
     static allowSaves: boolean;
     id: number;

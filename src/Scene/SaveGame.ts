@@ -13,6 +13,7 @@ import { SaveLoadGame } from "./SaveLoadGame";
 import { Graphic, Datas, Manager } from "../index";
 import { Enum } from "../Common";
 import Align = Enum.Align;
+import { Game } from "../Core";
 
 /** @class
  *  A scene in the menu for saving a game.
@@ -42,7 +43,7 @@ class SaveGame extends SaveLoadGame {
      */
     async save() {
         Datas.Systems.soundConfirmation.playSound();
-        await Manager.Stack.game.save(this.windowChoicesSlots
+        await Game.current.save(this.windowChoicesSlots
             .currentSelectedIndex + 1);
         Manager.Stack.pop();
         this.loading = false;

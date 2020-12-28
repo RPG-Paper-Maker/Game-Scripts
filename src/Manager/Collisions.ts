@@ -10,8 +10,8 @@
 */
 
 import { Mathf, Constants, Enum } from "../Common";
-import { MapObject, Position, Portion, MapPortion, StructMapElementCollision, CollisionSquare, Mountain, Vector3, Vector2 } from "../Core";
-import { Datas, Manager, System, Core } from "../index";
+import { MapObject, Position, Portion, MapPortion, StructMapElementCollision, CollisionSquare, Mountain, Vector3, Vector2, Game } from "../Core";
+import { Datas, System, Scene } from "../index";
 import ElementMapKind = Enum.ElementMapKind;
 
 import { THREE } from "../Globals";
@@ -358,9 +358,9 @@ class Collisions {
                         .SQUARE_SIZE, positionAfter.y + j * Datas.Systems
                         .SQUARE_SIZE, positionAfter.z + k * Datas.Systems
                         .SQUARE_SIZE);
-                    portion = Manager.Stack.currentMap.getLocalPortion(Portion
+                    portion = Scene.Map.current.getLocalPortion(Portion
                         .createFromVector3(positionAfterPlus));
-                    mapPortion = Manager.Stack.currentMap.getMapPortion(portion);
+                    mapPortion = Scene.Map.current.getMapPortion(portion);
                     if (mapPortion !== null) {
                         result = this.check(mapPortion, jpositionBefore
                             , new Position(jpositionAfter.x + i, jpositionAfter
@@ -382,18 +382,17 @@ class Collisions {
         }
 
         // Check collision inside & with other objects
-        if (object !== Manager.Stack.game.hero && object.checkCollisionObject(
-            Manager.Stack.game.hero))
-        {
+        if (object !== Game.current.hero && object.checkCollisionObject(Game
+            .current.hero)) {
             return [true, null];
         }
 
         // Check objects collisions
-        portion = Manager.Stack.currentMap.getLocalPortion(Portion
+        portion = Scene.Map.current.getLocalPortion(Portion
             .createFromVector3(positionAfter));
         for (i = 0; i < 2; i++) {
             for (j = 0; j < 2; j++) {
-                mapPortion = Manager.Stack.currentMap.getMapPortion(new Portion(
+                mapPortion = Scene.Map.current.getMapPortion(new Portion(
                     portion.x + i, portion.y, portion.z + j));
                 if (mapPortion !== null && this.checkObjects(mapPortion, object)) {
                     return [true, null];
@@ -402,13 +401,13 @@ class Collisions {
         }
 
         // Check empty square or square mountain height possible down
-        mapPortion = Manager.Stack.currentMap.getMapPortion(portion);
+        mapPortion = Scene.Map.current.getMapPortion(portion);
         let floors: number[];
         if (mapPortion !== null) {
             floors = mapPortion.squareNonEmpty[jpositionAfter.x % Constants
                 .PORTION_SIZE][jpositionAfter.z % Constants.PORTION_SIZE];
             if (floors.length === 0) {
-                let otherMapPortion = Manager.Stack.currentMap.getMapPortion(new 
+                let otherMapPortion = Scene.Map.current.getMapPortion(new 
                     Portion(portion.x, portion.y + 1, portion.z));
                 if (otherMapPortion) {
                     floors = otherMapPortion.squareNonEmpty[jpositionAfter.x %
@@ -774,8 +773,8 @@ class Collisions {
             position: Position;
         for (i = 0, l = mapPortion.overflowMountains.length; i < l; i++) {
             position = mapPortion.overflowMountains[i];
-            objCollision = Manager.Stack.currentMap.getMapPortion(Manager.Stack
-                .currentMap.getLocalPortion(position.getGlobalPortion()))
+            objCollision = Scene.Map.current.getMapPortion(Scene.Map.current
+                .getLocalPortion(position.getGlobalPortion()))
                 .getObjectCollisionAt(position, jpositionAfter, ElementMapKind
                 .Mountains);
             for (j = 0, m = objCollision.length; j < m; j++) {
@@ -1028,7 +1027,7 @@ class Collisions {
      *  @returns {boolean}
      */
     static checkObjects(mapPortion: MapPortion, object: MapObject): boolean {
-        let datas = Manager.Stack.currentMap.getObjectsAtPortion(mapPortion
+        let datas = Scene.Map.current.getObjectsAtPortion(mapPortion
             .portion);
         return this.checkObjectsList(mapPortion.objectsList, object) || this
             .checkObjectsList(datas.min, object) || this

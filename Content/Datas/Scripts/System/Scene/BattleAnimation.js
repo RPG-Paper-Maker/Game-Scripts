@@ -17,6 +17,7 @@ var ItemKind = Enum.ItemKind;
 var AnimationEffectConditionKind = Enum.AnimationEffectConditionKind;
 var BattleStep = Enum.BattleStep;
 var AnimationPositionKind = Enum.AnimationPositionKind;
+import { Game } from "../Core/index.js";
 // -------------------------------------------------------
 //
 //  CLASS SceneBattle
@@ -109,7 +110,7 @@ class BattleAnimation {
                     .animationTargetID.getValue());
                 this.battle.effects = content.effects;
                 if (this.battle.attackingGroup === CharacterKind.Hero) {
-                    Manager.Stack.game.useItem(graphic.item);
+                    Game.current.useItem(graphic.item);
                 }
                 this.battle.user.setUsingItem();
                 break;

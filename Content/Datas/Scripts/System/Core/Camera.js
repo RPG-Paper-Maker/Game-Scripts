@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { ScreenResolution, Mathf } from "../Common/index.js";
-import { Manager } from "../index.js";
+import { Scene } from "../index.js";
 /** @class
  *  The camera of the current map.
  *  @param {System.CameraProperties} cameraProperties The System camera
@@ -153,7 +153,7 @@ class Camera {
      */
     updateView() {
         this.getThreeCamera().lookAt(this.targetPosition);
-        Manager.Stack.currentMap.orientation = this.getMapOrientation();
+        Scene.Map.current.orientation = this.getMapOrientation();
     }
     /**
      * Update all the parameters.

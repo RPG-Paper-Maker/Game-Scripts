@@ -12,7 +12,7 @@
 import { Base } from "./Base";
 import { System, Datas, Manager, Scene } from "../index";
 import { Utils } from "../Common";
-import { MapObject, Position } from "../Core";
+import { MapObject, Position, Game } from "../Core";
 
 /** @class
  *  An event command for battle processing.
@@ -133,7 +133,7 @@ class StartBattle extends Base {
                 .create(this.mapID.getValue(), new Position(this.x.getValue(), 
                 this.y.getValue(), this.yPlus.getValue(), this.z.getValue())) : 
                 Datas.BattleSystems.getBattleMap(this.battleMapID.getValue());
-            Manager.Stack.game.heroBattle = new MapObject(Manager.Stack.game
+            Game.current.heroBattle = new MapObject(Game.current
                 .hero.system, battleMap.position.toVector3(), true);
 
             // Defining the battle state instance

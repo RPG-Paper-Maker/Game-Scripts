@@ -10,8 +10,8 @@
 */
 
 import { Base } from "./Base";
-import { System, Manager } from "../index";
-import { MapObject, Skill } from "../Core";
+import { System } from "../index";
+import { MapObject, Skill, Game } from "../Core";
 import { Player } from "../Core";
 import { Utils } from "../Common";
 
@@ -36,7 +36,7 @@ class ChangeASkill extends Base {
         }
         this.skillID = System.DynamicValue.createValueCommand(command, iterator);
     
-        // Selection
+        // Selectionnager
         this.selection = command[iterator.i++];
         switch (this.selection) {
             case 0:
@@ -66,11 +66,11 @@ class ChangeASkill extends Base {
         let targets: Player[];
         switch (this.selection) {
             case 0:
-                targets = [Manager.Stack.game.getHeroByInstanceID(this
+                targets = [Game.current.getHeroByInstanceID(this
                     .heInstanceID.getValue())];
                 break;
             case 1:
-                targets = Manager.Stack.game.getTeam(this.groupIndex);
+                targets = Game.current.getTeam(this.groupIndex);
                 break;
         }
         let target: Player, index: number;

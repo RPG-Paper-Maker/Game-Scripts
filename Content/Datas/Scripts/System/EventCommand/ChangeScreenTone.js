@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
-import { System, Datas, Manager } from "../index.js";
+import { System, Datas, Manager, Scene } from "../index.js";
 import { Utils } from "../Common/index.js";
 /** @class
  *  An event command for changing screen tone.
@@ -91,8 +91,8 @@ class ChangeScreenTone extends Base {
                 currentState.finalDifBlue));
             Manager.GL.screenTone.setW(Manager.GL.screenTone.w + (timeRate *
                 currentState.finalDifGrey));
-            Manager.GL.updateBackgroundColor(Manager.Stack.currentMap
-                .mapProperties.backgroundColor);
+            Manager.GL.updateBackgroundColor(Scene.Map.current.mapProperties
+                .backgroundColor);
             // If time = 0, then this is the end of the command
             if (currentState.timeLeft === 0) {
                 return 1;

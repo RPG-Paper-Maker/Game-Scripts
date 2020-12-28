@@ -11,8 +11,7 @@
 import { Enum, Utils } from "../Common/index.js";
 var DynamicValueKind = Enum.DynamicValueKind;
 import { System, Datas } from "../index.js";
-import { Stack } from "../Manager/index.js";
-import { ReactionInterpreter } from "../Core/index.js";
+import { ReactionInterpreter, Game } from "../Core/index.js";
 /** @class
  *  The class who handle dynamic value.
  *  @extends {System.Base}
@@ -240,7 +239,7 @@ class DynamicValue extends System.Base {
     getValue() {
         switch (this.kind) {
             case DynamicValueKind.Variable:
-                return Stack.game.variables[this.value];
+                return Game.current.variables[this.value];
             case DynamicValueKind.Parameter:
                 return ReactionInterpreter.currentParameters[this.value]
                     .getValue();

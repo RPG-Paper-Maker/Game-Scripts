@@ -12,7 +12,7 @@ import { Base } from "./Base.js";
 import { Scene, Manager, Graphic, Datas } from "../index.js";
 import { Enum, ScreenResolution } from "../Common/index.js";
 var Align = Enum.Align;
-import { WindowChoices, WindowBox } from "../Core/index.js";
+import { WindowChoices, WindowBox, Game } from "../Core/index.js";
 ;
 /** @class
  *  A scene for the main menu.
@@ -44,10 +44,10 @@ class Menu extends Base {
             Scene.Menu.prototype.exit
         ];
         // Initializing graphics for displaying heroes informations
-        let nbHeroes = Manager.Stack.game.teamHeroes.length;
+        let nbHeroes = Game.current.teamHeroes.length;
         let graphicsHeroes = new Array(nbHeroes);
         for (let i = 0; i < nbHeroes; i++) {
-            graphicsHeroes[i] = new Graphic.Player(Manager.Stack.game.teamHeroes[i]);
+            graphicsHeroes[i] = new Graphic.Player(Game.current.teamHeroes[i]);
         }
         // All the windows
         this.windowChoicesCommands = new WindowChoices(20, 20, 150, WindowBox
@@ -130,7 +130,7 @@ class Menu extends Base {
      *  Update the scene.
      */
     update() {
-        Scene.Base.prototype.update.call(Manager.Stack.currentMap);
+        Scene.Base.prototype.update.call(Scene.Map.current);
         this.windowTimeCurrencies.content.update();
         for (let i = 0, l = this.windowChoicesTeam.listWindows.length; i < l; i++) {
             this.windowChoicesTeam.listWindows[i].content
@@ -142,7 +142,7 @@ class Menu extends Base {
      *  @param {number} key The key ID
      */
     onKeyPressed(key) {
-        Scene.Base.prototype.onKeyPressed.call(Manager.Stack.currentMap, key);
+        Scene.Base.prototype.onKeyPressed.call(Scene.Map.current, key);
         if (this.windowChoicesTeam.currentSelectedIndex === -1) {
             this.windowChoicesCommands.onKeyPressed(key, this);
             // Quit the menu if cancelling + in window command
@@ -172,11 +172,11 @@ class Menu extends Base {
                 else {
                     // If a hero is selected, interchange now !
                     // Change the current game order
-                    let item1 = Manager.Stack.game.teamHeroes[this.selectedOrder];
-                    let item2 = Manager.Stack.game.teamHeroes[this
+                    let item1 = Game.current.teamHeroes[this.selectedOrder];
+                    let item2 = Game.current.teamHeroes[this
                         .windowChoicesTeam.currentSelectedIndex];
-                    Manager.Stack.game.teamHeroes[this.selectedOrder] = item2;
-                    Manager.Stack.game.teamHeroes[this.windowChoicesTeam
+                    Game.current.teamHeroes[this.selectedOrder] = item2;
+                    Game.current.teamHeroes[this.windowChoicesTeam
                         .currentSelectedIndex] = item1;
                     let graphic1 = this.windowChoicesTeam.getContent(this
                         .selectedOrder);
@@ -200,7 +200,7 @@ class Menu extends Base {
      *  @param {number} key The key ID
      */
     onKeyReleased(key) {
-        Scene.Base.prototype.onKeyReleased.call(Manager.Stack.currentMap, key);
+        Scene.Base.prototype.onKeyReleased.call(Scene.Map.current, key);
     }
     /**
      *  Handle scene pressed repeat key.
@@ -208,8 +208,7 @@ class Menu extends Base {
      *  @returns {boolean}
      */
     onKeyPressedRepeat(key) {
-        return Scene.Base.prototype.onKeyPressedRepeat.call(Manager.Stack
-            .currentMap, key);
+        return Scene.Base.prototype.onKeyPressedRepeat.call(Scene.Map.current, key);
     }
     /**
      *  Handle scene pressed and repeat key.
@@ -217,7 +216,7 @@ class Menu extends Base {
      *  @returns {boolean}
      */
     onKeyPressedAndRepeat(key) {
-        Scene.Base.prototype.onKeyPressedAndRepeat.call(Manager.Stack.currentMap, key);
+        Scene.Base.prototype.onKeyPressedAndRepeat.call(Scene.Map.current, key);
         if (this.windowChoicesTeam.currentSelectedIndex === -1) {
             return this.windowChoicesCommands.onKeyPressedAndRepeat(key);
         }
@@ -230,7 +229,7 @@ class Menu extends Base {
      */
     drawHUD() {
         // Draw the local map behind
-        Manager.Stack.currentMap.drawHUD();
+        Scene.Map.current.drawHUD();
         // Draw the windows
         this.windowChoicesCommands.draw();
         this.windowChoicesTeam.draw();

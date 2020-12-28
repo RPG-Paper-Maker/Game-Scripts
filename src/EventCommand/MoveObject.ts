@@ -10,11 +10,11 @@
 */
 
 import { Base } from "./Base";
-import { System, Manager, Datas, EventCommand } from "../index";
+import { System, Datas, EventCommand, Scene } from "../index";
 import { Enum, Utils, Mathf } from "../Common";
 import CommandMoveKind = Enum.CommandMoveKind;
 import Orientation = Enum.Orientation;
-import { MapObject, StructSearchResult } from "../Core";
+import { MapObject, StructSearchResult, Game } from "../Core";
 
 /** @class
  *  An event command for moving object.
@@ -177,7 +177,7 @@ class MoveObject extends Base {
         if (object.moveFrequencyTick > 0) {
             return false;
         }
-        let angle = this.isCameraOrientation ? Manager.Stack.currentMap.camera
+        let angle = this.isCameraOrientation ? Scene.Map.current.camera
             .horizontalAngle : -90.0;
         if (currentState.position === null && square) {
             let position = object.position;
@@ -522,14 +522,14 @@ class MoveObject extends Base {
             if (parameters.permanent) {
                 let statesOptions: Record<string, any>[];
                 if (object.isHero) {
-                    statesOptions = Manager.Stack.game.heroStatesOptions;
+                    statesOptions = Game.current.heroStatesOptions;
                 } else if (object.isStartup) {
                     return;
                 } else {
-                    let portion = Manager.Stack.currentMap.allObjects[object
+                    let portion = Scene.Map.current.allObjects[object
                         .system.id].getGlobalPortion();
-                    let portionDatas = Manager.Stack.game.getPotionsDatas(
-                        Manager.Stack.currentMap.id, portion);
+                    let portionDatas = Game.current.getPotionsDatas(Scene.Map
+                        .current.id, portion);
                     let indexProp = portionDatas.soi.indexOf(object.system.id);
                     if (indexProp === -1) {
                         statesOptions = [];
@@ -562,8 +562,8 @@ class MoveObject extends Base {
      *  @returns {Orientation}
     */
     getHeroOrientation(object: MapObject): Orientation {
-        let xDif = object.position.x - Manager.Stack.game.hero.position.x;
-        let zDif = object.position.z - Manager.Stack.game.hero.position.z;
+        let xDif = object.position.x - Game.current.hero.position.x;
+        let zDif = object.position.z - Game.current.hero.position.z;
         if (Math.abs(xDif) > Math.abs(zDif)) {
             if (xDif > 0) {
                 return Orientation.West;

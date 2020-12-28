@@ -9,10 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
-import { System, Manager, Datas, Scene } from "../index.js";
+import { System, Datas, Scene } from "../index.js";
 import { Utils, Enum, Mathf, KeyEvent, Interpreter } from "../Common/index.js";
 var ConditionHeroesKind = Enum.ConditionHeroesKind;
 var ItemKind = Enum.ItemKind;
+import { Game } from "../Core/index.js";
 /** @class
  *  An event command for condition event command block.
  *  @extends EventCommand.Base
@@ -208,12 +209,12 @@ class If extends Base {
                 break;
             case 1:
                 if (this.heroesInTeam) {
-                    heroesSelection = Manager.Stack.game.getTeam(this
+                    heroesSelection = Game.current.getTeam(this
                         .heroesInTeamSelection);
                 }
                 else {
-                    heroesSelection = Manager.Stack.game.teamHeroes.concat(Manager.Stack.game.reserveHeroes);
-                    heroesSelection.concat(Manager.Stack.game.hiddenHeroes);
+                    heroesSelection = Game.current.teamHeroes.concat(Game.current.reserveHeroes);
+                    heroesSelection.concat(Game.current.hiddenHeroes);
                 }
                 switch (this.heroesKind) {
                     case 0:
@@ -223,7 +224,7 @@ class If extends Base {
                         });
                         break;
                     case 1:
-                        let tab = Manager.Stack.game.getTeam(this
+                        let tab = Game.current.getTeam(this
                             .heroesInTeamValue);
                         result = this.getResult(heroesSelection, (hero) => {
                             id = hero.instid;
@@ -292,15 +293,15 @@ class If extends Base {
                 }
                 break;
             case 2:
-                result = Mathf.OPERATORS_COMPARE[this.operationCurrency](Manager
-                    .Stack.game.currencies[this.currencyID.getValue()], this
+                result = Mathf.OPERATORS_COMPARE[this.operationCurrency](Game
+                    .current.currencies[this.currencyID.getValue()], this
                     .currencyValue.getValue());
                 break;
             case 3:
                 nb = 0;
                 id = this.itemID.getValue();
-                for (i = 0, l = Manager.Stack.game.items.length; i < l; i++) {
-                    item = Manager.Stack.game.items[i];
+                for (i = 0, l = Game.current.items.length; i < l; i++) {
+                    item = Game.current.items[i];
                     if (item.kind === ItemKind.Item && item.id === id) {
                         nb = item.nb;
                         break;
@@ -312,16 +313,16 @@ class If extends Base {
             case 4:
                 nb = 0;
                 id = this.weaponID.getValue();
-                for (i = 0, l = Manager.Stack.game.items.length; i < l; i++) {
-                    item = Manager.Stack.game.items[i];
+                for (i = 0, l = Game.current.items.length; i < l; i++) {
+                    item = Game.current.items[i];
                     if (item.kind === ItemKind.Weapon && item.id === id) {
                         nb = item.nb;
                         break;
                     }
                 }
                 if (this.weaponEquiped) {
-                    heroesSelection = Manager.Stack.game.teamHeroes.concat(Manager.Stack.game.reserveHeroes);
-                    heroesSelection.concat(Manager.Stack.game.hiddenHeroes);
+                    heroesSelection = Game.current.teamHeroes.concat(Game.current.reserveHeroes);
+                    heroesSelection.concat(Game.current.hiddenHeroes);
                     let h;
                     for (i = 0, l = heroesSelection.length; i < l; i++) {
                         h = heroesSelection[i];
@@ -340,16 +341,16 @@ class If extends Base {
             case 5:
                 nb = 0;
                 id = this.armorID.getValue();
-                for (i = 0, l = Manager.Stack.game.items.length; i < l; i++) {
-                    item = Manager.Stack.game.items[i];
+                for (i = 0, l = Game.current.items.length; i < l; i++) {
+                    item = Game.current.items[i];
                     if (item.kind === ItemKind.Armor && item.id === id) {
                         nb = item.nb;
                         break;
                     }
                 }
                 if (this.armorEquiped) {
-                    heroesSelection = Manager.Stack.game.teamHeroes.concat(Manager.Stack.game.reserveHeroes);
-                    heroesSelection.concat(Manager.Stack.game.hiddenHeroes);
+                    heroesSelection = Game.current.teamHeroes.concat(Game.current.reserveHeroes);
+                    heroesSelection.concat(Game.current.hiddenHeroes);
                     let h;
                     for (i = 0, l = heroesSelection.length; i < l; i++) {
                         h = heroesSelection[i];

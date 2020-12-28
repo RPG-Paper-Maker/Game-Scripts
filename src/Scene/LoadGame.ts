@@ -14,7 +14,7 @@ import { Graphic, Datas, Manager, Scene } from "../index";
 import { Enum, Constants, Platform } from "../Common";
 import Align = Enum.Align;
 import PictureKind = Enum.PictureKind;
-import { Picture2D } from "../Core";
+import { Picture2D, Game } from "../Core";
 
 /** @class
  *  A scene in the menu for loading a game.
@@ -56,16 +56,16 @@ class LoadGame extends SaveLoadGame {
 
         // If action, load the selected slot
         if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Action)) {
-            Manager.Stack.game = (<Graphic.Save> this.windowChoicesSlots
+            Game.current = (<Graphic.Save> this.windowChoicesSlots
                 .getCurrentContent()).game;
-            if (Manager.Stack.game.isEmpty) {
-                Manager.Stack.game = null;
+            if (Game.current.isEmpty) {
+                Game.current = null;
                 Datas.Systems.soundImpossible.playSound();
             } else {
                 Datas.Systems.soundConfirmation.playSound();
 
                 // Initialize properties for hero
-                Manager.Stack.game.hero.initializeProperties();
+                Game.current.hero.initializeProperties();
 
                 // Stop video if existing
                 if (!Datas.TitlescreenGameover.isTitleBackgroundImage) {
@@ -76,7 +76,7 @@ class LoadGame extends SaveLoadGame {
 
                 // Pop load and title screen from the stack
                 Manager.Stack.pop();
-                Manager.Stack.replace(new Scene.Map(Manager.Stack.game
+                Manager.Stack.replace(new Scene.Map(Game.current
                     .currentMapID));
             }
         }

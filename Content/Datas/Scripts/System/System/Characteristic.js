@@ -14,7 +14,7 @@ var IncreaseDecreaseKind = Enum.IncreaseDecreaseKind;
 import { Base } from "./Base.js";
 import { DynamicValue } from "./DynamicValue.js";
 import { Player } from "../Core/index.js";
-import { Datas, Manager } from "../index.js";
+import { Datas, Scene } from "../index.js";
 /** @class
  *  A characteristic of a common skill item.
  *  @extends System.Base
@@ -138,8 +138,8 @@ class Characteristic extends Base {
      *  @returns {string}
      */
     toString() {
-        let user = Manager.Stack.currentMap.user ? Manager.Stack.currentMap.user
-            .player : Player.getTemporaryPlayer();
+        let user = Scene.Map.current.user ? Scene.Map.current.user.player :
+            Player.getTemporaryPlayer();
         let target = Player.getTemporaryPlayer();
         let result = "";
         switch (this.kind) {

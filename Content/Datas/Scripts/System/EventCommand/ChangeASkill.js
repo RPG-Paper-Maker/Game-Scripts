@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
-import { System, Manager } from "../index.js";
-import { Skill } from "../Core/index.js";
+import { System } from "../index.js";
+import { Skill, Game } from "../Core/index.js";
 import { Utils } from "../Common/index.js";
 /** @class
  *  An event command for changing a skill.
@@ -24,7 +24,7 @@ class ChangeASkill extends Base {
             i: 0
         };
         this.skillID = System.DynamicValue.createValueCommand(command, iterator);
-        // Selection
+        // Selectionnager
         this.selection = command[iterator.i++];
         switch (this.selection) {
             case 0:
@@ -49,11 +49,11 @@ class ChangeASkill extends Base {
         let targets;
         switch (this.selection) {
             case 0:
-                targets = [Manager.Stack.game.getHeroByInstanceID(this
+                targets = [Game.current.getHeroByInstanceID(this
                         .heInstanceID.getValue())];
                 break;
             case 1:
-                targets = Manager.Stack.game.getTeam(this.groupIndex);
+                targets = Game.current.getTeam(this.groupIndex);
                 break;
         }
         let target, index;

@@ -10,8 +10,8 @@
 */
 
 import { Base } from "./Base";
-import { System, Manager } from "../index";
-import { MapObject } from "../Core";
+import { System, Manager, Scene } from "../index";
+import { MapObject, Game } from "../Core";
 import { Mathf, Utils } from "../Common";
 
 /** @class
@@ -53,20 +53,19 @@ class ChangeProperty extends Base {
         object.properties[propertyID] = newValue;
         let props: number[];
         if (object.isHero) {
-            props = Manager.Stack.game.heroProperties;
+            props = Game.current.heroProperties;
         } else if (object.isStartup) {
-            props = Manager.Stack.game.startupProperties[Manager.Stack
-                .currentMap.id];
+            props = Game.current.startupProperties[Scene.Map.current.id];
             if (Utils.isUndefined(props)) {
                 props = [];
-                Manager.Stack.game.startupProperties[Manager.Stack.currentMap.id
+                Game.current.startupProperties[Scene.Map.current.id
                     ] = props;
             }
         } else {
-            let portion = Manager.Stack.currentMap.allObjects[object.system.id]
+            let portion = Scene.Map.current.allObjects[object.system.id]
                 .getGlobalPortion();
-            let portionDatas = Manager.Stack.game.getPotionsDatas(Manager.Stack
-                .currentMap.id, portion);
+            let portionDatas = Game.current.getPotionsDatas(Scene.Map.current.id, 
+                portion);
             let indexProp = portionDatas.pi.indexOf(object.system.id);
             if (indexProp === -1) {
                 props = [];

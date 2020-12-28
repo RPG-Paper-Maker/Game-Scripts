@@ -10,6 +10,7 @@
 */
 import { Scene, Manager } from "../index.js";
 import { Utils, Platform, ScreenResolution, KeyEvent } from "../Common/index.js";
+import { Game } from "../Core/index.js";
 /** @class
  *  The game stack that is organizing the game scenes.
  *  @static
@@ -113,8 +114,8 @@ class Stack {
      */
     static update() {
         // Update game timer if there's a current game
-        if (this.game !== null) {
-            this.game.playTime.update();
+        if (Game.current !== null) {
+            Game.current.playTime.update();
         }
         // Update songs manager
         Manager.Songs.update();
@@ -217,7 +218,6 @@ Stack.loadingDelay = 0;
 Stack.elapsedTime = 0;
 Stack.averageElapsedTime = 0;
 Stack.lastUpdateTime = new Date().getTime();
-Stack.game = null;
 Stack.displayedPictures = [];
 Stack.isInMainMenu = false;
 export { Stack };

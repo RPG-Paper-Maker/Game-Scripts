@@ -15,7 +15,7 @@ var BattlerStep = Enum.BattlerStep;
 var CharacterKind = Enum.CharacterKind;
 var ElementMapKind = Enum.ElementMapKind;
 import { ProgressionTable } from "../System/index.js";
-import { Manager, Datas } from "../index.js";
+import { Manager, Datas, Scene } from "../index.js";
 import { Sprite } from "./Sprite.js";
 import { Vector3 } from "./Vector3.js";
 /** @class
@@ -244,7 +244,7 @@ class Battler {
             this.upPosition.setX(newX);
             this.halfPosition.setX(newX);
             this.updatePositions();
-            this.updateArrowPosition(Manager.Stack.currentMap.camera);
+            this.updateArrowPosition(Scene.Map.current.camera);
             Manager.Stack.requestPaintHUD = true;
         }
     }
@@ -268,7 +268,7 @@ class Battler {
      */
     updateArrow() {
         if (this.frameArrow.update()) {
-            this.arrowPosition = Manager.GL.toScreenPosition(this.mesh.position, Manager.Stack.currentMap.camera.getThreeCamera());
+            this.arrowPosition = Manager.GL.toScreenPosition(this.mesh.position, Scene.Map.current.camera.getThreeCamera());
             Manager.Stack.requestPaintHUD = true;
         }
     }
@@ -276,7 +276,7 @@ class Battler {
      *  Update the damages position.
      */
     updateDamages() {
-        this.damagePosition = Manager.GL.toScreenPosition(this.upPosition, Manager.Stack.currentMap.camera.getThreeCamera());
+        this.damagePosition = Manager.GL.toScreenPosition(this.upPosition, Scene.Map.current.camera.getThreeCamera());
     }
     /**
      *  Update attacking step frame.
@@ -293,10 +293,10 @@ class Battler {
      *  Update positions to screen.
      */
     updatePositions() {
-        this.topPosition = Manager.GL.toScreenPosition(this.upPosition, Manager
-            .Stack.currentMap.camera.getThreeCamera());
-        this.midPosition = Manager.GL.toScreenPosition(this.halfPosition, Manager.Stack.currentMap.camera.getThreeCamera());
-        this.botPosition = Manager.GL.toScreenPosition(this.mesh.position, Manager.Stack.currentMap.camera.getThreeCamera());
+        this.topPosition = Manager.GL.toScreenPosition(this.upPosition, Scene
+            .Map.current.camera.getThreeCamera());
+        this.midPosition = Manager.GL.toScreenPosition(this.halfPosition, Scene.Map.current.camera.getThreeCamera());
+        this.botPosition = Manager.GL.toScreenPosition(this.mesh.position, Scene.Map.current.camera.getThreeCamera());
     }
     /**
      *  Update the arrow position.
@@ -309,7 +309,7 @@ class Battler {
      */
     addToScene() {
         if (this.mesh !== null) {
-            Manager.Stack.currentMap.scene.add(this.mesh);
+            Scene.Map.current.scene.add(this.mesh);
         }
     }
     /**
@@ -317,7 +317,7 @@ class Battler {
      */
     removeFromScene() {
         if (this.mesh !== null) {
-            Manager.Stack.currentMap.scene.remove(this.mesh);
+            Scene.Map.current.scene.remove(this.mesh);
         }
     }
     /**

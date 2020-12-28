@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
-import { System, Manager, EventCommand } from "../index.js";
+import { System, Manager, EventCommand, Scene } from "../index.js";
 import { Utils } from "../Common/index.js";
 /** @class
  *  An event command for shaking screen.
@@ -37,8 +37,10 @@ class ShakeScreen extends Base {
      */
     static updateTargetOffset(currentState, timeRate) {
         let value = timeRate * currentState.finalDifPos;
-        Manager.Stack.currentMap.camera.targetOffset.x += value * -Math.sin(Manager.Stack.currentMap.camera.horizontalAngle * Math.PI / 180.0);
-        Manager.Stack.currentMap.camera.targetOffset.z += value * Math.cos(Manager.Stack.currentMap.camera.horizontalAngle * Math.PI / 180.0);
+        Scene.Map.current.camera.targetOffset.x += value * -Math.sin(Scene.Map
+            .current.camera.horizontalAngle * Math.PI / 180.0);
+        Scene.Map.current.camera.targetOffset.z += value * Math.cos(Scene.Map
+            .current.camera.horizontalAngle * Math.PI / 180.0);
     }
     /**
      *  Initialize the current state.
@@ -64,8 +66,8 @@ class ShakeScreen extends Base {
             shakeTime: shakeTime,
             shakeTimeLeft: shakeTime,
             currentOffset: 0,
-            beginPosX: Manager.Stack.currentMap.camera.targetOffset.x,
-            beginPosZ: Manager.Stack.currentMap.camera.targetOffset.z,
+            beginPosX: Scene.Map.current.camera.targetOffset.x,
+            beginPosZ: Scene.Map.current.camera.targetOffset.z,
             finalDifPos: -offset,
             time: time,
             timeLeft: time,
@@ -109,10 +111,8 @@ class ShakeScreen extends Base {
             }
             EventCommand.ShakeScreen.updateTargetOffset(currentState, timeRate);
             if (currentState.timeLeft === 0) {
-                Manager.Stack.currentMap.camera.targetOffset.x = currentState
-                    .beginPosX;
-                Manager.Stack.currentMap.camera.targetOffset.z = currentState
-                    .beginPosZ;
+                Scene.Map.current.camera.targetOffset.x = currentState.beginPosX;
+                Scene.Map.current.camera.targetOffset.z = currentState.beginPosZ;
                 return 1;
             }
             return 0;

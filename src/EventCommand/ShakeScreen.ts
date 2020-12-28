@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { System, Manager, EventCommand } from "../index";
+import { System, Manager, EventCommand, Scene } from "../index";
 import { Utils } from "../Common";
 import { MapObject } from "../Core";
 
@@ -51,10 +51,10 @@ class ShakeScreen extends Base {
         number)
     {
         let value = timeRate * currentState.finalDifPos;
-        Manager.Stack.currentMap.camera.targetOffset.x += value * -Math.sin(
-            Manager.Stack.currentMap.camera.horizontalAngle * Math.PI / 180.0);
-        Manager.Stack.currentMap.camera.targetOffset.z += value * Math.cos(
-            Manager.Stack.currentMap.camera.horizontalAngle * Math.PI / 180.0);
+        Scene.Map.current.camera.targetOffset.x += value * -Math.sin(Scene.Map
+            .current.camera.horizontalAngle * Math.PI / 180.0);
+        Scene.Map.current.camera.targetOffset.z += value * Math.cos(Scene.Map
+            .current.camera.horizontalAngle * Math.PI / 180.0);
     }
 
     /** 
@@ -82,8 +82,8 @@ class ShakeScreen extends Base {
             shakeTime: shakeTime,
             shakeTimeLeft: shakeTime,
             currentOffset: 0,
-            beginPosX: Manager.Stack.currentMap.camera.targetOffset.x,
-            beginPosZ: Manager.Stack.currentMap.camera.targetOffset.z,
+            beginPosX: Scene.Map.current.camera.targetOffset.x,
+            beginPosZ: Scene.Map.current.camera.targetOffset.z,
             finalDifPos: -offset,
             time: time,
             timeLeft: time,
@@ -130,10 +130,8 @@ class ShakeScreen extends Base {
             }
             EventCommand.ShakeScreen.updateTargetOffset(currentState, timeRate);
             if (currentState.timeLeft === 0) {
-                Manager.Stack.currentMap.camera.targetOffset.x = currentState
-                    .beginPosX;
-                Manager.Stack.currentMap.camera.targetOffset.z = currentState
-                    .beginPosZ;
+                Scene.Map.current.camera.targetOffset.x = currentState.beginPosX;
+                Scene.Map.current.camera.targetOffset.z = currentState.beginPosZ;
                 return 1;
             }
             return 0;

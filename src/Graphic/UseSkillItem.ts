@@ -10,9 +10,9 @@
 */
 
 import { Base } from "./Base";
-import { Graphic, Manager, Datas } from "../index";
+import { Graphic, Manager, Datas, Scene } from "../index";
 import { Mathf } from "../Common";
-import { Battler } from "../Core";
+import { Battler, Game } from "../Core";
 
 /** @class
  *  The graphic displaying a skill or an item use.
@@ -29,8 +29,8 @@ class UseSkillItem extends Base {
 
         this.graphicCharacters = new Array;
         let player: Graphic.Player;
-        for (let i = 0, l = Manager.Stack.game.teamHeroes.length; i < l; i++) {
-            player = new Graphic.Player(Manager.Stack.game.teamHeroes[i]);
+        for (let i = 0, l = Game.current.teamHeroes.length; i < l; i++) {
+            player = new Graphic.Player(Game.current.teamHeroes[i]);
             player.initializeCharacter(true);
             this.graphicCharacters.push(player);
         }
@@ -44,15 +44,15 @@ class UseSkillItem extends Base {
     setAll(b: boolean) {
         this.all = b;
         if (b) {
-            let l = Manager.Stack.game.teamHeroes.length;
-            Manager.Stack.currentMap.targets = new Array(l);
+            let l = Game.current.teamHeroes.length;
+            Scene.Map.current.targets = new Array(l);
             for (let i = 0; i < l; i++) {
-                Manager.Stack.currentMap.targets[i] = new Battler(Manager.Stack
-                    .game.teamHeroes[i]);
+                Scene.Map.current.targets[i] = new Battler(Game.current
+                    .teamHeroes[i]);
             }
         } else {
             this.indexArrow = 0;
-            Manager.Stack.currentMap.targets = [new Battler(Manager.Stack.game
+            Scene.Map.current.targets = [new Battler(Game.current
                 .teamHeroes[this.indexArrow])];
         }
     }
@@ -99,7 +99,7 @@ class UseSkillItem extends Base {
                 Datas.Systems.soundCursor.playSound();
             }
             this.indexArrow = Mathf.mod(index, this.graphicCharacters.length);
-            Manager.Stack.currentMap.targets = [new Battler(Manager.Stack.game
+            Scene.Map.current.targets = [new Battler(Game.current
                 .teamHeroes[this.indexArrow])];
             Manager.Stack.requestPaintHUD = true;
         }

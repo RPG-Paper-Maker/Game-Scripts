@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Land } from "./Land.js";
-import { Manager, Datas } from "../index.js";
+import { Datas, Scene } from "../index.js";
 /** @class
  *  A floor in the map.
  *  @extends Land
@@ -41,7 +41,7 @@ class Floor extends Land {
      *  @returns {StructMapElementCollision}
      */
     updateGeometry(geometry, position, width, height, count) {
-        return (width === 0 || height === 0) ? null : super.updateGeometryLand(geometry, Manager.Stack.currentMap.mapProperties.tileset.picture
+        return (width === 0 || height === 0) ? null : super.updateGeometryLand(geometry, Scene.Map.current.mapProperties.tileset.picture
             .getCollisionAt(this.texture), position, width, height, (this
             .texture[0] * Datas.Systems.SQUARE_SIZE) / width, (this.texture[1] *
             Datas.Systems.SQUARE_SIZE) / height, (this.texture[2] * Datas

@@ -10,8 +10,8 @@
 */
 
 import { Base } from "./Base";
-import { System, Manager } from "../index";
-import { MapObject } from "../Core";
+import { System } from "../index";
+import { MapObject, Game } from "../Core";
 import { Mathf } from "../Common";
 
 /** @class
@@ -48,8 +48,8 @@ class ModifyCurrency extends Base {
         number
     {
         let currencyID = this.currencyID.getValue();
-        Manager.Stack.game.currencies[currencyID] = Mathf.OPERATORS_NUMBERS[this
-            .operation](Manager.Stack.game.currencies[currencyID], this.value
+        Game.current.currencies[currencyID] = Mathf.OPERATORS_NUMBERS[this
+            .operation](Game.current.currencies[currencyID], this.value
             .getValue());
         return 1;
     }

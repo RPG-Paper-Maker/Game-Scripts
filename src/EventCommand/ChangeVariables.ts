@@ -10,8 +10,8 @@
 */
 
 import { Base } from "./Base";
-import { System, Manager } from "../index";
-import { StructSearchResult, MapObject, Position } from "../Core";
+import { System } from "../index";
+import { StructSearchResult, MapObject, Position, Game } from "../Core";
 import { Mathf, Enum, Utils } from "../Common";
 import VariableMapObjectCharacteristicKind = Enum.VariableMapObjectCharacteristicKind;
 
@@ -154,9 +154,9 @@ class ChangeVariables extends Base {
         // Apply new value to variable(s)
         if (!Utils.isUndefined(currentState.value)) {
             for (let i = 0, l = this.nbSelection; i < l; i++) {
-                Manager.Stack.game.variables[this.selection + i] = Mathf
-                    .OPERATORS_NUMBERS[this.operation](Manager.Stack.game
-                    .variables[this.selection + i], currentState.value);
+                Game.current.variables[this.selection + i] = Mathf
+                    .OPERATORS_NUMBERS[this.operation](Game.current.variables[
+                    this.selection + i], currentState.value);
             }
         }
         return Utils.isUndefined(currentState.value) ? 0 : 1;

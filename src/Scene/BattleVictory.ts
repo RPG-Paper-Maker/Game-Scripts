@@ -14,7 +14,7 @@ import { Enum, ScreenResolution, Platform } from "../Common";
 import Align = Enum.Align;
 import CharacterKind = Enum.CharacterKind;
 import LootKind = Enum.LootKind;
-import { Battler, WindowBox, Player, Item } from "../Core";
+import { Battler, WindowBox, Player, Item, Game } from "../Core";
 
 // -------------------------------------------------------
 //
@@ -57,7 +57,7 @@ class BattleVictory {
         this.prepareRewards();
         let id: string;
         for (id in this.battle.currencies) {
-            Manager.Stack.game.currencies[id] += this.battle.currencies[id];
+            Game.current.currencies[id] += this.battle.currencies[id];
         }
         let i: number, l: number;
         for (i = 0, l = this.battle.loots.length; i < l; i++) {
@@ -68,7 +68,7 @@ class BattleVictory {
 
         // Heroes
         let battler: Battler;
-        for (i = 0, l = Manager.Stack.game.teamHeroes.length; i < l; i++) {
+        for (i = 0, l = Game.current.teamHeroes.length; i < l; i++) {
             battler = this.battle.battlers[CharacterKind.Hero][i];
             battler.setVictory();
             battler.player.totalRemainingXP = this.battle.xp;
@@ -153,7 +153,7 @@ class BattleVictory {
     updateTeamXP() {
         this.battle.finishedXP = true;
         let battler: Battler, player: Player, y: number , h: number;
-        for (let i = this.battle.priorityIndex, l = Manager.Stack.game
+        for (let i = this.battle.priorityIndex, l = Game.current
             .teamHeroes.length; i < l; i++) {
             battler = this.battle.battlers[CharacterKind.Hero][i];
             player = battler.player;
@@ -164,7 +164,7 @@ class BattleVictory {
                     this.battle.finishedXP = false;
                     (<Graphic.XPProgression>this.battle.windowExperienceProgression
                         .content).updateExperience();
-                    this.battle.priorityIndex = i + 1 % Manager.Stack.game
+                    this.battle.priorityIndex = i + 1 % Game.current
                         .teamHeroes.length;
                     this.pauseTeamXP();
                     this.battle.finishedXP = false;
@@ -196,7 +196,7 @@ class BattleVictory {
      *  Pause the team progression xp.
      */
     pauseTeamXP() {
-        for (let i = 0, l = Manager.Stack.game.teamHeroes.length; i < l; i++) {
+        for (let i = 0, l = Game.current.teamHeroes.length; i < l; i++) {
             this.battle.battlers[CharacterKind.Hero][i].player.pauseExperience();
         }
     }
@@ -205,7 +205,7 @@ class BattleVictory {
      *  Unpause the team progression xp.
      */
     unpauseTeamXP() {
-        for (let i = 0, l = Manager.Stack.game.teamHeroes.length; i < l; i++) {
+        for (let i = 0, l = Game.current.teamHeroes.length; i < l; i++) {
             this.battle.battlers[CharacterKind.Hero][i].player.unpauseExperience();
         }
         this.battle.user.player.updateRemainingXP(Scene.Battle.TIME_PROGRESSION_XP);
@@ -244,7 +244,7 @@ class BattleVictory {
                     this.battle.time = new Date().getTime();
                     this.battle.windowTopInformations.content = this.battle
                         .graphicRewardTop;
-                    for (let i = 0, l = Manager.Stack.game.teamHeroes.length; i 
+                    for (let i = 0, l = Game.current.teamHeroes.length; i 
                         < l; i++) {
                         this.battle.battlers[CharacterKind.Hero][i].player
                             .updateRemainingXP(Scene.Battle.TIME_PROGRESSION_XP);
@@ -363,7 +363,7 @@ class BattleVictory {
                         this.prepareEndTransition();
                     } else { // Pass xp
                         let player: Player;
-                        for (let i = 0, l = Manager.Stack.game.teamHeroes.length; 
+                        for (let i = 0, l = Game.current.teamHeroes.length; 
                             i < l; i++) {
                             player = this.battle.battlers[CharacterKind.Hero][i]
                                 .player;

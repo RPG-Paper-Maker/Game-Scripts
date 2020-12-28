@@ -10,8 +10,8 @@
 */
 
 import { Base } from "./Base";
-import { System, Manager } from "../index";
-import { MapObject, Player } from "../Core";
+import { System } from "../index";
+import { MapObject, Player, Game } from "../Core";
 
 /** @class
  *  An event command for changing a hero name.
@@ -60,11 +60,11 @@ class ChangeName extends Base {
         let targets: Player[];
         switch (this.selection) {
             case 0:
-                targets = [Manager.Stack.game.getHeroByInstanceID(this
+                targets = [Game.current.getHeroByInstanceID(this
                     .heInstanceID.getValue())];
                 break;
             case 1:
-                targets = Manager.Stack.game.getTeam(this.groupIndex);
+                targets = Game.current.getTeam(this.groupIndex);
                 break;
         }
         let target: Player;

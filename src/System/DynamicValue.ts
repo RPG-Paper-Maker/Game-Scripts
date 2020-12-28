@@ -13,8 +13,7 @@ import { Enum, Utils } from "../Common";
 import DynamicValueKind = Enum.DynamicValueKind;
 import { System, Datas } from "../index";
 import { StructIterator } from "../EventCommand";
-import { Stack } from "../Manager";
-import { ReactionInterpreter } from "../Core";
+import { ReactionInterpreter, Game } from "../Core";
 
 interface StructJSON
 {
@@ -293,7 +292,7 @@ class DynamicValue extends System.Base {
     getValue(): any {
         switch (this.kind) {
             case DynamicValueKind.Variable:
-                return Stack.game.variables[this.value];
+                return Game.current.variables[this.value];
             case DynamicValueKind.Parameter:
                 return ReactionInterpreter.currentParameters[this.value]
                     .getValue();

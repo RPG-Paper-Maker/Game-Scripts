@@ -13,7 +13,7 @@ import { Graphic, Datas, Manager, Scene } from "../index.js";
 import { Enum, Constants, Platform } from "../Common/index.js";
 var Align = Enum.Align;
 var PictureKind = Enum.PictureKind;
-import { Picture2D } from "../Core/index.js";
+import { Picture2D, Game } from "../Core/index.js";
 /** @class
  *  A scene in the menu for loading a game.
  *  @extends Scene.SaveLoadGame
@@ -43,16 +43,16 @@ class LoadGame extends SaveLoadGame {
         super.onKeyPressed(key);
         // If action, load the selected slot
         if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Action)) {
-            Manager.Stack.game = this.windowChoicesSlots
+            Game.current = this.windowChoicesSlots
                 .getCurrentContent().game;
-            if (Manager.Stack.game.isEmpty) {
-                Manager.Stack.game = null;
+            if (Game.current.isEmpty) {
+                Game.current = null;
                 Datas.Systems.soundImpossible.playSound();
             }
             else {
                 Datas.Systems.soundConfirmation.playSound();
                 // Initialize properties for hero
-                Manager.Stack.game.hero.initializeProperties();
+                Game.current.hero.initializeProperties();
                 // Stop video if existing
                 if (!Datas.TitlescreenGameover.isTitleBackgroundImage) {
                     Platform.canvasVideos.classList.add(Constants.CLASS_HIDDEN);
@@ -61,7 +61,7 @@ class LoadGame extends SaveLoadGame {
                 }
                 // Pop load and title screen from the stack
                 Manager.Stack.pop();
-                Manager.Stack.replace(new Scene.Map(Manager.Stack.game
+                Manager.Stack.replace(new Scene.Map(Game.current
                     .currentMapID));
             }
         }

@@ -29,8 +29,6 @@ class Stack {
     public static elapsedTime = 0;
     public static averageElapsedTime = 0;
     public static lastUpdateTime = new Date().getTime();
-    public static game: Game = null;
-    public static currentMap: Scene.Map;
     public static displayedPictures: [number, Picture2D][] = [];
     public static isInMainMenu: boolean = false;
 
@@ -143,8 +141,8 @@ class Stack {
      */
     static update() {
         // Update game timer if there's a current game
-        if (this.game !== null) {
-            this.game.playTime.update();
+        if (Game.current !== null) {
+            Game.current.playTime.update();
         }
 
         // Update songs manager

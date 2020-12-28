@@ -10,7 +10,7 @@
 */
 
 import { Camera, Node, ReactionInterpreter, MapObject } from "../Core";
-import { Manager, System } from "../index";
+import { System, Scene } from "../index";
 import { Utils } from "../Common";
 
 /** @class
@@ -68,7 +68,7 @@ class Base {
                 endingReactions.push(i);
             }
             // If changed map, STOP
-            if (!Manager.Stack.currentMap || Manager.Stack.currentMap.loading) {
+            if (!Scene.Map.current || Scene.Map.current.loading) {
                 return;
             }
         }

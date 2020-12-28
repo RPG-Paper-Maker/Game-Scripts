@@ -14,7 +14,7 @@ import ElementMapKind = Enum.ElementMapKind;
 import { MapElement, StructMapElementCollision } from "./MapElement";
 import { THREE } from "../Globals";
 import { Position } from "./Position";
-import { Datas, Manager, Core } from "../index";
+import { Datas, Core, Scene } from "../index";
 import { Vector3 } from "./Vector3";
 import { Vector2 } from "./Vector2";
 
@@ -214,7 +214,7 @@ class Sprite extends MapElement {
         w = Math.floor(this.textureRect[2] / 2);
         h = Math.floor(this.textureRect[3] / 2);
         if (tileset) {
-            let collisions = Manager.Stack.currentMap.mapProperties.tileset.picture
+            let collisions = Scene.Map.current.mapProperties.tileset.picture
                 .getSquaresForTexture(this.textureRect);
             let rect: number[];
             for (let i = 0, l = collisions.length; i < l; i++) {

@@ -11,7 +11,7 @@
 import { THREE } from "../Globals.js";
 import { MapObject } from "./MapObject.js";
 import { Position } from "./Position.js";
-import { System, Datas, Manager } from "../index.js";
+import { System, Datas, Manager, Scene } from "../index.js";
 import { Constants, Enum, Utils } from "../Common/index.js";
 import { Floor } from "./Floor.js";
 import { Autotiles } from "./Autotiles.js";
@@ -24,6 +24,7 @@ import { Mountains } from "./Mountains.js";
 import { Mountain } from "./Mountain.js";
 import { Object3DBox } from "./Object3DBox.js";
 import { Object3DCustom } from "./Object3DCustom.js";
+import { Game } from "./Game.js";
 /** @class
  *  A portion of the map.
  *  @param {Portion} portion
@@ -93,7 +94,7 @@ class MapPortion {
      *  @param {Record<string, any>} json Json object describing the floors
      */
     readFloors(json) {
-        let material = Manager.Stack.currentMap.textureTileset;
+        let material = Scene.Map.current.textureTileset;
         let texture = Manager.GL.getMaterialTexture(material);
         let width = texture ? texture.image.width : 0;
         let height = texture ? texture.image.height : 0;
@@ -142,7 +143,7 @@ class MapPortion {
         geometry.uvsNeedUpdate = true;
         this.staticFloorsMesh = new THREE.Mesh(geometry, material);
         this.staticFloorsMesh.renderOrder = 0;
-        Manager.Stack.currentMap.scene.add(this.staticFloorsMesh);
+        Scene.Map.current.scene.add(this.staticFloorsMesh);
     }
     /**
      *  Read the JSON associated to the autotiles in the portion.
@@ -153,11 +154,11 @@ class MapPortion {
             return;
         }
         let texture = null;
-        let autotilesLength = Manager.Stack.currentMap.texturesAutotiles.length;
+        let autotilesLength = Scene.Map.current.texturesAutotiles.length;
         // Create autotiles according to the textures
         let i;
         for (i = 0; i < autotilesLength; i++) {
-            this.staticAutotilesList.push(new Autotiles(Manager.Stack.currentMap
+            this.staticAutotilesList.push(new Autotiles(Scene.Map.current
                 .texturesAutotiles[i]));
         }
         // Read and update geometry
@@ -169,7 +170,7 @@ class MapPortion {
             indexPos = position.toIndex();
             texture = null;
             for (index = 0; index < autotilesLength; index++) {
-                textureAutotile = Manager.Stack.currentMap.texturesAutotiles[index];
+                textureAutotile = Scene.Map.current.texturesAutotiles[index];
                 if (textureAutotile.isInTexture(autotile.autotileID, autotile
                     .texture)) {
                     texture = textureAutotile;
@@ -189,7 +190,7 @@ class MapPortion {
         for (i = 0, l = this.staticAutotilesList.length; i < l; i++) {
             autotiles = this.staticAutotilesList[i];
             autotiles.createMesh();
-            Manager.Stack.currentMap.scene.add(autotiles.mesh);
+            Scene.Map.current.scene.add(autotiles.mesh);
         }
     }
     /**
@@ -204,7 +205,7 @@ class MapPortion {
      *  @param {Record<string, any>} json Json object describing the sprites globals
     */
     readSpritesGlobals(json) {
-        let material = Manager.Stack.currentMap.textureTileset;
+        let material = Scene.Map.current.textureTileset;
         let staticGeometry = new THREE.Geometry();
         let count = 0;
         staticGeometry.faceVertexUvs[0] = [];
@@ -225,7 +226,7 @@ class MapPortion {
                     plane.position.set(localPosition.x, localPosition.y, localPosition.z);
                     plane.renderOrder = 999;
                     this.faceSpritesList.push(plane);
-                    Manager.Stack.currentMap.scene.add(plane);
+                    Scene.Map.current.scene.add(plane);
                 }
                 else {
                     resultUpdate = sprite.updateGeometry(staticGeometry, texture
@@ -239,7 +240,7 @@ class MapPortion {
         staticGeometry.uvsNeedUpdate = true;
         this.staticSpritesMesh = new THREE.Mesh(staticGeometry, material);
         this.staticSpritesMesh.renderOrder = 999;
-        Manager.Stack.currentMap.scene.add(this.staticSpritesMesh);
+        Scene.Map.current.scene.add(this.staticSpritesMesh);
     }
     /**
      *  Read the JSON associated to the sprites walls in the portion.
@@ -247,7 +248,7 @@ class MapPortion {
      *  walls
      */
     readSpritesWalls(json) {
-        let wallsIds = Manager.Stack.currentMap.texturesWalls.length;
+        let wallsIds = Scene.Map.current.texturesWalls.length;
         let hash = new Array(wallsIds);
         // Initialize all walls to null
         let i;
@@ -267,7 +268,7 @@ class MapPortion {
                 if (obj === null) {
                     geometry = new THREE.Geometry();
                     geometry.faceVertexUvs[0] = [];
-                    material = Manager.Stack.currentMap.texturesWalls[sprite.id];
+                    material = Scene.Map.current.texturesWalls[sprite.id];
                     count = 0;
                     obj = {
                         geometry: geometry,
@@ -299,7 +300,7 @@ class MapPortion {
                 geometry.uvsNeedUpdate = true;
                 mesh = new THREE.Mesh(geometry, obj.material);
                 this.staticWallsList.push(mesh);
-                Manager.Stack.currentMap.scene.add(mesh);
+                Scene.Map.current.scene.add(mesh);
             }
         }
     }
@@ -312,11 +313,11 @@ class MapPortion {
             return;
         }
         let texture = null;
-        let mountainsLength = Manager.Stack.currentMap.texturesMountains.length;
+        let mountainsLength = Scene.Map.current.texturesMountains.length;
         // Create mountains according to the textures
         let i;
         for (i = 0; i < mountainsLength; i++) {
-            this.staticMountainsList.push(new Mountains(Manager.Stack.currentMap
+            this.staticMountainsList.push(new Mountains(Scene.Map.current
                 .texturesMountains[i]));
         }
         // Read and update geometry
@@ -329,7 +330,7 @@ class MapPortion {
             mountain.read(jsonMountain.v);
             indexPos = position.toIndex();
             for (index = 0; index < mountainsLength; index++) {
-                textureMountain = Manager.Stack.currentMap.texturesMountains[index];
+                textureMountain = Scene.Map.current.texturesMountains[index];
                 if (textureMountain.isInTexture(mountain.mountainID)) {
                     texture = textureMountain;
                     mountains = this.staticMountainsList[index];
@@ -345,7 +346,7 @@ class MapPortion {
         for (i = 0, l = this.staticMountainsList.length; i < l; i++) {
             mountains = this.staticMountainsList[i];
             mountains.createMesh();
-            Manager.Stack.currentMap.scene.add(mountains.mesh);
+            Scene.Map.current.scene.add(mountains.mesh);
         }
         // Handle overflow
         jsonMountain = json.o;
@@ -359,7 +360,7 @@ class MapPortion {
     */
     readObjects3D(json) {
         // Initialize
-        let nbTextures = Manager.Stack.currentMap.texturesObjects3D.length;
+        let nbTextures = Scene.Map.current.texturesObjects3D.length;
         let hash = new Array(nbTextures);
         let i;
         for (i = 1; i <= nbTextures; i++) {
@@ -398,7 +399,7 @@ class MapPortion {
                     if (obj === null) {
                         geometry = new THREE.Geometry();
                         geometry.faceVertexUvs[0] = [];
-                        material = Manager.Stack.currentMap.texturesObjects3D[obj3D.datas.pictureID];
+                        material = Scene.Map.current.texturesObjects3D[obj3D.datas.pictureID];
                         count = 0;
                         obj = {
                             geometry: geometry,
@@ -430,7 +431,7 @@ class MapPortion {
                 mesh = new THREE.Mesh(geometry, obj.material);
                 this.staticObjects3DList.push(mesh);
                 mesh.renderOrder = 999;
-                Manager.Stack.currentMap.scene.add(mesh);
+                Scene.Map.current.scene.add(mesh);
             }
         }
     }
@@ -441,7 +442,7 @@ class MapPortion {
      *  at the beginning of the game
     */
     readObjects(json, isMapHero) {
-        let datas = Manager.Stack.currentMap.getObjectsAtPortion(this.portion);
+        let datas = Scene.Map.current.getObjectsAtPortion(this.portion);
         let objectsM = datas.m;
         let objectsR = datas.r;
         let m = objectsM.length;
@@ -496,36 +497,35 @@ class MapPortion {
     cleanAll() {
         // Static stuff
         if (this.staticFloorsMesh !== null) {
-            Manager.Stack.currentMap.scene.remove(this.staticFloorsMesh);
+            Scene.Map.current.scene.remove(this.staticFloorsMesh);
         }
         if (this.staticSpritesMesh !== null) {
-            Manager.Stack.currentMap.scene.remove(this.staticSpritesMesh);
+            Scene.Map.current.scene.remove(this.staticSpritesMesh);
         }
         let i, l;
         for (i = 0, l = this.faceSpritesList.length; i < l; i++) {
-            Manager.Stack.currentMap.scene.remove(this.faceSpritesList[i]);
+            Scene.Map.current.scene.remove(this.faceSpritesList[i]);
         }
         for (i = 0, l = this.staticWallsList.length; i < l; i++) {
-            Manager.Stack.currentMap.scene.remove(this.staticWallsList[i]);
+            Scene.Map.current.scene.remove(this.staticWallsList[i]);
         }
         for (i = 0, l = this.staticAutotilesList.length; i < l; i++) {
-            Manager.Stack.currentMap.scene.remove(this.staticAutotilesList[i]
+            Scene.Map.current.scene.remove(this.staticAutotilesList[i]
                 .mesh);
         }
         for (i = 0, l = this.staticMountainsList.length; i < l; i++) {
-            Manager.Stack.currentMap.scene.remove(this.staticMountainsList[i]
+            Scene.Map.current.scene.remove(this.staticMountainsList[i]
                 .mesh);
         }
         for (i = 0, l = this.staticObjects3DList.length; i < l; i++) {
-            Manager.Stack.currentMap.scene.remove(this.staticObjects3DList[i]);
+            Scene.Map.current.scene.remove(this.staticObjects3DList[i]);
         }
         // Objects
         for (i = 0, l = this.objectsList.length; i < l; i++) {
             this.objectsList[i].removeFromScene();
         }
         // Remove moved objects from the scene
-        let datas = Manager.Stack.game.getPotionsDatas(Manager.Stack.currentMap
-            .id, this.portion);
+        let datas = Game.current.getPotionsDatas(Scene.Map.current.id, this.portion);
         let objects = datas.min;
         for (i = 0, l = objects.length; i < l; i++) {
             objects[i].removeFromScene();
@@ -611,7 +611,7 @@ class MapPortion {
                     for (c = -z; c <= z; c++) {
                         positionPlus = new Position(position.x + a, position.y +
                             b, position.z + c);
-                        if (Manager.Stack.currentMap.isInMap(positionPlus) && this
+                        if (Scene.Map.current.isInMap(positionPlus) && this
                             .isPositionIn(positionPlus)) {
                             this.boundingBoxesSprites[positionPlus.toIndex()]
                                 .push(objCollision);
@@ -645,7 +645,7 @@ class MapPortion {
                 for (b = minH; b <= maxH; b++) {
                     for (c = minD; c <= maxD; c++) {
                         positionPlus = new Position(centeredPosition.x + a, centeredPosition.y + b, centeredPosition.z + c);
-                        if (Manager.Stack.currentMap.isInMap(positionPlus) &&
+                        if (Scene.Map.current.isInMap(positionPlus) &&
                             this.isPositionIn(positionPlus)) {
                             if (side) {
                                 objCollisionPlus = {};

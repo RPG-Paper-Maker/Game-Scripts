@@ -16,7 +16,7 @@ var OrientationWindow = Enum.OrientationWindow;
 var ItemKind = Enum.ItemKind;
 var TargetKind = Enum.TargetKind;
 var AvailableKind = Enum.AvailableKind;
-import { WindowBox, WindowChoices } from "../Core/index.js";
+import { WindowBox, WindowChoices, Game } from "../Core/index.js";
 /** @class
  *  A scene in the menu for describing inventory.
  *  @extends Scene.Base
@@ -82,11 +82,11 @@ class MenuInventory extends Base {
      */
     updateForTab() {
         let indexTab = this.windowChoicesTabs.currentSelectedIndex;
-        let nbItems = Manager.Stack.game.items.length;
+        let nbItems = Game.current.items.length;
         let list = [];
         let ownedItem, item;
         for (let i = 0; i < nbItems; i++) {
-            ownedItem = Manager.Stack.game.items[i];
+            ownedItem = Game.current.items[i];
             item = Datas.Items.get(ownedItem.id);
             if (indexTab === 0 || (indexTab === 1 && (ownedItem.kind ===
                 ItemKind.Item && item.consumable)) || (indexTab === 2 && (ownedItem.kind === ItemKind.Item && item.type === 1)) || (indexTab === 3 && (ownedItem.kind === ItemKind.Item && item.type
@@ -104,7 +104,7 @@ class MenuInventory extends Base {
      */
     useItem() {
         let graphic = this.windowInformations.content;
-        Manager.Stack.game.useItem(graphic.item);
+        Game.current.useItem(graphic.item);
         if (graphic.item.nb > 0) {
             graphic.updateNb();
         }
@@ -139,7 +139,7 @@ class MenuInventory extends Base {
      *  Update the scene.
      */
     update() {
-        Scene.Base.prototype.update.call(Manager.Stack.currentMap);
+        Scene.Base.prototype.update.call(Scene.Map.current);
         if (this.windowChoicesList.currentSelectedIndex !== -1) {
             this.windowBoxUseItem.update();
         }
@@ -149,7 +149,7 @@ class MenuInventory extends Base {
      *  @param {number} key The key ID
      */
     onKeyPressed(key) {
-        Scene.Base.prototype.onKeyPressed.call(Manager.Stack.currentMap, key);
+        Scene.Base.prototype.onKeyPressed.call(Scene.Map.current, key);
         let graphic = this.windowInformations.content;
         switch (this.substep) {
             case 0:
@@ -200,7 +200,7 @@ class MenuInventory extends Base {
      *  @param {number} key The key ID
      */
     onKeyReleased(key) {
-        Scene.Base.prototype.onKeyReleased.call(Manager.Stack.currentMap, key);
+        Scene.Base.prototype.onKeyReleased.call(Scene.Map.current, key);
     }
     /**
      *  Handle scene pressed repeat key.
@@ -208,8 +208,7 @@ class MenuInventory extends Base {
      *  @returns {boolean}
      */
     onKeyPressedRepeat(key) {
-        return Scene.Base.prototype.onKeyPressedRepeat.call(Manager.Stack
-            .currentMap, key);
+        return Scene.Base.prototype.onKeyPressedRepeat.call(Scene.Map.current, key);
     }
     /**
      *  Handle scene pressed and repeat key.
@@ -217,8 +216,8 @@ class MenuInventory extends Base {
      *  @returns {boolean}
      */
     onKeyPressedAndRepeat(key) {
-        let res = Scene.Base.prototype.onKeyPressedAndRepeat.call(Manager.Stack
-            .currentMap, key);
+        let res = Scene.Base.prototype.onKeyPressedAndRepeat.call(Scene.Map
+            .current, key);
         switch (this.substep) {
             case 0:
                 this.moveTabKey(key);
@@ -235,7 +234,7 @@ class MenuInventory extends Base {
      */
     drawHUD() {
         // Draw the local map behind
-        Manager.Stack.currentMap.drawHUD();
+        Scene.Map.current.drawHUD();
         // Draw the menu
         this.windowTop.draw();
         this.windowChoicesTabs.draw();

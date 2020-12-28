@@ -10,9 +10,9 @@
 */
 
 import { Base } from "./Base";
-import { System, Manager } from "../index";
+import { System } from "../index";
 import { Utils, Enum } from "../Common";
-import { MapObject, Player, Item } from "../Core";
+import { MapObject, Player, Item, Game } from "../Core";
 import ItemKind = Enum.ItemKind;
 
 /** @class
@@ -72,11 +72,11 @@ class ChangeEquipment extends Base {
         let targets: Player[];
         switch (this.selection) {
             case 0:
-                targets = [Manager.Stack.game.getHeroByInstanceID(this
+                targets = [Game.current.getHeroByInstanceID(this
                     .heInstanceID.getValue())];
                 break;
             case 1:
-                targets = Manager.Stack.game.getTeam(this.groupIndex);
+                targets = Game.current.getTeam(this.groupIndex);
                 break;
         }
         let target: Player, item: Item;

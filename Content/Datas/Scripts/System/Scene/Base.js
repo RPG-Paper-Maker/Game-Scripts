@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { ReactionInterpreter } from "../Core/index.js";
-import { Manager } from "../index.js";
+import { Scene } from "../index.js";
 import { Utils } from "../Common/index.js";
 /** @class
  *   Abstract class for the game stack.
@@ -56,7 +56,7 @@ class Base {
                 endingReactions.push(i);
             }
             // If changed map, STOP
-            if (!Manager.Stack.currentMap || Manager.Stack.currentMap.loading) {
+            if (!Scene.Map.current || Scene.Map.current.loading) {
                 return;
             }
         }

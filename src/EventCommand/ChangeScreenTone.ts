@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { System, Datas, Manager } from "../index";
+import { System, Datas, Manager, Scene } from "../index";
 import { Utils } from "../Common";
 import { MapObject } from "../Core";
 
@@ -111,8 +111,8 @@ class ChangeScreenTone extends Base {
                 currentState.finalDifBlue));
             Manager.GL.screenTone.setW(Manager.GL.screenTone.w + (timeRate * 
                 currentState.finalDifGrey));
-            Manager.GL.updateBackgroundColor(Manager.Stack.currentMap
-                .mapProperties.backgroundColor);
+            Manager.GL.updateBackgroundColor(Scene.Map.current.mapProperties
+                .backgroundColor);
 
             // If time = 0, then this is the end of the command
             if (currentState.timeLeft === 0) {

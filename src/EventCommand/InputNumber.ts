@@ -10,8 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { MapObject } from "../Core";
-import { Manager } from "../index";
+import { MapObject, Game } from "../Core";
 import { KeyEvent, Platform, ScreenResolution } from "../Common";
 
 /** @class
@@ -53,7 +52,7 @@ class InputNumber extends Base {
         number
     {
         if (currentState.confirmed) {
-            Manager.Stack.game.variables[this.id] = currentState.entered;
+            Game.current.variables[this.id] = currentState.entered;
             return 1;
         }
         return 0;

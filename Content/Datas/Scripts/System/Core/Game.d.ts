@@ -11,6 +11,7 @@ import { Portion } from "./Portion.js";
  *  @param {number} slot The number of the slot to load
  */
 declare class Game {
+    static current: Game;
     slot: number;
     hero: MapObject;
     heroBattle: MapObject;

@@ -11,7 +11,7 @@
 
 import { Land } from "./Land";
 import { Position } from "./Position";
-import { Manager, Datas } from "../index";
+import { Datas, Scene } from "../index";
 import { StructMapElementCollision } from "./MapElement";
 
 /** @class
@@ -52,7 +52,7 @@ class Floor extends Land {
         number, height: number, count: number): StructMapElementCollision
     {
         return (width === 0 || height === 0) ? null : super.updateGeometryLand(
-            geometry, Manager.Stack.currentMap.mapProperties.tileset.picture
+            geometry, Scene.Map.current.mapProperties.tileset.picture
             .getCollisionAt(this.texture), position, width, height, (this
             .texture[0] * Datas.Systems.SQUARE_SIZE) / width, (this.texture[1] * 
             Datas.Systems.SQUARE_SIZE) / height, (this.texture[2] * Datas

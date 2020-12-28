@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Datas, Manager } from "../index.js";
+import { Datas } from "../index.js";
 import { Enum, Mathf, Interpreter, Utils } from "../Common/index.js";
 var CharacterKind = Enum.CharacterKind;
 var EffectSpecialActionKind = Enum.EffectSpecialActionKind;
@@ -16,6 +16,7 @@ var EffectKind = Enum.EffectKind;
 var MonsterActionKind = Enum.MonsterActionKind;
 var TargetKind = Enum.TargetKind;
 var MonsterActionTargetKind = Enum.MonsterActionTargetKind;
+import { Game } from "../Core/index.js";
 // -------------------------------------------------------
 //
 //  CLASS SceneBattle
@@ -75,7 +76,7 @@ class BattleEnemyAttack {
                 }
             }
             if (action.isConditionVariable && !Mathf.OPERATORS_COMPARE[action
-                .operationKindVariable](Manager.Stack.game.variables[action
+                .operationKindVariable](Game.current.variables[action
                 .variableID], action.variableValueCompare.getValue())) {
                 continue;
             }

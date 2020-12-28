@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { Manager, Graphic, Datas, Scene, System } from "../index";
-import { WindowBox, WindowChoices, Player, Item } from "../Core";
+import { WindowBox, WindowChoices, Player, Item, Game } from "../Core";
 import { Enum } from "../Common";
 import Align = Enum.Align;
 import OrientationWindow = Enum.OrientationWindow;
@@ -36,10 +36,10 @@ class MenuEquip extends Base {
         super(false);
 
         // Tab heroes
-        let nbHeroes = Manager.Stack.game.teamHeroes.length;
+        let nbHeroes = Game.current.teamHeroes.length;
         let listHeroes = new Array(nbHeroes);
         for (let i = 0; i < nbHeroes; i++) {
-            listHeroes[i] = new Graphic.PlayerDescription(Manager.Stack.game
+            listHeroes[i] = new Graphic.PlayerDescription(Game.current
                 .teamHeroes[i]);
         }
 
@@ -89,7 +89,7 @@ class MenuEquip extends Base {
         let l = Datas.BattleSystems.equipmentsOrder.length;
         let list = new Array(l);
         for (let i = 0; i < l; i++) {
-            list[i] = new Graphic.Equip(Manager.Stack.game.teamHeroes[this
+            list[i] = new Graphic.Equip(Game.current.teamHeroes[this
                 .windowChoicesTabs.currentSelectedIndex], Datas.BattleSystems
                 .equipmentsOrder[i], equipLength);
         }
@@ -109,8 +109,8 @@ class MenuEquip extends Base {
         let list: Graphic.Base[] = [new Graphic.Text("[Remove]")];
         let item: Item, systemItem: System.CommonSkillItem, type: System
             .WeaponArmorKind, nbItem: number;
-        for (let i = 0, l = Manager.Stack.game.items.length; i < l; i++) {
-            item = Manager.Stack.game.items[i];
+        for (let i = 0, l = Game.current.items.length; i < l; i++) {
+            item = Game.current.items[i];
             if (item.kind !== ItemKind.Item) {
                 systemItem = item.getItemInformations();
                 type = systemItem.getType();
@@ -129,7 +129,7 @@ class MenuEquip extends Base {
      *  Update the informations to display for equipment stats.
      */
     updateInformations() {
-        let player = Manager.Stack.game.teamHeroes[this.windowChoicesTabs
+        let player = Game.current.teamHeroes[this.windowChoicesTabs
             .currentSelectedIndex];
         if (this.selectedEquipment === -1) {
             this.list = [];
@@ -184,7 +184,7 @@ class MenuEquip extends Base {
      *  Remove the equipment of the character.
      */
     remove() {
-        let character = Manager.Stack.game.teamHeroes[this.windowChoicesTabs
+        let character = Game.current.teamHeroes[this.windowChoicesTabs
             .currentSelectedIndex];
         let id = Datas.BattleSystems.equipmentsOrder[this.windowChoicesEquipment
             .currentSelectedIndex];
@@ -201,7 +201,7 @@ class MenuEquip extends Base {
      */
     equip() {
         let index = this.windowChoicesTabs.currentSelectedIndex;
-        let character = Manager.Stack.game.teamHeroes[index];
+        let character = Game.current.teamHeroes[index];
         let gameItem = (<Graphic.Item> this.windowChoicesList
             .getCurrentContent()).item;
         let id = Datas.BattleSystems.equipmentsOrder[this.windowChoicesEquipment
@@ -211,8 +211,8 @@ class MenuEquip extends Base {
 
         // Remove one equip from inventory
         let item: Item;
-        for (let i = 0, l = Manager.Stack.game.items.length; i < l; i++) {
-            item = Manager.Stack.game.items[i];
+        for (let i = 0, l = Game.current.items.length; i < l; i++) {
+            item = Game.current.items[i];
             if (item.kind === gameItem.kind && item.id === gameItem.id) {
                 item.remove(1);
                 break;
@@ -228,7 +228,7 @@ class MenuEquip extends Base {
      *  Update the stats.
      */
     updateStats() {
-        Manager.Stack.game.teamHeroes[this.windowChoicesTabs
+        Game.current.teamHeroes[this.windowChoicesTabs
             .currentSelectedIndex].updateEquipmentStats(this.list, this.bonus);
     }
 
@@ -236,7 +236,7 @@ class MenuEquip extends Base {
      *  Update the scene.
      */
     update() {
-        Scene.Base.prototype.update.call(Manager.Stack.currentMap);
+        Scene.Base.prototype.update.call(Scene.Map.current);
     }
 
     /** 
@@ -244,7 +244,7 @@ class MenuEquip extends Base {
      *  @param {number} key The key ID
      */
     onKeyPressed(key: number) {
-        Scene.Base.prototype.onKeyPressed.call(Manager.Stack.currentMap, key);
+        Scene.Base.prototype.onKeyPressed.call(Scene.Map.current, key);
         if (this.selectedEquipment === -1) {
             if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
                 .Cancel) || Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
@@ -296,7 +296,7 @@ class MenuEquip extends Base {
      *  @param {number} key The key ID
      */
     onKeyReleased(key: number) {
-        Scene.Base.prototype.onKeyReleased.call(Manager.Stack.currentMap, key);
+        Scene.Base.prototype.onKeyReleased.call(Scene.Map.current, key);
     }
 
     /** 
@@ -305,8 +305,7 @@ class MenuEquip extends Base {
      *  @returns {boolean}
     */
     onKeyPressedRepeat(key: number): boolean {
-        return Scene.Base.prototype.onKeyPressedRepeat.call(Manager.Stack
-            .currentMap, key);
+        return Scene.Base.prototype.onKeyPressedRepeat.call(Scene.Map.current, key);
     }
 
     /** 
@@ -315,8 +314,8 @@ class MenuEquip extends Base {
      *  @returns {boolean}
     */
     onKeyPressedAndRepeat(key: number): boolean {
-        let res = Scene.Base.prototype.onKeyPressedAndRepeat.call(Manager.Stack
-            .currentMap, key);
+        let res = Scene.Base.prototype.onKeyPressedAndRepeat.call(Scene.Map
+            .current, key);
         this.moveTabKey(key);
         return res;
     }
@@ -326,7 +325,7 @@ class MenuEquip extends Base {
      */
     drawHUD() {
         // Draw the local map behind
-        Manager.Stack.currentMap.drawHUD();
+        Scene.Map.current.drawHUD();
 
         // Draw the menu
         this.windowTop.draw();

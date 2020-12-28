@@ -10,7 +10,7 @@
 */
 import { Base } from "./Base.js";
 import { THREE } from "../Globals.js";
-import { Datas, System, Manager } from "../index.js";
+import { Datas, System, Manager, Scene } from "../index.js";
 import { PlaySong } from "./PlaySong.js";
 import { DynamicValue } from "./DynamicValue.js";
 import { MapObject } from "../Core/MapObject.js";
@@ -90,8 +90,8 @@ class MapProperties extends Base {
         let size = 10000 * Datas.Systems.SQUARE_SIZE / Constants
             .BASIC_SQUARE_SIZE;
         this.skyboxGeometry = new THREE.BoxGeometry(size, size, size);
-        Manager.Stack.currentMap.scene.add(new THREE.Mesh(this.skyboxGeometry, Datas.Systems.getSkybox(this.backgroundSkyboxID.getValue())
-            .createTextures()));
+        Scene.Map.current.scene.add(new THREE.Mesh(this.skyboxGeometry, Datas
+            .Systems.getSkybox(this.backgroundSkyboxID.getValue()).createTextures()));
     }
 }
 export { MapProperties };

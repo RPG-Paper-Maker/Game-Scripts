@@ -17,6 +17,7 @@ var Align = Enum.Align;
 var ItemKind = Enum.ItemKind;
 var AvailableKind = Enum.AvailableKind;
 var TargetKind = Enum.TargetKind;
+import { Game } from "../Core/index.js";
 // -------------------------------------------------------
 //
 //  CLASS BattleSelection
@@ -56,8 +57,8 @@ class BattleSelection {
         this.battle.listItems = [];
         // Items
         let ownedItem, item;
-        for (let i = 0, l = Manager.Stack.game.items.length; i < l; i++) {
-            ownedItem = Manager.Stack.game.items[i];
+        for (let i = 0, l = Game.current.items.length; i < l; i++) {
+            ownedItem = Game.current.items[i];
             item = Datas.Items.get(ownedItem.id);
             if (ownedItem.kind === ItemKind.Item && item.consumable && (item
                 .availableKind === AvailableKind.Battle || item.availableKind

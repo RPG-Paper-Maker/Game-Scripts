@@ -9,8 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
-import { System, Datas, Manager } from "../index.js";
+import { System, Datas } from "../index.js";
 import { Utils, Mathf, Interpreter } from "../Common/index.js";
+import { Game } from "../Core/index.js";
 /** @class
  *  An event command for changing a statistic.
  *  @extends EventCommand.Base
@@ -64,11 +65,11 @@ class ChangeAStatistic extends Base {
         let targets;
         switch (this.selection) {
             case 0:
-                targets = [Manager.Stack.game.getHeroByInstanceID(this
+                targets = [Game.current.getHeroByInstanceID(this
                         .heInstanceID.getValue())];
                 break;
             case 1:
-                targets = Manager.Stack.game.getTeam(this.groupIndex);
+                targets = Game.current.getTeam(this.groupIndex);
                 break;
         }
         let target;

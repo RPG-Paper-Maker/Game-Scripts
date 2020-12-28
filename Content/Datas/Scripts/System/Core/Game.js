@@ -332,4 +332,5 @@ class Game {
         return this.mapsDatas[id][portion.x][portion.y < 0 ? 0 : 1][Math.abs(portion.y)][portion.z];
     }
 }
+Game.current = null;
 export { Game };

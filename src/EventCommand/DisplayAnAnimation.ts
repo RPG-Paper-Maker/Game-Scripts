@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { System, Datas, Manager } from "../index";
+import { System, Datas, Manager, Scene } from "../index";
 import { Utils, Enum } from "../Common";
 import { MapObject, StructSearchResult } from "../Core";
 import AnimationEffectConditionKind = Enum.AnimationEffectConditionKind;
@@ -77,13 +77,13 @@ class DisplayAnAnimation extends Base {
             }
             if (currentState.object !== null) {
                 currentState.object.topPosition = Manager.GL.toScreenPosition(
-                    currentState.object.upPosition, Manager.Stack.currentMap
+                    currentState.object.upPosition, Scene.Map.current
                     .camera.getThreeCamera());
                 currentState.object.midPosition = Manager.GL.toScreenPosition(
-                    currentState.object.halfPosition, Manager.Stack.currentMap
+                    currentState.object.halfPosition, Scene.Map.current
                     .camera.getThreeCamera());
                 currentState.object.botPosition = Manager.GL.toScreenPosition(
-                    currentState.object.position, Manager.Stack.currentMap
+                    currentState.object.position, Scene.Map.current
                     .camera.getThreeCamera());
                 currentState.animation.playSounds(currentState.frame, 
                     AnimationEffectConditionKind.None);

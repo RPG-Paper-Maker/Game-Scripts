@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
-import { System, Datas, Manager } from "../index.js";
+import { System, Datas, Manager, Scene } from "../index.js";
 import { Utils, Enum } from "../Common/index.js";
 import { MapObject } from "../Core/index.js";
 var AnimationEffectConditionKind = Enum.AnimationEffectConditionKind;
@@ -63,11 +63,11 @@ class DisplayAnAnimation extends Base {
                 currentState.waitingObject = true;
             }
             if (currentState.object !== null) {
-                currentState.object.topPosition = Manager.GL.toScreenPosition(currentState.object.upPosition, Manager.Stack.currentMap
+                currentState.object.topPosition = Manager.GL.toScreenPosition(currentState.object.upPosition, Scene.Map.current
                     .camera.getThreeCamera());
-                currentState.object.midPosition = Manager.GL.toScreenPosition(currentState.object.halfPosition, Manager.Stack.currentMap
+                currentState.object.midPosition = Manager.GL.toScreenPosition(currentState.object.halfPosition, Scene.Map.current
                     .camera.getThreeCamera());
-                currentState.object.botPosition = Manager.GL.toScreenPosition(currentState.object.position, Manager.Stack.currentMap
+                currentState.object.botPosition = Manager.GL.toScreenPosition(currentState.object.position, Scene.Map.current
                     .camera.getThreeCamera());
                 currentState.animation.playSounds(currentState.frame, AnimationEffectConditionKind.None);
                 currentState.frame++;

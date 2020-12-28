@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Bitmap, Picture2D, Tree, Node } from "../Core";
-import { Datas, System, Graphic, Manager } from "../index";
+import { Bitmap, Picture2D, Tree, Node, Game } from "../Core";
+import { Datas, System, Graphic } from "../index";
 import { Enum, Constants, Utils, ScreenResolution } from "../Common";
 import PictureKind = Enum.PictureKind;
 import TagKind = Enum.TagKind;
@@ -292,7 +292,7 @@ class Message extends Graphic.Base {
                 text = Utils.numToString(value.getValue());
                 break;
             case TagKind.HeroName:
-                text = Manager.Stack.game.getHeroByInstanceID(value.getValue())
+                text = Game.current.getHeroByInstanceID(value.getValue())
                     .name;
                 break;
             }

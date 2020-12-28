@@ -10,7 +10,7 @@
 */
 import { Node } from "./index.js";
 import { Utils, Platform } from "../Common/index.js";
-import { EventCommand, Manager } from "../index.js";
+import { EventCommand, Manager, Scene } from "../index.js";
 /** @class
  *  A reaction command interpreter.
  *  @param {MapObject} sender Current event sender (null for System events)
@@ -76,7 +76,7 @@ class ReactionInterpreter {
      *  Update the current commands
      */
     update() {
-        if (this.isFinished() || Manager.Stack.currentMap.loading || !this
+        if (this.isFinished() || Scene.Map.current.loading || !this
             .canExecute()) {
             return;
         }
@@ -89,7 +89,7 @@ class ReactionInterpreter {
                     .currentReaction, this.currentMapObject, this.currentState, this.currentParameters, this.currentTimeState, this
                     .currentCommand);
                 interpreter.currentCommandState.parallel = true;
-                Manager.Stack.currentMap.parallelCommands.push(interpreter);
+                Scene.Map.current.parallelCommands.push(interpreter);
             }
             newCommand = this.updateCommand();
             if (newCommand !== this.currentCommand) {
@@ -114,7 +114,7 @@ class ReactionInterpreter {
      *  @returns {Node}
      */
     updateCommand() {
-        if (Manager.Stack.currentMap.loading) {
+        if (Scene.Map.current.loading) {
             return this.currentCommand;
         }
         this.updateObjectParameters();
@@ -218,7 +218,7 @@ class ReactionInterpreter {
      *  @param {number} key The key ID pressed
      */
     onKeyPressed(key) {
-        if (!this.isFinished() && (!Manager.Stack.currentMap.loading && this
+        if (!this.isFinished() && (!Scene.Map.current.loading && this
             .canExecute())) {
             this.currentCommand.data.onKeyPressed(this.currentCommandState, key);
         }
@@ -228,7 +228,7 @@ class ReactionInterpreter {
      *  @param {number} key The key ID released
      */
     onKeyReleased(key) {
-        if (!this.isFinished() && (!Manager.Stack.currentMap.loading && this
+        if (!this.isFinished() && (!Scene.Map.current.loading && this
             .canExecute())) {
             this.currentCommand.data.onKeyReleased(this.currentCommandState, key);
         }
@@ -239,7 +239,7 @@ class ReactionInterpreter {
      *  @returns {boolean} false if the other keys are blocked after it
      */
     onKeyPressedRepeat(key) {
-        if (!this.isFinished() && (!Manager.Stack.currentMap.loading && this
+        if (!this.isFinished() && (!Scene.Map.current.loading && this
             .canExecute())) {
             return this.currentCommand.data.onKeyPressedRepeat(this
                 .currentCommandState, key);
@@ -253,7 +253,7 @@ class ReactionInterpreter {
      *  @returns {boolean} false if the other keys are blocked after it
     */
     onKeyPressedAndRepeat(key) {
-        if (!this.isFinished() && (!Manager.Stack.currentMap.loading && this
+        if (!this.isFinished() && (!Scene.Map.current.loading && this
             .canExecute())) {
             return this.currentCommand.data.onKeyPressedAndRepeat(this
                 .currentCommandState, key);

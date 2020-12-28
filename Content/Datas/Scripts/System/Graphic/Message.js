@@ -8,8 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Picture2D, Tree } from "../Core/index.js";
-import { Datas, System, Graphic, Manager } from "../index.js";
+import { Picture2D, Tree, Game } from "../Core/index.js";
+import { Datas, System, Graphic } from "../index.js";
 import { Enum, Constants, Utils, ScreenResolution } from "../Common/index.js";
 var PictureKind = Enum.PictureKind;
 var TagKind = Enum.TagKind;
@@ -261,7 +261,7 @@ class Message extends Graphic.Base {
                         text = Utils.numToString(value.getValue());
                         break;
                     case TagKind.HeroName:
-                        text = Manager.Stack.game.getHeroByInstanceID(value.getValue())
+                        text = Game.current.getHeroByInstanceID(value.getValue())
                             .name;
                         break;
                 }

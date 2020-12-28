@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
-import { Manager } from "../index.js";
+import { Game } from "../Core/index.js";
 import { KeyEvent, Platform, ScreenResolution } from "../Common/index.js";
 /** @class
  *  An event command for entering a number inside a variable.
@@ -42,7 +42,7 @@ class InputNumber extends Base {
     */
     update(currentState, object, state) {
         if (currentState.confirmed) {
-            Manager.Stack.game.variables[this.id] = currentState.entered;
+            Game.current.variables[this.id] = currentState.entered;
             return 1;
         }
         return 0;

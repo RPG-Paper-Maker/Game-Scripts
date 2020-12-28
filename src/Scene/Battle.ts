@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Battler, Camera, WindowBox, WindowChoices, Picture2D, Item } from "../Core";
+import { Battler, Camera, WindowBox, WindowChoices, Picture2D, Item, Game } from "../Core";
 import { Graphic, System, Scene, Manager } from "..";
 import { Enum } from "../Common";
 import CharacterKind = Enum.CharacterKind;
@@ -218,8 +218,8 @@ class Battle extends Map {
      *  Initialize and correct some camera settings for the battle start
      */
     initializeCamera() {
-        this.camera = new Camera(this.mapProperties.cameraProperties, Manager
-            .Stack.game.heroBattle);
+        this.camera = new Camera(this.mapProperties.cameraProperties, Game
+            .current.heroBattle);
         this.cameraStep = 0;
         this.cameraTick = Scene.Battle.CAMERA_TICK;
         this.cameraOffset = Battle.CAMERA_OFFSET;
@@ -323,11 +323,11 @@ class Battle extends Map {
      */
     endBattle() {
         // Heroes
-        for (let i = 0, l = Manager.Stack.game.teamHeroes.length; i < l; i++) {
+        for (let i = 0, l = Game.current.teamHeroes.length; i < l; i++) {
             this.battlers[CharacterKind.Hero][i].removeFromScene();
         }
         Manager.Stack.pop();
-        Manager.Stack.currentMap = <Scene.Map>Manager.Stack.top;
+        Scene.Map.current = <Scene.Map>Manager.Stack.top;
     }
 
     /** 

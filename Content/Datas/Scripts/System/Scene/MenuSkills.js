@@ -10,7 +10,7 @@
 */
 import { Base } from "./Base.js";
 import { Manager, Graphic, Scene, Datas } from "../index.js";
-import { WindowBox, WindowChoices, Battler } from "../Core/index.js";
+import { WindowBox, WindowChoices, Battler, Game } from "../Core/index.js";
 import { Enum, ScreenResolution } from "../Common/index.js";
 var Align = Enum.Align;
 var OrientationWindow = Enum.OrientationWindow;
@@ -24,11 +24,11 @@ class MenuSkills extends Base {
     constructor() {
         super(false);
         // Tab heroes
-        let nbHeroes = Manager.Stack.game.teamHeroes.length;
+        let nbHeroes = Game.current.teamHeroes.length;
         let listHeroes = new Array(nbHeroes);
         this.positionChoice = new Array(nbHeroes);
         for (let i = 0; i < nbHeroes; i++) {
-            listHeroes[i] = new Graphic.PlayerDescription(Manager.Stack.game
+            listHeroes[i] = new Graphic.PlayerDescription(Game.current
                 .teamHeroes[i]);
             this.positionChoice[i] = {
                 index: 0,
@@ -77,9 +77,9 @@ class MenuSkills extends Base {
      */
     updateForTab() {
         let indexTab = this.windowChoicesTabs.currentSelectedIndex;
-        Manager.Stack.currentMap.user = new Battler(Manager.Stack.game
+        Scene.Map.current.user = new Battler(Game.current
             .teamHeroes[indexTab]);
-        let skills = Manager.Stack.currentMap.user.player.sk;
+        let skills = Scene.Map.current.user.player.sk;
         // Get the first skills of the hero
         let list = [];
         for (let i = 0, l = skills.length; i < l; i++) {
@@ -90,7 +90,7 @@ class MenuSkills extends Base {
         this.windowChoicesList.unselect();
         this.windowChoicesList.offsetSelectedIndex = this.positionChoice[indexTab].offset;
         this.windowChoicesList.select(this.positionChoice[indexTab].index);
-        Manager.Stack.currentMap.user = new Battler(Manager.Stack.game
+        Scene.Map.current.user = new Battler(Game.current
             .teamHeroes[indexTab]);
     }
     /**
@@ -116,7 +116,7 @@ class MenuSkills extends Base {
      *  Update the scene.
      */
     update() {
-        Scene.Base.prototype.update.call(Manager.Stack.currentMap);
+        Scene.Base.prototype.update.call(Scene.Map.current);
         if (this.windowChoicesList.currentSelectedIndex !== -1) {
             this.windowBoxUseSkill.update();
         }
@@ -126,7 +126,7 @@ class MenuSkills extends Base {
      *  @param {number} key The key ID
      */
     onKeyPressed(key) {
-        Scene.Base.prototype.onKeyPressed.call(Manager.Stack.currentMap, key);
+        Scene.Base.prototype.onKeyPressed.call(Scene.Map.current, key);
         let graphic = this.windowInformations.content;
         switch (this.substep) {
             case 0:
@@ -154,7 +154,7 @@ class MenuSkills extends Base {
                 else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
                     .menuControls.Cancel) || Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.controls.MainMenu)) {
                     Datas.Systems.soundCancel.playSound();
-                    Manager.Stack.currentMap.user = null;
+                    Scene.Map.current.user = null;
                     Manager.Stack.pop();
                 }
                 break;
@@ -185,7 +185,7 @@ class MenuSkills extends Base {
      *  @param {number} key The key ID
      */
     onKeyReleased(key) {
-        Scene.Base.prototype.onKeyReleased.call(Manager.Stack.currentMap, key);
+        Scene.Base.prototype.onKeyReleased.call(Scene.Map.current, key);
     }
     /**
      *  Handle scene pressed repeat key.
@@ -193,8 +193,7 @@ class MenuSkills extends Base {
      *  @returns {boolean}
      */
     onKeyPressedRepeat(key) {
-        return Scene.Base.prototype.onKeyPressedRepeat.call(Manager.Stack
-            .currentMap, key);
+        return Scene.Base.prototype.onKeyPressedRepeat.call(Scene.Map.current, key);
     }
     /**
      *  Handle scene pressed and repeat key.
@@ -202,8 +201,8 @@ class MenuSkills extends Base {
      *  @returns {boolean}
      */
     onKeyPressedAndRepeat(key) {
-        let res = Scene.Base.prototype.onKeyPressedAndRepeat.call(Manager.Stack
-            .currentMap, key);
+        let res = Scene.Base.prototype.onKeyPressedAndRepeat.call(Scene.Map
+            .current, key);
         switch (this.substep) {
             case 0:
                 this.moveTabKey(key);
@@ -220,7 +219,7 @@ class MenuSkills extends Base {
      */
     drawHUD() {
         // Draw the local map behind
-        Manager.Stack.currentMap.drawHUD();
+        Scene.Map.current.drawHUD();
         // Draw the menu
         this.windowTop.draw();
         this.windowChoicesTabs.draw();

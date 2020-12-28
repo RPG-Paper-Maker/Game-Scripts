@@ -10,8 +10,8 @@
 */
 
 import { Base } from "./Base";
-import { System, Manager } from "../index";
-import { MapObject, StructSearchResult, Portion } from "../Core";
+import { System, Scene } from "../index";
+import { MapObject, StructSearchResult, Portion, Game } from "../Core";
 
 /** @class
  *  An event command for removing a specific object from map.
@@ -62,9 +62,9 @@ class RemoveObjectFromMap extends Base {
                             result.datas.m.splice(result.index, 1);
                             let index = result.datas.min.indexOf(result.object);
                             if (index === -1) {
-                                result.datas = Manager.Stack.game
-                                    .getPotionsDatas(Manager.Stack.currentMap.id
-                                    , Portion.createFromVector3(result.object
+                                result.datas = Game.current
+                                    .getPotionsDatas(Scene.Map.current.id, 
+                                    Portion.createFromVector3(result.object
                                     .position));
                                 result.datas.mout.splice(result.datas.mout
                                     .indexOf(result.object), 1);

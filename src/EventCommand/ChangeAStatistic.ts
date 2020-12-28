@@ -10,9 +10,9 @@
 */
 
 import { Base } from "./Base";
-import { System, Datas, Manager } from "../index";
+import { System, Datas } from "../index";
 import { Utils, Mathf, Interpreter } from "../Common";
-import { MapObject } from "../Core";
+import { MapObject, Game } from "../Core";
 import { Player } from "../Core";
 
 /** @class
@@ -92,11 +92,11 @@ class ChangeAStatistic extends Base {
         let targets: Player[];
         switch (this.selection) {
             case 0:
-                targets = [Manager.Stack.game.getHeroByInstanceID(this
+                targets = [Game.current.getHeroByInstanceID(this
                     .heInstanceID.getValue())];
                 break;
             case 1:
-                targets = Manager.Stack.game.getTeam(this.groupIndex);
+                targets = Game.current.getTeam(this.groupIndex);
                 break;
         }
         let target: Player;

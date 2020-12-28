@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { THREE } from "../Globals.js";
-import { System, Manager, Datas } from "../index.js";
+import { System, Manager, Datas, Scene } from "../index.js";
 import { Frame } from "./Frame.js";
 import { Enum, Utils, IO, Paths, Constants, Platform, Mathf } from "../Common/index.js";
 var Orientation = Enum.Orientation;
@@ -22,6 +22,7 @@ import { Position } from "./Position.js";
 import { CollisionSquare } from "./CollisionSquare.js";
 import { MapElement } from "./MapElement.js";
 import { Vector3 } from "./Vector3.js";
+import { Game } from "./Game.js";
 /** @class
  *  Object in local map that can move.
  *  @param {SystemObject} System The System informations
@@ -92,16 +93,14 @@ class MapObject {
                 objectID = thisObject.system.id;
                 break;
             case 0: // Hero
-                object = Manager.Stack.game.hero,
-                    objectID = Manager.Stack.game.hero.system.id;
+                object = Game.current.hero,
+                    objectID = Game.current.hero.system.id;
             default:
                 break;
         }
         // Check if direct
-        let globalPortion = Manager.Stack.currentMap.allObjects[objectID]
-            .getGlobalPortion();
-        let mapsDatas = Manager.Stack.game.getPotionsDatas(Manager.Stack
-            .currentMap.id, globalPortion);
+        let globalPortion = Scene.Map.current.allObjects[objectID].getGlobalPortion();
+        let mapsDatas = Game.current.getPotionsDatas(Scene.Map.current.id, globalPortion);
         if (object !== null) {
             return {
                 object: object,
@@ -130,10 +129,10 @@ class MapObject {
             };
         }
         // If not moving, search directly in portion
-        let localPortion = Manager.Stack.currentMap.getLocalPortion(globalPortion);
+        let localPortion = Scene.Map.current.getLocalPortion(globalPortion);
         let mapPortion;
-        if (Manager.Stack.currentMap.isInPortion(localPortion)) {
-            mapPortion = Manager.Stack.currentMap.getMapPortion(localPortion);
+        if (Scene.Map.current.isInPortion(localPortion)) {
+            mapPortion = Scene.Map.current.getMapPortion(localPortion);
             let objects = mapPortion.objectsList;
             for (i = 0, l = objects.length; i < l; i++) {
                 if (objects[i].system.id === objectID) {
@@ -143,7 +142,7 @@ class MapObject {
             }
             if (moved === null) {
                 return {
-                    object: Manager.Stack.game.hero,
+                    object: Game.current.hero,
                     id: objectID,
                     kind: 1,
                     index: -1,
@@ -173,18 +172,16 @@ class MapObject {
      *  @returns {Promise<StructSearchResult>}
      */
     static async searchOutMap(objectID) {
-        let globalPortion = Manager.Stack.currentMap.allObjects[objectID]
+        let globalPortion = Scene.Map.current.allObjects[objectID]
             .getGlobalPortion();
-        let mapsDatas = Manager.Stack.game.getPotionsDatas(Manager.Stack
-            .currentMap.id, globalPortion);
-        let json = await IO.parseFileJSON(Paths.FILE_MAPS + Manager.Stack
-            .currentMap.mapName + Constants.STRING_SLASH + globalPortion
-            .getFileName());
+        let mapsDatas = Game.current.getPotionsDatas(Scene.Map.current.id, globalPortion);
+        let json = await IO.parseFileJSON(Paths.FILE_MAPS + Scene.Map.current
+            .mapName + Constants.STRING_SLASH + globalPortion.getFileName());
         let mapPortion = new MapPortion(globalPortion);
         let moved = mapPortion.getObjFromID(json, objectID);
         if (moved === null) {
             return {
-                object: Manager.Stack.game.hero,
+                object: Game.current.hero,
                 id: objectID,
                 kind: 2,
                 index: -1,
@@ -217,19 +214,18 @@ class MapObject {
     initializeProperties() {
         let mapProp, mapStatesOpts;
         if (this.isHero) {
-            mapProp = Manager.Stack.game.heroProperties;
-            mapStatesOpts = Manager.Stack.game.heroStatesOptions;
+            mapProp = Game.current.heroProperties;
+            mapStatesOpts = Game.current.heroStatesOptions;
         }
         else if (this.isStartup) {
-            mapProp = Manager.Stack.game.startupProperties[Manager.Stack
-                .currentMap.id];
+            mapProp = Game.current.startupProperties[Scene.Map.current.id];
             mapStatesOpts = [];
             if (Utils.isUndefined(mapProp)) {
                 mapProp = [];
             }
         }
         else {
-            let obj = Manager.Stack.currentMap.allObjects[this.system.id];
+            let obj = Scene.Map.current.allObjects[this.system.id];
             if (Utils.isUndefined(obj)) {
                 Platform.showErrorMessage("Can't find object " + this.system.name +
                     " in object linking. Please remove this object from your " +
@@ -238,8 +234,7 @@ class MapObject {
                     "because we are trying to fix this issue.");
             }
             let portion = obj.getGlobalPortion();
-            let portionDatas = Manager.Stack.game.getPotionsDatas(Manager.Stack
-                .currentMap.id, portion);
+            let portionDatas = Game.current.getPotionsDatas(Scene.Map.current.id, portion);
             let indexProp = portionDatas.pi.indexOf(this.system.id);
             mapProp = (indexProp === -1) ? [] : portionDatas.p[indexProp];
             indexProp = portionDatas.soi.indexOf(this.system.id);
@@ -323,19 +318,16 @@ class MapObject {
         this.removeFromScene();
         // Updating the current state
         if (this.isHero) {
-            this.states = Manager.Stack.game.heroStates;
+            this.states = Game.current.heroStates;
         }
         else if (this.isStartup) {
-            if (!Manager.Stack.game.startupStates.hasOwnProperty(Manager.Stack
-                .currentMap.id)) {
-                Manager.Stack.game.startupStates[Manager.Stack.currentMap.id] =
-                    [1];
+            if (!Game.current.startupStates.hasOwnProperty(Scene.Map.current.id)) {
+                Game.current.startupStates[Scene.Map.current.id] = [1];
             }
-            this.states = Manager.Stack.game.startupStates[Manager.Stack
-                .currentMap.id];
+            this.states = Game.current.startupStates[Scene.Map.current.id];
         }
         else {
-            let pos = Manager.Stack.currentMap.allObjects[this.system.id];
+            let pos = Scene.Map.current.allObjects[this.system.id];
             if (Utils.isUndefined(pos)) {
                 Platform.showErrorMessage("Can't find object " + this.system.name +
                     " in object linking. Please remove this object from your " +
@@ -344,8 +336,7 @@ class MapObject {
                     "because we are trying to fix this issue.");
             }
             let portion = pos.getGlobalPortion();
-            let portionDatas = Manager.Stack.game.getPotionsDatas(Manager.Stack
-                .currentMap.id, portion);
+            let portionDatas = Game.current.getPotionsDatas(Scene.Map.current.id, portion);
             let indexState = portionDatas.si.indexOf(this.system.id);
             this.states = (indexState === -1) ? [this.system.states.length > 0 ?
                     this.system.states[0].id : 1] : portionDatas.s[indexState];
@@ -366,8 +357,8 @@ class MapObject {
             return;
         }
         let material = this.currentStateInstance === null ? null : (this
-            .currentStateInstance.graphicID === 0 ? Manager.Stack.currentMap
-            .textureTileset : Manager.Stack.currentMap.texturesCharacters[this
+            .currentStateInstance.graphicID === 0 ? Scene.Map.current
+            .textureTileset : Scene.Map.current.texturesCharacters[this
             .currentStateInstance.graphicID]);
         this.meshBoundingBox = new Array;
         let texture = Manager.GL.getMaterialTexture(material);
@@ -405,7 +396,7 @@ class MapObject {
                 .position.z);
             this.boundingBoxSettings = objCollision[1][0];
             if (this.currentStateInstance.graphicID === 0) {
-                let picture = Manager.Stack.currentMap.mapProperties.tileset
+                let picture = Scene.Map.current.mapProperties.tileset
                     .picture;
                 this.boundingBoxSettings.squares = picture ? picture
                     .getSquaresForTexture(this.currentStateInstance.rectTileset)
@@ -441,9 +432,9 @@ class MapObject {
         let position = new Vector3(this.previousPosition.x, this
             .previousPosition.y, this.previousPosition.z);
         // The speed depends on the time elapsed since the last update
-        let w = Manager.Stack.currentMap.mapProperties.length * Datas.Systems
+        let w = Scene.Map.current.mapProperties.length * Datas.Systems
             .SQUARE_SIZE;
-        let h = Manager.Stack.currentMap.mapProperties.width * Datas.Systems
+        let h = Scene.Map.current.mapProperties.width * Datas.Systems
             .SQUARE_SIZE;
         let xPlus, zPlus, res;
         if (orientation === Orientation.South || this.previousOrientation ===
@@ -595,7 +586,7 @@ class MapObject {
      */
     updateBB(position) {
         if (this.currentStateInstance.graphicID !== 0) {
-            this.boundingBoxSettings.squares = Manager.Stack.currentMap
+            this.boundingBoxSettings.squares = Scene.Map.current
                 .collisions[PictureKind.Characters][this.currentStateInstance
                 .graphicID][this.getStateIndex()];
         }
@@ -688,7 +679,7 @@ class MapObject {
             orientation = this.previousOrientation;
         }
         if (isCameraOrientation) {
-            orientation = Mathf.mod(orientation + Manager.Stack.currentMap
+            orientation = Mathf.mod(orientation + Scene.Map.current
                 .camera.getMapOrientation() - 2, 4);
         }
         this.position.set(position.x, position.y, position.z);
@@ -730,8 +721,7 @@ class MapObject {
         if (!this.isHero) {
             let previousPortion = Position.createFromVector3(this.position)
                 .getGlobalPortion();
-            let objects = Manager.Stack.game.getPotionsDatas(Manager.Stack
-                .currentMap.id, previousPortion);
+            let objects = Game.current.getPotionsDatas(Scene.Map.current.id, previousPortion);
             // Remove from the moved objects in or out of the portion
             let movedObjects = objects.mout;
             let index = movedObjects.indexOf(this);
@@ -744,16 +734,14 @@ class MapObject {
                 movedObjects.splice(index, 1);
             }
             // Add to moved objects of the original portion if not done yet
-            let originalPortion = Manager.Stack.currentMap.allObjects[this
+            let originalPortion = Scene.Map.current.allObjects[this
                 .system.id].getGlobalPortion();
-            objects = Manager.Stack.game.getPotionsDatas(Manager.Stack
-                .currentMap.id, originalPortion);
+            objects = Game.current.getPotionsDatas(Scene.Map.current.id, originalPortion);
             movedObjects = objects.m;
             if (movedObjects.indexOf(this) === -1) {
                 movedObjects.push(this);
-                movedObjects = Manager.Stack.currentMap.getMapPortion(Manager
-                    .Stack.currentMap.getLocalPortion(originalPortion))
-                    .objectsList;
+                movedObjects = Scene.Map.current.getMapPortion(Scene.Map.current
+                    .getLocalPortion(originalPortion)).objectsList;
                 index = movedObjects.indexOf(this);
                 if (index !== -1) {
                     movedObjects.splice(index, 1);
@@ -768,9 +756,8 @@ class MapObject {
         if (!this.isHero) {
             let afterPortion = Position.createFromVector3(this.position)
                 .getGlobalPortion();
-            let objects = Manager.Stack.game.getPotionsDatas(Manager.Stack
-                .currentMap.id, afterPortion);
-            let originalPortion = Manager.Stack.currentMap.allObjects[this
+            let objects = Game.current.getPotionsDatas(Scene.Map.current.id, afterPortion);
+            let originalPortion = Scene.Map.current.allObjects[this
                 .system.id].getGlobalPortion();
             if (!originalPortion.equals(afterPortion)) {
                 objects.mout.push(this);
@@ -779,7 +766,7 @@ class MapObject {
                 objects.min.push(this);
             }
             // Add or remove from scene
-            if (Manager.Stack.currentMap.isInPortion(Manager.Stack.currentMap
+            if (Scene.Map.current.isInPortion(Scene.Map.current
                 .getLocalPortion(afterPortion))) {
                 this.addToScene();
             }
@@ -793,7 +780,7 @@ class MapObject {
      */
     addToScene() {
         if (!this.isInScene && this.mesh !== null) {
-            Manager.Stack.currentMap.scene.add(this.mesh);
+            Scene.Map.current.scene.add(this.mesh);
             this.isInScene = true;
         }
     }
@@ -803,7 +790,7 @@ class MapObject {
     addBBToScene() {
         if (Datas.Systems.showBB) {
             for (let i = 0, l = this.meshBoundingBox.length; i < l; i++) {
-                Manager.Stack.currentMap.scene.add(this.meshBoundingBox[i]);
+                Scene.Map.current.scene.add(this.meshBoundingBox[i]);
             }
         }
     }
@@ -812,7 +799,7 @@ class MapObject {
      */
     removeFromScene() {
         if (this.isInScene) {
-            Manager.Stack.currentMap.scene.remove(this.mesh);
+            Scene.Map.current.scene.remove(this.mesh);
             this.removeBBFromScene();
             this.isInScene = false;
         }
@@ -823,7 +810,7 @@ class MapObject {
     removeBBFromScene() {
         if (Datas.Systems.showBB) {
             for (let i = 0, l = this.meshBoundingBox.length; i < l; i++) {
-                Manager.Stack.currentMap.scene.remove(this.meshBoundingBox[i]);
+                Scene.Map.current.scene.remove(this.meshBoundingBox[i]);
             }
         }
         this.meshBoundingBox = new Array;
@@ -919,7 +906,7 @@ class MapObject {
     updateMovingState() {
         if (!this.removed && this.currentState && this.currentState
             .objectMovingKind !== ObjectMovingKind.Fix) {
-            let interpreter = Manager.Stack.currentMap.addReaction(null, this
+            let interpreter = Scene.Map.current.addReaction(null, this
                 .currentState.route, this, this.currentState.id, [null], null, true);
             if (interpreter !== null) {
                 this.movingState = interpreter.currentCommandState;
@@ -939,7 +926,7 @@ class MapObject {
      *  Update the orientation according to the camera position
      */
     updateOrientation() {
-        this.orientation = Mathf.mod((Manager.Stack.currentMap.orientation - 2)
+        this.orientation = Mathf.mod((Scene.Map.current.orientation - 2)
             * 3 + this.orientationEye, 4);
     }
     /**
@@ -990,9 +977,8 @@ class MapObject {
     updateMaterial() {
         if (!this.isNone()) {
             this.mesh.material = this.currentStateInstance.graphicID === 0 ?
-                Manager.Stack.currentMap.textureTileset : Manager.Stack
-                .currentMap.texturesCharacters[this.currentStateInstance
-                .graphicID];
+                Scene.Map.current.textureTileset : Scene.Map.current
+                .texturesCharacters[this.currentStateInstance.graphicID];
         }
         else {
             this.mesh = null;

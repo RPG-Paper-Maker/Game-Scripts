@@ -9,9 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
-import { Graphic, Manager, Datas } from "../index.js";
+import { Graphic, Datas } from "../index.js";
 import { Utils, Enum } from "../Common/index.js";
 var Align = Enum.Align;
+import { Game } from "../Core/index.js";
 /** @class
  *  The graphic displaying all currencies and play time in scene menu.
  *  @extends Graphic.Base
@@ -22,8 +23,8 @@ class TimeCurrencies extends Base {
         // Currencies
         this.currencies = [];
         let graphic;
-        for (let id in Manager.Stack.game.currencies) {
-            graphic = new Graphic.TextIcon(Utils.numToString(Manager.Stack.game
+        for (let id in Game.current.currencies) {
+            graphic = new Graphic.TextIcon(Utils.numToString(Game.current
                 .currencies[id]), Datas.Systems.getCurrency(parseInt(id))
                 .pictureID, {
                 side: Align.Right,
@@ -32,7 +33,7 @@ class TimeCurrencies extends Base {
             this.currencies.push(graphic);
         }
         // Time
-        this.time = Manager.Stack.game.playTime.getSeconds();
+        this.time = Game.current.playTime.getSeconds();
         this.graphicPlayTime = new Graphic.Text(Utils.getStringDate(this.time), {
             align: Align.Right
         });
@@ -51,8 +52,8 @@ class TimeCurrencies extends Base {
      *  Update the play time
      */
     update() {
-        if (Manager.Stack.game.playTime.getSeconds() !== this.time) {
-            this.graphicPlayTime.setText(Utils.getStringDate(Manager.Stack.game
+        if (Game.current.playTime.getSeconds() !== this.time) {
+            this.graphicPlayTime.setText(Utils.getStringDate(Game.current
                 .playTime.getSeconds()));
         }
     }

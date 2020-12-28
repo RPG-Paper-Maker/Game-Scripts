@@ -8,10 +8,10 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Portion } from "../Core/index.js";
+import { Portion, Game } from "../Core/index.js";
 import { Enum } from "../Common/index.js";
 var EventCommandKind = Enum.EventCommandKind;
-import { EventCommand, Manager, Datas } from "../index.js";
+import { EventCommand, Manager, Datas, Scene } from "../index.js";
 /** @class
  *  A static class for some events functions.
  *  @static
@@ -167,12 +167,12 @@ class Events {
                 }
                 else if (targetID === 0) {
                     // Send to the hero
-                    Manager.Stack.game.hero.receiveEvent(sender, isSystem, eventID, parameters, Manager.Stack.game.heroStates);
+                    Game.current.hero.receiveEvent(sender, isSystem, eventID, parameters, Game.current.heroStates);
                 }
                 else {
-                    Manager.Stack.currentMap.updatePortions(this, function (x, y, z, i, j, k) {
-                        let objects = Manager.Stack.game.getPotionsDatas(Manager
-                            .Stack.currentMap.id, new Portion(x, y, z));
+                    Scene.Map.current.updatePortions(this, function (x, y, z, i, j, k) {
+                        let objects = Game.current.getPotionsDatas(Scene.Map
+                            .current.id, new Portion(x, y, z));
                         // Moved objects
                         let a, l, object;
                         for (a = 0, l = objects.min.length; a < l; a++) {
@@ -190,7 +190,7 @@ class Events {
                             }
                         }
                         // Static
-                        let mapPortion = Manager.Stack.currentMap.getMapPortion(new Portion(i, j, k));
+                        let mapPortion = Scene.Map.current.getMapPortion(new Portion(i, j, k));
                         if (mapPortion) {
                             for (a = 0, l = mapPortion.objectsList.length; a < l; a++) {
                                 object = mapPortion.objectsList[a];
@@ -200,8 +200,7 @@ class Events {
                                 }
                             }
                             if (mapPortion.heroID === targetID) {
-                                Manager.Stack.game.hero.receiveEvent(sender, isSystem, eventID, parameters, Manager.Stack
-                                    .game.heroStates);
+                                Game.current.hero.receiveEvent(sender, isSystem, eventID, parameters, Game.current.heroStates);
                             }
                         }
                     });
@@ -223,27 +222,26 @@ class Events {
      *  receive event
      */
     static sendEventDetection(sender, targetID, isSystem, eventID, parameters, senderNoReceiver = false) {
-        Manager.Stack.currentMap.updatePortions(this, function (x, y, z, i, j, k) {
-            let objects = Manager.Stack.game.getPotionsDatas(Manager.Stack
-                .currentMap.id, new Portion(x, y, z));
+        Scene.Map.current.updatePortions(this, function (x, y, z, i, j, k) {
+            let objects = Game.current.getPotionsDatas(Scene.Map.current.id, new Portion(x, y, z));
             // Moved objects
             Manager.Events.sendEventObjects(objects.min, sender, targetID, isSystem, eventID, parameters, senderNoReceiver);
             Manager.Events.sendEventObjects(objects.mout, sender, targetID, isSystem, eventID, parameters, senderNoReceiver);
             // Static
-            let mapPortion = Manager.Stack.currentMap.getMapPortion(new Portion(i, j, k));
+            let mapPortion = Scene.Map.current.getMapPortion(new Portion(i, j, k));
             if (mapPortion) {
                 Manager.Events.sendEventObjects(mapPortion.objectsList, sender, targetID, isSystem, eventID, parameters, senderNoReceiver);
             }
         });
         // And the hero!
-        if (!senderNoReceiver || sender !== Manager.Stack.game.hero) {
+        if (!senderNoReceiver || sender !== Game.current.hero) {
             if (targetID !== -1) {
                 // Check according to detection model
-                if (!Datas.Systems.getDetection(targetID).checkCollision(sender, Manager.Stack.game.hero)) {
+                if (!Datas.Systems.getDetection(targetID).checkCollision(sender, Game.current.hero)) {
                     return;
                 }
             }
-            Manager.Stack.game.hero.receiveEvent(sender, isSystem, eventID, parameters, Manager.Stack.game.heroStates);
+            Game.current.hero.receiveEvent(sender, isSystem, eventID, parameters, Game.current.heroStates);
         }
     }
     /**

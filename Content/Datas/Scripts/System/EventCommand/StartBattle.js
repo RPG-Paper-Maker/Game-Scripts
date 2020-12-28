@@ -11,7 +11,7 @@
 import { Base } from "./Base.js";
 import { System, Datas, Manager, Scene } from "../index.js";
 import { Utils } from "../Common/index.js";
-import { MapObject, Position } from "../Core/index.js";
+import { MapObject, Position, Game } from "../Core/index.js";
 /** @class
  *  An event command for battle processing.
  *  @extends EventCommand.Base
@@ -98,7 +98,7 @@ class StartBattle extends Base {
             let battleMap = (this.battleMapID === null) ? System.BattleMap
                 .create(this.mapID.getValue(), new Position(this.x.getValue(), this.y.getValue(), this.yPlus.getValue(), this.z.getValue())) :
                 Datas.BattleSystems.getBattleMap(this.battleMapID.getValue());
-            Manager.Stack.game.heroBattle = new MapObject(Manager.Stack.game
+            Game.current.heroBattle = new MapObject(Game.current
                 .hero.system, battleMap.position.toVector3(), true);
             // Defining the battle state instance
             let sceneBattle = new Scene.Battle(this.troopID.getValue(), this
