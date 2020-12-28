@@ -1,6 +1,8 @@
 import { Translatable } from "./Translatable.js";
 import { StatisticProgression } from "./StatisticProgression.js";
 import { ClassSkill } from "./ClassSkill.js";
+import { System } from "../index.js";
+import { Skill } from "../Core/index.js";
 /** @class
  *  A class of the game.
  *  @extends System.Translatable
@@ -47,8 +49,22 @@ declare class Class extends Translatable {
     /**
      *  Get the skills.
      *  @param {System.Class} upClass The up class
+     *  @param {number} level The class level
+     *  @returns {Skill[]}
+     */
+    getSkills(upClass: System.Class, level: number): Skill[];
+    /**
+     *  Get the learned skill at a specific level.
+     *  @param {System.Class} upClass The up class
+     *  @param {number} level The class level
+     *  @returns {Skill[]}
+     */
+    getLearnedSkills(upClass: System.Class, level: number): Skill[];
+    /**
+     *  Get the skills class without duplicate of ideas between classes.
+     *  @param {System.Class} upClass The up class
      *  @returns {System.ClassSkill[]}
      */
-    getSkills(upClass: Class): ClassSkill[];
+    getSkillsWithoutDuplicate(upClass: Class): System.ClassSkill[];
 }
 export { Class };

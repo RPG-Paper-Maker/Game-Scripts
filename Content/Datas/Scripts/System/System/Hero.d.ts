@@ -1,7 +1,7 @@
 import { Base } from "./Base.js";
 import { Class } from "./Class.js";
 import { StatisticProgression } from "./StatisticProgression.js";
-import { ClassSkill } from "./ClassSkill.js";
+import { Skill } from "../Core/index.js";
 /** @class
  *  An hero of the game.
  *  @extends System.Base
@@ -38,9 +38,17 @@ declare class Hero extends Base {
     getStatisticsProgression(): StatisticProgression[];
     /**
      *  Get the skills according to class inherit and this hero.
-     *  @returns {System.ClassSkill[]}
+     *  @param {number} level
+     *  @returns {Skill[]}
      */
-    getSkills(): ClassSkill[];
+    getSkills(level: number): Skill[];
+    /**
+     *  Get the learned skill at a specific level according to class inherit and
+     *  this hero.
+     *  @param {number} level
+     *  @returns {Skill[]}
+     */
+    getLearnedSkills(level: number): Skill[];
     /**
      *  Create the experience list according to base and inflation.
      *  @returns {number[]}

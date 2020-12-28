@@ -198,21 +198,13 @@ class Player {
      */
     instanciate(level: number) {
         // Skills
-        this.sk = [];
-        let skills = this.system.getSkills();
-        let i: number, l: number, skill: System.ClassSkill;
-        for (i = 0, l = skills.length; i < l; i++) {
-            skill = skills[i];
-            if (skill.level > level) {
-                break;
-            }
-            this.sk.push(new Skill(skill.id));
-        }
+        this.sk = this.system.getSkills(level);
 
         // Stats
         let statistics = Datas.BattleSystems.statisticsOrder;
         let statisticsProgression = this.system.getStatisticsProgression();
         let nonFixStatistics = new Array;
+        let i: number, l: number;
         for (i = 0, l = statistics.length; i < l; i++) {
             this[Datas.BattleSystems.getStatistic(statistics[i])
                 .getBeforeAbbreviation()] = undefined;
@@ -513,10 +505,22 @@ class Player {
      *  Apply level up.
      */
     levelUp() {
+        // Change lvl stat
         this[Datas.BattleSystems.getLevelStatistic().abbreviation]++;
 
         // Update statistics
         this.updateAllStatsValues();
+
+        // Update skills learned
+        this.learnSkills();
+    }
+
+    /**
+     *  Learn new skills (on level up).
+     */
+    learnSkills() {
+        this.sk = this.sk.concat(this.system.getLearnedSkills(this[Datas
+            .BattleSystems.getLevelStatistic().abbreviation]));
     }
 
     /**

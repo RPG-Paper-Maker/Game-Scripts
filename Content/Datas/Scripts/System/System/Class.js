@@ -12,6 +12,7 @@ import { Translatable } from "./Translatable.js";
 import { StatisticProgression } from "./StatisticProgression.js";
 import { ClassSkill } from "./ClassSkill.js";
 import { Utils } from "../Common/index.js";
+import { Skill } from "../Core/index.js";
 /** @class
  *  A class of the game.
  *  @extends System.Translatable
@@ -107,10 +108,64 @@ class Class extends Translatable {
     /**
      *  Get the skills.
      *  @param {System.Class} upClass The up class
+     *  @param {number} level The class level
+     *  @returns {Skill[]}
+     */
+    getSkills(upClass, level) {
+        let all = this.getSkillsWithoutDuplicate(upClass);
+        let skills = [];
+        let skill;
+        for (let i = 0, l = all.length; i < l; i++) {
+            skill = all[i];
+            if (skill.level > level) {
+                break;
+            }
+            skills.push(new Skill(skill.id));
+        }
+        return skills;
+    }
+    /**
+     *  Get the learned skill at a specific level.
+     *  @param {System.Class} upClass The up class
+     *  @param {number} level The class level
+     *  @returns {Skill[]}
+     */
+    getLearnedSkills(upClass, level) {
+        let all = this.getSkillsWithoutDuplicate(upClass);
+        let skills = [];
+        let skill;
+        for (let i = 0, l = all.length; i < l; i++) {
+            skill = all[i];
+            if (skill.level === level) {
+                skills.push(new Skill(skill.id));
+            }
+        }
+        return skills;
+    }
+    /**
+     *  Get the skills class without duplicate of ideas between classes.
+     *  @param {System.Class} upClass The up class
      *  @returns {System.ClassSkill[]}
      */
-    getSkills(upClass) {
-        return this.skills.concat(upClass.skills);
+    getSkillsWithoutDuplicate(upClass) {
+        let skills = [];
+        let i, l, j, m, skill, skillUp;
+        for (i = 0, l = this.skills.length; i < l; i++) {
+            skills.push(this.skills[i]);
+        }
+        for (i = 0, l = skills.length; i < l; i++) {
+            skill = skills[i];
+            for (j = 0, m = upClass.skills.length; j < m; j++) {
+                skillUp = upClass.skills[j];
+                if (skill.id === skillUp.id) {
+                    skills[i] = skillUp;
+                }
+                else {
+                    skills.push(skillUp);
+                }
+            }
+        }
+        return skills;
     }
 }
 Class.PROPERTY_FINAL_LEVEL = "finalLevel";

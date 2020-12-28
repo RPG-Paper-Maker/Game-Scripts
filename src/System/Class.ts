@@ -13,6 +13,8 @@ import { Translatable } from "./Translatable";
 import { StatisticProgression } from "./StatisticProgression";
 import { ClassSkill } from "./ClassSkill";
 import { Utils } from "../Common";
+import { System } from "..";
+import { Skill } from "../Core";
 
 /** @class
  *  A class of the game.
@@ -130,10 +132,66 @@ class Class extends Translatable {
     /** 
      *  Get the skills.
      *  @param {System.Class} upClass The up class
+     *  @param {number} level The class level
+     *  @returns {Skill[]}
+     */
+    getSkills(upClass: System.Class, level: number): Skill[] {
+        let all = this.getSkillsWithoutDuplicate(upClass);
+        let skills = [];
+        let skill: System.ClassSkill;
+        for (let i = 0, l = all.length; i < l; i++) {
+            skill = all[i];
+            if (skill.level > level) {
+                break;
+            }
+            skills.push(new Skill(skill.id));
+        }
+        return skills;
+    }
+
+    /** 
+     *  Get the learned skill at a specific level.
+     *  @param {System.Class} upClass The up class
+     *  @param {number} level The class level
+     *  @returns {Skill[]}
+     */
+    getLearnedSkills(upClass: System.Class, level: number): Skill[] {
+        let all = this.getSkillsWithoutDuplicate(upClass);
+        let skills = [];
+        let skill: System.ClassSkill;
+        for (let i = 0, l = all.length; i < l; i++) {
+            skill = all[i];
+            if (skill.level === level) {
+                skills.push(new Skill(skill.id));
+            }
+        }
+        return skills;
+    }
+
+    /** 
+     *  Get the skills class without duplicate of ideas between classes.
+     *  @param {System.Class} upClass The up class
      *  @returns {System.ClassSkill[]}
      */
-    getSkills(upClass: Class): ClassSkill[] {
-        return this.skills.concat(upClass.skills);
+    getSkillsWithoutDuplicate(upClass: Class): System.ClassSkill[] {
+        let skills: System.ClassSkill[] = [];
+        let i: number, l: number, j: number, m: number, skill: System.ClassSkill, 
+            skillUp: System.ClassSkill;
+        for (i = 0, l = this.skills.length; i < l; i++) {
+            skills.push(this.skills[i]);
+        }
+        for (i = 0, l = skills.length; i < l; i++) {
+            skill = skills[i];
+            for (j = 0, m = upClass.skills.length; j < m; j++) {
+                skillUp = upClass.skills[j];
+                if (skill.id === skillUp.id) {
+                    skills[i] = skillUp;
+                } else {
+                    skills.push(skillUp);
+                }
+            }
+        }
+        return skills;
     }
 }
 

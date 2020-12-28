@@ -60,10 +60,21 @@ class Hero extends Base {
     }
     /**
      *  Get the skills according to class inherit and this hero.
-     *  @returns {System.ClassSkill[]}
+     *  @param {number} level
+     *  @returns {Skill[]}
      */
-    getSkills() {
-        return Datas.Classes.get(this.idClass).getSkills(this.classInherit);
+    getSkills(level) {
+        return Datas.Classes.get(this.idClass).getSkills(this.classInherit, level);
+    }
+    /**
+     *  Get the learned skill at a specific level according to class inherit and
+     *  this hero.
+     *  @param {number} level
+     *  @returns {Skill[]}
+     */
+    getLearnedSkills(level) {
+        return Datas.Classes.get(this.idClass).getLearnedSkills(this
+            .classInherit, level);
     }
     /**
      *  Create the experience list according to base and inflation.

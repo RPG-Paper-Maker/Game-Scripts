@@ -123,6 +123,10 @@ declare class Player {
      */
     levelUp(): void;
     /**
+     *  Learn new skills (on level up).
+     */
+    learnSkills(): void;
+    /**
      *  Get the experience reward.
      *  @returns {number}
      */
