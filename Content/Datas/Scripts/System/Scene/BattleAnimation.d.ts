@@ -14,6 +14,10 @@ declare class BattleAnimation {
      */
     getCondition(): AnimationEffectConditionKind;
     /**
+     *  Update the targets attacked and check if they are dead.
+     */
+    updateTargetsAttacked(): void;
+    /**
      *  Update the battle.
      */
     update(): void;

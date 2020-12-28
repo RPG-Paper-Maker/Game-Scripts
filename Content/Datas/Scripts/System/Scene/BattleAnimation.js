@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Scene, Graphic, Datas, Manager } from "../index.js";
-import { Enum, Utils } from "../Common/index.js";
+import { Enum } from "../Common/index.js";
 var EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 var CharacterKind = Enum.CharacterKind;
 var Align = Enum.Align;
@@ -158,6 +158,17 @@ class BattleAnimation {
         return AnimationEffectConditionKind.Hit;
     }
     /**
+     *  Update the targets attacked and check if they are dead.
+     */
+    updateTargetsAttacked() {
+        let target;
+        for (let i = 0, l = this.battle.targets.length; i < l; i++) {
+            target = this.battle.targets[i];
+            target.updateDead(target.damages > 0 && !target.isDamagesMiss, this
+                .battle.user.player);
+        }
+    }
+    /**
      *  Update the battle.
      */
     update() {
@@ -185,6 +196,7 @@ class BattleAnimation {
                         for (i = 0, l = this.battle.targets.length; i < l; i++) {
                             this.battle.targets[i].timeDamage = 0;
                         }
+                        this.updateTargetsAttacked();
                         this.battle.subStep = 2;
                     }
                     else {
@@ -205,6 +217,7 @@ class BattleAnimation {
                     for (i = 0, l = this.battle.targets.length; i < l; i++) {
                         this.battle.targets[i].timeDamage = 0;
                     }
+                    this.updateTargetsAttacked();
                     this.battle.subStep = 2;
                 }
                 break;
@@ -218,15 +231,6 @@ class BattleAnimation {
                 }
                 if ((new Date().getTime() - this.battle.time) >= Scene.Battle
                     .TIME_ACTION_ANIMATION) {
-                    let target;
-                    for (i = 0, l = this.battle.targets.length; i < l; i++) {
-                        target = this.battle.targets[i];
-                        if (!Utils.isUndefined(target)) {
-                            target.updateDead(target.damages > 0 &&
-                                !target.isDamagesMiss, this.battle.user.player);
-                        }
-                    }
-                    Manager.Stack.requestPaintHUD = true;
                     // Target and user test death
                     this.battle.user.updateDead(false);
                     for (i = 0, l = this.battle.targets.length; i < l; i++) {

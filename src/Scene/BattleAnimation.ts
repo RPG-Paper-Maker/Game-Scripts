@@ -176,6 +176,18 @@ class BattleAnimation {
     }
 
     /**
+     *  Update the targets attacked and check if they are dead.
+     */
+    public updateTargetsAttacked() {
+        let target: Battler;
+        for (let i = 0, l = this.battle.targets.length; i < l; i++) {
+            target = this.battle.targets[i];
+            target.updateDead(target.damages > 0 && !target.isDamagesMiss, this
+                .battle.user.player);
+        }
+    }
+
+    /**
      *  Update the battle.
      */
     public update() {
@@ -205,6 +217,7 @@ class BattleAnimation {
                     for (i = 0, l = this.battle.targets.length; i < l; i++) {
                         this.battle.targets[i].timeDamage = 0;
                     }
+                    this.updateTargetsAttacked();
                     this.battle.subStep = 2;
                 } else {
                     this.battle.subStep = 1;
@@ -224,6 +237,7 @@ class BattleAnimation {
                 for (i = 0, l = this.battle.targets.length; i < l; i++) {
                     this.battle.targets[i].timeDamage = 0;
                 }
+                this.updateTargetsAttacked();
                 this.battle.subStep = 2;
             }
             break;
@@ -237,15 +251,6 @@ class BattleAnimation {
             }
             if ((new Date().getTime() - this.battle.time) >= Scene.Battle
                 .TIME_ACTION_ANIMATION) {
-                let target: Battler;
-                for (i = 0, l = this.battle.targets.length; i < l; i++) {
-                    target = this.battle.targets[i];
-                    if (!Utils.isUndefined(target)) {
-                        target.updateDead(target.damages > 0 && 
-                            !target.isDamagesMiss, this.battle.user.player);
-                    }
-                }
-                Manager.Stack.requestPaintHUD = true;
 
                 // Target and user test death
                 this.battle.user.updateDead(false);
