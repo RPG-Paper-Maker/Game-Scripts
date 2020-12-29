@@ -77,7 +77,7 @@ class MoveCamera extends Base {
             finalPosition: new Vector3(finalX, finalY, finalZ),
             finalDifH: finalH - Scene.Map.current.camera.horizontalAngle,
             finalDifV: finalV - Scene.Map.current.camera.verticalAngle,
-            finalDistance: finalDistance - Scene.Map.current.camera
+            finalDifDistance: finalDistance - Scene.Map.current.camera
                 .distance,
             time: time,
             timeLeft: time,
@@ -136,7 +136,7 @@ class MoveCamera extends Base {
                     difNb = Manager.Stack.elapsedTime;
                     currentState.timeLeft -= Manager.Stack.elapsedTime;
                     if (currentState.timeLeft < 0) {
-                        dif += currentState.timeLeft;
+                        difNb += currentState.timeLeft;
                         currentState.timeLeft = 0;
                     }
                     timeRate = difNb / currentState.time;
@@ -159,11 +159,13 @@ class MoveCamera extends Base {
                     }
                 }
                 Scene.Map.current.camera.updateTargetPosition();
-                Scene.Map.current.camera.updateAngles();
+                if (currentState.finalDifH === 0 && currentState.finalDifV === 0) {
+                    Scene.Map.current.camera.updateAngles();
+                }
                 Scene.Map.current.camera.updateDistance();
                 // Rotation
-                Scene.Map.current.camera.horizontalAngle += timeRate *
-                    currentState.finalDifH;
+                Scene.Map.current.camera.addHorizontalAngle(timeRate *
+                    currentState.finalDifH);
                 Scene.Map.current.camera.addVerticalAngle(timeRate *
                     currentState.finalDifV);
                 if (this.rotationTargetOffset) {
@@ -171,11 +173,13 @@ class MoveCamera extends Base {
                 }
                 // Zoom
                 Scene.Map.current.camera.distance += timeRate *
-                    currentState.finalDistance;
+                    currentState.finalDifDistance;
                 // Update
                 Scene.Map.current.camera.update();
                 // If time = 0, then this is the end of the command
-                return currentState.timeLeft === 0 ? 1 : 0;
+                if (currentState.timeLeft === 0) {
+                    return 1;
+                }
             }
             return 0;
         }

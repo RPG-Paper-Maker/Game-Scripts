@@ -75,7 +75,6 @@ export class CameraProperties extends Base {
             / Constants.BASIC_SQUARE_SIZE);
         camera.horizontalAngle = this.horizontalAngle.getValue();
         camera.verticalAngle = this.verticalAngle.getValue();
-        camera.verticalRight = true;
         camera.targetPosition = new Vector3();
         let x = this.targetOffsetX.getValue();
         if (this.isSquareTargetOffsetX) {

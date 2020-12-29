@@ -4,10 +4,7 @@ import { THREE } from "../Globals.js";
  * It's used as an API bridge between the user and Three.js
  * @author Nio Kasgami
  */
-export declare class Vector3 extends THREE.Vector3 {
-    x: number;
-    y: number;
-    z: number;
+declare class Vector3 extends THREE.Vector3 {
     /**
      * The data class who hold 3D Coordinate.
      * @param {number} x the x-axis coordinate in float
@@ -17,3 +14,4 @@ export declare class Vector3 extends THREE.Vector3 {
      */
     constructor(x?: number, y?: number, z?: number, freeze?: boolean);
 }
+export { Vector3 };

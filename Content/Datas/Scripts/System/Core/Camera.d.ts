@@ -19,7 +19,6 @@ declare class Camera {
     distance: number;
     horizontalAngle: number;
     verticalAngle: number;
-    verticalRight: boolean;
     constructor(cameraProperties: System.CameraProperties, target: MapObject);
     /**
      *  Configure camera when resizing window.
@@ -54,6 +53,11 @@ declare class Camera {
      *  @returns {number}
      */
     getVerticalAngle(p1: Vector3, p2: Vector3): number;
+    /**
+     *  Add an angle to the horizontal angle.
+     *  @param {number} a The angle to add
+     */
+    addHorizontalAngle(a: number): void;
     /**
      *  Add an angle to the vertical angle.
      *  @param {number} a The angle to add

@@ -74,21 +74,29 @@ class Camera {
         return 90 + (Math.atan2(y, Math.sqrt(x * x + z * z)) * 180 / Math.PI);
     }
     /**
+     *  Add an angle to the horizontal angle.
+     *  @param {number} a The angle to add
+     */
+    addHorizontalAngle(a) {
+        this.horizontalAngle += a;
+        if (this.horizontalAngle >= 360) {
+            this.horizontalAngle = this.horizontalAngle % 360;
+        }
+        else if (this.horizontalAngle <= -360) {
+            this.horizontalAngle = 360 + this.horizontalAngle;
+        }
+    }
+    /**
      *  Add an angle to the vertical angle.
      *  @param {number} a The angle to add
      */
     addVerticalAngle(a) {
-        if (this.verticalRight) {
-            this.verticalAngle += a;
-            if (this.verticalAngle >= 180 || this.verticalAngle <= 0) {
-                this.verticalRight = false;
-            }
+        this.verticalAngle += a;
+        if (this.verticalAngle >= 360) {
+            this.verticalAngle = this.verticalAngle % 360;
         }
-        else {
-            this.verticalAngle -= a;
-            if (this.verticalAngle >= 180 || this.verticalAngle <= 0) {
-                this.verticalRight = true;
-            }
+        else if (this.verticalAngle <= -360) {
+            this.verticalAngle = 360 + this.verticalAngle;
         }
     }
     /**

@@ -32,7 +32,6 @@ class Camera {
     public distance: number;
     public horizontalAngle: number;
     public verticalAngle: number;
-    public verticalRight: boolean;
 
     constructor(cameraProperties: System.CameraProperties, target: MapObject) {
         cameraProperties.initializeCamera(this);
@@ -100,20 +99,28 @@ class Camera {
     }
 
     /** 
+     *  Add an angle to the horizontal angle.
+     *  @param {number} a The angle to add
+     */
+    addHorizontalAngle(a: number) {
+        this.horizontalAngle += a;
+        if (this.horizontalAngle >= 360) {
+            this.horizontalAngle = this.horizontalAngle % 360;
+        } else if (this.horizontalAngle <= -360) {
+            this.horizontalAngle = 360 + this.horizontalAngle;
+        }
+    }
+
+    /** 
      *  Add an angle to the vertical angle.
      *  @param {number} a The angle to add
      */
     addVerticalAngle(a: number) {
-        if (this.verticalRight) {
-            this.verticalAngle += a;
-            if (this.verticalAngle >= 180 || this.verticalAngle <= 0) {
-                this.verticalRight = false;
-            }
-        } else {
-            this.verticalAngle -= a;
-            if (this.verticalAngle >= 180 || this.verticalAngle <= 0) {
-                this.verticalRight = true;
-            }
+        this.verticalAngle += a;
+        if (this.verticalAngle >= 360) {
+            this.verticalAngle = this.verticalAngle % 360;
+        } else if (this.verticalAngle <= -360) {
+            this.verticalAngle = 360 + this.verticalAngle;
         }
     }
 
