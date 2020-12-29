@@ -857,7 +857,7 @@ class Collisions {
 
         // if w = 0, check height
         if (objCollision.rw === 0) {
-            let pass = forceAlways || -(!forceNever && ((y + objCollision.rh) <= 
+            let pass = forceNever || -(!forceAlways && ((y + objCollision.rh) <= 
                 (positionAfter.y + Datas.Systems.mountainCollisionHeight
                 .getValue())));
             if (Mathf.isPointOnRectangle(point, x, x + Datas.Systems.SQUARE_SIZE
@@ -1005,7 +1005,7 @@ class Collisions {
             }
 
             // If angle limit, block
-            if (forceNever || (!forceAlways && mountain.angle > Datas.Systems
+            if (forceAlways || (!forceNever && mountain.angle > Datas.Systems
                 .mountainCollisionAngle.getValue()))
             {
                 // Check if floor existing on top of the mountain angle
@@ -1014,7 +1014,7 @@ class Collisions {
                     .length > 0;
                 return [!isFloor, null];
             }
-            return [!forceAlways && (Math.abs(newPosition.y - positionAfter.y) >
+            return [!forceNever && (Math.abs(newPosition.y - positionAfter.y) >
                 Datas.Systems.mountainCollisionHeight.getValue()), newPosition.y];
         }
         return [false, null];
