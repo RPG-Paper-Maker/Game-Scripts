@@ -55,7 +55,7 @@ class Collisions {
      */
     static applyBoxLandTransforms(box, boundingBox) {
         // Cancel previous geometry transforms
-        box.geometry.translate(-box['previousTranslate[0]'], -box['previousTranslate'][1], -box['previousTranslate'][2]);
+        box.geometry.translate(-box['previousTranslate'][0], -box['previousTranslate'][1], -box['previousTranslate'][2]);
         box.geometry.rotateZ(-box['previousRotate'][2] * Math.PI / 180.0);
         box.geometry.rotateX(-box['previousRotate'][1] * Math.PI / 180.0);
         box.geometry.rotateY(-box['previousRotate'][0] * Math.PI / 180.0);
