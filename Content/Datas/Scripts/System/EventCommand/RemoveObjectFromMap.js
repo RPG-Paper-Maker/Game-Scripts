@@ -46,7 +46,7 @@ class RemoveObjectFromMap extends Base {
         if (!currentState.started) {
             currentState.started = true;
             MapObject.search(objectID, (result) => {
-                if (result.datas.r.indexOf(result.id) === -1) {
+                if (result.datas !== null && result.datas.r.indexOf(result.id) === -1) {
                     switch (result.kind) {
                         case 0:
                             result.datas.m.splice(result.index, 1);
@@ -68,6 +68,9 @@ class RemoveObjectFromMap extends Base {
                             }
                             break;
                     }
+                }
+                if (result.datas === null || result.datas.r.indexOf(result.id)
+                    === -1) {
                     result.object.removed = true;
                     result.object.removeFromScene();
                 }

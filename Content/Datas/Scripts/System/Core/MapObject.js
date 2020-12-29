@@ -86,15 +86,24 @@ class MapObject {
         let object = null;
         switch (objectID) {
             case -1: // This object
-                if (thisObject.isInScene || thisObject.isHero || thisObject
-                    .isStartup) {
+                objectID = thisObject.system.id;
+                if (thisObject.isInScene) {
                     object = thisObject;
                 }
-                objectID = thisObject.system.id;
+                if (thisObject.isHero || thisObject.isStartup) {
+                    return {
+                        object: object,
+                        id: objectID,
+                        datas: null
+                    };
+                }
                 break;
             case 0: // Hero
-                object = Game.current.hero,
-                    objectID = Game.current.hero.system.id;
+                return {
+                    object: Game.current.hero,
+                    id: Game.current.hero.system.id,
+                    datas: null
+                };
             default:
                 break;
         }
