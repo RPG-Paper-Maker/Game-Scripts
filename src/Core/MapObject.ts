@@ -144,7 +144,7 @@ class MapObject {
                 }
                 if (thisObject.isHero || thisObject.isStartup) {
                     return {
-                        object: object,
+                        object: thisObject,
                         id: objectID,
                         datas: null
                     };
@@ -963,7 +963,7 @@ class MapObject {
         .Event, number]): boolean
     {
         // Option only one event per frame
-        if (this.system.isEventFrame && this.receivedOneEvent) {
+        if ((this.system.isEventFrame && this.receivedOneEvent || this.removed)) {
             return false;
         }
 

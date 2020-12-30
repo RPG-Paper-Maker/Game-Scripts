@@ -1009,7 +1009,7 @@ class Collisions {
                 .mountainCollisionAngle.getValue()))
             {
                 // Check if floor existing on top of the mountain angle
-                isFloor = jposition[1] === jpositionAfter[1] ? false : 
+                isFloor = jposition.y === jpositionAfter.y ? false : 
                     mapPortion.boundingBoxesLands[jpositionAfter.toIndex()]
                     .length > 0;
                 return [!isFloor, null];

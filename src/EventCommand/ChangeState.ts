@@ -177,8 +177,7 @@ class ChangeState extends Base {
             }
         }
         if (currentState.waitingObject && currentState.object !== null) {
-            if (currentState.object.isHero || currentState.object.isStartup) 
-            {
+            if (currentState.object.isHero || currentState.object.isStartup) {
                 let states = currentState.object.isHero ? Game.current
                     .heroStates : Game.current.startupStates[Scene.Map.current.id];
                 switch (this.operationKind) {

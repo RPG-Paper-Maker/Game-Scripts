@@ -46,31 +46,32 @@ class RemoveObjectFromMap extends Base {
         if (!currentState.started) {
             currentState.started = true;
             MapObject.search(objectID, (result) => {
-                if (result.datas !== null && result.datas.r.indexOf(result.id) === -1) {
-                    switch (result.kind) {
-                        case 0:
-                            result.datas.m.splice(result.index, 1);
-                            let index = result.datas.min.indexOf(result.object);
-                            if (index === -1) {
-                                result.datas = Game.current
-                                    .getPotionsDatas(Scene.Map.current.id, Portion.createFromVector3(result.object
-                                    .position));
-                                result.datas.mout.splice(result.datas.mout
-                                    .indexOf(result.object), 1);
-                            }
-                            else {
-                                result.datas.min.splice(index, 1);
-                            }
-                            break;
-                        case 1:
-                            if (result.index > -1) {
-                                result.list.splice(result.index, 1);
-                            }
-                            break;
+                if (!result.object.removed) {
+                    if (result.datas !== null) {
+                        switch (result.kind) {
+                            case 0:
+                                result.datas.m.splice(result.index, 1);
+                                let index = result.datas.min.indexOf(result.object);
+                                if (index === -1) {
+                                    result.datas = Game.current.getPotionsDatas(Scene.Map.current.id, Portion
+                                        .createFromVector3(result.object.position));
+                                    result.datas.mout.splice(result.datas.mout
+                                        .indexOf(result.object), 1);
+                                }
+                                else {
+                                    result.datas.min.splice(index, 1);
+                                }
+                                break;
+                            case 1:
+                                if (result.index > -1) {
+                                    result.list.splice(result.index, 1);
+                                }
+                                break;
+                        }
+                        if (result.datas.r.indexOf(result.id) === -1) {
+                            result.datas.r.push(result.id);
+                        }
                     }
-                }
-                if (result.datas === null || result.datas.r.indexOf(result.id)
-                    === -1) {
                     result.object.removed = true;
                     result.object.removeFromScene();
                 }
