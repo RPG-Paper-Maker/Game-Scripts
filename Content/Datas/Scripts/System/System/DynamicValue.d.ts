@@ -152,7 +152,7 @@ declare class DynamicValue extends System.Base {
      *  Get the value
      *  @returns {any}
      */
-    getValue(): any;
+    getValue<T>(): T;
     /**
      *  Check if a value is equal to another one
      *  @param {System.DynamicValue} value The value to compare
