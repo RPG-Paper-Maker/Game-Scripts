@@ -8,10 +8,10 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base.js";
-import { DynamicValue } from "./DynamicValue.js";
-import { Item } from "../Core/index.js";
-import { Mathf } from "../Common/index.js";
+import { Base } from "./Base";
+import { DynamicValue } from "./DynamicValue";
+import { Item } from "../Core";
+import { Mathf } from "../Common";
 /** @class
  *  A loot of the game.
  *  @extends System.Base

@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Utils, Platform } from "../Common/index.js";
+import { Utils, Platform } from "../Common";
 /** @class
  *  The abstract class who model the Structure of RPM datas.
  *  @static

@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Node } from "./Node.js";
+import { Node } from "./Node";
 /** @class
  *  Datas structure of tree.
  *  @param {any} data The data

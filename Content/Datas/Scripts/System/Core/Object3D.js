@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { MapElement } from "./MapElement.js";
+import { MapElement } from "./MapElement";
 /** @class
  *  The abstract class who model the Structure of RPM datas.
  *  @extends MapElement

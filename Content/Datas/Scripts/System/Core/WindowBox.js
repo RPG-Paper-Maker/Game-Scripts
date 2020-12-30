@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Bitmap } from "./Bitmap.js";
-import { Datas } from "../index.js";
-import { Platform, ScreenResolution } from "../Common/index.js";
+import { Bitmap } from "./Bitmap";
+import { Datas } from "..";
+import { Platform, ScreenResolution } from "../Common";
 /** @class
  *  A class for window boxes.
  *  @extends Bitmap

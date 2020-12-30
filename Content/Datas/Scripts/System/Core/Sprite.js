@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Enum, Utils } from "../Common/index.js";
+import { Enum, Utils } from "../Common";
 var ElementMapKind = Enum.ElementMapKind;
 import { MapElement } from "./MapElement.js";
 import { THREE } from "../Globals.js";

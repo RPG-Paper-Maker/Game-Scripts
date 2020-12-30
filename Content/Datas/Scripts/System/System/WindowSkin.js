@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { System, Datas } from "../index.js";
-import { Picture2D } from "../Core/index.js";
-import { Enum, Utils, ScreenResolution } from "../Common/index.js";
+import { System, Datas } from "..";
+import { Picture2D } from "../Core";
+import { Enum, Utils, ScreenResolution } from "../Common";
 var PictureKind = Enum.PictureKind;
 /** @class
  *  A window skin of the game.

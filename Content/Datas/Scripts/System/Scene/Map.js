@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { THREE } from "../Globals.js";
-import { Base } from "./Base.js";
-import { Enum, Utils, Constants, IO, Paths } from "../Common/index.js";
+import { THREE } from "../Globals";
+import { Base } from "./Base";
+import { Enum, Utils, Constants, IO, Paths } from "../Common";
 var PictureKind = Enum.PictureKind;
 import { System, Datas, Scene, Manager } from "../index.js";
 import { Position, Portion, MapPortion, Camera, ReactionInterpreter, Vector3, Game } from "../Core/index.js";

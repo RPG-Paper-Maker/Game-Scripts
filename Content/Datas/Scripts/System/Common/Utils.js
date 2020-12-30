@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Constants } from "./index.js";
+import { Constants } from ".";
 /** @class
  *  @static
  *  The static class containing all the utils functions.

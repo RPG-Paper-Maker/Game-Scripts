@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-export * from "./Collisions.js";
-export * from "./Events.js";
-export * from "./GL.js";
-export * from "./Plugins.js";
-export * from "./Songs.js";
-export * from "./Stack.js";
+export * from "./Collisions";
+export * from "./Events";
+export * from "./GL";
+export * from "./Plugins";
+export * from "./Songs";
+export * from "./Stack";

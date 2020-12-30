@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { THREE } from "../Globals.js";
-import { Enum, Mathf } from "../Common/index.js";
-import { Frame } from "./Frame.js";
+import { THREE } from "../Globals";
+import { Enum, Mathf } from "../Common";
+import { Frame } from "./Frame";
 var BattlerStep = Enum.BattlerStep;
 var CharacterKind = Enum.CharacterKind;
 var ElementMapKind = Enum.ElementMapKind;
