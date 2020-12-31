@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
-import { Utils } from "../Common";
-import { System } from "..";
+import { Base } from "./Base.js";
+import { Utils } from "../Common/index.js";
+import { System } from "../index.js";
 /** @class
  *  A custom plugin in the game.
  *  @extends System.Base

@@ -289,7 +289,7 @@ class DynamicValue extends System.Base {
      *  Get the value
      *  @returns {any}
      */
-    getValue(): any {
+    getValue<T>(): any {
         switch (this.kind) {
             case DynamicValueKind.Variable:
                 return Game.current.variables[this.value];

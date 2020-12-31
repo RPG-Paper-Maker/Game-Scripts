@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Translatable } from "./Translatable";
+import { Translatable } from "./Translatable.js";
 /** @class
  *  A weapon/armor kind of the game.
  *  @extends System.Translatable

@@ -8,10 +8,10 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
-import { Frame, Battler } from "../Core";
-import { Graphic, Datas, System, Manager } from "..";
-import { Enum, Constants, Utils, Platform } from "../Common";
+import { Base } from "./Base.js";
+import { Frame, Battler } from "../Core/index.js";
+import { Graphic, Datas, System, Manager } from "../index.js";
+import { Enum, Constants, Utils, Platform } from "../Common/index.js";
 var Align = Enum.Align;
 var PictureKind = Enum.PictureKind;
 /** @class

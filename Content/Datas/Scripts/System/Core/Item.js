@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Enum } from "../Common";
+import { Enum } from "../Common/index.js";
 var ItemKind = Enum.ItemKind;
 import { Datas } from "../index.js";
 import { Game } from "./Game.js";

@@ -8,11 +8,11 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
-import { Utils, Enum } from "../Common";
-import { Position } from "../Core";
+import { Base } from "./Base.js";
+import { Utils, Enum } from "../Common/index.js";
+import { Position } from "../Core/index.js";
 var Orientation = Enum.Orientation;
-import { Datas, Manager } from "..";
+import { Datas, Manager } from "../index.js";
 /** @class
  *  A detection of the game.
  *  @extends System.Base

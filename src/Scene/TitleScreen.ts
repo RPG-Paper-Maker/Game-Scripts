@@ -100,3 +100,6 @@ class TitleScreen extends Base {
 }
 
 export { TitleScreen }
+
+class NewTitle {}
+Window["TitleScreen"] = NewTitle;

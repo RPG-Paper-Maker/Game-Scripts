@@ -8,10 +8,10 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
-import { System } from "..";
-import { THREE } from "../Globals";
-import { Vector3 } from "../Core";
+import { Base } from "./Base.js";
+import { System } from "../index.js";
+import { THREE } from "../Globals.js";
+import { Vector3 } from "../Core/index.js";
 /** @class
  *  The system color class.
  *  @extends {System.Base}

@@ -8,8 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
-import { Utils, Enum, Constants, Interpreter, Mathf } from "../Common";
+import { Base } from "./Base.js";
+import { Utils, Enum, Constants, Interpreter, Mathf } from "../Common/index.js";
 var EffectKind = Enum.EffectKind;
 var DamagesKind = Enum.DamagesKind;
 var EffectSpecialActionKind = Enum.EffectSpecialActionKind;

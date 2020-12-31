@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
-import { System, Datas, Manager } from "..";
-import { Utils, Platform, ScreenResolution } from "../Common";
+import { Base } from "./Base.js";
+import { System, Datas, Manager } from "../index.js";
+import { Utils, Platform, ScreenResolution } from "../Common/index.js";
 /** @class
  *  An event command for flashing screen.
  *  @extends EventCommand.Base

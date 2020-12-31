@@ -8,8 +8,8 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
-import { Position } from "../Core";
+import { Base } from "./Base.js";
+import { Position } from "../Core/index.js";
 /** @class
  *  A battle map of the game.
  *  @extends System.Base

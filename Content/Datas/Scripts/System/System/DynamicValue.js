@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Enum, Utils } from "../Common";
+import { Enum, Utils } from "../Common/index.js";
 var DynamicValueKind = Enum.DynamicValueKind;
 import { System, Datas } from "../index.js";
 import { ReactionInterpreter, Game } from "../Core/index.js";

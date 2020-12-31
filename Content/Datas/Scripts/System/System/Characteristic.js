@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Enum, Utils, Interpreter } from "../Common";
+import { Enum, Utils, Interpreter } from "../Common/index.js";
 var CharacteristicKind = Enum.CharacteristicKind;
 var IncreaseDecreaseKind = Enum.IncreaseDecreaseKind;
 import { Base } from "./Base.js";

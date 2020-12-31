@@ -12,7 +12,7 @@ import { Mathf, Constants, Enum } from "../Common/index.js";
 import { Position, Portion, Vector3, Vector2, Game } from "../Core/index.js";
 import { Datas, Scene } from "../index.js";
 var ElementMapKind = Enum.ElementMapKind;
-import { THREE } from "../Globals";
+import { THREE } from "../Globals.js";
 /** @class
  *  The collisions manager.
  *  @static

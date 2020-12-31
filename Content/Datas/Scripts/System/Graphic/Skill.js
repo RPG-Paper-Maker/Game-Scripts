@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
-import { Graphic, Datas } from "..";
-import { Enum } from "../Common";
+import { Base } from "./Base.js";
+import { Graphic, Datas } from "../index.js";
+import { Enum } from "../Common/index.js";
 var Align = Enum.Align;
 /** @class
  *  The graphic displaying the player skills informations in skill menu.

@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { IO, Paths, Utils, Enum } from "../Common";
+import { IO, Paths, Utils, Enum } from "../Common/index.js";
 var TitleSettingKind = Enum.TitleSettingKind;
 /** @class
  *  All the settings datas.

@@ -26,6 +26,7 @@
     "ELECTRON_NO_ASAR": null
   },
   "dependencies": {
+    "@types/node": "^14.14.16",
     "@types/three": "^0.103.2",
     "howler": "^2.2.1",
     "three.js": "^0.77.1"

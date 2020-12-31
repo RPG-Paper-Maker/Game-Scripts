@@ -8,11 +8,11 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
-import { Enum } from "../Common";
+import { Base } from "./Base.js";
+import { Enum } from "../Common/index.js";
 var TitleSettingKind = Enum.TitleSettingKind;
 var Align = Enum.Align;
-import { Graphic } from "..";
+import { Graphic } from "../index.js";
 /** @class
  *  A class for all settings to display in screen.
  *  @extends Graphic.Base

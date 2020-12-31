@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
+import { Base } from "./Base.js";
 /** @class
  *  An event command representing one of the choice.
  *  @extends EventCommand.Base

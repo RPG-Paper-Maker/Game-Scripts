@@ -8,12 +8,12 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Enum, Utils, Constants, ScreenResolution, Platform } from "../Common";
+import { Enum, Utils, Constants, ScreenResolution, Platform } from "../Common/index.js";
 var Align = Enum.Align;
 var AlignVertical = Enum.AlignVertical;
-import { Stack } from "../Manager";
-import { Base } from "./Base";
-import { Datas, System } from "..";
+import { Stack } from "../Manager/index.js";
+import { Base } from "./Base.js";
+import { Datas, System } from "../index.js";
 /** @class
  *  A class for all the texts to display in HUD.
  *  @extends Bitmap

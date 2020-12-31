@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base";
-import { Scene, Manager, Graphic, Datas } from "..";
-import { Enum, ScreenResolution } from "../Common";
+import { Base } from "./Base.js";
+import { Scene, Manager, Graphic, Datas } from "../index.js";
+import { Enum, ScreenResolution } from "../Common/index.js";
 var Align = Enum.Align;
 import { WindowChoices, WindowBox, Game } from "../Core/index.js";
 ;

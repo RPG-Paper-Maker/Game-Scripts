@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Graphic } from "..";
-import { Base } from "./Base";
-import { Enum, Utils } from "../Common";
+import { Graphic } from "../index.js";
+import { Base } from "./Base.js";
+import { Enum, Utils } from "../Common/index.js";
 var Align = Enum.Align;
 /** @class
  *  The graphic displaying a save.
