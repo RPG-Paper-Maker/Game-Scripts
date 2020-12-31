@@ -92,7 +92,7 @@ class MapObject {
                 }
                 if (thisObject.isHero || thisObject.isStartup) {
                     return {
-                        object: object,
+                        object: thisObject,
                         id: objectID,
                         datas: null
                     };
@@ -836,7 +836,7 @@ class MapObject {
     */
     receiveEvent(sender, isSystem, eventID, parameters, states, events) {
         // Option only one event per frame
-        if (this.system.isEventFrame && this.receivedOneEvent) {
+        if ((this.system.isEventFrame && this.receivedOneEvent || this.removed)) {
             return false;
         }
         let test = false;
