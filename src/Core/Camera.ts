@@ -17,9 +17,9 @@ import { Vector3 } from "./index";
 
 /** @class
  *  The camera of the current map.
- *  @param {System.CameraProperties} cameraProperties The System camera
+ *  @param {System.CameraProperties} cameraProperties - The System camera
  *  properties
- *  @param {MapObject} target The camera target
+ *  @param {MapObject} target - The camera target
  */
 class Camera {
     
@@ -75,8 +75,8 @@ class Camera {
 
     /** 
      *  Get the horizontal angle between two positions.
-     *  @param {Vector3} p1 The first position
-     *  @param {Vector3} p2 The second position
+     *  @param {Vector3} p1 - The first position
+     *  @param {Vector3} p2 - The second position
      *  @returns {number}
      */
     getHorizontalAngle(p1: Vector3, p2: Vector3): 
@@ -87,8 +87,8 @@ class Camera {
 
     /** 
      *  Get the vertical angle between two positions.
-     *  @param {Vector3} p1 The first position
-     *  @param {Vector3} p2 The second position
+     *  @param {Vector3} p1 - The first position
+     *  @param {Vector3} p2 - The second position
      *  @returns {number}
      */
     getVerticalAngle(p1: Vector3, p2:  Vector3): number {
@@ -100,7 +100,7 @@ class Camera {
 
     /** 
      *  Add an angle to the horizontal angle.
-     *  @param {number} a The angle to add
+     *  @param {number} a - The angle to add
      */
     addHorizontalAngle(a: number) {
         this.horizontalAngle += a;
@@ -113,7 +113,7 @@ class Camera {
 
     /** 
      *  Add an angle to the vertical angle.
-     *  @param {number} a The angle to add
+     *  @param {number} a - The angle to add
      */
     addVerticalAngle(a: number) {
         this.verticalAngle += a;

@@ -2,7 +2,7 @@ import { Translatable } from "./Translatable.js";
 /** @class
  *  A key shortcut of the game.
  *  @extends {System.Translatable}
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  keyboard
  */
 declare class Keyboard extends Translatable {
@@ -11,7 +11,7 @@ declare class Keyboard extends Translatable {
     constructor(json?: Record<string, any>);
     /**
      *  Read the JSON associated to the keyboard.
-     *  @param {Record<string, any>} json Json object describing the keyboard
+     *  @param {Record<string, any>} - json Json object describing the keyboard
      */
     read(json: Record<string, any>): void;
     /**

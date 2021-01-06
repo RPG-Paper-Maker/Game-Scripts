@@ -4,7 +4,7 @@ import TitleCommandKind = Enum.TitleCommandKind;
 /** @class
  *  A title command of the game.
  *  @extends System.Translatable
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  title screen command
  */
 declare class TitleCommand extends Translatable {
@@ -13,7 +13,7 @@ declare class TitleCommand extends Translatable {
     constructor(json?: Record<string, any>);
     /**
      *  Read the JSON associated to the title screen command.
-     *  @param {Record<string, any>} json Json object describing the title
+     *  @param {Record<string, any>} - json Json object describing the title
      *  screen command
      */
     read(json: Record<string, any>): void;

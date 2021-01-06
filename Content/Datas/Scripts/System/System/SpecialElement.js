@@ -13,7 +13,7 @@ import { Utils } from "../Common/index.js";
 /** @class
  *  A special element (autotile, wall, object3D, mountain) of the game.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  special element
  */
 class SpecialElement extends Base {
@@ -22,7 +22,7 @@ class SpecialElement extends Base {
     }
     /**
      *  Read the JSON associated to the special element.
-     *  @param {Record<string, any>} json Json object describing the special
+     *  @param {Record<string, any>} - json Json object describing the special
      *  element
      */
     read(json) {

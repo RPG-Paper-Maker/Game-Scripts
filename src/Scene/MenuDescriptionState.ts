@@ -9,25 +9,34 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from "./Base";
+import { MenuBase } from "./MenuBase";
 import { Manager, Graphic, Scene, Datas } from "../index";
-import { WindowBox, WindowChoices, Game } from "../Core";
+import { WindowBox, WindowChoices, Game, Rectangle } from "../Core";
 import { Enum } from "../Common";
 import Align = Enum.Align;
 import OrientationWindow = Enum.OrientationWindow;
 
-/** @class
- *  A scene in the menu for describing players statistics.
- *  @extends Scene.Base
- */
-class MenuDescriptionState extends Base {
 
+/**
+ * The scene menu describing players statistics.
+ *
+ * @class MenuDescriptionState
+ * @extends {Base}
+ */
+class MenuDescriptionState extends MenuBase {
+
+    /**
+     * the top window
+     *
+     * @type {WindowBox}
+     * @memberof MenuDescriptionState
+     */
     public windowTop: WindowBox;
     public windowChoicesTabs: WindowChoices;
     public windowInformations: WindowBox;
 
     constructor() {
-        super(false);
+        super();
 
         // Tab heroes
         let nbHeroes = Game.current.teamHeroes.length;
@@ -39,21 +48,49 @@ class MenuDescriptionState extends Base {
 
         // All the windows
         this.windowTop = new WindowBox(20, 20, 200, 30, {
-                content: new Graphic.Text("State", { align: Align.Center })
-            }
+            content: new Graphic.Text("State", { align: Align.Center })
+        }
         );
         this.windowChoicesTabs = new WindowChoices(50, 60, 110, WindowBox
             .SMALL_SLOT_HEIGHT, listHeroes, {
-                orientation: OrientationWindow.Horizontal,
-                nbItemsMax: 4
-            }
+            orientation: OrientationWindow.Horizontal,
+            nbItemsMax: 4
+        }
         );
         this.windowInformations = new WindowBox(20, 100, 600, 340, {
-                padding: WindowBox.HUGE_PADDING_BOX
-            }
+            padding: WindowBox.HUGE_PADDING_BOX
+        }
         );
         this.synchronize();
     }
+
+    create() {
+        this.createAllWindows();
+    }
+
+    createAllWindows() {
+        this.createWindowTop();
+        this.createWindowTabs();
+    }
+
+    createWindowTop() {
+        const rect = new Rectangle(20, 20, 200, 30);
+        const options = {
+            content: new Graphic.Text("State", { align: Align.Center })
+        };
+        this.windowTop = new WindowBox(rect.x, rect.y, rect.width, rect.height, options);
+    }
+
+    createWindowTabs() {
+        const rect = new Rectangle(50, 60, 110, WindowBox.SMALL_SLOT_HEIGHT);
+        const options = { orientation: OrientationWindow.Horizontal, nbItemsMax: 4 }
+        const listHeroes = [];
+        for (let i = 0; i < this.party().length; i++) {
+            listHeroes[i] = new Graphic.Player(this.party()[i]);
+        }
+        this.windowChoicesTabs = new WindowChoices(rect.x, rect.y, rect.width, rect.height, listHeroes, options)
+    }
+
 
     /**
      *  Synchronize informations with selected hero.
@@ -68,19 +105,18 @@ class MenuDescriptionState extends Base {
      */
     update() {
         Scene.Base.prototype.update.call(Scene.Map.current);
-        (<Graphic.PlayerDescription> this.windowInformations.content)
+        (<Graphic.PlayerDescription>this.windowInformations.content)
             .updateBattler();
     }
 
     /** 
      *  Handle scene key pressed.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     onKeyPressed(key: number) {
         Scene.Base.prototype.onKeyPressed.call(Scene.Map.current, key);
         if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Cancel)
-            || Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.controls.MainMenu))
-        {
+            || Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.controls.MainMenu)) {
             Datas.Systems.soundCancel.playSound();
             Manager.Stack.pop();
         }
@@ -88,7 +124,7 @@ class MenuDescriptionState extends Base {
 
     /** 
      *  Handle scene key released.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     onKeyReleased(key: number) {
         Scene.Base.prototype.onKeyReleased.call(Scene.Map.current, key);
@@ -96,7 +132,7 @@ class MenuDescriptionState extends Base {
 
     /** 
      *  Handle scene pressed repeat key.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      *  @returns {boolean}
      */
     onKeyPressedRepeat(key: number): boolean {
@@ -105,7 +141,7 @@ class MenuDescriptionState extends Base {
 
     /** 
      *  Handle scene pressed and repeat key.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      *  @returns {boolean}
      */
     onKeyPressedAndRepeat(key: number): boolean {

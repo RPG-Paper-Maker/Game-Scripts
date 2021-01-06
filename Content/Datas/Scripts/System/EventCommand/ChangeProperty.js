@@ -15,7 +15,7 @@ import { Mathf, Utils } from "../Common/index.js";
 /** @class
  *  An event command for changing a property value.
  *  @extends EventCommand.Base
- *  @param {any[]} command Direct JSON command to parse
+ *  @param {any[]} command - Direct JSON command to parse
  */
 class ChangeProperty extends Base {
     constructor(command) {
@@ -29,9 +29,9 @@ class ChangeProperty extends Base {
     }
     /**
      *  Update and check if the event is finished.
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {MapObject} object The current object reacting
-     *  @param {number} state The state ID
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The current object reacting
+     *  @param {number} state - The state ID
      *  @returns {number} The number of node to pass
     */
     update(currentState, object, state) {

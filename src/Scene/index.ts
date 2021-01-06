@@ -10,6 +10,8 @@
 */
 
 export * from "./Base";
+export * from "./MenuBase";
+export {MenuCommands} from "./MenuBase";
 export * from "./Battle";
 export * from "./BattleAnimation";
 export * from "./BattleEnemyAttack";

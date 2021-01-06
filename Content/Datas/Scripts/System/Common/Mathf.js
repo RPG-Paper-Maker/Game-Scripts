@@ -8,46 +8,52 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-/** @class
- *  @static
- *  The static class for Math related function.
+/**
+ * The static class for Math related function.
+ *
+ * @class Mathf
  */
 class Mathf {
     constructor() {
         throw new Error("This is a static class!");
     }
-    /**
+    /*
      * Potential Hotspot/Nullipotent
      * @author DoubleX @interface
-     * @param {(T, number, T[]): boolean} splitCallback - The callback in the
+     * @param {(T, number, - T[]): boolean} splitCallback - The callback in the
      *                                                    Array split method
      * @param {any} splitThis? - The context of splitCallback
      * @returns {[T[]]} - The fully splitted array from array
      */
-    static split(array, splitCallback, splitThis) {
-        const newArray = [];
-        let newGroup = [];
+    /*
+    static split<T>(array: T[], splitCallback: (elem: T, i: number, self: T[])
+        => boolean, splitThis?: any): T[][]
+    {
+        const newArray: T[][] = [];
+        let newGroup: T[] = [];
         // forEach is tested to be the fastest among sandboxes including NW.js
-        array.forEach((elem, i) => {
+        array.forEach((elem: T, i: number) => {
             // It's ok to call undefined context with previously bound callbacks
             if (splitCallback.call(splitThis, elem, i, array)) {
                 newArray.push(newGroup); // It's ok for 1st group to be empty
                 newGroup = [];
-            }
-            else
-                newGroup.push(elem);
+            } else newGroup.push(elem);
             //
         });
         newArray.push(newGroup); // It's ok for the last group to be empty
         //
         return newArray;
     } // split
+    */
     /**
      * Potential Hotspot/Nullipotent
-     * @author DoubleX @interface
+     *
+     * @static
+     * @template T
      * @param {T[]} array1 - The 1st array to be checked against
      * @param {T[]} array2 - The 2nd array to be checked against
-     * @returns {boolean} If array1's a proper subset of array2
+     * @return {*}  {boolean}
+     * @memberof Mathf
      */
     static isProperSubsetOf(array1, array2) {
         return this.isSubsetOf(array1, array2) && !this.isSubsetOf(array2, array1);
@@ -77,11 +83,13 @@ class Mathf {
     ; // isSupersetOf
     /**
      * Potential Hotspot/Nullipotent
-     * @author DoubleX @interface
-     * @param {[*]} arr - The array to be checked against
-     * @param {T[]} array1 - The 1st array to be checked against
-     * @param {T[]} array2 - The 2nd array to be checked against
-     * @returns {boolean} If array1's a subset of array2
+     *
+     * @static
+     * @template T
+     * @param {T[]} array1 -The 1st array to be checked against
+     * @param {T[]} array2 -The 2nd array to be checked against
+     * @return {*}  {boolean}
+     * @memberof Mathf
      */
     static isSubsetOf(array1, array2) {
         return this.isEmpty(this.difference(array1, array2));
@@ -214,7 +222,7 @@ class Mathf {
     ;
     /** Check if an array is empty.
      *   @static
-     *   @param {any[]} array The array to test
+     *   @param {any[]} array - The array to test
      *   @returns {boolean}
      */
     static isEmpty(array) {
@@ -224,7 +232,7 @@ class Mathf {
     }
     /** Get the cos.
      *   @static
-     *   @param {number} v The value
+     *   @param {number} v - The value
      *   @returns {number}
      */
     static cos(v) {
@@ -232,7 +240,7 @@ class Mathf {
     }
     /** Get the sin.
      *   @static
-     *   @param {number} v The value
+     *   @param {number} v - The value
      *   @returns {number}
      */
     static sin(v) {
@@ -250,7 +258,7 @@ class Mathf {
     }
     /** Get the list max ID.
      *   @static
-     *   @param {number[]} list A list containing only IDs
+     *   @param {number[]} list - A list containing only IDs
      *   @returns {number}
      */
     static getMaxID(list) {
@@ -292,11 +300,11 @@ class Mathf {
     /**
      *  Indicate if a point is inside a rectangle.
      *  @static
-     *  @param {Vector2} p The point to test
-     *  @param {number} x1 The x left point of the rectangle
-     *  @param {number} x2 The x right point of the rectangle
-     *  @param {number} y1 The y top point of the rectangle
-     *  @param {number} y2 The y bottom point of the rectangle
+     *  @param {Vector2} p - The point to test
+     *  @param {number} x1 - The x left point of the rectangle
+     *  @param {number} x2 - The x right point of the rectangle
+     *  @param {number} y1 - The y top point of the rectangle
+     *  @param {number} y2 - The y bottom point of the rectangle
      *  @returns {boolean}
      */
     static isPointOnRectangle(p, x1, x2, y1, y2) {
@@ -305,10 +313,10 @@ class Mathf {
     /**
      *  Indicate if a point is inside a triangle.
      *  @static
-     *  @param {Vector2} p The point to test
-     *  @param {Vector2} p0 One of the point of the triangle
-     *  @param {Vector2} p1 One of the point of the triangle
-     *  @param {Vector2} p2 One of the point of the triangle
+     *  @param {Vector2} p - The point to test
+     *  @param {Vector2} p0 - One of the point of the triangle
+     *  @param {Vector2} p1 - One of the point of the triangle
+     *  @param {Vector2} p2 - One of the point of the triangle
      *  @returns {boolean}
      */
     static isPointOnTriangle(p, p0, p1, p2) {
@@ -349,9 +357,9 @@ class Mathf {
      * Convert a value to a rounded percent.
      *
      * @export
-     * @param {number} a The value to convert
-     * @param {number} b The target max value
-     * @param {boolean} large convert the percent to a small value (0 ~ 1) or a large value (0 ~ 100)
+     * @param {number} a - The value to convert
+     * @param {number} b - The target max value
+     * @param {boolean} large - convert the percent to a small value (0 ~ 1) or a large value (0 ~ 100)
      * @return {number}
      */
     static roundedPercentOf(a, b, large = false) {

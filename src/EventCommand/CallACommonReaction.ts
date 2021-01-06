@@ -18,7 +18,7 @@ import DynamicValueKind = Enum.DynamicValueKind;
 /** @class
  *  An event command for calling a common reaction.
  *  @extends EventCommand.Base
- *  @param {any[]} command Direct JSON command to parse
+ *  @param {any[]} command - Direct JSON command to parse
  */
 class CallACommonReaction extends Base {
 
@@ -54,9 +54,9 @@ class CallACommonReaction extends Base {
 
     /** 
      *  Update and check if the event is finished.
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {MapObject} object The current object reacting
-     *  @param {number} state The state ID
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The current object reacting
+     *  @param {number} state - The state ID
      *  @returns {number} The number of node to pass
      */
     update(currentState: Record<string, any>, object: MapObject, state: number): 
@@ -95,8 +95,8 @@ class CallACommonReaction extends Base {
 
     /** 
      *  First key press handle for the current stack.
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {number} key The key ID pressed
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {number} key - The key ID pressed
      */
     onKeyPressed(currentState: Record<string, any>, key: number) {
         if (currentState.interpreter && currentState.interpreter.currentCommand) {
@@ -108,8 +108,8 @@ class CallACommonReaction extends Base {
 
     /** 
      *  First key release handle for the current stack.
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {number} key The key ID pressed
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {number} key - The key ID pressed
      */
     onKeyReleased(currentState: Record<string, any>, key: number) {
         if (currentState.interpreter && currentState.interpreter.currentCommand) {
@@ -121,8 +121,8 @@ class CallACommonReaction extends Base {
 
     /** 
      *  Key pressed repeat handle for the current stack.
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {number} key The key ID pressed
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {number} key - The key ID pressed
      *  @returns {boolean}
      */
     onKeyPressedRepeat(currentState: Record<string, any>, key: number): boolean {
@@ -137,8 +137,8 @@ class CallACommonReaction extends Base {
     /** 
      *  Key pressed repeat handle for the current stack, but with
      *  a small wait after the first pressure (generally used for menus).
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {number} key The key ID pressed
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {number} key - The key ID pressed
      *  @returns {boolean}
      */
     onKeyPressedAndRepeat(currentState: Record<string, any>, key: number): 
@@ -153,7 +153,7 @@ class CallACommonReaction extends Base {
 
     /** 
      *  Draw the HUD.
-     *  @param {Record<string, any>} currentState The current state of the event
+     *  @param {Record<string, any>} - currentState The current state of the event
      */
     drawHUD(currentState: Record<string, any>) {
         if (currentState.interpreter && currentState.interpreter.currentCommand) {

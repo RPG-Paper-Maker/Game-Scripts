@@ -13,9 +13,9 @@ import { Graphic, Datas } from "../index.js";
 /** @class
  *  The graphic displaying all the equipment information in the equip menu.
  *  @extends Graphic.Base
- *  @param {Player} player The current selected player
- *  @param {number} id The equipment ID
- *  @param {number} length Max length of equipment kind name
+ *  @param {Player} player - The current selected player
+ *  @param {number} id - The equipment ID
+ *  @param {number} length - Max length of equipment kind name
  */
 class Equip extends Base {
     constructor(player, id, length) {
@@ -30,10 +30,10 @@ class Equip extends Base {
     }
     /**
      *  Drawing the equipment kind and equipment name.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
      */
     drawChoice(x, y, w, h) {
         this.graphicEquipmentName.draw(x, y, w, h);
@@ -41,10 +41,10 @@ class Equip extends Base {
     }
     /**
      *  Drawing the equipment kind and equipment name.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
      */
     draw(x, y, w, h) {
         this.drawChoice(x, y, w, h);

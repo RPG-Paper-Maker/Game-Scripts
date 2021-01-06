@@ -16,7 +16,7 @@ import { Constants, Paths, Utils } from "../Common";
 /** @class
  *  A video of the game.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the 
  *  video
  */
 class Video extends Base {
@@ -33,8 +33,8 @@ class Video extends Base {
     /** 
      *  Get the folder associated to videos.
      *  @static
-     *  @param {boolean} isBR Indicate if the video is a BR
-     *  @param {string} dlc The dlc name
+     *  @param {boolean} isBR - Indicate if the video is a BR
+     *  @param {string} dlc - The dlc name
      *  @returns {string}
      */
     static getFolder(isBR: boolean, dlc: string): string {
@@ -54,7 +54,7 @@ class Video extends Base {
 
     /** 
      *  Read the JSON associated to the video.
-     *  @param {Record<string, any>} json Json object describing the video
+     *  @param {Record<string, any>} - json Json object describing the video
      */
     read(json: Record<string, any>) {
         this.id = json.id;

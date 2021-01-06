@@ -318,7 +318,7 @@ class BattleInitialize {
     
     /** 
      *  Handle key pressed.
-     *   @param {number} key The key ID 
+     *   @param {number} key - The key ID 
      */
     onKeyPressedStep(key: number) {
 
@@ -326,7 +326,7 @@ class BattleInitialize {
 
     /** 
      *  Handle key released.
-     *  @param {number} key The key ID 
+     *  @param {number} key - The key ID 
      */
     onKeyReleasedStep(key: number) {
 
@@ -334,7 +334,7 @@ class BattleInitialize {
 
     /** 
      *  Handle key repeat pressed.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      *  @returns {boolean}
      */
     onKeyPressedRepeatStep(key: number): boolean {
@@ -343,7 +343,7 @@ class BattleInitialize {
 
     /** 
      *  Handle key pressed and repeat.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      *  @returns {boolean}
      */
     onKeyPressedAndRepeatStep(key: number): boolean {

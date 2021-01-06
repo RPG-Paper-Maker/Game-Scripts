@@ -13,19 +13,44 @@ import { Bitmap } from "./Bitmap";
 import { Graphic, Datas } from "../index";
 import { Platform, ScreenResolution } from "../Common";
 
-/** @class
- *  A class for window boxes.
- *  @extends Bitmap
- *  @param {number} x The x coords
- *  @param {number} y The y coords
- *  @param {number} w The w coords
- *  @param {number} h The h coords
- *  @param {Object} [opts={}] Options
- *  @param {Bitmap} [opts.content=null] Content (containing a draw function) to
- *  display inside the window.
- *  @param {number[]} [opts.padding=[0,0,0,0]] Padding of the box
- *  @param {boolean} [opts.limitContent=true] If checked, the content will be 
- *  cut according to padding
+
+/**
+ * the window box options
+ *
+ * @interface WindowBoxOptions
+ */
+interface WindowBoxOptions {
+    /**
+     * the contents displayed inside the window.
+     *
+     * @type {Graphic.Base}
+     * @default null
+     * @memberof WindowBoxOption
+     */
+    content?: Graphic.Base;
+    /**
+     * The window padding
+     *
+     * @type {number[]}
+     * @default [0,0,0,0]
+     * @memberof WindowBoxOption
+     */
+    padding?: number[];
+    /**
+     * If enabled the contents will be cut according to the padding size.
+     *
+     * @type {boolean}
+     * @default true
+     * @memberof WindowBoxOption
+     */
+    limitContent?: boolean;
+}
+
+/**
+ * The class for window boxes.
+ *
+ * @class WindowBox
+ * @extends {Bitmap}
  */
 class WindowBox extends Bitmap {
 
@@ -51,15 +76,20 @@ class WindowBox extends Bitmap {
     public contentDimension: number[];
     public windowDimension: number[];
 
-    constructor(x: number, y: number, w: number, h: number, { content = null, 
-        padding = [0, 0, 0, 0], limitContent = true }: { content?: Graphic.Base,
-        padding?: number[], limitContent?: boolean } = {})
-    {
+    /**
+     * 
+     * @param {number} x - The x coordinates
+     * @param {number} y - The y coordinates
+     * @param {number} w - The width coordinates
+     * @param {number} h - The height coordinates
+     * @param {WindowBoxOption} [options={}] - the window options
+     * @memberof WindowBox
+     */
+    constructor(x: number, y: number, w: number, h: number, options: WindowBoxOptions = {}) {
         super(x, y, w, h);
-
-        this.content = content;
-        this.padding = padding;
-        this.limitContent = limitContent;
+        this.content = options.content || null;
+        this.padding = options.padding || [0, 0, 0, 0];
+        this.limitContent = options.limitContent || true;
         this.updateDimensions();
         this.bordersOpacity = 1;
         this.backgroundOpacity = 1;
@@ -69,7 +99,7 @@ class WindowBox extends Bitmap {
 
     /** 
      *  Set the x value.
-     *  @param {number} x The x value
+     *  @param {number} x - The x value
      */
     setX(x: number) {
         super.setX(x);
@@ -80,7 +110,7 @@ class WindowBox extends Bitmap {
 
     /** 
      *  Set the y value.
-     *  @param {number} y The y value
+     *  @param {number} y - The y value
      */
     setY(y: number) {
         super.setY(y);
@@ -91,7 +121,7 @@ class WindowBox extends Bitmap {
 
     /** 
      *  Set the w value.
-     *  @param {number} w The w value
+     *  @param {number} w - The w value
      */
     setW(w: number) {
         super.setW(w);
@@ -102,7 +132,7 @@ class WindowBox extends Bitmap {
 
     /** 
      *  Set the h value.
-     *  @param {number} h The h value
+     *  @param {number} h - The h value
      */
     setH(h: number) {
         super.setH(h);
@@ -143,19 +173,18 @@ class WindowBox extends Bitmap {
 
     /** 
      *  Draw the window.
-     *  @param {boolean} [isChoice=false] Indicate if this window box is used
+     *  @param {boolean} [isChoice=false] - Indicate if this window box is used
      *  for a window choices
-     *  @param {number[]} [windowDimension = this.windowDimension] Dimensions 
+     *  @param {number[]} [windowDimension - = this.windowDimension] Dimensions 
      *  of the window
-     *  @param {number[]} [contentDimension = this.contentDimension] Dimension 
+     *  @param {number[]} [contentDimension - = this.contentDimension] Dimension 
      *  of content
      */
     draw(isChoice: boolean = false, windowDimension: number[] = this
-        .windowDimension, contentDimension: number[] = this.contentDimension)
-    {
+        .windowDimension, contentDimension: number[] = this.contentDimension) {
         // Content behind
         if (this.content) {
-            this.content.drawBehind(contentDimension[0], contentDimension[1], 
+            this.content.drawBehind(contentDimension[0], contentDimension[1],
                 contentDimension[2], contentDimension[3]);
         }
 
@@ -169,17 +198,17 @@ class WindowBox extends Bitmap {
                 Platform.ctx.save();
                 Platform.ctx.beginPath();
                 Platform.ctx.rect(ScreenResolution.getScreenX(contentDimension
-                    [0]), ScreenResolution.getScreenY(contentDimension[1] - (
+                [0]), ScreenResolution.getScreenY(contentDimension[1] - (
                     this.padding[3] / 2)), ScreenResolution.getScreenX(
-                    contentDimension[2]), ScreenResolution.getScreenY(
-                    contentDimension[3] + this.padding[3]));
+                        contentDimension[2]), ScreenResolution.getScreenY(
+                            contentDimension[3] + this.padding[3]));
                 Platform.ctx.clip();
             }
             if (isChoice) {
-                this.content.drawChoice(contentDimension[0], contentDimension[1], 
+                this.content.drawChoice(contentDimension[0], contentDimension[1],
                     contentDimension[2], contentDimension[3]);
             } else {
-                this.content.draw(contentDimension[0], contentDimension[1], 
+                this.content.draw(contentDimension[0], contentDimension[1],
                     contentDimension[2], contentDimension[3]);
             }
             if (!isChoice && this.limitContent) {
@@ -189,4 +218,4 @@ class WindowBox extends Bitmap {
     }
 }
 
-export { WindowBox }
+export { WindowBox, WindowBoxOptions }

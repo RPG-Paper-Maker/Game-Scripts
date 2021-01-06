@@ -34,7 +34,7 @@ class Land extends MapElement {
 
     /**
      *  Read the JSON associated to the land
-     *  @param {Record<string, any>} json Json object describing the land
+     *  @param {Record<string, any>} json - Json object describing the land
      */
     read(json: Record<string, any>) {
         super.read(json);
@@ -59,17 +59,17 @@ class Land extends MapElement {
     /** 
      *  Update the geometry associated to this land and return the collision
      *  result.
-     *  @param {THREE.Geometry} geometry The geometry asoociated to the
+     *  @param {THREE.Geometry} geometry - The geometry asoociated to the
      *  autotiles
-     *  @param {CollisionSquare} collision The collision square
-     *  @param {Position} position The position
-     *  @param {number} width The texture total width
-     *  @param {number} height The texture total height
-     *  @param {number} x The x texture position
-     *  @param {number} y The y texture position
-     *  @param {number} w The w texture size
-     *  @param {number} h The h texture size
-     *  @param {number} count The faces count
+     *  @param {CollisionSquare} collision - The collision square
+     *  @param {Position} position - The position
+     *  @param {number} width - The texture total width
+     *  @param {number} height - The texture total height
+     *  @param {number} x - The x texture position
+     *  @param {number} y - The y texture position
+     *  @param {number} w - The w texture size
+     *  @param {number} h - The h texture size
+     *  @param {number} count - The faces count
      *  @returns {StructCollision}
      */
     updateGeometryLand(geometry: THREE.Geometry, collision: 

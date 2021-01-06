@@ -16,7 +16,7 @@ import { Utils } from "../Common";
 /** @class
  *  An event that an object can react on.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the 
  *  object event
  */
 class Event extends Base {
@@ -33,7 +33,7 @@ class Event extends Base {
 
     /** 
      *  Read the JSON associated to the object event
-     *  @param {Record<string, any>} json Json object describing the object event
+     *  @param {Record<string, any>} - json Json object describing the object event
      */
     read(json: Record<string, any>) {
         this.isSystem = json.sys;
@@ -54,7 +54,7 @@ class Event extends Base {
 
     /** 
      *  Check if this event is equal to another.
-     *  @param {System.Event} event The event to compare
+     *  @param {System.Event} event - The event to compare
      *  @returns {boolean}
      */
     isEqual(event: System.Event): boolean {
@@ -71,7 +71,7 @@ class Event extends Base {
 
     /** 
      *  Add reactions to the event.
-     *  @param {Record<number, System.Reaction>} reactions The reactions to add
+     *  @param {Record<number, System.Reaction>} - reactions The reactions to add
      */
     addReactions(reactions: Record<number, System.Reaction>) {
         for (let idState in reactions)

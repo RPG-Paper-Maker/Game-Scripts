@@ -10,7 +10,7 @@
 */
 /** @class
  *  A skill learned by a player.
- *  @param {number} id The ID of the skill
+ *  @param {number} id - The ID of the skill
  */
 class Skill {
     constructor(id) {

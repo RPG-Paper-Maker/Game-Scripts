@@ -92,8 +92,8 @@ class MapPortion {
 
     /** 
      *  Read the JSON associated to the map portion.
-     *  @param {Record<string, any>} json Json object describing the map portion
-     *  @param {boolean} isMapHero Indicates if this map is where the hero is
+     *  @param {Record<string, any>} json - object describing the map portion
+     *  @param {boolean} isMapHero - Indicates if this map is where the hero is
      *  at the beginning of the game.
      */
     read(json: Record<string, any>, isMapHero: boolean) {
@@ -110,7 +110,7 @@ class MapPortion {
 
     /** 
      *  Read the JSON associated to the lands in the portion.
-     *  @param {Record<string, any>} json Json object describing the lands
+     *  @param {Record<string, any>} json - object describing the lands
      */
     readLands(json: Record<string, any>) {
         this.readFloors(json.floors);
@@ -119,7 +119,7 @@ class MapPortion {
 
     /** 
      *  Read the JSON associated to the floors in the portion.
-     *  @param {Record<string, any>} json Json object describing the floors
+     *  @param {Record<string, any>} json - Json object describing the floors
      */
     readFloors(json: Record<string, any>) {
         let material = Scene.Map.current.textureTileset;
@@ -181,7 +181,7 @@ class MapPortion {
 
     /** 
      *  Read the JSON associated to the autotiles in the portion.
-     *  @param {Record<string, any>} json Json object describing the autotiles
+     *  @param {Record<string, any>} json - Json object describing the autotiles
      */
     readAutotiles(json: Record<string, any>) {
         if (!json) {
@@ -238,7 +238,7 @@ class MapPortion {
 
     /** 
      *  Read the JSON associated to the sprites in the portion.
-     *  @param {Record<string, any>} json Json object describing the sprites
+     *  @param {Record<string, any>} json - Json object describing the sprites
      */
     readSprites(json: Record<string, any>) {
         this.readSpritesWalls(json.walls);
@@ -246,7 +246,7 @@ class MapPortion {
     }
 
     /** Read the JSON associated to the sprites globals in the portion.
-     *  @param {Record<string, any>} json Json object describing the sprites globals
+     *  @param {Record<string, any>} json - Json object describing the sprites globals
     */
     readSpritesGlobals(json: Record<string, any>) {
         let material = Scene.Map.current.textureTileset;
@@ -295,7 +295,7 @@ class MapPortion {
 
     /** 
      *  Read the JSON associated to the sprites walls in the portion.
-     *  @param {Record<string, any>} json Json object describing the sprites 
+     *  @param {Record<string, any>} json - Json object describing the sprites 
      *  walls
      */
     readSpritesWalls(json: Record<string, any>) {
@@ -363,7 +363,7 @@ class MapPortion {
 
     /** 
      *  Read the JSON associated to the mountains in the portion.
-     *  @param {Record<string, any>} json Json object describing the mountains
+     *  @param {Record<string, any>} json - Json object describing the mountains
      */
     readMountains(json: Record<string, any>) {
         if (!json) {
@@ -423,7 +423,7 @@ class MapPortion {
 
     /** 
      *  Read the JSON associated to the objects 3D in the portion.
-     *  @param {Record<string, any>} json Json object describing the objects 3D
+     *  @param {Record<string, any>} json - Json object describing the objects 3D
     */
     readObjects3D(json: Record<string, any>) {
         // Initialize
@@ -512,8 +512,8 @@ class MapPortion {
 
     /** 
      *  Read the JSON associated to the objects in the portion.
-     *  @param {Record<string, any>} json Json object describing the objects
-     *  @param {boolean} isMapHero Indicates if this map is where the hero is
+     *  @param {Record<string, any>} json - Json object describing the objects
+     *  @param {boolean} isMapHero - Indicates if this map is where the hero is
      *  at the beginning of the game
     */
     readObjects(json: Record<string, any>, isMapHero: boolean) {
@@ -622,8 +622,8 @@ class MapPortion {
 
     /** 
      *  Search for the object with the ID.
-     *  @param {Record<string, any>} json Json object describing the objects
-     *  @param {number} id The ID of the object
+     *  @param {Record<string, any>} json - Json object describing the objects
+     *  @param {number} id - The ID of the object
      *  @returns {MapObject}
     */
     getObjFromID(json: Record<string, any>, id: number): MapObject {
@@ -653,7 +653,7 @@ class MapPortion {
 
     /** 
      *  Get hero model.
-     *  @param {Record<string, any>} json Json object describing the objects
+     *  @param {Record<string, any>} json - Json object describing the objects
      *  @returns {MapObject}
      */
     getHeroModel(json: Record<string, any>): MapObject {
@@ -674,7 +674,7 @@ class MapPortion {
 
     /** 
      *  Update the face sprites orientation.
-     *  @param {number} angle The angle on the Y axis
+     *  @param {number} angle - The angle on the Y axis
      */
     updateFaceSprites(angle: number) {
         let i: number, l: number;
@@ -688,8 +688,8 @@ class MapPortion {
 
     /** 
      *  Update the collision sprite.
-     *  @param {StructMapElementCollision[]} collisions The collisions objects
-     *  @param {Position} position The json position of the sprite
+     *  @param {StructMapElementCollision[]} collisions - The collisions objects
+     *  @param {Position} position - The json position of the sprite
      */
     updateCollisionSprite(collisions: StructMapElementCollision[], position: 
         Position)
@@ -717,10 +717,10 @@ class MapPortion {
     }
 
     /** Update the collision sprite
-     *  @param {Record<string, any>[]} boundingBoxes The bounding boxes list to update 
-     *  @param {StructMapElementCollision[]} collisions The collisions objects
-     *  @param {Position} position The json position of the sprite
-     *  @param {boolean} side Indicate if collision side
+     *  @param {Record<string, any>[]} boundingBoxes - The bounding boxes list to update 
+     *  @param {StructMapElementCollision[]} collisions - The collisions objects
+     *  @param {Position} position - The json position of the sprite
+     *  @param {boolean} side - Indicate if collision side
     */
     updateCollision(boundingBoxes: Record<string, any>[], collisions: 
         StructMapElementCollision[], position: Position, side: boolean)
@@ -773,9 +773,9 @@ class MapPortion {
 
     /** 
      *  Get the object collision according to position.
-     *  @param {Position} positionSource The source json position
-     *  @param {Position} positionTarget The target json position
-     *  @param {ElementMapKind} kind The element map kind
+     *  @param {Position} positionSource - The source json position
+     *  @param {Position} positionTarget - The target json position
+     *  @param {ElementMapKind} kind - The element map kind
      *  @returns {StructMapElementCollision[]}
      */
     getObjectCollisionAt(positionSource: Position, positionTarget: Position, 
@@ -811,7 +811,7 @@ class MapPortion {
 
     /** 
      *  Add a position to non empty.
-     *  @param {Position} position The position to add
+     *  @param {Position} position - The position to add
      */
     addToNonEmpty(position: Position) {
         this.squareNonEmpty[position.x % Constants.PORTION_SIZE][position.z % 
@@ -820,7 +820,7 @@ class MapPortion {
 
     /** 
      *  Check if position if in this map portion.
-     *  @param {Position} position The position to check
+     *  @param {Position} position - The position to check
      *  @returns {boolean}
     */
     isPositionIn(position: Position): boolean {

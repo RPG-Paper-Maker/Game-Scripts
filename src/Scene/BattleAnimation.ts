@@ -319,7 +319,7 @@ class BattleAnimation {
 
     /** 
      *  Handle key pressed.
-     *   @param {number} key The key ID 
+     *   @param {number} key - The key ID 
      */
     public onKeyPressedStep(key: number) {
 
@@ -327,7 +327,7 @@ class BattleAnimation {
 
     /** 
      *  Handle key released.
-     *  @param {number} key The key ID 
+     *  @param {number} key - The key ID 
      */
     public onKeyReleasedStep(key: number) {
 
@@ -335,7 +335,7 @@ class BattleAnimation {
 
     /** 
      *  Handle key repeat pressed.
-     *  @param {number} key The key ID 
+     *  @param {number} key - The key ID 
      *  @returns {boolean}
      */
     public onKeyPressedRepeatStep(key: number): boolean {
@@ -344,7 +344,7 @@ class BattleAnimation {
 
     /** 
      *  Handle key pressed and repeat.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      *  @returns {boolean} 
      */
     public onKeyPressedAndRepeatStep(key: number): boolean {

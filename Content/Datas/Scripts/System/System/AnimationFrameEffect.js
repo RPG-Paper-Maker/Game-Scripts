@@ -16,7 +16,7 @@ import { PlaySong } from "./PlaySong.js";
 /** @class
  *  An animation frame effect.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  animation frame effect
  */
 class AnimationFrameEffect extends Base {
@@ -25,7 +25,7 @@ class AnimationFrameEffect extends Base {
     }
     /**
      *  Read the JSON associated to the animation frame effect.
-     *  @param {Record<string, any>} json Json object describing the animation
+     *  @param {Record<string, any>} - json Json object describing the animation
      *  frame effect
      */
     read(json) {
@@ -38,7 +38,7 @@ class AnimationFrameEffect extends Base {
     }
     /**
      *  Play the sound effect according to a condition.
-     *  @param {AnimationEffectConditionKind} condition The animation effect
+     *  @param {AnimationEffectConditionKind} condition - The animation effect
      *  condition kind
      */
     playSE(condition) {

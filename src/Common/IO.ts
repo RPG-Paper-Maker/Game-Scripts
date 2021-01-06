@@ -9,9 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-/** @class
- *  @static
- *  The Input and Output class who handles loading and saving.
+
+/**
+ * The Input and Output class who handles loading and saving.
+ *
+ * @class IO
  */
 class IO {
 
@@ -22,7 +24,7 @@ class IO {
     /** 
      *  Check if a file exists.
      *  @static
-     *  @param {string} url The path of the file
+     *  @param {string} url - The path of the file
      *  @returns {boolean}
      */
     static fileExists = function(url: string): Promise<boolean> {
@@ -33,7 +35,7 @@ class IO {
     /** 
      *  Open an existing file.
      *  @static
-     *  @param {string} url The path of the file
+     *  @param {string} url - The path of the file
      *  @returns {string}
      */
     static openFile = async function(url: string): Promise<string>
@@ -53,7 +55,7 @@ class IO {
     /** 
      *  Open and parse an existing file.
      *  @static
-     *  @param {string} url The path of the file
+     *  @param {string} url - The path of the file
      *  @returns {Promise<Record<string, any>>}
      */
     static parseFileJSON = async function(url: string): Promise<Record<string, 
@@ -65,8 +67,8 @@ class IO {
     /** 
      *  Write a json file.
      *  @static
-     *  @param {string} url The path of the file
-     *  @param {Object} obj An object that can be stringified by JSON
+     *  @param {string} url - The path of the file
+     *  @param {Object} obj - An object that can be stringified by JSON
      */
     static saveFile = async function(url: string, obj: Object)
     {

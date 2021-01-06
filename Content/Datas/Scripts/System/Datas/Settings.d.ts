@@ -18,7 +18,7 @@ declare class Settings {
     /**
      *  Update Keyboard settings.
      *  @param {number} id
-     *  @param {number[][]} sc
+     *  @param {number[][]} sc -
      *  @static
      */
     static updateKeyboard(id: number, sc: number[][]): void;

@@ -15,7 +15,7 @@ import { System } from "../index";
 /** @class
  *  A common reaction.
  *  @extends System.Reaction
- *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the 
  *  common reaction
  */
 class CommonReaction extends Reaction {
@@ -27,7 +27,7 @@ class CommonReaction extends Reaction {
     }
 
     /** Read the JSON associated to the common reaction.
-     *  @param {Record<string, any>} json Json object describing the common 
+     *  @param {Record<string, any>} - json Json object describing the common 
      *  reaction
      */
     read(json: Record<string, any>) {

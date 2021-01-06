@@ -118,7 +118,7 @@ class MenuInventory extends Base {
     }
     /**
      *  Move tab according to key.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     moveTabKey(key) {
         // Tab
@@ -146,7 +146,7 @@ class MenuInventory extends Base {
     }
     /**
      *  Handle scene key pressed.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     onKeyPressed(key) {
         Scene.Base.prototype.onKeyPressed.call(Scene.Map.current, key);
@@ -197,14 +197,14 @@ class MenuInventory extends Base {
     }
     /**
      *  Handle scene key released.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     onKeyReleased(key) {
         Scene.Base.prototype.onKeyReleased.call(Scene.Map.current, key);
     }
     /**
      *  Handle scene pressed repeat key.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      *  @returns {boolean}
      */
     onKeyPressedRepeat(key) {
@@ -212,7 +212,7 @@ class MenuInventory extends Base {
     }
     /**
      *  Handle scene pressed and repeat key.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      *  @returns {boolean}
      */
     onKeyPressedAndRepeat(key) {

@@ -10,10 +10,9 @@
 */
 import { Datas, Common, Core, EventCommand, Graphic, Manager, System, Scene } from "../index.js";
 import { THREE, Howl } from "../Globals.js";
-/** @class
- *  @static
- *  The interpreter to evaluate formulas or simple scripts without having to
- *  import.
+/**
+ *  The interpreter to evaluate formulas or simple scripts without having to import.
+ * @class Interpreter
  */
 class Interpreter {
     constructor() {

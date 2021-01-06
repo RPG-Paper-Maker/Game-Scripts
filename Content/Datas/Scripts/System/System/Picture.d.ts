@@ -5,9 +5,9 @@ import { Base } from "./Base.js";
 /** @class
  *  A picture of the game.
  *  @extends {System.Base}
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  picture
- *  @param {PictureKind} [kind=PictureKind.Pictures] The kind of picture
+ *  @param {PictureKind} [kind=PictureKind.Pictures] - The kind of picture
  */
 declare class Picture extends Base {
     id: number;
@@ -29,29 +29,29 @@ declare class Picture extends Base {
     setup(args: any[]): void;
     /**
      *  Get string of picture kind.
-     *  @param {PictureKind} kind The picture kind
+     *  @param {PictureKind} kind - The picture kind
      *  @returns {string}
      */
     static pictureKindToString(kind: PictureKind): string;
     /**
      *  Get the folder associated to a kind of picture.
      *  @static
-     *  @param {PictureKind} kind The kind of picture
-     *  @param {boolean} isBR Indicate if the picture is a BR
-     *  @param {string} dlc The picture DLC name (if exists)
+     *  @param {PictureKind} kind - The kind of picture
+     *  @param {boolean} isBR - Indicate if the picture is a BR
+     *  @param {string} dlc - The picture DLC name (if exists)
      *  @returns {string}
      */
     static getFolder(kind: PictureKind, isBR: boolean, dlc: string): string;
     /**
      *  Get the local folder associated to a kind of picture.
      *  @static
-     *  @param {PictureKind} kind The kind of picture
+     *  @param {PictureKind} kind - The kind of picture
      *  @returns {string}
      */
     static getLocalFolder(kind: PictureKind): string;
     /**
      *  Read the JSON associated to the picture.
-     *  @param {Object} json Json object describing the picture
+     *  @param {Object} json - Json object describing the picture
      */
     read(json: Record<string, any>): void;
     /**
@@ -66,7 +66,7 @@ declare class Picture extends Base {
     getPath(): string;
     /**
      *  Read collisions according to image size.
-     *  @param {HTMLImageElement} image The image texture
+     *  @param {HTMLImageElement} image - The image texture
      */
     readCollisionsImage(image: HTMLImageElement): void;
     /**
@@ -76,38 +76,38 @@ declare class Picture extends Base {
     readCollisions(): void;
     /**
      *  Get a specific collision square according to texture.
-     *  @param {number[]} pos Texture position
+     *  @param {number[]} pos - Texture position
      *  @returns {CollisionSquare}
      */
     getCollisionAt(pos: number[]): CollisionSquare;
     /**
      *  Get a specific collision square according to texture.
-     *  @param {number} x Texture x position
-     *  @param {number} y Texture y position
+     *  @param {number} x - Texture x position
+     *  @param {number} y - Texture y position
      *  @returns {CollisionSquare}
      */
     getCollisionAtPos(x: number, y: number): CollisionSquare;
     /**
      *  Get a specific collision square according to index.
-     *  @param {number} index The index positions
+     *  @param {number} index - The index positions
      *  @returns {CollisionSquare}
      */
     getCollisionAtIndex(index: number): CollisionSquare;
     /**
      *  Get a specific collision for wall.
-     *  @param {number[]} texture Texture position
+     *  @param {number[]} texture - Texture position
      *  @returns {number[][]}
      */
     getSquaresForWall(texture: number[]): number[][];
     /**
      *  Get a specific collision square according to texture.
-     *  @param {number[]} texture Texture position
+     *  @param {number[]} texture - Texture position
      *  @returns {number[][]}
      */
     getSquaresForTexture(texture: number[]): number[][];
     /**
      *  Get a specific collision square according to texture
-     *  @param {THREE.Image} image The image texture
+     *  @param {THREE.Image} image - The image texture
      *  @returns {number[][][]}
      */
     getSquaresForStates(image: any): number[][];

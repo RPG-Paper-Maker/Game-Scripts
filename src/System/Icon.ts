@@ -14,7 +14,7 @@ import { Translatable } from "./Translatable";
 /** @class
  *  Something at least including an icon.
  *  @extends {System.Translatable}
- *  @param {Object} [json=undefined] Json object describing the icon
+ *  @param {Object} [json=undefined] - Json object describing the icon
  */
 class Icon extends Translatable {
     
@@ -26,7 +26,7 @@ class Icon extends Translatable {
 
     /** 
      *  Read the JSON associated to the icon.
-     *  @param {Record<string, any>} json Json object describing the icon
+     *  @param {Record<string, any>} - json Json object describing the icon
      */
     read(json?: Record<string, any>) {
         super.read(json);

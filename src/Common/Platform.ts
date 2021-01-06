@@ -18,23 +18,34 @@ const app = remote.app;
 
 let firstError = true;
 
-/** @class
- *  @static
- *  A class replaced according to te platform used (desktop, browser, mobile...).
+/**
+ * A class replaced according to te platform used (desktop, browser, mobile...)
+ *
+ * @class Platform
  */
 class Platform {
-    public static readonly ROOT_DIRECTORY = app.getAppPath();
-    public static readonly screen = ElectronScreen.getPrimaryDisplay();
-    public static readonly screenWidth = Platform.screen.bounds.width;
-    public static readonly screenHeight = Platform.screen.bounds.height;
-    public static readonly DESKTOP = true;
-    public static canvas3D = document.getElementById('three-d');
-    public static canvasHUD = <HTMLCanvasElement> document.getElementById('hud');
-    public static canvasVideos = <HTMLVideoElement> document.getElementById('video-container');
-    public static canvasRendering = <HTMLCanvasElement> document.getElementById('rendering');
-    public static ctx = <CanvasRenderingContext2D> Platform.canvasHUD.getContext('2d');
-    public static ctxr = <CanvasRenderingContext2D> Platform.canvasRendering.getContext("2d");
 
+    public static readonly ROOT_DIRECTORY: any = app.getAppPath();
+
+    public static readonly screen: any = ElectronScreen.getPrimaryDisplay();
+
+    public static readonly screenWidth: number = Platform.screen.bounds.width;
+
+    public static readonly screenHeight: number = Platform.screen.bounds.height;
+
+    public static readonly DESKTOP: boolean = true;
+
+    public static canvas3D: any = document.getElementById('three-d');
+    public static canvasHUD: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById('hud');
+    public static canvasVideos: HTMLVideoElement = <HTMLVideoElement> document.getElementById('video-container');
+    public static canvasRendering: HTMLCanvasElement= <HTMLCanvasElement> document.getElementById('rendering');
+    public static ctx: CanvasRenderingContext2D = <CanvasRenderingContext2D> Platform.canvasHUD.getContext('2d');
+    public static ctxr: CanvasRenderingContext2D = <CanvasRenderingContext2D> Platform.canvasRendering.getContext("2d");
+
+    /**
+     * Creates an instance of Platform.
+     * @memberof Platform
+     */
     constructor() {
         throw new Error("This class is static.")
     }
@@ -42,7 +53,7 @@ class Platform {
     /** 
      *  Set window title.
      *  @static
-     *  @param {string} title The title to display
+     *  @param {string} title - The title to display
      */
     static setWindowTitle = function (title: string) {
         ipc.send('change-window-title', title);
@@ -51,9 +62,9 @@ class Platform {
     /** 
      *  Set window size.
      *  @static
-     *  @param {number} w The window width
-     *  @param {number} h The window height
-     *  @param {boolean} f Indicate if the window is fullscreen
+     *  @param {number} w - The window width
+     *  @param {number} h - The window height
+     *  @param {boolean} f - Indicate if the window is fullscreen
      */
     static setWindowSize = function (w: number, h: number, f: boolean) {
         ipc.send('change-window-size', w, h, f);
@@ -70,7 +81,7 @@ class Platform {
     /** 
      *  Show an error object.
      *  @static
-     *  @param {Error} e The error message
+     *  @param {Error} e - The error message
      */
     static showError(e: Error) {
         Platform.showErrorMessage(e.message + Constants.STRING_NEW_LINE + e
@@ -80,7 +91,7 @@ class Platform {
     /** 
      *  Show an error message.
      *  @static
-     *  @param {string} msg The error message
+     *  @param {string} msg - The error message
      */
     static showErrorMessage(msg: string) {
         if (firstError) {

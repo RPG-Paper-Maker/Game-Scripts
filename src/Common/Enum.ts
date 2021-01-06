@@ -639,6 +639,17 @@ namespace Enum {
         EnemyAttack,
         Victory
     };
+
+    /**
+     * Enum for the screen transition.
+     *
+     * @export
+     * @enum {number}
+     */
+    export enum FadeType {
+        FadeIn,
+        FadeOut
+    }
 }
 
 export { Enum }

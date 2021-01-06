@@ -5,7 +5,7 @@ import { System, EventCommand } from "../index.js";
 /** @class
  *  A possible state of an object.
  *  @extends System.Base
- *  @param {Record<string, any>} json Json object describing the object state
+ *  @param {Record<string, any>} - json Json object describing the object state
  */
 declare class State extends Base {
     id: number;
@@ -30,7 +30,7 @@ declare class State extends Base {
     constructor(json?: Record<string, any>);
     /**
      *  Read the JSON associated to the object state.
-     *  @param {Record<string, any>} json Json object describing the object
+     *  @param {Record<string, any>} - json Json object describing the object
      *  state
      */
     read(json: Record<string, any>): void;

@@ -12,7 +12,7 @@ import { Translatable } from "./Translatable.js";
 /** @class
  *  Something at least including an icon.
  *  @extends {System.Translatable}
- *  @param {Object} [json=undefined] Json object describing the icon
+ *  @param {Object} [json=undefined] - Json object describing the icon
  */
 class Icon extends Translatable {
     constructor(json) {
@@ -20,7 +20,7 @@ class Icon extends Translatable {
     }
     /**
      *  Read the JSON associated to the icon.
-     *  @param {Record<string, any>} json Json object describing the icon
+     *  @param {Record<string, any>} - json Json object describing the icon
      */
     read(json) {
         super.read(json);

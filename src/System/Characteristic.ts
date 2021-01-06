@@ -21,7 +21,7 @@ import { Datas, Manager, Scene } from "../index";
 /** @class
  *  A characteristic of a common skill item.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the 
  *  characteristic
  */
 class Characteristic extends Base {
@@ -55,7 +55,7 @@ class Characteristic extends Base {
 
     /** 
      *  Read the JSON associated to the characteristic.
-     *  @param {Record<string, any>} json Json object describing the 
+     *  @param {Record<string, any>} - json Json object describing the 
      *  characteristic
      */
     read(json: Record<string, any>) {
@@ -125,7 +125,7 @@ class Characteristic extends Base {
 
     /** 
      *  Get the new stat value of a player with this characteristic bonus.
-     *  @param {Player} gamePlayer the player
+     *  @param {Player} gamePlayer - the player
      *  @returns {number[]}
      */
     getNewStatValue(gamePlayer: Player): number[] {

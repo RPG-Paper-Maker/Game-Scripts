@@ -15,7 +15,7 @@ import { Mathf } from "../Common/index.js";
 /** @class
  *  A loot of the game.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  loot
  */
 class Loot extends Base {
@@ -24,7 +24,7 @@ class Loot extends Base {
     }
     /**
      *  Read the JSON associated to the loot.
-     *  @param {Record<string, any>} json Json object describing the loot
+     *  @param {Record<string, any>} - json Json object describing the loot
      */
     read(json) {
         this.kind = json.k;
@@ -36,7 +36,7 @@ class Loot extends Base {
     }
     /**
      *  Check if a loot is available at a particular level.
-     *  @param {number} level The level
+     *  @param {number} level - The level
      *  @returns {boolean}
      */
     isAvailable(level) {
@@ -44,7 +44,7 @@ class Loot extends Base {
     }
     /**
      *  Get the current loot at a particular level.
-     *  @param {number} level The level
+     *  @param {number} level - The level
      *  @returns {Item}
      */
     currenLoot(level) {

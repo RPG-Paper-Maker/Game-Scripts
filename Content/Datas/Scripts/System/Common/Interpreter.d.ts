@@ -1,8 +1,7 @@
 import { Player, MapObject } from "../Core/index.js";
-/** @class
- *  @static
- *  The interpreter to evaluate formulas or simple scripts without having to
- *  import.
+/**
+ *  The interpreter to evaluate formulas or simple scripts without having to import.
+ * @class Interpreter
  */
 declare class Interpreter {
     private static common;

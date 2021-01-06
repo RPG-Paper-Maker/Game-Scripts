@@ -14,7 +14,7 @@ import { Utils, Platform, ScreenResolution } from "../Common/index.js";
 /** @class
  *  An event command for flashing screen.
  *  @extends EventCommand.Base
- *  @param {Object} command Direct JSON command to parse
+ *  @param {Object} command - Direct JSON command to parse
  */
 class FlashScreen extends Base {
     constructor(command) {
@@ -46,9 +46,9 @@ class FlashScreen extends Base {
     }
     /**
      *  Update and check if the event is finished.
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {MapObject} object The current object reacting
-     *  @param {number} state The state ID
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The current object reacting
+     *  @param {number} state - The state ID
      *  @returns {number} The number of node to pass
      */
     update(currentState, object, state) {
@@ -76,7 +76,7 @@ class FlashScreen extends Base {
     }
     /**
      *  Draw the HUD
-     *  @param {Record<string, any>} currentState The current state of the event
+     *  @param {Record<string, any>} - currentState The current state of the event
      */
     drawHUD(currentState) {
         Platform.ctx.fillStyle = currentState.color;

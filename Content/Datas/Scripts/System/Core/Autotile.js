@@ -12,11 +12,11 @@ import { Enum } from "../Common/index.js";
 var PictureKind = Enum.PictureKind;
 import { Land } from "./Land.js";
 import { Datas } from "../index.js";
-/** @class
- *  @extends Land
- *  An autotile in the map
- *  @param {Record<string, any>} [json=undefined] Json object describing the
- *  autotile
+/**
+ * An autotile in the map
+ *
+ * @class Autotile
+ * @extends {Land}
  */
 class Autotile extends Land {
     constructor(json) {
@@ -27,7 +27,7 @@ class Autotile extends Land {
     }
     /**
      *  Read the JSON associated to the autotile.
-     *  @param {Record<string, any>} json Json object describing the autotile
+     *  @param {Record<string, any>} json - Json object describing the autotile
      */
     read(json) {
         super.read(json);
@@ -37,14 +37,14 @@ class Autotile extends Land {
     /**
      *  Update the geometry associated to this autotile and return the
      *  collision result.
-     *  @param {THREE.Geometry} geometry The geometry asoociated to the
+     *  @param {THREE.Geometry} geometry - The geometry asoociated to the
      *  autotiles
-     *  @param {TextureBundle} texure The several texture used for this
+     *  @param {TextureBundle} texure - The several texture used for this
      *  geometry
-     *  @param {Position} position The json position
-     *  @param {number} width The texture total width
-     *  @param {number} height The texture total height
-     *  @param {number} count The faces count
+     *  @param {Position} position - The json position
+     *  @param {number} width - The texture total width
+     *  @param {number} height - The texture total height
+     *  @param {number} count - The faces count
      *  @returns {StructMapElementCollision}
      */
     updateGeometryAutotile(geometry, texture, position, width, height, count) {

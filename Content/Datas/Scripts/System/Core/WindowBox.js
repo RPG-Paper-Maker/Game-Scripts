@@ -11,26 +11,27 @@
 import { Bitmap } from "./Bitmap.js";
 import { Datas } from "../index.js";
 import { Platform, ScreenResolution } from "../Common/index.js";
-/** @class
- *  A class for window boxes.
- *  @extends Bitmap
- *  @param {number} x The x coords
- *  @param {number} y The y coords
- *  @param {number} w The w coords
- *  @param {number} h The h coords
- *  @param {Object} [opts={}] Options
- *  @param {Bitmap} [opts.content=null] Content (containing a draw function) to
- *  display inside the window.
- *  @param {number[]} [opts.padding=[0,0,0,0]] Padding of the box
- *  @param {boolean} [opts.limitContent=true] If checked, the content will be
- *  cut according to padding
+/**
+ * The class for window boxes.
+ *
+ * @class WindowBox
+ * @extends {Bitmap}
  */
 class WindowBox extends Bitmap {
-    constructor(x, y, w, h, { content = null, padding = [0, 0, 0, 0], limitContent = true } = {}) {
+    /**
+     *
+     * @param {number} x - The x coordinates
+     * @param {number} y - The y coordinates
+     * @param {number} w - The width coordinates
+     * @param {number} h - The height coordinates
+     * @param {WindowBoxOption} [options={}] - the window options
+     * @memberof WindowBox
+     */
+    constructor(x, y, w, h, options = {}) {
         super(x, y, w, h);
-        this.content = content;
-        this.padding = padding;
-        this.limitContent = limitContent;
+        this.content = options.content || null;
+        this.padding = options.padding || [0, 0, 0, 0];
+        this.limitContent = options.limitContent || true;
         this.updateDimensions();
         this.bordersOpacity = 1;
         this.backgroundOpacity = 1;
@@ -39,7 +40,7 @@ class WindowBox extends Bitmap {
     }
     /**
      *  Set the x value.
-     *  @param {number} x The x value
+     *  @param {number} x - The x value
      */
     setX(x) {
         super.setX(x);
@@ -49,7 +50,7 @@ class WindowBox extends Bitmap {
     }
     /**
      *  Set the y value.
-     *  @param {number} y The y value
+     *  @param {number} y - The y value
      */
     setY(y) {
         super.setY(y);
@@ -59,7 +60,7 @@ class WindowBox extends Bitmap {
     }
     /**
      *  Set the w value.
-     *  @param {number} w The w value
+     *  @param {number} w - The w value
      */
     setW(w) {
         super.setW(w);
@@ -69,7 +70,7 @@ class WindowBox extends Bitmap {
     }
     /**
      *  Set the h value.
-     *  @param {number} h The h value
+     *  @param {number} h - The h value
      */
     setH(h) {
         super.setH(h);
@@ -106,11 +107,11 @@ class WindowBox extends Bitmap {
     }
     /**
      *  Draw the window.
-     *  @param {boolean} [isChoice=false] Indicate if this window box is used
+     *  @param {boolean} [isChoice=false] - Indicate if this window box is used
      *  for a window choices
-     *  @param {number[]} [windowDimension = this.windowDimension] Dimensions
+     *  @param {number[]} [windowDimension - = this.windowDimension] Dimensions
      *  of the window
-     *  @param {number[]} [contentDimension = this.contentDimension] Dimension
+     *  @param {number[]} [contentDimension - = this.contentDimension] Dimension
      *  of content
      */
     draw(isChoice = false, windowDimension = this

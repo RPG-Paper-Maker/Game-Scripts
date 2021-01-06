@@ -21,7 +21,7 @@ class AnimationFrameElement extends Base {
     }
     /**
      *  Read the JSON associated to the animation frame element.
-     *  @param {Record<string, any>} json Json object describing the animation
+     *  @param {Record<string, any>} - json Json object describing the animation
      *  frame element
      */
     read(json) {
@@ -36,10 +36,10 @@ class AnimationFrameElement extends Base {
     }
     /**
      *  Draw the animation element.
-     *  @param {Picture2D} picture The picture associated to the animation
-     *  @param {Vector2} position The position on screen for animation
-     *  @param {number} rows The number of rows in the animation texture
-     *  @param {number} cols The number of columns in the animation texture
+     *  @param {Picture2D} picture - The picture associated to the animation
+     *  @param {Vector2} position - The position on screen for animation
+     *  @param {number} rows - The number of rows in the animation texture
+     *  @param {number} cols - The number of columns in the animation texture
      */
     draw(picture, position, rows, cols) {
         picture.zoom = this.zoom;

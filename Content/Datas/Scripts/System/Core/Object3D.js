@@ -19,7 +19,7 @@ class Object3D extends MapElement {
     }
     /**
      *  Read the JSON associated to the object 3D.
-     *  @param {Record<string, any>} json Json object describing the object 3D
+     *  @param {Record<string, any>} json - Json object describing the object 3D
      */
     read(json) {
         super.read(json);

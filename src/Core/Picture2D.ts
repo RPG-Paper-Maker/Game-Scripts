@@ -18,11 +18,11 @@ import { Bitmap } from "./Bitmap";
 /** @class
  *   A class for pictures drawable in HUD.
  *   @extends Bitmap
- *   @param {string} [path=""] The path to the ressource
- *   @param {number} [x=0] Coords of the bitmap
- *   @param {number} [y=0] Coords of the bitmap
- *   @param {number} [w=0] Coords of the bitmap
- *   @param {number} [h=0] Coords of the bitmap
+ *   @param {string} [path=""] - The path to the ressource
+ *   @param {number} [x=0] - Coords of the bitmap
+ *   @param {number} [y=0] - Coords of the bitmap
+ *   @param {number} [w=0] - Coords of the bitmap
+ *   @param {number} [h=0] - Coords of the bitmap
  */
 class Picture2D extends Bitmap {
 
@@ -61,7 +61,7 @@ class Picture2D extends Bitmap {
     /** 
      *  Create a picture and then load it
      *  @static
-     *  @param {System.Picture} picture The picture to load
+     *  @param {System.Picture} picture - The picture to load
      */
     static async create(picture: System.Picture, opts: { x?: number, y?: number, 
         w?: number, h?: number, zoom?: number, opacity?: number, angle?: number, 
@@ -73,19 +73,27 @@ class Picture2D extends Bitmap {
         return pic;
     }
 
-    /** 
+    /*
      *  Create a picture from kind and id and then load it
      *  @static
-     *  @param {number} id The picture id to load
-     *  @param {PictureKind} kind The picture kind to load
-     *  @param {number} x The x position
-     *  @param {number} y The y position
-     *  @param {number} w The w size
-     *  @param {number} h The h size
+     *  @param {number} id - The picture id to load
+     *  @param {PictureKind} kind - The picture kind to load
+     *  @param {number} x - The x position
+     *  @param {number} y - The y position
+     *  @param {number} w - The w size
+     *  @param {number} h - The h size
      */
-    static async createWithID(id: number, kind: PictureKind, opts: { x?: number, 
-        y?: number, w?: number, h?: number, zoom?: number, opacity?: number, 
-        angle?: number, cover?: boolean, stretch?: boolean } = {})
+    /**
+     * Create a picture from kind and id and then load it
+     *
+     * @static
+     * @param {number} id - The picture id to load
+     * @param {PictureKind} kind - The picture kind to load
+     * @param {pictureOptions} [opts={}]
+     * @return {*} 
+     * @memberof Picture2D
+     */
+    static async createWithID(id: number, kind: PictureKind, opts: pictureOptions = {})
     {
         return (await Picture2D.create(Datas.Pictures.get(kind, id), opts));
     }
@@ -93,7 +101,7 @@ class Picture2D extends Bitmap {
     /** 
      *  Load the image.
      *  @static
-     *  @param {string} path The image path
+     *  @param {string} path - The image path
      *  @returns {Promise<HTMLImageElement>}
      */
     static async loadImage(path: string): Promise<HTMLImageElement> {
@@ -157,15 +165,15 @@ class Picture2D extends Bitmap {
 
     /** 
      *  Draw the picture on HUD
-     *  @param {number} [x=undefined] The x position
-     *  @param {number} [y=undefined] The y position
-     *  @param {number} [w=undefined] The w position
-     *  @param {number} [h=undefined] The h position
-     *  @param {number} [sx=0] The source x position
-     *  @param {number} [sy=0] The source x position
-     *  @param {number} [sw=this.oW] The source width size
-     *  @param {number} [sh=this.oH] The source height size
-     *  @param {boolean} [positionResize=true] Indicate if the position resize
+     *  @param {number} [x=undefined] - The x position
+     *  @param {number} [y=undefined] - The y position
+     *  @param {number} [w=undefined] - The w position
+     *  @param {number} [h=undefined] - The h position
+     *  @param {number} [sx=0] - The source x position
+     *  @param {number} [sy=0] - The source x position
+     *  @param {number} [sw=this.oW] - The source width size
+     *  @param {number} [sh=this.oH] - The source height size
+     *  @param {boolean} [positionResize=true] - Indicate if the position resize
      *  (screen resolution)
      */
     draw(x: number = undefined, y: number = undefined, w: number = undefined, h: 
@@ -219,6 +227,17 @@ class Picture2D extends Bitmap {
             Platform.ctx.restore();
         }
     }
+}
+interface pictureOptions {
+     x?: number, 
+     y?: number, 
+     w?: number, 
+     h?: number, 
+     zoom?: number, 
+     opacity?: number, 
+     angle?: number, 
+     cover?: boolean, 
+     stretch?: boolean
 }
 
 export { Picture2D }

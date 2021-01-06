@@ -3,7 +3,7 @@ import { DynamicValue } from "./DynamicValue.js";
 /** @class
  *  A cost of a common skill item.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  cost
  */
 declare class Cost extends Base {
@@ -15,7 +15,7 @@ declare class Cost extends Base {
     constructor(json?: Record<string, any>);
     /**
      *  Read the JSON associated to the cost.
-     *  @param {Record<string, any>} json Json object describing the cost
+     *  @param {Record<string, any>} - json Json object describing the cost
      */
     read(json: Record<string, any>): void;
     /**

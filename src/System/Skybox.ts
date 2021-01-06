@@ -18,7 +18,7 @@ import PictureKind = Enum.PictureKind;
 /** @class
  *  A skybox of the game.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the 
  *  skybox
  */
 class Skybox extends Base {
@@ -36,7 +36,7 @@ class Skybox extends Base {
 
     /** 
      *  Read the JSON associated to the skybox.
-     *  @param {Record<string, any>} json Json object describing the skybox
+     *  @param {Record<string, any>} - json Json object describing the skybox
      */
     read(json: Record<string, any>) {
         this.front = Utils.defaultValue(json.fid, 1);

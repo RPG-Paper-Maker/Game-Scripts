@@ -19,12 +19,12 @@ import { Object3D } from "./Object3D";
 import { Vector3 } from "./Vector3";
 import { Vector2 } from "./Vector2";
 
-/** @class
- *  A 3D object box in the map.
- *  @extends Object3D
- *  @param {Record<string, any>} json Json object describing the object 3D 
- *  custom
- *  @param {System.Object3D} datas The System object 3D
+
+/**
+ * A 3D object box in the map.
+ *
+ * @class Object3DBox
+ * @extends {Object3D}
  */
 class Object3DBox extends Object3D {
 
@@ -129,7 +129,7 @@ class Object3DBox extends Object3D {
 
     /** 
      *  Read the JSON associated to the object 3D box.
-     *  @param {Record<string, any>} json Json object describing the object 3D 
+     *  @param {Record<string, any>} json - Json object describing the object 3D 
      *  box
     */
     read(json: Record<string, any>) {
@@ -140,10 +140,10 @@ class Object3DBox extends Object3D {
 
     /** 
      *  Update the geometry of a group of object 3D with the same material.
-     *  @param {THREE.Geometry} geometry Geometry of the object 3D
-     *  @param {Position} position The position of object 3D
-     *  @param {number} count The faces count
-     *  @return {[number, StructMapElementCollision[]]}
+     *  @param {THREE.Geometry} geometry - Geometry of the object 3D
+     *  @param {Position} position - The position of object 3D
+     *  @param {number} count - The faces count
+     *  @return {number[]}
     */
     updateGeometry(geometry: THREE.Geometry, position: Position, count: 
         number): [number, StructMapElementCollision[]]

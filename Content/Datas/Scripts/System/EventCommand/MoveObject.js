@@ -17,7 +17,7 @@ import { MapObject, Game } from "../Core/index.js";
 /** @class
  *  An event command for moving object.
  *  @extends EventCommand.Base
- *  @param {any[]} command Direct JSON command to parse
+ *  @param {any[]} command - Direct JSON command to parse
  */
 class MoveObject extends Base {
     constructor(command) {
@@ -109,7 +109,7 @@ class MoveObject extends Base {
     /**
      *  Get the opposite orientation.
      *  @static
-     *  @param {Orientation} orientation The orientation
+     *  @param {Orientation} orientation - The orientation
      *  @returns {Orientation} The current state
      */
     static oppositeOrientation(orientation) {
@@ -145,10 +145,10 @@ class MoveObject extends Base {
     }
     /**
      *  Function to move north.
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {MapObject} object The object to move
-     *  @param {bool} square Indicate if it is a square move
-     *  @param {Orientation} orientation The orientation where to move
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {bool} square - Indicate if it is a square move
+     *  @param {Orientation} orientation - The orientation where to move
      *  @returns {boolean}
      */
     move(currentState, object, square, orientation) {
@@ -216,16 +216,16 @@ class MoveObject extends Base {
     }
     /**
      *  Change the frequency tick of the object.
-     *  @param {MapObject} object The object to move
+     *  @param {MapObject} object - The object to move
      */
     moveFrequency(object) {
         object.moveFrequencyTick = object.frequency.getValue() * 1000;
     }
     /**
      *  Function to move north.
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {MapObject} object The object to move
-     *  @param {Record<string, any>} parameters The parameters
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
      *  @returns {Orientation}
      */
     moveNorth(currentState, object, parameters) {
@@ -233,9 +233,9 @@ class MoveObject extends Base {
     }
     /**
      *  Function to move south.
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {MapObject} object The object to move
-     *  @param {Record<string, any>} parameters The parameters
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
      *  @returns {Orientation}
      */
     moveSouth(currentState, object, parameters) {
@@ -246,9 +246,9 @@ class MoveObject extends Base {
     }
     /**
      *  Function to move west.
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {MapObject} object The object to move
-     *  @param {Record<string, any>} parameters The parameters
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
      *  @returns {Orientation}
     */
     moveWest(currentState, object, parameters) {
@@ -259,9 +259,9 @@ class MoveObject extends Base {
     }
     /**
      *  Function to move east.
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {MapObject} object The object to move
-     *  @param {Record<string, any>} parameters The parameters
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
      *  @returns {Orientation}
      */
     moveEast(currentState, object, parameters) {
@@ -272,9 +272,9 @@ class MoveObject extends Base {
     }
     /**
      *  Function to move north west.
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {MapObject} object The object to move
-     *  @param {Record<string, any>} parameters The parameters
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
      *  @returns {Orientation}
      */
     moveNorthWest(currentState, object, parameters) {
@@ -286,9 +286,9 @@ class MoveObject extends Base {
     }
     /**
      *  Function to move north west.
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {MapObject} object The object to move
-     *  @param {Record<string, any>} parameters The parameters
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
      *  @returns {Orientation}
      */
     moveNorthEast(currentState, object, parameters) {
@@ -300,9 +300,9 @@ class MoveObject extends Base {
     }
     /**
      *  Function to move north west.
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {MapObject} object The object to move
-     *  @param {Record<string, any>} parameters The parameters
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
      *  @returns {Orientation}
      */
     moveSouthWest(currentState, object, parameters) {
@@ -314,9 +314,9 @@ class MoveObject extends Base {
     }
     /**
      *  Function to move north west.
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {MapObject} object The object to move
-     *  @param {Record<string, any>} parameters The parameters
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
      *  @returns {Orientation}
     */
     moveSouthEast(currentState, object, parameters) {
@@ -328,9 +328,9 @@ class MoveObject extends Base {
     }
     /**
      *  Function to move random.
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {MapObject} object The object to move
-     *  @param {Record<string, any>} parameters The parameters
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
      *  @returns {Orientation}
      */
     moveRandom(currentState, object, parameters) {
@@ -347,9 +347,9 @@ class MoveObject extends Base {
     }
     /**
      *  Function to move hero.
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {MapObject} object The object to move
-     *  @param {Record<string, any>} parameters The parameters
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
      *  @returns {Orientation}
     */
     moveHero(currentState, object, parameters) {
@@ -357,9 +357,9 @@ class MoveObject extends Base {
     }
     /**
      *  Function to move opposite to hero.
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {MapObject} object The object to move
-     *  @param {Record<string, any>} parameters The parameters
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
      *  @returns {Orientation}
     */
     moveOppositeHero(currentState, object, parameters) {
@@ -367,10 +367,10 @@ class MoveObject extends Base {
     }
     /**
      *  Function to move hero and opposite hero.
-     *  @param {Object} currentState The current state of the event
-     *  @param {MapObject} object The object to move
-     *  @param {Object} parameters The parameters
-     *  @param {boolean} opposite Indicate if opposite
+     *  @param {Object} currentState - The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Object} parameters - The parameters
+     *  @param {boolean} opposite - Indicate if opposite
      *  @returns {Orientation}
     */
     moveHeroAndOpposite(currentState, object, parameters, opposite) {
@@ -387,9 +387,9 @@ class MoveObject extends Base {
     }
     /**
      *  Function to move front.
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {MapObject} object The object to move
-     *  @param {Record<string, any>} parameters The parameters
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
      *  @returns {Orientation}
     */
     moveFront(currentState, object, parameters) {
@@ -403,9 +403,9 @@ class MoveObject extends Base {
     }
     /**
      *  Function to move back.
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {MapObject} object The object to move
-     *  @param {Record<string, any>} parameters The parameters
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
      *  @returns {Orientation}
     */
     moveBack(currentState, object, parameters) {
@@ -419,9 +419,9 @@ class MoveObject extends Base {
     }
     /**
      *  Function to change graphics.
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {MapObject} object The object to move
-     *  @param {Record<string, any>} parameters The parameters
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
     */
     changeGraphics(currentState, object, parameters) {
         if (object) {
@@ -481,7 +481,7 @@ class MoveObject extends Base {
     }
     /**
      *  Get the hero orientation.
-     *  @param {MapObject} object The object to move
+     *  @param {MapObject} object - The object to move
      *  @returns {Orientation}
     */
     getHeroOrientation(object) {
@@ -506,7 +506,7 @@ class MoveObject extends Base {
     }
     /**
      *  Get the current orientation.
-     *  @param {Record<string, any>} currentState The current state of the event
+     *  @param {Record<string, any>} - currentState The current state of the event
      *  @returns {Orientation}
      */
     getCurrentOrientation(currentState) {
@@ -517,9 +517,9 @@ class MoveObject extends Base {
     }
     /**
      *  Update and check if the event is finished.
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {MapObject} object The current object reacting
-     *  @param {number} state The state ID
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The current object reacting
+     *  @param {number} state - The state ID
      *  @returns {number} The number of node to pass
     */
     update(currentState, object, state) {

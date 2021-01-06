@@ -16,12 +16,12 @@ import { Graphic, Datas } from "../index.js";
 /** @class
  *  The graphic displaying a text and an icon.
  *  @extends Graphic.Base
- *  @param {string} text The brut text to display
- *  @param {number} iconID The icon ID
- *  @param {Object} [opts={}] Options
- *  @param {Align} [opts.side=Align.Left] The side to display icon
- *  @param {Align} [opts.align=Align.left] The complete graphic align
- *  @param {number} [opts.space=RPM.MEDIUM_SPACE] The space between icon and
+ *  @param {string} text - The brut text to display
+ *  @param {number} iconID - The icon ID
+ *  @param {Object} [opts={}] - Options
+ *  @param {Align} [opts.side=Align.Left] - The side to display icon
+ *  @param {Align} [opts.align=Align.left] - The complete graphic align
+ *  @param {number} [opts.space=RPM.MEDIUM_SPACE] - The space between icon and
  *  text
  */
 class TextIcon extends Base {
@@ -56,10 +56,10 @@ class TextIcon extends Base {
     }
     /**
      *  Drawing the content choice.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
      */
     drawChoice(x, y, w, h) {
         let iconWidth = this.graphicIcon.oW;
@@ -91,10 +91,10 @@ class TextIcon extends Base {
     }
     /**
      *  Drawing the content.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
      */
     draw(x, y, w, h) {
         this.drawChoice(x, y, w, h);

@@ -17,20 +17,20 @@ declare class Pictures {
     static read(): Promise<void>;
     /**
      *  Get the corresponding picture.
-     *  @param {PictureKind} kind The picture kind
-     *  @param {number} id The picture id
+     *  @param {PictureKind} kind - The picture kind
+     *  @param {number} id - The picture id
      *  @returns {Picture}
      */
     static get(kind: PictureKind, id: number): System.Picture;
     /**
      *  Get the corresponding picture list by kind.
-     *  @param {PictureKind} kind The picture kind
+     *  @param {PictureKind} kind - The picture kind
      *  @returns {Picture}
      */
     static getListByKind(kind: PictureKind): System.Picture[];
     /** Get a copy of the picture 2D.
-    *   @param {PictureKind} kind The picture kind
-    *   @param {number} id The picture id
+    *   @param {PictureKind} kind - The picture kind
+    *   @param {number} id - The picture id
     *   @returns {Picture2D}
     */
     static getPictureCopy(kind: PictureKind, id: number): Picture2D;

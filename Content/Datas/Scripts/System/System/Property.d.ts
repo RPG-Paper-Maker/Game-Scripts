@@ -3,7 +3,7 @@ import { System } from "../index.js";
 /** @class
  *  A property of an object.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  property
  */
 declare class Property extends Base {
@@ -12,7 +12,7 @@ declare class Property extends Base {
     constructor(json?: Record<string, any>);
     /**
      *  Read the JSON associated to the property.
-     *  @param {Record<string, any>} json Json object describing the property
+     *  @param {Record<string, any>} - json Json object describing the property
      */
     read(json: Record<string, any>): void;
 }

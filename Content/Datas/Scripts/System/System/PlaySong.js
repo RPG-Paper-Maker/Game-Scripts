@@ -15,8 +15,8 @@ import { System, Manager } from "../index.js";
 /** @class
  *  A way to play a song.
  *  @extends System.Base
- *  @param {SongKind} kind The kind of song to play
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {SongKind} kind - The kind of song to play
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  play song
  */
 class PlaySong extends Base {
@@ -27,7 +27,7 @@ class PlaySong extends Base {
     }
     /**
      *  Read the JSON associated to the play song.
-     *  @param {Record<string, any>} json Json object describing the play song
+     *  @param {Record<string, any>} - json Json object describing the play song
      */
     read(json) {
         if (!json) {
@@ -66,12 +66,12 @@ class PlaySong extends Base {
     }
     /**
      *  Update all the specified values.
-     *  @param {System.DynamicValue} songID The song ID
-     *  @param {System.DynamicValue} volume The volume to play
-     *  @param {boolean} isStart Indicate if there's a start value
-     *  @param {System.DynamicValue} start The start of the song to play
-     *  @param {boolean} isEnd Indicate if there's a end value
-     *  @param {System.DynamicValue} end The end of the song to play
+     *  @param {System.DynamicValue} songID - The song ID
+     *  @param {System.DynamicValue} volume - The volume to play
+     *  @param {boolean} isStart - Indicate if there's a start value
+     *  @param {System.DynamicValue} start - The start of the song to play
+     *  @param {boolean} isEnd - Indicate if there's a end value
+     *  @param {System.DynamicValue} end - The end of the song to play
      */
     updateValues(songID, volume, isStart, start, isEnd, end) {
         this.songID = songID;
@@ -83,8 +83,8 @@ class PlaySong extends Base {
     }
     /**
      *  Play the music.
-     *  @param {number} [start=undefined] The start of the song to play
-     *  @param {number} [volume=undefined] The volume to play
+     *  @param {number} [start=undefined] - The start of the song to play
+     *  @param {number} [volume=undefined] - The volume to play
      */
     playMusic(start, volume) {
         if (Utils.isUndefined(start)) {
@@ -115,7 +115,7 @@ class PlaySong extends Base {
     }
     /**
      *  Play the music effect and return the next node value.
-     *  @param {Record<string, any>} currentState The current state of the
+     *  @param {Record<string, any>} - currentState The current state of the
      *  playing music effect
      *  @returns {number}
      */

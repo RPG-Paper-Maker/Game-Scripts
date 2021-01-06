@@ -13,8 +13,8 @@ import { DynamicValue } from "./DynamicValue.js";
 /** @class
  *  A progression table.
  *  @extends System.Base
- *  @param {number} [id=undefined] The ID
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {number} [id=undefined] - The ID
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  progression table
  */
 class ProgressionTable extends Base {
@@ -31,9 +31,9 @@ class ProgressionTable extends Base {
     /**
      *  Create a new System progression table.
      *  @static
-     *  @param {System.DynamicValue} i The initial value
-     *  @param {System.DynamicValue} f The final value
-     *  @param {number} equation The equation kind
+     *  @param {System.DynamicValue} i - The initial value
+     *  @param {System.DynamicValue} f - The final value
+     *  @param {number} equation - The equation kind
      *  @returns {ProgressionTable}
      */
     static create(i, f, equation) {
@@ -44,9 +44,9 @@ class ProgressionTable extends Base {
     /**
      *  Create a new System progression table from numbers values.
      *  @static
-     *  @param {number} i The initial value
-     *  @param {number} f The final value
-     *  @param {number} equation The equation kind
+     *  @param {number} i - The initial value
+     *  @param {number} f - The final value
+     *  @param {number} equation - The equation kind
      *  @returns {ProgressionTable}
      */
     static createFromNumbers(i, f, equation) {
@@ -55,7 +55,7 @@ class ProgressionTable extends Base {
     }
     /**
      *  Read the JSON associated to the progression table.
-     *  @param {Record<string, any>} json Json object describing the progression table
+     *  @param {Record<string, any>} - json Json object describing the progression table
      */
     read(json) {
         this.initialValue = new DynamicValue(json.i);
@@ -71,9 +71,9 @@ class ProgressionTable extends Base {
     }
     /**
      *  Initialize this progression table.
-     *  @param {System.DynamicValue} i The initial value
-     *  @param {System.DynamicValue} f The final value
-     *  @param {number} equation The equation kind
+     *  @param {System.DynamicValue} i - The initial value
+     *  @param {System.DynamicValue} f - The final value
+     *  @param {number} equation - The equation kind
      */
     initialize(i, f, equation) {
         this.initialValue = i;
@@ -83,9 +83,9 @@ class ProgressionTable extends Base {
     }
     /**
      *  Get the progression at a current value.
-     *  @param {number} current The current value
-     *  @param {number} f The final value
-     *  @param {boolean} [decimal=false] Indicate if the return should have
+     *  @param {number} current - The current value
+     *  @param {number} f - The final value
+     *  @param {boolean} [decimal=false] - Indicate if the return should have
      *  decimal or not
      *  @returns {number}
      */

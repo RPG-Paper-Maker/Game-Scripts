@@ -15,7 +15,7 @@ var PictureKind = Enum.PictureKind;
 /** @class
  *  A window skin of the game.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  window skin
  */
 class WindowSkin extends System.Base {
@@ -24,7 +24,7 @@ class WindowSkin extends System.Base {
     }
     /**
      *  Read the JSON associated to the window skin.
-     *  @param {Record<string, any>} json Json object describing the window skin
+     *  @param {Record<string, any>} - json Json object describing the window skin
      */
     read(json) {
         this.pictureID = json.pid;
@@ -56,20 +56,20 @@ class WindowSkin extends System.Base {
     }
     /**
      *  Draw any element of the window skin box with the cut picture.
-     *  @param {number[]} r The rect source
-     *  @param {number} x The x target
-     *  @param {number} y The y target
-     *  @param {number} [w=r[2]] The w target
-     *  @param {number} [h=r[3]] The h target
-     *  @param {number} [zoom=1.0] The zoom to apply of target size
+     *  @param {number[]} r - The rect source
+     *  @param {number} x - The x target
+     *  @param {number} y - The y target
+     *  @param {number} [w=r[2]] - The w target
+     *  @param {number} [h=r[3]] - The h target
+     *  @param {number} [zoom=1.0] - The zoom to apply of target size
      */
     drawElement(r, x, y, w = r[2], h = r[3], zoom = 1.0) {
         this.picture.draw(x, y, w * zoom, h * zoom, r[0], r[1], r[2], r[3]);
     }
     /**
      *  Draw the background box.
-     *  @param {number[]} background The background source rect
-     *  @param {number[]} rect The final box rect
+     *  @param {number[]} background - The background source rect
+     *  @param {number[]} rect - The final box rect
      */
     drawBoxBackground(background, rect) {
         if (this.backgroundRepeat) {
@@ -92,9 +92,9 @@ class WindowSkin extends System.Base {
     }
     /**
      *  Draw the box
-     *  @param {number[]} rect The final box rect
-     *  @param {boolean} selected Indicate if the box is selected
-     *  @param {boolean} bordersVisible Indicate if the borders of the box are visible
+     *  @param {number[]} rect - The final box rect
+     *  @param {boolean} selected - Indicate if the box is selected
+     *  @param {boolean} bordersVisible - Indicate if the borders of the box are visible
      */
     drawBox(rect, selected, bordersVisible) {
         if (bordersVisible) {
@@ -160,10 +160,10 @@ class WindowSkin extends System.Base {
     }
     /**
      *  Draw the arrow for targets.
-     *  @param {number} frame The current frame to draw
-     *  @param {number} x The x position
-     *  @param {number} y The y position
-     *  @param {boolean} positionResize Indicate if the position picture needs
+     *  @param {number} frame - The current frame to draw
+     *  @param {number} x - The x position
+     *  @param {number} y - The y position
+     *  @param {boolean} positionResize - Indicate if the position picture needs
      *  to be resize (resolution)
      */
     drawArrowTarget(frame, x, y, positionResize = false) {
@@ -173,9 +173,9 @@ class WindowSkin extends System.Base {
     }
     /**
      *  Draw the arrow for end of messages.
-     *  @param {number} frame The current frame to draw
-     *  @param {number} x The x position
-     *  @param {number} y The y position
+     *  @param {number} frame - The current frame to draw
+     *  @param {number} x - The x position
+     *  @param {number} y - The y position
      */
     drawArrowMessage(frame, x, y) {
         let width = this.arrowEndMessage[2] / Datas.Systems.FRAMES;
@@ -183,11 +183,11 @@ class WindowSkin extends System.Base {
     }
     /**
      *  Draw a damage number.
-     *  @param {number} damage The damage number to display
-     *  @param {number} x The x position
-     *  @param {number} y The y position
-     *  @param {number[]} rect The source rect
-     *  @param {number} zoom The zoom to apply on damages
+     *  @param {number} damage - The damage number to display
+     *  @param {number} x - The x position
+     *  @param {number} y - The y position
+     *  @param {number[]} rect - The source rect
+     *  @param {number} zoom - The zoom to apply on damages
      */
     drawDamagesNumber(damage, x, y, rect, zoom) {
         let digits = Utils.numToString(damage).split("").map(Number);
@@ -202,12 +202,12 @@ class WindowSkin extends System.Base {
     }
     /**
      *  Draw a damage number according to the kind of damages.
-     *  @param {number} damage The damage number to display
-     *  @param {number} x The x position
-     *  @param {number} y The y position
-     *  @param {boolean} isCrit Indicate if the damages are a critical hit
-     *  @param {boolean} isMiss Indicate if the damages are a missed hit
-     *  @param {number} zoom The zoom to apply on damages
+     *  @param {number} damage - The damage number to display
+     *  @param {number} x - The x position
+     *  @param {number} y - The y position
+     *  @param {boolean} isCrit - Indicate if the damages are a critical hit
+     *  @param {boolean} isMiss - Indicate if the damages are a missed hit
+     *  @param {number} zoom - The zoom to apply on damages
      */
     drawDamages(damage, x, y, isCrit, isMiss, zoom) {
         if (isMiss) {

@@ -30,7 +30,7 @@ class UseSkillItem extends Base {
     }
     /**
      *  Set if all targets are selected or not.
-     *  @param {boolean} b Indicate if all the targets are selected
+     *  @param {boolean} b - Indicate if all the targets are selected
      */
     setAll(b) {
         this.all = b;
@@ -78,7 +78,7 @@ class UseSkillItem extends Base {
     }
     /**
      *  Move an arrow according to index.
-     *  @param {number} index The corresponding index
+     *  @param {number} index - The corresponding index
      */
     moveArrow(index) {
         if (!this.all) {
@@ -94,7 +94,7 @@ class UseSkillItem extends Base {
     /**
      *  Key pressed repeat handle, but with a small wait after the first
      *  pressure.
-     *  @param {number} key The key ID pressed
+     *  @param {number} key - The key ID pressed
      */
     onKeyPressedAndRepeat(key) {
         if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Right)) {
@@ -107,10 +107,10 @@ class UseSkillItem extends Base {
     }
     /**
      *  Draw an arrow at a specific index.
-     *  @param {number} index The corresponding index
-     *  @param {number} x The x position
-     *  @param {number} y The y position
-     *  @param {number} h The h size
+     *  @param {number} index - The corresponding index
+     *  @param {number} x - The x position
+     *  @param {number} y - The y position
+     *  @param {number} h - The h size
      */
     drawArrowAtIndex(index, x, y, h) {
         Datas.Systems.getCurrentWindowSkin().drawArrowTarget(this
@@ -118,20 +118,20 @@ class UseSkillItem extends Base {
     }
     /**
      *  Drawing the skill or item use informations.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
      */
     drawChoice(x, y, w, h) {
         this.draw(x, y, w, h);
     }
     /**
      *  Drawing the skill or item use informations.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
      */
     draw(x, y, w, h) {
         let i, l;

@@ -6,11 +6,11 @@ import { Item } from "./Item.js";
 import { Battler } from "./Battler.js";
 /** @class
  *  A character in the team/hidden/reserve.
- *  @param {CharacterKind} [kind=undefined] The kind of the character (hero or monster)
- *  @param {number} [id=undefined] The ID of the character
- *  @param {number} [instanceID=undefined] The instance id of the character
- *  @param {Skill[]} [skills=undefined] List of all the learned skills
- *  @param {Record<string, any>} [json=undefined] Json object describing the items
+ *  @param {CharacterKind} [kind=undefined] - The kind of the character (hero or monster)
+ *  @param {number} [id=undefined] - The ID of the character
+ *  @param {number} [instanceID=undefined] - The instance id of the character
+ *  @param {Skill[]} [skills=undefined] - List of all the learned skills
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the items
  */
 declare class Player {
     id: number;
@@ -40,7 +40,7 @@ declare class Player {
     /**
      *  Get the max size of equipment kind names.
      *  @static
-     *  @param {number[]} values The values
+     *  @param {number[]} values - The values
      *  @returns {GamePlayer}
      */
     static getTemporaryPlayer(values?: number[]): Player;
@@ -71,31 +71,31 @@ declare class Player {
     isDead(): boolean;
     /**
      *  Instanciate a character in a particular level.
-     *  @param {number} level The level of the new character
+     *  @param {number} level - The level of the new character
      */
     instanciate(level: number): void;
     /**
      *  Get the stats thanks to equipments.
-     *  @param {System.CommonSkillItem} item The System item
-     *  @param {number} equipmentID The equipment ID
+     *  @param {System.CommonSkillItem} item - The System item
+     *  @param {number} equipmentID - The equipment ID
      *  @returns {number[][]}
      */
     getEquipmentStatsAndBonus(item?: System.CommonSkillItem, equipmentID?: number): number[][];
     /**
      *  Update stats with equipment stats
-     *  @param {number[]} list The stats list
-     *  @param {number[]} bonus The bonus list
+     *  @param {number[]} list - The stats list
+     *  @param {number[]} bonus - The bonus list
      */
     updateEquipmentStats(list?: number[], bonus?: number[]): void;
     /**
      *  Initialize stat value.
-     *  @param {System.Statistic} statistic The statistic
-     *  @param {number} bonus The value
+     *  @param {System.Statistic} statistic - The statistic
+     *  @param {number} bonus - The value
      */
     initStatValue(statistic: System.Statistic, value: number): void;
     /** Update stats value.
-     *  @param {System.Statistic} statistic The statistic
-     *  @param {number} bonus The value
+     *  @param {System.Statistic} statistic - The statistic
+     *  @param {number} bonus - The value
      */
     updateStatValue(statistic: System.Statistic, value: number): void;
     /**
@@ -104,13 +104,13 @@ declare class Player {
     updateAllStatsValues(): void;
     /**
      *  Get the bar abbreviation.
-     *  @param {System.Statistic} stat The statistic
+     *  @param {System.Statistic} stat - The statistic
      *  @returns {string}
      */
     getBarAbbreviation(stat: System.Statistic): string;
     /**
      *  Read the JSON associated to the character and items.
-     *  @param {Record<string, any>} json Json object describing the items
+     *  @param {Record<string, any>} - json Json object describing the items
     */
     read(json: Record<string, any>): void;
     /**
@@ -143,7 +143,7 @@ declare class Player {
     getRewardLoots(): Record<string, Item>[];
     /**
      *  Update remaining xp according to full time.
-     *  @param {number} fullTime Full time in milliseconds
+     *  @param {number} fullTime - Full time in milliseconds
      */
     updateRemainingXP(fullTime: number): void;
     /**

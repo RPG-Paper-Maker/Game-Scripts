@@ -15,7 +15,7 @@ import { ReactionInterpreter, Game } from "../Core/index.js";
 /** @class
  *  The class who handle dynamic value.
  *  @extends {System.Base}
- *  @param {Record<string, any>} [json=undefined] Json object describing the value
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the value
  */
 class DynamicValue extends System.Base {
     constructor(json) {
@@ -24,8 +24,8 @@ class DynamicValue extends System.Base {
     /**
      *  Create a new value from kind and value.
      *  @static
-     *  @param {DynamicValueKind} [k=DynamicValueKind.None] The kind of value
-     *  @param {any} [v=0] The value
+     *  @param {DynamicValueKind} [k=DynamicValueKind.None] - The kind of value
+     *  @param {any} [v=0] - The value
      *  @returns {SystemValue}
      */
     static create(k = DynamicValueKind.None, v = 0) {
@@ -50,8 +50,8 @@ class DynamicValue extends System.Base {
     /**
      *  Create a new value from a command and iterator.
      *  @static
-     *  @param {any[]} command The list describing the command
-     *  @param {StructIterator} iterator The iterator
+     *  @param {any[]} command - The list describing the command
+     *  @param {StructIterator} iterator - The iterator
      *  @returns {System.DynamicValue}
      */
     static createValueCommand(command, iterator) {
@@ -70,7 +70,7 @@ class DynamicValue extends System.Base {
     /**
      *  Create a new value number.
      *  @static
-     *  @param {number} n The number
+     *  @param {number} n - The number
      *  @returns {System.DynamicValue}
      */
     static createNumber(n) {
@@ -79,7 +79,7 @@ class DynamicValue extends System.Base {
     /**
      *  Create a new value message.
      *  @static
-     *  @param {string} m The message
+     *  @param {string} m - The message
      *  @returns {System.DynamicValue}
      */
     static createMessage(m) {
@@ -88,7 +88,7 @@ class DynamicValue extends System.Base {
     /**
      *  Create a new value decimal number.
      *  @static
-     *  @param {number} n The number
+     *  @param {number} n - The number
      *  @returns {System.DynamicValue}
      */
     static createNumberDouble(n) {
@@ -97,7 +97,7 @@ class DynamicValue extends System.Base {
     /**
      *  Create a new value keyBoard.
      *  @static
-     *  @param {number} k The key number
+     *  @param {number} k - The key number
      *  @returns {System.DynamicValue}
      */
     static createKeyBoard(k) {
@@ -106,7 +106,7 @@ class DynamicValue extends System.Base {
     /**
      *  Create a new value switch.
      *  @static
-     *  @param {boolean} b The value of the switch
+     *  @param {boolean} b - The value of the switch
      *  @returns {System.DynamicValue}
      */
     static createSwitch(b) {
@@ -115,7 +115,7 @@ class DynamicValue extends System.Base {
     /**
      *  Create a new value variable.
      *  @static
-     *  @param {number} id The variable ID
+     *  @param {number} id - The variable ID
      *  @returns {System.DynamicValue}
      */
     static createVariable(id) {
@@ -124,7 +124,7 @@ class DynamicValue extends System.Base {
     /**
      *  Create a new value parameter.
      *  @static
-     *  @param {number} id The parameter ID
+     *  @param {number} id - The parameter ID
      *  @returns {System.DynamicValue}
      */
     static createParameter(id) {
@@ -133,7 +133,7 @@ class DynamicValue extends System.Base {
     /**
      *  Create a new value property.
      *  @static
-     *  @param {number} id The property id
+     *  @param {number} id - The property id
      *  @returns {System.DynamicValue}
      */
     static createProperty(id) {
@@ -142,8 +142,8 @@ class DynamicValue extends System.Base {
     /**
      *  Try to read a number value, if not possible put default value.
      *  @static
-     *  @param {StructJSONDynamicValue} json The json value
-     *  @param {number} [n=0] The default value
+     *  @param {StructJSONDynamicValue} json - The json value
+     *  @param {number} [n=0] - The default value
      *  @returns {System.DynamicValue}
      */
     static readOrDefaultNumber(json, n = 0) {
@@ -153,8 +153,8 @@ class DynamicValue extends System.Base {
     /**
      *  Try to read a double number value, if not possible put default value.
      *  @static
-     *  @param {StructJSONDynamicValue} json The json value
-     *  @param {number} [n=0] The default value
+     *  @param {StructJSONDynamicValue} json - The json value
+     *  @param {number} [n=0] - The default value
      *  @returns {System.DynamicValue}
      */
     static readOrDefaultNumberDouble(json, n = 0) {
@@ -163,8 +163,8 @@ class DynamicValue extends System.Base {
     /**
      *  Try to read a database value, if not possible put default value.
      *  @static
-     *  @param {StructJSONDynamicValue} json The json value
-     *  @param {number} [id=1] The default value
+     *  @param {StructJSONDynamicValue} json - The json value
+     *  @param {number} [id=1] - The default value
      *  @returns {System.DynamicValue}
      */
     static readOrDefaultDatabase(json, id = 1) {
@@ -173,8 +173,8 @@ class DynamicValue extends System.Base {
     /**
      *  Try to read a message value, if not possible put default value.
      *  @static
-     *  @param {StructJSONDynamicValue} json The json value
-     *  @param {string} [m=""] The default value
+     *  @param {StructJSONDynamicValue} json - The json value
+     *  @param {string} [m=""] - The default value
      *  @returns {System.DynamicValue}
      */
     static readOrDefaultMessage(json, m = "") {
@@ -183,7 +183,7 @@ class DynamicValue extends System.Base {
     /**
      *  Try to read a value, if not possible put none value.
      *  @static
-     *  @param {StructJSONDynamicValue} json The json value
+     *  @param {StructJSONDynamicValue} json - The json value
      *  @returns {System.DynamicValue}
      */
     static readOrNone(json) {
@@ -193,7 +193,7 @@ class DynamicValue extends System.Base {
     /**
      *  Read a value of any kind and return it.
      *  @static
-     *  @param {StructJSONDynamicValue} json The json value
+     *  @param {StructJSONDynamicValue} json - The json value
      *  @returns {System.DynamicValue}
      */
     static readFromJSON(json) {
@@ -203,7 +203,7 @@ class DynamicValue extends System.Base {
     }
     /**
      *  Read the JSON associated to the value
-     *  @param {StructJSONDynamicValue} json Json object describing the value
+     *  @param {StructJSONDynamicValue} json - Json object describing the value
      */
     read(json) {
         this.kind = json.k;
@@ -319,7 +319,7 @@ class DynamicValue extends System.Base {
     }
     /**
      *  Check if a value is equal to another one
-     *  @param {System.DynamicValue} value The value to compare
+     *  @param {System.DynamicValue} value - The value to compare
      *  @returns {boolean}
      */
     isEqual(value) {

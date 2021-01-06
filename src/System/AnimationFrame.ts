@@ -19,7 +19,7 @@ import { Picture2D, Vector2 } from "../Core";
 /** @class
  *  An animation frame.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the animation frame
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the animation frame
  */
 class AnimationFrame extends Base {
 
@@ -32,7 +32,7 @@ class AnimationFrame extends Base {
 
     /**
      *  Read the JSON associated to the animation frame.
-     *  @param {Record<string, any>} json Json object describing the animation 
+     *  @param {Record<string, any>} - json Json object describing the animation 
      *  frame
      */
     read(json: Record<string, any>) {
@@ -46,7 +46,7 @@ class AnimationFrame extends Base {
 
     /** 
      *  Play the sounds according to condition.
-     *  @param {AnimationEffectConditionKind} condition The condition
+     *  @param {AnimationEffectConditionKind} condition - The condition
      */
     playSounds(condition: AnimationEffectConditionKind) {
         for (let i = 0, l = this.effects.length; i < l; i++) {
@@ -56,10 +56,10 @@ class AnimationFrame extends Base {
 
     /** 
      *  Draw the animation frame.
-     *  @param {Picture2D} picture The picture associated to the animation
-     *  @param {Vector2} position The position on screen for animation
-     *  @param {number} rows The number of rows in the animation texture
-     *  @param {number} cols The number of columns in the animation texture
+     *  @param {Picture2D} picture - The picture associated to the animation
+     *  @param {Vector2} position - The position on screen for animation
+     *  @param {number} rows - The number of rows in the animation texture
+     *  @param {number} cols - The number of columns in the animation texture
      */
     draw(picture: Picture2D, position: Vector2, rows: number, cols: number) {
         for (let i = 0, l = this.elements.length; i < l; i++) {

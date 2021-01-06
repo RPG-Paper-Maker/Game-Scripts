@@ -22,7 +22,7 @@ class Events {
     }
     /**
      *  Get the event command and read json.
-     *  @param {Record<string, any>} json
+     *  @param {Record<string, any>} - json
      *  @returns {EventCommand.Base}
      */
     static getEventCommand(json) {
@@ -143,13 +143,13 @@ class Events {
     /**
      *  Send an event.
      *  @static
-     *  @param {MapObject} sender The sender of this event
-     *  @param {number} targetKind The kind of target
-     *  @param {number} targetID The target ID
-     *  @param {boolean} isSystem Boolean indicating if it is an event System
-     *  @param {number} eventID The event ID
-     *  @param {Parameter[]} parameters List of all the parameters
-     *  @param {boolean} senderNoReceiver Indicate if the sender should not
+     *  @param {MapObject} sender - The sender of this event
+     *  @param {number} targetKind - The kind of target
+     *  @param {number} targetID - The target ID
+     *  @param {boolean} isSystem - Boolean indicating if it is an event System
+     *  @param {number} eventID - The event ID
+     *  @param {Parameter[]} parameters - List of all the parameters
+     *  @param {boolean} senderNoReceiver - Indicate if the sender should not
      *  receive event
      */
     static sendEvent(sender, targetKind, targetID, isSystem, eventID, parameters, senderNoReceiver) {
@@ -213,12 +213,12 @@ class Events {
     /**
      *  Send an event detection
      *  @static
-     *  @param {MapObject} sender The sender of this event
-     *  @param {number} targetID The target ID
-     *  @param {boolean} isSystem Boolean indicating if it is an event System
-     *  @param {number} eventID The event ID
-     *  @param {Parameter[]} parameters List of all the parameters
-     *  @param {boolean} senderNoReceiver Indicate if the sender should not
+     *  @param {MapObject} sender - The sender of this event
+     *  @param {number} targetID - The target ID
+     *  @param {boolean} isSystem - Boolean indicating if it is an event System
+     *  @param {number} eventID - The event ID
+     *  @param {Parameter[]} parameters - List of all the parameters
+     *  @param {boolean} senderNoReceiver - Indicate if the sender should not
      *  receive event
      */
     static sendEventDetection(sender, targetID, isSystem, eventID, parameters, senderNoReceiver = false) {
@@ -247,13 +247,13 @@ class Events {
     /**
      *  Send an event to objects.
      *  @static
-     *  @param {MapObject[]} objects The list of objects to send event
-     *  @param {MapObject} sender The sender of this event
-     *  @param {number} targetID The target ID
-     *  @param {boolean} isSystem Boolean indicating if it is an event System
-     *  @param {number} eventID The event ID
-     *  @param {Parameter[]} parameters List of all the parameters
-     *  @param {boolean} senderNoReceiver Indicate if the sender should not
+     *  @param {MapObject[]} objects - The list of objects to send event
+     *  @param {MapObject} sender - The sender of this event
+     *  @param {number} targetID - The target ID
+     *  @param {boolean} isSystem - Boolean indicating if it is an event System
+     *  @param {number} eventID - The event ID
+     *  @param {Parameter[]} parameters - List of all the parameters
+     *  @param {boolean} senderNoReceiver - Indicate if the sender should not
      *  receive event
      */
     static sendEventObjects(objects, sender, targetID, isSystem, eventID, parameters, senderNoReceiver) {

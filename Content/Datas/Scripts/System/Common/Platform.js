@@ -15,18 +15,23 @@ const ipc = electron.ipcRenderer;
 const ElectronScreen = remote.screen;
 const app = remote.app;
 let firstError = true;
-/** @class
- *  @static
- *  A class replaced according to te platform used (desktop, browser, mobile...).
+/**
+ * A class replaced according to te platform used (desktop, browser, mobile...)
+ *
+ * @class Platform
  */
 class Platform {
+    /**
+     * Creates an instance of Platform.
+     * @memberof Platform
+     */
     constructor() {
         throw new Error("This class is static.");
     }
     /**
      *  Show an error object.
      *  @static
-     *  @param {Error} e The error message
+     *  @param {Error} e - The error message
      */
     static showError(e) {
         Platform.showErrorMessage(e.message + Constants.STRING_NEW_LINE + e
@@ -35,7 +40,7 @@ class Platform {
     /**
      *  Show an error message.
      *  @static
-     *  @param {string} msg The error message
+     *  @param {string} msg - The error message
      */
     static showErrorMessage(msg) {
         if (firstError) {
@@ -59,7 +64,7 @@ Platform.ctxr = Platform.canvasRendering.getContext("2d");
 /**
  *  Set window title.
  *  @static
- *  @param {string} title The title to display
+ *  @param {string} title - The title to display
  */
 Platform.setWindowTitle = function (title) {
     ipc.send('change-window-title', title);
@@ -67,9 +72,9 @@ Platform.setWindowTitle = function (title) {
 /**
  *  Set window size.
  *  @static
- *  @param {number} w The window width
- *  @param {number} h The window height
- *  @param {boolean} f Indicate if the window is fullscreen
+ *  @param {number} w - The window width
+ *  @param {number} h - The window height
+ *  @param {boolean} f - Indicate if the window is fullscreen
  */
 Platform.setWindowSize = function (w, h, f) {
     ipc.send('change-window-size', w, h, f);

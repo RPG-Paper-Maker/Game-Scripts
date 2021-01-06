@@ -27,9 +27,9 @@ abstract class Base {
     /** 
      *  Get an element in a list by ID safely.
      *  @static
-     *  @param {number} id The ID to select
-     *  @param {T[]} list The list to browse
-     *  @param {string} name The name of the element to describe in the error 
+     *  @param {number} id - The ID to select
+     *  @param {T[]} list - The list to browse
+     *  @param {string} name - The name of the element to describe in the error 
      *  message
      *  @returns {T}
      */

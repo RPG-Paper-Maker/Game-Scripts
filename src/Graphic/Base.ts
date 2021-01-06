@@ -20,10 +20,10 @@ abstract class Base extends Bitmap {
     public datas: Object;
 
     /** Drawing the stuff behind the window box.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
      */
     drawBehind(x: number, y: number, w: number, h: number) {
         
@@ -38,11 +38,11 @@ abstract class Base extends Bitmap {
 
     /**
      *  Drawing the graphic.
-     *  @param {number} [x=this.oX] The x position to draw graphic
-     *  @param {number} [y=this.oY] The y position to draw graphic
-     *  @param {number} [w=this.oW] The width dimention to draw graphic
-     *  @param {number} [h=this.oH] The height dimention to draw graphic
-     *  @param {boolean} [positionResize=true] If checked, resize postion 
+     *  @param {number} [x=this.oX] - The x position to draw graphic
+     *  @param {number} [y=this.oY] - The y position to draw graphic
+     *  @param {number} [w=this.oW] - The width dimention to draw graphic
+     *  @param {number} [h=this.oH] - The height dimention to draw graphic
+     *  @param {boolean} [positionResize=true] - If checked, resize postion 
      *  according to screen resolution
      */
     abstract drawChoice(x: number, y: number, w: number, h: number, positionResize?: 
@@ -50,11 +50,11 @@ abstract class Base extends Bitmap {
 
     /** 
      *  Drawing the graphic in box.
-     *  @param {number} [x=this.oX] The x position to draw graphic
-     *  @param {number} [y=this.oY] The y position to draw graphic
-     *  @param {number} [w=this.oW] The width dimention to draw graphic
-     *  @param {number} [h=this.oH] The height dimention to draw graphic
-     *  @param {boolean} [positionResize=true] If checked, resize postion 
+     *  @param {number} [x=this.oX] - The x position to draw graphic
+     *  @param {number} [y=this.oY] - The y position to draw graphic
+     *  @param {number} [w=this.oW] - The width dimention to draw graphic
+     *  @param {number} [h=this.oH] - The height dimention to draw graphic
+     *  @param {boolean} [positionResize=true] - If checked, resize postion 
      *  according to screen resolution
      */
     abstract draw(x: number, y: number, w: number, h: number, positionResize?

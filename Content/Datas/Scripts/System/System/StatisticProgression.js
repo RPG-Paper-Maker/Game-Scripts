@@ -16,7 +16,7 @@ import { Class } from "./Class.js";
 /** @class
  *  A statistic progression of the game.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  statistic progression
  */
 class StatisticProgression extends Base {
@@ -25,7 +25,7 @@ class StatisticProgression extends Base {
     }
     /**
      *  Read the JSON associated to the statistic progression
-     *  @param {Record<string, any>} json Json object describing the statistic
+     *  @param {Record<string, any>} - json Json object describing the statistic
      *  progression
      */
     read(json) {
@@ -42,9 +42,9 @@ class StatisticProgression extends Base {
     }
     /**
      *  Get the value progresion at level
-     *  @param {number} level The level
-     *  @param {Player} user The user
-     *  @param {number} [maxLevel=undefined] The max level
+     *  @param {number} level - The level
+     *  @param {Player} user - The user
+     *  @param {number} [maxLevel=undefined] - The max level
      *  @returns {number}
      */
     getValueAtLevel(level, user, maxLevel) {

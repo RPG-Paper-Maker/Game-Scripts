@@ -8,9 +8,10 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-/** @class
- *  @static
- *  The Input and Output class who handles loading and saving.
+/**
+ * The Input and Output class who handles loading and saving.
+ *
+ * @class IO
  */
 class IO {
     constructor() {
@@ -20,7 +21,7 @@ class IO {
 /**
  *  Check if a file exists.
  *  @static
- *  @param {string} url The path of the file
+ *  @param {string} url - The path of the file
  *  @returns {boolean}
  */
 IO.fileExists = function (url) {
@@ -30,7 +31,7 @@ IO.fileExists = function (url) {
 /**
  *  Open an existing file.
  *  @static
- *  @param {string} url The path of the file
+ *  @param {string} url - The path of the file
  *  @returns {string}
  */
 IO.openFile = async function (url) {
@@ -47,7 +48,7 @@ IO.openFile = async function (url) {
 /**
  *  Open and parse an existing file.
  *  @static
- *  @param {string} url The path of the file
+ *  @param {string} url - The path of the file
  *  @returns {Promise<Record<string, any>>}
  */
 IO.parseFileJSON = async function (url) {
@@ -56,8 +57,8 @@ IO.parseFileJSON = async function (url) {
 /**
  *  Write a json file.
  *  @static
- *  @param {string} url The path of the file
- *  @param {Object} obj An object that can be stringified by JSON
+ *  @param {string} url - The path of the file
+ *  @param {Object} obj - An object that can be stringified by JSON
  */
 IO.saveFile = async function (url, obj) {
     const fs = require('fs').promises;

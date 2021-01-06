@@ -1,7 +1,7 @@
 /**
  *  The superclass that define all the System classes structure.
  *  @abstract
- *  @param {Record<string, any>} [json=undefined]
+ *  @param {Record<string, any>} - [json=undefined]
  *  @param {any} args
  */
 declare abstract class Base {
@@ -15,7 +15,7 @@ declare abstract class Base {
     setup(...args: any): void;
     /**
      *  Read the json data
-     *  @param {Record<string, any>} json
+     *  @param {Record<string, any>} - json
      */
     abstract read(json: Record<string, any>): void;
 }

@@ -9,8 +9,8 @@ export declare class Vector2 extends THREE.Vector2 {
     y: number;
     /**
      * The data class who hold 2D coordinates.
-     * @param x the x axis
-     * @param y the y axis
+     * @param x the - x axis
+     * @param y the - y axis
      */
     constructor(x?: number, y?: number);
     reset(): void;

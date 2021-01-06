@@ -9,10 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-/**
- * Ambient module "core"
- * @example import * as core from "Core"
- */
+
 
 export * from "./Autotile";
 export * from "./Autotiles";
@@ -46,5 +43,8 @@ export * from "./TextureBundle";
 export * from "./Tree";
 export * from "./WindowBox";
 export * from "./WindowChoices";
+export { ChoicesOptions } from "./WindowChoices";
 export * from "./Vector3";
 export * from "./Vector2";
+export * from "./Anchor2D";
+export * from "./Rectangle";

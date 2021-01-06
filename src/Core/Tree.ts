@@ -13,7 +13,7 @@ import { Node } from "./Node";
 
 /** @class
  *  Datas structure of tree.
- *  @param {any} data The data
+ *  @param {any} data - The data
  */
 class Tree {
     public root: Node;
@@ -28,7 +28,7 @@ class Tree {
 
     /**
      * Add a new child.
-     * @param {Record<string, any>} data
+     * @param {Record<string, any>} - data
      * @returns {Node}
      */
     public add(data: Record<string, any>): Node {

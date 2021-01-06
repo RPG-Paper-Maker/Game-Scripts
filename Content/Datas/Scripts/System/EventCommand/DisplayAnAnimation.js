@@ -16,7 +16,7 @@ var AnimationEffectConditionKind = Enum.AnimationEffectConditionKind;
 /** @class
  *  An event command for displaying an animation.
  *  @extends EventCommand.Base
- *  @param {any[]} command Direct JSON command to parse
+ *  @param {any[]} command - Direct JSON command to parse
  */
 class DisplayAnAnimation extends Base {
     constructor(command) {
@@ -48,9 +48,9 @@ class DisplayAnAnimation extends Base {
     }
     /**
      *  Update and check if the event is finished.
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {MapObject} object The current object reacting
-     *  @param {number} state The state ID
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The current object reacting
+     *  @param {number} state - The state ID
      *  @returns {number} The number of node to pass
      */
     update(currentState, object, state) {
@@ -79,7 +79,7 @@ class DisplayAnAnimation extends Base {
     }
     /**
      *  Draw the HUD.
-     *  @param {Record<string, any>} currentState The current state of the event
+     *  @param {Record<string, any>} - currentState The current state of the event
      */
     drawHUD(currentState) {
         if (currentState.object !== null) {

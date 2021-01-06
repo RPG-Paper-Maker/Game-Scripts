@@ -13,9 +13,9 @@ import { Manager, Datas } from "../index";
 
 /** @class
  *  A frame for updating animations (characters, battlers, etc.).
- *  @param {number} duration The frame duration
- *  @param {number} [tick=0] The frame tick (= time spent since current frame)
- *  @param {number} [value=0] The current frame value
+ *  @param {number} duration - The frame duration
+ *  @param {number} [tick=0] - The frame tick (= time spent since current frame)
+ *  @param {number} [value=0] - The current frame value
  */
 class Frame {
 
@@ -32,7 +32,7 @@ class Frame {
     /** 
      *  Update frame according to tick and duration, return true if frame is 
      *  different.
-     *  @param {number} [duration=this.duration] The frame duration
+     *  @param {number} [duration=this.duration] - The frame duration
      *  @returns {boolean}
      */
     update(duration: number = this.duration): boolean {

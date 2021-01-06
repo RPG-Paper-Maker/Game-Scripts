@@ -22,7 +22,7 @@ import { Effect } from "./Effect.js";
 /** @class
  *  A common class for skills, items, weapons, armors.
  *  @extends System.Icon
- *  @param {Record<string, any>} [json=undefined] Json object describing the common
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the common
  */
 class CommonSkillItem extends Icon {
     constructor(json) {
@@ -30,7 +30,7 @@ class CommonSkillItem extends Icon {
     }
     /**
      *  Read the JSON associated to the common.
-     *  @param {Record<string, any>} json Json object describing the common
+     *  @param {Record<string, any>} - json Json object describing the common
      */
     read(json) {
         super.read(json);

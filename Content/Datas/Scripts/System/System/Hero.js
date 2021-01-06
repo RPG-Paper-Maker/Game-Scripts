@@ -15,7 +15,7 @@ import { Datas } from "../index.js";
 /** @class
  *  An hero of the game.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  hero
  */
 class Hero extends Base {
@@ -24,7 +24,7 @@ class Hero extends Base {
     }
     /**
      *  Read the JSON associated to the hero.
-     *  @param {Record<string, any>} json Json object describing the hero
+     *  @param {Record<string, any>} - json Json object describing the hero
      */
     read(json) {
         this.name = json.names[1];
@@ -35,7 +35,7 @@ class Hero extends Base {
     }
     /**
      *  Get the property according to class inherit and this hero.
-     *  @param {string} prop The property name
+     *  @param {string} prop - The property name
      *  @returns {number}
      */
     getProperty(prop) {

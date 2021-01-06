@@ -59,7 +59,7 @@ class TitleSettings extends Base {
     }
     /**
      *  Handle scene key pressed.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     onKeyPressed(key) {
         this.windowChoicesMain.onKeyPressed(key);
@@ -71,7 +71,7 @@ class TitleSettings extends Base {
     }
     /**
      *  Handle scene pressed and repeat key.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      *  @returns {boolean}
      */
     onKeyPressedAndRepeat(key) {

@@ -14,7 +14,7 @@ import { System } from "../index.js";
 /** @class
  *  A custom plugin in the game.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  plugin
  */
 class Plugin extends Base {
@@ -24,7 +24,7 @@ class Plugin extends Base {
     }
     /**
      *  Read the JSON associated to the plugin.
-     *  @param {Record<string, any>} json Json object describing the plugin
+     *  @param {Record<string, any>} - json Json object describing the plugin
      */
     read(json) {
         this.name = json.name;

@@ -74,8 +74,8 @@ class Songs {
 
     /** 
      *  Get the corresponding song.
-     *  @param {SongKind} kind The song kind
-     *  @param {number} id The song id
+     *  @param {SongKind} kind - The song kind
+     *  @param {number} id - The song id
      *  @returns {System.Song}
      */
     static get(kind: SongKind, id: number): System.Song {

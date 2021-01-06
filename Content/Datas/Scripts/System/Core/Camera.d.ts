@@ -5,9 +5,9 @@ import Orientation = Enum.Orientation;
 import { Vector3 } from "./index.js";
 /** @class
  *  The camera of the current map.
- *  @param {System.CameraProperties} cameraProperties The System camera
+ *  @param {System.CameraProperties} cameraProperties - The System camera
  *  properties
- *  @param {MapObject} target The camera target
+ *  @param {MapObject} target - The camera target
  */
 declare class Camera {
     perspectiveCamera: THREE.PerspectiveCamera;
@@ -41,26 +41,26 @@ declare class Camera {
     getHeight(): number;
     /**
      *  Get the horizontal angle between two positions.
-     *  @param {Vector3} p1 The first position
-     *  @param {Vector3} p2 The second position
+     *  @param {Vector3} p1 - The first position
+     *  @param {Vector3} p2 - The second position
      *  @returns {number}
      */
     getHorizontalAngle(p1: Vector3, p2: Vector3): number;
     /**
      *  Get the vertical angle between two positions.
-     *  @param {Vector3} p1 The first position
-     *  @param {Vector3} p2 The second position
+     *  @param {Vector3} p1 - The first position
+     *  @param {Vector3} p2 - The second position
      *  @returns {number}
      */
     getVerticalAngle(p1: Vector3, p2: Vector3): number;
     /**
      *  Add an angle to the horizontal angle.
-     *  @param {number} a The angle to add
+     *  @param {number} a - The angle to add
      */
     addHorizontalAngle(a: number): void;
     /**
      *  Add an angle to the vertical angle.
-     *  @param {number} a The angle to add
+     *  @param {number} a - The angle to add
      */
     addVerticalAngle(a: number): void;
     /**

@@ -8,19 +8,21 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base.js";
+import { MenuBase } from "./MenuBase.js";
 import { Manager, Graphic, Scene, Datas } from "../index.js";
-import { WindowBox, WindowChoices, Game } from "../Core/index.js";
+import { WindowBox, WindowChoices, Game, Rectangle } from "../Core/index.js";
 import { Enum } from "../Common/index.js";
 var Align = Enum.Align;
 var OrientationWindow = Enum.OrientationWindow;
-/** @class
- *  A scene in the menu for describing players statistics.
- *  @extends Scene.Base
+/**
+ * The scene menu describing players statistics.
+ *
+ * @class MenuDescriptionState
+ * @extends {Base}
  */
-class MenuDescriptionState extends Base {
+class MenuDescriptionState extends MenuBase {
     constructor() {
-        super(false);
+        super();
         // Tab heroes
         let nbHeroes = Game.current.teamHeroes.length;
         let listHeroes = new Array(nbHeroes);
@@ -42,6 +44,29 @@ class MenuDescriptionState extends Base {
         });
         this.synchronize();
     }
+    create() {
+        this.createAllWindows();
+    }
+    createAllWindows() {
+        this.createWindowTop();
+        this.createWindowTabs();
+    }
+    createWindowTop() {
+        const rect = new Rectangle(20, 20, 200, 30);
+        const options = {
+            content: new Graphic.Text("State", { align: Align.Center })
+        };
+        this.windowTop = new WindowBox(rect.x, rect.y, rect.width, rect.height, options);
+    }
+    createWindowTabs() {
+        const rect = new Rectangle(50, 60, 110, WindowBox.SMALL_SLOT_HEIGHT);
+        const options = { orientation: OrientationWindow.Horizontal, nbItemsMax: 4 };
+        const listHeroes = [];
+        for (let i = 0; i < this.party().length; i++) {
+            listHeroes[i] = new Graphic.Player(this.party()[i]);
+        }
+        this.windowChoicesTabs = new WindowChoices(rect.x, rect.y, rect.width, rect.height, listHeroes, options);
+    }
     /**
      *  Synchronize informations with selected hero.
      */
@@ -59,7 +84,7 @@ class MenuDescriptionState extends Base {
     }
     /**
      *  Handle scene key pressed.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     onKeyPressed(key) {
         Scene.Base.prototype.onKeyPressed.call(Scene.Map.current, key);
@@ -71,14 +96,14 @@ class MenuDescriptionState extends Base {
     }
     /**
      *  Handle scene key released.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     onKeyReleased(key) {
         Scene.Base.prototype.onKeyReleased.call(Scene.Map.current, key);
     }
     /**
      *  Handle scene pressed repeat key.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      *  @returns {boolean}
      */
     onKeyPressedRepeat(key) {
@@ -86,7 +111,7 @@ class MenuDescriptionState extends Base {
     }
     /**
      *  Handle scene pressed and repeat key.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      *  @returns {boolean}
      */
     onKeyPressedAndRepeat(key) {

@@ -17,7 +17,7 @@ var PictureKind = Enum.PictureKind;
 /** @class
  *  The graphic displaying all the stats in the player description state menu.
  *  @extends Graphic.Base
- *  @param {Player} player The current selected player
+ *  @param {Player} player - The current selected player
  */
 class PlayerDescription extends Base {
     constructor(player) {
@@ -170,10 +170,10 @@ class PlayerDescription extends Base {
     }
     /**
      *  Drawing the statistic progression.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
      */
     drawStatisticProgression(x, y, w, h) {
         for (let i = 0, l = this.listStatsNames.length; i < l; i++) {
@@ -183,20 +183,20 @@ class PlayerDescription extends Base {
     }
     /**
      *  Drawing the player in choice box
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
      */
     drawChoice(x, y, w, h) {
         this.graphicNameCenter.draw(x, y, w, h);
     }
     /**
      *  Drawing the player description
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
      */
     draw(x, y, w, h) {
         let xCharacter = x + 80;

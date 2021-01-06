@@ -15,7 +15,7 @@ import { Vector3 } from "../Core/index.js";
 /** @class
  *  The system color class.
  *  @extends {System.Base}
- *  @param {Record<string, any>} [json=undefined] Json object describing the color
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the color
  */
 class Color extends Base {
     constructor(json) {
@@ -24,10 +24,10 @@ class Color extends Base {
     /**
      *  Create a new color according to RGBA values.
      *  @static
-     *  @param {number} r The red color between 0 and 255
-     *  @param {number} g The green color between 0 and 255
-     *  @param {number} b The blue color between 0 and 255
-     *  @param {number} a The alpha value between 0 and 255
+     *  @param {number} r - The red color between 0 and 255
+     *  @param {number} g - The green color between 0 and 255
+     *  @param {number} b - The blue color between 0 and 255
+     *  @param {number} a - The alpha value between 0 and 255
      *  @returns {Color}
      */
     static createColor(r, g, b, a) {
@@ -38,9 +38,9 @@ class Color extends Base {
     /**
      *  Used for mixing vectors according to alpha in getHex algorithm.
      *  @static
-     *  @param {Vector3} x The x position
-     *  @param {Vector3} y The y position
-     *  @param {number} aThe alpha value between 0 and 1
+     *  @param {Vector3} x - The x position
+     *  @param {Vector3} y - The y position
+     *  @param {number} aThe - alpha value between 0 and 1
      *  @returns {Vector3}
      */
     static mix(x, y, a) {
@@ -48,10 +48,10 @@ class Color extends Base {
     }
     /**
      *  Initialize the color according to RGBA values.
-     *  @param {number} r The red color between 0 and 255
-     *  @param {number} g The green color between 0 and 255
-     *  @param {number} b The blue color between 0 and 255
-     *  @param {number} a The alpha value between 0 and 255
+     *  @param {number} r - The red color between 0 and 255
+     *  @param {number} g - The green color between 0 and 255
+     *  @param {number} b - The blue color between 0 and 255
+     *  @param {number} a - The alpha value between 0 and 255
      */
     initialize(r, g, b, a = 255) {
         this.red = r;
@@ -63,14 +63,14 @@ class Color extends Base {
     }
     /**
      *  Read the JSON associated to the color.
-     *  @param {Record<string, any>} json Json object describing the color
+     *  @param {Record<string, any>} - json Json object describing the color
      */
     read(json) {
         this.initialize(json.r, json.g, json.b, json.a);
     }
     /**
      *  Get the hex value of the color.
-     *  @param {THREE.Vector4} tone The tone value
+     *  @param {THREE.Vector4} tone - The tone value
      *  @returns {string}
      */
     getHex(tone) {

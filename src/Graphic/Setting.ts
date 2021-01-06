@@ -18,7 +18,7 @@ import { Graphic } from "../index";
 /** @class
  *  A class for all settings to display in screen.
  *  @extends Graphic.Base
- *  @param {number} id 
+ *  @param {number} id - 
  */
 class Setting extends Base {
 
@@ -45,10 +45,10 @@ class Setting extends Base {
     
     /** 
      *  Drawing the choice.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
     */
     drawChoice(x: number, y: number, w: number, h: number) {
         this.graphicTextLeft.draw(x, y, w, h);
@@ -57,10 +57,10 @@ class Setting extends Base {
 
     /** 
      *  Drawing the settings informations.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
     */
     draw(x: number, y: number, w: number, h: number) {
         this.graphicTextInformation.draw(x, y, w, h);

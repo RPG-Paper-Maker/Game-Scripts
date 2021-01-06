@@ -17,7 +17,7 @@ import Align = Enum.Align;
 /** @class
  *  The graphic displaying the player skills informations in skill menu.
  *  @extends Graphic.Base
- *  @param {Skill} skill The current selected skill
+ *  @param {Skill} skill - The current selected skill
  */
 class Skill extends Base {
 
@@ -39,10 +39,10 @@ class Skill extends Base {
 
     /** 
      *  Drawing the skill in choice box.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
      */
     drawChoice(x: number, y: number, w: number, h: number) {
         this.graphicName.draw(x, y, w, h);
@@ -51,10 +51,10 @@ class Skill extends Base {
 
     /** 
      *  Drawing the skill description.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
      */
     draw(x: number, y: number, w: number, h: number) {
         this.graphicInformations.draw(x, y, w, h);

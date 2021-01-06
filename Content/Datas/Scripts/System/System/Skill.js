@@ -12,7 +12,7 @@ import { CommonSkillItem } from "./CommonSkillItem.js";
 /** @class
  *  A skill of the game.
  *  @extends System.CommonSkillItem
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  skill
  */
 class Skill extends CommonSkillItem {
@@ -21,7 +21,7 @@ class Skill extends CommonSkillItem {
     }
     /**
      *  Read the JSON associated to the skill.
-     *  @param {Record<string, any>} json Json object describing the skill
+     *  @param {Record<string, any>} - json Json object describing the skill
      */
     read(json) {
         super.read(json);

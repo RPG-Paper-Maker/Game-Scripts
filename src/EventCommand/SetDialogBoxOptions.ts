@@ -17,7 +17,7 @@ import { MapObject } from "../Core";
 /** @class
  *  An event command for setting the dialog box options.
  *  @extends EventCommand.Base
- *  @param {any[]} command Direct JSON command to parse
+ *  @param {any[]} command - Direct JSON command to parse
  */
 class SetDialogBoxOptions extends Base {
     public windowSkinID: System.DynamicValue;
@@ -130,9 +130,9 @@ class SetDialogBoxOptions extends Base {
 
     /** 
      *  Update and check if the event is finished
-     *  @param {Object} currentState The current state of the event
-     *  @param {MapObject} object The current object reacting
-     *  @param {number} state The state ID
+     *  @param {Object} currentState - The current state of the event
+     *  @param {MapObject} object - The current object reacting
+     *  @param {number} state - The state ID
      *  @returns {number} The number of node to pass
      */
     update(currentState?: Record<string, any>, object?: MapObject, state?: 

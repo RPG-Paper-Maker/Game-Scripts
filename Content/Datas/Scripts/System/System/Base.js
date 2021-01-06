@@ -11,7 +11,7 @@
 /**
  *  The superclass that define all the System classes structure.
  *  @abstract
- *  @param {Record<string, any>} [json=undefined]
+ *  @param {Record<string, any>} - [json=undefined]
  *  @param {any} args
  */
 class Base {

@@ -16,7 +16,7 @@ import { Base } from "./Base";
 /** @class
  *  A name that can have several translations.
  *  @extends {System.Base}
- *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the 
  *  name in sevaral langs
  */
 class Translatable extends Base {
@@ -40,7 +40,7 @@ class Translatable extends Base {
 
     /** 
      *  Read the JSON associated to the name in sevaral langs.
-     *  @param {Record<string, any>} json Json object describing the name in 
+     *  @param {Record<string, any>} - json Json object describing the name in 
      *  sevaral langs
      */
     read(json: Record<string, any>): void {

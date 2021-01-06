@@ -16,7 +16,7 @@ import { Manager, EventCommand, System } from "../index";
 /** @class
  *  A reaction to an event.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the 
  *  object reaction
  */
 class Reaction extends Base {
@@ -32,7 +32,7 @@ class Reaction extends Base {
 
     /** 
      *  Read the JSON associated to the object reaction.
-     *  @param {Record<string, any>} json Json object describing the object 
+     *  @param {Record<string, any>} - json Json object describing the object 
      *  reaction
      */
     read(json: Record<string, any>) {
@@ -51,9 +51,9 @@ class Reaction extends Base {
 
     /** 
      *  Read the JSON children associated to the object reaction.
-     *  @param {Record<string, any>} jsonCommands Json object describing the 
+     *  @param {Record<string, any>} - jsonCommands Json object describing the 
      *  object
-     *  @param {Node} commands All the commands (final result)
+     *  @param {Node} commands - All the commands (final result)
      */
     readChildrenJSON(jsonCommands: Record<string, any>, commands: Node) {
         let choice = null;

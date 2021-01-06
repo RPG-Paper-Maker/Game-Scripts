@@ -12,7 +12,7 @@ import { Translatable } from "./Translatable.js";
 /** @class
  *  A weapon/armor kind of the game.
  *  @extends System.Translatable
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  weapon / armor kind
  */
 class WeaponArmorKind extends Translatable {
@@ -21,7 +21,7 @@ class WeaponArmorKind extends Translatable {
     }
     /**
      *  Read the JSON associated to the weapon / armor kind.
-     *  @param {Record<string, any>} json Json object describing the weapon /
+     *  @param {Record<string, any>} - json Json object describing the weapon /
      *  armor kind
      */
     read(json) {

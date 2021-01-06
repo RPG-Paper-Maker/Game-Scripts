@@ -28,7 +28,7 @@ declare class MenuEquip extends Base {
     updateInformations(): void;
     /**
      *  Move tab according to key.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     moveTabKey(key: number): void;
     /**
@@ -49,23 +49,23 @@ declare class MenuEquip extends Base {
     update(): void;
     /**
      *  Handle scene key pressed.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     onKeyPressed(key: number): void;
     /**
      *  Handle scene key released.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     onKeyReleased(key: number): void;
     /**
      *  Handle scene pressed repeat key.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      *  @returns {boolean}
     */
     onKeyPressedRepeat(key: number): boolean;
     /**
      *  Handle scene pressed and repeat key.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      *  @returns {boolean}
     */
     onKeyPressedAndRepeat(key: number): boolean;

@@ -1,30 +1,58 @@
 import { Base } from "./Base.js";
 import { Picture2D, WindowChoices } from "../Core/index.js";
-/** @class
- *  A scene for the title screen.
- *  @extends Scene.Base
+/**
+ * the Scene displaying the game title screen.
+ *
+ * @class TitleScreen
+ * @extends {Base}
  */
 declare class TitleScreen extends Base {
+    /**
+     * The title screen background image.
+     *
+     * @type {Picture2D}
+     * @memberof TitleScreen
+     */
     pictureBackground: Picture2D;
+    /**
+     * The title screen command window.
+     *
+     * @type {WindowChoices}
+     * @memberof TitleScreen
+     */
     windowChoicesCommands: WindowChoices;
     constructor();
     /**
-     *  Load async stuff.
+     * @inheritdoc
+     *
+     * @memberof TitleScreen
+     */
+    create(): void;
+    /**
+     * @inheritdoc
+     *
+     * @memberof TitleScreen
      */
     load(): Promise<void>;
     /**
-     *  Handle scene key pressed.
-     *  @param {number} key The key ID
+     * @inheritdoc
+     *
+     * @param {number} key - the key ID
+     * @memberof TitleScreen
      */
     onKeyPressed(key: number): void;
     /**
-     *  Handle scene pressed and repeat key.
-     *  @param {number} key The key ID
-     *  @returns {boolean}
+     * @inheritdoc
+     *
+     * @param {number} key - the key ID
+     * @return {*}  {boolean}
+     * @memberof TitleScreen
      */
     onKeyPressedAndRepeat(key: number): boolean;
     /**
-     *  Draw the HUD scene.
+     * @inheritdoc
+     *
+     * @memberof TitleScreen
      */
     drawHUD(): void;
 }

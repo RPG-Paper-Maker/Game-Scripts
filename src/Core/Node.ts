@@ -11,8 +11,8 @@
 
 /** @class
  *  Datas structure of tree.
- *  @param {Node} parent Parent of the node
- *  @param {any} data Data of the node
+ *  @param {Node} parent - Parent of the node
+ *  @param {any} data - Data of the node
  */
 class Node {
 

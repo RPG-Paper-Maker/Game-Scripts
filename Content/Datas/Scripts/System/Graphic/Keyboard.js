@@ -29,7 +29,7 @@ class Keyboard extends Base {
     }
     /**
      *  Update short sc.
-     *  @param {number[][]} sh The short list
+     *  @param {number[][]} sh - The short list
      */
     updateShort(sh) {
         this.kb.sc = sh;
@@ -37,10 +37,10 @@ class Keyboard extends Base {
     }
     /**
      *  Drawing the keyboard in choice box.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
      */
     drawChoice(x, y, w, h) {
         this.graphicTextName.draw(x, y, w, h);
@@ -48,10 +48,10 @@ class Keyboard extends Base {
     }
     /**
      *  Drawing the keyboard description.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
      */
     draw(x, y, w, h) {
         this.graphicTextInformation.draw(x, y, w, (h / 2));

@@ -19,9 +19,9 @@ import { THREE } from "../Globals";
 /** @class
  *  A picture of the game.
  *  @extends {System.Base}
- *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the 
  *  picture
- *  @param {PictureKind} [kind=PictureKind.Pictures] The kind of picture
+ *  @param {PictureKind} [kind=PictureKind.Pictures] - The kind of picture
  */
 class Picture extends Base {
 
@@ -53,7 +53,7 @@ class Picture extends Base {
 
     /** 
      *  Get string of picture kind.
-     *  @param {PictureKind} kind The picture kind
+     *  @param {PictureKind} kind - The picture kind
      *  @returns {string}
      */
     static pictureKindToString(kind: PictureKind): string {
@@ -95,9 +95,9 @@ class Picture extends Base {
     /** 
      *  Get the folder associated to a kind of picture.
      *  @static
-     *  @param {PictureKind} kind The kind of picture
-     *  @param {boolean} isBR Indicate if the picture is a BR
-     *  @param {string} dlc The picture DLC name (if exists)
+     *  @param {PictureKind} kind - The kind of picture
+     *  @param {boolean} isBR - Indicate if the picture is a BR
+     *  @param {string} dlc - The picture DLC name (if exists)
      *  @returns {string}
      */
     static getFolder(kind: PictureKind, isBR: boolean, dlc: string): string {
@@ -109,7 +109,7 @@ class Picture extends Base {
     /** 
      *  Get the local folder associated to a kind of picture.
      *  @static
-     *  @param {PictureKind} kind The kind of picture
+     *  @param {PictureKind} kind - The kind of picture
      *  @returns {string}
      */
     static getLocalFolder(kind: PictureKind): string {
@@ -150,7 +150,7 @@ class Picture extends Base {
 
     /** 
      *  Read the JSON associated to the picture.
-     *  @param {Object} json Json object describing the picture
+     *  @param {Object} json - Json object describing the picture
      */
     read(json: Record<string, any>) {
         this.id = json.id;
@@ -180,7 +180,7 @@ class Picture extends Base {
 
     /** 
      *  Read collisions according to image size.
-     *  @param {HTMLImageElement} image The image texture
+     *  @param {HTMLImageElement} image - The image texture
      */
     readCollisionsImage(image: HTMLImageElement) {
         this.width = Math.floor(image.width / Datas.Systems.SQUARE_SIZE);
@@ -232,7 +232,7 @@ class Picture extends Base {
 
     /** 
      *  Get a specific collision square according to texture.
-     *  @param {number[]} pos Texture position
+     *  @param {number[]} pos - Texture position
      *  @returns {CollisionSquare}
      */
     getCollisionAt(pos: number[]): CollisionSquare {
@@ -241,8 +241,8 @@ class Picture extends Base {
 
     /** 
      *  Get a specific collision square according to texture.
-     *  @param {number} x Texture x position
-     *  @param {number} y Texture y position
+     *  @param {number} x - Texture x position
+     *  @param {number} y - Texture y position
      *  @returns {CollisionSquare}
      */
     getCollisionAtPos(x: number, y: number): CollisionSquare {
@@ -251,7 +251,7 @@ class Picture extends Base {
 
     /** 
      *  Get a specific collision square according to index.
-     *  @param {number} index The index positions
+     *  @param {number} index - The index positions
      *  @returns {CollisionSquare}
      */
     getCollisionAtIndex(index: number): CollisionSquare {
@@ -261,7 +261,7 @@ class Picture extends Base {
 
     /** 
      *  Get a specific collision for wall.
-     *  @param {number[]} texture Texture position
+     *  @param {number[]} texture - Texture position
      *  @returns {number[][]}
      */
     getSquaresForWall(texture: number[]): number[][] {
@@ -305,7 +305,7 @@ class Picture extends Base {
 
     /** 
      *  Get a specific collision square according to texture.
-     *  @param {number[]} texture Texture position
+     *  @param {number[]} texture - Texture position
      *  @returns {number[][]}
      */
     getSquaresForTexture(texture: number[]): number[][] {
@@ -324,7 +324,7 @@ class Picture extends Base {
 
     /** 
      *  Get a specific collision square according to texture
-     *  @param {THREE.Image} image The image texture
+     *  @param {THREE.Image} image - The image texture
      *  @returns {number[][][]}
      */
     getSquaresForStates(image: any): number[][] {

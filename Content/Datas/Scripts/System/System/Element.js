@@ -14,7 +14,7 @@ import { Utils } from "../Common/index.js";
 /** @class
  *  An element of the game.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  element
  */
 class Element extends Icon {
@@ -23,7 +23,7 @@ class Element extends Icon {
     }
     /**
      *  Read the JSON associated to the element
-     *  @param {Record<string, any>} json Json object describing the element
+     *  @param {Record<string, any>} - json Json object describing the element
      */
     read(json) {
         super.read(json);

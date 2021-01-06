@@ -20,7 +20,7 @@ import { Monster } from "./Monster";
 /** @class
  *  A monster action of the game.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the 
  *  monster action
  */
 class MonsterAction extends Base {
@@ -54,7 +54,7 @@ class MonsterAction extends Base {
 
     /** 
      *  Read the JSON associated to the monster action.
-     *  @param {Record<string, any>} json Json object describing the monster 
+     *  @param {Record<string, any>} - json Json object describing the monster 
      *  action
      */
     read(json: Record<string, any>) {

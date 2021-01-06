@@ -16,7 +16,7 @@ import { Datas } from "../index";
 /** @class
  *  An armor of the game.
  *  @extends System.CommonSkillItem
- *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the 
  *  armor
  */
 class Armor extends CommonSkillItem {
@@ -27,7 +27,7 @@ class Armor extends CommonSkillItem {
 
     /** 
      *  Read the JSON associated to the armor.
-     *  @param {Record<string, any>} json Json object describing the armor
+     *  @param {Record<string, any>} - json Json object describing the armor
      */
     read(json: Record<string, any>) {
         super.read(json);

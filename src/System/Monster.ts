@@ -28,7 +28,7 @@ interface StructReward {
 /** @class
  *  A monster of the game.
  *  @extends System.Hero
- *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the 
  *  monster
  */
 class Monster extends Hero {
@@ -41,7 +41,7 @@ class Monster extends Hero {
     }
 
     /** Read the JSON associated to the monster.
-     *  @param {Record<string, any>} json Json object describing the monster
+     *  @param {Record<string, any>} - json Json object describing the monster
      */
     read(json: Record<string, any>) {
         super.read(json);
@@ -81,7 +81,7 @@ class Monster extends Hero {
 
     /** 
      *  Get the experience reward.
-     *  @param {number} level The monster level
+     *  @param {number} level - The monster level
      *  @returns {number}
      */
     getRewardExperience(level: number): number {
@@ -91,7 +91,7 @@ class Monster extends Hero {
 
     /** 
      *  Get the currencies reward.
-     *  @param {number} level The monster level
+     *  @param {number} level - The monster level
      *  @returns {Object}
      */
     getRewardCurrencies(level: number): Record<string, number> {
@@ -107,7 +107,7 @@ class Monster extends Hero {
 
     /** 
      *  Get the loots reward.
-     *  @param {number} level The monster level
+     *  @param {number} level - The monster level
      *  @returns {Record<string, Item>[]}
      */
     getRewardLoots(level: number): Record<string, Item>[] {

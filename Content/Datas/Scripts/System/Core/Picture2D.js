@@ -15,11 +15,11 @@ import { Bitmap } from "./Bitmap.js";
 /** @class
  *   A class for pictures drawable in HUD.
  *   @extends Bitmap
- *   @param {string} [path=""] The path to the ressource
- *   @param {number} [x=0] Coords of the bitmap
- *   @param {number} [y=0] Coords of the bitmap
- *   @param {number} [w=0] Coords of the bitmap
- *   @param {number} [h=0] Coords of the bitmap
+ *   @param {string} [path=""] - The path to the ressource
+ *   @param {number} [x=0] - Coords of the bitmap
+ *   @param {number} [y=0] - Coords of the bitmap
+ *   @param {number} [w=0] - Coords of the bitmap
+ *   @param {number} [h=0] - Coords of the bitmap
  */
 class Picture2D extends Bitmap {
     constructor(path = "", { x = 0, y = 0, w = 0, h = 0, zoom = 1.0, opacity = 1.0, angle = 0.0, cover = false, stretch = false } = {}) {
@@ -41,22 +41,32 @@ class Picture2D extends Bitmap {
     /**
      *  Create a picture and then load it
      *  @static
-     *  @param {System.Picture} picture The picture to load
+     *  @param {System.Picture} picture - The picture to load
      */
     static async create(picture, opts = {}) {
         let pic = picture ? new Picture2D(picture.getPath(), opts) : new Picture2D();
         await pic.load();
         return pic;
     }
-    /**
+    /*
      *  Create a picture from kind and id and then load it
      *  @static
-     *  @param {number} id The picture id to load
-     *  @param {PictureKind} kind The picture kind to load
-     *  @param {number} x The x position
-     *  @param {number} y The y position
-     *  @param {number} w The w size
-     *  @param {number} h The h size
+     *  @param {number} id - The picture id to load
+     *  @param {PictureKind} kind - The picture kind to load
+     *  @param {number} x - The x position
+     *  @param {number} y - The y position
+     *  @param {number} w - The w size
+     *  @param {number} h - The h size
+     */
+    /**
+     * Create a picture from kind and id and then load it
+     *
+     * @static
+     * @param {number} id - The picture id to load
+     * @param {PictureKind} kind - The picture kind to load
+     * @param {pictureOptions} [opts={}]
+     * @return {*}
+     * @memberof Picture2D
      */
     static async createWithID(id, kind, opts = {}) {
         return (await Picture2D.create(Datas.Pictures.get(kind, id), opts));
@@ -64,7 +74,7 @@ class Picture2D extends Bitmap {
     /**
      *  Load the image.
      *  @static
-     *  @param {string} path The image path
+     *  @param {string} path - The image path
      *  @returns {Promise<HTMLImageElement>}
      */
     static async loadImage(path) {
@@ -126,15 +136,15 @@ class Picture2D extends Bitmap {
     }
     /**
      *  Draw the picture on HUD
-     *  @param {number} [x=undefined] The x position
-     *  @param {number} [y=undefined] The y position
-     *  @param {number} [w=undefined] The w position
-     *  @param {number} [h=undefined] The h position
-     *  @param {number} [sx=0] The source x position
-     *  @param {number} [sy=0] The source x position
-     *  @param {number} [sw=this.oW] The source width size
-     *  @param {number} [sh=this.oH] The source height size
-     *  @param {boolean} [positionResize=true] Indicate if the position resize
+     *  @param {number} [x=undefined] - The x position
+     *  @param {number} [y=undefined] - The y position
+     *  @param {number} [w=undefined] - The w position
+     *  @param {number} [h=undefined] - The h position
+     *  @param {number} [sx=0] - The source x position
+     *  @param {number} [sy=0] - The source x position
+     *  @param {number} [sw=this.oW] - The source width size
+     *  @param {number} [sh=this.oH] - The source height size
+     *  @param {boolean} [positionResize=true] - Indicate if the position resize
      *  (screen resolution)
      */
     draw(x = undefined, y = undefined, w = undefined, h = undefined, sx = 0, sy = 0, sw = this.oW, sh = this.oH, positionResize = true) {

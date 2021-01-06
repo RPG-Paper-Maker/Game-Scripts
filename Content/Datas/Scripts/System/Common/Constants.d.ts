@@ -1,6 +1,7 @@
-/** @class
- *  @static
- *  The common class for constants.
+/**
+ *
+ * The common class for constants.
+ * @class Constants
  */
 declare class Constants {
     static readonly DEFAULT_FONT_SIZE = 13;

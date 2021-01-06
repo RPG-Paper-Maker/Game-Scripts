@@ -9,9 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-/** @class
- *  @static
- *  The key event class used to convert Qt keys to web keys.
+/**
+ * The key event class used to convert Qt keys to web keys.
+ *
+ * @class KeyEvent
  */
 class KeyEvent {
 
@@ -166,7 +167,7 @@ class KeyEvent {
 
     /** Convert Qt key to DOM.
      *   @static
-     *   @param {number} key The qt key to convert
+     *   @param {number} key - The qt key to convert
      *   @returns {number}
      */
     static qtToDOM(key: number): number {
@@ -292,7 +293,7 @@ class KeyEvent {
 
     /** Check if the pressed key is a PAD number.
      *   @static
-     *   @param {number} key The key ID
+     *   @param {number} key - The key ID
      *   @returns {boolean}
      */
     static isKeyNumberPADPressed(key: number): boolean {
@@ -301,7 +302,7 @@ class KeyEvent {
 
     /** Check if the pressed key is a number with shift.
      *   @static
-     *   @param {number} key The key ID
+     *   @param {number} key - The key ID
      *   @returns {boolean}
      */
     static isKeyNumberTopPressed(key: number): boolean {
@@ -311,7 +312,7 @@ class KeyEvent {
 
     /** Check if the pressed key is a number.
      *   @static
-     *   @param {number} key The key ID
+     *   @param {number} key - The key ID
      *   @returns {boolean}
      */
     static isKeyNumberPressed(key: number): boolean {
@@ -321,7 +322,7 @@ class KeyEvent {
 
     /** Get the char associated to the key.
      *   @static
-     *   @param {number} key The key ID
+     *   @param {number} key - The key ID
      *   @returns {string}
      */
     static getKeyChar(key: number): string {
@@ -345,7 +346,7 @@ class KeyEvent {
 
     /** Get the string associated to the key
      *   @static
-     *   @param {number} key The key ID
+     *   @param {number} key - The key ID
      *   @returns {string}
      */
     static getKeyString(key: number): string {

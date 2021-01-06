@@ -2,7 +2,7 @@ import { Base } from "./Base.js";
 /** @class
  *  A skybox of the game.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  skybox
  */
 declare class Skybox extends Base {
@@ -15,7 +15,7 @@ declare class Skybox extends Base {
     constructor(json?: Record<string, any>);
     /**
      *  Read the JSON associated to the skybox.
-     *  @param {Record<string, any>} json Json object describing the skybox
+     *  @param {Record<string, any>} - json Json object describing the skybox
      */
     read(json: Record<string, any>): void;
     /**

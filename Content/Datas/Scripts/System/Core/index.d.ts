@@ -1,7 +1,3 @@
-/**
- * Ambient module "core"
- * @example import * as core from "Core"
- */
 export * from "./Autotile.js";
 export * from "./Autotiles.js";
 export * from "./Bitmap.js";
@@ -34,5 +30,8 @@ export * from "./TextureBundle.js";
 export * from "./Tree.js";
 export * from "./WindowBox.js";
 export * from "./WindowChoices.js";
+export { ChoicesOptions } from "./WindowChoices";
 export * from "./Vector3.js";
 export * from "./Vector2.js";
+export * from "./Anchor2D.js";
+export * from "./Rectangle.js";

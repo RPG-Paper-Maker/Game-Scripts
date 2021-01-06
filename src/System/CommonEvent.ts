@@ -14,7 +14,7 @@ import { Parameter } from "./Parameter";
 
 /** @class
  *   An event that can be called.
- *   @param {Record<string, any>} [json] json object describing the event
+ *   @param {Record<string, any>} - [json] json object describing the event
  */
 class CommonEvent extends Base {
 
@@ -26,7 +26,7 @@ class CommonEvent extends Base {
 
     /** 
      *  Read the JSON associated to the event.
-     *  @param {Record<string, any>} json Json object describing the event
+     *  @param {Record<string, any>} - json Json object describing the event
      */
     read(json: Record<string, any>) {
         this.parameters = Parameter.readParameters(json);

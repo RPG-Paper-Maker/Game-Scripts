@@ -6,7 +6,7 @@ import { Picture2D, Battler } from "../Core/index.js";
 /** @class
  *  An animation of a skill / item / weapon or for display animation command.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  animation
  */
 declare class Animation extends Base {
@@ -18,7 +18,7 @@ declare class Animation extends Base {
     constructor(json?: Record<string, any>);
     /**
      *  Read the JSON associated to the animation
-     *  @param {Record<string, any>} json Json object describing the animation
+     *  @param {Record<string, any>} - json Json object describing the animation
      */
     read(json: Record<string, any>): void;
     /**
@@ -28,15 +28,15 @@ declare class Animation extends Base {
     createPicture(): Picture2D;
     /**
      *  Play the sounds according to frame and condition.
-     *  @param {number} frame The frame
-     *  @param {AnimationEffectConditionKind} condition The condition
+     *  @param {number} frame - The frame
+     *  @param {AnimationEffectConditionKind} condition - The condition
      */
     playSounds(frame: number, condition: AnimationEffectConditionKind): void;
     /**
      *  Draw the animation.
-     *  @param {Picture2D} picture The picture associated to the animation
-     *  @param {number} frame The frame
-     *  @param {Battler} battler The battler target
+     *  @param {Picture2D} picture - The picture associated to the animation
+     *  @param {number} frame - The frame
+     *  @param {Battler} battler - The battler target
      */
     draw(picture: Picture2D, frame: number, battler: Battler): void;
 }

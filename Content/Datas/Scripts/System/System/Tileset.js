@@ -17,7 +17,7 @@ import { THREE } from "../Globals.js";
 /** @class
  *  A tileset of the game.
  *  @extends System.Base
- *  @param {Record<string, any>} json Json object describing the tileset
+ *  @param {Record<string, any>} - json Json object describing the tileset
  */
 class Tileset extends Base {
     constructor(json) {
@@ -34,7 +34,7 @@ class Tileset extends Base {
     }
     /**
      *  Read the JSON associated to the tileset.
-     *  @param {Record<string, any>} json Json object describing the tileset
+     *  @param {Record<string, any>} - json Json object describing the tileset
      */
     read(json) {
         this.id = json.id;
@@ -75,7 +75,7 @@ class Tileset extends Base {
     }
     /**
      *  Get the string logic for special elements.
-     *  @param {number[]} specials Special elements
+     *  @param {number[]} specials - Special elements
      *  @returns {string}
      */
     getSpecialString(specials) {
@@ -180,11 +180,11 @@ class Tileset extends Base {
     }
     /**
      *  Load an autotile ID and add it to context rendering.
-     *  @param {TextureBundle} textureAutotile The autotile several texture
-     *  @param {THREE.Texture} texture The texture to paint on
-     *  @param {System.Picture} picture The picture to paint
-     *  @param {number} offset The offset
-     *  @param {number} id The picture id
+     *  @param {TextureBundle} textureAutotile - The autotile several texture
+     *  @param {THREE.Texture} texture - The texture to paint on
+     *  @param {System.Picture} picture - The picture to paint
+     *  @param {number} offset - The offset
+     *  @param {number} id - The picture id
      *  @returns {any[]}
      */
     async loadTextureAutotile(textureAutotile, texture, picture, offset, id) {
@@ -220,10 +220,10 @@ class Tileset extends Base {
     }
     /**
      *  Paint the picture in texture.
-     *  @param {Image} img The image to draw
-     *  @param {number} offset The offset
-     *  @param {number[]} point The in several texture
-     *  @param {number} id The picture id
+     *  @param {Image} img - The image to draw
+     *  @param {number} offset - The offset
+     *  @param {number[]} point - The in several texture
+     *  @param {number} id - The picture id
      */
     paintPictureAutotile(img, offset, point, id) {
         let row = -1;
@@ -272,8 +272,8 @@ class Tileset extends Base {
     }
     /**
      *  Update texture of a TextureAutotile.
-     *  @param {TextureBundle} textureAutotile The autotile several texture
-     *  @param {THREE.Texture} texture The texture to paint on
+     *  @param {TextureBundle} textureAutotile - The autotile several texture
+     *  @param {THREE.Texture} texture - The texture to paint on
      */
     async updateTextureAutotile(textureAutotile, texture) {
         texture.image = await Picture2D.loadImage(Platform.canvasRendering
@@ -321,11 +321,11 @@ class Tileset extends Base {
     }
     /**
      *  Load a mountain ID and add it to context rendering
-     *  @param {TextureBundle} textureMountain The mountain several texture
-     *  @param {THREE.Texture} texture The texture to paint on
-     *  @param {System.Picture} picture The picture to paint
-     *  @param {number} offset The offset
-     *  @param {number} id The picture id
+     *  @param {TextureBundle} textureMountain - The mountain several texture
+     *  @param {THREE.Texture} texture - The texture to paint on
+     *  @param {System.Picture} picture - The picture to paint
+     *  @param {number} offset - The offset
+     *  @param {number} id - The picture id
      *  @returns {any[]}
      */
     async loadTextureMountain(textureMountain, texture, picture, offset, id) {
@@ -363,9 +363,9 @@ class Tileset extends Base {
     }
     /**
      *  Paint the picture in texture.
-     *  @param {HTMLImageElement} img The image to draw
-     *  @param {number} offset The offset
-     *  @param {number} id The picture id
+     *  @param {HTMLImageElement} img - The image to draw
+     *  @param {number} offset - The offset
+     *  @param {number} id - The picture id
      */
     paintPictureMountain(img, offset, id) {
         let y = offset * 4 * Datas.Systems.SQUARE_SIZE;
@@ -404,8 +404,8 @@ class Tileset extends Base {
     }
     /**
      *  Update texture of a TextureSeveral.
-     *  @param {TextureBundle} textureMountain The mountain several texture
-     *  @param {THREE.Texture} texture The texture to paint on
+     *  @param {TextureBundle} textureMountain - The mountain several texture
+     *  @param {THREE.Texture} texture - The texture to paint on
      */
     async updateTextureMountain(textureMountain, texture) {
         texture.image = await Picture2D.loadImage(Platform.canvasRendering
@@ -443,8 +443,8 @@ class Tileset extends Base {
     }
     /**
      *  Load a wall texture.
-     *  @param {System.Picture} picture The picture to load
-     *  @param {number} id The picture id
+     *  @param {System.Picture} picture - The picture to load
+     *  @param {number} id - The picture id
      *  @returns {THREE.ShaderMaterial}
      */
     async loadTextureWall(picture, id) {

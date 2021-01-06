@@ -28,7 +28,7 @@ abstract class Object3D extends MapElement {
 
     /** 
      *  Read the JSON associated to the object 3D.
-     *  @param {Record<string, any>} json Json object describing the object 3D
+     *  @param {Record<string, any>} json - Json object describing the object 3D
      */
     read(json: Record<string, any>) {
         super.read(json);
@@ -36,10 +36,10 @@ abstract class Object3D extends MapElement {
 
     /** 
      *  Update the geometry of a group of object 3D with the same material.
-     *  @param {THREE.Geometry} geometry Geometry of the object 3D
-     *  @param {Position} position The position of object 3D
-     *  @param {number} count The faces count
-     *  @return {[number, StructMapElementCollision[]]}
+     *  @param {THREE.Geometry} geometry - Geometry of the object 3D
+     *  @param {Position} position - The position of object 3D
+     *  @param {number} count - The faces count
+     *  @return {any[]}
      */
     abstract updateGeometry(geometry: THREE.Geometry, position: Position, 
         count: number): [number, StructMapElementCollision[]];

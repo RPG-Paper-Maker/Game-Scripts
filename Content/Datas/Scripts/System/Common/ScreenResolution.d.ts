@@ -1,7 +1,7 @@
-/** @class
- *  @static
- *  A static class for having a quick access to screen resolution variables and
- *  functions;
+/**
+ * A static class for having a quick access to screen resolution variables and functions;
+ *
+ * @class ScreenResolution
  */
 declare class ScreenResolution {
     static readonly SCREEN_X: number;
@@ -13,39 +13,39 @@ declare class ScreenResolution {
     constructor();
     /** Get the pixel position transformation according to screen size
      *   @static
-     *   @param {number} x The position on screen
+     *   @param {number} x - The position on screen
      *   @returns {number}
      */
     static getScreenX(x: number): number;
     /** Get the pixel position transformation according to screen size
      *   @static
-     *   @param {number} y The position on screen
+     *   @param {number} y - The position on screen
      *   @returns {number}
      */
     static getScreenY(y: number): number;
     /** Get the pixel position transformation according to screen size
      *   @static
-     *   @param {number} xy The position on screen
+     *   @param {number} xy - The position on screen
      *   @returns {number}
      */
     static getScreenXY(xy: number): number;
     /** Get the min pixel position transformation according to screen size
      *   @static
-     *   @param {number} xy The position on screen
+     *   @param {number} xy - The position on screen
      *   @returns {number}
      */
     static getScreenMinXY(xy: number): number;
     /** Get the pixel position transformation according to screen size, but
      *   without rounding it
      *   @static
-     *   @param {number} x The position on screen
+     *   @param {number} x - The position on screen
      *   @returns {number}
      */
     static getDoubleScreenX(x: number): number;
     /** Get the pixel position transformation according to screen size, but
      *   without rounding it
      *   @static
-     *   @param {number} y The position on screen
+     *   @param {number} y - The position on screen
      *   @returns {number}
      */
     static getDoubleScreenY(y: number): number;

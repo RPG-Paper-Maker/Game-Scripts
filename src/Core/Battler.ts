@@ -27,9 +27,9 @@ import { Vector2 } from "./Vector2";
 
 /** @class
  *  A battler in a battle (ally or ennemy).
- *  @param {Player} player The character properties
- *  @param {Vector3} position The battler position
- *  @param {Camera} camera the camera associated to the battle
+ *  @param {Player} player - The character properties
+ *  @param {Vector3} position - The battler position
+ *  @param {Camera} camera - the camera associated to the battle
  */
 class Battler {
     
@@ -155,7 +155,7 @@ class Battler {
     
     /** 
      *  Set the selected state.
-     *  @param {boolean} selected Indicate if the battler is selected 
+     *  @param {boolean} selected - Indicate if the battler is selected 
      */
     setSelected(selected: boolean) {
         if (this.selected !== selected) {
@@ -166,7 +166,7 @@ class Battler {
 
     /** 
      *  Set the active state.
-     *  @param {boolean} active Indicate if the battler is active
+     *  @param {boolean} active - Indicate if the battler is active
      */
     setActive(active: boolean) {
         this.active = active;
@@ -250,8 +250,8 @@ class Battler {
 
     /** 
      *  Update battler step if is dead, attacked if attacked.
-     *  @param {boolean} attacked Indicate if the battler is attacked
-     *  @param {Player} user The attack / skill / item user
+     *  @param {boolean} attacked - Indicate if the battler is attacked
+     *  @param {Player} user - The attack / skill / item user
      */
     updateDead(attacked: boolean, user?: Player) {
         let step = BattlerStep.Normal;
