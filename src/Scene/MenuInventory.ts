@@ -18,7 +18,7 @@ import ItemKind = Enum.ItemKind;
 import TargetKind = Enum.TargetKind;
 import AvailableKind = Enum.AvailableKind;
 import { WindowBox, WindowChoices, Item, Game } from "../Core";
-import { StructPositionChoice } from "./index";
+import { StructPositionChoice } from "./Menu";
 
 /** @class
  *  A scene in the menu for describing inventory.

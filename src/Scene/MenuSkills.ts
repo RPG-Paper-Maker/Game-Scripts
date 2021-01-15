@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { Manager, Graphic, Scene, Datas } from "../index";
-import { StructPositionChoice } from "./index";
+import { StructPositionChoice } from "./Menu";
 import { WindowBox, WindowChoices, Battler, Game } from "../Core";
 import { Enum, ScreenResolution } from "../Common";
 import Align = Enum.Align;

@@ -419,4 +419,4 @@ class Menu extends MenuBase {
     }
 }
 
-export {Menu}
+export { StructPositionChoice, Menu}
