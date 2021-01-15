@@ -183,6 +183,7 @@ class Plugins {
         */
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     /**
      *  @static
@@ -265,6 +266,8 @@ class Plugins {
         }
     
     }
+=======
+>>>>>>> 822b380... revert
 }
 
 export { Plugins }
