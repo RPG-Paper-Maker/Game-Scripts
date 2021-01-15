@@ -4,7 +4,7 @@ import { MapObject } from "../Core/index.js";
 /** @class
  *  An event command for setting the dialog box options.
  *  @extends EventCommand.Base
- *  @param {any[]} command Direct JSON command to parse
+ *  @param {any[]} command - Direct JSON command to parse
  */
 declare class SetDialogBoxOptions extends Base {
     windowSkinID: System.DynamicValue;
@@ -46,9 +46,9 @@ declare class SetDialogBoxOptions extends Base {
     constructor(command: any[]);
     /**
      *  Update and check if the event is finished
-     *  @param {Object} currentState The current state of the event
-     *  @param {MapObject} object The current object reacting
-     *  @param {number} state The state ID
+     *  @param {Object} currentState - The current state of the event
+     *  @param {MapObject} object - The current object reacting
+     *  @param {number} state - The state ID
      *  @returns {number} The number of node to pass
      */
     update(currentState?: Record<string, any>, object?: MapObject, state?: number): number;

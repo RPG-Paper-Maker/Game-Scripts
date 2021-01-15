@@ -1,7 +1,8 @@
 import { Vector2, Vector3 } from "../Core/index.js";
-/** @class
- *  @static
- *  The static class for Math related function.
+/**
+ * The static class for Math related function.
+ *
+ * @class Mathf
  */
 declare class Mathf {
     static OPERATORS_COMPARE: ((a: number, b: number) => boolean)[];
@@ -9,19 +10,13 @@ declare class Mathf {
     constructor();
     /**
      * Potential Hotspot/Nullipotent
-     * @author DoubleX @interface
-     * @param {(T, number, T[]): boolean} splitCallback - The callback in the
-     *                                                    Array split method
-     * @param {any} splitThis? - The context of splitCallback
-     * @returns {[T[]]} - The fully splitted array from array
-     */
-    static split<T>(array: T[], splitCallback: (elem: T, i: number, self: T[]) => boolean, splitThis?: any): T[][];
-    /**
-     * Potential Hotspot/Nullipotent
-     * @author DoubleX @interface
+     *
+     * @static
+     * @template T
      * @param {T[]} array1 - The 1st array to be checked against
      * @param {T[]} array2 - The 2nd array to be checked against
-     * @returns {boolean} If array1's a proper subset of array2
+     * @return {*}  {boolean}
+     * @memberof Mathf
      */
     static isProperSubsetOf<T>(array1: T[], array2: T[]): boolean;
     /**
@@ -42,11 +37,13 @@ declare class Mathf {
     static isSupersetOf<T>(array1: T[], array2: T[]): boolean;
     /**
      * Potential Hotspot/Nullipotent
-     * @author DoubleX @interface
-     * @param {[*]} arr - The array to be checked against
-     * @param {T[]} array1 - The 1st array to be checked against
-     * @param {T[]} array2 - The 2nd array to be checked against
-     * @returns {boolean} If array1's a subset of array2
+     *
+     * @static
+     * @template T
+     * @param {T[]} array1 -The 1st array to be checked against
+     * @param {T[]} array2 -The 2nd array to be checked against
+     * @return {*}  {boolean}
+     * @memberof Mathf
      */
     static isSubsetOf<T>(array1: T[], array2: T[]): boolean;
     /**
@@ -134,19 +131,19 @@ declare class Mathf {
     static clear<T>(array: T[]): void;
     /** Check if an array is empty.
      *   @static
-     *   @param {any[]} array The array to test
+     *   @param {any[]} array - The array to test
      *   @returns {boolean}
      */
     static isEmpty<T>(array: T[]): boolean;
     /** Get the cos.
      *   @static
-     *   @param {number} v The value
+     *   @param {number} v - The value
      *   @returns {number}
      */
     static cos(v: number): number;
     /** Get the sin.
      *   @static
-     *   @param {number} v The value
+     *   @param {number} v - The value
      *   @returns {number}
      */
     static sin(v: number): number;
@@ -159,7 +156,7 @@ declare class Mathf {
     static mod(x: number, m: number): number;
     /** Get the list max ID.
      *   @static
-     *   @param {number[]} list A list containing only IDs
+     *   @param {number[]} list - A list containing only IDs
      *   @returns {number}
      */
     static getMaxID(list: number[]): number;
@@ -188,21 +185,21 @@ declare class Mathf {
     /**
      *  Indicate if a point is inside a rectangle.
      *  @static
-     *  @param {Vector2} p The point to test
-     *  @param {number} x1 The x left point of the rectangle
-     *  @param {number} x2 The x right point of the rectangle
-     *  @param {number} y1 The y top point of the rectangle
-     *  @param {number} y2 The y bottom point of the rectangle
+     *  @param {Vector2} p - The point to test
+     *  @param {number} x1 - The x left point of the rectangle
+     *  @param {number} x2 - The x right point of the rectangle
+     *  @param {number} y1 - The y top point of the rectangle
+     *  @param {number} y2 - The y bottom point of the rectangle
      *  @returns {boolean}
      */
     static isPointOnRectangle(p: Vector2, x1: number, x2: number, y1: number, y2: number): boolean;
     /**
      *  Indicate if a point is inside a triangle.
      *  @static
-     *  @param {Vector2} p The point to test
-     *  @param {Vector2} p0 One of the point of the triangle
-     *  @param {Vector2} p1 One of the point of the triangle
-     *  @param {Vector2} p2 One of the point of the triangle
+     *  @param {Vector2} p - The point to test
+     *  @param {Vector2} p0 - One of the point of the triangle
+     *  @param {Vector2} p1 - One of the point of the triangle
+     *  @param {Vector2} p2 - One of the point of the triangle
      *  @returns {boolean}
      */
     static isPointOnTriangle(p: Vector2, p0: Vector2, p1: Vector2, p2: Vector2): boolean;
@@ -227,9 +224,9 @@ declare class Mathf {
      * Convert a value to a rounded percent.
      *
      * @export
-     * @param {number} a The value to convert
-     * @param {number} b The target max value
-     * @param {boolean} large convert the percent to a small value (0 ~ 1) or a large value (0 ~ 100)
+     * @param {number} a - The value to convert
+     * @param {number} b - The target max value
+     * @param {boolean} large - convert the percent to a small value (0 ~ 1) or a large value (0 ~ 100)
      * @return {number}
      */
     static roundedPercentOf(a: number, b: number, large?: boolean): number;

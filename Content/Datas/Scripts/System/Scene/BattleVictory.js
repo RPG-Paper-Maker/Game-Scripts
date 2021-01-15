@@ -325,7 +325,7 @@ class BattleVictory {
     }
     /**
      *  Handle key pressed.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     onKeyPressedStep(key) {
         switch (this.battle.subStep) {
@@ -370,13 +370,13 @@ class BattleVictory {
     }
     /**
      *  Handle key released.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     onKeyReleasedStep(key) {
     }
     /**
      *  Handle key repeat pressed.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      *  @returns {boolean}
      */
     onKeyPressedRepeatStep(key) {
@@ -384,7 +384,7 @@ class BattleVictory {
     }
     /**
      *  Handle key pressed and repeat.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     onKeyPressedAndRepeatStep(key) {
         return true;

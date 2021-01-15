@@ -4,7 +4,7 @@ import { Player, MapObject } from "../Core/index.js";
 /** @class
  *  An event command for condition event command block.
  *  @extends EventCommand.Base
- *  @param {any[]} command Direct JSON command to parse
+ *  @param {any[]} command - Direct JSON command to parse
  */
 declare class If extends Base {
     hasElse: boolean;
@@ -47,45 +47,45 @@ declare class If extends Base {
     constructor(command: any[]);
     /**
      *  Apply callback with all the heroes.
-     *  @param {Player[]} tab The heroes list
-     *  @param {Function} callback The callback
+     *  @param {Player[]} tab - The heroes list
+     *  @param {Function} callback - The callback
      *  @returns {boolean}
      */
     allTheHeroes(tab: Player[], callback: Function): boolean;
     /**
      *  Apply callback with none of the heroes.
-     *  @param {Player[]} tab The heroes list
-     *  @param {Function} callback The callback
+     *  @param {Player[]} tab - The heroes list
+     *  @param {Function} callback - The callback
      *  @returns {boolean}
      */
     noneOfTheHeroes(tab: Player[], callback: Function): boolean;
     /**
      *  Apply callback with at least one hero.
-     *  @param {Player[]} tab The heroes list
-     *  @param {Function} callback The callback
+     *  @param {Player[]} tab - The heroes list
+     *  @param {Function} callback - The callback
      *  @returns {boolean}
      */
     atLeastOneHero(tab: Player[], callback: Function): boolean;
     /**
      *  Apply callback with the hero with instance ID.
-     *  @param {Player[]} tab The heroes list
-     *  @param {number} id The hero instance id
-     *  @param {Function} callback The callback
+     *  @param {Player[]} tab - The heroes list
+     *  @param {number} id - The hero instance id
+     *  @param {Function} callback - The callback
      *  @returns {boolean}
      */
     theHeroeWithInstanceID(tab: Player[], id: number, callback: Function): boolean;
     /**
      *  Apply callback according to heroes selection.
-     *  @param {Player[]} tab The heroes list
-     *  @param {Function} callback The callback
+     *  @param {Player[]} tab - The heroes list
+     *  @param {Function} callback - The callback
      *  @returns {boolean}
     */
     getResult(tab: Player[], callback: Function): boolean;
     /**
      *  Update and check if the event is finished.
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {MapObject} object The current object reacting
-     *  @param {number} state The state ID
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The current object reacting
+     *  @param {number} state - The state ID
      *  @returns {number} The number of node to pass
     */
     update(currentState: Record<string, any>, object: MapObject, state: number): number;

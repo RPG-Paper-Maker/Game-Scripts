@@ -57,7 +57,7 @@ class MapProperties extends Base {
 
     /** 
      *  Read the JSON associated to the map properties.
-     *  @param {Record<string, any>} json Json object describing the map 
+     *  @param {Record<string, any>} - json Json object describing the map 
      *  properties
      */
     read(json: Record<string, any>) {

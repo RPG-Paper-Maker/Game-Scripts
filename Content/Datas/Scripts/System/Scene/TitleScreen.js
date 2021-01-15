@@ -13,16 +13,28 @@ import { Manager, Datas } from "../index.js";
 import { Picture2D, WindowChoices, WindowBox } from "../Core/index.js";
 import { Enum, Platform, ScreenResolution, Constants } from "../Common/index.js";
 var PictureKind = Enum.PictureKind;
-/** @class
- *  A scene for the title screen.
- *  @extends Scene.Base
+/**
+ * the Scene displaying the game title screen.
+ *
+ * @class TitleScreen
+ * @extends {Base}
  */
 class TitleScreen extends Base {
     constructor() {
         super();
     }
     /**
-     *  Load async stuff.
+     * @inheritdoc
+     *
+     * @memberof TitleScreen
+     */
+    create() {
+        super.create();
+    }
+    /**
+     * @inheritdoc
+     *
+     * @memberof TitleScreen
      */
     async load() {
         // Stop all songs
@@ -56,23 +68,29 @@ class TitleScreen extends Base {
         this.loading = false;
     }
     /**
-     *  Handle scene key pressed.
-     *  @param {number} key The key ID
+     * @inheritdoc
+     *
+     * @param {number} key - the key ID
+     * @memberof TitleScreen
      */
     onKeyPressed(key) {
         this.windowChoicesCommands.onKeyPressed(key, this.windowChoicesCommands
             .getCurrentContent().datas);
     }
     /**
-     *  Handle scene pressed and repeat key.
-     *  @param {number} key The key ID
-     *  @returns {boolean}
+     * @inheritdoc
+     *
+     * @param {number} key - the key ID
+     * @return {*}  {boolean}
+     * @memberof TitleScreen
      */
     onKeyPressedAndRepeat(key) {
         return this.windowChoicesCommands.onKeyPressedAndRepeat(key);
     }
     /**
-     *  Draw the HUD scene.
+     * @inheritdoc
+     *
+     * @memberof TitleScreen
      */
     drawHUD() {
         if (Datas.TitlescreenGameover.isTitleBackgroundImage) {

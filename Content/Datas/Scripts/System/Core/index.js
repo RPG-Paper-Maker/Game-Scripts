@@ -8,10 +8,6 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-/**
- * Ambient module "core"
- * @example import * as core from "Core"
- */
 export * from "./Autotile.js";
 export * from "./Autotiles.js";
 export * from "./Bitmap.js";
@@ -46,3 +42,5 @@ export * from "./WindowBox.js";
 export * from "./WindowChoices.js";
 export * from "./Vector3.js";
 export * from "./Vector2.js";
+export * from "./Anchor2D.js";
+export * from "./Rectangle.js";

@@ -18,8 +18,8 @@ class TextureBundle {
     }
     /**
      *  Set the begining texture.
-     *  @param {number} id The begining texture ID
-     *  @param {number[]} point The begining texture point offset
+     *  @param {number} id - The begining texture ID
+     *  @param {number[]} point - The begining texture point offset
      */
     setBegin(id, point) {
         this.beginID = id;
@@ -27,8 +27,8 @@ class TextureBundle {
     }
     /**
      *  Set the ending texture.
-     *  @param {number} id The ending texture ID
-     *  @param {number[]} point The ending texture point offset
+     *  @param {number} id - The ending texture ID
+     *  @param {number[]} point - The ending texture point offset
      */
     setEnd(id, point) {
         this.endID = id;

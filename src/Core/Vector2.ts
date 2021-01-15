@@ -23,8 +23,8 @@ export class Vector2 extends THREE.Vector2 {
 
     /**
      * The data class who hold 2D coordinates.
-     * @param x the x axis
-     * @param y the y axis
+     * @param x the - x axis
+     * @param y the - y axis
      */
     constructor(x = 0, y = 0) {
         super(x, y);

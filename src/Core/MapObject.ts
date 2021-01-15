@@ -34,11 +34,10 @@ interface StructSearchResult {
     list?: MapObject[]
 }
 
-/** @class
- *  Object in local map that can move.
- *  @param {SystemObject} System The System informations
- *  @param {Vector3} position The current object position
- *  @param {boolean} isHero Indicate if the object is the hero
+/**
+ * Object in local map that can move.
+ *
+ * @class MapObject
  */
 class MapObject {
     
@@ -113,7 +112,7 @@ class MapObject {
     /** 
      *  Search an object in the map.
      *  @static
-     *  @param {number} objectID The object ID searched
+     *  @param {number} objectID - The object ID searched
      */
     static search(objectID: number, callback: Function, thisObject?: MapObject) {
         let result = this.searchInMap(objectID, thisObject);
@@ -130,8 +129,8 @@ class MapObject {
     /** 
      *  Search an object that is already loaded. Return null if not found.
      *  @static
-     *  @param {number} objectID The object ID searched
-     *  @param {MapObject} object This object
+     *  @param {number} objectID - The object ID searched
+     *  @param {MapObject} object - This object
      *  @returns {Promise<StructSearchResult>}
      */
     static searchInMap(objectID: number, thisObject?: MapObject): StructSearchResult {
@@ -232,7 +231,7 @@ class MapObject {
     /** 
      *  Search an object that is not loaded yet.
      *  @static
-     *  @param {number} objectID The object ID searched
+     *  @param {number} objectID - The object ID searched
      *  @returns {Promise<StructSearchResult>}
      */
     static async searchOutMap(objectID: number): Promise<StructSearchResult> {
@@ -267,7 +266,7 @@ class MapObject {
 
     /** 
      *  Read the JSON associated to the object.
-     *  @param {Record<string, any>} json Json object describing the object
+     *  @param {Record<string, any>} json - Json object describing the object
      */
     read(json: Record<string, any>) {
         this.position = Position.createFromArray(json.k).toVector3();
@@ -501,9 +500,9 @@ class MapObject {
 
     /** 
      *  Simulate moving object position.
-     *  @param {Orientation} orientation The orientation to move
-     *  @param {number} distance The distance
-     *  @param {number} angle The angle
+     *  @param {Orientation} orientation - The orientation to move
+     *  @param {number} distance - The distance
+     *  @param {number} angle - The angle
      *  @returns {Vector3}
      */
     getFuturPosition(orientation: Orientation, distance: number, angle: number): 
@@ -613,7 +612,7 @@ class MapObject {
 
     /** 
      *  Check collision with another object.
-     *  @param {MapObject} object The other map object
+     *  @param {MapObject} object - The other map object
      *  @returns {boolean}
     */
     checkCollisionObject(object: MapObject): boolean {
@@ -664,7 +663,7 @@ class MapObject {
 
     /** 
      *  Check if two objects can be in the same floor rect (need test collision)
-     *  @param {MapObject} object The other map object
+     *  @param {MapObject} object - The other map object
      *  @returns {boolean}
      */
     isInRect(object: MapObject): boolean {
@@ -682,7 +681,7 @@ class MapObject {
 
     /** 
      *  Only updates the bounding box mesh position.
-     *  @param {Vector3} position Position to update
+     *  @param {Vector3} position - Position to update
      */
     updateBB(position: Vector3) {
         if (this.currentStateInstance.graphicID !== 0) {
@@ -730,7 +729,7 @@ class MapObject {
 
     /** 
      *  Only updates the bounding box mesh position.
-     *  @param {Vector3} position Position to update
+     *  @param {Vector3} position - Position to update
      */
     updateBBPosition(position: Vector3) {
         for (let i = 0, l = this.meshBoundingBox.length; i < l; i++) {
@@ -762,15 +761,15 @@ class MapObject {
 
     /** 
      *  Move the object (one step).
-     *  @param {Orientation} orientation Orientation to move
-     *  @param {number} limit Max distance to go
-     *  @param {number} angle The angle
-     *  @param {boolean} isCameraOrientation Indicate if this should take 
+     *  @param {Orientation} orientation - Orientation to move
+     *  @param {number} limit - Max distance to go
+     *  @param {number} angle - The angle
+     *  @param {boolean} isCameraOrientation - Indicate if this should take 
      *  account of camera orientation
-     *  @returns {[number, number]}
+     *  @returns {number[]}
     */
     move(orientation: Orientation, limit: number, angle: number, 
-        isCameraOrientation: boolean): [number, number]
+        isCameraOrientation: boolean): number[]
     {
         if (this.removed) {
             return [0, 0];
@@ -816,7 +815,7 @@ class MapObject {
 
     /** 
      *  Teleport the object.
-     *  @param {Vector3} position Position to teleport
+     *  @param {Vector3} position - Position to teleport
      */
     teleport(position: Vector3) {
         if (this.removed) {
@@ -950,12 +949,12 @@ class MapObject {
 
     /** 
      *  Receive an event.
-     *  @param {MapObject} sender The sender of this event
-     *  @param {boolean} isSystem Indicate if it is an event System
-     *  @param {number} eventID The event ID
-     *  @param {Parameter[]} parameters List of all the parameters
-     *  @param {number[]} states List of all the current states of the object
-     *  @param {number[]} events The time events list
+     *  @param {MapObject} sender - The sender of this event
+     *  @param {boolean} isSystem - Indicate if it is an event System
+     *  @param {number} eventID - The event ID
+     *  @param {Parameter[]} parameters - List of all the parameters
+     *  @param {number[]} states - List of all the current states of the object
+     *  @param {number[]} events - The time events list
      *  @returns {boolean}
     */
     receiveEvent(sender: MapObject, isSystem: boolean, eventID: number, 
@@ -989,7 +988,7 @@ class MapObject {
 
     /** 
      *  Update according to camera angle.
-     *  @param {number} angle The camera angle
+     *  @param {number} angle - The camera angle
      */
     update(angle: number = 0) {
         if (this.removed) {
@@ -1067,7 +1066,7 @@ class MapObject {
 
     /** 
      *  Update sprite faces angles.
-     *  @param {number} angle The camera angle
+     *  @param {number} angle - The camera angle
      */
     updateAngle(angle: number) {
         if (this.currentState.graphicKind === ElementMapKind.SpritesFace) {

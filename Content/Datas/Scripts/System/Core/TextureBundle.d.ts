@@ -11,14 +11,14 @@ declare class TextureBundle {
     constructor();
     /**
      *  Set the begining texture.
-     *  @param {number} id The begining texture ID
-     *  @param {number[]} point The begining texture point offset
+     *  @param {number} id - The begining texture ID
+     *  @param {number[]} point - The begining texture point offset
      */
     setBegin(id: number, point: number[]): void;
     /**
      *  Set the ending texture.
-     *  @param {number} id The ending texture ID
-     *  @param {number[]} point The ending texture point offset
+     *  @param {number} id - The ending texture ID
+     *  @param {number[]} point - The ending texture point offset
      */
     setEnd(id: number, point: number[]): void;
     /**

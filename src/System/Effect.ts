@@ -22,7 +22,7 @@ import { Statistic } from "./Statistic";
 /** @class
  *  An effect of a common skill item.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the 
  *  effect
  */
 class Effect extends Base {
@@ -65,7 +65,7 @@ class Effect extends Base {
 
     /** 
      *  Read the JSON associated to the effect.
-     *  @param {Record<string, any>} json Json object describing the effect
+     *  @param {Record<string, any>} - json Json object describing the effect
      */
     read(json: Record<string, any>) {
         this.kind = Utils.defaultValue(json.k, EffectKind.Damages);

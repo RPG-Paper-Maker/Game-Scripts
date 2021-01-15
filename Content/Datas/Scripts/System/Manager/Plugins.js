@@ -35,23 +35,26 @@ class Plugins {
      *  Load a particular plugin.
      *  @static
      *  @async
-     *  @param {Record<string, any>} pluginJSON
+     *  @param {Record<string, any>}  pluginJSON - the plugin details to load
      *  @returns {Promise<boolean>}
      */
     static async loadPlugin(pluginJSON) {
         let json = await IO.parseFileJSON(Paths.PLUGINS + pluginJSON.name +
             Constants.STRING_SLASH + Paths.FILE_PLUGIN_DETAILS);
         let plugin = new System.Plugin(pluginJSON.id, json);
-        this.register(plugin);
-        return (await new Promise((resolve, reject) => {
-            let url = Paths.PLUGINS + pluginJSON.name + Constants.STRING_SLASH +
-                Paths.FILE_PLUGIN_CODE;
-            let script = document.createElement("script");
-            script.type = "module";
-            script.src = url;
-            document.body.appendChild(script);
-            script.onload = () => { resolve(true); };
-        }));
+        // FIX 01 : plugin wasn't unloaded if not enabled.
+        if (plugin.isOn) {
+            this.register(plugin);
+            return (await new Promise((resolve, reject) => {
+                let url = Paths.PLUGINS + pluginJSON.name + Constants.STRING_SLASH +
+                    Paths.FILE_PLUGIN_CODE;
+                let script = document.createElement("script");
+                script.type = "module";
+                script.src = url;
+                document.body.appendChild(script);
+                script.onload = () => { resolve(true); };
+            }));
+        }
     }
     /**
      *  Register plugin parameters.
@@ -121,7 +124,7 @@ class Plugins {
     /**
      *  Get plugin parameters.
      *  @static
-     *  @param {string} pluginName
+     *  @param {string} pluginName -
      *  @returns {Record<string, DynamicValue>}
      */
     static getParameters(pluginName) {

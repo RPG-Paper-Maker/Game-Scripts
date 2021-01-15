@@ -9,53 +9,40 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Bitmap } from "./Bitmap.js";
-import { Enum } from "../Common/index.js";
+import { Enum, Utils } from "../Common/index.js";
 var OrientationWindow = Enum.OrientationWindow;
 import { Manager, Datas } from "../index.js";
 import { WindowBox } from "./WindowBox.js";
-/** @class
- *  A class for window choices.
- *  @extends Bitmap
- *  @param {number} x The x coords
- *  @param {number} y The y coords
- *  @param {number} w The w coords
- *  @param {number} h The h coords
- *  @param {Object[]} listContents List of all the contents to display
- *  @param {Object} [opts={}] Options
- *  @param {function[]} [opts.listCallbacks=null] List of all the callback
- *  functions to excecute when pressed.
- *  @param {OrientationWindow} [opts.orientation=OrientationWindow.Vertical] The
- *  orientation of the window (horizontal or vertical)
- *  @param {number} [opts.nbItemsMax = listContents.length] Max number of items
- *  to display on the choice box
- *  @param {number[]} [opts.padding=RPM.SMALL_SLOT_PADDING] Padding of the box
- *  @param {number} [opts.space=0] Space between each choice in the box
- *  @param {number} [opts.currentSelectedIndex=0] The current selected index
- *  position in the choice box
- *  @param {boolean} [opts.bordersInsideVisible=true] If checked, each choice
- *  will have an individual window box
+/**
+ * The window class who handle choices.
+ *
+ * @class WindowChoices
+ * @extends {Bitmap}
  */
 class WindowChoices extends Bitmap {
-    constructor(x, y, w, h, listContents, { listCallbacks = null, orientation = OrientationWindow.Vertical, nbItemsMax = listContents.length, padding = WindowBox.SMALL_SLOT_PADDING, space = 0, currentSelectedIndex = 0, bordersInsideVisible = true } = {}) {
+    constructor(x, y, w, h, listContents, options = {}) {
         super(x, y, w, h);
         // Parameters
-        this.orientation = orientation;
-        this.nbItemsMax = nbItemsMax;
-        this.padding = padding;
-        this.space = space;
-        this.currentSelectedIndex = currentSelectedIndex;
-        this.bordersInsideVisible = bordersInsideVisible;
+        this.orientation = Utils.defaultValue(options.orientation, OrientationWindow.Vertical);
+        this.nbItemsMax = Utils.defaultValue(options.nbItemsMax, 4);
+        this.padding = Utils.defaultValue(options.padding, WindowBox
+            .SMALL_PADDING_BOX);
+        this.space = Utils.defaultValue(options.space, 0);
+        this.currentSelectedIndex = Utils.defaultValue(options
+            .currentSelectedIndex, -1);
+        this.bordersInsideVisible = Utils.defaultValue(options
+            .bordersInsideVisible, true);
         // Initialize values
         this.offsetSelectedIndex = 0;
         this.choiceWidth = w;
         this.choiceHeight = h;
         this.startTime = new Date().getTime();
         // Initialize contents choices and callbacks
-        this.setContentsCallbacks(listContents, listCallbacks, currentSelectedIndex);
+        this.setContentsCallbacks(listContents, options.listCallbacks, options.currentSelectedIndex);
     }
     /**
      *  Set the x value.
-     *  @param {number} x The x value
+     *  @param {number} x - The x value
      */
     setX(x) {
         super.setX(x);
@@ -65,7 +52,7 @@ class WindowChoices extends Bitmap {
     }
     /**
      *  Set the y value.
-     *  @param {number} y The y value
+     *  @param {number} y - The y value
      */
     setY(y) {
         super.setY(y);
@@ -75,7 +62,7 @@ class WindowChoices extends Bitmap {
     }
     /**
      *  Get the content at a specific index.
-     *  @param {number} i The index
+     *  @param {number} i - The index
      *  @returns {Graphic.Base}
      */
     getContent(i) {
@@ -91,7 +78,7 @@ class WindowChoices extends Bitmap {
     }
     /**
      *  Update content size according to all the current settings.
-     *  @param {number} [currentSelectedIndex=0] The current selected index
+     *  @param {number} [currentSelectedIndex=0] - The current selected index
      *  position
      */
     updateContentSize(currentSelectedIndex = 0) {
@@ -149,15 +136,15 @@ class WindowChoices extends Bitmap {
     }
     /**
      *  Set the content at a specific index.
-     *  @param {number} i The index
-     *  @param {Graphic.Base} content The new content
+     *  @param {number} i - The index
+     *  @param {Graphic.Base} content - The new content
      */
     setContent(i, content) {
         this.listWindows[i].content = content;
     }
     /**
      *  Set all the graphic contents.
-     *  @param {Graphic.Base[]} contents All the contents
+     *  @param {Graphic.Base[]} contents - All the contents
      */
     setContents(contents) {
         for (let i = 0, l = this.listWindows.length; i < l; i++) {
@@ -166,7 +153,7 @@ class WindowChoices extends Bitmap {
     }
     /**
      *  Set all the callbacks for each choice.
-     *  @param {Function[]} callbacks All the callbacks functions
+     *  @param {Function[]} callbacks - All the callbacks functions
      */
     setCallbacks(callbacks) {
         if (callbacks === null) {
@@ -183,9 +170,9 @@ class WindowChoices extends Bitmap {
     }
     /**
      *  Set all the contents and callbacks.
-     *  @param {Graphic.Base[]} contents All the contents
-     *  @param {function[]} [callbacks=null] All the callbacks functions
-     *  @param {number} [currentSelectedIndex=0] The current selected index
+     *  @param {Graphic.Base[]} contents - All the contents
+     *  @param {function[]} [callbacks=null] - All the callbacks functions
+     *  @param {number} [currentSelectedIndex=0] - The current selected index
      *  position
      */
     setContentsCallbacks(contents, callbacks = null, currentSelectedIndex = 0) {
@@ -206,7 +193,7 @@ class WindowChoices extends Bitmap {
     }
     /**
      *  Select a choice.
-     *  @param {number} i The index of the choice
+     *  @param {number} i - The index of the choice
      */
     select(i) {
         if (this.listWindows.length > 0) {
@@ -267,8 +254,8 @@ class WindowChoices extends Bitmap {
     }
     /**
      *  First key press handle.
-     *  @param {number} key The key ID pressed
-     *  @param {Object} base The base object to apply with callback
+     *  @param {number} key - The key ID pressed
+     *  @param {Object} base - The base object to apply with callback
      */
     onKeyPressed(key, base) {
         if (this.currentSelectedIndex !== -1) {
@@ -293,7 +280,7 @@ class WindowChoices extends Bitmap {
     /**
      *  Key pressed repeat handle, but with a small wait after the first
      *  pressure (generally used for menus).
-     *  @param {number} key The key ID pressed
+     *  @param {number} key - The key ID pressed
      *  @returns {boolean} false if the other keys are blocked after it
      */
     onKeyPressedAndRepeat(key) {

@@ -1,8 +1,8 @@
-/**
- * The module who hold libraries who can't be loaded normally using the ES6 module fashion.
- * Such as Three.js
- * It allow to use an ES6 module approach without comprimising it's typing and the require file.
- * @author nio kasgami
+/*
+  The module who hold libraries who can't be loaded normally using the ES6 module fashion.
+  Such as Three.js
+  It allow to use an ES6 module approach without comprimising it's typing and the require file.
+  @author nio kasgami
  */
 /**
  * @module Three.js

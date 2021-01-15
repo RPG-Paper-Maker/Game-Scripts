@@ -17,7 +17,7 @@ import { Datas } from "../index.js";
 /** @class
  *  A camera properties of the game.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  camera properties
  */
 export class CameraProperties extends Base {
@@ -26,7 +26,7 @@ export class CameraProperties extends Base {
     }
     /**
      *  Read the JSON associated to the camera properties.
-     *  @param {Record<string, any>} json Json object describing the camera
+     *  @param {Record<string, any>} - json Json object describing the camera
      *  properties
      */
     read(json) {
@@ -45,7 +45,7 @@ export class CameraProperties extends Base {
     }
     /**
      *  Initialize a camera according this System properties
-     *  @param {Camera} camera The camera
+     *  @param {Camera} camera - The camera
      */
     initializeCamera(camera) {
         camera.isPerspective = true;

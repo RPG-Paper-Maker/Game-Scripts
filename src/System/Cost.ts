@@ -19,7 +19,7 @@ import { Player, Game } from "../Core";
 /** @class
  *  A cost of a common skill item.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the 
  *  cost
  */
 class Cost extends Base {
@@ -36,7 +36,7 @@ class Cost extends Base {
 
     /** 
      *  Read the JSON associated to the cost.
-     *  @param {Record<string, any>} json Json object describing the cost
+     *  @param {Record<string, any>} - json Json object describing the cost
      */
     read(json: Record<string, any>) {
         this.kind = Utils.defaultValue(json.k, DamagesKind.Stat);

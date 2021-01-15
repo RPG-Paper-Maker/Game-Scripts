@@ -12,7 +12,7 @@ import { Base } from "./Base.js";
 /** @class
  *  A statistic of the game.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  statistic
  */
 class Statistic extends Base {
@@ -22,8 +22,8 @@ class Statistic extends Base {
     /**
      *  Create an res percent element.
      *  @static
-     *  @param {number} id The element id
-     *  @param {string} name The element name
+     *  @param {number} id - The element id
+     *  @param {string} name - The element name
      *  @returns {SystemStatistic}
      */
     static createElementRes(id, name) {
@@ -37,8 +37,8 @@ class Statistic extends Base {
     /**
      *  Create an res percent element.
      *  @static
-     *  @param {number} id The element id
-     *  @param {string} name The element name
+     *  @param {number} id - The element id
+     *  @param {string} name - The element name
      *  @returns {SystemStatistic}
      */
     static createElementResPercent(id, name) {
@@ -51,7 +51,7 @@ class Statistic extends Base {
     }
     /**
      *  Read the JSON associated to the statistic.
-     *  @param {Record<string, any>} json Json object describing the statistic
+     *  @param {Record<string, any>} - json Json object describing the statistic
      */
     read(json) {
         this.name = json.names[1];

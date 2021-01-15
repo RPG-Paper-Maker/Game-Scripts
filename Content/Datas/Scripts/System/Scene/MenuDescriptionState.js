@@ -8,58 +8,104 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base.js";
+import { MenuBase } from "./MenuBase.js";
 import { Manager, Graphic, Scene, Datas } from "../index.js";
-import { WindowBox, WindowChoices, Game } from "../Core/index.js";
+import { WindowBox, WindowChoices, Rectangle } from "../Core/index.js";
 import { Enum } from "../Common/index.js";
 var Align = Enum.Align;
 var OrientationWindow = Enum.OrientationWindow;
-/** @class
- *  A scene in the menu for describing players statistics.
- *  @extends Scene.Base
+/**
+ * The scene menu describing players statistics.
+ *
+ * @class MenuDescriptionState
+ * @extends {Base}
  */
-class MenuDescriptionState extends Base {
+class MenuDescriptionState extends MenuBase {
+    /**
+     * Creates an instance of MenuDescriptionState.
+     * @memberof MenuDescriptionState
+     */
     constructor() {
-        super(false);
-        // Tab heroes
-        let nbHeroes = Game.current.teamHeroes.length;
-        let listHeroes = new Array(nbHeroes);
-        for (let i = 0; i < nbHeroes; i++) {
-            listHeroes[i] = new Graphic.PlayerDescription(Game.current
-                .teamHeroes[i]);
-        }
-        // All the windows
-        this.windowTop = new WindowBox(20, 20, 200, 30, {
-            content: new Graphic.Text("State", { align: Align.Center })
-        });
-        this.windowChoicesTabs = new WindowChoices(50, 60, 110, WindowBox
-            .SMALL_SLOT_HEIGHT, listHeroes, {
-            orientation: OrientationWindow.Horizontal,
-            nbItemsMax: 4
-        });
-        this.windowInformations = new WindowBox(20, 100, 600, 340, {
-            padding: WindowBox.HUGE_PADDING_BOX
-        });
+        super();
         this.synchronize();
     }
     /**
-     *  Synchronize informations with selected hero.
+     * @inheritdoc
+     *
+     * @memberof MenuDescriptionState
+     */
+    create() {
+        this.createAllWindows();
+    }
+    /**
+     * create all the windows in the scene.
+     *
+     * @memberof MenuDescriptionState
+     */
+    createAllWindows() {
+        this.createWindowTabs();
+        this.createWindowTop();
+        this.createWindowInformation();
+    }
+    /**
+     * create the top window.
+     *
+     * @memberof MenuDescriptionState
+     */
+    createWindowTop() {
+        const rect = new Rectangle(20, 20, 200, 30);
+        const options = {
+            content: new Graphic.Text("State", { align: Align.Center })
+        };
+        this.windowTop = new WindowBox(rect.x, rect.y, rect.width, rect.height, options);
+    }
+    /**
+     * create the tab window containing the heros.
+     *
+     * @memberof MenuDescriptionState
+     */
+    createWindowTabs() {
+        const rect = new Rectangle(50, 60, 110, WindowBox.SMALL_SLOT_HEIGHT);
+        const options = { orientation: OrientationWindow.Horizontal, nbItemsMax: 4 };
+        const listHeroes = [];
+        for (let i = 0; i < this.party().length; i++) {
+            listHeroes[i] = new Graphic.PlayerDescription(this.party()[i]);
+        }
+        this.windowChoicesTabs = new WindowChoices(rect.x, rect.y, rect.width, rect.height, listHeroes, options);
+    }
+    /**
+     * create the information window
+     *
+     * @memberof MenuDescriptionState
+     */
+    createWindowInformation() {
+        const rect = new Rectangle(20, 100, 600, 340);
+        this.windowInformation = new WindowBox(rect.x, rect.y, rect.width, rect.height, { padding: WindowBox.HUGE_PADDING_BOX });
+    }
+    /**
+     * Synchronize information's with the selected hero.
+     *
+     * @memberof MenuDescriptionState
      */
     synchronize() {
-        this.windowInformations.content = this.windowChoicesTabs
+        this.windowInformation.content = this.windowChoicesTabs
             .getCurrentContent();
     }
     /**
-     *  Update the scene
+     * @inheritdoc
+     *
+     * @memberof MenuDescriptionState
      */
     update() {
-        Scene.Base.prototype.update.call(Scene.Map.current);
-        this.windowInformations.content
+        super.update();
+        this.windowInformation.content
             .updateBattler();
     }
     /**
-     *  Handle scene key pressed.
-     *  @param {number} key The key ID
+     * @inheritdoc
+     *
+     * @param {number} key - the key ID
+     * @memberof MenuDescriptionState
      */
     onKeyPressed(key) {
         Scene.Base.prototype.onKeyPressed.call(Scene.Map.current, key);
@@ -70,24 +116,30 @@ class MenuDescriptionState extends Base {
         }
     }
     /**
-     *  Handle scene key released.
-     *  @param {number} key The key ID
+     * @inheritdoc
+     *
+     * @param {number} key - the key id
+     * @memberof MenuDescriptionState
      */
     onKeyReleased(key) {
         Scene.Base.prototype.onKeyReleased.call(Scene.Map.current, key);
     }
     /**
-     *  Handle scene pressed repeat key.
-     *  @param {number} key The key ID
-     *  @returns {boolean}
+     * @inheritdoc
+     *
+     * @param {number} key - the key id
+     * @return {*}  {boolean}
+     * @memberof MenuDescriptionState
      */
     onKeyPressedRepeat(key) {
         return Scene.Base.prototype.onKeyPressedRepeat.call(Scene.Map.current, key);
     }
     /**
-     *  Handle scene pressed and repeat key.
-     *  @param {number} key The key ID
-     *  @returns {boolean}
+     * @inheritdoc
+     *
+     * @param {number} key - the key id
+     * @return {*}  {boolean}
+     * @memberof MenuDescriptionState
      */
     onKeyPressedAndRepeat(key) {
         let res = Scene.Base.prototype.onKeyPressedAndRepeat.call(Scene.Map
@@ -97,7 +149,9 @@ class MenuDescriptionState extends Base {
         return res;
     }
     /**
-     *  Draw the HUD scene.
+     * @inheritdoc
+     *
+     * @memberof MenuDescriptionState
      */
     drawHUD() {
         // Draw the local map behind
@@ -105,7 +159,7 @@ class MenuDescriptionState extends Base {
         // Draw the menu
         this.windowTop.draw();
         this.windowChoicesTabs.draw();
-        this.windowInformations.draw();
+        this.windowInformation.draw();
     }
 }
 export { MenuDescriptionState };

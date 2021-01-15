@@ -12,7 +12,7 @@ import { Base } from "./Base.js";
 /** @class
  *  A troop of the game.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  troop
  */
 class Troop extends Base {
@@ -21,7 +21,7 @@ class Troop extends Base {
     }
     /**
      *  Read the JSON associated to the troop.
-     *  @param {Record<string, any>} json Json object describing the troop
+     *  @param {Record<string, any>} - json Json object describing the troop
      */
     read(json) {
         let jsonList = json.l;

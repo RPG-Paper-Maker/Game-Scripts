@@ -23,13 +23,13 @@ declare class BattleSelection {
     registerLastItemIndex(): void;
     /**
      *  Select a target.
-     *  @param {TargetKind} targetKind The target kind
+     *  @param {TargetKind} targetKind - The target kind
      */
     selectTarget(targetKind: TargetKind): void;
     /**
      *  Select the first index according to target kind.
-     *  @param {CharacterKind} kind The target kind
-     *  @param {number} index The index (last registered)
+     *  @param {CharacterKind} kind - The target kind
+     *  @param {number} index - The index (last registered)
      */
     selectFirstIndex(kind: CharacterKind, index: number): number;
     /**
@@ -61,7 +61,7 @@ declare class BattleSelection {
     onAllyUnselected(): void;
     /**
      *  When a command is selected.
-     *  @param {number} key The key pressed ID
+     *  @param {number} key - The key pressed ID
      */
     onCommandSelected(key: number): void;
     /**
@@ -78,23 +78,23 @@ declare class BattleSelection {
     update(): void;
     /**
      *  Handle key pressed.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     onKeyPressedStep(key: number): void;
     /**
      *  Handle key released.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     onKeyReleasedStep(key: number): void;
     /**
      *  Handle key repeat pressed.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      *  @returns {boolean}
      */
     onKeyPressedRepeatStep(key: number): boolean;
     /**
      *  Handle key pressed and repeat.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      *  @returns {boolean}
      */
     onKeyPressedAndRepeatStep(key: number): boolean;

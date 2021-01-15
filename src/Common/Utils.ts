@@ -11,9 +11,10 @@
 
 import { Constants } from "./index";
 
-/** @class
- *  @static
- *  The static class containing all the utils functions.
+/**
+ * The static class containing all the utils functions.
+ *
+ * @class Utils
  */
 class Utils {
 
@@ -24,8 +25,8 @@ class Utils {
     /** 
      *  Return default value if undefined, else the value.
      *  @static
-     *  @param {any} value The value
-     *  @param {any} defaultValue The default value
+     *  @param {any} value - The value
+     *  @param {any} defaultValue - The default value
      *  @returns {any}
      */
     public static defaultValue<T>(value: T, defaultValue: T): T {
@@ -34,7 +35,7 @@ class Utils {
 
     /** Check if the value is undefined
     *   @static
-    *   @param {any} value The value
+    *   @param {any} value - The value
     *   @returns {boolean}
     */
     public static isUndefined(value: any): boolean {
@@ -43,57 +44,52 @@ class Utils {
 
     /** Check if the value is a number
     *   @static
-    *   @param {any} value The value
+    *   @param {any} value - The value
     *   @returns {boolean}
     */
-    static isNumber(value: any): boolean
-    {
+    static isNumber(value: any): boolean {
         return typeof value === Constants.NUMBER;
     }
 
     /** Check if the value is a string
      *   @static
-     *   @param {any} value The value
+     *   @param {any} value - The value
      *   @returns {boolean}
      */
-    static isString(value: any): boolean
-    {
+    static isString(value: any): boolean {
         return typeof value === Constants.STRING;
     }
 
     /** Convert a number to boolean
      *   @static
-     *   @param {number} num The number
+     *   @param {number} num - The number
      *   @returns {boolean}
      */
-    static numToBool(num: number): boolean
-    {
+    static numToBool(num: number): boolean {
         return num === Constants.NUM_BOOL_TRUE;
     }
 
     /** Convert a boolean to number
      *   @static
-     *   @param {boolean} b The boolean
+     *   @param {boolean} b - The boolean
      *   @returns {number}
      */
-    static boolToNum(b: boolean): number
-    {
+    static boolToNum(b: boolean): number {
         return b ? Constants.NUM_BOOL_TRUE : Constants.NUM_BOOL_FALSE;
     }
 
     /** Convert number to string
      *   @static
-     *   @param {number} n The number
+     *   @param {number} n - The number
      *   @returns {string}
      */
-    static numToString(n: number): string
-    {
+    static numToString(n: number): string {
         return "" + n;
     }
 
     /** Try catch for async functions
      *   @static
-     *   @param {function} func The async function to apply
+     *   @param {function} func - The async function to apply
      *   @returns {Promise<any>}
      */
     static async tryCatch(func: Function, that?: Object): Promise<any> {
@@ -106,7 +102,7 @@ class Utils {
 
     /** Return a string of the date by passing all the seconds
      *   @static
-     *   @param {number} total Total number of seconds
+     *   @param {number} total - Total number of seconds
      *   @returns {string}
      */
     static getStringDate(total: number): string {
@@ -118,8 +114,8 @@ class Utils {
 
     /** Return the string of a number and parse with 0 according to a given size
      *   @static
-     *   @param {number} num Number
-     *   @param {number} size Max number to display
+     *   @param {number} num - Number
+     *   @param {number} size - Max number to display
      *   @returns {string}
      */
     static formatNumber(num: number, size: number): string {
@@ -128,7 +124,7 @@ class Utils {
 
     /** Create a new array list initialed with null everywhere
      *   @static
-     *   @param {number} size The list size
+     *   @param {number} size - The list size
      *   @returns {any[]}
      */
     static fillNullList(size: number): any[] {
@@ -142,53 +138,46 @@ class Utils {
     /** Link the fontSize and the fontName to a string that can be used by the
     *   canvasHUD
     *   @static
-    *   @param {number} fontSize The fontSize
-    *   @param {string} fontName The fontName
-    *   @param {boolean} bold Indicate if the text is bold
-    *   @param {boolean} italic Indicate if the text is italic
+    *   @param {number} fontSize - The fontSize
+    *   @param {string} fontName - The fontName
+    *   @param {boolean} bold - Indicate if the text is bold
+    *   @param {boolean} italic - Indicate if the text is italic
     *   @returns {string}
     */
-    static createFont = function(fontSize: number, fontName: string, bold: 
+    static createFont = function (fontSize: number, fontName: string, bold:
         boolean, italic: boolean) {
-        return (bold ? "bold " : "") + (italic ? "italic " : "") + fontSize + 
+        return (bold ? "bold " : "") + (italic ? "italic " : "") + fontSize +
             "px " + fontName;
     }
 
-    /** 
-     *  Read a json list and create a System list sorted by ID, index, and 
-     *  return max ID.
-     *  @static
-     *  @param {Record<string, any>[]} opts.list The json list to read
-     *  @param {any[]} opts.listIDs The list to fill by ID
-     *  @param {any[]} opts.listIndexes The list to fill by index
-     *  @param {function} opts.func The function to apply
-     *  @param {function} opts.cons The function to apply
-     *  @returns {number}
+    /**
+     * Read a json list and create a System list sorted by ID, index, and return max ID.
+     *
+     * @static
+     * @param {systemJsonList} json - The json list to read
+     * @return {*}  {number}
+     * @memberof Utils
      */
-    static readJSONSystemList({ list, listIDs, listIndexes, indexesIDs = false, 
-        listHash, cons, func }: { list: Record<string, any>[], listIDs?: any[], 
-        listIndexes?: any[], indexesIDs?: boolean, listHash?: any[], cons?: any,
-        func?: any }): number
-    {
+    static readJSONSystemList(json : systemJsonList): number {
         let jsonElement: any;
         let maxID = 0;
         let id: number, element: any;
-        for (let i = 0, l = list.length; i < l; i++) {
-            jsonElement = list[i];
+        for (let i = 0, l = json.list.length; i < l; i++) {
+            jsonElement = json.list[i];
             id = jsonElement.id;
-            if (Utils.isUndefined(listHash)) {
-                element = Utils.isUndefined(cons) ? func.call(null, jsonElement)
-                    : new cons(jsonElement);
-                if (!Utils.isUndefined(listIDs)) {
-                    listIDs[jsonElement.id] = element;
+            if (Utils.isUndefined(json.listHash)) {
+                element = Utils.isUndefined(json.cons) ? json.func.call(null, jsonElement)
+                    : new json.cons(jsonElement);
+                if (!Utils.isUndefined(json.listIDs)) {
+                    json.listIDs[jsonElement.id] = element;
                 }
-                if (!Utils.isUndefined(listIndexes)) {
-                    listIndexes[i] = indexesIDs ? id : element;
+                if (!Utils.isUndefined(json.listIndexes)) {
+                    json.listIndexes[i] = json.indexesIDs ? id : element;
                 }
             } else {
-                listHash[jsonElement[Constants.JSON_KEY]] = Utils.isUndefined(
-                    cons) ? func.call(null, jsonElement) : new cons(jsonElement[
-                    Constants.JSON_VALUE]);
+                json.listHash[jsonElement[Constants.JSON_KEY]] = Utils.isUndefined(
+                    json.cons) ? json.func.call(null, jsonElement) : new json.cons(jsonElement[
+                        Constants.JSON_VALUE]);
             }
             maxID = Math.max(id, maxID);
         }
@@ -198,7 +187,7 @@ class Utils {
     /** 
      *  Get the number of fields of an object
      *  @static
-     *  @param {Object} obj The object to count fields
+     *  @param {Object} obj - The object to count fields
      *  @returns {number}
      */
     static countFields(obj: Record<string, any>): number {
@@ -222,19 +211,28 @@ class Utils {
      *  Get the index of an object in a array containing a property with a 
      *  specific value.
      *  @static
-     *  @param {Object[]} array The array to check
-     *  @param {string} attr The attribute of the object to check
-     *  @param {any} value The value to check on the object attribute 
+     *  @param {Object[]} array - The array to check
+     *  @param {string} attr - The attribute of the object to check
+     *  @param {any} value - The value to check on the object attribute 
      *  @returns {number}
      */
     static indexOfProp(array: Object[], attr: string, value: any): number {
-        for (let i = 0, l = array.length; i < l; i ++) {
+        for (let i = 0, l = array.length; i < l; i++) {
             if (array[i][attr] === value) {
                 return i;
             }
         }
         return -1;
     }
+}
+
+interface systemJsonList {
+    list: Record<string, any>[],
+    listIDs?: any[],
+    listIndexes?: any[],
+    indexesIDs?: boolean,
+    listHash?: any[], cons?: any,
+    func?: any
 }
 
 export { Utils }

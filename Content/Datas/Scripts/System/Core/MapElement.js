@@ -22,7 +22,7 @@ class MapElement {
     }
     /**
      *  Read the JSON associated to the map element.
-     *  @param {Record<string, any>} json Json object describing the map element
+     *  @param {Record<string, any>} json - Json object describing the map element
      */
     read(json) {
         this.xOffset = Utils.defaultValue(json.xOff, 0);
@@ -31,14 +31,14 @@ class MapElement {
     }
     /**
      *  Scale the vertices correctly.
-     *  @param {Vector3} vecA The A vertex to rotate
-     *  @param {Vector3} vecB The B vertex to rotate
-     *  @param {Vector3} vecC The C vertex to rotate
-     *  @param {Vector3} vecD The D vertex to rotate
-     *  @param {Vector3} center The center to rotate around
-     *  @param {Position} position The json position
-     *  @param {Vector3} size The scale size
-     *  @param {ElementMapKind} kind The element map kind
+     *  @param {Vector3} vecA - The A vertex to rotate
+     *  @param {Vector3} vecB - The B vertex to rotate
+     *  @param {Vector3} vecC - The C vertex to rotate
+     *  @param {Vector3} vecD - The D vertex to rotate
+     *  @param {Vector3} center - The center to rotate around
+     *  @param {Position} position - The json position
+     *  @param {Vector3} size - The scale size
+     *  @param {ElementMapKind} kind - The element map kind
      */
     scale(vecA, vecB, vecC, vecD, center, position, size, kind) {
         let zPlus = position.layer * 0.05;

@@ -19,8 +19,8 @@ import Align = Enum.Align;
 /** @class
  *  A class for message show text command.
  *  @extends Graphic.Base
- *  @param {string} message The complete text to parse
- *  @param {number} facesetID The faceset picture ID
+ *  @param {string} message - The complete text to parse
+ *  @param {number} facesetID - The faceset picture ID
  */
 class Message extends Graphic.Base {
 
@@ -62,7 +62,7 @@ class Message extends Graphic.Base {
 
     /** 
      *  Set message (parse).
-     *  @param {string} message The message to parse
+     *  @param {string} message - The message to parse
      */
     setMessage(message: string) {
         this.tree = new Tree(null);
@@ -150,11 +150,11 @@ class Message extends Graphic.Base {
     
     /** 
      *  Update tag.
-     *  @param {Node} currentNode The current node
-     *  @param {TagKind} tag The tag kind
-     *  @param {string} value The tag value
-     *  @param {boolean} open Indicate if open tag
-     *  @param {Node[]} notClosed List of unclosed nodes
+     *  @param {Node} currentNode - The current node
+     *  @param {TagKind} tag - The tag kind
+     *  @param {string} value - The tag value
+     *  @param {boolean} open - Indicate if open tag
+     *  @param {Node[]} notClosed - List of unclosed nodes
      *  @returns {Node} 
      */
     updateTag(currentNode: Node, tag: TagKind, value: string, open: boolean, 
@@ -252,8 +252,8 @@ class Message extends Graphic.Base {
     
     /** 
      *  Update the nodes.
-     *  @param {Node} node The current node
-     *  @param {Record<string, any>} result The result object
+     *  @param {Node} node - The current node
+     *  @param {Record<string, any>} - result The result object
      */
     updateNodes(node: Node, result: Record<string, any>)
     {
@@ -406,10 +406,10 @@ class Message extends Graphic.Base {
     
     /** 
      *  Drawing the faceset behind.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
      */
     drawBehind(x: number, y: number, w: number, h: number) {
         if (!Datas.Systems.dbOptions.v_fPosAbove) {
@@ -419,10 +419,10 @@ class Message extends Graphic.Base {
     
     /** 
      *  Drawing the faceset.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
      */
     drawFaceset(x: number, y: number, w: number, h: number) {
         this.faceset.draw(x + Utils.defaultValue(Datas.Systems.dbOptions.v_fX, 0
@@ -432,10 +432,10 @@ class Message extends Graphic.Base {
     
     /** 
      *  Drawing the message box.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
      */
     drawChoice(x: number = this.oX, y: number = this.oY, w: number = this.oW, h: 
         number = this.oH, positionResize: boolean = true)
@@ -445,11 +445,11 @@ class Message extends Graphic.Base {
 
     /** 
      *  Drawing the message.
-     *  @param {number} [x=this.oX] The x position to draw graphic
-     *  @param {number} [y=this.oY] The y position to draw graphic
-     *  @param {number} [w=this.oW] The width dimention to draw graphic
-     *  @param {number} [h=this.oH] The height dimention to draw graphic
-     *  @param {boolean} [positionResize=true] If checked, resize postion 
+     *  @param {number} [x=this.oX] - The x position to draw graphic
+     *  @param {number} [y=this.oY] - The y position to draw graphic
+     *  @param {number} [w=this.oW] - The width dimention to draw graphic
+     *  @param {number} [h=this.oH] - The height dimention to draw graphic
+     *  @param {boolean} [positionResize=true] - If checked, resize postion 
      *  according to screen resolution
      */
     draw(x: number = this.oX, y: number = this.oY, w: number = this.oW, h: 

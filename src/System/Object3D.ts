@@ -21,7 +21,7 @@ import { Vector3 } from "../Core";
 /** @class
  *  A 3D object of the game.
  *  @extends System.SpecialElement
- *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the 
  *  object 3D
  */
 class Object3D extends SpecialElement {
@@ -47,7 +47,7 @@ class Object3D extends SpecialElement {
 
     /** 
      *  Read the JSON associated to the object 3D.
-     *  @param {Record<string, any>} json Json object describing the object 3D
+     *  @param {Record<string, any>} - json Json object describing the object 3D
      */
     read(json: Record<string, any>) {
         super.read(json);

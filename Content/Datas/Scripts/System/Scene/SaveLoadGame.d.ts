@@ -18,18 +18,18 @@ declare class SaveLoadGame extends Base {
     load(): Promise<void>;
     /**
      *  Initialize a game displaying.
-     *   @param {Game} game The game
+     *   @param {Game} game - The game
      */
     initializeGame(game: Game): void;
     /**
      *  Set the contents in the bottom and top bars.
-     *  @param {Graphic.Base} top A graphic content for top
-     *  @param {Graphic.Base} bot A graphic content for bot
+     *  @param {Graphic.Base} top - A graphic content for top
+     *  @param {Graphic.Base} bot - A graphic content for bot
      */
     setContents(top: Graphic.Base, bot: Graphic.Base): void;
     /**
      *  Update the information to display inside the save informations.
-     *  @param {number} i The slot index
+     *  @param {number} i - The slot index
      */
     updateInformations(i: number): void;
     /**
@@ -38,12 +38,12 @@ declare class SaveLoadGame extends Base {
     update(): void;
     /**
      *  Handle scene key pressed.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     onKeyPressed(key: number): void;
     /**
      *  Handle scene pressed and repeat key.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      *  @returns {boolean}
      */
     onKeyPressedAndRepeat(key: number): boolean;

@@ -17,8 +17,8 @@ var Align = Enum.Align;
 /** @class
  *  A class for message show text command.
  *  @extends Graphic.Base
- *  @param {string} message The complete text to parse
- *  @param {number} facesetID The faceset picture ID
+ *  @param {string} message - The complete text to parse
+ *  @param {number} facesetID - The faceset picture ID
  */
 class Message extends Graphic.Base {
     constructor(message, facesetID) {
@@ -31,7 +31,7 @@ class Message extends Graphic.Base {
     }
     /**
      *  Set message (parse).
-     *  @param {string} message The message to parse
+     *  @param {string} message - The message to parse
      */
     setMessage(message) {
         this.tree = new Tree(null);
@@ -129,11 +129,11 @@ class Message extends Graphic.Base {
     }
     /**
      *  Update tag.
-     *  @param {Node} currentNode The current node
-     *  @param {TagKind} tag The tag kind
-     *  @param {string} value The tag value
-     *  @param {boolean} open Indicate if open tag
-     *  @param {Node[]} notClosed List of unclosed nodes
+     *  @param {Node} currentNode - The current node
+     *  @param {TagKind} tag - The tag kind
+     *  @param {string} value - The tag value
+     *  @param {boolean} open - Indicate if open tag
+     *  @param {Node[]} notClosed - List of unclosed nodes
      *  @returns {Node}
      */
     updateTag(currentNode, tag, value, open, notClosed) {
@@ -224,8 +224,8 @@ class Message extends Graphic.Base {
     }
     /**
      *  Update the nodes.
-     *  @param {Node} node The current node
-     *  @param {Record<string, any>} result The result object
+     *  @param {Node} node - The current node
+     *  @param {Record<string, any>} - result The result object
      */
     updateNodes(node, result) {
         let tag = node.data[0];
@@ -372,10 +372,10 @@ class Message extends Graphic.Base {
     }
     /**
      *  Drawing the faceset behind.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
      */
     drawBehind(x, y, w, h) {
         if (!Datas.Systems.dbOptions.v_fPosAbove) {
@@ -384,10 +384,10 @@ class Message extends Graphic.Base {
     }
     /**
      *  Drawing the faceset.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
      */
     drawFaceset(x, y, w, h) {
         this.faceset.draw(x + Utils.defaultValue(Datas.Systems.dbOptions.v_fX, 0), y - ((this.faceset.oH - h) / 2) + Utils.defaultValue(Datas
@@ -395,21 +395,21 @@ class Message extends Graphic.Base {
     }
     /**
      *  Drawing the message box.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
      */
     drawChoice(x = this.oX, y = this.oY, w = this.oW, h = this.oH, positionResize = true) {
         this.draw(x, y, w, h, positionResize);
     }
     /**
      *  Drawing the message.
-     *  @param {number} [x=this.oX] The x position to draw graphic
-     *  @param {number} [y=this.oY] The y position to draw graphic
-     *  @param {number} [w=this.oW] The width dimention to draw graphic
-     *  @param {number} [h=this.oH] The height dimention to draw graphic
-     *  @param {boolean} [positionResize=true] If checked, resize postion
+     *  @param {number} [x=this.oX] - The x position to draw graphic
+     *  @param {number} [y=this.oY] - The y position to draw graphic
+     *  @param {number} [w=this.oW] - The width dimention to draw graphic
+     *  @param {number} [h=this.oH] - The height dimention to draw graphic
+     *  @param {boolean} [positionResize=true] - If checked, resize postion
      *  according to screen resolution
      */
     draw(x = this.oX, y = this.oY, w = this.oW, h = this.oH, positionResize = true) {

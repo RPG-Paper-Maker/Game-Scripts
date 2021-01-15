@@ -3,7 +3,7 @@ import { System } from "../index.js";
 /** @class
  *  A custom plugin in the game.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  plugin
  */
 declare class Plugin extends Base {
@@ -18,7 +18,7 @@ declare class Plugin extends Base {
     constructor(id: number, json?: Record<string, any>);
     /**
      *  Read the JSON associated to the plugin.
-     *  @param {Record<string, any>} json Json object describing the plugin
+     *  @param {Record<string, any>} - json Json object describing the plugin
      */
     read(json: Record<string, any>): void;
 }

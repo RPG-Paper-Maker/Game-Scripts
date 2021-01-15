@@ -5,7 +5,7 @@ import { ShowText } from "./ShowText.js";
 /** @class
  *  An event command for displaying a choice.
  *  @extends EventCommand.Base
- *  @param {any[]} command Direct JSON command to parse
+ *  @param {any[]} command - Direct JSON command to parse
  */
 declare class DisplayChoice extends Base {
     cancelAutoIndex: System.DynamicValue;
@@ -15,7 +15,7 @@ declare class DisplayChoice extends Base {
     constructor(command: any[]);
     /**
      *  Set the show text property.
-     *  @param {EventCommand.ShowText} showText The show text value
+     *  @param {EventCommand.ShowText} showText - The show text value
      */
     setShowText(showText: ShowText): void;
     /**
@@ -25,10 +25,10 @@ declare class DisplayChoice extends Base {
     initialize(): Record<string, any>;
     /**
      *  Update and check if the event is finished.
-     *  @param {Record<string, any>}} currentState The current state of the
+     *  @param {Record<string, any>}} - currentState The current state of the
      *  event
-     *  @param {MapObject} object The current object reacting
-     *  @param {number} state The state ID
+     *  @param {MapObject} object - The current object reacting
+     *  @param {number} state - The state ID
      *  @returns {number} The number of node to pass
      */
     update(currentState: Record<string, any>, object: MapObject, state: number): number;
@@ -39,20 +39,20 @@ declare class DisplayChoice extends Base {
     goToNextCommand(): number;
     /**
      *  First key press handle for the current stack.
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {number} key The key ID pressed
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {number} key - The key ID pressed
      */
     onKeyPressed(currentState: Record<string, any>, key: number): void;
     /**
      *  Key pressed repeat handle for the current stack, but with
      *  a small wait after the first pressure (generally used for menus).
-     *  @param {Record<string, any>}} currentState The current state of the event
-     *  @param {number} key The key ID pressed
+     *  @param {Record<string, any>}} - currentState The current state of the event
+     *  @param {number} key - The key ID pressed
      */
     onKeyPressedAndRepeat(currentState: Record<string, any>, key: number): boolean;
     /**
      *  Draw the HUD
-     *  @param {Record<string, any>} currentState The current state of the event
+     *  @param {Record<string, any>} - currentState The current state of the event
      */
     drawHUD(currentState?: Record<string, any>): void;
 }

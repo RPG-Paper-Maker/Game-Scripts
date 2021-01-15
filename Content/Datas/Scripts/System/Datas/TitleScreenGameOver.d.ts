@@ -44,7 +44,7 @@ declare class TitlescreenGameover {
     /**
      *  Get the settings commands action function according to ID.
      *  @static
-     *  @param {number} id The action ID
+     *  @param {number} id - The action ID
      *  @returns {function}
      */
     static getSettingsCommandsAction(id: number): Function;

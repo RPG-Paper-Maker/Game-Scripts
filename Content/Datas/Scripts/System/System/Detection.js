@@ -16,7 +16,7 @@ import { Datas, Manager } from "../index.js";
 /** @class
  *  A detection of the game.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  detection
  */
 class Detection extends Base {
@@ -25,7 +25,7 @@ class Detection extends Base {
     }
     /**
      *  Read the JSON associated to the detection.
-     *  @param {Record<string, any>} json Json object describing the detection
+     *  @param {Record<string, any>} - json Json object describing the detection
      */
     read(json) {
         let jsonList = Utils.defaultValue(json.b, []);
@@ -40,8 +40,8 @@ class Detection extends Base {
     }
     /**
      *  Check the collision between sender and object.
-     *  @param {MapObject} sender The object that sent test collision
-     *  @param {MapObject} object The object to test the collision
+     *  @param {MapObject} sender - The object that sent test collision
+     *  @param {MapObject} object - The object to test the collision
      *  @returns {boolean}
      */
     checkCollision(sender, object) {
@@ -57,7 +57,7 @@ class Detection extends Base {
     }
     /**
      *  Get the sender bounding box.
-     *  @param {MapObject} sender The object that sent test collision
+     *  @param {MapObject} sender - The object that sent test collision
      *  @returns {number[][]}
      */
     getBoundingBoxes(sender) {

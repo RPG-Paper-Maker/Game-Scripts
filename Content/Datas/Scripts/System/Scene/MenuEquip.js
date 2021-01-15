@@ -8,57 +8,116 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base.js";
+import { MenuBase } from "./MenuBase.js";
 import { Manager, Graphic, Datas, Scene } from "../index.js";
-import { WindowBox, WindowChoices, Player, Game } from "../Core/index.js";
+import { WindowBox, WindowChoices, Player, Game, Rectangle } from "../Core/index.js";
 import { Enum } from "../Common/index.js";
 var Align = Enum.Align;
 var OrientationWindow = Enum.OrientationWindow;
 var ItemKind = Enum.ItemKind;
-/** @class
- *  A scene in the menu for describing players equipments.
- *  @extends Scene.Base
+/**
+ * The menu scene displaying heroes equipments
+ *
+ * @class MenuEquip
+ * @extends {MenuBase}
  */
-class MenuEquip extends Base {
+class MenuEquip extends MenuBase {
     constructor() {
-        super(false);
-        // Tab heroes
-        let nbHeroes = Game.current.teamHeroes.length;
-        let listHeroes = new Array(nbHeroes);
-        for (let i = 0; i < nbHeroes; i++) {
-            listHeroes[i] = new Graphic.PlayerDescription(Game.current
-                .teamHeroes[i]);
-        }
-        // Equipment
-        let nbEquipments = Datas.BattleSystems.equipmentsOrder.length;
-        let nbEquipChoice = Scene.Menu.SLOTS_TO_DISPLAY - nbEquipments - 1;
-        // All the windows
-        this.windowTop = new WindowBox(20, 20, 200, 30, {
-            content: new Graphic.Text("Equip", { align: Align.Center })
-        });
-        this.windowChoicesTabs = new WindowChoices(50, 60, 110, WindowBox
-            .SMALL_SLOT_HEIGHT, listHeroes, {
-            orientation: OrientationWindow.Horizontal,
-            nbItemsMax: 4,
-            padding: [0, 0, 0, 0]
-        });
-        this.windowChoicesEquipment = new WindowChoices(20, 100, 290, WindowBox
-            .SMALL_SLOT_HEIGHT, new Array(nbEquipments), {
-            nbItemsMax: nbEquipments
-        });
-        this.windowChoicesList = new WindowChoices(20, 100 + (nbEquipments + 1)
-            * WindowBox.SMALL_SLOT_HEIGHT, 290, WindowBox.SMALL_SLOT_HEIGHT, [], {
-            nbItemsMax: nbEquipChoice,
-            currentSelectedIndex: -1
-        });
-        this.windowInformations = new WindowBox(330, 100, 285, 350, {
-            padding: WindowBox.SMALL_PADDING_BOX
-        });
-        // Updates
+        super();
         this.updateForTab();
     }
     /**
-     *  Update tab.
+     * @inheritdoc
+     *
+     * @memberof MenuEquip
+     */
+    create() {
+        this.createAllWindows();
+    }
+    /**
+     * create all the window in the scene.
+     *
+     * @memberof MenuEquip
+     */
+    createAllWindows() {
+        this.createWindowTop();
+        this.createWindowChoiceTabs();
+        this.createWindowChoiceEquipment();
+        this.createWindowChoiceList();
+        this.createWindowInformation();
+    }
+    /**
+     * create the top window
+     *
+     * @memberof MenuEquip
+     */
+    createWindowTop() {
+        const rect = new Rectangle(20, 20, 200, 30);
+        this.windowTop = new WindowBox(rect.x, rect.y, rect.width, rect.height, {
+            content: new Graphic.Text("Equip", { align: Align.Center })
+        });
+    }
+    /**
+     * create the choice tab window
+     *
+     * @memberof MenuEquip
+     */
+    createWindowChoiceTabs() {
+        const rect = new Rectangle(50, 60, 110, WindowBox.SMALL_SLOT_HEIGHT);
+        let listHeroes = [];
+        for (let i = 0; i < this.party().length; i++) {
+            listHeroes[i] = new Graphic.PlayerDescription(this.party()[i]);
+        }
+        console.log(listHeroes);
+        const options = {
+            orientation: OrientationWindow.Horizontal,
+            nbItemMax: 4,
+            padding: [0, 0, 0, 0]
+        };
+        this.windowChoicesTabs = new WindowChoices(rect.x, rect.y, rect.width, rect.height, listHeroes, options);
+    }
+    /**
+     * create the equipment choice window
+     *
+     * @memberof MenuEquip
+     */
+    createWindowChoiceEquipment() {
+        const rect = new Rectangle(20, 100, 290, WindowBox.SMALL_SLOT_HEIGHT);
+        let nbEquipments = Datas.BattleSystems.equipmentsOrder.length;
+        this.windowChoicesEquipment = new WindowChoices(rect.x, rect.y, rect.width, rect.height, new Array(nbEquipments), {
+            nbItemsMax: nbEquipments
+        });
+    }
+    /**
+     * create the choice window
+     *
+     * @memberof MenuEquip
+     */
+    createWindowChoiceList() {
+        const nbEquips = Datas.BattleSystems.equipmentsOrder.length;
+        const nbEquipChoice = MenuBase.SLOTS_TO_DISPLAY - nbEquips - 1;
+        const y = 100 + (nbEquips + 1) * WindowBox.SMALL_SLOT_HEIGHT;
+        const rect = new Rectangle(20, y, 290, WindowBox.SMALL_SLOT_HEIGHT);
+        this.windowChoicesList = new WindowChoices(rect.x, rect.y, rect.width, rect.height, [], {
+            nbItemsMax: nbEquipChoice,
+            currentSelectedIndex: -1
+        });
+    }
+    /**
+     * create the information window
+     *
+     * @memberof MenuEquip
+     */
+    createWindowInformation() {
+        const rect = new Rectangle(330, 100, 285, 350);
+        this.windowInformation = new WindowBox(rect.x, rect.y, rect.width, rect.height, {
+            padding: WindowBox.SMALL_PADDING_BOX
+        });
+    }
+    /**
+     * update the tab window
+     *
+     * @memberof MenuEquip
      */
     updateForTab() {
         // update equipment
@@ -77,13 +136,16 @@ class MenuEquip extends Base {
         this.updateInformations();
     }
     /**
-     *  Update the equipment list
+     * update the equipment list
+     *
+     * @memberof MenuEquip
      */
     updateEquipmentList() {
-        let idEquipment = Datas.BattleSystems.equipmentsOrder[this
-            .windowChoicesEquipment.currentSelectedIndex];
+        const currentIndex = this.windowChoicesEquipment.currentSelectedIndex;
+        let idEquipment = Datas.BattleSystems.equipmentsOrder[currentIndex];
         let list = [new Graphic.Text("[Remove]")];
-        let item, systemItem, type, nbItem;
+        let item, systemItem;
+        let type, nbItem;
         for (let i = 0, l = Game.current.items.length; i < l; i++) {
             item = Game.current.items[i];
             if (item.kind !== ItemKind.Item) {
@@ -100,7 +162,9 @@ class MenuEquip extends Base {
         this.windowChoicesList.setContentsCallbacks(list, null, -1);
     }
     /**
-     *  Update the informations to display for equipment stats.
+     * update the equipment stats display information.
+     *
+     * @memberof MenuEquip
      */
     updateInformations() {
         let player = Game.current.teamHeroes[this.windowChoicesTabs
@@ -121,12 +185,14 @@ class MenuEquip extends Base {
                 this.bonus = result[1];
             }
         }
-        this.windowInformations.content = new Graphic.EquipStats(player, this
+        this.windowInformation.content = new Graphic.EquipStats(player, this
             .list);
     }
     /**
-     *  Move tab according to key.
-     *  @param {number} key The key ID
+     * Move tab according to key
+     *
+     * @param {number} key - the key ID
+     * @memberof MenuEquip
      */
     moveTabKey(key) {
         // Tab
@@ -154,11 +220,12 @@ class MenuEquip extends Base {
         }
     }
     /**
-     *  Remove the equipment of the character.
+     * remove the selected equipment
+     *
+     * @memberof MenuEquip
      */
     remove() {
-        let character = Game.current.teamHeroes[this.windowChoicesTabs
-            .currentSelectedIndex];
+        let character = this.party()[this.windowChoicesTabs.currentSelectedIndex];
         let id = Datas.BattleSystems.equipmentsOrder[this.windowChoicesEquipment
             .currentSelectedIndex];
         let prev = character.equip[id];
@@ -169,7 +236,9 @@ class MenuEquip extends Base {
         this.updateStats();
     }
     /**
-     *  Equip the selected equipment.
+     * equip the selected equipment
+     *
+     * @memberof MenuEquip
      */
     equip() {
         let index = this.windowChoicesTabs.currentSelectedIndex;
@@ -195,11 +264,13 @@ class MenuEquip extends Base {
         this.updateStats();
     }
     /**
-     *  Update the stats.
+     * update the character stats
+     *
+     * @memberof MenuEquip
      */
     updateStats() {
-        Game.current.teamHeroes[this.windowChoicesTabs
-            .currentSelectedIndex].updateEquipmentStats(this.list, this.bonus);
+        const index = this.windowChoicesTabs.currentSelectedIndex;
+        this.party()[index].updateEquipmentStats(this.list, this.bonus);
     }
     /**
      *  Update the scene.
@@ -209,7 +280,7 @@ class MenuEquip extends Base {
     }
     /**
      *  Handle scene key pressed.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     onKeyPressed(key) {
         Scene.Base.prototype.onKeyPressed.call(Scene.Map.current, key);
@@ -261,22 +332,22 @@ class MenuEquip extends Base {
     }
     /**
      *  Handle scene key released.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     onKeyReleased(key) {
         Scene.Base.prototype.onKeyReleased.call(Scene.Map.current, key);
     }
     /**
      *  Handle scene pressed repeat key.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      *  @returns {boolean}
     */
     onKeyPressedRepeat(key) {
-        return Scene.Base.prototype.onKeyPressedRepeat.call(Scene.Map.current, key);
+        return super.onKeyPressedAndRepeat(key);
     }
     /**
      *  Handle scene pressed and repeat key.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      *  @returns {boolean}
     */
     onKeyPressedAndRepeat(key) {
@@ -296,7 +367,7 @@ class MenuEquip extends Base {
         this.windowChoicesTabs.draw();
         this.windowChoicesEquipment.draw();
         this.windowChoicesList.draw();
-        this.windowInformations.draw();
+        this.windowInformation.draw();
     }
 }
 export { MenuEquip };

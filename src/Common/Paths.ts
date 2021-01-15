@@ -11,10 +11,10 @@
 
 import { Platform } from "./Platform";
 
-/** @class
- *  @static
- *  The static class containing all the files paths.
- *  @example import { Paths } from "../Common"
+/**
+ * The static class containing all the files paths.
+ *
+ * @class Paths
  */
 class Paths {
 

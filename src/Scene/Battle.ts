@@ -21,17 +21,17 @@ import { Map } from "./Map";
 /** @class
  *  A scene for battling.
  *  @extends SceneGame
- *  @param {number} troopID Current troop ID that the allies are fighting
- *  @param {boolean} canGameOver Indicate if there is a win/lose node or not
- *  @param {boolean} canEscape Indicate if the player can escape this battle
- *  @param {SystemBattleMap} battleMap The System battle map
- *  @param {Enum.MapTransitionKind} transitionStart The kind of transition for 
+ *  @param {number} troopID - Current troop ID that the allies are fighting
+ *  @param {boolean} canGameOver - Indicate if there is a win/lose node or not
+ *  @param {boolean} canEscape - Indicate if the player can escape this battle
+ *  @param {SystemBattleMap} battleMap - The System battle map
+ *  @param {Enum.MapTransitionKind} transitionStart - The kind of transition for 
  *  the battle start
- *  @param {Enum.MapTransitionKind} transitionEnd The kind of transition for the 
+ *  @param {Enum.MapTransitionKind} transitionEnd - The kind of transition for the 
  *  battle end
- *  @param {SystemColor} transitionStartColor The System color for start
+ *  @param {SystemColor} transitionStartColor - The System color for start
  *  transition
- *  @param {SystemColor} transitionEndColor The System color for end
+ *  @param {SystemColor} transitionEndColor - The System color for end
  *  transition
  */
 class Battle extends Map {
@@ -245,9 +245,9 @@ class Battle extends Map {
 
     /** 
      *  Check if a player is defined (active and not dead).
-     *  @param {CharacterKind} kind Kind of player
-     *  @param {number} index Index in the group
-     *  @param {boolean} target Indicate if the player is a target
+     *  @param {CharacterKind} kind - Kind of player
+     *  @param {number} index - Index in the group
+     *  @param {boolean} target - Indicate if the player is a target
      *  @returns {boolean}
      */
     isDefined(kind: CharacterKind, index: number, target?: boolean): boolean {
@@ -271,7 +271,7 @@ class Battle extends Map {
 
     /** 
      *  Check if all the heroes or enemies are dead
-     *  @param {CharacterKind} group Kind of player
+     *  @param {CharacterKind} group - Kind of player
      *  @returns {boolean}
      */
     isGroupDead(group: CharacterKind): boolean {
@@ -332,7 +332,7 @@ class Battle extends Map {
 
     /** 
      *  Change the step of the battle.
-     *  @param {BattleStep} i Step of the battle
+     *  @param {BattleStep} i - Step of the battle
      */
     changeStep(i: BattleStep) {
         this.step = i;
@@ -466,7 +466,7 @@ class Battle extends Map {
 
     /** 
      *  Handle battle key pressed according to step.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     onKeyPressed(key: number) {
         super.onKeyPressed(key);
@@ -491,7 +491,7 @@ class Battle extends Map {
 
     /** 
      *  Handle battle key released according to step.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     onKeyReleased(key: number) {
         super.onKeyReleased(key);
@@ -516,7 +516,7 @@ class Battle extends Map {
 
     /** 
      *  Handle battle key pressed repeat according to step.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      *  @returns {boolean}
      */
     onKeyPressedRepeat(key: number): boolean {
@@ -543,7 +543,7 @@ class Battle extends Map {
 
     /** 
      *  Handle battle key pressed and repeat according to step.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      *  @returns {boolean}
      */
     onKeyPressedAndRepeat(key: number): boolean {

@@ -1,46 +1,114 @@
-import { Base } from "./Base.js";
+import { MenuBase } from "./MenuBase.js";
 import { WindowBox, WindowChoices } from "../Core/index.js";
-/** @class
- *  A scene in the menu for describing players statistics.
- *  @extends Scene.Base
+/**
+ * The scene menu describing players statistics.
+ *
+ * @class MenuDescriptionState
+ * @extends {Base}
  */
-declare class MenuDescriptionState extends Base {
+declare class MenuDescriptionState extends MenuBase {
+    /**
+     * the top window
+     *
+     * @type {WindowBox}
+     * @memberof MenuDescriptionState
+     */
     windowTop: WindowBox;
+    /**
+     * the choices tabs window
+     *
+     * @type {WindowChoices}
+     * @memberof MenuDescriptionState
+     */
     windowChoicesTabs: WindowChoices;
-    windowInformations: WindowBox;
+    /**
+     * the information window
+     *
+     * @type {WindowBox}
+     * @memberof MenuDescriptionState
+     */
+    windowInformation: WindowBox;
+    /**
+     * Creates an instance of MenuDescriptionState.
+     * @memberof MenuDescriptionState
+     */
     constructor();
     /**
-     *  Synchronize informations with selected hero.
+     * @inheritdoc
+     *
+     * @memberof MenuDescriptionState
+     */
+    create(): void;
+    /**
+     * create all the windows in the scene.
+     *
+     * @memberof MenuDescriptionState
+     */
+    createAllWindows(): void;
+    /**
+     * create the top window.
+     *
+     * @memberof MenuDescriptionState
+     */
+    createWindowTop(): void;
+    /**
+     * create the tab window containing the heros.
+     *
+     * @memberof MenuDescriptionState
+     */
+    createWindowTabs(): void;
+    /**
+     * create the information window
+     *
+     * @memberof MenuDescriptionState
+     */
+    createWindowInformation(): void;
+    /**
+     * Synchronize information's with the selected hero.
+     *
+     * @memberof MenuDescriptionState
      */
     synchronize(): void;
     /**
-     *  Update the scene
+     * @inheritdoc
+     *
+     * @memberof MenuDescriptionState
      */
     update(): void;
     /**
-     *  Handle scene key pressed.
-     *  @param {number} key The key ID
+     * @inheritdoc
+     *
+     * @param {number} key - the key ID
+     * @memberof MenuDescriptionState
      */
     onKeyPressed(key: number): void;
     /**
-     *  Handle scene key released.
-     *  @param {number} key The key ID
+     * @inheritdoc
+     *
+     * @param {number} key - the key id
+     * @memberof MenuDescriptionState
      */
     onKeyReleased(key: number): void;
     /**
-     *  Handle scene pressed repeat key.
-     *  @param {number} key The key ID
-     *  @returns {boolean}
+     * @inheritdoc
+     *
+     * @param {number} key - the key id
+     * @return {*}  {boolean}
+     * @memberof MenuDescriptionState
      */
     onKeyPressedRepeat(key: number): boolean;
     /**
-     *  Handle scene pressed and repeat key.
-     *  @param {number} key The key ID
-     *  @returns {boolean}
+     * @inheritdoc
+     *
+     * @param {number} key - the key id
+     * @return {*}  {boolean}
+     * @memberof MenuDescriptionState
      */
     onKeyPressedAndRepeat(key: number): boolean;
     /**
-     *  Draw the HUD scene.
+     * @inheritdoc
+     *
+     * @memberof MenuDescriptionState
      */
     drawHUD(): void;
 }

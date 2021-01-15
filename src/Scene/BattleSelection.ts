@@ -115,7 +115,7 @@ class BattleSelection {
 
     /** 
      *  Select a target.
-     *  @param {TargetKind} targetKind The target kind 
+     *  @param {TargetKind} targetKind - The target kind 
      */
     public selectTarget(targetKind: TargetKind) {
         this.battle.subStep = 2;
@@ -152,8 +152,8 @@ class BattleSelection {
 
     /** 
      *  Select the first index according to target kind.
-     *  @param {CharacterKind} kind The target kind
-     *  @param {number} index The index (last registered)
+     *  @param {CharacterKind} kind - The target kind
+     *  @param {number} index - The index (last registered)
      */
     public selectFirstIndex(kind: CharacterKind, index: number) {
         while (!this.battle.isDefined(kind, index)) {
@@ -290,7 +290,7 @@ class BattleSelection {
 
     /** 
      *  When a command is selected.
-     *  @param {number} key The key pressed ID
+     *  @param {number} key - The key pressed ID
      */
     public onCommandSelected(key: number) {
         switch (this.battle.battleCommandKind) {
@@ -410,7 +410,7 @@ class BattleSelection {
 
     /** 
      *  Handle key pressed.
-     *  @param {number} key The key ID 
+     *  @param {number} key - The key ID 
      */
     public onKeyPressedStep(key: number) {
         switch (this.battle.subStep) {
@@ -447,7 +447,7 @@ class BattleSelection {
 
     /** 
      *  Handle key released.
-     *  @param {number} key The key ID 
+     *  @param {number} key - The key ID 
      */
     public onKeyReleasedStep(key: number) {
 
@@ -455,7 +455,7 @@ class BattleSelection {
 
     /** 
      *  Handle key repeat pressed.
-     *  @param {number} key The key ID 
+     *  @param {number} key - The key ID 
      *  @returns {boolean}
      */
     public onKeyPressedRepeatStep(key: number): boolean {
@@ -464,7 +464,7 @@ class BattleSelection {
 
     /** 
      *  Handle key pressed and repeat.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      *  @returns {boolean}
      */
     public onKeyPressedAndRepeatStep(key: number): boolean {

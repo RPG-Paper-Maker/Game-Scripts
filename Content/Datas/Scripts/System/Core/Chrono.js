@@ -10,7 +10,7 @@
 */
 /** @class
  *  A chrono in the game.
- *  @param {number} start The start time of the chrono (in milliseconds)
+ *  @param {number} start - The start time of the chrono (in milliseconds)
  */
 class Chrono {
     constructor(start = 0) {

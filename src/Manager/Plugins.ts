@@ -73,7 +73,7 @@ class Plugins {
      */
     static register(plugin: System.Plugin) {
         if (this.plugins.hasOwnProperty(plugin.name)) {
-            throw new Error("Duplicate error: " + plugin + " is an duplicate of " 
+            throw new Error("Duplicate error: " + plugin + " is an duplicate of "
                 + plugin.name);
         } else {
             this.plugins[plugin.name] = plugin;
@@ -88,9 +88,8 @@ class Plugins {
      *  @param {string} commandName
      *  @param {Function} command
      */
-    static registerCommand(pluginName: string, commandName: string, command: 
-        Function)
-    {
+    static registerCommand(pluginName: string, commandName: string, command:
+        Function) {
         this.fetch(pluginName).commands[commandName] = command;
     }
 
@@ -127,7 +126,7 @@ class Plugins {
      *  @param {string} pluginName
      *  @returns {boolean}
      */
-    static exists(pluginName: string): boolean {   
+    static exists(pluginName: string): boolean {
         for (const pluginNameExisting in this.plugins) {
             if (pluginNameExisting === pluginName) {
                 return true;
@@ -139,7 +138,7 @@ class Plugins {
     /**
      *  Get plugin parameters.
      *  @static
-     *  @param {string} pluginName 
+     *  @param {string} pluginName - 
      *  @returns {Record<string, DynamicValue>}
      */
     static getParameters(pluginName: string): any {

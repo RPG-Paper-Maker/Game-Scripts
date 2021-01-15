@@ -23,20 +23,20 @@ declare class Songs {
     static initialize(): void;
     /**
      *  Play a music.
-     *  @param {SongKind} kind The kind of the song
-     *  @param {number} id The id of the song
-     *  @param {number} volume The volume of the song
-     *  @param {number} start The start of the song
-     *  @param {number} end The end of the song
+     *  @param {SongKind} kind - The kind of the song
+     *  @param {number} id - The id of the song
+     *  @param {number} volume - The volume of the song
+     *  @param {number} start - The start of the song
+     *  @param {number} end - The end of the song
      */
     static playMusic(kind: SongKind, id: number, volume: number, start: number, end: number): void;
     /**
      *  Stop a song.
      *  @static
-     *  @param {SongKind} kind The kind of song to stop
-     *  @param {number} time The date seconds value in the first call of stop
-     *  @param {number} seconds The seconds needed for entirely stop the song
-     *  @param {boolean} pause Indicates if the song needs to be paused instead
+     *  @param {SongKind} kind - The kind of song to stop
+     *  @param {number} time - The date seconds value in the first call of stop
+     *  @param {number} seconds - The seconds needed for entirely stop the song
+     *  @param {boolean} pause - Indicates if the song needs to be paused instead
      *  of stoppped
      *  @returns {boolean} Indicates if the song is stopped
      */
@@ -44,32 +44,32 @@ declare class Songs {
     /**
      *  Unpause a song.
      *  @static
-     *  @param {SongKind} kind The kind of song to unpause
-     *  @param {number} time The date seconds value in the first call of
+     *  @param {SongKind} kind - The kind of song to unpause
+     *  @param {number} time - The date seconds value in the first call of
      *  unpause
-     *  @param {number} seconds The seconds needed for entirely play the song
+     *  @param {number} seconds - The seconds needed for entirely play the song
      *  @returns {boolean} Indicate if the song is played with all volume
      */
     static unpauseSong(kind: SongKind, time: number, seconds: number): boolean;
     /**
      *  Play a sound.
      *  @static
-     *  @param {number} id The id of the sound
-     *  @param {number} volume The volume of the sound
+     *  @param {number} id - The id of the sound
+     *  @param {number} volume - The volume of the sound
      */
     static playSound(id: number, volume: number): void;
     /**
      *  Play a music effect.
      *  @static
-     *  @param {number} id The id of the sound
-     *  @param {number} volume The volume of the sound
-     *  @param {Record<string, any>} currentState The current state command
+     *  @param {number} id - The id of the sound
+     *  @param {number} volume - The volume of the sound
+     *  @param {Record<string, any>} - currentState The current state command
      */
     static playMusicEffect(id: number, volume: number, currentState: Record<string, any>): boolean;
     /**
      *  Update songs positions or other stuff.
      *  @static
-     *  @param {SongKind} kind The song kind
+     *  @param {SongKind} kind - The song kind
      */
     static updateByKind(kind: SongKind): void;
     /**
@@ -78,15 +78,15 @@ declare class Songs {
     static update(): void;
     /**
      *  Stop the music (with progression).
-     *  @param {number} time The time to stop
+     *  @param {number} time - The time to stop
      */
     static stopMusic(time: number): void;
     /**
      *  Initialize progression music (for stop).
-     *  @param {number} i The initial volume
-     *  @param {number} f The final volume
-     *  @param {number} equation The equation kind
-     *  @param {number} end The end of the song
+     *  @param {number} i - The initial volume
+     *  @param {number} f - The final volume
+     *  @param {number} equation - The equation kind
+     *  @param {number} end - The end of the song
      */
     static initializeProgressionMusic(i: number, f: number, equation: number, end: number): void;
     /**

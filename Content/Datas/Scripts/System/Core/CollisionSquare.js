@@ -24,11 +24,11 @@ class CollisionSquare {
     /**
      *  Union of the collision squares.
      *  @static
-     *  @param {number[][]} squares All the squares and their corresponding
+     *  @param {number[][]} squares - All the squares and their corresponding
      *  rects
-     *  @param {number} l The squares numbers
-     *  @param {number} w The number of squares width
-     *  @param {number} h The number of squares height
+     *  @param {number} l - The squares numbers
+     *  @param {number} w - The number of squares width
+     *  @param {number} h - The number of squares height
      *  @returns {number[][]}
      */
     static unionSquares(squares, l, w, h) {
@@ -125,18 +125,19 @@ class CollisionSquare {
     /**
      *  Get the BB according to rect and size.
      *  @static
-     *  @param {number[]} rect The rect
-     *  @param {number} w The number of squares width
-     *  @param {number} h The number of squares height
+     *  @param {number[]} rect - The rect
+     *  @param {number} w - The number of squares width
+     *  @param {number} h - The number of squares height
      */
     static getBB(rect, w, h) {
         return [(rect[0] - ((w * Datas.Systems.SQUARE_SIZE) - rect[0] - rect[2])) / 2, (h * Datas.Systems.SQUARE_SIZE) - rect[1] - (rect[3] / 2), 0,
             rect[2], rect[3], 1, 0, 0, 0];
     }
     /**
-     *  Read the JSON associated to the collision square.
-     *  @param {Record<string, any>} json Json object describing the collision
-     *  square
+     * Read the JSON associated to the collision square.
+     *
+     * @param {Record<string, any>} json  - Json object describing the collision square
+     * @memberof CollisionSquare
      */
     read(json) {
         let rect = json.rec;

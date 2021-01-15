@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { Manager, Graphic, Scene, Datas } from "../index";
-import { StructPositionChoice } from "./index";
+import { StructPositionChoice } from "./Menu";
 import { WindowBox, WindowChoices, Battler, Game } from "../Core";
 import { Enum, ScreenResolution } from "../Common";
 import Align = Enum.Align;
@@ -124,7 +124,7 @@ class MenuSkills extends Base {
 
     /** 
      *  Move tab according to key.
-     *  @param {number} key The key ID 
+     *  @param {number} key - The key ID 
      */
     moveTabKey(key: number) {
         // Tab
@@ -156,7 +156,7 @@ class MenuSkills extends Base {
 
     /** 
      *  Handle scene key pressed.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     onKeyPressed(key: number) {
         Scene.Base.prototype.onKeyPressed.call(Scene.Map.current, key);
@@ -220,7 +220,7 @@ class MenuSkills extends Base {
 
     /** 
      *  Handle scene key released.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     onKeyReleased(key: number) {
         Scene.Base.prototype.onKeyReleased.call(Scene.Map.current, key);
@@ -228,7 +228,7 @@ class MenuSkills extends Base {
 
     /** 
      *  Handle scene pressed repeat key.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      *  @returns {boolean}
      */
     onKeyPressedRepeat(key: number): boolean {
@@ -237,7 +237,7 @@ class MenuSkills extends Base {
 
     /** 
      *  Handle scene pressed and repeat key.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      *  @returns {boolean}
      */
     onKeyPressedAndRepeat(key: number): boolean {

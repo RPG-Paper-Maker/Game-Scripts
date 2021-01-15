@@ -15,7 +15,7 @@ var SongKind = Enum.SongKind;
 /** @class
  *  An event command for stopping the music.
  *  @extends EventCommand.Base
- *  @param {any[]} command Direct JSON command to parse
+ *  @param {any[]} command - Direct JSON command to parse
  */
 class StopMusic extends Base {
     constructor(command) {
@@ -27,8 +27,8 @@ class StopMusic extends Base {
     /**
      *  Parse a stop song command.
      *  @static
-     *  @param {any} that The event command to parse
-     *  @param {any[]} command Direct JSON command to parse
+     *  @param {any} that - The event command to parse
+     *  @param {any[]} command - Direct JSON command to parse
      */
     static parseStopSong(that, command) {
         let iterator = {
@@ -39,9 +39,9 @@ class StopMusic extends Base {
     /**
      *  Stop the song.
      *  @static
-     *  @param {any} that The event command to parse
-     *  @param {SongKind} kind The song kind
-     *  @param {number} time The date seconds value in the first call of stop
+     *  @param {any} that - The event command to parse
+     *  @param {SongKind} kind - The song kind
+     *  @param {number} time - The date seconds value in the first call of stop
      */
     static stopSong(that, kind, time) {
         return Manager.Songs.stopSong(kind, time, that.seconds.getValue()) ? 1 :
@@ -59,9 +59,9 @@ class StopMusic extends Base {
     }
     /**
      *  Update and check if the event is finished.
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {MapObject} object The current object reacting
-     *  @param {number} state The state ID
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The current object reacting
+     *  @param {number} state - The state ID
      *  @returns {number} The number of node to pass
      */
     update(currentState, object, state) {

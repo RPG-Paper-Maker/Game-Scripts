@@ -18,7 +18,7 @@ declare class Plugins {
      *  Load a particular plugin.
      *  @static
      *  @async
-     *  @param {Record<string, any>} pluginJSON
+     *  @param {Record<string, any>}  pluginJSON - the plugin details to load
      *  @returns {Promise<boolean>}
      */
     static loadPlugin(pluginJSON: Record<string, any>): Promise<boolean>;
@@ -62,7 +62,7 @@ declare class Plugins {
     /**
      *  Get plugin parameters.
      *  @static
-     *  @param {string} pluginName
+     *  @param {string} pluginName -
      *  @returns {Record<string, DynamicValue>}
      */
     static getParameters(pluginName: string): any;

@@ -1,0 +1,7970 @@
+{
+	"name": "",
+	"type": "RootDoc",
+	"members": [
+		{
+			"name": "THREE",
+			"type": "PropertyDoc",
+			"brief": "",
+			"description": "\n"
+		},
+		{
+			"name": "Howl",
+			"type": "PropertyDoc",
+			"brief": "",
+			"description": "\n"
+		},
+		{
+			"name": "Constants",
+			"type": "ClassDoc",
+			"brief": "",
+			"description": "\n The common class for constants.\n\n"
+		},
+		{
+			"name": "Easing",
+			"type": "ClassDoc",
+			"brief": " The static class who handle easing in 2D",
+			"description": "\n\n"
+		},
+		{
+			"name": "CommandMoveKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the different command moves kind.\n\n"
+		},
+		{
+			"name": "EventCommandKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the different event commands kind.\n\n"
+		},
+		{
+			"name": "ItemKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the different items kind.\n\n"
+		},
+		{
+			"name": "CharacterKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the different players kind.\n\n"
+		},
+		{
+			"name": "GroupKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the different groups kind.\n\n"
+		},
+		{
+			"name": "Align",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the different horizontal aligns kind.\n\n"
+		},
+		{
+			"name": "AlignVertical",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the different vertical aligns kind.\n\n"
+		},
+		{
+			"name": "Orientation",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the different orientations kind.\n\n"
+		},
+		{
+			"name": "ElementMapKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the different map elements kind.\n\n"
+		},
+		{
+			"name": "SpriteWallKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the different sprite walls kind.\n\n"
+		},
+		{
+			"name": "PictureKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the different pictures kind.\n\n"
+		},
+		{
+			"name": "SongKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the different songs kind.\n\n"
+		},
+		{
+			"name": "DynamicValueKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": " Enum for the different primitive values kind.\n\n"
+		},
+		{
+			"name": "OrientationWindow",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the different window orientations.\n\n"
+		},
+		{
+			"name": "BattlerStep",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the different battler steps.\n\n"
+		},
+		{
+			"name": "LootKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the different loots kind.\n\n"
+		},
+		{
+			"name": "DamagesKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the different damages kind.\n\n"
+		},
+		{
+			"name": "EffectKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the different effect kind.\n\n"
+		},
+		{
+			"name": "EffectSpecialActionKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the different effect special action kind.\n\n"
+		},
+		{
+			"name": "CharacteristicKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the different characteristic kind.\n\n"
+		},
+		{
+			"name": "IncreaseDecreaseKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the different increase / decrease kind.\n\n"
+		},
+		{
+			"name": "TargetKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the different target kind.\n\n"
+		},
+		{
+			"name": "AvailableKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the different available kind.\n\n"
+		},
+		{
+			"name": "ShapeKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the different shape kind.\n\n"
+		},
+		{
+			"name": "CustomShapeKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the different custom shape kind.\n\n"
+		},
+		{
+			"name": "ObjectCollisionKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the different object collision kind.\n\n"
+		},
+		{
+			"name": "MapTransitionKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the map transitions.\n\n"
+		},
+		{
+			"name": "MountainCollisionKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the map transitions.\n\n"
+		},
+		{
+			"name": "TitleCommandKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the title commands.\n\n"
+		},
+		{
+			"name": "TitleSettingKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the title settings.\n\n"
+		},
+		{
+			"name": "ObjectMovingKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the object moving.\n\n"
+		},
+		{
+			"name": "TagKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the tags.\n\n"
+		},
+		{
+			"name": "ConditionHeroesKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the condition heroes.\n\n"
+		},
+		{
+			"name": "VariableMapObjectCharacteristicKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the variables map object characteristics.\n\n"
+		},
+		{
+			"name": "AnimationPositionKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the animation position kind.\n\n"
+		},
+		{
+			"name": "AnimationEffectConditionKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the animation effect condition kind.\n\n"
+		},
+		{
+			"name": "MonsterActionKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the monster action kind.\n\n"
+		},
+		{
+			"name": "MonsterActionTargetKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the monster action target kind.\n\n"
+		},
+		{
+			"name": "OperationKind",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the operation kind.\n\n"
+		},
+		{
+			"name": "BattleStep",
+			"type": "EnumDoc",
+			"brief": "",
+			"description": "\n   Enum for the battle step.\n\n"
+		},
+		{
+			"name": "FadeType",
+			"type": "EnumDoc",
+			"brief": " Enum for the screen transition.",
+			"description": "\n\n\n"
+		},
+		{
+			"name": "Interpreter",
+			"type": "ClassDoc",
+			"brief": "",
+			"description": "\n  The interpreter to evaluate formulas or simple scripts without having to import.\n\n",
+			"members": [
+				{
+					"name": "evaluate",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "  Evaluate a formula.",
+					"description": "\n\n"
+				}
+			]
+		},
+		{
+			"name": "IO",
+			"type": "ClassDoc",
+			"brief": " The Input and Output class who handles loading and saving.",
+			"description": "\n\n\n",
+			"members": [
+				{
+					"name": "fileExists",
+					"type": "PropertyDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Check if a file exists.\n\n"
+				},
+				{
+					"name": "openFile",
+					"type": "PropertyDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Open an existing file.\n\n"
+				},
+				{
+					"name": "parseFileJSON",
+					"type": "PropertyDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Open and parse an existing file.\n\n"
+				},
+				{
+					"name": "saveFile",
+					"type": "PropertyDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Write a json file.\n\n"
+				}
+			]
+		},
+		{
+			"name": "KeyEvent",
+			"type": "ClassDoc",
+			"brief": " The key event class used to convert Qt keys to web keys.",
+			"description": "\n\n\n",
+			"members": [
+				{
+					"name": "qtToDOM",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Convert Qt key to DOM.\n\n"
+				},
+				{
+					"name": "isKeyNumberPADPressed",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Check if the pressed key is a PAD number.\n\n"
+				},
+				{
+					"name": "isKeyNumberTopPressed",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Check if the pressed key is a number with shift.\n\n"
+				},
+				{
+					"name": "isKeyNumberPressed",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Check if the pressed key is a number.\n\n"
+				},
+				{
+					"name": "getKeyChar",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Get the char associated to the key.\n\n"
+				},
+				{
+					"name": "getKeyString",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Get the string associated to the key\n\n"
+				}
+			]
+		},
+		{
+			"name": "Mathf",
+			"type": "ClassDoc",
+			"brief": " The static class for Math related function.",
+			"description": "\n\n\n",
+			"members": [
+				{
+					"name": "isProperSubsetOf",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": " Potential Hotspot/Nullipotent",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "isProperSupersetOf",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n Potential Hotspot/Nullipotent\n\n"
+				},
+				{
+					"name": "isSupersetOf",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n Potential Hotspot/Nullipotent\n\n"
+				},
+				{
+					"name": "isSubsetOf",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": " Potential Hotspot/Nullipotent",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "symmetricDifference",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n Potential Hotspot/Nullipotent\n\n"
+				},
+				{
+					"name": "symmetricDifferenceInPlace",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n This method changes the original array\n Potential Hotspot/Nullipotent\n\n"
+				},
+				{
+					"name": "union",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n Potential Hotspot/Nullipotent\n\n"
+				},
+				{
+					"name": "unionInPlace",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n This method changes the original array\n Potential Hotspot/Nullipotent\n\n"
+				},
+				{
+					"name": "difference",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n Potential Hotspot/Nullipotent\n\n"
+				},
+				{
+					"name": "differenceInPlace",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n This method changes the original array\n Potential Hotspot/Nullipotent\n\n"
+				},
+				{
+					"name": "intersection",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n Potential Hotspot/Nullipotent\n\n"
+				},
+				{
+					"name": "intersectionInPlace",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n This method changes the original array\n Potential Hotspot/Nullipotent\n\n"
+				},
+				{
+					"name": "excludes",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n Potential Hotspot/Nullipotent\n\n"
+				},
+				{
+					"name": "clear",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n Potential Hotspot/Idempotent\n\n"
+				},
+				{
+					"name": "isEmpty",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Check if an array is empty.\n\n"
+				},
+				{
+					"name": "cos",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Get the cos.\n\n"
+				},
+				{
+					"name": "sin",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Get the sin.\n\n"
+				},
+				{
+					"name": "mod",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Give a modulo without negative value.\n\n"
+				},
+				{
+					"name": "getMaxID",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Get the list max ID.\n\n"
+				},
+				{
+					"name": "random",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Create a random number between min and max.\n\n"
+				},
+				{
+					"name": "clamp",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n Clamp a number between two values.\n\n"
+				},
+				{
+					"name": "variance",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Get random value according to value and variance\n\n"
+				},
+				{
+					"name": "isPointOnRectangle",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Indicate if a point is inside a rectangle.\n\n"
+				},
+				{
+					"name": "isPointOnTriangle",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Indicate if a point is inside a triangle.\n\n"
+				},
+				{
+					"name": "orthogonalProjection",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the orthogonal projection between two vectors.\n\n"
+				},
+				{
+					"name": "percentOf",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": " Convert a value to a percent.",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "roundedPercentOf",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": " Convert a value to a rounded percent.",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "numberOf",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": " Convert a percent to a number",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "roundedNumberOf",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": " Convert a percent to a rounded number",
+					"description": "\n\n\n"
+				}
+			]
+		},
+		{
+			"name": "Paths",
+			"type": "ClassDoc",
+			"brief": " The static class containing all the files paths.",
+			"description": "\n\n\n"
+		},
+		{
+			"name": "Platform",
+			"type": "ClassDoc",
+			"brief": " A class replaced according to te platform used (desktop, browser, mobile...)",
+			"description": "\n\n\n",
+			"members": [
+				{
+					"name": "constructor",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n Creates an instance of Platform.\n\n"
+				},
+				{
+					"name": "setWindowTitle",
+					"type": "PropertyDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Set window title.\n\n"
+				},
+				{
+					"name": "setWindowSize",
+					"type": "PropertyDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Set window size.\n\n"
+				},
+				{
+					"name": "quit",
+					"type": "PropertyDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Quit app.\n\n"
+				},
+				{
+					"name": "showError",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Show an error object.\n\n"
+				},
+				{
+					"name": "showErrorMessage",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Show an error message.\n\n"
+				}
+			]
+		},
+		{
+			"name": "ScreenResolution",
+			"type": "ClassDoc",
+			"brief": " A static class for having a quick access to screen resolution variables and functions;",
+			"description": "\n\n\n",
+			"members": [
+				{
+					"name": "getScreenX",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Get the pixel position transformation according to screen size\n\n"
+				},
+				{
+					"name": "getScreenY",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Get the pixel position transformation according to screen size\n\n"
+				},
+				{
+					"name": "getScreenXY",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Get the pixel position transformation according to screen size\n\n"
+				},
+				{
+					"name": "getScreenMinXY",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Get the min pixel position transformation according to screen size\n\n"
+				},
+				{
+					"name": "getDoubleScreenX",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Get the pixel position transformation according to screen size, but\n   without rounding it\n\n"
+				},
+				{
+					"name": "getDoubleScreenY",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Get the pixel position transformation according to screen size, but\n   without rounding it\n\n"
+				}
+			]
+		},
+		{
+			"name": "Utils",
+			"type": "ClassDoc",
+			"brief": " The static class containing all the utils functions.",
+			"description": "\n\n\n",
+			"members": [
+				{
+					"name": "defaultValue",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Return default value if undefined, else the value.\n\n"
+				},
+				{
+					"name": "isUndefined",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Check if the value is undefined\n\n"
+				},
+				{
+					"name": "isNumber",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Check if the value is a number\n\n"
+				},
+				{
+					"name": "isString",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Check if the value is a string\n\n"
+				},
+				{
+					"name": "numToBool",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Convert a number to boolean\n\n"
+				},
+				{
+					"name": "boolToNum",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Convert a boolean to number\n\n"
+				},
+				{
+					"name": "numToString",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Convert number to string\n\n"
+				},
+				{
+					"name": "tryCatch",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Try catch for async functions\n\n"
+				},
+				{
+					"name": "getStringDate",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Return a string of the date by passing all the seconds\n\n"
+				},
+				{
+					"name": "formatNumber",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Return the string of a number and parse with 0 according to a given size\n\n"
+				},
+				{
+					"name": "fillNullList",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Create a new array list initialed with null everywhere\n\n"
+				},
+				{
+					"name": "createFont",
+					"type": "PropertyDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Link the fontSize and the fontName to a string that can be used by the\n   canvasHUD\n\n"
+				},
+				{
+					"name": "readJSONSystemList",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": " Read a json list and create a System list sorted by ID, index, and return max ID.",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "countFields",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the number of fields of an object\n\n"
+				},
+				{
+					"name": "indexOfProp",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the index of an object in a array containing a property with a\n  specific value.\n\n"
+				}
+			]
+		},
+		{
+			"name": "Anchor2D",
+			"type": "ClassDoc",
+			"brief": " The data class who manage Sprite anchor in 2D",
+			"description": "\n\n",
+			"members": [
+				{
+					"name": "constructor",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n The data class who manage sprite anchor in 2D\n\n"
+				},
+				{
+					"name": "set",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": " Set the anchors using object format (can also use premade).",
+					"description": "\n\n\n"
+				}
+			]
+		},
+		{
+			"name": "Autotile",
+			"type": "ClassDoc",
+			"brief": " An autotile in the map",
+			"description": "\n\n\n",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Read the JSON associated to the autotile.\n\n"
+				},
+				{
+					"name": "updateGeometryAutotile",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update the geometry associated to this autotile and return the\n  collision result.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "updateGeometry",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update the geometry of the autotiles according to an autotile and its\n  position.\n\n"
+				},
+				{
+					"name": "createMesh",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Create a mesh with material and geometry.",
+					"description": "\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "setSelected",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Set the selected state.\n\n"
+				},
+				{
+					"name": "setActive",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Set the active state.\n\n"
+				},
+				{
+					"name": "setAttacking",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Set battler step as attacking.",
+					"description": "\n\n"
+				},
+				{
+					"name": "isStepAttacking",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Check if the battler is attacking (or skill, item, escape).\n\n"
+				},
+				{
+					"name": "isAttacking",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Check if the battler is attacking and the frames is currently run.\n\n"
+				},
+				{
+					"name": "setUsingSkill",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Set battler step as using a skill.",
+					"description": "\n\n"
+				},
+				{
+					"name": "setUsingItem",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Set battler step as using an item.",
+					"description": "\n\n"
+				},
+				{
+					"name": "setEscaping",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Set battler step as escaping.",
+					"description": "\n\n"
+				},
+				{
+					"name": "setVictory",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Set battler step as victory.",
+					"description": "\n\n"
+				},
+				{
+					"name": "updateDead",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update battler step if is dead, attacked if attacked.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the battler.",
+					"description": "\n\n"
+				},
+				{
+					"name": "updateSelected",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the selected move progress.",
+					"description": "\n\n"
+				},
+				{
+					"name": "updateFrame",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the frame.",
+					"description": "\n\n"
+				},
+				{
+					"name": "updateArrow",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the frame.",
+					"description": "\n\n"
+				},
+				{
+					"name": "updateDamages",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the damages position.",
+					"description": "\n\n"
+				},
+				{
+					"name": "updateAttacking",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update attacking step frame.",
+					"description": "\n\n"
+				},
+				{
+					"name": "updatePositions",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update positions to screen.",
+					"description": "\n\n"
+				},
+				{
+					"name": "updateArrowPosition",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the arrow position.",
+					"description": "\n\n"
+				},
+				{
+					"name": "addToScene",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Add the battler to scene.",
+					"description": "\n\n"
+				},
+				{
+					"name": "removeFromScene",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Remove battler from scene.",
+					"description": "\n\n"
+				},
+				{
+					"name": "updateUVs",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the UVs coordinates according to frame and orientation.",
+					"description": "\n\n"
+				},
+				{
+					"name": "drawArrow",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Draw the arrow to select this battler.",
+					"description": "\n\n"
+				},
+				{
+					"name": "drawDamages",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Draw the damages on top of the battler.",
+					"description": "\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "setX",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Set the x value.\n\n"
+				},
+				{
+					"name": "setY",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Set the y value.\n\n"
+				},
+				{
+					"name": "setW",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Set the w value.\n\n"
+				},
+				{
+					"name": "setH",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Set the h value.\n\n"
+				},
+				{
+					"name": "setLeft",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Set the position to the left.",
+					"description": "\n\n"
+				},
+				{
+					"name": "setTop",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Set the position to the top.",
+					"description": "\n\n"
+				},
+				{
+					"name": "setRight",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Set the position to the right.",
+					"description": "\n\n"
+				},
+				{
+					"name": "setBot",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Set the position to the bot.",
+					"description": "\n\n"
+				},
+				{
+					"name": "setCoords",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Set all the coords values.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "resizeGL",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Configure camera when resizing window.",
+					"description": "\n\n"
+				},
+				{
+					"name": "getMapOrientation",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the map orientation according to the camera.\n\n"
+				},
+				{
+					"name": "getDistance",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the distance according to vertical angle.\n\n"
+				},
+				{
+					"name": "getHeight",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the height according to vertical angle.\n\n"
+				},
+				{
+					"name": "getHorizontalAngle",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the horizontal angle between two positions.\n\n"
+				},
+				{
+					"name": "getVerticalAngle",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the vertical angle between two positions.\n\n"
+				},
+				{
+					"name": "addHorizontalAngle",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Add an angle to the horizontal angle.\n\n"
+				},
+				{
+					"name": "addVerticalAngle",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Add an angle to the vertical angle.\n\n"
+				},
+				{
+					"name": "updateTargetPosition",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the target position according to target and target offset.",
+					"description": "\n\n"
+				},
+				{
+					"name": "getThreeCamera",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the perspective or orthographic camera.\n\n"
+				},
+				{
+					"name": "updateCameraPosition",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the three.js camera position.",
+					"description": "\n\n"
+				},
+				{
+					"name": "updateTargetOffset",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update target offset position.",
+					"description": "\n\n"
+				},
+				{
+					"name": "updateAngles",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update horizontal and vertical angles.",
+					"description": "\n\n"
+				},
+				{
+					"name": "updateDistance",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the distance.",
+					"description": "\n\n"
+				},
+				{
+					"name": "updateView",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": " Update the three.js camera view.",
+					"description": "\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": " Update all the parameters.",
+					"description": "\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "getSeconds",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get time time in seconds.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the chrono",
+					"description": "\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "unionSquares",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Union of the collision squares.\n\n"
+				},
+				{
+					"name": "getBB",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the BB according to rect and size.\n\n"
+				},
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": " Read the JSON associated to the collision square.",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "hasAllDirections",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Indicate if all the direction are OK.\n\n"
+				}
+			]
+		},
+		{
+			"name": "Floor",
+			"type": "ClassDoc",
+			"brief": "  A floor in the map.",
+			"description": "\n\n\n",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Read the JSON associated to the floor.\n\n"
+				},
+				{
+					"name": "updateGeometry",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update the geometry associated to this floor and return the\n  collision result.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update frame according to tick and duration, return true if frame is\n  different.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "getHeroInstanceInTab",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the hero in a tab with instance ID.\n\n"
+				},
+				{
+					"name": "load",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Load the game file.\n\n"
+				},
+				{
+					"name": "save",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Save a game file.\n\n"
+				},
+				{
+					"name": "getCompressedMapsDatas",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get a compressed version of mapsDatas (don't retain meshs).\n\n"
+				},
+				{
+					"name": "initializeDefault",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Initialize a default game",
+					"description": "\n\n"
+				},
+				{
+					"name": "initializeVariables",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Initialize the default variables.",
+					"description": "\n\n"
+				},
+				{
+					"name": "instanciateTeam",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Instanciate a new character in a group in the game.\n\n"
+				},
+				{
+					"name": "getGroups",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the teams list in a list.\n\n"
+				},
+				{
+					"name": "getPathSave",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the path save according to slot.\n\n"
+				},
+				{
+					"name": "getVariable",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the variable by ID.\n\n"
+				},
+				{
+					"name": "getCurrency",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the currency by ID.\n\n"
+				},
+				{
+					"name": "getHeroByInstanceID",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the hero with instance ID.\n\n"
+				},
+				{
+					"name": "useItem",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Use an item and remove it from inventory.\n\n"
+				},
+				{
+					"name": "getTeam",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the team according to group kind.\n\n"
+				},
+				{
+					"name": "getPotionsDatas",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the portions datas according to id and position.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "findItem",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Find an item in the inventory.\n\n"
+				},
+				{
+					"name": "remove",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Remove item from inventory.\n\n"
+				},
+				{
+					"name": "add",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Add item in inventory.\n\n"
+				},
+				{
+					"name": "getItemInformations",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the item informations System.\n\n"
+				},
+				{
+					"name": "modifyItems",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Modify items only if already in inventory.\n\n"
+				},
+				{
+					"name": "equalItems",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Modify the number of the item",
+					"description": "\n\n"
+				},
+				{
+					"name": "addItems",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Add the number of the item",
+					"description": "\n\n"
+				},
+				{
+					"name": "removeItems",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Remove the number of the item",
+					"description": "\n\n"
+				},
+				{
+					"name": "multItems",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Multiply the number of the item",
+					"description": "\n\n"
+				},
+				{
+					"name": "divItems",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Modify the number of the item",
+					"description": "\n\n"
+				},
+				{
+					"name": "moduloItems",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Modulo the number of the item",
+					"description": "\n\n"
+				},
+				{
+					"name": "use",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Use one item and check if there is at least one item left\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Read the JSON associated to the land\n\n"
+				},
+				{
+					"name": "getIndex",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Return the rect index.\n\n"
+				},
+				{
+					"name": "updateGeometryLand",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update the geometry associated to this land and return the collision\n  result.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Read the JSON associated to the map element.\n\n"
+				},
+				{
+					"name": "scale",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Scale the vertices correctly.\n\n"
+				}
+			]
+		},
+		{
+			"name": "MapObject",
+			"type": "ClassDoc",
+			"brief": " Object in local map that can move.",
+			"description": "\n\n\n",
+			"members": [
+				{
+					"name": "search",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Search an object in the map.\n\n"
+				},
+				{
+					"name": "searchInMap",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Search an object that is already loaded. Return null if not found.\n\n"
+				},
+				{
+					"name": "searchOutMap",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Search an object that is not loaded yet.\n\n"
+				},
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Read the JSON associated to the object.\n\n"
+				},
+				{
+					"name": "initializeProperties",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Initialize objet properties.",
+					"description": "\n\n"
+				},
+				{
+					"name": "initializeTimeEvents",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Initialize time events (reactions to event time).",
+					"description": "\n\n"
+				},
+				{
+					"name": "updateTimeEvents",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update time events.",
+					"description": "\n\n"
+				},
+				{
+					"name": "changeState",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the current state (graphics to display), also update the mesh.",
+					"description": "\n\n"
+				},
+				{
+					"name": "getFuturPosition",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Simulate moving object position.\n\n"
+				},
+				{
+					"name": "checkCollisionObject",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Check collision with another object.\n\n"
+				},
+				{
+					"name": "checkCollisionDetection",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Check the collision detection.\n\n"
+				},
+				{
+					"name": "isInRect",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Check if two objects can be in the same floor rect (need test collision)\n\n"
+				},
+				{
+					"name": "updateBB",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Only updates the bounding box mesh position.\n\n"
+				},
+				{
+					"name": "updateBBPosition",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Only updates the bounding box mesh position.\n\n"
+				},
+				{
+					"name": "move",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Move the object (one step).\n\n"
+				},
+				{
+					"name": "teleport",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Teleport the object.\n\n"
+				},
+				{
+					"name": "removeMoveTemp",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Remove datas move temp",
+					"description": "\n\n"
+				},
+				{
+					"name": "addMoveTemp",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Add to datas move temp",
+					"description": "\n\n"
+				},
+				{
+					"name": "addToScene",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Add object mesh to scene",
+					"description": "\n\n"
+				},
+				{
+					"name": "addBBToScene",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Add bounding boxes mesh to scene",
+					"description": "\n\n"
+				},
+				{
+					"name": "removeFromScene",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  remove object mesh from scene",
+					"description": "\n\n"
+				},
+				{
+					"name": "removeBBFromScene",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Remove bounding boxes mesh from scene",
+					"description": "\n\n"
+				},
+				{
+					"name": "receiveEvent",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Receive an event.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update according to camera angle.\n\n"
+				},
+				{
+					"name": "updateMovingState",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update moving state.",
+					"description": "\n\n"
+				},
+				{
+					"name": "updateAngle",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update sprite faces angles.\n\n"
+				},
+				{
+					"name": "updateOrientation",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the orientation according to the camera position",
+					"description": "\n\n"
+				},
+				{
+					"name": "updateUVs",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the UVs coordinates according to frame and orientation",
+					"description": "\n\n"
+				},
+				{
+					"name": "updateMaterial",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the material",
+					"description": "\n\n"
+				},
+				{
+					"name": "getStateIndex",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the state index.\n\n"
+				},
+				{
+					"name": "isNone",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Check if graphics is none.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Read the JSON associated to the map portion.\n\n"
+				},
+				{
+					"name": "readLands",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Read the JSON associated to the lands in the portion.\n\n"
+				},
+				{
+					"name": "readFloors",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Read the JSON associated to the floors in the portion.\n\n"
+				},
+				{
+					"name": "readAutotiles",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Read the JSON associated to the autotiles in the portion.\n\n"
+				},
+				{
+					"name": "readSprites",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Read the JSON associated to the sprites in the portion.\n\n"
+				},
+				{
+					"name": "readSpritesGlobals",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": " Read the JSON associated to the sprites globals in the portion.\n\n"
+				},
+				{
+					"name": "readSpritesWalls",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Read the JSON associated to the sprites walls in the portion.\n\n"
+				},
+				{
+					"name": "readMountains",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Read the JSON associated to the mountains in the portion.\n\n"
+				},
+				{
+					"name": "readObjects3D",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Read the JSON associated to the objects 3D in the portion.\n\n"
+				},
+				{
+					"name": "readObjects",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Read the JSON associated to the objects in the portion.\n\n"
+				},
+				{
+					"name": "cleanAll",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Remove all the objects from the scene.",
+					"description": "\n\n"
+				},
+				{
+					"name": "getObjFromID",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Search for the object with the ID.\n\n"
+				},
+				{
+					"name": "getHeroModel",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get hero model.\n\n"
+				},
+				{
+					"name": "updateFaceSprites",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update the face sprites orientation.\n\n"
+				},
+				{
+					"name": "updateCollisionSprite",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update the collision sprite.\n\n"
+				},
+				{
+					"name": "updateCollision",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": " Update the collision sprite\n\n"
+				},
+				{
+					"name": "getObjectCollisionAt",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the object collision according to position.\n\n"
+				},
+				{
+					"name": "addToNonEmpty",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Add a position to non empty.\n\n"
+				},
+				{
+					"name": "isPositionIn",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Check if position if in this map portion.\n\n"
+				}
+			]
+		},
+		{
+			"name": "Mountain",
+			"type": "ClassDoc",
+			"brief": " A mountain in the map.",
+			"description": "\n\n\n",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Read the JSON associated to the mountain.\n\n"
+				},
+				{
+					"name": "getTotalSquaresWidth",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the total squares width.\n\n"
+				},
+				{
+					"name": "getTotalSquaresHeight",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": " Get the total squares height.\n\n"
+				},
+				{
+					"name": "getWidthOnlyPixelsPlus",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the squares number width with pixels plus.\n\n"
+				},
+				{
+					"name": "getHeightOnlyPixelsPlus",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the squares number height with pixels plus.\n\n"
+				},
+				{
+					"name": "getWidthTotalPixels",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the total width in pixels.\n\n"
+				},
+				{
+					"name": "getHeightTotalPixels",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the total height in pixels.\n\n"
+				},
+				{
+					"name": "getSystem",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the System special element mountain.\n\n"
+				},
+				{
+					"name": "drawEntireFaces",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Draw the entire faces.\n\n"
+				},
+				{
+					"name": "drawSideCorner",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Draw the side corner.\n\n"
+				},
+				{
+					"name": "drawFace",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Draw a face.\n\n"
+				},
+				{
+					"name": "updateGeometry",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update the geometry of a group of mountains with the same material.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "updateGeometry",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update the geometry of the mountains according to a mountain.\n\n"
+				},
+				{
+					"name": "createMesh",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Create a mesh with material and geometry.",
+					"description": "\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "add",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n Add a new child.\n\n"
+				},
+				{
+					"name": "isRoot",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Check if this node is the root of the tree.\n\n"
+				},
+				{
+					"name": "getNext",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the next parent child\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Read the JSON associated to the object 3D.\n\n"
+				},
+				{
+					"name": "updateGeometry",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update the geometry of a group of object 3D with the same material.\n\n"
+				}
+			]
+		},
+		{
+			"name": "Object3DBox",
+			"type": "ClassDoc",
+			"brief": " A 3D object box in the map.",
+			"description": "\n\n\n",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Read the JSON associated to the object 3D box.\n\n"
+				},
+				{
+					"name": "updateGeometry",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update the geometry of a group of object 3D with the same material.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Read the JSON associated to the object 3D custom.\n\n"
+				},
+				{
+					"name": "updateGeometry",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update the geometry of a group of objects 3D cutom with the same\n  material.\n\n"
+				}
+			]
+		},
+		{
+			"name": "Party",
+			"type": "ClassDoc",
+			"brief": " The class who handles the heroes party.",
+			"description": "\n\n\n",
+			"members": [
+				{
+					"name": "teamHeroes",
+					"type": "PropertyDoc",
+					"access": "private",
+					"scope": "instance",
+					"brief": " the heros who are in the party and are used in battle.",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "hiddenHeroes",
+					"type": "PropertyDoc",
+					"access": "private",
+					"scope": "instance",
+					"brief": " The heros who temporally left the party.",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "reserveHeroes",
+					"type": "PropertyDoc",
+					"access": "private",
+					"scope": "instance",
+					"brief": " the heros who are in the reserve party (not in battle).",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "allMembers",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": " Return all members of the team. (including hidden and reserve)",
+					"description": "\n\n"
+				},
+				{
+					"name": "aliveMembers",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": " Return all the aliveMembers (including hidden and reserve)",
+					"description": "\n\n"
+				},
+				{
+					"name": "aliveTeamMembers",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": " Return all the alive team members.",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "deadMembers",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": " return all the dead members (including hidden and reserve)",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "leader",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": " Return the first member of the battle party.",
+					"description": "\n\n"
+				},
+				{
+					"name": "maxMembers",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n Return the max number of members a party can be\n\n"
+				},
+				{
+					"name": "currencies",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": " Return all the currencies that a party has.",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "currency",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n return a specific currency.\n\n"
+				},
+				{
+					"name": "maxCurrencies",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n Return the maximum currency that a party can have.\n\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "create",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Create a picture and then load it\n\n"
+				},
+				{
+					"name": "createWithID",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": " Create a picture from kind and id and then load it",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "loadImage",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Load the image.\n\n"
+				},
+				{
+					"name": "load",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Load the picture and then check.\n\n"
+				},
+				{
+					"name": "createCopy",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Create a copy of a picture2D.\n\n"
+				},
+				{
+					"name": "draw",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Draw the picture on HUD\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "getEquipmentLength",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the max size of equipment kind names.\n\n"
+				},
+				{
+					"name": "getTemporaryPlayer",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the max size of equipment kind names.\n\n"
+				},
+				{
+					"name": "getSystem",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the player informations System.\n\n"
+				},
+				{
+					"name": "getSaveCharacter",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get a compressed object for saving the character in a file.\n\n"
+				},
+				{
+					"name": "getSaveStat",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the statistics for save character.\n\n"
+				},
+				{
+					"name": "getSaveEquip",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the equips for save character.\n\n"
+				},
+				{
+					"name": "isDead",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Check if the character is dead.\n\n"
+				},
+				{
+					"name": "instanciate",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Instanciate a character in a particular level.\n\n"
+				},
+				{
+					"name": "getEquipmentStatsAndBonus",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the stats thanks to equipments.\n\n"
+				},
+				{
+					"name": "updateEquipmentStats",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update stats with equipment stats\n\n"
+				},
+				{
+					"name": "initStatValue",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Initialize stat value.\n\n"
+				},
+				{
+					"name": "updateStatValue",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": " Update stats value.\n\n"
+				},
+				{
+					"name": "updateAllStatsValues",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update all the stats values.",
+					"description": "\n\n"
+				},
+				{
+					"name": "getBarAbbreviation",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the bar abbreviation.\n\n"
+				},
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Read the JSON associated to the character and items.\n\n"
+				},
+				{
+					"name": "getCurrentLevel",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the current level.\n\n"
+				},
+				{
+					"name": "levelUp",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Apply level up.",
+					"description": "\n\n"
+				},
+				{
+					"name": "learnSkills",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Learn new skills (on level up).",
+					"description": "\n\n"
+				},
+				{
+					"name": "getRewardExperience",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the experience reward.\n\n"
+				},
+				{
+					"name": "getRewardCurrencies",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the currencies reward.\n\n"
+				},
+				{
+					"name": "getRewardLoots",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the loots reward.\n\n"
+				},
+				{
+					"name": "updateRemainingXP",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update remaining xp according to full time.\n\n"
+				},
+				{
+					"name": "updateObtainedExperience",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update obtained experience.",
+					"description": "\n\n"
+				},
+				{
+					"name": "updateExperience",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update experience and check if leveling up.\n\n"
+				},
+				{
+					"name": "passExperience",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Pass the progressive experience and directly update experience.",
+					"description": "\n\n"
+				},
+				{
+					"name": "pauseExperience",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Pause experience (when leveling up).",
+					"description": "\n\n"
+				},
+				{
+					"name": "unpauseExperience",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Unpause experience.",
+					"description": "\n\n"
+				},
+				{
+					"name": "isExperienceUpdated",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Check if experience is updated.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "createFromArray",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Create a portion from an array.\n\n"
+				},
+				{
+					"name": "createFromVector3",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Create a portion from a three.js Vector3.\n\n"
+				},
+				{
+					"name": "equals",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Test if a portion is equal to another.\n\n"
+				},
+				{
+					"name": "getFileName",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the portion file name.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "createFromArray",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Create a position from an array.\n\n"
+				},
+				{
+					"name": "createFromVector3",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Create a position from a three.js vector3.\n\n"
+				},
+				{
+					"name": "equals",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Test if a position is equal to another.\n\n"
+				},
+				{
+					"name": "getTotalY",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the complete number of Y of a position.\n\n"
+				},
+				{
+					"name": "getGlobalPortion",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the global portion of a json position.\n\n"
+				},
+				{
+					"name": "toVector3",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Transform a position to a Vector3.\n\n"
+				},
+				{
+					"name": "toIndex",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Transform a position to index position on X/Z axis (used for map\n  portion bounding boxes).\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "isFinished",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Check if the current reaction is finished (no more commands to excecute).\n\n"
+				},
+				{
+					"name": "canExecute",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Check if the command can be executed.\n\n"
+				},
+				{
+					"name": "updateObjectParameters",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update current object and parameters (for variables).",
+					"description": "\n\n"
+				},
+				{
+					"name": "updateFinish",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update if finished.",
+					"description": "\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the current commands",
+					"description": "\n\n"
+				},
+				{
+					"name": "updateCommand",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update a command and return the next command to excecute (if finished)\n\n"
+				},
+				{
+					"name": "endOfBlock",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update a command that corresponds to the end of a block and return the\n  next command to excecute (if finished).\n\n"
+				},
+				{
+					"name": "goToNextCommand",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  After the end of a block, go to the next command.\n\n"
+				},
+				{
+					"name": "onKeyPressed",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  First key press handle for the current command\n\n"
+				},
+				{
+					"name": "onKeyReleased",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  First key release handle for the current command.\n\n"
+				},
+				{
+					"name": "onKeyPressedRepeat",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Key pressed repeat handle for the current command.\n\n"
+				},
+				{
+					"name": "onKeyPressedAndRepeat",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Key pressed repeat handle for the current command, but with a small\n  wait after the first pressure (generally used for menus).\n\n"
+				},
+				{
+					"name": "drawHUD",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Draw HUD for the current command",
+					"description": "\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "x",
+					"type": "PropertyDoc",
+					"access": "public",
+					"scope": "default",
+					"brief": "",
+					"description": ""
+				},
+				{
+					"name": "y",
+					"type": "PropertyDoc",
+					"access": "public",
+					"scope": "default",
+					"brief": "",
+					"description": ""
+				},
+				{
+					"name": "width",
+					"type": "PropertyDoc",
+					"access": "public",
+					"scope": "default",
+					"brief": "",
+					"description": ""
+				},
+				{
+					"name": "height",
+					"type": "PropertyDoc",
+					"access": "public",
+					"scope": "default",
+					"brief": "",
+					"description": ""
+				},
+				{
+					"name": "anchor",
+					"type": "PropertyDoc",
+					"access": "public",
+					"scope": "default",
+					"brief": "",
+					"description": ""
+				},
+				{
+					"name": "createFromArray",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Create a rectangle from an array.\n\n"
+				},
+				{
+					"name": "move",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Move rectangle to x, y.\n\n"
+				},
+				{
+					"name": "resize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Resize rectangle with width and height value.\n\n"
+				},
+				{
+					"name": "set",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Move and resize rectangle.\n\n"
+				},
+				{
+					"name": "setAnchor",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Set the anchor x, y.\n\n"
+				},
+				{
+					"name": "presetAnchor",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Preset anchor.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": ""
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "create",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Create a new sprite.\n\n"
+				},
+				{
+					"name": "rotateVertex",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Rotate a vertex around a specified center.\n\n"
+				},
+				{
+					"name": "rotateSprite",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Rotate the four vertices of a sprite around a specified center.\n\n"
+				},
+				{
+					"name": "addStaticSpriteToGeometry",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Add a static sprite to the geometry.\n\n"
+				},
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Read the JSON associated to the sprite.\n\n"
+				},
+				{
+					"name": "updateGeometry",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update the geometry associated to this.\n\n"
+				},
+				{
+					"name": "createGeometry",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Create the geometry associated to this sprite\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Read the JSON associated to the sprite wall.\n\n"
+				},
+				{
+					"name": "updateGeometry",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update the geometry of a group of sprite walls with the same material.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "setBegin",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Set the begining texture.\n\n"
+				},
+				{
+					"name": "setEnd",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Set the ending texture.\n\n"
+				},
+				{
+					"name": "isSup",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Check which point is on top.\n\n"
+				},
+				{
+					"name": "isInf",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Check which point is on bot.\n\n"
+				},
+				{
+					"name": "isInTexture",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Check if a couple (id, rect) is inside this texture.\n\n"
+				},
+				{
+					"name": "addToList",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Add a couple (id, point) inside the list.\n\n"
+				},
+				{
+					"name": "getOffset",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the offset of couple (id, rect).\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "constructor",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n The data of the visual tree.\n\n"
+				},
+				{
+					"name": "add",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n Add a new child.\n\n"
+				}
+			]
+		},
+		{
+			"name": "Vector2",
+			"type": "ClassDoc",
+			"brief": "",
+			"description": "\n The data class who hold 2D coordinates.\n It's used as an API bridge between the user and Three.js\n\n",
+			"members": [
+				{
+					"name": "constructor",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n The data class who hold 2D coordinates.\n\n"
+				}
+			]
+		},
+		{
+			"name": "Vector3",
+			"type": "ClassDoc",
+			"brief": "",
+			"description": "\n The data class who hold 3D coordinates.\n It's used as an API bridge between the user and Three.js\n\n",
+			"members": [
+				{
+					"name": "constructor",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n The data class who hold 3D Coordinate.\n\n"
+				}
+			]
+		},
+		{
+			"name": "WindowBoxOptions",
+			"type": "InterfaceDoc",
+			"brief": " the window box options",
+			"description": "\n\n\n",
+			"members": [
+				{
+					"name": "content",
+					"type": "PropertyDoc",
+					"brief": " the contents displayed inside the window.",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "padding",
+					"type": "PropertyDoc",
+					"brief": " The window padding",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "limitContent",
+					"type": "PropertyDoc",
+					"brief": " If enabled the contents will be cut according to the padding size.",
+					"description": "\n\n\n"
+				}
+			]
+		},
+		{
+			"name": "WindowBox",
+			"type": "ClassDoc",
+			"brief": " The class for window boxes.",
+			"description": "\n\n\n",
+			"members": [
+				{
+					"name": "constructor",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n"
+				},
+				{
+					"name": "setX",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Set the x value.\n\n"
+				},
+				{
+					"name": "setY",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Set the y value.\n\n"
+				},
+				{
+					"name": "setW",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Set the w value.\n\n"
+				},
+				{
+					"name": "setH",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Set the h value.\n\n"
+				},
+				{
+					"name": "updateDimensions",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the content and window dimensions.",
+					"description": "\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the content.",
+					"description": "\n\n"
+				},
+				{
+					"name": "draw",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Draw the window.\n\n"
+				}
+			]
+		},
+		{
+			"name": "ChoicesOptions",
+			"type": "InterfaceDoc",
+			"brief": " the choices options used for the window initialization",
+			"description": "\n\n\n",
+			"members": [
+				{
+					"name": "listCallbacks",
+					"type": "PropertyDoc",
+					"brief": " The choices callbacks",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "orientation",
+					"type": "PropertyDoc",
+					"brief": " The choices list orientation",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "nbItemsMax",
+					"type": "PropertyDoc",
+					"brief": " The max number of choices displayed",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "padding",
+					"type": "PropertyDoc",
+					"brief": " The window padding",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "space",
+					"type": "PropertyDoc",
+					"brief": " the space in between choices.",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "currentSelectedIndex",
+					"type": "PropertyDoc",
+					"brief": " The current selected choices index.",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "bordersInsideVisible",
+					"type": "PropertyDoc",
+					"brief": " If enabled the inside border will be visible.",
+					"description": "\n\n\n"
+				}
+			]
+		},
+		{
+			"name": "WindowChoices",
+			"type": "ClassDoc",
+			"brief": " The window class who handle choices.",
+			"description": "\n\n\n",
+			"members": [
+				{
+					"name": "setX",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Set the x value.\n\n"
+				},
+				{
+					"name": "setY",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Set the y value.\n\n"
+				},
+				{
+					"name": "getContent",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the content at a specific index.\n\n"
+				},
+				{
+					"name": "getCurrentContent",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the current selected content.\n\n"
+				},
+				{
+					"name": "updateContentSize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update content size according to all the current settings.\n\n"
+				},
+				{
+					"name": "setContent",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Set the content at a specific index.\n\n"
+				},
+				{
+					"name": "setContents",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Set all the graphic contents.\n\n"
+				},
+				{
+					"name": "setCallbacks",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Set all the callbacks for each choice.\n\n"
+				},
+				{
+					"name": "setContentsCallbacks",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Set all the contents and callbacks.\n\n"
+				},
+				{
+					"name": "unselect",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Unselect a choice.",
+					"description": "\n\n"
+				},
+				{
+					"name": "select",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Select a choice.\n\n"
+				},
+				{
+					"name": "selectCurrent",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Select the current choice.",
+					"description": "\n\n"
+				},
+				{
+					"name": "goUp",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Go cursor up.",
+					"description": "\n\n"
+				},
+				{
+					"name": "goDown",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Go cursor down.",
+					"description": "\n\n"
+				},
+				{
+					"name": "onKeyPressed",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  First key press handle.\n\n"
+				},
+				{
+					"name": "onKeyPressedAndRepeat",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Key pressed repeat handle, but with a small wait after the first\n  pressure (generally used for menus).\n\n"
+				},
+				{
+					"name": "draw",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Draw the windows.",
+					"description": "\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Read the JSON file associated to troops.\n\n"
+				},
+				{
+					"name": "get",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the animation by ID.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Read the JSON file associated to armors.\n\n"
+				},
+				{
+					"name": "get",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the armor by ID.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "get",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get an element in a list by ID safely.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "  Read the JSON file associated to battle System.",
+					"description": "\n\n"
+				},
+				{
+					"name": "getLevelStatistic",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the statistic corresponding to the level.\n\n"
+				},
+				{
+					"name": "getExpStatistic",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the statistic corresponding to the experience.\n\n"
+				},
+				{
+					"name": "getElement",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the element by ID.\n\n"
+				},
+				{
+					"name": "getStatistic",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the statistic by ID.\n\n"
+				},
+				{
+					"name": "getEquipment",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the equipment by ID.\n\n"
+				},
+				{
+					"name": "getWeaponKind",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the weapon kind by ID.\n\n"
+				},
+				{
+					"name": "getArmorKind",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the armor kind by ID.\n\n"
+				},
+				{
+					"name": "getBattleCommand",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the battle command by ID.\n\n"
+				},
+				{
+					"name": "getBattleMap",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the battle map by ID.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Read the JSON file associated to classes\n\n"
+				},
+				{
+					"name": "get",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the class by ID.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Read the JSON file associated to common events.\n\n"
+				},
+				{
+					"name": "modelReOrder",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Reorder the models in the right order for inheritance.\n\n"
+				},
+				{
+					"name": "getEventSystem",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the event system by ID.\n\n"
+				},
+				{
+					"name": "getEventUser",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the event user by ID.\n\n"
+				},
+				{
+					"name": "getCommonReaction",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the common reaction by ID.\n\n"
+				},
+				{
+					"name": "getCommonObject",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the common object by ID.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Read the JSON file associated to heroes.\n\n"
+				},
+				{
+					"name": "get",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the hero by ID.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Read the JSON file associated to items.\n\n"
+				},
+				{
+					"name": "get",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the item by ID.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "isKeyEqual",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Test if a key id can be equal to a keyboard System object.\n\n"
+				},
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Read the JSON file associated to keyboard.\n\n"
+				},
+				{
+					"name": "get",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the keyboard by ID.\n\n"
+				},
+				{
+					"name": "getCommandsGraphics",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the graphics commands.\n\n"
+				},
+				{
+					"name": "getCommandsActions",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the actions commands.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Read the JSON file associated to monsters.\n\n"
+				},
+				{
+					"name": "get",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the monster by ID.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Read the JSON file associated to pictures.\n\n"
+				},
+				{
+					"name": "get",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the corresponding picture.\n\n"
+				},
+				{
+					"name": "getListByKind",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the corresponding picture list by kind.\n\n"
+				},
+				{
+					"name": "getPictureCopy",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": " Get a copy of the picture 2D.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Read the settings file.\n\n"
+				},
+				{
+					"name": "write",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Write the settings file.\n\n"
+				},
+				{
+					"name": "updateKeyboard",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Update Keyboard settings.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "  Read the JSON file associated to shapes.",
+					"description": "\n\n"
+				},
+				{
+					"name": "get",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the corresponding shape\n\n"
+				}
+			]
+		},
+		{
+			"name": "\n   All the skills datas",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Read the JSON file associated to skills.\n\n"
+				},
+				{
+					"name": "get",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the skill by ID.\n\n"
+				}
+			]
+		},
+		{
+			"name": "\n   All the songs datas",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "  Read the JSON file associated to songs",
+					"description": "\n\n"
+				},
+				{
+					"name": "get",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the corresponding song.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "  Read the JSON file associated to special elements.",
+					"description": "\n\n"
+				},
+				{
+					"name": "getAutotile",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the autotile by ID.\n\n"
+				},
+				{
+					"name": "getWall",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the wall by ID.\n\n"
+				},
+				{
+					"name": "getMountain",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the mountain by ID.\n\n"
+				},
+				{
+					"name": "getObject3D",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the object 3D by ID.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Read the JSON file associated to System.\n\n"
+				},
+				{
+					"name": "getItemType",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the item type by ID safely.\n\n"
+				},
+				{
+					"name": "getColor",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the color by ID safely.\n\n"
+				},
+				{
+					"name": "getCurrency",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the currency by ID safely.\n\n"
+				},
+				{
+					"name": "getWindowSkin",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the window skin by ID safely.\n\n"
+				},
+				{
+					"name": "getCameraProperties",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the camera properties by ID safely.\n\n"
+				},
+				{
+					"name": "getDetection",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the detection by ID safely.\n\n"
+				},
+				{
+					"name": "getSkybox",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the skybox by ID safely.\n\n"
+				},
+				{
+					"name": "getFontSize",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the font size by ID safely.\n\n"
+				},
+				{
+					"name": "getFontName",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the font name by ID safely.\n\n"
+				},
+				{
+					"name": "getSpeed",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the speed by ID safely.\n\n"
+				},
+				{
+					"name": "getFrequency",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the frequency by ID safely.\n\n"
+				},
+				{
+					"name": "getModelHero",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the system object of hero.\n\n"
+				},
+				{
+					"name": "loadWindowSkins",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Load the window skins pictures\n\n"
+				},
+				{
+					"name": "getDefaultCurrencies",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the default array currencies for a default game.\n\n"
+				},
+				{
+					"name": "getCurrentWindowSkin",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the current System window skin.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "  Read the JSON file associated to tilesets.",
+					"description": "\n\n"
+				},
+				{
+					"name": "get",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the tileset by ID.\n\n"
+				},
+				{
+					"name": "loadPictures",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Load pictures.\n\n"
+				},
+				{
+					"name": "getTexturesAutotiles",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the autotiles textures.\n\n"
+				},
+				{
+					"name": "getTexturesMountains",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the mountains textures.\n\n"
+				},
+				{
+					"name": "getTexturesWalls",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the walls textures.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Read the JSON file associated to title screen and game over.\n\n"
+				},
+				{
+					"name": "getCommandsNames",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the commands graphic names.\n\n"
+				},
+				{
+					"name": "getCommandsActions",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the commands actions functions.\n\n"
+				},
+				{
+					"name": "getSettingsCommandsContent",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the commands settings content graphic.\n\n"
+				},
+				{
+					"name": "getSettingsCommandsActions",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the settings commands actions functions.\n\n"
+				},
+				{
+					"name": "getSettingsCommandsAction",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the settings commands action function according to ID.\n\n"
+				},
+				{
+					"name": "keyboardAssignment",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  The setting action keyboard assignment.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Read the JSON file associated to troops\n\n"
+				},
+				{
+					"name": "get",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the troop by ID.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Read the JSON file associated to variables.\n\n"
+				},
+				{
+					"name": "get",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the variable name by ID.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "  Read the JSON file associated to videos",
+					"description": "\n\n"
+				},
+				{
+					"name": "get",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the corresponding video.\n\n"
+				}
+			]
+		},
+		{
+			"name": "\n  All the weapons datas",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "read",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Read the JSON file associated to weapons\n\n"
+				},
+				{
+					"name": "get",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the weapon by ID.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n Initialize the current state.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n Update and check if the event is finished.\n\n"
+				},
+				{
+					"name": "onKeyPressed",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  First key press handle for the current stack.\n\n"
+				},
+				{
+					"name": "onKeyReleased",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  First key release handle for the current stack.\n\n"
+				},
+				{
+					"name": "onKeyPressedRepeat",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Key pressed repeat handle for the current stack.\n\n"
+				},
+				{
+					"name": "onKeyPressedAndRepeat",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Key pressed repeat handle for the current stack, but with\n  a small wait after the first pressure (generally used for menus).\n\n"
+				},
+				{
+					"name": "drawHUD",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Draw the HUD.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Initialize the current state.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				},
+				{
+					"name": "onKeyPressed",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  First key press handle for the current stack.\n\n"
+				},
+				{
+					"name": "onKeyReleased",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  First key release handle for the current stack.\n\n"
+				},
+				{
+					"name": "onKeyPressedRepeat",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Key pressed repeat handle for the current stack.\n\n"
+				},
+				{
+					"name": "onKeyPressedAndRepeat",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Key pressed repeat handle for the current stack, but with\n  a small wait after the first pressure (generally used for menus).\n\n"
+				},
+				{
+					"name": "drawHUD",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Draw the HUD.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Initialize the current state.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "addState",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Add a state to an object.\n\n"
+				},
+				{
+					"name": "removeState",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Remove a state from an object.\n\n"
+				},
+				{
+					"name": "removeAll",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Remove all the states from an object.\n\n"
+				},
+				{
+					"name": "removeFromDatas",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Remove states from datas.\n\n"
+				},
+				{
+					"name": "addStateSpecial",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Add state in ID's list.\n\n"
+				},
+				{
+					"name": "removeStateSpecial",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Remove state in ID's list.\n\n"
+				},
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Initialize the current state.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Initialize the current.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				},
+				{
+					"name": "goToNextCommand",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Returns the number of node to pass.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": ""
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Initialize the current state.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				},
+				{
+					"name": "drawHUD",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Draw the HUD.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "setShowText",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Set the show text property.\n\n"
+				},
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Initialize the current state.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				},
+				{
+					"name": "goToNextCommand",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Returns the number of node to pass.\n\n"
+				},
+				{
+					"name": "onKeyPressed",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  First key press handle for the current stack.\n\n"
+				},
+				{
+					"name": "onKeyPressedAndRepeat",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Key pressed repeat handle for the current stack, but with\n  a small wait after the first pressure (generally used for menus).\n\n"
+				},
+				{
+					"name": "drawHUD",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Draw the HUD\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				},
+				{
+					"name": "goToNextCommand",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Returns the number of node to pass.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Initialize the current state.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				},
+				{
+					"name": "drawHUD",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Draw the HUD\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "allTheHeroes",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Apply callback with all the heroes.\n\n"
+				},
+				{
+					"name": "noneOfTheHeroes",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Apply callback with none of the heroes.\n\n"
+				},
+				{
+					"name": "atLeastOneHero",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Apply callback with at least one hero.\n\n"
+				},
+				{
+					"name": "theHeroeWithInstanceID",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Apply callback with the hero with instance ID.\n\n"
+				},
+				{
+					"name": "getResult",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Apply callback according to heroes selection.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				},
+				{
+					"name": "goToNextCommand",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Returns the number of node to pass.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				},
+				{
+					"name": "goToNextCommand",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Returns the number of node to pass.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				},
+				{
+					"name": "goToNextCommand",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Returns the number of node to pass.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Initialize the current state.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				},
+				{
+					"name": "onKeyPressed",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  First key press handle for the current stack.\n\n"
+				},
+				{
+					"name": "drawHUD",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Draw the HUD.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": ""
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "addRemove",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Add or remove a character in a group.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Initialize the current state.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "oppositeOrientation",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the opposite orientation.\n\n"
+				},
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Initialize the current state.\n\n"
+				},
+				{
+					"name": "move",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Function to move north.\n\n"
+				},
+				{
+					"name": "moveFrequency",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Change the frequency tick of the object.\n\n"
+				},
+				{
+					"name": "moveNorth",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Function to move north.\n\n"
+				},
+				{
+					"name": "moveSouth",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Function to move south.\n\n"
+				},
+				{
+					"name": "moveWest",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Function to move west.\n\n"
+				},
+				{
+					"name": "moveEast",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Function to move east.\n\n"
+				},
+				{
+					"name": "moveNorthWest",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Function to move north west.\n\n"
+				},
+				{
+					"name": "moveNorthEast",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Function to move north west.\n\n"
+				},
+				{
+					"name": "moveSouthWest",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Function to move north west.\n\n"
+				},
+				{
+					"name": "moveSouthEast",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Function to move north west.\n\n"
+				},
+				{
+					"name": "moveRandom",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Function to move random.\n\n"
+				},
+				{
+					"name": "moveHero",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Function to move hero.\n\n"
+				},
+				{
+					"name": "moveOppositeHero",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Function to move opposite to hero.\n\n"
+				},
+				{
+					"name": "moveHeroAndOpposite",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Function to move hero and opposite hero.\n\n"
+				},
+				{
+					"name": "moveFront",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Function to move front.\n\n"
+				},
+				{
+					"name": "moveBack",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Function to move back.\n\n"
+				},
+				{
+					"name": "changeGraphics",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Function to change graphics.\n\n"
+				},
+				{
+					"name": "getHeroOrientation",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the hero orientation.\n\n"
+				},
+				{
+					"name": "getCurrentOrientation",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the current orientation.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Initialize the current state.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Initialize the current state.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Initialize the current state.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "parsePlaySong",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Parse a play song command.\n\n"
+				},
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Initialize the current state.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Initialize the current state.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Initialize the current state.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Initialize the current state.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Initialize the current state.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "updateTargetOffset",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Update the target offset\n\n"
+				},
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Initialize the current state.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Initialize the current state.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				},
+				{
+					"name": "onKeyPressed",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  First key press handle for the current stack\n\n"
+				},
+				{
+					"name": "drawHUD",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Draw the HUD\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Initialize the current state.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Initialize the current state.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "parseStopSong",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Parse a stop song command.\n\n"
+				},
+				{
+					"name": "stopSong",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Stop the song.\n\n"
+				},
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Initialize the current state.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Initialize the current state.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Initialize the current state.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished\n\n"
+				},
+				{
+					"name": "goToNextCommand",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the number of nodes to pass.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update and check if the event is finished.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "\n",
+			"members": [
+				{
+					"name": "drawBehind",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": " Drawing the stuff behind the window box.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the content.",
+					"description": "\n\n"
+				},
+				{
+					"name": "drawChoice",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the graphic.\n\n"
+				},
+				{
+					"name": "draw",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the graphic in box.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "drawChoice",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the equipment kind and equipment name.\n\n"
+				},
+				{
+					"name": "draw",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the equipment kind and equipment name.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "drawChoice",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the statistics modifications.\n\n"
+				},
+				{
+					"name": "draw",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the statistics modifications.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "updateNb",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the game item number.",
+					"description": "\n\n"
+				},
+				{
+					"name": "drawChoice",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the item in choice box.\n\n"
+				},
+				{
+					"name": "draw",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the item description.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "updateShort",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update short sc.\n\n"
+				},
+				{
+					"name": "drawChoice",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the keyboard in choice box.\n\n"
+				},
+				{
+					"name": "draw",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the keyboard description.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "drawChoice",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the loots.\n\n"
+				},
+				{
+					"name": "draw",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the loots.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "setMessage",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Set message (parse).\n\n"
+				},
+				{
+					"name": "updateTag",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update tag.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update all.",
+					"description": "\n\n"
+				},
+				{
+					"name": "updateNodes",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update the nodes.\n\n"
+				},
+				{
+					"name": "drawBehind",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the faceset behind.\n\n"
+				},
+				{
+					"name": "drawFaceset",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the faceset.\n\n"
+				},
+				{
+					"name": "drawChoice",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the message box.\n\n"
+				},
+				{
+					"name": "draw",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the message.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "updateReverse",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update the reverse value for faceset.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the graphics",
+					"description": "\n\n"
+				},
+				{
+					"name": "updateExperience",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update experience graphics.",
+					"description": "\n\n"
+				},
+				{
+					"name": "initializeCharacter",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Initialize character graphics font size.\n\n"
+				},
+				{
+					"name": "updateBattler",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update battler frame.",
+					"description": "\n\n"
+				},
+				{
+					"name": "drawCharacter",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the character.\n\n"
+				},
+				{
+					"name": "drawChoice",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the player in choice box in the main menu.\n\n"
+				},
+				{
+					"name": "draw",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the player informations in battles.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "initializeStatisticProgression",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Initialize the statistic progression",
+					"description": "\n\n"
+				},
+				{
+					"name": "updateStatisticProgression",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the statistic progression.",
+					"description": "\n\n"
+				},
+				{
+					"name": "updateBattler",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the battler frame.",
+					"description": "\n\n"
+				},
+				{
+					"name": "drawStatisticProgression",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the statistic progression.\n\n"
+				},
+				{
+					"name": "drawChoice",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the player in choice box\n\n"
+				},
+				{
+					"name": "draw",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the player description\n\n"
+				}
+			]
+		},
+		{
+			"name": "\n  The graphic displaying all experience + currencies",
+			"type": "ClassDoc",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "drawChoice",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the progression.\n\n"
+				},
+				{
+					"name": "draw",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the progression.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the battler graphics.",
+					"description": "\n\n"
+				},
+				{
+					"name": "drawChoice",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the save slot.\n\n"
+				},
+				{
+					"name": "draw",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": " Drawing the save informations.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "drawChoice",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the choice.\n\n"
+				},
+				{
+					"name": "draw",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the settings informations.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "drawChoice",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the skill in choice box.\n\n"
+				},
+				{
+					"name": "draw",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the skill description.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "drawChoice",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the skill description.\n\n"
+				},
+				{
+					"name": "draw",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the skill description.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "updateStatisticProgression",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the statistic progression graphics.",
+					"description": "\n\n"
+				},
+				{
+					"name": "getHeight",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the stat names list height.\n\n"
+				},
+				{
+					"name": "drawChoice",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the player description.\n\n"
+				},
+				{
+					"name": "draw",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the player description.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "setFontSize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Set the font size and the final font.\n\n"
+				},
+				{
+					"name": "setText",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Set the current displayed text.\n\n"
+				},
+				{
+					"name": "updateContextFont",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Update the context font (without window resizing), this function is\n  used before a context.measureText.\n\n"
+				},
+				{
+					"name": "updateContextFontReal",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the context font with resizing.",
+					"description": "\n\n"
+				},
+				{
+					"name": "measureText",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Measure text width and stock results in the instance.",
+					"description": "\n\n"
+				},
+				{
+					"name": "drawChoice",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the text in choice box.\n\n"
+				},
+				{
+					"name": "draw",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the text in box (duplicate of drawChoice).\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "getMaxHeight",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the max possible height.\n\n"
+				},
+				{
+					"name": "getWidth",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the width.\n\n"
+				},
+				{
+					"name": "drawChoice",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the content choice.\n\n"
+				},
+				{
+					"name": "draw",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the content.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the play time",
+					"description": "\n\n"
+				},
+				{
+					"name": "drawChoice",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the content choice.\n\n"
+				},
+				{
+					"name": "draw",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the content.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "setAll",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Set if all targets are selected or not.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the battler frame.",
+					"description": "\n\n"
+				},
+				{
+					"name": "updateStats",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Udpate the battler.",
+					"description": "\n\n"
+				},
+				{
+					"name": "goLeft",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Move arrow left.",
+					"description": "\n\n"
+				},
+				{
+					"name": "goRight",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Move arrow right.",
+					"description": "\n\n"
+				},
+				{
+					"name": "moveArrow",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Move an arrow according to index.\n\n"
+				},
+				{
+					"name": "onKeyPressedAndRepeat",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Key pressed repeat handle, but with a small wait after the first\n  pressure.\n\n"
+				},
+				{
+					"name": "drawArrowAtIndex",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Draw an arrow at a specific index.\n\n"
+				},
+				{
+					"name": "drawChoice",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the skill or item use informations.\n\n"
+				},
+				{
+					"name": "draw",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the skill or item use informations.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "updateExperience",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update graphics experience.",
+					"description": "\n\n"
+				},
+				{
+					"name": "drawChoice",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the progression.\n\n"
+				},
+				{
+					"name": "draw",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Drawing the progression.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "createBox",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Create a box for bounding box.\n\n"
+				},
+				{
+					"name": "createOrientedBox",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Create an oriented box for bounding box.\n\n"
+				},
+				{
+					"name": "applyBoxLandTransforms",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Apply transform for lands bounding box.\n\n"
+				},
+				{
+					"name": "applyBoxSpriteTransforms",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Apply transform for sprite bounding box.\n\n"
+				},
+				{
+					"name": "applyOrientedBoxTransforms",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Apply transform for oriented bounding box.\n\n"
+				},
+				{
+					"name": "isOverlapping",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Indicate if min and max are overlapping.\n\n"
+				},
+				{
+					"name": "obbVSobb",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Check collision between two OBB.\n\n"
+				},
+				{
+					"name": "checkFaces",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Check the faces for OBB collision.\n\n"
+				},
+				{
+					"name": "overlapOnThisNormal",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Check if vertices overlap on one of the faces normal.\n\n"
+				},
+				{
+					"name": "checkRay",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Check collision ray.\n\n"
+				},
+				{
+					"name": "check",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Check if there is a collision at this position.\n\n"
+				},
+				{
+					"name": "checkLands",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Check if there is a collision with lands at this position.\n\n"
+				},
+				{
+					"name": "checkLandsInside",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Check if there is a collision with lands with directions.\n\n"
+				},
+				{
+					"name": "checkIntersectionLand",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Check intersection between ray and an object.\n\n"
+				},
+				{
+					"name": "checkDirections",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Check directions\n\n"
+				},
+				{
+					"name": "checkDirectionsInside",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Check directions inside.\n\n"
+				},
+				{
+					"name": "checkSprites",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Check if there is a collision with sprites at this position.\n\n"
+				},
+				{
+					"name": "checkIntersectionSprite",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Check intersection between ray and an object.\n\n"
+				},
+				{
+					"name": "checkObjects3D",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Check if there is a collision with sprites at this position.\n\n"
+				},
+				{
+					"name": "checkMountains",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Check if there is a collision with mountains at this position.\n\n"
+				},
+				{
+					"name": "checkMountain",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Check if there is a collision with mountains at this position.\n\n"
+				},
+				{
+					"name": "checkIntersectionMountain",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Check intersection with a mountain.\n\n"
+				},
+				{
+					"name": "checkObjects",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Check collision with objects.\n\n"
+				},
+				{
+					"name": "checkObjectsList",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Check collision with objects.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "getEventCommand",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the event command and read json.\n\n"
+				},
+				{
+					"name": "sendEvent",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Send an event.\n\n"
+				},
+				{
+					"name": "sendEventDetection",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Send an event detection\n\n"
+				},
+				{
+					"name": "sendEventObjects",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Send an event to objects.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Initialize the openGL stuff.\n\n"
+				},
+				{
+					"name": "load",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Load shaders stuff.\n\n"
+				},
+				{
+					"name": "resize",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Set the camera aspect while resizing the window.\n\n"
+				},
+				{
+					"name": "loadTexture",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Load a texture.\n\n"
+				},
+				{
+					"name": "loadTextureEmpty",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Load a texture empty.\n\n"
+				},
+				{
+					"name": "createMaterial",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Create a material from texture.\n\n"
+				},
+				{
+					"name": "getMaterialTexture",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get material THREE.Texture (if exists).\n\n"
+				},
+				{
+					"name": "updateBackgroundColor",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Update the background color\n\n"
+				},
+				{
+					"name": "toScreenPosition",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Convert 3D vector to a 2D point on screen.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "load",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Load all the game plugins.\n\n"
+				},
+				{
+					"name": "loadPlugin",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Load a particular plugin.\n\n"
+				},
+				{
+					"name": "register",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Register plugin parameters.\n\n"
+				},
+				{
+					"name": "registerCommand",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Register a plugin command.\n\n"
+				},
+				{
+					"name": "executeCommand",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Execute a plugin command.\n\n"
+				},
+				{
+					"name": "fetch",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Return the plugin object.\n\n"
+				},
+				{
+					"name": "exists",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Check whether the plugin exist or not. It's used for compatbilities\n  purpose.\n\n"
+				},
+				{
+					"name": "getParameters",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get plugin parameters.\n\n"
+				},
+				{
+					"name": "getParameter",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get a plugin parameter.\n\n"
+				},
+				{
+					"name": "isEnabled",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Check whether or not the plugin is enabled or not.\n\n"
+				},
+				{
+					"name": "merge",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Merge the two plugins to extends their plugins data.\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "  Initialize all the lists according to SongKind.",
+					"description": "\n\n"
+				},
+				{
+					"name": "playMusic",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Play a music.\n\n"
+				},
+				{
+					"name": "stopSong",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Stop a song.\n\n"
+				},
+				{
+					"name": "unpauseSong",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Unpause a song.\n\n"
+				},
+				{
+					"name": "playSound",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Play a sound.\n\n"
+				},
+				{
+					"name": "playMusicEffect",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Play a music effect.\n\n"
+				},
+				{
+					"name": "updateByKind",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Update songs positions or other stuff.\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "  Update songs positions or other stuffs.",
+					"description": "\n\n"
+				},
+				{
+					"name": "stopMusic",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Stop the music (with progression).\n\n"
+				},
+				{
+					"name": "initializeProgressionMusic",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Initialize progression music (for stop).\n\n"
+				},
+				{
+					"name": "updateProgressionMusic",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "  Update the progression music",
+					"description": "\n\n"
+				},
+				{
+					"name": "stopAll",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "  Stop all the songs",
+					"description": "\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "push",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Push a new scene in the stack.\n\n"
+				},
+				{
+					"name": "pop",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Pop (remove) the last scene in the stack.\n\n"
+				},
+				{
+					"name": "popAll",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Pop (remove) all the scene in the stack.\n\n"
+				},
+				{
+					"name": "replace",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Replace the last scene in the stack by a new scene.\n\n"
+				},
+				{
+					"name": "at",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Get the scene at a specific index in the stack. 0 is the bottom of the\n  stack.\n\n"
+				},
+				{
+					"name": "isEmpty",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Check if the stack is empty.\n\n"
+				},
+				{
+					"name": "isLoading",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Check if top content is loading.\n\n"
+				},
+				{
+					"name": "pushTitleScreen",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Push the title screen when empty.\n\n"
+				},
+				{
+					"name": "clearHUD",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "  Clear the HUD canvas.",
+					"description": "\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "  Update the stack.",
+					"description": "\n\n"
+				},
+				{
+					"name": "onKeyPressed",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  First key press handle for the current stack.\n\n"
+				},
+				{
+					"name": "onKeyReleased",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  First key release handle for the current stack.\n\n"
+				},
+				{
+					"name": "onKeyPressedRepeat",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Key pressed repeat handle for the current stack.\n\n"
+				},
+				{
+					"name": "onKeyPressedAndRepeat",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Key pressed repeat handle for the current stack, but with\n  a small wait after the first pressure (generally used for menus).\n\n"
+				},
+				{
+					"name": "draw3D",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "  Draw the 3D for the current stack.",
+					"description": "\n\n"
+				},
+				{
+					"name": "drawHUD",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "  Draw HUD for the current stack.",
+					"description": "\n\n"
+				}
+			]
+		},
+		{
+			"name": "Base",
+			"type": "ClassDoc",
+			"brief": " The superclass who shape the structure of a scene.",
+			"description": "\n\n\n",
+			"members": [
+				{
+					"name": "reactionInterpreters",
+					"type": "PropertyDoc",
+					"scope": "instance",
+					"brief": " An array of reaction interpreters.",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "parallelCommands",
+					"type": "PropertyDoc",
+					"scope": "instance",
+					"brief": " the array holding parallel commands.",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "loading",
+					"type": "PropertyDoc",
+					"scope": "instance",
+					"brief": " the async loading flag.",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "camera",
+					"type": "PropertyDoc",
+					"scope": "instance",
+					"brief": " The scene camera.",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "constructor",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n"
+				},
+				{
+					"name": "create",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": " assign and create all the contents of the scene synchronously.",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "load",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n Load the scene asynchronous contents.\n\n"
+				},
+				{
+					"name": "updateInterpreters",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": " Update all the reaction interpreters from the scenes.",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "updateParallelCommands",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": " Update all the parallel commands from the scenes.",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "addReaction",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": " Add a reaction in the interpreter list.",
+					"description": "\n\n\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": " Update the scene.",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "onKeyPressed",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": " Handle the scene reactions when a key is pressed.",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "onKeyReleased",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": " Handle the scene reactions when a key is released.",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "onKeyPressedRepeat",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": " Handle the scene reactions when a key is repeated",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "onKeyPressedAndRepeat",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": " Handle scene reactions when a key is pressed and repeated",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "draw3D",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": " Draw the contents in the 3D scene.",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "drawHUD",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": " Draw the HUD contents on the scene.",
+					"description": "\n\n\n"
+				},
+				{
+					"name": "close",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": " Close the scene.",
+					"description": "\n\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "transitionZoom",
+					"type": "PropertyDoc",
+					"scope": "instance",
+					"brief": "Whether to zoom during a transition",
+					"description": ""
+				},
+				{
+					"name": "transitionEnded",
+					"type": "PropertyDoc",
+					"scope": "instance",
+					"brief": "Indicate whether the transition has ended",
+					"description": ""
+				},
+				{
+					"name": "timeTransition",
+					"type": "PropertyDoc",
+					"scope": "instance",
+					"brief": " Time Transition time",
+					"description": ""
+				},
+				{
+					"name": "step",
+					"type": "PropertyDoc",
+					"scope": "instance",
+					"brief": "What step (initialization, animation, selection, victory) of battle the game is on",
+					"description": ""
+				},
+				{
+					"name": "load",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Load async stuff.",
+					"description": "\n\n"
+				},
+				{
+					"name": "initializeCamera",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Initialize and correct some camera settings for the battle start",
+					"description": "\n\n"
+				},
+				{
+					"name": "activeGroup",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Make the attacking group all actives.",
+					"description": "\n\n"
+				},
+				{
+					"name": "isDefined",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Check if a player is defined (active and not dead).\n\n"
+				},
+				{
+					"name": "isEndTurn",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Check if all the heroes or enemies are inactive.\n\n"
+				},
+				{
+					"name": "isGroupDead",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Check if all the heroes or enemies are dead\n\n"
+				},
+				{
+					"name": "isWin",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Check if all the enemies are dead.\n\n"
+				},
+				{
+					"name": "isLose",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Check if all the heroes are dead.\n\n"
+				},
+				{
+					"name": "gameOver",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Transition to game over scene.",
+					"description": "\n\n"
+				},
+				{
+					"name": "win",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Win the battle.",
+					"description": "\n\n"
+				},
+				{
+					"name": "endBattle",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Win the battle.",
+					"description": "\n\n"
+				},
+				{
+					"name": "changeStep",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Change the step of the battle.\n\n"
+				},
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Initialize the current step.",
+					"description": "\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update battle according to step.",
+					"description": "\n\n"
+				},
+				{
+					"name": "moveStandardCamera",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Do camera standard moves.",
+					"description": "\n\n"
+				},
+				{
+					"name": "onKeyPressed",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Handle battle key pressed according to step.\n\n"
+				},
+				{
+					"name": "onKeyReleased",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Handle battle key released according to step.\n\n"
+				},
+				{
+					"name": "onKeyPressedRepeat",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Handle battle key pressed repeat according to step.\n\n"
+				},
+				{
+					"name": "onKeyPressedAndRepeat",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Handle battle key pressed and repeat according to step.\n\n"
+				},
+				{
+					"name": "draw3D",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Draw the battle 3D scene.",
+					"description": "\n\n"
+				},
+				{
+					"name": "drawHUD",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Draw the battle HUD according to step.",
+					"description": "\n\n"
+				}
+			]
+		},
+		{
+			"name": "BattleAnimation",
+			"type": "ClassDoc",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Initialize step.",
+					"description": "\n\n"
+				},
+				{
+					"name": "getCondition",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the animation efect condition kind.\n\n"
+				},
+				{
+					"name": "updateTargetsAttacked",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the targets attacked and check if they are dead.",
+					"description": "\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the battle.",
+					"description": "\n\n"
+				},
+				{
+					"name": "onKeyPressedStep",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Handle key pressed.\n\n"
+				},
+				{
+					"name": "onKeyReleasedStep",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Handle key released.\n\n"
+				},
+				{
+					"name": "onKeyPressedRepeatStep",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Handle key repeat pressed.\n\n"
+				},
+				{
+					"name": "onKeyPressedAndRepeatStep",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Handle key pressed and repeat.\n\n"
+				},
+				{
+					"name": "drawHUDStep",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Draw the battle HUD.",
+					"description": "\n\n"
+				}
+			]
+		},
+		{
+			"name": "BattleEnemyAttack",
+			"type": "ClassDoc",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Initialize step.",
+					"description": "\n\n"
+				},
+				{
+					"name": "defineAction",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Define the action to do.",
+					"description": "\n\n"
+				},
+				{
+					"name": "defineTargets",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Define the targets",
+					"description": "\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the battle",
+					"description": "\n\n"
+				},
+				{
+					"name": "onKeyPressedStep",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Handle key pressed.\n\n"
+				},
+				{
+					"name": "onKeyReleasedStep",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Handle key released.\n\n"
+				},
+				{
+					"name": "onKeyPressedRepeatStep",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Handle key repeat pressed.\n\n"
+				},
+				{
+					"name": "onKeyPressedAndRepeatStep",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Handle key pressed and repeat.\n\n"
+				},
+				{
+					"name": "drawHUDStep",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Draw the battle HUD.",
+					"description": "\n\n"
+				}
+			]
+		},
+		{
+			"name": "BattleInitialize",
+			"type": "ClassDoc",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Initialize step.",
+					"description": "\n\n"
+				},
+				{
+					"name": "initializeAlliesBattlers",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Initialize allies battlers.",
+					"description": "\n\n"
+				},
+				{
+					"name": "initializeEnemiesBattlers",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Initialize enemies battlers.",
+					"description": "\n\n"
+				},
+				{
+					"name": "initializeInformation",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Initialize informations (boxes).",
+					"description": "\n\n"
+				},
+				{
+					"name": "initializeWindowCommands",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Initialize window commands.",
+					"description": "\n\n"
+				},
+				{
+					"name": "initializeWindowsEnd",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": " Initialize windows end",
+					"description": "\n"
+				},
+				{
+					"name": "initializeMusic",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Initialize musics.",
+					"description": "\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the battle.",
+					"description": "\n\n"
+				},
+				{
+					"name": "updateTransitionStartFade",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": " Update transtion start fade.",
+					"description": "\n\n"
+				},
+				{
+					"name": "updateTransitionStartZoom",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update transition start zoom.",
+					"description": "\n\n"
+				},
+				{
+					"name": "onKeyPressedStep",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Handle key pressed.\n\n"
+				},
+				{
+					"name": "onKeyReleasedStep",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Handle key released.\n\n"
+				},
+				{
+					"name": "onKeyPressedRepeatStep",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Handle key repeat pressed.\n\n"
+				},
+				{
+					"name": "onKeyPressedAndRepeatStep",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Handle key pressed and repeat.\n\n"
+				},
+				{
+					"name": "drawHUDStep",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Draw the battle HUD",
+					"description": "\n\n"
+				}
+			]
+		},
+		{
+			"name": "BattleSelection",
+			"type": "ClassDoc",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Initialize step.",
+					"description": "\n\n"
+				},
+				{
+					"name": "registerLastCommandIndex",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Register the last command index and offset in the user.",
+					"description": "\n\n"
+				},
+				{
+					"name": "registerLastSkillIndex",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Register the laster skill index and offset in the user.",
+					"description": "\n\n"
+				},
+				{
+					"name": "registerLastItemIndex",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Register the last item index and offset in the user.",
+					"description": "\n\n"
+				},
+				{
+					"name": "selectTarget",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Select a target.\n\n"
+				},
+				{
+					"name": "selectFirstIndex",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Select the first index according to target kind.\n\n"
+				},
+				{
+					"name": "indexArrowUp",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the index of the array after going up.\n\n"
+				},
+				{
+					"name": "indexArrowDown",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the index of the array after going down.\n\n"
+				},
+				{
+					"name": "moveArrow",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Move the arrow.",
+					"description": "\n\n"
+				},
+				{
+					"name": "selectedUserTargetIndex",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the index of the target.\n\n"
+				},
+				{
+					"name": "onAllySelected",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  When an ally is selected.",
+					"description": "\n\n"
+				},
+				{
+					"name": "onAllyUnselected",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  When an ally is unselected.",
+					"description": "\n\n"
+				},
+				{
+					"name": "onCommandSelected",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  When a command is selected.\n\n"
+				},
+				{
+					"name": "onTargetsSelected",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  When targets are selected.",
+					"description": "\n\n"
+				},
+				{
+					"name": "onTargetsUnselected",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  When targets are unselected.",
+					"description": "\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the battle.",
+					"description": "\n\n"
+				},
+				{
+					"name": "onKeyPressedStep",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Handle key pressed.\n\n"
+				},
+				{
+					"name": "onKeyReleasedStep",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Handle key released.\n\n"
+				},
+				{
+					"name": "onKeyPressedRepeatStep",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Handle key repeat pressed.\n\n"
+				},
+				{
+					"name": "onKeyPressedAndRepeatStep",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Handle key pressed and repeat.\n\n"
+				},
+				{
+					"name": "drawHUDStep",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Draw the battle HUD.",
+					"description": "\n\n"
+				}
+			]
+		},
+		{
+			"name": "BattleVictory",
+			"type": "ClassDoc",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "initialize",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Initialize step.",
+					"description": "\n\n"
+				},
+				{
+					"name": "prepareRewards",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Prepare the rewards (xp, currencies, loots).",
+					"description": "\n\n"
+				},
+				{
+					"name": "updateTeamXP",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the team progression xp.",
+					"description": "\n\n"
+				},
+				{
+					"name": "pauseTeamXP",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Pause the team progression xp.",
+					"description": "\n\n"
+				},
+				{
+					"name": "unpauseTeamXP",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Unpause the team progression xp.",
+					"description": "\n\n"
+				},
+				{
+					"name": "playMapMusic",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Play map music.",
+					"description": "\n\n"
+				},
+				{
+					"name": "prepareEndTransition",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Prepare the end transition.",
+					"description": "\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the battle.",
+					"description": "\n\n"
+				},
+				{
+					"name": "onKeyPressedStep",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Handle key pressed.\n\n"
+				},
+				{
+					"name": "onKeyReleasedStep",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Handle key released.\n\n"
+				},
+				{
+					"name": "onKeyPressedRepeatStep",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Handle key repeat pressed.\n\n"
+				},
+				{
+					"name": "onKeyPressedAndRepeatStep",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Handle key pressed and repeat.\n\n"
+				},
+				{
+					"name": "drawHUDStep",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Draw the battle HUD.",
+					"description": "\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "load",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Load async stuff.",
+					"description": "\n\n"
+				},
+				{
+					"name": "updateKey",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the key.",
+					"description": "\n\n"
+				},
+				{
+					"name": "update",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Update the scene.",
+					"description": "\n\n"
+				},
+				{
+					"name": "onKeyPressed",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Handle scene key pressed.\n\n"
+				},
+				{
+					"name": "onKeyReleased",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Handle scene key released.\n\n"
+				},
+				{
+					"name": "onKeyPressedAndRepeat",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Handle scene pressed and repeat key.\n\n"
+				},
+				{
+					"name": "drawHUD",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Draw the HUD scene",
+					"description": "\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "load",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Load async stuff.",
+					"description": "\n\n"
+				},
+				{
+					"name": "onKeyPressed",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Handle scene key pressed\n\n"
+				},
+				{
+					"name": "drawHUD",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Draw the HUD scene",
+					"description": "\n\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "drawHUD",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": " Draw the HUD scene",
+					"description": "\n"
+				}
+			]
+		},
+		{
+			"name": "",
+			"type": "ClassDoc",
+			"scope": "static",
+			"brief": "",
+			"description": "",
+			"members": [
+				{
+					"name": "load",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Load async stuff.",
+					"description": "\n\n"
+				},
+				{
+					"name": "generateMapName",
+					"type": "MethodDoc",
+					"scope": "static",
+					"brief": "",
+					"description": "\n  Generate the map name according to the ID.\n\n"
+				},
+				{
+					"name": "readMapProperties",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Read the map properties file.",
+					"description": "\n\n"
+				},
+				{
+					"name": "initializeCamera",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Initialize the map objects.",
+					"description": "\n\n"
+				},
+				{
+					"name": "initializeObjects",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Initialize the map objects.",
+					"description": "\n\n"
+				},
+				{
+					"name": "initializePortionsObjects",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Initialize all the objects moved or / and with changed states.",
+					"description": "\n\n"
+				},
+				{
+					"name": "loadTextures",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Load all the textures of the map.",
+					"description": "\n\n"
+				},
+				{
+					"name": "loadCollisions",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Load the collisions settings.",
+					"description": "\n\n"
+				},
+				{
+					"name": "initializePortions",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "  Initialize the map portions.",
+					"description": "\n\n"
+				},
+				{
+					"name": "loadPortions",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the portion file name.\n\n"
+				},
+				{
+					"name": "loadPortion",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Load a portion.\n\n"
+				},
+				{
+					"name": "loadPortionFromPortion",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Load a portion from a portion.\n\n"
+				},
+				{
+					"name": "removePortion",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Remove a portion.\n\n"
+				},
+				{
+					"name": "setPortion",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Set a portion.\n\n"
+				},
+				{
+					"name": "setMapPortion",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Set a portion.\n\n"
+				},
+				{
+					"name": "getObjectsAtPortion",
+					"type": "MethodDoc",
+					"scope": "instance",
+					"brief": "",
+					"description": "\n  Get the objects at a specific portion.\n\n"
+				}
+			]
+		}
+	]
+}

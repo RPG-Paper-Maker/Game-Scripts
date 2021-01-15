@@ -146,7 +146,7 @@ class KeyboardAssign extends Base {
 
     /** 
      *  Handle scene key pressed.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     onKeyPressed(key: number) {
         if (this.showPress) {
@@ -176,7 +176,7 @@ class KeyboardAssign extends Base {
 
     /** 
      *  Handle scene key released.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     onKeyReleased(key: number) {
         this.keysPressed.splice(this.keysPressed.indexOf(key), 1);
@@ -189,7 +189,7 @@ class KeyboardAssign extends Base {
 
     /** 
      *  Handle scene pressed and repeat key.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      *  @returns {boolean}
      */
     onKeyPressedAndRepeat(key: number): boolean {

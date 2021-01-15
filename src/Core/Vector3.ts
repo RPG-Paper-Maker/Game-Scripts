@@ -20,10 +20,10 @@ class Vector3 extends THREE.Vector3 {
 
     /**
      * The data class who hold 3D Coordinate.
-     * @param {number} x the x-axis coordinate in float
-     * @param {number} y the y-axis coordinate in float
-     * @param {number} z the z-axis coordinate in float
-     * @param {boolean} freeze whether or not to freeze the coordinates
+     * @param {number} x - the x-axis coordinate in float
+     * @param {number} y - the y-axis coordinate in float
+     * @param {number} z - the z-axis coordinate in float
+     * @param {boolean} freeze - whether or not to freeze the coordinates
      */
     constructor(x: number = 0, y: number = 0, z: number = 0, freeze: boolean = 
         false) {

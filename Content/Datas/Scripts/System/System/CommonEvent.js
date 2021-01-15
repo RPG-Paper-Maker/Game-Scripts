@@ -12,7 +12,7 @@ import { Base } from "./Base.js";
 import { Parameter } from "./Parameter.js";
 /** @class
  *   An event that can be called.
- *   @param {Record<string, any>} [json] json object describing the event
+ *   @param {Record<string, any>} - [json] json object describing the event
  */
 class CommonEvent extends Base {
     constructor(json) {
@@ -20,7 +20,7 @@ class CommonEvent extends Base {
     }
     /**
      *  Read the JSON associated to the event.
-     *  @param {Record<string, any>} json Json object describing the event
+     *  @param {Record<string, any>} - json Json object describing the event
      */
     read(json) {
         this.parameters = Parameter.readParameters(json);

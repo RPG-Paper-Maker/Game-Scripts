@@ -2,7 +2,7 @@ import { Base } from "./Base.js";
 /** @class
  *  A video of the game.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  video
  */
 declare class Video extends Base {
@@ -14,8 +14,8 @@ declare class Video extends Base {
     /**
      *  Get the folder associated to videos.
      *  @static
-     *  @param {boolean} isBR Indicate if the video is a BR
-     *  @param {string} dlc The dlc name
+     *  @param {boolean} isBR - Indicate if the video is a BR
+     *  @param {string} dlc - The dlc name
      *  @returns {string}
      */
     static getFolder(isBR: boolean, dlc: string): string;
@@ -27,7 +27,7 @@ declare class Video extends Base {
     static getLocalFolder(): string;
     /**
      *  Read the JSON associated to the video.
-     *  @param {Record<string, any>} json Json object describing the video
+     *  @param {Record<string, any>} - json Json object describing the video
      */
     read(json: Record<string, any>): void;
     /**

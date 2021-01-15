@@ -17,9 +17,9 @@ import { Position, Portion, MapPortion, Camera, ReactionInterpreter, Vector3, Ga
 /** @class
  *  A scene for a local map.
  *  @extends Scene.Base
- *  @param {number} id The map ID
- *  @param {boolean} [isBattleMap=false] Indicate if this map is a battle one
- *  @param {boolean} [minimal=false] Indicate if the map should be partialy
+ *  @param {number} id - The map ID
+ *  @param {boolean} [isBattleMap=false] - Indicate if this map is a battle one
+ *  @param {boolean} [minimal=false] - Indicate if the map should be partialy
  *  loaded (only for getting objects infos)
 */
 class Map extends Base {
@@ -65,7 +65,7 @@ class Map extends Base {
     /**
      *  Generate the map name according to the ID.
      *  @static
-     *  @param {number} id ID of the map
+     *  @param {number} id - ID of the map
      *  @returns {string}
      */
     static generateMapName(id) {
@@ -231,7 +231,7 @@ class Map extends Base {
     }
     /**
      *  Get the portion file name.
-     *  @param {boolean} noNewPortion Indicate if the map portions array needs
+     *  @param {boolean} noNewPortion - Indicate if the map portions array needs
      *  to be initialized
      */
     async loadPortions(noNewPortion = false) {
@@ -253,13 +253,13 @@ class Map extends Base {
     }
     /**
      *  Load a portion.
-     *  @param {number} realX The global x portion
-     *  @param {number} realY The global y portion
-     *  @param {number} realZ The global z portion
-     *  @param {number} x The local x portion
-     *  @param {number} y The local y portion
-     *  @param {number} z The local z portion
-     *  @param {boolean} move Indicate if the portion was moved or completely
+     *  @param {number} realX - The global x portion
+     *  @param {number} realY - The global y portion
+     *  @param {number} realZ - The global z portion
+     *  @param {number} x - The local x portion
+     *  @param {number} y - The local y portion
+     *  @param {number} z - The local z portion
+     *  @param {boolean} move - Indicate if the portion was moved or completely
      *  loaded
      */
     async loadPortion(realX, realY, realZ, x, y, z, move = false) {
@@ -283,11 +283,11 @@ class Map extends Base {
     }
     /**
      *  Load a portion from a portion.
-     *  @param {Portion} portion The portion
-     *  @param {number} x The local x portion
-     *  @param {number} y The local y portion
-     *  @param {number} z The local z portion
-     *  @param {boolean} move Indicate if the portion was moved or completely
+     *  @param {Portion} portion - The portion
+     *  @param {number} x - The local x portion
+     *  @param {number} y - The local y portion
+     *  @param {number} z - The local z portion
+     *  @param {boolean} move - Indicate if the portion was moved or completely
      *  loaded
     */
     async loadPortionFromPortion(portion, x, y, z, move) {
@@ -295,9 +295,9 @@ class Map extends Base {
     }
     /**
      *  Remove a portion.
-     *  @param {number} x The local x portion
-     *  @param {number} y The local y portion
-     *  @param {number} z The local z portion
+     *  @param {number} x - The local x portion
+     *  @param {number} y - The local y portion
+     *  @param {number} z - The local z portion
     */
     removePortion(x, y, z) {
         let mapPortion = this.getMapPortion(new Portion(x, y, z));
@@ -307,23 +307,23 @@ class Map extends Base {
     }
     /**
      *  Set a portion.
-     *  @param {number} i The previous x portion
-     *  @param {number} j The previous y portion
-     *  @param {number} k The previous z portion
-     *  @param {number} m The new x portion
-     *  @param {number} n The new y portion
-     *  @param {number} o The new z portion
+     *  @param {number} i - The previous x portion
+     *  @param {number} j - The previous y portion
+     *  @param {number} k - The previous z portion
+     *  @param {number} m - The new x portion
+     *  @param {number} n - The new y portion
+     *  @param {number} o - The new z portion
     */
     setPortion(i, j, k, m, n, o) {
         this.setMapPortion(i, j, k, this.getMapPortion(new Portion(m, n, o)), true);
     }
     /**
      *  Set a portion.
-     *  @param {number} x The local x portion
-     *  @param {number} y The local y portion
-     *  @param {number} z The local z portion
-     *  @param {MapPortion} mapPortion The new map portion
-     *  @param {boolean} move Indicate if the portion was moved or completely
+     *  @param {number} x - The local x portion
+     *  @param {number} y - The local y portion
+     *  @param {number} z - The local z portion
+     *  @param {MapPortion} mapPortion - The new map portion
+     *  @param {boolean} move - Indicate if the portion was moved or completely
      *  loaded
     */
     setMapPortion(x, y, z, mapPortion, move) {
@@ -344,9 +344,9 @@ class Map extends Base {
     }
     /**
      *  Get a map portion at local postions.
-     *  @param {number} x The local x portion
-     *  @param {number} y The local y portion
-     *  @param {number} z The local z portion
+     *  @param {number} x - The local x portion
+     *  @param {number} y - The local y portion
+     *  @param {number} z - The local z portion
      *  @returns {MapPortion}
     */
     getMapPortion(portion) {
@@ -354,7 +354,7 @@ class Map extends Base {
     }
     /**
      *  Get a map portion at json position.
-     *  @param {Position} position The position
+     *  @param {Position} position - The position
      *  @returns {MapPortion}
      */
     getMapPortionByPosition(position) {
@@ -362,7 +362,7 @@ class Map extends Base {
     }
     /**
      *  Get map portion according to portion index.
-     *  @param {number} index The portion index
+     *  @param {number} index - The portion index
      *  @returns {MapPortion}
      */
     getBrutMapPortion(index) {
@@ -370,7 +370,7 @@ class Map extends Base {
     }
     /**
      *  Get portion index according to local position.
-     *  @param {Portion} portion The local portion
+     *  @param {Portion} portion - The local portion
      *  @returns {number}
     */
     getPortionIndex(portion) {
@@ -380,7 +380,7 @@ class Map extends Base {
     }
     /**
      *  Set a local portion with a global portion.
-     *  @param {Portion} portion The global portion
+     *  @param {Portion} portion - The global portion
      *  @returns {Portion}
      */
     getLocalPortion(portion) {
@@ -410,7 +410,7 @@ class Map extends Base {
     }
     /**
      *  Check if a local portion if in the limit
-     *  @param {Portion} portion The local portion
+     *  @param {Portion} portion - The local portion
      *  @returns {boolean}
     */
     isInPortion(portion) {
@@ -420,7 +420,7 @@ class Map extends Base {
     }
     /**
      *  Check if a position is in the map.
-     *  @param {Position} position The json position
+     *  @param {Position} position - The json position
      *  @returns {boolean}
      */
     isInMap(position) {
@@ -444,9 +444,9 @@ class Map extends Base {
     }
     /**
      *  Load collision for special elements.
-     *  @param {number[]} list The IDs list
-     *  @param {PictureKind} kind The picture kind
-     *  @param {SpecialElement[]} specials The specials list
+     *  @param {number[]} list - The IDs list
+     *  @param {PictureKind} kind - The picture kind
+     *  @param {SpecialElement[]} specials - The specials list
     */
     loadSpecialsCollision(list, kind, specials) {
         let special, picture;
@@ -636,7 +636,7 @@ class Map extends Base {
     }
     /**
      *  Handle scene key pressed.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     onKeyPressed(key) {
         if (!this.loading) {
@@ -651,7 +651,7 @@ class Map extends Base {
     }
     /**
      *  Handle scene key released.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     onKeyReleased(key) {
         if (!this.loading) {
@@ -665,7 +665,7 @@ class Map extends Base {
     }
     /**
      *  Handle scene pressed repeat key.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      *  @returns {boolean}
      */
     onKeyPressedRepeat(key) {
@@ -681,7 +681,7 @@ class Map extends Base {
     }
     /**
      *  Handle scene pressed and repeat key.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      *  @returns {boolean}
      */
     onKeyPressedAndRepeat(key) {

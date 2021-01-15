@@ -16,7 +16,7 @@ import { Graphic } from "../index.js";
 /** @class
  *  A class for all settings to display in screen.
  *  @extends Graphic.Base
- *  @param {number} id
+ *  @param {number} id -
  */
 class Setting extends Base {
     constructor(id) {
@@ -35,10 +35,10 @@ class Setting extends Base {
     }
     /**
      *  Drawing the choice.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
     */
     drawChoice(x, y, w, h) {
         this.graphicTextLeft.draw(x, y, w, h);
@@ -46,10 +46,10 @@ class Setting extends Base {
     }
     /**
      *  Drawing the settings informations.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
     */
     draw(x, y, w, h) {
         this.graphicTextInformation.draw(x, y, w, h);

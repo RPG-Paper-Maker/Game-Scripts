@@ -31,25 +31,25 @@ declare class Tilesets {
     static get(id: number): System.Tileset;
     /**
      *  Load pictures.
-     *  @param {PictureKind} pictureKind The picture kind
-     *  @param {string} texturesName The field name textures
+     *  @param {PictureKind} pictureKind - The picture kind
+     *  @param {string} texturesName - The field name textures
      */
     static loadPictures(pictureKind: PictureKind, texturesName: string): Promise<void>;
     /**
      *  Get the autotiles textures.
-     *  @param {System.Tileset} tileset The tileset
+     *  @param {System.Tileset} tileset - The tileset
      *  @returns {TextureBundle[]}
      */
     static getTexturesAutotiles(tileset: System.Tileset): TextureBundle[];
     /**
      *  Get the mountains textures.
-     *  @param {System.Tileset} tileset The tileset
+     *  @param {System.Tileset} tileset - The tileset
      *  @returns {THREE.ShaderMaterial[]}
      */
     static getTexturesMountains(tileset: System.Tileset): TextureBundle[];
     /**
      *  Get the walls textures.
-     *  @param {System.Tileset} tileset The tileset
+     *  @param {System.Tileset} tileset - The tileset
      *  @returns {THREE.ShaderMaterial[]}
      */
     static getTexturesWalls(tileset: System.Tileset): THREE.ShaderMaterial[];

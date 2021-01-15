@@ -13,10 +13,9 @@ import { Datas, Common, Core, EventCommand, Graphic, Manager, System, Scene } fr
 import { Player, MapObject } from "../Core";
 import { THREE, Howl } from "../Globals";
 
-/** @class
- *  @static
- *  The interpreter to evaluate formulas or simple scripts without having to 
- *  import.
+/**
+ *  The interpreter to evaluate formulas or simple scripts without having to import.
+ * @class Interpreter
  */
 class Interpreter {
 

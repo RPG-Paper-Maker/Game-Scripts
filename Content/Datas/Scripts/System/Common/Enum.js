@@ -674,5 +674,16 @@ var Enum;
         BattleStep[BattleStep["Victory"] = 4] = "Victory";
     })(BattleStep = Enum.BattleStep || (Enum.BattleStep = {}));
     ;
+    /**
+     * Enum for the screen transition.
+     *
+     * @export
+     * @enum {number}
+     */
+    let FadeType;
+    (function (FadeType) {
+        FadeType[FadeType["FadeIn"] = 0] = "FadeIn";
+        FadeType[FadeType["FadeOut"] = 1] = "FadeOut";
+    })(FadeType = Enum.FadeType || (Enum.FadeType = {}));
 })(Enum || (Enum = {}));
 export { Enum };

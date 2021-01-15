@@ -40,10 +40,10 @@ class Loots extends Base {
 
     /** 
      *  Drawing the loots.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
      */
     drawChoice(x: number = this.oX, y: number = this.oY, w: number = this.oW, h: 
         number = this.oH) {
@@ -52,10 +52,10 @@ class Loots extends Base {
 
     /** 
      *  Drawing the loots.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
      */
     draw(x: number, y: number, w: number, h: number) {
         for (let i = 0, l = this.graphicsLoots.length; i < l; i++) {

@@ -1,7 +1,7 @@
 import { Node } from "./Node.js";
 /** @class
  *  Datas structure of tree.
- *  @param {any} data The data
+ *  @param {any} data - The data
  */
 declare class Tree {
     root: Node;
@@ -12,7 +12,7 @@ declare class Tree {
     constructor(data: any);
     /**
      * Add a new child.
-     * @param {Record<string, any>} data
+     * @param {Record<string, any>} - data
      * @returns {Node}
      */
     add(data: Record<string, any>): Node;

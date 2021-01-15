@@ -16,7 +16,7 @@ declare class SaveGame extends SaveLoadGame {
     save(): Promise<void>;
     /**
      *  Handle scene key pressed.
-     *   @param {number} key The key ID
+     *   @param {number} key - The key ID
      */
     onKeyPressed(key: number): void;
 }

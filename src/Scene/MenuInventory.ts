@@ -18,7 +18,7 @@ import ItemKind = Enum.ItemKind;
 import TargetKind = Enum.TargetKind;
 import AvailableKind = Enum.AvailableKind;
 import { WindowBox, WindowChoices, Item, Game } from "../Core";
-import { StructPositionChoice } from "./index";
+import { StructPositionChoice } from "./Menu";
 
 /** @class
  *  A scene in the menu for describing inventory.
@@ -149,7 +149,7 @@ class MenuInventory extends Base {
 
     /** 
      *  Move tab according to key.
-     *  @param {number} key The key ID 
+     *  @param {number} key - The key ID 
      */
     moveTabKey(key: number) {
         // Tab
@@ -182,7 +182,7 @@ class MenuInventory extends Base {
 
     /** 
      *  Handle scene key pressed.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     onKeyPressed(key: number) {
         Scene.Base.prototype.onKeyPressed.call(Scene.Map.current, key);
@@ -239,7 +239,7 @@ class MenuInventory extends Base {
 
     /** 
      *  Handle scene key released.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     onKeyReleased(key: number) {
         Scene.Base.prototype.onKeyReleased.call(Scene.Map.current, key);
@@ -247,7 +247,7 @@ class MenuInventory extends Base {
 
     /** 
      *  Handle scene pressed repeat key.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      *  @returns {boolean}
      */
     onKeyPressedRepeat(key: number): boolean {
@@ -256,7 +256,7 @@ class MenuInventory extends Base {
 
     /** 
      *  Handle scene pressed and repeat key.
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      *  @returns {boolean}
      */
     onKeyPressedAndRepeat(key: number): boolean {

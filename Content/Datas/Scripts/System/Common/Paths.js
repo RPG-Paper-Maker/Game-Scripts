@@ -9,10 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Platform } from "./Platform.js";
-/** @class
- *  @static
- *  The static class containing all the files paths.
- *  @example import { Paths } from "../Common/index.js"
+/**
+ * The static class containing all the files paths.
+ *
+ * @class Paths
  */
 class Paths {
     constructor() {

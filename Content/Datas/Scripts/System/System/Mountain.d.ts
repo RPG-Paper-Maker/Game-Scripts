@@ -2,7 +2,7 @@ import { SpecialElement } from "./SpecialElement.js";
 /** @class
  *  A mountain of the game.
  *  @extends System.SpecialElement
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  mountain
  */
 declare class Mountain extends SpecialElement {
@@ -11,7 +11,7 @@ declare class Mountain extends SpecialElement {
     constructor(json?: Record<string, any>);
     /**
      *  Read the JSON associated to the mountain.
-     *  @param {Record<string, any>} json Json object describing the mountain
+     *  @param {Record<string, any>} - json Json object describing the mountain
      */
     read(json: Record<string, any>): void;
     /**

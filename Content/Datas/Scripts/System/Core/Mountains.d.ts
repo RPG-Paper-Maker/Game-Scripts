@@ -16,8 +16,8 @@ declare class Mountains {
     constructor(bundle: TextureBundle);
     /**
      *  Update the geometry of the mountains according to a mountain.
-     *  @param {Position} position The position
-     *  @param {Mountain} mountain The moutain to update
+     *  @param {Position} position - The position
+     *  @param {Mountain} mountain - The moutain to update
      */
     updateGeometry(position: Position, mountain: Mountain): StructMapElementCollision[];
     /**

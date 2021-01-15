@@ -8,7 +8,7 @@ import CharacterKind = Enum.CharacterKind;
 import { Portion } from "./Portion.js";
 /** @class
  *  All the global informations of a particular game.
- *  @param {number} slot The number of the slot to load
+ *  @param {number} slot - The number of the slot to load
  */
 declare class Game {
     static current: Game;
@@ -35,8 +35,8 @@ declare class Game {
     /**
      *  Get the hero in a tab with instance ID.
      *  @static
-     *  @param {Player[]} tab The heroes tab
-     *  @param {number} id The instance ID
+     *  @param {Player[]} tab - The heroes tab
+     *  @param {number} id - The instance ID
      *  @returns {GamePlayer}
      */
     static getHeroInstanceInTab(tab: Player[], id: number): Player;
@@ -65,11 +65,11 @@ declare class Game {
     initializeVariables(): void;
     /**
      *  Instanciate a new character in a group in the game.
-     *  @param {GroupKind} groupKind In which group we should instanciate
-     *  @param {CharacterKind} type The type of character to instanciate
-     *  @param {number} id The ID of the character to instanciate
-     *  @param {number} level The player level
-     *  @param {number} stockID The ID of the variable where we will stock the
+     *  @param {GroupKind} groupKind - In which group we should instanciate
+     *  @param {CharacterKind} type - The type of character to instanciate
+     *  @param {number} id - The ID of the character to instanciate
+     *  @param {number} level - The player level
+     *  @param {number} stockID - The ID of the variable where we will stock the
      *  instantiate ID
      */
     instanciateTeam(groupKind: GroupKind, type: CharacterKind, id: number, level: number, stockID: number): void;
@@ -98,25 +98,25 @@ declare class Game {
     getCurrency(id: number): any;
     /**
      *  Get the hero with instance ID.
-     *  @param {number} id The instance ID
+     *  @param {number} id - The instance ID
      *  @returns {Player}
      */
     getHeroByInstanceID(id: number): Player;
     /**
      *  Use an item and remove it from inventory.
-     *  @param {Item} item The item
+     *  @param {Item} item - The item
     */
     useItem(item: Item): void;
     /**
      *  Get the team according to group kind.
-     *  @param {GroupKind} kind The group kind
+     *  @param {GroupKind} kind - The group kind
      *  @returns {Player[]}
      */
     getTeam(kind: GroupKind): Player[];
     /**
      *  Get the portions datas according to id and position.
-     *  @param {number} id The map id
-     *  @param {Portion} portion The portion
+     *  @param {number} id - The map id
+     *  @param {Portion} portion - The portion
      *  @returns {Record<string, any>}
     */
     getPotionsDatas(id: number, portion: Portion): Record<string, any>;

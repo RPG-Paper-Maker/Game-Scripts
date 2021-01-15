@@ -16,7 +16,7 @@ import { Utils } from "../Common";
 /** @class
  *  An object in the map.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the 
  *  object
  */
 class MapObject extends Base {
@@ -35,7 +35,7 @@ class MapObject extends Base {
 
     /** 
      *  Read the JSON associated to the object
-     *  @param {Record<string, any>} json Json object describing the object
+     *  @param {Record<string, any>} - json Json object describing the object
      */
     read(json: Record<string, any>) {
         this.id = json.id;
@@ -154,10 +154,10 @@ class MapObject extends Base {
 
     /** 
      *  Get the reactions corresponding to a given event and parameters.
-     *  @param {boolean} isSystem Boolean indicating if it is an event System
-     *  @param {number} idEvent ID of the event
-     *  @param {number} state The ID of the state
-     *  @param {System.DynamicValue[]} parameters List of all the parameters
+     *  @param {boolean} isSystem - Boolean indicating if it is an event System
+     *  @param {number} idEvent - ID of the event
+     *  @param {number} state - The ID of the state
+     *  @param {System.DynamicValue[]} parameters - List of all the parameters
      *  @returns {System.Reaction[]}
      */
     getReactions(isSystem: boolean, idEvent: number, state: number, parameters: 

@@ -14,10 +14,11 @@ import { Utils, Constants } from "../Common/index.js";
 import { Datas } from "../index.js";
 import { Vector3 } from "./Vector3.js";
 import { Vector2 } from "./Vector2.js";
-/** @class
- *  A mountain in the map.
- *  @extends MapElement
- *  @param {Record<string, any>} [json=undefined] Json object describing the mountain
+/**
+ * A mountain in the map.
+ *
+ * @class Mountain
+ * @extends {MapElement}
  */
 class Mountain extends MapElement {
     constructor(json) {
@@ -28,7 +29,7 @@ class Mountain extends MapElement {
     }
     /**
      *  Read the JSON associated to the mountain.
-     *  @param {Record<string, any>} json Json object describing the mountain
+     *  @param {Record<string, any>}  json - Json object describing the mountain
      */
     read(json) {
         super.read(json);
@@ -100,28 +101,28 @@ class Mountain extends MapElement {
     }
     /**
      *  Draw the entire faces.
-     *  @param {boolean} left Indicate if left
-     *  @param {boolean} right Indicate if right
-     *  @param {number} angle The angle
-     *  @param {Vector3} center The position center
-     *  @param {number} width The width in squares
-     *  @param {number} height The height in squares
-     *  @param {number} w The w in coordinates
-     *  @param {number} faceHeight The face height
-     *  @param {number} wp The width pixels
-     *  @param {number} xLeft The x left position
-     *  @param {number} xRight The x right position
-     *  @param {number} yTop The y top position
-     *  @param {number} yBot The y bot position
-     *  @param {number} zFront The z front position
-     *  @param {number} zBack The z back position
-     *  @param {number} yOffset The y offset
-     *  @param {Vector3} vecFrontA The front vector position A
-     *  @param {Vector3} vecBackA The back vector position A
-     *  @param {Vector3} vecFrontB The front vector position B
-     *  @param {Vector3} vecBackB The back vector position B
-     *  @param {THREE.geometry} geometry The geometry
-     *  @param {number} count The faces count
+     *  @param {boolean} left - Indicate if left
+     *  @param {boolean} right - Indicate if right
+     *  @param {number} angle - The angle
+     *  @param {Vector3} center - The position center
+     *  @param {number} width - The width in squares
+     *  @param {number} height - The height in squares
+     *  @param {number} w - The w in coordinates
+     *  @param {number} faceHeight - The face height
+     *  @param {number} wp - The width pixels
+     *  @param {number} xLeft - The x left position
+     *  @param {number} xRight - The x right position
+     *  @param {number} yTop - The y top position
+     *  @param {number} yBot - The y bot position
+     *  @param {number} zFront - The z front position
+     *  @param {number} zBack - The z back position
+     *  @param {number} yOffset - The y offset
+     *  @param {Vector3} vecFrontA - The front vector position A
+     *  @param {Vector3} vecBackA - The back vector position A
+     *  @param {Vector3} vecFrontB - The front vector position B
+     *  @param {Vector3} vecBackB - The back vector position B
+     *  @param {THREE.geometry} geometry - The geometry
+     *  @param {number} count - The faces count
      *  @returns {number}
      */
     drawEntireFaces(left, right, angle, center, width, height, w, faceHeight, wp, xLeft, xRight, yTop, yBot, zFront, zBack, yOffset, vecFrontA, vecBackA, vecFrontB, vecBackB, geometry, count) {
@@ -181,34 +182,34 @@ class Mountain extends MapElement {
     }
     /**
      *  Draw the side corner.
-     *  @param {number} xKind The xKind position
-     *  @param {number} yKind The yKind position
-     *  @param {number} angle The angle
-     *  @param {Vector3} center The position center
-     *  @param {number} width The width in squares
-     *  @param {number} height The height in squares
-     *  @param {number} w The w in coordinates
-     *  @param {number} faceHeight The face height
-     *  @param {number} wp The width pixels
-     *  @param {number} xLeft The x left position
-     *  @param {number} xRight The x right position
-     *  @param {number} xLeftTop The x left top position
-     *  @param {number} xRightTop The x right top position
-     *  @param {number} xLeftBot The x left bot position
-     *  @param {number} xRightBot The x right bot position
-     *  @param {number} yTop The y top position
-     *  @param {number} yBot The y bot position
-     *  @param {number} zFront The z front position
-     *  @param {number} zBack The z back position
-     *  @param {number} zFrontLeft The z front left position
-     *  @param {number} zFrontRight The z front right position
-     *  @param {number} zBackLeft The z back left position
-     *  @param {number} zBackRight The z back right position
-     *  @param {number} yOffset The y offset
-     *  @param {THREE.geometry} geometry The geometry
-     *  @param {number} count The faces count
-     *  @param {number} xCornerOffsetTop The x corner offset top
-     *  @param {number} xCornerOffsetBot The x corner offset bot
+     *  @param {number} xKind - The xKind position
+     *  @param {number} yKind - The yKind position
+     *  @param {number} angle - The angle
+     *  @param {Vector3} center - The position center
+     *  @param {number} width - The width in squares
+     *  @param {number} height - The height in squares
+     *  @param {number} w - The w in coordinates
+     *  @param {number} faceHeight - The face height
+     *  @param {number} wp - The width pixels
+     *  @param {number} xLeft - The x left position
+     *  @param {number} xRight - The x right position
+     *  @param {number} xLeftTop - The x left top position
+     *  @param {number} xRightTop - The x right top position
+     *  @param {number} xLeftBot - The x left bot position
+     *  @param {number} xRightBot - The x right bot position
+     *  @param {number} yTop - The y top position
+     *  @param {number} yBot - The y bot position
+     *  @param {number} zFront - The z front position
+     *  @param {number} zBack - The z back position
+     *  @param {number} zFrontLeft - The z front left position
+     *  @param {number} zFrontRight - The z front right position
+     *  @param {number} zBackLeft - The z back left position
+     *  @param {number} zBackRight - The z back right position
+     *  @param {number} yOffset - The y offset
+     *  @param {THREE.geometry} geometry - The geometry
+     *  @param {number} count - The faces count
+     *  @param {number} xCornerOffsetTop - The x corner offset top
+     *  @param {number} xCornerOffsetBot - The x corner offset bot
      *  @returns {number}
      */
     drawSideCorner(xKind, yKind, angle, center, width, height, w, faceHeight, wp, xLeft, xRight, xLeftTop, xRightTop, xLeftBot, xRightBot, yTop, yBot, zFront, zBack, zFrontLeft, zFrontRight, zBackLeft, zBackRight, yOffset, geometry, count, xCornerOffsetTop, xCornerOffsetBot) {
@@ -221,30 +222,30 @@ class Mountain extends MapElement {
     }
     /**
      *  Draw a face.
-     *  @param {number} xKind The xKind position
-     *  @param {number} yKind The yKind position
-     *  @param {number} angle The angle
-     *  @param {Vector3} center The position center
-     *  @param {number} width The width in squares
-     *  @param {number} height The height in squares
-     *  @param {number} w The w in coordinates
-     *  @param {number} faceHeight The face height
-     *  @param {number} xLeftTop The x left top position
-     *  @param {number} xRightTop The x right top position
-     *  @param {number} xLeftBot The x left bot position
-     *  @param {number} xRightBot The x right bot position
-     *  @param {number} yTop The y top position
-     *  @param {number} yBot The y bot position
-     *  @param {number} zFrontLeft The z front left position
-     *  @param {number} zFrontRight The z front right position
-     *  @param {number} zBackLeft The z back left position
-     *  @param {number} zBackRight The z back right position
-     *  @param {number} yOffset The y offset
-     *  @param {THREE.geometry} geometry The geometry
-     *  @param {number} count The faces count
-     *  @param {number} xCornerOffsetTop The x corner offset top
-     *  @param {number} xCornerOffsetBot The x corner offset bot
-     *  @param {boolean} isCorner Indicate if corner
+     *  @param {number} xKind - The xKind position
+     *  @param {number} yKind - The yKind position
+     *  @param {number} angle - The angle
+     *  @param {Vector3} center - The position center
+     *  @param {number} width - The width in squares
+     *  @param {number} height - The height in squares
+     *  @param {number} w - The w in coordinates
+     *  @param {number} faceHeight - The face height
+     *  @param {number} xLeftTop - The x left top position
+     *  @param {number} xRightTop - The x right top position
+     *  @param {number} xLeftBot - The x left bot position
+     *  @param {number} xRightBot - The x right bot position
+     *  @param {number} yTop - The y top position
+     *  @param {number} yBot - The y bot position
+     *  @param {number} zFrontLeft - The z front left position
+     *  @param {number} zFrontRight - The z front right position
+     *  @param {number} zBackLeft - The z back left position
+     *  @param {number} zBackRight - The z back right position
+     *  @param {number} yOffset - The y offset
+     *  @param {THREE.geometry} geometry - The geometry
+     *  @param {number} count - The faces count
+     *  @param {number} xCornerOffsetTop - The x corner offset top
+     *  @param {number} xCornerOffsetBot - The x corner offset bot
+     *  @param {boolean} isCorner - Indicate if corner
      *  @returns {number}
      */
     drawFace(xKind, yKind, angle, center, width, height, w, faceHeight, xLeftTop, xRightTop, xLeftBot, xRightBot, yTop, yBot, zFrontLeft, zFrontRight, zBackLeft, zBackRight, yOffset, geometry, count, xCornerOffsetTop, xCornerOffsetBot, isCorner) {
@@ -301,10 +302,10 @@ class Mountain extends MapElement {
     }
     /**
      *  Update the geometry of a group of mountains with the same material.
-     *  @param {THREE.Geometry} geometry The geometry of mountains
-     *  @param {TextureBundle} texture The texture mountain
-     *  @param {Position} position The position
-     *  @param {number} count The faces count
+     *  @param {THREE.Geometry} geometry - The geometry of mountains
+     *  @param {TextureBundle} texture - The texture mountain
+     *  @param {Position} position - The position
+     *  @param {number} count - The faces count
      *  @return {any[]}
      */
     updateGeometry(geometry, texture, position, count) {

@@ -13,7 +13,7 @@ import { Datas } from "../index.js";
 /** @class
  *  An item of the game.
  *  @extends CommonSkillItem
- *  @param {Record<string, any>} [json=undefined] Json object describing the item
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the item
  */
 class Item extends CommonSkillItem {
     constructor(json) {
@@ -21,7 +21,7 @@ class Item extends CommonSkillItem {
     }
     /**
      *  Read the JSON associated to the item.
-     *  @param {Record<string, any>} json Json object describing the item
+     *  @param {Record<string, any>} - json Json object describing the item
      */
     read(json) {
         super.read(json);

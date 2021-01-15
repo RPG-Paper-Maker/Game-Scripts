@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 export * from "./Base.js";
+export * from "./MenuBase.js";
 export * from "./Battle.js";
 export * from "./BattleAnimation.js";
 export * from "./BattleEnemyAttack.js";

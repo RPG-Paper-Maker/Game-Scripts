@@ -15,21 +15,48 @@ import { Picture2D, WindowChoices, WindowBox } from "../Core";
 import { Enum, Platform, ScreenResolution, Constants } from "../Common";
 import PictureKind = Enum.PictureKind;
 
-/** @class
- *  A scene for the title screen.
- *  @extends Scene.Base
+/**
+ * the Scene displaying the game title screen.
+ *
+ * @class TitleScreen
+ * @extends {Base}
  */
 class TitleScreen extends Base {
 
+    /**
+     * The title screen background image.
+     *
+     * @type {Picture2D}
+     * @memberof TitleScreen
+     */
     public pictureBackground: Picture2D;
+
+    /**
+     * The title screen command window.
+     *
+     * @type {WindowChoices}
+     * @memberof TitleScreen
+     */
     public windowChoicesCommands: WindowChoices;
+
 
     constructor() {
         super();
     }
 
-    /** 
-     *  Load async stuff.
+    /**
+     * @inheritdoc
+     *
+     * @memberof TitleScreen
+     */
+    create(): void {
+        super.create();
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @memberof TitleScreen
      */
     async load() {
         // Stop all songs
@@ -54,9 +81,9 @@ class TitleScreen extends Base {
         let commandsNb = Datas.TitlescreenGameover.titleCommands.length;
         this.windowChoicesCommands = new WindowChoices(ScreenResolution.SCREEN_X
             / 2 - (WindowBox.MEDIUM_SLOT_WIDTH / 2), ScreenResolution.SCREEN_Y -
-            Constants.HUGE_SPACE - (commandsNb * WindowBox.MEDIUM_SLOT_HEIGHT), 
+            Constants.HUGE_SPACE - (commandsNb * WindowBox.MEDIUM_SLOT_HEIGHT),
             WindowBox.MEDIUM_SLOT_WIDTH, WindowBox.MEDIUM_SLOT_HEIGHT, Datas
-            .TitlescreenGameover.getCommandsNames(),
+                .TitlescreenGameover.getCommandsNames(),
             {
                 nbItemsMax: commandsNb,
                 listCallbacks: Datas.TitlescreenGameover.getCommandsActions(),
@@ -70,26 +97,33 @@ class TitleScreen extends Base {
         this.loading = false;
     }
 
-    /** 
-     *  Handle scene key pressed.
-     *  @param {number} key The key ID
+
+    /**
+     * @inheritdoc
+     *
+     * @param {number} key - the key ID
+     * @memberof TitleScreen
      */
     onKeyPressed(key: number) {
         this.windowChoicesCommands.onKeyPressed(key, this.windowChoicesCommands
             .getCurrentContent().datas);
     }
 
-    /** 
-     *  Handle scene pressed and repeat key.
-     *  @param {number} key The key ID
-     *  @returns {boolean}
+    /**
+     * @inheritdoc
+     *
+     * @param {number} key - the key ID
+     * @return {*}  {boolean}
+     * @memberof TitleScreen
      */
     onKeyPressedAndRepeat(key: number): boolean {
         return this.windowChoicesCommands.onKeyPressedAndRepeat(key);
     }
 
-    /** 
-     *  Draw the HUD scene.
+    /**
+     * @inheritdoc
+     *
+     * @memberof TitleScreen
      */
     drawHUD() {
         if (Datas.TitlescreenGameover.isTitleBackgroundImage) {

@@ -4,7 +4,7 @@ import { Player } from "../Core/index.js";
 /** @class
  *  A characteristic of a common skill item.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  characteristic
  */
 declare class Characteristic extends Base {
@@ -34,13 +34,13 @@ declare class Characteristic extends Base {
     constructor(json?: Record<string, any>);
     /**
      *  Read the JSON associated to the characteristic.
-     *  @param {Record<string, any>} json Json object describing the
+     *  @param {Record<string, any>} - json Json object describing the
      *  characteristic
      */
     read(json: Record<string, any>): void;
     /**
      *  Get the new stat value of a player with this characteristic bonus.
-     *  @param {Player} gamePlayer the player
+     *  @param {Player} gamePlayer - the player
      *  @returns {number[]}
      */
     getNewStatValue(gamePlayer: Player): number[];

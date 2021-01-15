@@ -16,7 +16,7 @@ var Align = Enum.Align;
 /** @class
  *  An event command for displaying text.
  *  @extends EventCommand.Base
- *  @param {any[]} command Direct JSON command to parse
+ *  @param {any[]} command - Direct JSON command to parse
  */
 class ShowText extends Base {
     constructor(command) {
@@ -74,9 +74,9 @@ class ShowText extends Base {
     }
     /**
      *  Update and check if the event is finished.
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {MapObject} object The current object reacting
-     *  @param {number} state The state ID
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The current object reacting
+     *  @param {number} state - The state ID
      *  @returns {number} The number of node to pass
      */
     update(currentState, object, state) {
@@ -95,8 +95,8 @@ class ShowText extends Base {
     }
     /**
      *  First key press handle for the current stack
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {number} key The key ID pressed
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {number} key - The key ID pressed
      */
     onKeyPressed(currentState, key) {
         if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Action)) {
@@ -105,7 +105,7 @@ class ShowText extends Base {
     }
     /**
      *  Draw the HUD
-     *  @param {Record<string ,any>} currentState The current state of the event
+     *  @param {Record<string ,any>} - currentState The current state of the event
      */
     drawHUD(currentState) {
         this.windowMain.draw();

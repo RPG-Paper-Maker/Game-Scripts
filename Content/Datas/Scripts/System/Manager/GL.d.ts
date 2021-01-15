@@ -28,7 +28,7 @@ declare class GL {
     static resize(): void;
     /**
      *  Load a texture.
-     *  @param {string} path The path of the texture
+     *  @param {string} path - The path of the texture
      *  @returns {Promise<THREE.Material>}
      */
     static loadTexture(path: string): Promise<THREE.ShaderMaterial>;
@@ -61,8 +61,8 @@ declare class GL {
     /**
      *  Convert 3D vector to a 2D point on screen.
      *  @static
-     *  @param {Vector3} vector The 3D vector
-     *  @param {THREE.Camera} camera The three.js camera
+     *  @param {Vector3} vector - The 3D vector
+     *  @param {THREE.Camera} camera - The three.js camera
      *  @returns {Vector2}
      */
     static toScreenPosition(vector: Vector3, camera: THREE.Camera): Vector2;

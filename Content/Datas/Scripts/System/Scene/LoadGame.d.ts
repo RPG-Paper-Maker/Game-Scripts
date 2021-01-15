@@ -13,7 +13,7 @@ declare class LoadGame extends SaveLoadGame {
     load(): Promise<void>;
     /**
      *  Handle scene key pressed
-     *  @param {number} key The key ID
+     *  @param {number} key - The key ID
      */
     onKeyPressed(key: number): void;
     /**

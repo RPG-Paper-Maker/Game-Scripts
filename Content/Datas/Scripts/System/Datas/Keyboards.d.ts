@@ -12,8 +12,8 @@ declare class Keyboards {
     /**
      *  Test if a key id can be equal to a keyboard System object.
      *  @static
-     *  @param {number} key The key id that needs to be compared
-     *  @param {System.KeyBoard} abr The keyBoard to compare to the key
+     *  @param {number} key - The key id that needs to be compared
+     *  @param {System.KeyBoard} abr - The keyBoard to compare to the key
      *  @returns {boolean}
      */
     static isKeyEqual(key: number, abr: System.Keyboard): boolean;

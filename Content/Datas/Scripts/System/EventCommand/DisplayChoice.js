@@ -16,7 +16,7 @@ var Align = Enum.Align;
 /** @class
  *  An event command for displaying a choice.
  *  @extends EventCommand.Base
- *  @param {any[]} command Direct JSON command to parse
+ *  @param {any[]} command - Direct JSON command to parse
  */
 class DisplayChoice extends Base {
     constructor(command) {
@@ -60,7 +60,7 @@ class DisplayChoice extends Base {
     }
     /**
      *  Set the show text property.
-     *  @param {EventCommand.ShowText} showText The show text value
+     *  @param {EventCommand.ShowText} showText - The show text value
      */
     setShowText(showText) {
         this.showText = showText;
@@ -83,10 +83,10 @@ class DisplayChoice extends Base {
     }
     /**
      *  Update and check if the event is finished.
-     *  @param {Record<string, any>}} currentState The current state of the
+     *  @param {Record<string, any>}} - currentState The current state of the
      *  event
-     *  @param {MapObject} object The current object reacting
-     *  @param {number} state The state ID
+     *  @param {MapObject} object - The current object reacting
+     *  @param {number} state - The state ID
      *  @returns {number} The number of node to pass
      */
     update(currentState, object, state) {
@@ -101,8 +101,8 @@ class DisplayChoice extends Base {
     }
     /**
      *  First key press handle for the current stack.
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {number} key The key ID pressed
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {number} key - The key ID pressed
      */
     onKeyPressed(currentState, key) {
         if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Action)) {
@@ -116,15 +116,15 @@ class DisplayChoice extends Base {
     /**
      *  Key pressed repeat handle for the current stack, but with
      *  a small wait after the first pressure (generally used for menus).
-     *  @param {Record<string, any>}} currentState The current state of the event
-     *  @param {number} key The key ID pressed
+     *  @param {Record<string, any>}} - currentState The current state of the event
+     *  @param {number} key - The key ID pressed
      */
     onKeyPressedAndRepeat(currentState, key) {
         return this.windowChoices.onKeyPressedAndRepeat(key);
     }
     /**
      *  Draw the HUD
-     *  @param {Record<string, any>} currentState The current state of the event
+     *  @param {Record<string, any>} - currentState The current state of the event
      */
     drawHUD(currentState) {
         // Display text command if existing

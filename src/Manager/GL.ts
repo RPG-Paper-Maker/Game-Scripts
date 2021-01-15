@@ -78,7 +78,7 @@ class GL {
 
     /** 
      *  Load a texture.
-     *  @param {string} path The path of the texture
+     *  @param {string} path - The path of the texture
      *  @returns {Promise<THREE.Material>}
      */
     static async loadTexture(path: string): Promise<THREE.ShaderMaterial> {
@@ -161,8 +161,8 @@ class GL {
     /** 
      *  Convert 3D vector to a 2D point on screen.
      *  @static
-     *  @param {Vector3} vector The 3D vector
-     *  @param {THREE.Camera} camera The three.js camera
+     *  @param {Vector3} vector - The 3D vector
+     *  @param {THREE.Camera} camera - The three.js camera
      *  @returns {Vector2}
      */
     static toScreenPosition(vector: Vector3, camera: THREE.Camera): Vector2 {

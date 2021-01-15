@@ -13,7 +13,7 @@ import { KeyEvent } from "../Common/index.js";
 /** @class
  *  A key shortcut of the game.
  *  @extends {System.Translatable}
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  keyboard
  */
 class Keyboard extends Translatable {
@@ -22,7 +22,7 @@ class Keyboard extends Translatable {
     }
     /**
      *  Read the JSON associated to the keyboard.
-     *  @param {Record<string, any>} json Json object describing the keyboard
+     *  @param {Record<string, any>} - json Json object describing the keyboard
      */
     read(json) {
         super.read(json);

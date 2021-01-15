@@ -1,18 +1,41 @@
 import { Bitmap } from "./Bitmap.js";
 import { Graphic } from "../index.js";
-/** @class
- *  A class for window boxes.
- *  @extends Bitmap
- *  @param {number} x The x coords
- *  @param {number} y The y coords
- *  @param {number} w The w coords
- *  @param {number} h The h coords
- *  @param {Object} [opts={}] Options
- *  @param {Bitmap} [opts.content=null] Content (containing a draw function) to
- *  display inside the window.
- *  @param {number[]} [opts.padding=[0,0,0,0]] Padding of the box
- *  @param {boolean} [opts.limitContent=true] If checked, the content will be
- *  cut according to padding
+/**
+ * the window box options
+ *
+ * @interface WindowBoxOptions
+ */
+interface WindowBoxOptions {
+    /**
+     * the contents displayed inside the window.
+     *
+     * @type {Graphic.Base}
+     * @default null
+     * @memberof WindowBoxOption
+     */
+    content?: Graphic.Base;
+    /**
+     * The window padding
+     *
+     * @type {number[]}
+     * @default [0,0,0,0]
+     * @memberof WindowBoxOption
+     */
+    padding?: number[];
+    /**
+     * If enabled the contents will be cut according to the padding size.
+     *
+     * @type {boolean}
+     * @default true
+     * @memberof WindowBoxOption
+     */
+    limitContent?: boolean;
+}
+/**
+ * The class for window boxes.
+ *
+ * @class WindowBox
+ * @extends {Bitmap}
  */
 declare class WindowBox extends Bitmap {
     static readonly NONE_PADDING: number[];
@@ -35,29 +58,34 @@ declare class WindowBox extends Bitmap {
     bordersVisible: boolean;
     contentDimension: number[];
     windowDimension: number[];
-    constructor(x: number, y: number, w: number, h: number, { content, padding, limitContent }?: {
-        content?: Graphic.Base;
-        padding?: number[];
-        limitContent?: boolean;
-    });
+    /**
+     *
+     * @param {number} x - The x coordinates
+     * @param {number} y - The y coordinates
+     * @param {number} w - The width coordinates
+     * @param {number} h - The height coordinates
+     * @param {WindowBoxOption} [options={}] - the window options
+     * @memberof WindowBox
+     */
+    constructor(x: number, y: number, w: number, h: number, options?: WindowBoxOptions);
     /**
      *  Set the x value.
-     *  @param {number} x The x value
+     *  @param {number} x - The x value
      */
     setX(x: number): void;
     /**
      *  Set the y value.
-     *  @param {number} y The y value
+     *  @param {number} y - The y value
      */
     setY(y: number): void;
     /**
      *  Set the w value.
-     *  @param {number} w The w value
+     *  @param {number} w - The w value
      */
     setW(w: number): void;
     /**
      *  Set the h value.
-     *  @param {number} h The h value
+     *  @param {number} h - The h value
      */
     setH(h: number): void;
     /**
@@ -70,13 +98,13 @@ declare class WindowBox extends Bitmap {
     update(): void;
     /**
      *  Draw the window.
-     *  @param {boolean} [isChoice=false] Indicate if this window box is used
+     *  @param {boolean} [isChoice=false] - Indicate if this window box is used
      *  for a window choices
-     *  @param {number[]} [windowDimension = this.windowDimension] Dimensions
+     *  @param {number[]} [windowDimension - = this.windowDimension] Dimensions
      *  of the window
-     *  @param {number[]} [contentDimension = this.contentDimension] Dimension
+     *  @param {number[]} [contentDimension - = this.contentDimension] Dimension
      *  of content
      */
     draw(isChoice?: boolean, windowDimension?: number[], contentDimension?: number[]): void;
 }
-export { WindowBox };
+export { WindowBox, WindowBoxOptions };

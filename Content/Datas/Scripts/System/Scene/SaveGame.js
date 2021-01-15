@@ -42,7 +42,7 @@ class SaveGame extends SaveLoadGame {
     }
     /**
      *  Handle scene key pressed.
-     *   @param {number} key The key ID
+     *   @param {number} key - The key ID
      */
     onKeyPressed(key) {
         super.onKeyPressed(key);

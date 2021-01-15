@@ -15,7 +15,7 @@ import { System } from "../index";
 /** @class
  *  An event command for label.
  *  @extends EventCommand.Base
- *  @param {any[]} command Direct JSON command to parse
+ *  @param {any[]} command - Direct JSON command to parse
  */
 class Label extends Base {
 

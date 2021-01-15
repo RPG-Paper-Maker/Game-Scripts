@@ -3,7 +3,7 @@ import { Graphic } from "../index.js";
 import { Base } from "./Base.js";
 /** @class
  *  The graphic displaying all the stats in the player description state menu.
- *  @param {GamePlayer} gamePlayer The current selected player
+ *  @param {GamePlayer} gamePlayer - The current selected player
  */
 declare class StatisticProgression extends Base {
     player: Player;
@@ -24,18 +24,18 @@ declare class StatisticProgression extends Base {
     getHeight(): number;
     /**
      *  Drawing the player description.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
      */
     drawChoice(x: number, y: number, w: number, h: number): void;
     /**
      *  Drawing the player description.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
      */
     draw(x: number, y: number, w: number, h: number): void;
 }

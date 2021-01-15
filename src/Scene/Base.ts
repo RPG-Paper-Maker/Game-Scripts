@@ -13,36 +13,88 @@ import { Camera, Node, ReactionInterpreter, MapObject } from "../Core";
 import { System, Scene } from "../index";
 import { Utils } from "../Common";
 
-/** @class
- *   Abstract class for the game stack.
- *   @param {boolean} [loading=true] Indicate if the scene should load async
- *   stuff
+/**
+ * The superclass who shape the structure of a scene.
+ *
+ * @abstract
+ * @class Base
  */
-class Base {
-    
+abstract class Base {
+
+    /**
+     * An array of reaction interpreters.
+     *
+     * @type {ReactionInterpreter[]}
+     * @memberof Base
+     */
     public reactionInterpreters: ReactionInterpreter[];
+
+    /**
+     * the array holding parallel commands.
+     *
+     * @type {ReactionInterpreter[]}
+     * @memberof Base
+     */
     public parallelCommands: ReactionInterpreter[];
+
+    /**
+     * the async loading flag.
+     *
+     * @type {boolean}
+     * @memberof Base
+     */
     public loading: boolean;
+
+    /**
+     * The scene camera.
+     *
+     * @type {Camera}
+     * @memberof Base
+     */
     public camera: Camera;
 
-    constructor(loading = true) {
+    /**
+     * @param {boolean} [loading - = true] tell whether or not the scene is loading asynchronosively. 
+     */
+    constructor(loading: boolean = true) {
         this.reactionInterpreters = new Array;
         this.parallelCommands = new Array;
         if (loading) {
             this.loading = true;
             Utils.tryCatch(this.load, this);
         }
+        this.create();
     }
 
-    /** 
-     *  Load async stuff.
+    /**
+     * assign and create all the contents of the scene synchronously.
+     * 
+     * @example
+     * create(){
+     *   super.create();
+     *   this.createAllWindows();
+     * }
+     * @memberof Base
+     */
+     create() {};
+
+    /**
+     * Load the scene asynchronous contents. 
+     * @example
+     * // Load an the titlescreen background into the scene.
+     *  const picture = await Picture2D.createWithID(null,null,null);
+     * 
+     * @async
+     * @memberof Base
      */
     async load() {
         this.loading = false;
     }
 
-    /** 
-     *  Update all the reactions interpreters.
+    /**
+     * Update all the reaction interpreters from the scenes. 
+     *
+     * @memberof Base
      */
     updateInterpreters() {
         // Index of all the finished parallel reactions
@@ -79,8 +131,10 @@ class Base {
         }
     }
 
-    /** 
-     *  Update all the parallel commands.
+    /**
+     * Update all the parallel commands from the scenes.
+     *
+     * @memberof Base
      */
     updateParallelCommands() {
         let endingCommands = new Array; // Index of all the finished commands
@@ -97,21 +151,23 @@ class Base {
         }
     }
 
-    /** 
-     *  Add a reaction in the interpreter list.
-     *  @param {MapObject} sender The sender of this reaction
-     *  @param {System.Reaction} reaction The reaction to add
-     *  @param {MapObject} object The object reacting
-     *  @param {number} state The state ID
-     *  @param {System.Parameter[]} parameters All the parameters coming with
-     *  this reaction
-     *  @param {number[]} event The time events values
-     *  @param {boolean} moving Indicate if command is a moving one
+    /**
+     * Add a reaction in the interpreter list.
+     *
+     * @param {MapObject} sender - The reaction sender
+     * @param {System.Reaction} reaction - The reaction to add
+     * @param {MapObject} object - The object reacting
+     * @param {number} state - the state ID
+     * @param {System.DynamicValue[]} parameters - All the parameters coming with this reaction
+     * @param {[System.Event, number]} - event the time events values
+     * @param {boolean} [moving=false] - indicate if the command is of type moving.
+     * @return {*}  {ReactionInterpreter}
+     * 
+     * @memberof Base
      */
-    addReaction(sender: MapObject, reaction: System.Reaction, object: MapObject, 
-        state: number, parameters: System.DynamicValue[], event: [System.Event, 
-        number], moving: boolean = false): ReactionInterpreter
-    {
+    addReaction(sender: MapObject, reaction: System.Reaction, object: MapObject,
+        state: number, parameters: System.DynamicValue[], event: [System.Event,
+            number], moving: boolean = false): ReactionInterpreter {
         if (reaction.getFirstCommand() !== null) {
             let excecuted = false;
             let reactionInterpreter: ReactionInterpreter;
@@ -139,20 +195,25 @@ class Base {
         return null;
     }
 
-    /** 
-     *  Update the scene.
+    /**
+     * Update the scene.
+     *
+     * @memberof Base
      */
     update() {
         // Parallel reactions
-        Base.prototype.updateInterpreters.call(this);
-
-        // Parallel comands
-        Base.prototype.updateParallelCommands.call(this);
+        this.updateInterpreters.call(this);
+        //Base.prototype.updateInterpreters.call(this);
+        // Parallel commands
+        this.updateParallelCommands.call(this);
+       // Base.prototype.updateParallelCommands.call(this);
     }
 
-    /** 
-     *  Handle scene key pressed.
-     *  @param {number} key The key ID
+    /**
+     * Handle the scene reactions when a key is pressed.
+     *
+     * @param {number} key - the key ID
+     * @memberof Base
      */
     onKeyPressed(key: number) {
         for (let i = 0, l = this.reactionInterpreters.length; i < l; i++) {
@@ -160,9 +221,11 @@ class Base {
         }
     }
 
-    /** 
-     *  Handle scene key released.
-     *  @param {number} key The key ID
+    /**
+     * Handle the scene reactions when a key is released.
+     *
+     * @param {number} key - the key ID
+     * @memberof Base
      */
     onKeyReleased(key: number) {
         for (let i = 0, l = this.reactionInterpreters.length; i < l; i++) {
@@ -170,10 +233,12 @@ class Base {
         }
     }
 
-    /** 
-     *  Handle scene pressed repeat key.
-     *  @param {number} key The key ID
-     *  @returns {boolean}
+    /**
+     * Handle the scene reactions when a key is repeated
+     *
+     * @param {number} key - The key ID
+     * @return {*}  {boolean}
+     * @memberof Base
      */
     onKeyPressedRepeat(key: number): boolean {
         for (let i = 0, l = this.reactionInterpreters.length; i < l; i++) {
@@ -182,10 +247,12 @@ class Base {
         return true;
     }
 
-    /** 
-     *  Handle scene pressed and repeat key.
-     *  @param {number} key The key ID
-     *  @returns {boolean}
+    /**
+     * Handle scene reactions when a key is pressed and repeated
+     *
+     * @param {number} key
+     * @return {*}  {boolean}
+     * @memberof Base
      */
     onKeyPressedAndRepeat(key: number): boolean {
         for (let i = 0, l = this.reactionInterpreters.length; i < l; i++) {
@@ -194,15 +261,19 @@ class Base {
         return true;
     }
 
-    /** 
-     *  Draw the 3D scene.
+    /**
+     * Draw the contents in the 3D scene.
+     *
+     * @memberof Base
      */
     draw3D() {
 
     }
 
-    /** 
-     *  Draw the HUD scene.
+    /**
+     * Draw the HUD contents on the scene.
+     *
+     * @memberof Base
      */
     drawHUD() {
         let i: number, l: number;
@@ -214,8 +285,10 @@ class Base {
         }
     }
 
-    /** 
-     *  Close the scene.
+    /**
+     * Close the scene.
+     *
+     * @memberof Base
      */
     close() {
 

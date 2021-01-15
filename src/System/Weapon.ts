@@ -15,7 +15,7 @@ import { Datas, System } from "../index";
 /** @class
  *  A weapon of the game.
  *  @extends System.Armor
- *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the 
  *  weapon
  */
 class Weapon extends Armor {
@@ -26,7 +26,7 @@ class Weapon extends Armor {
 
     /** 
      *  Read the JSON associated to the weapon.
-     *  @param {Record<string, any>} json Json object describing the weapon
+     *  @param {Record<string, any>} - json Json object describing the weapon
      */
     read(json: Record<string, any>) {
         super.read(json);

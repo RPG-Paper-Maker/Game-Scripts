@@ -9,7 +9,7 @@ import { System } from "../index.js";
 /** @class
  *  A common class for skills, items, weapons, armors.
  *  @extends System.Icon
- *  @param {Record<string, any>} [json=undefined] Json object describing the common
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the common
  */
 declare class CommonSkillItem extends Icon {
     hasType: boolean;
@@ -33,7 +33,7 @@ declare class CommonSkillItem extends Icon {
     constructor(json?: Record<string, any>);
     /**
      *  Read the JSON associated to the common.
-     *  @param {Record<string, any>} json Json object describing the common
+     *  @param {Record<string, any>} - json Json object describing the common
      */
     read(json: Record<string, any>): void;
     /**

@@ -9,9 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-/** @class
- *  @static
- *  The common class for constants.
+/**
+ *
+ * The common class for constants.
+ * @class Constants
  */
 class Constants {
 

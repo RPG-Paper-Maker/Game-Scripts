@@ -44,8 +44,8 @@ declare class Autotiles {
     /**
      *  Update the geometry of the autotiles according to an autotile and its
      *  position.
-     *  @param {Position} position The position
-     *  @param {Autotile} autotile The autotile to add to geometry
+     *  @param {Position} position - The position
+     *  @param {Autotile} autotile - The autotile to add to geometry
      *  @returns {StructMapElementCollision}
      */
     updateGeometry(position: Position, autotile: Autotile): StructMapElementCollision;

@@ -18,7 +18,7 @@ import { Vector2 } from "./Vector2.js";
 /** @class
  *  A sprite in the map.
  *  @extends MapElement
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  sprite
  */
 class Sprite extends MapElement {
@@ -32,8 +32,8 @@ class Sprite extends MapElement {
     /**
      *  Create a new sprite.
      *  @static
-     *  @param {ElementMapKind} kind The element map kind
-     *  @param {number[]} texture Texture UV coords
+     *  @param {ElementMapKind} kind - The element map kind
+     *  @param {number[]} texture - Texture UV coords
      */
     static create(kind, texture) {
         let sprite = new Sprite();
@@ -44,10 +44,10 @@ class Sprite extends MapElement {
     /**
      *  Rotate a vertex around a specified center.
      *  @static
-     *  @param {Vector3} vec The vertex to rotate
-     *  @param {Vector3} center The center to rotate around
-     *  @param {number} angle The angle in degree
-     *  @param {Vector3} axis The vector axis
+     *  @param {Vector3} vec - The vertex to rotate
+     *  @param {Vector3} center - The center to rotate around
+     *  @param {number} angle - The angle in degree
+     *  @param {Vector3} axis - The vector axis
      */
     static rotateVertex(vec, center, angle, axis) {
         vec.sub(center);
@@ -56,13 +56,13 @@ class Sprite extends MapElement {
     }
     /** Rotate the four vertices of a sprite around a specified center.
      *   @static
-     *   @param {Vector3} vecA The A vertex to rotate
-     *   @param {Vector3} vecB The B vertex to rotate
-     *   @param {Vector3} vecC The C vertex to rotate
-     *   @param {Vector3} vecD The D vertex to rotate
-     *   @param {Vector3} center The center to rotate around
-     *   @param {number} angle The angle in degree
-     *   @param {Vector3} axis The vector axis
+     *   @param {Vector3} vecA - The A vertex to rotate
+     *   @param {Vector3} vecB - The B vertex to rotate
+     *   @param {Vector3} vecC - The C vertex to rotate
+     *   @param {Vector3} vecD - The D vertex to rotate
+     *   @param {Vector3} center - The center to rotate around
+     *   @param {number} angle - The angle in degree
+     *   @param {Vector3} axis - The vector axis
      */
     static rotateSprite(vecA, vecB, vecC, vecD, center, angle, axis) {
         Sprite.rotateVertex(vecA, center, angle, axis);
@@ -73,14 +73,14 @@ class Sprite extends MapElement {
     /**
      *  Add a static sprite to the geometry.
      *  @static
-     *  @param {THREE.Geometry} geometry The geometry
-     *  @param {Vector3} vecA The A vertex
-     *  @param {Vector3} vecB The B vertex
-     *  @param {Vector3} vecC The C vertex
-     *  @param {Vector3} vecD The D vertex
-     *  @param {Vector2[]} texFaceA The texture face A
-     *  @param {Vector2[]} texFaceB The texture face B
-     *  @param {number} count The faces count
+     *  @param {THREE.Geometry} geometry - The geometry
+     *  @param {Vector3} vecA - The A vertex
+     *  @param {Vector3} vecB - The B vertex
+     *  @param {Vector3} vecC - The C vertex
+     *  @param {Vector3} vecD - The D vertex
+     *  @param {Vector2[]} texFaceA - The texture face A
+     *  @param {Vector2[]} texFaceB - The texture face B
+     *  @param {number} count - The faces count
      *  @returns {number}
      */
     static addStaticSpriteToGeometry(geometry, vecA, vecB, vecC, vecD, texFaceA, texFaceB, count) {
@@ -96,7 +96,7 @@ class Sprite extends MapElement {
     }
     /**
      *  Read the JSON associated to the sprite.
-     *  @param {Record<string, any>} json Json object describing the sprite
+     *  @param {Record<string, any>} - json Json object describing the sprite
      */
     read(json) {
         super.read(json);
@@ -106,13 +106,13 @@ class Sprite extends MapElement {
     }
     /**
      *  Update the geometry associated to this.
-     *  @param {THREE.Geometry} geometry The geometry
-     *  @param {number} width The total texture width
-     *  @param {number} height The total texture height
-     *  @param {number[]} position The position
-     *  @param {number} count The faces count
-     *  @param {boolean} tileset Indicate if the texture is tileset
-     *  @param {Vector3} localPosition The local position
+     *  @param {THREE.Geometry} geometry - The geometry
+     *  @param {number} width - The total texture width
+     *  @param {number} height - The total texture height
+     *  @param {number[]} position - The position
+     *  @param {number} count - The faces count
+     *  @param {boolean} tileset - Indicate if the texture is tileset
+     *  @param {Vector3} localPosition - The local position
      *  @returns {any[]}
      */
     updateGeometry(geometry, width, height, position, count, tileset, localPosition) {
@@ -247,10 +247,10 @@ class Sprite extends MapElement {
     }
     /**
      *  Create the geometry associated to this sprite
-     *  @param {number} width The texture total width
-     *  @param {number} height The texture total height
-     *  @param {boolean} tileset Indicate if the texture is tileset
-     *  @param {Position} position The position
+     *  @param {number} width - The texture total width
+     *  @param {number} height - The texture total height
+     *  @param {boolean} tileset - Indicate if the texture is tileset
+     *  @param {Position} position - The position
      *  @returns {any[]}
      */
     createGeometry(width, height, tileset, position) {

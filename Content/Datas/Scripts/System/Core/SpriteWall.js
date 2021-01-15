@@ -18,7 +18,7 @@ import { Vector2 } from "./Vector2.js";
 /** @class
  *  A sprite in the map.
  *  @extends MapElement
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  wall
  */
 class SpriteWall extends MapElement {
@@ -30,7 +30,7 @@ class SpriteWall extends MapElement {
     }
     /**
      *  Read the JSON associated to the sprite wall.
-     *  @param {Record<string, any>} json Json object describing the wall
+     *  @param {Record<string, any>} - json Json object describing the wall
      */
     read(json) {
         super.read(json);
@@ -39,11 +39,11 @@ class SpriteWall extends MapElement {
     }
     /**
      *  Update the geometry of a group of sprite walls with the same material.
-     *  @param {THREE.Geometry} geometry The geometry
-     *  @param {Position} position The position
-     *  @param {number} width The total width of the texture
-     *  @param {number} height The total height of the texture
-     *  @param {number} count The faces count
+     *  @param {THREE.Geometry} geometry - The geometry
+     *  @param {Position} position - The position
+     *  @param {number} width - The total width of the texture
+     *  @param {number} height - The total height of the texture
+     *  @param {number} count - The faces count
      *  @return {any[]}
      */
     updateGeometry(geometry, position, width, height, count) {

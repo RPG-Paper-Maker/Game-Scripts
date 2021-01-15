@@ -12,23 +12,23 @@ declare class Keyboard extends Base {
     constructor(kb: System.Keyboard);
     /**
      *  Update short sc.
-     *  @param {number[][]} sh The short list
+     *  @param {number[][]} sh - The short list
      */
     updateShort(sh: number[][]): void;
     /**
      *  Drawing the keyboard in choice box.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
      */
     drawChoice(x: number, y: number, w: number, h: number): void;
     /**
      *  Drawing the keyboard description.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
      */
     draw(x: number, y: number, w: number, h: number): void;
 }

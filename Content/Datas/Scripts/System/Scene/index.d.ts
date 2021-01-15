@@ -1,4 +1,6 @@
 export * from "./Base.js";
+export * from "./MenuBase.js";
+export { MenuCommands } from "./MenuBase";
 export * from "./Battle.js";
 export * from "./BattleAnimation.js";
 export * from "./BattleEnemyAttack.js";

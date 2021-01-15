@@ -41,11 +41,11 @@ class Songs {
     }
     /**
      *  Play a music.
-     *  @param {SongKind} kind The kind of the song
-     *  @param {number} id The id of the song
-     *  @param {number} volume The volume of the song
-     *  @param {number} start The start of the song
-     *  @param {number} end The end of the song
+     *  @param {SongKind} kind - The kind of the song
+     *  @param {number} id - The id of the song
+     *  @param {number} volume - The volume of the song
+     *  @param {number} start - The start of the song
+     *  @param {number} end - The end of the song
      */
     static playMusic(kind, id, volume, start, end) {
         if (id < 1) {
@@ -83,10 +83,10 @@ class Songs {
     /**
      *  Stop a song.
      *  @static
-     *  @param {SongKind} kind The kind of song to stop
-     *  @param {number} time The date seconds value in the first call of stop
-     *  @param {number} seconds The seconds needed for entirely stop the song
-     *  @param {boolean} pause Indicates if the song needs to be paused instead
+     *  @param {SongKind} kind - The kind of song to stop
+     *  @param {number} time - The date seconds value in the first call of stop
+     *  @param {number} seconds - The seconds needed for entirely stop the song
+     *  @param {boolean} pause - Indicates if the song needs to be paused instead
      *  of stoppped
      *  @returns {boolean} Indicates if the song is stopped
      */
@@ -118,10 +118,10 @@ class Songs {
     /**
      *  Unpause a song.
      *  @static
-     *  @param {SongKind} kind The kind of song to unpause
-     *  @param {number} time The date seconds value in the first call of
+     *  @param {SongKind} kind - The kind of song to unpause
+     *  @param {number} time - The date seconds value in the first call of
      *  unpause
-     *  @param {number} seconds The seconds needed for entirely play the song
+     *  @param {number} seconds - The seconds needed for entirely play the song
      *  @returns {boolean} Indicate if the song is played with all volume
      */
     static unpauseSong(kind, time, seconds) {
@@ -144,8 +144,8 @@ class Songs {
     /**
      *  Play a sound.
      *  @static
-     *  @param {number} id The id of the sound
-     *  @param {number} volume The volume of the sound
+     *  @param {number} id - The id of the sound
+     *  @param {number} volume - The volume of the sound
      */
     static playSound(id, volume) {
         if (id === -1) {
@@ -163,9 +163,9 @@ class Songs {
     /**
      *  Play a music effect.
      *  @static
-     *  @param {number} id The id of the sound
-     *  @param {number} volume The volume of the sound
-     *  @param {Record<string, any>} currentState The current state command
+     *  @param {number} id - The id of the sound
+     *  @param {number} volume - The volume of the sound
+     *  @param {Record<string, any>} - currentState The current state command
      */
     static playMusicEffect(id, volume, currentState) {
         if (id === -1 || currentState.end) {
@@ -200,7 +200,7 @@ class Songs {
     /**
      *  Update songs positions or other stuff.
      *  @static
-     *  @param {SongKind} kind The song kind
+     *  @param {SongKind} kind - The song kind
      */
     static updateByKind(kind) {
         let howl = this.current[kind];
@@ -220,7 +220,7 @@ class Songs {
     }
     /**
      *  Stop the music (with progression).
-     *  @param {number} time The time to stop
+     *  @param {number} time - The time to stop
      */
     static stopMusic(time) {
         this.isMusicNone = true;
@@ -230,10 +230,10 @@ class Songs {
     }
     /**
      *  Initialize progression music (for stop).
-     *  @param {number} i The initial volume
-     *  @param {number} f The final volume
-     *  @param {number} equation The equation kind
-     *  @param {number} end The end of the song
+     *  @param {number} i - The initial volume
+     *  @param {number} f - The final volume
+     *  @param {number} equation - The equation kind
+     *  @param {number} end - The end of the song
      */
     static initializeProgressionMusic(i, f, equation, end) {
         this.progressionMusic = ProgressionTable.createFromNumbers(i, f, equation);

@@ -21,7 +21,7 @@ import { Datas } from "../index";
 /** @class
  *  An animation of a skill / item / weapon or for display animation command.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the 
  *  animation
  */
 class Animation extends Base {
@@ -38,7 +38,7 @@ class Animation extends Base {
 
     /** 
      *  Read the JSON associated to the animation
-     *  @param {Record<string, any>} json Json object describing the animation
+     *  @param {Record<string, any>} - json Json object describing the animation
      */
     read(json: Record<string, any>) {
         this.pictureID = Utils.defaultValue(json.pid, 1);
@@ -62,8 +62,8 @@ class Animation extends Base {
 
     /** 
      *  Play the sounds according to frame and condition.
-     *  @param {number} frame The frame
-     *  @param {AnimationEffectConditionKind} condition The condition
+     *  @param {number} frame - The frame
+     *  @param {AnimationEffectConditionKind} condition - The condition
      */
     playSounds(frame: number, condition: AnimationEffectConditionKind) {
         if (frame > 0 && frame < this.frames.length) {
@@ -73,9 +73,9 @@ class Animation extends Base {
 
     /** 
      *  Draw the animation.
-     *  @param {Picture2D} picture The picture associated to the animation
-     *  @param {number} frame The frame
-     *  @param {Battler} battler The battler target
+     *  @param {Picture2D} picture - The picture associated to the animation
+     *  @param {number} frame - The frame
+     *  @param {Battler} battler - The battler target
      */
     draw(picture: Picture2D, frame: number, battler: Battler) {
         if (frame > 0 && frame < this.frames.length) {

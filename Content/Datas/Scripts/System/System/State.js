@@ -18,7 +18,7 @@ import { System, Manager } from "../index.js";
 /** @class
  *  A possible state of an object.
  *  @extends System.Base
- *  @param {Record<string, any>} json Json object describing the object state
+ *  @param {Record<string, any>} - json Json object describing the object state
  */
 class State extends Base {
     constructor(json) {
@@ -26,7 +26,7 @@ class State extends Base {
     }
     /**
      *  Read the JSON associated to the object state.
-     *  @param {Record<string, any>} json Json object describing the object
+     *  @param {Record<string, any>} - json Json object describing the object
      *  state
      */
     read(json) {

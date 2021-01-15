@@ -20,7 +20,7 @@ import { Skill } from "../Core";
  *  A class of the game.
  *  @extends System.Translatable
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the 
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the 
  *  class
  */
 class Class extends Translatable {
@@ -43,7 +43,7 @@ class Class extends Translatable {
 
     /** 
      *  Read the JSON associated to the class.
-     *  @param {Record<string, any>} json Json object describing the class
+     *  @param {Record<string, any>} - json Json object describing the class
      */
     read(json: Record<string, any>) {
         super.read(json);
@@ -75,8 +75,8 @@ class Class extends Translatable {
 
     /** 
      *  Get property according to upClass.
-     *  @param {string} prop The property name
-     *  @param {System.Class} upClass The up class
+     *  @param {string} prop - The property name
+     *  @param {System.Class} upClass - The up class
      *  @returns {any}
      */
     getProperty(prop: string, upClass: Class): any {
@@ -85,7 +85,7 @@ class Class extends Translatable {
 
     /** 
      *  Get the experience table.
-     *  @param {System.Class} upClass The up class
+     *  @param {System.Class} upClass - The up class
      *  @returns {Record<string, number>}
      */
     getExperienceTable(upClass: Class): Record<string, number> {
@@ -102,7 +102,7 @@ class Class extends Translatable {
 
     /** 
      *  Get the statistics progression.
-     *  @param {System.Class} upClass The up class
+     *  @param {System.Class} upClass - The up class
      *  @returns {System.StatisticProgression[]}
      */
     getStatisticsProgression(upClass: Class): StatisticProgression[] {
@@ -131,8 +131,8 @@ class Class extends Translatable {
 
     /** 
      *  Get the skills.
-     *  @param {System.Class} upClass The up class
-     *  @param {number} level The class level
+     *  @param {System.Class} upClass - The up class
+     *  @param {number} level - The class level
      *  @returns {Skill[]}
      */
     getSkills(upClass: System.Class, level: number): Skill[] {
@@ -151,8 +151,8 @@ class Class extends Translatable {
 
     /** 
      *  Get the learned skill at a specific level.
-     *  @param {System.Class} upClass The up class
-     *  @param {number} level The class level
+     *  @param {System.Class} upClass - The up class
+     *  @param {number} level - The class level
      *  @returns {Skill[]}
      */
     getLearnedSkills(upClass: System.Class, level: number): Skill[] {
@@ -170,7 +170,7 @@ class Class extends Translatable {
 
     /** 
      *  Get the skills class without duplicate of ideas between classes.
-     *  @param {System.Class} upClass The up class
+     *  @param {System.Class} upClass - The up class
      *  @returns {System.ClassSkill[]}
      */
     getSkillsWithoutDuplicate(upClass: Class): System.ClassSkill[] {

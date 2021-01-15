@@ -3,9 +3,9 @@ import ItemKind = Enum.ItemKind;
 import { System } from "../index.js";
 /** @class
  *  An item in the inventory.
- *  @param {ItemKind} kind Kind of item (item, weapon, or armor)
- *  @param {number} id The ID of the item
- *  @param {number} nb The occurence of the item in the inventory
+ *  @param {ItemKind} kind - Kind of item (item, weapon, or armor)
+ *  @param {number} id - The ID of the item
+ *  @param {number} nb - The occurence of the item in the inventory
  */
 declare class Item {
     kind: ItemKind;
@@ -15,19 +15,19 @@ declare class Item {
     /**
      *  Find an item in the inventory.
      *  @static
-     *  @param {ItemKind} kind The kind of item
-     *  @param {number} id The item ID
+     *  @param {ItemKind} kind - The kind of item
+     *  @param {number} id - The item ID
      *  @returns {Item}
      */
     static findItem(kind: ItemKind, id: number): Item;
     /**
      *  Remove item from inventory.
-     *  @param {number} nb Number of item to remove
+     *  @param {number} nb - Number of item to remove
      */
     remove(nb: number): void;
     /**
      *  Add item in inventory.
-     *  @param {number} nb Number of item to add
+     *  @param {number} nb - Number of item to add
      */
     add(nb: number): void;
     /**
@@ -37,7 +37,7 @@ declare class Item {
     getItemInformations(): System.CommonSkillItem;
     /**
      *  Modify items only if already in inventory.
-     *  @param {Function} callback callback function for action
+     *  @param {Function} callback - callback function for action
      *  @returns {boolean} Indicates if the item is already inside the
      *  inventory
      */

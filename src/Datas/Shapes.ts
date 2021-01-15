@@ -77,8 +77,8 @@ class Shapes {
 
     /** 
      *  Get the corresponding shape
-     *  @param {CustomShapeKind} kind The shape kind
-     *  @param {number} id The shape id
+     *  @param {CustomShapeKind} kind - The shape kind
+     *  @param {number} id - The shape id
      *  @returns {System.Shape}
      */
     static get(kind: CustomShapeKind, id: number): System.Shape {

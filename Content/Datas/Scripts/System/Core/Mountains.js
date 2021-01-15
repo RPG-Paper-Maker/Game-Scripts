@@ -27,8 +27,8 @@ class Mountains {
     }
     /**
      *  Update the geometry of the mountains according to a mountain.
-     *  @param {Position} position The position
-     *  @param {Mountain} mountain The moutain to update
+     *  @param {Position} position - The position
+     *  @param {Mountain} mountain - The moutain to update
      */
     updateGeometry(position, mountain) {
         let res = mountain.updateGeometry(this.geometry, this.bundle, position, this.count);

@@ -19,8 +19,8 @@ import { Vector3 } from "./Vector3.js";
 /** @class
  *  A 3D object custom in the map.
  *  @extends Object3D
- *  @param {Record<string, any>} json Json object describing the object 3D custom
- *  @param {System.Object3D} datas The System object 3D
+ *  @param {Record<string, any>} json - Json object describing the object 3D custom
+ *  @param {System.Object3D} datas - The System object 3D
  */
 class Object3DCustom extends Object3D {
     constructor(json, datas) {
@@ -32,7 +32,7 @@ class Object3DCustom extends Object3D {
     }
     /**
      *  Read the JSON associated to the object 3D custom.
-     *  @param {Record<string, any>} json Json object describing the object 3D
+     *  @param {Record<string, any>} json - Json object describing the object 3D
      *  custom
      */
     read(json) {
@@ -42,9 +42,9 @@ class Object3DCustom extends Object3D {
     /**
      *  Update the geometry of a group of objects 3D cutom with the same
      *  material.
-     *  @param {THREE.Geometry} geometry Geometry of the object 3D custom
-     *  @param {Position} position The position of the object 3D custom
-     *  @param {number} count The faces count
+     *  @param {THREE.Geometry} geometry - Geometry of the object 3D custom
+     *  @param {Position} position - The position of the object 3D custom
+     *  @param {number} count - The faces count
      *  @return {any[]}
     */
     updateGeometry(geometry, position, count) {

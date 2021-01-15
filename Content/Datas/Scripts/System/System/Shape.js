@@ -17,9 +17,9 @@ import { Vector3, Vector2 } from "../Core/index.js";
 /** @class
  *  A shape of the game.
  *  @extends System.Base
- *  @param {Record<string, any>} [json=undefined] Json object describing the
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  shape
- *  @param {CustomShapeKind} [kind=CustomShapeKin] The kind of custom shape
+ *  @param {CustomShapeKind} [kind=CustomShapeKin] - The kind of custom shape
  */
 class Shape extends Base {
     constructor(json, kind = CustomShapeKind.OBJ) {
@@ -34,7 +34,7 @@ class Shape extends Base {
     }
     /**
      *  Get string of custom shape kind.
-     *  @param {CustomShapeKind} kind The custom shape kind
+     *  @param {CustomShapeKind} kind - The custom shape kind
      *  @returns {string}
      */
     static customShapeKindToString(kind) {
@@ -50,7 +50,7 @@ class Shape extends Base {
     }
     /**
      *  Parse the .obj text.
-     *  @param {string } text
+     *  @param {string } - text
      *  @returns {Record<string, any>}
      */
     static parse(text) {
@@ -147,9 +147,9 @@ class Shape extends Base {
     /**
      *  Get the folder associated to a kind of custom shape.
      *  @static
-     *  @param {CustomShapeKind} kind The kind of custom shape
-     *  @param {boolean} isBR Indicate if the shape is a BR
-     *  @param {string} dlc The dlc name
+     *  @param {CustomShapeKind} kind - The kind of custom shape
+     *  @param {boolean} isBR - Indicate if the shape is a BR
+     *  @param {string} dlc - The dlc name
      *  @returns {string}
      */
     static getFolder(kind, isBR, dlc) {
@@ -159,7 +159,7 @@ class Shape extends Base {
     }
     /**
      *  Get the local folder associated to a kind of custom shape.
-     *  @param {CustomShapeKind} kind The kind of custom shape
+     *  @param {CustomShapeKind} kind - The kind of custom shape
      *  @returns {string}
      */
     static getLocalFolder(kind) {
@@ -175,7 +175,7 @@ class Shape extends Base {
     }
     /**
      *  Read the JSON associated to the shape
-     *  @param {Record<string, any>} json Json object describing the shape
+     *  @param {Record<string, any>} - json Json object describing the shape
      */
     read(json) {
         this.id = json.id;

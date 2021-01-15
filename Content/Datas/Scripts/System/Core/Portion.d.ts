@@ -20,7 +20,7 @@ declare class Portion {
     /**
      *  Create a portion from a three.js Vector3.
      *   @static
-     *   @param {number[]} p The array position
+     *   @param {number[]} p - The array position
      *   @returns {number[]}
      */
     static createFromVector3(position: Vector3): Portion;

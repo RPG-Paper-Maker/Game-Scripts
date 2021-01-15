@@ -14,7 +14,7 @@ import { MapObject, Game } from "../Core/index.js";
 /** @class
  *  An event command for changing an object state.
  *  @extends EventCommand.Base
- *  @param {any[]} command Direct JSON command to parse
+ *  @param {any[]} command - Direct JSON command to parse
  */
 class ChangeState extends Base {
     constructor(command) {
@@ -30,9 +30,9 @@ class ChangeState extends Base {
     /**
      *  Add a state to an object.
      *  @static
-     *  @param {Record<string, any>} portionDatas Datas inside a portion
-     *  @param {number} index Index in the portion datas
-     *  @param {number} state ID of the state
+     *  @param {Record<string, any>} - portionDatas Datas inside a portion
+     *  @param {number} index - Index in the portion datas
+     *  @param {number} state - ID of the state
      */
     static addState(portionDatas, index, state) {
         let states = portionDatas.s[index];
@@ -44,9 +44,9 @@ class ChangeState extends Base {
     /**
      *  Remove a state from an object.
      *  @static
-     *  @param {Record<string, any>} portionDatas Datas inside a portion
-     *  @param {number} index Index in the portion datas
-     *  @param {number} state ID of the state
+     *  @param {Record<string, any>} - portionDatas Datas inside a portion
+     *  @param {number} index - Index in the portion datas
+     *  @param {number} state - ID of the state
      */
     static removeState(portionDatas, index, state) {
         let states = portionDatas.s[index];
@@ -59,8 +59,8 @@ class ChangeState extends Base {
     /**
      *  Remove all the states from an object.
      *  @static
-     *  @param {Record<string, any>} portionDatas Datas inside a portion
-     *  @param {number} index Index in the portion datas
+     *  @param {Record<string, any>} - portionDatas Datas inside a portion
+     *  @param {number} index - Index in the portion datas
      */
     static removeAll(portionDatas, index) {
         portionDatas.s[index] = [];
@@ -68,8 +68,8 @@ class ChangeState extends Base {
     /**
      *  Remove states from datas.
      *  @static
-     *  @param {Record<string, any>} portionDatas Datas inside a portion
-     *  @param {number} index Index in the portion datas
+     *  @param {Record<string, any>} - portionDatas Datas inside a portion
+     *  @param {number} index - Index in the portion datas
      *  @param {number[]} states
      */
     static removeFromDatas(portionDatas, index, states) {
@@ -81,8 +81,8 @@ class ChangeState extends Base {
     /**
      *  Add state in ID's list.
      *  @static
-     *  @param {number[]} states The states IDs
-     *  @param {number} state ID of the state
+     *  @param {number[]} states - The states IDs
+     *  @param {number} state - ID of the state
      */
     static addStateSpecial(states, state) {
         if (states.indexOf(state) === -1) {
@@ -92,8 +92,8 @@ class ChangeState extends Base {
     /**
      *  Remove state in ID's list.
      *  @static
-     *  @param {number[]} states The states IDs
-     *  @param {number} state ID of the state
+     *  @param {number[]} states - The states IDs
+     *  @param {number} state - ID of the state
      */
     static removeStateSpecial(states, state) {
         let indexState = states.indexOf(state);
@@ -115,9 +115,9 @@ class ChangeState extends Base {
     }
     /**
      *  Update and check if the event is finished.
-     *  @param {Record<string, any>} currentState The current state of the event
-     *  @param {MapObject} object The current object reacting
-     *  @param {number} state The state ID
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The current object reacting
+     *  @param {number} state - The state ID
      *  @returns {number} The number of node to pass
      */
     update(currentState, object, state) {

@@ -21,7 +21,7 @@ class Stack {
     }
     /**
      *  Push a new scene in the stack.
-     *  @param {Scene.Base} scene The scene to push
+     *  @param {Scene.Base} scene - The scene to push
      */
     static push(scene) {
         this.content.push(scene);
@@ -61,7 +61,7 @@ class Stack {
     }
     /**
      *  Replace the last scene in the stack by a new scene.
-     *  @param {SceneGame} scene The scene to replace
+     *  @param {SceneGame} scene - The scene to replace
      *  @returns {SceneGame} The last scene that is replaced
      */
     static replace(scene) {
@@ -72,7 +72,7 @@ class Stack {
     /**
      *  Get the scene at a specific index in the stack. 0 is the bottom of the
      *  stack.
-     *  @param {number} i Index in the stack
+     *  @param {number} i - Index in the stack
      *  @returns {SceneGame} The scene in the index of the stack
      */
     static at(i) {
@@ -131,7 +131,7 @@ class Stack {
     }
     /**
      *  First key press handle for the current stack.
-     *  @param {number} key The key ID pressed
+     *  @param {number} key - The key ID pressed
      */
     static onKeyPressed(key) {
         if (!this.isEmpty()) {
@@ -140,7 +140,7 @@ class Stack {
     }
     /**
      *  First key release handle for the current stack.
-     *  @param {number} key The key ID released
+     *  @param {number} key - The key ID released
      */
     static onKeyReleased(key) {
         if (!this.isEmpty()) {
@@ -149,7 +149,7 @@ class Stack {
     }
     /**
      *  Key pressed repeat handle for the current stack.
-     *  @param {number} key The key ID pressed
+     *  @param {number} key - The key ID pressed
      *  @returns {boolean} false if the other keys are blocked after it
      */
     static onKeyPressedRepeat(key) {
@@ -158,7 +158,7 @@ class Stack {
     /**
      *  Key pressed repeat handle for the current stack, but with
      *  a small wait after the first pressure (generally used for menus).
-     *  @param {number} key The key ID pressed
+     *  @param {number} key - The key ID pressed
      *  @returns {boolean} false if the other keys are blocked after it
      */
     static onKeyPressedAndRepeat(key) {

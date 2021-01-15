@@ -38,9 +38,9 @@ abstract class Base {
 
     /** 
      * Update and check if the event is finished.
-     * @param {Record<string, any>} currentState The current state of the event
-     * @param {MapObject} object The current object reacting
-     * @param {number} state The state ID
+     * @param {Record<string, any>} - currentState The current state of the event
+     * @param {MapObject} object - The current object reacting
+     * @param {number} state - The state ID
      * @returns {number} The number of node to pass
      */
     update(currentState?: Record<string, any>, object?: MapObject, state?: 
@@ -51,8 +51,8 @@ abstract class Base {
 
     /** 
      *  First key press handle for the current stack.
-     *  @param {Object} currentState The current state of the event
-     *  @param {number} key The key ID pressed
+     *  @param {Object} currentState - The current state of the event
+     *  @param {number} key - The key ID pressed
      */
     onKeyPressed(currentState: Object, key: number) {
 
@@ -60,8 +60,8 @@ abstract class Base {
 
     /** 
      *  First key release handle for the current stack.
-     *  @param {Object} currentState The current state of the event
-     *  @param {number} key The key ID pressed
+     *  @param {Object} currentState - The current state of the event
+     *  @param {number} key - The key ID pressed
     */
     onKeyReleased(currentState: Object, key: number) {
 
@@ -69,8 +69,8 @@ abstract class Base {
 
     /** 
      *  Key pressed repeat handle for the current stack.
-     *  @param {Object} currentState The current state of the event
-     *  @param {number} key The key ID pressed
+     *  @param {Object} currentState - The current state of the event
+     *  @param {number} key - The key ID pressed
      *  @returns {boolean}
      */
     onKeyPressedRepeat(currentState: Object, key: number): boolean {
@@ -80,8 +80,8 @@ abstract class Base {
     /** 
      *  Key pressed repeat handle for the current stack, but with
      *  a small wait after the first pressure (generally used for menus).
-     *  @param {Object} currentState The current state of the event
-     *  @param {number} key The key ID pressed
+     *  @param {Object} currentState - The current state of the event
+     *  @param {number} key - The key ID pressed
      *  @returns {boolean}
      */
     onKeyPressedAndRepeat(currentState: Object, key: number): boolean {
@@ -90,7 +90,7 @@ abstract class Base {
 
     /** 
      *  Draw the HUD.
-     *  @param {Object} currentState The current state of the event
+     *  @param {Object} currentState - The current state of the event
      */
     drawHUD(currentState?: Object) {
 

@@ -14,8 +14,8 @@ import { Utils, Enum } from "../Common/index.js";
 var Align = Enum.Align;
 /** @class
  *  The graphic displaying all the items information in the inventory menu.
- *  @param {Item} item The current selected item
- *  @param {number} nbItem The number of occurence of the selected item
+ *  @param {Item} item - The current selected item
+ *  @param {number} nbItem - The number of occurence of the selected item
  */
 class Item extends Base {
     constructor(item, nbItem) {
@@ -37,10 +37,10 @@ class Item extends Base {
     }
     /**
      *  Drawing the item in choice box.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
      */
     drawChoice(x, y, w, h) {
         this.graphicName.draw(x, y, w, h);
@@ -48,10 +48,10 @@ class Item extends Base {
     }
     /**
      *  Drawing the item description.
-     *  @param {number} x The x position to draw graphic
-     *  @param {number} y The y position to draw graphic
-     *  @param {number} w The width dimention to draw graphic
-     *  @param {number} h The height dimention to draw graphic
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
      */
     draw(x, y, w, h) {
         this.graphicInformations.draw(x, y, w, h);
