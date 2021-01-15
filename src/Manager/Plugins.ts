@@ -184,6 +184,7 @@ class Plugins {
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     /**
      *  @static
@@ -201,6 +202,8 @@ class Plugins {
         | T[LT] | LM, staticType :boolean = false, overwrite:boolean = false, 
         loadBefore: boolean = true) {
 =======
+=======
+>>>>>>> b6a5b90... Revert "revert"
     /**
      * @static
      * @usage This function is used to inject/overwrite original class methods and variables.
@@ -213,7 +216,10 @@ class Plugins {
      * @param loadBefore (METHODS ONLY) Should original method's code be executed before or after your code (NOTE: This is obviously disabled if param overwrite is set to true.) (DEFAULT: true)
      */
     static prototypeOverwrite<T extends NewableFunction, M extends keyof T,LT extends keyof T["prototype"],TR = string,LM = NewableFunction>(classObject:T, prototypeName:LT | TR | M, prototype:T["prototype"][LT] | T[LT] | LM,staticType:boolean = false,overwrite:boolean = false,loadBefore:boolean = true){
+<<<<<<< HEAD
 >>>>>>> f257966 (Added prototypeOverwrite support to Manager/plugin.ts)
+=======
+>>>>>>> b6a5b90... Revert "revert"
         let TheAnyPrototype:any = prototype; //force any type, system will not accept otherwise!
         if(!staticType){
             let classPrototype = classObject.prototype[prototypeName];
@@ -242,6 +248,7 @@ class Plugins {
             let classMethod = classAnyObject[prototypeName];
             if(classMethod instanceof Function){
 <<<<<<< HEAD
+<<<<<<< HEAD
                 if(overwrite){
                     classAnyObject[prototypeName] = function(...args){
                         TheAnyPrototype.call(this,...args);
@@ -249,6 +256,8 @@ class Plugins {
                 } else 
 =======
 >>>>>>> f257966 (Added prototypeOverwrite support to Manager/plugin.ts)
+=======
+>>>>>>> b6a5b90... Revert "revert"
                 if(loadBefore){
                     classAnyObject[prototypeName] = function(...args){
                         classMethod.call(this,...args);
@@ -266,8 +275,11 @@ class Plugins {
         }
     
     }
+<<<<<<< HEAD
 =======
 >>>>>>> 822b380... revert
+=======
+>>>>>>> b6a5b90... Revert "revert"
 }
 
 export { Plugins }
