@@ -11,7 +11,7 @@
 
 import { Bitmap } from "./Bitmap";
 import { Graphic, Datas } from "../index";
-import { Platform, ScreenResolution } from "../Common";
+import { Platform, ScreenResolution, Utils } from "../Common";
 
 
 /**
@@ -87,9 +87,9 @@ class WindowBox extends Bitmap {
      */
     constructor(x: number, y: number, w: number, h: number, options: WindowBoxOptions = {}) {
         super(x, y, w, h);
-        this.content = options.content || null;
-        this.padding = options.padding || [0, 0, 0, 0];
-        this.limitContent = options.limitContent || true;
+        this.content = Utils.defaultValue(options.content, null);
+        this.padding = Utils.defaultValue(options.padding, [0, 0, 0, 0]);
+        this.limitContent = Utils.defaultValue(options.limitContent, true);
         this.updateDimensions();
         this.bordersOpacity = 1;
         this.backgroundOpacity = 1;
