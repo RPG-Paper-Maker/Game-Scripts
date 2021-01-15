@@ -108,8 +108,6 @@ abstract class MenuBase extends Base {
         this._activeHero = id;
     }
 
-
-
     /**
      * Return a array of the party graphics
      * 
@@ -128,7 +126,7 @@ abstract class MenuBase extends Base {
         }
         return array;
     }
-    
+
     /**
      * Return the active hero graphics.
      *
@@ -138,44 +136,31 @@ abstract class MenuBase extends Base {
      * @return {Graphic.Player} 
      * @memberof MenuBase
      */
-    heroGraphics(): Graphic.Player{
+    heroGraphics(): Graphic.Player {
         let id = this._activeHero;
         return this.partyGraphics()[id];
     }
-    
 
-    update(){
+    /**
+     * @inheritdoc
+     *
+     * @memberof MenuBase
+     */
+    update() {
         Scene.Base.prototype.update.call(Scene.Map.current);
     }
 
+    onKeyPressed(key: number) {
+        Scene.Base.prototype.onKeyPressed.call(Scene.Map.current, key);
+    }
+
+    onKeyPressedAndRepeat(key: number) {
+        return Scene.Base.prototype.onKeyPressedRepeat.call(Scene.Map.current, key);
+    }
+
+    onKeyReleased(key: number) {
+        Scene.Base.prototype.onKeyReleased.call(Scene.Map.current, key);
+    }
 }
 
 export { MenuBase, MenuCommands }
-
-
-
-/**
- * the class
- *
- * @class Test
- */
-class Test {
-
-    /**
-     * the class unit
-     *
-     * @type {number[]}
-     * @memberof Test
-     */
-    unit: number[];
-
-    /**
-     * Creates an instance of Test.
-     * @param {number} x - the x-axis
-     * @param {number} y - the y-axis
-     * @memberof Test
-     */
-    constructor(x: number,y: number) {
-        this.unit = [x,y];
-    }
-}

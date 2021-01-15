@@ -1,5 +1,5 @@
 #!/bin/sh
-path="/home/wano/Documents/RPG Paper Maker Games/project-without-name"
+path="C:\Users\nioPC\Documents\RPG Paper Maker Games\EmeraldEngineTS"
 cp -r ./Content/Datas/Scripts ./Scripts-temp-copy
 rm -R ./Content/Datas
 cp -r "${path}/resources/app/Content/Datas" "./Content/Datas"

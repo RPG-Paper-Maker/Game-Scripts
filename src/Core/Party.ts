@@ -1,4 +1,6 @@
+import { Group } from "three";
 import { Datas, System } from "..";
+import { Enum } from "../Common";
 import { Hero } from "../System";
 import { Player } from "./Player";
 
@@ -42,6 +44,9 @@ class Party {
 
     /**
      * Return all members of the team. (including hidden and reserve)
+     *
+     * @return {*}  {Player[]}
+     * @memberof Party
      */
     allMembers(): Player[] {
         let heroes = [];
@@ -116,6 +121,38 @@ class Party {
         return 4;
     }
 
+    addToParty(id: number, kind: Enum.GroupKind) {
+
+    }
+
+    removeFromParty(id: number, kind: Enum.GroupKind) { }
+
+
+    swapTeam(teamA: structSwap, teamB: structSwap) {
+        let a = this.allocateTeamGroup(teamA.team)[teamA.id];
+        let b = this.allocateTeamGroup(teamB.team)[teamB.id];
+
+        this.allocateTeamGroup(teamA.team)[teamA.id] = b;
+        this.allocateTeamGroup(teamB.team)[teamB.id] = a;
+
+    }
+
+    private allocateTeamGroup(team: Enum.GroupKind): Player[] {
+        switch (team) {
+            case Enum.GroupKind.Team:
+                return this.teamHeroes;
+                break;
+            case Enum.GroupKind.Reserve:
+                return this.reserveHeroes;
+                break;
+            case Enum.GroupKind.Hidden:
+                return this.hiddenHeroes;
+                break;
+            default:
+                throw new Error("The team is unspecified")
+                break;
+        }
+    }
     /**
      * Return all the currencies that a party has.
      *
@@ -143,6 +180,11 @@ class Party {
     maxCurrencies(): number {
         return 9999999999;
     }
+}
+
+interface structSwap {
+    id: number;
+    team: Enum.GroupKind;
 }
 
 export { Party }

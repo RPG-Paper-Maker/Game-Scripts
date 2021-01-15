@@ -6,7 +6,8 @@
   "scripts": {
     "start": "electron ./main.js --dev",
     "doc": "webdoc -R README.md",
-    "compile": "compile.sh"
+    "compile": "compile.sh",
+    "copy": "copy-project.hs"
   },
   "repository": {
     "type": "git",

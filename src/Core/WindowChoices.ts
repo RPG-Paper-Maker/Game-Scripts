@@ -113,10 +113,10 @@ class WindowChoices extends Bitmap {
         // Parameters
         this.orientation = options.orientation || OrientationWindow.Vertical;
         this.nbItemsMax = options.nbItemsMax || 4;
-        this.padding = options.padding || [0, 0, 0, 0];
+        this.padding = options.padding || WindowBox.SMALL_PADDING_BOX;
         this.space = options.space || 0;
         this.currentSelectedIndex = options.currentSelectedIndex || -1;
-        this.bordersInsideVisible = options.bordersInsideVisible || false;
+        this.bordersInsideVisible = options.bordersInsideVisible || true;
 
         // Initialize values
         this.offsetSelectedIndex = 0;

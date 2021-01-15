@@ -20,6 +20,7 @@ interface StructPositionChoice {
     offset: number
 };
 
+
 /**
  * The class who handle the scene menu in game.
  *
@@ -97,7 +98,7 @@ class Menu extends MenuBase {
         let _name: string;
         for (let i = 0; i < container.length; i++) {
             _align = container[i].command.align;
-            _name = container[i].command.align;
+            _name = container[i].command.name;
             commands[i] = new Graphic.Text(_name, { align: _align });
             actions[i] = container[i].action;
         }
@@ -233,7 +234,7 @@ class Menu extends MenuBase {
      * @memberof Menu
      */
     update() {
-        Scene.Base.prototype.update.call(Scene.Map.current);
+        super.update();
 
         this.windowTimeCurrencies.content.update();
         for (let i = 0, l = this.windowChoicesTeam.listWindows.length; i < l; i++) {
@@ -254,7 +255,7 @@ class Menu extends MenuBase {
         return (kb.isKeyEqual(key, kb.menuControls.Cancel)
             || kb.isKeyEqual(key, kb.controls.MainMenu));
     }
-    
+
     /**
      * return whether the key action is quitting the order screen.
      *
@@ -339,7 +340,7 @@ class Menu extends MenuBase {
      *  @param {number} key - The key ID
      */
     onKeyPressed(key: number) {
-        Scene.Base.prototype.onKeyPressed.call(Scene.Map.current, key);
+        super.onKeyPressed(key);
         const kb = Datas.Keyboards;
 
         if (this.windowChoicesTeam.currentSelectedIndex === -1) {
@@ -365,7 +366,7 @@ class Menu extends MenuBase {
      *  @param {number} key - The key ID
      */
     onKeyReleased(key: number) {
-        Scene.Base.prototype.onKeyReleased.call(Scene.Map.current, key);
+        super.onKeyReleased(key);
     }
 
     /** 
@@ -374,7 +375,7 @@ class Menu extends MenuBase {
      *  @returns {boolean}
      */
     onKeyPressedRepeat(key: number): boolean {
-        return Scene.Base.prototype.onKeyPressedRepeat.call(Scene.Map.current, key);
+        return super.onKeyPressedAndRepeat(key);
     }
 
     /** 
@@ -383,9 +384,7 @@ class Menu extends MenuBase {
      *  @returns {boolean}
      */
     onKeyPressedAndRepeat(key: number): boolean {
-        Scene.Base.prototype.onKeyPressedAndRepeat.call(Scene.Map.current
-            , key);
-
+        super.onKeyPressedAndRepeat(key);
         if (this.windowChoicesTeam.currentSelectedIndex === -1) {
             return this.windowChoicesCommands.onKeyPressedAndRepeat(key);
         } else {
@@ -420,4 +419,4 @@ class Menu extends MenuBase {
     }
 }
 
-export { StructPositionChoice, Menu }
+export {Menu}
