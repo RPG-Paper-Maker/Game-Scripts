@@ -1,6 +1,8 @@
 node_modules
 *-lock.json
 *.lock
+.VSCodeCounter
+.vscode
 Content/Images
 Content/Shapes
 Content/Songs

@@ -1,6 +1,5 @@
 #!/bin/sh
 rm -R ./Content/Datas/Scripts/System
 npx tsc
-cp -v ./src/definitions.d.ts ./Content/Datas/Script/System
+cp ./src/Definitions.d.ts ./Content/Datas/Scripts/System/Definitions.d.ts
 ./module-fix.sh
-echo completed!
