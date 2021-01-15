@@ -185,6 +185,7 @@ class Plugins {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     /**
      *  @static
@@ -280,6 +281,8 @@ class Plugins {
 >>>>>>> 822b380... revert
 =======
 >>>>>>> b6a5b90... Revert "revert"
+=======
+>>>>>>> d406318... Revert "Added prototypeOverwrite support to Manager/plugin.ts"
 }
 
 export { Plugins }
