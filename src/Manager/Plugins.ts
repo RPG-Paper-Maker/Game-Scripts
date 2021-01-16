@@ -250,15 +250,21 @@ class Plugins {
             if(classMethod instanceof Function){
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 2411c81 (Update Plugins.ts)
                 if(overwrite){
                     classAnyObject[prototypeName] = function(...args){
                         TheAnyPrototype.call(this,...args);
                     }
                 } else 
+<<<<<<< HEAD
 =======
 >>>>>>> f257966 (Added prototypeOverwrite support to Manager/plugin.ts)
 =======
 >>>>>>> b6a5b90... Revert "revert"
+=======
+>>>>>>> 2411c81 (Update Plugins.ts)
                 if(loadBefore){
                     classAnyObject[prototypeName] = function(...args){
                         classMethod.call(this,...args);
