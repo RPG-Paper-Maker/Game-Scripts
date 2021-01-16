@@ -275,7 +275,8 @@ class Message extends Graphic.Base {
                     strokeColor: result.csc
                 });
                 result.g.push(graphic);
-                result.p.push(graphic.measureText());
+                graphic.measureText();
+                result.p.push(graphic.textWidth);
                 result.a.push(result.ca);
                 if (graphic.fontSize > result.h[0]) {
                     result.h[0] = graphic.fontSize;
@@ -423,7 +424,8 @@ class Message extends Graphic.Base {
         let align = Align.None;
         let c = this.heights.length - 1;
         // Draw each graphics
-        let graphic, offsetX;
+        let offsetX = 0;
+        let graphic;
         for (let i = 0, j = 0, l = this.graphics.length; i < l; i++) {
             graphic = this.graphics[i];
             // New line

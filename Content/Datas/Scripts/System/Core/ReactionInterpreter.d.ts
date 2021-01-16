@@ -27,7 +27,10 @@ declare class ReactionInterpreter {
     currentCommandState: Record<string, any>;
     currentTimeState: [System.Event, number];
     isInMainMenu: boolean;
-    constructor(sender: MapObject, reaction: System.Reaction, object: MapObject, state: number, parameters?: System.DynamicValue[], event?: [System.Event, number], command?: Node);
+    constructor(sender: MapObject, reaction: System.Reaction, object: MapObject, state: number, parameters?: System.DynamicValue[], event?: [
+        System.Event,
+        number
+    ], command?: Node);
     /**
      *  Check if the current reaction is finished (no more commands to excecute).
      *  @returns {boolean}

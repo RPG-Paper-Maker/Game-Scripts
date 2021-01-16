@@ -177,7 +177,7 @@ class Plugins {
      *  @param overwrite (METHODS ONLY) Should call original method's code or overwrite original method. (DEFAULT: false)
      *  @param loadBefore (METHODS ONLY) Should original method's code be executed before or after your code (NOTE: This is obviously disabled if param overwrite is set to true.) (DEFAULT: true)
      */
-    static prototypeOverwrite(classObject, prototypeName, prototype, staticType = false, overwrite = false, loadBefore = true) {
+    static inject(classObject, prototypeName, prototype, staticType = false, overwrite = false, loadBefore = true) {
         let TheAnyPrototype = prototype; //force any type, system will not accept otherwise!
         if (!staticType) {
             let classPrototype = classObject.prototype[prototypeName];

@@ -86,7 +86,10 @@ declare abstract class Base {
      *
      * @memberof Base
      */
-    addReaction(sender: MapObject, reaction: System.Reaction, object: MapObject, state: number, parameters: System.DynamicValue[], event: [System.Event, number], moving?: boolean): ReactionInterpreter;
+    addReaction(sender: MapObject, reaction: System.Reaction, object: MapObject, state: number, parameters: System.DynamicValue[], event: [
+        System.Event,
+        number
+    ], moving?: boolean): ReactionInterpreter;
     /**
      * Update the scene.
      *

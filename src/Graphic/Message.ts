@@ -308,7 +308,8 @@ class Message extends Graphic.Base {
                 }
             );
             result.g.push(graphic);
-            result.p.push(graphic.measureText());
+            graphic.measureText();
+            result.p.push(graphic.textWidth);
             result.a.push(result.ca);
             if (graphic.fontSize > result.h[0]) {
                 result.h[0] = graphic.fontSize;
@@ -466,7 +467,8 @@ class Message extends Graphic.Base {
         let c = this.heights.length - 1;
 
         // Draw each graphics
-        let graphic: Bitmap, offsetX: number;
+        let offsetX = 0;
+        let graphic: Bitmap;
         for (let i = 0, j = 0, l = this.graphics.length; i < l; i ++) {
             graphic = this.graphics[i];
     

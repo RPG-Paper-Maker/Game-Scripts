@@ -10,7 +10,7 @@
 */
 import { Bitmap } from "./Bitmap.js";
 import { Datas } from "../index.js";
-import { Platform, ScreenResolution } from "../Common/index.js";
+import { Platform, ScreenResolution, Utils } from "../Common/index.js";
 /**
  * The class for window boxes.
  *
@@ -29,9 +29,9 @@ class WindowBox extends Bitmap {
      */
     constructor(x, y, w, h, options = {}) {
         super(x, y, w, h);
-        this.content = options.content || null;
-        this.padding = options.padding || [0, 0, 0, 0];
-        this.limitContent = options.limitContent || true;
+        this.content = Utils.defaultValue(options.content, null);
+        this.padding = Utils.defaultValue(options.padding, [0, 0, 0, 0]);
+        this.limitContent = Utils.defaultValue(options.limitContent, true);
         this.updateDimensions();
         this.bordersOpacity = 1;
         this.backgroundOpacity = 1;

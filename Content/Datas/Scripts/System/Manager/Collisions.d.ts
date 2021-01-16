@@ -217,7 +217,11 @@ declare class Collisions {
      *  @param {boolean} block - The block mountain collision
      *  @returns {[boolean, boolean, number]}
     */
-    static checkMountain(mapPortion: MapPortion, jpositionAfter: Position, positionAfter: Vector3, testedCollisions: StructMapElementCollision[], object: MapObject, objCollision: StructMapElementCollision, yMountain: number, block: boolean): [boolean, boolean, number];
+    static checkMountain(mapPortion: MapPortion, jpositionAfter: Position, positionAfter: Vector3, testedCollisions: StructMapElementCollision[], object: MapObject, objCollision: StructMapElementCollision, yMountain: number, block: boolean): [
+        boolean,
+        boolean,
+        number
+    ];
     /**
      *  Check intersection with a mountain.
      *  @static
