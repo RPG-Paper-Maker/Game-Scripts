@@ -252,7 +252,11 @@ class Plugins {
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
+<<<<<<< HEAD
 >>>>>>> 2411c81 (Update Plugins.ts)
+=======
+>>>>>>> patch-1
+>>>>>>> 548ffcf6cec6ff600129ac4aedfa73ae225378f0
                 if(overwrite){
                     classAnyObject[prototypeName] = function(...args){
                         TheAnyPrototype.call(this,...args);
@@ -264,7 +268,11 @@ class Plugins {
 =======
 >>>>>>> b6a5b90... Revert "revert"
 =======
+<<<<<<< HEAD
 >>>>>>> 2411c81 (Update Plugins.ts)
+=======
+>>>>>>> patch-1
+>>>>>>> 548ffcf6cec6ff600129ac4aedfa73ae225378f0
                 if(loadBefore){
                     classAnyObject[prototypeName] = function(...args){
                         classMethod.call(this,...args);
