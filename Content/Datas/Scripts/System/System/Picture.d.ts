@@ -15,6 +15,7 @@ declare class Picture extends Base {
     name: string;
     isBR: boolean;
     dlc: string;
+    base64: string;
     jsonCollisions: Record<string, any>[];
     collisionsRepeat: boolean;
     collisions: CollisionSquare[];

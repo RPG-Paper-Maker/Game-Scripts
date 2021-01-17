@@ -135,6 +135,7 @@ class Picture extends Base {
         this.name = json.name;
         this.isBR = json.br;
         this.dlc = Utils.defaultValue(json.d, "");
+        this.base64 = json.base64;
         this.jsonCollisions = Utils.defaultValue(json.col, []);
         this.collisionsRepeat = Utils.defaultValue(json.rcol, false);
     }
@@ -144,12 +145,18 @@ class Picture extends Base {
      */
     async load() {
         this.picture = await Picture2D.create(this);
+        if (this.base64) {
+            this.base64 = "";
+        }
     }
     /**
      *  Get the absolute path associated to this picture.
      *  @returns {string}
      */
     getPath() {
+        if (this.base64) {
+            return this.base64;
+        }
         return this.id === -1 ? "" : Picture.getFolder(this.kind, this.isBR, this.dlc) + Constants.STRING_SLASH + this.name;
     }
     /**

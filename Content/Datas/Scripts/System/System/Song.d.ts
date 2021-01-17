@@ -15,6 +15,7 @@ declare class Song extends Base {
     name: string;
     isBR: boolean;
     dlc: string;
+    base64: string;
     howl: typeof Howl;
     constructor(json?: Record<string, any>, kind?: SongKind);
     /**

@@ -30,6 +30,7 @@ class Picture extends Base {
     public name: string;
     public isBR: boolean;
     public dlc: string;
+    public base64: string;
     public jsonCollisions: Record<string, any>[];
     public collisionsRepeat: boolean;
     public collisions: CollisionSquare[];
@@ -157,6 +158,7 @@ class Picture extends Base {
         this.name = json.name;
         this.isBR = json.br;
         this.dlc = Utils.defaultValue(json.d, "");
+        this.base64 = json.base64;
         this.jsonCollisions = Utils.defaultValue(json.col, []);
         this.collisionsRepeat = Utils.defaultValue(json.rcol, false);
     }
@@ -167,6 +169,9 @@ class Picture extends Base {
      */
     async load() {
         this.picture = await Picture2D.create(this);
+        if (this.base64) {
+            this.base64 = "";
+        }
     }
 
     /** 
@@ -174,6 +179,9 @@ class Picture extends Base {
      *  @returns {string}
      */
     getPath(): string {
+        if (this.base64) {
+            return this.base64;
+        }
         return this.id === -1 ? "" : Picture.getFolder(this.kind, this.isBR, 
             this.dlc) + Constants.STRING_SLASH + this.name;
     }

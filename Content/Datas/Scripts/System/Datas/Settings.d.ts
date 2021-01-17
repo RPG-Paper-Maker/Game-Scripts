@@ -4,6 +4,7 @@
  */
 declare class Settings {
     static kb: number[][][];
+    static isDevMode: boolean;
     constructor();
     /**
      *  Read the settings file.

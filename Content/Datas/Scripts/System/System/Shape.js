@@ -182,20 +182,27 @@ class Shape extends Base {
         this.name = json.name;
         this.isBR = json.br;
         this.dlc = Utils.defaultValue(json.d, "");
+        this.base64 = json.base64;
     }
     /**
      *  Load the .obj.
      */
     async load() {
         if (this.id !== -1) {
-            let url = this.getPath();
-            this.geometry = await new Promise((resolve, reject) => {
-                Shape.loader.load(url, function (text) {
-                    resolve(Shape.parse(text));
-                }, () => { }, () => {
-                    Platform.showErrorMessage("Could not load " + url);
+            if (this.base64) {
+                this.geometry = Shape.parse(atob(this.base64));
+                this.base64 = "";
+            }
+            else {
+                let url = this.getPath();
+                this.geometry = await new Promise((resolve, reject) => {
+                    Shape.loader.load(url, function (text) {
+                        resolve(Shape.parse(text));
+                    }, () => { }, () => {
+                        Platform.showErrorMessage("Could not load " + url);
+                    });
                 });
-            });
+            }
         }
     }
     /**

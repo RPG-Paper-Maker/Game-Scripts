@@ -9,6 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Datas } from "..";
+
 
 /**
  * The Input and Output class who handles loading and saving.
@@ -61,7 +63,12 @@ class IO {
     static parseFileJSON = async function(url: string): Promise<Record<string, 
         any>>
     {
-        return JSON.parse(await IO.openFile(url));
+        let content = await IO.openFile(url);
+        if (!Datas.Settings.isDevMode)
+        {
+            content = atob(content);
+        }
+        return JSON.parse(content);
     }
 
     /** 

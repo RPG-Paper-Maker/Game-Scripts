@@ -49,6 +49,9 @@ class TitleScreen extends Base {
         }
         else {
             Platform.canvasVideos.classList.remove('hidden');
+            console.log("a");
+            console.log(Datas.Videos.get(Datas
+                .TitlescreenGameover.titleBackgroundVideoID));
             Platform.canvasVideos.src = Datas.Videos.get(Datas
                 .TitlescreenGameover.titleBackgroundVideoID).getPath();
             await Platform.canvasVideos.play();

@@ -20,6 +20,8 @@ class Settings {
 
     public static kb: number[][][];
 
+    public static isDevMode: boolean;
+
     constructor() {
         throw new Error("This is a static class!");
     }
@@ -29,6 +31,9 @@ class Settings {
      *  @static
      */
     static async read() {
+        this.isDevMode = await IO.fileExists(Paths.FILE_TREE_MAP);
+        console.log(this.isDevMode);
+
         // Settings
         let json = await IO.parseFileJSON(Paths.FILE_SETTINGS);
         this.kb = [];

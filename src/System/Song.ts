@@ -29,6 +29,7 @@ class Song extends Base {
     public name: string;
     public isBR: boolean;
     public dlc: string;
+    public base64: string;
     public howl: typeof Howl;
 
     constructor(json?: Record<string ,any>, kind: SongKind = SongKind.Music) {
@@ -104,6 +105,7 @@ class Song extends Base {
         this.name = json.name;
         this.isBR = json.br;
         this.dlc = Utils.defaultValue(json.d, "");
+        this.base64 = json.base64;
     }
 
     /** 
@@ -111,6 +113,9 @@ class Song extends Base {
      *  @returns {string}
      */
     getPath(): string {
+        if (this.base64) {
+            return this.base64;
+        }
         return Song.getFolder(this.kind, this.isBR, this.dlc) + Constants
             .STRING_SLASH + this.name;
     }
@@ -125,6 +130,9 @@ class Song extends Base {
                 loop: this.kind !== SongKind.MusicEffect,
                 html5: true
             });
+            if (this.base64) {
+                this.base64 = "";
+            }
         }
     }
 }

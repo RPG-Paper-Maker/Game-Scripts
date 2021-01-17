@@ -15,6 +15,7 @@ declare class Shape extends Base {
     name: string;
     isBR: boolean;
     dlc: string;
+    base64: string;
     geometry: Record<string, any>;
     constructor(json?: Record<string, any>, kind?: CustomShapeKind);
     /**

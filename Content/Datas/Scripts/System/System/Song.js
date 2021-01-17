@@ -89,12 +89,16 @@ class Song extends Base {
         this.name = json.name;
         this.isBR = json.br;
         this.dlc = Utils.defaultValue(json.d, "");
+        this.base64 = json.base64;
     }
     /**
      *  Get the absolute path associated to this song.
      *  @returns {string}
      */
     getPath() {
+        if (this.base64) {
+            return this.base64;
+        }
         return Song.getFolder(this.kind, this.isBR, this.dlc) + Constants
             .STRING_SLASH + this.name;
     }
@@ -108,6 +112,9 @@ class Song extends Base {
                 loop: this.kind !== SongKind.MusicEffect,
                 html5: true
             });
+            if (this.base64) {
+                this.base64 = "";
+            }
         }
     }
 }

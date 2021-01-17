@@ -31,6 +31,7 @@ class Shape extends Base {
     public name: string;
     public isBR: boolean;
     public dlc: string;
+    public base64: string;
     public geometry: Record<string, any>;
 
     constructor(json?: Record<string, any>, kind: CustomShapeKind = 
@@ -205,6 +206,7 @@ class Shape extends Base {
         this.name = json.name;
         this.isBR = json.br;
         this.dlc = Utils.defaultValue(json.d, "");
+        this.base64 = json.base64;
     }
 
     /** 
@@ -213,16 +215,21 @@ class Shape extends Base {
     async load() {
         if (this.id !== -1)
         {
-            let url = this.getPath();
-            this.geometry = await new Promise((resolve, reject) => {
-                Shape.loader.load(url, function (text: string) {
-                    resolve(Shape.parse(text));
-                },
-                () => {},
-                () => {
-                    Platform.showErrorMessage("Could not load " + url);
+            if (this.base64) {
+                this.geometry = Shape.parse(atob(this.base64));
+                this.base64 = "";
+            } else {
+                let url = this.getPath();
+                this.geometry = await new Promise((resolve, reject) => {
+                    Shape.loader.load(url, function (text: string) {
+                        resolve(Shape.parse(text));
+                    },
+                    () => {},
+                    () => {
+                        Platform.showErrorMessage("Could not load " + url);
+                    });
                 });
-            });
+            }
         }
     }
 
