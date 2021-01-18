@@ -208,7 +208,12 @@ class Plugins {
             let classAnyObject = classObject; //force any type, system will not accept otherwise!
             let classMethod = classAnyObject[prototypeName];
             if (classMethod instanceof Function) {
-                if (loadBefore) {
+                if (overwrite) {
+                    classAnyObject[prototypeName] = function (...args) {
+                        TheAnyPrototype.call(this, ...args);
+                    };
+                }
+                else if (loadBefore) {
                     classAnyObject[prototypeName] = function (...args) {
                         classMethod.call(this, ...args);
                         TheAnyPrototype.call(this, ...args);

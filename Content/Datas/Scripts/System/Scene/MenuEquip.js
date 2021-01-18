@@ -68,7 +68,6 @@ class MenuEquip extends MenuBase {
         for (let i = 0; i < this.party().length; i++) {
             listHeroes[i] = new Graphic.PlayerDescription(this.party()[i]);
         }
-        console.log(listHeroes);
         const options = {
             orientation: OrientationWindow.Horizontal,
             nbItemMax: 4,

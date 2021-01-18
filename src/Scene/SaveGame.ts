@@ -43,8 +43,7 @@ class SaveGame extends SaveLoadGame {
      */
     async save() {
         Datas.Systems.soundConfirmation.playSound();
-        await Game.current.save(this.windowChoicesSlots
-            .currentSelectedIndex + 1);
+        await Game.current.save(this.windowChoicesSlots.currentSelectedIndex + 1);
         Manager.Stack.pop();
         this.loading = false;
     }

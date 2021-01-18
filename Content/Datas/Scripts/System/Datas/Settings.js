@@ -23,8 +23,6 @@ class Settings {
      *  @static
      */
     static async read() {
-        this.isDevMode = await IO.fileExists(Paths.FILE_TREE_MAP);
-        console.log(this.isDevMode);
         // Settings
         let json = await IO.parseFileJSON(Paths.FILE_SETTINGS);
         this.kb = [];
@@ -45,6 +43,13 @@ class Settings {
         }
         json[Utils.numToString(TitleSettingKind.KeyboardAssigment)] = jsonObjs;
         IO.saveFile(Paths.FILE_SETTINGS, json);
+    }
+    /**
+     *  Check if the app is in dev mode
+     *  @static
+     */
+    static async checkIsDevMode() {
+        this.isDevMode = await (IO.fileExists(Paths.FILE_TREE_MAP));
     }
     /**
      *  Update Keyboard settings.

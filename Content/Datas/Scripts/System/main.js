@@ -15,6 +15,7 @@ let loaded = false;
  *  Initialize the game stack and datas.
  */
 async function initialize() {
+    Datas.Settings.checkIsDevMode();
     await Manager.Plugins.load();
     Manager.Stack.loadingDelay = 0;
     Manager.Songs.initialize();

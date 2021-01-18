@@ -24,7 +24,7 @@ First, complete the `Content` folder thanks to any recent project you want to te
 
 When it's done, just run:
 
-	./build.sh
+	./run.sh
 
 ## Structure
 The RPM cores script files are ESM (ecmascript module system) based. 

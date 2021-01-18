@@ -17,6 +17,11 @@ declare class Settings {
      */
     static write(): void;
     /**
+     *  Check if the app is in dev mode
+     *  @static
+     */
+    static checkIsDevMode(): Promise<void>;
+    /**
      *  Update Keyboard settings.
      *  @param {number} id
      *  @param {number[][]} sc -
