@@ -15,6 +15,7 @@ var ObjectCollisionKind = Enum.ObjectCollisionKind;
 import { Object3D } from "./Object3D.js";
 import { Vector3 } from "./Vector3.js";
 import { Vector2 } from "./Vector2.js";
+import { THREE } from "../Globals.js";
 /**
  * A 3D object box in the map.
  *
@@ -30,6 +31,17 @@ class Object3DBox extends Object3D {
         }
     }
     /**
+     *  Create a new 3D object box.
+     *  @static
+     *  @param {System.Object3D} datas - The object datas
+     *  @returns {Core.Object3DBox}
+     */
+    static create(datas) {
+        let object = new Object3DBox(undefined, datas);
+        object.id = datas.id;
+        return object;
+    }
+    /**
      *  Read the JSON associated to the object 3D box.
      *  @param {Record<string, any>} json - Json object describing the object 3D
      *  box
@@ -37,6 +49,14 @@ class Object3DBox extends Object3D {
     read(json) {
         super.read(json);
         this.id = this.datas.id;
+    }
+    /**
+     *  Get the center vector.
+     *  @returns {Vector3}
+     */
+    getCenterVector() {
+        return new Vector3(this.datas.widthPixels() / 2, this.datas
+            .heightPixels() / 2, this.datas.depthPixels() / 2);
     }
     /**
      *  Update the geometry of a group of object 3D with the same material.
@@ -147,6 +167,17 @@ class Object3DBox extends Object3D {
             });
         }
         return [count, objCollision];
+    }
+    /**
+     *  Create a new geometry.
+     *  @param {Position} position - The position of object 3D
+     *  @return {[THREE.Geometry, [number, StructMapElementCollision[]]]}
+    */
+    createGeometry(position) {
+        let geometry = new THREE.Geometry();
+        geometry.faceVertexUvs[0] = [];
+        geometry.uvsNeedUpdate = true;
+        return [geometry, this.updateGeometry(geometry, position, 0)];
     }
 }
 Object3DBox.VERTICES = [

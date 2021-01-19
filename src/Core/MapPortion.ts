@@ -14,7 +14,7 @@ import { Portion } from "./Portion";
 import { MapObject } from "./MapObject";
 import { Position } from "./Position";
 import { System, Datas, Manager, Scene } from "../index";
-import { StructMapElementCollision } from "./MapElement";
+import { MapElement, StructMapElementCollision } from "./MapElement";
 import { Constants, Enum, Utils } from "../Common";
 import { Floor } from "./Floor";
 import { Autotiles } from "./Autotiles";

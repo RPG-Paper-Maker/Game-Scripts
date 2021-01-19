@@ -98,8 +98,7 @@ class StartBattle extends Base {
             let battleMap = (this.battleMapID === null) ? System.BattleMap
                 .create(this.mapID.getValue(), new Position(this.x.getValue(), this.y.getValue(), this.yPlus.getValue(), this.z.getValue())) :
                 Datas.BattleSystems.getBattleMap(this.battleMapID.getValue());
-            Game.current.heroBattle = new MapObject(Game.current
-                .hero.system, battleMap.position.toVector3(), true);
+            Game.current.heroBattle = new MapObject(Game.current.hero.system, battleMap.position.toVector3(), true);
             // Defining the battle state instance
             let sceneBattle = new Scene.Battle(this.troopID.getValue(), this
                 .canGameOver, this.canEscape, battleMap, this.transitionStart, this.transitionEnd, this.transitionStartColor ? Datas.Systems

@@ -17,13 +17,16 @@ import Orientation = Enum.Orientation;
 import ElementMapKind = Enum.ElementMapKind;
 import PictureKind = Enum.PictureKind;
 import ObjectMovingKind = Enum.ObjectMovingKind;
+import ShapeKind = Enum.ShapeKind;
 import { MapPortion } from "./MapPortion";
 import { Sprite } from "./Sprite";
 import { Position } from "./Position";
 import { CollisionSquare } from "./CollisionSquare";
-import { MapElement } from "./MapElement";
+import { MapElement, StructMapElementCollision } from "./MapElement";
 import { Vector3 } from "./Vector3";
 import { Game } from "./Game";
+import { Object3DBox } from "./Object3DBox";
+import { Object3DCustom } from "./Object3DCustom";
 
 interface StructSearchResult {
     object: MapObject,
@@ -78,8 +81,8 @@ class MapObject {
     public upPosition: Vector3;
     public halfPosition: Vector3;
 
-    constructor(system: System.MapObject, position?: Vector3, 
-        isHero: boolean = false)
+    constructor(system: System.MapObject, position?: Vector3, isHero: boolean = 
+        false)
     {
         this.system = system;
         this.position = position;
@@ -432,10 +435,20 @@ class MapObject {
         if (this.isStartup) {
             return;
         }
-        let material = this.currentStateInstance === null ? null : (this
-            .currentStateInstance.graphicID === 0 ? Scene.Map.current
-            .textureTileset : Scene.Map.current.texturesCharacters[this
-            .currentStateInstance.graphicID]);
+        let material = null;
+        let objectDatas: System.Object3D;
+        if (this.currentStateInstance !== null) {
+            if (this.currentStateInstance.graphicKind === ElementMapKind.Object3D) {
+                objectDatas = Datas.SpecialElements.objects[this
+                    .currentStateInstance.graphicID];
+                material = Scene.Map.current.texturesObjects3D[objectDatas
+                    .pictureID];
+            } else {
+                material = this.currentStateInstance.graphicID === 0 ? Scene.Map
+                    .current.textureTileset : Scene.Map.current
+                    .texturesCharacters[this.currentStateInstance.graphicID];
+            }
+        }
         this.meshBoundingBox = new Array;
         let texture = Manager.GL.getMaterialTexture(material);
         if (this.currentState !== null && !this.isNone() && texture) {
@@ -447,24 +460,45 @@ class MapObject {
                 .indexX;
             this.orientationEye = this.currentStateInstance.indexY;
             this.updateOrientation();
-            let x: number, y: number;
-            if (this.currentStateInstance.graphicID === 0) {
-                x = this.currentStateInstance.rectTileset[0];
-                y = this.currentStateInstance.rectTileset[1];
-                this.width = this.currentStateInstance.rectTileset[2];
-                this.height = this.currentStateInstance.rectTileset[3];
+            let result: [THREE.Geometry, [number, StructMapElementCollision[]]];
+            if (this.currentStateInstance.graphicKind === ElementMapKind.Object3D) {
+                let objectDatas = Datas.SpecialElements.objects[this
+                    .currentStateInstance.graphicID];
+                let object3D: Object3DBox;
+                switch (objectDatas.shapeKind) {
+                    case ShapeKind.Box:
+                        object3D = Object3DBox.create(objectDatas);
+                        result = object3D.createGeometry(new Position());
+                        break;
+                    case ShapeKind.Custom:
+                        object3D = Object3DCustom.create(objectDatas);
+                        result = object3D.createGeometry(new Position());
+                        break;
+                }
+                // Correct position offset (left / top)
+                this.position.set(this.position.x - (Datas.Systems.SQUARE_SIZE /
+                    2), this.position.y, this.position.z - (Datas.Systems
+                    .SQUARE_SIZE / 2));
             } else {
-                x = 0;
-                y = 0;
-                this.width = texture.image.width / Datas.Systems.SQUARE_SIZE / 
-                    Datas.Systems.FRAMES;
-                this.height = texture.image.height / Datas.Systems.SQUARE_SIZE / 
-                    4;
+                let x: number, y: number;
+                if (this.currentStateInstance.graphicID === 0) {
+                    x = this.currentStateInstance.rectTileset[0];
+                    y = this.currentStateInstance.rectTileset[1];
+                    this.width = this.currentStateInstance.rectTileset[2];
+                    this.height = this.currentStateInstance.rectTileset[3];
+                } else {
+                    x = 0;
+                    y = 0;
+                    this.width = texture.image.width / Datas.Systems.SQUARE_SIZE / 
+                        Datas.Systems.FRAMES;
+                    this.height = texture.image.height / Datas.Systems.SQUARE_SIZE / 
+                        4;
+                }
+                let sprite = Sprite.create(this.currentState.graphicKind, [x, y, 
+                    this.width, this.height]);
+                result = sprite.createGeometry(this.width, this.height, false,
+                    Position.createFromVector3(this.position));
             }
-            let sprite = Sprite.create(this.currentState.graphicKind, [x, y, 
-                this.width, this.height]);
-            let result = sprite.createGeometry(this.width, this.height, false,
-                Position.createFromVector3(this.position));
             let geometry = result[0];
             let objCollision = result[1];
             this.mesh = new THREE.Mesh(geometry, material);
@@ -477,6 +511,9 @@ class MapObject {
                 this.boundingBoxSettings.squares = picture ? picture
                     .getSquaresForTexture(this.currentStateInstance.rectTileset)
                     : [];
+            }
+            if (this.currentStateInstance.graphicKind === ElementMapKind.Object3D) {
+                this.boundingBoxSettings.b = [this.boundingBoxSettings.b];
             }
             this.updateBB(this.position);
             this.updateUVs();
@@ -662,42 +699,88 @@ class MapObject {
     }
 
     /** 
-     *  Check if two objects can be in the same floor rect (need test collision)
-     *  @param {MapObject} object - The other map object
-     *  @returns {boolean}
+     *  Only updates the bounding box mesh position.
+     *  @param {Vector3} position - Position to update
      */
-    isInRect(object: MapObject): boolean {
-        return (this.position.x - Math.floor(this.width * Datas.Systems
-            .SQUARE_SIZE / 2)) < (object.position.x + Math.floor(this.width * 
-            Datas.Systems.SQUARE_SIZE / 2)) && (this.position.x + Math.floor(
-            this.width * Datas.Systems.SQUARE_SIZE / 2)) > (object.position.x - 
-            Math.floor(this.width * Datas.Systems.SQUARE_SIZE / 2)) && (this
-            .position.z - Math.floor(this.width * Datas.Systems.SQUARE_SIZE / 2)
-            ) < (object.position.z + Math.floor(this.width * Datas.Systems
-            .SQUARE_SIZE / 2)) && (this.position.z + Math.floor(this.width * 
-            Datas.Systems.SQUARE_SIZE / 2)) > (object.position.z - Math.floor(
-            this.width * Datas.Systems.SQUARE_SIZE / 2));
+    updateBB(position: Vector3) {
+        if (this.currentStateInstance.graphicKind !== ElementMapKind.Object3D && 
+            this.currentStateInstance.graphicID !== 0) {
+            this.boundingBoxSettings.squares = Scene.Map.current
+                .collisions[PictureKind.Characters][this.currentStateInstance
+                .graphicID][this.getStateIndex()];
+        }
+        this.removeBBFromScene();
+        let box: THREE.Mesh;
+        switch (this.currentState.graphicKind) {
+            case ElementMapKind.SpritesFix:
+            case ElementMapKind.SpritesFace:
+            {
+                this.boundingBoxSettings.b = new Array;
+                for (let i = 0, l = this.boundingBoxSettings.squares.length; i < l; i++) {
+                    this.boundingBoxSettings.b.push(CollisionSquare.getBB(this
+                        .boundingBoxSettings.squares[i], this.width, this.height));
+                    if (this.currentState.graphicKind === ElementMapKind.SpritesFix) {
+                        box = Manager.Collisions.createBox();
+                        Manager.Collisions.applyBoxSpriteTransforms(box, 
+                            [
+                                position.x + this.boundingBoxSettings.b[i][0],
+                                position.y + this.boundingBoxSettings.b[i][1],
+                                position.z + this.boundingBoxSettings.b[i][2],
+                                this.boundingBoxSettings.b[i][3],
+                                this.boundingBoxSettings.b[i][4],
+                                this.boundingBoxSettings.b[i][5],
+                                this.boundingBoxSettings.b[i][6],
+                                this.boundingBoxSettings.b[i][7],
+                                this.boundingBoxSettings.b[i][8]
+                            ]
+                        );
+                    } else {
+                        box = Manager.Collisions.createOrientedBox();
+                        Manager.Collisions.applyOrientedBoxTransforms(box, 
+                            [
+                                position.x + this.boundingBoxSettings.b[i][0],
+                                position.y + this.boundingBoxSettings.b[i][1],
+                                position.z + this.boundingBoxSettings.b[i][2],
+                                this.boundingBoxSettings.b[i][3],
+                                this.boundingBoxSettings.b[i][4],
+                            ]
+                        );
+                    }
+                    this.meshBoundingBox.push(box);
+                }
+                break;
+            }
+            case ElementMapKind.Object3D:
+                box = Manager.Collisions.createBox();
+                Manager.Collisions.applyBoxSpriteTransforms(box, 
+                    [
+                        position.x + this.boundingBoxSettings.b[0][0],
+                        position.y + this.boundingBoxSettings.b[0][1],
+                        position.z + this.boundingBoxSettings.b[0][2],
+                        this.boundingBoxSettings.b[0][3],
+                        this.boundingBoxSettings.b[0][4],
+                        this.boundingBoxSettings.b[0][5],
+                        this.boundingBoxSettings.b[0][6],
+                        this.boundingBoxSettings.b[0][7],
+                        this.boundingBoxSettings.b[0][8]
+                    ]
+                );
+                this.meshBoundingBox.push(box);
+                break;
+        }
+        this.addBBToScene();
     }
 
     /** 
      *  Only updates the bounding box mesh position.
      *  @param {Vector3} position - Position to update
      */
-    updateBB(position: Vector3) {
-        if (this.currentStateInstance.graphicID !== 0) {
-            this.boundingBoxSettings.squares = Scene.Map.current
-                .collisions[PictureKind.Characters][this.currentStateInstance
-                .graphicID][this.getStateIndex()];
-        }
-        this.boundingBoxSettings.b = new Array;
-        this.removeBBFromScene();
-        let box: THREE.Mesh;
-        for (let i = 0, l = this.boundingBoxSettings.squares.length; i < l; i++) {
-            this.boundingBoxSettings.b.push(CollisionSquare.getBB(this
-                .boundingBoxSettings.squares[i], this.width, this.height));
-            if (this.currentState.graphicKind === ElementMapKind.SpritesFix) {
-                box = Manager.Collisions.createBox();
-                Manager.Collisions.applyBoxSpriteTransforms(box, 
+    updateBBPosition(position: Vector3) {
+        for (let i = 0, l = this.meshBoundingBox.length; i < l; i++) {
+            if (this.currentState.graphicKind === ElementMapKind.SpritesFix || 
+                this.currentState.graphicKind === ElementMapKind.Object3D) {
+                Manager.Collisions.applyBoxSpriteTransforms(this.meshBoundingBox
+                    [i],
                     [
                         position.x + this.boundingBoxSettings.b[i][0],
                         position.y + this.boundingBoxSettings.b[i][1],
@@ -710,41 +793,7 @@ class MapObject {
                         this.boundingBoxSettings.b[i][8]
                     ]
                 );
-            } else {
-                box = Manager.Collisions.createOrientedBox();
-                Manager.Collisions.applyOrientedBoxTransforms(box, 
-                    [
-                        position.x + this.boundingBoxSettings.b[i][0],
-                        position.y + this.boundingBoxSettings.b[i][1],
-                        position.z + this.boundingBoxSettings.b[i][2],
-                        this.boundingBoxSettings.b[i][3],
-                        this.boundingBoxSettings.b[i][4],
-                    ]
-                );
-            }
-            this.meshBoundingBox.push(box);
-        }
-        this.addBBToScene();
-    }
-
-    /** 
-     *  Only updates the bounding box mesh position.
-     *  @param {Vector3} position - Position to update
-     */
-    updateBBPosition(position: Vector3) {
-        for (let i = 0, l = this.meshBoundingBox.length; i < l; i++) {
-            if (this.currentState.graphicKind === ElementMapKind.SpritesFix) {
-                Manager.Collisions.applyBoxSpriteTransforms(this.meshBoundingBox
-                    [i],
-                    [
-                        position.x + this.boundingBoxSettings.b[i][0],
-                        position.y + this.boundingBoxSettings.b[i][1],
-                        position.z + this.boundingBoxSettings.b[i][2],
-                        this.boundingBoxSettings.b[i][3],
-                        this.boundingBoxSettings.b[i][4],
-                    ]
-                );
-            } else {
+            } else if (this.currentState.graphicKind === ElementMapKind.SpritesFace) {
                 Manager.Collisions.applyOrientedBoxTransforms(this
                     .meshBoundingBox[i],
                     [
@@ -752,7 +801,7 @@ class MapObject {
                         position.y + this.boundingBoxSettings.b[i][1],
                         position.z + this.boundingBoxSettings.b[i][2],
                         this.boundingBoxSettings.b[i][3],
-                        this.boundingBoxSettings.b[i][4],
+                        this.boundingBoxSettings.b[i][4]
                     ]
                 );
             }
@@ -1086,7 +1135,8 @@ class MapObject {
      *  Update the UVs coordinates according to frame and orientation
      */
     updateUVs() {
-        if (this.mesh !== null && !this.isNone()) {
+        if (this.mesh !== null && !this.isNone() && this.currentStateInstance
+            .graphicKind !== ElementMapKind.Object3D) {
             let texture = Manager.GL.getMaterialTexture(<THREE.ShaderMaterial>
                 this.mesh.material);
             if (texture) {

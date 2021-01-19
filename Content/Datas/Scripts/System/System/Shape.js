@@ -196,7 +196,7 @@ class Shape extends Base {
             else {
                 let url = this.getPath();
                 this.geometry = await new Promise((resolve, reject) => {
-                    Shape.loader.load(url, function (text) {
+                    Shape.loader.load(url, (text) => {
                         resolve(Shape.parse(text));
                     }, () => { }, () => {
                         Platform.showErrorMessage("Could not load " + url);

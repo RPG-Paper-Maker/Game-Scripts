@@ -119,7 +119,7 @@ class Object3D extends SpecialElement {
     depth(): number {
         return this.depthSquare + (this.depthPixel > 0 ? 1 : 0);
     }
-
+    
     /** 
      *  Get the size vector.
      *  @returns {Vector3}

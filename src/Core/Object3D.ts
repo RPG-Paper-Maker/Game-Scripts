@@ -12,6 +12,7 @@
 import { System } from "../index";
 import { StructMapElementCollision, MapElement } from "./MapElement";
 import { Position } from "./Position";
+import { Vector3 } from "./Vector3";
 
 /** @class
  *  The abstract class who model the Structure of RPM datas.
@@ -34,6 +35,12 @@ abstract class Object3D extends MapElement {
         super.read(json);
     }
 
+    /** 
+     *  Get the center vector.
+     *  @returns {Vector3}
+     */
+    abstract getCenterVector(): Vector3;
+    
     /** 
      *  Update the geometry of a group of object 3D with the same material.
      *  @param {THREE.Geometry} geometry - Geometry of the object 3D

@@ -50,9 +50,8 @@ class Game {
 
     constructor(slot: number = -1) {
         this.slot = slot;
-        this.hero = new MapObject(Datas.Systems.modelHero.system, new THREE
-            .Vector3(Datas.Systems.modelHero.position.x, Datas.Systems.modelHero
-            .position.y, Datas.Systems.modelHero.position.z), true);
+        this.hero = new MapObject(Datas.Systems.modelHero.system, Datas.Systems
+            .modelHero.position.clone(), true);
         this.isEmpty = true;
     }
 

@@ -31,6 +31,17 @@ class Object3DCustom extends Object3D {
         }
     }
     /**
+     *  Create a new 3D object box.
+     *  @static
+     *  @param {System.Object3D} datas - The object datas
+     *  @returns {Core.Object3DBox}
+     */
+    static create(datas) {
+        let object = new Object3DCustom(undefined, datas);
+        object.id = datas.id;
+        return object;
+    }
+    /**
      *  Read the JSON associated to the object 3D custom.
      *  @param {Record<string, any>} json - Json object describing the object 3D
      *  custom
@@ -38,6 +49,14 @@ class Object3DCustom extends Object3D {
     read(json) {
         super.read(json);
         this.id = this.datas.id;
+    }
+    /**
+     *  Get the center vector.
+     *  @returns {Vector3}
+     */
+    getCenterVector() {
+        return Datas.Shapes.get(Enum.CustomShapeKind.OBJ, this.datas.objID)
+            .geometry.center.clone();
     }
     /**
      *  Update the geometry of a group of objects 3D cutom with the same
@@ -129,6 +148,17 @@ class Object3DCustom extends Object3D {
             });
         }
         return [count, objCollision];
+    }
+    /**
+     *  Create a new geometry.
+     *  @param {Position} position - The position of object 3D
+     *  @return {[THREE.Geometry, [number, StructMapElementCollision[]]]}
+     */
+    createGeometry(position) {
+        let geometry = new THREE.Geometry();
+        geometry.faceVertexUvs[0] = [];
+        geometry.uvsNeedUpdate = true;
+        return [geometry, this.updateGeometry(geometry, position, 0)];
     }
 }
 export { Object3DCustom };

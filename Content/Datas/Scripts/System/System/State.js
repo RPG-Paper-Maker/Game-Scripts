@@ -74,6 +74,7 @@ class State extends Base {
     copyInstance() {
         return {
             graphicID: this.graphicID,
+            graphicKind: this.graphicKind,
             rectTileset: this.rectTileset,
             indexX: this.indexX,
             indexY: this.indexY

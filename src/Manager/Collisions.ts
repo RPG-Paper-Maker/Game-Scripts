@@ -1028,11 +1028,10 @@ class Collisions {
      *  @returns {boolean}
      */
     static checkObjects(mapPortion: MapPortion, object: MapObject): boolean {
-        let datas = Scene.Map.current.getObjectsAtPortion(mapPortion
-            .portion);
+        let datas = Scene.Map.current.getObjectsAtPortion(mapPortion.portion);
         return this.checkObjectsList(mapPortion.objectsList, object) || this
-            .checkObjectsList(datas.min, object) || this
-            .checkObjectsList(datas.mout, object);
+            .checkObjectsList(datas.min, object) || this.checkObjectsList(datas
+            .mout, object);
     }
 
     /** 
@@ -1046,7 +1045,7 @@ class Collisions {
         let obj: MapObject;
         for (let i = 0, l = list.length; i < l; i++) {
             obj = list[i];
-            if (obj !== object && object.isInRect(obj)) {
+            if (obj !== object) {
                 if (object.checkCollisionObject(obj)) {
                     return true;
                 }

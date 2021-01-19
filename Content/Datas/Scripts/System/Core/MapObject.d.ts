@@ -115,12 +115,6 @@ declare class MapObject {
      */
     checkCollisionDetection(): boolean;
     /**
-     *  Check if two objects can be in the same floor rect (need test collision)
-     *  @param {MapObject} object - The other map object
-     *  @returns {boolean}
-     */
-    isInRect(object: MapObject): boolean;
-    /**
      *  Only updates the bounding box mesh position.
      *  @param {Vector3} position - Position to update
      */

@@ -8,7 +8,6 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { THREE } from "../Globals.js";
 import { Player } from "./Player.js";
 import { Datas } from "../index.js";
 import { Item } from "./Item.js";
@@ -24,9 +23,8 @@ var CharacterKind = Enum.CharacterKind;
 class Game {
     constructor(slot = -1) {
         this.slot = slot;
-        this.hero = new MapObject(Datas.Systems.modelHero.system, new THREE
-            .Vector3(Datas.Systems.modelHero.position.x, Datas.Systems.modelHero
-            .position.y, Datas.Systems.modelHero.position.z), true);
+        this.hero = new MapObject(Datas.Systems.modelHero.system, Datas.Systems
+            .modelHero.position.clone(), true);
         this.isEmpty = true;
     }
     /**
