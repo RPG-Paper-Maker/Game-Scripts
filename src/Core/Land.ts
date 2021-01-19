@@ -18,6 +18,7 @@ import { Datas } from "../index";
 import { StructMapElementCollision } from "./MapElement"
 import { Vector3 } from "./Vector3";
 import { Vector2 } from "./Vector2";
+import { Sprite } from "./Sprite";
 
 /** @class
  *  A land in the map.
@@ -88,13 +89,30 @@ class Land extends MapElement {
         let objCollision: StructMapElementCollision = null;
 
         // Vertices
-        geometry.vertices.push(new Vector3(a, b, c));
-        geometry.vertices.push(new Vector3(a + Datas.Systems.SQUARE_SIZE, 
-            b, c));
-        geometry.vertices.push(new Vector3(a + Datas.Systems.SQUARE_SIZE, 
-            b, c + Datas.Systems.SQUARE_SIZE));
-        geometry.vertices.push(new Vector3(a, b, c + Datas.Systems
-            .SQUARE_SIZE));
+        let vecA = new Vector3(a, b, c);
+        let vecB = new Vector3(a + Datas.Systems.SQUARE_SIZE, b, c);
+        let vecC = new Vector3(a + Datas.Systems.SQUARE_SIZE, b, c + Datas
+            .Systems.SQUARE_SIZE);
+        let vecD = new Vector3(a, b, c + Datas.Systems.SQUARE_SIZE);
+        let center = new Vector3(a + (Datas.Systems.SQUARE_SIZE / 2), b, c + (
+            Datas.Systems.SQUARE_SIZE / 2));
+        if (position.angleY !== 0.0) {
+            Sprite.rotateSprite(vecA, vecB, vecC, vecD, center, position.angleY,
+                Sprite.Y_AXIS);
+        }
+        if (position.angleX !== 0.0) {
+            Sprite.rotateSprite(vecA, vecB, vecC, vecD, center, position.angleX,
+                Sprite.X_AXIS);
+        }
+        if (position.angleZ !== 0.0) {
+            Sprite.rotateSprite(vecA, vecB, vecC, vecD, center, position.angleZ,
+                Sprite.Z_AXIS);
+        }
+        geometry.vertices.push(vecA);
+        geometry.vertices.push(vecB);
+        geometry.vertices.push(vecC);
+        geometry.vertices.push(vecD);
+
         let j = count * 4;
         geometry.faces.push(new THREE.Face3(j, j + 1, j + 2));
         geometry.faces.push(new THREE.Face3(j, j + 2, j + 3));
