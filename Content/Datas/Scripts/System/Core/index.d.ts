@@ -1,3 +1,4 @@
+export * from "./Animation.js";
 export * from "./Autotile.js";
 export * from "./Autotiles.js";
 export * from "./Bitmap.js";

@@ -1,4 +1,4 @@
-import { Battler, WindowBox, WindowChoices, Picture2D, Item } from "../Core/index.js";
+import { Battler, WindowBox, WindowChoices, Item, Animation } from "../Core/index.js";
 import { Graphic, System, Scene } from "../index.js";
 import { Enum } from "../Common/index.js";
 import CharacterKind = Enum.CharacterKind;
@@ -80,11 +80,9 @@ declare class Battle extends Map {
     time: number;
     timeEnemyAttack: number;
     turn: number;
-    userAnimation: System.Animation;
-    targetAnimation: System.Animation;
+    animationUser: Animation;
+    animationTarget: Animation;
     action: System.MonsterAction;
-    userAnimationPicture: Picture2D;
-    targetAnimationPicture: Picture2D;
     transitionStart: MapTransitionKind;
     transitionStartColor: System.Color;
     transitionEnd: MapTransitionKind;
@@ -102,8 +100,6 @@ declare class Battle extends Map {
     subStep: number;
     mapCameraDistance: number;
     actionDoNothing: System.MonsterAction;
-    frameUser: number;
-    frameTarget: number;
     cameraStep: number;
     cameraTick: number;
     cameraON: boolean;

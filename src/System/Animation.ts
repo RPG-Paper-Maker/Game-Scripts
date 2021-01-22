@@ -11,12 +11,10 @@
 
 import { Enum, Utils } from "../Common";
 import AnimationPositionKind = Enum.AnimationPositionKind;
-import PictureKind = Enum.PictureKind;
 import AnimationEffectConditionKind = Enum.AnimationEffectConditionKind;
 import { Base } from "./Base";
 import { AnimationFrame } from "./AnimationFrame";
 import { Picture2D, Battler, Vector2 } from "../Core";
-import { Datas } from "../index";
 
 /** @class
  *  An animation of a skill / item / weapon or for display animation command.
@@ -49,15 +47,6 @@ class Animation extends Base {
             AnimationFrame });
         this.rows = Utils.defaultValue(json.r, 5);
         this.cols = Utils.defaultValue(json.c, 5);
-    }
-
-    /** 
-     *  Create an animation picture copy.
-     *  @returns {Picture2D}
-     */
-    createPicture(): Picture2D {
-        return Datas.Pictures.getPictureCopy(PictureKind.Animations, this
-            .pictureID);
     }
 
     /** 

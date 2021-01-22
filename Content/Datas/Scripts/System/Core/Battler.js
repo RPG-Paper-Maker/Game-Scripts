@@ -11,9 +11,6 @@
 import { THREE } from "../Globals.js";
 import { Enum, Mathf, ScreenResolution } from "../Common/index.js";
 import { Frame } from "./Frame.js";
-var BattlerStep = Enum.BattlerStep;
-var CharacterKind = Enum.CharacterKind;
-var ElementMapKind = Enum.ElementMapKind;
 import { ProgressionTable } from "../System/index.js";
 import { Manager, Datas, Scene } from "../index.js";
 import { Sprite } from "./Sprite.js";
@@ -28,6 +25,9 @@ import { Status } from "./Status.js";
 class Battler {
     constructor(player, position, camera) {
         this.itemsNumbers = [];
+        this.status = null;
+        this.currentStatusAnimation = null;
+        this.nextStatusAnimation = null;
         this.player = player;
         if (!position) {
             return;
@@ -47,7 +47,7 @@ class Battler {
         this.frame = new Frame(Mathf.random(250, 300));
         this.frameAttacking = new Frame(350);
         this.frameArrow = new Frame(125);
-        this.step = BattlerStep.Normal;
+        this.step = Enum.BattlerStep.Normal;
         this.width = 1;
         this.height = 1;
         this.selected = false;
@@ -84,15 +84,15 @@ class Battler {
                 .SQUARE_SIZE / Datas.Systems.FRAMES);
             this.height = Math.floor(texture.image.height / Datas.Systems
                 .SQUARE_SIZE / Battler.STEPS);
-            let sprite = Sprite.create(ElementMapKind.SpritesFace, [0, 0, this
-                    .width, this.height]);
+            let sprite = Sprite.create(Enum.ElementMapKind.SpritesFace, [0, 0,
+                this.width, this.height]);
             let geometry = sprite.createGeometry(this.width, this.height, false, position)[0];
             this.mesh = new THREE.Mesh(geometry, material);
             this.mesh.position.set(this.position.x, this.position.y, this
                 .position.z);
             this.upPosition = new Vector3(this.position.x, this.position.y + (this.height * Datas.Systems.SQUARE_SIZE), this.position.z);
             this.halfPosition = new Vector3(this.position.x, this.position.y + (this.height * Datas.Systems.SQUARE_SIZE / 2), this.position.z);
-            if (player.kind === CharacterKind.Monster) {
+            if (player.kind === Enum.CharacterKind.Monster) {
                 this.mesh.scale.set(-1, 1, 1);
             }
             this.updateUVs();
@@ -133,7 +133,7 @@ class Battler {
      */
     setAttacking() {
         this.frameAttacking.value = 0;
-        this.step = BattlerStep.Attack;
+        this.step = Enum.BattlerStep.Attack;
         this.updateUVs();
     }
     /**
@@ -141,9 +141,9 @@ class Battler {
      *  @returns {boolean}
      */
     isStepAttacking() {
-        return this.step === BattlerStep.Attack || this.step === BattlerStep
-            .Skill || this.step === BattlerStep.Item || this.step ===
-            BattlerStep.Escape;
+        return this.step === Enum.BattlerStep.Attack || this.step === Enum
+            .BattlerStep.Skill || this.step === Enum.BattlerStep.Item || this
+            .step === Enum.BattlerStep.Escape;
     }
     /**
      *  Check if the battler is attacking and the frames is currently run.
@@ -158,7 +158,7 @@ class Battler {
      */
     setUsingSkill() {
         this.frameAttacking.value = 0;
-        this.step = BattlerStep.Skill;
+        this.step = Enum.BattlerStep.Skill;
         this.updateUVs();
     }
     /**
@@ -166,7 +166,7 @@ class Battler {
      */
     setUsingItem() {
         this.frameAttacking.value = 0;
-        this.step = BattlerStep.Item;
+        this.step = Enum.BattlerStep.Item;
         this.updateUVs();
     }
     /**
@@ -174,7 +174,7 @@ class Battler {
      */
     setEscaping() {
         this.frameAttacking.value = 0;
-        this.step = BattlerStep.Escape;
+        this.step = Enum.BattlerStep.Escape;
         this.updateUVs();
     }
     /**
@@ -182,7 +182,7 @@ class Battler {
      */
     setVictory() {
         this.frame.value = 0;
-        this.step = BattlerStep.Victory;
+        this.step = Enum.BattlerStep.Victory;
         this.updateUVs();
     }
     /**
@@ -191,15 +191,15 @@ class Battler {
      *  @param {Player} user - The attack / skill / item user
      */
     updateDead(attacked, user) {
-        let step = BattlerStep.Normal;
+        let step = Enum.BattlerStep.Normal;
         if (this.player.isDead()) {
-            step = BattlerStep.Dead;
+            step = Enum.BattlerStep.Dead;
         }
         else if (attacked) {
-            step = BattlerStep.Attacked;
+            step = Enum.BattlerStep.Attacked;
         }
-        if (this.step !== step && (user !== this.player || step === BattlerStep
-            .Dead)) {
+        if (this.step !== step && (user !== this.player || step === Enum
+            .BattlerStep.Dead)) {
             this.step = step;
             this.updateUVs();
         }
@@ -224,11 +224,11 @@ class Battler {
     updateSelected() {
         let newX = this.mesh.position.x;
         let progression;
-        if (this.player.kind === CharacterKind.Hero) {
+        if (this.player.kind === Enum.CharacterKind.Hero) {
             progression = this.selected ? this.progressionAllyFront : this
                 .progressionAllyBack;
         }
-        else if (this.player.kind === CharacterKind.Monster) {
+        else if (this.player.kind === Enum.CharacterKind.Monster) {
             progression = this.selected ? this.progressionEnemyFront : this
                 .progressionEnemyBack;
         }
@@ -263,6 +263,10 @@ class Battler {
         if (!this.attacking && this.frame.update()) {
             this.updateUVs();
         }
+        if (this.currentStatusAnimation) {
+            this.currentStatusAnimation.update();
+            Manager.Stack.requestPaintHUD = true;
+        }
     }
     /**
      *  Update the frame.
@@ -285,7 +289,7 @@ class Battler {
     updateAttacking() {
         if (this.isStepAttacking() && this.frameAttacking.update()) {
             if (this.frameAttacking.value === 0) {
-                this.step = BattlerStep.Normal;
+                this.step = Enum.BattlerStep.Normal;
             }
             this.updateUVs();
         }
@@ -332,15 +336,15 @@ class Battler {
             let textureHeight = texture.image.height;
             let frame = 0;
             switch (this.step) {
-                case BattlerStep.Normal:
-                case BattlerStep.Victory:
-                case BattlerStep.Dead:
+                case Enum.BattlerStep.Normal:
+                case Enum.BattlerStep.Victory:
+                case Enum.BattlerStep.Dead:
                     frame = this.frame.value;
                     break;
-                case BattlerStep.Attack:
-                case BattlerStep.Skill:
-                case BattlerStep.Item:
-                case BattlerStep.Escape:
+                case Enum.BattlerStep.Attack:
+                case Enum.BattlerStep.Skill:
+                case Enum.BattlerStep.Item:
+                case Enum.BattlerStep.Escape:
                     frame = this.frameAttacking.value;
                     break;
             }
@@ -385,9 +389,18 @@ class Battler {
             .getScreenYReverse(this.damagePosition.y), Enum.Align.Center);
     }
     /**
+     *  Draw the status animation
+     */
+    drawStatusAnimation() {
+        if (this.currentStatusAnimation) {
+            this.currentStatusAnimation.draw(this);
+        }
+    }
+    /**
      *  Draw the HUD specific to battler.
      */
     drawHUD() {
+        this.drawStatusAnimation();
         this.drawStatus();
     }
 }

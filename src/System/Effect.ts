@@ -16,7 +16,7 @@ import DamagesKind = Enum.DamagesKind;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 import CharacterKind = Enum.CharacterKind;
 import { System, EventCommand, Manager, Datas, Scene } from "../index";
-import { Player, ReactionInterpreter, Battler, Game } from "../Core";
+import { Player, ReactionInterpreter, Battler, Game, Animation } from "../Core";
 import { Statistic } from "./Statistic";
 import { Status } from "../Core/Status";
 
@@ -160,9 +160,15 @@ class Effect extends Base {
         }
         let targets = Scene.Map.current.targets;
         let result = false;
+        let l = targets.length;
+        let target: Battler;
+        for (let i = 0; i < l; i++) {
+            target = targets[i];
+            target.status = null;
+            target.currentStatusAnimation = null;
+        }
         switch (this.kind) {
             case EffectKind.Damages: {
-                let l = targets.length;
                 let damage: number, miss: boolean, crit: boolean, target: Player
                     , precision: number, random: number, variance: number, 
                     fixRes: number, percentRes: number, element: number, 
@@ -318,7 +324,9 @@ class Effect extends Base {
                             }
                         }
                         if (add) {
-                            target.player.status.push(new Status(id));
+                            target.status = new Status(id);
+                            target.nextStatusAnimation = new Animation(target
+                                .status.system.animationID.getValue(), true);
                         }
                     }
                     // For diplaying result in HUD

@@ -12,7 +12,7 @@
 import { Base } from "./Base";
 import { System, Datas, Manager, Scene } from "../index";
 import { Utils, Enum } from "../Common";
-import { MapObject, StructSearchResult } from "../Core";
+import { Animation, MapObject, StructSearchResult } from "../Core";
 import AnimationEffectConditionKind = Enum.AnimationEffectConditionKind;
 
 /** @class
@@ -45,13 +45,11 @@ class DisplayAnAnimation extends Base {
      *  @returns {Record<string, any>} The current state
      */
     initialize(): Record<string, any> {
-        let animation = Datas.Animations.get(this.animationID.getValue());
+        let animation = new Animation(this.animationID.getValue());
         return {
             parallel: this.isWaitEnd,
             animation: animation,
-            picture: animation.createPicture(),
-            frame: 1,
-            frameMax: animation.frames.length - 1,
+            frameMax: animation.system.frames.length - 1,
             object: null,
             waitingObject: false
         }
@@ -85,11 +83,10 @@ class DisplayAnAnimation extends Base {
                 currentState.object.botPosition = Manager.GL.toScreenPosition(
                     currentState.object.position, Scene.Map.current
                     .camera.getThreeCamera());
-                currentState.animation.playSounds(currentState.frame, 
-                    AnimationEffectConditionKind.None);
-                currentState.frame++;
+                currentState.animation.playSounds(AnimationEffectConditionKind.None);
+                currentState.animation.update();
                 Manager.Stack.requestPaintHUD = true;
-                return currentState.frame > currentState.frameMax ? 1 : 0;
+                return currentState.animation.frame > currentState.frameMax ? 1 : 0;
             }
         }
         return 1;
@@ -101,8 +98,7 @@ class DisplayAnAnimation extends Base {
      */
     drawHUD(currentState: Record<string, any>) {
         if (currentState.object !== null) {
-            currentState.animation.draw(currentState.picture, currentState.frame
-                , currentState.object);
+            currentState.animation.draw(currentState.object);
         }
     }
 }

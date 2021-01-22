@@ -1,12 +1,13 @@
 import { Player } from "./Player.js";
 import { Enum } from "../Common/index.js";
 import { Frame } from "./Frame.js";
-import BattlerStep = Enum.BattlerStep;
 import { ProgressionTable } from "../System/index.js";
 import { Camera } from "./Camera.js";
 import { Position } from "./Position.js";
 import { Vector3 } from "./Vector3.js";
 import { Vector2 } from "./Vector2.js";
+import { Status } from "./Status.js";
+import { Animation } from "./Animation.js";
 /** @class
  *  A battler in a battle (ally or ennemy).
  *  @param {Player} player - The character properties
@@ -29,7 +30,7 @@ declare class Battler {
     frame: Frame;
     frameAttacking: Frame;
     frameArrow: Frame;
-    step: BattlerStep;
+    step: Enum.BattlerStep;
     width: number;
     height: number;
     selected: boolean;
@@ -54,6 +55,9 @@ declare class Battler {
     damages: number;
     isDamagesMiss: boolean;
     isDamagesCritical: boolean;
+    status: Status;
+    currentStatusAnimation: Animation;
+    nextStatusAnimation: Animation;
     constructor(player: Player, position?: Position, camera?: Camera);
     /**
      *  Set the selected state.
@@ -157,6 +161,10 @@ declare class Battler {
      *  Draw the status on top of the battler.
      */
     drawStatus(): void;
+    /**
+     *  Draw the status animation
+     */
+    drawStatusAnimation(): void;
     /**
      *  Draw the HUD specific to battler.
      */

@@ -15,7 +15,7 @@ var DamagesKind = Enum.DamagesKind;
 var EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 var CharacterKind = Enum.CharacterKind;
 import { System, Manager, Datas, Scene } from "../index.js";
-import { Player, ReactionInterpreter, Game } from "../Core/index.js";
+import { Player, ReactionInterpreter, Game, Animation } from "../Core/index.js";
 import { Status } from "../Core/Status.js";
 /** @class
  *  An effect of a common skill item.
@@ -116,9 +116,15 @@ class Effect extends Base {
         }
         let targets = Scene.Map.current.targets;
         let result = false;
+        let l = targets.length;
+        let target;
+        for (let i = 0; i < l; i++) {
+            target = targets[i];
+            target.status = null;
+            target.currentStatusAnimation = null;
+        }
         switch (this.kind) {
             case EffectKind.Damages: {
-                let l = targets.length;
                 let damage, miss, crit, target, precision, random, variance, fixRes, percentRes, element, critical, stat, abbreviation, max, before, currencyID, battler;
                 for (let i = 0; i < l; i++) {
                     damage = 0;
@@ -258,7 +264,9 @@ class Effect extends Base {
                             }
                         }
                         if (add) {
-                            target.player.status.push(new Status(id));
+                            target.status = new Status(id);
+                            target.nextStatusAnimation = new Animation(target
+                                .status.system.animationID.getValue(), true);
                         }
                     }
                     // For diplaying result in HUD

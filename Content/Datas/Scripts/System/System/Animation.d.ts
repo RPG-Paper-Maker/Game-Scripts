@@ -22,11 +22,6 @@ declare class Animation extends Base {
      */
     read(json: Record<string, any>): void;
     /**
-     *  Create an animation picture copy.
-     *  @returns {Picture2D}
-     */
-    createPicture(): Picture2D;
-    /**
      *  Play the sounds according to frame and condition.
      *  @param {number} frame - The frame
      *  @param {AnimationEffectConditionKind} condition - The condition

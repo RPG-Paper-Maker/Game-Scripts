@@ -8,6 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
+export * from "./Animation.js";
 export * from "./Autotile.js";
 export * from "./Autotiles.js";
 export * from "./Bitmap.js";

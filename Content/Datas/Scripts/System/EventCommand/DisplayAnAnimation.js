@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
-import { System, Datas, Manager, Scene } from "../index.js";
+import { System, Manager, Scene } from "../index.js";
 import { Utils, Enum } from "../Common/index.js";
-import { MapObject } from "../Core/index.js";
+import { Animation, MapObject } from "../Core/index.js";
 var AnimationEffectConditionKind = Enum.AnimationEffectConditionKind;
 /** @class
  *  An event command for displaying an animation.
@@ -35,13 +35,11 @@ class DisplayAnAnimation extends Base {
      *  @returns {Record<string, any>} The current state
      */
     initialize() {
-        let animation = Datas.Animations.get(this.animationID.getValue());
+        let animation = new Animation(this.animationID.getValue());
         return {
             parallel: this.isWaitEnd,
             animation: animation,
-            picture: animation.createPicture(),
-            frame: 1,
-            frameMax: animation.frames.length - 1,
+            frameMax: animation.system.frames.length - 1,
             object: null,
             waitingObject: false
         };
@@ -69,10 +67,10 @@ class DisplayAnAnimation extends Base {
                     .camera.getThreeCamera());
                 currentState.object.botPosition = Manager.GL.toScreenPosition(currentState.object.position, Scene.Map.current
                     .camera.getThreeCamera());
-                currentState.animation.playSounds(currentState.frame, AnimationEffectConditionKind.None);
-                currentState.frame++;
+                currentState.animation.playSounds(AnimationEffectConditionKind.None);
+                currentState.animation.update();
                 Manager.Stack.requestPaintHUD = true;
-                return currentState.frame > currentState.frameMax ? 1 : 0;
+                return currentState.animation.frame > currentState.frameMax ? 1 : 0;
             }
         }
         return 1;
@@ -83,7 +81,7 @@ class DisplayAnAnimation extends Base {
      */
     drawHUD(currentState) {
         if (currentState.object !== null) {
-            currentState.animation.draw(currentState.picture, currentState.frame, currentState.object);
+            currentState.animation.draw(currentState.object);
         }
     }
 }

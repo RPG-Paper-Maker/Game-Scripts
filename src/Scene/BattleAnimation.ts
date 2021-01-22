@@ -11,7 +11,7 @@
 */
 
 import { Scene, Graphic, Datas, System, Manager } from "..";
-import { Enum, Utils } from "../Common";
+import { Enum } from "../Common";
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 import CharacterKind = Enum.CharacterKind;
 import Align = Enum.Align;
@@ -19,7 +19,7 @@ import ItemKind = Enum.ItemKind;
 import AnimationEffectConditionKind = Enum.AnimationEffectConditionKind;
 import BattleStep = Enum.BattleStep;
 import AnimationPositionKind = Enum.AnimationPositionKind;
-import { Item, Battler, Game } from "../Core";
+import { Item, Battler, Game, Animation } from "../Core";
 
 // -------------------------------------------------------
 //
@@ -71,8 +71,6 @@ class BattleAnimation {
             informationText, { align: Align.Center });
         this.battle.time = new Date().getTime();
         this.battle.effects = [];
-        this.battle.frameUser = 0;
-        this.battle.frameTarget = 0;
         let i: number, l: number;
         switch (this.battle.battleCommandKind) {
             case EffectSpecialActionKind.ApplyWeapons:
@@ -84,10 +82,10 @@ class BattleAnimation {
                         gameItem = equipments[i];
                         if (gameItem && gameItem.kind === ItemKind.Weapon) {
                             weapon = gameItem.getItemInformations();
-                            this.battle.userAnimation = Datas.Animations.get(
-                                weapon.animationUserID.getValue());
-                            this.battle.targetAnimation = Datas.Animations.get(
-                                weapon.animationTargetID.getValue());
+                            this.battle.animationUser = new Animation(weapon
+                                .animationUserID.getValue());
+                            this.battle.animationTarget = new Animation(weapon
+                                .animationTargetID.getValue());
                             for (j = 0, m = weapon.effects.length; j < m; j++) {
                                 this.battle.effects.push(weapon.effects[j]);
                             }
@@ -95,10 +93,10 @@ class BattleAnimation {
                     }
                 }
                 if (this.battle.effects.length === 0) {
-                    this.battle.userAnimation = Datas.Animations.get(Datas
-                        .Skills.get(1).animationUserID.getValue());
-                    this.battle.targetAnimation = Datas.Animations.get(Datas
-                        .Skills.get(1).animationTargetID.getValue());
+                    this.battle.animationUser = new Animation(Datas.Skills.get(1)
+                        .animationUserID.getValue());
+                    this.battle.animationTarget = new Animation(Datas.Skills.get(1)
+                        .animationTargetID.getValue());
                     let effects = this.battle.attackSkill.effects;
                     for (i = 1, l = effects.length; i < l; i++) {
                         this.battle.effects.push(effects[i]);
@@ -107,9 +105,9 @@ class BattleAnimation {
                 this.battle.user.setAttacking();
                 break;
             case EffectSpecialActionKind.OpenSkills:
-                this.battle.userAnimation = Datas.Animations.get(content
+                this.battle.animationUser = new Animation(content
                     .animationUserID.getValue());
-                this.battle.targetAnimation = Datas.Animations.get(content
+                this.battle.animationTarget = new Animation(content
                     .animationTargetID.getValue());
                 this.battle.effects = content.effects;
                 content.cost();
@@ -118,9 +116,9 @@ class BattleAnimation {
             case EffectSpecialActionKind.OpenItems:
                 let graphic = <Graphic.Item>this.battle.windowChoicesItems
                     .getCurrentContent();
-                this.battle.userAnimation = Datas.Animations.get(content
+                this.battle.animationUser = new Animation(content
                     .animationUserID.getValue());
-                this.battle.targetAnimation = Datas.Animations.get(content
+                this.battle.animationTarget = new Animation(content
                     .animationTargetID.getValue());
                 this.battle.effects = content.effects;
                 if (this.battle.attackingGroup === CharacterKind.Hero) {
@@ -149,13 +147,11 @@ class BattleAnimation {
         if (this.battle.effects.length > 0) {
             this.battle.effects[this.battle.currentEffectIndex].execute();
         }
-        if (this.battle.userAnimation) {
-            this.battle.userAnimationPicture = this.battle.userAnimation
-                .createPicture();
+        if (this.battle.animationUser.system === null) {
+            this.battle.animationUser = null;
         }
-        if (this.battle.targetAnimation) {
-            this.battle.targetAnimationPicture = this.battle.targetAnimation
-                .createPicture();
+        if (this.battle.animationTarget.system === null) {
+            this.battle.animationTarget = null;
         }
     }
 
@@ -182,8 +178,15 @@ class BattleAnimation {
         let target: Battler;
         for (let i = 0, l = this.battle.targets.length; i < l; i++) {
             target = this.battle.targets[i];
-            target.updateDead(target.damages > 0 && !target.isDamagesMiss, this
-                .battle.user.player);
+            target.updateDead((target.damages > 0 || target.status !== null) && 
+                !target.isDamagesMiss, this.battle.user.player);
+            if (target.status !== null) {
+                target.player.status.push(target.status);
+                if (target.nextStatusAnimation) {
+                    target.currentStatusAnimation = target.nextStatusAnimation;
+                    target.nextStatusAnimation = null;
+                }
+            }
         }
     }
 
@@ -200,18 +203,17 @@ class BattleAnimation {
             }
 
             // User animation if exists
-            if (this.battle.userAnimation) {
-                this.battle.frameUser++;
-                this.battle.userAnimation.playSounds(this.battle.frameUser, this
-                    .getCondition());
+            if (this.battle.animationUser) {
+                this.battle.animationUser.update();
+                this.battle.animationUser.playSounds(this.getCondition());
                 Manager.Stack.requestPaintHUD = true;
             }
 
             // Test if animation finished
-            if ((!this.battle.userAnimation || this.battle.frameUser > this
-                .battle.userAnimation.frames.length) && !this.battle.user
-                .isAttacking()) {
-                if (!this.battle.targetAnimation) {
+            if ((!this.battle.animationUser || this.battle.animationUser.frame > 
+                this.battle.animationUser.system.frames.length) && !this.battle
+                .user.isAttacking()) {
+                if (!this.battle.animationTarget) {
                     this.battle.time = new Date().getTime() - (Scene.Battle
                         .TIME_ACTION_ANIMATION / 2);
                     for (i = 0, l = this.battle.targets.length; i < l; i++) {
@@ -226,12 +228,11 @@ class BattleAnimation {
             break;
         case 1: // Animation target
             // Target animation if exists
-            this.battle.frameTarget++;
-            this.battle.targetAnimation.playSounds(this.battle.frameTarget, this
-                .getCondition());
+            this.battle.animationTarget.update();
+            this.battle.animationTarget.playSounds(this.getCondition());
             Manager.Stack.requestPaintHUD = true;
-            if (this.battle.frameTarget > this.battle.targetAnimation.frames
-                .length) {
+            if (this.battle.animationTarget.frame > this.battle.animationTarget
+                .system.frames.length) {
                 this.battle.time = new Date().getTime() - (Scene.Battle
                     .TIME_ACTION_ANIMATION / 2);
                 for (i = 0, l = this.battle.targets.length; i < l; i++) {
@@ -358,29 +359,26 @@ class BattleAnimation {
         this.battle.windowTopInformations.draw();
 
         // Draw animations
-        if (this.battle.userAnimation) {
-            this.battle.userAnimation.draw(this.battle.userAnimationPicture, 
-                this.battle.frameUser, this.battle.user);
+        if (this.battle.animationUser) {
+            this.battle.animationUser.draw(this.battle.user);
         }
         let i: number, l: number;
-        if (this.battle.targetAnimation) {
-            if (this.battle.targetAnimation.positionKind === 
+        if (this.battle.animationTarget) {
+            if (this.battle.animationTarget.system.positionKind === 
                 AnimationPositionKind.ScreenCenter) {
-                this.battle.targetAnimation.draw(this.battle
-                    .targetAnimationPicture, this.battle.frameTarget, null);
+                this.battle.animationTarget.draw(null);
             } else {
                 for (i = 0, l = this.battle.targets.length; i < l; i++) {
-                    this.battle.targetAnimation.draw(this.battle
-                        .targetAnimationPicture, this.battle.frameTarget, this
-                        .battle.targets[i]);
+                    this.battle.animationTarget.draw(this.battle.targets[i]);
                 }
             }
         }
 
         // Draw damages
         if (this.battle.reactionInterpreters.length === 0 && !this.battle.user
-            .isAttacking() && (!this.battle.targetAnimation || this.battle
-            .frameTarget > this.battle.targetAnimation.frames.length)) {
+            .isAttacking() && (!this.battle.animationTarget || this.battle
+            .animationTarget.frame > this.battle.animationTarget.system.frames
+            .length)) {
             for (i = 0, l = this.battle.targets.length; i < l; i++) {
                 this.battle.targets[i].drawDamages();
             }

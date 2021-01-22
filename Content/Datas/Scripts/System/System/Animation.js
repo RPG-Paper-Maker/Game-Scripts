@@ -10,11 +10,9 @@
 */
 import { Enum, Utils } from "../Common/index.js";
 var AnimationPositionKind = Enum.AnimationPositionKind;
-var PictureKind = Enum.PictureKind;
 import { Base } from "./Base.js";
 import { AnimationFrame } from "./AnimationFrame.js";
 import { Vector2 } from "../Core/index.js";
-import { Datas } from "../index.js";
 /** @class
  *  An animation of a skill / item / weapon or for display animation command.
  *  @extends System.Base
@@ -37,14 +35,6 @@ class Animation extends Base {
         Utils.readJSONSystemList({ list: json.f, listIDs: this.frames, cons: AnimationFrame });
         this.rows = Utils.defaultValue(json.r, 5);
         this.cols = Utils.defaultValue(json.c, 5);
-    }
-    /**
-     *  Create an animation picture copy.
-     *  @returns {Picture2D}
-     */
-    createPicture() {
-        return Datas.Pictures.getPictureCopy(PictureKind.Animations, this
-            .pictureID);
     }
     /**
      *  Play the sounds according to frame and condition.
