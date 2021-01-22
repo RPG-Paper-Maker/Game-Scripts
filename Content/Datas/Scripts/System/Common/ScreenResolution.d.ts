@@ -23,6 +23,18 @@ declare class ScreenResolution {
      *   @returns {number}
      */
     static getScreenY(y: number): number;
+    /** Get the pixel position transformation according to screen size (reverse)
+     *   @static
+     *   @param {number} x - The position on screen
+     *   @returns {number}
+     */
+    static getScreenXReverse(x: number): number;
+    /** Get the pixel position transformation according to screen size (reverse)
+     *   @static
+     *   @param {number} y - The position on screen
+     *   @returns {number}
+     */
+    static getScreenYReverse(y: number): number;
     /** Get the pixel position transformation according to screen size
      *   @static
      *   @param {number} xy - The position on screen

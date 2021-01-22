@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { THREE } from "../Globals.js";
-import { Constants, Enum, Mathf, ScreenResolution } from "../Common/index.js";
+import { Enum, Mathf, ScreenResolution } from "../Common/index.js";
 import { Frame } from "./Frame.js";
 var BattlerStep = Enum.BattlerStep;
 var CharacterKind = Enum.CharacterKind;
@@ -18,6 +18,7 @@ import { ProgressionTable } from "../System/index.js";
 import { Manager, Datas, Scene } from "../index.js";
 import { Sprite } from "./Sprite.js";
 import { Vector3 } from "./Vector3.js";
+import { Status } from "./Status.js";
 /** @class
  *  A battler in a battle (ally or ennemy).
  *  @param {Player} player - The character properties
@@ -379,22 +380,9 @@ class Battler {
      *  Draw the status on top of the battler.
      */
     drawStatus() {
-        let status = this.player.getFirstStatus();
-        let totalWidth = 0;
-        let space = ScreenResolution.getScreenX(Constants.MEDIUM_SPACE);
-        let i, l, s;
-        for (let i = 0, l = status.length; i < l; i++) {
-            totalWidth += status[i].picture.oW;
-        }
-        if (l > 1) {
-            totalWidth += (l - 1) * space;
-        }
-        let x = 0;
-        for (i = 0, l = status.length; i < l; i++) {
-            s = status[i];
-            x += s.picture.w;
-            s.drawBattler(this.damagePosition.x - totalWidth + x + (i * space), this.damagePosition.y);
-        }
+        Status.drawList(this.player.getFirstStatus(), ScreenResolution
+            .getScreenXReverse(this.damagePosition.x), ScreenResolution
+            .getScreenYReverse(this.damagePosition.y), Enum.Align.Center);
     }
     /**
      *  Draw the HUD specific to battler.

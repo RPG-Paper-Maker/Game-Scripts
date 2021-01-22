@@ -462,23 +462,9 @@ class Battler {
      *  Draw the status on top of the battler.
      */
     drawStatus() {
-        let status: Status[] = this.player.getFirstStatus();
-        let totalWidth: number = 0;
-        let space = ScreenResolution.getScreenX(Constants.MEDIUM_SPACE);
-        let i: number, l: number, s: Status;
-        for (let i = 0, l = status.length; i < l; i++) {
-            totalWidth += status[i].picture.oW;
-        }
-        if (l > 1) {
-            totalWidth += (l - 1) * space;
-        }
-        let x: number = 0;
-        for (i = 0, l = status.length; i < l; i++) {
-            s = status[i];
-            x += s.picture.w;
-            s.drawBattler(this.damagePosition.x - totalWidth + x + (i * space), 
-                this.damagePosition.y);
-        }
+        Status.drawList(this.player.getFirstStatus(), ScreenResolution
+            .getScreenXReverse(this.damagePosition.x), ScreenResolution
+            .getScreenYReverse(this.damagePosition.y), Enum.Align.Center);
     }
 
     /** 

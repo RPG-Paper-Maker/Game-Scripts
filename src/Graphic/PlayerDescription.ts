@@ -15,6 +15,7 @@ import { Graphic, Datas, System, Manager } from "../index";
 import { Enum, Constants, Utils, Platform } from "../Common";
 import Align = Enum.Align;
 import PictureKind = Enum.PictureKind;
+import { Status } from "../Core/Status";
 
 /** @class
  *  The graphic displaying all the stats in the player description state menu.
@@ -258,6 +259,9 @@ class PlayerDescription extends Base {
         let xLevel = xLevelName + Platform.ctx.measureText(this.graphicLevelName
             .text).width;
         this.graphicLevel.draw(xLevel, yName, 0, 0);
+        this.graphicLevel.updateContextFont();
+        let xStatus = xLevel + Platform.ctx.measureText(this.graphicLevel.text).width;
+        Status.drawList(this.player.status, xStatus, yName);
         let yClass = yName + 20;
         this.graphicClass.draw(xCharacter, yClass, 0, 0);
         let yExp = yClass + 20;
@@ -274,8 +278,8 @@ class PlayerDescription extends Base {
             xStat = x + (Math.floor(i/7)*190);
             yStat = yStats + ((i%7)*30);
             this.listStatsNames[i].draw(xStat, yStat, 0, 0);
-            this.listStats[i].draw(xStat + this.listLength[Math.floor(i/7)] + 10
-                , yStat, 0, 0);
+            this.listStats[i].draw(xStat + this.listLength[Math.floor(i/7)] + 10, 
+                yStat, 0, 0);
         }
     }
 }

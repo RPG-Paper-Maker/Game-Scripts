@@ -9,8 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { stat } from "fs";
 import { Datas, System } from "..";
-import { Enum } from "../Common";
+import { Constants, Enum, ScreenResolution } from "../Common";
 import { Picture2D } from "./Picture2D";
 
 /** @class
@@ -30,15 +31,51 @@ class Status {
             this.system.pictureID);
     }
 
+    static drawList(statusList: Status[], x: number, y: number, align: Enum
+        .Align = Enum.Align.Left) {
+        let totalWidth: number = 0;
+        let maxHeight: number = 0;
+        let maxWidth: number = 0;
+        let i: number, l: number, s: Status, h: number, w: number;
+        for (let i = 0, l = statusList.length; i < l; i++) {
+            totalWidth += statusList[i].picture.oW;
+            w = statusList[i].picture.oW;
+            if (w > maxWidth) {
+                maxWidth = w;
+            }
+            h = statusList[i].picture.oH;
+            if (h > maxHeight) {
+                maxHeight = h;
+            }
+        }
+        if (l > 1) {
+            totalWidth += (l - 1) * Constants.MEDIUM_SPACE;
+        }
+        let xOffset: number = 0;
+        switch (align) {
+            case Enum.Align.Left:
+                totalWidth = 0;
+                break;
+            case Enum.Align.Center:
+                totalWidth /= 2;
+                break;
+
+        }
+        for (i = 0, l = statusList.length; i < l; i++) {
+            s = statusList[i];
+            xOffset += s.picture.oW;
+            s.draw(x - totalWidth + xOffset + (i * Constants.MEDIUM_SPACE) - 
+                maxWidth, y - (maxHeight / 2));
+        }
+    }
+
     /** 
      *  Draw the status on top of battler.
      *  @param {number} x - The x position
      *  @param {number} y - The y position
      */
-    drawBattler(x: number, y: number) {
-        this.picture.x = x;
-        this.picture.y = y;
-        this.picture.draw();
+    draw(x: number, y: number) {
+        this.picture.draw(x, y);
     }
 }
 

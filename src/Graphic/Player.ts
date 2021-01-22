@@ -12,8 +12,9 @@
 import { Graphic, Core, Datas, System, Manager } from "../index";
 import { Picture2D, Frame, Battler } from "../Core";
 import { Base } from "./Base";
-import { Utils, Constants, Platform, Enum } from "../Common";
+import { Utils, Constants, Platform, Enum, ScreenResolution } from "../Common";
 import PictureKind = Enum.PictureKind;
+import { Status } from "../Core/Status";
 
 /** @class
  *  The graphic displaying the player minimal stats informations.
@@ -232,11 +233,12 @@ class Player extends Base {
      */
     drawCharacter(x: number, y: number, w: number, h: number) {
         // Measure widths
-        Platform.ctx.font = this.graphicName.font;
+        this.graphicName.updateContextFont();
         let wName = Platform.ctx.measureText(this.graphicName.text).width;
+        this.graphicLevelName.updateContextFont();
         let wLevelName = Platform.ctx.measureText(this.graphicLevelName.text)
             .width;
-        let xLevelName = x + wName + 10;
+        let xLevelName = x + wName + Constants.MEDIUM_SPACE;
         let xLevel = xLevelName + wLevelName;
 
         // Battler
@@ -252,11 +254,8 @@ class Player extends Base {
         let yStats = yName;
         if (this.displayNameLevel) {
             this.graphicName.draw(x, yName, 0, 0);
-            this.graphicName.updateContextFont();
             this.graphicLevelName.draw(xLevelName, yName, 0, 0);
-            this.graphicLevelName.updateContextFont();
             this.graphicLevel.draw(xLevel, yName, 0, 0);
-            this.graphicLevel.updateContextFont();
             yStats += 15;
         }
         let yStat: number;
@@ -291,17 +290,23 @@ class Player extends Base {
         this.graphicName.draw(xCharacter, yName, 0, 0);
         this.graphicName.updateContextFont();
         let xLevelName = xCharacter + Platform.ctx.measureText(this.graphicName
-            .text).width + 10;
+            .text).width + Constants.MEDIUM_SPACE;
         this.graphicLevelName.draw(xLevelName, yName, 0, 0);
         this.graphicLevelName.updateContextFont();
         let xLevel = xLevelName + Platform.ctx.measureText(this.graphicLevelName
             .text).width;
         this.graphicLevel.draw(xLevel, yName, 0, 0);
+        this.graphicLevel.updateContextFont();
+        let xStatus = xLevel + Platform.ctx.measureText(this.graphicLevel.text)
+            .width;
+        if (this.player.status.length > 0) {
+            Status.drawList(this.player.status, xStatus, yName);
+        }
 
         // Level up
         if (this.player.levelingUp) {
             this.graphicLevelUp.draw(xLevel + Platform.ctx.measureText(this
-                .graphicLevel.text).width + 10, yName, 0, 0);
+                .graphicLevel.text).width + Constants.MEDIUM_SPACE, yName, 0, 0);
         }
 
         let yClass = yName + 15;
@@ -310,7 +315,7 @@ class Player extends Base {
         if (this.graphicExpName !== null) {
             this.graphicExpName.draw(xCharacter, yExp, 0, 0);
             this.graphicExp.draw(xCharacter + Platform.ctx.measureText(this
-                .graphicExpName.text).width + 10, yExp, 0, 0);
+                .graphicExpName.text).width + Constants.MEDIUM_SPACE, yExp, 0, 0);
         }
     }
 
@@ -323,30 +328,32 @@ class Player extends Base {
     */
     draw(x: number, y: number, w: number, h: number) {
         // Measure widths
-        this.graphicName.updateContextFontReal();
-        this.graphicLevelName.updateContextFontReal();
-        this.graphicLevel.updateContextFontReal();
+        this.graphicName.updateContextFont();
         let wName = Platform.ctx.measureText(this.graphicName.text).width;
+        this.graphicLevelName.updateContextFont();
         let wLevelName = Platform.ctx.measureText(this.graphicLevelName.text)
             .width;
-        let xLevelName = x + wName + 10;
+        let xLevelName = x + wName + Constants.MEDIUM_SPACE;
         let xLevel = xLevelName + wLevelName;
+        this.graphicLevel.updateContextFont();
         let firstLineLength = xLevel + Platform.ctx.measureText(this
             .graphicLevel.text).width;
         let xOffset = this.reverse ? w - Math.max(firstLineLength, this
             .maxStatNamesLength + 10 + this.maxStatLength) : 0;
         
+        // Name, level, status
         let yName = y + 10;
         this.graphicName.draw(x + xOffset, yName, 0, 0);
         this.graphicName.updateContextFont();
         this.graphicLevelName.draw(xLevelName + xOffset, yName, 0, 0);
         this.graphicLevelName.updateContextFont();
         this.graphicLevel.draw(xLevel + xOffset, yName, 0, 0);
+        Status.drawList(this.player.status, firstLineLength, yName);
         let yStats = yName + 20;
 
         // Stats
-        let xStat: number, yStat: number;
-        for (let i = 0, l = this.listStatsNames.length; i < l; i++) {
+        let i: number, l: number, xStat: number, yStat: number;
+        for (i = 0, l = this.listStatsNames.length; i < l; i++) {
             xStat = x + xOffset;
             yStat = yStats + (i*20);
             this.listStatsNames[i].draw(xStat, yStat, 0, 0);

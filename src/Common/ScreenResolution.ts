@@ -44,6 +44,24 @@ class ScreenResolution {
         return Math.ceil(ScreenResolution.getDoubleScreenY(y));
     }
 
+    /** Get the pixel position transformation according to screen size (reverse)
+     *   @static
+     *   @param {number} x - The position on screen
+     *   @returns {number}
+     */
+    static getScreenXReverse(x: number): number {
+        return Math.floor(x / ScreenResolution.WINDOW_X);
+    }
+
+    /** Get the pixel position transformation according to screen size (reverse)
+     *   @static
+     *   @param {number} y - The position on screen
+     *   @returns {number}
+     */
+    static getScreenYReverse(y: number): number {
+        return Math.floor(y / ScreenResolution.WINDOW_Y);
+    }
+
     /** Get the pixel position transformation according to screen size
      *   @static
      *   @param {number} xy - The position on screen
