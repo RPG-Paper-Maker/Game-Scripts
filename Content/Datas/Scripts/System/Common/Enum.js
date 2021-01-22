@@ -685,5 +685,22 @@ var Enum;
         FadeType[FadeType["FadeIn"] = 0] = "FadeIn";
         FadeType[FadeType["FadeOut"] = 1] = "FadeOut";
     })(FadeType = Enum.FadeType || (Enum.FadeType = {}));
+    /**
+     * Enum for the status restrictions kind.
+     *
+     * @export
+     * @enum {number}
+     */
+    let StatusRestrictionsKind;
+    (function (StatusRestrictionsKind) {
+        StatusRestrictionsKind[StatusRestrictionsKind["None"] = 0] = "None";
+        StatusRestrictionsKind[StatusRestrictionsKind["CantDoAnything"] = 1] = "CantDoAnything";
+        StatusRestrictionsKind[StatusRestrictionsKind["CantUseSkills"] = 2] = "CantUseSkills";
+        StatusRestrictionsKind[StatusRestrictionsKind["CantUseItems"] = 3] = "CantUseItems";
+        StatusRestrictionsKind[StatusRestrictionsKind["CantEscape"] = 4] = "CantEscape";
+        StatusRestrictionsKind[StatusRestrictionsKind["AttackRandomTarget"] = 5] = "AttackRandomTarget";
+        StatusRestrictionsKind[StatusRestrictionsKind["AttackRandomAlly"] = 6] = "AttackRandomAlly";
+        StatusRestrictionsKind[StatusRestrictionsKind["AttackRandomEnemy"] = 7] = "AttackRandomEnemy";
+    })(StatusRestrictionsKind = Enum.StatusRestrictionsKind || (Enum.StatusRestrictionsKind = {}));
 })(Enum || (Enum = {}));
 export { Enum };

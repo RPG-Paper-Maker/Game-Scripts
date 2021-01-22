@@ -650,6 +650,23 @@ namespace Enum {
         FadeIn,
         FadeOut
     }
+
+    /**
+     * Enum for the status restrictions kind.
+     *
+     * @export
+     * @enum {number}
+     */
+    export enum StatusRestrictionsKind {
+        None,
+        CantDoAnything,
+        CantUseSkills,
+        CantUseItems,
+        CantEscape,
+        AttackRandomTarget,
+        AttackRandomAlly,
+        AttackRandomEnemy
+    }
 }
 
 export { Enum }

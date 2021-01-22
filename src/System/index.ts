@@ -57,6 +57,8 @@ export * from "./SpecialElement";
 export * from "./State";
 export * from "./Statistic";
 export * from "./StatisticProgression";
+export * from "./Status";
+export * from "./StatusReleaseTurn";
 export * from "./Tileset";
 export * from "./TitleCommand";
 export * from "./Translatable";

@@ -56,6 +56,8 @@ export * from "./SpecialElement.js";
 export * from "./State.js";
 export * from "./Statistic.js";
 export * from "./StatisticProgression.js";
+export * from "./Status.js";
+export * from "./StatusReleaseTurn.js";
 export * from "./Tileset.js";
 export * from "./TitleCommand.js";
 export * from "./Translatable.js";
