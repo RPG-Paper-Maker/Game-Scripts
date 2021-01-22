@@ -10,13 +10,13 @@
 */
 import { System } from "../index.js";
 import { Enum, Utils } from "../Common/index.js";
-import { Base } from "./Base.js";
+import { Icon } from "./Icon.js";
 /** @class
  *  A possible status hero.
  *  @extends System.Base
  *  @param {Record<string, any>} - json Json object describing the object state
  */
-class Status extends Base {
+class Status extends Icon {
     constructor(json) {
         super(json);
     }
@@ -25,6 +25,8 @@ class Status extends Base {
      *  @param {Record<string, any>} - json Json object describing the status
      */
     read(json) {
+        super.read(json);
+        this.id = json.id;
         this.animationID = System.DynamicValue.readOrNone(json.animationID);
         this.restrictionKind = Utils.defaultValue(json.restrictionKind, Enum
             .StatusRestrictionsKind.None);

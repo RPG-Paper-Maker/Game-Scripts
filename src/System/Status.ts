@@ -11,15 +11,16 @@
 
 import { System } from "..";
 import { Enum, Utils } from "../Common";
-import { Base } from "./Base";
+import { Icon } from "./Icon";
 
 /** @class
  *  A possible status hero.
  *  @extends System.Base
  *  @param {Record<string, any>} - json Json object describing the object state
  */
-class Status extends Base {
+class Status extends Icon {
 
+    public id: number;
     public animationID: System.DynamicValue;
     public restrictionKind: Enum.StatusRestrictionsKind;
     public priority: System.DynamicValue;
@@ -47,6 +48,8 @@ class Status extends Base {
      */
     read(json: Record<string, any>)
     {
+        super.read(json);
+        this.id = json.id;
         this.animationID = System.DynamicValue.readOrNone(json.animationID);
         this.restrictionKind = Utils.defaultValue(json.restrictionKind, Enum
             .StatusRestrictionsKind.None);

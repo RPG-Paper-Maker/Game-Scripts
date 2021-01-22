@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { THREE } from "../Globals.js";
-import { Enum, Mathf } from "../Common/index.js";
+import { Constants, Enum, Mathf, ScreenResolution } from "../Common/index.js";
 import { Frame } from "./Frame.js";
 var BattlerStep = Enum.BattlerStep;
 var CharacterKind = Enum.CharacterKind;
@@ -374,6 +374,33 @@ class Battler {
     drawDamages() {
         Datas.Systems.getCurrentWindowSkin().drawDamages(this.damages, this
             .damagePosition.x, this.damagePosition.y, this.isDamagesCritical, this.isDamagesMiss, this.timeDamage / Battler.TOTAL_TIME_DAMAGE);
+    }
+    /**
+     *  Draw the status on top of the battler.
+     */
+    drawStatus() {
+        let status = this.player.getFirstStatus();
+        let totalWidth = 0;
+        let space = ScreenResolution.getScreenX(Constants.MEDIUM_SPACE);
+        let i, l, s;
+        for (let i = 0, l = status.length; i < l; i++) {
+            totalWidth += status[i].picture.oW;
+        }
+        if (l > 1) {
+            totalWidth += (l - 1) * space;
+        }
+        let x = 0;
+        for (i = 0, l = status.length; i < l; i++) {
+            s = status[i];
+            x += s.picture.w;
+            s.drawBattler(this.damagePosition.x - totalWidth + x + (i * space), this.damagePosition.y);
+        }
+    }
+    /**
+     *  Draw the HUD specific to battler.
+     */
+    drawHUD() {
+        this.drawStatus();
     }
 }
 Battler.OFFSET_SELECTED = 10;

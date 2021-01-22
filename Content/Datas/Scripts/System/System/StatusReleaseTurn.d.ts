@@ -12,8 +12,9 @@ declare class StatusReleaseTurn extends Base {
     chance: System.DynamicValue;
     constructor(json?: Record<string, any>);
     /**
-     *  Read the JSON associated to the status.
+     *  Read the JSON associated to the status release turn.
      *  @param {Record<string, any>} - json Json object describing the status
+     *  release turn
      */
     read(json: Record<string, any>): void;
 }

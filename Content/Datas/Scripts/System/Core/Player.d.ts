@@ -4,6 +4,7 @@ import { System } from "../index.js";
 import { Skill } from "./Skill.js";
 import { Item } from "./Item.js";
 import { Battler } from "./Battler.js";
+import { Status } from "./Status.js";
 /** @class
  *  A character in the team/hidden/reserve.
  *  @param {CharacterKind} [kind=undefined] - The kind of the character (hero or monster)
@@ -13,6 +14,7 @@ import { Battler } from "./Battler.js";
  *  @param {Record<string, any>} - [json=undefined] Json object describing the items
  */
 declare class Player {
+    static MAX_STATUS_DISPLAY_TOP: number;
     id: number;
     kind: CharacterKind;
     instid: number;
@@ -21,6 +23,7 @@ declare class Player {
     levelingUp: boolean;
     sk: Skill[];
     equip: Item[];
+    status: Status[];
     expList: number[];
     testedLevelUp: boolean;
     remainingXP: number;
@@ -30,7 +33,7 @@ declare class Player {
     obtainedXP: number;
     stepLevelUp: number;
     battler: Battler;
-    constructor(kind?: CharacterKind, id?: number, instanceID?: number, skills?: Skill[], name?: string, json?: Record<string, any>);
+    constructor(kind?: CharacterKind, id?: number, instanceID?: number, skills?: Record<string, any>[], status?: Record<string, any>[], name?: string, json?: Record<string, any>);
     /**
      *  Get the max size of equipment kind names.
      *  @static
@@ -172,5 +175,10 @@ declare class Player {
      *  @returns {boolean}
      */
     isExperienceUpdated(): boolean;
+    /**
+     *  Get the first status to display according to priority.
+     *  @returns {Core.Status}
+     */
+    getFirstStatus(): Status[];
 }
 export { Player };

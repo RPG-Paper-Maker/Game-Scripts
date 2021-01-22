@@ -25,6 +25,7 @@ export * from "./Shapes";
 export * from "./Skills";
 export * from "./Songs";
 export * from "./SpecialElements";
+export * from "./Status";
 export * from "./Systems";
 export * from "./Tilesets";
 export * from "./TitleScreenGameOver";

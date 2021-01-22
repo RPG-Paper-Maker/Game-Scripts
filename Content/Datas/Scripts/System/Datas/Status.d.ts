@@ -1,9 +1,9 @@
 import { System } from "../index.js";
 /** @class
- *  All the animations datas.
+ *  All the status datas.
  *  @static
  */
-declare class Animations {
+declare class Status {
     private static list;
     constructor();
     /**
@@ -13,11 +13,11 @@ declare class Animations {
      */
     static read(): Promise<void>;
     /**
-     *  Get the animation by ID.
+     *  Get the status by ID.
      *  @static
      *  @param {number} id
-     *  @returns {System.Animation}
+     *  @returns {System.Status}
      */
-    static get(id: number): System.Animation;
+    static get(id: number): System.Status;
 }
-export { Animations };
+export { Status };

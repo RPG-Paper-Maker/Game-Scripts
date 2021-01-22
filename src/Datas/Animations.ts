@@ -25,7 +25,7 @@ class Animations {
     }
 
     /** 
-     *  Read the JSON file associated to troops.
+     *  Read the JSON file associated to status.
      *  @static
      *  @async
      */

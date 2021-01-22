@@ -107,7 +107,7 @@ class BattleInitialize {
                 .heroBattle.position.z - Datas.Systems.SQUARE_SIZE + (i * Datas
                     .Systems.SQUARE_SIZE));
             player = new Player(CharacterKind.Monster, troopElement.id, Game
-                .current.charactersInstances++, []);
+                .current.charactersInstances++, [], []);
             player.instanciate(troopElement.level);
             battler = new Battler(player, Position.createFromVector3(position), 
                 this.battle.camera);

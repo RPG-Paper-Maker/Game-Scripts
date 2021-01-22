@@ -50,6 +50,7 @@ async function load() {
     await Datas.Heroes.read();
     await Datas.Monsters.read();
     await Datas.Troops.read();
+    await Datas.Status.read();
     await Datas.BattleSystems.read();
     await Datas.TitlescreenGameover.read();
     await Datas.Keyboards.read();

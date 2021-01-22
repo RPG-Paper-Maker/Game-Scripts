@@ -1,12 +1,13 @@
 import { System } from "../index.js";
 import { Enum } from "../Common/index.js";
-import { Base } from "./Base.js";
+import { Icon } from "./Icon.js";
 /** @class
  *  A possible status hero.
  *  @extends System.Base
  *  @param {Record<string, any>} - json Json object describing the object state
  */
-declare class Status extends Base {
+declare class Status extends Icon {
+    id: number;
     animationID: System.DynamicValue;
     restrictionKind: Enum.StatusRestrictionsKind;
     priority: System.DynamicValue;

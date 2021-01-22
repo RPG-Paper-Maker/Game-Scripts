@@ -153,5 +153,13 @@ declare class Battler {
      *  Draw the damages on top of the battler.
      */
     drawDamages(): void;
+    /**
+     *  Draw the status on top of the battler.
+     */
+    drawStatus(): void;
+    /**
+     *  Draw the HUD specific to battler.
+     */
+    drawHUD(): void;
 }
 export { Battler };

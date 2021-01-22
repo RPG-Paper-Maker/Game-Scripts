@@ -13,6 +13,7 @@ var CharacterKind = Enum.CharacterKind;
 import { Datas, System, Graphic } from "../index.js";
 import { Skill } from "./Skill.js";
 import { Item } from "./Item.js";
+import { Status } from "./Status.js";
 /** @class
  *  A character in the team/hidden/reserve.
  *  @param {CharacterKind} [kind=undefined] - The kind of the character (hero or monster)
@@ -22,7 +23,7 @@ import { Item } from "./Item.js";
  *  @param {Record<string, any>} - [json=undefined] Json object describing the items
  */
 class Player {
-    constructor(kind, id, instanceID, skills, name, json) {
+    constructor(kind, id, instanceID, skills, status, name, json) {
         if (!Utils.isUndefined(kind)) {
             this.kind = kind;
             this.id = id;
@@ -30,17 +31,23 @@ class Player {
             this.system = this.getSystem();
             this.name = Utils.isUndefined(name) ? this.system.name : name;
             // Skills
-            let l = skills.length;
-            this.sk = new Array(l);
-            let i;
-            for (i = 0; i < l; i++) {
+            this.sk = [];
+            let i, l;
+            for (i = 0, l = skills.length; i < l; i++) {
                 this.sk[i] = new Skill(skills[i].id);
             }
             // Equip
             l = Datas.BattleSystems.maxEquipmentID;
             this.equip = new Array(l + 1);
-            for (i = 1; i <= l; i++) {
+            for (i = 1, l = Datas.BattleSystems.maxEquipmentID; i <= l; i++) {
                 this.equip[i] = null;
+            }
+            // Status
+            this.status = [];
+            let element;
+            for (i = 0, l = status.length; i < l; i++) {
+                element = status[i];
+                this.status[i] = new Status(element.id, element.turn);
             }
             // Experience list
             this.expList = this.system.createExpList();
@@ -101,12 +108,23 @@ class Player {
      *  @returns {Record<string, any>}
      */
     getSaveCharacter() {
+        // Status
+        let statusList = [];
+        let i, l, status;
+        for (i = 0, l = this.status.length; i < l; i++) {
+            status = this.status[i];
+            statusList[i] = {
+                id: status.system.id,
+                turn: status.turn
+            };
+        }
         return {
             kind: this.kind,
             id: this.id,
             name: this.name,
             instid: this.instid,
             sk: this.sk,
+            status: statusList,
             stats: this.getSaveStat(),
             equip: this.getSaveEquip()
         };
@@ -586,5 +604,39 @@ class Player {
         return this.testedLevelUp && this.totalRemainingXP === 0 && this
             .remainingXP === 0;
     }
+    /**
+     *  Get the first status to display according to priority.
+     *  @returns {Core.Status}
+     */
+    getFirstStatus() {
+        let maxPriorities = [], maxStatus = [], priority, status, min, index;
+        // Push the first
+        let l = this.status.length;
+        let i;
+        for (i = 0; i < l && i < Player.MAX_STATUS_DISPLAY_TOP; i++) {
+            status = this.status[0];
+            maxPriorities.push(status.system.priority.getValue());
+            maxStatus.push(status);
+        }
+        // Check the max priorities
+        for (i = Player.MAX_STATUS_DISPLAY_TOP; i < l; i++) {
+            status = this.status[i];
+            priority = status.system.priority.getValue();
+            min = maxPriorities[0];
+            index = 0;
+            for (let j = 1, m = maxPriorities.length; j < m; j++) {
+                if (maxPriorities[j] <= min) {
+                    min = maxPriorities[j];
+                    index = j;
+                }
+            }
+            if (priority >= min) {
+                maxPriorities[index] = priority;
+                maxStatus[index] = status;
+            }
+        }
+        return maxStatus;
+    }
 }
+Player.MAX_STATUS_DISPLAY_TOP = 3;
 export { Player };

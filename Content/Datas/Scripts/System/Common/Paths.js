@@ -48,6 +48,7 @@ Paths.FILE_VARIABLES = Paths.DATAS + "variables.json";
 Paths.FILE_SETTINGS = Paths.DATAS + "settings.json";
 Paths.FILE_DLCS = Paths.DATAS + "dlcs.json";
 Paths.FILE_ANIMATIONS = Paths.DATAS + "animations.json";
+Paths.FILE_STATUS = Paths.DATAS + "status.json";
 Paths.FILE_SCRIPTS = Paths.DATAS + "scripts.json";
 Paths.FILE_TREE_MAP = Paths.DATAS + "treeMap.json";
 Paths.FILE_PLUGIN_CODE = "code.js";

@@ -11,7 +11,7 @@
 
 import { THREE } from "../Globals";
 import { Player } from "./Player";
-import { Enum, Mathf } from "../Common";
+import { Constants, Enum, Mathf, ScreenResolution } from "../Common";
 import { Frame } from "./Frame";
 import BattlerStep = Enum.BattlerStep;
 import CharacterKind = Enum.CharacterKind;
@@ -24,6 +24,7 @@ import { Position } from "./Position";
 import { ShaderMaterial } from "three";
 import { Vector3 } from "./Vector3";
 import { Vector2 } from "./Vector2";
+import { Status } from "./Status";
 
 /** @class
  *  A battler in a battle (ally or ennemy).
@@ -455,6 +456,36 @@ class Battler {
         Datas.Systems.getCurrentWindowSkin().drawDamages(this.damages, this
             .damagePosition.x, this.damagePosition.y, this.isDamagesCritical, 
             this.isDamagesMiss, this.timeDamage / Battler.TOTAL_TIME_DAMAGE);
+    }
+
+    /** 
+     *  Draw the status on top of the battler.
+     */
+    drawStatus() {
+        let status: Status[] = this.player.getFirstStatus();
+        let totalWidth: number = 0;
+        let space = ScreenResolution.getScreenX(Constants.MEDIUM_SPACE);
+        let i: number, l: number, s: Status;
+        for (let i = 0, l = status.length; i < l; i++) {
+            totalWidth += status[i].picture.oW;
+        }
+        if (l > 1) {
+            totalWidth += (l - 1) * space;
+        }
+        let x: number = 0;
+        for (i = 0, l = status.length; i < l; i++) {
+            s = status[i];
+            x += s.picture.w;
+            s.drawBattler(this.damagePosition.x - totalWidth + x + (i * space), 
+                this.damagePosition.y);
+        }
+    }
+
+    /** 
+     *  Draw the HUD specific to battler.
+     */
+    drawHUD() {
+        this.drawStatus();
     }
 }
 

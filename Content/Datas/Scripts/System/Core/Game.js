@@ -76,20 +76,20 @@ class Game {
         this.teamHeroes = [];
         Utils.readJSONSystemList({ list: json.th, listIndexes: this.teamHeroes, func: (json) => {
                 return new Player(json.kind, json.id, json.instid, json.sk, json
-                    .name, json);
+                    .status, json.name, json);
             }
         });
         this.reserveHeroes = [];
         Utils.readJSONSystemList({ list: json.sh, listIndexes: this
                 .reserveHeroes, func: (json) => {
                 return new Player(json.kind, json.id, json.instid, json.sk, json
-                    .name, json);
+                    .status, json.name, json);
             }
         });
         this.hiddenHeroes = [];
         Utils.readJSONSystemList({ list: json.hh, listIndexes: this.hiddenHeroes, func: (json) => {
                 return new Player(json.kind, json.id, json.instid, json.sk, json
-                    .name, json);
+                    .status, json.name, json);
             }
         });
         // Map infos
@@ -244,7 +244,7 @@ class Game {
         // Stock the instanciation id in a variable
         this.variables[stockID] = this.charactersInstances;
         // Adding the instanciated character in the right group
-        let player = new Player(type, id, this.charactersInstances++, []);
+        let player = new Player(type, id, this.charactersInstances++, [], []);
         player.instanciate(level);
         this.getTeam(groupKind).push(player);
     }

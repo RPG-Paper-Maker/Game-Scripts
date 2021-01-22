@@ -24,6 +24,7 @@ export * from "./Shapes.js";
 export * from "./Skills.js";
 export * from "./Songs.js";
 export * from "./SpecialElements.js";
+export * from "./Status.js";
 export * from "./Systems.js";
 export * from "./Tilesets.js";
 export * from "./TitleScreenGameOver.js";

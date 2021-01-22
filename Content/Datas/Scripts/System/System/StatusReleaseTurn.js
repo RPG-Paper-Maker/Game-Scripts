@@ -21,8 +21,9 @@ class StatusReleaseTurn extends Base {
         super(json);
     }
     /**
-     *  Read the JSON associated to the status.
+     *  Read the JSON associated to the status release turn.
      *  @param {Record<string, any>} - json Json object describing the status
+     *  release turn
      */
     read(json) {
         this.operationTurnKind = Utils.defaultValue(json.operationTurnKind, Enum

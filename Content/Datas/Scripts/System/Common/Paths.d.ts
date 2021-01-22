@@ -33,6 +33,7 @@ declare class Paths {
     static readonly FILE_SETTINGS: string;
     static readonly FILE_DLCS: string;
     static readonly FILE_ANIMATIONS: string;
+    static readonly FILE_STATUS: string;
     static readonly FILE_SCRIPTS: string;
     static readonly FILE_TREE_MAP: string;
     static readonly FILE_PLUGIN_CODE = "code.js";

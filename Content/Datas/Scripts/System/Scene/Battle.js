@@ -410,6 +410,15 @@ class Battle extends Map {
      *  Draw the battle HUD according to step.
      */
     drawHUD() {
+        // Draw all battlers special HUD
+        let i, l;
+        for (i = 0, l = this.battlers[Enum.CharacterKind.Hero].length; i < l; i++) {
+            this.battlers[Enum.CharacterKind.Hero][i].drawHUD();
+        }
+        for (i = 0, l = this.battlers[Enum.CharacterKind.Monster].length; i < l; i++) {
+            this.battlers[Enum.CharacterKind.Monster][i].drawHUD();
+        }
+        // Draw HUD according to step
         switch (this.step) {
             case BattleStep.Initialize:
                 this.battleInitialize.drawHUDStep();

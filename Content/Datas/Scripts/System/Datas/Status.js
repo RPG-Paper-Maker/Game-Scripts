@@ -11,10 +11,10 @@
 import { System, Datas } from "../index.js";
 import { IO, Paths, Utils } from "../Common/index.js";
 /** @class
- *  All the animations datas.
+ *  All the status datas.
  *  @static
  */
-class Animations {
+class Status {
     constructor() {
         throw new Error("This is a static class!");
     }
@@ -24,19 +24,19 @@ class Animations {
      *  @async
      */
     static async read() {
-        let json = (await IO.parseFileJSON(Paths.FILE_ANIMATIONS)).animations;
+        let json = (await IO.parseFileJSON(Paths.FILE_STATUS)).status;
         this.list = [];
         Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System
-                .Animation });
+                .Status });
     }
     /**
-     *  Get the animation by ID.
+     *  Get the status by ID.
      *  @static
      *  @param {number} id
-     *  @returns {System.Animation}
+     *  @returns {System.Status}
      */
     static get(id) {
-        return Datas.Base.get(id, this.list, "animation");
+        return Datas.Base.get(id, this.list, "status");
     }
 }
-export { Animations };
+export { Status };

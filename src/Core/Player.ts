@@ -11,10 +11,11 @@
 
 import { Enum, Interpreter, Utils, Platform } from "../Common";
 import CharacterKind = Enum.CharacterKind;
-import { Datas, System, Graphic } from "../index";
+import { Datas, System, Graphic, Core } from "../index";
 import { Skill } from "./Skill";
 import { Item } from "./Item";
 import { Battler } from "./Battler";
+import { Status } from "./Status";
 
 /** @class
  *  A character in the team/hidden/reserve.
@@ -26,6 +27,8 @@ import { Battler } from "./Battler";
  */
 class Player {
     
+    public static MAX_STATUS_DISPLAY_TOP: number = 3;
+
     public id: number;
     public kind: CharacterKind;
     public instid: number;
@@ -34,6 +37,7 @@ class Player {
     public levelingUp: boolean;
     public sk: Skill[];
     public equip: Item[];
+    public status: Status[];
     public expList: number[];
     public testedLevelUp: boolean;
     public remainingXP: number;
@@ -45,7 +49,8 @@ class Player {
     public battler: Battler;
 
     constructor(kind?: CharacterKind, id?: number, instanceID?: number, skills?: 
-        Skill[], name?: string, json?: Record<string, any>)
+        Record<string, any>[], status?: Record<string, any>[], name?: string, 
+        json?: Record<string, any>)
     {
         if (!Utils.isUndefined(kind)) {
             this.kind = kind;
@@ -55,19 +60,25 @@ class Player {
             this.name = Utils.isUndefined(name) ? this.system.name : name;
 
             // Skills
-            let l = skills.length;
-            this.sk = new Array(l);
-            let i: number;
-            for (i = 0; i < l; i++) {
+            this.sk = [];
+            let i: number, l: number;
+            for (i = 0, l = skills.length; i < l; i++) {
                 this.sk[i] = new Skill(skills[i].id);
             }
 
             // Equip
             l = Datas.BattleSystems.maxEquipmentID;
             this.equip = new Array(l + 1);
-            for (i = 1; i <= l; i++)
-            {
+            for (i = 1, l = Datas.BattleSystems.maxEquipmentID; i <= l; i++) {
                 this.equip[i] = null;
+            }
+
+            // Status
+            this.status = [];
+            let element: Record<string, any>;
+            for (i = 0, l = status.length; i < l; i++) {
+                element = status[i];
+                this.status[i] = new Status(element.id, element.turn);
             }
 
             // Experience list
@@ -137,12 +148,23 @@ class Player {
      *  @returns {Record<string, any>}
      */
     getSaveCharacter(): Record<string, any> {
+        // Status
+        let statusList = [];
+        let i: number, l: number, status: Status;
+        for (i = 0, l = this.status.length; i < l; i++) {
+            status = this.status[i];
+            statusList[i] = {
+                id: status.system.id,
+                turn: status.turn
+            };
+        }
         return {
             kind: this.kind,
             id: this.id,
             name: this.name,
             instid: this.instid,
             sk: this.sk,
+            status: statusList,
             stats: this.getSaveStat(),
             equip: this.getSaveEquip()
         };
@@ -660,6 +682,43 @@ class Player {
     isExperienceUpdated(): boolean {
         return this.testedLevelUp && this.totalRemainingXP === 0 && this
             .remainingXP === 0;
+    }
+
+    /** 
+     *  Get the first status to display according to priority.
+     *  @returns {Core.Status}
+     */
+    getFirstStatus(): Status[] {
+        let maxPriorities: number[] = [], maxStatus: Status[] = [], priority: number, 
+            status: Status, min: number, index: number;
+
+        // Push the first
+        let l = this.status.length;
+        let i: number;
+        for (i = 0; i < l && i < Player.MAX_STATUS_DISPLAY_TOP; i++) {
+            status = this.status[0];
+            maxPriorities.push(status.system.priority.getValue());
+            maxStatus.push(status);
+        }
+
+        // Check the max priorities
+        for (i = Player.MAX_STATUS_DISPLAY_TOP; i < l; i++) {
+            status = this.status[i];
+            priority = status.system.priority.getValue();
+            min = maxPriorities[0];
+            index = 0;
+            for (let j = 1, m = maxPriorities.length; j < m; j++) {
+                if (maxPriorities[j] <= min) {
+                    min = maxPriorities[j];
+                    index = j;
+                }
+            }
+            if (priority >= min) {
+                maxPriorities[index] = priority;
+                maxStatus[index] = status;
+            }
+        }
+        return maxStatus;
     }
 }
 

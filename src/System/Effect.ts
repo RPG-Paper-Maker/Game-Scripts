@@ -18,6 +18,7 @@ import CharacterKind = Enum.CharacterKind;
 import { System, EventCommand, Manager, Datas, Scene } from "../index";
 import { Player, ReactionInterpreter, Battler, Game } from "../Core";
 import { Statistic } from "./Statistic";
+import { Status } from "../Core/Status";
 
 /** @class
  *  An effect of a common skill item.
@@ -297,8 +298,38 @@ class Effect extends Base {
                 }
                 break;
             }
-            case EffectKind.Status:
+            case EffectKind.Status: {
+                let precision: number, random: number, miss: boolean, target: 
+                    Battler, id: number, j: number, m: number, add :boolean;
+                for (let i = 0, l = targets.length; i < l; i++) {
+                    target = targets[i];
+                    precision = Interpreter.evaluate(this.statusPrecisionFormula
+                        .getValue(), { user: user, target: target.player });
+                    random = Mathf.random(0, 100);
+                    if (precision < random) {
+                        miss = true;
+                    } else {
+                        id = this.statusID.getValue();
+                        add = true;
+                        for (j = 0, m = target.player.status.length; j < m; j++) {
+                            if (target.player.status[j].system.id === id) {
+                                add = false;
+                                break;
+                            }
+                        }
+                        if (add) {
+                            target.player.status.push(new Status(id));
+                        }
+                    }
+                    // For diplaying result in HUD
+                    if (Scene.Map.current.isBattleMap) {
+                        target.damages = null;
+                        target.isDamagesMiss = miss;
+                        target.isDamagesCritical = false;
+                    }
+                }
                 break;
+            }
             case EffectKind.AddRemoveSkill:
                 break;
             case EffectKind.PerformSkill:
