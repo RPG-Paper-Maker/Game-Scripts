@@ -606,36 +606,60 @@ class Player {
     }
     /**
      *  Get the first status to display according to priority.
-     *  @returns {Core.Status}
+     *  @returns {Core.Status[]}
      */
     getFirstStatus() {
-        let maxPriorities = [], maxStatus = [], priority, status, min, index;
-        // Push the first
-        let l = this.status.length;
-        let i;
-        for (i = 0; i < l && i < Player.MAX_STATUS_DISPLAY_TOP; i++) {
-            status = this.status[0];
-            maxPriorities.push(status.system.priority.getValue());
-            maxStatus.push(status);
-        }
-        // Check the max priorities
-        for (i = Player.MAX_STATUS_DISPLAY_TOP; i < l; i++) {
+        let statusList = [];
+        let status;
+        for (let i = 0; i < Player.MAX_STATUS_DISPLAY_TOP; i++) {
             status = this.status[i];
-            priority = status.system.priority.getValue();
-            min = maxPriorities[0];
-            index = 0;
-            for (let j = 1, m = maxPriorities.length; j < m; j++) {
-                if (maxPriorities[j] <= min) {
-                    min = maxPriorities[j];
-                    index = j;
-                }
+            if (status) {
+                statusList.push(status);
             }
-            if (priority >= min) {
-                maxPriorities[index] = priority;
-                maxStatus[index] = status;
+            else {
+                break;
             }
         }
-        return maxStatus;
+        return statusList;
+    }
+    /**
+     *  Add a new status and check if already in.
+     *  @param {number} id - The status id to add
+     */
+    addStatus(id) {
+        let status = new Status(id);
+        let priority = status.system.priority.getValue();
+        let i, s, p;
+        for (i = this.status.length - 1; i >= 0; i--) {
+            s = this.status[i];
+            // If same id, don't add
+            if (s.system.id === id) {
+                return null;
+            }
+        }
+        for (i = this.status.length - 1; i >= 0; i--) {
+            // Add according to priority
+            p = s.system.priority.getValue();
+            if (s <= priority) {
+                break;
+            }
+        }
+        this.status.splice(i < 0 ? 0 : 0, 0, status);
+        return status;
+    }
+    /**
+     *  Remove the status.
+     *  @param {number} id - The status id to remove
+     */
+    removeStatus(id) {
+        let i, l, s;
+        for (i = this.status.length - 1; i >= 0; i--) {
+            s = this.status[i];
+            // If same id, remove
+            if (s.system.id === id) {
+                this.status.splice(i, 1);
+            }
+        }
     }
 }
 Player.MAX_STATUS_DISPLAY_TOP = 3;

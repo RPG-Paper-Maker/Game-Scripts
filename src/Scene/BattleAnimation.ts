@@ -20,6 +20,7 @@ import AnimationEffectConditionKind = Enum.AnimationEffectConditionKind;
 import BattleStep = Enum.BattleStep;
 import AnimationPositionKind = Enum.AnimationPositionKind;
 import { Item, Battler, Game, Animation } from "../Core";
+import { Status } from "../Core/Status";
 
 // -------------------------------------------------------
 //
@@ -175,16 +176,27 @@ class BattleAnimation {
      *  Update the targets attacked and check if they are dead.
      */
     public updateTargetsAttacked() {
-        let target: Battler;
+        let target: Battler, status: Status, previousFirst: Status;
         for (let i = 0, l = this.battle.targets.length; i < l; i++) {
             target = this.battle.targets[i];
-            target.updateDead((target.damages > 0 || target.status !== null) && 
-                !target.isDamagesMiss, this.battle.user.player);
-            if (target.status !== null) {
-                target.player.status.push(target.status);
-                if (target.nextStatusAnimation) {
-                    target.currentStatusAnimation = target.nextStatusAnimation;
-                    target.nextStatusAnimation = null;
+            target.updateDead((target.damages > 0 || target.nextStatusID !== null) 
+                && !target.isDamagesMiss, this.battle.user.player);
+            if (target.nextStatusID !== null) {
+                previousFirst = target.player[0];
+                if (target.nextStatusAdd) {
+                    status = target.player.addStatus(target.nextStatusID);
+                } else {
+                    target.player.removeStatus(target.nextStatusID);
+                }
+                // If first status changed, change animation
+                status = target.player.status[0];
+                if (previousFirst != status) {
+                    if (status) {
+                        target.currentStatusAnimation = new Animation(status
+                            .system.animationID.getValue(), true);
+                    } else {
+                        target.currentStatusAnimation = null;
+                    }
                 }
             }
         }

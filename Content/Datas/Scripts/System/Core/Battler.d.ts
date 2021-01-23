@@ -6,7 +6,6 @@ import { Camera } from "./Camera.js";
 import { Position } from "./Position.js";
 import { Vector3 } from "./Vector3.js";
 import { Vector2 } from "./Vector2.js";
-import { Status } from "./Status.js";
 import { Animation } from "./Animation.js";
 /** @class
  *  A battler in a battle (ally or ennemy).
@@ -55,9 +54,9 @@ declare class Battler {
     damages: number;
     isDamagesMiss: boolean;
     isDamagesCritical: boolean;
-    status: Status;
+    nextStatusAdd: boolean;
+    nextStatusID: number;
     currentStatusAnimation: Animation;
-    nextStatusAnimation: Animation;
     constructor(player: Player, position?: Position, camera?: Camera);
     /**
      *  Set the selected state.

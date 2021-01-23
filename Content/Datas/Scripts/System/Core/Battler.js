@@ -25,9 +25,9 @@ import { Status } from "./Status.js";
 class Battler {
     constructor(player, position, camera) {
         this.itemsNumbers = [];
-        this.status = null;
+        this.nextStatusAdd = null;
+        this.nextStatusID = null;
         this.currentStatusAnimation = null;
-        this.nextStatusAnimation = null;
         this.player = player;
         if (!position) {
             return;

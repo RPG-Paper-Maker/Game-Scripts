@@ -164,8 +164,8 @@ class Effect extends Base {
         let target: Battler;
         for (let i = 0; i < l; i++) {
             target = targets[i];
-            target.status = null;
-            target.currentStatusAnimation = null;
+            target.nextStatusAdd = null;
+            target.nextStatusID = null;
         }
         switch (this.kind) {
             case EffectKind.Damages: {
@@ -306,7 +306,7 @@ class Effect extends Base {
             }
             case EffectKind.Status: {
                 let precision: number, random: number, miss: boolean, target: 
-                    Battler, id: number, j: number, m: number, add :boolean;
+                    Battler, id: number, status: Status;
                 for (let i = 0, l = targets.length; i < l; i++) {
                     target = targets[i];
                     precision = Interpreter.evaluate(this.statusPrecisionFormula
@@ -316,18 +316,8 @@ class Effect extends Base {
                         miss = true;
                     } else {
                         id = this.statusID.getValue();
-                        add = true;
-                        for (j = 0, m = target.player.status.length; j < m; j++) {
-                            if (target.player.status[j].system.id === id) {
-                                add = false;
-                                break;
-                            }
-                        }
-                        if (add) {
-                            target.status = new Status(id);
-                            target.nextStatusAnimation = new Animation(target
-                                .status.system.animationID.getValue(), true);
-                        }
+                        target.nextStatusID = id;
+                        target.nextStatusAdd = this.isAddStatus;
                     }
                     // For diplaying result in HUD
                     if (Scene.Map.current.isBattleMap) {

@@ -73,9 +73,9 @@ class Battler {
     public damages: number;
     public isDamagesMiss: boolean;
     public isDamagesCritical: boolean;
-    public status: Status = null;
+    public nextStatusAdd: boolean = null;
+    public nextStatusID: number = null;
     public currentStatusAnimation: Animation = null;
-    public nextStatusAnimation: Animation = null;
 
     constructor(player: Player, position?: Position, camera?: Camera) {
         this.player = player;

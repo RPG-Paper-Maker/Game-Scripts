@@ -177,8 +177,18 @@ declare class Player {
     isExperienceUpdated(): boolean;
     /**
      *  Get the first status to display according to priority.
-     *  @returns {Core.Status}
+     *  @returns {Core.Status[]}
      */
     getFirstStatus(): Status[];
+    /**
+     *  Add a new status and check if already in.
+     *  @param {number} id - The status id to add
+     */
+    addStatus(id: number): Status;
+    /**
+     *  Remove the status.
+     *  @param {number} id - The status id to remove
+     */
+    removeStatus(id: number): void;
 }
 export { Player };
