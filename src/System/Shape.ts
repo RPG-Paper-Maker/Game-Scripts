@@ -226,7 +226,13 @@ class Shape extends Base {
                     },
                     () => {},
                     () => {
-                        Platform.showErrorMessage("Could not load " + url);
+                        let error = "Could not load " + url;
+                        if (Datas.Systems.ignoreAssetsLoadingErrors) {
+                            console.log(error);
+                            resolve({});
+                        } else {
+                            Platform.showErrorMessage(error);
+                        }
                     });
                 });
             }

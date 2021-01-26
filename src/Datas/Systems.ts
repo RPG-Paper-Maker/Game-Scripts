@@ -51,6 +51,7 @@ class Systems {
     public static soundImpossible: System.PlaySong;
     public static dbOptions: EventCommand.SetDialogBoxOptions;
     public static modelHero: MapObject;
+    public static ignoreAssetsLoadingErrors: boolean;
 
     constructor() {
         throw new Error("This is a static class!");
@@ -120,6 +121,7 @@ class Systems {
             Manager.Collisions.BB_MATERIAL.wireframe = true;
         }
         Manager.Collisions.BB_MATERIAL.visible = this.showBB;
+        this.ignoreAssetsLoadingErrors = false; //TODO
 
         // Lists
         this.itemsTypes = [];
