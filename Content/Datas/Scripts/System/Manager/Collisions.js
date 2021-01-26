@@ -718,19 +718,22 @@ class Collisions {
         let h = objCollision.rh;
         // if w = 0, check height
         if (objCollision.rw === 0) {
-            let pass = forceNever || -(!forceAlways && ((y + objCollision.rh) <=
-                (positionAfter.y + Datas.Systems.mountainCollisionHeight
-                    .getValue())));
+            // If not in the height, no test
+            if (positionAfter.y < y || positionAfter.y > y + h) {
+                return [false, null];
+            }
+            let pass = forceNever || -(!forceAlways && ((y + h) <= (positionAfter
+                .y + Datas.Systems.mountainCollisionHeight.getValue())));
             if (Mathf.isPointOnRectangle(point, x, x + Datas.Systems.SQUARE_SIZE, z, z + Datas.Systems.SQUARE_SIZE)) {
-                return pass ? [false, y + objCollision.rh] : [true, null];
+                return pass ? [false, (positionAfter.y - y - h) ===
+                        0 ? null : y + h] : [true, null];
             }
             else {
                 if (!pass) {
                     return [this.checkIntersectionSprite([x + (Datas.Systems
                                 .SQUARE_SIZE / 2), y + (Datas.Systems.SQUARE_SIZE / 2),
                             z + (Datas.Systems.SQUARE_SIZE / 2), Datas.Systems
-                                .SQUARE_SIZE, objCollision.rh, Datas.Systems.SQUARE_SIZE,
-                            0, 0, 0], true, object), null];
+                                .SQUARE_SIZE, h, Datas.Systems.SQUARE_SIZE, 0, 0, 0], true, object), null];
                 }
             }
         }
