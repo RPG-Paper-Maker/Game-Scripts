@@ -8,7 +8,10 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
+import { Rectangle } from "../Core/index.js";
 import { Constants } from "./index.js";
+import { Platform } from "./Platform.js";
+import { ScreenResolution } from "./ScreenResolution.js";
 /**
  * The static class containing all the utils functions.
  *
@@ -189,6 +192,22 @@ class Utils {
             }
         }
         return -1;
+    }
+    /**
+     * Fill the screen with the said color
+     *
+     * @static
+     * @param {number} r - the red color
+     * @param {number} g - the green color
+     * @param {number} b - the blue color
+     * @param {number} a - the alpha value
+     * @memberof Utils
+     */
+    static fillScreen(r, g, b, a) {
+        let color = `rgba(${r},${g},${b},${a})`;
+        const rect = new Rectangle(0, 0, ScreenResolution.CANVAS_WIDTH, ScreenResolution.CANVAS_HEIGHT);
+        Platform.ctx.fillStyle = color;
+        Platform.ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
     }
 }
 /** Link the fontSize and the fontName to a string that can be used by the

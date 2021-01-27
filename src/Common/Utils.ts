@@ -9,7 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Rectangle } from "../Core";
 import { Constants } from "./index";
+import { Platform } from "./Platform";
+import { ScreenResolution } from "./ScreenResolution";
 
 /**
  * The static class containing all the utils functions.
@@ -158,7 +161,7 @@ class Utils {
      * @return {*}  {number}
      * @memberof Utils
      */
-    static readJSONSystemList(json : systemJsonList): number {
+    static readJSONSystemList(json: systemJsonList): number {
         let jsonElement: any;
         let maxID = 0;
         let id: number, element: any;
@@ -223,6 +226,23 @@ class Utils {
             }
         }
         return -1;
+    }
+
+    /**
+     * Fill the screen with the said color
+     *
+     * @static
+     * @param {number} r - the red color
+     * @param {number} g - the green color
+     * @param {number} b - the blue color
+     * @param {number} a - the alpha value
+     * @memberof Utils
+     */
+    static fillScreen(r: number, g: number, b: number, a: number) {
+        let color = `rgba(${r},${g},${b},${a})`
+        const rect = new Rectangle(0, 0, ScreenResolution.CANVAS_WIDTH, ScreenResolution.CANVAS_HEIGHT)
+        Platform.ctx.fillStyle = color;
+        Platform.ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
     }
 }
 

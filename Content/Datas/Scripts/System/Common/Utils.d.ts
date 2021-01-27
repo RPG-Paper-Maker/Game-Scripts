@@ -110,6 +110,17 @@ declare class Utils {
      *  @returns {number}
      */
     static indexOfProp(array: Object[], attr: string, value: any): number;
+    /**
+     * Fill the screen with the said color
+     *
+     * @static
+     * @param {number} r - the red color
+     * @param {number} g - the green color
+     * @param {number} b - the blue color
+     * @param {number} a - the alpha value
+     * @memberof Utils
+     */
+    static fillScreen(r: number, g: number, b: number, a: number): void;
 }
 interface systemJsonList {
     list: Record<string, any>[];
