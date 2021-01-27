@@ -705,6 +705,7 @@ class Player {
     /** 
      *  Add a new status and check if already in.
      *  @param {number} id - The status id to add
+     *  @returns {Core.Status}
      */
     addStatus(id: number): Status {
         let status = new Status(id);

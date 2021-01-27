@@ -6,6 +6,7 @@ import { Camera } from "./Camera.js";
 import { Position } from "./Position.js";
 import { Vector3 } from "./Vector3.js";
 import { Vector2 } from "./Vector2.js";
+import { Status } from "./Status.js";
 import { Animation } from "./Animation.js";
 /** @class
  *  A battler in a battle (ally or ennemy).
@@ -30,6 +31,7 @@ declare class Battler {
     frameAttacking: Frame;
     frameArrow: Frame;
     step: Enum.BattlerStep;
+    lastStep: Enum.BattlerStep;
     width: number;
     height: number;
     selected: boolean;
@@ -58,6 +60,12 @@ declare class Battler {
     nextStatusID: number;
     currentStatusAnimation: Animation;
     constructor(player: Player, position?: Position, camera?: Camera);
+    /**
+     *  Check at least one affected status contains the following restriction.
+     *  @param {Enum.StatusRestrictionsKind} restriction - The kind of restriction
+     *  @returns {boolean}
+     */
+    containsRestriction(restriction: Enum.StatusRestrictionsKind): boolean;
     /**
      *  Set the selected state.
      *  @param {boolean} selected - Indicate if the battler is selected
@@ -137,6 +145,11 @@ declare class Battler {
      */
     updateArrowPosition(camera: Camera): void;
     /**
+     *  Update current status animation.
+     *  @param {Core.Status} previousFirst - The previous status animation.
+     */
+    updateAnimationStatus(previousFirst?: Status): void;
+    /**
      *  Add the battler to scene.
      */
     addToScene(): void;
@@ -148,6 +161,21 @@ declare class Battler {
      *  Update the UVs coordinates according to frame and orientation.
      */
     updateUVs(): void;
+    /**
+     *  Add a new status and check if already in.
+     *  @param {number} id - The status id to add
+     *  @returns {Core.Status}
+     */
+    addStatus(id: number): Status;
+    /**
+     *  Remove the status.
+     *  @param {number} id - The status id to remove
+     */
+    removeStatus(id: number): void;
+    /**
+     *  Update status step (first priority status displayed).
+     */
+    updateStatusStep(): void;
     /**
      *  Draw the arrow to select this battler.
      */

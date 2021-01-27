@@ -84,6 +84,8 @@ class Picture2D extends Bitmap {
                 resolve(image);
             };
             image.onerror = () => {
+                image.width = 0;
+                image.height = 0;
                 resolve(image);
             };
             image.src = path;

@@ -584,10 +584,11 @@ declare namespace Enum {
      */
     enum BattleStep {
         Initialize = 0,
-        Selection = 1,
-        Animation = 2,
-        EnemyAttack = 3,
-        Victory = 4
+        StartTurn = 1,
+        Selection = 2,
+        Animation = 3,
+        EnemyAttack = 4,
+        Victory = 5
     }
     /**
      * Enum for the screen transition.

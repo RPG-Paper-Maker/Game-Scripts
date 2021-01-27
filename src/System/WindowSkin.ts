@@ -92,9 +92,10 @@ class WindowSkin extends System.Base {
      *  @param {number} [zoom=1.0] - The zoom to apply of target size
      */
     drawElement(r: number[], x: number, y: number, w: number = r[2], h: number = 
-        r[3], zoom: number = 1.0)
+        r[3], zoom: number = 1.0, positionResize: boolean = true)
     {
-        this.picture.draw(x, y, w * zoom, h * zoom, r[0], r[1], r[2], r[3]);
+        this.picture.draw(x, y, w * zoom, h * zoom, r[0], r[1], r[2], r[3], 
+            positionResize);
     }
 
     /** 
@@ -267,8 +268,9 @@ class WindowSkin extends System.Base {
         boolean, zoom: number)
     {
         if (isMiss) {
-            this.drawElement(this.textMiss, x - this.textMiss[2] / 2, y, this
-                .textMiss[2], this.textMiss[3], zoom);
+            this.drawElement(this.textMiss, x - ScreenResolution.getScreenX(this
+                .textMiss[2] / 2), y, this.textMiss[2], this.textMiss[3], zoom, 
+                false);
         } else if (damage < 0) {
             this.drawDamagesNumber(damage, x, y, this.textHeal, zoom);
         } else if (isCrit) {

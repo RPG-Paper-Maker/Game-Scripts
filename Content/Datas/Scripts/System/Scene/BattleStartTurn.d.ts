@@ -1,26 +1,19 @@
-import { Scene, System } from "../index.js";
+import { Scene } from "../index.js";
 import { Enum } from "../Common/index.js";
-declare class BattleEnemyAttack {
+import { Battler } from "../Core/index.js";
+declare class BattleStartTurn {
     battle: Scene.Battle;
+    step: number;
+    active: boolean;
     constructor(battle: Scene.Battle);
     /**
      *  Initialize step.
      */
     initialize(): void;
+    startSelectionEnemyAttack(): void;
+    defineRandom(user: Battler, restriction: Enum.StatusRestrictionsKind): void;
     /**
-     *  Define the possible action to do.
-     */
-    definePossibleActions(actions: System.MonsterAction[], restriction: Enum.StatusRestrictionsKind): number;
-    /**
-     *  Define the action to do.
-     */
-    defineAction(restriction?: Enum.StatusRestrictionsKind): void;
-    /**
-     *  Define the targets
-     */
-    defineTargets(restriction?: Enum.StatusRestrictionsKind): void;
-    /**
-     *  Update the battle
+     *  Update the battle.
      */
     update(): void;
     /**
@@ -30,7 +23,7 @@ declare class BattleEnemyAttack {
     onKeyPressedStep(key: number): void;
     /**
      *  Handle key released.
-     *   @param {number} key - The key ID
+     *  @param {number} key - The key ID
      */
     onKeyReleasedStep(key: number): void;
     /**
@@ -50,4 +43,4 @@ declare class BattleEnemyAttack {
      */
     drawHUDStep(): void;
 }
-export { BattleEnemyAttack };
+export { BattleStartTurn };

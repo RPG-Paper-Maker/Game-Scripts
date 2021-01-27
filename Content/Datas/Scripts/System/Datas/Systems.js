@@ -74,6 +74,7 @@ class Systems {
             Manager.Collisions.BB_MATERIAL.wireframe = true;
         }
         Manager.Collisions.BB_MATERIAL.visible = this.showBB;
+        this.ignoreAssetsLoadingErrors = false; //TODO
         // Lists
         this.itemsTypes = [];
         this.colors = [];

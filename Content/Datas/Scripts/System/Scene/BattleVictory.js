@@ -18,7 +18,6 @@ import { WindowBox, Item, Game } from "../Core/index.js";
 //
 //  CLASS BattleVictory
 //
-//  Step 4 : End of battle
 //      SubStep 0 : Victory message
 //      SubStep 1 : Experience update
 //      SubStep 2 : Level up

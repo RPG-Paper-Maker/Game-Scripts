@@ -42,7 +42,8 @@ class BattleInitialize {
         this.battle.battlers = new Array(2);
         this.battle.graphicPlayers = new Array(2);
         this.battle.time = new Date().getTime();
-        this.battle.turn = 1;
+        this.battle.turn = 0;
+        this.battle.attackingGroup = CharacterKind.Hero;
         this.initializeAlliesBattlers();
         this.initializeEnemiesBattlers();
         this.initializeInformation();
@@ -207,7 +208,7 @@ class BattleInitialize {
             this.updateTransitionStartZoom();
         }
         else {
-            this.battle.changeStep(1);
+            this.battle.changeStep(Enum.BattleStep.StartTurn);
         }
     }
     /**
@@ -237,7 +238,7 @@ class BattleInitialize {
             }
             return;
         }
-        this.battle.changeStep(BattleStep.Selection);
+        this.battle.changeStep(BattleStep.StartTurn);
     }
     /**
      *  Update transition start zoom.
@@ -274,7 +275,7 @@ class BattleInitialize {
                 return;
             }
         }
-        this.battle.changeStep(BattleStep.Selection);
+        this.battle.changeStep(BattleStep.StartTurn);
     }
     /**
      *  Handle key pressed.

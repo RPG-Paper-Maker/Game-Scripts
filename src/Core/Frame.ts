@@ -20,11 +20,14 @@ import { Manager, Datas } from "../index";
 class Frame {
 
     public duration: number;
+    public loop: boolean;
     public tick: number;
     public value: number;
 
-    constructor(duration: number, tick: number = 0, value: number = 0) {
+    constructor(duration: number, loop: boolean = true, tick: number = 0, value: 
+        number = 0) {
         this.duration = duration;
+        this.loop = loop;
         this.tick = tick;
         this.value = value;
     }
@@ -36,6 +39,9 @@ class Frame {
      *  @returns {boolean}
      */
     update(duration: number = this.duration): boolean {
+        if (!this.loop && this.value === Datas.Systems.FRAMES - 1) {
+            return false;
+        }
         let frame = this.value;
         this.tick += Manager.Stack.elapsedTime;
         if (this.tick >= duration) {

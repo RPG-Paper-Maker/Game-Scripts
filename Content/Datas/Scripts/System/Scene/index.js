@@ -15,6 +15,7 @@ export * from "./BattleAnimation.js";
 export * from "./BattleEnemyAttack.js";
 export * from "./BattleInitialize.js";
 export * from "./BattleSelection.js";
+export * from "./BattleStartTurn.js";
 export * from "./BattleVictory.js";
 export * from "./KeyboardAssign.js";
 export * from "./LoadGame.js";

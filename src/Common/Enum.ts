@@ -634,6 +634,7 @@ namespace Enum {
      */
     export enum BattleStep {
         Initialize,
+        StartTurn,
         Selection,
         Animation,
         EnemyAttack,

@@ -36,6 +36,7 @@ declare class Systems {
     static soundImpossible: System.PlaySong;
     static dbOptions: EventCommand.SetDialogBoxOptions;
     static modelHero: MapObject;
+    static ignoreAssetsLoadingErrors: boolean;
     constructor();
     /**
      *  Read the JSON file associated to System.

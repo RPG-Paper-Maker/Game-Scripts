@@ -72,7 +72,16 @@ class GL {
             this.textureLoader.load(path, (t) => {
                 resolve(t);
             }, () => { }, () => {
-                Platform.showErrorMessage("Could not load " + path);
+                let error = "Could not load " + path;
+                if (Datas.Systems.ignoreAssetsLoadingErrors) {
+                    let t = new THREE.Texture();
+                    t.image = new Image();
+                    console.log(error);
+                    resolve(t);
+                }
+                else {
+                    Platform.showErrorMessage(error);
+                }
             });
         }));
         return this.createMaterial(texture);

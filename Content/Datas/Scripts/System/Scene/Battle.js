@@ -35,6 +35,7 @@ class Battle extends Map {
         super(battleMap.idMap, true);
         // Battle Handlers
         this.battleInitialize = new Scene.BattleInitialize(this);
+        this.battleStartTurn = new Scene.BattleStartTurn(this);
         this.battleSelection = new Scene.BattleSelection(this);
         this.battleAnimation = new Scene.BattleAnimation(this);
         this.battleEnemyAttack = new Scene.BattleEnemyAttack(this);
@@ -98,7 +99,11 @@ class Battle extends Map {
      *  @returns {boolean}
      */
     isDefined(kind, index, target) {
-        return ((target || this.battlers[kind][index].active) && !this.battlers[kind][index].player.isDead());
+        return (target || (this.battlers[kind][index].active && !this.battlers[kind][index].player.isDead() && !this.battlers[kind][index]
+            .containsRestriction(Enum.StatusRestrictionsKind.CantDoAnything) &&
+            !this.battlers[kind][index].containsRestriction(Enum
+                .StatusRestrictionsKind.AttackRandomAlly) && !this.battlers[kind][index].containsRestriction(Enum.StatusRestrictionsKind
+            .AttackRandomEnemy) && !this.battlers[kind][index].containsRestriction(Enum.StatusRestrictionsKind.AttackRandomTarget)));
     }
     /**
      *  Check if all the heroes or enemies are inactive.
@@ -169,6 +174,18 @@ class Battle extends Map {
         Scene.Map.current = Manager.Stack.top;
     }
     /**
+     *  Switch attacking group.
+     */
+    switchAttackingGroup() {
+        // Switching group
+        if (this.attackingGroup === Enum.CharacterKind.Hero) {
+            this.attackingGroup = Enum.CharacterKind.Monster;
+        }
+        else {
+            this.attackingGroup = Enum.CharacterKind.Hero;
+        }
+    }
+    /**
      *  Change the step of the battle.
      *  @param {BattleStep} i - Step of the battle
      */
@@ -184,6 +201,9 @@ class Battle extends Map {
         switch (this.step) {
             case BattleStep.Initialize:
                 this.battleInitialize.initialize();
+                break;
+            case BattleStep.StartTurn:
+                this.battleStartTurn.initialize();
                 break;
             case BattleStep.Selection:
                 this.battleSelection.initialize();
@@ -222,6 +242,9 @@ class Battle extends Map {
         switch (this.step) {
             case BattleStep.Initialize:
                 this.battleInitialize.update();
+                break;
+            case BattleStep.StartTurn:
+                this.battleStartTurn.update();
                 break;
             case BattleStep.Selection:
                 this.battleSelection.update();
@@ -305,6 +328,9 @@ class Battle extends Map {
             case BattleStep.Initialize:
                 this.battleInitialize.onKeyPressedStep(key);
                 break;
+            case BattleStep.StartTurn:
+                this.battleStartTurn.onKeyPressedStep(key);
+                break;
             case BattleStep.Selection:
                 this.battleSelection.onKeyPressedStep(key);
                 break;
@@ -328,6 +354,9 @@ class Battle extends Map {
         switch (this.step) {
             case BattleStep.Initialize:
                 this.battleInitialize.onKeyReleasedStep(key);
+                break;
+            case BattleStep.StartTurn:
+                this.battleStartTurn.onKeyReleasedStep(key);
                 break;
             case BattleStep.Selection:
                 this.battleSelection.onKeyReleasedStep(key);
@@ -354,6 +383,9 @@ class Battle extends Map {
             case BattleStep.Initialize:
                 res = res && this.battleInitialize.onKeyPressedRepeatStep(key);
                 break;
+            case BattleStep.StartTurn:
+                res = res && this.battleStartTurn.onKeyPressedRepeatStep(key);
+                break;
             case BattleStep.Selection:
                 res = res && this.battleSelection.onKeyPressedRepeatStep(key);
                 break;
@@ -379,6 +411,9 @@ class Battle extends Map {
         switch (this.step) {
             case BattleStep.Initialize:
                 res = res && this.battleInitialize.onKeyPressedAndRepeatStep(key);
+                break;
+            case BattleStep.StartTurn:
+                res = res && this.battleStartTurn.onKeyPressedAndRepeatStep(key);
                 break;
             case BattleStep.Selection:
                 res = res && this.battleSelection.onKeyPressedAndRepeatStep(key);
@@ -422,6 +457,9 @@ class Battle extends Map {
         switch (this.step) {
             case BattleStep.Initialize:
                 this.battleInitialize.drawHUDStep();
+                break;
+            case BattleStep.StartTurn:
+                this.battleStartTurn.drawHUDStep();
                 break;
             case BattleStep.Selection:
                 this.battleSelection.drawHUDStep();

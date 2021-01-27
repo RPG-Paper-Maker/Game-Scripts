@@ -17,7 +17,6 @@ import CharacterKind = Enum.CharacterKind;
 import Align = Enum.Align;
 import ItemKind = Enum.ItemKind;
 import AnimationEffectConditionKind = Enum.AnimationEffectConditionKind;
-import BattleStep = Enum.BattleStep;
 import AnimationPositionKind = Enum.AnimationPositionKind;
 import { Item, Battler, Game, Animation } from "../Core";
 import { Status } from "../Core/Status";
@@ -26,7 +25,6 @@ import { Status } from "../Core/Status";
 //
 //  CLASS SceneBattle
 //
-//  Step 2 :
 //      SubStep 0 : Animation user + animation sprite
 //      SubStep 1 : Animation target
 //      SubStep 2 : Damages
@@ -51,9 +49,10 @@ class BattleAnimation {
                 informationText = this.battle.attackSkill.name();
                 break;
             case EffectSpecialActionKind.OpenSkills:
-                content = this.battle.attackingGroup === CharacterKind.Hero ? (<
-                    Graphic.Skill>this.battle.windowChoicesSkills
-                    .getCurrentContent()).system : Datas.Skills.get(this.battle
+                content = this.battle.attackingGroup === CharacterKind.Hero ? (
+                    this.battle.battleStartTurn.active ? this.battle.currentSkill : 
+                    (<Graphic.Skill>this.battle.windowChoicesSkills
+                    .getCurrentContent()).system) : Datas.Skills.get(this.battle
                     .action.skillID.getValue());
                 informationText = content.name();
                 break;
@@ -148,10 +147,10 @@ class BattleAnimation {
         if (this.battle.effects.length > 0) {
             this.battle.effects[this.battle.currentEffectIndex].execute();
         }
-        if (this.battle.animationUser.system === null) {
+        if (this.battle.animationUser && this.battle.animationUser.system === null) {
             this.battle.animationUser = null;
         }
-        if (this.battle.animationTarget.system === null) {
+        if (this.battle.animationTarget && this.battle.animationTarget.system === null) {
             this.battle.animationTarget = null;
         }
     }
@@ -182,22 +181,14 @@ class BattleAnimation {
             target.updateDead((target.damages > 0 || target.nextStatusID !== null) 
                 && !target.isDamagesMiss, this.battle.user.player);
             if (target.nextStatusID !== null) {
-                previousFirst = target.player[0];
+                previousFirst = target.player.status[0];
                 if (target.nextStatusAdd) {
-                    status = target.player.addStatus(target.nextStatusID);
+                    status = target.addStatus(target.nextStatusID);
                 } else {
-                    target.player.removeStatus(target.nextStatusID);
+                    target.removeStatus(target.nextStatusID);
                 }
                 // If first status changed, change animation
-                status = target.player.status[0];
-                if (previousFirst != status) {
-                    if (status) {
-                        target.currentStatusAnimation = new Animation(status
-                            .system.animationID.getValue(), true);
-                    } else {
-                        target.currentStatusAnimation = null;
-                    }
-                }
+                target.updateAnimationStatus(previousFirst);
             }
         }
     }
@@ -276,10 +267,10 @@ class BattleAnimation {
                 if (this.battle.isWin()) {
                     this.battle.winning = true;
                     this.battle.activeGroup();
-                    this.battle.changeStep(4);
+                    this.battle.changeStep(Enum.BattleStep.Victory);
                 } else if (this.battle.isLose()) {
                     this.battle.winning = false;
-                    this.battle.changeStep(BattleStep.Victory);
+                    this.battle.changeStep(Enum.BattleStep.Victory);
                 } else {
                     effect = this.battle.effects[this.battle.currentEffectIndex];
                     this.battle.currentEffectIndex++;
@@ -309,19 +300,19 @@ class BattleAnimation {
                     }
 
                     // Testing end of turn
+                    if (this.battle.battleStartTurn.active) {
+                        this.battle.changeStep(Enum.BattleStep.StartTurn);
+                        return;
+                    }
                     if (this.battle.isEndTurn()) {
                         this.battle.activeGroup();
-                        if (this.battle.attackingGroup === CharacterKind.Hero) {
-                            this.battle.changeStep(3); // Attack of ennemies
-                        } else {
-                            this.battle.turn++;
-                            this.battle.changeStep(1); // Attack of heroes
-                        }
+                        this.battle.switchAttackingGroup();
+                        this.battle.changeStep(Enum.BattleStep.StartTurn);
                     } else {
                         if (this.battle.attackingGroup === CharacterKind.Hero) {
-                            this.battle.changeStep(1); // Attack of heroes
+                            this.battle.changeStep(Enum.BattleStep.Selection); // Attack of heroes
                         } else {
-                            this.battle.changeStep(3); // Attack of ennemies
+                            this.battle.changeStep(Enum.BattleStep.EnemyAttack); // Attack of ennemies
                         }
                     }
                 }

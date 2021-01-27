@@ -6,9 +6,10 @@
  */
 declare class Frame {
     duration: number;
+    loop: boolean;
     tick: number;
     value: number;
-    constructor(duration: number, tick?: number, value?: number);
+    constructor(duration: number, loop?: boolean, tick?: number, value?: number);
     /**
      *  Update frame according to tick and duration, return true if frame is
      *  different.

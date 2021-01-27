@@ -63,8 +63,8 @@ class WindowSkin extends System.Base {
      *  @param {number} [h=r[3]] - The h target
      *  @param {number} [zoom=1.0] - The zoom to apply of target size
      */
-    drawElement(r, x, y, w = r[2], h = r[3], zoom = 1.0) {
-        this.picture.draw(x, y, w * zoom, h * zoom, r[0], r[1], r[2], r[3]);
+    drawElement(r, x, y, w = r[2], h = r[3], zoom = 1.0, positionResize = true) {
+        this.picture.draw(x, y, w * zoom, h * zoom, r[0], r[1], r[2], r[3], positionResize);
     }
     /**
      *  Draw the background box.
@@ -211,8 +211,8 @@ class WindowSkin extends System.Base {
      */
     drawDamages(damage, x, y, isCrit, isMiss, zoom) {
         if (isMiss) {
-            this.drawElement(this.textMiss, x - this.textMiss[2] / 2, y, this
-                .textMiss[2], this.textMiss[3], zoom);
+            this.drawElement(this.textMiss, x - ScreenResolution.getScreenX(this
+                .textMiss[2] / 2), y, this.textMiss[2], this.textMiss[3], zoom, false);
         }
         else if (damage < 0) {
             this.drawDamagesNumber(damage, x, y, this.textHeal, zoom);

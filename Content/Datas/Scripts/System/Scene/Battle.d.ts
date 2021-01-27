@@ -55,6 +55,7 @@ declare class Battle extends Map {
     static WINDOW_STATS_HEIGHT: number;
     static escapedLastBattle: boolean;
     battleInitialize: Scene.BattleInitialize;
+    battleStartTurn: Scene.BattleStartTurn;
     battleSelection: Scene.BattleSelection;
     battleAnimation: Scene.BattleAnimation;
     battleEnemyAttack: Scene.BattleEnemyAttack;
@@ -80,6 +81,7 @@ declare class Battle extends Map {
     time: number;
     timeEnemyAttack: number;
     turn: number;
+    currentSkill: System.Skill;
     animationUser: Animation;
     animationTarget: Animation;
     action: System.MonsterAction;
@@ -182,6 +184,10 @@ declare class Battle extends Map {
      *  Win the battle.
      */
     endBattle(): void;
+    /**
+     *  Switch attacking group.
+     */
+    switchAttackingGroup(): void;
     /**
      *  Change the step of the battle.
      *  @param {BattleStep} i - Step of the battle

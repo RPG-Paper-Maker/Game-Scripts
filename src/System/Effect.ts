@@ -306,7 +306,7 @@ class Effect extends Base {
             }
             case EffectKind.Status: {
                 let precision: number, random: number, miss: boolean, target: 
-                    Battler, id: number, status: Status;
+                    Battler, id: number;
                 for (let i = 0, l = targets.length; i < l; i++) {
                     target = targets[i];
                     precision = Interpreter.evaluate(this.statusPrecisionFormula
@@ -315,6 +315,7 @@ class Effect extends Base {
                     if (precision < random) {
                         miss = true;
                     } else {
+                        miss = false;
                         id = this.statusID.getValue();
                         target.nextStatusID = id;
                         target.nextStatusAdd = this.isAddStatus;
@@ -339,8 +340,7 @@ class Effect extends Base {
                     null, null, this.commonReaction.parameters));
                 break;
             case EffectKind.SpecialActions:
-                Scene.Map.current.battleCommandKind = this
-                    .specialActionKind;
+                Scene.Map.current.battleCommandKind = this.specialActionKind;
                 break;
             case EffectKind.Script:
                 break;
@@ -416,10 +416,10 @@ class Effect extends Base {
                     ": " + (min === max ? min : min + " - " + max) + (options
                     .length > 0 ? " [" + options.join(" - ") +  "]" : "");
             case EffectKind.Status:
-                return (this.isAddStatus ? "Add" : "Remove") + " " + 
-                    " [precision: " + Interpreter.evaluate(this
-                    .statusPrecisionFormula.getValue(), { user: user, target: 
-                    target }) + "%]";
+                return (this.isAddStatus ? "Add" : "Remove") + " " + Datas
+                    .Status.get(this.statusID.getValue()).name() + " [precision: " + 
+                    Interpreter.evaluate(this.statusPrecisionFormula.getValue(), 
+                    { user: user, target: target }) + "%]";
             case EffectKind.AddRemoveSkill:
                 return (this.isAddSkill ? "Add" : "Remove") + " skill " + Datas
                     .Skills.get(this.addSkillID.getValue()).name;

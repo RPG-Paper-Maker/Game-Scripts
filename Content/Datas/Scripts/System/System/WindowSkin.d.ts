@@ -46,7 +46,7 @@ declare class WindowSkin extends System.Base {
      *  @param {number} [h=r[3]] - The h target
      *  @param {number} [zoom=1.0] - The zoom to apply of target size
      */
-    drawElement(r: number[], x: number, y: number, w?: number, h?: number, zoom?: number): void;
+    drawElement(r: number[], x: number, y: number, w?: number, h?: number, zoom?: number, positionResize?: boolean): void;
     /**
      *  Draw the background box.
      *  @param {number[]} background - The background source rect

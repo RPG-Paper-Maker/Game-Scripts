@@ -199,7 +199,14 @@ class Shape extends Base {
                     Shape.loader.load(url, (text) => {
                         resolve(Shape.parse(text));
                     }, () => { }, () => {
-                        Platform.showErrorMessage("Could not load " + url);
+                        let error = "Could not load " + url;
+                        if (Datas.Systems.ignoreAssetsLoadingErrors) {
+                            console.log(error);
+                            resolve({});
+                        }
+                        else {
+                            Platform.showErrorMessage(error);
+                        }
                     });
                 });
             }

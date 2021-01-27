@@ -25,7 +25,6 @@ import { Item, Skill, Game } from "../Core";
 //
 //  CLASS BattleSelection
 //
-//  Step 1 :
 //      SubStep 0 : Selection of an ally
 //      SubStep 1 : Selection of a command
 //      SubStep 2 : selection of an ally/enemy for a command
@@ -49,14 +48,32 @@ class BattleSelection {
             this.battle.winning = false;
             this.battle.changeStep(BattleStep.Victory);
             return;
+        } else if (this.battle.isWin()) {
+            this.battle.winning = true;
+            this.battle.activeGroup();
+            this.battle.changeStep(BattleStep.Victory);
         }
+
+        // Check if everyone is defined
+        let exists = false;
+        for (let i = 0, l = this.battle.battlers[Enum.CharacterKind.Hero].length; 
+            i < l; i++) {
+            if (this.battle.isDefined(Enum.CharacterKind.Hero, i)) {
+                exists = true;
+                break;
+            }
+        }
+        if (!exists) {
+            this.battle.switchAttackingGroup();
+            this.battle.changeStep(Enum.BattleStep.StartTurn);
+            return;
+        }
+
         this.battle.battleCommandKind = EffectSpecialActionKind.None;
         this.battle.windowTopInformations.content = new Graphic.Text(
             "Select an ally", { align: Align.Center });
-        this.battle.selectedUserIndex = this.selectFirstIndex(CharacterKind.Hero
-            , 0);
+        this.battle.selectedUserIndex = this.selectFirstIndex(CharacterKind.Hero, 0);
         this.battle.kindSelection = CharacterKind.Hero;
-        this.battle.attackingGroup = CharacterKind.Hero;
         this.battle.userTarget = false;
         this.battle.all = false;
         this.battle.targets = [];
@@ -156,7 +173,7 @@ class BattleSelection {
      *  @param {number} index - The index (last registered)
      */
     public selectFirstIndex(kind: CharacterKind, index: number) {
-        while (!this.battle.isDefined(kind, index)) {
+        while (!this.battle.isDefined(kind, index, this.battle.subStep === 2)) {
             if (index < (this.battle.battlers[kind].length - 1)) {
                 index++;
             } else if (index === (this.battle.battlers[kind].length - 1)) {
@@ -314,7 +331,7 @@ class BattleSelection {
             .TextIcon>this.battle.windowChoicesBattleCommands.getCurrentContent())
             .system);
         let i: number, l: number;
-        switch (this.battle.battleCommandKind) {
+        switch (<Enum.EffectSpecialActionKind> this.battle.battleCommandKind) {
             case EffectSpecialActionKind.ApplyWeapons:
                 // Check weapon TargetKind
                 this.battle.attackSkill = (<Graphic.Skill>this.battle
@@ -335,21 +352,26 @@ class BattleSelection {
                 }
                 this.selectTarget(targetKind);
                 break;
-            /*
             case EffectSpecialActionKind.OpenSkills:
-                if (this.battle.listSkills.length === 0) {
+                if (this.battle.listSkills.length === 0 || this.battle.user
+                    .containsRestriction(Enum.StatusRestrictionsKind.CantUseSkills)) {
                     this.battle.battleCommandKind = EffectSpecialActionKind.None;
                 }
                 break;
             case EffectSpecialActionKind.OpenItems:
-                if (this.battle.listItems.length === 0) {
+                if (this.battle.listItems.length === 0 || this.battle.user
+                    .containsRestriction(Enum.StatusRestrictionsKind.CantUseItems)) {
                     this.battle.battleCommandKind = EffectSpecialActionKind.None;
                 }
                 break;
-                */
             case EffectSpecialActionKind.Escape:
+                if (this.battle.user.containsRestriction(Enum.StatusRestrictionsKind
+                    .CantEscape)) {
+                    this.battle.battleCommandKind = EffectSpecialActionKind.None;
+                    break;
+                }
                 if (this.battle.canEscape) {
-                    this.battle.step = 4;
+                    this.battle.step = Enum.BattleStep.Victory;
                     this.battle.subStep = 3;
                     this.battle.transitionEnded = false;
                     this.battle.time = new Date().getTime();
@@ -366,7 +388,7 @@ class BattleSelection {
                 return;
             case EffectSpecialActionKind.EndTurn:
                 this.battle.windowChoicesBattleCommands.unselect();
-                this.battle.changeStep(2);
+                this.battle.changeStep(Enum.BattleStep.Animation);
                 return;
             default:
                 break;

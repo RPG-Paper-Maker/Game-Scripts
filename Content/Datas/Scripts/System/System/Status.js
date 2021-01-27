@@ -31,7 +31,7 @@ class Status extends Icon {
         this.restrictionKind = Utils.defaultValue(json.restrictionKind, Enum
             .StatusRestrictionsKind.None);
         this.priority = System.DynamicValue.readOrDefaultNumber(json.priority);
-        this.battlerPosition = System.DynamicValue.readOrDefaultNumber(json.priority);
+        this.battlerPosition = System.DynamicValue.readOrDefaultNumber(json.battlerPosition);
         this.isReleaseAtEndBattle = Utils.defaultValue(json.isReleaseAtEndBattle, false);
         this.isReleaseAfterAttacked = Utils.defaultValue(json.isReleaseAfterAttacked, false);
         this.chanceReleaseAfterAttacked = System.DynamicValue

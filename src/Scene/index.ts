@@ -17,6 +17,7 @@ export * from "./BattleAnimation";
 export * from "./BattleEnemyAttack";
 export * from "./BattleInitialize";
 export * from "./BattleSelection";
+export * from "./BattleStartTurn";
 export * from "./BattleVictory";
 export * from "./KeyboardAssign";
 export * from "./LoadGame";
