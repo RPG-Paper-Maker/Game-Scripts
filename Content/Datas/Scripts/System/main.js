@@ -21,6 +21,7 @@ export class Main {
         throw new Error("This is a static class");
     }
     static async initialize() {
+        Datas.Settings.checkIsDevMode();
         await Manager.Plugins.load();
         Manager.Stack.loadingDelay = 0;
         Manager.Songs.initialize();
@@ -46,6 +47,7 @@ export class Main {
         Manager.GL.resize();
         await Datas.SpecialElements.read();
         await Datas.Tilesets.read();
+        await Datas.Status.read();
         await Datas.Items.read();
         await Datas.Skills.read();
         await Datas.Weapons.read();

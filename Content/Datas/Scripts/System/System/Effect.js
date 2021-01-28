@@ -124,7 +124,7 @@ class Effect extends Base {
         }
         switch (this.kind) {
             case EffectKind.Damages: {
-                let damage, miss, crit, target, precision, random, variance, fixRes, percentRes, element, critical, stat, abbreviation, max, before, currencyID, battler;
+                let damage, miss, crit, target, precision, variance, fixRes, percentRes, element, critical, stat, abbreviation, max, before, currencyID, battler;
                 for (let i = 0; i < l; i++) {
                     damage = 0;
                     miss = false;
@@ -135,8 +135,7 @@ class Effect extends Base {
                         precision = Interpreter.evaluate(this
                             .damagePrecisionFormula.getValue(), { user: user,
                             target: target });
-                        random = Mathf.random(0, 100);
-                        if (precision < random) {
+                        if (!Mathf.randomPercentTest(precision)) {
                             damage = null;
                             miss = true;
                         }
@@ -161,8 +160,7 @@ class Effect extends Base {
                             critical = Interpreter.evaluate(this
                                 .damageCriticalFormula.getValue(), { user: user,
                                 target: target });
-                            random = Mathf.random(0, 100);
-                            if (random <= critical) {
+                            if (Mathf.randomPercentTest(critical)) {
                                 damage = Interpreter.evaluate(Interpreter
                                     .evaluate(Datas.BattleSystems.formulaCrit
                                     .getValue(), { user: user, target: target,
@@ -244,20 +242,19 @@ class Effect extends Base {
                 break;
             }
             case EffectKind.Status: {
-                let precision, random, miss, target, id;
+                let precision, miss, target, id;
                 for (let i = 0, l = targets.length; i < l; i++) {
                     target = targets[i];
                     precision = Interpreter.evaluate(this.statusPrecisionFormula
                         .getValue(), { user: user, target: target.player });
-                    random = Mathf.random(0, 100);
-                    if (precision < random) {
-                        miss = true;
-                    }
-                    else {
+                    if (Mathf.randomPercentTest(precision)) {
                         miss = false;
                         id = this.statusID.getValue();
                         target.nextStatusID = id;
                         target.nextStatusAdd = this.isAddStatus;
+                    }
+                    else {
+                        miss = true;
                     }
                     // For diplaying result in HUD
                     if (Scene.Map.current.isBattleMap) {

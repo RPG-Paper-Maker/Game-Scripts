@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Enum, Interpreter, Utils, Platform } from "../Common/index.js";
+import { Enum, Interpreter, Utils, Platform, Mathf } from "../Common/index.js";
 var CharacterKind = Enum.CharacterKind;
 import { Datas, System, Graphic } from "../index.js";
 import { Skill } from "./Skill.js";
@@ -653,13 +653,65 @@ class Player {
      *  @param {number} id - The status id to remove
      */
     removeStatus(id) {
-        let i, l, s;
+        let i, s;
         for (i = this.status.length - 1; i >= 0; i--) {
             s = this.status[i];
             // If same id, remove
             if (s.system.id === id) {
                 this.status.splice(i, 1);
             }
+        }
+    }
+    /**
+     *  Remove the status with release at end battle option.
+     */
+    removeEndBattleStatus() {
+        let s;
+        for (let i = this.status.length - 1; i >= 0; i--) {
+            s = this.status[i];
+            if (s.system.isReleaseAtEndBattle) {
+                this.status.splice(i, 1);
+            }
+        }
+    }
+    /**
+     *  Remove the status with release after attacked option.
+     */
+    removeAfterAttackedStatus() {
+        let s;
+        for (let i = this.status.length - 1; i >= 0; i--) {
+            s = this.status[i];
+            if (s.system.isReleaseAfterAttacked && Mathf.randomPercentTest(s.system
+                .chanceReleaseAfterAttacked.getValue())) {
+                this.status.splice(i, 1);
+            }
+        }
+    }
+    /**
+     *  Remove the status with release at start turn option.
+     */
+    removeStartTurnStatus() {
+        let j, m, s, release;
+        for (let i = this.status.length - 1; i >= 0; i--) {
+            s = this.status[i];
+            if (s.system.isReleaseStartTurn) {
+                for (j = 0, m = s.system.releaseStartTurn.length; j < m; j++) {
+                    release = s.system.releaseStartTurn[j];
+                    if (Mathf.OPERATORS_COMPARE[release.operationTurnKind](s.turn, release.turn.getValue()) && Mathf.randomPercentTest(release.chance.getValue())) {
+                        this.status.splice(i, 1);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    /**
+     *  Update each status turn.
+     */
+    updateStatusTurn() {
+        for (let i = this.status.length - 1; i >= 0; i--) {
+            this.status[i].turn++;
+            console.log(this.status[i].turn);
         }
     }
 }

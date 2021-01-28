@@ -15,6 +15,7 @@ import Align = Enum.Align;
 import CharacterKind = Enum.CharacterKind;
 import LootKind = Enum.LootKind;
 import { Battler, WindowBox, Player, Item, Game } from "../Core";
+import { Status } from "../Core/Status";
 
 // -------------------------------------------------------
 //
@@ -40,6 +41,16 @@ class BattleVictory {
      *  Initialize step.
      */
     public initialize() {
+        // Remove status if release at end of battles
+        let i: number, l: number, battler: Battler, s: Status;
+        for (i = 0, l = Game.current.teamHeroes.length; i < l; i++) {
+            battler = this.battle.battlers[CharacterKind.Hero][i];
+            s = battler.player.status[0];
+            battler.player.removeEndBattleStatus();
+            battler.updateStatusStep();
+            battler.updateAnimationStatus(s);
+        }
+
         // If loosing, directly go to end transition
         if (!this.battle.winning) {
             this.battle.windowTopInformations.content = new Graphic.Text(
@@ -58,7 +69,6 @@ class BattleVictory {
         for (id in this.battle.currencies) {
             Game.current.currencies[id] += this.battle.currencies[id];
         }
-        let i: number, l: number;
         for (i = 0, l = this.battle.loots.length; i < l; i++) {
             for (id in this.battle.loots[i]) {
                 this.battle.loots[i][id].addItems();
@@ -66,7 +76,6 @@ class BattleVictory {
         }
 
         // Heroes
-        let battler: Battler;
         for (i = 0, l = Game.current.teamHeroes.length; i < l; i++) {
             battler = this.battle.battlers[CharacterKind.Hero][i];
             battler.setVictory();

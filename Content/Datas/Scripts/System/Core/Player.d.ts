@@ -191,5 +191,21 @@ declare class Player {
      *  @param {number} id - The status id to remove
      */
     removeStatus(id: number): void;
+    /**
+     *  Remove the status with release at end battle option.
+     */
+    removeEndBattleStatus(): void;
+    /**
+     *  Remove the status with release after attacked option.
+     */
+    removeAfterAttackedStatus(): void;
+    /**
+     *  Remove the status with release at start turn option.
+     */
+    removeStartTurnStatus(): void;
+    /**
+     *  Update each status turn.
+     */
+    updateStatusTurn(): void;
 }
 export { Player };

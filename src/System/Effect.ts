@@ -18,7 +18,6 @@ import CharacterKind = Enum.CharacterKind;
 import { System, EventCommand, Manager, Datas, Scene } from "../index";
 import { Player, ReactionInterpreter, Battler, Game, Animation } from "../Core";
 import { Statistic } from "./Statistic";
-import { Status } from "../Core/Status";
 
 /** @class
  *  An effect of a common skill item.
@@ -170,10 +169,10 @@ class Effect extends Base {
         switch (this.kind) {
             case EffectKind.Damages: {
                 let damage: number, miss: boolean, crit: boolean, target: Player
-                    , precision: number, random: number, variance: number, 
-                    fixRes: number, percentRes: number, element: number, 
-                    critical: number, stat: Statistic, abbreviation: string, max
-                    : number, before: number, currencyID: number, battler: Battler;
+                    , precision: number, variance: number, fixRes: number, 
+                    percentRes: number, element: number, critical: number, stat: 
+                    Statistic, abbreviation: string, max: number, before: number, 
+                    currencyID: number, battler: Battler;
                 for (let i = 0; i < l; i++) {
                     damage = 0;
                     miss = false;
@@ -185,8 +184,7 @@ class Effect extends Base {
                         precision = Interpreter.evaluate(this
                             .damagePrecisionFormula.getValue(), { user: user, 
                             target: target });
-                        random = Mathf.random(0, 100);
-                        if (precision < random) {
+                        if (!Mathf.randomPercentTest(precision)) {
                             damage = null;
                             miss = true;
                         }
@@ -216,8 +214,7 @@ class Effect extends Base {
                             critical = Interpreter.evaluate(this
                                 .damageCriticalFormula.getValue(), { user :user, 
                                 target: target });
-                            random = Mathf.random(0, 100);
-                            if (random <= critical) {
+                            if (Mathf.randomPercentTest(critical)) {
                                 damage = Interpreter.evaluate(Interpreter
                                     .evaluate(Datas.BattleSystems.formulaCrit
                                     .getValue(), { user: user, target: target, 
@@ -305,20 +302,19 @@ class Effect extends Base {
                 break;
             }
             case EffectKind.Status: {
-                let precision: number, random: number, miss: boolean, target: 
+                let precision: number, miss: boolean, target: 
                     Battler, id: number;
                 for (let i = 0, l = targets.length; i < l; i++) {
                     target = targets[i];
                     precision = Interpreter.evaluate(this.statusPrecisionFormula
                         .getValue(), { user: user, target: target.player });
-                    random = Mathf.random(0, 100);
-                    if (precision < random) {
-                        miss = true;
-                    } else {
+                    if (Mathf.randomPercentTest(precision)) {
                         miss = false;
                         id = this.statusID.getValue();
                         target.nextStatusID = id;
                         target.nextStatusAdd = this.isAddStatus;
+                    } else {
+                        miss = true;
                     }
                     // For diplaying result in HUD
                     if (Scene.Map.current.isBattleMap) {

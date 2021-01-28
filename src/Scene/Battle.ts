@@ -343,7 +343,13 @@ class Battle extends Map {
         if (this.attackingGroup === Enum.CharacterKind.Hero) {
             this.attackingGroup = Enum.CharacterKind.Monster;
         } else {
+            this.turn++;
             this.attackingGroup = Enum.CharacterKind.Hero;
+        }
+
+        // Updating status turn
+        for (let i = 0, l = this.battlers[this.attackingGroup].length; i < l; i++) {
+            this.battlers[this.attackingGroup][i].player.updateStatusTurn();
         }
     }
 

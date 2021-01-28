@@ -413,7 +413,7 @@ class Mathf {
      * @param {number} a
      * @param {number} b
      * @param {boolean} [large=false]
-     * @return {*}  {number}
+     * @return {number}  {number}
      */
     static numberOf(a: number, b: number, large = true): number {
         if (a > 1 && !large || b > 1 && !large) {
@@ -429,13 +429,22 @@ class Mathf {
      * @param {number} a
      * @param {number} b
      * @param {boolean} [large=true]
-     * @return {*}  {number}
+     * @return {number}  {number}
      */
     static roundedNumberOf(a: number, b: number, large = true): number {
         if (a > 1 && !large || b > 1 && !large) {
             throw new Error("value out of range! (0~1) please enable large mode if you want to use integer!");
         }
         return Math.round(this.numberOf(a, b));
+    }
+
+    /**
+     *  Test if hit.
+     * @param {number} chance
+     * @return {boolean}
+     */
+    static randomPercentTest(chance: number): boolean {
+        return chance > 0 && this.random(0, 100) <= chance;
     }
 }
 

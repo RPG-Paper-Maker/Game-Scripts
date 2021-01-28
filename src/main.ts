@@ -54,6 +54,7 @@ export class Main {
         Manager.GL.resize();
         await Datas.SpecialElements.read();
         await Datas.Tilesets.read();
+        await Datas.Status.read();
         await Datas.Items.read();
         await Datas.Skills.read();
         await Datas.Weapons.read();

@@ -30,57 +30,69 @@ class BattleStartTurn {
      */
     initialize() {
         this.active = true;
-        let i, l;
-        switch (this.step) {
-            case 0:
-                let user;
-                for (i = 0, l = this.battle.battlers[this.battle.attackingGroup]
-                    .length; i < l; i++) {
-                    user = this.battle.battlers[this.battle.attackingGroup][i];
-                    if (user.active) {
-                        if (user.containsRestriction(Enum.StatusRestrictionsKind
-                            .CantDoAnything)) {
-                            continue;
-                        }
-                        if (user.containsRestriction(Enum.StatusRestrictionsKind
-                            .AttackRandomAlly)) {
-                            this.defineRandom(user, Enum.StatusRestrictionsKind
-                                .AttackRandomAlly);
-                            return;
-                        }
-                        if (user.containsRestriction(Enum.StatusRestrictionsKind
-                            .AttackRandomEnemy)) {
-                            this.defineRandom(user, Enum.StatusRestrictionsKind
-                                .AttackRandomEnemy);
-                            return;
-                        }
-                        if (user.containsRestriction(Enum.StatusRestrictionsKind
-                            .AttackRandomTarget)) {
-                            this.defineRandom(user, Enum.StatusRestrictionsKind
-                                .AttackRandomTarget);
-                            return;
-                        }
+        // Check status releases
+        let i, l, user, s;
+        if (this.step === 0) {
+            for (i = 0, l = this.battle.battlers[this.battle.attackingGroup]
+                .length; i < l; i++) {
+                user = this.battle.battlers[this.battle.attackingGroup][i];
+                if (!user.player.isDead()) {
+                    let s = user.player.status[0];
+                    user.player.removeStartTurnStatus();
+                    user.updateStatusStep();
+                    user.updateAnimationStatus(s);
+                }
+            }
+            this.step++;
+        }
+        // Status effects
+        if (this.step === 1) {
+            this.step++;
+        }
+        // Check status restrictions (force attacks)
+        if (this.step === 2) {
+            for (i = 0, l = this.battle.battlers[this.battle.attackingGroup]
+                .length; i < l; i++) {
+                user = this.battle.battlers[this.battle.attackingGroup][i];
+                if (user.active) {
+                    if (user.containsRestriction(Enum.StatusRestrictionsKind
+                        .CantDoAnything)) {
+                        continue;
+                    }
+                    if (user.containsRestriction(Enum.StatusRestrictionsKind
+                        .AttackRandomAlly)) {
+                        this.defineRandom(user, Enum.StatusRestrictionsKind
+                            .AttackRandomAlly);
+                        return;
+                    }
+                    if (user.containsRestriction(Enum.StatusRestrictionsKind
+                        .AttackRandomEnemy)) {
+                        this.defineRandom(user, Enum.StatusRestrictionsKind
+                            .AttackRandomEnemy);
+                        return;
+                    }
+                    if (user.containsRestriction(Enum.StatusRestrictionsKind
+                        .AttackRandomTarget)) {
+                        this.defineRandom(user, Enum.StatusRestrictionsKind
+                            .AttackRandomTarget);
+                        return;
                     }
                 }
-                if (this.battle.isEndTurn()) {
-                    this.battle.activeGroup();
-                    this.battle.switchAttackingGroup();
-                    this.battle.changeStep(Enum.BattleStep.StartTurn);
-                }
-                else {
-                    this.startSelectionEnemyAttack();
-                }
-                break;
-            case 1:
-                this.battle.battleAnimation.update();
-                break;
+            }
+            if (this.battle.isEndTurn()) {
+                this.battle.activeGroup();
+                this.battle.switchAttackingGroup();
+                this.battle.changeStep(Enum.BattleStep.StartTurn);
+            }
+            else {
+                this.startSelectionEnemyAttack();
+            }
         }
     }
     startSelectionEnemyAttack() {
         this.active = false;
         this.step = 0;
         if (this.battle.attackingGroup === Enum.CharacterKind.Hero) {
-            this.battle.turn++;
             this.battle.changeStep(Enum.BattleStep.Selection); // Attack of heroes
         }
         else {

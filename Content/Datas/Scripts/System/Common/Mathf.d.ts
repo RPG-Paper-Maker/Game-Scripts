@@ -237,7 +237,7 @@ declare class Mathf {
      * @param {number} a
      * @param {number} b
      * @param {boolean} [large=false]
-     * @return {*}  {number}
+     * @return {number}  {number}
      */
     static numberOf(a: number, b: number, large?: boolean): number;
     /**
@@ -247,8 +247,14 @@ declare class Mathf {
      * @param {number} a
      * @param {number} b
      * @param {boolean} [large=true]
-     * @return {*}  {number}
+     * @return {number}  {number}
      */
     static roundedNumberOf(a: number, b: number, large?: boolean): number;
+    /**
+     *  Test if hit.
+     * @param {number} chance
+     * @return {boolean}
+     */
+    static randomPercentTest(chance: number): boolean;
 }
 export { Mathf };
