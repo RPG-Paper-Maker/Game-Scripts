@@ -651,6 +651,7 @@ class Player {
     /**
      *  Remove the status.
      *  @param {number} id - The status id to remove
+     *  @returns {Core.Status}
      */
     removeStatus(id) {
         let i, s;
@@ -659,6 +660,7 @@ class Player {
             // If same id, remove
             if (s.system.id === id) {
                 this.status.splice(i, 1);
+                return s;
             }
         }
     }
@@ -711,7 +713,6 @@ class Player {
     updateStatusTurn() {
         for (let i = this.status.length - 1; i >= 0; i--) {
             this.status[i].turn++;
-            console.log(this.status[i].turn);
         }
     }
 }

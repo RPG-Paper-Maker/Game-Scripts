@@ -22,7 +22,7 @@ declare class Map extends Base {
     orientation: Orientation;
     user: Battler;
     isBattleMap: boolean;
-    tempTargets: any[];
+    tempTargets: Battler[];
     targets: Battler[];
     battleCommandKind: EffectSpecialActionKind;
     mapProperties: System.MapProperties;

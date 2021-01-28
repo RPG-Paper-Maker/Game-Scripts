@@ -56,9 +56,9 @@ declare class Battler {
     damages: number;
     isDamagesMiss: boolean;
     isDamagesCritical: boolean;
-    nextStatusAdd: boolean;
-    nextStatusID: number;
     currentStatusAnimation: Animation;
+    lastStatus: Status;
+    lastStatusHealed: Status;
     constructor(player: Player, position?: Position, camera?: Camera);
     /**
      *  Check at least one affected status contains the following restriction.
@@ -170,8 +170,9 @@ declare class Battler {
     /**
      *  Remove the status.
      *  @param {number} id - The status id to remove
+     *  @returns {Core.Status}
      */
-    removeStatus(id: number): void;
+    removeStatus(id: number): Status;
     /**
      *  Update status step (first priority status displayed).
      */

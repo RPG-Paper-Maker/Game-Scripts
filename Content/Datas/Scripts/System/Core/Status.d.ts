@@ -10,7 +10,11 @@ declare class Status {
     turn: number;
     picture: Picture2D;
     constructor(id: number, turn?: number);
+    static getMessage(message: System.DynamicValue, target: string): string;
     static drawList(statusList: Status[], x: number, y: number, align?: Enum.Align): void;
+    getMessageAllyAffected(target: string): string;
+    getMessageEnemyAffected(target: string): string;
+    getMessageHealed(target: string): string;
     /**
      *  Draw the status on top of battler.
      *  @param {number} x - The x position

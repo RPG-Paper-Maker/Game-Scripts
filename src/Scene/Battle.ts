@@ -107,6 +107,7 @@ class Battle extends Map {
     public timeEnemyAttack: number;
     public turn: number;
     public currentSkill: System.Skill;
+    public informationText: string;
 
     //Animation
     public animationUser: Animation;
@@ -165,6 +166,7 @@ class Battle extends Map {
     public xp: number;
     public battleMap: System.BattleMap;
     public currentEffectIndex: number;
+    public currentTargetIndex: number;
     public priorityIndex: number;
     public lootsNumber: number;
 

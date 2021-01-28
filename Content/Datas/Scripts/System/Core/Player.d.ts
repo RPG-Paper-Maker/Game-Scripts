@@ -189,8 +189,9 @@ declare class Player {
     /**
      *  Remove the status.
      *  @param {number} id - The status id to remove
+     *  @returns {Core.Status}
      */
-    removeStatus(id: number): void;
+    removeStatus(id: number): Status;
     /**
      *  Remove the status with release at end battle option.
      */

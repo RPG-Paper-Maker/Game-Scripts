@@ -20,6 +20,9 @@ class Status {
         this.turn = turn;
         this.picture = Datas.Pictures.getPictureCopy(Enum.PictureKind.Icons, this.system.pictureID);
     }
+    static getMessage(message, target) {
+        return message.getValue().replace("[target]", target);
+    }
     static drawList(statusList, x, y, align = Enum.Align.Left) {
         let totalWidth = 0;
         let maxHeight = 0;
@@ -54,6 +57,15 @@ class Status {
             s.draw(x - totalWidth + xOffset + (i * Constants.MEDIUM_SPACE) -
                 maxWidth, y - (maxHeight / 2));
         }
+    }
+    getMessageAllyAffected(target) {
+        return Status.getMessage(this.system.messageAllyAffected, target);
+    }
+    getMessageEnemyAffected(target) {
+        return Status.getMessage(this.system.messageEnemyAffected, target);
+    }
+    getMessageHealed(target) {
+        return Status.getMessage(this.system.messageStatusHealed, target);
     }
     /**
      *  Draw the status on top of battler.

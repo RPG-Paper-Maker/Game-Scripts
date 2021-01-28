@@ -37,7 +37,7 @@ class Map extends Base {
     public orientation: Orientation;
     public user: Battler;
     public isBattleMap: boolean;
-    public tempTargets: any[];
+    public tempTargets: Battler[];
     public targets: Battler[];
     public battleCommandKind: EffectSpecialActionKind;
     public mapProperties: System.MapProperties;

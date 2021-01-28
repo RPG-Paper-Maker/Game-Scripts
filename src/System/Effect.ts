@@ -18,6 +18,7 @@ import CharacterKind = Enum.CharacterKind;
 import { System, EventCommand, Manager, Datas, Scene } from "../index";
 import { Player, ReactionInterpreter, Battler, Game, Animation } from "../Core";
 import { Statistic } from "./Statistic";
+import { Status } from "../Core/Status";
 
 /** @class
  *  An effect of a common skill item.
@@ -160,12 +161,6 @@ class Effect extends Base {
         let targets = Scene.Map.current.targets;
         let result = false;
         let l = targets.length;
-        let target: Battler;
-        for (let i = 0; i < l; i++) {
-            target = targets[i];
-            target.nextStatusAdd = null;
-            target.nextStatusID = null;
-        }
         switch (this.kind) {
             case EffectKind.Damages: {
                 let damage: number, miss: boolean, crit: boolean, target: Player
@@ -302,8 +297,8 @@ class Effect extends Base {
                 break;
             }
             case EffectKind.Status: {
-                let precision: number, miss: boolean, target: 
-                    Battler, id: number;
+                let precision: number, miss: boolean, target: Battler, id: number,
+                    previousFirst: Status;
                 for (let i = 0, l = targets.length; i < l; i++) {
                     target = targets[i];
                     precision = Interpreter.evaluate(this.statusPrecisionFormula
@@ -311,8 +306,19 @@ class Effect extends Base {
                     if (Mathf.randomPercentTest(precision)) {
                         miss = false;
                         id = this.statusID.getValue();
-                        target.nextStatusID = id;
-                        target.nextStatusAdd = this.isAddStatus;
+                        previousFirst = target.player.status[0];
+                        
+                        // Add or remove status
+                        if (this.isAddStatus) {
+                            target.lastStatusHealed = null;
+                            target.lastStatus = target.addStatus(id);
+                        } else {
+                            target.lastStatusHealed = target.removeStatus(id);
+                            target.lastStatus = null;
+                        }
+
+                        // If first status changed, change animation
+                        target.updateAnimationStatus(previousFirst);
                     } else {
                         miss = true;
                     }

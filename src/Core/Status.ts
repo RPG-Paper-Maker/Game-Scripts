@@ -31,6 +31,10 @@ class Status {
             this.system.pictureID);
     }
 
+    static getMessage(message: System.DynamicValue, target: string): string {
+        return message.getValue().replace("[target]", target);
+    }
+
     static drawList(statusList: Status[], x: number, y: number, align: Enum
         .Align = Enum.Align.Left) {
         let totalWidth: number = 0;
@@ -67,6 +71,18 @@ class Status {
             s.draw(x - totalWidth + xOffset + (i * Constants.MEDIUM_SPACE) - 
                 maxWidth, y - (maxHeight / 2));
         }
+    }
+
+    getMessageAllyAffected(target: string): string {
+        return Status.getMessage(this.system.messageAllyAffected, target);
+    }
+
+    getMessageEnemyAffected(target: string): string {
+        return Status.getMessage(this.system.messageEnemyAffected, target);
+    }
+
+    getMessageHealed(target: string): string {
+        return Status.getMessage(this.system.messageStatusHealed, target);
     }
 
     /** 

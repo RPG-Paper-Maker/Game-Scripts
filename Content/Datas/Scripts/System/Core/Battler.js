@@ -26,8 +26,6 @@ import { Animation } from "./Animation.js";
 class Battler {
     constructor(player, position, camera) {
         this.itemsNumbers = [];
-        this.nextStatusAdd = null;
-        this.nextStatusID = null;
         this.currentStatusAnimation = null;
         this.player = player;
         if (!position) {
@@ -419,10 +417,12 @@ class Battler {
     /**
      *  Remove the status.
      *  @param {number} id - The status id to remove
+     *  @returns {Core.Status}
      */
     removeStatus(id) {
-        this.player.removeStatus(id);
+        let status = this.player.removeStatus(id);
         this.updateStatusStep();
+        return status;
     }
     /**
      *  Update status step (first priority status displayed).

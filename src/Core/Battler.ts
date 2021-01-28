@@ -74,9 +74,9 @@ class Battler {
     public damages: number;
     public isDamagesMiss: boolean;
     public isDamagesCritical: boolean;
-    public nextStatusAdd: boolean = null;
-    public nextStatusID: number = null;
     public currentStatusAnimation: Animation = null;
+    public lastStatus: Status;
+    public lastStatusHealed: Status;
 
     constructor(player: Player, position?: Position, camera?: Camera) {
         this.player = player;
@@ -499,10 +499,12 @@ class Battler {
     /** 
      *  Remove the status.
      *  @param {number} id - The status id to remove
+     *  @returns {Core.Status}
      */
-    removeStatus(id: number) {
-        this.player.removeStatus(id);
+    removeStatus(id: number): Status {
+        let status = this.player.removeStatus(id);
         this.updateStatusStep();
+        return status;
     }
 
     /** 

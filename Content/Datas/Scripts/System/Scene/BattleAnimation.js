@@ -34,29 +34,30 @@ class BattleAnimation {
      *  Initialize step.
      */
     initialize() {
-        let informationText, content;
+        let content;
         switch (this.battle.battleCommandKind) {
             case EffectSpecialActionKind.ApplyWeapons:
-                informationText = this.battle.attackSkill.name();
+                this.battle.informationText = this.battle.attackSkill.name();
                 break;
             case EffectSpecialActionKind.OpenSkills:
                 content = this.battle.attackingGroup === CharacterKind.Hero ? (this.battle.battleStartTurn.active ? this.battle.currentSkill :
                     this.battle.windowChoicesSkills
                         .getCurrentContent().system) : Datas.Skills.get(this.battle
                     .action.skillID.getValue());
-                informationText = content.name();
+                this.battle.informationText = content.name();
                 break;
             case EffectSpecialActionKind.OpenItems:
                 content = this.battle.attackingGroup === CharacterKind.Hero ? this.battle.windowChoicesItems
                     .getCurrentContent().system : Datas.Items.get(this.battle
                     .action.itemID.getValue());
-                informationText = content.name();
+                this.battle.informationText = content.name();
                 break;
             default:
-                informationText = "";
+                this.battle.informationText = "";
                 break;
         }
-        this.battle.windowTopInformations.content = new Graphic.Text(informationText, { align: Align.Center });
+        this.battle.windowTopInformations.content = new Graphic.Text(this.battle
+            .informationText, { align: Align.Center });
         this.battle.time = new Date().getTime();
         this.battle.effects = [];
         let i, l;
@@ -128,10 +129,8 @@ class BattleAnimation {
                 this.battle.subStep = 2;
                 break;
         }
-        this.battle.currentEffectIndex = 0;
-        if (this.battle.effects.length > 0) {
-            this.battle.effects[this.battle.currentEffectIndex].execute();
-        }
+        this.battle.currentEffectIndex = -1;
+        this.battle.currentTargetIndex = null;
         if (this.battle.animationUser && this.battle.animationUser.system === null) {
             this.battle.animationUser = null;
         }
@@ -158,25 +157,13 @@ class BattleAnimation {
      *  Update the targets attacked and check if they are dead.
      */
     updateTargetsAttacked() {
-        let target, previousFirst;
+        let target;
         for (let i = 0, l = this.battle.targets.length; i < l; i++) {
             target = this.battle.targets[i];
-            target.updateDead((target.damages > 0 || target.nextStatusID !== null)
-                && !target.isDamagesMiss, this.battle.user.player);
-            previousFirst = target.player.status[0];
+            target.updateDead((target.damages > 0 || target == null) && !target
+                .isDamagesMiss, this.battle.user.player);
             // Release status after attacked
             target.player.removeAfterAttackedStatus();
-            // Add or remove status
-            if (target.nextStatusID !== null) {
-                if (target.nextStatusAdd) {
-                    target.addStatus(target.nextStatusID);
-                }
-                else {
-                    target.removeStatus(target.nextStatusID);
-                }
-            }
-            // If first status changed, change animation
-            target.updateAnimationStatus(previousFirst);
         }
     }
     /**
@@ -201,12 +188,11 @@ class BattleAnimation {
                     this.battle.animationUser.system.frames.length) && !this.battle
                     .user.isAttacking()) {
                     if (!this.battle.animationTarget) {
-                        this.battle.time = new Date().getTime() - (Scene.Battle
-                            .TIME_ACTION_ANIMATION / 2);
+                        this.battle.time = new Date().getTime() - Scene.Battle
+                            .TIME_ACTION_ANIMATION;
                         for (i = 0, l = this.battle.targets.length; i < l; i++) {
                             this.battle.targets[i].timeDamage = 0;
                         }
-                        this.updateTargetsAttacked();
                         this.battle.subStep = 2;
                     }
                     else {
@@ -221,12 +207,11 @@ class BattleAnimation {
                 Manager.Stack.requestPaintHUD = true;
                 if (this.battle.animationTarget.frame > this.battle.animationTarget
                     .system.frames.length) {
-                    this.battle.time = new Date().getTime() - (Scene.Battle
-                        .TIME_ACTION_ANIMATION / 2);
+                    this.battle.time = new Date().getTime() - Scene.Battle
+                        .TIME_ACTION_ANIMATION;
                     for (i = 0, l = this.battle.targets.length; i < l; i++) {
                         this.battle.targets[i].timeDamage = 0;
                     }
-                    this.updateTargetsAttacked();
                     this.battle.subStep = 2;
                 }
                 break;
@@ -240,7 +225,6 @@ class BattleAnimation {
                 }
                 if ((new Date().getTime() - this.battle.time) >= Scene.Battle
                     .TIME_ACTION_ANIMATION) {
-                    // Target and user test death
                     this.battle.user.updateDead(false);
                     for (i = 0, l = this.battle.targets.length; i < l; i++) {
                         this.battle.targets[i].updateDead(false);
@@ -257,28 +241,73 @@ class BattleAnimation {
                         this.battle.changeStep(Enum.BattleStep.Victory);
                     }
                     else {
-                        effect = this.battle.effects[this.battle.currentEffectIndex];
-                        this.battle.currentEffectIndex++;
-                        for (l = this.battle.effects.length; this.battle
-                            .currentEffectIndex < l; this.battle.currentEffectIndex++) {
-                            this.battle.targets = this.battle.tempTargets;
-                            effect = this.battle.effects[this.battle.currentEffectIndex];
-                            effect.execute();
-                            if (effect.isAnimated()) {
-                                break;
+                        // Apply effect
+                        if (this.battle.currentTargetIndex === null) {
+                            this.battle.currentEffectIndex++;
+                            for (l = this.battle.effects.length; this.battle
+                                .currentEffectIndex < l; this.battle.currentEffectIndex++) {
+                                effect = this.battle.effects[this.battle.currentEffectIndex];
+                                effect.execute();
+                                if (effect.isAnimated()) {
+                                    if (effect.kind === Enum.EffectKind.Status) {
+                                        this.battle.currentTargetIndex = -1;
+                                    }
+                                    break;
+                                }
                             }
                         }
+                        // Status message
+                        if (this.battle.currentTargetIndex !== null) {
+                            let target;
+                            this.battle.currentTargetIndex++;
+                            for (l = this.battle.targets.length; this.battle
+                                .currentTargetIndex < l; this.battle.currentTargetIndex++) {
+                                target = this.battle.targets[this.battle.currentTargetIndex];
+                                if (!target.isDamagesMiss) {
+                                    if (target.lastStatus !== null) {
+                                        this.battle.windowTopInformations
+                                            .content.setText(target.player.kind ===
+                                            CharacterKind.Hero ? target.lastStatus
+                                            .getMessageAllyAffected(target.player
+                                            .name) : target.lastStatus
+                                            .getMessageEnemyAffected(target.player
+                                            .name));
+                                        break;
+                                    }
+                                    if (target.lastStatusHealed !== null) {
+                                        this.battle.windowTopInformations
+                                            .content.setText(target.lastStatusHealed
+                                            .getMessageHealed(target.player.name));
+                                        break;
+                                    }
+                                }
+                            }
+                            if (this.battle.currentTargetIndex === l) {
+                                this.battle.currentTargetIndex = null;
+                            }
+                        }
+                        // Target attacked
+                        this.updateTargetsAttacked();
                         isAnotherEffect = this.battle.currentEffectIndex < this
-                            .battle.effects.length;
+                            .battle.effects.length || this.battle.currentTargetIndex
+                            !== null;
                         if (isAnotherEffect) {
                             this.battle.time = new Date().getTime() - (Scene.Battle
                                 .TIME_ACTION_ANIMATION / 2);
-                            for (let j = 0, ll = this.battle.targets.length; j < ll; j++) {
-                                this.battle.targets[j].timeDamage = 0;
+                            for (i = 0, l = this.battle.targets.length; i < l; i++) {
+                                this.battle.targets[i].timeDamage = 0;
                             }
                             return;
                         }
                         else {
+                            let target;
+                            for (i = 0, l = this.battle.targets.length; i < l; i++) {
+                                target = this.battle.targets[i];
+                                target.updateDead(false);
+                                target.damages = null;
+                                target.isDamagesMiss = false;
+                                target.isDamagesCritical = false;
+                            }
                             this.battle.user.setActive(false);
                             this.battle.user.setSelected(false);
                         }
