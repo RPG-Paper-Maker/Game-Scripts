@@ -203,7 +203,7 @@ declare class Player {
     /**
      *  Remove the status with release at start turn option.
      */
-    removeStartTurnStatus(): void;
+    removeStartTurnStatus(listStill: Status[]): Status[];
     /**
      *  Update each status turn.
      */

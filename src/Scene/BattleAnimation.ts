@@ -177,7 +177,7 @@ class BattleAnimation {
         for (let i = 0, l = this.battle.targets.length; i < l; i++) {
             target = this.battle.targets[i];
             target.updateDead((target.damages > 0 || target == null) && !target
-                .isDamagesMiss, this.battle.user.player);
+                .isDamagesMiss, this.battle.user ? this.battle.user.player : null);
 
             // Release status after attacked
             target.player.removeAfterAttackedStatus();
@@ -209,7 +209,7 @@ class BattleAnimation {
                 .user.isAttacking()) {
                 if (!this.battle.animationTarget) {
                     this.battle.time = new Date().getTime() - Scene.Battle
-                    .TIME_ACTION_ANIMATION;
+                        .TIME_ACTION_ANIMATION + Scene.Battle.TIME_ACTION_NO_ANIMATION;
                     for (i = 0, l = this.battle.targets.length; i < l; i++) {
                         this.battle.targets[i].timeDamage = 0;
                     }
@@ -244,9 +244,11 @@ class BattleAnimation {
             }
             if ((new Date().getTime() - this.battle.time) >= Scene.Battle
                 .TIME_ACTION_ANIMATION) {
-                this.battle.user.updateDead(false);
                 for (i = 0, l = this.battle.targets.length; i < l; i++) {
                     this.battle.targets[i].updateDead(false);
+                }
+                if (this.battle.user) {
+                    this.battle.user.updateDead(false);
                 }
 
                 // Testing end of battle
@@ -288,16 +290,15 @@ class BattleAnimation {
                                     (<Graphic.Text>this.battle.windowTopInformations
                                         .content).setText(target.player.kind === 
                                         CharacterKind.Hero ? target.lastStatus
-                                        .getMessageAllyAffected(target.player
-                                        .name) : target.lastStatus
-                                        .getMessageEnemyAffected(target.player
-                                        .name));
+                                        .getMessageAllyAffected(target) : target
+                                        .lastStatus
+                                        .getMessageEnemyAffected(target));
                                     break;
                                 }
                                 if (target.lastStatusHealed !== null) {
                                     (<Graphic.Text>this.battle.windowTopInformations
                                         .content).setText(target.lastStatusHealed
-                                        .getMessageHealed(target.player.name));
+                                        .getMessageHealed(target));
                                     break;
                                 }
                             }
@@ -328,8 +329,10 @@ class BattleAnimation {
                             target.isDamagesMiss = false;
                             target.isDamagesCritical = false;
                         }
-                        this.battle.user.setActive(false);
-                        this.battle.user.setSelected(false);
+                        if (this.battle.user) {
+                            this.battle.user.setActive(false);
+                            this.battle.user.setSelected(false);
+                        }
                     }
 
                     // Testing end of turn
@@ -411,10 +414,10 @@ class BattleAnimation {
         }
 
         // Draw damages
-        if (this.battle.reactionInterpreters.length === 0 && !this.battle.user
-            .isAttacking() && (!this.battle.animationTarget || this.battle
-            .animationTarget.frame > this.battle.animationTarget.system.frames
-            .length)) {
+        if (this.battle.reactionInterpreters.length === 0 && (this.battle.user === 
+            null || !this.battle.user.isAttacking()) && (!this.battle
+            .animationTarget || this.battle.animationTarget.frame > this.battle
+            .animationTarget.system.frames.length)) {
             for (i = 0, l = this.battle.targets.length; i < l; i++) {
                 this.battle.targets[i].drawDamages();
             }

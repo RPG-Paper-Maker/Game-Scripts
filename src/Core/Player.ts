@@ -776,7 +776,8 @@ class Player {
     /** 
      *  Remove the status with release at start turn option.
      */
-    removeStartTurnStatus() {
+    removeStartTurnStatus(listStill: Status[]): Status[] {
+        let listHealed: Status[] = [];
         let j: number, m: number, s: Status, release: System.StatusReleaseTurn;
         for (let i = this.status.length - 1; i >= 0; i--) {
             s = this.status[i];
@@ -787,11 +788,15 @@ class Player {
                         release.turn.getValue()) && Mathf.randomPercentTest(
                         release.chance.getValue())) {
                         this.status.splice(i, 1);
+                        listHealed.push(s);
                         break;
+                    } else {
+                        listStill.push(s);
                     }
                 }
             }
         }
+        return listHealed;
     }
 
     /** 

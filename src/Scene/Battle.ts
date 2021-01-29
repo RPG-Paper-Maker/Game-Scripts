@@ -44,6 +44,7 @@ class Battle extends Map {
     public static TIME_LINEAR_MUSIC_END = 500;
     public static TIME_LINEAR_MUSIC_START = 500;
     public static TIME_ACTION_ANIMATION = 2000;
+    public static TIME_ACTION_NO_ANIMATION = 400;
     public static CAMERA_TICK = 0.05;
     public static CAMERA_OFFSET = 3;
     public static START_CAMERA_DISTANCE = 10;

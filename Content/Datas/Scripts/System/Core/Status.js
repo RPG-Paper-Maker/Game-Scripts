@@ -20,9 +20,24 @@ class Status {
         this.turn = turn;
         this.picture = Datas.Pictures.getPictureCopy(Enum.PictureKind.Icons, this.system.pictureID);
     }
+    /**
+     *  Get message and replace target name.
+     *  @static
+     *  @param {System.DynamicValue} message
+     *  @param {Battler} target
+     *  @returns {string}
+     */
     static getMessage(message, target) {
-        return message.getValue().replace("[target]", target);
+        return message.getValue().replace("[target]", target.player.name);
     }
+    /**
+     *  Draw the status on top of battler.
+     *  @static
+     *  @param {Status[]} statusList
+     *  @param {number} x - The x position
+     *  @param {number} y - The y position
+     *  @param {Enum.Align} [align=Enum.Align.Left]
+     */
     static drawList(statusList, x, y, align = Enum.Align.Left) {
         let totalWidth = 0;
         let maxHeight = 0;
@@ -58,14 +73,37 @@ class Status {
                 maxWidth, y - (maxHeight / 2));
         }
     }
+    /**
+     *  Get message when ally affected.
+     *  @param {Battler} target
+     *  @returns {string}
+     */
     getMessageAllyAffected(target) {
         return Status.getMessage(this.system.messageAllyAffected, target);
     }
+    /**
+     *  Get message when enemy affected.
+     *  @param {Battler} target
+     *  @returns {string}
+     */
     getMessageEnemyAffected(target) {
         return Status.getMessage(this.system.messageEnemyAffected, target);
     }
+    /**
+     *  Get message when healed.
+     *  @param {Battler} target
+     *  @returns {string}
+     */
     getMessageHealed(target) {
         return Status.getMessage(this.system.messageStatusHealed, target);
+    }
+    /**
+     *  Get message when still affected.
+     *  @param {Battler} target
+     *  @returns {string}
+     */
+    getMessageStillAffected(target) {
+        return Status.getMessage(this.system.messageStatusStillAffected, target);
     }
     /**
      *  Draw the status on top of battler.

@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Datas } from "../index.js";
+import { Datas, Scene } from "../index.js";
 import { Enum, Mathf } from "../Common/index.js";
 import { Animation } from "../Core/index.js";
 // -------------------------------------------------------
@@ -23,6 +23,8 @@ class BattleStartTurn {
     constructor(battle) {
         this.step = 0;
         this.active = false;
+        this.statusHealed = [];
+        this.statusStill = [];
         this.battle = battle;
     }
     /**
@@ -30,50 +32,63 @@ class BattleStartTurn {
      */
     initialize() {
         this.active = true;
+        this.battle.time = new Date().getTime() - Scene.Battle.TIME_ACTION_ANIMATION;
         // Check status releases
-        let i, l, user, s;
+        let i, l, battler, s;
         if (this.step === 0) {
+            let listStill, listHealed;
             for (i = 0, l = this.battle.battlers[this.battle.attackingGroup]
                 .length; i < l; i++) {
-                user = this.battle.battlers[this.battle.attackingGroup][i];
-                if (!user.player.isDead()) {
-                    let s = user.player.status[0];
-                    user.player.removeStartTurnStatus();
-                    user.updateStatusStep();
-                    user.updateAnimationStatus(s);
+                battler = this.battle.battlers[this.battle.attackingGroup][i];
+                if (!battler.player.isDead()) {
+                    s = battler.player.status[0];
+                    listStill = [];
+                    listHealed = battler.player.removeStartTurnStatus(listStill);
+                    battler.updateStatusStep();
+                    battler.updateAnimationStatus(s);
+                    if (listHealed.length > 0) {
+                        this.statusHealed.push([battler, listHealed]);
+                    }
+                    if (listStill.length > 0) {
+                        this.statusStill.push([battler, listStill]);
+                    }
                 }
             }
-            this.step++;
+            if (this.statusHealed.length > 0 || this.statusStill.length > 0) {
+                this.step++;
+                return;
+            }
+            this.step = 3;
         }
         // Status effects
-        if (this.step === 1) {
+        if (this.step === 3) {
             this.step++;
         }
         // Check status restrictions (force attacks)
-        if (this.step === 2) {
+        if (this.step === 4) {
             for (i = 0, l = this.battle.battlers[this.battle.attackingGroup]
                 .length; i < l; i++) {
-                user = this.battle.battlers[this.battle.attackingGroup][i];
-                if (user.active) {
-                    if (user.containsRestriction(Enum.StatusRestrictionsKind
+                battler = this.battle.battlers[this.battle.attackingGroup][i];
+                if (battler.active) {
+                    if (battler.containsRestriction(Enum.StatusRestrictionsKind
                         .CantDoAnything)) {
                         continue;
                     }
-                    if (user.containsRestriction(Enum.StatusRestrictionsKind
+                    if (battler.containsRestriction(Enum.StatusRestrictionsKind
                         .AttackRandomAlly)) {
-                        this.defineRandom(user, Enum.StatusRestrictionsKind
+                        this.defineRandom(battler, Enum.StatusRestrictionsKind
                             .AttackRandomAlly);
                         return;
                     }
-                    if (user.containsRestriction(Enum.StatusRestrictionsKind
+                    if (battler.containsRestriction(Enum.StatusRestrictionsKind
                         .AttackRandomEnemy)) {
-                        this.defineRandom(user, Enum.StatusRestrictionsKind
+                        this.defineRandom(battler, Enum.StatusRestrictionsKind
                             .AttackRandomEnemy);
                         return;
                     }
-                    if (user.containsRestriction(Enum.StatusRestrictionsKind
+                    if (battler.containsRestriction(Enum.StatusRestrictionsKind
                         .AttackRandomTarget)) {
-                        this.defineRandom(user, Enum.StatusRestrictionsKind
+                        this.defineRandom(battler, Enum.StatusRestrictionsKind
                             .AttackRandomTarget);
                         return;
                     }
@@ -171,6 +186,59 @@ class BattleStartTurn {
      *  Update the battle.
      */
     update() {
+        if ((new Date().getTime() - this.battle.time) >= Scene.Battle.TIME_ACTION_ANIMATION) {
+            // Healed status
+            if (this.step === 1) {
+                if (this.statusHealed.length > 0) {
+                    let tab = this.statusHealed[0];
+                    let battler = tab[0];
+                    let status = tab[1];
+                    let s = status[0];
+                    this.battle.windowTopInformations.content
+                        .setText(s.getMessageHealed(battler));
+                    this.battle.time = new Date().getTime() - (Scene.Battle
+                        .TIME_ACTION_ANIMATION / 2);
+                    status.splice(0, 1);
+                    if (status.length === 0) {
+                        this.statusHealed.splice(0, 1);
+                    }
+                    return;
+                }
+                this.step++;
+            }
+            // Still status + effects
+            if (this.step === 2) {
+                if (this.statusStill.length > 0) {
+                    let tab = this.statusStill[0];
+                    let battler = tab[0];
+                    let status = tab[1];
+                    let s = status[0];
+                    this.battle.windowTopInformations.content
+                        .setText(s.getMessageStillAffected(battler));
+                    status.splice(0, 1);
+                    if (status.length === 0) {
+                        this.statusStill.splice(0, 1);
+                    }
+                    this.battle.time = new Date().getTime() - (Scene.Battle
+                        .TIME_ACTION_ANIMATION / 2);
+                    // If effects, apply animation only for those
+                    if (s.system.effects.length > 0) {
+                        this.battle.effects = s.system.effects;
+                        this.battle.user = null;
+                        this.battle.targets = [battler];
+                        this.battle.currentEffectIndex = -1;
+                        this.battle.currentTargetIndex = null;
+                        this.battle.animationUser = null;
+                        this.battle.animationTarget = null;
+                        this.battle.step = Enum.BattleStep.Animation;
+                        this.battle.subStep = 2;
+                    }
+                    return;
+                }
+                this.step++;
+                this.initialize();
+            }
+        }
     }
     /**
      *  Handle key pressed.

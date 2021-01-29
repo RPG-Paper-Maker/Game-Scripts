@@ -31,6 +31,7 @@ declare class Battle extends Map {
     static TIME_LINEAR_MUSIC_END: number;
     static TIME_LINEAR_MUSIC_START: number;
     static TIME_ACTION_ANIMATION: number;
+    static TIME_ACTION_NO_ANIMATION: number;
     static CAMERA_TICK: number;
     static CAMERA_OFFSET: number;
     static START_CAMERA_DISTANCE: number;

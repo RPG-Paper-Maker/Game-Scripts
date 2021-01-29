@@ -12,6 +12,7 @@
 import { stat } from "fs";
 import { Datas, System } from "..";
 import { Constants, Enum, ScreenResolution } from "../Common";
+import { Battler } from "./Battler";
 import { Picture2D } from "./Picture2D";
 
 /** @class
@@ -31,10 +32,25 @@ class Status {
             this.system.pictureID);
     }
 
-    static getMessage(message: System.DynamicValue, target: string): string {
-        return message.getValue().replace("[target]", target);
+    /** 
+     *  Get message and replace target name.
+     *  @static
+     *  @param {System.DynamicValue} message
+     *  @param {Battler} target
+     *  @returns {string}
+     */
+    static getMessage(message: System.DynamicValue, target: Battler): string {
+        return message.getValue().replace("[target]", target.player.name);
     }
 
+    /** 
+     *  Draw the status on top of battler.
+     *  @static
+     *  @param {Status[]} statusList
+     *  @param {number} x - The x position
+     *  @param {number} y - The y position
+     *  @param {Enum.Align} [align=Enum.Align.Left]
+     */
     static drawList(statusList: Status[], x: number, y: number, align: Enum
         .Align = Enum.Align.Left) {
         let totalWidth: number = 0;
@@ -73,16 +89,40 @@ class Status {
         }
     }
 
-    getMessageAllyAffected(target: string): string {
+    /** 
+     *  Get message when ally affected.
+     *  @param {Battler} target
+     *  @returns {string}
+     */
+    getMessageAllyAffected(target: Battler): string {
         return Status.getMessage(this.system.messageAllyAffected, target);
     }
 
-    getMessageEnemyAffected(target: string): string {
+    /** 
+     *  Get message when enemy affected.
+     *  @param {Battler} target
+     *  @returns {string}
+     */
+    getMessageEnemyAffected(target: Battler): string {
         return Status.getMessage(this.system.messageEnemyAffected, target);
     }
 
-    getMessageHealed(target: string): string {
+    /** 
+     *  Get message when healed.
+     *  @param {Battler} target
+     *  @returns {string}
+     */
+    getMessageHealed(target: Battler): string {
         return Status.getMessage(this.system.messageStatusHealed, target);
+    }
+
+    /** 
+     *  Get message when still affected.
+     *  @param {Battler} target
+     *  @returns {string}
+     */
+    getMessageStillAffected(target: Battler): string {
+        return Status.getMessage(this.system.messageStatusStillAffected, target);
     }
 
     /** 
