@@ -292,6 +292,8 @@ class Player {
             list[i] = null;
             bonus[i] = null;
         }
+
+        // Equipment
         let j: number, m: number, characteristics: System.Characteristic[], 
             characteristic: System.Characteristic, result: number[], statistic: 
             System.Statistic, base: number;
@@ -308,6 +310,31 @@ class Player {
                 characteristics = this.equip[j].getItemInformations()
                     .characteristics;
             }
+            if (characteristics) {
+                for (i = 0, l = characteristics.length; i < l; i++) {
+                    characteristic = characteristics[i];
+                    result = characteristic.getNewStatValue(this);
+                    if (result !== null) {
+                        if (list[result[0]] === null) {
+                            statistic = Datas.BattleSystems.getStatistic(result[
+                                0]);
+                            base = this[statistic.getAbbreviationNext()] - this[
+                                statistic.getBonusAbbreviation()];
+                            list[result[0]] = characteristic.operation ? 0 : 
+                                base;
+                            bonus[result[0]] = characteristic.operation ? -base 
+                                : 0;
+                        }
+                        list[result[0]] += result[1];
+                        bonus[result[0]] += result[1];
+                    }
+                }
+            }
+        }
+
+        // Status
+        for (j = 0, m = this.status.length; j < m; j++) {
+            characteristics = this.status[j].system.characteristics;
             if (characteristics) {
                 for (i = 0, l = characteristics.length; i < l; i++) {
                     characteristic = characteristics[i];
@@ -726,6 +753,7 @@ class Player {
             }
         }
         this.status.splice(i < 0 ? 0 : 0, 0, status);
+        this.updateAllStatsValues();
         return status;
     }
 
@@ -741,21 +769,29 @@ class Player {
             // If same id, remove
             if (s.system.id === id) {
                 this.status.splice(i, 1);
+                this.updateAllStatsValues();
                 return s;
             }
         }
+        return null;
     }
 
     /** 
      *  Remove the status with release at end battle option.
      */
     removeEndBattleStatus() {
+        let test = false;
         let s: Status;
         for (let i = this.status.length - 1; i >= 0; i--) {
             s = this.status[i];
             if (s.system.isReleaseAtEndBattle) {
                 this.status.splice(i, 1);
+                test = true;
             }
+        }
+        // If at least one removed, update stats
+        if (test) {
+            this.updateAllStatsValues();
         }
     }
 
@@ -763,13 +799,18 @@ class Player {
      *  Remove the status with release after attacked option.
      */
     removeAfterAttackedStatus() {
+        let test = false;
         let s: Status;
         for (let i = this.status.length - 1; i >= 0; i--) {
             s = this.status[i];
             if (s.system.isReleaseAfterAttacked && Mathf.randomPercentTest(s.system
                 .chanceReleaseAfterAttacked.getValue())) {
                 this.status.splice(i, 1);
+                test = true;
             }
+        }
+        if (test) {
+            this.updateAllStatsValues();
         }
     }
 
@@ -778,6 +819,7 @@ class Player {
      */
     removeStartTurnStatus(listStill: Status[]): Status[] {
         let listHealed: Status[] = [];
+        let test = false;
         let j: number, m: number, s: Status, release: System.StatusReleaseTurn;
         for (let i = this.status.length - 1; i >= 0; i--) {
             s = this.status[i];
@@ -789,12 +831,16 @@ class Player {
                         release.chance.getValue())) {
                         this.status.splice(i, 1);
                         listHealed.push(s);
+                        test = true;
                         break;
                     } else {
                         listStill.push(s);
                     }
                 }
             }
+        }
+        if (test) {
+            this.updateAllStatsValues();
         }
         return listHealed;
     }

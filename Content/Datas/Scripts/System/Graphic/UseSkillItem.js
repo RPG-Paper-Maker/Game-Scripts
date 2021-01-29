@@ -114,7 +114,7 @@ class UseSkillItem extends Base {
      */
     drawArrowAtIndex(index, x, y, h) {
         Datas.Systems.getCurrentWindowSkin().drawArrowTarget(this
-            .graphicCharacters[index].battlerFrame.value, x + 32 + (index * 85), y + h - 20);
+            .graphicCharacters[index].battlerFrame.value, x + 32 + (index * 85), y + h - 20, true);
     }
     /**
      *  Drawing the skill or item use informations.

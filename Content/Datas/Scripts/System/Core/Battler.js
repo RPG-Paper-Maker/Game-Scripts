@@ -370,7 +370,7 @@ class Battler {
      *  Update the UVs coordinates according to frame and orientation.
      */
     updateUVs() {
-        if (this.mesh !== null) {
+        if (this.mesh) {
             let texture = Manager.GL.getMaterialTexture(this
                 .mesh.material);
             let textureWidth = texture.image.width;
