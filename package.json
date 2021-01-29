@@ -23,7 +23,7 @@
   "devDependencies": {
     "@types/howler": "^2.2.1",
     "better-docs": "^2.3.2",
-    "electron": "^8.1.0",
+    "electron": ">=9.4.0",
     "pixi-webdoc-template": "^1.1.4",
     "react": "^16.0.0",
     "react-dom": "^16.0.0"
