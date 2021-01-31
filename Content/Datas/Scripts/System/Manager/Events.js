@@ -152,13 +152,13 @@ class Events {
      *  @param {boolean} senderNoReceiver - Indicate if the sender should not
      *  receive event
      */
-    static sendEvent(sender, targetKind, targetID, isSystem, eventID, parameters, senderNoReceiver) {
+    static sendEvent(sender, targetKind, targetID, isSystem, eventID, parameters, senderNoReceiver, onlyTheClosest) {
         switch (targetKind) {
             case 0: // Send to all
                 Manager.Events.sendEventDetection(sender, -1, isSystem, eventID, parameters);
                 break;
             case 1: // Send to detection
-                Manager.Events.sendEventDetection(sender, targetID, isSystem, eventID, parameters, senderNoReceiver);
+                Manager.Events.sendEventDetection(sender, targetID, isSystem, eventID, parameters, senderNoReceiver, onlyTheClosest);
                 break;
             case 2: // Send to a particular object
                 if (targetID === -1) {
@@ -221,16 +221,18 @@ class Events {
      *  @param {boolean} senderNoReceiver - Indicate if the sender should not
      *  receive event
      */
-    static sendEventDetection(sender, targetID, isSystem, eventID, parameters, senderNoReceiver = false) {
+    static sendEventDetection(sender, targetID, isSystem, eventID, parameters, senderNoReceiver = false, onlyTheClosest = false) {
+        let objects, closests;
         Scene.Map.current.updatePortions(this, function (x, y, z, i, j, k) {
-            let objects = Game.current.getPotionsDatas(Scene.Map.current.id, new Portion(x, y, z));
+            objects = Game.current.getPotionsDatas(Scene.Map.current.id, new Portion(x, y, z));
             // Moved objects
-            Manager.Events.sendEventObjects(objects.min, sender, targetID, isSystem, eventID, parameters, senderNoReceiver);
-            Manager.Events.sendEventObjects(objects.mout, sender, targetID, isSystem, eventID, parameters, senderNoReceiver);
+            closests = Manager.Events.sendEventObjects(objects.min, sender, targetID, isSystem, eventID, parameters, senderNoReceiver, onlyTheClosest);
+            closests = closests.concat(Manager.Events.sendEventObjects(objects
+                .mout, sender, targetID, isSystem, eventID, parameters, senderNoReceiver, onlyTheClosest));
             // Static
             let mapPortion = Scene.Map.current.getMapPortion(new Portion(i, j, k));
             if (mapPortion) {
-                Manager.Events.sendEventObjects(mapPortion.objectsList, sender, targetID, isSystem, eventID, parameters, senderNoReceiver);
+                closests = closests.concat(Manager.Events.sendEventObjects(mapPortion.objectsList, sender, targetID, isSystem, eventID, parameters, senderNoReceiver, onlyTheClosest));
             }
         });
         // And the hero!
@@ -241,7 +243,25 @@ class Events {
                     return;
                 }
             }
-            Game.current.hero.receiveEvent(sender, isSystem, eventID, parameters, Game.current.heroStates);
+            if (onlyTheClosest) {
+                closests.push([Game.current.hero, sender, isSystem, eventID,
+                    parameters, Game.current.heroStates]);
+            }
+            else {
+                Game.current.hero.receiveEvent(sender, isSystem, eventID, parameters, Game.current.heroStates);
+            }
+        }
+        // If only sending to the closest to the sender...
+        if (onlyTheClosest && closests.length > 0) {
+            let closest = closests[0], d1, d2;
+            for (let i = 1, l = closests.length; i < l; i++) {
+                d1 = closest[0].position.distanceTo(sender.position);
+                d2 = closests[i][0].position.distanceTo(sender.position);
+                if (d1 >= d2) {
+                    closest = closests[i];
+                }
+            }
+            closest[0].receiveEvent(closest[1], closest[2], closest[3], closest[4], closest[5]);
         }
     }
     /**
@@ -255,9 +275,11 @@ class Events {
      *  @param {Parameter[]} parameters - List of all the parameters
      *  @param {boolean} senderNoReceiver - Indicate if the sender should not
      *  receive event
+     *  @returns {any[]}
      */
-    static sendEventObjects(objects, sender, targetID, isSystem, eventID, parameters, senderNoReceiver) {
+    static sendEventObjects(objects, sender, targetID, isSystem, eventID, parameters, senderNoReceiver, onlyTheClosest) {
         let object;
+        let closests = [];
         for (let i = 0, l = objects.length; i < l; i++) {
             object = objects[i];
             if (senderNoReceiver && sender === object) {
@@ -270,9 +292,16 @@ class Events {
                 }
             }
             // Make the object receive the event
-            object.receiveEvent(sender, isSystem, eventID, parameters, object
-                .states);
+            if (onlyTheClosest) {
+                closests.push([object, sender, isSystem, eventID, parameters,
+                    object.states]);
+            }
+            else {
+                object.receiveEvent(sender, isSystem, eventID, parameters, object
+                    .states);
+            }
         }
+        return closests;
     }
 }
 export { Events };

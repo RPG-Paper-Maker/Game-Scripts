@@ -24,9 +24,6 @@ declare class SpriteWall extends MapElement {
      *  @param {number} count - The faces count
      *  @return {any[]}
      */
-    updateGeometry(geometry: THREE.Geometry, position: Position, width: number, height: number, count: number): [
-        number,
-        StructMapElementCollision[]
-    ];
+    updateGeometry(geometry: THREE.Geometry, position: Position, width: number, height: number, count: number): [number, StructMapElementCollision[]];
 }
 export { SpriteWall };

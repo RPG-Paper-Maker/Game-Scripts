@@ -49,12 +49,6 @@ declare class Object3DBox extends Object3D {
      *  @param {Position} position - The position of object 3D
      *  @return {[THREE.Geometry, [number, StructMapElementCollision[]]]}
     */
-    createGeometry(position: Position): [
-        THREE.Geometry,
-        [
-            number,
-            StructMapElementCollision[]
-        ]
-    ];
+    createGeometry(position: Position): [THREE.Geometry, [number, StructMapElementCollision[]]];
 }
 export { Object3DBox };

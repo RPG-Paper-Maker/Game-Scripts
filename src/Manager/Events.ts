@@ -159,7 +159,7 @@ class Events {
      */
     static sendEvent(sender: MapObject, targetKind: number, targetID: number, 
         isSystem: boolean, eventID: number, parameters: System.DynamicValue[], 
-        senderNoReceiver: boolean)
+        senderNoReceiver: boolean, onlyTheClosest: boolean)
     {
         switch (targetKind) {
             case 0: // Send to all
@@ -168,7 +168,7 @@ class Events {
                 break;
             case 1: // Send to detection
                 Manager.Events.sendEventDetection(sender, targetID, isSystem,
-                    eventID, parameters, senderNoReceiver);
+                    eventID, parameters, senderNoReceiver, onlyTheClosest);
                 break;
             case 2: // Send to a particular object
                 if (targetID === -1) {
@@ -246,26 +246,27 @@ class Events {
      */
     static sendEventDetection(sender: MapObject, targetID: number, isSystem: 
         boolean, eventID: number, parameters: System.DynamicValue[], 
-        senderNoReceiver: boolean = false)
+        senderNoReceiver: boolean = false, onlyTheClosest: boolean = false)
     {
+        let objects: Record<string, any>, closests: any[][];
         Scene.Map.current.updatePortions(this, function(x: number, y: 
             number, z: number, i: number, j: number, k: number) {
-            let objects = Game.current.getPotionsDatas(Scene.Map.current.id, 
-                new Portion(x, y, z));
+            objects = Game.current.getPotionsDatas(Scene.Map.current.id, new 
+                Portion(x, y, z));
 
             // Moved objects
-            Manager.Events.sendEventObjects(objects.min, sender, targetID
-                , isSystem, eventID, parameters, senderNoReceiver);
-            Manager.Events.sendEventObjects(objects.mout, sender, 
-                targetID, isSystem, eventID, parameters, senderNoReceiver);
-
+            closests = Manager.Events.sendEventObjects(objects.min, sender, targetID, 
+                isSystem, eventID, parameters, senderNoReceiver, onlyTheClosest);
+            closests = closests.concat(Manager.Events.sendEventObjects(objects
+                .mout, sender, targetID, isSystem, eventID, parameters, 
+                senderNoReceiver, onlyTheClosest));
             // Static
             let mapPortion = Scene.Map.current.getMapPortion(new Portion(
                 i, j, k));
             if (mapPortion) {
-                Manager.Events.sendEventObjects(mapPortion.objectsList,
-                    sender, targetID, isSystem, eventID, parameters, 
-                    senderNoReceiver);
+                closests = closests.concat(Manager.Events.sendEventObjects(
+                    mapPortion.objectsList, sender, targetID, isSystem, eventID, 
+                    parameters, senderNoReceiver, onlyTheClosest));
             }
         });
 
@@ -279,8 +280,27 @@ class Events {
                     return;
                 }
             }
-            Game.current.hero.receiveEvent(sender, isSystem, eventID, 
-                parameters, Game.current.heroStates);
+            if (onlyTheClosest) {
+                closests.push([Game.current.hero, sender, isSystem, eventID, 
+                    parameters, Game.current.heroStates]);
+            } else {
+                Game.current.hero.receiveEvent(sender, isSystem, eventID, 
+                    parameters, Game.current.heroStates);
+            }
+        }
+
+        // If only sending to the closest to the sender...
+        if (onlyTheClosest && closests.length > 0) {
+            let closest = closests[0], d1: number, d2: number;
+            for (let i = 1, l = closests.length; i < l; i++) {
+                d1 = closest[0].position.distanceTo(sender.position);
+                d2 = closests[i][0].position.distanceTo(sender.position);
+                if (d1 >= d2) {
+                    closest = closests[i];
+                }
+            }
+            closest[0].receiveEvent(closest[1], closest[2], closest[3], 
+                closest[4], closest[5]);
         }
     }
 
@@ -295,12 +315,14 @@ class Events {
      *  @param {Parameter[]} parameters - List of all the parameters
      *  @param {boolean} senderNoReceiver - Indicate if the sender should not 
      *  receive event
+     *  @returns {any[]}
      */
     static sendEventObjects(objects: MapObject[], sender: MapObject, targetID: 
         number, isSystem: boolean, eventID: number, parameters: System
-        .DynamicValue[], senderNoReceiver: boolean)
+        .DynamicValue[], senderNoReceiver: boolean, onlyTheClosest: boolean)
     {
         let object: MapObject;
+        let closests: any[][] = [];
         for (let i = 0, l = objects.length; i < l; i++) {
             object = objects[i];
             if (senderNoReceiver && sender === object) {
@@ -316,9 +338,15 @@ class Events {
             }
 
             // Make the object receive the event
-            object.receiveEvent(sender, isSystem, eventID, parameters, object
-                .states);
+            if (onlyTheClosest) {
+                closests.push([object, sender, isSystem, eventID, parameters, 
+                    object.states]);
+            } else {
+                object.receiveEvent(sender, isSystem, eventID, parameters, object
+                    .states);
+            }
         }
+        return closests;
     }
 }
 

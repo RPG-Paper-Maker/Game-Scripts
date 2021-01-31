@@ -642,9 +642,9 @@ class Map extends Base {
         if (!this.loading) {
             // Send keyPressEvent to all the objects
             if (!ReactionInterpreter.blockingHero && !this.isBattleMap) {
-                Manager.Events.sendEvent(null, 0, 1, true, 3, [null,
-                    System.DynamicValue.createNumber(key), System.DynamicValue
-                        .createSwitch(false), System.DynamicValue.createSwitch(false)], true);
+                Manager.Events.sendEvent(null, 0, 1, true, 3, [null, System
+                        .DynamicValue.createNumber(key), System.DynamicValue
+                        .createSwitch(false), System.DynamicValue.createSwitch(false)], true, false);
             }
             super.onKeyPressed(key);
         }
@@ -657,8 +657,8 @@ class Map extends Base {
         if (!this.loading) {
             // Send keyReleaseEvent to all the objects
             if (!ReactionInterpreter.blockingHero && !this.isBattleMap) {
-                Manager.Events.sendEvent(null, 0, 1, true, 4, [null,
-                    System.DynamicValue.createNumber(key)], true);
+                Manager.Events.sendEvent(null, 0, 1, true, 4, [null, System
+                        .DynamicValue.createNumber(key)], true, false);
             }
             super.onKeyReleased(key);
         }
@@ -671,9 +671,9 @@ class Map extends Base {
     onKeyPressedRepeat(key) {
         if (!this.loading) {
             if (!ReactionInterpreter.blockingHero && !this.isBattleMap) {
-                Manager.Events.sendEvent(null, 0, 1, true, 3, [null,
-                    System.DynamicValue.createNumber(key), System.DynamicValue
-                        .createSwitch(true), System.DynamicValue.createSwitch(true)], true);
+                Manager.Events.sendEvent(null, 0, 1, true, 3, [null, System
+                        .DynamicValue.createNumber(key), System.DynamicValue
+                        .createSwitch(true), System.DynamicValue.createSwitch(true)], true, false);
             }
             return super.onKeyPressedRepeat(key);
         }
@@ -687,10 +687,9 @@ class Map extends Base {
     onKeyPressedAndRepeat(key) {
         if (!this.loading) {
             if (!ReactionInterpreter.blockingHero && !this.isBattleMap) {
-                Manager.Events.sendEvent(null, 0, 1, true, 3, [null,
-                    System.DynamicValue.createNumber(key), System.DynamicValue
-                        .createSwitch(true), System.DynamicValue.createSwitch(false)
-                ], true);
+                Manager.Events.sendEvent(null, 0, 1, true, 3, [null, System
+                        .DynamicValue.createNumber(key), System.DynamicValue
+                        .createSwitch(true), System.DynamicValue.createSwitch(false)], true, false);
             }
             super.onKeyPressedAndRepeat(key);
         }

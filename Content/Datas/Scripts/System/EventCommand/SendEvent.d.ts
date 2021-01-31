@@ -9,6 +9,7 @@ import { MapObject } from "../Core/index.js";
 declare class SendEvent extends Base {
     targetKind: number;
     senderNoReceiver: boolean;
+    onlyTheClosest: boolean;
     targetID: System.DynamicValue;
     isSystem: boolean;
     eventID: number;

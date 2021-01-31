@@ -184,18 +184,21 @@ class Plugins {
             if (classPrototype instanceof Function) {
                 if (overwrite) {
                     classObject.prototype[prototypeName] = function (...args) {
+                        this.super = (...arggs) => { classPrototype.call(this, ...arggs); };
                         return TheAnyPrototype.call(this, ...args);
                     };
                 }
                 else if (loadBefore) {
                     classObject.prototype[prototypeName] = function (...args) {
                         let result = classPrototype.call(this, ...args);
+                        this.super = (...arggs) => { classPrototype.call(this, ...arggs); };
                         this.callResult = result;
                         return TheAnyPrototype.call(this, ...args);
                     };
                 }
                 else {
                     classObject.prototype[prototypeName] = function (...args) {
+                        this.super = (...arggs) => { classPrototype.call(this, ...arggs); };
                         TheAnyPrototype.call(this, ...args);
                         return classPrototype.call(this, ...args);
                     };
@@ -211,18 +214,21 @@ class Plugins {
             if (classMethod instanceof Function) {
                 if (overwrite) {
                     classAnyObject[prototypeName] = function (...args) {
+                        this.super = (...arggs) => { classMethod.call(this, ...arggs); };
                         return TheAnyPrototype.call(this, ...args);
                     };
                 }
                 else if (loadBefore) {
                     classAnyObject[prototypeName] = function (...args) {
                         let result = classMethod.call(this, ...args);
+                        this.super = (...arggs) => { classMethod.call(this, ...arggs); };
                         this.callResult = result;
                         return TheAnyPrototype.call(this, ...args);
                     };
                 }
                 else {
                     classAnyObject[prototypeName] = function (...args) {
+                        this.super = (...arggs) => { classMethod.call(this, ...arggs); };
                         TheAnyPrototype.call(this, ...args);
                         return classMethod.call(this, ...args);
                     };

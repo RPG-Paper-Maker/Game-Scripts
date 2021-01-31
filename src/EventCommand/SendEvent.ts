@@ -24,6 +24,7 @@ class SendEvent extends Base {
 
     public targetKind: number;
     public senderNoReceiver: boolean;
+    public onlyTheClosest: boolean;
     public targetID: System.DynamicValue;
     public isSystem: boolean;
     public eventID: number;
@@ -45,6 +46,7 @@ class SendEvent extends Base {
                 this.targetID = System.DynamicValue.createValueCommand(command, 
                     iterator);
                 this.senderNoReceiver = Utils.numToBool(command[iterator.i++]);
+                this.onlyTheClosest = Utils.numToBool(command[iterator.i++]);
                 break;
             case 2:
                 this.targetID = System.DynamicValue.createValueCommand(command, 
@@ -87,7 +89,7 @@ class SendEvent extends Base {
     {
         Manager.Events.sendEvent(object, this.targetKind, this.targetID
             .getValue(), this.isSystem, this.eventID, this.parameters, this
-            .senderNoReceiver);
+            .senderNoReceiver, this.onlyTheClosest);
         return 1;
     }
 }
