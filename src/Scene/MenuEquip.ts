@@ -391,6 +391,9 @@ class MenuEquip extends MenuBase {
                 this.selectedEquipment = this.windowChoicesEquipment
                     .currentSelectedIndex;
                 this.windowChoicesList.currentSelectedIndex = 0;
+                if (this.windowChoicesList.listContents.length > 1) {
+                    this.windowChoicesList.goDown();
+                }
                 this.updateInformations();
                 this.windowChoicesList.selectCurrent();
             }
