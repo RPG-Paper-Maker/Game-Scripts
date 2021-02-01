@@ -33,6 +33,7 @@ class Systems {
     public static mountainCollisionHeight: System.DynamicValue;
     public static mountainCollisionAngle: System.DynamicValue;
     public static mapFrameDuration: System.DynamicValue;
+    public static priceSoldItem: System.DynamicValue;
     public static showBB: boolean;
     private static itemsTypes: string[];
     private static colors: System.Color[]
@@ -101,6 +102,8 @@ class Systems {
             .readOrDefaultNumberDouble(json.mca, 45);
         this.mapFrameDuration = System.DynamicValue.readOrDefaultNumber(json.mfd
             , 150);
+        this.priceSoldItem = System.DynamicValue.readOrDefaultNumberDouble(json
+            .priceSoldItem, 50);
 
         // Path BR
         this.PATH_BR = Paths.FILES + json.pathBR;
