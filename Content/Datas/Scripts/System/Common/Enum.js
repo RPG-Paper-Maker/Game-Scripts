@@ -97,6 +97,7 @@ var Enum;
         EventCommandKind[EventCommandKind["ShakeScreen"] = 55] = "ShakeScreen";
         EventCommandKind[EventCommandKind["FlashScreen"] = 56] = "FlashScreen";
         EventCommandKind[EventCommandKind["Plugin"] = 57] = "Plugin";
+        EventCommandKind[EventCommandKind["StartShopMenu"] = 58] = "StartShopMenu";
     })(EventCommandKind = Enum.EventCommandKind || (Enum.EventCommandKind = {}));
     ;
     /**

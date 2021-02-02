@@ -140,6 +140,8 @@ class Events {
                 return new EventCommand.FlashScreen(command);
             case EventCommandKind.Plugin:
                 return new EventCommand.Plugin(command);
+            case EventCommandKind.StartShopMenu:
+                return new EventCommand.StartShopMenu(command);
             default:
                 return null;
         }

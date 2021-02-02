@@ -95,7 +95,8 @@ namespace Enum {
         DisplayAnAnimation,
         ShakeScreen,
         FlashScreen,
-        Plugin
+        Plugin,
+        StartShopMenu
     };
 
     /**

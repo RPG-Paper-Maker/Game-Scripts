@@ -56,6 +56,7 @@ export * from "./SetMoveTurnAPicture";
 export * from "./ShakeScreen";
 export * from "./ShowText";
 export * from "./StartBattle";
+export * from "./StartShopMenu";
 export * from "./StopBackgroundSound";
 export * from "./StopMusic";
 export * from "./StopReaction";

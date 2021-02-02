@@ -45,6 +45,7 @@ export * from "./SetMoveTurnAPicture.js";
 export * from "./ShakeScreen.js";
 export * from "./ShowText.js";
 export * from "./StartBattle.js";
+export * from "./StartShopMenu.js";
 export * from "./StopBackgroundSound.js";
 export * from "./StopMusic.js";
 export * from "./StopReaction.js";

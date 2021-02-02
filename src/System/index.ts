@@ -50,6 +50,7 @@ export * from "./ProgressionTable";
 export * from "./Property";
 export * from "./Reaction";
 export * from "./Shape";
+export * from "./ShopItem";
 export * from "./Skill";
 export * from "./Skybox";
 export * from "./Song";

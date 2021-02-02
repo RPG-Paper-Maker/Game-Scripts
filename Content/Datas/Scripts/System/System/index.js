@@ -49,6 +49,7 @@ export * from "./ProgressionTable.js";
 export * from "./Property.js";
 export * from "./Reaction.js";
 export * from "./Shape.js";
+export * from "./ShopItem.js";
 export * from "./Skill.js";
 export * from "./Skybox.js";
 export * from "./Song.js";

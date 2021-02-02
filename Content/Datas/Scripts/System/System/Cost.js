@@ -12,7 +12,7 @@ import { Enum, Utils, Interpreter } from "../Common/index.js";
 var DamagesKind = Enum.DamagesKind;
 import { Base } from "./Base.js";
 import { DynamicValue } from "./DynamicValue.js";
-import { Datas, Scene } from "../index.js";
+import { Datas, Scene, System } from "../index.js";
 import { Player, Game } from "../Core/index.js";
 /** @class
  *  A cost of a common skill item.
@@ -42,6 +42,21 @@ class Cost extends Base {
                 break;
         }
         this.valueFormula = DynamicValue.readOrDefaultMessage(json.vf);
+    }
+    parse(command, iterator) {
+        this.kind = command[iterator.i++];
+        switch (this.kind) {
+            case Enum.DamagesKind.Stat:
+                this.statisticID = System.DynamicValue.createValueCommand(command, iterator);
+                break;
+            case 1:
+                this.currencyID = System.DynamicValue.createValueCommand(command, iterator);
+                break;
+            case 2:
+                this.variableID = command[iterator.i++];
+                break;
+        }
+        this.valueFormula = System.DynamicValue.createValueCommand(command, iterator);
     }
     /**
      *  Use the cost.

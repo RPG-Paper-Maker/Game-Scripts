@@ -13,8 +13,9 @@ import { Enum, Utils, Interpreter } from "../Common";
 import DamagesKind = Enum.DamagesKind;
 import { Base } from "./Base";
 import { DynamicValue } from "./DynamicValue";
-import { Manager, Datas, Scene } from "../index";
+import { Manager, Datas, Scene, System } from "../index";
 import { Player, Game } from "../Core";
+import { StructIterator } from "../EventCommand";
 
 /** @class
  *  A cost of a common skill item.
@@ -52,6 +53,22 @@ class Cost extends Base {
                 break;
         }
         this.valueFormula = DynamicValue.readOrDefaultMessage(json.vf);
+    }
+
+    parse(command: any[], iterator: StructIterator) {
+        this.kind = command[iterator.i++];
+        switch (this.kind) {
+            case Enum.DamagesKind.Stat:
+                this.statisticID = System.DynamicValue.createValueCommand(command, iterator);
+                break;
+            case 1:
+                this.currencyID = System.DynamicValue.createValueCommand(command, iterator);
+                break;
+            case 2:
+                this.variableID = command[iterator.i++];
+                break;
+        }
+        this.valueFormula = System.DynamicValue.createValueCommand(command, iterator);
     }
 
     /** 

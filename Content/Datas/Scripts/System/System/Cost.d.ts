@@ -1,5 +1,6 @@
 import { Base } from "./Base.js";
 import { DynamicValue } from "./DynamicValue.js";
+import { StructIterator } from "../EventCommand/index.js";
 /** @class
  *  A cost of a common skill item.
  *  @extends System.Base
@@ -18,6 +19,7 @@ declare class Cost extends Base {
      *  @param {Record<string, any>} - json Json object describing the cost
      */
     read(json: Record<string, any>): void;
+    parse(command: any[], iterator: StructIterator): void;
     /**
      *  Use the cost.
      */

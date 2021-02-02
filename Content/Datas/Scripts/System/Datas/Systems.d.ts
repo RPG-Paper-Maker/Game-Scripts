@@ -18,6 +18,7 @@ declare class Systems {
     static mountainCollisionHeight: System.DynamicValue;
     static mountainCollisionAngle: System.DynamicValue;
     static mapFrameDuration: System.DynamicValue;
+    static priceSoldItem: System.DynamicValue;
     static showBB: boolean;
     private static itemsTypes;
     private static colors;
