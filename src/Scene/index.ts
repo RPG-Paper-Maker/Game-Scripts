@@ -27,6 +27,7 @@ export * from "./Menu";
 export * from "./MenuDescriptionState";
 export * from "./MenuEquip";
 export * from "./MenuInventory";
+export * from "./MenuShop";
 export * from "./MenuSkills";
 export * from "./SaveGame";
 export * from "./SaveLoadGame";

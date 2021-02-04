@@ -35,7 +35,6 @@ class StartShopMenu extends Base {
             this.items.push(shopItem);
         }
         this.isDirectNode = false;
-        console.log(this);
     }
     /**
      *  Initialize the current state.
@@ -57,7 +56,7 @@ class StartShopMenu extends Base {
         if (currentState.opened) {
             return 1;
         }
-        Manager.Stack.push(new Scene.Menu());
+        Manager.Stack.push(new Scene.MenuShop());
         currentState.opened = true;
         return 0;
     }

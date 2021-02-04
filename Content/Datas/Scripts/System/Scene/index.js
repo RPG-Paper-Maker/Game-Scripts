@@ -25,6 +25,7 @@ export * from "./Menu.js";
 export * from "./MenuDescriptionState.js";
 export * from "./MenuEquip.js";
 export * from "./MenuInventory.js";
+export * from "./MenuShop.js";
 export * from "./MenuSkills.js";
 export * from "./SaveGame.js";
 export * from "./SaveLoadGame.js";

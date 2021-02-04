@@ -55,7 +55,7 @@ declare class MenuSkills extends Base {
      */
     onKeyPressedAndRepeat(key: number): boolean;
     /**
-     *  Draw the HUD scene
+     *  Draw the HUD scene.
      */
     drawHUD(): void;
 }

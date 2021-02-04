@@ -256,7 +256,7 @@ class MenuSkills extends Base {
     }
 
     /** 
-     *  Draw the HUD scene
+     *  Draw the HUD scene.
      */
     drawHUD() {
         // Draw the local map behind

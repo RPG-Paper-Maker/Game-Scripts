@@ -71,7 +71,6 @@ class ShopItem extends Base {
                 cost = new System.Cost();
                 cost.parse(command, iterator);
                 this.specificPrice.push(cost);
-                console.log(command[iterator.i])
             }
             iterator.i++;
         }
