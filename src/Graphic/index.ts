@@ -21,6 +21,7 @@ export * from "./PlayerDescription";
 export * from "./RewardsTop";
 export * from "./Save";
 export * from "./Setting";
+export * from "./ShopCurrencies";
 export * from "./Skill";
 export * from "./SkillItem";
 export * from "./StatisticProgression";

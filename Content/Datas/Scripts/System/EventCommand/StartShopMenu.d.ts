@@ -8,8 +8,7 @@ import { Base } from "./Base.js";
  */
 declare class StartShopMenu extends Base {
     buyOnly: System.DynamicValue;
-    isStock: boolean;
-    stockVariableID: number;
+    shopID: System.DynamicValue;
     items: System.ShopItem[];
     constructor(command: any[]);
     /**

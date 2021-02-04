@@ -87,7 +87,7 @@ class MenuInventory extends Base {
         let ownedItem, item;
         for (let i = 0; i < nbItems; i++) {
             ownedItem = Game.current.items[i];
-            item = Datas.Items.get(ownedItem.id);
+            item = ownedItem.system;
             if (indexTab === 0 || (indexTab === 1 && (ownedItem.kind ===
                 ItemKind.Item && item.consumable)) || (indexTab === 2 && (ownedItem.kind === ItemKind.Item && item.type === 1)) || (indexTab === 3 && (ownedItem.kind === ItemKind.Item && item.type
                 === 2)) || (indexTab === 4 && ownedItem.kind === ItemKind.Weapon) || (indexTab === 5 && ownedItem.kind === ItemKind.Armor)) {
@@ -158,11 +158,12 @@ class MenuInventory extends Base {
                     if (this.windowInformations.content === null) {
                         return;
                     }
-                    let targetKind = graphic.system.targetKind;
-                    let availableKind = graphic.system.availableKind;
-                    if (graphic.system.consumable && (targetKind === TargetKind
-                        .Ally || targetKind === TargetKind.AllAllies) && (availableKind === AvailableKind.Always || availableKind
-                        === AvailableKind.MainMenu)) {
+                    let targetKind = graphic.item.system.targetKind;
+                    let availableKind = graphic.item.system.availableKind;
+                    if (graphic.item.system.consumable && (targetKind ===
+                        TargetKind.Ally || targetKind === TargetKind.AllAllies) &&
+                        (availableKind === AvailableKind.Always || availableKind
+                            === AvailableKind.MainMenu)) {
                         Datas.Systems.soundConfirmation.playSound();
                         this.substep = 1;
                         this.windowBoxUseItem.content
@@ -182,7 +183,7 @@ class MenuInventory extends Base {
             case 1:
                 if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
                     .Action)) {
-                    if (graphic.system.isPossible() && graphic.system.use()) {
+                    if (graphic.item.system.isPossible() && graphic.item.system.use()) {
                         this.useItem();
                     }
                 }

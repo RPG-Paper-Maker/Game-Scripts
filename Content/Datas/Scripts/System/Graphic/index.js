@@ -20,6 +20,7 @@ export * from "./PlayerDescription.js";
 export * from "./RewardsTop.js";
 export * from "./Save.js";
 export * from "./Setting.js";
+export * from "./ShopCurrencies.js";
 export * from "./Skill.js";
 export * from "./SkillItem.js";
 export * from "./StatisticProgression.js";

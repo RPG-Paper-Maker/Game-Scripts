@@ -19,8 +19,8 @@ import { Game } from "../Core/index.js";
  * @extends {Base}
  */
 class MenuBase extends Base {
-    constructor() {
-        super(false);
+    constructor(...args) {
+        super(false, ...args);
     }
     /**
      * Return the whole party array.

@@ -23,13 +23,25 @@ import { Game } from "./Game";
 class Item {
 
     public kind: ItemKind;
-    public id: number;
+    public system: System.CommonSkillItem;
     public nb: number;
+    public shop: System.ShopItem;
 
-    constructor(kind: ItemKind, id: number, nb: number) {
+    constructor(kind: ItemKind, id: number, nb: number, shop?: System.ShopItem) {
         this.kind = kind;
-        this.id = id;
+        switch (this.kind) {
+            case ItemKind.Item:
+                this.system = Datas.Items.get(id);
+                break;
+            case ItemKind.Weapon:
+                this.system = Datas.Weapons.get(id);
+                break;
+            case ItemKind.Armor:
+                this.system = Datas.Armors.get(id);
+                break;
+        }
         this.nb = nb;
+        this.shop = shop;
     }
 
     /** 
@@ -43,7 +55,7 @@ class Item {
         let item: Item;
         for (let i = 0, l = Game.current.items.length; i < l; i++) {
             item = Game.current.items[i];
-            if (item.kind === kind && item.id === id) {
+            if (item.kind === kind && item.system.id === id) {
                 return item;
             }
         }
@@ -74,21 +86,6 @@ class Item {
     }
 
     /** 
-     *  Get the item informations System.
-     *  @returns {System.CommonSkillItem}
-     */
-    getItemInformations(): System.CommonSkillItem {
-        switch (this.kind) {
-            case ItemKind.Item:
-                return Datas.Items.get(this.id);
-            case ItemKind.Weapon:
-                return Datas.Weapons.get(this.id);
-            case ItemKind.Armor:
-                return Datas.Armors.get(this.id);
-        }
-    }
-
-    /** 
      *  Modify items only if already in inventory.
      *  @param {Function} callback - callback function for action
      *  @returns {boolean} Indicates if the item is already inside the
@@ -98,7 +95,7 @@ class Item {
         let item: Item;
         for (let i = 0, l = Game.current.items.length; i < l; i++) {
             item = Game.current.items[i];
-            if (item.kind === this.kind && item.id === this.id) {
+            if (item.kind === this.kind && item.system.id === this.system.id) {
                 // If the item already is in the inventory...
                 callback.call(this, item, i);
                 return true;

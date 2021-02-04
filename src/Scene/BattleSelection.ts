@@ -87,7 +87,7 @@ class BattleSelection {
         let ownedItem: Item, item: System.Item;
         for (let i = 0, l = Game.current.items.length; i < l; i++) {
             ownedItem = Game.current.items[i];
-            item = Datas.Items.get(ownedItem.id);
+            item = Datas.Items.get(ownedItem.system.id);
             if (ownedItem.kind === ItemKind.Item && item.consumable && (item
                 .availableKind === AvailableKind.Battle || item.availableKind 
                 === AvailableKind.Always)) {
@@ -321,7 +321,7 @@ class BattleSelection {
                 return;
             case EffectSpecialActionKind.OpenItems:
                 this.selectTarget((<Graphic.Item>this.battle
-                    .windowItemDescription.content).system.targetKind);
+                    .windowItemDescription.content).item.system.targetKind);
                 this.registerLastItemIndex();
                 return;
             default:
@@ -342,7 +342,7 @@ class BattleSelection {
                 for (i = 0, l = equipments.length; i < l; i++) {
                     gameItem = equipments[i];
                     if (gameItem && gameItem.kind === ItemKind.Weapon) {
-                        targetKind = gameItem.getItemInformations().targetKind;
+                        targetKind = gameItem.system.targetKind;
                         break;
                     }
                 }

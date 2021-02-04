@@ -34,6 +34,7 @@ class CommonSkillItem extends Icon {
      */
     read(json) {
         super.read(json);
+        this.id = json.id;
         this.type = Utils.defaultValue(json.t, 1);
         this.consumable = Utils.defaultValue(json.con, false);
         this.oneHand = Utils.defaultValue(json.oh, true);

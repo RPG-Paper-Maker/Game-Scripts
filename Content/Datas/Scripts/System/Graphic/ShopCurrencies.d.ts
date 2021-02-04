@@ -1,36 +1,32 @@
 import { Base } from "./Base.js";
-import { Graphic, Core } from "../index.js";
+import { Graphic } from "../index.js";
 /** @class
- *  The graphic displaying all the items information in the inventory menu.
- *  @param {Item} item - The current selected item
- *  @param {number} nbItem - The number of occurence of the selected item
+ *  The graphic displaying all currencies when in shop menu.
+ *  @extends Graphic.Base
  */
-declare class Item extends Base {
-    item: Core.Item;
-    graphicName: Graphic.TextIcon;
-    graphicNb: Graphic.Text;
-    graphicInformations: Graphic.SkillItem;
-    graphicCurrencies: Graphic.TextIcon[];
-    constructor(item: Core.Item, nbItem?: number);
+declare class ShopCurrencies extends Base {
+    currencies: Graphic.TextIcon[];
+    constructor();
+    getWidth(): number;
     /**
-     *  Update the game item number.
+     *  Update the currencies.
      */
-    updateNb(): void;
+    update(): void;
     /**
-     *  Drawing the item in choice box.
+     *  Drawing the content choice.
      *  @param {number} x - The x position to draw graphic
      *  @param {number} y - The y position to draw graphic
      *  @param {number} w - The width dimention to draw graphic
      *  @param {number} h - The height dimention to draw graphic
-     */
+    */
     drawChoice(x: number, y: number, w: number, h: number): void;
     /**
-     *  Drawing the item description.
+     *  Drawing the content.
      *  @param {number} x - The x position to draw graphic
      *  @param {number} y - The y position to draw graphic
      *  @param {number} w - The width dimention to draw graphic
      *  @param {number} h - The height dimention to draw graphic
-     */
+    */
     draw(x: number, y: number, w: number, h: number): void;
 }
-export { Item };
+export { ShopCurrencies };

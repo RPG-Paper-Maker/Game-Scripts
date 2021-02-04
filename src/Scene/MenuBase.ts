@@ -51,8 +51,8 @@ abstract class MenuBase extends Base {
      */
     protected _activeHero: number;
 
-    constructor() {
-        super(false);
+    constructor(...args: any[]) {
+        super(false, ...args);
     }
 
     /**

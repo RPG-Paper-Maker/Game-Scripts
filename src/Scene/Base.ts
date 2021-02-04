@@ -56,15 +56,20 @@ abstract class Base {
     /**
      * @param {boolean} [loading - = true] tell whether or not the scene is loading asynchronosively. 
      */
-    constructor(loading: boolean = true) {
+    constructor(loading: boolean = true, ...args: any) {
         this.reactionInterpreters = new Array;
         this.parallelCommands = new Array;
+        this.initialize(...args);
         if (loading) {
             this.loading = true;
             Utils.tryCatch(this.load, this);
         }
         this.create();
     }
+
+    initialize(...args: any) {
+
+    };
 
     /**
      * assign and create all the contents of the scene synchronously.

@@ -37,7 +37,7 @@ declare abstract class MenuBase extends Base {
      * @memberof MenuBase
      */
     protected _activeHero: number;
-    constructor();
+    constructor(...args: any[]);
     /**
      * Return the whole party array.
      *

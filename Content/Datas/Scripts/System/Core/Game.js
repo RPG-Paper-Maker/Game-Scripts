@@ -60,6 +60,7 @@ class Game {
         this.playTime = new Chrono(json.t);
         this.charactersInstances = json.inst;
         this.variables = json.vars;
+        this.shops = json.shops;
         // Items
         this.items = [];
         Utils.readJSONSystemList({ list: json.itm, listIndexes: this.items, func: (json) => {
@@ -145,6 +146,7 @@ class Game {
             heroStatesOpts: this.heroStatesOptions,
             startS: this.startupStates,
             startP: this.startupProperties,
+            shops: this.shops,
             mapsDatas: this.getCompressedMapsDatas()
         });
     }
@@ -220,6 +222,7 @@ class Game {
         this.mapsDatas = {};
         this.hero.initializeProperties();
         this.playTime = new Chrono(0);
+        this.shops = {};
         this.isEmpty = false;
     }
     /**

@@ -31,6 +31,7 @@ declare class Game {
     startupProperties: Record<string, any>;
     mapsDatas: Record<string, any>;
     isEmpty: boolean;
+    shops: Record<string, Record<string, number>[]>;
     constructor(slot?: number);
     /**
      *  Get the hero in a tab with instance ID.

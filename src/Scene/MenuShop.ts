@@ -1,7 +1,18 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2021 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
 
 import { Datas, Graphic, Manager, Scene } from "..";
 import { Constants, Enum, ScreenResolution } from "../Common";
-import { Rectangle, WindowBox, WindowChoices } from "../Core";
+import { Item, Rectangle, WindowBox, WindowChoices } from "../Core";
+import { StructPositionChoice } from "./Menu";
 import { MenuBase } from "./MenuBase";
 
 /**
@@ -20,10 +31,19 @@ class MenuShop extends MenuBase {
     public windowBoxUseItem: WindowBox;
     public windowBoxOwned: WindowBox;
     public windowBoxCurrencies: WindowBox;
+    public buyOnly: boolean;
+    public stock: Item[];
     public step: number;
+    public positionChoice: StructPositionChoice[];
 
-    constructor() {
-        super();
+    constructor(buyOnly: boolean, stock: Item[]) {
+        super(buyOnly, stock);
+    }
+
+    initialize(buyOnly: boolean, stock: Item[]) {
+        this.buyOnly = buyOnly;
+        this.stock = stock;
+        this.step = 0;
     }
 
     /**
@@ -32,7 +52,7 @@ class MenuShop extends MenuBase {
     create() {
         super.create();
         this.createAllWindows();
-        this.step = 0;
+        this.updateItemsList();
     }
 
     /**
@@ -67,9 +87,11 @@ class MenuShop extends MenuBase {
         const rect = new Rectangle(ScreenResolution.SCREEN_X - (105 * 2) - 5, 20, 
             105, WindowBox.SMALL_SLOT_HEIGHT);
         const list = [
-            new Graphic.Text("Buy", { align: Enum.Align.Center}), 
-            new Graphic.Text("Sell", { align: Enum.Align.Center})
+            new Graphic.Text("Buy", { align: Enum.Align.Center})
         ];
+        if (!this.buyOnly) {
+            list.push(new Graphic.Text("Sell", { align: Enum.Align.Center}));
+        }
         const options = {
             orientation: Enum.OrientationWindow.Horizontal,
             nbItemsMax: list.length,
@@ -99,6 +121,14 @@ class MenuShop extends MenuBase {
         };
         this.windowChoicesItemsKind = new WindowChoices(rect.x, rect.y, rect.width, 
             rect.height, list, options);
+        const l = list.length;
+        this.positionChoice = new Array(l);
+        for (let i = 0; i < l; i++) {
+            this.positionChoice[i] = {
+                index: 0,
+                offset: 0
+            };
+        }
     }
 
     /**
@@ -107,9 +137,7 @@ class MenuShop extends MenuBase {
     createWindowChoicesList() {
         const rect = new Rectangle(20, 100, 200, WindowBox.SMALL_SLOT_HEIGHT);
         const options = {
-            orientation: Enum.OrientationWindow.Horizontal,
-            nbItemsMax: Scene.Menu.SLOTS_TO_DISPLAY,
-            padding: [0, 0, 0, 0]
+            nbItemsMax: Scene.Menu.SLOTS_TO_DISPLAY
         };
         this.windowChoicesList = new WindowChoices(rect.x, rect.y, rect.width, 
             rect.height, [], options);
@@ -160,13 +188,47 @@ class MenuShop extends MenuBase {
      *  Create the currencies window.
      */
     createWindowBoxCurrencies() {
-        const width = 200;
+        const graphic = new Graphic.ShopCurrencies();
+        const width = graphic.getWidth() + (WindowBox.SMALL_SLOT_PADDING[0] * 2);
         const rect = new Rectangle(ScreenResolution.SCREEN_X - Constants
             .LARGE_SPACE - width, ScreenResolution.SCREEN_Y - WindowBox
             .SMALL_SLOT_HEIGHT - Constants.LARGE_SPACE, width, WindowBox
             .SMALL_SLOT_HEIGHT);
         this.windowBoxCurrencies = new WindowBox(rect.x, rect.y, rect.width, rect
-            .height);
+            .height, {content: graphic, padding: WindowBox.SMALL_SLOT_PADDING});
+    }
+
+    /** 
+     *  Update items list.
+     */
+    updateItemsList() {
+        let indexTab = this.windowChoicesItemsKind.currentSelectedIndex;
+        let list: Graphic.Item[] = [];
+        let item: Item;
+        for (let i = 0, l = this.stock.length; i < l; i++) {
+            item = this.stock[i];
+            if (item.nb !== 0 && (indexTab === 0 || (indexTab === 1 && (item.kind === 
+                Enum.ItemKind.Item && item.system.consumable)) || (indexTab === 
+                2 && (item.kind === Enum.ItemKind.Item && item.system.type === 1)) 
+                || (indexTab === 3 && (item.kind === Enum.ItemKind.Item && item
+                .system.type === 2)) || (indexTab === 4 && item.kind === Enum
+                .ItemKind.Weapon) || (indexTab === 5 && item.kind === Enum
+                .ItemKind.Armor))) {
+                list.push(new Graphic.Item(item));
+            }
+        }
+        this.windowChoicesList.setContentsCallbacks(list);
+        this.windowChoicesList.unselect();
+        this.windowChoicesList.offsetSelectedIndex = this.positionChoice[indexTab].offset;
+        this.windowChoicesList.select(this.positionChoice[indexTab].index);
+        this.synchronize();
+    }
+
+    /** 
+     *  Update informations to display.
+     */
+    synchronize() {
+        this.windowBoxInformation.content = this.windowChoicesList.getCurrentContent();
     }
 
     /** 
@@ -214,6 +276,7 @@ class MenuShop extends MenuBase {
             case 1:
                 this.windowChoicesItemsKind.onKeyPressedAndRepeat(key);
                 this.windowChoicesList.onKeyPressedAndRepeat(key);
+                this.synchronize();
                 break;
         }
         return res;
@@ -227,7 +290,6 @@ class MenuShop extends MenuBase {
 
         this.windowBoxTop.draw();
         this.windowChoicesBuySell.draw();
-        this.windowBoxCurrencies.draw();
         if (this.step > 0) {
             this.windowChoicesItemsKind.draw();
             this.windowChoicesList.draw();
@@ -239,6 +301,7 @@ class MenuShop extends MenuBase {
                 this.windowBoxEmpty.draw();
             }
         }
+        this.windowBoxCurrencies.draw();
     }
 }
 

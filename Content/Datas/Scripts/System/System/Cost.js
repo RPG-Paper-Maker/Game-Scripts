@@ -25,6 +25,19 @@ class Cost extends Base {
         super(json);
     }
     /**
+     *  Get the price for several costs.
+     */
+    static getPrice(list) {
+        let price = {};
+        let cost;
+        for (let i = 0, l = list.length; i < l; i++) {
+            cost = list[i];
+            price[cost.currencyID.getValue()] = Interpreter.evaluate(cost
+                .valueFormula.getValue());
+        }
+        return price;
+    }
+    /**
      *  Read the JSON associated to the cost.
      *  @param {Record<string, any>} - json Json object describing the cost
      */
@@ -43,6 +56,11 @@ class Cost extends Base {
         }
         this.valueFormula = DynamicValue.readOrDefaultMessage(json.vf);
     }
+    /**
+     *  Parse command with iterator.
+     *  @param {any[]} command
+     *  @param {StructIterator} iterator
+     */
     parse(command, iterator) {
         this.kind = command[iterator.i++];
         switch (this.kind) {

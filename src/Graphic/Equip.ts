@@ -36,7 +36,7 @@ class Equip extends Base {
         this.graphicEquipmentName = new Graphic.Text(Datas.BattleSystems
             .getEquipment(id));
         this.graphicEquipment = new Graphic.Text(equiped === null ? "-" : 
-            equiped.getItemInformations().name());
+            equiped.system.name());
     }
 
     /** 

@@ -10,8 +10,8 @@
 */
 
 import { Base } from "./Base";
-import { System, Graphic, Core } from "../index";
-import { Utils, Enum } from "../Common";
+import { System, Graphic, Core, Datas } from "../index";
+import { Utils, Enum, Constants } from "../Common";
 import Align = Enum.Align;
 
 /** @class
@@ -22,23 +22,38 @@ import Align = Enum.Align;
 class Item extends Base {
 
     public item: Core.Item;
-    public system: System.CommonSkillItem;
     public graphicName: Graphic.TextIcon;
     public graphicNb: Graphic.Text;
     public graphicInformations: Graphic.SkillItem;
+    public graphicCurrencies: Graphic.TextIcon[];
 
     constructor(item: Core.Item, nbItem?: number) {
         super();
 
         this.item = item;
-        this.system = item.getItemInformations();
 
         // All the graphics
-        this.graphicName = new Graphic.TextIcon(this.system.name(), this.system
-            .pictureID);
-        this.graphicNb = new Graphic.Text("x" + (Utils.isUndefined(nbItem) ? 
-            item.nb : nbItem), { align: Align.Right });
-        this.graphicInformations = new Graphic.SkillItem(this.system);
+        nbItem = Utils.isUndefined(nbItem) ? item.nb : nbItem;
+        this.graphicName = new Graphic.TextIcon(this.item.system.name() + (
+            !Utils.isUndefined(item.shop) && nbItem !== -1 ? Constants.STRING_SPACE + 
+            Constants.STRING_BRACKET_LEFT + nbItem + Constants.STRING_BRACKET_RIGHT : 
+            ""), this.item.system.pictureID);
+        if (Utils.isUndefined(item.shop)) {
+            this.graphicNb = new Graphic.Text("x" + nbItem, { align: Align.Right });
+        }
+        this.graphicInformations = new Graphic.SkillItem(this.item.system);
+        this.graphicCurrencies = [];
+        if (!Utils.isUndefined(item.shop)) {
+            let price = item.shop.getPrice();
+            this.graphicCurrencies = [];
+            let graphic: Graphic.TextIcon;
+            for (let id in price) {
+                graphic = new Graphic.TextIcon(Utils.numToString(price[id]), 
+                    Datas.Systems.getCurrency(parseInt(id)).pictureID, { align: 
+                    Align.Right });
+                this.graphicCurrencies.push(graphic);
+            }
+        }
     }
 
     /** 
@@ -57,7 +72,17 @@ class Item extends Base {
      */
     drawChoice(x: number, y: number, w: number, h: number) {
         this.graphicName.draw(x, y, w, h);
-        this.graphicNb.draw(x, y, w, h);
+        let offset = 0;
+        let graphic: Graphic.TextIcon;
+        for (let i = this.graphicCurrencies.length - 1; i >= 0; i--) {
+            graphic = this.graphicCurrencies[i];
+            console.log(graphic);
+            graphic.draw(x - offset, y, w, h);
+            offset += graphic.getWidth() + Constants.MEDIUM_SPACE;
+        }
+        if (this.graphicNb) {
+            this.graphicNb.draw(x, y, w, h);
+        }
     }
 
     /** 
@@ -69,7 +94,6 @@ class Item extends Base {
      */
     draw(x: number, y: number, w: number, h: number) {
         this.graphicInformations.draw(x, y, w, h);
-        this.graphicNb.draw(x, y, w, 0);
     }
 }
 

@@ -9,7 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Manager, Scene, System } from "../index.js";
-import { Utils } from "../Common/index.js";
+import { Enum, Utils } from "../Common/index.js";
+import { Game, Item } from "../Core/index.js";
 import { Base } from "./Base.js";
 /** @class
  *  An event command for sarting shop menu.
@@ -23,10 +24,7 @@ class StartShopMenu extends Base {
             i: 0
         };
         this.buyOnly = System.DynamicValue.createValueCommand(command, iterator);
-        this.isStock = Utils.numToBool(command[iterator.i++]);
-        if (this.isStock) {
-            this.stockVariableID = command[iterator.i++];
-        }
+        this.shopID = System.DynamicValue.createValueCommand(command, iterator);
         this.items = [];
         let shopItem;
         while (iterator.i < command.length) {
@@ -41,8 +39,42 @@ class StartShopMenu extends Base {
      *  @returns {Record<string, any>} The current state
      */
     initialize() {
+        // Create or load stock according to first time opening or not
+        let shopID = this.shopID.getValue();
+        let stocks = [];
+        stocks[Enum.ItemKind.Item] = {};
+        stocks[Enum.ItemKind.Weapon] = {};
+        stocks[Enum.ItemKind.Armor] = {};
+        let system;
+        let list = [];
+        let id, stock;
+        if (Game.current.shops[shopID]) {
+            stocks = Game.current.shops[shopID];
+            for (let i = 0, l = this.items.length; i < l; i++) {
+                system = this.items[i];
+                id = system.getItem().id;
+                stock = stocks[system.selectionItem][id];
+                if (Utils.isUndefined(stock)) {
+                    stock = system.getStock();
+                    stocks[system.selectionItem][id] = stock;
+                }
+                list[i] = new Item(system.selectionItem, id, stock, system);
+            }
+        }
+        else {
+            for (let i = 0, l = this.items.length; i < l; i++) {
+                system = this.items[i];
+                id = system.getItem().id;
+                stock = system.getStock();
+                stocks[system.selectionItem][id] = stock;
+                list[i] = new Item(system.selectionItem, id, stock, system);
+            }
+            Game.current.shops[shopID] = stocks;
+        }
         return {
-            opened: false
+            opened: false,
+            buyOnly: this.buyOnly.getValue(),
+            stock: list
         };
     }
     /**
@@ -56,7 +88,8 @@ class StartShopMenu extends Base {
         if (currentState.opened) {
             return 1;
         }
-        Manager.Stack.push(new Scene.MenuShop());
+        Manager.Stack.push(new Scene.MenuShop(currentState.buyOnly, currentState
+            .stock));
         currentState.opened = true;
         return 0;
     }

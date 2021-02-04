@@ -324,7 +324,7 @@ class If extends Base {
                                 for (i = 0, l = hero.equip.length; i < l; i++) {
                                     equip = hero.equip[i];
                                     if (equip && equip.kind === ItemKind.Weapon 
-                                        && equip.id === id)
+                                        && equip.system.id === id)
                                     {
                                         return true;
                                     }
@@ -339,7 +339,7 @@ class If extends Base {
                                 for (i = 0, l = hero.equip.length; i < l; i++) {
                                     equip = hero.equip[i];
                                     if (equip && equip.kind === ItemKind.Armor 
-                                        && equip.id === id)
+                                        && equip.system.id === id)
                                     {
                                         return true;
                                     }
@@ -382,7 +382,7 @@ class If extends Base {
                 id = this.itemID.getValue();
                 for (i = 0, l = Game.current.items.length; i < l; i++) {
                     item = Game.current.items[i];
-                    if (item.kind === ItemKind.Item && item.id === id) {
+                    if (item.kind === ItemKind.Item && item.system.id === id) {
                         nb = item.nb;
                         break;
                     }
@@ -395,7 +395,7 @@ class If extends Base {
                 id = this.weaponID.getValue();
                 for (i = 0, l = Game.current.items.length; i < l; i++) {
                     item = Game.current.items[i];
-                    if (item.kind === ItemKind.Weapon && item.id === id) {
+                    if (item.kind === ItemKind.Weapon && item.system.id === id) {
                         nb = item.nb;
                         break;
                     }
@@ -410,7 +410,7 @@ class If extends Base {
                         for (j = 0, m = h.equip.length; j < m; j++) {
                             equip = h.equip[j];
                             if (equip && equip.kind === ItemKind.Weapon && equip
-                                .id === id)
+                                .system.id === id)
                             {
                                 nb += 1;
                             }
@@ -425,7 +425,7 @@ class If extends Base {
                 id = this.armorID.getValue();
                 for (i = 0, l = Game.current.items.length; i < l; i++) {
                     item = Game.current.items[i];
-                    if (item.kind === ItemKind.Armor && item.id === id) {
+                    if (item.kind === ItemKind.Armor && item.system.id === id) {
                         nb = item.nb;
                         break;
                     }
@@ -440,7 +440,7 @@ class If extends Base {
                         for (j = 0, m = h.equip.length; j < m; j++) {
                             equip = h.equip[j];
                             if (equip && equip.kind === ItemKind.Armor && equip
-                                .id === id)
+                                .system.id === id)
                             {
                                 nb += 1;
                             }

@@ -36,6 +36,20 @@ class Cost extends Base {
     }
 
     /** 
+     *  Get the price for several costs.
+     */
+    static getPrice(list: System.Cost[]): Record<string, number> {
+        let price = {};
+        let cost: System.Cost;
+        for (let i = 0, l = list.length; i < l; i++) {
+            cost = list[i];
+            price[cost.currencyID.getValue()] = Interpreter.evaluate(cost
+                .valueFormula.getValue());
+        }
+        return price;
+    }
+
+    /** 
      *  Read the JSON associated to the cost.
      *  @param {Record<string, any>} - json Json object describing the cost
      */
@@ -55,6 +69,11 @@ class Cost extends Base {
         this.valueFormula = DynamicValue.readOrDefaultMessage(json.vf);
     }
 
+    /** 
+     *  Parse command with iterator.
+     *  @param {any[]} command
+     *  @param {StructIterator} iterator
+     */
     parse(command: any[], iterator: StructIterator) {
         this.kind = command[iterator.i++];
         switch (this.kind) {

@@ -120,10 +120,10 @@ class Monster extends Hero {
             loot = this.rewards.loots[i].currenLoot(level);
             if (loot !== null) {
                 loots = list[loot.kind];
-                if (loots.hasOwnProperty(loot.id)) {
-                    loots[loot.id].nb += loot.nb;
+                if (loots.hasOwnProperty(loot.system.id)) {
+                    loots[loot.system.id].nb += loot.nb;
                 } else {
-                    loots[loot.id] = loot;
+                    loots[loot.system.id] = loot;
                 }
             }
         }

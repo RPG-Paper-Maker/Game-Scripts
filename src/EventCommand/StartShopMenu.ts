@@ -10,8 +10,8 @@
 */
 
 import { Manager, Scene, System } from "..";
-import { Utils } from "../Common";
-import { MapObject } from "../Core";
+import { Enum, Utils } from "../Common";
+import { Game, Item, MapObject } from "../Core";
 import { Base } from "./Base";
 
 /** @class
@@ -21,8 +21,7 @@ import { Base } from "./Base";
  */
 class StartShopMenu extends Base {
     public buyOnly: System.DynamicValue;
-    public isStock: boolean;
-    public stockVariableID: number;
+    public shopID: System.DynamicValue;
     public items: System.ShopItem[];
 
     constructor(command: any[]) {
@@ -32,10 +31,7 @@ class StartShopMenu extends Base {
             i: 0
         }
         this.buyOnly = System.DynamicValue.createValueCommand(command, iterator);
-        this.isStock = Utils.numToBool(command[iterator.i++]);
-        if (this.isStock) {
-            this.stockVariableID = command[iterator.i++];
-        }
+        this.shopID = System.DynamicValue.createValueCommand(command, iterator);
         this.items = [];
         let shopItem: System.ShopItem;
         while (iterator.i < command.length) {
@@ -43,6 +39,7 @@ class StartShopMenu extends Base {
             shopItem.parse(command, iterator);
             this.items.push(shopItem);
         }
+
         this.isDirectNode = false;
     }
 
@@ -51,8 +48,41 @@ class StartShopMenu extends Base {
      *  @returns {Record<string, any>} The current state
      */
     initialize(): Record<string, any> {
+        // Create or load stock according to first time opening or not
+        let shopID = this.shopID.getValue();
+        let stocks: Record<string, number>[] = [];
+        stocks[Enum.ItemKind.Item] = {};
+        stocks[Enum.ItemKind.Weapon] = {};
+        stocks[Enum.ItemKind.Armor] = {};
+        let system: System.ShopItem;
+        let list: Item[] = [];
+        let id: number, stock: number;
+        if (Game.current.shops[shopID]) {
+            stocks = Game.current.shops[shopID];
+            for (let i = 0, l = this.items.length; i < l; i++) {
+                system = this.items[i];
+                id = system.getItem().id;
+                stock = stocks[system.selectionItem][id];
+                if (Utils.isUndefined(stock)) {
+                    stock = system.getStock();
+                    stocks[system.selectionItem][id] = stock;
+                }
+                list[i] = new Item(system.selectionItem, id, stock, system);
+            }
+        } else {
+            for (let i = 0, l = this.items.length; i < l; i++) {
+                system = this.items[i];
+                id = system.getItem().id;
+                stock = system.getStock();
+                stocks[system.selectionItem][id] = stock;
+                list[i] = new Item(system.selectionItem, id, stock, system);
+            }
+            Game.current.shops[shopID] = stocks;
+        }
         return {
-            opened: false
+            opened: false,
+            buyOnly: this.buyOnly.getValue(),
+            stock: list
         }
     }
 
@@ -68,7 +98,8 @@ class StartShopMenu extends Base {
         if (currentState.opened) {
             return 1;
         }
-        Manager.Stack.push(new Scene.MenuShop());
+        Manager.Stack.push(new Scene.MenuShop(currentState.buyOnly, currentState
+            .stock));
         currentState.opened = true;
         return 0;
     }

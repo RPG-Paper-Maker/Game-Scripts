@@ -29,6 +29,7 @@ import { System } from "../index";
  */
 class CommonSkillItem extends Icon {
 
+    public id: number;
     public hasType: boolean;
     public hasTargetKind: boolean;
     public type: number;
@@ -58,7 +59,7 @@ class CommonSkillItem extends Icon {
      */
     read(json: Record<string, any>) {
         super.read(json);
-
+        this.id = json.id;
         this.type = Utils.defaultValue(json.t, 1);
         this.consumable = Utils.defaultValue(json.con, false);
         this.oneHand = Utils.defaultValue(json.oh, true);

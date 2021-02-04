@@ -9,9 +9,10 @@ import { System } from "../index.js";
  */
 declare class Item {
     kind: ItemKind;
-    id: number;
+    system: System.CommonSkillItem;
     nb: number;
-    constructor(kind: ItemKind, id: number, nb: number);
+    shop: System.ShopItem;
+    constructor(kind: ItemKind, id: number, nb: number, shop?: System.ShopItem);
     /**
      *  Find an item in the inventory.
      *  @static
@@ -30,11 +31,6 @@ declare class Item {
      *  @param {number} nb - Number of item to add
      */
     add(nb: number): void;
-    /**
-     *  Get the item informations System.
-     *  @returns {System.CommonSkillItem}
-     */
-    getItemInformations(): System.CommonSkillItem;
     /**
      *  Modify items only if already in inventory.
      *  @param {Function} callback - callback function for action

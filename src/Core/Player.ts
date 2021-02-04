@@ -198,8 +198,8 @@ class Player {
         let list = new Array(l);
         for (let i = 1; i < l; i++) {
             if (this.equip[i] !== null) {
-                list[i] = [this.equip[i].kind, this.equip[i].id, this.equip[i]
-                    .nb];
+                list[i] = [this.equip[i].kind, this.equip[i].system.id, this
+                    .equip[i].nb];
             }
         }
         return list;
@@ -307,8 +307,7 @@ class Player {
                 if (this.equip[j] === null) {
                     continue;
                 }
-                characteristics = this.equip[j].getItemInformations()
-                    .characteristics;
+                characteristics = this.equip[j].system.characteristics;
             }
             if (characteristics) {
                 for (i = 0, l = characteristics.length; i < l; i++) {

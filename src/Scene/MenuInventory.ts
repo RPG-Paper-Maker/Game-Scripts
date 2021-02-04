@@ -109,10 +109,10 @@ class MenuInventory extends Base {
         let indexTab = this.windowChoicesTabs.currentSelectedIndex;
         let nbItems = Game.current.items.length;
         let list = [];
-        let ownedItem: Item, item: System.Item;
+        let ownedItem: Item, item: System.CommonSkillItem;
         for (let i = 0; i < nbItems; i++) {
             ownedItem = Game.current.items[i];
-            item = Datas.Items.get(ownedItem.id);
+            item = ownedItem.system;
             if (indexTab === 0 || (indexTab === 1 && (ownedItem.kind === 
                 ItemKind.Item && item.consumable)) || (indexTab === 2 && (
                 ownedItem.kind === ItemKind.Item && item.type === 1)) || (
@@ -195,11 +195,11 @@ class MenuInventory extends Base {
                     if (this.windowInformations.content === null) {
                         return;
                     }
-                    let targetKind = graphic.system.targetKind;
-                    let availableKind = graphic.system.availableKind;
-                    if (graphic.system.consumable && (targetKind === TargetKind
-                        .Ally || targetKind === TargetKind.AllAllies) && (
-                        availableKind === AvailableKind.Always || availableKind 
+                    let targetKind = graphic.item.system.targetKind;
+                    let availableKind = graphic.item.system.availableKind;
+                    if (graphic.item.system.consumable && (targetKind === 
+                        TargetKind.Ally || targetKind === TargetKind.AllAllies) && 
+                        (availableKind === AvailableKind.Always || availableKind 
                         === AvailableKind.MainMenu))
                     {
                         Datas.Systems.soundConfirmation.playSound();
@@ -222,7 +222,7 @@ class MenuInventory extends Base {
                 if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
                     .Action))
                 {
-                    if (graphic.system.isPossible() && graphic.system.use()) {
+                    if (graphic.item.system.isPossible() && graphic.item.system.use()) {
                         this.useItem();
                     }
                 } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards

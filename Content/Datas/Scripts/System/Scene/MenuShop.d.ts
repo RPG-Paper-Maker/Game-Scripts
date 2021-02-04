@@ -1,4 +1,5 @@
-import { WindowBox, WindowChoices } from "../Core/index.js";
+import { Item, WindowBox, WindowChoices } from "../Core/index.js";
+import { StructPositionChoice } from "./Menu.js";
 import { MenuBase } from "./MenuBase.js";
 /**
  * The scene handling and processing the shop system.
@@ -15,8 +16,12 @@ declare class MenuShop extends MenuBase {
     windowBoxUseItem: WindowBox;
     windowBoxOwned: WindowBox;
     windowBoxCurrencies: WindowBox;
+    buyOnly: boolean;
+    stock: Item[];
     step: number;
-    constructor();
+    positionChoice: StructPositionChoice[];
+    constructor(buyOnly: boolean, stock: Item[]);
+    initialize(buyOnly: boolean, stock: Item[]): void;
     /**
      *  Create the menu.
      */
@@ -61,6 +66,14 @@ declare class MenuShop extends MenuBase {
      *  Create the currencies window.
      */
     createWindowBoxCurrencies(): void;
+    /**
+     *  Update items list.
+     */
+    updateItemsList(): void;
+    /**
+     *  Update informations to display.
+     */
+    synchronize(): void;
     /**
      *  Handle scene key pressed.
      *  @param {number} key - The key ID

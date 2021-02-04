@@ -28,5 +28,17 @@ declare class ShopItem extends Base {
      *  @param {StructIterator} iterator
      */
     parse(command: any[], iterator: StructIterator): void;
+    /**
+     *  Get the item system.
+     */
+    getItem(): System.CommonSkillItem;
+    /**
+     *  Get the price.
+     */
+    getPrice(): Record<string, number>;
+    /**
+     *  Get the initial stock.
+     */
+    getStock(): number;
 }
 export { ShopItem };

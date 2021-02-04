@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { System } from "..";
+import { Datas, System } from "..";
 import { Enum, Utils } from "../Common";
 import { StructIterator } from "../EventCommand";
 import { Base } from "./Base";
@@ -79,6 +79,35 @@ class ShopItem extends Base {
             this.specificStock = System.DynamicValue.createValueCommand(command, 
                 iterator);
         }
+    }
+
+    /** 
+     *  Get the item system.
+     */
+    getItem(): System.CommonSkillItem {
+        switch (this.selectionItem) {
+            case Enum.ItemKind.Item:
+                return Datas.Items.get(this.itemID.getValue());
+            case Enum.ItemKind.Weapon:
+                return Datas.Weapons.get(this.weaponID.getValue());
+            case Enum.ItemKind.Armor:
+                return Datas.Armors.get(this.armorID.getValue());
+        }
+    }
+
+    /** 
+     *  Get the price.
+     */
+    getPrice(): Record<string, number> {
+        return this.selectionPrice ? System.Cost.getPrice(this.specificPrice) : 
+            System.Cost.getPrice(this.getItem().price);
+    }
+
+    /** 
+     *  Get the initial stock.
+     */
+    getStock(): number {
+        return this.selectionStock ? this.specificStock.getValue() : -1;
     }
 }
 

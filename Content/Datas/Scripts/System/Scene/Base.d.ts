@@ -38,7 +38,8 @@ declare abstract class Base {
     /**
      * @param {boolean} [loading - = true] tell whether or not the scene is loading asynchronosively.
      */
-    constructor(loading?: boolean);
+    constructor(loading?: boolean, ...args: any);
+    initialize(...args: any): void;
     /**
      * assign and create all the contents of the scene synchronously.
      *

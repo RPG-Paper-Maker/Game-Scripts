@@ -9,9 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { THREE } from "../Globals";
 import { Player } from "./Player";
-import { Datas } from "../index";
+import { Datas, EventCommand } from "../index";
 import { Item } from "./Item";
 import { Chrono } from "./Chrono";
 import { MapObject } from "./MapObject";
@@ -47,6 +46,7 @@ class Game {
     public startupProperties: Record<string, any>;
     public mapsDatas: Record<string, any>;
     public isEmpty: boolean;
+    public shops: Record<string, Record<string, number>[]>;
 
     constructor(slot: number = -1) {
         this.slot = slot;
@@ -89,6 +89,7 @@ class Game {
         this.playTime = new Chrono(json.t);
         this.charactersInstances = json.inst;
         this.variables = json.vars;
+        this.shops = json.shops;
 
         // Items
         this.items = [];
@@ -183,6 +184,7 @@ class Game {
             heroStatesOpts: this.heroStatesOptions,
             startS: this.startupStates,
             startP: this.startupProperties,
+            shops: this.shops,
             mapsDatas : this.getCompressedMapsDatas()
         });
     }
@@ -262,6 +264,7 @@ class Game {
         this.mapsDatas = {};
         this.hero.initializeProperties();
         this.playTime = new Chrono(0);
+        this.shops = {};
         this.isEmpty = false;
     }
 

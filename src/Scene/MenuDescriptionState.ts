@@ -65,7 +65,6 @@ class MenuDescriptionState extends MenuBase {
      * @memberof MenuDescriptionState
      */
     create() {
-        
         this.createAllWindows();
     }
 

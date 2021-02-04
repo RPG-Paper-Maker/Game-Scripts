@@ -12,6 +12,7 @@ import { System } from "../index.js";
  *  @param {Record<string, any>} - [json=undefined] Json object describing the common
  */
 declare class CommonSkillItem extends Icon {
+    id: number;
     hasType: boolean;
     hasTargetKind: boolean;
     type: number;

@@ -148,7 +148,7 @@ class MenuEquip extends MenuBase {
         for (let i = 0, l = Game.current.items.length; i < l; i++) {
             item = Game.current.items[i];
             if (item.kind !== ItemKind.Item) {
-                systemItem = item.getItemInformations();
+                systemItem = item.system;
                 type = systemItem.getType();
                 if (type.equipments[idEquipment]) {
                     nbItem = item.nb;
@@ -177,8 +177,7 @@ class MenuEquip extends MenuBase {
                 this.list = [];
             }
             else {
-                let result = player.getEquipmentStatsAndBonus(item.system, Datas
-                    .BattleSystems.equipmentsOrder[this.windowChoicesEquipment
+                let result = player.getEquipmentStatsAndBonus(item.item.system, Datas.BattleSystems.equipmentsOrder[this.windowChoicesEquipment
                     .currentSelectedIndex]);
                 this.list = result[0];
                 this.bonus = result[1];
@@ -252,7 +251,7 @@ class MenuEquip extends MenuBase {
         let item;
         for (let i = 0, l = Game.current.items.length; i < l; i++) {
             item = Game.current.items[i];
-            if (item.kind === gameItem.kind && item.id === gameItem.id) {
+            if (item.kind === gameItem.kind && item.system.id === gameItem.system.id) {
                 item.remove(1);
                 break;
             }

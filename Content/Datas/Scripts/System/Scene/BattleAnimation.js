@@ -48,8 +48,8 @@ class BattleAnimation {
                 break;
             case EffectSpecialActionKind.OpenItems:
                 content = this.battle.attackingGroup === CharacterKind.Hero ? this.battle.windowChoicesItems
-                    .getCurrentContent().system : Datas.Items.get(this.battle
-                    .action.itemID.getValue());
+                    .getCurrentContent().item.system : Datas.Items.get(this
+                    .battle.action.itemID.getValue());
                 this.battle.informationText = content.name();
                 break;
             default:
@@ -69,7 +69,7 @@ class BattleAnimation {
                     for (i = 0, l = equipments.length; i < l; i++) {
                         gameItem = equipments[i];
                         if (gameItem && gameItem.kind === ItemKind.Weapon) {
-                            weapon = gameItem.getItemInformations();
+                            weapon = gameItem.system;
                             this.battle.animationUser = new Animation(weapon
                                 .animationUserID.getValue());
                             this.battle.animationTarget = new Animation(weapon

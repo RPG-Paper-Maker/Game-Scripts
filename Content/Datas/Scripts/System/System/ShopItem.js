@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { System } from "../index.js";
+import { Datas, System } from "../index.js";
 import { Enum, Utils } from "../Common/index.js";
 import { Base } from "./Base.js";
 /** @class
@@ -58,6 +58,32 @@ class ShopItem extends Base {
         if (this.selectionStock) {
             this.specificStock = System.DynamicValue.createValueCommand(command, iterator);
         }
+    }
+    /**
+     *  Get the item system.
+     */
+    getItem() {
+        switch (this.selectionItem) {
+            case Enum.ItemKind.Item:
+                return Datas.Items.get(this.itemID.getValue());
+            case Enum.ItemKind.Weapon:
+                return Datas.Weapons.get(this.weaponID.getValue());
+            case Enum.ItemKind.Armor:
+                return Datas.Armors.get(this.armorID.getValue());
+        }
+    }
+    /**
+     *  Get the price.
+     */
+    getPrice() {
+        return this.selectionPrice ? System.Cost.getPrice(this.specificPrice) :
+            System.Cost.getPrice(this.getItem().price);
+    }
+    /**
+     *  Get the initial stock.
+     */
+    getStock() {
+        return this.selectionStock ? this.specificStock.getValue() : -1;
     }
 }
 export { ShopItem };
