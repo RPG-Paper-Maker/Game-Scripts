@@ -32,10 +32,10 @@ class WindowBox extends Bitmap {
         this.content = Utils.defaultValue(options.content, null);
         this.padding = Utils.defaultValue(options.padding, [0, 0, 0, 0]);
         this.limitContent = Utils.defaultValue(options.limitContent, true);
+        this.selected = Utils.defaultValue(options.selected, false);
         this.updateDimensions();
         this.bordersOpacity = 1;
         this.backgroundOpacity = 1;
-        this.selected = false;
         this.bordersVisible = true;
     }
     /**
@@ -151,7 +151,9 @@ WindowBox.HUGE_PADDING_BOX = [30, 30, 30, 30];
 WindowBox.DIALOG_PADDING_BOX = [30, 50, 30, 50];
 WindowBox.SMALL_SLOT_PADDING = [10, 5, 10, 5];
 WindowBox.SMALL_SLOT_HEIGHT = 30;
+WindowBox.LARGE_SLOT_WIDTH = 250;
 WindowBox.MEDIUM_SLOT_WIDTH = 200;
+WindowBox.SMALL_SLOT_WIDTH = 100;
 WindowBox.MEDIUM_SLOT_HEIGHT = 40;
 WindowBox.LARGE_SLOT_HEIGHT = 60;
 export { WindowBox };

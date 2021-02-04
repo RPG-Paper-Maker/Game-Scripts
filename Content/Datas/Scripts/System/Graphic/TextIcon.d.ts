@@ -28,7 +28,7 @@ declare class TextIcon extends Base {
         side?: Enum.Align;
         align?: Enum.Align;
         space?: number;
-    });
+    }, textOptions?: {});
     /**
      *  Get the max possible height.
      *  @returns {number}

@@ -1,23 +1,24 @@
+import { Graphic } from "../index.js";
 import { Base } from "./Base.js";
-import { Graphic, Core } from "../index.js";
 /** @class
- *  The graphic displaying all the items information in the inventory menu.
- *  @param {Item} item - The current selected item
- *  @param {number} nbItem - The number of occurence of the selected item
+ *  The graphic displaying spinbox inside.
+ *  @extends Graphic.Base
  */
-declare class Item extends Base {
-    item: Core.Item;
-    graphicName: Graphic.TextIcon;
-    graphicNb: Graphic.Text;
-    graphicInformations: Graphic.SkillItem;
-    graphicCurrencies: Graphic.TextIcon[];
-    constructor(item: Core.Item, nbItem?: number, possible?: boolean);
+declare class SpinBox extends Base {
+    graphicTimes: Graphic.Text;
+    graphicValue: Graphic.Text;
+    value: number;
+    constructor(value: number);
     /**
-     *  Update the game item number.
+     *  Update value.
+     *  @param {number} x - The x position to draw graphic
+     *  @param {number} y - The y position to draw graphic
+     *  @param {number} w - The width dimention to draw graphic
+     *  @param {number} h - The height dimention to draw graphic
      */
-    updateNb(): void;
+    setValue(value: number): void;
     /**
-     *  Drawing the item in choice box.
+     *  Drawing the skill or item use informations.
      *  @param {number} x - The x position to draw graphic
      *  @param {number} y - The y position to draw graphic
      *  @param {number} w - The width dimention to draw graphic
@@ -25,7 +26,7 @@ declare class Item extends Base {
      */
     drawChoice(x: number, y: number, w: number, h: number): void;
     /**
-     *  Drawing the item description.
+     *  Drawing the skill or item use informations.
      *  @param {number} x - The x position to draw graphic
      *  @param {number} y - The y position to draw graphic
      *  @param {number} w - The width dimention to draw graphic
@@ -33,4 +34,4 @@ declare class Item extends Base {
      */
     draw(x: number, y: number, w: number, h: number): void;
 }
-export { Item };
+export { SpinBox };

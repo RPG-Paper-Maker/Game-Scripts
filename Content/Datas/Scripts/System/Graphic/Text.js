@@ -140,9 +140,10 @@ class Text extends Base {
         let l = this.lines.length;
         let size;
         for (let i = 0; i < l; i++) {
-            size = Platform.ctx.measureText(this.lines[i]);
-            if (size.width > this.textWidth) {
-                this.textWidth = size.width;
+            size = Platform.ctx.measureText(this.lines[i]).width + (this
+                .strokeColor === null ? 0 : 2);
+            if (size > this.textWidth) {
+                this.textWidth = size;
             }
         }
         this.textHeight = (this.fontSize + (this.fontSize / 3)) * l;
@@ -176,9 +177,11 @@ class Text extends Base {
             .strokeColor === null ? 0 : 2));
         switch (this.align) {
             case Align.Left:
+                x += ScreenResolution.getScreenX(1);
                 break;
             case Align.Right:
-                x += w;
+                x += w - ScreenResolution.getScreenX(1);
+                ;
                 xBack = x - textWidth;
                 break;
             case Align.Center:

@@ -11,13 +11,13 @@
 
 import { Base } from "./Base";
 import { Graphic, Datas, Scene, Manager, System } from "../index";
-import { Enum, ScreenResolution } from "../Common";
+import { Constants, Enum, ScreenResolution } from "../Common";
 import Align = Enum.Align;
 import OrientationWindow = Enum.OrientationWindow;
 import ItemKind = Enum.ItemKind;
 import TargetKind = Enum.TargetKind;
 import AvailableKind = Enum.AvailableKind;
-import { WindowBox, WindowChoices, Item, Game } from "../Core";
+import { WindowBox, WindowChoices, Item, Game, Rectangle } from "../Core";
 import { StructPositionChoice } from "./Menu";
 
 /** @class
@@ -29,7 +29,7 @@ class MenuInventory extends Base {
     public windowTop: WindowBox;
     public windowChoicesTabs: WindowChoices;
     public windowChoicesList: WindowChoices;
-    public windowInformations: WindowBox;
+    public windowBoxInformation: WindowBox;
     public windowEmpty: WindowBox;
     public windowBoxUseItem: WindowBox;
     public positionChoice: StructPositionChoice[];
@@ -59,26 +59,15 @@ class MenuInventory extends Base {
                 nbItemsMax: 6
             }
         );
-        this.windowChoicesList = new WindowChoices(20, 100, 200, WindowBox
-            .SMALL_SLOT_HEIGHT, [], {
-                nbItemsMax: Scene.Menu.SLOTS_TO_DISPLAY,
-            }
-        );
-        this.windowInformations = new WindowBox(240, 100, 360, 200, {
-                padding: WindowBox.HUGE_PADDING_BOX
-            }
-        );
+        this.createWindowChoicesList();
+        this.createWindowBoxInformation();
         this.windowEmpty = new WindowBox(10, 100, ScreenResolution.SCREEN_X - 20
             , WindowBox.SMALL_SLOT_HEIGHT, {
                 content: new Graphic.Text("Empty", { align: Align.Center }),
                 padding: WindowBox.SMALL_SLOT_PADDING
             }
         );
-        this.windowBoxUseItem = new WindowBox(240, 320, 360, 140, {
-                content: new Graphic.UseSkillItem(),
-                padding: WindowBox.SMALL_PADDING_BOX
-            }
-        );
+        this.createWindowBoxUseItem();
         let l = menuKind.length;
         this.positionChoice = new Array(l);
         for (let i = 0; i < l; i++) {
@@ -94,11 +83,60 @@ class MenuInventory extends Base {
         this.synchronize();
     }
 
+    /**
+     *  Create the choice list.
+     */
+    createWindowChoicesList() {
+        const rect = new Rectangle(Constants.HUGE_SPACE, Constants.HUGE_SPACE + 
+            ((WindowBox.SMALL_SLOT_HEIGHT + Constants.LARGE_SPACE) * 2), WindowBox
+            .LARGE_SLOT_WIDTH, WindowBox.SMALL_SLOT_HEIGHT);
+        const options = {
+            nbItemsMax: Scene.Menu.SLOTS_TO_DISPLAY
+        };
+        this.windowChoicesList = new WindowChoices(rect.x, rect.y, rect.width, 
+            rect.height, [], options);
+    }
+    
+    /**
+     *  Create the information window.
+     */
+    createWindowBoxInformation() {
+        const width = ScreenResolution.SCREEN_X - (Constants.HUGE_SPACE * 2) - 
+            WindowBox.LARGE_SLOT_WIDTH - Constants.LARGE_SPACE;
+        const height = 215;
+        const rect = new Rectangle(ScreenResolution.SCREEN_X - Constants
+            .HUGE_SPACE - width, Constants.HUGE_SPACE + ((WindowBox
+            .SMALL_SLOT_HEIGHT + Constants.LARGE_SPACE) * 2), width, height);
+        const options = { 
+            padding: WindowBox.HUGE_PADDING_BOX
+        };
+        this.windowBoxInformation = new WindowBox(rect.x, rect.y, rect.width, rect
+            .height, options);
+    }
+
+    /**
+     *  Create the user item window.
+     */
+    createWindowBoxUseItem() {
+        const width = this.windowBoxInformation.oW;
+        const height = 140;
+        const rect = new Rectangle(ScreenResolution.SCREEN_X - Constants
+            .HUGE_SPACE - width, this.windowBoxInformation.oY + this
+            .windowBoxInformation.oH + Constants.MEDIUM_SPACE, width, height);
+        const graphic = new Graphic.UseSkillItem();
+        const options = {
+            content: graphic, 
+            padding: WindowBox.SMALL_PADDING_BOX
+        }
+        this.windowBoxUseItem = new WindowBox(rect.x, rect.y, rect.width, rect
+            .height, options);
+    }
+
     /** 
      *  Update informations to display.
      */
     synchronize() {
-        this.windowInformations.content = this.windowChoicesList
+        this.windowBoxInformation.content = this.windowChoicesList
             .getCurrentContent();
     }
 
@@ -134,7 +172,7 @@ class MenuInventory extends Base {
      *  Use the current item.
      */
     useItem() {
-        let graphic = <Graphic.Item> this.windowInformations.content;
+        let graphic = <Graphic.Item> this.windowBoxInformation.content;
         Game.current.useItem(graphic.item);
         if (graphic.item.nb > 0) {
             graphic.updateNb();
@@ -186,13 +224,13 @@ class MenuInventory extends Base {
      */
     onKeyPressed(key: number) {
         Scene.Base.prototype.onKeyPressed.call(Scene.Map.current, key);
-        let graphic = <Graphic.Item> this.windowInformations.content;
+        let graphic = <Graphic.Item> this.windowBoxInformation.content;
         switch (this.substep) {
             case 0:
                 if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
                     .Action))
                 {
-                    if (this.windowInformations.content === null) {
+                    if (this.windowBoxInformation.content === null) {
                         return;
                     }
                     let targetKind = graphic.item.system.targetKind;
@@ -286,7 +324,7 @@ class MenuInventory extends Base {
         this.windowChoicesTabs.draw();
         this.windowChoicesList.draw();
         if (this.windowChoicesList.listWindows.length > 0) {
-            this.windowInformations.draw();
+            this.windowBoxInformation.draw();
             if (this.substep === 1) {
                 this.windowBoxUseItem.draw();
             }

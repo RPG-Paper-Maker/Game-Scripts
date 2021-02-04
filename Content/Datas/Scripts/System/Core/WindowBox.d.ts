@@ -7,29 +7,37 @@ import { Graphic } from "../index.js";
  */
 interface WindowBoxOptions {
     /**
-     * the contents displayed inside the window.
+     *  The contents displayed inside the window.
      *
-     * @type {Graphic.Base}
-     * @default null
-     * @memberof WindowBoxOption
+     *  @type {Graphic.Base}
+     *  @default null
+     *  @memberof WindowBoxOption
      */
     content?: Graphic.Base;
     /**
-     * The window padding
+     *  The window padding
      *
-     * @type {number[]}
-     * @default [0,0,0,0]
-     * @memberof WindowBoxOption
+     *  @type {number[]}
+     *  @default [0,0,0,0]
+     *  @memberof WindowBoxOption
      */
     padding?: number[];
     /**
-     * If enabled the contents will be cut according to the padding size.
+     *  If enabled the contents will be cut according to the padding size.
      *
-     * @type {boolean}
-     * @default true
-     * @memberof WindowBoxOption
+     *  @type {boolean}
+     *  @default true
+     *  @memberof WindowBoxOption
      */
     limitContent?: boolean;
+    /**
+     *  Indicate if selected.
+     *
+     *  @type {boolean}
+     *  @default false
+     *  @memberof WindowBoxOption
+     */
+    selected?: boolean;
 }
 /**
  * The class for window boxes.
@@ -46,7 +54,9 @@ declare class WindowBox extends Bitmap {
     static readonly DIALOG_PADDING_BOX: number[];
     static readonly SMALL_SLOT_PADDING: number[];
     static readonly SMALL_SLOT_HEIGHT = 30;
+    static readonly LARGE_SLOT_WIDTH = 250;
     static readonly MEDIUM_SLOT_WIDTH = 200;
+    static readonly SMALL_SLOT_WIDTH = 100;
     static readonly MEDIUM_SLOT_HEIGHT = 40;
     static readonly LARGE_SLOT_HEIGHT = 60;
     content: Graphic.Base;

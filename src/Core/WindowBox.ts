@@ -21,29 +21,37 @@ import { Platform, ScreenResolution, Utils } from "../Common";
  */
 interface WindowBoxOptions {
     /**
-     * the contents displayed inside the window.
+     *  The contents displayed inside the window.
      *
-     * @type {Graphic.Base}
-     * @default null
-     * @memberof WindowBoxOption
+     *  @type {Graphic.Base}
+     *  @default null
+     *  @memberof WindowBoxOption
      */
     content?: Graphic.Base;
     /**
-     * The window padding
+     *  The window padding
      *
-     * @type {number[]}
-     * @default [0,0,0,0]
-     * @memberof WindowBoxOption
+     *  @type {number[]}
+     *  @default [0,0,0,0]
+     *  @memberof WindowBoxOption
      */
     padding?: number[];
     /**
-     * If enabled the contents will be cut according to the padding size.
+     *  If enabled the contents will be cut according to the padding size.
      *
-     * @type {boolean}
-     * @default true
-     * @memberof WindowBoxOption
+     *  @type {boolean}
+     *  @default true
+     *  @memberof WindowBoxOption
      */
     limitContent?: boolean;
+    /**
+     *  Indicate if selected.
+     *
+     *  @type {boolean}
+     *  @default false
+     *  @memberof WindowBoxOption
+     */
+    selected?: boolean;
 }
 
 /**
@@ -62,7 +70,9 @@ class WindowBox extends Bitmap {
     public static readonly DIALOG_PADDING_BOX = [30, 50, 30, 50];
     public static readonly SMALL_SLOT_PADDING = [10, 5, 10, 5];
     public static readonly SMALL_SLOT_HEIGHT = 30;
+    public static readonly LARGE_SLOT_WIDTH = 250;
     public static readonly MEDIUM_SLOT_WIDTH = 200;
+    public static readonly SMALL_SLOT_WIDTH = 100;
     public static readonly MEDIUM_SLOT_HEIGHT = 40;
     public static readonly LARGE_SLOT_HEIGHT = 60;
 
@@ -90,10 +100,10 @@ class WindowBox extends Bitmap {
         this.content = Utils.defaultValue(options.content, null);
         this.padding = Utils.defaultValue(options.padding, [0, 0, 0, 0]);
         this.limitContent = Utils.defaultValue(options.limitContent, true);
+        this.selected = Utils.defaultValue(options.selected, false);
         this.updateDimensions();
         this.bordersOpacity = 1;
         this.backgroundOpacity = 1;
-        this.selected = false;
         this.bordersVisible = true;
     }
 

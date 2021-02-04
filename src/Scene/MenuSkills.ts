@@ -12,8 +12,8 @@
 import { Base } from "./Base";
 import { Manager, Graphic, Scene, Datas } from "../index";
 import { StructPositionChoice } from "./Menu";
-import { WindowBox, WindowChoices, Battler, Game } from "../Core";
-import { Enum, ScreenResolution } from "../Common";
+import { WindowBox, WindowChoices, Battler, Game, Rectangle } from "../Core";
+import { Constants, Enum, ScreenResolution } from "../Common";
 import Align = Enum.Align;
 import OrientationWindow = Enum.OrientationWindow;
 import TargetKind = Enum.TargetKind;
@@ -29,7 +29,7 @@ class MenuSkills extends Base {
     public windowTop: WindowBox;
     public windowChoicesTabs: WindowChoices;
     public windowChoicesList: WindowChoices;
-    public windowInformations: WindowBox;
+    public windowBoxInformation: WindowBox;
     public windowEmpty: WindowBox;
     public windowBoxUseSkill: WindowBox;
     public substep: number;
@@ -62,15 +62,8 @@ class MenuSkills extends Base {
                 padding: [0, 0, 0, 0]
             }
         );
-        this.windowChoicesList = new WindowChoices(20, 100, 200, WindowBox
-            .SMALL_SLOT_HEIGHT, [], {
-                nbItemsMax: Scene.Menu.SLOTS_TO_DISPLAY
-            }
-        );
-        this.windowInformations = new WindowBox(240, 100, 360, 200, {
-                padding: WindowBox.HUGE_PADDING_BOX
-            }
-        );
+        this.createWindowChoicesList();
+        this.createWindowBoxInformation();
         this.windowEmpty = new WindowBox(10, 100, ScreenResolution.SCREEN_X - 20
             , WindowBox.SMALL_SLOT_HEIGHT, {
                 content: new Graphic.Text("Empty", { align: Align.Center }),
@@ -89,11 +82,42 @@ class MenuSkills extends Base {
         this.synchronize();
     }
 
+    /**
+     *  Create the choice list.
+     */
+    createWindowChoicesList() {
+        const rect = new Rectangle(Constants.HUGE_SPACE, Constants.HUGE_SPACE + 
+            ((WindowBox.SMALL_SLOT_HEIGHT + Constants.LARGE_SPACE) * 2), WindowBox
+            .LARGE_SLOT_WIDTH, WindowBox.SMALL_SLOT_HEIGHT);
+        const options = {
+            nbItemsMax: Scene.Menu.SLOTS_TO_DISPLAY
+        };
+        this.windowChoicesList = new WindowChoices(rect.x, rect.y, rect.width, 
+            rect.height, [], options);
+    }
+    
+    /**
+     *  Create the information window.
+     */
+    createWindowBoxInformation() {
+        const width = ScreenResolution.SCREEN_X - (Constants.HUGE_SPACE * 2) - 
+            WindowBox.LARGE_SLOT_WIDTH - Constants.LARGE_SPACE;
+        const height = 200;
+        const rect = new Rectangle(ScreenResolution.SCREEN_X - Constants
+            .HUGE_SPACE - width, Constants.HUGE_SPACE + ((WindowBox
+            .SMALL_SLOT_HEIGHT + Constants.LARGE_SPACE) * 2), width, height);
+        const options = { 
+            padding: WindowBox.HUGE_PADDING_BOX
+        };
+        this.windowBoxInformation = new WindowBox(rect.x, rect.y, rect.width, rect
+            .height, options);
+    }
+
     /** 
      *  Synchronize informations with selected hero.
      */
     synchronize() {
-        this.windowInformations.content = this.windowChoicesList
+        this.windowBoxInformation.content = this.windowChoicesList
             .getCurrentContent();
     }
 
@@ -160,13 +184,13 @@ class MenuSkills extends Base {
      */
     onKeyPressed(key: number) {
         Scene.Base.prototype.onKeyPressed.call(Scene.Map.current, key);
-        let graphic = <Graphic.Skill> this.windowInformations.content;
+        let graphic = <Graphic.Skill> this.windowBoxInformation.content;
         switch (this.substep) {
             case 0:
                 if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
                     .Action))
                 {
-                    if (this.windowInformations.content === null) {
+                    if (this.windowBoxInformation.content === null) {
                         return;
                     }
                     let targetKind = graphic.system.targetKind;
@@ -267,7 +291,7 @@ class MenuSkills extends Base {
         this.windowChoicesTabs.draw();
         this.windowChoicesList.draw();
         if (this.windowChoicesList.listWindows.length > 0) {
-            this.windowInformations.draw();
+            this.windowBoxInformation.draw();
             if (this.substep === 1) {
                 this.windowBoxUseSkill.draw();
             }

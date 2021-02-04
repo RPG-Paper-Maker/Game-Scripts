@@ -9,12 +9,24 @@ declare class MenuInventory extends Base {
     windowTop: WindowBox;
     windowChoicesTabs: WindowChoices;
     windowChoicesList: WindowChoices;
-    windowInformations: WindowBox;
+    windowBoxInformation: WindowBox;
     windowEmpty: WindowBox;
     windowBoxUseItem: WindowBox;
     positionChoice: StructPositionChoice[];
     substep: number;
     constructor();
+    /**
+     *  Create the choice list.
+     */
+    createWindowChoicesList(): void;
+    /**
+     *  Create the information window.
+     */
+    createWindowBoxInformation(): void;
+    /**
+     *  Create the user item window.
+     */
+    createWindowBoxUseItem(): void;
     /**
      *  Update informations to display.
      */

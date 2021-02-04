@@ -26,7 +26,7 @@ import { Graphic, Datas } from "../index.js";
  */
 class TextIcon extends Base {
     constructor(text, iconID, { side = Align.Left, align = Align
-        .Left, space = Constants.MEDIUM_SPACE } = {}) {
+        .Left, space = Constants.MEDIUM_SPACE } = {}, textOptions = {}) {
         super();
         this.text = text;
         this.iconID = iconID;
@@ -35,7 +35,7 @@ class TextIcon extends Base {
         this.space = space;
         this.graphicIcon = Datas.Pictures.getPictureCopy(PictureKind.Icons, this
             .iconID);
-        this.graphicText = new Graphic.Text(this.text);
+        this.graphicText = new Graphic.Text(this.text, textOptions);
         Platform.ctx.font = this.graphicText.font;
         this.graphicText.updateContextFont();
         this.length = Platform.ctx.measureText(this.text).width;

@@ -30,15 +30,23 @@ declare class ShopItem extends Base {
     parse(command: any[], iterator: StructIterator): void;
     /**
      *  Get the item system.
+     *  @returns {System.CommonSkillItem}
      */
     getItem(): System.CommonSkillItem;
     /**
      *  Get the price.
+     *  @returns {number}
      */
     getPrice(): Record<string, number>;
     /**
      *  Get the initial stock.
+     *  @returns {number}
      */
     getStock(): number;
+    /**
+     *  Get the initial stock.
+     *  @returns {boolean}
+     */
+    isPossiblePrice(): boolean;
 }
 export { ShopItem };

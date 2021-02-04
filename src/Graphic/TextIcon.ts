@@ -40,7 +40,7 @@ class TextIcon extends Base {
     public length: number;
 
     constructor(text: string, iconID: number, { side = Align.Left, align = Align
-        .Left, space = Constants.MEDIUM_SPACE } = {})
+        .Left, space = Constants.MEDIUM_SPACE } = {}, textOptions = {})
     {
         super();
 
@@ -51,7 +51,7 @@ class TextIcon extends Base {
         this.space = space;
         this.graphicIcon = Datas.Pictures.getPictureCopy(PictureKind.Icons, this
             .iconID);
-        this.graphicText = new Graphic.Text(this.text);
+        this.graphicText = new Graphic.Text(this.text, textOptions);
         Platform.ctx.font = this.graphicText.font;
         this.graphicText.updateContextFont();
         this.length = Platform.ctx.measureText(this.text).width;

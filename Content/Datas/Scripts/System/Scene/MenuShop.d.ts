@@ -1,4 +1,5 @@
 import { Item, WindowBox, WindowChoices } from "../Core/index.js";
+import { SpinBox } from "../Core/SpinBox.js";
 import { StructPositionChoice } from "./Menu.js";
 import { MenuBase } from "./MenuBase.js";
 /**
@@ -16,6 +17,7 @@ declare class MenuShop extends MenuBase {
     windowBoxUseItem: WindowBox;
     windowBoxOwned: WindowBox;
     windowBoxCurrencies: WindowBox;
+    spinBox: SpinBox;
     buyOnly: boolean;
     stock: Item[];
     step: number;
@@ -67,6 +69,10 @@ declare class MenuShop extends MenuBase {
      */
     createWindowBoxCurrencies(): void;
     /**
+     *  Create the currencies window.
+     */
+    createSpinBox(): void;
+    /**
      *  Update items list.
      */
     updateItemsList(): void;
@@ -74,6 +80,15 @@ declare class MenuShop extends MenuBase {
      *  Update informations to display.
      */
     synchronize(): void;
+    /**
+     *  Move tab according to key.
+     *  @param {number} key - The key ID
+     */
+    moveTabKey(key: number): void;
+    /**
+     *  Update the scene.
+     */
+    update(): void;
     /**
      *  Handle scene key pressed.
      *  @param {number} key - The key ID

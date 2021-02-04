@@ -232,6 +232,28 @@ class WindowSkin extends System.Base {
     }
 
     /** 
+     *  Draw the arrow up for spinbox.
+     *  @param {number} x - The x position
+     *  @param {number} y - The y position
+     */
+    drawArrowUp(x: number, y: number) {
+        this.picture.draw(x, y, this.arrowUpDown[2], this.arrowUpDown[3] / 2,
+            this.arrowUpDown[0], this.arrowUpDown[1], this.arrowUpDown[2], 
+            this.arrowUpDown[3] / 2);
+    }
+
+    /** 
+     *  Draw the arrow up for spinbox.
+     *  @param {number} x - The x position
+     *  @param {number} y - The y position
+     */
+    drawArrowDown(x: number, y: number) {
+        this.picture.draw(x, y, this.arrowUpDown[2], this.arrowUpDown[3] / 2,
+            this.arrowUpDown[0], this.arrowUpDown[1] + (this.arrowUpDown[3] / 2), 
+            this.arrowUpDown[2], this.arrowUpDown[3] / 2);
+    }
+
+    /** 
      *  Draw a damage number.
      *  @param {number} damage - The damage number to display
      *  @param {number} x - The x position

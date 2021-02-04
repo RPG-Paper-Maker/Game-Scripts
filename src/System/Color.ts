@@ -25,6 +25,7 @@ class Color extends Base {
     public static RED = System.Color.createColor(216, 33, 17);
     public static WHITE = System.Color.createColor(255, 255, 255);
     public static BLACK = System.Color.createColor(0, 0, 0);
+    public static GREY = System.Color.createColor(150, 150, 150);
 
     public red: number;
     public green: number;

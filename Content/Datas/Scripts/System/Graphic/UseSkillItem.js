@@ -17,7 +17,7 @@ import { Battler, Game } from "../Core/index.js";
  *  @extends Graphic.Base
  */
 class UseSkillItem extends Base {
-    constructor() {
+    constructor(hideArrow = false) {
         super();
         this.graphicCharacters = new Array;
         let player;
@@ -26,6 +26,7 @@ class UseSkillItem extends Base {
             player.initializeCharacter(true);
             this.graphicCharacters.push(player);
         }
+        this.hideArrow = hideArrow;
         this.setAll(false);
     }
     /**
@@ -138,13 +139,15 @@ class UseSkillItem extends Base {
         for (i = 0, l = this.graphicCharacters.length; i < l; i++) {
             this.graphicCharacters[i].drawCharacter(x + 5 + (i * 85), y - 32, w, h);
         }
-        if (this.all) {
-            for (i = 0; i < l; i++) {
-                this.drawArrowAtIndex(i, x, y, h);
+        if (!this.hideArrow) {
+            if (this.all) {
+                for (i = 0; i < l; i++) {
+                    this.drawArrowAtIndex(i, x, y, h);
+                }
             }
-        }
-        else {
-            this.drawArrowAtIndex(this.indexArrow, x, y, h);
+            else {
+                this.drawArrowAtIndex(this.indexArrow, x, y, h);
+            }
         }
     }
 }

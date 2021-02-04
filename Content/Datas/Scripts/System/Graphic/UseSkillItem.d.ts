@@ -8,7 +8,8 @@ declare class UseSkillItem extends Base {
     graphicCharacters: Graphic.Player[];
     all: boolean;
     indexArrow: number;
-    constructor();
+    hideArrow: boolean;
+    constructor(hideArrow?: boolean);
     /**
      *  Set if all targets are selected or not.
      *  @param {boolean} b - Indicate if all the targets are selected

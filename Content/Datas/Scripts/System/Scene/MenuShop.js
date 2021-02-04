@@ -10,7 +10,8 @@
 */
 import { Datas, Graphic, Manager, Scene } from "../index.js";
 import { Constants, Enum, ScreenResolution } from "../Common/index.js";
-import { Rectangle, WindowBox, WindowChoices } from "../Core/index.js";
+import { Game, Rectangle, WindowBox, WindowChoices } from "../Core/index.js";
+import { SpinBox } from "../Core/SpinBox.js";
 import { MenuBase } from "./MenuBase.js";
 /**
  * The scene handling and processing the shop system.
@@ -33,6 +34,7 @@ class MenuShop extends MenuBase {
         super.create();
         this.createAllWindows();
         this.updateItemsList();
+        this.synchronize();
     }
     /**
      *  Create all the windows.
@@ -47,20 +49,26 @@ class MenuShop extends MenuBase {
         this.createWindowBoxUseItem();
         this.createWindowBoxOwned();
         this.createWindowBoxCurrencies();
+        this.createSpinBox();
     }
     /**
      *  Create the top window.
      */
     createWindowBoxTop() {
-        const rect = new Rectangle(20, 20, 200, 30);
-        this.windowBoxTop = new WindowBox(rect.x, rect.y, rect.width, rect.height, { content: new Graphic.Text("Shop", { align: Enum.Align.Center })
-        });
+        const rect = new Rectangle(Constants.HUGE_SPACE, Constants.HUGE_SPACE, WindowBox.MEDIUM_SLOT_WIDTH, WindowBox.SMALL_SLOT_HEIGHT);
+        const graphic = new Graphic.Text("Shop", { align: Enum.Align.Center });
+        const options = {
+            content: graphic
+        };
+        this.windowBoxTop = new WindowBox(rect.x, rect.y, rect.width, rect.height, options);
     }
     /**
      *  Create the choice tab window buy/sell.
      */
     createWindowChoicesBuySell() {
-        const rect = new Rectangle(ScreenResolution.SCREEN_X - (105 * 2) - 5, 20, 105, WindowBox.SMALL_SLOT_HEIGHT);
+        const rect = new Rectangle(ScreenResolution.SCREEN_X - Constants.HUGE_SPACE -
+            (WindowBox.SMALL_SLOT_WIDTH * 2), Constants.HUGE_SPACE, WindowBox
+            .SMALL_SLOT_WIDTH, WindowBox.SMALL_SLOT_HEIGHT);
         const list = [
             new Graphic.Text("Buy", { align: Enum.Align.Center })
         ];
@@ -70,7 +78,7 @@ class MenuShop extends MenuBase {
         const options = {
             orientation: Enum.OrientationWindow.Horizontal,
             nbItemsMax: list.length,
-            padding: [0, 0, 0, 0]
+            padding: WindowBox.NONE_PADDING
         };
         this.windowChoicesBuySell = new WindowChoices(rect.x, rect.y, rect.width, rect.height, list, options);
     }
@@ -78,7 +86,9 @@ class MenuShop extends MenuBase {
      *  Create the choice tab window for sorting items kind.
      */
     createWindowChoicesItemsKind() {
-        const rect = new Rectangle(5, 60, 105, WindowBox.SMALL_SLOT_HEIGHT);
+        const rect = new Rectangle(Constants.MEDIUM_SPACE, Constants.HUGE_SPACE +
+            WindowBox.SMALL_SLOT_HEIGHT + Constants.LARGE_SPACE, WindowBox
+            .SMALL_SLOT_WIDTH, WindowBox.SMALL_SLOT_HEIGHT);
         const list = [
             new Graphic.Text("All", { align: Enum.Align.Center }),
             new Graphic.Text("Consumables", { align: Enum.Align.Center }),
@@ -106,7 +116,9 @@ class MenuShop extends MenuBase {
      *  Create the choice list.
      */
     createWindowChoicesList() {
-        const rect = new Rectangle(20, 100, 200, WindowBox.SMALL_SLOT_HEIGHT);
+        const rect = new Rectangle(Constants.HUGE_SPACE, Constants.HUGE_SPACE +
+            ((WindowBox.SMALL_SLOT_HEIGHT + Constants.LARGE_SPACE) * 2), WindowBox
+            .LARGE_SLOT_WIDTH, WindowBox.SMALL_SLOT_HEIGHT);
         const options = {
             nbItemsMax: Scene.Menu.SLOTS_TO_DISPLAY
         };
@@ -116,37 +128,62 @@ class MenuShop extends MenuBase {
      *  Create the information window.
      */
     createWindowBoxInformation() {
-        const rect = new Rectangle(240, 100, 360, 200);
+        const width = ScreenResolution.SCREEN_X - (Constants.HUGE_SPACE * 2) -
+            WindowBox.LARGE_SLOT_WIDTH - Constants.LARGE_SPACE;
+        const height = 215;
+        const rect = new Rectangle(ScreenResolution.SCREEN_X - Constants
+            .HUGE_SPACE - width, Constants.HUGE_SPACE + ((WindowBox
+            .SMALL_SLOT_HEIGHT + Constants.LARGE_SPACE) * 2), width, height);
+        const options = {
+            padding: WindowBox.HUGE_PADDING_BOX
+        };
         this.windowBoxInformation = new WindowBox(rect.x, rect.y, rect.width, rect
-            .height, { padding: WindowBox.HUGE_PADDING_BOX });
+            .height, options);
     }
     /**
      *  Create the empty window.
      */
     createWindowBoxEmpty() {
-        const rect = new Rectangle(10, 100, ScreenResolution.SCREEN_X - 20, WindowBox.SMALL_SLOT_HEIGHT);
+        const rect = new Rectangle(Constants.LARGE_SPACE, WindowBox.SMALL_SLOT_WIDTH, ScreenResolution.SCREEN_X - Constants.HUGE_SPACE, WindowBox
+            .SMALL_SLOT_HEIGHT);
+        const graphic = new Graphic.Text("Empty", { align: Enum.Align.Center });
+        const options = {
+            content: graphic,
+            padding: WindowBox.SMALL_SLOT_PADDING
+        };
         this.windowBoxEmpty = new WindowBox(rect.x, rect.y, rect.width, rect
-            .height, { content: new Graphic.Text("Empty", { align: Enum.Align
-                    .Center }), padding: WindowBox.SMALL_SLOT_PADDING });
+            .height, options);
     }
     /**
      *  Create the user item window.
      */
     createWindowBoxUseItem() {
-        const rect = new Rectangle(240, 320, 360, 140);
+        const width = this.windowBoxInformation.oW;
+        const height = 140;
+        const rect = new Rectangle(ScreenResolution.SCREEN_X - Constants
+            .HUGE_SPACE - width, this.windowBoxInformation.oY + this
+            .windowBoxInformation.oH + Constants.MEDIUM_SPACE, width, height);
+        const graphic = new Graphic.UseSkillItem(true);
+        const options = {
+            content: graphic,
+            padding: WindowBox.SMALL_PADDING_BOX
+        };
         this.windowBoxUseItem = new WindowBox(rect.x, rect.y, rect.width, rect
-            .height, { content: new Graphic.UseSkillItem(), padding: WindowBox
-                .SMALL_PADDING_BOX });
+            .height, options);
     }
     /**
      *  Create the owned items window.
      */
     createWindowBoxOwned() {
-        const rect = new Rectangle(20, ScreenResolution.SCREEN_Y - WindowBox
-            .SMALL_SLOT_HEIGHT - Constants.LARGE_SPACE, 100, WindowBox
-            .SMALL_SLOT_HEIGHT);
+        const rect = new Rectangle(Constants.LARGE_SPACE, ScreenResolution
+            .SCREEN_Y - WindowBox.SMALL_SLOT_HEIGHT - Constants.LARGE_SPACE, WindowBox.SMALL_SLOT_WIDTH, WindowBox.SMALL_SLOT_HEIGHT);
+        const graphic = new Graphic.Text("", { align: Enum.Align.Center });
+        const options = {
+            content: graphic,
+            padding: WindowBox.SMALL_SLOT_PADDING
+        };
         this.windowBoxOwned = new WindowBox(rect.x, rect.y, rect.width, rect
-            .height);
+            .height, options);
     }
     /**
      *  Create the currencies window.
@@ -158,8 +195,20 @@ class MenuShop extends MenuBase {
             .LARGE_SPACE - width, ScreenResolution.SCREEN_Y - WindowBox
             .SMALL_SLOT_HEIGHT - Constants.LARGE_SPACE, width, WindowBox
             .SMALL_SLOT_HEIGHT);
+        const options = {
+            content: graphic,
+            padding: WindowBox.SMALL_SLOT_PADDING
+        };
         this.windowBoxCurrencies = new WindowBox(rect.x, rect.y, rect.width, rect
-            .height, { content: graphic, padding: WindowBox.SMALL_SLOT_PADDING });
+            .height, options);
+    }
+    /**
+     *  Create the currencies window.
+     */
+    createSpinBox() {
+        const width = SpinBox.DEFAULT_WIDTH;
+        const height = SpinBox.DEFAULT_HEIGHT;
+        this.spinBox = new SpinBox((ScreenResolution.SCREEN_X - width) / 2, (ScreenResolution.SCREEN_Y - height) / 2);
     }
     /**
      *  Update items list.
@@ -177,20 +226,58 @@ class MenuShop extends MenuBase {
                     .system.type === 2)) || (indexTab === 4 && item.kind === Enum
                 .ItemKind.Weapon) || (indexTab === 5 && item.kind === Enum
                 .ItemKind.Armor))) {
-                list.push(new Graphic.Item(item));
+                list.push(new Graphic.Item(item, item.nb, item.shop.isPossiblePrice()));
             }
         }
         this.windowChoicesList.setContentsCallbacks(list);
         this.windowChoicesList.unselect();
         this.windowChoicesList.offsetSelectedIndex = this.positionChoice[indexTab].offset;
         this.windowChoicesList.select(this.positionChoice[indexTab].index);
-        this.synchronize();
     }
     /**
      *  Update informations to display.
      */
     synchronize() {
         this.windowBoxInformation.content = this.windowChoicesList.getCurrentContent();
+        let owned = 0;
+        let item;
+        for (let i = 0, l = Game.current.items.length; i < l; i++) {
+            item = Game.current.items[i];
+            if (item.system.id === this.windowBoxInformation
+                .content.item.system.id) {
+                owned = item.nb;
+                break;
+            }
+        }
+        this.windowBoxOwned.content.setText("Owned: " + owned);
+    }
+    /**
+     *  Move tab according to key.
+     *  @param {number} key - The key ID
+     */
+    moveTabKey(key) {
+        // Tab
+        const indexTab = this.windowChoicesItemsKind.currentSelectedIndex;
+        this.windowChoicesItemsKind.onKeyPressedAndRepeat(key);
+        if (indexTab !== this.windowChoicesItemsKind.currentSelectedIndex) {
+            this.updateItemsList();
+        }
+        // List
+        const indexList = this.windowChoicesList.currentSelectedIndex;
+        this.windowChoicesList.onKeyPressedAndRepeat(key);
+        if (indexList !== this.windowChoicesList.currentSelectedIndex) {
+            this.synchronize();
+        }
+        let position = this.positionChoice[this.windowChoicesItemsKind
+            .currentSelectedIndex];
+        position.index = this.windowChoicesList.currentSelectedIndex;
+        position.offset = this.windowChoicesList.offsetSelectedIndex;
+    }
+    /**
+     *  Update the scene.
+     */
+    update() {
+        this.windowBoxUseItem.content.update();
     }
     /**
      *  Handle scene key pressed.
@@ -198,6 +285,7 @@ class MenuShop extends MenuBase {
      */
     onKeyPressed(key) {
         super.onKeyPressed(key);
+        let graphic = this.windowBoxInformation.content;
         switch (this.step) {
             case 0:
                 if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Action)) {
@@ -213,10 +301,35 @@ class MenuShop extends MenuBase {
                 }
                 break;
             case 1:
-                if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
+                if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
+                    .Action)) {
+                    if (this.windowBoxInformation.content === null) {
+                        return;
+                    }
+                    if (graphic.item.shop.isPossiblePrice()) {
+                        Datas.Systems.soundConfirmation.playSound();
+                        this.step = 2;
+                        Manager.Stack.requestPaintHUD = true;
+                    }
+                    else {
+                        Datas.Systems.soundImpossible.playSound();
+                    }
+                }
+                else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
                     .menuControls.Cancel) || Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.controls.MainMenu)) {
                     Datas.Systems.soundCancel.playSound();
                     this.step = 0;
+                }
+                break;
+            case 2:
+                if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
+                    .Action)) {
+                }
+                else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
+                    .menuControls.Cancel) || Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.controls.MainMenu)) {
+                    Datas.Systems.soundCancel.playSound();
+                    this.step = 1;
+                    Manager.Stack.requestPaintHUD = true;
                 }
                 break;
         }
@@ -233,9 +346,10 @@ class MenuShop extends MenuBase {
                 this.windowChoicesBuySell.onKeyPressedAndRepeat(key);
                 break;
             case 1:
-                this.windowChoicesItemsKind.onKeyPressedAndRepeat(key);
-                this.windowChoicesList.onKeyPressedAndRepeat(key);
-                this.synchronize();
+                this.moveTabKey(key);
+                break;
+            case 2:
+                this.spinBox.onKeyPressedAndRepeat(key);
                 break;
         }
         return res;
@@ -257,6 +371,9 @@ class MenuShop extends MenuBase {
             }
             else {
                 this.windowBoxEmpty.draw();
+            }
+            if (this.step === 2) {
+                this.spinBox.draw();
             }
         }
         this.windowBoxCurrencies.draw();

@@ -77,6 +77,18 @@ declare class WindowSkin extends System.Base {
      */
     drawArrowMessage(frame: number, x: number, y: number): void;
     /**
+     *  Draw the arrow up for spinbox.
+     *  @param {number} x - The x position
+     *  @param {number} y - The y position
+     */
+    drawArrowUp(x: number, y: number): void;
+    /**
+     *  Draw the arrow up for spinbox.
+     *  @param {number} x - The x position
+     *  @param {number} y - The y position
+     */
+    drawArrowDown(x: number, y: number): void;
+    /**
      *  Draw a damage number.
      *  @param {number} damage - The damage number to display
      *  @param {number} x - The x position

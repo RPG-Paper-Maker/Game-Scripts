@@ -23,8 +23,9 @@ class UseSkillItem extends Base {
     public graphicCharacters: Graphic.Player[];
     public all: boolean;
     public indexArrow: number;
+    public hideArrow: boolean;
 
-    constructor() {
+    constructor(hideArrow: boolean = false) {
         super();
 
         this.graphicCharacters = new Array;
@@ -34,6 +35,7 @@ class UseSkillItem extends Base {
             player.initializeCharacter(true);
             this.graphicCharacters.push(player);
         }
+        this.hideArrow = hideArrow;
         this.setAll(false);
     }
 
@@ -158,12 +160,14 @@ class UseSkillItem extends Base {
             this.graphicCharacters[i].drawCharacter(x + 5 + (i * 85), y - 32, w,
                 h);
         }
-        if (this.all) {
-            for (i = 0; i < l; i++) {
-                this.drawArrowAtIndex(i, x, y, h);
+        if (!this.hideArrow) {
+            if (this.all) {
+                for (i = 0; i < l; i++) {
+                    this.drawArrowAtIndex(i, x, y, h);
+                }
+            } else {
+                this.drawArrowAtIndex(this.indexArrow, x, y, h);
             }
-        } else {
-            this.drawArrowAtIndex(this.indexArrow, x, y, h);
         }
     }
 }

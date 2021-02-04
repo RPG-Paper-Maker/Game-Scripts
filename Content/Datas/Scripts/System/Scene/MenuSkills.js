@@ -10,8 +10,8 @@
 */
 import { Base } from "./Base.js";
 import { Manager, Graphic, Scene, Datas } from "../index.js";
-import { WindowBox, WindowChoices, Battler, Game } from "../Core/index.js";
-import { Enum, ScreenResolution } from "../Common/index.js";
+import { WindowBox, WindowChoices, Battler, Game, Rectangle } from "../Core/index.js";
+import { Constants, Enum, ScreenResolution } from "../Common/index.js";
 var Align = Enum.Align;
 var OrientationWindow = Enum.OrientationWindow;
 var TargetKind = Enum.TargetKind;
@@ -45,13 +45,8 @@ class MenuSkills extends Base {
             nbItemsMax: 4,
             padding: [0, 0, 0, 0]
         });
-        this.windowChoicesList = new WindowChoices(20, 100, 200, WindowBox
-            .SMALL_SLOT_HEIGHT, [], {
-            nbItemsMax: Scene.Menu.SLOTS_TO_DISPLAY
-        });
-        this.windowInformations = new WindowBox(240, 100, 360, 200, {
-            padding: WindowBox.HUGE_PADDING_BOX
-        });
+        this.createWindowChoicesList();
+        this.createWindowBoxInformation();
         this.windowEmpty = new WindowBox(10, 100, ScreenResolution.SCREEN_X - 20, WindowBox.SMALL_SLOT_HEIGHT, {
             content: new Graphic.Text("Empty", { align: Align.Center }),
             padding: WindowBox.SMALL_SLOT_PADDING
@@ -66,10 +61,38 @@ class MenuSkills extends Base {
         this.synchronize();
     }
     /**
+     *  Create the choice list.
+     */
+    createWindowChoicesList() {
+        const rect = new Rectangle(Constants.HUGE_SPACE, Constants.HUGE_SPACE +
+            ((WindowBox.SMALL_SLOT_HEIGHT + Constants.LARGE_SPACE) * 2), WindowBox
+            .LARGE_SLOT_WIDTH, WindowBox.SMALL_SLOT_HEIGHT);
+        const options = {
+            nbItemsMax: Scene.Menu.SLOTS_TO_DISPLAY
+        };
+        this.windowChoicesList = new WindowChoices(rect.x, rect.y, rect.width, rect.height, [], options);
+    }
+    /**
+     *  Create the information window.
+     */
+    createWindowBoxInformation() {
+        const width = ScreenResolution.SCREEN_X - (Constants.HUGE_SPACE * 2) -
+            WindowBox.LARGE_SLOT_WIDTH - Constants.LARGE_SPACE;
+        const height = 200;
+        const rect = new Rectangle(ScreenResolution.SCREEN_X - Constants
+            .HUGE_SPACE - width, Constants.HUGE_SPACE + ((WindowBox
+            .SMALL_SLOT_HEIGHT + Constants.LARGE_SPACE) * 2), width, height);
+        const options = {
+            padding: WindowBox.HUGE_PADDING_BOX
+        };
+        this.windowBoxInformation = new WindowBox(rect.x, rect.y, rect.width, rect
+            .height, options);
+    }
+    /**
      *  Synchronize informations with selected hero.
      */
     synchronize() {
-        this.windowInformations.content = this.windowChoicesList
+        this.windowBoxInformation.content = this.windowChoicesList
             .getCurrentContent();
     }
     /**
@@ -127,12 +150,12 @@ class MenuSkills extends Base {
      */
     onKeyPressed(key) {
         Scene.Base.prototype.onKeyPressed.call(Scene.Map.current, key);
-        let graphic = this.windowInformations.content;
+        let graphic = this.windowBoxInformation.content;
         switch (this.substep) {
             case 0:
                 if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
                     .Action)) {
-                    if (this.windowInformations.content === null) {
+                    if (this.windowBoxInformation.content === null) {
                         return;
                     }
                     let targetKind = graphic.system.targetKind;
@@ -225,7 +248,7 @@ class MenuSkills extends Base {
         this.windowChoicesTabs.draw();
         this.windowChoicesList.draw();
         if (this.windowChoicesList.listWindows.length > 0) {
-            this.windowInformations.draw();
+            this.windowBoxInformation.draw();
             if (this.substep === 1) {
                 this.windowBoxUseSkill.draw();
             }

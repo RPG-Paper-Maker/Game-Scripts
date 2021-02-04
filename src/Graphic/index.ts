@@ -24,6 +24,7 @@ export * from "./Setting";
 export * from "./ShopCurrencies";
 export * from "./Skill";
 export * from "./SkillItem";
+export * from "./SpinBox";
 export * from "./StatisticProgression";
 export * from "./Text";
 export * from "./TextIcon";

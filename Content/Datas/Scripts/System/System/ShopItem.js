@@ -10,6 +10,7 @@
 */
 import { Datas, System } from "../index.js";
 import { Enum, Utils } from "../Common/index.js";
+import { Game } from "../Core/index.js";
 import { Base } from "./Base.js";
 /** @class
  *  A skill learned by a player.
@@ -61,6 +62,7 @@ class ShopItem extends Base {
     }
     /**
      *  Get the item system.
+     *  @returns {System.CommonSkillItem}
      */
     getItem() {
         switch (this.selectionItem) {
@@ -74,6 +76,7 @@ class ShopItem extends Base {
     }
     /**
      *  Get the price.
+     *  @returns {number}
      */
     getPrice() {
         return this.selectionPrice ? System.Cost.getPrice(this.specificPrice) :
@@ -81,9 +84,23 @@ class ShopItem extends Base {
     }
     /**
      *  Get the initial stock.
+     *  @returns {number}
      */
     getStock() {
         return this.selectionStock ? this.specificStock.getValue() : -1;
+    }
+    /**
+     *  Get the initial stock.
+     *  @returns {boolean}
+     */
+    isPossiblePrice() {
+        let price = this.getPrice();
+        for (let id in price) {
+            if (Game.current.currencies[id] < price[id]) {
+                return false;
+            }
+        }
+        return true;
     }
 }
 export { ShopItem };

@@ -11,6 +11,7 @@
 
 import { Datas, System } from "..";
 import { Enum, Utils } from "../Common";
+import { Game } from "../Core";
 import { StructIterator } from "../EventCommand";
 import { Base } from "./Base";
 
@@ -83,6 +84,7 @@ class ShopItem extends Base {
 
     /** 
      *  Get the item system.
+     *  @returns {System.CommonSkillItem}
      */
     getItem(): System.CommonSkillItem {
         switch (this.selectionItem) {
@@ -97,6 +99,7 @@ class ShopItem extends Base {
 
     /** 
      *  Get the price.
+     *  @returns {number}
      */
     getPrice(): Record<string, number> {
         return this.selectionPrice ? System.Cost.getPrice(this.specificPrice) : 
@@ -105,9 +108,24 @@ class ShopItem extends Base {
 
     /** 
      *  Get the initial stock.
+     *  @returns {number}
      */
     getStock(): number {
         return this.selectionStock ? this.specificStock.getValue() : -1;
+    }
+
+    /** 
+     *  Get the initial stock.
+     *  @returns {boolean}
+     */
+    isPossiblePrice(): boolean {
+        let price = this.getPrice();
+        for (let id in price) {
+            if (Game.current.currencies[id] < price[id]) {
+                return false;
+            }
+        }
+        return true;
     }
 }
 

@@ -10,6 +10,7 @@ declare class Color extends Base {
     static RED: Color;
     static WHITE: Color;
     static BLACK: Color;
+    static GREY: Color;
     red: number;
     green: number;
     blue: number;

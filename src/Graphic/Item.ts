@@ -27,7 +27,7 @@ class Item extends Base {
     public graphicInformations: Graphic.SkillItem;
     public graphicCurrencies: Graphic.TextIcon[];
 
-    constructor(item: Core.Item, nbItem?: number) {
+    constructor(item: Core.Item, nbItem?: number, possible: boolean = true) {
         super();
 
         this.item = item;
@@ -37,7 +37,8 @@ class Item extends Base {
         this.graphicName = new Graphic.TextIcon(this.item.system.name() + (
             !Utils.isUndefined(item.shop) && nbItem !== -1 ? Constants.STRING_SPACE + 
             Constants.STRING_BRACKET_LEFT + nbItem + Constants.STRING_BRACKET_RIGHT : 
-            ""), this.item.system.pictureID);
+            ""), this.item.system.pictureID, {}, possible ? {} : { color: System
+            .Color.GREY });
         if (Utils.isUndefined(item.shop)) {
             this.graphicNb = new Graphic.Text("x" + nbItem, { align: Align.Right });
         }
@@ -50,7 +51,7 @@ class Item extends Base {
             for (let id in price) {
                 graphic = new Graphic.TextIcon(Utils.numToString(price[id]), 
                     Datas.Systems.getCurrency(parseInt(id)).pictureID, { align: 
-                    Align.Right });
+                    Align.Right }, possible ? {} : { color: System.Color.GREY });
                 this.graphicCurrencies.push(graphic);
             }
         }
@@ -76,7 +77,6 @@ class Item extends Base {
         let graphic: Graphic.TextIcon;
         for (let i = this.graphicCurrencies.length - 1; i >= 0; i--) {
             graphic = this.graphicCurrencies[i];
-            console.log(graphic);
             graphic.draw(x - offset, y, w, h);
             offset += graphic.getWidth() + Constants.MEDIUM_SPACE;
         }
