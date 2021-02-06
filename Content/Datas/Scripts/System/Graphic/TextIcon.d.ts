@@ -40,6 +40,11 @@ declare class TextIcon extends Base {
      */
     getWidth(): number;
     /**
+     *  Set the text.
+     *  @param {string} text
+     */
+    setText(text: string): void;
+    /**
      *  Drawing the content choice.
      *  @param {number} x - The x position to draw graphic
      *  @param {number} y - The y position to draw graphic

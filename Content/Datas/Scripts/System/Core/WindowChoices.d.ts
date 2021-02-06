@@ -116,7 +116,7 @@ declare class WindowChoices extends Bitmap {
      *  @param {number} [currentSelectedIndex=0] - The current selected index
      *  position
      */
-    updateContentSize(currentSelectedIndex?: number): void;
+    updateContentSize(currentSelectedIndex?: number, offsetSelectedIndex?: number): void;
     /**
      *  Set the content at a specific index.
      *  @param {number} i - The index
@@ -154,6 +154,10 @@ declare class WindowChoices extends Bitmap {
      *  Select the current choice.
      */
     selectCurrent(): void;
+    /**
+     *  Remove the current choice.
+     */
+    removeCurrent(): void;
     /**
      *  Go cursor up.
      */

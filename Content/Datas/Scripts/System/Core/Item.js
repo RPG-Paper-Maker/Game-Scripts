@@ -53,6 +53,16 @@ class Item {
         return null;
     }
     /**
+     *  The json save.
+     */
+    getSave() {
+        return {
+            kind: this.kind,
+            id: this.system.id,
+            nb: this.nb
+        };
+    }
+    /**
      *  Remove item from inventory.
      *  @param {number} nb - Number of item to remove
      */
@@ -147,6 +157,43 @@ class Item {
      */
     use() {
         return --this.nb > 0;
+    }
+    /**
+     *  Get the max value you could buy from this item shop.
+     *  @returns {number}
+     */
+    getMaxBuy() {
+        return this.shop.getMax(this.nb === -1 ? 9999 : this.nb);
+    }
+    /**
+     *  Use the currencies to buy this shop item and indicates if the shop item
+     *  need to be removed.
+     *  @param {number} shopID The item shop ID
+     *  @param {number} times The number of items to buy
+     *  @returns {boolean}
+     */
+    buy(shopID, times) {
+        let price = this.shop.getPrice();
+        // Update currency
+        for (let id in price) {
+            Game.current.currencies[id] -= price[id] * times;
+            if (this.nb !== -1) {
+                this.nb -= times;
+            }
+        }
+        // Add items to inventory
+        let item = Item.findItem(this.kind, this.system.id);
+        if (item) {
+            item.nb += times;
+        }
+        else {
+            Game.current.items.push(new Item(this.kind, this.system.id, times));
+        }
+        // Change stock value
+        if (Game.current.shops[shopID][this.kind][this.system.id] !== -1) {
+            Game.current.shops[shopID][this.kind][this.system.id] -= times;
+        }
+        return Game.current.shops[shopID][this.kind][this.system.id] === 0;
     }
 }
 export { Item };

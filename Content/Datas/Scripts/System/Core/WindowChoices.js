@@ -81,7 +81,7 @@ class WindowChoices extends Bitmap {
      *  @param {number} [currentSelectedIndex=0] - The current selected index
      *  position
      */
-    updateContentSize(currentSelectedIndex = 0) {
+    updateContentSize(currentSelectedIndex = 0, offsetSelectedIndex = 0) {
         // Getting the main box size
         let totalNb = this.listContents.length;
         this.size = totalNb > this.nbItemsMax ? this.nbItemsMax : totalNb;
@@ -130,7 +130,7 @@ class WindowChoices extends Bitmap {
         else {
             this.currentSelectedIndex = -1;
         }
-        this.offsetSelectedIndex = 0;
+        this.offsetSelectedIndex = offsetSelectedIndex;
         // Update HUD
         Manager.Stack.requestPaintHUD = true;
     }
@@ -211,6 +211,17 @@ class WindowChoices extends Bitmap {
      */
     selectCurrent() {
         this.select(this.currentSelectedIndex);
+    }
+    /**
+     *  Remove the current choice.
+     */
+    removeCurrent() {
+        this.listContents.splice(this.currentSelectedIndex, 1);
+        if (this.currentSelectedIndex === this.listContents.length) {
+            this.currentSelectedIndex--;
+            this.offsetSelectedIndex--;
+        }
+        this.updateContentSize(this.currentSelectedIndex, this.offsetSelectedIndex);
     }
     /**
      *  Go cursor up.

@@ -22,6 +22,10 @@ declare class Item {
      */
     static findItem(kind: ItemKind, id: number): Item;
     /**
+     *  The json save.
+     */
+    getSave(): Record<string, any>;
+    /**
      *  Remove item from inventory.
      *  @param {number} nb - Number of item to remove
      */
@@ -67,5 +71,18 @@ declare class Item {
      * @returns {boolean}
      */
     use(): boolean;
+    /**
+     *  Get the max value you could buy from this item shop.
+     *  @returns {number}
+     */
+    getMaxBuy(): number;
+    /**
+     *  Use the currencies to buy this shop item and indicates if the shop item
+     *  need to be removed.
+     *  @param {number} shopID The item shop ID
+     *  @param {number} times The number of items to buy
+     *  @returns {boolean}
+     */
+    buy(shopID: number, times: number): boolean;
 }
 export { Item };

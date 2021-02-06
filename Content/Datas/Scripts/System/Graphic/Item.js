@@ -23,10 +23,8 @@ class Item extends Base {
         this.item = item;
         // All the graphics
         nbItem = Utils.isUndefined(nbItem) ? item.nb : nbItem;
-        this.graphicName = new Graphic.TextIcon(this.item.system.name() + (!Utils.isUndefined(item.shop) && nbItem !== -1 ? Constants.STRING_SPACE +
-            Constants.STRING_BRACKET_LEFT + nbItem + Constants.STRING_BRACKET_RIGHT :
-            ""), this.item.system.pictureID, {}, possible ? {} : { color: System
-                .Color.GREY });
+        this.graphicName = new Graphic.TextIcon("", this.item.system.pictureID, {}, possible ? {} : { color: System.Color.GREY });
+        this.updateName(nbItem);
         if (Utils.isUndefined(item.shop)) {
             this.graphicNb = new Graphic.Text("x" + nbItem, { align: Align.Right });
         }
@@ -41,6 +39,15 @@ class Item extends Base {
                 this.graphicCurrencies.push(graphic);
             }
         }
+    }
+    /**
+     *  Update the item name (+ item number if shop).
+     *  @param {number} [nbItem=undefined]
+     */
+    updateName(nbItem) {
+        nbItem = Utils.isUndefined(nbItem) ? this.item.nb : nbItem;
+        this.graphicName.setText(this.item.system.name() + (!Utils.isUndefined(this.item.shop) && nbItem !== -1 ? Constants.STRING_SPACE + Constants
+            .STRING_BRACKET_LEFT + nbItem + Constants.STRING_BRACKET_RIGHT : ""));
     }
     /**
      *  Update the game item number.

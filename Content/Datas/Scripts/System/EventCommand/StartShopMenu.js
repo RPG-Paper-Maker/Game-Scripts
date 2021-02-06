@@ -73,6 +73,7 @@ class StartShopMenu extends Base {
         }
         return {
             opened: false,
+            shopID: shopID,
             buyOnly: this.buyOnly.getValue(),
             stock: list
         };
@@ -88,8 +89,8 @@ class StartShopMenu extends Base {
         if (currentState.opened) {
             return 1;
         }
-        Manager.Stack.push(new Scene.MenuShop(currentState.buyOnly, currentState
-            .stock));
+        Manager.Stack.push(new Scene.MenuShop(currentState.shopID, currentState
+            .buyOnly, currentState.stock));
         currentState.opened = true;
         return 0;
     }

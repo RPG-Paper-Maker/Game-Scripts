@@ -30,6 +30,9 @@ class Base {
         if (id === null) {
             return null;
         }
+        else if (Utils.isUndefined(id)) {
+            throw new Error();
+        }
         let v = list[id];
         if (Utils.isUndefined(v)) {
             Platform.showErrorMessage(Base.STRING_ERROR_GET_1 + (isID ? "ID" :

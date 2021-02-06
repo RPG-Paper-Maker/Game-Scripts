@@ -48,5 +48,11 @@ declare class ShopItem extends Base {
      *  @returns {boolean}
      */
     isPossiblePrice(): boolean;
+    /**
+     *  Get the max possible number you can buy.
+     *  @param {number} initial The initial value corresponding to stock.
+     *  @returns {number}
+     */
+    getMax(initial: number): number;
 }
 export { ShopItem };

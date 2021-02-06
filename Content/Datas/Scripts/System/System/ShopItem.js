@@ -102,5 +102,22 @@ class ShopItem extends Base {
         }
         return true;
     }
+    /**
+     *  Get the max possible number you can buy.
+     *  @param {number} initial The initial value corresponding to stock.
+     *  @returns {number}
+     */
+    getMax(initial) {
+        let price = this.getPrice();
+        let max = initial;
+        let p;
+        for (let id in price) {
+            p = price[id];
+            if (p !== 0) {
+                max = Math.min(max, Math.floor(Game.current.currencies[id] / p));
+            }
+        }
+        return max;
+    }
 }
 export { ShopItem };

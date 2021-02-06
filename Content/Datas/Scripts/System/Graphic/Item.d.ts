@@ -13,6 +13,11 @@ declare class Item extends Base {
     graphicCurrencies: Graphic.TextIcon[];
     constructor(item: Core.Item, nbItem?: number, possible?: boolean);
     /**
+     *  Update the item name (+ item number if shop).
+     *  @param {number} [nbItem=undefined]
+     */
+    updateName(nbItem?: number): void;
+    /**
      *  Update the game item number.
      */
     updateNb(): void;

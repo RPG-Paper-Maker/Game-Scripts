@@ -19,10 +19,11 @@ import { MenuBase } from "./MenuBase.js";
  * @extends {MenuBase}
  */
 class MenuShop extends MenuBase {
-    constructor(buyOnly, stock) {
-        super(buyOnly, stock);
+    constructor(shopID, buyOnly, stock) {
+        super(shopID, buyOnly, stock);
     }
-    initialize(buyOnly, stock) {
+    initialize(shopID, buyOnly, stock) {
+        this.shopID = shopID;
         this.buyOnly = buyOnly;
         this.stock = stock;
         this.step = 0;
@@ -239,17 +240,19 @@ class MenuShop extends MenuBase {
      */
     synchronize() {
         this.windowBoxInformation.content = this.windowChoicesList.getCurrentContent();
-        let owned = 0;
-        let item;
-        for (let i = 0, l = Game.current.items.length; i < l; i++) {
-            item = Game.current.items[i];
-            if (item.system.id === this.windowBoxInformation
-                .content.item.system.id) {
-                owned = item.nb;
-                break;
+        if (this.windowBoxInformation.content) {
+            let owned = 0;
+            let item;
+            for (let i = 0, l = Game.current.items.length; i < l; i++) {
+                item = Game.current.items[i];
+                if (item.system.id === this.windowBoxInformation
+                    .content.item.system.id) {
+                    owned = item.nb;
+                    break;
+                }
             }
+            this.windowBoxOwned.content.setText("Owned: " + owned);
         }
-        this.windowBoxOwned.content.setText("Owned: " + owned);
     }
     /**
      *  Move tab according to key.
@@ -285,7 +288,7 @@ class MenuShop extends MenuBase {
      */
     onKeyPressed(key) {
         super.onKeyPressed(key);
-        let graphic = this.windowBoxInformation.content;
+        let graphic = this.windowChoicesList.getCurrentContent();
         switch (this.step) {
             case 0:
                 if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Action)) {
@@ -308,6 +311,8 @@ class MenuShop extends MenuBase {
                     }
                     if (graphic.item.shop.isPossiblePrice()) {
                         Datas.Systems.soundConfirmation.playSound();
+                        this.spinBox.max = graphic.item.getMaxBuy();
+                        this.spinBox.value = 1;
                         this.step = 2;
                         Manager.Stack.requestPaintHUD = true;
                     }
@@ -324,6 +329,17 @@ class MenuShop extends MenuBase {
             case 2:
                 if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
                     .Action)) {
+                    Datas.Systems.soundConfirmation.playSound();
+                    if (graphic.item.buy(this.shopID, this.spinBox.value)) {
+                        this.windowChoicesList.removeCurrent();
+                    }
+                    else {
+                        graphic.updateName();
+                    }
+                    this.synchronize();
+                    this.windowBoxCurrencies.update();
+                    this.step = 1;
+                    Manager.Stack.requestPaintHUD = true;
                 }
                 else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
                     .menuControls.Cancel) || Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.controls.MainMenu)) {

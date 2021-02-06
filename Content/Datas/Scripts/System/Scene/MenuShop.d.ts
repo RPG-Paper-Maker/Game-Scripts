@@ -18,12 +18,13 @@ declare class MenuShop extends MenuBase {
     windowBoxOwned: WindowBox;
     windowBoxCurrencies: WindowBox;
     spinBox: SpinBox;
+    shopID: number;
     buyOnly: boolean;
     stock: Item[];
     step: number;
     positionChoice: StructPositionChoice[];
-    constructor(buyOnly: boolean, stock: Item[]);
-    initialize(buyOnly: boolean, stock: Item[]): void;
+    constructor(shopID: number, buyOnly: boolean, stock: Item[]);
+    initialize(shopID: number, buyOnly: boolean, stock: Item[]): void;
     /**
      *  Create the menu.
      */

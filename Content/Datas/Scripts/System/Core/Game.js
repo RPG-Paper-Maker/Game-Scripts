@@ -129,12 +129,17 @@ class Game {
         for (i = 0; i < l; i++) {
             hiddenHeroes[i] = this.hiddenHeroes[i].getSaveCharacter();
         }
+        l = this.items.length;
+        let items = new Array(l);
+        for (i = 0; i < l; i++) {
+            items[i] = this.items[i].getSave();
+        }
         await IO.saveFile(this.getPathSave(slot), {
             t: this.playTime.time,
             th: teamHeroes,
             sh: reserveHeroes,
             hh: hiddenHeroes,
-            itm: this.items,
+            itm: items,
             cur: this.currencies,
             inst: this.charactersInstances,
             vars: this.variables,

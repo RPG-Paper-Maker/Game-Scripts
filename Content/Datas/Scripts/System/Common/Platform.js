@@ -109,5 +109,8 @@ window.onerror = function (msg, url, line, column, err) {
         ipc.send('window-error', str);
         throw err;
     }
+    else {
+        console.error(err);
+    }
 };
 export { Platform };
