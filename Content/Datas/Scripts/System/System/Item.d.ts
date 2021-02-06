@@ -1,4 +1,5 @@
 import { CommonSkillItem } from "./CommonSkillItem.js";
+import { Enum } from "../Common/index.js";
 /** @class
  *  An item of the game.
  *  @extends CommonSkillItem
@@ -15,5 +16,10 @@ declare class Item extends CommonSkillItem {
      *  @returns {string}
      */
     getStringType(): string;
+    /**
+     *  Get the item kind.
+     *  @returns {Enum.ItemKind}
+     */
+    getKind(): Enum.ItemKind;
 }
 export { Item };

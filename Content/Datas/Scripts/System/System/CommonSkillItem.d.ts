@@ -1,3 +1,4 @@
+import { Enum } from "../Common/index.js";
 import { Icon } from "./Icon.js";
 import { Translatable } from "./Translatable.js";
 import { DynamicValue } from "./DynamicValue.js";
@@ -70,5 +71,15 @@ declare class CommonSkillItem extends Icon {
      *  @returns {number}
      */
     getPrice(): Record<string, number>;
+    /**
+     *  Get the item kind.
+     *  @returns {Enum.ItemKind}
+     */
+    getKind(): Enum.ItemKind;
+    /**
+     *  Check if is weapon or armor.
+     *  @returns {boolean}
+     */
+    isWeaponArmor(): boolean;
 }
 export { CommonSkillItem };

@@ -18,7 +18,8 @@ declare class EquipStats extends Base {
     valueLength: number;
     graphicArrow: Graphic.Text;
     arrowLength: number;
-    constructor(gamePlayer: Player, newValues: number[]);
+    displayAll: boolean;
+    constructor(gamePlayer: Player, newValues: number[], displayAll?: boolean);
     /**
      *  Drawing the statistics modifications.
      *  @param {number} x - The x position to draw graphic

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Utils } from "../Common";
+import { Enum, Interpreter, Utils } from "../Common";
 import TargetKind = Enum.TargetKind;
 import AvailableKind = Enum.AvailableKind;
 import SongKind = Enum.SongKind;
@@ -21,6 +21,7 @@ import { Cost } from "./Cost";
 import { Characteristic } from "./Characteristic";
 import { Effect } from "./Effect";
 import { System } from "../index";
+import { Player } from "../Core";
 
 /** @class
  *  A common class for skills, items, weapons, armors.
@@ -173,6 +174,23 @@ class CommonSkillItem extends Icon {
      */
     getPrice(): Record<string, number> {
         return System.Cost.getPrice(this.price);
+    }
+
+    /** 
+     *  Get the item kind.
+     *  @returns {Enum.ItemKind}
+     */
+    getKind(): Enum.ItemKind {
+        return null;
+    }
+
+    /** 
+     *  Check if is weapon or armor.
+     *  @returns {boolean}
+     */
+    isWeaponArmor(): boolean {
+        return this.getKind() === Enum.ItemKind.Weapon || this.getKind() === 
+            Enum.ItemKind.Armor;
     }
 }
 

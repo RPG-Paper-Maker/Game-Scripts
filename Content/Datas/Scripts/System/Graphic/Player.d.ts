@@ -1,4 +1,4 @@
-import { Graphic, Core } from "../index.js";
+import { Graphic, Core, System } from "../index.js";
 import { Picture2D, Frame } from "../Core/index.js";
 import { Base } from "./Base.js";
 /** @class
@@ -25,6 +25,7 @@ declare class Player extends Base {
     battlerFrame: Frame;
     graphicLevelUp: Graphic.Text;
     displayNameLevel: boolean;
+    graphicStatShort: Graphic.Text;
     constructor(player: Core.Player, reverse?: boolean);
     /**
      *  Update the reverse value for faceset.
@@ -49,6 +50,16 @@ declare class Player extends Base {
      *  Update battler frame.
      */
     updateBattler(): void;
+    /**
+     *  Update stat short.
+     *  @param {number} equipmentID
+     *  @param {System.CommonSkillItem} weaponArmor
+     */
+    updateStatShort(weaponArmor: System.CommonSkillItem): void;
+    /**
+     *  Update stat short to none.
+     */
+    updateStatShortNone(): void;
     /**
      *  Drawing the character.
      *  @param {number} x - The x position to draw graphic

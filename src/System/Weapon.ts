@@ -11,6 +11,7 @@
 
 import { Armor } from "./Armor";
 import { Datas, System } from "../index";
+import { Enum } from "../Common";
 
 /** @class
  *  A weapon of the game.
@@ -38,6 +39,14 @@ class Weapon extends Armor {
      */
     getType(): System.WeaponArmorKind {
         return Datas.BattleSystems.getWeaponKind(this.type);
+    }
+
+    /** 
+     *  Get the item kind.
+     *  @returns {Enum.ItemKind}
+     */
+    getKind(): Enum.ItemKind {
+        return Enum.ItemKind.Weapon;
     }
 }
 

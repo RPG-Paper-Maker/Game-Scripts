@@ -852,6 +852,39 @@ class Player {
             this.status[i].turn++;
         }
     }
+
+    /** 
+     *  Get the best weapon armor to replace for shops.
+     *  @param {System.CommonSkillItem}
+     *  @returns {[number, number, number[][]]}
+     */
+    getBestWeaponArmorToReplace(weaponArmor: System.CommonSkillItem): [number, 
+        number, number[][]] {
+        let equipments = weaponArmor.getType().equipments;
+        let baseResult = this.getEquipmentStatsAndBonus();
+        let baseBonus = 0;
+        let id: string;
+        for (id in baseResult[1]) {
+            baseBonus += baseResult[1][id] === null ? 0 : baseResult[1][id];
+        }
+        let totalBonus: number = 0, bestResult: number[][] = [], result: number[][],
+            bestBonus: number, bestEquipmentID: number;
+        for (let equipmentID = equipments.length - 1; equipmentID >= 1; equipmentID--) {
+            if (equipments[equipmentID]) {
+                result = this.getEquipmentStatsAndBonus(weaponArmor, equipmentID);
+                totalBonus = 0;
+                for (id in baseResult[1]) {
+                    totalBonus += result[1][id] === null ? 0 : result[1][id];
+                }
+                if (Utils.isUndefined(bestBonus) || bestBonus < totalBonus) {
+                    bestBonus = totalBonus;
+                    bestResult = result;
+                    bestEquipmentID = equipmentID;
+                }
+            }
+        }
+        return [bestBonus - baseBonus, bestEquipmentID, bestResult];
+    }
 }
 
 export { Player }

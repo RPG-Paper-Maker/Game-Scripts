@@ -12,6 +12,7 @@
 import { CommonSkillItem } from "./CommonSkillItem";
 import { WeaponArmorKind } from "./WeaponArmorKind";
 import { Datas } from "../index";
+import { Enum } from "../Common";
 
 /** @class
  *  An armor of the game.
@@ -38,6 +39,14 @@ class Armor extends CommonSkillItem {
      */
     getType(): WeaponArmorKind {
         return Datas.BattleSystems.getArmorKind(this.type);
+    }
+
+    /** 
+     *  Get the item kind.
+     *  @returns {Enum.ItemKind}
+     */
+    getKind(): Enum.ItemKind {
+        return Enum.ItemKind.Armor;
     }
 }
 

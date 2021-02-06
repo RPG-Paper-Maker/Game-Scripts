@@ -1,4 +1,4 @@
-import { Item, WindowBox, WindowChoices } from "../Core/index.js";
+import { Item, Player, WindowBox, WindowChoices } from "../Core/index.js";
 import { SpinBox } from "../Core/SpinBox.js";
 import { StructPositionChoice } from "./Menu.js";
 import { MenuBase } from "./MenuBase.js";
@@ -17,12 +17,17 @@ declare class MenuShop extends MenuBase {
     windowBoxUseItem: WindowBox;
     windowBoxOwned: WindowBox;
     windowBoxCurrencies: WindowBox;
+    windowBoxConfirmEquip: WindowBox;
+    windowChoicesConfirmEquip: WindowChoices;
     spinBox: SpinBox;
     shopID: number;
     buyOnly: boolean;
     stock: Item[];
     step: number;
     positionChoice: StructPositionChoice[];
+    currentEquipmentID: number;
+    currentList: number[];
+    currentBonus: number[];
     constructor(shopID: number, buyOnly: boolean, stock: Item[]);
     initialize(shopID: number, buyOnly: boolean, stock: Item[]): void;
     /**
@@ -74,10 +79,23 @@ declare class MenuShop extends MenuBase {
      */
     createSpinBox(): void;
     /**
+     *  Create the confirm equip window.
+     */
+    createWindowBoxConfirmEquip(): void;
+    /**
+     *  Create the confirm equip window choice.
+     */
+    createWindowChoicesConfirmEquip(): void;
+    /**
      *  Check if is in buy mode.
      *  @returns {boolean}
      */
     isBuy(): boolean;
+    /**
+     *  Get the current selected player.
+     *  @returns {Core.Player}
+     */
+    getCurrentPlayer(): Player;
     /**
      *  Update items list.
      */
@@ -91,6 +109,14 @@ declare class MenuShop extends MenuBase {
      *  @param {number} key - The key ID
      */
     moveTabKey(key: number): void;
+    /**
+     *  Update the equipments stats when selecting a player.
+     */
+    updateEquipmentStats(): void;
+    /**
+     *  Equip the selected equipment.
+     */
+    equip(shopItem: Item): void;
     /**
      *  Update the scene.
      */

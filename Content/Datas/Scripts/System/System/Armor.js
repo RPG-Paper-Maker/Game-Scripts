@@ -10,6 +10,7 @@
 */
 import { CommonSkillItem } from "./CommonSkillItem.js";
 import { Datas } from "../index.js";
+import { Enum } from "../Common/index.js";
 /** @class
  *  An armor of the game.
  *  @extends System.CommonSkillItem
@@ -32,6 +33,13 @@ class Armor extends CommonSkillItem {
      */
     getType() {
         return Datas.BattleSystems.getArmorKind(this.type);
+    }
+    /**
+     *  Get the item kind.
+     *  @returns {Enum.ItemKind}
+     */
+    getKind() {
+        return Enum.ItemKind.Armor;
     }
 }
 export { Armor };

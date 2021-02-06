@@ -142,5 +142,20 @@ class CommonSkillItem extends Icon {
     getPrice() {
         return System.Cost.getPrice(this.price);
     }
+    /**
+     *  Get the item kind.
+     *  @returns {Enum.ItemKind}
+     */
+    getKind() {
+        return null;
+    }
+    /**
+     *  Check if is weapon or armor.
+     *  @returns {boolean}
+     */
+    isWeaponArmor() {
+        return this.getKind() === Enum.ItemKind.Weapon || this.getKind() ===
+            Enum.ItemKind.Armor;
+    }
 }
 export { CommonSkillItem };

@@ -142,7 +142,7 @@ class MenuEquip extends MenuBase {
     updateEquipmentList() {
         const currentIndex = this.windowChoicesEquipment.currentSelectedIndex;
         let idEquipment = Datas.BattleSystems.equipmentsOrder[currentIndex];
-        let list = [new Graphic.Text("[Remove]")];
+        let list = [new Graphic.Text("  [Remove]")];
         let item, systemItem;
         let type, nbItem;
         for (let i = 0, l = Game.current.items.length; i < l; i++) {
@@ -173,7 +173,7 @@ class MenuEquip extends MenuBase {
         }
         else {
             let item = this.windowChoicesList.getCurrentContent();
-            if (item === null) {
+            if (item === null || !item.item) {
                 this.list = [];
             }
             else {

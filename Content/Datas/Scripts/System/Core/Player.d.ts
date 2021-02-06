@@ -208,5 +208,11 @@ declare class Player {
      *  Update each status turn.
      */
     updateStatusTurn(): void;
+    /**
+     *  Get the best weapon armor to replace for shops.
+     *  @param {System.CommonSkillItem}
+     *  @returns {[number, number, number[][]]}
+     */
+    getBestWeaponArmorToReplace(weaponArmor: System.CommonSkillItem): [number, number, number[][]];
 }
 export { Player };

@@ -32,11 +32,9 @@ class WeaponArmorKind extends Translatable {
      */
     read(json: Record<string, any>) {
         super.read(json);
-
         this.equipments = json.equipment;
         this.equipments.unshift(false);
     }
-
 }
 
 export { WeaponArmorKind }

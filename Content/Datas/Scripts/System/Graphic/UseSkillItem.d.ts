@@ -1,5 +1,6 @@
 import { Base } from "./Base.js";
-import { Graphic } from "../index.js";
+import { Graphic, System } from "../index.js";
+import { Player } from "../Core/index.js";
 /** @class
  *  The graphic displaying a skill or an item use.
  *  @extends Graphic.Base
@@ -9,7 +10,14 @@ declare class UseSkillItem extends Base {
     all: boolean;
     indexArrow: number;
     hideArrow: boolean;
-    constructor(hideArrow?: boolean);
+    constructor({ hideArrow }?: {
+        hideArrow?: boolean;
+    });
+    /**
+     *  Get the selected player.
+     *  @returns {Core.Player}
+     */
+    getSelectedPlayer(): Player;
     /**
      *  Set if all targets are selected or not.
      *  @param {boolean} b - Indicate if all the targets are selected
@@ -36,6 +44,16 @@ declare class UseSkillItem extends Base {
      *  @param {number} index - The corresponding index
      */
     moveArrow(index: number): void;
+    /**
+     *  Update stat short.
+     *  @param {number} equipmentID
+     *  @param {System.CommonSkillItem} weaponArmor
+     */
+    updateStatShort(weaponArmor: System.CommonSkillItem): void;
+    /**
+     *  Update stat short to none.
+     */
+    updateStatShortNone(): void;
     /**
      *  Key pressed repeat handle, but with a small wait after the first
      *  pressure.

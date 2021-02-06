@@ -10,6 +10,7 @@
 */
 import { Armor } from "./Armor.js";
 import { Datas } from "../index.js";
+import { Enum } from "../Common/index.js";
 /** @class
  *  A weapon of the game.
  *  @extends System.Armor
@@ -33,6 +34,13 @@ class Weapon extends Armor {
      */
     getType() {
         return Datas.BattleSystems.getWeaponKind(this.type);
+    }
+    /**
+     *  Get the item kind.
+     *  @returns {Enum.ItemKind}
+     */
+    getKind() {
+        return Enum.ItemKind.Weapon;
     }
 }
 export { Weapon };

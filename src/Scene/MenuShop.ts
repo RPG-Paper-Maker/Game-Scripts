@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Graphic, Manager, Scene } from "..";
+import { Core, Datas, Graphic, Manager, Scene, System } from "..";
 import { Constants, Enum, ScreenResolution } from "../Common";
-import { Game, Item, Rectangle, WindowBox, WindowChoices } from "../Core";
+import { Game, Item, Player, Rectangle, WindowBox, WindowChoices } from "../Core";
 import { SpinBox } from "../Core/SpinBox";
 import { StructPositionChoice } from "./Menu";
 import { MenuBase } from "./MenuBase";
@@ -32,12 +32,17 @@ class MenuShop extends MenuBase {
     public windowBoxUseItem: WindowBox;
     public windowBoxOwned: WindowBox;
     public windowBoxCurrencies: WindowBox;
+    public windowBoxConfirmEquip: WindowBox;
+    public windowChoicesConfirmEquip: WindowChoices;
     public spinBox: SpinBox;
     public shopID: number;
     public buyOnly: boolean;
     public stock: Item[];
     public step: number;
     public positionChoice: StructPositionChoice[];
+    public currentEquipmentID: number;
+    public currentList: number[];
+    public currentBonus: number[];
 
     constructor(shopID: number, buyOnly: boolean, stock: Item[]) {
         super(shopID, buyOnly, stock);
@@ -74,6 +79,8 @@ class MenuShop extends MenuBase {
         this.createWindowBoxOwned();
         this.createWindowBoxCurrencies();
         this.createSpinBox();
+        this.createWindowBoxConfirmEquip();
+        this.createWindowChoicesConfirmEquip();
     }
 
     /**
@@ -200,7 +207,7 @@ class MenuShop extends MenuBase {
         const rect = new Rectangle(ScreenResolution.SCREEN_X - Constants
             .HUGE_SPACE - width, this.windowBoxInformation.oY + this
             .windowBoxInformation.oH + Constants.MEDIUM_SPACE, width, height);
-        const graphic = new Graphic.UseSkillItem(true);
+        const graphic = new Graphic.UseSkillItem({ hideArrow: true });
         const options = {
             content: graphic, 
             padding: WindowBox.SMALL_PADDING_BOX
@@ -253,12 +260,58 @@ class MenuShop extends MenuBase {
             ScreenResolution.SCREEN_Y - height) / 2);
     }
 
+    /**
+     *  Create the confirm equip window.
+     */
+    createWindowBoxConfirmEquip() {
+        const width = 300;
+        const height = 100;
+        const rect = new Rectangle((ScreenResolution.SCREEN_X - width) / 2, (
+            ScreenResolution.SCREEN_Y - height) / 2, width, height);
+        const graphic = new Graphic.Text("Would you like to equip it?", { align: 
+            Enum.Align.Center });
+        const options = { 
+            content: graphic, 
+            padding: WindowBox.SMALL_SLOT_PADDING
+        };
+        this.windowBoxConfirmEquip = new WindowBox(rect.x, rect.y, rect.width, 
+            rect.height, options);
+    }
+
+    /**
+     *  Create the confirm equip window choice.
+     */
+    createWindowChoicesConfirmEquip() {
+        const rect = new Rectangle((ScreenResolution.SCREEN_X - WindowBox
+            .SMALL_SLOT_WIDTH) / 2, this.windowBoxConfirmEquip.oY + this
+            .windowBoxConfirmEquip.oH, WindowBox.SMALL_SLOT_WIDTH, WindowBox
+            .SMALL_SLOT_HEIGHT);
+        const list = [
+            new Graphic.Text("Yes", { align: Enum.Align.Center}),
+            new Graphic.Text("No", { align: Enum.Align.Center})
+        ];
+        const options = {
+            nbItemsMax: list.length,
+            padding: WindowBox.NONE_PADDING
+        };
+        this.windowChoicesConfirmEquip = new WindowChoices(rect.x, rect.y, rect
+            .width, rect.height, list, options);
+    }
+
     /** 
      *  Check if is in buy mode.
      *  @returns {boolean}
      */
     isBuy(): boolean {
         return this.windowChoicesBuySell.currentSelectedIndex === 0;
+    }
+
+    /** 
+     *  Get the current selected player.
+     *  @returns {Core.Player}
+     */
+    getCurrentPlayer(): Player {
+        return (<Graphic.UseSkillItem>this.windowBoxUseItem.content).getSelectedPlayer();
     }
 
     /** 
@@ -328,6 +381,17 @@ class MenuShop extends MenuBase {
             this.synchronize();
         }
 
+        // Update stats short if weapon / armor
+        if (this.windowChoicesList.getCurrentContent()) {
+            let system = (<Graphic.Item>this.windowChoicesList.getCurrentContent())
+            .item.system;
+            if (system.isWeaponArmor()) {
+                (<Graphic.UseSkillItem>this.windowBoxUseItem.content).updateStatShort(system);
+            } else {
+                (<Graphic.UseSkillItem>this.windowBoxUseItem.content).updateStatShortNone();
+            }
+        }
+
         // Update position
         if (this.windowChoicesList.currentSelectedIndex !== -1) {
             let position = this.positionChoice[this.windowChoicesItemsKind
@@ -335,6 +399,35 @@ class MenuShop extends MenuBase {
             position.index = this.windowChoicesList.currentSelectedIndex;
             position.offset = this.windowChoicesList.offsetSelectedIndex;
         }
+    }
+
+    /**
+     *  Update the equipments stats when selecting a player.
+     */
+    updateEquipmentStats() {
+        let player = this.getCurrentPlayer();
+        let result = player.getBestWeaponArmorToReplace((<Graphic.Item>this
+            .windowChoicesList.getCurrentContent()).item.system);
+        this.windowBoxInformation.content = new Graphic.EquipStats(player, 
+            result[2][0], false);
+        this.currentEquipmentID = result[1];
+        this.currentList = result[2][0];
+        this.currentBonus = result[2][1];
+    }
+
+    /**
+     *  Equip the selected equipment.
+     */
+    equip(shopItem: Item) {
+        let player = this.getCurrentPlayer();
+        let item = Item.findItem(shopItem.kind, shopItem.system.id);
+        let prev = player.equip[this.currentEquipmentID];
+        player.equip[this.currentEquipmentID] = item;
+        item.remove(1);
+        if (prev) {
+            prev.add(1);
+        }
+        player.updateEquipmentStats(this.currentList, this.currentBonus);
     }
     
     /**
@@ -376,9 +469,18 @@ class MenuShop extends MenuBase {
                     if (this.isBuy()) {
                         if (graphic.item.shop.isPossiblePrice()) {
                             Datas.Systems.soundConfirmation.playSound();
-                            this.spinBox.max = graphic.item.getMaxBuy();
-                            this.spinBox.value = 1;
-                            this.step = 2;
+                            if (graphic.item.system.isWeaponArmor()) {
+                                (<Graphic.UseSkillItem>this.windowBoxUseItem.content)
+                                    .hideArrow = false;
+                                (<Graphic.UseSkillItem>this.windowBoxUseItem.content)
+                                    .indexArrow = 0;
+                                this.updateEquipmentStats();
+                                this.step = 3;
+                            } else {
+                                this.spinBox.max = graphic.item.getMaxBuy();
+                                this.spinBox.updateValue(1);
+                                this.step = 2;
+                            }
                             Manager.Stack.requestPaintHUD = true;
                         } else {
                             Datas.Systems.soundImpossible.playSound();
@@ -386,7 +488,7 @@ class MenuShop extends MenuBase {
                     } else {
                         Datas.Systems.soundConfirmation.playSound();
                         this.spinBox.max = graphic.item.nb;
-                        this.spinBox.value = 1;
+                        this.spinBox.updateValue(1);
                         this.step = 2;
                         Manager.Stack.requestPaintHUD = true;
                     }
@@ -398,14 +500,22 @@ class MenuShop extends MenuBase {
                 }
                 break;
             case 2:
+            case 4:
                 if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
                     .Action)) {
                     Datas.Systems.soundConfirmation.playSound();
+                    let shopItem = graphic.item;
                     if (this.isBuy()) {
-                        if (graphic.item.buy(this.shopID, this.spinBox.value)) {
-                            this.windowChoicesList.removeCurrent();
+                        if (this.step === 2 && graphic.item.system.isWeaponArmor()) {
+                            this.step = 4;
+                            Manager.Stack.requestPaintHUD = true;
+                            break;
                         } else {
-                            graphic.updateName();
+                            if (graphic.item.buy(this.shopID, this.spinBox.value)) {
+                                this.windowChoicesList.removeCurrent();
+                            } else {
+                                graphic.updateName();
+                            }
                         }
                     } else {
                         if (graphic.item.sell(this.spinBox.value)) {
@@ -414,14 +524,40 @@ class MenuShop extends MenuBase {
                             graphic.updateNb();
                         }
                     }
-                    this.synchronize();
                     this.windowBoxCurrencies.update();
+                    // If equip
+                    if (this.step === 4 && this.windowChoicesConfirmEquip
+                        .currentSelectedIndex === 0) {
+                        this.equip(shopItem);
+                        (<Graphic.UseSkillItem>this.windowBoxUseItem.content)
+                            .hideArrow = true;
+                        this.synchronize();
+                    }
                     this.step = 1;
                     Manager.Stack.requestPaintHUD = true;
                 } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
                     .menuControls.Cancel) || Datas.Keyboards.isKeyEqual(key, 
                     Datas.Keyboards.controls.MainMenu)) {
                     Datas.Systems.soundCancel.playSound();
+                    this.step = graphic.item.system.isWeaponArmor() ? 3 : 1;
+                    Manager.Stack.requestPaintHUD = true;
+                }
+                break;
+            case 3:
+                if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
+                    .Action)) {
+                    Datas.Systems.soundConfirmation.playSound();
+                    this.spinBox.max = graphic.item.nb;
+                    this.spinBox.updateValue(1);
+                    this.step = 2;
+                    Manager.Stack.requestPaintHUD = true;
+                } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
+                    .menuControls.Cancel) || Datas.Keyboards.isKeyEqual(key, 
+                    Datas.Keyboards.controls.MainMenu)) {
+                    Datas.Systems.soundCancel.playSound();
+                    (<Graphic.UseSkillItem>this.windowBoxUseItem.content)
+                        .hideArrow = true;
+                    this.synchronize();
                     this.step = 1;
                     Manager.Stack.requestPaintHUD = true;
                 }
@@ -446,6 +582,13 @@ class MenuShop extends MenuBase {
             case 2:
                 this.spinBox.onKeyPressedAndRepeat(key);
                 break;
+            case 3:
+                (<Graphic.UseSkillItem>this.windowBoxUseItem.content).onKeyPressedAndRepeat(key);
+                this.updateEquipmentStats();
+                break;
+            case 4:
+                this.windowChoicesConfirmEquip.onKeyPressedAndRepeat(key);
+                break;
         }
         return res;
     }
@@ -455,7 +598,6 @@ class MenuShop extends MenuBase {
      */
     drawHUD(){
         super.drawHUD();
-
         this.windowBoxTop.draw();
         this.windowChoicesBuySell.draw();
         if (this.step > 0) {
@@ -472,6 +614,9 @@ class MenuShop extends MenuBase {
             }
             if (this.step === 2) {
                 this.spinBox.draw();
+            } else if (this.step === 4) {
+                this.windowBoxConfirmEquip.draw();
+                this.windowChoicesConfirmEquip.draw();
             }
         }
         this.windowBoxCurrencies.draw();

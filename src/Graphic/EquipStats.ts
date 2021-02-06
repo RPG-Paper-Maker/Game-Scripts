@@ -32,11 +32,13 @@ class EquipStats extends Base {
     public valueLength: number;
     public graphicArrow: Graphic.Text;
     public arrowLength: number;
+    public displayAll: boolean;
 
-    constructor(gamePlayer: Player, newValues: number[]) {
+    constructor(gamePlayer: Player, newValues: number[], displayAll: boolean = true) {
         super();
 
         this.isChanging = newValues.length !== 0;
+        this.displayAll = displayAll;
 
         // All the graphics
         this.listStatsNames = new Array;
@@ -45,7 +47,7 @@ class EquipStats extends Base {
         let maxLength = 0;
         let maxLengthValue = 0;
         let id: number, statistic: System.Statistic, graphicName: Graphic.Text, 
-            txt: string, graphicValue: Graphic.Text;
+            txt: string, graphicValue: Graphic.Text, baseValue: number, newValue: number;
         for (let i = 0, j = 0, l = Datas.BattleSystems.statisticsOrder.length; i 
             < l; i++)
         {
@@ -57,6 +59,18 @@ class EquipStats extends Base {
                 if (statistic.isRes) {
                     continue;
                 }
+                // Value of the stat
+                baseValue = gamePlayer[statistic.abbreviation];
+                txt = Utils.numToString(baseValue);
+                if (!statistic.isFix) {
+                    baseValue = gamePlayer[statistic.getMaxAbbreviation()]
+                    txt += Constants.STRING_SLASH + baseValue;
+                }
+                newValue = newValues[id];
+                if (this.isChanging && !this.displayAll && baseValue === newValue) {
+                    continue;
+                }
+
                 // Name of the stat
                 graphicName = new Graphic.Text(statistic.name + Constants
                     .STRING_COLON);
@@ -66,12 +80,7 @@ class EquipStats extends Base {
                     .width, maxLength);
                 this.listStatsNames.push(graphicName);
 
-                // Value of the stat
-                txt = Utils.numToString(gamePlayer[statistic.abbreviation]);
-                if (!statistic.isFix) {
-                    txt += Constants.STRING_SLASH + gamePlayer[statistic
-                        .getMaxAbbreviation()];
-                }
+                // Value and new value
                 graphicValue = new Graphic.Text(txt);
                 Platform.ctx.font = graphicValue.font;
                 graphicValue.updateContextFont();
@@ -79,9 +88,9 @@ class EquipStats extends Base {
                     .text).width, maxLengthValue);
                 this.listStats.push(graphicValue);
                 if (this.isChanging) {
-                    txt = statistic.isFix ? Utils.numToString(newValues[id]) : 
-                        Math.min(gamePlayer[statistic.abbreviation], newValues[
-                        id]) + Constants.STRING_SLASH + newValues[id];
+                    txt = statistic.isFix ? Utils.numToString(newValue) : Math
+                        .min(gamePlayer[statistic.abbreviation], newValue) + 
+                        Constants.STRING_SLASH + newValue;
                     this.listNewStats.push(new Graphic.Text(txt));
                 }
                 j++;

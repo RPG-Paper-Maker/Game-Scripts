@@ -41,6 +41,7 @@ class Player extends Base {
     public battlerFrame: Frame;
     public graphicLevelUp: Graphic.Text;
     public displayNameLevel: boolean;
+    public graphicStatShort: Graphic.Text;
 
     constructor(player: Core.Player, reverse = false) {
         super();
@@ -225,6 +226,29 @@ class Player extends Base {
     }
 
     /** 
+     *  Update stat short.
+     *  @param {number} equipmentID
+     *  @param {System.CommonSkillItem} weaponArmor
+     */
+    updateStatShort(weaponArmor: System.CommonSkillItem) {
+        let totalBonus = this.player.getBestWeaponArmorToReplace(weaponArmor)[0];
+        if (totalBonus > 0) {
+            this.graphicStatShort = new Graphic.Text("^", { color: System.Color.GREEN });
+        } else if (totalBonus < 0) {
+            this.graphicStatShort = new Graphic.Text("ˇ", { color: System.Color.RED });
+        } else {
+            this.graphicStatShort = new Graphic.Text("-", { color: System.Color.GREY });
+        }
+    }
+
+    /** 
+     *  Update stat short to none.
+     */
+    updateStatShortNone() {
+        this.graphicStatShort = null;
+    }
+
+    /** 
      *  Drawing the character.
      *  @param {number} x - The x position to draw graphic
      *  @param {number} y - The y position to draw graphic
@@ -252,6 +276,9 @@ class Player extends Base {
 
         // Stats
         let yStats = yName;
+        if (this.graphicStatShort) {
+            this.graphicStatShort.draw(x, yStats - 15, 0, 0);
+        }
         if (this.displayNameLevel) {
             this.graphicName.draw(x, yName, 0, 0);
             this.graphicLevelName.draw(xLevelName, yName, 0, 0);
@@ -260,10 +287,9 @@ class Player extends Base {
         }
         let yStat: number;
         for (let i = 0, l = this.listStatsNames.length; i < l; i++) {
-            yStat = yStats + (i * 12);
+            yStat = yStats + i * 12;
             this.listStatsNames[i].draw(x, yStat, 0, 0);
-            this.listStats[i].draw(x + this.maxStatNamesLength + 10, yStat, 0, 
-                0);
+            this.listStats[i].draw(x + this.maxStatNamesLength + 10, yStat, 0, 0);
         }
     }
 

@@ -17,7 +17,7 @@ import { Battler, Game } from "../Core/index.js";
  *  @extends Graphic.Base
  */
 class UseSkillItem extends Base {
-    constructor(hideArrow = false) {
+    constructor({ hideArrow = false } = {}) {
         super();
         this.graphicCharacters = new Array;
         let player;
@@ -28,6 +28,13 @@ class UseSkillItem extends Base {
         }
         this.hideArrow = hideArrow;
         this.setAll(false);
+    }
+    /**
+     *  Get the selected player.
+     *  @returns {Core.Player}
+     */
+    getSelectedPlayer() {
+        return this.graphicCharacters[this.indexArrow].player;
     }
     /**
      *  Set if all targets are selected or not.
@@ -90,6 +97,24 @@ class UseSkillItem extends Base {
             Scene.Map.current.targets = [new Battler(Game.current
                     .teamHeroes[this.indexArrow])];
             Manager.Stack.requestPaintHUD = true;
+        }
+    }
+    /**
+     *  Update stat short.
+     *  @param {number} equipmentID
+     *  @param {System.CommonSkillItem} weaponArmor
+     */
+    updateStatShort(weaponArmor) {
+        for (let i = 0, l = this.graphicCharacters.length; i < l; i++) {
+            this.graphicCharacters[i].updateStatShort(weaponArmor);
+        }
+    }
+    /**
+     *  Update stat short to none.
+     */
+    updateStatShortNone() {
+        for (let i = 0, l = this.graphicCharacters.length; i < l; i++) {
+            this.graphicCharacters[i].updateStatShortNone();
         }
     }
     /**
