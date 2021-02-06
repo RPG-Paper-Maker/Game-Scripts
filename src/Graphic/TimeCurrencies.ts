@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { Graphic, Datas } from "../index";
-import { Utils, Enum } from "../Common";
+import { Utils, Enum, Mathf } from "../Common";
 import Align = Enum.Align;
 import { Game } from "../Core";
 
@@ -34,7 +34,7 @@ class TimeCurrencies extends Base {
         this.currencies = [];
         let graphic: Graphic.TextIcon;
         for (let id in Game.current.currencies) {
-            graphic = new Graphic.TextIcon(Utils.numToString(Game.current
+            graphic = new Graphic.TextIcon(Mathf.numberWithCommas(Game.current
                 .currencies[id]), Datas.Systems.getCurrency(parseInt(id))
                 .pictureID, {
                     side: Align.Right,

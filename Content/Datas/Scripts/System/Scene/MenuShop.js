@@ -212,14 +212,22 @@ class MenuShop extends MenuBase {
         this.spinBox = new SpinBox((ScreenResolution.SCREEN_X - width) / 2, (ScreenResolution.SCREEN_Y - height) / 2);
     }
     /**
+     *  Check if is in buy mode.
+     *  @returns {boolean}
+     */
+    isBuy() {
+        return this.windowChoicesBuySell.currentSelectedIndex === 0;
+    }
+    /**
      *  Update items list.
      */
     updateItemsList() {
+        let listToSort = this.isBuy() ? this.stock : Game.current.items;
         let indexTab = this.windowChoicesItemsKind.currentSelectedIndex;
         let list = [];
         let item;
-        for (let i = 0, l = this.stock.length; i < l; i++) {
-            item = this.stock[i];
+        for (let i = 0, l = listToSort.length; i < l; i++) {
+            item = listToSort[i];
             if (item.nb !== 0 && (indexTab === 0 || (indexTab === 1 && (item.kind ===
                 Enum.ItemKind.Item && item.system.consumable)) || (indexTab ===
                 2 && (item.kind === Enum.ItemKind.Item && item.system.type === 1))
@@ -227,7 +235,9 @@ class MenuShop extends MenuBase {
                     .system.type === 2)) || (indexTab === 4 && item.kind === Enum
                 .ItemKind.Weapon) || (indexTab === 5 && item.kind === Enum
                 .ItemKind.Armor))) {
-                list.push(new Graphic.Item(item, item.nb, item.shop.isPossiblePrice()));
+                list.push(this.isBuy() ? new Graphic.Item(item, { nbItem: item
+                        .nb, possible: item.shop.isPossiblePrice() }) : new Graphic
+                    .Item(item, { showSellPrice: true }));
             }
         }
         this.windowChoicesList.setContentsCallbacks(list);
@@ -271,10 +281,13 @@ class MenuShop extends MenuBase {
         if (indexList !== this.windowChoicesList.currentSelectedIndex) {
             this.synchronize();
         }
-        let position = this.positionChoice[this.windowChoicesItemsKind
-            .currentSelectedIndex];
-        position.index = this.windowChoicesList.currentSelectedIndex;
-        position.offset = this.windowChoicesList.offsetSelectedIndex;
+        // Update position
+        if (this.windowChoicesList.currentSelectedIndex !== -1) {
+            let position = this.positionChoice[this.windowChoicesItemsKind
+                .currentSelectedIndex];
+            position.index = this.windowChoicesList.currentSelectedIndex;
+            position.offset = this.windowChoicesList.offsetSelectedIndex;
+        }
     }
     /**
      *  Update the scene.
@@ -293,6 +306,7 @@ class MenuShop extends MenuBase {
             case 0:
                 if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Action)) {
                     Datas.Systems.soundConfirmation.playSound();
+                    this.updateItemsList();
                     this.step = 1;
                     Manager.Stack.requestPaintHUD = true;
                 }
@@ -309,15 +323,24 @@ class MenuShop extends MenuBase {
                     if (this.windowBoxInformation.content === null) {
                         return;
                     }
-                    if (graphic.item.shop.isPossiblePrice()) {
+                    if (this.isBuy()) {
+                        if (graphic.item.shop.isPossiblePrice()) {
+                            Datas.Systems.soundConfirmation.playSound();
+                            this.spinBox.max = graphic.item.getMaxBuy();
+                            this.spinBox.value = 1;
+                            this.step = 2;
+                            Manager.Stack.requestPaintHUD = true;
+                        }
+                        else {
+                            Datas.Systems.soundImpossible.playSound();
+                        }
+                    }
+                    else {
                         Datas.Systems.soundConfirmation.playSound();
-                        this.spinBox.max = graphic.item.getMaxBuy();
+                        this.spinBox.max = graphic.item.nb;
                         this.spinBox.value = 1;
                         this.step = 2;
                         Manager.Stack.requestPaintHUD = true;
-                    }
-                    else {
-                        Datas.Systems.soundImpossible.playSound();
                     }
                 }
                 else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
@@ -330,11 +353,21 @@ class MenuShop extends MenuBase {
                 if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
                     .Action)) {
                     Datas.Systems.soundConfirmation.playSound();
-                    if (graphic.item.buy(this.shopID, this.spinBox.value)) {
-                        this.windowChoicesList.removeCurrent();
+                    if (this.isBuy()) {
+                        if (graphic.item.buy(this.shopID, this.spinBox.value)) {
+                            this.windowChoicesList.removeCurrent();
+                        }
+                        else {
+                            graphic.updateName();
+                        }
                     }
                     else {
-                        graphic.updateName();
+                        if (graphic.item.sell(this.spinBox.value)) {
+                            this.windowChoicesList.removeCurrent();
+                        }
+                        else {
+                            graphic.updateNb();
+                        }
                     }
                     this.synchronize();
                     this.windowBoxCurrencies.update();
@@ -383,7 +416,9 @@ class MenuShop extends MenuBase {
             if (this.windowChoicesList.listWindows.length > 0) {
                 this.windowBoxInformation.draw();
                 this.windowBoxUseItem.draw();
-                this.windowBoxOwned.draw();
+                if (this.isBuy()) {
+                    this.windowBoxOwned.draw();
+                }
             }
             else {
                 this.windowBoxEmpty.draw();

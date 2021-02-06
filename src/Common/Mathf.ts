@@ -440,11 +440,21 @@ class Mathf {
 
     /**
      *  Test if hit.
-     * @param {number} chance
-     * @return {boolean}
+     *  @param {number} chance
+     *  @return {boolean}
      */
     static randomPercentTest(chance: number): boolean {
         return chance > 0 && this.random(0, 100) <= chance;
+    }
+
+    /**
+     *  Get the number (like currencies values) but with comas included to 
+     *  separate thousands.
+     *  @param {number} x
+     *  @return {string}
+     */
+    static numberWithCommas(x: number): string {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 }
 

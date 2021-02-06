@@ -65,11 +65,13 @@ class Item {
     /**
      *  Remove item from inventory.
      *  @param {number} nb - Number of item to remove
+     *  @returns {boolean}
      */
     remove(nb) {
         this.nb -= nb;
         if (this.nb <= 0) {
             Game.current.items.splice(Game.current.items.indexOf(this), 1);
+            return true;
         }
     }
     /**
@@ -177,9 +179,9 @@ class Item {
         // Update currency
         for (let id in price) {
             Game.current.currencies[id] -= price[id] * times;
-            if (this.nb !== -1) {
-                this.nb -= times;
-            }
+        }
+        if (this.nb !== -1) {
+            this.nb -= times;
         }
         // Add items to inventory
         let item = Item.findItem(this.kind, this.system.id);
@@ -194,6 +196,22 @@ class Item {
             Game.current.shops[shopID][this.kind][this.system.id] -= times;
         }
         return Game.current.shops[shopID][this.kind][this.system.id] === 0;
+    }
+    /**
+     *  Get the currencies to sell this item and indicates if the item need to
+     *  be removed from list.
+     *  @param {number} shopID The item shop ID
+     *  @param {number} times The number of items to buy
+     *  @returns {boolean}
+     */
+    sell(times) {
+        let price = this.system.getPrice();
+        // Update currency
+        for (let id in price) {
+            Game.current.currencies[id] += Math.round(price[id] * Datas.Systems
+                .priceSoldItem.getValue() / 100) * times;
+        }
+        return this.remove(times);
     }
 }
 export { Item };

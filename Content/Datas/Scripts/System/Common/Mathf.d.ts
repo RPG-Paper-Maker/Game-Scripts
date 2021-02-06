@@ -252,9 +252,16 @@ declare class Mathf {
     static roundedNumberOf(a: number, b: number, large?: boolean): number;
     /**
      *  Test if hit.
-     * @param {number} chance
-     * @return {boolean}
+     *  @param {number} chance
+     *  @return {boolean}
      */
     static randomPercentTest(chance: number): boolean;
+    /**
+     *  Get the number (like currencies values) but with comas included to
+     *  separate thousands.
+     *  @param {number} x
+     *  @return {string}
+     */
+    static numberWithCommas(x: number): string;
 }
 export { Mathf };

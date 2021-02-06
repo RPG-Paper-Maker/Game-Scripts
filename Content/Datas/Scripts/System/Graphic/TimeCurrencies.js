@@ -10,7 +10,7 @@
 */
 import { Base } from "./Base.js";
 import { Graphic, Datas } from "../index.js";
-import { Utils, Enum } from "../Common/index.js";
+import { Utils, Enum, Mathf } from "../Common/index.js";
 var Align = Enum.Align;
 import { Game } from "../Core/index.js";
 /** @class
@@ -24,7 +24,7 @@ class TimeCurrencies extends Base {
         this.currencies = [];
         let graphic;
         for (let id in Game.current.currencies) {
-            graphic = new Graphic.TextIcon(Utils.numToString(Game.current
+            graphic = new Graphic.TextIcon(Mathf.numberWithCommas(Game.current
                 .currencies[id]), Datas.Systems.getCurrency(parseInt(id))
                 .pictureID, {
                 side: Align.Right,

@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { System, Graphic, Core, Datas } from "../index";
-import { Utils, Enum, Constants } from "../Common";
+import { Utils, Enum, Constants, Mathf } from "../Common";
 import Align = Enum.Align;
 
 /** @class
@@ -27,7 +27,9 @@ class Item extends Base {
     public graphicInformations: Graphic.SkillItem;
     public graphicCurrencies: Graphic.TextIcon[];
 
-    constructor(item: Core.Item, nbItem?: number, possible: boolean = true) {
+    constructor(item: Core.Item, { nbItem, possible = true, showSellPrice = 
+        false }: { nbItem?: number, possible?: boolean, showSellPrice?: boolean } 
+        = {}) {
         super();
 
         this.item = item;
@@ -42,14 +44,16 @@ class Item extends Base {
         }
         this.graphicInformations = new Graphic.SkillItem(this.item.system);
         this.graphicCurrencies = [];
-        if (!Utils.isUndefined(item.shop)) {
-            let price = item.shop.getPrice();
+        if (!Utils.isUndefined(item.shop) || showSellPrice) {
+            let price = showSellPrice ? item.system.getPrice() : item.shop.getPrice();
             this.graphicCurrencies = [];
             let graphic: Graphic.TextIcon;
             for (let id in price) {
-                graphic = new Graphic.TextIcon(Utils.numToString(price[id]), 
-                    Datas.Systems.getCurrency(parseInt(id)).pictureID, { align: 
-                    Align.Right }, possible ? {} : { color: System.Color.GREY });
+                graphic = new Graphic.TextIcon(Mathf.numberWithCommas(showSellPrice ? 
+                    Math.round(Datas.Systems.priceSoldItem.getValue() * price[id] 
+                    / 100) : price[id]), Datas.Systems.getCurrency(parseInt(id))
+                    .pictureID, { align: Align.Right }, possible ? {} : { color: 
+                    System.Color.GREY });
                 this.graphicCurrencies.push(graphic);
             }
         }
@@ -90,7 +94,7 @@ class Item extends Base {
             offset += graphic.getWidth() + Constants.MEDIUM_SPACE;
         }
         if (this.graphicNb) {
-            this.graphicNb.draw(x, y, w, h);
+            this.graphicNb.draw(x - offset, y, w, h);
         }
     }
 

@@ -10,7 +10,7 @@
 */
 import { Base } from "./Base.js";
 import { System, Graphic, Datas } from "../index.js";
-import { Utils, Enum, Constants } from "../Common/index.js";
+import { Utils, Enum, Constants, Mathf } from "../Common/index.js";
 var Align = Enum.Align;
 /** @class
  *  The graphic displaying all the items information in the inventory menu.
@@ -18,7 +18,7 @@ var Align = Enum.Align;
  *  @param {number} nbItem - The number of occurence of the selected item
  */
 class Item extends Base {
-    constructor(item, nbItem, possible = true) {
+    constructor(item, { nbItem, possible = true, showSellPrice = false } = {}) {
         super();
         this.item = item;
         // All the graphics
@@ -30,12 +30,15 @@ class Item extends Base {
         }
         this.graphicInformations = new Graphic.SkillItem(this.item.system);
         this.graphicCurrencies = [];
-        if (!Utils.isUndefined(item.shop)) {
-            let price = item.shop.getPrice();
+        if (!Utils.isUndefined(item.shop) || showSellPrice) {
+            let price = showSellPrice ? item.system.getPrice() : item.shop.getPrice();
             this.graphicCurrencies = [];
             let graphic;
             for (let id in price) {
-                graphic = new Graphic.TextIcon(Utils.numToString(price[id]), Datas.Systems.getCurrency(parseInt(id)).pictureID, { align: Align.Right }, possible ? {} : { color: System.Color.GREY });
+                graphic = new Graphic.TextIcon(Mathf.numberWithCommas(showSellPrice ?
+                    Math.round(Datas.Systems.priceSoldItem.getValue() * price[id]
+                        / 100) : price[id]), Datas.Systems.getCurrency(parseInt(id))
+                    .pictureID, { align: Align.Right }, possible ? {} : { color: System.Color.GREY });
                 this.graphicCurrencies.push(graphic);
             }
         }
@@ -72,7 +75,7 @@ class Item extends Base {
             offset += graphic.getWidth() + Constants.MEDIUM_SPACE;
         }
         if (this.graphicNb) {
-            this.graphicNb.draw(x, y, w, h);
+            this.graphicNb.draw(x - offset, y, w, h);
         }
     }
     /**

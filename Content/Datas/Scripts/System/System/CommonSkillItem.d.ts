@@ -65,5 +65,10 @@ declare class CommonSkillItem extends Icon {
      *  @returns {System/WeaponArmorKind}
      */
     getType(): System.WeaponArmorKind;
+    /**
+     *  Get the price.
+     *  @returns {number}
+     */
+    getPrice(): Record<string, number>;
 }
 export { CommonSkillItem };

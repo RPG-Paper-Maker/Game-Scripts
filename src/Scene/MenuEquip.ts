@@ -242,7 +242,7 @@ class MenuEquip extends MenuBase {
                 if (type.equipments[idEquipment]) {
                     nbItem = item.nb;
                     if (nbItem > 0) {
-                        list.push(new Graphic.Item(item, nbItem));
+                        list.push(new Graphic.Item(item, { nbItem: nbItem }));
                     }
                 }
             }

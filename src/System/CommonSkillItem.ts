@@ -166,6 +166,14 @@ class CommonSkillItem extends Icon {
     getType(): System.WeaponArmorKind {
         return null;
     }
+
+    /** 
+     *  Get the price.
+     *  @returns {number}
+     */
+    getPrice(): Record<string, number> {
+        return System.Cost.getPrice(this.price);
+    }
 }
 
 export { CommonSkillItem }

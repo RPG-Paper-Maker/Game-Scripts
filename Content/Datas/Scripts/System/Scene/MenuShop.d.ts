@@ -74,6 +74,11 @@ declare class MenuShop extends MenuBase {
      */
     createSpinBox(): void;
     /**
+     *  Check if is in buy mode.
+     *  @returns {boolean}
+     */
+    isBuy(): boolean;
+    /**
      *  Update items list.
      */
     updateItemsList(): void;

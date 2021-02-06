@@ -397,11 +397,20 @@ class Mathf {
     }
     /**
      *  Test if hit.
-     * @param {number} chance
-     * @return {boolean}
+     *  @param {number} chance
+     *  @return {boolean}
      */
     static randomPercentTest(chance) {
         return chance > 0 && this.random(0, 100) <= chance;
+    }
+    /**
+     *  Get the number (like currencies values) but with comas included to
+     *  separate thousands.
+     *  @param {number} x
+     *  @return {string}
+     */
+    static numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 }
 Mathf.OPERATORS_COMPARE = [

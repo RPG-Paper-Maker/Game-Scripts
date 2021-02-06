@@ -11,7 +11,11 @@ declare class Item extends Base {
     graphicNb: Graphic.Text;
     graphicInformations: Graphic.SkillItem;
     graphicCurrencies: Graphic.TextIcon[];
-    constructor(item: Core.Item, nbItem?: number, possible?: boolean);
+    constructor(item: Core.Item, { nbItem, possible, showSellPrice }?: {
+        nbItem?: number;
+        possible?: boolean;
+        showSellPrice?: boolean;
+    });
     /**
      *  Update the item name (+ item number if shop).
      *  @param {number} [nbItem=undefined]

@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { Graphic, Datas } from "../index";
-import { Utils, Enum, Constants } from "../Common";
+import { Utils, Enum, Constants, Mathf } from "../Common";
 import { Game } from "../Core";
 
 /** @class
@@ -46,7 +46,7 @@ class ShopCurrencies extends Base {
         this.currencies = [];
         let graphic: Graphic.TextIcon;
         for (let id in Game.current.currencies) {
-            graphic = new Graphic.TextIcon(Utils.numToString(Game.current
+            graphic = new Graphic.TextIcon(Mathf.numberWithCommas(Game.current
                 .currencies[id]), Datas.Systems.getCurrency(parseInt(id))
                 .pictureID);
             this.currencies.push(graphic);

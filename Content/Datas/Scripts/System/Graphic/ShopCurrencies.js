@@ -10,7 +10,7 @@
 */
 import { Base } from "./Base.js";
 import { Graphic, Datas } from "../index.js";
-import { Utils, Constants } from "../Common/index.js";
+import { Constants, Mathf } from "../Common/index.js";
 import { Game } from "../Core/index.js";
 /** @class
  *  The graphic displaying all currencies when in shop menu.
@@ -38,7 +38,7 @@ class ShopCurrencies extends Base {
         this.currencies = [];
         let graphic;
         for (let id in Game.current.currencies) {
-            graphic = new Graphic.TextIcon(Utils.numToString(Game.current
+            graphic = new Graphic.TextIcon(Mathf.numberWithCommas(Game.current
                 .currencies[id]), Datas.Systems.getCurrency(parseInt(id))
                 .pictureID);
             this.currencies.push(graphic);
