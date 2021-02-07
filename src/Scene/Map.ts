@@ -707,33 +707,33 @@ class Map extends Base {
         let vector = new Vector3();
         this.camera.getThreeCamera().getWorldDirection(vector);
         let angle = Math.atan2(vector.x,vector.z) + (180 * Math.PI / 180.0);
+        this.mapProperties.startupObject.update();
+
+        // Update the objects
         if (!this.isBattleMap) {
-            this.mapProperties.startupObject.update();
-
-            // Update the objects
             Game.current.hero.update(angle);
-            this.updatePortions(this, function(x: number, y: number, z: number, 
-                i: number, j: number, k: number)
-            {
-                let objects = Game.current.getPotionsDatas(this.id, new 
-                    Portion(x, y, z));
-                let movedObjects = objects.min;
-                let p: number, l: number;
-                for (p = 0, l = movedObjects.length; p < l; p++) {
-                    movedObjects[p].update(angle);
-                }
-                movedObjects = objects.mout;
-                for (p = 0, l = movedObjects.length; p < l; p++) {
-                    movedObjects[p].update(angle);
-                }
-
-                // Update face sprites
-                let mapPortion = this.getMapPortion(new Portion(i, j, k));
-                if (mapPortion) {
-                    mapPortion.updateFaceSprites(angle);
-                }
-            });
         }
+        this.updatePortions(this, function(x: number, y: number, z: number, 
+            i: number, j: number, k: number)
+        {
+            let objects = Game.current.getPotionsDatas(this.id, new 
+                Portion(x, y, z));
+            let movedObjects = objects.min;
+            let p: number, l: number;
+            for (p = 0, l = movedObjects.length; p < l; p++) {
+                movedObjects[p].update(angle);
+            }
+            movedObjects = objects.mout;
+            for (p = 0, l = movedObjects.length; p < l; p++) {
+                movedObjects[p].update(angle);
+            }
+
+            // Update face sprites
+            let mapPortion = this.getMapPortion(new Portion(i, j, k));
+            if (mapPortion) {
+                mapPortion.updateFaceSprites(angle);
+            }
+        });
 
         // Update scene game (interpreters)
         super.update();

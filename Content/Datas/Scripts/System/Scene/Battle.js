@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Camera, Game } from "../Core/index.js";
+import { Camera, Game, Vector3 } from "../Core/index.js";
 import { System, Scene, Manager } from "../index.js";
 import { Enum } from "../Common/index.js";
 var CharacterKind = Enum.CharacterKind;
@@ -230,16 +230,20 @@ class Battle extends Map {
      */
     update() {
         super.update();
+        // Y angle
+        let vector = new Vector3();
+        this.camera.getThreeCamera().getWorldDirection(vector);
+        let angle = Math.atan2(vector.x, vector.z) + (180 * Math.PI / 180.0);
         // Heroes
         let battlers = this.battlers[CharacterKind.Hero];
         let i, l;
         for (i = 0, l = battlers.length; i < l; i++) {
-            battlers[i].update();
+            battlers[i].update(angle);
         }
         // Ennemies
         battlers = this.battlers[CharacterKind.Monster];
         for (i = 0, l = battlers.length; i < l; i++) {
-            battlers[i].update();
+            battlers[i].update(angle);
         }
         // Camera temp code for moving
         this.moveStandardCamera();

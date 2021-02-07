@@ -298,7 +298,7 @@ class Battler {
     /** 
      *  Update the battler.
      */
-    update() {
+    update(angle: number) {
         if (this.mesh !== null) {
             this.setActive(this.active);
             this.updateSelected();
@@ -307,6 +307,7 @@ class Battler {
             this.updateDamages();
             this.updateAttacking();
             this.updatePositions();
+            this.mesh.rotation.y = angle;
         }
     }
 

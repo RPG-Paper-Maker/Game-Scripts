@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Battler, Camera, WindowBox, WindowChoices, Picture2D, Item, Game, Animation } from "../Core";
+import { Battler, Camera, WindowBox, WindowChoices, Picture2D, Item, Game, Animation, Vector3 } from "../Core";
 import { Graphic, System, Scene, Manager } from "..";
 import { Enum } from "../Common";
 import CharacterKind = Enum.CharacterKind;
@@ -399,16 +399,21 @@ class Battle extends Map {
     update() {
         super.update();
 
+        // Y angle
+        let vector = new Vector3();
+        this.camera.getThreeCamera().getWorldDirection(vector);
+        let angle = Math.atan2(vector.x,vector.z) + (180 * Math.PI / 180.0);
+
         // Heroes
         let battlers = this.battlers[CharacterKind.Hero];
         let i: number, l: number;
         for (i = 0, l = battlers.length; i < l; i++) {
-            battlers[i].update();
+            battlers[i].update(angle);
         }
         // Ennemies
         battlers = this.battlers[CharacterKind.Monster];
         for (i = 0, l = battlers.length; i < l; i++) {
-            battlers[i].update();
+            battlers[i].update(angle);
         }
 
         // Camera temp code for moving

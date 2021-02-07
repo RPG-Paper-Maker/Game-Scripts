@@ -114,7 +114,7 @@ declare class Battler {
     /**
      *  Update the battler.
      */
-    update(): void;
+    update(angle: number): void;
     /**
      *  Update the selected move progress.
      */
