@@ -59,6 +59,8 @@ class Systems {
         this.mountainCollisionAngle = System.DynamicValue
             .readOrDefaultNumberDouble(json.mca, 45);
         this.mapFrameDuration = System.DynamicValue.readOrDefaultNumber(json.mfd, 150);
+        this.battlersFrames = Utils.defaultValue(json.battlersFrames, 4);
+        this.battlersColumns = Utils.defaultValue(json.battlersColumns, 9);
         this.priceSoldItem = System.DynamicValue.readOrDefaultNumberDouble(json
             .priceSoldItem, 50);
         // Path BR

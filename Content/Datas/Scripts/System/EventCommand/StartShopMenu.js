@@ -68,7 +68,6 @@ class StartShopMenu extends Base {
                             stock += newStock;
                         }
                     }
-                    console.log(system);
                     stocks[system.selectionItem][id] = stock;
                 }
                 else {

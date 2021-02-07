@@ -18,7 +18,6 @@ declare class Battler {
     static OFFSET_SELECTED: number;
     static TIME_MOVE: number;
     static TOTAL_TIME_DAMAGE: number;
-    static STEPS: number;
     player: Player;
     position: Vector3;
     arrowPosition: Vector2;

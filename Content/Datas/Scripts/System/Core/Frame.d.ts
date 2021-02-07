@@ -9,7 +9,13 @@ declare class Frame {
     loop: boolean;
     tick: number;
     value: number;
-    constructor(duration: number, loop?: boolean, tick?: number, value?: number);
+    frames: number;
+    constructor(duration: number, { loop, tick, value, frames }?: {
+        loop?: boolean;
+        tick?: number;
+        value?: number;
+        frames?: number;
+    });
     /**
      *  Update frame according to tick and duration, return true if frame is
      *  different.

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
-import { Frame, Battler } from "../Core/index.js";
+import { Frame } from "../Core/index.js";
 import { Graphic, Datas, System, Manager } from "../index.js";
 import { Enum, Constants, Utils, Platform } from "../Common/index.js";
 var Align = Enum.Align;
@@ -83,7 +83,7 @@ class PlayerDescription extends Base {
         this.listLength.push(maxLength);
         // Battler
         this.battler = Datas.Pictures.getPictureCopy(PictureKind.Battlers, system.idBattler);
-        this.battlerFrame = new Frame(250);
+        this.battlerFrame = new Frame(250, { frames: Datas.Systems.battlersFrames });
     }
     /**
      *  Initialize the statistic progression
@@ -203,8 +203,8 @@ class PlayerDescription extends Base {
         let xCharacter = x + 80;
         let yName = y + 20;
         let coef = Constants.BASIC_SQUARE_SIZE / Datas.Systems.SQUARE_SIZE;
-        let wBattler = this.battler.oW / Datas.Systems.FRAMES;
-        let hBattler = this.battler.oH / Battler.STEPS;
+        let wBattler = this.battler.oW / Datas.Systems.battlersFrames;
+        let hBattler = this.battler.oH / Datas.Systems.battlersColumns;
         // Battler
         this.battler.draw(x + (80 - (wBattler * coef)) / 2, y + 80 - (hBattler *
             coef) - 15, wBattler * coef, hBattler * coef, this.battlerFrame

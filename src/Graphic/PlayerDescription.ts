@@ -112,7 +112,7 @@ class PlayerDescription extends Base {
         // Battler
         this.battler = Datas.Pictures.getPictureCopy(PictureKind.Battlers, 
             system.idBattler);
-        this.battlerFrame = new Frame(250);
+        this.battlerFrame = new Frame(250, { frames: Datas.Systems.battlersFrames });
     }
 
     /** 
@@ -240,8 +240,8 @@ class PlayerDescription extends Base {
         let xCharacter = x + 80;
         let yName = y + 20;
         let coef = Constants.BASIC_SQUARE_SIZE / Datas.Systems.SQUARE_SIZE;
-        let wBattler = this.battler.oW / Datas.Systems.FRAMES;
-        let hBattler = this.battler.oH / Battler.STEPS;
+        let wBattler = this.battler.oW / Datas.Systems.battlersFrames;
+        let hBattler = this.battler.oH / Datas.Systems.battlersColumns;
 
         // Battler
         this.battler.draw(x + (80 - (wBattler * coef)) / 2, y + 80 - (hBattler *

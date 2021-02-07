@@ -35,7 +35,6 @@ class Battler {
     public static OFFSET_SELECTED = 10;
     public static TIME_MOVE = 200;
     public static TOTAL_TIME_DAMAGE = 250;
-    public static STEPS = 9;
 
     public player: Player;
     public position: Vector3;
@@ -95,8 +94,8 @@ class Battler {
         this.botPosition = Manager.GL.toScreenPosition(this.position, camera
             .getThreeCamera());
         this.active = true;
-        this.frame = new Frame(Mathf.random(250, 300));
-        this.frameAttacking = new Frame(350, false);
+        this.frame = new Frame(Mathf.random(250, 300), { frames: Datas.Systems.battlersFrames });
+        this.frameAttacking = new Frame(350, { loop: false });
         this.frameArrow = new Frame(125);
         this.step = Enum.BattlerStep.Normal;
         this.lastStep = Enum.BattlerStep.Normal;
@@ -135,13 +134,13 @@ class Battler {
                 }
             });
             texture = Manager.GL.getMaterialTexture(material);
-            this.width = Math.floor(texture.image.width / Datas.Systems
-                .SQUARE_SIZE / Datas.Systems.FRAMES);
-            this.height = Math.floor(texture.image.height / Datas.Systems
-                .SQUARE_SIZE / Battler.STEPS);
+            this.width = texture.image.width / Datas.Systems.SQUARE_SIZE / Datas
+                .Systems.battlersFrames;
+            this.height = texture.image.height / Datas.Systems.SQUARE_SIZE / 
+                Datas.Systems.battlersColumns;
             let sprite = Sprite.create(Enum.ElementMapKind.SpritesFace, [0, 0, 
                 this.width, this.height]);
-            let geometry = sprite.createGeometry(this.width, this.height, false,
+            let geometry = sprite.createGeometry(this.width, this.height, false, 
                 position)[0];
             this.mesh = new THREE.Mesh(geometry, material);
             this.mesh.position.set(this.position.x, this.position.y, this

@@ -33,6 +33,8 @@ class Systems {
     public static mountainCollisionHeight: System.DynamicValue;
     public static mountainCollisionAngle: System.DynamicValue;
     public static mapFrameDuration: System.DynamicValue;
+    public static battlersFrames: number;
+    public static battlersColumns: number;
     public static priceSoldItem: System.DynamicValue;
     public static showBB: boolean;
     private static itemsTypes: string[];
@@ -102,6 +104,8 @@ class Systems {
             .readOrDefaultNumberDouble(json.mca, 45);
         this.mapFrameDuration = System.DynamicValue.readOrDefaultNumber(json.mfd
             , 150);
+        this.battlersFrames = Utils.defaultValue(json.battlersFrames, 4);
+        this.battlersColumns = Utils.defaultValue(json.battlersColumns, 9);
         this.priceSoldItem = System.DynamicValue.readOrDefaultNumberDouble(json
             .priceSoldItem, 50);
 

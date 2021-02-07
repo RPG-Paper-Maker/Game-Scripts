@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Graphic, Datas, System, Manager } from "../index.js";
-import { Frame, Battler } from "../Core/index.js";
+import { Frame } from "../Core/index.js";
 import { Base } from "./Base.js";
 import { Utils, Constants, Platform, Enum } from "../Common/index.js";
 var PictureKind = Enum.PictureKind;
@@ -92,7 +92,7 @@ class Player extends Base {
         // Battler
         this.battler = Datas.Pictures.getPictureCopy(PictureKind.Battlers, hero
             .idBattler);
-        this.battlerFrame = new Frame(250);
+        this.battlerFrame = new Frame(250, { frames: Datas.Systems.battlersFrames });
         // Level up
         this.graphicLevelUp = new Graphic.Text("Level up!");
         this.displayNameLevel = true;
@@ -221,8 +221,8 @@ class Player extends Base {
         // Battler
         let yName = y + 100;
         let coef = Constants.BASIC_SQUARE_SIZE / Datas.Systems.SQUARE_SIZE;
-        let wBattler = this.battler.oW / Datas.Systems.FRAMES;
-        let hBattler = this.battler.oH / Battler.STEPS;
+        let wBattler = this.battler.oW / Datas.Systems.battlersFrames;
+        let hBattler = this.battler.oH / Datas.Systems.battlersColumns;
         this.battler.draw(x, yName - (hBattler * coef) - 15, wBattler * coef, hBattler * coef, this.battlerFrame.value * wBattler, 0, wBattler, hBattler);
         // Stats
         let yStats = yName;
@@ -253,8 +253,8 @@ class Player extends Base {
         let xCharacter = x + 80;
         let yName = y + 20;
         let coef = Constants.BASIC_SQUARE_SIZE / Datas.Systems.SQUARE_SIZE;
-        let wBattler = this.battler.oW / Datas.Systems.FRAMES;
-        let hBattler = this.battler.oH / Battler.STEPS;
+        let wBattler = this.battler.oW / Datas.Systems.battlersFrames;
+        let hBattler = this.battler.oH / Datas.Systems.battlersColumns;
         // Battler
         this.battler.draw(x + (80 - (wBattler * coef)) / 2, y + h - (hBattler *
             coef) - 15, wBattler * coef, hBattler * coef, this.battlerFrame

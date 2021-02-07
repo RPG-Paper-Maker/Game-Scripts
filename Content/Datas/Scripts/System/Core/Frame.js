@@ -16,11 +16,12 @@ import { Manager, Datas } from "../index.js";
  *  @param {number} [value=0] - The current frame value
  */
 class Frame {
-    constructor(duration, loop = true, tick = 0, value = 0) {
+    constructor(duration, { loop = true, tick = 0, value = 0, frames = Datas.Systems.FRAMES } = {}) {
         this.duration = duration;
         this.loop = loop;
         this.tick = tick;
         this.value = value;
+        this.frames = frames;
     }
     /**
      *  Update frame according to tick and duration, return true if frame is
@@ -29,13 +30,13 @@ class Frame {
      *  @returns {boolean}
      */
     update(duration = this.duration) {
-        if (!this.loop && this.value === Datas.Systems.FRAMES - 1) {
+        if (!this.loop && this.value === this.frames - 1) {
             return false;
         }
         let frame = this.value;
         this.tick += Manager.Stack.elapsedTime;
         if (this.tick >= duration) {
-            this.value = (this.value + 1) % Datas.Systems.FRAMES;
+            this.value = (this.value + 1) % this.frames;
             this.tick = 0;
         }
         return (frame !== this.value);
