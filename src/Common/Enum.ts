@@ -96,7 +96,8 @@ namespace Enum {
         ShakeScreen,
         FlashScreen,
         Plugin,
-        StartShopMenu
+        StartShopMenu,
+        RestockShop
     };
 
     /**

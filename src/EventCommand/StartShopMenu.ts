@@ -23,14 +23,18 @@ class StartShopMenu extends Base {
     public buyOnly: System.DynamicValue;
     public shopID: System.DynamicValue;
     public items: System.ShopItem[];
+    public isRestock: boolean;
 
-    constructor(command: any[]) {
+    constructor(command: any[], isRestock: boolean = false) {
         super();
 
+        this.isRestock = isRestock;
         let iterator = {
             i: 0
         }
-        this.buyOnly = System.DynamicValue.createValueCommand(command, iterator);
+        if (!isRestock) {
+            this.buyOnly = System.DynamicValue.createValueCommand(command, iterator);
+        }
         this.shopID = System.DynamicValue.createValueCommand(command, iterator);
         this.items = [];
         let shopItem: System.ShopItem;
@@ -56,30 +60,47 @@ class StartShopMenu extends Base {
         stocks[Enum.ItemKind.Armor] = {};
         let system: System.ShopItem;
         let list: Item[] = [];
-        let id: number, stock: number;
+        let id: number, stock: number, newStock;
         if (Game.current.shops[shopID]) {
             stocks = Game.current.shops[shopID];
             for (let i = 0, l = this.items.length; i < l; i++) {
                 system = this.items[i];
                 id = system.getItem().id;
                 stock = stocks[system.selectionItem][id];
-                if (Utils.isUndefined(stock)) {
-                    stock = system.getStock();
+                if (this.isRestock) {
+                    stock = (Utils.isUndefined(stock) ? 0 : stock);
+                    if (stock !== -1) {
+                        newStock = system.getStock();
+                        if (newStock === -1) {
+                            stock = -1;
+                        } else {
+                            stock += newStock;
+                        }
+                    }
                     stocks[system.selectionItem][id] = stock;
+                } else {
+                    if (Utils.isUndefined(stock)) {
+                        stock = system.getStock();
+                        stocks[system.selectionItem][id] = stock;
+                    }
                 }
                 list[i] = new Item(system.selectionItem, id, stock, system);
             }
         } else {
-            for (let i = 0, l = this.items.length; i < l; i++) {
-                system = this.items[i];
-                id = system.getItem().id;
-                stock = system.getStock();
-                stocks[system.selectionItem][id] = stock;
-                list[i] = new Item(system.selectionItem, id, stock, system);
+            if (!this.isRestock) {
+                for (let i = 0, l = this.items.length; i < l; i++) {
+                    system = this.items[i];
+                    id = system.getItem().id;
+                    stock = system.getStock();
+                    stocks[system.selectionItem][id] = stock;
+                    list[i] = new Item(system.selectionItem, id, stock, system);
+                }
+                Game.current.shops[shopID] = stocks;
             }
-            Game.current.shops[shopID] = stocks;
         }
-        return {
+        return this.isRestock ? {
+            opened: true
+        } : {
             opened: false,
             shopID: shopID,
             buyOnly: this.buyOnly.getValue(),

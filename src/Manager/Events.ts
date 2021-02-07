@@ -142,6 +142,8 @@ class Events {
                 return new EventCommand.Plugin(command);
             case EventCommandKind.StartShopMenu:
                 return new EventCommand.StartShopMenu(command);
+            case EventCommandKind.RestockShop:
+                return new EventCommand.StartShopMenu(command, true);
             default:
                 return null;
         }

@@ -10,7 +10,8 @@ declare class StartShopMenu extends Base {
     buyOnly: System.DynamicValue;
     shopID: System.DynamicValue;
     items: System.ShopItem[];
-    constructor(command: any[]);
+    isRestock: boolean;
+    constructor(command: any[], isRestock?: boolean);
     /**
      *  Initialize the current state.
      *  @returns {Record<string, any>} The current state

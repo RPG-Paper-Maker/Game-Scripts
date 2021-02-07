@@ -360,7 +360,6 @@ class MenuShop extends MenuBase {
     equip(shopItem) {
         let player = this.getCurrentPlayer();
         let item = Item.findItem(shopItem.kind, shopItem.system.id);
-        console.log(shopItem);
         let prev = player.equip[this.currentEquipmentID];
         player.equip[this.currentEquipmentID] = item;
         item.remove(1);
