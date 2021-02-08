@@ -176,6 +176,14 @@ declare class Player {
      */
     isExperienceUpdated(): boolean;
     /**
+     *  Synchronize experience if level was manually updated with a command.
+     */
+    synchronizeExperience(): void;
+    /**
+     *  Synchronize level if experience was manually updated with a command.
+     */
+    synchronizeLevel(): void;
+    /**
      *  Get the first status to display according to priority.
      *  @returns {Core.Status[]}
      */

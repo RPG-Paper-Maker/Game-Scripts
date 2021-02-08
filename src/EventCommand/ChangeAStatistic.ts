@@ -87,7 +87,10 @@ class ChangeAStatistic extends Base {
     update(currentState: Record<string, any>, object: MapObject, state: number): 
         number
     {
-        let stat = Datas.BattleSystems.getStatistic(this.statisticID.getValue());
+        let statisticID = this.statisticID.getValue();
+        let stat = Datas.BattleSystems.getStatistic(statisticID);
+        let isChangingExperience = Datas.BattleSystems.idExpStatistic === statisticID;
+        let isChangingLevel = Datas.BattleSystems.idLevelStatistic === statisticID;
         let abr = stat.abbreviation;
         let targets: Player[];
         switch (this.selection) {
@@ -99,9 +102,10 @@ class ChangeAStatistic extends Base {
                 targets = Game.current.getTeam(this.groupIndex);
                 break;
         }
-        let target: Player;
+        let target: Player, before: number, after: number;
         for (let i = 0, l = targets.length; i < l; i++) {
             target = targets[i];
+            before = target[abr];
             switch (this.value) {
                 case 0:
                     target[abr] = Mathf.OPERATORS_NUMBERS[this.operation](target
@@ -120,6 +124,17 @@ class ChangeAStatistic extends Base {
             if (!this.canAboveMax) {
                 target[abr] = Math.max(target[stat.getMaxAbbreviation()], target
                     [abr]);
+            }
+            after = target[abr];
+            if (isChangingLevel) {
+                target[abr] = before;
+                while (target.getCurrentLevel() < after) {
+                    target.levelUp();
+                }
+                target.synchronizeExperience();
+            }
+            if (isChangingExperience) {
+                target.synchronizeLevel();
             }
         }
         return 1;

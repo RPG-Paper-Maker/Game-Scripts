@@ -711,6 +711,34 @@ class Player {
     }
 
     /** 
+     *  Synchronize experience if level was manually updated with a command.
+     */
+    synchronizeExperience() {
+        let statistic = Datas.BattleSystems.getExpStatistic();
+        let level = this.getCurrentLevel();
+        this[statistic.abbreviation] = this.expList[level];
+        this[statistic.getMaxAbbreviation()] = this.expList[level + 1];
+    }
+
+    /** 
+     *  Synchronize level if experience was manually updated with a command.
+     */
+    synchronizeLevel() {
+        let expStatistic = Datas.BattleSystems.getExpStatistic();
+        let exp = this[expStatistic.abbreviation];
+        let finalLevel = this.expList.length - 1;
+        for (; finalLevel >= 1; finalLevel--) {
+            if (exp >= this.expList[finalLevel]) {
+                break;
+            }
+        }
+        this[expStatistic.getMaxAbbreviation()] = this.expList[finalLevel + 1];
+        while (this.getCurrentLevel() < finalLevel) {
+            this.levelUp();
+        }
+    }
+
+    /** 
      *  Get the first status to display according to priority.
      *  @returns {Core.Status[]}
      */
