@@ -30,6 +30,14 @@ abstract class Base {
     public reactionInterpreters: ReactionInterpreter[];
 
     /**
+     * An array of reaction interpreters caused by effects.
+     *
+     * @type {ReactionInterpreter[]}
+     * @memberof Base
+     */
+    public reactionInterpretersEffects: ReactionInterpreter[];
+
+    /**
      * the array holding parallel commands.
      *
      * @type {ReactionInterpreter[]}
@@ -58,6 +66,7 @@ abstract class Base {
      */
     constructor(loading: boolean = true, ...args: any) {
         this.reactionInterpreters = new Array;
+        this.reactionInterpretersEffects = new Array;
         this.parallelCommands = new Array;
         this.initialize(...args);
         if (loading) {
@@ -116,13 +125,17 @@ abstract class Base {
         }
 
         // Updating all reactions
-        let interpreter: ReactionInterpreter;
+        let interpreter: ReactionInterpreter, effectIndex: number;
         for (i = 0, l = this.reactionInterpreters.length; i < l; i++) {
             interpreter = this.reactionInterpreters[i];
             interpreter.update();
             if (interpreter.isFinished()) {
                 interpreter.updateFinish();
                 endingReactions.push(i);
+                effectIndex = this.reactionInterpretersEffects.indexOf(interpreter);
+                if (effectIndex !== -1) {
+                    this.reactionInterpretersEffects.splice(effectIndex, 1);
+                }
             }
             // If changed map, STOP
             if (!Scene.Map.current || Scene.Map.current.loading) {

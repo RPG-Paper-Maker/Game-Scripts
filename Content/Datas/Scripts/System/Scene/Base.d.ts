@@ -15,6 +15,13 @@ declare abstract class Base {
      */
     reactionInterpreters: ReactionInterpreter[];
     /**
+     * An array of reaction interpreters caused by effects.
+     *
+     * @type {ReactionInterpreter[]}
+     * @memberof Base
+     */
+    reactionInterpretersEffects: ReactionInterpreter[];
+    /**
      * the array holding parallel commands.
      *
      * @type {ReactionInterpreter[]}

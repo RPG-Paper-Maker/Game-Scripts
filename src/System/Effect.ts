@@ -336,10 +336,11 @@ class Effect extends Base {
             case EffectKind.PerformSkill:
                 break;
             case EffectKind.CommonReaction:
-                Scene.Map.current.reactionInterpreters.push(new 
-                    ReactionInterpreter(null, Datas.CommonEvents
-                    .getCommonReaction(this.commonReaction.commonReactionID), 
-                    null, null, this.commonReaction.parameters));
+                let reactionInterpreter = new ReactionInterpreter(null, Datas
+                    .CommonEvents.getCommonReaction(this.commonReaction
+                    .commonReactionID), null, null, this.commonReaction.parameters);
+                Scene.Map.current.reactionInterpretersEffects.push(reactionInterpreter);
+                Scene.Map.current.reactionInterpreters.push(reactionInterpreter);
                 break;
             case EffectKind.SpecialActions:
                 Scene.Map.current.battleCommandKind = this.specialActionKind;

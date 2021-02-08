@@ -23,6 +23,7 @@ class Base {
      */
     constructor(loading = true, ...args) {
         this.reactionInterpreters = new Array;
+        this.reactionInterpretersEffects = new Array;
         this.parallelCommands = new Array;
         this.initialize(...args);
         if (loading) {
@@ -76,13 +77,17 @@ class Base {
             }
         }
         // Updating all reactions
-        let interpreter;
+        let interpreter, effectIndex;
         for (i = 0, l = this.reactionInterpreters.length; i < l; i++) {
             interpreter = this.reactionInterpreters[i];
             interpreter.update();
             if (interpreter.isFinished()) {
                 interpreter.updateFinish();
                 endingReactions.push(i);
+                effectIndex = this.reactionInterpretersEffects.indexOf(interpreter);
+                if (effectIndex !== -1) {
+                    this.reactionInterpretersEffects.splice(effectIndex, 1);
+                }
             }
             // If changed map, STOP
             if (!Scene.Map.current || Scene.Map.current.loading) {

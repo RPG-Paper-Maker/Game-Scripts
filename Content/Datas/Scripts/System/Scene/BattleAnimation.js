@@ -217,7 +217,7 @@ class BattleAnimation {
                 break;
             case 2: // Damages
                 // If calling a common reaction, wait for it to be finished
-                if (this.battle.reactionInterpreters.length > 0) {
+                if (this.battle.reactionInterpretersEffects.length > 0) {
                     for (i = 0, l = this.battle.targets.length; i < l; i++) {
                         this.battle.targets[i].timeDamage = 0;
                     }
@@ -387,8 +387,8 @@ class BattleAnimation {
             }
         }
         // Draw damages
-        if (this.battle.reactionInterpreters.length === 0 && (this.battle.user ===
-            null || !this.battle.user.isAttacking()) && (!this.battle
+        if (this.battle.reactionInterpretersEffects.length === 0 && (this.battle
+            .user === null || !this.battle.user.isAttacking()) && (!this.battle
             .animationTarget || this.battle.animationTarget.frame > this.battle
             .animationTarget.system.frames.length)) {
             for (i = 0, l = this.battle.targets.length; i < l; i++) {
