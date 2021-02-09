@@ -17,7 +17,6 @@ import { Position } from "./Position";
 import { TextureBundle } from "./TextureBundle";
 import { Vector3 } from "./Vector3";
 import { Vector2 } from "./Vector2";
-import { THREE } from "../Globals";
 
 /**
  * A mountain in the map.
@@ -35,7 +34,6 @@ class Mountain extends MapElement {
     public static Y_MID_OFFSET = 1;
     public static Y_BOT_OFFSET = 2;
     public static Y_MIX_OFFSET = 3;
-    public static randomOffset = 0.01;
 
     public mountainID: number;
     public widthSquares: number;
@@ -428,11 +426,6 @@ class Mountain extends MapElement {
         let faceHeight = Math.sqrt((wp * wp) + (hp * hp));
         let w = Datas.Systems.SQUARE_SIZE / width;
         let localPosition = position.toVector3(false);
-        localPosition.setY(localPosition.y + Mountain.randomOffset);
-        Mountain.randomOffset += 0.01;
-        if (Mountain.randomOffset > 0.5) {
-            Mountain.randomOffset = 0.01;
-        }
         let center = new Vector3(localPosition.x + (Datas.Systems
             .SQUARE_SIZE / 2), localPosition.y + (Datas.Systems.SQUARE_SIZE / 2), 
             localPosition.z + (Datas.Systems.SQUARE_SIZE / 2));
