@@ -12,6 +12,7 @@ void main() {
 		pos = vec2(1.0 - vUv.x, vUv.y);
 	else
 		pos = vUv;
+	pos = vec2(pos.x - floor(pos.x), pos.y - floor(pos.y));
 	vec4 color = texture2D(t, pos);
 	if (color.a <= alpha_threshold)
         discard;

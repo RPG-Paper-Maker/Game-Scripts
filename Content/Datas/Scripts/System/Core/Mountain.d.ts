@@ -18,6 +18,7 @@ declare class Mountain extends MapElement {
     static Y_MID_OFFSET: number;
     static Y_BOT_OFFSET: number;
     static Y_MIX_OFFSET: number;
+    static randomOffset: number;
     mountainID: number;
     widthSquares: number;
     widthPixels: number;
