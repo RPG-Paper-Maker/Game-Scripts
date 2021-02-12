@@ -262,18 +262,14 @@ class MenuEquip extends MenuBase {
             this.list = [];
         } else {
             let item = <Graphic.Item>this.windowChoicesList.getCurrentContent();
-            if (item === null || !item.item) {
-                this.list = [];
-            } else {
-                let result = player.getEquipmentStatsAndBonus(item.item.system, 
-                    Datas.BattleSystems.equipmentsOrder[this.windowChoicesEquipment
-                    .currentSelectedIndex]);
-                this.list = result[0];
-                this.bonus = result[1];
-            }
+            let equipmentID = Datas.BattleSystems.equipmentsOrder[this
+                .windowChoicesEquipment.currentSelectedIndex];
+            let system = item.item ? item.item.system : null;
+            let result = player.getEquipmentStatsAndBonus(system, equipmentID);
+            this.list = result[0];
+            this.bonus = result[1];
         }
-        this.windowInformation.content = new Graphic.EquipStats(player, this
-            .list);
+        this.windowInformation.content = new Graphic.EquipStats(player, this.list);
     }
 
     /**
