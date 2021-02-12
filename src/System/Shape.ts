@@ -213,7 +213,7 @@ class Shape extends Base {
      *  Load the .obj.
      */
     async load() {
-        if (this.id !== -1)
+        if (this.id !== -1 && !this.geometry)
         {
             if (this.base64) {
                 this.geometry = Shape.parse(atob(this.base64));

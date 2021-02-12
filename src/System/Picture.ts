@@ -182,6 +182,9 @@ class Picture extends Base {
         if (this.base64) {
             return this.base64;
         }
+        if (this.picture) {
+            return this.picture.path;
+        }
         return this.id === -1 ? "" : Picture.getFolder(this.kind, this.isBR, 
             this.dlc) + Constants.STRING_SLASH + this.name;
     }

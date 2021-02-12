@@ -116,6 +116,9 @@ class Song extends Base {
         if (this.base64) {
             return this.base64;
         }
+        if (this.howl) {
+            return this.howl._src;
+        }
         return Song.getFolder(this.kind, this.isBR, this.dlc) + Constants
             .STRING_SLASH + this.name;
     }
@@ -124,7 +127,7 @@ class Song extends Base {
      *  Load the song.
      */
     load() {
-        if (this.id !== -1) {
+        if (this.id !== -1 && !this.howl) {
             this.howl = new Howl({
                 src: [this.getPath()],
                 loop: this.kind !== SongKind.MusicEffect,
