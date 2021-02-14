@@ -669,7 +669,7 @@ class MapPortion {
                 return new MapObject(object, position.toVector3(), true);
             }
         }
-        return null;
+        throw "Impossible to get the hero. Please delete your hero from the map and define it again.";
     }
 
     /** 
