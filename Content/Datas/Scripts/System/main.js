@@ -21,7 +21,7 @@ export class Main {
         throw new Error("This is a static class");
     }
     static async initialize() {
-        Datas.Settings.checkIsDevMode();
+        Datas.Settings.checkIsProtected();
         await Manager.Plugins.load();
         Manager.Stack.loadingDelay = 0;
         Manager.Songs.initialize();

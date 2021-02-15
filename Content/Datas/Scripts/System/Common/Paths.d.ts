@@ -35,7 +35,7 @@ declare class Paths {
     static readonly FILE_ANIMATIONS: string;
     static readonly FILE_STATUS: string;
     static readonly FILE_SCRIPTS: string;
-    static readonly FILE_TREE_MAP: string;
+    static readonly FILE_PROTECT: string;
     static readonly FILE_PLUGIN_CODE = "code.js";
     static readonly FILE_PLUGIN_DETAILS = "details.json";
     static readonly PICTURES = "/Content/Images";

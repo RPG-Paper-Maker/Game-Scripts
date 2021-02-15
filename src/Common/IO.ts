@@ -40,8 +40,7 @@ class IO {
      *  @param {string} url - The path of the file
      *  @returns {string}
      */
-    static openFile = async function(url: string): Promise<string>
-    {
+    static openFile = async function(url: string): Promise<string> {
         const fs = require('fs').promises;
         return (await fs.readFile(url, (e: Error, data: Buffer) => {
             if (e) 
@@ -60,12 +59,9 @@ class IO {
      *  @param {string} url - The path of the file
      *  @returns {Promise<Record<string, any>>}
      */
-    static parseFileJSON = async function(url: string): Promise<Record<string, 
-        any>>
-    {
+    static parseFileJSON = async function(url: string): Promise<Record<string, any>> {
         let content = await IO.openFile(url);
-        if (!Datas.Settings.isDevMode)
-        {
+        if (Datas.Settings.isProtected) {
             content = atob(content);
         }
         return JSON.parse(content);
@@ -77,12 +73,10 @@ class IO {
      *  @param {string} url - The path of the file
      *  @param {Object} obj - An object that can be stringified by JSON
      */
-    static saveFile = async function(url: string, obj: Object)
-    {
+    static saveFile = async function(url: string, obj: Object) {
         const fs = require('fs').promises;
         let content = JSON.stringify(obj);
-        if (!Datas.Settings.isDevMode)
-        {
+        if (Datas.Settings.isProtected) {
             content = btoa(content);
         }
         return await fs.writeFile(url, content, (e: Error) => {

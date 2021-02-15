@@ -4,7 +4,7 @@
  */
 declare class Settings {
     static kb: number[][][];
-    static isDevMode: boolean;
+    static isProtected: boolean;
     constructor();
     /**
      *  Read the settings file.
@@ -20,7 +20,7 @@ declare class Settings {
      *  Check if the app is in dev mode
      *  @static
      */
-    static checkIsDevMode(): Promise<void>;
+    static checkIsProtected(): Promise<void>;
     /**
      *  Update Keyboard settings.
      *  @param {number} id

@@ -49,7 +49,7 @@ class Paths {
     public static readonly FILE_ANIMATIONS = Paths.DATAS + "animations.json";
     public static readonly FILE_STATUS = Paths.DATAS + "status.json";
     public static readonly FILE_SCRIPTS = Paths.DATAS + "scripts.json";
-    public static readonly FILE_TREE_MAP = Paths.DATAS + "treeMap.json";
+    public static readonly FILE_PROTECT = Platform.ROOT_DIRECTORY + "/.protect";
     public static readonly FILE_PLUGIN_CODE = "code.js";
     public static readonly FILE_PLUGIN_DETAILS = "details.json";
     public static readonly PICTURES = "/Content/Images";

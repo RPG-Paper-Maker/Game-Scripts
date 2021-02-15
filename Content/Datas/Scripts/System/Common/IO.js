@@ -54,7 +54,7 @@ IO.openFile = async function (url) {
  */
 IO.parseFileJSON = async function (url) {
     let content = await IO.openFile(url);
-    if (!Datas.Settings.isDevMode) {
+    if (Datas.Settings.isProtected) {
         content = atob(content);
     }
     return JSON.parse(content);
@@ -68,7 +68,7 @@ IO.parseFileJSON = async function (url) {
 IO.saveFile = async function (url, obj) {
     const fs = require('fs').promises;
     let content = JSON.stringify(obj);
-    if (!Datas.Settings.isDevMode) {
+    if (Datas.Settings.isProtected) {
         content = btoa(content);
     }
     return await fs.writeFile(url, content, (e) => {

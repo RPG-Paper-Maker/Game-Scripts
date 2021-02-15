@@ -48,8 +48,8 @@ class Settings {
      *  Check if the app is in dev mode
      *  @static
      */
-    static async checkIsDevMode() {
-        this.isDevMode = await (IO.fileExists(Paths.FILE_TREE_MAP));
+    static async checkIsProtected() {
+        this.isProtected = await (IO.fileExists(Paths.FILE_PROTECT));
     }
     /**
      *  Update Keyboard settings.

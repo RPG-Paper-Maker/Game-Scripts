@@ -20,7 +20,7 @@ class Settings {
 
     public static kb: number[][][];
 
-    public static isDevMode: boolean;
+    public static isProtected: boolean;
 
     constructor() {
         throw new Error("This is a static class!");
@@ -58,8 +58,8 @@ class Settings {
      *  Check if the app is in dev mode
      *  @static
      */
-    static async checkIsDevMode() {
-        this.isDevMode = await (IO.fileExists(Paths.FILE_TREE_MAP));
+    static async checkIsProtected() {
+        this.isProtected = await (IO.fileExists(Paths.FILE_PROTECT));
     }
 
     /** 
