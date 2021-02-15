@@ -184,7 +184,7 @@ class MoveObject extends Base {
             currentState.position = object.getFuturPosition(orientation, Datas
                 .Systems.SQUARE_SIZE, angle);
             if (position.equals(currentState.position)) {
-                if (this.isIgnore) {
+                if (!this.isIgnore) {
                     currentState.position = null;
                     object.moving = true;
                     return true;
@@ -220,7 +220,7 @@ class MoveObject extends Base {
             .SQUARE_SIZE) || (square && currentState.distance >= Datas.Systems
             .SQUARE_SIZE || (distances[0] === 0)))
         {
-            if (this.isIgnore && distances[0] === 0) {
+            if (!this.isIgnore && distances[0] === 0) {
                 currentState.position = null;
                 object.moving = true;
                 return true;
