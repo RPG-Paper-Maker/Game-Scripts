@@ -352,6 +352,7 @@ class MapObject {
             this.states = (indexState === -1) ? [this.system.states.length > 0 ?
                     this.system.states[0].id : 1] : portionDatas.s[indexState];
         }
+        let previousStateInstance = this.currentStateInstance;
         this.currentState = null;
         this.currentStateInstance = null;
         let state;
@@ -409,9 +410,11 @@ class MapObject {
                         break;
                 }
                 // Correct position offset (left / top)
-                this.position.set(this.position.x - (Datas.Systems.SQUARE_SIZE /
-                    2), this.position.y, this.position.z - (Datas.Systems
-                    .SQUARE_SIZE / 2));
+                if (previousStateInstance && previousStateInstance.graphicKind
+                    !== ElementMapKind.Object3D) {
+                    this.position.set(this.position.x - (Datas.Systems
+                        .SQUARE_SIZE / 2), this.position.y, this.position.z - (Datas.Systems.SQUARE_SIZE / 2));
+                }
             }
             else {
                 let x, y;
@@ -432,6 +435,12 @@ class MapObject {
                 let sprite = Sprite.create(this.currentState.graphicKind, [x, y,
                     this.width, this.height]);
                 result = sprite.createGeometry(this.width, this.height, false, Position.createFromVector3(this.position));
+                // Correct position offset (left / top)
+                if (previousStateInstance && previousStateInstance.graphicKind
+                    === ElementMapKind.Object3D) {
+                    this.position.set(this.position.x + (Datas.Systems
+                        .SQUARE_SIZE / 2), this.position.y, this.position.z + (Datas.Systems.SQUARE_SIZE / 2));
+                }
             }
             let geometry = result[0];
             let objCollision = result[1];
@@ -747,7 +756,7 @@ class MapObject {
         // Update orientation
         this.orientationEye = orientation;
         orientation = this.orientation;
-        if (this.currentState.setWithCamera) {
+        if (this.currentState && this.currentState.setWithCamera) {
             this.updateOrientation();
         }
         if (this.orientation !== orientation) {
@@ -940,7 +949,7 @@ class MapObject {
                 frame = this.frame.value !== this.currentStateInstance.indexX;
                 this.frame.value = this.currentStateInstance.indexX;
                 // Update angle
-                if (this.currentState.setWithCamera) {
+                if (this.currentState && this.currentState.setWithCamera) {
                     this.updateOrientation();
                 }
             }

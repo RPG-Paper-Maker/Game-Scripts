@@ -325,7 +325,7 @@ class Collisions {
         for (i = 0; i < 2; i++) {
             for (j = 0; j < 2; j++) {
                 mapPortion = Scene.Map.current.getMapPortion(new Portion(portion.x + i, portion.y, portion.z + j));
-                if (mapPortion !== null && this.checkObjects(mapPortion, object)) {
+                if (mapPortion && this.checkObjects(mapPortion, object)) {
                     return [true, null];
                 }
             }
