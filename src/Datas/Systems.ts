@@ -36,6 +36,7 @@ class Systems {
     public static battlersFrames: number;
     public static battlersColumns: number;
     public static priceSoldItem: System.DynamicValue;
+    public static enterNameTable: string[][];
     public static showBB: boolean;
     private static itemsTypes: string[];
     private static colors: System.Color[]
@@ -191,6 +192,9 @@ class Systems {
         this.dbOptions = <EventCommand.SetDialogBoxOptions> Manager.Events
             .getEventCommand(json.dbo);
         this.dbOptions.update();
+
+        // Enter name menu options
+        this.enterNameTable = json.enterNameTable;
 
         // Initialize loading scene now that basics are loaded
         Manager.Stack.sceneLoading = new Scene.Loading();

@@ -201,6 +201,9 @@ class WindowChoices extends Bitmap {
                 i = this.listWindows.length - 1;
                 this.offsetSelectedIndex = this.size - 1;
             }
+            else {
+                this.offsetSelectedIndex = i;
+            }
             this.currentSelectedIndex = i;
             this.listWindows[this.currentSelectedIndex].selected = true;
             Manager.Stack.requestPaintHUD = true;

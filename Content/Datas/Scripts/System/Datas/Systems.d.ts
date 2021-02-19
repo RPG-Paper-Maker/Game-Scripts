@@ -21,6 +21,7 @@ declare class Systems {
     static battlersFrames: number;
     static battlersColumns: number;
     static priceSoldItem: System.DynamicValue;
+    static enterNameTable: string[][];
     static showBB: boolean;
     private static itemsTypes;
     private static colors;

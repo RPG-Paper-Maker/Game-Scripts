@@ -25,6 +25,7 @@ export * from "./Loading";
 export * from "./Map";
 export * from "./Menu";
 export * from "./MenuDescriptionState";
+export * from "./MenuEnterAName";
 export * from "./MenuEquip";
 export * from "./MenuInventory";
 export * from "./MenuShop";

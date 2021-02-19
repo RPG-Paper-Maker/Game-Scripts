@@ -140,6 +140,8 @@ class Events {
                 return new EventCommand.StartShopMenu(command);
             case EventCommandKind.RestockShop:
                 return new EventCommand.StartShopMenu(command, true);
+            case EventCommandKind.EnterANameMenu:
+                return new EventCommand.EnterANameMenu(command);
             default:
                 return null;
         }

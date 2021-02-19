@@ -23,6 +23,7 @@ export * from "./Loading.js";
 export * from "./Map.js";
 export * from "./Menu.js";
 export * from "./MenuDescriptionState.js";
+export * from "./MenuEnterAName.js";
 export * from "./MenuEquip.js";
 export * from "./MenuInventory.js";
 export * from "./MenuShop.js";

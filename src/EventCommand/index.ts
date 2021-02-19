@@ -28,6 +28,7 @@ export * from "./DisplayAPicture";
 export * from "./DisplayChoice";
 export * from "./Else";
 export * from "./EndGame";
+export * from "./EnterANameMenu";
 export * from "./FlashScreen";
 export * from "./If";
 export * from "./IfLose";

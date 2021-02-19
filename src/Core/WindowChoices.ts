@@ -310,6 +310,8 @@ class WindowChoices extends Bitmap {
             if (i >= this.listWindows.length) {
                 i = this.listWindows.length - 1;
                 this.offsetSelectedIndex = this.size - 1;
+            } else {
+                this.offsetSelectedIndex = i;
             }
             this.currentSelectedIndex = i;
             this.listWindows[this.currentSelectedIndex].selected = true;

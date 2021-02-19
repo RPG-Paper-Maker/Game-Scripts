@@ -27,6 +27,7 @@ export * from "./DisplayAPicture.js";
 export * from "./DisplayChoice.js";
 export * from "./Else.js";
 export * from "./EndGame.js";
+export * from "./EnterANameMenu.js";
 export * from "./FlashScreen.js";
 export * from "./If.js";
 export * from "./IfLose.js";
