@@ -32,6 +32,7 @@ class WindowChoices extends Bitmap {
             .currentSelectedIndex, -1);
         this.bordersInsideVisible = Utils.defaultValue(options
             .bordersInsideVisible, true);
+        this.bordersVisible = Utils.defaultValue(options.bordersVisible, true);
         // Initialize values
         this.offsetSelectedIndex = 0;
         this.choiceWidth = w;
@@ -47,7 +48,7 @@ class WindowChoices extends Bitmap {
     setX(x) {
         super.setX(x);
         if (this.listContents) {
-            this.updateContentSize(this.currentSelectedIndex);
+            this.updatePosition();
         }
     }
     /**
@@ -57,7 +58,18 @@ class WindowChoices extends Bitmap {
     setY(y) {
         super.setY(y);
         if (this.listContents) {
-            this.updateContentSize(this.currentSelectedIndex);
+            this.updatePosition();
+        }
+    }
+    updatePosition() {
+        let windowBox;
+        for (let i = 0; i < this.listWindows.length; i++) {
+            windowBox = this.listWindows[i];
+            windowBox.setX(this.orientation === OrientationWindow.Horizontal ?
+                this.oX + this.padding[0] + (i * this.choiceWidth) + (i * this
+                    .space) : this.oX + this.padding[0]);
+            windowBox.setY(this.orientation === OrientationWindow.Horizontal ?
+                this.oY : this.oY + (i * this.choiceHeight) + (i * this.space));
         }
     }
     /**
@@ -87,13 +99,15 @@ class WindowChoices extends Bitmap {
         this.size = totalNb > this.nbItemsMax ? this.nbItemsMax : totalNb;
         let boxWidth, boxHeight;
         if (this.orientation === OrientationWindow.Horizontal) {
-            boxWidth = (this.choiceWidth + this.space) * this.size - this.space;
+            boxWidth = (this.choiceWidth + this.space) * this.size - this.space
+                + (this.bordersInsideVisible ? 0 : this.padding[0] * 3);
             boxHeight = this.choiceHeight;
         }
         else {
             boxWidth = this.choiceWidth;
             boxHeight = (this.choiceHeight + this.space) * this.size - this
-                .space;
+                .space + (this.bordersInsideVisible ? 0 : this.padding[1] * 3);
+            ;
         }
         this.setW(boxWidth);
         this.setH(boxHeight);
@@ -105,19 +119,21 @@ class WindowChoices extends Bitmap {
         let window;
         for (let i = 0; i < totalNb; i++) {
             if (this.orientation === OrientationWindow.Horizontal) {
-                window = new WindowBox(this.oX + (i * this.choiceWidth) + (i *
+                window = new WindowBox(this.oX + this.padding[0] + (i * this.choiceWidth) + (i *
                     this.space), this.oY, this.choiceWidth, this.choiceHeight, {
                     content: this.listContents[i],
-                    padding: this.padding
+                    padding: this.bordersInsideVisible ? WindowBox
+                        .NONE_PADDING : this.padding
                 });
             }
             else {
-                window = new WindowBox(this.oX, this.oY + (i * this.choiceHeight) + (i * this.space), this.choiceWidth, this.choiceHeight, {
+                window = new WindowBox(this.oX + this.padding[0], this.oY + (i * this.choiceHeight) + (i * this.space), this.choiceWidth, this.choiceHeight, {
                     content: this.listContents[i],
-                    padding: this.padding
+                    padding: this.bordersInsideVisible ? WindowBox
+                        .NONE_PADDING : this.padding
                 });
             }
-            window.bordersVisible = this.bordersInsideVisible;
+            window.bordersVisible = this.bordersInsideVisible && this.bordersVisible;
             this.listWindows[i] = window;
         }
         // Select current selected index if number of choices > 0
@@ -201,7 +217,7 @@ class WindowChoices extends Bitmap {
                 i = this.listWindows.length - 1;
                 this.offsetSelectedIndex = this.size - 1;
             }
-            else {
+            else if (this.listWindows.length <= this.size) {
                 this.offsetSelectedIndex = i;
             }
             this.currentSelectedIndex = i;
@@ -334,7 +350,7 @@ class WindowChoices extends Bitmap {
      *  Draw the windows.
      */
     draw() {
-        if (!this.bordersInsideVisible) {
+        if (!this.bordersInsideVisible && this.bordersVisible) {
             this.windowMain.draw();
         }
         let offset = this.currentSelectedIndex === -1 ? -1 : this

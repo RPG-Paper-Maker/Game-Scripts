@@ -31,7 +31,7 @@ class EnterANameMenu extends Base {
      */
     initialize() {
         return {
-            opened: false,
+            opened: false
         };
     }
     /**

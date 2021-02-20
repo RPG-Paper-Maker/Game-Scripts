@@ -40,7 +40,7 @@ class EnterANameMenu extends Base {
      */
     initialize(): Record<string, any> {
         return {
-            opened: false,
+            opened: false
         }
     }
 

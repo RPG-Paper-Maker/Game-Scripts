@@ -65,6 +65,14 @@ interface ChoicesOptions {
      * @memberof ChoicesOptions
      */
     bordersInsideVisible?: boolean;
+    /**
+     * If enabled the inside border will be visible.
+     *
+     * @type {boolean}
+     * @default true
+     * @memberof ChoicesOptions
+     */
+    bordersVisible?: boolean;
 }
 /**
  * The window class who handle choices.
@@ -80,6 +88,7 @@ declare class WindowChoices extends Bitmap {
     space: number;
     currentSelectedIndex: number;
     bordersInsideVisible: boolean;
+    bordersVisible: boolean;
     offsetSelectedIndex: number;
     choiceWidth: number;
     choiceHeight: number;
@@ -100,6 +109,7 @@ declare class WindowChoices extends Bitmap {
      *  @param {number} y - The y value
      */
     setY(y: number): void;
+    updatePosition(): void;
     /**
      *  Get the content at a specific index.
      *  @param {number} i - The index

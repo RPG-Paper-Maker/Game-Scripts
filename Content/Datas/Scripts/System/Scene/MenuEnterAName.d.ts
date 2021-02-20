@@ -10,6 +10,8 @@ declare class MenuEnterAName extends MenuBase {
     static MAX_COLUMNS: number;
     windowChoicesTop: WindowChoices;
     windowBoxMain: WindowBox;
+    windowChoicesMain: WindowChoices[];
+    windowBoxOk: WindowBox;
     pictureFaceset: Picture2D;
     heroInstanceID: number;
     maxCharacters: number;
@@ -19,6 +21,9 @@ declare class MenuEnterAName extends MenuBase {
     displayColumns: number;
     selectedhero: Player;
     frameUnderscore: Frame;
+    currentRow: number;
+    offsetRow: number;
+    currentCharacterPosition: number;
     constructor(heroInstanceID: number, maxCharacters: number);
     initialize(heroInstanceID: number, maxCharacters: number): void;
     /**
@@ -42,9 +47,17 @@ declare class MenuEnterAName extends MenuBase {
      */
     createWindowBoxTop(): void;
     /**
-     *  Create the choice tab window buy/sell.
+     *  Create main window box.
      */
     createWindowBoxMain(): void;
+    /**
+     *  Create the top window.
+     */
+    createWindowChoicesMain(): void;
+    /**
+     *  Create the ok window box.
+     */
+    createWindowBoxOk(): void;
     /**
      *  Update the scene.
      */
