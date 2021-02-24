@@ -13,7 +13,6 @@ import { Graphic, Datas, Scene, Manager } from "../index.js";
 import { Constants, Enum, ScreenResolution } from "../Common/index.js";
 var Align = Enum.Align;
 var OrientationWindow = Enum.OrientationWindow;
-var ItemKind = Enum.ItemKind;
 var TargetKind = Enum.TargetKind;
 var AvailableKind = Enum.AvailableKind;
 import { WindowBox, WindowChoices, Game, Rectangle } from "../Core/index.js";
@@ -25,19 +24,18 @@ class MenuInventory extends Base {
     constructor() {
         super(false);
         // Initializing the top menu for item kinds
-        let menuKind = [
-            new Graphic.Text("All", { align: Align.Center }),
-            new Graphic.Text("Consumables", { align: Align.Center }),
-            new Graphic.Text(Datas.Systems.getItemType(1), { align: Align.Center }),
-            new Graphic.Text(Datas.Systems.getItemType(2), { align: Align.Center }),
-            new Graphic.Text("Weapons", { align: Align.Center }),
-            new Graphic.Text("Armors", { align: Align.Center })
-        ];
+        let l = Datas.Systems.inventoryFilters.length;
+        let menuKind = new Array();
+        let i;
+        for (i = 0, l = Datas.Systems.inventoryFilters.length; i < l; i++) {
+            menuKind[i] = new Graphic.Text(Datas.Systems.inventoryFilters[i]
+                .name(), { align: Align.Center });
+        }
         // All the windows
         this.windowTop = new WindowBox(20, 20, 200, 30, {
             content: new Graphic.Text("Inventory", { align: Align.Center })
         });
-        this.windowChoicesTabs = new WindowChoices(5, 60, 105, WindowBox
+        this.windowChoicesTabs = new WindowChoices(5, 60, 100, WindowBox
             .SMALL_SLOT_HEIGHT, menuKind, {
             orientation: OrientationWindow.Horizontal,
             nbItemsMax: 6
@@ -49,9 +47,9 @@ class MenuInventory extends Base {
             padding: WindowBox.SMALL_SLOT_PADDING
         });
         this.createWindowBoxUseItem();
-        let l = menuKind.length;
+        l = menuKind.length;
         this.positionChoice = new Array(l);
-        for (let i = 0; i < l; i++) {
+        for (i = 0; i < l; i++) {
             this.positionChoice[i] = {
                 index: 0,
                 offset: 0
@@ -121,13 +119,10 @@ class MenuInventory extends Base {
         let indexTab = this.windowChoicesTabs.currentSelectedIndex;
         let nbItems = Game.current.items.length;
         let list = [];
-        let ownedItem, item;
+        let ownedItem;
         for (let i = 0; i < nbItems; i++) {
             ownedItem = Game.current.items[i];
-            item = ownedItem.system;
-            if (indexTab === 0 || (indexTab === 1 && (ownedItem.kind ===
-                ItemKind.Item && item.consumable)) || (indexTab === 2 && (ownedItem.kind === ItemKind.Item && item.type === 1)) || (indexTab === 3 && (ownedItem.kind === ItemKind.Item && item.type
-                === 2)) || (indexTab === 4 && ownedItem.kind === ItemKind.Weapon) || (indexTab === 5 && ownedItem.kind === ItemKind.Armor)) {
+            if (Datas.Systems.inventoryFilters[indexTab].getFilter()(ownedItem)) {
                 list.push(new Graphic.Item(ownedItem));
             }
         }

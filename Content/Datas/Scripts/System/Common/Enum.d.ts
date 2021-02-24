@@ -619,5 +619,36 @@ declare namespace Enum {
         AttackRandomAlly = 6,
         AttackRandomEnemy = 7
     }
+    /**
+     *  Enum for the inventory filter kind.
+     *
+     *  @export
+     *  @enum {number}
+     */
+    enum InventoryFilterKind {
+        All = 0,
+        Consumables = 1,
+        Custom = 2,
+        Weapons = 3,
+        Armors = 4,
+        WeaponsAndAmors = 5,
+        Script = 6
+    }
+    /**
+     *  Enum for the main menu command kind.
+     *
+     *  @export
+     *  @enum {number}
+     */
+    enum MainMenuCommandKind {
+        Inventory = 0,
+        Skills = 1,
+        Equip = 2,
+        States = 3,
+        Order = 4,
+        Save = 5,
+        Quit = 6,
+        Script = 7
+    }
 }
 export { Enum };

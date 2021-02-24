@@ -706,5 +706,38 @@ var Enum;
         StatusRestrictionsKind[StatusRestrictionsKind["AttackRandomAlly"] = 6] = "AttackRandomAlly";
         StatusRestrictionsKind[StatusRestrictionsKind["AttackRandomEnemy"] = 7] = "AttackRandomEnemy";
     })(StatusRestrictionsKind = Enum.StatusRestrictionsKind || (Enum.StatusRestrictionsKind = {}));
+    /**
+     *  Enum for the inventory filter kind.
+     *
+     *  @export
+     *  @enum {number}
+     */
+    let InventoryFilterKind;
+    (function (InventoryFilterKind) {
+        InventoryFilterKind[InventoryFilterKind["All"] = 0] = "All";
+        InventoryFilterKind[InventoryFilterKind["Consumables"] = 1] = "Consumables";
+        InventoryFilterKind[InventoryFilterKind["Custom"] = 2] = "Custom";
+        InventoryFilterKind[InventoryFilterKind["Weapons"] = 3] = "Weapons";
+        InventoryFilterKind[InventoryFilterKind["Armors"] = 4] = "Armors";
+        InventoryFilterKind[InventoryFilterKind["WeaponsAndAmors"] = 5] = "WeaponsAndAmors";
+        InventoryFilterKind[InventoryFilterKind["Script"] = 6] = "Script";
+    })(InventoryFilterKind = Enum.InventoryFilterKind || (Enum.InventoryFilterKind = {}));
+    /**
+     *  Enum for the main menu command kind.
+     *
+     *  @export
+     *  @enum {number}
+     */
+    let MainMenuCommandKind;
+    (function (MainMenuCommandKind) {
+        MainMenuCommandKind[MainMenuCommandKind["Inventory"] = 0] = "Inventory";
+        MainMenuCommandKind[MainMenuCommandKind["Skills"] = 1] = "Skills";
+        MainMenuCommandKind[MainMenuCommandKind["Equip"] = 2] = "Equip";
+        MainMenuCommandKind[MainMenuCommandKind["States"] = 3] = "States";
+        MainMenuCommandKind[MainMenuCommandKind["Order"] = 4] = "Order";
+        MainMenuCommandKind[MainMenuCommandKind["Save"] = 5] = "Save";
+        MainMenuCommandKind[MainMenuCommandKind["Quit"] = 6] = "Quit";
+        MainMenuCommandKind[MainMenuCommandKind["Script"] = 7] = "Script";
+    })(MainMenuCommandKind = Enum.MainMenuCommandKind || (Enum.MainMenuCommandKind = {}));
 })(Enum || (Enum = {}));
 export { Enum };

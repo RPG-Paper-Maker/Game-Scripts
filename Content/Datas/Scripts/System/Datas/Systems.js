@@ -81,6 +81,7 @@ class Systems {
         this.ignoreAssetsLoadingErrors = false; //TODO
         // Lists
         this.itemsTypes = [];
+        this.inventoryFilters = [];
         this.colors = [];
         this.currencies = [];
         this.windowSkins = [];
@@ -92,9 +93,9 @@ class Systems {
         this.speeds = [];
         this.frequencies = [];
         Utils.readJSONSystemList({ list: json.itemsTypes, listIDs: this
-                .itemsTypes, func: (element) => {
-                return element.name;
-            } });
+                .itemsTypes, cons: System.Translatable });
+        Utils.readJSONSystemList({ list: json.inventoryFilters, listIndexes: this
+                .inventoryFilters, cons: System.InventoryFilter });
         Utils.readJSONSystemList({ list: json.colors, listIDs: this.colors, cons: System.Color });
         Utils.readJSONSystemList({ list: json.currencies, listIDs: this
                 .currencies, cons: System.Currency });

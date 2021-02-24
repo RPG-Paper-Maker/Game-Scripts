@@ -671,6 +671,39 @@ namespace Enum {
         AttackRandomAlly,
         AttackRandomEnemy
     }
+
+    /**
+     *  Enum for the inventory filter kind.
+     *
+     *  @export
+     *  @enum {number}
+     */
+    export enum InventoryFilterKind {
+        All,
+        Consumables,
+        Custom,
+        Weapons,
+        Armors,
+        WeaponsAndAmors,
+        Script
+    }
+
+    /**
+     *  Enum for the main menu command kind.
+     *
+     *  @export
+     *  @enum {number}
+     */
+    export enum MainMenuCommandKind {
+        Inventory,
+        Skills,
+        Equip,
+        States,
+        Order,
+        Save,
+        Quit,
+        Script
+    }
 }
 
 export { Enum }

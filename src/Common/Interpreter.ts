@@ -38,15 +38,16 @@ class Interpreter {
      *  Evaluate a formula.
      */
     static evaluate(formula: string, { user, target, damage, thisObject, 
-        addReturn = true }: { user?: Player, target?: Player, damage?: number, 
-        thisObject?: MapObject, addReturn?: boolean} = {}): any
-    {
+        addReturn = true, additionalName = "", additionalValue = null }: { user?: 
+        Player, target?: Player, damage?: number, thisObject?: MapObject, 
+        addReturn?: boolean, additionalName?: string, additionalValue?: any} = 
+        {}): any {
         return new Function("Common", "Core", "Datas", "EventCommand", "Graphic"
             , "Manager", "Scene", "System", "THREE", "Howl", "u", "t", "damage",
-            "$object", (addReturn ? "return " : "") + formula)(this.common, this
-            .core, this.datas, this.eventCommand, this.graphic, this.manager, 
-            this.scene, this.system, this.three, this.howl, user, target, damage
-            , thisObject);
+            "$object", additionalName, (addReturn ? "return " : "") + formula)(
+            this.common, this.core, this.datas, this.eventCommand, this.graphic,
+            this.manager, this.scene, this.system, this.three, this.howl, user, 
+            target, damage, thisObject, additionalValue);
     }
 }
 

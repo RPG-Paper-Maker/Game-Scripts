@@ -77,6 +77,16 @@ declare class CommonSkillItem extends Icon {
      */
     getKind(): Enum.ItemKind;
     /**
+     *  Check if is weapon.
+     *  @returns {boolean}
+     */
+    isWeapon(): boolean;
+    /**
+     *  Check if is armor.
+     *  @returns {boolean}
+     */
+    isArmor(): boolean;
+    /**
      *  Check if is weapon or armor.
      *  @returns {boolean}
      */

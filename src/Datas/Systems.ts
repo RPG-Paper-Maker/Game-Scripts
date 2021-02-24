@@ -38,7 +38,8 @@ class Systems {
     public static priceSoldItem: System.DynamicValue;
     public static enterNameTable: string[][];
     public static showBB: boolean;
-    private static itemsTypes: string[];
+    private static itemsTypes: System.Translatable[];
+    public static inventoryFilters: System.InventoryFilter[];
     private static colors: System.Color[]
     private static currencies: System.Currency[];
     private static windowSkins: System.WindowSkin[];
@@ -133,6 +134,7 @@ class Systems {
 
         // Lists
         this.itemsTypes = [];
+        this.inventoryFilters = [];
         this.colors = [];
         this.currencies = [];
         this.windowSkins = [];
@@ -144,10 +146,9 @@ class Systems {
         this.speeds = [];
         this.frequencies = [];
         Utils.readJSONSystemList({ list: json.itemsTypes, listIDs: this
-            .itemsTypes, func: (element: Record<string, any>) =>
-        {
-            return element.name;
-        }});
+            .itemsTypes, cons: System.Translatable });
+        Utils.readJSONSystemList({ list: json.inventoryFilters, listIndexes: this
+            .inventoryFilters, cons: System.InventoryFilter });
         Utils.readJSONSystemList({ list: json.colors, listIDs: this.colors, cons
             : System.Color });
         Utils.readJSONSystemList({ list: json.currencies, listIDs: this
@@ -207,7 +208,7 @@ class Systems {
      *  @param {number} id
      *  @returns {string}
      */
-    static getItemType(id: number): string {
+    static getItemType(id: number): System.Translatable {
         return Datas.Base.get(id, this.itemsTypes, "item type");
     }
 

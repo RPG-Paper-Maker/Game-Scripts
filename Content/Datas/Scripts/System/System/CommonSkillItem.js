@@ -150,12 +150,25 @@ class CommonSkillItem extends Icon {
         return null;
     }
     /**
+     *  Check if is weapon.
+     *  @returns {boolean}
+     */
+    isWeapon() {
+        return this.getKind() === Enum.ItemKind.Weapon;
+    }
+    /**
+     *  Check if is armor.
+     *  @returns {boolean}
+     */
+    isArmor() {
+        return this.getKind() === Enum.ItemKind.Armor;
+    }
+    /**
      *  Check if is weapon or armor.
      *  @returns {boolean}
      */
     isWeaponArmor() {
-        return this.getKind() === Enum.ItemKind.Weapon || this.getKind() ===
-            Enum.ItemKind.Armor;
+        return this.isWeapon() || this.isArmor();
     }
 }
 export { CommonSkillItem };

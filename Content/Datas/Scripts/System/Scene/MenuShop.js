@@ -92,21 +92,20 @@ class MenuShop extends MenuBase {
         const rect = new Rectangle(Constants.MEDIUM_SPACE, Constants.HUGE_SPACE +
             WindowBox.SMALL_SLOT_HEIGHT + Constants.LARGE_SPACE, WindowBox
             .SMALL_SLOT_WIDTH, WindowBox.SMALL_SLOT_HEIGHT);
-        const list = [
-            new Graphic.Text("All", { align: Enum.Align.Center }),
-            new Graphic.Text("Consumables", { align: Enum.Align.Center }),
-            new Graphic.Text(Datas.Systems.getItemType(1), { align: Enum.Align.Center }),
-            new Graphic.Text(Datas.Systems.getItemType(2), { align: Enum.Align.Center }),
-            new Graphic.Text("Weapons", { align: Enum.Align.Center }),
-            new Graphic.Text("Armors", { align: Enum.Align.Center })
-        ];
+        let l = Datas.Systems.inventoryFilters.length;
+        let list = new Array();
+        let i;
+        for (i = 0, l = Datas.Systems.inventoryFilters.length; i < l; i++) {
+            list[i] = new Graphic.Text(Datas.Systems.inventoryFilters[i]
+                .name(), { align: Enum.Align.Center });
+        }
         const options = {
             orientation: Enum.OrientationWindow.Horizontal,
             nbItemsMax: list.length,
             padding: [0, 0, 0, 0]
         };
         this.windowChoicesItemsKind = new WindowChoices(rect.x, rect.y, rect.width, rect.height, list, options);
-        const l = list.length;
+        l = list.length;
         this.positionChoice = new Array(l);
         for (let i = 0; i < l; i++) {
             this.positionChoice[i] = {
@@ -123,7 +122,8 @@ class MenuShop extends MenuBase {
             ((WindowBox.SMALL_SLOT_HEIGHT + Constants.LARGE_SPACE) * 2), WindowBox
             .LARGE_SLOT_WIDTH, WindowBox.SMALL_SLOT_HEIGHT);
         const options = {
-            nbItemsMax: Scene.Menu.SLOTS_TO_DISPLAY
+            nbItemsMax: Scene.Menu.SLOTS_TO_DISPLAY,
+            padding: WindowBox.SMALL_SLOT_PADDING
         };
         this.windowChoicesList = new WindowChoices(rect.x, rect.y, rect.width, rect.height, [], options);
     }
@@ -270,13 +270,8 @@ class MenuShop extends MenuBase {
         let item;
         for (let i = 0, l = listToSort.length; i < l; i++) {
             item = listToSort[i];
-            if (item.nb !== 0 && (indexTab === 0 || (indexTab === 1 && (item.kind ===
-                Enum.ItemKind.Item && item.system.consumable)) || (indexTab ===
-                2 && (item.kind === Enum.ItemKind.Item && item.system.type === 1))
-                || (indexTab === 3 && (item.kind === Enum.ItemKind.Item && item
-                    .system.type === 2)) || (indexTab === 4 && item.kind === Enum
-                .ItemKind.Weapon) || (indexTab === 5 && item.kind === Enum
-                .ItemKind.Armor))) {
+            if (item.nb !== 0 && Datas.Systems.inventoryFilters[indexTab]
+                .getFilter()(item)) {
                 list.push(this.isBuy() ? new Graphic.Item(item, { nbItem: item
                         .nb, possible: item.shop.isPossiblePrice() }) : new Graphic
                     .Item(item, { showSellPrice: true }));

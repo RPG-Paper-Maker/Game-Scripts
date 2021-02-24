@@ -33,6 +33,7 @@ export * from "./Element";
 export * from "./Event";
 export * from "./Hero";
 export * from "./Icon";
+export * from "./InventoryFilter";
 export * from "./Item";
 export * from "./Keyboard";
 export * from "./Loot";

@@ -22,6 +22,7 @@ export * from "./Element.js";
 export * from "./Event.js";
 export * from "./Hero.js";
 export * from "./Icon.js";
+export * from "./InventoryFilter.js";
 export * from "./Item.js";
 export * from "./Keyboard.js";
 export * from "./Loot.js";

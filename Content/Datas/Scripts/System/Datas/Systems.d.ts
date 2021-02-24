@@ -24,6 +24,7 @@ declare class Systems {
     static enterNameTable: string[][];
     static showBB: boolean;
     private static itemsTypes;
+    static inventoryFilters: System.InventoryFilter[];
     private static colors;
     private static currencies;
     private static windowSkins;
@@ -53,7 +54,7 @@ declare class Systems {
      *  @param {number} id
      *  @returns {string}
      */
-    static getItemType(id: number): string;
+    static getItemType(id: number): System.Translatable;
     /**
      *  Get the color by ID safely.
      *  @static

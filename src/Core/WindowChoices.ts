@@ -231,8 +231,8 @@ class WindowChoices extends Bitmap {
                     this.space), this.oY, this.choiceWidth, this.choiceHeight,
                     {
                         content: this.listContents[i],
-                        padding: this.bordersInsideVisible ? WindowBox
-                            .NONE_PADDING : this.padding
+                        padding: this.bordersInsideVisible ? this.padding : 
+                            WindowBox.NONE_PADDING
                     }
                 );
             } else {
@@ -240,8 +240,8 @@ class WindowChoices extends Bitmap {
                 ) + (i * this.space), this.choiceWidth, this.choiceHeight,
                     {
                         content: this.listContents[i],
-                        padding: this.bordersInsideVisible ? WindowBox
-                            .NONE_PADDING : this.padding
+                        padding: this.bordersInsideVisible ? this.padding : 
+                            WindowBox.NONE_PADDING
                     }
                 );
             }

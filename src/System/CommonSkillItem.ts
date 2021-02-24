@@ -185,12 +185,27 @@ class CommonSkillItem extends Icon {
     }
 
     /** 
+     *  Check if is weapon.
+     *  @returns {boolean}
+     */
+    isWeapon(): boolean {
+        return this.getKind() === Enum.ItemKind.Weapon;
+    }
+
+    /** 
+     *  Check if is armor.
+     *  @returns {boolean}
+     */
+    isArmor(): boolean {
+        return this.getKind() === Enum.ItemKind.Armor;
+    }
+
+    /** 
      *  Check if is weapon or armor.
      *  @returns {boolean}
      */
     isWeaponArmor(): boolean {
-        return this.getKind() === Enum.ItemKind.Weapon || this.getKind() === 
-            Enum.ItemKind.Armor;
+        return this.isWeapon() || this.isArmor();
     }
 }
 
