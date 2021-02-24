@@ -118,7 +118,7 @@ class BattleInitialize {
 
             // Graphic player
             this.battle.graphicPlayers[CharacterKind.Monster][i] = new Graphic
-                .Player(player, true);
+                .Player(player, { reverse: true });
         
         }
     }

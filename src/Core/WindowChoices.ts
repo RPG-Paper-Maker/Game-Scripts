@@ -414,7 +414,6 @@ class WindowChoices extends Bitmap {
                 .Action)) {
                 let callback = this.listCallBacks[this.currentSelectedIndex];
                 if (callback !== null) {
-
                     // Play a sound according to callback result
                     if (callback.call(base)) {
                         Datas.Systems.soundConfirmation.playSound();

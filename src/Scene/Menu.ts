@@ -9,11 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Scene, Manager, Graphic, Datas } from "../index";
+import { Scene, Manager, Graphic, Datas, System } from "../index";
 import { Enum, ScreenResolution } from "../Common";
-import Align = Enum.Align;
 import { WindowChoices, WindowBox, Game, Rectangle, ChoicesOptions } from "../Core";
-import { MenuBase, MenuCommands } from "./MenuBase";
+import { MenuBase } from "./MenuBase";
 
 interface StructPositionChoice {
     index: number,
@@ -28,27 +27,6 @@ interface StructPositionChoice {
  * @extends {MenuBase}
  */
 class Menu extends MenuBase {
-
-    // Transferring public static SLOTS_TO_DISPLAY = 12; to menuBase
-
-    /**
-     * The array containing the menu commands.
-     * @todo in 1.7 and above the system will be changed for a dynamic support.
-     *
-     * @static
-     * @type {MenuCommands[]}
-     * @memberof Menu
-     */
-    public static menuCommands: MenuCommands[] = [
-        { command: { name: "Inventory", align: Align.Center }, action: Menu.prototype.openInventory },
-        { command: { name: "Skills", align: Align.Center }, action: Menu.prototype.openSkills },
-        { command: { name: "Equip", align: Align.Center }, action: Menu.prototype.openEquip },
-        { command: { name: "State", align: Align.Center }, action: Menu.prototype.openState },
-        { command: { name: "Order", align: Align.Center }, action: Menu.prototype.openOrder },
-        { command: { name: "Save", align: Align.Center }, action: Menu.prototype.openSave },
-        { command: { name: "Quit", align: Align.Center }, action: Menu.prototype.exit }
-    ];
-
 
     public selectedOrder: number;
     public windowChoicesCommands: WindowChoices;
@@ -91,25 +69,22 @@ class Menu extends MenuBase {
      * @memberof Menu
      */
     createCommandWindow() {
-        let commands: Graphic.Text[] = [];
+        let graphics: Graphic.Text[] = [];
         let actions: Function[] = [];
-        let container = Menu.menuCommands;
-        let _align: Align;
-        let _name: string;
-        for (let i = 0; i < container.length; i++) {
-            _align = container[i].command.align;
-            _name = container[i].command.name;
-            commands[i] = new Graphic.Text(_name, { align: _align });
-            actions[i] = container[i].action;
+        let command: System.MainMenuCommand;
+        for (let i = 0, l = Datas.Systems.mainMenuCommands.length; i < l; i++) {
+            command = Datas.Systems.mainMenuCommands[i];
+            graphics[i] = new Graphic.Text(command.name(), { align: Enum.Align.Center });
+            actions[i] = command.getCallback();
         }
-
         const rect = new Rectangle(20, 20, 150, WindowBox.MEDIUM_SLOT_HEIGHT);
         const options: ChoicesOptions = {
-            nbItemsMax: Menu.menuCommands.length,
+            nbItemsMax: Math.min(8, graphics.length),
             listCallbacks: actions,
             padding: [0, 0, 0, 0]
         };
-        this.windowChoicesCommands = new WindowChoices(rect.x, rect.y, rect.width, rect.height, commands, options);
+        this.windowChoicesCommands = new WindowChoices(rect.x, rect.y, rect.width, 
+            rect.height, graphics, options);
     }
 
     /**
@@ -120,13 +95,13 @@ class Menu extends MenuBase {
     createTeamOrderWindow() {
         const rect = new Rectangle(190, 20, 430, 95);
         const options: ChoicesOptions = {
-            nbItemsMax: 4, // TODO : make sure it works for custom hero party?
+            nbItemsMax: 4,
             padding: WindowBox.VERY_SMALL_PADDING_BOX,
             space: 15,
             currentSelectedIndex: -1
         };
-
-        this.windowChoicesTeam = new WindowChoices(rect.x, rect.y, rect.width, rect.height, this.partyGraphics(), options);
+        this.windowChoicesTeam = new WindowChoices(rect.x, rect.y, rect.width, 
+            rect.height, this.partyGraphics(), options);
     }
 
     /**
@@ -145,87 +120,6 @@ class Menu extends MenuBase {
             this.windowTimeCurrencies.padding[3];
         this.windowTimeCurrencies.setY(ScreenResolution.SCREEN_Y - 20 - h);
         this.windowTimeCurrencies.setH(h);
-    }
-
-
-    /**
-     * Callback function for opening the inventory.
-     *
-     * @return {*} 
-     * @memberof Menu
-     */
-    openInventory() {
-        Manager.Stack.push(new Scene.MenuInventory());
-        return true;
-    }
-
-    /**
-     * Callback function for opening the skills menu.
-     *
-     * @return {*} 
-     * @memberof Menu
-     */
-    openSkills() {
-        Manager.Stack.push(new Scene.MenuSkills());
-        return true;
-    }
-
-    /**
-     * callback function for opening the equipment menu.
-     *
-     * @return {*} 
-     * @memberof Menu
-     */
-    openEquip() {
-        Manager.Stack.push(new Scene.MenuEquip());
-        return true;
-    }
-
-    /**
-     * Callback function for opening the player description state menu.
-     *
-     * @return {*} 
-     * @memberof Menu
-     */
-    openState() {
-        Manager.Stack.push(new Scene.MenuDescriptionState());
-        return true;
-    }
-
-    /** 
-     *  Callback function for reordering heroes.
-     * 
-     * @returns {*}
-     * @memberof Menu
-     */
-    openOrder() {
-        this.windowChoicesTeam.select(0);
-        return true;
-    }
-
-    /** 
-     *  Callback function for opening the save menu.
-     * 
-     * @returns {*}
-     * @memberof Menu
-     */
-    openSave() {
-        if (Scene.Map.allowSaves) {
-            Manager.Stack.push(new Scene.SaveGame());
-            return true;
-        }
-        return false;
-    }
-
-    /** 
-     *  Callback function for quitting the game.
-     * 
-     * @returns {*}
-     * @memberof Menu
-     */
-    exit() {
-        Manager.Stack.replace(new Scene.TitleScreen());
-        return true;
     }
 
     /** 

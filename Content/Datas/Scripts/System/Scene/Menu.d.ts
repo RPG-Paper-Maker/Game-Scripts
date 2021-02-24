@@ -1,5 +1,5 @@
 import { WindowChoices, WindowBox } from "../Core/index.js";
-import { MenuBase, MenuCommands } from "./MenuBase.js";
+import { MenuBase } from "./MenuBase.js";
 interface StructPositionChoice {
     index: number;
     offset: number;
@@ -11,15 +11,6 @@ interface StructPositionChoice {
  * @extends {MenuBase}
  */
 declare class Menu extends MenuBase {
-    /**
-     * The array containing the menu commands.
-     * @todo in 1.7 and above the system will be changed for a dynamic support.
-     *
-     * @static
-     * @type {MenuCommands[]}
-     * @memberof Menu
-     */
-    static menuCommands: MenuCommands[];
     selectedOrder: number;
     windowChoicesCommands: WindowChoices;
     windowChoicesTeam: WindowChoices;
@@ -55,55 +46,6 @@ declare class Menu extends MenuBase {
      * @memberof Menu
      */
     createWindowTimeCurrencies(): void;
-    /**
-     * Callback function for opening the inventory.
-     *
-     * @return {*}
-     * @memberof Menu
-     */
-    openInventory(): boolean;
-    /**
-     * Callback function for opening the skills menu.
-     *
-     * @return {*}
-     * @memberof Menu
-     */
-    openSkills(): boolean;
-    /**
-     * callback function for opening the equipment menu.
-     *
-     * @return {*}
-     * @memberof Menu
-     */
-    openEquip(): boolean;
-    /**
-     * Callback function for opening the player description state menu.
-     *
-     * @return {*}
-     * @memberof Menu
-     */
-    openState(): boolean;
-    /**
-     *  Callback function for reordering heroes.
-     *
-     * @returns {*}
-     * @memberof Menu
-     */
-    openOrder(): boolean;
-    /**
-     *  Callback function for opening the save menu.
-     *
-     * @returns {*}
-     * @memberof Menu
-     */
-    openSave(): boolean;
-    /**
-     *  Callback function for quitting the game.
-     *
-     * @returns {*}
-     * @memberof Menu
-     */
-    exit(): boolean;
     /**
      *  Update the scene.
      *

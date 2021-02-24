@@ -26,6 +26,7 @@ export * from "./InventoryFilter.js";
 export * from "./Item.js";
 export * from "./Keyboard.js";
 export * from "./Loot.js";
+export * from "./MainMenuCommand.js";
 export * from "./MapObject.js";
 export * from "./MapProperties.js";
 export * from "./Monster.js";

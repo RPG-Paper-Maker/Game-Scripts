@@ -21,9 +21,10 @@ import { Status } from "../Core/Status.js";
  *  @param {boolean} [reverse=false] - Indicate if the faceset should be reversed
  */
 class Player extends Base {
-    constructor(player, reverse = false) {
+    constructor(player, { isMainMenu = false, reverse = false } = {}) {
         super();
         this.player = player;
+        this.isMainMenu = isMainMenu;
         this.reverse = reverse;
         // Informations
         let hero = this.player.system;
@@ -47,9 +48,21 @@ class Player extends Base {
         this.listStats = [];
         this.maxStatNamesLength = 0;
         this.maxStatLength = 0;
+        let statistics;
+        let i, l;
+        if (this.isMainMenu) {
+            l = Datas.Systems.heroesStatistics.length;
+            statistics = new Array(l);
+            for (i = 0; i < l; i++) {
+                statistics[i] = Datas.Systems.heroesStatistics[i].getValue();
+            }
+        }
+        else {
+            statistics = Datas.BattleSystems.statisticsOrder;
+        }
         let id, statistic, graphic, c, txt;
-        for (let i = 0, l = Datas.BattleSystems.statisticsOrder.length; i < l; i++) {
-            id = Datas.BattleSystems.statisticsOrder[i];
+        for (i = 0, l = statistics.length; i < l; i++) {
+            id = statistics[i];
             if (id !== Datas.BattleSystems.idLevelStatistic && id !== Datas
                 .BattleSystems.idExpStatistic) {
                 statistic = Datas.BattleSystems.getStatistic(id);
@@ -126,10 +139,21 @@ class Player extends Base {
         this.graphicLevel.setText(Utils.numToString(this.player[levelStat
             .abbreviation]));
         // Adding stats
+        let statistics;
+        let i, l;
+        if (this.isMainMenu) {
+            l = Datas.Systems.heroesStatistics.length;
+            statistics = new Array(l);
+            for (i = 0; i < l; i++) {
+                statistics[i] = Datas.Systems.heroesStatistics[i].getValue();
+            }
+        }
+        else {
+            statistics = Datas.BattleSystems.statisticsOrder;
+        }
         let id, statistic, txt;
-        for (let i = 0, j = 0, l = Datas.BattleSystems.statisticsOrder.length; i
-            < l; i++) {
-            id = Datas.BattleSystems.statisticsOrder[i];
+        for (let i = 0, j = 0, l = statistics.length; i < l; i++) {
+            id = statistics[i];
             if (id !== Datas.BattleSystems.idLevelStatistic && id !== Datas
                 .BattleSystems.idExpStatistic) {
                 statistic = Datas.BattleSystems.getStatistic(id);
@@ -274,6 +298,16 @@ class Player extends Base {
             .width;
         if (this.player.status.length > 0) {
             Status.drawList(this.player.status, xStatus, yName);
+        }
+        // Right stats
+        if (this.isMainMenu) {
+            let xStat = x + w - 125;
+            let i, l, yStat;
+            for (i = 0, l = this.listStatsNames.length; i < l; i++) {
+                yStat = yName + (i * 20);
+                this.listStatsNames[i].draw(xStat, yStat, 0, 0);
+                this.listStats[i].draw(xStat + this.maxStatNamesLength + 10, yStat, 0, 0);
+            }
         }
         // Level up
         if (this.player.levelingUp) {

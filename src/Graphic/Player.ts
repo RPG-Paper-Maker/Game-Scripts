@@ -42,11 +42,14 @@ class Player extends Base {
     public graphicLevelUp: Graphic.Text;
     public displayNameLevel: boolean;
     public graphicStatShort: Graphic.Text;
+    public isMainMenu: boolean;
 
-    constructor(player: Core.Player, reverse = false) {
+    constructor(player: Core.Player, { isMainMenu = false, reverse = false }: {
+        isMainMenu?: boolean, reverse?: boolean } = {}) {
         super();
 
         this.player = player;
+        this.isMainMenu = isMainMenu;
         this.reverse = reverse;
 
         // Informations
@@ -75,15 +78,23 @@ class Player extends Base {
         this.listStats = [];
         this.maxStatNamesLength = 0;
         this.maxStatLength = 0;
+        let statistics: number[];
+        let i: number, l: number;
+        if (this.isMainMenu) {
+            l = Datas.Systems.heroesStatistics.length;
+            statistics = new Array(l);
+            for (i = 0; i < l; i++) {
+                statistics[i] = Datas.Systems.heroesStatistics[i].getValue();
+            }
+        } else {
+            statistics = Datas.BattleSystems.statisticsOrder;
+        }
         let id: number, statistic: System.Statistic, graphic: Graphic.Text, c: 
             number, txt: string;
-        for (let i = 0, l = Datas.BattleSystems.statisticsOrder.length; i < l; 
-            i++)
-        {
-            id = Datas.BattleSystems.statisticsOrder[i];
+        for (i = 0, l = statistics.length; i < l; i++) {
+            id = statistics[i];
             if (id !== Datas.BattleSystems.idLevelStatistic && id !== Datas
-                .BattleSystems.idExpStatistic)
-            {
+                .BattleSystems.idExpStatistic) {
                 statistic = Datas.BattleSystems.getStatistic(id);
 
                 // Only display bars
@@ -165,14 +176,23 @@ class Player extends Base {
             .abbreviation]));
 
         // Adding stats
+        let statistics: number[];
+        let i: number, l: number;
+        if (this.isMainMenu) {
+            l = Datas.Systems.heroesStatistics.length;
+            statistics = new Array(l);
+            for (i = 0; i < l; i++) {
+                statistics[i] = Datas.Systems.heroesStatistics[i].getValue();
+            }
+        } else {
+            statistics = Datas.BattleSystems.statisticsOrder;
+        }
         let id: number, statistic: System.Statistic, txt: string;
-        for (let i = 0, j = 0, l = Datas.BattleSystems.statisticsOrder.length; i 
-            < l; i++)
+        for (let i = 0, j = 0, l = statistics.length; i < l; i++)
         {
-            id = Datas.BattleSystems.statisticsOrder[i];
+            id = statistics[i];
             if (id !== Datas.BattleSystems.idLevelStatistic && id !== Datas
-                .BattleSystems.idExpStatistic)
-            {
+                .BattleSystems.idExpStatistic) {
                 statistic = Datas.BattleSystems.getStatistic(id);
 
                 // Only display bars
@@ -327,6 +347,18 @@ class Player extends Base {
             .width;
         if (this.player.status.length > 0) {
             Status.drawList(this.player.status, xStatus, yName);
+        }
+
+        // Right stats
+        if (this.isMainMenu) {
+            let xStat = x + w - 125;
+            let i: number, l: number, yStat: number;
+            for (i = 0, l = this.listStatsNames.length; i < l; i++) {
+                yStat = yName + (i * 20);
+                this.listStatsNames[i].draw(xStat, yStat, 0, 0);
+                this.listStats[i].draw(xStat + this.maxStatNamesLength + 10, 
+                    yStat, 0, 0);
+            }
         }
 
         // Level up

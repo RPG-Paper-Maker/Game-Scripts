@@ -25,6 +25,8 @@ declare class Systems {
     static showBB: boolean;
     private static itemsTypes;
     static inventoryFilters: System.InventoryFilter[];
+    static mainMenuCommands: System.MainMenuCommand[];
+    static heroesStatistics: System.DynamicValue[];
     private static colors;
     private static currencies;
     private static windowSkins;

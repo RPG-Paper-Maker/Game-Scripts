@@ -37,6 +37,7 @@ export * from "./InventoryFilter";
 export * from "./Item";
 export * from "./Keyboard";
 export * from "./Loot";
+export * from "./MainMenuCommand";
 export * from "./MapObject";
 export * from "./MapProperties";
 export * from "./Monster";

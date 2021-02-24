@@ -26,7 +26,11 @@ declare class Player extends Base {
     graphicLevelUp: Graphic.Text;
     displayNameLevel: boolean;
     graphicStatShort: Graphic.Text;
-    constructor(player: Core.Player, reverse?: boolean);
+    isMainMenu: boolean;
+    constructor(player: Core.Player, { isMainMenu, reverse }?: {
+        isMainMenu?: boolean;
+        reverse?: boolean;
+    });
     /**
      *  Update the reverse value for faceset.
      *  @param {boolean} reverse - The reverse value

@@ -40,6 +40,8 @@ class Systems {
     public static showBB: boolean;
     private static itemsTypes: System.Translatable[];
     public static inventoryFilters: System.InventoryFilter[];
+    public static mainMenuCommands: System.MainMenuCommand[];
+    public static heroesStatistics: System.DynamicValue[];
     private static colors: System.Color[]
     private static currencies: System.Currency[];
     private static windowSkins: System.WindowSkin[];
@@ -135,6 +137,8 @@ class Systems {
         // Lists
         this.itemsTypes = [];
         this.inventoryFilters = [];
+        this.mainMenuCommands = [];
+        this.heroesStatistics = [];
         this.colors = [];
         this.currencies = [];
         this.windowSkins = [];
@@ -149,6 +153,13 @@ class Systems {
             .itemsTypes, cons: System.Translatable });
         Utils.readJSONSystemList({ list: json.inventoryFilters, listIndexes: this
             .inventoryFilters, cons: System.InventoryFilter });
+        Utils.readJSONSystemList({ list: json.mainMenuCommands, listIndexes: this
+            .mainMenuCommands, cons: System.MainMenuCommand });
+        Utils.readJSONSystemList({ list: json.heroesStatistics, listIndexes: this
+            .heroesStatistics, func: (element: Record<string, any>) =>
+        {
+            return System.DynamicValue.readOrDefaultDatabase(element.statisticID);
+        }});
         Utils.readJSONSystemList({ list: json.colors, listIDs: this.colors, cons
             : System.Color });
         Utils.readJSONSystemList({ list: json.currencies, listIDs: this

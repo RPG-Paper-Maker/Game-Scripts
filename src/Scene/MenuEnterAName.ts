@@ -9,7 +9,6 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { timeStamp } from "console";
 import { Datas, Graphic, Manager } from "..";
 import { Enum, ScreenResolution } from "../Common";
 import { Frame, Game, Picture2D, Player, Rectangle, WindowBox, WindowChoices } from "../Core";
