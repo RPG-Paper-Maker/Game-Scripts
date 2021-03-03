@@ -64,7 +64,7 @@ class TroopReactionConditions extends Base {
         this.isStatisticID = Utils.defaultValue(json.isStatisticID, false);
         this.statisticID = System.DynamicValue.readOrDefaultDatabase(json
             .statisticID);
-        this.statisticOperationKind = Utils.defaultValue(json.isStatisticID, 
+        this.statisticOperationKind = Utils.defaultValue(json.statisticOperationKind, 
             Enum.OperationKind.EqualTo);
         this.statisticCompare = System.DynamicValue.readOrDefaultNumber(json
             .statisticCompare);
@@ -99,9 +99,9 @@ class TroopReactionConditions extends Base {
                                 break;
                             }
                         }
-                    }
-                    if (!test) {
-                        return test;
+                        if (!test) {
+                            return test;
+                        }
                     }
                     if (this.isStatisticID) {
                         id = this.statisticID.getValue();
@@ -113,12 +113,15 @@ class TroopReactionConditions extends Base {
                             throw new Error("No max value for stat " + stat.name);
                         }
                         const compareValue = this.statisticCompare.getValue();
-                        test = Mathf.OPERATORS_COMPARE[this.statisticOperationKind](
-                            this.statisticCompareUnit ? statValueMax / 
+                        console.log([this.statisticCompareUnit ? statValue / 
                             statValueMax : statValue, this.statisticCompareUnit ? 
+                            compareValue / 100 : compareValue])
+                        return Mathf.OPERATORS_COMPARE[this.statisticOperationKind](
+                            this.statisticCompareUnit ? statValue / statValueMax 
+                            : statValue, this.statisticCompareUnit ? 
                             compareValue / 100 : compareValue);
                     }
-                    return test;
+                    return true;
                 }
             );
         }

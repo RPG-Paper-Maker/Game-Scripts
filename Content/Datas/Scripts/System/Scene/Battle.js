@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Camera, Game, Vector3 } from "../Core/index.js";
+import { Camera, Game, Vector3, ReactionInterpreter } from "../Core/index.js";
 import { System, Scene, Manager, Datas } from "../index.js";
 import { Enum } from "../Common/index.js";
 var CharacterKind = Enum.CharacterKind;
@@ -52,6 +52,8 @@ class Battle extends Map {
         this.transitionColor = transitionStart === Enum.MapTransitionKind.Fade;
         this.transitionColorAlpha = 0;
         this.step = BattleStep.Initialize;
+        this.indexTroopReaction = 0;
+        this.interpreterTroopReaction = null;
         this.sceneMap = Manager.Stack.top;
         this.mapCameraDistance = this.sceneMap.camera.distance;
         this.actionDoNothing = new System.MonsterAction({});
@@ -251,6 +253,34 @@ class Battle extends Map {
         }
         // Camera temp code for moving
         this.moveStandardCamera();
+        // Reaction troop always frequency
+        if (this.interpreterTroopReaction === null) {
+            let reaction;
+            for (l = this.troop.reactions.length; this.indexTroopReaction < l; this.indexTroopReaction++) {
+                reaction = this.troop.reactions[this.indexTroopReaction];
+                if (reaction.frequency === Enum.TroopReactionFrequencyKind.Always) {
+                    // Check conditions
+                    if (!reaction.conditions.isValid()) {
+                        continue;
+                    }
+                    this.interpreterTroopReaction = new ReactionInterpreter(null, reaction, null, null);
+                    break;
+                }
+            }
+        }
+        if (this.interpreterTroopReaction) {
+            this.interpreterTroopReaction.update();
+            if (this.interpreterTroopReaction.isFinished()) {
+                this.indexTroopReaction++;
+                this.interpreterTroopReaction = null;
+            }
+        }
+        if (this.indexTroopReaction >= l) {
+            this.indexTroopReaction = 0;
+        }
+        if (this.interpreterTroopReaction) {
+            return;
+        }
         // Update according to step
         switch (this.step) {
             case BattleStep.Initialize:
@@ -340,6 +370,10 @@ class Battle extends Map {
      */
     onKeyPressed(key) {
         super.onKeyPressed(key);
+        if (this.interpreterTroopReaction) {
+            this.interpreterTroopReaction.onKeyPressed(key);
+            return;
+        }
         switch (this.step) {
             case BattleStep.Initialize:
                 this.battleInitialize.onKeyPressedStep(key);
@@ -370,6 +404,10 @@ class Battle extends Map {
      */
     onKeyReleased(key) {
         super.onKeyReleased(key);
+        if (this.interpreterTroopReaction) {
+            this.interpreterTroopReaction.onKeyReleased(key);
+            return;
+        }
         switch (this.step) {
             case BattleStep.Initialize:
                 this.battleInitialize.onKeyReleasedStep(key);
@@ -401,6 +439,9 @@ class Battle extends Map {
      */
     onKeyPressedRepeat(key) {
         let res = super.onKeyPressedRepeat(key);
+        if (this.interpreterTroopReaction) {
+            return res && this.interpreterTroopReaction.onKeyPressedRepeat(key);
+        }
         switch (this.step) {
             case BattleStep.Initialize:
                 res = res && this.battleInitialize.onKeyPressedRepeatStep(key);
@@ -433,6 +474,9 @@ class Battle extends Map {
      */
     onKeyPressedAndRepeat(key) {
         let res = super.onKeyPressedAndRepeat(key);
+        if (this.interpreterTroopReaction) {
+            return res && this.interpreterTroopReaction.onKeyPressedAndRepeat(key);
+        }
         switch (this.step) {
             case BattleStep.Initialize:
                 res = res && this.battleInitialize.onKeyPressedAndRepeatStep(key);
@@ -504,6 +548,9 @@ class Battle extends Map {
             case BattleStep.Victory:
                 this.battleVictory.drawHUDStep();
                 break;
+        }
+        if (this.interpreterTroopReaction) {
+            this.interpreterTroopReaction.drawHUD();
         }
         super.drawHUD();
     }

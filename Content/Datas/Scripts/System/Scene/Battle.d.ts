@@ -1,4 +1,4 @@
-import { Battler, WindowBox, WindowChoices, Item, Animation, Player } from "../Core/index.js";
+import { Battler, WindowBox, WindowChoices, Item, Animation, Player, ReactionInterpreter } from "../Core/index.js";
 import { Graphic, System, Scene } from "../index.js";
 import { Enum } from "../Common/index.js";
 import CharacterKind = Enum.CharacterKind;
@@ -104,6 +104,8 @@ declare class Battle extends Map {
     /**What step (initialization, animation, selection, victory) of battle the game is on */
     step: number;
     subStep: number;
+    indexTroopReaction: number;
+    interpreterTroopReaction: ReactionInterpreter;
     mapCameraDistance: number;
     actionDoNothing: System.MonsterAction;
     cameraStep: number;

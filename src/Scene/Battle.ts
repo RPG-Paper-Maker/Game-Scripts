@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Battler, Camera, WindowBox, WindowChoices, Picture2D, Item, Game, Animation, Vector3, Player } from "../Core";
+import { Battler, Camera, WindowBox, WindowChoices, Picture2D, Item, Game, Animation, Vector3, Player, ReactionInterpreter } from "../Core";
 import { Graphic, System, Scene, Manager, Datas } from "..";
 import { Enum } from "../Common";
 import CharacterKind = Enum.CharacterKind;
@@ -135,6 +135,8 @@ class Battle extends Map {
     /**What step (initialization, animation, selection, victory) of battle the game is on */
     public step: number;
     public subStep: number;
+    public indexTroopReaction: number;
+    public interpreterTroopReaction: ReactionInterpreter;
 
     public mapCameraDistance: number;
     public actionDoNothing: System.MonsterAction;
@@ -204,6 +206,8 @@ class Battle extends Map {
         this.transitionColor = transitionStart === Enum.MapTransitionKind.Fade;
         this.transitionColorAlpha = 0;
         this.step = BattleStep.Initialize;
+        this.indexTroopReaction = 0;
+        this.interpreterTroopReaction = null;
         this.sceneMap = <Scene.Map>Manager.Stack.top;
         this.mapCameraDistance = this.sceneMap.camera.distance;
         this.actionDoNothing = new System.MonsterAction({});
@@ -425,6 +429,37 @@ class Battle extends Map {
         // Camera temp code for moving
         this.moveStandardCamera();
 
+        // Reaction troop always frequency
+        if (this.interpreterTroopReaction === null) {
+            let reaction: System.TroopReaction;
+            for (l = this.troop.reactions.length; this.indexTroopReaction < l; 
+                this.indexTroopReaction++) {
+                reaction = this.troop.reactions[this.indexTroopReaction];
+                if (reaction.frequency === Enum.TroopReactionFrequencyKind.Always) {
+                    // Check conditions
+                    if (!reaction.conditions.isValid()) {
+                        continue;
+                    }
+                    this.interpreterTroopReaction = new ReactionInterpreter(null, 
+                        reaction, null, null);
+                    break;
+                }
+            }
+        }
+        if (this.interpreterTroopReaction) {
+            this.interpreterTroopReaction.update();
+            if (this.interpreterTroopReaction.isFinished()) {
+                this.indexTroopReaction++;
+                this.interpreterTroopReaction = null;
+            }
+        }
+        if (this.indexTroopReaction >= l) {
+            this.indexTroopReaction = 0;
+        }
+        if (this.interpreterTroopReaction) {
+            return;
+        }
+
         // Update according to step
         switch (this.step) {
             case BattleStep.Initialize:
@@ -516,6 +551,10 @@ class Battle extends Map {
      */
     onKeyPressed(key: number) {
         super.onKeyPressed(key);
+        if (this.interpreterTroopReaction) {
+            this.interpreterTroopReaction.onKeyPressed(key);
+            return;
+        }
         switch (this.step) {
             case BattleStep.Initialize:
                 this.battleInitialize.onKeyPressedStep(key);
@@ -547,6 +586,10 @@ class Battle extends Map {
      */
     onKeyReleased(key: number) {
         super.onKeyReleased(key);
+        if (this.interpreterTroopReaction) {
+            this.interpreterTroopReaction.onKeyReleased(key);
+            return;
+        }
         switch (this.step) {
             case BattleStep.Initialize:
                 this.battleInitialize.onKeyReleasedStep(key);
@@ -579,6 +622,9 @@ class Battle extends Map {
      */
     onKeyPressedRepeat(key: number): boolean {
         let res = super.onKeyPressedRepeat(key);
+        if (this.interpreterTroopReaction) {
+            return res && this.interpreterTroopReaction.onKeyPressedRepeat(key);
+        }
         switch (this.step) {
             case BattleStep.Initialize:
                 res = res && this.battleInitialize.onKeyPressedRepeatStep(key);
@@ -612,6 +658,9 @@ class Battle extends Map {
      */
     onKeyPressedAndRepeat(key: number): boolean {
         let res = super.onKeyPressedAndRepeat(key);
+        if (this.interpreterTroopReaction) {
+            return res && this.interpreterTroopReaction.onKeyPressedAndRepeat(key);
+        }
         switch (this.step) {
             case BattleStep.Initialize:
                 res = res && this.battleInitialize.onKeyPressedAndRepeatStep(key);
@@ -685,6 +734,9 @@ class Battle extends Map {
             case BattleStep.Victory:
                 this.battleVictory.drawHUDStep();
                 break;
+        }
+        if (this.interpreterTroopReaction) {
+            this.interpreterTroopReaction.drawHUD();
         }
         super.drawHUD();
     }
