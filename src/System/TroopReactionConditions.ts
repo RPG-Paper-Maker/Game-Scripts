@@ -49,9 +49,9 @@ class TroopReactionConditions extends Base {
     read(json: Record<string, any>) {
         this.isNumberOfTurn = Utils.defaultValue(json.isNumberOfTurn, false);
         this.numberOfTurnPlus = System.DynamicValue.readOrDefaultNumber(json
-            .numberOfTurnPlus);
+            .numberOfTurnPlus, 1);
         this.numberOfTurnTimes = System.DynamicValue.readOrDefaultNumber(json
-            .numberOfTurnTimes);
+            .numberOfTurnTimes, 1);
         this.isHeroesMonsters = Utils.defaultValue(json.isHeroesMonsters, false);
         this.isHeroes = Utils.defaultValue(json.isHeroes, true);
         this.conditionHeroesKind = Utils.defaultValue(json.conditionHeroesKind, 
@@ -72,7 +72,11 @@ class TroopReactionConditions extends Base {
             true);
     }
 
-    isValid() {
+    /** 
+     *  Check if conditions are valid.
+     *  @returns {boolean}
+     */
+    isValid(): boolean {
         let sceneBattle = <Scene.Battle>Scene.Map.current;
         if (this.isNumberOfTurn) {
             if (((sceneBattle.turn - this.numberOfTurnPlus.getValue()) % this

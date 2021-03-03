@@ -40,6 +40,7 @@ class BattleInitialize {
         this.battle.battleCommandKind = EffectSpecialActionKind.None;
         this.battle.targets = [];
         this.battle.battlers = new Array(2);
+        this.battle.players = new Array(2);
         this.battle.graphicPlayers = new Array(2);
         this.battle.time = new Date().getTime();
         this.battle.turn = 1;
@@ -57,6 +58,7 @@ class BattleInitialize {
     initializeAlliesBattlers() {
         let l = Game.current.teamHeroes.length;
         this.battle.battlers[CharacterKind.Hero] = new Array(l);
+        this.battle.players[CharacterKind.Hero] = new Array(l);
         this.battle.graphicPlayers[CharacterKind.Hero] = new Array(l);
         let position, player, battler;
         for (let i = 0; i < l; i++) {
@@ -72,6 +74,7 @@ class BattleInitialize {
             player.battler = battler;
             battler.addToScene();
             this.battle.battlers[CharacterKind.Hero][i] = battler;
+            this.battle.players[CharacterKind.Hero][i] = player;
             // Graphic player
             this.battle.graphicPlayers[CharacterKind.Hero][i] = new Graphic
                 .Player(player);
@@ -81,14 +84,14 @@ class BattleInitialize {
      *  Initialize enemies battlers.
      */
     initializeEnemiesBattlers() {
-        let troop = Datas.Troops.get(this.battle.troopID);
-        let l = troop.list.length;
+        let l = this.battle.troop.list.length;
         this.battle.battlers[CharacterKind.Monster] = new Array(l);
+        this.battle.players[CharacterKind.Monster] = new Array(l);
         this.battle.graphicPlayers[CharacterKind.Monster] = new Array(l);
         let troopElement, position, player, battler;
         for (let i = 0; i < l; i++) {
             // Battlers
-            troopElement = troop.list[i];
+            troopElement = this.battle.troop.list[i];
             position = new Vector3(Game.current.heroBattle.position.x - (2
                 * Datas.Systems.SQUARE_SIZE) - (i * Datas.Systems.SQUARE_SIZE *
                 3 / 4), Game.current.heroBattle.position.y, Game.current
@@ -101,6 +104,7 @@ class BattleInitialize {
             player.battler = battler;
             battler.addToScene();
             this.battle.battlers[CharacterKind.Monster][i] = battler;
+            this.battle.players[CharacterKind.Monster][i] = player;
             // Graphic player
             this.battle.graphicPlayers[CharacterKind.Monster][i] = new Graphic
                 .Player(player, { reverse: true });

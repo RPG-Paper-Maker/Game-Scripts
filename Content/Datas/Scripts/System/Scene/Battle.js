@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Camera, Game, Vector3 } from "../Core/index.js";
-import { System, Scene, Manager } from "../index.js";
+import { System, Scene, Manager, Datas } from "../index.js";
 import { Enum } from "../Common/index.js";
 var CharacterKind = Enum.CharacterKind;
 var BattleStep = Enum.BattleStep;
@@ -41,7 +41,7 @@ class Battle extends Map {
         this.battleEnemyAttack = new Scene.BattleEnemyAttack(this);
         this.battleVictory = new Scene.BattleVictory(this);
         // ====
-        this.troopID = troopID;
+        this.troop = Datas.Troops.get(troopID);
         this.canGameOver = canGameOver;
         this.canEscape = canEscape;
         this.transitionStart = transitionStart;

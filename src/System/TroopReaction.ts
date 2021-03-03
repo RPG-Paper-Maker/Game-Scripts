@@ -21,6 +21,7 @@ import { Reaction } from "./Reaction";
  */
 class TroopReaction extends Reaction {
 
+    public id: number;
     public conditions: System.TroopReactionConditions;
     public frequency: Enum.TroopReactionFrequencyKind;
 
@@ -35,6 +36,7 @@ class TroopReaction extends Reaction {
      */
     read(json: Record<string, any>) {
         super.read(json);
+        this.id = json.id;
         this.conditions = new System.TroopReactionConditions(json.conditions);
         this.frequency = Utils.defaultValue(json.frequency, Enum
             .TroopReactionFrequencyKind.OneTime);

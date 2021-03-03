@@ -8,6 +8,7 @@ import { Reaction } from "./Reaction.js";
  *  troop reaction conditions
  */
 declare class TroopReaction extends Reaction {
+    id: number;
     conditions: System.TroopReactionConditions;
     frequency: Enum.TroopReactionFrequencyKind;
     constructor(json?: Record<string, any>);

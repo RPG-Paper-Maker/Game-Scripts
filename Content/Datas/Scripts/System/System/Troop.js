@@ -39,7 +39,7 @@ class Troop extends Base {
         }
         this.reactions = [];
         Utils.readJSONSystemList({ list: Utils.defaultValue(json.reactions, []),
-            listIDs: this.reactions, cons: System.TroopReaction });
+            listIndexes: this.reactions, cons: System.TroopReaction });
     }
 }
 export { Troop };

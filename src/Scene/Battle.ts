@@ -10,7 +10,7 @@
 */
 
 import { Battler, Camera, WindowBox, WindowChoices, Picture2D, Item, Game, Animation, Vector3, Player } from "../Core";
-import { Graphic, System, Scene, Manager } from "..";
+import { Graphic, System, Scene, Manager, Datas } from "..";
 import { Enum } from "../Common";
 import CharacterKind = Enum.CharacterKind;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
@@ -78,7 +78,7 @@ class Battle extends Map {
     public battleVictory: Scene.BattleVictory;
 
     // Flags
-    public troopID: number;
+    public troop: System.Troop;
     public canGameOver: boolean;
     public canEscape: boolean;
     public winning: boolean;
@@ -192,7 +192,7 @@ class Battle extends Map {
         this.battleVictory = new Scene.BattleVictory(this);
 
         // ====
-        this.troopID = troopID;
+        this.troop = Datas.Troops.get(troopID);
         this.canGameOver = canGameOver;
         this.canEscape = canEscape;
         this.transitionStart = transitionStart;

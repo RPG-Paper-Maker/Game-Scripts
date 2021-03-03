@@ -29,5 +29,6 @@ declare class TroopReactionConditions extends Base {
      *  reaction conditions
      */
     read(json: Record<string, any>): void;
+    isValid(): boolean;
 }
 export { TroopReactionConditions };

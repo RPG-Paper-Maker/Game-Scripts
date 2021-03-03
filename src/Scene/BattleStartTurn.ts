@@ -12,7 +12,7 @@
 
 import { Datas, Graphic, Scene, System } from "..";
 import { Enum, Mathf } from "../Common";
-import { Animation, Battler } from "../Core";
+import { Animation, Battler, ReactionInterpreter } from "../Core";
 import { Status } from "../Core/Status";
 
 // -------------------------------------------------------
@@ -31,6 +31,9 @@ class BattleStartTurn {
     public active: boolean = false;
     public statusHealed: [Battler, Status[]][] = [];
     public statusStill: [Battler, Status[]][] = [];
+    public oneTimeTroopReactions: boolean[] = [];
+    public indexTroopReaction: number = 0;
+    public interpreter: ReactionInterpreter = null;
 
     constructor(battle: Scene.Battle) {
         this.battle = battle;
@@ -43,9 +46,40 @@ class BattleStartTurn {
         this.active = true;
         this.battle.time = new Date().getTime() - Scene.Battle.TIME_ACTION_ANIMATION;
 
-        // Check status releases
-        let i: number, l: number, battler: Battler, s: Status;
+        // One time troop reaction or each begin turn
+        let i: number, l: number, battler: Battler;
         if (this.step === 0) {
+            let reactions = this.battle.troop.reactions;
+            let reaction: System.TroopReaction;
+            for (l = reactions.length; this.indexTroopReaction < l; this
+                .indexTroopReaction++) {
+                reaction = reactions[this.indexTroopReaction];
+                if (reaction.frequency === Enum.TroopReactionFrequencyKind.OneTime 
+                    && this.oneTimeTroopReactions[reaction.id]) {
+                    continue;
+                }
+                if (reaction.frequency === Enum.TroopReactionFrequencyKind.OneTime
+                    || reaction.frequency === Enum.TroopReactionFrequencyKind
+                    .EachTurnBegin) {
+                    // Check conditions
+                    if (!reaction.conditions.isValid()) {
+                        continue;
+                    }
+                    if (reaction.frequency === Enum.TroopReactionFrequencyKind.OneTime) {
+                        this.oneTimeTroopReactions[reaction.id] = true;
+                    } 
+                    this.interpreter = new ReactionInterpreter(null, reaction, 
+                        null, null);
+                    return;
+                }
+            }
+            this.interpreter = null;
+            this.step++;
+        }
+
+        // Check status releases
+        let s: Status;
+        if (this.step === 1) {
             let listStill: Status[], listHealed: Status[];
             for (i = 0, l = this.battle.battlers[this.battle.attackingGroup]
                 .length; i < l; i++) {
@@ -68,16 +102,16 @@ class BattleStartTurn {
                 this.step++;
                 return;
             }
-            this.step = 3;
+            this.step = 4;
         }
 
         // Status effects
-        if (this.step === 3) {
+        if (this.step === 4) {
             this.step++;
         }
 
         // Check status restrictions (force attacks)
-        if (this.step === 4) {
+        if (this.step === 5) {
             for (i = 0, l = this.battle.battlers[this.battle.attackingGroup]
                 .length; i < l; i++) {
                 battler = this.battle.battlers[this.battle.attackingGroup][i];
@@ -119,6 +153,7 @@ class BattleStartTurn {
     public startSelectionEnemyAttack() {
         this.active = false;
         this.step = 0;
+        this.indexTroopReaction = 0;
         if (this.battle.attackingGroup === Enum.CharacterKind.Hero) {
             this.battle.changeStep(Enum.BattleStep.Selection); // Attack of heroes
         } else {
@@ -198,9 +233,18 @@ class BattleStartTurn {
      *  Update the battle.
      */
     public update() {
+        // Troop reactions
+        if (this.step === 0) {
+            this.interpreter.update();
+            if (this.interpreter.isFinished()) {
+                this.indexTroopReaction++;
+                this.initialize();
+                return;
+            }
+        }
         if ((new Date().getTime() - this.battle.time) >= Scene.Battle.TIME_ACTION_ANIMATION) {
             // Healed status
-            if (this.step === 1) {
+            if (this.step === 2) {
                 if (this.statusHealed.length > 0) {
                     let tab = this.statusHealed[0];
                     let battler = tab[0];
@@ -219,7 +263,7 @@ class BattleStartTurn {
                 this.step++;
             }
             // Still status + effects
-            if (this.step === 2) {
+            if (this.step === 3) {
                 if (this.statusStill.length > 0) {
                     let tab = this.statusStill[0];
                     let battler = tab[0];
@@ -258,7 +302,9 @@ class BattleStartTurn {
      *  @param {number} key - The key ID 
      */
     public onKeyPressedStep(key: number) {
-        
+        if (this.interpreter) {
+            this.interpreter.onKeyPressed(key);
+        }
     }
 
     /** 
@@ -266,7 +312,9 @@ class BattleStartTurn {
      *  @param {number} key - The key ID 
      */
     public onKeyReleasedStep(key: number) {
-
+        if (this.interpreter) {
+            this.interpreter.onKeyReleased(key);
+        }
     }
 
     /** 
@@ -275,6 +323,9 @@ class BattleStartTurn {
      *  @returns {boolean}
      */
     public onKeyPressedRepeatStep(key: number): boolean {
+        if (this.interpreter) {
+            return this.interpreter.onKeyPressedRepeat(key);
+        }
         return true;
     }
 
@@ -284,7 +335,10 @@ class BattleStartTurn {
      *  @returns {boolean}
      */
     public onKeyPressedAndRepeatStep(key: number): boolean {
-       return true;
+        if (this.interpreter) {
+            return this.interpreter.onKeyPressedAndRepeat(key);
+        }
+        return true;
     }
 
     /** 
@@ -292,6 +346,9 @@ class BattleStartTurn {
      */
     public drawHUDStep() {
         this.battle.windowTopInformations.draw();
+        if (this.interpreter) {
+            this.interpreter.drawHUD();
+        }
     }
 
 }

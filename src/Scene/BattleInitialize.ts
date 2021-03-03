@@ -96,8 +96,7 @@ class BattleInitialize {
      *  Initialize enemies battlers.
      */
     initializeEnemiesBattlers() {
-        let troop = Datas.Troops.get(this.battle.troopID);
-        let l = troop.list.length;
+        let l = this.battle.troop.list.length;
         this.battle.battlers[CharacterKind.Monster] = new Array(l);
         this.battle.players[CharacterKind.Monster] = new Array(l);
         this.battle.graphicPlayers[CharacterKind.Monster] = new Array(l);
@@ -105,7 +104,7 @@ class BattleInitialize {
             battler: Battler;
         for (let i = 0; i < l; i++) {
             // Battlers
-            troopElement = troop.list[i];
+            troopElement = this.battle.troop.list[i];
             position = new Vector3(Game.current.heroBattle.position.x - (2
                 * Datas.Systems.SQUARE_SIZE) - (i * Datas.Systems.SQUARE_SIZE * 
                 3 / 4), Game.current.heroBattle.position.y, Game.current

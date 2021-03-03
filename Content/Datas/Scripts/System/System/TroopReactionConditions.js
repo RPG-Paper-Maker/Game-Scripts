@@ -8,8 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { System } from "../index.js";
-import { Enum, Utils } from "../Common/index.js";
+import { Datas, Scene, System } from "../index.js";
+import { Enum, Mathf, Utils } from "../Common/index.js";
+import { Player } from "../Core/index.js";
 import { Base } from "./Base.js";
 /** @class
  *  A troop reaction conditions of the game.
@@ -47,6 +48,52 @@ class TroopReactionConditions extends Base {
         this.statisticCompare = System.DynamicValue.readOrDefaultNumber(json
             .statisticCompare);
         this.statisticCompareUnit = Utils.defaultValue(json.statisticCompareUnit, true);
+    }
+    isValid() {
+        let sceneBattle = Scene.Map.current;
+        if (this.isNumberOfTurn) {
+            console.log(sceneBattle.turn);
+            if (((sceneBattle.turn - this.numberOfTurnPlus.getValue()) % this
+                .numberOfTurnTimes.getValue()) !== 0) {
+                return false;
+            }
+        }
+        if (this.isHeroesMonsters) {
+            return Player.applySelection(this.conditionHeroesKind, sceneBattle
+                .players[this.isHeroes ? Enum.CharacterKind.Hero : Enum
+                .CharacterKind.Monster], this.heroInstanceID.getValue(), (player) => {
+                let test = false;
+                let id;
+                if (this.isStatusID) {
+                    id = this.statusID.getValue();
+                    for (let i = 0, l = player.status.length; i < l; i++) {
+                        if (id === player.status[i].system.id) {
+                            test = true;
+                            break;
+                        }
+                    }
+                }
+                if (!test) {
+                    return test;
+                }
+                if (this.isStatisticID) {
+                    id = this.statisticID.getValue();
+                    const stat = Datas.BattleSystems.getStatistic(this
+                        .statisticID.getValue());
+                    const statValue = player[stat.abbreviation];
+                    const statValueMax = player[stat.getMaxAbbreviation()];
+                    if (Utils.isUndefined(statValueMax)) {
+                        throw new Error("No max value for stat " + stat.name);
+                    }
+                    const compareValue = this.statisticCompare.getValue();
+                    test = Mathf.OPERATORS_COMPARE[this.statisticOperationKind](this.statisticCompareUnit ? statValueMax /
+                        statValueMax : statValue, this.statisticCompareUnit ?
+                        compareValue / 100 : compareValue);
+                }
+                return test;
+            });
+        }
+        return true;
     }
 }
 export { TroopReactionConditions };

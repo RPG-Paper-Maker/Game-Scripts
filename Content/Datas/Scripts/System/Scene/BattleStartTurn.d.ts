@@ -1,6 +1,6 @@
 import { Scene } from "../index.js";
 import { Enum } from "../Common/index.js";
-import { Battler } from "../Core/index.js";
+import { Battler, ReactionInterpreter } from "../Core/index.js";
 import { Status } from "../Core/Status.js";
 declare class BattleStartTurn {
     battle: Scene.Battle;
@@ -8,6 +8,9 @@ declare class BattleStartTurn {
     active: boolean;
     statusHealed: [Battler, Status[]][];
     statusStill: [Battler, Status[]][];
+    oneTimeTroopReactions: boolean[];
+    indexTroopReaction: number;
+    interpreter: ReactionInterpreter;
     constructor(battle: Scene.Battle);
     /**
      *  Initialize step.
