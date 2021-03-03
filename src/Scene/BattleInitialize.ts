@@ -48,6 +48,7 @@ class BattleInitialize {
         this.battle.battleCommandKind = EffectSpecialActionKind.None;
         this.battle.targets = [];
         this.battle.battlers = new Array(2);
+        this.battle.players = new Array(2);
         this.battle.graphicPlayers = new Array(2);
         this.battle.time = new Date().getTime();
         this.battle.turn = 1;
@@ -66,6 +67,7 @@ class BattleInitialize {
     initializeAlliesBattlers() {
         let l = Game.current.teamHeroes.length;
         this.battle.battlers[CharacterKind.Hero] = new Array(l);
+        this.battle.players[CharacterKind.Hero] = new Array(l);
         this.battle.graphicPlayers[CharacterKind.Hero] = new Array(l);
         let position: Vector3, player: Player, battler: Battler;
         for (let i = 0; i < l; i++) {
@@ -82,6 +84,7 @@ class BattleInitialize {
             player.battler = battler;
             battler.addToScene();
             this.battle.battlers[CharacterKind.Hero][i] = battler;
+            this.battle.players[CharacterKind.Hero][i] = player;
 
             // Graphic player
             this.battle.graphicPlayers[CharacterKind.Hero][i] = new Graphic
@@ -96,6 +99,7 @@ class BattleInitialize {
         let troop = Datas.Troops.get(this.battle.troopID);
         let l = troop.list.length;
         this.battle.battlers[CharacterKind.Monster] = new Array(l);
+        this.battle.players[CharacterKind.Monster] = new Array(l);
         this.battle.graphicPlayers[CharacterKind.Monster] = new Array(l);
         let troopElement: StructTroopElement, position: Vector3, player: Player,
             battler: Battler;
@@ -115,6 +119,7 @@ class BattleInitialize {
             player.battler = battler;
             battler.addToScene();
             this.battle.battlers[CharacterKind.Monster][i] = battler;
+            this.battle.players[CharacterKind.Monster][i] = player;
 
             // Graphic player
             this.battle.graphicPlayers[CharacterKind.Monster][i] = new Graphic

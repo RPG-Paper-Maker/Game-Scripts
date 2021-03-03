@@ -1,3 +1,4 @@
+import { System } from "../index.js";
 import { Base } from "./Base.js";
 interface StructTroopElement {
     id: number;
@@ -11,6 +12,7 @@ interface StructTroopElement {
  */
 declare class Troop extends Base {
     list: StructTroopElement[];
+    reactions: System.TroopReaction[];
     constructor(json?: Record<string, any>);
     /**
      *  Read the JSON associated to the troop.

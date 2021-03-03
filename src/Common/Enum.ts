@@ -690,7 +690,6 @@ namespace Enum {
 
     /**
      *  Enum for the main menu command kind.
-     *
      *  @export
      *  @enum {number}
      */
@@ -703,6 +702,18 @@ namespace Enum {
         Save,
         Quit,
         Script
+    }
+
+    /**
+     *  Enum for the troop reaction frequency kind.
+     *  @export
+     *  @enum {number}
+     */
+    export enum TroopReactionFrequencyKind {
+        OneTime,
+        EachTurnBegin,
+        EachTurnEnd,
+        Always
     }
 }
 

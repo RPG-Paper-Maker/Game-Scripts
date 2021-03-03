@@ -171,91 +171,6 @@ class If extends Base {
         }
     }
 
-    /** 
-     *  Apply callback with all the heroes.
-     *  @param {Player[]} tab - The heroes list
-     *  @param {Function} callback - The callback
-     *  @returns {boolean}
-     */
-    allTheHeroes(tab: Player[], callback: Function): boolean {
-        for (let i = 0, l = tab.length; i < l; i++) {
-            if (!callback.call(this, tab[i])) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /** 
-     *  Apply callback with none of the heroes.
-     *  @param {Player[]} tab - The heroes list
-     *  @param {Function} callback - The callback
-     *  @returns {boolean}
-     */
-    noneOfTheHeroes(tab: Player[], callback: Function): boolean {
-        for (let i = 0, l = tab.length; i < l; i++) {
-            if (callback.call(this, tab[i])) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /** 
-     *  Apply callback with at least one hero.
-     *  @param {Player[]} tab - The heroes list
-     *  @param {Function} callback - The callback
-     *  @returns {boolean}
-     */
-    atLeastOneHero(tab: Player[], callback: Function): boolean {
-        for (let i = 0, l = tab.length; i < l; i++) {
-            if (callback.call(this, tab[i])) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /** 
-     *  Apply callback with the hero with instance ID.
-     *  @param {Player[]} tab - The heroes list
-     *  @param {number} id - The hero instance id
-     *  @param {Function} callback - The callback
-     *  @returns {boolean}
-     */
-    theHeroeWithInstanceID(tab: Player[], id: number, callback: Function): 
-        boolean
-    {
-        let hero: Player;
-        for (let i = 0, l = tab.length; i < l; i++) {
-            hero = tab[i];
-            if (hero.instid === id && !callback.call(this, hero)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /** 
-     *  Apply callback according to heroes selection.
-     *  @param {Player[]} tab - The heroes list
-     *  @param {Function} callback - The callback
-     *  @returns {boolean}
-    */
-    getResult(tab: Player[], callback: Function): boolean {
-        switch (this.heroesSelection) {
-            case ConditionHeroesKind.AllTheHeroes:
-                return this.allTheHeroes(tab, callback);
-            case ConditionHeroesKind.NoneOfTheHeroes:
-                return this.noneOfTheHeroes(tab, callback);
-            case ConditionHeroesKind.AtLeastOneHero:
-                return this.atLeastOneHero(tab, callback);
-            case ConditionHeroesKind.TheHeroeWithInstanceID:
-                return this.theHeroeWithInstanceID(tab, this.heroInstanceID
-                    .getValue(), callback);
-        }
-    }
-
     /**
      *  Update and check if the event is finished.
      *  @param {Record<string, any>} - currentState The current state of the event
@@ -287,88 +202,107 @@ class If extends Base {
                 switch (this.heroesKind) {
                     case 0:
                         let name = this.heroesNamed.getValue();
-                        result = this.getResult(heroesSelection, (hero: Player) => {
-                            return hero.name === name;
-                        });
+                        result = Player.applySelection(this.heroesSelection, 
+                            heroesSelection, this.heroInstanceID.getValue(), 
+                            (hero: Player) => {
+                                return hero.name === name;
+                            }
+                        );
                         break;
                     case 1:
                         let tab = Game.current.getTeam(this
                             .heroesInTeamValue);
-                        result = this.getResult(heroesSelection, (hero:Player) => {
-                            id = hero.instid;
-                            for (i = 0, l = tab.length; i < l; i++) {
-                                if (tab[i].instid === id) {
-                                    return true;
+                        result = Player.applySelection(this.heroesSelection, 
+                            heroesSelection, this.heroInstanceID.getValue(), 
+                            (hero:Player) => {
+                                id = hero.instid;
+                                for (i = 0, l = tab.length; i < l; i++) {
+                                    if (tab[i].instid === id) {
+                                        return true;
+                                    }
                                 }
+                                return false;
                             }
-                            return false;
-                        });
+                        );
                         break;
                     case 2:
                         id = this.heroesSkillID.getValue();
-                        result = this.getResult(heroesSelection, (hero: Player) => {
-                            for (i = 0, l = hero.sk.length; i < l; i++) {
-                                if (hero.sk[i].id === id) {
-                                    return true;
+                        result = Player.applySelection(this.heroesSelection, 
+                            heroesSelection, this.heroInstanceID.getValue(), 
+                            (hero: Player) => {
+                                for (i = 0, l = hero.sk.length; i < l; i++) {
+                                    if (hero.sk[i].id === id) {
+                                        return true;
+                                    }
                                 }
+                                return false;
                             }
-                            return false;
-                        });
+                        );
                         break;
                     case 3:
                         switch (this.heroesEquipedKind) {
                         case 0:
                             id = this.heroesEquipedWeaponID.getValue();
-                            result = this.getResult(heroesSelection, (hero: 
-                                Player) => {
-                                for (i = 0, l = hero.equip.length; i < l; i++) {
-                                    equip = hero.equip[i];
-                                    if (equip && equip.kind === ItemKind.Weapon 
-                                        && equip.system.id === id)
-                                    {
-                                        return true;
+                            result = Player.applySelection(this.heroesSelection, 
+                                heroesSelection, this.heroInstanceID.getValue(), 
+                                (hero: Player) => {
+                                    for (i = 0, l = hero.equip.length; i < l; i++) {
+                                        equip = hero.equip[i];
+                                        if (equip && equip.kind === ItemKind.Weapon 
+                                            && equip.system.id === id)
+                                        {
+                                            return true;
+                                        }
                                     }
+                                    return false;
                                 }
-                                return false;
-                            });
+                            );
                             break;
                         case 1:
                             id = this.heroesEquipedArmorID.getValue();
-                            result = this.getResult(heroesSelection, (hero: 
-                                Player) => {
-                                for (i = 0, l = hero.equip.length; i < l; i++) {
-                                    equip = hero.equip[i];
-                                    if (equip && equip.kind === ItemKind.Armor 
-                                        && equip.system.id === id)
-                                    {
-                                        return true;
+                            result = Player.applySelection(this.heroesSelection, 
+                                heroesSelection, this.heroInstanceID.getValue(), 
+                                (hero: Player) => {
+                                    for (i = 0, l = hero.equip.length; i < l; i++) {
+                                        equip = hero.equip[i];
+                                        if (equip && equip.kind === ItemKind.Armor 
+                                            && equip.system.id === id)
+                                        {
+                                            return true;
+                                        }
                                     }
+                                    return false;
                                 }
-                                return false;
-                            });
+                            );
                             break;
                         }
                         break;
                     case 4:
                         id = this.heroesStatusID.getValue();
-                        result = this.getResult(heroesSelection, (hero: Player) => {
-                            for (i = 0, l = hero.status.length; i < l; i++) {
-                                if (id === hero.status[i].system.id) {
-                                    return true;
+                        result = Player.applySelection(this.heroesSelection, 
+                            heroesSelection, this.heroInstanceID.getValue(), 
+                            (hero: Player) => {
+                                for (i = 0, l = hero.status.length; i < l; i++) {
+                                    if (id === hero.status[i].system.id) {
+                                        return true;
+                                    }
                                 }
+                                return false;
                             }
-                            return false;
-                        });
+                        );
                         break;
                     case 5:
                         stat = Datas.BattleSystems.getStatistic(this
                             .heroesStatisticID.getValue());
                         value = this.heroesStatisticValue.getValue();
-                        result = this.getResult(heroesSelection, (hero: Player) => {
-                            return Mathf.OPERATORS_COMPARE[this
-                                .heroesStatisticOperation](hero[stat
-                                .abbreviation], value);
-                        });
+                        result = Player.applySelection(this.heroesSelection, 
+                            heroesSelection, this.heroInstanceID.getValue(), 
+                            (hero: Player) => {
+                                return Mathf.OPERATORS_COMPARE[this
+                                    .heroesStatisticOperation](hero[stat
+                                    .abbreviation], value);
+                            }
+                        );
                         break;
                     }
                     break;

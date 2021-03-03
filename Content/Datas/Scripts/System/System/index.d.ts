@@ -55,6 +55,8 @@ export * from "./Tileset.js";
 export * from "./TitleCommand.js";
 export * from "./Translatable.js";
 export * from "./Troop.js";
+export * from "./TroopReaction.js";
+export * from "./TroopReactionConditions.js";
 export * from "./Video.js";
 export * from "./Weapon.js";
 export * from "./WeaponArmorKind.js";

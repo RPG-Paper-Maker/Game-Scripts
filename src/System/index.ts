@@ -66,6 +66,8 @@ export * from "./Tileset";
 export * from "./TitleCommand";
 export * from "./Translatable";
 export * from "./Troop";
+export * from "./TroopReaction";
+export * from "./TroopReactionConditions";
 export * from "./Video";
 export * from "./Weapon";
 export * from "./WeaponArmorKind";

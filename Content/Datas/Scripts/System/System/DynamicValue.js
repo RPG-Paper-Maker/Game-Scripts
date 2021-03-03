@@ -140,6 +140,17 @@ class DynamicValue extends System.Base {
         return System.DynamicValue.create(DynamicValueKind.Property, id);
     }
     /**
+     *  Try to read a variable value, if not possible put default value.
+     *  @static
+     *  @param {StructJSONDynamicValue} json - The json value
+     *  @param {number} [n=0] - The default value
+     *  @returns {System.DynamicValue}
+     */
+    static readOrDefaultVariable(json) {
+        return Utils.isUndefined(json) ? System.DynamicValue.createVariable(1) :
+            System.DynamicValue.readFromJSON(json);
+    }
+    /**
      *  Try to read a number value, if not possible put default value.
      *  @static
      *  @param {StructJSONDynamicValue} json - The json value

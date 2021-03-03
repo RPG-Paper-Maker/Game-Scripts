@@ -98,6 +98,14 @@ declare class DynamicValue extends System.Base {
      */
     static createProperty(id: number): System.DynamicValue;
     /**
+     *  Try to read a variable value, if not possible put default value.
+     *  @static
+     *  @param {StructJSONDynamicValue} json - The json value
+     *  @param {number} [n=0] - The default value
+     *  @returns {System.DynamicValue}
+     */
+    static readOrDefaultVariable(json: StructJSON): System.DynamicValue;
+    /**
      *  Try to read a number value, if not possible put default value.
      *  @static
      *  @param {StructJSONDynamicValue} json - The json value

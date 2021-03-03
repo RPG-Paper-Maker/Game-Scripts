@@ -131,6 +131,91 @@ class Player {
     }
 
     /** 
+     *  Apply callback with all the heroes.
+     *  @param {Player[]} tab - The heroes list
+     *  @param {Function} callback - The callback
+     *  @returns {boolean}
+     */
+    static allTheHeroes(tab: Player[], callback: Function): boolean {
+        for (let i = 0, l = tab.length; i < l; i++) {
+            if (!callback.call(this, tab[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /** 
+     *  Apply callback with none of the heroes.
+     *  @param {Player[]} tab - The heroes list
+     *  @param {Function} callback - The callback
+     *  @returns {boolean}
+     */
+    static noneOfTheHeroes(tab: Player[], callback: Function): boolean {
+        for (let i = 0, l = tab.length; i < l; i++) {
+            if (callback.call(this, tab[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /** 
+     *  Apply callback with at least one hero.
+     *  @param {Player[]} tab - The heroes list
+     *  @param {Function} callback - The callback
+     *  @returns {boolean}
+     */
+    static atLeastOneHero(tab: Player[], callback: Function): boolean {
+        for (let i = 0, l = tab.length; i < l; i++) {
+            if (callback.call(this, tab[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** 
+     *  Apply callback with the hero with instance ID.
+     *  @param {Player[]} tab - The heroes list
+     *  @param {number} id - The hero instance id
+     *  @param {Function} callback - The callback
+     *  @returns {boolean}
+     */
+    static theHeroeWithInstanceID(tab: Player[], id: number, callback: Function): 
+        boolean
+    {
+        let hero: Player;
+        for (let i = 0, l = tab.length; i < l; i++) {
+            hero = tab[i];
+            if (hero.instid === id && !callback.call(this, hero)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /** 
+     *  Apply callback according to heroes selection.
+     *  @param {Player[]} tab - The heroes list
+     *  @param {Function} callback - The callback
+     *  @returns {boolean}
+    */
+    static applySelection(selectionKind: Enum.ConditionHeroesKind, tab: Player[], 
+        instanceID: number, callback: Function): boolean {
+        switch (selectionKind) {
+            case Enum.ConditionHeroesKind.AllTheHeroes:
+                return Player.allTheHeroes(tab, callback);
+            case Enum.ConditionHeroesKind.NoneOfTheHeroes:
+                return Player.noneOfTheHeroes(tab, callback);
+            case Enum.ConditionHeroesKind.AtLeastOneHero:
+                return Player.atLeastOneHero(tab, callback);
+            case Enum.ConditionHeroesKind.TheHeroeWithInstanceID:
+                return Player.theHeroeWithInstanceID(tab, instanceID, callback);
+        }
+    }
+
+    /** 
      *  Get the player informations System.
      *  @returns {System.Hero}
      */

@@ -724,7 +724,6 @@ var Enum;
     })(InventoryFilterKind = Enum.InventoryFilterKind || (Enum.InventoryFilterKind = {}));
     /**
      *  Enum for the main menu command kind.
-     *
      *  @export
      *  @enum {number}
      */
@@ -739,5 +738,17 @@ var Enum;
         MainMenuCommandKind[MainMenuCommandKind["Quit"] = 6] = "Quit";
         MainMenuCommandKind[MainMenuCommandKind["Script"] = 7] = "Script";
     })(MainMenuCommandKind = Enum.MainMenuCommandKind || (Enum.MainMenuCommandKind = {}));
+    /**
+     *  Enum for the troop reaction frequency kind.
+     *  @export
+     *  @enum {number}
+     */
+    let TroopReactionFrequencyKind;
+    (function (TroopReactionFrequencyKind) {
+        TroopReactionFrequencyKind[TroopReactionFrequencyKind["OneTime"] = 0] = "OneTime";
+        TroopReactionFrequencyKind[TroopReactionFrequencyKind["EachTurnBegin"] = 1] = "EachTurnBegin";
+        TroopReactionFrequencyKind[TroopReactionFrequencyKind["EachTurnEnd"] = 2] = "EachTurnEnd";
+        TroopReactionFrequencyKind[TroopReactionFrequencyKind["Always"] = 3] = "Always";
+    })(TroopReactionFrequencyKind = Enum.TroopReactionFrequencyKind || (Enum.TroopReactionFrequencyKind = {}));
 })(Enum || (Enum = {}));
 export { Enum };
