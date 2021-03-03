@@ -60,6 +60,7 @@ declare class Battle extends Map {
     battleSelection: Scene.BattleSelection;
     battleAnimation: Scene.BattleAnimation;
     battleEnemyAttack: Scene.BattleEnemyAttack;
+    battleEndTurn: Scene.BattleEndTurn;
     battleVictory: Scene.BattleVictory;
     troop: System.Troop;
     canGameOver: boolean;

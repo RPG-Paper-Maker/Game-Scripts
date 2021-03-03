@@ -127,8 +127,6 @@ class BattleStartTurn {
                 }
             }
             if (this.battle.isEndTurn()) {
-                this.battle.activeGroup();
-                this.battle.switchAttackingGroup();
                 this.battle.changeStep(Enum.BattleStep.StartTurn);
             }
             else {

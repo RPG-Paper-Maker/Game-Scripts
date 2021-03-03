@@ -591,7 +591,8 @@ declare namespace Enum {
         Selection = 2,
         Animation = 3,
         EnemyAttack = 4,
-        Victory = 5
+        EndTurn = 5,
+        Victory = 6
     }
     /**
      * Enum for the screen transition.

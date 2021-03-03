@@ -675,7 +675,8 @@ var Enum;
         BattleStep[BattleStep["Selection"] = 2] = "Selection";
         BattleStep[BattleStep["Animation"] = 3] = "Animation";
         BattleStep[BattleStep["EnemyAttack"] = 4] = "EnemyAttack";
-        BattleStep[BattleStep["Victory"] = 5] = "Victory";
+        BattleStep[BattleStep["EndTurn"] = 5] = "EndTurn";
+        BattleStep[BattleStep["Victory"] = 6] = "Victory";
     })(BattleStep = Enum.BattleStep || (Enum.BattleStep = {}));
     ;
     /**

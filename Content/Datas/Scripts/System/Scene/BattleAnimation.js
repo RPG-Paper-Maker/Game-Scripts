@@ -316,13 +316,11 @@ class BattleAnimation {
                         }
                         // Testing end of turn
                         if (this.battle.battleStartTurn.active) {
-                            this.battle.changeStep(Enum.BattleStep.StartTurn);
+                            this.battle.changeStep(Enum.BattleStep.EndTurn);
                             return;
                         }
                         if (this.battle.isEndTurn()) {
-                            this.battle.activeGroup();
-                            this.battle.switchAttackingGroup();
-                            this.battle.changeStep(Enum.BattleStep.StartTurn);
+                            this.battle.changeStep(Enum.BattleStep.EndTurn);
                         }
                         else {
                             if (this.battle.attackingGroup === CharacterKind.Hero) {

@@ -64,8 +64,7 @@ class BattleSelection {
             }
         }
         if (!exists) {
-            this.battle.switchAttackingGroup();
-            this.battle.changeStep(Enum.BattleStep.StartTurn);
+            this.battle.changeStep(Enum.BattleStep.EndTurn);
             return;
         }
 

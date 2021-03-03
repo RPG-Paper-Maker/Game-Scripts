@@ -641,6 +641,7 @@ namespace Enum {
         Selection,
         Animation,
         EnemyAttack,
+        EndTurn,
         Victory
     };
 

@@ -3,6 +3,7 @@ export * from "./MenuBase.js";
 export { MenuCommands } from "./MenuBase";
 export * from "./Battle.js";
 export * from "./BattleAnimation.js";
+export * from "./BattleEndTurn.js";
 export * from "./BattleEnemyAttack.js";
 export * from "./BattleInitialize.js";
 export * from "./BattleSelection.js";

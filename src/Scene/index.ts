@@ -14,6 +14,7 @@ export * from "./MenuBase";
 export {MenuCommands} from "./MenuBase";
 export * from "./Battle";
 export * from "./BattleAnimation";
+export * from "./BattleEndTurn";
 export * from "./BattleEnemyAttack";
 export * from "./BattleInitialize";
 export * from "./BattleSelection";

@@ -39,6 +39,7 @@ class Battle extends Map {
         this.battleSelection = new Scene.BattleSelection(this);
         this.battleAnimation = new Scene.BattleAnimation(this);
         this.battleEnemyAttack = new Scene.BattleEnemyAttack(this);
+        this.battleEndTurn = new Scene.BattleEndTurn(this);
         this.battleVictory = new Scene.BattleVictory(this);
         // ====
         this.troop = Datas.Troops.get(troopID);
@@ -219,6 +220,9 @@ class Battle extends Map {
             case BattleStep.EnemyAttack:
                 this.battleEnemyAttack.initialize();
                 break;
+            case BattleStep.EndTurn:
+                this.battleEndTurn.initialize();
+                break;
             case BattleStep.Victory:
                 this.battleVictory.initialize();
                 break;
@@ -263,6 +267,9 @@ class Battle extends Map {
                 break;
             case BattleStep.EnemyAttack:
                 this.battleEnemyAttack.update();
+                break;
+            case BattleStep.EndTurn:
+                this.battleEndTurn.update();
                 break;
             case BattleStep.Victory:
                 this.battleVictory.update();
@@ -349,6 +356,9 @@ class Battle extends Map {
             case BattleStep.EnemyAttack:
                 this.battleEnemyAttack.onKeyPressedStep(key);
                 break;
+            case BattleStep.EndTurn:
+                this.battleEndTurn.onKeyPressedStep(key);
+                break;
             case BattleStep.Victory:
                 this.battleVictory.onKeyPressedStep(key);
                 break;
@@ -375,6 +385,9 @@ class Battle extends Map {
                 break;
             case BattleStep.EnemyAttack:
                 this.battleEnemyAttack.onKeyReleasedStep(key);
+                break;
+            case BattleStep.EndTurn:
+                this.battleEndTurn.onKeyReleasedStep(key);
                 break;
             case BattleStep.Victory:
                 this.battleVictory.onKeyReleasedStep(key);
@@ -404,6 +417,9 @@ class Battle extends Map {
             case BattleStep.EnemyAttack:
                 res = res && this.battleEnemyAttack.onKeyPressedRepeatStep(key);
                 break;
+            case BattleStep.EndTurn:
+                res = res && this.battleEndTurn.onKeyPressedRepeatStep(key);
+                break;
             case BattleStep.Victory:
                 res = res && this.battleVictory.onKeyPressedRepeatStep(key);
                 break;
@@ -432,6 +448,9 @@ class Battle extends Map {
                 break;
             case BattleStep.EnemyAttack:
                 res = res && this.battleEnemyAttack.onKeyPressedAndRepeatStep(key);
+                break;
+            case BattleStep.EndTurn:
+                res = res && this.battleEndTurn.onKeyPressedAndRepeatStep(key);
                 break;
             case BattleStep.Victory:
                 res = res && this.battleVictory.onKeyPressedAndRepeatStep(key);
@@ -478,6 +497,9 @@ class Battle extends Map {
                 break;
             case BattleStep.EnemyAttack:
                 this.battleEnemyAttack.drawHUDStep();
+                break;
+            case BattleStep.EndTurn:
+                this.battleEndTurn.drawHUDStep();
                 break;
             case BattleStep.Victory:
                 this.battleVictory.drawHUDStep();
