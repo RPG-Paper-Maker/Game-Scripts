@@ -150,7 +150,7 @@ class Utils {
     static createFont = function (fontSize: number, fontName: string, bold:
         boolean, italic: boolean) {
         return (bold ? "bold " : "") + (italic ? "italic " : "") + fontSize +
-            "px " + fontName;
+            "px " + "\"" + fontName + "\"";
     }
 
     /**

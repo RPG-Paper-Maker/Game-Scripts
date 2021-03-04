@@ -352,7 +352,7 @@ class Message extends Graphic.Base {
             break;
         case TagKind.Font:
             font = result.cf;
-            result.cf = Datas.Systems.getFontName(value).getValue();
+            result.cf = Datas.Systems.getFontName(value).getName();
             break;
         case TagKind.TextColor:
             textColor = result.ctc;

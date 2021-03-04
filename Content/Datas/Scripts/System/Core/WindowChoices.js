@@ -106,8 +106,7 @@ class WindowChoices extends Bitmap {
         else {
             boxWidth = this.choiceWidth;
             boxHeight = (this.choiceHeight + this.space) * this.size - this
-                .space + (this.bordersInsideVisible ? 0 : this.padding[1] * 3);
-            ;
+                .space;
         }
         this.setW(boxWidth);
         this.setH(boxHeight);
@@ -127,10 +126,10 @@ class WindowChoices extends Bitmap {
                 });
             }
             else {
-                window = new WindowBox(this.oX + this.padding[0], this.oY + (i * this.choiceHeight) + (i * this.space), this.choiceWidth, this.choiceHeight, {
+                window = new WindowBox(this.oX, this.oY + (i * this.choiceHeight)
+                    + (i * this.space), this.choiceWidth, this.choiceHeight, {
                     content: this.listContents[i],
-                    padding: this.bordersInsideVisible ? this.padding :
-                        WindowBox.NONE_PADDING
+                    padding: this.padding
                 });
             }
             window.bordersVisible = this.bordersInsideVisible && this.bordersVisible;

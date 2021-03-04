@@ -26,6 +26,7 @@ class Paths {
     public static readonly FILE_MAP_OBJECTS = "/objects.json";
     public static readonly FILE_PICTURES = Paths.DATAS + "pictures.json";
     public static readonly FILE_VIDEOS = Paths.DATAS + "videos.json";
+    public static readonly FILE_FONTS = Paths.DATAS + "fonts.json";
     public static readonly FILE_SONGS = Paths.DATAS + "songs.json";
     public static readonly FILE_SHAPES = Paths.DATAS + "shapes.json";
     public static readonly FILE_COMMON_EVENTS = Paths.DATAS + "commonEvents.json";
@@ -54,6 +55,7 @@ class Paths {
     public static readonly FILE_PLUGIN_DETAILS = "details.json";
     public static readonly PICTURES = "/Content/Images";
     public static readonly VIDEOS = "/Content/Videos";
+    public static readonly FONTS = "/Content/Fonts";
     public static readonly HUD = Paths.PICTURES + "/HUD/";
     public static readonly TEXTURES2D = Paths.PICTURES + "/Textures2D/";
     public static readonly BARS = Paths.HUD + "Bars";

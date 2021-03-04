@@ -221,6 +221,6 @@ class Utils {
 */
 Utils.createFont = function (fontSize, fontName, bold, italic) {
     return (bold ? "bold " : "") + (italic ? "italic " : "") + fontSize +
-        "px " + fontName;
+        "px " + "\"" + fontName + "\"";
 };
 export { Utils };

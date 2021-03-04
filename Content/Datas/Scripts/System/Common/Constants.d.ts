@@ -5,7 +5,7 @@
  */
 declare class Constants {
     static readonly DEFAULT_FONT_SIZE = 13;
-    static readonly DEFAULT_FONT_NAME = "sans-serif";
+    static readonly DEFAULT_FONT_NAME = "Arial";
     static readonly BASIC_SQUARE_SIZE = 32;
     static readonly SMALL_FONT_SIZE = 8;
     static readonly MEDIUM_FONT_SIZE = 10;

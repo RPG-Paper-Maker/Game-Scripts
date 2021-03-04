@@ -30,6 +30,7 @@ export * from "./DynamicValue.js";
 export * from "./Effect.js";
 export * from "./Element.js";
 export * from "./Event.js";
+export * from "./FontName.js";
 export * from "./Hero.js";
 export * from "./Icon.js";
 export * from "./InventoryFilter.js";

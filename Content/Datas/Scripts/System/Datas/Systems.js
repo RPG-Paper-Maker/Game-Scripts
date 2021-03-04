@@ -116,10 +116,7 @@ class Systems {
         Utils.readJSONSystemList({ list: json.fs, listIDs: this.fontSizes, func: (element) => {
                 return System.DynamicValue.readOrDefaultNumber(element.s, 0);
             } });
-        Utils.readJSONSystemList({ list: json.fn, listIDs: this.fontNames, func: (element) => {
-                return System.DynamicValue.readOrDefaultMessage(element.f, Constants
-                    .DEFAULT_FONT_NAME);
-            } });
+        Utils.readJSONSystemList({ list: json.fn, listIDs: this.fontNames, cons: System.FontName });
         Utils.readJSONSystemList({ list: json.sf, listIDs: this.speeds, func: (element) => {
                 return System.DynamicValue.readOrDefaultNumberDouble(element.v, 1);
             } });

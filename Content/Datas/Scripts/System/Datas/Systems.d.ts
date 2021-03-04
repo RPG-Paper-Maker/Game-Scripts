@@ -112,7 +112,7 @@ declare class Systems {
      *  @param {number} id
      *  @returns {string}
      */
-    static getFontName(id: number): System.DynamicValue;
+    static getFontName(id: number): System.FontName;
     /**
      *  Get the speed by ID safely.
      *  @static

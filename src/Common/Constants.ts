@@ -17,7 +17,7 @@
 class Constants {
 
     public static readonly DEFAULT_FONT_SIZE = 13;
-    public static readonly DEFAULT_FONT_NAME = "sans-serif";
+    public static readonly DEFAULT_FONT_NAME = "Arial";
     public static readonly BASIC_SQUARE_SIZE = 32;
     public static readonly SMALL_FONT_SIZE = 8;
     public static readonly MEDIUM_FONT_SIZE = 10;

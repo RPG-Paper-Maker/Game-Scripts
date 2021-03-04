@@ -31,6 +31,7 @@ export * from "./DynamicValue";
 export * from "./Effect";
 export * from "./Element";
 export * from "./Event";
+export * from "./FontName";
 export * from "./Hero";
 export * from "./Icon";
 export * from "./InventoryFilter";

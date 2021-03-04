@@ -19,7 +19,7 @@ class Constants {
     }
 }
 Constants.DEFAULT_FONT_SIZE = 13;
-Constants.DEFAULT_FONT_NAME = "sans-serif";
+Constants.DEFAULT_FONT_NAME = "Arial";
 Constants.BASIC_SQUARE_SIZE = 32;
 Constants.SMALL_FONT_SIZE = 8;
 Constants.MEDIUM_FONT_SIZE = 10;

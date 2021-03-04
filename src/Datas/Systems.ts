@@ -49,7 +49,7 @@ class Systems {
     private static detections: System.Detection[];
     private static skyboxes: System.Skybox[];
     private static fontSizes: System.DynamicValue[];
-    private static fontNames: System.DynamicValue[];
+    private static fontNames: System.FontName[];
     private static speeds: System.DynamicValue[];
     private static frequencies: System.DynamicValue[];
     public static soundCursor: System.PlaySong;
@@ -177,12 +177,8 @@ class Systems {
         {
             return System.DynamicValue.readOrDefaultNumber(element.s, 0);
         }});
-        Utils.readJSONSystemList({ list: json.fn, listIDs: this.fontNames, func:
-            (element: Record<string, any>) =>
-        {
-            return System.DynamicValue.readOrDefaultMessage(element.f, Constants
-                .DEFAULT_FONT_NAME);
-        }});
+        Utils.readJSONSystemList({ list: json.fn, listIDs: this.fontNames, cons:
+            System.FontName });
         Utils.readJSONSystemList({ list: json.sf, listIDs: this.speeds, func: 
             (element: Record<string, any>) =>
         {
@@ -299,7 +295,7 @@ class Systems {
      *  @param {number} id
      *  @returns {string}
      */
-    static getFontName(id: number): System.DynamicValue {
+    static getFontName(id: number): System.FontName {
         return Datas.Base.get(id, this.fontNames, "font name");
     }
 

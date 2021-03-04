@@ -142,7 +142,7 @@ class SetDialogBoxOptions extends Base {
         }
         if (!Utils.isUndefined(this.tFont)) {
             Datas.Systems.dbOptions.v_tFont = Datas.Systems.getFontName(this
-                .tFont.getValue()).getValue();
+                .tFont.getValue()).getName();
         }
         return 1;
     }
