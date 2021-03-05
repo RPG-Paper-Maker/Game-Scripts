@@ -210,5 +210,11 @@ declare class MapObject {
      *  @returns {boolean}
      */
     isNone(): boolean;
+    /**
+     *  Get the opposition orientation of the object (used for no direction fix
+     *  state).
+     *  @returns {Enum.Orientation}
+     */
+    getOppositeOrientation(): Enum.Orientation;
 }
 export { StructSearchResult, MapObject };

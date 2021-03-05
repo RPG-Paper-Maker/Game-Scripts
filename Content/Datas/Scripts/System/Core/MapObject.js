@@ -907,6 +907,11 @@ class MapObject {
             reactions = this.system.getReactions(isSystem, eventID, states[i], parameters);
             for (j = 0, m = reactions.length; j < m; j++) {
                 Manager.Stack.top.addReaction(sender, reactions[j], this, state, parameters, events);
+                // If sender is in this map and no fix, look at the object
+                if (sender && sender.position && sender !== this && !this
+                    .currentState.directionFix) {
+                    this.orientationEye = sender.getOppositeOrientation();
+                }
                 this.receivedOneEvent = true;
                 test = true;
                 if (this.system.isEventFrame) {
@@ -1069,6 +1074,25 @@ class MapObject {
     isNone() {
         return this.currentState.graphicKind === ElementMapKind.None || this
             .currentStateInstance.graphicID === -1;
+    }
+    /**
+     *  Get the opposition orientation of the object (used for no direction fix
+     *  state).
+     *  @returns {Enum.Orientation}
+     */
+    getOppositeOrientation() {
+        switch (this.orientationEye) {
+            case Enum.Orientation.None:
+                return Enum.Orientation.None;
+            case Enum.Orientation.North:
+                return Enum.Orientation.South;
+            case Enum.Orientation.South:
+                return Enum.Orientation.North;
+            case Enum.Orientation.East:
+                return Enum.Orientation.West;
+            case Enum.Orientation.West:
+                return Enum.Orientation.East;
+        }
     }
 }
 MapObject.SPEED_NORMAL = 0.004666;
