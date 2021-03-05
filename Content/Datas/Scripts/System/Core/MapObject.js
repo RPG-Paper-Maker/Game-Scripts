@@ -634,6 +634,10 @@ class MapObject {
                 .graphicID][this.getStateIndex()];
         }
         this.removeBBFromScene();
+        // If state option through, ignore BB
+        if (this.currentState.through) {
+            return;
+        }
         let box;
         switch (this.currentState.graphicKind) {
             case ElementMapKind.SpritesFix:
