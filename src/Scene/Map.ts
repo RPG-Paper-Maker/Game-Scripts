@@ -16,7 +16,7 @@ import Orientation = Enum.Orientation;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 import PictureKind = Enum.PictureKind;
 import { System, Datas, Scene, Manager } from "../index";
-import { Position, Portion, MapPortion, TextureBundle, Camera, ReactionInterpreter, Vector3, Player, Battler, Game } from "../Core";
+import { Position, Portion, MapPortion, TextureBundle, Camera, ReactionInterpreter, Vector3, Player, Battler, Game, MapObject } from "../Core";
 
 /** @class
  *  A scene for a local map.
@@ -164,7 +164,7 @@ class Map extends Base {
         let w = Math.ceil(this.mapProperties.width / Constants.PORTION_SIZE);
         let d = Math.ceil(this.mapProperties.depth / Constants.PORTION_SIZE);
         let h = Math.ceil(this.mapProperties.height / Constants.PORTION_SIZE);
-        var objectsPortions = new Array(l);
+        let objectsPortions = new Array(l);
         let i: number, j: number, jp: number, k: number, jabs: number;
         for (i = 0; i < l; i++) {
             objectsPortions[i] = new Array(2);
@@ -410,7 +410,7 @@ class Map extends Base {
      *  @returns {Record<string, any>}
      */
     getObjectsAtPortion(portion: Portion): Record<string, any> {
-        return Game.current.getPotionsDatas(this.id, portion);
+        return Game.current.getPortionDatas(this.id, portion);
     }
 
     /** 
@@ -716,7 +716,7 @@ class Map extends Base {
         this.updatePortions(this, function(x: number, y: number, z: number, 
             i: number, j: number, k: number)
         {
-            let objects = Game.current.getPotionsDatas(this.id, new 
+            let objects = Game.current.getPortionDatas(this.id, new 
                 Portion(x, y, z));
             let movedObjects = objects.min;
             let p: number, l: number;
@@ -827,15 +827,35 @@ class Map extends Base {
         let w = Math.ceil(this.mapProperties.width / Constants.PORTION_SIZE);
         let d = Math.ceil(this.mapProperties.depth / Constants.PORTION_SIZE);
         let h = Math.ceil(this.mapProperties.height / Constants.PORTION_SIZE);
-        let objectsPortions = Game.current.mapsDatas[this.id];
-        let i: number, j: number, k: number, portion: Record<string, any>;
+        let i: number, j: number, k: number, portion: Record<string, any>, x: number;
         for (i = 0; i < l; i++) {
             for (j = -d; j < h; j++) {
                 for (k = 0; k < w; k++) {
-                    portion = objectsPortions[i][j < 0 ? 0 : 1][Math.abs(j)][k];
-                    portion.min = [];
-                    portion.mout = [];
-                    portion.m = [];
+                    portion = Game.current.getPortionPosDatas(this.id, i, j, k);
+                    for (x = portion.min.length - 1; x >= 0; x--) {
+                        if (!portion.min[x].currentState || !portion.min[x]
+                            .currentState.keepPosition) {
+                            portion.min.splice(x, 1);
+                        } else {
+                            portion.min[x].removeFromScene();
+                        }
+                    }
+                    for (x = portion.mout.length - 1; x >= 0; x--) {
+                        if (!portion.mout[x].currentState || !portion.mout[x]
+                            .currentState.keepPosition) {
+                            portion.mout.splice(x, 1);
+                        } else {
+                            portion.mout[x].removeFromScene();
+                        }
+                    }
+                    for (x = portion.m.length - 1; x >= 0; x--) {
+                        if (!portion.m[x].currentState || !portion.m[x]
+                            .currentState.keepPosition) {
+                            portion.m.splice(x, 1);
+                        } else {
+                            portion.m[x].removeFromScene();
+                        }
+                    }
                     portion.r = [];
                 }
             }

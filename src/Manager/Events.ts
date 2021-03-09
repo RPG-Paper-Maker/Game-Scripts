@@ -190,7 +190,7 @@ class Events {
                         number, y: number, z: number, i: number, j: number, k: 
                         number)
                     {
-                        let objects = Game.current.getPotionsDatas(Scene.Map
+                        let objects = Game.current.getPortionDatas(Scene.Map
                             .current.id, new Portion(x, y, z));
 
                         // Moved objects
@@ -257,7 +257,7 @@ class Events {
         let objects: Record<string, any>, closests: any[][];
         Scene.Map.current.updatePortions(this, function(x: number, y: 
             number, z: number, i: number, j: number, k: number) {
-            objects = Game.current.getPotionsDatas(Scene.Map.current.id, new 
+            objects = Game.current.getPortionDatas(Scene.Map.current.id, new 
                 Portion(x, y, z));
 
             // Moved objects

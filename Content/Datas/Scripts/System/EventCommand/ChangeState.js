@@ -181,7 +181,7 @@ class ChangeState extends Base {
                     currentState.objectID;
                 let portion = currentState.map.allObjects[objectID]
                     .getGlobalPortion();
-                let portionDatas = Game.current.getPotionsDatas(currentState.map.id, portion);
+                let portionDatas = Game.current.getPortionDatas(currentState.map.id, portion);
                 let indexState = portionDatas.si.indexOf(objectID);
                 if (indexState === -1) {
                     indexState = portionDatas.si.length;

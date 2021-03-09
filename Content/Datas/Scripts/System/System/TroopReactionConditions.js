@@ -89,9 +89,6 @@ class TroopReactionConditions extends Base {
                         throw new Error("No max value for stat " + stat.name);
                     }
                     const compareValue = this.statisticCompare.getValue();
-                    console.log([this.statisticCompareUnit ? statValue /
-                            statValueMax : statValue, this.statisticCompareUnit ?
-                            compareValue / 100 : compareValue]);
                     return Mathf.OPERATORS_COMPARE[this.statisticOperationKind](this.statisticCompareUnit ? statValue / statValueMax
                         : statValue, this.statisticCompareUnit ?
                         compareValue / 100 : compareValue);

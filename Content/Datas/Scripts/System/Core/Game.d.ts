@@ -52,6 +52,10 @@ declare class Game {
      */
     save(slot?: number): Promise<void>;
     /**
+     *  Load the positions that were kept (keep position option).
+     */
+    loadPositions(): Promise<void>;
+    /**
      *  Get a compressed version of mapsDatas (don't retain meshs).
      *  @returns {Object}
      */
@@ -120,6 +124,15 @@ declare class Game {
      *  @param {Portion} portion - The portion
      *  @returns {Record<string, any>}
     */
-    getPotionsDatas(id: number, portion: Portion): Record<string, any>;
+    getPortionDatas(id: number, portion: Portion): Record<string, any>;
+    /**
+     *  Get the portions datas according to id and position.
+     *  @param {number} id - The map id
+     *  @param {number} i
+     *  @param {number} j
+     *  @param {number} k
+     *  @returns {Record<string, any>}
+    */
+    getPortionPosDatas(id: number, i: number, j: number, k: number): Record<string, any>;
 }
 export { Game };

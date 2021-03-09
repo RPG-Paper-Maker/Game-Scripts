@@ -53,7 +53,7 @@ class RemoveObjectFromMap extends Base {
                                 result.datas.m.splice(result.index, 1);
                                 let index = result.datas.min.indexOf(result.object);
                                 if (index === -1) {
-                                    result.datas = Game.current.getPotionsDatas(Scene.Map.current.id, Portion
+                                    result.datas = Game.current.getPortionDatas(Scene.Map.current.id, Portion
                                         .createFromVector3(result.object.position));
                                     result.datas.mout.splice(result.datas.mout
                                         .indexOf(result.object), 1);

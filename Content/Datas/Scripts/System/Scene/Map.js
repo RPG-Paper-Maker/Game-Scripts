@@ -122,7 +122,7 @@ class Map extends Base {
         let w = Math.ceil(this.mapProperties.width / Constants.PORTION_SIZE);
         let d = Math.ceil(this.mapProperties.depth / Constants.PORTION_SIZE);
         let h = Math.ceil(this.mapProperties.height / Constants.PORTION_SIZE);
-        var objectsPortions = new Array(l);
+        let objectsPortions = new Array(l);
         let i, j, jp, k, jabs;
         for (i = 0; i < l; i++) {
             objectsPortions[i] = new Array(2);
@@ -340,7 +340,7 @@ class Map extends Base {
      *  @returns {Record<string, any>}
      */
     getObjectsAtPortion(portion) {
-        return Game.current.getPotionsDatas(this.id, portion);
+        return Game.current.getPortionDatas(this.id, portion);
     }
     /**
      *  Get a map portion at local postions.
@@ -615,7 +615,7 @@ class Map extends Base {
             Game.current.hero.update(angle);
         }
         this.updatePortions(this, function (x, y, z, i, j, k) {
-            let objects = Game.current.getPotionsDatas(this.id, new Portion(x, y, z));
+            let objects = Game.current.getPortionDatas(this.id, new Portion(x, y, z));
             let movedObjects = objects.min;
             let p, l;
             for (p = 0, l = movedObjects.length; p < l; p++) {
@@ -714,15 +714,38 @@ class Map extends Base {
         let w = Math.ceil(this.mapProperties.width / Constants.PORTION_SIZE);
         let d = Math.ceil(this.mapProperties.depth / Constants.PORTION_SIZE);
         let h = Math.ceil(this.mapProperties.height / Constants.PORTION_SIZE);
-        let objectsPortions = Game.current.mapsDatas[this.id];
-        let i, j, k, portion;
+        let i, j, k, portion, x;
         for (i = 0; i < l; i++) {
             for (j = -d; j < h; j++) {
                 for (k = 0; k < w; k++) {
-                    portion = objectsPortions[i][j < 0 ? 0 : 1][Math.abs(j)][k];
-                    portion.min = [];
-                    portion.mout = [];
-                    portion.m = [];
+                    portion = Game.current.getPortionPosDatas(this.id, i, j, k);
+                    for (x = portion.min.length - 1; x >= 0; x--) {
+                        if (!portion.min[x].currentState || !portion.min[x]
+                            .currentState.keepPosition) {
+                            portion.min.splice(x, 1);
+                        }
+                        else {
+                            portion.min[x].removeFromScene();
+                        }
+                    }
+                    for (x = portion.mout.length - 1; x >= 0; x--) {
+                        if (!portion.mout[x].currentState || !portion.mout[x]
+                            .currentState.keepPosition) {
+                            portion.mout.splice(x, 1);
+                        }
+                        else {
+                            portion.mout[x].removeFromScene();
+                        }
+                    }
+                    for (x = portion.m.length - 1; x >= 0; x--) {
+                        if (!portion.m[x].currentState || !portion.m[x]
+                            .currentState.keepPosition) {
+                            portion.m.splice(x, 1);
+                        }
+                        else {
+                            portion.m[x].removeFromScene();
+                        }
+                    }
                     portion.r = [];
                 }
             }

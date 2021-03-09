@@ -35,6 +35,23 @@ class LoadGame extends SaveLoadGame {
         }
         this.loading = false;
     }
+    async loadGame() {
+        this.loading = true;
+        await Game.current.loadPositions();
+        // Initialize properties for hero
+        Game.current.hero.initializeProperties();
+        // Stop video if existing
+        if (!Datas.TitlescreenGameover.isTitleBackgroundImage) {
+            Platform.canvasVideos.classList.add(Constants.CLASS_HIDDEN);
+            Platform.canvasVideos.pause();
+            Platform.canvasVideos.src = "";
+        }
+        // Pop load and title screen from the stack
+        Manager.Stack.pop();
+        Manager.Stack.replace(new Scene.Map(Game.current
+            .currentMapID));
+        this.loading = false;
+    }
     /**
      *  Handle scene key pressed
      *  @param {number} key - The key ID
@@ -51,18 +68,7 @@ class LoadGame extends SaveLoadGame {
             }
             else {
                 Datas.Systems.soundConfirmation.playSound();
-                // Initialize properties for hero
-                Game.current.hero.initializeProperties();
-                // Stop video if existing
-                if (!Datas.TitlescreenGameover.isTitleBackgroundImage) {
-                    Platform.canvasVideos.classList.add(Constants.CLASS_HIDDEN);
-                    Platform.canvasVideos.pause();
-                    Platform.canvasVideos.src = "";
-                }
-                // Pop load and title screen from the stack
-                Manager.Stack.pop();
-                Manager.Stack.replace(new Scene.Map(Game.current
-                    .currentMapID));
+                this.loadGame();
             }
         }
     }

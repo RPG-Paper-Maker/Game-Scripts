@@ -452,7 +452,7 @@ class MoveObject extends Base {
                 else {
                     let portion = Scene.Map.current.allObjects[object
                         .system.id].getGlobalPortion();
-                    let portionDatas = Game.current.getPotionsDatas(Scene.Map
+                    let portionDatas = Game.current.getPortionDatas(Scene.Map
                         .current.id, portion);
                     let indexProp = portionDatas.soi.indexOf(object.system.id);
                     if (indexProp === -1) {

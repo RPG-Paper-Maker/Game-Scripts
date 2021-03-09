@@ -18,6 +18,7 @@ interface StructSearchResult {
  */
 declare class MapObject {
     static SPEED_NORMAL: number;
+    id: number;
     system: System.MapObject;
     position: Vector3;
     isHero: boolean;

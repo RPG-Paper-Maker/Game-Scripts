@@ -177,7 +177,7 @@ class Events {
                 }
                 else {
                     Scene.Map.current.updatePortions(this, function (x, y, z, i, j, k) {
-                        let objects = Game.current.getPotionsDatas(Scene.Map
+                        let objects = Game.current.getPortionDatas(Scene.Map
                             .current.id, new Portion(x, y, z));
                         // Moved objects
                         let a, l, object;
@@ -230,7 +230,7 @@ class Events {
     static sendEventDetection(sender, targetID, isSystem, eventID, parameters, senderNoReceiver = false, onlyTheClosest = false) {
         let objects, closests;
         Scene.Map.current.updatePortions(this, function (x, y, z, i, j, k) {
-            objects = Game.current.getPotionsDatas(Scene.Map.current.id, new Portion(x, y, z));
+            objects = Game.current.getPortionDatas(Scene.Map.current.id, new Portion(x, y, z));
             // Moved objects
             closests = Manager.Events.sendEventObjects(objects.min, sender, targetID, isSystem, eventID, parameters, senderNoReceiver, onlyTheClosest);
             closests = closests.concat(Manager.Events.sendEventObjects(objects

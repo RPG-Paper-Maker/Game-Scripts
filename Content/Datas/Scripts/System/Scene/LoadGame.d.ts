@@ -11,6 +11,7 @@ declare class LoadGame extends SaveLoadGame {
      *  Load async stuff.
      */
     load(): Promise<void>;
+    loadGame(): Promise<void>;
     /**
      *  Handle scene key pressed
      *  @param {number} key - The key ID

@@ -34,6 +34,7 @@ import { Object3DCustom } from "./Object3DCustom.js";
 class MapObject {
     constructor(system, position, isHero = false) {
         this.system = system;
+        this.id = system.id;
         this.position = position;
         this.isHero = isHero;
         this.previousPosition = position;
@@ -111,7 +112,7 @@ class MapObject {
         }
         // Check if direct
         let globalPortion = Scene.Map.current.allObjects[objectID].getGlobalPortion();
-        let mapsDatas = Game.current.getPotionsDatas(Scene.Map.current.id, globalPortion);
+        let mapsDatas = Game.current.getPortionDatas(Scene.Map.current.id, globalPortion);
         if (object !== null) {
             return {
                 object: object,
@@ -185,7 +186,7 @@ class MapObject {
     static async searchOutMap(objectID) {
         let globalPortion = Scene.Map.current.allObjects[objectID]
             .getGlobalPortion();
-        let mapsDatas = Game.current.getPotionsDatas(Scene.Map.current.id, globalPortion);
+        let mapsDatas = Game.current.getPortionDatas(Scene.Map.current.id, globalPortion);
         let json = await IO.parseFileJSON(Paths.FILE_MAPS + Scene.Map.current
             .mapName + Constants.STRING_SLASH + globalPortion.getFileName());
         let mapPortion = new MapPortion(globalPortion);
@@ -245,10 +246,16 @@ class MapObject {
                     "because we are trying to fix this issue.");
             }
             let portion = obj.getGlobalPortion();
-            let portionDatas = Game.current.getPotionsDatas(Scene.Map.current.id, portion);
-            let indexProp = portionDatas.pi.indexOf(this.system.id);
+            let portionDatas = Game.current.getPortionDatas(Scene.Map.current.id, portion);
+            let indexProp = -1;
+            if (portionDatas.pi) {
+                indexProp = portionDatas.pi.indexOf(this.system.id);
+            }
             mapProp = (indexProp === -1) ? [] : portionDatas.p[indexProp];
-            indexProp = portionDatas.soi.indexOf(this.system.id);
+            indexProp = -1;
+            if (portionDatas.soi) {
+                indexProp = portionDatas.soi.indexOf(this.system.id);
+            }
             mapStatesOpts = (indexProp === -1) ? [] : portionDatas.so[indexProp];
         }
         // Properties
@@ -347,8 +354,11 @@ class MapObject {
                     "because we are trying to fix this issue.");
             }
             let portion = pos.getGlobalPortion();
-            let portionDatas = Game.current.getPotionsDatas(Scene.Map.current.id, portion);
-            let indexState = portionDatas.si.indexOf(this.system.id);
+            let portionDatas = Game.current.getPortionDatas(Scene.Map.current.id, portion);
+            let indexState = -1;
+            if (portionDatas.si) {
+                indexState = portionDatas.si.indexOf(this.system.id);
+            }
             this.states = (indexState === -1) ? [this.system.states.length > 0 ?
                     this.system.states[0].id : 1] : portionDatas.s[indexState];
         }
@@ -365,7 +375,7 @@ class MapObject {
             }
         }
         // Update mesh
-        if (this.isStartup) {
+        if (this.isStartup || !Scene.Map.current.textureTileset) {
             return;
         }
         let material = null;
@@ -795,7 +805,7 @@ class MapObject {
         if (!this.isHero) {
             let previousPortion = Position.createFromVector3(this.position)
                 .getGlobalPortion();
-            let objects = Game.current.getPotionsDatas(Scene.Map.current.id, previousPortion);
+            let objects = Game.current.getPortionDatas(Scene.Map.current.id, previousPortion);
             // Remove from the moved objects in or out of the portion
             let movedObjects = objects.mout;
             let index = movedObjects.indexOf(this);
@@ -810,7 +820,7 @@ class MapObject {
             // Add to moved objects of the original portion if not done yet
             let originalPortion = Scene.Map.current.allObjects[this
                 .system.id].getGlobalPortion();
-            objects = Game.current.getPotionsDatas(Scene.Map.current.id, originalPortion);
+            objects = Game.current.getPortionDatas(Scene.Map.current.id, originalPortion);
             movedObjects = objects.m;
             if (movedObjects.indexOf(this) === -1) {
                 movedObjects.push(this);
@@ -830,7 +840,7 @@ class MapObject {
         if (!this.isHero) {
             let afterPortion = Position.createFromVector3(this.position)
                 .getGlobalPortion();
-            let objects = Game.current.getPotionsDatas(Scene.Map.current.id, afterPortion);
+            let objects = Game.current.getPortionDatas(Scene.Map.current.id, afterPortion);
             let originalPortion = Scene.Map.current.allObjects[this
                 .system.id].getGlobalPortion();
             if (!originalPortion.equals(afterPortion)) {
