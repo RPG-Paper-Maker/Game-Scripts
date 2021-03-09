@@ -53,6 +53,7 @@ declare class MapObject {
     removed: boolean;
     upPosition: Vector3;
     halfPosition: Vector3;
+    currentOrientationStop: boolean;
     constructor(system: System.MapObject, position?: Vector3, isHero?: boolean);
     /**
      *  Search an object in the map.

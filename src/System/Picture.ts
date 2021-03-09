@@ -14,7 +14,6 @@ import PictureKind = Enum.PictureKind;
 import { Datas } from "../index";
 import { Picture2D, CollisionSquare } from "../Core";
 import { Base } from "./Base";
-import { THREE } from "../Globals";
 
 /** @class
  *  A picture of the game.
@@ -37,6 +36,7 @@ class Picture extends Base {
     public picture: Picture2D;
     public width: number;
     public height: number;
+    public isStopAnimation: boolean;
 
     constructor(json?: Record<string, any>, kind: PictureKind = PictureKind
         .Pictures)
@@ -161,6 +161,7 @@ class Picture extends Base {
         this.base64 = json.base64;
         this.jsonCollisions = Utils.defaultValue(json.col, []);
         this.collisionsRepeat = Utils.defaultValue(json.rcol, false);
+        this.isStopAnimation = Utils.defaultValue(json.isStopAnimation, false);
     }
 
     /** 
@@ -171,6 +172,19 @@ class Picture extends Base {
         this.picture = await Picture2D.create(this);
         if (this.base64) {
             this.base64 = "";
+        }
+    }
+
+    /** 
+     *  Get the number of rows for the picture (used for characters).
+     *  @returns {number}
+     */
+    getRows(): number {
+        switch (this.kind) {
+            case Enum.PictureKind.Characters:
+                return 4 + (this.isStopAnimation ? 4 : 0);
+            default:
+                return 1;
         }
     }
 
@@ -210,7 +224,7 @@ class Picture extends Base {
 
         // Initialize
         let w = this.width / Datas.Systems.FRAMES;
-        let h = this.height / 4;
+        let h = this.height / this.getRows();
         this.collisions = new Array(this.width * this.height);
         let i: number, l: number;
         for (i = 0, l = this.width * this.height; i < l; i++) {
@@ -341,7 +355,7 @@ class Picture extends Base {
     getSquaresForStates(image: any): number[][] {
         let w = Math.floor(image.width / Datas.Systems.SQUARE_SIZE / Datas
             .Systems.FRAMES);
-        let h = Math.floor(image.height / Datas.Systems.SQUARE_SIZE / 4);
+        let h = Math.floor(image.height / Datas.Systems.SQUARE_SIZE / this.getRows());
         let states = new Array(Datas.Systems.FRAMES * 4);
         let j: number;
         for (let i = 0; i < Datas.Systems.FRAMES; i++) {

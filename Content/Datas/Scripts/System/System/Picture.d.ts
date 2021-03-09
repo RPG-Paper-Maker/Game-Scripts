@@ -22,6 +22,7 @@ declare class Picture extends Base {
     picture: Picture2D;
     width: number;
     height: number;
+    isStopAnimation: boolean;
     constructor(json?: Record<string, any>, kind?: PictureKind);
     /**
      *  Assign the default members.
@@ -60,6 +61,11 @@ declare class Picture extends Base {
      *  @async
      */
     load(): Promise<void>;
+    /**
+     *  Get the number of rows for the picture (used for characters).
+     *  @returns {number}
+     */
+    getRows(): number;
     /**
      *  Get the absolute path associated to this picture.
      *  @returns {string}

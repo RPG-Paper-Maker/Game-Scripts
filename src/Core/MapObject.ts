@@ -81,6 +81,7 @@ class MapObject {
     public removed: boolean;
     public upPosition: Vector3;
     public halfPosition: Vector3;
+    public currentOrientationStop: boolean;
 
     constructor(system: System.MapObject, position?: Vector3, isHero: boolean = 
         false)
@@ -108,6 +109,7 @@ class MapObject {
         this.previousOrientation = null;
         this.otherMoveCommand = null;
         this.yMountain = null;
+        this.currentOrientationStop = false;
         if (!this.isHero) {
             this.initializeProperties();
         }
@@ -433,6 +435,7 @@ class MapObject {
         let previousStateInstance = this.currentStateInstance;
         this.currentState = null;
         this.currentStateInstance = null;
+        this.currentOrientationStop = false;
         let state: System.State;
         for (let i = this.system.states.length - 1; i >= 0; i--) {
             state = this.system.states[i];
@@ -507,12 +510,15 @@ class MapObject {
                     this.width = texture.image.width / Datas.Systems.SQUARE_SIZE / 
                         Datas.Systems.FRAMES;
                     this.height = texture.image.height / Datas.Systems.SQUARE_SIZE / 
-                        4;
+                        Datas.Pictures.get(Enum.PictureKind.Characters, state
+                        .graphicID).getRows();;
+                    this.currentOrientationStop = this.currentStateInstance.indexY >= 4;
                 }
                 let sprite = Sprite.create(this.currentState.graphicKind, [x, y, 
                     this.width, this.height]);
-                result = sprite.createGeometry(this.width, this.height, false,
-                    Position.createFromVector3(this.position));
+                result = sprite.createGeometry(this.width, this.height, this
+                    .currentStateInstance.graphicID === 0, Position
+                    .createFromVector3(this.position));
                 // Correct position offset (left / top)
                 if (previousStateInstance && previousStateInstance.graphicKind 
                     === ElementMapKind.Object3D) {
@@ -1095,12 +1101,21 @@ class MapObject {
                     % 2 !== 0) ? 1 : 0;
                 this.mesh.position.set(this.position.x, this.position.y + offset
                     , this.position.z);
-                //this.updateBBPosition(this.position);
-                this.moving = false;
+                //this.updateBBPosition(this.position)
                 this.previousPosition = this.position;
             } else {
-                frame = this.frame.value !== this.currentStateInstance.indexX;
-                this.frame.value = this.currentStateInstance.indexX;
+                if (this.currentState.stopAnimation) {
+                    frame = this.frame.update(Datas.Systems.mapFrameDuration
+                        .getValue() / this.speed.getValue());
+                } else {
+                    frame = this.frame.value !== this.currentStateInstance.indexX;
+                    this.frame.value = this.currentStateInstance.indexX;
+                }
+                // Update mesh position
+                let offset = (this.currentState.pixelOffset && this.frame.value 
+                    % 2 !== 0) ? 1 : 0;
+                this.mesh.position.set(this.position.x, this.position.y + offset
+                    , this.position.z);
 
                 // Update angle
                 if (this.currentState && this.currentState.setWithCamera) {
@@ -1126,6 +1141,7 @@ class MapObject {
         // Time events
         this.receivedOneEvent = false;
         this.updateTimeEvents();
+        this.moving = false;
     }
 
     /** 
@@ -1186,7 +1202,9 @@ class MapObject {
                     h = this.height * Datas.Systems.SQUARE_SIZE / textureHeight;
                     x = (this.frame.value >= Datas.Systems.FRAMES ? Datas
                         .Systems.FRAMES - 1 : this.frame.value) * w;
-                    y = this.orientation * h;
+                    y = (this.orientation + (this.currentOrientationStop || (
+                        this.currentState.stopAnimation && !this.moving) ? 4 : 
+                        0)) * h;
                 }
                 let coefX = MapElement.COEF_TEX / textureWidth;
                 let coefY = MapElement.COEF_TEX / textureHeight;

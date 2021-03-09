@@ -138,6 +138,7 @@ class Picture extends Base {
         this.base64 = json.base64;
         this.jsonCollisions = Utils.defaultValue(json.col, []);
         this.collisionsRepeat = Utils.defaultValue(json.rcol, false);
+        this.isStopAnimation = Utils.defaultValue(json.isStopAnimation, false);
     }
     /**
      *  Read the JSON associated to the picture.
@@ -147,6 +148,18 @@ class Picture extends Base {
         this.picture = await Picture2D.create(this);
         if (this.base64) {
             this.base64 = "";
+        }
+    }
+    /**
+     *  Get the number of rows for the picture (used for characters).
+     *  @returns {number}
+     */
+    getRows() {
+        switch (this.kind) {
+            case Enum.PictureKind.Characters:
+                return 4 + (this.isStopAnimation ? 4 : 0);
+            default:
+                return 1;
         }
     }
     /**
@@ -181,7 +194,7 @@ class Picture extends Base {
         }
         // Initialize
         let w = this.width / Datas.Systems.FRAMES;
-        let h = this.height / 4;
+        let h = this.height / this.getRows();
         this.collisions = new Array(this.width * this.height);
         let i, l;
         for (i = 0, l = this.width * this.height; i < l; i++) {
@@ -305,7 +318,7 @@ class Picture extends Base {
     getSquaresForStates(image) {
         let w = Math.floor(image.width / Datas.Systems.SQUARE_SIZE / Datas
             .Systems.FRAMES);
-        let h = Math.floor(image.height / Datas.Systems.SQUARE_SIZE / 4);
+        let h = Math.floor(image.height / Datas.Systems.SQUARE_SIZE / this.getRows());
         let states = new Array(Datas.Systems.FRAMES * 4);
         let j;
         for (let i = 0; i < Datas.Systems.FRAMES; i++) {
