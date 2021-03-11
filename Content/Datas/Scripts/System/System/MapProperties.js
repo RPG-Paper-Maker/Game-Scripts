@@ -14,9 +14,10 @@ import { Datas, System, Manager, Scene } from "../index.js";
 import { PlaySong } from "./PlaySong.js";
 import { DynamicValue } from "./DynamicValue.js";
 import { MapObject } from "../Core/MapObject.js";
-import { Enum, Constants } from "../Common/index.js";
+import { Enum, Constants, Utils, Mathf } from "../Common/index.js";
 var SongKind = Enum.SongKind;
 var PictureKind = Enum.PictureKind;
+import { Game } from "../Core/index.js";
 /** @class
  *  The properties of a map.
  *  @extends System.Base
@@ -26,6 +27,7 @@ class MapProperties extends Base {
         super();
         this.sceneBackground = null;
         this.skyboxGeometry = null;
+        this.currentNumberSteps = 0;
     }
     /**
      *  Read the JSON associated to the map properties.
@@ -63,6 +65,14 @@ class MapProperties extends Base {
         var startupReactions = new System.MapObject(json.so);
         this.startupObject = new MapObject(startupReactions);
         this.startupObject.changeState();
+        // Random battles
+        this.randomBattleMapID = System.DynamicValue.readOrDefaultDatabase(json
+            .randomBattleMapID);
+        this.randomBattles = [];
+        Utils.readJSONSystemList({ list: Utils.defaultValue(json.randomBattles, []), listIndexes: this.randomBattles, cons: System.RandomBattle });
+        this.randomBattleNumberStep = System.DynamicValue.readOrDefaultNumber(json.randomBattleNumberStep, 300);
+        this.randomBattleVariance = System.DynamicValue.readOrDefaultNumber(json.randomBattleVariance, 20);
+        this.updateMaxNumberSteps();
     }
     /**
      *  Update the background color
@@ -84,7 +94,7 @@ class MapProperties extends Base {
         this.sceneBackground.add(new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), bgMat));
     }
     /**
-     *  Update the background skybox
+     *  Update the background skybox.
      */
     updateBackgroundSkybox() {
         let size = 10000 * Datas.Systems.SQUARE_SIZE / Constants
@@ -92,6 +102,53 @@ class MapProperties extends Base {
         this.skyboxGeometry = new THREE.BoxGeometry(size, size, size);
         Scene.Map.current.scene.add(new THREE.Mesh(this.skyboxGeometry, Datas
             .Systems.getSkybox(this.backgroundSkyboxID.getValue()).createTextures()));
+    }
+    /**
+     *  Update the max steps numbers for starting a random battle.
+     */
+    updateMaxNumberSteps() {
+        this.currentNumberSteps = 0;
+        this.maxNumberSteps = Mathf.variance(this.randomBattleNumberStep
+            .getValue(), this.randomBattleVariance.getValue());
+    }
+    /**
+     *  Check if a random battle can be started.
+     */
+    checkRandomBattle() {
+        this.currentNumberSteps++;
+        if (this.currentNumberSteps >= this.maxNumberSteps) {
+            this.updateMaxNumberSteps();
+            let randomBattle = null;
+            let rand = Mathf.random(0, 100);
+            let priority = 0;
+            // Remove 0 priority
+            let battles = [];
+            let total = 0;
+            for (randomBattle of this.randomBattles) {
+                randomBattle.updateCurrentPriority();
+                if (randomBattle.currentPriority > 0) {
+                    battles.push(randomBattle);
+                    total += randomBattle.currentPriority;
+                }
+            }
+            for (randomBattle of this.randomBattles) {
+                priority += randomBattle.priority.getValue() / total * 100;
+                if (rand <= priority) {
+                    break;
+                }
+                else {
+                    randomBattle = null;
+                }
+            }
+            if (randomBattle !== null) {
+                let battleMap = Datas.BattleSystems.getBattleMap(this
+                    .randomBattleMapID.getValue());
+                Game.current.heroBattle = new MapObject(Game.current.hero.system, battleMap.position.toVector3(), true);
+                Manager.Stack.push(new Scene.Battle(randomBattle.troopID
+                    .getValue(), true, true, battleMap, Enum.MapTransitionKind
+                    .Zoom, Enum.MapTransitionKind.Zoom, null, null));
+            }
+        }
     }
 }
 export { MapProperties };

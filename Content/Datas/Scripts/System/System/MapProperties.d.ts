@@ -27,9 +27,15 @@ declare class MapProperties extends Base {
     backgroundImageID: number;
     backgroundSkyboxID: DynamicValue;
     startupObject: MapObject;
+    randomBattleMapID: System.DynamicValue;
+    randomBattles: System.RandomBattle[];
+    randomBattleNumberStep: System.DynamicValue;
+    randomBattleVariance: System.DynamicValue;
     cameraBackground: THREE.Camera;
     sceneBackground: THREE.Scene;
     skyboxGeometry: THREE.BoxGeometry;
+    currentNumberSteps: number;
+    maxNumberSteps: number;
     constructor();
     /**
      *  Read the JSON associated to the map properties.
@@ -46,8 +52,16 @@ declare class MapProperties extends Base {
      */
     updateBackgroundImage(): void;
     /**
-     *  Update the background skybox
+     *  Update the background skybox.
      */
     updateBackgroundSkybox(): void;
+    /**
+     *  Update the max steps numbers for starting a random battle.
+     */
+    updateMaxNumberSteps(): void;
+    /**
+     *  Check if a random battle can be started.
+     */
+    checkRandomBattle(): void;
 }
 export { MapProperties };

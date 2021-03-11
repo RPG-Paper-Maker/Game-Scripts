@@ -624,6 +624,10 @@ class MoveObject extends Base {
                     currentState.random = Mathf.random(0, 3);
                     currentState.position = null;
                     currentState.moveHeroOrientation = null;
+                    // Check random battle steps
+                    if (object.isHero) {
+                        Scene.Map.current.mapProperties.checkRandomBattle();
+                    }
                 }
                 return (this.moves[currentState.index] == null) ? 1 : 0;
             }

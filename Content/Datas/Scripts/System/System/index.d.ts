@@ -40,6 +40,7 @@ export * from "./PlaySong.js";
 export * from "./Plugin.js";
 export * from "./ProgressionTable.js";
 export * from "./Property.js";
+export * from "./RandomBattle.js";
 export * from "./Reaction.js";
 export * from "./Shape.js";
 export * from "./ShopItem.js";

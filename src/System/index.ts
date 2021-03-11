@@ -51,6 +51,7 @@ export * from "./PlaySong";
 export * from "./Plugin";
 export * from "./ProgressionTable";
 export * from "./Property";
+export * from "./RandomBattle";
 export * from "./Reaction";
 export * from "./Shape";
 export * from "./ShopItem";
