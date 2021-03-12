@@ -1,3 +1,4 @@
+import { Enum } from "../Common/index.js";
 import { Base } from "./Base.js";
 import { DynamicValue } from "./DynamicValue.js";
 import { Player } from "../Core/index.js";
@@ -8,7 +9,7 @@ import { Player } from "../Core/index.js";
  *  characteristic
  */
 declare class Characteristic extends Base {
-    kind: number;
+    kind: Enum.CharacteristicKind;
     isIncreaseDecrease: boolean;
     increaseDecreaseKind: number;
     statisticValueID: DynamicValue;

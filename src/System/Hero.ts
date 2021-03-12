@@ -12,7 +12,7 @@
 import { Base } from "./Base";
 import { Class } from "./Class";
 import { Utils } from "../Common";
-import { Datas } from "../index";
+import { Datas, System } from "../index";
 import { StatisticProgression } from "./StatisticProgression";
 import { ClassSkill } from "./ClassSkill";
 import { Skill } from "../Core";
@@ -62,8 +62,15 @@ class Hero extends Base {
      *  @returns {Record<string, any>}
      */
     getExperienceTable(): Record<string, any> {
-        return Datas.Classes.get(this.idClass).getExperienceTable(this
-            .classInherit);
+        return Datas.Classes.get(this.idClass).getExperienceTable(this.classInherit);
+    }
+
+    /** 
+     *  Get the characteristics according to class inherit and this hero.
+     *  @returns {System.Characteristic[]}
+     */
+    getCharacteristics(): System.Characteristic[] {
+        return Datas.Classes.get(this.idClass).getCharacteristics(this.classInherit);
     }
 
     /** 

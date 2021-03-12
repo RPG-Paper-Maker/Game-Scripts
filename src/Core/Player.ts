@@ -307,11 +307,23 @@ class Player {
         // Skills
         this.sk = this.system.getSkills(level);
 
+        // Begin equipment
+        let characteristics = this.system.getCharacteristics();
+        let i: number, l: number, characteristic: System.Characteristic;
+        for (i = 0, l = characteristics.length; i < l; i++) {
+            characteristic = characteristics[i];
+            if (characteristic.kind === Enum.CharacteristicKind.BeginEquipment) {
+                this.equip[characteristic.beginEquipmentID.getValue()] = new 
+                    Item(characteristic.isBeginWeapon ? Enum.ItemKind.Weapon :
+                    Enum.ItemKind.Armor, characteristic.beginWeaponArmorID
+                    .getValue(), 1);
+            }
+        }
+
         // Stats
         let statistics = Datas.BattleSystems.statisticsOrder;
         let statisticsProgression = this.system.getStatisticsProgression();
         let nonFixStatistics = new Array;
-        let i: number, l: number;
         for (i = 0, l = statistics.length; i < l; i++) {
             this[Datas.BattleSystems.getStatistic(statistics[i])
                 .getBeforeAbbreviation()] = undefined;
@@ -426,9 +438,7 @@ class Player {
         }
 
         // Class and hero characteristics
-        this.updateCharacteristics(Datas.Classes.get(this.system.idClass)
-            .characteristics, list, bonus);
-        this.updateCharacteristics(this.system.classInherit.characteristics, list, bonus);
+        this.updateCharacteristics(this.system.getCharacteristics(), list, bonus);
 
         // Same values for not changed stats
         for (i = 0, l = statistics.length; i < l; i++) {

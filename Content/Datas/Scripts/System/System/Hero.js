@@ -47,8 +47,14 @@ class Hero extends Base {
      *  @returns {Record<string, any>}
      */
     getExperienceTable() {
-        return Datas.Classes.get(this.idClass).getExperienceTable(this
-            .classInherit);
+        return Datas.Classes.get(this.idClass).getExperienceTable(this.classInherit);
+    }
+    /**
+     *  Get the characteristics according to class inherit and this hero.
+     *  @returns {System.Characteristic[]}
+     */
+    getCharacteristics() {
+        return Datas.Classes.get(this.idClass).getCharacteristics(this.classInherit);
     }
     /**
      *  Get the statistics progression according to class inherit and this hero.

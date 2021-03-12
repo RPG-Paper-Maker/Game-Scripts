@@ -105,6 +105,15 @@ class Class extends Translatable {
     }
 
     /** 
+     *  Get the characteristics according to class inherit and this hero.
+     *  @param {System.Class} upClass - The up class
+     *  @returns {System.Characteristic[]}
+     */
+    getCharacteristics(upClass: Class): System.Characteristic[] {
+        return this.characteristics.concat(upClass.characteristics);
+    }
+
+    /** 
      *  Get the statistics progression.
      *  @param {System.Class} upClass - The up class
      *  @returns {System.StatisticProgression[]}

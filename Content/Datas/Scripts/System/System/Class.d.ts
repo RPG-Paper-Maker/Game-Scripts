@@ -40,6 +40,12 @@ declare class Class extends Translatable {
      */
     getExperienceTable(upClass: Class): Record<string, number>;
     /**
+     *  Get the characteristics according to class inherit and this hero.
+     *  @param {System.Class} upClass - The up class
+     *  @returns {System.Characteristic[]}
+     */
+    getCharacteristics(upClass: Class): System.Characteristic[];
+    /**
      *  Get the statistics progression.
      *  @param {System.Class} upClass - The up class
      *  @returns {System.StatisticProgression[]}

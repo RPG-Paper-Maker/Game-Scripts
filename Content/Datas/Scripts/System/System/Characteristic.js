@@ -9,8 +9,6 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Enum, Utils, Interpreter } from "../Common/index.js";
-var CharacteristicKind = Enum.CharacteristicKind;
-var IncreaseDecreaseKind = Enum.IncreaseDecreaseKind;
 import { Base } from "./Base.js";
 import { DynamicValue } from "./DynamicValue.js";
 import { Player } from "../Core/index.js";
@@ -31,31 +29,32 @@ class Characteristic extends Base {
      *  characteristic
      */
     read(json) {
-        this.kind = Utils.defaultValue(json.k, CharacteristicKind
+        this.kind = Utils.defaultValue(json.k, Enum.CharacteristicKind
             .IncreaseDecrease);
         switch (this.kind) {
-            case CharacteristicKind.IncreaseDecrease:
+            case Enum.CharacteristicKind.IncreaseDecrease:
                 this.isIncreaseDecrease = Utils.defaultValue(json.iid, true);
-                this.increaseDecreaseKind = Utils.defaultValue(json.idk, IncreaseDecreaseKind.StatValue);
+                this.increaseDecreaseKind = Utils.defaultValue(json.idk, Enum.
+                    IncreaseDecreaseKind.StatValue);
                 switch (this.increaseDecreaseKind) {
-                    case IncreaseDecreaseKind.StatValue:
+                    case Enum.IncreaseDecreaseKind.StatValue:
                         this.statisticValueID = DynamicValue
                             .readOrDefaultDatabase(json.svid);
                         break;
-                    case IncreaseDecreaseKind.ElementRes:
+                    case Enum.IncreaseDecreaseKind.ElementRes:
                         this.elementResID = DynamicValue.readOrDefaultDatabase(json.erid);
                         break;
-                    case IncreaseDecreaseKind.StatusRes:
+                    case Enum.IncreaseDecreaseKind.StatusRes:
                         this.statusResID = DynamicValue.readOrDefaultDatabase(json.strid);
                         break;
-                    case IncreaseDecreaseKind.CurrencyGain:
+                    case Enum.IncreaseDecreaseKind.CurrencyGain:
                         this.currencyGainID = DynamicValue.readOrDefaultDatabase(json.cgid);
                         break;
-                    case IncreaseDecreaseKind.SkillCost:
+                    case Enum.IncreaseDecreaseKind.SkillCost:
                         this.skillCostID = DynamicValue.readOrDefaultDatabase(json.scid);
                         this.isAllSkillCost = Utils.defaultValue(json.iasc, true);
                         break;
-                    case IncreaseDecreaseKind.Variable:
+                    case Enum.IncreaseDecreaseKind.Variable:
                         this.variableID = Utils.defaultValue(json.vid, 1);
                         break;
                 }
@@ -63,10 +62,10 @@ class Characteristic extends Base {
                 this.value = DynamicValue.readOrDefaultNumber(json.v);
                 this.unit = Utils.defaultValue(json.u, true);
                 break;
-            case CharacteristicKind.Script:
+            case Enum.CharacteristicKind.Script:
                 this.script = DynamicValue.readOrDefaultMessage(json.s);
                 break;
-            case CharacteristicKind.AllowForbidEquip:
+            case Enum.CharacteristicKind.AllowForbidEquip:
                 this.isAllowEquip = Utils.defaultValue(json.iae, true);
                 this.isAllowEquipWeapon = Utils.defaultValue(json.iaew, true);
                 this.equipWeaponTypeID = DynamicValue.readOrDefaultDatabase(json
@@ -74,12 +73,12 @@ class Characteristic extends Base {
                 this.equipArmorTypeID = DynamicValue.readOrDefaultDatabase(json
                     .eatid);
                 break;
-            case CharacteristicKind.AllowForbidChange:
+            case Enum.CharacteristicKind.AllowForbidChange:
                 this.isAllowChangeEquipment = Utils.defaultValue(json.iace, true);
                 this.changeEquipmentID = DynamicValue.readOrDefaultDatabase(json
                     .ceid);
                 break;
-            case CharacteristicKind.BeginEquipment:
+            case Enum.CharacteristicKind.BeginEquipment:
                 this.beginEquipmentID = DynamicValue.readOrDefaultDatabase(json
                     .beid);
                 this.isBeginWeapon = Utils.defaultValue(json.ibw, true);
@@ -95,9 +94,9 @@ class Characteristic extends Base {
     getNewStatValue(gamePlayer) {
         let statID, stat, value, baseStatValue;
         switch (this.kind) {
-            case CharacteristicKind.IncreaseDecrease:
+            case Enum.CharacteristicKind.IncreaseDecrease:
                 switch (this.increaseDecreaseKind) {
-                    case IncreaseDecreaseKind.StatValue:
+                    case Enum.IncreaseDecreaseKind.StatValue:
                         statID = this.statisticValueID.getValue();
                         stat = Datas.BattleSystems.getStatistic(statID);
                         value = this.value.getValue() * (this.isIncreaseDecrease
@@ -113,7 +112,7 @@ class Characteristic extends Base {
                                 / 100) : value; // % / Fix
                         }
                         return [statID, value];
-                    case IncreaseDecreaseKind.ElementRes:
+                    case Enum.IncreaseDecreaseKind.ElementRes:
                         statID = this.unit ? Datas.BattleSystems
                             .statisticsElementsPercent[this.elementResID
                             .getValue()] : Datas.BattleSystems
@@ -143,27 +142,27 @@ class Characteristic extends Base {
         let target = Player.getTemporaryPlayer();
         let result = "";
         switch (this.kind) {
-            case CharacteristicKind.IncreaseDecrease:
+            case Enum.CharacteristicKind.IncreaseDecrease:
                 switch (this.increaseDecreaseKind) {
-                    case IncreaseDecreaseKind.StatValue:
+                    case Enum.IncreaseDecreaseKind.StatValue:
                         result += Datas.BattleSystems.getStatistic(Interpreter
                             .evaluate(this.statisticValueID.getValue(), { user: user, target: target })).name;
                         break;
-                    case IncreaseDecreaseKind.ElementRes:
+                    case Enum.IncreaseDecreaseKind.ElementRes:
                         result += Datas.BattleSystems.getElement(this
                             .elementResID.getValue()).name + " res.";
                         break;
-                    case IncreaseDecreaseKind.StatusRes:
+                    case Enum.IncreaseDecreaseKind.StatusRes:
                         break;
-                    case IncreaseDecreaseKind.ExperienceGain:
+                    case Enum.IncreaseDecreaseKind.ExperienceGain:
                         result += Datas.BattleSystems.getExpStatistic().name +
                             " gain";
                         break;
-                    case IncreaseDecreaseKind.CurrencyGain:
+                    case Enum.IncreaseDecreaseKind.CurrencyGain:
                         result += Datas.Systems.getCurrency(this.currencyGainID
                             .getValue()).name + " gain";
                         break;
-                    case IncreaseDecreaseKind.SkillCost:
+                    case Enum.IncreaseDecreaseKind.SkillCost:
                         if (this.isAllSkillCost) {
                             result += "All skills cost";
                         }
@@ -172,7 +171,7 @@ class Characteristic extends Base {
                                 .getValue()).name + " skill cost";
                         }
                         break;
-                    case IncreaseDecreaseKind.Variable:
+                    case Enum.IncreaseDecreaseKind.Variable:
                         result += Datas.Variables.get(this.variableID);
                         break;
                 }
@@ -199,10 +198,10 @@ class Characteristic extends Base {
                     result += "%";
                 }
                 break;
-            case CharacteristicKind.Script:
-            case CharacteristicKind.AllowForbidEquip:
-            case CharacteristicKind.AllowForbidChange:
-            case CharacteristicKind.BeginEquipment:
+            case Enum.CharacteristicKind.Script:
+            case Enum.CharacteristicKind.AllowForbidEquip:
+            case Enum.CharacteristicKind.AllowForbidChange:
+            case Enum.CharacteristicKind.BeginEquipment:
                 break;
         }
         return result;

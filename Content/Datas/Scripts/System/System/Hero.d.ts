@@ -1,5 +1,6 @@
 import { Base } from "./Base.js";
 import { Class } from "./Class.js";
+import { System } from "../index.js";
 import { StatisticProgression } from "./StatisticProgression.js";
 import { Skill } from "../Core/index.js";
 /** @class
@@ -31,6 +32,11 @@ declare class Hero extends Base {
      *  @returns {Record<string, any>}
      */
     getExperienceTable(): Record<string, any>;
+    /**
+     *  Get the characteristics according to class inherit and this hero.
+     *  @returns {System.Characteristic[]}
+     */
+    getCharacteristics(): System.Characteristic[];
     /**
      *  Get the statistics progression according to class inherit and this hero.
      *  @returns {System.StatisticProgression[]}
