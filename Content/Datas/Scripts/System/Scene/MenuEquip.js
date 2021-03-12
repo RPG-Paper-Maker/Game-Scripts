@@ -159,6 +159,9 @@ class MenuEquip extends MenuBase {
         let list = [new Graphic.Text("  [Remove]")];
         let item, systemItem;
         let type, nbItem;
+        let player = Game.current.teamHeroes[this.windowChoicesTabs
+            .currentSelectedIndex];
+        let j, m, characteristic, allow, characteristics;
         for (let i = 0, l = Game.current.items.length; i < l; i++) {
             item = Game.current.items[i];
             if (item.kind !== ItemKind.Item) {
@@ -167,7 +170,25 @@ class MenuEquip extends MenuBase {
                 if (type.equipments[idEquipment]) {
                     nbItem = item.nb;
                     if (nbItem > 0) {
-                        list.push(new Graphic.Item(item, { nbItem: nbItem }));
+                        characteristics = player.system.getCharacteristics();
+                        allow = true;
+                        for (j = 1, m = characteristics.length; j < m; j++) {
+                            characteristic = characteristics[j];
+                            if (characteristic.kind === Enum.CharacteristicKind
+                                .AllowForbidEquip && ((item.kind === Enum.ItemKind
+                                .Weapon && characteristic.isAllowEquipWeapon &&
+                                systemItem.type === characteristic.equipWeaponTypeID
+                                    .getValue()) || (item.kind === Enum.ItemKind.Armor
+                                && !characteristic.isAllowEquipWeapon &&
+                                systemItem.type === characteristic.equipArmorTypeID
+                                    .getValue()))) {
+                                console.log(characteristic);
+                                allow = characteristic.isAllowEquip;
+                            }
+                        }
+                        if (allow) {
+                            list.push(new Graphic.Item(item, { nbItem: nbItem }));
+                        }
                     }
                 }
             }
