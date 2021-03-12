@@ -156,13 +156,12 @@ class MenuEquip extends MenuBase {
      */
     createWindowChoiceEquipment() {
         const rect = new Rectangle(20, 100, 290, WindowBox.SMALL_SLOT_HEIGHT);
-        let nbEquipments = Datas.BattleSystems.equipmentsOrder.length;
-        this.windowChoicesEquipment = new WindowChoices(rect.x, rect.y, rect.width, rect.height,
-            new Array(nbEquipments),
-            {
-                nbItemsMax: nbEquipments
-            }
-        );
+        const nbEquipments = Datas.BattleSystems.equipmentsOrder.length;
+        const options = {
+            nbItemsMax: nbEquipments
+        }
+        this.windowChoicesEquipment = new WindowChoices(rect.x, rect.y, rect
+            .width, rect.height, new Array(nbEquipments), options);
     }
 
     /**
@@ -207,11 +206,24 @@ class MenuEquip extends MenuBase {
         // update equipment
         let equipLength = Player.getEquipmentLength();
         let l = Datas.BattleSystems.equipmentsOrder.length;
+        let player = Game.current.teamHeroes[this.windowChoicesTabs.currentSelectedIndex];
+        let characteristics = player.system.getCharacteristics();
         let list = new Array(l);
+        let j: number, m: number, characteristic: System.Characteristic, isPossible: 
+            boolean;
         for (let i = 0; i < l; i++) {
-            list[i] = new Graphic.Equip(Game.current.teamHeroes[this
-                .windowChoicesTabs.currentSelectedIndex], Datas.BattleSystems
-                    .equipmentsOrder[i], equipLength);
+            // Check if is possible because of characteristics
+            isPossible = true;
+            for (j = 1, m = characteristics.length; j < m; j++) {
+                characteristic = characteristics[j];
+                if (characteristic.kind === Enum.CharacteristicKind.AllowForbidChange &&
+                    characteristic.changeEquipmentID.getValue() === Datas
+                    .BattleSystems.equipmentsOrder[i]) {
+                    isPossible = characteristic.isAllowChangeEquipment;
+                }
+            }
+            list[i] = new Graphic.Equip(player, Datas.BattleSystems
+                .equipmentsOrder[i], equipLength, isPossible);
         }
         this.windowChoicesEquipment.setContents(list);
         this.selectedEquipment = -1;
@@ -310,11 +322,12 @@ class MenuEquip extends MenuBase {
      * @memberof MenuEquip
      */
     remove() {
-        let character = this.party()[this.windowChoicesTabs.currentSelectedIndex];
+        let player = this.party()[this.windowChoicesTabs.currentSelectedIndex];
         let id = Datas.BattleSystems.equipmentsOrder[this.windowChoicesEquipment
             .currentSelectedIndex];
-        let prev = character.equip[id];
-        character.equip[id] = null;
+        let prev = player.equip[id];
+        console.log(prev)
+        player.equip[id] = null;
         if (prev) {
             prev.add(1);
         }
@@ -382,15 +395,20 @@ class MenuEquip extends MenuBase {
                 Manager.Stack.pop();
             } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
                 .menuControls.Action)) {
-                Datas.Systems.soundConfirmation.playSound();
-                this.selectedEquipment = this.windowChoicesEquipment
-                    .currentSelectedIndex;
-                this.windowChoicesList.currentSelectedIndex = 0;
-                if (this.windowChoicesList.listContents.length > 1) {
-                    this.windowChoicesList.goDown();
+                if ((<Graphic.Equip>this.windowChoicesEquipment.getCurrentContent())
+                    .isPossible) {
+                    Datas.Systems.soundConfirmation.playSound();
+                    this.selectedEquipment = this.windowChoicesEquipment
+                        .currentSelectedIndex;
+                    this.windowChoicesList.currentSelectedIndex = 0;
+                    if (this.windowChoicesList.listContents.length > 1) {
+                        this.windowChoicesList.goDown();
+                    }
+                    this.updateInformations();
+                    this.windowChoicesList.selectCurrent();
+                } else {
+                    Datas.Systems.soundCancel.playSound();
                 }
-                this.updateInformations();
-                this.windowChoicesList.selectCurrent();
             }
         } else {
             if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls

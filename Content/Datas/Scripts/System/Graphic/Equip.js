@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
-import { Graphic, Datas } from "../index.js";
+import { Graphic, Datas, System } from "../index.js";
 /** @class
  *  The graphic displaying all the equipment information in the equip menu.
  *  @extends Graphic.Base
@@ -18,15 +18,16 @@ import { Graphic, Datas } from "../index.js";
  *  @param {number} length - Max length of equipment kind name
  */
 class Equip extends Base {
-    constructor(player, id, length) {
+    constructor(player, id, length, isPossible) {
         super();
         this.length = length;
+        this.isPossible = isPossible;
         let equiped = player.equip[id];
         // All the graphics
         this.graphicEquipmentName = new Graphic.Text(Datas.BattleSystems
-            .getEquipment(id));
+            .getEquipment(id), isPossible ? {} : { color: System.Color.GREY });
         this.graphicEquipment = new Graphic.Text(equiped === null ? "-" :
-            equiped.system.name());
+            equiped.system.name(), isPossible ? {} : { color: System.Color.GREY });
     }
     /**
      *  Drawing the equipment kind and equipment name.

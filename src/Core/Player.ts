@@ -309,14 +309,21 @@ class Player {
 
         // Begin equipment
         let characteristics = this.system.getCharacteristics();
-        let i: number, l: number, characteristic: System.Characteristic;
-        for (i = 0, l = characteristics.length; i < l; i++) {
+        let i: number, l: number, characteristic: System.Characteristic, kind: 
+            Enum.ItemKind, itemID: number, item: Item;
+        for (i = 1, l = characteristics.length; i < l; i++) {
             characteristic = characteristics[i];
             if (characteristic.kind === Enum.CharacteristicKind.BeginEquipment) {
-                this.equip[characteristic.beginEquipmentID.getValue()] = new 
-                    Item(characteristic.isBeginWeapon ? Enum.ItemKind.Weapon :
-                    Enum.ItemKind.Armor, characteristic.beginWeaponArmorID
-                    .getValue(), 1);
+                kind = characteristic.isBeginWeapon ? Enum.ItemKind.Weapon :
+                    Enum.ItemKind.Armor;
+                itemID = characteristic.beginWeaponArmorID.getValue();
+                item = Item.findItem(kind, itemID);
+                if (item) {
+                    item.nb++;
+                } else {
+                    item = new Item(kind, itemID, 0);
+                }
+                this.equip[characteristic.beginEquipmentID.getValue()] = item;
             }
         }
 

@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { Player } from "../Core";
-import { Graphic, Datas } from "../index";
+import { Graphic, Datas, System } from "../index";
 
 /** @class
  *  The graphic displaying all the equipment information in the equip menu.
@@ -23,20 +23,22 @@ import { Graphic, Datas } from "../index";
 class Equip extends Base {
 
     public length: number;
+    public isPossible: boolean;
     public graphicEquipmentName: Graphic.Text;
     public graphicEquipment: Graphic.Text;
 
-    constructor(player: Player, id: number, length: number) {
+    constructor(player: Player, id: number, length: number, isPossible: boolean) {
         super();
 
         this.length = length;
+        this.isPossible = isPossible;
         let equiped = player.equip[id];
 
         // All the graphics
         this.graphicEquipmentName = new Graphic.Text(Datas.BattleSystems
-            .getEquipment(id));
+            .getEquipment(id), isPossible ? {} : { color: System.Color.GREY });
         this.graphicEquipment = new Graphic.Text(equiped === null ? "-" : 
-            equiped.system.name());
+            equiped.system.name(), isPossible ? {} : { color: System.Color.GREY });
     }
 
     /** 

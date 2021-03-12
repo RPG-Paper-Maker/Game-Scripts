@@ -10,9 +10,10 @@ import { Graphic } from "../index.js";
  */
 declare class Equip extends Base {
     length: number;
+    isPossible: boolean;
     graphicEquipmentName: Graphic.Text;
     graphicEquipment: Graphic.Text;
-    constructor(player: Player, id: number, length: number);
+    constructor(player: Player, id: number, length: number, isPossible: boolean);
     /**
      *  Drawing the equipment kind and equipment name.
      *  @param {number} x - The x position to draw graphic
