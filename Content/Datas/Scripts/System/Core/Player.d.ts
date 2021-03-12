@@ -121,6 +121,13 @@ declare class Player {
      */
     getEquipmentStatsAndBonus(item?: System.CommonSkillItem, equipmentID?: number): number[][];
     /**
+     *  Update stats according to charactersitics.
+     *  @param {number[]} characteristics - The characteristics list
+     *  @param {number[]} list - The stats list
+     *  @param {number[]} bonus - The bonus list
+     */
+    updateCharacteristics(characteristics: System.Characteristic[], list: number[], bonus: number[]): void;
+    /**
      *  Update stats with equipment stats
      *  @param {number[]} list - The stats list
      *  @param {number[]} bonus - The bonus list

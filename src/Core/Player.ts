@@ -357,6 +357,7 @@ class Player {
                     .getValueAtLevel(level, this));
             }
         }
+        this.updateAllStatsValues();
     }
 
     /** 
@@ -420,26 +421,14 @@ class Player {
         for (j = 0, m = this.status.length; j < m; j++) {
             characteristics = this.status[j].system.characteristics;
             if (characteristics) {
-                for (i = 0, l = characteristics.length; i < l; i++) {
-                    characteristic = characteristics[i];
-                    result = characteristic.getNewStatValue(this);
-                    if (result !== null) {
-                        if (list[result[0]] === null) {
-                            statistic = Datas.BattleSystems.getStatistic(result[
-                                0]);
-                            base = this[statistic.getAbbreviationNext()] - this[
-                                statistic.getBonusAbbreviation()];
-                            list[result[0]] = characteristic.operation ? 0 : 
-                                base;
-                            bonus[result[0]] = characteristic.operation ? -base 
-                                : 0;
-                        }
-                        list[result[0]] += result[1];
-                        bonus[result[0]] += result[1];
-                    }
-                }
+                this.updateCharacteristics(characteristics, list, bonus);
             }
         }
+
+        // Class and hero characteristics
+        this.updateCharacteristics(Datas.Classes.get(this.system.idClass)
+            .characteristics, list, bonus);
+        this.updateCharacteristics(this.system.classInherit.characteristics, list, bonus);
 
         // Same values for not changed stats
         for (i = 0, l = statistics.length; i < l; i++) {
@@ -466,6 +455,34 @@ class Player {
             }
         }
         return [list, bonus];
+    }
+
+    /** 
+     *  Update stats according to charactersitics.
+     *  @param {number[]} characteristics - The characteristics list
+     *  @param {number[]} list - The stats list
+     *  @param {number[]} bonus - The bonus list
+     */
+    updateCharacteristics(characteristics: System.Characteristic[], list: 
+        number[], bonus: number[]) {
+        let characteristic: System.Characteristic, statistic: System.Statistic, 
+            base: number;
+        for (let i = 0, l = characteristics.length; i < l; i++) {
+            characteristic = characteristics[i];
+            let result = characteristic.getNewStatValue(this);
+            if (result !== null) {
+                if (list[result[0]] === null) {
+                    statistic = Datas.BattleSystems.getStatistic(result[
+                        0]);
+                    base = this[statistic.getAbbreviationNext()] - this[statistic
+                        .getBonusAbbreviation()];
+                    list[result[0]] = characteristic.operation ? 0 : base;
+                    bonus[result[0]] = characteristic.operation ? -base : 0;
+                }
+                list[result[0]] += result[1];
+                bonus[result[0]] += result[1];
+            }
+        }
     }
 
     /** 
@@ -623,7 +640,7 @@ class Player {
             }
             this.equip[i] = item;
         }
-        this.updateEquipmentStats();
+        this.updateAllStatsValues();
     }
 
     /** 

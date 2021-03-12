@@ -1,6 +1,4 @@
 import { Translatable } from "./Translatable.js";
-import { StatisticProgression } from "./StatisticProgression.js";
-import { ClassSkill } from "./ClassSkill.js";
 import { System } from "../index.js";
 import { Skill } from "../Core/index.js";
 /** @class
@@ -19,8 +17,9 @@ declare class Class extends Translatable {
     experienceBase: number;
     experienceInflation: number;
     experienceTable: Record<string, any>;
-    statisticsProgression: StatisticProgression[];
-    skills: ClassSkill[];
+    characteristics: System.Characteristic[];
+    statisticsProgression: System.StatisticProgression[];
+    skills: System.ClassSkill[];
     constructor(json?: Record<string, any>);
     /**
      *  Read the JSON associated to the class.
@@ -45,7 +44,7 @@ declare class Class extends Translatable {
      *  @param {System.Class} upClass - The up class
      *  @returns {System.StatisticProgression[]}
      */
-    getStatisticsProgression(upClass: Class): StatisticProgression[];
+    getStatisticsProgression(upClass: Class): System.StatisticProgression[];
     /**
      *  Get the skills.
      *  @param {System.Class} upClass - The up class

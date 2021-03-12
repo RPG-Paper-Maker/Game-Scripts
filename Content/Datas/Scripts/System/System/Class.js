@@ -9,9 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Translatable } from "./Translatable.js";
-import { StatisticProgression } from "./StatisticProgression.js";
-import { ClassSkill } from "./ClassSkill.js";
 import { Utils } from "../Common/index.js";
+import { System } from "../index.js";
 import { Skill } from "../Core/index.js";
 /** @class
  *  A class of the game.
@@ -44,13 +43,16 @@ class Class extends Translatable {
             }
         }
         // Statistic progression
+        this.characteristics = [];
+        Utils.readJSONSystemList({ list: Utils.defaultValue(json.characteristics, []), listIndexes: this.characteristics, cons: System.Characteristic });
+        // Statistic progression
         this.statisticsProgression = [];
         Utils.readJSONSystemList({ list: Utils.defaultValue(json.stats, []),
-            listIndexes: this.statisticsProgression, cons: StatisticProgression });
+            listIndexes: this.statisticsProgression, cons: System.StatisticProgression });
         // Skills
         this.skills = [];
         Utils.readJSONSystemList({ list: Utils.defaultValue(json.skills, []),
-            listIndexes: this.skills, cons: ClassSkill });
+            listIndexes: this.skills, cons: System.ClassSkill });
     }
     /**
      *  Get property according to upClass.
