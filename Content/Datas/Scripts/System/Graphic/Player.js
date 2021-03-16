@@ -34,13 +34,13 @@ class Player extends Base {
         // All the graphics
         this.graphicName = new Graphic.Text(this.player.name);
         this.graphicClass = new Graphic.Text(cl.name(), { fontSize: 10 });
-        this.graphicLevelName = new Graphic.Text(levelStat.name);
+        this.graphicLevelName = new Graphic.Text(levelStat.name());
         this.graphicLevel = new Graphic.Text(Utils.numToString(this.player[levelStat.abbreviation]));
         if (expStat === null) {
             this.graphicExpName = null;
         }
         else {
-            this.graphicExpName = new Graphic.Text(expStat.name, { fontSize: Constants.MEDIUM_FONT_SIZE });
+            this.graphicExpName = new Graphic.Text(expStat.name(), { fontSize: Constants.MEDIUM_FONT_SIZE });
             this.graphicExp = new Graphic.Text(this.player.getBarAbbreviation(expStat), { fontSize: Constants.MEDIUM_FONT_SIZE });
         }
         // Adding stats
@@ -68,7 +68,7 @@ class Player extends Base {
                 statistic = Datas.BattleSystems.getStatistic(id);
                 // Only display bars
                 if (!statistic.isFix) {
-                    graphic = new Graphic.Text(statistic.name + Constants
+                    graphic = new Graphic.Text(statistic.name() + Constants
                         .STRING_COLON);
                     Platform.ctx.font = graphic.font;
                     graphic.updateContextFont();
@@ -133,9 +133,9 @@ class Player extends Base {
         let cl = Datas.Classes.get(hero.idClass);
         let levelStat = Datas.BattleSystems.getLevelStatistic();
         // All the graphics
-        this.graphicName.setText(hero.name);
+        this.graphicName.setText(this.player.name);
         this.graphicClass.setText(cl.name());
-        this.graphicLevelName.setText(levelStat.name);
+        this.graphicLevelName.setText(levelStat.name());
         this.graphicLevel.setText(Utils.numToString(this.player[levelStat
             .abbreviation]));
         // Adding stats

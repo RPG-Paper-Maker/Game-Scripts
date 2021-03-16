@@ -7,15 +7,8 @@ import { Base } from "./Base.js";
  *  name in sevaral langs
  */
 declare class Translatable extends Base {
-    static EMPTY_NAMES: {
-        names: string[];
-    };
     names: string[];
     constructor(json?: Record<string, any>);
-    /**
-     *  Assign the default members.
-     */
-    setup(): void;
     /**
      *  Read the JSON associated to the name in sevaral langs.
      *  @param {Record<string, any>} - json Json object describing the name in

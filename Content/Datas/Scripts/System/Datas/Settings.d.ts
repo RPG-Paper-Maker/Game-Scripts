@@ -4,6 +4,7 @@
  */
 declare class Settings {
     static kb: number[][][];
+    static currentLanguage: number;
     static isProtected: boolean;
     constructor();
     /**
@@ -28,5 +29,10 @@ declare class Settings {
      *  @static
      */
     static updateKeyboard(id: number, sc: number[][]): void;
+    /**
+     *  Update current language setting.
+     *  @param {number} id
+     */
+    static updateCurrentLanguage(id: number): void;
 }
 export { Settings };

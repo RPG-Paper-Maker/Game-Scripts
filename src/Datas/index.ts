@@ -18,6 +18,7 @@ export * from "./CommonEvents";
 export * from "./Heroes";
 export * from "./Items";
 export * from "./Keyboards";
+export * from "./Languages";
 export * from "./Monsters";
 export * from "./Pictures";
 export * from "./Settings";

@@ -8,17 +8,17 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base.js";
 import { Class } from "./Class.js";
 import { Utils } from "../Common/index.js";
 import { Datas } from "../index.js";
+import { Translatable } from "./Translatable.js";
 /** @class
  *  An hero of the game.
  *  @extends System.Base
  *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  hero
  */
-class Hero extends Base {
+class Hero extends Translatable {
     constructor(json) {
         super(json);
     }
@@ -27,7 +27,7 @@ class Hero extends Base {
      *  @param {Record<string, any>} - json Json object describing the hero
      */
     read(json) {
-        this.name = json.names[1];
+        super.read(json);
         this.idClass = json.class;
         this.idBattler = Utils.defaultValue(json.bid, -1);
         this.idFaceset = Utils.defaultValue(json.fid, -1);

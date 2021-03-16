@@ -54,5 +54,11 @@ declare class TitlescreenGameover {
      *  @returns {boolean}
      */
     static keyboardAssignment(): boolean;
+    /**
+     *  The setting action language.
+     *  @static
+     *  @returns {boolean}
+     */
+    static language(): boolean;
 }
 export { TitlescreenGameover };

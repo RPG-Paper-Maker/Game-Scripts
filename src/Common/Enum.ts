@@ -505,7 +505,8 @@ namespace Enum {
      *   @readonly
      */
     export enum TitleSettingKind {
-        KeyboardAssigment
+        KeyboardAssigment,
+        Language
     };
 
     /**

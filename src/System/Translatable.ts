@@ -9,8 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Utils } from "../Common";
-import { EventCommand } from "../index";
+import { Datas, EventCommand } from "../index";
 import { Base } from "./Base";
 
 /** @class
@@ -21,21 +20,10 @@ import { Base } from "./Base";
  */
 class Translatable extends Base {
 
-    public static EMPTY_NAMES = {
-        names: ["", ""]
-    }
-
     public names: string[];
 
     constructor(json?: Record<string, any>) {
         super(json)
-    }
-
-    /** 
-     *  Assign the default members.
-     */
-    public setup() {
-        this.names = [];
     }
 
     /** 
@@ -44,7 +32,7 @@ class Translatable extends Base {
      *  sevaral langs
      */
     read(json: Record<string, any>): void {
-        this.names = Utils.defaultValue(json.names, ["", json[1]]);
+        this.names = json.names;
     }
 
     /** 
@@ -52,7 +40,7 @@ class Translatable extends Base {
      *  @returns {string}
      */
     name(): string {
-        return this.names[1];
+        return this.names[Datas.Settings.currentLanguage] || "";
     }
 
     /** 
@@ -63,7 +51,6 @@ class Translatable extends Base {
         let name = command[iterator.i++];
         this.names[id] = name;
     }
-
 }
 
 export { Translatable }

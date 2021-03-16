@@ -530,6 +530,7 @@ var Enum;
     let TitleSettingKind;
     (function (TitleSettingKind) {
         TitleSettingKind[TitleSettingKind["KeyboardAssigment"] = 0] = "KeyboardAssigment";
+        TitleSettingKind[TitleSettingKind["Language"] = 1] = "Language";
     })(TitleSettingKind = Enum.TitleSettingKind || (Enum.TitleSettingKind = {}));
     ;
     /**

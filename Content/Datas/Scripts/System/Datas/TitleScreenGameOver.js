@@ -42,7 +42,7 @@ class TitlescreenGameover {
         let obj;
         for (let i = 0, j = 0; i < l; i++) {
             obj = jsonList[i];
-            if (obj.tso) {
+            if (Utils.defaultValue(obj.checked, true)) {
                 this.titleSettings[j] = obj.id;
                 j++;
             }
@@ -114,6 +114,8 @@ class TitlescreenGameover {
         switch (id) {
             case TitleSettingKind.KeyboardAssigment:
                 return Datas.TitlescreenGameover.keyboardAssignment;
+            case TitleSettingKind.Language:
+                return Datas.TitlescreenGameover.language;
         }
     }
     /**
@@ -123,6 +125,15 @@ class TitlescreenGameover {
      */
     static keyboardAssignment() {
         Manager.Stack.push(new Scene.KeyboardAssign());
+        return true;
+    }
+    /**
+     *  The setting action language.
+     *  @static
+     *  @returns {boolean}
+     */
+    static language() {
+        Manager.Stack.push(new Scene.ChangeLanguage());
         return true;
     }
 }

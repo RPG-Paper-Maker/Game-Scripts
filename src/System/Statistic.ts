@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from "./Base";
+import { Translatable } from "./Translatable";
 
 /** @class
  *  A statistic of the game.
@@ -17,15 +17,16 @@ import { Base } from "./Base";
  *  @param {Record<string, any>} - [json=undefined] Json object describing the 
  *  statistic
  */
-class Statistic extends Base {
+class Statistic extends Translatable {
 
-    public name: string;
+    public suffixName: string;
     public abbreviation: string;
     public isFix: boolean;
     public isRes: boolean;
 
     constructor(json?: Record<string, any>)  {
         super(json);
+        this.suffixName = "";
     }
 
     /** 
@@ -37,7 +38,7 @@ class Statistic extends Base {
      */
     static createElementRes(id: number, name: string): Statistic {
         let stat = new Statistic();
-        stat.name = name + " res.";
+        stat.suffixName = " res.";
         stat.abbreviation = "elres" + id;
         stat.isFix = true;
         stat.isRes = true;
@@ -53,7 +54,7 @@ class Statistic extends Base {
      */
     static createElementResPercent(id: number, name: string): Statistic {
         let stat = new Statistic();
-        stat.name = name + " res.(%)";
+        stat.suffixName = name + " res.(%)";
         stat.abbreviation = "elresp" + id;
         stat.isFix = true;
         stat.isRes = true;
@@ -65,9 +66,17 @@ class Statistic extends Base {
      *  @param {Record<string, any>} - json Json object describing the statistic
      */
     read(json: Record<string, any>) {
-        this.name = json.names[1];
+        super.read(json);
         this.abbreviation = json.abr;
         this.isFix = json.fix;
+    }
+
+    /** 
+     *  Get the name according to current lang.
+     *  @returns {string}
+     */
+    name(): string {
+        return super.name() + this.suffixName;
     }
 
     /** 

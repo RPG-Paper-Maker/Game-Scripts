@@ -9,13 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from "./Base";
 import { Class } from "./Class";
 import { Utils } from "../Common";
 import { Datas, System } from "../index";
 import { StatisticProgression } from "./StatisticProgression";
-import { ClassSkill } from "./ClassSkill";
 import { Skill } from "../Core";
+import { Translatable } from "./Translatable";
 
 /** @class
  *  An hero of the game.
@@ -23,9 +22,8 @@ import { Skill } from "../Core";
  *  @param {Record<string, any>} - [json=undefined] Json object describing the 
  *  hero
  */
-class Hero extends Base {
+class Hero extends Translatable {
 
-    name: string;
     idClass: number;
     idBattler: number;
     idFaceset: number;
@@ -40,7 +38,7 @@ class Hero extends Base {
      *  @param {Record<string, any>} - json Json object describing the hero
      */
     read(json: Record<string, any>) {
-        this.name = json.names[1];
+        super.read(json);
         this.idClass = json.class;
         this.idBattler = Utils.defaultValue(json.bid, -1);
         this.idFaceset = Utils.defaultValue(json.fid, -1);

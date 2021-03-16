@@ -86,7 +86,7 @@ class TroopReactionConditions extends Base {
                     const statValue = player[stat.abbreviation];
                     const statValueMax = player[stat.getMaxAbbreviation()];
                     if (Utils.isUndefined(statValueMax)) {
-                        throw new Error("No max value for stat " + stat.name);
+                        throw new Error("No max value for stat " + stat.name());
                     }
                     const compareValue = this.statisticCompare.getValue();
                     return Mathf.OPERATORS_COMPARE[this.statisticOperationKind](this.statisticCompareUnit ? statValue / statValueMax

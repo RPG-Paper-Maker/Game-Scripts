@@ -20,6 +20,7 @@ export * from "./BattleInitialize";
 export * from "./BattleSelection";
 export * from "./BattleStartTurn";
 export * from "./BattleVictory";
+export * from "./ChangeLanguage";
 export * from "./KeyboardAssign";
 export * from "./LoadGame";
 export * from "./Loading";

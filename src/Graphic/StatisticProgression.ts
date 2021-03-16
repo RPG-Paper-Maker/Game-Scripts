@@ -72,7 +72,7 @@ class StatisticProgression extends Base {
                 if (statistic.isRes) {
                     continue;
                 }
-                graphic = new Graphic.Text(statistic.name + Constants.STRING_COLON);
+                graphic = new Graphic.Text(statistic.name() + Constants.STRING_COLON);
                 Platform.ctx.font = graphic.font;
                 graphic.updateContextFont();
                 this.maxLength = Math.max(Platform.ctx.measureText(graphic.text)

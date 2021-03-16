@@ -57,13 +57,13 @@ class PlayerDescription extends Base {
         this.graphicName = new Graphic.Text(this.player.name);
         this.graphicClass = new Graphic.Text(cl.name(), { fontSize: Constants
             .MEDIUM_FONT_SIZE });
-        this.graphicLevelName = new Graphic.Text(levelStat.name);
+        this.graphicLevelName = new Graphic.Text(levelStat.name());
         this.graphicLevel = new Graphic.Text(Utils.numToString(player[levelStat
             .abbreviation]));
         if (expStat === null) {
             this.graphicExpName = null;
         } else {
-            this.graphicExpName = new Graphic.Text(expStat.name, { fontSize: 
+            this.graphicExpName = new Graphic.Text(expStat.name(), { fontSize: 
                 Constants.MEDIUM_FONT_SIZE });
             this.graphicExp = new Graphic.Text(player.getBarAbbreviation(expStat
                 ), { fontSize: Constants.MEDIUM_FONT_SIZE });
@@ -87,7 +87,7 @@ class PlayerDescription extends Base {
                 if (statistic.isRes) {
                     continue;
                 }
-                graphicName = new Graphic.Text(statistic.name + Constants
+                graphicName = new Graphic.Text(statistic.name() + Constants
                     .STRING_COLON);
                 Platform.ctx.font = graphicName.font;
                 graphicName.updateContextFont();
@@ -167,7 +167,7 @@ class PlayerDescription extends Base {
                 .BattleSystems.idExpStatistic)
             {
                 statistic = Datas.BattleSystems.getStatistic(id);
-                graphicName = new Graphic.Text(statistic.name + Constants
+                graphicName = new Graphic.Text(statistic.name() + Constants
                     .STRING_COLON);
                 Platform.ctx.font = graphicName.font;
                 graphicName.updateContextFont();

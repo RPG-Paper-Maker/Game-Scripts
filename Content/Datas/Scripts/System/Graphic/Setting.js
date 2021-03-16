@@ -29,6 +29,12 @@ class Setting extends Base {
                 this.graphicRight = new Graphic.Text("...", { align: Align
                         .Center });
                 break;
+            case TitleSettingKind.Language:
+                textLeft = "Language";
+                textInformation = "Update current language.";
+                this.graphicRight = new Graphic.Text("...", { align: Align
+                        .Center });
+                break;
         }
         this.graphicTextLeft = new Graphic.Text(textLeft);
         this.graphicTextInformation = new Graphic.Text(textInformation, { align: Align.Center });

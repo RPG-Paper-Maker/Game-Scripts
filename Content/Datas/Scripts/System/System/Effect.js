@@ -339,7 +339,7 @@ class Effect extends Base {
                 switch (this.damageKind) {
                     case DamagesKind.Stat:
                         damageName = Datas.BattleSystems.getStatistic(this
-                            .damageStatisticID.getValue()).name;
+                            .damageStatisticID.getValue()).name();
                         break;
                     case DamagesKind.Currency:
                         damageName = Datas.Systems.getCurrency(this
@@ -358,10 +358,10 @@ class Effect extends Base {
                     Interpreter.evaluate(this.statusPrecisionFormula.getValue(), { user: user, target: target }) + "%]";
             case EffectKind.AddRemoveSkill:
                 return (this.isAddSkill ? "Add" : "Remove") + " skill " + Datas
-                    .Skills.get(this.addSkillID.getValue()).name;
+                    .Skills.get(this.addSkillID.getValue()).name();
             case EffectKind.PerformSkill:
                 return "Perform skill " + Datas.Skills.get(this.performSkillID
-                    .getValue()).name;
+                    .getValue()).name();
             default:
                 return "";
         }

@@ -52,7 +52,7 @@ class EquipStats extends Base {
                     continue;
                 }
                 // Name of the stat
-                graphicName = new Graphic.Text(statistic.name + Constants
+                graphicName = new Graphic.Text(statistic.name() + Constants
                     .STRING_COLON);
                 Platform.ctx.font = graphicName.font;
                 graphicName.updateContextFont();

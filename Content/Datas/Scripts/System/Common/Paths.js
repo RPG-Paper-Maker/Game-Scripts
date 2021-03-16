@@ -51,6 +51,7 @@ Paths.FILE_DLCS = Paths.DATAS + "dlcs.json";
 Paths.FILE_ANIMATIONS = Paths.DATAS + "animations.json";
 Paths.FILE_STATUS = Paths.DATAS + "status.json";
 Paths.FILE_SCRIPTS = Paths.DATAS + "scripts.json";
+Paths.FILE_LANGS = Paths.DATAS + "langs.json";
 Paths.FILE_PROTECT = Platform.ROOT_DIRECTORY + "/.protect";
 Paths.FILE_PLUGIN_CODE = "code.js";
 Paths.FILE_PLUGIN_DETAILS = "details.json";

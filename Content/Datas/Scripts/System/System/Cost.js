@@ -135,11 +135,11 @@ class Cost extends Base {
         switch (this.kind) {
             case DamagesKind.Stat:
                 result += Datas.BattleSystems.getStatistic(this.statisticID
-                    .getValue()).name;
+                    .getValue()).name();
                 break;
             case DamagesKind.Currency:
                 result += Datas.Systems.getCurrency(this.currencyID.getValue())
-                    .name;
+                    .name();
                 break;
             case DamagesKind.Variable:
                 result += Datas.Variables.get(this.variableID);

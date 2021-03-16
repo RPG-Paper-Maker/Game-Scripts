@@ -7,6 +7,7 @@ export * from "./CommonEvents.js";
 export * from "./Heroes.js";
 export * from "./Items.js";
 export * from "./Keyboards.js";
+export * from "./Languages.js";
 export * from "./Monsters.js";
 export * from "./Pictures.js";
 export * from "./Settings.js";

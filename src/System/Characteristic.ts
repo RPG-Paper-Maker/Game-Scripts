@@ -184,28 +184,28 @@ class Characteristic extends Base {
                     case Enum.IncreaseDecreaseKind.StatValue:
                         result += Datas.BattleSystems.getStatistic(Interpreter
                             .evaluate(this.statisticValueID.getValue(), { user: 
-                            user, target: target })).name;
+                            user, target: target })).name();
                         break;
                     case Enum.IncreaseDecreaseKind.ElementRes:
                         result += Datas.BattleSystems.getElement(this
-                            .elementResID.getValue()).name + " res.";
+                            .elementResID.getValue()).name() + " res.";
                         break;
                     case Enum.IncreaseDecreaseKind.StatusRes:
                         break;
                     case Enum.IncreaseDecreaseKind.ExperienceGain:
-                        result += Datas.BattleSystems.getExpStatistic().name +
+                        result += Datas.BattleSystems.getExpStatistic().name() +
                             " gain";
                         break;
                     case Enum.IncreaseDecreaseKind.CurrencyGain:
                         result += Datas.Systems.getCurrency(this.currencyGainID
-                            .getValue()).name + " gain";
+                            .getValue()).name() + " gain";
                         break;
                     case Enum.IncreaseDecreaseKind.SkillCost:
                         if (this.isAllSkillCost) {
                             result += "All skills cost";
                         } else {
                             result += Datas.Skills.get(this.skillCostID
-                                .getValue()).name + " skill cost";
+                                .getValue()).name() + " skill cost";
                         }
                         break;
                     case Enum.IncreaseDecreaseKind.Variable:

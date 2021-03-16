@@ -64,8 +64,7 @@ class CommonSkillItem extends Icon {
         this.type = Utils.defaultValue(json.t, 1);
         this.consumable = Utils.defaultValue(json.con, false);
         this.oneHand = Utils.defaultValue(json.oh, true);
-        this.description = new Translatable(Utils.defaultValue(json.d, 
-            Translatable.EMPTY_NAMES));
+        this.description = new Translatable(json.d);
         this.targetKind = Utils.defaultValue(json.tk, TargetKind.None);
         this.targetConditionFormula = DynamicValue.readOrNone(json.tcf);
         this.conditionFormula = DynamicValue.readOrNone(json.cf);

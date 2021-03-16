@@ -28,7 +28,7 @@ class RewardsTop extends Base {
 
         // Experience
         this.graphicXP = new Graphic.Text(Datas.BattleSystems.getExpStatistic()
-            .name + Constants.STRING_COLON + Constants.STRING_SPACE + xp);
+            .name() + Constants.STRING_COLON + Constants.STRING_SPACE + xp);
         Platform.ctx.font = this.graphicXP.font;
         this.graphicXP.updateContextFont();
         this.graphicXPLength = Platform.ctx.measureText(this.graphicXP.text).width;

@@ -13,7 +13,7 @@ import { Enum, Utils, Interpreter } from "../Common";
 import DamagesKind = Enum.DamagesKind;
 import { Base } from "./Base";
 import { DynamicValue } from "./DynamicValue";
-import { Manager, Datas, Scene, System } from "../index";
+import { Datas, Scene, System } from "../index";
 import { Player, Game } from "../Core";
 import { StructIterator } from "../EventCommand";
 
@@ -154,11 +154,11 @@ class Cost extends Base {
         switch (this.kind) {
             case DamagesKind.Stat:
                 result += Datas.BattleSystems.getStatistic(this.statisticID
-                    .getValue()).name;
+                    .getValue()).name();
                 break;
             case DamagesKind.Currency:
                 result += Datas.Systems.getCurrency(this.currencyID.getValue())
-                    .name;
+                    .name();
                 break;
             case DamagesKind.Variable:
                 result += Datas.Variables.get(this.variableID);

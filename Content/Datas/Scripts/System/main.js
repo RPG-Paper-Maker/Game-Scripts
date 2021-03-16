@@ -35,6 +35,7 @@ export class Main {
      * @memberof Main
      */
     static async load() {
+        await Datas.Languages.read();
         await Datas.Settings.read();
         await Datas.Systems.read();
         await Datas.Variables.read();

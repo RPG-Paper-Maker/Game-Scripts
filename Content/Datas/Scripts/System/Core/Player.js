@@ -29,7 +29,7 @@ class Player {
             this.id = id;
             this.instid = instanceID;
             this.system = this.getSystem();
-            this.name = Utils.isUndefined(name) ? this.system.name : name;
+            this.name = Utils.isUndefined(name) ? this.system.name() : name;
             // Skills
             this.sk = [];
             let i, l;

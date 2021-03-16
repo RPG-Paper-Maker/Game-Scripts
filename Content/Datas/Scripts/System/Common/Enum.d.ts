@@ -465,7 +465,8 @@ declare namespace Enum {
      *   @readonly
      */
     enum TitleSettingKind {
-        KeyboardAssigment = 0
+        KeyboardAssigment = 0,
+        Language = 1
     }
     /**
      *   Enum for the object moving.

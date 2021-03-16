@@ -1,12 +1,12 @@
-import { Base } from "./Base.js";
+import { Translatable } from "./Translatable.js";
 /** @class
  *  A statistic of the game.
  *  @extends System.Base
  *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  statistic
  */
-declare class Statistic extends Base {
-    name: string;
+declare class Statistic extends Translatable {
+    suffixName: string;
     abbreviation: string;
     isFix: boolean;
     isRes: boolean;
@@ -32,6 +32,11 @@ declare class Statistic extends Base {
      *  @param {Record<string, any>} - json Json object describing the statistic
      */
     read(json: Record<string, any>): void;
+    /**
+     *  Get the name according to current lang.
+     *  @returns {string}
+     */
+    name(): string;
     /**
      *  Get the max abbreviation.
      *  @returns {string}

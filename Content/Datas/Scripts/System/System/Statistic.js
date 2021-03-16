@@ -8,16 +8,17 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Base } from "./Base.js";
+import { Translatable } from "./Translatable.js";
 /** @class
  *  A statistic of the game.
  *  @extends System.Base
  *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  statistic
  */
-class Statistic extends Base {
+class Statistic extends Translatable {
     constructor(json) {
         super(json);
+        this.suffixName = "";
     }
     /**
      *  Create an res percent element.
@@ -28,7 +29,7 @@ class Statistic extends Base {
      */
     static createElementRes(id, name) {
         let stat = new Statistic();
-        stat.name = name + " res.";
+        stat.suffixName = " res.";
         stat.abbreviation = "elres" + id;
         stat.isFix = true;
         stat.isRes = true;
@@ -43,7 +44,7 @@ class Statistic extends Base {
      */
     static createElementResPercent(id, name) {
         let stat = new Statistic();
-        stat.name = name + " res.(%)";
+        stat.suffixName = name + " res.(%)";
         stat.abbreviation = "elresp" + id;
         stat.isFix = true;
         stat.isRes = true;
@@ -54,9 +55,16 @@ class Statistic extends Base {
      *  @param {Record<string, any>} - json Json object describing the statistic
      */
     read(json) {
-        this.name = json.names[1];
+        super.read(json);
         this.abbreviation = json.abr;
         this.isFix = json.fix;
+    }
+    /**
+     *  Get the name according to current lang.
+     *  @returns {string}
+     */
+    name() {
+        return super.name() + this.suffixName;
     }
     /**
      *  Get the max abbreviation.
