@@ -30,7 +30,6 @@ class DisplayChoice extends Base {
 
     constructor(command: any[]) {
         super();
-        console.log(command)
 
         let iterator = {
             i: 0

@@ -66,6 +66,10 @@ declare class Stack {
      */
     static clearHUD(): void;
     /**
+     *  Translate all the current scenes.
+     */
+    static translateAll(): void;
+    /**
      *  Update the stack.
      */
     static update(): void;

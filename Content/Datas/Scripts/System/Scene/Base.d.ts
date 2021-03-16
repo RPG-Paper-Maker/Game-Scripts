@@ -69,6 +69,10 @@ declare abstract class Base {
      */
     load(): Promise<void>;
     /**
+     *  Translate the scene if possible.
+     */
+    translate(): void;
+    /**
      * Update all the reaction interpreters from the scenes.
      *
      * @memberof Base

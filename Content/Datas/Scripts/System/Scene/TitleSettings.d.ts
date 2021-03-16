@@ -15,6 +15,10 @@ declare class TitleSettings extends Base {
      */
     load(): Promise<void>;
     /**
+     *  Translate the scene if possible.
+     */
+    translate(): void;
+    /**
      *  Handle scene key pressed.
      *  @param {number} key - The key ID
      */

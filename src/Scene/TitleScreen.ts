@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { Manager, Datas } from "../index";
+import { Manager, Datas, Graphic } from "../index";
 import { Picture2D, WindowChoices, WindowBox } from "../Core";
 import { Enum, Platform, ScreenResolution, Constants } from "../Common";
 import PictureKind = Enum.PictureKind;
@@ -97,6 +97,15 @@ class TitleScreen extends Base {
         this.loading = false;
     }
 
+    /** 
+     *  Translate the scene if possible.
+     */
+    translate() {
+        for (let i = 0, l = this.windowChoicesCommands.listContents.length; i < l; i++) {
+            (<Graphic.Text>this.windowChoicesCommands.listContents[i]).setText(
+                Datas.TitlescreenGameover.titleCommands[i].name());
+        }
+    }
 
     /**
      * @inheritdoc
@@ -130,6 +139,7 @@ class TitleScreen extends Base {
             this.pictureBackground.draw();
         }
         this.windowChoicesCommands.draw();
+        console.log(this.windowChoicesCommands)
     }
 }
 

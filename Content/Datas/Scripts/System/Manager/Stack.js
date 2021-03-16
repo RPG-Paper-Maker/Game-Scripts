@@ -110,6 +110,14 @@ class Stack {
         Platform.ctx.imageSmoothingEnabled = false;
     }
     /**
+     *  Translate all the current scenes.
+     */
+    static translateAll() {
+        for (let scene of this.content) {
+            scene.translate();
+        }
+    }
+    /**
      *  Update the stack.
      */
     static update() {

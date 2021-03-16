@@ -58,6 +58,11 @@ class TitleSettings extends Base {
         this.loading = false;
     }
     /**
+     *  Translate the scene if possible.
+     */
+    translate() {
+    }
+    /**
      *  Handle scene key pressed.
      *  @param {number} key - The key ID
      */

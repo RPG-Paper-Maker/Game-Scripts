@@ -143,6 +143,7 @@ class ChangeLanguage extends Base {
         let newIndex = this.windowChoicesMain.currentSelectedIndex;
         if (newIndex !== index) {
             Datas.Settings.updateCurrentLanguage(Datas.Languages.listOrder[newIndex]);
+            Manager.Stack.translateAll();
         }
         return true;
     }

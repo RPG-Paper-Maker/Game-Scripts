@@ -41,7 +41,6 @@ class ShowText extends Base {
         while (iterator.i < command.length) {
             lang.getCommand(command, iterator);
         }
-        console.log(lang)
         this.message = lang.name();
         this.windowMain = new WindowBox(0, 0, 0, 0,
             {

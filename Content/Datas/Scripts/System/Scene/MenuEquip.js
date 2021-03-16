@@ -182,7 +182,6 @@ class MenuEquip extends MenuBase {
                                 && !characteristic.isAllowEquipWeapon &&
                                 systemItem.type === characteristic.equipArmorTypeID
                                     .getValue()))) {
-                                console.log(characteristic);
                                 allow = characteristic.isAllowEquip;
                             }
                         }
@@ -258,7 +257,6 @@ class MenuEquip extends MenuBase {
         let id = Datas.BattleSystems.equipmentsOrder[this.windowChoicesEquipment
             .currentSelectedIndex];
         let prev = player.equip[id];
-        console.log(prev);
         player.equip[id] = null;
         if (prev) {
             prev.add(1);

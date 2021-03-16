@@ -105,6 +105,13 @@ abstract class Base {
         this.loading = false;
     }
 
+    /** 
+     *  Translate the scene if possible.
+     */
+    translate() {
+
+    }
+
     /**
      * Update all the reaction interpreters from the scenes. 
      *

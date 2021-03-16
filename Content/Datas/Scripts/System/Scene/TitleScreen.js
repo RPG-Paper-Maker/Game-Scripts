@@ -68,6 +68,14 @@ class TitleScreen extends Base {
         this.loading = false;
     }
     /**
+     *  Translate the scene if possible.
+     */
+    translate() {
+        for (let i = 0, l = this.windowChoicesCommands.listContents.length; i < l; i++) {
+            this.windowChoicesCommands.listContents[i].setText(Datas.TitlescreenGameover.titleCommands[i].name());
+        }
+    }
+    /**
      * @inheritdoc
      *
      * @param {number} key - the key ID
@@ -97,6 +105,7 @@ class TitleScreen extends Base {
             this.pictureBackground.draw();
         }
         this.windowChoicesCommands.draw();
+        console.log(this.windowChoicesCommands);
     }
 }
 export { TitleScreen };

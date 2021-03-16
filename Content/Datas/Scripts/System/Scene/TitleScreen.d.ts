@@ -35,6 +35,10 @@ declare class TitleScreen extends Base {
      */
     load(): Promise<void>;
     /**
+     *  Translate the scene if possible.
+     */
+    translate(): void;
+    /**
      * @inheritdoc
      *
      * @param {number} key - the key ID

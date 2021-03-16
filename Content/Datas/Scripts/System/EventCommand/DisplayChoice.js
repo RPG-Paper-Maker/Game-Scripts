@@ -21,7 +21,6 @@ var Align = Enum.Align;
 class DisplayChoice extends Base {
     constructor(command) {
         super();
-        console.log(command);
         let iterator = {
             i: 0
         };
