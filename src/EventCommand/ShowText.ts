@@ -37,7 +37,12 @@ class ShowText extends Base {
         }
         this.interlocutor = System.DynamicValue.createValueCommand(command, iterator);
         this.facesetID = command[iterator.i++];
-        this.message = Utils.numToString(command[iterator.i++]);
+        let lang = new System.Translatable();
+        while (iterator.i < command.length) {
+            lang.getCommand(command, iterator);
+        }
+        console.log(lang)
+        this.message = lang.name();
         this.windowMain = new WindowBox(0, 0, 0, 0,
             {
                 content: new Graphic.Message(this.message, this.facesetID),

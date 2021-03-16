@@ -30,6 +30,7 @@ class DisplayChoice extends Base {
 
     constructor(command: any[]) {
         super();
+        console.log(command)
 
         let iterator = {
             i: 0
@@ -42,12 +43,18 @@ class DisplayChoice extends Base {
         let next: string;
         while (iterator.i < l) {
             next = command[iterator.i];
-            iterator.i++;
-            if (next !== Constants.STRING_DASH) {
+            if (next === Constants.STRING_DASH) {
+                iterator.i++;
+                if (lang !== null) {
+                    this.choices.push(lang.name());
+                }
                 lang = new System.Translatable();
+            } else {
                 lang.getCommand(command, iterator);
-                this.choices.push(lang.name());
             }
+        }
+        if (lang !== null) {
+            this.choices.push(lang.name());
         }
 
         // Determine slots width

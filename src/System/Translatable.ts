@@ -27,6 +27,13 @@ class Translatable extends Base {
     }
 
     /** 
+     *  Assign the default members.
+     */
+    public setup() {
+        this.names = [];
+    }
+
+    /** 
      *  Read the JSON associated to the name in sevaral langs.
      *  @param {Record<string, any>} - json Json object describing the name in 
      *  sevaral langs

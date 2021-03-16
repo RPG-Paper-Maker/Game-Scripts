@@ -21,6 +21,7 @@ var Align = Enum.Align;
 class DisplayChoice extends Base {
     constructor(command) {
         super();
+        console.log(command);
         let iterator = {
             i: 0
         };
@@ -31,12 +32,19 @@ class DisplayChoice extends Base {
         let next;
         while (iterator.i < l) {
             next = command[iterator.i];
-            iterator.i++;
-            if (next !== Constants.STRING_DASH) {
+            if (next === Constants.STRING_DASH) {
+                iterator.i++;
+                if (lang !== null) {
+                    this.choices.push(lang.name());
+                }
                 lang = new System.Translatable();
-                lang.getCommand(command, iterator);
-                this.choices.push(lang.name());
             }
+            else {
+                lang.getCommand(command, iterator);
+            }
+        }
+        if (lang !== null) {
+            this.choices.push(lang.name());
         }
         // Determine slots width
         l = this.choices.length;

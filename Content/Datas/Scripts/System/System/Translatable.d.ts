@@ -10,6 +10,10 @@ declare class Translatable extends Base {
     names: string[];
     constructor(json?: Record<string, any>);
     /**
+     *  Assign the default members.
+     */
+    setup(): void;
+    /**
      *  Read the JSON associated to the name in sevaral langs.
      *  @param {Record<string, any>} - json Json object describing the name in
      *  sevaral langs
