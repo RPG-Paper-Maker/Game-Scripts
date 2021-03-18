@@ -39,6 +39,7 @@ declare class Map extends Base {
     collisions: number[][][][];
     previousCameraPosition: Vector3;
     portionsObjectsUpdated: boolean;
+    maxObjectsID: number;
     constructor(id: number, isBattleMap?: boolean, minimal?: boolean);
     /**
      *  Load async stuff.

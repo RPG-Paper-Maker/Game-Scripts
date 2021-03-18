@@ -98,7 +98,8 @@ namespace Enum {
         Plugin,
         StartShopMenu,
         RestockShop,
-        EnterANameMenu
+        EnterANameMenu,
+        CreateObjectInMap
     };
 
     /**

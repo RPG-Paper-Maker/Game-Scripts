@@ -301,10 +301,10 @@ class DynamicValue extends System.Base {
      *  Get the value
      *  @returns {any}
      */
-    getValue<T>(): any {
+    getValue<T>(forceVariable: boolean = false): any {
         switch (this.kind) {
             case DynamicValueKind.Variable:
-                return Game.current.variables[this.value];
+                return forceVariable ? this.value : Game.current.variables[this.value];
             case DynamicValueKind.Parameter:
                 return ReactionInterpreter.currentParameters[this.value]
                     .getValue();

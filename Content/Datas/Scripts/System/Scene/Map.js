@@ -106,10 +106,14 @@ class Map extends Base {
         let l = json.length;
         this.allObjects = new Array(l + 1);
         let jsonObject;
+        this.maxObjectsID = 1;
         for (let i = 0; i < l; i++) {
             jsonObject = json[i];
             this.allObjects[jsonObject.id] = Position.createFromArray(jsonObject
                 .p);
+            if (jsonObject.id > this.maxObjectsID) {
+                this.maxObjectsID = jsonObject.id;
+            }
         }
     }
     /**

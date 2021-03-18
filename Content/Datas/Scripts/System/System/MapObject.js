@@ -21,6 +21,15 @@ class MapObject extends Base {
     constructor(json) {
         super(json);
     }
+    static createFromModelID(modelID, id) {
+        let mapObject = new MapObject();
+        mapObject.id = id;
+        mapObject.name = "";
+        mapObject.addDefaultValues();
+        mapObject.addInheritanceModel(modelID);
+        mapObject.timeEvents = mapObject.getTimeEvents();
+        return mapObject;
+    }
     /**
      *  Read the JSON associated to the object
      *  @param {Record<string, any>} - json Json object describing the object
@@ -29,40 +38,11 @@ class MapObject extends Base {
         this.id = json.id;
         this.name = json.name;
         this.isEventFrame = json.ooepf;
-        this.states = [];
-        this.properties = [];
-        this.events = {};
-        let hID = json.hId;
-        let i, l;
-        if (hID !== -1) {
-            let inheritedObject = Datas.CommonEvents.getCommonObject(hID);
-            // Only one event per frame inheritance is a priority
-            this.isEventFrame = inheritedObject.isEventFrame;
-            // States
-            let states = Utils.defaultValue(inheritedObject.states, []);
-            for (i = 0, l = states.length; i < l; i++) {
-                this.states.push(states[i]);
-            }
-            // Properties
-            let properties = Utils.defaultValue(inheritedObject.properties, []);
-            for (i = 0, l = properties.length; i < l; i++) {
-                this.properties.push(properties[i]);
-            }
-            // Events
-            let events = inheritedObject.events;
-            let eventsList, realEventsList;
-            for (let idEvent in events) {
-                eventsList = events[idEvent];
-                realEventsList = new Array;
-                for (i = 0, l = eventsList.length; i < l; i++) {
-                    realEventsList.push(eventsList[i]);
-                }
-                this.events[idEvent] = realEventsList;
-            }
-        }
+        this.addDefaultValues();
+        this.addInheritanceModel(json.hId);
         // States
         let jsonList = Utils.defaultValue(json.states, []);
-        let jsonElement, id, j, m;
+        let jsonElement, id, j, m, i, l;
         for (i = 0, l = jsonList.length; i < l; i++) {
             jsonElement = jsonList[i];
             id = jsonElement.id;
@@ -112,6 +92,40 @@ class MapObject extends Base {
             }
         }
         this.timeEvents = this.getTimeEvents();
+    }
+    addDefaultValues() {
+        this.states = [];
+        this.properties = [];
+        this.events = {};
+    }
+    addInheritanceModel(modelID) {
+        if (modelID !== -1) {
+            let inheritedObject = Datas.CommonEvents.getCommonObject(modelID);
+            // Only one event per frame inheritance is a priority
+            this.isEventFrame = inheritedObject.isEventFrame;
+            // States
+            let states = Utils.defaultValue(inheritedObject.states, []);
+            let i, l;
+            for (i = 0, l = states.length; i < l; i++) {
+                this.states.push(states[i]);
+            }
+            // Properties
+            let properties = Utils.defaultValue(inheritedObject.properties, []);
+            for (i = 0, l = properties.length; i < l; i++) {
+                this.properties.push(properties[i]);
+            }
+            // Events
+            let events = inheritedObject.events;
+            let eventsList, realEventsList;
+            for (let idEvent in events) {
+                eventsList = events[idEvent];
+                realEventsList = new Array;
+                for (i = 0, l = eventsList.length; i < l; i++) {
+                    realEventsList.push(eventsList[i]);
+                }
+                this.events[idEvent] = realEventsList;
+            }
+        }
     }
     /**
      *  Get all the time events.

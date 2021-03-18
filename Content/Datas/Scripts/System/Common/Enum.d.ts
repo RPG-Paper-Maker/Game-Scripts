@@ -86,7 +86,8 @@ declare namespace Enum {
         Plugin = 57,
         StartShopMenu = 58,
         RestockShop = 59,
-        EnterANameMenu = 60
+        EnterANameMenu = 60,
+        CreateObjectInMap = 61
     }
     /**
      *   Enum for the different items kind.

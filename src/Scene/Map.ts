@@ -54,6 +54,7 @@ class Map extends Base {
     public collisions: number[][][][];
     public previousCameraPosition: Vector3;
     public portionsObjectsUpdated: boolean;
+    public maxObjectsID: number;
 
     constructor(id: number, isBattleMap: boolean = false, minimal: boolean = 
         false)
@@ -147,10 +148,14 @@ class Map extends Base {
         let l = json.length;
         this.allObjects = new Array(l + 1);
         let jsonObject: Record<string, any>;
+        this.maxObjectsID = 1;
         for (let i = 0; i < l; i++) {
             jsonObject = json[i];
             this.allObjects[jsonObject.id] = Position.createFromArray(jsonObject
                 .p);
+            if (jsonObject.id > this.maxObjectsID) {
+                this.maxObjectsID = jsonObject.id;
+            }
         }
     }
 
@@ -517,7 +522,7 @@ class Map extends Base {
      *  Get the hero position according to battle map.
      *  @returns {Vector3} 
      */
-    getHeroPosition() {
+    getHeroPosition(): Vector3 {
         return this.isBattleMap ? Game.current.heroBattle.position : 
             Game.current.hero.position;
     }

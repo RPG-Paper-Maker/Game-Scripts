@@ -22,6 +22,7 @@ export * from "./ChangeState.js";
 export * from "./ChangeVariables.js";
 export * from "./Choice.js";
 export * from "./Comment.js";
+export * from "./CreateObjectInMap.js";
 export * from "./DisplayAnAnimation.js";
 export * from "./DisplayAPicture.js";
 export * from "./DisplayChoice.js";

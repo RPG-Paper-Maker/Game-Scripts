@@ -23,6 +23,7 @@ export * from "./ChangeState";
 export * from "./ChangeVariables";
 export * from "./Choice";
 export * from "./Comment";
+export * from "./CreateObjectInMap";
 export * from "./DisplayAnAnimation";
 export * from "./DisplayAPicture";
 export * from "./DisplayChoice";

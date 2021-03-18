@@ -402,9 +402,6 @@ class MapObject {
     changeState() {
         let angle = this.mesh ? this.mesh.rotation.y : 0;
 
-        // Remove previous mesh
-        this.removeFromScene();
-
         // Updating the current state
         if (this.isHero) {
             this.states = Game.current.heroStates;
@@ -445,6 +442,15 @@ class MapObject {
                 break;
             }
         }
+
+        // If not a different state, don't update
+        if (this.currentStateInstance !== null && this.currentStateInstance === 
+            previousStateInstance) {
+            return;
+        }
+
+        // Remove previous mesh
+        this.removeFromScene();
 
         // Update mesh
         if (this.isStartup || !Scene.Map.current.textureTileset) {

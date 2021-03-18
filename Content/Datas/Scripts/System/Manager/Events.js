@@ -142,6 +142,8 @@ class Events {
                 return new EventCommand.StartShopMenu(command, true);
             case EventCommandKind.EnterANameMenu:
                 return new EventCommand.EnterANameMenu(command);
+            case EventCommandKind.CreateObjectInMap:
+                return new EventCommand.CreateObjectInMap(command);
             default:
                 return null;
         }

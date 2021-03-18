@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { Datas, System } from "../index";
+import { Datas, Scene, System } from "../index";
 import { Utils } from "../Common";
 
 /** @class
@@ -22,7 +22,7 @@ import { Utils } from "../Common";
 class MapObject extends Base {
 
     public id: number;
-    public name: number;
+    public name: string;
     public isEventFrame: boolean;
     public states: System.State[];
     public properties: System.Property[];
@@ -34,6 +34,22 @@ class MapObject extends Base {
     }
 
     /** 
+     *  Create a system map object from a model ID.
+     *  @static
+     *  @param {Record<string, any>} modelID
+     *  @param {Record<string, any>} id
+     */
+    static createFromModelID(modelID: number, id: number): MapObject {
+        let mapObject = new MapObject();
+        mapObject.id = id;
+        mapObject.name = "";
+        mapObject.addDefaultValues();
+        mapObject.addInheritanceModel(modelID);
+        mapObject.timeEvents = mapObject.getTimeEvents();
+        return mapObject;
+    }
+
+    /** 
      *  Read the JSON associated to the object
      *  @param {Record<string, any>} - json Json object describing the object
      */
@@ -41,45 +57,13 @@ class MapObject extends Base {
         this.id = json.id;
         this.name = json.name;
         this.isEventFrame = json.ooepf;
-        this.states = [];
-        this.properties = [];
-        this.events = {};
-        let hID = json.hId;
-        let i: number, l: number;
-        if (hID !== -1) {
-            let inheritedObject = Datas.CommonEvents.getCommonObject(hID);
-
-            // Only one event per frame inheritance is a priority
-            this.isEventFrame = inheritedObject.isEventFrame;
-
-            // States
-            let states = Utils.defaultValue(inheritedObject.states, []);
-            for (i = 0, l = states.length; i < l; i++) {
-                this.states.push(states[i]);
-            }
-
-            // Properties
-            let properties = Utils.defaultValue(inheritedObject.properties, []);
-            for (i = 0, l = properties.length; i < l; i++) {
-                this.properties.push(properties[i]);
-            }
-
-            // Events
-            let events = inheritedObject.events;
-            let eventsList: System.Event[], realEventsList: System.Event[];
-            for (let idEvent in events) {
-                eventsList = events[idEvent];
-                realEventsList = new Array;
-                for (i = 0, l = eventsList.length; i < l; i++) {
-                    realEventsList.push(eventsList[i]);
-                }
-                this.events[idEvent] = realEventsList;
-            }
-        }
-
+        this.addDefaultValues();
+        this.addInheritanceModel(json.hId);
+        
         // States
         let jsonList = Utils.defaultValue(json.states, []);
-        let jsonElement: Record<string, any>, id: number, j: number, m: number;
+        let jsonElement: Record<string, any>, id: number, j: number, m: number, 
+            i: number, l: number;
         for (i = 0, l = jsonList.length; i < l; i++) {
             jsonElement = jsonList[i];
             id = jsonElement.id;
@@ -131,6 +115,53 @@ class MapObject extends Base {
             }
         }
         this.timeEvents = this.getTimeEvents();
+    }
+
+    /** 
+     *  Add default values.
+     */
+    addDefaultValues() {
+        this.states = [];
+        this.properties = [];
+        this.events = {};
+    }
+
+    /** 
+     *  Add inheritance values according to a model ID.
+     *  @param {number} modelID
+     */
+    addInheritanceModel(modelID: number) {
+        if (modelID !== -1) {
+            let inheritedObject = Datas.CommonEvents.getCommonObject(modelID);
+
+            // Only one event per frame inheritance is a priority
+            this.isEventFrame = inheritedObject.isEventFrame;
+
+            // States
+            let states = Utils.defaultValue(inheritedObject.states, []);
+            let i: number, l: number;
+            for (i = 0, l = states.length; i < l; i++) {
+                this.states.push(states[i]);
+            }
+
+            // Properties
+            let properties = Utils.defaultValue(inheritedObject.properties, []);
+            for (i = 0, l = properties.length; i < l; i++) {
+                this.properties.push(properties[i]);
+            }
+
+            // Events
+            let events = inheritedObject.events;
+            let eventsList: System.Event[], realEventsList: System.Event[];
+            for (let idEvent in events) {
+                eventsList = events[idEvent];
+                realEventsList = new Array;
+                for (i = 0, l = eventsList.length; i < l; i++) {
+                    realEventsList.push(eventsList[i]);
+                }
+                this.events[idEvent] = realEventsList;
+            }
+        }
     }
 
     /** 
