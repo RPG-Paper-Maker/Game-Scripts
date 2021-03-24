@@ -19,7 +19,15 @@ declare namespace Enum {
         MoveFront = 11,
         MoveBack = 12,
         ChangeGraphics = 13,
-        Jump = 14
+        Jump = 14,
+        TurnNorth = 15,
+        TurnSouth = 16,
+        TurnWest = 17,
+        TurnEast = 18,
+        Turn90Right = 19,
+        Turn90Left = 20,
+        LookAtHero = 21,
+        LookAtHeroOpposite = 22
     }
     /**
      *   Enum for the different event commands kind.

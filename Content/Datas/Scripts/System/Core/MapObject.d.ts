@@ -143,13 +143,19 @@ declare class MapObject {
     teleport(position: Vector3): void;
     /**
      *  Jump the object (one step).
-     *  @param {number} limit - Max distance to go
-     *  @param {number} angle - The angle
-     *  @param {boolean} isCameraOrientation - Indicate if this should take
-     *  account of camera orientation
-     *  @returns {boolean}
-    */
+     *  @param {Vector3} start - The start position of the jump
+     *  @param {Vector3} end - The end position of the jump
+     *  @param {number} peak - The y peak
+     *  @param {number} currentTime - The current time for jump animation
+     *  @param {number} finalTime - The total final time for complete jump animation
+     *  @returns {number}
+     */
     jump(start: Vector3, end: Vector3, peak: number, currentTime: number, finalTime: number): number;
+    /**
+     *  Look a direction.
+     *  @param {Vector3} orientation - The direction to look at.
+     */
+    lookAt(oriention: Orientation): void;
     /**
      *  Remove datas move temp
      */
@@ -222,10 +228,10 @@ declare class MapObject {
      */
     isNone(): boolean;
     /**
-     *  Get the opposition orientation of the object (used for no direction fix
-     *  state).
+     *  Get the orientation between two objects.
+     *  @param {Core.MapObject} object
      *  @returns {Enum.Orientation}
      */
-    getOppositeOrientation(): Enum.Orientation;
+    getOrientationBetween(object: MapObject): Enum.Orientation;
 }
 export { StructSearchResult, MapObject };

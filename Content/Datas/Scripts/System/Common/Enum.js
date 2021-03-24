@@ -32,6 +32,14 @@ var Enum;
         CommandMoveKind[CommandMoveKind["MoveBack"] = 12] = "MoveBack";
         CommandMoveKind[CommandMoveKind["ChangeGraphics"] = 13] = "ChangeGraphics";
         CommandMoveKind[CommandMoveKind["Jump"] = 14] = "Jump";
+        CommandMoveKind[CommandMoveKind["TurnNorth"] = 15] = "TurnNorth";
+        CommandMoveKind[CommandMoveKind["TurnSouth"] = 16] = "TurnSouth";
+        CommandMoveKind[CommandMoveKind["TurnWest"] = 17] = "TurnWest";
+        CommandMoveKind[CommandMoveKind["TurnEast"] = 18] = "TurnEast";
+        CommandMoveKind[CommandMoveKind["Turn90Right"] = 19] = "Turn90Right";
+        CommandMoveKind[CommandMoveKind["Turn90Left"] = 20] = "Turn90Left";
+        CommandMoveKind[CommandMoveKind["LookAtHero"] = 21] = "LookAtHero";
+        CommandMoveKind[CommandMoveKind["LookAtHeroOpposite"] = 22] = "LookAtHeroOpposite";
     })(CommandMoveKind = Enum.CommandMoveKind || (Enum.CommandMoveKind = {}));
     /**
      *   Enum for the different event commands kind.

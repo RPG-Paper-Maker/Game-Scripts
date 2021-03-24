@@ -166,6 +166,70 @@ declare class MoveObject extends Base {
     */
     jump(currentState: Record<string, any>, object: MapObject, parameters: Record<string, any>): Orientation | boolean;
     /**
+     *  Function to look at north.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    turnNorth(currentState: Record<string, any>, object: MapObject, parameters: Record<string, any>): Orientation | boolean;
+    /**
+     *  Function to look at south.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    turnSouth(currentState: Record<string, any>, object: MapObject, parameters: Record<string, any>): Orientation | boolean;
+    /**
+     *  Function to look at west.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    turnWest(currentState: Record<string, any>, object: MapObject, parameters: Record<string, any>): Orientation | boolean;
+    /**
+     *  Function to look at east.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    turnEast(currentState: Record<string, any>, object: MapObject, parameters: Record<string, any>): Orientation | boolean;
+    /**
+     *  Function to look at 90° right.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    turn90Right(currentState: Record<string, any>, object: MapObject, parameters: Record<string, any>): Orientation | boolean;
+    /**
+     *  Function to look at 90° left.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    turn90Left(currentState: Record<string, any>, object: MapObject, parameters: Record<string, any>): Orientation | boolean;
+    /**
+     *  Function to look at hero.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    lookAtHero(currentState: Record<string, any>, object: MapObject, parameters: Record<string, any>): Orientation | boolean;
+    /**
+     *  Function to look at hero opposite.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    lookAtHeroOpposite(currentState: Record<string, any>, object: MapObject, parameters: Record<string, any>): Orientation | boolean;
+    /**
      *  Function to change graphics.
      *  @param {Record<string, any>} - currentState The current state of the event
      *  @param {MapObject} object - The object to move

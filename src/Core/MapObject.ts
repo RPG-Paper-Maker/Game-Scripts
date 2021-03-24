@@ -924,12 +924,13 @@ class MapObject {
 
     /** 
      *  Jump the object (one step).
-     *  @param {number} limit - Max distance to go
-     *  @param {number} angle - The angle
-     *  @param {boolean} isCameraOrientation - Indicate if this should take 
-     *  account of camera orientation
-     *  @returns {boolean}
-    */
+     *  @param {Vector3} start - The start position of the jump
+     *  @param {Vector3} end - The end position of the jump
+     *  @param {number} peak - The y peak
+     *  @param {number} currentTime - The current time for jump animation
+     *  @param {number} finalTime - The total final time for complete jump animation
+     *  @returns {number}
+     */
     jump(start: Vector3, end: Vector3, peak: number, currentTime: number, 
         finalTime: number): number {
         if (this.removed) {
@@ -954,16 +955,28 @@ class MapObject {
         let z = (currentTime / finalTime) * (end.z - start.z) + start.z;
         this.position.set(x, y, z);
 
-        // Update orientation
-        let orientation = this.orientation;
-        if (this.orientation !== orientation) {
-            this.updateUVs();
-        }
-
         // Add to moving objects
         this.addMoveTemp();
 
         return currentTime;
+    }
+
+    /** 
+     *  Look a direction.
+     *  @param {Vector3} orientation - The direction to look at.
+     */
+    lookAt(oriention: Orientation) {
+        if (this.removed) {
+            return;
+        }
+        this.orientationEye = oriention;
+        oriention = this.orientation;
+        if (this.currentState && this.currentState.setWithCamera) {
+            this.updateOrientation();
+        }
+        if (this.orientation !== oriention) {
+            this.updateUVs();
+        }
     }
 
     /** 
@@ -1111,7 +1124,7 @@ class MapObject {
                 // If sender is in this map and no fix, look at the object
                 if (sender && sender.position && sender !== this && !this
                     .currentState.directionFix) {
-                    this.orientationEye = sender.getOppositeOrientation();
+                    this.orientationEye = this.getOrientationBetween(sender);
                 }
                 this.receivedOneEvent = true;
                 test = true;
@@ -1313,23 +1326,28 @@ class MapObject {
     }
 
     /** 
-     *  Get the opposition orientation of the object (used for no direction fix 
-     *  state).
+     *  Get the orientation between two objects.
+     *  @param {Core.MapObject} object
      *  @returns {Enum.Orientation}
      */
-    getOppositeOrientation(): Enum.Orientation {
-        switch (this.orientationEye) {
-            case Enum.Orientation.None:
-                return Enum.Orientation.None;
-            case Enum.Orientation.North:
-                return Enum.Orientation.South;
-            case Enum.Orientation.South:
-                return Enum.Orientation.North;
-            case Enum.Orientation.East:
-                return Enum.Orientation.West;
-            case Enum.Orientation.West:
-                return Enum.Orientation.East;
+    getOrientationBetween(object: MapObject): Enum.Orientation {
+        let x = Math.abs(object.position.x - this.position.x);
+        let z = Math.abs(object.position.z - this.position.z);
+        let orientation = this.orientationEye;
+        if (x >= z) {
+            if (object.position.x >= this.position.x) {
+                orientation = Enum.Orientation.East;
+            } else if (object.position.x < this.position.x) {
+                orientation = Enum.Orientation.West;
+            }
+        } else {
+            if (object.position.z >= this.position.z) {
+                orientation = Enum.Orientation.South;
+            } else if (object.position.z < this.position.z) {
+                orientation = Enum.Orientation.North;
+            }
         }
+        return orientation;
     }
 }
 

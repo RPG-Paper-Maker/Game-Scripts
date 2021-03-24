@@ -126,6 +126,36 @@ class MoveObject extends Base {
                 });
                 this.moves.push(this.changeGraphics);
             }
+            else if (this.kind >= CommandMoveKind.TurnNorth && this.kind <=
+                CommandMoveKind.LookAtHeroOpposite) {
+                this.parameters.push({});
+                switch (this.kind) {
+                    case CommandMoveKind.TurnNorth:
+                        this.moves.push(this.turnNorth);
+                        break;
+                    case CommandMoveKind.TurnSouth:
+                        this.moves.push(this.turnSouth);
+                        break;
+                    case CommandMoveKind.TurnWest:
+                        this.moves.push(this.turnWest);
+                        break;
+                    case CommandMoveKind.TurnEast:
+                        this.moves.push(this.turnEast);
+                        break;
+                    case CommandMoveKind.Turn90Right:
+                        this.moves.push(this.turn90Right);
+                        break;
+                    case CommandMoveKind.Turn90Left:
+                        this.moves.push(this.turn90Left);
+                        break;
+                    case CommandMoveKind.LookAtHero:
+                        this.moves.push(this.lookAtHero);
+                        break;
+                    case CommandMoveKind.LookAtHeroOpposite:
+                        this.moves.push(this.lookAtHeroOpposite);
+                        break;
+                }
+            }
         }
         this.isDirectNode = !this.isWaitEnd;
         this.parallel = !this.isWaitEnd;
@@ -473,6 +503,118 @@ class MoveObject extends Base {
             else {
                 return false;
             }
+        }
+        return Orientation.None;
+    }
+    /**
+     *  Function to look at north.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    turnNorth(currentState, object, parameters) {
+        if (object) {
+            object.lookAt(Orientation.North);
+            return true;
+        }
+        return Orientation.North;
+    }
+    /**
+     *  Function to look at south.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    turnSouth(currentState, object, parameters) {
+        if (object) {
+            object.lookAt(Orientation.South);
+            return true;
+        }
+        return Orientation.South;
+    }
+    /**
+     *  Function to look at west.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    turnWest(currentState, object, parameters) {
+        if (object) {
+            object.lookAt(Orientation.West);
+            return true;
+        }
+        return Orientation.West;
+    }
+    /**
+     *  Function to look at east.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    turnEast(currentState, object, parameters) {
+        if (object) {
+            object.lookAt(Orientation.East);
+            return true;
+        }
+        return Orientation.East;
+    }
+    /**
+     *  Function to look at 90° right.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    turn90Right(currentState, object, parameters) {
+        if (object) {
+            object.lookAt((object.orientationEye + 1) % 4);
+            return true;
+        }
+        return Orientation.None;
+    }
+    /**
+     *  Function to look at 90° left.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    turn90Left(currentState, object, parameters) {
+        if (object) {
+            object.lookAt((object.orientationEye - 1) % 4);
+            return true;
+        }
+        return Orientation.None;
+    }
+    /**
+     *  Function to look at hero.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    lookAtHero(currentState, object, parameters) {
+        if (object) {
+            object.lookAt(object.getOrientationBetween(Game.current.hero));
+            return true;
+        }
+        return Orientation.None;
+    }
+    /**
+     *  Function to look at hero opposite.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    lookAtHeroOpposite(currentState, object, parameters) {
+        if (object) {
+            object.lookAt((object.getOrientationBetween(Game.current.hero) + 2) % 4);
+            return true;
         }
         return Orientation.None;
     }
