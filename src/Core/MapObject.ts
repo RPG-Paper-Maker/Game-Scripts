@@ -27,6 +27,7 @@ import { Vector3 } from "./Vector3";
 import { Game } from "./Game";
 import { Object3DBox } from "./Object3DBox";
 import { Object3DCustom } from "./Object3DCustom";
+import { Vector } from "three";
 
 interface StructSearchResult {
     object: MapObject,
@@ -919,6 +920,50 @@ class MapObject {
 
         // Add to moving objects
         this.addMoveTemp();
+    }
+
+    /** 
+     *  Jump the object (one step).
+     *  @param {number} limit - Max distance to go
+     *  @param {number} angle - The angle
+     *  @param {boolean} isCameraOrientation - Indicate if this should take 
+     *  account of camera orientation
+     *  @returns {boolean}
+    */
+    jump(start: Vector3, end: Vector3, peak: number, currentTime: number, 
+        finalTime: number): number {
+        if (this.removed) {
+            return finalTime;
+        }
+        
+        // Remove from move
+        this.removeMoveTemp();
+
+        // Set position
+        let a = -(peak - start.y) / ((finalTime / 2) * (finalTime / 2));
+        let coef = 1;
+        if (start.y !== end.y) {
+            let tEnd = Math.sqrt((end.y - peak) / a);
+            let reduce = (finalTime / 2) - tEnd;
+            coef = (finalTime - reduce) / finalTime;
+        }
+        currentTime = Math.min(currentTime + Manager.Stack.elapsedTime, finalTime);
+        let t = (currentTime * coef) - (finalTime / 2);
+        let y = (a * (t * t)) + peak;
+        let x = (currentTime / finalTime) * (end.x - start.x) + start.x;
+        let z = (currentTime / finalTime) * (end.z - start.z) + start.z;
+        this.position.set(x, y, z);
+
+        // Update orientation
+        let orientation = this.orientation;
+        if (this.orientation !== orientation) {
+            this.updateUVs();
+        }
+
+        // Add to moving objects
+        this.addMoveTemp();
+
+        return currentTime;
     }
 
     /** 

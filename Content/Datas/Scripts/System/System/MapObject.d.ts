@@ -15,13 +15,26 @@ declare class MapObject extends Base {
     events: Record<number, System.Event[]>;
     timeEvents: System.Event[];
     constructor(json?: Record<string, any>);
+    /**
+     *  Create a system map object from a model ID.
+     *  @static
+     *  @param {Record<string, any>} modelID
+     *  @param {Record<string, any>} id
+     */
     static createFromModelID(modelID: number, id: number): MapObject;
     /**
      *  Read the JSON associated to the object
      *  @param {Record<string, any>} - json Json object describing the object
      */
     read(json: Record<string, any>): void;
+    /**
+     *  Add default values.
+     */
     addDefaultValues(): void;
+    /**
+     *  Add inheritance values according to a model ID.
+     *  @param {number} modelID
+     */
     addInheritanceModel(modelID: number): void;
     /**
      *  Get all the time events.

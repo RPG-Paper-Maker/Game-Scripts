@@ -13,7 +13,7 @@ import { System, Datas, EventCommand, Scene } from "../index.js";
 import { Enum, Utils, Mathf } from "../Common/index.js";
 var CommandMoveKind = Enum.CommandMoveKind;
 var Orientation = Enum.Orientation;
-import { MapObject, Game } from "../Core/index.js";
+import { MapObject, Game, Vector3 } from "../Core/index.js";
 /** @class
  *  An event command for moving object.
  *  @extends EventCommand.Base
@@ -83,9 +83,33 @@ class MoveObject extends Base {
                     case CommandMoveKind.MoveBack:
                         this.moves.push(this.moveBack);
                         break;
+                    case CommandMoveKind.Jump:
+                        this.moves.push(this.jump);
+                        break;
                 }
             }
-            if (this.kind === CommandMoveKind.ChangeGraphics) {
+            else if (this.kind === CommandMoveKind.Jump) {
+                let square = !Utils.numToBool(command[iterator.i++]);
+                let x = System.DynamicValue.createValueCommand(command, iterator);
+                let y = System.DynamicValue.createValueCommand(command, iterator);
+                let yPlus = System.DynamicValue.createValueCommand(command, iterator);
+                let z = System.DynamicValue.createValueCommand(command, iterator);
+                let peakY = System.DynamicValue.createValueCommand(command, iterator);
+                let peakYPlus = System.DynamicValue.createValueCommand(command, iterator);
+                let time = System.DynamicValue.createValueCommand(command, iterator);
+                this.parameters.push({
+                    square: square,
+                    x: x,
+                    y: y,
+                    yPlus: yPlus,
+                    z: z,
+                    peakY: peakY,
+                    peakYPlus: peakYPlus,
+                    time: time
+                });
+                this.moves.push(this.jump);
+            }
+            else if (this.kind === CommandMoveKind.ChangeGraphics) {
                 permanent = Utils.numToBool(command[iterator.i++]);
                 let pictureID = System.DynamicValue.createValueCommand(command, iterator);
                 let indexX = command[iterator.i++];
@@ -140,7 +164,8 @@ class MoveObject extends Base {
             object: null,
             random: Mathf.random(0, 3),
             moveHeroOrientation: null,
-            pause: false
+            pause: false,
+            currentTime: -1
         };
     }
     /**
@@ -414,6 +439,40 @@ class MoveObject extends Base {
                 EventCommand.MoveObject.oppositeOrientation(object.orientationEye) : currentState.moveHeroOrientation;
             currentState.moveHeroOrientation = orientation;
             return this.move(currentState, object, parameters.square, currentState.moveHeroOrientation);
+        }
+        return Orientation.None;
+    }
+    /**
+     *  Function to jump.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+    */
+    jump(currentState, object, parameters) {
+        if (object) {
+            if (currentState.currentTime === -1) {
+                currentState.currentTime = 0;
+                currentState.startJump = new Vector3(object.position.x, object
+                    .position.y, object.position.z);
+                let square = parameters.square ? Datas.Systems.SQUARE_SIZE : 1;
+                currentState.endJump = new Vector3(parameters.x.getValue() *
+                    square + currentState.startJump.x, parameters.y.getValue() *
+                    square + parameters.yPlus.getValue() + currentState.startJump
+                    .y, parameters.z.getValue() * square + currentState.startJump.z);
+                currentState.peak = parameters.peakY.getValue() * Datas.Systems
+                    .SQUARE_SIZE + parameters.peakYPlus.getValue();
+                currentState.time = parameters.time.getValue() * 1000;
+            }
+            currentState.currentTime = object.jump(currentState.startJump, currentState.endJump, currentState.peak, currentState
+                .currentTime, currentState.time);
+            if (currentState.currentTime === currentState.time) {
+                currentState.currentTime = -1;
+                return true;
+            }
+            else {
+                return false;
+            }
         }
         return Orientation.None;
     }

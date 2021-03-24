@@ -105,7 +105,6 @@ class TitleScreen extends Base {
             this.pictureBackground.draw();
         }
         this.windowChoicesCommands.draw();
-        console.log(this.windowChoicesCommands);
     }
 }
 export { TitleScreen };

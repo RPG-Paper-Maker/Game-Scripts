@@ -158,6 +158,14 @@ declare class MoveObject extends Base {
     */
     moveBack(currentState: Record<string, any>, object: MapObject, parameters: Record<string, any>): Orientation | boolean;
     /**
+     *  Function to jump.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+    */
+    jump(currentState: Record<string, any>, object: MapObject, parameters: Record<string, any>): Orientation | boolean;
+    /**
      *  Function to change graphics.
      *  @param {Record<string, any>} - currentState The current state of the event
      *  @param {MapObject} object - The object to move

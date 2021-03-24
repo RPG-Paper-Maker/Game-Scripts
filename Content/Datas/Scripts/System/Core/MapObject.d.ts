@@ -54,7 +54,6 @@ declare class MapObject {
     upPosition: Vector3;
     halfPosition: Vector3;
     currentOrientationStop: boolean;
-    isCreated: boolean;
     constructor(system: System.MapObject, position?: Vector3, isHero?: boolean);
     /**
      *  Search an object in the map.
@@ -142,6 +141,15 @@ declare class MapObject {
      *  @param {Vector3} position - Position to teleport
      */
     teleport(position: Vector3): void;
+    /**
+     *  Jump the object (one step).
+     *  @param {number} limit - Max distance to go
+     *  @param {number} angle - The angle
+     *  @param {boolean} isCameraOrientation - Indicate if this should take
+     *  account of camera orientation
+     *  @returns {boolean}
+    */
+    jump(start: Vector3, end: Vector3, peak: number, currentTime: number, finalTime: number): number;
     /**
      *  Remove datas move temp
      */

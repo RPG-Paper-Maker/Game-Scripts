@@ -21,6 +21,12 @@ class MapObject extends Base {
     constructor(json) {
         super(json);
     }
+    /**
+     *  Create a system map object from a model ID.
+     *  @static
+     *  @param {Record<string, any>} modelID
+     *  @param {Record<string, any>} id
+     */
     static createFromModelID(modelID, id) {
         let mapObject = new MapObject();
         mapObject.id = id;
@@ -93,11 +99,18 @@ class MapObject extends Base {
         }
         this.timeEvents = this.getTimeEvents();
     }
+    /**
+     *  Add default values.
+     */
     addDefaultValues() {
         this.states = [];
         this.properties = [];
         this.events = {};
     }
+    /**
+     *  Add inheritance values according to a model ID.
+     *  @param {number} modelID
+     */
     addInheritanceModel(modelID) {
         if (modelID !== -1) {
             let inheritedObject = Datas.CommonEvents.getCommonObject(modelID);

@@ -18,7 +18,8 @@ declare namespace Enum {
         MoveOppositeHero = 10,
         MoveFront = 11,
         MoveBack = 12,
-        ChangeGraphics = 13
+        ChangeGraphics = 13,
+        Jump = 14
     }
     /**
      *   Enum for the different event commands kind.

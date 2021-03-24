@@ -29,7 +29,8 @@ namespace Enum {
         MoveOppositeHero,
         MoveFront,
         MoveBack,
-        ChangeGraphics
+        ChangeGraphics,
+        Jump
     }
 
     /**

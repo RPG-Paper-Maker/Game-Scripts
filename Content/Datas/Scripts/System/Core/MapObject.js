@@ -811,6 +811,43 @@ class MapObject {
         this.addMoveTemp();
     }
     /**
+     *  Jump the object (one step).
+     *  @param {number} limit - Max distance to go
+     *  @param {number} angle - The angle
+     *  @param {boolean} isCameraOrientation - Indicate if this should take
+     *  account of camera orientation
+     *  @returns {boolean}
+    */
+    jump(start, end, peak, currentTime, finalTime) {
+        if (this.removed) {
+            return finalTime;
+        }
+        // Remove from move
+        this.removeMoveTemp();
+        // Set position
+        let a = -(peak - start.y) / ((finalTime / 2) * (finalTime / 2));
+        let coef = 1;
+        if (start.y !== end.y) {
+            let tEnd = Math.sqrt((end.y - peak) / a);
+            let reduce = (finalTime / 2) - tEnd;
+            coef = (finalTime - reduce) / finalTime;
+        }
+        currentTime = Math.min(currentTime + Manager.Stack.elapsedTime, finalTime);
+        let t = (currentTime * coef) - (finalTime / 2);
+        let y = (a * (t * t)) + peak;
+        let x = (currentTime / finalTime) * (end.x - start.x) + start.x;
+        let z = (currentTime / finalTime) * (end.z - start.z) + start.z;
+        this.position.set(x, y, z);
+        // Update orientation
+        let orientation = this.orientation;
+        if (this.orientation !== orientation) {
+            this.updateUVs();
+        }
+        // Add to moving objects
+        this.addMoveTemp();
+        return currentTime;
+    }
+    /**
      *  Remove datas move temp
      */
     removeMoveTemp() {
@@ -937,7 +974,6 @@ class MapObject {
                 if (sender && sender.position && sender !== this && !this
                     .currentState.directionFix) {
                     this.orientationEye = sender.getOppositeOrientation();
-                    this.addMoveTemp();
                 }
                 this.receivedOneEvent = true;
                 test = true;
