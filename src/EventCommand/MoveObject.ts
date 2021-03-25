@@ -218,22 +218,26 @@ class MoveObject extends Base {
                 }
             } else if (this.kind >= CommandMoveKind.Wait && this.kind <= 
                 CommandMoveKind.Script) {
-                command.splice(0, 1);
-                let kind: Enum.EventCommandKind;
+                let kind: Enum.EventCommandKind, l: number;
                 switch (this.kind) {
                     case CommandMoveKind.Wait:
                         kind = Enum.EventCommandKind.Wait;
+                        l = 2;
                         break;
                     case CommandMoveKind.PlaySound:
                         kind = Enum.EventCommandKind.PlaySound;
+                        l = 12;
                         break;
                     case CommandMoveKind.Script:
                         kind = Enum.EventCommandKind.Script;
+                        l = Utils.numToBool(command[iterator.i]) ? 3 : 2;
                         break;
                 }
+                let commandList = command.slice(iterator.i, iterator.i + l);
+                iterator.i += l;
                 let eventCommand = Manager.Events.getEventCommand({
                     kind: kind,
-                    command: command
+                    command: commandList
                 });
                 this.parameters.push({
                     command: eventCommand

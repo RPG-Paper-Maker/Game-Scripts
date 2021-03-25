@@ -557,8 +557,6 @@ class MapObject {
             this.updateUVs();
             this.updateAngle(angle);
         } else {
-            console.log(this
-                .currentStateInstance)
             this.mesh = null;
             this.boundingBoxSettings = null;
             this.speed = this.currentState === null ? System.DynamicValue
