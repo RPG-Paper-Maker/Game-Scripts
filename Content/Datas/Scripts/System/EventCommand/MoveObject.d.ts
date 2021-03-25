@@ -237,6 +237,94 @@ declare class MoveObject extends Base {
     */
     changeGraphics(currentState: Record<string, any>, object: MapObject, parameters: Record<string, any>): Orientation | boolean;
     /**
+     *  Function to change speed.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    changeSpeed(currentState: Record<string, any>, object: MapObject, parameters: Record<string, any>): Orientation | boolean;
+    /**
+     *  Function to change frequency.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    changeFrequency(currentState: Record<string, any>, object: MapObject, parameters: Record<string, any>): Orientation | boolean;
+    /**
+     *  Function to move animation.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    moveAnimation(currentState: Record<string, any>, object: MapObject, parameters: Record<string, any>): Orientation | boolean;
+    /**
+     *  Function to stop animation.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    stopAnimation(currentState: Record<string, any>, object: MapObject, parameters: Record<string, any>): Orientation | boolean;
+    /**
+     *  Function to climb animation.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    climbAnimation(currentState: Record<string, any>, object: MapObject, parameters: Record<string, any>): Orientation | boolean;
+    /**
+     *  Function to direction fix.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    directionFix(currentState: Record<string, any>, object: MapObject, parameters: Record<string, any>): Orientation | boolean;
+    /**
+     *  Function to through.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    through(currentState: Record<string, any>, object: MapObject, parameters: Record<string, any>): Orientation | boolean;
+    /**
+     *  Function to set with camera.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    setWithCamera(currentState: Record<string, any>, object: MapObject, parameters: Record<string, any>): Orientation | boolean;
+    /**
+     *  Function to pixel offset.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    pixelOffset(currentState: Record<string, any>, object: MapObject, parameters: Record<string, any>): Orientation | boolean;
+    /**
+     *  Function to keep position.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    keepPosition(currentState: Record<string, any>, object: MapObject, parameters: Record<string, any>): Orientation | boolean;
+    /**
+     *  Function to wait, play a sound, and script.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    useCommand(currentState: Record<string, any>, object: MapObject, parameters: Record<string, any>): Orientation | boolean;
+    /**
      *  Get the hero orientation.
      *  @param {MapObject} object - The object to move
      *  @returns {Orientation}
@@ -248,6 +336,12 @@ declare class MoveObject extends Base {
      *  @returns {Orientation}
      */
     getCurrentOrientation(currentState: Record<string, any>): Orientation;
+    /**
+     *  Get the permanent options. Returns null if startup object.
+     *  @param {Core.MapObject} - currentState The current state of the event
+     *  @returns {Record<string, any>}
+     */
+    getPermanentOptions(object: MapObject): Record<string, any>;
     /**
      *  Update and check if the event is finished.
      *  @param {Record<string, any>} - currentState The current state of the event

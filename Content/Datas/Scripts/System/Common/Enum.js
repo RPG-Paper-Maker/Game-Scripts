@@ -40,6 +40,19 @@ var Enum;
         CommandMoveKind[CommandMoveKind["Turn90Left"] = 20] = "Turn90Left";
         CommandMoveKind[CommandMoveKind["LookAtHero"] = 21] = "LookAtHero";
         CommandMoveKind[CommandMoveKind["LookAtHeroOpposite"] = 22] = "LookAtHeroOpposite";
+        CommandMoveKind[CommandMoveKind["ChangeSpeed"] = 23] = "ChangeSpeed";
+        CommandMoveKind[CommandMoveKind["ChangeFrequency"] = 24] = "ChangeFrequency";
+        CommandMoveKind[CommandMoveKind["MoveAnimation"] = 25] = "MoveAnimation";
+        CommandMoveKind[CommandMoveKind["StopAnimation"] = 26] = "StopAnimation";
+        CommandMoveKind[CommandMoveKind["ClimbAnimation"] = 27] = "ClimbAnimation";
+        CommandMoveKind[CommandMoveKind["FixDirection"] = 28] = "FixDirection";
+        CommandMoveKind[CommandMoveKind["Through"] = 29] = "Through";
+        CommandMoveKind[CommandMoveKind["SetWithCamera"] = 30] = "SetWithCamera";
+        CommandMoveKind[CommandMoveKind["PixelOffset"] = 31] = "PixelOffset";
+        CommandMoveKind[CommandMoveKind["KeepPosition"] = 32] = "KeepPosition";
+        CommandMoveKind[CommandMoveKind["Wait"] = 33] = "Wait";
+        CommandMoveKind[CommandMoveKind["PlaySound"] = 34] = "PlaySound";
+        CommandMoveKind[CommandMoveKind["Script"] = 35] = "Script";
     })(CommandMoveKind = Enum.CommandMoveKind || (Enum.CommandMoveKind = {}));
     /**
      *   Enum for the different event commands kind.

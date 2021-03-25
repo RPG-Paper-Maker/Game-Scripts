@@ -106,7 +106,16 @@ class State extends Base {
             graphicKind: this.graphicKind,
             rectTileset: this.rectTileset,
             indexX: this.indexX,
-            indexY: this.indexY
+            indexY: this.indexY,
+            speedID: this.speedID,
+            frequencyID: this.frequencyID,
+            moveAnimation: this.moveAnimation,
+            climbAnimation: this.climbAnimation,
+            directionFix: this.directionFix,
+            through: this.through,
+            setWithCamera: this.setWithCamera,
+            pixelOffset: this.pixelOffset,
+            keepPosition: this.keepPosition
         }
     }
 }

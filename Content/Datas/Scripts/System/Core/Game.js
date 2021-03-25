@@ -253,7 +253,8 @@ class Game {
                                 if (datas.min && datas.min.length) {
                                     tab = [];
                                     for (o of datas.min) {
-                                        if (o.currentState && o.currentState.keepPosition) {
+                                        if (o.currentStateInstance && o
+                                            .currentStateInstance.keepPosition) {
                                             tab.push(o.system.id);
                                         }
                                     }
@@ -264,7 +265,8 @@ class Game {
                                 if (datas.mout && datas.mout.length) {
                                     tab = [];
                                     for (o of datas.mout) {
-                                        if (o.currentState && o.currentState.keepPosition) {
+                                        if (o.currentStateInstance && o
+                                            .currentStateInstance.keepPosition) {
                                             tab.push(o.system.id);
                                         }
                                     }
@@ -275,7 +277,8 @@ class Game {
                                 if (datas.m && datas.m.length) {
                                     tab = [];
                                     for (o of datas.m) {
-                                        if (o.currentState && o.currentState.keepPosition) {
+                                        if (o.currentStateInstance && o
+                                            .currentStateInstance.keepPosition) {
                                             tab.push([o.system.id, o.position.x,
                                                 o.position.y, o.position.z]);
                                         }

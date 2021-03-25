@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { System, Datas, EventCommand, Scene } from "../index";
+import { System, Datas, EventCommand, Scene, Manager, Core } from "../index";
 import { Enum, Utils, Mathf } from "../Common";
 import CommandMoveKind = Enum.CommandMoveKind;
 import Orientation = Enum.Orientation;
@@ -169,6 +169,76 @@ class MoveObject extends Base {
                         this.moves.push(this.lookAtHeroOpposite);
                         break;
                 }
+            } else if (this.kind === CommandMoveKind.ChangeSpeed || this.kind 
+                === CommandMoveKind.ChangeFrequency) {
+                let permanent = Utils.numToBool(command[iterator.i++]);
+                let value = System.DynamicValue.createValueCommand(command, iterator);
+                this.parameters.push({
+                    permanent: permanent,
+                    value: value
+                });
+                if (this.kind === CommandMoveKind.ChangeSpeed) {
+                    this.moves.push(this.changeSpeed);
+                } else {
+                    this.moves.push(this.changeFrequency);
+                }
+            } else if (this.kind >= CommandMoveKind.MoveAnimation && this.kind 
+                <= CommandMoveKind.KeepPosition) {
+                let onOff = Utils.numToBool(command[iterator.i++]);
+                let permanent = Utils.numToBool(command[iterator.i++]);
+                this.parameters.push({
+                    onOff: onOff,
+                    permanent: permanent
+                });
+                switch (this.kind) {
+                    case CommandMoveKind.MoveAnimation:
+                        this.moves.push(this.moveAnimation);
+                        break;
+                    case CommandMoveKind.StopAnimation:
+                        this.moves.push(this.stopAnimation);
+                        break;
+                    case CommandMoveKind.ClimbAnimation:
+                        this.moves.push(this.climbAnimation);
+                        break;
+                    case CommandMoveKind.FixDirection:
+                        this.moves.push(this.directionFix);
+                        break;
+                    case CommandMoveKind.Through:
+                        this.moves.push(this.through);
+                        break;
+                    case CommandMoveKind.SetWithCamera:
+                        this.moves.push(this.setWithCamera);
+                        break;
+                    case CommandMoveKind.PixelOffset:
+                        this.moves.push(this.pixelOffset);
+                        break;
+                    case CommandMoveKind.KeepPosition:
+                        this.moves.push(this.keepPosition);
+                        break;
+                }
+            } else if (this.kind >= CommandMoveKind.Wait && this.kind <= 
+                CommandMoveKind.Script) {
+                command.splice(0, 1);
+                let kind: Enum.EventCommandKind;
+                switch (this.kind) {
+                    case CommandMoveKind.Wait:
+                        kind = Enum.EventCommandKind.Wait;
+                        break;
+                    case CommandMoveKind.PlaySound:
+                        kind = Enum.EventCommandKind.PlaySound;
+                        break;
+                    case CommandMoveKind.Script:
+                        kind = Enum.EventCommandKind.Script;
+                        break;
+                }
+                let eventCommand = Manager.Events.getEventCommand({
+                    kind: kind,
+                    command: command
+                });
+                this.parameters.push({
+                    command: eventCommand
+                });
+                this.moves.push(this.useCommand);
             }
         }
         this.isDirectNode = !this.isWaitEnd;
@@ -211,7 +281,8 @@ class MoveObject extends Base {
             random: Mathf.random(0, 3),
             moveHeroOrientation: null,
             pause: false,
-            currentTime: -1
+            currentTime: -1,
+            commandState: null
         }
     }
 
@@ -744,29 +815,9 @@ class MoveObject extends Base {
 
             // Permanent change
             if (parameters.permanent) {
-                let statesOptions: Record<string, any>[];
-                if (object.isHero) {
-                    statesOptions = Game.current.heroStatesOptions;
-                } else if (object.isStartup) {
+                let options = this.getPermanentOptions(object);
+                if (options === null) {
                     return;
-                } else {
-                    let portion = Scene.Map.current.allObjects[object
-                        .system.id].getGlobalPortion();
-                    let portionDatas = Game.current.getPortionDatas(Scene.Map
-                        .current.id, portion);
-                    let indexProp = portionDatas.soi.indexOf(object.system.id);
-                    if (indexProp === -1) {
-                        statesOptions = [];
-                        portionDatas.soi.push(object.system.id);
-                        portionDatas.so.push(statesOptions);
-                    } else {
-                        statesOptions = portionDatas.so[indexProp];
-                    }
-                }
-                let options = statesOptions[object.currentState.id - 1];
-                if (!options) {
-                    options = {};
-                    statesOptions[object.currentState.id - 1] = options;
                 }
                 options.gid = object.currentStateInstance.graphicID;
                 options.gt = object.currentStateInstance.rectTileset;
@@ -776,6 +827,292 @@ class MoveObject extends Base {
 
             // Graphic update
             object.changeState();
+        }
+        return Orientation.None;
+    }
+
+    /** 
+     *  Function to change speed.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    changeSpeed(currentState: Record<string, any>, object: MapObject, parameters: 
+        Record<string, any>): Orientation | boolean
+    {
+        if (object) {
+            // Change object current state value
+            object.currentStateInstance.speedID = parameters.value.getValue();
+
+            // Permanent change
+            if (parameters.permanent) {
+                let options = this.getPermanentOptions(object);
+                if (options === null) {
+                    return;
+                }
+                options.sid = object.currentStateInstance.speedID;
+            }
+            object.changeState();
+        }
+        return Orientation.None;
+    }
+
+
+    /** 
+     *  Function to change frequency.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    changeFrequency(currentState: Record<string, any>, object: MapObject, parameters: 
+        Record<string, any>): Orientation | boolean
+    {
+        if (object) {
+            // Change object current state value
+            object.currentStateInstance.frequencyID = parameters.value.getValue();
+
+            // Permanent change
+            if (parameters.permanent) {
+                let options = this.getPermanentOptions(object);
+                if (options === null) {
+                    return;
+                }
+                options.fid = object.currentStateInstance.frequencyID;
+            }
+            object.changeState();
+        }
+        return Orientation.None;
+    }
+
+    /** 
+     *  Function to move animation.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    moveAnimation(currentState: Record<string, any>, object: MapObject, parameters: 
+        Record<string, any>): Orientation | boolean
+    {
+        if (object) {
+            // Change object current state value
+            object.currentStateInstance.moveAnimation = parameters.onOff;
+
+            // Permanent change
+            if (parameters.permanent) {
+                let options = this.getPermanentOptions(object);
+                if (options === null) {
+                    return;
+                }
+                options.ma = object.currentStateInstance.moveAnimation;
+            }
+        }
+        return Orientation.None;
+    }
+    
+    /** 
+     *  Function to stop animation.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    stopAnimation(currentState: Record<string, any>, object: MapObject, parameters: 
+        Record<string, any>): Orientation | boolean
+    {
+        if (object) {
+            // Change object current state value
+            object.currentStateInstance.stopAnimation = parameters.onOff;
+
+            // Permanent change
+            if (parameters.permanent) {
+                let options = this.getPermanentOptions(object);
+                if (options === null) {
+                    return;
+                }
+                options.sa = object.currentStateInstance.stopAnimation;
+            }
+        }
+        return Orientation.None;
+    }
+
+    /** 
+     *  Function to climb animation.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    climbAnimation(currentState: Record<string, any>, object: MapObject, parameters: 
+        Record<string, any>): Orientation | boolean
+    {
+        if (object) {
+            // Change object current state value
+            object.currentStateInstance.climbAnimation = parameters.onOff;
+
+            // Permanent change
+            if (parameters.permanent) {
+                let options = this.getPermanentOptions(object);
+                if (options === null) {
+                    return;
+                }
+                options.ca = object.currentStateInstance.climbAnimation;
+            }
+        }
+        return Orientation.None;
+    }
+
+    /** 
+     *  Function to direction fix.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    directionFix(currentState: Record<string, any>, object: MapObject, parameters: 
+        Record<string, any>): Orientation | boolean
+    {
+        if (object) {
+            // Change object current state value
+            object.currentStateInstance.directionFix = parameters.onOff;
+
+            // Permanent change
+            if (parameters.permanent) {
+                let options = this.getPermanentOptions(object);
+                if (options === null) {
+                    return;
+                }
+                options.df = object.currentStateInstance.directionFix;
+            }
+        }
+        return Orientation.None;
+    }
+
+    /** 
+     *  Function to through.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    through(currentState: Record<string, any>, object: MapObject, parameters: 
+        Record<string, any>): Orientation | boolean
+    {
+        if (object) {
+            // Change object current state value
+            object.currentStateInstance.through = parameters.onOff;
+
+            // Permanent change
+            if (parameters.permanent) {
+                let options = this.getPermanentOptions(object);
+                if (options === null) {
+                    return;
+                }
+                options.t = object.currentStateInstance.through;
+            }
+        }
+        return Orientation.None;
+    }
+    
+    /** 
+     *  Function to set with camera.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    setWithCamera(currentState: Record<string, any>, object: MapObject, parameters: 
+        Record<string, any>): Orientation | boolean
+    {
+        if (object) {
+            // Change object current state value
+            object.currentStateInstance.setWithCamera = parameters.onOff;
+
+            // Permanent change
+            if (parameters.permanent) {
+                let options = this.getPermanentOptions(object);
+                if (options === null) {
+                    return;
+                }
+                options.swc = object.currentStateInstance.setWithCamera;
+            }
+        }
+        return Orientation.None;
+    }
+
+    /** 
+     *  Function to pixel offset.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    pixelOffset(currentState: Record<string, any>, object: MapObject, parameters: 
+        Record<string, any>): Orientation | boolean
+    {
+        if (object) {
+            // Change object current state value
+            object.currentStateInstance.pixelOffset = parameters.onOff;
+
+            // Permanent change
+            if (parameters.permanent) {
+                let options = this.getPermanentOptions(object);
+                if (options === null) {
+                    return;
+                }
+                options.po = object.currentStateInstance.pixelOffset;
+            }
+        }
+        return Orientation.None;
+    }
+    
+    /** 
+     *  Function to keep position.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    keepPosition(currentState: Record<string, any>, object: MapObject, parameters: 
+        Record<string, any>): Orientation | boolean
+    {
+        if (object) {
+            // Change object current state value
+            object.currentStateInstance.keepPosition = parameters.onOff;
+
+            // Permanent change
+            if (parameters.permanent) {
+                let options = this.getPermanentOptions(object);
+                if (options === null) {
+                    return;
+                }
+                options.kp = object.currentStateInstance.keepPosition;
+            }
+        }
+        return Orientation.None;
+    }
+
+    /** 
+     *  Function to wait, play a sound, and script.
+     *  @param {Record<string, any>} - currentState The current state of the event
+     *  @param {MapObject} object - The object to move
+     *  @param {Record<string, any>} - parameters The parameters
+     *  @returns {Orientation}
+     */
+    useCommand(currentState: Record<string, any>, object: MapObject, parameters: 
+        Record<string, any>): Orientation | boolean
+    {
+        if (object) {
+            if (currentState.commandState === null) {
+                currentState.commandState = parameters.command.initialize();
+            }
+            if (parameters.command.update(currentState.commandState, object) != 0) {
+                currentState.commandState = null;
+                return true;
+            }
+            return false;
         }
         return Orientation.None;
     }
@@ -813,6 +1150,39 @@ class MoveObject extends Base {
             return Orientation.None;
         }
         return this.moves[currentState.index].call(this, currentState);
+    }
+
+    /** 
+     *  Get the permanent options. Returns null if startup object.
+     *  @param {Core.MapObject} - currentState The current state of the event
+     *  @returns {Record<string, any>}
+     */
+    getPermanentOptions(object: MapObject): Record<string, any> {
+        let statesOptions: Record<string, any>[];
+        if (object.isHero) {
+            statesOptions = Game.current.heroStatesOptions;
+        } else if (object.isStartup) {
+            return null;
+        } else {
+            let portion = Scene.Map.current.allObjects[object.system.id]
+                .getGlobalPortion();
+            let portionDatas = Game.current.getPortionDatas(Scene.Map
+                .current.id, portion);
+            let indexProp = portionDatas.soi.indexOf(object.system.id);
+            if (indexProp === -1) {
+                statesOptions = [];
+                portionDatas.soi.push(object.system.id);
+                portionDatas.so.push(statesOptions);
+            } else {
+                statesOptions = portionDatas.so[indexProp];
+            }
+        }
+        let options = statesOptions[object.currentState.id - 1];
+        if (!options) {
+            options = {};
+            statesOptions[object.currentState.id - 1] = options;
+        }
+        return options;
     }
 
     /** 

@@ -338,10 +338,20 @@ class MapObject {
             state = stateSystem.copyInstance();
             this.statesInstance[i] = state;
             if (!Utils.isUndefined(stateValue)) {
-                state.graphicID = stateValue.gid;
-                state.rectTileset = stateValue.gt;
-                state.indexX = stateValue.gix;
-                state.indexY = stateValue.giy;
+                state.graphicID = Utils.defaultValue(stateValue.gid, stateSystem.graphicID);
+                state.rectTileset = Utils.defaultValue(stateValue.gt, stateSystem.rectTileset);
+                state.indexX = Utils.defaultValue(stateValue.gix, stateSystem.indexX);
+                state.indexY = Utils.defaultValue(stateValue.giy, stateSystem.indexY);
+                state.speedID = Utils.defaultValue(stateValue.sid, stateSystem.speedID);
+                state.frequencyID =  Utils.defaultValue(stateValue.fid, stateSystem.frequencyID);
+                state.moveAnimation = Utils.defaultValue(stateValue.ma, stateSystem.moveAnimation);
+                state.stopAnimation = Utils.defaultValue(stateValue.sa, stateSystem.stopAnimation);
+                state.climbAnimation = Utils.defaultValue(stateValue.ca, stateSystem.climbAnimation);
+                state.directionFix = Utils.defaultValue(stateValue.df, stateSystem.directionFix);
+                state.through = Utils.defaultValue(stateValue.t, stateSystem.through);
+                state.setWithCamera = Utils.defaultValue(stateValue.swc, stateSystem.setWithCamera);
+                state.pixelOffset = Utils.defaultValue(stateValue.po, stateSystem.pixelOffset);
+                state.keepPosition = Utils.defaultValue(stateValue.kp, stateSystem.keepPosition);
             }
         }
     }
@@ -444,12 +454,6 @@ class MapObject {
             }
         }
 
-        // If not a different state, don't update
-        if (this.currentStateInstance !== null && this.currentStateInstance === 
-            previousStateInstance) {
-            return;
-        }
-
         // Remove previous mesh
         this.removeFromScene();
 
@@ -474,9 +478,8 @@ class MapObject {
         this.meshBoundingBox = new Array;
         let texture = Manager.GL.getMaterialTexture(material);
         if (this.currentState !== null && !this.isNone() && texture) {
-            this.speed = Datas.Systems.getSpeed(this.currentState.speedID);
-            this.frequency = Datas.Systems.getFrequency(this.currentState
-                .frequencyID);
+            this.speed = Datas.Systems.getSpeed(this.currentStateInstance.speedID);
+            this.frequency = Datas.Systems.getFrequency(this.currentStateInstance.frequencyID);
             this.frame.value = this.currentStateInstance.indexX >= Datas.Systems
                 .FRAMES ? Datas.Systems.FRAMES - 1 : this.currentStateInstance
                 .indexX;
@@ -554,14 +557,16 @@ class MapObject {
             this.updateUVs();
             this.updateAngle(angle);
         } else {
+            console.log(this
+                .currentStateInstance)
             this.mesh = null;
             this.boundingBoxSettings = null;
             this.speed = this.currentState === null ? System.DynamicValue
                 .createNumberDouble(1) : Datas.Systems.getSpeed(this
-                .currentState.speedID);
+                .currentStateInstance.speedID);
             this.frequency = this.currentState === null ? System.DynamicValue
                 .createNumberDouble(0) : Datas.Systems.getFrequency(this
-                .currentState.frequencyID);
+                .currentStateInstance.frequencyID);
             this.width = 0;
             this.height = 0;
         }
@@ -746,7 +751,7 @@ class MapObject {
         }
         this.removeBBFromScene();
         // If state option through, ignore BB
-        if (this.currentState.through) {
+        if (this.currentStateInstance.through) {
             return;
         }
         let box: THREE.Mesh;
@@ -887,7 +892,7 @@ class MapObject {
         // Update orientation
         this.orientationEye = orientation;
         orientation = this.orientation;
-        if (this.currentState && this.currentState.setWithCamera) {
+        if (this.currentStateInstance && this.currentStateInstance.setWithCamera) {
             this.updateOrientation();
         }
         if (this.orientation !== orientation) {
@@ -971,7 +976,7 @@ class MapObject {
         }
         this.orientationEye = oriention;
         oriention = this.orientation;
-        if (this.currentState && this.currentState.setWithCamera) {
+        if (this.currentStateInstance && this.currentStateInstance.setWithCamera) {
             this.updateOrientation();
         }
         if (this.orientation !== oriention) {
@@ -1123,7 +1128,7 @@ class MapObject {
                     parameters, events);
                 // If sender is in this map and no fix, look at the object
                 if (sender && sender.position && sender !== this && !this
-                    .currentState.directionFix) {
+                    .currentStateInstance.directionFix) {
                     this.orientationEye = this.getOrientationBetween(sender);
                 }
                 this.receivedOneEvent = true;
@@ -1155,20 +1160,20 @@ class MapObject {
             let orientation = this.orientation;
             if (this.moving) {
                 // If moving, update frame
-                if (this.currentState.moveAnimation) {
+                if (this.currentStateInstance.moveAnimation) {
                     frame = this.frame.update(Datas.Systems.mapFrameDuration
                         .getValue() / this.speed.getValue());
                 }
 
                 // Update mesh position
-                let offset = (this.currentState.pixelOffset && this.frame.value 
-                    % 2 !== 0) ? 1 : 0;
+                let offset = (this.currentStateInstance.pixelOffset && this
+                    .frame.value % 2 !== 0) ? 1 : 0;
                 this.mesh.position.set(this.position.x, this.position.y + offset
                     , this.position.z);
                 //this.updateBBPosition(this.position)
                 this.previousPosition = this.position;
             } else {
-                if (this.currentState.stopAnimation) {
+                if (this.currentStateInstance.stopAnimation) {
                     frame = this.frame.update(Datas.Systems.mapFrameDuration
                         .getValue() / this.speed.getValue());
                 } else {
@@ -1176,13 +1181,13 @@ class MapObject {
                     this.frame.value = this.currentStateInstance.indexX;
                 }
                 // Update mesh position
-                let offset = (this.currentState.pixelOffset && this.frame.value 
-                    % 2 !== 0) ? 1 : 0;
+                let offset = (this.currentStateInstance.pixelOffset && this
+                    .frame.value % 2 !== 0) ? 1 : 0;
                 this.mesh.position.set(this.position.x, this.position.y + offset
                     , this.position.z);
 
                 // Update angle
-                if (this.currentState && this.currentState.setWithCamera) {
+                if (this.currentStateInstance && this.currentStateInstance.setWithCamera) {
                     this.updateOrientation();
                 }
             }
@@ -1267,8 +1272,8 @@ class MapObject {
                     x = (this.frame.value >= Datas.Systems.FRAMES ? Datas
                         .Systems.FRAMES - 1 : this.frame.value) * w;
                     y = (this.orientation + (this.currentOrientationStop || (
-                        this.currentState.stopAnimation && !this.moving) ? 4 : 
-                        0)) * h;
+                        this.currentStateInstance.stopAnimation && !this.moving) 
+                        ? 4 : 0)) * h;
                 }
                 let coefX = MapElement.COEF_TEX / textureWidth;
                 let coefY = MapElement.COEF_TEX / textureHeight;

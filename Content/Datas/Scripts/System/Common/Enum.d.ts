@@ -27,7 +27,20 @@ declare namespace Enum {
         Turn90Right = 19,
         Turn90Left = 20,
         LookAtHero = 21,
-        LookAtHeroOpposite = 22
+        LookAtHeroOpposite = 22,
+        ChangeSpeed = 23,
+        ChangeFrequency = 24,
+        MoveAnimation = 25,
+        StopAnimation = 26,
+        ClimbAnimation = 27,
+        FixDirection = 28,
+        Through = 29,
+        SetWithCamera = 30,
+        PixelOffset = 31,
+        KeepPosition = 32,
+        Wait = 33,
+        PlaySound = 34,
+        Script = 35
     }
     /**
      *   Enum for the different event commands kind.

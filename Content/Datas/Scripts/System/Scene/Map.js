@@ -725,7 +725,7 @@ class Map extends Base {
                     portion = Game.current.getPortionPosDatas(this.id, i, j, k);
                     for (x = portion.min.length - 1; x >= 0; x--) {
                         if (!portion.min[x].currentState || !portion.min[x]
-                            .currentState.keepPosition) {
+                            .currentStateInstance.keepPosition) {
                             portion.min.splice(x, 1);
                         }
                         else {
@@ -734,7 +734,7 @@ class Map extends Base {
                     }
                     for (x = portion.mout.length - 1; x >= 0; x--) {
                         if (!portion.mout[x].currentState || !portion.mout[x]
-                            .currentState.keepPosition) {
+                            .currentStateInstance.keepPosition) {
                             portion.mout.splice(x, 1);
                         }
                         else {
@@ -743,7 +743,7 @@ class Map extends Base {
                     }
                     for (x = portion.m.length - 1; x >= 0; x--) {
                         if (!portion.m[x].currentState || !portion.m[x]
-                            .currentState.keepPosition) {
+                            .currentStateInstance.keepPosition) {
                             portion.m.splice(x, 1);
                         }
                         else {
