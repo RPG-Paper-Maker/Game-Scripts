@@ -20,6 +20,7 @@ export * from "./ChangeName";
 export * from "./ChangeProperty";
 export * from "./ChangeScreenTone";
 export * from "./ChangeState";
+export * from "./ChangeStatus";
 export * from "./ChangeVariables";
 export * from "./Choice";
 export * from "./Comment";

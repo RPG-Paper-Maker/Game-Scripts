@@ -121,7 +121,8 @@ namespace Enum {
         StartShopMenu,
         RestockShop,
         EnterANameMenu,
-        CreateObjectInMap
+        CreateObjectInMap,
+        ChangeStatus
     };
 
     /**

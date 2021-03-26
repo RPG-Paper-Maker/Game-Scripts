@@ -16,6 +16,7 @@ import { Constants, Enum } from "../Common/index.js";
  */
 class Status {
     constructor(id, turn = 0) {
+        this.id = id;
         this.system = Datas.Status.get(id);
         this.turn = turn;
         this.picture = Datas.Pictures.getPictureCopy(Enum.PictureKind.Icons, this.system.pictureID);

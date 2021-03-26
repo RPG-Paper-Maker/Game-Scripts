@@ -7,6 +7,7 @@ import { Picture2D } from "./Picture2D.js";
  *  @param {number} id - The ID of the status
  */
 declare class Status {
+    id: number;
     system: System.Status;
     turn: number;
     picture: Picture2D;

@@ -9,6 +9,7 @@ export * from "./ChangeName.js";
 export * from "./ChangeProperty.js";
 export * from "./ChangeScreenTone.js";
 export * from "./ChangeState.js";
+export * from "./ChangeStatus.js";
 export * from "./ChangeVariables.js";
 export * from "./Choice.js";
 export * from "./Comment.js";

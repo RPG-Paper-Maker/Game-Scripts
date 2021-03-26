@@ -144,6 +144,8 @@ class Events {
                 return new EventCommand.EnterANameMenu(command);
             case EventCommandKind.CreateObjectInMap:
                 return new EventCommand.CreateObjectInMap(command);
+            case EventCommandKind.ChangeStatus:
+                return new EventCommand.ChangeStatus(command);
             default:
                 return null;
         }

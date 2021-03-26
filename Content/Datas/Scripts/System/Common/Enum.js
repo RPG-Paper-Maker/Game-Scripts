@@ -123,6 +123,7 @@ var Enum;
         EventCommandKind[EventCommandKind["RestockShop"] = 59] = "RestockShop";
         EventCommandKind[EventCommandKind["EnterANameMenu"] = 60] = "EnterANameMenu";
         EventCommandKind[EventCommandKind["CreateObjectInMap"] = 61] = "CreateObjectInMap";
+        EventCommandKind[EventCommandKind["ChangeStatus"] = 62] = "ChangeStatus";
     })(EventCommandKind = Enum.EventCommandKind || (Enum.EventCommandKind = {}));
     ;
     /**

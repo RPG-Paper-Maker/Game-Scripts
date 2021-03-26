@@ -109,7 +109,8 @@ declare namespace Enum {
         StartShopMenu = 58,
         RestockShop = 59,
         EnterANameMenu = 60,
-        CreateObjectInMap = 61
+        CreateObjectInMap = 61,
+        ChangeStatus = 62
     }
     /**
      *   Enum for the different items kind.

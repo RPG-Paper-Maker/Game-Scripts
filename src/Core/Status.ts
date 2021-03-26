@@ -9,7 +9,6 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { stat } from "fs";
 import { Datas, System } from "..";
 import { Constants, Enum, ScreenResolution } from "../Common";
 import { Battler } from "./Battler";
@@ -21,11 +20,13 @@ import { Picture2D } from "./Picture2D";
  */
 class Status {
 
+    public id: number;
     public system: System.Status;
     public turn: number;
     public picture: Picture2D;
 
     constructor(id: number, turn: number = 0) {
+        this.id = id;
         this.system = Datas.Status.get(id);
         this.turn = turn;
         this.picture = Datas.Pictures.getPictureCopy(Enum.PictureKind.Icons, 
