@@ -150,6 +150,8 @@ class Events {
                 return new EventCommand.CreateObjectInMap(command);
             case EventCommandKind.ChangeStatus:
                 return new EventCommand.ChangeStatus(command);
+            case EventCommandKind.ResetCamera:
+                return new EventCommand.ResetCamera(command);
             default:
                 return null;
         }

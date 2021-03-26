@@ -15,7 +15,7 @@ import { MapObject, Game } from "../Core";
 import { Player } from "../Core";
 
 /** @class
- *  An event command for changing a skill.
+ *  An event command for changing status.
  *  @extends EventCommand.Base
  */
 class ChangeStatus extends Base {

@@ -122,7 +122,8 @@ namespace Enum {
         RestockShop,
         EnterANameMenu,
         CreateObjectInMap,
-        ChangeStatus
+        ChangeStatus,
+        ResetCamera
     };
 
     /**

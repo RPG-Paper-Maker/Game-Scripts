@@ -51,6 +51,7 @@ export * from "./PlaySound.js";
 export * from "./Plugin.js";
 export * from "./RemoveAPicture.js";
 export * from "./RemoveObjectFromMap.js";
+export * from "./ResetCamera.js";
 export * from "./Script.js";
 export * from "./SendEvent.js";
 export * from "./SetDialogBoxOptions.js";

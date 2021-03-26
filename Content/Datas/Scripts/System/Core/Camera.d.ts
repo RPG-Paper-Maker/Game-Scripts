@@ -10,6 +10,7 @@ import { Vector3 } from "./index.js";
  *  @param {MapObject} target - The camera target
  */
 declare class Camera {
+    system: System.CameraProperties;
     perspectiveCamera: THREE.PerspectiveCamera;
     orthographicCamera: THREE.OrthographicCamera;
     isPerspective: boolean;
@@ -20,6 +21,10 @@ declare class Camera {
     horizontalAngle: number;
     verticalAngle: number;
     constructor(cameraProperties: System.CameraProperties, target: MapObject);
+    /**
+     *  Initialize the camera according to system camera properties.
+     */
+    initialize(): void;
     /**
      *  Configure camera when resizing window.
      */

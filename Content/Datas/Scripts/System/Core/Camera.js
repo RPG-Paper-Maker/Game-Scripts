@@ -18,8 +18,15 @@ import { Scene } from "../index.js";
  */
 class Camera {
     constructor(cameraProperties, target) {
-        cameraProperties.initializeCamera(this);
+        this.system = cameraProperties;
+        this.initialize();
         this.target = target;
+    }
+    /**
+     *  Initialize the camera according to system camera properties.
+     */
+    initialize() {
+        this.system.initializeCamera(this);
     }
     /**
      *  Configure camera when resizing window.

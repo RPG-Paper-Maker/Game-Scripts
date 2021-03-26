@@ -12,7 +12,7 @@ import { Base } from "./Base.js";
 import { System } from "../index.js";
 import { Game } from "../Core/index.js";
 /** @class
- *  An event command for changing a skill.
+ *  An event command for changing status.
  *  @extends EventCommand.Base
  */
 class ChangeStatus extends Base {

@@ -1,16 +1,11 @@
 import { Base } from "./Base.js";
-import { System } from "../index.js";
 import { MapObject } from "../Core/index.js";
 /** @class
- *  An event command for changing status.
+ *  An event command for reseting the camera.
  *  @extends EventCommand.Base
+ *  @param {any[]} command - Direct JSON command to parse
  */
-declare class ChangeStatus extends Base {
-    selection: number;
-    heInstanceID: System.DynamicValue;
-    groupIndex: number;
-    operation: number;
-    statusID: System.DynamicValue;
+declare class ResetCamera extends Base {
     constructor(command: any[]);
     /**
      *  Update and check if the event is finished.
@@ -21,4 +16,4 @@ declare class ChangeStatus extends Base {
     */
     update(currentState: Record<string, any>, object: MapObject, state: number): number;
 }
-export { ChangeStatus };
+export { ResetCamera };

@@ -52,6 +52,7 @@ export * from "./PlaySound";
 export * from "./Plugin";
 export * from "./RemoveAPicture";
 export * from "./RemoveObjectFromMap";
+export * from "./ResetCamera";
 export * from "./Script";
 export * from "./SendEvent";
 export * from "./SetDialogBoxOptions";

@@ -110,7 +110,8 @@ declare namespace Enum {
         RestockShop = 59,
         EnterANameMenu = 60,
         CreateObjectInMap = 61,
-        ChangeStatus = 62
+        ChangeStatus = 62,
+        ResetCamera = 63
     }
     /**
      *   Enum for the different items kind.

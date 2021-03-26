@@ -124,6 +124,7 @@ var Enum;
         EventCommandKind[EventCommandKind["EnterANameMenu"] = 60] = "EnterANameMenu";
         EventCommandKind[EventCommandKind["CreateObjectInMap"] = 61] = "CreateObjectInMap";
         EventCommandKind[EventCommandKind["ChangeStatus"] = 62] = "ChangeStatus";
+        EventCommandKind[EventCommandKind["ResetCamera"] = 63] = "ResetCamera";
     })(EventCommandKind = Enum.EventCommandKind || (Enum.EventCommandKind = {}));
     ;
     /**
