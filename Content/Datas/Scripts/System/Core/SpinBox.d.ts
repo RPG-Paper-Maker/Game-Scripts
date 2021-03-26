@@ -12,19 +12,22 @@ declare class SpinBox extends Bitmap {
     value: number;
     min: number;
     max: number;
+    allowLeftRight: boolean;
     active: boolean;
     startTime: number;
     /**
      *  @param {number} x - The x coordinates
      *  @param {number} y - The y coordinates
      */
-    constructor(x: number, y: number, { w, h, value, min, max, active }?: {
+    constructor(x: number, y: number, { w, h, value, min, max, active, allowLeftRight, times }?: {
         w?: number;
         h?: number;
         value?: number;
         min?: number;
         max?: number;
         active?: boolean;
+        allowLeftRight?: boolean;
+        times?: boolean;
     });
     /**
      *  Set the x value.
@@ -46,6 +49,11 @@ declare class SpinBox extends Bitmap {
      *  @param {number} h - The h value
      */
     setH(h: number): void;
+    /**
+     *  Update active.
+     *  @param {boolean} active
+     */
+    setActive(active: boolean): void;
     /**
      *  Update value.
      *  @param {number} value

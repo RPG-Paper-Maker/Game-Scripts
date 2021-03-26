@@ -56,7 +56,7 @@ class Reaction extends Base {
      *  @param {Node} commands - All the commands (final result)
      */
     readChildrenJSON(jsonCommands: Record<string, any>, commands: Node) {
-        let choice = null;
+        let showText: EventCommand.ShowText = null;
         let command: EventCommand.Base, node: Node;
         for (let i = 0, l = jsonCommands.length; i < l; i++) {
             command = Manager.Events.getEventCommand(jsonCommands[i]);
@@ -71,10 +71,13 @@ class Reaction extends Base {
 
             // If text before choice, make a link
             if (command instanceof EventCommand.ShowText) {
-                choice = command;
+                showText = command;
             } else if (command instanceof EventCommand.DisplayChoice) {
-                command.setShowText(choice);
-                choice = null;
+                command.setShowText(showText);
+                showText = null;
+            } else if (command instanceof EventCommand.InputNumber) {
+                command.setShowText(showText);
+                showText = null;
             } else if (command instanceof EventCommand.Label) {
                 this.labels.push([command.name, node]);
             }

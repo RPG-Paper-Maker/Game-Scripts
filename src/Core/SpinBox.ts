@@ -27,6 +27,7 @@ class SpinBox extends Bitmap {
     public value: number;
     public min: number;
     public max: number;
+    public allowLeftRight: boolean;
     public active: boolean;
     public startTime: number;
 
@@ -35,13 +36,14 @@ class SpinBox extends Bitmap {
      *  @param {number} y - The y coordinates
      */
     constructor(x: number, y: number, { w = SpinBox.DEFAULT_WIDTH, h = SpinBox
-        .DEFAULT_HEIGHT, value = 1, min = 1, max = 100, active = false } = {}) {
+        .DEFAULT_HEIGHT, value = 1, min = 1, max = 100, active = true, 
+        allowLeftRight = true, times = true } = {}) {
         super(x, y, w, h);
         this.value = value;
         this.min = min;
         this.max = max;
-        this.active = active;
-        const graphic = new Graphic.SpinBox(value);
+        this.allowLeftRight = allowLeftRight;
+        const graphic = new Graphic.SpinBox(value, times);
         const options = { 
             content: graphic,
             padding: WindowBox.MEDIUM_PADDING_BOX,
@@ -49,6 +51,7 @@ class SpinBox extends Bitmap {
         };
         this.windowBox = new WindowBox(x, y, w, h, options);
         this.startTime = new Date().getTime();
+        this.setActive(active);
     }
 
     /** 
@@ -96,6 +99,17 @@ class SpinBox extends Bitmap {
     }
 
     /** 
+     *  Update active.
+     *  @param {boolean} active
+     */
+    setActive(active: boolean) {
+        if (active !== this.active) {
+            this.active = active;
+            this.windowBox.selected = active;
+        }
+    }
+
+    /** 
      *  Update value.
      *  @param {number} value
      */
@@ -104,6 +118,7 @@ class SpinBox extends Bitmap {
             this.value = value;
             Datas.Systems.soundCursor.playSound();
             (<Graphic.SpinBox>this.windowBox.content).setValue(value);
+            Manager.Stack.requestPaintHUD = true;
         }
     }
 
@@ -133,14 +148,18 @@ class SpinBox extends Bitmap {
      *  Update when going left.
      */
     goLeft() {
-        this.updateValue(Math.max(this.value - 10, this.min));
+        if (this.allowLeftRight) {
+            this.updateValue(Math.max(this.value - 10, this.min));
+        }
     }
 
     /** 
      *  Update when going right.
      */
     goRight() {
-        this.updateValue(Math.min(this.value + 10, this.max));
+        if (this.allowLeftRight) {
+            this.updateValue(Math.min(this.value + 10, this.max));
+        }
     }
 
     /** 
@@ -150,17 +169,20 @@ class SpinBox extends Bitmap {
      *  @returns {boolean} false if the other keys are blocked after it
      */
     onKeyPressedAndRepeat(key: number): boolean {
-        let t = new Date().getTime();
-        if (t - this.startTime >= WindowChoices.TIME_WAIT_PRESS) {
-            this.startTime = t;
-            if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Down)) {
-                this.goDown();
-            } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Up)) {
-                this.goUp();
-            } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Right)) {
-                this.goRight();
-            } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Left)) {
-                this.goLeft();
+        if (this.active) {
+            let t = new Date().getTime();
+            if (t - this.startTime >= WindowChoices.TIME_WAIT_PRESS) {
+                this.startTime = t;
+                console.log(key)
+                if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Down)) {
+                    this.goDown();
+                } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Up)) {
+                    this.goUp();
+                } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Right)) {
+                    this.goRight();
+                } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Left)) {
+                    this.goLeft();
+                }
             }
         }
         return true;
@@ -171,16 +193,18 @@ class SpinBox extends Bitmap {
      */
     draw() {
         this.windowBox.draw();
-        let windowSkin = Datas.Systems.getCurrentWindowSkin();
-        if (this.value < this.max) {
-            windowSkin.drawArrowUp(this.oX + (this.oW - windowSkin.arrowUpDown[2]) 
-                / 2, this.oY - (windowSkin.arrowUpDown[3] / 2) - 1);
+        if (this.active) {
+            let windowSkin = Datas.Systems.getCurrentWindowSkin();
+            if (this.value < this.max) {
+                windowSkin.drawArrowUp(this.oX + (this.oW - windowSkin
+                    .arrowUpDown[2]) / 2, this.oY - (windowSkin.arrowUpDown[3] 
+                    / 2) - 1);
+            }
+            if (this.value > this.min ) {
+                windowSkin.drawArrowDown(this.oX + (this.oW - windowSkin
+                    .arrowUpDown[2]) / 2, this.oY + this.oH + 1);
+            }
         }
-        if (this.value > this.min ) {
-            windowSkin.drawArrowDown(this.oX + (this.oW - windowSkin.arrowUpDown[2]) 
-                / 2, this.oY + this.oH + 1);
-        }
-        
     }
 }
 

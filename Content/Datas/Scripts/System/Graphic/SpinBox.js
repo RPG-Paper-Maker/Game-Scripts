@@ -16,8 +16,9 @@ import { Base } from "./Base.js";
  *  @extends Graphic.Base
  */
 class SpinBox extends Base {
-    constructor(value) {
+    constructor(value, times = true) {
         super();
+        this.times = times;
         this.graphicTimes = new Graphic.Text("x");
         this.setValue(value);
     }
@@ -32,7 +33,7 @@ class SpinBox extends Base {
         if (this.value !== value) {
             this.value = value;
             this.graphicValue = new Graphic.Text(Utils.numToString(value), {
-                align: Enum.Align.Right
+                align: this.times ? Enum.Align.Right : Enum.Align.Center
             });
             Manager.Stack.requestPaintHUD = true;
         }
@@ -55,7 +56,9 @@ class SpinBox extends Base {
      *  @param {number} h - The height dimention to draw graphic
      */
     draw(x, y, w, h) {
-        this.graphicTimes.draw(x, y, w, h);
+        if (this.times) {
+            this.graphicTimes.draw(x, y, w, h);
+        }
         this.graphicValue.draw(x, y, w, h);
     }
 }

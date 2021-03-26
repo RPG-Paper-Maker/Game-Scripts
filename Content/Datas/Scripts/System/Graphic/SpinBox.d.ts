@@ -8,7 +8,8 @@ declare class SpinBox extends Base {
     graphicTimes: Graphic.Text;
     graphicValue: Graphic.Text;
     value: number;
-    constructor(value: number);
+    times: boolean;
+    constructor(value: number, times?: boolean);
     /**
      *  Update value.
      *  @param {number} x - The x position to draw graphic
