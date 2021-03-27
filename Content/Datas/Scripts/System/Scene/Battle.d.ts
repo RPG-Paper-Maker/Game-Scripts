@@ -70,6 +70,7 @@ declare class Battle extends Map {
     finishedXP: boolean;
     all: boolean;
     userTarget: boolean;
+    forceEndBattle: boolean;
     kindSelection: CharacterKind;
     selectedUserIndex: number;
     selectedTargetIndex: number;

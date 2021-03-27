@@ -235,6 +235,11 @@ class Battle extends Map {
      *  Update battle according to step.
      */
     update() {
+        if (this.forceEndBattle) {
+            this.winning = false;
+            this.changeStep(Enum.BattleStep.Victory);
+            this.forceEndBattle = false;
+        }
         super.update();
         // Y angle
         let vector = new Vector3();

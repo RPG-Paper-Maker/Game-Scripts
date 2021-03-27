@@ -87,6 +87,7 @@ class Battle extends Map {
     public finishedXP: boolean;
     public all: boolean;
     public userTarget: boolean;
+    public forceEndBattle: boolean;
 
     //Selection
     public kindSelection: CharacterKind;
@@ -407,6 +408,12 @@ class Battle extends Map {
      *  Update battle according to step.
      */
     update() {
+        if (this.forceEndBattle) {
+            this.winning = false;
+            this.changeStep(Enum.BattleStep.Victory);
+            this.forceEndBattle = false;
+        }
+
         super.update();
 
         // Y angle

@@ -30,6 +30,7 @@ export * from "./DisplayAnAnimation.js";
 export * from "./DisplayAPicture.js";
 export * from "./DisplayChoice.js";
 export * from "./Else.js";
+export * from "./EndBattle.js";
 export * from "./EndGame.js";
 export * from "./EnterANameMenu.js";
 export * from "./FlashScreen.js";

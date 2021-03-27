@@ -31,6 +31,7 @@ export * from "./DisplayAnAnimation";
 export * from "./DisplayAPicture";
 export * from "./DisplayChoice";
 export * from "./Else";
+export * from "./EndBattle";
 export * from "./EndGame";
 export * from "./EnterANameMenu";
 export * from "./FlashScreen";
