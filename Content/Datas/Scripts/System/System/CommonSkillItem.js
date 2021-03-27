@@ -47,6 +47,7 @@ class CommonSkillItem extends Icon {
         this.sound = new PlaySong(SongKind.Sound, json.s);
         this.animationUserID = DynamicValue.readOrNone(json.auid);
         this.animationTargetID = DynamicValue.readOrNone(json.atid);
+        this.canBeSold = DynamicValue.readOrDefaultSwitch(json.canBeSold);
         this.price = [];
         Utils.readJSONSystemList({ list: Utils.defaultValue(json.p, []),
             listIndexes: this.price, cons: Cost });

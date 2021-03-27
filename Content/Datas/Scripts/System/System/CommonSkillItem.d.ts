@@ -27,6 +27,7 @@ declare class CommonSkillItem extends Icon {
     sound: PlaySong;
     animationID: DynamicValue;
     animationTargetID: DynamicValue;
+    canBeSold: System.DynamicValue;
     price: Cost[];
     costs: Cost[];
     effects: Effect[];

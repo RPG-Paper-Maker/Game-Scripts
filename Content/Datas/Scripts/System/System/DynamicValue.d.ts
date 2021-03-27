@@ -138,6 +138,14 @@ declare class DynamicValue extends System.Base {
      */
     static readOrDefaultMessage(json: StructJSON, m?: string): System.DynamicValue;
     /**
+     *  Try to read a switch value, if not possible put default value.
+     *  @static
+     *  @param {StructJSONDynamicValue} json - The json value
+     *  @param {boolean} [s=true] - The default value
+     *  @returns {System.DynamicValue}
+     */
+    static readOrDefaultSwitch(json: StructJSON, s?: boolean): System.DynamicValue;
+    /**
      *  Try to read a value, if not possible put none value.
      *  @static
      *  @param {StructJSONDynamicValue} json - The json value

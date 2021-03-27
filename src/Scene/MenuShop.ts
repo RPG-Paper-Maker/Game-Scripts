@@ -324,7 +324,8 @@ class MenuShop extends MenuBase {
         let item: Item;
         for (let i = 0, l = listToSort.length; i < l; i++) {
             item = listToSort[i];
-            if (item.nb !== 0 && Datas.Systems.inventoryFilters[indexTab]
+            if (item.nb !== 0 && (this.isBuy() || item.system.canBeSold
+                .getValue()) && Datas.Systems.inventoryFilters[indexTab]
                 .getFilter()(item)) {
                 list.push(this.isBuy() ? new Graphic.Item(item, { nbItem: item
                     .nb, possible: item.shop.isPossiblePrice() }) : new Graphic

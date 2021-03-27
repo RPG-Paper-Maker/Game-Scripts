@@ -218,8 +218,7 @@ class DynamicValue extends System.Base {
     static readOrDefaultDatabase(json: StructJSON, id: number = 1): 
         System.DynamicValue {
         return Utils.isUndefined(json) ? System.DynamicValue.create(
-            DynamicValueKind.DataBase, id) : System.DynamicValue.readFromJSON(
-            json);
+            DynamicValueKind.DataBase, id) : System.DynamicValue.readFromJSON(json);
     }
 
     /** 
@@ -232,8 +231,19 @@ class DynamicValue extends System.Base {
     static readOrDefaultMessage(json: StructJSON, m: string = ""): 
         System.DynamicValue {
         return Utils.isUndefined(json) ? System.DynamicValue.create(
-            DynamicValueKind.Message, m) : System.DynamicValue.readFromJSON(
-            json);
+            DynamicValueKind.Message, m) : System.DynamicValue.readFromJSON(json);
+    }
+
+    /** 
+     *  Try to read a switch value, if not possible put default value.
+     *  @static
+     *  @param {StructJSONDynamicValue} json - The json value
+     *  @param {boolean} [s=true] - The default value
+     *  @returns {System.DynamicValue}
+     */
+    static readOrDefaultSwitch(json: StructJSON, s: boolean = true): System.DynamicValue {
+        return Utils.isUndefined(json) ? System.DynamicValue.createSwitch(s) : 
+            System.DynamicValue.readFromJSON(json);
     }
 
     /** 

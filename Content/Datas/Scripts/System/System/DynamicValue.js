@@ -192,6 +192,17 @@ class DynamicValue extends System.Base {
         return Utils.isUndefined(json) ? System.DynamicValue.create(DynamicValueKind.Message, m) : System.DynamicValue.readFromJSON(json);
     }
     /**
+     *  Try to read a switch value, if not possible put default value.
+     *  @static
+     *  @param {StructJSONDynamicValue} json - The json value
+     *  @param {boolean} [s=true] - The default value
+     *  @returns {System.DynamicValue}
+     */
+    static readOrDefaultSwitch(json, s = true) {
+        return Utils.isUndefined(json) ? System.DynamicValue.createSwitch(s) :
+            System.DynamicValue.readFromJSON(json);
+    }
+    /**
      *  Try to read a value, if not possible put none value.
      *  @static
      *  @param {StructJSONDynamicValue} json - The json value
