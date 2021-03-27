@@ -198,7 +198,7 @@ class BattleInitialize {
         let song = Manager.Songs.current[SongKind.Music];
         this.battle.musicMapTime = song === null ? 0 : song.seek() / Constants
             .ONE_SECOND_MILLI;
-        Datas.BattleSystems.battleMusic.playMusic();
+        Game.current.battleMusic.playMusic();
     }
     /**
      *  Update the battle.

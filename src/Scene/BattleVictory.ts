@@ -89,7 +89,7 @@ class BattleVictory {
         this.battle.priorityIndex = 0;
 
         // Music
-        Datas.BattleSystems.battleVictory.playMusic();
+        Game.current.victoryMusic.playMusic();
 
         // Windows
         let w = 200 + WindowBox.SMALL_PADDING_BOX[0] + WindowBox.SMALL_PADDING_BOX[2];

@@ -10,7 +10,7 @@
 */
 
 import { Player } from "./Player";
-import { Datas, Scene } from "../index";
+import { Datas, Scene, System } from "../index";
 import { Item } from "./Item";
 import { Chrono } from "./Chrono";
 import { MapObject } from "./MapObject";
@@ -48,11 +48,15 @@ class Game {
     public mapsDatas: Record<string, any>;
     public isEmpty: boolean;
     public shops: Record<string, Record<string, number>[]>;
+    public battleMusic: System.PlaySong;
+    public victoryMusic: System.PlaySong;
 
     constructor(slot: number = -1) {
         this.slot = slot;
         this.hero = new MapObject(Datas.Systems.modelHero.system, Datas.Systems
             .modelHero.position.clone(), true);
+        this.battleMusic = Datas.BattleSystems.battleMusic;
+        this.victoryMusic = Datas.BattleSystems.battleVictory;
         this.isEmpty = true;
     }
 

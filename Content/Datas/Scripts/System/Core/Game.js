@@ -26,6 +26,8 @@ class Game {
         this.slot = slot;
         this.hero = new MapObject(Datas.Systems.modelHero.system, Datas.Systems
             .modelHero.position.clone(), true);
+        this.battleMusic = Datas.BattleSystems.battleMusic;
+        this.victoryMusic = Datas.BattleSystems.battleVictory;
         this.isEmpty = true;
     }
     /**

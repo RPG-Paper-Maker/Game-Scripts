@@ -148,6 +148,10 @@ class Events {
                 return new EventCommand.ChangeStatus(command);
             case EventCommandKind.ResetCamera:
                 return new EventCommand.ResetCamera(command);
+            case EventCommandKind.ChangeBattleMusic:
+                return new EventCommand.ChangeBattleMusic(command);
+            case EventCommandKind.ChangeVictoryMusic:
+                return new EventCommand.ChangeVictoryMusic(command);
             default:
                 return null;
         }

@@ -73,7 +73,7 @@ class BattleVictory {
         this.battle.user = null;
         this.battle.priorityIndex = 0;
         // Music
-        Datas.BattleSystems.battleVictory.playMusic();
+        Game.current.victoryMusic.playMusic();
         // Windows
         let w = 200 + WindowBox.SMALL_PADDING_BOX[0] + WindowBox.SMALL_PADDING_BOX[2];
         let h = this.battle.lootsNumber * 30 + WindowBox.SMALL_PADDING_BOX[1] +

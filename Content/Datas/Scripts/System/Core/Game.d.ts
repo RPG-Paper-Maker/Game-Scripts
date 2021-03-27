@@ -1,4 +1,5 @@
 import { Player } from "./Player.js";
+import { System } from "../index.js";
 import { Item } from "./Item.js";
 import { Chrono } from "./Chrono.js";
 import { MapObject } from "./MapObject.js";
@@ -32,6 +33,8 @@ declare class Game {
     mapsDatas: Record<string, any>;
     isEmpty: boolean;
     shops: Record<string, Record<string, number>[]>;
+    battleMusic: System.PlaySong;
+    victoryMusic: System.PlaySong;
     constructor(slot?: number);
     /**
      *  Get the hero in a tab with instance ID.

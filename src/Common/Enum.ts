@@ -123,7 +123,9 @@ namespace Enum {
         EnterANameMenu,
         CreateObjectInMap,
         ChangeStatus,
-        ResetCamera
+        ResetCamera,
+        ChangeBattleMusic,
+        ChangeVictoryMusic
     };
 
     /**

@@ -111,7 +111,9 @@ declare namespace Enum {
         EnterANameMenu = 60,
         CreateObjectInMap = 61,
         ChangeStatus = 62,
-        ResetCamera = 63
+        ResetCamera = 63,
+        ChangeBattleMusic = 64,
+        ChangeVictoryMusic = 65
     }
     /**
      *   Enum for the different items kind.
