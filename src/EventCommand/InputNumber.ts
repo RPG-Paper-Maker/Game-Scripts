@@ -126,9 +126,11 @@ class InputNumber extends Base {
             if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Right)) {
                 currentState.index = Mathf.mod(currentState.index + 1, currentState.digits);
                 Datas.Systems.soundCursor.playSound();
+                Manager.Stack.requestPaintHUD = true;
             } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Left)) {
                 currentState.index = Mathf.mod(currentState.index - 1, currentState.digits);
                 Datas.Systems.soundCursor.playSound();
+                Manager.Stack.requestPaintHUD = true;
             }
             currentState.spinBoxes[currentState.index].setActive(true);
         }
