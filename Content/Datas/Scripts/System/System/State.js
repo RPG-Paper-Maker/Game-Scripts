@@ -82,6 +82,7 @@ class State extends Base {
             speedID: this.speedID,
             frequencyID: this.frequencyID,
             moveAnimation: this.moveAnimation,
+            stopAnimation: this.stopAnimation,
             climbAnimation: this.climbAnimation,
             directionFix: this.directionFix,
             through: this.through,

@@ -10,7 +10,7 @@
 */
 import { MenuBase } from "./MenuBase.js";
 import { Manager, Graphic, Datas, Scene } from "../index.js";
-import { WindowBox, WindowChoices, Player, Game, Rectangle } from "../Core/index.js";
+import { WindowBox, WindowChoices, Player, Item, Game, Rectangle } from "../Core/index.js";
 import { Enum } from "../Common/index.js";
 var Align = Enum.Align;
 var OrientationWindow = Enum.OrientationWindow;
@@ -131,7 +131,7 @@ class MenuEquip extends MenuBase {
         for (let i = 0; i < l; i++) {
             // Check if is possible because of characteristics
             isPossible = true;
-            for (j = 1, m = characteristics.length; j < m; j++) {
+            for (j = 0, m = characteristics.length; j < m; j++) {
                 characteristic = characteristics[j];
                 if (characteristic.kind === Enum.CharacteristicKind.AllowForbidChange &&
                     characteristic.changeEquipmentID.getValue() === Datas
@@ -172,7 +172,7 @@ class MenuEquip extends MenuBase {
                     if (nbItem > 0) {
                         characteristics = player.system.getCharacteristics();
                         allow = true;
-                        for (j = 1, m = characteristics.length; j < m; j++) {
+                        for (j = 0, m = characteristics.length; j < m; j++) {
                             characteristic = characteristics[j];
                             if (characteristic.kind === Enum.CharacteristicKind
                                 .AllowForbidEquip && ((item.kind === Enum.ItemKind
@@ -259,7 +259,13 @@ class MenuEquip extends MenuBase {
         let prev = player.equip[id];
         player.equip[id] = null;
         if (prev) {
-            prev.add(1);
+            let item = Item.findItem(prev.kind, prev.system.id);
+            if (item === null) {
+                prev.add(1);
+            }
+            else {
+                item.add(1);
+            }
         }
         this.updateStats();
     }
@@ -287,7 +293,13 @@ class MenuEquip extends MenuBase {
             }
         }
         if (prev) {
-            prev.add(1);
+            let item = Item.findItem(prev.kind, prev.system.id);
+            if (item === null) {
+                prev.add(1);
+            }
+            else {
+                item.add(1);
+            }
         }
         this.updateStats();
     }

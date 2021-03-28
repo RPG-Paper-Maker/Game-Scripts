@@ -173,7 +173,6 @@ class SpinBox extends Bitmap {
             let t = new Date().getTime();
             if (t - this.startTime >= WindowChoices.TIME_WAIT_PRESS) {
                 this.startTime = t;
-                console.log(key)
                 if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Down)) {
                     this.goDown();
                 } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Up)) {

@@ -95,7 +95,9 @@ class CreateObjectInMap extends Base {
             let globalPortion = position.getGlobalPortion();
             Scene.Map.current.allObjects[id] = position;
             let newObject = new MapObject(System.MapObject.createFromModelID(this.modelID.getValue(), id), currentState.position);
-            Game.current.variables[this.stockID.getValue(true)] = id;
+            if (this.isStockID) {
+                Game.current.variables[this.stockID.getValue(true)] = id;
+            }
             Game.current.getPortionDatas(Scene.Map.current.id, globalPortion).m.push(newObject);
             Game.current.getPortionDatas(Scene.Map.current.id, globalPortion).min.push(newObject);
             newObject.changeState();

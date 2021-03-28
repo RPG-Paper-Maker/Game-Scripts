@@ -474,17 +474,22 @@ class MapObject {
             this.mesh.position.set(this.position.x, this.position.y, this
                 .position.z);
             this.boundingBoxSettings = objCollision[1][0];
-            if (this.currentStateInstance.graphicID === 0) {
-                let picture = Scene.Map.current.mapProperties.tileset
-                    .picture;
-                this.boundingBoxSettings.squares = picture ? picture
-                    .getSquaresForTexture(this.currentStateInstance.rectTileset)
-                    : [];
+            if (this.boundingBoxSettings) {
+                if (this.currentStateInstance.graphicID === 0) {
+                    let picture = Scene.Map.current.mapProperties.tileset
+                        .picture;
+                    this.boundingBoxSettings.squares = picture ? picture
+                        .getSquaresForTexture(this.currentStateInstance.rectTileset)
+                        : [];
+                }
+                if (this.currentStateInstance.graphicKind === ElementMapKind.Object3D) {
+                    this.boundingBoxSettings.b = [this.boundingBoxSettings.b];
+                }
+                this.updateBB(this.position);
             }
-            if (this.currentStateInstance.graphicKind === ElementMapKind.Object3D) {
-                this.boundingBoxSettings.b = [this.boundingBoxSettings.b];
+            else {
+                this.boundingBoxSettings = null;
             }
-            this.updateBB(this.position);
             this.updateUVs();
             this.updateAngle(angle);
         }

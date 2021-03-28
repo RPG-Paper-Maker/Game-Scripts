@@ -855,12 +855,13 @@ class Collisions {
         let w = objCollision.rw;
         let h = objCollision.rh;
 
+        // If not in the height, no test
+        if (positionAfter.y < y || positionAfter.y > y + h) {
+            return [false, null];
+        }
+
         // if w = 0, check height
         if (objCollision.rw === 0) {
-            // If not in the height, no test
-            if (positionAfter.y < y || positionAfter.y > y + h) {
-                return [false, null];
-            }
             let pass = forceNever || -(!forceAlways && ((y + h) <= (positionAfter
                 .y + Datas.Systems.mountainCollisionHeight.getValue())));
             if (Mathf.isPointOnRectangle(point, x, x + Datas.Systems.SQUARE_SIZE
@@ -1016,6 +1017,7 @@ class Collisions {
                 isFloor = jposition.y === jpositionAfter.y ? false : 
                     mapPortion.boundingBoxesLands[jpositionAfter.toIndex()]
                     .length > 0;
+                console.log(!isFloor, new Date().getTime())
                 return [!isFloor, null];
             }
             return [!forceNever && (Math.abs(newPosition.y - positionAfter.y) >
