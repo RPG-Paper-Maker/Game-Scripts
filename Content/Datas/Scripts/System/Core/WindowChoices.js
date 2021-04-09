@@ -360,6 +360,18 @@ class WindowChoices extends Bitmap {
             this.listWindows[index].draw(true, this.listWindows[i]
                 .windowDimension, this.listWindows[i].contentDimension);
         }
+        // Draw arrows
+        let ws = Datas.Systems.getCurrentWindowSkin();
+        const arrowWidth = ws.arrowUpDown[2];
+        const arrowHeight = ws.arrowUpDown[3] / 2;
+        const arrowX = this.oX + (this.oW / 2) - (arrowWidth / 2);
+        if (this.currentSelectedIndex - offset > 0) {
+            ws.drawArrowUp(arrowX, this.oY - arrowHeight - 1);
+        }
+        if (this.currentSelectedIndex - offset < this.listWindows.length - this
+            .nbItemsMax) {
+            ws.drawArrowDown(arrowX, this.oY + this.oH + 1);
+        }
     }
 }
 WindowChoices.TIME_WAIT_PRESS = 50;
