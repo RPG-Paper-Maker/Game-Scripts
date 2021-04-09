@@ -49,7 +49,7 @@ function createWindow () {
 
 app.whenReady().then(()=>
 globalShortcut.register('Alt+CommandOrControl+I', () => {
-    window.webContents.openDevTools();
+    window.openDevTools({mode:'undocked'})
   })
 ).then(createWindow)
 app.commandLine.appendSwitch('high-dpi-support', 'true');
