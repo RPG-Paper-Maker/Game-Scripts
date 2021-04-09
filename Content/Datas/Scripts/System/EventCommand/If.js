@@ -13,7 +13,7 @@ import { System, Datas, Scene } from "../index.js";
 import { Utils, Enum, Mathf, KeyEvent, Interpreter } from "../Common/index.js";
 var ConditionHeroesKind = Enum.ConditionHeroesKind;
 var ItemKind = Enum.ItemKind;
-import { Player, Game } from "../Core/index.js";
+import { Player, MapObject, Game } from "../Core/index.js";
 /** @class
  *  An event command for condition event command block.
  *  @extends EventCommand.Base
@@ -112,7 +112,21 @@ class If extends Base {
             case 7:
                 this.script = System.DynamicValue.createValueCommand(command, iterator);
                 break;
+            case 9:
+                this.objectIDLookingAt = System.DynamicValue.createValueCommand(command, iterator);
+                this.orientationLookingAt = command[iterator.i++];
+                break;
         }
+    }
+    /**
+     *  Initialize the current state.
+     *  @returns {Record<string, any>} The current state
+     */
+    initialize() {
+        return {
+            waitingObject: false,
+            object: null
+        };
     }
     /**
      *  Update and check if the event is finished.
@@ -313,6 +327,23 @@ class If extends Base {
             case 8:
                 result = Scene.Battle.escapedLastBattle;
                 break;
+            case 9: {
+                if (!currentState.waitingObject) {
+                    let objectID = this.objectIDLookingAt.getValue();
+                    MapObject.search(objectID, (result) => {
+                        currentState.object = result.object;
+                    }, object);
+                    currentState.waitingObject = true;
+                }
+                if (currentState.object === null) {
+                    return 0;
+                }
+                else {
+                    result = currentState.object.orientationEye === this
+                        .orientationLookingAt;
+                    break;
+                }
+            }
             default:
                 break;
         }

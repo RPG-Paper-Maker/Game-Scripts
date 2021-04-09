@@ -1,5 +1,6 @@
 import { Base } from "./Base.js";
 import { System } from "../index.js";
+import { Enum } from "../Common/index.js";
 import { MapObject } from "../Core/index.js";
 /** @class
  *  An event command for condition event command block.
@@ -43,8 +44,15 @@ declare class If extends Base {
     armorEquiped: boolean;
     keyID: System.DynamicValue;
     keyValue: System.DynamicValue;
+    objectIDLookingAt: System.DynamicValue;
+    orientationLookingAt: Enum.Orientation;
     script: System.DynamicValue;
     constructor(command: any[]);
+    /**
+     *  Initialize the current state.
+     *  @returns {Record<string, any>} The current state
+     */
+    initialize(): Record<string, any>;
     /**
      *  Update and check if the event is finished.
      *  @param {Record<string, any>} - currentState The current state of the event

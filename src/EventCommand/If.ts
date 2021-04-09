@@ -14,7 +14,7 @@ import { System, Datas, Scene } from "../index";
 import { Utils, Enum, Mathf, KeyEvent, Interpreter } from "../Common";
 import ConditionHeroesKind = Enum.ConditionHeroesKind;
 import ItemKind = Enum.ItemKind;
-import { Player, MapObject, Item, Game } from "../Core";
+import { Player, MapObject, Item, Game, StructSearchResult } from "../Core";
 
 /** @class
  *  An event command for condition event command block.
@@ -59,6 +59,8 @@ class If extends Base {
     public armorEquiped: boolean;
     public keyID: System.DynamicValue;
     public keyValue: System.DynamicValue;
+    public objectIDLookingAt: System.DynamicValue;
+    public orientationLookingAt: Enum.Orientation;
     public script: System.DynamicValue;
 
     constructor(command: any[]) {
@@ -168,6 +170,22 @@ class If extends Base {
                 this.script = System.DynamicValue.createValueCommand(command, 
                     iterator);
                 break;
+            case 9:
+                this.objectIDLookingAt = System.DynamicValue.createValueCommand(
+                    command, iterator);
+                this.orientationLookingAt = command[iterator.i++];
+                break;
+        }
+    }
+
+    /** 
+     *  Initialize the current state.
+     *  @returns {Record<string, any>} The current state
+     */
+    initialize(): Record<string, any> {
+        return {
+            waitingObject: false,
+            object: null
         }
     }
 
@@ -402,6 +420,22 @@ class If extends Base {
             case 8:
                 result = Scene.Battle.escapedLastBattle;
                 break;
+            case 9: {
+                if (!currentState.waitingObject) {
+                    let objectID = this.objectIDLookingAt.getValue();
+                    MapObject.search(objectID, (result: StructSearchResult) => {
+                            currentState.object = result.object;
+                        }, object);
+                    currentState.waitingObject = true;
+                }
+                if (currentState.object === null) {
+                    return 0;
+                } else {
+                    result = currentState.object.orientationEye === this
+                        .orientationLookingAt;
+                    break;
+                }
+            }
             default:
                 break;
         }
