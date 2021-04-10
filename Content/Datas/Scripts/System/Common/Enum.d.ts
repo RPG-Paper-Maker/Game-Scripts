@@ -295,7 +295,29 @@ declare namespace Enum {
         CommonReaction = 44,
         Model = 45,
         CustomStructure = 46,
-        CustomList = 47
+        CustomList = 47,
+        Vector2 = 48,
+        Vector3 = 49,
+        Bars = 50,
+        Icons = 51,
+        Autotiles = 52,
+        Characters = 53,
+        Mountains = 54,
+        Tilesets = 55,
+        Walls = 56,
+        Battlers = 57,
+        Facesets = 58,
+        WindowSkins = 59,
+        TitleScreen = 60,
+        Object3D = 61,
+        Pictures = 62,
+        Animations = 63,
+        SkyBoxes = 64,
+        Enum = 65,
+        Music = 66,
+        BackgroundSound = 67,
+        Sound = 68,
+        MusicEffect = 69
     }
     /**
      *   Enum for the different window orientations.

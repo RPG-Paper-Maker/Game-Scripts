@@ -5,6 +5,9 @@ import { StructIterator } from "../EventCommand/index.js";
 interface StructJSON {
     k: DynamicValueKind;
     v: any;
+    x: StructJSON;
+    y: StructJSON;
+    z: StructJSON;
     customStructure?: Record<string, any>;
     customList?: Record<string, any>;
 }
@@ -18,6 +21,9 @@ declare class DynamicValue extends System.Base {
     value: any;
     customStructure: Record<string, System.DynamicValue>;
     customList: System.DynamicValue[];
+    x: System.DynamicValue;
+    y: System.DynamicValue;
+    z: System.DynamicValue;
     constructor(json?: Record<string, any>);
     /**
      *  Create a new value from kind and value.
