@@ -24,6 +24,9 @@ class ChangeLanguage extends Base {
     public windowBoxLanguage: WindowBox;
     public windowBoxTop: WindowBox;
     public windowChoicesMain: WindowChoices;
+    public windowBoxConfirm: WindowBox;
+    public windowChoicesConfirm: WindowChoices;
+    public step: number = 0;
 
     constructor() {
         super();
@@ -44,6 +47,8 @@ class ChangeLanguage extends Base {
         this.createWindowBoxLanguage();
         this.createWindowBoxTop();
         this.createWindowChoicesMain();
+        this.createWindowBoxConfirm();
+        this.createWindowChoicesConfirm();
     }
 
     /** 
@@ -84,13 +89,62 @@ class ChangeLanguage extends Base {
             WindowBox.LARGE_SLOT_HEIGHT + Constants.LARGE_SPACE, ScreenResolution
             .SCREEN_X - (2 * Constants.HUGE_SPACE), WindowBox.MEDIUM_SLOT_HEIGHT);
         const options = {
-            nbItemsMax: 9
+            nbItemsMax: 9,
+            listCallbacks: Datas.Languages.getCommandsCallbacks()
         };
         this.windowChoicesMain = new WindowChoices(rect.x, rect.y, rect.width, 
             rect.height, Datas.Languages.getCommandsGraphics(), options);
         this.windowChoicesMain.unselect();
         this.windowChoicesMain.select(Datas.Languages.getIndexByID(Datas.Settings
             .currentLanguage));
+    }
+
+    /** 
+     *  Create the window confirmation.
+     */
+    createWindowBoxConfirm() {
+        const width = 200;
+        const height = 75;
+        const rect = new Rectangle((ScreenResolution.SCREEN_X - width) / 2, (
+            ScreenResolution.SCREEN_Y - height) / 2, width, height);
+        const graphic = new Graphic.Text("Confirm?", { align: Enum.Align.Center });
+        const options = { 
+            content: graphic
+        };
+        this.windowBoxConfirm = new WindowBox(rect.x, rect.y, rect.width, rect
+            .height, options);
+    }
+
+    /** 
+     *  Create the window information on top.
+     */
+    createWindowChoicesConfirm() {
+        const rect = new Rectangle(this.windowBoxConfirm.oX + ((this
+            .windowBoxConfirm.oW - WindowBox.SMALL_SLOT_WIDTH) / 2), this
+            .windowBoxConfirm.oY + this.windowBoxConfirm.oH, WindowBox
+            .SMALL_SLOT_WIDTH, WindowBox.SMALL_SLOT_HEIGHT);
+        const options = {
+            listCallbacks: [
+                () => { // YES
+                    Datas.Settings.updateCurrentLanguage(Datas.Languages
+                        .listOrder[this.windowChoicesMain.currentSelectedIndex]);
+                    Manager.Stack.translateAll();
+                    this.step = 0;
+                    return true;
+                },
+                () => { // NO
+                    this.step = 0;
+                    Manager.Stack.requestPaintHUD = true;
+                    return false;
+                }
+            ]
+        };
+        const graphics = [
+            new Graphic.Text("Yes", { align: Enum.Align.Center }),
+            new Graphic.Text("No", { align: Enum.Align.Center })
+        ];
+        this.windowChoicesConfirm = new WindowChoices(rect.x, rect.y, rect.width, 
+            rect.height, graphics, options);
     }
 
     /** 
@@ -122,13 +176,27 @@ class ChangeLanguage extends Base {
      *  @param {number} key - The key ID
      */
     onKeyPressed(key: number) {
-        this.windowChoicesMain.onKeyPressed(key, this);
-        if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
-            .Cancel) || Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
-            .controls.MainMenu))
-        {
-            Datas.Systems.soundCancel.playSound();
-            Manager.Stack.pop();
+        switch (this.step) {
+            case 0:
+                this.windowChoicesMain.onKeyPressed(key, this);
+                if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
+                    .Action)) {
+                    this.windowChoicesConfirm.unselect();
+                    this.windowChoicesConfirm.select(0);
+                    this.step = 1;
+                } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
+                    .menuControls.Cancel) || Datas.Keyboards.isKeyEqual(key, 
+                    Datas.Keyboards.controls.MainMenu))
+                {
+                    Datas.Systems.soundCancel.playSound();
+                    Manager.Stack.pop();
+                }
+                break;
+            case 1:
+                this.windowChoicesConfirm.onKeyPressed(key, this);
+                break;
+            default:
+                break;
         }
     }
 
@@ -138,12 +206,13 @@ class ChangeLanguage extends Base {
      *  @returns {boolean}
      */
     onKeyPressedAndRepeat(key: number): boolean {
-        let index = this.windowChoicesMain.currentSelectedIndex;
-        this.windowChoicesMain.onKeyPressedAndRepeat(key);
-        let newIndex = this.windowChoicesMain.currentSelectedIndex;
-        if (newIndex !== index) {
-            Datas.Settings.updateCurrentLanguage(Datas.Languages.listOrder[newIndex]);
-            Manager.Stack.translateAll();
+        switch (this.step) {
+            case 0:
+                this.windowChoicesMain.onKeyPressedAndRepeat(key);
+                break;
+            case 1:
+                this.windowChoicesConfirm.onKeyPressedAndRepeat(key);
+                break;
         }
         return true;
     }
@@ -158,6 +227,10 @@ class ChangeLanguage extends Base {
         this.windowBoxLanguage.draw();
         this.windowBoxTop.draw();
         this.windowChoicesMain.draw();
+        if (this.step === 1) {
+            this.windowBoxConfirm.draw();
+            this.windowChoicesConfirm.draw();
+        }
     }
 }
 

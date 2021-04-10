@@ -40,5 +40,11 @@ declare class Languages {
      *  @returns {Graphic.Text[]}
      */
     static getCommandsGraphics(): Graphic.Text[];
+    /**
+     *  Get the language callbacks.
+     *  @static
+     *  @returns {(() => boolean)[]}
+     */
+    static getCommandsCallbacks(): (() => boolean)[];
 }
 export { Languages };

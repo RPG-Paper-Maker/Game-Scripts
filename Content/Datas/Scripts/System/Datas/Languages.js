@@ -66,5 +66,13 @@ class Languages {
     static getCommandsGraphics() {
         return this.listOrder.map(id => new Graphic.Text(this.get(id)));
     }
+    /**
+     *  Get the language callbacks.
+     *  @static
+     *  @returns {(() => boolean)[]}
+     */
+    static getCommandsCallbacks() {
+        return this.listOrder.map(id => (() => { return true; }));
+    }
 }
 export { Languages };

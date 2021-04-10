@@ -9,6 +9,9 @@ declare class ChangeLanguage extends Base {
     windowBoxLanguage: WindowBox;
     windowBoxTop: WindowBox;
     windowChoicesMain: WindowChoices;
+    windowBoxConfirm: WindowBox;
+    windowChoicesConfirm: WindowChoices;
+    step: number;
     constructor();
     /**
      *  Create scene.
@@ -30,6 +33,14 @@ declare class ChangeLanguage extends Base {
      *  Create the window information on top.
      */
     createWindowChoicesMain(): void;
+    /**
+     *  Create the window confirmation.
+     */
+    createWindowBoxConfirm(): void;
+    /**
+     *  Create the window information on top.
+     */
+    createWindowChoicesConfirm(): void;
     /**
      *  Load async stuff.
      */
