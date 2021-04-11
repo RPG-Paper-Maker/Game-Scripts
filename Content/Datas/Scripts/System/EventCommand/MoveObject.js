@@ -1078,7 +1078,7 @@ class MoveObject extends Base {
                     currentState.position = null;
                     currentState.moveHeroOrientation = null;
                     // Check random battle steps
-                    if (object.isHero) {
+                    if (object && object.isHero) {
                         Scene.Map.current.mapProperties.checkRandomBattle();
                     }
                 }

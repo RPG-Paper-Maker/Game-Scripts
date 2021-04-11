@@ -1017,7 +1017,6 @@ class Collisions {
                 isFloor = jposition.y === jpositionAfter.y ? false : 
                     mapPortion.boundingBoxesLands[jpositionAfter.toIndex()]
                     .length > 0;
-                console.log(!isFloor, new Date().getTime())
                 return [!isFloor, null];
             }
             return [!forceNever && (Math.abs(newPosition.y - positionAfter.y) >
