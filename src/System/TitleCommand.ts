@@ -74,7 +74,6 @@ class TitleCommand extends Translatable {
             Platform.canvasVideos.pause();
             Platform.canvasVideos.src = "";
         }
-        Manager.Songs.stopAll();
     
         // Create a new game
         Game.current = new Game();
