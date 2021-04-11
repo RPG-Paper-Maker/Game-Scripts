@@ -53,6 +53,11 @@ declare class Statistic extends Translatable {
      */
     getBonusAbbreviation(): string;
     /**
+     *  Get the added abbreviation.
+     *  @returns {string}
+     */
+    getAddedAbbreviation(): string;
+    /**
      *  Get the next abbreviation.
      *  @returns {string}
      */

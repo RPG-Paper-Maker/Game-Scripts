@@ -103,9 +103,14 @@ class ChangeAStatistic extends Base {
                 }
                 target.synchronizeExperience();
             }
+            else {
+                target[stat.getAddedAbbreviation()] += after - before;
+            }
             if (isChangingExperience) {
                 target.synchronizeLevel();
             }
+            // Recalculate stats
+            target.updateAllStatsValues();
         }
         return 1;
     }

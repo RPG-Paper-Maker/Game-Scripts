@@ -217,8 +217,9 @@ class Player {
         for (let i = 0; i < l; i++) {
             let id = Datas.BattleSystems.statisticsOrder[i];
             statistic = Datas.BattleSystems.getStatistic(id);
-            list[id] = statistic.isFix ? [this[statistic.abbreviation], this[statistic.getBonusAbbreviation()]] : [this[statistic
-                    .abbreviation], this[statistic.getBonusAbbreviation()], this[statistic.getMaxAbbreviation()]];
+            list[id] = statistic.isFix ? [this[statistic.abbreviation], this[statistic.getBonusAbbreviation()], this[statistic
+                    .getAddedAbbreviation()]] : [this[statistic.abbreviation], this[statistic.getBonusAbbreviation()], this[statistic
+                    .getMaxAbbreviation()], this[statistic.getAddedAbbreviation()]];
         }
         return list;
     }
@@ -285,6 +286,7 @@ class Player {
             // Default value
             this.initStatValue(statistic, 0);
             this[statistic.getBonusAbbreviation()] = 0;
+            this[statistic.getAddedAbbreviation()] = 0;
             if (id === Datas.BattleSystems.idLevelStatistic) {
                 // Level
                 this[statistic.abbreviation] = level;
@@ -332,10 +334,12 @@ class Player {
         let l = statistics.length;
         let list = new Array(l);
         let bonus = new Array(l);
+        let added = new Array(l);
         let i;
         for (i = 1; i < l; i++) {
             list[i] = null;
             bonus[i] = null;
+            added[i] = null;
         }
         // Equipment
         let j, m, characteristics, characteristic, result, statistic, base;
@@ -380,13 +384,16 @@ class Player {
         }
         // Class and hero characteristics
         this.updateCharacteristics(this.system.getCharacteristics(), list, bonus);
-        // Same values for not changed stats
+        // Same values for not changed stats and added stats
+        let id;
         for (i = 0, l = statistics.length; i < l; i++) {
-            let id = statistics[i];
+            id = statistics[i];
+            statistic = Datas.BattleSystems.getStatistic(id);
             if (list[id] === null) {
-                list[id] = this[Datas.BattleSystems.getStatistic(id)
-                    .getAbbreviationNext()];
+                list[id] = this[statistic.getAbbreviationNext()];
             }
+            added[id] = this[statistic.getAddedAbbreviation()];
+            list[id] += added[id];
         }
         // Update formulas statistics
         let statisticsProgression = this.system.getStatisticsProgression();
@@ -398,7 +405,8 @@ class Player {
                 list[statisticProgression.id] = statisticProgression
                     .getValueAtLevel(this.getCurrentLevel(), previewPlayer, this
                     .system.getProperty(System.Class.PROPERTY_FINAL_LEVEL)) +
-                    bonus[statisticProgression.id];
+                    bonus[statisticProgression.id] + added[statisticProgression
+                    .id];
                 previewPlayer.initStatValue(Datas.BattleSystems.getStatistic(statisticProgression.id), list[statisticProgression.id]);
             }
         }
@@ -555,6 +563,10 @@ class Player {
                 this[statistic.getBonusAbbreviation()] = value[1];
                 if (!statistic.isFix) {
                     this[statistic.getMaxAbbreviation()] = value[2];
+                    this[statistic.getAddedAbbreviation()] = value[3];
+                }
+                else {
+                    this[statistic.getAddedAbbreviation()] = value[2];
                 }
             }
         }

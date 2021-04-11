@@ -104,6 +104,14 @@ class Statistic extends Translatable {
     }
 
     /** 
+     *  Get the added abbreviation.
+     *  @returns {string}
+     */
+    getAddedAbbreviation(): string {
+        return "added" + this.abbreviation;
+    }
+
+    /** 
      *  Get the next abbreviation.
      *  @returns {string}
      */
