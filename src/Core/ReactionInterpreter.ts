@@ -298,7 +298,9 @@ class ReactionInterpreter {
      *  Draw HUD for the current command
      */
     drawHUD() {
-        this.currentCommand.data.drawHUD(this.currentCommandState);
+        if (this.currentCommand && this.currentCommand.data) {
+            this.currentCommand.data.drawHUD(this.currentCommandState);
+        }
     }
 }
 
