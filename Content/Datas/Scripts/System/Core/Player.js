@@ -876,21 +876,23 @@ class Player {
     removeStartTurnStatus(listStill) {
         let listHealed = [];
         let test = false;
-        let j, m, s, release;
+        let j, m, s, release, testRelease;
         for (let i = this.status.length - 1; i >= 0; i--) {
             s = this.status[i];
             if (s.system.isReleaseStartTurn) {
+                testRelease = false;
                 for (j = 0, m = s.system.releaseStartTurn.length; j < m; j++) {
                     release = s.system.releaseStartTurn[j];
                     if (Mathf.OPERATORS_COMPARE[release.operationTurnKind](s.turn, release.turn.getValue()) && Mathf.randomPercentTest(release.chance.getValue())) {
                         this.status.splice(i, 1);
                         listHealed.push(s);
                         test = true;
+                        testRelease = true;
                         break;
                     }
-                    else {
-                        listStill.push(s);
-                    }
+                }
+                if (!testRelease) {
+                    listStill.push(s);
                 }
             }
         }

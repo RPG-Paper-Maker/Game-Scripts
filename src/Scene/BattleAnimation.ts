@@ -337,7 +337,7 @@ class BattleAnimation {
 
                     // Testing end of turn
                     if (this.battle.battleStartTurn.active) {
-                        this.battle.changeStep(Enum.BattleStep.EndTurn);
+                        this.battle.changeStep(Enum.BattleStep.StartTurn);
                         return;
                     }
                     if (this.battle.isEndTurn()) {

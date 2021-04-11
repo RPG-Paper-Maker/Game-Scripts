@@ -977,10 +977,12 @@ class Player {
     removeStartTurnStatus(listStill: Status[]): Status[] {
         let listHealed: Status[] = [];
         let test = false;
-        let j: number, m: number, s: Status, release: System.StatusReleaseTurn;
+        let j: number, m: number, s: Status, release: System.StatusReleaseTurn,
+            testRelease: boolean;
         for (let i = this.status.length - 1; i >= 0; i--) {
             s = this.status[i];
             if (s.system.isReleaseStartTurn) {
+                testRelease = false;
                 for (j = 0, m = s.system.releaseStartTurn.length; j < m; j++) {
                     release = s.system.releaseStartTurn[j];
                     if (Mathf.OPERATORS_COMPARE[release.operationTurnKind](s.turn, 
@@ -989,10 +991,12 @@ class Player {
                         this.status.splice(i, 1);
                         listHealed.push(s);
                         test = true;
+                        testRelease = true;
                         break;
-                    } else {
-                        listStill.push(s);
                     }
+                }
+                if (!testRelease) {
+                    listStill.push(s);
                 }
             }
         }
