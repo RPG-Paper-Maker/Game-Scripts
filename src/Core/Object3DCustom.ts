@@ -118,6 +118,7 @@ class Object3DCustom extends Object3D {
             vecA.multiply(scaleVec);
             vecB.multiply(scaleVec);
             vecC.multiply(scaleVec);
+            center.multiply(scaleVec);
             vecA.add(localPosition);
             vecB.add(localPosition);
             vecC.add(localPosition);
