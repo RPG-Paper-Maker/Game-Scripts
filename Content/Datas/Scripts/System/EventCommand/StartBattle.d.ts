@@ -20,6 +20,7 @@ declare class StartBattle extends Base {
     transitionStartColor: System.DynamicValue;
     transitionEnd: number;
     transitionEndColor: System.DynamicValue;
+    battleMapType: number;
     constructor(command: any[]);
     /**
      *  Initialize the current state.
