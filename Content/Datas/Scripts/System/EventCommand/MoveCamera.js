@@ -162,7 +162,6 @@ class MoveCamera extends Base {
                 if (currentState.finalDifH === 0 && currentState.finalDifV === 0) {
                     Scene.Map.current.camera.updateAngles();
                 }
-                Scene.Map.current.camera.updateDistance();
                 // Rotation
                 Scene.Map.current.camera.addHorizontalAngle(timeRate *
                     currentState.finalDifH);
@@ -176,6 +175,7 @@ class MoveCamera extends Base {
                     currentState.finalDifDistance;
                 // Update
                 Scene.Map.current.camera.update();
+                Scene.Map.current.camera.updateDistance();
                 // If time = 0, then this is the end of the command
                 if (currentState.timeLeft === 0) {
                     return 1;

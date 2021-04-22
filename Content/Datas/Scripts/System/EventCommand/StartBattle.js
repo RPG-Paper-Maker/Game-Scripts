@@ -98,7 +98,6 @@ class StartBattle extends Base {
             if (this.battleMapType === 3) {
                 this.battleMapID = Scene.Map.current.mapProperties.randomBattleMapID;
             }
-            console.log(this.battleMapType);
             let battleMap = (this.battleMapID === null) ? System.BattleMap
                 .create(this.mapID.getValue(), new Position(this.x.getValue(), this.y.getValue(), this.yPlus.getValue(), this.z.getValue())) :
                 Datas.BattleSystems.getBattleMap(this.battleMapID.getValue());

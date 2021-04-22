@@ -29,7 +29,7 @@ class Camera {
     public isPerspective: boolean;
     public target: MapObject;
     public targetPosition: Vector3;
-    public targetOffset:   Vector3;
+    public targetOffset: Vector3;
     public distance: number;
     public horizontalAngle: number;
     public verticalAngle: number;
