@@ -26,7 +26,7 @@ class Troop extends Base {
      *  @param {Record<string, any>} - json Json object describing the troop
      */
     read(json) {
-        let jsonList = json.l;
+        let jsonList = Utils.defaultValue(json.l, []);
         let l = jsonList.length;
         this.list = new Array(l);
         let jsonElement;
