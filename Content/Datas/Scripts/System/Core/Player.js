@@ -879,6 +879,7 @@ class Player {
         let j, m, s, release, testRelease;
         for (let i = this.status.length - 1; i >= 0; i--) {
             s = this.status[i];
+            testRelease = false;
             if (s.system.isReleaseStartTurn) {
                 testRelease = false;
                 for (j = 0, m = s.system.releaseStartTurn.length; j < m; j++) {
@@ -891,9 +892,9 @@ class Player {
                         break;
                     }
                 }
-                if (!testRelease) {
-                    listStill.push(s);
-                }
+            }
+            if (!testRelease) {
+                listStill.push(s);
             }
         }
         if (test) {
