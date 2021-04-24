@@ -10,7 +10,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Scene, System, Datas } from "..";
+import { Scene, System, Datas, Graphic } from "..";
 import { Enum, Mathf, Interpreter, Utils } from "../Common";
 import CharacterKind = Enum.CharacterKind;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
@@ -40,7 +40,7 @@ class BattleEnemyAttack {
      *  Initialize step.
      */
     initialize() {
-        this.battle.windowTopInformations.content = null;
+        (<Graphic.Text>this.battle.windowTopInformations.content).setText("");
 
         // Define which monster will attack
         let exists = false;

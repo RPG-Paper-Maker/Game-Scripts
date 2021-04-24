@@ -8,11 +8,10 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Scene, Graphic, Datas, Manager } from "../index.js";
+import { Scene, Datas, Manager } from "../index.js";
 import { Enum } from "../Common/index.js";
 var EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 var CharacterKind = Enum.CharacterKind;
-var Align = Enum.Align;
 var ItemKind = Enum.ItemKind;
 var AnimationEffectConditionKind = Enum.AnimationEffectConditionKind;
 var AnimationPositionKind = Enum.AnimationPositionKind;
@@ -56,8 +55,8 @@ class BattleAnimation {
                 this.battle.informationText = "";
                 break;
         }
-        this.battle.windowTopInformations.content = new Graphic.Text(this.battle
-            .informationText, { align: Align.Center });
+        this.battle.windowTopInformations.content.setText(this
+            .battle.informationText);
         this.battle.time = new Date().getTime();
         this.battle.effects = [];
         let i, l;

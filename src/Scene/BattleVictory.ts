@@ -53,15 +53,15 @@ class BattleVictory {
 
         // If loosing, directly go to end transition
         if (!this.battle.winning) {
-            this.battle.windowTopInformations.content = new Graphic.Text(
-                "Defeat...", { align: Align.Center });
+            (<Graphic.Text>this.battle.windowTopInformations.content).setText(
+                "Defeat...");
             this.battle.subStep = 4;
             return;
         }
 
         // Change information bar content
-        this.battle.windowTopInformations.content = new Graphic.Text("Victory!", 
-            { align: Align.Center });
+        (<Graphic.Text>this.battle.windowTopInformations.content).setText(
+            "Victory!");
 
         // Rewards
         this.prepareRewards();

@@ -67,8 +67,8 @@ class BattleAnimation {
                 this.battle.informationText = "";
                 break;
         }
-        this.battle.windowTopInformations.content = new Graphic.Text(this.battle
-            .informationText, { align: Align.Center });
+        (<Graphic.Text>this.battle.windowTopInformations.content).setText(this
+            .battle.informationText);
         this.battle.time = new Date().getTime();
         this.battle.effects = [];
         let i: number, l: number;

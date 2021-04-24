@@ -13,7 +13,6 @@ import { Enum } from "../Common/index.js";
 var BattleStep = Enum.BattleStep;
 var EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 var CharacterKind = Enum.CharacterKind;
-var Align = Enum.Align;
 var ItemKind = Enum.ItemKind;
 var AvailableKind = Enum.AvailableKind;
 var TargetKind = Enum.TargetKind;
@@ -59,7 +58,7 @@ class BattleSelection {
             return;
         }
         this.battle.battleCommandKind = EffectSpecialActionKind.None;
-        this.battle.windowTopInformations.content = new Graphic.Text("Select an ally", { align: Align.Center });
+        this.battle.windowTopInformations.content.setText("Select an ally");
         this.battle.selectedUserIndex = this.selectFirstIndex(CharacterKind.Hero, 0);
         this.battle.kindSelection = CharacterKind.Hero;
         this.battle.userTarget = false;

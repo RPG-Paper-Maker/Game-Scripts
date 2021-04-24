@@ -116,7 +116,8 @@ class BattleInitialize {
     initializeInformation() {
         this.battle.windowTopInformations = new WindowBox(0, Constants
             .HUGE_SPACE, ScreenResolution.SCREEN_X, WindowBox.SMALL_SLOT_HEIGHT, {
-            padding: WindowBox.SMALL_SLOT_PADDING
+            padding: WindowBox.SMALL_SLOT_PADDING,
+            content: new Graphic.Text("", { align: Enum.Align.Center })
         });
         this.battle.windowUserInformations = new WindowBox(ScreenResolution
             .SCREEN_X - Scene.Battle.WINDOW_PROFILE_WIDTH, ScreenResolution

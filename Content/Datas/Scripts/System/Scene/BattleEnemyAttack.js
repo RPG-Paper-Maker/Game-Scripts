@@ -32,7 +32,7 @@ class BattleEnemyAttack {
      *  Initialize step.
      */
     initialize() {
-        this.battle.windowTopInformations.content = null;
+        this.battle.windowTopInformations.content.setText("");
         // Define which monster will attack
         let exists = false;
         let i, l;

@@ -10,7 +10,6 @@
 */
 import { Scene, Graphic, Manager, Datas, System } from "../index.js";
 import { Enum, ScreenResolution, Platform } from "../Common/index.js";
-var Align = Enum.Align;
 var CharacterKind = Enum.CharacterKind;
 var LootKind = Enum.LootKind;
 import { WindowBox, Item, Game } from "../Core/index.js";
@@ -44,12 +43,12 @@ class BattleVictory {
         }
         // If loosing, directly go to end transition
         if (!this.battle.winning) {
-            this.battle.windowTopInformations.content = new Graphic.Text("Defeat...", { align: Align.Center });
+            this.battle.windowTopInformations.content.setText("Defeat...");
             this.battle.subStep = 4;
             return;
         }
         // Change information bar content
-        this.battle.windowTopInformations.content = new Graphic.Text("Victory!", { align: Align.Center });
+        this.battle.windowTopInformations.content.setText("Victory!");
         // Rewards
         this.prepareRewards();
         let id;
