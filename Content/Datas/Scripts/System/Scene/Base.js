@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { ReactionInterpreter } from "../Core/index.js";
-import { Scene } from "../index.js";
+import { Scene, Manager } from "../index.js";
 import { Utils } from "../Common/index.js";
 /**
  * The superclass who shape the structure of a scene.
@@ -95,8 +95,8 @@ class Base {
                 }
             }
             // If changed map, STOP
-            if (!Scene.Map.current || Scene.Map.current.loading) {
-                return;
+            if (!Scene.Map.current || Manager.Stack.top.loading) {
+                break;
             }
         }
         // Deleting finished reactions
