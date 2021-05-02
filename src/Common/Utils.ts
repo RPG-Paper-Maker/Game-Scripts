@@ -116,13 +116,23 @@ class Utils {
     }
 
     /** Return the string of a number and parse with 0 according to a given size
-     *   @static
-     *   @param {number} num - Number
-     *   @param {number} size - Max number to display
-     *   @returns {string}
+     *  @static
+     *  @param {number} num - Number
+     *  @param {number} size - Max number to display
+     *  @returns {string}
      */
     static formatNumber(num: number, size: number): string {
         return ('000000000' + num).substr(-size);
+    }
+
+    /** Return the string of a id + name of a system element.
+     *  @static
+     *  @param {number} id
+     *  @param {string} name
+     *  @returns {string}
+     */
+    static getIDName(id: number, name: string): string {
+        return "<> " + this.formatNumber(id, 4) + ": " + name;
     }
 
     /** Create a new array list initialed with null everywhere

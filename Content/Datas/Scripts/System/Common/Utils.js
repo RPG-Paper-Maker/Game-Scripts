@@ -102,13 +102,22 @@ class Utils {
             .STRING_COLON + this.formatNumber(Math.floor((total % 3600) / 60), 2) + Constants.STRING_COLON + this.formatNumber(Math.floor(total % 60), 2));
     }
     /** Return the string of a number and parse with 0 according to a given size
-     *   @static
-     *   @param {number} num - Number
-     *   @param {number} size - Max number to display
-     *   @returns {string}
+     *  @static
+     *  @param {number} num - Number
+     *  @param {number} size - Max number to display
+     *  @returns {string}
      */
     static formatNumber(num, size) {
         return ('000000000' + num).substr(-size);
+    }
+    /** Return the string of a id + name of a system element.
+     *  @static
+     *  @param {number} id
+     *  @param {string} name
+     *  @returns {string}
+     */
+    static getIDName(id, name) {
+        return "<> " + this.formatNumber(id, 4) + ": " + name;
     }
     /** Create a new array list initialed with null everywhere
      *   @static

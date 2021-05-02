@@ -24,12 +24,12 @@ import { Translatable } from "./Translatable";
  */
 class Hero extends Translatable {
 
-    idClass: number;
+    class: System.Class;
     idBattler: number;
     idFaceset: number;
     classInherit: Class;
 
-    constructor(json) {
+    constructor(json: Record<string, any>) {
         super(json);
     }
 
@@ -39,10 +39,21 @@ class Hero extends Translatable {
      */
     read(json: Record<string, any>) {
         super.read(json);
-        this.idClass = json.class;
+        json.class = -1;
+        this.class = Datas.Classes.get(json.class, "Could not find the class in " 
+            + (this.isMonster() ? "monster" : "hero") + " " + Utils.getIDName(
+            json.id, this.name()) + ", please check your Data manager and add a correct class.");
         this.idBattler = Utils.defaultValue(json.bid, -1);
         this.idFaceset = Utils.defaultValue(json.fid, -1);
         this.classInherit = new Class(json.ci);
+    }
+
+    /** 
+     *  Check if this hero is a monster.
+     *  @returns {boolean}
+     */
+    isMonster(): boolean {
+        return this instanceof System.Monster;
     }
 
     /** 
@@ -51,8 +62,7 @@ class Hero extends Translatable {
      *  @returns {number}
      */
     getProperty(prop: string): any {
-        return Datas.Classes.get(this.idClass).getProperty(prop, this
-            .classInherit);
+        return this.class.getProperty(prop, this.classInherit);
     }
 
     /**
@@ -60,7 +70,7 @@ class Hero extends Translatable {
      *  @returns {Record<string, any>}
      */
     getExperienceTable(): Record<string, any> {
-        return Datas.Classes.get(this.idClass).getExperienceTable(this.classInherit);
+        return this.class.getExperienceTable(this.classInherit);
     }
 
     /** 
@@ -68,7 +78,7 @@ class Hero extends Translatable {
      *  @returns {System.Characteristic[]}
      */
     getCharacteristics(): System.Characteristic[] {
-        return Datas.Classes.get(this.idClass).getCharacteristics(this.classInherit);
+        return this.class.getCharacteristics(this.classInherit);
     }
 
     /** 
@@ -76,8 +86,7 @@ class Hero extends Translatable {
      *  @returns {System.StatisticProgression[]}
      */
     getStatisticsProgression(): StatisticProgression[] {
-        return Datas.Classes.get(this.idClass).getStatisticsProgression(this
-            .classInherit);
+        return this.class.getStatisticsProgression(this.classInherit);
     }
 
     /** 
@@ -86,7 +95,7 @@ class Hero extends Translatable {
      *  @returns {Skill[]}
      */
     getSkills(level: number): Skill[] {
-        return Datas.Classes.get(this.idClass).getSkills(this.classInherit, level);
+        return this.class.getSkills(this.classInherit, level);
     }
 
     /** 
@@ -96,8 +105,7 @@ class Hero extends Translatable {
      *  @returns {Skill[]}
      */
     getLearnedSkills(level: number): Skill[] {
-        return Datas.Classes.get(this.idClass).getLearnedSkills(this
-            .classInherit, level);
+        return this.class.getLearnedSkills(this.classInherit, level);
     }
 
     /**  

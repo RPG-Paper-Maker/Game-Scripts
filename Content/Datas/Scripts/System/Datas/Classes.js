@@ -33,10 +33,11 @@ class Classes {
      *  Get the class by ID.
      *  @static
      *  @param {number} id
+     *  @param {string} errorMessage
      *  @returns {System.Class}
      */
-    static get(id) {
-        return Datas.Base.get(id, this.list, "class");
+    static get(id, errorMessage = "") {
+        return Datas.Base.get(id, this.list, "class", true, errorMessage);
     }
 }
 export { Classes };

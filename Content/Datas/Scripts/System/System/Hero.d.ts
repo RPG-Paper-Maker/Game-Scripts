@@ -10,16 +10,21 @@ import { Translatable } from "./Translatable.js";
  *  hero
  */
 declare class Hero extends Translatable {
-    idClass: number;
+    class: System.Class;
     idBattler: number;
     idFaceset: number;
     classInherit: Class;
-    constructor(json: any);
+    constructor(json: Record<string, any>);
     /**
      *  Read the JSON associated to the hero.
      *  @param {Record<string, any>} - json Json object describing the hero
      */
     read(json: Record<string, any>): void;
+    /**
+     *  Check if this hero is a monster.
+     *  @returns {boolean}
+     */
+    isMonster(): boolean;
     /**
      *  Get the property according to class inherit and this hero.
      *  @param {string} prop - The property name

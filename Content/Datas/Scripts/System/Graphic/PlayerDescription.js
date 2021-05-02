@@ -26,7 +26,7 @@ class PlayerDescription extends Base {
         this.player = player;
         // Informations
         let system = this.player.system;
-        let cl = Datas.Classes.get(system.idClass);
+        let cl = system.class;
         let levelStat = Datas.BattleSystems.getLevelStatistic();
         let expStat = Datas.BattleSystems.getExpStatistic();
         // All the graphics

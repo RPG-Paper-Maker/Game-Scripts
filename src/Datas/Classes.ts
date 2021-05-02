@@ -40,10 +40,11 @@ class Classes {
      *  Get the class by ID.
      *  @static
      *  @param {number} id
+     *  @param {string} errorMessage
      *  @returns {System.Class}
      */
-    static get(id: number): System.Class {
-        return Datas.Base.get(id, this.list, "class");
+    static get(id: number, errorMessage: string = ""): System.Class {
+        return Datas.Base.get(id, this.list, "class", true, errorMessage);
     }
 }
 
