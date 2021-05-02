@@ -10,6 +10,7 @@ declare class MapObject extends Base {
     id: number;
     name: string;
     isEventFrame: boolean;
+    canBeTriggeredAnotherObject: boolean;
     states: System.State[];
     properties: System.Property[];
     events: Record<number, System.Event[]>;

@@ -24,6 +24,7 @@ class MapObject extends Base {
     public id: number;
     public name: string;
     public isEventFrame: boolean;
+    public canBeTriggeredAnotherObject: boolean;
     public states: System.State[];
     public properties: System.Property[];
     public events: Record<number, System.Event[]>
@@ -57,6 +58,8 @@ class MapObject extends Base {
         this.id = json.id;
         this.name = json.name;
         this.isEventFrame = json.ooepf;
+        this.canBeTriggeredAnotherObject = Utils.defaultValue(json
+            .canBeTriggeredAnotherObject, true);
         this.addDefaultValues();
         this.addInheritanceModel(json.hId);
         
@@ -136,6 +139,7 @@ class MapObject extends Base {
 
             // Only one event per frame inheritance is a priority
             this.isEventFrame = inheritedObject.isEventFrame;
+            this.canBeTriggeredAnotherObject = inheritedObject.canBeTriggeredAnotherObject;
 
             // States
             let states = Utils.defaultValue(inheritedObject.states, []);

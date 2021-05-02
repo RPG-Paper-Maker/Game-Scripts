@@ -1118,6 +1118,22 @@ class MapObject {
             return false;
         }
 
+        // Option can be triggered be another object
+        if (!this.system.canBeTriggeredAnotherObject) {
+            for (let interpreter of Manager.Stack.top.reactionInterpreters) {
+                if (interpreter.currentMapObject !== this && interpreter
+                    .currentMapObject != sender) {
+                    return false;
+                }
+            }
+            for (let interpreter of Manager.Stack.top.parallelCommands) {
+                if (interpreter.currentMapObject !== this && interpreter
+                    .currentMapObject != sender) {
+                    return false;
+                }
+            }
+        }
+
         let test = false;
         let i: number, j: number, l: number, m: number, state: number, reactions
             : System.Reaction[];

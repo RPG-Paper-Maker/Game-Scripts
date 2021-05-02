@@ -44,6 +44,8 @@ class MapObject extends Base {
         this.id = json.id;
         this.name = json.name;
         this.isEventFrame = json.ooepf;
+        this.canBeTriggeredAnotherObject = Utils.defaultValue(json
+            .canBeTriggeredAnotherObject, true);
         this.addDefaultValues();
         this.addInheritanceModel(json.hId);
         // States
@@ -116,6 +118,7 @@ class MapObject extends Base {
             let inheritedObject = Datas.CommonEvents.getCommonObject(modelID);
             // Only one event per frame inheritance is a priority
             this.isEventFrame = inheritedObject.isEventFrame;
+            this.canBeTriggeredAnotherObject = inheritedObject.canBeTriggeredAnotherObject;
             // States
             let states = Utils.defaultValue(inheritedObject.states, []);
             let i, l;

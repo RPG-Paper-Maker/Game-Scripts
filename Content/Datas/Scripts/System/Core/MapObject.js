@@ -985,6 +985,21 @@ class MapObject {
         if ((this.system.isEventFrame && this.receivedOneEvent || this.removed)) {
             return false;
         }
+        // Option can be triggered be another object
+        if (!this.system.canBeTriggeredAnotherObject) {
+            for (let interpreter of Manager.Stack.top.reactionInterpreters) {
+                if (interpreter.currentMapObject !== this && interpreter
+                    .currentMapObject != sender) {
+                    return false;
+                }
+            }
+            for (let interpreter of Manager.Stack.top.parallelCommands) {
+                if (interpreter.currentMapObject !== this && interpreter
+                    .currentMapObject != sender) {
+                    return false;
+                }
+            }
+        }
         let test = false;
         let i, j, l, m, state, reactions;
         for (i = 0, l = states.length; i < l; i++) {
