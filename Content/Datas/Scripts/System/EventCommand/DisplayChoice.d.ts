@@ -1,5 +1,5 @@
 import { Base } from "./Base.js";
-import { System } from "../index.js";
+import { System, Graphic } from "../index.js";
 import { WindowChoices, MapObject } from "../Core/index.js";
 import { ShowText } from "./ShowText.js";
 /** @class
@@ -9,9 +9,12 @@ import { ShowText } from "./ShowText.js";
  */
 declare class DisplayChoice extends Base {
     cancelAutoIndex: System.DynamicValue;
+    maxNumberChoices: System.DynamicValue;
     choices: string[];
     windowChoices: WindowChoices;
     showText: ShowText;
+    graphics: Graphic.Text[];
+    maxWidth: number;
     constructor(command: any[]);
     /**
      *  Set the show text property.

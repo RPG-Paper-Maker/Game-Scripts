@@ -28,7 +28,6 @@ class Hero extends Translatable {
      */
     read(json) {
         super.read(json);
-        json.class = -1;
         this.class = Datas.Classes.get(json.class, "Could not find the class in "
             + (this.isMonster() ? "monster" : "hero") + " " + Utils.getIDName(json.id, this.name()) + ", please check your Data manager and add a correct class.");
         this.idBattler = Utils.defaultValue(json.bid, -1);
