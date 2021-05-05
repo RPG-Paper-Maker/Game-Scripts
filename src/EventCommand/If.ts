@@ -81,11 +81,8 @@ class If extends Base {
                 break;
             case 1: // Heroes
                 this.heroesSelection = command[iterator.i++];
-                if (this.heroesSelection === ConditionHeroesKind
-                    .TheHeroeWithInstanceID)
-                {
-                    this.heroInstanceID = System.DynamicValue.createValueCommand
-                        (command, iterator);
+                if (this.heroesSelection === ConditionHeroesKind.TheHeroeWithInstanceID) {
+                    this.heroInstanceID = System.DynamicValue.createValueCommand(command, iterator);
                 }
                 this.heroesInTeam = Utils.numToBool(command[iterator.i++]);
                 if (this.heroesInTeam) {
@@ -179,6 +176,14 @@ class If extends Base {
     }
 
     /** 
+     *  Get the hero instance ID.
+     *  @returns {number}
+     */
+    getHeroInstanceID(): number {
+        return this.heroInstanceID ? this.heroInstanceID.getValue() : 0;
+    }
+
+    /** 
      *  Initialize the current state.
      *  @returns {Record<string, any>} The current state
      */
@@ -221,7 +226,7 @@ class If extends Base {
                     case 0:
                         let name = this.heroesNamed.getValue();
                         result = Player.applySelection(this.heroesSelection, 
-                            heroesSelection, this.heroInstanceID.getValue(), 
+                            heroesSelection, this.getHeroInstanceID(), 
                             (hero: Player) => {
                                 return hero.name === name;
                             }
@@ -231,7 +236,7 @@ class If extends Base {
                         let tab = Game.current.getTeam(this
                             .heroesInTeamValue);
                         result = Player.applySelection(this.heroesSelection, 
-                            heroesSelection, this.heroInstanceID.getValue(), 
+                            heroesSelection, this.getHeroInstanceID(), 
                             (hero:Player) => {
                                 id = hero.instid;
                                 for (i = 0, l = tab.length; i < l; i++) {
@@ -246,7 +251,7 @@ class If extends Base {
                     case 2:
                         id = this.heroesSkillID.getValue();
                         result = Player.applySelection(this.heroesSelection, 
-                            heroesSelection, this.heroInstanceID.getValue(), 
+                            heroesSelection, this.getHeroInstanceID(), 
                             (hero: Player) => {
                                 for (i = 0, l = hero.sk.length; i < l; i++) {
                                     if (hero.sk[i].id === id) {
@@ -262,7 +267,7 @@ class If extends Base {
                         case 0:
                             id = this.heroesEquipedWeaponID.getValue();
                             result = Player.applySelection(this.heroesSelection, 
-                                heroesSelection, this.heroInstanceID.getValue(), 
+                                heroesSelection, this.getHeroInstanceID(), 
                                 (hero: Player) => {
                                     for (i = 0, l = hero.equip.length; i < l; i++) {
                                         equip = hero.equip[i];
@@ -279,7 +284,7 @@ class If extends Base {
                         case 1:
                             id = this.heroesEquipedArmorID.getValue();
                             result = Player.applySelection(this.heroesSelection, 
-                                heroesSelection, this.heroInstanceID.getValue(), 
+                                heroesSelection, this.getHeroInstanceID(), 
                                 (hero: Player) => {
                                     for (i = 0, l = hero.equip.length; i < l; i++) {
                                         equip = hero.equip[i];
@@ -298,7 +303,7 @@ class If extends Base {
                     case 4:
                         id = this.heroesStatusID.getValue();
                         result = Player.applySelection(this.heroesSelection, 
-                            heroesSelection, this.heroInstanceID.getValue(), 
+                            heroesSelection, this.getHeroInstanceID(), 
                             (hero: Player) => {
                                 for (i = 0, l = hero.status.length; i < l; i++) {
                                     if (id === hero.status[i].system.id) {
@@ -314,7 +319,7 @@ class If extends Base {
                             .heroesStatisticID.getValue());
                         value = this.heroesStatisticValue.getValue();
                         result = Player.applySelection(this.heroesSelection, 
-                            heroesSelection, this.heroInstanceID.getValue(), 
+                            heroesSelection, this.getHeroInstanceID(), 
                             (hero: Player) => {
                                 return Mathf.OPERATORS_COMPARE[this
                                     .heroesStatisticOperation](hero[stat

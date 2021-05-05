@@ -49,6 +49,11 @@ declare class If extends Base {
     script: System.DynamicValue;
     constructor(command: any[]);
     /**
+     *  Get the hero instance ID.
+     *  @returns {number}
+     */
+    getHeroInstanceID(): number;
+    /**
      *  Initialize the current state.
      *  @returns {Record<string, any>} The current state
      */
