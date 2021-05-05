@@ -58,6 +58,7 @@ class MoveCamera extends Base {
      *  @returns {Record<string, any>} The current state
      */
     initialize() {
+        Scene.Map.current.camera.update();
         let time = this.time.getValue() * 1000;
         let operation = Mathf.OPERATORS_NUMBERS[this.operation];
         let finalX = operation(Scene.Map.current.camera.getThreeCamera()
@@ -162,6 +163,7 @@ class MoveCamera extends Base {
                 if (currentState.finalDifH === 0 && currentState.finalDifV === 0) {
                     Scene.Map.current.camera.updateAngles();
                 }
+                Scene.Map.current.camera.updateDistance();
                 // Rotation
                 Scene.Map.current.camera.addHorizontalAngle(timeRate *
                     currentState.finalDifH);
@@ -175,7 +177,6 @@ class MoveCamera extends Base {
                     currentState.finalDifDistance;
                 // Update
                 Scene.Map.current.camera.update();
-                Scene.Map.current.camera.updateDistance();
                 // If time = 0, then this is the end of the command
                 if (currentState.timeLeft === 0) {
                     return 1;
