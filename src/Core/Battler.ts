@@ -77,12 +77,12 @@ class Battler {
     public lastStatus: Status;
     public lastStatusHealed: Status;
 
-    constructor(player: Player, position?: Position, camera?: Camera) {
+    constructor(player: Player, position?: Position, vect?: Vector3, camera?: Camera) {
         this.player = player;
         if (!position) {
             return;
         }
-        this.position = position.toVector3();
+        this.position = vect;
         this.arrowPosition = Manager.GL.toScreenPosition(this.position, camera
             .getThreeCamera());
         this.damagePosition = Manager.GL.toScreenPosition(this.position, camera

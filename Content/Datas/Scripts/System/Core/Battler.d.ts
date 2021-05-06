@@ -58,7 +58,7 @@ declare class Battler {
     currentStatusAnimation: Animation;
     lastStatus: Status;
     lastStatusHealed: Status;
-    constructor(player: Player, position?: Position, camera?: Camera);
+    constructor(player: Player, position?: Position, vect?: Vector3, camera?: Camera);
     /**
      *  Check at least one affected status contains the following restriction.
      *  @param {Enum.StatusRestrictionsKind} restriction - The kind of restriction

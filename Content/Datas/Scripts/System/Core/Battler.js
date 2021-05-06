@@ -24,14 +24,14 @@ import { Animation } from "./Animation.js";
  *  @param {Camera} camera - the camera associated to the battle
  */
 class Battler {
-    constructor(player, position, camera) {
+    constructor(player, position, vect, camera) {
         this.itemsNumbers = [];
         this.currentStatusAnimation = null;
         this.player = player;
         if (!position) {
             return;
         }
-        this.position = position.toVector3();
+        this.position = vect;
         this.arrowPosition = Manager.GL.toScreenPosition(this.position, camera
             .getThreeCamera());
         this.damagePosition = Manager.GL.toScreenPosition(this.position, camera

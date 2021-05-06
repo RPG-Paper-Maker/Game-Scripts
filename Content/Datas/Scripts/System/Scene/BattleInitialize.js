@@ -69,7 +69,7 @@ class BattleInitialize {
                 .heroBattle.position.z - Datas.Systems.SQUARE_SIZE + (i * Datas
                 .Systems.SQUARE_SIZE));
             player = Game.current.teamHeroes[i];
-            battler = new Battler(player, Position.createFromVector3(position), this.battle.camera);
+            battler = new Battler(player, Position.createFromVector3(position), position, this.battle.camera);
             battler.updateDead(false);
             player.battler = battler;
             battler.addToScene();
@@ -100,7 +100,7 @@ class BattleInitialize {
             player = new Player(CharacterKind.Monster, troopElement.id, Game
                 .current.charactersInstances++, [], []);
             player.instanciate(troopElement.level);
-            battler = new Battler(player, Position.createFromVector3(position), this.battle.camera);
+            battler = new Battler(player, Position.createFromVector3(position), position, this.battle.camera);
             player.battler = battler;
             battler.addToScene();
             this.battle.battlers[CharacterKind.Monster][i] = battler;
