@@ -135,7 +135,7 @@ class StartBattle extends Base {
             }
             let battleMap = (this.battleMapID === null) ? System.BattleMap
                 .create(this.mapID.getValue(), new Position(this.x.getValue(), 
-                this.y.getValue(), this.yPlus.getValue(), this.z.getValue())) : 
+                this.y.getValue(), this.z.getValue(), this.yPlus.getValue())) : 
                 Datas.BattleSystems.getBattleMap(this.battleMapID.getValue());
             Game.current.heroBattle = new MapObject(Game.current.hero.system,
                 battleMap.position.toVector3(), true);
