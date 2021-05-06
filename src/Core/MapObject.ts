@@ -298,7 +298,9 @@ class MapObject {
         } else {
             let obj = Scene.Map.current.allObjects[this.system.id];
             if (Utils.isUndefined(obj)) {
-                Platform.showErrorMessage("Can't find object " + this.system.name +
+                Platform.showErrorMessage("Can't find object with name" + this
+                    .system.name + " and ID " + this.system.id + " in map " + 
+                    Scene.Map.current.mapName +
                     " in object linking. Please remove this object from your " +
                     "map and recreate it.\nIf possible, report that you got " +
                     "this error and describe the steps for having this " +
@@ -424,7 +426,9 @@ class MapObject {
         } else {
             let pos = Scene.Map.current.allObjects[this.system.id];
             if (Utils.isUndefined(pos)) {
-                Platform.showErrorMessage("Can't find object " + this.system.name +
+                Platform.showErrorMessage("Can't find object with name" + this
+                    .system.name + " and ID " + this.system.id + " in map " + 
+                    Scene.Map.current.mapName +
                     " in object linking. Please remove this object from your " +
                     "map and recreate it.\nIf possible, report that you got " +
                     "this error and describe the steps for having this " +
