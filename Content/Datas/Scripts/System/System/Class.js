@@ -159,20 +159,23 @@ class Class extends Translatable {
      */
     getSkillsWithoutDuplicate(upClass) {
         let skills = [];
-        let i, l, j, m, skill, skillUp;
+        let i, l, j, m, skill, skillUp, test;
         for (i = 0, l = this.skills.length; i < l; i++) {
             skills.push(this.skills[i]);
         }
-        for (i = 0, l = skills.length; i < l; i++) {
-            skill = skills[i];
-            for (j = 0, m = upClass.skills.length; j < m; j++) {
-                skillUp = upClass.skills[j];
+        for (j = 0, m = upClass.skills.length; j < m; j++) {
+            skillUp = upClass.skills[j];
+            test = true;
+            for (i = 0, l = skills.length; i < l; i++) {
+                skill = skills[i];
                 if (skill.id === skillUp.id) {
                     skills[i] = skillUp;
+                    test = false;
+                    break;
                 }
-                else {
-                    skills.push(skillUp);
-                }
+            }
+            if (test) {
+                skills.push(skillUp);
             }
         }
         return skills;
