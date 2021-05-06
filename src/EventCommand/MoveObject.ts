@@ -307,19 +307,8 @@ class MoveObject extends Base {
         let angle = this.isCameraOrientation ? Scene.Map.current.camera
             .horizontalAngle : -90.0;
         if (currentState.position === null && square) {
-            let position = object.position;
             currentState.position = object.getFuturPosition(orientation, Datas
                 .Systems.SQUARE_SIZE, angle);
-            if (position.equals(currentState.position)) {
-                if (!this.isIgnore) {
-                    currentState.position = null;
-                    object.moving = true;
-                    return true;
-                }
-                object.move(orientation, 0, angle, this.isCameraOrientation);
-                this.moveFrequency(object);
-                return true;
-            }
         }
         if (object.previousMoveCommand === null && object.previousOrientation
             === null)
