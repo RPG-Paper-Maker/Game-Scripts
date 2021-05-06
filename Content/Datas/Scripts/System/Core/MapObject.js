@@ -455,9 +455,8 @@ class MapObject {
                     this.width = texture.image.width / Datas.Systems.SQUARE_SIZE /
                         Datas.Systems.FRAMES;
                     this.height = texture.image.height / Datas.Systems.SQUARE_SIZE /
-                        Datas.Pictures.get(Enum.PictureKind.Characters, state
-                            .graphicID).getRows();
-                    ;
+                        Datas.Pictures.get(Enum.PictureKind.Characters, this
+                            .currentStateInstance.graphicID).getRows();
                     this.currentOrientationStop = this.currentStateInstance.indexY >= 4;
                 }
                 let sprite = Sprite.create(this.currentState.graphicKind, [x, y,
