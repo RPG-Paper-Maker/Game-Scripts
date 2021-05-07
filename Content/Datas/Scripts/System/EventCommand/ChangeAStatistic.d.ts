@@ -17,6 +17,7 @@ declare class ChangeAStatistic extends Base {
     vFormula: System.DynamicValue;
     vMax: boolean;
     canAboveMax: boolean;
+    isApplyToMax: boolean;
     constructor(command: any[]);
     /**
      *  Update and check if the event is finished.

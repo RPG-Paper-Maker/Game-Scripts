@@ -51,6 +51,7 @@ class ChangeAStatistic extends Base {
         }
         // Option
         this.canAboveMax = !Utils.numToBool(command[iterator.i++]);
+        this.isApplyToMax = Utils.numToBool(command[iterator.i++]);
     }
     /**
      *  Update and check if the event is finished.
@@ -64,7 +65,7 @@ class ChangeAStatistic extends Base {
         let stat = Datas.BattleSystems.getStatistic(statisticID);
         let isChangingExperience = Datas.BattleSystems.idExpStatistic === statisticID;
         let isChangingLevel = Datas.BattleSystems.idLevelStatistic === statisticID;
-        let abr = stat.abbreviation;
+        let abr = this.isApplyToMax ? stat.getMaxAbbreviation() : stat.abbreviation;
         let targets;
         switch (this.selection) {
             case 0:
@@ -96,18 +97,21 @@ class ChangeAStatistic extends Base {
                 target[abr] = Math.max(target[stat.getMaxAbbreviation()], target[abr]);
             }
             after = target[abr];
-            if (isChangingLevel) {
-                target[abr] = before;
-                while (target.getCurrentLevel() < after) {
-                    target.levelUp();
+            if (isChangingLevel || isChangingExperience || stat.isFix || this
+                .isApplyToMax) {
+                if (isChangingLevel) {
+                    target[abr] = before;
+                    while (target.getCurrentLevel() < after) {
+                        target.levelUp();
+                    }
+                    target.synchronizeExperience();
                 }
-                target.synchronizeExperience();
-            }
-            else {
-                target[stat.getAddedAbbreviation()] += after - before;
-            }
-            if (isChangingExperience) {
-                target.synchronizeLevel();
+                else {
+                    target[stat.getAddedAbbreviation()] += after - before;
+                }
+                if (isChangingExperience) {
+                    target.synchronizeLevel();
+                }
             }
             // Recalculate stats
             target.updateAllStatsValues();
