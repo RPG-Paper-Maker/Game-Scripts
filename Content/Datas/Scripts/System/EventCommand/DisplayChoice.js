@@ -66,11 +66,6 @@ class DisplayChoice extends Base {
      */
     setShowText(showText) {
         this.showText = showText;
-        // Move to right if show text before
-        if (showText) {
-            this.windowChoices.setX(ScreenResolution.SCREEN_X - this
-                .windowChoices.oW - 10);
-        }
     }
     /**
      *  Initialize the current state.
@@ -79,11 +74,16 @@ class DisplayChoice extends Base {
     initialize() {
         let maxItems = this.maxNumberChoices.getValue();
         this.windowChoices = new WindowChoices((ScreenResolution.SCREEN_X - this
-            .maxWidth) / 2, ScreenResolution.SCREEN_Y - 10 - 150 - (maxItems *
-            WindowBox.MEDIUM_SLOT_HEIGHT), this.maxWidth, WindowBox
+            .maxWidth) / 2, ScreenResolution.SCREEN_Y - 10 - 150 - (this.choices
+            .length * WindowBox.MEDIUM_SLOT_HEIGHT), this.maxWidth, WindowBox
             .MEDIUM_SLOT_HEIGHT, this.graphics, {
             nbItemsMax: maxItems
         });
+        // Move to right if show text before
+        if (this.showText) {
+            this.windowChoices.setX(ScreenResolution.SCREEN_X - this
+                .windowChoices.oW - 10);
+        }
         return {
             index: -1
         };
