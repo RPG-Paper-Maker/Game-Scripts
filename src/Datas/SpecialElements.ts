@@ -18,7 +18,7 @@ import { System, Datas } from "../index";
  */
 class SpecialElements {
 
-    public static autotiles: System.SpecialElement[];
+    public static autotiles: System.Autotile[];
     public static walls: System.SpecialElement[];
     public static mountains: System.Mountain[];
     public static objects: System.Object3D[];
@@ -34,7 +34,7 @@ class SpecialElements {
         let json = (await IO.parseFileJSON(Paths.FILE_SPECIAL_ELEMENTS));
         this.autotiles = [];
         Utils.readJSONSystemList({ list: json.autotiles, listIDs: this.autotiles
-            , cons: System.SpecialElement });
+            , cons: System.Autotile });
         this.walls = [];
         Utils.readJSONSystemList({ list: json.walls, listIDs: this.walls, cons: 
             System.SpecialElement });

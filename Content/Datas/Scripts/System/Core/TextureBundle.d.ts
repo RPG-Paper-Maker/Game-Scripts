@@ -8,6 +8,7 @@ declare class TextureBundle {
     beginPoint: number[];
     endID: number;
     endPoint: number[];
+    isAnimated: boolean;
     constructor();
     /**
      *  Set the begining texture.

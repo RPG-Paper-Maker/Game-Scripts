@@ -14,6 +14,7 @@ export * from "./AnimationFrame";
 export * from "./AnimationFrameEffect";
 export * from "./AnimationFrameElement";
 export * from "./Armor";
+export * from "./Autotile";
 export * from "./Base";
 export * from "./BattleMap";
 export * from "./CameraProperties";

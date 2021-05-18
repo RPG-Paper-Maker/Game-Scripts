@@ -159,7 +159,7 @@ class Tileset extends Base {
                 picture = Datas.Pictures.get(PictureKind.Autotiles, autotile
                     .pictureID);
                 if (picture) {
-                    result = await this.loadTextureAutotile(textureAutotile, texture, picture, offset, id);
+                    result = await this.loadTextureAutotile(textureAutotile, texture, picture, offset, id, autotile.isAnimated);
                 }
                 else {
                     result = null;
@@ -185,30 +185,45 @@ class Tileset extends Base {
      *  @param {System.Picture} picture - The picture to paint
      *  @param {number} offset - The offset
      *  @param {number} id - The picture id
+     *  @param {boolean} isAnimated
      *  @returns {any[]}
      */
-    async loadTextureAutotile(textureAutotile, texture, picture, offset, id) {
+    async loadTextureAutotile(textureAutotile, texture, picture, offset, id, isAnimated) {
+        let frames = isAnimated ? Datas.Systems.autotilesFrames : 1;
         let picture2D = await Picture2D.create(picture);
         let width = Math.floor((picture2D.image.width / 2) / Datas.Systems
-            .SQUARE_SIZE);
+            .SQUARE_SIZE) / frames;
         let height = Math.floor((picture2D.image.height / 3) / Datas.Systems
             .SQUARE_SIZE);
         let size = width * height;
         // Update picture width and height for collisions settings
         picture.width = width;
         picture.height = height;
-        let point;
+        let j, point, p;
         for (let i = 0; i < size; i++) {
             point = [i % width, Math.floor(i / width)];
+            if (isAnimated) {
+                if (textureAutotile != null) {
+                    await this.updateTextureAutotile(textureAutotile, texture);
+                    texture = new THREE.Texture();
+                    Platform.ctxr.clearRect(0, 0, Platform.canvasRendering.width, Platform.canvasRendering.height);
+                    textureAutotile = null;
+                }
+                offset = 0;
+            }
             if (offset === 0 && textureAutotile === null) {
                 textureAutotile = new TextureBundle();
                 textureAutotile.setBegin(id, point);
+                textureAutotile.isAnimated = isAnimated;
             }
-            this.paintPictureAutotile(picture2D.image, offset, point, id);
+            for (j = 0; j < frames; j++) {
+                p = [(point[0] * frames) + j, point[1]];
+                this.paintPictureAutotile(picture2D.image, offset, p, id);
+                offset++;
+            }
             textureAutotile.setEnd(id, point);
             textureAutotile.addToList(id, point);
-            offset++;
-            if (offset === this.getMaxAutotilesOffsetTexture()) {
+            if (!isAnimated && offset === this.getMaxAutotilesOffsetTexture()) {
                 await this.updateTextureAutotile(textureAutotile, texture);
                 texture = new THREE.Texture();
                 Platform.ctxr.clearRect(0, 0, Platform.canvasRendering.width, Platform.canvasRendering.height);

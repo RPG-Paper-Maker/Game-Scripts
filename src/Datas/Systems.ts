@@ -35,6 +35,8 @@ class Systems {
     public static mapFrameDuration: System.DynamicValue;
     public static battlersFrames: number;
     public static battlersColumns: number;
+    public static autotilesFrames: number;
+    public static autotilesFrameDuration: number;
     public static priceSoldItem: System.DynamicValue;
     public static enterNameTable: string[][];
     public static showBB: boolean;
@@ -110,6 +112,8 @@ class Systems {
             , 150);
         this.battlersFrames = Utils.defaultValue(json.battlersFrames, 4);
         this.battlersColumns = Utils.defaultValue(json.battlersColumns, 9);
+        this.autotilesFrames = Utils.defaultValue(json.battlersColumns, 4);
+        this.autotilesFrameDuration = Utils.defaultValue(json.battlersColumns, 150);
         this.priceSoldItem = System.DynamicValue.readOrDefaultNumberDouble(json
             .priceSoldItem, 50);
 

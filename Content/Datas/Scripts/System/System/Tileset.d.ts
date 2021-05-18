@@ -81,9 +81,10 @@ declare class Tileset extends Base {
      *  @param {System.Picture} picture - The picture to paint
      *  @param {number} offset - The offset
      *  @param {number} id - The picture id
+     *  @param {boolean} isAnimated
      *  @returns {any[]}
      */
-    loadTextureAutotile(textureAutotile: TextureBundle, texture: THREE.Texture, picture: System.Picture, offset: number, id: number): Promise<any[]>;
+    loadTextureAutotile(textureAutotile: TextureBundle, texture: THREE.Texture, picture: System.Picture, offset: number, id: number, isAnimated: boolean): Promise<any[]>;
     /**
      *  Paint the picture in texture.
      *  @param {Image} img - The image to draw

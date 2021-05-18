@@ -20,6 +20,7 @@ class TextureBundle {
     public beginPoint: number[];
     public endID: number;
     public endPoint: number[];
+    public isAnimated: boolean;
 
     constructor() {
         this.list = [];

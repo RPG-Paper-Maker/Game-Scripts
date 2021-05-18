@@ -61,6 +61,8 @@ class Systems {
         this.mapFrameDuration = System.DynamicValue.readOrDefaultNumber(json.mfd, 150);
         this.battlersFrames = Utils.defaultValue(json.battlersFrames, 4);
         this.battlersColumns = Utils.defaultValue(json.battlersColumns, 9);
+        this.autotilesFrames = Utils.defaultValue(json.battlersColumns, 4);
+        this.autotilesFrameDuration = Utils.defaultValue(json.battlersColumns, 150);
         this.priceSoldItem = System.DynamicValue.readOrDefaultNumberDouble(json
             .priceSoldItem, 50);
         // Path BR

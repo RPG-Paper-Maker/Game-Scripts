@@ -14,8 +14,7 @@ import { Enum, Utils } from "../Common";
 import ShapeKind = Enum.ShapeKind;
 import ObjectCollisionKind = Enum.ObjectCollisionKind;
 import CustomShapeKind = Enum.CustomShapeKind;
-import { Datas, System, Core } from "../index";
-import { THREE } from "../Globals";
+import { Datas, System } from "../index";
 import { Vector3 } from "../Core";
 
 /** @class

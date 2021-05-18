@@ -4,7 +4,7 @@ import Orientation = Enum.Orientation;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 import PictureKind = Enum.PictureKind;
 import { System, Scene } from "../index.js";
-import { Position, Portion, MapPortion, TextureBundle, Vector3, Battler } from "../Core/index.js";
+import { Position, Portion, MapPortion, TextureBundle, Vector3, Battler, Frame, Vector2 } from "../Core/index.js";
 /** @class
  *  A scene for a local map.
  *  @extends Scene.Base
@@ -40,6 +40,8 @@ declare class Map extends Base {
     previousCameraPosition: Vector3;
     portionsObjectsUpdated: boolean;
     maxObjectsID: number;
+    autotileFrame: Frame;
+    autotilesOffset: Vector2;
     constructor(id: number, isBattleMap?: boolean, minimal?: boolean);
     /**
      *  Load async stuff.

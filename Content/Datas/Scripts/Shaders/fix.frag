@@ -1,17 +1,18 @@
 uniform sampler2D t;
 uniform vec4 colorD;
 uniform bool reverseH;
+uniform vec2 offset;
 uniform float alpha_threshold;
 
 varying vec2 vUv;
 
 void main() {
 	vec2 pos;
-	
+	vec2 coords = vec2(vUv.x + offset.x, vUv.y + offset.y);
 	if (reverseH)
-		pos = vec2(1.0 - vUv.x, vUv.y);
+		pos = vec2(1.0 - coords.x, coords.y);
 	else
-		pos = vUv;
+		pos = coords;
 	pos = vec2(pos.x - floor(pos.x), pos.y - floor(pos.y));
 	vec4 color = texture2D(t, pos);
 	if (color.a <= alpha_threshold)

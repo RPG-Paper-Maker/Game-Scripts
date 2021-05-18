@@ -4,7 +4,7 @@ import { System } from "../index.js";
  *  @static
  */
 declare class SpecialElements {
-    static autotiles: System.SpecialElement[];
+    static autotiles: System.Autotile[];
     static walls: System.SpecialElement[];
     static mountains: System.Mountain[];
     static objects: System.Object3D[];

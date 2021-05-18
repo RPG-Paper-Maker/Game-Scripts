@@ -16,7 +16,7 @@ import Orientation = Enum.Orientation;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 import PictureKind = Enum.PictureKind;
 import { System, Datas, Scene, Manager } from "../index";
-import { Position, Portion, MapPortion, TextureBundle, Camera, ReactionInterpreter, Vector3, Player, Battler, Game, MapObject } from "../Core";
+import { Position, Portion, MapPortion, TextureBundle, Camera, ReactionInterpreter, Vector3, Autotiles, Battler, Game, Frame, Vector2 } from "../Core";
 
 /** @class
  *  A scene for a local map.
@@ -55,6 +55,8 @@ class Map extends Base {
     public previousCameraPosition: Vector3;
     public portionsObjectsUpdated: boolean;
     public maxObjectsID: number;
+    public autotileFrame: Frame;
+    public autotilesOffset: Vector2 = new Vector2();
 
     constructor(id: number, isBattleMap: boolean = false, minimal: boolean = 
         false)
@@ -76,6 +78,11 @@ class Map extends Base {
      */
     async load() {
         Scene.Map.current = this;
+
+        // Initialize autotile frame counter
+        this.autotileFrame = new Frame(Datas.Systems.autotilesFrameDuration, { 
+            frames: Datas.Systems.autotilesFrames });
+
         if (!this.isBattleMap) {
             Game.current.currentMapID = this.id;
         }
@@ -226,6 +233,12 @@ class Map extends Base {
         this.texturesMountains = Datas.Tilesets.getTexturesMountains(tileset);
         this.texturesObjects3D = Datas.Tilesets.texturesObjects3D;
         this.texturesCharacters = Datas.Tilesets.texturesCharacters;
+
+        // Update shaders for autotiles
+        for (let textures of this.texturesAutotiles) {
+            textures.material.uniforms.offset.value = textures.isAnimated ? this
+                .autotilesOffset : new Vector2();
+        }
     }
 
     /** 
@@ -694,6 +707,14 @@ class Map extends Base {
      */
     update() {
         this.updateMovingPortions();
+
+        // Update autotiles animated
+        if (this.autotileFrame.update()) {
+            this.autotilesOffset.setY((this.autotileFrame.value * Autotiles
+                .COUNT_LIST * 2 * Datas.Systems.SQUARE_SIZE) / Constants
+                .MAX_PICTURE_SIZE);
+                console.log(this.autotilesOffset)
+        }
 
         // Update camera
         this.camera.update();

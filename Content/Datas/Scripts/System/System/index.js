@@ -13,6 +13,7 @@ export * from "./AnimationFrame.js";
 export * from "./AnimationFrameEffect.js";
 export * from "./AnimationFrameElement.js";
 export * from "./Armor.js";
+export * from "./Autotile.js";
 export * from "./Base.js";
 export * from "./BattleMap.js";
 export * from "./CameraProperties.js";

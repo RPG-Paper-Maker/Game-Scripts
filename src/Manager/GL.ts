@@ -10,7 +10,7 @@
 */
 
 import { THREE } from "../Globals";
-import { Datas, System } from "../index";
+import { Datas, Scene, System } from "../index";
 import { ScreenResolution, Platform, Utils, IO, Paths } from "../Common";
 import { Stack } from "./Stack";
 import { Camera, Vector3, Vector2 } from "../Core";
@@ -125,8 +125,7 @@ class GL {
      */
     static createMaterial(texture: THREE.Texture, opts: { flipX?: boolean
         , flipY?: boolean, uniforms?: Record<string, any> } = {}): THREE
-        .ShaderMaterial
-    {
+        .ShaderMaterial {
         texture.magFilter = THREE.NearestFilter;
         texture.minFilter = THREE.NearestFilter;
         texture.flipY = opts.flipY;
@@ -135,6 +134,7 @@ class GL {
                 t: { type: "t", value: texture },
                 colorD: { type: "v4", value: this.screenTone },
                 reverseH: { type: "b", value: opts.flipX },
+                offset: { type: "v2", value: new Vector2() }
             };
         }
         let material = new THREE.ShaderMaterial({

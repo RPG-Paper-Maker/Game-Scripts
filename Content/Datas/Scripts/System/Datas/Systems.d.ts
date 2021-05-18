@@ -20,6 +20,8 @@ declare class Systems {
     static mapFrameDuration: System.DynamicValue;
     static battlersFrames: number;
     static battlersColumns: number;
+    static autotilesFrames: number;
+    static autotilesFrameDuration: number;
     static priceSoldItem: System.DynamicValue;
     static enterNameTable: string[][];
     static showBB: boolean;

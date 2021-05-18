@@ -25,7 +25,7 @@ class SpecialElements {
         let json = (await IO.parseFileJSON(Paths.FILE_SPECIAL_ELEMENTS));
         this.autotiles = [];
         Utils.readJSONSystemList({ list: json.autotiles, listIDs: this.autotiles,
-            cons: System.SpecialElement });
+            cons: System.Autotile });
         this.walls = [];
         Utils.readJSONSystemList({ list: json.walls, listIDs: this.walls, cons: System.SpecialElement });
         this.mountains = [];

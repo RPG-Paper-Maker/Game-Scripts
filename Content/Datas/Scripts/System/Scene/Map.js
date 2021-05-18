@@ -13,7 +13,7 @@ import { Base } from "./Base.js";
 import { Enum, Utils, Constants, IO, Paths } from "../Common/index.js";
 var PictureKind = Enum.PictureKind;
 import { System, Datas, Scene, Manager } from "../index.js";
-import { Position, Portion, MapPortion, Camera, ReactionInterpreter, Vector3, Game } from "../Core/index.js";
+import { Position, Portion, MapPortion, Camera, ReactionInterpreter, Vector3, Autotiles, Game, Frame, Vector2 } from "../Core/index.js";
 /** @class
  *  A scene for a local map.
  *  @extends Scene.Base
@@ -25,6 +25,7 @@ import { Position, Portion, MapPortion, Camera, ReactionInterpreter, Vector3, Ga
 class Map extends Base {
     constructor(id, isBattleMap = false, minimal = false) {
         super(false);
+        this.autotilesOffset = new Vector2();
         this.id = id;
         this.isBattleMap = isBattleMap;
         this.mapName = Scene.Map.generateMapName(id);
@@ -39,6 +40,10 @@ class Map extends Base {
      */
     async load() {
         Scene.Map.current = this;
+        // Initialize autotile frame counter
+        this.autotileFrame = new Frame(Datas.Systems.autotilesFrameDuration, {
+            frames: Datas.Systems.autotilesFrames
+        });
         if (!this.isBattleMap) {
             Game.current.currentMapID = this.id;
         }
@@ -181,6 +186,11 @@ class Map extends Base {
         this.texturesMountains = Datas.Tilesets.getTexturesMountains(tileset);
         this.texturesObjects3D = Datas.Tilesets.texturesObjects3D;
         this.texturesCharacters = Datas.Tilesets.texturesCharacters;
+        // Update shaders for autotiles
+        for (let textures of this.texturesAutotiles) {
+            textures.material.uniforms.offset.value = textures.isAnimated ? this
+                .autotilesOffset : new Vector2();
+        }
     }
     /**
      *  Load the collisions settings.
@@ -599,6 +609,13 @@ class Map extends Base {
      */
     update() {
         this.updateMovingPortions();
+        // Update autotiles animated
+        if (this.autotileFrame.update()) {
+            this.autotilesOffset.setY((this.autotileFrame.value * Autotiles
+                .COUNT_LIST * 2 * Datas.Systems.SQUARE_SIZE) / Constants
+                .MAX_PICTURE_SIZE);
+            console.log(this.autotilesOffset);
+        }
         // Update camera
         this.camera.update();
         // Update skybox

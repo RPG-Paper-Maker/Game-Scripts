@@ -113,6 +113,7 @@ class GL {
                 t: { type: "t", value: texture },
                 colorD: { type: "v4", value: this.screenTone },
                 reverseH: { type: "b", value: opts.flipX },
+                offset: { type: "v2", value: new Vector2() }
             };
         }
         let material = new THREE.ShaderMaterial({
