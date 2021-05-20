@@ -47,6 +47,8 @@ class Player {
     public obtainedXP: number;
     public stepLevelUp: number;
     public battler: Battler;
+    public addedSkills: number[];
+    public removedSkills: number[];
 
     constructor(kind?: CharacterKind, id?: number, instanceID?: number, skills?: 
         Record<string, any>[], status?: Record<string, any>[], name?: string, 
@@ -65,6 +67,8 @@ class Player {
             for (i = 0, l = skills.length; i < l; i++) {
                 this.sk[i] = new Skill(skills[i].id);
             }
+            this.addedSkills = [];
+            this.removedSkills = [];
 
             // Equip
             l = Datas.BattleSystems.maxEquipmentID;
@@ -249,6 +253,8 @@ class Player {
             name: this.name,
             instid: this.instid,
             sk: this.sk,
+            ask: this.addedSkills,
+            rsk: this.removedSkills,
             status: statusList,
             stats: this.getSaveStat(),
             equip: this.getSaveEquip()
@@ -633,6 +639,10 @@ class Player {
      *  @param {Record<string, any>} - json Json object describing the items
     */
     read(json: Record<string, any>) {
+        // Added skills
+        this.addedSkills = json.ask;
+        this.removedSkills = json.rsk;
+
         // Stats
         let jsonStats = json.stats;
         let i: number, l: number, statistic: System.Statistic, value: number[];
@@ -697,8 +707,15 @@ class Player {
      *  Learn new skills (on level up).
      */
     learnSkills() {
-        this.sk = this.sk.concat(this.system.getLearnedSkills(this[Datas
-            .BattleSystems.getLevelStatistic().abbreviation]));
+        let newSkills = this.system.getLearnedSkills(this[Datas.BattleSystems
+            .getLevelStatistic().abbreviation]);
+
+        // If already added, remove
+        for (let skill of newSkills) {
+            this.removeSkill(skill.id);
+        }
+
+        this.sk = this.sk.concat(newSkills);
     }
 
     /**
@@ -1047,6 +1064,33 @@ class Player {
             }
         }
         return [bestBonus - baseBonus, bestEquipmentID, bestResult];
+    }
+
+    /** 
+     *  Add a skill id if not existing yet.
+     *  @param {number} id
+     */
+    addSkill(id: number) {
+        if (this.addedSkills.indexOf(id) === -1) {
+            this.addedSkills.push(id);
+            this.sk.push(new Skill(id));
+            Utils.removeFromArray(this.removedSkills, id)
+        }
+    }
+
+    /** 
+     *  Remove a skill id if existing.
+     *  @param {number} id
+     */
+    removeSkill(id: number) {
+        let index = Utils.indexOfProp(this.sk, "id", id);
+        Utils.removeFromArray(this.addedSkills, id);
+        if (index !== -1) {
+            this.sk.splice(index, 1);
+            if (this.removedSkills.indexOf(id) === -1) {
+                this.removedSkills.push(id);
+            }
+        }
     }
 }
 

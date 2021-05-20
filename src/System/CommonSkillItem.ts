@@ -131,6 +131,7 @@ class CommonSkillItem extends Icon {
      *  @returns {boolean}
      */
     isPossible(): boolean {
+        /*
         console.log("ok")
         console.log(this.targetConditionFormula.getValue())
         // At least one target can be selected
@@ -152,6 +153,7 @@ class CommonSkillItem extends Icon {
             }
         }
         console.log("b")
+        */
         // Skill cost
         for (let i = 0, l = this.costs.length; i < l; i++) {
             if (!this.costs[i].isPossible()) {

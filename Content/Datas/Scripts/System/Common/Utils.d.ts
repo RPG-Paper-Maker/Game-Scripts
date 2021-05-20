@@ -1,3 +1,12 @@
+interface systemJsonList {
+    list: Record<string, any>[];
+    listIDs?: any[];
+    listIndexes?: any[];
+    indexesIDs?: boolean;
+    listHash?: any[];
+    cons?: any;
+    func?: any;
+}
 /**
  * The static class containing all the utils functions.
  *
@@ -128,14 +137,9 @@ declare class Utils {
      * @memberof Utils
      */
     static fillScreen(r: number, g: number, b: number, a: number): void;
-}
-interface systemJsonList {
-    list: Record<string, any>[];
-    listIDs?: any[];
-    listIndexes?: any[];
-    indexesIDs?: boolean;
-    listHash?: any[];
-    cons?: any;
-    func?: any;
+    /**
+      * Remove an element from an array.
+      */
+    static removeFromArray<T>(array: T[], element: T): boolean;
 }
 export { Utils };

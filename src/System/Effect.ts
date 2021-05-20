@@ -161,18 +161,19 @@ class Effect extends Base {
         let targets = Scene.Map.current.targets;
         let result = false;
         let l = targets.length;
+        let target: Player, battler: Battler;
         switch (this.kind) {
             case EffectKind.Damages: {
-                let damage: number, miss: boolean, crit: boolean, target: Player
-                    , precision: number, variance: number, fixRes: number, 
-                    percentRes: number, element: number, critical: number, stat: 
-                    Statistic, abbreviation: string, max: number, before: number, 
-                    currencyID: number, battler: Battler;
+                let damage: number, miss: boolean, crit: boolean, precision: number, 
+                    variance: number, fixRes: number, percentRes: number, element: 
+                    number, critical: number, stat: Statistic, abbreviation: 
+                    string, max: number, before: number, currencyID: number;
                 for (let i = 0; i < l; i++) {
                     damage = 0;
                     miss = false;
                     crit = false;
-                    target = targets[i].player;
+                    battler = targets[i];
+                    target = battler.player;
 
                     // Calculate damages
                     if (this.isDamagePrecision) {
@@ -236,7 +237,6 @@ class Effect extends Base {
 
                     // For diplaying result in HUD
                     if (Scene.Map.current.isBattleMap) {
-                        battler = targets[i];
                         battler.damages = damage;
                         battler.isDamagesMiss = miss;
                         battler.isDamagesCritical = crit;
@@ -297,44 +297,52 @@ class Effect extends Base {
                 break;
             }
             case EffectKind.Status: {
-                let precision: number, miss: boolean, target: Battler, id: number,
-                    previousFirst: Status;
+                let precision: number, miss: boolean, id: number, previousFirst: 
+                    Status;
                 for (let i = 0, l = targets.length; i < l; i++) {
-                    target = targets[i];
+                    battler = targets[i];
                     precision = Interpreter.evaluate(this.statusPrecisionFormula
-                        .getValue(), { user: user, target: target.player });
+                        .getValue(), { user: user, target: battler.player });
                     if (Mathf.randomPercentTest(precision)) {
                         miss = false;
                         id = this.statusID.getValue();
-                        previousFirst = target.player.status[0];
+                        previousFirst = battler.player.status[0];
                         
                         // Add or remove status
                         if (this.isAddStatus) {
-                            target.lastStatusHealed = null;
-                            target.lastStatus = target.addStatus(id);
+                            battler.lastStatusHealed = null;
+                            battler.lastStatus = target.addStatus(id);
                         } else {
-                            target.lastStatusHealed = target.removeStatus(id);
-                            target.lastStatus = null;
+                            battler.lastStatusHealed = target.removeStatus(id);
+                            battler.lastStatus = null;
                         }
 
                         // If first status changed, change animation
-                        target.updateAnimationStatus(previousFirst);
+                        battler.updateAnimationStatus(previousFirst);
                     } else {
                         miss = true;
                     }
                     // For diplaying result in HUD
                     if (Scene.Map.current.isBattleMap) {
-                        target.damages = null;
-                        target.isDamagesMiss = miss;
-                        target.isDamagesCritical = false;
+                        battler.damages = null;
+                        battler.isDamagesMiss = miss;
+                        battler.isDamagesCritical = false;
                     }
                 }
                 break;
             }
             case EffectKind.AddRemoveSkill:
+                for (battler of targets) {
+                    let skillID = this.addSkillID.getValue();
+                    if (this.isAddSkill) {
+                        battler.player.addSkill(skillID);
+                    } else {
+                        battler.player.removeSkill(skillID);
+                    }
+                }
                 break;
             case EffectKind.PerformSkill:
-                break;
+                return ;
             case EffectKind.CommonReaction:
                 let reactionInterpreter = new ReactionInterpreter(null, Datas
                     .CommonEvents.getCommonReaction(this.commonReaction

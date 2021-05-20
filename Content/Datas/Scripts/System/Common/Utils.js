@@ -218,6 +218,19 @@ class Utils {
         Platform.ctx.fillStyle = color;
         Platform.ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
     }
+    /**
+      * Remove an element from an array.
+      */
+    static removeFromArray(array, element) {
+        let index = array.indexOf(element);
+        if (index === -1) {
+            return false;
+        }
+        else {
+            array.splice(index, 1);
+            return true;
+        }
+    }
 }
 /** Link the fontSize and the fontName to a string that can be used by the
 *   canvasHUD

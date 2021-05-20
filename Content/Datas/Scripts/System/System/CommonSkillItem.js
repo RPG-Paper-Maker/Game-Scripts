@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Enum, Interpreter, Utils } from "../Common/index.js";
+import { Enum, Utils } from "../Common/index.js";
 var TargetKind = Enum.TargetKind;
 var AvailableKind = Enum.AvailableKind;
 var SongKind = Enum.SongKind;
@@ -19,7 +19,7 @@ import { PlaySong } from "./PlaySong.js";
 import { Cost } from "./Cost.js";
 import { Characteristic } from "./Characteristic.js";
 import { Effect } from "./Effect.js";
-import { Scene, System } from "../index.js";
+import { System } from "../index.js";
 /** @class
  *  A common class for skills, items, weapons, armors.
  *  @extends System.Icon
@@ -101,34 +101,29 @@ class CommonSkillItem extends Icon {
      *  @returns {boolean}
      */
     isPossible() {
-        console.log("ok");
-        console.log(this.targetConditionFormula.getValue());
+        /*
+        console.log("ok")
+        console.log(this.targetConditionFormula.getValue())
         // At least one target can be selected
-        if (!Scene.Map.current.targets.some(target => {
-            console.log(target);
-            return Interpreter
-                .evaluate(this.targetConditionFormula.getValue(), { user: Scene.Map
-                    .current.user.player, target: target.player });
-        })) {
+        if (!Scene.Map.current.targets.some(target => { console.log(target); return Interpreter
+            .evaluate(this.targetConditionFormula.getValue(), { user: Scene.Map
+            .current.user.player, target: target.player }) })) {
             return false;
         }
-        console.log("a");
+        console.log("a")
         // If attack skill, also test on equipped weapons
-        if (this.effects.some((effect) => {
-            return effect.kind === Enum
-                .EffectKind.SpecialActions && effect.specialActionKind === Enum
-                .EffectSpecialActionKind.ApplyWeapons;
-        })) {
-            if (!Scene.Map.current.user.player.equip.some(item => {
-                return !item
-                    .system.isWeapon() || Scene.Map.current.targets.some(target => {
-                    return Interpreter.evaluate(this.targetConditionFormula.getValue(), { user: Scene.Map.current.user.player, target: target.player });
-                });
-            })) {
+        if (this.effects.some((effect) => { return effect.kind === Enum
+            .EffectKind.SpecialActions && effect.specialActionKind === Enum
+            .EffectSpecialActionKind.ApplyWeapons; })) {
+            if (!Scene.Map.current.user.player.equip.some(item => { return !item
+                .system.isWeapon() || Scene.Map.current.targets.some(target => {
+                return Interpreter.evaluate(this.targetConditionFormula.getValue(),
+                { user: Scene.Map.current.user.player, target: target.player })})})) {
                 return false;
             }
         }
-        console.log("b");
+        console.log("b")
+        */
         // Skill cost
         for (let i = 0, l = this.costs.length; i < l; i++) {
             if (!this.costs[i].isPossible()) {

@@ -99,7 +99,7 @@ class TitleCommand extends Translatable {
      *  @returns {boolean}
      */
     executeScript() {
-        Interpreter.evaluate(this.script);
+        Interpreter.evaluate(this.script, { addReturn: false });
         return true;
     }
 }

@@ -14,6 +14,15 @@ import { Constants } from "./index";
 import { Platform } from "./Platform";
 import { ScreenResolution } from "./ScreenResolution";
 
+interface systemJsonList {
+    list: Record<string, any>[],
+    listIDs?: any[],
+    listIndexes?: any[],
+    indexesIDs?: boolean,
+    listHash?: any[], cons?: any,
+    func?: any
+}
+
 /**
  * The static class containing all the utils functions.
  *
@@ -254,15 +263,19 @@ class Utils {
         Platform.ctx.fillStyle = color;
         Platform.ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
     }
-}
 
-interface systemJsonList {
-    list: Record<string, any>[],
-    listIDs?: any[],
-    listIndexes?: any[],
-    indexesIDs?: boolean,
-    listHash?: any[], cons?: any,
-    func?: any
+    /**
+      * Remove an element from an array.
+      */
+    static removeFromArray<T>(array: T[], element: T): boolean {
+        let index = array.indexOf(element);
+        if (index === -1) {
+            return false;
+        } else {
+            array.splice(index, 1);
+            return true;
+        }
+    }
 }
 
 export { Utils }

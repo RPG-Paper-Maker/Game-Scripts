@@ -33,6 +33,8 @@ declare class Player {
     obtainedXP: number;
     stepLevelUp: number;
     battler: Battler;
+    addedSkills: number[];
+    removedSkills: number[];
     constructor(kind?: CharacterKind, id?: number, instanceID?: number, skills?: Record<string, any>[], status?: Record<string, any>[], name?: string, json?: Record<string, any>);
     /**
      *  Get the max size of equipment kind names.
@@ -265,5 +267,15 @@ declare class Player {
      *  @returns {[number, number, number[][]]}
      */
     getBestWeaponArmorToReplace(weaponArmor: System.CommonSkillItem): [number, number, number[][]];
+    /**
+     *  Add a skill id if not existing yet.
+     *  @param {number} id
+     */
+    addSkill(id: number): void;
+    /**
+     *  Remove a skill id if existing.
+     *  @param {number} id
+     */
+    removeSkill(id: number): void;
 }
 export { Player };
