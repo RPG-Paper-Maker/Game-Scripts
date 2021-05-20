@@ -38,10 +38,13 @@ class Interpreter {
      *  Evaluate a formula.
      */
     static evaluate(formula: string, { user, target, damage, thisObject, 
-        addReturn = true, additionalName = "", additionalValue = null }: { user?: 
-        Player, target?: Player, damage?: number, thisObject?: MapObject, 
-        addReturn?: boolean, additionalName?: string, additionalValue?: any} = 
-        {}): any {
+        addReturn = true, additionalName = "", additionalValue = null, 
+        defaultValue = true }: { user?: Player, target?: Player, damage?: number, 
+        thisObject?: MapObject, addReturn?: boolean, additionalName?: string, 
+        additionalValue?: any, defaultValue?: any} = {}): any {
+        if (formula === null) {
+            return defaultValue;
+        }
         return new Function("Common", "Core", "Datas", "EventCommand", "Graphic"
             , "Manager", "Scene", "System", "THREE", "Howl", "u", "t", "damage",
             "$object", additionalName, (addReturn ? "return " : "") + formula)(

@@ -11,7 +11,7 @@
 import { MenuBase } from "./MenuBase.js";
 import { Manager, Graphic, Datas, Scene } from "../index.js";
 import { WindowBox, WindowChoices, Player, Item, Game, Rectangle } from "../Core/index.js";
-import { Enum } from "../Common/index.js";
+import { Enum, Interpreter } from "../Common/index.js";
 var Align = Enum.Align;
 var OrientationWindow = Enum.OrientationWindow;
 var ItemKind = Enum.ItemKind;
@@ -185,7 +185,9 @@ class MenuEquip extends MenuBase {
                                 allow = characteristic.isAllowEquip;
                             }
                         }
-                        if (allow) {
+                        if (allow && Interpreter.evaluate(systemItem
+                            .conditionFormula.getValue(), { user: Game.current
+                                .teamHeroes[this.windowChoicesTabs.currentSelectedIndex] })) {
                             list.push(new Graphic.Item(item, { nbItem: nbItem }));
                         }
                     }

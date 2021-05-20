@@ -21,7 +21,10 @@ class Interpreter {
     /**
      *  Evaluate a formula.
      */
-    static evaluate(formula, { user, target, damage, thisObject, addReturn = true, additionalName = "", additionalValue = null } = {}) {
+    static evaluate(formula, { user, target, damage, thisObject, addReturn = true, additionalName = "", additionalValue = null, defaultValue = true } = {}) {
+        if (formula === null) {
+            return defaultValue;
+        }
         return new Function("Common", "Core", "Datas", "EventCommand", "Graphic", "Manager", "Scene", "System", "THREE", "Howl", "u", "t", "damage", "$object", additionalName, (addReturn ? "return " : "") + formula)(this.common, this.core, this.datas, this.eventCommand, this.graphic, this.manager, this.scene, this.system, this.three, this.howl, user, target, damage, thisObject, additionalValue);
     }
 }

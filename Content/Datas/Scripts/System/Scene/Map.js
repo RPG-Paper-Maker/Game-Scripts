@@ -614,7 +614,6 @@ class Map extends Base {
             this.autotilesOffset.setY((this.autotileFrame.value * Autotiles
                 .COUNT_LIST * 2 * Datas.Systems.SQUARE_SIZE) / Constants
                 .MAX_PICTURE_SIZE);
-            console.log(this.autotilesOffset);
         }
         // Update camera
         this.camera.update();

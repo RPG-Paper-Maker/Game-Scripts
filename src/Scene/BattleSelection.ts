@@ -11,7 +11,7 @@
 */
 
 import { Scene, Graphic, System, Manager, Datas } from "..";
-import { Enum } from "../Common";
+import { Enum, Interpreter } from "../Common";
 import BattleStep = Enum.BattleStep;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 import CharacterKind = Enum.CharacterKind;
@@ -260,12 +260,17 @@ class BattleSelection {
         // Update skills list
         let skills = this.battle.user.player.sk;
         this.battle.listSkills = [];
-        let ownedSkill: Skill, availableKind: AvailableKind;
+        let ownedSkill: Skill, skill: System.Skill;
         for (let i = 0, l = skills.length; i < l; i++) {
             ownedSkill = skills[i];
-            availableKind = Datas.Skills.get(ownedSkill.id).availableKind;
-            if (availableKind === AvailableKind.Always || availableKind ===
-                AvailableKind.Battle) {
+            skill = Datas.Skills.get(ownedSkill.id);
+            if ((skill.availableKind === AvailableKind.Always || skill
+                .availableKind === AvailableKind.Battle) && Interpreter
+                .evaluate(skill.conditionFormula.getValue(), { user: this.battle
+                .user.player }) && this.battle.battlers[CharacterKind.Monster]
+                .every((battler) => { return Interpreter.evaluate(skill
+                .conditionFormula.getValue(), { user: this.battle.user.player, 
+                target: battler.player}) })) {
                 this.battle.listSkills.push(new Graphic.Skill(ownedSkill));
             }
         }

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Scene, Graphic, System, Manager, Datas } from "../index.js";
-import { Enum } from "../Common/index.js";
+import { Enum, Interpreter } from "../Common/index.js";
 var BattleStep = Enum.BattleStep;
 var EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 var CharacterKind = Enum.CharacterKind;
@@ -235,12 +235,19 @@ class BattleSelection {
         // Update skills list
         let skills = this.battle.user.player.sk;
         this.battle.listSkills = [];
-        let ownedSkill, availableKind;
+        let ownedSkill, skill;
         for (let i = 0, l = skills.length; i < l; i++) {
             ownedSkill = skills[i];
-            availableKind = Datas.Skills.get(ownedSkill.id).availableKind;
-            if (availableKind === AvailableKind.Always || availableKind ===
-                AvailableKind.Battle) {
+            skill = Datas.Skills.get(ownedSkill.id);
+            if ((skill.availableKind === AvailableKind.Always || skill
+                .availableKind === AvailableKind.Battle) && Interpreter
+                .evaluate(skill.conditionFormula.getValue(), { user: this.battle
+                    .user.player }) && this.battle.battlers[CharacterKind.Monster]
+                .every((battler) => {
+                return Interpreter.evaluate(skill
+                    .conditionFormula.getValue(), { user: this.battle.user.player,
+                    target: battler.player });
+            })) {
                 this.battle.listSkills.push(new Graphic.Skill(ownedSkill));
             }
         }

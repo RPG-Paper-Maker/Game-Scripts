@@ -12,7 +12,7 @@
 import { MenuBase } from "./MenuBase";
 import { Manager, Graphic, Datas, Scene, System } from "../index";
 import { WindowBox, WindowChoices, Player, Item, Game, Rectangle } from "../Core";
-import { Enum } from "../Common";
+import { Enum, Interpreter } from "../Common";
 import Align = Enum.Align;
 import OrientationWindow = Enum.OrientationWindow;
 import ItemKind = Enum.ItemKind;
@@ -271,7 +271,9 @@ class MenuEquip extends MenuBase {
                                 allow = characteristic.isAllowEquip;
                             }
                         }
-                        if (allow) {
+                        if (allow && Interpreter.evaluate(systemItem
+                            .conditionFormula.getValue(), { user: Game.current
+                            .teamHeroes[this.windowChoicesTabs.currentSelectedIndex] })) {
                             list.push(new Graphic.Item(item, { nbItem: nbItem }));
                         }
                     }

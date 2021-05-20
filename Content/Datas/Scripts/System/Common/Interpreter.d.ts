@@ -18,7 +18,7 @@ declare class Interpreter {
     /**
      *  Evaluate a formula.
      */
-    static evaluate(formula: string, { user, target, damage, thisObject, addReturn, additionalName, additionalValue }?: {
+    static evaluate(formula: string, { user, target, damage, thisObject, addReturn, additionalName, additionalValue, defaultValue }?: {
         user?: Player;
         target?: Player;
         damage?: number;
@@ -26,6 +26,7 @@ declare class Interpreter {
         addReturn?: boolean;
         additionalName?: string;
         additionalValue?: any;
+        defaultValue?: any;
     }): any;
 }
 export { Interpreter };

@@ -16,7 +16,7 @@ import Orientation = Enum.Orientation;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 import PictureKind = Enum.PictureKind;
 import { System, Datas, Scene, Manager } from "../index";
-import { Position, Portion, MapPortion, TextureBundle, Camera, ReactionInterpreter, Vector3, Autotiles, Battler, Game, Frame, Vector2 } from "../Core";
+import { Position, Portion, MapPortion, TextureBundle, Camera, ReactionInterpreter, Vector3, Autotiles, Battler, Game, Frame, Vector2, Player } from "../Core";
 
 /** @class
  *  A scene for a local map.
@@ -713,7 +713,6 @@ class Map extends Base {
             this.autotilesOffset.setY((this.autotileFrame.value * Autotiles
                 .COUNT_LIST * 2 * Datas.Systems.SQUARE_SIZE) / Constants
                 .MAX_PICTURE_SIZE);
-                console.log(this.autotilesOffset)
         }
 
         // Update camera

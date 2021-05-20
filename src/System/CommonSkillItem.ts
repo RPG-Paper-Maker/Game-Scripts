@@ -20,7 +20,7 @@ import { PlaySong } from "./PlaySong";
 import { Cost } from "./Cost";
 import { Characteristic } from "./Characteristic";
 import { Effect } from "./Effect";
-import { System } from "../index";
+import { Scene, System } from "../index";
 import { Player } from "../Core";
 
 /** @class
@@ -131,6 +131,28 @@ class CommonSkillItem extends Icon {
      *  @returns {boolean}
      */
     isPossible(): boolean {
+        console.log("ok")
+        console.log(this.targetConditionFormula.getValue())
+        // At least one target can be selected
+        if (!Scene.Map.current.targets.some(target => { console.log(target); return Interpreter
+            .evaluate(this.targetConditionFormula.getValue(), { user: Scene.Map
+            .current.user.player, target: target.player }) })) {
+            return false;
+        }
+        console.log("a")
+        // If attack skill, also test on equipped weapons
+        if (this.effects.some((effect) => { return effect.kind === Enum
+            .EffectKind.SpecialActions && effect.specialActionKind === Enum
+            .EffectSpecialActionKind.ApplyWeapons; })) {
+            if (!Scene.Map.current.user.player.equip.some(item => { return !item
+                .system.isWeapon() || Scene.Map.current.targets.some(target => { 
+                return Interpreter.evaluate(this.targetConditionFormula.getValue(), 
+                { user: Scene.Map.current.user.player, target: target.player })})})) {
+                return false;
+            }
+        }
+        console.log("b")
+        // Skill cost
         for (let i = 0, l = this.costs.length; i < l; i++) {
             if (!this.costs[i].isPossible()) {
                 return false;
