@@ -276,8 +276,9 @@ class BattleStartTurn {
                     this.battle.time = new Date().getTime() - (Scene.Battle
                         .TIME_ACTION_ANIMATION / 2);
                     // If effects, apply animation only for those
-                    if (s.system.effects.length > 0) {
-                        this.battle.effects = s.system.effects;
+                    let effects = s.system.getEffects();
+                    if (effects.length > 0) {
+                        this.battle.effects = effects;
                         this.battle.user = null;
                         this.battle.targets = [battler];
                         this.battle.currentEffectIndex = -1;

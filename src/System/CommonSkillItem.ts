@@ -20,7 +20,7 @@ import { PlaySong } from "./PlaySong";
 import { Cost } from "./Cost";
 import { Characteristic } from "./Characteristic";
 import { Effect } from "./Effect";
-import { Scene, System } from "../index";
+import { Datas, Scene, System } from "../index";
 import { Player } from "../Core";
 
 /** @class
@@ -89,6 +89,23 @@ class CommonSkillItem extends Icon {
     }
 
     /** 
+     *  Get all the effects, including the ones with perform skill efect.
+     *  @returns {System.Effect}
+     */
+    getEffects(): System.Effect[] {
+        let effects: System.Effect[] = [];
+        for (let effect of this.effects) {
+            if (effect.kind === Enum.EffectKind.PerformSkill) {
+                effects = effects.concat(Datas.Skills.get(effect.performSkillID
+                    .getValue()).getEffects());
+            } else {
+                effects.push(effect);
+            }
+        }
+        return effects;
+    }
+
+    /** 
      *  Use the command if possible.
      *  @returns {boolean}
      */
@@ -106,13 +123,12 @@ class CommonSkillItem extends Icon {
      */
     use(): boolean {
         let isDoingSomething = false;
-        let i: number, l: number;
-        for (i = 0, l = this.effects.length; i < l; i++) {
-            isDoingSomething = isDoingSomething || this.effects[i].execute();
+        for (let effect of this.getEffects()) {
+            isDoingSomething = isDoingSomething || effect.execute();
         }
         if (isDoingSomething) {
-            for (i = 0, l = this.costs.length; i < l; i++) {
-                this.costs[i].use();
+            for (let cost of this.costs) {
+                cost.use();
             }
         }
         return isDoingSomething;

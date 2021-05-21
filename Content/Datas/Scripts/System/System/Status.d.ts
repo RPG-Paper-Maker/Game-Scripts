@@ -29,5 +29,10 @@ declare class Status extends Icon {
      *  @param {Record<string, any>} - json Json object describing the status
      */
     read(json: Record<string, any>): void;
+    /**
+     *  Get all the effects, including the ones with perform skill efect.
+     *  @returns {System.Effect}
+     */
+    getEffects(): System.Effect[];
 }
 export { Status };

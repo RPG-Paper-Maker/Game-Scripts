@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { System } from "../index.js";
+import { Datas, System } from "../index.js";
 import { Enum, Utils } from "../Common/index.js";
 import { Icon } from "./Icon.js";
 /** @class
@@ -53,6 +53,23 @@ class Status extends Icon {
             listIndexes: this.effects, cons: System.Effect });
         this.characteristics = [];
         Utils.readJSONSystemList({ list: Utils.defaultValue(json.characteristics, []), listIndexes: this.characteristics, cons: System.Characteristic });
+    }
+    /**
+     *  Get all the effects, including the ones with perform skill efect.
+     *  @returns {System.Effect}
+     */
+    getEffects() {
+        let effects = [];
+        for (let effect of this.effects) {
+            if (effect.kind === Enum.EffectKind.PerformSkill) {
+                effects.concat(Datas.Skills.get(effect.performSkillID.getValue())
+                    .getEffects());
+            }
+            else {
+                effects.push(effect);
+            }
+        }
+        return effects;
     }
 }
 export { Status };

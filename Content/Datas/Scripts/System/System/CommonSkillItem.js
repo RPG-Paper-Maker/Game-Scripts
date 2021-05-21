@@ -19,7 +19,7 @@ import { PlaySong } from "./PlaySong.js";
 import { Cost } from "./Cost.js";
 import { Characteristic } from "./Characteristic.js";
 import { Effect } from "./Effect.js";
-import { System } from "../index.js";
+import { Datas, System } from "../index.js";
 /** @class
  *  A common class for skills, items, weapons, armors.
  *  @extends System.Icon
@@ -62,6 +62,23 @@ class CommonSkillItem extends Icon {
             listIndexes: this.characteristics, cons: Characteristic });
     }
     /**
+     *  Get all the effects, including the ones with perform skill efect.
+     *  @returns {System.Effect}
+     */
+    getEffects() {
+        let effects = [];
+        for (let effect of this.effects) {
+            if (effect.kind === Enum.EffectKind.PerformSkill) {
+                effects = effects.concat(Datas.Skills.get(effect.performSkillID
+                    .getValue()).getEffects());
+            }
+            else {
+                effects.push(effect);
+            }
+        }
+        return effects;
+    }
+    /**
      *  Use the command if possible.
      *  @returns {boolean}
      */
@@ -78,13 +95,12 @@ class CommonSkillItem extends Icon {
      */
     use() {
         let isDoingSomething = false;
-        let i, l;
-        for (i = 0, l = this.effects.length; i < l; i++) {
-            isDoingSomething = isDoingSomething || this.effects[i].execute();
+        for (let effect of this.getEffects()) {
+            isDoingSomething = isDoingSomething || effect.execute();
         }
         if (isDoingSomething) {
-            for (i = 0, l = this.costs.length; i < l; i++) {
-                this.costs[i].use();
+            for (let cost of this.costs) {
+                cost.use();
             }
         }
         return isDoingSomething;

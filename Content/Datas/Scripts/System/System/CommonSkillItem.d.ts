@@ -40,6 +40,11 @@ declare class CommonSkillItem extends Icon {
      */
     read(json: Record<string, any>): void;
     /**
+     *  Get all the effects, including the ones with perform skill efect.
+     *  @returns {System.Effect}
+     */
+    getEffects(): System.Effect[];
+    /**
      *  Use the command if possible.
      *  @returns {boolean}
      */

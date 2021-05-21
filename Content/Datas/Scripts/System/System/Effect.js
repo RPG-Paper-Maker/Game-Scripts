@@ -268,7 +268,7 @@ class Effect extends Base {
                         battler.isDamagesCritical = false;
                     }
                 }
-                break;
+                return true;
             }
             case EffectKind.AddRemoveSkill:
                 for (battler of targets) {
@@ -280,21 +280,22 @@ class Effect extends Base {
                         battler.player.removeSkill(skillID);
                     }
                 }
-                break;
+                return true;
             case EffectKind.PerformSkill:
-                return;
+                break;
             case EffectKind.CommonReaction:
                 let reactionInterpreter = new ReactionInterpreter(null, Datas
                     .CommonEvents.getCommonReaction(this.commonReaction
                     .commonReactionID), null, null, this.commonReaction.parameters);
                 Scene.Map.current.reactionInterpretersEffects.push(reactionInterpreter);
                 Scene.Map.current.reactionInterpreters.push(reactionInterpreter);
-                break;
+                return true;
             case EffectKind.SpecialActions:
                 Scene.Map.current.battleCommandKind = this.specialActionKind;
-                break;
+                return true;
             case EffectKind.Script:
-                break;
+                Interpreter.evaluate(this.scriptFormula.getValue(), { addReturn: false });
+                return true;
         }
         return result;
     }

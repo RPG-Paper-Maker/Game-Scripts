@@ -166,7 +166,7 @@ class BattleEnemyAttack {
         switch (this.battle.action.actionKind) {
             case MonsterActionKind.UseSkill:
                 let effect = Datas.Skills.get(this.battle.action.skillID
-                    .getValue()).effects[0];
+                    .getValue()).getEffects()[0];
                 if (effect) {
                     this.battle.battleCommandKind = effect.kind === EffectKind
                         .SpecialActions ? effect.specialActionKind :

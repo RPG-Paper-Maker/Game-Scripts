@@ -59,7 +59,7 @@ class BattleAnimation {
             .battle.informationText);
         this.battle.time = new Date().getTime();
         this.battle.effects = [];
-        let i, l;
+        let i, l, effects;
         switch (this.battle.battleCommandKind) {
             case EffectSpecialActionKind.ApplyWeapons:
                 if (this.battle.attackingGroup === CharacterKind.Hero) {
@@ -73,8 +73,9 @@ class BattleAnimation {
                                 .animationUserID.getValue());
                             this.battle.animationTarget = new Animation(weapon
                                 .animationTargetID.getValue());
-                            for (j = 0, m = weapon.effects.length; j < m; j++) {
-                                this.battle.effects.push(weapon.effects[j]);
+                            effects = weapon.getEffects();
+                            for (j = 0, m = effects.length; j < m; j++) {
+                                this.battle.effects.push(effects[j]);
                             }
                         }
                     }
@@ -84,7 +85,7 @@ class BattleAnimation {
                         .animationUserID.getValue());
                     this.battle.animationTarget = new Animation(Datas.Skills.get(1)
                         .animationTargetID.getValue());
-                    let effects = this.battle.attackSkill.effects;
+                    let effects = this.battle.attackSkill.getEffects();
                     for (i = 1, l = effects.length; i < l; i++) {
                         this.battle.effects.push(effects[i]);
                     }
@@ -96,7 +97,7 @@ class BattleAnimation {
                     .animationUserID.getValue());
                 this.battle.animationTarget = new Animation(content
                     .animationTargetID.getValue());
-                this.battle.effects = content.effects;
+                this.battle.effects = content.getEffects();
                 content.cost();
                 this.battle.user.setUsingSkill();
                 break;
@@ -107,7 +108,7 @@ class BattleAnimation {
                     .animationUserID.getValue());
                 this.battle.animationTarget = new Animation(content
                     .animationTargetID.getValue());
-                this.battle.effects = content.effects;
+                this.battle.effects = content.getEffects();
                 if (this.battle.attackingGroup === CharacterKind.Hero) {
                     Game.current.useItem(graphic.item);
                 }
