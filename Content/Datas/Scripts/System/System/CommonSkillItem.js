@@ -122,7 +122,11 @@ class CommonSkillItem extends Icon {
     isPossible(target) {
         let targets = Scene.Map.current.getPossibleTargets(this.targetKind);
         let user = Scene.Map.current.user ? Scene.Map.current.user.player : null;
-        // At least one target can be selected
+        // Condition
+        if (!Interpreter.evaluate(this.conditionFormula.getValue())) {
+            return false;
+        }
+        // Target condition : at least one target can be selected
         let fTargetCondition = (target) => {
             return Interpreter.evaluate(this.targetConditionFormula.getValue(), { user: user, target: target });
         };
@@ -144,9 +148,11 @@ class CommonSkillItem extends Icon {
         })) {
             if (!Scene.Map.current.user.player.equip.some(item => {
                 return item
-                    === null || (!item.system.isWeapon() || (target ?
-                    Interpreter.evaluate(item.system.targetConditionFormula.getValue(), { user: user, target: target }) : targets.some(target => {
-                    Interpreter.evaluate(item.system.targetConditionFormula.getValue(), { user: user, target: target });
+                    === null || (!item.system.isWeapon() || !Interpreter.evaluate(item
+                    .system.conditionFormula.getValue()) || (target ? Interpreter
+                    .evaluate(item.system.targetConditionFormula.getValue(), { user: user, target: target }) : targets.some(target => {
+                    Interpreter
+                        .evaluate(item.system.targetConditionFormula.getValue(), { user: user, target: target });
                 })));
             })) {
                 return false;
