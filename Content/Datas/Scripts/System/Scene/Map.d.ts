@@ -4,7 +4,7 @@ import Orientation = Enum.Orientation;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 import PictureKind = Enum.PictureKind;
 import { System, Scene } from "../index.js";
-import { Position, Portion, MapPortion, TextureBundle, Vector3, Battler, Frame, Vector2 } from "../Core/index.js";
+import { Position, Portion, MapPortion, TextureBundle, Vector3, Battler, Frame, Vector2, Player } from "../Core/index.js";
 /** @class
  *  A scene for a local map.
  *  @extends Scene.Base
@@ -58,6 +58,12 @@ declare class Map extends Base {
      *  Read the map properties file.
      */
     readMapProperties(): Promise<void>;
+    /**
+     *  Get all the possible targets of a skill.
+     *  @param {Enum.TargetKind} targetKind
+     *  @returns {Player[]}
+     */
+    getPossibleTargets(targetKind: Enum.TargetKind): Player[];
     /**
      *  Initialize the map objects.
      */

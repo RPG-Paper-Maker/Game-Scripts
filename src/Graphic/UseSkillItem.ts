@@ -20,6 +20,7 @@ import { Battler, Game, Player } from "../Core";
  */
 class UseSkillItem extends Base {
 
+    public skillItem: System.CommonSkillItem;
     public graphicCharacters: Graphic.Player[];
     public all: boolean;
     public indexArrow: number;
@@ -36,7 +37,6 @@ class UseSkillItem extends Base {
             this.graphicCharacters.push(player);
         }
         this.hideArrow = hideArrow;
-        this.setAll(false);
     }
 
     /** 
@@ -45,6 +45,14 @@ class UseSkillItem extends Base {
      */
     getSelectedPlayer(): Player {
         return this.graphicCharacters[this.indexArrow].player;
+    }
+
+    /** 
+     *  Set skill item.
+     *  @param {System.CommonSkillItem} skillItem
+     */
+    setSkillItem(skillItem: System.CommonSkillItem) {
+        this.skillItem = skillItem;
     }
 
     /** 
@@ -61,9 +69,8 @@ class UseSkillItem extends Base {
                     .teamHeroes[i]);
             }
         } else {
-            this.indexArrow = 0;
-            Scene.Map.current.targets = [new Battler(Game.current
-                .teamHeroes[this.indexArrow])];
+            this.indexArrow = -1;
+            this.goRight();
         }
     }
 
@@ -89,14 +96,14 @@ class UseSkillItem extends Base {
      *  Move arrow left.
      */
     goLeft() {
-        this.moveArrow(this.indexArrow - 1);
+        this.moveArrow(-1);
     }
 
     /** 
      *  Move arrow right.
      */
     goRight() {
-        this.moveArrow(this.indexArrow + 1);
+        this.moveArrow(1);
     }
 
     /** 
@@ -105,13 +112,15 @@ class UseSkillItem extends Base {
      */
     moveArrow(index: number) {
         if (!this.all) {
-            if (this.indexArrow !== index) {
-                Datas.Systems.soundCursor.playSound();
-            }
-            this.indexArrow = Mathf.mod(index, this.graphicCharacters.length);
-            Scene.Map.current.targets = [new Battler(Game.current
-                .teamHeroes[this.indexArrow])];
+            let target: Player;
+            do {
+                this.indexArrow = Mathf.mod(this.indexArrow + index, this
+                    .graphicCharacters.length);
+                target = Game.current.teamHeroes[this.indexArrow];
+            } while (!this.skillItem.isPossible(target));
+            Scene.Map.current.targets = [new Battler(target)];
             Manager.Stack.requestPaintHUD = true;
+            Datas.Systems.soundCursor.playSound();
         }
     }
 

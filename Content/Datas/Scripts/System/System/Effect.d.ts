@@ -42,6 +42,7 @@ declare class Effect extends Base {
     scriptFormula: System.DynamicValue;
     isTemporarilyChangeTarget: boolean;
     temporarilyChangeTargetFormula: System.DynamicValue;
+    skillItem: System.CommonSkillItem;
     constructor(json?: Record<string, any>);
     /**
      *  Read the JSON associated to the effect.

@@ -6,6 +6,7 @@ import { Player } from "../Core/index.js";
  *  @extends Graphic.Base
  */
 declare class UseSkillItem extends Base {
+    skillItem: System.CommonSkillItem;
     graphicCharacters: Graphic.Player[];
     all: boolean;
     indexArrow: number;
@@ -18,6 +19,11 @@ declare class UseSkillItem extends Base {
      *  @returns {Core.Player}
      */
     getSelectedPlayer(): Player;
+    /**
+     *  Set skill item.
+     *  @param {System.CommonSkillItem} skillItem
+     */
+    setSkillItem(skillItem: System.CommonSkillItem): void;
     /**
      *  Set if all targets are selected or not.
      *  @param {boolean} b - Indicate if all the targets are selected

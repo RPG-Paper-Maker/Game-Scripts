@@ -86,6 +86,23 @@ class Map extends Base {
         this.mapProperties.read(json);
     }
     /**
+     *  Get all the possible targets of a skill.
+     *  @param {Enum.TargetKind} targetKind
+     *  @returns {Player[]}
+     */
+    getPossibleTargets(targetKind) {
+        if (targetKind === Enum.TargetKind.User) {
+            return [this.user.player];
+        }
+        else if (targetKind === Enum.TargetKind.Ally || targetKind === Enum
+            .TargetKind.AllAllies) {
+            return Game.current.teamHeroes;
+        }
+        else {
+            return [];
+        }
+    }
+    /**
      *  Initialize the map objects.
      */
     initializeCamera() {

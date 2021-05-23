@@ -121,11 +121,14 @@ class Effect extends Base {
             case EffectKind.Damages: {
                 let damage, miss, crit, precision, variance, fixRes, percentRes, element, critical, stat, abbreviation, max, before, currencyID;
                 for (let i = 0; i < l; i++) {
+                    battler = targets[i];
+                    target = battler.player;
+                    if (!this.skillItem.isPossible(target)) {
+                        continue;
+                    }
                     damage = 0;
                     miss = false;
                     crit = false;
-                    battler = targets[i];
-                    target = battler.player;
                     // Calculate damages
                     if (this.isDamagePrecision) {
                         precision = Interpreter.evaluate(this

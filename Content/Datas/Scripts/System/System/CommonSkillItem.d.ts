@@ -7,6 +7,7 @@ import { Cost } from "./Cost.js";
 import { Characteristic } from "./Characteristic.js";
 import { Effect } from "./Effect.js";
 import { System } from "../index.js";
+import { Player } from "../Core/index.js";
 /** @class
  *  A common class for skills, items, weapons, armors.
  *  @extends System.Icon
@@ -61,7 +62,7 @@ declare class CommonSkillItem extends Icon {
     /** Check if the costs are possible.
      *  @returns {boolean}
      */
-    isPossible(): boolean;
+    isPossible(target?: Player): boolean;
     /**
      *  Get the target kind string.
      *  @returns {string}

@@ -206,14 +206,17 @@ class BattleEnemyAttack {
         let targetKind, side;
         switch (this.battle.action.actionKind) {
             case MonsterActionKind.UseSkill:
-                targetKind = Datas.Skills.get(this.battle.action.skillID
-                    .getValue()).targetKind;
+                this.battle.skill = Datas.Skills.get(this.battle.action.skillID
+                    .getValue());
+                targetKind = this.battle.skill.targetKind;
                 break;
             case MonsterActionKind.UseItem:
-                targetKind = Datas.Items.get(this.battle.action.itemID
-                    .getValue()).targetKind;
+                this.battle.skill = Datas.Items.get(this.battle.action.itemID
+                    .getValue());
+                targetKind = this.battle.skill.targetKind;
                 break;
             case MonsterActionKind.DoNothing:
+                this.battle.skill = null;
                 this.battle.targets = [];
                 return;
         }

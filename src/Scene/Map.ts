@@ -129,6 +129,22 @@ class Map extends Base {
     }
 
     /** 
+     *  Get all the possible targets of a skill.
+     *  @param {Enum.TargetKind} targetKind
+     *  @returns {Player[]}
+     */
+    getPossibleTargets(targetKind: Enum.TargetKind): Player[] {
+        if (targetKind === Enum.TargetKind.User) {
+            return [this.user.player];
+        } else if (targetKind === Enum.TargetKind.Ally || targetKind === Enum
+            .TargetKind.AllAllies) {
+            return Game.current.teamHeroes;
+        } else {
+            return [];
+        }
+    }
+
+    /** 
      *  Initialize the map objects.
      */
     initializeCamera() {

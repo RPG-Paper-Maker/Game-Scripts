@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Enum, Utils } from "../Common/index.js";
+import { Enum, Interpreter, Utils } from "../Common/index.js";
 var TargetKind = Enum.TargetKind;
 var AvailableKind = Enum.AvailableKind;
 var SongKind = Enum.SongKind;
@@ -19,7 +19,7 @@ import { PlaySong } from "./PlaySong.js";
 import { Cost } from "./Cost.js";
 import { Characteristic } from "./Characteristic.js";
 import { Effect } from "./Effect.js";
-import { Datas, System } from "../index.js";
+import { Datas, Scene, System } from "../index.js";
 /** @class
  *  A common class for skills, items, weapons, armors.
  *  @extends System.Icon
@@ -57,6 +57,9 @@ class CommonSkillItem extends Icon {
         this.effects = [];
         Utils.readJSONSystemList({ list: Utils.defaultValue(json.e, []),
             listIndexes: this.effects, cons: Effect });
+        for (let effect of this.effects) {
+            effect.skillItem = this;
+        }
         this.characteristics = [];
         Utils.readJSONSystemList({ list: Utils.defaultValue(json.car, []),
             listIndexes: this.characteristics, cons: Characteristic });
@@ -116,30 +119,39 @@ class CommonSkillItem extends Icon {
     /** Check if the costs are possible.
      *  @returns {boolean}
      */
-    isPossible() {
-        /*
-        console.log("ok")
-        console.log(this.targetConditionFormula.getValue())
+    isPossible(target) {
+        let targets = Scene.Map.current.getPossibleTargets(this.targetKind);
+        let user = Scene.Map.current.user ? Scene.Map.current.user.player : null;
         // At least one target can be selected
-        if (!Scene.Map.current.targets.some(target => { console.log(target); return Interpreter
-            .evaluate(this.targetConditionFormula.getValue(), { user: Scene.Map
-            .current.user.player, target: target.player }) })) {
-            return false;
-        }
-        console.log("a")
-        // If attack skill, also test on equipped weapons
-        if (this.effects.some((effect) => { return effect.kind === Enum
-            .EffectKind.SpecialActions && effect.specialActionKind === Enum
-            .EffectSpecialActionKind.ApplyWeapons; })) {
-            if (!Scene.Map.current.user.player.equip.some(item => { return !item
-                .system.isWeapon() || Scene.Map.current.targets.some(target => {
-                return Interpreter.evaluate(this.targetConditionFormula.getValue(),
-                { user: Scene.Map.current.user.player, target: target.player })})})) {
+        let fTargetCondition = (target) => {
+            return Interpreter.evaluate(this.targetConditionFormula.getValue(), { user: user, target: target });
+        };
+        if (target) {
+            if (!fTargetCondition.call(this, target)) {
                 return false;
             }
         }
-        console.log("b")
-        */
+        else {
+            if (!targets.some(fTargetCondition)) {
+                return false;
+            }
+        }
+        // If attack skill, also test on equipped weapons
+        if (this.effects.some((effect) => {
+            return effect.kind === Enum
+                .EffectKind.SpecialActions && effect.specialActionKind === Enum
+                .EffectSpecialActionKind.ApplyWeapons;
+        })) {
+            if (!Scene.Map.current.user.player.equip.some(item => {
+                return item
+                    === null || (!item.system.isWeapon() || (target ?
+                    Interpreter.evaluate(item.system.targetConditionFormula.getValue(), { user: user, target: target }) : targets.some(target => {
+                    Interpreter.evaluate(item.system.targetConditionFormula.getValue(), { user: user, target: target });
+                })));
+            })) {
+                return false;
+            }
+        }
         // Skill cost
         for (let i = 0, l = this.costs.length; i < l; i++) {
             if (!this.costs[i].isPossible()) {

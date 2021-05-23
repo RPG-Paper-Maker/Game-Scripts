@@ -183,6 +183,7 @@ class MenuInventory extends Base {
     onKeyPressed(key) {
         Scene.Base.prototype.onKeyPressed.call(Scene.Map.current, key);
         let graphic = this.windowBoxInformation.content;
+        let graphicUse = this.windowBoxUseItem.content;
         switch (this.substep) {
             case 0:
                 if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
@@ -192,14 +193,15 @@ class MenuInventory extends Base {
                     }
                     let targetKind = graphic.item.system.targetKind;
                     let availableKind = graphic.item.system.availableKind;
-                    if (graphic.item.system.consumable && (targetKind ===
-                        TargetKind.Ally || targetKind === TargetKind.AllAllies) &&
-                        (availableKind === AvailableKind.Always || availableKind
-                            === AvailableKind.MainMenu)) {
+                    if (graphic.item.system.isPossible() && graphic.item.system
+                        .consumable && (targetKind === TargetKind.Ally ||
+                        targetKind === TargetKind.AllAllies) && (availableKind
+                        === AvailableKind.Always || availableKind ===
+                        AvailableKind.MainMenu)) {
                         Datas.Systems.soundConfirmation.playSound();
                         this.substep = 1;
-                        this.windowBoxUseItem.content
-                            .setAll(targetKind === TargetKind.AllAllies);
+                        graphicUse.setSkillItem(graphic.item.system);
+                        graphicUse.setAll(targetKind === TargetKind.AllAllies);
                         Manager.Stack.requestPaintHUD = true;
                     }
                     else {

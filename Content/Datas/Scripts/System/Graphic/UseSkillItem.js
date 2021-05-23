@@ -27,7 +27,6 @@ class UseSkillItem extends Base {
             this.graphicCharacters.push(player);
         }
         this.hideArrow = hideArrow;
-        this.setAll(false);
     }
     /**
      *  Get the selected player.
@@ -35,6 +34,13 @@ class UseSkillItem extends Base {
      */
     getSelectedPlayer() {
         return this.graphicCharacters[this.indexArrow].player;
+    }
+    /**
+     *  Set skill item.
+     *  @param {System.CommonSkillItem} skillItem
+     */
+    setSkillItem(skillItem) {
+        this.skillItem = skillItem;
     }
     /**
      *  Set if all targets are selected or not.
@@ -51,9 +57,8 @@ class UseSkillItem extends Base {
             }
         }
         else {
-            this.indexArrow = 0;
-            Scene.Map.current.targets = [new Battler(Game.current
-                    .teamHeroes[this.indexArrow])];
+            this.indexArrow = -1;
+            this.goRight();
         }
     }
     /**
@@ -76,13 +81,13 @@ class UseSkillItem extends Base {
      *  Move arrow left.
      */
     goLeft() {
-        this.moveArrow(this.indexArrow - 1);
+        this.moveArrow(-1);
     }
     /**
      *  Move arrow right.
      */
     goRight() {
-        this.moveArrow(this.indexArrow + 1);
+        this.moveArrow(1);
     }
     /**
      *  Move an arrow according to index.
@@ -90,13 +95,15 @@ class UseSkillItem extends Base {
      */
     moveArrow(index) {
         if (!this.all) {
-            if (this.indexArrow !== index) {
-                Datas.Systems.soundCursor.playSound();
-            }
-            this.indexArrow = Mathf.mod(index, this.graphicCharacters.length);
-            Scene.Map.current.targets = [new Battler(Game.current
-                    .teamHeroes[this.indexArrow])];
+            let target;
+            do {
+                this.indexArrow = Mathf.mod(this.indexArrow + index, this
+                    .graphicCharacters.length);
+                target = Game.current.teamHeroes[this.indexArrow];
+            } while (!this.skillItem.isPossible(target));
+            Scene.Map.current.targets = [new Battler(target)];
             Manager.Stack.requestPaintHUD = true;
+            Datas.Systems.soundCursor.playSound();
         }
     }
     /**

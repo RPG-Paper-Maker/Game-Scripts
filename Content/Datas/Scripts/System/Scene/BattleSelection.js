@@ -232,6 +232,7 @@ class BattleSelection {
             .lastCommandIndex);
         this.battle.windowChoicesBattleCommands.offsetSelectedIndex = this
             .battle.user.lastCommandOffset;
+        this.battle.skill = null;
         // Update skills list
         let skills = this.battle.user.player.sk;
         this.battle.listSkills = [];
@@ -294,16 +295,22 @@ class BattleSelection {
                 let skill = this.battle.windowChoicesSkills
                     .getCurrentContent().system;
                 if (skill.isPossible()) {
+                    this.battle.skill = skill;
                     this.selectTarget(skill.targetKind);
                     this.registerLastSkillIndex();
                 }
                 return;
             case EffectSpecialActionKind.OpenItems:
-                this.selectTarget(this.battle
-                    .windowItemDescription.content.item.system.targetKind);
-                this.registerLastItemIndex();
+                let item = this.battle.windowItemDescription
+                    .content.item.system;
+                if (item.isPossible()) {
+                    this.battle.skill = item;
+                    this.selectTarget(item.targetKind);
+                    this.registerLastItemIndex();
+                }
                 return;
             default:
+                this.battle.battleCommandKind = EffectSpecialActionKind.None;
                 break;
         }
         this.battle.windowChoicesBattleCommands.onKeyPressed(key, this.battle.windowChoicesBattleCommands.getCurrentContent()
@@ -314,6 +321,7 @@ class BattleSelection {
                 // Check weapon TargetKind
                 this.battle.attackSkill = this.battle
                     .windowChoicesBattleCommands.getCurrentContent().system;
+                this.battle.skill = this.battle.attackSkill;
                 let targetKind = null;
                 let equipments = this.battle.user.player.equip;
                 let gameItem;
@@ -377,6 +385,7 @@ class BattleSelection {
      *  When targets are selected.
      */
     onTargetsSelected() {
+        this.battle.skill = null;
         let player = this.battle.battlers[this.battle.kindSelection];
         if (this.battle.all) {
             for (let i = 0, l = player.length; i < l; i++) {
@@ -393,6 +402,7 @@ class BattleSelection {
      *  When targets are unselected.
      */
     onTargetsUnselected() {
+        this.battle.skill = null;
         this.battle.subStep = 1;
         this.battle.kindSelection = CharacterKind.Hero;
         this.battle.userTarget = false;

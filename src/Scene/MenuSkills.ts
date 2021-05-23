@@ -185,6 +185,7 @@ class MenuSkills extends Base {
     onKeyPressed(key: number) {
         Scene.Base.prototype.onKeyPressed.call(Scene.Map.current, key);
         let graphic = <Graphic.Skill> this.windowBoxInformation.content;
+        let graphicUse = <Graphic.UseSkillItem> this.windowBoxUseSkill.content;
         switch (this.substep) {
             case 0:
                 if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
@@ -202,8 +203,8 @@ class MenuSkills extends Base {
                     {
                         Datas.Systems.soundConfirmation.playSound();
                         this.substep = 1;
-                        (<Graphic.UseSkillItem> this.windowBoxUseSkill.content)
-                            .setAll(targetKind === TargetKind.AllAllies);
+                        graphicUse.setSkillItem(graphic.system);
+                        graphicUse.setAll(targetKind === TargetKind.AllAllies);
                         Manager.Stack.requestPaintHUD = true;
                     } else {
                         Datas.Systems.soundImpossible.playSound();

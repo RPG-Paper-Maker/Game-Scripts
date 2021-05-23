@@ -74,6 +74,7 @@ declare class Battle extends Map {
     kindSelection: CharacterKind;
     selectedUserIndex: number;
     selectedTargetIndex: number;
+    skill: System.CommonSkillItem;
     listSkills: Graphic.Skill[];
     listItems: Graphic.Item[];
     effects: System.Effect[];
@@ -143,6 +144,12 @@ declare class Battle extends Map {
      *  Load async stuff.
      */
     load(): Promise<void>;
+    /**
+     *  Get all the possible targets of a skill.
+     *  @param {Enum.TargetKind} targetKind
+     *  @returns {Player[]}
+     */
+    getPossibleTargets(targetKind: Enum.TargetKind): Player[];
     /**
      *  Initialize and correct some camera settings for the battle start
      */

@@ -57,6 +57,7 @@ class Battle extends Map {
         this.sceneMap = Manager.Stack.top;
         this.mapCameraDistance = this.sceneMap.camera.distance;
         this.actionDoNothing = new System.MonsterAction({});
+        this.skill = null;
     }
     /**
      *  Load async stuff.
@@ -66,6 +67,25 @@ class Battle extends Map {
         this.initialize();
         Manager.Stack.requestPaintHUD = true;
         this.loading = false;
+    }
+    /**
+     *  Get all the possible targets of a skill.
+     *  @param {Enum.TargetKind} targetKind
+     *  @returns {Player[]}
+     */
+    getPossibleTargets(targetKind) {
+        if (targetKind === Enum.TargetKind.User) {
+            return [this.user.player];
+        }
+        else if (targetKind === Enum.TargetKind.None) {
+            return [];
+        }
+        else {
+            return this.battlers[((targetKind === Enum.TargetKind.Ally ||
+                targetKind === Enum.TargetKind.AllAllies) && this.attackingGroup
+                === Enum.CharacterKind.Hero) ? Enum.CharacterKind.Hero : Enum
+                .CharacterKind.Monster].map(battler => { return battler.player; });
+        }
     }
     /**
      *  Initialize and correct some camera settings for the battle start
@@ -102,11 +122,16 @@ class Battle extends Map {
      *  @returns {boolean}
      */
     isDefined(kind, index, target) {
-        return (target || (this.battlers[kind][index].active && !this.battlers[kind][index].player.isDead() && !this.battlers[kind][index]
+        let battler = this.battlers[kind][index];
+        if (target) {
+            return !this.skill || this.skill.isPossible(battler.player);
+        }
+        return battler.active && !battler.player.isDead() && !battler
             .containsRestriction(Enum.StatusRestrictionsKind.CantDoAnything) &&
-            !this.battlers[kind][index].containsRestriction(Enum
-                .StatusRestrictionsKind.AttackRandomAlly) && !this.battlers[kind][index].containsRestriction(Enum.StatusRestrictionsKind
-            .AttackRandomEnemy) && !this.battlers[kind][index].containsRestriction(Enum.StatusRestrictionsKind.AttackRandomTarget)));
+            !battler.containsRestriction(Enum.StatusRestrictionsKind
+                .AttackRandomAlly) && !battler.containsRestriction(Enum
+            .StatusRestrictionsKind.AttackRandomEnemy) && !battler
+            .containsRestriction(Enum.StatusRestrictionsKind.AttackRandomTarget);
     }
     /**
      *  Check if all the heroes or enemies are inactive.

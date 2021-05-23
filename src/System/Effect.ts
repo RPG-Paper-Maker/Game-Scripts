@@ -59,6 +59,7 @@ class Effect extends Base {
     public scriptFormula: System.DynamicValue;
     public isTemporarilyChangeTarget: boolean;
     public temporarilyChangeTargetFormula: System.DynamicValue;
+    public skillItem: System.CommonSkillItem;
 
     constructor(json?: Record<string, any>) {
         super(json);
@@ -169,11 +170,14 @@ class Effect extends Base {
                     number, critical: number, stat: Statistic, abbreviation: 
                     string, max: number, before: number, currencyID: number;
                 for (let i = 0; i < l; i++) {
+                    battler = targets[i];
+                    target = battler.player;
+                    if (!this.skillItem.isPossible(target)) {
+                        continue;
+                    }
                     damage = 0;
                     miss = false;
                     crit = false;
-                    battler = targets[i];
-                    target = battler.player;
 
                     // Calculate damages
                     if (this.isDamagePrecision) {
