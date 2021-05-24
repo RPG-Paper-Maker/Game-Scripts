@@ -76,10 +76,16 @@ class BattleVictory {
         }
 
         // Heroes
+        let xp: number;
         for (i = 0, l = Game.current.teamHeroes.length; i < l; i++) {
             battler = this.battle.battlers[CharacterKind.Hero][i];
             battler.setVictory();
-            battler.player.totalRemainingXP = this.battle.xp;
+            xp = this.battle.xp;
+            if (battler.player.experienceGain[0]) {
+                xp *= battler.player.experienceGain[0].multiplication;
+                xp += this.battle.xp * battler.player.experienceGain[0].addition / 100;
+            }
+            battler.player.totalRemainingXP = xp;
         }
 
         // Time progression settings
@@ -116,18 +122,35 @@ class BattleVictory {
         this.battle.loots[LootKind.Armor] = {};
         this.battle.lootsNumber = 0;
         let battlers = this.battle.battlers[CharacterKind.Monster];
+
+        // Calculate rewards
         let i: number, j: number, l: number, m: number, player: Player, id: 
             string, list: Record<string, Item>[], loots: Record<string, Item>,
-            currencies: Record<string, number>;
+            currencies: Record<string, number>, hero: Battler, baseCurrency: number,
+            currency: number;
         for (i = 0, l = battlers.length; i < l; i++) {
             player = battlers[i].player;
             this.battle.xp += player.getRewardExperience();
             currencies = player.getRewardCurrencies();
             for (id in currencies) {
+                baseCurrency = currencies[id];
+                currency = baseCurrency;
+                // Get team currency bonus
+                for (hero of this.battle.battlers[CharacterKind.Hero]) {
+                    if (hero.player.currencyGain[id]) {
+                        currency *= hero.player.currencyGain[id].multiplication;
+                    }
+                }
+                for (hero of this.battle.battlers[CharacterKind.Hero]) {
+                    if (hero.player.currencyGain[id]) {
+                        currency += baseCurrency * hero.player.currencyGain[id]
+                            .addition / 100;
+                    }
+                }
                 if (this.battle.currencies.hasOwnProperty(id)) {
-                    this.battle.currencies[id] += currencies[id];
+                    this.battle.currencies[id] += currency;
                 } else {
-                    this.battle.currencies[id] = currencies[id];
+                    this.battle.currencies[id] = currency;
                 }
             }
             list = player.getRewardLoots();

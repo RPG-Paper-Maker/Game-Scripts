@@ -61,10 +61,16 @@ class BattleVictory {
             }
         }
         // Heroes
+        let xp;
         for (i = 0, l = Game.current.teamHeroes.length; i < l; i++) {
             battler = this.battle.battlers[CharacterKind.Hero][i];
             battler.setVictory();
-            battler.player.totalRemainingXP = this.battle.xp;
+            xp = this.battle.xp;
+            if (battler.player.experienceGain[0]) {
+                xp *= battler.player.experienceGain[0].multiplication;
+                xp += this.battle.xp * battler.player.experienceGain[0].addition / 100;
+            }
+            battler.player.totalRemainingXP = xp;
         }
         // Time progression settings
         this.battle.time = new Date().getTime();
@@ -96,17 +102,32 @@ class BattleVictory {
         this.battle.loots[LootKind.Armor] = {};
         this.battle.lootsNumber = 0;
         let battlers = this.battle.battlers[CharacterKind.Monster];
-        let i, j, l, m, player, id, list, loots, currencies;
+        // Calculate rewards
+        let i, j, l, m, player, id, list, loots, currencies, hero, baseCurrency, currency;
         for (i = 0, l = battlers.length; i < l; i++) {
             player = battlers[i].player;
             this.battle.xp += player.getRewardExperience();
             currencies = player.getRewardCurrencies();
             for (id in currencies) {
+                baseCurrency = currencies[id];
+                currency = baseCurrency;
+                // Get team currency bonus
+                for (hero of this.battle.battlers[CharacterKind.Hero]) {
+                    if (hero.player.currencyGain[id]) {
+                        currency *= hero.player.currencyGain[id].multiplication;
+                    }
+                }
+                for (hero of this.battle.battlers[CharacterKind.Hero]) {
+                    if (hero.player.currencyGain[id]) {
+                        currency += baseCurrency * hero.player.currencyGain[id]
+                            .addition / 100;
+                    }
+                }
                 if (this.battle.currencies.hasOwnProperty(id)) {
-                    this.battle.currencies[id] += currencies[id];
+                    this.battle.currencies[id] += currency;
                 }
                 else {
-                    this.battle.currencies[id] = currencies[id];
+                    this.battle.currencies[id] = currency;
                 }
             }
             list = player.getRewardLoots();

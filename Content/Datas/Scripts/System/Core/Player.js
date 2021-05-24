@@ -336,7 +336,11 @@ class Player {
         let bonus = new Array(l);
         let added = new Array(l);
         let res = {
-            statusRes: []
+            statusRes: [],
+            experienceGain: [],
+            currencyGain: [],
+            skillCostRes: [],
+            variableRes: []
         };
         let i;
         for (i = 1; i < l; i++) {
@@ -466,6 +470,10 @@ class Player {
             this[statistic.getBonusAbbreviation()] = bonus[id];
         }
         this.statusRes = res.statusRes;
+        this.experienceGain = res.experienceGain;
+        this.currencyGain = res.currencyGain;
+        this.skillCostRes = res.skillCostRes;
+        this.variableRes = res.variableRes;
     }
     /**
      *  Initialize stat value.

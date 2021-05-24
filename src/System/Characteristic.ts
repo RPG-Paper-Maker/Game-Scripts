@@ -177,6 +177,22 @@ class Characteristic extends Base {
                 propName = "statusRes";
                 id = this.statusResID.getValue();
                 break;
+            case Enum.IncreaseDecreaseKind.ExperienceGain:
+                propName = "experienceGain";
+                id = 0;
+                break;
+            case Enum.IncreaseDecreaseKind.CurrencyGain:
+                propName = "currencyGain";
+                id = this.currencyGainID.getValue();
+                break;
+            case Enum.IncreaseDecreaseKind.SkillCost:
+                propName = "skillCostRes";
+                id = this.isAllSkillCost ? -1 : this.skillCostID.getValue();
+                break;
+            case Enum.IncreaseDecreaseKind.Variable:
+                propName = "variableRes";
+                id = this.variableID;
+                break;
         }
         if (!res[propName][id]) {
             res[propName][id] = {
@@ -184,11 +200,12 @@ class Characteristic extends Base {
                 addition: 0
             }
         }
-        let value = this.value.getValue() * (this.isIncreaseDecrease ? 1 : -1);
+        let value = this.value.getValue();
         if (this.operation) { // * (multiplication)
-            res[propName][id].multiplication *= this.unit ? value / 100 : value; // % / Fix
+            let v = this.unit ? value / 100 : value;
+            res[propName][id].multiplication *= this.isIncreaseDecrease ? v : 1 / v; // % / Fix
         } else { // + (addition)
-            res[propName][id].addition += value; // % / Fix
+            res[propName][id].addition += this.isIncreaseDecrease ? value : -value; // % / Fix
         }
     }
 

@@ -34,6 +34,10 @@ declare class Player {
     stepLevelUp: number;
     battler: Battler;
     statusRes: Record<string, number>[];
+    experienceGain: Record<string, number>[];
+    currencyGain: Record<string, number>[];
+    skillCostRes: Record<string, number>[];
+    variableRes: Record<string, number>[];
     constructor(kind?: CharacterKind, id?: number, instanceID?: number, skills?: Record<string, any>[], status?: Record<string, any>[], name?: string, json?: Record<string, any>);
     /**
      *  Get the max size of equipment kind names.

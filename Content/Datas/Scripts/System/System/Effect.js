@@ -252,7 +252,6 @@ class Effect extends Base {
                         precision /= target.statusRes[id].multiplication;
                         precision -= target.statusRes[id].addition;
                     }
-                    console.log(precision);
                     if (Mathf.randomPercentTest(precision)) {
                         miss = false;
                         previousFirst = battler.player.status[0];
