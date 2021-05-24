@@ -169,6 +169,29 @@ class Characteristic extends Base {
         }
     }
 
+    setIncreaseDecreaseValues(res: Record<string, any>) {
+        let propName: string;
+        let id: number;
+        switch (this.increaseDecreaseKind) {
+            case Enum.IncreaseDecreaseKind.StatusRes:
+                propName = "statusRes";
+                id = this.statusResID.getValue();
+                break;
+        }
+        if (!res[propName][id]) {
+            res[propName][id] = {
+                multiplication: 1,
+                addition: 0
+            }
+        }
+        let value = this.value.getValue() * (this.isIncreaseDecrease ? 1 : -1);
+        if (this.operation) { // * (multiplication)
+            res[propName][id].multiplication *= this.unit ? value / 100 : value; // % / Fix
+        } else { // + (addition)
+            res[propName][id].addition += value; // % / Fix
+        }
+    }
+
     /** 
      *  Get the string representation of the characteristic.
      *  @returns {string}
@@ -191,6 +214,8 @@ class Characteristic extends Base {
                             .elementResID.getValue()).name() + " res.";
                         break;
                     case Enum.IncreaseDecreaseKind.StatusRes:
+                        result += Datas.Status.get(this.statusResID.getValue())
+                            .name() + " res.";
                         break;
                     case Enum.IncreaseDecreaseKind.ExperienceGain:
                         result += Datas.BattleSystems.getExpStatistic().name() +

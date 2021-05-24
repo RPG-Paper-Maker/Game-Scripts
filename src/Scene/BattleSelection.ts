@@ -259,7 +259,7 @@ class BattleSelection {
         this.battle.skill = null;
 
         // Update skills list
-        let skills = this.battle.user.player.sk;
+        let skills = this.battle.user.player.skills;
         this.battle.listSkills = [];
         let ownedSkill: Skill, skill: System.Skill;
         for (let i = 0, l = skills.length; i < l; i++) {

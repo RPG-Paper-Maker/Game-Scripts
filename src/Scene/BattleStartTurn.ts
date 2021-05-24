@@ -166,8 +166,8 @@ class BattleStartTurn {
             this.battle.currentEffectIndex = 0;
             let skills: System.Skill[] = [];
             let skill: System.Skill;
-            for (let i = 0, l = user.player.sk.length; i < l; i++) {
-                skill = Datas.Skills.get(user.player.sk[i].id);
+            for (let i = 0, l = user.player.skills.length; i < l; i++) {
+                skill = Datas.Skills.get(user.player.skills[i].id);
                 if (!skill.isPossible()) {
                     continue;
                 }

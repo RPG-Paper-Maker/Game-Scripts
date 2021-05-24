@@ -305,11 +305,17 @@ class Effect extends Base {
                     Status;
                 for (let i = 0, l = targets.length; i < l; i++) {
                     battler = targets[i];
+                    target = battler.player;
                     precision = Interpreter.evaluate(this.statusPrecisionFormula
                         .getValue(), { user: user, target: battler.player });
+                    id = this.statusID.getValue();
+                    // Handle resistance
+                    if (target.statusRes[id]) {
+                        precision /= target.statusRes[id].multiplication;
+                        precision -= target.statusRes[id].addition;
+                    }
                     if (Mathf.randomPercentTest(precision)) {
                         miss = false;
-                        id = this.statusID.getValue();
                         previousFirst = battler.player.status[0];
                         
                         // Add or remove status

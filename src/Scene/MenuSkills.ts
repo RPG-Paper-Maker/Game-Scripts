@@ -128,7 +128,7 @@ class MenuSkills extends Base {
         let indexTab = this.windowChoicesTabs.currentSelectedIndex;
         Scene.Map.current.user = new Battler(Game.current
             .teamHeroes[indexTab]);
-        let skills = Scene.Map.current.user.player.sk;
+        let skills = Scene.Map.current.user.player.skills;
 
         // Get the first skills of the hero
         let list = [];

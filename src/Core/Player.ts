@@ -35,7 +35,7 @@ class Player {
     public system: System.Hero;
     public name: string;
     public levelingUp: boolean;
-    public sk: Skill[];
+    public skills: Skill[];
     public equip: Item[];
     public status: Status[];
     public expList: number[];
@@ -47,6 +47,7 @@ class Player {
     public obtainedXP: number;
     public stepLevelUp: number;
     public battler: Battler;
+    public statusRes: Record<string, number>[];
 
     constructor(kind?: CharacterKind, id?: number, instanceID?: number, skills?: 
         Record<string, any>[], status?: Record<string, any>[], name?: string, 
@@ -60,10 +61,10 @@ class Player {
             this.name = Utils.isUndefined(name) ? this.system.name() : name;
 
             // Skills
-            this.sk = [];
+            this.skills = [];
             let i: number, l: number;
             for (i = 0, l = skills.length; i < l; i++) {
-                this.sk[i] = new Skill(skills[i].id);
+                this.skills[i] = new Skill(skills[i].id);
             }
 
             // Equip
@@ -248,7 +249,7 @@ class Player {
             id: this.id,
             name: this.name,
             instid: this.instid,
-            sk: this.sk,
+            sk: this.skills,
             status: statusList,
             stats: this.getSaveStat(),
             equip: this.getSaveEquip()
@@ -306,7 +307,7 @@ class Player {
      */
     instanciate(level: number) {
         // Skills
-        this.sk = this.system.getSkills(level);
+        this.skills = this.system.getSkills(level);
 
         // Begin equipment
         let characteristics = this.system.getCharacteristics();
@@ -388,13 +389,16 @@ class Player {
      *  @returns {number[][]}
      */
     getEquipmentStatsAndBonus(item?: System.CommonSkillItem, equipmentID?: 
-        number): number[][]
+        number): [number[], number[], Record<string, any>]
     {
         let statistics = Datas.BattleSystems.statisticsOrder;
         let l = statistics.length;
         let list = new Array(l);
         let bonus = new Array(l);
         let added = new Array(l);
+        let res: Record<string, any> = {
+            statusRes: []
+        };
         let i: number;
         for (i = 1; i < l; i++) {
             list[i] = null;
@@ -404,8 +408,7 @@ class Player {
 
         // Equipment
         let j: number, m: number, characteristics: System.Characteristic[], 
-            characteristic: System.Characteristic, result: number[], statistic: 
-            System.Statistic, base: number;
+            statistic: System.Statistic;
         for (j = 1, m = this.equip.length; j < m; j++) {
             if (j === equipmentID) {
                 if (!item) {
@@ -419,24 +422,7 @@ class Player {
                 characteristics = this.equip[j].system.characteristics;
             }
             if (characteristics) {
-                for (i = 0, l = characteristics.length; i < l; i++) {
-                    characteristic = characteristics[i];
-                    result = characteristic.getNewStatValue(this);
-                    if (result !== null) {
-                        if (list[result[0]] === null) {
-                            statistic = Datas.BattleSystems.getStatistic(result[
-                                0]);
-                            base = this[statistic.getAbbreviationNext()] - this[
-                                statistic.getBonusAbbreviation()];
-                            list[result[0]] = characteristic.operation ? 0 : 
-                                base;
-                            bonus[result[0]] = characteristic.operation ? -base 
-                                : 0;
-                        }
-                        list[result[0]] += result[1];
-                        bonus[result[0]] += result[1];
-                    }
-                }
+                this.updateCharacteristics(characteristics, list, bonus, res);
             }
         }
 
@@ -444,12 +430,12 @@ class Player {
         for (j = 0, m = this.status.length; j < m; j++) {
             characteristics = this.status[j].system.characteristics;
             if (characteristics) {
-                this.updateCharacteristics(characteristics, list, bonus);
+                this.updateCharacteristics(characteristics, list, bonus, res);
             }
         }
 
         // Class and hero characteristics
-        this.updateCharacteristics(this.system.getCharacteristics(), list, bonus);
+        this.updateCharacteristics(this.system.getCharacteristics(), list, bonus, res);
 
         // Same values for not changed stats and added stats
         let id: number;
@@ -479,7 +465,7 @@ class Player {
                     statisticProgression.id), list[statisticProgression.id]);
             }
         }
-        return [list, bonus];
+        return [list, bonus, res];
     }
 
     /** 
@@ -489,23 +475,32 @@ class Player {
      *  @param {number[]} bonus - The bonus list
      */
     updateCharacteristics(characteristics: System.Characteristic[], list: 
-        number[], bonus: number[]) {
+        number[], bonus: number[], res: Record<string, any>) {
         let characteristic: System.Characteristic, statistic: System.Statistic, 
             base: number;
         for (let i = 0, l = characteristics.length; i < l; i++) {
             characteristic = characteristics[i];
-            let result = characteristic.getNewStatValue(this);
-            if (result !== null) {
-                if (list[result[0]] === null) {
-                    statistic = Datas.BattleSystems.getStatistic(result[
-                        0]);
-                    base = this[statistic.getAbbreviationNext()] - this[statistic
-                        .getBonusAbbreviation()];
-                    list[result[0]] = characteristic.operation ? 0 : base;
-                    bonus[result[0]] = characteristic.operation ? -base : 0;
+            if (characteristic.kind === Enum.CharacteristicKind.IncreaseDecrease) {
+                switch (characteristic.increaseDecreaseKind) {
+                    case Enum.IncreaseDecreaseKind.StatValue:
+                    case Enum.IncreaseDecreaseKind.ElementRes:
+                        let result = characteristic.getNewStatValue(this);
+                        if (result !== null) {
+                            if (list[result[0]] === null) {
+                                statistic = Datas.BattleSystems.getStatistic(result[0]);
+                                base = this[statistic.getAbbreviationNext()] - this[statistic
+                                    .getBonusAbbreviation()];
+                                list[result[0]] = characteristic.operation ? 0 : base;
+                                bonus[result[0]] = characteristic.operation ? -base : 0;
+                            }
+                            list[result[0]] += result[1];
+                            bonus[result[0]] += result[1];
+                        }
+                        break;
+                    default:
+                        characteristic.setIncreaseDecreaseValues(res);
+                        break;
                 }
-                list[result[0]] += result[1];
-                bonus[result[0]] += result[1];
             }
         }
     }
@@ -515,12 +510,12 @@ class Player {
      *  @param {number[]} list - The stats list
      *  @param {number[]} bonus - The bonus list
      */
-    updateEquipmentStats(list?: number[], bonus?: number[]) {
-        let result: number[][];
-        if (!list || !bonus) {
-            result = this.getEquipmentStatsAndBonus();
+    updateEquipmentStats(list?: number[], bonus?: number[], res?: Record<string, any>) {
+        if (!list || !bonus || !res) {
+            let result = this.getEquipmentStatsAndBonus();
             list = result[0];
             bonus = result[1];
+            res = result[2];
         }
         let statistics = Datas.BattleSystems.statisticsOrder;
         let statistic: System.Statistic, value: number;
@@ -541,6 +536,7 @@ class Player {
             }
             this[statistic.getBonusAbbreviation()] = bonus[id];
         }
+        this.statusRes = res.statusRes;
     }
 
     /**
@@ -616,6 +612,9 @@ class Player {
                     .getValueAtLevel(level, this));
             }
         }
+
+        // Update equipment stats + characteristics
+        this.statusRes = [];
         this.updateEquipmentStats();
     }
 
@@ -706,7 +705,7 @@ class Player {
             this.removeSkill(skill.id);
         }
 
-        this.sk = this.sk.concat(newSkills);
+        this.skills = this.skills.concat(newSkills);
     }
 
     /**
@@ -1030,7 +1029,7 @@ class Player {
      *  @returns {[number, number, number[][]]}
      */
     getBestWeaponArmorToReplace(weaponArmor: System.CommonSkillItem): [number, 
-        number, number[][]] {
+        number, [number[], number[], Record<string, any>]] {
         let equipments = weaponArmor.getType().equipments;
         let baseResult = this.getEquipmentStatsAndBonus();
         let baseBonus = 0;
@@ -1038,7 +1037,8 @@ class Player {
         for (id in baseResult[1]) {
             baseBonus += baseResult[1][id] === null ? 0 : baseResult[1][id];
         }
-        let totalBonus: number = 0, bestResult: number[][] = [], result: number[][],
+        let totalBonus: number = 0, bestResult: [number[], number[], Record<
+            string, any>], result: [number[], number[], Record<string, any>], 
             bestBonus: number, bestEquipmentID: number;
         for (let equipmentID = equipments.length - 1; equipmentID >= 1; equipmentID--) {
             if (equipments[equipmentID]) {
@@ -1062,9 +1062,9 @@ class Player {
      *  @param {number} id
      */
     addSkill(id: number) {
-        let index = Utils.indexOfProp(this.sk, "id", id);
+        let index = Utils.indexOfProp(this.skills, "id", id);
         if (index === -1) {
-            this.sk.push(new Skill(id));
+            this.skills.push(new Skill(id));
         }
     }
 
@@ -1073,9 +1073,9 @@ class Player {
      *  @param {number} id
      */
     removeSkill(id: number) {
-        let index = Utils.indexOfProp(this.sk, "id", id);
+        let index = Utils.indexOfProp(this.skills, "id", id);
         if (index !== -1) {
-            this.sk.splice(index, 1);
+            this.skills.splice(index, 1);
         }
     }
 }

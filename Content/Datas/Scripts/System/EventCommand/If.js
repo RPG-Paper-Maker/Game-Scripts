@@ -181,8 +181,8 @@ class If extends Base {
                     case 2:
                         id = this.heroesSkillID.getValue();
                         result = Player.applySelection(this.heroesSelection, heroesSelection, this.getHeroInstanceID(), (hero) => {
-                            for (i = 0, l = hero.sk.length; i < l; i++) {
-                                if (hero.sk[i].id === id) {
+                            for (i = 0, l = hero.skills.length; i < l; i++) {
+                                if (hero.skills[i].id === id) {
                                     return true;
                                 }
                             }

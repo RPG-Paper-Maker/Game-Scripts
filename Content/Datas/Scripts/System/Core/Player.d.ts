@@ -21,7 +21,7 @@ declare class Player {
     system: System.Hero;
     name: string;
     levelingUp: boolean;
-    sk: Skill[];
+    skills: Skill[];
     equip: Item[];
     status: Status[];
     expList: number[];
@@ -33,6 +33,7 @@ declare class Player {
     obtainedXP: number;
     stepLevelUp: number;
     battler: Battler;
+    statusRes: Record<string, number>[];
     constructor(kind?: CharacterKind, id?: number, instanceID?: number, skills?: Record<string, any>[], status?: Record<string, any>[], name?: string, json?: Record<string, any>);
     /**
      *  Get the max size of equipment kind names.
@@ -119,20 +120,20 @@ declare class Player {
      *  @param {number} equipmentID - The equipment ID
      *  @returns {number[][]}
      */
-    getEquipmentStatsAndBonus(item?: System.CommonSkillItem, equipmentID?: number): number[][];
+    getEquipmentStatsAndBonus(item?: System.CommonSkillItem, equipmentID?: number): [number[], number[], Record<string, any>];
     /**
      *  Update stats according to charactersitics.
      *  @param {number[]} characteristics - The characteristics list
      *  @param {number[]} list - The stats list
      *  @param {number[]} bonus - The bonus list
      */
-    updateCharacteristics(characteristics: System.Characteristic[], list: number[], bonus: number[]): void;
+    updateCharacteristics(characteristics: System.Characteristic[], list: number[], bonus: number[], res: Record<string, any>): void;
     /**
      *  Update stats with equipment stats
      *  @param {number[]} list - The stats list
      *  @param {number[]} bonus - The bonus list
      */
-    updateEquipmentStats(list?: number[], bonus?: number[]): void;
+    updateEquipmentStats(list?: number[], bonus?: number[], res?: Record<string, any>): void;
     /**
      *  Initialize stat value.
      *  @param {System.Statistic} statistic - The statistic
@@ -264,7 +265,7 @@ declare class Player {
      *  @param {System.CommonSkillItem}
      *  @returns {[number, number, number[][]]}
      */
-    getBestWeaponArmorToReplace(weaponArmor: System.CommonSkillItem): [number, number, number[][]];
+    getBestWeaponArmorToReplace(weaponArmor: System.CommonSkillItem): [number, number, [number[], number[], Record<string, any>]];
     /**
      *  Add a skill id if not existing yet.
      *  @param {number} id

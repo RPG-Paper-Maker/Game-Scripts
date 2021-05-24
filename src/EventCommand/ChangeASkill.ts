@@ -76,16 +76,16 @@ class ChangeASkill extends Base {
         let target: Player, index: number;
         for (let i = 0, l = targets.length; i < l; i++) {
             target = targets[i];
-            index = Utils.indexOfProp(target.sk, "id", skillID);
+            index = Utils.indexOfProp(target.skills, "id", skillID);
             switch (this.operation) {
                 case 0:
                     if (index === -1) {
-                        target.sk.push(new Skill(skillID));
+                        target.skills.push(new Skill(skillID));
                     }
                     break;
                 case 1:
                     if (index !== -1) {
-                        target.sk.splice(index, 1);
+                        target.skills.splice(index, 1);
                     }
                     break;
             }

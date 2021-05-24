@@ -234,7 +234,7 @@ class BattleSelection {
             .battle.user.lastCommandOffset;
         this.battle.skill = null;
         // Update skills list
-        let skills = this.battle.user.player.sk;
+        let skills = this.battle.user.player.skills;
         this.battle.listSkills = [];
         let ownedSkill, skill;
         for (let i = 0, l = skills.length; i < l; i++) {
