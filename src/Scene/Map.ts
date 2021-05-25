@@ -57,9 +57,10 @@ class Map extends Base {
     public maxObjectsID: number;
     public autotileFrame: Frame;
     public autotilesOffset: Vector2 = new Vector2();
+    public heroOrientation: Enum.Orientation;
 
     constructor(id: number, isBattleMap: boolean = false, minimal: boolean = 
-        false)
+        false, heroOrientation: Enum.Orientation = null)
     {
         super(false);
 
@@ -67,6 +68,7 @@ class Map extends Base {
         this.isBattleMap = isBattleMap;
         this.mapName = Scene.Map.generateMapName(id);
         this.loading = false;
+        this.heroOrientation = heroOrientation;
         if (!minimal) {
             this.loading = true;
             Utils.tryCatch(this.load, this);
@@ -307,6 +309,11 @@ class Map extends Base {
         // Hero initialize
         if (!this.isBattleMap) {
             Game.current.hero.changeState();
+            if (this.heroOrientation !== null) {
+                Game.current.hero.orientation = this.heroOrientation;
+                Game.current.hero.orientationEye = this.heroOrientation;
+                Game.current.hero.updateUVs();
+            }
 
             // Start music and background sound
             this.mapProperties.music.playMusic();

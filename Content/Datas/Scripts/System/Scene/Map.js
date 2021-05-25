@@ -23,13 +23,14 @@ import { Position, Portion, MapPortion, Camera, ReactionInterpreter, Vector3, Au
  *  loaded (only for getting objects infos)
 */
 class Map extends Base {
-    constructor(id, isBattleMap = false, minimal = false) {
+    constructor(id, isBattleMap = false, minimal = false, heroOrientation = null) {
         super(false);
         this.autotilesOffset = new Vector2();
         this.id = id;
         this.isBattleMap = isBattleMap;
         this.mapName = Scene.Map.generateMapName(id);
         this.loading = false;
+        this.heroOrientation = heroOrientation;
         if (!minimal) {
             this.loading = true;
             Utils.tryCatch(this.load, this);
@@ -253,6 +254,11 @@ class Map extends Base {
         // Hero initialize
         if (!this.isBattleMap) {
             Game.current.hero.changeState();
+            if (this.heroOrientation !== null) {
+                Game.current.hero.orientation = this.heroOrientation;
+                Game.current.hero.orientationEye = this.heroOrientation;
+                Game.current.hero.updateUVs();
+            }
             // Start music and background sound
             this.mapProperties.music.playMusic();
             this.mapProperties.backgroundSound.playMusic();

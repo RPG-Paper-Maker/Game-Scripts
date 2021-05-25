@@ -42,7 +42,8 @@ declare class Map extends Base {
     maxObjectsID: number;
     autotileFrame: Frame;
     autotilesOffset: Vector2;
-    constructor(id: number, isBattleMap?: boolean, minimal?: boolean);
+    heroOrientation: Enum.Orientation;
+    constructor(id: number, isBattleMap?: boolean, minimal?: boolean, heroOrientation?: Enum.Orientation);
     /**
      *  Load async stuff.
      */

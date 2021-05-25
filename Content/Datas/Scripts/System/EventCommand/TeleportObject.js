@@ -11,7 +11,7 @@
 import { Base } from "./Base.js";
 import { System, Datas, Manager, Scene } from "../index.js";
 import { MapObject, Position, ReactionInterpreter, Game, Frame } from "../Core/index.js";
-import { Constants, Platform, ScreenResolution, Utils } from "../Common/index.js";
+import { Constants, Mathf, Platform, ScreenResolution, Utils } from "../Common/index.js";
 /** @class
  *  An event command for teleporting an object.
  *  @extends EventCommand.Base
@@ -78,7 +78,9 @@ class TeleportObject extends Base {
             endColor: this.transitionEnd === 1 ? Datas.Systems.getColor(this
                 .transitionEndColor.getValue()) : null,
             transitionColorAlpha: 0,
+            distance: Scene.Map.current.camera.distance,
             transitioning: false,
+            endTransition: false,
             frame: new Frame(TeleportObject.TRANSITION_DURATION)
         };
     }
@@ -90,15 +92,27 @@ class TeleportObject extends Base {
      *  @returns {number} The number of node to pass
      */
     update(currentState, object, state) {
+        let coef;
         // Apply start transition
         if (!currentState.transitionedStart) {
-            if (currentState.transitionColorAlpha < 1) {
-                currentState.transitionColorAlpha = currentState.frame.update()
-                    ? 1 : currentState.frame.tick / TeleportObject
-                    .TRANSITION_DURATION;
+            coef = currentState.frame.update() ? 1 : currentState.frame.tick
+                / TeleportObject.TRANSITION_DURATION;
+            if (this.transitionStart === 1) {
+                if (currentState.transitionColorAlpha < 1) {
+                    currentState.transitionColorAlpha = coef;
+                }
             }
-            if (currentState.transitionColorAlpha !== 1) {
+            else if (this.transitionStart === 2) {
+                if (Scene.Map.current.camera.distance > 0) {
+                    Scene.Map.current.camera.distance = 1 + ((1 - coef) *
+                        (currentState.distance - 1));
+                }
+            }
+            if (coef < 1) {
                 return 0;
+            }
+            else {
+                currentState.transitionedStart = true;
             }
         }
         // Search object
@@ -127,13 +141,19 @@ class TeleportObject extends Base {
                         if (result.object.isHero) {
                             Game.current.hero.position = currentState
                                 .position;
+                            let direction = this.direction === 0 ? Game.current
+                                .hero.orientation : this.direction - 1;
                             if (Scene.Map.current.id !== id) {
-                                let map = new Scene.Map(id);
+                                let map = new Scene.Map(id, false, false, direction);
                                 map.reactionInterpreters.push(ReactionInterpreter.currentReaction);
                                 Manager.Stack.replace(map);
+                                currentState.distance = null;
                             }
                             else {
                                 await Scene.Map.current.loadPortions(true);
+                                Game.current.hero.orientationEye = Mathf.mod(direction + Scene.Map.current.camera
+                                    .getMapOrientation() - 2, 4);
+                                Game.current.hero.updateUVs();
                             }
                         }
                     }
@@ -147,19 +167,36 @@ class TeleportObject extends Base {
         if (currentState.teleported && !currentState.transitionedEnd) {
             if (!currentState.transitioning) {
                 currentState.frame.reset();
+                if (this.transitionEnd === 2 && currentState.distance !== null) {
+                    Scene.Map.current.camera.distance = 1;
+                }
             }
-            currentState.transitionedStart = true;
+            currentState.endTransition = true;
             currentState.transitioning = true;
-            if (currentState.transitionColorAlpha > 0) {
-                currentState.transitionColorAlpha = currentState.frame.update()
-                    ? 0 : (TeleportObject.TRANSITION_DURATION - currentState
-                    .frame.tick) / TeleportObject.TRANSITION_DURATION;
+            coef = currentState.frame.update() ? 1 : currentState.frame.tick /
+                TeleportObject.TRANSITION_DURATION;
+            if (this.transitionEnd === 1) {
+                if (currentState.transitionColorAlpha > 0) {
+                    currentState.transitionColorAlpha = 1 - coef;
+                }
             }
-            if (currentState.transitionColorAlpha === 0) {
-                currentState.transitionedEnd = true;
-                currentState.transitioning = false;
+            else if (this.transitionEnd === 2) {
+                if (currentState.distance === null) {
+                    if (Scene.Map.current.camera && Scene.Map.current.camera
+                        .system && !Utils.isUndefined(Scene.Map.current.camera
+                        .distance)) {
+                        currentState.distance = Scene.Map.current.camera.distance;
+                        Scene.Map.current.camera.distance = 1;
+                    }
+                    else {
+                        return 0;
+                    }
+                }
+                if (Scene.Map.current.camera.distance < currentState.distance) {
+                    Scene.Map.current.camera.distance = 1 + (coef * (currentState.distance - 1));
+                }
             }
-            else {
+            if (coef < 1) {
                 return 0;
             }
         }
@@ -170,7 +207,7 @@ class TeleportObject extends Base {
      *  @param {Record<string ,any>} - currentState The current state of the event
      */
     drawHUD(currentState) {
-        if (!currentState.transitionedStart) {
+        if (this.transitionStart === 1 && !currentState.endTransition) {
             Platform.ctx.fillStyle = Constants.STRING_RGBA + Constants
                 .STRING_PARENTHESIS_LEFT + currentState.startColor.red
                 + Constants.STRING_COMA + currentState.startColor.green
@@ -179,7 +216,8 @@ class TeleportObject extends Base {
                 Constants.STRING_PARENTHESIS_RIGHT;
             Platform.ctx.fillRect(0, 0, ScreenResolution.CANVAS_WIDTH, ScreenResolution.CANVAS_HEIGHT);
         }
-        if (currentState.transitioning && !currentState.transitionedEnd) {
+        if (this.transitionEnd === 1 && currentState.transitioning &&
+            !currentState.transitionedEnd) {
             Platform.ctx.fillStyle = Constants.STRING_RGBA + Constants
                 .STRING_PARENTHESIS_LEFT + currentState.endColor.red
                 + Constants.STRING_COMA + currentState.endColor.green
