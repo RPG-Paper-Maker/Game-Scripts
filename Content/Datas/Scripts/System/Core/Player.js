@@ -339,8 +339,7 @@ class Player {
             statusRes: [],
             experienceGain: [],
             currencyGain: [],
-            skillCostRes: [],
-            variableRes: []
+            skillCostRes: []
         };
         let i;
         for (i = 1; i < l; i++) {
@@ -436,6 +435,9 @@ class Player {
                         break;
                 }
             }
+            else if (characteristic.kind === Enum.CharacteristicKind.Script) {
+                characteristic.executeScript(this);
+            }
         }
     }
     /**
@@ -473,7 +475,6 @@ class Player {
         this.experienceGain = res.experienceGain;
         this.currencyGain = res.currencyGain;
         this.skillCostRes = res.skillCostRes;
-        this.variableRes = res.variableRes;
     }
     /**
      *  Initialize stat value.

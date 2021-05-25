@@ -210,6 +210,14 @@ class Characteristic extends Base {
     }
 
     /** 
+     *  Execute the characteristic script.
+     *  @param {Player} user
+     */
+    executeScript(user: Player) {
+        Interpreter.evaluate(this.script.getValue(), { user: user, addReturn: false});
+    }
+
+    /** 
      *  Get the string representation of the characteristic.
      *  @returns {string}
      */

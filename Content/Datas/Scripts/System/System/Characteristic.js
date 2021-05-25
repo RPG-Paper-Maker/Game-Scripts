@@ -132,6 +132,10 @@ class Characteristic extends Base {
                 return null;
         }
     }
+    /**
+     *  Set the increase decrease values for specific res.
+     *  @param {Record<string, any>} res
+     */
     setIncreaseDecreaseValues(res) {
         let propName;
         let id;
@@ -152,10 +156,6 @@ class Characteristic extends Base {
                 propName = "skillCostRes";
                 id = this.isAllSkillCost ? -1 : this.skillCostID.getValue();
                 break;
-            case Enum.IncreaseDecreaseKind.Variable:
-                propName = "variableRes";
-                id = this.variableID;
-                break;
         }
         if (!res[propName][id]) {
             res[propName][id] = {
@@ -171,6 +171,13 @@ class Characteristic extends Base {
         else { // + (addition)
             res[propName][id].addition += this.isIncreaseDecrease ? value : -value; // % / Fix
         }
+    }
+    /**
+     *  Execute the characteristic script.
+     *  @param {Player} user
+     */
+    executeScript(user) {
+        Interpreter.evaluate(this.script.getValue(), { user: user, addReturn: false });
     }
     /**
      *  Get the string representation of the characteristic.

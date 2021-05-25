@@ -45,7 +45,16 @@ declare class Characteristic extends Base {
      *  @returns {number[]}
      */
     getNewStatValue(gamePlayer: Player): number[];
+    /**
+     *  Set the increase decrease values for specific res.
+     *  @param {Record<string, any>} res
+     */
     setIncreaseDecreaseValues(res: Record<string, any>): void;
+    /**
+     *  Execute the characteristic script.
+     *  @param {Player} user
+     */
+    executeScript(user: Player): void;
     /**
      *  Get the string representation of the characteristic.
      *  @returns {string}

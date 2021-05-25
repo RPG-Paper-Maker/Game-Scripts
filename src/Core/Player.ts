@@ -507,6 +507,8 @@ class Player {
                         characteristic.setIncreaseDecreaseValues(res);
                         break;
                 }
+            } else if (characteristic.kind === Enum.CharacteristicKind.Script) {
+                characteristic.executeScript(this);
             }
         }
     }
