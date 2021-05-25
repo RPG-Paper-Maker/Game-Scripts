@@ -17,6 +17,10 @@ declare class Frame {
         frames?: number;
     });
     /**
+     *  Reset the frame.
+     */
+    reset(): void;
+    /**
      *  Update frame according to tick and duration, return true if frame is
      *  different.
      *  @param {number} [duration=this.duration] - The frame duration

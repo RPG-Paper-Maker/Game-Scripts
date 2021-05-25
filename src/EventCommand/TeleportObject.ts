@@ -11,7 +11,8 @@
 
 import { Base } from "./Base";
 import { System, Datas, Manager, Scene } from "../index";
-import { MapObject, Position, ReactionInterpreter, StructSearchResult, Game } from "../Core";
+import { MapObject, Position, ReactionInterpreter, StructSearchResult, Game, Frame } from "../Core";
+import { Constants, Platform, ScreenResolution, Utils } from "../Common";
 
 /** @class
  *  An event command for teleporting an object.
@@ -20,6 +21,8 @@ import { MapObject, Position, ReactionInterpreter, StructSearchResult, Game } fr
  */
 class TeleportObject extends Base {
 
+    public static TRANSITION_DURATION = 1000;
+
     public objectID: System.DynamicValue;
     public objectIDPosition: System.DynamicValue;
     public mapID: System.DynamicValue;
@@ -27,6 +30,11 @@ class TeleportObject extends Base {
     public y: System.DynamicValue;
     public yPlus: System.DynamicValue;
     public z: System.DynamicValue;
+    public direction: number;
+    public transitionStart: number;
+    public transitionStartColor: System.DynamicValue;
+    public transitionEnd: number;
+    public transitionEndColor: System.DynamicValue;
 
     constructor(command: any[]) {
         super();
@@ -69,8 +77,18 @@ class TeleportObject extends Base {
                 break;
         }
 
-        // Options
-        // TODO
+        // Transition
+        this.direction = command[iterator.i++];
+        this.transitionStart = command[iterator.i++];
+        if (Utils.numToBool(this.transitionStart)) {
+            this.transitionStartColor = System.DynamicValue.createValueCommand(
+                command, iterator);
+        }
+        this.transitionEnd = command[iterator.i++];
+        if (Utils.numToBool(this.transitionEnd)) {
+            this.transitionEndColor = System.DynamicValue.createValueCommand(
+                command, iterator);
+        }
 
         this.isDirectNode = false;
     }
@@ -84,7 +102,16 @@ class TeleportObject extends Base {
             position: null,
             waitingPosition: false,
             waitingObject: false,
-            teleported: false
+            teleported: false,
+            transitionedStart: this.transitionStart === 0,
+            transitionedEnd: this.transitionEnd === 0,
+            startColor: this.transitionStart === 1 ? Datas.Systems.getColor(this
+                .transitionStartColor.getValue()) : null,
+            endColor: this.transitionEnd === 1 ? Datas.Systems.getColor(this
+                .transitionEndColor.getValue()) : null,   
+            transitionColorAlpha: 0,
+            transitioning: false,
+            frame: new Frame(TeleportObject.TRANSITION_DURATION)
         }
     }
 
@@ -98,6 +125,18 @@ class TeleportObject extends Base {
     update(currentState: Record<string, any>, object: MapObject, state: number): 
         number
     {
+        // Apply start transition
+        if (!currentState.transitionedStart) {
+            if (currentState.transitionColorAlpha < 1) {
+                currentState.transitionColorAlpha = currentState.frame.update() 
+                    ? 1 : currentState.frame.tick / TeleportObject
+                    .TRANSITION_DURATION;
+            }
+            if (currentState.transitionColorAlpha !== 1) {
+                return 0;
+            }
+        }
+        // Search object
         if (!currentState.waitingObject) {
             let objectID = this.objectID.getValue();
             if (!currentState.waitingPosition) {
@@ -140,7 +179,53 @@ class TeleportObject extends Base {
                 currentState.waitingObject = true;
             }
         }
+        // Apply end transition
+        if (currentState.teleported && !currentState.transitionedEnd) {
+            if (!currentState.transitioning) {
+                currentState.frame.reset();
+            }
+            currentState.transitionedStart = true;
+            currentState.transitioning = true;
+            if (currentState.transitionColorAlpha > 0) {
+                currentState.transitionColorAlpha = currentState.frame.update() 
+                    ? 0 : (TeleportObject.TRANSITION_DURATION - currentState
+                    .frame.tick) / TeleportObject.TRANSITION_DURATION;
+            }
+            if (currentState.transitionColorAlpha === 0) {
+                currentState.transitionedEnd = true;
+                currentState.transitioning = false;
+            } else {
+                return 0;
+            }
+        }
         return currentState.teleported ? 1 : 0;
+    }
+
+    /** 
+     *  Draw the HUD
+     *  @param {Record<string ,any>} - currentState The current state of the event
+     */
+    drawHUD(currentState?: Record<string ,any>) {
+        if (!currentState.transitionedStart) {
+            Platform.ctx.fillStyle = Constants.STRING_RGBA + Constants
+            .STRING_PARENTHESIS_LEFT + currentState.startColor.red 
+            + Constants.STRING_COMA + currentState.startColor.green
+            + Constants.STRING_COMA + currentState.startColor.blue 
+            + Constants.STRING_COMA + currentState.transitionColorAlpha + 
+            Constants.STRING_PARENTHESIS_RIGHT;
+            Platform.ctx.fillRect(0, 0, ScreenResolution.CANVAS_WIDTH, 
+                ScreenResolution.CANVAS_HEIGHT);
+        }
+        if (currentState.transitioning && !currentState.transitionedEnd) {
+            Platform.ctx.fillStyle = Constants.STRING_RGBA + Constants
+            .STRING_PARENTHESIS_LEFT + currentState.endColor.red 
+            + Constants.STRING_COMA + currentState.endColor.green
+            + Constants.STRING_COMA + currentState.endColor.blue 
+            + Constants.STRING_COMA + currentState.transitionColorAlpha + 
+            Constants.STRING_PARENTHESIS_RIGHT;
+            Platform.ctx.fillRect(0, 0, ScreenResolution.CANVAS_WIDTH, 
+                ScreenResolution.CANVAS_HEIGHT);
+        }
     }
 }
 
