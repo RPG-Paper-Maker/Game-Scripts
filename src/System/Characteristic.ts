@@ -169,6 +169,10 @@ class Characteristic extends Base {
         }
     }
 
+    /** 
+     *  Set the increase decrease values for specific res.
+     *  @param {Record<string, any>} res
+     */
     setIncreaseDecreaseValues(res: Record<string, any>) {
         let propName: string;
         let id: number;
@@ -188,10 +192,6 @@ class Characteristic extends Base {
             case Enum.IncreaseDecreaseKind.SkillCost:
                 propName = "skillCostRes";
                 id = this.isAllSkillCost ? -1 : this.skillCostID.getValue();
-                break;
-            case Enum.IncreaseDecreaseKind.Variable:
-                propName = "variableRes";
-                id = this.variableID;
                 break;
         }
         if (!res[propName][id]) {
@@ -261,7 +261,7 @@ class Characteristic extends Base {
                 if (this.operation) {
                     result += "x";
                     if (sign === -1) {
-                        result += "-";
+                        result += "/";
                     }
                 } else {
                     if (sign === 1) {

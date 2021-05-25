@@ -1,6 +1,6 @@
 import { Base } from "./Base.js";
-import { DynamicValue } from "./DynamicValue.js";
 import { System } from "../index.js";
+import { Player } from "../Core/index.js";
 import { StructIterator } from "../EventCommand/index.js";
 /** @class
  *  A cost of a common skill item.
@@ -10,10 +10,11 @@ import { StructIterator } from "../EventCommand/index.js";
  */
 declare class Cost extends Base {
     kind: number;
-    statisticID: DynamicValue;
-    currencyID: DynamicValue;
+    statisticID: System.DynamicValue;
+    currencyID: System.DynamicValue;
     variableID: number;
-    valueFormula: DynamicValue;
+    valueFormula: System.DynamicValue;
+    skillItem: System.CommonSkillItem;
     constructor(json?: Record<string, any>);
     /**
      *  Get the price for several costs.
@@ -30,6 +31,10 @@ declare class Cost extends Base {
      *  @param {StructIterator} iterator
      */
     parse(command: any[], iterator: StructIterator): void;
+    /**
+     *  Get value according to user characteristics.
+     */
+    getValue(user: Player, target: Player): number;
     /**
      *  Use the cost.
      */

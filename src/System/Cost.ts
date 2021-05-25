@@ -26,10 +26,11 @@ import { StructIterator } from "../EventCommand";
 class Cost extends Base {
 
     public kind: number;
-    public statisticID: DynamicValue;
-    public currencyID: DynamicValue;
+    public statisticID: System.DynamicValue;
+    public currencyID: System.DynamicValue;
     public variableID: number;
-    public valueFormula: DynamicValue;
+    public valueFormula: System.DynamicValue;
+    public skillItem: System.CommonSkillItem;
 
     constructor(json?: Record<string, any>) {
         super(json);
@@ -91,14 +92,35 @@ class Cost extends Base {
     }
 
     /** 
+     *  Get value according to user characteristics.
+     */
+    getValue(user: Player, target: Player) {
+        let value = Interpreter.evaluate(this.valueFormula.getValue(), { user: 
+            user, target: target });
+        let baseValue = value;
+        if (user.skillCostRes[-1]) {
+            value *= user.skillCostRes[-1].multiplication;
+        }
+        if (user.skillCostRes[this.skillItem.id]) {
+            value *= user.skillCostRes[this.skillItem.id].multiplication;
+        }
+        if (user.skillCostRes[-1]) {
+            value += baseValue * user.skillCostRes[-1].addition /100;
+        }
+        if (user.skillCostRes[this.skillItem.id]) {
+            value += baseValue * user.skillCostRes[this.skillItem.id].multiplication / 100;
+        }
+        return Math.round(value);
+    }
+
+    /** 
      *  Use the cost.
      */
     use() {
         let user = Scene.Map.current.user ? Scene.Map.current.user.player : 
             Player.getTemporaryPlayer();
         let target = Player.getTemporaryPlayer();
-        let value = Interpreter.evaluate(this.valueFormula.getValue(), { user: 
-            user, target: target });
+        let value = this.getValue(user, target);
         switch (this.kind) {
             case DamagesKind.Stat:
                 user[Datas.BattleSystems.getStatistic(this.statisticID
@@ -122,8 +144,7 @@ class Cost extends Base {
         let user = Scene.Map.current.user ? Scene.Map.current.user
             .player : Player.getTemporaryPlayer();
         let target = Player.getTemporaryPlayer();
-        let value = Interpreter.evaluate(this.valueFormula.getValue(), { user: 
-            user, target: target });
+        let value = this.getValue(user, target);
         let currentValue: number;
         switch (this.kind) {
             case DamagesKind.Stat:
@@ -149,8 +170,7 @@ class Cost extends Base {
         let user = Scene.Map.current.user ? Scene.Map.current.user
             .player : Player.getTemporaryPlayer();
         let target = Player.getTemporaryPlayer();
-        let result = Interpreter.evaluate(this.valueFormula.getValue(), { user: 
-            user, target: target }) + " ";
+        let result = this.getValue(user, target) + " ";
         switch (this.kind) {
             case DamagesKind.Stat:
                 result += Datas.BattleSystems.getStatistic(this.statisticID

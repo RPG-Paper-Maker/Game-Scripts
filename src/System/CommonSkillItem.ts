@@ -80,6 +80,9 @@ class CommonSkillItem extends Icon {
         this.costs = [];
         Utils.readJSONSystemList({ list: Utils.defaultValue(json.cos, []), 
             listIndexes: this.costs, cons: Cost });
+        for (let cost of this.costs) {
+            cost.skillItem = this;
+        }
         this.effects = [];
         Utils.readJSONSystemList({ list: Utils.defaultValue(json.e, []), 
             listIndexes: this.effects, cons: Effect });

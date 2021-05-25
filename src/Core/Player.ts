@@ -51,7 +51,6 @@ class Player {
     public experienceGain: Record<string, number>[];
     public currencyGain: Record<string, number>[];
     public skillCostRes: Record<string, number>[];
-    public variableRes: Record<string, number>[];
 
     constructor(kind?: CharacterKind, id?: number, instanceID?: number, skills?: 
         Record<string, any>[], status?: Record<string, any>[], name?: string, 
@@ -404,8 +403,7 @@ class Player {
             statusRes: [],
             experienceGain: [],
             currencyGain: [],
-            skillCostRes: [],
-            variableRes: []
+            skillCostRes: []
         };
         let i: number;
         for (i = 1; i < l; i++) {
@@ -548,7 +546,6 @@ class Player {
         this.experienceGain = res.experienceGain;
         this.currencyGain = res.currencyGain;
         this.skillCostRes = res.skillCostRes;
-        this.variableRes = res.variableRes;
     }
 
     /**

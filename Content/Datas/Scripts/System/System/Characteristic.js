@@ -224,7 +224,7 @@ class Characteristic extends Base {
                 if (this.operation) {
                     result += "x";
                     if (sign === -1) {
-                        result += "-";
+                        result += "/";
                     }
                 }
                 else {
