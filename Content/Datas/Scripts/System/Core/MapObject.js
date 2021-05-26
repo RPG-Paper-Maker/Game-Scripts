@@ -1141,7 +1141,6 @@ class MapObject {
                     h = this.height * Datas.Systems.SQUARE_SIZE / textureHeight;
                     x = (this.frame.value >= Datas.Systems.FRAMES ? Datas
                         .Systems.FRAMES - 1 : this.frame.value) * w;
-                    console.log(this.orientation);
                     y = (this.orientation + (this.currentOrientationStop || (this.currentStateInstance.stopAnimation && !this.moving)
                         ? 4 : 0)) * h;
                 }

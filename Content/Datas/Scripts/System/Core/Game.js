@@ -347,8 +347,9 @@ class Game {
     initializeVariables() {
         this.variables = new Array(Datas.Variables.variablesNumbers);
         for (let i = 0; i < Datas.Variables.variablesNumbers; i++) {
-            this.variables[i] = null;
+            this.variables[i] = 0;
         }
+        console.log(this.variables);
     }
     /**
      *  Instanciate a new character in a group in the game.

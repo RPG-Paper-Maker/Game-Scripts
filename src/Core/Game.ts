@@ -396,7 +396,7 @@ class Game {
     initializeVariables() {
         this.variables = new Array(Datas.Variables.variablesNumbers);
         for (let i = 0; i < Datas.Variables.variablesNumbers; i++) {
-            this.variables[i] = null;
+            this.variables[i] = 0;
         }
     }
 
