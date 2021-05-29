@@ -64,15 +64,22 @@ export class Main {
         await Datas.CommonEvents.read();
         await Datas.Systems.getModelHero();
         await Datas.Systems.loadWindowSkins();
-        Main.onEndLoading();
+        await Main.onEndLoading();
     }
     /**
      * exporting function for let control to the user when the loading ended
      *
      * @export
      */
-    static onEndLoading() {
-        Manager.Stack.pushTitleScreen();
+    static async onEndLoading() {
+        switch (Platform.MODE_TEST) {
+            case "battleTroop":
+                await Manager.Stack.pushBattleTest();
+                break;
+            default:
+                Manager.Stack.pushTitleScreen();
+                break;
+        }
         Main.loaded = true;
         Manager.Stack.requestPaintHUD = true;
     }

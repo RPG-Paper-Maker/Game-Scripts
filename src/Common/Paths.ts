@@ -21,6 +21,7 @@ class Paths {
     public static readonly ROOT_DIRECTORY_LOCAL = "."
     public static readonly FILES = "file:///";
     public static readonly DATAS = Platform.ROOT_DIRECTORY + "/Content/Datas/";
+    public static readonly TEST = Platform.ROOT_DIRECTORY + "/Test/";
     public static readonly FILE_MAPS = Paths.DATAS + "Maps/";
     public static readonly FILE_MAP_INFOS = "/infos.json";
     public static readonly FILE_MAP_OBJECTS = "/objects.json";
@@ -52,6 +53,7 @@ class Paths {
     public static readonly FILE_SCRIPTS = Paths.DATAS + "scripts.json";
     public static readonly FILE_LANGS = Paths.DATAS + "langs.json";
     public static readonly FILE_PROTECT = Platform.ROOT_DIRECTORY + "/.protect";
+    public static readonly FILE_TEST = Paths.TEST + "/test.json";
     public static readonly FILE_PLUGIN_CODE = "code.js";
     public static readonly FILE_PLUGIN_DETAILS = "details.json";
     public static readonly PICTURES = "/Content/Images";

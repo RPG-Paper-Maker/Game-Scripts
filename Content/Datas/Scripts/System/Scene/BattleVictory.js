@@ -268,6 +268,9 @@ class BattleVictory {
                     else {
                         this.battle.gameOver();
                     }
+                    if (Platform.MODE_TEST === "battleTroop") {
+                        Platform.quit();
+                    }
                 }
                 // Transition zoom
                 if (this.battle.transitionEnd === 2) {

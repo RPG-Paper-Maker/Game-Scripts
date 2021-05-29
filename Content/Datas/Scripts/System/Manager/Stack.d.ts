@@ -62,6 +62,10 @@ declare class Stack {
      */
     static pushTitleScreen(): Scene.TitleScreen;
     /**
+     *  Push a battle scene for testing troop.
+     */
+    static pushBattleTest(): Promise<void>;
+    /**
      *  Clear the HUD canvas.
      */
     static clearHUD(): void;

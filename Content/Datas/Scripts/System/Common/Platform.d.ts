@@ -9,6 +9,7 @@ declare class Platform {
     static readonly screenWidth: number;
     static readonly screenHeight: number;
     static readonly DESKTOP: boolean;
+    static readonly MODE_TEST: any;
     static canvas3D: any;
     static canvasHUD: HTMLCanvasElement;
     static canvasVideos: HTMLVideoElement;

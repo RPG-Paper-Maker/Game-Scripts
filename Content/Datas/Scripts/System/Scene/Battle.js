@@ -55,7 +55,9 @@ class Battle extends Map {
         this.indexTroopReaction = 0;
         this.interpreterTroopReaction = null;
         this.sceneMap = Manager.Stack.top;
-        this.mapCameraDistance = this.sceneMap.camera.distance;
+        if (this.sceneMap) {
+            this.mapCameraDistance = this.sceneMap.camera.distance;
+        }
         this.actionDoNothing = new System.MonsterAction({});
         this.skill = null;
     }

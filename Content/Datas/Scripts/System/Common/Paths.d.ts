@@ -7,6 +7,7 @@ declare class Paths {
     static readonly ROOT_DIRECTORY_LOCAL = ".";
     static readonly FILES = "file:///";
     static readonly DATAS: string;
+    static readonly TEST: string;
     static readonly FILE_MAPS: string;
     static readonly FILE_MAP_INFOS = "/infos.json";
     static readonly FILE_MAP_OBJECTS = "/objects.json";
@@ -38,6 +39,7 @@ declare class Paths {
     static readonly FILE_SCRIPTS: string;
     static readonly FILE_LANGS: string;
     static readonly FILE_PROTECT: string;
+    static readonly FILE_TEST: string;
     static readonly FILE_PLUGIN_CODE = "code.js";
     static readonly FILE_PLUGIN_DETAILS = "details.json";
     static readonly PICTURES = "/Content/Images";

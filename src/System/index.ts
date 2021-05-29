@@ -34,6 +34,8 @@ export * from "./Element";
 export * from "./Event";
 export * from "./FontName";
 export * from "./Hero";
+export * from "./HeroTroopBattleTest";
+export * from "./HeroTroopBattleTestEquipment";
 export * from "./Icon";
 export * from "./InventoryFilter";
 export * from "./Item";

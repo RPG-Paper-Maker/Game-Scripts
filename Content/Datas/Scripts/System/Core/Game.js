@@ -349,7 +349,6 @@ class Game {
         for (let i = 0; i < Datas.Variables.variablesNumbers; i++) {
             this.variables[i] = 0;
         }
-        console.log(this.variables);
     }
     /**
      *  Instanciate a new character in a group in the game.
@@ -359,6 +358,7 @@ class Game {
      *  @param {number} level - The player level
      *  @param {number} stockID - The ID of the variable where we will stock the
      *  instantiate ID
+     *  @returns {Player}
      */
     instanciateTeam(groupKind, type, id, level, stockID) {
         // Stock the instanciation id in a variable
@@ -367,6 +367,7 @@ class Game {
         let player = new Player(type, id, this.charactersInstances++, [], []);
         player.instanciate(level);
         this.getTeam(groupKind).push(player);
+        return player;
     }
     /**
      *  Get the teams list in a list.

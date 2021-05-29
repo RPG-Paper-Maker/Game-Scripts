@@ -20,7 +20,7 @@ export declare class Main {
      *
      * @export
      */
-    static onEndLoading(): void;
+    static onEndLoading(): Promise<void>;
     /**
      *  Main loop of the game.
      */

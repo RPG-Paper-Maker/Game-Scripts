@@ -8,9 +8,9 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Scene, Manager } from "../index.js";
-import { Utils, Platform, ScreenResolution, KeyEvent } from "../Common/index.js";
-import { Game } from "../Core/index.js";
+import { Scene, Manager, Common, System, Datas } from "../index.js";
+import { Utils, Platform, ScreenResolution, KeyEvent, Paths, Enum } from "../Common/index.js";
+import { Game, MapObject } from "../Core/index.js";
 /** @class
  *  The game stack that is organizing the game scenes.
  *  @static
@@ -100,6 +100,29 @@ class Stack {
         let scene = new Scene.TitleScreen();
         this.push(scene);
         return scene;
+    }
+    /**
+     *  Push a battle scene for testing troop.
+     */
+    static async pushBattleTest() {
+        let json = await Common.IO.parseFileJSON(Paths.FILE_TEST);
+        let troopID = json.troopID;
+        let battleMap = Datas.BattleSystems.getBattleMap(json
+            .battleTroopTestBattleMapID);
+        let heroes = [];
+        Utils.readJSONSystemList({ list: json.battleTroopTestHeroes, listIndexes: heroes, cons: System.HeroTroopBattleTest });
+        Game.current = new Game();
+        Game.current.initializeDefault();
+        Game.current.heroBattle = new MapObject(Game.current.hero.system, battleMap.position.toVector3(), true);
+        let player;
+        Game.current.teamHeroes = [];
+        for (let hero of heroes) {
+            player = Game.current.instanciateTeam(Enum.GroupKind.Team, Enum
+                .CharacterKind.Hero, hero.heroID, hero.level, 1);
+            hero.equip(player);
+        }
+        let scene = new Scene.Battle(troopID, true, true, battleMap, 0, 0, null, null);
+        this.push(scene);
     }
     /**
      *  Clear the HUD canvas.

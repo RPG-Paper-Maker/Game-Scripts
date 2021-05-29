@@ -35,6 +35,8 @@ class Platform {
 
     public static readonly DESKTOP: boolean = true;
 
+    public static readonly MODE_TEST = remote.getGlobal('modeTest');
+
     public static canvas3D: any = document.getElementById('three-d');
     public static canvasHUD: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById('hud');
     public static canvasVideos: HTMLVideoElement = <HTMLVideoElement> document.getElementById('video-container');

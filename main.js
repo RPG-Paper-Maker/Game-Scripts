@@ -11,10 +11,11 @@
 
 const { app, BrowserWindow, globalShortcut, dialog } = require('electron')
 
+global.modeTest = app.commandLine.getSwitchValue("modeTest");
 let ipc = require('electron').ipcMain;
 let window;
 
-function createWindow () {    
+function createWindow () {
     window = new BrowserWindow({
         title: "",
         width: 640,

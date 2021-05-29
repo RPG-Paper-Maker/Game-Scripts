@@ -55,6 +55,7 @@ Platform.screen = ElectronScreen.getPrimaryDisplay();
 Platform.screenWidth = Platform.screen.bounds.width;
 Platform.screenHeight = Platform.screen.bounds.height;
 Platform.DESKTOP = true;
+Platform.MODE_TEST = remote.getGlobal('modeTest');
 Platform.canvas3D = document.getElementById('three-d');
 Platform.canvasHUD = document.getElementById('hud');
 Platform.canvasVideos = document.getElementById('video-container');

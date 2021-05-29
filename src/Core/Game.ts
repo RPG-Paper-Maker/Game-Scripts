@@ -408,9 +408,10 @@ class Game {
      *  @param {number} level - The player level
      *  @param {number} stockID - The ID of the variable where we will stock the
      *  instantiate ID
+     *  @returns {Player}
      */
     instanciateTeam(groupKind: GroupKind, type: CharacterKind, id: number, level
-        : number, stockID: number)
+        : number, stockID: number): Player
     {
         // Stock the instanciation id in a variable
         this.variables[stockID] = this.charactersInstances;
@@ -419,6 +420,7 @@ class Game {
         let player = new Player(type, id, this.charactersInstances++, [], []);
         player.instanciate(level);
         this.getTeam(groupKind).push(player);
+        return player;
     }
 
     /** 

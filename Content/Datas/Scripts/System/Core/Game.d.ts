@@ -79,8 +79,9 @@ declare class Game {
      *  @param {number} level - The player level
      *  @param {number} stockID - The ID of the variable where we will stock the
      *  instantiate ID
+     *  @returns {Player}
      */
-    instanciateTeam(groupKind: GroupKind, type: CharacterKind, id: number, level: number, stockID: number): void;
+    instanciateTeam(groupKind: GroupKind, type: CharacterKind, id: number, level: number, stockID: number): Player;
     /**
      *  Get the teams list in a list.
      *  @returns {Player[][]}

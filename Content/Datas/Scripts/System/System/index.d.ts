@@ -23,6 +23,8 @@ export * from "./Element.js";
 export * from "./Event.js";
 export * from "./FontName.js";
 export * from "./Hero.js";
+export * from "./HeroTroopBattleTest.js";
+export * from "./HeroTroopBattleTestEquipment.js";
 export * from "./Icon.js";
 export * from "./InventoryFilter.js";
 export * from "./Item.js";

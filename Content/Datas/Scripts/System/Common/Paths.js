@@ -22,6 +22,7 @@ class Paths {
 Paths.ROOT_DIRECTORY_LOCAL = ".";
 Paths.FILES = "file:///";
 Paths.DATAS = Platform.ROOT_DIRECTORY + "/Content/Datas/";
+Paths.TEST = Platform.ROOT_DIRECTORY + "/Test/";
 Paths.FILE_MAPS = Paths.DATAS + "Maps/";
 Paths.FILE_MAP_INFOS = "/infos.json";
 Paths.FILE_MAP_OBJECTS = "/objects.json";
@@ -53,6 +54,7 @@ Paths.FILE_STATUS = Paths.DATAS + "status.json";
 Paths.FILE_SCRIPTS = Paths.DATAS + "scripts.json";
 Paths.FILE_LANGS = Paths.DATAS + "langs.json";
 Paths.FILE_PROTECT = Platform.ROOT_DIRECTORY + "/.protect";
+Paths.FILE_TEST = Paths.TEST + "/test.json";
 Paths.FILE_PLUGIN_CODE = "code.js";
 Paths.FILE_PLUGIN_DETAILS = "details.json";
 Paths.PICTURES = "/Content/Images";
