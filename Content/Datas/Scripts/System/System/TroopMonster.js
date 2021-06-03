@@ -12,26 +12,26 @@ import { System } from "../index.js";
 import { Utils } from "../Common/index.js";
 import { Base } from "./Base.js";
 /** @class
- *  A troop of the game.
+ *  A troop monster.
  *  @extends System.Base
  *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  troop
+ *  troop monster
  */
-class Troop extends Base {
+class TroopMonster extends Base {
     constructor(json) {
         super(json);
     }
     /**
-     *  Read the JSON associated to the troop.
+     *  Read the JSON associated to the troop monster.
      *  @param {Record<string, any>} - json Json object describing the troop
+     *  monster
      */
     read(json) {
-        this.list = [];
-        Utils.readJSONSystemList({ list: Utils.defaultValue(json.l, []),
-            listIndexes: this.list, cons: System.TroopMonster });
-        this.reactions = [];
-        Utils.readJSONSystemList({ list: Utils.defaultValue(json.reactions, []),
-            listIndexes: this.reactions, cons: System.TroopReaction });
+        this.id = json.id;
+        this.level = json.l;
+        this.isSpecificPosition = Utils.defaultValue(json.isSpecificPosition, false);
+        this.specificPosition = System.DynamicValue.readOrDefaultMessage(json
+            .specificPosition, "new Core.Vector3(0,0,0)");
     }
 }
-export { Troop };
+export { TroopMonster };

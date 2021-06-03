@@ -22,6 +22,10 @@ declare class BattleSystems {
     static idExpStatistic: number;
     static formulaIsDead: System.DynamicValue;
     static formulaCrit: System.DynamicValue;
+    static heroesBattlersCenterOffset: System.DynamicValue;
+    static heroesBattlersOffset: System.DynamicValue;
+    static troopsBattlersCenterOffset: System.DynamicValue;
+    static troopsBattlersOffset: System.DynamicValue;
     static battleMusic: System.PlaySong;
     static battleLevelUp: System.PlaySong;
     static battleVictory: System.PlaySong;

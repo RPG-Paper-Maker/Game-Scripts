@@ -10,15 +10,14 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Scene, Graphic, Manager, Datas, System } from "..";
-import { Enum, Constants, ScreenResolution, Platform } from "../Common";
+import { Scene, Graphic, Manager, Datas, System, Core } from "..";
+import { Enum, Constants, ScreenResolution, Platform, Interpreter } from "../Common";
 import CharacterKind = Enum.CharacterKind;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 import SongKind = Enum.SongKind;
 import MapTransitionKind = Enum.MapTransitionKind;
 import BattleStep = Enum.BattleStep;
 import { Vector3, Player, Battler, Position, WindowBox, WindowChoices, Game } from "../Core";
-import { StructTroopElement } from "../System";
 
 // -------------------------------------------------------
 //
@@ -69,14 +68,25 @@ class BattleInitialize {
         this.battle.battlers[CharacterKind.Hero] = new Array(l);
         this.battle.players[CharacterKind.Hero] = new Array(l);
         this.battle.graphicPlayers[CharacterKind.Hero] = new Array(l);
-        let position: Vector3, player: Player, battler: Battler;
+        let position: Vector3, player: Player, battler: Battler, center: Vector3, 
+            offset: Vector3;
         for (let i = 0; i < l; i++) {
             // Battlers
-            position = new Vector3(Game.current.heroBattle.position.x + (2
-                * Datas.Systems.SQUARE_SIZE) + (i * Datas.Systems.SQUARE_SIZE / 
-                2), Game.current.heroBattle.position.y, Game.current
-                .heroBattle.position.z - Datas.Systems.SQUARE_SIZE + (i * Datas
-                .Systems.SQUARE_SIZE));
+            center = Interpreter.evaluate(Datas.BattleSystems.heroesBattlersCenterOffset
+                .getValue());
+            if (!(center instanceof Core.Vector3)) {
+                Platform.showErrorMessage("Heroes battlers center offset incorrect return: " + center);
+            }
+            offset = Interpreter.evaluate(Datas.BattleSystems.heroesBattlersOffset
+                .getValue(), { additionalName: "i", additionalValue: i });
+            if (!(offset instanceof Core.Vector3)) {
+                Platform.showErrorMessage("Heroes battlers offset incorrect return: " + center);
+            }
+            position = Game.current.heroBattle.position.clone().add(center).add(offset);
+            console.log(Game.current.heroBattle.position);
+            console.log(center);
+            console.log(offset);
+            console.log(position);
             player = Game.current.teamHeroes[i];
             battler = new Battler(player, Position.createFromVector3(position),
                 position, this.battle.camera);
@@ -100,19 +110,34 @@ class BattleInitialize {
         this.battle.battlers[CharacterKind.Monster] = new Array(l);
         this.battle.players[CharacterKind.Monster] = new Array(l);
         this.battle.graphicPlayers[CharacterKind.Monster] = new Array(l);
-        let troopElement: StructTroopElement, position: Vector3, player: Player,
-            battler: Battler;
+        let troopMonster: System.TroopMonster, position: Vector3, player: Player,
+            battler: Battler, center: Vector3, offset: Vector3;
         for (let i = 0; i < l; i++) {
             // Battlers
-            troopElement = this.battle.troop.list[i];
-            position = new Vector3(Game.current.heroBattle.position.x - (2
-                * Datas.Systems.SQUARE_SIZE) - (i * Datas.Systems.SQUARE_SIZE * 
-                3 / 4), Game.current.heroBattle.position.y, Game.current
-                .heroBattle.position.z - Datas.Systems.SQUARE_SIZE + (i * Datas
-                    .Systems.SQUARE_SIZE));
-            player = new Player(CharacterKind.Monster, troopElement.id, Game
+            troopMonster = this.battle.troop.list[i];
+            if (troopMonster.isSpecificPosition) {
+                center = Interpreter.evaluate(troopMonster.specificPosition
+                    .getValue());
+                if (!(center instanceof Core.Vector3)) {
+                    Platform.showErrorMessage("Specific position return: " + center);
+                }
+                offset = new Vector3();
+            } else {
+                center = Interpreter.evaluate(Datas.BattleSystems.troopsBattlersCenterOffset
+                    .getValue());
+                if (!(center instanceof Core.Vector3)) {
+                    Platform.showErrorMessage("Troops battlers center offset incorrect return: " + center);
+                }
+                offset = Interpreter.evaluate(Datas.BattleSystems.troopsBattlersOffset
+                    .getValue(), { additionalName: "i", additionalValue: i });
+                if (!(offset instanceof Core.Vector3)) {
+                    Platform.showErrorMessage("Troops battlers offset incorrect return: " + center);
+                }
+            }
+            position = Game.current.heroBattle.position.clone().add(center).add(offset);
+            player = new Player(CharacterKind.Monster, troopMonster.id, Game
                 .current.charactersInstances++, [], []);
-            player.instanciate(troopElement.level);
+            player.instanciate(troopMonster.level);
             battler = new Battler(player, Position.createFromVector3(position), 
                 position, this.battle.camera);
             player.battler = battler;

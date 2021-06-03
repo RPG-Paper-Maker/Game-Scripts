@@ -13,11 +13,6 @@ import { System } from "..";
 import { Utils } from "../Common";
 import { Base } from "./Base";
 
-interface StructTroopElement {
-    id: number,
-    level: number
-}
-
 /** @class
  *  A troop of the game.
  *  @extends System.Base
@@ -26,7 +21,7 @@ interface StructTroopElement {
  */
 class Troop extends Base {
 
-    public list: StructTroopElement[];
+    public list: System.TroopMonster[];
     public reactions: System.TroopReaction[];
 
     constructor(json?: Record<string, any>) {
@@ -38,21 +33,13 @@ class Troop extends Base {
      *  @param {Record<string, any>} - json Json object describing the troop
      */
     read(json: Record<string, any>) {
-        let jsonList = Utils.defaultValue(json.l, []);
-        let l = jsonList.length;
-        this.list = new Array(l);
-        let jsonElement: Record<string, any>;
-        for (let i = 0; i < l; i++) {
-            jsonElement = jsonList[i];
-            this.list[i] = {
-                id: jsonElement.id,
-                level: jsonElement.l
-            };
-        }
+        this.list = [];
+        Utils.readJSONSystemList({ list: Utils.defaultValue(json.l, []), 
+            listIndexes: this.list, cons: System.TroopMonster });
         this.reactions = [];
         Utils.readJSONSystemList({ list: Utils.defaultValue(json.reactions, []), 
             listIndexes: this.reactions, cons: System.TroopReaction });
     }
 }
 
-export { StructTroopElement, Troop }
+export { Troop }

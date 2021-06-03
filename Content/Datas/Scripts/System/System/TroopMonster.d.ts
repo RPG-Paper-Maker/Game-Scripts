@@ -1,19 +1,22 @@
 import { System } from "../index.js";
 import { Base } from "./Base.js";
 /** @class
- *  A troop of the game.
+ *  A troop monster.
  *  @extends System.Base
  *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  troop
+ *  troop monster
  */
-declare class Troop extends Base {
-    list: System.TroopMonster[];
-    reactions: System.TroopReaction[];
+declare class TroopMonster extends Base {
+    id: number;
+    level: number;
+    isSpecificPosition: boolean;
+    specificPosition: System.DynamicValue;
     constructor(json?: Record<string, any>);
     /**
-     *  Read the JSON associated to the troop.
+     *  Read the JSON associated to the troop monster.
      *  @param {Record<string, any>} - json Json object describing the troop
+     *  monster
      */
     read(json: Record<string, any>): void;
 }
-export { Troop };
+export { TroopMonster };

@@ -37,6 +37,10 @@ class BattleSystems {
     public static idExpStatistic: number;
     public static formulaIsDead: System.DynamicValue;
     public static formulaCrit: System.DynamicValue;
+    public static heroesBattlersCenterOffset: System.DynamicValue;
+    public static heroesBattlersOffset: System.DynamicValue;
+    public static troopsBattlersCenterOffset: System.DynamicValue;
+    public static troopsBattlersOffset: System.DynamicValue;
     public static battleMusic: System.PlaySong;
     public static battleLevelUp: System.PlaySong;
     public static battleVictory: System.PlaySong;
@@ -127,6 +131,10 @@ class BattleSystems {
         // Formulas
         this.formulaIsDead = new System.DynamicValue(json.fisdead);
         this.formulaCrit = System.DynamicValue.readOrDefaultMessage(json.fc);
+        this.heroesBattlersCenterOffset = System.DynamicValue.readOrDefaultMessage(json.heroesBattlersCenterOffset, "new Core.Vector3(2 * Datas.Systems.SQUARE_SIZE, 0, -Datas.Systems.SQUARE_SIZE)");
+        this.heroesBattlersOffset = System.DynamicValue.readOrDefaultMessage(json.heroesBattlersOffset, "new Core.Vector3(i * Datas.Systems.SQUARE_SIZE / 2, 0, i * Datas.Systems.SQUARE_SIZE)");
+        this.troopsBattlersCenterOffset = System.DynamicValue.readOrDefaultMessage(json.troopsBattlersCenterOffset, "new Core.Vector3(-2 * Datas.Systems.SQUARE_SIZE, 0, -Datas.Systems.SQUARE_SIZE)");
+        this.troopsBattlersOffset = System.DynamicValue.readOrDefaultMessage(json.troopsBattlersOffset, "new Core.Vector3(-i * Datas.Systems.SQUARE_SIZE * 3 / 4, 0, i * Datas.Systems.SQUARE_SIZE)");
 
         // Musics
         this.battleMusic = new System.PlaySong(SongKind.Music, json.bmusic);

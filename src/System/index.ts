@@ -71,6 +71,7 @@ export * from "./Tileset";
 export * from "./TitleCommand";
 export * from "./Translatable";
 export * from "./Troop";
+export * from "./TroopMonster";
 export * from "./TroopReaction";
 export * from "./TroopReactionConditions";
 export * from "./Video";
