@@ -34,5 +34,6 @@ export * from "./MenuShop";
 export * from "./MenuSkills";
 export * from "./SaveGame";
 export * from "./SaveLoadGame";
+export * from "./ShowTextPreview";
 export * from "./TitleScreen";
 export * from "./TitleSettings";

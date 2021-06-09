@@ -124,6 +124,9 @@ class Stack {
         let scene = new Scene.Battle(troopID, true, true, battleMap, 0, 0, null, null);
         this.push(scene);
     }
+    static async pushShowTextPreview() {
+        this.push(new Scene.ShowTextPreview());
+    }
     /**
      *  Clear the HUD canvas.
      */

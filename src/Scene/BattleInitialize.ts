@@ -83,10 +83,6 @@ class BattleInitialize {
                 Platform.showErrorMessage("Heroes battlers offset incorrect return: " + center);
             }
             position = Game.current.heroBattle.position.clone().add(center).add(offset);
-            console.log(Game.current.heroBattle.position);
-            console.log(center);
-            console.log(offset);
-            console.log(position);
             player = Game.current.teamHeroes[i];
             battler = new Battler(player, Position.createFromVector3(position),
                 position, this.battle.camera);

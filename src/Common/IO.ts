@@ -64,7 +64,11 @@ class IO {
         if (Datas.Settings.isProtected) {
             content = atob(content);
         }
-        return JSON.parse(content);
+        try {
+            return JSON.parse(content);
+        } catch (e) {
+            return {};
+        }
     }
 
     /** 

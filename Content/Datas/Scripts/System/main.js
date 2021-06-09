@@ -76,6 +76,9 @@ export class Main {
             case "battleTroop":
                 await Manager.Stack.pushBattleTest();
                 break;
+            case "showTextPreview":
+                await Manager.Stack.pushShowTextPreview();
+                break;
             default:
                 Manager.Stack.pushTitleScreen();
                 break;

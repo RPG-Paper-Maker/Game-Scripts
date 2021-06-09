@@ -65,6 +65,7 @@ declare class Stack {
      *  Push a battle scene for testing troop.
      */
     static pushBattleTest(): Promise<void>;
+    static pushShowTextPreview(): Promise<void>;
     /**
      *  Clear the HUD canvas.
      */

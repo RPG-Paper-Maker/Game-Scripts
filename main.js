@@ -9,13 +9,15 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-const { app, BrowserWindow, globalShortcut, dialog } = require('electron')
+const { app, BrowserWindow, globalShortcut, dialog, screen } = require('electron')
 
 global.modeTest = app.commandLine.getSwitchValue("modeTest");
 let ipc = require('electron').ipcMain;
 let window;
 
 function createWindow () {
+    let width = screen.getPrimaryDisplay().bounds.width;
+    let height = screen.getPrimaryDisplay().bounds.height;
     window = new BrowserWindow({
         title: "",
         width: 640,
@@ -26,6 +28,9 @@ function createWindow () {
             enableRemoteModule: true
         }
     });
+    if (global.modeTest === "showTextPreview") {
+        window.setAlwaysOnTop(true, 'screen');
+    }
     ipc.on('window-error', function(event, err) {
         window.webContents.openDevTools();
         dialog.showMessageBoxSync({ title: 'Error', type: 'error', message: err });
@@ -41,7 +46,11 @@ function createWindow () {
         } else
         {
             window.setContentSize(w, h);
-            window.center();
+            if (global.modeTest === "showTextPreview") {
+                window.setBounds({ x: width - 640, y: (height - 480) / 2 });
+            } else {
+                window.center();
+            }
         }
     })
     window.loadFile('index.html');

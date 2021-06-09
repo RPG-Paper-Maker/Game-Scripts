@@ -152,6 +152,10 @@ class Stack {
         this.push(scene);
     }
 
+    static async pushShowTextPreview() {
+        this.push(new Scene.ShowTextPreview());
+    }
+
     /** 
      *  Clear the HUD canvas.
      */

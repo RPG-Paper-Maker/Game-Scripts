@@ -32,5 +32,6 @@ export * from "./MenuShop.js";
 export * from "./MenuSkills.js";
 export * from "./SaveGame.js";
 export * from "./SaveLoadGame.js";
+export * from "./ShowTextPreview.js";
 export * from "./TitleScreen.js";
 export * from "./TitleSettings.js";
