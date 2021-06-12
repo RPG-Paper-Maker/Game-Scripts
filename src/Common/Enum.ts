@@ -126,7 +126,8 @@ namespace Enum {
         ResetCamera,
         ChangeBattleMusic,
         ChangeVictoryMusic,
-        EndBattle
+        EndBattle,
+        ForceAnAction
     };
 
     /**

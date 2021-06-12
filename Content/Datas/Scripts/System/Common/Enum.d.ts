@@ -114,7 +114,8 @@ declare namespace Enum {
         ResetCamera = 63,
         ChangeBattleMusic = 64,
         ChangeVictoryMusic = 65,
-        EndBattle = 66
+        EndBattle = 66,
+        ForceAnAction = 67
     }
     /**
      *   Enum for the different items kind.

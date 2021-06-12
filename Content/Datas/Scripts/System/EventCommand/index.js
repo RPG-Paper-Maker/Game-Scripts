@@ -34,6 +34,7 @@ export * from "./EndBattle.js";
 export * from "./EndGame.js";
 export * from "./EnterANameMenu.js";
 export * from "./FlashScreen.js";
+export * from "./ForceAnAction.js";
 export * from "./If.js";
 export * from "./IfLose.js";
 export * from "./IfWin.js";

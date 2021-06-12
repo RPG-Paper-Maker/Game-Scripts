@@ -158,6 +158,8 @@ class Events {
                 return new EventCommand.ChangeVictoryMusic(command);
             case EventCommandKind.EndBattle:
                 return new EventCommand.EndBattle(command);
+            case EventCommandKind.ForceAnAction:
+                return new EventCommand.ForceAnAction(command);
             default:
                 return null;
         }

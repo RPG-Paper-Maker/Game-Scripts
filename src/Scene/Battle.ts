@@ -88,6 +88,7 @@ class Battle extends Map {
     public all: boolean;
     public userTarget: boolean;
     public forceEndBattle: boolean;
+    public forceAnAction: boolean;
 
     //Selection
     public kindSelection: CharacterKind;
@@ -137,6 +138,8 @@ class Battle extends Map {
     /**What step (initialization, animation, selection, victory) of battle the game is on */
     public step: number;
     public subStep: number;
+    public previousStep: number;
+    public previousSubStep: number;
     public indexTroopReaction: number;
     public interpreterTroopReaction: ReactionInterpreter;
 

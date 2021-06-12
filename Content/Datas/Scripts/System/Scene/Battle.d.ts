@@ -71,6 +71,7 @@ declare class Battle extends Map {
     all: boolean;
     userTarget: boolean;
     forceEndBattle: boolean;
+    forceAnAction: boolean;
     kindSelection: CharacterKind;
     selectedUserIndex: number;
     selectedTargetIndex: number;
@@ -106,6 +107,8 @@ declare class Battle extends Map {
     /**What step (initialization, animation, selection, victory) of battle the game is on */
     step: number;
     subStep: number;
+    previousStep: number;
+    previousSubStep: number;
     indexTroopReaction: number;
     interpreterTroopReaction: ReactionInterpreter;
     mapCameraDistance: number;

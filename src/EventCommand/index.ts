@@ -35,6 +35,7 @@ export * from "./EndBattle";
 export * from "./EndGame";
 export * from "./EnterANameMenu";
 export * from "./FlashScreen";
+export * from "./ForceAnAction";
 export * from "./If";
 export * from "./IfLose";
 export * from "./IfWin";
