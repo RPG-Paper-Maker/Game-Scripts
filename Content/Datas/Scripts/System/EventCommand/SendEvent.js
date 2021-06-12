@@ -66,9 +66,9 @@ class SendEvent extends Base {
      *  @returns {number} The number of node to pass
     */
     update(currentState, object, state) {
-        Manager.Events.sendEvent(object, this.targetKind, this.targetID
-            .getValue(), this.isSystem, this.eventID, this.parameters, this
-            .senderNoReceiver, this.onlyTheClosest);
+        Manager.Events.sendEvent(object, this.targetKind, this.targetID ? this
+            .targetID.getValue() : -1, this.isSystem, this.eventID, this
+            .parameters, this.senderNoReceiver, this.onlyTheClosest);
         return 1;
     }
 }

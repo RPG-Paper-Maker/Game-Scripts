@@ -36,7 +36,6 @@ class SendEvent extends Base {
         let iterator = {
             i: 0
         }
-
         // Target
         let l = command.length;
         this.targetKind = command[iterator.i++];
@@ -87,9 +86,9 @@ class SendEvent extends Base {
     update(currentState: Record<string, any>, object: MapObject, state: number): 
         number
     {
-        Manager.Events.sendEvent(object, this.targetKind, this.targetID
-            .getValue(), this.isSystem, this.eventID, this.parameters, this
-            .senderNoReceiver, this.onlyTheClosest);
+        Manager.Events.sendEvent(object, this.targetKind, this.targetID ? this
+            .targetID.getValue() : -1, this.isSystem, this.eventID, this
+            .parameters, this.senderNoReceiver, this.onlyTheClosest);
         return 1;
     }
 }
