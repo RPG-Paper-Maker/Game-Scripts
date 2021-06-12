@@ -89,6 +89,7 @@ class Battle extends Map {
     public userTarget: boolean;
     public forceEndBattle: boolean;
     public forceAnAction: boolean;
+    public forceAnActionUseTurn: boolean;
 
     //Selection
     public kindSelection: CharacterKind;

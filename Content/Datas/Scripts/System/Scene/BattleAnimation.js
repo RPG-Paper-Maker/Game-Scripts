@@ -319,9 +319,15 @@ class BattleAnimation {
                                 target.isDamagesMiss = false;
                                 target.isDamagesCritical = false;
                             }
-                            if (!this.battle.forceAnAction && this.battle.user) {
-                                this.battle.user.setActive(false);
-                                this.battle.user.setSelected(false);
+                            if (this.battle.user) {
+                                if (!this.battle.forceAnAction || this.battle
+                                    .forceAnActionUseTurn) {
+                                    this.battle.user.setActive(false);
+                                    this.battle.user.setSelected(false);
+                                }
+                                if (this.battle.targets.length > 0) {
+                                    this.battle.user.lastTarget = target;
+                                }
                             }
                         }
                         if (this.battle.forceAnAction) {

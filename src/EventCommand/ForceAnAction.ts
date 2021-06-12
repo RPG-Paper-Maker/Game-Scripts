@@ -147,17 +147,48 @@ class ForceAnAction extends Base {
         }
         // If several possible targets, select according to target kind
         if (targets.length > 0) {
-            switch (this.targetKind) {
+            let targetKind = this.targetKind;
+            if (targetKind === 1) { // Last target
+                if (map.user.lastTarget !== null && targets.indexOf(map.user
+                    .lastTarget) !== -1) {
+                    map.targets = [map.user.lastTarget];
+                } else {
+                    targetKind = 0;
+                }
+            }
+            switch (targetKind) {
                 case 0: // Random
                     map.targets = [targets[Mathf.random(0, targets.length - 1)]];
                     break;
-                case 1: // Last target
-
-                    break;
                 case 2: // custom
+                    switch (this.targetCustomKind) {
+                        case 0: // Enemy
+                            map.targets = [map.battlers[Enum.CharacterKind.Monster]
+                                [this.targetEnemyIndex]];
+                            break;
+                        case 1: // Hero instance ID
+                            let id = this.targetHeroEnemyInstanceID.getValue();
+                            for (let battler of map.battlers[Enum.CharacterKind
+                                .Hero]) {
+                                if (battler.player.instid === id) {
+                                    map.targets = [battler];
+                                    break;
+                                }
+                            }
+                            for (let battler of map.battlers[Enum.CharacterKind
+                                .Monster]) {
+                                if (battler.player.instid === id) {
+                                    map.targets = [battler];
+                                    break;
+                                }
+                            }
+                            break; 
+                    }
                     break;
             }
         }
+        // Use battler turn or not
+        map.forceAnActionUseTurn = this.useBattlerTurn;
         // Register step and substep for going back to it after action done
         map.previousStep = map.step;
         map.previousSubStep = map.subStep;

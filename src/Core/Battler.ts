@@ -76,6 +76,7 @@ class Battler {
     public currentStatusAnimation: Animation = null;
     public lastStatus: Status;
     public lastStatusHealed: Status;
+    public lastTarget: Battler = null;
 
     constructor(player: Player, position?: Position, vect?: Vector3, camera?: Camera) {
         this.player = player;

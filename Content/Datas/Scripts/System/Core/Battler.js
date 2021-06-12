@@ -27,6 +27,7 @@ class Battler {
     constructor(player, position, vect, camera) {
         this.itemsNumbers = [];
         this.currentStatusAnimation = null;
+        this.lastTarget = null;
         this.player = player;
         if (!position) {
             return;

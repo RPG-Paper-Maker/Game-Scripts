@@ -72,6 +72,7 @@ declare class Battle extends Map {
     userTarget: boolean;
     forceEndBattle: boolean;
     forceAnAction: boolean;
+    forceAnActionUseTurn: boolean;
     kindSelection: CharacterKind;
     selectedUserIndex: number;
     selectedTargetIndex: number;

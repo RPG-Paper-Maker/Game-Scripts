@@ -58,6 +58,7 @@ declare class Battler {
     currentStatusAnimation: Animation;
     lastStatus: Status;
     lastStatusHealed: Status;
+    lastTarget: Battler;
     constructor(player: Player, position?: Position, vect?: Vector3, camera?: Camera);
     /**
      *  Check at least one affected status contains the following restriction.

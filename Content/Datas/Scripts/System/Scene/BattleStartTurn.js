@@ -126,12 +126,7 @@ class BattleStartTurn {
                     }
                 }
             }
-            if (this.battle.isEndTurn()) {
-                this.battle.changeStep(Enum.BattleStep.StartTurn);
-            }
-            else {
-                this.startSelectionEnemyAttack();
-            }
+            this.startSelectionEnemyAttack();
         }
     }
     startSelectionEnemyAttack() {
