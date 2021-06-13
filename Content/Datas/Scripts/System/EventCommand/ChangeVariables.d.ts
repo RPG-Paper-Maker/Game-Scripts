@@ -1,6 +1,7 @@
 import { Base } from "./Base.js";
 import { System } from "../index.js";
 import { MapObject } from "../Core/index.js";
+import { Enum } from "../Common/index.js";
 /** @class
  *  An event command for changing variables values.
  *  @extends EventCommand.Base
@@ -18,6 +19,14 @@ declare class ChangeVariables extends Base {
     valueSwitch: System.DynamicValue;
     valueMapObject: System.DynamicValue;
     valueMapObjectChar: number;
+    valueItemKind: Enum.ItemKind;
+    valueItemID: System.DynamicValue;
+    valueTotalCurrencyKind: number;
+    valueTotalCurrencyID: System.DynamicValue;
+    valueHeroEnemyInstanceID: System.DynamicValue;
+    valueStatisticID: System.DynamicValue;
+    valueEnemyIndex: number;
+    valueOtherCharacteristicKind: number;
     constructor(command: any[]);
     /**
      *  Initialize the current.

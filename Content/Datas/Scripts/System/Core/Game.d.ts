@@ -21,6 +21,8 @@ declare class Game {
     variables: any[];
     items: Item[];
     currencies: number[];
+    currenciesEarned: number[];
+    currenciesUsed: number[];
     teamHeroes: Player[];
     reserveHeroes: Player[];
     hiddenHeroes: Player[];
@@ -105,6 +107,18 @@ declare class Game {
      *  @returns {any}
      */
     getCurrency(id: number): any;
+    /**
+     *  Get the currency earned by ID.
+     *  @param {number} id
+     *  @returns {any}
+     */
+    getCurrencyEarned(id: number): any;
+    /**
+     *  Get the currency used by ID.
+     *  @param {number} id
+     *  @returns {any}
+     */
+    getCurrencyUsed(id: number): any;
     /**
      *  Get the hero with instance ID.
      *  @param {number} id - The instance ID

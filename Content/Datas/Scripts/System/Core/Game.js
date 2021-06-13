@@ -71,10 +71,23 @@ class Game {
             }
         });
         // Currencies
-        let l = json.cur.length;
-        this.currencies = new Array(l);
-        for (let i = 1; i < l; i++) {
-            this.currencies[i] = json.cur[i];
+        this.currencies = [];
+        for (let id in json.cur) {
+            if (json.cur[id] !== null) {
+                this.currencies[id] = json.cur[id];
+            }
+        }
+        this.currenciesEarned = [];
+        for (let id in json.cure) {
+            if (json.cure[id] !== null) {
+                this.currenciesEarned[id] = json.cure[id];
+            }
+        }
+        this.currenciesUsed = [];
+        for (let id in json.curu) {
+            if (json.curu[id] !== null) {
+                this.currenciesUsed[id] = json.curu[id];
+            }
         }
         // Heroes
         this.teamHeroes = [];
@@ -144,6 +157,8 @@ class Game {
             hh: hiddenHeroes,
             itm: items,
             cur: this.currencies,
+            cure: this.currenciesEarned,
+            curu: this.currenciesUsed,
             inst: this.charactersInstances,
             vars: this.variables,
             currentMapId: this.currentMapID,
@@ -326,6 +341,8 @@ class Game {
         this.hiddenHeroes = [];
         this.items = [];
         this.currencies = Datas.Systems.getDefaultCurrencies();
+        this.currenciesEarned = Datas.Systems.getDefaultCurrencies();
+        this.currenciesUsed = Datas.Systems.getDefaultCurrencies();
         this.charactersInstances = 0;
         this.initializeVariables();
         this.currentMapID = Datas.Systems.ID_MAP_START_HERO;
@@ -400,6 +417,22 @@ class Game {
      */
     getCurrency(id) {
         return Datas.Base.get(id, this.currencies, "currency");
+    }
+    /**
+     *  Get the currency earned by ID.
+     *  @param {number} id
+     *  @returns {any}
+     */
+    getCurrencyEarned(id) {
+        return Datas.Base.get(id, this.currenciesEarned, "currency earned");
+    }
+    /**
+     *  Get the currency used by ID.
+     *  @param {number} id
+     *  @returns {any}
+     */
+    getCurrencyUsed(id) {
+        return Datas.Base.get(id, this.currenciesUsed, "currency used");
     }
     /**
      *  Get the hero with instance ID.

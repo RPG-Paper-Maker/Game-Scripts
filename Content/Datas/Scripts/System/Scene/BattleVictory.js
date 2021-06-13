@@ -54,6 +54,12 @@ class BattleVictory {
         let id;
         for (id in this.battle.currencies) {
             Game.current.currencies[id] += this.battle.currencies[id];
+            if (this.battle.currencies[id] > 0) {
+                Game.current.currenciesEarned[id] += this.battle.currencies[id];
+            }
+            else {
+                Game.current.currenciesUsed[id] -= this.battle.currencies[id];
+            }
         }
         for (i = 0, l = this.battle.loots.length; i < l; i++) {
             for (id in this.battle.loots[i]) {

@@ -199,8 +199,15 @@ class Item {
     buy(shopID: number, times: number): boolean {
         let price = this.shop.getPrice();
         // Update currency
+        let p: number;
         for (let id in price) {
-            Game.current.currencies[id] -= price[id] * times;
+            p = price[id] * times;
+            Game.current.currencies[id] -= p;
+            if (p > 0) {
+                Game.current.currenciesUsed[id] += p;
+            } else {
+                Game.current.currenciesEarned[id] -= p;
+            }
         }
         if (this.nb !== - 1) {
             this.nb -= times;
@@ -229,9 +236,16 @@ class Item {
     sell(times: number): boolean {
         let price = this.system.getPrice();
         // Update currency
+        let p: number;
         for (let id in price) {
-            Game.current.currencies[id] += Math.round(price[id] * Datas.Systems
-                .priceSoldItem.getValue() / 100) * times;
+            p = Math.round(price[id] * Datas.Systems.priceSoldItem.getValue() / 
+                100) * times;
+            Game.current.currencies[id] += p;
+            if (p > 0) {
+                Game.current.currenciesEarned[id] += p;
+            } else {
+                Game.current.currenciesUsed[id] -= p;
+            }
         }
         return this.remove(times);
     }

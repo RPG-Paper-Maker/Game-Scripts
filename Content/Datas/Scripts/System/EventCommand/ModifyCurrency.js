@@ -36,9 +36,17 @@ class ModifyCurrency extends Base {
     */
     update(currentState, object, state) {
         let currencyID = this.currencyID.getValue();
+        let previousCurrency = Game.current.currencies[currencyID];
         Game.current.currencies[currencyID] = Mathf.OPERATORS_NUMBERS[this
             .operation](Game.current.currencies[currencyID], this.value
             .getValue());
+        let dif = Game.current.currencies[currencyID] - previousCurrency;
+        if (dif > 0) {
+            Game.current.currenciesEarned[currencyID] += dif;
+        }
+        else {
+            Game.current.currenciesUsed[currencyID] -= dif;
+        }
         return 1;
     }
 }

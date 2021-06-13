@@ -10,9 +10,8 @@
 */
 import { Base } from "./Base.js";
 import { System } from "../index.js";
-import { MapObject, Position, Game } from "../Core/index.js";
+import { MapObject, Position, Game, Item } from "../Core/index.js";
 import { Mathf, Enum, Utils } from "../Common/index.js";
-var VariableMapObjectCharacteristicKind = Enum.VariableMapObjectCharacteristicKind;
 /** @class
  *  An event command for changing variables values.
  *  @extends EventCommand.Base
@@ -51,6 +50,24 @@ class ChangeVariables extends Base {
             case 4: // Map object characteristic
                 this.valueMapObject = System.DynamicValue.createValueCommand(command, iterator);
                 this.valueMapObjectChar = command[iterator.i++];
+                break;
+            case 5: // Number of weapon / armor / item in inventory
+                this.valueItemKind = command[iterator.i++];
+                this.valueItemID = System.DynamicValue.createValueCommand(command, iterator);
+                break;
+            case 6: // Total currency
+                this.valueTotalCurrencyKind = command[iterator.i++];
+                this.valueTotalCurrencyID = System.DynamicValue.createValueCommand(command, iterator);
+                break;
+            case 7: // Hero / enemy stat
+                this.valueHeroEnemyInstanceID = System.DynamicValue.createValueCommand(command, iterator);
+                this.valueStatisticID = System.DynamicValue.createValueCommand(command, iterator);
+                break;
+            case 8: // Enemy instance ID
+                this.valueEnemyIndex = command[iterator.i++];
+                break;
+            case 9: // Other characteristics
+                this.valueOtherCharacteristicKind = command[iterator.i++];
                 break;
         }
     }
@@ -93,29 +110,63 @@ class ChangeVariables extends Base {
                     MapObject.search(objectID, (result) => {
                         let obj = result.object;
                         switch (this.valueMapObjectChar) {
-                            case VariableMapObjectCharacteristicKind.XSquarePosition:
+                            case Enum.VariableMapObjectCharacteristicKind.XSquarePosition:
                                 currentState.value = Position.createFromVector3(obj.position).x;
                                 break;
-                            case VariableMapObjectCharacteristicKind.YSquarePosition:
+                            case Enum.VariableMapObjectCharacteristicKind.YSquarePosition:
                                 currentState.value = Position.createFromVector3(obj.position).y;
                                 break;
-                            case VariableMapObjectCharacteristicKind.ZSquarePosition:
+                            case Enum.VariableMapObjectCharacteristicKind.ZSquarePosition:
                                 currentState.value = Position.createFromVector3(obj.position).z;
                                 break;
-                            case VariableMapObjectCharacteristicKind.XPixelPosition:
+                            case Enum.VariableMapObjectCharacteristicKind.XPixelPosition:
                                 currentState.value = obj.position.x;
                                 break;
-                            case VariableMapObjectCharacteristicKind.YPixelPosition:
+                            case Enum.VariableMapObjectCharacteristicKind.YPixelPosition:
                                 currentState.value = obj.position.y;
                                 break;
-                            case VariableMapObjectCharacteristicKind.ZPixelPosition:
+                            case Enum.VariableMapObjectCharacteristicKind.ZPixelPosition:
                                 currentState.value = obj.position.z;
                                 break;
-                            case VariableMapObjectCharacteristicKind.Orientation:
+                            case Enum.VariableMapObjectCharacteristicKind.Orientation:
                                 currentState.value = obj.orientation;
                                 break;
                         }
                     }, object);
+                case 5: // Number of weapon / armor / item in inventory
+                    let item = Item.findItem(this.valueItemKind, this.valueItemID
+                        .getValue());
+                    currentState.value = item === null ? 0 : item.nb;
+                    break;
+                case 6: // Total currency
+                    switch (this.valueTotalCurrencyKind) {
+                        case 0: // Owned
+                            currentState.value = Game.current.getCurrency(this
+                                .valueTotalCurrencyID.getValue());
+                            break;
+                        case 1: // Earned
+                            currentState.value = Game.current.getCurrencyEarned(this
+                                .valueTotalCurrencyID.getValue());
+                            break;
+                        case 2: // Used
+                            currentState.value = Game.current.getCurrencyUsed(this
+                                .valueTotalCurrencyID.getValue());
+                            break;
+                    }
+                    break;
+                case 7: // Hero / enemy stat
+                    /*
+                        this.valueHeroEnemyInstanceID = System.DynamicValue.createValueCommand(
+                            command, iterator);
+                        this.valueStatisticID = System.DynamicValue.createValueCommand(
+                            command, iterator);*/
+                    break;
+                case 8: // Enemy instance ID
+                    //this.valueEnemyIndex = command[iterator.i++];
+                    break;
+                case 9: // Other characteristics
+                    //this.valueOtherCharacteristicKind = command[iterator.i++];
+                    break;
             }
         }
         // Apply new value to variable(s)
