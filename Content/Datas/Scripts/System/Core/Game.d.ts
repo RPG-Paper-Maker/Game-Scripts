@@ -37,6 +37,9 @@ declare class Game {
     shops: Record<string, Record<string, number>[]>;
     battleMusic: System.PlaySong;
     victoryMusic: System.PlaySong;
+    steps: number;
+    saves: number;
+    battles: number;
     constructor(slot?: number);
     /**
      *  Get the hero in a tab with instance ID.

@@ -909,6 +909,11 @@ class MapObject {
         // Add to moving objects
         this.addMoveTemp();
 
+        // Add to game steps infos
+        if (this.isHero && distance > 0) {
+            Game.current.steps++;
+        }
+
         return [distance, normalDistance];
     }
 

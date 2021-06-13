@@ -372,6 +372,7 @@ class Battle extends Map {
         }
         Manager.Stack.pop();
         Scene.Map.current = <Scene.Map>Manager.Stack.top;
+        Game.current.battles++;
     }
 
     /** 

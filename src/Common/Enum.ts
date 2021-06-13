@@ -768,6 +768,27 @@ namespace Enum {
         EachTurnEnd,
         Always
     }
+
+    /**
+     *  Enum for the change variables other characteristics kind.
+     *  @export
+     *  @enum {number}
+     */
+    export enum ChangeVariablesOtherCharacteristics {
+        CurrentMapID,
+        NumberInTeam,
+        NumberInHidden,
+        NumberInReserve,
+        TotalNumberOfSteps,
+        TotalNumberOfSeconds,
+        TotalNumberOfSavesDone,
+        TotalNumberOfBattles,
+        CameraXPosition,
+        CameraYPosition,
+        CameraZPosition,
+        TotalSecondsCurrentMusic,
+        TotalSecondsCurrentBackgroundMusic
+    }
 }
 
 export { Enum }

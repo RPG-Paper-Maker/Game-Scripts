@@ -803,5 +803,26 @@ var Enum;
         TroopReactionFrequencyKind[TroopReactionFrequencyKind["EachTurnEnd"] = 2] = "EachTurnEnd";
         TroopReactionFrequencyKind[TroopReactionFrequencyKind["Always"] = 3] = "Always";
     })(TroopReactionFrequencyKind = Enum.TroopReactionFrequencyKind || (Enum.TroopReactionFrequencyKind = {}));
+    /**
+     *  Enum for the change variables other characteristics kind.
+     *  @export
+     *  @enum {number}
+     */
+    let ChangeVariablesOtherCharacteristics;
+    (function (ChangeVariablesOtherCharacteristics) {
+        ChangeVariablesOtherCharacteristics[ChangeVariablesOtherCharacteristics["CurrentMapID"] = 0] = "CurrentMapID";
+        ChangeVariablesOtherCharacteristics[ChangeVariablesOtherCharacteristics["NumberInTeam"] = 1] = "NumberInTeam";
+        ChangeVariablesOtherCharacteristics[ChangeVariablesOtherCharacteristics["NumberInHidden"] = 2] = "NumberInHidden";
+        ChangeVariablesOtherCharacteristics[ChangeVariablesOtherCharacteristics["NumberInReserve"] = 3] = "NumberInReserve";
+        ChangeVariablesOtherCharacteristics[ChangeVariablesOtherCharacteristics["TotalNumberOfSteps"] = 4] = "TotalNumberOfSteps";
+        ChangeVariablesOtherCharacteristics[ChangeVariablesOtherCharacteristics["TotalNumberOfSeconds"] = 5] = "TotalNumberOfSeconds";
+        ChangeVariablesOtherCharacteristics[ChangeVariablesOtherCharacteristics["TotalNumberOfSavesDone"] = 6] = "TotalNumberOfSavesDone";
+        ChangeVariablesOtherCharacteristics[ChangeVariablesOtherCharacteristics["TotalNumberOfBattles"] = 7] = "TotalNumberOfBattles";
+        ChangeVariablesOtherCharacteristics[ChangeVariablesOtherCharacteristics["CameraXPosition"] = 8] = "CameraXPosition";
+        ChangeVariablesOtherCharacteristics[ChangeVariablesOtherCharacteristics["CameraYPosition"] = 9] = "CameraYPosition";
+        ChangeVariablesOtherCharacteristics[ChangeVariablesOtherCharacteristics["CameraZPosition"] = 10] = "CameraZPosition";
+        ChangeVariablesOtherCharacteristics[ChangeVariablesOtherCharacteristics["TotalSecondsCurrentMusic"] = 11] = "TotalSecondsCurrentMusic";
+        ChangeVariablesOtherCharacteristics[ChangeVariablesOtherCharacteristics["TotalSecondsCurrentBackgroundMusic"] = 12] = "TotalSecondsCurrentBackgroundMusic";
+    })(ChangeVariablesOtherCharacteristics = Enum.ChangeVariablesOtherCharacteristics || (Enum.ChangeVariablesOtherCharacteristics = {}));
 })(Enum || (Enum = {}));
 export { Enum };

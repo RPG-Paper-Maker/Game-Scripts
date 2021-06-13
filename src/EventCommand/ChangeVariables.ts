@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { System } from "../index";
+import { Datas, Manager, Scene, System } from "../index";
 import { StructSearchResult, MapObject, Position, Game, Item } from "../Core";
 import { Mathf, Enum, Utils } from "../Common";
 
@@ -39,7 +39,7 @@ class ChangeVariables extends Base {
     public valueHeroEnemyInstanceID: System.DynamicValue;
     public valueStatisticID: System.DynamicValue;
     public valueEnemyIndex: number;
-    public valueOtherCharacteristicKind: number;
+    public valueOtherCharacteristicKind: Enum.ChangeVariablesOtherCharacteristics;
 
     constructor(command: any[]) {
         super();
@@ -196,17 +196,77 @@ class ChangeVariables extends Base {
                     }
                     break;
                 case 7: // Hero / enemy stat
-                /*
-                    this.valueHeroEnemyInstanceID = System.DynamicValue.createValueCommand(
-                        command, iterator);
-                    this.valueStatisticID = System.DynamicValue.createValueCommand(
-                        command, iterator);*/
+                    currentState.value = 0;
+                    let id = this.valueHeroEnemyInstanceID.getValue();
+                    for (let player of Game.current.teamHeroes) {
+                        if (player.instid === id) {
+                            currentState.value = player[Datas.BattleSystems
+                                .getStatistic(this.valueStatisticID.getValue())
+                                .abbreviation]
+                            break;
+                        }
+                    }
                     break;
                 case 8: // Enemy instance ID
-                    //this.valueEnemyIndex = command[iterator.i++];
+                    currentState.value = 0;
+                    if (Scene.Map.current.isBattleMap) {
+                        currentState.value = (<Scene.Battle>Scene.Map.current)
+                            .battlers[Enum.CharacterKind.Monster][this
+                            .valueEnemyIndex].player.instid;
+                    }
                     break;
                 case 9: // Other characteristics
-                    //this.valueOtherCharacteristicKind = command[iterator.i++];
+                    switch (this.valueOtherCharacteristicKind) {
+                        case Enum.ChangeVariablesOtherCharacteristics.CurrentMapID:
+                            currentState.value = Scene.Map.current.id;
+                            break;
+                        case Enum.ChangeVariablesOtherCharacteristics.NumberInTeam:
+                            currentState.value = Game.current.teamHeroes.length;
+                            break;
+                        case Enum.ChangeVariablesOtherCharacteristics.NumberInHidden:
+                            currentState.value = Game.current.hiddenHeroes.length;
+                            break;
+                        case Enum.ChangeVariablesOtherCharacteristics.NumberInReserve:
+                            currentState.value = Game.current.reserveHeroes.length;
+                            break;
+                        case Enum.ChangeVariablesOtherCharacteristics.TotalNumberOfSteps:
+                            currentState.value = Game.current.steps;
+                            break;
+                        case Enum.ChangeVariablesOtherCharacteristics.TotalNumberOfSeconds:
+                            currentState.value = Game.current.playTime.getSeconds();
+                            break;
+                        case Enum.ChangeVariablesOtherCharacteristics.TotalNumberOfSavesDone:
+                            currentState.value = Game.current.saves;
+                            break;
+                        case Enum.ChangeVariablesOtherCharacteristics.TotalNumberOfBattles:
+                            currentState.value = Game.current.battles;
+                            break;
+                        case Enum.ChangeVariablesOtherCharacteristics.CameraXPosition:
+                            currentState.value = Scene.Map.current.camera.getThreeCamera().position.x;
+                            break;
+                        case Enum.ChangeVariablesOtherCharacteristics.CameraYPosition:
+                            currentState.value = Scene.Map.current.camera.getThreeCamera().position.y;
+                            break;
+                        case Enum.ChangeVariablesOtherCharacteristics.CameraZPosition:
+                            currentState.value = Scene.Map.current.camera.getThreeCamera().position.z;
+                            break;
+                        case Enum.ChangeVariablesOtherCharacteristics.TotalSecondsCurrentMusic: {
+                            currentState.value = 0;
+                            let current = Manager.Songs.current[Enum.SongKind.Music];
+                            if (current) {
+                                currentState.value = current.seek();
+                            }
+                            break;
+                        }
+                        case Enum.ChangeVariablesOtherCharacteristics.TotalSecondsCurrentBackgroundMusic: {
+                            currentState.value = 0;
+                            let current = Manager.Songs.current[Enum.SongKind.BackgroundSound];
+                            if (current) {
+                                currentState.value = current.seek();
+                            }
+                            break;
+                        }
+                    }
                     break;
             }
         }

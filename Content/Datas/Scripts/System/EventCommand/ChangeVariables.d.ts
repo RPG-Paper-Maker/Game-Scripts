@@ -26,7 +26,7 @@ declare class ChangeVariables extends Base {
     valueHeroEnemyInstanceID: System.DynamicValue;
     valueStatisticID: System.DynamicValue;
     valueEnemyIndex: number;
-    valueOtherCharacteristicKind: number;
+    valueOtherCharacteristicKind: Enum.ChangeVariablesOtherCharacteristics;
     constructor(command: any[]);
     /**
      *  Initialize the current.

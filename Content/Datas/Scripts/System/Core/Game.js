@@ -64,6 +64,9 @@ class Game {
         this.charactersInstances = json.inst;
         this.variables = json.vars;
         this.shops = json.shops;
+        this.steps = Utils.defaultValue(json.steps, 0);
+        this.saves = Utils.defaultValue(json.saves, 0);
+        this.battles = Utils.defaultValue(json.battles, 0);
         // Items
         this.items = [];
         Utils.readJSONSystemList({ list: json.itm, listIndexes: this.items, func: (json) => {
@@ -150,6 +153,7 @@ class Game {
         for (i = 0; i < l; i++) {
             items[i] = this.items[i].getSave();
         }
+        this.saves++;
         await IO.saveFile(this.getPathSave(slot), {
             t: this.playTime.time,
             th: teamHeroes,
@@ -170,6 +174,9 @@ class Game {
             startS: this.startupStates,
             startP: this.startupProperties,
             shops: this.shops,
+            steps: this.steps,
+            saves: this.saves,
+            battles: this.battles,
             mapsDatas: this.getCompressedMapsDatas()
         });
     }
@@ -356,6 +363,9 @@ class Game {
         this.hero.initializeProperties();
         this.playTime = new Chrono(0);
         this.shops = {};
+        this.steps = 0;
+        this.saves = 0;
+        this.battles = 0;
         this.isEmpty = false;
     }
     /**

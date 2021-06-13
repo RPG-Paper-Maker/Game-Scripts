@@ -202,6 +202,7 @@ class Battle extends Map {
         }
         Manager.Stack.pop();
         Scene.Map.current = Manager.Stack.top;
+        Game.current.battles++;
     }
     /**
      *  Switch attacking group.
