@@ -43,8 +43,7 @@ class BattleVictory {
     public initialize() {
         // Remove status if release at end of battles
         let i: number, l: number, battler: Battler, s: Status;
-        for (i = 0, l = Game.current.teamHeroes.length; i < l; i++) {
-            battler = this.battle.battlers[CharacterKind.Hero][i];
+        for (battler of this.battle.battlers[CharacterKind.Hero]) {
             s = battler.player.status[0];
             battler.player.removeEndBattleStatus();
             battler.updateStatusStep();
@@ -82,8 +81,7 @@ class BattleVictory {
 
         // Heroes
         let xp: number;
-        for (i = 0, l = Game.current.teamHeroes.length; i < l; i++) {
-            battler = this.battle.battlers[CharacterKind.Hero][i];
+        for (battler of this.battle.battlers[CharacterKind.Hero]) {
             battler.setVictory();
             xp = this.battle.xp;
             if (battler.player.experienceGain[0]) {
@@ -189,8 +187,8 @@ class BattleVictory {
     updateTeamXP() {
         this.battle.finishedXP = true;
         let battler: Battler, player: Player, y: number , h: number;
-        for (let i = this.battle.priorityIndex, l = Game.current
-            .teamHeroes.length; i < l; i++) {
+        for (let i = this.battle.priorityIndex, l = this.battle.battlers[
+            CharacterKind.Hero].length; i < l; i++) {
             battler = this.battle.battlers[CharacterKind.Hero][i];
             player = battler.player;
             if (!player.isExperienceUpdated()) {
@@ -232,8 +230,8 @@ class BattleVictory {
      *  Pause the team progression xp.
      */
     pauseTeamXP() {
-        for (let i = 0, l = Game.current.teamHeroes.length; i < l; i++) {
-            this.battle.battlers[CharacterKind.Hero][i].player.pauseExperience();
+        for (let battler of this.battle.battlers[CharacterKind.Hero]) {
+            battler.player.pauseExperience();
         }
     }
 
@@ -241,8 +239,8 @@ class BattleVictory {
      *  Unpause the team progression xp.
      */
     unpauseTeamXP() {
-        for (let i = 0, l = Game.current.teamHeroes.length; i < l; i++) {
-            this.battle.battlers[CharacterKind.Hero][i].player.unpauseExperience();
+        for (let battler of this.battle.battlers[CharacterKind.Hero]) {
+            battler.player.unpauseExperience();
         }
         this.battle.user.player.updateRemainingXP(Scene.Battle.TIME_PROGRESSION_XP);
     }
@@ -280,10 +278,8 @@ class BattleVictory {
                     this.battle.time = new Date().getTime();
                     this.battle.windowTopInformations.content = this.battle
                         .graphicRewardTop;
-                    for (let i = 0, l = Game.current.teamHeroes.length; i 
-                        < l; i++) {
-                        this.battle.battlers[CharacterKind.Hero][i].player
-                            .updateRemainingXP(Scene.Battle.TIME_PROGRESSION_XP);
+                    for (let battler of this.battle.battlers[CharacterKind.Hero]) {
+                        battler.player.updateRemainingXP(Scene.Battle.TIME_PROGRESSION_XP);
                     }
                     Manager.Stack.requestPaintHUD = true;
                     this.battle.subStep = 1;
@@ -401,13 +397,9 @@ class BattleVictory {
                     if (this.battle.finishedXP) {
                         this.prepareEndTransition();
                     } else { // Pass xp
-                        let player: Player;
-                        for (let i = 0, l = Game.current.teamHeroes.length; 
-                            i < l; i++) {
-                            player = this.battle.battlers[CharacterKind.Hero][i]
-                                .player;
-                            player.passExperience();
-                            player.updateObtainedExperience();
+                        for (let battler of this.battle.battlers[CharacterKind.Hero]) {
+                            battler.player.passExperience();
+                            battler.player.updateObtainedExperience();
                         }
                     }
                 }

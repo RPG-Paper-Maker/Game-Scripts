@@ -29,8 +29,8 @@ class XPProgression extends Base {
      *  Update graphics experience.
      */
     updateExperience() {
-        for (let i = 0, l = Game.current.teamHeroes.length; i < l; i++) {
-            this.graphicCharacters[i].updateExperience();
+        for (let graphic of this.graphicCharacters) {
+            graphic.updateExperience();
         }
     }
     /**

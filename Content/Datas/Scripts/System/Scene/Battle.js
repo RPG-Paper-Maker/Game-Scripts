@@ -197,8 +197,8 @@ class Battle extends Map {
      */
     endBattle() {
         // Heroes
-        for (let i = 0, l = Game.current.teamHeroes.length; i < l; i++) {
-            this.battlers[CharacterKind.Hero][i].removeFromScene();
+        for (let battler of this.battlers[CharacterKind.Hero]) {
+            battler.removeFromScene();
         }
         Manager.Stack.pop();
         Scene.Map.current = Manager.Stack.top;

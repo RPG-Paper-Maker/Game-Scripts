@@ -10,10 +10,8 @@
 */
 
 import { Base } from "./Base";
-import { System } from "../index";
+import { Graphic, Scene, System } from "../index";
 import { Enum } from "../Common";
-import GroupKind = Enum.GroupKind;
-import CharacterKind = Enum.CharacterKind;
 import { Player, MapObject, Game } from "../Core";
 
 /** @class
@@ -23,15 +21,17 @@ import { Player, MapObject, Game } from "../Core";
  */
 class ModifyTeam extends Base {
 
-    public addingKind: number;
+    public kind: number;
     public instanceLevel: System.DynamicValue;
-    public instanceTeam: GroupKind;
-    public stockVariableID : number;
-    public instanceKind: CharacterKind;
-    public instanceID: number;
-    public addRemoveKind: CharacterKind;
-    public addRemoveID: System.DynamicValue;
-    public addRemoveTeam: GroupKind;
+    public instanceTeam: Enum.GroupKind;
+    public stockVariableID : System.DynamicValue;
+    public instanceKind: Enum.CharacterKind;
+    public instanceID: System.DynamicValue;
+    public enemyInstanceID: System.DynamicValue;
+    public enemyTeam: Enum.GroupKind;
+    public modifyKind: number;
+    public modifyInstanceID: System.DynamicValue;
+    public modifyTeam: Enum.GroupKind;
 
     constructor(command: any[]) {
         super();
@@ -39,55 +39,29 @@ class ModifyTeam extends Base {
         let iterator = {
             i: 0
         }
-        this.addingKind = command[iterator.i++];
-        switch (this.addingKind) {
-            case 0: // If create new instance
+        this.kind = command[iterator.i++];
+        switch (this.kind) {
+            case 0: // Create new instance
                 this.instanceLevel = System.DynamicValue.createValueCommand(
                     command, iterator);
                 this.instanceTeam = command[iterator.i++];
-                this.stockVariableID = command[iterator.i++];
-                this.instanceKind = command[iterator.i++];
-                this.instanceID = command[iterator.i++];
-                break;
-            case 1:
-                this.addRemoveKind = command[iterator.i++];
-                this.addRemoveID = System.DynamicValue.createValueCommand(
+                this.stockVariableID = System.DynamicValue.createValueCommand(
                     command, iterator);
-                this.addRemoveTeam = command[iterator.i++];
+                this.instanceKind = command[iterator.i++];
+                this.instanceID = System.DynamicValue.createValueCommand(
+                    command, iterator);
                 break;
-        }
-    }
-
-    /** 
-     *  Add or remove a character in a group.
-     *  @param {CharacterKind} kind - The type of character to instanciate
-     *  @param {number} id - The ID of the character to instanciate
-     *  @param {GroupKind} groupKind - In which group we should instanciate
-     */
-    addRemove(kind: CharacterKind, id: number, groupKind: GroupKind) {
-        // Searching for the ID
-        let groups = Game.current.getGroups();
-        let group = null;
-        let i: number, j: number, l: number, m: number, g: Player[], player: 
-            Player;
-        for (i = 0, l = groups.length; i < l; i++) {
-            g = groups[i];
-            for (j = 0, m = g.length; j < m; j++) {
-                player = g[j];
-                if (player.instid === id) {
-                    group = g;
-                    break;
-                }
-            }
-            if (group !== null) {
+            case 1: // Add enemy
+                this.enemyInstanceID = System.DynamicValue.createValueCommand(
+                    command, iterator);
+                this.enemyTeam = command[iterator.i++];
                 break;
-            }
-        }
-        if (group !== null)  {
-            group.splice(j, 1);
-            if (kind === 0) {
-                groups[groupKind].push(player);
-            }
+            case 2: // Modify (move/remove)
+                this.modifyKind = command[iterator.i++];
+                this.modifyInstanceID = System.DynamicValue.createValueCommand(
+                    command, iterator);
+                this.modifyTeam = command[iterator.i++];
+                break;
         }
     }
 
@@ -101,16 +75,56 @@ class ModifyTeam extends Base {
     update(currentState: Record<string, any>, object: MapObject, state: number): 
         number
     {
-        switch (this.addingKind) {
-            case 0:
-                Game.current.instanciateTeam(this.instanceTeam, this
-                    .instanceKind, this.instanceID, this.instanceLevel
-                    .getValue(), this.stockVariableID);
+        switch (this.kind) {
+            case 0: // Create new instance
+                Game.current.instanciateTeam(this.instanceTeam, this.instanceKind, 
+                    this.instanceID.getValue(), this.instanceLevel.getValue(), 
+                    this.stockVariableID.getValue(true));
                 break;
-            case 1:
-                this.addRemove(this.addRemoveKind, this.addRemoveID.getValue(), 
-                    this.addRemoveTeam);
+            case 1: { // Add enemy
+                if (!Scene.Map.current.isBattleMap) {
+                    return;
+                }
+                let id = this.enemyInstanceID.getValue();
+                let player: Player = null;
+                for (let battler of (<Scene.Battle>Scene.Map.current).battlers[
+                    Enum.CharacterKind.Monster]) {
+                    if (battler.player.instid === id) {
+                        player = battler.player;
+                        break;
+                    }
+                }
+                if (player !== null) {
+                    player.kind = Enum.CharacterKind.Hero;
+                    Game.current.getTeam(this.enemyTeam).push(player);
+                }
                 break;
+            }
+            case 2: { // Modify (move/remove)
+                let groups = Game.current.getGroups();
+                let selectedGroup = null;
+                let id = this.modifyInstanceID.getValue();
+                let player: Player;
+                // Find group and player associated to instance ID
+                for (let group of groups) {
+                    for (player of group) {
+                        if (player.instid === id) {
+                            selectedGroup = group;
+                            break;
+                        }
+                    }
+                    if (selectedGroup !== null) {
+                        break;
+                    }
+                }
+                if (selectedGroup !== null)  {
+                    selectedGroup.splice(selectedGroup.indexOf(player), 1);
+                    if (this.modifyKind === 0) { // If moving
+                        groups[this.modifyTeam].push(player);
+                    }
+                }
+                break;
+            }
         }
         return 1;
     }
