@@ -127,7 +127,8 @@ namespace Enum {
         ChangeBattleMusic,
         ChangeVictoryMusic,
         EndBattle,
-        ForceAnAction
+        ForceAnAction,
+        ChangeMapProperties
     };
 
     /**

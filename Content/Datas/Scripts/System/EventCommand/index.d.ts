@@ -6,6 +6,7 @@ export * from "./ChangeASkill.js";
 export * from "./ChangeAStatistic.js";
 export * from "./ChangeBattleMusic.js";
 export * from "./ChangeEquipment.js";
+export * from "./ChangeMapProperties.js";
 export * from "./ChangeName.js";
 export * from "./ChangeProperty.js";
 export * from "./ChangeScreenTone.js";

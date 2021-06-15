@@ -2,6 +2,7 @@ import { Base } from "./Base.js";
 import { Enum } from "../Common/index.js";
 import SongKind = Enum.SongKind;
 import { System } from "../index.js";
+import { StructIterator } from "../EventCommand/index.js";
 /** @class
  *  A way to play a song.
  *  @extends System.Base
@@ -21,10 +22,30 @@ declare class PlaySong extends Base {
     end: System.DynamicValue;
     constructor(kind: SongKind, json?: Record<string, any>);
     /**
+     *  Create a new value from a command and iterator.
+     *  @static
+     *  @param {any[]} command - The list describing the command
+     *  @param {StructIterator} iterator - The iterator
+     *  @returns {System.PlaySong}
+     */
+    static createValueCommand(command: any[], iterator: StructIterator, kind: Enum.SongKind): System.PlaySong;
+    /**
      *  Read the JSON associated to the play song.
      *  @param {Record<string, any>} - json Json object describing the play song
      */
     read(json: Record<string, any>): void;
+    /**
+     *  Parse a play song command.
+     *  @static
+     *  @param {any} command
+     *  @param {StructIterator} iterator
+     */
+    parse(command: any[], iterator: StructIterator): void;
+    /**
+     *  Get the json value.
+     *  @returns {Record<string, any>}
+     */
+    toJson(): Record<string, any>;
     /**
      *  Set song play to default values.
      */

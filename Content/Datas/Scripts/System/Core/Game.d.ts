@@ -33,6 +33,7 @@ declare class Game {
     startupStates: Record<string, any>;
     startupProperties: Record<string, any>;
     mapsDatas: Record<string, any>;
+    mapsProperties: Record<string, any>;
     isEmpty: boolean;
     shops: Record<string, Record<string, number>[]>;
     battleMusic: System.PlaySong;

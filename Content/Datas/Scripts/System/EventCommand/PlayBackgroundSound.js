@@ -9,9 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
-import { EventCommand } from "../index.js";
+import { System } from "../index.js";
 import { Enum } from "../Common/index.js";
-var SongKind = Enum.SongKind;
 /** @class
  *  An event command for playing a backgroundsound.
  *  @extends EventCommand.Base
@@ -20,8 +19,11 @@ var SongKind = Enum.SongKind;
 class PlayBackgroundSound extends Base {
     constructor(command) {
         super();
-        EventCommand.PlayMusic.parsePlaySong(this, command, SongKind
-            .BackgroundSound);
+        let iterator = {
+            i: 0
+        };
+        this.song = System.PlaySong.createValueCommand(command, iterator, Enum
+            .SongKind.BackgroundSound);
     }
     /**
      *  Initialize the current state.

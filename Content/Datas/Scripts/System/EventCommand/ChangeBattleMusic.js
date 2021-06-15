@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
-import { EventCommand } from "../index.js";
+import { System } from "../index.js";
 import { Enum } from "../Common/index.js";
 import { Game } from "../Core/index.js";
 /** @class
@@ -19,7 +19,11 @@ import { Game } from "../Core/index.js";
 class ChangeBattleMusic extends Base {
     constructor(command) {
         super();
-        EventCommand.PlayMusic.parsePlaySong(this, command, Enum.SongKind.Music);
+        let iterator = {
+            i: 0
+        };
+        this.song = System.PlaySong.createValueCommand(command, iterator, Enum
+            .SongKind.Music);
     }
     /**
      *  Update and check if the event is finished.

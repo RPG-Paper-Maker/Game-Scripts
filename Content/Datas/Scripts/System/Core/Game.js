@@ -121,6 +121,7 @@ class Game {
         this.heroStatesOptions = json.heroStatesOpts;
         this.startupStates = json.startS;
         this.startupProperties = json.startP;
+        this.mapsProperties = json.mapsP;
         this.mapsDatas = json.mapsDatas;
         this.isEmpty = false;
     }
@@ -173,6 +174,7 @@ class Game {
             heroStatesOpts: this.heroStatesOptions,
             startS: this.startupStates,
             startP: this.startupProperties,
+            mapsP: this.mapsProperties,
             shops: this.shops,
             steps: this.steps,
             saves: this.saves,
@@ -358,6 +360,7 @@ class Game {
         this.heroStatesOptions = [];
         this.startupStates = {};
         this.startupProperties = {};
+        this.mapsProperties = {};
         this.instanciateTeam(GroupKind.Team, CharacterKind.Hero, 1, 1, 1);
         this.mapsDatas = {};
         this.hero.initializeProperties();

@@ -9,9 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
-import { EventCommand, System } from "../index.js";
-import { Enum, Utils } from "../Common/index.js";
-var SongKind = Enum.SongKind;
+import { System } from "../index.js";
+import { Enum } from "../Common/index.js";
 /** @class
  *  An event command for playing a music.
  *  @extends EventCommand.Base
@@ -20,32 +19,11 @@ var SongKind = Enum.SongKind;
 class PlayMusic extends Base {
     constructor(command) {
         super();
-        EventCommand.PlayMusic.parsePlaySong(this, command, SongKind.Music);
-    }
-    /**
-     *  Parse a play song command.
-     *  @static
-     *  @param {any} that - The event command to parse
-     *  @param {any[]} command - Direct JSON command to parse
-     *  @param {SongKind} kind - The song kind
-     */
-    static parsePlaySong(that, command, kind) {
         let iterator = {
             i: 0
         };
-        let isIDprimitive = Utils.numToBool(command[iterator.i++]);
-        let valueID = System.DynamicValue.createValueCommand(command, iterator);
-        let id = System.DynamicValue.createNumber(command[iterator.i++]);
-        let songID = isIDprimitive ? valueID : id;
-        let volume = System.DynamicValue.createValueCommand(command, iterator);
-        let isStart = Utils.numToBool(command[iterator.i++]);
-        let start = System.DynamicValue.createValueCommand(command, iterator);
-        start = isStart ? start : System.DynamicValue.createNumber(0);
-        let isEnd = Utils.numToBool(command[iterator.i++]);
-        let end = System.DynamicValue.createValueCommand(command, iterator);
-        end = isEnd ? end : null;
-        that.song = new System.PlaySong(kind);
-        that.song.updateValues(songID, volume, isStart, start, isEnd, end);
+        this.song = System.PlaySong.createValueCommand(command, iterator, Enum
+            .SongKind.Music);
     }
     /**
      *  Initialize the current state.

@@ -112,6 +112,7 @@ class Map extends Base {
         this.camera.update();
         this.currentPortion = Portion.createFromVector3(this.camera
             .getThreeCamera().position);
+        this.previousCameraPosition = null;
         if (this.mapProperties.skyboxGeometry !== null) {
             this.previousCameraPosition = this.camera.getThreeCamera().position
                 .clone();

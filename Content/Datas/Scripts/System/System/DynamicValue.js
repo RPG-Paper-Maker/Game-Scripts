@@ -264,6 +264,16 @@ class DynamicValue extends System.Base {
         }
     }
     /**
+     *  Get the json value.
+     *  @returns {Record<string, any>}
+     */
+    toJson() {
+        let json = {};
+        json.k = this.kind;
+        json.v = this.value;
+        return json;
+    }
+    /**
      *  Get the value
      *  @returns {any}
      */

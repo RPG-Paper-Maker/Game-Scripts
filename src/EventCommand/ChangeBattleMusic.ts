@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { EventCommand, System } from "../index";
+import { System } from "../index";
 import { Enum } from "../Common";
 import { Game, MapObject } from "../Core";
 
@@ -24,7 +24,11 @@ class ChangeBattleMusic extends Base {
 
     constructor(command: any[]) {
         super();
-        EventCommand.PlayMusic.parsePlaySong(this, command, Enum.SongKind.Music);
+        let iterator = {
+            i: 0
+        };
+        this.song = System.PlaySong.createValueCommand(command, iterator, Enum
+            .SongKind.Music);
     }
 
     /** 

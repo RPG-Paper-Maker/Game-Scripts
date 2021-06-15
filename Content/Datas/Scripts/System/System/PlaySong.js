@@ -26,6 +26,18 @@ class PlaySong extends Base {
         this.read(json);
     }
     /**
+     *  Create a new value from a command and iterator.
+     *  @static
+     *  @param {any[]} command - The list describing the command
+     *  @param {StructIterator} iterator - The iterator
+     *  @returns {System.PlaySong}
+     */
+    static createValueCommand(command, iterator, kind) {
+        let song = new System.PlaySong(kind);
+        song.parse(command, iterator);
+        return song;
+    }
+    /**
      *  Read the JSON associated to the play song.
      *  @param {Record<string, any>} - json Json object describing the play song
      */
@@ -43,6 +55,45 @@ class PlaySong extends Base {
         this.isEnd = json.ie;
         this.end = this.isEnd ? new System.DynamicValue(json.e) : System
             .DynamicValue.createNumber(0);
+    }
+    /**
+     *  Parse a play song command.
+     *  @static
+     *  @param {any} command
+     *  @param {StructIterator} iterator
+     */
+    parse(command, iterator) {
+        let isIDprimitive = Utils.numToBool(command[iterator.i++]);
+        let valueID = System.DynamicValue.createValueCommand(command, iterator);
+        let id = System.DynamicValue.createNumber(command[iterator.i++]);
+        let songID = isIDprimitive ? valueID : id;
+        let volume = System.DynamicValue.createValueCommand(command, iterator);
+        let isStart = Utils.numToBool(command[iterator.i++]);
+        let start = System.DynamicValue.createValueCommand(command, iterator);
+        start = isStart ? start : System.DynamicValue.createNumber(0);
+        let isEnd = Utils.numToBool(command[iterator.i++]);
+        let end = System.DynamicValue.createValueCommand(command, iterator);
+        end = isEnd ? end : null;
+        this.updateValues(songID, volume, isStart, start, isEnd, end);
+    }
+    /**
+     *  Get the json value.
+     *  @returns {Record<string, any>}
+     */
+    toJson() {
+        let json = {};
+        json.isbi = true;
+        json.vid = this.songID.toJson();
+        json.v = this.volume.toJson();
+        json.is = this.isStart;
+        if (this.isStart) {
+            json.s = this.start.toJson();
+        }
+        json.ie = this.isEnd;
+        if (this.isEnd) {
+            json.e = this.end.toJson();
+        }
+        return json;
     }
     /**
      *  Set song play to default values.

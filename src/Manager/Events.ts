@@ -160,6 +160,8 @@ class Events {
                 return new EventCommand.EndBattle(command);
             case EventCommandKind.ForceAnAction:
                 return new EventCommand.ForceAnAction(command);
+            case EventCommandKind.ChangeMapProperties:
+                return new EventCommand.ChangeMapProperties(command);
             default:
                 return null;
         }

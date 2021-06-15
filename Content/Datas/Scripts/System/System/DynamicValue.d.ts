@@ -171,6 +171,11 @@ declare class DynamicValue extends System.Base {
      */
     read(json: StructJSON): void;
     /**
+     *  Get the json value.
+     *  @returns {Record<string, any>}
+     */
+    toJson(): Record<string, any>;
+    /**
      *  Get the value
      *  @returns {any}
      */

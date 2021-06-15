@@ -77,21 +77,36 @@ class MapProperties extends Base {
         this.depth = json.d;
 
         // Tileset: if not existing, by default select the first one
-        this.tileset = Datas.Tilesets.get(json.tileset);
-        this.music = new PlaySong(SongKind.Music, json.music);
-        this.backgroundSound = new PlaySong(SongKind.BackgroundSound, json.bgs);
-        this.cameraProperties = Datas.Systems.getCameraProperties(DynamicValue
-            .readOrDefaultDatabase(json.cp, 1).getValue());
-        this.isBackgroundColor = json.isky;
-        this.isBackgroundImage = json.isi;
+        let datas = Game.current.mapsProperties[this.id];
+        if (Utils.isUndefined(datas)) {
+            datas = {};
+        }
+        this.tileset = Datas.Tilesets.get(Utils.defaultValue(datas.tileset, json
+            .tileset));
+        this.music = new PlaySong(SongKind.Music, Utils.defaultValue(datas.music, 
+            json.music));
+        this.backgroundSound = new PlaySong(SongKind.BackgroundSound, Utils
+            .defaultValue(datas.backgroundSound, json.bgs));
+        this.cameraProperties = Datas.Systems.getCameraProperties(Utils.defaultValue(
+            datas.camera, DynamicValue.readOrDefaultDatabase(json.cp, 1).getValue()));
+        let kind = -1;
+        if (!Utils.isUndefined(datas.color)) {
+            kind = 0;
+        } else if (!Utils.isUndefined(datas.skybox)) {
+            kind = 1;
+        }
+        this.isBackgroundColor = kind === 0 ? true : json.isky;
+        this.isBackgroundImage = kind !== -1 ? false : json.isi;
         if (this.isBackgroundColor) {
-            this.backgroundColorID = new DynamicValue(json.sky);
+            this.backgroundColorID = Utils.isUndefined(datas.color) ? new 
+                DynamicValue(json.sky) : DynamicValue.createNumber(datas.color);;
         } else if (this.isBackgroundImage) {
             this.backgroundImageID = json.ipid;
             this.updateBackgroundImage();
         } else   {
-            this.backgroundSkyboxID = DynamicValue.readOrDefaultDatabase(json
-                .sbid);
+            this.backgroundSkyboxID = Utils.isUndefined(datas.skybox) ? 
+                DynamicValue.readOrDefaultDatabase(json.sbid) : DynamicValue
+                .createNumber(datas.skybox);
             this.updateBackgroundSkybox();
         }
         this.updateBackgroundColor();
