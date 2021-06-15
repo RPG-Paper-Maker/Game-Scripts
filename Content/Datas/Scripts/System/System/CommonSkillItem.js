@@ -122,7 +122,7 @@ class CommonSkillItem extends Icon {
     /** Check if the costs are possible.
      *  @returns {boolean}
      */
-    isPossible(target) {
+    isPossible(target, checkCost = true) {
         let targets = Scene.Map.current.getPossibleTargets(this.targetKind);
         let user = Scene.Map.current.user ? Scene.Map.current.user.player : null;
         // Condition
@@ -162,9 +162,11 @@ class CommonSkillItem extends Icon {
             }
         }
         // Skill cost
-        for (let i = 0, l = this.costs.length; i < l; i++) {
-            if (!this.costs[i].isPossible()) {
-                return false;
+        if (checkCost) {
+            for (let i = 0, l = this.costs.length; i < l; i++) {
+                if (!this.costs[i].isPossible()) {
+                    return false;
+                }
             }
         }
         return true;

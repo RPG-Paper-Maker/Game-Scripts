@@ -39,6 +39,7 @@ class Player {
     public equip: Item[];
     public status: Status[];
     public expList: number[];
+    public editedExpList: Record<string, number>;
     public testedLevelUp: boolean;
     public remainingXP: number;
     public totalRemainingXP: number;
@@ -87,6 +88,7 @@ class Player {
 
             // Experience list
             this.expList = this.system.createExpList();
+            this.editedExpList = {};
             this.levelingUp = false;
             this.testedLevelUp = true;
 
@@ -255,7 +257,8 @@ class Player {
             sk: this.skills,
             status: statusList,
             stats: this.getSaveStat(),
-            equip: this.getSaveEquip()
+            equip: this.getSaveEquip(),
+            exp: this.editedExpList
         };
     }
 
@@ -679,6 +682,12 @@ class Player {
             }
             this.equip[i] = item;
         }
+
+        // Exp list
+        for (let i in json.exp) {
+            this.expList[i] = json.exp[i];
+        }
+
         this.updateAllStatsValues();
     }
 

@@ -125,6 +125,7 @@ class Cost extends Base {
     isPossible() {
         let user = Scene.Map.current.user ? Scene.Map.current.user
             .player : Player.getTemporaryPlayer();
+        console.log(user);
         let target = Player.getTemporaryPlayer();
         let value = this.getValue(user, target);
         let currentValue;

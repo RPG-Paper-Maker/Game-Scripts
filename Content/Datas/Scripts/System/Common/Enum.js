@@ -130,6 +130,7 @@ var Enum;
         EventCommandKind[EventCommandKind["EndBattle"] = 66] = "EndBattle";
         EventCommandKind[EventCommandKind["ForceAnAction"] = 67] = "ForceAnAction";
         EventCommandKind[EventCommandKind["ChangeMapProperties"] = 68] = "ChangeMapProperties";
+        EventCommandKind[EventCommandKind["ChangeExperienceCurve"] = 69] = "ChangeExperienceCurve";
     })(EventCommandKind = Enum.EventCommandKind || (Enum.EventCommandKind = {}));
     ;
     /**

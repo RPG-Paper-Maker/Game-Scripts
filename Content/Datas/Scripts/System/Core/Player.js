@@ -51,6 +51,7 @@ class Player {
             }
             // Experience list
             this.expList = this.system.createExpList();
+            this.editedExpList = {};
             this.levelingUp = false;
             this.testedLevelUp = true;
             // Read if possible
@@ -203,7 +204,8 @@ class Player {
             sk: this.skills,
             status: statusList,
             stats: this.getSaveStat(),
-            equip: this.getSaveEquip()
+            equip: this.getSaveEquip(),
+            exp: this.editedExpList
         };
     }
     /**
@@ -596,6 +598,10 @@ class Player {
                 item = null;
             }
             this.equip[i] = item;
+        }
+        // Exp list
+        for (let i in json.exp) {
+            this.expList[i] = json.exp[i];
         }
         this.updateAllStatsValues();
     }

@@ -10,9 +10,9 @@
 */
 
 import { Base } from "./Base";
-import { System, Datas, Scene, EventCommand } from "../index";
-import { Utils, Enum, Mathf } from "../Common";
-import { Battler, Game, MapObject } from "../Core";
+import { System, Scene } from "../index";
+import { Utils, Enum } from "../Common";
+import { Game, MapObject } from "../Core";
 
 /** @class
  *  An event command for changing a map properties.
@@ -65,6 +65,7 @@ class ChangeMapProperties extends Base {
             this.skyKind = command[iterator.i++];
             this.skyID = System.DynamicValue.createValueCommand(command, iterator);
         }
+        this.isDirectNode = false;
     }
 
     /** 

@@ -17,6 +17,7 @@ export * from "./ChangeASkill";
 export * from "./ChangeAStatistic";
 export * from "./ChangeBattleMusic";
 export * from "./ChangeEquipment";
+export * from "./ChangeExperienceCurve";
 export * from "./ChangeMapProperties";
 export * from "./ChangeName";
 export * from "./ChangeProperty";

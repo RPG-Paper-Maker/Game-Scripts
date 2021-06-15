@@ -54,7 +54,8 @@ class ReactionInterpreter {
         this.currentParameters = parameters;
         this.currentCommand = command;
         this.updateObjectParameters();
-        this.currentCommandState = this.currentCommand.data.initialize();
+        this.currentCommandState = this.currentCommand === null ? null : this
+            .currentCommand.data.initialize();
         this.currentTimeState = event;
         this.isInMainMenu = Manager.Stack.isInMainMenu;
         Manager.Stack.requestPaintHUD = true;

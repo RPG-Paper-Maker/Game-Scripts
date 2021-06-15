@@ -62,7 +62,7 @@ declare class CommonSkillItem extends Icon {
     /** Check if the costs are possible.
      *  @returns {boolean}
      */
-    isPossible(target?: Player): boolean;
+    isPossible(target?: Player, checkCost?: boolean): boolean;
     /**
      *  Get the target kind string.
      *  @returns {string}

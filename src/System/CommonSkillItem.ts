@@ -152,7 +152,7 @@ class CommonSkillItem extends Icon {
     /** Check if the costs are possible.
      *  @returns {boolean}
      */
-    isPossible(target?: Player): boolean {
+    isPossible(target?: Player, checkCost: boolean = true): boolean {
         let targets = Scene.Map.current.getPossibleTargets(this.targetKind);
         let user = Scene.Map.current.user ? Scene.Map.current.user.player : null;
 
@@ -160,7 +160,6 @@ class CommonSkillItem extends Icon {
         if (!Interpreter.evaluate(this.conditionFormula.getValue())) {
             return false;
         }
-
         // Target condition : at least one target can be selected
         let fTargetCondition = (target: Player) => {
             return Interpreter.evaluate(this.targetConditionFormula.getValue(), 
@@ -175,7 +174,6 @@ class CommonSkillItem extends Icon {
                 return false;
             }
         }
-
         // If attack skill, also test on equipped weapons
         if (this.effects.some((effect) => { return effect.kind === Enum
             .EffectKind.SpecialActions && effect.specialActionKind === Enum
@@ -190,11 +188,12 @@ class CommonSkillItem extends Icon {
                 return false;
             }
         }
-
         // Skill cost
-        for (let i = 0, l = this.costs.length; i < l; i++) {
-            if (!this.costs[i].isPossible()) {
-                return false;
+        if (checkCost) {
+            for (let i = 0, l = this.costs.length; i < l; i++) {
+                if (!this.costs[i].isPossible()) {
+                    return false;
+                }
             }
         }
         return true;

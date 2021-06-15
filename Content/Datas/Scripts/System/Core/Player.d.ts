@@ -25,6 +25,7 @@ declare class Player {
     equip: Item[];
     status: Status[];
     expList: number[];
+    editedExpList: Record<string, number>;
     testedLevelUp: boolean;
     remainingXP: number;
     totalRemainingXP: number;
