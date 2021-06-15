@@ -16,6 +16,7 @@ export * from "./CallACommonReaction";
 export * from "./ChangeASkill";
 export * from "./ChangeAStatistic";
 export * from "./ChangeBattleMusic";
+export * from "./ChangeClass";
 export * from "./ChangeEquipment";
 export * from "./ChangeExperienceCurve";
 export * from "./ChangeMapProperties";

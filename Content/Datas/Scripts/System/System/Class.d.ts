@@ -12,6 +12,7 @@ declare class Class extends Translatable {
     static PROPERTY_FINAL_LEVEL: string;
     static PROPERTY_EXPERIENCE_BASE: string;
     static PROPERTY_EXPERIENCE_INFLATION: string;
+    id: number;
     initialLevel: number;
     finalLevel: number;
     experienceBase: number;

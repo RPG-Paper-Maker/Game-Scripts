@@ -58,66 +58,79 @@ class Hero extends Translatable {
     /** 
      *  Get the property according to class inherit and this hero.
      *  @param {string} prop - The property name
+     *  @param {System.Class} changedClass - The class if it was changed from original
      *  @returns {number}
      */
-    getProperty(prop: string): any {
-        return this.class.getProperty(prop, this.classInherit);
+    getProperty(prop: string, changedClass: System.Class): any {
+        return Utils.defaultValue(changedClass, this.class).getProperty(prop, 
+            this.classInherit);
     }
 
     /**
      *  Get the experience table according to class inherit and this hero.
+     *  @param {System.Class} changedClass - The class if it was changed from original
      *  @returns {Record<string, any>}
      */
-    getExperienceTable(): Record<string, any> {
-        return this.class.getExperienceTable(this.classInherit);
+    getExperienceTable(changedClass: System.Class): Record<string, any> {
+        return Utils.defaultValue(changedClass, this.class).getExperienceTable(
+            this.classInherit);
     }
 
     /** 
      *  Get the characteristics according to class inherit and this hero.
+     *  @param {System.Class} changedClass - The class if it was changed from original
      *  @returns {System.Characteristic[]}
      */
-    getCharacteristics(): System.Characteristic[] {
-        return this.class.getCharacteristics(this.classInherit);
+    getCharacteristics(changedClass: System.Class): System.Characteristic[] {
+        return Utils.defaultValue(changedClass, this.class).getCharacteristics(
+            this.classInherit);
     }
 
     /** 
      *  Get the statistics progression according to class inherit and this hero.
+     *  @param {System.Class} changedClass - The class if it was changed from original
      *  @returns {System.StatisticProgression[]}
      */
-    getStatisticsProgression(): StatisticProgression[] {
-        return this.class.getStatisticsProgression(this.classInherit);
+    getStatisticsProgression(changedClass: System.Class): StatisticProgression[] {
+        return Utils.defaultValue(changedClass, this.class).getStatisticsProgression(
+            this.classInherit);
     }
 
     /** 
      *  Get the skills according to class inherit and this hero.
      *  @param {number} level
+     *  @param {System.Class} changedClass - The class if it was changed from original
      *  @returns {Skill[]}
      */
-    getSkills(level: number): Skill[] {
-        return this.class.getSkills(this.classInherit, level);
+    getSkills(level: number, changedClass: System.Class): Skill[] {
+        return Utils.defaultValue(changedClass, this.class).getSkills(this
+            .classInherit, level);
     }
 
     /** 
      *  Get the learned skill at a specific level according to class inherit and 
      *  this hero.
      *  @param {number} level
+     *  @param {System.Class} changedClass - The class if it was changed from original
      *  @returns {Skill[]}
      */
-    getLearnedSkills(level: number): Skill[] {
-        return this.class.getLearnedSkills(this.classInherit, level);
+    getLearnedSkills(level: number, changedClass: System.Class): Skill[] {
+        return Utils.defaultValue(changedClass, this.class).getLearnedSkills(
+            this.classInherit, level);
     }
 
     /**  
      *  Create the experience list according to base and inflation.
+     *  @param {System.Class} changedClass - The class if it was changed from original
      *  @returns {number[]}
      */
-    createExpList(): number[] {
-        let finalLevel = this.getProperty(Class.PROPERTY_FINAL_LEVEL);
+    createExpList(changedClass: System.Class): number[] {
+        let finalLevel = this.getProperty(Class.PROPERTY_FINAL_LEVEL, changedClass);
         let experienceBase = this.getProperty(Class
-            .PROPERTY_EXPERIENCE_BASE);
+            .PROPERTY_EXPERIENCE_BASE, changedClass);
         let experienceInflation = this.getProperty(Class
-            .PROPERTY_EXPERIENCE_INFLATION);
-        let experienceTable = this.getExperienceTable();
+            .PROPERTY_EXPERIENCE_INFLATION, changedClass);
+        let experienceTable = this.getExperienceTable(changedClass);
         let expList = new Array(finalLevel + 1);
 
         // Basis

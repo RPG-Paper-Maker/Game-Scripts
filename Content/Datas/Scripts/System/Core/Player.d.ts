@@ -1,5 +1,4 @@
 import { Enum } from "../Common/index.js";
-import CharacterKind = Enum.CharacterKind;
 import { System } from "../index.js";
 import { Skill } from "./Skill.js";
 import { Item } from "./Item.js";
@@ -16,7 +15,7 @@ import { Status } from "./Status.js";
 declare class Player {
     static MAX_STATUS_DISPLAY_TOP: number;
     id: number;
-    kind: CharacterKind;
+    kind: Enum.CharacterKind;
     instid: number;
     system: System.Hero;
     name: string;
@@ -38,7 +37,8 @@ declare class Player {
     experienceGain: Record<string, number>[];
     currencyGain: Record<string, number>[];
     skillCostRes: Record<string, number>[];
-    constructor(kind?: CharacterKind, id?: number, instanceID?: number, skills?: Record<string, any>[], status?: Record<string, any>[], name?: string, json?: Record<string, any>);
+    changedClass: System.Class;
+    constructor(kind?: Enum.CharacterKind, id?: number, instanceID?: number, skills?: Record<string, any>[], status?: Record<string, any>[], name?: string, json?: Record<string, any>);
     /**
      *  Get the max size of equipment kind names.
      *  @static
@@ -280,5 +280,15 @@ declare class Player {
      *  @param {number} id
      */
     removeSkill(id: number): void;
+    /**
+     *  Get characteristics.
+     *  @returns {System.Characteristic[]}
+     */
+    getCharacteristics(): System.Characteristic[];
+    /**
+     *  Get player class (depends on if it was changed).
+     *  @returns {System.Characteristic[]}
+     */
+    getClass(): System.Class;
 }
 export { Player };

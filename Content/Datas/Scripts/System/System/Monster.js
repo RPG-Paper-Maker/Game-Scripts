@@ -33,7 +33,7 @@ class Monster extends Hero {
         this.rewards = {};
         // Experience
         this.rewards.xp = new ProgressionTable(this.getProperty(Class
-            .PROPERTY_FINAL_LEVEL), json.xp);
+            .PROPERTY_FINAL_LEVEL, undefined), json.xp);
         // Currencies
         let jsonCurrencies = json.cur;
         let l = jsonCurrencies.length;
@@ -65,7 +65,7 @@ class Monster extends Hero {
      */
     getRewardExperience(level) {
         return this.rewards.xp.getProgressionAt(level, this.getProperty(Class
-            .PROPERTY_FINAL_LEVEL));
+            .PROPERTY_FINAL_LEVEL, undefined));
     }
     /**
      *  Get the currencies reward.
@@ -77,7 +77,7 @@ class Monster extends Hero {
         let progression;
         for (let i = 0, l = this.rewards.currencies.length; i < l; i++) {
             progression = this.rewards.currencies[i];
-            currencies[progression.id] = progression.getProgressionAt(level, this.getProperty(Class.PROPERTY_FINAL_LEVEL));
+            currencies[progression.id] = progression.getProgressionAt(level, this.getProperty(Class.PROPERTY_FINAL_LEVEL, undefined));
         }
         return currencies;
     }

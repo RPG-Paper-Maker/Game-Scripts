@@ -10,8 +10,8 @@
 */
 
 import { Base } from "./Base";
-import { System } from "../index";
-import { Enum, Mathf } from "../Common";
+import { Datas, System } from "../index";
+import { Enum } from "../Common";
 import { Game, MapObject, Player } from "../Core";
 
 /** @class
@@ -19,15 +19,12 @@ import { Game, MapObject, Player } from "../Core";
  *  @extends EventCommand.Base
  *  @param {Object} command - Direct JSON command to parse
  */
-class ChangeExperienceCurve extends Base {
+class ChangeClass extends Base {
     
+    public classID: System.DynamicValue;
     public selectionKind: number;
     public selectionHeroEnemyInstanceID: System.DynamicValue;
     public selectionTeam: Enum.GroupKind;
-    public levelRange: System.DynamicValue;
-    public levelRangeTo: System.DynamicValue;
-    public operation: number;
-    public totalExperience: System.DynamicValue;
 
     constructor(command: any[]) {
         super();
@@ -35,6 +32,7 @@ class ChangeExperienceCurve extends Base {
         let iterator = {
             i: 0
         }
+        this.classID = System.DynamicValue.createValueCommand(command, iterator);
         this.selectionKind = command[iterator.i++];
         switch (this.selectionKind) {
             case 0:
@@ -45,10 +43,6 @@ class ChangeExperienceCurve extends Base {
                 this.selectionTeam = command[iterator.i++];
                 break;
         }
-        this.levelRange = System.DynamicValue.createValueCommand(command, iterator);
-        this.levelRangeTo = System.DynamicValue.createValueCommand(command, iterator);
-        this.operation = command[iterator.i++];
-        this.totalExperience = System.DynamicValue.createValueCommand(command, iterator);
     }
 
     /** 
@@ -61,6 +55,7 @@ class ChangeExperienceCurve extends Base {
     update(currentState: Record<string, any>, object: MapObject, state: number): 
         number
     {   
+        let newClass = Datas.Classes.get(this.classID.getValue());
         let targets: Player[];
         switch (this.selectionKind) {
             case 0:
@@ -71,21 +66,15 @@ class ChangeExperienceCurve extends Base {
                 targets = Game.current.getTeam(this.selectionTeam);
                 break;
         }
-        let level = this.levelRange.getValue();
-        let levelTo = this.levelRangeTo.getValue();
-        let totalExperience = this.totalExperience.getValue();
-        let i: number, value: number;
+        let level: number;
         for (let target of targets) {
-            for (i = level; i <= levelTo; i++) {
-                value = Mathf.OPERATORS_NUMBERS[this.operation](target.expList[i], 
-                    totalExperience);
-                target.expList[i] = value;
-                target.editedExpList[i] = value;
-            }
-            target.synchronizeLevel();
+            target.changedClass = newClass;
+            level = target[Datas.BattleSystems.getLevelStatistic().abbreviation];
+            target.skills = target.system.getSkills(level, newClass);
+            target.updateAllStatsValues();
         }
         return 1;
     }
 }
 
-export { ChangeExperienceCurve }
+export { ChangeClass }

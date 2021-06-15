@@ -61,9 +61,9 @@ class StatisticProgression extends Base {
      */
     getValueAtLevel(level: number, user: Player, maxLevel?: number): number {
         return this.isFix ? this.table.getProgressionAt(level, Utils.isUndefined
-            (maxLevel) ? user.system.getProperty(Class.PROPERTY_FINAL_LEVEL) : 
-            maxLevel) : Interpreter.evaluate(this.formula.getValue(), { user: 
-            user });
+            (maxLevel) ? user.system.getProperty(Class.PROPERTY_FINAL_LEVEL, user
+            .changedClass) : maxLevel) : Interpreter.evaluate(this.formula
+            .getValue(), { user: user });
     }
 }
 

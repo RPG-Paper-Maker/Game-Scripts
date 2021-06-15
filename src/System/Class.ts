@@ -27,6 +27,7 @@ class Class extends Translatable {
     public static PROPERTY_EXPERIENCE_BASE = "experienceBase";
     public static PROPERTY_EXPERIENCE_INFLATION = "experienceInflation";
 
+    public id: number;
     public initialLevel: number;
     public finalLevel: number;
     public experienceBase: number;
@@ -47,6 +48,7 @@ class Class extends Translatable {
     read(json: Record<string, any>) {
         super.read(json);
 
+        this.id = json.id;
         this.initialLevel = Utils.defaultValue(json.iniL, -1);
         this.finalLevel = Utils.defaultValue(json.mxL, -1);
         this.experienceBase = Utils.defaultValue(json.eB, -1);

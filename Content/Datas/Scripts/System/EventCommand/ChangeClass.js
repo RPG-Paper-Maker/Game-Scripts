@@ -9,20 +9,20 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
-import { System } from "../index.js";
-import { Mathf } from "../Common/index.js";
+import { Datas, System } from "../index.js";
 import { Game } from "../Core/index.js";
 /** @class
  *  An event command for changing experience curve of one or several hero.
  *  @extends EventCommand.Base
  *  @param {Object} command - Direct JSON command to parse
  */
-class ChangeExperienceCurve extends Base {
+class ChangeClass extends Base {
     constructor(command) {
         super();
         let iterator = {
             i: 0
         };
+        this.classID = System.DynamicValue.createValueCommand(command, iterator);
         this.selectionKind = command[iterator.i++];
         switch (this.selectionKind) {
             case 0:
@@ -33,10 +33,6 @@ class ChangeExperienceCurve extends Base {
                 this.selectionTeam = command[iterator.i++];
                 break;
         }
-        this.levelRange = System.DynamicValue.createValueCommand(command, iterator);
-        this.levelRangeTo = System.DynamicValue.createValueCommand(command, iterator);
-        this.operation = command[iterator.i++];
-        this.totalExperience = System.DynamicValue.createValueCommand(command, iterator);
     }
     /**
      *  Update and check if the event is finished.
@@ -46,6 +42,7 @@ class ChangeExperienceCurve extends Base {
      *  @returns {number} The number of node to pass
      */
     update(currentState, object, state) {
+        let newClass = Datas.Classes.get(this.classID.getValue());
         let targets;
         switch (this.selectionKind) {
             case 0:
@@ -56,19 +53,14 @@ class ChangeExperienceCurve extends Base {
                 targets = Game.current.getTeam(this.selectionTeam);
                 break;
         }
-        let level = this.levelRange.getValue();
-        let levelTo = this.levelRangeTo.getValue();
-        let totalExperience = this.totalExperience.getValue();
-        let i, value;
+        let level;
         for (let target of targets) {
-            for (i = level; i <= levelTo; i++) {
-                value = Mathf.OPERATORS_NUMBERS[this.operation](target.expList[i], totalExperience);
-                target.expList[i] = value;
-                target.editedExpList[i] = value;
-            }
-            target.synchronizeLevel();
+            target.changedClass = newClass;
+            level = target[Datas.BattleSystems.getLevelStatistic().abbreviation];
+            target.skills = target.system.getSkills(level, newClass);
+            target.updateAllStatsValues();
         }
         return 1;
     }
 }
-export { ChangeExperienceCurve };
+export { ChangeClass };

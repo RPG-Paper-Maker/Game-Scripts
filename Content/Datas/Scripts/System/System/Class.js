@@ -29,6 +29,7 @@ class Class extends Translatable {
      */
     read(json) {
         super.read(json);
+        this.id = json.id;
         this.initialLevel = Utils.defaultValue(json.iniL, -1);
         this.finalLevel = Utils.defaultValue(json.mxL, -1);
         this.experienceBase = Utils.defaultValue(json.eB, -1);

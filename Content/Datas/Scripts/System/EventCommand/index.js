@@ -15,6 +15,7 @@ export * from "./CallACommonReaction.js";
 export * from "./ChangeASkill.js";
 export * from "./ChangeAStatistic.js";
 export * from "./ChangeBattleMusic.js";
+export * from "./ChangeClass.js";
 export * from "./ChangeEquipment.js";
 export * from "./ChangeExperienceCurve.js";
 export * from "./ChangeMapProperties.js";

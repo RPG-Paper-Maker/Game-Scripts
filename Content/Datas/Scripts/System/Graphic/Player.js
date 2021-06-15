@@ -28,7 +28,7 @@ class Player extends Base {
         this.reverse = reverse;
         // Informations
         let hero = this.player.system;
-        let cl = hero.class;
+        let cl = this.player.getClass();
         let levelStat = Datas.BattleSystems.getLevelStatistic();
         let expStat = Datas.BattleSystems.getExpStatistic();
         // All the graphics
@@ -130,7 +130,7 @@ class Player extends Base {
     update() {
         // Informations
         let hero = this.player.system;
-        let cl = hero.class;
+        let cl = this.player.getClass();
         let levelStat = Datas.BattleSystems.getLevelStatistic();
         // All the graphics
         this.graphicName.setText(this.player.name);

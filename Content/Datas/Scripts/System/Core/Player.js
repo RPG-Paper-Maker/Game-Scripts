@@ -9,7 +9,6 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Enum, Interpreter, Utils, Platform, Mathf } from "../Common/index.js";
-var CharacterKind = Enum.CharacterKind;
 import { Datas, System, Graphic } from "../index.js";
 import { Skill } from "./Skill.js";
 import { Item } from "./Item.js";
@@ -50,13 +49,15 @@ class Player {
                 this.status[i] = new Status(element.id, element.turn);
             }
             // Experience list
-            this.expList = this.system.createExpList();
             this.editedExpList = {};
             this.levelingUp = false;
             this.testedLevelUp = true;
             // Read if possible
             if (json) {
                 this.read(json);
+            }
+            else {
+                this.expList = this.system.createExpList(undefined);
             }
         }
     }
@@ -175,9 +176,9 @@ class Player {
      */
     getSystem() {
         switch (this.kind) {
-            case CharacterKind.Hero:
+            case Enum.CharacterKind.Hero:
                 return Datas.Heroes.get(this.id);
-            case CharacterKind.Monster:
+            case Enum.CharacterKind.Monster:
                 return Datas.Monsters.get(this.id);
         }
     }
@@ -205,7 +206,8 @@ class Player {
             status: statusList,
             stats: this.getSaveStat(),
             equip: this.getSaveEquip(),
-            exp: this.editedExpList
+            exp: this.editedExpList,
+            class: this.changedClass ? this.changedClass.id : undefined
         };
     }
     /**
@@ -253,9 +255,9 @@ class Player {
      */
     instanciate(level) {
         // Skills
-        this.skills = this.system.getSkills(level);
+        this.skills = this.system.getSkills(level, this.changedClass);
         // Begin equipment
-        let characteristics = this.system.getCharacteristics();
+        let characteristics = this.system.getCharacteristics(this.changedClass);
         let i, l, characteristic, kind, itemID, item;
         for (i = 1, l = characteristics.length; i < l; i++) {
             characteristic = characteristics[i];
@@ -275,7 +277,8 @@ class Player {
         }
         // Stats
         let statistics = Datas.BattleSystems.statisticsOrder;
-        let statisticsProgression = this.system.getStatisticsProgression();
+        let statisticsProgression = this.system.getStatisticsProgression(this
+            .changedClass);
         let nonFixStatistics = new Array;
         for (i = 0, l = statistics.length; i < l; i++) {
             this[Datas.BattleSystems.getStatistic(statistics[i])
@@ -376,7 +379,7 @@ class Player {
             }
         }
         // Class and hero characteristics
-        this.updateCharacteristics(this.system.getCharacteristics(), list, bonus, res);
+        this.updateCharacteristics(this.system.getCharacteristics(this.changedClass), list, bonus, res);
         // Same values for not changed stats and added stats
         let id;
         for (i = 0, l = statistics.length; i < l; i++) {
@@ -389,7 +392,8 @@ class Player {
             list[id] += added[id];
         }
         // Update formulas statistics
-        let statisticsProgression = this.system.getStatisticsProgression();
+        let statisticsProgression = this.system.getStatisticsProgression(this
+            .changedClass);
         let previewPlayer = Player.getTemporaryPlayer(list);
         let statisticProgression;
         for (i = 0, l = statisticsProgression.length; i < l; i++) {
@@ -397,9 +401,8 @@ class Player {
                 statisticProgression = statisticsProgression[j];
                 list[statisticProgression.id] = statisticProgression
                     .getValueAtLevel(this.getCurrentLevel(), previewPlayer, this
-                    .system.getProperty(System.Class.PROPERTY_FINAL_LEVEL)) +
-                    bonus[statisticProgression.id] + added[statisticProgression
-                    .id];
+                    .system.getProperty(System.Class.PROPERTY_FINAL_LEVEL, this
+                    .changedClass)) + bonus[statisticProgression.id] + added[statisticProgression.id];
                 previewPlayer.initStatValue(Datas.BattleSystems.getStatistic(statisticProgression.id), list[statisticProgression.id]);
             }
         }
@@ -509,7 +512,8 @@ class Player {
         // Fix values : equipment influence etc
         let level = this.getCurrentLevel();
         let statistics = Datas.BattleSystems.statisticsOrder;
-        let statisticsProgression = this.system.getStatisticsProgression();
+        let statisticsProgression = this.system.getStatisticsProgression(this
+            .changedClass);
         let nonFixStatistics = new Array;
         let i, l;
         for (i = 0, l = statistics.length; i < l; i++) {
@@ -600,6 +604,8 @@ class Player {
             this.equip[i] = item;
         }
         // Exp list
+        this.changedClass = json.class ? Datas.Classes.get(json.class) : undefined;
+        this.expList = this.system.createExpList(this.changedClass);
         for (let i in json.exp) {
             this.expList[i] = json.exp[i];
         }
@@ -628,7 +634,7 @@ class Player {
      */
     learnSkills() {
         let newSkills = this.system.getLearnedSkills(this[Datas.BattleSystems
-            .getLevelStatistic().abbreviation]);
+            .getLevelStatistic().abbreviation], this.changedClass);
         // If already added, remove
         for (let skill of newSkills) {
             this.removeSkill(skill.id);
@@ -980,6 +986,20 @@ class Player {
         if (index !== -1) {
             this.skills.splice(index, 1);
         }
+    }
+    /**
+     *  Get characteristics.
+     *  @returns {System.Characteristic[]}
+     */
+    getCharacteristics() {
+        return this.system.getCharacteristics(this.changedClass);
+    }
+    /**
+     *  Get player class (depends on if it was changed).
+     *  @returns {System.Characteristic[]}
+     */
+    getClass() {
+        return Utils.defaultValue(this.changedClass, this.system.class);
     }
 }
 Player.MAX_STATUS_DISPLAY_TOP = 3;

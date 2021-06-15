@@ -125,7 +125,7 @@ class MenuEquip extends MenuBase {
         let equipLength = Player.getEquipmentLength();
         let l = Datas.BattleSystems.equipmentsOrder.length;
         let player = Game.current.teamHeroes[this.windowChoicesTabs.currentSelectedIndex];
-        let characteristics = player.system.getCharacteristics();
+        let characteristics = player.getCharacteristics();
         let list = new Array(l);
         let j, m, characteristic, isPossible;
         for (let i = 0; i < l; i++) {
@@ -170,7 +170,7 @@ class MenuEquip extends MenuBase {
                 if (type.equipments[idEquipment]) {
                     nbItem = item.nb;
                     if (nbItem > 0) {
-                        characteristics = player.system.getCharacteristics();
+                        characteristics = player.getCharacteristics();
                         allow = true;
                         for (j = 0, m = characteristics.length; j < m; j++) {
                             characteristic = characteristics[j];

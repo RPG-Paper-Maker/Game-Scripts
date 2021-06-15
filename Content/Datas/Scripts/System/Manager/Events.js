@@ -160,6 +160,8 @@ class Events {
                 return new EventCommand.ChangeMapProperties(command);
             case EventCommandKind.ChangeExperienceCurve:
                 return new EventCommand.ChangeExperienceCurve(command);
+            case EventCommandKind.ChangeClass:
+                return new EventCommand.ChangeClass(command);
             default:
                 return null;
         }

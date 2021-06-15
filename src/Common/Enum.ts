@@ -129,7 +129,8 @@ namespace Enum {
         EndBattle,
         ForceAnAction,
         ChangeMapProperties,
-        ChangeExperienceCurve
+        ChangeExperienceCurve,
+        ChangeClass
     };
 
     /**
