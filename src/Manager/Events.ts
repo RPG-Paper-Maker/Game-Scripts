@@ -166,6 +166,8 @@ class Events {
                 return new EventCommand.ChangeExperienceCurve(command);
             case EventCommandKind.ChangeClass:
                 return new EventCommand.ChangeClass(command);
+            case EventCommandKind.ChangeChronometer:
+                return new EventCommand.ChangeChronometer(command);
             default:
                 return null;
         }

@@ -130,7 +130,8 @@ namespace Enum {
         ForceAnAction,
         ChangeMapProperties,
         ChangeExperienceCurve,
-        ChangeClass
+        ChangeClass,
+        ChangeChronometer
     };
 
     /**

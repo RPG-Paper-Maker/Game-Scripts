@@ -118,7 +118,8 @@ declare namespace Enum {
         ForceAnAction = 67,
         ChangeMapProperties = 68,
         ChangeExperienceCurve = 69,
-        ChangeClass = 70
+        ChangeClass = 70,
+        ChangeChronometer = 71
     }
     /**
      *   Enum for the different items kind.

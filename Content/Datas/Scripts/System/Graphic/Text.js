@@ -189,15 +189,15 @@ class Text extends Base {
                 xBack = x - (textWidth / 2);
                 break;
         }
-        y += ScreenResolution.getScreenY(this.fontSize) / 3;
         switch (this.verticalAlign) {
             case AlignVertical.Bot:
-                y += h;
+                y += (ScreenResolution.getScreenY(this.fontSize) / 3) + h;
                 break;
             case AlignVertical.Top:
+                y += ScreenResolution.getScreenY(this.fontSize);
                 break;
             case AlignVertical.Center:
-                y += (h / 2);
+                y += (ScreenResolution.getScreenY(this.fontSize) / 3) + (h / 2);
                 break;
         }
         // Draw background color

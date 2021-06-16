@@ -181,7 +181,7 @@ class Stack {
     static update() {
         // Update game timer if there's a current game
         if (Game.current !== null) {
-            Game.current.playTime.update();
+            Game.current.update();
         }
 
         // Update songs manager
@@ -280,6 +280,9 @@ class Stack {
                         this.displayedPictures[i][1].draw();
                     }
                 }
+            }
+            if (Game.current !== null) {
+                Game.current.drawHUD();
             }
         }
     }

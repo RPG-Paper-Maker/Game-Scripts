@@ -41,6 +41,7 @@ declare class Game {
     steps: number;
     saves: number;
     battles: number;
+    chronometers: Chrono[];
     constructor(slot?: number);
     /**
      *  Get the hero in a tab with instance ID.
@@ -156,5 +157,18 @@ declare class Game {
      *  @returns {Record<string, any>}
     */
     getPortionPosDatas(id: number, i: number, j: number, k: number): Record<string, any>;
+    /**
+     *  Get a chrono ID.
+     *  @returns {number}
+    */
+    getNewChronoID(): number;
+    /**
+     *  Update.
+     */
+    update(): void;
+    /**
+     *  Draw the HUD.
+     */
+    drawHUD(): void;
 }
 export { Game };

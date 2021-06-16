@@ -23,6 +23,7 @@ import { Vector3 } from "./Vector3.js";
  */
 class Game {
     constructor(slot = -1) {
+        this.chronometers = [];
         this.slot = slot;
         this.hero = new MapObject(Datas.Systems.modelHero.system, Datas.Systems
             .modelHero.position.clone(), true);
@@ -67,6 +68,9 @@ class Game {
         this.steps = Utils.defaultValue(json.steps, 0);
         this.saves = Utils.defaultValue(json.saves, 0);
         this.battles = Utils.defaultValue(json.battles, 0);
+        this.chronometers = json.chronos.map((chrono) => {
+            return new Chrono(json.t, json.id, true, json.d);
+        });
         // Items
         this.items = [];
         Utils.readJSONSystemList({ list: json.itm, listIndexes: this.items, func: (json) => {
@@ -179,6 +183,13 @@ class Game {
             steps: this.steps,
             saves: this.saves,
             battles: this.battles,
+            chronos: this.chronometers.map((chrono) => {
+                return {
+                    t: chrono.time,
+                    id: chrono.id,
+                    d: chrono.graphic !== null
+                };
+            }),
             mapsDatas: this.getCompressedMapsDatas()
         });
     }
@@ -506,6 +517,44 @@ class Game {
     */
     getPortionPosDatas(id, i, j, k) {
         return this.mapsDatas[id][i][j < 0 ? 0 : 1][Math.abs(j)][k];
+    }
+    /**
+     *  Get a chrono ID.
+     *  @returns {number}
+    */
+    getNewChronoID() {
+        let id = 0;
+        let test = false;
+        let chrono;
+        while (!test) {
+            test = true;
+            for (chrono of this.chronometers) {
+                if (chrono.id === id) {
+                    id++;
+                    test = false;
+                    break;
+                }
+            }
+        }
+        return id;
+    }
+    /**
+     *  Update.
+     */
+    update() {
+        this.playTime.update();
+        for (let chrono of this.chronometers) {
+            if (chrono.update()) {
+            }
+        }
+    }
+    /**
+     *  Draw the HUD.
+     */
+    drawHUD() {
+        for (let chrono of this.chronometers) {
+            chrono.drawHUD();
+        }
     }
 }
 Game.current = null;

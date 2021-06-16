@@ -9,17 +9,30 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Graphic } from "..";
+import { Enum, ScreenResolution, Utils } from "../Common";
+
 /** @class
  *  A chrono in the game.
  *  @param {number} start - The start time of the chrono (in milliseconds)
  */
 class Chrono {
 
+    public id: number;
     public time: number;
     public lastTime: number;
+    public reverse: boolean;
+    public paused: boolean = false;
+    public graphic: Graphic.Text;
 
-    constructor(start: number = 0) {
+    constructor(start: number = 0, id: number = -1, reverse: boolean = false,
+        displayOnScreen: boolean = false) {
+        this.id = id;
+        this.reverse = reverse;
         this.time = start;
+        this.graphic = displayOnScreen ? new Graphic.Text(Utils.getStringDate(
+            this.getSeconds()), { align: Enum.Align.Right, verticalAlign: Enum
+            .AlignVertical.Top}) : null;
         this.lastTime = new Date().getTime();
     }
 
@@ -28,16 +41,54 @@ class Chrono {
      *  @returns {number}
      */
     getSeconds(): number {
-        return Math.floor(this.time / 1000);
+        return this.reverse ? Math.ceil(this.time / 1000) : Math.floor(this.time 
+            / 1000);
     }
 
     /** 
-     *  Update the chrono
+     *  Pause the chrono.
      */
-    update() {
+    pause() {
+        this.paused = true;
+    }
+
+    /** 
+     *  Continue the chrono (if paused).
+     */
+    continue() {
+        this.paused = false;
+        this.lastTime = new Date().getTime();
+    }
+
+    /** 
+     *  Update the chrono. If reverse, return true if time reach 0.
+     *  @returns {boolean}
+     */
+    update(): boolean {
+        if (this.paused) {
+            return false;
+        }
+        if (this.reverse && this.time === 0) {
+            return true;
+        }
         let date = new Date().getTime();
-        this.time += date - this.lastTime;
+        this.time += (this.reverse ? -1 : 1) * (date - this.lastTime);
+        this.time = Math.max(0, this.time);
         this.lastTime = date;
+        if (this.graphic !== null) {
+            this.graphic.setText(Utils.getStringDate(this.getSeconds()));
+        }
+        return this.reverse && this.time === 0;
+    }
+
+    /** 
+     *  Draw the HUD chrono.
+     */
+    drawHUD() {
+        if (this.graphic !== null) {
+            this.graphic.draw(0, 0, ScreenResolution.SCREEN_X, ScreenResolution
+                .SCREEN_Y);
+        }
     }
 }
 

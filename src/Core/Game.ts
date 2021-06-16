@@ -56,6 +56,7 @@ class Game {
     public steps: number;
     public saves: number;
     public battles: number;
+    public chronometers: Chrono[] = [];
 
     constructor(slot: number = -1) {
         this.slot = slot;
@@ -104,6 +105,9 @@ class Game {
         this.steps = Utils.defaultValue(json.steps, 0);
         this.saves = Utils.defaultValue(json.saves, 0);
         this.battles = Utils.defaultValue(json.battles, 0);
+        this.chronometers = json.chronos.map((chrono: Record<string,any>) => {
+            return new Chrono(json.t, json.id, true, json.d);
+        });
 
         // Items
         this.items = [];
@@ -225,6 +229,13 @@ class Game {
             steps: this.steps,
             saves: this.saves,
             battles: this.battles,
+            chronos: this.chronometers.map((chrono: Chrono) => {
+                return {
+                    t: chrono.time, 
+                    id: chrono.id, 
+                    d: chrono.graphic !== null
+                }
+            }),
             mapsDatas : this.getCompressedMapsDatas()
         });
     }
@@ -576,6 +587,48 @@ class Game {
     */
     getPortionPosDatas(id: number, i: number, j: number, k: number): Record<string, any> {
         return this.mapsDatas[id][i][j < 0 ? 0 : 1][Math.abs(j)][k];
+    }
+
+    /** 
+     *  Get a chrono ID.
+     *  @returns {number}
+    */
+    getNewChronoID(): number {
+        let id = 0;
+        let test = false;
+        let chrono: Chrono;
+        while (!test) {
+            test = true;
+            for (chrono of this.chronometers) {
+                if (chrono.id === id) {
+                    id++;
+                    test = false;
+                    break;
+                }
+            }
+        }
+        return id;
+    }
+
+    /**
+     *  Update.
+     */
+    update() {
+        this.playTime.update();
+        for (let chrono of this.chronometers) {
+            if (chrono.update()) {
+
+            }
+        }
+    }
+
+    /** 
+     *  Draw the HUD.
+     */
+    drawHUD(){
+        for (let chrono of this.chronometers) {
+            chrono.drawHUD();
+        }
     }
 }
 
