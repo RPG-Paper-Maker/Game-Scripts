@@ -24,6 +24,7 @@ class Chrono {
     public reverse: boolean;
     public paused: boolean = false;
     public graphic: Graphic.Text;
+    public finished: boolean = false;
 
     constructor(start: number = 0, id: number = -1, reverse: boolean = false,
         displayOnScreen: boolean = false) {
@@ -65,11 +66,8 @@ class Chrono {
      *  @returns {boolean}
      */
     update(): boolean {
-        if (this.paused) {
+        if (this.paused || this.finished) {
             return false;
-        }
-        if (this.reverse && this.time === 0) {
-            return true;
         }
         let date = new Date().getTime();
         this.time += (this.reverse ? -1 : 1) * (date - this.lastTime);
@@ -78,7 +76,8 @@ class Chrono {
         if (this.graphic !== null) {
             this.graphic.setText(Utils.getStringDate(this.getSeconds()));
         }
-        return this.reverse && this.time === 0;
+        this.finished = this.reverse && this.time === 0;
+        return this.finished;
     }
 
     /** 

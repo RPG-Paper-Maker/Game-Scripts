@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Player } from "./Player.js";
-import { Datas, Scene } from "../index.js";
+import { Datas, Manager, Scene, System } from "../index.js";
 import { Item } from "./Item.js";
 import { Chrono } from "./Chrono.js";
 import { MapObject } from "./MapObject.js";
@@ -545,6 +545,8 @@ class Game {
         this.playTime.update();
         for (let chrono of this.chronometers) {
             if (chrono.update()) {
+                Manager.Events.sendEvent(null, 0, 1, true, 2, [null, System
+                        .DynamicValue.createNumber(chrono.id)], true, false);
             }
         }
     }

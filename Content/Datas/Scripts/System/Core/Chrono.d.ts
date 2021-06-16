@@ -10,6 +10,7 @@ declare class Chrono {
     reverse: boolean;
     paused: boolean;
     graphic: Graphic.Text;
+    finished: boolean;
     constructor(start?: number, id?: number, reverse?: boolean, displayOnScreen?: boolean);
     /**
      *  Get time time in seconds.

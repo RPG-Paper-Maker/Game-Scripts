@@ -17,6 +17,7 @@ import { Enum, ScreenResolution, Utils } from "../Common/index.js";
 class Chrono {
     constructor(start = 0, id = -1, reverse = false, displayOnScreen = false) {
         this.paused = false;
+        this.finished = false;
         this.id = id;
         this.reverse = reverse;
         this.time = start;
@@ -50,11 +51,8 @@ class Chrono {
      *  @returns {boolean}
      */
     update() {
-        if (this.paused) {
+        if (this.paused || this.finished) {
             return false;
-        }
-        if (this.reverse && this.time === 0) {
-            return true;
         }
         let date = new Date().getTime();
         this.time += (this.reverse ? -1 : 1) * (date - this.lastTime);
@@ -63,7 +61,8 @@ class Chrono {
         if (this.graphic !== null) {
             this.graphic.setText(Utils.getStringDate(this.getSeconds()));
         }
-        return this.reverse && this.time === 0;
+        this.finished = this.reverse && this.time === 0;
+        return this.finished;
     }
     /**
      *  Draw the HUD chrono.

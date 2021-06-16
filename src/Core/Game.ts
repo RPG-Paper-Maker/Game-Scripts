@@ -10,7 +10,7 @@
 */
 
 import { Player } from "./Player";
-import { Datas, Scene, System } from "../index";
+import { Datas, Manager, Scene, System } from "../index";
 import { Item } from "./Item";
 import { Chrono } from "./Chrono";
 import { MapObject } from "./MapObject";
@@ -617,7 +617,8 @@ class Game {
         this.playTime.update();
         for (let chrono of this.chronometers) {
             if (chrono.update()) {
-
+                Manager.Events.sendEvent(null, 0, 1, true, 2, [null, System
+                    .DynamicValue.createNumber(chrono.id)], true, false);
             }
         }
     }
