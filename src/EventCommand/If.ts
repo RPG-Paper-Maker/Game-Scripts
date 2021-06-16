@@ -14,7 +14,7 @@ import { System, Datas, Scene } from "../index";
 import { Utils, Enum, Mathf, KeyEvent, Interpreter } from "../Common";
 import ConditionHeroesKind = Enum.ConditionHeroesKind;
 import ItemKind = Enum.ItemKind;
-import { Player, MapObject, Item, Game, StructSearchResult } from "../Core";
+import { Player, MapObject, Item, Game, StructSearchResult, Chrono } from "../Core";
 
 /** @class
  *  An event command for condition event command block.
@@ -61,6 +61,9 @@ class If extends Base {
     public keyValue: System.DynamicValue;
     public objectIDLookingAt: System.DynamicValue;
     public orientationLookingAt: Enum.Orientation;
+    public chronometerID: System.DynamicValue;
+    public chronometerOperation: number;
+    public chronometerSeconds: System.DynamicValue;
     public script: System.DynamicValue;
 
     constructor(command: any[]) {
@@ -171,6 +174,13 @@ class If extends Base {
                 this.objectIDLookingAt = System.DynamicValue.createValueCommand(
                     command, iterator);
                 this.orientationLookingAt = command[iterator.i++];
+                break;
+            case 10:
+                this.chronometerID = System.DynamicValue.createValueCommand(
+                    command, iterator);
+                this.chronometerOperation = command[iterator.i++];
+                this.chronometerSeconds = System.DynamicValue.createValueCommand(
+                    command, iterator);
                 break;
         }
     }
@@ -441,6 +451,18 @@ class If extends Base {
                     break;
                 }
             }
+            case 10:
+                let index = Utils.indexOfProp(Game.current.chronometers, "id", 
+                    this.chronometerID.getValue());
+                if (index === -1) {
+                    result = false;
+                    break;
+                } else {
+                    let chrono = Game.current.chronometers[index];
+                    result = Mathf.OPERATORS_COMPARE[this.chronometerOperation](
+                        chrono.getSeconds(), this.chronometerSeconds.getValue());
+                }
+                break;
             default:
                 break;
         }

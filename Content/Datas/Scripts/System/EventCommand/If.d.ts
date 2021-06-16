@@ -46,6 +46,9 @@ declare class If extends Base {
     keyValue: System.DynamicValue;
     objectIDLookingAt: System.DynamicValue;
     orientationLookingAt: Enum.Orientation;
+    chronometerID: System.DynamicValue;
+    chronometerOperation: number;
+    chronometerSeconds: System.DynamicValue;
     script: System.DynamicValue;
     constructor(command: any[]);
     /**

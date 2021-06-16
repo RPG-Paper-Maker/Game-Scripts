@@ -115,6 +115,11 @@ class If extends Base {
                 this.objectIDLookingAt = System.DynamicValue.createValueCommand(command, iterator);
                 this.orientationLookingAt = command[iterator.i++];
                 break;
+            case 10:
+                this.chronometerID = System.DynamicValue.createValueCommand(command, iterator);
+                this.chronometerOperation = command[iterator.i++];
+                this.chronometerSeconds = System.DynamicValue.createValueCommand(command, iterator);
+                break;
         }
     }
     /**
@@ -350,6 +355,17 @@ class If extends Base {
                     break;
                 }
             }
+            case 10:
+                let index = Utils.indexOfProp(Game.current.chronometers, "id", this.chronometerID.getValue());
+                if (index === -1) {
+                    result = false;
+                    break;
+                }
+                else {
+                    let chrono = Game.current.chronometers[index];
+                    result = Mathf.OPERATORS_COMPARE[this.chronometerOperation](chrono.getSeconds(), this.chronometerSeconds.getValue());
+                }
+                break;
             default:
                 break;
         }

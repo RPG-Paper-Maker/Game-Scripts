@@ -76,7 +76,7 @@ class ChangeChronometer extends Base {
         }
         // Stock value
         if (this.operation !== 0 && this.stockValue && chrono !== null) {
-            Game.current.variables[this.stockID.getValue(true)] = chrono.time / 1000;
+            Game.current.variables[this.stockID.getValue(true)] = chrono.getSeconds();
         }
         return 1;
     }

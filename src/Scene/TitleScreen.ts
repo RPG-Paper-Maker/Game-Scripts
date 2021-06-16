@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { Manager, Datas, Graphic } from "../index";
-import { Picture2D, WindowChoices, WindowBox } from "../Core";
+import { Picture2D, WindowChoices, WindowBox, Game } from "../Core";
 import { Enum, Platform, ScreenResolution, Constants } from "../Common";
 import PictureKind = Enum.PictureKind;
 
@@ -59,6 +59,8 @@ class TitleScreen extends Base {
      * @memberof TitleScreen
      */
     async load() {
+        Game.current = null;
+        
         // Stop all songs
         Manager.Songs.stopAll();
 

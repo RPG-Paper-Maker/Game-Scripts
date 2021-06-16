@@ -10,7 +10,7 @@
 */
 import { Base } from "./Base.js";
 import { Manager, Datas } from "../index.js";
-import { Picture2D, WindowChoices, WindowBox } from "../Core/index.js";
+import { Picture2D, WindowChoices, WindowBox, Game } from "../Core/index.js";
 import { Enum, Platform, ScreenResolution, Constants } from "../Common/index.js";
 var PictureKind = Enum.PictureKind;
 /**
@@ -37,6 +37,7 @@ class TitleScreen extends Base {
      * @memberof TitleScreen
      */
     async load() {
+        Game.current = null;
         // Stop all songs
         Manager.Songs.stopAll();
         // Destroy pictures
