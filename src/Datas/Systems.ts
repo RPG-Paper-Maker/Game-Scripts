@@ -10,9 +10,7 @@
 */
 
 import { IO, Paths, Platform, ScreenResolution, Utils, Constants, Enum } from "../Common";
-import * as System from "../System";
-import { Manager, Datas, Scene, EventCommand } from "../index";
-import SongKind = Enum.SongKind;
+import { Manager, Datas, Scene, EventCommand, System } from "../index";
 import { Position, MapPortion, MapObject } from "../Core";
 
 /** @class
@@ -107,7 +105,7 @@ class Systems {
 
         // Other numbers
         this.SQUARE_SIZE = json.ss;
-        this.PORTIONS_RAY_NEAR = 3; // TODO: json.pr
+        this.PORTIONS_RAY_NEAR = Utils.defaultValue(json.portionRayIngame, 3);
         this.FRAMES = json.frames;
         this.mountainCollisionHeight = System.DynamicValue.readOrDefaultNumber(
             json.mch, 4);
@@ -200,10 +198,10 @@ class Systems {
         }});
         
         // Sounds
-        this.soundCursor = new System.PlaySong(SongKind.Sound, json.scu);
-        this.soundConfirmation = new System.PlaySong(SongKind.Sound, json.sco);
-        this.soundCancel = new System.PlaySong(SongKind.Sound, json.sca);
-        this.soundImpossible = new System.PlaySong(SongKind.Sound, json.si);
+        this.soundCursor = new System.PlaySong(Enum.SongKind.Sound, json.scu);
+        this.soundConfirmation = new System.PlaySong(Enum.SongKind.Sound, json.sco);
+        this.soundCancel = new System.PlaySong(Enum.SongKind.Sound, json.sca);
+        this.soundImpossible = new System.PlaySong(Enum.SongKind.Sound, json.si);
 
         // Window skin options
         this.dbOptions = <EventCommand.SetDialogBoxOptions> Manager.Events

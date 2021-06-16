@@ -9,9 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { IO, Paths, Platform, ScreenResolution, Utils, Constants, Enum } from "../Common/index.js";
-import * as System from "../System/index.js";
-import { Manager, Datas, Scene } from "../index.js";
-var SongKind = Enum.SongKind;
+import { Manager, Datas, Scene, System } from "../index.js";
 import { Position, MapPortion } from "../Core/index.js";
 /** @class
 *   All the System datas.
@@ -58,7 +56,8 @@ class Systems {
         this.antialias = Utils.defaultValue(json.aa, false);
         // Other numbers
         this.SQUARE_SIZE = json.ss;
-        this.PORTIONS_RAY_NEAR = 3; // TODO: json.pr
+        this.PORTIONS_RAY_NEAR = Utils.defaultValue(json.portionRayIngame, 3);
+        console.log(this.PORTIONS_RAY_NEAR);
         this.FRAMES = json.frames;
         this.mountainCollisionHeight = System.DynamicValue.readOrDefaultNumber(json.mch, 4);
         this.mountainCollisionAngle = System.DynamicValue
@@ -131,10 +130,10 @@ class Systems {
                 return System.DynamicValue.readOrDefaultNumberDouble(element.v, 1);
             } });
         // Sounds
-        this.soundCursor = new System.PlaySong(SongKind.Sound, json.scu);
-        this.soundConfirmation = new System.PlaySong(SongKind.Sound, json.sco);
-        this.soundCancel = new System.PlaySong(SongKind.Sound, json.sca);
-        this.soundImpossible = new System.PlaySong(SongKind.Sound, json.si);
+        this.soundCursor = new System.PlaySong(Enum.SongKind.Sound, json.scu);
+        this.soundConfirmation = new System.PlaySong(Enum.SongKind.Sound, json.sco);
+        this.soundCancel = new System.PlaySong(Enum.SongKind.Sound, json.sca);
+        this.soundImpossible = new System.PlaySong(Enum.SongKind.Sound, json.si);
         // Window skin options
         this.dbOptions = Manager.Events
             .getEventCommand(json.dbo);
