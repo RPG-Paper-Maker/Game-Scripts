@@ -57,6 +57,7 @@ class Systems {
     public static soundCancel: System.PlaySong;
     public static soundImpossible: System.PlaySong;
     public static dbOptions: EventCommand.SetDialogBoxOptions;
+    public static saveSlots: number;
     public static modelHero: MapObject;
     public static ignoreAssetsLoadingErrors: boolean;
 
@@ -117,6 +118,7 @@ class Systems {
         this.battlersColumns = Utils.defaultValue(json.battlersColumns, 9);
         this.autotilesFrames = Utils.defaultValue(json.battlersColumns, 4);
         this.autotilesFrameDuration = Utils.defaultValue(json.battlersColumns, 150);
+        this.saveSlots = Utils.defaultValue(json.saveSlots, 4);
         this.priceSoldItem = System.DynamicValue.readOrDefaultNumberDouble(json
             .priceSoldItem, 50);
 

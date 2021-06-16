@@ -57,7 +57,6 @@ class Systems {
         // Other numbers
         this.SQUARE_SIZE = json.ss;
         this.PORTIONS_RAY_NEAR = Utils.defaultValue(json.portionRayIngame, 3);
-        console.log(this.PORTIONS_RAY_NEAR);
         this.FRAMES = json.frames;
         this.mountainCollisionHeight = System.DynamicValue.readOrDefaultNumber(json.mch, 4);
         this.mountainCollisionAngle = System.DynamicValue
@@ -67,6 +66,7 @@ class Systems {
         this.battlersColumns = Utils.defaultValue(json.battlersColumns, 9);
         this.autotilesFrames = Utils.defaultValue(json.battlersColumns, 4);
         this.autotilesFrameDuration = Utils.defaultValue(json.battlersColumns, 150);
+        this.saveSlots = Utils.defaultValue(json.saveSlots, 4);
         this.priceSoldItem = System.DynamicValue.readOrDefaultNumberDouble(json
             .priceSoldItem, 50);
         // Path BR

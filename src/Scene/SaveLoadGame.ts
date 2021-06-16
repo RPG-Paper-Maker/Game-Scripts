@@ -35,9 +35,10 @@ class SaveLoadGame extends Base {
      */
     async load() {
         // Initialize games
-        this.gamesDatas = [null, null, null, null];
+        this.gamesDatas = [];
         let currentGame = Game.current;
-        for (let i = 1; i <= 4; i++) {
+        for (let i = 1; i <= Datas.Systems.saveSlots; i++) {
+            this.gamesDatas.push(null);
             Game.current = new Game(i);
             await Game.current.load();
             this.initializeGame(Game.current);
@@ -53,7 +54,7 @@ class SaveLoadGame extends Base {
         );
         this.windowChoicesSlots = new WindowChoices(10, 100, 100, 50, this
             .gamesDatas, {
-                nbItemsMax: 4,
+                nbItemsMax: 6,
                 padding: WindowBox.NONE_PADDING
             }
         );

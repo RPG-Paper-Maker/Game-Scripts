@@ -43,6 +43,7 @@ declare class Systems {
     static soundCancel: System.PlaySong;
     static soundImpossible: System.PlaySong;
     static dbOptions: EventCommand.SetDialogBoxOptions;
+    static saveSlots: number;
     static modelHero: MapObject;
     static ignoreAssetsLoadingErrors: boolean;
     constructor();
