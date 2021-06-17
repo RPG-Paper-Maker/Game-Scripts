@@ -11,7 +11,11 @@
 
 const { app, BrowserWindow, globalShortcut, dialog, screen } = require('electron')
 
-global.modeTest = app.commandLine.getSwitchValue("modeTest");
+if (process.argv.length === 3) {
+    global.modeTest = process.argv[2];
+} else {
+    global.modeTest = app.commandLine.getSwitchValue("modeTest");
+}
 let ipc = require('electron').ipcMain;
 let window;
 
