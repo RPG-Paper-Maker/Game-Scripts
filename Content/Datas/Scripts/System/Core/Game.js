@@ -68,8 +68,8 @@ class Game {
         this.steps = Utils.defaultValue(json.steps, 0);
         this.saves = Utils.defaultValue(json.saves, 0);
         this.battles = Utils.defaultValue(json.battles, 0);
-        this.chronometers = json.chronos.map((chrono) => {
-            return new Chrono(json.t, json.id, true, json.d);
+        this.chronometers = Utils.defaultValue(json.chronos, []).map((chrono) => {
+            return new Chrono(chrono.t, chrono.id, true, chrono.d);
         });
         // Items
         this.items = [];
@@ -125,7 +125,7 @@ class Game {
         this.heroStatesOptions = json.heroStatesOpts;
         this.startupStates = json.startS;
         this.startupProperties = json.startP;
-        this.mapsProperties = json.mapsP;
+        this.mapsProperties = Utils.defaultValue(json.mapsP, {});
         this.mapsDatas = json.mapsDatas;
         this.isEmpty = false;
     }
