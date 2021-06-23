@@ -250,17 +250,17 @@ class Events {
      *  receive event
      */
     static sendEventDetection(sender, targetID, isSystem, eventID, parameters, senderNoReceiver = false, onlyTheClosest = false) {
-        let objects, closests;
-        Scene.Map.current.updatePortions(this, function (x, y, z, i, j, k) {
+        let objects;
+        let closests = [];
+        Scene.Map.current.updatePortions(this, (x, y, z, i, j, k) => {
             objects = Game.current.getPortionDatas(Scene.Map.current.id, new Portion(x, y, z));
             // Moved objects
-            closests = Manager.Events.sendEventObjects(objects.min, sender, targetID, isSystem, eventID, parameters, senderNoReceiver, onlyTheClosest);
-            closests = closests.concat(Manager.Events.sendEventObjects(objects
-                .mout, sender, targetID, isSystem, eventID, parameters, senderNoReceiver, onlyTheClosest));
+            Manager.Events.sendEventObjects(objects.min, sender, targetID, isSystem, eventID, parameters, senderNoReceiver, onlyTheClosest, closests);
+            Manager.Events.sendEventObjects(objects.mout, sender, targetID, isSystem, eventID, parameters, senderNoReceiver, onlyTheClosest, closests);
             // Static
             let mapPortion = Scene.Map.current.getMapPortion(new Portion(i, j, k));
             if (mapPortion) {
-                closests = closests.concat(Manager.Events.sendEventObjects(mapPortion.objectsList, sender, targetID, isSystem, eventID, parameters, senderNoReceiver, onlyTheClosest));
+                Manager.Events.sendEventObjects(mapPortion.objectsList, sender, targetID, isSystem, eventID, parameters, senderNoReceiver, onlyTheClosest, closests);
             }
         });
         // And the hero!
@@ -303,11 +303,11 @@ class Events {
      *  @param {Parameter[]} parameters - List of all the parameters
      *  @param {boolean} senderNoReceiver - Indicate if the sender should not
      *  receive event
-     *  @returns {any[]}
+     *  @param {boolean} onlyTheClosest
+     *  @param {any[][]} closests
      */
-    static sendEventObjects(objects, sender, targetID, isSystem, eventID, parameters, senderNoReceiver, onlyTheClosest) {
+    static sendEventObjects(objects, sender, targetID, isSystem, eventID, parameters, senderNoReceiver, onlyTheClosest, closests) {
         let object;
-        let closests = [];
         for (let i = 0, l = objects.length; i < l; i++) {
             object = objects[i];
             if (senderNoReceiver && sender === object) {
@@ -329,7 +329,6 @@ class Events {
                     .states);
             }
         }
-        return closests;
     }
 }
 export { Events };

@@ -48,8 +48,9 @@ declare class Events {
      *  @param {Parameter[]} parameters - List of all the parameters
      *  @param {boolean} senderNoReceiver - Indicate if the sender should not
      *  receive event
-     *  @returns {any[]}
+     *  @param {boolean} onlyTheClosest
+     *  @param {any[][]} closests
      */
-    static sendEventObjects(objects: MapObject[], sender: MapObject, targetID: number, isSystem: boolean, eventID: number, parameters: System.DynamicValue[], senderNoReceiver: boolean, onlyTheClosest: boolean): any[][];
+    static sendEventObjects(objects: MapObject[], sender: MapObject, targetID: number, isSystem: boolean, eventID: number, parameters: System.DynamicValue[], senderNoReceiver: boolean, onlyTheClosest: boolean, closests: any[][]): void;
 }
 export { Events };
