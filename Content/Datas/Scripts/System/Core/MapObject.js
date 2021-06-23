@@ -792,13 +792,15 @@ class MapObject {
         }
         this.position.set(position.x, position.y, position.z);
         // Update orientation
-        this.orientationEye = orientation;
-        orientation = this.orientation;
-        if (this.currentStateInstance && this.currentStateInstance.setWithCamera) {
-            this.updateOrientation();
-        }
-        if (this.orientation !== orientation) {
-            this.updateUVs();
+        if (this.currentStateInstance && !this.currentStateInstance.directionFix) {
+            this.orientationEye = orientation;
+            orientation = this.orientation;
+            if (this.currentStateInstance && this.currentStateInstance.setWithCamera) {
+                this.updateOrientation();
+            }
+            if (this.orientation !== orientation) {
+                this.updateUVs();
+            }
         }
         this.moving = true;
         // Add to moving objects
@@ -855,6 +857,27 @@ class MapObject {
         let x = (currentTime / finalTime) * (end.x - start.x) + start.x;
         let z = (currentTime / finalTime) * (end.z - start.z) + start.z;
         this.position.set(x, y, z);
+        this.updateBBPosition(this.position);
+        // Update orientation
+        if (this.currentStateInstance && !this.currentStateInstance.directionFix) {
+            let orientation = this.orientationEye;
+            x = end.x - start.x;
+            z = end.z - start.z;
+            if (x !== 0) {
+                orientation = x > 0 ? Enum.Orientation.East : Enum.Orientation.West;
+            }
+            else if (z !== 0) {
+                orientation = z > 0 ? Enum.Orientation.South : Enum.Orientation.North;
+            }
+            this.orientationEye = orientation;
+            orientation = this.orientation;
+            if (this.currentStateInstance && this.currentStateInstance.setWithCamera) {
+                this.updateOrientation();
+            }
+            if (this.orientation !== orientation) {
+                this.updateUVs();
+            }
+        }
         // Add to moving objects
         this.addMoveTemp();
         return currentTime;
