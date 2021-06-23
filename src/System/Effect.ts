@@ -286,12 +286,6 @@ class Effect extends Base {
                                 .damageVariableID];
                             Game.current.variables[this.damageVariableID] 
                                 -= damage;
-                            if (Game.current.variables[this
-                                .damageVariableID] < 0)
-                            {
-                                Game.current.variables[this
-                                    .damageVariableID] = 0;
-                            }
                             result = result || (before !== Game.current
                                 .variables[this.damageVariableID] && damage !== 
                                 0);
