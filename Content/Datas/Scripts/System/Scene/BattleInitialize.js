@@ -164,7 +164,8 @@ class BattleInitialize {
         let listCallbacks = new Array(l);
         let skill;
         for (let i = 0; i < l; i++) {
-            skill = Datas.Skills.get(Datas.BattleSystems.battleCommandsOrder[i]);
+            skill = Datas.Skills.get(Datas.BattleSystems.getBattleCommand(Datas
+                .BattleSystems.battleCommandsOrder[i]));
             listContent[i] = new Graphic.TextIcon(skill.name(), skill.pictureID);
             listContent[i].system = skill;
             listCallbacks[i] = System.CommonSkillItem.prototype.useCommand;

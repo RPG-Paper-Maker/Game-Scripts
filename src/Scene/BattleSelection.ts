@@ -402,6 +402,15 @@ class BattleSelection {
                 this.battle.windowChoicesBattleCommands.unselect();
                 this.battle.changeStep(Enum.BattleStep.Animation);
                 return;
+            case EffectSpecialActionKind.None: // If any other skill that is not a special action
+                let skill = <System.Skill>(<Graphic.TextIcon>this.battle
+                    .windowChoicesBattleCommands.getCurrentContent()).system;
+                if (skill.isPossible()) {
+                    this.battle.skill = skill;
+                    this.selectTarget(skill.targetKind);
+                    this.battle.battleCommandKind = EffectSpecialActionKind.OpenSkills;
+                }
+                break;
             default:
                 break;
         }
