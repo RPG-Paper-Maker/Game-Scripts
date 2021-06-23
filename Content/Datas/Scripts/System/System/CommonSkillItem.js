@@ -140,7 +140,7 @@ class CommonSkillItem extends Icon {
             }
         }
         else {
-            if (!targets.some(fTargetCondition)) {
+            if (this.targetKind !== Enum.TargetKind.None && !targets.some(fTargetCondition)) {
                 return false;
             }
         }

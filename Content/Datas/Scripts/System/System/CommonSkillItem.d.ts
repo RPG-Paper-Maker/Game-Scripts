@@ -21,7 +21,7 @@ declare class CommonSkillItem extends Icon {
     consumable: boolean;
     oneHand: boolean;
     description: Translatable;
-    targetKind: number;
+    targetKind: Enum.TargetKind;
     targetConditionFormula: DynamicValue;
     conditionFormula: DynamicValue;
     availableKind: number;

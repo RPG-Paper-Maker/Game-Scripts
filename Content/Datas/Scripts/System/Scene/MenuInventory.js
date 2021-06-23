@@ -23,6 +23,8 @@ import { WindowBox, WindowChoices, Game, Rectangle } from "../Core/index.js";
 class MenuInventory extends Base {
     constructor() {
         super(false);
+        Scene.Map.current.user = null;
+        Scene.Map.current.targets = [];
         // Initializing the top menu for item kinds
         let l = Datas.Systems.inventoryFilters.length;
         let menuKind = new Array();
@@ -136,7 +138,9 @@ class MenuInventory extends Base {
      */
     useItem() {
         let graphic = this.windowBoxInformation.content;
-        Game.current.useItem(graphic.item);
+        if (graphic.item.system.consumable) {
+            Game.current.useItem(graphic.item);
+        }
         if (graphic.item.nb > 0) {
             graphic.updateNb();
         }
@@ -193,15 +197,28 @@ class MenuInventory extends Base {
                     }
                     let targetKind = graphic.item.system.targetKind;
                     let availableKind = graphic.item.system.availableKind;
-                    if (graphic.item.system.isPossible() && graphic.item.system
-                        .consumable && (targetKind === TargetKind.Ally ||
-                        targetKind === TargetKind.AllAllies) && (availableKind
+                    if (graphic.item.system.isPossible() && (availableKind
                         === AvailableKind.Always || availableKind ===
                         AvailableKind.MainMenu)) {
-                        Datas.Systems.soundConfirmation.playSound();
-                        this.substep = 1;
-                        graphicUse.setSkillItem(graphic.item.system);
-                        graphicUse.setAll(targetKind === TargetKind.AllAllies);
+                        if (targetKind === TargetKind.Ally || targetKind ===
+                            TargetKind.AllAllies) {
+                            Datas.Systems.soundConfirmation.playSound();
+                            this.substep = 1;
+                            graphicUse.setSkillItem(graphic.item.system);
+                            graphicUse.setAll(targetKind === TargetKind.AllAllies);
+                        }
+                        else if (targetKind === TargetKind.None) {
+                            if (graphic.item.system.use()) {
+                                Datas.Systems.soundConfirmation.playSound();
+                                this.useItem();
+                            }
+                            else {
+                                Datas.Systems.soundImpossible.playSound();
+                            }
+                        }
+                        else {
+                            Datas.Systems.soundImpossible.playSound();
+                        }
                         Manager.Stack.requestPaintHUD = true;
                     }
                     else {
@@ -218,7 +235,11 @@ class MenuInventory extends Base {
                 if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
                     .Action)) {
                     if (graphic.item.system.isPossible() && graphic.item.system.use()) {
+                        Datas.Systems.soundConfirmation.playSound();
                         this.useItem();
+                    }
+                    else {
+                        Datas.Systems.soundCancel.playSound();
                     }
                 }
                 else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards

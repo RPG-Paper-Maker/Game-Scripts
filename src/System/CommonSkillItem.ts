@@ -37,7 +37,7 @@ class CommonSkillItem extends Icon {
     public consumable: boolean;
     public oneHand: boolean;
     public description: Translatable;
-    public targetKind: number;
+    public targetKind: Enum.TargetKind;
     public targetConditionFormula: DynamicValue;
     public conditionFormula: DynamicValue;
     public availableKind: number;
@@ -171,7 +171,8 @@ class CommonSkillItem extends Icon {
                 return false;
             }
         } else {
-            if (!targets.some(fTargetCondition)) {
+            if (this.targetKind !== Enum.TargetKind.None && !targets.some(
+                fTargetCondition)) {
                 return false;
             }
         }

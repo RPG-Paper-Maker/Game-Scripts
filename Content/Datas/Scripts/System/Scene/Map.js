@@ -93,7 +93,7 @@ class Map extends Base {
      */
     getPossibleTargets(targetKind) {
         if (targetKind === Enum.TargetKind.User) {
-            return [this.user.player];
+            return this.user ? [this.user.player] : [];
         }
         else if (targetKind === Enum.TargetKind.Ally || targetKind === Enum
             .TargetKind.AllAllies) {
