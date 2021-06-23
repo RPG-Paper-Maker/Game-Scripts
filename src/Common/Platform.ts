@@ -87,18 +87,23 @@ class Platform {
      */
     static showError(e: Error) {
         Platform.showErrorMessage(e.message + Constants.STRING_NEW_LINE + e
-            .stack);
+            .stack, false);
     }
 
     /** 
      *  Show an error message.
      *  @static
      *  @param {string} msg - The error message
+     *  @param {boolean} displayDialog - Indicates if you need to display the 
+     *  dialog box
      */
-    static showErrorMessage(msg: string) {
+    static showErrorMessage(msg: string, displayDialog: boolean = true) {
         if (firstError) {
             firstError = false;
             ipc.send('window-error', msg);
+            if (displayDialog) {
+                ipc.send('dialog-error-message', msg);
+            }
             throw new Error(msg);
         }
     }

@@ -35,6 +35,8 @@ function createWindow () {
     }
     ipc.on('window-error', function(event, err) {
         window.webContents.openDevTools();
+    });
+    ipc.on('dialog-error-message', function(event, err) {
         dialog.showMessageBoxSync({ title: 'Error', type: 'error', message: err });
     });
     ipc.on('change-window-title', function(event, title) {

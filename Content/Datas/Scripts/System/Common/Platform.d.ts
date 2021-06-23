@@ -50,7 +50,9 @@ declare class Platform {
      *  Show an error message.
      *  @static
      *  @param {string} msg - The error message
+     *  @param {boolean} displayDialog - Indicates if you need to display the
+     *  dialog box
      */
-    static showErrorMessage(msg: string): void;
+    static showErrorMessage(msg: string, displayDialog?: boolean): void;
 }
 export { Platform };

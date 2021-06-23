@@ -43,7 +43,6 @@ class BattleAnimation {
      */
     public initialize() {
         let content: System.CommonSkillItem;
-        console.log(this.battle.battleCommandKind)
         switch (this.battle.battleCommandKind) {
             case EffectSpecialActionKind.ApplyWeapons:
                 this.battle.informationText = this.battle.attackSkill.name();
@@ -72,8 +71,6 @@ class BattleAnimation {
                 this.battle.informationText = content.name();
                 break;
             case EffectSpecialActionKind.None: // If command was a skill without special action
-                console.log(this.battle
-                    .windowChoicesBattleCommands)
                 content = <System.Skill>(<Graphic.TextIcon>this.battle
                     .windowChoicesBattleCommands.getContent(this.battle.user
                     .lastCommandIndex)).system;

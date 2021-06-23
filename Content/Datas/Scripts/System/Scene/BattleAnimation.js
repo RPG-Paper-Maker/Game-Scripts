@@ -34,7 +34,6 @@ class BattleAnimation {
      */
     initialize() {
         let content;
-        console.log(this.battle.battleCommandKind);
         switch (this.battle.battleCommandKind) {
             case EffectSpecialActionKind.ApplyWeapons:
                 this.battle.informationText = this.battle.attackSkill.name();
@@ -63,8 +62,6 @@ class BattleAnimation {
                 this.battle.informationText = content.name();
                 break;
             case EffectSpecialActionKind.None: // If command was a skill without special action
-                console.log(this.battle
-                    .windowChoicesBattleCommands);
                 content = this.battle
                     .windowChoicesBattleCommands.getContent(this.battle.user
                     .lastCommandIndex).system;
