@@ -770,13 +770,16 @@ class Collisions {
             }
         }
         let j: number, m: number, objCollision: StructMapElementCollision[], 
-            position: Position;
+            position: Position, mapPortionOverflow: MapPortion;
         for (i = 0, l = mapPortion.overflowMountains.length; i < l; i++) {
             position = mapPortion.overflowMountains[i];
-            objCollision = Scene.Map.current.getMapPortion(Scene.Map.current
-                .getLocalPortion(position.getGlobalPortion()))
-                .getObjectCollisionAt(position, jpositionAfter, ElementMapKind
-                .Mountains);
+            mapPortionOverflow = Scene.Map.current.getMapPortion(Scene.Map.current
+                .getLocalPortion(position.getGlobalPortion()));
+            if (!mapPortionOverflow) {
+                continue;
+            }
+            objCollision = mapPortionOverflow.getObjectCollisionAt(position, 
+                jpositionAfter, ElementMapKind.Mountains);
             for (j = 0, m = objCollision.length; j < m; j++) {
                 result = this.checkMountain(mapPortion, jpositionAfter, 
                     positionAfter, testedCollisions, object, objCollision[j], 
