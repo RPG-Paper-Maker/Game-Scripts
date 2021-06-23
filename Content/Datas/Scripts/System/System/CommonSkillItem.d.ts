@@ -52,9 +52,10 @@ declare class CommonSkillItem extends Icon {
     useCommand(): boolean;
     /**
      *  Execute the effects and costs.
+     *  @param {useCost}
      *  @returns {boolean}
      */
-    use(): boolean;
+    use(useCost?: boolean): boolean;
     /**
      *  Use the costs.
      */

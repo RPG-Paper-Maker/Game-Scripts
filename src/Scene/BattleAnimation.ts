@@ -43,6 +43,7 @@ class BattleAnimation {
      */
     public initialize() {
         let content: System.CommonSkillItem;
+        console.log(this.battle.battleCommandKind)
         switch (this.battle.battleCommandKind) {
             case EffectSpecialActionKind.ApplyWeapons:
                 this.battle.informationText = this.battle.attackSkill.name();
@@ -68,6 +69,14 @@ class BattleAnimation {
                         .getCurrentContent()).item.system : Datas.Items.get(this
                         .battle.action.itemID.getValue());
                 }
+                this.battle.informationText = content.name();
+                break;
+            case EffectSpecialActionKind.None: // If command was a skill without special action
+                console.log(this.battle
+                    .windowChoicesBattleCommands)
+                content = <System.Skill>(<Graphic.TextIcon>this.battle
+                    .windowChoicesBattleCommands.getContent(this.battle.user
+                    .lastCommandIndex)).system;
                 this.battle.informationText = content.name();
                 break;
             default:
@@ -113,6 +122,7 @@ class BattleAnimation {
                 this.battle.user.setAttacking();
                 break;
             case EffectSpecialActionKind.OpenSkills:
+            case EffectSpecialActionKind.None:
                 this.battle.animationUser = new Animation(content
                     .animationUserID.getValue());
                 this.battle.animationTarget = new Animation(content

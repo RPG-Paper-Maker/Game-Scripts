@@ -382,7 +382,6 @@ class BattleSelection {
                 if (skill.isPossible()) {
                     this.battle.skill = skill;
                     this.selectTarget(skill.targetKind);
-                    this.battle.battleCommandKind = EffectSpecialActionKind.OpenSkills;
                 }
                 break;
             default:

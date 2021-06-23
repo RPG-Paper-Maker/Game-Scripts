@@ -118,21 +118,22 @@ class CommonSkillItem extends Icon {
     useCommand(): boolean {
         let possible = this.isPossible();
         if (possible) {
-            this.use();
+            this.use(false);
         }
         return possible;
     }
 
     /** 
      *  Execute the effects and costs.
+     *  @param {useCost}
      *  @returns {boolean}
      */
-    use(): boolean {
+    use(useCost: boolean = true): boolean {
         let isDoingSomething = false;
         for (let effect of this.getEffects()) {
             isDoingSomething = isDoingSomething || effect.execute();
         }
-        if (isDoingSomething) {
+        if (useCost && isDoingSomething) {
             for (let cost of this.costs) {
                 cost.use();
             }
