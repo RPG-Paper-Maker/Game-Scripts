@@ -55,7 +55,7 @@ class Translatable extends Base {
      */
     getCommand(command: string[], iterator: EventCommand.StructIterator) {
         let id = command[iterator.i++];
-        let name = command[iterator.i++];
+        let name = "" + command[iterator.i++];
         this.names[id] = name;
     }
 }

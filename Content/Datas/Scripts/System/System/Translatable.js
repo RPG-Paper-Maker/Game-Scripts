@@ -46,7 +46,7 @@ class Translatable extends Base {
      */
     getCommand(command, iterator) {
         let id = command[iterator.i++];
-        let name = command[iterator.i++];
+        let name = "" + command[iterator.i++];
         this.names[id] = name;
     }
 }

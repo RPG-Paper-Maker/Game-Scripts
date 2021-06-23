@@ -43,7 +43,7 @@ class DisplayChoice extends Base {
             iterator);
         this.choices = [];
         let l = command.length;
-        let lang = null;
+        let lang: System.Translatable = null;
         let next: string;
         while (iterator.i < l) {
             next = command[iterator.i];
