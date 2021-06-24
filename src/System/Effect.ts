@@ -262,7 +262,7 @@ class Effect extends Base {
                                 target[abbreviation] = Math.min(target[
                                     abbreviation], max);
                             }
-                            result = result || (before !== max && damage !== 0);
+                            result = result || before !== target[abbreviation];
                             break;
                         case DamagesKind.Currency:
                             currencyID = this.damageCurrencyID.getValue();
@@ -277,8 +277,8 @@ class Effect extends Base {
                                     Game.current.currencies[currencyID] = 
                                         0;
                                 }
-                                result = result || (before !== Game.current
-                                    .currencies[currencyID] && damage !== 0);
+                                result = result || before !== Game.current
+                                    .currencies[currencyID];
                             }    
                             break;
                         case DamagesKind.Variable:
@@ -286,9 +286,8 @@ class Effect extends Base {
                                 .damageVariableID];
                             Game.current.variables[this.damageVariableID] 
                                 -= damage;
-                            result = result || (before !== Game.current
-                                .variables[this.damageVariableID] && damage !== 
-                                0);
+                            result = result || before !== Game.current
+                                .variables[this.damageVariableID];
                             break;
                     }
                 }
