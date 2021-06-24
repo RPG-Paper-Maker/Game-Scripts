@@ -336,10 +336,10 @@ class Player {
      */
     getEquipmentStatsAndBonus(item, equipmentID) {
         let statistics = Datas.BattleSystems.statisticsOrder;
-        let l = statistics.length;
-        let list = new Array(l);
-        let bonus = new Array(l);
-        let added = new Array(l);
+        let l = Datas.BattleSystems.maxStatisticID;
+        let list = new Array(l + 1);
+        let bonus = new Array(l + 1);
+        let added = new Array(l + 1);
         let res = {
             statusRes: [],
             experienceGain: [],
@@ -347,7 +347,7 @@ class Player {
             skillCostRes: []
         };
         let i;
-        for (i = 1; i < l; i++) {
+        for (i = 1; i < l + 1; i++) {
             list[i] = null;
             bonus[i] = null;
             added[i] = null;

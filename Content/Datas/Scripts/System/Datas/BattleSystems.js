@@ -32,26 +32,26 @@ class BattleSystems {
         // Statistics
         this.statistics = [];
         this.statisticsOrder = [];
-        let maxID = Utils.readJSONSystemList({ list: Utils.defaultValue(json
-                .statistics, []), listIDs: this.statistics, listIndexes: this
+        this.maxStatisticID = Utils.readJSONSystemList({ list: Utils.defaultValue(json.statistics, []), listIDs: this.statistics, listIndexes: this
                 .statisticsOrder, indexesIDs: true, cons: System.Statistic });
         // Add elements res to statistics
         this.statisticsElements = [];
         this.statisticsElementsPercent = [];
         let index = this.statisticsOrder.length;
-        let id, name;
-        for (let i = 0, l = this.elementsOrder.length; i < l; i++) {
+        let id, name, i, l;
+        for (i = 0, l = this.elementsOrder.length; i < l; i++) {
             id = this.elementsOrder[i];
             name = this.elements[id].name();
-            this.statistics[maxID + (i * 2) + 1] = System.Statistic
+            this.statistics[this.maxStatisticID + (i * 2) + 1] = System.Statistic
                 .createElementRes(id, name);
-            this.statistics[maxID + (i * 2) + 2] = System.Statistic
+            this.statistics[this.maxStatisticID + (i * 2) + 2] = System.Statistic
                 .createElementResPercent(id, name);
-            this.statisticsOrder[index + (i * 2)] = maxID + (i * 2) + 1;
-            this.statisticsOrder[index + (i * 2) + 1] = maxID + (i * 2) + 2;
-            this.statisticsElements[id] = maxID + (i * 2) + 1;
-            this.statisticsElementsPercent[id] = maxID + (i * 2) + 2;
+            this.statisticsOrder[index + (i * 2)] = this.maxStatisticID + (i * 2) + 1;
+            this.statisticsOrder[index + (i * 2) + 1] = this.maxStatisticID + (i * 2) + 2;
+            this.statisticsElements[id] = this.maxStatisticID + (i * 2) + 1;
+            this.statisticsElementsPercent[id] = this.maxStatisticID + (i * 2) + 2;
         }
+        this.maxStatisticID += l * 2;
         // Equipments
         this.equipments = [];
         this.equipmentsOrder = [];

@@ -401,10 +401,10 @@ class Player {
         number): [number[], number[], Record<string, any>]
     {
         let statistics = Datas.BattleSystems.statisticsOrder;
-        let l = statistics.length;
-        let list = new Array(l);
-        let bonus = new Array(l);
-        let added = new Array(l);
+        let l = Datas.BattleSystems.maxStatisticID;
+        let list = new Array(l + 1);
+        let bonus = new Array(l + 1);
+        let added = new Array(l + 1);
         let res: Record<string, any> = {
             statusRes: [],
             experienceGain: [],
@@ -412,7 +412,7 @@ class Player {
             skillCostRes: []
         };
         let i: number;
-        for (i = 1; i < l; i++) {
+        for (i = 1; i < l + 1; i++) {
             list[i] = null;
             bonus[i] = null;
             added[i] = null;
@@ -541,6 +541,7 @@ class Player {
             value = list[id];
             if (statistic.isFix) {
                 this[statistic.abbreviation] = value;
+
             } else {
                 this[statistic.getMaxAbbreviation()] = value;
                 if (this[statistic.abbreviation] > this[statistic

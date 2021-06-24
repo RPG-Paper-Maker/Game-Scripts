@@ -10,6 +10,7 @@ declare class BattleSystems {
     static statisticsOrder: number[];
     static statisticsElements: number[];
     static statisticsElementsPercent: number[];
+    static maxStatisticID: number;
     private static equipments;
     static equipmentsOrder: number[];
     static maxEquipmentID: number;
