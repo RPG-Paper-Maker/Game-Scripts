@@ -878,6 +878,8 @@ class MoveObject extends Base {
                 }
                 options.t = object.currentStateInstance.through;
             }
+            // Update bounding box
+            object.updateBB(object.position);
         }
         return Orientation.None;
     }

@@ -261,7 +261,6 @@ class Player {
         let i, l, characteristic, kind, itemID, item;
         for (i = 0, l = characteristics.length; i < l; i++) {
             characteristic = characteristics[i];
-            console.log(characteristic);
             if (characteristic.kind === Enum.CharacteristicKind.BeginEquipment) {
                 kind = characteristic.isBeginWeapon ? Enum.ItemKind.Weapon :
                     Enum.ItemKind.Armor;
@@ -273,7 +272,6 @@ class Player {
                 else {
                     item = new Item(kind, itemID, 0);
                 }
-                console.log(characteristic.beginEquipmentID);
                 this.equip[characteristic.beginEquipmentID.getValue()] = item;
             }
         }
