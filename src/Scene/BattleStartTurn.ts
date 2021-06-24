@@ -31,7 +31,6 @@ class BattleStartTurn {
     public active: boolean = false;
     public statusHealed: [Battler, Status[]][] = [];
     public statusStill: [Battler, Status[]][] = [];
-    public oneTimeTroopReactions: boolean[] = [];
     public indexTroopReaction: number = 0;
     public interpreter: ReactionInterpreter = null;
 
@@ -54,20 +53,12 @@ class BattleStartTurn {
             for (l = reactions.length; this.indexTroopReaction < l; this
                 .indexTroopReaction++) {
                 reaction = reactions[this.indexTroopReaction];
-                if (reaction.frequency === Enum.TroopReactionFrequencyKind.OneTime 
-                    && this.oneTimeTroopReactions[reaction.id]) {
-                    continue;
-                }
-                if (reaction.frequency === Enum.TroopReactionFrequencyKind.OneTime
-                    || reaction.frequency === Enum.TroopReactionFrequencyKind
+                if (reaction.frequency === Enum.TroopReactionFrequencyKind
                     .EachTurnBegin) {
                     // Check conditions
                     if (!reaction.conditions.isValid()) {
                         continue;
                     }
-                    if (reaction.frequency === Enum.TroopReactionFrequencyKind.OneTime) {
-                        this.oneTimeTroopReactions[reaction.id] = true;
-                    } 
                     this.interpreter = new ReactionInterpreter(null, reaction, 
                         null, null);
                     return;

@@ -115,6 +115,7 @@ class Battle extends Map {
     public turn: number;
     public currentSkill: System.Skill;
     public informationText: string;
+    public oneTimeTroopReactions: boolean[] = [];
 
     //Animation
     public animationUser: Animation;
@@ -471,11 +472,16 @@ class Battle extends Map {
             for (l = this.troop.reactions.length; this.indexTroopReaction < l; 
                 this.indexTroopReaction++) {
                 reaction = this.troop.reactions[this.indexTroopReaction];
-                if (reaction.frequency === Enum.TroopReactionFrequencyKind.Always) {
+                if (reaction.frequency === Enum.TroopReactionFrequencyKind.Always 
+                    || (reaction.frequency === Enum.TroopReactionFrequencyKind
+                    .OneTime && !this.oneTimeTroopReactions[reaction.id])) {
                     // Check conditions
                     if (!reaction.conditions.isValid()) {
                         continue;
                     }
+                    if (reaction.frequency === Enum.TroopReactionFrequencyKind.OneTime) {
+                        this.oneTimeTroopReactions[reaction.id] = true;
+                    } 
                     this.interpreterTroopReaction = new ReactionInterpreter(null, 
                         reaction, null, null);
                     break;

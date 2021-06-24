@@ -25,7 +25,6 @@ class BattleStartTurn {
         this.active = false;
         this.statusHealed = [];
         this.statusStill = [];
-        this.oneTimeTroopReactions = [];
         this.indexTroopReaction = 0;
         this.interpreter = null;
         this.battle = battle;
@@ -44,19 +43,11 @@ class BattleStartTurn {
             for (l = reactions.length; this.indexTroopReaction < l; this
                 .indexTroopReaction++) {
                 reaction = reactions[this.indexTroopReaction];
-                if (reaction.frequency === Enum.TroopReactionFrequencyKind.OneTime
-                    && this.oneTimeTroopReactions[reaction.id]) {
-                    continue;
-                }
-                if (reaction.frequency === Enum.TroopReactionFrequencyKind.OneTime
-                    || reaction.frequency === Enum.TroopReactionFrequencyKind
-                        .EachTurnBegin) {
+                if (reaction.frequency === Enum.TroopReactionFrequencyKind
+                    .EachTurnBegin) {
                     // Check conditions
                     if (!reaction.conditions.isValid()) {
                         continue;
-                    }
-                    if (reaction.frequency === Enum.TroopReactionFrequencyKind.OneTime) {
-                        this.oneTimeTroopReactions[reaction.id] = true;
                     }
                     this.interpreter = new ReactionInterpreter(null, reaction, null, null);
                     return;

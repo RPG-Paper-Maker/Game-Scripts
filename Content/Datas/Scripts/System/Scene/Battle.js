@@ -33,6 +33,7 @@ import { Map } from "./Map.js";
 class Battle extends Map {
     constructor(troopID, canGameOver, canEscape, battleMap, transitionStart, transitionEnd, transitionStartColor, transitionEndColor) {
         super(battleMap.idMap, true);
+        this.oneTimeTroopReactions = [];
         // Battle Handlers
         this.battleInitialize = new Scene.BattleInitialize(this);
         this.battleStartTurn = new Scene.BattleStartTurn(this);
@@ -291,10 +292,15 @@ class Battle extends Map {
             let reaction;
             for (l = this.troop.reactions.length; this.indexTroopReaction < l; this.indexTroopReaction++) {
                 reaction = this.troop.reactions[this.indexTroopReaction];
-                if (reaction.frequency === Enum.TroopReactionFrequencyKind.Always) {
+                if (reaction.frequency === Enum.TroopReactionFrequencyKind.Always
+                    || (reaction.frequency === Enum.TroopReactionFrequencyKind
+                        .OneTime && !this.oneTimeTroopReactions[reaction.id])) {
                     // Check conditions
                     if (!reaction.conditions.isValid()) {
                         continue;
+                    }
+                    if (reaction.frequency === Enum.TroopReactionFrequencyKind.OneTime) {
+                        this.oneTimeTroopReactions[reaction.id] = true;
                     }
                     this.interpreterTroopReaction = new ReactionInterpreter(null, reaction, null, null);
                     break;

@@ -8,7 +8,6 @@ declare class BattleStartTurn {
     active: boolean;
     statusHealed: [Battler, Status[]][];
     statusStill: [Battler, Status[]][];
-    oneTimeTroopReactions: boolean[];
     indexTroopReaction: number;
     interpreter: ReactionInterpreter;
     constructor(battle: Scene.Battle);

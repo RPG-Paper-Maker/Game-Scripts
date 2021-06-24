@@ -90,6 +90,7 @@ declare class Battle extends Map {
     turn: number;
     currentSkill: System.Skill;
     informationText: string;
+    oneTimeTroopReactions: boolean[];
     animationUser: Animation;
     animationTarget: Animation;
     action: System.MonsterAction;
