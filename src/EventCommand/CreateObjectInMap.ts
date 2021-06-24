@@ -96,7 +96,8 @@ class CreateObjectInMap extends Base {
         number
     {
         // Do nothing if not in the current map
-        if (this.mapID.getValue() !== Scene.Map.current.id) {
+        if (this.objectIDPosition === null && this.mapID.getValue() !== Scene.Map
+            .current.id) {
             return 1;
         }
         if (!currentState.waitingPosition) {
@@ -108,7 +109,7 @@ class CreateObjectInMap extends Base {
             } else {
                 MapObject.search(this.objectIDPosition.getValue(), (result: 
                     StructSearchResult) => {
-                    currentState.position = result.object.position;
+                    currentState.position = result.object.position.clone();
                 }, object);
             }
             currentState.waitingPosition = true;
