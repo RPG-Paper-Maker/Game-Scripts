@@ -131,9 +131,11 @@ class Menu extends MenuBase {
         super.update();
 
         this.windowTimeCurrencies.content.update();
+        let graphic: Graphic.Player;
         for (let i = 0, l = this.windowChoicesTeam.listWindows.length; i < l; i++) {
-            (<Graphic.Player>this.windowChoicesTeam.listWindows[i].content)
-                .updateBattler();
+            graphic = <Graphic.Player>this.windowChoicesTeam.listWindows[i].content;
+            graphic.updateBattler();
+            graphic.update();
         }
     }
 

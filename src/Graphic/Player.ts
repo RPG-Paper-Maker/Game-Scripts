@@ -164,7 +164,6 @@ class Player extends Base {
      */
     update() {
         // Informations
-        let hero = this.player.system;
         let cl = this.player.getClass();
         let levelStat = Datas.BattleSystems.getLevelStatistic();
 
