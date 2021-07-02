@@ -505,7 +505,7 @@ class MapObject {
                         break;
                 }
                 // Correct position offset (left / top)
-                if (previousStateInstance && previousStateInstance.graphicKind 
+                if (!previousStateInstance || previousStateInstance.graphicKind 
                     !== ElementMapKind.Object3D) {
                     this.position.set(this.position.x - (Datas.Systems
                         .SQUARE_SIZE / 2), this.position.y, this.position.z - (

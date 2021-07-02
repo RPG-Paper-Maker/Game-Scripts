@@ -111,6 +111,7 @@ class Text extends Base {
      *  @param {string} text - The new text
      */
     setText(text) {
+        text += ""; // Be sure that it's string type
         if (this.text !== text) {
             this.text = text;
             this.lines = this.text.split(Constants.STRING_NEW_LINE);
