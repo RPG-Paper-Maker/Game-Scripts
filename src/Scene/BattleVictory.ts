@@ -300,7 +300,7 @@ class BattleVictory {
                     } else {
                         this.battle.gameOver();
                     }
-                    if (Platform.MODE_TEST === "battleTroop") {
+                    if (Platform.MODE_TEST === Platform.MODE_TEST_BATTLE_TROOP) {
                         Platform.quit();
                     }
                 }

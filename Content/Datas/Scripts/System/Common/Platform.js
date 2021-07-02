@@ -54,6 +54,15 @@ class Platform {
             throw new Error(msg);
         }
     }
+    /**
+     *  Check if there is a specific mode test (app args).
+     *  @static
+     *  @returns {boolean}
+     */
+    static isModeTestNormal() {
+        return Platform.MODE_TEST !== Platform.MODE_TEST_BATTLE_TROOP && Platform
+            .MODE_TEST !== Platform.MODE_TEST_SHOW_TEXT_PREVIEW;
+    }
 }
 Platform.ROOT_DIRECTORY = app.getAppPath();
 Platform.screen = ElectronScreen.getPrimaryDisplay();
@@ -61,6 +70,8 @@ Platform.screenWidth = Platform.screen.bounds.width;
 Platform.screenHeight = Platform.screen.bounds.height;
 Platform.DESKTOP = true;
 Platform.MODE_TEST = remote.getGlobal('modeTest');
+Platform.MODE_TEST_BATTLE_TROOP = "battleTroop";
+Platform.MODE_TEST_SHOW_TEXT_PREVIEW = "showTextPreview";
 Platform.canvas3D = document.getElementById('three-d');
 Platform.canvasHUD = document.getElementById('hud');
 Platform.canvasVideos = document.getElementById('video-container');

@@ -10,6 +10,8 @@ declare class Platform {
     static readonly screenHeight: number;
     static readonly DESKTOP: boolean;
     static readonly MODE_TEST: any;
+    static readonly MODE_TEST_BATTLE_TROOP = "battleTroop";
+    static readonly MODE_TEST_SHOW_TEXT_PREVIEW = "showTextPreview";
     static canvas3D: any;
     static canvasHUD: HTMLCanvasElement;
     static canvasVideos: HTMLVideoElement;
@@ -54,5 +56,11 @@ declare class Platform {
      *  dialog box
      */
     static showErrorMessage(msg: string, displayDialog?: boolean): void;
+    /**
+     *  Check if there is a specific mode test (app args).
+     *  @static
+     *  @returns {boolean}
+     */
+    static isModeTestNormal(): boolean;
 }
 export { Platform };

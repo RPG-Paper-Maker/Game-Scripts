@@ -80,7 +80,7 @@ class Systems {
         let w = json.sw;
         let h = json.sh;
         let isScreenWindow = json.isw;
-        if (Platform.MODE_TEST !== "") {
+        if (!Platform.isModeTestNormal()) {
             w = 640;
             h = 480;
             isScreenWindow = true;

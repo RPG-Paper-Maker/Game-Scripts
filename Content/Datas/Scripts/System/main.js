@@ -73,10 +73,10 @@ export class Main {
      */
     static async onEndLoading() {
         switch (Platform.MODE_TEST) {
-            case "battleTroop":
+            case Platform.MODE_TEST_BATTLE_TROOP:
                 await Manager.Stack.pushBattleTest();
                 break;
-            case "showTextPreview":
+            case Platform.MODE_TEST_SHOW_TEXT_PREVIEW:
                 await Manager.Stack.pushShowTextPreview();
                 break;
             default:

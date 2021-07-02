@@ -26,17 +26,13 @@ let firstError = true;
 class Platform {
 
     public static readonly ROOT_DIRECTORY: any = app.getAppPath();
-
     public static readonly screen: any = ElectronScreen.getPrimaryDisplay();
-
     public static readonly screenWidth: number = Platform.screen.bounds.width;
-
     public static readonly screenHeight: number = Platform.screen.bounds.height;
-
     public static readonly DESKTOP: boolean = true;
-
     public static readonly MODE_TEST = remote.getGlobal('modeTest');
-
+    public static readonly MODE_TEST_BATTLE_TROOP = "battleTroop";
+    public static readonly MODE_TEST_SHOW_TEXT_PREVIEW = "showTextPreview";
     public static canvas3D: any = document.getElementById('three-d');
     public static canvasHUD: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById('hud');
     public static canvasVideos: HTMLVideoElement = <HTMLVideoElement> document.getElementById('video-container');
@@ -106,6 +102,16 @@ class Platform {
             }
             throw new Error(msg);
         }
+    }
+
+    /** 
+     *  Check if there is a specific mode test (app args).
+     *  @static
+     *  @returns {boolean}
+     */
+    static isModeTestNormal(): boolean {
+        return Platform.MODE_TEST !== Platform.MODE_TEST_BATTLE_TROOP && Platform
+            .MODE_TEST !== Platform.MODE_TEST_SHOW_TEXT_PREVIEW;
     }
 }
 
