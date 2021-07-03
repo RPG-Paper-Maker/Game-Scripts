@@ -155,7 +155,7 @@ class ChangeState extends Base {
                     currentState.map = new Scene.Map(currentState.mapID, false, 
                         true);
                     (async() => {
-                        await currentState.map.readMapProperties();
+                        await currentState.map.readMapProperties(true);
                         await currentState.map.initializeObjects();
                         currentState.map.initializePortionsObjects();
                     })();

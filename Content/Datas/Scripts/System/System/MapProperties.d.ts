@@ -44,11 +44,15 @@ declare class MapProperties extends Base {
      */
     read(json: Record<string, any>): void;
     /**
-     *  Update the background color
+     *  Update the background.
+     */
+    updateBackground(): void;
+    /**
+     *  Update the background color.
      */
     updateBackgroundColor(): void;
     /**
-     *  Update the background image
+     *  Update the background image.
      */
     updateBackgroundImage(): void;
     /**

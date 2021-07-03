@@ -102,14 +102,11 @@ class MapProperties extends Base {
                 DynamicValue(json.sky) : DynamicValue.createNumber(datas.color);;
         } else if (this.isBackgroundImage) {
             this.backgroundImageID = json.ipid;
-            this.updateBackgroundImage();
-        } else   {
+        } else {
             this.backgroundSkyboxID = Utils.isUndefined(datas.skybox) ? 
                 DynamicValue.readOrDefaultDatabase(json.sbid) : DynamicValue
                 .createNumber(datas.skybox);
-            this.updateBackgroundSkybox();
         }
-        this.updateBackgroundColor();
         var startupReactions = new System.MapObject(json.so);
         this.startupObject = new MapObject(startupReactions);
         this.startupObject.changeState();
@@ -128,7 +125,19 @@ class MapProperties extends Base {
     }
 
     /** 
-     *  Update the background color
+     *  Update the background.
+     */
+    updateBackground() {
+        if (this.isBackgroundImage) {
+            this.updateBackgroundImage();
+        } else if (!this.isBackgroundColor) {
+            this.updateBackgroundSkybox();
+        }
+        this.updateBackgroundColor();
+    }
+
+    /** 
+     *  Update the background color.
      */
     updateBackgroundColor() {
         this.backgroundColor = Datas.Systems.getColor(this.isBackgroundColor ? 
@@ -136,7 +145,7 @@ class MapProperties extends Base {
     }
 
     /** 
-     *  Update the background image
+     *  Update the background image.
      */
     updateBackgroundImage() {
         let bgMat = Manager.GL.createMaterial(Manager.GL.textureLoader.load(

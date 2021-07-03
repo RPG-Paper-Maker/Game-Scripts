@@ -80,11 +80,14 @@ class Map extends Base {
     /**
      *  Read the map properties file.
      */
-    async readMapProperties() {
+    async readMapProperties(minimal = false) {
         this.mapProperties = new System.MapProperties();
         let json = await IO.parseFileJSON(Paths.FILE_MAPS + this.mapName + Paths
             .FILE_MAP_INFOS);
         this.mapProperties.read(json);
+        if (!minimal) {
+            this.mapProperties.updateBackground();
+        }
     }
     /**
      *  Get all the possible targets of a skill.

@@ -58,7 +58,7 @@ declare class Map extends Base {
     /**
      *  Read the map properties file.
      */
-    readMapProperties(): Promise<void>;
+    readMapProperties(minimal?: boolean): Promise<void>;
     /**
      *  Get all the possible targets of a skill.
      *  @param {Enum.TargetKind} targetKind
