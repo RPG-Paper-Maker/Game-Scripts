@@ -133,6 +133,7 @@ class ChangeVariables extends Base {
                                 break;
                         }
                     }, object);
+                    break;
                 case 5: // Number of weapon / armor / item in inventory
                     let item = Item.findItem(this.valueItemKind, this.valueItemID
                         .getValue());
