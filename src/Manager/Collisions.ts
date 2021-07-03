@@ -448,6 +448,9 @@ class Collisions {
             }
 
             // Check lands inside collisions
+            portion = Scene.Map.current.getLocalPortion(Portion.createFromVector3(
+                positionBefore));
+            mapPortion = Scene.Map.current.getMapPortion(portion);
             return [this.checkLandsInside(mapPortion, jpositionBefore,
                 jpositionAfter, direction), yMountain];
         }
