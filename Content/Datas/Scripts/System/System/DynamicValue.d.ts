@@ -104,6 +104,14 @@ declare class DynamicValue extends System.Base {
      */
     static createProperty(id: number): System.DynamicValue;
     /**
+     *  Map a list of parameters so it gets the current properties and
+     *  parameters values.
+     *  @static
+     *  @param {System.DynamicValue[]} parameters
+     *  @returns {System.DynamicValue[]}
+     */
+    static mapWithParametersProperties(parameters: System.DynamicValue[]): System.DynamicValue[];
+    /**
      *  Try to read a variable value, if not possible put default value.
      *  @static
      *  @param {StructJSONDynamicValue} json - The json value

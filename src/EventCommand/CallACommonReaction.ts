@@ -65,23 +65,25 @@ class CallACommonReaction extends Base {
         if (!currentState.interpreter) {
             let reaction = Datas.CommonEvents.getCommonReaction(this
                 .commonReactionID);
+            let parameters = System.DynamicValue.mapWithParametersProperties(this
+                .parameters);
 
             // Correct parameters for default values
             let v: System.DynamicValue, parameter: System.DynamicValue, k: 
                 DynamicValueKind;
             for (let id in reaction.parameters) {
                 v = reaction.parameters[id].value;
-                parameter = this.parameters[id];
+                parameter = parameters[id];
                 k = parameter ? parameter.kind : DynamicValueKind.None;
-                if (k <= DynamicValueKind.Default) {
+                if (k > DynamicValueKind.Unknown && k <= DynamicValueKind.Default) {
                     parameter = k === DynamicValueKind.Default ? v : System
                         .DynamicValue.create(k, null);
                 }
-                this.parameters[id] = parameter;
+                parameters[id] = parameter;
             }
             currentState.interpreter = new ReactionInterpreter(object, Datas
                 .CommonEvents.getCommonReaction(this.commonReactionID), null, 
-                null, this.parameters);
+                null, parameters);
         }
         ReactionInterpreter.blockingHero = currentState.interpreter
             .currentReaction.blockingHero;

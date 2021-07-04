@@ -65,7 +65,7 @@ class SendEvent extends Base {
         while (iterator.i < l) {
             paramID = command[iterator.i++];
             k = command[iterator.i++];
-            if (k <= DynamicValueKind.Default) {
+            if (k > DynamicValueKind.Unknown && k <= DynamicValueKind.Default) {
                 // If default value
                 parameter = k === DynamicValueKind.Default ? parameters[
                     paramID].value : System.DynamicValue.create(k, null);
@@ -87,11 +87,9 @@ class SendEvent extends Base {
         number
     {
         Manager.Events.sendEvent(object, this.targetKind, this.targetID ? this
-            .targetID.getValue() : -1, this.isSystem, this.eventID, this
-            .parameters.map(value => { return value.kind === Enum.DynamicValueKind
-                .Parameter || Enum.DynamicValueKind.Property ? System.DynamicValue
-                .create(Enum.DynamicValueKind.Unknown, value.getValue()) : value;}),
-                this.senderNoReceiver, this.onlyTheClosest);
+            .targetID.getValue() : -1, this.isSystem, this.eventID, System
+            .DynamicValue.mapWithParametersProperties(this
+            .parameters), this.senderNoReceiver, this.onlyTheClosest);
         return 1;
     }
 }
