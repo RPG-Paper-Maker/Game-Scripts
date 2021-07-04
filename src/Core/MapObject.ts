@@ -168,7 +168,13 @@ class MapObject {
         }
 
         // Check if direct
-        let globalPortion = Scene.Map.current.allObjects[objectID].getGlobalPortion();
+        let position = Scene.Map.current.allObjects[objectID];
+        if (!position) { // If cannot find, inform that the object doesn't exist in the map
+            Platform.showErrorMessage("Can't find object with ID" + objectID + 
+            " in map " +  Scene.Map.current.mapName + ". Please check where " +
+            "this ID is used and remove it.");
+        }
+        let globalPortion = position.getGlobalPortion();
         let mapsDatas = Game.current.getPortionDatas(Scene.Map.current.id, 
             globalPortion);
         if (object !== null) {
