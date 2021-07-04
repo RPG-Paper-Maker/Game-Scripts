@@ -923,6 +923,9 @@ class Map extends Base {
             [0, 0, 0, 1, 1, 1, 0, 0, 0]);
         Manager.Collisions.applyOrientedBoxTransforms(Manager.Collisions
             .BB_ORIENTED_BOX, [0, 0, 0, 2, 1]);
+
+        // Clear renderer
+        Manager.GL.renderer.clear();
     }
 }
 
