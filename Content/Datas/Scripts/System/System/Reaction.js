@@ -58,16 +58,17 @@ class Reaction extends Base {
             if (command instanceof EventCommand.ShowText) {
                 showText = command;
             }
-            else if (command instanceof EventCommand.DisplayChoice) {
-                command.setShowText(showText);
-                showText = null;
-            }
-            else if (command instanceof EventCommand.InputNumber) {
+            else if (command instanceof EventCommand.DisplayChoice || command
+                instanceof EventCommand.InputNumber) {
                 command.setShowText(showText);
                 showText = null;
             }
             else if (command instanceof EventCommand.Label) {
                 this.labels.push([command.name, node]);
+                showText = null;
+            }
+            else {
+                showText = null;
             }
             if (jsonCommands[i].children) {
                 this.readChildrenJSON(jsonCommands[i].children, node);
