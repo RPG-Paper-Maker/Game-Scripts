@@ -88,7 +88,10 @@ class SendEvent extends Base {
     {
         Manager.Events.sendEvent(object, this.targetKind, this.targetID ? this
             .targetID.getValue() : -1, this.isSystem, this.eventID, this
-            .parameters, this.senderNoReceiver, this.onlyTheClosest);
+            .parameters.map(value => { return value.kind === Enum.DynamicValueKind
+                .Parameter || Enum.DynamicValueKind.Property ? System.DynamicValue
+                .create(Enum.DynamicValueKind.Unknown, value.getValue()) : value;}),
+                this.senderNoReceiver, this.onlyTheClosest);
         return 1;
     }
 }

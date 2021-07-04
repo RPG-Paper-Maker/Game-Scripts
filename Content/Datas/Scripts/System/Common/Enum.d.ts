@@ -253,6 +253,7 @@ declare namespace Enum {
      *   @readonly
      */
     enum DynamicValueKind {
+        Unknown = -1,
         None = 0,
         Anything = 1,
         Default = 2,

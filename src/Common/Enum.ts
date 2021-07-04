@@ -276,6 +276,7 @@ namespace Enum {
      *   @readonly
      */
     export enum DynamicValueKind {
+        Unknown = -1,
         None,
         Anything,
         Default,

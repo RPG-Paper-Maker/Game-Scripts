@@ -283,6 +283,7 @@ var Enum;
      */
     let DynamicValueKind;
     (function (DynamicValueKind) {
+        DynamicValueKind[DynamicValueKind["Unknown"] = -1] = "Unknown";
         DynamicValueKind[DynamicValueKind["None"] = 0] = "None";
         DynamicValueKind[DynamicValueKind["Anything"] = 1] = "Anything";
         DynamicValueKind[DynamicValueKind["Default"] = 2] = "Default";
