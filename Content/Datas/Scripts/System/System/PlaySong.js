@@ -147,6 +147,11 @@ class PlaySong extends Base {
         // If same music ID and same
         if (this.songID.getValue() === PlaySong.currentPlayingMusic.songID
             .getValue() && start === PlaySong.currentPlayingMusic.start.getValue()) {
+            // If same, be sure to update volume anyway
+            if (Manager.Songs.current[Enum.SongKind.Music]) {
+                Manager.Songs.current[Enum.SongKind.Music].volume(volume);
+                Manager.Songs.volumes[Enum.SongKind.Music] = volume;
+            }
             return 1;
         }
         // Update current and previous played music
