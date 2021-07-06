@@ -50,7 +50,7 @@ class BattleInitialize {
         this.battle.players = new Array(2);
         this.battle.graphicPlayers = new Array(2);
         this.battle.time = new Date().getTime();
-        this.battle.turn = 1;
+        this.battle.turn = 0;
         this.battle.attackingGroup = CharacterKind.Hero;
         this.initializeAlliesBattlers();
         this.initializeEnemiesBattlers();
@@ -273,6 +273,7 @@ class BattleInitialize {
         } else if (this.battle.transitionStart === MapTransitionKind.Zoom) {
             this.updateTransitionStartZoom();
         } else {
+            this.battle.turn = 1;
             this.battle.changeStep(Enum.BattleStep.StartTurn);
         }
     }
@@ -304,6 +305,7 @@ class BattleInitialize {
             }
             return;
         }
+        this.battle.turn = 1;
         this.battle.changeStep(BattleStep.StartTurn);
     }
 
@@ -341,6 +343,7 @@ class BattleInitialize {
                 return;
             }
         }
+        this.battle.turn = 1;
         this.battle.changeStep(BattleStep.StartTurn);
     }
     

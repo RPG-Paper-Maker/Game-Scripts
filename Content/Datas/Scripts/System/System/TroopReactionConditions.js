@@ -56,9 +56,17 @@ class TroopReactionConditions extends Base {
     isValid() {
         let sceneBattle = Scene.Map.current;
         if (this.isNumberOfTurn) {
-            if (((sceneBattle.turn - this.numberOfTurnPlus.getValue()) % this
-                .numberOfTurnTimes.getValue()) !== 0) {
-                return false;
+            let plus = this.numberOfTurnPlus.getValue();
+            let times = this.numberOfTurnTimes.getValue();
+            if (times === 1) {
+                if (sceneBattle.turn < plus) {
+                    return false;
+                }
+            }
+            else {
+                if (Mathf.mod(sceneBattle.turn - plus, times) !== 0) {
+                    return false;
+                }
             }
         }
         if (this.isHeroesMonsters) {
