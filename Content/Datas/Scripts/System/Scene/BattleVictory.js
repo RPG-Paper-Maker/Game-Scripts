@@ -82,7 +82,9 @@ class BattleVictory {
         this.battle.user = null;
         this.battle.priorityIndex = 0;
         // Music
-        Game.current.victoryMusic.playMusic();
+        if (Game.current.victoryMusic.songID.getValue() !== -1) {
+            Game.current.victoryMusic.playMusic();
+        }
         // Windows
         let w = 200 + WindowBox.SMALL_PADDING_BOX[0] + WindowBox.SMALL_PADDING_BOX[2];
         let h = this.battle.lootsNumber * 30 + WindowBox.SMALL_PADDING_BOX[1] +
