@@ -171,6 +171,12 @@ class Songs {
         if (id === -1 || currentState.end) {
             return true;
         }
+        if (this.currentStateMusicEffect === null) {
+            this.currentStateMusicEffect = currentState;
+        }
+        if (this.currentStateMusicEffect !== currentState) {
+            return true;
+        }
         if (this.musicEffectStep === 0) {
             this.playMusic(SongKind.MusicEffect, id, volume, null, null);
             this.musicEffectStep++;
@@ -182,6 +188,10 @@ class Songs {
         }
         if (this.musicEffectStep === 2) {
             if (this.current[SongKind.MusicEffect] === null || !this.current[SongKind.MusicEffect].playing()) {
+                if (this.current[SongKind.MusicEffect] !== null) {
+                    this.current[SongKind.MusicEffect].stop();
+                    this.current[SongKind.MusicEffect] = null;
+                }
                 if (this.current[SongKind.Music] !== null) {
                     this.current[SongKind.Music].play();
                 }
@@ -192,6 +202,7 @@ class Songs {
         if (this.musicEffectStep === 3) {
             if (this.unpauseSong(SongKind.Music, currentState.timePlay, 0.5)) {
                 this.musicEffectStep = 0;
+                this.currentStateMusicEffect = null;
                 return true;
             }
         }
@@ -291,4 +302,5 @@ Songs.starts = [];
 Songs.ends = [];
 Songs.current = [];
 Songs.progressionMusic = null;
+Songs.currentStateMusicEffect = null;
 export { Songs };

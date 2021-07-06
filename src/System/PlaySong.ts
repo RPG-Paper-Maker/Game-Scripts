@@ -209,10 +209,13 @@ class PlaySong extends Base {
      *  @returns {number}
      */
     playMusicEffect(currentState: Record<string, any>): number {
-        let played = Manager.Songs.playMusicEffect(this.songID.getValue(), this
+        if (currentState.parallel) {
+            let played = Manager.Songs.playMusicEffect(this.songID.getValue(), this
             .volume.getValue() / 100, currentState);
-        currentState.end = played;
-        return currentState.parallel ? (played ? 1 : 0) : 1;
+            currentState.end = played;
+            return played ? 1 : 0;
+        }
+        return 1;
     }
 }
 

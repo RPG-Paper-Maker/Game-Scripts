@@ -16,6 +16,7 @@ declare class Songs {
     static progressionMusic: any;
     static progressionMusicTime: number;
     static progressionMusicEnd: number;
+    static currentStateMusicEffect: Record<string, any>;
     constructor();
     /**
      *  Initialize all the lists according to SongKind.
