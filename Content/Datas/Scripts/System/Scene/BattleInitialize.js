@@ -121,7 +121,7 @@ class BattleInitialize {
             position = Game.current.heroBattle.position.clone().add(center).add(offset);
             player = new Player(CharacterKind.Monster, troopMonster.id, Game
                 .current.charactersInstances++, [], []);
-            player.instanciate(troopMonster.level);
+            player.instanciate(troopMonster.level.getValue());
             battler = new Battler(player, Position.createFromVector3(position), position, this.battle.camera);
             player.battler = battler;
             battler.addToScene();

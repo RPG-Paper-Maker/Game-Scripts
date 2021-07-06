@@ -28,7 +28,7 @@ class TroopMonster extends Base {
      */
     read(json) {
         this.id = json.id;
-        this.level = json.l;
+        this.level = System.DynamicValue.readOrDefaultNumber(json.l, 1);
         this.isSpecificPosition = Utils.defaultValue(json.isSpecificPosition, false);
         this.specificPosition = System.DynamicValue.readOrDefaultMessage(json
             .specificPosition, "new Core.Vector3(0,0,0)");
