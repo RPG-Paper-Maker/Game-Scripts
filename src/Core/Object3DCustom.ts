@@ -17,9 +17,8 @@ import CustomShapeKind = Enum.CustomShapeKind;
 import ObjectCollisionKind = Enum.ObjectCollisionKind;
 import { Sprite } from "./Sprite";
 import { Object3D } from "./Object3D";
-import { THREE } from "../Globals";
 import { Vector3 } from "./Vector3";
-import { Vector2 } from "./Vector2";
+import { CustomGeometry } from "./CustomGeometry";
 
 /** @class
  *  A 3D object custom in the map.
@@ -76,12 +75,12 @@ class Object3DCustom extends Object3D {
     /** 
      *  Update the geometry of a group of objects 3D cutom with the same 
      *  material.
-     *  @param {THREE.Geometry} geometry - Geometry of the object 3D custom
+     *  @param {Core.CustomGeometry} geometry - Geometry of the object 3D custom
      *  @param {Position} position - The position of the object 3D custom
      *  @param {number} count - The faces count
      *  @return {any[]}
     */
-    updateGeometry(geometry: THREE.Geometry, position: Position, count: 
+    updateGeometry(geometry: CustomGeometry, position: Position, count: 
         number) : [number, StructMapElementCollision[]]
     {
         let localPosition = position.toVector3();
@@ -95,7 +94,7 @@ class Object3DCustom extends Object3D {
         let angleY = position.angleY;
         let angleX = position.angleX;
         let angleZ = position.angleZ;
-        let vecA: Vector3, vecB: Vector3, vecC: Vector3, face: Vector2[];
+        let vecA: Vector3, vecB: Vector3, vecC: Vector3;
         for (let i = 0, l = modelGeometry.vertices.length; i < l; i += 3) {
             vecA = vertices[i].clone();
             vecB = vertices[i + 1].clone();
@@ -121,16 +120,10 @@ class Object3DCustom extends Object3D {
             vecA.add(localPosition);
             vecB.add(localPosition);
             vecC.add(localPosition);
-            face = [
-                uvs[i].clone(),
-                uvs[i + 1].clone(),
-                uvs[i + 2].clone()
-            ];
-            geometry.vertices.push(vecA);
-            geometry.vertices.push(vecB);
-            geometry.vertices.push(vecC);
-            geometry.faces.push(new THREE.Face3(count, count + 1, count + 2));
-            geometry.faceVertexUvs[0].push(face);
+            geometry.pushTriangleVertices(vecA, vecB, vecC);
+            geometry.pushTriangleIndices(count);
+            geometry.pushTriangleUVs(uvs[i].clone(), uvs[i + 1].clone(), uvs[i 
+                + 2].clone());
             count += 3;
         }
 
@@ -174,15 +167,15 @@ class Object3DCustom extends Object3D {
     /** 
      *  Create a new geometry.
      *  @param {Position} position - The position of object 3D
-     *  @return {[THREE.Geometry, [number, StructMapElementCollision[]]]}
+     *  @return {[Core.CustomGeometry, [number, StructMapElementCollision[]]]}
      */
-    createGeometry(position: Position): [THREE.Geometry, [number, 
+    createGeometry(position: Position): [CustomGeometry, [number, 
         StructMapElementCollision[]]]
     {
-        let geometry = new THREE.Geometry();
-        geometry.faceVertexUvs[0] = [];
-        geometry.uvsNeedUpdate = true;
-        return [geometry, this.updateGeometry(geometry, position, 0)];
+        let geometry = new CustomGeometry();
+        let collisions = this.updateGeometry(geometry, position, 0);
+        geometry.updateAttributes();
+        return [geometry, collisions];
     }
 }
 

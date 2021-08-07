@@ -190,7 +190,10 @@ declare class MapObject {
      *  @param {number[]} events - The time events list
      *  @returns {boolean}
     */
-    receiveEvent(sender: MapObject, isSystem: boolean, eventID: number, parameters: System.DynamicValue[], states: number[], events?: [System.Event, number]): boolean;
+    receiveEvent(sender: MapObject, isSystem: boolean, eventID: number, parameters: System.DynamicValue[], states: number[], events?: [
+        System.Event,
+        number
+    ]): boolean;
     /**
      *  Update according to camera angle.
      *  @param {number} angle - The camera angle

@@ -13,8 +13,8 @@ import { Datas, Scene } from "../index.js";
 /**
  *  A floor in the map.
  *
- * @class Floor
- * @extends {Land}
+ *  @class Floor
+ *  @extends {Land}
  */
 class Floor extends Land {
     constructor(json) {
@@ -33,9 +33,9 @@ class Floor extends Land {
     /**
      *  Update the geometry associated to this floor and return the
      *  collision result.
-     *  @param {THREE.Geometry} geometry - The geometry asoociated to the
-     *  autotiles
-     *  @param {Position} position - The position
+     *  @param {Core.CustomGeometry} geometry - The geometry asoociated to the
+     *  floor
+     *  @param {Core.Position} position - The position
      *  @param {number} width - The texture total width
      *  @param {number} height - The texture total height
      *  @param {number} count - The faces count

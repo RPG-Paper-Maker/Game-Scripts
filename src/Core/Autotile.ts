@@ -16,6 +16,7 @@ import { TextureBundle } from "./TextureBundle";
 import { Position } from "./Position";
 import { StructMapElementCollision } from "./MapElement"
 import { Datas } from "../index";
+import { CustomGeometry } from "./CustomGeometry";
 
 
 /**
@@ -50,7 +51,7 @@ class Autotile extends Land {
     /** 
      *  Update the geometry associated to this autotile and return the
      *  collision result.
-     *  @param {THREE.Geometry} geometry - The geometry asoociated to the
+     *  @param {Core.CustomGeometry} geometry - The geometry asoociated to the
      *  autotiles
      *  @param {TextureBundle} texure - The several texture used for this
      *  geometry
@@ -60,7 +61,7 @@ class Autotile extends Land {
      *  @param {number} count - The faces count
      *  @returns {StructMapElementCollision}
      */
-    updateGeometryAutotile(geometry: THREE.Geometry, texture: 
+    updateGeometryAutotile(geometry: CustomGeometry, texture: 
         TextureBundle, position: Position, width: number, height: number, count: 
         number): StructMapElementCollision
     {

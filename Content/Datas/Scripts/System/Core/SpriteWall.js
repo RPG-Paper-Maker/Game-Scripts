@@ -15,6 +15,7 @@ var PictureKind = Enum.PictureKind;
 import { Sprite } from "./Sprite.js";
 import { Vector3 } from "./Vector3.js";
 import { Vector2 } from "./Vector2.js";
+import { CustomGeometry } from "./CustomGeometry.js";
 /** @class
  *  A sprite in the map.
  *  @extends MapElement
@@ -79,17 +80,11 @@ class SpriteWall extends MapElement {
         y += coefY;
         w -= (coefX * 2);
         h -= (coefY * 2);
-        // Texture UV coordinates for each triangle faces
-        let texFaceA = [
-            new Vector2(x, y),
-            new Vector2(x + w, y),
-            new Vector2(x + w, y + h)
-        ];
-        let texFaceB = [
-            new Vector2(x, y),
-            new Vector2(x + w, y + h),
-            new Vector2(x, y + h)
-        ];
+        let texA = new Vector2();
+        let texB = new Vector2();
+        let texC = new Vector2();
+        let texD = new Vector2();
+        CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, x, y, w, h);
         // Collision
         let objCollision = [];
         let collisions = [];
@@ -125,7 +120,7 @@ class SpriteWall extends MapElement {
         }
         // Add sprite to geometry
         Sprite.rotateSprite(vecA, vecB, vecC, vecD, center, angle, Sprite.Y_AXIS);
-        count = Sprite.addStaticSpriteToGeometry(geometry, vecA, vecB, vecC, vecD, texFaceA, texFaceB, count);
+        count = Sprite.addStaticSpriteToGeometry(geometry, vecA, vecB, vecC, vecD, texA, texB, texC, texD, count);
         return [count, objCollision];
     }
 }

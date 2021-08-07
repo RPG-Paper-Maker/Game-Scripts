@@ -10,7 +10,7 @@
 */
 
 import { Mathf, Constants, Enum } from "../Common";
-import { MapObject, Position, Portion, MapPortion, StructMapElementCollision, CollisionSquare, Mountain, Vector3, Vector2, Game } from "../Core";
+import { MapObject, Position, Portion, MapPortion, StructMapElementCollision, CollisionSquare, Mountain, Vector3, Vector2, Game, CustomGeometry } from "../Core";
 import { Datas, System, Scene } from "../index";
 import ElementMapKind = Enum.ElementMapKind;
 
@@ -38,7 +38,7 @@ class Collisions {
      *  @returns {THREE.Mesh}
      */
     static createBox(): THREE.Mesh {
-        let box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), this
+        let box = new THREE.Mesh(CustomGeometry.createBox(1, 1, 1), this
             .BB_MATERIAL);
         box['previousTranslate'] = [0, 0, 0];
         box['previousRotate'] = [0, 0, 0];
@@ -52,7 +52,7 @@ class Collisions {
      *  @returns {THREE.Mesh}
      */
     static createOrientedBox(): THREE.Mesh {
-        let box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), this
+        let box = new THREE.Mesh(CustomGeometry.createBox(1, 1, 1), this
             .BB_MATERIAL);
         box['previousTranslate'] = [0, 0, 0];
         box['previousScale'] = [1, 1, 1];
@@ -207,45 +207,43 @@ class Collisions {
     /** 
      *  Check collision between two OBB.
      *  @static
-     *  @param {THREE.Geometry} shapeA - First shape
-     *  @param {THREE.Geometry} shapeB - Second shape
+     *  @param {Core.CustomGeometry} shapeA - First shape
+     *  @param {Core.CustomGeometry} shapeB - Second shape
      *  @returns {boolean}
      */
-    static obbVSobb(shapeA: THREE.Geometry, shapeB: THREE.Geometry
-        ): boolean
+    static obbVSobb(shapeA: CustomGeometry, shapeB: CustomGeometry): boolean
     {
-        let facesA = shapeA.faces;
-        let facesB = shapeB.faces;
-        let verticesA = shapeA.vertices;
-        let verticesB = shapeB.vertices;
+        let facesA = shapeA.getNormals();
+        let facesB = shapeB.getNormals();
+        let verticesA = shapeA.getVertices();
+        let verticesB = shapeB.getVertices();
         let lA = verticesA.length;
         let lB = verticesB.length;
-        if (!this.checkFaces(facesA, verticesA, verticesB, lA, lB)) {
+        if (!this.checkNormals(facesA, verticesA, verticesB, lA, lB)) {
             return false;
         }
-        if (!this.checkFaces(facesB, verticesA, verticesB, lA, lB)) {
+        if (!this.checkNormals(facesB, verticesA, verticesB, lA, lB)) {
             return false;
         }
         return true;
     }
 
     /** 
-     *  Check the faces for OBB collision.
+     *  Check the fnormals for OBB collision.
      *  @static
-     *  @param {THREE.Face3[]} shapes - The faces to check
+     *  @param {ArrayLike<number>} normals - The normals to check
      *  @param {Vector3[]} verticesA - First vertices to check
      *  @param {Vector3[]} verticesB - Second vertices to check
      *  @param {number} lA - The first vertices length
      *  @param {number} lB - The second vertices length
      *  @returns {boolean}
      */
-    static checkFaces(faces: THREE.Face3[], verticesA: Vector3[], verticesB: 
-        Vector3[], lA: number, lB: number): boolean
+    static checkNormals(normals: ArrayLike<number>, verticesA: ArrayLike<number>, 
+        verticesB: ArrayLike<number>, lA: number, lB: number): boolean
     {
-        for (let i = 0, l = faces.length; i < l; i++) {
-            if (!this.overlapOnThisNormal(verticesA, verticesB, lA, lB, faces[i]
-                .normal))
-            {
+        for (let i = 0, l = normals.length; i < l; i += 3) {
+            if (!this.overlapOnThisNormal(verticesA, verticesB, lA, lB, new 
+                Vector3(normals[i], normals[i + 1], normals[i + 2]))) {
                 return false;
             }
         }
@@ -255,23 +253,23 @@ class Collisions {
     /** 
      *  Check if vertices overlap on one of the faces normal.
      *  @static
-     *  @param {Vector3[]} verticesA - First vertices to check
-     *  @param {Vector3[]} verticesB - Second vertices to check
+     *  @param {ArrayLike<number>} verticesA - First vertices to check
+     *  @param {ArrayLike<number>} verticesB - Second vertices to check
      *  @param {number} lA - The first vertices length
      *  @param {number} lB - The second vertices length
-     *  @param {Vector3} normal - The face normal
+     *  @param {Core.Vector3} normal - The face normal
      *  @returns {boolean}
      */
-    static overlapOnThisNormal(verticesA: Vector3[], verticesB: 
-        Vector3[], lA: number, lB: number, normal: THREE
+    static overlapOnThisNormal(verticesA: ArrayLike<number>, verticesB: 
+        ArrayLike<number>, lA: number, lB: number, normal: THREE
         .Vector3): boolean
     {
         // We test each vertex of A
         let minA = null;
         let maxA = null;
         let i: number, vertex: Vector3, buffer: number;
-        for (i = 0; i < lA; i++) {
-            vertex = verticesA[i];
+        for (i = 0; i < lA; i += 3) {
+            vertex = new Vector3(verticesA[i], verticesA[i + 1], verticesA[i + 2]);
             buffer = Mathf.orthogonalProjection(vertex, normal);
             if (minA === null || buffer < minA) {
                 minA = buffer;
@@ -284,8 +282,8 @@ class Collisions {
         // We test each vertex of B
         let minB = null;
         let maxB = null;
-        for (i = 0; i < lB; i++) {
-            vertex = verticesB[i];
+        for (i = 0; i < lB; i += 3) {
+            vertex = new Vector3(verticesB[i], verticesB[i + 1], verticesB[i + 2]);
             buffer = Mathf.orthogonalProjection(vertex, normal);
             if (minB === null || buffer < minB) {
                 minB = buffer;
@@ -577,8 +575,8 @@ class Collisions {
             return false;
         }
         this.applyBoxLandTransforms(this.BB_BOX, boundingBox);
-        return this.obbVSobb(<THREE.Geometry>object.currentBoundingBox.geometry
-            , <THREE.Geometry>this.BB_BOX.geometry);
+        return this.obbVSobb(<CustomGeometry>object.currentBoundingBox.geometry, 
+            <CustomGeometry>this.BB_BOX.geometry);
     }
 
     /** 
@@ -699,12 +697,12 @@ class Collisions {
         }
         if (fix) {
             this.applyBoxSpriteTransforms(this.BB_BOX, boundingBox);
-            return this.obbVSobb(<THREE.Geometry>object.currentBoundingBox
-                .geometry, <THREE.Geometry>this.BB_BOX.geometry);
+            return this.obbVSobb(<CustomGeometry>object.currentBoundingBox
+                .geometry, <CustomGeometry>this.BB_BOX.geometry);
         } else {
             this.applyOrientedBoxTransforms(this.BB_ORIENTED_BOX, boundingBox);
-            return this.obbVSobb(<THREE.Geometry>object.currentBoundingBox
-                .geometry, <THREE.Geometry>this.BB_ORIENTED_BOX.geometry);
+            return this.obbVSobb(<CustomGeometry>object.currentBoundingBox
+                .geometry, <CustomGeometry>this.BB_ORIENTED_BOX.geometry);
         }
     }
 

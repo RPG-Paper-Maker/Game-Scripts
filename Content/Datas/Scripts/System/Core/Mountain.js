@@ -121,7 +121,7 @@ class Mountain extends MapElement {
      *  @param {Vector3} vecBackA - The back vector position A
      *  @param {Vector3} vecFrontB - The front vector position B
      *  @param {Vector3} vecBackB - The back vector position B
-     *  @param {THREE.geometry} geometry - The geometry
+     *  @param {Core.CustomGeometry} geometry - The geometry
      *  @param {number} count - The faces count
      *  @returns {number}
      */
@@ -206,7 +206,7 @@ class Mountain extends MapElement {
      *  @param {number} zBackLeft - The z back left position
      *  @param {number} zBackRight - The z back right position
      *  @param {number} yOffset - The y offset
-     *  @param {THREE.geometry} geometry - The geometry
+     *  @param {Core.CustomGeometry} geometry - The geometry
      *  @param {number} count - The faces count
      *  @param {number} xCornerOffsetTop - The x corner offset top
      *  @param {number} xCornerOffsetBot - The x corner offset bot
@@ -241,7 +241,7 @@ class Mountain extends MapElement {
      *  @param {number} zBackLeft - The z back left position
      *  @param {number} zBackRight - The z back right position
      *  @param {number} yOffset - The y offset
-     *  @param {THREE.geometry} geometry - The geometry
+     *  @param {Core.CustomGeometry} geometry - The geometry
      *  @param {number} count - The faces count
      *  @param {number} xCornerOffsetTop - The x corner offset top
      *  @param {number} xCornerOffsetBot - The x corner offset bot
@@ -297,12 +297,12 @@ class Mountain extends MapElement {
         let vecD = new Vector3(xLeftBot, yBot, zFrontLeft);
         // Rotate and draw sprite side
         Sprite.rotateSprite(vecA, vecB, vecC, vecD, center, angle, Sprite.Y_AXIS);
-        count = Sprite.addStaticSpriteToGeometry(geometry, vecA, vecB, vecC, vecD, texFaceA, texFaceB, count);
+        count = Sprite.addStaticSpriteToGeometry(geometry, vecA, vecB, vecC, vecD, texA, texB, texC, texD, count);
         return count;
     }
     /**
      *  Update the geometry of a group of mountains with the same material.
-     *  @param {THREE.Geometry} geometry - The geometry of mountains
+     *  @param {Core.CustomGeometry} geometry - The geometry of mountains
      *  @param {TextureBundle} texture - The texture mountain
      *  @param {Position} position - The position
      *  @param {number} count - The faces count

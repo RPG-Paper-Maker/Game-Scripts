@@ -3,6 +3,7 @@ import { System } from "../index.js";
 import { Position } from "./Position.js";
 import { Object3D } from "./Object3D.js";
 import { Vector3 } from "./Vector3.js";
+import { CustomGeometry } from "./CustomGeometry.js";
 /** @class
  *  A 3D object custom in the map.
  *  @extends Object3D
@@ -34,17 +35,23 @@ declare class Object3DCustom extends Object3D {
     /**
      *  Update the geometry of a group of objects 3D cutom with the same
      *  material.
-     *  @param {THREE.Geometry} geometry - Geometry of the object 3D custom
+     *  @param {Core.CustomGeometry} geometry - Geometry of the object 3D custom
      *  @param {Position} position - The position of the object 3D custom
      *  @param {number} count - The faces count
      *  @return {any[]}
     */
-    updateGeometry(geometry: THREE.Geometry, position: Position, count: number): [number, StructMapElementCollision[]];
+    updateGeometry(geometry: CustomGeometry, position: Position, count: number): [number, StructMapElementCollision[]];
     /**
      *  Create a new geometry.
      *  @param {Position} position - The position of object 3D
-     *  @return {[THREE.Geometry, [number, StructMapElementCollision[]]]}
+     *  @return {[Core.CustomGeometry, [number, StructMapElementCollision[]]]}
      */
-    createGeometry(position: Position): [THREE.Geometry, [number, StructMapElementCollision[]]];
+    createGeometry(position: Position): [
+        CustomGeometry,
+        [
+            number,
+            StructMapElementCollision[]
+        ]
+    ];
 }
 export { Object3DCustom };

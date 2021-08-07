@@ -26,6 +26,8 @@ import { Vector3 } from "./Vector3.js";
 import { Game } from "./Game.js";
 import { Object3DBox } from "./Object3DBox.js";
 import { Object3DCustom } from "./Object3DCustom.js";
+import { CustomGeometry } from "./CustomGeometry.js";
+import { Vector2 } from "./Vector2.js";
 /**
  * Object in local map that can move.
  *
@@ -1183,14 +1185,14 @@ class MapObject {
                 y += coefY;
                 w -= (coefX * 2);
                 h -= (coefY * 2);
+                let texA = new Vector2();
+                let texB = new Vector2();
+                let texC = new Vector2();
+                let texD = new Vector2();
+                CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, x, y, w, h);
                 // Update geometry
-                this.mesh.geometry.faceVertexUvs[0][0][0].set(x, y);
-                this.mesh.geometry.faceVertexUvs[0][0][1].set(x + w, y);
-                this.mesh.geometry.faceVertexUvs[0][0][2].set(x + w, y + h);
-                this.mesh.geometry.faceVertexUvs[0][1][0].set(x, y);
-                this.mesh.geometry.faceVertexUvs[0][1][1].set(x + w, y + h);
-                this.mesh.geometry.faceVertexUvs[0][1][2].set(x, y + h);
-                this.mesh.geometry.uvsNeedUpdate = true;
+                this.mesh.geometry.pushQuadUVs(texA, texB, texC, texD);
+                this.mesh.geometry.updateUVs();
             }
         }
     }

@@ -15,6 +15,7 @@ import { Autotile } from "./Autotile";
 import { Position } from "./Position";
 import { StructMapElementCollision } from "./MapElement";
 import { Manager } from "../index";
+import { CustomGeometry } from "./CustomGeometry";
 
 /** @class
  *  Autotiles grouped with the same textures.
@@ -53,7 +54,7 @@ class Autotiles {
     public bundle: TextureBundle;
     public width: number;
     public height: number;
-    public geometry: THREE.Geometry;
+    public geometry: CustomGeometry;
     public mesh: THREE.Mesh;
     public index: number;
 
@@ -62,8 +63,7 @@ class Autotiles {
         let texture = Manager.GL.getMaterialTexture(bundle.material);
         this.width = texture ? texture.image.width : 0;
         this.height = texture ? texture.image.height : 0;
-        this.geometry = new THREE.Geometry();
-        this.geometry.faceVertexUvs[0] = [];
+        this.geometry = new CustomGeometry();
         this.mesh = null;
         this.index = 0;
     }
@@ -87,6 +87,7 @@ class Autotiles {
      *  Create a mesh with material and geometry.
      */
     createMesh() {
+        this.geometry.updateAttributes();
         this.mesh = new THREE.Mesh(this.geometry, this.bundle.material);
     }
 }

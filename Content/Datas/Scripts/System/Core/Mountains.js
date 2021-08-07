@@ -10,6 +10,7 @@
 */
 import { THREE } from "../Globals.js";
 import { Manager } from "../index.js";
+import { CustomGeometry } from "./CustomGeometry.js";
 /** @class
  *  The wrapper class for handle mountains sharing the same texture.
  *  @param {TextureBundle} texture
@@ -20,8 +21,7 @@ class Mountains {
         let texture = Manager.GL.getMaterialTexture(bundle.material);
         this.width = texture.image.width;
         this.height = texture.image.height;
-        this.geometry = new THREE.Geometry();
-        this.geometry.faceVertexUvs[0] = [];
+        this.geometry = new CustomGeometry();
         this.count = 0;
         this.mesh = null;
     }
@@ -39,6 +39,7 @@ class Mountains {
      *  Create a mesh with material and geometry.
      */
     createMesh() {
+        this.geometry.updateAttributes();
         this.mesh = new THREE.Mesh(this.geometry, this.bundle.material);
     }
 }

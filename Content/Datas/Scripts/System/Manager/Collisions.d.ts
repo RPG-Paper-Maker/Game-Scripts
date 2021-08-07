@@ -1,14 +1,14 @@
-import { MapObject, Position, MapPortion, StructMapElementCollision, Vector3 } from "../Core/index.js";
+import { MapObject, Position, MapPortion, StructMapElementCollision, Vector3, CustomGeometry } from "../Core/index.js";
 /** @class
  *  The collisions manager.
  *  @static
  */
 declare class Collisions {
     static BB_MATERIAL: import("three").MeshBasicMaterial;
-    static BB_BOX: import("three").Mesh<import("three").Geometry | import("three").BufferGeometry, import("three").Material | import("three").Material[]>;
-    static BB_ORIENTED_BOX: import("three").Mesh<import("three").Geometry | import("three").BufferGeometry, import("three").Material | import("three").Material[]>;
-    static BB_BOX_DETECTION: import("three").Mesh<import("three").Geometry | import("three").BufferGeometry, import("three").Material | import("three").Material[]>;
-    static BB_BOX_DEFAULT_DETECTION: import("three").Mesh<import("three").Geometry | import("three").BufferGeometry, import("three").Material | import("three").Material[]>;
+    static BB_BOX: import("three").Mesh<import("three").BufferGeometry, import("three").Material | import("three").Material[]>;
+    static BB_ORIENTED_BOX: import("three").Mesh<import("three").BufferGeometry, import("three").Material | import("three").Material[]>;
+    static BB_BOX_DETECTION: import("three").Mesh<import("three").BufferGeometry, import("three").Material | import("three").Material[]>;
+    static BB_BOX_DEFAULT_DETECTION: import("three").Mesh<import("three").BufferGeometry, import("three").Material | import("three").Material[]>;
     constructor();
     /**
      *  Create a box for bounding box.
@@ -56,11 +56,11 @@ declare class Collisions {
     /**
      *  Check collision between two OBB.
      *  @static
-     *  @param {THREE.Geometry} shapeA - First shape
-     *  @param {THREE.Geometry} shapeB - Second shape
+     *  @param {Core.CustomGeometry} shapeA - First shape
+     *  @param {Core.CustomGeometry} shapeB - Second shape
      *  @returns {boolean}
      */
-    static obbVSobb(shapeA: THREE.Geometry, shapeB: THREE.Geometry): boolean;
+    static obbVSobb(shapeA: CustomGeometry, shapeB: CustomGeometry): boolean;
     /**
      *  Check the faces for OBB collision.
      *  @static
@@ -71,7 +71,7 @@ declare class Collisions {
      *  @param {number} lB - The second vertices length
      *  @returns {boolean}
      */
-    static checkFaces(faces: THREE.Face3[], verticesA: Vector3[], verticesB: Vector3[], lA: number, lB: number): boolean;
+    static checkFaces(normals: ArrayLike<number>, verticesA: ArrayLike<number>, verticesB: ArrayLike<number>, lA: number, lB: number): boolean;
     /**
      *  Check if vertices overlap on one of the faces normal.
      *  @static
@@ -82,7 +82,7 @@ declare class Collisions {
      *  @param {Vector3} normal - The face normal
      *  @returns {boolean}
      */
-    static overlapOnThisNormal(verticesA: Vector3[], verticesB: Vector3[], lA: number, lB: number, normal: THREE.Vector3): boolean;
+    static overlapOnThisNormal(verticesA: ArrayLike<number>, verticesB: ArrayLike<number>, lA: number, lB: number, normal: THREE.Vector3): boolean;
     /**
      *  Check collision ray.
      *  @static
@@ -217,7 +217,11 @@ declare class Collisions {
      *  @param {boolean} block - The block mountain collision
      *  @returns {[boolean, boolean, number]}
     */
-    static checkMountain(mapPortion: MapPortion, jpositionAfter: Position, positionAfter: Vector3, testedCollisions: StructMapElementCollision[], object: MapObject, objCollision: StructMapElementCollision, yMountain: number, block: boolean): [boolean, boolean, number];
+    static checkMountain(mapPortion: MapPortion, jpositionAfter: Position, positionAfter: Vector3, testedCollisions: StructMapElementCollision[], object: MapObject, objCollision: StructMapElementCollision, yMountain: number, block: boolean): [
+        boolean,
+        boolean,
+        number
+    ];
     /**
      *  Check intersection with a mountain.
      *  @static

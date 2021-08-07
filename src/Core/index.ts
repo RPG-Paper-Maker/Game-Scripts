@@ -19,6 +19,7 @@ export * from "./Chrono";
 export * from "./CollisionSquare";
 export * from "./ReactionInterpreter";
 export * from "./Skill";
+export * from "./CustomGeometry";
 export * from "./Floor";
 export * from "./Frame";
 export * from "./Game";

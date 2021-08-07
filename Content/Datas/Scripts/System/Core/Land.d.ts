@@ -2,6 +2,7 @@ import { MapElement } from "./MapElement.js";
 import { CollisionSquare } from "./CollisionSquare.js";
 import { Position } from "./Position.js";
 import { StructMapElementCollision } from "./MapElement.js";
+import { CustomGeometry } from "./CustomGeometry.js";
 /** @class
  *  A land in the map.
  *  @extends MapElement
@@ -24,7 +25,7 @@ declare class Land extends MapElement {
     /**
      *  Update the geometry associated to this land and return the collision
      *  result.
-     *  @param {THREE.Geometry} geometry - The geometry asoociated to the
+     *  @param {Core.CustomGeometry} geometry - The geometry asoociated to the
      *  autotiles
      *  @param {CollisionSquare} collision - The collision square
      *  @param {Position} position - The position
@@ -37,6 +38,6 @@ declare class Land extends MapElement {
      *  @param {number} count - The faces count
      *  @returns {StructCollision}
      */
-    updateGeometryLand(geometry: THREE.Geometry, collision: CollisionSquare, position: Position, width: number, height: number, x: number, y: number, w: number, h: number, count: number): StructMapElementCollision;
+    updateGeometryLand(geometry: CustomGeometry, collision: CollisionSquare, position: Position, width: number, height: number, x: number, y: number, w: number, h: number, count: number): StructMapElementCollision;
 }
 export { Land };

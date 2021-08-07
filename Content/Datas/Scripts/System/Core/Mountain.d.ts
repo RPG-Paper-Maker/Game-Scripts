@@ -3,6 +3,7 @@ import { System, Core } from "../index.js";
 import { Position } from "./Position.js";
 import { TextureBundle } from "./TextureBundle.js";
 import { Vector3 } from "./Vector3.js";
+import { CustomGeometry } from "./CustomGeometry.js";
 /**
  * A mountain in the map.
  *
@@ -91,11 +92,11 @@ declare class Mountain extends MapElement {
      *  @param {Vector3} vecBackA - The back vector position A
      *  @param {Vector3} vecFrontB - The front vector position B
      *  @param {Vector3} vecBackB - The back vector position B
-     *  @param {THREE.geometry} geometry - The geometry
+     *  @param {Core.CustomGeometry} geometry - The geometry
      *  @param {number} count - The faces count
      *  @returns {number}
      */
-    drawEntireFaces(left: boolean, right: boolean, angle: number, center: Core.Vector3, width: number, height: number, w: number, faceHeight: number, wp: number, xLeft: number, xRight: number, yTop: number, yBot: number, zFront: number, zBack: number, yOffset: number, vecFrontA: Vector3, vecBackA: Vector3, vecFrontB: Vector3, vecBackB: Vector3, geometry: THREE.Geometry, count: number): number;
+    drawEntireFaces(left: boolean, right: boolean, angle: number, center: Core.Vector3, width: number, height: number, w: number, faceHeight: number, wp: number, xLeft: number, xRight: number, yTop: number, yBot: number, zFront: number, zBack: number, yOffset: number, vecFrontA: Vector3, vecBackA: Vector3, vecFrontB: Vector3, vecBackB: Vector3, geometry: CustomGeometry, count: number): number;
     /**
      *  Draw the side corner.
      *  @param {number} xKind - The xKind position
@@ -122,13 +123,13 @@ declare class Mountain extends MapElement {
      *  @param {number} zBackLeft - The z back left position
      *  @param {number} zBackRight - The z back right position
      *  @param {number} yOffset - The y offset
-     *  @param {THREE.geometry} geometry - The geometry
+     *  @param {Core.CustomGeometry} geometry - The geometry
      *  @param {number} count - The faces count
      *  @param {number} xCornerOffsetTop - The x corner offset top
      *  @param {number} xCornerOffsetBot - The x corner offset bot
      *  @returns {number}
      */
-    drawSideCorner(xKind: number, yKind: number, angle: number, center: Vector3, width: number, height: number, w: number, faceHeight: number, wp: number, xLeft: number, xRight: number, xLeftTop: number, xRightTop: number, xLeftBot: number, xRightBot: number, yTop: number, yBot: number, zFront: number, zBack: number, zFrontLeft: number, zFrontRight: number, zBackLeft: number, zBackRight: number, yOffset: number, geometry: THREE.Geometry, count: number, xCornerOffsetTop: number, xCornerOffsetBot: number): number;
+    drawSideCorner(xKind: number, yKind: number, angle: number, center: Vector3, width: number, height: number, w: number, faceHeight: number, wp: number, xLeft: number, xRight: number, xLeftTop: number, xRightTop: number, xLeftBot: number, xRightBot: number, yTop: number, yBot: number, zFront: number, zBack: number, zFrontLeft: number, zFrontRight: number, zBackLeft: number, zBackRight: number, yOffset: number, geometry: CustomGeometry, count: number, xCornerOffsetTop: number, xCornerOffsetBot: number): number;
     /**
      *  Draw a face.
      *  @param {number} xKind - The xKind position
@@ -150,22 +151,22 @@ declare class Mountain extends MapElement {
      *  @param {number} zBackLeft - The z back left position
      *  @param {number} zBackRight - The z back right position
      *  @param {number} yOffset - The y offset
-     *  @param {THREE.geometry} geometry - The geometry
+     *  @param {Core.CustomGeometry} geometry - The geometry
      *  @param {number} count - The faces count
      *  @param {number} xCornerOffsetTop - The x corner offset top
      *  @param {number} xCornerOffsetBot - The x corner offset bot
      *  @param {boolean} isCorner - Indicate if corner
      *  @returns {number}
      */
-    drawFace(xKind: number, yKind: number, angle: number, center: THREE.Vector3, width: number, height: number, w: number, faceHeight: number, xLeftTop: number, xRightTop: number, xLeftBot: number, xRightBot: number, yTop: number, yBot: number, zFrontLeft: number, zFrontRight: number, zBackLeft: number, zBackRight: number, yOffset: number, geometry: THREE.Geometry, count: number, xCornerOffsetTop: number, xCornerOffsetBot: number, isCorner: boolean): number;
+    drawFace(xKind: number, yKind: number, angle: number, center: THREE.Vector3, width: number, height: number, w: number, faceHeight: number, xLeftTop: number, xRightTop: number, xLeftBot: number, xRightBot: number, yTop: number, yBot: number, zFrontLeft: number, zFrontRight: number, zBackLeft: number, zBackRight: number, yOffset: number, geometry: CustomGeometry, count: number, xCornerOffsetTop: number, xCornerOffsetBot: number, isCorner: boolean): number;
     /**
      *  Update the geometry of a group of mountains with the same material.
-     *  @param {THREE.Geometry} geometry - The geometry of mountains
+     *  @param {Core.CustomGeometry} geometry - The geometry of mountains
      *  @param {TextureBundle} texture - The texture mountain
      *  @param {Position} position - The position
      *  @param {number} count - The faces count
      *  @return {any[]}
      */
-    updateGeometry(geometry: THREE.Geometry, texture: TextureBundle, position: Position, count: number): any[];
+    updateGeometry(geometry: CustomGeometry, texture: TextureBundle, position: Position, count: number): any[];
 }
 export { Mountain };

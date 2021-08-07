@@ -2,6 +2,7 @@ import { TextureBundle } from "./TextureBundle.js";
 import { Mountain } from "./Mountain.js";
 import { StructMapElementCollision } from "./MapElement.js";
 import { Position } from "./Position.js";
+import { CustomGeometry } from "./CustomGeometry.js";
 /** @class
  *  The wrapper class for handle mountains sharing the same texture.
  *  @param {TextureBundle} texture
@@ -10,7 +11,7 @@ declare class Mountains {
     bundle: TextureBundle;
     width: number;
     height: number;
-    geometry: THREE.Geometry;
+    geometry: CustomGeometry;
     count: number;
     mesh: THREE.Mesh;
     constructor(bundle: TextureBundle);

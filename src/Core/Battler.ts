@@ -23,6 +23,7 @@ import { Vector3 } from "./Vector3";
 import { Vector2 } from "./Vector2";
 import { Status } from "./Status";
 import { Animation } from "./Animation";
+import { CustomGeometry } from "./CustomGeometry";
 
 /** @class
  *  A battler in a battle (ally or ennemy).
@@ -472,17 +473,15 @@ class Battler {
             let y = this.step * h;
 
             // Update geometry
-            (<THREE.Geometry>this.mesh.geometry).faceVertexUvs[0][0][0].set(x, y);
-            (<THREE.Geometry>this.mesh.geometry).faceVertexUvs[0][0][1].set(x + 
-                w, y);
-            (<THREE.Geometry>this.mesh.geometry).faceVertexUvs[0][0][2].set(x + 
-                w, y + h);
-            (<THREE.Geometry>this.mesh.geometry).faceVertexUvs[0][1][0].set(x, y);
-            (<THREE.Geometry>this.mesh.geometry).faceVertexUvs[0][1][1].set(x + 
-                w, y + h);
-            (<THREE.Geometry>this.mesh.geometry).faceVertexUvs[0][1][2].set(x, y 
-                + h);
-            (<THREE.Geometry>this.mesh.geometry).uvsNeedUpdate = true;
+            let texA = new Vector2();
+            let texB = new Vector2();
+            let texC = new Vector2();
+            let texD = new Vector2();
+            CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, x, y, w, h);
+
+            // Update geometry
+            (<CustomGeometry>this.mesh.geometry).pushQuadUVs(texA, texB, texC, texD);
+            (<CustomGeometry>this.mesh.geometry).updateUVs();
         }
     }
 

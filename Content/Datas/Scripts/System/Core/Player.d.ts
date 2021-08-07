@@ -269,7 +269,11 @@ declare class Player {
      *  @param {System.CommonSkillItem}
      *  @returns {[number, number, number[][]]}
      */
-    getBestWeaponArmorToReplace(weaponArmor: System.CommonSkillItem): [number, number, [number[], number[], Record<string, any>]];
+    getBestWeaponArmorToReplace(weaponArmor: System.CommonSkillItem): [
+        number,
+        number,
+        [number[], number[], Record<string, any>]
+    ];
     /**
      *  Add a skill id if not existing yet.
      *  @param {number} id

@@ -15,8 +15,10 @@ import { ProgressionTable } from "../System/index.js";
 import { Manager, Datas, Scene } from "../index.js";
 import { Sprite } from "./Sprite.js";
 import { Vector3 } from "./Vector3.js";
+import { Vector2 } from "./Vector2.js";
 import { Status } from "./Status.js";
 import { Animation } from "./Animation.js";
+import { CustomGeometry } from "./CustomGeometry.js";
 /** @class
  *  A battler in a battle (ally or ennemy).
  *  @param {Player} player - The character properties
@@ -393,17 +395,14 @@ class Battler {
             let x = frame * w;
             let y = this.step * h;
             // Update geometry
-            this.mesh.geometry.faceVertexUvs[0][0][0].set(x, y);
-            this.mesh.geometry.faceVertexUvs[0][0][1].set(x +
-                w, y);
-            this.mesh.geometry.faceVertexUvs[0][0][2].set(x +
-                w, y + h);
-            this.mesh.geometry.faceVertexUvs[0][1][0].set(x, y);
-            this.mesh.geometry.faceVertexUvs[0][1][1].set(x +
-                w, y + h);
-            this.mesh.geometry.faceVertexUvs[0][1][2].set(x, y
-                + h);
-            this.mesh.geometry.uvsNeedUpdate = true;
+            let texA = new Vector2();
+            let texB = new Vector2();
+            let texC = new Vector2();
+            let texD = new Vector2();
+            CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, x, y, w, h);
+            // Update geometry
+            this.mesh.geometry.pushQuadUVs(texA, texB, texC, texD);
+            this.mesh.geometry.updateUVs();
         }
     }
     /**

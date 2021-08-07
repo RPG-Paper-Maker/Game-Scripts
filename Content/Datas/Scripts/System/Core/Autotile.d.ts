@@ -2,6 +2,7 @@ import { Land } from "./Land.js";
 import { TextureBundle } from "./TextureBundle.js";
 import { Position } from "./Position.js";
 import { StructMapElementCollision } from "./MapElement.js";
+import { CustomGeometry } from "./CustomGeometry.js";
 /**
  * An autotile in the map
  *
@@ -20,7 +21,7 @@ declare class Autotile extends Land {
     /**
      *  Update the geometry associated to this autotile and return the
      *  collision result.
-     *  @param {THREE.Geometry} geometry - The geometry asoociated to the
+     *  @param {Core.CustomGeometry} geometry - The geometry asoociated to the
      *  autotiles
      *  @param {TextureBundle} texure - The several texture used for this
      *  geometry
@@ -30,6 +31,6 @@ declare class Autotile extends Land {
      *  @param {number} count - The faces count
      *  @returns {StructMapElementCollision}
      */
-    updateGeometryAutotile(geometry: THREE.Geometry, texture: TextureBundle, position: Position, width: number, height: number, count: number): StructMapElementCollision;
+    updateGeometryAutotile(geometry: CustomGeometry, texture: TextureBundle, position: Position, width: number, height: number, count: number): StructMapElementCollision;
 }
 export { Autotile };

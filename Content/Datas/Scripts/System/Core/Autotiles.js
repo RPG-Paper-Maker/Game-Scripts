@@ -10,6 +10,7 @@
 */
 import { THREE } from "../Globals.js";
 import { Manager } from "../index.js";
+import { CustomGeometry } from "./CustomGeometry.js";
 /** @class
  *  Autotiles grouped with the same textures.
  *  @param {TextureBundle} texture
@@ -20,8 +21,7 @@ class Autotiles {
         let texture = Manager.GL.getMaterialTexture(bundle.material);
         this.width = texture ? texture.image.width : 0;
         this.height = texture ? texture.image.height : 0;
-        this.geometry = new THREE.Geometry();
-        this.geometry.faceVertexUvs[0] = [];
+        this.geometry = new CustomGeometry();
         this.mesh = null;
         this.index = 0;
     }
@@ -41,6 +41,7 @@ class Autotiles {
      *  Create a mesh with material and geometry.
      */
     createMesh() {
+        this.geometry.updateAttributes();
         this.mesh = new THREE.Mesh(this.geometry, this.bundle.material);
     }
 }

@@ -25,6 +25,7 @@ import { Mountain } from "./Mountain.js";
 import { Object3DBox } from "./Object3DBox.js";
 import { Object3DCustom } from "./Object3DCustom.js";
 import { Game } from "./Game.js";
+import { CustomGeometry } from "./CustomGeometry.js";
 /** @class
  *  A portion of the map.
  *  @param {Portion} portion
@@ -98,8 +99,7 @@ class MapPortion {
         let texture = Manager.GL.getMaterialTexture(material);
         let width = texture ? texture.image.width : 0;
         let height = texture ? texture.image.height : 0;
-        let geometry = new THREE.Geometry();
-        geometry.faceVertexUvs[0] = [];
+        let geometry = new CustomGeometry();
         let layers = [];
         let count = 0;
         let i, j, l, m, jsonFloor, position, layer, floor, objCollision, index;
@@ -140,7 +140,7 @@ class MapPortion {
             count++;
         }
         // Creating the plane
-        geometry.uvsNeedUpdate = true;
+        geometry.updateAttributes();
         this.staticFloorsMesh = new THREE.Mesh(geometry, material);
         this.staticFloorsMesh.renderOrder = 0;
         Scene.Map.current.scene.add(this.staticFloorsMesh);
@@ -206,9 +206,8 @@ class MapPortion {
     */
     readSpritesGlobals(json) {
         let material = Scene.Map.current.textureTileset;
-        let staticGeometry = new THREE.Geometry();
+        let staticGeometry = new CustomGeometry();
         let count = 0;
-        staticGeometry.faceVertexUvs[0] = [];
         let texture = Manager.GL.getMaterialTexture(material);
         if (texture) {
             let s, position, sprite, localPosition, result, geometry, collisions, plane, resultUpdate;
@@ -237,7 +236,7 @@ class MapPortion {
                 this.updateCollisionSprite(collisions, position);
             }
         }
-        staticGeometry.uvsNeedUpdate = true;
+        staticGeometry.updateAttributes();
         this.staticSpritesMesh = new THREE.Mesh(staticGeometry, material);
         this.staticSpritesMesh.renderOrder = 999;
         Scene.Map.current.scene.add(this.staticSpritesMesh);
@@ -266,8 +265,7 @@ class MapPortion {
             // If ID exists in this tileset
             if (!Utils.isUndefined(obj)) {
                 if (obj === null) {
-                    geometry = new THREE.Geometry();
-                    geometry.faceVertexUvs[0] = [];
+                    geometry = new CustomGeometry();
                     material = Scene.Map.current.texturesWalls[sprite.id];
                     count = 0;
                     obj = {
@@ -297,7 +295,7 @@ class MapPortion {
             obj = hash[i];
             if (obj !== null) {
                 geometry = obj.geometry;
-                geometry.uvsNeedUpdate = true;
+                geometry.updateAttributes();
                 mesh = new THREE.Mesh(geometry, obj.material);
                 this.staticWallsList.push(mesh);
                 Scene.Map.current.scene.add(mesh);
@@ -397,8 +395,7 @@ class MapPortion {
                 obj = hash[obj3D.datas.pictureID];
                 if (!Utils.isUndefined(obj)) {
                     if (obj === null) {
-                        geometry = new THREE.Geometry();
-                        geometry.faceVertexUvs[0] = [];
+                        geometry = new CustomGeometry();
                         material = Scene.Map.current.texturesObjects3D[obj3D.datas.pictureID];
                         count = 0;
                         obj = {
@@ -427,7 +424,7 @@ class MapPortion {
             obj = hash[i];
             if (obj !== null) {
                 geometry = obj.geometry;
-                geometry.uvsNeedUpdate = true;
+                geometry.updateAttributes();
                 mesh = new THREE.Mesh(geometry, obj.material);
                 this.staticObjects3DList.push(mesh);
                 mesh.renderOrder = 999;

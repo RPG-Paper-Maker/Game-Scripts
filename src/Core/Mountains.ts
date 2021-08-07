@@ -15,6 +15,7 @@ import { Mountain } from "./Mountain";
 import { StructMapElementCollision } from "./MapElement";
 import { Position } from "./Position";
 import { Manager } from "../index";
+import { CustomGeometry } from "./CustomGeometry";
 
 /** @class
  *  The wrapper class for handle mountains sharing the same texture.
@@ -25,7 +26,7 @@ class Mountains {
     public bundle: TextureBundle;
     public width: number;
     public height: number;
-    public geometry: THREE.Geometry;
+    public geometry: CustomGeometry;
     public count: number;
     public mesh: THREE.Mesh;
 
@@ -34,8 +35,7 @@ class Mountains {
         let texture = Manager.GL.getMaterialTexture(bundle.material);
         this.width = texture.image.width;
         this.height = texture.image.height;
-        this.geometry = new THREE.Geometry();
-        this.geometry.faceVertexUvs[0] = [];
+        this.geometry = new CustomGeometry();
         this.count = 0;
         this.mesh = null;
     }
@@ -58,6 +58,7 @@ class Mountains {
      *  Create a mesh with material and geometry.
      */
     createMesh() {
+        this.geometry.updateAttributes();
         this.mesh = new THREE.Mesh(this.geometry, this.bundle.material);
     }
 }

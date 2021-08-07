@@ -10,11 +10,11 @@
 */
 import { MapElement } from "./MapElement.js";
 import { Utils } from "../Common/index.js";
-import { THREE } from "../Globals.js";
 import { Datas } from "../index.js";
 import { Vector3 } from "./Vector3.js";
-import { Vector2 } from "./Vector2.js";
 import { Sprite } from "./Sprite.js";
+import { CustomGeometry } from "./CustomGeometry.js";
+import { Vector2 } from "./Vector2.js";
 /** @class
  *  A land in the map.
  *  @extends MapElement
@@ -47,7 +47,7 @@ class Land extends MapElement {
     /**
      *  Update the geometry associated to this land and return the collision
      *  result.
-     *  @param {THREE.Geometry} geometry - The geometry asoociated to the
+     *  @param {Core.CustomGeometry} geometry - The geometry asoociated to the
      *  autotiles
      *  @param {CollisionSquare} collision - The collision square
      *  @param {Position} position - The position
@@ -86,30 +86,23 @@ class Land extends MapElement {
         if (position.angleZ !== 0.0) {
             Sprite.rotateSprite(vecA, vecB, vecC, vecD, center, position.angleZ, Sprite.Z_AXIS);
         }
-        geometry.vertices.push(vecA);
-        geometry.vertices.push(vecB);
-        geometry.vertices.push(vecC);
-        geometry.vertices.push(vecD);
-        let j = count * 4;
-        geometry.faces.push(new THREE.Face3(j, j + 1, j + 2));
-        geometry.faces.push(new THREE.Face3(j, j + 2, j + 3));
-        // Texture
+        // Vertices
+        geometry.pushQuadVertices(vecA, vecB, vecC, vecD);
+        // Indices
+        geometry.pushQuadIndices(count * 4);
+        // UVs
         let coefX = MapElement.COEF_TEX / width;
         let coefY = MapElement.COEF_TEX / height;
         x += coefX;
         y += coefY;
         w -= (coefX * 2);
         h -= (coefY * 2);
-        geometry.faceVertexUvs[0].push([
-            new Vector2(x, y),
-            new Vector2(x + w, y),
-            new Vector2(x + w, y + h)
-        ]);
-        geometry.faceVertexUvs[0].push([
-            new Vector2(x, y),
-            new Vector2(x + w, y + h),
-            new Vector2(x, y + h)
-        ]);
+        let texA = new Vector2();
+        let texB = new Vector2();
+        let texC = new Vector2();
+        let texD = new Vector2();
+        CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, x, y, w, h);
+        geometry.pushQuadUVs(texA, texB, texC, texD);
         // Collision
         if (collision !== null) {
             let rect = collision.rect;

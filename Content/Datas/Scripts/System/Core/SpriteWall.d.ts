@@ -1,5 +1,6 @@
 import { MapElement, StructMapElementCollision } from "./MapElement.js";
 import { Position } from "./Position.js";
+import { CustomGeometry } from "./CustomGeometry.js";
 /** @class
  *  A sprite in the map.
  *  @extends MapElement
@@ -24,6 +25,9 @@ declare class SpriteWall extends MapElement {
      *  @param {number} count - The faces count
      *  @return {any[]}
      */
-    updateGeometry(geometry: THREE.Geometry, position: Position, width: number, height: number, count: number): [number, StructMapElementCollision[]];
+    updateGeometry(geometry: CustomGeometry, position: Position, width: number, height: number, count: number): [
+        number,
+        StructMapElementCollision[]
+    ];
 }
 export { SpriteWall };

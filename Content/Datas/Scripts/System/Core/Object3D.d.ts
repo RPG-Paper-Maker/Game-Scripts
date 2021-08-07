@@ -1,4 +1,5 @@
 import { System } from "../index.js";
+import { CustomGeometry } from "./CustomGeometry.js";
 import { StructMapElementCollision, MapElement } from "./MapElement.js";
 import { Position } from "./Position.js";
 import { Vector3 } from "./Vector3.js";
@@ -22,11 +23,11 @@ declare abstract class Object3D extends MapElement {
     abstract getCenterVector(): Vector3;
     /**
      *  Update the geometry of a group of object 3D with the same material.
-     *  @param {THREE.Geometry} geometry - Geometry of the object 3D
+     *  @param {Core.CustomGeometry} geometry - Geometry of the object 3D
      *  @param {Position} position - The position of object 3D
      *  @param {number} count - The faces count
      *  @return {any[]}
      */
-    abstract updateGeometry(geometry: THREE.Geometry, position: Position, count: number): [number, StructMapElementCollision[]];
+    abstract updateGeometry(geometry: CustomGeometry, position: Position, count: number): [number, StructMapElementCollision[]];
 }
 export { Object3D };

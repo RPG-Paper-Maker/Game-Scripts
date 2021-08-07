@@ -5,6 +5,7 @@ import { Position } from "./Position.js";
 import { Core } from "../index.js";
 import { Vector3 } from "./Vector3.js";
 import { Vector2 } from "./Vector2.js";
+import { CustomGeometry } from "./CustomGeometry.js";
 /** @class
  *  A sprite in the map.
  *  @extends MapElement
@@ -53,12 +54,12 @@ declare class Sprite extends MapElement {
      *  @param {Vector3} vecB - The B vertex
      *  @param {Vector3} vecC - The C vertex
      *  @param {Vector3} vecD - The D vertex
-     *  @param {Vector2[]} texFaceA - The texture face A
-     *  @param {Vector2[]} texFaceB - The texture face B
+     *  @param {Vector2} texA- The texture face A
+     *  @param {Vector2} texB - The texture face B
      *  @param {number} count - The faces count
      *  @returns {number}
      */
-    static addStaticSpriteToGeometry(geometry: THREE.Geometry, vecA: Core.Vector3, vecB: Vector3, vecC: Vector3, vecD: Vector3, texFaceA: Vector2[], texFaceB: Vector2[], count: number): number;
+    static addStaticSpriteToGeometry(geometry: CustomGeometry, vecA: Core.Vector3, vecB: Vector3, vecC: Vector3, vecD: Vector3, texA: Vector2, texB: Vector2, texC: Vector2, texD: Vector2, count: number): number;
     /**
      *  Read the JSON associated to the sprite.
      *  @param {Record<string, any>} - json Json object describing the sprite
@@ -66,7 +67,7 @@ declare class Sprite extends MapElement {
     read(json: Record<string, any>): void;
     /**
      *  Update the geometry associated to this.
-     *  @param {THREE.Geometry} geometry - The geometry
+     *  @param {Core.CustomGeometry} geometry - The geometry
      *  @param {number} width - The total texture width
      *  @param {number} height - The total texture height
      *  @param {number[]} position - The position
@@ -75,7 +76,7 @@ declare class Sprite extends MapElement {
      *  @param {Vector3} localPosition - The local position
      *  @returns {any[]}
      */
-    updateGeometry(geometry: THREE.Geometry, width: number, height: number, position: Position, count: number, tileset: boolean, localPosition: Vector3): [number, StructMapElementCollision[]];
+    updateGeometry(geometry: CustomGeometry, width: number, height: number, position: Position, count: number, tileset: boolean, localPosition: Vector3): [number, StructMapElementCollision[]];
     /**
      *  Create the geometry associated to this sprite
      *  @param {number} width - The texture total width
@@ -84,6 +85,6 @@ declare class Sprite extends MapElement {
      *  @param {Position} position - The position
      *  @returns {any[]}
      */
-    createGeometry(width: number, height: number, tileset: boolean, position: Position): [THREE.Geometry, [number, StructMapElementCollision[]]];
+    createGeometry(width: number, height: number, tileset: boolean, position: Position): [CustomGeometry, [number, StructMapElementCollision[]]];
 }
 export { Sprite };

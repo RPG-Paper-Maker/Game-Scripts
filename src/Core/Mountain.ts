@@ -17,6 +17,7 @@ import { Position } from "./Position";
 import { TextureBundle } from "./TextureBundle";
 import { Vector3 } from "./Vector3";
 import { Vector2 } from "./Vector2";
+import { CustomGeometry } from "./CustomGeometry";
 
 /**
  * A mountain in the map.
@@ -158,7 +159,7 @@ class Mountain extends MapElement {
      *  @param {Vector3} vecBackA - The back vector position A
      *  @param {Vector3} vecFrontB - The front vector position B
      *  @param {Vector3} vecBackB - The back vector position B
-     *  @param {THREE.geometry} geometry - The geometry
+     *  @param {Core.CustomGeometry} geometry - The geometry
      *  @param {number} count - The faces count
      *  @returns {number}
      */
@@ -167,7 +168,7 @@ class Mountain extends MapElement {
         wp: number, xLeft: number, xRight: number, yTop: number, yBot: number, 
         zFront: number, zBack: number, yOffset: number, vecFrontA: Vector3, 
         vecBackA: Vector3, vecFrontB: Vector3, vecBackB: Vector3, 
-        geometry: THREE.Geometry, count: number): number
+        geometry: CustomGeometry, count: number): number
     {
         let xKind = Mountain.X_LEFT_OFFSET;
         let nbSteps = Math.ceil(faceHeight / Datas.Systems.SQUARE_SIZE);
@@ -284,7 +285,7 @@ class Mountain extends MapElement {
      *  @param {number} zBackLeft - The z back left position
      *  @param {number} zBackRight - The z back right position
      *  @param {number} yOffset - The y offset
-     *  @param {THREE.geometry} geometry - The geometry
+     *  @param {Core.CustomGeometry} geometry - The geometry
      *  @param {number} count - The faces count
      *  @param {number} xCornerOffsetTop - The x corner offset top
      *  @param {number} xCornerOffsetBot - The x corner offset bot
@@ -296,7 +297,7 @@ class Mountain extends MapElement {
         xRightTop: number, xLeftBot: number, xRightBot: number, yTop: number, 
         yBot: number, zFront: number, zBack: number, zFrontLeft: number, 
         zFrontRight: number, zBackLeft: number, zBackRight: number, yOffset: 
-        number, geometry: THREE.Geometry, count: number, xCornerOffsetTop: 
+        number, geometry: CustomGeometry, count: number, xCornerOffsetTop: 
         number, xCornerOffsetBot: number): number
     {
         count = this.drawFace(xKind, yKind, angle, center, width, height, w,
@@ -334,7 +335,7 @@ class Mountain extends MapElement {
      *  @param {number} zBackLeft - The z back left position
      *  @param {number} zBackRight - The z back right position
      *  @param {number} yOffset - The y offset
-     *  @param {THREE.geometry} geometry - The geometry
+     *  @param {Core.CustomGeometry} geometry - The geometry
      *  @param {number} count - The faces count
      *  @param {number} xCornerOffsetTop - The x corner offset top
      *  @param {number} xCornerOffsetBot - The x corner offset bot
@@ -346,7 +347,7 @@ class Mountain extends MapElement {
         xLeftTop: number, xRightTop: number, xLeftBot: number, xRightBot: number
         , yTop: number, yBot: number, zFrontLeft: number, zFrontRight: number, 
         zBackLeft: number, zBackRight: number, yOffset: number, geometry: 
-        THREE.Geometry, count: number, xCornerOffsetTop: number, 
+        CustomGeometry, count: number, xCornerOffsetTop: number, 
         xCornerOffsetBot: number, isCorner: boolean): number
     {
         // Textures coordinates
@@ -401,19 +402,19 @@ class Mountain extends MapElement {
         // Rotate and draw sprite side
         Sprite.rotateSprite(vecA, vecB, vecC, vecD, center, angle, Sprite.Y_AXIS);
         count = Sprite.addStaticSpriteToGeometry(geometry, vecA, vecB, vecC,
-            vecD, texFaceA, texFaceB, count);
+            vecD, texA, texB, texC, texD, count);
         return count;
     }
 
     /** 
      *  Update the geometry of a group of mountains with the same material.
-     *  @param {THREE.Geometry} geometry - The geometry of mountains
+     *  @param {Core.CustomGeometry} geometry - The geometry of mountains
      *  @param {TextureBundle} texture - The texture mountain
      *  @param {Position} position - The position
      *  @param {number} count - The faces count
      *  @return {any[]}
      */
-    updateGeometry(geometry: THREE.Geometry, texture: TextureBundle, 
+    updateGeometry(geometry: CustomGeometry, texture: TextureBundle, 
         position: Position, count: number) : any[]
     {
         // General configurations

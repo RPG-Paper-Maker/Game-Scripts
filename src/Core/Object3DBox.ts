@@ -10,7 +10,7 @@
 */
 
 import { StructMapElementCollision } from "./MapElement";
-import { System, Datas } from "../index";
+import { System, Datas, Core } from "../index";
 import { Position } from "./Position";
 import { Sprite } from "./Sprite";
 import { Enum } from "../Common";
@@ -19,6 +19,7 @@ import { Object3D } from "./Object3D";
 import { Vector3 } from "./Vector3";
 import { Vector2 } from "./Vector2";
 import { THREE } from "../Globals";
+import { CustomGeometry } from "./CustomGeometry";
 
 /**
  * A 3D object box in the map.
@@ -161,12 +162,12 @@ class Object3DBox extends Object3D {
 
     /** 
      *  Update the geometry of a group of object 3D with the same material.
-     *  @param {THREE.Geometry} geometry - Geometry of the object 3D
+     *  @param {Core.CustomGeometry} geometry - Geometry of the object 3D
      *  @param {Position} position - The position of object 3D
      *  @param {number} count - The faces count
      *  @return {number[]}
     */
-    updateGeometry(geometry: THREE.Geometry, position: Position, count: 
+    updateGeometry(geometry: CustomGeometry, position: Position, count: 
         number): [number, StructMapElementCollision[]]
     {
         let coef = 0.01;
@@ -207,9 +208,9 @@ class Object3DBox extends Object3D {
         }
 
         // Vertices + faces / indexes
-        let vecA: Vector3, vecB: Vector3, vecC: Vector3, vecD: 
-            Vector3, texA: number[], texB: number[], texC: number[], texD: 
-            number[], faceA: Vector2[], faceB: Vector2[];
+        let vecA: Vector3, vecB: Vector3, vecC: Vector3, vecD: Vector3, tA: 
+            number[], tB: number[], tC: number[], tD: number[], texA: Vector2, 
+            texB: Vector2, texC: Vector2, texD: Vector2;
         for (let i = 0; i < Object3DBox.NB_VERTICES; i += 4) {
             vecA = Object3DBox.VERTICES[i].clone();
             vecB = Object3DBox.VERTICES[i + 1].clone();
@@ -223,20 +224,14 @@ class Object3DBox extends Object3D {
             vecB.add(localPosition);
             vecC.add(localPosition);
             vecD.add(localPosition);
-            texA = Object3DBox.TEXTURES[i];
-            texB = Object3DBox.TEXTURES[i + 1];
-            texC = Object3DBox.TEXTURES[i + 2];
-            texD = Object3DBox.TEXTURES[i + 3];
-            faceA = [
-                new Vector2(textures[texA[0]], textures[texA[1]]),
-                new Vector2(textures[texB[0]], textures[texB[1]]),
-                new Vector2(textures[texC[0]], textures[texC[1]])
-            ];
-            faceB = [
-                new Vector2(textures[texA[0]], textures[texA[1]]),
-                new Vector2(textures[texC[0]], textures[texC[1]]),
-                new Vector2(textures[texD[0]], textures[texD[1]])
-            ];
+            tA = Object3DBox.TEXTURES[i];
+            tB = Object3DBox.TEXTURES[i + 1];
+            tC = Object3DBox.TEXTURES[i + 2];
+            tD = Object3DBox.TEXTURES[i + 3];
+            texA = new Vector2(textures[tA[0]], textures[tA[1]]);
+            texB = new Vector2(textures[tB[0]], textures[tB[1]]);
+            texC = new Vector2(textures[tC[0]], textures[tC[1]]);
+            texD = new Vector2(textures[tD[0]], textures[tD[1]]);
             if (angleY !== 0.0) {
                 Sprite.rotateSprite(vecA, vecB, vecC, vecD, center, angleY,
                     Sprite.Y_AXIS);
@@ -250,7 +245,7 @@ class Object3DBox extends Object3D {
                     Sprite.Z_AXIS);
             }
             count = Sprite.addStaticSpriteToGeometry(geometry, vecA, vecB, vecC,
-                vecD, faceA, faceB, count);
+                vecD, texA, texB, texC, texD, count);
         }
 
         // Collisions
@@ -286,15 +281,15 @@ class Object3DBox extends Object3D {
     /** 
      *  Create a new geometry.
      *  @param {Position} position - The position of object 3D
-     *  @return {[THREE.Geometry, [number, StructMapElementCollision[]]]}
+     *  @return {[Core.CustomGeometry, [number, StructMapElementCollision[]]]}
     */
-    createGeometry(position: Position): [THREE.Geometry, [number, 
+    createGeometry(position: Position): [CustomGeometry, [number, 
         StructMapElementCollision[]]]
     {
-        let geometry = new THREE.Geometry();
-        geometry.faceVertexUvs[0] = [];
-        geometry.uvsNeedUpdate = true;
-        return [geometry, this.updateGeometry(geometry, position, 0)];
+        let geometry = new CustomGeometry();
+        let collisions = this.updateGeometry(geometry, position, 0);
+        geometry.updateAttributes();
+        return [geometry, collisions];
     }
 }
 

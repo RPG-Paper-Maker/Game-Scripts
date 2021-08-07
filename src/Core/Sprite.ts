@@ -17,6 +17,7 @@ import { Position } from "./Position";
 import { Datas, Core, Scene } from "../index";
 import { Vector3 } from "./Vector3";
 import { Vector2 } from "./Vector2";
+import { CustomGeometry } from "./CustomGeometry";
 
 /** @class
  *  A sprite in the map.
@@ -63,9 +64,8 @@ class Sprite extends MapElement {
      *  @param {number} angle - The angle in degree
      *  @param {Vector3} axis - The vector axis
      */
-    static rotateVertex(vec: Vector3, center: Vector3, 
-        angle: number, axis: Vector3)
-    {
+    static rotateVertex(vec: Vector3, center: Vector3, angle: number, axis: 
+        Vector3) {
         vec.sub(center);
         vec.applyAxisAngle(axis, angle * Math.PI / 180.0);
         vec.add(center);
@@ -81,10 +81,8 @@ class Sprite extends MapElement {
      *   @param {number} angle - The angle in degree
      *   @param {Vector3} axis - The vector axis
      */
-    static rotateSprite(vecA: Vector3, vecB: Vector3, 
-        vecC: Vector3, vecD: Vector3, center: 
-        Vector3, angle: number, axis: Vector3)
-    {
+    static rotateSprite(vecA: Vector3, vecB: Vector3, vecC: Vector3, vecD: 
+        Vector3, center: Vector3, angle: number, axis: Vector3) {
         Sprite.rotateVertex(vecA, center, angle, axis);
         Sprite.rotateVertex(vecB, center, angle, axis);
         Sprite.rotateVertex(vecC, center, angle, axis);
@@ -99,24 +97,18 @@ class Sprite extends MapElement {
      *  @param {Vector3} vecB - The B vertex
      *  @param {Vector3} vecC - The C vertex
      *  @param {Vector3} vecD - The D vertex
-     *  @param {Vector2[]} texFaceA - The texture face A
-     *  @param {Vector2[]} texFaceB - The texture face B
+     *  @param {Vector2} texA- The texture face A
+     *  @param {Vector2} texB - The texture face B
      *  @param {number} count - The faces count
      *  @returns {number}
      */
-    static addStaticSpriteToGeometry(geometry: THREE.Geometry, vecA: Core
-        .Vector3, vecB: Vector3, vecC: Vector3, vecD: Vector3, 
-        texFaceA: Vector2[], texFaceB: Vector2[], count: number): 
-        number
+    static addStaticSpriteToGeometry(geometry: CustomGeometry, vecA: Core
+        .Vector3, vecB: Vector3, vecC: Vector3, vecD: Vector3, texA: Vector2, 
+        texB: Vector2, texC: Vector2, texD: Vector2, count: number): number
     {
-        geometry.vertices.push(vecA);
-        geometry.vertices.push(vecB);
-        geometry.vertices.push(vecC);
-        geometry.vertices.push(vecD);
-        geometry.faces.push(new THREE.Face3(count, count + 1, count + 2));
-        geometry.faces.push(new THREE.Face3(count, count + 2, count + 3));
-        geometry.faceVertexUvs[0].push(texFaceA);
-        geometry.faceVertexUvs[0].push(texFaceB);
+        geometry.pushQuadVertices(vecA, vecB, vecC, vecD);
+        geometry.pushQuadIndices(count);
+        geometry.pushQuadUVs(texA, texB, texC, texD);
         return count + 4;
     }
 
@@ -126,7 +118,6 @@ class Sprite extends MapElement {
      */
     read(json: Record<string, any>) {
         super.read(json);
-
         this.front = Utils.defaultValue(json.f, true);
         this.kind = json.k;
         this.textureRect = json.t;
@@ -134,7 +125,7 @@ class Sprite extends MapElement {
 
     /** 
      *  Update the geometry associated to this.
-     *  @param {THREE.Geometry} geometry - The geometry
+     *  @param {Core.CustomGeometry} geometry - The geometry
      *  @param {number} width - The total texture width
      *  @param {number} height - The total texture height
      *  @param {number[]} position - The position
@@ -143,7 +134,7 @@ class Sprite extends MapElement {
      *  @param {Vector3} localPosition - The local position
      *  @returns {any[]}
      */
-    updateGeometry(geometry: THREE.Geometry, width: number, height: 
+    updateGeometry(geometry: CustomGeometry, width: number, height: 
         number, position: Position, count: number, tileset: boolean, 
         localPosition: Vector3): [number, StructMapElementCollision[]]
     {
@@ -196,23 +187,16 @@ class Sprite extends MapElement {
         y += coefY;
         w -= (coefX * 2);
         h -= (coefY * 2);
-
-        // Texture UV coordinates for each triangle faces
-        let texFaceA = [
-            new Vector2(x, y),
-            new Vector2(x + w, y),
-            new Vector2(x + w, y + h)
-        ];
-        let texFaceB = [
-            new Vector2(x, y),
-            new Vector2(x + w, y + h),
-            new Vector2(x, y + h)
-        ];
+        let texA = new Vector2();
+        let texB = new Vector2();
+        let texC = new Vector2();
+        let texD = new Vector2();
+        CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, x, y, w, h);
 
         // Collision
         let objCollision: StructMapElementCollision[] = new Array;
-        w = Math.floor(this.textureRect[2] / 2);
-        h = Math.floor(this.textureRect[3] / 2);
+        let twidth = Math.floor(this.textureRect[2] / 2);
+        let theight = Math.floor(this.textureRect[3] / 2);
         if (tileset) {
             let collisions = Scene.Map.current.mapProperties.tileset.picture
                 .getSquaresForTexture(this.textureRect);
@@ -237,16 +221,16 @@ class Sprite extends MapElement {
                         angleX,
                         angleZ
                     ],
-                    w: w,
-                    h: h,
+                    w: twidth,
+                    h: theight,
                     k: this.kind === ElementMapKind.SpritesFix
                 });
             }
         } else {   // Character
             objCollision.push({
                 b: null,
-                w: w,
-                h: h,
+                w: twidth,
+                h: theight,
                 k: this.kind === ElementMapKind.SpritesFix
             });
         }
@@ -257,7 +241,7 @@ class Sprite extends MapElement {
         let vecSimpleC = vecC.clone();
         let vecSimpleD = vecD.clone();
         count = Sprite.addStaticSpriteToGeometry(geometry, vecSimpleA,
-            vecSimpleB, vecSimpleC, vecSimpleD, texFaceA, texFaceB, count);
+            vecSimpleB, vecSimpleC, vecSimpleD, texA, texB, texC, texD, count);
 
         // Double sprite
         if (this.kind === ElementMapKind.SpritesDouble || this.kind ===
@@ -269,7 +253,7 @@ class Sprite extends MapElement {
             Sprite.rotateSprite(vecDoubleA, vecDoubleB, vecDoubleC, vecDoubleD,
                 center, 90, Sprite.Y_AXIS);
             count = Sprite.addStaticSpriteToGeometry(geometry, vecDoubleA,
-                vecDoubleB, vecDoubleC, vecDoubleD, texFaceA, texFaceB, count);
+                vecDoubleB, vecDoubleC, vecDoubleD, texA, texB, texC, texD, count);
 
             // Quadra sprite
             if (this.kind === ElementMapKind.SpritesQuadra) {
@@ -286,10 +270,10 @@ class Sprite extends MapElement {
                 Sprite.rotateSprite(vecQuadra2A, vecQuadra2B, vecQuadra2C,
                     vecQuadra2D, center, -45, Sprite.Y_AXIS);
                 count = Sprite.addStaticSpriteToGeometry(geometry, vecQuadra1A,
-                    vecQuadra1B, vecQuadra1C, vecQuadra1D, texFaceA, texFaceB,
+                    vecQuadra1B, vecQuadra1C, vecQuadra1D, texA, texB, texC, texD, 
                     count);
                 count = Sprite.addStaticSpriteToGeometry(geometry, vecQuadra2A,
-                    vecQuadra2B, vecQuadra2C, vecQuadra2D, texFaceA, texFaceB,
+                    vecQuadra2B, vecQuadra2C, vecQuadra2D, texA, texB, texC, texD, 
                     count);
             }
         }
@@ -305,13 +289,13 @@ class Sprite extends MapElement {
      *  @returns {any[]}
      */
     createGeometry(width: number, height: number, tileset: boolean, position: 
-        Position): [THREE.Geometry, [number, StructMapElementCollision[]]]
+        Position): [CustomGeometry, [number, StructMapElementCollision[]]]
     {
-        let geometry = new THREE.Geometry();
-        geometry.faceVertexUvs[0] = [];
-        geometry.uvsNeedUpdate = true;
-        return [geometry, this.updateGeometry(geometry, width, height, position,
-            0, tileset, null)];
+        let geometry = new CustomGeometry;
+        let collisions = this.updateGeometry(geometry, width, height, position,
+            0, tileset, null);
+        geometry.updateAttributes();
+        return [geometry, collisions];
     }
 }
 

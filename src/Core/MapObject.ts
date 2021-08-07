@@ -27,7 +27,8 @@ import { Vector3 } from "./Vector3";
 import { Game } from "./Game";
 import { Object3DBox } from "./Object3DBox";
 import { Object3DCustom } from "./Object3DCustom";
-import { Vector } from "three";
+import { CustomGeometry } from "./CustomGeometry";
+import { Vector2 } from "./Vector2";
 
 interface StructSearchResult {
     object: MapObject,
@@ -495,7 +496,7 @@ class MapObject {
                 .indexX;
             this.orientationEye = this.currentStateInstance.indexY;
             this.updateOrientation();
-            let result: [THREE.Geometry, [number, StructMapElementCollision[]]];
+            let result: [CustomGeometry, [number, StructMapElementCollision[]]];
             if (this.currentStateInstance.graphicKind === ElementMapKind.Object3D) {
                 let objectDatas = Datas.SpecialElements.objects[this
                     .currentStateInstance.graphicID];
@@ -708,8 +709,8 @@ class MapObject {
         let i: number, j: number, l: number, m: number;
         for (i = 0, l = this.meshBoundingBox.length; i < l; i++) {
             for (j = 0, m = object.meshBoundingBox.length; j < m; j++) {
-                if (Manager.Collisions.obbVSobb(<THREE.Geometry>this
-                    .meshBoundingBox[i].geometry, <THREE.Geometry>object
+                if (Manager.Collisions.obbVSobb(<CustomGeometry>this
+                    .meshBoundingBox[i].geometry, <CustomGeometry>object
                     .meshBoundingBox[j].geometry))
                 {
                     return true;
@@ -726,8 +727,8 @@ class MapObject {
     checkCollisionDetection(): boolean {
         let i: number, l: number;
         for (i = 0, l = this.meshBoundingBox.length; i < l; i++) {
-            if (Manager.Collisions.obbVSobb(<THREE.Geometry>this.meshBoundingBox
-                [i].geometry, <THREE.Geometry>Manager.Collisions
+            if (Manager.Collisions.obbVSobb(<CustomGeometry>this.meshBoundingBox
+                [i].geometry, <CustomGeometry>Manager.Collisions
                 .BB_BOX_DETECTION.geometry))
             {
                 return true;
@@ -740,8 +741,8 @@ class MapObject {
                 Datas.Systems.SQUARE_SIZE / 2), this.position.z, Datas.Systems
                 .SQUARE_SIZE, Datas.Systems.SQUARE_SIZE, Datas.Systems
                 .SQUARE_SIZE, 0, 0, 0]);
-            if (Manager.Collisions.obbVSobb(<THREE.Geometry>Manager.Collisions
-                .BB_BOX_DEFAULT_DETECTION.geometry, <THREE.Geometry>Manager
+            if (Manager.Collisions.obbVSobb(<CustomGeometry>Manager.Collisions
+                .BB_BOX_DEFAULT_DETECTION.geometry, <CustomGeometry>Manager
                 .Collisions.BB_BOX_DETECTION.geometry))
             {
                 return true;
@@ -1338,21 +1339,16 @@ class MapObject {
                 y += coefY;
                 w -= (coefX * 2);
                 h -= (coefY * 2);
+                let texA = new Vector2();
+                let texB = new Vector2();
+                let texC = new Vector2();
+                let texD = new Vector2();
+                CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, x, y, w, h);
 
                 // Update geometry
-                (<THREE.Geometry>this.mesh.geometry).faceVertexUvs[0][0][0].set(
-                    x, y);
-                (<THREE.Geometry>this.mesh.geometry).faceVertexUvs[0][0][1].set(
-                    x + w, y);
-                (<THREE.Geometry>this.mesh.geometry).faceVertexUvs[0][0][2].set(
-                    x + w, y + h);
-                (<THREE.Geometry>this.mesh.geometry).faceVertexUvs[0][1][0].set(
-                    x, y);
-                (<THREE.Geometry>this.mesh.geometry).faceVertexUvs[0][1][1].set(
-                    x + w, y + h);
-                (<THREE.Geometry>this.mesh.geometry).faceVertexUvs[0][1][2].set(
-                    x, y + h);
-                (<THREE.Geometry>this.mesh.geometry).uvsNeedUpdate = true;
+                (<CustomGeometry>this.mesh.geometry).pushQuadUVs(texA, texB, 
+                    texC, texD);
+                (<CustomGeometry>this.mesh.geometry).updateUVs();
             }
         }
     }

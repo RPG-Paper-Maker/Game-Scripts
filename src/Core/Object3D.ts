@@ -10,6 +10,7 @@
 */
 
 import { System } from "../index";
+import { CustomGeometry } from "./CustomGeometry";
 import { StructMapElementCollision, MapElement } from "./MapElement";
 import { Position } from "./Position";
 import { Vector3 } from "./Vector3";
@@ -43,12 +44,12 @@ abstract class Object3D extends MapElement {
     
     /** 
      *  Update the geometry of a group of object 3D with the same material.
-     *  @param {THREE.Geometry} geometry - Geometry of the object 3D
+     *  @param {Core.CustomGeometry} geometry - Geometry of the object 3D
      *  @param {Position} position - The position of object 3D
      *  @param {number} count - The faces count
      *  @return {any[]}
      */
-    abstract updateGeometry(geometry: THREE.Geometry, position: Position, 
+    abstract updateGeometry(geometry: CustomGeometry, position: Position, 
         count: number): [number, StructMapElementCollision[]];
 }
 

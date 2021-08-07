@@ -14,7 +14,7 @@ import { Portion } from "./Portion";
 import { MapObject } from "./MapObject";
 import { Position } from "./Position";
 import { System, Datas, Manager, Scene } from "../index";
-import { MapElement, StructMapElementCollision } from "./MapElement";
+import { StructMapElementCollision } from "./MapElement";
 import { Constants, Enum, Utils } from "../Common";
 import { Floor } from "./Floor";
 import { Autotiles } from "./Autotiles";
@@ -31,6 +31,7 @@ import { Object3DCustom } from "./Object3DCustom";
 import { Object3D } from "./Object3D";
 import { Vector3 } from "./Vector3";
 import { Game } from "./Game";
+import { CustomGeometry } from "./CustomGeometry";
 
 /** @class
  *  A portion of the map.
@@ -126,8 +127,7 @@ class MapPortion {
         let texture = Manager.GL.getMaterialTexture(material);
         let width = texture ? texture.image.width : 0;
         let height = texture ? texture.image.height : 0;
-        let geometry = new THREE.Geometry();
-        geometry.faceVertexUvs[0] = [];
+        let geometry = new CustomGeometry();
         let layers: [Position, Floor][] = [];
         let count = 0;
         let i: number, j: number, l: number, m: number, jsonFloor: Record<string
@@ -149,7 +149,7 @@ class MapPortion {
                     layers.push([position, floor]);
                 }
             } else {
-                objCollision = floor.updateGeometry(geometry, position, width,
+                objCollision = floor.updateGeometry(geometry, position, width, 
                     height, count);
                 index = position.toIndex();
                 this.boundingBoxesLands[index].push(objCollision);
@@ -162,7 +162,7 @@ class MapPortion {
         for (i = 0, l = layers.length; i < l; i++) {
             position = layers[i][0];
             floor = layers[i][1];
-            objCollision = floor.updateGeometry(geometry, position, width,
+            objCollision = floor.updateGeometry(geometry, position, width, 
                 height, count);
             index = position.toIndex();
             if (objCollision !== null) {
@@ -173,7 +173,7 @@ class MapPortion {
         }
 
         // Creating the plane
-        geometry.uvsNeedUpdate = true;
+        geometry.updateAttributes();
         this.staticFloorsMesh = new THREE.Mesh(geometry, material);
         this.staticFloorsMesh.renderOrder = 0;
         Scene.Map.current.scene.add(this.staticFloorsMesh);
@@ -250,17 +250,15 @@ class MapPortion {
     */
     readSpritesGlobals(json: Record<string, any>) {
         let material = Scene.Map.current.textureTileset;
-        let staticGeometry = new THREE.Geometry();
+        let staticGeometry = new CustomGeometry();
         let count = 0;
-        staticGeometry.faceVertexUvs[0] = [];
         let texture = Manager.GL.getMaterialTexture(material);
         if (texture) {
             let s: Record<string, any>, position: Position, sprite: Sprite, 
-                localPosition: Vector3, result: [THREE
-                .Geometry, [number, StructMapElementCollision[]]], geometry: 
-                THREE.Geometry, collisions: StructMapElementCollision[], 
-                plane: THREE.Mesh, resultUpdate: [number, 
-                StructMapElementCollision[]];
+                localPosition: Vector3, result: [CustomGeometry, [number, 
+                StructMapElementCollision[]]], geometry: CustomGeometry, 
+                collisions: StructMapElementCollision[], plane: THREE.Mesh, 
+                resultUpdate: [number, StructMapElementCollision[]];
             for (let i = 0, l = json.length; i < l; i++) {
                 s = json[i];
                 position = Position.createFromArray(s.k);
@@ -287,7 +285,7 @@ class MapPortion {
                 this.updateCollisionSprite(collisions, position);
             }
         }
-        staticGeometry.uvsNeedUpdate = true;
+        staticGeometry.updateAttributes();
         this.staticSpritesMesh = new THREE.Mesh(staticGeometry, material);
         this.staticSpritesMesh.renderOrder = 999;
         Scene.Map.current.scene.add(this.staticSpritesMesh);
@@ -308,9 +306,9 @@ class MapPortion {
             hash[i] = null;
         }
         let l: number, s: Record<string, any>, position: Position, sprite: 
-            SpriteWall, obj: Record<string, any>, geometry: THREE
-            .Geometry, material: THREE.ShaderMaterial, count: number
-            , result: [number, StructMapElementCollision[]];
+            SpriteWall, obj: Record<string, any>, geometry: CustomGeometry, 
+            material: THREE.ShaderMaterial, count: number, result: [number, 
+            StructMapElementCollision[]];
         for (i = 0, l = json.length; i < l; i++) {
             // Getting sprite
             s = json[i];
@@ -322,8 +320,7 @@ class MapPortion {
             // If ID exists in this tileset
             if (!Utils.isUndefined(obj)) {
                 if (obj === null) {
-                    geometry = new THREE.Geometry();
-                    geometry.faceVertexUvs[0] = [];
+                    geometry = new CustomGeometry();
                     material = Scene.Map.current.texturesWalls[sprite.id];
                     count = 0;
                     obj = {
@@ -353,7 +350,7 @@ class MapPortion {
             obj = hash[i];
             if (obj !== null) {
                 geometry = obj.geometry;
-                geometry.uvsNeedUpdate = true;
+                geometry.updateAttributes();
                 mesh = new THREE.Mesh(geometry, obj.material);
                 this.staticWallsList.push(mesh);
                 Scene.Map.current.scene.add(mesh);
@@ -439,7 +436,7 @@ class MapPortion {
         let l = jsonAll.length;
         let o: Record<string, any>, position: Position, v: Record<string, any>, 
             datas: System.Object3D, obj3D: Object3D, obj: Record<string, any>, 
-            geometry: THREE.Geometry, material: THREE.ShaderMaterial, count: 
+            geometry: CustomGeometry, material: THREE.ShaderMaterial, count: 
             number, result: [number, StructMapElementCollision[]];
         for (i = 0; i < l; i++) {
             // Getting object 3D
@@ -469,8 +466,7 @@ class MapPortion {
                 obj = hash[obj3D.datas.pictureID];
                 if (!Utils.isUndefined(obj)) {
                     if (obj === null) {
-                        geometry = new THREE.Geometry();
-                        geometry.faceVertexUvs[0] = [];
+                        geometry = new CustomGeometry();
                         material = Scene.Map.current.texturesObjects3D[
                             obj3D.datas.pictureID];
                         count = 0;
@@ -501,7 +497,7 @@ class MapPortion {
             obj = hash[i];
             if (obj !== null) {
                 geometry = obj.geometry;
-                geometry.uvsNeedUpdate = true;
+                geometry.updateAttributes();
                 mesh = new THREE.Mesh(geometry, obj.material);
                 this.staticObjects3DList.push(mesh);
                 mesh.renderOrder = 999;

@@ -37,7 +37,7 @@ class Autotile extends Land {
     /**
      *  Update the geometry associated to this autotile and return the
      *  collision result.
-     *  @param {THREE.Geometry} geometry - The geometry asoociated to the
+     *  @param {Core.CustomGeometry} geometry - The geometry asoociated to the
      *  autotiles
      *  @param {TextureBundle} texure - The several texture used for this
      *  geometry

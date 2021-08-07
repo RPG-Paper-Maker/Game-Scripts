@@ -1,8 +1,9 @@
 import { StructMapElementCollision } from "./MapElement.js";
-import { System } from "../index.js";
+import { System, Core } from "../index.js";
 import { Position } from "./Position.js";
 import { Object3D } from "./Object3D.js";
 import { Vector3 } from "./Vector3.js";
+import { CustomGeometry } from "./CustomGeometry.js";
 /**
  * A 3D object box in the map.
  *
@@ -10,7 +11,7 @@ import { Vector3 } from "./Vector3.js";
  * @extends {Object3D}
  */
 declare class Object3DBox extends Object3D {
-    static VERTICES: Vector3[];
+    static VERTICES: Core.Vector3[];
     static NB_VERTICES: number;
     static TEXTURES: number[][];
     static TEXTURES_VALUES: number[];
@@ -38,17 +39,23 @@ declare class Object3DBox extends Object3D {
     getCenterVector(): Vector3;
     /**
      *  Update the geometry of a group of object 3D with the same material.
-     *  @param {THREE.Geometry} geometry - Geometry of the object 3D
+     *  @param {Core.CustomGeometry} geometry - Geometry of the object 3D
      *  @param {Position} position - The position of object 3D
      *  @param {number} count - The faces count
      *  @return {number[]}
     */
-    updateGeometry(geometry: THREE.Geometry, position: Position, count: number): [number, StructMapElementCollision[]];
+    updateGeometry(geometry: CustomGeometry, position: Position, count: number): [number, StructMapElementCollision[]];
     /**
      *  Create a new geometry.
      *  @param {Position} position - The position of object 3D
-     *  @return {[THREE.Geometry, [number, StructMapElementCollision[]]]}
+     *  @return {[Core.CustomGeometry, [number, StructMapElementCollision[]]]}
     */
-    createGeometry(position: Position): [THREE.Geometry, [number, StructMapElementCollision[]]];
+    createGeometry(position: Position): [
+        CustomGeometry,
+        [
+            number,
+            StructMapElementCollision[]
+        ]
+    ];
 }
 export { Object3DBox };

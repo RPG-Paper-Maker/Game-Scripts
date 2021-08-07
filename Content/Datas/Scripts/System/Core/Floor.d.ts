@@ -1,11 +1,12 @@
 import { Land } from "./Land.js";
 import { Position } from "./Position.js";
 import { StructMapElementCollision } from "./MapElement.js";
+import { CustomGeometry } from "./CustomGeometry.js";
 /**
  *  A floor in the map.
  *
- * @class Floor
- * @extends {Land}
+ *  @class Floor
+ *  @extends {Land}
  */
 declare class Floor extends Land {
     constructor(json?: Record<string, any>);
@@ -17,14 +18,14 @@ declare class Floor extends Land {
     /**
      *  Update the geometry associated to this floor and return the
      *  collision result.
-     *  @param {THREE.Geometry} geometry - The geometry asoociated to the
-     *  autotiles
-     *  @param {Position} position - The position
+     *  @param {Core.CustomGeometry} geometry - The geometry asoociated to the
+     *  floor
+     *  @param {Core.Position} position - The position
      *  @param {number} width - The texture total width
      *  @param {number} height - The texture total height
      *  @param {number} count - The faces count
      *  @returns {StructMapElementCollision}
      */
-    updateGeometry(geometry: THREE.Geometry, position: Position, width: number, height: number, count: number): StructMapElementCollision;
+    updateGeometry(geometry: CustomGeometry, position: Position, width: number, height: number, count: number): StructMapElementCollision;
 }
 export { Floor };
