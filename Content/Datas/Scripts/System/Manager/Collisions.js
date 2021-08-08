@@ -168,25 +168,25 @@ class Collisions {
         let verticesB = shapeB.getVertices();
         let lA = verticesA.length;
         let lB = verticesB.length;
-        if (!this.checkFaces(facesA, verticesA, verticesB, lA, lB)) {
+        if (!this.checkNormals(facesA, verticesA, verticesB, lA, lB)) {
             return false;
         }
-        if (!this.checkFaces(facesB, verticesA, verticesB, lA, lB)) {
+        if (!this.checkNormals(facesB, verticesA, verticesB, lA, lB)) {
             return false;
         }
         return true;
     }
     /**
-     *  Check the faces for OBB collision.
+     *  Check the fnormals for OBB collision.
      *  @static
-     *  @param {THREE.Face3[]} shapes - The faces to check
+     *  @param {ArrayLike<number>} normals - The normals to check
      *  @param {Vector3[]} verticesA - First vertices to check
      *  @param {Vector3[]} verticesB - Second vertices to check
      *  @param {number} lA - The first vertices length
      *  @param {number} lB - The second vertices length
      *  @returns {boolean}
      */
-    static checkFaces(normals, verticesA, verticesB, lA, lB) {
+    static checkNormals(normals, verticesA, verticesB, lA, lB) {
         for (let i = 0, l = normals.length; i < l; i += 3) {
             if (!this.overlapOnThisNormal(verticesA, verticesB, lA, lB, new Vector3(normals[i], normals[i + 1], normals[i + 2]))) {
                 return false;
@@ -197,11 +197,11 @@ class Collisions {
     /**
      *  Check if vertices overlap on one of the faces normal.
      *  @static
-     *  @param {Vector3[]} verticesA - First vertices to check
-     *  @param {Vector3[]} verticesB - Second vertices to check
+     *  @param {ArrayLike<number>} verticesA - First vertices to check
+     *  @param {ArrayLike<number>} verticesB - Second vertices to check
      *  @param {number} lA - The first vertices length
      *  @param {number} lB - The second vertices length
-     *  @param {Vector3} normal - The face normal
+     *  @param {Core.Vector3} normal - The face normal
      *  @returns {boolean}
      */
     static overlapOnThisNormal(verticesA, verticesB, lA, lB, normal) {

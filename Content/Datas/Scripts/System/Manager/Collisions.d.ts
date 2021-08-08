@@ -62,24 +62,24 @@ declare class Collisions {
      */
     static obbVSobb(shapeA: CustomGeometry, shapeB: CustomGeometry): boolean;
     /**
-     *  Check the faces for OBB collision.
+     *  Check the fnormals for OBB collision.
      *  @static
-     *  @param {THREE.Face3[]} shapes - The faces to check
+     *  @param {ArrayLike<number>} normals - The normals to check
      *  @param {Vector3[]} verticesA - First vertices to check
      *  @param {Vector3[]} verticesB - Second vertices to check
      *  @param {number} lA - The first vertices length
      *  @param {number} lB - The second vertices length
      *  @returns {boolean}
      */
-    static checkFaces(normals: ArrayLike<number>, verticesA: ArrayLike<number>, verticesB: ArrayLike<number>, lA: number, lB: number): boolean;
+    static checkNormals(normals: ArrayLike<number>, verticesA: ArrayLike<number>, verticesB: ArrayLike<number>, lA: number, lB: number): boolean;
     /**
      *  Check if vertices overlap on one of the faces normal.
      *  @static
-     *  @param {Vector3[]} verticesA - First vertices to check
-     *  @param {Vector3[]} verticesB - Second vertices to check
+     *  @param {ArrayLike<number>} verticesA - First vertices to check
+     *  @param {ArrayLike<number>} verticesB - Second vertices to check
      *  @param {number} lA - The first vertices length
      *  @param {number} lB - The second vertices length
-     *  @param {Vector3} normal - The face normal
+     *  @param {Core.Vector3} normal - The face normal
      *  @returns {boolean}
      */
     static overlapOnThisNormal(verticesA: ArrayLike<number>, verticesB: ArrayLike<number>, lA: number, lB: number, normal: THREE.Vector3): boolean;

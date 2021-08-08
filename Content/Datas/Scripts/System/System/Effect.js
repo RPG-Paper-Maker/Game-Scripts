@@ -297,7 +297,15 @@ class Effect extends Base {
                 Scene.Map.current.battleCommandKind = this.specialActionKind;
                 return true;
             case EffectKind.Script:
-                Interpreter.evaluate(this.scriptFormula.getValue(), { addReturn: false });
+                let script = this.scriptFormula.getValue();
+                if (targets.length > 0) {
+                    Interpreter.evaluate(script, { addReturn: false, user: user,
+                        target: null });
+                }
+                for (let target of targets) {
+                    Interpreter.evaluate(script, { addReturn: false, user: user,
+                        target: target.player });
+                }
                 return true;
         }
         return result;
