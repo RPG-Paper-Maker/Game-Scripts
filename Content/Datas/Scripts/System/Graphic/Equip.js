@@ -25,7 +25,7 @@ class Equip extends Base {
         let equiped = player.equip[id];
         // All the graphics
         this.graphicEquipmentName = new Graphic.Text(Datas.BattleSystems
-            .getEquipment(id), isPossible ? {} : { color: System.Color.GREY });
+            .getEquipment(id).name(), isPossible ? {} : { color: System.Color.GREY });
         this.graphicEquipment = new Graphic.Text(equiped === null ? "-" :
             equiped.system.name(), isPossible ? {} : { color: System.Color.GREY });
     }

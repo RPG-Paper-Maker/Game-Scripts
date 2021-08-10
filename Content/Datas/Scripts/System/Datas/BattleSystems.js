@@ -57,10 +57,8 @@ class BattleSystems {
         this.equipmentsOrder = [];
         this.maxEquipmentID = Utils.readJSONSystemList({ list: Utils
                 .defaultValue(json.equipments, []), listIDs: this.equipments,
-            listIndexes: this.equipmentsOrder, indexesIDs: true, func: (jsonEquipment) => {
-                return jsonEquipment.names[1];
-            }
-        });
+            listIndexes: this.equipmentsOrder, indexesIDs: true, cons: System
+                .Translatable });
         this.weaponsKind = [];
         Utils.readJSONSystemList({ list: Utils.defaultValue(json.weaponsKind, []), listIDs: this.weaponsKind, cons: System.WeaponArmorKind });
         // Armors kind
@@ -130,7 +128,7 @@ class BattleSystems {
     /**
      *  Get the equipment by ID.
      *  @param {number} id
-     *  @returns {string}
+     *  @returns {System.Translatable}
      */
     static getEquipment(id) {
         return Datas.Base.get(id, this.equipments, "equipment");

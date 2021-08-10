@@ -62,9 +62,9 @@ declare class BattleSystems {
     /**
      *  Get the equipment by ID.
      *  @param {number} id
-     *  @returns {string}
+     *  @returns {System.Translatable}
      */
-    static getEquipment(id: number): string;
+    static getEquipment(id: number): System.Translatable;
     /**
      *  Get the weapon kind by ID.
      *  @param {number} id

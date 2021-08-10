@@ -113,7 +113,7 @@ class Player {
             l; i++)
         {
             graphic = new Graphic.Text(Datas.BattleSystems.getEquipment(Datas
-                .BattleSystems.equipmentsOrder[i+1]));
+                .BattleSystems.equipmentsOrder[i+1]).name());
             graphic.updateContextFont();
             maxLength = Math.max(Platform.ctx.measureText(graphic.text).width, 
                 maxLength);

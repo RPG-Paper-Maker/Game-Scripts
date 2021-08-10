@@ -26,7 +26,7 @@ class BattleSystems {
     public static statisticsElements: number[];
     public static statisticsElementsPercent: number[];
     public static maxStatisticID: number;
-    private static equipments: string[];
+    private static equipments: System.Translatable[];
     public static equipmentsOrder: number[];
     public static maxEquipmentID: number;
     private static weaponsKind: System.WeaponArmorKind[];
@@ -94,12 +94,8 @@ class BattleSystems {
         this.equipmentsOrder = [];
         this.maxEquipmentID = Utils.readJSONSystemList({ list: Utils
             .defaultValue(json.equipments, []), listIDs: this.equipments, 
-            listIndexes: this.equipmentsOrder, indexesIDs: true, func: (
-            jsonEquipment: Record<string, any>) => 
-            {
-                return jsonEquipment.names[1];
-            }
-        });
+            listIndexes: this.equipmentsOrder, indexesIDs: true, cons: System
+            .Translatable });
         this.weaponsKind = [];
         Utils.readJSONSystemList({ list: Utils.defaultValue(json.weaponsKind, []
             ), listIDs: this.weaponsKind, cons: System.WeaponArmorKind });
@@ -184,9 +180,9 @@ class BattleSystems {
     /** 
      *  Get the equipment by ID.
      *  @param {number} id
-     *  @returns {string}
+     *  @returns {System.Translatable}
      */
-    static getEquipment(id: number): string {
+    static getEquipment(id: number): System.Translatable {
         return Datas.Base.get(id, this.equipments, "equipment");
     }
 
