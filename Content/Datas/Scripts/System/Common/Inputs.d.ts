@@ -4,7 +4,8 @@
  */
 declare class Inputs {
     static keysPressed: number[];
-    static mousePressed: boolean;
+    static mouseLeftPressed: boolean;
+    static mouseRightPressed: boolean;
     static mouseFirstPressX: number;
     static mouseFirstPressY: number;
     static mouseLastMoveX: number;

@@ -10,7 +10,7 @@
 */
 
 import { Bitmap } from "./Bitmap";
-import { Enum, ScreenResolution, Utils } from "../Common";
+import { Enum, Inputs, ScreenResolution, Utils } from "../Common";
 import OrientationWindow = Enum.OrientationWindow;
 import { Graphic, Manager, Datas } from "../index";
 import { WindowBox } from "./WindowBox";
@@ -576,7 +576,7 @@ class WindowChoices extends Bitmap {
      *  @param {Object} base - The base object to apply with callback
      */
     onMouseUp(x: number, y: number, base?: Object) {
-        if (this.currentSelectedIndex !== -1) {
+        if (this.currentSelectedIndex !== -1 && Inputs.mouseLeftPressed) {
             let callback = this.listCallBacks[this.currentSelectedIndex];
             if (callback !== null) {
                 // Play a sound according to callback result

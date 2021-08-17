@@ -79,7 +79,17 @@ class Inputs {
         document.addEventListener('mousedown', function (event) {
             if (Main.loaded && !Manager.Stack.isLoading() && Datas.Systems
                 .isMouseControls) {
-                Inputs.mousePressed = true;
+                console.log(event.button);
+                switch (event.button) {
+                    case 0:
+                        Inputs.mouseLeftPressed = true;
+                        break;
+                    case 2:
+                        Inputs.mouseRightPressed = true;
+                        break;
+                    default:
+                        break;
+                }
                 Inputs.mouseFirstPressX = event.clientX;
                 Inputs.mouseFirstPressY = event.clientY;
                 Manager.Stack.onMouseDown(event.clientX, event.clientY);
@@ -98,14 +108,24 @@ class Inputs {
         document.addEventListener('mouseup', function (event) {
             if (Main.loaded && !Manager.Stack.isLoading() && Datas.Systems
                 .isMouseControls) {
-                Inputs.mousePressed = false;
                 Manager.Stack.onMouseUp(event.clientX, event.clientY);
+                switch (event.button) {
+                    case 0:
+                        Inputs.mouseLeftPressed = false;
+                        break;
+                    case 2:
+                        Inputs.mouseRightPressed = false;
+                        break;
+                    default:
+                        break;
+                }
             }
         }, false);
     }
 }
 Inputs.keysPressed = [];
-Inputs.mousePressed = false;
+Inputs.mouseLeftPressed = false;
+Inputs.mouseRightPressed = false;
 Inputs.mouseFirstPressX = -1;
 Inputs.mouseFirstPressY = -1;
 Inputs.mouseLastMoveX = -1;

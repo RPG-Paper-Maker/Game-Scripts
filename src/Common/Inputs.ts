@@ -21,7 +21,8 @@ import { Platform } from "./Platform";
 class Inputs {
 
     static keysPressed: number[] = [];
-    static mousePressed: boolean = false;
+    static mouseLeftPressed: boolean = false;
+    static mouseRightPressed: boolean = false;
     static mouseFirstPressX: number = -1;
     static mouseFirstPressY: number = -1;
     static mouseLastMoveX: number = -1;
@@ -95,7 +96,17 @@ class Inputs {
         document.addEventListener('mousedown', function (event) {
             if (Main.loaded && !Manager.Stack.isLoading() && Datas.Systems
                 .isMouseControls) {
-                Inputs.mousePressed = true;
+                    console.log(event.button)
+                switch (event.button) {
+                    case 0:
+                        Inputs.mouseLeftPressed = true;
+                        break;
+                    case 2:
+                        Inputs.mouseRightPressed = true;
+                        break;
+                    default:
+                        break;
+                }
                 Inputs.mouseFirstPressX = event.clientX;
                 Inputs.mouseFirstPressY = event.clientY;
                 Manager.Stack.onMouseDown(event.clientX, event.clientY);
@@ -116,8 +127,17 @@ class Inputs {
         document.addEventListener('mouseup', function (event) {
             if (Main.loaded && !Manager.Stack.isLoading() && Datas.Systems
                 .isMouseControls) {
-                Inputs.mousePressed = false;
                 Manager.Stack.onMouseUp(event.clientX, event.clientY);
+                switch (event.button) {
+                    case 0:
+                        Inputs.mouseLeftPressed = false;
+                        break;
+                    case 2:
+                        Inputs.mouseRightPressed = false;
+                        break;
+                    default:
+                        break;
+                }
             }
         }, false);
     }

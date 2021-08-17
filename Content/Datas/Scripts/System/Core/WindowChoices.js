@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Bitmap } from "./Bitmap.js";
-import { Enum, ScreenResolution, Utils } from "../Common/index.js";
+import { Enum, Inputs, ScreenResolution, Utils } from "../Common/index.js";
 var OrientationWindow = Enum.OrientationWindow;
 import { Manager, Datas } from "../index.js";
 import { WindowBox } from "./WindowBox.js";
@@ -448,7 +448,7 @@ class WindowChoices extends Bitmap {
      *  @param {Object} base - The base object to apply with callback
      */
     onMouseUp(x, y, base) {
-        if (this.currentSelectedIndex !== -1) {
+        if (this.currentSelectedIndex !== -1 && Inputs.mouseLeftPressed) {
             let callback = this.listCallBacks[this.currentSelectedIndex];
             if (callback !== null) {
                 // Play a sound according to callback result
