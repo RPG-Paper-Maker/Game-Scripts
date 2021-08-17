@@ -206,17 +206,18 @@ declare class WindowChoices extends Bitmap {
      */
     onKeyPressedAndRepeat(key: number): boolean;
     /**
-     *  Mouse down handle for the current stack.
-     *  @param {number} x - The x mouse position on screen
-     *  @param {number} y - The y mouse position on screen
-     */
-    onMouseDown(x: number, y: number): void;
-    /**
      *  Mouse move handle for the current stack.
      *  @param {number} x - The x mouse position on screen
      *  @param {number} y - The y mouse position on screen
      */
     onMouseMove(x: number, y: number): void;
+    /**
+     *  Mouse up handle for the current stack.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     *  @param {Object} base - The base object to apply with callback
+     */
+    onMouseUp(x: number, y: number, base?: Object): void;
     /**
      *  Draw the windows.
      */

@@ -512,15 +512,6 @@ class WindowChoices extends Bitmap {
     }
 
     /** 
-     *  Mouse down handle for the current stack.
-     *  @param {number} x - The x mouse position on screen
-     *  @param {number} y - The y mouse position on screen
-     */
-    onMouseDown(x: number, y: number) {
-        
-    }
-
-    /** 
      *  Mouse move handle for the current stack.
      *  @param {number} x - The x mouse position on screen
      *  @param {number} y - The y mouse position on screen
@@ -574,6 +565,28 @@ class WindowChoices extends Bitmap {
                 if (rect.isInside(x, y)) {
                     this.isMouseInArrowDown = true;
                 }
+            }
+        }
+    }
+
+    /** 
+     *  Mouse up handle for the current stack.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     *  @param {Object} base - The base object to apply with callback
+     */
+    onMouseUp(x: number, y: number, base?: Object) {
+        if (this.currentSelectedIndex !== -1) {
+            let callback = this.listCallBacks[this.currentSelectedIndex];
+            if (callback !== null) {
+                // Play a sound according to callback result
+                if (callback.call(base)) {
+                    Datas.Systems.soundConfirmation.playSound();
+                } else {
+                    Datas.Systems.soundImpossible.playSound();
+                }
+            } else {
+                Datas.Systems.soundImpossible.playSound();
             }
         }
     }

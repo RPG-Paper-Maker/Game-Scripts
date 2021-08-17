@@ -55,7 +55,7 @@ class TitleScreen extends Base {
             / 2 - (WindowBox.MEDIUM_SLOT_WIDTH / 2), ScreenResolution.SCREEN_Y -
             Constants.HUGE_SPACE - (commandsNb * WindowBox.MEDIUM_SLOT_HEIGHT), WindowBox.MEDIUM_SLOT_WIDTH, WindowBox.MEDIUM_SLOT_HEIGHT, Datas
             .TitlescreenGameover.getCommandsNames(), {
-            nbItemsMax: 2,
+            nbItemsMax: commandsNb,
             listCallbacks: Datas.TitlescreenGameover.getCommandsActions(),
             padding: [0, 0, 0, 0]
         });
@@ -96,14 +96,15 @@ class TitleScreen extends Base {
     /**
      *  @inheritdoc
      */
-    onMouseDown(x, y) {
-        this.windowChoicesCommands.onMouseDown(x, y);
+    onMouseMove(x, y) {
+        this.windowChoicesCommands.onMouseMove(x, y);
     }
     /**
      *  @inheritdoc
      */
-    onMouseMove(x, y) {
-        this.windowChoicesCommands.onMouseMove(x, y);
+    onMouseUp(x, y) {
+        this.windowChoicesCommands.onMouseUp(x, y, this.windowChoicesCommands
+            .getCurrentContent().datas);
     }
     /**
      *  @inheritdoc
