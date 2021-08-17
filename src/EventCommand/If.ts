@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { System, Datas, Scene } from "../index";
-import { Utils, Enum, Mathf, KeyEvent, Interpreter } from "../Common";
+import { Utils, Enum, Mathf, Interpreter, Inputs } from "../Common";
 import ConditionHeroesKind = Enum.ConditionHeroesKind;
 import ItemKind = Enum.ItemKind;
 import { Player, MapObject, Item, Game, StructSearchResult, Chrono } from "../Core";
@@ -421,8 +421,8 @@ class If extends Base {
                 let key = Datas.Keyboards.get(this.keyID.getValue());
                 let b = this.keyValue.getValue();
                 result = !b;
-                for (i = 0, l = KeyEvent.keysPressed.length; i < l; i++) {
-                    if (Datas.Keyboards.isKeyEqual(KeyEvent.keysPressed[i], key)) {
+                for (i = 0, l = Inputs.keysPressed.length; i < l; i++) {
+                    if (Datas.Keyboards.isKeyEqual(Inputs.keysPressed[i], key)) {
                         result = b;
                         break;
                     }

@@ -4,7 +4,6 @@
  * @class KeyEvent
  */
 declare class KeyEvent {
-    static keysPressed: number[];
     static DOM_VK_CANCEL: number;
     static DOM_VK_HELP: number;
     static DOM_VK_BACK_SPACE: number;

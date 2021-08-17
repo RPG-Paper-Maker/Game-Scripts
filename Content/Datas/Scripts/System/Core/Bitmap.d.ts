@@ -68,5 +68,12 @@ declare class Bitmap {
      *  @param {number} h - The h value
      */
     setCoords(x: number, y: number, w: number, h: number): void;
+    /**
+     *  Check if x and y coords are inside.
+     *  @param {number} x
+     *  @param {number} y
+     *  @returns {boolean}
+     */
+    isInside(x: number, y: number): boolean;
 }
 export { Bitmap };

@@ -3,6 +3,8 @@
  *  Handles inputs for keyboard and mouse.
  */
 declare class Inputs {
+    static keysPressed: number[];
+    static mousePressed: boolean;
     constructor();
     /**
      *  Initialize all keyboard and mouse events.

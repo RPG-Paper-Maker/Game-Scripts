@@ -1,62 +1,51 @@
 import { Base } from "./Base.js";
 import { Picture2D, WindowChoices } from "../Core/index.js";
 /**
- * the Scene displaying the game title screen.
- *
- * @class TitleScreen
- * @extends {Base}
+ *  The Scene displaying the game title screen.
+ *  @class TitleScreen
+ *  @extends {Scene.Base}
  */
 declare class TitleScreen extends Base {
     /**
-     * The title screen background image.
-     *
-     * @type {Picture2D}
-     * @memberof TitleScreen
+     *  The title screen background image.
+     *  @type {Picture2D}
      */
     pictureBackground: Picture2D;
     /**
-     * The title screen command window.
-     *
-     * @type {WindowChoices}
-     * @memberof TitleScreen
+     *  The title screen command window.
+     *  @type {WindowChoices}
      */
     windowChoicesCommands: WindowChoices;
     constructor();
     /**
-     * @inheritdoc
-     *
-     * @memberof TitleScreen
+     *  @inheritdoc
      */
     create(): void;
     /**
-     * @inheritdoc
-     *
-     * @memberof TitleScreen
+     *  @inheritdoc
      */
     load(): Promise<void>;
     /**
-     *  Translate the scene if possible.
+     *  @inheritdoc
      */
     translate(): void;
     /**
-     * @inheritdoc
-     *
-     * @param {number} key - the key ID
-     * @memberof TitleScreen
+     *  @inheritdoc
+     *  @param {number} key - the key ID
      */
     onKeyPressed(key: number): void;
     /**
-     * @inheritdoc
-     *
-     * @param {number} key - the key ID
-     * @return {*}  {boolean}
-     * @memberof TitleScreen
+     *  @inheritdoc
+     *  @param {number} key - the key ID
+     *  @return {*}  {boolean}
      */
     onKeyPressedAndRepeat(key: number): boolean;
     /**
-     * @inheritdoc
-     *
-     * @memberof TitleScreen
+     *  @inheritdoc
+     */
+    onMouseMove(x: number, y: number): void;
+    /**
+     *  @inheritdoc
      */
     drawHUD(): void;
 }

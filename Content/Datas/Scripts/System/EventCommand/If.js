@@ -10,7 +10,7 @@
 */
 import { Base } from "./Base.js";
 import { System, Datas, Scene } from "../index.js";
-import { Utils, Enum, Mathf, KeyEvent, Interpreter } from "../Common/index.js";
+import { Utils, Enum, Mathf, Interpreter, Inputs } from "../Common/index.js";
 var ConditionHeroesKind = Enum.ConditionHeroesKind;
 var ItemKind = Enum.ItemKind;
 import { Player, MapObject, Game } from "../Core/index.js";
@@ -325,8 +325,8 @@ class If extends Base {
                 let key = Datas.Keyboards.get(this.keyID.getValue());
                 let b = this.keyValue.getValue();
                 result = !b;
-                for (i = 0, l = KeyEvent.keysPressed.length; i < l; i++) {
-                    if (Datas.Keyboards.isKeyEqual(KeyEvent.keysPressed[i], key)) {
+                for (i = 0, l = Inputs.keysPressed.length; i < l; i++) {
+                    if (Datas.Keyboards.isKeyEqual(Inputs.keysPressed[i], key)) {
                         result = b;
                         break;
                     }

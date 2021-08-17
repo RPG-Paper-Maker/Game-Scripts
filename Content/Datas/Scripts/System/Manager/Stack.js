@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Scene, Manager, Common, System, Datas } from "../index.js";
-import { Utils, Platform, ScreenResolution, KeyEvent, Paths, Enum } from "../Common/index.js";
+import { Utils, Platform, ScreenResolution, Paths, Enum, Inputs } from "../Common/index.js";
 import { Game, MapObject } from "../Core/index.js";
 /** @class
  *  The game stack that is organizing the game scenes.
@@ -155,8 +155,8 @@ class Stack {
         Manager.Songs.update();
         // Repeat keypress as long as not blocking
         let continuePressed;
-        for (let i = 0, l = KeyEvent.keysPressed.length; i < l; i++) {
-            continuePressed = this.onKeyPressedRepeat(KeyEvent.keysPressed[i]);
+        for (let i = 0, l = Inputs.keysPressed.length; i < l; i++) {
+            continuePressed = this.onKeyPressedRepeat(Inputs.keysPressed[i]);
             if (!continuePressed) {
                 break;
             }

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Manager } from "..";
+import { Datas, Manager } from "..";
 import { Main } from "../main";
 import { KeyEvent } from "./KeyEvent";
 import { Platform } from "./Platform";
@@ -19,6 +19,9 @@ import { Platform } from "./Platform";
  *  Handles inputs for keyboard and mouse.
  */
 class Inputs {
+
+    static keysPressed: number[] = [];
+    static mousePressed: boolean = false;
 
     constructor() {
         throw new Error("This is a static class");
@@ -49,8 +52,8 @@ class Inputs {
                 }
                 // If not repeat, call simple press RPM event
                 if (!event.repeat) {
-                    if (KeyEvent.keysPressed.indexOf(key) === -1) {
-                        KeyEvent.keysPressed.push(key);
+                    if (Inputs.keysPressed.indexOf(key) === -1) {
+                        Inputs.keysPressed.push(key);
                         Manager.Stack.onKeyPressed(key);
                         // If is loading, that means a new scene was created, return
                         if (Manager.Stack.isLoading()) {
@@ -69,12 +72,12 @@ class Inputs {
             if (Main.loaded && !Manager.Stack.isLoading()) {
                 let key = event.keyCode;
                 // Remove this key from pressed keys list
-                KeyEvent.keysPressed.splice(KeyEvent.keysPressed.indexOf(key), 1);
+                Inputs.keysPressed.splice(Inputs.keysPressed.indexOf(key), 1);
         
                 // Call release RPM event
                 Manager.Stack.onKeyReleased(key);
             } else {
-                KeyEvent.keysPressed = [];
+                Inputs.keysPressed = [];
             }
         }, false);
     }
@@ -86,21 +89,26 @@ class Inputs {
     static initializeMouse() {
         // Mouse down
         document.addEventListener('mousedown', function (event) {
-            if (Main.loaded && !Manager.Stack.isLoading()) {
+            if (Main.loaded && !Manager.Stack.isLoading() && Datas.Systems
+                .isMouseControls) {
+                Inputs.mousePressed = true;
                 Manager.Stack.onMouseDown(event.clientX, event.clientY);
             }
         }, false);
 
         // Mouse move
         document.addEventListener('mousemove', function (event) {
-            if (Main.loaded && !Manager.Stack.isLoading()) {
+            if (Main.loaded && !Manager.Stack.isLoading() && Datas.Systems
+                .isMouseControls) {
                 Manager.Stack.onMouseMove(event.clientX, event.clientY);
             }
         }, false);
 
         // Mouse up
         document.addEventListener('mouseup', function (event) {
-            if (Main.loaded && !Manager.Stack.isLoading()) {
+            if (Main.loaded && !Manager.Stack.isLoading() && Datas.Systems
+                .isMouseControls) {
+                Inputs.mousePressed = false;
                 Manager.Stack.onMouseUp(event.clientX, event.clientY);
             }
         }, false);

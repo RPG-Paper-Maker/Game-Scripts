@@ -114,5 +114,14 @@ class Bitmap {
         this.setW(w);
         this.setH(h);
     }
+    /**
+     *  Check if x and y coords are inside.
+     *  @param {number} x
+     *  @param {number} y
+     *  @returns {boolean}
+     */
+    isInside(x, y) {
+        return x >= this.x && x <= (this.x + this.w) && y >= this.y && y <= (this.y + this.h);
+    }
 }
 export { Bitmap };

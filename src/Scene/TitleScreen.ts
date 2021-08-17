@@ -16,26 +16,21 @@ import { Enum, Platform, ScreenResolution, Constants } from "../Common";
 import PictureKind = Enum.PictureKind;
 
 /**
- * the Scene displaying the game title screen.
- *
- * @class TitleScreen
- * @extends {Base}
+ *  The Scene displaying the game title screen.
+ *  @class TitleScreen
+ *  @extends {Scene.Base}
  */
 class TitleScreen extends Base {
 
     /**
-     * The title screen background image.
-     *
-     * @type {Picture2D}
-     * @memberof TitleScreen
+     *  The title screen background image.
+     *  @type {Picture2D}
      */
     public pictureBackground: Picture2D;
 
     /**
-     * The title screen command window.
-     *
-     * @type {WindowChoices}
-     * @memberof TitleScreen
+     *  The title screen command window.
+     *  @type {WindowChoices}
      */
     public windowChoicesCommands: WindowChoices;
 
@@ -45,18 +40,14 @@ class TitleScreen extends Base {
     }
 
     /**
-     * @inheritdoc
-     *
-     * @memberof TitleScreen
+     *  @inheritdoc
      */
     create(): void {
         super.create();
     }
 
     /**
-     * @inheritdoc
-     *
-     * @memberof TitleScreen
+     *  @inheritdoc
      */
     async load() {
         Game.current = null;
@@ -100,7 +91,7 @@ class TitleScreen extends Base {
     }
 
     /** 
-     *  Translate the scene if possible.
+     *  @inheritdoc
      */
     translate() {
         for (let i = 0, l = this.windowChoicesCommands.listContents.length; i < l; i++) {
@@ -110,10 +101,8 @@ class TitleScreen extends Base {
     }
 
     /**
-     * @inheritdoc
-     *
-     * @param {number} key - the key ID
-     * @memberof TitleScreen
+     *  @inheritdoc
+     *  @param {number} key - the key ID
      */
     onKeyPressed(key: number) {
         this.windowChoicesCommands.onKeyPressed(key, this.windowChoicesCommands
@@ -121,20 +110,23 @@ class TitleScreen extends Base {
     }
 
     /**
-     * @inheritdoc
-     *
-     * @param {number} key - the key ID
-     * @return {*}  {boolean}
-     * @memberof TitleScreen
+     *  @inheritdoc
+     *  @param {number} key - the key ID
+     *  @return {*}  {boolean}
      */
     onKeyPressedAndRepeat(key: number): boolean {
         return this.windowChoicesCommands.onKeyPressedAndRepeat(key);
     }
 
+    /** 
+     *  @inheritdoc
+     */
+    onMouseMove(x: number, y: number) {
+        this.windowChoicesCommands.onMouseMove(x, y);
+    }
+
     /**
-     * @inheritdoc
-     *
-     * @memberof TitleScreen
+     *  @inheritdoc
      */
     drawHUD() {
         if (Datas.TitlescreenGameover.isTitleBackgroundImage) {

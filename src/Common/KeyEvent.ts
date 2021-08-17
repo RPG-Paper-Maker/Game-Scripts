@@ -9,6 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Inputs } from "./Inputs";
+
 /**
  * The key event class used to convert Qt keys to web keys.
  *
@@ -16,7 +18,6 @@
  */
 class KeyEvent {
 
-    static keysPressed: number[] = [];
     static DOM_VK_CANCEL = 3;
     static DOM_VK_HELP = 6;
     static DOM_VK_BACK_SPACE = 8;
@@ -306,7 +307,7 @@ class KeyEvent {
      *   @returns {boolean}
      */
     static isKeyNumberTopPressed(key: number): boolean {
-        let shift = KeyEvent.keysPressed.indexOf(KeyEvent.DOM_VK_SHIFT) !== -1;
+        let shift = Inputs.keysPressed.indexOf(KeyEvent.DOM_VK_SHIFT) !== -1;
         return shift && key >= KeyEvent.DOM_VK_0 && key <= KeyEvent.DOM_VK_9;
     }
 

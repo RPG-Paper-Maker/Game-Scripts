@@ -10,7 +10,7 @@
 */
 
 import { Scene, Manager, Common, System, Datas } from "../index";
-import { Utils, Platform, ScreenResolution, KeyEvent, Paths, Enum } from "../Common";
+import { Utils, Platform, ScreenResolution, Paths, Enum, Inputs } from "../Common";
 import { Game, MapObject, Picture2D, Player } from "../Core";
 
 /** @class
@@ -189,8 +189,8 @@ class Stack {
 
         // Repeat keypress as long as not blocking
         let continuePressed: boolean;
-        for (let i = 0, l = KeyEvent.keysPressed.length; i < l; i++) {
-            continuePressed = this.onKeyPressedRepeat(KeyEvent.keysPressed[i]);
+        for (let i = 0, l = Inputs.keysPressed.length; i < l; i++) {
+            continuePressed = this.onKeyPressedRepeat(Inputs.keysPressed[i]);
             if (!continuePressed) {
                 break;
             }

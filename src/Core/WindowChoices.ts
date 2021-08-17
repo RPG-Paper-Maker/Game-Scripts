@@ -400,6 +400,7 @@ class WindowChoices extends Bitmap {
             Datas.Systems.soundCursor.playSound();
             Manager.Stack.requestPaintHUD = true;
         }
+        console.log(this.currentSelectedIndex, this.offsetSelectedIndex)
     }
 
     /** 
@@ -464,6 +465,33 @@ class WindowChoices extends Bitmap {
             }
         }
         return true;
+    }
+
+    /** 
+     *  Mouse move handle for the current stack.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseMove(x: number, y: number) {
+        // If inside the main window
+        if (this.currentSelectedIndex !== -1 && this.isInside(x, y)) {
+            let index: number;
+            // Check which window
+            if (this.orientation === OrientationWindow.Horizontal) {
+                index = Math.floor((x - this.x) / (this.choiceWidth + this.space));
+            } else {
+                index = Math.floor((y - this.y) / (this.choiceHeight + this.space));
+            }
+            // If different index, then change it visually + sound
+            if (this.offsetSelectedIndex !== index) {
+                Datas.Systems.soundCursor.playSound();
+                this.listWindows[this.currentSelectedIndex].selected = false;
+                this.currentSelectedIndex += index - this.offsetSelectedIndex;
+                this.offsetSelectedIndex = index;
+                this.listWindows[this.currentSelectedIndex].selected = true;
+                Manager.Stack.requestPaintHUD = true;
+            }
+        }
     }
 
     /** 

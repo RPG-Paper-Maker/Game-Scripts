@@ -14,27 +14,22 @@ import { Picture2D, WindowChoices, WindowBox, Game } from "../Core/index.js";
 import { Enum, Platform, ScreenResolution, Constants } from "../Common/index.js";
 var PictureKind = Enum.PictureKind;
 /**
- * the Scene displaying the game title screen.
- *
- * @class TitleScreen
- * @extends {Base}
+ *  The Scene displaying the game title screen.
+ *  @class TitleScreen
+ *  @extends {Scene.Base}
  */
 class TitleScreen extends Base {
     constructor() {
         super();
     }
     /**
-     * @inheritdoc
-     *
-     * @memberof TitleScreen
+     *  @inheritdoc
      */
     create() {
         super.create();
     }
     /**
-     * @inheritdoc
-     *
-     * @memberof TitleScreen
+     *  @inheritdoc
      */
     async load() {
         Game.current = null;
@@ -69,7 +64,7 @@ class TitleScreen extends Base {
         this.loading = false;
     }
     /**
-     *  Translate the scene if possible.
+     *  @inheritdoc
      */
     translate() {
         for (let i = 0, l = this.windowChoicesCommands.listContents.length; i < l; i++) {
@@ -77,29 +72,29 @@ class TitleScreen extends Base {
         }
     }
     /**
-     * @inheritdoc
-     *
-     * @param {number} key - the key ID
-     * @memberof TitleScreen
+     *  @inheritdoc
+     *  @param {number} key - the key ID
      */
     onKeyPressed(key) {
         this.windowChoicesCommands.onKeyPressed(key, this.windowChoicesCommands
             .getCurrentContent().datas);
     }
     /**
-     * @inheritdoc
-     *
-     * @param {number} key - the key ID
-     * @return {*}  {boolean}
-     * @memberof TitleScreen
+     *  @inheritdoc
+     *  @param {number} key - the key ID
+     *  @return {*}  {boolean}
      */
     onKeyPressedAndRepeat(key) {
         return this.windowChoicesCommands.onKeyPressedAndRepeat(key);
     }
     /**
-     * @inheritdoc
-     *
-     * @memberof TitleScreen
+     *  @inheritdoc
+     */
+    onMouseMove(x, y) {
+        this.windowChoicesCommands.onMouseMove(x, y);
+    }
+    /**
+     *  @inheritdoc
      */
     drawHUD() {
         if (Datas.TitlescreenGameover.isTitleBackgroundImage) {

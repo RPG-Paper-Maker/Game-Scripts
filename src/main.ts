@@ -10,7 +10,7 @@
 */
 
 import { Datas, Manager } from "./index";
-import { Utils, KeyEvent, Platform, Inputs } from "./Common";
+import { Utils, Platform, Inputs } from "./Common";
 
 /**
  * The main class who boot and loop everything's

@@ -190,6 +190,12 @@ declare class WindowChoices extends Bitmap {
      */
     onKeyPressedAndRepeat(key: number): boolean;
     /**
+     *  Mouse move handle for the current stack.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseMove(x: number, y: number): void;
+    /**
      *  Draw the windows.
      */
     draw(): void;
