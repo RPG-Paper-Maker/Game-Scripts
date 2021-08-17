@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { WindowBox, WindowChoices, Game } from "../Core";
-import { ScreenResolution } from "../Common";
+import { Inputs, ScreenResolution } from "../Common";
 import { Graphic, Datas, Manager } from "../index";
 
 /** @class
@@ -90,6 +90,14 @@ class SaveLoadGame extends Base {
     }
 
     /** 
+     *  Cancel the scene.
+     */
+    cancel() {
+        Datas.Systems.soundCancel.playSound();
+        Manager.Stack.pop();
+    }
+
+    /** 
      *  Update the scene.
      */
     update() {
@@ -103,12 +111,8 @@ class SaveLoadGame extends Base {
      *  @param {number} key - The key ID
      */
     onKeyPressed(key: number) {
-        if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Cancel)
-            || Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.controls
-            .MainMenu))
-        {
-            Datas.Systems.soundCancel.playSound();
-            Manager.Stack.pop();
+        if (Datas.Keyboards.checkCancelMenu(key)) {
+            this.cancel();
         }
     }
 
@@ -122,6 +126,22 @@ class SaveLoadGame extends Base {
         this.updateInformations.call(this, this.windowChoicesSlots
             .currentSelectedIndex);
         return true;
+    }
+
+    /** 
+     *  @inheritdoc
+     */
+    onMouseMove(x: number, y: number) {
+        this.windowChoicesSlots.onMouseMove(x, y);
+    }
+
+    /** 
+     *  @inheritdoc
+     */
+    onMouseUp(x: number, y: number) {
+        if (Inputs.mouseRightPressed) {
+            this.cancel();
+        }
     }
 
     /** 

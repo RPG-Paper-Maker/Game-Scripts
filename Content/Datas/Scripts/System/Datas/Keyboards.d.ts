@@ -42,5 +42,17 @@ declare class Keyboards {
      *  @returns {Function[]}
      */
     static getCommandsActions(): Function[];
+    /**
+     *  Check if key is cancelling menu.
+     *  @static
+     *  @returns {boolean}
+     */
+    static checkCancelMenu(key: number): boolean;
+    /**
+     *  Check if key is action menu.
+     *  @static
+     *  @returns {boolean}
+     */
+    static checkActionMenu(key: number): boolean;
 }
 export { Keyboards };

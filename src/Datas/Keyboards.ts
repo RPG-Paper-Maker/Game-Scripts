@@ -125,6 +125,26 @@ class Keyboards {
         }
         return list;
     }
+
+    /** 
+     *  Check if key is cancelling menu.
+     *  @static
+     *  @returns {boolean}
+     */
+    static checkCancelMenu(key: number): boolean {
+        return Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
+            .Cancel) || Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.controls
+            .MainMenu);
+    }
+
+    /** 
+     *  Check if key is action menu.
+     *  @static
+     *  @returns {boolean}
+     */
+    static checkActionMenu(key: number): boolean {
+        return Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Action);
+    }
 }
 
 export { Keyboards }

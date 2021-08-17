@@ -11,7 +11,7 @@
 
 import { SaveLoadGame } from "./SaveLoadGame";
 import { Graphic, Datas, Manager, Scene } from "../index";
-import { Enum, Constants, Platform } from "../Common";
+import { Enum, Constants, Platform, Inputs } from "../Common";
 import Align = Enum.Align;
 import PictureKind = Enum.PictureKind;
 import { Picture2D, Game } from "../Core";
@@ -68,23 +68,37 @@ class LoadGame extends SaveLoadGame {
     }
 
     /** 
+     *  Slot action.
+     */
+    action() {
+        Game.current = (<Graphic.Save> this.windowChoicesSlots.getCurrentContent())
+            .game;
+        if (Game.current.isEmpty) {
+            Game.current = null;
+            Datas.Systems.soundImpossible.playSound();
+        } else {
+            Datas.Systems.soundConfirmation.playSound();
+            this.loadGame();
+        }
+    }
+
+    /** 
      *  Handle scene key pressed
      *  @param {number} key - The key ID
      */
     onKeyPressed(key: number) {
         super.onKeyPressed(key);
-
-        // If action, load the selected slot
-        if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Action)) {
-            Game.current = (<Graphic.Save> this.windowChoicesSlots
-                .getCurrentContent()).game;
-            if (Game.current.isEmpty) {
-                Game.current = null;
-                Datas.Systems.soundImpossible.playSound();
-            } else {
-                Datas.Systems.soundConfirmation.playSound();
-                this.loadGame();
-            }
+        if (Datas.Keyboards.checkActionMenu(key)) {
+            this.action();
+        }
+    }
+    /** 
+     *  @inheritdoc
+     */
+    onMouseUp(x: number, y: number) {
+        super.onMouseUp(x, y);
+        if (Inputs.mouseLeftPressed) {
+            this.action();
         }
     }
 

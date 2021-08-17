@@ -11,7 +11,7 @@
 import { Base } from "./Base.js";
 import { Datas, Graphic, Manager } from "../index.js";
 import { Picture2D, WindowBox, WindowChoices } from "../Core/index.js";
-import { Enum, Constants, ScreenResolution } from "../Common/index.js";
+import { Enum, Constants, ScreenResolution, Inputs } from "../Common/index.js";
 var PictureKind = Enum.PictureKind;
 var Align = Enum.Align;
 /** @class
@@ -58,6 +58,13 @@ class TitleSettings extends Base {
         this.loading = false;
     }
     /**
+     *  Cancel the scene.
+     */
+    cancel() {
+        Datas.Systems.soundCancel.playSound();
+        Manager.Stack.pop();
+    }
+    /**
      *  Translate the scene if possible.
      */
     translate() {
@@ -68,10 +75,8 @@ class TitleSettings extends Base {
      */
     onKeyPressed(key) {
         this.windowChoicesMain.onKeyPressed(key);
-        if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Cancel)
-            || Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.controls.MainMenu)) {
-            Datas.Systems.soundCancel.playSound();
-            Manager.Stack.pop();
+        if (Datas.Keyboards.checkCancelMenu(key)) {
+            this.cancel();
         }
     }
     /**
@@ -84,6 +89,21 @@ class TitleSettings extends Base {
         this.windowInformations.content = this.windowChoicesMain
             .getCurrentContent();
         return true;
+    }
+    /**
+     *  @inheritdoc
+     */
+    onMouseMove(x, y) {
+        this.windowChoicesMain.onMouseMove(x, y);
+    }
+    /**
+     *  @inheritdoc
+     */
+    onMouseUp(x, y) {
+        this.windowChoicesMain.onMouseUp(x, y);
+        if (Inputs.mouseRightPressed) {
+            this.cancel();
+        }
     }
     /**
      *  Draw the HUD scene.

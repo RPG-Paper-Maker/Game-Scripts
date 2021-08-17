@@ -10,7 +10,7 @@
 */
 import { SaveLoadGame } from "./SaveLoadGame.js";
 import { Graphic, Datas, Manager, Scene } from "../index.js";
-import { Enum, Constants, Platform } from "../Common/index.js";
+import { Enum, Constants, Platform, Inputs } from "../Common/index.js";
 var Align = Enum.Align;
 var PictureKind = Enum.PictureKind;
 import { Picture2D, Game } from "../Core/index.js";
@@ -53,23 +53,37 @@ class LoadGame extends SaveLoadGame {
         this.loading = false;
     }
     /**
+     *  Slot action.
+     */
+    action() {
+        Game.current = this.windowChoicesSlots.getCurrentContent()
+            .game;
+        if (Game.current.isEmpty) {
+            Game.current = null;
+            Datas.Systems.soundImpossible.playSound();
+        }
+        else {
+            Datas.Systems.soundConfirmation.playSound();
+            this.loadGame();
+        }
+    }
+    /**
      *  Handle scene key pressed
      *  @param {number} key - The key ID
      */
     onKeyPressed(key) {
         super.onKeyPressed(key);
-        // If action, load the selected slot
-        if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Action)) {
-            Game.current = this.windowChoicesSlots
-                .getCurrentContent().game;
-            if (Game.current.isEmpty) {
-                Game.current = null;
-                Datas.Systems.soundImpossible.playSound();
-            }
-            else {
-                Datas.Systems.soundConfirmation.playSound();
-                this.loadGame();
-            }
+        if (Datas.Keyboards.checkActionMenu(key)) {
+            this.action();
+        }
+    }
+    /**
+     *  @inheritdoc
+     */
+    onMouseUp(x, y) {
+        super.onMouseUp(x, y);
+        if (Inputs.mouseLeftPressed) {
+            this.action();
         }
     }
     /**

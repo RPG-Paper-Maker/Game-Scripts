@@ -12,7 +12,7 @@
 import { Base } from "./Base";
 import { Datas, Graphic, Manager } from "../index";
 import { Picture2D, WindowBox, WindowChoices } from "../Core";
-import { Enum, Constants, ScreenResolution } from "../Common";
+import { Enum, Constants, ScreenResolution, Inputs } from "../Common";
 import PictureKind = Enum.PictureKind;
 import Align = Enum.Align;
 
@@ -79,6 +79,14 @@ class TitleSettings extends Base {
     }
 
     /** 
+     *  Cancel the scene.
+     */
+    cancel() {
+        Datas.Systems.soundCancel.playSound();
+        Manager.Stack.pop();
+    }
+
+    /** 
      *  Translate the scene if possible.
      */
     translate() {
@@ -91,11 +99,8 @@ class TitleSettings extends Base {
      */
     onKeyPressed(key: number) {
         this.windowChoicesMain.onKeyPressed(key);
-        if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Cancel)
-            || Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.controls.MainMenu))
-        {
-            Datas.Systems.soundCancel.playSound();
-            Manager.Stack.pop();
+        if (Datas.Keyboards.checkCancelMenu(key)) {
+            this.cancel();
         }
     }
 
@@ -109,6 +114,23 @@ class TitleSettings extends Base {
         this.windowInformations.content = this.windowChoicesMain
             .getCurrentContent();
         return true;
+    }
+
+    /** 
+     *  @inheritdoc
+     */
+    onMouseMove(x: number, y: number) {
+        this.windowChoicesMain.onMouseMove(x, y);
+    }
+
+    /** 
+     *  @inheritdoc
+     */
+    onMouseUp(x: number, y: number) {
+        this.windowChoicesMain.onMouseUp(x, y);
+        if (Inputs.mouseRightPressed) {
+            this.cancel();
+        }
     }
 
     /** 

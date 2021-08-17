@@ -10,7 +10,7 @@
 */
 import { Base } from "./Base.js";
 import { WindowBox, WindowChoices, Game } from "../Core/index.js";
-import { ScreenResolution } from "../Common/index.js";
+import { Inputs, ScreenResolution } from "../Common/index.js";
 import { Graphic, Datas, Manager } from "../index.js";
 /** @class
  *  Abstract class for the game save and loading menus.
@@ -71,6 +71,13 @@ class SaveLoadGame extends Base {
         this.windowInformations.content = this.gamesDatas[i];
     }
     /**
+     *  Cancel the scene.
+     */
+    cancel() {
+        Datas.Systems.soundCancel.playSound();
+        Manager.Stack.pop();
+    }
+    /**
      *  Update the scene.
      */
     update() {
@@ -83,11 +90,8 @@ class SaveLoadGame extends Base {
      *  @param {number} key - The key ID
      */
     onKeyPressed(key) {
-        if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Cancel)
-            || Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.controls
-                .MainMenu)) {
-            Datas.Systems.soundCancel.playSound();
-            Manager.Stack.pop();
+        if (Datas.Keyboards.checkCancelMenu(key)) {
+            this.cancel();
         }
     }
     /**
@@ -100,6 +104,20 @@ class SaveLoadGame extends Base {
         this.updateInformations.call(this, this.windowChoicesSlots
             .currentSelectedIndex);
         return true;
+    }
+    /**
+     *  @inheritdoc
+     */
+    onMouseMove(x, y) {
+        this.windowChoicesSlots.onMouseMove(x, y);
+    }
+    /**
+     *  @inheritdoc
+     */
+    onMouseUp(x, y) {
+        if (Inputs.mouseRightPressed) {
+            this.cancel();
+        }
     }
     /**
      *  Draw the HUD scene
