@@ -15,7 +15,8 @@ interface StructIterator {
     i: number
 }
 
-/** @class
+/** 
+ *  @class
  *  An abstract event command.
  */
 abstract class Base {
@@ -54,18 +55,14 @@ abstract class Base {
      *  @param {Object} currentState - The current state of the event
      *  @param {number} key - The key ID pressed
      */
-    onKeyPressed(currentState: Object, key: number) {
-
-    }
+    onKeyPressed(currentState: Object, key: number) {}
 
     /** 
      *  First key release handle for the current stack.
      *  @param {Object} currentState - The current state of the event
      *  @param {number} key - The key ID pressed
     */
-    onKeyReleased(currentState: Object, key: number) {
-
-    }
+    onKeyReleased(currentState: Object, key: number) {}
 
     /** 
      *  Key pressed repeat handle for the current stack.
@@ -87,6 +84,30 @@ abstract class Base {
     onKeyPressedAndRepeat(currentState: Object, key: number): boolean {
         return true;
     }
+
+    /** 
+     *  Mouse down handle for the current stack.
+     *  @param {Object} currentState - The current state of the event
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseDown(currentState: Object, x: number, y: number) {}
+
+    /** 
+     *  Mouse move handle for the current stack.
+     *  @param {Object} currentState - The current state of the event
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseMove(currentState: Object, x: number, y: number) {}
+
+    /** 
+     *  Mouse up handle for the current stack.
+     *  @param {Object} currentState - The current state of the event
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseUp(currentState: Object, x: number, y: number) {}
 
     /** 
      *  Draw the HUD.

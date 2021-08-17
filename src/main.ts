@@ -10,7 +10,7 @@
 */
 
 import { Datas, Manager } from "./index";
-import { Utils, KeyEvent, Platform } from "./Common";
+import { Utils, KeyEvent, Platform, Inputs } from "./Common";
 
 /**
  * The main class who boot and loop everything's
@@ -136,45 +136,7 @@ Utils.tryCatch(Main.initialize);
 //
 // -------------------------------------------------------
 
-document.addEventListener('keydown', function (event) {
-    if (Main.loaded && !Manager.Stack.isLoading()) {
-        let key = event.keyCode;
-
-        // On pressing F12, quit game
-        if (key === KeyEvent.DOM_VK_F12) {
-            Platform.quit();
-        }
-        // If not repeat, call simple press RPM event
-        if (!event.repeat) {
-            if (KeyEvent.keysPressed.indexOf(key) === -1) {
-                KeyEvent.keysPressed.push(key);
-                Manager.Stack.onKeyPressed(key);
-                // If is loading, that means a new scene was created, return
-                if (Manager.Stack.isLoading()) {
-                    return;
-                }
-            }
-        }
-
-        // Also always call pressed and repeat RPM event
-        Manager.Stack.onKeyPressedAndRepeat(key);
-    }
-}, false);
-
-// -------------------------------------------------------
-
-document.addEventListener('keyup', function (event) {
-    if (Main.loaded && !Manager.Stack.isLoading()) {
-        let key = event.keyCode;
-        // Remove this key from pressed keys list
-        KeyEvent.keysPressed.splice(KeyEvent.keysPressed.indexOf(key), 1);
-
-        // Call release RPM event
-        Manager.Stack.onKeyReleased(key);
-    } else {
-        KeyEvent.keysPressed = [];
-    }
-}, false);
+Inputs.initialize();
 
 // -------------------------------------------------------
 //

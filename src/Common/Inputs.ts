@@ -1,0 +1,110 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2021 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+import { Manager } from "..";
+import { Main } from "../main";
+import { KeyEvent } from "./KeyEvent";
+import { Platform } from "./Platform";
+
+/**
+ *  @class
+ *  Handles inputs for keyboard and mouse.
+ */
+class Inputs {
+
+    constructor() {
+        throw new Error("This is a static class");
+    }
+
+    /** 
+     *  Initialize all keyboard and mouse events.
+     *  @static
+     */
+    static initialize() {
+        this.initializeKeyboard();
+        this.initializeMouse();
+    }
+
+    /** 
+     *  Initialize all keyboard events.
+     *  @static
+     */
+    static initializeKeyboard() {
+        // Key down
+        document.addEventListener('keydown', function (event) {
+            if (Main.loaded && !Manager.Stack.isLoading()) {
+                let key = event.keyCode;
+        
+                // On pressing F12, quit game
+                if (key === KeyEvent.DOM_VK_F12) {
+                    Platform.quit();
+                }
+                // If not repeat, call simple press RPM event
+                if (!event.repeat) {
+                    if (KeyEvent.keysPressed.indexOf(key) === -1) {
+                        KeyEvent.keysPressed.push(key);
+                        Manager.Stack.onKeyPressed(key);
+                        // If is loading, that means a new scene was created, return
+                        if (Manager.Stack.isLoading()) {
+                            return;
+                        }
+                    }
+                }
+        
+                // Also always call pressed and repeat RPM event
+                Manager.Stack.onKeyPressedAndRepeat(key);
+            }
+        }, false);
+
+        // Key up
+        document.addEventListener('keyup', function (event) {
+            if (Main.loaded && !Manager.Stack.isLoading()) {
+                let key = event.keyCode;
+                // Remove this key from pressed keys list
+                KeyEvent.keysPressed.splice(KeyEvent.keysPressed.indexOf(key), 1);
+        
+                // Call release RPM event
+                Manager.Stack.onKeyReleased(key);
+            } else {
+                KeyEvent.keysPressed = [];
+            }
+        }, false);
+    }
+
+    /** 
+     *  Initialize all mouse events.
+     *  @static
+     */
+    static initializeMouse() {
+        // Mouse down
+        document.addEventListener('mousedown', function (event) {
+            if (Main.loaded && !Manager.Stack.isLoading()) {
+                Manager.Stack.onMouseDown(event.clientX, event.clientY);
+            }
+        }, false);
+
+        // Mouse move
+        document.addEventListener('mousemove', function (event) {
+            if (Main.loaded && !Manager.Stack.isLoading()) {
+                Manager.Stack.onMouseMove(event.clientX, event.clientY);
+            }
+        }, false);
+
+        // Mouse up
+        document.addEventListener('mouseup', function (event) {
+            if (Main.loaded && !Manager.Stack.isLoading()) {
+                Manager.Stack.onMouseUp(event.clientX, event.clientY);
+            }
+        }, false);
+    }
+}
+
+export { Inputs }

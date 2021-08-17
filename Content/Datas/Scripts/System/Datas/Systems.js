@@ -54,6 +54,7 @@ class Systems {
         ScreenResolution.WINDOW_Y = ScreenResolution.CANVAS_HEIGHT /
             ScreenResolution.SCREEN_Y;
         this.antialias = Utils.defaultValue(json.aa, false);
+        this.isMouseControls = Utils.defaultValue(json.isMouseControls, true);
         // Other numbers
         this.SQUARE_SIZE = json.ss;
         this.PORTIONS_RAY_NEAR = Utils.defaultValue(json.portionRayIngame, 3);

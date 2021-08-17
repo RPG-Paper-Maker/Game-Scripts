@@ -14,6 +14,7 @@ declare class Systems {
     static ID_OBJECT_START_HERO: number;
     static projectName: System.Translatable;
     static antialias: boolean;
+    static isMouseControls: boolean;
     static mountainCollisionHeight: System.DynamicValue;
     static mountainCollisionAngle: System.DynamicValue;
     static mapFrameDuration: System.DynamicValue;

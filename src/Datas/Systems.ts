@@ -28,6 +28,7 @@ class Systems {
     public static ID_OBJECT_START_HERO: number;
     public static projectName: System.Translatable;
     public static antialias: boolean;
+    public static isMouseControls: boolean;
     public static mountainCollisionHeight: System.DynamicValue;
     public static mountainCollisionAngle: System.DynamicValue;
     public static mapFrameDuration: System.DynamicValue;
@@ -103,6 +104,7 @@ class Systems {
         ScreenResolution.WINDOW_Y = ScreenResolution.CANVAS_HEIGHT / 
             ScreenResolution.SCREEN_Y;
         this.antialias = Utils.defaultValue(json.aa, false);
+        this.isMouseControls = Utils.defaultValue(json.isMouseControls, true);
 
         // Other numbers
         this.SQUARE_SIZE = json.ss;

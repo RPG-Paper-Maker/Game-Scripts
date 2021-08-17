@@ -219,8 +219,7 @@ class ReactionInterpreter {
      *  @param {number} key - The key ID pressed
      */
     onKeyPressed(key) {
-        if (!this.isFinished() && (!Scene.Map.current.loading && this
-            .canExecute())) {
+        if (!this.isFinished() && (!Scene.Map.current.loading && this.canExecute())) {
             this.currentCommand.data.onKeyPressed(this.currentCommandState, key);
         }
     }
@@ -229,8 +228,7 @@ class ReactionInterpreter {
      *  @param {number} key - The key ID released
      */
     onKeyReleased(key) {
-        if (!this.isFinished() && (!Scene.Map.current.loading && this
-            .canExecute())) {
+        if (!this.isFinished() && (!Scene.Map.current.loading && this.canExecute())) {
             this.currentCommand.data.onKeyReleased(this.currentCommandState, key);
         }
     }
@@ -240,8 +238,7 @@ class ReactionInterpreter {
      *  @returns {boolean} false if the other keys are blocked after it
      */
     onKeyPressedRepeat(key) {
-        if (!this.isFinished() && (!Scene.Map.current.loading && this
-            .canExecute())) {
+        if (!this.isFinished() && (!Scene.Map.current.loading && this.canExecute())) {
             return this.currentCommand.data.onKeyPressedRepeat(this
                 .currentCommandState, key);
         }
@@ -254,12 +251,41 @@ class ReactionInterpreter {
      *  @returns {boolean} false if the other keys are blocked after it
     */
     onKeyPressedAndRepeat(key) {
-        if (!this.isFinished() && (!Scene.Map.current.loading && this
-            .canExecute())) {
+        if (!this.isFinished() && (!Scene.Map.current.loading && this.canExecute())) {
             return this.currentCommand.data.onKeyPressedAndRepeat(this
                 .currentCommandState, key);
         }
         return true;
+    }
+    /**
+     *  Mouse down handle for the current command.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseDown(x, y) {
+        if (!this.isFinished() && (!Scene.Map.current.loading && this.canExecute())) {
+            return this.currentCommand.data.onMouseDown(this.currentCommandState, x, y);
+        }
+    }
+    /**
+     *  Mouse move handle for the current command.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseMove(x, y) {
+        if (!this.isFinished() && (!Scene.Map.current.loading && this.canExecute())) {
+            return this.currentCommand.data.onMouseMove(this.currentCommandState, x, y);
+        }
+    }
+    /**
+     *  Mouse up handle for the current command.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseUp(x, y) {
+        if (!this.isFinished() && (!Scene.Map.current.loading && this.canExecute())) {
+            return this.currentCommand.data.onMouseUp(this.currentCommandState, x, y);
+        }
     }
     /**
      *  Draw HUD for the current command

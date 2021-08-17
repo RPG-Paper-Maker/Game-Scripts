@@ -36,7 +36,7 @@ class SpecialElements {
     /**
      *  Get the autotile by ID.
      *  @param {number} id
-     *  @returns {System.SpecialElement}
+     *  @returns {System.Autotile}
      */
     static getAutotile(id) {
         return Datas.Base.get(id, this.autotiles, "autotile");

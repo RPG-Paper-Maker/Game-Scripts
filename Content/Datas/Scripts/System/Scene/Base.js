@@ -12,14 +12,13 @@ import { ReactionInterpreter } from "../Core/index.js";
 import { Scene, Manager } from "../index.js";
 import { Utils } from "../Common/index.js";
 /**
- * The superclass who shape the structure of a scene.
- *
- * @abstract
- * @class Base
+ *  The superclass who shape the structure of a scene.
+ *  @abstract
  */
 class Base {
     /**
-     * @param {boolean} [loading - = true] tell whether or not the scene is loading asynchronosively.
+     *  @param {boolean} [loading = true] - Tells whether or not the scene is
+     *  loading asynchronosively.
      */
     constructor(loading = true, ...args) {
         this.reactionInterpreters = new Array;
@@ -32,29 +31,23 @@ class Base {
         }
         this.create();
     }
-    initialize(...args) {
-    }
-    ;
+    initialize(...args) { }
     /**
-     * assign and create all the contents of the scene synchronously.
+     *  Assign and create all the contents of the scene synchronously.
      *
-     * @example
-     * create(){
-     *   super.create();
-     *   this.createAllWindows();
-     * }
-     * @memberof Base
+     *  @example
+     *  create(){
+     *    super.create();
+     *    this.createAllWindows();
+     *  }
      */
     create() { }
-    ;
     /**
-     * Load the scene asynchronous contents.
-     * @example
-     * // Load an the titlescreen background into the scene.
+     *  Load the scene asynchronous contents.
+     *  @example
+     *  // Load an the titlescreen background into the scene.
      *  const picture = await Picture2D.createWithID(null,null,null);
-     *
-     * @async
-     * @memberof Base
+     *  @async
      */
     async load() {
         this.loading = false;
@@ -62,34 +55,32 @@ class Base {
     /**
      *  Translate the scene if possible.
      */
-    translate() {
-    }
+    translate() { }
     /**
-     * Update all the reaction interpreters from the scenes.
-     *
-     * @memberof Base
+     *  Update all the reaction interpreters from the scenes.
      */
     updateInterpreters() {
         // Index of all the finished parallel reactions
         let endingReactions = new Array;
         // Updating blocking hero
         ReactionInterpreter.blockingHero = false;
-        let i, l;
-        for (i = 0, l = this.reactionInterpreters.length; i < l; i++) {
-            if (this.reactionInterpreters[i].currentReaction.blockingHero) {
+        let reaction;
+        ReactionInterpreter;
+        for (reaction of this.reactionInterpreters) {
+            if (reaction.currentReaction.blockingHero) {
                 ReactionInterpreter.blockingHero = true;
                 break;
             }
         }
         // Updating all reactions
-        let interpreter, effectIndex;
+        let effectIndex, i, l;
         for (i = 0, l = this.reactionInterpreters.length; i < l; i++) {
-            interpreter = this.reactionInterpreters[i];
-            interpreter.update();
-            if (interpreter.isFinished()) {
-                interpreter.updateFinish();
+            reaction = this.reactionInterpreters[i];
+            reaction.update();
+            if (reaction.isFinished()) {
+                reaction.updateFinish();
                 endingReactions.push(i);
-                effectIndex = this.reactionInterpretersEffects.indexOf(interpreter);
+                effectIndex = this.reactionInterpretersEffects.indexOf(reaction);
                 if (effectIndex !== -1) {
                     this.reactionInterpretersEffects.splice(effectIndex, 1);
                 }
@@ -105,9 +96,7 @@ class Base {
         }
     }
     /**
-     * Update all the parallel commands from the scenes.
-     *
-     * @memberof Base
+     *  Update all the parallel commands from the scenes.
      */
     updateParallelCommands() {
         let endingCommands = new Array; // Index of all the finished commands
@@ -133,16 +122,13 @@ class Base {
      * @param {System.DynamicValue[]} parameters - All the parameters coming with this reaction
      * @param {[System.Event, number]} - event the time events values
      * @param {boolean} [moving=false] - indicate if the command is of type moving.
-     * @return {*}  {ReactionInterpreter}
-     *
-     * @memberof Base
+     * @return {ReactionInterpreter}
      */
     addReaction(sender, reaction, object, state, parameters, event, moving = false) {
         if (reaction.getFirstCommand() !== null) {
             let excecuted = false;
             let reactionInterpreter;
-            for (let i = 0, l = this.reactionInterpreters.length; i < l; i++) {
-                reactionInterpreter = this.reactionInterpreters[i];
+            for (reactionInterpreter of this.reactionInterpreters) {
                 if (reactionInterpreter.currentMapObject === object &&
                     reactionInterpreter.currentReaction === reaction) {
                     excecuted = true;
@@ -164,92 +150,101 @@ class Base {
     }
     /**
      * Update the scene.
-     *
-     * @memberof Base
      */
     update() {
         // Parallel reactions
         this.updateInterpreters.call(this);
-        //Base.prototype.updateInterpreters.call(this);
         // Parallel commands
         this.updateParallelCommands.call(this);
-        // Base.prototype.updateParallelCommands.call(this);
     }
     /**
-     * Handle the scene reactions when a key is pressed.
-     *
-     * @param {number} key - the key ID
-     * @memberof Base
+     *  Handle the scene reactions when a key is pressed.
+     *  @param {number} key - the key ID
      */
     onKeyPressed(key) {
-        for (let i = 0, l = this.reactionInterpreters.length; i < l; i++) {
-            this.reactionInterpreters[i].onKeyPressed(key);
+        for (let reaction of this.reactionInterpreters) {
+            reaction.onKeyPressed(key);
         }
     }
     /**
-     * Handle the scene reactions when a key is released.
-     *
-     * @param {number} key - the key ID
-     * @memberof Base
+     *  Handle the scene reactions when a key is released.
+     *  @param {number} key - the key ID
      */
     onKeyReleased(key) {
-        for (let i = 0, l = this.reactionInterpreters.length; i < l; i++) {
-            this.reactionInterpreters[i].onKeyReleased(key);
+        for (let reaction of this.reactionInterpreters) {
+            reaction.onKeyReleased(key);
         }
     }
     /**
-     * Handle the scene reactions when a key is repeated
-     *
-     * @param {number} key - The key ID
-     * @return {*}  {boolean}
-     * @memberof Base
+     *  Handle the scene reactions when a key is repeated.
+     *  @param {number} key - The key ID
+     *  @return {boolean}
      */
     onKeyPressedRepeat(key) {
-        for (let i = 0, l = this.reactionInterpreters.length; i < l; i++) {
-            this.reactionInterpreters[i].onKeyPressedRepeat(key);
+        for (let reaction of this.reactionInterpreters) {
+            reaction.onKeyPressedRepeat(key);
         }
         return true;
     }
     /**
-     * Handle scene reactions when a key is pressed and repeated
-     *
-     * @param {number} key
-     * @return {*}  {boolean}
-     * @memberof Base
+     *  Handle scene reactions when a key is pressed and repeated.
+     *  @param {number} key
+     *  @return {boolean}
      */
     onKeyPressedAndRepeat(key) {
-        for (let i = 0, l = this.reactionInterpreters.length; i < l; i++) {
-            this.reactionInterpreters[i].onKeyPressedAndRepeat(key);
+        for (let reaction of this.reactionInterpreters) {
+            reaction.onKeyPressedAndRepeat(key);
         }
         return true;
     }
     /**
-     * Draw the contents in the 3D scene.
-     *
-     * @memberof Base
+     *  Mouse down handle for the scene.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
      */
-    draw3D() {
+    onMouseDown(x, y) {
+        for (let reaction of this.reactionInterpreters) {
+            reaction.onMouseDown(x, y);
+        }
     }
     /**
-     * Draw the HUD contents on the scene.
-     *
-     * @memberof Base
+     *  Mouse move handle for the scene.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseMove(x, y) {
+        for (let reaction of this.reactionInterpreters) {
+            reaction.onMouseMove(x, y);
+        }
+    }
+    /**
+     *  Mouse up handle for the scene.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseUp(x, y) {
+        for (let reaction of this.reactionInterpreters) {
+            reaction.onMouseUp(x, y);
+        }
+    }
+    /**
+     *  Draw the contents in the 3D scene.
+     */
+    draw3D() { }
+    /**
+     *  Draw the HUD contents on the scene.
      */
     drawHUD() {
-        let i, l;
-        for (i = 0, l = this.reactionInterpreters.length; i < l; i++) {
-            this.reactionInterpreters[i].drawHUD();
+        for (let reaction of this.reactionInterpreters) {
+            reaction.drawHUD();
         }
-        for (i = 0, l = this.parallelCommands.length; i < l; i++) {
-            this.parallelCommands[i].drawHUD();
+        for (let command of this.parallelCommands) {
+            command.drawHUD();
         }
     }
     /**
-     * Close the scene.
-     *
-     * @memberof Base
+     *  Close the scene.
      */
-    close() {
-    }
+    close() { }
 }
 export { Base };

@@ -199,6 +199,36 @@ class Stack {
         return this.isEmpty() ? true : this.top.onKeyPressedAndRepeat(key);
     }
     /**
+     *  Mouse down handle for the current stack.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    static onMouseDown(x, y) {
+        if (!this.isEmpty()) {
+            this.top.onMouseDown(x, y);
+        }
+    }
+    /**
+     *  Mouse move handle for the current stack.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    static onMouseMove(x, y) {
+        if (!this.isEmpty()) {
+            this.top.onMouseMove(x, y);
+        }
+    }
+    /**
+     *  Mouse up handle for the current stack.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    static onMouseUp(x, y) {
+        if (!this.isEmpty()) {
+            this.top.onMouseUp(x, y);
+        }
+    }
+    /**
      *  Draw the 3D for the current stack.
      */
     static draw3D() {

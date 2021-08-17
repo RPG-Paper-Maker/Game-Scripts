@@ -1,71 +1,62 @@
 import { Camera, ReactionInterpreter, MapObject } from "../Core/index.js";
 import { System } from "../index.js";
 /**
- * The superclass who shape the structure of a scene.
- *
- * @abstract
- * @class Base
+ *  The superclass who shape the structure of a scene.
+ *  @abstract
  */
 declare abstract class Base {
     /**
-     * An array of reaction interpreters.
-     *
-     * @type {ReactionInterpreter[]}
-     * @memberof Base
+     *  An array of reaction interpreters.
+     *  @type {ReactionInterpreter[]}
+     *  @memberof Base
      */
     reactionInterpreters: ReactionInterpreter[];
     /**
-     * An array of reaction interpreters caused by effects.
-     *
-     * @type {ReactionInterpreter[]}
-     * @memberof Base
+     *  An array of reaction interpreters caused by effects.
+     *  @type {ReactionInterpreter[]}
+     *  @memberof Base
      */
     reactionInterpretersEffects: ReactionInterpreter[];
     /**
-     * the array holding parallel commands.
-     *
-     * @type {ReactionInterpreter[]}
-     * @memberof Base
+     *  The array holding parallel commands.
+     *  @type {ReactionInterpreter[]}
+     *  @memberof Base
      */
     parallelCommands: ReactionInterpreter[];
     /**
-     * the async loading flag.
-     *
-     * @type {boolean}
-     * @memberof Base
+     *  The async loading flag.
+     *  @type {boolean}
+     *  @memberof Base
      */
     loading: boolean;
     /**
-     * The scene camera.
-     *
-     * @type {Camera}
-     * @memberof Base
+     *  The scene camera.
+     *  @type {Camera}
+     *  @memberof Base
      */
     camera: Camera;
     /**
-     * @param {boolean} [loading - = true] tell whether or not the scene is loading asynchronosively.
+     *  @param {boolean} [loading = true] - Tells whether or not the scene is
+     *  loading asynchronosively.
      */
     constructor(loading?: boolean, ...args: any);
     initialize(...args: any): void;
     /**
-     * assign and create all the contents of the scene synchronously.
+     *  Assign and create all the contents of the scene synchronously.
      *
-     * @example
-     * create(){
-     *   super.create();
-     *   this.createAllWindows();
-     * }
-     * @memberof Base
+     *  @example
+     *  create(){
+     *    super.create();
+     *    this.createAllWindows();
+     *  }
      */
     create(): void;
     /**
-     * Load the scene asynchronous contents.
-     * @example
-     * // Load an the titlescreen background into the scene.
+     *  Load the scene asynchronous contents.
+     *  @example
+     *  // Load an the titlescreen background into the scene.
      *  const picture = await Picture2D.createWithID(null,null,null);
-     *
-     * @async
-     * @memberof Base
+     *  @async
      */
     load(): Promise<void>;
     /**
@@ -73,15 +64,11 @@ declare abstract class Base {
      */
     translate(): void;
     /**
-     * Update all the reaction interpreters from the scenes.
-     *
-     * @memberof Base
+     *  Update all the reaction interpreters from the scenes.
      */
     updateInterpreters(): void;
     /**
-     * Update all the parallel commands from the scenes.
-     *
-     * @memberof Base
+     *  Update all the parallel commands from the scenes.
      */
     updateParallelCommands(): void;
     /**
@@ -94,9 +81,7 @@ declare abstract class Base {
      * @param {System.DynamicValue[]} parameters - All the parameters coming with this reaction
      * @param {[System.Event, number]} - event the time events values
      * @param {boolean} [moving=false] - indicate if the command is of type moving.
-     * @return {*}  {ReactionInterpreter}
-     *
-     * @memberof Base
+     * @return {ReactionInterpreter}
      */
     addReaction(sender: MapObject, reaction: System.Reaction, object: MapObject, state: number, parameters: System.DynamicValue[], event: [
         System.Event,
@@ -104,56 +89,58 @@ declare abstract class Base {
     ], moving?: boolean): ReactionInterpreter;
     /**
      * Update the scene.
-     *
-     * @memberof Base
      */
     update(): void;
     /**
-     * Handle the scene reactions when a key is pressed.
-     *
-     * @param {number} key - the key ID
-     * @memberof Base
+     *  Handle the scene reactions when a key is pressed.
+     *  @param {number} key - the key ID
      */
     onKeyPressed(key: number): void;
     /**
-     * Handle the scene reactions when a key is released.
-     *
-     * @param {number} key - the key ID
-     * @memberof Base
+     *  Handle the scene reactions when a key is released.
+     *  @param {number} key - the key ID
      */
     onKeyReleased(key: number): void;
     /**
-     * Handle the scene reactions when a key is repeated
-     *
-     * @param {number} key - The key ID
-     * @return {*}  {boolean}
-     * @memberof Base
+     *  Handle the scene reactions when a key is repeated.
+     *  @param {number} key - The key ID
+     *  @return {boolean}
      */
     onKeyPressedRepeat(key: number): boolean;
     /**
-     * Handle scene reactions when a key is pressed and repeated
-     *
-     * @param {number} key
-     * @return {*}  {boolean}
-     * @memberof Base
+     *  Handle scene reactions when a key is pressed and repeated.
+     *  @param {number} key
+     *  @return {boolean}
      */
     onKeyPressedAndRepeat(key: number): boolean;
     /**
-     * Draw the contents in the 3D scene.
-     *
-     * @memberof Base
+     *  Mouse down handle for the scene.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseDown(x: number, y: number): void;
+    /**
+     *  Mouse move handle for the scene.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseMove(x: number, y: number): void;
+    /**
+     *  Mouse up handle for the scene.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseUp(x: number, y: number): void;
+    /**
+     *  Draw the contents in the 3D scene.
      */
     draw3D(): void;
     /**
-     * Draw the HUD contents on the scene.
-     *
-     * @memberof Base
+     *  Draw the HUD contents on the scene.
      */
     drawHUD(): void;
     /**
-     * Close the scene.
-     *
-     * @memberof Base
+     *  Close the scene.
      */
     close(): void;
 }

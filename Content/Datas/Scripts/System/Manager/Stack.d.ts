@@ -102,6 +102,24 @@ declare class Stack {
      */
     static onKeyPressedAndRepeat(key: number): boolean;
     /**
+     *  Mouse down handle for the current stack.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    static onMouseDown(x: number, y: number): void;
+    /**
+     *  Mouse move handle for the current stack.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    static onMouseMove(x: number, y: number): void;
+    /**
+     *  Mouse up handle for the current stack.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    static onMouseUp(x: number, y: number): void;
+    /**
      *  Draw the 3D for the current stack.
      */
     static draw3D(): void;

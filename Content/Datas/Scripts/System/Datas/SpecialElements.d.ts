@@ -16,9 +16,9 @@ declare class SpecialElements {
     /**
      *  Get the autotile by ID.
      *  @param {number} id
-     *  @returns {System.SpecialElement}
+     *  @returns {System.Autotile}
      */
-    static getAutotile(id: number): System.SpecialElement;
+    static getAutotile(id: number): System.Autotile;
     /**
      *  Get the wall by ID.
      *  @param {number} id

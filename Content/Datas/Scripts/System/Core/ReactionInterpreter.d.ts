@@ -96,6 +96,24 @@ declare class ReactionInterpreter {
     */
     onKeyPressedAndRepeat(key: number): boolean;
     /**
+     *  Mouse down handle for the current command.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseDown(x: number, y: number): any;
+    /**
+     *  Mouse move handle for the current command.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseMove(x: number, y: number): any;
+    /**
+     *  Mouse up handle for the current command.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseUp(x: number, y: number): any;
+    /**
      *  Draw HUD for the current command
      */
     drawHUD(): void;

@@ -2,7 +2,8 @@ import { MapObject } from "../Core/index.js";
 interface StructIterator {
     i: number;
 }
-/** @class
+/**
+ *  @class
  *  An abstract event command.
  */
 declare abstract class Base {
@@ -49,6 +50,27 @@ declare abstract class Base {
      *  @returns {boolean}
      */
     onKeyPressedAndRepeat(currentState: Object, key: number): boolean;
+    /**
+     *  Mouse down handle for the current stack.
+     *  @param {Object} currentState - The current state of the event
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseDown(currentState: Object, x: number, y: number): void;
+    /**
+     *  Mouse move handle for the current stack.
+     *  @param {Object} currentState - The current state of the event
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseMove(currentState: Object, x: number, y: number): void;
+    /**
+     *  Mouse up handle for the current stack.
+     *  @param {Object} currentState - The current state of the event
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseUp(currentState: Object, x: number, y: number): void;
     /**
      *  Draw the HUD.
      *  @param {Object} currentState - The current state of the event
