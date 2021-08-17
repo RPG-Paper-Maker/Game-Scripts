@@ -78,7 +78,7 @@ class TitleScreen extends Base {
             WindowBox.MEDIUM_SLOT_WIDTH, WindowBox.MEDIUM_SLOT_HEIGHT, Datas
                 .TitlescreenGameover.getCommandsNames(),
             {
-                nbItemsMax: commandsNb,
+                nbItemsMax: 2,
                 listCallbacks: Datas.TitlescreenGameover.getCommandsActions(),
                 padding: [0, 0, 0, 0]
             }
@@ -102,6 +102,13 @@ class TitleScreen extends Base {
 
     /**
      *  @inheritdoc
+     */
+    update() {
+        this.windowChoicesCommands.update();
+    }
+
+    /**
+     *  @inheritdoc
      *  @param {number} key - the key ID
      */
     onKeyPressed(key: number) {
@@ -116,6 +123,13 @@ class TitleScreen extends Base {
      */
     onKeyPressedAndRepeat(key: number): boolean {
         return this.windowChoicesCommands.onKeyPressedAndRepeat(key);
+    }
+
+    /** 
+     *  @inheritdoc
+     */
+    onMouseDown(x: number, y: number) {
+        this.windowChoicesCommands.onMouseDown(x, y);
     }
 
     /** 

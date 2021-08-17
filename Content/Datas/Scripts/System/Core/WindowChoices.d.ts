@@ -82,6 +82,7 @@ interface ChoicesOptions {
  */
 declare class WindowChoices extends Bitmap {
     static TIME_WAIT_PRESS: number;
+    static TIME_WAIT_MOUSE_ARROW: number;
     orientation: OrientationWindow;
     nbItemsMax: number;
     padding: number[];
@@ -93,11 +94,14 @@ declare class WindowChoices extends Bitmap {
     choiceWidth: number;
     choiceHeight: number;
     startTime: number;
+    mouseArrowTime: number;
     listContents: Graphic.Base[];
     listWindows: WindowBox[];
     listCallBacks: Function[];
     windowMain: WindowBox;
     size: number;
+    isMouseInArrowUp: boolean;
+    isMouseInArrowDown: boolean;
     constructor(x: number, y: number, w: number, h: number, listContents: any[], options?: ChoicesOptions);
     /**
      *  Set the x value.
@@ -177,6 +181,18 @@ declare class WindowChoices extends Bitmap {
      */
     goDown(): void;
     /**
+     *  Go arrow up.
+     */
+    goArrowUp(): void;
+    /**
+     *  Go arrow down.
+     */
+    goArrowDown(): void;
+    /**
+     *  Update the widget.
+     */
+    update(): void;
+    /**
      *  First key press handle.
      *  @param {number} key - The key ID pressed
      *  @param {Object} base - The base object to apply with callback
@@ -189,6 +205,12 @@ declare class WindowChoices extends Bitmap {
      *  @returns {boolean} false if the other keys are blocked after it
      */
     onKeyPressedAndRepeat(key: number): boolean;
+    /**
+     *  Mouse down handle for the current stack.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseDown(x: number, y: number): void;
     /**
      *  Mouse move handle for the current stack.
      *  @param {number} x - The x mouse position on screen

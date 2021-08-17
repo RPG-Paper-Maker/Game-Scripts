@@ -10,10 +10,11 @@
 */
 
 import { Bitmap } from "./Bitmap";
-import { Enum, Utils } from "../Common";
+import { Enum, ScreenResolution, Utils } from "../Common";
 import OrientationWindow = Enum.OrientationWindow;
 import { Graphic, Manager, Datas } from "../index";
 import { WindowBox } from "./WindowBox";
+import { Rectangle } from "./Rectangle";
 
 /**
  * the choices options used for the window initialization
@@ -99,6 +100,7 @@ interface ChoicesOptions {
 class WindowChoices extends Bitmap {
 
     public static TIME_WAIT_PRESS = 50;
+    public static TIME_WAIT_MOUSE_ARROW = 200;
 
     public orientation: OrientationWindow;
     public nbItemsMax: number;
@@ -111,11 +113,14 @@ class WindowChoices extends Bitmap {
     public choiceWidth: number;
     public choiceHeight: number;
     public startTime: number;
+    public mouseArrowTime: number;
     public listContents: Graphic.Base[];
     public listWindows: WindowBox[];
     public listCallBacks: Function[];
     public windowMain: WindowBox;
     public size: number;
+    public isMouseInArrowUp: boolean = false;
+    public isMouseInArrowDown: boolean = false;
 
     constructor(x: number, y: number, w: number, h: number, listContents: any[], options: ChoicesOptions = {}) {
         super(x, y, w, h);
@@ -138,6 +143,7 @@ class WindowChoices extends Bitmap {
         this.choiceWidth = w;
         this.choiceHeight = h;
         this.startTime = new Date().getTime();
+        this.mouseArrowTime = new Date().getTime();
 
         // Initialize contents choices and callbacks
         this.setContentsCallbacks(listContents, options.listCallbacks,
@@ -400,7 +406,45 @@ class WindowChoices extends Bitmap {
             Datas.Systems.soundCursor.playSound();
             Manager.Stack.requestPaintHUD = true;
         }
-        console.log(this.currentSelectedIndex, this.offsetSelectedIndex)
+    }
+
+    /** 
+     *  Go arrow up.
+     */
+    goArrowUp() {
+        this.offsetSelectedIndex++;
+        Datas.Systems.soundCursor.playSound();
+        Manager.Stack.requestPaintHUD = true;
+    }
+
+    /** 
+     *  Go arrow down.
+     */
+    goArrowDown() {
+        this.offsetSelectedIndex--;
+        Datas.Systems.soundCursor.playSound();
+        Manager.Stack.requestPaintHUD = true;
+    }
+
+    /** 
+     *  Update the widget.
+     */
+    update() {
+        let t = new Date().getTime();
+        if (t - this.mouseArrowTime >= WindowChoices.TIME_WAIT_MOUSE_ARROW) {
+            this.mouseArrowTime = t;
+            let offset = this.currentSelectedIndex === -1 ? -1 : this
+                .offsetSelectedIndex;
+            // If pressing on arrow up
+            if (this.isMouseInArrowUp && this.currentSelectedIndex - offset > 0) {
+                this.goArrowUp();
+            }
+            // If pressing on arrow down
+            if (this.isMouseInArrowDown && this.currentSelectedIndex - offset < 
+                this.listWindows.length - this.nbItemsMax) {
+                this.goArrowDown();
+            }
+        }
     }
 
     /** 
@@ -468,11 +512,25 @@ class WindowChoices extends Bitmap {
     }
 
     /** 
+     *  Mouse down handle for the current stack.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseDown(x: number, y: number) {
+        
+    }
+
+    /** 
      *  Mouse move handle for the current stack.
      *  @param {number} x - The x mouse position on screen
      *  @param {number} y - The y mouse position on screen
      */
     onMouseMove(x: number, y: number) {
+        if (!Datas.Systems.isMouseControls) {
+            return;
+        }
+        this.isMouseInArrowDown = false;
+        this.isMouseInArrowUp = false;
         // If inside the main window
         if (this.currentSelectedIndex !== -1 && this.isInside(x, y)) {
             let index: number;
@@ -483,13 +541,39 @@ class WindowChoices extends Bitmap {
                 index = Math.floor((y - this.y) / (this.choiceHeight + this.space));
             }
             // If different index, then change it visually + sound
-            if (this.offsetSelectedIndex !== index) {
+            if (this.offsetSelectedIndex !== index && index < this.nbItemsMax) {
                 Datas.Systems.soundCursor.playSound();
                 this.listWindows[this.currentSelectedIndex].selected = false;
                 this.currentSelectedIndex += index - this.offsetSelectedIndex;
                 this.offsetSelectedIndex = index;
                 this.listWindows[this.currentSelectedIndex].selected = true;
                 Manager.Stack.requestPaintHUD = true;
+            }
+        } else {
+            // If on arrow
+            let offset = this.currentSelectedIndex === -1 ? -1 : this
+                .offsetSelectedIndex;
+            let ws = Datas.Systems.getCurrentWindowSkin();
+            const arrowWidth = ScreenResolution.getScreenXY(ws.arrowUpDown[2]);
+            const arrowHeight = ScreenResolution.getScreenXY(ws.arrowUpDown[3] / 2);
+            const arrowX = this.x + (this.w / 2) - (arrowWidth / 2);
+            
+            // If pressing on arrow up
+            if (this.currentSelectedIndex - offset > 0) {
+                let rect = new Rectangle(arrowX, this.y - arrowHeight - 1, 
+                    arrowWidth, arrowHeight);
+                if (rect.isInside(x, y)) {
+                    this.isMouseInArrowUp = true;
+                }
+            }
+            // If pressing on arrow down
+            if (this.currentSelectedIndex - offset < this.listWindows.length - this
+                .nbItemsMax) {
+                let rect = new Rectangle(arrowX, this.y + this.h + 1, arrowWidth, 
+                    arrowHeight);
+                if (rect.isInside(x, y)) {
+                    this.isMouseInArrowDown = true;
+                }
             }
         }
     }
@@ -498,6 +582,7 @@ class WindowChoices extends Bitmap {
      *  Draw the windows.
      */
     draw() {
+        // Draw windows
         if (!this.bordersInsideVisible && this.bordersVisible) {
             this.windowMain.draw();
         }

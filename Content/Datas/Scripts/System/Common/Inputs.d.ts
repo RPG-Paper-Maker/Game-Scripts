@@ -5,6 +5,10 @@
 declare class Inputs {
     static keysPressed: number[];
     static mousePressed: boolean;
+    static mouseFirstPressX: number;
+    static mouseFirstPressY: number;
+    static mouseLastMoveX: number;
+    static mouseLastMoveY: number;
     constructor();
     /**
      *  Initialize all keyboard and mouse events.

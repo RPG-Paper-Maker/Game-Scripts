@@ -83,5 +83,15 @@ class Rectangle {
     presetAnchor(anchorPreset) {
         this.anchor.set(anchorPreset);
     }
+    /**
+     *  Check if x and y are inside the rectangle.
+     *  @param {number} x
+     *  @param {number} y
+     *  @returns {boolean}
+     */
+    isInside(x, y) {
+        return x >= this.x && x <= (this.x + this.width) && y >= this.y && (y <=
+            this.y + this.height);
+    }
 }
 export { Rectangle };

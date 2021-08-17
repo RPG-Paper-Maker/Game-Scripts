@@ -31,6 +31,10 @@ declare class TitleScreen extends Base {
     translate(): void;
     /**
      *  @inheritdoc
+     */
+    update(): void;
+    /**
+     *  @inheritdoc
      *  @param {number} key - the key ID
      */
     onKeyPressed(key: number): void;
@@ -40,6 +44,10 @@ declare class TitleScreen extends Base {
      *  @return {*}  {boolean}
      */
     onKeyPressedAndRepeat(key: number): boolean;
+    /**
+     *  @inheritdoc
+     */
+    onMouseDown(x: number, y: number): void;
     /**
      *  @inheritdoc
      */

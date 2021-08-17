@@ -22,6 +22,10 @@ class Inputs {
 
     static keysPressed: number[] = [];
     static mousePressed: boolean = false;
+    static mouseFirstPressX: number = -1;
+    static mouseFirstPressY: number = -1;
+    static mouseLastMoveX: number = -1;
+    static mouseLastMoveY: number = -1;
 
     constructor() {
         throw new Error("This is a static class");
@@ -92,6 +96,8 @@ class Inputs {
             if (Main.loaded && !Manager.Stack.isLoading() && Datas.Systems
                 .isMouseControls) {
                 Inputs.mousePressed = true;
+                Inputs.mouseFirstPressX = event.clientX;
+                Inputs.mouseFirstPressY = event.clientY;
                 Manager.Stack.onMouseDown(event.clientX, event.clientY);
             }
         }, false);
@@ -101,6 +107,8 @@ class Inputs {
             if (Main.loaded && !Manager.Stack.isLoading() && Datas.Systems
                 .isMouseControls) {
                 Manager.Stack.onMouseMove(event.clientX, event.clientY);
+                Inputs.mouseLastMoveX = event.clientX;
+                Inputs.mouseLastMoveY = event.clientY;
             }
         }, false);
 

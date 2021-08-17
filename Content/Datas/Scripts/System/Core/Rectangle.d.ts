@@ -58,5 +58,12 @@ declare class Rectangle {
         x: number;
         y: number;
     }): void;
+    /**
+     *  Check if x and y are inside the rectangle.
+     *  @param {number} x
+     *  @param {number} y
+     *  @returns {boolean}
+     */
+    isInside(x: number, y: number): boolean;
 }
 export { Rectangle };

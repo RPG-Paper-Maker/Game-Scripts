@@ -9,10 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Bitmap } from "./Bitmap.js";
-import { Enum, Utils } from "../Common/index.js";
+import { Enum, ScreenResolution, Utils } from "../Common/index.js";
 var OrientationWindow = Enum.OrientationWindow;
 import { Manager, Datas } from "../index.js";
 import { WindowBox } from "./WindowBox.js";
+import { Rectangle } from "./Rectangle.js";
 /**
  * The window class who handle choices.
  *
@@ -22,6 +23,8 @@ import { WindowBox } from "./WindowBox.js";
 class WindowChoices extends Bitmap {
     constructor(x, y, w, h, listContents, options = {}) {
         super(x, y, w, h);
+        this.isMouseInArrowUp = false;
+        this.isMouseInArrowDown = false;
         // Parameters
         this.orientation = Utils.defaultValue(options.orientation, OrientationWindow.Vertical);
         this.nbItemsMax = Utils.defaultValue(options.nbItemsMax, 4);
@@ -38,6 +41,7 @@ class WindowChoices extends Bitmap {
         this.choiceWidth = w;
         this.choiceHeight = h;
         this.startTime = new Date().getTime();
+        this.mouseArrowTime = new Date().getTime();
         // Initialize contents choices and callbacks
         this.setContentsCallbacks(listContents, options.listCallbacks, options.currentSelectedIndex);
     }
@@ -280,7 +284,42 @@ class WindowChoices extends Bitmap {
             Datas.Systems.soundCursor.playSound();
             Manager.Stack.requestPaintHUD = true;
         }
-        console.log(this.currentSelectedIndex, this.offsetSelectedIndex);
+    }
+    /**
+     *  Go arrow up.
+     */
+    goArrowUp() {
+        this.offsetSelectedIndex++;
+        Datas.Systems.soundCursor.playSound();
+        Manager.Stack.requestPaintHUD = true;
+    }
+    /**
+     *  Go arrow down.
+     */
+    goArrowDown() {
+        this.offsetSelectedIndex--;
+        Datas.Systems.soundCursor.playSound();
+        Manager.Stack.requestPaintHUD = true;
+    }
+    /**
+     *  Update the widget.
+     */
+    update() {
+        let t = new Date().getTime();
+        if (t - this.mouseArrowTime >= WindowChoices.TIME_WAIT_MOUSE_ARROW) {
+            this.mouseArrowTime = t;
+            let offset = this.currentSelectedIndex === -1 ? -1 : this
+                .offsetSelectedIndex;
+            // If pressing on arrow up
+            if (this.isMouseInArrowUp && this.currentSelectedIndex - offset > 0) {
+                this.goArrowUp();
+            }
+            // If pressing on arrow down
+            if (this.isMouseInArrowDown && this.currentSelectedIndex - offset <
+                this.listWindows.length - this.nbItemsMax) {
+                this.goArrowDown();
+            }
+        }
     }
     /**
      *  First key press handle.
@@ -347,11 +386,23 @@ class WindowChoices extends Bitmap {
         return true;
     }
     /**
+     *  Mouse down handle for the current stack.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseDown(x, y) {
+    }
+    /**
      *  Mouse move handle for the current stack.
      *  @param {number} x - The x mouse position on screen
      *  @param {number} y - The y mouse position on screen
      */
     onMouseMove(x, y) {
+        if (!Datas.Systems.isMouseControls) {
+            return;
+        }
+        this.isMouseInArrowDown = false;
+        this.isMouseInArrowUp = false;
         // If inside the main window
         if (this.currentSelectedIndex !== -1 && this.isInside(x, y)) {
             let index;
@@ -363,7 +414,7 @@ class WindowChoices extends Bitmap {
                 index = Math.floor((y - this.y) / (this.choiceHeight + this.space));
             }
             // If different index, then change it visually + sound
-            if (this.offsetSelectedIndex !== index) {
+            if (this.offsetSelectedIndex !== index && index < this.nbItemsMax) {
                 Datas.Systems.soundCursor.playSound();
                 this.listWindows[this.currentSelectedIndex].selected = false;
                 this.currentSelectedIndex += index - this.offsetSelectedIndex;
@@ -372,11 +423,36 @@ class WindowChoices extends Bitmap {
                 Manager.Stack.requestPaintHUD = true;
             }
         }
+        else {
+            // If on arrow
+            let offset = this.currentSelectedIndex === -1 ? -1 : this
+                .offsetSelectedIndex;
+            let ws = Datas.Systems.getCurrentWindowSkin();
+            const arrowWidth = ScreenResolution.getScreenXY(ws.arrowUpDown[2]);
+            const arrowHeight = ScreenResolution.getScreenXY(ws.arrowUpDown[3] / 2);
+            const arrowX = this.x + (this.w / 2) - (arrowWidth / 2);
+            // If pressing on arrow up
+            if (this.currentSelectedIndex - offset > 0) {
+                let rect = new Rectangle(arrowX, this.y - arrowHeight - 1, arrowWidth, arrowHeight);
+                if (rect.isInside(x, y)) {
+                    this.isMouseInArrowUp = true;
+                }
+            }
+            // If pressing on arrow down
+            if (this.currentSelectedIndex - offset < this.listWindows.length - this
+                .nbItemsMax) {
+                let rect = new Rectangle(arrowX, this.y + this.h + 1, arrowWidth, arrowHeight);
+                if (rect.isInside(x, y)) {
+                    this.isMouseInArrowDown = true;
+                }
+            }
+        }
     }
     /**
      *  Draw the windows.
      */
     draw() {
+        // Draw windows
         if (!this.bordersInsideVisible && this.bordersVisible) {
             this.windowMain.draw();
         }
@@ -403,4 +479,5 @@ class WindowChoices extends Bitmap {
     }
 }
 WindowChoices.TIME_WAIT_PRESS = 50;
+WindowChoices.TIME_WAIT_MOUSE_ARROW = 200;
 export { WindowChoices };
