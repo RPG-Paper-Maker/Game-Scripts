@@ -11,9 +11,7 @@
 import { Base } from "./Base.js";
 import { Datas, Graphic, Scene, Manager } from "../index.js";
 import { Picture2D, WindowBox, WindowChoices } from "../Core/index.js";
-import { Enum, Constants, ScreenResolution } from "../Common/index.js";
-var PictureKind = Enum.PictureKind;
-var Align = Enum.Align;
+import { Enum, Constants, ScreenResolution, Inputs } from "../Common/index.js";
 /** @class
  *  A scene for the keyboard assign setting.
  *  @extends Scene.Base
@@ -29,21 +27,21 @@ class KeyboardAssign extends Base {
         // Creating background
         if (Datas.TitlescreenGameover.isTitleBackgroundImage) {
             this.pictureBackground = await Picture2D.createWithID(Datas
-                .TitlescreenGameover.titleBackgroundImageID, PictureKind
+                .TitlescreenGameover.titleBackgroundImageID, Enum.PictureKind
                 .TitleScreen, { cover: true });
         }
         // Creating windows
         this.windowKeyboard = new WindowBox(Constants.HUGE_SPACE, Constants
             .HUGE_SPACE, WindowBox.MEDIUM_SLOT_WIDTH, WindowBox
             .LARGE_SLOT_HEIGHT, {
-            content: new Graphic.Text("KEYBOARD", { align: Align.Center }),
+            content: new Graphic.Text("KEYBOARD", { align: Enum.Align.Center }),
             padding: WindowBox.SMALL_SLOT_PADDING
         });
         this.windowInformations = new WindowBox(Constants.HUGE_SPACE + WindowBox
             .MEDIUM_SLOT_WIDTH + Constants.LARGE_SPACE, Constants.HUGE_SPACE, ScreenResolution.SCREEN_X - (2 * Constants.HUGE_SPACE) - WindowBox
             .MEDIUM_SLOT_WIDTH - Constants.LARGE_SPACE, WindowBox
             .LARGE_SLOT_HEIGHT, {
-            content: new Graphic.Text("Select a keyboard shortcut to edit.", { align: Align.Center }),
+            content: new Graphic.Text("Select a keyboard shortcut to edit.", { align: Enum.Align.Center }),
             padding: WindowBox.SMALL_SLOT_PADDING
         });
         this.windowChoicesMain = new WindowChoices(Constants.HUGE_SPACE, Constants.HUGE_SPACE + WindowBox.LARGE_SLOT_HEIGHT + Constants
@@ -81,6 +79,19 @@ class KeyboardAssign extends Base {
         return true;
     }
     /**
+     *  Cancel the scene.
+     */
+    cancel() {
+        Datas.Systems.soundCancel.playSound();
+        Manager.Stack.pop();
+    }
+    /**
+     *  Move keyboard assign.
+     */
+    move() {
+        this.windowPress.content = this.windowChoicesMain.getCurrentContent();
+    }
+    /**
      *  Update the scene.
      */
     update() {
@@ -99,6 +110,9 @@ class KeyboardAssign extends Base {
                 }
                 Manager.Stack.requestPaintHUD = true;
             }
+        }
+        else {
+            this.windowChoicesMain.update();
         }
     }
     /**
@@ -122,11 +136,8 @@ class KeyboardAssign extends Base {
         }
         else {
             this.windowChoicesMain.onKeyPressed(key, this);
-            if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
-                .Cancel) || Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
-                .controls.MainMenu)) {
-                Datas.Systems.soundCancel.playSound();
-                Manager.Stack.pop();
+            if (Datas.Keyboards.checkCancelMenu(key)) {
+                this.cancel();
             }
         }
     }
@@ -150,9 +161,29 @@ class KeyboardAssign extends Base {
     onKeyPressedAndRepeat(key) {
         if (!this.showPress) {
             this.windowChoicesMain.onKeyPressedAndRepeat(key);
-            this.windowPress.content = this.windowChoicesMain.getCurrentContent();
+            this.move();
         }
         return true;
+    }
+    /**
+     *  @inheritdoc
+     */
+    onMouseMove(x, y) {
+        if (!this.showPress) {
+            this.windowChoicesMain.onMouseMove(x, y);
+            this.move();
+        }
+    }
+    /**
+     *  @inheritdoc
+     */
+    onMouseUp(x, y) {
+        if (!this.showPress) {
+            this.windowChoicesMain.onMouseUp(x, y, this);
+            if (Inputs.mouseRightPressed) {
+                this.cancel();
+            }
+        }
     }
     /**
      *  Draw the HUD scene

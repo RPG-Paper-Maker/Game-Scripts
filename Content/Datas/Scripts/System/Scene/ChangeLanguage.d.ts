@@ -50,6 +50,18 @@ declare class ChangeLanguage extends Base {
      */
     createBackground(): Promise<void>;
     /**
+     *  Action the scene.
+     */
+    action(): void;
+    /**
+     *  Cancel the scene.
+     */
+    cancel(): void;
+    /**
+     *  Update the scene.
+     */
+    update(): void;
+    /**
      *  Handle scene key pressed.
      *  @param {number} key - The key ID
      */
@@ -60,6 +72,14 @@ declare class ChangeLanguage extends Base {
      *  @returns {boolean}
      */
     onKeyPressedAndRepeat(key: number): boolean;
+    /**
+     *  @inheritdoc
+     */
+    onMouseMove(x: number, y: number): void;
+    /**
+     *  @inheritdoc
+     */
+    onMouseUp(x: number, y: number): void;
     /**
      *  Draw the HUD scene
      */

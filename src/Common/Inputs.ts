@@ -96,7 +96,6 @@ class Inputs {
         document.addEventListener('mousedown', function (event) {
             if (Main.loaded && !Manager.Stack.isLoading() && Datas.Systems
                 .isMouseControls) {
-                    console.log(event.button)
                 switch (event.button) {
                     case 0:
                         Inputs.mouseLeftPressed = true;

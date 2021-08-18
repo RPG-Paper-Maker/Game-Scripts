@@ -81,6 +81,7 @@ class SaveLoadGame extends Base {
      *  Update the scene.
      */
     update() {
+        this.windowChoicesSlots.update();
         if (!this.windowInformations.content.game.isEmpty) {
             this.windowInformations.content.update();
         }

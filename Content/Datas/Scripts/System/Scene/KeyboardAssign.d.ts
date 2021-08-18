@@ -31,6 +31,14 @@ declare class KeyboardAssign extends Base {
      */
     updateKey(): boolean;
     /**
+     *  Cancel the scene.
+     */
+    cancel(): void;
+    /**
+     *  Move keyboard assign.
+     */
+    move(): void;
+    /**
      *  Update the scene.
      */
     update(): void;
@@ -50,6 +58,14 @@ declare class KeyboardAssign extends Base {
      *  @returns {boolean}
      */
     onKeyPressedAndRepeat(key: number): boolean;
+    /**
+     *  @inheritdoc
+     */
+    onMouseMove(x: number, y: number): void;
+    /**
+     *  @inheritdoc
+     */
+    onMouseUp(x: number, y: number): void;
     /**
      *  Draw the HUD scene
      */

@@ -70,6 +70,12 @@ class TitleSettings extends Base {
     translate() {
     }
     /**
+     *  @inheritdoc
+     */
+    update() {
+        this.windowChoicesMain.update();
+    }
+    /**
      *  Handle scene key pressed.
      *  @param {number} key - The key ID
      */

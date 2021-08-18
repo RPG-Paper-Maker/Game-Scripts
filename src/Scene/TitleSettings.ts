@@ -93,6 +93,13 @@ class TitleSettings extends Base {
         
     }
 
+    /**
+     *  @inheritdoc
+     */
+    update() {
+        this.windowChoicesMain.update();
+    }
+
     /** 
      *  Handle scene key pressed.
      *  @param {number} key - The key ID

@@ -23,6 +23,10 @@ declare class TitleSettings extends Base {
      */
     translate(): void;
     /**
+     *  @inheritdoc
+     */
+    update(): void;
+    /**
      *  Handle scene key pressed.
      *  @param {number} key - The key ID
      */

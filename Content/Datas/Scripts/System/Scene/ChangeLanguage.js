@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Datas, Graphic, Manager } from "../index.js";
-import { Constants, Enum, Platform, ScreenResolution } from "../Common/index.js";
+import { Constants, Enum, Inputs, Platform, ScreenResolution } from "../Common/index.js";
 import { Picture2D, Rectangle, WindowBox, WindowChoices } from "../Core/index.js";
 import { Base } from "./Base.js";
 /** @class
@@ -108,6 +108,7 @@ class ChangeLanguage extends Base {
                         .listOrder[this.windowChoicesMain.currentSelectedIndex]);
                     Manager.Stack.translateAll();
                     this.step = 0;
+                    Manager.Stack.requestPaintHUD = true;
                     return true;
                 },
                 () => {
@@ -147,6 +148,33 @@ class ChangeLanguage extends Base {
         }
     }
     /**
+     *  Action the scene.
+     */
+    action() {
+        this.windowChoicesConfirm.unselect();
+        this.windowChoicesConfirm.select(0);
+        this.step = 1;
+    }
+    /**
+     *  Cancel the scene.
+     */
+    cancel() {
+        Datas.Systems.soundCancel.playSound();
+        Manager.Stack.pop();
+    }
+    /**
+     *  Update the scene.
+     */
+    update() {
+        switch (this.step) {
+            case 0:
+                this.windowChoicesMain.update();
+            case 1:
+                this.windowChoicesConfirm.update();
+                break;
+        }
+    }
+    /**
      *  Handle scene key pressed.
      *  @param {number} key - The key ID
      */
@@ -154,16 +182,11 @@ class ChangeLanguage extends Base {
         switch (this.step) {
             case 0:
                 this.windowChoicesMain.onKeyPressed(key, this);
-                if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
-                    .Action)) {
-                    this.windowChoicesConfirm.unselect();
-                    this.windowChoicesConfirm.select(0);
-                    this.step = 1;
+                if (Datas.Keyboards.checkActionMenu(key)) {
+                    this.action();
                 }
-                else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
-                    .menuControls.Cancel) || Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.controls.MainMenu)) {
-                    Datas.Systems.soundCancel.playSound();
-                    Manager.Stack.pop();
+                else if (Datas.Keyboards.checkCancelMenu) {
+                    this.cancel();
                 }
                 break;
             case 1:
@@ -188,6 +211,40 @@ class ChangeLanguage extends Base {
                 break;
         }
         return true;
+    }
+    /**
+     *  @inheritdoc
+     */
+    onMouseMove(x, y) {
+        switch (this.step) {
+            case 0:
+                this.windowChoicesMain.onMouseMove(x, y);
+                break;
+            case 1:
+                this.windowChoicesConfirm.onMouseMove(x, y);
+                break;
+        }
+    }
+    /**
+     *  @inheritdoc
+     */
+    onMouseUp(x, y) {
+        switch (this.step) {
+            case 0:
+                this.windowChoicesMain.onMouseUp(x, y, this);
+                if (Inputs.mouseLeftPressed) {
+                    this.action();
+                }
+                else if (Inputs.mouseRightPressed) {
+                    this.cancel();
+                }
+                break;
+            case 1:
+                this.windowChoicesConfirm.onMouseUp(x, y, this);
+                break;
+            default:
+                break;
+        }
     }
     /**
      *  Draw the HUD scene

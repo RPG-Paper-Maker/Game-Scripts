@@ -532,7 +532,7 @@ class WindowChoices extends Bitmap {
                 index = Math.floor((y - this.y) / (this.choiceHeight + this.space));
             }
             // If different index, then change it visually + sound
-            if (this.offsetSelectedIndex !== index && index < this.nbItemsMax) {
+            if (this.offsetSelectedIndex !== index && index < this.size) {
                 Datas.Systems.soundCursor.playSound();
                 this.listWindows[this.currentSelectedIndex].selected = false;
                 this.currentSelectedIndex += index - this.offsetSelectedIndex;
@@ -576,6 +576,9 @@ class WindowChoices extends Bitmap {
      *  @param {Object} base - The base object to apply with callback
      */
     onMouseUp(x: number, y: number, base?: Object) {
+        if (!Datas.Systems.isMouseControls) {
+            return;
+        }
         if (this.currentSelectedIndex !== -1 && Inputs.mouseLeftPressed) {
             let callback = this.listCallBacks[this.currentSelectedIndex];
             if (callback !== null) {

@@ -12,9 +12,7 @@
 import { Base } from "./Base";
 import { Datas, Graphic, Scene, Manager } from "../index";
 import { Picture2D, WindowBox, WindowChoices } from "../Core";
-import { Enum, Constants, ScreenResolution } from "../Common";
-import PictureKind = Enum.PictureKind;
-import Align = Enum.Align;
+import { Enum, Constants, ScreenResolution, Inputs } from "../Common";
 
 /** @class
  *  A scene for the keyboard assign setting.
@@ -51,7 +49,7 @@ class KeyboardAssign extends Base {
         // Creating background
         if (Datas.TitlescreenGameover.isTitleBackgroundImage) {
             this.pictureBackground = await Picture2D.createWithID(Datas
-                .TitlescreenGameover.titleBackgroundImageID, PictureKind
+                .TitlescreenGameover.titleBackgroundImageID, Enum.PictureKind
                 .TitleScreen, { cover: true });
         }
 
@@ -60,7 +58,7 @@ class KeyboardAssign extends Base {
             .HUGE_SPACE, WindowBox.MEDIUM_SLOT_WIDTH, WindowBox
             .LARGE_SLOT_HEIGHT,
             {
-                content: new Graphic.Text("KEYBOARD", { align: Align.Center }),
+                content: new Graphic.Text("KEYBOARD", { align: Enum.Align.Center }),
                 padding: WindowBox.SMALL_SLOT_PADDING
             }
         );
@@ -71,7 +69,7 @@ class KeyboardAssign extends Base {
             .LARGE_SLOT_HEIGHT, 
             {
                 content: new Graphic.Text("Select a keyboard shortcut to edit.",
-                    { align: Align.Center }),
+                    { align: Enum.Align.Center }),
                 padding: WindowBox.SMALL_SLOT_PADDING
             }
         );
@@ -122,6 +120,21 @@ class KeyboardAssign extends Base {
     }
 
     /** 
+     *  Cancel the scene.
+     */
+    cancel() {
+        Datas.Systems.soundCancel.playSound();
+        Manager.Stack.pop();
+    }
+
+    /** 
+     *  Move keyboard assign.
+     */
+    move() {
+        this.windowPress.content = this.windowChoicesMain.getCurrentContent();
+    }
+
+    /** 
      *  Update the scene.
      */
     update() {
@@ -141,6 +154,8 @@ class KeyboardAssign extends Base {
                 }
                 Manager.Stack.requestPaintHUD = true;
             }
+        } else {
+            this.windowChoicesMain.update();
         }
     }
 
@@ -164,12 +179,8 @@ class KeyboardAssign extends Base {
             }
         } else {
             this.windowChoicesMain.onKeyPressed(key, this);
-            if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
-                .Cancel) || Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
-                .controls.MainMenu))
-            {
-                Datas.Systems.soundCancel.playSound();
-                Manager.Stack.pop();
+            if (Datas.Keyboards.checkCancelMenu(key)) {
+                this.cancel();
             }
         }
     }
@@ -195,9 +206,31 @@ class KeyboardAssign extends Base {
     onKeyPressedAndRepeat(key: number): boolean {
         if (!this.showPress) {
             this.windowChoicesMain.onKeyPressedAndRepeat(key);
-            this.windowPress.content = this.windowChoicesMain.getCurrentContent();
+            this.move();
         }
        return true;
+    }
+
+    /** 
+     *  @inheritdoc
+     */
+    onMouseMove(x: number, y: number) {
+        if (!this.showPress) {
+            this.windowChoicesMain.onMouseMove(x, y);
+            this.move();
+        }
+    }
+
+    /** 
+     *  @inheritdoc
+     */
+    onMouseUp(x: number, y: number) {
+        if (!this.showPress) {
+            this.windowChoicesMain.onMouseUp(x, y, this);
+            if (Inputs.mouseRightPressed) {
+                this.cancel();
+            }
+        }
     }
 
     /** 
