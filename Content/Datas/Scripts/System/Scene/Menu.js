@@ -117,30 +117,6 @@ class Menu extends MenuBase {
         }
     }
     /**
-     * return whether the key action is quitting to map and in window command.
-     *
-     * @param {number} key
-     * @return {*}  {boolean}
-     * @memberof Menu
-     */
-    isKeyQuittingToMap(key) {
-        const kb = Datas.Keyboards;
-        return (kb.isKeyEqual(key, kb.menuControls.Cancel)
-            || kb.isKeyEqual(key, kb.controls.MainMenu));
-    }
-    /**
-     * return whether the key action is quitting the order screen.
-     *
-     * @param {number} key
-     * @return {*}  {boolean}
-     * @memberof Menu
-     */
-    isKeyQuittingReorder(key) {
-        const kb = Datas.Keyboards;
-        return (kb.isKeyEqual(key, kb.menuControls.Cancel)
-            || kb.isKeyEqual(key, kb.controls.MainMenu));
-    }
-    /**
      * function called when quitting the menu.
      *
      * @memberof Menu
@@ -198,29 +174,39 @@ class Menu extends MenuBase {
         }
     }
     /**
+     *  A scene action.
+     */
+    action(isKey, options = {}) {
+        if (this.windowChoicesTeam.currentSelectedIndex === -1) {
+            if (isKey) {
+                this.windowChoicesCommands.onKeyPressed(options.key, this);
+            }
+            else {
+                this.windowChoicesCommands.onMouseUp(options.x, options.y, this);
+            }
+            // Quit the menu if cancelling + in window command
+            if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
+                this.onQuitMenu();
+            }
+        }
+        else {
+            // If in reorder team window
+            if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
+                this.onTeamUnselect();
+            }
+            else if (Scene.MenuBase.checkActionMenu(isKey, options)) {
+                this.onTeamSelect();
+            }
+        }
+    }
+    /**
      *  @inheritdoc
      *
      *  @param {number} key - The key ID
      */
     onKeyPressed(key) {
         super.onKeyPressed(key);
-        const kb = Datas.Keyboards;
-        if (this.windowChoicesTeam.currentSelectedIndex === -1) {
-            this.windowChoicesCommands.onKeyPressed(key, this);
-            // Quit the menu if cancelling + in window command
-            if (this.isKeyQuittingToMap(key)) {
-                this.onQuitMenu();
-            }
-        }
-        else {
-            // If in reorder team window
-            if (this.isKeyQuittingReorder(key)) {
-                this.onTeamUnselect();
-            }
-            else if (kb.isKeyEqual(key, kb.menuControls.Action)) {
-                this.onTeamSelect();
-            }
-        }
+        this.action(true, { key: key });
     }
     /**
      *  @inheritdoc
@@ -251,6 +237,25 @@ class Menu extends MenuBase {
         else {
             return this.windowChoicesTeam.onKeyPressedAndRepeat(key);
         }
+    }
+    /**
+     *  @inheritdoc
+     */
+    onMouseMove(x, y) {
+        super.onMouseMove(x, y);
+        if (this.windowChoicesTeam.currentSelectedIndex === -1) {
+            return this.windowChoicesCommands.onMouseMove(x, y);
+        }
+        else {
+            return this.windowChoicesTeam.onMouseMove(x, y);
+        }
+    }
+    /**
+     *  @inheritdoc
+     */
+    onMouseUp(x, y) {
+        super.onMouseUp(x, y);
+        this.action(false, { x: x, y: y });
     }
     /**
      * @inheritdoc

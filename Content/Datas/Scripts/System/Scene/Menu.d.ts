@@ -53,22 +53,6 @@ declare class Menu extends MenuBase {
      */
     update(): void;
     /**
-     * return whether the key action is quitting to map and in window command.
-     *
-     * @param {number} key
-     * @return {*}  {boolean}
-     * @memberof Menu
-     */
-    isKeyQuittingToMap(key: number): boolean;
-    /**
-     * return whether the key action is quitting the order screen.
-     *
-     * @param {number} key
-     * @return {*}  {boolean}
-     * @memberof Menu
-     */
-    isKeyQuittingReorder(key: number): boolean;
-    /**
      * function called when quitting the menu.
      *
      * @memberof Menu
@@ -95,6 +79,14 @@ declare class Menu extends MenuBase {
      */
     onTeamSelect(): void;
     /**
+     *  A scene action.
+     */
+    action(isKey: boolean, options?: {
+        key?: number;
+        x?: number;
+        y?: number;
+    }): void;
+    /**
      *  @inheritdoc
      *
      *  @param {number} key - The key ID
@@ -118,6 +110,14 @@ declare class Menu extends MenuBase {
      *  @returns {boolean}
      */
     onKeyPressedAndRepeat(key: number): boolean;
+    /**
+     *  @inheritdoc
+     */
+    onMouseMove(x: number, y: number): void;
+    /**
+     *  @inheritdoc
+     */
+    onMouseUp(x: number, y: number): void;
     /**
      * @inheritdoc
      *

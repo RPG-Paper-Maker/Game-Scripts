@@ -10,7 +10,7 @@
 */
 
 import { Scene, Manager, Graphic, Datas, System } from "../index";
-import { Enum, ScreenResolution } from "../Common";
+import { Enum, Inputs, ScreenResolution } from "../Common";
 import { WindowChoices, WindowBox, Game, Rectangle, ChoicesOptions } from "../Core";
 import { MenuBase } from "./MenuBase";
 
@@ -140,32 +140,6 @@ class Menu extends MenuBase {
     }
 
     /**
-     * return whether the key action is quitting to map and in window command.
-     *
-     * @param {number} key
-     * @return {*}  {boolean}
-     * @memberof Menu
-     */
-    isKeyQuittingToMap(key: number): boolean {
-        const kb = Datas.Keyboards;
-        return (kb.isKeyEqual(key, kb.menuControls.Cancel)
-            || kb.isKeyEqual(key, kb.controls.MainMenu));
-    }
-
-    /**
-     * return whether the key action is quitting the order screen.
-     *
-     * @param {number} key
-     * @return {*}  {boolean}
-     * @memberof Menu
-     */
-    isKeyQuittingReorder(key: number): boolean {
-        const kb = Datas.Keyboards;
-        return (kb.isKeyEqual(key, kb.menuControls.Cancel)
-            || kb.isKeyEqual(key, kb.controls.MainMenu));
-    }
-
-    /**
      * function called when quitting the menu.
      *
      * @memberof Menu
@@ -231,29 +205,37 @@ class Menu extends MenuBase {
     }
 
     /** 
+     *  A scene action.
+     */
+    action(isKey: boolean, options: { key?: number, x?: number, y?: number } = {}) {
+        if (this.windowChoicesTeam.currentSelectedIndex === -1) {
+            if (isKey) {
+                this.windowChoicesCommands.onKeyPressed(options.key, this);
+            } else {
+                this.windowChoicesCommands.onMouseUp(options.x, options.y, this);
+            }
+            // Quit the menu if cancelling + in window command
+            if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
+                this.onQuitMenu();
+            }
+        } else {
+            // If in reorder team window
+            if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
+                this.onTeamUnselect();
+            } else if (Scene.MenuBase.checkActionMenu(isKey, options)) {
+                this.onTeamSelect();
+            }
+        }
+    }
+
+    /** 
      *  @inheritdoc
      * 
      *  @param {number} key - The key ID
      */
     onKeyPressed(key: number) {
         super.onKeyPressed(key);
-        const kb = Datas.Keyboards;
-
-        if (this.windowChoicesTeam.currentSelectedIndex === -1) {
-            this.windowChoicesCommands.onKeyPressed(key, this);
-
-            // Quit the menu if cancelling + in window command
-            if (this.isKeyQuittingToMap(key)) {
-                this.onQuitMenu();
-            }
-        } else {
-            // If in reorder team window
-            if (this.isKeyQuittingReorder(key)) {
-                this.onTeamUnselect();
-            } else if (kb.isKeyEqual(key, kb.menuControls.Action)) {
-                this.onTeamSelect();
-            }
-        }
+        this.action(true, { key: key });
     }
 
     /** 
@@ -286,6 +268,26 @@ class Menu extends MenuBase {
         } else {
             return this.windowChoicesTeam.onKeyPressedAndRepeat(key);
         }
+    }
+
+    /** 
+     *  @inheritdoc
+     */
+    onMouseMove(x: number, y: number) {
+        super.onMouseMove(x, y);
+        if (this.windowChoicesTeam.currentSelectedIndex === -1) {
+            return this.windowChoicesCommands.onMouseMove(x, y);
+        } else {
+            return this.windowChoicesTeam.onMouseMove(x, y);
+        }
+    }
+
+    /** 
+     *  @inheritdoc
+     */
+    onMouseUp(x: number, y: number) {
+        super.onMouseUp(x, y);
+        this.action(false, { x: x, y: y });
     }
 
     /**

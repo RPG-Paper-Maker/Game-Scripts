@@ -39,6 +39,24 @@ declare abstract class MenuBase extends Base {
     protected _activeHero: number;
     constructor(...args: any[]);
     /**
+     *  Check is actioning menu input (for keyboard and mouse).
+     *  @static
+     */
+    static checkActionMenu(isKey: boolean, options?: {
+        key?: number;
+        x?: number;
+        y?: number;
+    }): boolean;
+    /**
+     *  Check is canceling menu input (for keyboard and mouse).
+     *  @static
+     */
+    static checkCancelMenu(isKey: boolean, options?: {
+        key?: number;
+        x?: number;
+        y?: number;
+    }): boolean;
+    /**
      * Return the whole party array.
      *
      * @example

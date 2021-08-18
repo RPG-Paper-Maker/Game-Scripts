@@ -9,8 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./index.js";
-import { Graphic, Scene } from "../index.js";
+import { Datas, Graphic, Scene } from "../index.js";
 import { Game } from "../Core/index.js";
+import { Inputs } from "../Common/index.js";
 /**
  * The superclass who handle menu related scenes
  *
@@ -21,6 +22,22 @@ import { Game } from "../Core/index.js";
 class MenuBase extends Base {
     constructor(...args) {
         super(false, ...args);
+    }
+    /**
+     *  Check is actioning menu input (for keyboard and mouse).
+     *  @static
+     */
+    static checkActionMenu(isKey, options = {}) {
+        return (isKey && Datas.Keyboards.checkActionMenu(options.key)) || (!isKey
+            && Inputs.mouseLeftPressed);
+    }
+    /**
+     *  Check is canceling menu input (for keyboard and mouse).
+     *  @static
+     */
+    static checkCancelMenu(isKey, options = {}) {
+        return (isKey && Datas.Keyboards.checkCancelMenu(options.key)) || (!isKey
+            && Inputs.mouseRightPressed);
     }
     /**
      * Return the whole party array.

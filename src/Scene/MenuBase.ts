@@ -10,9 +10,9 @@
 */
 
 import { Base } from ".";
-import { Graphic, Manager, Scene } from "..";
+import { Datas, Graphic, Manager, Scene } from "..";
 import { Game, Player } from "../Core";
-import { Enum } from "../Common";
+import { Enum, Inputs } from "../Common";
 import Align = Enum.Align;
 
 /**
@@ -53,6 +53,26 @@ abstract class MenuBase extends Base {
 
     constructor(...args: any[]) {
         super(false, ...args);
+    }
+
+    /**
+     *  Check is actioning menu input (for keyboard and mouse).
+     *  @static
+     */
+    static checkActionMenu(isKey: boolean, options: { key?: number, x?: number, 
+        y?: number } = {}) {
+        return (isKey && Datas.Keyboards.checkActionMenu(options.key)) || (!isKey 
+            && Inputs.mouseLeftPressed);
+    }
+
+    /**
+     *  Check is canceling menu input (for keyboard and mouse).
+     *  @static
+     */
+    static checkCancelMenu(isKey: boolean, options: { key?: number, x?: number, 
+        y?: number } = {}) {
+        return (isKey && Datas.Keyboards.checkCancelMenu(options.key)) || (!isKey 
+            && Inputs.mouseRightPressed);
     }
 
     /**
