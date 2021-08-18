@@ -160,6 +160,33 @@ class UseSkillItem extends Base {
     }
 
     /** 
+     *  Mouse move handle for the current stack.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseMove(x: number, y: number) {
+        if (!this.all) {
+            let changed = false;
+            let i: number, l: number;
+            for (i = 0, l = this.graphicCharacters.length; i < l; i++) {
+                if (this.graphicCharacters[i].battlerRect.isInside(x, y)) {
+                    changed = true;
+                    break;
+                }
+            }
+            if (changed && i !== this.indexArrow) {
+                let target = Game.current.teamHeroes[i];
+                if (this.skillItem.isPossible(target)) {
+                    this.indexArrow = i;
+                    Scene.Map.current.targets = [new Battler(target)];
+                    Manager.Stack.requestPaintHUD = true;
+                    Datas.Systems.soundCursor.playSound();
+                }
+            }
+        }
+    }
+
+    /** 
      *  Draw an arrow at a specific index.
      *  @param {number} index - The corresponding index
      *  @param {number} x - The x position

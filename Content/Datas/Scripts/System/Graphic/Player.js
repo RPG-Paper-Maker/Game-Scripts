@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Graphic, Datas, System, Manager } from "../index.js";
-import { Frame } from "../Core/index.js";
+import { Frame, Rectangle } from "../Core/index.js";
 import { Base } from "./Base.js";
-import { Utils, Constants, Platform, Enum } from "../Common/index.js";
+import { Utils, Constants, Platform, Enum, ScreenResolution } from "../Common/index.js";
 var PictureKind = Enum.PictureKind;
 import { Status } from "../Core/Status.js";
 /** @class
@@ -23,6 +23,7 @@ import { Status } from "../Core/Status.js";
 class Player extends Base {
     constructor(player, { isMainMenu = false, reverse = false } = {}) {
         super();
+        this.battlerRect = new Rectangle();
         this.player = player;
         this.isMainMenu = isMainMenu;
         this.reverse = reverse;
@@ -246,7 +247,14 @@ class Player extends Base {
         let coef = Constants.BASIC_SQUARE_SIZE / Datas.Systems.SQUARE_SIZE;
         let wBattler = this.battler.oW / Datas.Systems.battlersFrames;
         let hBattler = this.battler.oH / Datas.Systems.battlersColumns;
-        this.battler.draw(x, yName - (hBattler * coef) - 15, wBattler * coef, hBattler * coef, this.battlerFrame.value * wBattler, 0, wBattler, hBattler);
+        this.battlerRect.setCoords(x, yName - (hBattler * coef) - 15, wBattler *
+            coef, hBattler * coef);
+        this.battler.draw(this.battlerRect.x, this.battlerRect.y, this.battlerRect
+            .width, this.battlerRect.height, this.battlerFrame.value * wBattler, 0, wBattler, hBattler);
+        this.battlerRect.setCoords(ScreenResolution.getScreenX(this.battlerRect
+            .x), ScreenResolution.getScreenY(this.battlerRect.y), ScreenResolution
+            .getScreenMinXY(this.battlerRect.width), ScreenResolution
+            .getScreenMinXY(this.battlerRect.height));
         // Stats
         let yStats = yName;
         if (this.graphicStatShort) {

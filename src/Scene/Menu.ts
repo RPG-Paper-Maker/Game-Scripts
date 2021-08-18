@@ -129,7 +129,11 @@ class Menu extends MenuBase {
      */
     update() {
         super.update();
-
+        if (this.windowChoicesTeam.currentSelectedIndex === -1) {
+            this.windowChoicesCommands.update();
+        } else {
+            this.windowChoicesTeam.update();
+        }
         this.windowTimeCurrencies.content.update();
         let graphic: Graphic.Player;
         for (let i = 0, l = this.windowChoicesTeam.listWindows.length; i < l; i++) {

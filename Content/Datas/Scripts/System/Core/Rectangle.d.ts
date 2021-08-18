@@ -45,6 +45,14 @@ declare class Rectangle {
      */
     set(x: number, y: number, width: number, height: number): void;
     /**
+     *  Set rectangle coords.
+     *  @param {number} x
+     *  @param {number} y
+     *  @param {number} width
+     *  @param {number} height
+     */
+    setCoords(x: number, y: number, width: number, height: number): void;
+    /**
      *  Set the anchor x, y.
      *  @param {number} x
      *  @param {number} y

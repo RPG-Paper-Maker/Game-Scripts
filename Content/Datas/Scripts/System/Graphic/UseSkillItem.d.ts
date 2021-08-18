@@ -67,6 +67,12 @@ declare class UseSkillItem extends Base {
      */
     onKeyPressedAndRepeat(key: number): void;
     /**
+     *  Mouse move handle for the current stack.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseMove(x: number, y: number): void;
+    /**
      *  Draw an arrow at a specific index.
      *  @param {number} index - The corresponding index
      *  @param {number} x - The x position

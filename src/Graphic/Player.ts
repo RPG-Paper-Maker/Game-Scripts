@@ -10,9 +10,9 @@
 */
 
 import { Graphic, Core, Datas, System, Manager } from "../index";
-import { Picture2D, Frame } from "../Core";
+import { Picture2D, Frame, Rectangle } from "../Core";
 import { Base } from "./Base";
-import { Utils, Constants, Platform, Enum } from "../Common";
+import { Utils, Constants, Platform, Enum, ScreenResolution } from "../Common";
 import PictureKind = Enum.PictureKind;
 import { Status } from "../Core/Status";
 
@@ -43,6 +43,7 @@ class Player extends Base {
     public displayNameLevel: boolean;
     public graphicStatShort: Graphic.Text;
     public isMainMenu: boolean;
+    public battlerRect: Rectangle = new Rectangle();
 
     constructor(player: Core.Player, { isMainMenu = false, reverse = false }: {
         isMainMenu?: boolean, reverse?: boolean } = {}) {
@@ -289,9 +290,15 @@ class Player extends Base {
         let coef = Constants.BASIC_SQUARE_SIZE / Datas.Systems.SQUARE_SIZE;
         let wBattler = this.battler.oW / Datas.Systems.battlersFrames;
         let hBattler = this.battler.oH / Datas.Systems.battlersColumns;
-        this.battler.draw(x, yName - (hBattler * coef) - 15, wBattler * coef,
-            hBattler * coef, this.battlerFrame.value * wBattler, 0, wBattler, 
-            hBattler);
+        this.battlerRect.setCoords(x, yName - (hBattler * coef) - 15, wBattler * 
+            coef, hBattler * coef);
+        this.battler.draw(this.battlerRect.x, this.battlerRect.y, this.battlerRect
+            .width, this.battlerRect.height, this.battlerFrame.value * wBattler, 
+            0, wBattler, hBattler);
+        this.battlerRect.setCoords(ScreenResolution.getScreenX(this.battlerRect
+            .x), ScreenResolution.getScreenY(this.battlerRect.y), ScreenResolution
+            .getScreenMinXY(this.battlerRect.width), ScreenResolution
+            .getScreenMinXY(this.battlerRect.height));
 
         // Stats
         let yStats = yName;

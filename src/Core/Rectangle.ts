@@ -32,11 +32,7 @@ class Rectangle {
     public anchor: Anchor2D
 
     constructor(x = 0, y = 0, width = 1, height = 1) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-
+        this.setCoords(x, y, width, height);
         const anchorX = Anchor2D.MIDDLE_BOTTOM.x;
         const anchorY = Anchor2D.MIDDLE_BOTTOM.y;
         this.anchor = new Anchor2D(anchorX, anchorY);
@@ -81,6 +77,20 @@ class Rectangle {
     public set(x: number, y: number, width: number, height: number) {
         this.move(x, y);
         this.resize(width, height);
+    }
+
+    /**
+     *  Set rectangle coords.
+     *  @param {number} x
+     *  @param {number} y
+     *  @param {number} width
+     *  @param {number} height
+     */
+    public setCoords(x: number, y: number, width: number, height: number) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
     }
 
     /**

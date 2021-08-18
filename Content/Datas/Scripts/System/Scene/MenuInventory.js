@@ -156,15 +156,25 @@ class MenuInventory extends Base {
      *  Move tab according to key.
      *  @param {number} key - The key ID
      */
-    moveTabKey(key) {
+    moveTabKey(isKey, options = {}) {
         // Tab
         let indexTab = this.windowChoicesTabs.currentSelectedIndex;
-        this.windowChoicesTabs.onKeyPressedAndRepeat(key);
+        if (isKey) {
+            this.windowChoicesTabs.onKeyPressedAndRepeat(options.key);
+        }
+        else {
+            this.windowChoicesTabs.onMouseMove(options.x, options.y);
+        }
         if (indexTab !== this.windowChoicesTabs.currentSelectedIndex) {
             this.updateForTab();
         }
         // List
-        this.windowChoicesList.onKeyPressedAndRepeat(key);
+        if (isKey) {
+            this.windowChoicesList.onKeyPressedAndRepeat(options.key);
+        }
+        else {
+            this.windowChoicesList.onMouseMove(options.x, options.y);
+        }
         let position = this.positionChoice[this.windowChoicesTabs
             .currentSelectedIndex];
         position.index = this.windowChoicesList.currentSelectedIndex;
@@ -172,26 +182,14 @@ class MenuInventory extends Base {
         this.synchronize();
     }
     /**
-     *  Update the scene.
+     *  A scene action.
      */
-    update() {
-        Scene.Base.prototype.update.call(Scene.Map.current);
-        if (this.windowChoicesList.currentSelectedIndex !== -1) {
-            this.windowBoxUseItem.update();
-        }
-    }
-    /**
-     *  Handle scene key pressed.
-     *  @param {number} key - The key ID
-     */
-    onKeyPressed(key) {
-        Scene.Base.prototype.onKeyPressed.call(Scene.Map.current, key);
+    action(isKey, options = {}) {
         let graphic = this.windowBoxInformation.content;
         let graphicUse = this.windowBoxUseItem.content;
         switch (this.substep) {
             case 0:
-                if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
-                    .Action)) {
+                if (Scene.MenuBase.checkActionMenu(isKey, options)) {
                     if (this.windowBoxInformation.content === null) {
                         return;
                     }
@@ -225,15 +223,13 @@ class MenuInventory extends Base {
                         Datas.Systems.soundImpossible.playSound();
                     }
                 }
-                else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
-                    .menuControls.Cancel) || Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.controls.MainMenu)) {
+                else if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
                     Datas.Systems.soundCancel.playSound();
                     Manager.Stack.pop();
                 }
                 break;
             case 1:
-                if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
-                    .Action)) {
+                if (Scene.MenuBase.checkActionMenu(isKey, options)) {
                     if (graphic.item.system.isPossible() && graphic.item.system.use()) {
                         Datas.Systems.soundConfirmation.playSound();
                         this.useItem();
@@ -242,14 +238,52 @@ class MenuInventory extends Base {
                         Datas.Systems.soundCancel.playSound();
                     }
                 }
-                else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
-                    .menuControls.Cancel) || Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.controls.MainMenu)) {
+                else if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
                     Datas.Systems.soundCancel.playSound();
                     this.substep = 0;
                     Manager.Stack.requestPaintHUD = true;
                 }
                 break;
         }
+    }
+    /**
+     *  A scene move.
+     */
+    move(isKey, options = {}) {
+        switch (this.substep) {
+            case 0:
+                this.moveTabKey(isKey, options);
+                break;
+            case 1:
+                if (isKey) {
+                    this.windowBoxUseItem.content
+                        .onKeyPressedAndRepeat(options.key);
+                }
+                else {
+                    this.windowBoxUseItem.content
+                        .onMouseMove(options.x, options.y);
+                }
+                break;
+        }
+    }
+    /**
+     *  Update the scene.
+     */
+    update() {
+        Scene.Base.prototype.update.call(Scene.Map.current);
+        this.windowChoicesList.update();
+        this.windowChoicesTabs.update();
+        if (this.windowChoicesList.currentSelectedIndex !== -1) {
+            this.windowBoxUseItem.update();
+        }
+    }
+    /**
+     *  Handle scene key pressed.
+     *  @param {number} key - The key ID
+     */
+    onKeyPressed(key) {
+        Scene.Base.prototype.onKeyPressed.call(Scene.Map.current, key);
+        this.action(true, { key: key });
     }
     /**
      *  Handle scene key released.
@@ -274,16 +308,22 @@ class MenuInventory extends Base {
     onKeyPressedAndRepeat(key) {
         let res = Scene.Base.prototype.onKeyPressedAndRepeat.call(Scene.Map
             .current, key);
-        switch (this.substep) {
-            case 0:
-                this.moveTabKey(key);
-                break;
-            case 1:
-                this.windowBoxUseItem.content
-                    .onKeyPressedAndRepeat(key);
-                break;
-        }
+        this.move(true, { key: key });
         return res;
+    }
+    /**
+     *  @inheritdoc
+     */
+    onMouseMove(x, y) {
+        super.onMouseMove(x, y);
+        this.move(false, { x: x, y: y });
+    }
+    /**
+     *  @inheritdoc
+     */
+    onMouseUp(x, y) {
+        super.onMouseUp(x, y);
+        this.action(false, { x: x, y: y });
     }
     /**
      *  Draw the HUD scene.

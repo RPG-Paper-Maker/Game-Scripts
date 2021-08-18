@@ -1,5 +1,5 @@
 import { Graphic, Core, System } from "../index.js";
-import { Picture2D, Frame } from "../Core/index.js";
+import { Picture2D, Frame, Rectangle } from "../Core/index.js";
 import { Base } from "./Base.js";
 /** @class
  *  The graphic displaying the player minimal stats informations.
@@ -27,6 +27,7 @@ declare class Player extends Base {
     displayNameLevel: boolean;
     graphicStatShort: Graphic.Text;
     isMainMenu: boolean;
+    battlerRect: Rectangle;
     constructor(player: Core.Player, { isMainMenu, reverse }?: {
         isMainMenu?: boolean;
         reverse?: boolean;
