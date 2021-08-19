@@ -579,7 +579,8 @@ class WindowChoices extends Bitmap {
         if (!Datas.Systems.isMouseControls) {
             return;
         }
-        if (this.currentSelectedIndex !== -1 && Inputs.mouseLeftPressed) {
+        if (this.currentSelectedIndex !== -1 && Inputs.mouseLeftPressed && this
+            .listWindows[this.currentSelectedIndex].isInside(x, y)) {
             let callback = this.listCallBacks[this.currentSelectedIndex];
             if (callback !== null) {
                 // Play a sound according to callback result

@@ -307,15 +307,18 @@ class MenuEquip extends MenuBase {
     }
 
     /**
-     * Move tab according to key
-     *
-     * @param {number} key - the key ID
-     * @memberof MenuEquip
+     *  Move tab according to key.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
      */
-    moveTabKey(key: number) {
+    moveTabKey(isKey: boolean, options: { key?: number, x?: number, y?: number } = {}) {
         // Tab
         let indexTab = this.windowChoicesTabs.currentSelectedIndex;
-        this.windowChoicesTabs.onKeyPressedAndRepeat(key);
+        if (isKey) {
+            this.windowChoicesTabs.onKeyPressedAndRepeat(options.key);
+        } else {
+            this.windowChoicesTabs.onMouseMove(options.x, options.y);
+        }
         if (indexTab !== this.windowChoicesTabs.currentSelectedIndex) {
             this.updateForTab();
         }
@@ -324,14 +327,22 @@ class MenuEquip extends MenuBase {
         if (this.selectedEquipment === -1) {
             let indexEquipment = this.windowChoicesEquipment
                 .currentSelectedIndex;
-            this.windowChoicesEquipment.onKeyPressedAndRepeat(key);
+            if (isKey) {
+                this.windowChoicesEquipment.onKeyPressedAndRepeat(options.key);
+            } else {
+                this.windowChoicesEquipment.onMouseMove(options.x, options.y);
+            }
             if (indexEquipment !== this.windowChoicesEquipment
                 .currentSelectedIndex) {
                 this.updateEquipmentList();
             }
         } else {
             let indexList = this.windowChoicesList.currentSelectedIndex;
-            this.windowChoicesList.onKeyPressedAndRepeat(key);
+            if (isKey) {
+                this.windowChoicesList.onKeyPressedAndRepeat(options.key);
+            } else {
+                this.windowChoicesList.onMouseMove(options.x, options.y);
+            }
             if (indexList !== this.windowChoicesList.currentSelectedIndex) {
                 this.updateInformations();
             }
@@ -405,27 +416,17 @@ class MenuEquip extends MenuBase {
         this.party()[index].updateEquipmentStats(this.list, this.bonus);
     }
 
-    /**
-     *  Update the scene.
-     */
-    update() {
-        Scene.Base.prototype.update.call(Scene.Map.current);
-    }
-
     /** 
-     *  Handle scene key pressed.
-     *  @param {number} key - The key ID
+     *  A scene action.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
      */
-    onKeyPressed(key: number) {
-        Scene.Base.prototype.onKeyPressed.call(Scene.Map.current, key);
+    action(isKey: boolean, options: { key?: number, x?: number, y?: number } = {}) {
         if (this.selectedEquipment === -1) {
-            if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
-                .Cancel) || Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
-                    .controls.MainMenu)) {
+            if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
                 Datas.Systems.soundCancel.playSound();
                 Manager.Stack.pop();
-            } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
-                .menuControls.Action)) {
+            } else if (Scene.MenuBase.checkActionMenu(isKey, options)) {
                 if ((<Graphic.Equip>this.windowChoicesEquipment.getCurrentContent())
                     .isPossible) {
                     Datas.Systems.soundConfirmation.playSound();
@@ -442,15 +443,12 @@ class MenuEquip extends MenuBase {
                 }
             }
         } else {
-            if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
-                .Cancel) || Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
-                    .controls.MainMenu)) {
+            if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
                 Datas.Systems.soundCancel.playSound();
                 this.selectedEquipment = -1;
                 this.windowChoicesList.unselect();
                 this.updateInformations();
-            } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
-                .menuControls.Action)) {
+            } else if (Scene.MenuBase.checkActionMenu(isKey, options)) {
                 if (this.windowChoicesList.getCurrentContent() !== null) {
                     Datas.Systems.soundConfirmation.playSound();
                     if (this.windowChoicesList.currentSelectedIndex === 0) {
@@ -466,6 +464,31 @@ class MenuEquip extends MenuBase {
                 }
             }
         }
+    }
+
+    /** 
+     *  A scene move.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    move(isKey: boolean, options: { key?: number, x?: number, y?: number } = {}) {
+        this.moveTabKey(isKey, options);
+    }
+
+    /**
+     *  Update the scene.
+     */
+    update() {
+        Scene.Base.prototype.update.call(Scene.Map.current);
+    }
+
+    /** 
+     *  Handle scene key pressed.
+     *  @param {number} key - The key ID
+     */
+    onKeyPressed(key: number) {
+        Scene.Base.prototype.onKeyPressed.call(Scene.Map.current, key);
+        this.action(true, { key: key });
     }
 
     /** 
@@ -493,8 +516,24 @@ class MenuEquip extends MenuBase {
     onKeyPressedAndRepeat(key: number): boolean {
         let res = Scene.Base.prototype.onKeyPressedAndRepeat.call(Scene.Map
             .current, key);
-        this.moveTabKey(key);
+        this.move(true, { key: key });
         return res;
+    }
+
+    /** 
+     *  @inheritdoc
+     */
+    onMouseMove(x: number, y: number) {
+        super.onMouseMove(x, y);
+        this.move(false, { x: x, y: y });
+    }
+
+    /** 
+     *  @inheritdoc
+     */
+    onMouseUp(x: number, y: number) {
+        super.onMouseUp(x, y);
+        this.action(false, { x: x, y: y });
     }
 
     /** 
