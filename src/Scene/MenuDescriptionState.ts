@@ -127,6 +127,32 @@ class MenuDescriptionState extends MenuBase {
         this.windowInformation.content = this.windowChoicesTabs
             .getCurrentContent();
     }
+
+    /** 
+     *  A scene action.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    action(isKey: boolean, options: { key?: number, x?: number, y?: number } = {}) {
+        if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
+            Datas.Systems.soundCancel.playSound();
+            Manager.Stack.pop();
+        }
+    }
+
+    /** 
+     *  A scene move.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    move(isKey: boolean, options: { key?: number, x?: number, y?: number } = {}) {
+        if (isKey) {
+            this.windowChoicesTabs.onKeyPressedAndRepeat(options.key);
+        } else {
+            this.windowChoicesTabs.onMouseMove(options.x, options.y);
+        }
+        this.synchronize();
+    }
     
     /**
      * @inheritdoc
@@ -147,11 +173,7 @@ class MenuDescriptionState extends MenuBase {
      */
     onKeyPressed(key: number) {
         Scene.Base.prototype.onKeyPressed.call(Scene.Map.current, key);
-        if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Cancel)
-            || Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.controls.MainMenu)) {
-            Datas.Systems.soundCancel.playSound();
-            Manager.Stack.pop();
-        }
+        this.action(true, { key: key });
     }
 
     /**
@@ -163,7 +185,6 @@ class MenuDescriptionState extends MenuBase {
     onKeyReleased(key: number) {
         Scene.Base.prototype.onKeyReleased.call(Scene.Map.current, key);
     }
-
 
     /**
      * @inheritdoc
@@ -186,9 +207,24 @@ class MenuDescriptionState extends MenuBase {
     onKeyPressedAndRepeat(key: number): boolean {
         let res = Scene.Base.prototype.onKeyPressedAndRepeat.call(Scene.Map
             .current, key);
-        this.windowChoicesTabs.onKeyPressedAndRepeat(key);
-        this.synchronize();
+        this.move(true, { key: key });
         return res;
+    }
+
+    /** 
+     *  @inheritdoc
+     */
+    onMouseMove(x: number, y: number) {
+        super.onMouseMove(x, y);
+        this.move(false, { x: x, y: y });
+    }
+
+    /** 
+     *  @inheritdoc
+     */
+    onMouseUp(x: number, y: number) {
+        super.onMouseUp(x, y);
+        this.action(false, { x: x, y: y });
     }
 
     /**
