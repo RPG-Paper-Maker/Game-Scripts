@@ -19,6 +19,7 @@ import { Vector2 } from "./Vector2.js";
 import { Status } from "./Status.js";
 import { Animation } from "./Animation.js";
 import { CustomGeometry } from "./CustomGeometry.js";
+import { Rectangle } from "./Rectangle.js";
 /** @class
  *  A battler in a battle (ally or ennemy).
  *  @param {Player} player - The character properties
@@ -28,6 +29,7 @@ import { CustomGeometry } from "./CustomGeometry.js";
 class Battler {
     constructor(player, position, vect, camera) {
         this.itemsNumbers = [];
+        this.rect = new Rectangle();
         this.currentStatusAnimation = null;
         this.lastTarget = null;
         this.player = player;
@@ -93,6 +95,11 @@ class Battler {
             this.mesh = new THREE.Mesh(geometry, material);
             this.mesh.position.set(this.position.x, this.position.y, this
                 .position.z);
+            this.topLeftPosition = new Vector3(this.position.x - (this.width / 2
+                * Datas.Systems.SQUARE_SIZE), this.position.y + (this.height *
+                Datas.Systems.SQUARE_SIZE), this.position.z);
+            this.botRightPosition = new Vector3(this.position.x + (this.width / 2
+                * Datas.Systems.SQUARE_SIZE), this.position.y, this.position.z);
             this.upPosition = new Vector3(this.position.x, this.position.y + (this.height * Datas.Systems.SQUARE_SIZE), this.position.z);
             this.halfPosition = new Vector3(this.position.x, this.position.y + (this.height * Datas.Systems.SQUARE_SIZE / 2), this.position.z);
             if (player.kind === Enum.CharacterKind.Monster) {
@@ -117,6 +124,15 @@ class Battler {
             }
         }
         return false;
+    }
+    /**
+     *  Check if mouse is inside the battler rectangle.
+     *  @param {number} x
+     *  @param {number} y
+     *  @returns {boolean}
+     */
+    isInside(x, y) {
+        return this.rect.isInside(x, y);
     }
     /**
      *  Set the selected state.
@@ -331,6 +347,9 @@ class Battler {
             .Map.current.camera.getThreeCamera());
         this.midPosition = Manager.GL.toScreenPosition(this.halfPosition, Scene.Map.current.camera.getThreeCamera());
         this.botPosition = Manager.GL.toScreenPosition(this.mesh.position, Scene.Map.current.camera.getThreeCamera());
+        let topLeft = Manager.GL.toScreenPosition(this.topLeftPosition, Scene.Map.current.camera.getThreeCamera());
+        let botRight = Manager.GL.toScreenPosition(this.botRightPosition, Scene.Map.current.camera.getThreeCamera());
+        this.rect.setCoords(topLeft.x, topLeft.y, botRight.x - topLeft.x, botRight.y - topLeft.y);
     }
     /**
      *  Update the arrow position.

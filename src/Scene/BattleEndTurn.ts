@@ -127,6 +127,33 @@ class BattleEndTurn {
     }
 
     /** 
+     *  @inheritdoc
+     */
+    onMouseDownStep(x: number, y: number) {
+        if (this.interpreter) {
+            this.interpreter.onMouseDown(x, y);
+        }
+    }
+
+    /** 
+     *  @inheritdoc
+     */
+    onMouseMoveStep(x: number, y: number) {
+        if (this.interpreter) {
+            this.interpreter.onMouseMove(x, y);
+        }
+    }
+
+    /** 
+     *  @inheritdoc
+     */
+    onMouseUpStep(x: number, y: number) {
+        if (this.interpreter) {
+            this.interpreter.onMouseUp(x, y);
+        }
+    }
+
+    /** 
      *  Draw the battle HUD.
      */
     public drawHUDStep() {

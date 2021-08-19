@@ -730,6 +730,72 @@ class Battle extends Map {
     }
 
     /** 
+     *  @inheritdoc
+     */
+    onMouseDown(x: number, y: number) {
+        super.onMouseDown(x, y);
+        if (this.interpreterTroopReaction) {
+            this.interpreterTroopReaction.onMouseDown(x, y);
+            return;
+        }
+        switch (this.step) {
+            case BattleStep.StartTurn:
+                this.battleStartTurn.onMouseDownStep(x, y);
+                break;
+            case BattleStep.EndTurn:
+                this.battleEndTurn.onMouseDownStep(x, y);
+                break;
+        }
+    }
+
+    /** 
+     *  @inheritdoc
+     */
+    onMouseMove(x: number, y: number) {
+        super.onMouseMove(x, y);
+        if (this.interpreterTroopReaction) {
+            this.interpreterTroopReaction.onMouseMove(x, y);
+            return;
+        }
+        switch (this.step) {
+            case BattleStep.StartTurn:
+                this.battleStartTurn.onMouseMoveStep(x, y);
+                break;
+            case BattleStep.Selection:
+                this.battleSelection.onMouseMoveStep(x, y);
+                break;
+            case BattleStep.EndTurn:
+                this.battleEndTurn.onMouseMoveStep(x, y);
+                break;
+        }
+    }
+
+    /** 
+     *  @inheritdoc
+     */
+    onMouseUp(x: number, y: number) {
+        super.onMouseUp(x, y);
+        if (this.interpreterTroopReaction) {
+            this.interpreterTroopReaction.onMouseUp(x, y);
+            return;
+        }
+        switch (this.step) {
+            case BattleStep.StartTurn:
+                this.battleStartTurn.onMouseUpStep(x, y);
+                break;
+            case BattleStep.Selection:
+                this.battleSelection.onMouseUpStep(x, y);
+                break;
+            case BattleStep.EndTurn:
+                this.battleEndTurn.onMouseUpStep(x, y);
+                break;
+            case BattleStep.Victory:
+                this.battleVictory.onMouseUpStep(x, y);
+                break;
+        }
+    }
+
+    /** 
      *  Draw the battle 3D scene.
      */
     draw3D() {

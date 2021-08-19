@@ -248,6 +248,18 @@ declare class Battle extends Map {
      */
     onKeyPressedAndRepeat(key: number): boolean;
     /**
+     *  @inheritdoc
+     */
+    onMouseDown(x: number, y: number): void;
+    /**
+     *  @inheritdoc
+     */
+    onMouseMove(x: number, y: number): void;
+    /**
+     *  @inheritdoc
+     */
+    onMouseUp(x: number, y: number): void;
+    /**
      *  Draw the battle 3D scene.
      */
     draw3D(): void;

@@ -8,6 +8,7 @@ import { Vector3 } from "./Vector3.js";
 import { Vector2 } from "./Vector2.js";
 import { Status } from "./Status.js";
 import { Animation } from "./Animation.js";
+import { Rectangle } from "./Rectangle.js";
 /** @class
  *  A battler in a battle (ally or ennemy).
  *  @param {Player} player - The character properties
@@ -48,8 +49,11 @@ declare class Battler {
     timerMove: number;
     timeDamage: number;
     mesh: THREE.Mesh;
+    topLeftPosition: Vector3;
+    botRightPosition: Vector3;
     upPosition: Vector3;
     halfPosition: Vector3;
+    rect: Rectangle;
     moving: boolean;
     attacking: boolean;
     damages: number;
@@ -66,6 +70,13 @@ declare class Battler {
      *  @returns {boolean}
      */
     containsRestriction(restriction: Enum.StatusRestrictionsKind): boolean;
+    /**
+     *  Check if mouse is inside the battler rectangle.
+     *  @param {number} x
+     *  @param {number} y
+     *  @returns {boolean}
+     */
+    isInside(x: number, y: number): boolean;
     /**
      *  Set the selected state.
      *  @param {boolean} selected - Indicate if the battler is selected

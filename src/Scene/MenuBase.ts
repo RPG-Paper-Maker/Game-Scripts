@@ -76,6 +76,16 @@ abstract class MenuBase extends Base {
     }
 
     /**
+     *  Check is canceling input (for keyboard and mouse).
+     *  @static
+     */
+    static checkCancel(isKey: boolean, options: { key?: number, x?: number, 
+        y?: number } = {}) {
+        return (isKey && Datas.Keyboards.checkCancel(options.key)) || (!isKey 
+            && Inputs.mouseRightPressed);
+    }
+
+    /**
      * Return the whole party array.
      * 
      * @example

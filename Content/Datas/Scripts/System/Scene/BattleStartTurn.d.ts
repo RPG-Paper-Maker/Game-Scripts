@@ -44,6 +44,18 @@ declare class BattleStartTurn {
      */
     onKeyPressedAndRepeatStep(key: number): boolean;
     /**
+     *  @inheritdoc
+     */
+    onMouseDownStep(x: number, y: number): void;
+    /**
+     *  @inheritdoc
+     */
+    onMouseMoveStep(x: number, y: number): void;
+    /**
+     *  @inheritdoc
+     */
+    onMouseUpStep(x: number, y: number): void;
+    /**
      *  Draw the battle HUD.
      */
     drawHUDStep(): void;

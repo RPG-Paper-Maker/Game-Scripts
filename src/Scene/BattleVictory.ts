@@ -269,6 +269,47 @@ class BattleVictory {
     }
 
     /** 
+     *  A scene action.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    action(isKey: boolean, options: { key?: number, x?: number, y?: number } = {}) {
+        switch (this.battle.subStep) {
+            case 1:
+                if (Scene.MenuBase.checkActionMenu(isKey, options)) {
+                    if (this.battle.finishedXP) {
+                        this.prepareEndTransition();
+                    } else { // Pass xp
+                        for (let battler of this.battle.battlers[CharacterKind.Hero]) {
+                            battler.player.passExperience();
+                            battler.player.updateObtainedExperience();
+                        }
+                    }
+                }
+                break;
+            case 2:
+                if (Scene.MenuBase.checkActionMenu(isKey, options)) {
+                    if (this.battle.user.player.stepLevelUp === 0) {
+                        this.battle.user.player.stepLevelUp = 1;
+                        (<Graphic.StatisticProgression>this.battle
+                            .windowStatisticProgression.content)
+                            .updateStatisticProgression();
+                    } else
+                    {
+                        this.battle.user.player.levelingUp = false;
+                        this.unpauseTeamXP();
+                        this.battle.subStep = 1;
+                    }
+                    Manager.Stack.requestPaintHUD = true;
+                }
+                break;
+            case 4:
+                this.prepareEndTransition();
+                break;
+        }
+    }
+
+    /** 
      *  Update the battle.
      */
     update() {
@@ -392,41 +433,7 @@ class BattleVictory {
      *  @param {number} key - The key ID 
      */
     onKeyPressedStep(key: number) {
-        switch (this.battle.subStep) {
-            case 1:
-                if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
-                    .Action)) {
-                    if (this.battle.finishedXP) {
-                        this.prepareEndTransition();
-                    } else { // Pass xp
-                        for (let battler of this.battle.battlers[CharacterKind.Hero]) {
-                            battler.player.passExperience();
-                            battler.player.updateObtainedExperience();
-                        }
-                    }
-                }
-                break;
-            case 2:
-                if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
-                    .Action)) {
-                    if (this.battle.user.player.stepLevelUp === 0) {
-                        this.battle.user.player.stepLevelUp = 1;
-                        (<Graphic.StatisticProgression>this.battle
-                            .windowStatisticProgression.content)
-                            .updateStatisticProgression();
-                    } else
-                    {
-                        this.battle.user.player.levelingUp = false;
-                        this.unpauseTeamXP();
-                        this.battle.subStep = 1;
-                    }
-                    Manager.Stack.requestPaintHUD = true;
-                }
-                break;
-            case 4:
-                this.prepareEndTransition();
-                break;
-        }
+        this.action(true, { key: key });
     }
 
     /** 
@@ -452,6 +459,13 @@ class BattleVictory {
      */
     onKeyPressedAndRepeatStep(key: number): boolean {
         return true;
+    }
+
+    /** 
+     *  @inheritdoc
+     */
+    onMouseUpStep(x: number, y: number) {
+        this.action(false, { x: x, y: y });
     }
 
     /**

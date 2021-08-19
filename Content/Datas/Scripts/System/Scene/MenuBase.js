@@ -40,6 +40,14 @@ class MenuBase extends Base {
             && Inputs.mouseRightPressed);
     }
     /**
+     *  Check is canceling input (for keyboard and mouse).
+     *  @static
+     */
+    static checkCancel(isKey, options = {}) {
+        return (isKey && Datas.Keyboards.checkCancel(options.key)) || (!isKey
+            && Inputs.mouseRightPressed);
+    }
+    /**
      * Return the whole party array.
      *
      * @example

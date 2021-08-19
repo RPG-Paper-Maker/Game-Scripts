@@ -57,6 +57,15 @@ declare abstract class MenuBase extends Base {
         y?: number;
     }): boolean;
     /**
+     *  Check is canceling input (for keyboard and mouse).
+     *  @static
+     */
+    static checkCancel(isKey: boolean, options?: {
+        key?: number;
+        x?: number;
+        y?: number;
+    }): boolean;
+    /**
      * Return the whole party array.
      *
      * @example

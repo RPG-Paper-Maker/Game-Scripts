@@ -24,6 +24,7 @@ import { Vector2 } from "./Vector2";
 import { Status } from "./Status";
 import { Animation } from "./Animation";
 import { CustomGeometry } from "./CustomGeometry";
+import { Rectangle } from "./Rectangle";
 
 /** @class
  *  A battler in a battle (ally or ennemy).
@@ -67,8 +68,11 @@ class Battler {
     public timerMove: number;
     public timeDamage: number;
     public mesh: THREE.Mesh;
+    public topLeftPosition: Vector3;
+    public botRightPosition: Vector3;
     public upPosition: Vector3;
     public halfPosition: Vector3;
+    public rect: Rectangle = new Rectangle();
     public moving: boolean;
     public attacking: boolean;
     public damages: number;
@@ -147,6 +151,11 @@ class Battler {
             this.mesh = new THREE.Mesh(geometry, material);
             this.mesh.position.set(this.position.x, this.position.y, this
                 .position.z);
+            this.topLeftPosition = new Vector3(this.position.x - (this.width / 2 
+                * Datas.Systems.SQUARE_SIZE), this.position.y + (this.height * 
+                Datas.Systems.SQUARE_SIZE), this.position.z);
+            this.botRightPosition = new Vector3(this.position.x + (this.width / 2 
+                * Datas.Systems.SQUARE_SIZE), this.position.y, this.position.z);
             this.upPosition = new Vector3(this.position.x, this.position.y + (
                 this.height * Datas.Systems.SQUARE_SIZE), this.position.z);
             this.halfPosition = new Vector3(this.position.x, this.position.y + (
@@ -174,6 +183,16 @@ class Battler {
             }
         }
         return false;
+    }
+
+    /** 
+     *  Check if mouse is inside the battler rectangle.
+     *  @param {number} x
+     *  @param {number} y
+     *  @returns {boolean}
+     */
+    isInside(x: number, y: number): boolean {
+        return this.rect.isInside(x, y);
     }
     
     /** 
@@ -403,6 +422,12 @@ class Battler {
             Scene.Map.current.camera.getThreeCamera());
         this.botPosition = Manager.GL.toScreenPosition(this.mesh.position, 
             Scene.Map.current.camera.getThreeCamera());
+        let topLeft = Manager.GL.toScreenPosition(this.topLeftPosition, 
+            Scene.Map.current.camera.getThreeCamera());
+        let botRight = Manager.GL.toScreenPosition(this.botRightPosition, 
+            Scene.Map.current.camera.getThreeCamera());    
+        this.rect.setCoords(topLeft.x, topLeft.y, botRight.x - topLeft.x, 
+            botRight.y - topLeft.y);
     }
 
     /** 

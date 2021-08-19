@@ -31,6 +31,16 @@ declare class BattleVictory {
      */
     prepareEndTransition(): void;
     /**
+     *  A scene action.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    action(isKey: boolean, options?: {
+        key?: number;
+        x?: number;
+        y?: number;
+    }): void;
+    /**
      *  Update the battle.
      */
     update(): void;
@@ -55,6 +65,10 @@ declare class BattleVictory {
      *  @param {number} key - The key ID
      */
     onKeyPressedAndRepeatStep(key: number): boolean;
+    /**
+     *  @inheritdoc
+     */
+    onMouseUpStep(x: number, y: number): void;
     /**
      *  Draw the battle HUD.
      */

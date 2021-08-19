@@ -77,7 +77,6 @@ class LoadGame extends SaveLoadGame {
      */
     onKeyPressed(key) {
         super.onKeyPressed(key);
-        console.log("b");
         this.action(true, { key: key });
     }
     /**
@@ -85,7 +84,6 @@ class LoadGame extends SaveLoadGame {
      */
     onMouseUp(x, y) {
         super.onMouseUp(x, y);
-        console.log("c");
         this.action(false, { x: x, y: y });
     }
     /**

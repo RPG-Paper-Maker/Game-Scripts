@@ -61,9 +61,14 @@ declare class BattleSelection {
     onAllyUnselected(): void;
     /**
      *  When a command is selected.
-     *  @param {number} key - The key pressed ID
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
      */
-    onCommandSelected(key: number): void;
+    onCommandSelected(isKey: boolean, options?: {
+        key?: number;
+        x?: number;
+        y?: number;
+    }): void;
     /**
      *  When targets are selected.
      */
@@ -72,6 +77,26 @@ declare class BattleSelection {
      *  When targets are unselected.
      */
     onTargetsUnselected(): void;
+    /**
+     *  A scene action.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    action(isKey: boolean, options?: {
+        key?: number;
+        x?: number;
+        y?: number;
+    }): void;
+    /**
+     *  A scene move.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    move(isKey: boolean, options?: {
+        key?: number;
+        x?: number;
+        y?: number;
+    }): void;
     /**
      *  Update the battle.
      */
@@ -98,6 +123,14 @@ declare class BattleSelection {
      *  @returns {boolean}
      */
     onKeyPressedAndRepeatStep(key: number): boolean;
+    /**
+     *  @inheritdoc
+     */
+    onMouseMoveStep(x: number, y: number): void;
+    /**
+     *  @inheritdoc
+     */
+    onMouseUpStep(x: number, y: number): void;
     /**
      *  Draw the battle HUD.
      */

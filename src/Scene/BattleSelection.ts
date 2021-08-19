@@ -19,7 +19,7 @@ import Align = Enum.Align;
 import ItemKind = Enum.ItemKind;
 import AvailableKind = Enum.AvailableKind;
 import TargetKind = Enum.TargetKind;
-import { Item, Skill, Game } from "../Core";
+import { Item, Skill, Game, Battler } from "../Core";
 
 // -------------------------------------------------------
 //
@@ -312,9 +312,11 @@ class BattleSelection {
 
     /** 
      *  When a command is selected.
-     *  @param {number} key - The key pressed ID
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
      */
-    public onCommandSelected(key: number) {
+    public onCommandSelected(isKey: boolean, options: { key?: number, x?: number, 
+        y?: number } = {}) {
         switch (this.battle.battleCommandKind) {
             case EffectSpecialActionKind.OpenSkills:
                 let skill = (<Graphic.Skill>this.battle.windowChoicesSkills
@@ -338,9 +340,14 @@ class BattleSelection {
                 this.battle.battleCommandKind = EffectSpecialActionKind.None;
                 break;
         }
-        this.battle.windowChoicesBattleCommands.onKeyPressed(key, (<Graphic
-            .TextIcon>this.battle.windowChoicesBattleCommands.getCurrentContent())
-            .system);
+        let system = (<Graphic.TextIcon>this.battle.windowChoicesBattleCommands
+            .getCurrentContent()).system;
+        if (isKey) {
+            this.battle.windowChoicesBattleCommands.onKeyPressed(options.key, system);
+        } else {
+            this.battle.windowChoicesBattleCommands.onMouseUp(options.x, options
+                .y, system);
+        }
         let i: number, l: number;
         switch (<Enum.EffectSpecialActionKind> this.battle.battleCommandKind) {
             case EffectSpecialActionKind.ApplyWeapons:
@@ -446,10 +453,127 @@ class BattleSelection {
     }
 
     /** 
+     *  A scene action.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    action(isKey: boolean, options: { key?: number, x?: number, y?: number } = {}) {
+        switch (this.battle.subStep) {
+            case 0:
+                if (Scene.MenuBase.checkActionMenu(isKey, options)) {
+                    Datas.Systems.soundConfirmation.playSound();
+                    this.onAllySelected();
+                }
+                break;
+            case 1:
+                if (Scene.MenuBase.checkActionMenu(isKey, options)) {
+                    this.onCommandSelected(isKey, options);
+                } else if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
+                    Datas.Systems.soundCancel.playSound();
+                    this.onAllyUnselected();
+                }
+                break;
+            case 2:
+                if (Scene.MenuBase.checkActionMenu(isKey, options)) {
+                    Datas.Systems.soundConfirmation.playSound();
+                    this.onTargetsSelected();
+                } else if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
+                    Datas.Systems.soundCancel.playSound();
+                    this.onTargetsUnselected();
+                }
+                break;
+        }
+    }
+
+    /** 
+     *  A scene move.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    move(isKey: boolean, options: { key?: number, x?: number, y?: number } = {}) {
+        let index = this.selectedUserTargetIndex();
+        switch (this.battle.subStep) {
+            case 0:
+            case 2:
+                if (!this.battle.userTarget) {
+                    if (isKey) {
+                        if (Datas.Keyboards.isKeyEqual(options.key, Datas
+                            .Keyboards.menuControls.Up) || Datas.Keyboards
+                            .isKeyEqual(options.key, Datas.Keyboards.menuControls
+                            .Left)) {
+                            index = this.indexArrowUp();
+                        } else if (Datas.Keyboards.isKeyEqual(options.key, Datas
+                            .Keyboards.menuControls.Down) || Datas.Keyboards
+                            .isKeyEqual(options.key, Datas.Keyboards.menuControls
+                            .Right)) {
+                            index = this.indexArrowDown();
+                        }
+                    } else {
+                        let battler: Battler;
+                        for (let i = 0, l = this.battle.battlers[this.battle
+                            .kindSelection].length; i < l; i++) {
+                            battler = this.battle.battlers[this.battle.kindSelection][i];
+                            if (battler.isInside(options.x, options.y) && this
+                                .battle.isDefined(this.battle.kindSelection, i, 
+                                this.battle.subStep === 2)) {
+                                index = i;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (this.battle.subStep === 0) {
+                    if (this.battle.selectedUserIndex !== index) {
+                        Datas.Systems.soundCursor.playSound();
+                    }
+                    this.battle.selectedUserIndex = index;
+                } else {
+                    if (this.battle.selectedTargetIndex !== index) {
+                        Datas.Systems.soundCursor.playSound();
+                    }
+                    this.battle.selectedTargetIndex = index;
+                }
+                this.moveArrow();
+                break;
+            case 1:
+                switch (this.battle.battleCommandKind) {
+                    case EffectSpecialActionKind.OpenSkills:
+                        if (isKey) {
+                            this.battle.windowChoicesSkills.onKeyPressedAndRepeat(options.key);
+                        } else {
+                            this.battle.windowChoicesSkills.onMouseMove(options.x, options.y);
+                        }
+                        this.battle.windowSkillDescription.content = this.battle
+                            .windowChoicesSkills.getCurrentContent();
+                        break;
+                    case EffectSpecialActionKind.OpenItems:
+                        if (isKey) {
+                            this.battle.windowChoicesItems.onKeyPressedAndRepeat(options.key);
+                        } else {
+                            this.battle.windowChoicesItems.onMouseMove(options.x, options.y);
+                        }
+                        this.battle.windowItemDescription.content = this.battle
+                            .windowChoicesItems.getCurrentContent();
+                        break;
+                    default:
+                        if (isKey) {
+                            this.battle.windowChoicesBattleCommands.onKeyPressedAndRepeat(options.key);
+                        } else {
+                            this.battle.windowChoicesBattleCommands.onMouseMove(options.x, options.y);
+                        }
+                        break;
+                }
+                break;
+        }
+    }
+
+    /** 
      *  Update the battle.
      */
     public update() {
-
+        this.battle.windowChoicesBattleCommands.update();
+        this.battle.windowChoicesItems.update();
+        this.battle.windowChoicesSkills.update();
     }
 
     /** 
@@ -457,36 +581,7 @@ class BattleSelection {
      *  @param {number} key - The key ID 
      */
     public onKeyPressedStep(key: number) {
-        switch (this.battle.subStep) {
-            case 0:
-                if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
-                    .Action)) {
-                    Datas.Systems.soundConfirmation.playSound();
-                    this.onAllySelected();
-                }
-                break;
-            case 1:
-                if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
-                    .Action)) {
-                    this.onCommandSelected(key);
-                } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
-                    .menuControls.Cancel)) {
-                    Datas.Systems.soundCancel.playSound();
-                    this.onAllyUnselected();
-                }
-                break;
-            case 2:
-                if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
-                    .Action)) {
-                    Datas.Systems.soundConfirmation.playSound();
-                    this.onTargetsSelected();
-                } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
-                    .menuControls.Cancel)) {
-                    Datas.Systems.soundCancel.playSound();
-                    this.onTargetsUnselected();
-                }
-                break;
-        }
+        this.action(true, { key: key });
     }
 
     /** 
@@ -512,54 +607,22 @@ class BattleSelection {
      *  @returns {boolean}
      */
     public onKeyPressedAndRepeatStep(key: number): boolean {
-        var index = this.selectedUserTargetIndex();
-        switch (this.battle.subStep) {
-            case 0:
-            case 2:
-                if (!this.battle.userTarget) {
-                    if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
-                        .menuControls.Up) || Datas.Keyboards.isKeyEqual(key, 
-                        Datas.Keyboards.menuControls.Left)) {
-                        index = this.indexArrowUp();
-                    } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
-                        .menuControls.Down) || Datas.Keyboards.isKeyEqual(key, 
-                        Datas.Keyboards.menuControls.Right)) {
-                        index = this.indexArrowDown();
-                    }
-                }
-                if (this.battle.subStep === 0) {
-                    if (this.battle.selectedUserIndex !== index) {
-                        Datas.Systems.soundCursor.playSound();
-                    }
-                    this.battle.selectedUserIndex = index;
-                } else {
-                    if (this.battle.selectedUserIndex !== index) {
-                        Datas.Systems.soundCursor.playSound();
-                    }
-                    this.battle.selectedTargetIndex = index;
-                }
-                this.moveArrow();
-                break;
-            case 1:
-                switch (this.battle.battleCommandKind) {
-                    case EffectSpecialActionKind.OpenSkills:
-                        this.battle.windowChoicesSkills.onKeyPressedAndRepeat(key);
-                        this.battle.windowSkillDescription.content = this.battle
-                            .windowChoicesSkills.getCurrentContent();
-                        break;
-                    case EffectSpecialActionKind.OpenItems:
-                        this.battle.windowChoicesItems.onKeyPressedAndRepeat(key);
-                        this.battle.windowItemDescription.content = this.battle
-                            .windowChoicesItems.getCurrentContent();
-                        break;
-                    default:
-                        this.battle.windowChoicesBattleCommands
-                            .onKeyPressedAndRepeat(key);
-                        break;
-                }
-                break;
-        }
+        this.move(true, { key: key });
         return true;
+    }
+
+    /** 
+     *  @inheritdoc
+     */
+    onMouseMoveStep(x: number, y: number) {
+        this.move(false, { x: x, y: y });
+    }
+
+    /** 
+     *  @inheritdoc
+     */
+    onMouseUpStep(x: number, y: number) {
+        this.action(false, { x: x, y: y });
     }
 
     /** 

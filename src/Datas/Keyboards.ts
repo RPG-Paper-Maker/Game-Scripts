@@ -138,6 +138,16 @@ class Keyboards {
     }
 
     /** 
+     *  Check if key is cancelling.
+     *  @static
+     *  @returns {boolean}
+     */
+    static checkCancel(key: number): boolean {
+        return Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
+            .Cancel);
+    }
+
+    /** 
      *  Check if key is action menu.
      *  @static
      *  @returns {boolean}
