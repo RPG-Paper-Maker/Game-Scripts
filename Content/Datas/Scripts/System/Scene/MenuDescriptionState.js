@@ -123,6 +123,7 @@ class MenuDescriptionState extends MenuBase {
      */
     update() {
         super.update();
+        this.windowChoicesTabs.update();
         this.windowInformation.content
             .updateBattler();
     }

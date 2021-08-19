@@ -14,8 +14,14 @@ declare class LoadGame extends SaveLoadGame {
     loadGame(): Promise<void>;
     /**
      *  Slot action.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
      */
-    action(): void;
+    action(isKey: boolean, options?: {
+        key?: number;
+        x?: number;
+        y?: number;
+    }): void;
     /**
      *  Handle scene key pressed
      *  @param {number} key - The key ID

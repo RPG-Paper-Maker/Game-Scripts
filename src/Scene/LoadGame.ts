@@ -69,16 +69,20 @@ class LoadGame extends SaveLoadGame {
 
     /** 
      *  Slot action.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
      */
-    action() {
-        Game.current = (<Graphic.Save> this.windowChoicesSlots.getCurrentContent())
+    action(isKey: boolean, options: { key?: number, x?: number, y?: number } = {}) {
+        if (Scene.MenuBase.checkActionMenu(isKey, options)) {
+            Game.current = (<Graphic.Save> this.windowChoicesSlots.getCurrentContent())
             .game;
-        if (Game.current.isEmpty) {
-            Game.current = null;
-            Datas.Systems.soundImpossible.playSound();
-        } else {
-            Datas.Systems.soundConfirmation.playSound();
-            this.loadGame();
+            if (Game.current.isEmpty) {
+                Game.current = null;
+                Datas.Systems.soundImpossible.playSound();
+            } else {
+                Datas.Systems.soundConfirmation.playSound();
+                this.loadGame();
+            }
         }
     }
 
@@ -88,18 +92,15 @@ class LoadGame extends SaveLoadGame {
      */
     onKeyPressed(key: number) {
         super.onKeyPressed(key);
-        if (Datas.Keyboards.checkActionMenu(key)) {
-            this.action();
-        }
+        this.action(true, { key: key });
     }
+
     /** 
      *  @inheritdoc
      */
     onMouseUp(x: number, y: number) {
         super.onMouseUp(x, y);
-        if (Inputs.mouseLeftPressed) {
-            this.action();
-        }
+        this.action(false, { x: x, y: y });
     }
 
     /** 

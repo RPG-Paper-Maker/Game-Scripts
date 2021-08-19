@@ -396,6 +396,9 @@ class MenuEquip extends MenuBase {
      */
     update() {
         Scene.Base.prototype.update.call(Scene.Map.current);
+        this.windowChoicesTabs.update();
+        this.windowChoicesEquipment.update();
+        this.windowChoicesList.update();
     }
     /**
      *  Handle scene key pressed.

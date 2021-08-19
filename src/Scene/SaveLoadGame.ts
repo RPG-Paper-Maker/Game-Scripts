@@ -12,7 +12,7 @@
 import { Base } from "./Base";
 import { WindowBox, WindowChoices, Game } from "../Core";
 import { Inputs, ScreenResolution } from "../Common";
-import { Graphic, Datas, Manager } from "../index";
+import { Graphic, Datas, Manager, Scene } from "../index";
 
 /** @class
  *  Abstract class for the game save and loading menus.
@@ -90,11 +90,30 @@ class SaveLoadGame extends Base {
     }
 
     /** 
-     *  Cancel the scene.
+     *  Slot cancel.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
      */
-    cancel() {
-        Datas.Systems.soundCancel.playSound();
-        Manager.Stack.pop();
+    cancel(isKey: boolean, options: { key?: number, x?: number, y?: number } = {}) {
+        if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
+            Datas.Systems.soundCancel.playSound();
+            Manager.Stack.pop();
+        }
+    }
+
+    /** 
+     *  Slot move.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    move(isKey: boolean, options: { key?: number, x?: number, y?: number } = {}) {
+        if (isKey) {
+            this.windowChoicesSlots.onKeyPressedAndRepeat(options.key);
+        } else {
+            this.windowChoicesSlots.onMouseMove(options.x, options.y);
+        }
+        this.updateInformations.call(this, this.windowChoicesSlots
+            .currentSelectedIndex);
     }
 
     /** 
@@ -112,9 +131,7 @@ class SaveLoadGame extends Base {
      *  @param {number} key - The key ID
      */
     onKeyPressed(key: number) {
-        if (Datas.Keyboards.checkCancelMenu(key)) {
-            this.cancel();
-        }
+        this.cancel(true, { key: key });
     }
 
     /** 
@@ -123,9 +140,7 @@ class SaveLoadGame extends Base {
      *  @returns {boolean}
      */
     onKeyPressedAndRepeat(key: number): boolean {
-        this.windowChoicesSlots.onKeyPressedAndRepeat(key);
-        this.updateInformations.call(this, this.windowChoicesSlots
-            .currentSelectedIndex);
+        this.move(true, { key: key });
         return true;
     }
 
@@ -133,16 +148,14 @@ class SaveLoadGame extends Base {
      *  @inheritdoc
      */
     onMouseMove(x: number, y: number) {
-        this.windowChoicesSlots.onMouseMove(x, y);
+        this.move(false, { x: x, y: y });
     }
 
     /** 
      *  @inheritdoc
      */
     onMouseUp(x: number, y: number) {
-        if (Inputs.mouseRightPressed) {
-            this.cancel();
-        }
+        this.cancel(false, { x: x, y: y });
     }
 
     /** 

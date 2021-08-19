@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { SaveLoadGame } from "./SaveLoadGame.js";
-import { Graphic, Datas, Manager } from "../index.js";
+import { Graphic, Datas, Manager, Scene } from "../index.js";
 import { Enum } from "../Common/index.js";
 var Align = Enum.Align;
 import { Game } from "../Core/index.js";
@@ -40,16 +40,31 @@ class SaveGame extends SaveLoadGame {
         this.loading = false;
     }
     /**
+     *  Slot action.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    action(isKey, options = {}) {
+        // If action, save in the selected slot
+        if (Scene.MenuBase.checkActionMenu(isKey, options)) {
+            this.loading = true;
+            this.save();
+        }
+    }
+    /**
      *  Handle scene key pressed.
      *   @param {number} key - The key ID
      */
     onKeyPressed(key) {
         super.onKeyPressed(key);
-        // If action, save in the selected slot
-        if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Action)) {
-            this.loading = true;
-            this.save();
-        }
+        this.action(true, { key: key });
+    }
+    /**
+     *  @inheritdoc
+     */
+    onMouseUp(x, y) {
+        super.onMouseUp(x, y);
+        this.action(false, { x: x, y: y });
     }
 }
 export { SaveGame };

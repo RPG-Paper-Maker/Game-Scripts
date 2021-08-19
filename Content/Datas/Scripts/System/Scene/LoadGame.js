@@ -10,7 +10,7 @@
 */
 import { SaveLoadGame } from "./SaveLoadGame.js";
 import { Graphic, Datas, Manager, Scene } from "../index.js";
-import { Enum, Constants, Platform, Inputs } from "../Common/index.js";
+import { Enum, Constants, Platform } from "../Common/index.js";
 var Align = Enum.Align;
 var PictureKind = Enum.PictureKind;
 import { Picture2D, Game } from "../Core/index.js";
@@ -54,17 +54,21 @@ class LoadGame extends SaveLoadGame {
     }
     /**
      *  Slot action.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
      */
-    action() {
-        Game.current = this.windowChoicesSlots.getCurrentContent()
-            .game;
-        if (Game.current.isEmpty) {
-            Game.current = null;
-            Datas.Systems.soundImpossible.playSound();
-        }
-        else {
-            Datas.Systems.soundConfirmation.playSound();
-            this.loadGame();
+    action(isKey, options = {}) {
+        if (Scene.MenuBase.checkActionMenu(isKey, options)) {
+            Game.current = this.windowChoicesSlots.getCurrentContent()
+                .game;
+            if (Game.current.isEmpty) {
+                Game.current = null;
+                Datas.Systems.soundImpossible.playSound();
+            }
+            else {
+                Datas.Systems.soundConfirmation.playSound();
+                this.loadGame();
+            }
         }
     }
     /**
@@ -73,18 +77,16 @@ class LoadGame extends SaveLoadGame {
      */
     onKeyPressed(key) {
         super.onKeyPressed(key);
-        if (Datas.Keyboards.checkActionMenu(key)) {
-            this.action();
-        }
+        console.log("b");
+        this.action(true, { key: key });
     }
     /**
      *  @inheritdoc
      */
     onMouseUp(x, y) {
         super.onMouseUp(x, y);
-        if (Inputs.mouseLeftPressed) {
-            this.action();
-        }
+        console.log("c");
+        this.action(false, { x: x, y: y });
     }
     /**
      *  Draw the HUD scene

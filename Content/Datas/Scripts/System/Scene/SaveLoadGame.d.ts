@@ -33,9 +33,25 @@ declare class SaveLoadGame extends Base {
      */
     updateInformations(i: number): void;
     /**
-     *  Cancel the scene.
+     *  Slot cancel.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
      */
-    cancel(): void;
+    cancel(isKey: boolean, options?: {
+        key?: number;
+        x?: number;
+        y?: number;
+    }): void;
+    /**
+     *  Slot move.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    move(isKey: boolean, options?: {
+        key?: number;
+        x?: number;
+        y?: number;
+    }): void;
     /**
      *  Update the scene.
      */

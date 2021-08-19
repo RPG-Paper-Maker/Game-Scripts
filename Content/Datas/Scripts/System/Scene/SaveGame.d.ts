@@ -15,9 +15,23 @@ declare class SaveGame extends SaveLoadGame {
      */
     save(): Promise<void>;
     /**
+     *  Slot action.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    action(isKey: boolean, options?: {
+        key?: number;
+        x?: number;
+        y?: number;
+    }): void;
+    /**
      *  Handle scene key pressed.
      *   @param {number} key - The key ID
      */
     onKeyPressed(key: number): void;
+    /**
+     *  @inheritdoc
+     */
+    onMouseUp(x: number, y: number): void;
 }
 export { SaveGame };

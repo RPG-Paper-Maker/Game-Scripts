@@ -161,6 +161,7 @@ class MenuDescriptionState extends MenuBase {
      */
     update() {
         super.update();
+        this.windowChoicesTabs.update();
         (<Graphic.PlayerDescription>this.windowInformation.content)
             .updateBattler();
     }

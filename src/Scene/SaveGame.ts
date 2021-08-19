@@ -10,7 +10,7 @@
 */
 
 import { SaveLoadGame } from "./SaveLoadGame";
-import { Graphic, Datas, Manager } from "../index";
+import { Graphic, Datas, Manager, Scene } from "../index";
 import { Enum } from "../Common";
 import Align = Enum.Align;
 import { Game } from "../Core";
@@ -49,17 +49,33 @@ class SaveGame extends SaveLoadGame {
     }
 
     /** 
+     *  Slot action.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    action(isKey: boolean, options: { key?: number, x?: number, y?: number } = {}) {
+        // If action, save in the selected slot
+        if (Scene.MenuBase.checkActionMenu(isKey, options)) {
+            this.loading = true;
+            this.save();
+        }
+    }
+
+    /** 
      *  Handle scene key pressed.
      *   @param {number} key - The key ID
      */
     onKeyPressed(key: number) {
         super.onKeyPressed(key);
+        this.action(true, { key: key });
+    }
 
-        // If action, save in the selected slot
-        if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Action)) {
-            this.loading = true;
-            this.save();
-        }
+    /** 
+     *  @inheritdoc
+     */
+    onMouseUp(x: number, y: number) {
+        super.onMouseUp(x, y);
+        this.action(false, { x: x, y: y });
     }
 }
 
