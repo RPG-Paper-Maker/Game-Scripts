@@ -148,24 +148,107 @@ class MenuSkills extends Base {
 
     /** 
      *  Move tab according to key.
-     *  @param {number} key - The key ID 
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
      */
-    moveTabKey(key: number) {
+    moveTabKey(isKey: boolean, options: { key?: number, x?: number, y?: number } = {}) {
         // Tab
         let indexTab = this.windowChoicesTabs.currentSelectedIndex;
-        this.windowChoicesTabs.onKeyPressedAndRepeat(key);
+        if (isKey) {
+            this.windowChoicesTabs.onKeyPressedAndRepeat(options.key);
+        } else {
+            this.windowChoicesTabs.onMouseMove(options.x, options.y);
+        }
         if (indexTab !== this.windowChoicesTabs.currentSelectedIndex) {
             this.updateForTab();
         }
-
         // List
-        this.windowChoicesList.onKeyPressedAndRepeat(key);
+        if (isKey) {
+            this.windowChoicesList.onKeyPressedAndRepeat(options.key);
+        } else {
+            this.windowChoicesList.onMouseMove(options.x, options.y);
+        }
         let position = this.positionChoice[this.windowChoicesTabs
             .currentSelectedIndex];
         position.index = this.windowChoicesList.currentSelectedIndex;
         position.offset = this.windowChoicesList.offsetSelectedIndex;
-
         this.synchronize();
+    }
+
+    /** 
+     *  A scene action.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    action(isKey: boolean, options: { key?: number, x?: number, y?: number } = {}) {
+        let graphic = <Graphic.Skill> this.windowBoxInformation.content;
+        let graphicUse = <Graphic.UseSkillItem> this.windowBoxUseSkill.content;
+        switch (this.substep) {
+            case 0:
+                if (Scene.MenuBase.checkActionMenu(isKey, options)) {
+                    if (this.windowBoxInformation.content === null) {
+                        return;
+                    }
+                    let targetKind = graphic.system.targetKind;
+                    let availableKind = graphic.system.availableKind;
+                    if (graphic.system.isPossible() && (targetKind === 
+                        TargetKind.Ally || targetKind === TargetKind.AllAllies) 
+                        && (availableKind === AvailableKind.Always || 
+                        availableKind === AvailableKind.MainMenu)) {
+                        Datas.Systems.soundConfirmation.playSound();
+                        this.substep = 1;
+                        graphicUse.setSkillItem(graphic.system);
+                        graphicUse.setAll(targetKind === TargetKind.AllAllies);
+                        Manager.Stack.requestPaintHUD = true;
+                    } else {
+                        Datas.Systems.soundImpossible.playSound();
+                    }
+                } else if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
+                    Datas.Systems.soundCancel.playSound();
+                    Scene.Map.current.user = null;
+                    Manager.Stack.pop();
+                }
+                break;
+            case 1:
+                if (Scene.MenuBase.checkActionMenu(isKey, options)) {
+                    if (graphic.system.use()) {
+                        graphic.system.sound.playSound();
+                        (<Graphic.UseSkillItem> this.windowBoxUseSkill.content)
+                            .updateStats();
+                        if (!graphic.system.isPossible()) {
+                            this.substep = 0;
+                        }
+                        Manager.Stack.requestPaintHUD = true;
+                    }
+                } else if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
+                    Datas.Systems.soundCancel.playSound();
+                    this.substep = 0;
+                    Manager.Stack.requestPaintHUD = true;
+                }
+                break;
+        }
+    }
+
+    /** 
+     *  A scene move.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    move(isKey: boolean, options: { key?: number, x?: number, y?: number } = {}) {
+        switch (this.substep) {
+            case 0:
+                this.moveTabKey(isKey, options);
+                break;
+            case 1:
+                if (isKey) {
+                    (<Graphic.UseSkillItem> this.windowBoxUseSkill.content)
+                        .onKeyPressedAndRepeat(options.key);
+                } else {
+                    (<Graphic.UseSkillItem> this.windowBoxUseSkill.content)
+                        .onMouseMove(options.x, options.y);
+                }
+                break;
+        }
     }
 
     /**
@@ -173,6 +256,8 @@ class MenuSkills extends Base {
      */
     update() {
         Scene.Base.prototype.update.call(Scene.Map.current);
+        this.windowChoicesList.update();
+        this.windowChoicesTabs.update();
         if (this.windowChoicesList.currentSelectedIndex !== -1) {
             this.windowBoxUseSkill.update();
         }
@@ -184,63 +269,7 @@ class MenuSkills extends Base {
      */
     onKeyPressed(key: number) {
         Scene.Base.prototype.onKeyPressed.call(Scene.Map.current, key);
-        let graphic = <Graphic.Skill> this.windowBoxInformation.content;
-        let graphicUse = <Graphic.UseSkillItem> this.windowBoxUseSkill.content;
-        switch (this.substep) {
-            case 0:
-                if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
-                    .Action))
-                {
-                    if (this.windowBoxInformation.content === null) {
-                        return;
-                    }
-                    let targetKind = graphic.system.targetKind;
-                    let availableKind = graphic.system.availableKind;
-                    if (graphic.system.isPossible() && (targetKind === 
-                        TargetKind.Ally || targetKind === TargetKind.AllAllies) 
-                        && (availableKind === AvailableKind.Always || 
-                        availableKind === AvailableKind.MainMenu))
-                    {
-                        Datas.Systems.soundConfirmation.playSound();
-                        this.substep = 1;
-                        graphicUse.setSkillItem(graphic.system);
-                        graphicUse.setAll(targetKind === TargetKind.AllAllies);
-                        Manager.Stack.requestPaintHUD = true;
-                    } else {
-                        Datas.Systems.soundImpossible.playSound();
-                    }
-                } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
-                    .menuControls.Cancel) || Datas.Keyboards.isKeyEqual(key, 
-                    Datas.Keyboards.controls.MainMenu))
-                {
-                    Datas.Systems.soundCancel.playSound();
-                    Scene.Map.current.user = null;
-                    Manager.Stack.pop();
-                }
-                break;
-            case 1:
-                if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
-                    .Action))
-                {
-                    if (graphic.system.use()) {
-                        graphic.system.sound.playSound();
-                        (<Graphic.UseSkillItem> this.windowBoxUseSkill.content)
-                            .updateStats();
-                        if (!graphic.system.isPossible()) {
-                            this.substep = 0;
-                        }
-                        Manager.Stack.requestPaintHUD = true;
-                    }
-                } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
-                    .menuControls.Cancel) || Datas.Keyboards.isKeyEqual(key,
-                    Datas.Keyboards.controls.MainMenu))
-                {
-                    Datas.Systems.soundCancel.playSound();
-                    this.substep = 0;
-                    Manager.Stack.requestPaintHUD = true;
-                }
-                break;
-        }
+        this.action(true, { key: key });
     }
 
     /** 
@@ -268,16 +297,24 @@ class MenuSkills extends Base {
     onKeyPressedAndRepeat(key: number): boolean {
         let res = Scene.Base.prototype.onKeyPressedAndRepeat.call(Scene.Map
             .current, key);
-        switch (this.substep) {
-            case 0:
-                this.moveTabKey(key);
-                break;
-            case 1:
-                (<Graphic.UseSkillItem> this.windowBoxUseSkill.content)
-                    .onKeyPressedAndRepeat(key);
-                break;
-        }
+        this.move(true, { key: key });
         return res;
+    }
+
+    /** 
+     *  @inheritdoc
+     */
+    onMouseMove(x: number, y: number) {
+        super.onMouseMove(x, y);
+        this.move(false, { x: x, y: y });
+    }
+
+    /** 
+     *  @inheritdoc
+     */
+    onMouseUp(x: number, y: number) {
+        super.onMouseUp(x, y);
+        this.action(false, { x: x, y: y });
     }
 
     /** 

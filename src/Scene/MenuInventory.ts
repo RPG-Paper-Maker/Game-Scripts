@@ -214,6 +214,8 @@ class MenuInventory extends Base {
 
     /** 
      *  A scene action.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
      */
     action(isKey: boolean, options: { key?: number, x?: number, y?: number } = {}) {
         let graphic = <Graphic.Item> this.windowBoxInformation.content;
@@ -274,6 +276,8 @@ class MenuInventory extends Base {
 
     /** 
      *  A scene move.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
      */
     move(isKey: boolean, options: { key?: number, x?: number, y?: number } = {}) {
         switch (this.substep) {

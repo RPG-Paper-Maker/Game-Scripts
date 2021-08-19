@@ -183,6 +183,8 @@ class MenuInventory extends Base {
     }
     /**
      *  A scene action.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
      */
     action(isKey, options = {}) {
         let graphic = this.windowBoxInformation.content;
@@ -248,6 +250,8 @@ class MenuInventory extends Base {
     }
     /**
      *  A scene move.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
      */
     move(isKey, options = {}) {
         switch (this.substep) {

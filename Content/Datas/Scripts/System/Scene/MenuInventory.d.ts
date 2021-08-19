@@ -50,6 +50,8 @@ declare class MenuInventory extends Base {
     }): void;
     /**
      *  A scene action.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
      */
     action(isKey: boolean, options?: {
         key?: number;
@@ -58,6 +60,8 @@ declare class MenuInventory extends Base {
     }): void;
     /**
      *  A scene move.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
      */
     move(isKey: boolean, options?: {
         key?: number;
