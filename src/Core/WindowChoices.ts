@@ -427,6 +427,19 @@ class WindowChoices extends Bitmap {
     }
 
     /** 
+     *  A widget move.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    move(isKey: boolean, options: { key?: number, x?: number, y?: number } = {}) {
+        if (isKey) {
+            this.onKeyPressedAndRepeat(options.key);
+        } else {
+            this.onMouseMove(options.x, options.y);
+        }
+    }
+
+    /** 
      *  Update the widget.
      */
     update() {

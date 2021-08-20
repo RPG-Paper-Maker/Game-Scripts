@@ -62,14 +62,6 @@ class UseSkillItem extends Base {
         }
     }
     /**
-     *  Update the battler frame.
-     */
-    update() {
-        for (let i = 0, l = this.graphicCharacters.length; i < l; i++) {
-            this.graphicCharacters[i].updateBattler();
-        }
-    }
-    /**
      *  Udpate the battler.
      */
     updateStats() {
@@ -122,6 +114,27 @@ class UseSkillItem extends Base {
     updateStatShortNone() {
         for (let i = 0, l = this.graphicCharacters.length; i < l; i++) {
             this.graphicCharacters[i].updateStatShortNone();
+        }
+    }
+    /**
+     *  A widget move.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    move(isKey, options = {}) {
+        if (isKey) {
+            this.onKeyPressedAndRepeat(options.key);
+        }
+        else {
+            this.onMouseMove(options.x, options.y);
+        }
+    }
+    /**
+     *  Update the battler frame.
+     */
+    update() {
+        for (let i = 0, l = this.graphicCharacters.length; i < l; i++) {
+            this.graphicCharacters[i].updateBattler();
         }
     }
     /**

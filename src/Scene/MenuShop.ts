@@ -360,19 +360,20 @@ class MenuShop extends MenuBase {
 
     /** 
      *  Move tab according to key.
-     *  @param {number} key - The key ID 
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
      */
-    moveTabKey(key: number) {
+    moveTabKey(isKey: boolean, options: { key?: number, x?: number, y?: number } = {}) {
         // Tab
         const indexTab = this.windowChoicesItemsKind.currentSelectedIndex;
-        this.windowChoicesItemsKind.onKeyPressedAndRepeat(key);
+        this.windowChoicesItemsKind.move(isKey, options);
         if (indexTab !== this.windowChoicesItemsKind.currentSelectedIndex) {
             this.updateItemsList();
         }
 
         // List
         const indexList = this.windowChoicesList.currentSelectedIndex;
-        this.windowChoicesList.onKeyPressedAndRepeat(key);
+        this.windowChoicesList.move(isKey, options);
         if (indexList !== this.windowChoicesList.currentSelectedIndex) {
             this.synchronize();
         }
@@ -425,40 +426,29 @@ class MenuShop extends MenuBase {
         }
         player.updateEquipmentStats(this.currentList, this.currentBonus);
     }
-    
-    /**
-     *  Update the scene.
-     */
-    update() {
-        this.windowBoxUseItem.content.update();
-    }
 
     /** 
-     *  Handle scene key pressed.
-     *  @param {number} key - The key ID
+     *  A scene action.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
      */
-    onKeyPressed(key: number) {
-        super.onKeyPressed(key);
+    action(isKey: boolean, options: { key?: number, x?: number, y?: number } = {}) {
         let graphic = <Graphic.Item>this.windowChoicesList.getCurrentContent();
         switch (this.step) {
             case 0:
-                if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Action)) {
+                if (Scene.MenuBase.checkActionMenu(isKey, options)) {
                     Datas.Systems.soundConfirmation.playSound();
                     this.updateItemsList();
                     this.step = 1;
                     Manager.Stack.requestPaintHUD = true;
-                } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
-                    .menuControls.Cancel) || Datas.Keyboards.isKeyEqual(key, 
-                    Datas.Keyboards.controls.MainMenu)) {
+                } else if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
                     Datas.Systems.soundCancel.playSound();
                     Scene.Map.current.user = null;
                     Manager.Stack.pop();
                 }
                 break;
             case 1:
-                if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
-                    .Action))
-                {
+                if (Scene.MenuBase.checkActionMenu(isKey, options)) {
                     if (this.windowBoxInformation.content === null) {
                         return;
                     }
@@ -470,6 +460,8 @@ class MenuShop extends MenuBase {
                                     .hideArrow = false;
                                 (<Graphic.UseSkillItem>this.windowBoxUseItem.content)
                                     .indexArrow = 0;
+                                (<Graphic.UseSkillItem>this.windowBoxUseItem.content)
+                                    .setSkillItem(graphic.item.system);
                                 this.updateEquipmentStats();
                                 this.step = 3;
                             } else {
@@ -488,17 +480,14 @@ class MenuShop extends MenuBase {
                         this.step = 2;
                         Manager.Stack.requestPaintHUD = true;
                     }
-                } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
-                    .menuControls.Cancel) || Datas.Keyboards.isKeyEqual(key, 
-                    Datas.Keyboards.controls.MainMenu)) {
+                } else if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
                     Datas.Systems.soundCancel.playSound();
                     this.step = 0;
                 }
                 break;
             case 2:
             case 4:
-                if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
-                    .Action)) {
+                if (Scene.MenuBase.checkActionMenu(isKey, options)) {
                     Datas.Systems.soundConfirmation.playSound();
                     let shopItem = graphic.item;
                     if (this.isBuy()) {
@@ -531,25 +520,20 @@ class MenuShop extends MenuBase {
                     }
                     this.step = 1;
                     Manager.Stack.requestPaintHUD = true;
-                } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
-                    .menuControls.Cancel) || Datas.Keyboards.isKeyEqual(key, 
-                    Datas.Keyboards.controls.MainMenu)) {
+                } else if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
                     Datas.Systems.soundCancel.playSound();
                     this.step = graphic.item.system.isWeaponArmor() ? 3 : 1;
                     Manager.Stack.requestPaintHUD = true;
                 }
                 break;
             case 3:
-                if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
-                    .Action)) {
+                if (Scene.MenuBase.checkActionMenu(isKey, options)) {
                     Datas.Systems.soundConfirmation.playSound();
                     this.spinBox.max = graphic.item.nb;
                     this.spinBox.updateValue(1);
                     this.step = 2;
                     Manager.Stack.requestPaintHUD = true;
-                } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
-                    .menuControls.Cancel) || Datas.Keyboards.isKeyEqual(key, 
-                    Datas.Keyboards.controls.MainMenu)) {
+                } else if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
                     Datas.Systems.soundCancel.playSound();
                     (<Graphic.UseSkillItem>this.windowBoxUseItem.content)
                         .hideArrow = true;
@@ -562,31 +546,76 @@ class MenuShop extends MenuBase {
     }
 
     /** 
+     *  A scene move.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    move(isKey: boolean, options: { key?: number, x?: number, y?: number } = {}) {
+        switch (this.step) {
+            case 0:
+                this.windowChoicesBuySell.move(isKey, options);
+                break;
+            case 1:
+                this.moveTabKey(isKey, options);
+                break;
+            case 2:
+                this.spinBox.onKeyPressedAndRepeat(options.key);
+                break;
+            case 3:
+                (<Graphic.UseSkillItem>this.windowBoxUseItem.content).move(isKey, options);
+                this.updateEquipmentStats();
+                break;
+            case 4:
+                this.windowChoicesConfirmEquip.move(isKey, options);
+                break;
+        }
+    }
+    
+    /**
+     *  Update the scene.
+     */
+    update() {
+        this.windowBoxUseItem.content.update();
+        this.windowChoicesBuySell.update();
+        this.windowChoicesConfirmEquip.update();
+        this.windowChoicesItemsKind.update();
+        this.windowChoicesList.update();
+    }
+
+    /** 
+     *  Handle scene key pressed.
+     *  @param {number} key - The key ID
+     */
+    onKeyPressed(key: number) {
+        super.onKeyPressed(key);
+        this.action(true, { key: key });
+    }
+
+    /** 
      *  Handle scene pressed and repeat key.
      *  @param {number} key - The key ID
      *  @returns {boolean}
      */
     onKeyPressedAndRepeat(key: number): boolean {
         let res = super.onKeyPressedAndRepeat(key);
-        switch (this.step) {
-            case 0:
-                this.windowChoicesBuySell.onKeyPressedAndRepeat(key);
-                break;
-            case 1:
-                this.moveTabKey(key);
-                break;
-            case 2:
-                this.spinBox.onKeyPressedAndRepeat(key);
-                break;
-            case 3:
-                (<Graphic.UseSkillItem>this.windowBoxUseItem.content).onKeyPressedAndRepeat(key);
-                this.updateEquipmentStats();
-                break;
-            case 4:
-                this.windowChoicesConfirmEquip.onKeyPressedAndRepeat(key);
-                break;
-        }
+        this.move(true, { key: key });
         return res;
+    }
+
+    /** 
+     *  @inheritdoc
+     */
+    onMouseMove(x: number, y: number) {
+        super.onMouseMove(x, y);
+        this.move(false, { x: x, y: y });
+    }
+
+    /** 
+     *  @inheritdoc
+     */
+    onMouseUp(x: number, y: number) {
+        super.onMouseUp(x, y);
+        this.action(false, { x: x, y: y });
     }
 
     /** 

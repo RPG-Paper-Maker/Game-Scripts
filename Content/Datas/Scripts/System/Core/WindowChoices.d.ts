@@ -189,6 +189,16 @@ declare class WindowChoices extends Bitmap {
      */
     goArrowDown(): void;
     /**
+     *  A widget move.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    move(isKey: boolean, options?: {
+        key?: number;
+        x?: number;
+        y?: number;
+    }): void;
+    /**
      *  Update the widget.
      */
     update(): void;

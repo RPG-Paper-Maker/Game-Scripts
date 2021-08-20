@@ -30,10 +30,6 @@ declare class UseSkillItem extends Base {
      */
     setAll(b: boolean): void;
     /**
-     *  Update the battler frame.
-     */
-    update(): void;
-    /**
      *  Udpate the battler.
      */
     updateStats(): void;
@@ -60,6 +56,20 @@ declare class UseSkillItem extends Base {
      *  Update stat short to none.
      */
     updateStatShortNone(): void;
+    /**
+     *  A widget move.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    move(isKey: boolean, options?: {
+        key?: number;
+        x?: number;
+        y?: number;
+    }): void;
+    /**
+     *  Update the battler frame.
+     */
+    update(): void;
     /**
      *  Key pressed repeat handle, but with a small wait after the first
      *  pressure.
