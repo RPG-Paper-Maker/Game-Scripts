@@ -11,7 +11,7 @@
 import { Base } from "./Base.js";
 import { Game, WindowChoices } from "../Core/index.js";
 import { Mathf, ScreenResolution } from "../Common/index.js";
-import { Datas, Manager, System } from "../index.js";
+import { Datas, Manager, Scene, System } from "../index.js";
 import { SpinBox } from "../Core/SpinBox.js";
 /** @class
  *  An event command for entering a number inside a variable.
@@ -34,6 +34,59 @@ class InputNumber extends Base {
      */
     setShowText(showText) {
         this.showText = showText;
+    }
+    /**
+     *  An event action.
+     *  @param {Record<string ,any>} currentState
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    action(currentState, isKey, options = {}) {
+        if (Scene.MenuBase.checkActionMenu(isKey, options) || Scene.MenuBase
+            .checkCancel(isKey, options)) {
+            currentState.confirmed = true;
+        }
+    }
+    /**
+     *  An event move.
+     *  @param {Record<string ,any>} currentState
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    move(currentState, isKey, options = {}) {
+        currentState.spinBoxes[currentState.index].move(isKey, options);
+        // Wait for a slower update
+        let t = new Date().getTime();
+        if (!isKey || (isKey && t - currentState.startTime >= WindowChoices
+            .TIME_WAIT_PRESS)) {
+            currentState.startTime = t;
+            currentState.spinBoxes[currentState.index].setActive(false);
+            if (isKey) {
+                if (Datas.Keyboards.isKeyEqual(options.key, Datas.Keyboards
+                    .menuControls.Right)) {
+                    currentState.index = Mathf.mod(currentState.index + 1, currentState.digits);
+                    Datas.Systems.soundCursor.playSound();
+                    Manager.Stack.requestPaintHUD = true;
+                }
+                else if (Datas.Keyboards.isKeyEqual(options.key, Datas
+                    .Keyboards.menuControls.Left)) {
+                    currentState.index = Mathf.mod(currentState.index - 1, currentState.digits);
+                    Datas.Systems.soundCursor.playSound();
+                    Manager.Stack.requestPaintHUD = true;
+                }
+            }
+            else {
+                for (let i = 0; i < currentState.digits; i++) {
+                    if (currentState.index !== i && currentState.spinBoxes[i]
+                        .isInside(options.x, options.y)) {
+                        currentState.index = i;
+                        Datas.Systems.soundCursor.playSound();
+                        Manager.Stack.requestPaintHUD = true;
+                    }
+                }
+            }
+            currentState.spinBoxes[currentState.index].setActive(true);
+        }
     }
     /**
      *  Initialize the current state.
@@ -69,12 +122,16 @@ class InputNumber extends Base {
      *  @returns {number} The number of node to pass
     */
     update(currentState, object, state) {
+        for (let spinbox of currentState.spinBoxes) {
+            spinbox.update();
+        }
         if (currentState.confirmed) {
             let value = "";
-            for (let i = 0; i < currentState.digits; i++) {
-                value += currentState.spinBoxes[i].value;
+            for (let spinbox of currentState.spinBoxes) {
+                value += spinbox.value;
             }
-            Game.current.variables[this.stockVariableID.getValue(true)] = parseInt(value);
+            Game.current.variables[this.stockVariableID.getValue(true)] =
+                parseInt(value);
             return 1;
         }
         return 0;
@@ -85,12 +142,7 @@ class InputNumber extends Base {
      *  @param {number} key - The key ID pressed
      */
     onKeyPressed(currentState, key) {
-        if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Action)
-            || Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
-                .Cancel) || Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.controls
-            .MainMenu)) {
-            currentState.confirmed = true;
-        }
+        this.action(currentState, true, { key: key });
     }
     /**
      *  Key pressed repeat handle for the current stack, but with
@@ -100,25 +152,20 @@ class InputNumber extends Base {
      *  @returns {boolean}
      */
     onKeyPressedAndRepeat(currentState, key) {
-        currentState.spinBoxes[currentState.index].onKeyPressedAndRepeat(key);
-        // Wait for a slower update
-        let t = new Date().getTime();
-        if (t - currentState.startTime >= WindowChoices.TIME_WAIT_PRESS) {
-            currentState.startTime = t;
-            currentState.spinBoxes[currentState.index].setActive(false);
-            if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Right)) {
-                currentState.index = Mathf.mod(currentState.index + 1, currentState.digits);
-                Datas.Systems.soundCursor.playSound();
-                Manager.Stack.requestPaintHUD = true;
-            }
-            else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Left)) {
-                currentState.index = Mathf.mod(currentState.index - 1, currentState.digits);
-                Datas.Systems.soundCursor.playSound();
-                Manager.Stack.requestPaintHUD = true;
-            }
-            currentState.spinBoxes[currentState.index].setActive(true);
-        }
+        this.move(currentState, true, { key: key });
         return true;
+    }
+    /**
+     *  @inheritdoc
+     */
+    onMouseMove(currentState, x, y) {
+        this.move(currentState, false, { x: x, y: y });
+    }
+    /**
+     *  @inheritdoc
+     */
+    onMouseUp(currentState, x, y) {
+        this.action(currentState, false, { x: x, y: y });
     }
     /**
      *  Draw the HUD.
