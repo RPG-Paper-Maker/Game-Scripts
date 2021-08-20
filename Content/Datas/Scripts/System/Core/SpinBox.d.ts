@@ -15,6 +15,9 @@ declare class SpinBox extends Bitmap {
     allowLeftRight: boolean;
     active: boolean;
     startTime: number;
+    mouseArrowTime: number;
+    isMouseInArrowUp: boolean;
+    isMouseInArrowDown: boolean;
     /**
      *  @param {number} x - The x coordinates
      *  @param {number} y - The y coordinates
@@ -76,12 +79,32 @@ declare class SpinBox extends Bitmap {
      */
     goRight(): void;
     /**
+     *  A widget move.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    move(isKey: boolean, options?: {
+        key?: number;
+        x?: number;
+        y?: number;
+    }): void;
+    /**
+     *  Update the widget.
+     */
+    update(): void;
+    /**
      *  Key pressed repeat handle, but with a small wait after the first
      *  pressure (generally used for menus).
      *  @param {number} key - The key ID pressed
      *  @returns {boolean} false if the other keys are blocked after it
      */
     onKeyPressedAndRepeat(key: number): boolean;
+    /**
+     *  Mouse down handle for the current stack.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseMove(x: number, y: number): void;
     /**
      *  Draw the spin box.
      */

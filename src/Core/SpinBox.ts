@@ -10,7 +10,9 @@
 */
 
 import { Datas, Graphic, Manager } from "..";
+import { ScreenResolution } from "../Common";
 import { Bitmap } from "./Bitmap";
+import { Rectangle } from "./Rectangle";
 import { WindowBox } from "./WindowBox";
 import { WindowChoices } from "./WindowChoices";
 
@@ -30,6 +32,9 @@ class SpinBox extends Bitmap {
     public allowLeftRight: boolean;
     public active: boolean;
     public startTime: number;
+    public mouseArrowTime: number;
+    public isMouseInArrowUp: boolean = false;
+    public isMouseInArrowDown: boolean = false;
 
     /**
      *  @param {number} x - The x coordinates
@@ -51,6 +56,7 @@ class SpinBox extends Bitmap {
         };
         this.windowBox = new WindowBox(x, y, w, h, options);
         this.startTime = new Date().getTime();
+        this.mouseArrowTime = new Date().getTime();
         this.setActive(active);
     }
 
@@ -163,6 +169,37 @@ class SpinBox extends Bitmap {
     }
 
     /** 
+     *  A widget move.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    move(isKey: boolean, options: { key?: number, x?: number, y?: number } = {}) {
+        if (isKey) {
+            this.onKeyPressedAndRepeat(options.key);
+        } else {
+            this.onMouseMove(options.x, options.y);
+        }
+    }
+
+    /** 
+     *  Update the widget.
+     */
+    update() {
+        let t = new Date().getTime();
+        if (t - this.mouseArrowTime >= WindowChoices.TIME_WAIT_MOUSE_ARROW) {
+            this.mouseArrowTime = t;
+            // If pressing on arrow up
+            if (this.isMouseInArrowUp) {
+                this.goUp();
+            }
+            // If pressing on arrow down
+            if (this.isMouseInArrowDown) {
+                this.goDown();
+            }
+        }
+    }
+
+    /** 
      *  Key pressed repeat handle, but with a small wait after the first 
      *  pressure (generally used for menus).
      *  @param {number} key - The key ID pressed
@@ -188,20 +225,52 @@ class SpinBox extends Bitmap {
     }
 
     /** 
+     *  Mouse down handle for the current stack.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseMove(x: number, y: number) {
+        if (!Datas.Systems.isMouseControls) {
+            return;
+        }
+        if (this.active) {
+            this.isMouseInArrowDown = false;
+            this.isMouseInArrowUp = false;
+            const ws = Datas.Systems.getCurrentWindowSkin();
+            const arrowWidth = ScreenResolution.getScreenXY(ws.arrowUpDown[2]);
+            const arrowHeight = ScreenResolution.getScreenXY(ws.arrowUpDown[3]);
+            if (this.value < this.max) {
+                let rect = new Rectangle(this.x + (this.w - arrowWidth) / 2, 
+                    this.oY - (arrowHeight / 2) - 1, arrowWidth, arrowHeight);
+                if (rect.isInside(x, y)) {
+                    console.log("ok")
+                    this.isMouseInArrowUp = true;
+                }
+            }
+            if (this.value > this.min ) {
+                let rect = new Rectangle(this.x + (this.w - arrowWidth) / 2, 
+                    this.y + this.h + 1, arrowWidth, arrowHeight);
+                if (rect.isInside(x, y)) {
+                    this.isMouseInArrowDown = true;
+                }
+            }
+        }
+    }
+
+    /** 
      *  Draw the spin box.
      */
     draw() {
         this.windowBox.draw();
         if (this.active) {
-            let windowSkin = Datas.Systems.getCurrentWindowSkin();
+            const ws = Datas.Systems.getCurrentWindowSkin();
             if (this.value < this.max) {
-                windowSkin.drawArrowUp(this.oX + (this.oW - windowSkin
-                    .arrowUpDown[2]) / 2, this.oY - (windowSkin.arrowUpDown[3] 
-                    / 2) - 1);
+                ws.drawArrowUp(this.oX + (this.oW - ws.arrowUpDown[2]) / 2, this
+                    .oY - (ws.arrowUpDown[3] / 2) - 1);
             }
             if (this.value > this.min ) {
-                windowSkin.drawArrowDown(this.oX + (this.oW - windowSkin
-                    .arrowUpDown[2]) / 2, this.oY + this.oH + 1);
+                ws.drawArrowDown(this.oX + (this.oW - ws.arrowUpDown[2]) / 2, 
+                    this.oY + this.oH + 1);
             }
         }
     }

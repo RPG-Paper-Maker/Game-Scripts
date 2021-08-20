@@ -507,7 +507,7 @@ class MenuShop extends MenuBase {
                 this.moveTabKey(isKey, options);
                 break;
             case 2:
-                this.spinBox.onKeyPressedAndRepeat(options.key);
+                this.spinBox.move(isKey, options);
                 break;
             case 3:
                 this.windowBoxUseItem.content.move(isKey, options);
@@ -527,6 +527,7 @@ class MenuShop extends MenuBase {
         this.windowChoicesConfirmEquip.update();
         this.windowChoicesItemsKind.update();
         this.windowChoicesList.update();
+        this.spinBox.update();
     }
     /**
      *  Handle scene key pressed.
