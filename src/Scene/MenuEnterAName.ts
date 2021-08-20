@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Graphic, Manager } from "..";
+import { Datas, Graphic, Manager, Scene } from "..";
 import { Enum, ScreenResolution } from "../Common";
 import { Frame, Game, Picture2D, Player, Rectangle, WindowBox, WindowChoices } from "../Core";
 import { MenuBase } from "./MenuBase";
@@ -180,25 +180,13 @@ class MenuEnterAName extends MenuBase {
             options);
     }
 
-    /**
-     *  Update the scene.
-     */
-    update() {
-        if (this.frameUnderscore.update() && this.currentCharacterPosition < 
-            this.maxCharacters) {
-            (<Graphic.Text>this.windowChoicesTop.getContent(this
-                .currentCharacterPosition)).setText(this.frameUnderscore.value 
-                === 0 ? "_" : " ");
-        }
-    }
-
     /** 
-     *  Handle scene key pressed.
-     *  @param {number} key - The key ID
+     *  A scene action.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
      */
-    onKeyPressed(key: number) {
-        super.onKeyPressed(key);
-        if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Action)) {
+    action(isKey: boolean, options: { key?: number, x?: number, y?: number } = {}) {
+        if (Scene.MenuBase.checkActionMenu(isKey, options)) {
             Datas.Systems.soundConfirmation.playSound();
             // If is on OK button
             if (this.currentRow === this.rows) {
@@ -224,10 +212,8 @@ class MenuEnterAName extends MenuBase {
                     this.currentRow = this.rows;
                 }
             }
-        } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
-            .menuControls.Cancel) || Datas.Keyboards.isKeyEqual(key, 
-            Datas.Keyboards.controls.MainMenu)) {
-                Datas.Systems.soundCancel.playSound();
+        } else if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
+            Datas.Systems.soundCancel.playSound();
             if (this.currentCharacterPosition > 0) {
                 if (this.currentCharacterPosition < this.maxCharacters) {
                     (<Graphic.Text>this.windowChoicesTop.getContent(this
@@ -242,113 +228,184 @@ class MenuEnterAName extends MenuBase {
     }
 
     /** 
+     *  A scene move.
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    move(isKey: boolean, options: { key?: number, x?: number, y?: number } = {}) {
+        // If already max characters
+        if (this.currentCharacterPosition === this.maxCharacters) {
+            return;
+        }
+        let windowChoice = this.currentRow === this.rows ? null : this
+            .windowChoicesMain[this.currentRow];
+        let index = windowChoice === null ? 0 : windowChoice.currentSelectedIndex;
+        if (isKey) {
+            if (Datas.Keyboards.isKeyEqual(options.key, Datas.Keyboards
+                .menuControls.Down)) {
+                if (windowChoice !== null) {
+                    windowChoice.listWindows[windowChoice.currentSelectedIndex]
+                        .selected = false;
+                }
+                let i = this.currentRow;
+                if (i < this.rows && i >= 0) {
+                    this.currentRow++;
+                    if (this.offsetRow < (this.rows - this.displayRows) && i >= this
+                        .displayRows - 1 && i < this.rows - 1) {
+                        this.offsetRow++;
+                    }
+                } else if (i === this.rows) {
+                    this.currentRow = 0;
+                    this.offsetRow = 0;
+                    for (let i = 0; i < this.rows; i++) {
+                        this.windowChoicesMain[i].currentSelectedIndex = 0;
+                        this.windowChoicesMain[i].offsetSelectedIndex = 0;
+                    }
+                }
+                if (i !== this.currentRow) {
+                    Datas.Systems.soundCursor.playSound();
+                    for (let i = 0; i < this.displayRows; i++) {
+                        this.windowChoicesMain[i + this.offsetRow].setY(this
+                            .windowBoxMain.oY + this.windowBoxMain.padding[0] + 
+                            (i * 40));
+                    }
+                }
+                if (this.currentRow === this.rows) {
+                    this.windowBoxOk.selected = true;
+                } else {
+                    this.windowBoxOk.selected = false;
+                    this.windowChoicesMain[this.currentRow].select(index);
+                }
+            } else if (Datas.Keyboards.isKeyEqual(options.key, Datas.Keyboards
+                .menuControls.Up)) {
+                if (windowChoice !== null) {
+                    windowChoice.listWindows[windowChoice.currentSelectedIndex].selected = false;
+                }
+                let i = this.currentRow;
+                if (i > 0) {
+                    this.currentRow--;
+                    if (this.offsetRow === this.currentRow + 1) {
+                        this.offsetRow--;
+                    }
+                    if (i === this.rows) {
+                        this.offsetRow = this.rows - this.displayRows;
+                        for (let i = 0; i < this.rows; i++) {
+                            this.windowChoicesMain[i].currentSelectedIndex = 0;
+                            this.windowChoicesMain[i].offsetSelectedIndex = 0;
+                        }
+                    }
+                } else if (i === 0) {
+                    this.currentRow = this.rows;
+                }
+                if (i !== this.currentRow) {
+                    Datas.Systems.soundCursor.playSound();
+                    for (let i = 0; i < this.displayRows; i++) {
+                        this.windowChoicesMain[i + this.offsetRow].setY(this
+                            .windowBoxMain.oY + this.windowBoxMain.padding[0] + 
+                            (i * 40));
+                    }
+                }
+                if (this.currentRow === this.rows) {
+                    this.windowBoxOk.selected = true;
+                } else {
+                    this.windowBoxOk.selected = false;
+                    this.windowChoicesMain[this.currentRow].select(index);
+                }
+            } else if (Datas.Keyboards.isKeyEqual(options.key, Datas.Keyboards
+                .menuControls.Right)) {
+                if (this.currentRow < this.rows) {
+                    windowChoice.onKeyPressedAndRepeat(options.key);
+                    for (let i = 0; i < this.rows; i++) {
+                        this.windowChoicesMain[i].currentSelectedIndex = windowChoice
+                            .currentSelectedIndex;
+                        this.windowChoicesMain[i].offsetSelectedIndex = windowChoice
+                            .offsetSelectedIndex;
+                    }
+                }
+            } else if (Datas.Keyboards.isKeyEqual(options.key, Datas.Keyboards
+                .menuControls.Left)) {
+                if (this.currentRow < this.rows) {
+                    windowChoice.onKeyPressedAndRepeat(options.key);
+                    for (let i = 0; i < this.rows; i++) {
+                        this.windowChoicesMain[i].currentSelectedIndex = windowChoice
+                            .currentSelectedIndex;
+                        this.windowChoicesMain[i].offsetSelectedIndex = windowChoice
+                            .offsetSelectedIndex;
+                    }
+                }
+            }
+        } else {
+            let i: number, l: number;
+            for (i = 0, l = this.windowChoicesMain.length; i < l; i++) {
+                if (this.windowChoicesMain[i].isInside(options.x, options.y)) {
+                    if (this.currentRow !== i) {
+                        if (this.currentRow !== this.rows) {
+                            this.windowChoicesMain[this.currentRow].unselect();
+                        }
+                        this.currentRow = i;
+                        this.windowBoxOk.selected = false;
+                        this.windowChoicesMain[this.currentRow].select(i);
+                    }
+                    this.windowChoicesMain[i].onMouseMove(options.x, options.y);
+                    break;
+                }
+            }
+            if (this.windowBoxOk.isInside(options.x, options.y)) {
+                if (this.currentRow !== this.rows) {
+                    this.windowChoicesMain[this.currentRow].unselect();
+                }
+                this.currentRow = this.rows;
+                this.windowBoxOk.selected = true;
+            }
+        }
+    }
+
+    /**
+     *  Update the scene.
+     */
+    update() {
+        if (this.frameUnderscore.update() && this.currentCharacterPosition < 
+            this.maxCharacters) {
+            (<Graphic.Text>this.windowChoicesTop.getContent(this
+                .currentCharacterPosition)).setText(this.frameUnderscore.value 
+                === 0 ? "_" : " ");
+        }
+    }
+
+    /** 
+     *  Handle scene key pressed.
+     *  @param {number} key - The key ID
+     */
+    onKeyPressed(key: number) {
+        super.onKeyPressed(key);
+        this.action(true, { key: key });
+    }
+
+    /** 
      *  Handle scene pressed and repeat key.
      *  @param {number} key - The key ID
      *  @returns {boolean}
      */
     onKeyPressedAndRepeat(key: number): boolean {
         let res = super.onKeyPressedAndRepeat(key);
-        // If already max characters
-        if (this.currentCharacterPosition === this.maxCharacters) {
-            return res;
-        }
-        let windowChoice = this.currentRow === this.rows ? null : this
-            .windowChoicesMain[this.currentRow];
-        let index = windowChoice === null ? 0 : windowChoice.currentSelectedIndex;
-        if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
-            .menuControls.Down)) {
-            if (windowChoice !== null) {
-                windowChoice.listWindows[windowChoice.currentSelectedIndex]
-                    .selected = false;
-            }
-            let i = this.currentRow;
-            if (i < this.rows && i >= 0) {
-                this.currentRow++;
-                if (this.offsetRow < (this.rows - this.displayRows) && i >= this
-                    .displayRows - 1 && i < this.rows - 1) {
-                    this.offsetRow++;
-                }
-            } else if (i === this.rows) {
-                this.currentRow = 0;
-                this.offsetRow = 0;
-                for (let i = 0; i < this.rows; i++) {
-                    this.windowChoicesMain[i].currentSelectedIndex = 0;
-                    this.windowChoicesMain[i].offsetSelectedIndex = 0;
-                }
-            }
-            if (i !== this.currentRow) {
-                Datas.Systems.soundCursor.playSound();
-                for (let i = 0; i < this.displayRows; i++) {
-                    this.windowChoicesMain[i + this.offsetRow].setY(this
-                        .windowBoxMain.oY + this.windowBoxMain.padding[0] + 
-                        (i * 40));
-                }
-            }
-            if (this.currentRow === this.rows) {
-                this.windowBoxOk.selected = true;
-            } else {
-                this.windowBoxOk.selected = false;
-                this.windowChoicesMain[this.currentRow].select(index);
-            }
-        } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
-            .menuControls.Up)) {
-            if (windowChoice !== null) {
-                windowChoice.listWindows[windowChoice.currentSelectedIndex].selected = false;
-            }
-            let i = this.currentRow;
-            if (i > 0) {
-                this.currentRow--;
-                if (this.offsetRow === this.currentRow + 1) {
-                    this.offsetRow--;
-                }
-                if (i === this.rows) {
-                    this.offsetRow = this.rows - this.displayRows;
-                    for (let i = 0; i < this.rows; i++) {
-                        this.windowChoicesMain[i].currentSelectedIndex = 0;
-                        this.windowChoicesMain[i].offsetSelectedIndex = 0;
-                    }
-                }
-            } else if (i === 0) {
-                this.currentRow = this.rows;
-            }
-            if (i !== this.currentRow) {
-                Datas.Systems.soundCursor.playSound();
-                for (let i = 0; i < this.displayRows; i++) {
-                    this.windowChoicesMain[i + this.offsetRow].setY(this
-                        .windowBoxMain.oY + this.windowBoxMain.padding[0] + 
-                        (i * 40));
-                }
-            }
-            if (this.currentRow === this.rows) {
-                this.windowBoxOk.selected = true;
-            } else {
-                this.windowBoxOk.selected = false;
-                this.windowChoicesMain[this.currentRow].select(index);
-            }
-        } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
-            .menuControls.Right)) {
-            if (this.currentRow < this.rows) {
-                windowChoice.onKeyPressedAndRepeat(key);
-                for (let i = 0; i < this.rows; i++) {
-                    this.windowChoicesMain[i].currentSelectedIndex = windowChoice
-                        .currentSelectedIndex;
-                    this.windowChoicesMain[i].offsetSelectedIndex = windowChoice
-                        .offsetSelectedIndex;
-                }
-            }
-        } else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards
-            .menuControls.Left)) {
-            if (this.currentRow < this.rows) {
-                windowChoice.onKeyPressedAndRepeat(key);
-                for (let i = 0; i < this.rows; i++) {
-                    this.windowChoicesMain[i].currentSelectedIndex = windowChoice
-                        .currentSelectedIndex;
-                    this.windowChoicesMain[i].offsetSelectedIndex = windowChoice
-                        .offsetSelectedIndex;
-                }
-            }
-        }
+        this.move(true, { key: key });
         return res;
+    }
+
+    /** 
+     *  @inheritdoc
+     */
+    onMouseMove(x: number, y: number) {
+        super.onMouseMove(x, y);
+        this.move(false, { x: x, y: y });
+    }
+
+    /** 
+     *  @inheritdoc
+     */
+    onMouseUp(x: number, y: number) {
+        super.onMouseUp(x, y);
+        this.action(false, { x: x, y: y });
     }
 
     /** 
