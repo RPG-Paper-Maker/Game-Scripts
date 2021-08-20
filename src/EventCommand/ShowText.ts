@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { System, Graphic, Datas, Manager } from "../index";
+import { System, Graphic, Datas, Manager, Scene } from "../index";
 import { WindowBox, MapObject } from "../Core";
 import { Utils, Enum } from "../Common";
 import Align = Enum.Align;
@@ -58,6 +58,19 @@ class ShowText extends Base {
             }
         );
         this.isDirectNode = false;
+    }
+
+    /** 
+     *  An event action.
+     *  @param {Record<string ,any>} currentState
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    action(currentState: Record<string ,any>, isKey: boolean, options: { key?: 
+        number, x?: number, y?: number } = {}) {
+        if (Scene.MenuBase.checkActionMenu(isKey, options)) {
+            currentState.clicked = true;
+        }
     }
 
     /** 
@@ -123,9 +136,14 @@ class ShowText extends Base {
      *  @param {number} key - The key ID pressed
      */
     onKeyPressed(currentState: Record<string, any>, key: number) {
-        if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Action)) {
-            currentState.clicked = true;
-        }
+        this.action(currentState, true, { key: key });
+    }
+
+    /** 
+     *  @inheritdoc
+     */
+    onMouseUp(currentState: Record<string, any>, x: number, y: number) {
+        this.action(currentState, false, { x: x, y: y });
     }
 
     /** 

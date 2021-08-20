@@ -14,6 +14,17 @@ declare class ShowText extends Base {
     windowInterlocutor: WindowBox;
     constructor(command: any[]);
     /**
+     *  An event action.
+     *  @param {Record<string ,any>} currentState
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    action(currentState: Record<string, any>, isKey: boolean, options?: {
+        key?: number;
+        x?: number;
+        y?: number;
+    }): void;
+    /**
      *  Initialize the current state.
      *  @returns {Record<string, any>} The current state
      */
@@ -32,6 +43,10 @@ declare class ShowText extends Base {
      *  @param {number} key - The key ID pressed
      */
     onKeyPressed(currentState: Record<string, any>, key: number): void;
+    /**
+     *  @inheritdoc
+     */
+    onMouseUp(currentState: Record<string, any>, x: number, y: number): void;
     /**
      *  Draw the HUD
      *  @param {Record<string ,any>} - currentState The current state of the event

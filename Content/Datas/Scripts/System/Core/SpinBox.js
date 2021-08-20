@@ -217,7 +217,6 @@ class SpinBox extends Bitmap {
             if (this.value < this.max) {
                 let rect = new Rectangle(this.x + (this.w - arrowWidth) / 2, this.oY - (arrowHeight / 2) - 1, arrowWidth, arrowHeight);
                 if (rect.isInside(x, y)) {
-                    console.log("ok");
                     this.isMouseInArrowUp = true;
                 }
             }

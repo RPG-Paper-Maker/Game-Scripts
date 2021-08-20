@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
-import { System, Graphic, Datas, Manager } from "../index.js";
+import { System, Graphic, Datas, Manager, Scene } from "../index.js";
 import { WindowBox } from "../Core/index.js";
 import { Utils, Enum } from "../Common/index.js";
 var Align = Enum.Align;
@@ -43,6 +43,17 @@ class ShowText extends Base {
             padding: WindowBox.SMALL_SLOT_PADDING
         });
         this.isDirectNode = false;
+    }
+    /**
+     *  An event action.
+     *  @param {Record<string ,any>} currentState
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    action(currentState, isKey, options = {}) {
+        if (Scene.MenuBase.checkActionMenu(isKey, options)) {
+            currentState.clicked = true;
+        }
     }
     /**
      *  Initialize the current state.
@@ -103,9 +114,13 @@ class ShowText extends Base {
      *  @param {number} key - The key ID pressed
      */
     onKeyPressed(currentState, key) {
-        if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Action)) {
-            currentState.clicked = true;
-        }
+        this.action(currentState, true, { key: key });
+    }
+    /**
+     *  @inheritdoc
+     */
+    onMouseUp(currentState, x, y) {
+        this.action(currentState, false, { x: x, y: y });
     }
     /**
      *  Draw the HUD

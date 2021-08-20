@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Base } from "./Base.js";
-import { System, Graphic, Datas } from "../index.js";
+import { System, Graphic, Datas, Scene } from "../index.js";
 import { ScreenResolution, Enum, Constants } from "../Common/index.js";
 import { WindowChoices, WindowBox } from "../Core/index.js";
 var Align = Enum.Align;
@@ -68,6 +68,31 @@ class DisplayChoice extends Base {
         this.showText = showText;
     }
     /**
+     *  An event action.
+     *  @param {Record<string ,any>} currentState
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    action(currentState, isKey, options = {}) {
+        if (Scene.MenuBase.checkActionMenu(isKey, options)) {
+            Datas.Systems.soundConfirmation.playSound();
+            currentState.index = this.windowChoices.currentSelectedIndex;
+        }
+        else if (Scene.MenuBase.checkCancel(isKey, options)) {
+            Datas.Systems.soundCancel.playSound();
+            currentState.index = this.cancelAutoIndex.getValue() - 1;
+        }
+    }
+    /**
+     *  An event move.
+     *  @param {Record<string ,any>} currentState
+     *  @param {boolean} isKey
+     *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+     */
+    move(currentState, isKey, options = {}) {
+        this.windowChoices.move(isKey, options);
+    }
+    /**
      *  Initialize the current state.
      *  @returns {Record<string, any>} The current state
      */
@@ -97,6 +122,7 @@ class DisplayChoice extends Base {
      *  @returns {number} The number of node to pass
      */
     update(currentState, object, state) {
+        this.windowChoices.update();
         return currentState.index + 1;
     }
     /**
@@ -112,15 +138,7 @@ class DisplayChoice extends Base {
      *  @param {number} key - The key ID pressed
      */
     onKeyPressed(currentState, key) {
-        if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Action)) {
-            Datas.Systems.soundConfirmation.playSound();
-            currentState.index = this.windowChoices.currentSelectedIndex;
-        }
-        else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls
-            .Cancel)) {
-            Datas.Systems.soundCancel.playSound();
-            currentState.index = this.cancelAutoIndex.getValue() - 1;
-        }
+        this.action(currentState, true, { key: key });
     }
     /**
      *  Key pressed repeat handle for the current stack, but with
@@ -129,7 +147,20 @@ class DisplayChoice extends Base {
      *  @param {number} key - The key ID pressed
      */
     onKeyPressedAndRepeat(currentState, key) {
-        return this.windowChoices.onKeyPressedAndRepeat(key);
+        this.move(currentState, true, { key: key });
+        return true;
+    }
+    /**
+     *  @inheritdoc
+     */
+    onMouseMove(currentState, x, y) {
+        this.move(currentState, false, { x: x, y: y });
+    }
+    /**
+     *  @inheritdoc
+     */
+    onMouseUp(currentState, x, y) {
+        this.action(currentState, false, { x: x, y: y });
     }
     /**
      *  Draw the HUD
