@@ -127,12 +127,11 @@ class ReactionInterpreter {
                 if (this.currentCommand !== null) {
                     this.currentCommandState = this.currentCommand.data
                         .initialize();
-                    directNode = this.currentCommand.data.isDirectNode;
                 } else {
                     directNode = false;
                 }
             } else {
-                directNode = false;
+                directNode = this.currentCommand.data.isDirectNode;
             }
         }
     }

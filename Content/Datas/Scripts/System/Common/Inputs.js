@@ -99,8 +99,8 @@ class Inputs {
             if (Main.loaded && !Manager.Stack.isLoading() && Datas.Systems
                 .isMouseControls) {
                 Manager.Stack.onMouseMove(event.clientX, event.clientY);
-                Inputs.mouseLastMoveX = event.clientX;
-                Inputs.mouseLastMoveY = event.clientY;
+                Inputs.mouseX = event.clientX;
+                Inputs.mouseY = event.clientY;
             }
         }, false);
         // Mouse up
@@ -127,6 +127,6 @@ Inputs.mouseLeftPressed = false;
 Inputs.mouseRightPressed = false;
 Inputs.mouseFirstPressX = -1;
 Inputs.mouseFirstPressY = -1;
-Inputs.mouseLastMoveX = -1;
-Inputs.mouseLastMoveY = -1;
+Inputs.mouseX = -1;
+Inputs.mouseY = -1;
 export { Inputs };

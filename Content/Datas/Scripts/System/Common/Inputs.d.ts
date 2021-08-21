@@ -8,8 +8,8 @@ declare class Inputs {
     static mouseRightPressed: boolean;
     static mouseFirstPressX: number;
     static mouseFirstPressY: number;
-    static mouseLastMoveX: number;
-    static mouseLastMoveY: number;
+    static mouseX: number;
+    static mouseY: number;
     constructor();
     /**
      *  Initialize all keyboard and mouse events.

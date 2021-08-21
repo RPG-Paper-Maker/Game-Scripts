@@ -25,8 +25,8 @@ class Inputs {
     static mouseRightPressed: boolean = false;
     static mouseFirstPressX: number = -1;
     static mouseFirstPressY: number = -1;
-    static mouseLastMoveX: number = -1;
-    static mouseLastMoveY: number = -1;
+    static mouseX: number = -1;
+    static mouseY: number = -1;
 
     constructor() {
         throw new Error("This is a static class");
@@ -117,8 +117,8 @@ class Inputs {
             if (Main.loaded && !Manager.Stack.isLoading() && Datas.Systems
                 .isMouseControls) {
                 Manager.Stack.onMouseMove(event.clientX, event.clientY);
-                Inputs.mouseLastMoveX = event.clientX;
-                Inputs.mouseLastMoveY = event.clientY;
+                Inputs.mouseX = event.clientX;
+                Inputs.mouseY = event.clientY;
             }
         }, false);
 

@@ -733,6 +733,17 @@ class Map extends Base {
      *  Update the scene.
      */
     update() {
+        // Mouse down repeat
+        if (!this.loading) {
+            if (!ReactionInterpreter.blockingHero && !this.isBattleMap) {
+                Manager.Events.sendEvent(null, 0, 1, true, 5, [null, System
+                    .DynamicValue.createNumber(Inputs.mouseX), System
+                    .DynamicValue.createNumber(Inputs.mouseY), System
+                    .DynamicValue.createSwitch(Inputs.mouseLeftPressed), System
+                    .DynamicValue.createSwitch(true)], true, false);
+            }
+        }
+
         this.updateMovingPortions();
 
         // Update autotiles animated
@@ -870,7 +881,8 @@ class Map extends Base {
                 Manager.Events.sendEvent(null, 0, 1, true, 5, [null, System
                     .DynamicValue.createNumber(x), System.DynamicValue
                     .createNumber(y), System.DynamicValue.createSwitch(Inputs
-                    .mouseLeftPressed)], true, false);
+                    .mouseLeftPressed), System.DynamicValue.createSwitch(false)], 
+                    true, false);
             }
             super.onMouseDown(x, y);
         }

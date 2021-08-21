@@ -333,7 +333,9 @@ class If extends Base {
                 }
                 break;
             case 7:
-                result = Interpreter.evaluate("return " + this.script.getValue(), { thisObject: object });
+                result = Interpreter.evaluate(this.script.getValue(), {
+                    thisObject: object
+                });
                 break;
             case 8:
                 result = Scene.Battle.escapedLastBattle;
