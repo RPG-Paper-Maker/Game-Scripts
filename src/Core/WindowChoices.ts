@@ -491,7 +491,6 @@ class WindowChoices extends Bitmap {
      *  @returns {boolean} false if the other keys are blocked after it
      */
     onKeyPressedAndRepeat(key: number): boolean {
-
         // Wait for a slower update
         let t = new Date().getTime();
         if (t - this.startTime >= WindowChoices.TIME_WAIT_PRESS) {
@@ -530,9 +529,6 @@ class WindowChoices extends Bitmap {
      *  @param {number} y - The y mouse position on screen
      */
     onMouseMove(x: number, y: number) {
-        if (!Datas.Systems.isMouseControls) {
-            return;
-        }
         this.isMouseInArrowDown = false;
         this.isMouseInArrowUp = false;
         // If inside the main window
@@ -589,9 +585,6 @@ class WindowChoices extends Bitmap {
      *  @param {Object} base - The base object to apply with callback
      */
     onMouseUp(x: number, y: number, base?: Object) {
-        if (!Datas.Systems.isMouseControls) {
-            return;
-        }
         if (this.currentSelectedIndex !== -1 && Inputs.mouseLeftPressed && this
             .listWindows[this.currentSelectedIndex].isInside(x, y)) {
             let callback = this.listCallBacks[this.currentSelectedIndex];

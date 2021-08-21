@@ -230,9 +230,6 @@ class SpinBox extends Bitmap {
      *  @param {number} y - The y mouse position on screen
      */
     onMouseMove(x: number, y: number) {
-        if (!Datas.Systems.isMouseControls) {
-            return;
-        }
         if (this.active) {
             this.isMouseInArrowDown = false;
             this.isMouseInArrowUp = false;

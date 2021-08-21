@@ -51,7 +51,8 @@ class ShowText extends Base {
      *  @param {{ key?: number, x?: number, y?: number }} [options={}]
      */
     action(currentState, isKey, options = {}) {
-        if (Scene.MenuBase.checkActionMenu(isKey, options)) {
+        if (Scene.MenuBase.checkActionMenu(isKey, options) && (isKey || (!isKey
+            && this.windowMain.isInside(options.x, options.y)))) {
             currentState.clicked = true;
         }
     }

@@ -11,7 +11,7 @@
 
 import { THREE } from "../Globals";
 import { Base } from "./Base";
-import { Enum, Utils, Constants, IO, Paths } from "../Common";
+import { Enum, Utils, Constants, IO, Paths, Inputs } from "../Common";
 import Orientation = Enum.Orientation;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 import PictureKind = Enum.PictureKind;
@@ -857,6 +857,56 @@ class Map extends Base {
             super.onKeyPressedAndRepeat(key);
         }
         return true;
+    }
+
+    /** 
+     *  Mouse down handle for the scene.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseDown(x: number, y: number) {
+        if (!this.loading) {
+            if (!ReactionInterpreter.blockingHero && !this.isBattleMap) {
+                Manager.Events.sendEvent(null, 0, 1, true, 5, [null, System
+                    .DynamicValue.createNumber(x), System.DynamicValue
+                    .createNumber(y), System.DynamicValue.createSwitch(Inputs
+                    .mouseLeftPressed)], true, false);
+            }
+            super.onMouseDown(x, y);
+        }
+    }
+
+    /** 
+     *  Mouse move handle for the scene.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseMove(x: number, y: number) {
+        if (!this.loading) {
+            if (!ReactionInterpreter.blockingHero && !this.isBattleMap) {
+                Manager.Events.sendEvent(null, 0, 1, true, 7, [null, System
+                    .DynamicValue.createNumber(x), System.DynamicValue
+                    .createNumber(y)], true, false);
+            }
+            super.onMouseMove(x, y);
+        }
+    }
+
+    /** 
+     *  Mouse up handle for the scene.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseUp(x: number, y: number) {
+        if (!this.loading) {
+            if (!ReactionInterpreter.blockingHero && !this.isBattleMap) {
+                Manager.Events.sendEvent(null, 0, 1, true, 6, [null, System
+                    .DynamicValue.createNumber(x), System.DynamicValue
+                    .createNumber(y), System.DynamicValue.createSwitch(Inputs
+                    .mouseLeftPressed)], true, false);
+            }
+            super.onMouseUp(x, y);
+        }
     }
 
     /** 

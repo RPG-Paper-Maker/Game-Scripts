@@ -272,6 +272,24 @@ declare class Map extends Base {
      */
     onKeyPressedAndRepeat(key: number): boolean;
     /**
+     *  Mouse down handle for the scene.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseDown(x: number, y: number): void;
+    /**
+     *  Mouse move handle for the scene.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseMove(x: number, y: number): void;
+    /**
+     *  Mouse up handle for the scene.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseUp(x: number, y: number): void;
+    /**
      *  Draw the 3D scene.
      */
     draw3D(): void;

@@ -404,9 +404,6 @@ class WindowChoices extends Bitmap {
      *  @param {number} y - The y mouse position on screen
      */
     onMouseMove(x, y) {
-        if (!Datas.Systems.isMouseControls) {
-            return;
-        }
         this.isMouseInArrowDown = false;
         this.isMouseInArrowUp = false;
         // If inside the main window
@@ -461,9 +458,6 @@ class WindowChoices extends Bitmap {
      *  @param {Object} base - The base object to apply with callback
      */
     onMouseUp(x, y, base) {
-        if (!Datas.Systems.isMouseControls) {
-            return;
-        }
         if (this.currentSelectedIndex !== -1 && Inputs.mouseLeftPressed && this
             .listWindows[this.currentSelectedIndex].isInside(x, y)) {
             let callback = this.listCallBacks[this.currentSelectedIndex];

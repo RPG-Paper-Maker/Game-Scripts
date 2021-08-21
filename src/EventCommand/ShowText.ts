@@ -68,7 +68,8 @@ class ShowText extends Base {
      */
     action(currentState: Record<string ,any>, isKey: boolean, options: { key?: 
         number, x?: number, y?: number } = {}) {
-        if (Scene.MenuBase.checkActionMenu(isKey, options)) {
+        if (Scene.MenuBase.checkActionMenu(isKey, options) && (isKey || (!isKey 
+            && this.windowMain.isInside(options.x, options.y)))) {
             currentState.clicked = true;
         }
     }

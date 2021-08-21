@@ -10,7 +10,7 @@
 */
 import { THREE } from "../Globals.js";
 import { Base } from "./Base.js";
-import { Enum, Utils, Constants, IO, Paths } from "../Common/index.js";
+import { Enum, Utils, Constants, IO, Paths, Inputs } from "../Common/index.js";
 var PictureKind = Enum.PictureKind;
 import { System, Datas, Scene, Manager } from "../index.js";
 import { Position, Portion, MapPortion, Camera, ReactionInterpreter, Vector3, Autotiles, Game, Frame, Vector2 } from "../Core/index.js";
@@ -741,6 +741,53 @@ class Map extends Base {
             super.onKeyPressedAndRepeat(key);
         }
         return true;
+    }
+    /**
+     *  Mouse down handle for the scene.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseDown(x, y) {
+        if (!this.loading) {
+            if (!ReactionInterpreter.blockingHero && !this.isBattleMap) {
+                Manager.Events.sendEvent(null, 0, 1, true, 5, [null, System
+                        .DynamicValue.createNumber(x), System.DynamicValue
+                        .createNumber(y), System.DynamicValue.createSwitch(Inputs
+                        .mouseLeftPressed)], true, false);
+            }
+            super.onMouseDown(x, y);
+        }
+    }
+    /**
+     *  Mouse move handle for the scene.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseMove(x, y) {
+        if (!this.loading) {
+            if (!ReactionInterpreter.blockingHero && !this.isBattleMap) {
+                Manager.Events.sendEvent(null, 0, 1, true, 7, [null, System
+                        .DynamicValue.createNumber(x), System.DynamicValue
+                        .createNumber(y)], true, false);
+            }
+            super.onMouseMove(x, y);
+        }
+    }
+    /**
+     *  Mouse up handle for the scene.
+     *  @param {number} x - The x mouse position on screen
+     *  @param {number} y - The y mouse position on screen
+     */
+    onMouseUp(x, y) {
+        if (!this.loading) {
+            if (!ReactionInterpreter.blockingHero && !this.isBattleMap) {
+                Manager.Events.sendEvent(null, 0, 1, true, 6, [null, System
+                        .DynamicValue.createNumber(x), System.DynamicValue
+                        .createNumber(y), System.DynamicValue.createSwitch(Inputs
+                        .mouseLeftPressed)], true, false);
+            }
+            super.onMouseUp(x, y);
+        }
     }
     /**
      *  Draw the 3D scene.
