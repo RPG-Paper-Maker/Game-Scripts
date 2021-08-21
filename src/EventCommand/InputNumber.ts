@@ -35,7 +35,6 @@ class InputNumber extends Base {
         this.stockVariableID = System.DynamicValue.createValueCommand(command, 
             iterator);
         this.digits = System.DynamicValue.createValueCommand(command, iterator);
-        this.isDirectNode = false;
     }
 
     /** 

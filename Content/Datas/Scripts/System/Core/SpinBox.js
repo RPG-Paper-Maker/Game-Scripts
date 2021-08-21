@@ -212,7 +212,7 @@ class SpinBox extends Bitmap {
             const arrowWidth = ScreenResolution.getScreenXY(ws.arrowUpDown[2]);
             const arrowHeight = ScreenResolution.getScreenXY(ws.arrowUpDown[3]);
             if (this.value < this.max) {
-                let rect = new Rectangle(this.x + (this.w - arrowWidth) / 2, this.oY - (arrowHeight / 2) - 1, arrowWidth, arrowHeight);
+                let rect = new Rectangle(this.x + (this.w - arrowWidth) / 2, this.y - (arrowHeight / 2) - 1, arrowWidth, arrowHeight);
                 if (rect.isInside(x, y)) {
                     this.isMouseInArrowUp = true;
                 }

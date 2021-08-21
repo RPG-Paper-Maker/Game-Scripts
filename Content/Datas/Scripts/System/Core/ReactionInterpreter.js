@@ -99,13 +99,14 @@ class ReactionInterpreter {
                 if (this.currentCommand !== null) {
                     this.currentCommandState = this.currentCommand.data
                         .initialize();
+                    directNode = true;
                 }
                 else {
                     directNode = false;
                 }
             }
             else {
-                directNode = this.currentCommand.data.isDirectNode;
+                directNode = false;
             }
         }
     }

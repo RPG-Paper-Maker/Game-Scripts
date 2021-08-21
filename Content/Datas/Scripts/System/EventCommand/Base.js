@@ -14,7 +14,6 @@
  */
 class Base {
     constructor() {
-        this.isDirectNode = true;
         this.parallel = false;
     }
     /**

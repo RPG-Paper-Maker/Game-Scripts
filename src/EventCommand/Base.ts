@@ -21,11 +21,9 @@ interface StructIterator {
  */
 abstract class Base {
 
-    public isDirectNode: boolean;
     public parallel: boolean;
 
     constructor() {
-        this.isDirectNode = true;
         this.parallel = false;
     }
 

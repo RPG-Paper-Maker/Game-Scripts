@@ -18,7 +18,6 @@ import { Scene, Manager } from "../index.js";
 class OpenMainMenu extends Base {
     constructor(command) {
         super();
-        this.isDirectNode = false;
     }
     /**
      *  Initialize the current state.

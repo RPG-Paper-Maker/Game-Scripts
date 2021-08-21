@@ -50,7 +50,6 @@ class ChangeScreenTone extends Base {
         }
         this.waitEnd = Utils.numToBool(command[iterator.i++]);
         this.time = System.DynamicValue.createValueCommand(command, iterator);
-        this.isDirectNode = true;
         this.parallel = !this.waitEnd;
     }
 

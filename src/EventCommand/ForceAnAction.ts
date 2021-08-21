@@ -66,7 +66,6 @@ class ForceAnAction extends Base {
             }
         }
         this.useBattlerTurn = Utils.numToBool(command[iterator.i++]);
-        this.isDirectNode = false;
     }
 
     /** 

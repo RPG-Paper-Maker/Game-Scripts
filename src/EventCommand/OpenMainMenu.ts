@@ -22,8 +22,6 @@ class OpenMainMenu extends Base {
 
     constructor(command: any[]) {
         super();
-
-        this.isDirectNode = false;
     }
 
     /** 

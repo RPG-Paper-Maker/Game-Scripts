@@ -31,7 +31,6 @@ class EnterANameMenu extends Base {
         }
         this.heroInstanceID = System.DynamicValue.createValueCommand(command, iterator);
         this.maxCharacters = System.DynamicValue.createValueCommand(command, iterator);
-        this.isDirectNode = false;
     }
 
     /** 

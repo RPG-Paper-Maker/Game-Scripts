@@ -65,7 +65,6 @@ class ChangeMapProperties extends Base {
             this.skyKind = command[iterator.i++];
             this.skyID = System.DynamicValue.createValueCommand(command, iterator);
         }
-        this.isDirectNode = false;
     }
 
     /** 

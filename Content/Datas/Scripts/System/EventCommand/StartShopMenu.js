@@ -35,7 +35,6 @@ class StartShopMenu extends Base {
             shopItem.parse(command, iterator);
             this.items.push(shopItem);
         }
-        this.isDirectNode = false;
     }
     /**
      *  Initialize the current state.

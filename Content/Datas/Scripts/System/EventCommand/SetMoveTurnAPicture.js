@@ -45,7 +45,6 @@ class SetMoveTurnAPicture extends Base {
         }
         this.time = System.DynamicValue.createValueCommand(command, iterator);
         this.waitEnd = Utils.numToBool(command[iterator.i++]);
-        this.isDirectNode = true;
         this.parallel = !this.waitEnd;
     }
     /**

@@ -42,7 +42,6 @@ class ShowText extends Base {
             content: new Graphic.Text("", { align: Align.Center }),
             padding: WindowBox.SMALL_SLOT_PADDING
         });
-        this.isDirectNode = false;
     }
     /**
      *  An event action.

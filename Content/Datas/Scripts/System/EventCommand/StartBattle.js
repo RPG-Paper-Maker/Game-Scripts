@@ -73,7 +73,6 @@ class StartBattle extends Base {
         if (Utils.numToBool(this.transitionEnd)) {
             this.transitionEndColor = System.DynamicValue.createValueCommand(command, iterator);
         }
-        this.isDirectNode = false;
     }
     /**
      *  Initialize the current state.

@@ -51,7 +51,6 @@ class CreateObjectInMap extends Base {
         if (this.isStockID) {
             this.stockID = System.DynamicValue.createValueCommand(command, iterator);
         }
-        this.isDirectNode = false;
     }
     /**
      *  Initialize the current state.

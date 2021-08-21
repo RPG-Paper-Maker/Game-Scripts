@@ -27,7 +27,6 @@ class DisplayAnAnimation extends Base {
         this.objectID = System.DynamicValue.createValueCommand(command, iterator);
         this.animationID = System.DynamicValue.createValueCommand(command, iterator);
         this.isWaitEnd = Utils.numToBool(command[iterator.i++]);
-        this.isDirectNode = !this.isWaitEnd;
         this.parallel = !this.isWaitEnd;
     }
     /**

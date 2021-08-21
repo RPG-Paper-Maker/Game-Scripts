@@ -245,7 +245,6 @@ class MoveObject extends Base {
                 this.moves.push(this.useCommand);
             }
         }
-        this.isDirectNode = !this.isWaitEnd;
         this.parallel = !this.isWaitEnd;
     }
 

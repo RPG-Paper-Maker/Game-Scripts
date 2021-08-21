@@ -18,7 +18,6 @@ class Choice extends Base {
     constructor(command) {
         super();
         this.index = command[0];
-        this.isDirectNode = true;
         this.parallel = false;
     }
     /**

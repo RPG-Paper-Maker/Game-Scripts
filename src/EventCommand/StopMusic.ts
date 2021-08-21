@@ -26,7 +26,6 @@ class StopMusic extends Base {
         super();
 
         EventCommand.StopMusic.parseStopSong(this, command);
-        this.isDirectNode = true;
         this.parallel = true;
     }
 

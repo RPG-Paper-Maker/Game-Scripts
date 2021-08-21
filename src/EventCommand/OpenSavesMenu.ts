@@ -22,8 +22,6 @@ class OpenSavesMenu extends Base {
 
     constructor(command: any[]) {
         super();
-
-        this.isDirectNode = false;
     }
 
     /** 

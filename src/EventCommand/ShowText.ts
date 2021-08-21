@@ -57,7 +57,6 @@ class ShowText extends Base {
                 padding: WindowBox.SMALL_SLOT_PADDING
             }
         );
-        this.isDirectNode = false;
     }
 
     /** 

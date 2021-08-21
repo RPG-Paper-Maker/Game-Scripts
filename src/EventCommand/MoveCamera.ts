@@ -77,7 +77,6 @@ class MoveCamera extends Base {
         this.isWaitEnd = Utils.numToBool(command[iterator.i++]);
         this.time = System.DynamicValue.createValueCommand(command, iterator);
 
-        this.isDirectNode = false;
         this.parallel = !this.isWaitEnd;
     }
 

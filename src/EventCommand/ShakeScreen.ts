@@ -37,7 +37,6 @@ class ShakeScreen extends Base {
             iterator);
         this.isWaitEnd = Utils.numToBool(command[iterator.i++]);
         this.time = System.DynamicValue.createValueCommand(command, iterator);
-        this.isDirectNode = !this.isWaitEnd;
         this.parallel = !this.isWaitEnd;
     }
 

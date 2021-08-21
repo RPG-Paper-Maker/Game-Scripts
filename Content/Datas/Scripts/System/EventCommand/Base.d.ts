@@ -7,7 +7,6 @@ interface StructIterator {
  *  An abstract event command.
  */
 declare abstract class Base {
-    isDirectNode: boolean;
     parallel: boolean;
     constructor();
     /**

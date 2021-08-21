@@ -536,9 +536,11 @@ class WindowChoices extends Bitmap {
             let index: number;
             // Check which window
             if (this.orientation === OrientationWindow.Horizontal) {
-                index = Math.floor((x - this.x) / (this.choiceWidth + this.space));
+                index = Math.floor((x - this.x) / ScreenResolution.getScreenX(
+                    this.choiceWidth + this.space));
             } else {
-                index = Math.floor((y - this.y) / (this.choiceHeight + this.space));
+                index = Math.floor((y - this.y) / ScreenResolution.getScreenY(
+                    this.choiceHeight + this.space));
             }
             // If different index, then change it visually + sound
             if (this.offsetSelectedIndex !== index && index < this.size) {

@@ -30,7 +30,6 @@ class Wait extends Base {
         }
         this.milliseconds = System.DynamicValue.createValueCommand(command, 
             iterator);
-        this.isDirectNode = false;
     }
 
     /** 
