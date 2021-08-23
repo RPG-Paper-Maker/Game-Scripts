@@ -1,9 +1,7 @@
 /*
     RPG Paper Maker Copyright (C) 2017-2021 Wano
-
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
-
     Use Commercial edition for commercial use of your games.
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
@@ -196,7 +194,7 @@ class Plugins {
      */
     static inject<T extends NewableFunction, M extends keyof T, LT extends keyof T["prototype"], TR = string, LM = NewableFunction>(
         classObject: T, prototypeName: LT | TR | M, prototype:T["prototype"][LT] 
-        | T[LT] | LM, staticType :boolean = false, overwrite:boolean = false, 
+        | T[M] | LM, staticType :boolean = false, overwrite:boolean = false, 
         loadBefore: boolean = true) {
         let TheAnyPrototype:any = prototype; //force any type, system will not accept otherwise!
         if(!staticType){
