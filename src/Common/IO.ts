@@ -10,6 +10,7 @@
 */
 
 import { Datas } from "..";
+import { Platform } from "./Platform";
 
 
 /**
@@ -27,11 +28,19 @@ class IO {
      *  Check if a file exists.
      *  @static
      *  @param {string} url - The path of the file
-     *  @returns {boolean}
+     *  @returns {Promise<boolean>}
      */
-    static fileExists = function(url: string): Promise<boolean> {
-        const fs = require('fs');
-        return (fs.existsSync(url));
+    static fileExists = async function(url: string): Promise<boolean> {
+        return (await new Promise((resolve, reject) => {
+            let xhr = new XMLHttpRequest()
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    resolve(xhr.status === 200);
+                }
+            }
+            xhr.open('HEAD', url, true);
+            xhr.send();
+        }));
     }
 
     /** 
@@ -41,16 +50,18 @@ class IO {
      *  @returns {string}
      */
     static openFile = async function(url: string): Promise<string> {
-        const fs = require('fs').promises;
-        return (await fs.readFile(url, (e: Error, data: Buffer) => {
-            if (e) 
-            {
-                return null;
-            } else
-            {
-                return data;
+        return (await new Promise((resolve, reject) => {
+            let xhr = new XMLHttpRequest()
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if(xhr.status === 200 || xhr.status == 0) {
+                        resolve(xhr.responseText);
+                    }
+                }
             }
-        })).toString();
+            xhr.open("GET", url, true);
+            xhr.send(null);
+        }));
     }
 
     /** 
@@ -78,17 +89,19 @@ class IO {
      *  @param {Object} obj - An object that can be stringified by JSON
      */
     static saveFile = async function(url: string, obj: Object) {
-        const fs = require('fs').promises;
-        let content = JSON.stringify(obj);
-        if (Datas.Settings.isProtected) {
-            content = btoa(content);
-        }
-        return await fs.writeFile(url, content, (e: Error) => {
-            if (e)
-            {
-                throw e;
+        if (Platform.DESKTOP) { // Cannot be used in browser, need local storage
+            const fs = require('fs').promises;
+            let content = JSON.stringify(obj);
+            if (Datas.Settings.isProtected) {
+                content = btoa(content);
             }
-        });
+            return await fs.writeFile(url, content, (e: Error) => {
+                if (e)
+                {
+                    throw e;
+                }
+            });
+        }
     }
 }
 

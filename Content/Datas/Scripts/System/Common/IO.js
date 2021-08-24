@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 import { Datas } from "../index.js";
+import { Platform } from "./Platform.js";
 /**
  * The Input and Output class who handles loading and saving.
  *
@@ -23,11 +24,19 @@ class IO {
  *  Check if a file exists.
  *  @static
  *  @param {string} url - The path of the file
- *  @returns {boolean}
+ *  @returns {Promise<boolean>}
  */
-IO.fileExists = function (url) {
-    const fs = require('fs');
-    return (fs.existsSync(url));
+IO.fileExists = async function (url) {
+    return (await new Promise((resolve, reject) => {
+        let xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                resolve(xhr.status === 200);
+            }
+        };
+        xhr.open('HEAD', url, true);
+        xhr.send();
+    }));
 };
 /**
  *  Open an existing file.
@@ -36,15 +45,18 @@ IO.fileExists = function (url) {
  *  @returns {string}
  */
 IO.openFile = async function (url) {
-    const fs = require('fs').promises;
-    return (await fs.readFile(url, (e, data) => {
-        if (e) {
-            return null;
-        }
-        else {
-            return data;
-        }
-    })).toString();
+    return (await new Promise((resolve, reject) => {
+        let xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200 || xhr.status == 0) {
+                    resolve(xhr.responseText);
+                }
+            }
+        };
+        xhr.open("GET", url, true);
+        xhr.send(null);
+    }));
 };
 /**
  *  Open and parse an existing file.
@@ -71,15 +83,17 @@ IO.parseFileJSON = async function (url) {
  *  @param {Object} obj - An object that can be stringified by JSON
  */
 IO.saveFile = async function (url, obj) {
-    const fs = require('fs').promises;
-    let content = JSON.stringify(obj);
-    if (Datas.Settings.isProtected) {
-        content = btoa(content);
-    }
-    return await fs.writeFile(url, content, (e) => {
-        if (e) {
-            throw e;
+    if (Platform.DESKTOP) { // Cannot be used in browser, need local storage
+        const fs = require('fs').promises;
+        let content = JSON.stringify(obj);
+        if (Datas.Settings.isProtected) {
+            content = btoa(content);
         }
-    });
+        return await fs.writeFile(url, content, (e) => {
+            if (e) {
+                throw e;
+            }
+        });
+    }
 };
 export { IO };

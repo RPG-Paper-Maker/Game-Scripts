@@ -8,7 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
-import { Constants } from "./index.js";
+import { Constants, IO } from "./index.js";
 const electron = require('electron');
 const remote = electron.remote;
 const ipc = electron.ipcRenderer;
@@ -27,6 +27,23 @@ class Platform {
      */
     constructor() {
         throw new Error("This class is static.");
+    }
+    /**
+     *  Load a save.
+     *  @static
+     */
+    static async loadSave(slot, path) {
+        if (await IO.fileExists(path)) {
+            return await IO.parseFileJSON(path);
+        }
+        return null;
+    }
+    /**
+     *  Register a save.
+     *  @static
+     */
+    static async registerSave(slot, path, json) {
+        await IO.saveFile(path, json);
     }
     /**
      *  Show an error object.

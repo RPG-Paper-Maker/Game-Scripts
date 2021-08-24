@@ -9,7 +9,7 @@ declare class IO {
      *  Check if a file exists.
      *  @static
      *  @param {string} url - The path of the file
-     *  @returns {boolean}
+     *  @returns {Promise<boolean>}
      */
     static fileExists: (url: string) => Promise<boolean>;
     /**

@@ -5,6 +5,9 @@ import { THREE } from "../Globals.js";
  * @author Nio Kasgami
  */
 declare class Vector3 extends THREE.Vector3 {
+    x: number;
+    y: number;
+    z: number;
     /**
      * The data class who hold 3D Coordinate.
      * @param {number} x - the x-axis coordinate in float

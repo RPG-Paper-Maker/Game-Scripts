@@ -13,7 +13,7 @@ import { Datas, Manager, Scene, System } from "../index.js";
 import { Item } from "./Item.js";
 import { Chrono } from "./Chrono.js";
 import { MapObject } from "./MapObject.js";
-import { Paths, Constants, Utils, IO, Enum } from "../Common/index.js";
+import { Paths, Constants, Utils, Enum, Platform } from "../Common/index.js";
 var GroupKind = Enum.GroupKind;
 var CharacterKind = Enum.CharacterKind;
 import { Vector3 } from "./Vector3.js";
@@ -53,11 +53,8 @@ class Game {
      *  @async
      */
     async load() {
-        let json = null;
         let path = this.getPathSave();
-        if (IO.fileExists(path)) {
-            json = await IO.parseFileJSON(path);
-        }
+        let json = await Platform.loadSave(this.slot, path);
         if (json === null) {
             return;
         }
@@ -159,7 +156,7 @@ class Game {
             items[i] = this.items[i].getSave();
         }
         this.saves++;
-        await IO.saveFile(this.getPathSave(slot), {
+        await Platform.registerSave(slot, this.getPathSave(slot), {
             t: this.playTime.time,
             th: teamHeroes,
             sh: reserveHeroes,

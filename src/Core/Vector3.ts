@@ -17,6 +17,10 @@ import { THREE } from "../Globals";
  * @author Nio Kasgami
  */
 class Vector3 extends THREE.Vector3 {
+    
+    public x: number;
+    public y: number;
+    public z: number;
 
     /**
      * The data class who hold 3D Coordinate.

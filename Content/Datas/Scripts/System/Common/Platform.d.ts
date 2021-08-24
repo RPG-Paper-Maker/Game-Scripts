@@ -43,6 +43,16 @@ declare class Platform {
      */
     static quit: () => void;
     /**
+     *  Load a save.
+     *  @static
+     */
+    static loadSave(slot: number, path: string): Promise<Record<string, any>>;
+    /**
+     *  Register a save.
+     *  @static
+     */
+    static registerSave(slot: number, path: string, json: Record<string, any>): Promise<void>;
+    /**
      *  Show an error object.
      *  @static
      *  @param {Error} e - The error message

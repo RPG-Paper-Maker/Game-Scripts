@@ -92,6 +92,12 @@ class Inputs {
      *  @static
      */
     static initializeMouse() {
+        // Prevent context menu on mouse right click (for browser)
+        document.addEventListener("contextmenu", function(event) { 
+            event.preventDefault(); 
+            return false;
+        }, false);
+
         // Mouse down
         document.addEventListener('mousedown', function (event) {
             if (Main.loaded && !Manager.Stack.isLoading() && Datas.Systems

@@ -14,7 +14,7 @@ import { Datas, Manager, Scene, System } from "../index";
 import { Item } from "./Item";
 import { Chrono } from "./Chrono";
 import { MapObject } from "./MapObject";
-import { Paths, Constants, Utils, IO, Enum } from "../Common";
+import { Paths, Constants, Utils, IO, Enum, Platform } from "../Common";
 import GroupKind = Enum.GroupKind;
 import CharacterKind = Enum.CharacterKind;
 import { Portion } from "./Portion";
@@ -90,11 +90,8 @@ class Game {
      *  @async
      */
     async load() {
-        let json = null;
         let path = this.getPathSave();
-        if (IO.fileExists(path)) {
-            json = await IO.parseFileJSON(path);
-        }
+        let json = await Platform.loadSave(this.slot, path);
         if (json === null) {
             return;
         }
@@ -205,7 +202,7 @@ class Game {
             items[i] = this.items[i].getSave();
         }
         this.saves++;
-        await IO.saveFile(this.getPathSave(slot),
+        await Platform.registerSave(slot, this.getPathSave(slot),
         {
             t: this.playTime.time,
             th: teamHeroes,

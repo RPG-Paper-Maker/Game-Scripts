@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants } from "./index";
+import { Constants, IO } from "./index";
 const electron = require('electron');
 const remote = electron.remote;
 const ipc = electron.ipcRenderer;
@@ -74,6 +74,25 @@ class Platform {
      */
     static quit = function () {
         window.close();
+    }
+
+    /** 
+     *  Load a save.
+     *  @static
+     */
+    static async loadSave(slot: number, path: string): Promise<Record<string ,any>> {
+        if (await IO.fileExists(path)) {
+            return await IO.parseFileJSON(path);
+        }
+        return null;
+    }
+
+    /** 
+     *  Register a save.
+     *  @static
+     */
+    static async registerSave(slot: number, path: string, json: Record<string, any>) {
+        await IO.saveFile(path, json);
     }
 
     /** 
