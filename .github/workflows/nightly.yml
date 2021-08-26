@@ -18,6 +18,7 @@ jobs:
           node-version: 14
       - run: npm install
       - run: npm install typescript
+      - run: npm run build
       - uses: actions/upload-artifact@v2
         with:
           name: Content
