@@ -3,19 +3,8 @@ node_modules
 *.lock
 .VSCodeCounter/*
 .vscode/*
-Content/Images
-Content/Shapes
-Content/Songs
-Content/Videos
-Content/Fonts
-Content/Styles
-Content/Datas/*.json
-Content/Datas/Maps
-Content/Datas/Saves
-Content/Datas/Scripts/Plugins/*
+Content
 log.txt
 .idea
 
-#exept
-!Content/Datas/Scripts/Plugins/path.js
 RNA/ACTM.js
