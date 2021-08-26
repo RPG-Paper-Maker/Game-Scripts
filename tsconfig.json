@@ -17,7 +17,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "./Content/Datas/Scripts/System"
+    "outDir": "./build/Datas/Scripts/System"
   },
   "include": [
     "./src/**/*.ts"
