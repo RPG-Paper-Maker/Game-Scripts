@@ -62,7 +62,7 @@ async function exists(path) {
     } else {
       await runCommand("npx", ["tsc", "--incremental"]);
     }
-    await fs.copyFile(`${ SRC_DIR } / Definitions.d.ts`, `${ SYSTEM_DIR } / Definitions.d.ts`)
+    await fs.copyFile(`${ SRC_DIR }/Definitions.d.ts`, `${ SYSTEM_DIR }/Definitions.d.ts`)
     const endTime = Date.now() - startTime;
     console.log(
         `Compilation completed in ${ Math.floor(endTime / 1000) } seconds`
