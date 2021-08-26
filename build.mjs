@@ -45,7 +45,7 @@ async function exists(path) {
 }
 
 (async function () {
-  const BUILD_DIR = "./build";
+  const BUILD_DIR = "./Content";
   const SRC_DIR = "./src";
   const SYSTEM_DIR = `${BUILD_DIR}/Datas/Scripts/System`;
   const startTime = Date.now();

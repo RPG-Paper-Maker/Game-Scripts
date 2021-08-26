@@ -27,7 +27,8 @@ function createWindow () {
         resizable: false,
         webPreferences: {
             nodeIntegration: true,
-            enableRemoteModule: true
+            enableRemoteModule: true,
+            contextIsolation: false
         }
     });
     if (global.modeTest === "showTextPreview") {
