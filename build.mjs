@@ -4,7 +4,9 @@ import { exec } from "child_process";
 
 function runCommand(command, args = []) {
   return new Promise((resolve, reject) => {
-    exec(`${command} ${args.toString()}`, async (err, stdout, stderr) => {
+    const commandArgs = args.join(",").replace(",", " ");
+
+    exec(`${command} ${commandArgs}`, async (err, stdout, stderr) => {
       if (err) {
         reject(`"Problem running ${command}"`)
         return;
@@ -55,7 +57,11 @@ async function exists(path) {
       });
     }
 
-    await runCommand("npx", ["tsc"])
+    if (process.env.CI || process.env.PRODUCTION) {
+      await runCommand("npx", ["tsc"]);
+    } else {
+      await runCommand("npx", ["tsc", "--incremental"]);
+    }
     await fs.copyFile(`${ SRC_DIR } / Definitions.d.ts`, `${ SYSTEM_DIR } / Definitions.d.ts`)
     const endTime = Date.now() - startTime;
     console.log(
