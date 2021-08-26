@@ -2,7 +2,6 @@
   "compilerOptions": {
     "target": "es2020",
     "module": "esNext",
-    "incremental": true,
     "moduleResolution": "node",
     "lib": [
       "ES6",
