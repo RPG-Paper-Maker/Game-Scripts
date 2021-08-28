@@ -9,13 +9,43 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v2
         with:
           node-version: 14
-      - run: npm install
-      - run: npm install typescript
-      - run: npm run build
-      - uses: actions/upload-artifact@v2
+
+      - name: Setup enviroment
+        run: mkdir ./Content 
+
+      - name: Setup Git & Pull changes
+        working-directory: ./Content
+        run: |
+         git clone https://Wano-k:${{ secrets.GIT_TOKEN }}@github.com/RPG-Paper-Maker/Game-Scripts-Build.git" ./
+         git config --local user.name "PaperMaker-Bot"
+         git config --local user.email "PaperMaker-bot@users.noreply.github.com"
+         git checkout master
+
+      - name: Build from source
+        run: |
+          npm install
+          npm install typescript
+          npm run compile
+  
+      - name: Commit changes
+        working-directory: ./Content
+        continue-on-error: true
+        run: |
+         git add .
+         git commit -m "Release - ${{ github.repository }}@${{ github.sha }}"
+
+      - name: Push changes
+        working-directory: ./Content
+        run: git push origin develop
+      
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
         with:
           name: Content
           path: Content/
+
