@@ -8,7 +8,7 @@ function runCommand(command, args = []) {
 
     exec(`${command} ${commandArgs}`, async (err, stdout, stderr) => {
       if (err) {
-        reject(`"Problem running ${command}"`)
+        reject(`"Problem running ${command} ${commandArgs} \n ${stdout}"`)
         return;
       }
       if (stdout.length > 0) {
@@ -68,6 +68,6 @@ async function exists(path) {
         `Compilation completed in ${ Math.floor(endTime / 1000) } seconds`
       );
   } catch (error) {
-    console.error(error.message);
+    console.error(error);
   }
 })();
