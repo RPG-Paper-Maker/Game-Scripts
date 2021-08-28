@@ -62,6 +62,7 @@ async function exists(path) {
     } else {
       await runCommand("npx", ["tsc", "--incremental"]);
     }
+    await runCommand("module-fix.sh", [], true);
     await fs.copyFile(`${ SRC_DIR }/Definitions.d.ts`, `${ SYSTEM_DIR }/Definitions.d.ts`)
     const endTime = Date.now() - startTime;
     console.log(
