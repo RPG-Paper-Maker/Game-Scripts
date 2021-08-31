@@ -58,7 +58,7 @@ async function exists(path) {
     }
 
     if (process.env.CI || process.env.PRODUCTION) {
-      await runCommand("npx", ["tsc", "--outDir Scripts/System"]);
+      await runCommand("npx", ["tsc"]);
     } else {
       await runCommand("npx", ["tsc", "--incremental"]);
     }
