@@ -16,10 +16,10 @@ jobs:
           node-version: 14
 
       - name: Setup enviroment
-        run: mkdir ./Content 
+        run: mkdir ./Scripts 
 
       - name: Setup Git & Pull changes
-        working-directory: ./Content
+        working-directory: ./Scripts
         run: |
          git clone https://Wano-k:${{ secrets.GIT_TOKEN }}@github.com/RPG-Paper-Maker/Game-Scripts-Build.git" ./
          git config --local user.name "PaperMaker-Bot"
@@ -33,14 +33,14 @@ jobs:
           npm run compile
   
       - name: Commit changes
-        working-directory: ./Content
+        working-directory: ./Scripts
         continue-on-error: true
         run: |
          git add .
          git commit -m "Release - ${{ github.repository }}@${{ github.sha }}"
 
       - name: Push changes
-        working-directory: ./Content
+        working-directory: ./Scripts
         run: git push origin develop
       
       - name: Upload artifacts
