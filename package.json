@@ -5,6 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron ./main.js --dev",
+    "watch": "nodemon -e ts --watch ./src/**/* --exec npm run build",
     "build": "node build.mjs",
     "doc": "webdoc -R README.md",
     "compile": "compile.sh",
@@ -27,7 +28,8 @@
     "electron": ">=9.4.0",
     "pixi-webdoc-template": "^1.1.4",
     "react": "^16.0.0",
-    "react-dom": "^16.0.0"
+    "react-dom": "^16.0.0",
+    "nodemon": "^2.0.12"
   },
   "build": {
     "appId": "your.id"
