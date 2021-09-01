@@ -172,19 +172,20 @@ class Object3DBox extends Object3D {
     {
         let coef = 0.01;
         let localPosition = position.toVector3(false);
-        localPosition.setX(localPosition.x +  coef);
+        localPosition.setX(localPosition.x - Math.floor(Datas.Systems
+            .SQUARE_SIZE / 2) + position.getPixelsCenterX() +  coef);
         localPosition.setY(localPosition.y + coef);
-        localPosition.setZ(localPosition.z + coef);
+        localPosition.setZ(localPosition.z - Math.floor(Datas.Systems
+            .SQUARE_SIZE / 2) + position.getPixelsCenterZ() + coef);
         let angleY = position.angleY;
         let angleX = position.angleX;
         let angleZ = position.angleZ;
         let size = this.datas.getSizeVector();
-        let center = new Vector3(localPosition.x + Math.floor(Datas
-            .Systems.SQUARE_SIZE / 2), localPosition.y + (size.y / 2), 
-            localPosition.z + Math.floor(Datas.Systems.SQUARE_SIZE / 2));
-        let centerReal = new Vector3(localPosition.x + Math.floor(size.x /
-            2), localPosition.y + (size.y / 2), localPosition.z + Math.floor(
-            size.z / 2));
+        let center = new Vector3(localPosition.x + Math.floor(Datas.Systems
+            .SQUARE_SIZE / 2), localPosition.y + (size.y / 2), localPosition.z + 
+            Math.floor(Datas.Systems.SQUARE_SIZE / 2));
+        let centerReal = new Vector3(localPosition.x + Math.floor(size.x / 2), 
+            localPosition.y + (size.y / 2), localPosition.z + Math.floor(size.z / 2));
         Sprite.rotateVertex(centerReal, center, angleY, Sprite.Y_AXIS);
         Sprite.rotateVertex(centerReal, center, angleX, Sprite.X_AXIS);
         Sprite.rotateVertex(centerReal, center, angleZ, Sprite.Z_AXIS);
