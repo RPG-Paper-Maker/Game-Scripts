@@ -4,15 +4,13 @@ Game and scripts used for RPG Paper Maker
 
 ## How to install
 
-This is using electron.js framework. Download it according to your environment:
+This is using electron.js framework.
 
-https://www.electronjs.org/docs/tutorial/development-environment
+Use:
 
-Then use:
+    npm install
 
-	npm install
-
-Wait for the complete install and post-install with this command.
+Wait for the complete install with this command.
 
 You should also have TypeScript installed:
 
@@ -20,11 +18,17 @@ You should also have TypeScript installed:
 
 ## How to run
 
-First, complete the `Content` folder thanks to any recent project you want to test here (copy every file in `resources/app/Content` folder of any project you created with RPG Paper Maker, except the `Content/Datas/Scripts` folder). You can use `./copy-project.sh` for it (you need to set the path variable in this file).
+First, complete the `Content` folder thanks to any recent project you want to test here (copy every file in `resources/app/Content` folder of any project you created with RPG Paper Maker, except the `Content/Datas/Scripts` folder). 
+
+You can also use this quick command: 
+
+    ./copy-project.sh
+
+**/!\ (you need to set the path variable in this file to indicate the project path to copy)**
 
 When it's done, just run:
 
-	./run.sh
+    ./run.sh
 
 ## Structure
 The RPM cores script files are ESM (ecmascript module system) based. 
