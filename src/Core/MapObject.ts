@@ -29,6 +29,7 @@ import { Object3DBox } from "./Object3DBox";
 import { Object3DCustom } from "./Object3DCustom";
 import { CustomGeometry } from "./CustomGeometry";
 import { Vector2 } from "./Vector2";
+import { Portion } from "./Portion";
 
 interface StructSearchResult {
     object: MapObject,
@@ -84,6 +85,7 @@ class MapObject {
     public upPosition: Vector3;
     public halfPosition: Vector3;
     public currentOrientationStop: boolean;
+    public terrain: number;
 
     constructor(system: System.MapObject, position?: Vector3, isHero: boolean = 
         false)
@@ -924,6 +926,9 @@ class MapObject {
             Game.current.steps++;
         }
 
+        // Update terrrain
+        this.updateTerrain();
+
         return [distance, normalDistance];
     }
 
@@ -946,6 +951,9 @@ class MapObject {
 
         // Add to moving objects
         this.addMoveTemp();
+
+        // Update terrrain
+        this.updateTerrain();
     }
 
     /** 
@@ -1004,6 +1012,9 @@ class MapObject {
 
         // Add to moving objects
         this.addMoveTemp();
+
+        // Update terrrain
+        this.updateTerrain();
 
         return currentTime;
     }
@@ -1406,6 +1417,23 @@ class MapObject {
             }
         }
         return orientation;
+    }
+
+    /** 
+     *  Update the terrain the object is currently on.
+     */
+    updateTerrain() {
+        this.terrain = 0;
+        let mapPortion = Scene.Map.current.getMapPortion(Scene.Map.current
+            .getLocalPortion(Portion.createFromVector3(this.position)));
+        if (mapPortion) {
+            let position = Position.createFromVector3(this.position);
+            let index = position.toIndex();
+            let collision = mapPortion.boundingBoxesLands[index][0];
+            if (collision) {
+                this.terrain = collision.cs.terrain;
+            }
+        }
     }
 }
 

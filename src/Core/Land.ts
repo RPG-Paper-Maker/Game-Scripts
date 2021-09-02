@@ -131,7 +131,7 @@ class Land extends MapElement {
         // Collision
         if (collision !== null) {
             let rect = collision.rect;
-            if (!collision.hasAllDirections()) {
+            if (!collision.hasAllDirections() || collision.terrain > 0) {
                 if (rect === null) {
                     rect = [
                         a + Datas.Systems.SQUARE_SIZE / 2,
