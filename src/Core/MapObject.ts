@@ -1428,8 +1428,7 @@ class MapObject {
             .getLocalPortion(Portion.createFromVector3(this.position)));
         if (mapPortion) {
             let position = Position.createFromVector3(this.position);
-            let index = position.toIndex();
-            let collision = mapPortion.boundingBoxesLands[index][0];
+            let collision = mapPortion.boundingBoxesLands[position.toIndex()][0];
             if (collision) {
                 this.terrain = collision.cs.terrain;
             }
