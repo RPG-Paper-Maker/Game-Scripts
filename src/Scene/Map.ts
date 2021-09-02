@@ -370,7 +370,6 @@ class Map extends Base {
         let lz = Math.ceil(this.mapProperties.width / Constants.PORTION_SIZE);
         let ld = Math.ceil(this.mapProperties.depth / Constants.PORTION_SIZE);
         let lh = Math.ceil(this.mapProperties.height / Constants.PORTION_SIZE);
-        let mapPortion = null;
         if (realX >= 0 && realX < lx && realY >= -ld && realY < lh &&
             realZ >= 0 && realZ < lz)
         {
@@ -378,12 +377,16 @@ class Map extends Base {
             let json = await IO.parseFileJSON(Paths.FILE_MAPS + this.mapName + 
                 Constants.STRING_SLASH + portion.getFileName());
             if (json.hasOwnProperty("lands")) {
-                mapPortion = new MapPortion(portion);
+                let mapPortion = new MapPortion(portion);
+                this.setMapPortion(x, y, z, mapPortion, move);
                 mapPortion.read(json, this.id === Datas.Systems
                     .ID_MAP_START_HERO);
+            } else {
+                this.setMapPortion(x, y, z, null, move);
             }
+        } else {
+            this.setMapPortion(x, y, z, null, move);
         }
-        this.setMapPortion(x, y, z, mapPortion, move);
     }
 
     /** 

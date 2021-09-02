@@ -625,7 +625,8 @@ namespace Enum {
         XPixelPosition,
         YPixelPosition,
         ZPixelPosition,
-        Orientation
+        Orientation,
+        Terrain
     };
 
     /**

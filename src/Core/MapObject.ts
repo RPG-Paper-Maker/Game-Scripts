@@ -586,6 +586,8 @@ class MapObject {
             this.height = 0;
         }
 
+        this.updateTerrain();
+
         // Add to the scene
         this.addToScene();
     }
@@ -1424,13 +1426,15 @@ class MapObject {
      */
     updateTerrain() {
         this.terrain = 0;
-        let mapPortion = Scene.Map.current.getMapPortion(Scene.Map.current
-            .getLocalPortion(Portion.createFromVector3(this.position)));
-        if (mapPortion) {
-            let position = Position.createFromVector3(this.position);
-            let collision = mapPortion.boundingBoxesLands[position.toIndex()][0];
-            if (collision) {
-                this.terrain = collision.cs.terrain;
+        if (this.position) {
+            let mapPortion = Scene.Map.current.getMapPortion(Scene.Map.current
+                .getLocalPortion(Portion.createFromVector3(this.position)));
+            if (mapPortion) {
+                let position = Position.createFromVector3(this.position);
+                let collision = mapPortion.boundingBoxesLands[position.toIndex()][0];
+                if (collision) {
+                    this.terrain = collision.cs.terrain;
+                }
             }
         }
     }
