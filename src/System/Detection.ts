@@ -23,7 +23,7 @@ import { Datas, Manager } from "../index";
  */
 class Detection extends Base {
 
-    boxes: [Position, number, number][];
+    boxes: [Position, number, number, number, number, number, number][];
 
     constructor(json?: Record<string, any>) {
         super(json);
@@ -41,8 +41,10 @@ class Detection extends Base {
         for (let i = 0; i < l; i++) {
             jsonElement = jsonList[i];
             this.boxes[i] = [Position.createFromArray(jsonElement.k), Utils
-                .defaultValue(jsonElement.v.bhs, 1), Utils.defaultValue(
-                jsonElement.v.bhp, 0)];
+                .defaultValue(jsonElement.v.bls, 1), Utils.defaultValue(
+                jsonElement.v.blp, 0), Utils.defaultValue(jsonElement.v.bhs, 1), 
+                Utils.defaultValue(jsonElement.v.bhp, 0), Utils.defaultValue(
+                jsonElement.v.bws, 1), Utils.defaultValue(jsonElement.v.bwp, 0)];
         }
     }
 
@@ -74,38 +76,49 @@ class Detection extends Base {
         let localPosition = sender.position;
         let l = this.boxes.length;
         let list = new Array(l);
-        let box: [Position, number, number], p: Position, x: number, z: number;
+        let box: [Position, number, number, number, number, number, number], p: 
+            Position, x: number, z: number, length: number, height: number, 
+            width: number, px: number, pz: number;
         for (let i = 0; i < l; i++) {
             box = this.boxes[i];
             p = box[0];
+            length = (box[1] * Datas.Systems.SQUARE_SIZE) + (box[2] / 100 * Datas
+                .Systems.SQUARE_SIZE);
+            height = (box[3] * Datas.Systems.SQUARE_SIZE) + (box[4] / 100 * Datas
+                .Systems.SQUARE_SIZE);
+            width = (box[5] * Datas.Systems.SQUARE_SIZE) + (box[2] / 100 * Datas
+                .Systems.SQUARE_SIZE);
 
             // Update position according to sender orientation
+            px = (p.x - 1) * Datas.Systems.SQUARE_SIZE + p.getPixelsCenterX() + 
+                (length / 2);
+            pz = (p.z - 1) * Datas.Systems.SQUARE_SIZE + p.getPixelsCenterZ() + 
+                (width / 2);
             switch (orientation) {
                 case Orientation.South:
-                    x = p.x * Datas.Systems.SQUARE_SIZE;
-                    z = p.z * Datas.Systems.SQUARE_SIZE;
+                    x = px;
+                    z = pz;
                     break;
                 case Orientation.West:
-                    x = -p.z * Datas.Systems.SQUARE_SIZE;
-                    z = p.x * Datas.Systems.SQUARE_SIZE;
+                    x = -pz;
+                    z = px;
                     break;
                 case Orientation.North:
-                    x = -p.x * Datas.Systems.SQUARE_SIZE;
-                    z = -p.z * Datas.Systems.SQUARE_SIZE;
+                    x = -px;
+                    z = -pz;
                     break;
                 case Orientation.East:
-                    x = p.z * Datas.Systems.SQUARE_SIZE;
-                    z = -p.x * Datas.Systems.SQUARE_SIZE;
+                    x = pz;
+                    z = -px;
                     break;
             }
             list[i] = [
                 localPosition.x + x,
-                localPosition.y + p.getTotalY() + (Datas.Systems.SQUARE_SIZE / 2),
+                localPosition.y + p.getTotalY() + (height / 2),
                 localPosition.z + z,
-                Datas.Systems.SQUARE_SIZE,
-                (box[1] * Datas.Systems.SQUARE_SIZE) + (box[2] / 100 * Datas
-                    .Systems.SQUARE_SIZE),
-                Datas.Systems.SQUARE_SIZE,
+                length,
+                height,
+                width,
                 0,
                 0,
                 0
