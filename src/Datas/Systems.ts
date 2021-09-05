@@ -53,6 +53,7 @@ class Systems {
     private static fontNames: System.FontName[];
     private static speeds: System.DynamicValue[];
     private static frequencies: System.DynamicValue[];
+    public static initialPartyMembers: System.InitialPartyMember[];
     public static soundCursor: System.PlaySong;
     public static soundConfirmation: System.PlaySong;
     public static soundCancel: System.PlaySong;
@@ -160,6 +161,7 @@ class Systems {
         this.fontNames = [];
         this.speeds = [];
         this.frequencies = [];
+        this.initialPartyMembers = [];
         Utils.readJSONSystemList({ list: json.itemsTypes, listIDs: this
             .itemsTypes, cons: System.Translatable });
         Utils.readJSONSystemList({ list: json.inventoryFilters, listIndexes: this
@@ -200,7 +202,9 @@ class Systems {
         {
             return System.DynamicValue.readOrDefaultNumberDouble(element.v, 1);
         }});
-        
+        Utils.readJSONSystemList({ list: json.initialPartyMembers, listIndexes: 
+            this.initialPartyMembers, cons: System.InitialPartyMember });
+
         // Sounds
         this.soundCursor = new System.PlaySong(Enum.SongKind.Sound, json.scu);
         this.soundConfirmation = new System.PlaySong(Enum.SongKind.Sound, json.sco);

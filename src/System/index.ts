@@ -37,6 +37,7 @@ export * from "./Hero";
 export * from "./HeroTroopBattleTest";
 export * from "./HeroTroopBattleTestEquipment";
 export * from "./Icon";
+export * from "./InitialPartyMember";
 export * from "./InventoryFilter";
 export * from "./Item";
 export * from "./Keyboard";

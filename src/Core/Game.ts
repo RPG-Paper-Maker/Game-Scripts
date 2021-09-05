@@ -424,7 +424,11 @@ class Game {
         this.startupStates = {};
         this.startupProperties = {};
         this.mapsProperties = {};
-        this.instanciateTeam(GroupKind.Team, CharacterKind.Hero, 1, 1, 1);
+        for (let member of Datas.Systems.initialPartyMembers) {
+            this.instanciateTeam(member.teamKind, member.characterKind, member
+                .heroID.getValue(), member.level.getValue(), member
+                .variableInstanceID.getValue(true));
+        }
         this.mapsDatas = {};
         this.hero.initializeProperties();
         this.playTime = new Chrono(0);
