@@ -168,6 +168,8 @@ class Events {
                 return new EventCommand.ChangeClass(command);
             case EventCommandKind.ChangeChronometer:
                 return new EventCommand.ChangeChronometer(command);
+            case EventCommandKind.ChangeWeather:
+                return new EventCommand.ChangeWeather(command);
             default:
                 return null;
         }

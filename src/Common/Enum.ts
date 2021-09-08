@@ -131,7 +131,8 @@ namespace Enum {
         ChangeMapProperties,
         ChangeExperienceCurve,
         ChangeClass,
-        ChangeChronometer
+        ChangeChronometer,
+        ChangeWeather
     };
 
     /**

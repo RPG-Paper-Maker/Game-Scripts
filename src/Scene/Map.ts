@@ -11,7 +11,7 @@
 
 import { THREE } from "../Globals";
 import { Base } from "./Base";
-import { Enum, Utils, Constants, IO, Paths, Inputs } from "../Common";
+import { Enum, Utils, Constants, IO, Paths, Inputs, Interpreter } from "../Common";
 import Orientation = Enum.Orientation;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 import PictureKind = Enum.PictureKind;
@@ -58,6 +58,10 @@ class Map extends Base {
     public autotileFrame: Frame;
     public autotilesOffset: Vector2 = new Vector2();
     public heroOrientation: Enum.Orientation;
+    public weatherPoints: THREE.Points = null;
+    public weatherVelocities: number[];
+    public weatherRotationsAngle: number[];
+    public weatherRotationsPoint: Vector3[];
 
     constructor(id: number, isBattleMap: boolean = false, minimal: boolean = 
         false, heroOrientation: Enum.Orientation = null)
@@ -106,6 +110,7 @@ class Map extends Base {
         await this.loadTextures();
         this.loadCollisions();
         await this.initializePortions();
+        this.createWeather();
         Manager.Stack.requestPaintHUD = true;
         this.loading = false;
     }
@@ -733,6 +738,151 @@ class Map extends Base {
     }
 
     /** 
+     *  Get a random particle weather position according to options.
+     *  @param {number} portionsRay
+     *  @param {boolean} [offset=true]
+     *  @returns {number}
+     */
+    getWeatherPosition(portionsRay: number, offset: boolean = true): number {
+        return Math.random() * (Datas.Systems.SQUARE_SIZE * Datas.Systems
+            .SQUARE_SIZE * ((portionsRay * 2) + 1)) - (Datas.Systems.SQUARE_SIZE 
+            * Datas.Systems.SQUARE_SIZE * (portionsRay + (offset ? 0.5 : 0)));
+    }
+
+    /** 
+     *  Create the weather mesh system.
+     */
+    createWeather() {
+        if (Game.current.currentWeatherOptions === null) {
+            return;
+        }
+        if (this.weatherPoints) {
+            this.scene.remove(this.weatherPoints);
+        }
+
+        // create the weather variables
+        const vertices = [];
+        this.weatherVelocities = [];
+        this.weatherRotationsAngle = [];
+        this.weatherRotationsPoint = [];
+        Interpreter.evaluate("Scene.Map.current.addWeatherYRotation=function(){return " + 
+            Game.current.currentWeatherOptions.yRotationAddition + ";}", { 
+            addReturn: false });
+        Interpreter.evaluate("Scene.Map.current.addWeatherVelocityn=function(){return " + 
+            Game.current.currentWeatherOptions.velocityAddition + ";}", { 
+            addReturn: false });
+        const portionsRay = Game.current.currentWeatherOptions.portionsRay;
+        let initialVelocity = Interpreter.evaluate(Game.current.currentWeatherOptions
+            .initialVelocity);
+        initialVelocity *= (Datas.Systems.SQUARE_SIZE / Constants.BASIC_SQUARE_SIZE);
+        const initialYRotation = Interpreter.evaluate(Game.current.currentWeatherOptions
+            .initialYRotation);
+        const particleNumberPerPortion = Game.current.currentWeatherOptions.numberPerPortion;
+        const particleNumber = particleNumberPerPortion * ((portionsRay * 8) + 1) * 
+            (portionsRay * 2 + 1);
+        for ( let i = 0; i < particleNumber; i ++ ) {
+            const x = this.getWeatherPosition(portionsRay);
+            const y = this.getWeatherPosition(portionsRay, false);
+            const z = this.getWeatherPosition(portionsRay);
+            vertices.push( x, y, z );
+            this.weatherVelocities.push(initialVelocity);
+            this.weatherRotationsAngle.push(initialYRotation);
+            this.weatherRotationsPoint.push(Scene.Map.current.camera.target.position.clone());
+        }
+        const geometry = new THREE.BufferGeometry();
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+        let material = new THREE.PointsMaterial( { 
+            color: Game.current.currentWeatherOptions.isColor ? Datas.Systems
+                .getColor(Game.current.currentWeatherOptions.colorID).getHex() : 
+                0xFFFFFF,
+            size: Game.current.currentWeatherOptions.size,
+            transparent: true,
+            depthTest: Game.current.currentWeatherOptions.depthTest,
+            depthWrite: Game.current.currentWeatherOptions.depthWrite
+        });
+        if (!Game.current.currentWeatherOptions.isColor) {
+            const texture = (new THREE.TextureLoader).load(
+                Datas.Pictures.get(Enum.PictureKind
+                    .Particles, Game.current.currentWeatherOptions.imageID).getPath()
+            );
+            texture.magFilter = THREE.NearestFilter;
+            texture.minFilter = THREE.NearestFilter;
+            material.map = texture;
+        }
+        this.weatherPoints = new THREE.Points(geometry, material);
+        this.weatherPoints.position.set(Scene.Map.current.camera.target
+            .position.x, Scene.Map.current.camera.target
+            .position.y, Scene.Map.current.camera.target
+            .position.z)
+        this.weatherPoints.renderOrder = 1000;
+        this.scene.add(this.weatherPoints);
+    }
+
+    /** 
+     *  Function to overwrite with interpreter to add rotation to particles.
+     */
+    addWeatherYRotation() {
+        return 0;
+    }
+
+    /** 
+     *  Function to overwrite with interpreter to add velocity to particles.
+     */
+    addWeatherVelocity() {
+        return 0;
+    }
+
+    /** 
+     *  Update the weather particles moves.
+     */
+    updateWeather() {
+        if (Game.current.currentWeatherOptions === null) {
+            return;
+        }
+        let initialVelocity = Interpreter.evaluate(Game.current.currentWeatherOptions
+            .initialVelocity);
+        initialVelocity *= (Datas.Systems.SQUARE_SIZE / Constants.BASIC_SQUARE_SIZE);
+        const initialYRotation = Interpreter.evaluate(Game.current.currentWeatherOptions
+            .initialYRotation);
+        const portionsRay = Game.current.currentWeatherOptions.portionsRay;
+        const positionAttribute = this.weatherPoints.geometry.getAttribute('position');
+        const yAxis = new Vector3(0,1,0);
+        let y: number, v: Vector3;
+        for (let i = 0; i < positionAttribute.count; i++) {
+            y = positionAttribute.getY(i);
+            if (y < (<THREE.PointsMaterial>this.weatherPoints.material).size - 
+                (Datas.Systems.SQUARE_SIZE * Datas.Systems.SQUARE_SIZE * portionsRay)) {
+                y += (Datas.Systems.SQUARE_SIZE * Datas.Systems.SQUARE_SIZE * (
+                    portionsRay + 1));
+                this.weatherVelocities[i] = initialVelocity;
+                this.weatherRotationsAngle[i] = initialYRotation;
+                this.weatherRotationsPoint[i] = Scene.Map.current.camera.target
+                    .position.clone();
+                positionAttribute.setX(i, this.getWeatherPosition(portionsRay));
+                positionAttribute.setZ(i, this.getWeatherPosition(portionsRay));
+            }
+            y -= (Scene.Map.current.camera.target
+                .position.y - this.weatherPoints.position.y);
+            v = new Vector3(positionAttribute.getX(i) - (Scene.Map.current
+                .camera.target.position.x - this.weatherPoints.position.x), y, 
+                positionAttribute.getZ( i ) - (Scene.Map.current.camera.target
+                .position.z - this.weatherPoints.position.z));
+            this.weatherRotationsAngle[i] += this.addWeatherYRotation() * Math
+                .PI / 180;
+            v.applyAxisAngle(yAxis, this.weatherRotationsAngle[i]);
+            positionAttribute.setX(i, v.x);
+            positionAttribute.setZ(i, v.z);
+            this.weatherVelocities[i] += this.addWeatherVelocity() * (Datas.Systems
+                .SQUARE_SIZE / Constants.BASIC_SQUARE_SIZE);
+            positionAttribute.setY(i, v.y + this.weatherVelocities[i]);
+        }
+        positionAttribute.needsUpdate = true;
+        this.weatherPoints.position.set(Scene.Map.current.camera.target.position
+            .x, Scene.Map.current.camera.target.position.y, Scene.Map.current
+            .camera.target.position.z);
+    }
+
+    /** 
      *  Update the scene.
      */
     update() {
@@ -800,6 +950,8 @@ class Map extends Base {
                 mapPortion.updateFaceSprites(angle);
             }
         });
+
+        this.updateWeather();
 
         // Update scene game (interpreters)
         super.update();

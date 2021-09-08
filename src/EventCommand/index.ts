@@ -28,6 +28,7 @@ export * from "./ChangeState";
 export * from "./ChangeStatus";
 export * from "./ChangeVariables";
 export * from "./ChangeVictoryMusic";
+export * from "./ChangeWeather";
 export * from "./Choice";
 export * from "./Comment";
 export * from "./CreateObjectInMap";

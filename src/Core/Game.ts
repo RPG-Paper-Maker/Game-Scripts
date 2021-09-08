@@ -57,6 +57,8 @@ class Game {
     public saves: number;
     public battles: number;
     public chronometers: Chrono[] = [];
+    public previousWeatherOptions: Record<string, any> = null;
+    public currentWeatherOptions: Record<string, any> = null;
 
     constructor(slot: number = -1) {
         this.slot = slot;
