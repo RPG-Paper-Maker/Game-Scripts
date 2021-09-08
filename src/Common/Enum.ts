@@ -255,7 +255,8 @@ namespace Enum {
         Objects3D,
         Pictures,
         Animations,
-        Skyboxes
+        Skyboxes,
+        Particles
     };
 
     /**

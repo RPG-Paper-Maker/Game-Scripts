@@ -76,6 +76,7 @@ class Paths {
     public static readonly OBJECTS_3D = Paths.TEXTURES2D + "Objects3D";
     public static readonly MOUNTAINS = Paths.TEXTURES2D + "Mountains";
     public static readonly SKYBOXES = Paths.TEXTURES2D + "SkyBoxes";
+    public static readonly PARTICLES = Paths.TEXTURES2D + "Particles";
     public static readonly SONGS = "/Content/Songs/";
     public static readonly MUSICS = Paths.SONGS + "Musics";
     public static readonly BACKGROUND_SOUNDS = Paths.SONGS + "BackgroundSounds";
