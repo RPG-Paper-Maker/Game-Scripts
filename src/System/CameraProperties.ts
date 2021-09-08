@@ -47,10 +47,10 @@ export class CameraProperties extends Base {
      *  properties
      */
     read(json: Record<string, any>) {
-        this.distance = DynamicValue.readOrDefaultNumberDouble(json.d, 250);
+        this.distance = DynamicValue.readOrDefaultNumberDouble(json.d, 300);
         this.horizontalAngle = DynamicValue.readOrDefaultNumberDouble(json.ha,
             -90);
-        this.verticalAngle = DynamicValue.readOrDefaultNumberDouble(json.va, 55);
+        this.verticalAngle = DynamicValue.readOrDefaultNumberDouble(json.va, 65);
         this.targetOffsetX = DynamicValue.readOrDefaultNumber(json.tox, 0);
         this.targetOffsetY = DynamicValue.readOrDefaultNumber(json.toy, 0);
         this.targetOffsetZ = DynamicValue.readOrDefaultNumber(json.toz, 0);
