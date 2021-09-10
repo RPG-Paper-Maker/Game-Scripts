@@ -58,6 +58,10 @@ class Map extends Base {
     public autotileFrame: Frame;
     public autotilesOffset: Vector2 = new Vector2();
     public heroOrientation: Enum.Orientation;
+    public previousWeatherPoints: THREE.Points = null;
+    public previousWeatherVelocities: number[];
+    public previousWeatherRotationsAngle: number[];
+    public previousWeatherRotationsPoint: Vector3[];
     public weatherPoints: THREE.Points = null;
     public weatherVelocities: number[];
     public weatherRotationsAngle: number[];
@@ -110,6 +114,7 @@ class Map extends Base {
         await this.loadTextures();
         this.loadCollisions();
         await this.initializePortions();
+        this.createWeather(false);
         this.createWeather();
         Manager.Stack.requestPaintHUD = true;
         this.loading = false;
@@ -752,70 +757,90 @@ class Map extends Base {
     /** 
      *  Create the weather mesh system.
      */
-    createWeather() {
-        if (Game.current.currentWeatherOptions === null) {
+    createWeather(current: boolean = true) {
+        let options: Record<string, any>, points: THREE.Points, velocities: 
+            number[], rotationsAngle: number[], rotationsPoints: Vector3[];
+        if (current) {
+            options = Game.current.currentWeatherOptions;
+        } else {
+            options = Game.current.previousWeatherOptions;
+        }
+        if (options === null || options.isNone) {
             return;
         }
-        if (this.weatherPoints) {
-            this.scene.remove(this.weatherPoints);
-        }
-
-        // create the weather variables
+        // Create the weather variables
         const vertices = [];
-        this.weatherVelocities = [];
-        this.weatherRotationsAngle = [];
-        this.weatherRotationsPoint = [];
-        Interpreter.evaluate("Scene.Map.current.addWeatherYRotation=function(){return " + 
-            Game.current.currentWeatherOptions.yRotationAddition + ";}", { 
-            addReturn: false });
-        Interpreter.evaluate("Scene.Map.current.addWeatherVelocityn=function(){return " + 
-            Game.current.currentWeatherOptions.velocityAddition + ";}", { 
-            addReturn: false });
-        const portionsRay = Game.current.currentWeatherOptions.portionsRay;
-        let initialVelocity = Interpreter.evaluate(Game.current.currentWeatherOptions
-            .initialVelocity);
+        velocities = [];
+        rotationsAngle = [];
+        rotationsPoints = [];
+        Interpreter.evaluate("Scene.Map.current.add" + (current ? "" : "Previous") 
+            + "WeatherYRotation=function(){return " + options.yRotationAddition + 
+            ";}", { addReturn: false });
+        Interpreter.evaluate("Scene.Map.current.add" + (current ? "" : "Previous") 
+            + "WeatherVelocityn=function(){return " + options.velocityAddition + 
+            ";}", { addReturn: false });
+        let initialVelocity = Interpreter.evaluate(options.initialVelocity);
         initialVelocity *= (Datas.Systems.SQUARE_SIZE / Constants.BASIC_SQUARE_SIZE);
-        const initialYRotation = Interpreter.evaluate(Game.current.currentWeatherOptions
-            .initialYRotation);
-        const particleNumberPerPortion = Game.current.currentWeatherOptions.numberPerPortion;
-        const particleNumber = particleNumberPerPortion * ((portionsRay * 8) + 1) * 
-            (portionsRay * 2 + 1);
-        for ( let i = 0; i < particleNumber; i ++ ) {
+        const initialYRotation = Interpreter.evaluate(options.initialYRotation);
+        const portionsRay = options.portionsRay;
+        const particlesNumber = options.finalParticlesNumber;
+        for (let i = 0; i < particlesNumber; i ++) {
             const x = this.getWeatherPosition(portionsRay);
             const y = this.getWeatherPosition(portionsRay, false);
             const z = this.getWeatherPosition(portionsRay);
             vertices.push( x, y, z );
-            this.weatherVelocities.push(initialVelocity);
-            this.weatherRotationsAngle.push(initialYRotation);
-            this.weatherRotationsPoint.push(Scene.Map.current.camera.target.position.clone());
+            velocities.push(initialVelocity);
+            rotationsAngle.push(initialYRotation);
+            rotationsPoints.push(Scene.Map.current.camera.target.position.clone());
         }
         const geometry = new THREE.BufferGeometry();
         geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
         let material = new THREE.PointsMaterial( { 
-            color: Game.current.currentWeatherOptions.isColor ? Datas.Systems
-                .getColor(Game.current.currentWeatherOptions.colorID).getHex() : 
-                0xFFFFFF,
-            size: Game.current.currentWeatherOptions.size,
+            color: options.isColor ? Datas.Systems.getColor(options.colorID)
+                .getHex() : 0xFFFFFF,
+            size: options.size,
             transparent: true,
-            depthTest: Game.current.currentWeatherOptions.depthTest,
-            depthWrite: Game.current.currentWeatherOptions.depthWrite
+            depthTest: options.depthTest,
+            depthWrite: options.depthWrite
         });
-        if (!Game.current.currentWeatherOptions.isColor) {
-            const texture = (new THREE.TextureLoader).load(
-                Datas.Pictures.get(Enum.PictureKind
-                    .Particles, Game.current.currentWeatherOptions.imageID).getPath()
-            );
+        if (!options.isColor) {
+            const texture = (new THREE.TextureLoader).load(Datas.Pictures.get(
+                Enum.PictureKind.Particles, options.imageID).getPath());
             texture.magFilter = THREE.NearestFilter;
             texture.minFilter = THREE.NearestFilter;
             material.map = texture;
         }
-        this.weatherPoints = new THREE.Points(geometry, material);
-        this.weatherPoints.position.set(Scene.Map.current.camera.target
-            .position.x, Scene.Map.current.camera.target
-            .position.y, Scene.Map.current.camera.target
+        points = new THREE.Points(geometry, material);
+        points.position.set(Scene.Map.current.camera.target.position.x, Scene
+            .Map.current.camera.target.position.y, Scene.Map.current.camera.target
             .position.z)
-        this.weatherPoints.renderOrder = 1000;
-        this.scene.add(this.weatherPoints);
+        points.renderOrder = 1000;
+        this.scene.add(points);
+        if (current) {
+            this.weatherPoints = points;
+            this.weatherVelocities = velocities;
+            this.weatherRotationsAngle = rotationsAngle;
+            this.weatherRotationsPoint = rotationsPoints;
+        } else {
+            this.previousWeatherPoints = points;
+            this.previousWeatherVelocities = velocities;
+            this.previousWeatherRotationsAngle = rotationsAngle;
+            this.previousWeatherRotationsPoint = rotationsPoints;
+        }
+    }
+
+    /** 
+     *  Function to overwrite with interpreter to add rotation to particles.
+     */
+    addPreviousWeatherYRotation() {
+        return 0;
+    }
+
+    /** 
+     *  Function to overwrite with interpreter to add velocity to particles.
+     */
+    addPreviousWeatherVelocity() {
+        return 0;
     }
 
     /** 
@@ -832,52 +857,77 @@ class Map extends Base {
         return 0;
     }
 
+    switchPreviousWeather() {
+        Game.current.previousWeatherOptions = Game.current.currentWeatherOptions;
+        this.previousWeatherPoints = this.weatherPoints;
+        this.previousWeatherVelocities = this.weatherVelocities;
+        this.previousWeatherRotationsAngle = this.weatherRotationsAngle;
+        this.previousWeatherRotationsPoint = this.weatherRotationsPoint;
+        this.addPreviousWeatherVelocity = this.addWeatherVelocity;
+        this.addPreviousWeatherYRotation = this.addWeatherYRotation;
+    }
+
     /** 
      *  Update the weather particles moves.
      */
-    updateWeather() {
-        if (Game.current.currentWeatherOptions === null) {
+    updateWeather(current: boolean = true) {
+        let options: Record<string, any>, points: THREE.Points, velocities: 
+            number[], rotationsAngle: number[], rotationsPoints: Vector3[];
+        if (current) {
+            options = Game.current.currentWeatherOptions;
+            points = this.weatherPoints;
+            velocities = this.weatherVelocities;
+            rotationsAngle = this.weatherRotationsAngle;
+            rotationsPoints = this.weatherRotationsPoint;
+        } else {
+            options = Game.current.previousWeatherOptions;
+            points = this.previousWeatherPoints;
+            velocities = this.previousWeatherVelocities;
+            rotationsAngle = this.previousWeatherRotationsAngle;
+            rotationsPoints = this.previousWeatherRotationsPoint;
+        }
+        if (options === null || options.isNone) {
             return;
         }
-        let initialVelocity = Interpreter.evaluate(Game.current.currentWeatherOptions
-            .initialVelocity);
+        let initialVelocity = Interpreter.evaluate(options.initialVelocity);
         initialVelocity *= (Datas.Systems.SQUARE_SIZE / Constants.BASIC_SQUARE_SIZE);
-        const initialYRotation = Interpreter.evaluate(Game.current.currentWeatherOptions
-            .initialYRotation);
-        const portionsRay = Game.current.currentWeatherOptions.portionsRay;
-        const positionAttribute = this.weatherPoints.geometry.getAttribute('position');
-        const yAxis = new Vector3(0,1,0);
+        const initialYRotation = Interpreter.evaluate(options.initialYRotation);
+        const portionsRay = options.portionsRay;
+        const positionAttribute = points.geometry.getAttribute('position');
+        const yAxis = new Vector3(0, 1, 0);
+        const particlesNumber = Math.round(options.particlesNumber);
+        points.geometry.drawRange.count = particlesNumber;
         let y: number, v: Vector3;
-        for (let i = 0; i < positionAttribute.count; i++) {
+        for (let i = 0; i < particlesNumber; i++) {
             y = positionAttribute.getY(i);
-            if (y < (<THREE.PointsMaterial>this.weatherPoints.material).size - 
+            if (y < (<THREE.PointsMaterial>points.material).size - 
                 (Datas.Systems.SQUARE_SIZE * Datas.Systems.SQUARE_SIZE * portionsRay)) {
                 y += (Datas.Systems.SQUARE_SIZE * Datas.Systems.SQUARE_SIZE * (
                     portionsRay + 1));
-                this.weatherVelocities[i] = initialVelocity;
-                this.weatherRotationsAngle[i] = initialYRotation;
-                this.weatherRotationsPoint[i] = Scene.Map.current.camera.target
+                velocities[i] = initialVelocity;
+                rotationsAngle[i] = initialYRotation;
+                rotationsPoints[i] = Scene.Map.current.camera.target
                     .position.clone();
                 positionAttribute.setX(i, this.getWeatherPosition(portionsRay));
                 positionAttribute.setZ(i, this.getWeatherPosition(portionsRay));
             }
-            y -= (Scene.Map.current.camera.target
-                .position.y - this.weatherPoints.position.y);
+            y -= (Scene.Map.current.camera.target.position.y - points.position.y);
             v = new Vector3(positionAttribute.getX(i) - (Scene.Map.current
-                .camera.target.position.x - this.weatherPoints.position.x), y, 
+                .camera.target.position.x - points.position.x), y, 
                 positionAttribute.getZ( i ) - (Scene.Map.current.camera.target
-                .position.z - this.weatherPoints.position.z));
-            this.weatherRotationsAngle[i] += this.addWeatherYRotation() * Math
-                .PI / 180;
-            v.applyAxisAngle(yAxis, this.weatherRotationsAngle[i]);
+                .position.z - points.position.z));
+            rotationsAngle[i] += (current ? this.addWeatherYRotation() : this
+                .addPreviousWeatherYRotation()) * Math.PI / 180;
+            v.applyAxisAngle(yAxis, rotationsAngle[i]);
             positionAttribute.setX(i, v.x);
             positionAttribute.setZ(i, v.z);
-            this.weatherVelocities[i] += this.addWeatherVelocity() * (Datas.Systems
-                .SQUARE_SIZE / Constants.BASIC_SQUARE_SIZE);
-            positionAttribute.setY(i, v.y + this.weatherVelocities[i]);
+            velocities[i] += (current ? this.addWeatherVelocity() : this
+                .addPreviousWeatherVelocity()) * (Datas.Systems.SQUARE_SIZE / 
+                Constants.BASIC_SQUARE_SIZE);
+            positionAttribute.setY(i, v.y + velocities[i]);
         }
         positionAttribute.needsUpdate = true;
-        this.weatherPoints.position.set(Scene.Map.current.camera.target.position
+        points.position.set(Scene.Map.current.camera.target.position
             .x, Scene.Map.current.camera.target.position.y, Scene.Map.current
             .camera.target.position.z);
     }
@@ -951,6 +1001,7 @@ class Map extends Base {
             }
         });
 
+        this.updateWeather(false);
         this.updateWeather();
 
         // Update scene game (interpreters)
@@ -1140,9 +1191,6 @@ class Map extends Base {
             [0, 0, 0, 1, 1, 1, 0, 0, 0]);
         Manager.Collisions.applyOrientedBoxTransforms(Manager.Collisions
             .BB_ORIENTED_BOX, [0, 0, 0, 2, 1]);
-
-        // Clear renderer
-        Manager.GL.renderer.clear();
     }
 }
 

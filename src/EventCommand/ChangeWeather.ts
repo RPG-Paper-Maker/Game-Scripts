@@ -99,8 +99,10 @@ class ChangeWeather extends Base {
             timeLeft: time,
             isNone: this.isNone,
             isColor: this.isColor,
-            particles: 0,
-            created: false
+            particlesNumber: 0,
+            finalParticlesNumber: 0,
+            created: false,
+            transition: true
         }
         if (this.isNone) {
             return result;
@@ -111,8 +113,9 @@ class ChangeWeather extends Base {
             result.imageID = this.imageID.getValue();
         }
         result.numberPerPortion = this.numberPerPortion.getValue();
-        result.finalDifParticles = result.numberPerPortion;
         result.portionsRay = this.portionsRay.getValue();
+        result.finalParticlesNumber = result.numberPerPortion * ((result
+            .portionsRay * 8) + 1) * (result.portionsRay * 2 + 1);
         result.size = this.size.getValue();
         result.depthTest = this.depthTest.getValue();
         result.depthWrite = this.depthWrite.getValue();
@@ -134,6 +137,13 @@ class ChangeWeather extends Base {
         number
     {   
         if (currentState.parallel) {
+            // If previous weather already transitionning, cancel transition and remove immediately
+            if (Game.current.previousWeatherOptions !== null && Game.current
+                .previousWeatherOptions.transition && !currentState.created && 
+                !Game.current.previousWeatherOptions.isNone) {
+                 Scene.Map.current.scene.remove(Scene.Map.current.previousWeatherPoints);
+            }
+            // Define time rate
             let timeRate: number, dif: number;
             if (currentState.time === 0) {
                 timeRate = 1;
@@ -146,19 +156,40 @@ class ChangeWeather extends Base {
                 }
                 timeRate = dif / currentState.time;
             }
-
-            // Update values
-            currentState.particles = currentState.particles + (timeRate * currentState
-                .finalDifParticles);
-
+            // Update particles number to display
+            currentState.particlesNumber = currentState.particlesNumber + (
+                timeRate * currentState.finalParticlesNumber);
             // Create weather in the current map
             if (!currentState.created) {
                 currentState.created = true;
+                if (Game.current.currentWeatherOptions !== null) {
+                    Game.current.currentWeatherOptions.transition = true;
+                }
+                Scene.Map.current.switchPreviousWeather();
                 Game.current.currentWeatherOptions = currentState;
-                console.log("ok")
                 Scene.Map.current.createWeather();
             }
-            return currentState.timeLeft === 0 ? 1 : 0;
+            // Reduce particles number for the previous weather if existing
+            if (Game.current.previousWeatherOptions !== null && !Game.current
+                .previousWeatherOptions.isNone) {
+                Game.current.previousWeatherOptions.particlesNumber = Game
+                    .current.previousWeatherOptions.particlesNumber - (timeRate 
+                    * Game.current.previousWeatherOptions.finalParticlesNumber);
+                // If time left, remove it from scene
+                if (currentState.timeLeft === 0) {
+                    Game.current.previousWeatherOptions.transition = false;
+                    Scene.Map.current.scene.remove(Scene.Map.current.previousWeatherPoints);
+                }
+            }
+            // If time left, set transition to false and finish command
+            if (currentState.timeLeft === 0) {
+                Game.current.currentWeatherOptions.transition = false;
+                if (Game.current.previousWeatherOptions !== null) {
+                    Game.current.previousWeatherOptions.transition = false;
+                }
+                return 1;
+            }
+            return 0;
         }
         return 1;
     }

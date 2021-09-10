@@ -953,9 +953,6 @@ class MapObject {
 
         // Add to moving objects
         this.addMoveTemp();
-
-        // Update terrrain
-        this.updateTerrain();
     }
 
     /** 

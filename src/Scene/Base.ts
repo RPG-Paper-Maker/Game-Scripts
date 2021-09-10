@@ -108,7 +108,7 @@ abstract class Base {
 
         // Updating blocking hero
         ReactionInterpreter.blockingHero = false;
-        let reaction; ReactionInterpreter;
+        let reaction: ReactionInterpreter;
         for (reaction of this.reactionInterpreters) {
             if (reaction.currentReaction.blockingHero) {
                 ReactionInterpreter.blockingHero = true;
