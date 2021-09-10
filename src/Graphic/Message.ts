@@ -427,8 +427,9 @@ class Message extends Graphic.Base {
      */
     drawFaceset(x: number, y: number, w: number, h: number) {
         this.faceset.draw(x + Utils.defaultValue(Datas.Systems.dbOptions.v_fX, 0
-            ), y - ((this.faceset.oH - h) / 2) + Utils.defaultValue(Datas
-            .Systems.dbOptions.v_fX, 0));
+            ), y - ((Datas.Systems.facesetScalingHeight - h) / 2) + Utils
+            .defaultValue(Datas.Systems.dbOptions.v_fX, 0), Datas.Systems
+            .facesetScalingWidth, Datas.Systems.facesetScalingHeight);
     }
     
     /** 
@@ -459,8 +460,8 @@ class Message extends Graphic.Base {
         if (Datas.Systems.dbOptions.v_fPosAbove) {
             this.drawFaceset(x, y, w, h);
         }
-        let newX = ScreenResolution.getScreenX(x + this.faceset.oW + Constants
-            .HUGE_SPACE);
+        let newX = ScreenResolution.getScreenX(x + Constants.HUGE_SPACE) + 
+            ScreenResolution.getScreenMinXY(Datas.Systems.facesetScalingWidth);
         let newY = ScreenResolution.getScreenY(y + Constants.HUGE_SPACE);
         let offsetY = 0;
         let align = Align.None;

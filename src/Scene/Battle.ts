@@ -49,7 +49,7 @@ class Battle extends Map {
     public static CAMERA_OFFSET = 3;
     public static START_CAMERA_DISTANCE = 10;
     public static WINDOW_PROFILE_WIDTH = 300;
-    public static WINDOW_PROFILE_HEIGHT = 100;
+    public static WINDOW_PROFILE_HEIGHT = 136;
     public static COMMANDS_NUMBER = 6;
     public static WINDOW_COMMANDS_WIDTH = 150;
     public static WINDOW_COMMANDS_SELECT_X = 25;

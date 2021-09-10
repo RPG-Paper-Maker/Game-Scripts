@@ -59,6 +59,8 @@ class Systems {
     public static soundCancel: System.PlaySong;
     public static soundImpossible: System.PlaySong;
     public static dbOptions: EventCommand.SetDialogBoxOptions;
+    public static facesetScalingWidth: number;
+    public static facesetScalingHeight: number;
     public static saveSlots: number;
     public static modelHero: MapObject;
     public static ignoreAssetsLoadingErrors: boolean;
@@ -215,6 +217,10 @@ class Systems {
         this.dbOptions = <EventCommand.SetDialogBoxOptions> Manager.Events
             .getEventCommand(json.dbo);
         this.dbOptions.update();
+
+        // Faceset options
+        this.facesetScalingWidth = Utils.defaultValue(json.facesetScalingWidth, 120);
+        this.facesetScalingHeight = Utils.defaultValue(json.facesetScalingHeight, 120);
 
         // Enter name menu options
         this.enterNameTable = json.enterNameTable;

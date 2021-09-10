@@ -128,12 +128,11 @@ class Player extends Base {
         this.faceset = Datas.Pictures.getPictureCopy(PictureKind.Facesets, hero
             .idFaceset);
         if (this.reverse) {
-            this.faceset.setLeft();
+            this.faceset.setLeft(Datas.Systems.getCurrentWindowSkin().borderBotLeft[2]);
         } else {
-            this.faceset.setRight();
+            this.faceset.setRight(true, Datas.Systems.getCurrentWindowSkin().borderBotRight[2]);
         }
-        this.faceset.setBot(Datas.Systems.getCurrentWindowSkin().borderBotRight[
-            3]);
+        this.faceset.setBot(true, Datas.Systems.getCurrentWindowSkin().borderBotRight[3]);
         this.faceset.reverse = this.reverse;
 
         // Battler
@@ -152,9 +151,9 @@ class Player extends Base {
      */
     updateReverse(reverse: boolean) {
         if (reverse) {
-            this.faceset.setLeft();
+            this.faceset.setLeft(Datas.Systems.getCurrentWindowSkin().borderBotLeft[2]);
         } else {
-            this.faceset.setRight();
+            this.faceset.setRight(true, Datas.Systems.getCurrentWindowSkin().borderBotRight[2]);
         }
         this.faceset.reverse = reverse;
         this.reverse = reverse;
@@ -426,7 +425,8 @@ class Player extends Base {
         }
 
         // Faceset
-        this.faceset.draw();
+        this.faceset.draw(undefined, undefined, Datas.Systems
+            .facesetScalingWidth, Datas.Systems.facesetScalingHeight);
     }
 }
 

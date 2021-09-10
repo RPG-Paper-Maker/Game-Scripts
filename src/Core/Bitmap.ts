@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Datas } from "..";
 import { ScreenResolution } from "../Common"
 import { Stack } from "../Manager"
 
@@ -93,33 +94,35 @@ class Bitmap {
     /** 
      *  Set the position to the left.
      */
-    setLeft() {
-        this.oX = 0;
-        this.x = 0;
-        Stack.requestPaintHUD = true;
+    setLeft(offset: number = 0) {
+        this.setX(offset);
     }
 
     /** 
      *  Set the position to the top.
      */
-    setTop() {
-        this.oY = 0;
-        this.y = 0;
-        Stack.requestPaintHUD = true;
+    setTop(offset: number = 0) {
+        this.setY(offset);
     }
 
     /** 
      *  Set the position to the right.
      */
-    setRight(offset: number = 0) {
-        this.setX(ScreenResolution.SCREEN_X - this.oW - offset);
+    setRight(faceset: boolean = false, offset: number = 0) {
+        this.oX = ScreenResolution.SCREEN_X - offset - (faceset ? Datas.Systems
+            .facesetScalingWidth : this.oW);
+        this.x = ScreenResolution.getScreenX(ScreenResolution.SCREEN_X - offset) 
+            - ScreenResolution.getScreenMinXY(faceset ? Datas.Systems
+            .facesetScalingWidth : this.oW);
+        Stack.requestPaintHUD = true;
     }
 
     /** 
      *  Set the position to the bot.
      */
-    setBot(offset: number = 0) {
-        this.setY(ScreenResolution.SCREEN_Y - this.oH - offset);
+    setBot(faceset: boolean = false, offset: number = 0) {
+        this.setY(ScreenResolution.SCREEN_Y - (faceset ? Datas.Systems
+            .facesetScalingHeight : this.oH) - offset);
     }
 
     /** 
