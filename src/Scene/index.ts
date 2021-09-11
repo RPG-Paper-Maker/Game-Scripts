@@ -11,7 +11,7 @@
 
 export * from "./Base";
 export * from "./MenuBase";
-export {MenuCommands} from "./MenuBase";
+export * from "./MenuBase";
 export * from "./Battle";
 export * from "./BattleAnimation";
 export * from "./BattleEndTurn";
@@ -21,6 +21,7 @@ export * from "./BattleSelection";
 export * from "./BattleStartTurn";
 export * from "./BattleVictory";
 export * from "./ChangeLanguage";
+export * from "./GameOver";
 export * from "./KeyboardAssign";
 export * from "./LoadGame";
 export * from "./Loading";

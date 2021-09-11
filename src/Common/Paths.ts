@@ -66,6 +66,7 @@ class Paths {
     public static readonly ICONS = Paths.HUD + "Icons";
     public static readonly WINDOW_SKINS = Paths.HUD + "WindowSkins";
     public static readonly TITLE_SCREEN = Paths.HUD + "TitleScreen";
+    public static readonly GAME_OVER = Paths.HUD + "GameOver";
     public static readonly HUD_PICTURES = Paths.HUD + "Pictures";
     public static readonly ANIMATIONS = Paths.HUD + "Animations";
     public static readonly AUTOTILES = Paths.TEXTURES2D + "Autotiles";

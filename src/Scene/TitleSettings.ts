@@ -64,11 +64,10 @@ class TitleSettings extends Base {
             Constants.HUGE_SPACE + WindowBox.LARGE_SLOT_HEIGHT + Constants
             .LARGE_SPACE, ScreenResolution.SCREEN_X - (2 * Constants.HUGE_SPACE)
             , WindowBox.MEDIUM_SLOT_HEIGHT, Datas.TitlescreenGameover
-            .getSettingsCommandsContent(), 
+            .getTitleSettingsCommandsContent(), 
             {
                 nbItemsMax: 9,
-                listCallbacks: Datas.TitlescreenGameover
-                    .getSettingsCommandsActions(),
+                listCallbacks: Datas.TitlescreenGameover.getTitleSettingsCommandsActions(),
                 bordersInsideVisible: false
             }
         );

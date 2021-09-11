@@ -127,6 +127,16 @@ class Stack {
     }
 
     /** 
+     *  Push the game over.
+     *  @returns {Scene.GameOver}
+     */
+    static pushGameOver(): Scene.GameOver {
+        let scene = new Scene.GameOver();
+        this.push(scene);
+        return scene;
+    }
+
+    /** 
      *  Push a battle scene for testing troop.
      */
     static async pushBattleTest() {

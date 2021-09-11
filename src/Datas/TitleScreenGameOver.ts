@@ -27,6 +27,11 @@ class TitlescreenGameover {
     public static titleMusic: System.PlaySong;
     public static titleCommands: System.TitleCommand[];
     public static titleSettings: number[];
+    public static isGameOverBackgroundImage: boolean;
+    public static gameOverBackgroundImageID: number;
+    public static gameOverBackgroundVideoID: number;
+    public static gameOverMusic: System.PlaySong;
+    public static gameOverCommands: System.GameOverCommand[];
 
     constructor() {
         throw new Error("This is a static class!");
@@ -59,14 +64,26 @@ class TitlescreenGameover {
                 j++;
             }
         }
+
+        // Game over
+        this.isGameOverBackgroundImage = Utils.defaultValue(json
+            .isGameOverBackgroundImage, true);
+        this.gameOverBackgroundImageID = Utils.defaultValue(json
+            .gameOverBackgroundImageID, 1);
+        this.gameOverBackgroundVideoID = Utils.defaultValue(json
+            .gameOverBackgroundVideoID, 1);
+        this.gameOverMusic = new System.PlaySong(SongKind.Music, json.gameOverMusic);
+        this.gameOverCommands = [];
+        Utils.readJSONSystemList({ list: Utils.defaultValue(json.gameOverCommands, 
+            []), listIndexes: this.gameOverCommands, cons: System.GameOverCommand });
     }
 
     /** 
-     *  Get the commands graphic names.
+     *  Get the title screen commands graphic names.
      *  @static
      *  @returns {Graphic.Text[]}
      */
-    static getCommandsNames(): Graphic.Text[] {
+    static getTitleCommandsNames(): Graphic.Text[] {
         let l = this.titleCommands.length;
         let list = new Array(l);
         let titleCommand: System.TitleCommand, obj: Graphic.Text;
@@ -80,11 +97,11 @@ class TitlescreenGameover {
     }
 
     /** 
-     *  Get the commands actions functions.
+     *  Get the title screen commands actions functions.
      *  @static
      *  @returns {function[]}
      */
-    static getCommandsActions(): Function[] {
+    static getTitleCommandsActions(): Function[] {
         let l = this.titleCommands.length;
         let list = new Array(l);
         for (let i = 0; i < l; i++) {
@@ -94,11 +111,11 @@ class TitlescreenGameover {
     }
 
     /** 
-     *  Get the commands settings content graphic.
+     *  Get the title screen commands settings content graphic.
      *  @static
      *  @returns {Graphic.Setting[]}
      */
-    static getSettingsCommandsContent(): Graphic.Setting[] {
+    static getTitleSettingsCommandsContent(): Graphic.Setting[] {
         let l = this.titleSettings.length;
         let list = new Array(l);
         for (let i = 0; i < l; i++) {
@@ -108,26 +125,26 @@ class TitlescreenGameover {
     }
 
     /** 
-     *  Get the settings commands actions functions.
+     *  Get the title screen settings commands actions functions.
      *  @static
      *  @returns {function[]}
      */
-    static getSettingsCommandsActions(): Function[] {
+    static getTitleSettingsCommandsActions(): Function[] {
         let l = this.titleSettings.length;
         let list = new Array(l);
         for (let i = 0; i < l; i++) {
-            list[i] = this.getSettingsCommandsAction(this.titleSettings[i]);
+            list[i] = this.getTitleSettingsCommandsAction(this.titleSettings[i]);
         }
         return list;
     }
 
     /** 
-     *  Get the settings commands action function according to ID.
+     *  Get the title screen settings commands action function according to ID.
      *  @static
      *  @param {number} id - The action ID
      *  @returns {function}
      */
-    static getSettingsCommandsAction(id: number): Function
+    static getTitleSettingsCommandsAction(id: number): Function
     {
         switch (id) {
             case TitleSettingKind.KeyboardAssigment:
@@ -135,6 +152,38 @@ class TitlescreenGameover {
             case TitleSettingKind.Language:
                 return Datas.TitlescreenGameover.language;
         }
+    }
+
+    /** 
+     *  Get the game over commands graphic names.
+     *  @static
+     *  @returns {Graphic.Text[]}
+     */
+    static getGameOverCommandsNames(): Graphic.Text[] {
+        let l = this.gameOverCommands.length;
+        let list = new Array(l);
+        let command: System.GameOverCommand, obj: Graphic.Text;
+        for (let i = 0; i < l; i++) {
+            command = this.gameOverCommands[i];
+            obj = new Graphic.Text(command.name(), { align: Align.Center });
+            obj.datas = command;
+            list[i] = obj;
+        }
+        return list;
+    }
+
+    /** 
+     *  Get the game over commands actions functions.
+     *  @static
+     *  @returns {function[]}
+     */
+    static getGameOverCommandsActions(): Function[] {
+        let l = this.gameOverCommands.length;
+        let list = new Array(l);
+        for (let i = 0; i < l; i++) {
+            list[i] = this.gameOverCommands[i].getAction();
+        }
+        return list;
     }
 
     /** 

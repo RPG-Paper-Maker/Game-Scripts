@@ -50,13 +50,13 @@ class TitleCommand extends Translatable {
     getAction(): Function {
         switch (this.kind) {
             case TitleCommandKind.NewGame:
-                return this.startNewGame;
+                return TitleCommand.startNewGame;
             case TitleCommandKind.LoadGame:
-                return this.loadGame;
+                return TitleCommand.loadGame;
             case TitleCommandKind.Settings:
-                return this.showSettings;
+                return TitleCommand.showSettings;
             case TitleCommandKind.Exit:
-                return this.exit;
+                return TitleCommand.exit;
             case TitleCommandKind.Script:
                 return this.executeScript;
         }
@@ -64,9 +64,10 @@ class TitleCommand extends Translatable {
     
     /** 
      *  Callback function for start a new game.
+     *  @static
      *  @returns {boolean}
      */
-    startNewGame(): boolean {
+    static startNewGame(): boolean {
         // Stop video and songs if existing
         if (!Datas.TitlescreenGameover.isTitleBackgroundImage)
         {
@@ -89,7 +90,7 @@ class TitleCommand extends Translatable {
      *  Callback function for loading an existing game.
      *  @returns {boolean}
      */
-    loadGame(): boolean {
+    static loadGame(): boolean {
         Manager.Stack.push(new Scene.LoadGame());
         return true;
     }
@@ -98,7 +99,7 @@ class TitleCommand extends Translatable {
      *  Callback function for loading an existing game.
      *   @returns {boolean}
      */
-    showSettings(): boolean {
+    static showSettings(): boolean {
         Manager.Stack.push(new Scene.TitleSettings());
         return true;
     }
@@ -107,7 +108,7 @@ class TitleCommand extends Translatable {
      *  Callback function for closing the window.
      *  @returns {boolean}
      */
-    exit(): boolean {
+    static exit(): boolean {
         Platform.quit();
         return true;
     }

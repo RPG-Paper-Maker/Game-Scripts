@@ -36,8 +36,8 @@ class Events {
                 return new EventCommand.ShowText(command);
             case EventCommandKind.ChangeVariables:
                 return new EventCommand.ChangeVariables(command);
-            case EventCommandKind.EndGame:
-                return new EventCommand.EndGame(command);
+            case EventCommandKind.GameOver:
+                return new EventCommand.GameOver(command);
             case EventCommandKind.While:
                 return new EventCommand.While(command);
             case EventCommandKind.WhileBreak:

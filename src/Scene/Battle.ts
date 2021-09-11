@@ -349,10 +349,8 @@ class Battle extends Map {
      */
     gameOver() {
         if (this.canGameOver) {
-            Manager.Stack.pop();
-            Manager.Stack.replace(new Scene.TitleScreen()); // TODO
-        } else {
-            this.endBattle();
+            Manager.Stack.popAll();
+            Manager.Stack.pushGameOver();
         }
     }
 

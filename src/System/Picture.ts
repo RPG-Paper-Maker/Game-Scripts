@@ -149,6 +149,8 @@ class Picture extends Base {
                 return Paths.SKYBOXES;
             case PictureKind.Particles:
                 return Paths.PARTICLES;
+            case PictureKind.GameOver:
+                return Paths.GAME_OVER;
         }
         return "";
     }

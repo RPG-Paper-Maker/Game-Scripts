@@ -33,6 +33,7 @@ export * from "./Effect";
 export * from "./Element";
 export * from "./Event";
 export * from "./FontName";
+export * from "./GameOverCommand";
 export * from "./Hero";
 export * from "./HeroTroopBattleTest";
 export * from "./HeroTroopBattleTestEquipment";

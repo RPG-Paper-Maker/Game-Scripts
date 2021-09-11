@@ -9,21 +9,20 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Datas, Manager, Scene } from "..";
+import { Constants, Enum, Platform, ScreenResolution } from "../Common";
+import { Game, Picture2D, WindowBox, WindowChoices } from "../Core";
 import { Base } from "./Base";
-import { Manager, Datas, Graphic } from "../index";
-import { Picture2D, WindowChoices, WindowBox, Game } from "../Core";
-import { Enum, Platform, ScreenResolution, Constants } from "../Common";
-import PictureKind = Enum.PictureKind;
 
 /**
- *  The Scene displaying the game title screen.
- *  @class TitleScreen
+ *  The scene displaying the game over screen.
+ *  @class GameOver
  *  @extends {Scene.Base}
  */
-class TitleScreen extends Base {
+class GameOver extends Base {
 
     /**
-     *  The title screen background image.
+     *  The game over background image.
      *  @type {Picture2D}
      */
     public pictureBackground: Picture2D;
@@ -50,54 +49,66 @@ class TitleScreen extends Base {
      *  @inheritdoc
      */
     async load() {
-        Game.current = null;
-        
-        // Stop all songs
-        Manager.Songs.stopAll();
-
-        // Destroy pictures
-        Manager.Stack.displayedPictures = [];
+        // Reload current game
+        if (Game.current.slot !== -1) {
+            Game.current = new Game(Game.current.slot);
+            await Game.current.load();
+        }
 
         // Creating background
-        if (Datas.TitlescreenGameover.isTitleBackgroundImage) {
+        if (Datas.TitlescreenGameover.isGameOverBackgroundImage) {
             this.pictureBackground = await Picture2D.createWithID(Datas
-                .TitlescreenGameover.titleBackgroundImageID, PictureKind
-                .TitleScreen, { cover: true });
+                .TitlescreenGameover.gameOverBackgroundImageID, Enum.PictureKind
+                .GameOver, { cover: true });
         } else {
             Platform.canvasVideos.classList.remove('hidden');
             Platform.canvasVideos.src = Datas.Videos.get(Datas
-                .TitlescreenGameover.titleBackgroundVideoID).getPath();
+                .TitlescreenGameover.gameOverBackgroundVideoID).getPath();
             await Platform.canvasVideos.play();
         }
 
         // Windows
-        let commandsNb = Datas.TitlescreenGameover.titleCommands.length;
+        let commandsNb = Datas.TitlescreenGameover.gameOverCommands.length;
         this.windowChoicesCommands = new WindowChoices(ScreenResolution.SCREEN_X
             / 2 - (WindowBox.MEDIUM_SLOT_WIDTH / 2), ScreenResolution.SCREEN_Y -
             Constants.HUGE_SPACE - (commandsNb * WindowBox.MEDIUM_SLOT_HEIGHT),
             WindowBox.MEDIUM_SLOT_WIDTH, WindowBox.MEDIUM_SLOT_HEIGHT, Datas
-                .TitlescreenGameover.getTitleCommandsNames(),
+                .TitlescreenGameover.getGameOverCommandsNames(),
             {
                 nbItemsMax: commandsNb,
-                listCallbacks: Datas.TitlescreenGameover.getTitleCommandsActions(),
-                padding: [0, 0, 0, 0]
+                listCallbacks: Datas.TitlescreenGameover.getGameOverCommandsActions()
             }
         );
 
-        // Play title screen song
-        Datas.TitlescreenGameover.titleMusic.playMusic();
+        // Play game over song
+        Datas.TitlescreenGameover.gameOverMusic.playMusic();
 
         this.loading = false;
     }
 
-    /** 
-     *  @inheritdoc
+    /**
+     *  Continue the game.
      */
-    translate() {
-        for (let i = 0, l = this.windowChoicesCommands.listContents.length; i < l; i++) {
-            (<Graphic.Text>this.windowChoicesCommands.listContents[i]).setText(
-                Datas.TitlescreenGameover.titleCommands[i].name());
+    async continue() {
+        this.loading = true;
+
+        // Load positions
+        await Game.current.loadPositions();
+
+        // Initialize properties for hero
+        Game.current.hero.initializeProperties();
+
+        // Stop video if existing
+        if (!Datas.TitlescreenGameover.isGameOverBackgroundImage) {
+            Platform.canvasVideos.classList.add(Constants.CLASS_HIDDEN);
+            Platform.canvasVideos.pause();
+            Platform.canvasVideos.src = "";
         }
+
+        // Load map
+        Manager.Stack.replace(new Scene.Map(Game.current.currentMapID));
+
+        this.loading = false;
     }
 
     /**
@@ -151,4 +162,4 @@ class TitleScreen extends Base {
     }
 }
 
-export { TitleScreen }
+export { GameOver }

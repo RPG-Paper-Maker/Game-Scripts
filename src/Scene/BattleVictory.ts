@@ -305,6 +305,9 @@ class BattleVictory {
                 break;
             case 4:
                 this.prepareEndTransition();
+                if (!this.battle.winning) {
+                    this.battle.gameOver();
+                }
                 break;
         }
     }
@@ -341,7 +344,7 @@ class BattleVictory {
                     if (this.battle.winning) {
                         this.battle.win();
                     } else {
-                        this.battle.gameOver();
+                        this.battle.endBattle();
                     }
                     if (Platform.MODE_TEST === Platform.MODE_TEST_BATTLE_TROOP) {
                         Platform.quit();

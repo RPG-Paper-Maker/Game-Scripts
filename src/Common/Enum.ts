@@ -63,7 +63,7 @@ namespace Enum {
         None,
         ShowText,
         ChangeVariables,
-        EndGame,
+        GameOver,
         While,
         EndWhile,
         WhileBreak,
@@ -257,7 +257,8 @@ namespace Enum {
         Pictures,
         Animations,
         Skyboxes,
-        Particles
+        Particles,
+        GameOver
     };
 
     /**
@@ -545,7 +546,7 @@ namespace Enum {
     };
 
     /**
-     *   Enum for the title commands.
+     *   Enum for the title screen commands.
      *   @enum {number}
      *   @readonly
      */
@@ -553,6 +554,18 @@ namespace Enum {
         NewGame,
         LoadGame,
         Settings,
+        Exit,
+        Script
+    };
+
+    /**
+     *   Enum for the game over commands.
+     *   @enum {number}
+     *   @readonly
+     */
+    export enum GameOverCommandKind {
+        Continue,
+        TitleScreen,
         Exit,
         Script
     };
