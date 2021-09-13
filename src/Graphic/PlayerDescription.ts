@@ -27,6 +27,7 @@ class PlayerDescription extends Base {
     public player: Player;
     public graphicNameCenter: Graphic.Text;
     public graphicName: Graphic.Text;
+    public graphicDescription: Graphic.Text;
     public graphicClass: Graphic.Text;
     public graphicLevelName: Graphic.Text;
     public graphicLevel: Graphic.Text;
@@ -55,6 +56,7 @@ class PlayerDescription extends Base {
         this.graphicNameCenter = new Graphic.Text(this.player.name, { align: Align
             .Center });
         this.graphicName = new Graphic.Text(this.player.name);
+        this.graphicDescription = new Graphic.Text(system.description.name())
         this.graphicClass = new Graphic.Text(cl.name(), { fontSize: Constants
             .MEDIUM_FONT_SIZE });
         this.graphicLevelName = new Graphic.Text(levelStat.name());
@@ -248,7 +250,7 @@ class PlayerDescription extends Base {
             coef) - 15, wBattler * coef, hBattler * coef, this.battlerFrame
             .value * wBattler, 0, wBattler, hBattler);
 
-        // Name, level, exp
+        // Name, level, description, exp
         yName = y + 10;
         this.graphicName.draw(xCharacter, yName, 0, 0);
         this.graphicName.updateContextFont();
@@ -265,12 +267,15 @@ class PlayerDescription extends Base {
         let yClass = yName + 20;
         this.graphicClass.draw(xCharacter, yClass, 0, 0);
         let yExp = yClass + 20;
+        let yDescription = yExp;
         if (this.graphicExpName !== null) {
             this.graphicExpName.draw(xCharacter, yExp, 0, 0);
             this.graphicExp.draw(xCharacter + Platform.ctx.measureText(this
                 .graphicExpName.text).width + 10, yExp, 0, 0);
+            yDescription += 20;
         }
-        let yStats = yExp + 30;
+        this.graphicDescription.draw(xCharacter, yDescription, 0, 0);
+        let yStats = yDescription + 30;
 
         // Stats
         let xStat: number, yStat: number;

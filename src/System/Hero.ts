@@ -24,10 +24,11 @@ import { Translatable } from "./Translatable";
  */
 class Hero extends Translatable {
 
-    class: System.Class;
-    idBattler: number;
-    idFaceset: number;
-    classInherit: Class;
+    public class: System.Class;
+    public idBattler: number;
+    public idFaceset: number;
+    public classInherit: Class;
+    public description: System.Translatable;
 
     constructor(json: Record<string, any>) {
         super(json);
@@ -45,6 +46,7 @@ class Hero extends Translatable {
         this.idBattler = Utils.defaultValue(json.bid, -1);
         this.idFaceset = Utils.defaultValue(json.fid, -1);
         this.classInherit = new Class(json.ci);
+        this.description = new System.Translatable(json.description);
     }
 
     /** 
