@@ -55,9 +55,7 @@ class LoadGame extends SaveLoadGame {
 
         // Stop video if existing
         if (!Datas.TitlescreenGameover.isTitleBackgroundImage) {
-            Platform.canvasVideos.classList.add(Constants.CLASS_HIDDEN);
-            Platform.canvasVideos.pause();
-            Platform.canvasVideos.src = "";
+            Manager.Videos.stop();
         }
 
         // Pop load and title screen from the stack

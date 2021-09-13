@@ -15,3 +15,4 @@ export * from "./GL";
 export * from "./Plugins";
 export * from "./Songs";
 export * from "./Stack";
+export * from "./Videos";

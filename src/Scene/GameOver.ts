@@ -55,16 +55,18 @@ class GameOver extends Base {
             await Game.current.load();
         }
 
+        // Stop all songs and videos
+        Manager.Videos.stop();
+        Manager.Songs.stopAll();
+
         // Creating background
         if (Datas.TitlescreenGameover.isGameOverBackgroundImage) {
             this.pictureBackground = await Picture2D.createWithID(Datas
                 .TitlescreenGameover.gameOverBackgroundImageID, Enum.PictureKind
                 .GameOver, { cover: true });
         } else {
-            Platform.canvasVideos.classList.remove('hidden');
-            Platform.canvasVideos.src = Datas.Videos.get(Datas
-                .TitlescreenGameover.gameOverBackgroundVideoID).getPath();
-            await Platform.canvasVideos.play();
+            await Manager.Videos.play(Datas.Videos.get(Datas
+                .TitlescreenGameover.gameOverBackgroundVideoID).getPath());
         }
 
         // Windows
@@ -100,9 +102,7 @@ class GameOver extends Base {
 
         // Stop video if existing
         if (!Datas.TitlescreenGameover.isGameOverBackgroundImage) {
-            Platform.canvasVideos.classList.add(Constants.CLASS_HIDDEN);
-            Platform.canvasVideos.pause();
-            Platform.canvasVideos.src = "";
+            Manager.Videos.stop();
         }
 
         // Load map

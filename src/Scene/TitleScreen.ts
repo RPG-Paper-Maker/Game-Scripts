@@ -52,7 +52,8 @@ class TitleScreen extends Base {
     async load() {
         Game.current = null;
         
-        // Stop all songs
+        // Stop all songs and videos
+        Manager.Videos.stop();
         Manager.Songs.stopAll();
 
         // Destroy pictures
@@ -64,10 +65,8 @@ class TitleScreen extends Base {
                 .TitlescreenGameover.titleBackgroundImageID, PictureKind
                 .TitleScreen, { cover: true });
         } else {
-            Platform.canvasVideos.classList.remove('hidden');
-            Platform.canvasVideos.src = Datas.Videos.get(Datas
-                .TitlescreenGameover.titleBackgroundVideoID).getPath();
-            await Platform.canvasVideos.play();
+            await Manager.Videos.play(Datas.Videos.get(Datas
+                .TitlescreenGameover.titleBackgroundVideoID).getPath());
         }
 
         // Windows

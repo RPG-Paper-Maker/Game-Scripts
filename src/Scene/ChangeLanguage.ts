@@ -165,10 +165,8 @@ class ChangeLanguage extends Base {
                 .TitlescreenGameover.titleBackgroundImageID, Enum.PictureKind
                 .TitleScreen, { cover: true });
         } else {
-            Platform.canvasVideos.classList.remove('hidden');
-            Platform.canvasVideos.src = Datas.Videos.get(Datas
-                .TitlescreenGameover.titleBackgroundVideoID).getPath();
-            await Platform.canvasVideos.play();
+            await Manager.Videos.play(Datas.Videos.get(Datas
+                .TitlescreenGameover.titleBackgroundVideoID).getPath());
         }
     }
 

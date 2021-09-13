@@ -71,9 +71,7 @@ class TitleCommand extends Translatable {
         // Stop video and songs if existing
         if (!Datas.TitlescreenGameover.isTitleBackgroundImage)
         {
-            Platform.canvasVideos.classList.add(Constants.CLASS_HIDDEN);
-            Platform.canvasVideos.pause();
-            Platform.canvasVideos.src = "";
+            Manager.Videos.stop();
         }
     
         // Create a new game
