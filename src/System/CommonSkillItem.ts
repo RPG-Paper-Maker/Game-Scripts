@@ -21,7 +21,7 @@ import { Cost } from "./Cost";
 import { Characteristic } from "./Characteristic";
 import { Effect } from "./Effect";
 import { Datas, Scene, System } from "../index";
-import { Player } from "../Core";
+import { Battler, Player } from "../Core";
 
 /** @class
  *  A common class for skills, items, weapons, armors.
@@ -45,6 +45,7 @@ class CommonSkillItem extends Icon {
     public animationID: DynamicValue;
     public animationTargetID: DynamicValue;
     public canBeSold: System.DynamicValue;
+    public battleMessage: System.Translatable;
     public price: Cost[];
     public costs: Cost[];
     public effects: Effect[];
@@ -74,6 +75,7 @@ class CommonSkillItem extends Icon {
         this.animationUserID = DynamicValue.readOrNone(json.auid);
         this.animationTargetID = DynamicValue.readOrNone(json.atid);
         this.canBeSold = DynamicValue.readOrDefaultSwitch(json.canBeSold);
+        this.battleMessage = new System.Translatable(json.battleMessage);
         this.price = [];
         Utils.readJSONSystemList({ list: Utils.defaultValue(json.p, []), 
             listIndexes: this.price, cons: Cost });
@@ -269,6 +271,15 @@ class CommonSkillItem extends Icon {
      */
     isWeaponArmor(): boolean {
         return this.isWeapon() || this.isArmor();
+    }
+
+    /** 
+     *  Get message and replace user / skill / item name.
+     *  @param {Battler} user
+     *  @returns {string}
+     */
+    getMessage(user: Battler): string {
+        return "";
     }
 }
 

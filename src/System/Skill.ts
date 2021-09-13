@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Battler } from "../Core";
 import { CommonSkillItem } from "./CommonSkillItem";
 
 /** @class
@@ -44,6 +45,16 @@ class Skill extends CommonSkillItem {
             }
         }
         return result;
+    }
+
+    /** 
+     *  Get message and replace user / skill name.
+     *  @param {Battler} user
+     *  @returns {string}
+     */
+    getMessage(user: Battler): string {
+        return this.battleMessage.name().replace('[user]', user.player.name)
+            .replace('[skill]', this.name());
     }
 }
 

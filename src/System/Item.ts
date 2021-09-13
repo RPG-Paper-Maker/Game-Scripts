@@ -12,6 +12,7 @@
 import { CommonSkillItem } from "./CommonSkillItem";
 import { Datas } from "../index";
 import { Enum } from "../Common";
+import { Battler } from "../Core";
 
 /** @class
  *  An item of the game.
@@ -45,6 +46,16 @@ class Item extends CommonSkillItem {
      */
     getKind(): Enum.ItemKind {
         return Enum.ItemKind.Item;
+    }
+
+    /** 
+     *  Get message and replace user / item name.
+     *  @param {Battler} user
+     *  @returns {string}
+     */
+    getMessage(user: Battler): string {
+        return this.battleMessage.name().replace('[user]', user.player.name)
+            .replace('[item]', this.name());
     }
 }
 
