@@ -132,7 +132,8 @@ namespace Enum {
         ChangeExperienceCurve,
         ChangeClass,
         ChangeChronometer,
-        ChangeWeather
+        ChangeWeather,
+        PlayAVideo
     };
 
     /**

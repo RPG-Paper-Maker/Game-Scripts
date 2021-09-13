@@ -170,6 +170,8 @@ class Events {
                 return new EventCommand.ChangeChronometer(command);
             case EventCommandKind.ChangeWeather:
                 return new EventCommand.ChangeWeather(command);
+            case EventCommandKind.PlayAVideo:
+                return new EventCommand.PlayAVideo(command);
             default:
                 return null;
         }

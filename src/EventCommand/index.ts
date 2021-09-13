@@ -54,6 +54,7 @@ export * from "./MoveCamera";
 export * from "./MoveObject";
 export * from "./OpenMainMenu";
 export * from "./OpenSavesMenu";
+export * from "./PlayAVideo";
 export * from "./PlayBackgroundSound";
 export * from "./PlayMusic";
 export * from "./PlayMusicEffect";
