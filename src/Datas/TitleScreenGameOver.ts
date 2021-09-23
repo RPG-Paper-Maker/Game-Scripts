@@ -69,9 +69,9 @@ class TitlescreenGameover {
         this.isGameOverBackgroundImage = Utils.defaultValue(json
             .isGameOverBackgroundImage, true);
         this.gameOverBackgroundImageID = Utils.defaultValue(json
-            .gameOverBackgroundImageID, 1);
+            .gameOverBackgroundImage, 1);
         this.gameOverBackgroundVideoID = Utils.defaultValue(json
-            .gameOverBackgroundVideoID, 1);
+            .gameOverBackgroundVideo, 1);
         this.gameOverMusic = new System.PlaySong(SongKind.Music, json.gameOverMusic);
         this.gameOverCommands = [];
         Utils.readJSONSystemList({ list: Utils.defaultValue(json.gameOverCommands, 
