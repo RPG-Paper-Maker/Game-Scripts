@@ -1429,7 +1429,7 @@ class MapObject {
             if (mapPortion) {
                 let position = Position.createFromVector3(this.position);
                 let collision = mapPortion.boundingBoxesLands[position.toIndex()][0];
-                if (collision) {
+                if (collision && collision.cs) {
                     this.terrain = collision.cs.terrain;
                 }
             }
