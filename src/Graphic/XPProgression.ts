@@ -12,6 +12,7 @@
 import { Base } from "./Base";
 import { Graphic } from "..";
 import { Game } from "../Core";
+import { ScreenResolution } from "../Common";
 
 /** @class
  *  The graphic displaying all the progression for each character.
@@ -60,7 +61,8 @@ class XPProgression extends Base {
     */
     draw(x: number, y: number, w: number, h: number) {
         for (let i = 0, l = this.graphicCharacters.length; i < l; i++) {
-            this.graphicCharacters[i].drawChoice(x, y + (i * 90), w, 85);
+            this.graphicCharacters[i].drawChoice(x, y + ScreenResolution
+                .getScreenMinXY(i * 90), w, ScreenResolution.getScreenMinXY(85));
         }
     }
 }

@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { Enum, Constants, Platform } from "../Common";
+import { Enum, Constants, Platform, ScreenResolution } from "../Common";
 import Align = Enum.Align;
 import PictureKind = Enum.PictureKind;
 import { Picture2D } from "../Core";
@@ -37,7 +37,6 @@ class TextIcon extends Base {
     public space: number;
     public graphicIcon: Picture2D;
     public graphicText: Graphic.Text;
-    public length: number;
 
     constructor(text: string, iconID: number, { side = Align.Left, align = Align
         .Left, space = Constants.MEDIUM_SPACE } = {}, textOptions = {})
@@ -47,7 +46,7 @@ class TextIcon extends Base {
         this.iconID = iconID;
         this.side = side;
         this.align = align;
-        this.space = space;
+        this.space = ScreenResolution.getScreenMinXY(space);
         this.graphicIcon = Datas.Pictures.getPictureCopy(PictureKind.Icons, this
             .iconID);
         this.graphicText = new Graphic.Text("", textOptions);
@@ -59,7 +58,7 @@ class TextIcon extends Base {
      *  @returns {number}
      */
     getMaxHeight(): number {
-        return Math.max(this.graphicText.fontSize, this.graphicIcon.oH);
+        return Math.max(this.graphicText.fontSize, this.graphicIcon.h);
     }
 
     /** 
@@ -67,7 +66,7 @@ class TextIcon extends Base {
      *  @returns {number}
      */
     getWidth(): number {
-        return this.graphicIcon.oW + this.space + this.length;
+        return this.graphicIcon.w + this.space + this.graphicText.textWidth;
     }
 
     /** 
@@ -78,9 +77,7 @@ class TextIcon extends Base {
         if (this.text !== text) {
             this.text = text;
             this.graphicText.setText(text);
-            Platform.ctx.font = this.graphicText.font;
-            this.graphicText.updateContextFont();
-            this.length = Platform.ctx.measureText(this.text).width;
+            this.graphicText.measureText();
         }
     }
 
@@ -92,8 +89,8 @@ class TextIcon extends Base {
      *  @param {number} h - The height dimention to draw graphic
      */
     drawChoice(x: number, y: number, w: number, h: number) {
-        let iconWidth = this.graphicIcon.oW;
-        let iconHeight = this.graphicIcon.oH;
+        let iconWidth = this.graphicIcon.w;
+        let iconHeight = this.graphicIcon.h;
 
         // Align offset
         let offset: number;
@@ -111,13 +108,15 @@ class TextIcon extends Base {
 
         // Draw according to side
         if (this.side === Align.Left) {
-            this.graphicIcon.draw(x + offset, y - (iconHeight / 2) + (h / 2));
+            this.graphicIcon.draw({ x: x + offset, y: y - (iconHeight / 2) + (h 
+                / 2) });
             offset += iconWidth + this.space;
             this.graphicText.draw(x + offset, y, w, h);
         } else if (this.side === Align.Right) {
             this.graphicText.draw(x + offset, y, w, h);
-            offset += this.length + this.space;
-            this.graphicIcon.draw(x + offset, y - (iconHeight / 2) + (h / 2));
+            offset += this.graphicText.textWidth + this.space;
+            this.graphicIcon.draw({ x: x + offset, y: y - (iconHeight / 2) + (h 
+                / 2) });
         }
     }
 

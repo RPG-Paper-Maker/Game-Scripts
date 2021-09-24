@@ -319,7 +319,7 @@ class Message extends Graphic.Base {
         case TagKind.Icon: {
             let graphic = Datas.Pictures.getPictureCopy(PictureKind.Icons, value);
             result.g.push(graphic);
-            result.p.push(graphic.oW);
+            result.p.push(graphic.w);
             result.a.push(result.ca);
             if (Constants.DEFAULT_FONT_SIZE > result.h[0]) {
                 result.h[0] = Constants.DEFAULT_FONT_SIZE;
@@ -426,10 +426,12 @@ class Message extends Graphic.Base {
      *  @param {number} h - The height dimention to draw graphic
      */
     drawFaceset(x: number, y: number, w: number, h: number) {
-        this.faceset.draw(x + Utils.defaultValue(Datas.Systems.dbOptions.v_fX, 0
-            ), y - ((Datas.Systems.facesetScalingHeight - h) / 2) + Utils
-            .defaultValue(Datas.Systems.dbOptions.v_fX, 0), Datas.Systems
-            .facesetScalingWidth, Datas.Systems.facesetScalingHeight);
+        this.faceset.draw({ x: x + Utils.defaultValue(ScreenResolution
+            .getScreenMinXY(Datas.Systems.dbOptions.v_fX), 0), y: y - 
+            ((ScreenResolution.getScreenMinXY(Datas.Systems.facesetScalingHeight) 
+            - h) / 2) + Utils.defaultValue(ScreenResolution.getScreenMinXY(Datas
+            .Systems.dbOptions.v_fX), 0), w: Datas.Systems.facesetScalingWidth, 
+            h: Datas.Systems.facesetScalingHeight });
     }
     
     /** 
@@ -440,9 +442,9 @@ class Message extends Graphic.Base {
      *  @param {number} h - The height dimention to draw graphic
      */
     drawChoice(x: number = this.oX, y: number = this.oY, w: number = this.oW, h: 
-        number = this.oH, positionResize: boolean = true)
+        number = this.oH)
     {
-        this.draw(x, y, w, h, positionResize);
+        this.draw(x, y, w, h);
     }
 
     /** 
@@ -455,15 +457,15 @@ class Message extends Graphic.Base {
      *  according to screen resolution
      */
     draw(x: number = this.oX, y: number = this.oY, w: number = this.oW, h: 
-        number = this.oH, positionResize: boolean = true)
+        number = this.oH)
     {
         if (Datas.Systems.dbOptions.v_fPosAbove) {
             this.drawFaceset(x, y, w, h);
         }
-        let newX = ScreenResolution.getScreenX(x + Constants.HUGE_SPACE) + (this
-            .faceset.empty ? 0 : ScreenResolution.getScreenMinXY(Datas.Systems
-            .facesetScalingWidth));
-        let newY = ScreenResolution.getScreenY(y + Constants.HUGE_SPACE);
+        let newX = x + ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE) + 
+            (this.faceset.empty ? 0 : ScreenResolution.getScreenMinXY(Datas
+            .Systems.facesetScalingWidth));
+        let newY = y + ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE);
         let offsetY = 0;
         let align = Align.None;
         let c = this.heights.length - 1;
@@ -476,7 +478,7 @@ class Message extends Graphic.Base {
     
             // New line
             if (graphic === null) {
-                offsetY += ScreenResolution.getScreenMinXY(this.heights[c--] * 2);
+                offsetY += this.heights[c--] * 2;
                 align = Align.None;
                 j++;
             } else {
@@ -487,27 +489,22 @@ class Message extends Graphic.Base {
                         offsetX = 0;
                         break;
                     case Align.Center:
-                        offsetX = (ScreenResolution.getScreenX(w) - 
-                            ScreenResolution.getScreenMinXY(this.totalWidths[j])
-                            - newX) / 2;
+                        offsetX = (w - this.totalWidths[j] - newX) / 2;
                         break;
                     case Align.Right:
-                        offsetX = ScreenResolution.getScreenX(w) - 
-                            ScreenResolution.getScreenMinXY(this.totalWidths[j])
-                            - newX;
+                        offsetX = w - this.totalWidths[j] - newX;
                         break;
                     }
                     j++;
                 }
                 if (graphic instanceof Picture2D) {
-                    graphic.draw(newX + offsetX, newY - (graphic.h / 2) + 
-                        offsetY,  graphic.oW, graphic.oH, 0, 0, graphic.oW, 
-                        graphic.oH, false);
+                    graphic.draw({ x: newX + offsetX, y: newY - (graphic.h / 2) 
+                        + offsetY });
                 } else {
                     (<Graphic.Base>graphic).draw(newX + offsetX, newY + offsetY,
-                        graphic.oW, graphic.oH, false);
+                        graphic.oW, graphic.oH);
                 }
-                offsetX += ScreenResolution.getScreenMinXY(this.positions[i]);
+                offsetX += this.positions[i];
             }
         }
     }

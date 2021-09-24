@@ -11,7 +11,7 @@
 
 import { Player } from "../Core";
 import { Graphic, System, Datas } from "..";
-import { Constants, Platform, Utils } from "../Common";
+import { Constants, Platform, ScreenResolution, Utils } from "../Common";
 import { Base } from "./Base";
 
 /** @class
@@ -73,10 +73,7 @@ class StatisticProgression extends Base {
                     continue;
                 }
                 graphic = new Graphic.Text(statistic.name() + Constants.STRING_COLON);
-                Platform.ctx.font = graphic.font;
-                graphic.updateContextFont();
-                this.maxLength = Math.max(Platform.ctx.measureText(graphic.text)
-                    .width, this.maxLength);
+                this.maxLength = Math.max(graphic.textWidth, this.maxLength);
                 this.listStatsNames.push(graphic);
                 txt = "";
                 if (this.player.stepLevelUp === 0) {
@@ -95,10 +92,8 @@ class StatisticProgression extends Base {
                         .getMaxAbbreviation()];
                 }
                 graphic = new Graphic.Text(txt);
-                Platform.ctx.font = graphic.font;
-                graphic.updateContextFont();
-                this.maxProgressionLength = Math.max(Platform.ctx.measureText(
-                    graphic.text).width, this.maxProgressionLength);
+                this.maxProgressionLength = Math.max(graphic.textWidth, this
+                    .maxProgressionLength);
                 this.listStats.push(graphic);
             }
         }
@@ -109,7 +104,8 @@ class StatisticProgression extends Base {
      *  @returns {number}
      */
     getHeight(): number {
-        return this.listStatsNames.length * 20;
+        return this.listStatsNames.length * ScreenResolution.getScreenMinXY(
+            Constants.HUGE_SPACE);
     }
 
     /** 
@@ -133,12 +129,14 @@ class StatisticProgression extends Base {
     draw(x: number, y: number, w: number, h: number) {
         let yStat: number;
         for (let i = 0, l = this.listStatsNames.length; i < l; i++) {
-            yStat = y + (i * 20);
+            yStat = y + ScreenResolution.getScreenMinXY(i * Constants.HUGE_SPACE);
             this.listStatsNames[i].draw(x, yStat, 0, 0);
-            this.listStats[i].draw(x + this.maxLength + 10 , yStat, 0, 0);
+            this.listStats[i].draw(x + this.maxLength + ScreenResolution
+                .getScreenMinXY(Constants.LARGE_SPACE) , yStat, 0, 0);
             if (this.player.stepLevelUp === 0) {
                 this.listStatsProgression[i].draw(x + this.maxLength + this
-                    .maxProgressionLength + 20, yStat, 0, 0);
+                    .maxProgressionLength + ScreenResolution.getScreenMinXY(
+                    Constants.HUGE_SPACE), yStat, 0, 0);
             }
         }
     }

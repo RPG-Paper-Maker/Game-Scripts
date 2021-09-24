@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { Enum } from "../Common";
+import { Enum, ScreenResolution } from "../Common";
 import LootKind = Enum.LootKind;
 import { Graphic } from "..";
 import { Item } from "../Core";
@@ -59,7 +59,8 @@ class Loots extends Base {
      */
     draw(x: number, y: number, w: number, h: number) {
         for (let i = 0, l = this.graphicsLoots.length; i < l; i++) {
-            this.graphicsLoots[i].drawChoice(x, y + (i * 30), w, 30);
+            this.graphicsLoots[i].drawChoice(x, y + (i * ScreenResolution
+                .getScreenMinXY(30)), w, ScreenResolution.getScreenMinXY(30));
         }
     }
 }

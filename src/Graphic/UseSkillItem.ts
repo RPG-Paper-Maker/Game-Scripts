@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { Graphic, Manager, Datas, Scene, System, Core } from "../index";
-import { Mathf } from "../Common";
+import { Mathf, ScreenResolution } from "../Common";
 import { Battler, Game, Player } from "../Core";
 
 /** @class
@@ -208,8 +208,9 @@ class UseSkillItem extends Base {
      */
     drawArrowAtIndex(index: number, x: number, y: number, h: number) {
         Datas.Systems.getCurrentWindowSkin().drawArrowTarget(this
-            .graphicCharacters[index].battlerFrame.value, x + 32 + (index * 85), 
-            y + h - 20, true);
+            .graphicCharacters[index].battlerFrame.value, x + ScreenResolution
+            .getScreenMinXY(32) + (index * 85), y + h - ScreenResolution
+            .getScreenMinXY(20));
     }
 
     /** 
@@ -234,8 +235,9 @@ class UseSkillItem extends Base {
     {
         let i: number, l: number;
         for (i = 0, l = this.graphicCharacters.length; i < l; i++) {
-            this.graphicCharacters[i].drawCharacter(x + 5 + (i * 85), y - 32, w,
-                h);
+            this.graphicCharacters[i].drawCharacter(x + ScreenResolution
+                .getScreenMinXY(5 + (i * 85)), y - ScreenResolution
+                .getScreenMinXY(32), w, h);
         }
         if (!this.hideArrow) {
             if (this.all) {

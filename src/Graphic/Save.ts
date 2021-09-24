@@ -12,7 +12,7 @@
 import { Game } from "../Core";
 import { Graphic } from "../index";
 import { Base } from "./Base";
-import { Enum, Utils } from "../Common";
+import { Enum, ScreenResolution, Utils } from "../Common";
 import Align = Enum.Align;
 
 /** @class
@@ -80,10 +80,11 @@ class Save extends Base {
         if (this.game.isEmpty) {
             this.graphicEmpty.draw(x, y, w, h);
         } else {
-            this.graphicTimer.draw(x, y, w, 20);
+            this.graphicTimer.draw(x, y, w, ScreenResolution.getScreenMinXY(20));
             for (let i = 0, l = this.graphicPlayers.length; i < l; i++) {
-                this.graphicPlayers[i].drawCharacter(x + 5 + (i * 115), y + 20, 
-                    w, h);
+                this.graphicPlayers[i].drawCharacter(x + ScreenResolution
+                    .getScreenMinXY(5 + (i * 115)), y + ScreenResolution
+                    .getScreenMinXY(20), w, h);
             }
         }
     }

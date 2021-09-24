@@ -157,10 +157,10 @@ class WindowBox extends Bitmap {
     updateDimensions() {
         // Setting content dimensions
         this.contentDimension = [
-            this.oX + this.padding[0],
-            this.oY + this.padding[1],
-            this.oW - (2 * this.padding[2]),
-            this.oH - (2 * this.padding[3])
+            ScreenResolution.getScreenX(this.oX + this.padding[0]),
+            ScreenResolution.getScreenY(this.oY + this.padding[1]),
+            ScreenResolution.getScreenX(this.oW - (2 * this.padding[2])),
+            ScreenResolution.getScreenY(this.oH - (2 * this.padding[3]))
         ];
 
         // Adjusting dimensions
@@ -207,11 +207,10 @@ class WindowBox extends Bitmap {
             if (!isChoice && this.limitContent) {
                 Platform.ctx.save();
                 Platform.ctx.beginPath();
-                Platform.ctx.rect(ScreenResolution.getScreenX(contentDimension
-                [0]), ScreenResolution.getScreenY(contentDimension[1] - (
-                    this.padding[3] / 2)), ScreenResolution.getScreenX(
-                        contentDimension[2]), ScreenResolution.getScreenY(
-                            contentDimension[3] + this.padding[3]));
+                Platform.ctx.rect(contentDimension[0], contentDimension[1] - 
+                    ScreenResolution.getScreenY(this.padding[3] / 2), 
+                    contentDimension[2], contentDimension[3] + ScreenResolution
+                    .getScreenY(this.padding[3]));
                 Platform.ctx.clip();
             }
             if (isChoice) {

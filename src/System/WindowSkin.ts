@@ -94,8 +94,8 @@ class WindowSkin extends System.Base {
     drawElement(r: number[], x: number, y: number, w: number = r[2], h: number = 
         r[3], zoom: number = 1.0, positionResize: boolean = true)
     {
-        this.picture.draw(x, y, w * zoom, h * zoom, r[0], r[1], r[2], r[3], 
-            positionResize);
+        this.picture.draw({ x: x, y: y, w: w * zoom, h: h * zoom, sx: r[0], sy: 
+            r[1], sw: r[2], sh: r[3], positionResize: positionResize });
     }
 
     /** 
@@ -211,10 +211,10 @@ class WindowSkin extends System.Base {
         = false)
     {
         let width = this.arrowTargetSelection[2] / Datas.Systems.FRAMES;
-        this.picture.draw(x - (width / 2), y, width, this.arrowTargetSelection
-            [3],this.arrowTargetSelection[0] + (frame * width), this
-            .arrowTargetSelection[1], width, this.arrowTargetSelection[3],
-            positionResize);
+        this.picture.draw({ x: x - (width / 2), y: y, w: width, h: this
+            .arrowTargetSelection[3], sx: this.arrowTargetSelection[0] + (frame 
+            * width), sy: this.arrowTargetSelection[1], sw: width, sh: this
+            .arrowTargetSelection[3], positionResize: positionResize });
     }
 
     /** 
@@ -226,9 +226,9 @@ class WindowSkin extends System.Base {
     drawArrowMessage(frame: number, x: number, y: number)
     {
         let width = this.arrowEndMessage[2] / Datas.Systems.FRAMES;
-        this.picture.draw(x - (width / 2), y, width, this.arrowEndMessage[3],
-            this.arrowEndMessage[0] + (frame * width), this.arrowEndMessage[1],
-            width, this.arrowEndMessage[3]);
+        this.picture.draw({ x: x - (width / 2), y: y, w: width, h: this
+            .arrowEndMessage[3], sx: this.arrowEndMessage[0] + (frame * width), 
+            sy: this.arrowEndMessage[1], sw: width, sh: this.arrowEndMessage[3] });
     }
 
     /** 
@@ -237,9 +237,9 @@ class WindowSkin extends System.Base {
      *  @param {number} y - The y position
      */
     drawArrowUp(x: number, y: number) {
-        this.picture.draw(x, y, this.arrowUpDown[2], this.arrowUpDown[3] / 2,
-            this.arrowUpDown[0], this.arrowUpDown[1], this.arrowUpDown[2], 
-            this.arrowUpDown[3] / 2);
+        this.picture.draw({ x: x, y: y, w: this.arrowUpDown[2], h: this
+            .arrowUpDown[3] / 2, sx: this.arrowUpDown[0], sy: this.arrowUpDown[1], 
+            sw: this.arrowUpDown[2], sh: this.arrowUpDown[3] / 2 });
     }
 
     /** 
@@ -248,9 +248,10 @@ class WindowSkin extends System.Base {
      *  @param {number} y - The y position
      */
     drawArrowDown(x: number, y: number) {
-        this.picture.draw(x, y, this.arrowUpDown[2], this.arrowUpDown[3] / 2,
-            this.arrowUpDown[0], this.arrowUpDown[1] + (this.arrowUpDown[3] / 2), 
-            this.arrowUpDown[2], this.arrowUpDown[3] / 2);
+        this.picture.draw({ x: x, y: y, w: this.arrowUpDown[2], h: this
+            .arrowUpDown[3] / 2, sx: this.arrowUpDown[0], sy: this.arrowUpDown[1] 
+            + (this.arrowUpDown[3] / 2), sw: this.arrowUpDown[2], sh: this
+            .arrowUpDown[3] / 2 });
     }
 
     /** 
@@ -270,9 +271,10 @@ class WindowSkin extends System.Base {
         this.picture.stretch = false;
         for (let i = 0, l = digits.length; i < l; i++)
         {
-            this.picture.draw(x + ((i - ((l -1) / 2)) * (ScreenResolution
-                .getScreenMinXY(width) * zoom)), y, width * zoom, height * zoom, 
-                rect[0] + (digits[i] * width), rect[1], width, height, false);
+            this.picture.draw({ x: x + ((i - ((l -1) / 2)) * (ScreenResolution
+                .getScreenMinXY(width) * zoom)), y: y, w: width * zoom, h: 
+                height * zoom, sx: rect[0] + (digits[i] * width), sy: rect[1], 
+                sw: width, sh: height, positionResize: false });
         }
         this.picture.stretch = true;
     }

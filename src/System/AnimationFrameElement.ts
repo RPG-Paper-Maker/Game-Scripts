@@ -64,8 +64,9 @@ class AnimationFrameElement extends Base {
         picture.reverse = this.flip;
         let w = picture.oW / cols;
         let h = picture.oH / rows;
-        picture.draw(position.x + this.x, position.y + this.y, w * this.zoom, h
-            * this.zoom, w * this.texCol, h * this.texRow, w, h, false);
+        picture.draw({ x: position.x + this.x, y: position.y + this.y, w: w * 
+            this.zoom, h: h * this.zoom, sx: w * this.texCol, sy: h * this.texRow, 
+            sw: w, sh: h });
     }
 }
 

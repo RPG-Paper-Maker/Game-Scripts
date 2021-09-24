@@ -59,18 +59,19 @@ class Status {
         let maxWidth: number = 0;
         let i: number, l: number, s: Status, h: number, w: number;
         for (let i = 0, l = statusList.length; i < l; i++) {
-            totalWidth += statusList[i].picture.oW;
-            w = statusList[i].picture.oW;
+            totalWidth += statusList[i].picture.w;
+            w = statusList[i].picture.w;
             if (w > maxWidth) {
                 maxWidth = w;
             }
-            h = statusList[i].picture.oH;
+            h = statusList[i].picture.h;
             if (h > maxHeight) {
                 maxHeight = h;
             }
         }
         if (l > 1) {
-            totalWidth += (l - 1) * Constants.MEDIUM_SPACE;
+            totalWidth += (l - 1) * ScreenResolution.getScreenMinXY(Constants
+                .MEDIUM_SPACE);
         }
         let xOffset: number = 0;
         switch (align) {
@@ -84,9 +85,9 @@ class Status {
         }
         for (i = 0, l = statusList.length; i < l; i++) {
             s = statusList[i];
-            xOffset += s.picture.oW;
-            s.draw(x - totalWidth + xOffset + (i * Constants.MEDIUM_SPACE) - 
-                maxWidth, y - (maxHeight / 2));
+            xOffset += s.picture.w;
+            s.draw(x - totalWidth + xOffset + ScreenResolution.getScreenMinXY(i 
+                * Constants.MEDIUM_SPACE) - maxWidth, y - (maxHeight / 2));
         }
     }
 
@@ -132,7 +133,7 @@ class Status {
      *  @param {number} y - The y position
      */
     draw(x: number, y: number) {
-        this.picture.draw(x, y);
+        this.picture.draw({ x: x, y: y });
     }
 }
 

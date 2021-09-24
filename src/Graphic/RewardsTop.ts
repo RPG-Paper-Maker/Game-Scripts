@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { System, Graphic, Datas } from "..";
-import { Constants, Platform, Utils, Enum } from "../Common";
+import { Constants, Platform, Utils, Enum, ScreenResolution } from "../Common";
 import Align = Enum.Align;
 
 /** @class
@@ -20,7 +20,6 @@ import Align = Enum.Align;
 class RewardsTop extends Base {
     
     public graphicXP: Graphic.Text;
-    public graphicXPLength: number;
     public graphicCurrencies: Graphic.TextIcon[];
 
     constructor(xp: number, currencies: Record<string, number>) {
@@ -29,9 +28,6 @@ class RewardsTop extends Base {
         // Experience
         this.graphicXP = new Graphic.Text(Datas.BattleSystems.getExpStatistic()
             .name() + Constants.STRING_COLON + Constants.STRING_SPACE + xp);
-        Platform.ctx.font = this.graphicXP.font;
-        this.graphicXP.updateContextFont();
-        this.graphicXPLength = Platform.ctx.measureText(this.graphicXP.text).width;
 
         // Currencies
         this.graphicCurrencies = [];
@@ -62,23 +58,27 @@ class RewardsTop extends Base {
      */
     draw(x: number, y: number, w: number, h: number) {
         // Calculating offset for centering
-        let offsetWidth = this.graphicXPLength + 10;
+        let offsetWidth = this.graphicXP.textWidth; + ScreenResolution
+            .getScreenMinXY(Constants.LARGE_SPACE);
         let i: number, l: number;
         for (i = 0, l = this.graphicCurrencies.length; i < l; i++) {
-            offsetWidth += this.graphicCurrencies[i].getWidth() + (i < l - 1 ? 10 : 0);
+            offsetWidth += this.graphicCurrencies[i].getWidth() + ScreenResolution
+                .getScreenMinXY(i < l - 1 ? Constants.LARGE_SPACE : 0);
         }
         offsetWidth = ((w - offsetWidth) / 2);
 
         // Experience
         this.graphicXP.draw(x + offsetWidth, y, w, h);
-        offsetWidth += this.graphicXPLength + 10;
+        offsetWidth += this.graphicXP.textWidth + ScreenResolution
+            .getScreenMinXY(Constants.LARGE_SPACE);
 
         // Currencies
         let currency: Graphic.TextIcon;
         for (i = 0, l = this.graphicCurrencies.length; i < l; i++) {
             currency = this.graphicCurrencies[i];
             currency.draw(x + offsetWidth, y, w, h);
-            offsetWidth += currency.getWidth() + 10;
+            offsetWidth += currency.getWidth() + ScreenResolution.getScreenMinXY(
+                Constants.LARGE_SPACE);
         }
     }
 }

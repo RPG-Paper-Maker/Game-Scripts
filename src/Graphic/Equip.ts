@@ -12,6 +12,7 @@
 import { Base } from "./Base";
 import { Player } from "../Core";
 import { Graphic, Datas, System } from "../index";
+import { Constants, ScreenResolution } from "../Common";
 
 /** @class
  *  The graphic displaying all the equipment information in the equip menu.
@@ -30,7 +31,7 @@ class Equip extends Base {
     constructor(player: Player, id: number, length: number, isPossible: boolean) {
         super();
 
-        this.length = length;
+        this.length = ScreenResolution.getScreenMinXY(length);
         this.isPossible = isPossible;
         let equiped = player.equip[id];
 
@@ -50,7 +51,8 @@ class Equip extends Base {
      */
     drawChoice(x: number, y: number, w: number, h: number) {
         this.graphicEquipmentName.draw(x, y, w, h);
-        this.graphicEquipment.draw(x + this.length + 10, y, w, h);
+        this.graphicEquipment.draw(x + this.length + ScreenResolution
+            .getScreenMinXY(Constants.LARGE_SPACE), y, w, h);
     }
 
     /** 

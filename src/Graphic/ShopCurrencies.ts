@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { Graphic, Datas } from "../index";
-import { Utils, Enum, Constants, Mathf } from "../Common";
+import { Utils, Enum, Constants, Mathf, ScreenResolution } from "../Common";
 import { Game } from "../Core";
 
 /** @class
@@ -33,7 +33,7 @@ class ShopCurrencies extends Base {
         for (let i = 0, l = this.currencies.length; i < l; i++) {
             width += this.currencies[i].getWidth();
             if (i < l - 1) {
-                width += Constants.MEDIUM_SPACE;
+                width += ScreenResolution.getScreenMinXY(Constants.MEDIUM_SPACE);
             }
         }
         return width;
@@ -77,7 +77,8 @@ class ShopCurrencies extends Base {
         for (let i = 0, l = this.currencies.length; i < l; i++) {
             currency = this.currencies[i];
             currency.draw(x + offset, y, w, h);
-            offset += currency.getWidth() + Constants.MEDIUM_SPACE;
+            offset += currency.getWidth() + ScreenResolution.getScreenMinXY(
+                Constants.MEDIUM_SPACE);
         }
     }
 }

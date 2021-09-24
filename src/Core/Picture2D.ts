@@ -178,22 +178,21 @@ class Picture2D extends Bitmap {
      *  @param {boolean} [positionResize=true] - Indicate if the position resize
      *  (screen resolution)
      */
-    draw(x: number = undefined, y: number = undefined, w: number = undefined, h: 
-        number = undefined, sx: number = 0, sy: number = 0, sw: number = this.oW
-        , sh: number = this.oH, positionResize: boolean = true)
+    draw({ x = null, y = null, w = null, h = null, sx = 0, sy = 0, sw = this.oW, 
+        sh = this.oH, positionResize = false }: { x?: number, y?: number, w?: 
+        number, h?: number, sx?: number, sy?: number, sw?: number, sh?: number, 
+        positionResize?: boolean} = {})
     {
         if (this.loaded && sw > 0 && sh > 0) {
             // Default values
-            x = Utils.isUndefined(x) ? this.x : (positionResize ? 
-                ScreenResolution.getScreenX(x) : x);
-            y = Utils.isUndefined(y) ? this.y : (positionResize ? 
-                ScreenResolution.getScreenY(y) : y);
-            w = Utils.isUndefined(w) ? this.w * this.zoom : (this.stretch ? 
-                ScreenResolution.getScreenX(w) : ScreenResolution.getScreenMinXY
-                (w));
-            h = Utils.isUndefined(h) ? this.h * this.zoom : (this.stretch ? 
-                ScreenResolution.getScreenY(h) : ScreenResolution.getScreenMinXY
-                (h));
+            x = x === null ? this.x : (positionResize ? ScreenResolution
+                .getScreenX(x) : x);
+            y = y === null ? this.y : (positionResize ? ScreenResolution
+                .getScreenY(y) : y);
+            w = w === null ? this.w * this.zoom : (this.stretch ? ScreenResolution
+                .getScreenX(w) : ScreenResolution.getScreenMinXY(w));
+            h = h === null ? this.h * this.zoom : (this.stretch ? ScreenResolution
+                .getScreenY(h) : ScreenResolution.getScreenMinXY(h));
 
             // Draw the image according to all parameters
             let angle = this.angle * Math.PI / 180;

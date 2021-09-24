@@ -54,7 +54,6 @@ class Text extends Base {
     public italic: boolean;
     public backColor: System.Color;
     public strokeColor: System.Color;
-    public oFont: string;
     public font: string;
     public textWidth: number;
     public textHeight: number;
@@ -87,8 +86,6 @@ class Text extends Base {
     }
 
     wrapText(maxWidth: number) {
-        this.updateContextFontReal();
-        maxWidth = ScreenResolution.getScreenX(maxWidth);
         let text = this.text.replace('\\n', Constants.STRING_NEW_LINE);
         let lines = text.split(Constants.STRING_NEW_LINE);
         let words: string[] = [];
@@ -129,13 +126,8 @@ class Text extends Base {
      *  @param {number} fontSize - The new font size
      */
     setFontSize(fontSize: number) {
-        this.fontSize = fontSize;
-
-        // Create fonts without resizing (screen resolution) + with resize
-        this.oFont = Utils.createFont(fontSize, this.fontName, this.bold, this
-            .italic);
-        this.font = Utils.createFont(ScreenResolution.getScreenMinXY(fontSize), 
-            this.fontName, this.bold, this.italic);
+        this.fontSize = ScreenResolution.getScreenMinXY(fontSize);
+        this.font = Utils.createFont(this.fontSize, this.fontName, this.bold, this.italic);
     }
 
     /** 
@@ -153,17 +145,9 @@ class Text extends Base {
     }
 
     /** 
-     *  Update the context font (without window resizing), this function is
-     *  used before a context.measureText.
-     */
-    updateContextFont() {
-        Platform.ctx.font = this.oFont;
-    }
-
-    /** 
      *  Update the context font with resizing.
      */
-    updateContextFontReal() {
+    updateContextFont() {
         Platform.ctx.font = this.font;
     }
 
@@ -177,7 +161,7 @@ class Text extends Base {
         let size: number;
         for (let i = 0; i < l; i++) {
             size = Platform.ctx.measureText(this.lines[i]).width + (this
-                .strokeColor === null ? 0 : 2);
+                .strokeColor === null ? 0 : ScreenResolution.getScreenMinXY(2));
             if (size > this.textWidth) {
                 this.textWidth = size;
             }
@@ -191,37 +175,29 @@ class Text extends Base {
      *  @param {number} [y=this.oY] - The y position to draw graphic
      *  @param {number} [w=this.oW] - The width dimention to draw graphic
      *  @param {number} [h=this.oH] - The height dimention to draw graphic
-     *  @param {boolean} [positionResize=true] - If checked, resize postion 
-     *  according to screen resolution
      */
-    drawChoice(x: number = this.oX, y: number = this.oY, w: number = this.oW, h:
-        number = this.oH, positionResize: boolean = true): void
+    drawChoice(x: number = this.x, y: number = this.y, w: number = this.w, h:
+        number = this.h): void
     {
+        this.updateContextFont();
+
         // Wrap text if != 0
         if (this.lastW !== w && w !== 0) {
             this.lastW = w;
             this.wrapText(w);
         }
 
-        // If position resize checked, resize it
-        if (positionResize) {
-            x = ScreenResolution.getScreenX(x);
-            y = ScreenResolution.getScreenY(y);
-        }
-        w = ScreenResolution.getScreenX(w);
-        h = ScreenResolution.getScreenY(h);
-
         // Correcting x and y according to alignment
         let xBack = x;
-        let textWidth = ScreenResolution.getScreenX(this.textWidth);
-        let textHeight = ScreenResolution.getScreenY(this.fontSize + (this
-            .strokeColor === null ? 0 : 2));
+        let textWidth = this.textWidth;
+        let textHeight = this.fontSize + ScreenResolution.getScreenMinXY(this
+            .strokeColor === null ? 0 : 2);
         switch(this.align) {
         case Align.Left:
-            x += ScreenResolution.getScreenX(1);
+            x += ScreenResolution.getScreenMinXY(1);
             break;
         case Align.Right:
-            x += w - ScreenResolution.getScreenX(1);;
+            x += w - ScreenResolution.getScreenMinXY(1);
             xBack = x - textWidth;
             break;
         case Align.Center:
@@ -231,13 +207,13 @@ class Text extends Base {
         }
         switch(this.verticalAlign) {
         case AlignVertical.Bot:
-            y += (ScreenResolution.getScreenY(this.fontSize) / 3) + h;
+            y += (this.fontSize / 3) + h;
             break;
         case AlignVertical.Top:
-            y += ScreenResolution.getScreenY(this.fontSize);
+            y += this.fontSize;
             break;
         case AlignVertical.Center:
-            y += (ScreenResolution.getScreenY(this.fontSize) / 3) + (h / 2);
+            y += (this.fontSize / 3) + (h / 2);
             break;
         }
 
@@ -282,13 +258,11 @@ class Text extends Base {
      *  @param {number} [y=this.oY] - The y position to draw graphic
      *  @param {number} [w=this.oW] - The width dimention to draw graphic
      *  @param {number} [h=this.oH] - The height dimention to draw graphic
-     *  @param {boolean} [positionResize=true] - If checked, resize postion 
-     *  according to screen resolution
      */
-    draw(x: number = this.oX, y: number = this.oY, w: number = this.oW, h: 
-        number = this.oH, positionResize: boolean = true)
+    draw(x: number = this.x, y: number = this.y, w: number = this.w, h: 
+        number = this.h)
     {
-        this.drawChoice(x, y, w, h, positionResize);
+        this.drawChoice(x, y, w, h);
     }
 }
 
