@@ -67,12 +67,10 @@ class PlayAVideo extends Base {
     update(currentState: Record<string, any>, object: MapObject, state: number): 
         number
     {
-        console.log(this)
         if (currentState.parallel) {
             if (!currentState.started) {
                 switch (this.operation) {
                     case 0:
-                        console.log(this)
                         Manager.Videos.play(Datas.Videos.get(this.videoID)
                             .getPath() + (this.isStart ? "#t=" + this.start
                             .getValue() : ""), () => {

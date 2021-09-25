@@ -126,6 +126,7 @@ class ChangeMapProperties extends Base {
             if (mapID === Scene.Map.current.id) {
                 currentState.loading = true;
                 Scene.Map.current.close();
+                Scene.Map.current.loading = true;
                 (async() => {
                     await Scene.Map.current.load();
                     currentState.loaded = true;
