@@ -398,7 +398,7 @@ class MapObject {
             event = events[0];
             timeEllapsed = events[1];
             interval = event.parameters[1].value;
-            if (new Date().getTime() - timeEllapsed >= interval.getValue()) {
+            if (new Date().getTime() - timeEllapsed >= (interval.getValue() * 1000)) {
                 repeat = event.parameters[2].value;
                 if (this.receiveEvent(this, true, 1, [null, interval, repeat],
                     this.states, events))
