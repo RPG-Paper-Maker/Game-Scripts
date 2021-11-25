@@ -228,7 +228,8 @@ class WindowSkin extends System.Base {
         let width = this.arrowEndMessage[2] / Datas.Systems.FRAMES;
         this.picture.draw({ x: x - (width / 2), y: y, w: width, h: this
             .arrowEndMessage[3], sx: this.arrowEndMessage[0] + (frame * width), 
-            sy: this.arrowEndMessage[1], sw: width, sh: this.arrowEndMessage[3] });
+            sy: this.arrowEndMessage[1], sw: width, sh: this.arrowEndMessage[3], 
+            positionResize: true });
     }
 
     /** 
@@ -239,7 +240,8 @@ class WindowSkin extends System.Base {
     drawArrowUp(x: number, y: number) {
         this.picture.draw({ x: x, y: y, w: this.arrowUpDown[2], h: this
             .arrowUpDown[3] / 2, sx: this.arrowUpDown[0], sy: this.arrowUpDown[1], 
-            sw: this.arrowUpDown[2], sh: this.arrowUpDown[3] / 2 });
+            sw: this.arrowUpDown[2], sh: this.arrowUpDown[3] / 2, positionResize: 
+            true });
     }
 
     /** 
@@ -251,7 +253,7 @@ class WindowSkin extends System.Base {
         this.picture.draw({ x: x, y: y, w: this.arrowUpDown[2], h: this
             .arrowUpDown[3] / 2, sx: this.arrowUpDown[0], sy: this.arrowUpDown[1] 
             + (this.arrowUpDown[3] / 2), sw: this.arrowUpDown[2], sh: this
-            .arrowUpDown[3] / 2 });
+            .arrowUpDown[3] / 2, positionResize: true });
     }
 
     /** 
