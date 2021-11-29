@@ -125,10 +125,34 @@ class ChangeMapProperties extends Base {
             // Load map again if current map
             if (mapID === Scene.Map.current.id) {
                 currentState.loading = true;
-                Scene.Map.current.close();
+                if (this.isTilesetID) {
+                    Scene.Map.current.close();
+                }
                 Scene.Map.current.loading = true;
                 (async() => {
-                    await Scene.Map.current.load();
+                    if (this.isTilesetID) {
+                        await Scene.Map.current.load();
+                    } else {
+                        Scene.Map.current.mapProperties.close();
+                        await Scene.Map.current.readMapProperties();
+                        if (this.isMusic) {
+                            Scene.Map.current.mapProperties.music.playMusic();
+                        }
+                        if (this.isBackgroundSound) {
+                            Scene.Map.current.mapProperties.backgroundSound.playMusic();
+                        }
+                        if (this.isCameraPropertiesID) {
+                            Scene.Map.current.initializeCamera();
+                        }
+                        if (this.isSky) {
+                            switch (this.skyKind) {
+                                case 0:
+                                    Scene.Map.current.updateBackgroundColor();
+                                    break;
+                            }
+                        }
+                        Scene.Map.current.loading = false;
+                    }
                     currentState.loaded = true;
                 })();
             }

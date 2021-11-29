@@ -52,6 +52,7 @@ class MapProperties extends Base {
     public cameraBackground: THREE.Camera;
     public sceneBackground: THREE.Scene;
     public skyboxGeometry: THREE.BoxGeometry;
+    public skyboxMesh: THREE.Mesh;
     public maxNumberSteps: number;
 
     constructor() {
@@ -59,6 +60,7 @@ class MapProperties extends Base {
 
         this.sceneBackground = null;
         this.skyboxGeometry = null;
+        this.skyboxMesh = null;
     }
 
     /** 
@@ -67,6 +69,8 @@ class MapProperties extends Base {
      *  properties
      */
     read(json: Record<string, any>) {
+        this.skyboxGeometry = null;
+        this.skyboxMesh = null;
         this.id = json.id;
         this.name = json.name;
         this.length = json.l;
@@ -164,8 +168,9 @@ class MapProperties extends Base {
         let size = 10000 * Datas.Systems.SQUARE_SIZE / Constants
             .BASIC_SQUARE_SIZE;
         this.skyboxGeometry = new THREE.BoxGeometry(size, size, size);
-        Scene.Map.current.scene.add(new THREE.Mesh(this.skyboxGeometry, Datas
-            .Systems.getSkybox(this.backgroundSkyboxID.getValue()).createTextures()));
+        this.skyboxMesh = new THREE.Mesh(this.skyboxGeometry, Datas.Systems
+            .getSkybox(this.backgroundSkyboxID.getValue()).createTextures());
+        Scene.Map.current.scene.add(this.skyboxMesh);
     }
 
     /** 
@@ -224,6 +229,12 @@ class MapProperties extends Base {
                     .getValue(), true, true, battleMap, Enum.MapTransitionKind
                     .Zoom, Enum.MapTransitionKind.Zoom, null, null));
             }
+        }
+    }
+
+    close() {
+        if (this.skyboxMesh !== null) {
+            Scene.Map.current.scene.remove(this.skyboxMesh);
         }
     }
 }

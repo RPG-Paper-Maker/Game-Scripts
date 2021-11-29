@@ -960,7 +960,7 @@ class Map extends Base {
         this.camera.update();
 
         // Update skybox
-        if (this.previousCameraPosition) {
+        if (this.mapProperties.skyboxGeometry !== null) {
             let posDif = this.camera.getThreeCamera().position.clone().sub(this
                 .previousCameraPosition);
             this.mapProperties.skyboxGeometry.translate(posDif.x, posDif.y, 
