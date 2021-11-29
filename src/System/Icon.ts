@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Utils } from "../Common";
 import { Translatable } from "./Translatable";
 
 /** @class
@@ -19,6 +20,8 @@ import { Translatable } from "./Translatable";
 class Icon extends Translatable {
     
     public pictureID: number;
+    public pictureIndexX: number;
+    public pictureIndexY: number;
 
     constructor(json) {
         super(json);
@@ -32,6 +35,8 @@ class Icon extends Translatable {
         super.read(json);
 
         this.pictureID = json.pid;
+        this.pictureIndexX = Utils.defaultValue(json.pictureIndexX, 0);
+        this.pictureIndexY = Utils.defaultValue(json.pictureIndexY, 0);
     }
 }
 

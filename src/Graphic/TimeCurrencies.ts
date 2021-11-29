@@ -34,9 +34,8 @@ class TimeCurrencies extends Base {
         this.currencies = [];
         let graphic: Graphic.TextIcon;
         for (let id in Game.current.currencies) {
-            graphic = new Graphic.TextIcon(Mathf.numberWithCommas(Game.current
-                .currencies[id]), Datas.Systems.getCurrency(parseInt(id))
-                .pictureID, {
+            graphic = Graphic.TextIcon.createFromSystem(Mathf.numberWithCommas(
+                Game.current.currencies[id]), Datas.Systems.getCurrency(parseInt(id)), {
                     side: Align.Right,
                     align: Align.Right
                 }
@@ -56,9 +55,9 @@ class TimeCurrencies extends Base {
         this.height = 0;
         for (let i = 0, l = this.currencies.length; i < l; i++) {
             currency = this.currencies[i];
-            this.height = i * (Math.max(currency.graphicText.fontSize, currency
-                .graphicIcon.h) + ScreenResolution.getScreenMinXY(Constants
-                .MEDIUM_SPACE));
+            this.height = i * (Math.max(currency.graphicText.fontSize, 
+                ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize) + 
+                ScreenResolution.getScreenMinXY(Constants.MEDIUM_SPACE)));
         }
         this.height += ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE) + 
             this.graphicPlayTime.fontSize;

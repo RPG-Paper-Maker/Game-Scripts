@@ -31,6 +31,8 @@ class TextIcon extends Base {
 
     public text: string;
     public iconID: number;
+    public indexX: number;
+    public indexY: number;
     public system: System.Base;
     public side: Align;
     public align: Align;
@@ -38,12 +40,15 @@ class TextIcon extends Base {
     public graphicIcon: Picture2D;
     public graphicText: Graphic.Text;
 
-    constructor(text: string, iconID: number, { side = Align.Left, align = Align
-        .Left, space = Constants.MEDIUM_SPACE } = {}, textOptions = {})
+    constructor(text: string, iconID: number, indexX: number, indexY: number, { 
+        side = Align.Left, align = Align.Left, space = Constants.MEDIUM_SPACE } 
+        = {}, textOptions = {})
     {
         super();
 
         this.iconID = iconID;
+        this.indexX = indexX;
+        this.indexY = indexY;
         this.side = side;
         this.align = align;
         this.space = ScreenResolution.getScreenMinXY(space);
@@ -54,11 +59,23 @@ class TextIcon extends Base {
     }
 
     /** 
+     *  Create a graphic according to a System.Icon.
+     *  @static
+     *  @returns {number}
+     */
+    static createFromSystem(text: string, icon: System.Icon, options = {}, 
+        textOptions = {}): Graphic.TextIcon {
+        return new Graphic.TextIcon(text, icon.pictureID, icon.pictureIndexX, 
+            icon.pictureIndexY, options, textOptions);
+    }
+
+    /** 
      *  Get the max possible height.
      *  @returns {number}
      */
     getMaxHeight(): number {
-        return Math.max(this.graphicText.fontSize, this.graphicIcon.h);
+        return Math.max(this.graphicText.fontSize, ScreenResolution.getScreenMinXY(
+            Datas.Systems.iconsSize));
     }
 
     /** 
@@ -66,7 +83,8 @@ class TextIcon extends Base {
      *  @returns {number}
      */
     getWidth(): number {
-        return this.graphicIcon.w + this.space + this.graphicText.textWidth;
+        return ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize) + this
+            .space + this.graphicText.textWidth;
     }
 
     /** 
@@ -89,8 +107,8 @@ class TextIcon extends Base {
      *  @param {number} h - The height dimention to draw graphic
      */
     drawChoice(x: number, y: number, w: number, h: number) {
-        let iconWidth = this.graphicIcon.w;
-        let iconHeight = this.graphicIcon.h;
+        let iconWidth = ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize);
+        let iconHeight = ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize);
 
         // Align offset
         let offset: number;
@@ -107,16 +125,20 @@ class TextIcon extends Base {
         }
 
         // Draw according to side
+        let sx = this.indexX * Datas.Systems.iconsSize;
+        let sy = this.indexY * Datas.Systems.iconsSize;
         if (this.side === Align.Left) {
             this.graphicIcon.draw({ x: x + offset, y: y - (iconHeight / 2) + (h 
-                / 2) });
+                / 2), w: Datas.Systems.iconsSize, h: Datas.Systems.iconsSize, sx: 
+                sx, sy: sy, sw: Datas.Systems.iconsSize, sh: Datas.Systems.iconsSize });
             offset += iconWidth + this.space;
             this.graphicText.draw(x + offset, y, w, h);
         } else if (this.side === Align.Right) {
             this.graphicText.draw(x + offset, y, w, h);
             offset += this.graphicText.textWidth + this.space;
             this.graphicIcon.draw({ x: x + offset, y: y - (iconHeight / 2) + (h 
-                / 2) });
+                / 2), w: Datas.Systems.iconsSize, h: Datas.Systems.iconsSize, sx: 
+                sx, sy: sy, sw: Datas.Systems.iconsSize, sh: Datas.Systems.iconsSize });
         }
     }
 

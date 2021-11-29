@@ -61,6 +61,7 @@ class Systems {
     public static dbOptions: EventCommand.SetDialogBoxOptions;
     public static facesetScalingWidth: number;
     public static facesetScalingHeight: number;
+    public static iconsSize: number;
     public static saveSlots: number;
     public static modelHero: MapObject;
     public static ignoreAssetsLoadingErrors: boolean;
@@ -221,6 +222,9 @@ class Systems {
         // Faceset options
         this.facesetScalingWidth = Utils.defaultValue(json.facesetScalingWidth, 120);
         this.facesetScalingHeight = Utils.defaultValue(json.facesetScalingHeight, 120);
+
+        // Icons size
+        this.iconsSize = Utils.defaultValue(json.iconsSize, 16);
 
         // Enter name menu options
         this.enterNameTable = json.enterNameTable;

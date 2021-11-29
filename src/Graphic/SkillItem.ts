@@ -39,8 +39,8 @@ class SkillItem extends Base {
         this.system = system;
         // All the graphics
         this.graphicElements = [];
-        this.graphicName = new Graphic.TextIcon(system.name(), this.system
-            .pictureID);
+        this.graphicName = Graphic.TextIcon.createFromSystem(system.name(), this
+            .system);
         if (this.system.hasType) {
             this.graphicType = new Graphic.Text(system.getType().name(), { 
                 fontSize: Constants.MEDIUM_FONT_SIZE });
@@ -116,8 +116,8 @@ class SkillItem extends Base {
             offsetX += graphic.w + this.graphicName.space;
         }
         if (this.system.hasType) {
-            this.graphicType.draw(x + this.graphicName.graphicIcon.w + this
-                .graphicName.space, y + offsetY, w, 0);
+            this.graphicType.draw(x + Datas.Systems.iconsSize + this.graphicName
+                .space, y + offsetY, w, 0);
         }
         offsetY += ScreenResolution.getScreenMinXY(Constants.MEDIUM_FONT_SIZE + 
             Constants.LARGE_SPACE);

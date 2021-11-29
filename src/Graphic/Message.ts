@@ -317,9 +317,12 @@ class Message extends Graphic.Base {
             break;
         }
         case TagKind.Icon: {
-            let graphic = Datas.Pictures.getPictureCopy(PictureKind.Icons, value);
+            let args = value.split(";");
+            let graphic = Datas.Pictures.getPictureCopy(PictureKind.Icons, parseInt(args[0]));
+            graphic.sx = parseInt(args[1]) * Datas.Systems.iconsSize;
+            graphic.sy = parseInt(args[2]) * Datas.Systems.iconsSize;
             result.g.push(graphic);
-            result.p.push(graphic.w);
+            result.p.push(ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize));
             result.a.push(result.ca);
             if (Constants.DEFAULT_FONT_SIZE > result.h[0]) {
                 result.h[0] = Constants.DEFAULT_FONT_SIZE;
@@ -498,8 +501,10 @@ class Message extends Graphic.Base {
                     j++;
                 }
                 if (graphic instanceof Picture2D) {
-                    graphic.draw({ x: newX + offsetX, y: newY - (graphic.h / 2) 
-                        + offsetY });
+                    graphic.draw({ x: newX + offsetX, y: newY - (ScreenResolution
+                        .getScreenMinXY(Datas.Systems.iconsSize) / 2) + offsetY, 
+                        sw: Datas.Systems.iconsSize, sh: Datas.Systems.iconsSize, 
+                        w: Datas.Systems.iconsSize, h: Datas.Systems.iconsSize });
                 } else {
                     (<Graphic.Base>graphic).draw(newX + offsetX, newY + offsetY,
                         graphic.oW, graphic.oH);

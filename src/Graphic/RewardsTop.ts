@@ -32,9 +32,9 @@ class RewardsTop extends Base {
         // Currencies
         this.graphicCurrencies = [];
         for (let id in currencies) {
-            this.graphicCurrencies.push(new Graphic.TextIcon(Utils.numToString(
-                currencies[id]), Datas.Systems.getCurrency(parseInt(id))
-                .pictureID, { align: Align.Left }));
+            this.graphicCurrencies.push(Graphic.TextIcon.createFromSystem(Utils
+                .numToString(currencies[id]), Datas.Systems.getCurrency(parseInt(id)), 
+                { align: Align.Left }));
         }
     }
 

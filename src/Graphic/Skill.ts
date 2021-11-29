@@ -30,8 +30,8 @@ class Skill extends Base {
         super();
 
         this.system = Datas.Skills.get(skill.id);
-        this.graphicName = new Graphic.TextIcon(this.system.name(), this.system
-            .pictureID);
+        this.graphicName = Graphic.TextIcon.createFromSystem(this.system.name(), 
+            this.system);
         this.graphicCost = new Graphic.Text(this.system.getCostString(), { align
             : Align.Right });
         this.graphicInformations = new Graphic.SkillItem(this.system);

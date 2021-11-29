@@ -36,7 +36,7 @@ class Item extends Base {
 
         // All the graphics
         nbItem = Utils.isUndefined(nbItem) ? item.nb : nbItem;
-        this.graphicName = new Graphic.TextIcon("", this.item.system.pictureID, 
+        this.graphicName = Graphic.TextIcon.createFromSystem("", this.item.system, 
             {}, possible ? {} : { color: System.Color.GREY });
         this.updateName(nbItem);
         if (Utils.isUndefined(item.shop)) {
@@ -49,11 +49,11 @@ class Item extends Base {
             this.graphicCurrencies = [];
             let graphic: Graphic.TextIcon;
             for (let id in price) {
-                graphic = new Graphic.TextIcon(Mathf.numberWithCommas(showSellPrice ? 
-                    Math.round(Datas.Systems.priceSoldItem.getValue() * price[id] 
-                    / 100) : price[id]), Datas.Systems.getCurrency(parseInt(id))
-                    .pictureID, { align: Align.Right }, possible ? {} : { color: 
-                    System.Color.GREY });
+                graphic = Graphic.TextIcon.createFromSystem(Mathf
+                    .numberWithCommas(showSellPrice ? Math.round(Datas.Systems
+                    .priceSoldItem.getValue() * price[id] / 100) : price[id]), 
+                    Datas.Systems.getCurrency(parseInt(id)), { align: Align
+                    .Right }, possible ? {} : { color: System.Color.GREY });
                 this.graphicCurrencies.push(graphic);
             }
         }

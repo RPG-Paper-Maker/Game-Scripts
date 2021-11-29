@@ -37,9 +37,11 @@ class Picture2D extends Bitmap {
     public image: HTMLImageElement;
     public centered: boolean;
     public reverse: boolean;
+    public sx: number;
+    public sy: number;
 
     constructor(path: string = "", { x = 0, y = 0, w = 0, h = 0, zoom = 1.0, 
-        opacity = 1.0, angle = 0.0, cover = false, stretch = false } 
+        opacity = 1.0, angle = 0.0, cover = false, stretch = false, sx = 0, sy = 0 } 
         = {})
     {
         super(x, y, w, h);
@@ -49,6 +51,8 @@ class Picture2D extends Bitmap {
         this.angle = angle;
         this.cover = cover;
         this.stretch = stretch;
+        this.sx = sx;
+        this.sy = sy;
         if (path) {
             this.path = path;
             this.loaded = false;
@@ -178,10 +182,10 @@ class Picture2D extends Bitmap {
      *  @param {boolean} [positionResize=true] - Indicate if the position resize
      *  (screen resolution)
      */
-    draw({ x = null, y = null, w = null, h = null, sx = 0, sy = 0, sw = this.oW, 
-        sh = this.oH, positionResize = false }: { x?: number, y?: number, w?: 
-        number, h?: number, sx?: number, sy?: number, sw?: number, sh?: number, 
-        positionResize?: boolean} = {})
+    draw({ x = null, y = null, w = null, h = null, sx = this.sx, sy = this.sy, 
+        sw = this.oW, sh = this.oH, positionResize = false }: { x?: number, y?: 
+        number, w?: number, h?: number, sx?: number, sy?: number, sw?: number, 
+        sh?: number, positionResize?: boolean} = {})
     {
         if (this.loaded && sw > 0 && sh > 0) {
             // Default values
