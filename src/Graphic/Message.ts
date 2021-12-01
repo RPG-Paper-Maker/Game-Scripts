@@ -320,7 +320,13 @@ class Message extends Graphic.Base {
             let args = value.split(";");
             let graphic = Datas.Pictures.getPictureCopy(PictureKind.Icons, parseInt(args[0]));
             graphic.sx = parseInt(args[1]) * Datas.Systems.iconsSize;
+            if (isNaN(graphic.sx)) {
+                graphic.sx = 0;
+            }
             graphic.sy = parseInt(args[2]) * Datas.Systems.iconsSize;
+            if (isNaN(graphic.sy)) {
+                graphic.sy = 0;
+            }
             result.g.push(graphic);
             result.p.push(ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize));
             result.a.push(result.ca);
@@ -501,6 +507,7 @@ class Message extends Graphic.Base {
                     j++;
                 }
                 if (graphic instanceof Picture2D) {
+                    console.log(graphic)
                     graphic.draw({ x: newX + offsetX, y: newY - (ScreenResolution
                         .getScreenMinXY(Datas.Systems.iconsSize) / 2) + offsetY, 
                         sw: Datas.Systems.iconsSize, sh: Datas.Systems.iconsSize, 

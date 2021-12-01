@@ -187,7 +187,7 @@ class Picture2D extends Bitmap {
         number, w?: number, h?: number, sx?: number, sy?: number, sw?: number, 
         sh?: number, positionResize?: boolean} = {})
     {
-        if (this.loaded && sw > 0 && sh > 0) {
+        if (!this.empty && this.loaded && sw > 0 && sh > 0) {
             // Default values
             x = x === null ? this.x : (positionResize ? ScreenResolution
                 .getScreenX(x) : x);
