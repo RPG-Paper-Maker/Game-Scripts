@@ -413,8 +413,11 @@ class Player extends Base {
         }
 
         // Faceset
-        this.faceset.draw({ w: Datas.Systems.facesetScalingWidth, h: Datas
-            .Systems.facesetScalingHeight });
+        this.faceset.draw({ sx: this.player.system.indexXFaceset * Datas.Systems
+            .facesetsSize, sy: this.player.system.indexYFaceset * Datas.Systems
+            .facesetsSize, sw: Datas.Systems.facesetsSize, sh: Datas.Systems
+            .facesetsSize, w: Datas.Systems.facesetScalingWidth, h: Datas.Systems
+            .facesetScalingHeight });
     }
 }
 

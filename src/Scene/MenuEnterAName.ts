@@ -413,7 +413,11 @@ class MenuEnterAName extends MenuBase {
      */
     drawHUD(){
         super.drawHUD();
-        this.pictureFaceset.draw({ x: this.windowChoicesTop.x - this
+        this.pictureFaceset.draw({ sx: this.selectedhero.system.indexXFaceset * 
+            Datas.Systems.facesetsSize, sy: this.selectedhero.system.indexYFaceset 
+            * Datas.Systems.facesetsSize, sw: Datas.Systems.facesetsSize, sh: 
+            Datas.Systems.facesetsSize, w: Datas.Systems.facesetScalingWidth, h: 
+            Datas.Systems.facesetScalingHeight, x: this.windowChoicesTop.x - this
             .pictureFaceset.w, y: this.windowBoxMain.y - this.pictureFaceset.h });
         this.windowChoicesTop.draw();
         this.windowBoxMain.draw();

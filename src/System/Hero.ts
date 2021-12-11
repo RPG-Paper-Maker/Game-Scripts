@@ -27,6 +27,8 @@ class Hero extends Translatable {
     public class: System.Class;
     public idBattler: number;
     public idFaceset: number;
+    public indexXFaceset: number;
+    public indexYFaceset: number;
     public classInherit: Class;
     public description: System.Translatable;
 
@@ -45,6 +47,8 @@ class Hero extends Translatable {
             json.id, this.name()) + ", please check your Data manager and add a correct class.");
         this.idBattler = Utils.defaultValue(json.bid, -1);
         this.idFaceset = Utils.defaultValue(json.fid, -1);
+        this.indexXFaceset = Utils.defaultValue(json.indexXFaceset, 0);
+        this.indexYFaceset = Utils.defaultValue(json.indexYFaceset, 0);
         this.classInherit = new Class(json.ci);
         this.description = new System.Translatable(json.description);
     }

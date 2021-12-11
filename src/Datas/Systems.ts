@@ -59,6 +59,7 @@ class Systems {
     public static soundCancel: System.PlaySong;
     public static soundImpossible: System.PlaySong;
     public static dbOptions: EventCommand.SetDialogBoxOptions;
+    public static facesetsSize: number;
     public static facesetScalingWidth: number;
     public static facesetScalingHeight: number;
     public static iconsSize: number;
@@ -220,6 +221,7 @@ class Systems {
         this.dbOptions.update();
 
         // Faceset options
+        this.facesetsSize = Utils.defaultValue(json.facesetsSize, 128);
         this.facesetScalingWidth = Utils.defaultValue(json.facesetScalingWidth, 120);
         this.facesetScalingHeight = Utils.defaultValue(json.facesetScalingHeight, 120);
 
