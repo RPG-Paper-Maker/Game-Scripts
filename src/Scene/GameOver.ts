@@ -155,7 +155,7 @@ class GameOver extends Base {
      *  @inheritdoc
      */
     drawHUD() {
-        if (Datas.TitlescreenGameover.isTitleBackgroundImage) {
+        if (Datas.TitlescreenGameover.isGameOverBackgroundImage) {
             this.pictureBackground.draw();
         }
         this.windowChoicesCommands.draw();
