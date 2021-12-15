@@ -125,14 +125,34 @@ class MoveObject extends Base {
                 this.moves.push(this.jump);
             } else if (this.kind === CommandMoveKind.ChangeGraphics) {
                 permanent = Utils.numToBool(command[iterator.i++]);
+                let dontChangeOrientation = Utils.numToBool(command[iterator.i++]);
+                let indexKind = command[iterator.i++];
+                let kind = Enum.ElementMapKind.None;
+                switch (indexKind) {
+                    case 0:
+                        kind = Enum.ElementMapKind.None;
+                        break;
+                    case 1:
+                        kind = Enum.ElementMapKind.SpritesFix;
+                        break;
+                    case 2:
+                        kind = Enum.ElementMapKind.SpritesFace;
+                        break;
+                    case 3:
+                        kind = Enum.ElementMapKind.Object3D;
+                        break;
+                }
                 let pictureID = System.DynamicValue.createValueCommand(command, 
                     iterator);
+                iterator.i++;
                 let indexX = command[iterator.i++];
                 let indexY = command[iterator.i++];
                 let width = command[iterator.i++];
                 let height = command[iterator.i++];
                 this.parameters.push({
                     permanent: permanent,
+                    dontChangeOrientation: dontChangeOrientation,
+                    kind: kind,
                     pictureID: pictureID, 
                     indexX: indexX,
                     indexY: indexY,
@@ -791,6 +811,9 @@ class MoveObject extends Base {
     {
         if (object) {
             // Change object current state value
+            object.currentStateInstance.previousGraphicKind  = object
+                .currentStateInstance.graphicKind;
+            object.currentStateInstance.graphicKind  = parameters.kind;
             object.currentStateInstance.graphicID = parameters.pictureID
                 .getValue();
             if (object.currentStateInstance.graphicID === 0) {
@@ -801,8 +824,10 @@ class MoveObject extends Base {
                     parameters.height
                 ];
             } else {
-                object.currentStateInstance.indexX = parameters.indexX;
-                object.currentStateInstance.indexY = parameters.indexY;
+                if (!parameters.dontChangeOrientation) {
+                    object.currentStateInstance.indexX = parameters.indexX;
+                    object.currentStateInstance.indexY = parameters.indexY;
+                }
             }
 
             // Permanent change
@@ -812,6 +837,7 @@ class MoveObject extends Base {
                     return;
                 }
                 options.gid = object.currentStateInstance.graphicID;
+                options.gk = object.currentStateInstance.graphicKind;
                 options.gt = object.currentStateInstance.rectTileset;
                 options.gix = object.currentStateInstance.indexX;
                 options.giy = object.currentStateInstance.indexY;
