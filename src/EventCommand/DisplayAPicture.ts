@@ -32,6 +32,7 @@ class DisplayAPicture extends Base {
     public zoom: System.DynamicValue;
     public opacity: System.DynamicValue;
     public angle: System.DynamicValue;
+    public stretch: boolean;
 
     constructor(command: any[]) {
         super();
@@ -56,6 +57,7 @@ class DisplayAPicture extends Base {
         this.zoom = System.DynamicValue.createValueCommand(command, iterator);
         this.opacity = System.DynamicValue.createValueCommand(command, iterator);
         this.angle = System.DynamicValue.createValueCommand(command, iterator);
+        this.stretch = Utils.numToBool(command[iterator.i++]);
     }
 
     /** 
@@ -77,6 +79,11 @@ class DisplayAPicture extends Base {
         picture.zoom = this.zoom.getValue() / 100;
         picture.opacity = this.opacity.getValue() / 100;
         picture.angle = this.angle.getValue();
+        if (this.stretch) {
+            picture.stretch = true;
+            picture.setW(picture.image.width);
+            picture.setH(picture.image.height);
+        }
         let value: [number, Picture2D] = [currentIndex, picture];
         let ok = false;
         let index: number;
