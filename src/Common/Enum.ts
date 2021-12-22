@@ -133,7 +133,8 @@ namespace Enum {
         ChangeClass,
         ChangeChronometer,
         ChangeWeather,
-        PlayAVideo
+        PlayAVideo,
+        SwitchTexture
     };
 
     /**

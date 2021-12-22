@@ -260,10 +260,10 @@ class Map extends Base {
         let path = tileset.getPath();
         this.textureTileset = path ? (await Manager.GL.loadTexture(path)) : 
             Manager.GL.loadTextureEmpty();
-        this.texturesAutotiles = Datas.Tilesets.getTexturesAutotiles(tileset);
-        this.texturesWalls = Datas.Tilesets.getTexturesWalls(tileset);
-        this.texturesMountains = Datas.Tilesets.getTexturesMountains(tileset);
-        this.texturesObjects3D = Datas.Tilesets.texturesObjects3D;
+        this.texturesAutotiles = await tileset.getTexturesAutotiles();
+        this.texturesWalls = await tileset.getTexturesWalls();
+        this.texturesMountains = await tileset.getTexturesMountains();
+        this.texturesObjects3D = await tileset.getTexturesObjects3D();
         this.texturesCharacters = Datas.Tilesets.texturesCharacters;
 
         // Update shaders for autotiles

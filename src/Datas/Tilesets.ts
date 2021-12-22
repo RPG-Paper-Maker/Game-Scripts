@@ -12,7 +12,6 @@
 import { IO, Paths, Enum } from "../Common";
 import { System, Datas, Manager } from "../index";
 import PictureKind = Enum.PictureKind;
-import { TextureBundle } from "../Core";
 
 /** @class
  *  All the tilesets datas.
@@ -22,14 +21,9 @@ class Tilesets {
 
     public static PROPERTY_TEXTURES_CHARACTERS = "texturesCharacters";
     public static PROPERTY_TEXTURES_BATTLERS = "texturesBattlers";
-    public static PROPERTY_TEXTURES_OBJECTS_3D = "texturesObjects3D";
     private static list: System.Tileset[];
-    private static autotiles: Record<string, System.Tileset>;
-    private static walls: Record<string, System.Tileset>;
-    private static mountains: Record<string, System.Tileset>;
     public static texturesCharacters: THREE.ShaderMaterial[];
     public static texturesBattlers: THREE.ShaderMaterial[];
-    public static texturesObjects3D: THREE.ShaderMaterial[];
 
     constructor() {
         throw new Error("This is a static class!");
@@ -42,42 +36,18 @@ class Tilesets {
         let json = (await IO.parseFileJSON(Paths.FILE_TILESETS)).list;
         let l = json.length;
         this.list = new Array(l+1);
-        this.autotiles = {};
-        this.walls = {};
-        this.mountains = {};
 
         // Sorting all the tilesets according to the ID
-        let i: number, jsonTileset: Record<string, any>, tileset: System.Tileset
-            , idString: string;
+        let i: number, jsonTileset: Record<string, any>, tileset: System.Tileset;
         for (i = 0; i < l; i++) {
             jsonTileset = json[i];
             tileset = new System.Tileset(jsonTileset);
             this.list[jsonTileset.id] = tileset;
-
-            // Autotiles, walls
-            idString = tileset.getAutotilesString();
-            tileset.ownsAutotiles = this.autotiles.hasOwnProperty(idString);
-            if (!tileset.ownsAutotiles) {
-                this.autotiles[idString] = tileset;
-            }
-            idString = tileset.getMountainsString();
-            tileset.ownsMountains = this.mountains.hasOwnProperty(idString);
-            if (!tileset.ownsMountains) {
-                this.mountains[idString] = tileset;
-            }
-            idString = tileset.getWallsString();
-            tileset.ownsWalls = this.walls.hasOwnProperty(idString);
-            if (!tileset.ownsWalls) {
-                this.walls[idString] = tileset;
-            }
-            await tileset.loadSpecials();
         }
         await this.loadPictures(PictureKind.Characters, Datas.Tilesets
             .PROPERTY_TEXTURES_CHARACTERS);
         await this.loadPictures(PictureKind.Battlers, Datas.Tilesets
             .PROPERTY_TEXTURES_BATTLERS);
-        await this.loadPictures(PictureKind.Objects3D, Datas.Tilesets
-            .PROPERTY_TEXTURES_OBJECTS_3D);
     }
 
     /** 
@@ -112,33 +82,6 @@ class Tilesets {
             }
         }
         this[texturesName] = textures;
-    }
-
-    /** 
-     *  Get the autotiles textures.
-     *  @param {System.Tileset} tileset - The tileset
-     *  @returns {TextureBundle[]}
-     */
-    static getTexturesAutotiles(tileset: System.Tileset): TextureBundle[] {
-        return this.autotiles[tileset.getAutotilesString()].texturesAutotiles;
-    }
-
-    /**
-     *  Get the mountains textures.
-     *  @param {System.Tileset} tileset - The tileset
-     *  @returns {THREE.ShaderMaterial[]}
-     */
-    static getTexturesMountains(tileset: System.Tileset): TextureBundle[] {
-        return this.mountains[tileset.getMountainsString()].texturesMountains;
-    }
-
-    /** 
-     *  Get the walls textures.
-     *  @param {System.Tileset} tileset - The tileset
-     *  @returns {THREE.ShaderMaterial[]}
-     */
-    static getTexturesWalls(tileset: System.Tileset): THREE.ShaderMaterial[] {
-        return this.walls[tileset.getWallsString()].texturesWalls;
     }
 }
 

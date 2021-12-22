@@ -74,6 +74,7 @@ export * from "./StartShopMenu";
 export * from "./StopBackgroundSound";
 export * from "./StopMusic";
 export * from "./StopReaction";
+export * from "./SwitchTexture";
 export * from "./TeleportObject";
 export * from "./TitleScreen";
 export * from "./Wait";

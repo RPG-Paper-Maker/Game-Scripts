@@ -172,6 +172,8 @@ class Events {
                 return new EventCommand.ChangeWeather(command);
             case EventCommandKind.PlayAVideo:
                 return new EventCommand.PlayAVideo(command);
+            case EventCommandKind.SwitchTexture:
+                return new EventCommand.SwitchTexture(command);
             default:
                 return null;
         }
