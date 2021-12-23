@@ -206,8 +206,9 @@ class Systems {
         {
             return System.DynamicValue.readOrDefaultNumberDouble(element.v, 1);
         }});
-        Utils.readJSONSystemList({ list: json.initialPartyMembers, listIndexes: 
-            this.initialPartyMembers, cons: System.InitialPartyMember });
+        Utils.readJSONSystemList({ list: Utils.defaultValue(json
+            .initialPartyMembers, []), listIndexes: this.initialPartyMembers, 
+            cons: System.InitialPartyMember });
 
         // Sounds
         this.soundCursor = new System.PlaySong(Enum.SongKind.Sound, json.scu);

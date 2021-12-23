@@ -12,6 +12,7 @@
 import { Enum, Interpreter, Utils } from "../Common";
 import { Translatable } from "./Translatable";
 import { Manager, Scene } from "..";
+import { Game } from "../Core";
 
 /** @class
  *  A main menu command in scene main menu.
@@ -53,23 +54,35 @@ class MainMenuCommand extends Translatable {
                 };
             case Enum.MainMenuCommandKind.Skills:
                 return function() {
-                    Manager.Stack.push(new Scene.MenuSkills());
-                    return true;
+                    if (Game.current.teamHeroes.length > 0) {
+                        Manager.Stack.push(new Scene.MenuSkills());
+                        return true;
+                    }
+                    return false;
                 };
             case Enum.MainMenuCommandKind.Equip:
                 return function() {
-                    Manager.Stack.push(new Scene.MenuEquip());
-                    return true;
+                    if (Game.current.teamHeroes.length > 0) {
+                        Manager.Stack.push(new Scene.MenuEquip());
+                        return true;
+                    }
+                    return false;
                 };
             case Enum.MainMenuCommandKind.States:
                 return function() {
-                    Manager.Stack.push(new Scene.MenuDescriptionState());
-                    return true;
+                    if (Game.current.teamHeroes.length > 0) {
+                        Manager.Stack.push(new Scene.MenuDescriptionState());
+                        return true;
+                    }
+                    return false;
                 };
             case Enum.MainMenuCommandKind.Order:
                 return function() {
-                    this.windowChoicesTeam.select(0);
-                    return true;
+                    if (Game.current.teamHeroes.length > 0) {
+                        this.windowChoicesTeam.select(0);
+                        return true;
+                    }
+                    return false;
                 };
             case Enum.MainMenuCommandKind.Save:
                 return function() {
