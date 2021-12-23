@@ -1246,7 +1246,6 @@ class MapObject {
                 this.mesh.position.set(this.position.x, this.position.y + offset
                     , this.position.z);
                 //this.updateBBPosition(this.position)
-                this.previousPosition = this.position;
             } else {
                 if (this.currentStateInstance.stopAnimation) {
                     frame = this.frame.update(Datas.Systems.mapFrameDuration
@@ -1266,11 +1265,6 @@ class MapObject {
                     this.updateOrientation();
                 }
             }
-            this.upPosition = new Vector3(this.position.x, this.position.y 
-                + (this.height * Datas.Systems.SQUARE_SIZE), this.position.z);
-            this.halfPosition = new Vector3(this.position.x, this.position
-                .y + (this.height * Datas.Systems.SQUARE_SIZE / 2), this
-                .position.z);
             this.updateAngle(angle);
 
             // Update mesh
@@ -1285,6 +1279,16 @@ class MapObject {
         // Time events
         this.receivedOneEvent = false;
         this.updateTimeEvents();
+
+        // Positions
+        if (this.position && this.moving) {
+            this.previousPosition = this.position;
+            this.upPosition = new Vector3(this.position.x, this.position.y 
+                + (this.height * Datas.Systems.SQUARE_SIZE), this.position.z);
+            this.halfPosition = new Vector3(this.position.x, this.position
+                .y + (this.height * Datas.Systems.SQUARE_SIZE / 2), this
+                .position.z);
+        }
         this.moving = false;
     }
 
