@@ -324,6 +324,9 @@ class SpecialElements {
         let texture = new THREE.Texture();
         let w = picture2D.image.width;
         let h = picture2D.image.height;
+        if (w === 0 || h === 0) {
+            return Manager.GL.loadTextureEmpty();
+        }
 
         // Update picture infos for collisions
         picture.width = Math.floor(w / Datas.Systems.SQUARE_SIZE);
