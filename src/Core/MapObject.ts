@@ -1281,7 +1281,7 @@ class MapObject {
         this.updateTimeEvents();
 
         // Positions
-        if (this.position && this.moving) {
+        if (this.position) {
             this.previousPosition = this.position;
             this.upPosition = new Vector3(this.position.x, this.position.y 
                 + (this.height * Datas.Systems.SQUARE_SIZE), this.position.z);
