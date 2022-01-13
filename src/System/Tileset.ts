@@ -121,7 +121,8 @@ class Tileset extends Base {
     async getTexturesObjects3D(): Promise<THREE.ShaderMaterial[]> {
         let list: THREE.ShaderMaterial[] = [];
         for (let id of this.objects) {
-            list[id] = await Datas.SpecialElements.loadObject3DTexture(id);
+            list[Datas.SpecialElements.getObject3D(id).pictureID] = await Datas
+                .SpecialElements.loadObject3DTexture(id);
         }
         return list;
     }
