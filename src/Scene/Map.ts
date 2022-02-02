@@ -47,7 +47,7 @@ class Map extends Base {
     public mapPortions: MapPortion[];
     public textureTileset: THREE.ShaderMaterial;
     public texturesCharacters: THREE.ShaderMaterial[];
-    public texturesAutotiles: TextureBundle[];
+    public texturesAutotiles: TextureBundle[][];
     public texturesWalls: THREE.ShaderMaterial[];
     public texturesMountains: TextureBundle[];
     public texturesObjects3D: THREE.ShaderMaterial[];
@@ -267,9 +267,13 @@ class Map extends Base {
         this.texturesCharacters = Datas.Tilesets.texturesCharacters;
 
         // Update shaders for autotiles
-        for (let textures of this.texturesAutotiles) {
-            textures.material.uniforms.offset.value = textures.isAnimated ? this
-                .autotilesOffset : new Vector2();
+        for (let list of this.texturesAutotiles) {
+            if (list) {
+                for (let texture of list) {
+                    texture.material.uniforms.offset.value = texture.isAnimated ? 
+                        this.autotilesOffset : new Vector2();
+                }
+            }
         }
     }
 

@@ -94,10 +94,10 @@ class Tileset extends Base {
      *  Get the textures for autotiles.
      *  @returns {Promise<TextureBundle[]>}
      */
-    async getTexturesAutotiles(): Promise<TextureBundle[]> {
-        let list: TextureBundle[] = [];
+    async getTexturesAutotiles(): Promise<TextureBundle[][]> {
+        let list: TextureBundle[][] = new Array;
         for (let id of this.autotiles) {
-            list.push(await Datas.SpecialElements.loadAutotileTexture(id));
+            list[id] = await Datas.SpecialElements.loadAutotileTexture(id);
         }
         return list;
     }

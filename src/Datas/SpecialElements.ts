@@ -24,10 +24,10 @@ class SpecialElements {
     public static walls: System.SpecialElement[];
     public static mountains: System.Mountain[];
     public static objects: System.Object3D[];
-    private static texturesAutotiles: TextureBundle[] = [];
-    private static texturesWalls: THREE.ShaderMaterial[] = [];
-    private static texturesObjects3D: THREE.ShaderMaterial[] = [];
-    private static texturesMountains: TextureBundle[] = [];
+    public static texturesAutotiles: TextureBundle[][] = [];
+    public static texturesWalls: THREE.ShaderMaterial[] = [];
+    public static texturesObjects3D: THREE.ShaderMaterial[] = [];
+    public static texturesMountains: TextureBundle[] = [];
 
     constructor() {
         throw new Error("This is a static class!");
@@ -102,23 +102,24 @@ class SpecialElements {
      *  @param {number} id
      *  @returns {Promise<TextureBundle>}
      */
-    static async loadAutotileTexture(id: number): Promise<TextureBundle> {
+    static async loadAutotileTexture(id: number): Promise<TextureBundle[]> {
         let autotile = this.getAutotile(id);
         let pictureID = Game.current.textures.autotiles[id];
         if (Utils.isUndefined(pictureID)) {
             pictureID = autotile.pictureID;
         }
-        let textureAutotile = this.texturesAutotiles[pictureID];
-        if (Utils.isUndefined(textureAutotile)) {
+        let texturesAutotile = this.texturesAutotiles[pictureID];
+        if (Utils.isUndefined(texturesAutotile)) {
             let offset = 0;
             let result = null;
-            textureAutotile = null;
+            let textureAutotile: TextureBundle = null;
             let texture = new THREE.Texture();
+            texturesAutotile = new Array;
+            this.texturesAutotiles[pictureID] = texturesAutotile;
             Platform.ctxr.clearRect(0, 0, Platform.canvasRendering.width, Platform
                 .canvasRendering.height);
             Platform.canvasRendering.width = 64 * Datas.Systems.SQUARE_SIZE;
             Platform.canvasRendering.height = Constants.MAX_PICTURE_SIZE;
-            this.texturesAutotiles = new Array;
             if (autotile) {
                 let picture = Datas.Pictures.get(Enum.PictureKind.Autotiles, pictureID);
                 if (picture) {
@@ -139,7 +140,7 @@ class SpecialElements {
                 await this.updateTextureAutotile(textureAutotile, texture, pictureID);
             }
         }
-        return textureAutotile;
+        return texturesAutotile;
     }
     /** 
      *  Load an autotile ID and add it to context rendering.
@@ -280,7 +281,7 @@ class SpecialElements {
             .toDataURL());
         texture.needsUpdate = true;
         textureAutotile.material = Manager.GL.createMaterial(texture);
-        this.texturesAutotiles[id] = textureAutotile;
+        this.texturesAutotiles[id].push(textureAutotile);
     }
 
     /** 
