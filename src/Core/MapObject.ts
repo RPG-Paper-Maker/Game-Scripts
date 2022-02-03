@@ -1056,23 +1056,27 @@ class MapObject {
 
             // Remove from the moved objects in or out of the portion
             let movedObjects = objects.mout;
-            let index = movedObjects.indexOf(this);
-            if (index !== -1) {
-                movedObjects.splice(index, 1);
+            let index: number;
+            if (movedObjects) {
+                index = movedObjects.indexOf(this);
+                if (index !== -1) {
+                    movedObjects.splice(index, 1);
+                }
             }
             movedObjects = objects.min;
-            index = movedObjects.indexOf(this);
-            if (index !== -1) {
-                movedObjects.splice(index, 1);
+            if (movedObjects) {
+                index = movedObjects.indexOf(this);
+                if (index !== -1) {
+                    movedObjects.splice(index, 1);
+                }
             }
-
             // Add to moved objects of the original portion if not done yet
             let originalPortion = Scene.Map.current.allObjects[this
                 .system.id].getGlobalPortion();
             objects = Game.current.getPortionDatas(Scene.Map.current.id, 
                 originalPortion);
             movedObjects = objects.m;
-            if (movedObjects.indexOf(this) === -1) {
+            if (movedObjects && movedObjects.indexOf(this) === -1) {
                 movedObjects.push(this);
                 movedObjects = Scene.Map.current.getMapPortion(Scene.Map.current
                     .getLocalPortion(originalPortion)).objectsList;
