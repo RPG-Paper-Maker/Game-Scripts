@@ -890,7 +890,7 @@ class Map extends Base {
             rotationsAngle = this.previousWeatherRotationsAngle;
             rotationsPoints = this.previousWeatherRotationsPoint;
         }
-        if (options === null || options.isNone) {
+        if (options === null || options.isNone || !points) {
             return;
         }
         let initialVelocity = Interpreter.evaluate(options.initialVelocity);
