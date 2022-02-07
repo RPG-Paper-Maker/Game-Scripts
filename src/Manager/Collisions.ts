@@ -366,7 +366,8 @@ class Collisions {
                             , direction, testedCollisions);
                         if (result[0]) {
                             block = true;
-                        } else if (result[1] !== null) {
+                        }
+                        if (result[1] !== null) {
                             if (yMountain === null || yMountain < result[1]) {
                                 yMountain = result[1];
                             }
