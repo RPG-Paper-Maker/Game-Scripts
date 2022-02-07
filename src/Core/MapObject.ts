@@ -748,10 +748,10 @@ class MapObject {
         // If no bounding box, use only one square by default
         if (l === 0) {
             Manager.Collisions.applyBoxSpriteTransforms(Manager.Collisions
-                .BB_BOX_DEFAULT_DETECTION, [this.position.x, this.position.y + (
-                Datas.Systems.SQUARE_SIZE / 2), this.position.z, Datas.Systems
-                .SQUARE_SIZE, Datas.Systems.SQUARE_SIZE, Datas.Systems
-                .SQUARE_SIZE, 0, 0, 0]);
+                .BB_BOX_DEFAULT_DETECTION, [this.position.x, this.position.y + 
+                (Datas.Systems.SQUARE_SIZE / 4), this.position.z, Datas.Systems
+                .SQUARE_SIZE / 2, Datas.Systems.SQUARE_SIZE / 2, Datas.Systems
+                .SQUARE_SIZE / 2, 0, 0, 0]);
             if (Manager.Collisions.obbVSobb(<CustomGeometry>Manager.Collisions
                 .BB_BOX_DEFAULT_DETECTION.geometry, <CustomGeometry>Manager
                 .Collisions.BB_BOX_DETECTION.geometry))
