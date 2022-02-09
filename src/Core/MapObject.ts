@@ -310,10 +310,7 @@ class MapObject {
                 Platform.showErrorMessage("Can't find object with name" + this
                     .system.name + " and ID " + this.system.id + " in map " + 
                     Scene.Map.current.mapName +
-                    " in object linking. Please remove this object from your " +
-                    "map and recreate it.\nIf possible, report that you got " +
-                    "this error and describe the steps for having this " +
-                    "because we are trying to fix this issue.");
+                    " in object linking. Please open the map, check where is the object and save.");
             }
             let portion = obj.getGlobalPortion();
             let portionDatas = Game.current.getPortionDatas(Scene.Map.current.id, 
@@ -439,10 +436,7 @@ class MapObject {
                 Platform.showErrorMessage("Can't find object with name" + this
                     .system.name + " and ID " + this.system.id + " in map " + 
                     Scene.Map.current.mapName +
-                    " in object linking. Please remove this object from your " +
-                    "map and recreate it.\nIf possible, report that you got " +
-                    "this error and describe the steps for having this " +
-                    "because we are trying to fix this issue.");
+                    " in object linking. Please open the map, check where is the object and save.");
             }
             let portion = pos.getGlobalPortion();
             let portionDatas = Game.current.getPortionDatas(Scene.Map.current.id, 
