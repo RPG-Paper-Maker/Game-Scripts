@@ -36,6 +36,7 @@ function createWindow () {
     }
     ipc.on('window-error', function(event, err) {
         window.webContents.openDevTools();
+        window.setFullScreen(false);
     });
     ipc.on('dialog-error-message', function(event, err) {
         dialog.showMessageBoxSync({ title: 'Error', type: 'error', message: err });
