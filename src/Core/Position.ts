@@ -27,6 +27,9 @@ import { Vector3 } from "./Vector3";
  *  @param {number} angleY - The angle on Y axis in degree
  *  @param {number} angleX - The angle on X axis in degree
  *  @param {number} angleZ - The angle on Z axis in degree
+ *  @param {number} scaleX - The scale on X axis multiple
+ *  @param {number} scaleY - The scale on Y axis multiple
+ *  @param {number} scaleZ - The scale on Z axis multiple
  */
 class Position extends Portion {
 
@@ -37,10 +40,14 @@ class Position extends Portion {
     public angleY: number;
     public angleX: number;
     public angleZ: number;
+    public scaleX: number;
+    public scaleY: number;
+    public scaleZ: number;
 
     constructor(x: number = 0, y: number = 0, z: number = 0, yPixels: number = 0
         , layer: number = 0, centerX: number = 50, centerZ: number = 50, angleY: 
-        number = 0, angleX: number = 0, angleZ: number = 0)
+        number = 0, angleX: number = 0, angleZ: number = 0, scaleX: number = 1, 
+        scaleY: number = 1, scaleZ: number = 1)
     {
         super(x, y, z);
 
@@ -51,6 +58,9 @@ class Position extends Portion {
         this.angleY = angleY;
         this.angleX = angleX;
         this.angleZ = angleZ;
+        this.scaleX = scaleX;
+        this.scaleY = scaleY;
+        this.scaleZ = scaleZ;
     }
 
     /**
@@ -61,7 +71,8 @@ class Position extends Portion {
      */
     static createFromArray(array: number[]): Position {
         return new Position(array[0], array[1], array[3], array[2], array[4], 
-            array[5], array[6], array[7], array[8], array[9]);
+            array[5], array[6], array[7], array[8], array[9], array[10], array[11],
+            array[12]);
     }
 
     /**
@@ -85,7 +96,8 @@ class Position extends Portion {
             this.layer === position.layer && this.centerX === position.centerX 
             && this.centerZ === position.centerZ && this.angleY === position
             .angleY && this.angleX === position.angleX && this.angleZ === 
-            position.angleZ;
+            position.angleZ && this.scaleX === position.scaleX && this.scaleY ===
+            position.scaleY && this.scaleZ === position.scaleZ;
     }
 
     /** 
@@ -138,6 +150,14 @@ class Position extends Portion {
             (this.z * Datas.Systems.SQUARE_SIZE) + (center ? (this.centerZ / 100
                 * Datas.Systems.SQUARE_SIZE) : 0)
         );
+    }
+
+    /** 
+     *  Transform a position to a scaling Vector3.
+     *  @returns {Vector3}
+     */
+    toScaleVector() : Vector3 {
+        return new Vector3(this.scaleX, this.scaleY, this.scaleZ);
     }
 
     /** 

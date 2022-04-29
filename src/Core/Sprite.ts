@@ -143,8 +143,9 @@ class Sprite extends MapElement {
         let vecC = new Vector3(0.5, 0.0, 0.0);
         let vecD = new Vector3(-0.5, 0.0, 0.0);
         let center = new Vector3(0, 0, 0);
-        let size = new Vector3(this.textureRect[2] * Datas.Systems
-            .SQUARE_SIZE, this.textureRect[3] * Datas.Systems.SQUARE_SIZE, 1.0);
+        let size = new Vector3(this.textureRect[2] * Datas.Systems.SQUARE_SIZE * 
+            position.scaleX, this.textureRect[3] * Datas.Systems.SQUARE_SIZE *
+            position.scaleY, 1.0);
 
         // For static sprites
         super.scale(vecA, vecB, vecC, vecD, center, position, size, this.kind);

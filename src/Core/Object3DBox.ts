@@ -180,7 +180,7 @@ class Object3DBox extends Object3D {
         let angleY = position.angleY;
         let angleX = position.angleX;
         let angleZ = position.angleZ;
-        let size = this.datas.getSizeVector();
+        let size = this.datas.getSizeVector().multiply(position.toScaleVector());
         let center = new Vector3(localPosition.x + Math.floor(Datas.Systems
             .SQUARE_SIZE / 2), localPosition.y + (size.y / 2), localPosition.z + 
             Math.floor(Datas.Systems.SQUARE_SIZE / 2));

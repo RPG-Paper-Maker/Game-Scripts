@@ -90,7 +90,8 @@ class Object3DCustom extends Object3D {
         let uvs = modelGeometry.uvs;
         let center = modelGeometry.center.clone();
         let scale = this.datas.scale;
-        let scaleVec = new Vector3(scale, scale, scale);
+        let scaleVec = new Vector3(scale * position.scaleX, scale * position
+            .scaleY, scale * position.scaleZ);
         let angleY = position.angleY;
         let angleX = position.angleX;
         let angleZ = position.angleZ;
