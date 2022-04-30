@@ -252,9 +252,9 @@ class Object3DBox extends Object3D {
         // Collisions
         let objCollision: StructMapElementCollision[] = new Array;
         if (this.datas.collisionKind === ObjectCollisionKind.Perfect) {
-            let ws = this.datas.width();
-            let hs = this.datas.height();
-            let ds = this.datas.depth();
+            let ws = Math.floor(this.datas.width() * position.scaleX);
+            let hs = Math.floor(this.datas.height() * position.scaleY);
+            let ds = Math.floor(this.datas.depth() * position.scaleZ);
             objCollision.push({
                 p: position,
                 l: localPosition,
@@ -262,9 +262,9 @@ class Object3DBox extends Object3D {
                     centerReal.x,
                     centerReal.y,
                     centerReal.z,
-                    w,
-                    h,
-                    d,
+                    Math.floor(w * position.scaleX),
+                    Math.floor(h * position.scaleY),
+                    Math.floor(d * position.scaleZ),
                     angleY,
                     angleX,
                     angleZ

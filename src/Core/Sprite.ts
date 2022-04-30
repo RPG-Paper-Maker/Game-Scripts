@@ -196,8 +196,8 @@ class Sprite extends MapElement {
 
         // Collision
         let objCollision: StructMapElementCollision[] = new Array;
-        let twidth = Math.floor(this.textureRect[2] / 2);
-        let theight = Math.floor(this.textureRect[3] / 2);
+        let twidth = Math.floor(this.textureRect[2] * position.scaleX / 2);
+        let theight = Math.floor(this.textureRect[3] * position.scaleY / 2);
         if (tileset) {
             let collisions = Scene.Map.current.mapProperties.tileset.picture
                 .getSquaresForTexture(this.textureRect);
@@ -208,15 +208,16 @@ class Sprite extends MapElement {
                     p: position,
                     l: localPosition,
                     b: [
-                        (localPosition.x - (Math.floor(this.textureRect[2] / 2)
-                            * Datas.Systems.SQUARE_SIZE)) - ((this.textureRect[2
-                            ] % 2) * Math.round(Datas.Systems.SQUARE_SIZE / 2)) 
-                            + rect[0] + Math.round(rect[2] / 2),
-                        localPosition.y + (this.textureRect[3] * Datas.Systems
-                            .SQUARE_SIZE) - rect[1] - Math.round(rect[3] / 2),
+                        (localPosition.x - (twidth * Datas.Systems.SQUARE_SIZE)) 
+                            - (((this.textureRect[2] * position.scaleX) % 2) * 
+                            Math.round(Datas.Systems.SQUARE_SIZE / 2)) + rect[0] 
+                            + Math.round(rect[2] * position.scaleX / 2),
+                        localPosition.y + (this.textureRect[3] * position.scaleY
+                            * Datas.Systems.SQUARE_SIZE) - rect[1] - Math.round
+                            (rect[3] * position.scaleY / 2),
                         localPosition.z,
-                        rect[2],
-                        rect[3],
+                        rect[2] * position.scaleX,
+                        rect[3] * position.scaleY,
                         1,
                         angleY,
                         angleX,
@@ -227,6 +228,7 @@ class Sprite extends MapElement {
                     k: this.kind === ElementMapKind.SpritesFix
                 });
             }
+
         } else {   // Character
             objCollision.push({
                 b: null,

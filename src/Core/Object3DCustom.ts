@@ -132,12 +132,11 @@ class Object3DCustom extends Object3D {
         let objCollision: StructMapElementCollision[] = new Array;
         if (this.datas.collisionKind === ObjectCollisionKind.Simplified) {
             let obj = this.datas.getObj().geometry;
-            let w = obj.w * scale;
-            let h = obj.h * scale;
-            let d = obj.d * scale;
+            let w = obj.w * scale * position.scaleX;
+            let h = obj.h * scale * position.scaleY;
+            let d = obj.d * scale * position.scaleZ;
             let minPos = obj.minVertex.clone();
             minPos.multiply(scaleVec);
-            center.multiply(scaleVec);
             objCollision.push({
                 p: position,
                 l: localPosition,
