@@ -100,6 +100,9 @@ class Object3DCustom extends Object3D {
             vecA = vertices[i].clone();
             vecB = vertices[i + 1].clone();
             vecC = vertices[i + 2].clone();
+            vecA.multiply(scaleVec);
+            vecB.multiply(scaleVec);
+            vecC.multiply(scaleVec);
             if (angleY !== 0.0) {
                 Sprite.rotateVertex(vecA, center, angleY, Sprite.Y_AXIS);
                 Sprite.rotateVertex(vecB, center, angleY, Sprite.Y_AXIS);
@@ -115,9 +118,6 @@ class Object3DCustom extends Object3D {
                 Sprite.rotateVertex(vecB, center, angleZ, Sprite.Z_AXIS);
                 Sprite.rotateVertex(vecC, center, angleZ, Sprite.Z_AXIS);
             }
-            vecA.multiply(scaleVec);
-            vecB.multiply(scaleVec);
-            vecC.multiply(scaleVec);
             vecA.add(localPosition);
             vecB.add(localPosition);
             vecC.add(localPosition);
