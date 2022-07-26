@@ -178,7 +178,9 @@ class Game {
         this.startupProperties = json.startP;
         this.mapsProperties = Utils.defaultValue(json.mapsP, {});
         this.mapsDatas = json.mapsDatas;
-        this.textures = json.textures;
+        if (json.textures) {
+            this.textures = json.textures;
+        }
         this.isEmpty = false;
     }
 
