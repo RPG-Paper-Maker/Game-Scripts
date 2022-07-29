@@ -62,8 +62,11 @@ class Pictures
                     picture = new System.Picture(jsonPicture, k);
                     if (k === PictureKind.Icons || k === PictureKind.Pictures ||
                         k === PictureKind.Facesets || k === PictureKind
-                        .Animations || k === PictureKind.Battlers) {
+                        .Animations || k === PictureKind.Battlers || k === PictureKind.Bars) {
                         await picture.load();
+                        if (k === PictureKind.Bars) {
+                            picture.checkBarBorder();
+                        }
                     }
                     if (id !== 0) {
                         if (id === -1) {

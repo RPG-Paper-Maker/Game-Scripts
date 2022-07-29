@@ -68,8 +68,8 @@ class ScreenResolution {
      *   @returns {number}
      */
     static getScreenXY(xy: number): number {
-        return Math.ceil((ScreenResolution.WINDOW_X + ScreenResolution.WINDOW_Y)
-            / 2 * xy);
+        return (ScreenResolution.WINDOW_X + ScreenResolution.WINDOW_Y)
+            / 2 * xy;
     }
 
     /** Get the min pixel position transformation according to screen size
@@ -78,8 +78,8 @@ class ScreenResolution {
      *   @returns {number}
      */
     static getScreenMinXY(xy: number): number {
-        return Math.ceil(xy * Math.min(ScreenResolution.WINDOW_X, 
-            ScreenResolution.WINDOW_Y));
+        return xy * Math.min(ScreenResolution.WINDOW_X, 
+            ScreenResolution.WINDOW_Y);
     }
 
     /** Get the pixel position transformation according to screen size, but

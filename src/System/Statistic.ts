@@ -9,6 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Datas } from "..";
+import { Enum, Utils } from "../Common";
 import { Translatable } from "./Translatable";
 
 /** @class
@@ -22,6 +24,7 @@ class Statistic extends Translatable {
     public suffixName: string;
     public abbreviation: string;
     public isFix: boolean;
+    public pictureBarID: number;
     public isRes: boolean;
 
     constructor(json?: Record<string, any>)  {
@@ -69,6 +72,7 @@ class Statistic extends Translatable {
         super.read(json);
         this.abbreviation = json.abr;
         this.isFix = json.fix;
+        this.pictureBarID = Utils.defaultValue(json.pid, -1);
     }
 
     /** 
