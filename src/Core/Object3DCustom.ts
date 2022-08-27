@@ -160,6 +160,38 @@ class Object3DCustom extends Object3D {
                     d / 2 / Datas.Systems.SQUARE_SIZE)),
                 k: true
             });
+        } else if (this.datas.collisionKind === ObjectCollisionKind.Custom) {
+            let obj = Datas.Shapes.get(CustomShapeKind.Collisions, this.datas
+                .collisionCustomID).geometry;
+            let w = obj.w * scale * position.scaleX;
+            let h = obj.h * scale * position.scaleY;
+            let d = obj.d * scale * position.scaleZ;
+            let minPos = obj.minVertex.clone();
+            minPos.multiply(scaleVec);
+            objCollision.push({
+                id: this.datas.collisionCustomID,
+                p: position,
+                l: localPosition,
+                b: [
+                    localPosition.x + minPos.x + (w / 2),
+                    localPosition.y + minPos.y + (h / 2),
+                    localPosition.z + minPos.z + (d / 2),
+                    w,
+                    h,
+                    d,
+                    angleY,
+                    angleX,
+                    angleZ
+                ],
+                c: center,
+                w: Math.ceil(w / 2 / Datas.Systems.SQUARE_SIZE),
+                h: Math.ceil(h / 2 / Datas.Systems.SQUARE_SIZE),
+                d: Math.ceil(d / 2 / Datas.Systems.SQUARE_SIZE),
+                m: Math.max(Math.max(Math.ceil(w / 2 / Datas.Systems.SQUARE_SIZE
+                    ), Math.ceil(h / 2 / Datas.Systems.SQUARE_SIZE)), Math.ceil(
+                    d / 2 / Datas.Systems.SQUARE_SIZE)),
+                k: true
+            });
         }
         return [count, objCollision];
     }

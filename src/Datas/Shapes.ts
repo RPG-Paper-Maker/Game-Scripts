@@ -59,7 +59,7 @@ class Shapes {
                 if (jsonShape) {
                     id = jsonShape.id;
                     shape = new System.Shape(jsonShape, k);
-                    if (k === CustomShapeKind.OBJ) {
+                    if (k === CustomShapeKind.OBJ || k === CustomShapeKind.Collisions) {
                         await shape.load();
                     }
                     if (id !== 0) {

@@ -82,6 +82,19 @@ export class CustomGeometry extends THREE.BufferGeometry {
     }
 
     /**
+     *  Get the points vertices.
+     *  @returns {ArrayLike<number>}
+     */
+    getVerticesVectors(): THREE.Vector3[] {
+        let vertices = [];
+        let array = this.getVertices();
+        for (let i = 0, l = array.length; i < l; i += 3) {
+            vertices.push(new THREE.Vector3(array[i], array[i + 1], array[i + 2]));
+        }
+        return vertices;
+    }
+
+    /**
      *  Get the vertices numbers array.
      *  @returns {ArrayLike<number>}
      */

@@ -98,7 +98,6 @@ class Player extends Base {
                 if (!statistic.isFix) {
                     graphic = new Graphic.Statistic(this.player, statistic);
                     if (graphic.maxStatNamesLength > this.maxStatNamesLength) {
-                        console.log(graphic.maxStatNamesLength)
                         this.maxStatNamesLength = graphic.maxStatNamesLength;
                     }
                     this.listStatistics.push(graphic);

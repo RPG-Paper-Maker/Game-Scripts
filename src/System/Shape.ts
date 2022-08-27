@@ -12,9 +12,9 @@
 import { Enum, Constants, Paths, Utils, Platform } from "../Common";
 import CustomShapeKind = Enum.CustomShapeKind;
 import { Base } from "./Base";
-import { Datas } from "../index";
+import { Datas, Manager } from "../index";
 import { THREE } from "../Globals";
-import { Vector3, Vector2 } from "../Core";
+import { Vector3, Vector2, CustomGeometry } from "../Core";
 
 /** @class
  *  A shape of the game.
@@ -32,6 +32,7 @@ class Shape extends Base {
     public isBR: boolean;
     public dlc: string;
     public base64: string;
+    public mesh: THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]>;
     public geometry: Record<string, any>;
 
     constructor(json?: Record<string, any>, kind: CustomShapeKind = 
@@ -235,6 +236,22 @@ class Shape extends Base {
                         }
                     });
                 });
+                let geometry = new CustomGeometry();
+                let vertices = this.geometry.vertices;
+                let uvs = this.geometry.uvs;
+                let count = 0;
+                let vecA: Vector3, vecB: Vector3, vecC: Vector3;
+                for (let i = 0, l = this.geometry.vertices.length; i < l; i += 3) {
+                    vecA = vertices[i].clone();
+                    vecB = vertices[i + 1].clone();
+                    vecC = vertices[i + 2].clone();
+                    geometry.pushTriangleVertices(vecA, vecB, vecC);
+                    geometry.pushTriangleIndices(count);
+                    geometry.pushTriangleUVs(uvs[i].clone(), uvs[i + 1].clone(), uvs[i + 2].clone());
+                    count += 3;
+                }
+                geometry.updateAttributes();
+                this.mesh = new THREE.Mesh(geometry, Manager.Collisions.BB_MATERIAL);
             }
         }
     }

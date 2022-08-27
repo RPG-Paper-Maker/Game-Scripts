@@ -13,7 +13,6 @@ import { Mathf, Constants, Enum } from "../Common";
 import { MapObject, Position, Portion, MapPortion, StructMapElementCollision, CollisionSquare, Mountain, Vector3, Vector2, Game, CustomGeometry } from "../Core";
 import { Datas, System, Scene } from "../index";
 import ElementMapKind = Enum.ElementMapKind;
-
 import { THREE } from "../Globals";
 
 /** @class
@@ -27,6 +26,8 @@ class Collisions {
     public static BB_ORIENTED_BOX = Collisions.createOrientedBox();
     public static BB_BOX_DETECTION = Collisions.createBox();
     public static BB_BOX_DEFAULT_DETECTION = Collisions.createBox();
+    public static currentCustomObject3D: THREE.Mesh<CustomGeometry, THREE
+        .Material | THREE.Material[]> = null;
 
     constructor() {
         throw new Error("This is a static class");
@@ -37,7 +38,7 @@ class Collisions {
      *  @static
      *  @returns {THREE.Mesh}
      */
-    static createBox(): THREE.Mesh {
+    static createBox(): THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]> {
         let box = new THREE.Mesh(CustomGeometry.createBox(1, 1, 1), this
             .BB_MATERIAL);
         box['previousTranslate'] = [0, 0, 0];
@@ -51,7 +52,7 @@ class Collisions {
      *  @static
      *  @returns {THREE.Mesh}
      */
-    static createOrientedBox(): THREE.Mesh {
+    static createOrientedBox(): THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]> {
         let box = new THREE.Mesh(CustomGeometry.createBox(1, 1, 1), this
             .BB_MATERIAL);
         box['previousTranslate'] = [0, 0, 0];
@@ -485,7 +486,8 @@ class Collisions {
         return [(this.checkLands(mapPortion, jpositionBefore, jpositionAfter, 
             object, direction, testedCollisions) || this.checkSprites(mapPortion
             , jpositionAfter, testedCollisions, object) || this.checkObjects3D(
-            mapPortion, jpositionAfter, testedCollisions, object)), result[1]];
+            mapPortion, jpositionAfter, positionAfter, testedCollisions, object)), 
+            result[1]];
     }
 
     /** 
@@ -712,14 +714,15 @@ class Collisions {
      *  @static
      *  @param {MapPortion} mapPortion - The map portion to check
      *  @param {Position} jpositionAfter - The json position after collision
+     *  @param {THREE.Vector3} positionAfter - The position after collision
      *  @param {StructMapElementCollision[]} testedCollisions - The object 
      *  collisions that were already tested
      *  @param {MapObject} object - The map object collision test
      *  @returns {boolean}
     */
-    static checkObjects3D(mapPortion: MapPortion, jpositionAfter: Position, 
-        testedCollisions: StructMapElementCollision[], object: MapObject): 
-        boolean
+    static checkObjects3D(mapPortion: MapPortion, jpositionAfter: Position,
+        positionAfter: THREE.Vector3, testedCollisions: StructMapElementCollision[], 
+        object: MapObject): boolean
     {
         let objects3D = mapPortion.boundingBoxesObjects3D[jpositionAfter.toIndex()];
         if (objects3D !== null) {
@@ -728,11 +731,84 @@ class Collisions {
                 objCollision = objects3D[i];
                 if (testedCollisions.indexOf(objCollision) === -1) {
                     testedCollisions.push(objCollision);
-                    if (this.checkIntersectionSprite(objCollision.b, 
-                        objCollision.k, object))
-                    {
-                        return true;
+                    if (objCollision.id) {
+                        if (this.checkCustomObject3D(objCollision, object, 
+                            positionAfter)) {
+                            return true;
+                        }
+                    } else {
+                        if (this.checkIntersectionSprite(objCollision.b, 
+                            objCollision.k, object))
+                        {
+                            return true;
+                        }
                     }
+                }
+            }
+        }
+        return false;
+    }
+
+    /** 
+     *  Check if there is a collision with custom object 3D collision.
+     *  @static
+     *  @param {StructMapElementCollision} objCollision - The object colision 
+     *  info to test
+     *  @param {MapObject} object - The map object collision test
+     *  @param {THREE.Vector3} positionAfter - The position after collision
+     *  @returns {boolean}
+    */
+    static checkCustomObject3D(objCollision: StructMapElementCollision, object: 
+        MapObject, positionAfter: THREE.Vector3): boolean
+    {
+        // Remove previous
+        let mesh = Datas.Shapes.get(Enum.CustomShapeKind.Collisions, objCollision.id).mesh;
+        if (Datas.Systems.showBB && mesh !== this.currentCustomObject3D) {
+            Scene.Map.current.scene.remove(this.currentCustomObject3D);
+            this.currentCustomObject3D = mesh;
+        }
+        this.currentCustomObject3D.position.set(objCollision.l.x, objCollision.l.y, objCollision.l.z);
+        this.currentCustomObject3D.setRotationFromAxisAngle(new THREE.Vector3(1,0,0), objCollision.b[6]);
+        this.currentCustomObject3D.setRotationFromAxisAngle(new THREE.Vector3(0,1,0), objCollision.b[7]);
+        this.currentCustomObject3D.setRotationFromAxisAngle(new THREE.Vector3(0,0,1), objCollision.b[8]);
+        if (Datas.Systems.showBB) {
+            Scene.Map.current.scene.add(this.currentCustomObject3D);
+        }
+        let direction = positionAfter.clone().sub(object.position).normalize();
+        if (this.checkIntersectionMeshes(object.currentBoundingBox, this
+            .currentCustomObject3D, direction)) {
+            return true;
+        }
+        return false;
+    }
+
+    /** 
+     *  Check intersection between two complex meshes.
+     *  @static
+     *  @param {THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]>} meshA - The first mesh
+     *  @param {THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]>} meshB - The second mesh
+     *  @param {THREE.Vector3} direction - The meshA direction to mesh B
+     *  @returns {boolean}
+    */
+    static checkIntersectionMeshes(meshA: THREE.Mesh<CustomGeometry, THREE.Material 
+        | THREE.Material[]>, meshB: THREE.Mesh<CustomGeometry, THREE.Material | 
+        THREE.Material[]>, direction: THREE.Vector3): boolean {
+        let vertices = meshA.geometry.getVerticesVectors();
+        let raycaster = new THREE.Raycaster();
+        let directionNegate = direction.clone().negate();
+        let collisionResults: THREE.Intersection[];
+        for (let vertex of vertices) {
+            raycaster.set(vertex, direction);
+            collisionResults = raycaster.intersectObject(meshB);
+            if (collisionResults.length === 0) {
+                raycaster.set(vertex, directionNegate);
+                collisionResults = raycaster.intersectObject(meshB);
+            }
+            if (collisionResults.length > 0) {
+                raycaster.set(collisionResults[0].point, new THREE.Vector3(1,1,1));
+                const intersects = raycaster.intersectObject(meshA);
+                if (intersects.length > 0) { // Points is in objet
+                    return true;
                 }
             }
         }

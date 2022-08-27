@@ -56,8 +56,8 @@ class MapObject {
     public movingState: Record<string, any>;
     public previousPosition: Vector3;
     public mesh: THREE.Mesh;
-    public meshBoundingBox: THREE.Mesh[];
-    public currentBoundingBox: THREE.Mesh;
+    public meshBoundingBox: THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]>[];
+    public currentBoundingBox: THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]>;
     public boundingBoxSettings: Record<string, any>;
     public frame: Frame;
     public orientationEye: Orientation;
@@ -772,7 +772,7 @@ class MapObject {
         if (this.currentStateInstance.through) {
             return;
         }
-        let box: THREE.Mesh;
+        let box: THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]>
         switch (this.currentStateInstance.graphicKind) {
             case ElementMapKind.SpritesFix:
             case ElementMapKind.SpritesFace:
