@@ -22,6 +22,8 @@ import { Camera, Vector3, Vector2 } from "../Core";
 class GL {
     public static SHADER_FIX_VERTEX: string;
     public static SHADER_FIX_FRAGMENT: string;
+    public static SHADER_FACE_VERTEX: string;
+    public static SHADER_FACE_FRAGMENT: string;
     public static renderer: THREE.WebGLRenderer;
     public static textureLoader = new THREE.TextureLoader();
     public static screenTone = new THREE.Vector4(0, 0, 0, 1);
@@ -57,6 +59,10 @@ class GL {
         this.SHADER_FIX_VERTEX = json;
         json = await IO.openFile(Paths.SHADERS + "fix.frag")
         this.SHADER_FIX_FRAGMENT = json;
+        json = await IO.openFile(Paths.SHADERS + "face.vert")
+        this.SHADER_FACE_VERTEX = json;
+        json = await IO.openFile(Paths.SHADERS + "face.frag")
+        this.SHADER_FACE_FRAGMENT = json;
     }
 
     /** 
@@ -124,8 +130,8 @@ class GL {
      *  @returns {THREE.ShaderMaterial}
      */
     static createMaterial(texture: THREE.Texture, opts: { flipX?: boolean
-        , flipY?: boolean, uniforms?: Record<string, any> } = {}): THREE
-        .ShaderMaterial {
+        , flipY?: boolean, uniforms?: Record<string, any>, isFaceSprite?: boolean } = {}): 
+        THREE.ShaderMaterial {
         texture.magFilter = THREE.NearestFilter;
         texture.minFilter = THREE.NearestFilter;
         texture.flipY = opts.flipY;
@@ -139,9 +145,9 @@ class GL {
         }
         let material = new THREE.ShaderMaterial({
             uniforms:       opts.uniforms,
-            vertexShader:   this.SHADER_FIX_VERTEX,
-            fragmentShader: this.SHADER_FIX_FRAGMENT,
-            side: THREE.DoubleSide,
+            vertexShader:   opts.isFaceSprite ? this.SHADER_FACE_VERTEX : this.SHADER_FIX_VERTEX,
+            fragmentShader: opts.isFaceSprite ? this.SHADER_FACE_FRAGMENT : this.SHADER_FIX_FRAGMENT,
+            side: opts.isFaceSprite ? THREE.BackSide : THREE.DoubleSide,
             transparent: true
         });
         return material;

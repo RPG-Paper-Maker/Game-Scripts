@@ -22,6 +22,7 @@ import { THREE } from "../Globals";
 class Collisions {
 
     public static BB_MATERIAL = new THREE.MeshBasicMaterial();
+    public static BB_EMPTY_MATERIAL = new THREE.MeshBasicMaterial({visible: false});
     public static BB_BOX = Collisions.createBox();
     public static BB_ORIENTED_BOX = Collisions.createOrientedBox();
     public static BB_BOX_DETECTION = Collisions.createBox();
@@ -763,21 +764,26 @@ class Collisions {
     {
         // Remove previous
         let mesh = Datas.Shapes.get(Enum.CustomShapeKind.Collisions, objCollision.id).mesh;
-        if (Datas.Systems.showBB && mesh !== this.currentCustomObject3D) {
+        if (mesh !== this.currentCustomObject3D) {
             Scene.Map.current.scene.remove(this.currentCustomObject3D);
             this.currentCustomObject3D = mesh;
         }
-        this.currentCustomObject3D.position.set(objCollision.l.x, objCollision.l.y, objCollision.l.z);
-        this.currentCustomObject3D.setRotationFromAxisAngle(new THREE.Vector3(1,0,0), objCollision.b[6]);
-        this.currentCustomObject3D.setRotationFromAxisAngle(new THREE.Vector3(0,1,0), objCollision.b[7]);
-        this.currentCustomObject3D.setRotationFromAxisAngle(new THREE.Vector3(0,0,1), objCollision.b[8]);
-        if (Datas.Systems.showBB) {
+        if (this.currentCustomObject3D) {
+            this.currentCustomObject3D.position.set(objCollision.l.x, objCollision.l.y, objCollision.l.z);
+            this.currentCustomObject3D.setRotationFromAxisAngle(new THREE.Vector3(1,0,0), objCollision.b[6]);
+            this.currentCustomObject3D.setRotationFromAxisAngle(new THREE.Vector3(0,1,0), objCollision.b[7]);
+            this.currentCustomObject3D.setRotationFromAxisAngle(new THREE.Vector3(0,0,1), objCollision.b[8]);
             Scene.Map.current.scene.add(this.currentCustomObject3D);
-        }
-        let direction = positionAfter.clone().sub(object.position).normalize();
-        if (this.checkIntersectionMeshes(object.currentBoundingBox, this
-            .currentCustomObject3D, direction)) {
-            return true;
+            if (Datas.Systems.showBB) {
+                this.currentCustomObject3D.material = this.BB_MATERIAL;
+            } else {
+                this.currentCustomObject3D.material = this.BB_EMPTY_MATERIAL;
+            }
+            let direction = positionAfter.clone().sub(object.position).normalize();
+            if (this.checkIntersectionMeshes(object.currentBoundingBox, this
+                .currentCustomObject3D, direction)) {
+                return true;
+            }
         }
         return false;
     }

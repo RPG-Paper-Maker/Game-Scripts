@@ -18,6 +18,7 @@ import { Datas, Core, Scene } from "../index";
 import { Vector3 } from "./Vector3";
 import { Vector2 } from "./Vector2";
 import { CustomGeometry } from "./CustomGeometry";
+import { CustomGeometryFace } from "./CustomGeometryFace";
 
 /** @class
  *  A sprite in the map.
@@ -27,6 +28,12 @@ import { CustomGeometry } from "./CustomGeometry";
  */
 class Sprite extends MapElement {
 
+    public static MODEL = [
+        new Vector3(-0.5, 1.0, 0.0),
+        new Vector3(0.5, 1.0, 0.0),
+        new Vector3(0.5, 0.0, 0.0),
+        new Vector3(-0.5, 0.0, 0.0)
+    ];
     public static Y_AXIS = new Vector3(0, 1, 0);
     public static X_AXIS = new Vector3(1, 0, 0);
     public static Z_AXIS = new Vector3(0, 0, 1);
@@ -134,14 +141,14 @@ class Sprite extends MapElement {
      *  @param {Vector3} localPosition - The local position
      *  @returns {any[]}
      */
-    updateGeometry(geometry: CustomGeometry, width: number, height: 
+    updateGeometry(geometry: CustomGeometry | CustomGeometryFace, width: number, height: 
         number, position: Position, count: number, tileset: boolean, 
         localPosition: Vector3): [number, StructMapElementCollision[]]
     {
-        let vecA = new Vector3(-0.5, 1.0, 0.0);
-        let vecB = new Vector3(0.5, 1.0, 0.0);
-        let vecC = new Vector3(0.5, 0.0, 0.0);
-        let vecD = new Vector3(-0.5, 0.0, 0.0);
+        let vecA = Sprite.MODEL[0].clone();
+        let vecB = Sprite.MODEL[1].clone();
+        let vecC = Sprite.MODEL[2].clone();
+        let vecD = Sprite.MODEL[3].clone();
         let center = new Vector3(0, 0, 0);
         let size = new Vector3(this.textureRect[2] * Datas.Systems.SQUARE_SIZE * 
             position.scaleX, this.textureRect[3] * Datas.Systems.SQUARE_SIZE *
@@ -238,13 +245,23 @@ class Sprite extends MapElement {
             });
         }
 
-        // Simple sprite
-        let vecSimpleA = vecA.clone();
-        let vecSimpleB = vecB.clone();
-        let vecSimpleC = vecC.clone();
-        let vecSimpleD = vecD.clone();
-        count = Sprite.addStaticSpriteToGeometry(geometry, vecSimpleA,
-            vecSimpleB, vecSimpleC, vecSimpleD, texA, texB, texC, texD, count);
+        if (geometry instanceof CustomGeometryFace) {
+            // Face sprite
+            geometry.pushQuadVerticesFace(Sprite.MODEL[0].clone(), Sprite.MODEL[1]
+                .clone(), Sprite.MODEL[2].clone(), Sprite.MODEL[3].clone(), size
+                .clone(), new THREE.Vector3(center.x, localPosition.y, center.z));
+            geometry.pushQuadIndices(count);
+            geometry.pushQuadUVs(texA, texB, texC, texD);
+            count = count + 4;
+        } else {
+            // Simple sprite
+            let vecSimpleA = vecA.clone();
+            let vecSimpleB = vecB.clone();
+            let vecSimpleC = vecC.clone();
+            let vecSimpleD = vecD.clone();
+            count = Sprite.addStaticSpriteToGeometry(geometry, vecSimpleA,
+                vecSimpleB, vecSimpleC, vecSimpleD, texA, texB, texC, texD, count);
+        }
 
         // Double sprite
         if (this.kind === ElementMapKind.SpritesDouble || this.kind ===

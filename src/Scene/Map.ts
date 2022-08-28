@@ -46,6 +46,7 @@ class Map extends Base {
     public currentPortion: Portion;
     public mapPortions: MapPortion[];
     public textureTileset: THREE.ShaderMaterial;
+    public textureTilesetFace: THREE.ShaderMaterial;
     public texturesCharacters: THREE.ShaderMaterial[];
     public texturesAutotiles: TextureBundle[][];
     public texturesWalls: THREE.ShaderMaterial[];
@@ -260,6 +261,11 @@ class Map extends Base {
         let path = tileset.getPath();
         this.textureTileset = path ? (await Manager.GL.loadTexture(path)) : 
             Manager.GL.loadTextureEmpty();
+        this.textureTilesetFace = Manager.GL.createMaterial(this.textureTileset
+            .uniforms.t.value, {
+                isFaceSprite: true
+            }
+        );
         this.texturesAutotiles = await tileset.getTexturesAutotiles();
         this.texturesWalls = await tileset.getTexturesWalls();
         this.texturesMountains = await tileset.getTexturesMountains();

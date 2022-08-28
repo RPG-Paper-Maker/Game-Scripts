@@ -33,6 +33,7 @@ import { Vector3 } from "./Vector3";
 import { Game } from "./Game";
 import { CustomGeometry } from "./CustomGeometry";
 import { Texture } from "three";
+import { CustomGeometryFace } from "./CustomGeometryFace";
 
 /** @class
  *  A portion of the map.
@@ -43,6 +44,7 @@ class MapPortion {
     public portion: Portion;
     public staticFloorsMesh: THREE.Mesh;
     public staticSpritesMesh: THREE.Mesh;
+    public faceSpritesMesh: THREE.Mesh;
     public squareNonEmpty: number[][][];
     public boundingBoxesLands: StructMapElementCollision[][];
     public boundingBoxesSprites: StructMapElementCollision[][];
@@ -51,7 +53,6 @@ class MapPortion {
     public staticAutotilesList: Autotiles[][];
     public staticMountainsList: Mountains[];
     public objectsList: MapObject[];
-    public faceSpritesList: THREE.Mesh[];
     public staticWallsList: THREE.Mesh[];
     public staticObjects3DList: THREE.Mesh[];
     public overflowMountains: Position[];
@@ -61,6 +62,7 @@ class MapPortion {
         this.portion = portion;
         this.staticFloorsMesh = null;
         this.staticSpritesMesh = null;
+        this.faceSpritesMesh = null;
         this.squareNonEmpty = new Array(Constants.PORTION_SIZE * Constants
             .PORTION_SIZE);
         let i: number, j: number;
@@ -85,7 +87,6 @@ class MapPortion {
         this.staticAutotilesList = new Array;
         this.staticMountainsList = new Array;
         this.objectsList = new Array;
-        this.faceSpritesList = new Array;
         this.staticWallsList = new Array;
         this.staticObjects3DList = new Array;
         this.overflowMountains = new Array;
@@ -259,15 +260,15 @@ class MapPortion {
      *  @param {Record<string, any>} json - Json object describing the sprites globals
     */
     readSpritesGlobals(json: Record<string, any>) {
-        let material = Scene.Map.current.textureTileset;
+        let staticMaterial = Scene.Map.current.textureTileset;
+        let faceMaterial = Scene.Map.current.textureTilesetFace;
         let staticGeometry = new CustomGeometry();
-        let count = 0;
-        let texture = Manager.GL.getMaterialTexture(material);
+        let faceGeometry = new CustomGeometryFace();
+        let staticCount = 0, faceCount = 0;
+        let texture = Manager.GL.getMaterialTexture(staticMaterial);
         if (texture) {
             let s: Record<string, any>, position: Position, sprite: Sprite, 
-                localPosition: Vector3, result: [CustomGeometry, [number, 
-                StructMapElementCollision[]]], geometry: CustomGeometry, 
-                collisions: StructMapElementCollision[], plane: THREE.Mesh, 
+                localPosition: Vector3, collisions: StructMapElementCollision[],
                 resultUpdate: [number, StructMapElementCollision[]];
             for (let i = 0, l = json.length; i < l; i++) {
                 s = json[i];
@@ -275,30 +276,30 @@ class MapPortion {
                 sprite = new Sprite(s.v);
                 localPosition = position.toVector3();
                 if (sprite.kind === ElementMapKind.SpritesFace) {
-                    result = sprite.createGeometry(texture.image.width, texture
-                        .image.height, true, position);
-                    geometry = result[0];
-                    collisions = result[1][1];
-                    plane = new THREE.Mesh(geometry, material);
-                    plane.position.set(localPosition.x, localPosition.y, 
-                        localPosition.z);
-                    plane.renderOrder = 999;
-                    this.faceSpritesList.push(plane);
-                    Scene.Map.current.scene.add(plane);
+                    resultUpdate = sprite.updateGeometry(faceGeometry, texture.image
+                        .width, texture.image.height, position, faceCount, true, 
+                        localPosition);
+                    faceCount = resultUpdate[0];
+                    collisions = resultUpdate[1];
                 } else {
                     resultUpdate = sprite.updateGeometry(staticGeometry, texture
-                        .image.width, texture.image.height, position, count, 
+                        .image.width, texture.image.height, position, staticCount, 
                         true, localPosition);
-                    count = resultUpdate[0];
+                    staticCount = resultUpdate[0];
                     collisions = resultUpdate[1];
                 }
                 this.updateCollisionSprite(collisions, position);
             }
         }
         staticGeometry.updateAttributes();
-        this.staticSpritesMesh = new THREE.Mesh(staticGeometry, material);
+        faceGeometry.updateAttributes();
+        this.staticSpritesMesh = new THREE.Mesh(staticGeometry, staticMaterial);
         this.staticSpritesMesh.renderOrder = 999;
         Scene.Map.current.scene.add(this.staticSpritesMesh);
+        this.faceSpritesMesh = new THREE.Mesh(faceGeometry, faceMaterial);
+        this.faceSpritesMesh.renderOrder = 999;
+        this.faceSpritesMesh.frustumCulled = false;
+        Scene.Map.current.scene.add(this.faceSpritesMesh);
     }
 
     /** 
@@ -592,10 +593,10 @@ class MapPortion {
         if (this.staticSpritesMesh !== null) {
             Scene.Map.current.scene.remove(this.staticSpritesMesh);
         }
-        let i: number, l: number;
-        for (i = 0, l = this.faceSpritesList.length; i < l; i++) {
-            Scene.Map.current.scene.remove(this.faceSpritesList[i]);
+        if (this.faceSpritesMesh !== null) {
+            Scene.Map.current.scene.remove(this.faceSpritesMesh);
         }
+        let i: number, l: number;
         for (i = 0, l = this.staticWallsList.length; i < l; i++) {
             Scene.Map.current.scene.remove(this.staticWallsList[i]);
         }
@@ -689,9 +690,6 @@ class MapPortion {
      */
     updateFaceSprites(angle: number) {
         let i: number, l: number;
-        for (i = 0, l = this.faceSpritesList.length; i < l; i++) {
-            this.faceSpritesList[i].rotation.y = angle;
-        }
         for (i = 0, l = this.objectsList.length; i < l; i++) {
             this.objectsList[i].update(angle);
         }
