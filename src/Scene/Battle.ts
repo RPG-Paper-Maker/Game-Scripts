@@ -530,7 +530,7 @@ class Battle extends Map {
      *  Do camera standard moves.
      */
     moveStandardCamera() {
-        if (this.cameraON) {
+        if (Datas.BattleSystems.cameraMoveInBattle && this.cameraON) {
             switch (this.cameraStep) {
                 case 0:
                     this.camera.distance -= this.cameraTick;

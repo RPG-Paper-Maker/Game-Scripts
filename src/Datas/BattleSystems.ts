@@ -45,6 +45,7 @@ class BattleSystems {
     public static battleMusic: System.PlaySong;
     public static battleLevelUp: System.PlaySong;
     public static battleVictory: System.PlaySong;
+    public static cameraMoveInBattle: boolean;
         
     constructor() {
         throw new Error("This is a static class!");
@@ -138,6 +139,9 @@ class BattleSystems {
         this.battleMusic = new System.PlaySong(SongKind.Music, json.bmusic);
         this.battleLevelUp = new System.PlaySong(SongKind.Sound, json.blevelup);
         this.battleVictory = new System.PlaySong(SongKind.Music, json.bvictory);
+
+        // Options
+        this.cameraMoveInBattle = Utils.defaultValue(json.cmib, true);
     }
 
     /** 
