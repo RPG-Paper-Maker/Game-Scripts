@@ -39,6 +39,7 @@ class Systems {
     public static priceSoldItem: System.DynamicValue;
     public static enterNameTable: string[][];
     public static showBB: boolean;
+    public static showFPS: boolean;
     private static itemsTypes: System.Translatable[];
     public static inventoryFilters: System.InventoryFilter[];
     public static mainMenuCommands: System.MainMenuCommand[];
@@ -148,6 +149,7 @@ class Systems {
             Manager.Collisions.BB_MATERIAL.wireframe = true;
         }
         Manager.Collisions.BB_MATERIAL.visible = this.showBB;
+        this.showFPS = Utils.defaultValue(json.fps, false);
         this.ignoreAssetsLoadingErrors = false; //TODO
 
         // Lists

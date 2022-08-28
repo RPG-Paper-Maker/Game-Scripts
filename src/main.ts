@@ -20,7 +20,11 @@ import { Utils, Platform, Inputs } from "./Common";
  */
 export class Main {
 
-    static loaded = false;
+    static loaded: boolean = false;
+    static frames: number = 0;
+    static firstTime: number = -1;
+    static time: number = 0;
+    static FPS: number = 60;
 
     constructor() {
         throw new Error("This is a static class");
@@ -99,6 +103,9 @@ export class Main {
      *  Main loop of the game.
      */
     static loop() {
+        if (Main.firstTime === -1) {
+            Main.firstTime = performance.now();
+        }
         requestAnimationFrame(Main.loop);
 
         // Update if everything is loaded
@@ -118,8 +125,15 @@ export class Main {
         Manager.Stack.averageElapsedTime = (Manager.Stack.averageElapsedTime +
             Manager.Stack.elapsedTime) / 2;
         Manager.Stack.lastUpdateTime = new Date().getTime();
+        let end = performance.now();
+        Main.frames++;
+        let t = end - Main.firstTime;
+        if (t >= 1000) {
+            Main.FPS = Main.frames;
+            Main.frames = 0;
+            Main.firstTime = -1;
+        }
     }
-
 }
 
 // -------------------------------------------------------

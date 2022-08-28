@@ -10,8 +10,9 @@
 */
 
 import { Camera, Node, ReactionInterpreter, MapObject } from "../Core";
-import { System, Scene, Manager } from "../index";
-import { Utils } from "../Common";
+import { System, Scene, Manager, Graphic, Datas } from "../index";
+import { Enum, Utils } from "../Common";
+import { Main } from "../main";
 
 /**
  *  The superclass who shape the structure of a scene.
@@ -53,6 +54,7 @@ abstract class Base {
      *  @memberof Base
      */
     public camera: Camera;
+    public graphicFPS: Graphic.Text = null;
 
     /**
      *  @param {boolean} [loading = true] - Tells whether or not the scene is 
@@ -68,6 +70,9 @@ abstract class Base {
             Utils.tryCatch(this.load, this);
         }
         this.create();
+        if (Datas.Systems.showFPS) {
+            this.graphicFPS = new Graphic.Text('', { verticalAlign: Enum.AlignVertical.Top });
+        }
     }
 
     initialize(...args: any) {}
@@ -208,6 +213,10 @@ abstract class Base {
         this.updateInterpreters.call(this);
         // Parallel commands
         this.updateParallelCommands.call(this);
+        // FPS
+        if (this.graphicFPS) {
+            this.graphicFPS.setText("" + Main.FPS + "FPS");
+        }
     }
 
     /**
@@ -301,6 +310,10 @@ abstract class Base {
         }
         for (let command of this.parallelCommands) {
             command.drawHUD();
+        }
+        // Draw FPS
+        if (this.graphicFPS) {
+            this.graphicFPS.draw();
         }
     }
 
