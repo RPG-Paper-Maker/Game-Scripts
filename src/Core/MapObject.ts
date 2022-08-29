@@ -714,11 +714,14 @@ class MapObject {
         let i: number, j: number, l: number, m: number;
         for (i = 0, l = this.meshBoundingBox.length; i < l; i++) {
             for (j = 0, m = object.meshBoundingBox.length; j < m; j++) {
-                if (Manager.Collisions.obbVSobb(<CustomGeometry>this
-                    .meshBoundingBox[i].geometry, <CustomGeometry>object
-                    .meshBoundingBox[j].geometry))
-                {
-                    return true;
+                if (this.meshBoundingBox[i].geometry.boundingBox.intersectsBox(
+                    object.meshBoundingBox[j].geometry.boundingBox)) {
+                    if (Manager.Collisions.obbVSobb(<CustomGeometry>this
+                        .meshBoundingBox[i].geometry, <CustomGeometry>object
+                        .meshBoundingBox[j].geometry))
+                    {
+                        return true;
+                    }
                 }
             }
         }
@@ -808,6 +811,7 @@ class MapObject {
                             ]
                         );
                     }
+                    box.geometry.computeBoundingBox();
                     this.meshBoundingBox.push(box);
                 }
                 break;
@@ -827,6 +831,7 @@ class MapObject {
                         this.boundingBoxSettings.b[0][8]
                     ]
                 );
+                box.geometry.computeBoundingBox();
                 this.meshBoundingBox.push(box);
                 break;
         }
@@ -855,6 +860,7 @@ class MapObject {
                         this.boundingBoxSettings.b[i][8]
                     ]
                 );
+                this.meshBoundingBox[i].geometry.computeBoundingBox();
             } else if (this.currentStateInstance.graphicKind === ElementMapKind.SpritesFace) {
                 Manager.Collisions.applyOrientedBoxTransforms(this
                     .meshBoundingBox[i],
@@ -866,6 +872,7 @@ class MapObject {
                         this.boundingBoxSettings.b[i][4]
                     ]
                 );
+                this.meshBoundingBox[i].geometry.computeBoundingBox();
             }
         }
     }
