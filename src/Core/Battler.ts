@@ -11,7 +11,7 @@
 
 import { THREE } from "../Globals";
 import { Player } from "./Player";
-import { Enum, Mathf, ScreenResolution } from "../Common";
+import { Enum, Mathf } from "../Common";
 import { Frame } from "./Frame";
 import { ProgressionTable } from "../System";
 import { Manager, Datas, Scene, Core } from "../index";
@@ -569,9 +569,8 @@ class Battler {
      *  Draw the status on top of the battler.
      */
     drawStatus() {
-        Status.drawList(this.player.getFirstStatus(), ScreenResolution
-            .getScreenXReverse(this.damagePosition.x), ScreenResolution
-            .getScreenYReverse(this.damagePosition.y), Enum.Align.Center);
+        Status.drawList(this.player.getFirstStatus(), this.damagePosition.x, this
+            .damagePosition.y, Enum.Align.Center);
     }
 
     /** 
