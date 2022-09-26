@@ -207,7 +207,7 @@ class Picture extends Base {
         if (this.picture) {
             return this.picture.path;
         }
-        return this.id === -1 ? "" : Picture.getFolder(this.kind, this.isBR, 
+        return this.id === -1 || !this.name ? "" : Picture.getFolder(this.kind, this.isBR, 
             this.dlc) + Constants.STRING_SLASH + this.name;
     }
 
