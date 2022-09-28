@@ -115,11 +115,10 @@ class SkillItem extends Base {
         let i: number, l: number, graphic: Picture2D;
         for (i = 0, l = this.graphicElements.length; i < l; i++) {
             graphic = this.graphicElements[i];
-            graphic.draw({ x: offsetX, y: y - ScreenResolution.getScreenMinXY(
-                Datas.Systems.iconsSize), sw: Datas.Systems.iconsSize, sh: Datas
-                .Systems.iconsSize, w: ScreenResolution.getScreenMinXY(Datas
-                .Systems.iconsSize), h: ScreenResolution.getScreenMinXY(Datas
-                .Systems.iconsSize) });
+            graphic.draw({ x: offsetX, y: y - (ScreenResolution.getScreenMinXY(
+                Datas.Systems.iconsSize) / 2), sw: Datas.Systems.iconsSize, sh: Datas
+                .Systems.iconsSize, w: Datas.Systems.iconsSize, h: Datas.Systems
+                .iconsSize });
             offsetX += ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize) + 
                 this.graphicName.space;
         }
@@ -140,11 +139,10 @@ class SkillItem extends Base {
             if (pictureIcon) {
                 graphicText.measureText();
                 pictureIcon.draw({ x: x + graphicText.textWidth + ScreenResolution
-                    .getScreenMinXY(Constants.MEDIUM_SPACE), y: y + offsetY - 
-                    ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize), sw: 
+                    .getScreenMinXY(Constants.MEDIUM_SPACE), y: y + offsetY - (ScreenResolution.getScreenMinXY(
+                        Datas.Systems.iconsSize) / 2), sw: 
                     Datas.Systems.iconsSize, sh: Datas.Systems.iconsSize, w: 
-                    ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize), h: 
-                    ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize) });
+                    Datas.Systems.iconsSize, h:Datas.Systems.iconsSize });
             }
             offsetY += graphicText.fontSize + ScreenResolution.getScreenMinXY(
                 Constants.MEDIUM_SPACE);
