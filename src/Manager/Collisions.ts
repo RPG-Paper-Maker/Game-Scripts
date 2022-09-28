@@ -959,10 +959,9 @@ class Collisions {
             } else {
                 if (!pass) {
                     return [this.checkIntersectionSprite([x + (Datas.Systems
-                        .SQUARE_SIZE / 2), y + (Datas.Systems.SQUARE_SIZE / 2), 
-                        z + (Datas.Systems.SQUARE_SIZE / 2), Datas.Systems
-                        .SQUARE_SIZE, h, Datas.Systems.SQUARE_SIZE, 0, 0, 0], 
-                        true, object), null];
+                        .SQUARE_SIZE / 2), y + (h / 2), z + (Datas.Systems
+                        .SQUARE_SIZE / 2), Datas.Systems.SQUARE_SIZE, h, Datas
+                        .Systems.SQUARE_SIZE, 0, 0, 0], true, object), null];
                 }
             }
         } else {   
