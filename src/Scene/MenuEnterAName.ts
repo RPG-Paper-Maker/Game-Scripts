@@ -105,9 +105,10 @@ class MenuEnterAName extends MenuBase {
             bordersInsideVisible: false,
             padding: WindowBox.SMALL_SLOT_PADDING
         };
-        const rect = new Rectangle(((ScreenResolution.SCREEN_X - ((slotWidth * 
-            this.maxCharacters) + (options.padding[0] * 3) + this.pictureFaceset
-            .oW)) / 2) + this.pictureFaceset.oW, this.pictureFaceset.oH - 
+        const rect = new Rectangle(((ScreenResolution.SCREEN_X - (slotWidth * 
+            this.maxCharacters) - (options.padding[0] * 2) - Datas.Systems
+            .facesetScalingWidth) / 2) + Datas.Systems.facesetScalingWidth, 
+            Datas.Systems.facesetScalingHeight - 
             WindowBox.MEDIUM_SLOT_HEIGHT, slotWidth, WindowBox.MEDIUM_SLOT_HEIGHT);
         const list = new Array(this.maxCharacters);
         for (let i = 0; i < this.maxCharacters; i++) {
@@ -417,8 +418,10 @@ class MenuEnterAName extends MenuBase {
             Datas.Systems.facesetsSize, sy: this.selectedhero.system.indexYFaceset 
             * Datas.Systems.facesetsSize, sw: Datas.Systems.facesetsSize, sh: 
             Datas.Systems.facesetsSize, w: Datas.Systems.facesetScalingWidth, h: 
-            Datas.Systems.facesetScalingHeight, x: this.windowChoicesTop.x - this
-            .pictureFaceset.w, y: this.windowBoxMain.y - this.pictureFaceset.h });
+            Datas.Systems.facesetScalingHeight, x: this.windowChoicesTop.x - 
+            ScreenResolution.getScreenMinXY(Datas.Systems.facesetScalingWidth), 
+            y: this.windowBoxMain.y - ScreenResolution.getScreenMinXY(Datas.Systems
+            .facesetScalingHeight) });
         this.windowChoicesTop.draw();
         this.windowBoxMain.draw();
         for (let i = this.offsetRow; i < this.displayRows + this.offsetRow; i++) {
