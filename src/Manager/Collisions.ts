@@ -441,7 +441,53 @@ class Collisions {
                         }
                     }
                     if (maxY === null) {
-                        return [true, null];
+                        // redo with before pos for going down two following height angled
+                        portion = Scene.Map.current.getLocalPortion(Portion.createFromVector3(positionBefore));
+                        mapPortion = Scene.Map.current.getMapPortion(portion);
+                        if (mapPortion !== null) {
+                            floors = mapPortion.squareNonEmpty[jpositionBefore.x % Constants
+                                .PORTION_SIZE][jpositionBefore.z % Constants.PORTION_SIZE];
+                            if (floors.length === 0) {
+                                let otherMapPortion = Scene.Map.current.getMapPortion(new 
+                                    Portion(portion.x, portion.y + 1, portion.z));
+                                if (otherMapPortion) {
+                                    floors = otherMapPortion.squareNonEmpty[jpositionBefore.x %
+                                        Constants.PORTION_SIZE][jpositionBefore.z % Constants
+                                        .PORTION_SIZE];
+                                }
+                            }
+                            if (yMountain === null && floors.indexOf(positionBefore.y) === -1) {
+                                let l = floors.length;
+                                if (l === 0) {
+                                    return [true, null];
+                                } else {
+                                    let maxY = null;
+                                    let limitY = positionBefore.y - Datas.Systems
+                                        .mountainCollisionHeight.getValue();
+                                    let temp: number;
+                                    for (i = 0; i < l; i++) {
+                                        temp = floors[i];
+                                        if (temp <= (positionBefore.y + Datas.Systems
+                                            .mountainCollisionHeight.getValue()) && temp >= 
+                                            limitY)
+                                        {
+                                            if (maxY === null) {
+                                                maxY = temp;
+                                            } else {
+                                                if (maxY < temp) {
+                                                    maxY = temp;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (maxY === null) {
+                                        return [true, null];
+                                    } else {
+                                        yMountain = maxY;
+                                    }
+                                }
+                            }
+                        }
                     } else {
                         yMountain = maxY;
                     }
