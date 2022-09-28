@@ -94,8 +94,10 @@ class MainMenuCommand extends Translatable {
                 };
             case Enum.MainMenuCommandKind.Quit:
                 return function() {
-                    Manager.Stack.popAll();
-                    Manager.Stack.push(new Scene.TitleScreen());
+                    Manager.Stack.push(new Scene.Confirm(() => {
+                        Manager.Stack.popAll();
+                        Manager.Stack.push(new Scene.TitleScreen());
+                    }));
                     return true;
                 };
             case Enum.MainMenuCommandKind.Script:

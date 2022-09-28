@@ -21,6 +21,7 @@ export * from "./BattleSelection";
 export * from "./BattleStartTurn";
 export * from "./BattleVictory";
 export * from "./ChangeLanguage";
+export * from "./Confirm";
 export * from "./GameOver";
 export * from "./KeyboardAssign";
 export * from "./LoadGame";
