@@ -47,6 +47,7 @@ class Text extends Base {
     public lines: string[];
     public align: Align;
     public fontSize: number;
+    public oFontSize: number;
     public fontName: string;
     public verticalAlign: AlignVertical;
     public color: System.Color;
@@ -126,6 +127,7 @@ class Text extends Base {
      *  @param {number} fontSize - The new font size
      */
     setFontSize(fontSize: number) {
+        this.oFontSize = fontSize;
         this.fontSize = ScreenResolution.getScreenMinXY(fontSize);
         this.font = Utils.createFont(this.fontSize, this.fontName, this.bold, this.italic);
     }

@@ -55,12 +55,10 @@ class TimeCurrencies extends Base {
         this.height = 0;
         for (let i = 0, l = this.currencies.length; i < l; i++) {
             currency = this.currencies[i];
-            this.height = i * (Math.max(currency.graphicText.fontSize, 
-                ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize) + 
-                ScreenResolution.getScreenMinXY(Constants.MEDIUM_SPACE)));
+            this.height = i * (Math.max(currency.graphicText.oFontSize, Datas
+                .Systems.iconsSize + Constants.MEDIUM_SPACE));
         }
-        this.height += ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE) + 
-            this.graphicPlayTime.fontSize;
+        this.height += Constants.HUGE_SPACE + this.graphicPlayTime.oFontSize;
         this.offset = 0;
     }
 
