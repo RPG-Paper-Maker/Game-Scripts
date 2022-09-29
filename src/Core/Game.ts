@@ -553,7 +553,15 @@ class Game {
         if (hero !== null) {
             return hero;
         }
-        return Game.getHeroInstanceInTab(this.hiddenHeroes, id);
+        hero = Game.getHeroInstanceInTab(this.hiddenHeroes, id);
+        if (hero !== null) {
+            return hero;
+        }
+        if (Scene.Map.current.isBattleMap) {
+            return Game.getHeroInstanceInTab((<Scene.Battle>Scene.Map.current)
+                .players[Enum.CharacterKind.Monster], id);
+        }
+        return null;
     }
 
     /** 

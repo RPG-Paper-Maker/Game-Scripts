@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { System, Datas } from "../index";
-import { Utils, Mathf, Interpreter } from "../Common";
+import { Utils, Mathf, Interpreter, Platform } from "../Common";
 import { MapObject, Game } from "../Core";
 import { Player } from "../Core";
 
@@ -97,8 +97,12 @@ class ChangeAStatistic extends Base {
         let targets: Player[];
         switch (this.selection) {
             case 0:
-                targets = [Game.current.getHeroByInstanceID(this
-                    .heInstanceID.getValue())];
+                let t = Game.current.getHeroByInstanceID(this.heInstanceID.getValue());
+                if (t === null) {
+                    Platform.showErrorMessage("Can't get any hero/enemy with instance ID " 
+                        + this.heInstanceID.getValue() + ". Please review your event command.");
+                }
+                targets = [t];
                 break;
             case 1:
                 targets = Game.current.getTeam(this.groupIndex);
