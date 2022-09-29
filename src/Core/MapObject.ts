@@ -961,6 +961,9 @@ class MapObject {
 
         // Add to moving objects
         this.addMoveTemp();
+
+        // Update terrrain
+        this.updateTerrain();
     }
 
     /** 
@@ -1439,7 +1442,7 @@ class MapObject {
      */
     updateTerrain() {
         this.terrain = 0;
-        if (this.position) {
+        if (!Scene.Map.current.loading && this.position) {
             let mapPortion = Scene.Map.current.getMapPortion(Scene.Map.current
                 .getLocalPortion(Portion.createFromVector3(this.position)));
             if (mapPortion) {
