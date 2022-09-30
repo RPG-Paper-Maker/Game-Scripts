@@ -15,7 +15,7 @@ import { MapObject } from "./MapObject";
 import { Position } from "./Position";
 import { System, Datas, Manager, Scene } from "../index";
 import { StructMapElementCollision } from "./MapElement";
-import { Constants, Enum, Utils } from "../Common";
+import { Constants, Enum, Platform, Utils } from "../Common";
 import { Floor } from "./Floor";
 import { Autotiles } from "./Autotiles";
 import { Autotile } from "./Autotile";
@@ -669,6 +669,10 @@ class MapPortion {
      *  @returns {MapObject}
      */
     getHeroModel(json: Record<string, any>): MapObject {
+        let obj = json.objs;
+        if (!obj) {
+            Platform.showErrorMessage("Your hero object seems to be in a non existing map. Please use define as hero in a map to correct it.");
+        }
         json = json.objs.list;
         let jsonObject: Record<string, any>, position: Position, jsonObjectValue
             : Record<string, any>, object: System.MapObject;
