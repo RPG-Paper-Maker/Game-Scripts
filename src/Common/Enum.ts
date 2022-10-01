@@ -166,7 +166,8 @@ namespace Enum {
     export enum GroupKind {
         Team,
         Reserve,
-        Hidden
+        Hidden,
+        Troop
     }
 
     /**
@@ -202,6 +203,10 @@ namespace Enum {
         West,
         North,
         East,
+        SouthWest,
+        SouthEast,
+        NorthWest,
+        NorthEast,
         None
     }
 
