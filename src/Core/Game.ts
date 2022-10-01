@@ -19,6 +19,7 @@ import GroupKind = Enum.GroupKind;
 import CharacterKind = Enum.CharacterKind;
 import { Portion } from "./Portion";
 import { Vector3 } from "./Vector3";
+import { Group } from "three";
 
 /** @class
  *  All the global informations of a particular game.
@@ -587,6 +588,8 @@ class Game {
                 return this.reserveHeroes;
             case GroupKind.Hidden:
                 return this.hiddenHeroes;
+            case GroupKind.Troop:
+                return (<Scene.Battle>Scene.Map.current).players[CharacterKind.Monster];
         }
     }
 

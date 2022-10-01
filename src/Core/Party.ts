@@ -1,5 +1,5 @@
 import { Group } from "three";
-import { Datas, System } from "..";
+import { Datas, Scene, System } from "..";
 import { Enum } from "../Common";
 import { Hero } from "../System";
 import { Player } from "./Player";
@@ -147,12 +147,14 @@ class Party {
                 break;
             case Enum.GroupKind.Hidden:
                 return this.hiddenHeroes;
-                break;
+            case Enum.GroupKind.Troop:
+                    return (<Scene.Battle>Scene.Map.current).players[Enum.CharacterKind.Monster];
             default:
                 throw new Error("The team is unspecified")
                 break;
         }
     }
+    
     /**
      * Return all the currencies that a party has.
      *
