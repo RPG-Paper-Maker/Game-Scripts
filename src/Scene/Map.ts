@@ -11,7 +11,7 @@
 
 import { THREE } from "../Globals";
 import { Base } from "./Base";
-import { Enum, Utils, Constants, IO, Paths, Inputs, Interpreter } from "../Common";
+import { Enum, Utils, Constants, IO, Paths, Inputs, Interpreter, Platform } from "../Common";
 import Orientation = Enum.Orientation;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 import PictureKind = Enum.PictureKind;
@@ -261,11 +261,11 @@ class Map extends Base {
         let path = tileset.getPath();
         this.textureTileset = path ? (await Manager.GL.loadTexture(path)) : 
             Manager.GL.loadTextureEmpty();
-        this.textureTilesetFace = Manager.GL.createMaterial(this.textureTileset
-            .uniforms.t.value, {
-                isFaceSprite: true
-            }
-        );
+        let t: THREE.Texture = this.textureTileset.uniforms.t.value;
+        if (t.image.width % Datas.Systems.SQUARE_SIZE !== 0 || t.image.height % Datas.Systems.SQUARE_SIZE !== 0) {
+            Platform.showErrorMessage("Tileset in " + path + " is not in a size multiple of " + 
+                Datas.Systems.SQUARE_SIZE + ". Please edit this picture size.");
+        }
         this.texturesAutotiles = await tileset.getTexturesAutotiles();
         this.texturesWalls = await tileset.getTexturesWalls();
         this.texturesMountains = await tileset.getTexturesMountains();
