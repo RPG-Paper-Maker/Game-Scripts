@@ -307,10 +307,8 @@ class MapObject {
         } else {
             let obj = Scene.Map.current.allObjects[this.system.id];
             if (Utils.isUndefined(obj)) {
-                Platform.showErrorMessage("Can't find object with name" + this
-                    .system.name + " and ID " + this.system.id + " in map " + 
-                    Scene.Map.current.mapName +
-                    " in object linking. Please open the map, check where is the object and save.");
+                Platform.showErrorMessage("Object linking issue. Please go to map " + 
+                    Scene.Map.current.mapName + " and use Options > Debug Options in map > Synchronize map objects. Please report it to dev.");
             }
             let portion = obj.getGlobalPortion();
             let portionDatas = Game.current.getPortionDatas(Scene.Map.current.id, 
@@ -433,10 +431,8 @@ class MapObject {
         } else {
             let pos = Scene.Map.current.allObjects[this.system.id];
             if (Utils.isUndefined(pos)) {
-                Platform.showErrorMessage("Can't find object with name" + this
-                    .system.name + " and ID " + this.system.id + " in map " + 
-                    Scene.Map.current.mapName +
-                    " in object linking. Please open the map, check where is the object and save.");
+                Platform.showErrorMessage("Object linking issue. Please go to map " + 
+                    Scene.Map.current.mapName + " and use Options > Debug Options in map > Synchronize map objects. Please report it to dev.");
             }
             let portion = pos.getGlobalPortion();
             let portionDatas = Game.current.getPortionDatas(Scene.Map.current.id, 
