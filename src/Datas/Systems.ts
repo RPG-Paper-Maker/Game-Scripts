@@ -147,8 +147,11 @@ class Systems {
         {   
             Manager.Collisions.BB_MATERIAL.color.setHex(0xff0000);
             Manager.Collisions.BB_MATERIAL.wireframe = true;
+            Manager.Collisions.BB_MATERIAL_DETECTION.color.setHex(0x00f2ff);
+            Manager.Collisions.BB_MATERIAL_DETECTION.wireframe = true;
         }
         Manager.Collisions.BB_MATERIAL.visible = this.showBB;
+        Manager.Collisions.BB_MATERIAL_DETECTION.visible = this.showBB;
         this.showFPS = Utils.defaultValue(json.fps, false);
         this.ignoreAssetsLoadingErrors = false; //TODO
 

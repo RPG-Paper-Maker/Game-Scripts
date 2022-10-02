@@ -22,11 +22,12 @@ import { THREE } from "../Globals";
 class Collisions {
 
     public static BB_MATERIAL = new THREE.MeshBasicMaterial();
+    public static BB_MATERIAL_DETECTION = new THREE.MeshBasicMaterial();
     public static BB_EMPTY_MATERIAL = new THREE.MeshBasicMaterial({visible: false});
     public static BB_BOX = Collisions.createBox();
     public static BB_ORIENTED_BOX = Collisions.createOrientedBox();
-    public static BB_BOX_DETECTION = Collisions.createBox();
-    public static BB_BOX_DEFAULT_DETECTION = Collisions.createBox();
+    private static BB_BOX_DETECTION = Collisions.createBox(true);
+    public static BB_BOX_DEFAULT_DETECTION = Collisions.createBox(true);
     public static currentCustomObject3D: THREE.Mesh<CustomGeometry, THREE
         .Material | THREE.Material[]> = null;
 
@@ -39,9 +40,9 @@ class Collisions {
      *  @static
      *  @returns {THREE.Mesh}
      */
-    static createBox(): THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]> {
-        let box = new THREE.Mesh(CustomGeometry.createBox(1, 1, 1), this
-            .BB_MATERIAL);
+    static createBox(detection: boolean = false): THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]> {
+        let box = new THREE.Mesh(CustomGeometry.createBox(1, 1, 1), detection ? 
+            this.BB_MATERIAL_DETECTION : this.BB_MATERIAL);
         box['previousTranslate'] = [0, 0, 0];
         box['previousRotate'] = [0, 0, 0];
         box['previousScale'] = [1, 1, 1];
@@ -155,6 +156,18 @@ class Collisions {
 
         // Update geometry now
         box.updateMatrixWorld();
+    }
+
+    static getBBBoxDetection(force: boolean = false) {
+        if (Datas.Systems.showBB && !force) {
+            let box = Collisions.createBox(true);
+            this.BB_BOX_DETECTION = box;
+            Scene.Map.current.scene.add(box);
+            setTimeout(() => {
+                Scene.Map.current.scene.remove(box);
+            }, 100);
+        }
+        return this.BB_BOX_DETECTION;
     }
 
     /** 

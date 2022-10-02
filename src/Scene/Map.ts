@@ -104,8 +104,7 @@ class Map extends Base {
         if (Datas.Systems.showBB) {
             this.scene.add(Manager.Collisions.BB_BOX);
             this.scene.add(Manager.Collisions.BB_ORIENTED_BOX);
-            //this.scene.add(Manager.Collisions.BB_BOX_DETECTION);
-            //this.scene.add(Manager.Collisions.BB_BOX_DEFAULT_DETECTION);
+            this.scene.add(Manager.Collisions.BB_BOX_DEFAULT_DETECTION);
         }
         await this.readMapProperties();
         this.initializeCamera();

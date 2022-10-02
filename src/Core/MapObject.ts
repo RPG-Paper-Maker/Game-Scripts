@@ -733,7 +733,7 @@ class MapObject {
         for (i = 0, l = this.meshBoundingBox.length; i < l; i++) {
             if (Manager.Collisions.obbVSobb(<CustomGeometry>this.meshBoundingBox
                 [i].geometry, <CustomGeometry>Manager.Collisions
-                .BB_BOX_DETECTION.geometry))
+                .getBBBoxDetection(true).geometry))
             {
                 return true;
             }
@@ -747,7 +747,7 @@ class MapObject {
                 .SQUARE_SIZE, 0, 0, 0]);
             if (Manager.Collisions.obbVSobb(<CustomGeometry>Manager.Collisions
                 .BB_BOX_DEFAULT_DETECTION.geometry, <CustomGeometry>Manager
-                .Collisions.BB_BOX_DETECTION.geometry))
+                .Collisions.getBBBoxDetection(true).geometry))
             {
                 return true;
             }

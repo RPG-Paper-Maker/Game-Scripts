@@ -58,7 +58,7 @@ class Detection extends Base {
         let boundingBoxes = this.getBoundingBoxes(sender);
         for (let i = 0, l = boundingBoxes.length; i < l; i++) {
             Manager.Collisions.applyBoxSpriteTransforms(Manager.Collisions
-                .BB_BOX_DETECTION, boundingBoxes[i]);
+                .getBBBoxDetection(), boundingBoxes[i]);
             if (object.checkCollisionDetection()) {
                 return true;
             }
