@@ -222,13 +222,18 @@ class MapObject {
                 }
             }
             if (moved === null) {
-                return {
-                    object: Game.current.hero,
-                    id: objectID,
-                    kind: 1,
-                    index: -1,
-                    list: null,
-                    datas: mapsDatas
+                if (Scene.Map.current.id === Datas.Systems.ID_MAP_START_HERO &&
+                    Game.current.hero.id === objectID) {
+                    return {
+                        object: Game.current.hero,
+                        id: objectID,
+                        kind: 1,
+                        index: -1,
+                        list: null,
+                        datas: mapsDatas
+                    }
+                } else {
+                    return null;
                 }
             } else {
                 return {
@@ -261,13 +266,18 @@ class MapObject {
         let mapPortion = new MapPortion(globalPortion);
         let moved = mapPortion.getObjFromID(json, objectID);
         if (moved === null) {
-            return {
-                object: Game.current.hero,
-                id: objectID,
-                kind: 2,
-                index: -1,
-                list: null,
-                datas: mapsDatas
+            if (Scene.Map.current.id === Datas.Systems.ID_MAP_START_HERO &&
+                Game.current.hero.id === objectID) {
+                return {
+                    object: Game.current.hero,
+                    id: objectID,
+                    kind: 2,
+                    index: -1,
+                    list: null,
+                    datas: mapsDatas
+                }
+            } else {
+                return null;
             }
         } else {
             return {
