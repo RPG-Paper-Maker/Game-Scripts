@@ -12,6 +12,7 @@
 import { Base } from "./Base";
 import { System, EventCommand, Manager, Scene } from "../index";
 import { MapObject, StructSearchResult, Game } from "../Core";
+import { Platform } from "../Common";
 
 /** @class
  *  An event command for changing an object state.
@@ -205,8 +206,13 @@ class ChangeState extends Base {
             } else {
                 let objectID = currentState.objectID === -1 ? object.system.id : 
                     currentState.objectID;
-                let portion = currentState.map.allObjects[objectID]
-                    .getGlobalPortion();
+                let position = currentState.map.allObjects[objectID];
+                if (!position) {
+                    Platform.showErrorMessage("Change state command: the object ID " + 
+                        objectID + " selected doesn't exist in the map " + 
+                        currentState.map.name);
+                }
+                let portion = position.getGlobalPortion();
                 let portionDatas = Game.current.getPortionDatas(
                     currentState.map.id, portion);
                 let indexState = portionDatas.si.indexOf(objectID);
