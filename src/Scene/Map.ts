@@ -265,6 +265,11 @@ class Map extends Base {
             Platform.showErrorMessage("Tileset in " + path + " is not in a size multiple of " + 
                 Datas.Systems.SQUARE_SIZE + ". Please edit this picture size.");
         }
+        this.textureTilesetFace = Manager.GL.createMaterial(this.textureTileset
+            .uniforms.t.value, {
+                isFaceSprite: true
+            }
+        );
         this.texturesAutotiles = await tileset.getTexturesAutotiles();
         this.texturesWalls = await tileset.getTexturesWalls();
         this.texturesMountains = await tileset.getTexturesMountains();
