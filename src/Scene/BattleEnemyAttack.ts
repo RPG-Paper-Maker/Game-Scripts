@@ -101,10 +101,17 @@ class BattleEnemyAttack {
             if (action.isConditionStatistic) {
                 stat = Datas.BattleSystems.getStatistic(action.statisticID
                     .getValue());
-                if (!Mathf.OPERATORS_COMPARE[action.operationKindStatistic](
-                    player[stat.abbreviation] / player[stat.getMaxAbbreviation()]
-                    * 100, action.statisticValueCompare.getValue())) {
-                    continue;
+                if (stat.isFix) {
+                    if (!Mathf.OPERATORS_COMPARE[action.operationKindStatistic](
+                        player[stat.abbreviation], action.statisticValueCompare.getValue())) {
+                        continue;
+                    }
+                } else {
+                    if (!Mathf.OPERATORS_COMPARE[action.operationKindStatistic](
+                        player[stat.abbreviation] / player[stat.getMaxAbbreviation()]
+                        * 100, action.statisticValueCompare.getValue())) {
+                        continue;
+                    }
                 }
             }
             if (action.isConditionVariable && !Mathf.OPERATORS_COMPARE[action
