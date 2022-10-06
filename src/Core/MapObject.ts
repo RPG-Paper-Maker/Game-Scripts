@@ -962,6 +962,10 @@ class MapObject {
 
         // Set position
         this.position.set(position.x, position.y, position.z);
+        this.previousPosition.set(position.x, position.y, position.z);
+        if (this.movingState && this.movingState.position) {
+            this.movingState.position.set(position.x, position.y, position.z);
+        }
         this.updateBBPosition(position);
         this.moving = true;
 
