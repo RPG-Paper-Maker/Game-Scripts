@@ -172,7 +172,7 @@ class Effect extends Base {
                 for (let i = 0; i < l; i++) {
                     battler = targets[i];
                     target = battler.player;
-                    if (!this.skillItem.isPossible(target, false)) {
+                    if (this.skillItem && !this.skillItem.isPossible(target, false)) {
                         continue;
                     }
                     damage = 0;
