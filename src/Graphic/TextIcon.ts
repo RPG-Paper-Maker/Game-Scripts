@@ -65,8 +65,9 @@ class TextIcon extends Base {
      */
     static createFromSystem(text: string, icon: System.Icon, options = {}, 
         textOptions = {}): Graphic.TextIcon {
-        return new Graphic.TextIcon(text, icon.pictureID, icon.pictureIndexX, 
-            icon.pictureIndexY, options, textOptions);
+        return new Graphic.TextIcon(text, icon === null ? -1 : icon.pictureID, 
+            icon === null ? 0 : icon.pictureIndexX, icon === null ? 0 : icon
+            .pictureIndexY, options, textOptions);
     }
 
     /** 

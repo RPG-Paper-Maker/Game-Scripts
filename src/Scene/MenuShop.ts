@@ -449,7 +449,7 @@ class MenuShop extends MenuBase {
                 break;
             case 1:
                 if (Scene.MenuBase.checkActionMenu(isKey, options)) {
-                    if (this.windowBoxInformation.content === null) {
+                    if (this.windowBoxInformation.content === null || !graphic) {
                         return;
                     }
                     if (this.isBuy()) {

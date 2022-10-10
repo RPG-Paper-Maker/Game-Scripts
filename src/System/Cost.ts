@@ -39,13 +39,23 @@ class Cost extends Base {
     /** 
      *  Get the price for several costs.
      */
-    static getPrice(list: System.Cost[]): Record<string, number> {
+    static getPrice(list: System.Cost[]): Record<string, [DamagesKind, number]> {
         let price = {};
-        let cost: System.Cost;
+        let cost: System.Cost, value: [DamagesKind, number];
         for (let i = 0, l = list.length; i < l; i++) {
             cost = list[i];
-            price[cost.currencyID.getValue()] = Interpreter.evaluate(cost
-                .valueFormula.getValue());
+            value = [cost.kind, Interpreter.evaluate(cost.valueFormula.getValue())];
+            switch (cost.kind) {
+                case DamagesKind.Stat:
+                    price[cost.statisticID.getValue()] = value;
+                    break;
+                case DamagesKind.Currency:
+                    price[cost.currencyID.getValue()] = value;
+                    break;
+                case DamagesKind.Variable:
+                    price[cost.variableID] = value;
+                    break;
+            }
         }
         return price;
     }

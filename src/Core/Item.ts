@@ -11,8 +11,9 @@
 
 import { Enum } from "../Common";
 import ItemKind = Enum.ItemKind;
-import { System, Datas } from "../index";
+import { System, Datas, Scene } from "../index";
 import { Game } from "./Game";
+import { Player } from "./Player";
 
 /** @class
  *  An item in the inventory.
@@ -198,15 +199,28 @@ class Item {
      */
     buy(shopID: number, times: number): boolean {
         let price = this.shop.getPrice();
-        // Update currency
-        let p: number;
+        let user = Scene.Map.current.user ? Scene.Map.current.user.player : Player
+            .getTemporaryPlayer();
+
+        // Update value
         for (let id in price) {
-            p = price[id] * times;
-            Game.current.currencies[id] -= p;
-            if (p > 0) {
-                Game.current.currenciesUsed[id] += p;
-            } else {
-                Game.current.currenciesEarned[id] -= p;
+            let [kind, value] = price[id];
+            value *= times;
+            switch (kind) {
+                case Enum.DamagesKind.Currency:
+                    Game.current.currencies[id] -= value;
+                    if (value > 0) {
+                        Game.current.currenciesUsed[id] += value;
+                    } else {
+                        Game.current.currenciesEarned[id] -= value;
+                    }
+                    break;
+                case Enum.DamagesKind.Stat:
+                    user[Datas.BattleSystems.getStatistic(parseInt(id)).abbreviation] -= value;
+                    break;
+                case Enum.DamagesKind.Variable:
+                    Game.current.variables[parseInt(id)] -= value;
+                    break;
             }
         }
         if (this.nb !== - 1) {
@@ -235,16 +249,29 @@ class Item {
      */
     sell(times: number): boolean {
         let price = this.system.getPrice();
+        let user = Scene.Map.current.user ? Scene.Map.current.user.player : Player
+            .getTemporaryPlayer();
+
         // Update currency
-        let p: number;
         for (let id in price) {
-            p = Math.round(price[id] * Datas.Systems.priceSoldItem.getValue() / 
+            let [kind, value] = price[id];
+            let p = Math.round(value * Datas.Systems.priceSoldItem.getValue() / 
                 100) * times;
-            Game.current.currencies[id] += p;
-            if (p > 0) {
-                Game.current.currenciesEarned[id] += p;
-            } else {
-                Game.current.currenciesUsed[id] -= p;
+            switch (kind) {
+                case Enum.DamagesKind.Currency:
+                    Game.current.currencies[id] += p;
+                    if (p > 0) {
+                        Game.current.currenciesEarned[id] += p;
+                    } else {
+                        Game.current.currenciesUsed[id] -= p;
+                    }
+                    break;
+                case Enum.DamagesKind.Stat:
+                    user[Datas.BattleSystems.getStatistic(parseInt(id)).abbreviation] += p;
+                    break;
+                case Enum.DamagesKind.Variable:
+                    Game.current.variables[parseInt(id)] += p;
+                    break;
             }
         }
         return this.remove(times);
