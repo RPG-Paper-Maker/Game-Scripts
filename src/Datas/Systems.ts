@@ -372,7 +372,7 @@ class Systems {
         }
         if (Utils.isUndefined(position)) {
             Platform.showErrorMessage("Object linking issue. Please go to map " + 
-                Scene.Map.current.mapName + " and use Options > Debug Options in map > Synchronize map objects. Please report it to dev.");
+                mapName + " and use Options > Debug Options in map > Synchronize map objects. Please report it to dev.");
         }
         let globalPortion = position.getGlobalPortion();
         let fileName = globalPortion.getFileName();
