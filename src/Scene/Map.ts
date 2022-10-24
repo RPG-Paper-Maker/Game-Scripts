@@ -219,7 +219,8 @@ class Map extends Base {
                 jabs = Math.abs(j);
                 objectsPortions[i][jp][jabs] = new Array(w);
                 for (k = 0; k < w; k++) {
-                    datas = (mapsDatas) ? mapsDatas[i][jp][jabs][k] : null;
+                    datas = (mapsDatas && mapsDatas[i] && mapsDatas[i][jp] &&
+                        mapsDatas[i][jp][jabs]) ? mapsDatas[i][jp][jabs][k] : null;
                     objectsPortions[i][jp][jabs][k] = {
                         min: datas && datas.min ? datas.min : [],
                             // All the moved objects that are in this
