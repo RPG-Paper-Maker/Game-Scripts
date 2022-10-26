@@ -288,6 +288,9 @@ class MapPortion {
                     staticCount = resultUpdate[0];
                     collisions = resultUpdate[1];
                 }
+                position.x += sprite.xOffset;
+                position.y += sprite.yOffset;
+                position.z += sprite.zOffset;
                 this.updateCollisionSprite(collisions, position);
             }
         }

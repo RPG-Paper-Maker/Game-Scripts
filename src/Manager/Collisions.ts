@@ -11,7 +11,7 @@
 
 import { Mathf, Constants, Enum } from "../Common";
 import { MapObject, Position, Portion, MapPortion, StructMapElementCollision, CollisionSquare, Mountain, Vector3, Vector2, Game, CustomGeometry } from "../Core";
-import { Datas, System, Scene } from "../index";
+import { Datas, System, Scene, Manager } from "../index";
 import ElementMapKind = Enum.ElementMapKind;
 import { THREE } from "../Globals";
 
@@ -379,6 +379,9 @@ class Collisions {
                             , new Position(jpositionAfter.x + i, jpositionAfter
                             .y + j, jpositionAfter.z + k), positionAfter, object
                             , direction, testedCollisions);
+                        if (result[0] === null) {
+                            return result;
+                        }
                         if (result[0]) {
                             block = true;
                         }
@@ -432,7 +435,7 @@ class Collisions {
             if (yMountain === null && floors.indexOf(positionAfter.y) === -1) {
                 let l = floors.length;
                 if (l === 0) {
-                    return [true, null];
+                    return [null, null];
                 } else {
                     let maxY = null;
                     let limitY = positionAfter.y - Datas.Systems
@@ -472,7 +475,7 @@ class Collisions {
                             if (yMountain === null && floors.indexOf(positionBefore.y) === -1) {
                                 let l = floors.length;
                                 if (l === 0) {
-                                    return [true, null];
+                                    return [null, null];
                                 } else {
                                     let maxY = null;
                                     let limitY = positionBefore.y - Datas.Systems
@@ -494,6 +497,36 @@ class Collisions {
                                         }
                                     }
                                     if (maxY === null) {
+                                        // If non empty square on front of object, then force move front
+                                        let positionFront = positionBefore.clone();
+                                        console.log(object.orientationEye);
+                                        switch (object.orientationEye) {
+                                            case Enum.Orientation.North:
+                                                positionFront.setZ(positionFront.z - Datas.Systems.SQUARE_SIZE);
+                                                break;
+                                            case Enum.Orientation.South:
+                                                positionFront.setZ(positionFront.z + Datas.Systems.SQUARE_SIZE);
+                                                break;
+                                            case Enum.Orientation.West:
+                                                positionFront.setX(positionFront.x - Datas.Systems.SQUARE_SIZE);
+                                                break;
+                                            case Enum.Orientation.East:
+                                                positionFront.setX(positionFront.x + Datas.Systems.SQUARE_SIZE);
+                                                break;
+                                        }
+                                        portion = Scene.Map.current.getLocalPortion(Portion.createFromVector3(positionFront));
+                                        mapPortion = Scene.Map.current.getMapPortion(portion);
+                                        if (mapPortion !== null) {
+                                            floors = mapPortion.squareNonEmpty[Math.floor(positionFront.x / Datas.Systems.SQUARE_SIZE) % Constants.PORTION_SIZE][Math.floor(positionFront.z / Datas.Systems.SQUARE_SIZE) % Constants.PORTION_SIZE];
+                                            if (floors.length > 0) {
+                                                for (let y of floors) {
+                                                    console.log(y, positionFront.y)
+                                                    if (y === positionFront.y) {
+                                                        return [false, null];
+                                                    }
+                                                }
+                                            }
+                                        }
                                         return [true, null];
                                     } else {
                                         yMountain = maxY;
@@ -535,19 +568,26 @@ class Collisions {
         MapObject, direction: Vector3, testedCollisions: 
         StructMapElementCollision[]): [boolean, number]
     {
+        // Check sprites and climbing
+        let [isCollision, yMountain] = this.checkSprites(mapPortion, jpositionAfter, 
+            testedCollisions, object);
+        // Climbing
+        if (isCollision || yMountain !== null) {
+            return [isCollision, yMountain];
+        }
+
         // Check mountain collision first for elevation
-        let result = this.checkMountains(mapPortion, jpositionAfter, 
+        [isCollision, yMountain] = this.checkMountains(mapPortion, jpositionAfter, 
             positionAfter, testedCollisions, object);
-        if (result[0]) {
-            return result;
+        if (isCollision) {
+            return [isCollision, yMountain];
         }
 
         // Check other tests
         return [(this.checkLands(mapPortion, jpositionBefore, jpositionAfter, 
-            object, direction, testedCollisions) || this.checkSprites(mapPortion
-            , jpositionAfter, testedCollisions, object) || this.checkObjects3D(
+            object, direction, testedCollisions) || this.checkObjects3D(
             mapPortion, jpositionAfter, positionAfter, testedCollisions, object)), 
-            result[1]];
+            yMountain];
     }
 
     /** 
@@ -724,7 +764,7 @@ class Collisions {
     */
     static checkSprites(mapPortion: MapPortion, jpositionAfter: 
         Position, testedCollisions: StructMapElementCollision[], object: 
-        MapObject): boolean
+        MapObject): [boolean, number]
     {
         let sprites = mapPortion.boundingBoxesSprites[jpositionAfter.toIndex()];
         if (sprites !== null) {
@@ -736,12 +776,19 @@ class Collisions {
                     if (this.checkIntersectionSprite(objCollision.b, 
                         objCollision.k, object))
                     {
-                        return true;
+                        if (objCollision.cl) {
+                            const speed = object.speed.getValue() * MapObject
+                                .SPEED_NORMAL * Manager.Stack.averageElapsedTime 
+                                * Datas.Systems.SQUARE_SIZE / 2;
+                            const limit = objCollision.b[1] + Math.ceil(objCollision.b[4] / 2);
+                            return [null, Math.min(object.position.y + speed, limit)];
+                        }
+                        return [true, null];
                     }
                 }
             }
         }
-        return false;
+        return [false, null];
     }
 
     /** 

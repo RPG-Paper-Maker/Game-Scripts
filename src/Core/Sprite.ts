@@ -208,9 +208,7 @@ class Sprite extends MapElement {
         if (tileset) {
             let collisions = Scene.Map.current.mapProperties.tileset.picture
                 .getSquaresForTexture(this.textureRect);
-            let rect: number[];
-            for (let i = 0, l = collisions.length; i < l; i++) {
-                rect = collisions[i];
+            for (let rect of collisions) {
                 objCollision.push({
                     p: position,
                     l: localPosition,
@@ -235,7 +233,36 @@ class Sprite extends MapElement {
                     k: this.kind === ElementMapKind.SpritesFix
                 });
             }
-
+            let climbing = Scene.Map.current.mapProperties.tileset.picture
+                .getSquaresClimbing(this.textureRect);
+            for (let [x, y] of climbing) {
+                objCollision.push({
+                    p: position,
+                    l: localPosition,
+                    b: [
+                        (localPosition.x - (twidth * Datas.Systems.SQUARE_SIZE)) 
+                            - (((this.textureRect[2] * position.scaleX) % 2) * 
+                            Math.round(Datas.Systems.SQUARE_SIZE / 2)) + x 
+                            + Math.round(Datas.Systems.SQUARE_SIZE * position.scaleX * 
+                            position.scaleX / 2),
+                        (localPosition.y + this.yOffset * Datas.Systems.SQUARE_SIZE) + (this.textureRect[3] * position.scaleY
+                            * Datas.Systems.SQUARE_SIZE) - y - Math.round(Datas
+                            .Systems.SQUARE_SIZE * position.scaleY * position
+                            .scaleY / 2),
+                        localPosition.z,
+                        Datas.Systems.SQUARE_SIZE * position.scaleX,
+                        Datas.Systems.SQUARE_SIZE * position.scaleY,
+                        1,
+                        angleY,
+                        angleX,
+                        angleZ
+                    ],
+                    w: twidth,
+                    h: theight,
+                    k: this.kind === ElementMapKind.SpritesFix,
+                    cl: true
+                });
+            }
         } else {   // Character
             objCollision.push({
                 b: null,

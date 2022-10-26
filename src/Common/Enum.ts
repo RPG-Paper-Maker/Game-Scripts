@@ -207,6 +207,8 @@ namespace Enum {
         SouthEast,
         NorthWest,
         NorthEast,
+        Up,
+        Down,
         None
     }
 

@@ -411,6 +411,22 @@ class Picture extends Base {
             this.borderRight = this.picture.image.width - x - 1;
         }
     }
+
+    getSquaresClimbing(texture: number[]): [number, number][] {
+        const w = texture[2];
+        const h = texture[3];
+        const squares = [];
+        let square: CollisionSquare, x: number, y: number;
+        for (let i = 0, l = w * h; i < l; i++) {
+            x = i % w;
+            y = Math.floor(i / w);
+            square = this.getCollisionAtPos(texture[0] + x, texture[1] + y);
+            if (square !== null && square.climbing) {
+                squares.push([x, y]);
+            }
+        }
+        return squares;
+    }
 }
 
 export { Picture }

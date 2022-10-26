@@ -35,7 +35,8 @@ interface StructMapElementCollision {
     top?: boolean,
     bot?: boolean,
     a?: number,
-    id?: number
+    id?: number,
+    cl?: boolean
 }
 
 /** @class

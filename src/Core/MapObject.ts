@@ -684,14 +684,18 @@ class MapObject {
             this.currentBoundingBox = this.meshBoundingBox[i];
             result = Manager.Collisions.checkRay(this.position, 
                 position, this);
-            if (result[0]) {
-                blocked = true;
-                position = this.position;
-                break;
-            }
             if (result[1] !== null) {
                 yMountain = result[1];
             }
+            if (result[0] || result[0] === null) {
+                blocked = result[0];
+                if (blocked === null) {
+                    continue;
+                }
+            }
+        }
+        if (blocked || blocked === null) {
+            position = this.position;
         }
         /* If not blocked and possible Y up/down, check if there is no collision
         on top */
