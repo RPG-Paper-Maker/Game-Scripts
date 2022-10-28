@@ -64,7 +64,8 @@ class MapObject {
     public orientation: Orientation;
     public width: number;
     public height: number;
-    public moving: boolean;
+    public moving: boolean = false;
+    public isClimbing: boolean = false;
     public moveFrequencyTick: number;
     public isStartup: boolean;
     public isInScene: boolean;
@@ -85,6 +86,8 @@ class MapObject {
     public upPosition: Vector3;
     public halfPosition: Vector3;
     public currentOrientationStop: boolean;
+    public isOrientationStopWalk: boolean = false;
+    public currentOrientationClimbing: boolean;
     public terrain: number;
 
     constructor(system: System.MapObject, position?: Vector3, isHero: boolean = 
@@ -104,7 +107,6 @@ class MapObject {
         this.orientation = this.orientationEye;
         this.width = 1;
         this.height = 1;
-        this.moving = false;
         this.moveFrequencyTick = 0;
         this.isStartup = Utils.isUndefined(position);
         this.isInScene = false;
@@ -114,6 +116,7 @@ class MapObject {
         this.otherMoveCommand = null;
         this.yMountain = null;
         this.currentOrientationStop = false;
+        this.currentOrientationClimbing = false;
         if (!this.isHero) {
             this.initializeProperties();
         }
@@ -458,6 +461,8 @@ class MapObject {
         this.currentState = null;
         this.currentStateInstance = null;
         this.currentOrientationStop = false;
+        this.currentOrientationClimbing = false;
+        this.isOrientationStopWalk = false;
         let state: System.State;
         for (let i = this.system.states.length - 1; i >= 0; i--) {
             state = this.system.states[i];
@@ -539,7 +544,12 @@ class MapObject {
                     this.height = texture.image.height / Datas.Systems.SQUARE_SIZE / 
                         Datas.Pictures.get(Enum.PictureKind.Characters, this
                         .currentStateInstance.graphicID).getRows();
-                    this.currentOrientationStop = this.currentStateInstance.indexY >= 4;
+                    this.currentOrientationStop = this.currentStateInstance.indexY 
+                        >= 4 && this.currentStateInstance.indexY <= 7;
+                    this.currentOrientationClimbing = this.currentStateInstance
+                        .indexY >= 8;
+                    this.isOrientationStopWalk = !Datas.Pictures.get(Enum.PictureKind
+                        .Characters, this.currentStateInstance.graphicID).isStopAnimation;
                 }
                 let sprite = Sprite.create(this.currentStateInstance.graphicKind, [x, y, 
                     this.width, this.height]);
@@ -607,7 +617,7 @@ class MapObject {
      *  @returns {Vector3}
      */
     getFuturPosition(orientation: Orientation, distance: number, angle: number): 
-        Vector3
+        [Vector3, boolean]
     {
         let position = new Vector3(this.previousPosition.x, this
             .previousPosition.y, this.previousPosition.z);
@@ -712,7 +722,7 @@ class MapObject {
             }
         }
         this.updateBBPosition(this.position);
-        return position;
+        return [position, blocked === null && yMountain !== null];
     }
 
     /** 
@@ -913,7 +923,7 @@ class MapObject {
             speed *= Math.SQRT1_2;
         }
         let normalDistance = Math.min(limit, speed);
-        let position = this.getFuturPosition(orientation, normalDistance, angle);
+        let [position, isClimbing] = this.getFuturPosition(orientation, normalDistance, angle);
         let distance = (position.equals(this.position)) ? 0 : normalDistance;
         if (this.previousOrientation !== null) {
             orientation = this.previousOrientation;
@@ -937,6 +947,7 @@ class MapObject {
         }
 
         this.moving = true;
+        this.isClimbing = isClimbing;
 
         // Add to moving objects
         this.addMoveTemp();
@@ -1267,20 +1278,20 @@ class MapObject {
                     .frame.value % 2 !== 0) ? 1 : 0;
                 this.mesh.position.set(this.position.x, this.position.y + offset
                     , this.position.z);
-                //this.updateBBPosition(this.position)
             } else {
-                if (this.currentStateInstance.stopAnimation) {
+                if (this.currentStateInstance.stopAnimation && !this.isClimbing) {
                     frame = this.frame.update(Datas.Systems.mapFrameDuration
                         .getValue() / this.speed.getValue());
                 } else {
                     frame = this.frame.value !== this.currentStateInstance.indexX;
                     this.frame.value = this.currentStateInstance.indexX;
                 }
-                // Update mesh position
-                let offset = (this.currentStateInstance.pixelOffset && this
-                    .frame.value % 2 !== 0) ? 1 : 0;
-                this.mesh.position.set(this.position.x, this.position.y + offset
-                    , this.position.z);
+                // Update mesh position 
+                let offset = (this.currentStateInstance.stopAnimation && this
+                    .isOrientationStopWalk && this.currentStateInstance.pixelOffset && 
+                    this.frame.value % 2 !== 0) ? 1 : 0;
+                this.mesh.position.set(this.position.x, this.position.y + offset, 
+                    this.position.z);
 
                 // Update angle
                 if (this.currentStateInstance && this.currentStateInstance.setWithCamera) {
@@ -1354,7 +1365,7 @@ class MapObject {
     updateUVs() {
         if (this.mesh !== null && !this.isNone() && this.currentStateInstance
             .graphicKind !== ElementMapKind.Object3D) {
-            let texture = Manager.GL.getMaterialTexture(<THREE.ShaderMaterial>
+            let texture = Manager.GL.getMaterialTexture(<THREE.MeshPhongMaterial>
                 this.mesh.material);
             if (texture) {
                 let textureWidth = texture.image.width;
@@ -1372,9 +1383,15 @@ class MapObject {
                     h = this.height * Datas.Systems.SQUARE_SIZE / textureHeight;
                     x = (this.frame.value >= Datas.Systems.FRAMES ? Datas
                         .Systems.FRAMES - 1 : this.frame.value) * w;
-                    y = (this.orientation + (this.currentOrientationStop || (
-                        this.currentStateInstance.stopAnimation && !this.moving) 
-                        ? 4 : 0)) * h;
+                    y = this.orientation;
+                    if (this.currentOrientationClimbing || (this.currentStateInstance
+                        .climbAnimation && this.isClimbing)) {
+                        y += 8;
+                    } else if (this.currentOrientationStop || (this.currentStateInstance
+                        .stopAnimation && !this.moving)) {
+                        y += 4;
+                    }
+                    y *= h;
                 }
                 let coefX = MapElement.COEF_TEX / textureWidth;
                 let coefY = MapElement.COEF_TEX / textureHeight;

@@ -497,36 +497,43 @@ class Collisions {
                                         }
                                     }
                                     if (maxY === null) {
-                                        // If non empty square on front of object, then force move front
-                                        let positionFront = positionBefore.clone();
-                                        console.log(object.orientationEye);
-                                        switch (object.orientationEye) {
-                                            case Enum.Orientation.North:
-                                                positionFront.setZ(positionFront.z - Datas.Systems.SQUARE_SIZE);
-                                                break;
-                                            case Enum.Orientation.South:
-                                                positionFront.setZ(positionFront.z + Datas.Systems.SQUARE_SIZE);
-                                                break;
-                                            case Enum.Orientation.West:
-                                                positionFront.setX(positionFront.x - Datas.Systems.SQUARE_SIZE);
-                                                break;
-                                            case Enum.Orientation.East:
-                                                positionFront.setX(positionFront.x + Datas.Systems.SQUARE_SIZE);
-                                                break;
-                                        }
-                                        portion = Scene.Map.current.getLocalPortion(Portion.createFromVector3(positionFront));
-                                        mapPortion = Scene.Map.current.getMapPortion(portion);
-                                        if (mapPortion !== null) {
-                                            floors = mapPortion.squareNonEmpty[Math.floor(positionFront.x / Datas.Systems.SQUARE_SIZE) % Constants.PORTION_SIZE][Math.floor(positionFront.z / Datas.Systems.SQUARE_SIZE) % Constants.PORTION_SIZE];
-                                            if (floors.length > 0) {
-                                                for (let y of floors) {
-                                                    console.log(y, positionFront.y)
-                                                    if (y === positionFront.y) {
-                                                        return [false, null];
+                                        if (object.orientation === object.previousOrientation) {
+                                            // If non empty square on front of object, then force move front
+                                            let positionFront = positionBefore.clone();
+                                            switch (object.orientationEye) {
+                                                case Enum.Orientation.North:
+                                                    positionFront.setZ(positionFront.z - Datas.Systems.SQUARE_SIZE);
+                                                    break;
+                                                case Enum.Orientation.South:
+                                                    positionFront.setZ(positionFront.z + Datas.Systems.SQUARE_SIZE);
+                                                    break;
+                                                case Enum.Orientation.West:
+                                                    positionFront.setX(positionFront.x - Datas.Systems.SQUARE_SIZE);
+                                                    break;
+                                                case Enum.Orientation.East:
+                                                    positionFront.setX(positionFront.x + Datas.Systems.SQUARE_SIZE);
+                                                    break;
+                                            }
+                                            portion = Scene.Map.current.getLocalPortion(Portion.createFromVector3(positionFront));
+                                            mapPortion = Scene.Map.current.getMapPortion(portion);
+                                            if (mapPortion !== null) {
+                                                floors = mapPortion.squareNonEmpty[Math.floor(positionFront.x / Datas.Systems.SQUARE_SIZE) % Constants.PORTION_SIZE][Math.floor(positionFront.z / Datas.Systems.SQUARE_SIZE) % Constants.PORTION_SIZE];
+                                                if (floors.length > 0) {
+                                                    for (let y of floors) {
+                                                        if (y === positionFront.y) {
+                                                            return [false, null];
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
+                                        /*
+                                        const speed = object.speed.getValue() * MapObject
+                                            .SPEED_NORMAL * Manager.Stack.averageElapsedTime 
+                                            * Datas.Systems.SQUARE_SIZE / 4;
+                                        const limit = 0;
+                                        console.log('ok')
+                                        return [null, Math.max(object.position.y - speed, limit)];*/
                                         return [true, null];
                                     } else {
                                         yMountain = maxY;
@@ -773,15 +780,18 @@ class Collisions {
                 objCollision = sprites[i];
                 if (testedCollisions.indexOf(objCollision) === -1) {
                     testedCollisions.push(objCollision);
+                    console.log(object.isClimbing)
                     if (this.checkIntersectionSprite(objCollision.b, 
                         objCollision.k, object))
                     {
                         if (objCollision.cl) {
                             const speed = object.speed.getValue() * MapObject
                                 .SPEED_NORMAL * Manager.Stack.averageElapsedTime 
-                                * Datas.Systems.SQUARE_SIZE / 2;
-                            const limit = objCollision.b[1] + Math.ceil(objCollision.b[4] / 2);
-                            return [null, Math.min(object.position.y + speed, limit)];
+                                * Datas.Systems.SQUARE_SIZE / 4;
+                            const limitTop = objCollision.b[1] + Math.ceil(objCollision.b[4] / 2);
+                            const limitBot = objCollision.b[1] - Math.ceil(objCollision.b[4] / 2);
+                            return [null, object.orientation === Enum.Orientation.North ? Math
+                                .min(object.position.y + speed, limitTop) : Math.max(object.position.y - speed, limitBot)];
                         }
                         return [true, null];
                     }

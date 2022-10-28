@@ -37,6 +37,7 @@ class Picture extends Base {
     public width: number;
     public height: number;
     public isStopAnimation: boolean;
+    public isClimbAnimation: boolean;
     public borderLeft: number;
     public borderRight: number;
 
@@ -170,6 +171,7 @@ class Picture extends Base {
         this.jsonCollisions = Utils.defaultValue(json.col, []);
         this.collisionsRepeat = Utils.defaultValue(json.rcol, false);
         this.isStopAnimation = Utils.defaultValue(json.isStopAnimation, false);
+        this.isClimbAnimation = Utils.defaultValue(json.ica, false);
     }
 
     /** 
@@ -190,7 +192,7 @@ class Picture extends Base {
     getRows(): number {
         switch (this.kind) {
             case Enum.PictureKind.Characters:
-                return 4 + (this.isStopAnimation ? 4 : 0);
+                return 4 + (this.isStopAnimation ? 4 : 0) + (this.isClimbAnimation ? 4 : 0);
             default:
                 return 1;
         }

@@ -335,7 +335,7 @@ class MoveObject extends Base {
             .horizontalAngle : -90.0;
         if (currentState.position === null && square) {
             currentState.position = object.getFuturPosition(orientation, Datas
-                .Systems.SQUARE_SIZE, angle);
+                .Systems.SQUARE_SIZE, angle)[0];
         }
         if (object.previousMoveCommand === null && object.previousOrientation
             === null)

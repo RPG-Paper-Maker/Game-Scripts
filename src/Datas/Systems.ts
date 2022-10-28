@@ -86,7 +86,7 @@ class Systems {
         // Screen resolution + antialiasing
         let w = json.sw;
         let h = json.sh;
-        let isScreenWindow = true;
+        let isScreenWindow = json.isw;
         if (!Platform.isModeTestNormal()) {
             w = 640;
             h = 480;
@@ -142,7 +142,7 @@ class Systems {
         this.ID_OBJECT_START_HERO = json.idObjHero;
 
         // Debug bounding box
-        this.showBB = true;
+        this.showBB = Utils.defaultValue(json.bb, false);
         if (this.showBB)
         {   
             Manager.Collisions.BB_MATERIAL.color.setHex(0xff0000);
