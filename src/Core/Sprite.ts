@@ -120,17 +120,6 @@ class Sprite extends MapElement {
     }
 
     /** 
-     *  Read the JSON associated to the sprite.
-     *  @param {Record<string, any>} - json Json object describing the sprite
-     */
-    read(json: Record<string, any>) {
-        super.read(json);
-        this.front = Utils.defaultValue(json.f, true);
-        this.kind = json.k;
-        this.textureRect = json.t;
-    }
-
-    /** 
      *  Update the geometry associated to this.
      *  @param {Core.CustomGeometry} geometry - The geometry
      *  @param {number} width - The total texture width
@@ -343,6 +332,17 @@ class Sprite extends MapElement {
             0, tileset, null);
         geometry.updateAttributes();
         return [geometry, collisions];
+    }
+
+    /** 
+     *  Read the JSON associated to the sprite.
+     *  @param {Record<string, any>} - json Json object describing the sprite
+     */
+    read(json: Record<string, any>) {
+        super.read(json);
+        this.front = Utils.defaultValue(json.f, true);
+        this.kind = json.k;
+        this.textureRect = json.t;
     }
 }
 

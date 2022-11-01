@@ -68,6 +68,8 @@ class MapObject {
     public moving: boolean = false;
     public isClimbing: boolean = false;
     public isClimbingUp: boolean = true;
+    public climbOrientationEye: Enum.Orientation = Enum.Orientation.None;
+    public climbOrientation: Enum.Orientation = Enum.Orientation.None;
     public moveFrequencyTick: number;
     public isStartup: boolean;
     public isInScene: boolean;
@@ -619,7 +621,7 @@ class MapObject {
      *  @returns {Vector3}
      */
     getFuturPosition(orientation: Orientation, distance: number, angle: number): 
-        [Vector3, boolean]
+        [Vector3, boolean, Enum.Orientation]
     {
         let position = new Vector3(this.previousPosition.x, this
             .previousPosition.y, this.previousPosition.z);
@@ -691,7 +693,8 @@ class MapObject {
         this.updateBBPosition(position);
         let yMountain = null;
         let blocked = false;
-        let i: number, l: number, result: [boolean, number];
+        let o = Enum.Orientation.None;
+        let i: number, l: number, result: [boolean, number, Enum.Orientation];
         for (i = 0, l = this.meshBoundingBox.length; i < l; i++) {
             this.currentBoundingBox = this.meshBoundingBox[i];
             result = Manager.Collisions.checkRay(this.position, 
@@ -702,6 +705,7 @@ class MapObject {
             if (result[0] || result[0] === null) {
                 blocked = result[0];
                 if (blocked === null) {
+                    o = result[2];
                     continue;
                 }
             }
@@ -724,7 +728,7 @@ class MapObject {
             }
         }
         this.updateBBPosition(this.position);
-        return [position, blocked === null && yMountain !== null];
+        return [position, blocked === null && yMountain !== null, o];
     }
 
     /** 
@@ -932,7 +936,7 @@ class MapObject {
             speed *= Math.SQRT1_2;
         }
         let normalDistance = Math.min(limit, speed);
-        let [position, isClimbing] = this.getFuturPosition(orientation, normalDistance, angle);
+        let [position, isClimbing, o] = this.getFuturPosition(orientation, normalDistance, angle);
         let distance = (position.equals(this.position)) ? 0 : normalDistance;
         if (this.previousOrientation !== null) {
             orientation = this.previousOrientation;
@@ -944,13 +948,15 @@ class MapObject {
         this.position.set(position.x, position.y, position.z);
 
         // Update orientation
+        let climbOrientationEye = this.climbOrientationEye;
+        this.climbOrientationEye = o;
         if (this.currentStateInstance && !this.currentStateInstance.directionFix) {
             this.orientationEye = orientation;
             orientation = this.orientation;
             if (this.currentStateInstance && this.currentStateInstance.setWithCamera) {
                 this.updateOrientation();
             }
-            if (this.orientation !== orientation) {
+            if (this.orientation !== orientation || this.climbOrientationEye !== climbOrientationEye) {
                 this.updateUVs();
             }
         }
@@ -1372,6 +1378,8 @@ class MapObject {
     updateOrientation() {
         this.orientation = Mathf.mod((Scene.Map.current.orientation - 2) 
             * 3 + this.orientationEye, 4);
+        this.climbOrientation = Mathf.mod((Scene.Map.current.orientation - 2) 
+            * 3 + this.climbOrientationEye, 4);
     }
 
     /** 
@@ -1398,7 +1406,7 @@ class MapObject {
                     h = this.height * Datas.Systems.SQUARE_SIZE / textureHeight;
                     x = (this.frame.value >= Datas.Systems.FRAMES ? Datas
                         .Systems.FRAMES - 1 : this.frame.value) * w;
-                    y = this.orientation;
+                    y = this.isClimbing ? this.climbOrientation : this.orientation;
                     if (this.currentOrientationClimbing || (this.currentStateInstance
                         .climbAnimation && this.isClimbing)) {
                         y += 8;
@@ -1464,19 +1472,28 @@ class MapObject {
      *  @returns {Enum.Orientation}
      */
     getOrientationBetween(object: MapObject): Enum.Orientation {
-        let x = Math.abs(object.position.x - this.position.x);
-        let z = Math.abs(object.position.z - this.position.z);
+        return this.getOrientationBetweenPosition(object.position);
+    }
+
+    /** 
+     *  Get the orientation between an object and a position.
+     *  @param {Vector3} position 
+     *  @returns {Enum.Orientation}
+     */
+    getOrientationBetweenPosition(position: Vector3, priority: boolean = false, priorityX: boolean = true): Enum.Orientation {
+        let x = Math.abs(position.x - this.position.x);
+        let z = Math.abs(position.z - this.position.z);
         let orientation = this.orientationEye;
         if (x >= z) {
-            if (object.position.x >= this.position.x) {
+            if (position.x >= this.position.x) {
                 orientation = Enum.Orientation.East;
-            } else if (object.position.x < this.position.x) {
+            } else if (position.x < this.position.x) {
                 orientation = Enum.Orientation.West;
             }
         } else {
-            if (object.position.z >= this.position.z) {
+            if (position.z >= this.position.z) {
                 orientation = Enum.Orientation.South;
-            } else if (object.position.z < this.position.z) {
+            } else if (position.z < this.position.z) {
                 orientation = Enum.Orientation.North;
             }
         }

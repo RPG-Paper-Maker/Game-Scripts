@@ -322,7 +322,7 @@ class Collisions {
      *  @returns {boolean}
      */
     static checkRay(positionBefore: Vector3, positionAfter: Vector3, object: 
-        MapObject, bbSettings: number[]): [boolean, number]
+        MapObject, bbSettings: number[]): [boolean, number, Enum.Orientation]
     {
         let direction = new Vector3();
         direction.subVectors(positionAfter, positionBefore).normalize();
@@ -339,7 +339,7 @@ class Collisions {
         // Check collision outside
         let block = false;
         let i: number, j: number, k: number, i2: number, j2: number, k2: number, 
-            portion: Portion, mapPortion: MapPortion, result: [boolean, number];
+            portion: Portion, mapPortion: MapPortion, result: [boolean, number, Enum.Orientation];
         for (i = startI; i <= endI; i++) {
             for (j = startJ; j <= endJ; j++) {
                 for (k = startK; k <= endK; k++) {
@@ -374,16 +374,16 @@ class Collisions {
                                                 // If before and after collides, get up!
                                                 if (b === null) {
                                                     object.updateMeshBBPosition(object.currentBoundingBox, bbSettings, positionAfter);
-                                                    return [null, y];
+                                                    return [null, y, result[2]];
                                                 }
                                             }
                                         }
                                     }
                                 }
                                 object.updateMeshBBPosition(object.currentBoundingBox, bbSettings, positionAfter);
-                                return [false, null];
+                                return [false, null, Enum.Orientation.None];
                             }
-                            return result;
+                            return [result[0], result[1], result[2]];
                         }
                         if (result[0]) {
                             block = true;
@@ -398,13 +398,13 @@ class Collisions {
             }
         }
         if (block && (yMountain === null)) {
-            return [true, null];
+            return [true, null, Enum.Orientation.None];
         }
 
         // Check collision inside & with other objects
         if (object !== Game.current.hero && object.checkCollisionObject(Game
             .current.hero)) {
-            return [true, null];
+            return [true, null, Enum.Orientation.None];
         }
 
         // Check objects collisions
@@ -415,7 +415,7 @@ class Collisions {
                 mapPortion = Scene.Map.current.getMapPortion(new Portion(
                     portion.x + i, portion.y, portion.z + j));
                 if (mapPortion && this.checkObjects(mapPortion, object)) {
-                    return [true, null];
+                    return [true, null, Enum.Orientation.None];
                 }
             }
         }
@@ -438,7 +438,7 @@ class Collisions {
             if (yMountain === null && floors.indexOf(positionAfter.y) === -1) {
                 let l = floors.length;
                 if (l === 0) {
-                    return [null, null];
+                    return [null, null, Enum.Orientation.None];
                 } else {
                     let maxY = null;
                     let limitY = positionAfter.y - Datas.Systems
@@ -478,7 +478,7 @@ class Collisions {
                             if (yMountain === null && floors.indexOf(positionBefore.y) === -1) {
                                 let l = floors.length;
                                 if (l === 0) {
-                                    return [null, null];
+                                    return [null, null, Enum.Orientation.None];
                                 } else {
                                     let maxY = null;
                                     let limitY = positionBefore.y - Datas.Systems
@@ -524,7 +524,7 @@ class Collisions {
                                                 if (floors.length > 0) {
                                                     for (let y of floors) {
                                                         if (y === positionFront.y) {
-                                                            return [false, null];
+                                                            return [false, null, Enum.Orientation.None];
                                                         }
                                                     }
                                                 }
@@ -547,7 +547,7 @@ class Collisions {
                                                         const climbingUp = object.isClimbingUp;
                                                         object.isClimbingUp = false;
                                                         object.updateMeshBBPosition(object.currentBoundingBox, bbSettings, positionBottom);
-                                                        let [b, y] = this.checkSprites(mapPortion, jpositionBottom, [], object);
+                                                        let [b, y, o] = this.checkSprites(mapPortion, jpositionBottom, [], object);
                                                         if (b === null) {
                                                             // Check if after moving the collision still occurs. If not, go down
                                                             const positionBottomAfter = positionAfter.clone();
@@ -567,14 +567,14 @@ class Collisions {
                                                                             b = this.checkSprites(mapPortion, jpositionBottomAfter, [], object)[0];
                                                                             if (b === null) {
                                                                                 object.updateMeshBBPosition(object.currentBoundingBox, bbSettings, positionAfter);
-                                                                                return [null, null];
+                                                                                return [null, null, Enum.Orientation.None];
                                                                             }
                                                                         }
                                                                     }
                                                                 }
                                                             }
                                                             object.updateMeshBBPosition(object.currentBoundingBox, bbSettings, positionAfter); 
-                                                            return [null, y];
+                                                            return [null, y, o];
                                                         }
                                                         object.updateMeshBBPosition(object.currentBoundingBox, bbSettings, positionAfter);
                                                         object.isClimbingUp = climbingUp;
@@ -582,7 +582,7 @@ class Collisions {
                                                 }
                                             }
                                         }
-                                        return [true, null];
+                                        return [true, null, Enum.Orientation.None];
                                     } else {
                                         yMountain = maxY;
                                     }
@@ -600,9 +600,9 @@ class Collisions {
                 positionBefore));
             mapPortion = Scene.Map.current.getMapPortion(portion);
             return [this.checkLandsInside(mapPortion, jpositionBefore,
-                jpositionAfter, direction), yMountain];
+                jpositionAfter, direction), yMountain, Enum.Orientation.None];
         }
-        return [true, null];
+        return [true, null, Enum.Orientation.None];
     }
 
     /** 
@@ -621,28 +621,28 @@ class Collisions {
     static check(mapPortion: MapPortion, jpositionBefore: Position, 
         jpositionAfter: Position, positionAfter: Vector3, object: 
         MapObject, direction: Vector3, testedCollisions: 
-        StructMapElementCollision[]): [boolean, number]
+        StructMapElementCollision[]): [boolean, number, Enum.Orientation]
     {
         // Check sprites and climbing
-        let [isCollision, yMountain] = this.checkSprites(mapPortion, 
+        let [isCollision, yMountain, o] = this.checkSprites(mapPortion, 
             jpositionAfter, testedCollisions, object);
         // Climbing
         if (isCollision || yMountain !== null) {
-            return [isCollision, yMountain];
+            return [isCollision, yMountain, o];
         }
 
         // Check mountain collision first for elevation
         [isCollision, yMountain] = this.checkMountains(mapPortion, jpositionAfter, 
             positionAfter, testedCollisions, object);
         if (isCollision) {
-            return [isCollision, yMountain];
+            return [isCollision, yMountain, Enum.Orientation.None];
         }
 
         // Check other tests
         return [(this.checkLands(mapPortion, jpositionBefore, jpositionAfter, 
             object, direction, testedCollisions) || this.checkObjects3D(
             mapPortion, jpositionAfter, positionAfter, testedCollisions, object)), 
-            yMountain];
+            yMountain, Enum.Orientation.None];
     }
 
     /** 
@@ -819,7 +819,7 @@ class Collisions {
     */
     static checkSprites(mapPortion: MapPortion, jpositionAfter: 
         Position, testedCollisions: StructMapElementCollision[], object: 
-        MapObject): [boolean, number]
+        MapObject): [boolean, number, Enum.Orientation]
     {
         let sprites = mapPortion.boundingBoxesSprites[jpositionAfter.toIndex()];
         if (sprites !== null) {
@@ -839,14 +839,14 @@ class Collisions {
                             if (y === object.position.y) {
                                 continue;
                             }
-                            return [null, y];
+                            return [null, y, object.getOrientationBetweenPosition(objCollision.l)];
                         }
-                        return [true, null];
+                        return [true, null, Enum.Orientation.None];
                     }
                 }
             }
         }
-        return [false, null];
+        return [false, null, Enum.Orientation.None];
     }
 
     /** 
