@@ -30,6 +30,7 @@ import { Object3DCustom } from "./Object3DCustom";
 import { CustomGeometry } from "./CustomGeometry";
 import { Vector2 } from "./Vector2";
 import { Portion } from "./Portion";
+import { Main } from "../main";
 
 interface StructSearchResult {
     object: MapObject,
@@ -47,7 +48,7 @@ interface StructSearchResult {
  */
 class MapObject {
     
-    public static SPEED_NORMAL = 0.004666;
+    public static SPEED_NORMAL = 0.0011666;
 
     public id: number;
     public system: System.MapObject;
@@ -66,6 +67,7 @@ class MapObject {
     public height: number;
     public moving: boolean = false;
     public isClimbing: boolean = false;
+    public isClimbingUp: boolean = true;
     public moveFrequencyTick: number;
     public isStartup: boolean;
     public isInScene: boolean;
@@ -693,7 +695,7 @@ class MapObject {
         for (i = 0, l = this.meshBoundingBox.length; i < l; i++) {
             this.currentBoundingBox = this.meshBoundingBox[i];
             result = Manager.Collisions.checkRay(this.position, 
-                position, this);
+                position, this, this.boundingBoxSettings.b[i]);
             if (result[1] !== null) {
                 yMountain = result[1];
             }
@@ -704,7 +706,7 @@ class MapObject {
                 }
             }
         }
-        if (blocked || blocked === null) {
+        if (blocked || blocked === null && yMountain !== null) {
             position = this.position;
         }
         /* If not blocked and possible Y up/down, check if there is no collision
@@ -714,7 +716,7 @@ class MapObject {
             for (i = 0, l = this.meshBoundingBox.length; i < l; i++) {
                 this.currentBoundingBox = this.meshBoundingBox[i];
                 result = Manager.Collisions.checkRay(this.position, 
-                    position, this);
+                    position, this, this.boundingBoxSettings.b[i]);
                 if (result[0]) {
                     position = this.position;
                     break;
@@ -864,36 +866,43 @@ class MapObject {
      */
     updateBBPosition(position: Vector3) {
         for (let i = 0, l = this.meshBoundingBox.length; i < l; i++) {
-            if (this.currentStateInstance.graphicKind === ElementMapKind.SpritesFix || 
-                this.currentStateInstance.graphicKind === ElementMapKind.Object3D) {
-                Manager.Collisions.applyBoxSpriteTransforms(this.meshBoundingBox
-                    [i],
-                    [
-                        position.x + this.boundingBoxSettings.b[i][0],
-                        position.y + this.boundingBoxSettings.b[i][1],
-                        position.z + this.boundingBoxSettings.b[i][2],
-                        this.boundingBoxSettings.b[i][3],
-                        this.boundingBoxSettings.b[i][4],
-                        this.boundingBoxSettings.b[i][5],
-                        this.boundingBoxSettings.b[i][6],
-                        this.boundingBoxSettings.b[i][7],
-                        this.boundingBoxSettings.b[i][8]
-                    ]
-                );
-                this.meshBoundingBox[i].geometry.computeBoundingBox();
-            } else if (this.currentStateInstance.graphicKind === ElementMapKind.SpritesFace) {
-                Manager.Collisions.applyOrientedBoxTransforms(this
-                    .meshBoundingBox[i],
-                    [
-                        position.x + this.boundingBoxSettings.b[i][0],
-                        position.y + this.boundingBoxSettings.b[i][1],
-                        position.z + this.boundingBoxSettings.b[i][2],
-                        this.boundingBoxSettings.b[i][3],
-                        this.boundingBoxSettings.b[i][4]
-                    ]
-                );
-                this.meshBoundingBox[i].geometry.computeBoundingBox();
-            }
+            this.updateMeshBBPosition(this.meshBoundingBox[i], this
+                .boundingBoxSettings.b[i], position);
+        }
+    }
+
+    /** 
+     *  Only updates the current bounding box mesh position.
+     *  @param {Vector3} position - Position to update
+     */
+    updateMeshBBPosition(mesh: THREE.Mesh, bbSettings: number[], position: Vector3) {
+        if (this.currentStateInstance.graphicKind === ElementMapKind.SpritesFix || 
+            this.currentStateInstance.graphicKind === ElementMapKind.Object3D) {
+            Manager.Collisions.applyBoxSpriteTransforms(mesh,
+                [
+                    position.x + bbSettings[0],
+                    position.y + bbSettings[1],
+                    position.z + bbSettings[2],
+                    bbSettings[3],
+                    bbSettings[4],
+                    bbSettings[5],
+                    bbSettings[6],
+                    bbSettings[7],
+                    bbSettings[8]
+                ]
+            );
+            mesh.geometry.computeBoundingBox();
+        } else if (this.currentStateInstance.graphicKind === ElementMapKind.SpritesFace) {
+            Manager.Collisions.applyOrientedBoxTransforms(mesh,
+                [
+                    position.x + bbSettings[0],
+                    position.y + bbSettings[1],
+                    position.z + bbSettings[2],
+                    bbSettings[3],
+                    bbSettings[4]
+                ]
+            );
+            mesh.geometry.computeBoundingBox();
         }
     }
 
@@ -917,8 +926,8 @@ class MapObject {
         this.removeMoveTemp();
 
         // Set position
-        let speed = this.speed.getValue() * MapObject.SPEED_NORMAL * Manager
-            .Stack.averageElapsedTime * Datas.Systems.SQUARE_SIZE;
+        let speed = this.speed.getValue() * MapObject.SPEED_NORMAL * Math.max(60, 
+            Main.FPS) * Datas.Systems.SQUARE_SIZE;
         if (this.otherMoveCommand !== null) {
             speed *= Math.SQRT1_2;
         }
@@ -1322,6 +1331,12 @@ class MapObject {
                 .y + (this.height * Datas.Systems.SQUARE_SIZE / 2), this
                 .position.z);
         }
+    
+        // Climbing up
+        if (!this.moving) {
+            this.isClimbingUp = true;
+        }
+
         this.moving = false;
     }
 
@@ -1365,7 +1380,7 @@ class MapObject {
     updateUVs() {
         if (this.mesh !== null && !this.isNone() && this.currentStateInstance
             .graphicKind !== ElementMapKind.Object3D) {
-            let texture = Manager.GL.getMaterialTexture(<THREE.MeshPhongMaterial>
+            let texture = Manager.GL.getMaterialTexture(<THREE.ShaderMaterial>
                 this.mesh.material);
             if (texture) {
                 let textureWidth = texture.image.width;
@@ -1484,6 +1499,40 @@ class MapObject {
                 }
             }
         }
+    }
+
+    /** 
+     *  Get all the squares positions where you need to check collision.
+     */
+    getSquaresBB(direction: Vector3 = new Vector3()): [number, number, number, number, number, number] {
+        let startI: number, endI: number, startJ: number, endJ: number, startK: 
+            number, endK: number;
+        if (direction.x > 0) {
+            startI = 0;
+            endI = this.boundingBoxSettings.w;
+        } else if (direction.x < 0) {
+            startI = -this.boundingBoxSettings.w;
+            endI = 0;
+        } else {
+            startI = -this.boundingBoxSettings.w;
+            endI = this.boundingBoxSettings.w;
+        }
+        if (this.boundingBoxSettings.k) {
+            startK = 0;
+            endK = 0;
+        } else if (direction.z > 0) {
+            startK = 0;
+            endK = this.boundingBoxSettings.w;
+        } else if (direction.z < 0) {
+            startK = -this.boundingBoxSettings.w;
+            endK = 0;
+        } else {
+            startK = -this.boundingBoxSettings.w;
+            endK = this.boundingBoxSettings.w;
+        }
+        startJ = 0;
+        endJ = 0;
+        return [startI, endI, startJ, endJ, startK, endK];
     }
 }
 
