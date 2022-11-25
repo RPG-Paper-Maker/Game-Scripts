@@ -22,20 +22,21 @@ import { Datas } from "../index";
  *  @param {Record<string, any>} - [json=undefined] Json object describing the 
  *  camera properties
  */
-export class CameraProperties extends Base {
+class CameraProperties extends Base {
 
-    distance: DynamicValue;
-    horizontalAngle: DynamicValue;
-    verticalAngle: DynamicValue;
-    targetOffsetX: DynamicValue;
-    targetOffsetY: DynamicValue;
-    targetOffsetZ: DynamicValue;
-    isSquareTargetOffsetX: boolean;
-    isSquareTargetOffsetY: boolean;
-    isSquareTargetOffsetZ: boolean;
-    fov: DynamicValue;
-    near: DynamicValue;
-    far: DynamicValue;
+    public distance: DynamicValue;
+    public horizontalAngle: DynamicValue;
+    public verticalAngle: DynamicValue;
+    public targetOffsetX: DynamicValue;
+    public targetOffsetY: DynamicValue;
+    public targetOffsetZ: DynamicValue;
+    public isSquareTargetOffsetX: boolean;
+    public isSquareTargetOffsetY: boolean;
+    public isSquareTargetOffsetZ: boolean;
+    public fov: DynamicValue;
+    public near: DynamicValue;
+    public far: DynamicValue;
+    public orthographic: boolean;
 
     constructor(json?: Record<string, any>) {
         super(json);
@@ -60,6 +61,7 @@ export class CameraProperties extends Base {
         this.fov = DynamicValue.readOrDefaultNumberDouble(json.fov, 45);
         this.near = DynamicValue.readOrDefaultNumberDouble(json.n, 1);
         this.far = DynamicValue.readOrDefaultNumberDouble(json.f, 100000);
+        this.orthographic = Utils.defaultValue(json.o, false);
     }
 
     /** 
@@ -67,12 +69,19 @@ export class CameraProperties extends Base {
      *  @param {Camera} camera - The camera
      */
     initializeCamera(camera: Camera) {
-        camera.isPerspective = true;
-        camera.perspectiveCamera = new THREE.PerspectiveCamera(this.fov
-            .getValue(), ScreenResolution.CANVAS_WIDTH / ScreenResolution
-            .CANVAS_HEIGHT, this.near.getValue(), this.far.getValue());
+        camera.isPerspective = !this.orthographic;
         camera.distance = this.distance.getValue() * (Datas.Systems.SQUARE_SIZE 
             / Constants.BASIC_SQUARE_SIZE);
+        if (camera.isPerspective) {
+            camera.perspectiveCamera = new THREE.PerspectiveCamera(this.fov
+                .getValue(), ScreenResolution.CANVAS_WIDTH / ScreenResolution
+                .CANVAS_HEIGHT, this.near.getValue(), this.far.getValue());    
+        } else {
+            let x = ScreenResolution.CANVAS_WIDTH * (camera.distance / 1000);
+            let y = ScreenResolution.CANVAS_HEIGHT * (camera.distance / 1000);
+            camera.orthographicCamera = new THREE.OrthographicCamera(
+                -x, x, y, -y, this.near.getValue());
+        }
         camera.horizontalAngle = this.horizontalAngle.getValue();
         camera.verticalAngle = this.verticalAngle.getValue();
         camera.targetPosition = new Vector3();
@@ -91,3 +100,5 @@ export class CameraProperties extends Base {
         camera.targetOffset = new Vector3(x, y, z);
     }
 }
+
+export { CameraProperties }

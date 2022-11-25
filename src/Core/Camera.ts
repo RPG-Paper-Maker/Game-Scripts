@@ -161,6 +161,14 @@ class Camera {
         camera.position.y = this.targetPosition.y + this.getHeight();
         camera.position.z = this.targetPosition.z - (distance * Math
             .sin(this.horizontalAngle * Math.PI / 180.0));
+        if (!this.isPerspective) {
+            let x = ScreenResolution.CANVAS_WIDTH * (distance / 1000);
+            let y = ScreenResolution.CANVAS_HEIGHT * (distance / 1000);
+            this.orthographicCamera.left = -x;
+            this.orthographicCamera.right = x;
+            this.orthographicCamera.top = y;
+            this.orthographicCamera.bottom = -y;
+        }
     }
 
     /** 
