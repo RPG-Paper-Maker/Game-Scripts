@@ -39,6 +39,7 @@ class Object3D extends SpecialElement {
     public depthSquare: number;
     public depthPixel: number;
     public stretch: boolean;
+    public isTopLeft: boolean;
 
     constructor(json?: Record<string, any>) {
         super(json);
@@ -66,6 +67,7 @@ class Object3D extends SpecialElement {
         this.depthSquare = Utils.defaultValue(json.ds, 1);
         this.depthPixel = Utils.defaultValue(json.dp, 0);
         this.stretch = Utils.defaultValue(json.st, false);
+        this.isTopLeft = Utils.defaultValue(json.itl, true);
     }
 
     /** 

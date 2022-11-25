@@ -18,7 +18,6 @@ import ObjectCollisionKind = Enum.ObjectCollisionKind;
 import { Object3D } from "./Object3D";
 import { Vector3 } from "./Vector3";
 import { Vector2 } from "./Vector2";
-import { THREE } from "../Globals";
 import { CustomGeometry } from "./CustomGeometry";
 
 /**
@@ -65,6 +64,43 @@ class Object3DBox extends Object3D {
         new Vector3(1.0, 1.0, 0.0),
         new Vector3(1.0, 1.0, 1.0),
         new Vector3(0.0, 1.0, 1.0)
+    ];
+    public static VERTICES_CENTER = [
+        // Front
+        new Vector3(-0.5, 1.0, 0.5),
+        new Vector3(0.5, 1.0, 0.5),
+        new Vector3(0.5, 0.0, 0.5),
+        new Vector3(-0.5, 0.0, 0.5),
+    
+        // Back
+        new Vector3(0.5, 1.0, -0.5),
+        new Vector3(-0.5, 1.0, -0.5),
+        new Vector3(-0.5, 0.0, -0.5),
+        new Vector3(0.5, 0.0, -0.5),
+    
+        // Left
+        new Vector3(-0.5, 1.0, -0.5),
+        new Vector3(-0.5, 1.0, 0.5),
+        new Vector3(-0.5, 0.0, 0.5),
+        new Vector3(-0.5, 0.0, -0.5),
+    
+        // Right
+        new Vector3(0.5, 1.0, 0.5),
+        new Vector3(0.5, 1.0, -0.5),
+        new Vector3(0.5, 0.0, -0.5),
+        new Vector3(0.5, 0.0, 0.5),
+    
+        // Bottom
+        new Vector3(-0.5, 0.0, 0.5),
+        new Vector3(0.5, 0.0, 0.5),
+        new Vector3(0.5, 0.0, -0.5),
+        new Vector3(-0.5, 0.0, -0.5),
+    
+        // Top
+        new Vector3(-0.5, 1.0, -0.5),
+        new Vector3(0.5, 1.0, -0.5),
+        new Vector3(0.5, 1.0, 0.5),
+        new Vector3(-0.5, 1.0, 0.5)
     ];
     public static NB_VERTICES = 24;
     public static TEXTURES = [
@@ -172,11 +208,16 @@ class Object3DBox extends Object3D {
     {
         let coef = 0.01;
         let localPosition = position.toVector3(false);
-        localPosition.setX(localPosition.x - Math.floor(Datas.Systems
-            .SQUARE_SIZE / 2) + position.getPixelsCenterX() +  coef);
+        if (this.datas.isTopLeft) {
+            localPosition.setX(localPosition.x - Math.floor(Datas.Systems
+                .SQUARE_SIZE / 2) + position.getPixelsCenterX() +  coef);
+            localPosition.setZ(localPosition.z - Math.floor(Datas.Systems
+                .SQUARE_SIZE / 2) + position.getPixelsCenterZ() + coef);
+        } else {
+            localPosition.setX(localPosition.x + position.getPixelsCenterX() + coef);
+            localPosition.setZ(localPosition.z + position.getPixelsCenterZ() + coef);
+        }
         localPosition.setY(localPosition.y + coef);
-        localPosition.setZ(localPosition.z - Math.floor(Datas.Systems
-            .SQUARE_SIZE / 2) + position.getPixelsCenterZ() + coef);
         let angleY = position.angleY;
         let angleX = position.angleX;
         let angleZ = position.angleZ;
@@ -184,8 +225,10 @@ class Object3DBox extends Object3D {
         let center = new Vector3(localPosition.x + Math.floor(Datas.Systems
             .SQUARE_SIZE / 2), localPosition.y + (size.y / 2), localPosition.z + 
             Math.floor(Datas.Systems.SQUARE_SIZE / 2));
-        let centerReal = new Vector3(localPosition.x + Math.floor(size.x / 2), 
-            localPosition.y + (size.y / 2), localPosition.z + Math.floor(size.z / 2));
+        let centerReal = this.datas.isTopLeft ? new Vector3(localPosition.x + 
+            Math.floor(size.x / 2), localPosition.y + (size.y / 2), localPosition
+            .z + Math.floor(size.z / 2)) : new Vector3(localPosition.x, 
+                localPosition.y + (size.y / 2), localPosition.z);
         Sprite.rotateVertex(centerReal, center, angleY, Sprite.Y_AXIS);
         Sprite.rotateVertex(centerReal, center, angleX, Sprite.X_AXIS);
         Sprite.rotateVertex(centerReal, center, angleZ, Sprite.Z_AXIS);
@@ -213,10 +256,12 @@ class Object3DBox extends Object3D {
             number[], tB: number[], tC: number[], tD: number[], texA: Vector2, 
             texB: Vector2, texC: Vector2, texD: Vector2;
         for (let i = 0; i < Object3DBox.NB_VERTICES; i += 4) {
-            vecA = Object3DBox.VERTICES[i].clone();
-            vecB = Object3DBox.VERTICES[i + 1].clone();
-            vecC = Object3DBox.VERTICES[i + 2].clone();
-            vecD = Object3DBox.VERTICES[i + 3].clone();
+            let vertices = this.datas.isTopLeft ? Object3DBox.VERTICES : Object3DBox
+                .VERTICES_CENTER;
+            vecA =vertices[i].clone();
+            vecB =vertices[i + 1].clone();
+            vecC =vertices[i + 2].clone();
+            vecD =vertices[i + 3].clone();
             vecA.multiply(size);
             vecB.multiply(size);
             vecC.multiply(size);
