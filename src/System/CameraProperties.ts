@@ -76,11 +76,11 @@ class CameraProperties extends Base {
             camera.perspectiveCamera = new THREE.PerspectiveCamera(this.fov
                 .getValue(), ScreenResolution.CANVAS_WIDTH / ScreenResolution
                 .CANVAS_HEIGHT, this.near.getValue(), this.far.getValue());    
-        } else {
+        } else {            
             let x = ScreenResolution.CANVAS_WIDTH * (camera.distance / 1000);
             let y = ScreenResolution.CANVAS_HEIGHT * (camera.distance / 1000);
             camera.orthographicCamera = new THREE.OrthographicCamera(
-                -x, x, y, -y, this.near.getValue());
+                -x, x, y, -y, -this.far.getValue(), this.far.getValue());
         }
         camera.horizontalAngle = this.horizontalAngle.getValue();
         camera.verticalAngle = this.verticalAngle.getValue();
