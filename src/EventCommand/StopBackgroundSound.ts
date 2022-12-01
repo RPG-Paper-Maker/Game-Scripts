@@ -25,7 +25,7 @@ class StopBackgroundSound extends Base {
     constructor(command: any[]) {
         super();
 
-        EventCommand.StopMusic.parseStopSong(this, command);
+        EventCommand.StopMusic.parseStopSong(this, command, Enum.SongKind.BackgroundSound);
         this.parallel = true;
     }
 

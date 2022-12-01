@@ -174,6 +174,8 @@ class Events {
                 return new EventCommand.PlayAVideo(command);
             case EventCommandKind.SwitchTexture:
                 return new EventCommand.SwitchTexture(command);
+            case EventCommandKind.StopASound:
+                return new EventCommand.StopASound(command);
             default:
                 return null;
         }

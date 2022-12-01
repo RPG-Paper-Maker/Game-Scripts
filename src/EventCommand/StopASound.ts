@@ -12,49 +12,20 @@
 import { Base } from "./Base";
 import { EventCommand, System, Manager } from "../index";
 import { Enum } from "../Common";
-import SongKind = Enum.SongKind;
 import { MapObject } from "../Core";
 
 /** @class
- *  An event command for stopping the music.
+ *  An event command for stopping a specified sound.
  *  @extends EventCommand.Base
  *  @param {any[]} command - Direct JSON command to parse
  */
-class StopMusic extends Base {
+class StopASound extends Base {
 
     constructor(command: any[]) {
         super();
 
-        EventCommand.StopMusic.parseStopSong(this, command, Enum.SongKind.Music);
+        EventCommand.StopMusic.parseStopSong(this, command, Enum.SongKind.Sound);
         this.parallel = true;
-    }
-
-    /** 
-     *  Parse a stop song command.
-     *  @static
-     *  @param {any} that - The event command to parse
-     *  @param {any[]} command - Direct JSON command to parse
-     */
-    static parseStopSong(that: any, command: any[], kind: Enum.SongKind) {
-        let iterator = {
-            i: 0
-        }
-        that.seconds = System.DynamicValue.createValueCommand(command, iterator);
-        if (kind === Enum.SongKind.Sound) {
-            that.soundID = System.DynamicValue.createValueCommand(command, iterator);
-        }
-    }
-
-    /**
-     *  Stop the song.
-     *  @static
-     *  @param {any} that - The event command to parse
-     *  @param {SongKind} kind - The song kind
-     *  @param {number} time - The date seconds value in the first call of stop
-     */
-    static stopSong(that: any, kind: SongKind, time: number): number {
-        return Manager.Songs.stopSong(kind, time, that.seconds.getValue(), kind 
-            === Enum.SongKind.Sound ? that.soundID.getValue() : -1) ? 1 : 0;
     }
 
     /** 
@@ -78,10 +49,10 @@ class StopMusic extends Base {
     update(currentState: Record<string, any>, object: MapObject, state: number): 
         number
     {
-        let stopped = EventCommand.StopMusic.stopSong(this, SongKind.Music,
+        let stopped = EventCommand.StopMusic.stopSong(this, Enum.SongKind.Sound,
             currentState.time);
         return currentState.parallel ? stopped : 1;
     }
 }
 
-export { StopMusic }
+export { StopASound }
