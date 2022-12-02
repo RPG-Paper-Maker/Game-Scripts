@@ -82,6 +82,7 @@ class Battler {
     public lastStatus: Status;
     public lastStatusHealed: Status;
     public lastTarget: Battler = null;
+    public hidden: boolean = false;
 
     constructor(player: Player, position?: Position, vect?: Vector3, camera?: Camera) {
         this.player = player;
@@ -548,12 +549,23 @@ class Battler {
         }
     }
 
+    updateHidden(hidden: boolean) {
+        this.hidden = hidden;
+        if (this.hidden) {
+            this.removeFromScene();
+        } else {
+            this.addToScene();
+        }
+    }
+
     /** 
      *  Draw the arrow to select this battler.
      */
     drawArrow() {
-        Datas.Systems.getCurrentWindowSkin().drawArrowTarget(this.frameArrow
-            .value, this.arrowPosition.x, this.arrowPosition.y, false);
+        if (!this.hidden) {
+            Datas.Systems.getCurrentWindowSkin().drawArrowTarget(this.frameArrow
+                .value, this.arrowPosition.x, this.arrowPosition.y, false);
+        }
     }
 
     /** 

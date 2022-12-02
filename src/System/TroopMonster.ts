@@ -23,6 +23,7 @@ class TroopMonster extends Base {
 
     public id: number;
     public level: System.DynamicValue;
+    public hidden: System.DynamicValue;
     public isSpecificPosition: boolean;
     public specificPosition: System.DynamicValue;
 
@@ -38,6 +39,7 @@ class TroopMonster extends Base {
     read(json: Record<string, any>) {
         this.id = json.id;
         this.level = System.DynamicValue.readOrDefaultNumber(json.l, 1);
+        this.hidden = System.DynamicValue.readOrDefaultSwitch(json.h, false);
         this.isSpecificPosition = Utils.defaultValue(json.isSpecificPosition, false);
         this.specificPosition = System.DynamicValue.readOrDefaultMessage(json
             .specificPosition, "new Core.Vector3(0,0,0)");

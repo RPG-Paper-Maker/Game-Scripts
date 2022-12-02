@@ -75,7 +75,7 @@ class BattleStartTurn {
             for (i = 0, l = this.battle.battlers[this.battle.attackingGroup]
                 .length; i < l; i++) {
                 battler = this.battle.battlers[this.battle.attackingGroup][i];
-                if (!battler.player.isDead()) {
+                if (!battler.player.isDead() && !battler.hidden) {
                     s = battler.player.status[0];
                     listStill = [];
                     listHealed = battler.player.removeStartTurnStatus(listStill);

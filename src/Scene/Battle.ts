@@ -290,10 +290,10 @@ class Battle extends Map {
     isDefined(kind: CharacterKind, index: number, target?: boolean): boolean {
         let battler = this.battlers[kind][index];
         if (target) {
-            return !this.skill || this.skill.isPossible(battler.player);
+            return !battler.hidden && (!this.skill || this.skill.isPossible(battler.player));
         }
-        return battler.active && !battler.player.isDead() && !battler
-            .containsRestriction(Enum.StatusRestrictionsKind.CantDoAnything) && 
+        return battler.active && !battler.player.isDead() && !battler.hidden && 
+            !battler.containsRestriction(Enum.StatusRestrictionsKind.CantDoAnything) && 
             !battler.containsRestriction(Enum.StatusRestrictionsKind
             .AttackRandomAlly) && !battler.containsRestriction(Enum
             .StatusRestrictionsKind.AttackRandomEnemy) && !battler
@@ -315,13 +315,13 @@ class Battle extends Map {
     }
 
     /** 
-     *  Check if all the heroes or enemies are dead
+     *  Check if all the heroes or enemies are dead or hidden.
      *  @param {CharacterKind} group - Kind of player
      *  @returns {boolean}
      */
-    isGroupDead(group: CharacterKind): boolean {
-        for (let i = 0, l = this.battlers[group].length; i < l; i++) {
-            if (!this.battlers[group][i].player.isDead()) {
+    isGroupDeadHidden(group: CharacterKind): boolean {
+        for (let battler of this.battlers[group]) {
+            if (!battler.player.isDead() && !battler.hidden) {
                 return false;
             }
         }
@@ -333,7 +333,7 @@ class Battle extends Map {
      *  @returns {boolean}
      */
     isWin(): boolean {
-        return this.isGroupDead(CharacterKind.Monster);
+        return this.isGroupDeadHidden(CharacterKind.Monster);
     }
 
     /** 
@@ -341,7 +341,7 @@ class Battle extends Map {
      *  @returns {boolean}
      */
     isLose(): boolean {
-        return this.isGroupDead(CharacterKind.Hero);
+        return this.isGroupDeadHidden(CharacterKind.Hero);
     }
 
     /** 
