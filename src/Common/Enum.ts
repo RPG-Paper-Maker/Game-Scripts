@@ -135,7 +135,8 @@ namespace Enum {
         ChangeWeather,
         PlayAVideo,
         SwitchTexture,
-        StopASound
+        StopASound,
+        DisplayHideABattler
     };
 
     /**

@@ -35,6 +35,7 @@ export * from "./CreateObjectInMap";
 export * from "./DisplayAnAnimation";
 export * from "./DisplayAPicture";
 export * from "./DisplayChoice";
+export * from "./DisplayHideABattler";
 export * from "./Else";
 export * from "./EndBattle";
 export * from "./EnterANameMenu";

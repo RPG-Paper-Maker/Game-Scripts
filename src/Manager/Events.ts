@@ -176,6 +176,8 @@ class Events {
                 return new EventCommand.SwitchTexture(command);
             case EventCommandKind.StopASound:
                 return new EventCommand.StopASound(command);
+            case EventCommandKind.DisplayHideABattler:
+                return new EventCommand.DisplayHideABattler(command);
             default:
                 return null;
         }
