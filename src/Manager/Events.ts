@@ -178,6 +178,8 @@ class Events {
                 return new EventCommand.StopASound(command);
             case EventCommandKind.DisplayHideABattler:
                 return new EventCommand.DisplayHideABattler(command);
+            case EventCommandKind.TransformABattler:
+                return new EventCommand.TransformABattler(command);
             default:
                 return null;
         }

@@ -79,6 +79,7 @@ export * from "./StopReaction";
 export * from "./SwitchTexture";
 export * from "./TeleportObject";
 export * from "./TitleScreen";
+export * from "./TransformABattler";
 export * from "./Wait";
 export * from "./While";
 export * from "./WhileBreak";

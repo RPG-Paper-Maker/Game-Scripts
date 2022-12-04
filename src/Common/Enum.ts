@@ -136,7 +136,8 @@ namespace Enum {
         PlayAVideo,
         SwitchTexture,
         StopASound,
-        DisplayHideABattler
+        DisplayHideABattler,
+        TransformABattler
     };
 
     /**

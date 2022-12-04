@@ -39,6 +39,7 @@ class Battler {
     public static TOTAL_TIME_DAMAGE = 250;
 
     public player: Player;
+    public initialPosition: Position;
     public position: Vector3;
     public arrowPosition: Vector2;
     public damagePosition: Vector2;
@@ -86,6 +87,7 @@ class Battler {
 
     constructor(player: Player, position?: Position, vect?: Vector3, camera?: Camera) {
         this.player = player;
+        this.initialPosition = position;
         if (!position) {
             return;
         }
