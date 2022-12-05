@@ -60,6 +60,7 @@ class Text extends Base {
     public textHeight: number;
     public datas: any;
     public lastW: number = 0;
+    public zoom: number = 1;
 
     constructor(text = '', { x = 0, y = 0, w = 0, h = 0, align = Align.Left, 
         fontSize = Utils.defaultValue(Datas.Systems.dbOptions.v_tSize, Constants
@@ -129,6 +130,13 @@ class Text extends Base {
     setFontSize(fontSize: number) {
         this.oFontSize = fontSize;
         this.fontSize = ScreenResolution.getScreenMinXY(fontSize);
+        this.updateFont();
+    }
+
+    /** 
+     *  Set the final font.
+     */
+    updateFont() {
         this.font = Utils.createFont(this.fontSize, this.fontName, this.bold, this.italic);
     }
 
@@ -173,10 +181,10 @@ class Text extends Base {
 
     /** 
      *  Drawing the text in choice box.
-     *  @param {number} [x=this.oX] - The x position to draw graphic
-     *  @param {number} [y=this.oY] - The y position to draw graphic
-     *  @param {number} [w=this.oW] - The width dimention to draw graphic
-     *  @param {number} [h=this.oH] - The height dimention to draw graphic
+     *  @param {number} [x=this.x] - The x position to draw graphic
+     *  @param {number} [y=this.y] - The y position to draw graphic
+     *  @param {number} [w=this.w] - The width dimention to draw graphic
+     *  @param {number} [h=this.h] - The height dimention to draw graphic
      */
     drawChoice(x: number = this.x, y: number = this.y, w: number = this.w, h:
         number = this.h): void
@@ -191,6 +199,11 @@ class Text extends Base {
 
         // Correcting x and y according to alignment
         let xBack = x;
+        if (this.zoom !== 1) {
+            this.fontSize *= this.zoom;
+            this.updateFont();
+            this.measureText();
+        }
         let textWidth = this.textWidth;
         let textHeight = this.fontSize + ScreenResolution.getScreenMinXY(this
             .strokeColor === null ? 0 : 2);
@@ -251,6 +264,12 @@ class Text extends Base {
         for (i = 0; i < l; i++) {
             Platform.ctx.fillText(this.lines[i], x, y + yOffset);
             yOffset += lineHeight;
+        }
+
+        // Fix font back
+        if (this.zoom !== 1) {
+            this.setFontSize(this.oFontSize);
+            this.measureText();
         }
     }
 

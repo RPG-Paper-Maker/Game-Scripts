@@ -48,6 +48,7 @@ class Effect extends Base {
     public damagePrecisionFormula: System.DynamicValue;
     public isDamageStockVariableID: boolean;
     public damageStockVariableID: number;
+    public isDamageDisplayName: boolean;
     public isAddStatus: boolean;
     public statusID: System.DynamicValue;
     public statusPrecisionFormula: System.DynamicValue;
@@ -110,6 +111,7 @@ class Effect extends Base {
                 this.isDamageStockVariableID = Utils.defaultValue(json.idsv, 
                     false);
                 this.damageStockVariableID = Utils.defaultValue(json.dsv, 1);
+                this.isDamageDisplayName = Utils.defaultValue(json.iddn, false);
                 break;
             }
             case EffectKind.Status:
@@ -165,10 +167,11 @@ class Effect extends Base {
         let target: Player, battler: Battler;
         switch (this.kind) {
             case EffectKind.Damages: {
-                let damage: number, miss: boolean, crit: boolean, precision: number, 
-                    variance: number, fixRes: number, percentRes: number, element: 
-                    number, critical: number, stat: Statistic, abbreviation: 
-                    string, max: number, before: number, currencyID: number;
+                let damage: number, damageName: string, miss: boolean, crit: 
+                    boolean, precision: number, variance: number, fixRes: number, 
+                    percentRes: number, element: number, critical: number, stat: 
+                    Statistic, abbreviation: string, max: number, before: number, 
+                    currencyID: number;
                 for (let i = 0; i < l; i++) {
                     battler = targets[i];
                     target = battler.player;
@@ -176,6 +179,7 @@ class Effect extends Base {
                         continue;
                     }
                     damage = 0;
+                    damageName = "";
                     miss = false;
                     crit = false;
 
@@ -238,10 +242,25 @@ class Effect extends Base {
                         Game.current.variables[this.damageStockVariableID]
                             = damage === null ? 0 : damage;
                     }
+                    if (this.isDamageDisplayName) {
+                        switch (this.damageKind) {
+                            case Enum.DamagesKind.Stat:
+                                damageName = Datas.BattleSystems.getStatistic(
+                                    this.damageStatisticID.getValue()).name();
+                                break;
+                            case Enum.DamagesKind.Currency:
+                                damageName = Datas.Systems.getCurrency(
+                                    this.damageCurrencyID.getValue()).name();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
 
                     // For diplaying result in HUD
                     if (Scene.Map.current.isBattleMap) {
                         battler.damages = damage;
+                        battler.damagesName = damageName;
                         battler.isDamagesMiss = miss;
                         battler.isDamagesCritical = crit;
                     }

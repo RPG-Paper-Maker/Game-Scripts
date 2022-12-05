@@ -14,7 +14,7 @@ import { Player } from "./Player";
 import { Enum, Mathf } from "../Common";
 import { Frame } from "./Frame";
 import { ProgressionTable } from "../System";
-import { Manager, Datas, Scene, Core } from "../index";
+import { Manager, Datas, Scene, Core, Graphic } from "../index";
 import { Camera } from "./Camera";
 import { Sprite } from "./Sprite";
 import { Position } from "./Position";
@@ -77,6 +77,9 @@ class Battler {
     public moving: boolean;
     public attacking: boolean;
     public damages: number;
+    public damagesName: string;
+    public graphicDamageName: Graphic.Text = new Graphic.Text("", { verticalAlign: 
+        Enum.AlignVertical.Bot });
     public isDamagesMiss: boolean;
     public isDamagesCritical: boolean;
     public currentStatusAnimation: Animation = null;
@@ -574,9 +577,16 @@ class Battler {
      *  Draw the damages on top of the battler.
      */
     drawDamages() {
-        Datas.Systems.getCurrentWindowSkin().drawDamages(this.damages, this
-            .damagePosition.x, this.damagePosition.y, this.isDamagesCritical, 
-            this.isDamagesMiss, this.timeDamage / Battler.TOTAL_TIME_DAMAGE);
+        const zoom = this.timeDamage / Battler.TOTAL_TIME_DAMAGE;
+        const [x, height] = Datas.Systems.getCurrentWindowSkin().drawDamages(this.damages, 
+            this.damagePosition.x, this.damagePosition.y, this.isDamagesCritical, 
+            this.isDamagesMiss, zoom);
+        if (this.damagesName && this.damages && !this.isDamagesMiss) {
+            this.graphicDamageName.setText(this.damagesName);
+            this.graphicDamageName.zoom = zoom;
+            this.graphicDamageName.draw(x, this.damagePosition.y, this
+                .graphicDamageName.textWidth * zoom, height);
+        }
     }
 
     /** 
