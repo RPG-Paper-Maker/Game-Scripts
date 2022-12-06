@@ -130,7 +130,7 @@ class StartBattle extends Base {
         // Initializing battle
         if (currentState.sceneBattle === null) {
             if (this.battleMapType === 3) {
-                this.battleMapID = Scene.Map.current.mapProperties.randomBattleMapID;
+                this.battleMapID = Scene.Map.current.mapProperties.tileset.battleMap;
             }
             let battleMap = (this.battleMapID === null) ? System.BattleMap
                 .create(this.mapID.getValue(), new Position(this.x.getValue(), 

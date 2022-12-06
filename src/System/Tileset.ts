@@ -26,6 +26,7 @@ class Tileset extends Base {
 
     public collisions: CollisionSquare[];
     public id: number;
+    public battleMap: System.DynamicValue;
     public picture: System.Picture;
     public autotiles: number[];
     public walls: number[];
@@ -50,6 +51,7 @@ class Tileset extends Base {
     read(json: Record<string, any>) {
         this.id = json.id;
         this.picture = Datas.Pictures.get(PictureKind.Tilesets, json.pic);
+        this.battleMap = System.DynamicValue.readOrDefaultDatabase(json.bm, 1);
 
         // Special elements
         let jsonSpecials = json.auto;
