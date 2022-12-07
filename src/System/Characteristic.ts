@@ -14,7 +14,7 @@ import { Base } from "./Base";
 import { DynamicValue } from "./DynamicValue";
 import { Player } from "../Core";
 import { Statistic } from "./Statistic";
-import { Datas, Scene } from "../index";
+import { Datas, Scene, System } from "../index";
 
 /** @class
  *  A characteristic of a common skill item.
@@ -46,6 +46,7 @@ class Characteristic extends Base {
     public beginEquipmentID: DynamicValue;
     public beginWeaponArmorID: DynamicValue;
     public isBeginWeapon: boolean;
+    public elementID: DynamicValue;
 
     constructor(json?: Record<string, any>) {
         super(json);
@@ -117,6 +118,9 @@ class Characteristic extends Base {
                 this.isBeginWeapon = Utils.defaultValue(json.ibw, true);
                 this.beginWeaponArmorID = DynamicValue.readOrDefaultDatabase(
                     json.bwaid);
+                break;
+            case Enum.CharacteristicKind.Element:
+                this.elementID = System.DynamicValue.readOrDefaultDatabase(json.eid);
                 break;
         }
     }
@@ -283,10 +287,7 @@ class Characteristic extends Base {
                     result += "%";
                 }
                 break;
-            case Enum.CharacteristicKind.Script:
-            case Enum.CharacteristicKind.AllowForbidEquip:
-            case Enum.CharacteristicKind.AllowForbidChange:
-            case Enum.CharacteristicKind.BeginEquipment:
+            default:
                 break;
         }
         return result;

@@ -71,6 +71,7 @@ class ChangeClass extends Base {
             target.changedClass = newClass;
             level = target[Datas.BattleSystems.getLevelStatistic().abbreviation];
             target.skills = target.system.getSkills(level, newClass);
+            target.updateElements();
             target.updateAllStatsValues();
         }
         return 1;

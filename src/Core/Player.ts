@@ -52,6 +52,7 @@ class Player {
     public currencyGain: Record<string, number>[];
     public skillCostRes: Record<string, number>[];
     public changedClass: System.Class;
+    public elements: System.DynamicValue[];
 
     constructor(kind?: Enum.CharacterKind, id?: number, instanceID?: number, skills?: 
         Record<string, any>[], status?: Record<string, any>[], name?: string, 
@@ -85,6 +86,9 @@ class Player {
                 element = status[i];
                 this.status[i] = new Status(element.id, element.turn);
             }
+
+            // Elements
+            this.updateElements();
 
             // Experience list
             this.editedExpList = {};
@@ -316,8 +320,9 @@ class Player {
         // Skills
         this.skills = this.system.getSkills(level, this.changedClass);
 
-        // Begin equipment
+        // Begin equipment / elements
         let characteristics = this.system.getCharacteristics(this.changedClass);
+        this.elements = [];
         let i: number, l: number, characteristic: System.Characteristic, kind: 
             Enum.ItemKind, itemID: number, item: Item;
         for (i = 0, l = characteristics.length; i < l; i++) {
@@ -333,6 +338,8 @@ class Player {
                     item = new Item(kind, itemID, 0);
                 }
                 this.equip[characteristic.beginEquipmentID.getValue()] = item;
+            } else if (characteristic.kind === Enum.CharacteristicKind.Element) {
+                this.elements.push(characteristic.elementID);
             }
         }
 
@@ -1121,6 +1128,19 @@ class Player {
      */
     getClass(): System.Class {
         return Utils.defaultValue(this.changedClass, this.system.class);
+    }
+
+    /** 
+     *  Update the elements list according to characteristics.
+     */
+    updateElements() {
+        this.elements = [];
+        const characteristics = this.system.getCharacteristics(this.changedClass);
+        for (let characteristic of characteristics) {
+            if (characteristic.kind === Enum.CharacteristicKind.Element) {
+                this.elements.push(characteristic.elementID);
+            }
+        }
     }
 }
 

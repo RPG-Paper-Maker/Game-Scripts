@@ -453,7 +453,8 @@ namespace Enum {
         Script,
         AllowForbidEquip,
         AllowForbidChange,
-        BeginEquipment
+        BeginEquipment,
+        Element
     };
 
     /**
