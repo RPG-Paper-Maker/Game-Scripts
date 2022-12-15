@@ -10,7 +10,7 @@
 */
 
 import { Translatable } from "./Translatable";
-import { Enum, Utils, Platform, Constants, Interpreter } from "../Common";
+import { Enum, Utils, Platform, Interpreter } from "../Common";
 import TitleCommandKind = Enum.TitleCommandKind;
 import { Datas, Manager } from "../index";
 import { Game } from "../Core";
@@ -54,7 +54,10 @@ class TitleCommand extends Translatable {
             case TitleCommandKind.LoadGame:
                 return TitleCommand.loadGame;
             case TitleCommandKind.Settings:
-                return TitleCommand.showSettings;
+                const name = this.name();
+                return () => {
+                    return TitleCommand.showSettings(name);
+                };
             case TitleCommandKind.Exit:
                 return TitleCommand.exit;
             case TitleCommandKind.Script:
@@ -97,8 +100,8 @@ class TitleCommand extends Translatable {
      *  Callback function for loading an existing game.
      *   @returns {boolean}
      */
-    static showSettings(): boolean {
-        Manager.Stack.push(new Scene.TitleSettings());
+    static showSettings(title: string): boolean {
+        Manager.Stack.push(new Scene.TitleSettings(title));
         return true;
     }
     

@@ -19,7 +19,6 @@ import GroupKind = Enum.GroupKind;
 import CharacterKind = Enum.CharacterKind;
 import { Portion } from "./Portion";
 import { Vector3 } from "./Vector3";
-import { Group } from "three";
 
 /** @class
  *  All the global informations of a particular game.

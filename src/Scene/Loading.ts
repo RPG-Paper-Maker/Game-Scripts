@@ -11,7 +11,7 @@
 
 import { Enum } from "../Common";
 import Align = Enum.Align;
-import { Scene, Graphic } from "../index";
+import { Scene, Graphic, Datas } from "../index";
 
 /** @class
 *   A scene for the loading.
@@ -25,8 +25,8 @@ class Loading extends Scene.Base {
     constructor() {
         super(false);
         
-        this.text = new Graphic.Text("Loading...", { align: Align.Right, x: 590, 
-            y: 450, w: 40, h: 20 });
+        this.text = new Graphic.Text(Datas.Languages.extras.loading.name(), { align: 
+            Align.Right, x: 590, y: 450, w: 40, h: 20 });
     }
 
     /** Draw the HUD scene

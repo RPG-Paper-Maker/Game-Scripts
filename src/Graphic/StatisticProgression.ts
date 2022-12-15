@@ -11,7 +11,7 @@
 
 import { Player } from "../Core";
 import { Graphic, System, Datas } from "..";
-import { Constants, Platform, ScreenResolution, Utils } from "../Common";
+import { Constants, ScreenResolution, Utils } from "../Common";
 import { Base } from "./Base";
 
 /** @class

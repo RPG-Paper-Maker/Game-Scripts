@@ -26,9 +26,12 @@ class TitleSettings extends Base {
     public windowSettings: WindowBox
     public windowInformations: WindowBox;
     public windowChoicesMain: WindowChoices;
+    public title: string;
 
-    constructor() {
+    constructor(title: string) {
         super();
+
+        this.title = title;
     }
 
     /** 
@@ -47,7 +50,7 @@ class TitleSettings extends Base {
             .HUGE_SPACE, WindowBox.MEDIUM_SLOT_WIDTH, WindowBox
             .LARGE_SLOT_HEIGHT,
             {
-                content: new Graphic.Text("SETTINGS", { align: Align.Center }),
+                content: new Graphic.Text(this.title, { align: Align.Center }),
                 padding: WindowBox.SMALL_SLOT_PADDING
             }
         );

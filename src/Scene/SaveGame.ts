@@ -11,9 +11,9 @@
 
 import { SaveLoadGame } from "./SaveLoadGame";
 import { Graphic, Datas, Manager, Scene } from "../index";
-import { Enum, ScreenResolution } from "../Common";
+import { Enum } from "../Common";
 import Align = Enum.Align;
-import { Game, Rectangle, WindowBox, WindowChoices } from "../Core";
+import { Game } from "../Core";
 
 /** @class
  *  A scene in the menu for saving a game.
@@ -38,9 +38,9 @@ class SaveGame extends SaveLoadGame {
      */
     async load() {
         await super.load();
-        this.setContents.call(this, new Graphic.Text("Save a game", { align: 
-            Align.Center }), new Graphic.Text(
-            "Select a slot where you want to save.", { align: Align.Center }));
+        this.setContents.call(this, new Graphic.Text(Datas.Languages.extras
+            .saveAGame.name(), { align: Align.Center }), new Graphic.Text(
+            Datas.Languages.extras.saveAGameDescription.name(), { align: Align.Center }));
         this.loading = false;
     }
 

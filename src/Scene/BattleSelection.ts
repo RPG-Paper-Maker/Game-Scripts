@@ -70,7 +70,7 @@ class BattleSelection {
 
         this.battle.battleCommandKind = EffectSpecialActionKind.None;
         (<Graphic.Text>this.battle.windowTopInformations.content).setText(
-            "Select an ally");
+            Datas.Languages.extras.selectAnAlly.name());
         this.battle.selectedUserIndex = this.selectFirstIndex(CharacterKind.Hero, 0);
         this.battle.kindSelection = CharacterKind.Hero;
         this.battle.userTarget = false;

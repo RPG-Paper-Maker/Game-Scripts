@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { Graphic, Manager, Datas, Scene, System, Core } from "../index";
+import { Graphic, Manager, Datas, Scene, System } from "../index";
 import { Mathf, ScreenResolution } from "../Common";
 import { Battler, Game, Player } from "../Core";
 

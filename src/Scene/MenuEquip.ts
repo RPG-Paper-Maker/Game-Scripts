@@ -89,20 +89,13 @@ class MenuEquip extends MenuBase {
      * @memberof MenuEquip
      */
     public bonus: number[];
+    public title: string;
 
-
-    constructor() {
+    constructor(title: string) {
         super();
-        this.updateForTab();
-    }
-
-    /**
-     * @inheritdoc
-     *
-     * @memberof MenuEquip
-     */
-    create() {
+        this.title = title;
         this.createAllWindows();
+        this.updateForTab();
     }
 
     /**
@@ -126,7 +119,7 @@ class MenuEquip extends MenuBase {
     createWindowTop() {
         const rect = new Rectangle(20, 20, 200, 30);
         this.windowTop = new WindowBox(rect.x, rect.y, rect.width, rect.height, {
-            content: new Graphic.Text("Equip", { align: Align.Center })
+            content: new Graphic.Text(this.title, { align: Align.Center })
         });
     }
 
@@ -241,7 +234,8 @@ class MenuEquip extends MenuBase {
     updateEquipmentList() {
         const currentIndex = this.windowChoicesEquipment.currentSelectedIndex;
         let idEquipment = Datas.BattleSystems.equipmentsOrder[currentIndex];
-        let list: Graphic.Base[] = [new Graphic.Text("  [Remove]")];
+        let list: Graphic.Base[] = [new Graphic.Text("  [" + Datas.Languages
+            .extras.remove.name() + "]")];
         let item: Item, systemItem: System.CommonSkillItem;
         let type: System.WeaponArmorKind, nbItem: number;
         let player = Game.current.teamHeroes[this.windowChoicesTabs

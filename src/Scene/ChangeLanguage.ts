@@ -57,7 +57,8 @@ class ChangeLanguage extends Base {
     createWindowBoxLanguage() {
         const rect = new Rectangle(Constants.HUGE_SPACE, Constants.HUGE_SPACE, 
             WindowBox.MEDIUM_SLOT_WIDTH, WindowBox.LARGE_SLOT_HEIGHT);
-        const graphic = new Graphic.Text("Language", { align: Enum.Align.Center });
+        const graphic = new Graphic.Text(Datas.Languages.extras.language.name(), 
+            { align: Enum.Align.Center });
         const options = { 
             content: graphic
         };
@@ -73,7 +74,8 @@ class ChangeLanguage extends Base {
             .MEDIUM_SLOT_WIDTH + Constants.LARGE_SPACE, Constants.HUGE_SPACE, 
             ScreenResolution.SCREEN_X - (2 * Constants.HUGE_SPACE) - WindowBox
             .MEDIUM_SLOT_WIDTH - Constants.LARGE_SPACE, WindowBox.LARGE_SLOT_HEIGHT);
-        const graphic = new Graphic.Text("Select a language.", { align: Enum.Align.Center });
+        const graphic = new Graphic.Text(Datas.Languages.extras.languageSelectedDescription
+            .name(), { align: Enum.Align.Center });
         const options = { 
             content: graphic
         };
@@ -107,7 +109,8 @@ class ChangeLanguage extends Base {
         const height = 75;
         const rect = new Rectangle((ScreenResolution.SCREEN_X - width) / 2, (
             ScreenResolution.SCREEN_Y - height) / 2, width, height);
-        const graphic = new Graphic.Text("Confirm?", { align: Enum.Align.Center });
+        const graphic = new Graphic.Text(Datas.Languages.extras.confirm.name(), 
+            { align: Enum.Align.Center });
         const options = { 
             content: graphic
         };
@@ -141,8 +144,8 @@ class ChangeLanguage extends Base {
             ]
         };
         const graphics = [
-            new Graphic.Text("Yes", { align: Enum.Align.Center }),
-            new Graphic.Text("No", { align: Enum.Align.Center })
+            new Graphic.Text(Datas.Languages.extras.yes.name(), { align: Enum.Align.Center }),
+            new Graphic.Text(Datas.Languages.extras.no.name(), { align: Enum.Align.Center })
         ];
         this.windowChoicesConfirm = new WindowChoices(rect.x, rect.y, rect.width, 
             rect.height, graphics, options);

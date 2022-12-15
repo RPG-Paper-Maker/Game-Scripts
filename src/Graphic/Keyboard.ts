@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { System, Graphic } from "../index";
+import { System, Graphic, Datas } from "../index";
 import { Enum } from "../Common";
 import Align = Enum.Align;
 import { Base } from "./Base";
@@ -32,8 +32,8 @@ class Keyboard extends Base {
         this.graphicTextName = new Graphic.Text(kb.name());
         this.graphicTextShort = new Graphic.Text(kb.toString(), { align: Align
             .Center });
-        this.graphicTextInformation = new Graphic.Text("Press any keys...", { 
-            align: Align.Center });
+        this.graphicTextInformation = new Graphic.Text(Datas.Languages.extras
+            .pressAnyKeys.name(), { align: Align.Center });
     }
 
     /** 

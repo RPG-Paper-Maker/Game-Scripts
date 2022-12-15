@@ -12,7 +12,7 @@
 import { Base } from "./Base";
 import { Player, Picture2D, Frame } from "../Core";
 import { Graphic, Datas, System, Manager } from "../index";
-import { Enum, Constants, Utils, Platform, ScreenResolution } from "../Common";
+import { Enum, Constants, Utils, ScreenResolution } from "../Common";
 import { Status } from "../Core/Status";
 
 /** @class

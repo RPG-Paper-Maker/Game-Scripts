@@ -34,10 +34,12 @@ class MenuInventory extends Base {
     public windowBoxUseItem: WindowBox;
     public positionChoice: StructPositionChoice[];
     public substep: number;
+    public title: string;
 
-    constructor() {
+    constructor(title: string) {
         super(false);
 
+        this.title = title;
         Scene.Map.current.user = null;
         Scene.Map.current.targets = [];
 
@@ -52,7 +54,7 @@ class MenuInventory extends Base {
 
         // All the windows
         this.windowTop = new WindowBox(20, 20, 200, 30, {
-                content: new Graphic.Text("Inventory", { align: Align.Center })
+                content: new Graphic.Text(this.title, { align: Align.Center })
             }
         );
         this.windowChoicesTabs = new WindowChoices(5, 60, 100, WindowBox

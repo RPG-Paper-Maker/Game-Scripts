@@ -9,12 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Graphic, Core, Datas, System, Manager } from "../index";
-import { Picture2D, Frame, Rectangle } from "../Core";
+import { Graphic, Core, Datas, System } from "../index";
 import { Base } from "./Base";
-import { Utils, Constants, Platform, Enum, ScreenResolution } from "../Common";
-import PictureKind = Enum.PictureKind;
-import { Status } from "../Core/Status";
+import { Utils, Constants, Enum, ScreenResolution } from "../Common";
 
 /** @class
  *  The graphic displaying the player minimal stats informations.

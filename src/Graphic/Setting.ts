@@ -13,7 +13,7 @@ import { Base } from "./Base";
 import { Enum } from "../Common";
 import TitleSettingKind = Enum.TitleSettingKind;
 import Align = Enum.Align;
-import { Graphic } from "../index";
+import { Datas, Graphic } from "../index";
 
 /** @class
  *  A class for all settings to display in screen.
@@ -32,14 +32,14 @@ class Setting extends Base {
         let textLeft: string,textInformation: string;
         switch (id) {
             case TitleSettingKind.KeyboardAssigment:
-                textLeft = "Keyboard assignement";
-                textInformation = "Update keyboard assignement preferences.";
+                textLeft = Datas.Languages.extras.keyboardAssignment.name();
+                textInformation = Datas.Languages.extras.keyboardAssignmentDescription.name();
                 this.graphicRight = new Graphic.Text("...", { align: Align
                     .Center });
                 break;
             case TitleSettingKind.Language:
-                textLeft = "Language";
-                textInformation = "Update current language.";
+                textLeft = Datas.Languages.extras.language.name();
+                textInformation = Datas.Languages.extras.languageDescription.name();
                 this.graphicRight = new Graphic.Text("...", { align: Align
                     .Center });
                 break;

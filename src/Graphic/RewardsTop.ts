@@ -10,8 +10,8 @@
 */
 
 import { Base } from "./Base";
-import { System, Graphic, Datas } from "..";
-import { Constants, Platform, Utils, Enum, ScreenResolution } from "../Common";
+import { Graphic, Datas } from "..";
+import { Constants, Utils, Enum, ScreenResolution } from "../Common";
 import Align = Enum.Align;
 
 /** @class

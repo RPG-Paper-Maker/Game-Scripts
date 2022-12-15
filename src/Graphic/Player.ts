@@ -125,7 +125,7 @@ class Player extends Base {
         this.battlerFrame = new Frame(250, { frames: Datas.Systems.battlersFrames });
 
         // Level up
-        this.graphicLevelUp = new Graphic.Text("Level up!");
+        this.graphicLevelUp = new Graphic.Text(Datas.Languages.extras.levelUp.name());
         this.displayNameLevel = true;
     }
 

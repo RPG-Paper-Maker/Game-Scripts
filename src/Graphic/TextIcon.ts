@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { Enum, Constants, Platform, ScreenResolution } from "../Common";
+import { Enum, Constants, ScreenResolution } from "../Common";
 import Align = Enum.Align;
 import PictureKind = Enum.PictureKind;
 import { Picture2D } from "../Core";

@@ -9,8 +9,47 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Graphic } from "..";
+import { Datas, Graphic, System } from "..";
 import { IO, Paths, Utils } from "../Common";
+
+interface ExtrasKind {
+    loadAGame: System.Translatable,
+    loadAGameDescription: System.Translatable,
+    slot: System.Translatable,
+    empty: System.Translatable,
+    saveAGame: System.Translatable,
+    saveAGameDescription: System.Translatable,
+    keyboardAssignment: System.Translatable,
+    keyboardAssignmentDescription: System.Translatable,
+    keyboardAssignmentSelectedDescription: System.Translatable,
+    language: System.Translatable,
+    languageDescription: System.Translatable,
+    languageSelectedDescription: System.Translatable,
+    confirm: System.Translatable,
+    ok: System.Translatable,
+    yes: System.Translatable,
+    no: System.Translatable,
+    add: System.Translatable,
+    remove: System.Translatable,
+    shop: System.Translatable,
+    buy: System.Translatable,
+    sell: System.Translatable,
+    owned: System.Translatable,
+    selectAnAlly: System.Translatable,
+    victory: System.Translatable,
+    defeat: System.Translatable,
+    levelUp: System.Translatable,
+    precision: System.Translatable,
+    critical: System.Translatable,
+    damage: System.Translatable,
+    heal: System.Translatable,
+    skill: System.Translatable,
+    performSkill: System.Translatable,
+    loading: System.Translatable,
+    equipQuestion: System.Translatable
+    pressAnyKeys: System.Translatable
+    target: System.Translatable
+}
 
 /** 
  *  @class
@@ -21,6 +60,7 @@ class Languages {
 
     private static list: string[];
     public static listOrder: number[];
+    public static extras: ExtrasKind;
 
     constructor() {
         throw new Error("This is a static class!");
@@ -32,13 +72,52 @@ class Languages {
      *  @async
      */
     static async read() {
-        let json = (await IO.parseFileJSON(Paths.FILE_LANGS)).langs;
+        let json = (await IO.parseFileJSON(Paths.FILE_LANGS));
         this.list = [];
         this.listOrder = [];
-        Utils.readJSONSystemList({ list: json, listIDs: this.list, listIndexes: 
+        Utils.readJSONSystemList({ list: json.langs, listIDs: this.list, listIndexes: 
             this.listOrder, indexesIDs: true, func: (element: Record<string, any>) => {
             return element.name;
         }});
+        this.extras = {
+            loadAGame: new System.Translatable(json.lag),
+            loadAGameDescription: new System.Translatable(json.lagd),
+            slot: new System.Translatable(json.sl),
+            empty: new System.Translatable(json.em),
+            saveAGame: new System.Translatable(json.sag),
+            saveAGameDescription: new System.Translatable(json.sagd),
+            keyboardAssignment: new System.Translatable(json.ka),
+            keyboardAssignmentDescription: new System.Translatable(json.kad),
+            keyboardAssignmentSelectedDescription: new System.Translatable(json.kasd),
+            language: new System.Translatable(json.l),
+            languageDescription: new System.Translatable(json.ld),
+            languageSelectedDescription: new System.Translatable(json.lsd),
+            confirm: new System.Translatable(json.co),
+            ok: new System.Translatable(json.ok),
+            yes: new System.Translatable(json.ye),
+            no: new System.Translatable(json.no),
+            add: new System.Translatable(json.ad),
+            remove: new System.Translatable(json.re),
+            shop: new System.Translatable(json.sh),
+            buy: new System.Translatable(json.bu),
+            sell: new System.Translatable(json.se),
+            owned: new System.Translatable(json.ow),
+            selectAnAlly: new System.Translatable(json.saa),
+            victory: new System.Translatable(json.vi),
+            defeat: new System.Translatable(json.de),
+            levelUp: new System.Translatable(json.lu),
+            precision: new System.Translatable(json.pr),
+            critical: new System.Translatable(json.cr),
+            damage: new System.Translatable(json.da),
+            heal: new System.Translatable(json.he),
+            skill: new System.Translatable(json.sk),
+            performSkill: new System.Translatable(json.ps),
+            loading: new System.Translatable(json.lo),
+            equipQuestion: new System.Translatable(json.eq),
+            pressAnyKeys: new System.Translatable(json.pak),
+            target: new System.Translatable(json.ta)
+        }
+        console.log(json)
     }
 
     /** 

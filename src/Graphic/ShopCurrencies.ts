@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { Graphic, Datas } from "../index";
-import { Utils, Enum, Constants, Mathf, ScreenResolution } from "../Common";
+import { Constants, Mathf, ScreenResolution } from "../Common";
 import { Game } from "../Core";
 
 /** @class

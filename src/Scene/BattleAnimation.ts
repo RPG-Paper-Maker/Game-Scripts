@@ -14,7 +14,6 @@ import { Scene, Graphic, Datas, System, Manager } from "..";
 import { Enum } from "../Common";
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 import CharacterKind = Enum.CharacterKind;
-import Align = Enum.Align;
 import ItemKind = Enum.ItemKind;
 import AnimationEffectConditionKind = Enum.AnimationEffectConditionKind;
 import AnimationPositionKind = Enum.AnimationPositionKind;

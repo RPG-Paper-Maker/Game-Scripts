@@ -46,16 +46,17 @@ class MainMenuCommand extends Translatable {
      *  @returns {(item: Core.Item) => boolean}
      */
     getCallback(): () => boolean {
+        const name = this.name();
         switch (this.kind) {
             case Enum.MainMenuCommandKind.Inventory:
                 return function() {
-                    Manager.Stack.push(new Scene.MenuInventory());
+                    Manager.Stack.push(new Scene.MenuInventory(name));
                     return true;
                 };
             case Enum.MainMenuCommandKind.Skills:
                 return function() {
                     if (Game.current.teamHeroes.length > 0) {
-                        Manager.Stack.push(new Scene.MenuSkills());
+                        Manager.Stack.push(new Scene.MenuSkills(name));
                         return true;
                     }
                     return false;
@@ -63,7 +64,7 @@ class MainMenuCommand extends Translatable {
             case Enum.MainMenuCommandKind.Equip:
                 return function() {
                     if (Game.current.teamHeroes.length > 0) {
-                        Manager.Stack.push(new Scene.MenuEquip());
+                        Manager.Stack.push(new Scene.MenuEquip(name));
                         return true;
                     }
                     return false;
@@ -71,7 +72,7 @@ class MainMenuCommand extends Translatable {
             case Enum.MainMenuCommandKind.States:
                 return function() {
                     if (Game.current.teamHeroes.length > 0) {
-                        Manager.Stack.push(new Scene.MenuDescriptionState());
+                        Manager.Stack.push(new Scene.MenuDescriptionState(name));
                         return true;
                     }
                     return false;

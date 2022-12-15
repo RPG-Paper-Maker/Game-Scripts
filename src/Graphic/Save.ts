@@ -10,7 +10,7 @@
 */
 
 import { Game } from "../Core";
-import { Graphic } from "../index";
+import { Datas, Graphic } from "../index";
 import { Base } from "./Base";
 import { Enum, ScreenResolution, Utils } from "../Common";
 import Align = Enum.Align;
@@ -32,10 +32,11 @@ class Save extends Base {
         super();
 
         this.game = game;
-        this.graphicSlot = new Graphic.Text("Slot " + this.game.slot, { align: 
-            Align.Center });
+        this.graphicSlot = new Graphic.Text(Datas.Languages.extras.slot.name() + 
+            " " + this.game.slot, { align: Align.Center });
         if (this.game.isEmpty) {
-            this.graphicEmpty = new Graphic.Text("Empty", { align: Align.Center });
+            this.graphicEmpty = new Graphic.Text(Datas.Languages.extras.empty
+                .name(), { align: Align.Center });
         } else {
             this.graphicTimer = new Graphic.Text(Utils.getStringDate(this.game
                 .playTime.getSeconds()), { align: Align.Right });

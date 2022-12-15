@@ -439,12 +439,14 @@ class Effect extends Base {
                 if (this.isDamagePrecision) {
                     precision = Interpreter.evaluate(this.damagePrecisionFormula
                         .getValue(), { user: user, target: target });
-                    options.push("precision: " + precision + "%");
+                    options.push(Datas.Languages.extras.precision.name() + ": " + 
+                        precision + "%");
                 }
                 if (this.isDamageCritical) {
                     critical = Interpreter.evaluate(this.damageCriticalFormula
                         .getValue(), { user: user, target: target });
-                    options.push("critical: " + critical + "%");
+                    options.push(Datas.Languages.extras.critical.name() + ": " + 
+                        critical + "%");
                 }
                 let damageName = "";
                 switch (this.damageKind) {
@@ -460,20 +462,25 @@ class Effect extends Base {
                         damageName = Datas.Variables.get(this.damageVariableID);
                         break;
                 }
-                return (damage > 0 ? "Damage" : "Heal") + " " + damageName + 
-                    ": " + (min === max ? min : min + " - " + max) + (options
-                    .length > 0 ? " [" + options.join(" - ") +  "]" : "");
+                return (damage > 0 ? Datas.Languages.extras.damage.name() : Datas
+                    .Languages.extras.heal.name()) + " " + damageName + ": " + 
+                    (min === max ? min : min + " - " + max) + (options.length > 
+                    0 ? " [" + options.join(" - ") +  "]" : "");
             case EffectKind.Status:
-                return (this.isAddStatus ? "Add" : "Remove") + " " + Datas
-                    .Status.get(this.statusID.getValue()).name() + " [precision: " + 
-                    Interpreter.evaluate(this.statusPrecisionFormula.getValue(), 
-                    { user: user, target: target }) + "%]";
+                return (this.isAddStatus ? Datas.Languages.extras.add.name() : 
+                    Datas.Languages.extras.remove.name()) + " " + Datas.Status
+                    .get(this.statusID.getValue()).name() + " [" + Datas.Languages
+                    .extras.precision.name() + ": " + Interpreter.evaluate(this
+                    .statusPrecisionFormula.getValue(), { user: user, target: 
+                    target }) + "%]";
             case EffectKind.AddRemoveSkill:
-                return (this.isAddSkill ? "Add" : "Remove") + " skill " + Datas
-                    .Skills.get(this.addSkillID.getValue()).name();
-            case EffectKind.PerformSkill:
-                return "Perform skill " + Datas.Skills.get(this.performSkillID
+                return (this.isAddSkill ? Datas.Languages.extras.add.name() : 
+                    Datas.Languages.extras.remove.name()) + " " + Datas.Languages
+                    .extras.skill.name() + " " + Datas.Skills.get(this.addSkillID
                     .getValue()).name();
+            case EffectKind.PerformSkill:
+                return Datas.Languages.extras.performSkill.name() + " " + Datas
+                    .Skills.get(this.performSkillID.getValue()).name();
             default:
                 return "";
         }

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Core, Datas, Graphic, Manager, Scene, System } from "..";
+import { Datas, Graphic, Manager, Scene } from "..";
 import { Constants, Enum, ScreenResolution } from "../Common";
 import { Game, Item, Player, Rectangle, WindowBox, WindowChoices } from "../Core";
 import { SpinBox } from "../Core/SpinBox";
@@ -89,7 +89,8 @@ class MenuShop extends MenuBase {
     createWindowBoxTop() {
         const rect = new Rectangle(Constants.HUGE_SPACE, Constants.HUGE_SPACE, 
             WindowBox.MEDIUM_SLOT_WIDTH, WindowBox.SMALL_SLOT_HEIGHT);
-        const graphic = new Graphic.Text("Shop", { align: Enum.Align.Center });
+        const graphic = new Graphic.Text(Datas.Languages.extras.shop.name(), { 
+            align: Enum.Align.Center });
         const options = { 
             content: graphic
         };
@@ -105,10 +106,10 @@ class MenuShop extends MenuBase {
             (WindowBox.SMALL_SLOT_WIDTH * 2), Constants.HUGE_SPACE, WindowBox
             .SMALL_SLOT_WIDTH, WindowBox.SMALL_SLOT_HEIGHT);
         const list = [
-            new Graphic.Text("Buy", { align: Enum.Align.Center})
+            new Graphic.Text(Datas.Languages.extras.buy.name(), { align: Enum.Align.Center})
         ];
         if (!this.buyOnly) {
-            list.push(new Graphic.Text("Sell", { align: Enum.Align.Center}));
+            list.push(new Graphic.Text(Datas.Languages.extras.sell.name(), { align: Enum.Align.Center}));
         }
         const options = {
             orientation: Enum.OrientationWindow.Horizontal,
@@ -189,7 +190,8 @@ class MenuShop extends MenuBase {
         const rect = new Rectangle(Constants.LARGE_SPACE, WindowBox.SMALL_SLOT_WIDTH, 
             ScreenResolution.SCREEN_X - Constants.HUGE_SPACE, WindowBox
             .SMALL_SLOT_HEIGHT);
-        const graphic = new Graphic.Text("Empty", { align: Enum.Align.Center });
+        const graphic = new Graphic.Text(Datas.Languages.extras.empty.name(), { 
+            align: Enum.Align.Center });
         const options = {
             content: graphic, 
             padding: WindowBox.SMALL_SLOT_PADDING
@@ -268,8 +270,8 @@ class MenuShop extends MenuBase {
         const height = 100;
         const rect = new Rectangle((ScreenResolution.SCREEN_X - width) / 2, (
             ScreenResolution.SCREEN_Y - height) / 2, width, height);
-        const graphic = new Graphic.Text("Would you like to equip it?", { align: 
-            Enum.Align.Center });
+        const graphic = new Graphic.Text(Datas.Languages.extras.equipQuestion
+            .name(), { align: Enum.Align.Center });
         const options = { 
             content: graphic, 
             padding: WindowBox.SMALL_SLOT_PADDING
@@ -287,8 +289,8 @@ class MenuShop extends MenuBase {
             .windowBoxConfirmEquip.oH, WindowBox.SMALL_SLOT_WIDTH, WindowBox
             .SMALL_SLOT_HEIGHT);
         const list = [
-            new Graphic.Text("Yes", { align: Enum.Align.Center}),
-            new Graphic.Text("No", { align: Enum.Align.Center})
+            new Graphic.Text(Datas.Languages.extras.yes.name(), { align: Enum.Align.Center}),
+            new Graphic.Text(Datas.Languages.extras.no.name(), { align: Enum.Align.Center})
         ];
         const options = {
             nbItemsMax: list.length,
@@ -354,7 +356,8 @@ class MenuShop extends MenuBase {
                     break;
                 }
             }
-            (<Graphic.Text>this.windowBoxOwned.content).setText("Owned: " + owned);
+            (<Graphic.Text>this.windowBoxOwned.content).setText(Datas.Languages
+                .extras.owned.name() + ": " + owned);
         }
     }
 

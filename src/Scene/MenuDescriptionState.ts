@@ -25,6 +25,8 @@ import OrientationWindow = Enum.OrientationWindow;
  */
 class MenuDescriptionState extends MenuBase {
 
+    public title: string;
+
     /**
      * the top window
      *
@@ -54,18 +56,11 @@ class MenuDescriptionState extends MenuBase {
      * Creates an instance of MenuDescriptionState.
      * @memberof MenuDescriptionState
      */
-    constructor() {
+    constructor(title: string) {
         super();
-        this.synchronize();
-    }
-
-    /**
-     * @inheritdoc
-     *
-     * @memberof MenuDescriptionState
-     */
-    create() {
+        this.title = title;
         this.createAllWindows();
+        this.synchronize();
     }
 
     /**
@@ -87,7 +82,7 @@ class MenuDescriptionState extends MenuBase {
     createWindowTop() {
         const rect = new Rectangle(20, 20, 200, 30);
         const options = {
-            content: new Graphic.Text("State", { align: Align.Center })
+            content: new Graphic.Text(this.title, { align: Align.Center })
         };
         this.windowTop = new WindowBox(rect.x, rect.y, rect.width, rect.height, options);
     }
