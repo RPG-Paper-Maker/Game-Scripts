@@ -117,7 +117,6 @@ class Languages {
             pressAnyKeys: new System.Translatable(json.pak),
             target: new System.Translatable(json.ta)
         }
-        console.log(json)
     }
 
     /** 

@@ -119,8 +119,8 @@ class BattleEnemyAttack {
                 .variableID], action.variableValueCompare.getValue())) {
                 continue;
             }
-            if (action.isConditionStatus) {
-                // TODO
+            if (action.isConditionStatus && !player.hasStatus(action.statusID.getValue())) {
+                continue;
             }
             if (action.isConditionScript && !Interpreter.evaluate(action.script
                 .getValue())) {

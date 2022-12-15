@@ -911,6 +911,20 @@ class Player {
     }
 
     /** 
+     *  Check if player has status with ID.
+     *  @param {number} id 
+     *  @returns {boolean}
+     */
+    hasStatus(id: number): boolean {
+        for (let status of this.status) {
+            if (status.id === id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** 
      *  Get the first status to display according to priority.
      *  @returns {Core.Status[]}
      */
