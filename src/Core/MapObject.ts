@@ -509,18 +509,31 @@ class MapObject {
             this.orientationEye = this.currentStateInstance.indexY;
             this.updateOrientation();
             let result: [CustomGeometry, [number, StructMapElementCollision[]]];
+            let positionTranformation = Position.createFromVector3(this.position);
+            positionTranformation.centerX = this.currentStateInstance.centerX.getValue();
+            positionTranformation.centerZ = this.currentStateInstance.centerZ.getValue();
+            positionTranformation.angleX = this.currentStateInstance.angleX.getValue();
+            positionTranformation.angleY = this.currentStateInstance.angleY.getValue();
+            positionTranformation.angleZ = this.currentStateInstance.angleZ.getValue();
+            positionTranformation.scaleX = this.currentStateInstance.scaleX.getValue();
+            positionTranformation.scaleY = this.currentStateInstance.scaleY.getValue();
+            positionTranformation.scaleZ = this.currentStateInstance.scaleZ.getValue();
             if (this.currentStateInstance.graphicKind === ElementMapKind.Object3D) {
+                positionTranformation.x = 0;
+                positionTranformation.y = 0;
+                positionTranformation.yPixels = 0;
+                positionTranformation.z = 0;
                 let objectDatas = Datas.SpecialElements.objects[this
                     .currentStateInstance.graphicID];
                 let object3D: Object3DBox;
                 switch (objectDatas.shapeKind) {
                     case ShapeKind.Box:
                         object3D = Object3DBox.create(objectDatas);
-                        result = object3D.createGeometry(new Position());
+                        result = object3D.createGeometry(positionTranformation);
                         break;
                     case ShapeKind.Custom:
                         object3D = Object3DCustom.create(objectDatas);
-                        result = object3D.createGeometry(new Position());
+                        result = object3D.createGeometry(positionTranformation);
                         break;
                 }
                 // Correct position offset (left / top)
@@ -558,8 +571,7 @@ class MapObject {
                 let sprite = Sprite.create(this.currentStateInstance.graphicKind, [x, y, 
                     this.width, this.height]);
                 result = sprite.createGeometry(this.width, this.height, this
-                    .currentStateInstance.graphicID === 0, Position
-                    .createFromVector3(this.position));
+                    .currentStateInstance.graphicID === 0, positionTranformation);
                 // Correct position offset (left / top)
                 if (previousStateInstance && previousStateInstance.graphicKind 
                     === ElementMapKind.Object3D && (Utils.isUndefined(this

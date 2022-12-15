@@ -497,6 +497,15 @@ class DynamicValue extends System.Base {
         // If any other value, compare the direct values
         return this.getValue() === value.getValue();
     }
+
+    /** 
+     *  Create a copy of the value.
+     *  @param {System.DynamicValue} v
+     *  @returns {System.DynamicValue}
+     */
+    createCopy(): System.DynamicValue {
+        return System.DynamicValue.create(this.kind, this.value);
+    }
 }
 
 export { StructJSON, DynamicValue }
