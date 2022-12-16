@@ -88,10 +88,11 @@ class Object3DCustom extends Object3D {
             .datas.objID).geometry;
         let vertices = modelGeometry.vertices;
         let uvs = modelGeometry.uvs;
-        let center = modelGeometry.center.clone();
         let scale = this.datas.scale;
         let scaleVec = new Vector3(scale * position.scaleX, scale * position
             .scaleY, scale * position.scaleZ);
+        let center = modelGeometry.center.clone();
+        center.multiply(scaleVec);
         let angleY = position.angleY;
         let angleX = position.angleX;
         let angleZ = position.angleZ;
