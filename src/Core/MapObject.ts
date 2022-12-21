@@ -519,10 +519,10 @@ class MapObject {
             positionTranformation.scaleY = this.currentStateInstance.scaleY.getValue();
             positionTranformation.scaleZ = this.currentStateInstance.scaleZ.getValue();
             if (this.currentStateInstance.graphicKind === ElementMapKind.Object3D) {
-                positionTranformation.x = 0;
+                positionTranformation.x = -1/2;
                 positionTranformation.y = 0;
                 positionTranformation.yPixels = 0;
-                positionTranformation.z = 0;
+                positionTranformation.z = -1/2;
                 let objectDatas = Datas.SpecialElements.objects[this
                     .currentStateInstance.graphicID];
                 let object3D: Object3DBox;
@@ -542,9 +542,6 @@ class MapObject {
                     .currentStateInstance.previousGraphicKind) && this
                     .currentStateInstance.previousGraphicKind !== ElementMapKind
                     .Object3D)) {
-                    this.position.set(this.position.x - (Datas.Systems
-                        .SQUARE_SIZE / 2), this.position.y, this.position.z - (
-                        Datas.Systems.SQUARE_SIZE / 2));
                 }
             } else {
                 let x: number, y: number;
@@ -572,16 +569,6 @@ class MapObject {
                     this.width, this.height]);
                 result = sprite.createGeometry(this.width, this.height, this
                     .currentStateInstance.graphicID === 0, positionTranformation);
-                // Correct position offset (left / top)
-                if (previousStateInstance && previousStateInstance.graphicKind 
-                    === ElementMapKind.Object3D && (Utils.isUndefined(this
-                    .currentStateInstance.previousGraphicKind) || this
-                    .currentStateInstance.previousGraphicKind === ElementMapKind
-                    .Object3D)) {
-                    this.position.set(this.position.x + (Datas.Systems
-                        .SQUARE_SIZE / 2), this.position.y, this.position.z + (
-                        Datas.Systems.SQUARE_SIZE / 2));
-                }
             }
             let geometry = result[0];
             let objCollision = result[1];
