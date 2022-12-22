@@ -1379,6 +1379,26 @@ class MapObject {
             * 3 + this.orientationEye, 4);
         this.climbOrientation = Mathf.mod((Scene.Map.current.orientation - 2) 
             * 3 + this.climbOrientationEye, 4);
+        if (this.currentStateInstance.graphicKind === Enum.ElementMapKind.Object3D) {
+            let angle = 0;
+            switch (this.orientationEye) {
+                case Enum.Orientation.South:
+                    angle = 0;
+                    break;
+                case Enum.Orientation.East:
+                    angle = 90;
+                    break;
+                case Enum.Orientation.North:
+                    angle = 180;
+                    break;
+                case Enum.Orientation.West:
+                    angle = 270;
+                    break;
+            }
+            if (this.mesh) {
+                this.mesh.rotation.y = angle * Math.PI / 180.0;
+            }
+        }
     }
 
     /** 
