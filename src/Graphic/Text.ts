@@ -176,7 +176,7 @@ class Text extends Base {
                 this.textWidth = size;
             }
         }
-        this.textHeight = (this.fontSize + (this.fontSize / 3)) * l;
+        this.textHeight = this.fontSize * 2 * l;
     }
 
     /** 
@@ -189,20 +189,18 @@ class Text extends Base {
     drawChoice(x: number = this.x, y: number = this.y, w: number = this.w, h:
         number = this.h): void
     {
-        this.updateContextFont();
-
-        // Wrap text if != 0
-        if (this.lastW !== w && w !== 0) {
-            this.lastW = w;
-            this.wrapText(w);
-        }
-
         // Correcting x and y according to alignment
         let xBack = x;
         if (this.zoom !== 1) {
             this.fontSize *= this.zoom;
             this.updateFont();
             this.measureText();
+        }
+        // Wrap text if != 0
+        if (this.lastW !== w && w !== 0) {
+            this.lastW = w;
+            this.updateContextFont();
+            this.wrapText(w);
         }
         let textWidth = this.textWidth;
         let textHeight = this.fontSize + ScreenResolution.getScreenMinXY(this
