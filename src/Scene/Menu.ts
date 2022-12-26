@@ -10,8 +10,8 @@
 */
 
 import { Scene, Manager, Graphic, Datas, System } from "../index";
-import { Enum, Inputs, ScreenResolution } from "../Common";
-import { WindowChoices, WindowBox, Game, Rectangle, ChoicesOptions } from "../Core";
+import { Enum, ScreenResolution } from "../Common";
+import { WindowChoices, WindowBox, Rectangle, ChoicesOptions } from "../Core";
 import { MenuBase } from "./MenuBase";
 
 interface StructPositionChoice {

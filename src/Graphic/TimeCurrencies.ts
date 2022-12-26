@@ -10,7 +10,7 @@
 */
 
 import { Base } from "./Base";
-import { Graphic, Datas } from "../index";
+import { Graphic, Datas, System } from "../index";
 import { Utils, Enum, Mathf, Constants, ScreenResolution } from "../Common";
 import Align = Enum.Align;
 import { Game } from "../Core";
@@ -32,15 +32,18 @@ class TimeCurrencies extends Base {
 
         // Currencies
         this.currencies = [];
-        let graphic: Graphic.TextIcon;
+        let graphic: Graphic.TextIcon, systemCurrency: System.Currency;
         for (let id in Game.current.currencies) {
-            graphic = Graphic.TextIcon.createFromSystem(Mathf.numberWithCommas(
-                Game.current.currencies[id]), Datas.Systems.getCurrency(parseInt(id)), {
-                    side: Align.Right,
-                    align: Align.Right
-                }
-            );
-            this.currencies.push(graphic);
+            systemCurrency = Datas.Systems.getCurrency(parseInt(id));
+            if (systemCurrency.displayInMenu.getValue()) {
+                graphic = Graphic.TextIcon.createFromSystem(Mathf.numberWithCommas(
+                    Game.current.currencies[id]), systemCurrency, {
+                        side: Align.Right,
+                        align: Align.Right
+                    }
+                );
+                this.currencies.push(graphic);
+            }
         }
 
         // Time

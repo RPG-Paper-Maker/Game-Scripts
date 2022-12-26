@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { System } from "..";
 import { Icon } from "./Icon";
 
 /** @class
@@ -18,9 +19,20 @@ import { Icon } from "./Icon";
  *  currency
  */
 class Currency extends Icon {
+
+    public displayInMenu: System.DynamicValue;
     
     constructor(json?: Record<string, any>) {
         super(json);
+    }
+
+    /** 
+     *  Read the JSON associated to the cost.
+     *  @param {Record<string, any>} - json Json object describing the cost
+     */
+    read(json: Record<string, any>) {
+        super.read(json);
+        this.displayInMenu = System.DynamicValue.readOrDefaultSwitch(json.dim, true);
     }
 }
 
