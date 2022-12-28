@@ -1011,14 +1011,17 @@ class Player {
     /** 
      *  Remove the status with release after attacked option.
      */
-    removeAfterAttackedStatus() {
+    removeAfterAttackedStatus(battler: Battler) {
         let test = false;
         let s: Status;
         for (let i = this.status.length - 1; i >= 0; i--) {
             s = this.status[i];
             if (s.system.isReleaseAfterAttacked && Mathf.randomPercentTest(s.system
                 .chanceReleaseAfterAttacked.getValue())) {
+                s = this.status[0];
                 this.status.splice(i, 1);
+                battler.updateStatusStep();
+                battler.updateAnimationStatus(s);
                 test = true;
             }
         }

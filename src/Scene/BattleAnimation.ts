@@ -197,7 +197,7 @@ class BattleAnimation {
 
             // Release status after attacked
             if (this.battle.currentEffectIndex === 0 && isAttacked) {
-                target.player.removeAfterAttackedStatus();
+                target.player.removeAfterAttackedStatus(target);
             }
         }
     }
