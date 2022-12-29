@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+export * from "./ArrayUtils";
 export * from "./Constants";
 export * from "./Enum";
 export * from "./Inputs";

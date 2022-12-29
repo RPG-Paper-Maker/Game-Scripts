@@ -178,8 +178,10 @@ class TeleportObject extends Base {
                                 .hero.orientation : this.direction - 1;
                             if (Scene.Map.current.id !== id) {
                                 let map = new Scene.Map(id, false, false, direction);
-                                map.reactionInterpreters.push(
-                                    ReactionInterpreter.currentReaction);
+                                // Include current reaction in the new map so it excecute commands after teleport
+                                map.reactionInterpreters.push(ReactionInterpreter.currentReaction);
+                                // Initialize time event again to reinclude time repeat off
+                                Game.current.hero.initializeTimeEvents();
                                 Manager.Stack.replace(map);
                                 currentState.distance = null;
                             } else {
