@@ -264,8 +264,12 @@ class MapObject {
      *  @returns {Promise<StructSearchResult>}
      */
     static async searchOutMap(objectID: number): Promise<StructSearchResult> {
-        let globalPortion = Scene.Map.current.allObjects[objectID]
-            .getGlobalPortion();
+        let object = Scene.Map.current.allObjects[objectID];
+        if (!object) {
+            Platform.showErrorMessage("Trying to access an object ID " + objectID 
+                + " that doesn't exists. Please check your commands.");
+        }
+        let globalPortion = object.getGlobalPortion();
         let mapsDatas = Game.current.getPortionDatas(Scene.Map.current.id, 
             globalPortion);
         let json = await IO.parseFileJSON(Paths.FILE_MAPS + Scene.Map.current
