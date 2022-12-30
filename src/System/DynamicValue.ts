@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Utils } from "../Common";
+import { Enum, Platform, Utils } from "../Common";
 import DynamicValueKind = Enum.DynamicValueKind;
 import { System, Datas } from "../index";
 import { StructIterator } from "../EventCommand";
@@ -351,9 +351,12 @@ class DynamicValue extends System.Base {
      *  Get the value
      *  @returns {any}
      */
-    getValue<T>(forceVariable: boolean = false): any {
+    getValue<T>(forceVariable: boolean = false, deep: boolean = false): any {
         switch (this.kind) {
             case DynamicValueKind.Variable:
+                if (!Game.current) {
+                    Platform.showErrorMessage("Trying to access a variable value without any game loaded.");
+                }
                 return forceVariable ? this.value : Game.current.variables[this.value];
             case DynamicValueKind.Parameter:
                 return ReactionInterpreter.currentParameters[this.value]
@@ -425,8 +428,22 @@ class DynamicValue extends System.Base {
             case DynamicValueKind.Model:
                 return Datas.CommonEvents.getCommonObject(this.value);
             case DynamicValueKind.CustomStructure:
+                if (deep) {
+                    let obj = {};
+                    for (let k in this.customStructure) {
+                        obj[k] = this.customStructure[k].getValue(forceVariable, true);
+                    }
+                    return obj;
+                }
                 return this.customStructure;
             case DynamicValueKind.CustomList:
+                if (deep) {
+                    let list = [];
+                    for (let v of this.customList) {
+                        list.push(v.getValue(forceVariable, true));
+                    }
+                    return list;
+                }
                 return this.customList;
             case DynamicValueKind.Vector2:
                 return new Vector2(this.x.getValue(), this.y.getValue());

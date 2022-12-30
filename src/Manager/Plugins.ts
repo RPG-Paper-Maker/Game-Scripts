@@ -9,7 +9,6 @@
 
 import { IO, Paths, Constants, Utils } from "../Common";
 import { System } from "../index";
-import { DynamicValue } from "../System";
 
 /** @class
  *  The class who handles plugins of RPG Paper Maker.
@@ -148,10 +147,12 @@ class Plugins {
      *  @static
      *  @param {string} pluginName
      *  @param {string} parameter
+     *  @param {boolean} [forceDeepGetValue=true]
      *  @returns {any}
      */
-    static getParameter(pluginName: string, parameter: string): any {
-        return this.getParameters(pluginName)[parameter].getValue()
+    static getParameter(pluginName: string, parameter: string, forceDeepGetValue: 
+        boolean = true): any {
+        return this.getParameters(pluginName)[parameter].getValue(false, forceDeepGetValue);
     }
 
     /**
@@ -181,6 +182,8 @@ class Plugins {
         */
     }
 
+
+
     /**
      *  @static
      *  @usage This function is used to inject/overwrite original class methods and variables.
@@ -194,8 +197,8 @@ class Plugins {
      */
     static inject<T extends NewableFunction, M extends keyof T, LT extends keyof T["prototype"], TR = string, LM = NewableFunction>(
         classObject: T, prototypeName: LT | TR | M, prototype:T["prototype"][LT] 
-        | T[M] | LM, staticType :boolean = false, overwrite:boolean = false, 
-        loadBefore: boolean = true) {
+        | T[M] | LM, staticType :boolean = false, overwrite: boolean = false, 
+        loadOriginalBefore: boolean = true) {
         let TheAnyPrototype:any = prototype; //force any type, system will not accept otherwise!
         if(!staticType){
             let classPrototype = classObject.prototype[prototypeName];
@@ -205,7 +208,7 @@ class Plugins {
                         this.super = (...arggs)=>{classPrototype.call(this,...arggs)};
                         return TheAnyPrototype.call(this,...args);
                     }
-                } else if(loadBefore){
+                } else if(loadOriginalBefore){
                     classObject.prototype[prototypeName] = function(...args){
                         let result = classPrototype.call(this,...args);
                         this.super = (...arggs)=>{classPrototype.call(this,...arggs)};
@@ -232,7 +235,7 @@ class Plugins {
                        return TheAnyPrototype.call(this,...args);
                     }
                 } else 
-                if(loadBefore){
+                if(loadOriginalBefore){
                     classAnyObject[prototypeName] = function(...args){
                        let result = classMethod.call(this,...args);
                        this.super = (...arggs)=>{classMethod.call(this,...arggs)};
