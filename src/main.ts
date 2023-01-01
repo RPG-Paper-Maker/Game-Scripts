@@ -33,6 +33,7 @@ export class Main {
     static async initialize() {
         await Datas.Settings.checkIsProtected();
         await Manager.Plugins.load();
+        Inputs.initialize();
         Manager.Stack.loadingDelay = 0;
         Manager.Songs.initialize();
         Manager.Stack.clearHUD();
@@ -143,14 +144,6 @@ export class Main {
 // -------------------------------------------------------
 
 Utils.tryCatch(Main.initialize);
-
-// -------------------------------------------------------
-//
-// INPUTS CONFIG
-//
-// -------------------------------------------------------
-
-Inputs.initialize();
 
 // -------------------------------------------------------
 //
