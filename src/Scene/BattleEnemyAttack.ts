@@ -278,26 +278,56 @@ class BattleEnemyAttack {
                 }
                 break;
             case TargetKind.Ally:
-                side = CharacterKind.Monster;
+                switch (restriction) {
+                    case Enum.StatusRestrictionsKind.AttackRandomAlly:
+                        side = CharacterKind.Monster;
+                        break;
+                    case Enum.StatusRestrictionsKind.AttackRandomEnemy:
+                        side = CharacterKind.Hero;
+                        break;
+                    case Enum.StatusRestrictionsKind.AttackRandomTarget:
+                        side = Mathf.random(0, 1) === 0 ? CharacterKind.Monster :
+                            CharacterKind.Hero;
+                        break;
+                    default:
+                        side = CharacterKind.Monster;
+                        break;
+                }
                 break;
             case TargetKind.AllEnemies:
                 switch (restriction) {
                     case Enum.StatusRestrictionsKind.AttackRandomAlly:
                         this.battle.targets = this.battle.battlers[CharacterKind
                             .Monster];
-                        break;
+                        return;
                     case Enum.StatusRestrictionsKind.AttackRandomEnemy:
                         this.battle.targets = this.battle.battlers[CharacterKind
                             .Hero];
-                        break;
+                        return;
                     case Enum.StatusRestrictionsKind.AttackRandomTarget:
                         this.battle.targets = Mathf.random(0, 1) === 0 ? this
                             .battle.battlers[CharacterKind.Monster] : this
                             .battle.battlers[CharacterKind.Hero];
-                        break;
+                        return;
                 }
+                this.battle.targets = this.battle.battlers[CharacterKind.Hero];
                 return;
             case TargetKind.AllAllies:
+                switch (restriction) {
+                    case Enum.StatusRestrictionsKind.AttackRandomAlly:
+                        this.battle.targets = this.battle.battlers[CharacterKind
+                            .Hero];
+                        return;
+                    case Enum.StatusRestrictionsKind.AttackRandomEnemy:
+                        this.battle.targets = this.battle.battlers[CharacterKind
+                            .Monster];
+                        return;
+                    case Enum.StatusRestrictionsKind.AttackRandomTarget:
+                        this.battle.targets = Mathf.random(0, 1) === 0 ? this
+                            .battle.battlers[CharacterKind.Monster] : this
+                            .battle.battlers[CharacterKind.Hero];
+                        return;
+                }
                 this.battle.targets = this.battle.battlers[CharacterKind.Monster];
                 return;
         }
