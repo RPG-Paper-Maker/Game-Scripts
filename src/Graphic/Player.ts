@@ -109,8 +109,7 @@ class Player extends Base {
         }
 
         // Faceset
-        this.faceset = Datas.Pictures.getPictureCopy(PictureKind.Facesets, hero
-            .idFaceset);
+        this.faceset = Datas.Pictures.getPictureCopy(PictureKind.Facesets, player.getFacesetID());
         if (this.reverse) {
             this.faceset.setLeft(Datas.Systems.getCurrentWindowSkin().borderBotLeft[2]);
         } else {
@@ -120,8 +119,7 @@ class Player extends Base {
         this.faceset.reverse = this.reverse;
 
         // Battler
-        this.battler = Datas.Pictures.getPictureCopy(PictureKind.Battlers, hero
-            .idBattler);
+        this.battler = Datas.Pictures.getPictureCopy(PictureKind.Battlers, player.getBattlerID());
         this.battlerFrame = new Frame(250, { frames: Datas.Systems.battlersFrames });
 
         // Level up
@@ -360,8 +358,8 @@ class Player extends Base {
         }
 
         // Faceset
-        this.faceset.draw({ sx: this.player.system.indexXFaceset * Datas.Systems
-            .facesetsSize, sy: this.player.system.indexYFaceset * Datas.Systems
+        this.faceset.draw({ sx: this.player.getFacesetIndexX() * Datas.Systems
+            .facesetsSize, sy: this.player.getFacesetIndexY() * Datas.Systems
             .facesetsSize, sw: Datas.Systems.facesetsSize, sh: Datas.Systems
             .facesetsSize, w: Datas.Systems.facesetScalingWidth, h: Datas.Systems
             .facesetScalingHeight });

@@ -100,7 +100,7 @@ class PlayerDescription extends Base {
 
         // Battler
         this.battler = Datas.Pictures.getPictureCopy(Enum.PictureKind.Battlers, 
-            system.idBattler);
+            player.getBattlerID());
         this.battlerFrame = new Frame(250, { frames: Datas.Systems.battlersFrames });
     }
 

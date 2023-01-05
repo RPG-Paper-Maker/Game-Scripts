@@ -180,6 +180,8 @@ class Events {
                 return new EventCommand.DisplayHideABattler(command);
             case EventCommandKind.TransformABattler:
                 return new EventCommand.TransformABattler(command);
+            case EventCommandKind.ChangeBattlerGraphics:
+                return new EventCommand.ChangeBattlerGraphics(command);
             default:
                 return null;
         }

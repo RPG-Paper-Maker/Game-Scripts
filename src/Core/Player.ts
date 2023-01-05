@@ -53,6 +53,10 @@ class Player {
     public skillCostRes: Record<string, number>[];
     public changedClass: System.Class;
     public elements: System.DynamicValue[];
+    public battlerID: number = null;
+    public facesetID: number = null;
+    public facesetIndexX: number = null;
+    public facesetIndexY: number = null;
 
     constructor(kind?: Enum.CharacterKind, id?: number, instanceID?: number, skills?: 
         Record<string, any>[], status?: Record<string, any>[], name?: string, 
@@ -264,7 +268,11 @@ class Player {
             stats: this.getSaveStat(),
             equip: this.getSaveEquip(),
             exp: this.editedExpList,
-            class: this.changedClass ? this.changedClass.id : undefined
+            class: this.changedClass ? this.changedClass.id : undefined,
+            battler: this.battlerID,
+            face: this.facesetID,
+            faceX: this.facesetIndexX,
+            faceY: this.facesetIndexY
         };
     }
 
@@ -702,6 +710,12 @@ class Player {
         for (let i in json.exp) {
             this.expList[i] = json.exp[i];
         }
+
+        // Faceset and battler
+        this.facesetID = json.face;
+        this.facesetIndexX = json.faceX;
+        this.facesetIndexY = json.faceY;
+        this.battlerID = json.battler;
 
         this.updateAllStatsValues();
     }
@@ -1158,6 +1172,38 @@ class Player {
                 this.elements.push(characteristic.elementID);
             }
         }
+    }
+
+    /** 
+     *  Get battler ID from system, or another if modified with change graphics.
+     *  @returns {number}
+     */
+    getBattlerID(): number {
+        return this.battlerID === null ? this.system.idBattler : this.battlerID;
+    }
+
+    /** 
+     *  Get faceset ID from system, or another if modified with change graphics.
+     *  @returns {number}
+     */
+    getFacesetID(): number {
+        return this.facesetID === null ? this.system.idFaceset : this.facesetID;
+    }
+
+    /** 
+     *  Get faceset index x from system, or another if modified with change graphics.
+     *  @returns {number}
+     */
+    getFacesetIndexX(): number {
+        return this.facesetIndexX === null ? this.system.indexXFaceset : this.facesetIndexX;
+    }
+
+    /** 
+     *  Get faceset index y from system, or another if modified with change graphics.
+     *  @returns {number}
+     */
+    getFacesetIndexY(): number {
+        return this.facesetIndexY === null ? this.system.indexYFaceset : this.facesetIndexY;
     }
 }
 

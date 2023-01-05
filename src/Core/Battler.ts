@@ -131,7 +131,7 @@ class Battler {
             this.position.x + Battler.OFFSET_SELECTED, this.position.x, 0);
         this.timerMove = 0;
         this.timeDamage = Battler.TOTAL_TIME_DAMAGE;
-        let idBattler = player.system.idBattler;
+        let idBattler = player.getBattlerID();
         if (idBattler === -1) {
             this.mesh = null;
         } else {

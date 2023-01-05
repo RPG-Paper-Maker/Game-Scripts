@@ -137,7 +137,8 @@ namespace Enum {
         SwitchTexture,
         StopASound,
         DisplayHideABattler,
-        TransformABattler
+        TransformABattler,
+        ChangeBattlerGraphics
     };
 
     /**
