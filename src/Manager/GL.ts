@@ -130,7 +130,8 @@ class GL {
      *  @returns {THREE.ShaderMaterial}
      */
     static createMaterial(texture: THREE.Texture, opts: { flipX?: boolean
-        , flipY?: boolean, uniforms?: Record<string, any>, isFaceSprite?: boolean } = {}): 
+        , flipY?: boolean, uniforms?: Record<string, any>, isFaceSprite?: boolean,
+        side?: THREE.Side } = {}): 
         THREE.ShaderMaterial {
         texture.magFilter = THREE.NearestFilter;
         texture.minFilter = THREE.NearestFilter;
@@ -147,7 +148,7 @@ class GL {
             uniforms:       opts.uniforms,
             vertexShader:   opts.isFaceSprite ? this.SHADER_FACE_VERTEX : this.SHADER_FIX_VERTEX,
             fragmentShader: opts.isFaceSprite ? this.SHADER_FACE_FRAGMENT : this.SHADER_FIX_FRAGMENT,
-            side: opts.isFaceSprite ? THREE.BackSide : THREE.DoubleSide,
+            side: Utils.isUndefined(opts.side) ? (opts.isFaceSprite ? THREE.BackSide : THREE.DoubleSide) : opts.side,
             transparent: true
         });
         return material;

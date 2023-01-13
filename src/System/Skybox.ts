@@ -55,22 +55,22 @@ class Skybox extends Base {
         return [
             Manager.GL.createMaterial(Manager.GL.textureLoader.load(Datas
                 .Pictures.get(PictureKind.Skyboxes, this.left).getPath()), { 
-                flipY: true, flipX: true }),
+                flipY: true, flipX: true, side: THREE.BackSide }),
             Manager.GL.createMaterial(Manager.GL.textureLoader.load(Datas
                 .Pictures.get(PictureKind.Skyboxes, this.right).getPath()), { 
-                flipY: true, flipX: true }),
+                flipY: true, flipX: true, side: THREE.BackSide }),
             Manager.GL.createMaterial(Manager.GL.textureLoader.load(Datas
                 .Pictures.get(PictureKind.Skyboxes, this.top).getPath()), { 
-                flipY: true, flipX: true }),
+                flipY: true, flipX: true, side: THREE.BackSide }),
             Manager.GL.createMaterial(Manager.GL.textureLoader.load(Datas
                 .Pictures.get(PictureKind.Skyboxes, this.bot).getPath()), { 
-                flipY: true, flipX: true }),
+                flipY: true, flipX: true, side: THREE.BackSide }),
             Manager.GL.createMaterial(Manager.GL.textureLoader.load(Datas
                 .Pictures.get(PictureKind.Skyboxes, this.front).getPath()), { 
-                flipY: true, flipX: true }),
+                flipY: true, flipX: true, side: THREE.BackSide }),
             Manager.GL.createMaterial(Manager.GL.textureLoader.load(Datas
                 .Pictures.get(PictureKind.Skyboxes, this.back).getPath()), { 
-                flipY: true, flipX: true })
+                flipY: true, flipX: true, side: THREE.BackSide })
         ];
     }
 }
