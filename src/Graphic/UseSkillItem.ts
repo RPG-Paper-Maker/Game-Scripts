@@ -11,8 +11,8 @@
 
 import { Base } from "./Base";
 import { Graphic, Manager, Datas, Scene, System } from "../index";
-import { Mathf, ScreenResolution } from "../Common";
-import { Battler, Game, Player } from "../Core";
+import { Enum, Mathf, ScreenResolution } from "../Common";
+import { Battler, Game, Item, Player } from "../Core";
 
 /** @class
  *  The graphic displaying a skill or an item use.
@@ -28,14 +28,7 @@ class UseSkillItem extends Base {
 
     constructor({ hideArrow = false }: { hideArrow?: boolean } = {}) {
         super();
-
-        this.graphicCharacters = new Array;
-        let player: Graphic.Player;
-        for (let i = 0, l = Game.current.teamHeroes.length; i < l; i++) {
-            player = new Graphic.Player(Game.current.teamHeroes[i]);
-            player.initializeCharacter(true);
-            this.graphicCharacters.push(player);
-        }
+        this.updateGraphicCharactersEquip(null);
         this.hideArrow = hideArrow;
     }
 
@@ -132,6 +125,22 @@ class UseSkillItem extends Base {
     updateStatShortNone() {
         for (let i = 0, l = this.graphicCharacters.length; i < l; i++) {
             this.graphicCharacters[i].updateStatShortNone();
+        }
+    }
+
+    updateGraphicCharactersEquip(equip: Item) {
+        this.graphicCharacters = [];
+        let graphicPlayer: Graphic.Player, isPossible: boolean;
+        for (let player of Game.current.teamHeroes) {
+            isPossible = true;
+            if (equip !== null) {
+                isPossible = player.canEquipWeaponArmor(equip);
+            }
+            if (isPossible) {
+                graphicPlayer = new Graphic.Player(player);
+                graphicPlayer.initializeCharacter(true);
+                this.graphicCharacters.push(graphicPlayer);
+            }
         }
     }
 

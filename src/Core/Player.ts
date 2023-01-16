@@ -10,7 +10,7 @@
 */
 
 import { Enum, Interpreter, Utils, Platform, Mathf } from "../Common";
-import { Datas, System, Graphic } from "../index";
+import { Datas, System, Graphic, Core } from "../index";
 import { Skill } from "./Skill";
 import { Item } from "./Item";
 import { Battler } from "./Battler";
@@ -1150,7 +1150,15 @@ class Player {
      *  @returns {System.Characteristic[]}
      */
     getCharacteristics(): System.Characteristic[] {
-        return this.system.getCharacteristics(this.changedClass);
+        let characteristics = this.system.getCharacteristics(this.changedClass);
+        // Also add weapons and armors
+        for (let equipment of this.equip) {
+            if (equipment) {
+                characteristics = characteristics.concat(equipment
+                    .system.characteristics);
+            }
+        }
+        return characteristics;
     }
 
     /** 
@@ -1204,6 +1212,37 @@ class Player {
      */
     getFacesetIndexY(): number {
         return this.facesetIndexY === null ? this.system.indexYFaceset : this.facesetIndexY;
+    }
+
+    /** 
+     *  Check if player can equip this weapon or armor.
+     *  @param {Core.Item} weaponArmor
+     *  @returns {boolean}
+     */
+    canEquipWeaponArmor(weaponArmor: Item): boolean {
+        let characteristics = this.getCharacteristics();
+        for (let characteristic of characteristics) {
+            if (characteristic.kind === Enum.CharacteristicKind
+                .AllowForbidEquip && ((weaponArmor.kind === Enum.ItemKind
+                .Weapon && characteristic.isAllowEquipWeapon && 
+                weaponArmor.system.type === characteristic.equipWeaponTypeID
+                .getValue()) || (weaponArmor.kind === Enum.ItemKind.Armor 
+                && !characteristic.isAllowEquipWeapon && 
+                weaponArmor.system.type === characteristic.equipArmorTypeID
+                .getValue())) && !characteristic.isAllowEquip) {
+                return false;
+            }
+            if (characteristic.kind === Enum.CharacteristicKind.AllowForbidChange 
+                && !characteristic.isAllowChangeEquipment) {
+                let type = weaponArmor.kind === Enum.ItemKind.Weapon ? Datas
+                    .BattleSystems.getWeaponKind(weaponArmor.system.type) : Datas
+                    .BattleSystems.getArmorKind(weaponArmor.system.type);
+                if (type.equipments[characteristic.changeEquipmentID.getValue()]) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
 

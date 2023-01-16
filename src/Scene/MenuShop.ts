@@ -18,6 +18,11 @@ import { MenuBase } from "./MenuBase";
 
 /**
  * The scene handling and processing the shop system.
+ * STEP 0 => Buy or sell?
+ * STEP 1 => Selection of item
+ * STEP 2 => Selection of number (spinbox)
+ * STEP 3 => Selection of ally
+ * STEP 4 => Confirmation of equip
  * @class
  * @extends {MenuBase}
  */
@@ -359,6 +364,8 @@ class MenuShop extends MenuBase {
             (<Graphic.Text>this.windowBoxOwned.content).setText(Datas.Languages
                 .extras.owned.name() + ": " + owned);
         }
+        (<Graphic.UseSkillItem>this.windowBoxUseItem.content).updateGraphicCharactersEquip((
+            <Graphic.Item>this.windowBoxInformation.content).item);
     }
 
     /** 
@@ -458,7 +465,9 @@ class MenuShop extends MenuBase {
                     if (this.isBuy()) {
                         if (graphic.item.shop.isPossiblePrice()) {
                             Datas.Systems.soundConfirmation.playSound();
-                            if (graphic.item.system.isWeaponArmor()) {
+                            if (graphic.item.system.isWeaponArmor() && (<Graphic
+                                .UseSkillItem>this.windowBoxUseItem.content)
+                                .graphicCharacters.length > 0) {
                                 (<Graphic.UseSkillItem>this.windowBoxUseItem.content)
                                     .hideArrow = false;
                                 (<Graphic.UseSkillItem>this.windowBoxUseItem.content)
@@ -494,7 +503,9 @@ class MenuShop extends MenuBase {
                     Datas.Systems.soundConfirmation.playSound();
                     let shopItem = graphic.item;
                     if (this.isBuy()) {
-                        if (this.step === 2 && graphic.item.system.isWeaponArmor()) {
+                        if (this.step === 2 && graphic.item.system.isWeaponArmor() &&
+                            (<Graphic.UseSkillItem>this.windowBoxUseItem.content)
+                            .graphicCharacters.length > 0) {
                             this.step = 4;
                             Manager.Stack.requestPaintHUD = true;
                             break;

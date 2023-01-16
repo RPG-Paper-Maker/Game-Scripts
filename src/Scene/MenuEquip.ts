@@ -250,28 +250,7 @@ class MenuEquip extends MenuBase {
                 if (type.equipments[idEquipment]) {
                     nbItem = item.nb;
                     if (nbItem > 0) {
-                        characteristics = player.getCharacteristics();
-                        // Also add weapons and armors
-                        for (let equipment of player.equip) {
-                            if (equipment) {
-                                characteristics = characteristics.concat(equipment
-                                    .system.characteristics);
-                            }
-                        }
-                        allow = true;
-                        for (j = 0, m = characteristics.length; j < m; j++) {
-                            characteristic = characteristics[j];
-                            if (characteristic.kind === Enum.CharacteristicKind
-                                .AllowForbidEquip && ((item.kind === Enum.ItemKind
-                                .Weapon && characteristic.isAllowEquipWeapon && 
-                                systemItem.type === characteristic.equipWeaponTypeID
-                                .getValue()) || (item.kind === Enum.ItemKind.Armor 
-                                && !characteristic.isAllowEquipWeapon && 
-                                systemItem.type === characteristic.equipArmorTypeID
-                                .getValue()))) {
-                                allow = characteristic.isAllowEquip;
-                            }
-                        }
+                        allow = player.canEquipWeaponArmor(item);
                         if (allow && Interpreter.evaluate(systemItem
                             .conditionFormula.getValue(), { user: Game.current
                             .teamHeroes[this.windowChoicesTabs.currentSelectedIndex] })) {
