@@ -271,6 +271,86 @@ class BattleAnimation {
 
                 // Testing end of battle
                 let effect: System.Effect, isAnotherEffect: boolean;
+                // Apply effect
+                if (this.battle.currentTargetIndex === null) {
+                    this.battle.currentEffectIndex++;
+                    for (l = this.battle.effects.length; this.battle
+                        .currentEffectIndex < l; this.battle.currentEffectIndex++)
+                    {
+                        effect = this.battle.effects[this.battle.currentEffectIndex];
+                        effect.execute();
+                        if (effect.isAnimated()) {
+                            if (effect.kind === Enum.EffectKind.Status) {
+                                this.battle.currentTargetIndex = -1;
+                            }
+                            break;
+                        }
+                    }
+                }
+                // Status message
+                if (this.battle.currentTargetIndex !== null) {
+                    let target: Battler;
+                    this.battle.currentTargetIndex++;
+                    for (l = this.battle.targets.length; this.battle
+                        .currentTargetIndex < l; this.battle.currentTargetIndex++)
+                    {
+                        target = this.battle.targets[this.battle.currentTargetIndex];
+                        if (!target.isDamagesMiss) {
+                            if (target.lastStatus !== null) {
+                                (<Graphic.Text>this.battle.windowTopInformations
+                                    .content).setText(target.player.kind === 
+                                    CharacterKind.Hero ? target.lastStatus
+                                    .getMessageAllyAffected(target) : target
+                                    .lastStatus
+                                    .getMessageEnemyAffected(target));
+                                break;
+                            }
+                            if (target.lastStatusHealed !== null) {
+                                (<Graphic.Text>this.battle.windowTopInformations
+                                    .content).setText(target.lastStatusHealed
+                                    .getMessageHealed(target));
+                                break;
+                            }
+                        }
+                    }
+                    if (this.battle.currentTargetIndex === l) {
+                        this.battle.currentTargetIndex = null;
+                    }
+                }
+                // Target attacked
+                this.updateTargetsAttacked();
+
+                isAnotherEffect = this.battle.currentEffectIndex < this
+                    .battle.effects.length || this.battle.currentTargetIndex 
+                    !== null;
+                if (isAnotherEffect) {
+                    this.battle.time = new Date().getTime() - (Scene.Battle
+                        .TIME_ACTION_ANIMATION / 2);
+                    for (i = 0, l = this.battle.targets.length; i < l; i++) {
+                        this.battle.targets[i].timeDamage = 0;
+                    }
+                    return;
+                } else {
+                    let target: Battler;
+                    for (i = 0, l = this.battle.targets.length; i < l; i++) {
+                        target = this.battle.targets[i];
+                        target.updateDead(false);
+                        target.damages = null;
+                        target.isDamagesMiss = false;
+                        target.isDamagesCritical = false;
+                    }
+                    if (this.battle.user) {
+                        if (!this.battle.forceAnAction || this.battle
+                            .forceAnActionUseTurn) {
+                            this.battle.user.setActive(false);
+                            this.battle.user.setSelected(false);
+                        }
+                        if (this.battle.targets.length > 0) {
+                            this.battle.user.lastTarget = target;
+                        }
+                    }
+                }
+
                 if (this.battle.isWin()) {
                     this.battle.winning = true;
                     this.battle.activeGroup();
@@ -279,86 +359,6 @@ class BattleAnimation {
                     this.battle.winning = false;
                     this.battle.changeStep(Enum.BattleStep.Victory);
                 } else {
-                    // Apply effect
-                    if (this.battle.currentTargetIndex === null) {
-                        this.battle.currentEffectIndex++;
-                        for (l = this.battle.effects.length; this.battle
-                            .currentEffectIndex < l; this.battle.currentEffectIndex++)
-                        {
-                            effect = this.battle.effects[this.battle.currentEffectIndex];
-                            effect.execute();
-                            if (effect.isAnimated()) {
-                                if (effect.kind === Enum.EffectKind.Status) {
-                                    this.battle.currentTargetIndex = -1;
-                                }
-                                break;
-                            }
-                        }
-                    }
-                    // Status message
-                    if (this.battle.currentTargetIndex !== null) {
-                        let target: Battler;
-                        this.battle.currentTargetIndex++;
-                        for (l = this.battle.targets.length; this.battle
-                            .currentTargetIndex < l; this.battle.currentTargetIndex++)
-                        {
-                            target = this.battle.targets[this.battle.currentTargetIndex];
-                            if (!target.isDamagesMiss) {
-                                if (target.lastStatus !== null) {
-                                    (<Graphic.Text>this.battle.windowTopInformations
-                                        .content).setText(target.player.kind === 
-                                        CharacterKind.Hero ? target.lastStatus
-                                        .getMessageAllyAffected(target) : target
-                                        .lastStatus
-                                        .getMessageEnemyAffected(target));
-                                    break;
-                                }
-                                if (target.lastStatusHealed !== null) {
-                                    (<Graphic.Text>this.battle.windowTopInformations
-                                        .content).setText(target.lastStatusHealed
-                                        .getMessageHealed(target));
-                                    break;
-                                }
-                            }
-                        }
-                        if (this.battle.currentTargetIndex === l) {
-                            this.battle.currentTargetIndex = null;
-                        }
-                    }
-                    // Target attacked
-                    this.updateTargetsAttacked();
-
-                    isAnotherEffect = this.battle.currentEffectIndex < this
-                        .battle.effects.length || this.battle.currentTargetIndex 
-                        !== null;
-                    if (isAnotherEffect) {
-                        this.battle.time = new Date().getTime() - (Scene.Battle
-                            .TIME_ACTION_ANIMATION / 2);
-                        for (i = 0, l = this.battle.targets.length; i < l; i++) {
-                            this.battle.targets[i].timeDamage = 0;
-                        }
-                        return;
-                    } else {
-                        let target: Battler;
-                        for (i = 0, l = this.battle.targets.length; i < l; i++) {
-                            target = this.battle.targets[i];
-                            target.updateDead(false);
-                            target.damages = null;
-                            target.isDamagesMiss = false;
-                            target.isDamagesCritical = false;
-                        }
-                        if (this.battle.user) {
-                            if (!this.battle.forceAnAction || this.battle
-                                .forceAnActionUseTurn) {
-                                this.battle.user.setActive(false);
-                                this.battle.user.setSelected(false);
-                            }
-                            if (this.battle.targets.length > 0) {
-                                this.battle.user.lastTarget = target;
-                            }
-                        }
-                    }
-
                     if (this.battle.forceAnAction) {
                         this.battle.forceAnAction = false;
                         this.battle.step = this.battle.previousStep;
