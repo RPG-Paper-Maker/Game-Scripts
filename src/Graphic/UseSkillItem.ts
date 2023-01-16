@@ -209,7 +209,7 @@ class UseSkillItem extends Base {
     drawArrowAtIndex(index: number, x: number, y: number, h: number) {
         Datas.Systems.getCurrentWindowSkin().drawArrowTarget(this
             .graphicCharacters[index].battlerFrame.value, x + ScreenResolution
-            .getScreenMinXY(32) + (index * 85), y + h - ScreenResolution
+            .getScreenMinXY(32 + (index * 85)), y + h - ScreenResolution
             .getScreenMinXY(20));
     }
 
