@@ -9,13 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Constants, Platform, Utils } from "../Common";
+import { Enum, Utils } from "../Common";
 import PictureKind = Enum.PictureKind;
 import { Base } from "./Base";
-import { CollisionSquare, TextureBundle, Picture2D, Autotiles, Game } from "../Core";
-import { System, Datas, Manager } from "../index";
-import { THREE } from "../Globals";
-import { ShaderMaterial } from "three";
+import { CollisionSquare, TextureBundle, Game } from "../Core";
+import { System, Datas } from "../index";
 
 /** @class
  *  A tileset of the game.

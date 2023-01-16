@@ -351,6 +351,12 @@ class BattleVictory {
                     }
                 }
 
+                // Transition None
+                if (this.battle.transitionEnd === 0) {
+                    this.battle.sceneMap.updateBackgroundColor();
+                    this.battle.sceneMap.updateTexturesShaders();
+                }
+
                 // Transition zoom
                 if (this.battle.transitionEnd === 2) {
                     let offset;
@@ -367,7 +373,8 @@ class BattleVictory {
                             this.battle.camera.distance = Scene.Battle
                                 .START_CAMERA_DISTANCE;
                             this.battle.transitionZoom = true;
-                            (<Scene.Map>Manager.Stack.subTop).updateBackgroundColor();
+                            this.battle.sceneMap.updateBackgroundColor();
+                            this.battle.sceneMap.updateTexturesShaders();
                             this.playMapMusic();
                             this.battle.time = new Date().getTime();
                         }
@@ -404,7 +411,8 @@ class BattleVictory {
                             this.battle.transitionColorAlpha = 1;
                             this.battle.transitionColor = true;
                             this.battle.timeTransition = new Date().getTime();
-                            (<Scene.Map>Manager.Stack.subTop).updateBackgroundColor();
+                            this.battle.sceneMap.updateBackgroundColor();
+                            this.battle.sceneMap.updateTexturesShaders();
                         }
                         return;
                     }
@@ -426,6 +434,7 @@ class BattleVictory {
                         return;
                     }
                 }
+
                 this.battle.transitionEnded = true;
                 break;
         }
