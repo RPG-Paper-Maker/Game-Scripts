@@ -423,7 +423,7 @@ class Picture extends Base {
             x = i % w;
             y = Math.floor(i / w);
             square = this.getCollisionAtPos(texture[0] + x, texture[1] + y);
-            if (square !== null && square.climbing) {
+            if (square && square.climbing) {
                 squares.push([x, y]);
             }
         }
