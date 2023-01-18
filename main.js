@@ -48,7 +48,7 @@ function createWindow () {
         if (f)
         {
             window.setResizable(true);
-            window.setFullScreen(true)
+            window.setFullScreen(true);
         } else
         {
             window.setContentSize(w, h);
@@ -57,6 +57,7 @@ function createWindow () {
             } else {
                 window.center();
             }
+            window.setFullScreen(false);
         }
     })
     window.loadFile('index.html');

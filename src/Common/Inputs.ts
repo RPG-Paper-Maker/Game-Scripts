@@ -52,8 +52,18 @@ class Inputs {
                 let key = event.keyCode;
         
                 // On pressing F12, quit game
-                if (key === KeyEvent.DOM_VK_F12) {
-                    Platform.quit();
+                switch (key) {
+                    case KeyEvent.DOM_VK_F12:
+                        Platform.quit();
+                        break;
+                    case KeyEvent.DOM_VK_F4:
+                        Datas.Systems.switchFullscreen();
+                        break;
+                }
+                if (event.code === 'Enter' && (event.altKey || event.shiftKey)) {
+                    Datas.Systems.switchFullscreen();
+                    event.preventDefault();
+                    return;
                 }
                 // If not repeat, call simple press RPM event
                 if (!event.repeat) {

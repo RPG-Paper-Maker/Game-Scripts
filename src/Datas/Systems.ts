@@ -67,6 +67,9 @@ class Systems {
     public static saveSlots: number;
     public static modelHero: MapObject;
     public static ignoreAssetsLoadingErrors: boolean;
+    public static windowWidth: number;
+    public static windowHeight: number;
+    public static isScreenWindow: boolean;
 
     constructor() {
         throw new Error("This is a static class!");
@@ -92,23 +95,10 @@ class Systems {
             h = 480;
             isScreenWindow = true;
         }
-        if (!isScreenWindow)
-        {
-            w = Platform.screenWidth;
-            h = Platform.screenHeight;
-        }
-        Platform.setWindowSize(w, h, !isScreenWindow);
-        Platform.canvasHUD.width = w;
-        Platform.canvasHUD.height = h;
-        Platform.canvas3D.style.width = w;
-        Platform.canvas3D.style.height = h;
-        Platform.canvasVideos.height = h;
-        ScreenResolution.CANVAS_WIDTH = w;
-        ScreenResolution.CANVAS_HEIGHT = h;
-        ScreenResolution.WINDOW_X = ScreenResolution.CANVAS_WIDTH / 
-            ScreenResolution.SCREEN_X;
-        ScreenResolution.WINDOW_Y = ScreenResolution.CANVAS_HEIGHT / 
-            ScreenResolution.SCREEN_Y;
+        this.windowWidth = w;
+        this.windowHeight = h;
+        this.isScreenWindow = isScreenWindow;
+        this.updateWindowSize(w, h, !isScreenWindow);
         this.antialias = Utils.defaultValue(json.aa, false);
         this.isMouseControls = Utils.defaultValue(json.isMouseControls, true);
 
@@ -412,6 +402,47 @@ class Systems {
     static getCurrentWindowSkin(): System.WindowSkin
     {
         return this.dbOptions.v_windowSkin;
+    }
+
+    /** 
+     *  Update the window size and all the canvas sizes.
+     *  @static
+     *  @param {number} w
+     *  @param {number} h
+     *  @param {boolean} fullscreen
+     */
+    static updateWindowSize(w: number, h: number, fullscreen: boolean) {
+        if (fullscreen)
+        {
+            w = Platform.screenWidth;
+            h = Platform.screenHeight;
+        }
+        Platform.setWindowSize(w, h, fullscreen);
+        Platform.canvasHUD.width = w;
+        Platform.canvasHUD.height = h;
+        Platform.canvas3D.style.width = w;
+        Platform.canvas3D.style.height = h;
+        Platform.canvasVideos.height = h;
+        ScreenResolution.CANVAS_WIDTH = w;
+        ScreenResolution.CANVAS_HEIGHT = h;
+        ScreenResolution.WINDOW_X = ScreenResolution.CANVAS_WIDTH / 
+            ScreenResolution.SCREEN_X;
+        ScreenResolution.WINDOW_Y = ScreenResolution.CANVAS_HEIGHT / 
+            ScreenResolution.SCREEN_Y;
+        Manager.GL.resize();
+        Manager.Stack.requestPaintHUD = true;
+        for (let scene of Manager.Stack.content) {
+            scene.draw3D();
+        }
+    }
+
+    /** 
+     *  Switch between window and fullscreen.
+     *  @static
+     */
+    static switchFullscreen() {
+        this.isScreenWindow = !this.isScreenWindow;
+        this.updateWindowSize(this.windowWidth, this.windowHeight, !this.isScreenWindow);
     }
 }
 
