@@ -874,9 +874,7 @@ class Player {
      */
     pauseExperience() {
         this.totalTimeXP -= new Date().getTime() - this.timeXP;
-        if (this.totalTimeXP < 0) {
-            this.totalTimeXP = 0;
-        }
+        this.remainingXP -= this.obtainedXP;
         this.obtainedXP = 0;
     }
 
