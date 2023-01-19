@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { THREE } from "./Globals";
 import { Datas, Manager } from "./index";
 import { Utils, Platform, Inputs } from "./Common";
 
@@ -20,11 +21,14 @@ import { Utils, Platform, Inputs } from "./Common";
  */
 export class Main {
 
+    static clock = new THREE.Clock();
+    static clockFPS = new THREE.Clock();
+    static delta = 0;
+    static maxFPS: number = 60;
+    static FPS: number = 0;
     static loaded: boolean = false;
     static frames: number = 0;
-    static firstTime: number = -1;
     static time: number = 0;
-    static FPS: number = 60;
 
     constructor() {
         throw new Error("This is a static class");
@@ -104,35 +108,34 @@ export class Main {
      *  Main loop of the game.
      */
     static loop() {
-        if (Main.firstTime === -1) {
-            Main.firstTime = performance.now();
-        }
         requestAnimationFrame(Main.loop);
-
-        // Update if everything is loaded
-        if (Main.loaded) {
-            if (!Manager.Stack.isLoading()) {
-                Manager.Stack.update();
+        Main.delta += Main.clock.getDelta();
+        if (Main.delta > (1 / Main.maxFPS)) { 
+            // Update if everything is loaded
+            if (Main.loaded) {
+                if (!Manager.Stack.isLoading()) {
+                    Manager.Stack.update();
+                }
+                if (!Manager.Stack.isLoading()) {
+                    Manager.Stack.draw3D();
+                }
             }
-            if (!Manager.Stack.isLoading()) {
-                Manager.Stack.draw3D();
+            Manager.Stack.drawHUD();
+    
+            // Elapsed time
+            Manager.Stack.elapsedTime = new Date().getTime() - Manager.Stack
+                .lastUpdateTime;
+            Manager.Stack.averageElapsedTime = (Manager.Stack.averageElapsedTime +
+                Manager.Stack.elapsedTime) / 2;
+            Manager.Stack.lastUpdateTime = new Date().getTime();
+            Main.frames++;
+            Main.time += Main.clockFPS.getDelta();
+            if (Main.time >= 1) {
+                Main.FPS = Main.frames;
+                Main.frames = 0;
+                Main.time = Main.time % 1;
             }
-        }
-        Manager.Stack.drawHUD();
-
-        // Elapsed time
-        Manager.Stack.elapsedTime = new Date().getTime() - Manager.Stack
-            .lastUpdateTime;
-        Manager.Stack.averageElapsedTime = (Manager.Stack.averageElapsedTime +
-            Manager.Stack.elapsedTime) / 2;
-        Manager.Stack.lastUpdateTime = new Date().getTime();
-        let end = performance.now();
-        Main.frames++;
-        let t = end - Main.firstTime;
-        if (t >= 1000) {
-            Main.FPS = Main.frames;
-            Main.frames = 0;
-            Main.firstTime = -1;
+            Main.delta = Main.delta % (1 / Main.maxFPS);
         }
     }
 }
