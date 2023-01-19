@@ -48,7 +48,7 @@ interface StructSearchResult {
  */
 class MapObject {
     
-    public static SPEED_NORMAL = 0.0011666;
+    public static SPEED_NORMAL = 0.004666;
 
     public id: number;
     public system: System.MapObject;
@@ -933,8 +933,8 @@ class MapObject {
         this.removeMoveTemp();
 
         // Set position
-        let speed = this.speed.getValue() * MapObject.SPEED_NORMAL * Math.max(60, 
-            Main.FPS) * Datas.Systems.SQUARE_SIZE;
+        let speed = this.speed.getValue() * MapObject.SPEED_NORMAL * Manager
+            .Stack.averageElapsedTime * Datas.Systems.SQUARE_SIZE;
         if (this.otherMoveCommand !== null) {
             speed *= Math.SQRT1_2;
         }
