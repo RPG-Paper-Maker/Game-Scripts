@@ -712,9 +712,9 @@ class Player {
         }
 
         // Faceset and battler
-        this.facesetID = json.face;
-        this.facesetIndexX = json.faceX;
-        this.facesetIndexY = json.faceY;
+        this.facesetID = Utils.defaultValue(json.face, null);
+        this.facesetIndexX = Utils.defaultValue(json.faceX, null);
+        this.facesetIndexY = Utils.defaultValue(json.faceY, null);
         this.battlerID = json.battler;
 
         this.updateAllStatsValues();
