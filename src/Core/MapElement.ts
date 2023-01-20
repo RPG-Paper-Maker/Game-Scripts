@@ -97,7 +97,10 @@ class MapElement {
         // Position
         let pos = center.clone();
         pos.add(offset);
-        center.setY(center.y + (size.y / 2));
+        if (kind != Enum.ElementMapKind.SpritesFix && kind !== Enum.ElementMapKind
+            .SpritesDouble && kind !== Enum.ElementMapKind.SpritesQuadra) {
+            center.setY(center.y + (size.y / 2));
+        }
         vecA.multiply(size);
         vecB.multiply(size);
         vecC.multiply(size);

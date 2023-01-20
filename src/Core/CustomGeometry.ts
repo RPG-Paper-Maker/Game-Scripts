@@ -10,6 +10,7 @@
 */
 
 import { THREE } from "../Globals";
+import { Sprite } from "./Sprite";
 import { Vector2 } from "./Vector2";
 import { Vector3 } from "./Vector3";
 
@@ -124,6 +125,22 @@ export class CustomGeometry extends THREE.BufferGeometry {
      */
     getNormals(): ArrayLike<number>  {
         return this.getAttribute('normal').array;
+    }
+
+    /** 
+     *  Rotate all the vertices around a specified center Y.
+     *  @param {number} angle
+     *  @param {THREE.Vector3} axis
+     *  @param {THREE.Vector3} center
+     */
+    rotate(angle: number, axis: Vector3, center: Vector3) {
+        for (let vertex of this.getVerticesVectors()) {
+            Sprite.rotateVertex(vertex, center, angle, axis);
+            this.b_vertices.push(vertex.x, vertex.y, vertex.z);
+        }
+        this.setAttribute('position', new THREE.Float32BufferAttribute(this
+            .b_vertices, 3));
+        this.b_vertices = [];
     }
 
     /**
