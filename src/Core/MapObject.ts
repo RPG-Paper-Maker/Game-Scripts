@@ -506,8 +506,8 @@ class MapObject {
         }
         this.meshBoundingBox = new Array;
         let texture = Manager.GL.getMaterialTexture(material);
-        this.position.set(this.position.x - this.currentCenterOffset.x, 0, this
-            .position.z - this.currentCenterOffset.z);
+        this.position.set(this.position.x - this.currentCenterOffset.x, this
+            .position.y, this.position.z - this.currentCenterOffset.z);
         this.currentCenterOffset.set(0, 0, 0);
         this.currentAngle.set(0, 0, 0);
         this.currentScale.set(1, 1, 1);
@@ -591,8 +591,8 @@ class MapObject {
                 .angleY, positionTranformation.angleZ);
             this.currentScale.set(positionTranformation.scaleX, positionTranformation
                 .scaleY, positionTranformation.scaleZ);
-            this.position.set(this.position.x + this.currentCenterOffset.x, 0, 
-                this.position.z + this.currentCenterOffset.z);
+            this.position.set(this.position.x + this.currentCenterOffset.x, this
+                .position.y, this.position.z + this.currentCenterOffset.z);
             this.mesh.position.set(this.position.x, this.position.y, this
                 .position.z);
             this.boundingBoxSettings = objCollision[1][0];
