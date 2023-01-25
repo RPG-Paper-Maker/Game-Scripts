@@ -839,6 +839,7 @@ class Collisions {
         MapObject): [boolean, number, Enum.Orientation]
     {
         let sprites = mapPortion.boundingBoxesSprites[jpositionAfter.toIndex()];
+        let tested = false;
         if (sprites !== null) {
             let objCollision: StructMapElementCollision;
             for (let i = 0, l = sprites.length; i < l; i++) {
@@ -848,8 +849,8 @@ class Collisions {
                     if (this.checkIntersectionSprite(objCollision.b, objCollision.k, object)) {
                         if (objCollision.cl) {
                             const speed = object.speed.getValue() * MapObject
-                                .SPEED_NORMAL * Math.max(60, Main.FPS) * Datas
-                                .Systems.SQUARE_SIZE / 4;
+                                .SPEED_NORMAL * Manager.Stack.averageElapsedTime * 
+                                Datas.Systems.SQUARE_SIZE / 4;
                             const limitTop = objCollision.b[1] + Math.ceil(objCollision.b[4] / 2);
                             const limitBot = objCollision.b[1] - Math.ceil(objCollision.b[4] / 2);
                             const y = object.isClimbingUp ? Math.min(object.position.y + speed, limitTop) : Math.max(object.position.y - speed, limitBot);
@@ -858,12 +859,14 @@ class Collisions {
                             }
                             return [null, y, object.getOrientationBetweenPosition(objCollision.l)];
                         }
-                        return [true, null, Enum.Orientation.None];
+                        if (!object.isClimbing) {
+                            tested = true;
+                        }
                     }
                 }
             }
         }
-        return [false, null, Enum.Orientation.None];
+        return [tested, null, Enum.Orientation.None];
     }
 
     /** 
