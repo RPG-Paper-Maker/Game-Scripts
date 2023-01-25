@@ -217,14 +217,16 @@ class MapPortion {
             indexPos = position.toIndex();
             texture = null;
             texturesAutotile = Scene.Map.current.texturesAutotiles[autotile.autotileID];
-            for (j = 0, m = texturesAutotile.length; j < m; j++) {
-                textureAutotile = texturesAutotile[j];
-                if (textureAutotile.isInTexture(autotile.autotileID, autotile
-                    .texture))
-                {
-                    texture = textureAutotile;
-                    autotiles = this.staticAutotilesList[autotile.autotileID][j];
-                    break;
+            if (texturesAutotile) {
+                for (j = 0, m = texturesAutotile.length; j < m; j++) {
+                    textureAutotile = texturesAutotile[j];
+                    if (textureAutotile.isInTexture(autotile.autotileID, autotile
+                        .texture))
+                    {
+                        texture = textureAutotile;
+                        autotiles = this.staticAutotilesList[autotile.autotileID][j];
+                        break;
+                    }
                 }
             }
             if (texture !== null && texture.material !== null) {
