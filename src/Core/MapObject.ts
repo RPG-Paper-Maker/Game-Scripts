@@ -968,7 +968,9 @@ class MapObject {
 
         // Update orientation
         let climbOrientationEye = this.climbOrientationEye;
-        this.climbOrientationEye = o;
+        if (o !== Enum.Orientation.None) {
+            this.climbOrientationEye = o;
+        }
         if (this.currentStateInstance && !this.currentStateInstance.directionFix) {
             this.orientationEye = orientation;
             orientation = this.orientation;
@@ -1519,7 +1521,7 @@ class MapObject {
      *  @param {Vector3} position 
      *  @returns {Enum.Orientation}
      */
-    getOrientationBetweenPosition(position: Vector3, priority: boolean = false, priorityX: boolean = true): Enum.Orientation {
+    getOrientationBetweenPosition(position: Vector3): Enum.Orientation {
         let x = Math.abs(position.x - this.position.x);
         let z = Math.abs(position.z - this.position.z);
         let orientation = this.orientationEye;
