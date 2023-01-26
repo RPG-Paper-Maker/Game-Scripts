@@ -584,13 +584,15 @@ class Collisions {
                                                                             b = this.checkSprites(mapPortion, jpositionBottomAfter, [], object)[0];
                                                                             if (b === null) {
                                                                                 object.updateMeshBBPosition(object.currentBoundingBox, bbSettings, positionAfter);
+                                                                                object.isClimbingUp = climbingUp;
                                                                                 return [null, null, Enum.Orientation.None];
                                                                             }
                                                                         }
                                                                     }
                                                                 }
                                                             }
-                                                            object.updateMeshBBPosition(object.currentBoundingBox, bbSettings, positionAfter); 
+                                                            object.updateMeshBBPosition(object.currentBoundingBox, bbSettings, positionAfter);
+                                                            object.isClimbingUp = climbingUp; 
                                                             return [null, y, o];
                                                         }
                                                         object.updateMeshBBPosition(object.currentBoundingBox, bbSettings, positionAfter);

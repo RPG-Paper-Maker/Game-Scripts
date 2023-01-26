@@ -125,7 +125,7 @@ class SpriteWall extends MapElement {
                         .SQUARE_SIZE - rect[1]) / 2),
                     localPosition.z,
                     rect[2],
-                    rect[3],
+                    rect[3] - 0.001, // Small offset for climbing collisions stuff
                     1,
                     angle,
                     0,
