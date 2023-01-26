@@ -121,6 +121,44 @@ class Map extends Base {
     }
 
     /** 
+     *  Reload only the textures + collisions
+     */
+    async reloadTextures() {
+        let limit = this.getMapPortionLimit();
+        let i: number, j: number, k: number;
+        for (i = -limit; i <= limit; i++) {
+            for (j = -limit; j <= limit; j++) {
+                for (k = -limit; k <= limit; k++) {
+                    let mapPortion = this.getMapPortion(new Portion(i, j, k));
+                    if (mapPortion) {
+                        mapPortion.cleanStatic();
+                    }
+                }
+            }
+        }
+        this.collisions = new Array;
+        await this.readMapProperties();
+        this.initializeCamera();
+        await this.loadTextures();
+        this.loadCollisions();
+        for (i = -limit; i <= limit; i++) {
+            for (j = -limit; j <= limit; j++) {
+                for (k = -limit; k <= limit; k++) {
+                    let mapPortion = this.getMapPortion(new Portion(i, j, k));
+                    if (mapPortion) {
+                        let portion = new Portion(this.currentPortion.x + i, this
+                            .currentPortion.y + j, this.currentPortion.z + k);
+                        let json = await IO.parseFileJSON(Paths.FILE_MAPS + this
+                            .mapName + Constants.STRING_SLASH + portion.getFileName());
+                        mapPortion.readStatic(json);
+                    }
+                }
+            }
+        }
+        this.loading = false;
+    }
+
+    /** 
      *  Generate the map name according to the ID.
      *  @static
      *  @param {number} id - ID of the map

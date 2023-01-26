@@ -96,32 +96,35 @@ class SwitchTexture extends Base {
     update(currentState: Record<string, any>, object: MapObject, state: number): 
         number
     {
-        if (this.isTilesetID) {
-            Game.current.textures.tilesets[this.tilesetID.getValue()] = this
-                .tilesetPictureID.getValue();
+        if (!currentState.loading) {
+            currentState.loading = true;
+            if (this.isTilesetID) {
+                Game.current.textures.tilesets[this.tilesetID.getValue()] = this
+                    .tilesetPictureID.getValue();
+            }
+            if (this.isAutotileID) {
+                Game.current.textures.autotiles[this.autotileID.getValue()] = this
+                    .autotilePictureID.getValue();
+            }
+            if (this.isWallID) {
+                Game.current.textures.walls[this.wallID.getValue()] = this
+                    .wallPictureID.getValue();
+            }
+            if (this.isObject3DID) {
+                Game.current.textures.objects3D[this.object3DID.getValue()] = this
+                    .object3DPictureID.getValue();
+            }
+            if (this.isMountainID) {
+                Game.current.textures.mountains[this.mountainID.getValue()] = this
+                    .mountainPictureID.getValue();
+            }
+            //Scene.Map.current.close();
+            Scene.Map.current.loading = true;
+            (async() => {
+                await Scene.Map.current.reloadTextures();
+                currentState.loaded = true;
+            })();
         }
-        if (this.isAutotileID) {
-            Game.current.textures.autotiles[this.autotileID.getValue()] = this
-                .autotilePictureID.getValue();
-        }
-        if (this.isWallID) {
-            Game.current.textures.walls[this.wallID.getValue()] = this
-                .wallPictureID.getValue();
-        }
-        if (this.isObject3DID) {
-            Game.current.textures.objects3D[this.object3DID.getValue()] = this
-                .object3DPictureID.getValue();
-        }
-        if (this.isMountainID) {
-            Game.current.textures.mountains[this.mountainID.getValue()] = this
-                .mountainPictureID.getValue();
-        }
-        Scene.Map.current.close();
-        Scene.Map.current.loading = true;
-        (async() => {
-            await Scene.Map.current.load();
-            currentState.loaded = true;
-        })();
         return currentState.loaded ? 1 : 0;
     }
 }

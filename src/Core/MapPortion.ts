@@ -100,6 +100,15 @@ class MapPortion {
      *  at the beginning of the game.
      */
     read(json: Record<string, any>, isMapHero: boolean) {
+        this.readStatic(json);
+        this.readObjects(json.objs.list, isMapHero);
+    }
+
+    /** 
+     *  Read the JSON associated to the map portion, but only the static part.
+     *  @param {Record<string, any>} json - object describing the map portion
+     */
+    readStatic(json: Record<string, any>) {
         this.readLands(json.lands);
         this.readSprites(json.sprites);
         if (json.moun) {
@@ -108,7 +117,6 @@ class MapPortion {
         if (json.objs3d) {
             this.readObjects3D(json.objs3d);
         }
-        this.readObjects(json.objs.list, isMapHero);
     }
 
     /** 
@@ -588,10 +596,9 @@ class MapPortion {
     }
 
     /** 
-     *  Remove all the objects from the scene.
+     *  Remove all the static stuff from the scene.
      */
-    cleanAll() {
-        // Static stuff
+    cleanStatic() {
         if (this.staticFloorsMesh !== null) {
             Scene.Map.current.scene.remove(this.staticFloorsMesh);
         }
@@ -605,22 +612,35 @@ class MapPortion {
         for (i = 0, l = this.staticWallsList.length; i < l; i++) {
             Scene.Map.current.scene.remove(this.staticWallsList[i]);
         }
-        for (let list of  this.staticAutotilesList) {
+        this.staticWallsList = [];
+        for (let list of this.staticAutotilesList) {
             if (list) {
                 for (let autotiles of list) {
                     Scene.Map.current.scene.remove(autotiles.mesh);
                 } 
             }
         }
+        this.staticAutotilesList = [];
         for (i = 0, l = this.staticMountainsList.length; i < l; i++) {
             Scene.Map.current.scene.remove(this.staticMountainsList[i]
                 .mesh);
         }
+        this.staticMountainsList = [];
         for (i = 0, l = this.staticObjects3DList.length; i < l; i++) {
             Scene.Map.current.scene.remove(this.staticObjects3DList[i]);
         }
+        this.staticObjects3DList = [];
+    }    
+
+    /** 
+     *  Remove all the objects from the scene.
+     */
+    cleanAll() {
+        // Static stuff
+        this.cleanStatic();
 
         // Objects
+        let i: number, l: number;
         for (i = 0, l = this.objectsList.length; i < l; i++) {
             this.objectsList[i].removeFromScene();
         }
