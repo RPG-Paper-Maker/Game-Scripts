@@ -11,7 +11,6 @@
 
 import { MapElement } from "./MapElement";
 import { Utils } from "../Common";
-import { THREE } from "../Globals";
 import { CollisionSquare } from "./CollisionSquare";
 import { Position } from "./Position";
 import { Datas } from "../index";

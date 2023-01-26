@@ -948,13 +948,12 @@ class MapObject {
         // Set position
         let speed = this.speed.getValue() * MapObject.SPEED_NORMAL * Manager
             .Stack.averageElapsedTime * Datas.Systems.SQUARE_SIZE;
-            console.log(this.previousOrientation != this.orientation)
-        if (this.otherMoveCommand !== null || this.previousOrientation !== this.orientation) {
-            speed *= Math.SQRT1_2;
+        if (this.previousOrientation !== null && this.previousOrientation !== this.orientation) {
             // If already climbing, ignore
-            if (this.isClimbing) {
+            if (this.isClimbing && ((this.previousOrientation % 2) !== (this.orientation % 2))) {
                 return [0, 0];
             }
+            speed *= Math.SQRT1_2;
         }
 
         // Remove from move
@@ -1368,6 +1367,7 @@ class MapObject {
         // Climbing up
         if (!this.moving) {
             this.isClimbingUp = true;
+            this.previousOrientation = null;
         }
 
         this.moving = false;
