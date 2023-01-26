@@ -944,16 +944,22 @@ class MapObject {
         if (this.removed) {
             return [0, 0];
         }
-        
-        // Remove from move
-        this.removeMoveTemp();
 
         // Set position
         let speed = this.speed.getValue() * MapObject.SPEED_NORMAL * Manager
             .Stack.averageElapsedTime * Datas.Systems.SQUARE_SIZE;
-        if (this.otherMoveCommand !== null) {
+            console.log(this.previousOrientation != this.orientation)
+        if (this.otherMoveCommand !== null || this.previousOrientation !== this.orientation) {
             speed *= Math.SQRT1_2;
+            // If already climbing, ignore
+            if (this.isClimbing) {
+                return [0, 0];
+            }
         }
+
+        // Remove from move
+        this.removeMoveTemp();
+
         let normalDistance = Math.min(limit, speed);
         let [position, isClimbing, o] = this.getFuturPosition(orientation, normalDistance, angle);
         let distance = (position.equals(this.position)) ? 0 : normalDistance;
