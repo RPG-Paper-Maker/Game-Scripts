@@ -455,7 +455,7 @@ class Collisions {
             if (yMountain === null && floors.indexOf(positionAfter.y) === -1) {
                 let l = floors.length;
                 if (l === 0) {
-                    return [null, null, Enum.Orientation.None];
+                    return [true, null, Enum.Orientation.None];
                 } else {
                     let maxY = null;
                     let limitY = positionAfter.y - Datas.Systems
@@ -592,7 +592,7 @@ class Collisions {
                                                                 }
                                                             }
                                                             object.updateMeshBBPosition(object.currentBoundingBox, bbSettings, positionAfter);
-                                                            object.isClimbingUp = climbingUp; 
+                                                            object.isClimbingUp = climbingUp;
                                                             return [null, y, o];
                                                         }
                                                         object.updateMeshBBPosition(object.currentBoundingBox, bbSettings, positionAfter);
