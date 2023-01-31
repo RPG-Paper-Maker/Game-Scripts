@@ -156,10 +156,9 @@ class Class extends Translatable {
         let skill: System.ClassSkill;
         for (let i = 0, l = all.length; i < l; i++) {
             skill = all[i];
-            if (skill.level > level) {
-                break;
+            if (skill.level <= level) {
+                skills.push(new Skill(skill.id));
             }
-            skills.push(new Skill(skill.id));
         }
         return skills;
     }
