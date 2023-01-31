@@ -859,7 +859,15 @@ class Collisions {
                             if (y === object.position.y) {
                                 continue;
                             }
-                            return [null, y, object.getOrientationBetweenPosition(objCollision.l)];
+                            let angle = objCollision.b[6];
+                            let force = false, front = false;
+                            if (angle === 0 || angle === 180) {
+                                force = true;
+                                front = true;
+                            } else if (angle === 90 || angle === 270) {
+                                force = true;
+                            }
+                            return [null, y, object.getOrientationBetweenPosition(objCollision.l, force, front)];
                         }
                         if (!object.isClimbing) {
                             tested = true;

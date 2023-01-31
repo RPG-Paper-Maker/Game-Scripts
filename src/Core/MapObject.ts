@@ -1527,11 +1527,11 @@ class MapObject {
      *  @param {Vector3} position 
      *  @returns {Enum.Orientation}
      */
-    getOrientationBetweenPosition(position: Vector3): Enum.Orientation {
+    getOrientationBetweenPosition(position: Vector3, force: boolean = false, front: boolean = false): Enum.Orientation {
         let x = Math.abs(position.x - this.position.x);
         let z = Math.abs(position.z - this.position.z);
         let orientation = this.orientationEye;
-        if (x >= z) {
+        if ((!force &&  x >= z) || (force && !front)) {
             if (position.x >= this.position.x) {
                 orientation = Enum.Orientation.East;
             } else if (position.x < this.position.x) {
