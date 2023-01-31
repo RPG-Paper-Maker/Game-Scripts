@@ -65,6 +65,7 @@ class If extends Base {
     public chronometerOperation: number;
     public chronometerSeconds: System.DynamicValue;
     public script: System.DynamicValue;
+    public objectIDClimbing: System.DynamicValue;
 
     constructor(command: any[]) {
         super();
@@ -180,6 +181,10 @@ class If extends Base {
                     command, iterator);
                 this.chronometerOperation = command[iterator.i++];
                 this.chronometerSeconds = System.DynamicValue.createValueCommand(
+                    command, iterator);
+                break;
+            case 11:
+                this.objectIDClimbing = System.DynamicValue.createValueCommand(
                     command, iterator);
                 break;
         }
@@ -463,6 +468,21 @@ class If extends Base {
                         chrono.getSeconds(), this.chronometerSeconds.getValue());
                 }
                 break;
+            case 11: {
+                if (!currentState.waitingObject) {
+                    let objectID = this.objectIDClimbing.getValue();
+                    MapObject.search(objectID, (result: StructSearchResult) => {
+                            currentState.object = result.object;
+                        }, object);
+                    currentState.waitingObject = true;
+                }
+                if (currentState.object === null) {
+                    return 0;
+                } else {
+                    result = currentState.object.isClimbing;
+                    break;
+                }
+            }
             default:
                 break;
         }
