@@ -14,7 +14,7 @@ import { Player } from "./Player";
 import { Enum, Mathf } from "../Common";
 import { Frame } from "./Frame";
 import { ProgressionTable } from "../System";
-import { Manager, Datas, Scene, Core, Graphic } from "../index";
+import { Manager, Datas, Scene, Graphic } from "../index";
 import { Camera } from "./Camera";
 import { Sprite } from "./Sprite";
 import { Position } from "./Position";
@@ -39,6 +39,7 @@ class Battler {
     public static TOTAL_TIME_DAMAGE = 250;
 
     public player: Player;
+    public isEnemy: boolean;
     public initialPosition: Position;
     public position: Vector3;
     public arrowPosition: Vector2;
@@ -88,8 +89,10 @@ class Battler {
     public lastTarget: Battler = null;
     public hidden: boolean = false;
 
-    constructor(player: Player, position?: Position, vect?: Vector3, camera?: Camera) {
+    constructor(player: Player, isEnemy: boolean = false, position?: Position, 
+        vect?: Vector3, camera?: Camera) {
         this.player = player;
+        this.isEnemy = isEnemy;
         this.initialPosition = position;
         if (!position) {
             return;
@@ -166,7 +169,7 @@ class Battler {
                 this.height * Datas.Systems.SQUARE_SIZE), this.position.z);
             this.halfPosition = new Vector3(this.position.x, this.position.y + (
                 this.height * Datas.Systems.SQUARE_SIZE / 2), this.position.z);
-            if (player.kind === Enum.CharacterKind.Monster) {
+            if (isEnemy) {
                 this.mesh.scale.set(-1, 1, 1);
             }
             this.updateUVs();
@@ -344,12 +347,12 @@ class Battler {
     updateSelected() {
         let newX = this.mesh.position.x;
         let progression: ProgressionTable;
-        if (this.player.kind === Enum.CharacterKind.Hero) {
-            progression = this.selected ? this.progressionAllyFront : this
-                .progressionAllyBack;
-        } else if (this.player.kind === Enum.CharacterKind.Monster) {
+        if (this.isEnemy) {
             progression = this.selected ? this.progressionEnemyFront : this
                 .progressionEnemyBack;
+        } else {
+            progression = this.selected ? this.progressionAllyFront : this
+                .progressionAllyBack;
         }
         let time = new Date().getTime() - this.timerMove;
         if (time <= Battler.TIME_MOVE) {

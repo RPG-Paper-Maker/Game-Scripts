@@ -131,8 +131,8 @@ class ChangeBattlerGraphics extends Base {
                 player.facesetIndexY = this.facesetIndexY;
             }
             if (Scene.Map.current.isBattleMap) {
-                let newBattler = new Battler(player, battler.initialPosition, 
-                    battler.position, map.camera);
+                let newBattler = new Battler(player, battler.isEnemy, battler
+                    .initialPosition, battler.position, map.camera);
                 map.battlers[side][index].removeFromScene();
                 newBattler.addToScene();
                 map.battlers[side][index] = newBattler;

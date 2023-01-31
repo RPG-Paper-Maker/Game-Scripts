@@ -84,7 +84,7 @@ class BattleInitialize {
             }
             position = Game.current.heroBattle.position.clone().add(center).add(offset);
             player = Game.current.teamHeroes[i];
-            battler = new Battler(player, Position.createFromVector3(position),
+            battler = new Battler(player, false, Position.createFromVector3(position),
                 position, this.battle.camera);
             battler.updateDead(false);
             player.battler = battler;
@@ -134,7 +134,7 @@ class BattleInitialize {
             player = new Player(CharacterKind.Monster, troopMonster.id, Game
                 .current.charactersInstances++, [], []);
             player.instanciate(troopMonster.level.getValue());
-            battler = new Battler(player, Position.createFromVector3(position), 
+            battler = new Battler(player, true, Position.createFromVector3(position), 
                 position, this.battle.camera);
             player.battler = battler;
             battler.updateHidden(troopMonster.hidden.getValue());
