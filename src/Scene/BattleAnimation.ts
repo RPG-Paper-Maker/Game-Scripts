@@ -31,7 +31,7 @@ import { Item, Battler, Game, Animation } from "../Core";
 
 class BattleAnimation {
 
-    public battle: Scene.Battle
+    public battle: Scene.Battle;
 
     public constructor(battle: Scene.Battle) {
         this.battle = battle;
@@ -159,6 +159,9 @@ class BattleAnimation {
                 break;
         }
         this.battle.currentEffectIndex = -1;
+        if (this.battle.effects.length > 0) {
+            this.battle.effects[0].getMissAndCrit();
+        }
         this.battle.currentTargetIndex = null;
         if (this.battle.animationUser && this.battle.animationUser.system === null) {
             this.battle.animationUser = null;
@@ -173,11 +176,11 @@ class BattleAnimation {
      *  @returns {AnimationEffectConditionKind}
      */
     public getCondition(): AnimationEffectConditionKind {
-        if (this.battle.targets[0]) {
-            if (this.battle.targets[0].isDamagesMiss) {
+        for (let target of this.battle.targets) {
+            if (target.tempIsDamagesMiss) {
                 return AnimationEffectConditionKind.Miss;
             }
-            if (this.battle.targets[0].isDamagesCritical) {
+            if (target.tempIsDamagesCritical) {
                 return AnimationEffectConditionKind.Critical;
             }
         }
@@ -270,14 +273,14 @@ class BattleAnimation {
                 }
 
                 // Testing end of battle
-                let effect: System.Effect, isAnotherEffect: boolean;
+                let isAnotherEffect: boolean;
                 // Apply effect
                 if (this.battle.currentTargetIndex === null) {
                     this.battle.currentEffectIndex++;
                     for (l = this.battle.effects.length; this.battle
                         .currentEffectIndex < l; this.battle.currentEffectIndex++)
                     {
-                        effect = this.battle.effects[this.battle.currentEffectIndex];
+                        let effect = this.battle.effects[this.battle.currentEffectIndex];
                         effect.execute();
                         if (effect.isAnimated()) {
                             if (effect.kind === Enum.EffectKind.Status) {

@@ -83,6 +83,8 @@ class Battler {
         Enum.AlignVertical.Bot });
     public isDamagesMiss: boolean;
     public isDamagesCritical: boolean;
+    public tempIsDamagesMiss: boolean = null;
+    public tempIsDamagesCritical: boolean = null;
     public currentStatusAnimation: Animation = null;
     public lastStatus: Status;
     public lastStatusHealed: Status;

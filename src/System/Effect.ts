@@ -148,6 +148,80 @@ class Effect extends Base {
         this.temporarilyChangeTargetFormula = System.DynamicValue
             .readOrDefaultMessage(json.tctf);
     }
+
+    /** 
+     *  Get if effect is miss in battler temp variables.
+     */
+    getMissAndCrit() {
+        let user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
+        Scene.Map.current.tempTargets = Scene.Map.current.targets;
+        if (this.isTemporarilyChangeTarget) {
+            Scene.Map.current.targets = Interpreter.evaluate(this.temporarilyChangeTargetFormula
+                .getValue(), { user: user });
+        }
+        let targets = Scene.Map.current.targets;
+        let l = targets.length;
+        let target: Player, battler: Battler, precision: number, critical: number,
+            miss: boolean, crit: boolean;
+        switch (this.kind) {
+            case EffectKind.Damages: {
+                let damage: number;
+                for (let i = 0; i < l; i++) {
+                    battler = targets[i];
+                    target = battler.player;
+                    miss = false;
+                    crit = false;
+                    if (this.skillItem && !this.skillItem.isPossible(target, false)) {
+                        continue;
+                    }
+                    damage = 0;
+                    if (this.isDamagePrecision) {
+                        precision = Interpreter.evaluate(this
+                            .damagePrecisionFormula.getValue(), { user: user, 
+                            target: target });
+                        if (!Mathf.randomPercentTest(precision)) {
+                            damage = null;
+                            miss = true;
+                        }
+                    }
+                    if (damage !== null) {
+                        if (this.isDamageCritical) {
+                            critical = Interpreter.evaluate(this
+                                .damageCriticalFormula.getValue(), { user :user, 
+                                target: target });
+                            if (Mathf.randomPercentTest(critical)) {
+                                crit = true;
+                            }
+                        }
+                    }
+                    battler.tempIsDamagesMiss = miss;
+                    battler.tempIsDamagesCritical = crit;
+                }
+                break;
+            }
+            case EffectKind.Status: {
+                let precision: number, id: number;
+                for (let i = 0, l = targets.length; i < l; i++) {
+                    battler = targets[i];
+                    target = battler.player;
+                    miss = false;
+                    crit = false;
+                    precision = Interpreter.evaluate(this.statusPrecisionFormula
+                        .getValue(), { user: user, target: battler.player });
+                    id = this.statusID.getValue();
+                    // Handle resistance
+                    if (target.statusRes[id]) {
+                        precision /= target.statusRes[id].multiplication;
+                        precision -= target.statusRes[id].addition;
+                    }
+                    if (!Mathf.randomPercentTest(precision)) {
+                        miss = true;
+                    }
+                    battler.tempIsDamagesMiss = miss;
+                }
+            }
+        }
+    }
     
     /** 
      *  Execute the effect.
@@ -177,6 +251,8 @@ class Effect extends Base {
                     battler = targets[i];
                     target = battler.player;
                     if (this.skillItem && !this.skillItem.isPossible(target, false)) {
+                        battler.tempIsDamagesMiss = null;
+                        battler.tempIsDamagesCritical = null;
                         continue;
                     }
                     damage = 0;
@@ -189,7 +265,8 @@ class Effect extends Base {
                         precision = Interpreter.evaluate(this
                             .damagePrecisionFormula.getValue(), { user: user, 
                             target: target });
-                        if (!Mathf.randomPercentTest(precision)) {
+                        if (battler.tempIsDamagesMiss || (battler.tempIsDamagesMiss 
+                            === null && !Mathf.randomPercentTest(precision))) {
                             damage = null;
                             miss = true;
                         }
@@ -224,7 +301,9 @@ class Effect extends Base {
                             critical = Interpreter.evaluate(this
                                 .damageCriticalFormula.getValue(), { user :user, 
                                 target: target });
-                            if (Mathf.randomPercentTest(critical)) {
+                            if (battler.tempIsDamagesCritical || (battler
+                                .tempIsDamagesCritical === null && Mathf
+                                .randomPercentTest(critical))) {
                                 damage = Interpreter.evaluate(Interpreter
                                     .evaluate(Datas.BattleSystems.formulaCrit
                                     .getValue(), { user: user, target: target, 
@@ -316,6 +395,8 @@ class Effect extends Base {
                             break;
                     }
                 }
+                battler.tempIsDamagesMiss = null;
+                battler.tempIsDamagesCritical = null;
                 break;
             }
             case EffectKind.Status: {
@@ -332,7 +413,8 @@ class Effect extends Base {
                         precision /= target.statusRes[id].multiplication;
                         precision -= target.statusRes[id].addition;
                     }
-                    if (Mathf.randomPercentTest(precision)) {
+                    if (battler.tempIsDamagesMiss === false || (battler.tempIsDamagesMiss 
+                        === null && Mathf.randomPercentTest(precision))) {
                         miss = false;
                         previousFirst = battler.player.status[0];
                         
@@ -357,6 +439,8 @@ class Effect extends Base {
                         battler.isDamagesCritical = false;
                     }
                 }
+                battler.tempIsDamagesMiss = null;
+                battler.tempIsDamagesCritical = null;
                 return true;
             }
             case EffectKind.AddRemoveSkill:
