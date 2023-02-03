@@ -14,7 +14,6 @@ import { MapObject, Position, Portion, MapPortion, StructMapElementCollision, Co
 import { Datas, System, Scene, Manager } from "../index";
 import ElementMapKind = Enum.ElementMapKind;
 import { THREE } from "../Globals";
-import { Main } from "../main";
 
 /** @class
  *  The collisions manager.

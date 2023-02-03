@@ -1573,26 +1573,26 @@ class MapObject {
             number, endK: number;
         if (direction.x > 0) {
             startI = 0;
-            endI = this.boundingBoxSettings.w;
+            endI = this.boundingBoxSettings.w + 1;
         } else if (direction.x < 0) {
-            startI = -this.boundingBoxSettings.w;
+            startI = -this.boundingBoxSettings.w - 1;
             endI = 0;
         } else {
-            startI = -this.boundingBoxSettings.w;
-            endI = this.boundingBoxSettings.w;
+            startI = -this.boundingBoxSettings.w - 1;
+            endI = this.boundingBoxSettings.w + 1;
         }
         if (this.boundingBoxSettings.k) {
             startK = 0;
             endK = 0;
         } else if (direction.z > 0) {
             startK = 0;
-            endK = this.boundingBoxSettings.w;
+            endK = this.boundingBoxSettings.w + 1;
         } else if (direction.z < 0) {
-            startK = -this.boundingBoxSettings.w;
+            startK = -this.boundingBoxSettings.w - 1;
             endK = 0;
         } else {
-            startK = -this.boundingBoxSettings.w;
-            endK = this.boundingBoxSettings.w;
+            startK = -this.boundingBoxSettings.w - 1;
+            endK = this.boundingBoxSettings.w + 1;
         }
         startJ = 0;
         endJ = 0;
