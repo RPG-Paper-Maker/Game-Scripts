@@ -27,7 +27,6 @@ class Constants {
     public static readonly PORTIONS_RAY_FAR = 0;
     public static readonly PORTION_SIZE = 16;
     public static readonly MAX_PICTURE_SIZE = 4096;
-    public static readonly ONE_SECOND_MILLI = 1000;
     public static readonly NUM_BOOL_TRUE = 1;
     public static readonly NUM_BOOL_FALSE = 0;
     public static readonly CLASS_HIDDEN = "hidden";
