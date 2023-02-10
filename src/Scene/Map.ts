@@ -356,8 +356,7 @@ class Map extends Base {
             p = pictures[i];
             if (p) {
                 p.readCollisionsImage(image);
-                this.collisions[PictureKind.Characters][i] = p
-                    .getSquaresForStates(image);
+                this.collisions[PictureKind.Characters][i] = p.getSquaresForStates(image);
             } else {
                 this.collisions[PictureKind.Characters][i] = null;
             }
