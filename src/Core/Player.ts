@@ -139,8 +139,8 @@ class Player {
         let player = new Player();
         let statistics = Datas.BattleSystems.statisticsOrder;
         for (let i = 0, l = statistics.length; i < l; i++) {
-            player.initStatValue(Datas.BattleSystems.getStatistic(statistics[i])
-                , values ? values[i] : 0);
+            player.initStatValue(Datas.BattleSystems.getStatistic(statistics[i]), 
+                values ? values[statistics[i]] : 0);
         }
         return player;
     }
