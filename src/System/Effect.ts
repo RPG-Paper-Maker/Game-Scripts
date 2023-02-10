@@ -246,7 +246,7 @@ class Effect extends Base {
                     percentRes: number, element: number, critical: number, stat: 
                     Statistic, abbreviation: string, max: number, before: number, 
                     currencyID: number, targetElement: System.DynamicValue, 
-                    systemElement: System.Element;
+                    systemElement: System.Element, efficiency: System.DynamicValue;
                 for (let i = 0; i < l; i++) {
                     battler = targets[i];
                     target = battler.player;
@@ -286,7 +286,8 @@ class Effect extends Base {
                             systemElement = Datas.BattleSystems.getElement(element);
                             // If target also has elements
                             for (targetElement of target.elements) {
-                                damage *= systemElement.efficiency[targetElement.getValue()].getValue();
+                                efficiency = systemElement.efficiency[targetElement.getValue()];
+                                damage *= efficiency ? efficiency.getValue() : 1;
                             }
                             fixRes = target[Datas.BattleSystems.getStatistic(
                                 Datas.BattleSystems.statisticsElements[element])
