@@ -138,6 +138,10 @@ class MapObject {
         let result = this.searchInMap(objectID, thisObject);
         if (result === null) {
             (async() => {
+                // If this object is out of the map for some reasons
+                if (objectID === -1 && thisObject) {
+                    objectID = thisObject.system.id;
+                }
                 result = await this.searchOutMap(objectID);
                 callback.call(null, result);
             })();
@@ -157,16 +161,20 @@ class MapObject {
         let object = null;
         switch (objectID) {
             case -1: // This object
-                objectID = thisObject.system.id;
-                if (thisObject.isInScene) {
-                    object = thisObject;
-                }
-                if (thisObject.isHero || thisObject.isStartup) {
-                    return {
-                        object: thisObject,
-                        id: objectID,
-                        datas: null
-                    };
+                if (thisObject) {
+                    objectID = thisObject.system.id;
+                    if (thisObject.isInScene) {
+                        object = thisObject;
+                    }
+                    if (thisObject.isHero || thisObject.isStartup) {
+                        return {
+                            object: thisObject,
+                            id: objectID,
+                            datas: null
+                        };
+                    }
+                } else {
+                    return null;
                 }
                 break;
             case 0: // Hero

@@ -82,8 +82,8 @@ class CallACommonReaction extends Base {
                 parameters[id] = parameter;
             }
             currentState.interpreter = new ReactionInterpreter(object, Datas
-                .CommonEvents.getCommonReaction(this.commonReactionID), null, 
-                null, parameters);
+                .CommonEvents.getCommonReaction(this.commonReactionID), object, 
+                state, parameters);
         }
         ReactionInterpreter.blockingHero = currentState.interpreter
             .currentReaction.blockingHero;
