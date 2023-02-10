@@ -851,7 +851,7 @@ class Collisions {
                         if (objCollision.cl) {
                             const speed = object.speed.getValue() * MapObject
                                 .SPEED_NORMAL * Manager.Stack.averageElapsedTime * 
-                                Datas.Systems.SQUARE_SIZE / 4;
+                                Datas.Systems.SQUARE_SIZE * Datas.Systems.climbingSpeed.getValue();
                             const limitTop = objCollision.b[1] + Math.ceil(objCollision.b[4] / 2);
                             const limitBot = objCollision.b[1] - Math.ceil(objCollision.b[4] / 2);
                             const y = object.isClimbingUp ? Math.min(object.position.y + speed, limitTop) : Math.max(object.position.y - speed, limitBot);

@@ -31,6 +31,7 @@ class Systems {
     public static isMouseControls: boolean;
     public static mountainCollisionHeight: System.DynamicValue;
     public static mountainCollisionAngle: System.DynamicValue;
+    public static climbingSpeed: System.DynamicValue;
     public static mapFrameDuration: System.DynamicValue;
     public static battlersFrames: number;
     public static battlersColumns: number;
@@ -106,12 +107,10 @@ class Systems {
         this.SQUARE_SIZE = json.ss;
         this.PORTIONS_RAY_NEAR = Utils.defaultValue(json.portionRayIngame, 3);
         this.FRAMES = json.frames;
-        this.mountainCollisionHeight = System.DynamicValue.readOrDefaultNumber(
-            json.mch, 4);
-        this.mountainCollisionAngle = System.DynamicValue
-            .readOrDefaultNumberDouble(json.mca, 45);
-        this.mapFrameDuration = System.DynamicValue.readOrDefaultNumber(json.mfd
-            , 150);
+        this.mountainCollisionHeight = System.DynamicValue.readOrDefaultNumber(json.mch, 4);
+        this.mountainCollisionAngle = System.DynamicValue.readOrDefaultNumberDouble(json.mca, 45);
+        this.climbingSpeed = System.DynamicValue.readOrDefaultNumberDouble(json.cs, 0.25);
+        this.mapFrameDuration = System.DynamicValue.readOrDefaultNumber(json.mfd, 150);
         this.battlersFrames = Utils.defaultValue(json.battlersFrames, 4);
         this.battlersColumns = Utils.defaultValue(json.battlersColumns, 9);
         this.autotilesFrames = Utils.defaultValue(json.battlersColumns, 4);
