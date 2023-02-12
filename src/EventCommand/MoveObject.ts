@@ -11,7 +11,7 @@
 
 import { Base } from "./Base";
 import { System, Datas, EventCommand, Scene, Manager, Core } from "../index";
-import { Enum, Utils, Mathf } from "../Common";
+import { Enum, Utils, Mathf, Platform } from "../Common";
 import CommandMoveKind = Enum.CommandMoveKind;
 import Orientation = Enum.Orientation;
 import { MapObject, StructSearchResult, Game, Vector3 } from "../Core";
@@ -668,6 +668,10 @@ class MoveObject extends Base {
                     .y, parameters.z.getValue() * square + currentState.startJump.z);
                 currentState.peak = parameters.peakY.getValue() * Datas.Systems
                     .SQUARE_SIZE + parameters.peakYPlus.getValue();
+                if (currentState.peak < currentState.endJump.y) {
+                    Platform.showErrorMessage("Move object command: jump peak cannot be lower than final y position offset. Final position=" + 
+                        currentState.endJump.y + "px, Peak position=" + currentState.peak + "px");
+                }
                 currentState.time = parameters.time.getValue() * 1000;
             }
             currentState.currentTime = object.jump(currentState.startJump, 
