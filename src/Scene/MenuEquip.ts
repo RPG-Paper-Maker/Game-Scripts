@@ -26,68 +26,16 @@ import ItemKind = Enum.ItemKind;
  */
 class MenuEquip extends MenuBase {
 
-    /**
-     *  the top window
-     *
-     * @type {WindowBox}
-     * @memberof MenuEquip
-     */
+
+    public static MAX_SLOTS_EQUIPMENTS = 7;
+
     public windowTop: WindowBox;
-
-    /**
-     * the window choices tabs
-     *
-     * @type {WindowChoices}
-     * @memberof MenuEquip
-     */
     public windowChoicesTabs: WindowChoices;
-
-    /**
-     * the equipment choice window
-     *
-     * @type {WindowChoices}
-     * @memberof MenuEquip
-     */
     public windowChoicesEquipment: WindowChoices;
-
-    /**
-     * the window choice list
-     *
-     * @type {WindowChoices}
-     * @memberof MenuEquip
-     */
     public windowChoicesList: WindowChoices;
-
-    /**
-     * the information window.
-     *
-     * @type {WindowBox}
-     * @memberof MenuEquip
-     */
     public windowInformation: WindowBox;
-
-    /**
-     * the current selected equipment.
-     *
-     * @type {number}
-     * @memberof MenuEquip
-     */
     public selectedEquipment: number;
-
-    /**
-     * the equipment list
-     *
-     * @type {number[]}
-     * @memberof MenuEquip
-     */
     public list: number[];
-
-    /**
-     * the bonus stats.
-     *
-     * @type {number[]}
-     * @memberof MenuEquip
-     */
     public bonus: number[];
     public title: string;
 
@@ -151,7 +99,7 @@ class MenuEquip extends MenuBase {
         const rect = new Rectangle(20, 100, 290, WindowBox.SMALL_SLOT_HEIGHT);
         const nbEquipments = Datas.BattleSystems.equipmentsOrder.length;
         const options = {
-            nbItemsMax: nbEquipments
+            nbItemsMax: Math.min(Scene.MenuEquip.MAX_SLOTS_EQUIPMENTS, nbEquipments)
         }
         this.windowChoicesEquipment = new WindowChoices(rect.x, rect.y, rect
             .width, rect.height, new Array(nbEquipments), options);
@@ -163,9 +111,9 @@ class MenuEquip extends MenuBase {
      * @memberof MenuEquip
      */
     createWindowChoiceList() {
-        const nbEquips = Datas.BattleSystems.equipmentsOrder.length;
+        const nbEquips = Math.min(Scene.MenuEquip.MAX_SLOTS_EQUIPMENTS, Datas
+            .BattleSystems.equipmentsOrder.length);
         const nbEquipChoice = MenuBase.SLOTS_TO_DISPLAY - nbEquips - 1;
-
         const y = 100 + (nbEquips + 1) * WindowBox.SMALL_SLOT_HEIGHT;
         const rect = new Rectangle(20, y, 290, WindowBox.SMALL_SLOT_HEIGHT);
         this.windowChoicesList = new WindowChoices(rect.x, rect.y, rect.width, rect.height, []
