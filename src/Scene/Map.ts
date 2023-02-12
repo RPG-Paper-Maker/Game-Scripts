@@ -403,7 +403,6 @@ class Map extends Base {
     async loadPortions(update: boolean = false) {
         let previousPortion = this.currentPortion;
         this.currentPortion = Portion.createFromVector3(this.camera.getThreeCamera().position);
-        console.log(this.currentPortion, previousPortion);
         // If just need update but same current portion, then nothing to do
         if (update && previousPortion.equals(this.currentPortion)) {
             return;

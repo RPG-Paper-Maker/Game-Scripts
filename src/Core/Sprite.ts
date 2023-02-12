@@ -231,13 +231,15 @@ class Sprite extends MapElement {
                     b: [
                         (localPosition.x - (twidth * Datas.Systems.SQUARE_SIZE)) 
                             - (((this.textureRect[2] * position.scaleX) % 2) * 
-                            Math.round(Datas.Systems.SQUARE_SIZE / 2)) + x 
-                            + Math.round(Datas.Systems.SQUARE_SIZE * position.scaleX * 
-                            position.scaleX / 2),
-                        (localPosition.y + this.yOffset * Datas.Systems.SQUARE_SIZE) + (this.textureRect[3] * position.scaleY
-                            * Datas.Systems.SQUARE_SIZE) - y - Math.round(Datas
-                            .Systems.SQUARE_SIZE * position.scaleY * position
-                            .scaleY / 2),
+                            Math.round(Datas.Systems.SQUARE_SIZE / 2)) + (x * Datas
+                            .Systems.SQUARE_SIZE * position.scaleX) + Math.round(
+                            Datas.Systems.SQUARE_SIZE * position.scaleX * position
+                            .scaleX / 2),
+                        (localPosition.y + this.yOffset * Datas.Systems.SQUARE_SIZE) 
+                            + (this.textureRect[3] * position.scaleY * Datas.Systems
+                            .SQUARE_SIZE) - (y * Datas.Systems.SQUARE_SIZE * position
+                            .scaleY) - Math.round(Datas.Systems.SQUARE_SIZE * position
+                            .scaleY * position.scaleY / 2),
                         localPosition.z,
                         Datas.Systems.SQUARE_SIZE * position.scaleX,
                         Datas.Systems.SQUARE_SIZE * position.scaleY,

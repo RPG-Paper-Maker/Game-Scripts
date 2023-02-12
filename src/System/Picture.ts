@@ -419,7 +419,7 @@ class Picture extends Base {
         const h = texture[3];
         const squares = [];
         let square: CollisionSquare, x: number, y: number;
-        for (let i = 0, l = w * h; i < l; i++) {
+        for (let i = w * h - 1; i >= 0; i--) {
             x = i % w;
             y = Math.floor(i / w);
             square = this.getCollisionAtPos(texture[0] + x, texture[1] + y);
