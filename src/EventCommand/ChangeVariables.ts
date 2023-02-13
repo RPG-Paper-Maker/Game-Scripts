@@ -12,7 +12,7 @@
 import { Base } from "./Base";
 import { Datas, Manager, Scene, System } from "../index";
 import { StructSearchResult, MapObject, Position, Game, Item } from "../Core";
-import { Mathf, Enum, Utils } from "../Common";
+import { Mathf, Enum, Utils, Platform } from "../Common";
 
 /** @class
  *  An event command for changing variables values.
@@ -149,6 +149,10 @@ class ChangeVariables extends Base {
                     currentState.valid = false;
                     MapObject.search(objectID, (result: StructSearchResult) => {
                         let obj = result.object;
+                        if (!obj) {
+                            Platform.showErrorMessage("Cannot find object ID " + 
+                                objectID + " in change variables for map object characteristics.")
+                        }
                         switch(this.valueMapObjectChar) {
                             case Enum.VariableMapObjectCharacteristicKind.XSquarePosition:
                                 currentState.value = Position.createFromVector3(
