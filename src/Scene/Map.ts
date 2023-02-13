@@ -407,37 +407,21 @@ class Map extends Base {
         if (update && previousPortion.equals(this.currentPortion)) {
             return;
         }
-        let limit = this.getMapPortionLimit();
         if (!update) {
             this.mapPortions = [];
         }
+        let limit = this.getMapPortionLimit();
         let minX = previousPortion.x - limit;
         let minY = previousPortion.y - limit;
         let minZ = previousPortion.z - limit;
         let maxX = previousPortion.x + limit;
         let maxY = previousPortion.y + limit;
         let maxZ = previousPortion.x + limit;
+        let temp = new Array(this.mapPortions.length);
         let i: number, j: number, k: number, x: number, y: number, z: number;
-        // If update, first reuse map portions already existing
         if (update) {
-            for (i = -limit; i <= limit; i++) {
-                for (j = -limit; j <= limit; j++) {
-                    for (k = -limit; k <= limit; k++) {
-                        x = this.currentPortion.x + i;
-                        y = this.currentPortion.y + j;
-                        z = this.currentPortion.z + k;
-                        // If portion already exists in previous one
-                        if (x >= minX && x <= maxX && y >= minY && y <= maxY && 
-                            z >= minZ && z <= maxZ) {
-                            let newIndex = this.getPortionIndex(new Portion(i, j, k));
-                            let previousIndex = this.getPortionIndex(new Portion(
-                                x - previousPortion.x, y - previousPortion.y, z - 
-                                previousPortion.z));
-                            this.mapPortions[newIndex] = this.mapPortions[previousIndex];
-                            this.mapPortions[previousIndex] = null;
-                        }
-                    }
-                }
+            for (let i = 0, l = this.mapPortions.length; i < l; i++) {
+                temp[i] = this.mapPortions[i];
             }
         }
         for (i = -limit; i <= limit; i++) {
@@ -447,8 +431,17 @@ class Map extends Base {
                     y = this.currentPortion.y + j;
                     z = this.currentPortion.z + k;
                     // Load normally
-                    if (!update || x < minX || x > maxX || y < minY || y > maxY 
-                        || z < minZ || z > maxZ) {
+                    if (update && x >= minX && x <= maxX && y >= minY && y <= maxY && 
+                        z >= minZ && z <= maxZ) {
+                        let newIndex = this.getPortionIndex(new Portion(i, j, k));
+                        let previousIndex = this.getPortionIndex(new Portion(
+                            x - previousPortion.x, y - previousPortion.y, z - 
+                            previousPortion.z));
+                        this.mapPortions[newIndex] = temp[previousIndex];
+                        if (temp[previousIndex] !== null) {
+                            this.mapPortions[previousIndex] = null;
+                        }
+                    } else {
                         await this.loadPortion(x, y, z, i, j, k);
                     }
                 }
