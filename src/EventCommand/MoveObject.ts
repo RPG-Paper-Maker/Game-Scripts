@@ -897,6 +897,8 @@ class MoveObject extends Base {
                 }
                 options.sid = object.currentStateInstance.speedID;
             }
+            object.currentStateInstance.indexX = object.frame.value;
+            object.currentStateInstance.indexY = object.orientation;
             object.changeState();
         }
         return Orientation.None;
@@ -925,6 +927,8 @@ class MoveObject extends Base {
                 }
                 options.fid = object.currentStateInstance.frequencyID;
             }
+            object.currentStateInstance.indexX = object.frame.value;
+            object.currentStateInstance.indexY = object.orientation;
             object.changeState();
         }
         return Orientation.None;
