@@ -1566,9 +1566,10 @@ class MapObject {
                 .getLocalPortion(Portion.createFromVector3(this.position)));
             if (mapPortion) {
                 let position = Position.createFromVector3(this.position);
-                let collision = mapPortion.boundingBoxesLands[position.toIndex()][0];
-                if (collision && collision.cs) {
-                    this.terrain = collision.cs.terrain;
+                let boundingBoxes = mapPortion.boundingBoxesLands[position.toIndex()];
+                if (boundingBoxes.length > 0) {
+                    let collision = boundingBoxes[boundingBoxes.length - 1];
+                    this.terrain = collision && collision.cs ? collision.cs.terrain : 0;
                 }
             }
         }
