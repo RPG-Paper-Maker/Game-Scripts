@@ -724,8 +724,7 @@ class MapObject {
         let i: number, l: number, result: [boolean, number, Enum.Orientation];
         for (i = 0, l = this.meshBoundingBox.length; i < l; i++) {
             this.currentBoundingBox = this.meshBoundingBox[i];
-            result = Manager.Collisions.checkRay(this.position, 
-                position, this, this.boundingBoxSettings.b[i]);
+            result = Manager.Collisions.checkRay(this.position, position, this, this.boundingBoxSettings.b[i]);
             if (result[1] !== null) {
                 yMountain = result[1];
             }
@@ -738,16 +737,18 @@ class MapObject {
             }
         }
         if (blocked || blocked === null && yMountain !== null) {
-            position = this.position;
+            position = this.position.clone();
         }
         /* If not blocked and possible Y up/down, check if there is no collision
         on top */
         if (!blocked && yMountain !== null) {
             position.setY(yMountain);
+            this.updateBBPosition(position);
             for (i = 0, l = this.meshBoundingBox.length; i < l; i++) {
                 this.currentBoundingBox = this.meshBoundingBox[i];
                 result = Manager.Collisions.checkRay(this.position, 
-                    position, this, this.boundingBoxSettings.b[i]);
+                    position, this, this.boundingBoxSettings.b[i], true);
+                
                 if (result[0]) {
                     position = this.position;
                     break;

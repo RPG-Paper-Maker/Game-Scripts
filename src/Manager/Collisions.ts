@@ -338,7 +338,7 @@ class Collisions {
      *  @returns {boolean}
      */
     static checkRay(positionBefore: Vector3, positionAfter: Vector3, object: 
-        MapObject, bbSettings: number[]): [boolean, number, Enum.Orientation]
+        MapObject, bbSettings: number[], reverseTestObjects: boolean = false): [boolean, number, Enum.Orientation]
     {
         let direction = new Vector3();
         direction.subVectors(positionAfter, positionBefore).normalize();
@@ -351,6 +351,14 @@ class Collisions {
 
         // Squares to inspect according to the direction of the object
         let [startI, endI, startJ, endJ, startK, endK] = object.getSquaresBB();
+
+        // Test objects
+        if (reverseTestObjects) {
+            let result = this.checkObjectsRay(positionAfter, object);
+            if (result !== null) {
+                return result;
+            }
+        }
 
         // Check collision outside
         let block = false;
@@ -417,26 +425,17 @@ class Collisions {
             return [true, null, Enum.Orientation.None];
         }
 
-        // Check collision inside & with other objects
-        if (object !== Game.current.hero && object.checkCollisionObject(Game
-            .current.hero)) {
-            return [true, null, Enum.Orientation.None];
-        }
-
-        // Check objects collisions
-        portion = Scene.Map.current.getLocalPortion(Portion.createFromVector3(
-            positionAfter));
-        for (i = 0; i < 2; i++) {
-            for (j = 0; j < 2; j++) {
-                mapPortion = Scene.Map.current.getMapPortion(new Portion(
-                    portion.x + i, portion.y, portion.z + j));
-                if (mapPortion && this.checkObjects(mapPortion, object)) {
-                    return [true, null, Enum.Orientation.None];
-                }
+        // Test objects
+        if (!reverseTestObjects) {
+            let result = this.checkObjectsRay(positionAfter, object);
+            if (result !== null) {
+                return result;
             }
         }
 
         // Check empty square or square mountain height possible down
+        portion = Scene.Map.current.getLocalPortion(Portion.createFromVector3(
+            positionAfter));
         mapPortion = Scene.Map.current.getMapPortion(portion);
         let floors: number[];
         if (mapPortion !== null) {
@@ -621,6 +620,29 @@ class Collisions {
                 jpositionAfter, direction), yMountain, Enum.Orientation.None];
         }
         return [true, null, Enum.Orientation.None];
+    }
+
+    static checkObjectsRay(positionAfter: Vector3, object: MapObject): [boolean, number, Enum.Orientation] {
+        // Check collision inside & with other objects
+        if (object !== Game.current.hero && object.checkCollisionObject(Game
+            .current.hero)) {
+            return [true, null, Enum.Orientation.None];
+        }
+
+        // Check objects collisions
+        let portion = Scene.Map.current.getLocalPortion(Portion.createFromVector3(
+            positionAfter));
+        let i: number, j: number, mapPortion: MapPortion;
+        for (i = 0; i < 2; i++) {
+            for (j = 0; j < 2; j++) {
+                mapPortion = Scene.Map.current.getMapPortion(new Portion(
+                    portion.x + i, portion.y, portion.z + j));
+                if (mapPortion && this.checkObjects(mapPortion, object)) {
+                    return [true, null, Enum.Orientation.None];
+                }
+            }
+        }
+        return null;
     }
 
     /** 
