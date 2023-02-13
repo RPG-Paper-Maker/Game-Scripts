@@ -85,9 +85,10 @@ class CallACommonReaction extends Base {
                 .CommonEvents.getCommonReaction(this.commonReactionID), object, 
                 state, parameters);
         }
-        ReactionInterpreter.blockingHero = currentState.interpreter
-            .currentReaction.blockingHero;
+        let previousBlocking = ReactionInterpreter.blockingHero;
+        ReactionInterpreter.blockingHero = currentState.interpreter.currentReaction.blockingHero;
         currentState.interpreter.update();
+        ReactionInterpreter.blockingHero = previousBlocking;
         if (currentState.interpreter.isFinished()) {
             currentState.interpreter.updateFinish();
             return 1;
