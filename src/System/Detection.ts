@@ -86,7 +86,7 @@ class Detection extends Base {
                 .Systems.SQUARE_SIZE);
             height = (box[3] * Datas.Systems.SQUARE_SIZE) + (box[4] / 100 * Datas
                 .Systems.SQUARE_SIZE);
-            width = (box[5] * Datas.Systems.SQUARE_SIZE) + (box[2] / 100 * Datas
+            width = (box[5] * Datas.Systems.SQUARE_SIZE) + (box[6] / 100 * Datas
                 .Systems.SQUARE_SIZE);
 
             // Update position according to sender orientation
