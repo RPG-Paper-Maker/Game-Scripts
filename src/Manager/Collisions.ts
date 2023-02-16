@@ -359,7 +359,7 @@ class Collisions {
                 return result;
             }
         }
-
+        
         // Check collision outside
         let block = false;
         let i: number, j: number, k: number, i2: number, j2: number, k2: number, 
@@ -441,14 +441,12 @@ class Collisions {
         if (mapPortion !== null) {
             floors = mapPortion.squareNonEmpty[jpositionAfter.x % Constants
                 .PORTION_SIZE][jpositionAfter.z % Constants.PORTION_SIZE];
-            if (floors.length === 0) {
-                let otherMapPortion = Scene.Map.current.getMapPortion(new 
-                    Portion(portion.x, portion.y + 1, portion.z));
-                if (otherMapPortion) {
-                    floors = otherMapPortion.squareNonEmpty[jpositionAfter.x %
-                        Constants.PORTION_SIZE][jpositionAfter.z % Constants
-                        .PORTION_SIZE];
-                }
+            let otherMapPortion = Scene.Map.current.getMapPortion(new 
+                Portion(portion.x, portion.y + 1, portion.z));
+            if (otherMapPortion) {
+                floors = floors.concat(otherMapPortion.squareNonEmpty[jpositionAfter
+                    .x %Constants.PORTION_SIZE][jpositionAfter.z % Constants
+                    .PORTION_SIZE]);
             }
             if (yMountain === null && floors.indexOf(positionAfter.y) === -1) {
                 let l = floors.length;
@@ -481,14 +479,12 @@ class Collisions {
                         if (mapPortion !== null) {
                             floors = mapPortion.squareNonEmpty[jpositionBefore.x % Constants
                                 .PORTION_SIZE][jpositionBefore.z % Constants.PORTION_SIZE];
-                            if (floors.length === 0) {
-                                let otherMapPortion = Scene.Map.current.getMapPortion(new 
-                                    Portion(portion.x, portion.y + 1, portion.z));
-                                if (otherMapPortion) {
-                                    floors = otherMapPortion.squareNonEmpty[jpositionBefore.x %
-                                        Constants.PORTION_SIZE][jpositionBefore.z % Constants
-                                        .PORTION_SIZE];
-                                }
+                            let otherMapPortion = Scene.Map.current.getMapPortion(new 
+                                Portion(portion.x, portion.y + 1, portion.z));
+                            if (otherMapPortion) {
+                                floors = floors.concat(otherMapPortion.squareNonEmpty[jpositionBefore.x %
+                                    Constants.PORTION_SIZE][jpositionBefore.z % Constants
+                                    .PORTION_SIZE]);
                             }
                             if (yMountain === null && floors.indexOf(positionBefore.y) === -1) {
                                 let l = floors.length;
