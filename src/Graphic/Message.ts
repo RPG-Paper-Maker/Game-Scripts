@@ -444,7 +444,7 @@ class Message extends Graphic.Base {
             .getScreenMinXY(Datas.Systems.dbOptions.v_fX), 0), y: y - 
             ((ScreenResolution.getScreenMinXY(Datas.Systems.facesetScalingHeight) 
             - h) / 2) + Utils.defaultValue(ScreenResolution.getScreenMinXY(Datas
-            .Systems.dbOptions.v_fX), 0), w: Datas.Systems.facesetScalingWidth, 
+            .Systems.dbOptions.v_fY), 0), w: Datas.Systems.facesetScalingWidth, 
             h: Datas.Systems.facesetScalingHeight, sx: this.facesetIndexX * Datas
             .Systems.facesetsSize, sy: this.facesetIndexY * Datas.Systems
             .facesetsSize, sw: Datas.Systems.facesetsSize, sh: Datas.Systems
