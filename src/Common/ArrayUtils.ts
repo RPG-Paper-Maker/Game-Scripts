@@ -22,6 +22,10 @@ class ArrayUtils {
     static removeElement<T>(array: T[], value: T) {
         this.removeAt(array, array.indexOf(value));
     }
+
+    static insert(array: any[], index: number, value: any) {
+        array.splice(index, 0, value);
+    }
 }
 
 export { ArrayUtils }

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Utils } from "../Common";
+import { ArrayUtils, Enum, Utils } from "../Common";
 import PictureKind = Enum.PictureKind;
 import { Base } from "./Base";
 import { CollisionSquare, TextureBundle, Game } from "../Core";
@@ -54,10 +54,16 @@ class Tileset extends Base {
         // Special elements
         let jsonSpecials = json.auto;
         let l = jsonSpecials.length;
-        this.autotiles = new Array(l);
-        let i: number;
+        this.autotiles = [];
+        let i: number, j: number, id: number;
         for (i = 0; i < l; i++) {
-            this.autotiles[i] = jsonSpecials[i].id;
+            id = jsonSpecials[i].id
+            for (j = 0; j < i; j++) {
+                if (id <= this.autotiles[j]) {
+                    break;
+                }
+            }
+            ArrayUtils.insert(this.autotiles, j, id);
         }
         jsonSpecials = json.walls;
         l = jsonSpecials.length;
@@ -67,10 +73,17 @@ class Tileset extends Base {
         }
         jsonSpecials = json.moun;
         l = jsonSpecials.length;
-        this.mountains = new Array(l);
+        this.mountains = [];
         for (i = 0; i < l; i++) {
-            this.mountains[i] = jsonSpecials[i].id;
+            id = jsonSpecials[i].id
+            for (j = 0; j < i; j++) {
+                if (id <= this.mountains[j]) {
+                    break;
+                }
+            }
+            ArrayUtils.insert(this.mountains, j, id);
         }
+
         jsonSpecials = json.objs;
         l = jsonSpecials.length;
         this.objects = new Array(l);
