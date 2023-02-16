@@ -144,16 +144,17 @@ class Battler {
             // changes
             let originalMaterial = Datas.Tilesets.texturesBattlers[idBattler];
             let texture = Manager.GL.getMaterialTexture(originalMaterial);
-            let material = Manager.GL.createMaterial(texture.clone(), {
+            let copiedTexture = texture.clone();
+            let material = Manager.GL.createMaterial(copiedTexture, {
                 uniforms: {
-                    t: { type: "t", value: texture },
-                    colorD: { type: "v4", value: Manager.GL.screenTone.clone() }
+                    t: { type: "t", value: copiedTexture },
+                    colorD: { type: "v4", value: Manager.GL.screenTone.clone() },
+                    offset: { type: "v2", value: new THREE.Vector2() }
                 }
             });
-            texture = Manager.GL.getMaterialTexture(material);
-            this.width = texture.image.width / Datas.Systems.SQUARE_SIZE / Datas
+            this.width = copiedTexture.image.width / Datas.Systems.SQUARE_SIZE / Datas
                 .Systems.battlersFrames;
-            this.height = texture.image.height / Datas.Systems.SQUARE_SIZE / 
+            this.height = copiedTexture.image.height / Datas.Systems.SQUARE_SIZE / 
                 Datas.Systems.battlersColumns;
             let sprite = Sprite.create(Enum.ElementMapKind.SpritesFace, [0, 0, 
                 this.width, this.height]);
