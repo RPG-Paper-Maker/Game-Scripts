@@ -11,7 +11,7 @@
 
 import { THREE } from "../Globals";
 import { Player } from "./Player";
-import { Enum, Mathf } from "../Common";
+import { Enum, Interpreter, Mathf } from "../Common";
 import { Frame } from "./Frame";
 import { ProgressionTable } from "../System";
 import { Manager, Datas, Scene, Graphic } from "../index";
@@ -111,8 +111,10 @@ class Battler {
         this.botPosition = Manager.GL.toScreenPosition(this.position, camera
             .getThreeCamera());
         this.active = true;
-        this.frame = new Frame(Mathf.random(250, 300), { frames: Datas.Systems.battlersFrames });
-        this.frameAttacking = new Frame(350, { loop: false });
+        this.frame = new Frame(Interpreter.evaluate(Datas.Systems.battlersFrameDuration), 
+            { frames: Datas.Systems.battlersFrames });
+        this.frameAttacking = new Frame(Interpreter.evaluate(Datas.Systems.battlersFrameAttackingDuration), 
+            { loop: false });
         this.frameArrow = new Frame(125);
         this.step = Enum.BattlerStep.Normal;
         this.lastStep = Enum.BattlerStep.Normal;
