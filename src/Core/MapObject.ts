@@ -189,6 +189,10 @@ class MapObject {
 
         // Check if direct
         let position = Scene.Map.current.allObjects[objectID];
+        if (!position && Scene.Map.current.isBattleMap && Scene.Map.current.id === 
+            Game.current.currentMapID) { // Ignore if is in battle and same map
+            return null;
+        }
         if (!position) { // If cannot find, inform that the object doesn't exist in the map
             Platform.showErrorMessage("Can't find object with ID" + objectID + 
             " in map " +  Scene.Map.current.mapName + ". Please check where " +
@@ -274,12 +278,16 @@ class MapObject {
      *  @returns {Promise<StructSearchResult>}
      */
     static async searchOutMap(objectID: number): Promise<StructSearchResult> {
-        let object = Scene.Map.current.allObjects[objectID];
-        if (!object) {
+        let position = Scene.Map.current.allObjects[objectID];
+        if (!position && Scene.Map.current.isBattleMap && Scene.Map.current.id === 
+            Game.current.currentMapID) { // Ignore if is in battle and same map
+            return null;
+        }
+        if (!position) {
             Platform.showErrorMessage("Trying to access an object ID " + objectID 
                 + " that doesn't exists. Please check your commands.");
         }
-        let globalPortion = object.getGlobalPortion();
+        let globalPortion = position.getGlobalPortion();
         let mapsDatas = Game.current.getPortionDatas(Scene.Map.current.id, 
             globalPortion);
         let json = await IO.parseFileJSON(Paths.FILE_MAPS + Scene.Map.current

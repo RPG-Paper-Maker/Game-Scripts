@@ -583,15 +583,17 @@ class MapPortion {
         }
 
         // Add moved objects to the scene
-        let objects = datas.min;
-        for (i = 0, l = objects.length; i < l; i++) {
-            objects[i].changeState();
-            objects[i].addToScene();
-        }
-        objects = datas.mout;
-        for (i = 0, l = objects.length; i < l; i++) {
-            objects[i].changeState();
-            objects[i].addToScene();
+        if (!Scene.Map.current.isBattleMap) { // Not in battle to avoid issues if same map as current map
+            let objects = datas.min;
+            for (i = 0, l = objects.length; i < l; i++) {
+                objects[i].changeState();
+                objects[i].addToScene();
+            }
+            objects = datas.mout;
+            for (i = 0, l = objects.length; i < l; i++) {
+                objects[i].changeState();
+                objects[i].addToScene();
+            }   
         }
     }
 
