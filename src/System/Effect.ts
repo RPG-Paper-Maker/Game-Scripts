@@ -468,7 +468,7 @@ class Effect extends Base {
                 return true;
             case EffectKind.Script:
                 let script = this.scriptFormula.getValue();
-                if (targets.length > 0) {
+                if (targets.length === 0) {
                     Interpreter.evaluate(script, { addReturn: false, user: user, 
                         target: null });
                 }

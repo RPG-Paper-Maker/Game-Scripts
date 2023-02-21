@@ -133,7 +133,7 @@ class CommonSkillItem extends Icon {
     use(useCost: boolean = true): boolean {
         let isDoingSomething = false;
         for (let effect of this.getEffects()) {
-            isDoingSomething = isDoingSomething || effect.execute();
+            isDoingSomething = effect.execute() || isDoingSomething;
         }
         if (useCost && isDoingSomething) {
             for (let cost of this.costs) {
