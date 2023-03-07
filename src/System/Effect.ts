@@ -395,9 +395,9 @@ class Effect extends Base {
                                 .variables[this.damageVariableID];
                             break;
                     }
+                    battler.tempIsDamagesMiss = null;
+                    battler.tempIsDamagesCritical = null;
                 }
-                battler.tempIsDamagesMiss = null;
-                battler.tempIsDamagesCritical = null;
                 break;
             }
             case EffectKind.Status: {
@@ -442,7 +442,8 @@ class Effect extends Base {
                 }
                 battler.tempIsDamagesMiss = null;
                 battler.tempIsDamagesCritical = null;
-                return true;
+                result = true;
+                break;
             }
             case EffectKind.AddRemoveSkill:
                 for (battler of targets) {
@@ -453,7 +454,8 @@ class Effect extends Base {
                         battler.player.removeSkill(skillID);
                     }
                 }
-                return true;
+                result = true;
+                break;
             case EffectKind.PerformSkill:
                 break;
             case EffectKind.CommonReaction:
@@ -462,10 +464,12 @@ class Effect extends Base {
                     .commonReactionID), null, null, this.commonReaction.parameters);
                 Scene.Map.current.reactionInterpretersEffects.push(reactionInterpreter);
                 Scene.Map.current.reactionInterpreters.push(reactionInterpreter);
-                return true;
+                result = true;
+                break;
             case EffectKind.SpecialActions:
                 Scene.Map.current.battleCommandKind = this.specialActionKind;
-                return true;
+                result = true;
+                break;
             case EffectKind.Script:
                 let script = this.scriptFormula.getValue();
                 if (targets.length === 0) {
@@ -476,8 +480,10 @@ class Effect extends Base {
                     Interpreter.evaluate(script, { addReturn: false, user: user, 
                         target: target.player });
                 }
-                return true;
+                result = true;
+                break;
         }
+        Scene.Map.current.targets = Scene.Map.current.tempTargets;
         return result;
     }
 

@@ -427,17 +427,19 @@ class BattleSelection {
      *  When targets are selected.
      */
     public onTargetsSelected() {
-        this.battle.skill = null;
         let battlers = this.battle.battlers[this.battle.kindSelection];
         if (this.battle.all) {
             for (let battler of battlers) {
-                if (!battler.hidden) {
+                if (!battler.hidden && Interpreter.evaluate(this.battle.skill
+                    .targetConditionFormula.getValue(), { user: this.battle.user
+                    .player, target: battler.player})) {
                     this.battle.targets.push(battler);
                 }
             }
         } else {
             this.battle.targets.push(battlers[this.selectedUserTargetIndex()]);
         }
+        this.battle.skill = null;
         this.battle.windowChoicesBattleCommands.unselect();
         this.battle.changeStep(BattleStep.Animation);
     }
