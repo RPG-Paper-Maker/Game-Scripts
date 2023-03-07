@@ -1165,14 +1165,24 @@ class Collisions {
             if (Mathf.isPointOnRectangle(point, x, x + Datas.Systems.SQUARE_SIZE
                 , z, z + Datas.Systems.SQUARE_SIZE))
             {
-                return pass ? [false, (positionAfter.y - y - h) === 
-                    0 ? null : y + h] : [true, null];
+                return pass ? [false, (positionAfter.y - y - h) === 0 ? null : y + h] : [true, null];
+
             } else {
                 if (!pass) {
-                    return [this.checkIntersectionSprite([x + (Datas.Systems
-                        .SQUARE_SIZE / 2), y + (h / 2), z + (Datas.Systems
-                        .SQUARE_SIZE / 2), Datas.Systems.SQUARE_SIZE, h, Datas
-                        .Systems.SQUARE_SIZE, 0, 0, 0], true, object), null];
+                    // Collide with BB (avoiding use of checkIntersectionSprite here for perfs issues)
+                    let vertices = object.currentBoundingBox.geometry.getVertices();
+                    let vy = 0;
+                    for (let i = 0, l = vertices.length; i < l; i += 3) {
+                        vy = vertices[i + 1];
+                        if (vy >= y && vy <= y + h) {
+                            point = new Vector2(vertices[i], vertices[i + 2]);
+                            if (Mathf.isPointOnRectangle(point, x, x + Datas.Systems
+                                .SQUARE_SIZE, z, z + Datas.Systems.SQUARE_SIZE))
+                            {
+                                return [true, null];
+                            }
+                        }
+                    }
                 }
             }
         } else {   
