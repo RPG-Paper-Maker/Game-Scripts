@@ -25,8 +25,8 @@ class SpecialElements {
     public static mountains: System.Mountain[];
     public static objects: System.Object3D[];
     public static texturesAutotiles: TextureBundle[][] = [];
-    public static texturesWalls: THREE.ShaderMaterial[] = [];
-    public static texturesObjects3D: THREE.ShaderMaterial[] = [];
+    public static texturesWalls: THREE.MeshPhongMaterial[] = [];
+    public static texturesObjects3D: THREE.MeshPhongMaterial[] = [];
     public static texturesMountains: TextureBundle[] = [];
 
     constructor() {
@@ -282,16 +282,16 @@ class SpecialElements {
         texture.image = await Picture2D.loadImage(Platform.canvasRendering
             .toDataURL());
         texture.needsUpdate = true;
-        textureAutotile.material = Manager.GL.createMaterial(texture);
+        textureAutotile.material = Manager.GL.createMaterial({ texture: texture });
         this.texturesAutotiles[id].push(textureAutotile);
     }
 
     /** 
      *  Get the wall texture.
      *  @param {number} id
-     *  @returns {Promise<THREE.ShaderMaterial>}
+     *  @returns {Promise<THREE.MeshPhongMaterial>}
      */
-    static async loadWallTexture(id: number): Promise<THREE.ShaderMaterial> {
+    static async loadWallTexture(id: number): Promise<THREE.MeshPhongMaterial> {
         let wall = this.getWall(id);
         let pictureID = Game.current.textures.walls[id];
         if (Utils.isUndefined(pictureID)) {
@@ -318,10 +318,10 @@ class SpecialElements {
      *  Load a wall texture.
      *  @param {System.Picture} picture - The picture to load
      *  @param {number} id - The picture id
-     *  @returns {THREE.ShaderMaterial}
+     *  @returns {THREE.MeshPhongMaterial}
      */
     static async loadTextureWall(picture: System.Picture, id: number): Promise<
-        THREE.ShaderMaterial>
+        THREE.MeshPhongMaterial>
     {
         let picture2D = await Picture2D.create(picture);
         let texture = new THREE.Texture();
@@ -360,7 +360,7 @@ class SpecialElements {
         texture.image = await Picture2D.loadImage(Platform.canvasRendering
             .toDataURL());
         texture.needsUpdate = true;
-        return Manager.GL.createMaterial(texture);
+        return Manager.GL.createMaterial({ texture: texture });
     }
 
     /** 
@@ -528,16 +528,16 @@ class SpecialElements {
     {
         texture.image = await Picture2D.loadImage(Platform.canvasRendering.toDataURL());
         texture.needsUpdate = true;
-        textureMountain.material = Manager.GL.createMaterial(texture);
+        textureMountain.material = Manager.GL.createMaterial({ texture: texture });
         this.texturesMountains[id] = textureMountain;
     }
 
     /** 
      *  Get the wall texture.
      *  @param {number} id
-     *  @returns {Promise<THREE.ShaderMaterial>}
+     *  @returns {Promise<THREE.MeshPhongMaterial>}
      */
-    static async loadObject3DTexture(id: number): Promise<THREE.ShaderMaterial> {
+    static async loadObject3DTexture(id: number): Promise<THREE.MeshPhongMaterial> {
         let object3D = this.getObject3D(id);
         let pictureID = Game.current.textures.objects3D[id];
         if (Utils.isUndefined(pictureID)) {

@@ -15,7 +15,7 @@
 class TextureBundle {
 
     public list: any[][];
-    public material: THREE.ShaderMaterial;
+    public material: THREE.MeshPhongMaterial;
     public beginID: number;
     public beginPoint: number[];
     public endID: number;

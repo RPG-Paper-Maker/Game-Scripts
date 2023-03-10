@@ -18,7 +18,7 @@ import { Manager, Datas, Scene, Graphic } from "../index";
 import { Camera } from "./Camera";
 import { Sprite } from "./Sprite";
 import { Position } from "./Position";
-import { ShaderMaterial } from "three";
+import { MeshPhongMaterial } from "three";
 import { Vector3 } from "./Vector3";
 import { Vector2 } from "./Vector2";
 import { Status } from "./Status";
@@ -147,7 +147,8 @@ class Battler {
             let originalMaterial = Datas.Tilesets.texturesBattlers[idBattler];
             let texture = Manager.GL.getMaterialTexture(originalMaterial);
             let copiedTexture = texture.clone();
-            let material = Manager.GL.createMaterial(copiedTexture, {
+            let material = Manager.GL.createMaterial({
+                texture: copiedTexture,
                 uniforms: {
                     t: { type: "t", value: copiedTexture },
                     colorD: { type: "v4", value: Manager.GL.screenTone.clone() },
@@ -226,17 +227,17 @@ class Battler {
      */
     setActive(active: boolean) {
         this.active = active;
-        let material = <ShaderMaterial>this.mesh.material;
+        let material = <MeshPhongMaterial>this.mesh.material;
         if (active) {
-            material.uniforms.colorD.value.setX(Manager.GL.screenTone.x);
-            material.uniforms.colorD.value.setY(Manager.GL.screenTone.y);
-            material.uniforms.colorD.value.setZ(Manager.GL.screenTone.z);
-            material.uniforms.colorD.value.setW(Manager.GL.screenTone.w);
+            material.userData.uniforms.colorD.value.setX(Manager.GL.screenTone.x);
+            material.userData.uniforms.colorD.value.setY(Manager.GL.screenTone.y);
+            material.userData.uniforms.colorD.value.setZ(Manager.GL.screenTone.z);
+            material.userData.uniforms.colorD.value.setW(Manager.GL.screenTone.w);
         } else {
-            material.uniforms.colorD.value.setX(Manager.GL.screenTone.x - 0.3);
-            material.uniforms.colorD.value.setY(Manager.GL.screenTone.y - 0.3);
-            material.uniforms.colorD.value.setZ(Manager.GL.screenTone.z - 0.3);
-            material.uniforms.colorD.value.setW(Manager.GL.screenTone.w - 0.3);
+            material.userData.uniforms.colorD.value.setX(Manager.GL.screenTone.x - 0.3);
+            material.userData.uniforms.colorD.value.setY(Manager.GL.screenTone.y - 0.3);
+            material.userData.uniforms.colorD.value.setZ(Manager.GL.screenTone.z - 0.3);
+            material.userData.uniforms.colorD.value.setW(Manager.GL.screenTone.w - 0.3);
         }
     }
 
@@ -491,7 +492,7 @@ class Battler {
      */
     updateUVs() {
         if (this.mesh) {
-            let texture = Manager.GL.getMaterialTexture(<ShaderMaterial>this
+            let texture = Manager.GL.getMaterialTexture(<MeshPhongMaterial>this
                 .mesh.material);
             let textureWidth = texture.image.width;
             let textureHeight = texture.image.height;

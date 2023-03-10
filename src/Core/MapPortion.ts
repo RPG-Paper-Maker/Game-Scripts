@@ -186,6 +186,7 @@ class MapPortion {
         geometry.updateAttributes();
         this.staticFloorsMesh = new THREE.Mesh(geometry, material);
         this.staticFloorsMesh.renderOrder = 0;
+        this.staticFloorsMesh.receiveShadow = true;
         Scene.Map.current.scene.add(this.staticFloorsMesh);
     }
 
@@ -251,6 +252,8 @@ class MapPortion {
             if (list) {
                 for (autotiles of list) {
                     autotiles.createMesh();
+                    autotiles.mesh.receiveShadow = true;
+                    autotiles.mesh.castShadow = true;
                     Scene.Map.current.scene.add(autotiles.mesh);
                 }
             }
@@ -308,9 +311,18 @@ class MapPortion {
         faceGeometry.updateAttributes();
         this.staticSpritesMesh = new THREE.Mesh(staticGeometry, staticMaterial);
         this.staticSpritesMesh.renderOrder = 999;
+        this.staticSpritesMesh.receiveShadow = true;
+        this.staticSpritesMesh.castShadow = true;
+        this.staticSpritesMesh.customDepthMaterial = new THREE.MeshDepthMaterial({
+            depthPacking: THREE.RGBADepthPacking,
+            map: staticMaterial.map,
+            alphaTest: 0.5
+        });
         Scene.Map.current.scene.add(this.staticSpritesMesh);
         this.faceSpritesMesh = new THREE.Mesh(faceGeometry, faceMaterial);
         this.faceSpritesMesh.renderOrder = 999;
+        this.faceSpritesMesh.castShadow = true;
+        this.faceSpritesMesh.receiveShadow = true;
         this.faceSpritesMesh.frustumCulled = false;
         Scene.Map.current.scene.add(this.faceSpritesMesh);
     }
@@ -331,7 +343,7 @@ class MapPortion {
         }
         let l: number, s: Record<string, any>, position: Position, sprite: 
             SpriteWall, obj: Record<string, any>, geometry: CustomGeometry, 
-            material: THREE.ShaderMaterial, count: number, result: [number, 
+            material: THREE.MeshPhongMaterial, count: number, result: [number, 
             StructMapElementCollision[]];
         for (i = 0, l = json.length; i < l; i++) {
             // Getting sprite
@@ -432,6 +444,8 @@ class MapPortion {
         for (i = 0, l = this.staticMountainsList.length; i < l; i++) {
             mountains = this.staticMountainsList[i];
             mountains.createMesh();
+            mountains.mesh.receiveShadow = true;
+            mountains.mesh.castShadow = true;
             Scene.Map.current.scene.add(mountains.mesh);
         }
 
@@ -460,7 +474,7 @@ class MapPortion {
         let l = jsonAll.length;
         let o: Record<string, any>, position: Position, v: Record<string, any>, 
             datas: System.Object3D, obj3D: Object3D, obj: Record<string, any>, 
-            geometry: CustomGeometry, material: THREE.ShaderMaterial, count: 
+            geometry: CustomGeometry, material: THREE.MeshPhongMaterial, count: 
             number, result: [number, StructMapElementCollision[]];
         for (i = 0; i < l; i++) {
             // Getting object 3D
@@ -525,6 +539,8 @@ class MapPortion {
                 mesh = new THREE.Mesh(geometry, obj.material);
                 this.staticObjects3DList.push(mesh);
                 mesh.renderOrder = 999;
+                mesh.receiveShadow = true;
+                mesh.castShadow = true;
                 Scene.Map.current.scene.add(mesh);
             }
         }

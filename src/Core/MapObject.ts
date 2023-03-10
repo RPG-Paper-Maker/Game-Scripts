@@ -592,6 +592,7 @@ class MapObject {
                     this.isOrientationStopWalk = !Datas.Pictures.get(Enum.PictureKind
                         .Characters, this.currentStateInstance.graphicID).isStopAnimation;
                 }
+
                 let sprite = Sprite.create(this.currentStateInstance.graphicKind, [x, y, 
                     this.width, this.height]);
                 result = sprite.createGeometry(this.width, this.height, this
@@ -609,6 +610,13 @@ class MapObject {
                 .scaleY, positionTranformation.scaleZ);
             this.position.set(this.position.x + this.currentCenterOffset.x, this
                 .position.y, this.position.z + this.currentCenterOffset.z);
+            this.mesh.receiveShadow = true;
+            this.mesh.castShadow = true;
+            this.mesh.customDepthMaterial = new THREE.MeshDepthMaterial({
+                depthPacking: THREE.RGBADepthPacking,
+                map: material.map,
+                alphaTest: 0.5
+            });
             this.mesh.position.set(this.position.x, this.position.y, this
                 .position.z);
             this.boundingBoxSettings = objCollision[1][0];
@@ -1452,7 +1460,7 @@ class MapObject {
     updateUVs() {
         if (this.mesh !== null && !this.isNone() && this.currentStateInstance
             .graphicKind !== ElementMapKind.Object3D) {
-            let texture = Manager.GL.getMaterialTexture(<THREE.ShaderMaterial>
+            let texture = Manager.GL.getMaterialTexture(<THREE.MeshPhongMaterial>
                 this.mesh.material);
             if (texture) {
                 let textureWidth = texture.image.width;

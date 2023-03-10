@@ -117,10 +117,10 @@ class Tileset extends Base {
 
     /** 
      *  Get the textures for walls.
-     *  @returns {Promise<THREE.ShaderMaterial[]>}
+     *  @returns {Promise<THREE.MeshPhongMaterial[]>}
      */
-    async getTexturesWalls(): Promise<THREE.ShaderMaterial[]> {
-        let list: THREE.ShaderMaterial[] = [];
+    async getTexturesWalls(): Promise<THREE.MeshPhongMaterial[]> {
+        let list: THREE.MeshPhongMaterial[] = [];
         for (let id of this.walls) {
             list[id] = await Datas.SpecialElements.loadWallTexture(id);
         }
@@ -129,10 +129,10 @@ class Tileset extends Base {
 
     /** 
      *  Get the textures for 3D objects.
-     *  @returns {Promise<THREE.ShaderMaterial[]>}
+     *  @returns {Promise<THREE.MeshPhongMaterial[]>}
      */
-    async getTexturesObjects3D(): Promise<THREE.ShaderMaterial[]> {
-        let list: THREE.ShaderMaterial[] = [];
+    async getTexturesObjects3D(): Promise<THREE.MeshPhongMaterial[]> {
+        let list: THREE.MeshPhongMaterial[] = [];
         for (let id of this.objects) {
             list[Datas.SpecialElements.getObject3D(id).pictureID] = await Datas
                 .SpecialElements.loadObject3DTexture(id);

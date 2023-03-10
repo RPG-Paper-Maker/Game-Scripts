@@ -45,13 +45,13 @@ class Map extends Base {
     public allObjects: Position[];
     public currentPortion: Portion;
     public mapPortions: MapPortion[];
-    public textureTileset: THREE.ShaderMaterial;
-    public textureTilesetFace: THREE.ShaderMaterial;
-    public texturesCharacters: THREE.ShaderMaterial[];
+    public textureTileset: THREE.MeshPhongMaterial;
+    public textureTilesetFace: THREE.MeshPhongMaterial;
+    public texturesCharacters: THREE.MeshPhongMaterial[];
     public texturesAutotiles: TextureBundle[][];
-    public texturesWalls: THREE.ShaderMaterial[];
+    public texturesWalls: THREE.MeshPhongMaterial[];
     public texturesMountains: TextureBundle[];
-    public texturesObjects3D: THREE.ShaderMaterial[];
+    public texturesObjects3D: THREE.MeshPhongMaterial[];
     public collisions: number[][][][];
     public previousCameraPosition: Vector3;
     public portionsObjectsUpdated: boolean;
@@ -98,6 +98,46 @@ class Map extends Base {
             Game.current.currentMapID = this.id;
         }
         this.scene = new THREE.Scene();
+
+        // Lights
+        //const intensity = 3000;
+        //this.scene.fog = new THREE.FogExp2(0x8f8f8f, intensity / 1000000);
+    /*
+        const hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.5 );
+        hemiLight.color.setHSL( 1, 1, 1 );
+        //hemiLight.groundColor.setHSL( 0.095, 1, 0.75 );
+        hemiLight.position.set( 0, 1000, 0 );
+        this.scene.add( hemiLight );*/
+        const ambient = new THREE.AmbientLight(0xffffff, 2 / 3);
+        this.scene.add(ambient);
+
+        //const hemiLightHelper = new THREE.HemisphereLightHelper( hemiLight, 10 );
+        //this.scene.add( hemiLightHelper );
+
+        // 
+
+        const dirLight = new THREE.DirectionalLight( 0xffffff, 0.75);
+        dirLight.position.set( - 1, 1.75, 1 );
+        dirLight.position.multiplyScalar( 100 );
+        this.scene.add( dirLight );
+
+        dirLight.castShadow = true;
+
+        dirLight.shadow.mapSize.width = 2048;
+        dirLight.shadow.mapSize.height = 2048;
+
+        const d = 400;
+
+        dirLight.shadow.camera.left = - d;
+        dirLight.shadow.camera.right = d;
+        dirLight.shadow.camera.top = d;
+        dirLight.shadow.camera.bottom = - d;
+
+        dirLight.shadow.camera.far = 3500;
+        dirLight.shadow.bias = - 0.0003;
+
+        const dirLightHelper = new THREE.DirectionalLightHelper( dirLight, 10 );
+        this.scene.add( dirLightHelper );
 
         // Adding meshes for collision
         this.collisions = new Array;
@@ -299,16 +339,15 @@ class Map extends Base {
         let path = tileset.getPath();
         this.textureTileset = path ? (await Manager.GL.loadTexture(path)) : 
             Manager.GL.loadTextureEmpty();
-        let t: THREE.Texture = this.textureTileset.uniforms.t.value;
+        let t: THREE.Texture = this.textureTileset.map;
         if (t.image.width % Datas.Systems.SQUARE_SIZE !== 0 || t.image.height % Datas.Systems.SQUARE_SIZE !== 0) {
             Platform.showErrorMessage("Tileset in " + path + " is not in a size multiple of " + 
                 Datas.Systems.SQUARE_SIZE + ". Please edit this picture size.");
         }
-        this.textureTilesetFace = Manager.GL.createMaterial(this.textureTileset
-            .uniforms.t.value, {
-                isFaceSprite: true
-            }
-        );
+        this.textureTilesetFace = Manager.GL.createMaterial({
+            texture: this.textureTileset.map,
+            isFaceSprite: true
+        });
         this.texturesAutotiles = await tileset.getTexturesAutotiles();
         this.texturesWalls = await tileset.getTexturesWalls();
         this.texturesMountains = await tileset.getTexturesMountains();
@@ -324,8 +363,8 @@ class Map extends Base {
         for (let list of this.texturesAutotiles) {
             if (list) {
                 for (let texture of list) {
-                    texture.material.uniforms.offset.value = texture.isAnimated ? 
-                        this.autotilesOffset : new Vector2();
+                    texture.material.userData.uniforms.offset.value = texture
+                        .isAnimated ? this.autotilesOffset : new Vector2();
                 }
             }
         }
@@ -345,7 +384,7 @@ class Map extends Base {
         let pictures = Datas.Pictures.getListByKind(PictureKind.Characters);
         let l = pictures.length;
         this.collisions[PictureKind.Characters] = new Array(l);
-        let material: THREE.ShaderMaterial, image: HTMLImageElement, p: System
+        let material: THREE.MeshPhongMaterial, image: HTMLImageElement, p: System
             .Picture;
         for (let i = 1; i < l; i++) {
             material = this.texturesCharacters[i];

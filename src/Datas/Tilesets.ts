@@ -22,8 +22,8 @@ class Tilesets {
     public static PROPERTY_TEXTURES_CHARACTERS = "texturesCharacters";
     public static PROPERTY_TEXTURES_BATTLERS = "texturesBattlers";
     private static list: System.Tileset[];
-    public static texturesCharacters: THREE.ShaderMaterial[];
-    public static texturesBattlers: THREE.ShaderMaterial[];
+    public static texturesCharacters: THREE.MeshPhongMaterial[];
+    public static texturesBattlers: THREE.MeshPhongMaterial[];
 
     constructor() {
         throw new Error("This is a static class!");
