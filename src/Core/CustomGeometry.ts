@@ -134,7 +134,10 @@ export class CustomGeometry extends THREE.BufferGeometry {
      *  @param {THREE.Vector3} center
      */
     rotate(angle: number, axis: Vector3, center: Vector3) {
-        for (let vertex of this.getVerticesVectors()) {
+        const vertices = this.getVertices();
+        let vertex = new THREE.Vector3();
+        for (let i = 0, l = vertices.length; i < l; i += 3) {
+            vertex.set(vertices[i], vertices[i + 1], vertices[i + 2]);
             Sprite.rotateVertex(vertex, center, angle, axis);
             this.b_vertices.push(vertex.x, vertex.y, vertex.z);
         }

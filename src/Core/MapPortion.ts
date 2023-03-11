@@ -273,12 +273,11 @@ class MapPortion {
      *  @param {Record<string, any>} json - Json object describing the sprites globals
     */
     readSpritesGlobals(json: Record<string, any>) {
-        let staticMaterial = Scene.Map.current.textureTileset;
-        let faceMaterial = Scene.Map.current.textureTilesetFace;
+        const material = Scene.Map.current.textureTileset;
         let staticGeometry = new CustomGeometry();
         let faceGeometry = new CustomGeometryFace();
         let staticCount = 0, faceCount = 0;
-        let texture = Manager.GL.getMaterialTexture(staticMaterial);
+        let texture = Manager.GL.getMaterialTexture(material);
         if (texture) {
             let s: Record<string, any>, position: Position, sprite: Sprite, 
                 localPosition: Vector3, collisions: StructMapElementCollision[],
@@ -309,21 +308,17 @@ class MapPortion {
         }
         staticGeometry.updateAttributes();
         faceGeometry.updateAttributes();
-        this.staticSpritesMesh = new THREE.Mesh(staticGeometry, staticMaterial);
+        this.staticSpritesMesh = new THREE.Mesh(staticGeometry, material);
         this.staticSpritesMesh.renderOrder = 999;
         this.staticSpritesMesh.receiveShadow = true;
         this.staticSpritesMesh.castShadow = true;
-        this.staticSpritesMesh.customDepthMaterial = new THREE.MeshDepthMaterial({
-            depthPacking: THREE.RGBADepthPacking,
-            map: staticMaterial.map,
-            alphaTest: 0.5
-        });
+        this.staticSpritesMesh.customDepthMaterial = Scene.Map.current.textureDepthMaterial;
         Scene.Map.current.scene.add(this.staticSpritesMesh);
-        this.faceSpritesMesh = new THREE.Mesh(faceGeometry, faceMaterial);
+        this.faceSpritesMesh = new THREE.Mesh(faceGeometry, material);
         this.faceSpritesMesh.renderOrder = 999;
         this.faceSpritesMesh.castShadow = true;
         this.faceSpritesMesh.receiveShadow = true;
-        this.faceSpritesMesh.frustumCulled = false;
+        this.faceSpritesMesh.customDepthMaterial = Scene.Map.current.textureDepthMaterial;
         Scene.Map.current.scene.add(this.faceSpritesMesh);
     }
 
@@ -736,9 +731,9 @@ class MapPortion {
      *  @param {number} angle - The angle on the Y axis
      */
     updateFaceSprites(angle: number) {
-        let i: number, l: number;
-        for (i = 0, l = this.objectsList.length; i < l; i++) {
-            this.objectsList[i].update(angle);
+        (<CustomGeometryFace>this.faceSpritesMesh.geometry).rotate(angle, Sprite.Y_AXIS);
+        for (let object of this.objectsList) {
+            object.update(angle);
         }
     }
 

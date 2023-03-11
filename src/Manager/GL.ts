@@ -141,8 +141,8 @@ class GL {
         opts.texture.flipY = (opts.flipY) ? true : false;
         opts.repeat = Utils.defaultValue(opts.repeat, 1.0);
         opts.opacity = Utils.defaultValue(opts.opacity, 1.0);
-        const fragment = opts.isFaceSprite ? this.SHADER_FACE_FRAGMENT : this.SHADER_FIX_FRAGMENT;
-        const vertex = opts.isFaceSprite ? this.SHADER_FACE_VERTEX : this.SHADER_FIX_VERTEX;
+        const fragment = this.SHADER_FIX_FRAGMENT;
+        const vertex = this.SHADER_FIX_VERTEX;
         const screenTone = this.screenTone;
         const uniforms = {
             offset: { value: new THREE.Vector2() }

@@ -46,7 +46,7 @@ class Map extends Base {
     public currentPortion: Portion;
     public mapPortions: MapPortion[];
     public textureTileset: THREE.MeshPhongMaterial;
-    public textureTilesetFace: THREE.MeshPhongMaterial;
+    public textureDepthMaterial: THREE.MeshDepthMaterial;
     public texturesCharacters: THREE.MeshPhongMaterial[];
     public texturesAutotiles: TextureBundle[][];
     public texturesWalls: THREE.MeshPhongMaterial[];
@@ -67,6 +67,7 @@ class Map extends Base {
     public weatherVelocities: number[];
     public weatherRotationsAngle: number[];
     public weatherRotationsPoint: Vector3[];
+    public sunLight: THREE.DirectionalLight;
 
     constructor(id: number, isBattleMap: boolean = false, minimal: boolean = 
         false, heroOrientation: Enum.Orientation = null)
@@ -100,44 +101,23 @@ class Map extends Base {
         this.scene = new THREE.Scene();
 
         // Lights
-        //const intensity = 3000;
-        //this.scene.fog = new THREE.FogExp2(0x8f8f8f, intensity / 1000000);
-    /*
-        const hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.5 );
-        hemiLight.color.setHSL( 1, 1, 1 );
-        //hemiLight.groundColor.setHSL( 0.095, 1, 0.75 );
-        hemiLight.position.set( 0, 1000, 0 );
-        this.scene.add( hemiLight );*/
-        const ambient = new THREE.AmbientLight(0xffffff, 2 / 3);
+        const ambient = new THREE.AmbientLight(0xffffff, 0.75);
         this.scene.add(ambient);
-
-        //const hemiLightHelper = new THREE.HemisphereLightHelper( hemiLight, 10 );
-        //this.scene.add( hemiLightHelper );
-
-        // 
-
-        const dirLight = new THREE.DirectionalLight( 0xffffff, 0.75);
-        dirLight.position.set( - 1, 1.75, 1 );
-        dirLight.position.multiplyScalar( 100 );
-        this.scene.add( dirLight );
-
-        dirLight.castShadow = true;
-
-        dirLight.shadow.mapSize.width = 2048;
-        dirLight.shadow.mapSize.height = 2048;
-
-        const d = 400;
-
-        dirLight.shadow.camera.left = - d;
-        dirLight.shadow.camera.right = d;
-        dirLight.shadow.camera.top = d;
-        dirLight.shadow.camera.bottom = - d;
-
-        dirLight.shadow.camera.far = 3500;
-        dirLight.shadow.bias = - 0.0003;
-
-        const dirLightHelper = new THREE.DirectionalLightHelper( dirLight, 10 );
-        this.scene.add( dirLightHelper );
+        this.sunLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        this.sunLight.position.set(-1, 1.75, 1);
+        this.sunLight.position.multiplyScalar(Datas.Systems.SQUARE_SIZE * 10);
+        this.sunLight.target.position.set(0,0,0);
+        this.scene.add(this.sunLight);
+        this.sunLight.castShadow = true;
+        this.sunLight.shadow.mapSize.width = 2048;
+        this.sunLight.shadow.mapSize.height = 2048;
+        const d = Datas.Systems.SQUARE_SIZE * 10;
+        this.sunLight.shadow.camera.left = - d;
+        this.sunLight.shadow.camera.right = d;
+        this.sunLight.shadow.camera.top = d;
+        this.sunLight.shadow.camera.bottom = - d;
+        this.sunLight.shadow.camera.far = Datas.Systems.SQUARE_SIZE * 350;
+        this.sunLight.shadow.bias = - 0.0003;
 
         // Adding meshes for collision
         this.collisions = new Array;
@@ -156,6 +136,7 @@ class Map extends Base {
         await this.initializePortions();
         this.createWeather(false);
         this.createWeather();
+        
         Manager.Stack.requestPaintHUD = true;
         this.loading = false;
     }
@@ -339,15 +320,16 @@ class Map extends Base {
         let path = tileset.getPath();
         this.textureTileset = path ? (await Manager.GL.loadTexture(path)) : 
             Manager.GL.loadTextureEmpty();
+        this.textureDepthMaterial = new THREE.MeshDepthMaterial({
+            depthPacking: THREE.RGBADepthPacking,
+            map: this.textureTileset.map,
+            alphaTest: 0.5
+        });
         let t: THREE.Texture = this.textureTileset.map;
         if (t.image.width % Datas.Systems.SQUARE_SIZE !== 0 || t.image.height % Datas.Systems.SQUARE_SIZE !== 0) {
             Platform.showErrorMessage("Tileset in " + path + " is not in a size multiple of " + 
                 Datas.Systems.SQUARE_SIZE + ". Please edit this picture size.");
         }
-        this.textureTilesetFace = Manager.GL.createMaterial({
-            texture: this.textureTileset.map,
-            isFaceSprite: true
-        });
         this.texturesAutotiles = await tileset.getTexturesAutotiles();
         this.texturesWalls = await tileset.getTexturesWalls();
         this.texturesMountains = await tileset.getTexturesMountains();
@@ -1101,7 +1083,7 @@ class Map extends Base {
         // Getting the Y angle of the camera
         let vector = new Vector3();
         this.camera.getThreeCamera().getWorldDirection(vector);
-        let angle = Math.atan2(vector.x,vector.z) + (180 * Math.PI / 180.0);
+        let angle = Math.atan2(vector.x, vector.z) + Math.PI;
         this.mapProperties.startupObject.update();
 
         // Update the objects
