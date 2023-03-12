@@ -612,11 +612,13 @@ class MapObject {
                 .position.y, this.position.z + this.currentCenterOffset.z);
             this.mesh.receiveShadow = true;
             this.mesh.castShadow = true;
-            this.mesh.customDepthMaterial = new THREE.MeshDepthMaterial({
-                depthPacking: THREE.RGBADepthPacking,
-                map: material.map,
-                alphaTest: 0.5
-            });
+            if (Scene.Map.current.mapProperties.isSunLight) {
+                this.mesh.customDepthMaterial = new THREE.MeshDepthMaterial({
+                    depthPacking: THREE.RGBADepthPacking,
+                    map: material.map,
+                    alphaTest: 0.5
+                });
+            }
             this.mesh.position.set(this.position.x, this.position.y, this
                 .position.z);
             this.boundingBoxSettings = objCollision[1][0];

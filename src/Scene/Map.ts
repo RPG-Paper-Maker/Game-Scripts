@@ -100,25 +100,6 @@ class Map extends Base {
         }
         this.scene = new THREE.Scene();
 
-        // Lights
-        const ambient = new THREE.AmbientLight(0xffffff, 0.75);
-        this.scene.add(ambient);
-        this.sunLight = new THREE.DirectionalLight(0xffffff, 0.5);
-        this.sunLight.position.set(-1, 1.75, 1);
-        this.sunLight.position.multiplyScalar(Datas.Systems.SQUARE_SIZE * 10);
-        this.sunLight.target.position.set(0,0,0);
-        this.scene.add(this.sunLight);
-        this.sunLight.castShadow = true;
-        this.sunLight.shadow.mapSize.width = 2048;
-        this.sunLight.shadow.mapSize.height = 2048;
-        const d = Datas.Systems.SQUARE_SIZE * 10;
-        this.sunLight.shadow.camera.left = - d;
-        this.sunLight.shadow.camera.right = d;
-        this.sunLight.shadow.camera.top = d;
-        this.sunLight.shadow.camera.bottom = - d;
-        this.sunLight.shadow.camera.far = Datas.Systems.SQUARE_SIZE * 350;
-        this.sunLight.shadow.bias = - 0.0003;
-
         // Adding meshes for collision
         this.collisions = new Array;
         if (Datas.Systems.showBB) {
@@ -127,6 +108,7 @@ class Map extends Base {
             this.scene.add(Manager.Collisions.BB_BOX_DEFAULT_DETECTION);
         }
         await this.readMapProperties();
+        this.initializeSunLight();
         this.initializeCamera();
         this.orientation = this.camera.getMapOrientation();
         await this.initializeObjects();
@@ -215,6 +197,32 @@ class Map extends Base {
             return Game.current.teamHeroes;
         } else {
             return [];
+        }
+    }
+
+    /** 
+     *  Initialize sun light.
+     */
+    initializeSunLight() {
+        const ambient = new THREE.AmbientLight(0xffffff, this.mapProperties
+            .isSunLight ? 0.75 : 1);
+        this.scene.add(ambient);
+        if (this.mapProperties.isSunLight) {
+            this.sunLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            this.sunLight.position.set(-1, 1.75, 1);
+            this.sunLight.position.multiplyScalar(Datas.Systems.SQUARE_SIZE * 10);
+            this.sunLight.target.position.set(0,0,0);
+            this.scene.add(this.sunLight);
+            this.sunLight.castShadow = true;
+            this.sunLight.shadow.mapSize.width = 2048;
+            this.sunLight.shadow.mapSize.height = 2048;
+            const d = Datas.Systems.SQUARE_SIZE * 10;
+            this.sunLight.shadow.camera.left = - d;
+            this.sunLight.shadow.camera.right = d;
+            this.sunLight.shadow.camera.top = d;
+            this.sunLight.shadow.camera.bottom = - d;
+            this.sunLight.shadow.camera.far = Datas.Systems.SQUARE_SIZE * 350;
+            this.sunLight.shadow.bias = - 0.0003;
         }
     }
 

@@ -310,15 +310,19 @@ class MapPortion {
         faceGeometry.updateAttributes();
         this.staticSpritesMesh = new THREE.Mesh(staticGeometry, material);
         this.staticSpritesMesh.renderOrder = 999;
-        this.staticSpritesMesh.receiveShadow = true;
-        this.staticSpritesMesh.castShadow = true;
-        this.staticSpritesMesh.customDepthMaterial = Scene.Map.current.textureDepthMaterial;
+        if (Scene.Map.current.mapProperties.isSunLight) {
+            this.staticSpritesMesh.receiveShadow = true;
+            this.staticSpritesMesh.castShadow = true;
+            this.staticSpritesMesh.customDepthMaterial = Scene.Map.current.textureDepthMaterial;
+        }
         Scene.Map.current.scene.add(this.staticSpritesMesh);
         this.faceSpritesMesh = new THREE.Mesh(faceGeometry, material);
         this.faceSpritesMesh.renderOrder = 999;
-        this.faceSpritesMesh.castShadow = true;
-        this.faceSpritesMesh.receiveShadow = true;
-        this.faceSpritesMesh.customDepthMaterial = Scene.Map.current.textureDepthMaterial;
+        if (Scene.Map.current.mapProperties.isSunLight) {
+            this.faceSpritesMesh.castShadow = true;
+            this.faceSpritesMesh.receiveShadow = true;
+            this.faceSpritesMesh.customDepthMaterial = Scene.Map.current.textureDepthMaterial;
+        }
         Scene.Map.current.scene.add(this.faceSpritesMesh);
     }
 

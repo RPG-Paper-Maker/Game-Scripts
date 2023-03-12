@@ -43,11 +43,8 @@ export class CustomGeometryFace extends CustomGeometry {
     pushQuadVerticesFace(vecA: THREE.Vector3, vecB: THREE.Vector3, vecC: THREE.Vector3, 
         vecD: THREE.Vector3, center: THREE.Vector3) {
         this.b_vertices.push(vecA.x, vecA.y, vecA.z);
-        this.b_center.push(center.x, center.y, center.z);
         this.b_vertices.push(vecB.x, vecB.y, vecB.z);
-        this.b_center.push(center.x, center.y, center.z);
         this.b_vertices.push(vecC.x, vecC.y, vecC.z);
-        this.b_center.push(center.x, center.y, center.z);
         this.b_vertices.push(vecD.x, vecD.y, vecD.z);
         this.b_center.push(center.x, center.y, center.z);
     }
@@ -67,9 +64,11 @@ export class CustomGeometryFace extends CustomGeometry {
         const vertices = this.getVertices();
         let vertex = new THREE.Vector3();
         let center = new THREE.Vector3();
+        let ic = 0;
         for (let i = 0, l = vertices.length; i < l; i += 3) {
+            ic = Math.floor(i / 12) * 3;
             vertex.set(vertices[i], vertices[i + 1], vertices[i + 2]);
-            center.set(this.centerPoints[i], this.centerPoints[i + 1], this.centerPoints[i + 2])
+            center.set(this.centerPoints[ic], this.centerPoints[ic + 1], this.centerPoints[ic + 2])
             Sprite.rotateVertex(vertex, center, a, axis, false);
             this.b_vertices.push(vertex.x, vertex.y, vertex.z);
         }

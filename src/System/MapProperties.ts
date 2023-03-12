@@ -54,6 +54,7 @@ class MapProperties extends Base {
     public skyboxGeometry: THREE.BoxGeometry;
     public skyboxMesh: THREE.Mesh;
     public maxNumberSteps: number;
+    public isSunLight: boolean;
 
     constructor() {
         super();
@@ -124,6 +125,8 @@ class MapProperties extends Base {
         this.randomBattleVariance = System.DynamicValue.readOrDefaultNumber(
             json.randomBattleVariance, 20);
         this.updateMaxNumberSteps();
+
+        this.isSunLight = Utils.defaultValue(json.isl, true);
     }
 
     /** 
