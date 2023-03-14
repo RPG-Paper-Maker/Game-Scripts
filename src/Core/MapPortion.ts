@@ -32,7 +32,6 @@ import { Object3D } from "./Object3D";
 import { Vector3 } from "./Vector3";
 import { Game } from "./Game";
 import { CustomGeometry } from "./CustomGeometry";
-import { Texture } from "three";
 import { CustomGeometryFace } from "./CustomGeometryFace";
 
 /** @class
@@ -133,7 +132,7 @@ class MapPortion {
      *  @param {Record<string, any>} json - Json object describing the floors
      */
     readFloors(json: Record<string, any>) {
-        let material = Scene.Map.current.textureTileset;
+        const material = Scene.Map.current.textureTileset;
         let texture = Manager.GL.getMaterialTexture(material);
         let width = texture ? texture.image.width : 0;
         let height = texture ? texture.image.height : 0;
@@ -186,7 +185,11 @@ class MapPortion {
         geometry.updateAttributes();
         this.staticFloorsMesh = new THREE.Mesh(geometry, material);
         this.staticFloorsMesh.renderOrder = 0;
-        this.staticFloorsMesh.receiveShadow = true;
+        if (Scene.Map.current.mapProperties.isSunLight) {
+            this.staticFloorsMesh.receiveShadow = true;
+            this.staticFloorsMesh.castShadow = true;
+            this.staticFloorsMesh.customDepthMaterial = material.userData.customDepthMaterial;
+        }
         Scene.Map.current.scene.add(this.staticFloorsMesh);
     }
 
@@ -252,8 +255,12 @@ class MapPortion {
             if (list) {
                 for (autotiles of list) {
                     autotiles.createMesh();
-                    autotiles.mesh.receiveShadow = true;
-                    autotiles.mesh.castShadow = true;
+                    if (Scene.Map.current.mapProperties.isSunLight) {
+                        autotiles.mesh.receiveShadow = true;
+                        autotiles.mesh.castShadow = true;
+                        autotiles.mesh.customDepthMaterial = autotiles.bundle
+                            .material.userData.customDepthMaterial;
+                    }
                     Scene.Map.current.scene.add(autotiles.mesh);
                 }
             }
@@ -313,7 +320,7 @@ class MapPortion {
         if (Scene.Map.current.mapProperties.isSunLight) {
             this.staticSpritesMesh.receiveShadow = true;
             this.staticSpritesMesh.castShadow = true;
-            this.staticSpritesMesh.customDepthMaterial = Scene.Map.current.textureDepthMaterial;
+            this.staticSpritesMesh.customDepthMaterial = material.userData.customDepthMaterial;
         }
         Scene.Map.current.scene.add(this.staticSpritesMesh);
         this.faceSpritesMesh = new THREE.Mesh(faceGeometry, material);
@@ -321,7 +328,7 @@ class MapPortion {
         if (Scene.Map.current.mapProperties.isSunLight) {
             this.faceSpritesMesh.castShadow = true;
             this.faceSpritesMesh.receiveShadow = true;
-            this.faceSpritesMesh.customDepthMaterial = Scene.Map.current.textureDepthMaterial;
+            this.faceSpritesMesh.customDepthMaterial = material.userData.customDepthMaterial;
         }
         Scene.Map.current.scene.add(this.faceSpritesMesh);
     }
@@ -387,6 +394,11 @@ class MapPortion {
                 geometry = obj.geometry;
                 geometry.updateAttributes();
                 mesh = new THREE.Mesh(geometry, obj.material);
+                if (Scene.Map.current.mapProperties.isSunLight) {
+                    mesh.receiveShadow = true;
+                    mesh.castShadow = true;
+                    mesh.customDepthMaterial = obj.material.userData.customDepthMaterial;
+                }
                 this.staticWallsList.push(mesh);
                 Scene.Map.current.scene.add(mesh);
             }
@@ -443,8 +455,12 @@ class MapPortion {
         for (i = 0, l = this.staticMountainsList.length; i < l; i++) {
             mountains = this.staticMountainsList[i];
             mountains.createMesh();
-            mountains.mesh.receiveShadow = true;
-            mountains.mesh.castShadow = true;
+            if (Scene.Map.current.mapProperties.isSunLight) {
+                mountains.mesh.receiveShadow = true;
+                mountains.mesh.castShadow = true;
+                mountains.mesh.customDepthMaterial = mountains.bundle.material
+                    .userData.customDepthMaterial;
+            }
             Scene.Map.current.scene.add(mountains.mesh);
         }
 
@@ -538,8 +554,11 @@ class MapPortion {
                 mesh = new THREE.Mesh(geometry, obj.material);
                 this.staticObjects3DList.push(mesh);
                 mesh.renderOrder = 999;
-                mesh.receiveShadow = true;
-                mesh.castShadow = true;
+                if (Scene.Map.current.mapProperties.isSunLight) {
+                    mesh.receiveShadow = true;
+                    mesh.castShadow = true;
+                    mesh.customDepthMaterial = obj.material.userData.customDepthMaterial;
+                }
                 Scene.Map.current.scene.add(mesh);
             }
         }

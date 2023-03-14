@@ -144,9 +144,10 @@ class GL {
         const fragment = this.SHADER_FIX_FRAGMENT;
         const vertex = this.SHADER_FIX_VERTEX;
         const screenTone = this.screenTone;
-        const uniforms = {
-            offset: { value: new THREE.Vector2() }
-        }
+        const uniforms = opts.uniforms ? opts.uniforms : {
+            offset: { value: new THREE.Vector2() },
+            colorD: { value: screenTone }
+        };
 
         // Program cache key for multiple shader programs
         const key = fragment === this.SHADER_FIX_FRAGMENT ? 0 : 1;
@@ -159,12 +160,17 @@ class GL {
             alphaTest: 0.5
         });
         material.userData.uniforms = uniforms;
+        material.userData.customDepthMaterial = new THREE.MeshDepthMaterial({
+            depthPacking: THREE.RGBADepthPacking,
+            map: opts.texture,
+            alphaTest: 0.5
+        });
         
         // Edit shader information before compiling shader
         material.onBeforeCompile = (shader) => {
             shader.fragmentShader = fragment;
             shader.vertexShader = vertex;
-            shader.uniforms.colorD = { value: screenTone };
+            shader.uniforms.colorD = uniforms.colorD;
             shader.uniforms.reverseH = { value: opts.flipX };
             shader.uniforms.repeat = { value: opts.repeat };
             shader.uniforms.opacity = { value: opts.opacity };

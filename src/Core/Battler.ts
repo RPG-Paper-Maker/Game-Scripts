@@ -150,7 +150,6 @@ class Battler {
             let material = Manager.GL.createMaterial({
                 texture: copiedTexture,
                 uniforms: {
-                    t: { type: "t", value: copiedTexture },
                     colorD: { type: "v4", value: Manager.GL.screenTone.clone() },
                     offset: { type: "v2", value: new THREE.Vector2() }
                 }
@@ -166,6 +165,9 @@ class Battler {
             this.mesh = new THREE.Mesh(geometry, material);
             this.mesh.position.set(this.position.x, this.position.y, this
                 .position.z);
+            this.mesh.receiveShadow = true;
+            this.mesh.castShadow = true;
+            this.mesh.customDepthMaterial = material.userData.customDepthMaterial;
             this.topLeftPosition = new Vector3(this.position.x - (this.width / 2 
                 * Datas.Systems.SQUARE_SIZE), this.position.y + (this.height * 
                 Datas.Systems.SQUARE_SIZE), this.position.z);

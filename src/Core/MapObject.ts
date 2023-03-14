@@ -610,14 +610,10 @@ class MapObject {
                 .scaleY, positionTranformation.scaleZ);
             this.position.set(this.position.x + this.currentCenterOffset.x, this
                 .position.y, this.position.z + this.currentCenterOffset.z);
-            this.mesh.receiveShadow = true;
-            this.mesh.castShadow = true;
             if (Scene.Map.current.mapProperties.isSunLight) {
-                this.mesh.customDepthMaterial = new THREE.MeshDepthMaterial({
-                    depthPacking: THREE.RGBADepthPacking,
-                    map: material.map,
-                    alphaTest: 0.5
-                });
+                this.mesh.receiveShadow = true;
+                this.mesh.castShadow = true;
+                this.mesh.customDepthMaterial = material.userData.customDepthMaterial;
             }
             this.mesh.position.set(this.position.x, this.position.y, this
                 .position.z);

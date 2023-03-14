@@ -46,7 +46,6 @@ class Map extends Base {
     public currentPortion: Portion;
     public mapPortions: MapPortion[];
     public textureTileset: THREE.MeshPhongMaterial;
-    public textureDepthMaterial: THREE.MeshDepthMaterial;
     public texturesCharacters: THREE.MeshPhongMaterial[];
     public texturesAutotiles: TextureBundle[][];
     public texturesWalls: THREE.MeshPhongMaterial[];
@@ -328,11 +327,6 @@ class Map extends Base {
         let path = tileset.getPath();
         this.textureTileset = path ? (await Manager.GL.loadTexture(path)) : 
             Manager.GL.loadTextureEmpty();
-        this.textureDepthMaterial = new THREE.MeshDepthMaterial({
-            depthPacking: THREE.RGBADepthPacking,
-            map: this.textureTileset.map,
-            alphaTest: 0.5
-        });
         let t: THREE.Texture = this.textureTileset.map;
         if (t.image.width % Datas.Systems.SQUARE_SIZE !== 0 || t.image.height % Datas.Systems.SQUARE_SIZE !== 0) {
             Platform.showErrorMessage("Tileset in " + path + " is not in a size multiple of " + 

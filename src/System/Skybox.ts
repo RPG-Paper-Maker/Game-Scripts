@@ -51,51 +51,17 @@ class Skybox extends Base {
      *  Create the textures for the background
      *  @returns {THREE.MeshPhongMaterial[]} 
      */
-    createTextures(): THREE.MeshPhongMaterial[] {
-        return [
-            Manager.GL.createMaterial({
-                texture: Manager.GL.textureLoader.load(Datas.Pictures.get(
-                    PictureKind.Skyboxes, this.left).getPath()), 
-                flipY: true,
-                flipX: true,
-                side: THREE.BackSide
-            }),
-            Manager.GL.createMaterial({
-                texture: Manager.GL.textureLoader.load(Datas.Pictures.get(
-                    PictureKind.Skyboxes, this.right).getPath()),
-                flipY: true,
-                flipX: true,
-                side: THREE.BackSide
-            }),
-            Manager.GL.createMaterial({
-                texture: Manager.GL.textureLoader.load(Datas.Pictures.get(
-                    PictureKind.Skyboxes, this.top).getPath()),
-                flipY: true,
-                flipX: true,
-                side: THREE.BackSide
-            }),
-            Manager.GL.createMaterial({
-                texture: Manager.GL.textureLoader.load(Datas.Pictures.get(
-                    PictureKind.Skyboxes, this.bot).getPath()),
-                flipY: true,
-                flipX: true,
-                side: THREE.BackSide
-            }),
-            Manager.GL.createMaterial({
-                texture: Manager.GL.textureLoader.load(Datas.Pictures.get(
-                    PictureKind.Skyboxes, this.front).getPath()), 
-                flipY: true,
-                flipX: true,
-                side: THREE.BackSide
-            }),
-            Manager.GL.createMaterial({
-                texture: Manager.GL.textureLoader.load(Datas.Pictures.get(
-                    PictureKind.Skyboxes, this.back).getPath()), 
-                flipY: true,
-                flipX: true,
-                side: THREE.BackSide
-            })
-        ];
+    createTextures(): THREE.MeshBasicMaterial[] {
+        return [this.left, this.right, this.top, this.bot, this.front, this.back]
+            .map(side => { 
+                const texture = Manager.GL.textureLoader.load(Datas.Pictures.get(
+                    PictureKind.Skyboxes, side).getPath());
+                texture.wrapS = THREE.RepeatWrapping;
+                texture.repeat.x = - 1;
+                texture.magFilter = THREE.NearestFilter;
+                texture.minFilter = THREE.NearestFilter;
+                return new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide});
+            });
     }
 }
 
