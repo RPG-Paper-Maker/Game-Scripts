@@ -583,8 +583,8 @@ class MapObject {
                     this.width = texture.image.width / Datas.Systems.SQUARE_SIZE / 
                         Datas.Systems.FRAMES;
                     this.height = texture.image.height / Datas.Systems.SQUARE_SIZE / 
-                        Datas.Pictures.get(Enum.PictureKind.Characters, this
-                        .currentStateInstance.graphicID).getRows();
+                            Datas.Pictures.get(Enum.PictureKind.Characters, this
+                            .currentStateInstance.graphicID).getRows();
                     this.currentOrientationStop = this.currentStateInstance.indexY 
                         >= 4 && this.currentStateInstance.indexY <= 7;
                     this.currentOrientationClimbing = this.currentStateInstance
@@ -1477,12 +1477,22 @@ class MapObject {
                     x = (this.frame.value >= Datas.Systems.FRAMES ? Datas
                         .Systems.FRAMES - 1 : this.frame.value) * w;
                     y = this.isClimbing ? this.climbOrientation : this.orientation;
+                    let p = Datas.Pictures.get(Enum.PictureKind.Characters, this
+                        .currentStateInstance.graphicID);
                     if (this.currentOrientationClimbing || (this.currentStateInstance
                         .climbAnimation && this.isClimbing)) {
-                        y += 8;
+                        if (p.isClimbAnimation) {
+                            if (p.isStopAnimation) {
+                                y += 8;
+                            } else {
+                                y += 4;
+                            }
+                        }
                     } else if (this.currentOrientationStop || (this.currentStateInstance
                         .stopAnimation && !this.moving)) {
-                        y += 4;
+                        if (p.isStopAnimation) {
+                            y += 4;
+                        }
                     }
                     y *= h;
                 }
