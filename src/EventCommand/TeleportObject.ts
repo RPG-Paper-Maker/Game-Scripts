@@ -198,7 +198,9 @@ class TeleportObject extends Base {
                     if (needReload) {
                         Scene.Map.current.camera.updateTargetPosition();
                         Scene.Map.current.camera.updateCameraPosition();
-                        await Scene.Map.current.loadPortions(true);
+                        if (Scene.Map.current.updateCurrentPortion()) {
+                            await Scene.Map.current.loadPortions(true);
+                        }
                     }
                     currentState.teleported = true;
                 }, object);

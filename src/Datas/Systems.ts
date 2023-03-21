@@ -20,7 +20,7 @@ import { Position, MapPortion, MapObject } from "../Core";
 class Systems {
 
     public static SQUARE_SIZE: number;
-    public static PORTIONS_RAY_NEAR: number;
+    public static PORTIONS_RAY: number;
     public static FRAMES: number;
     public static PATH_BR: string;
     public static PATH_DLCS: string;
@@ -107,7 +107,7 @@ class Systems {
 
         // Other numbers
         this.SQUARE_SIZE = json.ss;
-        this.PORTIONS_RAY_NEAR = Utils.defaultValue(json.portionRayIngame, 3);
+        this.PORTIONS_RAY = Utils.defaultValue(json.portionRayIngame, 3);
         this.FRAMES = json.frames;
         this.mountainCollisionHeight = System.DynamicValue.readOrDefaultNumber(json.mch, 4);
         this.mountainCollisionAngle = System.DynamicValue.readOrDefaultNumberDouble(json.mca, 45);

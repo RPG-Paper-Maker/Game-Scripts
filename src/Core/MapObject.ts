@@ -234,7 +234,7 @@ class MapObject {
         let localPortion = Scene.Map.current.getLocalPortion(globalPortion);
         let mapPortion: MapPortion;
         if (Scene.Map.current.isInPortion(localPortion)) {
-            mapPortion = Scene.Map.current.getMapPortion(localPortion);
+            mapPortion = Scene.Map.current.getMapPortionFromPortion(localPortion);
             let objects = mapPortion.objectsList;
             for (i = 0, l = objects.length; i < l; i++) {
                 if (objects[i].system.id === objectID) {
@@ -1171,8 +1171,8 @@ class MapObject {
             movedObjects = objects.m;
             if (movedObjects && movedObjects.indexOf(this) === -1) {
                 movedObjects.push(this);
-                movedObjects = Scene.Map.current.getMapPortion(Scene.Map.current
-                    .getLocalPortion(originalPortion)).objectsList;
+                movedObjects = Scene.Map.current.getMapPortionFromPortion(Scene
+                    .Map.current.getLocalPortion(originalPortion)).objectsList;
                 index = movedObjects.indexOf(this);
                 if (index !== -1) {
                     movedObjects.splice(index, 1);
@@ -1586,8 +1586,8 @@ class MapObject {
     updateTerrain() {
         this.terrain = 0;
         if (!Scene.Map.current.loading && this.position) {
-            let mapPortion = Scene.Map.current.getMapPortion(Scene.Map.current
-                .getLocalPortion(Portion.createFromVector3(this.position)));
+            let mapPortion = Scene.Map.current.getMapPortionFromPortion(Scene.Map
+                .current.getLocalPortion(Portion.createFromVector3(this.position)));
             if (mapPortion) {
                 let position = Position.createFromVector3(this.position);
                 let boundingBoxes = mapPortion.boundingBoxesLands[position.toIndex()];
