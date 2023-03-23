@@ -40,7 +40,7 @@ class Collisions {
      *  @static
      */
     static initialize() {
-        this.BB_BOX_DETECTION.geometry.computeBoundingBox();
+        this.BB_BOX_DETECTION.geometry.boundingBox = new THREE.Box3();
     }
 
     /** 
@@ -101,7 +101,11 @@ class Collisions {
 
         // Update geometry now
         box.updateMatrixWorld();
-        box.geometry.computeBoundingBox();
+        
+        // Compute bounding box manually
+        if (box.geometry.boundingBox === null) {
+            box.geometry.computeBoundingBox();
+        }
     }
 
     /** 
@@ -150,7 +154,11 @@ class Collisions {
 
         // Update geometry now
         box.updateMatrixWorld();
-        box.geometry.computeBoundingBox();
+        
+        // Compute bounding box manually
+        if (box.geometry.boundingBox === null) {
+            box.geometry.computeBoundingBox();
+        }
     }
 
     /** 
@@ -183,18 +191,29 @@ class Collisions {
 
         // Update geometry now
         box.updateMatrixWorld();
-        box.geometry.computeBoundingBox();
+
+        // Compute bounding box manually
+        if (box.geometry.boundingBox === null) {
+            box.geometry.computeBoundingBox();
+        }
     }
 
-    static getBBBoxDetection(force: boolean = false) {
+    /** 
+     *  Get a bounding box mesh for detection. Keep the same existing one or 
+     *  force creating a new one for cases you need several.
+     *  @static
+     *  @param {number} [force=false]
+     *  @returns {THREE.Mesh}
+     */
+    static getBBBoxDetection(force: boolean = false): THREE.Mesh {
         if (Datas.Systems.showBB && !force) {
             let box = Collisions.createBox(true);
             this.BB_BOX_DETECTION = box;
-            box.geometry.computeBoundingBox();
+            box.geometry.boundingBox = new THREE.Box3();
             Scene.Map.current.scene.add(box);
             setTimeout(() => {
                 Scene.Map.current.scene.remove(box);
-            }, 100);
+            }, 1);
         }
         return this.BB_BOX_DETECTION;
     }
