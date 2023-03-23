@@ -36,6 +36,14 @@ class Collisions {
     }
 
     /** 
+     *  Initialize necessary collisions.
+     *  @static
+     */
+    static initialize() {
+        this.BB_BOX_DETECTION.geometry.computeBoundingBox();
+    }
+
+    /** 
      *  Create a box for bounding box.
      *  @static
      *  @returns {THREE.Mesh}
@@ -93,6 +101,7 @@ class Collisions {
 
         // Update geometry now
         box.updateMatrixWorld();
+        box.geometry.computeBoundingBox();
     }
 
     /** 
@@ -141,6 +150,7 @@ class Collisions {
 
         // Update geometry now
         box.updateMatrixWorld();
+        box.geometry.computeBoundingBox();
     }
 
     /** 
@@ -173,12 +183,14 @@ class Collisions {
 
         // Update geometry now
         box.updateMatrixWorld();
+        box.geometry.computeBoundingBox();
     }
 
     static getBBBoxDetection(force: boolean = false) {
         if (Datas.Systems.showBB && !force) {
             let box = Collisions.createBox(true);
             this.BB_BOX_DETECTION = box;
+            box.geometry.computeBoundingBox();
             Scene.Map.current.scene.add(box);
             setTimeout(() => {
                 Scene.Map.current.scene.remove(box);
@@ -245,6 +257,9 @@ class Collisions {
      */
     static obbVSobb(shapeA: CustomGeometry, shapeB: CustomGeometry): boolean
     {
+        if (!shapeA.boundingBox.intersectsBox(shapeB.boundingBox)) {
+            return false;
+        }
         let facesA = shapeA.getNormals();
         let facesB = shapeB.getNormals();
         let verticesA = shapeA.getVertices();

@@ -62,6 +62,7 @@ export class Main {
         Manager.GL.load();
         Manager.GL.initialize();
         Manager.GL.resize();
+        Manager.Collisions.initialize();
         await Datas.SpecialElements.read();
         await Datas.Tilesets.read();
         await Datas.Status.read();

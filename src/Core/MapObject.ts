@@ -879,7 +879,6 @@ class MapObject {
                             ]
                         );
                     }
-                    box.geometry.computeBoundingBox();
                     this.meshBoundingBox.push(box);
                 }
                 break;
@@ -899,7 +898,6 @@ class MapObject {
                         this.boundingBoxSettings.b[0][8]
                     ]
                 );
-                box.geometry.computeBoundingBox();
                 this.meshBoundingBox.push(box);
                 break;
         }
@@ -937,7 +935,6 @@ class MapObject {
                     bbSettings[8]
                 ]
             );
-            mesh.geometry.computeBoundingBox();
         } else if (this.currentStateInstance.graphicKind === ElementMapKind.SpritesFace) {
             Manager.Collisions.applyOrientedBoxTransforms(mesh,
                 [
@@ -948,7 +945,6 @@ class MapObject {
                     bbSettings[4]
                 ]
             );
-            mesh.geometry.computeBoundingBox();
         }
     }
 
