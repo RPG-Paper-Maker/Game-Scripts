@@ -426,6 +426,9 @@ class Map extends Base {
      *  @returns {boolean}
      */
     updateCurrentPortion(): boolean {
+        if (!this.camera) {
+            return false;
+        }
         this.previousPortion = this.currentPortion;
         this.currentPortion = Portion.createFromVector3(this.camera.getThreeCamera().position);
         if (!this.previousPortion) {
