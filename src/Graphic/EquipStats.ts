@@ -84,7 +84,13 @@ class EquipStats extends Base {
                     txt = statistic.isFix ? Utils.numToString(newValue) : Math
                         .min(gamePlayer[statistic.abbreviation], newValue) + 
                         Constants.STRING_SLASH + newValue;
-                    this.listNewStats.push(new Graphic.Text(txt));
+                    graphicValue = new Graphic.Text(txt);
+                    if (newValue > baseValue) {
+                        graphicValue.color = System.Color.GREEN;
+                    } else if (newValue < baseValue) {
+                        graphicValue.color = System.Color.RED;
+                    }
+                    this.listNewStats.push(graphicValue);
                 }
                 j++;
             }
