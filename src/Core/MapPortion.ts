@@ -519,16 +519,17 @@ class MapPortion {
                 obj = hash[obj3D.datas.pictureID];
                 if (!Utils.isUndefined(obj)) {
                     if (obj === null) {
-                        geometry = new CustomGeometry();
-                        material = Scene.Map.current.texturesObjects3D[
-                            obj3D.datas.pictureID];
-                        count = 0;
-                        obj = {
-                            geometry: geometry,
-                            material: material,
-                            c: count
-                        };
-                        hash[obj3D.datas.pictureID] = obj;
+                        material = Scene.Map.current.texturesObjects3D[obj3D.datas.pictureID];
+                        if (material) {
+                            geometry = new CustomGeometry();
+                            count = 0;
+                            obj = {
+                                geometry: geometry,
+                                material: material,
+                                c: count
+                            };
+                            hash[obj3D.datas.pictureID] = obj;
+                        }
                     } else {
                         geometry = obj.geometry;
                         material = obj.material;
