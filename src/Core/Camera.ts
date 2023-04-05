@@ -231,7 +231,7 @@ class Camera {
             Scene.Map.current.sunLight.target.updateMatrixWorld();
             Scene.Map.current.sunLight.position.set(-1, 1.75, 1).multiplyScalar(
                 Datas.Systems.SQUARE_SIZE * 10).add(this.targetPosition);
-            const d = Math.min(Datas.Systems.SQUARE_SIZE * this.distance / 10, 1000);
+            const d = Math.max(Datas.Systems.SQUARE_SIZE * this.distance / 10, 400);
             if (d !== Scene.Map.current.sunLight.shadow.camera.right) {
                 Scene.Map.current.sunLight.shadow.camera.left = - d;
                 Scene.Map.current.sunLight.shadow.camera.right = d;
