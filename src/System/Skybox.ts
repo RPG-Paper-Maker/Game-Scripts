@@ -60,7 +60,7 @@ class Skybox extends Base {
                 texture.repeat.x = - 1;
                 texture.magFilter = THREE.NearestFilter;
                 texture.minFilter = THREE.NearestFilter;
-                return new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide});
+                return new THREE.MeshBasicMaterial({map: texture, side: THREE.BackSide});
             });
     }
 }
