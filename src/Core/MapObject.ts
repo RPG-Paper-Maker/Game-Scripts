@@ -195,7 +195,7 @@ class MapObject {
         }
         if (!position) { // If cannot find, inform that the object doesn't exist in the map
             Platform.showErrorMessage("Can't find object with ID" + objectID + 
-            " in map " +  Scene.Map.current.mapName + ". Please check where " +
+            " in map " +  Scene.Map.current.mapProperties.name + ". Please check where " +
             "this ID is used and remove it.");
         }
         let globalPortion = position.getGlobalPortion();
@@ -291,7 +291,7 @@ class MapObject {
         let mapsDatas = Game.current.getPortionDatas(Scene.Map.current.id, 
             globalPortion);
         let json = await IO.parseFileJSON(Paths.FILE_MAPS + Scene.Map.current
-            .mapName + Constants.STRING_SLASH + globalPortion.getFileName());
+            .mapProperties.name + Constants.STRING_SLASH + globalPortion.getFileName());
         let mapPortion = new MapPortion(globalPortion);
         let moved = mapPortion.getObjFromID(json, objectID);
         if (moved === null) {
@@ -347,7 +347,7 @@ class MapObject {
             let obj = Scene.Map.current.allObjects[this.system.id];
             if (Utils.isUndefined(obj)) {
                 Platform.showErrorMessage("Object linking issue. Please go to map " + 
-                    Scene.Map.current.mapName + " and use Options > Debug Options in map > Synchronize map objects. Please report it to dev.");
+                    Scene.Map.current.mapProperties.name + " and use Options > Debug Options in map > Synchronize map objects. Please report it to dev.");
             }
             let portion = obj.getGlobalPortion();
             let portionDatas = Game.current.getPortionDatas(Scene.Map.current.id, 
@@ -471,7 +471,7 @@ class MapObject {
             let pos = Scene.Map.current.allObjects[this.system.id];
             if (Utils.isUndefined(pos)) {
                 Platform.showErrorMessage("Object linking issue. Please go to map " + 
-                    Scene.Map.current.mapName + " and use Options > Debug Options in map > Synchronize map objects. Please report it to dev.");
+                    Scene.Map.current.mapProperties.name + " and use Options > Debug Options in map > Synchronize map objects. Please report it to dev.");
             }
             let portion = pos.getGlobalPortion();
             let portionDatas = Game.current.getPortionDatas(Scene.Map.current.id, 
