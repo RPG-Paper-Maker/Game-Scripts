@@ -309,6 +309,9 @@ class Menu extends MenuBase {
 
         // Draw play time and currencies
         this.windowTimeCurrencies.draw();
+
+        // Draw interpreters
+        super.drawHUD();
     }
 
     /**

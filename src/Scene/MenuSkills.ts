@@ -259,7 +259,7 @@ class MenuSkills extends Base {
      *  Update the scene.
      */
     update() {
-        Scene.Base.prototype.update.call(Scene.Map.current);
+        super.update();
         this.windowChoicesList.update();
         this.windowChoicesTabs.update();
         if (this.windowChoicesList.currentSelectedIndex !== -1) {
@@ -272,8 +272,10 @@ class MenuSkills extends Base {
      *  @param {number} key - The key ID
      */
     onKeyPressed(key: number) {
-        Scene.Base.prototype.onKeyPressed.call(Scene.Map.current, key);
-        this.action(true, { key: key });
+        super.onKeyPressed(key);
+        if (this.reactionInterpreters.length === 0) {
+            this.action(true, { key: key });
+        }
     }
 
     /** 
@@ -281,7 +283,7 @@ class MenuSkills extends Base {
      *  @param {number} key - The key ID
      */
     onKeyReleased(key: number) {
-        Scene.Base.prototype.onKeyReleased.call(Scene.Map.current, key);
+        super.onKeyReleased(key);
     }
 
     /** 
@@ -290,7 +292,7 @@ class MenuSkills extends Base {
      *  @returns {boolean}
      */
     onKeyPressedRepeat(key: number): boolean {
-        return Scene.Base.prototype.onKeyPressedRepeat.call(Scene.Map.current, key);
+        return super.onKeyPressedRepeat(key);
     }
 
     /** 
@@ -299,9 +301,10 @@ class MenuSkills extends Base {
      *  @returns {boolean}
      */
     onKeyPressedAndRepeat(key: number): boolean {
-        let res = Scene.Base.prototype.onKeyPressedAndRepeat.call(Scene.Map
-            .current, key);
-        this.move(true, { key: key });
+        let res = super.onKeyPressedAndRepeat(key);
+        if (this.reactionInterpreters.length === 0) {
+            this.move(true, { key: key });
+        }
         return res;
     }
 
@@ -310,7 +313,9 @@ class MenuSkills extends Base {
      */
     onMouseMove(x: number, y: number) {
         super.onMouseMove(x, y);
-        this.move(false, { x: x, y: y });
+        if (this.reactionInterpreters.length === 0) {
+            this.move(false, { x: x, y: y });
+        }
     }
 
     /** 
@@ -318,7 +323,9 @@ class MenuSkills extends Base {
      */
     onMouseUp(x: number, y: number) {
         super.onMouseUp(x, y);
-        this.action(false, { x: x, y: y });
+        if (this.reactionInterpreters.length === 0) {
+            this.action(false, { x: x, y: y });
+        }
     }
 
     /** 
@@ -340,6 +347,9 @@ class MenuSkills extends Base {
         } else {
             this.windowEmpty.draw();
         }
+
+        // Draw interpreters
+        super.drawHUD();
     }
 }
 

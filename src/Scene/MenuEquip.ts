@@ -499,6 +499,9 @@ class MenuEquip extends MenuBase {
         this.windowChoicesEquipment.draw();
         this.windowChoicesList.draw();
         this.windowInformation.draw();
+
+        // Draw interpreters
+        super.drawHUD();
     }
 }
 

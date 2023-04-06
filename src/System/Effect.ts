@@ -462,8 +462,8 @@ class Effect extends Base {
                 let reactionInterpreter = new ReactionInterpreter(null, Datas
                     .CommonEvents.getCommonReaction(this.commonReaction
                     .commonReactionID), null, null, this.commonReaction.parameters);
-                Scene.Map.current.reactionInterpretersEffects.push(reactionInterpreter);
-                Scene.Map.current.reactionInterpreters.push(reactionInterpreter);
+                Manager.Stack.top.reactionInterpretersEffects.push(reactionInterpreter);
+                Manager.Stack.top.reactionInterpreters.push(reactionInterpreter);
                 result = true;
                 break;
             case EffectKind.SpecialActions:
