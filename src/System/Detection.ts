@@ -110,6 +110,9 @@ class Detection extends Base {
                 case Orientation.East:
                     x = pz;
                     z = -px;
+                default:
+                    x = 0;
+                    z = 0;
                     break;
             }
             list[i] = [
