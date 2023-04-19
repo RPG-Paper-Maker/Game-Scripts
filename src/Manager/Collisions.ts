@@ -408,7 +408,7 @@ class Collisions {
                     portion = Scene.Map.current.getLocalPortion(Portion
                         .createFromVector3(positionAfterPlus));
                     mapPortion = Scene.Map.current.getMapPortionFromPortion(portion);
-                    if (mapPortion !== null) {
+                    if (mapPortion) {
                         result = this.check(mapPortion, jpositionBefore
                             , new Position(jpositionAfter.x + i, jpositionAfter
                             .y + j, jpositionAfter.z + k), positionAfter, object
@@ -426,7 +426,7 @@ class Collisions {
                                                 .SQUARE_SIZE);
                                             portion = Scene.Map.current.getLocalPortion(Portion.createFromVector3(positionBeforePlus));
                                             mapPortion = Scene.Map.current.getMapPortionFromPortion(portion);
-                                            if (mapPortion !== null) {
+                                            if (mapPortion) {
                                                 let [b, y] = this.checkSprites(mapPortion, new Position(jpositionBefore.x + i2, jpositionBefore
                                                     .y + j2, jpositionBefore.z + k2), [], object);
                                                 // If before and after collides, get up!
@@ -472,7 +472,7 @@ class Collisions {
             positionAfter));
         mapPortion = Scene.Map.current.getMapPortionFromPortion(portion);
         let floors: number[];
-        if (mapPortion !== null) {
+        if (mapPortion) {
             floors = mapPortion.squareNonEmpty[jpositionAfter.x % Constants
                 .PORTION_SIZE][jpositionAfter.z % Constants.PORTION_SIZE];
             let otherMapPortion = Scene.Map.current.getMapPortion(portion.x, portion.y + 1, portion.z);
@@ -509,7 +509,7 @@ class Collisions {
                         // redo with before pos for going down two following height angled
                         portion = Scene.Map.current.getLocalPortion(Portion.createFromVector3(positionBefore));
                         mapPortion = Scene.Map.current.getMapPortionFromPortion(portion);
-                        if (mapPortion !== null) {
+                        if (mapPortion) {
                             floors = mapPortion.squareNonEmpty[jpositionBefore.x % Constants
                                 .PORTION_SIZE][jpositionBefore.z % Constants.PORTION_SIZE];
                             let otherMapPortion = Scene.Map.current.getMapPortion(portion.x, portion.y + 1, portion.z);
@@ -562,7 +562,7 @@ class Collisions {
                                             }
                                             portion = Scene.Map.current.getLocalPortion(Portion.createFromVector3(positionFront));
                                             mapPortion = Scene.Map.current.getMapPortionFromPortion(portion);
-                                            if (mapPortion !== null) {
+                                            if (mapPortion) {
                                                 floors = mapPortion.squareNonEmpty[Math.floor(positionFront.x / Datas.Systems.SQUARE_SIZE) % Constants.PORTION_SIZE][Math.floor(positionFront.z / Datas.Systems.SQUARE_SIZE) % Constants.PORTION_SIZE];
                                                 if (floors.length > 0) {
                                                     for (let y of floors) {
@@ -585,7 +585,7 @@ class Collisions {
                                                         .SQUARE_SIZE);
                                                     portion = Scene.Map.current.getLocalPortion(Portion.createFromVector3(positionBeforePlus));
                                                     mapPortion = Scene.Map.current.getMapPortionFromPortion(portion);
-                                                    if (mapPortion !== null) {
+                                                    if (mapPortion) {
                                                         const jpositionBottom = Position.createFromVector3(positionBeforePlus);
                                                         const climbingUp = object.isClimbingUp;
                                                         object.isClimbingUp = false;
