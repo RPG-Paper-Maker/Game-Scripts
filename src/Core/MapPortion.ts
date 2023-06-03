@@ -362,15 +362,17 @@ class MapPortion {
             // If ID exists in this tileset
             if (!Utils.isUndefined(obj)) {
                 if (obj === null) {
-                    geometry = new CustomGeometry();
                     material = Scene.Map.current.texturesWalls[sprite.id];
-                    count = 0;
-                    obj = {
-                        geometry: geometry,
-                        material: material,
-                        c: count
-                    };
-                    hash[sprite.id] = obj;
+                    if (material) {
+                        geometry = new CustomGeometry();
+                        count = 0;
+                        obj = {
+                            geometry: geometry,
+                            material: material,
+                            c: count
+                        };
+                        hash[sprite.id] = obj;
+                    }
                 } else {
                     geometry = obj.geometry;
                     material = obj.material;
