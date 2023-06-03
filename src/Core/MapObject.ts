@@ -291,7 +291,7 @@ class MapObject {
         let mapsDatas = Game.current.getPortionDatas(Scene.Map.current.id, 
             globalPortion);
         let json = await IO.parseFileJSON(Paths.FILE_MAPS + Scene.Map.current
-            .mapProperties.name + Constants.STRING_SLASH + globalPortion.getFileName());
+            .mapFilename + Constants.STRING_SLASH + globalPortion.getFileName());
         let mapPortion = new MapPortion(globalPortion);
         let moved = mapPortion.getObjFromID(json, objectID);
         if (moved === null) {
