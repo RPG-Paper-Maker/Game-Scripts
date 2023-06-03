@@ -56,6 +56,9 @@ class TitleScreen extends Base {
         Manager.Videos.stop();
         Manager.Songs.stopAll();
 
+        // Reset screen tone
+        Manager.GL.screenTone.set(0, 0, 0, 1);
+
         // Destroy pictures
         Manager.Stack.displayedPictures = [];
 

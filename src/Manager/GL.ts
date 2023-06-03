@@ -131,7 +131,7 @@ class GL {
      */
     static createMaterial(opts: { texture?: THREE.Texture | null, flipX?: boolean, 
         flipY?: boolean, uniforms?: Record<string, any>, side?: number,
-        isFaceSprite?: boolean, repeat?: number, opacity?: number }): THREE
+        isFaceSprite?: boolean, repeat?: number, opacity?: number, shadows?: boolean }): THREE
         .MeshPhongMaterial {
         if (!opts.texture) {
             opts.texture = new THREE.Texture();
@@ -141,6 +141,8 @@ class GL {
         opts.texture.flipY = (opts.flipY) ? true : false;
         opts.repeat = Utils.defaultValue(opts.repeat, 1.0);
         opts.opacity = Utils.defaultValue(opts.opacity, 1.0);
+        opts.shadows = Utils.defaultValue(opts.shadows, true);
+        opts.side = Utils.defaultValue(opts.side, THREE.DoubleSide);
         const fragment = this.SHADER_FIX_FRAGMENT;
         const vertex = this.SHADER_FIX_VERTEX;
         const screenTone = this.screenTone;
@@ -155,7 +157,7 @@ class GL {
         // Create material
         const material = new THREE.MeshPhongMaterial({
             map: opts.texture,
-            side: THREE.DoubleSide,
+            side: opts.side,
             transparent: true,
             alphaTest: 0.5
         });
@@ -175,6 +177,7 @@ class GL {
             shader.uniforms.repeat = { value: opts.repeat };
             shader.uniforms.opacity = { value: opts.opacity };
             shader.uniforms.offset = uniforms.offset;
+            shader.uniforms.enableShadows = { value: opts.shadows };
             material.userData.uniforms = shader.uniforms;
 
             // Important to run a unique shader only once and be able to use 
