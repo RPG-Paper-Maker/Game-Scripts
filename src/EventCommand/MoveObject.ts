@@ -847,13 +847,9 @@ class MoveObject extends Base {
                     parameters.height
                 ];
             } else {
-                if (parameters.dontChangeOrientation) {
-                    object.currentStateInstance.indexX = object.frame.value;
-                    object.currentStateInstance.indexY = object.orientation;
-                } else {
-                    object.currentStateInstance.indexX = parameters.indexX;
-                    object.currentStateInstance.indexY = parameters.indexY;
-                }
+                object.currentStateInstance.indexX = parameters.indexX;
+                object.currentStateInstance.indexY = parameters.dontChangeOrientation ? 
+                    object.orientation : parameters.indexY;
             }
 
             // Permanent change
