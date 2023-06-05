@@ -110,6 +110,7 @@ class Detection extends Base {
                 case Orientation.East:
                     x = pz;
                     z = -px;
+                    break;
                 default:
                     x = 0;
                     z = 0;
