@@ -85,8 +85,8 @@ class Chrono {
      */
     drawHUD() {
         if (this.graphic !== null) {
-            this.graphic.draw(0, 0, ScreenResolution.SCREEN_X, ScreenResolution
-                .SCREEN_Y);
+            this.graphic.draw(0, 0, ScreenResolution.getScreenX(ScreenResolution
+                .SCREEN_X), ScreenResolution.getScreenY(ScreenResolution.SCREEN_Y));
         }
     }
 }
