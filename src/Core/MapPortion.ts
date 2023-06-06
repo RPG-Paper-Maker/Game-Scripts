@@ -219,9 +219,8 @@ class MapPortion {
 
         // Read and update geometry
         let j: number, m: number, jsonAutotile: Record<string, any>, position: Position, 
-            autotile: Autotile, indexPos: number, textureAutotile
-            : TextureBundle, autotiles: Autotiles, objCollision: 
-            StructMapElementCollision;
+            autotile: Autotile, indexPos: number, textureAutotile: TextureBundle, 
+            autotiles: Autotiles, objCollision: StructMapElementCollision;
         for (i = 0, l = json.length; i < l; i++) {
             jsonAutotile = json[i];
             position = Position.createFromArray(jsonAutotile.k);
@@ -232,8 +231,8 @@ class MapPortion {
             if (texturesAutotile) {
                 for (j = 0, m = texturesAutotile.length; j < m; j++) {
                     textureAutotile = texturesAutotile[j];
-                    if (textureAutotile.isInTexture(autotile.autotileID, autotile
-                        .texture))
+                    if (textureAutotile.isInTexture(Datas.SpecialElements
+                        .getAutotile(autotile.autotileID).pictureID, autotile.texture))
                     {
                         texture = textureAutotile;
                         autotiles = this.staticAutotilesList[autotile.autotileID][j];
@@ -438,9 +437,9 @@ class MapPortion {
             mountain.read(jsonMountain.v);
             indexPos = position.toIndex();
             for (index = 0; index < mountainsLength; index++) {
-                textureMountain = Scene.Map.current.texturesMountains[
-                    index];
-                if (textureMountain.isInTexture(mountain.mountainID)) {
+                textureMountain = Scene.Map.current.texturesMountains[index];
+                if (textureMountain.isInTexture(Datas.SpecialElements
+                    .getMountain(mountain.mountainID).pictureID)) {
                     texture = textureMountain;
                     mountains = this.staticMountainsList[index];
                     break;

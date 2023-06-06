@@ -124,7 +124,7 @@ class SpecialElements {
                 let picture = Datas.Pictures.get(Enum.PictureKind.Autotiles, pictureID);
                 if (picture) {
                     result = await this.loadTextureAutotile(textureAutotile,
-                        texture, picture, offset, id, autotile.isAnimated);
+                        texture, picture, offset, autotile.isAnimated);
                 } else {
                     result = null;
                 }
@@ -148,13 +148,11 @@ class SpecialElements {
      *  @param {THREE.Texture} texture - The texture to paint on
      *  @param {System.Picture} picture - The picture to paint
      *  @param {number} offset - The offset
-     *  @param {number} id - The autotile id
      *  @param {boolean} isAnimated
      *  @returns {any[]}
      */
     static async loadTextureAutotile(textureAutotile: TextureBundle, texture: 
-        THREE.Texture, picture: System.Picture, offset: number, id: number, 
-        isAnimated: boolean): Promise<any[]>
+        THREE.Texture, picture: System.Picture, offset: number, isAnimated: boolean): Promise<any[]>
     {
         let frames = isAnimated ? Datas.Systems.autotilesFrames : 1;
         let picture2D = await Picture2D.create(picture);
@@ -189,16 +187,16 @@ class SpecialElements {
             }
             if (offset === 0 && textureAutotile === null) {
                 textureAutotile = new TextureBundle();
-                textureAutotile.setBegin(id, point);
+                textureAutotile.setBegin(picture.id, point);
                 textureAutotile.isAnimated = isAnimated;
             }
             for (j = 0; j < frames; j++) {
                 p = [(point[0] * frames) + j, point[1]];
-                this.paintPictureAutotile(picture2D.image, offset, p, id);
+                this.paintPictureAutotile(picture2D.image, offset, p);
                 offset++;
             }
-            textureAutotile.setEnd(id, point);
-            textureAutotile.addToList(id, point);
+            textureAutotile.setEnd(picture.id, point);
+            textureAutotile.addToList(picture.id, point);
             if (!isAnimated && offset === this.getMaxAutotilesOffsetTexture()) {
                 await this.updateTextureAutotile(textureAutotile, texture, picture.id);
                 texture = new THREE.Texture();
@@ -218,8 +216,7 @@ class SpecialElements {
      *  @param {number[]} point - The in several texture
      *  @param {number} id - The autotile id
      */
-    static paintPictureAutotile(img: HTMLImageElement, offset: number, point: number[], 
-        id: number)
+    static paintPictureAutotile(img: HTMLImageElement, offset: number, point: number[])
     {
         let row = -1;
         let offsetX = point[0] * 2 * Datas.Systems.SQUARE_SIZE;
@@ -443,13 +440,13 @@ class SpecialElements {
             point = [i % width, Math.floor(i / width)];
             if (offset === 0 && textureMountain === null) {
                 textureMountain = new TextureBundle();
-                textureMountain.setBegin(id, point);
+                textureMountain.setBegin(picture.id, point);
             }
             if (picture) {
                 this.paintPictureMountain(picture2D.image, offset, id);
             }
-            textureMountain.setEnd(id, point);
-            textureMountain.addToList(id, point);
+            textureMountain.setEnd(picture.id, point);
+            textureMountain.addToList(picture.id, point);
             offset++;
             if (offset === this.getMaxMountainOffsetTexture()) {
                 await this.updateTextureMountain(textureMountain, texture, picture.id);

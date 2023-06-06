@@ -418,8 +418,8 @@ class Mountain extends MapElement {
         position: Position, count: number) : any[]
     {
         // General configurations
-        let yOffset = texture.getOffset(this.mountainID, null) * 4 * Datas
-            .Systems.SQUARE_SIZE;
+        let yOffset = texture.getOffset(Datas.SpecialElements.getMountain(this
+            .mountainID).pictureID, null) * 4 * Datas.Systems.SQUARE_SIZE;
         let wp = this.getWidthTotalPixels();
         let hp = this.getHeightTotalPixels();
         let width = 4 * Datas.Systems.SQUARE_SIZE;

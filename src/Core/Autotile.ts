@@ -72,7 +72,7 @@ class Autotile extends Land {
             .getCollisionAtIndex(Land.prototype.getIndex.call(this, picture
             .width)) : null, position, width, height, ((this.tileID % 64) * 
             Datas.Systems.SQUARE_SIZE) / width, ((Math.floor(this.tileID / 64) +
-            (10 * texture.getOffset(this.autotileID, this.texture))) * Datas
+            (10 * texture.getOffset(autotile.pictureID, this.texture))) * Datas
             .Systems.SQUARE_SIZE) / height, Datas.Systems.SQUARE_SIZE / width, 
             Datas.Systems.SQUARE_SIZE / height, count);
     }
