@@ -49,8 +49,6 @@ class MapProperties extends Base {
     public randomBattles: System.RandomBattle[];
     public randomBattleNumberStep: System.DynamicValue;
     public randomBattleVariance: System.DynamicValue;
-    public cameraBackground: THREE.Camera;
-    public sceneBackground: THREE.Scene;
     public skyboxGeometry: THREE.BoxGeometry;
     public skyboxMesh: THREE.Mesh;
     public maxNumberSteps: number;
@@ -59,7 +57,6 @@ class MapProperties extends Base {
     constructor() {
         super();
 
-        this.sceneBackground = null;
         this.skyboxGeometry = null;
         this.skyboxMesh = null;
     }
@@ -153,16 +150,11 @@ class MapProperties extends Base {
      *  Update the background image.
      */
     updateBackgroundImage() {
-        let bgMat = Manager.GL.createMaterial({
-            texture: Manager.GL.textureLoader.load(Datas.Pictures.get(PictureKind
-                .Pictures, this.backgroundImageID).getPath()),
-            flipY: true
-        });
-        bgMat.depthTest = false;
-        bgMat.depthWrite = false;
-        this.sceneBackground = new THREE.Scene();
-        this.cameraBackground = new THREE.Camera();
-        this.sceneBackground.add(new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), bgMat));
+        const texture = Manager.GL.textureLoader.load(Datas.Pictures.get(
+            PictureKind.Pictures, this.backgroundImageID).getPath());
+        texture.magFilter = THREE.NearestFilter;
+        texture.minFilter = THREE.NearestFilter;
+        Scene.Map.current.scene.background = texture;
     }
 
     /** 
