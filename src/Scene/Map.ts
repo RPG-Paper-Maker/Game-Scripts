@@ -178,6 +178,10 @@ class Map extends Base {
         this.mapProperties = new System.MapProperties();
         let json = await IO.parseFileJSON(Paths.FILE_MAPS + this.mapFilename + Paths
             .FILE_MAP_INFOS);
+        if (this.isBattleMap && json.tileset === undefined) {
+            Platform.showErrorMessage("The battle map " + this.id + " doesn't " +
+                "exists. Please check your battle maps.");
+        }
         this.mapProperties.read(json);
         if (!minimal) {
             this.mapProperties.updateBackground();
