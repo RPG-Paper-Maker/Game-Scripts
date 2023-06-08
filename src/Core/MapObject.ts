@@ -126,7 +126,6 @@ class MapObject {
         if (!this.isHero) {
             this.initializeProperties();
         }
-        this.initializeTimeEvents();
     }
 
     /** 
@@ -497,6 +496,11 @@ class MapObject {
                 this.currentStateInstance = this.statesInstance[i];
                 break;
             }
+        }
+
+        // Reinitialize time events chrono
+        if (previousStateInstance !== this.currentStateInstance) {
+            this.initializeTimeEvents();
         }
 
         // Remove previous mesh
