@@ -33,6 +33,8 @@ class Camera {
     public distance: number;
     public horizontalAngle: number;
     public verticalAngle: number;
+    public hidingDistance: number = -1;
+    public timeHiding: number = 0;
 
     constructor(cameraProperties: System.CameraProperties, target: MapObject) {
         this.system = cameraProperties;
@@ -67,11 +69,24 @@ class Camera {
     }
 
     /** 
+     *  Get the distance and vertical angle according to hiding distance.
+     *  @returns {number}
+     */
+    getHidingDistanceVerticalAngle(): [number, number] {
+        return [
+            this.hidingDistance === -1 ?  this.distance : this.hidingDistance, 
+            this.hidingDistance === -1 ?  this.verticalAngle : this.verticalAngle
+        ];
+    }
+
+    /** 
      *  Get the distance according to vertical angle.
      *  @returns {number}
      */
     getDistance(): number {
-        return this.distance * Math.sin(this.verticalAngle * Math.PI / 180.0);
+        console.log(this.hidingDistance);
+        const [d, v] = this.getHidingDistanceVerticalAngle();
+        return d * Math.sin(v * Math.PI / 180.0);
     }
 
     /** 
@@ -79,7 +94,8 @@ class Camera {
      *  @returns {number}
      */
     getHeight(): number {
-        return this.distance * Math.cos(this.verticalAngle * Math.PI / 180.0);
+        const [d, v] = this.getHidingDistanceVerticalAngle();
+        return d * Math.cos(v * Math.PI / 180.0);
     }
 
     /** 

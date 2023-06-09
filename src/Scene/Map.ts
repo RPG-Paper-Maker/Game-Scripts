@@ -11,7 +11,7 @@
 
 import { THREE } from "../Globals";
 import { Base } from "./Base";
-import { Enum, Utils, Constants, IO, Paths, Inputs, Interpreter, Platform } from "../Common";
+import { Enum, Utils, Constants, IO, Paths, Inputs, Interpreter, Platform, Mathf } from "../Common";
 import Orientation = Enum.Orientation;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 import PictureKind = Enum.PictureKind;
@@ -68,6 +68,7 @@ class Map extends Base {
     public weatherRotationsAngle: number[];
     public weatherRotationsPoint: Vector3[];
     public sunLight: THREE.DirectionalLight;
+    public raycaster: THREE.Raycaster;
 
     constructor(id: number, isBattleMap: boolean = false, minimal: boolean = 
         false, heroOrientation: Enum.Orientation = null)
@@ -99,6 +100,7 @@ class Map extends Base {
             Game.current.currentMapID = this.id;
         }
         this.scene = new THREE.Scene();
+        this.raycaster = new THREE.Raycaster();
 
         // Adding meshes for collision
         this.collisions = new Array;
@@ -1023,6 +1025,19 @@ class Map extends Base {
         }
 
         // Update camera
+        this.camera.hidingDistance = -1;
+        this.camera.update();
+        const pointer = new THREE.Vector2();
+        this.raycaster.setFromCamera(pointer, this.camera.getThreeCamera());
+        const intersects = this.raycaster.intersectObjects(this.scene.children);
+        let distance: number;
+        for (let i = 0; i < intersects.length; i ++) {
+            distance = Math.ceil(intersects[i].distance) + 5;
+            if (distance < this.camera.distance && (this.camera.hidingDistance 
+                === -1 || this.camera.distance - distance < this.camera.hidingDistance)) {
+                this.camera.hidingDistance = this.camera.distance - distance;
+            }
+        }
         this.camera.update();
 
         // Update skybox
