@@ -26,6 +26,7 @@ class GL {
     public static SHADER_FACE_FRAGMENT: string;
     public static renderer: THREE.WebGLRenderer;
     public static textureLoader = new THREE.TextureLoader();
+    public static raycaster = new THREE.Raycaster();
     public static screenTone = new THREE.Vector4(0, 0, 0, 1);
 
     constructor() {

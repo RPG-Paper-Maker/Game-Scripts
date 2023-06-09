@@ -400,6 +400,7 @@ class MapPortion {
                     mesh.castShadow = true;
                     mesh.customDepthMaterial = obj.material.userData.customDepthMaterial;
                 }
+                mesh.layers.enable(1);
                 this.staticWallsList.push(mesh);
                 Scene.Map.current.scene.add(mesh);
             }
@@ -462,6 +463,7 @@ class MapPortion {
                 mountains.mesh.customDepthMaterial = mountains.bundle.material
                     .userData.customDepthMaterial;
             }
+            mountains.mesh.layers.enable(1);
             Scene.Map.current.scene.add(mountains.mesh);
         }
 
