@@ -178,6 +178,7 @@ class Camera {
      *  Update the three.js camera position.
      */
     updateCameraPosition() {
+        this.cameraPosition = this.getThreeCamera().position.clone();
         let distance = this.getDistance();
         let camera = this.getThreeCamera();
         camera.position.x = this.targetPosition.x - (distance * Math

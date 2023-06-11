@@ -11,7 +11,7 @@
 
 import { THREE } from "../Globals";
 import { Base } from "./Base";
-import { Enum, Utils, Constants, IO, Paths, Inputs, Interpreter, Platform, Mathf } from "../Common";
+import { Enum, Utils, Constants, IO, Paths, Inputs, Interpreter, Platform, Mathf, ScreenResolution } from "../Common";
 import Orientation = Enum.Orientation;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
 import PictureKind = Enum.PictureKind;
@@ -1000,6 +1000,20 @@ class Map extends Base {
             .camera.target.position.z);
     }
 
+    updateCameraHiding(pointer: THREE.Vector2) {
+        Manager.GL.raycaster.setFromCamera(pointer, this.camera.getThreeCamera());
+        Manager.GL.raycaster.layers.set(1);
+        const intersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
+        let distance: number;
+        for (let i = 0; i < intersects.length; i ++) {
+            distance = Math.ceil(intersects[i].distance) + 5;
+            if (distance < this.camera.distance && (!this.camera.isHiding() || 
+                this.camera.distance - distance < this.camera.hidingDistance)) {
+                this.camera.hidingDistance = this.camera.distance - distance;
+            }
+        }
+    }
+
     /** 
      *  Update the scene.
      */
@@ -1026,17 +1040,15 @@ class Map extends Base {
         this.camera.hidingDistance = -1;
         this.camera.update();
         if (Datas.Systems.moveCameraOnBlockView.getValue()) {
-            const pointer = new THREE.Vector2();
-            Manager.GL.raycaster.setFromCamera(pointer, this.camera.getThreeCamera());
-            Manager.GL.raycaster.layers.set(1); 
-            const intersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
-            let distance: number;
-            for (let i = 0; i < intersects.length; i ++) {
-                distance = Math.ceil(intersects[i].distance) + 5;
-                if (distance < this.camera.distance && (!this.camera.isHiding() || 
-                    this.camera.distance - distance < this.camera.hidingDistance)) {
-                    this.camera.hidingDistance = this.camera.distance - distance;
-                }
+            let pointer = Manager.GL.toScreenPosition(this.camera.target.position
+                .clone().add(new THREE.Vector3(0, this.camera.target.height * Datas
+                .Systems.SQUARE_SIZE, 0)), this.camera.getThreeCamera()).divide(
+                new THREE.Vector2(ScreenResolution.CANVAS_WIDTH, ScreenResolution
+                .CANVAS_HEIGHT)).subScalar(0.5);
+            pointer.setY(-pointer.y); 
+            this.updateCameraHiding(pointer);
+            if (this.camera.isHiding()) {
+                this.updateCameraHiding(new Vector2(0, 0));
             }
             this.camera.update();
         }
