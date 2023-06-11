@@ -1025,19 +1025,21 @@ class Map extends Base {
         // Update camera
         this.camera.hidingDistance = -1;
         this.camera.update();
-        const pointer = new THREE.Vector2();
-        Manager.GL.raycaster.setFromCamera(pointer, this.camera.getThreeCamera());
-        Manager.GL.raycaster.layers.set(1); 
-        const intersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
-        let distance: number;
-        for (let i = 0; i < intersects.length; i ++) {
-            distance = Math.ceil(intersects[i].distance) + 5;
-            if (distance < this.camera.distance && (this.camera.hidingDistance 
-                === -1 || this.camera.distance - distance < this.camera.hidingDistance)) {
-                this.camera.hidingDistance = this.camera.distance - distance;
+        if (Datas.Systems.moveCameraOnBlockView.getValue()) {
+            const pointer = new THREE.Vector2();
+            Manager.GL.raycaster.setFromCamera(pointer, this.camera.getThreeCamera());
+            Manager.GL.raycaster.layers.set(1); 
+            const intersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
+            let distance: number;
+            for (let i = 0; i < intersects.length; i ++) {
+                distance = Math.ceil(intersects[i].distance) + 5;
+                if (distance < this.camera.distance && (!this.camera.isHiding() || 
+                    this.camera.distance - distance < this.camera.hidingDistance)) {
+                    this.camera.hidingDistance = this.camera.distance - distance;
+                }
             }
+            this.camera.update();
         }
-        this.camera.update();
 
         // Update skybox
         if (this.mapProperties.skyboxGeometry !== null && this.previousCameraPosition) {

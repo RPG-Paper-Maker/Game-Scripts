@@ -35,6 +35,7 @@ class Camera {
     public verticalAngle: number;
     public hidingDistance: number = -1;
     public timeHiding: number = 0;
+    public cameraPosition: THREE.Vector3;
 
     constructor(cameraProperties: System.CameraProperties, target: MapObject) {
         this.system = cameraProperties;
@@ -61,6 +62,14 @@ class Camera {
     }
 
     /** 
+     *  Check if camera is currently hiding with walls / mountains.
+     *  @returns {boolean}
+     */
+    isHiding(): boolean {
+        return this.hidingDistance !== -1;
+    }
+
+    /** 
      *  Get the map orientation according to the camera.
      *  @returns {Orientation}
      */
@@ -84,7 +93,6 @@ class Camera {
      *  @returns {number}
      */
     getDistance(): number {
-        console.log(this.hidingDistance);
         const [d, v] = this.getHidingDistanceVerticalAngle();
         return d * Math.sin(v * Math.PI / 180.0);
     }
