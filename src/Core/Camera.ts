@@ -35,7 +35,6 @@ class Camera {
     public verticalAngle: number;
     public hidingDistance: number = -1;
     public timeHiding: number = 0;
-    public cameraPosition: THREE.Vector3;
 
     constructor(cameraProperties: System.CameraProperties, target: MapObject) {
         this.system = cameraProperties;
@@ -178,7 +177,6 @@ class Camera {
      *  Update the three.js camera position.
      */
     updateCameraPosition() {
-        this.cameraPosition = this.getThreeCamera().position.clone();
         let distance = this.getDistance();
         let camera = this.getThreeCamera();
         camera.position.x = this.targetPosition.x - (distance * Math

@@ -132,7 +132,7 @@ class GL {
      */
     static createMaterial(opts: { texture?: THREE.Texture | null, flipX?: boolean, 
         flipY?: boolean, uniforms?: Record<string, any>, side?: number,
-        isFaceSprite?: boolean, repeat?: number, opacity?: number, shadows?: boolean }): THREE
+        repeat?: number, opacity?: number, shadows?: boolean }): THREE
         .MeshPhongMaterial {
         if (!opts.texture) {
             opts.texture = new THREE.Texture();
@@ -149,7 +149,9 @@ class GL {
         const screenTone = this.screenTone;
         const uniforms = opts.uniforms ? opts.uniforms : {
             offset: { value: new THREE.Vector2() },
-            colorD: { value: screenTone }
+            colorD: { value: screenTone },
+            repeat: { value: opts.repeat },
+            enableShadows: { value: opts.shadows }
         };
 
         // Program cache key for multiple shader programs
@@ -160,7 +162,8 @@ class GL {
             map: opts.texture,
             side: opts.side,
             transparent: true,
-            alphaTest: 0.5
+            alphaTest: 0.5,
+            opacity: opts.opacity
         });
         material.userData.uniforms = uniforms;
         material.userData.customDepthMaterial = new THREE.MeshDepthMaterial({
@@ -176,7 +179,6 @@ class GL {
             shader.uniforms.colorD = uniforms.colorD;
             shader.uniforms.reverseH = { value: opts.flipX };
             shader.uniforms.repeat = { value: opts.repeat };
-            shader.uniforms.opacity = { value: opts.opacity };
             shader.uniforms.offset = uniforms.offset;
             shader.uniforms.enableShadows = { value: opts.shadows };
             material.userData.uniforms = shader.uniforms;
@@ -190,6 +192,17 @@ class GL {
 
         return material;
     }
+
+    static cloneMaterial(material: THREE.MeshPhongMaterial): THREE.MeshPhongMaterial {
+        return this.createMaterial({
+            texture: material.map,
+            flipY: material.map.flipY,
+            side: material.side,
+            repeat: material.userData.uniforms.repeat.value,
+            opacity: material.opacity,
+            shadows: material.userData.uniforms.enableShadows.value
+        });
+    } 
 
     /** 
      *  Get material THREE.Texture (if exists).

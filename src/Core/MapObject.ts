@@ -55,7 +55,7 @@ class MapObject {
     public isHero: boolean;
     public movingState: Record<string, any>;
     public previousPosition: Vector3;
-    public mesh: THREE.Mesh;
+    public mesh: THREE.Mesh<CustomGeometry, THREE.MeshPhongMaterial>;
     public meshBoundingBox: THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]>[];
     public currentBoundingBox: THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]>;
     public boundingBoxSettings: Record<string, any>;
@@ -523,6 +523,9 @@ class MapObject {
                     .current.textureTileset : Scene.Map.current
                     .texturesCharacters[this.currentStateInstance.graphicID];
             }
+        }
+        if (material && this.isHero) { // For opacity purposes
+            material = Manager.GL.cloneMaterial(material);
         }
         this.meshBoundingBox = new Array;
         let texture = Manager.GL.getMaterialTexture(material);

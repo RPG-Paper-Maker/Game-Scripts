@@ -98,7 +98,6 @@ class CameraProperties extends Base {
             z *= Datas.Systems.SQUARE_SIZE;
         }
         camera.targetOffset = new Vector3(x, y, z);
-        camera.cameraPosition = camera.getThreeCamera().position.clone();
     }
 }
 

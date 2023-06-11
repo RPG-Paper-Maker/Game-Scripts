@@ -563,6 +563,7 @@ class MapPortion {
                     mesh.castShadow = true;
                     mesh.customDepthMaterial = obj.material.userData.customDepthMaterial;
                 }
+                mesh.layers.enable(1);
                 Scene.Map.current.scene.add(mesh);
             }
         }

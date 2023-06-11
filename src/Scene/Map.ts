@@ -1000,6 +1000,10 @@ class Map extends Base {
             .camera.target.position.z);
     }
 
+    /** 
+     *  Update and move the camera position for hiding stuff.
+     *  @param {THREE.Vector2} pointer 2D position on screen to test if intersect
+     */
     updateCameraHiding(pointer: THREE.Vector2) {
         Manager.GL.raycaster.setFromCamera(pointer, this.camera.getThreeCamera());
         Manager.GL.raycaster.layers.set(1);
@@ -1036,9 +1040,18 @@ class Map extends Base {
                 .MAX_PICTURE_SIZE);
         }
 
+        this.updateWeather(false);
+        this.updateWeather();
+
         // Update camera
         this.camera.hidingDistance = -1;
         this.camera.update();
+
+        // Update scene game (interpreters)
+        this.mapProperties.startupObject.update();
+        super.update();
+
+        // Update camera hiding
         if (Datas.Systems.moveCameraOnBlockView.getValue()) {
             let pointer = Manager.GL.toScreenPosition(this.camera.target.position
                 .clone().add(new THREE.Vector3(0, this.camera.target.height * Datas
@@ -1051,6 +1064,17 @@ class Map extends Base {
                 this.updateCameraHiding(new Vector2(0, 0));
             }
             this.camera.update();
+            let opacity = 1;
+            if (this.camera.isHiding()) {
+                if (this.camera.hidingDistance < 2 * Datas.Systems.SQUARE_SIZE) {
+                    if (this.camera.hidingDistance < Datas.Systems.SQUARE_SIZE) {
+                        opacity = 0;
+                    } else {
+                        opacity = 0.5;
+                    }
+                }
+            }
+            Game.current.hero.mesh.material.opacity = opacity;
         }
 
         // Update skybox
@@ -1067,7 +1091,6 @@ class Map extends Base {
         let vector = new Vector3();
         this.camera.getThreeCamera().getWorldDirection(vector);
         let angle = Math.atan2(vector.x, vector.z) + Math.PI;
-        this.mapProperties.startupObject.update();
 
         // Update the objects
         if (!this.isBattleMap) {
@@ -1094,12 +1117,6 @@ class Map extends Base {
                 mapPortion.updateFaceSprites(angle);
             }
         });
-
-        this.updateWeather(false);
-        this.updateWeather();
-
-        // Update scene game (interpreters)
-        super.update();
 
         // Update portion
         if (Scene.Map.current.updateCurrentPortion()) {
