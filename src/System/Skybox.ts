@@ -58,7 +58,12 @@ class Skybox extends Base {
                     PictureKind.Skyboxes, side).getPath());
                 texture.wrapS = THREE.RepeatWrapping;
                 texture.repeat.x = - 1;
-                return Manager.GL.createMaterial({ texture: texture, side: THREE.BackSide });
+                return Manager.GL.createMaterial({
+                    texture: texture,
+                    side: THREE.BackSide,
+                    shadows: false,
+                    flipY: true
+                });
             });
     }
 }
