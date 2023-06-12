@@ -1044,7 +1044,7 @@ class Map extends Base {
         this.updateWeather();
 
         // Update camera
-        this.camera.hidingDistance = -1;
+        this.camera.forceNoHide = true;
         this.camera.update();
 
         // Update scene game (interpreters)
@@ -1053,6 +1053,8 @@ class Map extends Base {
 
         // Update camera hiding
         if (Datas.Systems.moveCameraOnBlockView.getValue()) {
+            this.camera.forceNoHide = false;
+            this.camera.hidingDistance = -1;
             let pointer = Manager.GL.toScreenPosition(this.camera.target.position
                 .clone().add(new THREE.Vector3(0, this.camera.target.height * Datas
                 .Systems.SQUARE_SIZE, 0)), this.camera.getThreeCamera()).divide(
@@ -1075,6 +1077,7 @@ class Map extends Base {
                 }
             }
             Game.current.hero.mesh.material.opacity = opacity;
+            this.camera.updateTimer();
         }
 
         // Update skybox

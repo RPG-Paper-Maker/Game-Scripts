@@ -10,9 +10,8 @@
 */
 
 import { ScreenResolution, Enum, Mathf } from "../Common";
-import { System, Scene, Datas } from "../index";
+import { System, Scene, Datas, Manager } from "../index";
 import { MapObject } from "./MapObject";
-import Orientation = Enum.Orientation;
 import { Vector3 } from "./index";
 
 /** @class
@@ -22,7 +21,8 @@ import { Vector3 } from "./index";
  *  @param {MapObject} target - The camera target
  */
 class Camera {
-    
+    public static readonly HIDDING_MOVE_TIME = 250;
+
     public system: System.CameraProperties;
     public perspectiveCamera: THREE.PerspectiveCamera;
     public orthographicCamera:  THREE.OrthographicCamera;
@@ -34,7 +34,12 @@ class Camera {
     public horizontalAngle: number;
     public verticalAngle: number;
     public hidingDistance: number = -1;
-    public timeHiding: number = 0;
+    public previousHidingDistance: number = -1;
+    public hidingTime: number = 1;
+    public hidingStart: number = -1;
+    public hidingEnd: number = -1;
+    public hidingCurrent: number = -1;
+    public forceNoHide: boolean = true;
 
     constructor(cameraProperties: System.CameraProperties, target: MapObject) {
         this.system = cameraProperties;
@@ -72,19 +77,27 @@ class Camera {
      *  Get the map orientation according to the camera.
      *  @returns {Orientation}
      */
-    getMapOrientation(): Orientation {
+    getMapOrientation(): Enum.Orientation {
         return Mathf.mod(Math.round((this.horizontalAngle) / 90) - 1, 4);
     }
 
     /** 
-     *  Get the distance and vertical angle according to hiding distance.
+     *  Get the time percentage progress.
      *  @returns {number}
      */
-    getHidingDistanceVerticalAngle(): [number, number] {
-        return [
-            this.hidingDistance === -1 ?  this.distance : this.hidingDistance, 
-            this.hidingDistance === -1 ?  this.verticalAngle : this.verticalAngle
-        ];
+    getHidingTimeProgress(): number {
+        return this.hidingTime / Camera.HIDDING_MOVE_TIME;
+    }
+
+    /** 
+     *  Get the distance according to hiding distance.
+     *  @returns {number}
+     */
+    getHidingDistance(): number {
+        if (Datas.Systems.moveCameraOnBlockView && !this.forceNoHide) {
+            return this.hidingCurrent === -1 ? this.distance : this.hidingCurrent;
+        }
+        return this.distance;
     }
 
     /** 
@@ -92,8 +105,8 @@ class Camera {
      *  @returns {number}
      */
     getDistance(): number {
-        const [d, v] = this.getHidingDistanceVerticalAngle();
-        return d * Math.sin(v * Math.PI / 180.0);
+        const d = this.getHidingDistance();
+        return d * Math.sin(this.verticalAngle * Math.PI / 180.0);
     }
 
     /** 
@@ -101,8 +114,8 @@ class Camera {
      *  @returns {number}
      */
     getHeight(): number {
-        const [d, v] = this.getHidingDistanceVerticalAngle();
-        return d * Math.cos(v * Math.PI / 180.0);
+        const d = this.getHidingDistance();
+        return d * Math.cos(this.verticalAngle * Math.PI / 180.0);
     }
 
     /** 
@@ -233,6 +246,30 @@ class Camera {
     updateView() {
         this.getThreeCamera().lookAt(this.targetPosition);
         Scene.Map.current.orientation = this.getMapOrientation();
+    }
+
+    /** 
+     * Update timer for hidding camera smooth move.
+     */
+    updateTimer() {
+        if (this.previousHidingDistance !== this.hidingDistance && Math.abs(this
+            .previousHidingDistance - this.hidingDistance) > Datas.Systems.SQUARE_SIZE) {
+            this.hidingTime = 0;
+            this.hidingStart = this.hidingCurrent;
+            this.hidingEnd = this.isHiding() ? this.hidingDistance : this.distance;
+        } else {
+            this.hidingTime = Math.min(this.hidingTime + Manager.Stack.elapsedTime, 
+                Camera.HIDDING_MOVE_TIME);
+        }
+        const time = this.getHidingTimeProgress();
+        if (time === 1) {
+            const dist = this.isHiding() ? this.hidingDistance : this.distance;
+            this.hidingCurrent = dist;
+            this.hidingStart = dist;
+            this.hidingEnd = dist;
+        }
+        this.previousHidingDistance = this.hidingDistance;
+        this.hidingCurrent = this.hidingStart + (this.hidingEnd - this.hidingStart) * time;
     }
 
     /** 
