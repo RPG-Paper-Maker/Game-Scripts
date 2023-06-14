@@ -611,7 +611,11 @@ class Game {
      *  @returns {Record<string, any>}
     */
     getPortionPosDatas(id: number, i: number, j: number, k: number): Record<string, any> {
-        let datas = this.mapsDatas[id][i];
+        let datas = this.mapsDatas[id];
+        if (Utils.isUndefined(datas)) {
+            return {};
+        }
+        datas = datas[i];
         if (Utils.isUndefined(datas)) {
             return {};
         }

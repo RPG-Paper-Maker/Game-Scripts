@@ -1040,45 +1040,9 @@ class Map extends Base {
                 .MAX_PICTURE_SIZE);
         }
 
-        this.updateWeather(false);
-        this.updateWeather();
-
         // Update camera
         this.camera.forceNoHide = true;
         this.camera.update();
-
-        // Update scene game (interpreters)
-        this.mapProperties.startupObject.update();
-        super.update();
-
-        // Update camera hiding
-        if (Datas.Systems.moveCameraOnBlockView.getValue()) {
-            this.camera.forceNoHide = false;
-            this.camera.hidingDistance = -1;
-            let pointer = Manager.GL.toScreenPosition(this.camera.target.position
-                .clone().add(new THREE.Vector3(0, this.camera.target.height * Datas
-                .Systems.SQUARE_SIZE, 0)), this.camera.getThreeCamera()).divide(
-                new THREE.Vector2(ScreenResolution.CANVAS_WIDTH, ScreenResolution
-                .CANVAS_HEIGHT)).subScalar(0.5);
-            pointer.setY(-pointer.y); 
-            this.updateCameraHiding(pointer);
-            if (this.camera.isHiding()) {
-                this.updateCameraHiding(new Vector2(0, 0));
-            }
-            this.camera.update();
-            let opacity = 1;
-            if (this.camera.isHiding()) {
-                if (this.camera.hidingDistance < 2 * Datas.Systems.SQUARE_SIZE) {
-                    if (this.camera.hidingDistance < Datas.Systems.SQUARE_SIZE) {
-                        opacity = 0;
-                    } else {
-                        opacity = 0.5;
-                    }
-                }
-            }
-            Game.current.hero.mesh.material.opacity = opacity;
-            this.camera.updateTimer();
-        }
 
         // Update skybox
         if (this.mapProperties.skyboxGeometry !== null && this.previousCameraPosition) {
@@ -1120,6 +1084,44 @@ class Map extends Base {
                 mapPortion.updateFaceSprites(angle);
             }
         });
+
+        this.updateWeather(false);
+        this.updateWeather();
+
+        // Update scene game (interpreters)
+        this.mapProperties.startupObject.update();
+        super.update();
+
+        // Update camera hiding
+        if (Datas.Systems.moveCameraOnBlockView.getValue()) {
+            this.camera.forceNoHide = false;
+            this.camera.hidingDistance = -1;
+            let pointer = Manager.GL.toScreenPosition(this.camera.target.position
+                .clone().add(new THREE.Vector3(0, this.camera.target.height * Datas
+                .Systems.SQUARE_SIZE, 0)), this.camera.getThreeCamera()).divide(
+                new THREE.Vector2(ScreenResolution.CANVAS_WIDTH, ScreenResolution
+                .CANVAS_HEIGHT)).subScalar(0.5);
+            pointer.setY(-pointer.y); 
+            this.updateCameraHiding(pointer);
+            if (this.camera.isHiding()) {
+                this.updateCameraHiding(new Vector2(0, 0));
+            }
+            this.camera.update();
+            let opacity = 1;
+            if (this.camera.isHiding()) {
+                if (this.camera.hidingDistance < 2 * Datas.Systems.SQUARE_SIZE) {
+                    if (this.camera.hidingDistance < Datas.Systems.SQUARE_SIZE) {
+                        opacity = 0;
+                    } else {
+                        opacity = 0.5;
+                    }
+                }
+            }
+            if (Game.current.hero.mesh) {
+                Game.current.hero.mesh.material.opacity = opacity;
+            }
+            this.camera.updateTimer();
+        }
 
         // Update portion
         if (Scene.Map.current.updateCurrentPortion()) {
