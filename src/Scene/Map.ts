@@ -1105,8 +1105,8 @@ class Map extends Base {
             this.updateCameraHiding(pointer);
             if (this.camera.isHiding()) {
                 this.updateCameraHiding(new Vector2(0, 0));
+                this.camera.update();
             }
-            this.camera.update();
             let opacity = 1;
             if (this.camera.isHiding()) {
                 if (this.camera.hidingDistance < 2 * Datas.Systems.SQUARE_SIZE) {
