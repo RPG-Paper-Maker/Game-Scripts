@@ -525,7 +525,7 @@ class SpecialElements {
     {
         texture.image = await Picture2D.loadImage(Platform.canvasRendering.toDataURL());
         texture.needsUpdate = true;
-        textureMountain.material = Manager.GL.createMaterial({ texture: texture });
+        textureMountain.material = Manager.GL.createMaterial({ texture: texture, side: THREE.BackSide });
         this.texturesMountains[id] = textureMountain;
     }
 

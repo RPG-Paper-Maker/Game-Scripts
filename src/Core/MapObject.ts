@@ -870,9 +870,9 @@ class MapObject {
                         box = Manager.Collisions.createBox();
                         Manager.Collisions.applyBoxSpriteTransforms(box, 
                             [
-                                position.x + this.boundingBoxSettings.b[i][0],
-                                position.y + this.boundingBoxSettings.b[i][1],
-                                position.z + this.boundingBoxSettings.b[i][2],
+                                position.x + (this.currentScale.x * this.boundingBoxSettings.b[i][0]),
+                                position.y + (this.currentScale.y * this.boundingBoxSettings.b[i][1]),
+                                position.z + (this.currentScale.z * this.boundingBoxSettings.b[i][2]),
                                 this.currentScale.x * this.boundingBoxSettings.b[i][3],
                                 this.currentScale.y * this.boundingBoxSettings.b[i][4],
                                 this.currentScale.z * this.boundingBoxSettings.b[i][5],
@@ -885,9 +885,9 @@ class MapObject {
                         box = Manager.Collisions.createOrientedBox();
                         Manager.Collisions.applyOrientedBoxTransforms(box, 
                             [
-                                position.x + this.boundingBoxSettings.b[i][0],
-                                position.y + this.boundingBoxSettings.b[i][1],
-                                position.z + this.boundingBoxSettings.b[i][2],
+                                position.x + (this.currentScale.x * this.boundingBoxSettings.b[i][0]),
+                                position.y + (this.currentScale.y * this.boundingBoxSettings.b[i][1]),
+                                position.z + (this.currentScale.x * this.boundingBoxSettings.b[i][2]),
                                 this.currentScale.x * this.boundingBoxSettings.b[i][3],
                                 this.currentScale.y * this.boundingBoxSettings.b[i][4],
                             ]
@@ -938,25 +938,25 @@ class MapObject {
             this.currentStateInstance.graphicKind === ElementMapKind.Object3D) {
             Manager.Collisions.applyBoxSpriteTransforms(mesh,
                 [
-                    position.x + bbSettings[0],
-                    position.y + bbSettings[1],
-                    position.z + bbSettings[2],
-                    bbSettings[3],
-                    bbSettings[4],
-                    bbSettings[5],
-                    bbSettings[6],
-                    bbSettings[7],
-                    bbSettings[8]
+                    position.x + (this.currentScale.x * bbSettings[0]),
+                    position.y + (this.currentScale.y * bbSettings[1]),
+                    position.z + (this.currentScale.z * bbSettings[2]),
+                    this.currentScale.x * bbSettings[3],
+                    this.currentScale.y * bbSettings[4],
+                    this.currentScale.z * bbSettings[5],
+                    this.currentAngle.y,
+                    this.currentAngle.x,
+                    this.currentAngle.z
                 ]
             );
         } else if (this.currentStateInstance.graphicKind === ElementMapKind.SpritesFace) {
             Manager.Collisions.applyOrientedBoxTransforms(mesh,
                 [
-                    position.x + bbSettings[0],
-                    position.y + bbSettings[1],
-                    position.z + bbSettings[2],
-                    bbSettings[3],
-                    bbSettings[4]
+                    position.x + (this.currentScale.x * bbSettings[0]),
+                    position.y + (this.currentScale.y * bbSettings[1]),
+                    position.z + (this.currentScale.x * bbSettings[2]),
+                    this.currentScale.x * bbSettings[3],
+                    this.currentScale.y * bbSettings[4]
                 ]
             );
         }

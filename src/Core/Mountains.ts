@@ -56,10 +56,15 @@ class Mountains {
 
     /** 
      *  Create a mesh with material and geometry.
+     *  @returns {boolean}
      */
-    createMesh() {
+    createMesh(): boolean {
+        if (this.geometry.isEmpty()) {
+            return false;
+        }
         this.geometry.updateAttributes();
         this.mesh = new THREE.Mesh(this.geometry, this.bundle.material);
+        return true;
     }
 }
 

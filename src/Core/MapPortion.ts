@@ -182,15 +182,17 @@ class MapPortion {
         }
 
         // Creating the plane
-        geometry.updateAttributes();
-        this.staticFloorsMesh = new THREE.Mesh(geometry, material);
-        this.staticFloorsMesh.renderOrder = 0;
-        if (Scene.Map.current.mapProperties.isSunLight) {
-            this.staticFloorsMesh.receiveShadow = true;
-            this.staticFloorsMesh.castShadow = true;
-            this.staticFloorsMesh.customDepthMaterial = material.userData.customDepthMaterial;
+        if (!geometry.isEmpty()) {
+            geometry.updateAttributes();
+            this.staticFloorsMesh = new THREE.Mesh(geometry, material);
+            this.staticFloorsMesh.renderOrder = 0;
+            if (Scene.Map.current.mapProperties.isSunLight) {
+                this.staticFloorsMesh.receiveShadow = true;
+                this.staticFloorsMesh.castShadow = true;
+                this.staticFloorsMesh.customDepthMaterial = material.userData.customDepthMaterial;
+            }
+            Scene.Map.current.scene.add(this.staticFloorsMesh);
         }
-        Scene.Map.current.scene.add(this.staticFloorsMesh);
     }
 
     /** 
@@ -253,14 +255,15 @@ class MapPortion {
         for (let list of this.staticAutotilesList) {
             if (list) {
                 for (autotiles of list) {
-                    autotiles.createMesh();
-                    if (Scene.Map.current.mapProperties.isSunLight) {
-                        autotiles.mesh.receiveShadow = true;
-                        autotiles.mesh.castShadow = true;
-                        autotiles.mesh.customDepthMaterial = autotiles.bundle
-                            .material.userData.customDepthMaterial;
+                    if (autotiles.createMesh()) {
+                        if (Scene.Map.current.mapProperties.isSunLight) {
+                            autotiles.mesh.receiveShadow = true;
+                            autotiles.mesh.castShadow = true;
+                            autotiles.mesh.customDepthMaterial = autotiles.bundle
+                                .material.userData.customDepthMaterial;
+                        }
+                        Scene.Map.current.scene.add(autotiles.mesh);
                     }
-                    Scene.Map.current.scene.add(autotiles.mesh);
                 }
             }
         }
@@ -312,24 +315,28 @@ class MapPortion {
                 this.updateCollisionSprite(collisions, position);
             }
         }
-        staticGeometry.updateAttributes();
-        faceGeometry.updateAttributes();
-        this.staticSpritesMesh = new THREE.Mesh(staticGeometry, material);
-        this.staticSpritesMesh.renderOrder = 999;
-        if (Scene.Map.current.mapProperties.isSunLight) {
-            this.staticSpritesMesh.receiveShadow = true;
-            this.staticSpritesMesh.castShadow = true;
-            this.staticSpritesMesh.customDepthMaterial = material.userData.customDepthMaterial;
+        if (!staticGeometry.isEmpty()) {
+            staticGeometry.updateAttributes();
+            this.staticSpritesMesh = new THREE.Mesh(staticGeometry, material);
+            this.staticSpritesMesh.renderOrder = 999;
+            if (Scene.Map.current.mapProperties.isSunLight) {
+                this.staticSpritesMesh.receiveShadow = true;
+                this.staticSpritesMesh.castShadow = true;
+                this.staticSpritesMesh.customDepthMaterial = material.userData.customDepthMaterial;
+            }
+            Scene.Map.current.scene.add(this.staticSpritesMesh);
         }
-        Scene.Map.current.scene.add(this.staticSpritesMesh);
-        this.faceSpritesMesh = new THREE.Mesh(faceGeometry, material);
-        this.faceSpritesMesh.renderOrder = 999;
-        if (Scene.Map.current.mapProperties.isSunLight) {
-            this.faceSpritesMesh.castShadow = true;
-            this.faceSpritesMesh.receiveShadow = true;
-            this.faceSpritesMesh.customDepthMaterial = material.userData.customDepthMaterial;
+        if (!faceGeometry.isEmpty()) {
+            faceGeometry.updateAttributes();
+            this.faceSpritesMesh = new THREE.Mesh(faceGeometry, material);
+            this.faceSpritesMesh.renderOrder = 999;
+            if (Scene.Map.current.mapProperties.isSunLight) {
+                this.faceSpritesMesh.castShadow = true;
+                this.faceSpritesMesh.receiveShadow = true;
+                this.faceSpritesMesh.customDepthMaterial = material.userData.customDepthMaterial;
+            }
+            Scene.Map.current.scene.add(this.faceSpritesMesh);
         }
-        Scene.Map.current.scene.add(this.faceSpritesMesh);
     }
 
     /** 
@@ -393,16 +400,18 @@ class MapPortion {
             obj = hash[i];
             if (obj !== null) {
                 geometry = obj.geometry;
-                geometry.updateAttributes();
-                mesh = new THREE.Mesh(geometry, obj.material);
-                if (Scene.Map.current.mapProperties.isSunLight) {
-                    mesh.receiveShadow = true;
-                    mesh.castShadow = true;
-                    mesh.customDepthMaterial = obj.material.userData.customDepthMaterial;
+                if (!geometry.isEmpty()) {
+                    geometry.updateAttributes();
+                    mesh = new THREE.Mesh(geometry, obj.material);
+                    if (Scene.Map.current.mapProperties.isSunLight) {
+                        mesh.receiveShadow = true;
+                        mesh.castShadow = true;
+                        mesh.customDepthMaterial = obj.material.userData.customDepthMaterial;
+                    }
+                    mesh.layers.enable(1);
+                    this.staticWallsList.push(mesh);
+                    Scene.Map.current.scene.add(mesh);
                 }
-                mesh.layers.enable(1);
-                this.staticWallsList.push(mesh);
-                Scene.Map.current.scene.add(mesh);
             }
         }
     }
@@ -456,15 +465,16 @@ class MapPortion {
         // Update all the geometry uvs and put it in the scene
         for (i = 0, l = this.staticMountainsList.length; i < l; i++) {
             mountains = this.staticMountainsList[i];
-            mountains.createMesh();
-            if (Scene.Map.current.mapProperties.isSunLight) {
-                mountains.mesh.receiveShadow = true;
-                mountains.mesh.castShadow = true;
-                mountains.mesh.customDepthMaterial = mountains.bundle.material
-                    .userData.customDepthMaterial;
+            if (mountains.createMesh()) {
+                if (Scene.Map.current.mapProperties.isSunLight) {
+                    mountains.mesh.receiveShadow = true;
+                    mountains.mesh.castShadow = true;
+                    mountains.mesh.customDepthMaterial = mountains.bundle.material
+                        .userData.customDepthMaterial;
+                }
+                mountains.mesh.layers.enable(1);
+                Scene.Map.current.scene.add(mountains.mesh);
             }
-            mountains.mesh.layers.enable(1);
-            Scene.Map.current.scene.add(mountains.mesh);
         }
 
         // Handle overflow
@@ -554,17 +564,19 @@ class MapPortion {
             obj = hash[i];
             if (obj !== null) {
                 geometry = obj.geometry;
-                geometry.updateAttributes();
-                mesh = new THREE.Mesh(geometry, obj.material);
-                this.staticObjects3DList.push(mesh);
-                mesh.renderOrder = 999;
-                if (Scene.Map.current.mapProperties.isSunLight) {
-                    mesh.receiveShadow = true;
-                    mesh.castShadow = true;
-                    mesh.customDepthMaterial = obj.material.userData.customDepthMaterial;
+                if (!geometry.isEmpty()) {
+                    geometry.updateAttributes();
+                    mesh = new THREE.Mesh(geometry, obj.material);
+                    this.staticObjects3DList.push(mesh);
+                    mesh.renderOrder = 999;
+                    if (Scene.Map.current.mapProperties.isSunLight) {
+                        mesh.receiveShadow = true;
+                        mesh.castShadow = true;
+                        mesh.customDepthMaterial = obj.material.userData.customDepthMaterial;
+                    }
+                    mesh.layers.enable(1);
+                    Scene.Map.current.scene.add(mesh);
                 }
-                mesh.layers.enable(1);
-                Scene.Map.current.scene.add(mesh);
             }
         }
     }
@@ -759,7 +771,9 @@ class MapPortion {
      *  @param {number} angle - The angle on the Y axis
      */
     updateFaceSprites(angle: number) {
-        (<CustomGeometryFace>this.faceSpritesMesh.geometry).rotate(angle, Sprite.Y_AXIS);
+        if (this.faceSpritesMesh) {
+            (<CustomGeometryFace>this.faceSpritesMesh.geometry).rotate(angle, Sprite.Y_AXIS);
+        }
         for (let object of this.objectsList) {
             object.update(angle);
         }
