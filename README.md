@@ -12,23 +12,17 @@ Use:
 
 Wait for the complete install with this command.
 
-You should also have TypeScript installed:
+You also need to have a project to test. You can run this command to automaticaly copy the `project-without-name` project folder you have in `pathToYourDocuments/RPG Paper Maker Games`:
 
-    npm install -g typescript
+    npm run copyProject
+
+You can change the project at anytime by reusing this command.
 
 ## How to run
 
-First, complete the `Content` folder thanks to any recent project you want to test here (copy every file in `resources/app/Content` folder of any project you created with RPG Paper Maker, except the `Content/Datas/Scripts` folder). 
+Just use this command:
 
-You can also use this quick command: 
-
-    ./copy-project.sh
-
-**/!\ (you need to set the path variable in this file to indicate the project path to copy)**
-
-When it's done, just run:
-
-    ./run.sh
+    npm run start
 
 ## How to contribute
 
@@ -36,9 +30,9 @@ You can help by contributing on the game engine. First, be sure to be familiar w
 
 That means that you should:
 
-- Click on the fork button.
-- Clone your fork.
-- Add a remote to the original project in order to always have access to the `develop` branch:
+-   Click on the fork button.
+-   Clone your fork.
+-   Add a remote to the original project in order to always have access to the `develop` branch:
 
 ```bash
 git remote add rpm https://github.com/RPG-Paper-Maker/Game-Scripts.git
@@ -55,44 +49,49 @@ After that, you can create a branch for your correction (or stay on your develop
 ```bash
 git checkout -b <choose_a_branch_name>
 ```
+
 Don't forget to pull rebase before submitting your PR!
 
 ## Structure
-The RPM cores script files are ESM (ecmascript module system) based. 
+
+The RPM cores script files are ESM (ecmascript module system) based.
 It's split into 9 modules:
-  * Core 
-     > The core files who power the engine whole behaviours. 
-  * System 
+
+-   Core
+    > The core files who power the engine whole behaviours.
+-   System
     > The data interface files. Its allow to interact with the raw json data of RPM.
-  * Game 
+-   Game
     > The game object related files. It empowers most of the game logics.
-  * Scene
+-   Scene
     > The module who hold all the scenes
-  * Manager
+-   Manager
     > The module who hold all the manager class.
-  * Commons
+-   Commons
     > The previously named RPM class, It was refactored and split into useful subclasses.
-  * Graphics
+-   Graphics
     > The module who hold all the Graphics related class.
-  * Windows
+-   Windows
     > The module who hold all the windows related class.
-  * Datas
+-   Datas
     > The module who hold all the datas.
- 
- ## Usages
-  The RPM corescript is Typescript based but has compiled javascript so can be still used
-  here's an example of plugin file. 
-   Note : still in dev.
-  ```ts
-   import {Management, Game} from "rpm";
-   import PluginManager = Management.PluginManager; 
-   // global in module are private to the file so it's fine to do this.
-   const parameters = PluginManager.fetch("MyAwesomePlugin");
-   
-   export class MyCustomClass extends Game.Base {
-     // ETC
-     constructor(){ 
-       super();
-     }
-   }
-   ```	
+
+## Usages
+
+The RPM corescript is Typescript based but has compiled javascript so can be still used
+here's an example of plugin file.
+Note : still in dev.
+
+```ts
+import { Management, Game } from 'rpm';
+import PluginManager = Management.PluginManager;
+// global in module are private to the file so it's fine to do this.
+const parameters = PluginManager.fetch('MyAwesomePlugin');
+
+export class MyCustomClass extends Game.Base {
+	// ETC
+	constructor() {
+		super();
+	}
+}
+```
