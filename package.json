@@ -4,13 +4,10 @@
   "description": "Game and scripts.",
   "main": "main.js",
   "scripts": {
-    "start": "electron ./main.js --dev",
-    "watch": "nodemon -e ts --watch ./src/**/* --exec npm run build",
-    "build": "node build.mjs",
-    "doc": "webdoc -R README.md",
-    "compile": "compile.sh",
-    "copy": "copy-project.sh",
-    "run": "run.sh"
+    "watch": "nodemon -e ts --watch ./src/**/* --exec npm run start",
+    "start": "node build.mjs && electron ./main.js --dev",
+    "copyProject": "node copyProject.mjs",
+    "doc": "webdoc -R README.md"
   },
   "repository": {
     "type": "git",
@@ -28,7 +25,8 @@
     "nodemon": "^2.0.12",
     "pixi-webdoc-template": "^1.1.4",
     "react": "^16.0.0",
-    "react-dom": "^16.0.0"
+    "react-dom": "^16.0.0",
+    "typescript": "^4.6.4"
   },
   "build": {
     "appId": "your.id"

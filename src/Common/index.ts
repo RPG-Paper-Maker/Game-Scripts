@@ -9,15 +9,15 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-export * from "./ArrayUtils";
-export * from "./Constants";
-export * from "./Enum";
-export * from "./Inputs";
-export * from "./Interpreter";
-export * from "./IO";
-export * from "./KeyEvent";
-export * from "./Mathf";
-export * from "./Paths";
-export * from "./Platform";
-export * from "./ScreenResolution";
-export * from "./Utils";
+export * from './ArrayUtils';
+export * from './Constants';
+export * from './Enum';
+export * from './Inputs';
+export * from './Interpreter';
+export * from './IO';
+export * from './KeyEvent';
+export * from './Mathf';
+export * from './Paths';
+export * from './Platform';
+export * from './ScreenResolution';
+export * from './Utils';

@@ -5,8 +5,7 @@
   @author nio kasgami
  */
 
-
-import {HOWLER_TYPE, THREE_TYPE} from "./Definitions";
+import { HOWLER_TYPE, THREE_TYPE } from './Definitions';
 
 /**
  * @module Three.js
@@ -16,5 +15,5 @@ export const THREE: typeof THREE_TYPE = require('./Content/Datas/Scripts/Libs/th
 /**
  * @module Howler.js
  */
-const  {Howl} = require('./Content/Datas/Scripts/Libs/howler.js');
-export { Howl }
+const { Howl } = require('./Content/Datas/Scripts/Libs/howler.js');
+export { Howl };

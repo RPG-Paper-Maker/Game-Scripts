@@ -1,9 +1,0 @@
-{
-  "BattleCommand": {
-    "move": {"func":  "CommandMove", "args":  ["target","pos"]},
-    "jump": {"func":  "CommandJump", "args":  ["target", "pos"]}
-  },
-  "Sequences": {
-    "Omnislash": ["move target: self, pos: (10,10,10)", "wait 2", "slash"]
-  }
-}
