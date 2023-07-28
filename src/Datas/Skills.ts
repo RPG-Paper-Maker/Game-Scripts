@@ -9,43 +9,40 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { IO, Paths, Utils } from "../Common";
-import { System, Datas } from "../index";
+import { Platform, Paths, Utils } from '../Common';
+import { System, Datas } from '../index';
 
 /** @class
-*   All the skills datas
-*   @static
-*/
+ *   All the skills datas
+ *   @static
+ */
 class Skills {
+	private static list: System.Skill[];
 
-    private static list: System.Skill[];
-    
-    constructor()
-    {
-        throw new Error("This is a static class!");
-    }
+	constructor() {
+		throw new Error('This is a static class!');
+	}
 
-    /** 
-     *  Read the JSON file associated to skills.
-     *  @static
-     *  @async
-     */
-    static async read() {
-        let json = (await IO.parseFileJSON(Paths.FILE_SKILLS)).skills;
-        this.list = [];
-        Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System
-            .Skill });
-    }
+	/**
+	 *  Read the JSON file associated to skills.
+	 *  @static
+	 *  @async
+	 */
+	static async read() {
+		let json = (await Platform.parseFileJSON(Paths.FILE_SKILLS)).skills;
+		this.list = [];
+		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System.Skill });
+	}
 
-    /** 
-     *  Get the skill by ID.
-     *  @static
-     *  @param {number} id
-     *  @returns {System.Skill}
-     */
-    static get(id: number): System.Skill {
-        return Datas.Base.get(id, this.list, "skill");
-    }
+	/**
+	 *  Get the skill by ID.
+	 *  @static
+	 *  @param {number} id
+	 *  @returns {System.Skill}
+	 */
+	static get(id: number): System.Skill {
+		return Datas.Base.get(id, this.list, 'skill');
+	}
 }
 
-export { Skills }
+export { Skills };

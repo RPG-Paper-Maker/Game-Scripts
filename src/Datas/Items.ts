@@ -9,42 +9,40 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { IO, Paths, Utils } from "../Common";
-import { System, Datas } from "../index";
+import { Platform, Paths, Utils } from '../Common';
+import { System, Datas } from '../index';
 
 /** @class
  *  All the items datas.
  *  @static
  */
 class Items {
+	private static list: System.Item[];
 
-    private static list: System.Item[];
+	constructor() {
+		throw new Error('This is a static class!');
+	}
 
-    constructor() {
-        throw new Error("This is a static class!");
-    }
+	/**
+	 *  Read the JSON file associated to items.
+	 *  @static
+	 *  @async
+	 */
+	static async read() {
+		let json = (await Platform.parseFileJSON(Paths.FILE_ITEMS)).items;
+		this.list = [];
+		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System.Item });
+	}
 
-    /**
-     *  Read the JSON file associated to items.
-     *  @static
-     *  @async
-     */
-    static async read() {
-        let json = (await IO.parseFileJSON(Paths.FILE_ITEMS)).items;
-        this.list = [];
-        Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System
-            .Item });
-    }
-
-    /** 
-     *  Get the item by ID.
-     *  @static
-     *  @param {number} id
-     *  @returns {System.Item}
-     */
-    static get(id: number): System.Item {
-        return Datas.Base.get(id, this.list, "item");
-    }
+	/**
+	 *  Get the item by ID.
+	 *  @static
+	 *  @param {number} id
+	 *  @returns {System.Item}
+	 */
+	static get(id: number): System.Item {
+		return Datas.Base.get(id, this.list, 'item');
+	}
 }
 
-export { Items }
+export { Items };

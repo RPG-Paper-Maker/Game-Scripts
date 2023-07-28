@@ -1,51 +1,50 @@
 name: Build Contents Release
 
 on:
-  release:
-    types: [created]
+    release:
+        types: [created]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 14
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  persist-credentials: false
+            - uses: actions/setup-node@v2
+              with:
+                  node-version: 14
 
-      - name: Setup enviroment
-        run: mkdir -p ./Content/Datas/Scripts/
+            - name: Setup enviroment
+              run: mkdir -p ./Content/Scripts/
 
-      - name: Setup Git & Pull changes
-        working-directory: ./Content/Datas/Scripts/
-        run: |
-         git clone "https://Wano-k:${{ secrets.GIT_TOKEN }}@github.com/RPG-Paper-Maker/Game-Scripts-Build.git" ./
-         git config --local user.name "PaperMaker-Bot"
-         git config --local user.email "PaperMaker-bot@users.noreply.github.com"
-         git checkout master
+            - name: Setup Git & Pull changes
+              working-directory: ./Content/Scripts/
+              run: |
+                  git clone "https://Wano-k:${{ secrets.GIT_TOKEN }}@github.com/RPG-Paper-Maker/Game-Scripts-Build.git" ./
+                  git config --local user.name "PaperMaker-Bot"
+                  git config --local user.email "PaperMaker-bot@users.noreply.github.com"
+                  git checkout master
 
-      - name: Build from source
-        run: |
-          npm install
-          npm install typescript
-          npm run build
-  
-      - name: Commit changes
-        working-directory: ./Content/Datas/Scripts/
-        continue-on-error: true
-        run: |
-         git add .
-         git commit -m "Release - ${{ github.repository }}@${{ github.sha }}"
+            - name: Build from source
+              run: |
+                  npm install
+                  npm install typescript
+                  npm run build
 
-      - name: Push changes
-        working-directory: ./Content/Datas/Scripts/
-        run: git push origin master
-      
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: Scripts
-          path: ./Content/Datas/Scripts/
+            - name: Commit changes
+              working-directory: ./Content/Scripts/
+              continue-on-error: true
+              run: |
+                  git add .
+                  git commit -m "Release - ${{ github.repository }}@${{ github.sha }}"
 
+            - name: Push changes
+              working-directory: ./Content/Scripts/
+              run: git push origin master
+
+            - name: Upload artifacts
+              uses: actions/upload-artifact@v2
+              with:
+                  name: Scripts
+                  path: ./Content/Scripts/

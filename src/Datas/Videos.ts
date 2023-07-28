@@ -9,40 +9,37 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { IO, Paths, Utils } from "../Common";
-import { System, Datas } from "../index";
+import { Platform, Paths, Utils } from '../Common';
+import { System, Datas } from '../index';
 
 /** @class
  *  All the videos datas.
  *  @static
  */
 class Videos {
+	private static list: System.Video[];
 
-    private static list: System.Video[];
+	constructor() {
+		throw new Error('This is a static class!');
+	}
 
-    constructor() {
-        throw new Error("This is a static class!");
-    }
+	/**
+	 *  Read the JSON file associated to videos
+	 */
+	static async read() {
+		let json = (await Platform.parseFileJSON(Paths.FILE_VIDEOS)).list;
+		this.list = [];
+		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System.Video });
+	}
 
-    /** 
-     *  Read the JSON file associated to videos
-     */
-    static async read() {
-        let json = (await IO.parseFileJSON(Paths.FILE_VIDEOS)).list;
-        this.list = [];
-        Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System
-            .Video });
-    }
-
-    /** 
-     *  Get the corresponding video.
-     *  @param {number} id
-     *  @returns {System.Video}
-     */
-    static get(id: number): System.Video {
-        return id === -1 ? new System.Video() : Datas.Base.get(id, this.list, 
-            "video");
-    }
+	/**
+	 *  Get the corresponding video.
+	 *  @param {number} id
+	 *  @returns {System.Video}
+	 */
+	static get(id: number): System.Video {
+		return id === -1 ? new System.Video() : Datas.Base.get(id, this.list, 'video');
+	}
 }
 
-export { Videos }
+export { Videos };

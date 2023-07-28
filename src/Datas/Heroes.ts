@@ -9,43 +9,40 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { System, Datas } from "../index";
-import { IO, Paths, Utils } from "../Common";
-
+import { System, Datas } from '../index';
+import { Platform, Paths, Utils } from '../Common';
 
 /** @class
  *  All the heroes datas.
  *  @static
  */
 class Heroes {
+	private static list: System.Hero[];
 
-    private static list: System.Hero[];
+	constructor() {
+		throw new Error('This is a static class!');
+	}
 
-    constructor() {
-        throw new Error("This is a static class!");
-    }
+	/**
+	 *  Read the JSON file associated to heroes.
+	 *  @static
+	 *  @async
+	 */
+	static async read() {
+		let json = (await Platform.parseFileJSON(Paths.FILE_HEROES)).heroes;
+		this.list = [];
+		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System.Hero });
+	}
 
-    /** 
-     *  Read the JSON file associated to heroes.
-     *  @static
-     *  @async
-     */
-    static async read() {
-        let json = (await IO.parseFileJSON(Paths.FILE_HEROES)).heroes;
-        this.list = [];
-        Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System
-            .Hero });
-    }
-
-    /** 
-     *  Get the hero by ID.
-     *  @static
-     *  @param {number} id
-     *  @returns {System.Hero}
-     */
-    static get(id: number): System.Hero {
-        return Datas.Base.get(id, this.list, "hero");
-    }
+	/**
+	 *  Get the hero by ID.
+	 *  @static
+	 *  @param {number} id
+	 *  @returns {System.Hero}
+	 */
+	static get(id: number): System.Hero {
+		return Datas.Base.get(id, this.list, 'hero');
+	}
 }
 
-export { Heroes }
+export { Heroes };

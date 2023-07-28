@@ -9,43 +9,41 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { System, Datas } from "../index";
-import { IO, Paths, Utils } from "../Common";
+import { System, Datas } from '../index';
+import { Platform, Paths, Utils } from '../Common';
 
 /** @class
  *  All the classes datas.
  *  @static
  */
 class Classes {
+	private static list: System.Class[];
 
-    private static list: System.Class[];
+	constructor() {
+		throw new Error('This is a static class!');
+	}
 
-    constructor() {
-        throw new Error("This is a static class!");
-    }
+	/**
+	 *  Read the JSON file associated to classes
+	 *  @static
+	 *  @async
+	 */
+	static async read() {
+		let json = (await Platform.parseFileJSON(Paths.FILE_CLASSES)).classes;
+		this.list = [];
+		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System.Class });
+	}
 
-    /** 
-     *  Read the JSON file associated to classes
-     *  @static
-     *  @async
-     */
-    static async read() {
-        let json = (await IO.parseFileJSON(Paths.FILE_CLASSES)).classes;
-        this.list = [];
-        Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System
-            .Class });
-    }
-
-    /** 
-     *  Get the class by ID.
-     *  @static
-     *  @param {number} id
-     *  @param {string} errorMessage
-     *  @returns {System.Class}
-     */
-    static get(id: number, errorMessage: string = ""): System.Class {
-        return Datas.Base.get(id, this.list, "class", true, errorMessage);
-    }
+	/**
+	 *  Get the class by ID.
+	 *  @static
+	 *  @param {number} id
+	 *  @param {string} errorMessage
+	 *  @returns {System.Class}
+	 */
+	static get(id: number, errorMessage: string = ''): System.Class {
+		return Datas.Base.get(id, this.list, 'class', true, errorMessage);
+	}
 }
 
-export { Classes }
+export { Classes };
