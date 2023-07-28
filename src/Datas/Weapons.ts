@@ -9,42 +9,40 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { IO, Paths, Utils } from "../Common";
-import { System, Datas } from "../index";
+import { Platform, Paths, Utils } from '../Common';
+import { System, Datas } from '../index';
 
 /** @class
  *  All the weapons datas
  *  @static
  */
 class Weapons {
+	private static list: System.Weapon[];
 
-    private static list: System.Weapon[];
+	constructor() {
+		throw new Error('This is a static class!');
+	}
 
-    constructor() {
-        throw new Error("This is a static class!");
-    }
+	/**
+	 *  Read the JSON file associated to weapons
+	 *  @static
+	 *  @async
+	 */
+	static async read() {
+		let json = (await Platform.parseFileJSON(Paths.FILE_WEAPONS)).weapons;
+		this.list = [];
+		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System.Weapon });
+	}
 
-    /** 
-     *  Read the JSON file associated to weapons
-     *  @static
-     *  @async
-     */
-    static async read() {
-        let json = (await IO.parseFileJSON(Paths.FILE_WEAPONS)).weapons;
-        this.list = [];
-        Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System
-            .Weapon });
-    }
-
-    /** 
-     *  Get the weapon by ID.
-     *  @static
-     *  @param {number} id
-     *  @returns {System.Weapon}
-     */
-    static get(id: number): System.Weapon {
-        return Datas.Base.get(id, this.list, "weapon");
-    }
+	/**
+	 *  Get the weapon by ID.
+	 *  @static
+	 *  @param {number} id
+	 *  @returns {System.Weapon}
+	 */
+	static get(id: number): System.Weapon {
+		return Datas.Base.get(id, this.list, 'weapon');
+	}
 }
 
-export { Weapons }
+export { Weapons };

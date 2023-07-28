@@ -42,7 +42,7 @@ async function modifyImportsInFile(filePath) {
 				/import ({ .+ }|\* as .+) from ['"](..?\/?\.?\.?\/)(Graphic|Core|Datas|EventCommand|Manager|Scene|Common|System|Libs|Utils).js['"]/g,
 				`import $1 from '$2$3/index.js'`
 			)
-			.replace(/import ({ .+ }|\* as .+) from "(..?)"/g, 'import $1 from "$2/index.js"');
+			.replace(/import ({ .+ }|\* as .+) from ['"](..?)['"]/g, 'import $1 from "$2/index.js"');
 		await fs.writeFile(filePath, modifiedContent, 'utf-8');
 	} catch (error) {
 		console.error(`Error modifying imports in file: ${filePath}`);
@@ -71,7 +71,7 @@ async function modifyImports(dir) {
 (async function () {
 	const BUILD_DIR = './Content';
 	const SRC_DIR = './src';
-	const SYSTEM_DIR = `${BUILD_DIR}/Datas/Scripts/System`;
+	const SYSTEM_DIR = `${BUILD_DIR}/Scripts/System`;
 	const startTime = Date.now();
 
 	try {

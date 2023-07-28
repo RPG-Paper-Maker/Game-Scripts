@@ -4,7 +4,7 @@
     },
     "source": {
         "includePattern": [
-            "Content/Datas/Scripts/System/**/*.d.ts"
+            "Content/Scripts/System/**/*.d.ts"
         ],
         "excludePattern": ["(node_modules|lib|test)", "node_modules/three/src/**/*.d.ts", "node_modules/three/src/**/*.ts"]
     },

@@ -9,42 +9,40 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { System, Datas } from "../index";
-import { IO, Paths, Utils } from "../Common";
+import { System, Datas } from '../index';
+import { Platform, Paths, Utils } from '../Common';
 
 /** @class
  *  All the animations datas.
  *  @static
  */
 class Animations {
+	private static list: System.Animation[];
 
-    private static list: System.Animation[];
+	constructor() {
+		throw new Error('This is a static class!');
+	}
 
-    constructor() {
-        throw new Error("This is a static class!");
-    }
+	/**
+	 *  Read the JSON file associated to status.
+	 *  @static
+	 *  @async
+	 */
+	static async read() {
+		let json = (await Platform.parseFileJSON(Paths.FILE_ANIMATIONS)).animations;
+		this.list = [];
+		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System.Animation });
+	}
 
-    /** 
-     *  Read the JSON file associated to status.
-     *  @static
-     *  @async
-     */
-    static async read() {
-        let json = (await IO.parseFileJSON(Paths.FILE_ANIMATIONS)).animations;
-        this.list = [];
-        Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System
-            .Animation });
-    }
-
-    /** 
-     *  Get the animation by ID.
-     *  @static
-     *  @param {number} id
-     *  @returns {System.Animation}
-     */
-    static get(id: number): System.Animation {
-        return Datas.Base.get(id, this.list, "animation");
-    }
+	/**
+	 *  Get the animation by ID.
+	 *  @static
+	 *  @param {number} id
+	 *  @returns {System.Animation}
+	 */
+	static get(id: number): System.Animation {
+		return Datas.Base.get(id, this.list, 'animation');
+	}
 }
 
-export { Animations }
+export { Animations };

@@ -10,10 +10,10 @@ import { HOWLER_TYPE, THREE_TYPE } from './Definitions';
 /**
  * @module Three.js
  */
-export const THREE: typeof THREE_TYPE = require('./Content/Datas/Scripts/Libs/three.js');
+export const THREE: typeof THREE_TYPE = require('./Content/Scripts/Libs/three.js');
 
 /**
  * @module Howler.js
  */
-const { Howl } = require('./Content/Datas/Scripts/Libs/howler.js');
+const { Howl } = require('./Content/Scripts/Libs/howler.js');
 export { Howl };
