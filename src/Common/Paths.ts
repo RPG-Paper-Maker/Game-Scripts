@@ -85,7 +85,7 @@ class Paths {
 	public static readonly OBJ = Paths.SHAPES + 'OBJ';
 	public static readonly MTL = Paths.SHAPES + 'MTL';
 	public static readonly OBJ_COLLISIONS = Paths.SHAPES + 'Collisions';
-	public static readonly SCRIPTS = Platform.ROOT_DIRECTORY + 'Scripts/';
+	public static readonly SCRIPTS = (Platform.WEB_DEV ? '.' + window.location.pathname : '') + 'Scripts/';
 	public static readonly PLUGINS = Paths.SCRIPTS + 'Plugins/';
 	public static readonly SYSTEM = Paths.SCRIPTS + 'System/';
 	public static readonly SHADERS = Paths.SCRIPTS + 'Shaders/';
