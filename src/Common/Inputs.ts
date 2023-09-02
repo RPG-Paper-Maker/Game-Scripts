@@ -9,124 +9,140 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Manager, Scene } from "..";
-import { Main } from "../main";
-import { KeyEvent } from "./KeyEvent";
+import { Datas, Manager, Scene } from '..';
+import { Main } from '../main';
+import { KeyEvent } from './KeyEvent';
 
 /**
  *  @class
  *  Handles inputs for keyboard and mouse.
  */
 class Inputs {
+	static keysPressed: number[] = []; // Currently pressed keys
+	static lockedKeys: [number, number][] = []; // Locked keys after a camera angle change
+	static mouseLeftPressed: boolean = false;
+	static mouseRightPressed: boolean = false;
+	static mouseFirstPressX: number = -1;
+	static mouseFirstPressY: number = -1;
+	static mouseX: number = -1;
+	static mouseY: number = -1;
 
-    static keysPressed: number[] = []; // Currently pressed keys
-    static lockedKeys: [number, number][] = []; // Locked keys after a camera angle change
-    static mouseLeftPressed: boolean = false;
-    static mouseRightPressed: boolean = false;
-    static mouseFirstPressX: number = -1;
-    static mouseFirstPressY: number = -1;
-    static mouseX: number = -1;
-    static mouseY: number = -1;
+	constructor() {
+		throw new Error('This is a static class');
+	}
 
-    constructor() {
-        throw new Error("This is a static class");
-    }
+	/**
+	 *  Initialize all keyboard and mouse events.
+	 *  @static
+	 */
+	static initialize() {
+		this.initializeKeyboard();
+	}
 
-    /** 
-     *  Initialize all keyboard and mouse events.
-     *  @static
-     */
-    static initialize() {
-        this.initializeKeyboard();
-        this.initializeMouse();
-    }
+	/**
+	 *  Initialize all keyboard events.
+	 *  @static
+	 */
+	static initializeKeyboard() {
+		// Key down
+		document.addEventListener(
+			'keydown',
+			function (event) {
+				if (Main.loaded && !Manager.Stack.isLoading()) {
+					let key = event.keyCode;
 
-    /** 
-     *  Initialize all keyboard events.
-     *  @static
-     */
-    static initializeKeyboard() {
-        // Key down
-        document.addEventListener('keydown', function (event) {
-            if (Main.loaded && !Manager.Stack.isLoading()) {
-                let key = event.keyCode;
-        
-                // On pressing F12, quit game
-                switch (key) {
-                    case KeyEvent.DOM_VK_F4:
-                        Datas.Systems.switchFullscreen();
-                        break;
-                }
-                if (event.code === 'Enter' && (event.altKey || event.shiftKey)) {
-                    Datas.Systems.switchFullscreen();
-                    event.preventDefault();
-                    return;
-                }
-                // If not repeat, call simple press RPM event
-                if (!event.repeat) {
-                    if (Inputs.keysPressed.indexOf(key) === -1) {
-                        Inputs.keysPressed.push(key);
-                        Manager.Stack.onKeyPressed(key);
-                        // If is loading, that means a new scene was created, return
-                        if (Manager.Stack.isLoading()) {
-                            return;
-                        }
-                    }
-                }
-        
-                // Also always call pressed and repeat RPM event
-                Manager.Stack.onKeyPressedAndRepeat(key);
-            }
-        }, false);
+					// On pressing F12, quit game
+					switch (key) {
+						case KeyEvent.DOM_VK_F4:
+							Datas.Systems.switchFullscreen();
+							break;
+					}
+					if (event.code === 'Enter' && (event.altKey || event.shiftKey)) {
+						Datas.Systems.switchFullscreen();
+						event.preventDefault();
+						return;
+					}
+					// If not repeat, call simple press RPM event
+					if (!event.repeat) {
+						if (Inputs.keysPressed.indexOf(key) === -1) {
+							Inputs.keysPressed.push(key);
+							Manager.Stack.onKeyPressed(key);
+							// If is loading, that means a new scene was created, return
+							if (Manager.Stack.isLoading()) {
+								return;
+							}
+						}
+					}
 
-        // Key up
-        document.addEventListener('keyup', function (event) {
-            if (Main.loaded && !Manager.Stack.isLoading()) {
-                let key = event.keyCode;
-                // Remove this key from pressed keys list
-                Inputs.keysPressed.splice(Inputs.keysPressed.indexOf(key), 1);
-                Inputs.lockedKeys.splice(Inputs.lockedKeys.findIndex(([k,]) => k === key), 1);
-        
-                // Call release RPM event
-                Manager.Stack.onKeyReleased(key);
-            } else {
-                Inputs.keysPressed = [];
-            }
-        }, false);
-    }
+					// Also always call pressed and repeat RPM event
+					Manager.Stack.onKeyPressedAndRepeat(key);
+				}
+			},
+			false
+		);
 
-    /** 
-     *  Initialize all mouse events.
-     *  @static
-     */
-    static initializeMouse() {
-        // Prevent context menu on mouse right click (for browser)
-        document.addEventListener("contextmenu", function(event) { 
-            event.preventDefault(); 
-            return false;
-        }, false);
+		// Key up
+		document.addEventListener(
+			'keyup',
+			function (event) {
+				if (Main.loaded && !Manager.Stack.isLoading()) {
+					let key = event.keyCode;
+					// Remove this key from pressed keys list
+					Inputs.keysPressed.splice(Inputs.keysPressed.indexOf(key), 1);
+					Inputs.lockedKeys.splice(
+						Inputs.lockedKeys.findIndex(([k]) => k === key),
+						1
+					);
 
-        // Mouse down
-        document.addEventListener('mousedown', function (event) {
-            if (Main.loaded && !Manager.Stack.isLoading() && Datas.Systems
-                .isMouseControls) {
-                switch (event.button) {
-                    case 0:
-                        Inputs.mouseLeftPressed = true;
-                        break;
-                    case 2:
-                        Inputs.mouseRightPressed = true;
-                        break;
-                    default:
-                        break;
-                }
-                Inputs.mouseFirstPressX = event.clientX;
-                Inputs.mouseFirstPressY = event.clientY;
-                Manager.Stack.onMouseDown(event.clientX, event.clientY);
-            }
-        }, false);
+					// Call release RPM event
+					Manager.Stack.onKeyReleased(key);
+				} else {
+					Inputs.keysPressed = [];
+				}
+			},
+			false
+		);
+	}
 
-        // Touch start
+	/**
+	 *  Initialize all mouse events.
+	 *  @static
+	 */
+	static initializeMouse() {
+		// Prevent context menu on mouse right click (for browser)
+		document.addEventListener(
+			'contextmenu',
+			function (event) {
+				event.preventDefault();
+				return false;
+			},
+			false
+		);
+
+		// Mouse down
+		document.addEventListener(
+			'mousedown',
+			function (event) {
+				if (Main.loaded && !Manager.Stack.isLoading() && Datas.Systems.isMouseControls) {
+					switch (event.button) {
+						case 0:
+							Inputs.mouseLeftPressed = true;
+							break;
+						case 2:
+							Inputs.mouseRightPressed = true;
+							break;
+						default:
+							break;
+					}
+					Inputs.mouseFirstPressX = event.clientX;
+					Inputs.mouseFirstPressY = event.clientY;
+					Manager.Stack.onMouseDown(event.clientX, event.clientY);
+				}
+			},
+			false
+		);
+
+		// Touch start
 		document.addEventListener(
 			'touchstart',
 			function (event) {
@@ -140,17 +156,20 @@ class Inputs {
 			false
 		);
 
-        // Mouse move
-        document.addEventListener('mousemove', function (event) {
-            if (Main.loaded && !Manager.Stack.isLoading() && Datas.Systems
-                .isMouseControls) {
-                Manager.Stack.onMouseMove(event.clientX, event.clientY);
-                Inputs.mouseX = event.clientX;
-                Inputs.mouseY = event.clientY;
-            }
-        }, false);
+		// Mouse move
+		document.addEventListener(
+			'mousemove',
+			function (event) {
+				if (Main.loaded && !Manager.Stack.isLoading() && Datas.Systems.isMouseControls) {
+					Manager.Stack.onMouseMove(event.clientX, event.clientY);
+					Inputs.mouseX = event.clientX;
+					Inputs.mouseY = event.clientY;
+				}
+			},
+			false
+		);
 
-        // Touch move
+		// Touch move
 		document.addEventListener(
 			'touchmove',
 			function (event) {
@@ -163,25 +182,28 @@ class Inputs {
 			false
 		);
 
-        // Mouse up
-        document.addEventListener('mouseup', function (event) {
-            if (Main.loaded && !Manager.Stack.isLoading() && Datas.Systems
-                .isMouseControls) {
-                Manager.Stack.onMouseUp(event.clientX, event.clientY);
-                switch (event.button) {
-                    case 0:
-                        Inputs.mouseLeftPressed = false;
-                        break;
-                    case 2:
-                        Inputs.mouseRightPressed = false;
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }, false);
+		// Mouse up
+		document.addEventListener(
+			'mouseup',
+			function (event) {
+				if (Main.loaded && !Manager.Stack.isLoading() && Datas.Systems.isMouseControls) {
+					Manager.Stack.onMouseUp(event.clientX, event.clientY);
+					switch (event.button) {
+						case 0:
+							Inputs.mouseLeftPressed = false;
+							break;
+						case 2:
+							Inputs.mouseRightPressed = false;
+							break;
+						default:
+							break;
+					}
+				}
+			},
+			false
+		);
 
-        // Touch end
+		// Touch end
 		document.addEventListener(
 			'touchend',
 			function (event) {
@@ -192,18 +214,18 @@ class Inputs {
 			},
 			false
 		);
-    }
+	}
 
-    static updateLockedKeysAngles(angle: number) {
-        if (Scene.Map.current.camera.horizontalAngle !== angle) {
-            for (const key of Inputs.keysPressed) {
-                const value = Inputs.lockedKeys.find(([k,]) => k === key);
-                if (!value) {
-                    Inputs.lockedKeys.push([key, angle]);
-                }
-            }
-        }
-    }
+	static updateLockedKeysAngles(angle: number) {
+		if (Scene.Map.current.camera.horizontalAngle !== angle) {
+			for (const key of Inputs.keysPressed) {
+				const value = Inputs.lockedKeys.find(([k]) => k === key);
+				if (!value) {
+					Inputs.lockedKeys.push([key, angle]);
+				}
+			}
+		}
+	}
 }
 
-export { Inputs }
+export { Inputs };
