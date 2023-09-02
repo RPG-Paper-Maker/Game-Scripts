@@ -55,13 +55,13 @@ class GL {
 	 */
 	static async load() {
 		// Shaders
-		let json = await Platform.loadFile(Paths.SHADERS + 'fix.vert', true);
+		let json = await Platform.loadFile(Paths.SHADERS + 'default.vert', true);
 		this.SHADER_FIX_VERTEX = json;
-		json = await Platform.loadFile(Paths.SHADERS + 'fix.frag', true);
+		json = await Platform.loadFile(Paths.SHADERS + 'default.frag', true);
 		this.SHADER_FIX_FRAGMENT = json;
-		json = await Platform.loadFile(Paths.SHADERS + 'face.vert', true);
+		json = await Platform.loadFile(Paths.SHADERS + 'default.vert', true);
 		this.SHADER_FACE_VERTEX = json;
-		json = await Platform.loadFile(Paths.SHADERS + 'face.frag', true);
+		json = await Platform.loadFile(Paths.SHADERS + 'default.frag', true);
 		this.SHADER_FACE_FRAGMENT = json;
 	}
 
