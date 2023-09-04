@@ -128,6 +128,20 @@ class Inputs {
             }
         }, false);
 
+        // Touch start
+		document.addEventListener(
+			'touchstart',
+			function (event) {
+				if (Main.loaded && !Manager.Stack.isLoading() && Datas.Systems.isMouseControls) {
+					Inputs.mouseLeftPressed = true;
+					Inputs.mouseFirstPressX = event.touches[0].pageX;
+					Inputs.mouseFirstPressY = event.touches[0].pageY;
+					Manager.Stack.onMouseDown(Inputs.mouseFirstPressX, Inputs.mouseFirstPressY);
+				}
+			},
+			false
+		);
+
         // Mouse move
         document.addEventListener('mousemove', function (event) {
             if (Main.loaded && !Manager.Stack.isLoading() && Datas.Systems
@@ -137,6 +151,19 @@ class Inputs {
                 Inputs.mouseY = event.clientY;
             }
         }, false);
+
+        // Touch move
+		document.addEventListener(
+			'touchmove',
+			function (event) {
+				if (Main.loaded && !Manager.Stack.isLoading() && Datas.Systems.isMouseControls) {
+					Manager.Stack.onMouseMove(event.touches[0].pageX, event.touches[0].pageY);
+					Inputs.mouseX = event.touches[0].pageX;
+					Inputs.mouseY = event.touches[0].pageY;
+				}
+			},
+			false
+		);
 
         // Mouse up
         document.addEventListener('mouseup', function (event) {
@@ -155,6 +182,18 @@ class Inputs {
                 }
             }
         }, false);
+
+        // Touch end
+		document.addEventListener(
+			'touchend',
+			function (event) {
+				if (Main.loaded && !Manager.Stack.isLoading() && Datas.Systems.isMouseControls) {
+					Manager.Stack.onMouseUp(Inputs.mouseX, Inputs.mouseY);
+					Inputs.mouseLeftPressed = false;
+				}
+			},
+			false
+		);
     }
 }
 
