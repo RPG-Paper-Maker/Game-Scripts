@@ -37,8 +37,8 @@ class Platform {
     public static canvasHUD: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById('hud');
     public static canvasVideos: HTMLVideoElement = <HTMLVideoElement> document.getElementById('video-container');
     public static canvasRendering: HTMLCanvasElement= <HTMLCanvasElement> document.getElementById('rendering');
-    public static ctx: CanvasRenderingContext2D = <CanvasRenderingContext2D> Platform.canvasHUD.getContext('2d');
-    public static ctxr: CanvasRenderingContext2D = <CanvasRenderingContext2D> Platform.canvasRendering.getContext("2d");
+    public static ctx: CanvasRenderingContext2D = <CanvasRenderingContext2D> Platform.canvasHUD.getContext('2d', { willReadFrequently: true });
+    public static ctxr: CanvasRenderingContext2D = <CanvasRenderingContext2D> Platform.canvasRendering.getContext("2d", { willReadFrequently: true });
 
     /**
      * Creates an instance of Platform.
