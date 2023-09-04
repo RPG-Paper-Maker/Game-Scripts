@@ -44,6 +44,7 @@ class GL {
         this.renderer.setSize(ScreenResolution.CANVAS_WIDTH, ScreenResolution
             .CANVAS_HEIGHT, true);
         this.renderer.shadowMap.enabled = true;
+        this.renderer.setPixelRatio(window.devicePixelRatio); 
         if (Datas.Systems.antialias)
         {
             this.renderer.setPixelRatio(2);
