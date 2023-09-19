@@ -53,9 +53,6 @@ class Inputs {
         
                 // On pressing F12, quit game
                 switch (key) {
-                    case KeyEvent.DOM_VK_F12:
-                        Platform.quit();
-                        break;
                     case KeyEvent.DOM_VK_F4:
                         Datas.Systems.switchFullscreen();
                         break;
