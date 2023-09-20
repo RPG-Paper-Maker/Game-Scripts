@@ -508,6 +508,7 @@ class Effect extends Base {
             case EffectKind.Damages:
                 let damage = Interpreter.evaluate(this.damageFormula.getValue(), 
                     { user: user, target: target });
+                damage = Math.round(damage);
                 if (damage === 0) {
                     return "";
                 }
