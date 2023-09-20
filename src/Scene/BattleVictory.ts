@@ -207,14 +207,9 @@ class BattleVictory {
                     player.stepLevelUp = 0;
                     this.battle.windowStatisticProgression.content = new
                         Graphic.StatisticProgression(this.battle.user.player);
-                    y = 90 + (i * 90);
                     h = (<Graphic.StatisticProgression>this.battle
                         .windowStatisticProgression.content).getHeight() + 
                         WindowBox.HUGE_PADDING_BOX[0] + WindowBox.HUGE_PADDING_BOX[2];
-                    if (y + h > ScreenResolution.CANVAS_HEIGHT - 10) {
-                        y = ScreenResolution.CANVAS_HEIGHT - h - 10;
-                    }
-                    this.battle.windowStatisticProgression.setY(y);
                     this.battle.windowStatisticProgression.setH(h);
                     Datas.BattleSystems.battleLevelUp.playSound();
                     this.battle.subStep = 2;
