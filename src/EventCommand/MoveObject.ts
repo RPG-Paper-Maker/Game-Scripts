@@ -363,10 +363,10 @@ class MoveObject extends Base {
             .SQUARE_SIZE) || (square && currentState.distance >= Datas.Systems
             .SQUARE_SIZE || (distances[0] === 0)))
         {
-            if (distances[0] === 0) {
+            if (distances[0] === 0 && square && !this.isIgnore) {
                 currentState.position = null;
                 object.moving = true;
-                return this.isIgnore;
+                return false;
             }
             if (square && currentState.distance === currentState.normalDistance) {
                 object.position = currentState.position;
