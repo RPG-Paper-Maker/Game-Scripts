@@ -39,6 +39,10 @@ class StatisticProgression extends Base {
             if (id !== Datas.BattleSystems.idLevelStatistic && id !== Datas
                 .BattleSystems.idExpStatistic) {
                 statistic = Datas.BattleSystems.getStatistic(id);
+                if (statistic.isRes || this.player[statistic
+                    .getBeforeAbbreviation()] === undefined) {
+                    continue;
+                }
                 value = this.player[statistic.getAbbreviationNext()] - this
                     .player[statistic.getBeforeAbbreviation()];
                 txt = value >= 0 ? "+" : "-";
@@ -69,7 +73,8 @@ class StatisticProgression extends Base {
             if (id !== Datas.BattleSystems.idLevelStatistic && id !== Datas
                 .BattleSystems.idExpStatistic) {
                 statistic = Datas.BattleSystems.getStatistic(id);
-                if (statistic.isRes) {
+                if (statistic.isRes || this.player[statistic
+                    .getBeforeAbbreviation()] === undefined) {
                     continue;
                 }
                 graphic = new Graphic.Text(statistic.name() + Constants.STRING_COLON);
