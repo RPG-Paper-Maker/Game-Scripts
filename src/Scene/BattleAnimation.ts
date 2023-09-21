@@ -281,8 +281,8 @@ class BattleAnimation {
                         .currentEffectIndex < l; this.battle.currentEffectIndex++)
                     {
                         let effect = this.battle.effects[this.battle.currentEffectIndex];
-                        effect.execute();
-                        if (effect.isAnimated()) {
+                        effect.execute(true);
+                        if (!effect.canSkip && effect.isAnimated()) {
                             if (effect.kind === Enum.EffectKind.Status) {
                                 this.battle.currentTargetIndex = -1;
                             }

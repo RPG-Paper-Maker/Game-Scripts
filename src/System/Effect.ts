@@ -61,6 +61,7 @@ class Effect extends Base {
     public isTemporarilyChangeTarget: boolean;
     public temporarilyChangeTargetFormula: System.DynamicValue;
     public skillItem: System.CommonSkillItem;
+    public canSkip = false;
 
     constructor(json?: Record<string, any>) {
         super(json);
@@ -227,9 +228,10 @@ class Effect extends Base {
      *  Execute the effect.
      *  @returns {boolean} 
      */
-    execute(): boolean {
+    execute(forceReaction = false): boolean {
         let user = Scene.Map.current.user ? Scene.Map.current.user.player : 
             Player.getTemporaryPlayer();
+        this.canSkip = false;
         Scene.Map.current.tempTargets = Scene.Map.current.targets;
         if (this.isTemporarilyChangeTarget) {
             Scene.Map.current.targets = Interpreter.evaluate(this
@@ -403,12 +405,23 @@ class Effect extends Base {
             case EffectKind.Status: {
                 let precision: number, miss: boolean, id: number, previousFirst: 
                     Status;
+                this.canSkip = true;
                 for (let i = 0, l = targets.length; i < l; i++) {
                     battler = targets[i];
                     target = battler.player;
+                    id = this.statusID.getValue();
+                    if (!target.hasStatus(id)) {
+                        battler.damages = null;
+                        battler.isDamagesMiss = false;
+                        battler.isDamagesCritical = false;
+                        battler.lastStatus = null;
+                        battler.lastStatusHealed = null;
+                        continue;
+                    } else {
+                        this.canSkip = false;
+                    }
                     precision = Interpreter.evaluate(this.statusPrecisionFormula
                         .getValue(), { user: user, target: battler.player });
-                    id = this.statusID.getValue();
                     // Handle resistance
                     if (target.statusRes[id]) {
                         precision /= target.statusRes[id].multiplication;
@@ -464,6 +477,12 @@ class Effect extends Base {
                     .commonReactionID), null, null, this.commonReaction.parameters);
                 Manager.Stack.top.reactionInterpretersEffects.push(reactionInterpreter);
                 Manager.Stack.top.reactionInterpreters.push(reactionInterpreter);
+                if (forceReaction) {
+                    Manager.Stack.top.updateInterpreters();
+                    if (Manager.Stack.top.reactionInterpretersEffects.length === 0) {
+                        this.canSkip = true;
+                    }
+                }
                 result = true;
                 break;
             case EffectKind.SpecialActions:
