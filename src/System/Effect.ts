@@ -410,7 +410,7 @@ class Effect extends Base {
                     battler = targets[i];
                     target = battler.player;
                     id = this.statusID.getValue();
-                    if (!target.hasStatus(id)) {
+                    if (!this.isAddStatus && !target.hasStatus(id)) {
                         battler.damages = null;
                         battler.isDamagesMiss = false;
                         battler.isDamagesCritical = false;
