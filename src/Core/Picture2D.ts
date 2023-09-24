@@ -222,7 +222,7 @@ class Picture2D extends Bitmap {
             if (this.centered) {
                 if (this.reverse) {
                     Platform.ctx.scale(-1, 1);
-                    Platform.ctx.translate(-x - w, y);
+                    Platform.ctx.translate(-x - (w / 2), y - (h / 2));
                 } else {
                     Platform.ctx.translate(x - (w / 2), y - (h / 2));
                 }
