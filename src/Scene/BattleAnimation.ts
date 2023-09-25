@@ -318,6 +318,12 @@ class BattleAnimation {
                     }
                     if (this.battle.currentTargetIndex === l) {
                         this.battle.currentTargetIndex = null;
+                        for (target of this.battle.targets)
+                        {
+                            target.damages = null;
+                            target.isDamagesMiss = false;
+                            target.isDamagesCritical = false;
+                        }
                     }
                 }
                 // Target attacked
@@ -449,7 +455,8 @@ class BattleAnimation {
         if (this.battle.reactionInterpretersEffects.length === 0 && (this.battle
             .user === null || !this.battle.user.isAttacking()) && (!this.battle
             .animationTarget || this.battle.animationTarget.frame > this.battle
-            .animationTarget.system.frames.length)) {
+            .animationTarget.system.frames.length) && (this.battle.currentTargetIndex 
+            === null || this.battle.currentTargetIndex === 0)) {
             for (i = 0, l = this.battle.targets.length; i < l; i++) {
                 this.battle.targets[i].drawDamages();
             }
