@@ -294,37 +294,28 @@ class BattleAnimation {
                 if (this.battle.currentTargetIndex !== null) {
                     let target: Battler;
                     this.battle.currentTargetIndex++;
+                    const messages: string[] = [];
                     for (l = this.battle.targets.length; this.battle
                         .currentTargetIndex < l; this.battle.currentTargetIndex++)
                     {
                         target = this.battle.targets[this.battle.currentTargetIndex];
                         if (!target.isDamagesMiss) {
                             if (target.lastStatus !== null) {
-                                (<Graphic.Text>this.battle.windowTopInformations
-                                    .content).setText(target.player.kind === 
+                                messages.push(target.player.kind === 
                                     CharacterKind.Hero ? target.lastStatus
                                     .getMessageAllyAffected(target) : target
                                     .lastStatus
                                     .getMessageEnemyAffected(target));
-                                break;
                             }
                             if (target.lastStatusHealed !== null) {
-                                (<Graphic.Text>this.battle.windowTopInformations
-                                    .content).setText(target.lastStatusHealed
+                                messages.push(target.lastStatusHealed
                                     .getMessageHealed(target));
-                                break;
                             }
                         }
                     }
-                    if (this.battle.currentTargetIndex === l) {
-                        this.battle.currentTargetIndex = null;
-                        for (target of this.battle.targets)
-                        {
-                            target.damages = null;
-                            target.isDamagesMiss = false;
-                            target.isDamagesCritical = false;
-                        }
-                    }
+                    (<Graphic.Text>this.battle.windowTopInformations
+                        .content).setText(messages.join(' '));
+                    this.battle.currentTargetIndex = null;
                 }
                 // Target attacked
                 this.updateTargetsAttacked();
@@ -455,8 +446,7 @@ class BattleAnimation {
         if (this.battle.reactionInterpretersEffects.length === 0 && (this.battle
             .user === null || !this.battle.user.isAttacking()) && (!this.battle
             .animationTarget || this.battle.animationTarget.frame > this.battle
-            .animationTarget.system.frames.length) && (this.battle.currentTargetIndex 
-            === null || this.battle.currentTargetIndex === 0)) {
+            .animationTarget.system.frames.length)) {
             for (i = 0, l = this.battle.targets.length; i < l; i++) {
                 this.battle.targets[i].drawDamages();
             }
