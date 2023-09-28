@@ -43,7 +43,6 @@ abstract class Base {
             throw new Error();
         }
         let v = list[id];
-        console.log(v)
         if (Utils.isUndefined(v)) {
             Platform.showErrorMessage(errorMessage === "" ? (Base
                 .STRING_ERROR_GET_1 + (isID ? "ID": "index") + " " + Utils

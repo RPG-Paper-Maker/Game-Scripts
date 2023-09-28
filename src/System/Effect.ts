@@ -206,7 +206,6 @@ class Effect extends Base {
                     battler = targets[i];
                     target = battler.player;
                     miss = false;
-                    crit = false;
                     precision = Interpreter.evaluate(this.statusPrecisionFormula
                         .getValue(), { user: user, target: battler.player });
                     id = this.statusID.getValue();
@@ -219,6 +218,12 @@ class Effect extends Base {
                         miss = true;
                     }
                     battler.tempIsDamagesMiss = miss;
+                }
+            }
+            default: {
+                for (const battler of targets) {
+                    battler.tempIsDamagesMiss = null;
+                    battler.tempIsDamagesCritical = null;
                 }
             }
         }
@@ -416,6 +421,8 @@ class Effect extends Base {
                         battler.isDamagesCritical = false;
                         battler.lastStatus = null;
                         battler.lastStatusHealed = null;
+                        battler.tempIsDamagesMiss = null;
+                        battler.tempIsDamagesCritical = null;
                         continue;
                     } else {
                         this.canSkip = false;
@@ -452,9 +459,9 @@ class Effect extends Base {
                         battler.isDamagesMiss = miss;
                         battler.isDamagesCritical = false;
                     }
+                    battler.tempIsDamagesMiss = null;
+                    battler.tempIsDamagesCritical = null;
                 }
-                battler.tempIsDamagesMiss = null;
-                battler.tempIsDamagesCritical = null;
                 result = true;
                 break;
             }
