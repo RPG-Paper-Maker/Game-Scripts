@@ -292,11 +292,11 @@ class Effect extends Base {
                                 damage *= efficiency ? efficiency.getValue() : 1;
                             }
                             fixRes = target[Datas.BattleSystems.getStatistic(
-                                Datas.BattleSystems.statisticsElements[element])
+                                Datas.BattleSystems.getStatisticElement(element))
                                 .abbreviation];
                             percentRes = target[Datas.BattleSystems.getStatistic
-                                (Datas.BattleSystems.statisticsElementsPercent[
-                                element]).abbreviation];
+                                (Datas.BattleSystems.getStatisticElementPercent(
+                                element)).abbreviation];
                             damage -= (damage * percentRes / 100);
                             damage -= fixRes;
                         }

@@ -154,9 +154,9 @@ class Characteristic extends Base {
                         return [statID, value];
                     case Enum.IncreaseDecreaseKind.ElementRes:
                         statID = this.unit ? Datas.BattleSystems
-                            .statisticsElementsPercent[this.elementResID
-                            .getValue()] : Datas.BattleSystems
-                            .statisticsElements[this.elementResID.getValue()];
+                            .getStatisticElementPercent(this.elementResID
+                            .getValue()) : Datas.BattleSystems
+                            .getStatisticElement(this.elementResID.getValue());
                         stat = Datas.BattleSystems.getStatistic(statID);
                         value = this.value.getValue() * (this.isIncreaseDecrease
                             ? 1 : -1);

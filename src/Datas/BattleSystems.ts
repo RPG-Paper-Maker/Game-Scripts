@@ -23,8 +23,8 @@ class BattleSystems {
     private static elementsOrder: number[];
     private static statistics: System.Statistic[];
     public static statisticsOrder: number[];
-    public static statisticsElements: number[];
-    public static statisticsElementsPercent: number[];
+    private static statisticsElements: number[];
+    private static statisticsElementsPercent: number[];
     public static maxStatisticID: number;
     private static equipments: System.Translatable[];
     public static equipmentsOrder: number[];
@@ -179,6 +179,24 @@ class BattleSystems {
      */
     static getStatistic(id: number): System.Statistic {
         return Datas.Base.get(id, this.statistics, "statistic");
+    }
+
+    /** 
+     *  Get the statistic element by ID.
+     *  @param {number} id
+     *  @returns {number}
+     */
+    static getStatisticElement(id: number): number {
+        return Datas.Base.get(id, this.statisticsElements, "statistic element");
+    }
+
+    /** 
+     *  Get the statistic element percent by ID.
+     *  @param {number} id
+     *  @returns {System.Statistic}
+     */
+    static getStatisticElementPercent(id: number): number {
+        return Datas.Base.get(id, this.statisticsElementsPercent, "statistic element percent");
     }
 
     /** 
