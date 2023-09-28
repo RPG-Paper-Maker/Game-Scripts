@@ -503,13 +503,15 @@ class BattleSelection {
                     if (isKey) {
                         if (Datas.Keyboards.isKeyEqual(options.key, Datas
                             .Keyboards.menuControls.Up) || Datas.Keyboards
-                            .isKeyEqual(options.key, Datas.Keyboards.menuControls
-                            .Left)) {
+                            .isKeyEqual(options.key, this.battle.subStep === 0 ? 
+                            Datas.Keyboards.menuControls.Left : Datas.Keyboards
+                            .menuControls.Right)) {
                             index = this.indexArrowUp();
                         } else if (Datas.Keyboards.isKeyEqual(options.key, Datas
                             .Keyboards.menuControls.Down) || Datas.Keyboards
-                            .isKeyEqual(options.key, Datas.Keyboards.menuControls
-                            .Right)) {
+                            .isKeyEqual(options.key, this.battle.subStep === 0 ? 
+                            Datas.Keyboards.menuControls.Right : Datas.Keyboards
+                            .menuControls.Left)) {
                             index = this.indexArrowDown();
                         }
                     } else {
