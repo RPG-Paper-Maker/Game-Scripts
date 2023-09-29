@@ -830,10 +830,10 @@ class MapObject {
                 .BB_BOX_DEFAULT_DETECTION, [this.position.x, this.position.y + 
                 (Datas.Systems.SQUARE_SIZE / 2), this.position.z, Datas.Systems
                 .SQUARE_SIZE, Datas.Systems.SQUARE_SIZE, Datas.Systems
-                .SQUARE_SIZE, 0, 0, 0]);
+                .SQUARE_SIZE, 0, 0, 0]);                
             if (Manager.Collisions.obbVSobb(<CustomGeometry>Manager.Collisions
                 .BB_BOX_DEFAULT_DETECTION.geometry, <CustomGeometry>Manager
-                .Collisions.getBBBoxDetection(true).geometry))
+                .Collisions.getBBBoxDetection(true).geometry, false))
             {
                 return true;
             }
