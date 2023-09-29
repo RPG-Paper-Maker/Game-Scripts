@@ -365,10 +365,11 @@ class Battler {
         let time = new Date().getTime() - this.timerMove;
         if (time <= Battler.TIME_MOVE) {
             this.moving = true;
-            newX = progression.getProgressionAt(time, Battler.TIME_MOVE, true);
         } else {
             this.moving = false;
+            time = Battler.TIME_MOVE;
         }
+        newX = progression.getProgressionAt(time, Battler.TIME_MOVE, true);
         if (this.mesh.position.x !== newX) {
             this.mesh.position.setX(newX);
             this.upPosition.setX(newX);
