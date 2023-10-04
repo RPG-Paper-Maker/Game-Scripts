@@ -774,9 +774,28 @@ class Map extends Base {
     {
         let special: System.SpecialElement, picture: System.Picture;
         for (let i = 0, l = list.length; i < l; i++) {
-            special = specials[list[i]];
+            const id = list[i];
+            special = specials[id];
             if (special) {
-                picture = Datas.Pictures.get(kind, special.pictureID);
+                let pictureID = undefined;
+                switch (kind) {
+                    case Enum.PictureKind.Autotiles:
+                        pictureID = Game.current.textures.autotiles[id];
+                        break;
+                    case Enum.PictureKind.Mountains:
+                        pictureID = Game.current.textures.mountains[id];
+                        break;
+                    case Enum.PictureKind.Walls:
+                        pictureID = Game.current.textures.walls[id];
+                        break;
+                    case Enum.PictureKind.Objects3D:
+                        pictureID = Game.current.textures.objects3D[id];
+                        break;
+                }
+                if (pictureID === undefined) {
+                    pictureID = special.pictureID;
+                }
+                picture = Datas.Pictures.get(kind, pictureID);
                 if (picture) {
                     picture.readCollisions();
                 }

@@ -227,14 +227,17 @@ class MapPortion {
             jsonAutotile = json[i];
             position = Position.createFromArray(jsonAutotile.k);
             autotile = new Autotile(jsonAutotile.v);
+            let pictureID = Game.current.textures.autotiles[autotile.autotileID];
+            if (pictureID === undefined) {
+                pictureID = Datas.SpecialElements.getAutotile(autotile.autotileID).pictureID;
+            }
             indexPos = position.toIndex();
             texture = null;
             texturesAutotile = Scene.Map.current.texturesAutotiles[autotile.autotileID];
             if (texturesAutotile) {
                 for (j = 0, m = texturesAutotile.length; j < m; j++) {
                     textureAutotile = texturesAutotile[j];
-                    if (textureAutotile.isInTexture(Datas.SpecialElements
-                        .getAutotile(autotile.autotileID).pictureID, autotile.texture))
+                    if (textureAutotile.isInTexture(pictureID, autotile.texture))
                     {
                         texture = textureAutotile;
                         autotiles = this.staticAutotilesList[autotile.autotileID][j];
@@ -243,7 +246,7 @@ class MapPortion {
                 }
             }
             if (texture !== null && texture.material !== null) {
-                objCollision = autotiles.updateGeometry(position, autotile);
+                objCollision = autotiles.updateGeometry(position, autotile, pictureID);
                 if (objCollision !== null) {
                     this.boundingBoxesLands[indexPos].push(objCollision);
                 }
@@ -362,6 +365,10 @@ class MapPortion {
             s = json[i];
             position = Position.createFromArray(s.k);
             sprite = new SpriteWall(s.v);
+            let pictureID = Game.current.textures.walls[sprite.id];
+            if (pictureID === undefined) {
+                pictureID = Datas.SpecialElements.getWall(sprite.id).pictureID;
+            }
 
             // Constructing the geometry
             obj = hash[sprite.id];
@@ -387,7 +394,7 @@ class MapPortion {
                 let texture = Manager.GL.getMaterialTexture(material);
                 if (texture) {
                     result = sprite.updateGeometry(geometry, position, texture
-                        .image.width, texture.image.height, count);
+                        .image.width, texture.image.height, pictureID, count);
                     obj.c = result[0];
                     this.updateCollisionSprite(result[1], position);
                 }
@@ -445,18 +452,22 @@ class MapPortion {
             position = Position.createFromArray(jsonMountain.k);
             mountain = new Mountain;
             mountain.read(jsonMountain.v);
+            let pictureID = Game.current.textures.mountains[mountain.mountainID];
+            if (pictureID === undefined) {
+                pictureID = Datas.SpecialElements.getMountain(mountain.mountainID)
+                    .pictureID;
+            }
             indexPos = position.toIndex();
             for (index = 0; index < mountainsLength; index++) {
                 textureMountain = Scene.Map.current.texturesMountains[index];
-                if (textureMountain.isInTexture(Datas.SpecialElements
-                    .getMountain(mountain.mountainID).pictureID)) {
+                if (textureMountain.isInTexture(pictureID)) {
                     texture = textureMountain;
                     mountains = this.staticMountainsList[index];
                     break;
                 }
             }
             if (texture !== null && texture.material !== null) {
-                objCollision = mountains.updateGeometry(position, mountain);
+                objCollision = mountains.updateGeometry(position, mountain, pictureID);
                 this.updateCollision(this.boundingBoxesMountains, objCollision,
                     position, true);
             }
@@ -510,6 +521,11 @@ class MapPortion {
             position = Position.createFromArray(o.k);
             v = o.v;
             datas = Datas.SpecialElements.getObject3D(v.did);
+            let pictureID = Game.current.textures.objects3D[datas.id];
+            if (pictureID === undefined) {
+                pictureID = Datas.SpecialElements.getObject3D(datas.id)
+                    .pictureID;
+            }
             if (datas) {
                 switch (datas.shapeKind) {
                     case ShapeKind.Box:
@@ -529,10 +545,10 @@ class MapPortion {
                 }
 
                 // Constructing the geometry
-                obj = hash[obj3D.datas.pictureID];
+                obj = hash[datas.id];
                 if (!Utils.isUndefined(obj)) {
                     if (obj === null) {
-                        material = Scene.Map.current.texturesObjects3D[obj3D.datas.pictureID];
+                        material = Scene.Map.current.texturesObjects3D[datas.id];
                         if (material) {
                             geometry = new CustomGeometry();
                             count = 0;
@@ -541,7 +557,7 @@ class MapPortion {
                                 material: material,
                                 c: count
                             };
-                            hash[obj3D.datas.pictureID] = obj;
+                            hash[datas.id] = obj;
                         }
                     } else {
                         geometry = obj.geometry;

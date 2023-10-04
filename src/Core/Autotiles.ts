@@ -75,12 +75,12 @@ class Autotiles {
      *  @param {Autotile} autotile - The autotile to add to geometry
      *  @returns {StructMapElementCollision}
      */
-    updateGeometry(position: Position, autotile: Autotile): 
+    updateGeometry(position: Position, autotile: Autotile, pictureID: number): 
         StructMapElementCollision
     {
         return this.width === null || this.height === 0 ? null : autotile
             .updateGeometryAutotile(this.geometry, this.bundle, position, this
-            .width, this.height, this.index++);
+            .width, this.height, pictureID, this.index++);
     }
 
     /** 

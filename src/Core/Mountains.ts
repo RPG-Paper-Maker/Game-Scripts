@@ -44,12 +44,13 @@ class Mountains {
      *  Update the geometry of the mountains according to a mountain.
      *  @param {Position} position - The position
      *  @param {Mountain} mountain - The moutain to update
+     *  @param {number} pictureID - The current mountain picture ID
      */
-    updateGeometry(position: Position, mountain: Mountain): 
+    updateGeometry(position: Position, mountain: Mountain, pictureID: number): 
         StructMapElementCollision[]
     {
         let res = mountain.updateGeometry(this.geometry, this.bundle, position,
-            this.count);
+            pictureID, this.count);
         this.count = res[0];
         return res[1];
     }
