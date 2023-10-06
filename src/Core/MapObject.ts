@@ -522,8 +522,7 @@ class MapObject {
             if (this.currentStateInstance.graphicKind === ElementMapKind.Object3D) {
                 objectDatas = Datas.SpecialElements.objects[this
                     .currentStateInstance.graphicID];
-                material = Scene.Map.current.texturesObjects3D[objectDatas
-                    .pictureID];
+                material = Scene.Map.current.texturesObjects3D[objectDatas.id];
             } else {
                 material = this.currentStateInstance.graphicID === 0 ? Scene.Map
                     .current.textureTileset : Scene.Map.current
