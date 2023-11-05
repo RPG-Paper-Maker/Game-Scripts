@@ -849,7 +849,7 @@ class MoveObject extends Base {
             } else {
                 object.currentStateInstance.indexX = parameters.indexX;
                 object.currentStateInstance.indexY = parameters.dontChangeOrientation ? 
-                    object.orientation : parameters.indexY;
+                    object.orientationEye : parameters.indexY;
             }
 
             // Permanent change
