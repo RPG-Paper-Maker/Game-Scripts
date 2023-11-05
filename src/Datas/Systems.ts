@@ -118,8 +118,8 @@ class Systems {
 		this.battlersFrameDuration = Utils.defaultValue(json.bfd, 'Common.Mathf.random(250, 300)');
 		this.battlersFrameAttackingDuration = Utils.defaultValue(json.bfad, '200');
 		this.battlersColumns = Utils.defaultValue(json.battlersColumns, 9);
-		this.autotilesFrames = Utils.defaultValue(json.battlersColumns, 4);
-		this.autotilesFrameDuration = Utils.defaultValue(json.battlersColumns, 150);
+		this.autotilesFrames = Utils.defaultValue(json.autotilesFrames, 4);
+		this.autotilesFrameDuration = Utils.defaultValue(json.autotilesFrameDuration, 150);
 		this.saveSlots = Utils.defaultValue(json.saveSlots, 4);
 		this.priceSoldItem = System.DynamicValue.readOrDefaultNumberDouble(json.priceSoldItem, 50);
 

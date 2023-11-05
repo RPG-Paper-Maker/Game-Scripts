@@ -10,8 +10,8 @@
 */
 
 import { Constants, Enum, Paths, Platform, Utils } from '../Common';
-import { Autotiles, Game, Picture2D, TextureBundle } from '../Core';
-import { System, Datas, Manager } from '../index';
+import { Autotiles, Frame, Game, Picture2D, TextureBundle } from '../Core';
+import { System, Datas, Manager, Scene } from '../index';
 import { THREE } from '../Globals';
 
 /** @class
@@ -305,6 +305,9 @@ class SpecialElements {
 		texture.image = await Picture2D.loadImage(Platform.canvasRendering.toDataURL());
 		texture.needsUpdate = true;
 		textureAutotile.material = Manager.GL.createMaterial({ texture: texture });
+		textureAutotile.material.userData.uniforms.offset.value = textureAutotile.isAnimated
+			? Scene.Map.current.autotilesOffset
+			: new THREE.Vector2();
 		this.texturesAutotiles[id].push(textureAutotile);
 	}
 
