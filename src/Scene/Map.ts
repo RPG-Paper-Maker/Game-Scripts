@@ -31,6 +31,7 @@ import {
 	Vector2,
 	Player,
 } from '../Core';
+import { SpecialElements } from '../Datas';
 
 /** @class
  *  A scene for a local map.
@@ -61,10 +62,6 @@ class Map extends Base {
 	public mapPortions: MapPortion[];
 	public textureTileset: THREE.MeshPhongMaterial;
 	public texturesCharacters: THREE.MeshPhongMaterial[];
-	public texturesAutotiles: TextureBundle[][];
-	public texturesWalls: THREE.MeshPhongMaterial[];
-	public texturesMountains: TextureBundle[];
-	public texturesObjects3D: THREE.MeshPhongMaterial[];
 	public collisions: number[][][][];
 	public previousCameraPosition: Vector3;
 	public portionsObjectsUpdated: boolean;
@@ -359,19 +356,12 @@ class Map extends Base {
 					'. Please edit this picture size.'
 			);
 		}
-		this.texturesAutotiles = await tileset.getTexturesAutotiles();
-		this.texturesWalls = await tileset.getTexturesWalls();
-		this.texturesMountains = await tileset.getTexturesMountains();
-		this.texturesObjects3D = await tileset.getTexturesObjects3D();
 		this.texturesCharacters = Datas.Tilesets.texturesCharacters;
 		this.updateTexturesShaders();
 	}
 
-	/**
-	 *  Update shaders for autotiles.
-	 */
 	updateTexturesShaders() {
-		for (let list of this.texturesAutotiles) {
+		for (let list of SpecialElements.texturesAutotiles) {
 			if (list) {
 				for (let texture of list) {
 					texture.material.userData.uniforms.offset.value = texture.isAnimated
@@ -582,7 +572,7 @@ class Map extends Base {
 			if (json.hasOwnProperty('lands')) {
 				let mapPortion = new MapPortion(portion);
 				this.setMapPortion(x, y, z, mapPortion, move);
-				mapPortion.read(json, this.id === Datas.Systems.ID_MAP_START_HERO);
+				await mapPortion.read(json, this.id === Datas.Systems.ID_MAP_START_HERO);
 			} else {
 				this.setMapPortion(x, y, z, null, move);
 			}
