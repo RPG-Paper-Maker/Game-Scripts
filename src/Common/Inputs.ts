@@ -37,6 +37,7 @@ class Inputs {
 	 */
 	static initialize() {
 		this.initializeKeyboard();
+		this.initializeMouse();
 	}
 
 	/**
@@ -94,6 +95,45 @@ class Inputs {
 					Manager.Stack.onKeyReleased(key);
 				} else {
 					Inputs.keysPressed = [];
+				}
+			},
+			false
+		);
+	}
+
+	/**
+	 *  Initialize all mouse events.
+	 *  @static
+	 */
+	static initializeMouse() {
+		// Prevent context menu on mouse right click (for browser)
+		document.addEventListener(
+			'contextmenu',
+			function (event) {
+				event.preventDefault();
+				return false;
+			},
+			false
+		);
+
+		// Mouse down
+		document.addEventListener(
+			'mousedown',
+			function (event) {
+				if (Main.loaded && !Manager.Stack.isLoading() && Datas.Systems.isMouseControls) {
+					switch (event.button) {
+						case 0:
+							Inputs.mouseLeftPressed = true;
+							break;
+						case 2:
+							Inputs.mouseRightPressed = true;
+							break;
+						default:
+							break;
+					}
+					Inputs.mouseFirstPressX = event.clientX;
+					Inputs.mouseFirstPressY = event.clientY;
+					Manager.Stack.onMouseDown(event.clientX, event.clientY);
 				}
 			},
 			false

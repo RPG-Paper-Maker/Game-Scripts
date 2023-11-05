@@ -24,11 +24,12 @@ let firstError = true;
  * @class Platform
  */
 class Platform {
-	public static readonly ROOT_DIRECTORY: any = app.getAppPath();
+	public static readonly ROOT_DIRECTORY: any = `${app.getAppPath()}/Content/`;
 	public static readonly screen: any = ElectronScreen.getPrimaryDisplay();
 	public static readonly screenWidth: number = Platform.screen.bounds.width;
 	public static readonly screenHeight: number = Platform.screen.bounds.height;
 	public static readonly DESKTOP: boolean = true;
+	public static readonly WEB_DEV: boolean = false;
 	public static readonly MODE_TEST = remote.getGlobal('modeTest');
 	public static readonly MODE_TEST_BATTLE_TROOP = 'battleTroop';
 	public static readonly MODE_TEST_SHOW_TEXT_PREVIEW = 'showTextPreview';
@@ -94,6 +95,9 @@ class Platform {
 	 *  @static
 	 */
 	static async loadFile(path: string, forcePath = false): Promise<string> {
+		if (forcePath) {
+			path = Platform.ROOT_DIRECTORY + '/' + path;
+		}
 		return await IO.openFile(path);
 	}
 

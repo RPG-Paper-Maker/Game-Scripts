@@ -99,7 +99,7 @@ class SpecialElements {
 	static async loadAutotileTexture(id: number): Promise<TextureBundle[]> {
 		let autotile = this.getAutotile(id);
 		let pictureID = Game.current.textures.autotiles[id];
-		if (Utils.isUndefined(pictureID)) {
+		if (pictureID === undefined) {
 			pictureID = autotile.pictureID;
 		}
 		let texturesAutotile = this.texturesAutotiles[pictureID];
@@ -123,6 +123,7 @@ class SpecialElements {
 						offset,
 						autotile.isAnimated
 					);
+					picture.readCollisions();
 				} else {
 					result = null;
 				}
@@ -306,7 +307,7 @@ class SpecialElements {
 		texture.needsUpdate = true;
 		textureAutotile.material = Manager.GL.createMaterial({ texture: texture });
 		textureAutotile.material.userData.uniforms.offset.value = textureAutotile.isAnimated
-			? Scene.Map.current.autotilesOffset
+			? Scene.Map.autotilesOffset
 			: new THREE.Vector2();
 		this.texturesAutotiles[id].push(textureAutotile);
 	}
@@ -331,6 +332,7 @@ class SpecialElements {
 				} else {
 					textureWall = Manager.GL.loadTextureEmpty();
 				}
+				picture.readCollisions();
 			} else {
 				textureWall = Manager.GL.loadTextureEmpty();
 			}

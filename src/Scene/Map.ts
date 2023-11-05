@@ -45,6 +45,8 @@ class Map extends Base {
 	public static current: Scene.Map;
 	public static allowMainMenu = true;
 	public static allowSaves = true;
+	public static autotileFrame = new Frame(0);
+	public static autotilesOffset: Vector2 = new Vector2();
 
 	public id: number;
 	public mapFilename: string;
@@ -66,8 +68,6 @@ class Map extends Base {
 	public previousCameraPosition: Vector3;
 	public portionsObjectsUpdated: boolean;
 	public maxObjectsID: number;
-	public autotileFrame: Frame;
-	public autotilesOffset: Vector2 = new Vector2();
 	public heroOrientation: Enum.Orientation;
 	public previousWeatherPoints: THREE.Points = null;
 	public previousWeatherVelocities: number[];
@@ -103,11 +103,6 @@ class Map extends Base {
 	 */
 	async load() {
 		Scene.Map.current = this;
-
-		// Initialize autotile frame counter
-		this.autotileFrame = new Frame(Datas.Systems.autotilesFrameDuration, {
-			frames: Datas.Systems.autotilesFrames,
-		});
 
 		if (!this.isBattleMap) {
 			Game.current.currentMapID = this.id;
@@ -168,7 +163,7 @@ class Map extends Base {
 							this.currentPortion.y + j,
 							this.currentPortion.z + k
 						);
-						let json = await IO.parseFileJSON(
+						let json = await Platform.parseFileJSON(
 							Paths.FILE_MAPS + this.mapFilename + Constants.STRING_SLASH + portion.getFileName()
 						);
 						mapPortion.readStatic(json);
@@ -194,7 +189,7 @@ class Map extends Base {
 	 */
 	async readMapProperties(minimal: boolean = false) {
 		this.mapProperties = new System.MapProperties();
-		let json = await IO.parseFileJSON(Paths.FILE_MAPS + this.mapFilename + Paths.FILE_MAP_INFOS);
+		let json = await Platform.parseFileJSON(Paths.FILE_MAPS + this.mapFilename + Paths.FILE_MAP_INFOS);
 		if (this.isBattleMap && json.tileset === undefined) {
 			Platform.showErrorMessage(
 				'The battle map ' + this.id + " doesn't " + 'exists. Please check your battle maps.'
@@ -268,7 +263,7 @@ class Map extends Base {
 	 *  Initialize the map objects.
 	 */
 	async initializeObjects() {
-		let json = (await IO.parseFileJSON(Paths.FILE_MAPS + this.mapFilename + Paths.FILE_MAP_OBJECTS)).objs;
+		let json = (await Platform.parseFileJSON(Paths.FILE_MAPS + this.mapFilename + Paths.FILE_MAP_OBJECTS)).objs;
 		let l = json.length;
 		this.allObjects = new Array(l + 1);
 		let jsonObject: Record<string, any>;
@@ -357,19 +352,6 @@ class Map extends Base {
 			);
 		}
 		this.texturesCharacters = Datas.Tilesets.texturesCharacters;
-		this.updateTexturesShaders();
-	}
-
-	updateTexturesShaders() {
-		for (let list of SpecialElements.texturesAutotiles) {
-			if (list) {
-				for (let texture of list) {
-					texture.material.userData.uniforms.offset.value = texture.isAnimated
-						? this.autotilesOffset
-						: new Vector2();
-				}
-			}
-		}
 	}
 
 	/**
@@ -401,16 +383,6 @@ class Map extends Base {
 				this.collisions[PictureKind.Characters][i] = null;
 			}
 		}
-
-		// Autotiles
-		this.loadSpecialsCollision(
-			this.mapProperties.tileset.autotiles,
-			PictureKind.Autotiles,
-			Datas.SpecialElements.autotiles
-		);
-
-		// Walls
-		this.loadSpecialsCollision(this.mapProperties.tileset.walls, PictureKind.Walls, Datas.SpecialElements.walls);
 	}
 
 	/**
@@ -422,7 +394,7 @@ class Map extends Base {
 
 		// Hero initialize
 		if (!this.isBattleMap) {
-			Game.current.hero.changeState();
+			await Game.current.hero.changeState();
 			if (this.heroOrientation !== null) {
 				Game.current.hero.orientation = this.heroOrientation;
 				Game.current.hero.orientationEye = this.heroOrientation;
@@ -566,11 +538,11 @@ class Map extends Base {
 		let lh = Math.ceil(this.mapProperties.height / Constants.PORTION_SIZE);
 		if (realX >= 0 && realX < lx && realY >= -ld && realY < lh && realZ >= 0 && realZ < lz) {
 			let portion = new Portion(realX, realY, realZ);
-			let json = await IO.parseFileJSON(
+			let json = await Platform.parseFileJSON(
 				Paths.FILE_MAPS + this.mapFilename + Constants.STRING_SLASH + portion.getFileName()
 			);
 			if (json.hasOwnProperty('lands')) {
-				let mapPortion = new MapPortion(portion);
+				const mapPortion = new MapPortion(portion);
 				this.setMapPortion(x, y, z, mapPortion, move);
 				await mapPortion.read(json, this.id === Datas.Systems.ID_MAP_START_HERO);
 			} else {
@@ -1109,9 +1081,9 @@ class Map extends Base {
 		}
 
 		// Update autotiles animated
-		if (this.autotileFrame.update()) {
-			this.autotilesOffset.setY(
-				(this.autotileFrame.value * Autotiles.COUNT_LIST * 2 * Datas.Systems.SQUARE_SIZE) /
+		if (Scene.Map.autotileFrame.update()) {
+			Scene.Map.autotilesOffset.setY(
+				(Scene.Map.autotileFrame.value * Autotiles.COUNT_LIST * 2 * Datas.Systems.SQUARE_SIZE) /
 					Constants.MAX_PICTURE_SIZE
 			);
 		}

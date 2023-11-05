@@ -465,7 +465,7 @@ class MapObject {
 	/**
 	 *  Update the current state (graphics to display), also update the mesh.
 	 */
-	changeState() {
+	async changeState() {
 		let angle = this.mesh ? this.mesh.rotation.y : 0;
 
 		// Updating the current state
@@ -529,7 +529,7 @@ class MapObject {
 		if (this.currentStateInstance !== null) {
 			if (this.currentStateInstance.graphicKind === ElementMapKind.Object3D) {
 				objectDatas = Datas.SpecialElements.objects[this.currentStateInstance.graphicID];
-				material = Scene.Map.current.texturesObjects3D[objectDatas.id];
+				material = await Datas.SpecialElements.loadObject3DTexture(objectDatas.id);
 			} else {
 				material =
 					this.currentStateInstance.graphicID === 0
@@ -804,6 +804,34 @@ class MapObject {
 		}
 		this.updateBBPosition(this.position);
 		return [position, blocked === null && yMountain !== null, o];
+	}
+
+	/**
+	 *  Check collision with another object.
+	 *  @param {MapObject} object - The other map object
+	 *  @returns {boolean}
+	 */
+	checkCollisionObject(object: MapObject): boolean {
+		let i: number, j: number, l: number, m: number;
+		for (i = 0, l = this.meshBoundingBox.length; i < l; i++) {
+			for (j = 0, m = object.meshBoundingBox.length; j < m; j++) {
+				if (
+					this.meshBoundingBox[i].geometry.boundingBox.intersectsBox(
+						object.meshBoundingBox[j].geometry.boundingBox
+					)
+				) {
+					if (
+						Manager.Collisions.obbVSobb(
+							<CustomGeometry>this.meshBoundingBox[i].geometry,
+							<CustomGeometry>object.meshBoundingBox[j].geometry
+						)
+					) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
