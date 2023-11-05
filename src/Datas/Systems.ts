@@ -235,6 +235,10 @@ class Systems {
 		// Enter name menu options
 		this.enterNameTable = json.enterNameTable;
 
+		// Initialize autotile frame counter
+		Scene.Map.autotileFrame.duration = this.autotilesFrameDuration;
+		Scene.Map.autotileFrame.frames = this.autotilesFrames;
+
 		// Initialize loading scene now that basics are loaded
 		Manager.Stack.sceneLoading = new Scene.Loading();
 		Manager.Stack.requestPaintHUD = true;

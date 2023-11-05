@@ -37,6 +37,7 @@ class Inputs {
 	 */
 	static initialize() {
 		this.initializeKeyboard();
+		this.initializeMouse();
 	}
 
 	/**

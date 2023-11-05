@@ -465,7 +465,7 @@ class MapObject {
 	/**
 	 *  Update the current state (graphics to display), also update the mesh.
 	 */
-	changeState() {
+	async changeState() {
 		let angle = this.mesh ? this.mesh.rotation.y : 0;
 
 		// Updating the current state
@@ -529,7 +529,7 @@ class MapObject {
 		if (this.currentStateInstance !== null) {
 			if (this.currentStateInstance.graphicKind === ElementMapKind.Object3D) {
 				objectDatas = Datas.SpecialElements.objects[this.currentStateInstance.graphicID];
-				material = Scene.Map.current.texturesObjects3D[objectDatas.id];
+				material = await Datas.SpecialElements.loadObject3DTexture(objectDatas.id);
 			} else {
 				material =
 					this.currentStateInstance.graphicID === 0

@@ -22,8 +22,8 @@ class BattleSystems {
 	private static elementsOrder: number[];
 	private static statistics: System.Statistic[];
 	public static statisticsOrder: number[];
-	public static statisticsElements: number[];
-	public static statisticsElementsPercent: number[];
+	private static statisticsElements: number[];
+	private static statisticsElementsPercent: number[];
 	public static maxStatisticID: number;
 	private static equipments: System.Translatable[];
 	public static equipmentsOrder: number[];
