@@ -337,60 +337,55 @@ class MapPortion {
 				pictureID = Datas.SpecialElements.getWall(sprite.id).pictureID;
 			}
 			// Constructing the geometry
-			let obj = hash[sprite.id];
-			// If ID exists in this tileset
-			if (obj !== undefined) {
-				let material: THREE.MeshPhongMaterial;
-				let geometry: CustomGeometry;
-				let count: number;
-				if (obj === null) {
-					material = await Datas.SpecialElements.loadWallTexture(sprite.id);
-					if (material) {
-						geometry = new CustomGeometry();
-						count = 0;
-						obj = {
-							geometry: geometry,
-							material: material,
-							c: count,
-						};
-						hash[sprite.id] = obj;
-					}
-				} else {
-					geometry = obj.geometry;
-					material = obj.material;
-					count = obj.c;
+			let obj = hash.get(sprite.id);
+			let material: THREE.MeshPhongMaterial;
+			let geometry: CustomGeometry;
+			let count: number;
+			if (obj) {
+				geometry = obj.geometry;
+				material = obj.material;
+				count = obj.c;
+			} else {
+				material = await Datas.SpecialElements.loadWallTexture(sprite.id);
+				if (material) {
+					geometry = new CustomGeometry();
+					count = 0;
+					obj = {
+						geometry: geometry,
+						material: material,
+						c: count,
+					};
+					hash.set(sprite.id, obj);
 				}
-				const texture = Manager.GL.getMaterialTexture(material);
-				if (texture) {
-					const result = sprite.updateGeometry(
-						geometry,
-						position,
-						texture.image.width,
-						texture.image.height,
-						pictureID,
-						count
-					);
-					obj.c = result[0];
-					this.updateCollisionSprite(result[1], position);
-				}
+			}
+			const texture = Manager.GL.getMaterialTexture(material);
+			if (texture) {
+				const result = sprite.updateGeometry(
+					geometry,
+					position,
+					texture.image.width,
+					texture.image.height,
+					pictureID,
+					count
+				);
+				obj.c = result[0];
+				this.updateCollisionSprite(result[1], position);
 			}
 		}
 		// Add to scene
 		for (const [, obj] of hash) {
-			if (obj !== null) {
-				const geometry = obj.geometry;
-				if (!geometry.isEmpty()) {
-					geometry.updateAttributes();
-					const mesh = new THREE.Mesh(geometry, obj.material);
-					if (Scene.Map.current.mapProperties.isSunLight) {
-						mesh.receiveShadow = true;
-						mesh.castShadow = true;
-						mesh.customDepthMaterial = obj.material.userData.customDepthMaterial;
-					}
-					mesh.layers.enable(1);
-					this.staticWallsList.push(mesh);
-					Scene.Map.current.scene.add(mesh);
+			const geometry = obj.geometry;
+			if (!geometry.isEmpty()) {
+				geometry.updateAttributes();
+				const mesh = new THREE.Mesh(geometry, obj.material);
+				if (Scene.Map.current.mapProperties.isSunLight) {
+					mesh.receiveShadow = true;
+					mesh.castShadow = true;
+					mesh.customDepthMaterial = obj.material.userData.customDepthMaterial;
 				}
+				mesh.layers.enable(1);
+				this.staticWallsList.push(mesh);
+				Scene.Map.current.scene.add(mesh);
 			}
 		}
 	}
