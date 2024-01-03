@@ -920,7 +920,7 @@ class MapObject {
 								this.currentAngle.z,
 							],
 							true,
-							this.boundingBoxSettings.b[i][1] / 2 / Datas.Systems.SQUARE_SIZE
+							[0, this.boundingBoxSettings.b[i][1] / 2 / Datas.Systems.SQUARE_SIZE, 0]
 						);
 					} else {
 						box = Manager.Collisions.createOrientedBox();
@@ -930,6 +930,10 @@ class MapObject {
 							position.z + this.currentScale.x * this.boundingBoxSettings.b[i][2],
 							this.currentScale.x * this.boundingBoxSettings.b[i][3],
 							this.currentScale.y * this.boundingBoxSettings.b[i][4],
+							1,
+							0,
+							0,
+							0,
 						]);
 					}
 					this.meshBoundingBox.push(box);
@@ -992,6 +996,10 @@ class MapObject {
 				position.z + this.currentScale.x * bbSettings[2],
 				this.currentScale.x * bbSettings[3],
 				this.currentScale.y * bbSettings[4],
+				1,
+				0,
+				0,
+				0,
 			]);
 		}
 	}
