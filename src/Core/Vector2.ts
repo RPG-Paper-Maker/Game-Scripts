@@ -9,29 +9,28 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { THREE } from "../Globals";
+import { THREE } from '../Globals';
 
 /**
  * The data class who hold 2D coordinates.
- * It's used as an API bridge between the user and Three.js 
+ * It's used as an API bridge between the user and Three.js
  * @author Nio Kasgami
  */
 export class Vector2 extends THREE.Vector2 {
+	public x: number;
+	public y: number;
 
-    public x: number;
-    public y: number;
+	/**
+	 * The data class who hold 2D coordinates.
+	 * @param x the - x axis
+	 * @param y the - y axis
+	 */
+	constructor(x = 0, y = 0) {
+		super(x, y);
+	}
 
-    /**
-     * The data class who hold 2D coordinates.
-     * @param x the - x axis
-     * @param y the - y axis
-     */
-    constructor(x = 0, y = 0) {
-        super(x, y);
-    }
-
-    reset() {
-        this.x = 0;
-        this.y = 0;
-    }
+	reset() {
+		this.x = 0;
+		this.y = 0;
+	}
 }
