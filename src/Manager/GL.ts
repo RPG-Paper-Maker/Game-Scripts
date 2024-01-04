@@ -132,7 +132,7 @@ class GL {
 		flipX?: boolean;
 		flipY?: boolean;
 		uniforms?: Record<string, any>;
-		side?: number;
+		side?: THREE.Side;
 		repeat?: number;
 		opacity?: number;
 		shadows?: boolean;

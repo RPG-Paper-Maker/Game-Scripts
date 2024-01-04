@@ -35,6 +35,7 @@ async function modifyImportsInFile(filePath) {
 	try {
 		const content = await fs.readFile(filePath, 'utf-8');
 		const modifiedContent = content
+			.replace(/import THREE from \'three\'/g, `import * as THREE from '../Libs/three'`)
 			.replace(/export \* from ['"](.+)['"]/g, 'export * from "$1.js"')
 			.replace(/export \* as (.+) from "(.+)"/g, 'export * as $1 from "./$1/index.js"')
 			.replace(/import ({ .+ }|\* as .+) from ['"](..?\/)(.+)['"]/g, `import $1 from '$2$3.js'`)

@@ -1,12 +1,14 @@
 /*
-  This file was created to fix the Three.JS typing errors since normal Module is incomplet and buggy. So we switched to 
-  Require. Although, it doesn't allow a proper typing. 
-  This file allows proper typing and is not shown into the JS render.
-  @author Nio Kasgami
- */
+    RPG Paper Maker Copyright (C) 2017-2023 Wano
 
-import * as three from "three";
-import * as howler from "howler";
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
 
-export const THREE_TYPE: typeof three;
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+import * as howler from 'howler';
+
 export const HOWLER_TYPE: typeof howler;

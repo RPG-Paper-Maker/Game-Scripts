@@ -9,92 +9,97 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { TextureBundle } from "./TextureBundle";
-import { THREE } from "../Globals";
-import { Autotile } from "./Autotile";
-import { Position } from "./Position";
-import { StructMapElementCollision } from "./MapElement";
-import { Manager } from "../index";
-import { CustomGeometry } from "./CustomGeometry";
+import { TextureBundle } from './TextureBundle';
+import { THREE } from '../Globals';
+import { Autotile } from './Autotile';
+import { Position } from './Position';
+import { StructMapElementCollision } from './MapElement';
+import { Manager } from '../index';
+import { CustomGeometry } from './CustomGeometry';
 
 /** @class
  *  Autotiles grouped with the same textures.
  *  @param {TextureBundle} texture
  */
 class Autotiles {
+	public static COUNT_LIST = 5;
+	public static LIST_A = ['A1', 'A2', 'A3', 'A4', 'A5'];
+	public static LIST_B = ['B1', 'B2', 'B3', 'B4', 'B5'];
+	public static LIST_C = ['C1', 'C2', 'C3', 'C4', 'C5'];
+	public static LIST_D = ['D1', 'D2', 'D3', 'D4', 'D5'];
+	public static AUTOTILE_BORDER = {
+		A1: 2,
+		B1: 3,
+		C1: 6,
+		D1: 7,
+		A2: 8,
+		B4: 9,
+		A4: 10,
+		B2: 11,
+		C5: 12,
+		D3: 13,
+		C3: 14,
+		D5: 15,
+		A5: 16,
+		B3: 17,
+		A3: 18,
+		B5: 19,
+		C2: 20,
+		D4: 21,
+		C4: 22,
+		D2: 23,
+	};
 
-    public static COUNT_LIST = 5;
-    public static LIST_A = ["A1", "A2", "A3", "A4", "A5"];
-    public static LIST_B = ["B1", "B2", "B3", "B4", "B5"];
-    public static LIST_C = ["C1", "C2", "C3", "C4", "C5"];
-    public static LIST_D = ["D1", "D2", "D3", "D4", "D5"];
-    public static AUTOTILE_BORDER = {
-        "A1": 2,
-        "B1": 3,
-        "C1": 6,
-        "D1": 7,
-        "A2": 8,
-        "B4": 9,
-        "A4": 10,
-        "B2": 11,
-        "C5": 12,
-        "D3": 13,
-        "C3": 14,
-        "D5": 15,
-        "A5": 16,
-        "B3": 17,
-        "A3": 18,
-        "B5": 19,
-        "C2": 20,
-        "D4": 21,
-        "C4": 22,
-        "D2": 23,
-    };
+	public bundle: TextureBundle;
+	public width: number;
+	public height: number;
+	public geometry: CustomGeometry;
+	public mesh: THREE.Mesh;
+	public index: number;
 
-    public bundle: TextureBundle;
-    public width: number;
-    public height: number;
-    public geometry: CustomGeometry;
-    public mesh: THREE.Mesh;
-    public index: number;
+	constructor(bundle: TextureBundle) {
+		this.bundle = bundle;
+		let texture = Manager.GL.getMaterialTexture(bundle.material);
+		this.width = texture ? texture.image.width : 0;
+		this.height = texture ? texture.image.height : 0;
+		this.geometry = new CustomGeometry();
+		this.mesh = null;
+		this.index = 0;
+	}
 
-    constructor(bundle: TextureBundle) {
-        this.bundle = bundle;
-        let texture = Manager.GL.getMaterialTexture(bundle.material);
-        this.width = texture ? texture.image.width : 0;
-        this.height = texture ? texture.image.height : 0;
-        this.geometry = new CustomGeometry();
-        this.mesh = null;
-        this.index = 0;
-    }
+	/**
+	 *  Update the geometry of the autotiles according to an autotile and its
+	 *  position.
+	 *  @param {Position} position - The position
+	 *  @param {Autotile} autotile - The autotile to add to geometry
+	 *  @returns {StructMapElementCollision}
+	 */
+	updateGeometry(position: Position, autotile: Autotile, pictureID: number): StructMapElementCollision {
+		return this.width === null || this.height === 0
+			? null
+			: autotile.updateGeometryAutotile(
+					this.geometry,
+					this.bundle,
+					position,
+					this.width,
+					this.height,
+					pictureID,
+					this.index++
+			  );
+	}
 
-    /** 
-     *  Update the geometry of the autotiles according to an autotile and its
-     *  position.
-     *  @param {Position} position - The position
-     *  @param {Autotile} autotile - The autotile to add to geometry
-     *  @returns {StructMapElementCollision}
-     */
-    updateGeometry(position: Position, autotile: Autotile, pictureID: number): 
-        StructMapElementCollision
-    {
-        return this.width === null || this.height === 0 ? null : autotile
-            .updateGeometryAutotile(this.geometry, this.bundle, position, this
-            .width, this.height, pictureID, this.index++);
-    }
-
-    /** 
-     *  Create a mesh with material and geometry.
-     *  @returns {boolean}
-     */
-    createMesh(): boolean {
-        if (this.geometry.isEmpty()) {
-            return false;
-        }
-        this.geometry.updateAttributes();
-        this.mesh = new THREE.Mesh(this.geometry, this.bundle.material);
-        return true;
-    }
+	/**
+	 *  Create a mesh with material and geometry.
+	 *  @returns {boolean}
+	 */
+	createMesh(): boolean {
+		if (this.geometry.isEmpty()) {
+			return false;
+		}
+		this.geometry.updateAttributes();
+		this.mesh = new THREE.Mesh(this.geometry, this.bundle.material);
+		return true;
+	}
 }
 
-export { Autotiles }
+export { Autotiles };

@@ -1,19 +1,17 @@
 /*
-  The module who hold libraries who can't be loaded normally using the ES6 module fashion.
-  Such as Three.js
-  It allow to use an ES6 module approach without comprimising it's typing and the require file.
-  @author nio kasgami
- */
+    RPG Paper Maker Copyright (C) 2017-2023 Wano
 
-import { HOWLER_TYPE, THREE_TYPE } from './Definitions';
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
 
-/**
- * @module Three.js
- */
-export const THREE: typeof THREE_TYPE = require('./Content/Scripts/Libs/three.js');
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
 
-/**
- * @module Howler.js
- */
+import { HOWLER_TYPE } from './Definitions';
+
+import THREE from 'three';
+export { THREE };
 const { Howl } = require('./Content/Scripts/Libs/howler.js');
 export { Howl };
