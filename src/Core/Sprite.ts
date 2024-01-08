@@ -152,6 +152,34 @@ class Sprite extends MapElement {
 		return count + 4;
 	}
 
+	getVectors(
+		vecA: THREE.Vector3,
+		vecB: THREE.Vector3,
+		vecC: THREE.Vector3,
+		vecD: THREE.Vector3,
+		pos: THREE.Vector3,
+		position: Position,
+		size: THREE.Vector3
+	) {
+		let zPlus = position.layer * 0.05;
+
+		// Apply an offset according to layer position
+		if (this.kind !== Enum.ElementMapKind.SpritesFace && !this.front) {
+			zPlus *= -1;
+		}
+		pos.setX(this.xOffset * Datas.Systems.SQUARE_SIZE);
+		pos.setY(this.yOffset * Datas.Systems.SQUARE_SIZE);
+		pos.setZ(this.zOffset * Datas.Systems.SQUARE_SIZE + zPlus);
+		vecA.multiply(size);
+		vecB.multiply(size);
+		vecC.multiply(size);
+		vecD.multiply(size);
+		vecA.add(pos);
+		vecB.add(pos);
+		vecC.add(pos);
+		vecD.add(pos);
+	}
+
 	/**
 	 *  Update the geometry associated to this.
 	 *  @param {Core.CustomGeometry} geometry - The geometry
@@ -176,7 +204,8 @@ class Sprite extends MapElement {
 		let vecB = Sprite.MODEL[1].clone();
 		let vecC = Sprite.MODEL[2].clone();
 		let vecD = Sprite.MODEL[3].clone();
-		let center = new Vector3(0, 0, 0);
+		let center = new Vector3();
+		let pos = new Vector3();
 		let size = new Vector3(
 			this.textureRect[2] * Datas.Systems.SQUARE_SIZE * position.scaleX,
 			this.textureRect[3] * Datas.Systems.SQUARE_SIZE * position.scaleY,
@@ -184,13 +213,14 @@ class Sprite extends MapElement {
 		);
 
 		// For static sprites
-		super.scale(vecA, vecB, vecC, vecD, center, position, size, this.kind);
+		this.getVectors(vecA, vecB, vecC, vecD, pos, position, size);
 		if (localPosition !== null) {
 			vecA.add(localPosition);
 			vecB.add(localPosition);
 			vecC.add(localPosition);
 			vecD.add(localPosition);
 			center.add(localPosition);
+			pos.add(localPosition);
 		} else {
 			localPosition = tileset ? position.toVector3() : new Vector3();
 		}
@@ -289,12 +319,13 @@ class Sprite extends MapElement {
 
 		if (geometry instanceof CustomGeometryFace) {
 			// Face sprite
-			const c = new THREE.Vector3(center.x, localPosition.y, center.z);
+			const p = new THREE.Vector3(pos.x, localPosition.y + this.yOffset * Datas.Systems.SQUARE_SIZE, pos.z);
+			const c = new THREE.Vector3(center.x, localPosition.y + this.yOffset * Datas.Systems.SQUARE_SIZE, center.z);
 			geometry.pushQuadVerticesFace(
-				Sprite.MODEL[0].clone().multiply(size).add(c),
-				Sprite.MODEL[1].clone().multiply(size).add(c),
-				Sprite.MODEL[2].clone().multiply(size).add(c),
-				Sprite.MODEL[3].clone().multiply(size).add(c),
+				Sprite.MODEL[0].clone().multiply(size).add(p),
+				Sprite.MODEL[1].clone().multiply(size).add(p),
+				Sprite.MODEL[2].clone().multiply(size).add(p),
+				Sprite.MODEL[3].clone().multiply(size).add(p),
 				c
 			);
 			geometry.pushQuadIndices(count);
