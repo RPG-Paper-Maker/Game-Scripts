@@ -544,7 +544,7 @@ class Map extends Base {
 			if (json.hasOwnProperty('lands')) {
 				const mapPortion = new MapPortion(portion);
 				this.setMapPortion(x, y, z, mapPortion, move);
-				await mapPortion.read(json, this.id === Datas.Systems.ID_MAP_START_HERO);
+				await mapPortion.read(json);
 			} else {
 				this.setMapPortion(x, y, z, null, move);
 			}

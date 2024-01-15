@@ -78,7 +78,7 @@ export class Main {
 		await Datas.Keyboards.read();
 		await Datas.Animations.read();
 		await Datas.CommonEvents.read();
-		await Datas.Systems.getModelHero();
+		Datas.Systems.getModelHero();
 		await Datas.Systems.loadWindowSkins();
 		await Main.onEndLoading();
 	}

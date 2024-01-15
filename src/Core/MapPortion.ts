@@ -54,7 +54,6 @@ class MapPortion {
 	public staticWallsList: THREE.Mesh[];
 	public staticObjects3DList: THREE.Mesh[];
 	public overflowMountains: Position[];
-	public heroID: number;
 
 	constructor(portion: Portion) {
 		this.portion = portion;
@@ -86,18 +85,15 @@ class MapPortion {
 		this.staticWallsList = new Array();
 		this.staticObjects3DList = new Array();
 		this.overflowMountains = new Array();
-		this.heroID = -1;
 	}
 
 	/**
 	 *  Read the JSON associated to the map portion.
 	 *  @param {Record<string, any>} json - object describing the map portion
-	 *  @param {boolean} isMapHero - Indicates if this map is where the hero is
-	 *  at the beginning of the game.
 	 */
-	async read(json: Record<string, any>, isMapHero: boolean) {
+	async read(json: Record<string, any>) {
 		await this.readStatic(json);
-		await this.readObjects(json.objs, isMapHero);
+		await this.readObjects(json.objs);
 	}
 
 	/**
@@ -528,10 +524,8 @@ class MapPortion {
 	/**
 	 *  Read the JSON associated to the objects in the portion.
 	 *  @param {Record<string, any>} json - Json object describing the objects
-	 *  @param {boolean} isMapHero - Indicates if this map is where the hero is
-	 *  at the beginning of the game
 	 */
-	async readObjects(json: Record<string, any>, isMapHero: boolean) {
+	async readObjects(json: Record<string, any>) {
 		let datas = Scene.Map.current.getObjectsAtPortion(this.portion);
 		let objectsM = datas.m;
 		let objectsR = datas.r;
@@ -570,15 +564,11 @@ class MapPortion {
 				}
 			}
 
-			/* If it is the hero, you should not add it to the list of
-            objects to display */
-			if ((!isMapHero || Datas.Systems.ID_OBJECT_START_HERO !== object.id) && index === -1) {
+			if (index === -1) {
 				localPosition = position.toVector3();
 				mapObject = new MapObject(object, localPosition);
 				await mapObject.changeState();
 				this.objectsList.push(mapObject);
-			} else {
-				this.heroID = object.id;
 			}
 		}
 
@@ -691,34 +681,6 @@ class MapPortion {
 			}
 		}
 		return null;
-	}
-
-	/**
-	 *  Get hero model.
-	 *  @param {Record<string, any>} json - Json object describing the objects
-	 *  @returns {MapObject}
-	 */
-	getHeroModel(json: Record<string, any>): MapObject {
-		json = json.objs;
-		if (!json) {
-			Platform.showErrorMessage(
-				'Your hero object seems to be in a non existing map. Please use define as hero in a map to correct it.'
-			);
-		}
-		let jsonObject: Record<string, any>,
-			position: Position,
-			jsonObjectValue: Record<string, any>,
-			object: System.MapObject;
-		for (let i = 0, l = json.length; i < l; i++) {
-			jsonObject = json[i];
-			position = Position.createFromArray(jsonObject.k);
-			jsonObjectValue = jsonObject.v;
-			if (Datas.Systems.ID_OBJECT_START_HERO === jsonObjectValue.id) {
-				object = new System.MapObject(jsonObjectValue);
-				return new MapObject(object, position.toVector3(), true);
-			}
-		}
-		throw 'Impossible to get the hero. Please delete your hero from the map and define it again.';
 	}
 
 	/**
