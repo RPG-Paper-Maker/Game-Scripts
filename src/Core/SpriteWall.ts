@@ -42,7 +42,6 @@ class SpriteWall extends MapElement {
 	 *  @param {Record<string, any>} - json Json object describing the wall
 	 */
 	read(json: Record<string, any>) {
-		console.log(json);
 		super.read(json);
 
 		this.id = json.w;
