@@ -225,15 +225,15 @@ namespace Enum {
 		None,
 		Floors,
 		Autotiles,
-		Water,
 		SpritesFace,
 		SpritesFix,
 		SpritesDouble,
 		SpritesQuadra,
 		SpritesWall,
-		Object,
-		Object3D,
 		Mountains,
+		Object3D,
+		Object,
+		StartPosition,
 	}
 
 	/**
