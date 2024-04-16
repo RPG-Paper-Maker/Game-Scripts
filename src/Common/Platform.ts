@@ -25,6 +25,7 @@ let firstError = true;
  */
 class Platform {
 	public static readonly ROOT_DIRECTORY: any = `${app.getAppPath()}/Content/`;
+	public static readonly IS_DESKTOP = false;
 	public static readonly screen: any = ElectronScreen.getPrimaryDisplay();
 	public static readonly screenWidth: number = Platform.screen.bounds.width;
 	public static readonly screenHeight: number = Platform.screen.bounds.height;
