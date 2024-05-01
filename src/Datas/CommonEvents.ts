@@ -22,6 +22,7 @@ class CommonEvents {
 	private static eventsUser: System.Event[];
 	private static commonReactions: System.CommonReaction[];
 	private static commonObjects: System.MapObject[];
+	public static heroObject: System.MapObject;
 
 	constructor() {
 		throw new Error('This is a static class!');
@@ -61,6 +62,10 @@ class CommonEvents {
 
 		// Now, we can create all the models without problem
 		Utils.readJSONSystemList({ list: reorderedList, listIDs: this.commonObjects, cons: System.MapObject });
+
+		// Hero object
+		this.heroObject = new System.MapObject();
+		this.heroObject.read(json.ho);
 	}
 
 	/**
