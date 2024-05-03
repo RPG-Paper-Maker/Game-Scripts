@@ -20,7 +20,7 @@ import SongKind = Enum.SongKind;
 import PictureKind = Enum.PictureKind;
 import { CameraProperties } from './CameraProperties';
 import { Color } from './Color';
-import { Game } from '../Core';
+import { Game, Position } from '../Core';
 
 /** @class
  *  The properties of a map.
@@ -52,6 +52,8 @@ class MapProperties extends Base {
 	public skyboxMesh: THREE.Mesh;
 	public maxNumberSteps: number;
 	public isSunLight: boolean;
+	public allObjects: Position[];
+	public maxObjectsID: number;
 
 	constructor() {
 		super();
@@ -125,6 +127,26 @@ class MapProperties extends Base {
 		this.updateMaxNumberSteps();
 
 		this.isSunLight = Utils.defaultValue(json.isl, true);
+
+		this.readObjects(json);
+	}
+
+	/**
+	 *  Initialize the map objects.
+	 */
+	readObjects(json: Record<string, any>) {
+		const { objs } = json;
+		let l = objs.length;
+		this.allObjects = new Array(l + 1);
+		let jsonObject: Record<string, any>;
+		this.maxObjectsID = 1;
+		for (let i = 0; i < l; i++) {
+			jsonObject = objs[i];
+			this.allObjects[jsonObject.id] = Position.createFromArray(jsonObject.p);
+			if (jsonObject.id > this.maxObjectsID) {
+				this.maxObjectsID = jsonObject.id;
+			}
+		}
 	}
 
 	/**

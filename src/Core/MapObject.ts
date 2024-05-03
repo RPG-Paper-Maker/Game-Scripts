@@ -184,7 +184,7 @@ class MapObject {
 		}
 
 		// Check if direct
-		let position = Scene.Map.current.allObjects[objectID];
+		let position = Scene.Map.current.mapProperties.allObjects[objectID];
 		if (!position && Scene.Map.current.isBattleMap && Scene.Map.current.id === Game.current.currentMapID) {
 			// Ignore if is in battle and same map
 			return null;
@@ -281,7 +281,7 @@ class MapObject {
 	 *  @returns {Promise<StructSearchResult>}
 	 */
 	static async searchOutMap(objectID: number): Promise<StructSearchResult> {
-		let position = Scene.Map.current.allObjects[objectID];
+		let position = Scene.Map.current.mapProperties.allObjects[objectID];
 		if (!position && Scene.Map.current.isBattleMap && Scene.Map.current.id === Game.current.currentMapID) {
 			// Ignore if is in battle and same map
 			return null;
@@ -347,7 +347,7 @@ class MapObject {
 				mapProp = [];
 			}
 		} else {
-			let obj = Scene.Map.current.allObjects[this.system.id];
+			let obj = Scene.Map.current.mapProperties.allObjects[this.system.id];
 			if (Utils.isUndefined(obj)) {
 				Platform.showErrorMessage(
 					'Object linking issue. Please go to map ' +
@@ -477,7 +477,7 @@ class MapObject {
 			}
 			this.states = Game.current.startupStates[Scene.Map.current.id];
 		} else {
-			let pos = Scene.Map.current.allObjects[this.system.id];
+			let pos = Scene.Map.current.mapProperties.allObjects[this.system.id];
 			if (Utils.isUndefined(pos)) {
 				Platform.showErrorMessage(
 					'Object linking issue. Please go to map ' +
@@ -1217,7 +1217,7 @@ class MapObject {
 				}
 			}
 			// Add to moved objects of the original portion if not done yet
-			let originalPortion = Scene.Map.current.allObjects[this.system.id].getGlobalPortion();
+			let originalPortion = Scene.Map.current.mapProperties.allObjects[this.system.id].getGlobalPortion();
 			objects = Game.current.getPortionDatas(Scene.Map.current.id, originalPortion);
 			movedObjects = objects.m;
 			if (movedObjects && movedObjects.indexOf(this) === -1) {
@@ -1240,7 +1240,7 @@ class MapObject {
 		if (!this.isHero) {
 			let afterPortion = Position.createFromVector3(this.position).getGlobalPortion();
 			let objects = Game.current.getPortionDatas(Scene.Map.current.id, afterPortion);
-			let originalPortion = Scene.Map.current.allObjects[this.system.id].getGlobalPortion();
+			let originalPortion = Scene.Map.current.mapProperties.allObjects[this.system.id].getGlobalPortion();
 			if (!originalPortion.equals(afterPortion)) {
 				objects.mout.push(this);
 			} else {

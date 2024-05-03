@@ -9,10 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from "./Base";
-import { System, Manager, Scene } from "../index";
-import { MapObject, Game } from "../Core";
-import { Mathf, Utils } from "../Common";
+import { Base } from './Base';
+import { System, Manager, Scene } from '../index';
+import { MapObject, Game } from '../Core';
+import { Mathf, Utils } from '../Common';
 
 /** @class
  *  An event command for changing a property value.
@@ -20,64 +20,59 @@ import { Mathf, Utils } from "../Common";
  *  @param {any[]} command - Direct JSON command to parse
  */
 class ChangeProperty extends Base {
+	public propertyID: System.DynamicValue;
+	public operationKind: number;
+	public newValue: System.DynamicValue;
 
-    public propertyID: System.DynamicValue;
-    public operationKind: number;
-    public newValue: System.DynamicValue;
+	constructor(command: any[]) {
+		super();
 
-    constructor(command: any[]) {
-        super();
+		let iterator = {
+			i: 0,
+		};
+		this.propertyID = System.DynamicValue.createValueCommand(command, iterator);
+		this.operationKind = command[iterator.i++];
+		this.newValue = System.DynamicValue.createValueCommand(command, iterator);
+	}
 
-        let iterator = {
-            i: 0
-        }
-        this.propertyID = System.DynamicValue.createValueCommand(command, 
-            iterator);
-        this.operationKind = command[iterator.i++];
-        this.newValue = System.DynamicValue.createValueCommand(command, iterator);
-    }
-
-    /** 
-     *  Update and check if the event is finished.
-     *  @param {Record<string, any>} - currentState The current state of the event
-     *  @param {MapObject} object - The current object reacting
-     *  @param {number} state - The state ID
-     *  @returns {number} The number of node to pass
-    */
-    update(currentState: Record<string, any>, object: MapObject, state: number): 
-        number
-    {
-        let propertyID = this.propertyID.getValue();
-        let newValue = Mathf.OPERATORS_NUMBERS[this.operationKind](object
-            .properties[propertyID], this.newValue.getValue());
-        object.properties[propertyID] = newValue;
-        let props: number[];
-        if (object.isHero) {
-            props = Game.current.heroProperties;
-        } else if (object.isStartup) {
-            props = Game.current.startupProperties[Scene.Map.current.id];
-            if (Utils.isUndefined(props)) {
-                props = [];
-                Game.current.startupProperties[Scene.Map.current.id
-                    ] = props;
-            }
-        } else {
-            let portion = Scene.Map.current.allObjects[object.system.id]
-                .getGlobalPortion();
-            let portionDatas = Game.current.getPortionDatas(Scene.Map.current.id, 
-                portion);
-            let indexProp = portionDatas.pi.indexOf(object.system.id);
-            if (indexProp === -1) {
-                props = [];
-                portionDatas.pi.push(object.system.id);
-                portionDatas.p.push(props);
-            } else {
-                props = portionDatas.p[indexProp];
-            }
-        }
-        props[propertyID - 1] = newValue;
-        return 1;
-    }
+	/**
+	 *  Update and check if the event is finished.
+	 *  @param {Record<string, any>} - currentState The current state of the event
+	 *  @param {MapObject} object - The current object reacting
+	 *  @param {number} state - The state ID
+	 *  @returns {number} The number of node to pass
+	 */
+	update(currentState: Record<string, any>, object: MapObject, state: number): number {
+		let propertyID = this.propertyID.getValue();
+		let newValue = Mathf.OPERATORS_NUMBERS[this.operationKind](
+			object.properties[propertyID],
+			this.newValue.getValue()
+		);
+		object.properties[propertyID] = newValue;
+		let props: number[];
+		if (object.isHero) {
+			props = Game.current.heroProperties;
+		} else if (object.isStartup) {
+			props = Game.current.startupProperties[Scene.Map.current.id];
+			if (Utils.isUndefined(props)) {
+				props = [];
+				Game.current.startupProperties[Scene.Map.current.id] = props;
+			}
+		} else {
+			let portion = Scene.Map.current.mapProperties.allObjects[object.system.id].getGlobalPortion();
+			let portionDatas = Game.current.getPortionDatas(Scene.Map.current.id, portion);
+			let indexProp = portionDatas.pi.indexOf(object.system.id);
+			if (indexProp === -1) {
+				props = [];
+				portionDatas.pi.push(object.system.id);
+				portionDatas.p.push(props);
+			} else {
+				props = portionDatas.p[indexProp];
+			}
+		}
+		props[propertyID - 1] = newValue;
+		return 1;
+	}
 }
 
-export { ChangeProperty }
+export { ChangeProperty };

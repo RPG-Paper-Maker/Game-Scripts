@@ -22,7 +22,6 @@ class Paths {
 	public static readonly TEST = Platform.ROOT_DIRECTORY + '/Test/';
 	public static readonly FILE_MAPS = Platform.ROOT_DIRECTORY + 'Maps/';
 	public static readonly FILE_MAP_INFOS = '/infos.json';
-	public static readonly FILE_MAP_OBJECTS = '/objects.json';
 	public static readonly FILE_PICTURES = Platform.ROOT_DIRECTORY + 'pictures.json';
 	public static readonly FILE_VIDEOS = Platform.ROOT_DIRECTORY + 'videos.json';
 	public static readonly FILE_FONTS = Platform.ROOT_DIRECTORY + 'fonts.json';

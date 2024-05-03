@@ -56,7 +56,6 @@ class Map extends Base {
 	public battleCommandKind: EffectSpecialActionKind;
 	public mapProperties: System.MapProperties;
 	public scene: THREE.Scene;
-	public allObjects: Position[];
 	public currentPortion: Portion;
 	public previousPortion: Portion;
 	public mapPortions: MapPortion[];
@@ -65,7 +64,6 @@ class Map extends Base {
 	public collisions: number[][][][];
 	public previousCameraPosition: Vector3;
 	public portionsObjectsUpdated: boolean;
-	public maxObjectsID: number;
 	public heroOrientation: Enum.Orientation;
 	public previousWeatherPoints: THREE.Points = null;
 	public previousWeatherVelocities: number[];
@@ -118,7 +116,6 @@ class Map extends Base {
 		this.initializeSunLight();
 		this.initializeCamera();
 		this.orientation = this.camera.getMapOrientation();
-		await this.initializeObjects();
 		this.initializePortionsObjects();
 		await this.loadTextures();
 		this.loadCollisions();
@@ -254,24 +251,6 @@ class Map extends Base {
 				this.camera.getThreeCamera().position.y,
 				this.camera.getThreeCamera().position.z
 			);
-		}
-	}
-
-	/**
-	 *  Initialize the map objects.
-	 */
-	async initializeObjects() {
-		let json = (await Platform.parseFileJSON(Paths.FILE_MAPS + this.mapFilename + Paths.FILE_MAP_OBJECTS)).objs;
-		let l = json.length;
-		this.allObjects = new Array(l + 1);
-		let jsonObject: Record<string, any>;
-		this.maxObjectsID = 1;
-		for (let i = 0; i < l; i++) {
-			jsonObject = json[i];
-			this.allObjects[jsonObject.id] = Position.createFromArray(jsonObject.p);
-			if (jsonObject.id > this.maxObjectsID) {
-				this.maxObjectsID = jsonObject.id;
-			}
 		}
 	}
 

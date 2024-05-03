@@ -298,7 +298,7 @@ class Game {
 									if (!map) {
 										map = new Scene.Map(parseInt(id), false, true);
 										Scene.Map.current = map;
-										await map.initializeObjects();
+										await map.readMapProperties();
 									}
 									datas.m = await Promise.all(datas.m.map(objectMap));
 									movedObjects = movedObjects.concat(datas.m);
