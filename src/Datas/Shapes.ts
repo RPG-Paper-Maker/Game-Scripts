@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Platform, Paths, Enum } from '../Common';
-import { System, Datas } from '../index';
+import { Constants, Enum, Paths, Platform } from '../Common';
+import { Datas, System } from '../index';
 import CustomShapeKind = Enum.CustomShapeKind;
 
 /** @class
@@ -64,6 +64,14 @@ class Shapes {
 				if (jsonShape) {
 					id = jsonShape.id;
 					shape = new System.Shape(jsonShape, k);
+					if (Platform.WEB_DEV && !shape.isBR) {
+						shape.base64 = await Platform.loadFile(
+							Platform.ROOT_DIRECTORY.slice(0, -1) +
+								System.Shape.getLocalFolder(shape.kind) +
+								Constants.STRING_SLASH +
+								shape.name
+						);
+					}
 					if (k === CustomShapeKind.OBJ || k === CustomShapeKind.Collisions) {
 						await shape.load();
 					}

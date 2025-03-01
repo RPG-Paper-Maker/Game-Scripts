@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Platform, Paths, Utils } from '../Common';
-import { System, Datas } from '../index';
+import { Constants, Paths, Platform, Utils } from '../Common';
+import { Datas, System } from '../index';
 
 /** @class
  *  All the videos datas.
@@ -30,6 +30,18 @@ class Videos {
 		let json = (await Platform.parseFileJSON(Paths.FILE_VIDEOS)).list;
 		this.list = [];
 		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System.Video });
+		if (Platform.WEB_DEV) {
+			for (const video of this.list) {
+				if (video) {
+					video.base64 = await Platform.loadFile(
+						Platform.ROOT_DIRECTORY.slice(0, -1) +
+							System.Video.getLocalFolder() +
+							Constants.STRING_SLASH +
+							video.name
+					);
+				}
+			}
+		}
 	}
 
 	/**

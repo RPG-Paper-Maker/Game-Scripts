@@ -9,12 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Constants, Paths, Utils, Platform } from '../Common';
-import CustomShapeKind = Enum.CustomShapeKind;
-import { Base } from './Base';
-import { Datas, Manager } from '../index';
+import { Constants, Enum, Paths, Platform, Utils } from '../Common';
+import { CustomGeometry, Vector2, Vector3 } from '../Core';
 import { THREE } from '../Globals';
-import { Vector3, Vector2, CustomGeometry } from '../Core';
+import { Datas, Manager } from '../index';
+import { Base } from './Base';
+import CustomShapeKind = Enum.CustomShapeKind;
 
 /** @class
  *  A shape of the game.
@@ -221,7 +221,8 @@ class Shape extends Base {
 	async load() {
 		if (this.id !== -1 && !this.geometry) {
 			if (this.base64) {
-				this.geometry = Shape.parse(atob(this.base64));
+				const base64Data = this.base64.split(',')[1];
+				this.geometry = Shape.parse(atob(base64Data));
 				this.base64 = '';
 			} else {
 				let url = this.getPath();

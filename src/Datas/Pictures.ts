@@ -9,10 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { System, Datas } from '../index';
-import { Paths, Platform, Enum } from '../Common';
-import PictureKind = Enum.PictureKind;
+import { Constants, Enum, Paths, Platform } from '../Common';
 import { Picture2D } from '../Core';
+import { Datas, System } from '../index';
+import PictureKind = Enum.PictureKind;
 
 /** @class
  *   All the pictures datas.
@@ -66,6 +66,14 @@ class Pictures {
 				if (jsonPicture) {
 					id = jsonPicture.id;
 					picture = new System.Picture(jsonPicture, k);
+					if (Platform.WEB_DEV && !picture.isBR) {
+						picture.base64 = await Platform.loadFile(
+							Platform.ROOT_DIRECTORY.slice(0, -1) +
+								System.Picture.getLocalFolder(picture.kind) +
+								Constants.STRING_SLASH +
+								picture.name
+						);
+					}
 					if (
 						k === PictureKind.Icons ||
 						k === PictureKind.Pictures ||
