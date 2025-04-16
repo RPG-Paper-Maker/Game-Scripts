@@ -195,7 +195,7 @@ class MapObject {
 				"Can't find object with ID" +
 					objectID +
 					' in map ' +
-					Scene.Map.current.mapProperties.name +
+					Scene.Map.current.mapProperties.names.name() +
 					'. Please check where ' +
 					'this ID is used and remove it.'
 			);
@@ -351,7 +351,7 @@ class MapObject {
 			if (Utils.isUndefined(obj)) {
 				Platform.showErrorMessage(
 					'Object linking issue. Please go to map ' +
-						Scene.Map.current.mapProperties.name +
+						Scene.Map.current.mapProperties.names.name() +
 						' and use Options > Debug Options in map > Synchronize map objects. Please report it to dev.'
 				);
 			}
@@ -481,7 +481,7 @@ class MapObject {
 			if (Utils.isUndefined(pos)) {
 				Platform.showErrorMessage(
 					'Object linking issue. Please go to map ' +
-						Scene.Map.current.mapProperties.name +
+						Scene.Map.current.mapProperties.names.name() +
 						' and use Options > Debug Options in map > Synchronize map objects. Please report it to dev.'
 				);
 			}

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, Enum, Inputs, Interpreter, IO, Paths, Platform, ScreenResolution, Utils } from '../Common';
+import { Constants, Enum, Inputs, Interpreter, Paths, Platform, ScreenResolution, Utils } from '../Common';
 import {
 	Autotiles,
 	Battler,

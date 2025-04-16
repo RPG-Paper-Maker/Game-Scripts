@@ -9,18 +9,18 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from './Base';
-import { THREE } from '../Globals';
-import { Datas, System, Manager, Scene } from '../index';
-import { PlaySong } from './PlaySong';
-import { DynamicValue } from './DynamicValue';
+import { Constants, Enum, Mathf, Utils } from '../Common';
+import { Game, Position } from '../Core';
 import { MapObject } from '../Core/MapObject';
-import { Enum, Constants, Utils, Mathf } from '../Common';
-import SongKind = Enum.SongKind;
-import PictureKind = Enum.PictureKind;
+import { THREE } from '../Globals';
+import { Datas, Manager, Scene, System } from '../index';
+import { Base } from './Base';
 import { CameraProperties } from './CameraProperties';
 import { Color } from './Color';
-import { Game, Position } from '../Core';
+import { DynamicValue } from './DynamicValue';
+import { PlaySong } from './PlaySong';
+import SongKind = Enum.SongKind;
+import PictureKind = Enum.PictureKind;
 
 /** @class
  *  The properties of a map.
@@ -28,7 +28,7 @@ import { Game, Position } from '../Core';
  */
 class MapProperties extends Base {
 	public id: number;
-	public name: string;
+	public names: System.Translatable;
 	public length: number;
 	public width: number;
 	public height: number;
@@ -71,7 +71,7 @@ class MapProperties extends Base {
 		this.skyboxGeometry = null;
 		this.skyboxMesh = null;
 		this.id = json.id;
-		this.name = json.name;
+		this.names = new System.Translatable(json);
 		this.length = json.l;
 		this.width = json.w;
 		this.height = json.h;

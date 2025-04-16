@@ -169,33 +169,4 @@ class Platform {
 	}
 }
 
-// Display error to main process
-window.onerror = function (msg, url, line, column, err) {
-	if (firstError) {
-		firstError = false;
-		let str = url ? url + Constants.STRING_COLON + ' ' + line + Constants.STRING_NEW_LINE : '';
-		if (err.stack != null) {
-			str += err.stack;
-		} else if (err.message != null) {
-			str += err.message;
-		}
-		const fs = require('fs');
-		fs.writeFile(
-			'log.txt',
-			'ERROR LOG' + Constants.STRING_COLON + Constants.STRING_NEW_LINE + Constants.STRING_NEW_LINE + str,
-			(e: Error) => {
-				if (e) {
-					Platform.showError(e);
-				}
-			}
-		);
-
-		// Send it to main process to open a dialog box
-		ipc.send('window-error', str);
-		throw err;
-	} else {
-		console.error(err);
-	}
-};
-
 export { Platform };

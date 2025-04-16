@@ -9,11 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Paths, Platform, ScreenResolution, Utils } from '../Common';
+import { Camera, Vector2, Vector3 } from '../Core';
 import { THREE } from '../Globals';
-import { Datas, Scene, System } from '../index';
-import { ScreenResolution, Platform, Utils, IO, Paths } from '../Common';
+import { Datas, System } from '../index';
 import { Stack } from './Stack';
-import { Camera, Vector3, Vector2 } from '../Core';
 
 /** @class
  *  The GL class handling some 3D stuff.
@@ -100,7 +100,7 @@ class GL {
 					if (Datas.Systems.ignoreAssetsLoadingErrors) {
 						let t = new THREE.Texture();
 						t.image = new Image();
-						console.log(error);
+						console.warn(error);
 						resolve(t);
 					} else {
 						Platform.showErrorMessage(error);

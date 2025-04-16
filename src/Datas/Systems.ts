@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Paths, Platform, ScreenResolution, Utils, Constants, Enum } from '../Common';
-import { Manager, Datas, Scene, EventCommand, System } from '../index';
-import { Position, MapPortion, MapObject } from '../Core';
+import { Enum, Paths, Platform, ScreenResolution, Utils } from '../Common';
+import { MapObject, Position } from '../Core';
+import { Datas, EventCommand, Manager, Scene, System } from '../index';
 
 /** @class
  *   All the System datas.
@@ -144,7 +144,7 @@ class Systems {
 		Manager.Collisions.BB_MATERIAL.visible = this.showBB;
 		Manager.Collisions.BB_MATERIAL_DETECTION.visible = this.showBB;
 		this.showFPS = Utils.defaultValue(json.fps, false);
-		this.ignoreAssetsLoadingErrors = false; //TODO
+		this.ignoreAssetsLoadingErrors = true; //TODO
 
 		// Lists
 		this.itemsTypes = [];
