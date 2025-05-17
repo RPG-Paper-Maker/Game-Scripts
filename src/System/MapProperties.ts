@@ -166,6 +166,7 @@ class MapProperties extends Base {
         this.skyboxGeometry = new THREE.BoxGeometry(size, size, size);
         this.skyboxMesh = new THREE.Mesh(this.skyboxGeometry, Datas.Systems
             .getSkybox(this.backgroundSkyboxID.getValue()).createTextures());
+		this.skyboxMesh.renderOrder = -1;
         Scene.Map.current.scene.add(this.skyboxMesh);
     }
 
