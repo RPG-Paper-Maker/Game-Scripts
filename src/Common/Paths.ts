@@ -19,7 +19,7 @@ import { Platform } from './Platform';
 class Paths {
 	public static readonly ROOT_DIRECTORY_LOCAL = '.';
 	public static readonly FILES = 'file:///';
-	public static readonly TEST = Platform.ROOT_DIRECTORY + '/Test/';
+	public static readonly TEST = Platform.ROOT_DIRECTORY + 'Test/';
 	public static readonly FILE_MAPS = Platform.ROOT_DIRECTORY + 'Maps/';
 	public static readonly FILE_MAP_INFOS = '/infos.json';
 	public static readonly FILE_PICTURES = Platform.ROOT_DIRECTORY + 'pictures.json';
