@@ -9,18 +9,18 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from ".";
-import { Datas, Graphic, Manager, Scene } from "..";
-import { Game, Player } from "../Core";
-import { Enum, Inputs } from "../Common";
+import { Base } from '.';
+import { Datas, Graphic, Scene } from '..';
+import { Enum, Inputs } from '../Common';
+import { Game, Player } from '../Core';
 import Align = Enum.Align;
 
 /**
  * The menu commands structure
  */
 interface MenuCommands {
-    command: { name: string, align: Align };
-    action: Function;
+	command: { name: string; align: Align };
+	action: Function;
 }
 
 /**
@@ -31,166 +31,158 @@ interface MenuCommands {
  * @extends {Base}
  */
 abstract class MenuBase extends Base {
+	/**
+	 * the slots to display in a menu.
+	 *
+	 * @static
+	 * @type {number}
+	 * @memberof MenuBase
+	 */
+	public static SLOTS_TO_DISPLAY: number = 12;
 
+	/**
+	 * The active hero id
+	 *
+	 * @protected
+	 * @type {number}
+	 * @memberof MenuBase
+	 */
+	protected _activeHero: number;
 
-    /**
-     * the slots to display in a menu.
-     *
-     * @static
-     * @type {number}
-     * @memberof MenuBase
-     */
-    public static SLOTS_TO_DISPLAY: number = 12;
+	constructor(...args: any[]) {
+		super(false, ...args);
+	}
 
-    /**
-     * The active hero id
-     *
-     * @protected
-     * @type {number}
-     * @memberof MenuBase
-     */
-    protected _activeHero: number;
+	/**
+	 *  Check is actioning menu input (for keyboard and mouse).
+	 *  @static
+	 */
+	static checkActionMenu(isKey: boolean, options: { key?: string; x?: number; y?: number } = {}) {
+		return (isKey && Datas.Keyboards.checkActionMenu(options.key)) || (!isKey && Inputs.mouseLeftPressed);
+	}
 
-    constructor(...args: any[]) {
-        super(false, ...args);
-    }
+	/**
+	 *  Check is canceling menu input (for keyboard and mouse).
+	 *  @static
+	 */
+	static checkCancelMenu(isKey: boolean, options: { key?: string; x?: number; y?: number } = {}) {
+		return (isKey && Datas.Keyboards.checkCancelMenu(options.key)) || (!isKey && Inputs.mouseRightPressed);
+	}
 
-    /**
-     *  Check is actioning menu input (for keyboard and mouse).
-     *  @static
-     */
-    static checkActionMenu(isKey: boolean, options: { key?: number, x?: number, 
-        y?: number } = {}) {
-        return (isKey && Datas.Keyboards.checkActionMenu(options.key)) || (!isKey 
-            && Inputs.mouseLeftPressed);
-    }
+	/**
+	 *  Check is canceling input (for keyboard and mouse).
+	 *  @static
+	 */
+	static checkCancel(isKey: boolean, options: { key?: string; x?: number; y?: number } = {}) {
+		return (isKey && Datas.Keyboards.checkCancel(options.key)) || (!isKey && Inputs.mouseRightPressed);
+	}
 
-    /**
-     *  Check is canceling menu input (for keyboard and mouse).
-     *  @static
-     */
-    static checkCancelMenu(isKey: boolean, options: { key?: number, x?: number, 
-        y?: number } = {}) {
-        return (isKey && Datas.Keyboards.checkCancelMenu(options.key)) || (!isKey 
-            && Inputs.mouseRightPressed);
-    }
+	/**
+	 * Return the whole party array.
+	 *
+	 * @example
+	 * var size = this.party().length;
+	 *
+	 * @return {*}
+	 * @memberof MenuBase
+	 */
+	party() {
+		return Game.current.teamHeroes;
+	}
 
-    /**
-     *  Check is canceling input (for keyboard and mouse).
-     *  @static
-     */
-    static checkCancel(isKey: boolean, options: { key?: number, x?: number, 
-        y?: number } = {}) {
-        return (isKey && Datas.Keyboards.checkCancel(options.key)) || (!isKey 
-            && Inputs.mouseRightPressed);
-    }
+	/**
+	 * Return the current active hero.
+	 *
+	 * @example
+	 * let level = this.hero().getCurrentLevel();
+	 *
+	 * @return {*}
+	 * @memberof MenuBase
+	 */
+	hero(): Player {
+		return this.party()[this._activeHero];
+	}
 
-    /**
-     * Return the whole party array.
-     * 
-     * @example
-     * var size = this.party().length;
-     * 
-     * @return {*} 
-     * @memberof MenuBase
-     */
-    party() {
-        return Game.current.teamHeroes;
-    }
+	/**
+	 * Return the current active hero index.
+	 *
+	 * @example
+	 * let id = this.heroID();
+	 * this.sprite = "Hero_" + id;
+	 *
+	 * @return {*}
+	 * @memberof MenuBase
+	 */
+	heroID() {
+		return this._activeHero;
+	}
 
-    /**
-     * Return the current active hero.
-     * 
-     * @example
-     * let level = this.hero().getCurrentLevel(); 
-     * 
-     * @return {*} 
-     * @memberof MenuBase
-     */
-    hero(): Player {
-        return this.party()[this._activeHero];
-    }
+	/**
+	 * set the active hero index.
+	 *
+	 * @param {number} id - the hero index
+	 * @memberof MenuBase
+	 */
+	setActiveHero(id: number) {
+		if (id > this.party().length) {
+			throw new Error('Out of bound error : The id is higher than the party array.');
+		}
+		this._activeHero = id;
+	}
 
-    /**
-     * Return the current active hero index.
-     * 
-     * @example 
-     * let id = this.heroID();
-     * this.sprite = "Hero_" + id;
-     * 
-     * @return {*} 
-     * @memberof MenuBase
-     */
-    heroID() {
-        return this._activeHero;
-    }
+	/**
+	 * Return a array of the party graphics
+	 *
+	 * @todo maybe move that to the future new Party class once done?
+	 *
+	 * @example
+	 *  var hero_Battler1 = this.partyGraphics()[0].battler;
+	 *
+	 * @return {Graphic.Player[]}
+	 * @memberof MenuBase
+	 */
+	partyGraphics(): Graphic.Player[] {
+		let array: Graphic.Player[] = [];
+		for (let i = 0; i < this.party().length; i++) {
+			array[i] = new Graphic.Player(this.party()[i], { isMainMenu: true });
+		}
+		return array;
+	}
 
-    /**
-     * set the active hero index.
-     *
-     * @param {number} id - the hero index
-     * @memberof MenuBase
-     */
-    setActiveHero(id: number) {
-        if (id > this.party().length) {
-            throw new Error("Out of bound error : The id is higher than the party array.");
-        }
-        this._activeHero = id;
-    }
+	/**
+	 * Return the active hero graphics.
+	 *
+	 * @example
+	 * var hero_battler = this.heroGraphics().battler;
+	 *
+	 * @return {Graphic.Player}
+	 * @memberof MenuBase
+	 */
+	heroGraphics(): Graphic.Player {
+		let id = this._activeHero;
+		return this.partyGraphics()[id];
+	}
 
-    /**
-     * Return a array of the party graphics
-     * 
-     * @todo maybe move that to the future new Party class once done?
-     * 
-     * @example
-     *  var hero_Battler1 = this.partyGraphics()[0].battler;
-     * 
-     * @return {Graphic.Player[]} 
-     * @memberof MenuBase
-     */
-    partyGraphics(): Graphic.Player[] {
-        let array: Graphic.Player[] = [];
-        for (let i = 0; i < this.party().length; i++) {
-            array[i] = new Graphic.Player(this.party()[i], { isMainMenu: true });
-        }
-        return array;
-    }
+	/**
+	 * @inheritdoc
+	 *
+	 * @memberof MenuBase
+	 */
+	update() {
+		Scene.Base.prototype.update.call(Scene.Map.current);
+	}
 
-    /**
-     * Return the active hero graphics.
-     *
-     * @example 
-     * var hero_battler = this.heroGraphics().battler;
-     * 
-     * @return {Graphic.Player} 
-     * @memberof MenuBase
-     */
-    heroGraphics(): Graphic.Player {
-        let id = this._activeHero;
-        return this.partyGraphics()[id];
-    }
+	onKeyPressed(key: string) {
+		Scene.Base.prototype.onKeyPressed.call(Scene.Map.current, key);
+	}
 
-    /**
-     * @inheritdoc
-     *
-     * @memberof MenuBase
-     */
-    update() {
-        Scene.Base.prototype.update.call(Scene.Map.current);
-    }
+	onKeyPressedAndRepeat(key: string) {
+		return Scene.Base.prototype.onKeyPressedRepeat.call(Scene.Map.current, key);
+	}
 
-    onKeyPressed(key: number) {
-        Scene.Base.prototype.onKeyPressed.call(Scene.Map.current, key);
-    }
-
-    onKeyPressedAndRepeat(key: number) {
-        return Scene.Base.prototype.onKeyPressedRepeat.call(Scene.Map.current, key);
-    }
-
-    onKeyReleased(key: number) {
-        Scene.Base.prototype.onKeyReleased.call(Scene.Map.current, key);
-    }
+	onKeyReleased(key: string) {
+		Scene.Base.prototype.onKeyReleased.call(Scene.Map.current, key);
+	}
 }
 
-export { MenuBase, MenuCommands }
+export { MenuBase, MenuCommands };

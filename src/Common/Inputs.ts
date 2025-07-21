@@ -11,7 +11,6 @@
 
 import { Datas, Manager, Scene } from '..';
 import { Main } from '../main';
-import { KeyEvent } from './KeyEvent';
 
 /**
  *  @class
@@ -50,11 +49,11 @@ class Inputs {
 			'keydown',
 			function (event) {
 				if (Main.loaded && !Manager.Stack.isLoading()) {
-					let key = event.keyCode;
+					let key = event.key;
 
 					// On pressing F12, quit game
 					switch (key) {
-						case KeyEvent.DOM_VK_F4:
+						case 'F4':
 							Datas.Systems.switchFullscreen();
 							break;
 					}
@@ -87,7 +86,7 @@ class Inputs {
 			'keyup',
 			function (event) {
 				if (Main.loaded && !Manager.Stack.isLoading()) {
-					let key = event.keyCode;
+					let key = event.key;
 					// Remove this key from pressed keys list
 					Inputs.keysPressed.splice(Inputs.keysPressed.indexOf(key), 1);
 					Inputs.lockedKeys.splice(

@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { System, Datas, Graphic, Scene } from '../index';
-import { Platform, Paths } from '../Common';
+import { Paths, Platform } from '../Common';
+import { Datas, Graphic, Scene, System } from '../index';
 
 /** @class
  *  All the keyBoards datas.
@@ -33,7 +33,7 @@ class Keyboards {
 	 *  @param {System.KeyBoard} abr - The keyBoard to compare to the key
 	 *  @returns {boolean}
 	 */
-	static isKeyEqual(key: number, abr: System.Keyboard): boolean {
+	static isKeyEqual(key: string, abr: System.Keyboard): boolean {
 		if (abr) {
 			let sc = abr.sc;
 			let m: number;
@@ -64,7 +64,7 @@ class Keyboards {
 		let l = jsonList.length;
 		this.list = new Array(l + 1);
 		this.listOrdered = new Array(l);
-		let jsonKey: Record<string, any>, id: number, abbreviation: string, key: System.Keyboard, sc: number[][];
+		let jsonKey: Record<string, any>, id: number, abbreviation: string, key: System.Keyboard, sc: string[][];
 		for (let i = 0; i < l; i++) {
 			jsonKey = jsonList[i];
 			id = jsonKey.id;
@@ -131,7 +131,7 @@ class Keyboards {
 	 *  @static
 	 *  @returns {boolean}
 	 */
-	static checkCancelMenu(key: number): boolean {
+	static checkCancelMenu(key: string): boolean {
 		return (
 			Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Cancel) ||
 			Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.controls.MainMenu)
@@ -143,7 +143,7 @@ class Keyboards {
 	 *  @static
 	 *  @returns {boolean}
 	 */
-	static checkCancel(key: number): boolean {
+	static checkCancel(key: string): boolean {
 		return Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Cancel);
 	}
 
@@ -152,7 +152,7 @@ class Keyboards {
 	 *  @static
 	 *  @returns {boolean}
 	 */
-	static checkActionMenu(key: number): boolean {
+	static checkActionMenu(key: string): boolean {
 		return Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Action);
 	}
 }

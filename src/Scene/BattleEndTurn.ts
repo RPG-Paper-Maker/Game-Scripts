@@ -1,4 +1,3 @@
-
 /*
     RPG Paper Maker Copyright (C) 2017-2023 Wano
 
@@ -10,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Scene, System } from "..";
-import { Enum } from "../Common";
-import { ReactionInterpreter } from "../Core";
+import { Scene, System } from '..';
+import { Enum } from '../Common';
+import { ReactionInterpreter } from '../Core';
 
 // -------------------------------------------------------
 //
@@ -21,147 +20,142 @@ import { ReactionInterpreter } from "../Core";
 // -------------------------------------------------------
 
 class BattleEndTurn {
+	public battle: Scene.Battle;
+	public step: number = 0;
+	public indexTroopReaction: number = 0;
+	public interpreter: ReactionInterpreter = null;
 
-    public battle: Scene.Battle
-    public step: number = 0;
-    public indexTroopReaction: number = 0;
-    public interpreter: ReactionInterpreter = null;
+	constructor(battle: Scene.Battle) {
+		this.battle = battle;
+	}
 
-    constructor(battle: Scene.Battle) {
-        this.battle = battle;
-    }
+	/**
+	 *  Initialize step.
+	 */
+	public initialize() {
+		// Each end turn troop reaction
+		if (this.step === 0) {
+			let reactions = this.battle.troop.reactions;
+			let reaction: System.TroopReaction, l: number;
+			for (l = reactions.length; this.indexTroopReaction < l; this.indexTroopReaction++) {
+				reaction = reactions[this.indexTroopReaction];
+				if (reaction.frequency === Enum.TroopReactionFrequencyKind.EachTurnEnd) {
+					// Check conditions
+					if (!reaction.conditions.isValid()) {
+						continue;
+					}
+					this.interpreter = new ReactionInterpreter(null, reaction, null, null);
+					return;
+				}
+			}
+			this.interpreter = null;
+			this.step++;
+		}
 
-    /** 
-     *  Initialize step.
-     */
-    public initialize() {
+		// End
+		if (this.step === 1) {
+			this.step = 0;
+			this.indexTroopReaction = 0;
+			this.battle.activeGroup();
+			this.battle.switchAttackingGroup();
+			this.battle.changeStep(Enum.BattleStep.StartTurn);
+		}
+	}
 
-        // Each end turn troop reaction
-        if (this.step === 0) {
-            let reactions = this.battle.troop.reactions;
-            let reaction: System.TroopReaction, l: number;
-            for (l = reactions.length; this.indexTroopReaction < l; this
-                .indexTroopReaction++) {
-                reaction = reactions[this.indexTroopReaction];
-                if (reaction.frequency === Enum.TroopReactionFrequencyKind.EachTurnEnd) {
-                    // Check conditions
-                    if (!reaction.conditions.isValid()) {
-                        continue;
-                    }
-                    this.interpreter = new ReactionInterpreter(null, reaction, 
-                        null, null);
-                    return;
-                }
-            }
-            this.interpreter = null;
-            this.step++;
-        }
+	/**
+	 *  Update the battle.
+	 */
+	public update() {
+		// Troop reactions
+		if (this.step === 0) {
+			this.interpreter.update();
+			if (this.interpreter.isFinished()) {
+				this.indexTroopReaction++;
+				this.initialize();
+				return;
+			}
+		}
+	}
 
-        // End
-        if (this.step === 1) {
-            this.step = 0;
-            this.indexTroopReaction = 0;
-            this.battle.activeGroup();
-            this.battle.switchAttackingGroup();
-            this.battle.changeStep(Enum.BattleStep.StartTurn);
-        }
-    }
+	/**
+	 *  Handle key pressed.
+	 *  @param {number} key - The key ID
+	 */
+	public onKeyPressedStep(key: string) {
+		if (this.interpreter) {
+			this.interpreter.onKeyPressed(key);
+		}
+	}
 
-    /** 
-     *  Update the battle.
-     */
-    public update() {
-        // Troop reactions
-        if (this.step === 0) {
-            this.interpreter.update();
-            if (this.interpreter.isFinished()) {
-                this.indexTroopReaction++;
-                this.initialize();
-                return;
-            }
-        }
-    }
+	/**
+	 *  Handle key released.
+	 *  @param {number} key - The key ID
+	 */
+	public onKeyReleasedStep(key: string) {
+		if (this.interpreter) {
+			this.interpreter.onKeyReleased(key);
+		}
+	}
 
-    /** 
-     *  Handle key pressed.
-     *  @param {number} key - The key ID 
-     */
-    public onKeyPressedStep(key: number) {
-        if (this.interpreter) {
-            this.interpreter.onKeyPressed(key);
-        }
-    }
+	/**
+	 *  Handle key repeat pressed.
+	 *  @param {number} key - The key ID
+	 *  @returns {boolean}
+	 */
+	public onKeyPressedRepeatStep(key: string): boolean {
+		if (this.interpreter) {
+			return this.interpreter.onKeyPressedRepeat(key);
+		}
+		return true;
+	}
 
-    /** 
-     *  Handle key released.
-     *  @param {number} key - The key ID 
-     */
-    public onKeyReleasedStep(key: number) {
-        if (this.interpreter) {
-            this.interpreter.onKeyReleased(key);
-        }
-    }
+	/**
+	 *  Handle key pressed and repeat.
+	 *  @param {number} key - The key ID
+	 *  @returns {boolean}
+	 */
+	public onKeyPressedAndRepeatStep(key: string): boolean {
+		if (this.interpreter) {
+			return this.interpreter.onKeyPressedAndRepeat(key);
+		}
+		return true;
+	}
 
-    /** 
-     *  Handle key repeat pressed.
-     *  @param {number} key - The key ID 
-     *  @returns {boolean}
-     */
-    public onKeyPressedRepeatStep(key: number): boolean {
-        if (this.interpreter) {
-            return this.interpreter.onKeyPressedRepeat(key);
-        }
-        return true;
-    }
+	/**
+	 *  @inheritdoc
+	 */
+	onMouseDownStep(x: number, y: number) {
+		if (this.interpreter) {
+			this.interpreter.onMouseDown(x, y);
+		}
+	}
 
-    /** 
-     *  Handle key pressed and repeat.
-     *  @param {number} key - The key ID
-     *  @returns {boolean}
-     */
-    public onKeyPressedAndRepeatStep(key: number): boolean {
-        if (this.interpreter) {
-            return this.interpreter.onKeyPressedAndRepeat(key);
-        }
-        return true;
-    }
+	/**
+	 *  @inheritdoc
+	 */
+	onMouseMoveStep(x: number, y: number) {
+		if (this.interpreter) {
+			this.interpreter.onMouseMove(x, y);
+		}
+	}
 
-    /** 
-     *  @inheritdoc
-     */
-    onMouseDownStep(x: number, y: number) {
-        if (this.interpreter) {
-            this.interpreter.onMouseDown(x, y);
-        }
-    }
+	/**
+	 *  @inheritdoc
+	 */
+	onMouseUpStep(x: number, y: number) {
+		if (this.interpreter) {
+			this.interpreter.onMouseUp(x, y);
+		}
+	}
 
-    /** 
-     *  @inheritdoc
-     */
-    onMouseMoveStep(x: number, y: number) {
-        if (this.interpreter) {
-            this.interpreter.onMouseMove(x, y);
-        }
-    }
-
-    /** 
-     *  @inheritdoc
-     */
-    onMouseUpStep(x: number, y: number) {
-        if (this.interpreter) {
-            this.interpreter.onMouseUp(x, y);
-        }
-    }
-
-    /** 
-     *  Draw the battle HUD.
-     */
-    public drawHUDStep() {
-        this.battle.windowTopInformations.draw();
-        if (this.interpreter) {
-            this.interpreter.drawHUD();
-        }
-    }
-
+	/**
+	 *  Draw the battle HUD.
+	 */
+	public drawHUDStep() {
+		this.battle.windowTopInformations.draw();
+		if (this.interpreter) {
+			this.interpreter.drawHUD();
+		}
+	}
 }
-export { BattleEndTurn }
+export { BattleEndTurn };

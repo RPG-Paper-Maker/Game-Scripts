@@ -9,13 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Scene, Graphic, Manager, Datas, System } from '..';
-import { Enum, ScreenResolution, Platform } from '../Common';
+import { Datas, Graphic, Manager, Scene, System } from '..';
+import { Enum, Platform, ScreenResolution } from '../Common';
+import { Battler, Game, Item, Player, WindowBox } from '../Core';
+import { Status } from '../Core/Status';
 import Align = Enum.Align;
 import CharacterKind = Enum.CharacterKind;
 import LootKind = Enum.LootKind;
-import { Battler, WindowBox, Player, Item, Game } from '../Core';
-import { Status } from '../Core/Status';
 
 // -------------------------------------------------------
 //
@@ -277,9 +277,9 @@ class BattleVictory {
 	/**
 	 *  A scene action.
 	 *  @param {boolean} isKey
-	 *  @param {{ key?: number, x?: number, y?: number }} [options={}]
+	 *  @param {{ key?: string, x?: number, y?: number }} [options={}]
 	 */
-	action(isKey: boolean, options: { key?: number; x?: number; y?: number } = {}) {
+	action(isKey: boolean, options: { key?: string; x?: number; y?: number } = {}) {
 		switch (this.battle.subStep) {
 			case 1:
 				if (Scene.MenuBase.checkActionMenu(isKey, options)) {
@@ -436,7 +436,7 @@ class BattleVictory {
 	 *  Handle key pressed.
 	 *  @param {number} key - The key ID
 	 */
-	onKeyPressedStep(key: number) {
+	onKeyPressedStep(key: string) {
 		this.action(true, { key: key });
 	}
 
@@ -444,14 +444,14 @@ class BattleVictory {
 	 *  Handle key released.
 	 *  @param {number} key - The key ID
 	 */
-	onKeyReleasedStep(key: number) {}
+	onKeyReleasedStep(key: string) {}
 
 	/**
 	 *  Handle key repeat pressed.
 	 *  @param {number} key - The key ID
 	 *  @returns {boolean}
 	 */
-	onKeyPressedRepeatStep(key: number): boolean {
+	onKeyPressedRepeatStep(key: string): boolean {
 		return true;
 	}
 
@@ -459,7 +459,7 @@ class BattleVictory {
 	 *  Handle key pressed and repeat.
 	 *  @param {number} key - The key ID
 	 */
-	onKeyPressedAndRepeatStep(key: number): boolean {
+	onKeyPressedAndRepeatStep(key: string): boolean {
 		return true;
 	}
 

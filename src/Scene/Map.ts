@@ -1156,7 +1156,7 @@ class Map extends Base {
 	 *  Handle scene key pressed.
 	 *  @param {number} key - The key ID
 	 */
-	onKeyPressed(key: number) {
+	onKeyPressed(key: string) {
 		if (!this.loading) {
 			// Send keyPressEvent to all the objects
 			if (!ReactionInterpreter.blockingHero && !this.isBattleMap) {
@@ -1168,7 +1168,7 @@ class Map extends Base {
 					3,
 					[
 						null,
-						System.DynamicValue.createNumber(key),
+						System.DynamicValue.createMessage(key),
 						System.DynamicValue.createSwitch(false),
 						System.DynamicValue.createSwitch(false),
 					],
@@ -1184,7 +1184,7 @@ class Map extends Base {
 	 *  Handle scene key released.
 	 *  @param {number} key - The key ID
 	 */
-	onKeyReleased(key: number) {
+	onKeyReleased(key: string) {
 		if (!this.loading) {
 			// Send keyReleaseEvent to all the objects
 			if (!ReactionInterpreter.blockingHero && !this.isBattleMap) {
@@ -1194,7 +1194,7 @@ class Map extends Base {
 					0,
 					true,
 					4,
-					[null, System.DynamicValue.createNumber(key)],
+					[null, System.DynamicValue.createMessage(key)],
 					true,
 					false
 				);
@@ -1208,7 +1208,7 @@ class Map extends Base {
 	 *  @param {number} key - The key ID
 	 *  @returns {boolean}
 	 */
-	onKeyPressedRepeat(key: number): boolean {
+	onKeyPressedRepeat(key: string): boolean {
 		if (!this.loading) {
 			if (!ReactionInterpreter.blockingHero && !this.isBattleMap) {
 				Manager.Events.sendEvent(
@@ -1219,7 +1219,7 @@ class Map extends Base {
 					3,
 					[
 						null,
-						System.DynamicValue.createNumber(key),
+						System.DynamicValue.createMessage(key),
 						System.DynamicValue.createSwitch(true),
 						System.DynamicValue.createSwitch(true),
 					],
@@ -1237,7 +1237,7 @@ class Map extends Base {
 	 *  @param {number} key - The key ID
 	 *  @returns {boolean}
 	 */
-	onKeyPressedAndRepeat(key: number): boolean {
+	onKeyPressedAndRepeat(key: string): boolean {
 		if (!this.loading) {
 			if (!ReactionInterpreter.blockingHero && !this.isBattleMap) {
 				Manager.Events.sendEvent(
@@ -1248,7 +1248,7 @@ class Map extends Base {
 					3,
 					[
 						null,
-						System.DynamicValue.createNumber(key),
+						System.DynamicValue.createMessage(key),
 						System.DynamicValue.createSwitch(true),
 						System.DynamicValue.createSwitch(false),
 					],

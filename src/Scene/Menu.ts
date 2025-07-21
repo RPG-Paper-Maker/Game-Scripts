@@ -9,16 +9,15 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Scene, Manager, Graphic, Datas, System } from "../index";
-import { Enum, ScreenResolution } from "../Common";
-import { WindowChoices, WindowBox, Rectangle, ChoicesOptions } from "../Core";
-import { MenuBase } from "./MenuBase";
+import { Enum, ScreenResolution } from '../Common';
+import { ChoicesOptions, Rectangle, WindowBox, WindowChoices } from '../Core';
+import { Datas, Graphic, Manager, Scene, System } from '../index';
+import { MenuBase } from './MenuBase';
 
 interface StructPositionChoice {
-    index: number,
-    offset: number
-};
-
+	index: number;
+	offset: number;
+}
 
 /**
  * The class who handle the scene menu in game.
@@ -27,301 +26,304 @@ interface StructPositionChoice {
  * @extends {MenuBase}
  */
 class Menu extends MenuBase {
+	public selectedOrder: number;
+	public windowChoicesCommands: WindowChoices;
+	public windowChoicesTeam: WindowChoices;
+	public windowTimeCurrencies: WindowBox;
 
-    public selectedOrder: number;
-    public windowChoicesCommands: WindowChoices;
-    public windowChoicesTeam: WindowChoices;
-    public windowTimeCurrencies: WindowBox;
+	constructor() {
+		super();
+		Manager.Stack.isInMainMenu = true;
+		// Initializing order index
+		this.selectedOrder = -1;
+		// Play a sound when opening the menu
+		Datas.Systems.soundCursor.playSound();
+	}
 
-    constructor() {
-        super();
-        Manager.Stack.isInMainMenu = true;
-        // Initializing order index
-        this.selectedOrder = -1;
-        // Play a sound when opening the menu
-        Datas.Systems.soundCursor.playSound();
-    }
+	/**
+	 * @inheritdoc
+	 *
+	 * @memberof Menu
+	 */
+	create() {
+		super.create();
+		this.createAllWindows();
+	}
 
-    /**
-     * @inheritdoc
-     *
-     * @memberof Menu
-     */
-    create() {
-        super.create();
-        this.createAllWindows();
-    }
+	/**
+	 * Create all the windows in the scene.
+	 *
+	 * @memberof Menu
+	 */
+	createAllWindows() {
+		this.createCommandWindow();
+		this.createTeamOrderWindow();
+		this.createWindowTimeCurrencies();
+	}
 
-    /**
-     * Create all the windows in the scene.
-     *
-     * @memberof Menu
-     */
-    createAllWindows() {
-        this.createCommandWindow();
-        this.createTeamOrderWindow();
-        this.createWindowTimeCurrencies();
-    }
+	/**
+	 * Create the commands window
+	 *
+	 * @memberof Menu
+	 */
+	createCommandWindow() {
+		let graphics: Graphic.Text[] = [];
+		let actions: Function[] = [];
+		let command: System.MainMenuCommand;
+		for (let i = 0, l = Datas.Systems.mainMenuCommands.length; i < l; i++) {
+			command = Datas.Systems.mainMenuCommands[i];
+			graphics[i] = new Graphic.Text(command.name(), { align: Enum.Align.Center });
+			actions[i] = command.getCallback();
+		}
+		const rect = new Rectangle(20, 20, 150, WindowBox.MEDIUM_SLOT_HEIGHT);
+		const options: ChoicesOptions = {
+			nbItemsMax: Math.min(8, graphics.length),
+			listCallbacks: actions,
+			padding: [0, 0, 0, 0],
+		};
+		this.windowChoicesCommands = new WindowChoices(rect.x, rect.y, rect.width, rect.height, graphics, options);
+	}
 
-    /**
-     * Create the commands window
-     *
-     * @memberof Menu
-     */
-    createCommandWindow() {
-        let graphics: Graphic.Text[] = [];
-        let actions: Function[] = [];
-        let command: System.MainMenuCommand;
-        for (let i = 0, l = Datas.Systems.mainMenuCommands.length; i < l; i++) {
-            command = Datas.Systems.mainMenuCommands[i];
-            graphics[i] = new Graphic.Text(command.name(), { align: Enum.Align.Center });
-            actions[i] = command.getCallback();
-        }
-        const rect = new Rectangle(20, 20, 150, WindowBox.MEDIUM_SLOT_HEIGHT);
-        const options: ChoicesOptions = {
-            nbItemsMax: Math.min(8, graphics.length),
-            listCallbacks: actions,
-            padding: [0, 0, 0, 0]
-        };
-        this.windowChoicesCommands = new WindowChoices(rect.x, rect.y, rect.width, 
-            rect.height, graphics, options);
-    }
+	/**
+	 * Create the team order window.
+	 *
+	 * @memberof Menu
+	 */
+	createTeamOrderWindow() {
+		const rect = new Rectangle(190, 20, 430, 95);
+		const options: ChoicesOptions = {
+			nbItemsMax: 4,
+			padding: WindowBox.VERY_SMALL_PADDING_BOX,
+			space: 15,
+			currentSelectedIndex: -1,
+		};
+		this.windowChoicesTeam = new WindowChoices(
+			rect.x,
+			rect.y,
+			rect.width,
+			rect.height,
+			this.partyGraphics(),
+			options
+		);
+	}
 
-    /**
-     * Create the team order window.
-     *
-     * @memberof Menu
-     */
-    createTeamOrderWindow() {
-        const rect = new Rectangle(190, 20, 430, 95);
-        const options: ChoicesOptions = {
-            nbItemsMax: 4,
-            padding: WindowBox.VERY_SMALL_PADDING_BOX,
-            space: 15,
-            currentSelectedIndex: -1
-        };
-        this.windowChoicesTeam = new WindowChoices(rect.x, rect.y, rect.width, 
-            rect.height, this.partyGraphics(), options);
-    }
+	/**
+	 * Create the time and currencies window.
+	 *
+	 * @memberof Menu
+	 */
+	createWindowTimeCurrencies() {
+		const rect = new Rectangle(20, 0, 150, 0);
+		this.windowTimeCurrencies = new WindowBox(rect.x, rect.y, rect.width, rect.height, {
+			content: new Graphic.TimeCurrencies(),
+			padding: WindowBox.HUGE_PADDING_BOX,
+		});
+		let h =
+			(<Graphic.TimeCurrencies>this.windowTimeCurrencies.content).height +
+			this.windowTimeCurrencies.padding[1] +
+			this.windowTimeCurrencies.padding[3];
+		this.windowTimeCurrencies.setY(ScreenResolution.SCREEN_Y - 20 - h);
+		this.windowTimeCurrencies.setH(h);
+	}
 
-    /**
-     * Create the time and currencies window.
-     *
-     * @memberof Menu
-     */
-    createWindowTimeCurrencies() {
-        const rect = new Rectangle(20, 0, 150, 0);
-        this.windowTimeCurrencies = new WindowBox(rect.x, rect.y, rect.width, rect.height, {
-            content: new Graphic.TimeCurrencies(),
-            padding: WindowBox.HUGE_PADDING_BOX
-        });
-        let h = (<Graphic.TimeCurrencies>this.windowTimeCurrencies.content)
-            .height + this.windowTimeCurrencies.padding[1] +
-            this.windowTimeCurrencies.padding[3];
-        this.windowTimeCurrencies.setY(ScreenResolution.SCREEN_Y - 20 - h);
-        this.windowTimeCurrencies.setH(h);
-    }
+	/**
+	 *  Update the scene.
+	 *
+	 * @memberof Menu
+	 */
+	update() {
+		super.update();
+		if (this.windowChoicesTeam.currentSelectedIndex === -1) {
+			this.windowChoicesCommands.update();
+		} else {
+			this.windowChoicesTeam.update();
+		}
+		this.windowTimeCurrencies.content.update();
+		let graphic: Graphic.Player;
+		for (let i = 0, l = this.windowChoicesTeam.listWindows.length; i < l; i++) {
+			graphic = <Graphic.Player>this.windowChoicesTeam.listWindows[i].content;
+			graphic.updateBattler();
+			graphic.update();
+		}
+	}
 
-    /** 
-     *  Update the scene.
-     * 
-     * @memberof Menu
-     */
-    update() {
-        super.update();
-        if (this.windowChoicesTeam.currentSelectedIndex === -1) {
-            this.windowChoicesCommands.update();
-        } else {
-            this.windowChoicesTeam.update();
-        }
-        this.windowTimeCurrencies.content.update();
-        let graphic: Graphic.Player;
-        for (let i = 0, l = this.windowChoicesTeam.listWindows.length; i < l; i++) {
-            graphic = <Graphic.Player>this.windowChoicesTeam.listWindows[i].content;
-            graphic.updateBattler();
-            graphic.update();
-        }
-    }
+	/**
+	 * function called when quitting the menu.
+	 *
+	 * @memberof Menu
+	 */
+	onQuitMenu() {
+		Datas.Systems.soundCancel.playSound();
+		Manager.Stack.pop();
+	}
 
-    /**
-     * function called when quitting the menu.
-     *
-     * @memberof Menu
-     */
-    onQuitMenu() {
-        Datas.Systems.soundCancel.playSound();
-        Manager.Stack.pop();
-    }
+	/**
+	 * function called when quitting the team order selection.
+	 *
+	 * @memberof Menu
+	 */
+	onTeamUnselect() {
+		Datas.Systems.soundCancel.playSound();
+		this.windowChoicesTeam.unselect();
+	}
 
-    /**
-     * function called when quitting the team order selection.
-     *
-     * @memberof Menu
-     */
-    onTeamUnselect() {
-        Datas.Systems.soundCancel.playSound();
-        this.windowChoicesTeam.unselect();
-    }
+	/**
+	 * swap two hero index in the active team.
+	 *
+	 * @param {number} id1
+	 * @param {number} id2
+	 * @memberof Menu
+	 */
+	swapHeroOrder(id1: number, id2: number) {
+		let hero1 = this.party()[id1];
+		let hero2 = this.party()[id2];
+		this.party()[id1] = hero2;
+		this.party()[id2] = hero1;
+	}
 
-    /**
-     * swap two hero index in the active team.
-     *
-     * @param {number} id1
-     * @param {number} id2
-     * @memberof Menu
-     */
-    swapHeroOrder(id1: number, id2: number) {
-        let hero1 = this.party()[id1];
-        let hero2 = this.party()[id2];
-        this.party()[id1] = hero2;
-        this.party()[id2] = hero1;
-    }
+	/**
+	 * function executed when you choose the order command.
+	 *
+	 * @memberof Menu
+	 */
+	onTeamSelect() {
+		Datas.Systems.soundConfirmation.playSound();
+		const winTeam = this.windowChoicesTeam;
+		const currentSelectedHero = winTeam.currentSelectedIndex;
 
-    /**
-     * function executed when you choose the order command.
-     *
-     * @memberof Menu
-     */
-    onTeamSelect() {
-        Datas.Systems.soundConfirmation.playSound();
-        const winTeam = this.windowChoicesTeam;
-        const currentSelectedHero = winTeam.currentSelectedIndex;
+		// If selecting the first hero to interchange
+		if (this.selectedOrder === -1) {
+			this.selectedOrder = currentSelectedHero;
+		} else {
+			this.swapHeroOrder(this.selectedOrder, currentSelectedHero);
 
-        // If selecting the first hero to interchange
-        if (this.selectedOrder === -1) {
-            this.selectedOrder = currentSelectedHero;
-        } else {
+			let graphic1 = winTeam.getContent(this.selectedOrder);
+			let graphic2 = winTeam.getContent(currentSelectedHero);
 
-            this.swapHeroOrder(this.selectedOrder, currentSelectedHero);
+			winTeam.setContent(this.selectedOrder, graphic2);
+			winTeam.setContent(currentSelectedHero, graphic1);
 
-            let graphic1 = winTeam.getContent(this.selectedOrder);
-            let graphic2 = winTeam.getContent(currentSelectedHero);
+			// Change background color
+			winTeam.listWindows[this.selectedOrder].selected = false;
+			this.selectedOrder = -1;
+			winTeam.select(currentSelectedHero);
+		}
+	}
 
-            winTeam.setContent(this.selectedOrder, graphic2);
-            winTeam.setContent(currentSelectedHero, graphic1);
+	/**
+	 *  A scene action.
+	 */
+	action(isKey: boolean, options: { key?: string; x?: number; y?: number } = {}) {
+		if (this.windowChoicesTeam.currentSelectedIndex === -1) {
+			if (isKey) {
+				this.windowChoicesCommands.onKeyPressed(options.key, this);
+			} else {
+				this.windowChoicesCommands.onMouseUp(options.x, options.y, this);
+			}
+			// Quit the menu if cancelling + in window command
+			if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
+				this.onQuitMenu();
+			}
+		} else {
+			// If in reorder team window
+			if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
+				this.onTeamUnselect();
+			} else if (Scene.MenuBase.checkActionMenu(isKey, options)) {
+				this.onTeamSelect();
+			}
+		}
+	}
 
-            // Change background color
-            winTeam.listWindows[this.selectedOrder]
-                .selected = false;
-            this.selectedOrder = -1;
-            winTeam.select(currentSelectedHero);
-        }
-    }
+	/**
+	 *  @inheritdoc
+	 *
+	 *  @param {number} key - The key ID
+	 */
+	onKeyPressed(key: string) {
+		super.onKeyPressed(key);
+		this.action(true, { key: key });
+	}
 
-    /** 
-     *  A scene action.
-     */
-    action(isKey: boolean, options: { key?: number, x?: number, y?: number } = {}) {
-        if (this.windowChoicesTeam.currentSelectedIndex === -1) {
-            if (isKey) {
-                this.windowChoicesCommands.onKeyPressed(options.key, this);
-            } else {
-                this.windowChoicesCommands.onMouseUp(options.x, options.y, this);
-            }
-            // Quit the menu if cancelling + in window command
-            if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
-                this.onQuitMenu();
-            }
-        } else {
-            // If in reorder team window
-            if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
-                this.onTeamUnselect();
-            } else if (Scene.MenuBase.checkActionMenu(isKey, options)) {
-                this.onTeamSelect();
-            }
-        }
-    }
+	/**
+	 *  @inheritdoc
+	 *
+	 *  @param {number} key - The key ID
+	 */
+	onKeyReleased(key: string) {
+		super.onKeyReleased(key);
+	}
 
-    /** 
-     *  @inheritdoc
-     * 
-     *  @param {number} key - The key ID
-     */
-    onKeyPressed(key: number) {
-        super.onKeyPressed(key);
-        this.action(true, { key: key });
-    }
+	/**
+	 *  @inheritdoc
+	 *  @param {number} key - The key ID
+	 *  @returns {boolean}
+	 */
+	onKeyPressedRepeat(key: string): boolean {
+		return super.onKeyPressedAndRepeat(key);
+	}
 
-    /** 
-     *  @inheritdoc
-     * 
-     *  @param {number} key - The key ID
-     */
-    onKeyReleased(key: number) {
-        super.onKeyReleased(key);
-    }
+	/**
+	 *  @inheritdoc
+	 *  @param {number} key - The key ID
+	 *  @returns {boolean}
+	 */
+	onKeyPressedAndRepeat(key: string): boolean {
+		super.onKeyPressedAndRepeat(key);
+		if (this.windowChoicesTeam.currentSelectedIndex === -1) {
+			return this.windowChoicesCommands.onKeyPressedAndRepeat(key);
+		} else {
+			return this.windowChoicesTeam.onKeyPressedAndRepeat(key);
+		}
+	}
 
-    /** 
-     *  @inheritdoc
-     *  @param {number} key - The key ID
-     *  @returns {boolean}
-     */
-    onKeyPressedRepeat(key: number): boolean {
-        return super.onKeyPressedAndRepeat(key);
-    }
+	/**
+	 *  @inheritdoc
+	 */
+	onMouseMove(x: number, y: number) {
+		super.onMouseMove(x, y);
+		if (this.windowChoicesTeam.currentSelectedIndex === -1) {
+			return this.windowChoicesCommands.onMouseMove(x, y);
+		} else {
+			return this.windowChoicesTeam.onMouseMove(x, y);
+		}
+	}
 
-    /** 
-     *  @inheritdoc
-     *  @param {number} key - The key ID
-     *  @returns {boolean}
-     */
-    onKeyPressedAndRepeat(key: number): boolean {
-        super.onKeyPressedAndRepeat(key);
-        if (this.windowChoicesTeam.currentSelectedIndex === -1) {
-            return this.windowChoicesCommands.onKeyPressedAndRepeat(key);
-        } else {
-            return this.windowChoicesTeam.onKeyPressedAndRepeat(key);
-        }
-    }
+	/**
+	 *  @inheritdoc
+	 */
+	onMouseUp(x: number, y: number) {
+		super.onMouseUp(x, y);
+		this.action(false, { x: x, y: y });
+	}
 
-    /** 
-     *  @inheritdoc
-     */
-    onMouseMove(x: number, y: number) {
-        super.onMouseMove(x, y);
-        if (this.windowChoicesTeam.currentSelectedIndex === -1) {
-            return this.windowChoicesCommands.onMouseMove(x, y);
-        } else {
-            return this.windowChoicesTeam.onMouseMove(x, y);
-        }
-    }
+	/**
+	 * @inheritdoc
+	 *
+	 * @memberof Menu
+	 */
+	drawHUD() {
+		// Draw the local map behind
+		Scene.Map.current.drawHUD();
 
-    /** 
-     *  @inheritdoc
-     */
-    onMouseUp(x: number, y: number) {
-        super.onMouseUp(x, y);
-        this.action(false, { x: x, y: y });
-    }
+		// Draw the windows
+		this.windowChoicesCommands.draw();
+		this.windowChoicesTeam.draw();
 
-    /**
-     * @inheritdoc
-     *
-     * @memberof Menu
-     */
-    drawHUD() {
-        // Draw the local map behind
-        Scene.Map.current.drawHUD();
+		// Draw play time and currencies
+		this.windowTimeCurrencies.draw();
 
-        // Draw the windows
-        this.windowChoicesCommands.draw();
-        this.windowChoicesTeam.draw();
+		// Draw interpreters
+		super.drawHUD();
+	}
 
-        // Draw play time and currencies
-        this.windowTimeCurrencies.draw();
-
-        // Draw interpreters
-        super.drawHUD();
-    }
-
-    /**
-     * @inheritdoc
-     *
-     * @memberof Menu
-     */
-    close() {
-        Manager.Stack.isInMainMenu = false;
-    }
+	/**
+	 * @inheritdoc
+	 *
+	 * @memberof Menu
+	 */
+	close() {
+		Manager.Stack.isInMainMenu = false;
+	}
 }
 
-export { StructPositionChoice, Menu}
+export { Menu, StructPositionChoice };

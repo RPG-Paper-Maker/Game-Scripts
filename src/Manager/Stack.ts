@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Scene, Manager, Common, System, Datas } from '../index';
-import { Utils, Platform, ScreenResolution, Paths, Enum, Inputs } from '../Common';
+import { Enum, Inputs, Paths, Platform, ScreenResolution, Utils } from '../Common';
 import { Game, MapObject, Picture2D, Player } from '../Core';
+import { Common, Datas, Manager, Scene, System } from '../index';
 
 /** @class
  *  The game stack that is organizing the game scenes.
@@ -216,7 +216,7 @@ class Stack {
 	 *  First key press handle for the current stack.
 	 *  @param {number} key - The key ID pressed
 	 */
-	static onKeyPressed(key: number) {
+	static onKeyPressed(key: string) {
 		if (!this.isEmpty()) {
 			this.top.onKeyPressed(key);
 		}
@@ -226,7 +226,7 @@ class Stack {
 	 *  First key release handle for the current stack.
 	 *  @param {number} key - The key ID released
 	 */
-	static onKeyReleased(key: number) {
+	static onKeyReleased(key: string) {
 		if (!this.isEmpty()) {
 			this.top.onKeyReleased(key);
 		}
@@ -237,7 +237,7 @@ class Stack {
 	 *  @param {number} key - The key ID pressed
 	 *  @returns {boolean} false if the other keys are blocked after it
 	 */
-	static onKeyPressedRepeat(key: number): boolean {
+	static onKeyPressedRepeat(key: string): boolean {
 		return this.isEmpty() ? true : this.top.onKeyPressedRepeat(key);
 	}
 
@@ -247,7 +247,7 @@ class Stack {
 	 *  @param {number} key - The key ID pressed
 	 *  @returns {boolean} false if the other keys are blocked after it
 	 */
-	static onKeyPressedAndRepeat(key: number): boolean {
+	static onKeyPressedAndRepeat(key: string): boolean {
 		return this.isEmpty() ? true : this.top.onKeyPressedAndRepeat(key);
 	}
 

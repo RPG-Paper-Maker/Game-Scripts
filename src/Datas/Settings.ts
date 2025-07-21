@@ -10,7 +10,7 @@
 */
 
 import { Datas } from '..';
-import { IO, Platform, Paths, Utils, Enum } from '../Common';
+import { Enum, IO, Paths, Platform, Utils } from '../Common';
 import TitleSettingKind = Enum.TitleSettingKind;
 
 /** @class
@@ -18,7 +18,7 @@ import TitleSettingKind = Enum.TitleSettingKind;
  *  @static
  */
 class Settings {
-	public static kb: number[][][];
+	public static kb: string[][][];
 	public static currentLanguage: number;
 	public static isProtected: boolean;
 
@@ -70,10 +70,10 @@ class Settings {
 	/**
 	 *  Update Keyboard settings.
 	 *  @param {number} id
-	 *  @param {number[][]} sc -
+	 *  @param {string[][]} sc -
 	 *  @static
 	 */
-	static updateKeyboard(id: number, sc: number[][]) {
+	static updateKeyboard(id: number, sc: string[][]) {
 		this.kb[id] = sc;
 		this.write();
 	}

@@ -15,7 +15,6 @@ export * from './Enum';
 export * from './Inputs';
 export * from './Interpreter';
 export * from './IO';
-export * from './KeyEvent';
 export * from './Mathf';
 export * from './Paths';
 export * from './Platform';
