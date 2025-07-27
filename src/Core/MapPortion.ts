@@ -215,6 +215,21 @@ class MapPortion {
 			}
 			Scene.Map.current.scene.add(this.staticFloorsMesh);
 		}
+
+		for (let list of this.staticAutotilesList) {
+			if (list) {
+				for (const autotiles of list) {
+					if (autotiles && autotiles.createMesh()) {
+						if (Scene.Map.current.mapProperties.isSunLight) {
+							autotiles.mesh.receiveShadow = true;
+							autotiles.mesh.castShadow = true;
+							autotiles.mesh.customDepthMaterial = autotiles.bundle.material.userData.customDepthMaterial;
+						}
+						Scene.Map.current.scene.add(autotiles.mesh);
+					}
+				}
+			}
+		}
 	}
 
 	/**
