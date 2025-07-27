@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Mathf } from '../Common';
 import { THREE } from '../Globals';
-import { Sprite } from './Sprite';
 import { Vector2 } from './Vector2';
 import { Vector3 } from './Vector3';
 
@@ -153,7 +153,7 @@ export class CustomGeometry extends THREE.BufferGeometry {
 		let vertex = new THREE.Vector3();
 		for (let i = 0, l = vertices.length; i < l; i += 3) {
 			vertex.set(vertices[i], vertices[i + 1], vertices[i + 2]);
-			Sprite.rotateVertex(vertex, center, angle, axis);
+			Mathf.rotateVertex(vertex, center, angle, axis);
 			this.b_vertices.push(vertex.x, vertex.y, vertex.z);
 		}
 		this.setAttribute('position', new THREE.Float32BufferAttribute(this.b_vertices, 3));
@@ -171,7 +171,7 @@ export class CustomGeometry extends THREE.BufferGeometry {
 		let vertex = new THREE.Vector3();
 		for (let i = 0, l = vertices.length; i < l; i += 3) {
 			vertex.set(vertices[i], vertices[i + 1], vertices[i + 2]);
-			Sprite.rotateVertexEuler(vertex, center, euler);
+			Mathf.rotateVertexEuler(vertex, center, euler);
 			this.b_vertices.push(vertex.x, vertex.y, vertex.z);
 		}
 		this.setAttribute('position', new THREE.Float32BufferAttribute(this.b_vertices, 3));

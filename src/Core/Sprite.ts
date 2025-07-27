@@ -9,16 +9,16 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Utils } from '../Common';
-import ElementMapKind = Enum.ElementMapKind;
-import { MapElement, StructMapElementCollision } from './MapElement';
+import { Enum, Mathf, Utils } from '../Common';
 import { THREE } from '../Globals';
-import { Position } from './Position';
-import { Datas, Core, Scene } from '../index';
-import { Vector3 } from './Vector3';
-import { Vector2 } from './Vector2';
+import { Core, Datas, Scene } from '../index';
 import { CustomGeometry } from './CustomGeometry';
 import { CustomGeometryFace } from './CustomGeometryFace';
+import { MapElement, StructMapElementCollision } from './MapElement';
+import { Position } from './Position';
+import { Vector2 } from './Vector2';
+import { Vector3 } from './Vector3';
+import ElementMapKind = Enum.ElementMapKind;
 
 /** @class
  *  A sprite in the map.
@@ -95,10 +95,10 @@ class Sprite extends MapElement {
 		angle: number,
 		axis: Vector3
 	) {
-		Sprite.rotateVertex(vecA, center, angle, axis);
-		Sprite.rotateVertex(vecB, center, angle, axis);
-		Sprite.rotateVertex(vecC, center, angle, axis);
-		Sprite.rotateVertex(vecD, center, angle, axis);
+		Mathf.rotateVertex(vecA, center, angle, axis);
+		Mathf.rotateVertex(vecB, center, angle, axis);
+		Mathf.rotateVertex(vecC, center, angle, axis);
+		Mathf.rotateVertex(vecD, center, angle, axis);
 	}
 
 	static rotateVertexEuler(vec: THREE.Vector3, center: THREE.Vector3, euler: THREE.Euler) {
@@ -115,10 +115,10 @@ class Sprite extends MapElement {
 		center: THREE.Vector3,
 		euler: THREE.Euler
 	) {
-		Sprite.rotateVertexEuler(vecA, center, euler);
-		Sprite.rotateVertexEuler(vecB, center, euler);
-		Sprite.rotateVertexEuler(vecC, center, euler);
-		Sprite.rotateVertexEuler(vecD, center, euler);
+		Mathf.rotateVertexEuler(vecA, center, euler);
+		Mathf.rotateVertexEuler(vecB, center, euler);
+		Mathf.rotateVertexEuler(vecC, center, euler);
+		Mathf.rotateVertexEuler(vecD, center, euler);
 	}
 
 	/**

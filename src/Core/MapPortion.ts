@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, Enum, Platform } from '../Common';
+import { Constants, Enum } from '../Common';
 import { THREE } from '../Globals';
 import { Datas, Manager, Scene, System } from '../index';
 import { Autotile } from './Autotile';
@@ -214,87 +214,6 @@ class MapPortion {
 				this.staticFloorsMesh.customDepthMaterial = material.userData.customDepthMaterial;
 			}
 			Scene.Map.current.scene.add(this.staticFloorsMesh);
-		}
-	}
-
-	/**
-	 *  Read the JSON associated to the autotiles in the portion.
-	 *  @param {Record<string, any>} json - Json object describing the autotiles
-	 */
-	readAutotiles(json: Record<string, any>) {
-		if (!json) {
-			return;
-		}
-		let texture: TextureBundle = null;
-
-		// Create autotiles according to the textures
-		let i: number, l: number, texturesAutotile: TextureBundle[];
-		for (i = 0, l = Scene.Map.current.texturesAutotiles.length; i < l; i++) {
-			texturesAutotile = Scene.Map.current.texturesAutotiles[i];
-			if (texturesAutotile) {
-				for (let textureAutotile of texturesAutotile) {
-					if (!this.staticAutotilesList[i]) {
-						this.staticAutotilesList[i] = new Array();
-					}
-					this.staticAutotilesList[i].push(new Autotiles(textureAutotile));
-				}
-			}
-		}
-
-		// Read and update geometry
-		let j: number,
-			m: number,
-			jsonAutotile: Record<string, any>,
-			position: Position,
-			autotile: Autotile,
-			indexPos: number,
-			textureAutotile: TextureBundle,
-			autotiles: Autotiles,
-			objCollision: StructMapElementCollision;
-		for (i = 0, l = json.length; i < l; i++) {
-			jsonAutotile = json[i];
-			position = Position.createFromArray(jsonAutotile.k);
-			autotile = new Autotile(jsonAutotile.v);
-			let pictureID = Game.current.textures.autotiles[autotile.autotileID];
-			if (pictureID === undefined) {
-				pictureID = Datas.SpecialElements.getAutotile(autotile.autotileID).pictureID;
-			}
-			indexPos = position.toIndex();
-			texture = null;
-			texturesAutotile = Scene.Map.current.texturesAutotiles[autotile.autotileID];
-			if (texturesAutotile) {
-				for (j = 0, m = texturesAutotile.length; j < m; j++) {
-					textureAutotile = texturesAutotile[j];
-					if (textureAutotile.isInTexture(pictureID, autotile.texture)) {
-						texture = textureAutotile;
-						autotiles = this.staticAutotilesList[autotile.autotileID][j];
-						break;
-					}
-				}
-			}
-			if (texture !== null && texture.material !== null) {
-				objCollision = autotiles.updateGeometry(position, autotile, pictureID);
-				if (objCollision !== null) {
-					this.boundingBoxesLands[indexPos].push(objCollision);
-				}
-			}
-			this.addToNonEmpty(position);
-		}
-
-		// Update all the geometry uvs and put it in the scene
-		for (let list of this.staticAutotilesList) {
-			if (list) {
-				for (autotiles of list) {
-					if (autotiles.createMesh()) {
-						if (Scene.Map.current.mapProperties.isSunLight) {
-							autotiles.mesh.receiveShadow = true;
-							autotiles.mesh.castShadow = true;
-							autotiles.mesh.customDepthMaterial = autotiles.bundle.material.userData.customDepthMaterial;
-						}
-						Scene.Map.current.scene.add(autotiles.mesh);
-					}
-				}
-			}
 		}
 	}
 

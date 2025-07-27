@@ -9,16 +9,15 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Enum, Mathf } from '../Common';
+import { Datas, System } from '../index';
+import { CustomGeometry } from './CustomGeometry';
 import { StructMapElementCollision } from './MapElement';
-import { System, Datas } from '../index';
+import { Object3D } from './Object3D';
 import { Position } from './Position';
-import { Enum } from '../Common';
+import { Vector3 } from './Vector3';
 import CustomShapeKind = Enum.CustomShapeKind;
 import ObjectCollisionKind = Enum.ObjectCollisionKind;
-import { Sprite } from './Sprite';
-import { Object3D } from './Object3D';
-import { Vector3 } from './Vector3';
-import { CustomGeometry } from './CustomGeometry';
 
 /** @class
  *  A 3D object custom in the map.
@@ -95,9 +94,9 @@ class Object3DCustom extends Object3D {
 			vecA.multiply(scaleVec);
 			vecB.multiply(scaleVec);
 			vecC.multiply(scaleVec);
-			Sprite.rotateVertexEuler(vecA, center, position.toRotationEuler());
-			Sprite.rotateVertexEuler(vecB, center, position.toRotationEuler());
-			Sprite.rotateVertexEuler(vecC, center, position.toRotationEuler());
+			Mathf.rotateVertexEuler(vecA, center, position.toRotationEuler());
+			Mathf.rotateVertexEuler(vecB, center, position.toRotationEuler());
+			Mathf.rotateVertexEuler(vecC, center, position.toRotationEuler());
 			vecA.add(localPosition);
 			vecB.add(localPosition);
 			vecC.add(localPosition);

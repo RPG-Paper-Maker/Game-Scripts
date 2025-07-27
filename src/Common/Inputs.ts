@@ -17,8 +17,8 @@ import { Main } from '../main';
  *  Handles inputs for keyboard and mouse.
  */
 class Inputs {
-	static keysPressed: number[] = []; // Currently pressed keys
-	static lockedKeys: [number, number][] = []; // Locked keys after a camera angle change
+	static keysPressed: string[] = []; // Currently pressed keys
+	static lockedKeys: [string, number][] = []; // Locked keys after a camera angle change
 	static mouseLeftPressed: boolean = false;
 	static mouseRightPressed: boolean = false;
 	static mouseFirstPressX: number = -1;

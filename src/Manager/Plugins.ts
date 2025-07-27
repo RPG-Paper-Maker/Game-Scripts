@@ -7,7 +7,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, Paths, Utils } from '../Common';
+import { Constants, Interpreter, Paths, Platform, Utils } from '../Common';
 import { System } from '../index';
 
 type ClassMethod<T extends NewableFunction, M extends keyof T['prototype']> = (

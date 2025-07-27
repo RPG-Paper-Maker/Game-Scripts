@@ -10,6 +10,7 @@
 */
 
 import { Vector2, Vector3 } from '../Core';
+import { THREE } from '../Globals';
 
 /**
  * The static class for Math related function.
@@ -478,6 +479,18 @@ class Mathf {
 
 	static degreesToRadians(degrees: number): number {
 		return degrees * (Math.PI / 180);
+	}
+
+	static rotateVertex(vec: Vector3, center: Vector3, angle: number, axis: Vector3, isDegree: boolean = true) {
+		vec.sub(center);
+		vec.applyAxisAngle(axis, isDegree ? (angle * Math.PI) / 180.0 : angle);
+		vec.add(center);
+	}
+
+	static rotateVertexEuler(vec: THREE.Vector3, center: THREE.Vector3, euler: THREE.Euler) {
+		vec.sub(center);
+		vec.applyEuler(euler);
+		vec.add(center);
 	}
 }
 

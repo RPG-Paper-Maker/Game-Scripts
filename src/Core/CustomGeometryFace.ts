@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Mathf } from '../Common';
 import { THREE } from '../Globals';
 import { CustomGeometry } from './CustomGeometry';
-import { Sprite } from './Sprite';
 import { Vector3 } from './Vector3';
 
 /**
@@ -73,7 +73,7 @@ export class CustomGeometryFace extends CustomGeometry {
 			ic = Math.floor(i / 12) * 3;
 			vertex.set(vertices[i], vertices[i + 1], vertices[i + 2]);
 			center.set(this.centerPoints[ic], this.centerPoints[ic + 1], this.centerPoints[ic + 2]);
-			Sprite.rotateVertex(vertex, center, a, axis, false);
+			Mathf.rotateVertex(vertex, center, a, axis, false);
 			this.b_vertices.push(vertex.x, vertex.y, vertex.z);
 		}
 		this.setAttribute('position', new THREE.Float32BufferAttribute(this.b_vertices, 3));
