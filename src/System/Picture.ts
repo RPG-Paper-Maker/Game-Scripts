@@ -109,7 +109,7 @@ class Picture extends Base {
 				? Datas.Systems.PATH_BR
 				: dlc
 				? Datas.Systems.PATH_DLCS + Constants.STRING_SLASH + dlc
-				: Paths.ROOT_DIRECTORY_LOCAL) + this.getLocalFolder(kind)
+				: Platform.ROOT_DIRECTORY) + this.getLocalFolder(kind)
 		);
 	}
 

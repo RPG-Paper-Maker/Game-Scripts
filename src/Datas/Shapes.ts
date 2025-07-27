@@ -64,7 +64,7 @@ class Shapes {
 				if (jsonShape) {
 					id = jsonShape.id;
 					shape = new System.Shape(jsonShape, k);
-					if (Platform.WEB_DEV && !shape.isBR) {
+					if (!Platform.IS_DESKTOP && !shape.isBR) {
 						shape.base64 = await Platform.loadFile(
 							Platform.ROOT_DIRECTORY.slice(0, -1) +
 								System.Shape.getLocalFolder(shape.kind) +

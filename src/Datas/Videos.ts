@@ -30,7 +30,7 @@ class Videos {
 		let json = (await Platform.parseFileJSON(Paths.FILE_VIDEOS)).list;
 		this.list = [];
 		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System.Video });
-		if (Platform.WEB_DEV) {
+		if (!Platform.IS_DESKTOP) {
 			for (const video of this.list) {
 				if (video) {
 					video.base64 = await Platform.loadFile(

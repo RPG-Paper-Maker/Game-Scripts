@@ -17,7 +17,6 @@ import { Platform } from './Platform';
  * @class Paths
  */
 class Paths {
-	public static readonly ROOT_DIRECTORY_LOCAL = '.';
 	public static readonly FILES = 'file:///';
 	public static readonly TEST = Platform.ROOT_DIRECTORY + 'Test/';
 	public static readonly FILE_MAPS = Platform.ROOT_DIRECTORY + 'Maps/';

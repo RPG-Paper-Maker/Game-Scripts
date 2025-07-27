@@ -66,7 +66,7 @@ class Pictures {
 				if (jsonPicture) {
 					id = jsonPicture.id;
 					picture = new System.Picture(jsonPicture, k);
-					if (Platform.WEB_DEV && !picture.isBR) {
+					if (!Platform.IS_DESKTOP && !picture.isBR) {
 						picture.base64 = await Platform.loadFile(
 							Platform.ROOT_DIRECTORY.slice(0, -1) +
 								System.Picture.getLocalFolder(picture.kind) +

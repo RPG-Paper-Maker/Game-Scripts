@@ -410,6 +410,8 @@ class Systems {
 		Platform.setWindowSize(w, h, fullscreen);
 		Platform.canvasHUD.width = w;
 		Platform.canvasHUD.height = h;
+		Platform.canvasHUD.style.width = `${w}px`;
+		Platform.canvasHUD.style.height = `${h}px`;
 		Platform.canvas3D.style.width = w;
 		Platform.canvas3D.style.height = h;
 		Platform.canvasVideos.height = h;
@@ -430,7 +432,7 @@ class Systems {
 	 */
 	static switchFullscreen() {
 		this.isScreenWindow = !this.isScreenWindow;
-		this.updateWindowSize(this.windowWidth, this.windowHeight, !this.isScreenWindow);
+		this.updateWindowSize(this.windowWidth, this.windowHeight, this.isScreenWindow);
 	}
 }
 

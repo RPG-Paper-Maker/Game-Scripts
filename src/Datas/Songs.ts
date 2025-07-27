@@ -65,7 +65,7 @@ class Songs {
 				if (jsonSong) {
 					id = jsonSong.id;
 					song = new System.Song(jsonSong, k);
-					if (Platform.WEB_DEV && !song.isBR) {
+					if (!Platform.IS_DESKTOP && !song.isBR) {
 						song.base64 = await Platform.loadFile(
 							Platform.ROOT_DIRECTORY.slice(0, -1) +
 								System.Song.getLocalFolder(song.kind) +

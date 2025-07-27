@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, Enum, Paths, Utils } from '../Common';
+import { Constants, Enum, Paths, Platform, Utils } from '../Common';
 import { Howl } from '../Globals';
 import { Datas } from '../index';
 import { Base } from './Base';
@@ -76,7 +76,7 @@ class Song extends Base {
 				? Datas.Systems.PATH_BR
 				: dlc
 				? Datas.Systems.PATH_DLCS + Constants.STRING_SLASH + dlc
-				: Paths.ROOT_DIRECTORY_LOCAL) + this.getLocalFolder(kind)
+				: Platform.ROOT_DIRECTORY) + this.getLocalFolder(kind)
 		);
 	}
 
