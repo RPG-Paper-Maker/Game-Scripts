@@ -886,7 +886,7 @@ class Map extends Base {
 			Scene.Map.current.camera.target.position.y,
 			Scene.Map.current.camera.target.position.z
 		);
-		points.renderOrder = -1;
+		points.renderOrder = 1;
 		this.scene.add(points);
 		if (current) {
 			this.weatherPoints = points;
@@ -1139,7 +1139,7 @@ class Map extends Base {
 					}
 				}
 			}
-			if (Game.current.hero.mesh) {
+			if (Game.current && Game.current.hero.mesh) {
 				Game.current.hero.mesh.material.opacity = opacity;
 			}
 			this.camera.updateTimer();

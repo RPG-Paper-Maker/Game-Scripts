@@ -9,23 +9,23 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Mathf, Constants, Enum } from '../Common';
+import { Constants, Enum, Mathf } from '../Common';
 import {
-	MapObject,
-	Position,
-	Portion,
-	MapPortion,
-	StructMapElementCollision,
 	CollisionSquare,
-	Mountain,
-	Vector3,
-	Vector2,
-	Game,
 	CustomGeometry,
+	Game,
+	MapObject,
+	MapPortion,
+	Mountain,
+	Portion,
+	Position,
+	StructMapElementCollision,
+	Vector2,
+	Vector3,
 } from '../Core';
-import { Datas, System, Scene, Manager } from '../index';
-import ElementMapKind = Enum.ElementMapKind;
 import { THREE } from '../Globals';
+import { Datas, Manager, Scene, System } from '../index';
+import ElementMapKind = Enum.ElementMapKind;
 
 /** @class
  *  The collisions manager.
@@ -95,27 +95,31 @@ class Collisions {
 	static applyBoxLandTransforms(box: THREE.Mesh, boundingBox: number[]) {
 		// Cancel previous geometry transforms
 		box.geometry.translate(
-			-box['previousTranslate'][0],
-			-box['previousTranslate'][1],
-			-box['previousTranslate'][2]
+			-box['previousTranslate'][0] + box['previousCenter'][0],
+			-box['previousTranslate'][1] + box['previousCenter'][1],
+			-box['previousTranslate'][2] + box['previousCenter'][2]
 		);
-		box.geometry.rotateZ((-box['previousRotate'][2] * Math.PI) / 180.0);
-		box.geometry.rotateY((-box['previousRotate'][0] * Math.PI) / 180.0);
-		box.geometry.rotateX((-box['previousRotate'][1] * Math.PI) / 180.0);
+		let geometry = <CustomGeometry>box.geometry;
+		geometry.rotateFromEuler(
+			new THREE.Euler(
+				(-box['previousRotate'][1] * Math.PI) / 180.0,
+				(-box['previousRotate'][0] * Math.PI) / 180.0,
+				(-box['previousRotate'][2] * Math.PI) / 180.0,
+				'ZYX'
+			),
+			new Vector3(box['previousCenter'][0], box['previousCenter'][1], box['previousCenter'][2])
+		);
 		box.geometry.scale(1 / box['previousScale'][0], 1 / box['previousScale'][1], 1 / box['previousScale'][2]);
-
 		// Update to the new ones
 		box.geometry.scale(boundingBox[3], 1, boundingBox[4]);
 		box.geometry.translate(boundingBox[0], boundingBox[1], boundingBox[2]);
-
 		// Register previous transforms to current
 		box['previousTranslate'] = [boundingBox[0], boundingBox[1], boundingBox[2]];
 		box['previousRotate'] = [0, 0, 0];
 		box['previousScale'] = [boundingBox[3], 1, boundingBox[4]];
-
+		box['previousCenter'] = [0, 0, 0];
 		// Update geometry now
 		box.updateMatrixWorld();
-
 		// Compute bounding box manually
 		if (box.geometry.boundingBox === null) {
 			box.geometry.computeBoundingBox();

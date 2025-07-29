@@ -461,6 +461,10 @@ class Sprite extends MapElement {
 		this.front = Utils.defaultValue(json.f, true);
 		this.kind = json.k;
 		this.textureRect = json.t;
+		if (this.textureRect.length === 2) {
+			this.textureRect.push(1);
+			this.textureRect.push(1);
+		}
 	}
 }
 
