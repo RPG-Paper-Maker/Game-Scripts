@@ -40,7 +40,7 @@ class Keyboards {
 			for (let i = 0, l = sc.length; i < l; i++) {
 				m = sc[i].length;
 				if (m === 1) {
-					if (sc[i][0] === key) {
+					if (sc[i][0].toUpperCase() === key.toUpperCase()) {
 						return true;
 					}
 				} else {
