@@ -143,6 +143,8 @@ class GL {
 		opts.texture.magFilter = THREE.NearestFilter;
 		opts.texture.minFilter = THREE.NearestFilter;
 		opts.texture.flipY = opts.flipY ? true : false;
+		opts.texture.wrapS = THREE.RepeatWrapping;
+		opts.texture.wrapT = THREE.RepeatWrapping;
 		opts.repeat = Utils.defaultValue(opts.repeat, 1.0);
 		opts.opacity = Utils.defaultValue(opts.opacity, 1.0);
 		opts.shadows = Utils.defaultValue(opts.shadows, true);
@@ -169,6 +171,7 @@ class GL {
 			transparent: true,
 			alphaTest: 0.5,
 			opacity: opts.opacity,
+			shininess: 0,
 		});
 		material.userData.uniforms = uniforms;
 		material.userData.customDepthMaterial = new THREE.MeshDepthMaterial({

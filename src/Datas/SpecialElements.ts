@@ -10,9 +10,9 @@
 */
 
 import { Constants, Enum, Paths, Platform, Utils } from '../Common';
-import { Autotiles, Frame, Game, Picture2D, TextureBundle } from '../Core';
-import { System, Datas, Manager, Scene } from '../index';
+import { Autotiles, Game, Picture2D, TextureBundle } from '../Core';
 import { THREE } from '../Globals';
+import { Datas, Manager, Scene, System } from '../index';
 
 /** @class
  *  All the special elements datas.
@@ -422,7 +422,7 @@ class SpecialElements {
 			let texture = new THREE.Texture();
 			Platform.ctxr.clearRect(0, 0, Platform.canvasRendering.width, Platform.canvasRendering.height);
 			Platform.canvasRendering.width = 4 * Datas.Systems.SQUARE_SIZE;
-			Platform.canvasRendering.height = Constants.MAX_PICTURE_SIZE;
+			Platform.canvasRendering.height = 7 * Datas.Systems.SQUARE_SIZE;
 			this.texturesMountains = new Array();
 			let picture = mountain ? Datas.Pictures.get(Enum.PictureKind.Mountains, pictureID) : null;
 			result = await this.loadTextureMountain(textureMountain, texture, picture, offset, id);
@@ -603,6 +603,23 @@ class SpecialElements {
 				sDiv,
 				sDiv
 			);
+
+			// Repeated mid (for corners)
+			for (let i = 0, l = 3; i < l; i++) {
+				for (let j = 0, m = 4; j < m; j++) {
+					Platform.ctxr.drawImage(
+						img,
+						Datas.Systems.SQUARE_SIZE,
+						i * Datas.Systems.SQUARE_SIZE,
+						Datas.Systems.SQUARE_SIZE,
+						Datas.Systems.SQUARE_SIZE,
+						j * Datas.Systems.SQUARE_SIZE,
+						(4 + i) * Datas.Systems.SQUARE_SIZE,
+						Datas.Systems.SQUARE_SIZE,
+						Datas.Systems.SQUARE_SIZE
+					);
+				}
+			}
 		} catch (e) {
 			Platform.showErrorMessage(
 				'Error: Wrong mountain (with ID:' + id + ') parsing. Please verify that you have a 3 x 3 picture.'

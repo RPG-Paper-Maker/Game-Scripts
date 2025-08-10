@@ -9,21 +9,20 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Platform, Utils } from "../Common";
+import { Enum, Platform, Utils } from '../Common';
+import { Game, ReactionInterpreter, Vector2, Vector3 } from '../Core';
+import { StructIterator } from '../EventCommand';
+import { Datas, System } from '../index';
 import DynamicValueKind = Enum.DynamicValueKind;
-import { System, Datas } from "../index";
-import { StructIterator } from "../EventCommand";
-import { ReactionInterpreter, Game, Vector2, Vector3 } from "../Core";
 
-interface StructJSON
-{
-    k: DynamicValueKind,
-    v: any,
-    x: StructJSON,
-    y: StructJSON,
-    z: StructJSON,
-    customStructure?: Record<string, any>,
-    customList?: Record<string, any>
+interface StructJSON {
+	k: DynamicValueKind;
+	v: any;
+	x: StructJSON;
+	y: StructJSON;
+	z: StructJSON;
+	customStructure?: Record<string, any>;
+	customList?: Record<string, any>;
 }
 
 /** @class
@@ -32,497 +31,490 @@ interface StructJSON
  *  @param {Record<string, any>} - [json=undefined] Json object describing the value
  */
 class DynamicValue extends System.Base {
-    
-    public kind: DynamicValueKind;
-    public value: any;
-    public customStructure: Record<string, System.DynamicValue>;
-    public customList: System.DynamicValue[];
-    public x: System.DynamicValue;
-    public y: System.DynamicValue;
-    public z: System.DynamicValue;
+	public kind: DynamicValueKind;
+	public value: any;
+	public customStructure: Record<string, System.DynamicValue>;
+	public customList: System.DynamicValue[];
+	public x: System.DynamicValue;
+	public y: System.DynamicValue;
+	public z: System.DynamicValue;
 
-    constructor(json?: Record<string, any>) {
-        super(json);
-    }
+	constructor(json?: Record<string, any>) {
+		super(json);
+	}
 
-    /** 
-     *  Create a new value from kind and value.
-     *  @static
-     *  @param {DynamicValueKind} [k=DynamicValueKind.None] - The kind of value
-     *  @param {any} [v=0] - The value
-     *  @returns {SystemValue}
-     */
-    static create(k: DynamicValueKind = DynamicValueKind.None, v: any = 0): 
-        System.DynamicValue {
-        let systemValue = new System.DynamicValue();
-        systemValue.kind = k;
-        switch (k) {
-            case DynamicValueKind.None:
-                systemValue.value = null;
-                break;
-            case DynamicValueKind.Message:
-                systemValue.value = Utils.numToString(v);
-                break;
-            case DynamicValueKind.Switch:
-                systemValue.value = Utils.numToBool(v);
-                break;
-            default:
-                systemValue.value = v;
-                break;
-        }
-        return systemValue;
-    }
+	/**
+	 *  Create a new value from kind and value.
+	 *  @static
+	 *  @param {DynamicValueKind} [k=DynamicValueKind.None] - The kind of value
+	 *  @param {any} [v=0] - The value
+	 *  @returns {SystemValue}
+	 */
+	static create(k: DynamicValueKind = DynamicValueKind.None, v: any = 0): System.DynamicValue {
+		let systemValue = new System.DynamicValue();
+		systemValue.kind = k;
+		switch (k) {
+			case DynamicValueKind.None:
+				systemValue.value = null;
+				break;
+			case DynamicValueKind.Message:
+				systemValue.value = Utils.numToString(v);
+				break;
+			case DynamicValueKind.Switch:
+				switch (v) {
+					case 1:
+						systemValue.value = true;
+						break;
+					case 0:
+						systemValue.value = false;
+						break;
+					default:
+						systemValue.value = v;
+						break;
+				}
+				break;
+			default:
+				systemValue.value = v;
+				break;
+		}
+		return systemValue;
+	}
 
-    /** 
-     *  Create a new value from a command and iterator.
-     *  @static
-     *  @param {any[]} command - The list describing the command
-     *  @param {StructIterator} iterator - The iterator
-     *  @returns {System.DynamicValue}
-     */
-    static createValueCommand(command: any[], iterator: StructIterator): 
-        System.DynamicValue {
-        let k = command[iterator.i++];
-        let v = command[iterator.i++];
-        return System.DynamicValue.create(k, v);
-    }
+	/**
+	 *  Create a new value from a command and iterator.
+	 *  @static
+	 *  @param {any[]} command - The list describing the command
+	 *  @param {StructIterator} iterator - The iterator
+	 *  @returns {System.DynamicValue}
+	 */
+	static createValueCommand(command: any[], iterator: StructIterator): System.DynamicValue {
+		let k = command[iterator.i++];
+		let v = command[iterator.i++];
+		return System.DynamicValue.create(k, v);
+	}
 
-    /** 
-     *  Create a none value.
-     *  @static
-     *  @returns {System.DynamicValue}
-     */
-    static createNone(): System.DynamicValue {
-        return System.DynamicValue.create(DynamicValueKind.None, null);
-    }
+	/**
+	 *  Create a none value.
+	 *  @static
+	 *  @returns {System.DynamicValue}
+	 */
+	static createNone(): System.DynamicValue {
+		return System.DynamicValue.create(DynamicValueKind.None, null);
+	}
 
-    /** 
-     *  Create a new value number.
-     *  @static
-     *  @param {number} n - The number
-     *  @returns {System.DynamicValue}
-     */
-    static createNumber(n: number): System.DynamicValue {
-        return System.DynamicValue.create(DynamicValueKind.Number, n);
-    }
+	/**
+	 *  Create a new value number.
+	 *  @static
+	 *  @param {number} n - The number
+	 *  @returns {System.DynamicValue}
+	 */
+	static createNumber(n: number): System.DynamicValue {
+		return System.DynamicValue.create(DynamicValueKind.Number, n);
+	}
 
-    /**
-     *  Create a new value message.
-     *  @static
-     *  @param {string} m - The message
-     *  @returns {System.DynamicValue}
-     */
-    static createMessage(m: string): System.DynamicValue {
-        return System.DynamicValue.create(DynamicValueKind.Message, m);
-    }
+	/**
+	 *  Create a new value message.
+	 *  @static
+	 *  @param {string} m - The message
+	 *  @returns {System.DynamicValue}
+	 */
+	static createMessage(m: string): System.DynamicValue {
+		return System.DynamicValue.create(DynamicValueKind.Message, m);
+	}
 
-    /** 
-     *  Create a new value decimal number.
-     *  @static
-     *  @param {number} n - The number
-     *  @returns {System.DynamicValue}
-     */
-    static createNumberDouble(n: number): System.DynamicValue {
-        return System.DynamicValue.create(DynamicValueKind.NumberDouble, n);
-    }
+	/**
+	 *  Create a new value decimal number.
+	 *  @static
+	 *  @param {number} n - The number
+	 *  @returns {System.DynamicValue}
+	 */
+	static createNumberDouble(n: number): System.DynamicValue {
+		return System.DynamicValue.create(DynamicValueKind.NumberDouble, n);
+	}
 
-    /** 
-     *  Create a new value keyBoard.
-     *  @static
-     *  @param {number} k - The key number
-     *  @returns {System.DynamicValue}
-     */
-    static createKeyBoard(k: number): System.DynamicValue {
-        return System.DynamicValue.create(DynamicValueKind.KeyBoard, k);
-    }
+	/**
+	 *  Create a new value keyBoard.
+	 *  @static
+	 *  @param {number} k - The key number
+	 *  @returns {System.DynamicValue}
+	 */
+	static createKeyBoard(k: number): System.DynamicValue {
+		return System.DynamicValue.create(DynamicValueKind.KeyBoard, k);
+	}
 
-    /** 
-     *  Create a new value switch.
-     *  @static
-     *  @param {boolean} b - The value of the switch
-     *  @returns {System.DynamicValue}
-     */
-    static createSwitch(b: boolean): System.DynamicValue {
-        return System.DynamicValue.create(DynamicValueKind.Switch, Utils.boolToNum(b));
-    }
+	/**
+	 *  Create a new value switch.
+	 *  @static
+	 *  @param {boolean} b - The value of the switch
+	 *  @returns {System.DynamicValue}
+	 */
+	static createSwitch(b: boolean): System.DynamicValue {
+		return System.DynamicValue.create(DynamicValueKind.Switch, Utils.boolToNum(b));
+	}
 
-    /** 
-     *  Create a new value variable.
-     *  @static
-     *  @param {number} id - The variable ID
-     *  @returns {System.DynamicValue}
-     */
-    static createVariable(id: number): System.DynamicValue {
-        return System.DynamicValue.create(DynamicValueKind.Variable, id);
-    }
+	/**
+	 *  Create a new value variable.
+	 *  @static
+	 *  @param {number} id - The variable ID
+	 *  @returns {System.DynamicValue}
+	 */
+	static createVariable(id: number): System.DynamicValue {
+		return System.DynamicValue.create(DynamicValueKind.Variable, id);
+	}
 
-    /** 
-     *  Create a new value parameter.
-     *  @static
-     *  @param {number} id - The parameter ID
-     *  @returns {System.DynamicValue}
-     */
-    static createParameter(id: number): System.DynamicValue {
-        return System.DynamicValue.create(DynamicValueKind.Parameter, id);
-    }
+	/**
+	 *  Create a new value parameter.
+	 *  @static
+	 *  @param {number} id - The parameter ID
+	 *  @returns {System.DynamicValue}
+	 */
+	static createParameter(id: number): System.DynamicValue {
+		return System.DynamicValue.create(DynamicValueKind.Parameter, id);
+	}
 
-    /** 
-     *  Create a new value property.
-     *  @static
-     *  @param {number} id - The property id
-     *  @returns {System.DynamicValue}
-     */
-    static createProperty(id: number): System.DynamicValue {
-        return System.DynamicValue.create(DynamicValueKind.Property, id);
-    }
+	/**
+	 *  Create a new value property.
+	 *  @static
+	 *  @param {number} id - The property id
+	 *  @returns {System.DynamicValue}
+	 */
+	static createProperty(id: number): System.DynamicValue {
+		return System.DynamicValue.create(DynamicValueKind.Property, id);
+	}
 
-    /** 
-     *  Map a list of parameters so it gets the current properties and 
-     *  parameters values.
-     *  @static
-     *  @param {System.DynamicValue[]} parameters
-     *  @returns {System.DynamicValue[]}
-     */
-    static mapWithParametersProperties(parameters: System.DynamicValue[]): System
-        .DynamicValue[] {
-        return parameters.map(value => { return value.kind === Enum.DynamicValueKind
-            .Parameter || Enum.DynamicValueKind.Property ? System.DynamicValue
-            .create(Enum.DynamicValueKind.Unknown, value.getValue()) : value;})
-    }
+	/**
+	 *  Map a list of parameters so it gets the current properties and
+	 *  parameters values.
+	 *  @static
+	 *  @param {System.DynamicValue[]} parameters
+	 *  @returns {System.DynamicValue[]}
+	 */
+	static mapWithParametersProperties(parameters: System.DynamicValue[]): System.DynamicValue[] {
+		return parameters.map((value) => {
+			return value.kind === Enum.DynamicValueKind.Parameter || Enum.DynamicValueKind.Property
+				? System.DynamicValue.create(Enum.DynamicValueKind.Unknown, value.getValue())
+				: value;
+		});
+	}
 
-    /** 
-     *  Try to read a variable value, if not possible put default value.
-     *  @static
-     *  @param {StructJSONDynamicValue} json - The json value
-     *  @param {number} [n=0] - The default value
-     *  @returns {System.DynamicValue}
-     */
-    static readOrDefaultVariable(json: StructJSON): System.DynamicValue {
-        return Utils.isUndefined(json) ? System.DynamicValue.createVariable(1) : 
-            System.DynamicValue.readFromJSON(json);
-    }
+	/**
+	 *  Try to read a variable value, if not possible put default value.
+	 *  @static
+	 *  @param {StructJSONDynamicValue} json - The json value
+	 *  @param {number} [n=0] - The default value
+	 *  @returns {System.DynamicValue}
+	 */
+	static readOrDefaultVariable(json: StructJSON): System.DynamicValue {
+		return Utils.isUndefined(json) ? System.DynamicValue.createVariable(1) : System.DynamicValue.readFromJSON(json);
+	}
 
-    /** 
-     *  Try to read a number value, if not possible put default value.
-     *  @static
-     *  @param {StructJSONDynamicValue} json - The json value
-     *  @param {number} [n=0] - The default value
-     *  @returns {System.DynamicValue}
-     */
-    static readOrDefaultNumber(json: StructJSON, n: number = 0): 
-        System.DynamicValue {
-        return Utils.isUndefined(json) ? System.DynamicValue.createNumber(n) : 
-            System.DynamicValue.readFromJSON(json);
-    }
+	/**
+	 *  Try to read a number value, if not possible put default value.
+	 *  @static
+	 *  @param {StructJSONDynamicValue} json - The json value
+	 *  @param {number} [n=0] - The default value
+	 *  @returns {System.DynamicValue}
+	 */
+	static readOrDefaultNumber(json: StructJSON, n: number = 0): System.DynamicValue {
+		return Utils.isUndefined(json) ? System.DynamicValue.createNumber(n) : System.DynamicValue.readFromJSON(json);
+	}
 
-    /** 
-     *  Try to read a double number value, if not possible put default value.
-     *  @static
-     *  @param {StructJSONDynamicValue} json - The json value
-     *  @param {number} [n=0] - The default value
-     *  @returns {System.DynamicValue}
-     */
-    static readOrDefaultNumberDouble(json: StructJSON, n: number = 0
-        ): System.DynamicValue {
-        return Utils.isUndefined(json) ? System.DynamicValue.createNumberDouble(
-            n) : System.DynamicValue.readFromJSON(json);
-    }
+	/**
+	 *  Try to read a double number value, if not possible put default value.
+	 *  @static
+	 *  @param {StructJSONDynamicValue} json - The json value
+	 *  @param {number} [n=0] - The default value
+	 *  @returns {System.DynamicValue}
+	 */
+	static readOrDefaultNumberDouble(json: StructJSON, n: number = 0): System.DynamicValue {
+		return Utils.isUndefined(json)
+			? System.DynamicValue.createNumberDouble(n)
+			: System.DynamicValue.readFromJSON(json);
+	}
 
-    /** 
-     *  Try to read a database value, if not possible put default value.
-     *  @static
-     *  @param {StructJSONDynamicValue} json - The json value
-     *  @param {number} [id=1] - The default value
-     *  @returns {System.DynamicValue}
-     */
-    static readOrDefaultDatabase(json: StructJSON, id: number = 1): 
-        System.DynamicValue {
-        return Utils.isUndefined(json) ? System.DynamicValue.create(
-            DynamicValueKind.DataBase, id) : System.DynamicValue.readFromJSON(json);
-    }
+	/**
+	 *  Try to read a database value, if not possible put default value.
+	 *  @static
+	 *  @param {StructJSONDynamicValue} json - The json value
+	 *  @param {number} [id=1] - The default value
+	 *  @returns {System.DynamicValue}
+	 */
+	static readOrDefaultDatabase(json: StructJSON, id: number = 1): System.DynamicValue {
+		return Utils.isUndefined(json)
+			? System.DynamicValue.create(DynamicValueKind.DataBase, id)
+			: System.DynamicValue.readFromJSON(json);
+	}
 
-    /** 
-     *  Try to read a message value, if not possible put default value.
-     *  @static
-     *  @param {StructJSONDynamicValue} json - The json value
-     *  @param {string} [m=""] - The default value
-     *  @returns {System.DynamicValue}
-     */
-    static readOrDefaultMessage(json: StructJSON, m: string = ""): 
-        System.DynamicValue {
-        return Utils.isUndefined(json) ? System.DynamicValue.create(
-            DynamicValueKind.Message, m) : System.DynamicValue.readFromJSON(json);
-    }
+	/**
+	 *  Try to read a message value, if not possible put default value.
+	 *  @static
+	 *  @param {StructJSONDynamicValue} json - The json value
+	 *  @param {string} [m=""] - The default value
+	 *  @returns {System.DynamicValue}
+	 */
+	static readOrDefaultMessage(json: StructJSON, m: string = ''): System.DynamicValue {
+		return Utils.isUndefined(json)
+			? System.DynamicValue.create(DynamicValueKind.Message, m)
+			: System.DynamicValue.readFromJSON(json);
+	}
 
-    /** 
-     *  Try to read a switch value, if not possible put default value.
-     *  @static
-     *  @param {StructJSONDynamicValue} json - The json value
-     *  @param {boolean} [s=true] - The default value
-     *  @returns {System.DynamicValue}
-     */
-    static readOrDefaultSwitch(json: StructJSON, s: boolean = true): System.DynamicValue {
-        return Utils.isUndefined(json) ? System.DynamicValue.createSwitch(s) : 
-            System.DynamicValue.readFromJSON(json);
-    }
+	/**
+	 *  Try to read a switch value, if not possible put default value.
+	 *  @static
+	 *  @param {StructJSONDynamicValue} json - The json value
+	 *  @param {boolean} [s=true] - The default value
+	 *  @returns {System.DynamicValue}
+	 */
+	static readOrDefaultSwitch(json: StructJSON, s: boolean = true): System.DynamicValue {
+		return Utils.isUndefined(json) ? System.DynamicValue.createSwitch(s) : System.DynamicValue.readFromJSON(json);
+	}
 
-    /** 
-     *  Try to read a value, if not possible put none value.
-     *  @static
-     *  @param {StructJSONDynamicValue} json - The json value
-     *  @returns {System.DynamicValue}
-     */
-    static readOrNone(json: StructJSON): System.DynamicValue {
-        return Utils.isUndefined(json) ? System.DynamicValue.createNone() : 
-            System.DynamicValue.readFromJSON(json);
-    }
+	/**
+	 *  Try to read a value, if not possible put none value.
+	 *  @static
+	 *  @param {StructJSONDynamicValue} json - The json value
+	 *  @returns {System.DynamicValue}
+	 */
+	static readOrNone(json: StructJSON): System.DynamicValue {
+		return Utils.isUndefined(json) ? System.DynamicValue.createNone() : System.DynamicValue.readFromJSON(json);
+	}
 
-    /** 
-     *  Read a value of any kind and return it.
-     *  @static
-     *  @param {StructJSONDynamicValue} json - The json value
-     *  @returns {System.DynamicValue}
-     */
-    static readFromJSON(json: StructJSON): System.DynamicValue {
-        let value = new System.DynamicValue();
-        value.read(json);
-        return value;
-    }
+	/**
+	 *  Read a value of any kind and return it.
+	 *  @static
+	 *  @param {StructJSONDynamicValue} json - The json value
+	 *  @returns {System.DynamicValue}
+	 */
+	static readFromJSON(json: StructJSON): System.DynamicValue {
+		let value = new System.DynamicValue();
+		value.read(json);
+		return value;
+	}
 
-    /** 
-     *  Read the JSON associated to the value
-     *  @param {StructJSONDynamicValue} json - Json object describing the value
-     */
-    read(json: StructJSON) {
-        this.kind = json.k;
-        this.value = json.v;
+	/**
+	 *  Read the JSON associated to the value
+	 *  @param {StructJSONDynamicValue} json - Json object describing the value
+	 */
+	read(json: StructJSON) {
+		this.kind = json.k;
+		this.value = json.v;
 
-        switch (this.kind) {
-            case DynamicValueKind.CustomStructure:
-                this.customStructure = {};
-                let jsonList = Utils.defaultValue(json.customStructure
-                    .properties, []);
-                let parameter: System.DynamicValue, jsonParameter: Record<string
-                    , any>;
-                for (let i = 0, l = jsonList.length; i < l; i++) {
-                    jsonParameter = jsonList[i];
-                    parameter = System.DynamicValue.readOrDefaultNumber(
-                        jsonParameter.value);
-                    this.customStructure[jsonParameter.name] = parameter;
-                }
-                break;
-            case DynamicValueKind.CustomList:
-                this.customList = [];
-                Utils.readJSONSystemList({ list: Utils.defaultValue(json
-                    .customList.list, []), listIndexes: this.customList, func: (
-                    jsonParameter: Record<string ,any>) =>
-                    {
-                        return System.DynamicValue.readOrDefaultNumber(
-                            jsonParameter.value); 
-                    }
-                });
-                break;
-            case DynamicValueKind.Vector2:
-                this.x = System.DynamicValue.readFromJSON(json.x);
-                this.y = System.DynamicValue.readFromJSON(json.y);
-                break;
-            case DynamicValueKind.Vector3:
-                this.x = System.DynamicValue.readFromJSON(json.x);
-                this.y = System.DynamicValue.readFromJSON(json.y);
-                this.z = System.DynamicValue.readFromJSON(json.z);
-                break;
-            default:
-                break;
-        }
-    }
+		switch (this.kind) {
+			case DynamicValueKind.CustomStructure:
+				this.customStructure = {};
+				let jsonList = Utils.defaultValue(json.customStructure.properties, []);
+				let parameter: System.DynamicValue, jsonParameter: Record<string, any>;
+				for (let i = 0, l = jsonList.length; i < l; i++) {
+					jsonParameter = jsonList[i];
+					parameter = System.DynamicValue.readOrDefaultNumber(jsonParameter.value);
+					this.customStructure[jsonParameter.name] = parameter;
+				}
+				break;
+			case DynamicValueKind.CustomList:
+				this.customList = [];
+				Utils.readJSONSystemList({
+					list: Utils.defaultValue(json.customList.list, []),
+					listIndexes: this.customList,
+					func: (jsonParameter: Record<string, any>) => {
+						return System.DynamicValue.readOrDefaultNumber(jsonParameter.value);
+					},
+				});
+				break;
+			case DynamicValueKind.Vector2:
+				this.x = System.DynamicValue.readFromJSON(json.x);
+				this.y = System.DynamicValue.readFromJSON(json.y);
+				break;
+			case DynamicValueKind.Vector3:
+				this.x = System.DynamicValue.readFromJSON(json.x);
+				this.y = System.DynamicValue.readFromJSON(json.y);
+				this.z = System.DynamicValue.readFromJSON(json.z);
+				break;
+			default:
+				break;
+		}
+	}
 
-    /** 
-     *  Get the json value.
-     *  @returns {Record<string, any>}
-     */
-    toJson(): Record<string, any> {
-        let json: Record<string, any> = {};
-        json.k = this.kind;
-        json.v = this.value;
-        return json;
-    }
+	/**
+	 *  Get the json value.
+	 *  @returns {Record<string, any>}
+	 */
+	toJson(): Record<string, any> {
+		let json: Record<string, any> = {};
+		json.k = this.kind;
+		json.v = this.value;
+		return json;
+	}
 
-    /** 
-     *  Get the value
-     *  @returns {any}
-     */
-    getValue<T>(forceVariable: boolean = false, deep: boolean = false): any {
-        switch (this.kind) {
-            case DynamicValueKind.Variable:
-                if (!Game.current) {
-                    Platform.showErrorMessage("Trying to access a variable value without any game loaded.");
-                }
-                return forceVariable ? this.value : Game.current.variables[this.value];
-            case DynamicValueKind.Parameter:
-                return ReactionInterpreter.currentParameters[this.value]
-                    .getValue();
-            case DynamicValueKind.Property:
-                return ReactionInterpreter.currentObject.properties[this.value];
-            case DynamicValueKind.Class:
-                return Datas.Classes.get(this.value);
-            case DynamicValueKind.Hero:
-                return Datas.Heroes.get(this.value);
-            case DynamicValueKind.Monster:
-                return Datas.Monsters.get(this.value);
-            case DynamicValueKind.Troop:
-                return Datas.Troops.get(this.value);
-            case DynamicValueKind.Item:
-                return Datas.Items.get(this.value);
-            case DynamicValueKind.Weapon:
-                return Datas.Weapons.get(this.value);
-            case DynamicValueKind.Armor:
-                return Datas.Armors.get(this.value);
-            case DynamicValueKind.Skill:
-                return Datas.Skills.get(this.value);
-            case DynamicValueKind.Animation:
-                return Datas.Animations.get(this.value);
-            case DynamicValueKind.Status:
-                return Datas.Status.get(this.value);
-            case DynamicValueKind.Tileset:
-                return Datas.Tilesets.get(this.value);
-            case DynamicValueKind.FontSize:
-                return Datas.Systems.getFontSize(this.value);
-            case DynamicValueKind.FontName:
-                return Datas.Systems.getFontName(this.value);
-            case DynamicValueKind.Color:
-                return Datas.Systems.getColor(this.value);
-            case DynamicValueKind.WindowSkin:
-                return Datas.Systems.getWindowSkin(this.value);
-            case DynamicValueKind.Currency:
-                return Datas.Systems.getCurrency(this.value);
-            case DynamicValueKind.Speed:
-                return Datas.Systems.getSpeed(this.value);
-            case DynamicValueKind.Detection:
-                return Datas.Systems.getDetection(this.value);
-            case DynamicValueKind.CameraProperty:
-                return Datas.Systems.getCameraProperties(this.value);
-            case DynamicValueKind.Frequency:
-                return Datas.Systems.getFrequency(this.value);
-            case DynamicValueKind.Skybox:
-                return Datas.Systems.getSkybox(this.value);
-            case DynamicValueKind.BattleMap:
-                return Datas.BattleSystems.getBattleMap(this.value);
-            case DynamicValueKind.Element:
-                return Datas.BattleSystems.getElement(this.value);
-            case DynamicValueKind.CommonStatistic:
-                return Datas.BattleSystems.getStatistic(this.value);
-            case DynamicValueKind.WeaponsKind:
-                return Datas.BattleSystems.getWeaponKind(this.value);
-            case DynamicValueKind.ArmorsKind:
-                return Datas.BattleSystems.getArmorKind(this.value);
-            case DynamicValueKind.CommonBattleCommand:
-                return Datas.BattleSystems.getBattleCommand(this.value);
-            case DynamicValueKind.CommonEquipment:
-                return Datas.BattleSystems.getEquipment(this.value);
-            case DynamicValueKind.Event:
-                return Datas.CommonEvents.getEventUser(this.value);
-            case DynamicValueKind.State:
-                return this.value;
-            case DynamicValueKind.CommonReaction:
-                return Datas.CommonEvents.getCommonReaction(this.value);
-            case DynamicValueKind.Model:
-                return Datas.CommonEvents.getCommonObject(this.value);
-            case DynamicValueKind.CustomStructure:
-                if (deep) {
-                    let obj = {};
-                    for (let k in this.customStructure) {
-                        obj[k] = this.customStructure[k].getValue(forceVariable, true);
-                    }
-                    return obj;
-                }
-                return this.customStructure;
-            case DynamicValueKind.CustomList:
-                if (deep) {
-                    let list = [];
-                    for (let v of this.customList) {
-                        list.push(v.getValue(forceVariable, true));
-                    }
-                    return list;
-                }
-                return this.customList;
-            case DynamicValueKind.Vector2:
-                return new Vector2(this.x.getValue(), this.y.getValue());
-            case DynamicValueKind.Vector3:
-                return new Vector3(this.x.getValue(), this.y.getValue(), this.z.getValue());
-            case DynamicValueKind.Bars:
-                return Datas.Pictures.get(Enum.PictureKind.Bars, this.value);
-            case DynamicValueKind.Icons:
-                return Datas.Pictures.get(Enum.PictureKind.Icons, this.value);
-            case DynamicValueKind.Autotiles:
-                return Datas.Pictures.get(Enum.PictureKind.Autotiles, this.value);
-            case DynamicValueKind.Characters:
-                return Datas.Pictures.get(Enum.PictureKind.Characters, this.value);
-            case DynamicValueKind.Mountains:
-                return Datas.Pictures.get(Enum.PictureKind.Mountains, this.value);
-            case DynamicValueKind.Tilesets:
-                return Datas.Pictures.get(Enum.PictureKind.Tilesets, this.value);
-            case DynamicValueKind.Walls:
-                return Datas.Pictures.get(Enum.PictureKind.Walls, this.value);
-            case DynamicValueKind.Battlers:
-                return Datas.Pictures.get(Enum.PictureKind.Battlers, this.value);
-            case DynamicValueKind.Facesets:
-                return Datas.Pictures.get(Enum.PictureKind.Facesets, this.value);
-            case DynamicValueKind.WindowSkins:
-                return Datas.Pictures.get(Enum.PictureKind.WindowSkins, this.value);
-            case DynamicValueKind.TitleScreen:
-                return Datas.Pictures.get(Enum.PictureKind.TitleScreen, this.value);
-            case DynamicValueKind.Object3D:
-                return Datas.Pictures.get(Enum.PictureKind.Objects3D, this.value);
-            case DynamicValueKind.Pictures:
-                return Datas.Pictures.get(Enum.PictureKind.Pictures, this.value);
-            case DynamicValueKind.Animations:
-                return Datas.Pictures.get(Enum.PictureKind.Animations, this.value);
-            case DynamicValueKind.SkyBoxes:
-                return Datas.Pictures.get(Enum.PictureKind.Skyboxes, this.value);
-            case DynamicValueKind.Music:
-                return Datas.Songs.get(Enum.SongKind.Music, this.value);
-            case DynamicValueKind.BackgroundSound:
-                return Datas.Songs.get(Enum.SongKind.BackgroundSound, this.value);
-            case DynamicValueKind.Sound:
-                return Datas.Songs.get(Enum.SongKind.Sound, this.value);
-            case DynamicValueKind.MusicEffect:
-                return Datas.Songs.get(Enum.SongKind.MusicEffect, this.value);
-            default:
-                return this.value;
-        }
-    }
+	/**
+	 *  Get the value
+	 *  @returns {any}
+	 */
+	getValue<T>(forceVariable: boolean = false, deep: boolean = false): any {
+		switch (this.kind) {
+			case DynamicValueKind.Variable:
+				if (!Game.current) {
+					Platform.showErrorMessage('Trying to access a variable value without any game loaded.');
+				}
+				return forceVariable ? this.value : Game.current.variables[this.value];
+			case DynamicValueKind.Parameter:
+				return ReactionInterpreter.currentParameters[this.value].getValue();
+			case DynamicValueKind.Property:
+				return ReactionInterpreter.currentObject.properties[this.value];
+			case DynamicValueKind.Class:
+				return Datas.Classes.get(this.value);
+			case DynamicValueKind.Hero:
+				return Datas.Heroes.get(this.value);
+			case DynamicValueKind.Monster:
+				return Datas.Monsters.get(this.value);
+			case DynamicValueKind.Troop:
+				return Datas.Troops.get(this.value);
+			case DynamicValueKind.Item:
+				return Datas.Items.get(this.value);
+			case DynamicValueKind.Weapon:
+				return Datas.Weapons.get(this.value);
+			case DynamicValueKind.Armor:
+				return Datas.Armors.get(this.value);
+			case DynamicValueKind.Skill:
+				return Datas.Skills.get(this.value);
+			case DynamicValueKind.Animation:
+				return Datas.Animations.get(this.value);
+			case DynamicValueKind.Status:
+				return Datas.Status.get(this.value);
+			case DynamicValueKind.Tileset:
+				return Datas.Tilesets.get(this.value);
+			case DynamicValueKind.FontSize:
+				return Datas.Systems.getFontSize(this.value);
+			case DynamicValueKind.FontName:
+				return Datas.Systems.getFontName(this.value);
+			case DynamicValueKind.Color:
+				return Datas.Systems.getColor(this.value);
+			case DynamicValueKind.WindowSkin:
+				return Datas.Systems.getWindowSkin(this.value);
+			case DynamicValueKind.Currency:
+				return Datas.Systems.getCurrency(this.value);
+			case DynamicValueKind.Speed:
+				return Datas.Systems.getSpeed(this.value);
+			case DynamicValueKind.Detection:
+				return Datas.Systems.getDetection(this.value);
+			case DynamicValueKind.CameraProperty:
+				return Datas.Systems.getCameraProperties(this.value);
+			case DynamicValueKind.Frequency:
+				return Datas.Systems.getFrequency(this.value);
+			case DynamicValueKind.Skybox:
+				return Datas.Systems.getSkybox(this.value);
+			case DynamicValueKind.BattleMap:
+				return Datas.BattleSystems.getBattleMap(this.value);
+			case DynamicValueKind.Element:
+				return Datas.BattleSystems.getElement(this.value);
+			case DynamicValueKind.CommonStatistic:
+				return Datas.BattleSystems.getStatistic(this.value);
+			case DynamicValueKind.WeaponsKind:
+				return Datas.BattleSystems.getWeaponKind(this.value);
+			case DynamicValueKind.ArmorsKind:
+				return Datas.BattleSystems.getArmorKind(this.value);
+			case DynamicValueKind.CommonBattleCommand:
+				return Datas.BattleSystems.getBattleCommand(this.value);
+			case DynamicValueKind.CommonEquipment:
+				return Datas.BattleSystems.getEquipment(this.value);
+			case DynamicValueKind.Event:
+				return Datas.CommonEvents.getEventUser(this.value);
+			case DynamicValueKind.State:
+				return this.value;
+			case DynamicValueKind.CommonReaction:
+				return Datas.CommonEvents.getCommonReaction(this.value);
+			case DynamicValueKind.Model:
+				return Datas.CommonEvents.getCommonObject(this.value);
+			case DynamicValueKind.CustomStructure:
+				if (deep) {
+					let obj = {};
+					for (let k in this.customStructure) {
+						obj[k] = this.customStructure[k].getValue(forceVariable, true);
+					}
+					return obj;
+				}
+				return this.customStructure;
+			case DynamicValueKind.CustomList:
+				if (deep) {
+					let list = [];
+					for (let v of this.customList) {
+						list.push(v.getValue(forceVariable, true));
+					}
+					return list;
+				}
+				return this.customList;
+			case DynamicValueKind.Vector2:
+				return new Vector2(this.x.getValue(), this.y.getValue());
+			case DynamicValueKind.Vector3:
+				return new Vector3(this.x.getValue(), this.y.getValue(), this.z.getValue());
+			case DynamicValueKind.Bars:
+				return Datas.Pictures.get(Enum.PictureKind.Bars, this.value);
+			case DynamicValueKind.Icons:
+				return Datas.Pictures.get(Enum.PictureKind.Icons, this.value);
+			case DynamicValueKind.Autotiles:
+				return Datas.Pictures.get(Enum.PictureKind.Autotiles, this.value);
+			case DynamicValueKind.Characters:
+				return Datas.Pictures.get(Enum.PictureKind.Characters, this.value);
+			case DynamicValueKind.Mountains:
+				return Datas.Pictures.get(Enum.PictureKind.Mountains, this.value);
+			case DynamicValueKind.Tilesets:
+				return Datas.Pictures.get(Enum.PictureKind.Tilesets, this.value);
+			case DynamicValueKind.Walls:
+				return Datas.Pictures.get(Enum.PictureKind.Walls, this.value);
+			case DynamicValueKind.Battlers:
+				return Datas.Pictures.get(Enum.PictureKind.Battlers, this.value);
+			case DynamicValueKind.Facesets:
+				return Datas.Pictures.get(Enum.PictureKind.Facesets, this.value);
+			case DynamicValueKind.WindowSkins:
+				return Datas.Pictures.get(Enum.PictureKind.WindowSkins, this.value);
+			case DynamicValueKind.TitleScreen:
+				return Datas.Pictures.get(Enum.PictureKind.TitleScreen, this.value);
+			case DynamicValueKind.Object3D:
+				return Datas.Pictures.get(Enum.PictureKind.Objects3D, this.value);
+			case DynamicValueKind.Pictures:
+				return Datas.Pictures.get(Enum.PictureKind.Pictures, this.value);
+			case DynamicValueKind.Animations:
+				return Datas.Pictures.get(Enum.PictureKind.Animations, this.value);
+			case DynamicValueKind.SkyBoxes:
+				return Datas.Pictures.get(Enum.PictureKind.Skyboxes, this.value);
+			case DynamicValueKind.Music:
+				return Datas.Songs.get(Enum.SongKind.Music, this.value);
+			case DynamicValueKind.BackgroundSound:
+				return Datas.Songs.get(Enum.SongKind.BackgroundSound, this.value);
+			case DynamicValueKind.Sound:
+				return Datas.Songs.get(Enum.SongKind.Sound, this.value);
+			case DynamicValueKind.MusicEffect:
+				return Datas.Songs.get(Enum.SongKind.MusicEffect, this.value);
+			default:
+				return this.value;
+		}
+	}
 
-    /** 
-     *  Check if a value is equal to another one
-     *  @param {System.DynamicValue} value - The value to compare
-     *  @returns {boolean}
-     */
-    isEqual(value: System.DynamicValue): boolean {
-        // If keyBoard
-        if (this.kind === DynamicValueKind.KeyBoard && value.kind !==
-            DynamicValueKind.KeyBoard) {
-            return Datas.Keyboards.isKeyEqual(value.value, Datas.Keyboards.get(
-                this.value));
-        } else if (value.kind === DynamicValueKind.KeyBoard && this.kind !==
-            DynamicValueKind.KeyBoard) {
-            return Datas.Keyboards.isKeyEqual(this.value, Datas.Keyboards.get(
-                value.value));
-        } else if (this.kind === DynamicValueKind.Anything || value.kind ===
-            DynamicValueKind.Anything) {
-            return true;
-        }
-        // If any other value, compare the direct values
-        return this.getValue() === value.getValue();
-    }
+	/**
+	 *  Check if a value is equal to another one
+	 *  @param {System.DynamicValue} value - The value to compare
+	 *  @returns {boolean}
+	 */
+	isEqual(value: System.DynamicValue): boolean {
+		// If keyBoard
+		if (this.kind === DynamicValueKind.KeyBoard && value.kind !== DynamicValueKind.KeyBoard) {
+			return Datas.Keyboards.isKeyEqual(value.value, Datas.Keyboards.get(this.value));
+		} else if (value.kind === DynamicValueKind.KeyBoard && this.kind !== DynamicValueKind.KeyBoard) {
+			return Datas.Keyboards.isKeyEqual(this.value, Datas.Keyboards.get(value.value));
+		} else if (this.kind === DynamicValueKind.Anything || value.kind === DynamicValueKind.Anything) {
+			return true;
+		}
+		// If any other value, compare the direct values
+		return this.getValue() === value.getValue();
+	}
 
-    /** 
-     *  Create a copy of the value.
-     *  @param {System.DynamicValue} v
-     *  @returns {System.DynamicValue}
-     */
-    createCopy(): System.DynamicValue {
-        return System.DynamicValue.create(this.kind, this.value);
-    }
+	/**
+	 *  Create a copy of the value.
+	 *  @param {System.DynamicValue} v
+	 *  @returns {System.DynamicValue}
+	 */
+	createCopy(): System.DynamicValue {
+		return System.DynamicValue.create(this.kind, this.value);
+	}
 }
 
-export { StructJSON, DynamicValue }
+export { DynamicValue, StructJSON };

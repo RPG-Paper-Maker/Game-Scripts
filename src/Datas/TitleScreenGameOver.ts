@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { System, Graphic, Datas, Manager, Scene } from '../index';
-import { Platform, Paths, Utils, Enum } from '../Common';
+import { Enum, Paths, Platform, Utils } from '../Common';
+import { Datas, Graphic, Manager, Scene, System } from '../index';
 import SongKind = Enum.SongKind;
 import Align = Enum.Align;
 import TitleSettingKind = Enum.TitleSettingKind;
@@ -62,7 +62,7 @@ class TitlescreenGameover {
 		for (let i = 0, j = 0; i < l; i++) {
 			obj = jsonList[i];
 			if (Utils.defaultValue(obj.checked, true)) {
-				this.titleSettings[j] = obj.id;
+				this.titleSettings[j] = obj.id ?? 0;
 				j++;
 			}
 		}

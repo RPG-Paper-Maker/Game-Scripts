@@ -74,6 +74,9 @@ class Map extends Base {
 	public weatherRotationsAngle: number[];
 	public weatherRotationsPoint: Vector3[];
 	public sunLight: THREE.DirectionalLight;
+	public overflowSprites: globalThis.Map<string, Set<string>> = new globalThis.Map();
+	public overflowMountains: globalThis.Map<string, Set<string>> = new globalThis.Map();
+	public overflowObjects3D: globalThis.Map<string, Set<string>> = new globalThis.Map();
 
 	constructor(
 		id: number,

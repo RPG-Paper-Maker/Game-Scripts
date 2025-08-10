@@ -53,7 +53,6 @@ class MapPortion {
 	public objectsList: MapObject[];
 	public staticWallsList: THREE.Mesh[];
 	public staticObjects3DList: THREE.Mesh[];
-	public overflowMountains: Position[];
 
 	constructor(portion: Portion) {
 		this.portion = portion;
@@ -84,7 +83,6 @@ class MapPortion {
 		this.objectsList = new Array();
 		this.staticWallsList = new Array();
 		this.staticObjects3DList = new Array();
-		this.overflowMountains = new Array();
 	}
 
 	/**
@@ -416,7 +414,13 @@ class MapPortion {
 			}
 			if (texture !== null && texture.material !== null) {
 				const objCollision = mountains.updateGeometry(position, mountain, pictureID);
-				this.updateCollision(this.boundingBoxesMountains, objCollision, position, true);
+				this.updateCollision(
+					this.boundingBoxesMountains,
+					objCollision,
+					position,
+					true,
+					Scene.Map.current.overflowMountains
+				);
 			}
 		}
 
@@ -496,7 +500,8 @@ class MapPortion {
 						this.boundingBoxesObjects3D,
 						result[1],
 						position,
-						datas.shapeKind === ShapeKind.Custom
+						datas.shapeKind === ShapeKind.Custom,
+						Scene.Map.current.overflowObjects3D
 					);
 				}
 			}
@@ -736,7 +741,8 @@ class MapPortion {
 		boundingBoxes: Record<string, any>[],
 		collisions: StructMapElementCollision[],
 		position: Position,
-		side: boolean
+		side: boolean,
+		overflowMap: Map<string, Set<string>>
 	) {
 		let i: number,
 			l: number,
@@ -776,7 +782,7 @@ class MapPortion {
 							centeredPosition.y + b,
 							centeredPosition.z + c
 						);
-						if (Scene.Map.current.isInMap(positionPlus) && this.isPositionIn(positionPlus)) {
+						if (Scene.Map.current.isInMap(positionPlus)) {
 							if (side) {
 								objCollisionPlus = {};
 								objCollisionPlus = Object.assign(objCollisionPlus, objCollision);
@@ -788,6 +794,17 @@ class MapPortion {
 								objCollisionPlus = objCollision;
 							}
 							boundingBoxes[positionPlus.toIndex()].push(objCollisionPlus);
+							// Overflowing to another portion
+							const mapPortion = Scene.Map.current.getMapPortionByPosition(positionPlus);
+							if (mapPortion && mapPortion !== this) {
+								const key = mapPortion.portion.toKey();
+								let portions = overflowMap.get(key);
+								if (!portions) {
+									portions = new Set();
+									overflowMap.set(key, portions);
+								}
+								portions.add(this.portion.toKey());
+							}
 						}
 					}
 				}
