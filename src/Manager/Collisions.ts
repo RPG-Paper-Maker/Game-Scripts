@@ -21,8 +21,6 @@ import {
 	Portion,
 	Position,
 	StructMapElementCollision,
-	Vector2,
-	Vector3,
 } from '../Core';
 import { Datas, Manager, Scene, System } from '../index';
 import ElementMapKind = Enum.ElementMapKind;
@@ -107,7 +105,7 @@ class Collisions {
 				(-box['previousRotate'][2] * Math.PI) / 180.0,
 				'ZYX'
 			),
-			new Vector3(box['previousCenter'][0], box['previousCenter'][1], box['previousCenter'][2])
+			new THREE.Vector3(box['previousCenter'][0], box['previousCenter'][1], box['previousCenter'][2])
 		);
 		box.geometry.scale(1 / box['previousScale'][0], 1 / box['previousScale'][1], 1 / box['previousScale'][2]);
 		// Update to the new ones
@@ -152,7 +150,7 @@ class Collisions {
 				(-box['previousRotate'][2] * Math.PI) / 180.0,
 				'ZYX'
 			),
-			new Vector3(box['previousCenter'][0], box['previousCenter'][1], box['previousCenter'][2])
+			new THREE.Vector3(box['previousCenter'][0], box['previousCenter'][1], box['previousCenter'][2])
 		);
 		box.geometry.scale(1 / box['previousScale'][0], 1 / box['previousScale'][1], 1 / box['previousScale'][2]);
 
@@ -336,8 +334,8 @@ class Collisions {
 	 *  Check the fnormals for OBB collision.
 	 *  @static
 	 *  @param {ArrayLike<number>} normals - The normals to check
-	 *  @param {Vector3[]} verticesA - First vertices to check
-	 *  @param {Vector3[]} verticesB - Second vertices to check
+	 *  @param {THREE.Vector3[]} verticesA - First vertices to check
+	 *  @param {THREE.Vector3[]} verticesB - Second vertices to check
 	 *  @param {number} lA - The first vertices length
 	 *  @param {number} lB - The second vertices length
 	 *  @returns {boolean}
@@ -356,7 +354,7 @@ class Collisions {
 					verticesB,
 					lA,
 					lB,
-					new Vector3(normals[i], normals[i + 1], normals[i + 2])
+					new THREE.Vector3(normals[i], normals[i + 1], normals[i + 2])
 				)
 			) {
 				return false;
@@ -372,7 +370,7 @@ class Collisions {
 	 *  @param {ArrayLike<number>} verticesB - Second vertices to check
 	 *  @param {number} lA - The first vertices length
 	 *  @param {number} lB - The second vertices length
-	 *  @param {Core.Vector3} normal - The face normal
+	 *  @param {Core.THREE.Vector3} normal - The face normal
 	 *  @returns {boolean}
 	 */
 	static overlapOnThisNormal(
@@ -385,9 +383,9 @@ class Collisions {
 		// We test each vertex of A
 		let minA = null;
 		let maxA = null;
-		let i: number, vertex: Vector3, buffer: number;
+		let i: number, vertex: THREE.Vector3, buffer: number;
 		for (i = 0; i < lA; i += 3) {
-			vertex = new Vector3(verticesA[i], verticesA[i + 1], verticesA[i + 2]);
+			vertex = new THREE.Vector3(verticesA[i], verticesA[i + 1], verticesA[i + 2]);
 			buffer = Mathf.orthogonalProjection(vertex, normal);
 			if (minA === null || buffer < minA) {
 				minA = buffer;
@@ -401,7 +399,7 @@ class Collisions {
 		let minB = null;
 		let maxB = null;
 		for (i = 0; i < lB; i += 3) {
-			vertex = new Vector3(verticesB[i], verticesB[i + 1], verticesB[i + 2]);
+			vertex = new THREE.Vector3(verticesB[i], verticesB[i + 1], verticesB[i + 2]);
 			buffer = Mathf.orthogonalProjection(vertex, normal);
 			if (minB === null || buffer < minB) {
 				minB = buffer;
@@ -418,24 +416,24 @@ class Collisions {
 	/**
 	 *  Check collision ray.
 	 *  @static
-	 *  @param {Vector3} positionBefore - The position before collision
-	 *  @param {Vector3} positionAfter - The position after collision
+	 *  @param {THREE.Vector3} positionBefore - The position before collision
+	 *  @param {THREE.Vector3} positionAfter - The position after collision
 	 *  @param {MapObject} object - The map object to test collision
 	 *  @returns {boolean}
 	 */
 	static checkRay(
-		positionBefore: Vector3,
-		positionAfter: Vector3,
+		positionBefore: THREE.Vector3,
+		positionAfter: THREE.Vector3,
 		object: MapObject,
 		bbSettings: number[],
 		reverseTestObjects: boolean = false
 	): [boolean, number, Enum.Orientation] {
-		let direction = new Vector3();
+		let direction = new THREE.Vector3();
 		direction.subVectors(positionAfter, positionBefore).normalize();
 		let jpositionBefore = Position.createFromVector3(positionBefore);
 		let jpositionAfter = Position.createFromVector3(positionAfter);
-		let positionBeforePlus = new Vector3();
-		let positionAfterPlus = new Vector3();
+		let positionBeforePlus = new THREE.Vector3();
+		let positionAfterPlus = new THREE.Vector3();
 		let testedCollisions = [];
 		let yMountain = null;
 
@@ -801,7 +799,7 @@ class Collisions {
 		return [true, null, Enum.Orientation.None];
 	}
 
-	static checkObjectsRay(positionAfter: Vector3, object: MapObject): [boolean, number, Enum.Orientation] {
+	static checkObjectsRay(positionAfter: THREE.Vector3, object: MapObject): [boolean, number, Enum.Orientation] {
 		// Check collision inside & with other objects
 		if (object !== Game.current.hero && object.checkCollisionObject(Game.current.hero)) {
 			return [true, null, Enum.Orientation.None];
@@ -827,9 +825,9 @@ class Collisions {
 	 *  @param {MapPortion} mapPortion - The map portion to check
 	 *  @param {Position} jpositionBefore - The json position before collision
 	 *  @param {Position} jpositionAfter - The json position after collision
-	 *  @param {Vector3} positionAfter - The position after collision
+	 *  @param {THREE.Vector3} positionAfter - The position after collision
 	 *  @param {MapObject} object - The map object collision test
-	 *  @param {Vector3} direction - The direction collision
+	 *  @param {THREE.Vector3} direction - The direction collision
 	 *  @param {StructMapElementCollision[]} testedCollisions - The object
 	 *  collisions that were already tested
 	 *  @returns {boolean}
@@ -838,9 +836,9 @@ class Collisions {
 		mapPortion: MapPortion,
 		jpositionBefore: Position,
 		jpositionAfter: Position,
-		positionAfter: Vector3,
+		positionAfter: THREE.Vector3,
 		object: MapObject,
-		direction: Vector3,
+		direction: THREE.Vector3,
 		testedCollisions: StructMapElementCollision[]
 	): [boolean, number, Enum.Orientation] {
 		// Check sprites and climbing
@@ -878,7 +876,7 @@ class Collisions {
 	 *  @param {Position} jpositionBefore - The json position before collision
 	 *  @param {Position} jpositionAfter - The json position after collision
 	 *  @param {MapObject} object - The map object collision test
-	 *  @param {Vector3} direction - The direction collision
+	 *  @param {THREE.Vector3} direction - The direction collision
 	 *  @param {StructMapElementCollision[]} testedCollisions - The object
 	 *  collisions that were already tested
 	 *  @returns {boolean}
@@ -928,14 +926,14 @@ class Collisions {
 	 *  @param {MapPortion} mapPortion - The map portion to check
 	 *  @param {Position} jpositionBefore - The json position before collision
 	 *  @param {Position} jpositionAfter - The json position after collision
-	 *  @param {Vector3} direction - The direction collision
+	 *  @param {THREE.Vector3} direction - The direction collision
 	 *  @returns {boolean}
 	 */
 	static checkLandsInside(
 		mapPortion: MapPortion,
 		jpositionBefore: Position,
 		jpositionAfter: Position,
-		direction: Vector3
+		direction: THREE.Vector3
 	): boolean {
 		let lands = mapPortion.boundingBoxesLands[jpositionBefore.toIndex()];
 		if (lands !== null) {
@@ -980,7 +978,7 @@ class Collisions {
 	 *  @param {Position} jpositionAfter - The json position after collision
 	 *  @param {StructMapElementCollision} collision - The collision object
 	 *  @param {number[]} boundingBox - The bounding box values
-	 *  @param {Vector3} direction - The direction collision
+	 *  @param {THREE.Vector3} direction - The direction collision
 	 *  @param {MapObject} object - The map object collision test
 	 *  @returns {boolean}
 	 */
@@ -989,7 +987,7 @@ class Collisions {
 		jpositionAfter: Position,
 		collision: StructMapElementCollision,
 		boundingBox: number[],
-		direction: Vector3,
+		direction: THREE.Vector3,
 		object: MapObject
 	): boolean {
 		if (collision === null) {
@@ -1020,7 +1018,7 @@ class Collisions {
 	 *  @param {Position} jpositionBefore - The json position before collision
 	 *  @param {Position} jpositionAfter - The json position after collision
 	 *  @param {StructMapElementCollision} collision - The collision object
-	 *  @param {Vector3} direction - The direction collision
+	 *  @param {THREE.Vector3} direction - The direction collision
 	 *  @returns {boolean}
 	 */
 	static checkDirectionsInside(
@@ -1262,7 +1260,7 @@ class Collisions {
 	 *  @static
 	 *  @param {MapPortion} mapPortion - The map portion to check
 	 *  @param {Position} jpositionAfter - The json position after collision
-	 *  @param {Vector3} positionAfter - The position after collision
+	 *  @param {THREE.Vector3} positionAfter - The position after collision
 	 *  @param {StructMapElementCollision[]} testedCollisions - The object collisions that were
 	 *  already tested
 	 *  @param {MapObject} object - The map object collision test
@@ -1271,7 +1269,7 @@ class Collisions {
 	static checkMountains(
 		mapPortion: MapPortion,
 		jpositionAfter: Position,
-		positionAfter: Vector3,
+		positionAfter: THREE.Vector3,
 		testedCollisions: StructMapElementCollision[],
 		object: MapObject
 	): [boolean, number] {
@@ -1312,7 +1310,7 @@ class Collisions {
 	 *  @static
 	 *  @param {MapPortion} mapPortion - The map portion to check
 	 *  @param {Position} jpositionAfter - The json position after collision
-	 *  @param {Vector3} positionAfter - The position after collision
+	 *  @param {THREE.Vector3} positionAfter - The position after collision
 	 *  @param {StructMapElementCollision[]} testedCollisions - The object
 	 *  collisions that were already tested
 	 *  @param {MapObject} object - The map object collision test
@@ -1324,7 +1322,7 @@ class Collisions {
 	static checkMountain(
 		mapPortion: MapPortion,
 		jpositionAfter: Position,
-		positionAfter: Vector3,
+		positionAfter: THREE.Vector3,
 		testedCollisions: StructMapElementCollision[],
 		object: MapObject,
 		objCollision: StructMapElementCollision,
@@ -1360,7 +1358,7 @@ class Collisions {
 	 *  @static
 	 *  @param {MapPortion} mapPortion - The map portion to check
 	 *  @param {Position} jpositionAfter - The json position after collision
-	 *  @param {Vector3} positionAfter - The position after collision
+	 *  @param {THREE.Vector3} positionAfter - The position after collision
 	 *  @param {StructMapElementCollision} objCollision - The object collision
 	 *  @param {MapObject} object - The map object collision test
 	 *  @returns {[boolean, number]}
@@ -1368,14 +1366,14 @@ class Collisions {
 	static checkIntersectionMountain(
 		mapPortion: MapPortion,
 		jpositionAfter: Position,
-		positionAfter: Vector3,
+		positionAfter: THREE.Vector3,
 		objCollision: StructMapElementCollision,
 		object: MapObject
 	): [boolean, number] {
 		let mountain = <Mountain>objCollision.t;
 		let forceAlways = (<System.Mountain>mountain.getSystem()).forceAlways();
 		let forceNever = (<System.Mountain>mountain.getSystem()).forceNever();
-		let point = new Vector2(positionAfter.x, positionAfter.z);
+		let point = new THREE.Vector2(positionAfter.x, positionAfter.z);
 		let x = objCollision.l.x;
 		let y = objCollision.l.y;
 		let z = objCollision.l.z;
@@ -1402,7 +1400,7 @@ class Collisions {
 					for (let i = 0, l = vertices.length; i < l; i += 3) {
 						vy = vertices[i + 1];
 						if (vy >= y && vy <= y + h) {
-							point = new Vector2(vertices[i], vertices[i + 2]);
+							point = new THREE.Vector2(vertices[i], vertices[i + 2]);
 							if (
 								Mathf.isPointOnRectangle(
 									point,
@@ -1421,59 +1419,64 @@ class Collisions {
 		} else {
 			// if w > 0, go like a slope
 			// Get coplanar points according to side
-			let ptA: Vector2, ptB: Vector2, ptC: Vector2, pA: Vector3, pB: Vector3, pC: Vector3;
+			let ptA: THREE.Vector2,
+				ptB: THREE.Vector2,
+				ptC: THREE.Vector2,
+				pA: THREE.Vector3,
+				pB: THREE.Vector3,
+				pC: THREE.Vector3;
 			if (objCollision.left && !mountain.left) {
 				if (objCollision.top && !mountain.top) {
-					ptA = new Vector2(x - w, z);
-					ptB = new Vector2(x, z);
-					ptC = new Vector2(x, z - w);
+					ptA = new THREE.Vector2(x - w, z);
+					ptB = new THREE.Vector2(x, z);
+					ptC = new THREE.Vector2(x, z - w);
 					if (Mathf.isPointOnTriangle(point, ptA, ptB, ptC)) {
-						pA = new Vector3(ptA.x, y, ptA.y);
-						pB = new Vector3(ptB.x, y + h, ptB.y);
-						pC = new Vector3(ptC.x, y, ptC.y);
+						pA = new THREE.Vector3(ptA.x, y, ptA.y);
+						pB = new THREE.Vector3(ptB.x, y + h, ptB.y);
+						pC = new THREE.Vector3(ptC.x, y, ptC.y);
 					} else {
 						return [false, null];
 					}
 				} else if (objCollision.bot && !mountain.bot) {
-					ptA = new Vector2(x - w, z + Datas.Systems.SQUARE_SIZE);
-					ptB = new Vector2(x, z + Datas.Systems.SQUARE_SIZE);
-					ptC = new Vector2(x, z + Datas.Systems.SQUARE_SIZE + w);
+					ptA = new THREE.Vector2(x - w, z + Datas.Systems.SQUARE_SIZE);
+					ptB = new THREE.Vector2(x, z + Datas.Systems.SQUARE_SIZE);
+					ptC = new THREE.Vector2(x, z + Datas.Systems.SQUARE_SIZE + w);
 					if (Mathf.isPointOnTriangle(point, ptA, ptB, ptC)) {
-						pA = new Vector3(ptA.x, y, ptA.y);
-						pB = new Vector3(ptB.x, y + h, ptB.y);
-						pC = new Vector3(ptC.x, y, ptC.y);
+						pA = new THREE.Vector3(ptA.x, y, ptA.y);
+						pB = new THREE.Vector3(ptB.x, y + h, ptB.y);
+						pC = new THREE.Vector3(ptC.x, y, ptC.y);
 					} else {
 						return [false, null];
 					}
 				} else {
 					if (Mathf.isPointOnRectangle(point, x - w, x, z, z + Datas.Systems.SQUARE_SIZE)) {
-						pA = new Vector3(x - w, y, z);
-						pB = new Vector3(x, y + h, z);
-						pC = new Vector3(x, y + h, z + Datas.Systems.SQUARE_SIZE);
+						pA = new THREE.Vector3(x - w, y, z);
+						pB = new THREE.Vector3(x, y + h, z);
+						pC = new THREE.Vector3(x, y + h, z + Datas.Systems.SQUARE_SIZE);
 					} else {
 						return [false, null];
 					}
 				}
 			} else if (objCollision.right && !mountain.right) {
 				if (objCollision.top && !mountain.top) {
-					ptA = new Vector2(x + Datas.Systems.SQUARE_SIZE, z - w);
-					ptB = new Vector2(x + Datas.Systems.SQUARE_SIZE, z);
-					ptC = new Vector2(x + Datas.Systems.SQUARE_SIZE + w, z);
+					ptA = new THREE.Vector2(x + Datas.Systems.SQUARE_SIZE, z - w);
+					ptB = new THREE.Vector2(x + Datas.Systems.SQUARE_SIZE, z);
+					ptC = new THREE.Vector2(x + Datas.Systems.SQUARE_SIZE + w, z);
 					if (Mathf.isPointOnTriangle(point, ptA, ptB, ptC)) {
-						pA = new Vector3(ptA.x, y, ptA.y);
-						pB = new Vector3(ptB.x, y + h, ptB.y);
-						pC = new Vector3(ptC.x, y, ptC.y);
+						pA = new THREE.Vector3(ptA.x, y, ptA.y);
+						pB = new THREE.Vector3(ptB.x, y + h, ptB.y);
+						pC = new THREE.Vector3(ptC.x, y, ptC.y);
 					} else {
 						return [false, null];
 					}
 				} else if (objCollision.bot && !mountain.bot) {
-					ptA = new Vector2(x + Datas.Systems.SQUARE_SIZE, z + Datas.Systems.SQUARE_SIZE + w);
-					ptB = new Vector2(x + Datas.Systems.SQUARE_SIZE, z + Datas.Systems.SQUARE_SIZE);
-					ptC = new Vector2(x + Datas.Systems.SQUARE_SIZE + w, z + Datas.Systems.SQUARE_SIZE);
+					ptA = new THREE.Vector2(x + Datas.Systems.SQUARE_SIZE, z + Datas.Systems.SQUARE_SIZE + w);
+					ptB = new THREE.Vector2(x + Datas.Systems.SQUARE_SIZE, z + Datas.Systems.SQUARE_SIZE);
+					ptC = new THREE.Vector2(x + Datas.Systems.SQUARE_SIZE + w, z + Datas.Systems.SQUARE_SIZE);
 					if (Mathf.isPointOnTriangle(point, ptA, ptB, ptC)) {
-						pA = new Vector3(ptA.x, y, ptA.y);
-						pB = new Vector3(ptB.x, y + h, ptB.y);
-						pC = new Vector3(ptC.x, y, ptC.y);
+						pA = new THREE.Vector3(ptA.x, y, ptA.y);
+						pB = new THREE.Vector3(ptB.x, y + h, ptB.y);
+						pC = new THREE.Vector3(ptC.x, y, ptC.y);
 					} else {
 						return [false, null];
 					}
@@ -1487,9 +1490,9 @@ class Collisions {
 							z + Datas.Systems.SQUARE_SIZE
 						)
 					) {
-						pA = new Vector3(x + Datas.Systems.SQUARE_SIZE, y + h, z + Datas.Systems.SQUARE_SIZE);
-						pB = new Vector3(x + Datas.Systems.SQUARE_SIZE, y + h, z);
-						pC = new Vector3(x + Datas.Systems.SQUARE_SIZE + w, y, z);
+						pA = new THREE.Vector3(x + Datas.Systems.SQUARE_SIZE, y + h, z + Datas.Systems.SQUARE_SIZE);
+						pB = new THREE.Vector3(x + Datas.Systems.SQUARE_SIZE, y + h, z);
+						pC = new THREE.Vector3(x + Datas.Systems.SQUARE_SIZE + w, y, z);
 					} else {
 						return [false, null];
 					}
@@ -1497,9 +1500,9 @@ class Collisions {
 			} else {
 				if (objCollision.top && !mountain.top) {
 					if (Mathf.isPointOnRectangle(point, x, x + Datas.Systems.SQUARE_SIZE, z - w, z)) {
-						pA = new Vector3(x, y + h, z);
-						pB = new Vector3(x, y, z - w);
-						pC = new Vector3(x + Datas.Systems.SQUARE_SIZE, y, z - w);
+						pA = new THREE.Vector3(x, y + h, z);
+						pB = new THREE.Vector3(x, y, z - w);
+						pC = new THREE.Vector3(x + Datas.Systems.SQUARE_SIZE, y, z - w);
 					} else {
 						return [false, null];
 					}
@@ -1513,9 +1516,9 @@ class Collisions {
 							z + Datas.Systems.SQUARE_SIZE + w
 						)
 					) {
-						pA = new Vector3(x + Datas.Systems.SQUARE_SIZE, y, z + Datas.Systems.SQUARE_SIZE + w);
-						pB = new Vector3(x, y, z + Datas.Systems.SQUARE_SIZE + w);
-						pC = new Vector3(x, y + h, z + Datas.Systems.SQUARE_SIZE);
+						pA = new THREE.Vector3(x + Datas.Systems.SQUARE_SIZE, y, z + Datas.Systems.SQUARE_SIZE + w);
+						pB = new THREE.Vector3(x, y, z + Datas.Systems.SQUARE_SIZE + w);
+						pC = new THREE.Vector3(x, y + h, z + Datas.Systems.SQUARE_SIZE);
 					} else {
 						return [false, null];
 					}
@@ -1525,8 +1528,8 @@ class Collisions {
 			}
 			// Get the intersection point for updating mountain y
 			let plane = new THREE.Plane();
-			let ray = new THREE.Ray(new Vector3(positionAfter.x, y, positionAfter.z), new Vector3(0, 1, 0));
-			let newPosition = new Vector3();
+			let ray = new THREE.Ray(new THREE.Vector3(positionAfter.x, y, positionAfter.z), new THREE.Vector3(0, 1, 0));
+			let newPosition = new THREE.Vector3();
 			plane.setFromCoplanarPoints(pA, pB, pC);
 			ray.intersectPlane(plane, newPosition);
 

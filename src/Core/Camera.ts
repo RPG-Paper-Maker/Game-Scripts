@@ -13,7 +13,6 @@ import * as THREE from 'three';
 import { Enum, Mathf, ScreenResolution } from '../Common';
 import { Datas, Manager, Scene, System } from '../index';
 import { MapObject } from './MapObject';
-import { Vector3 } from './index';
 
 /** @class
  *  The camera of the current map.
@@ -29,8 +28,8 @@ class Camera {
 	public orthographicCamera: THREE.OrthographicCamera;
 	public isPerspective: boolean;
 	public target: MapObject;
-	public targetPosition: Vector3;
-	public targetOffset: Vector3;
+	public targetPosition: THREE.Vector3;
+	public targetOffset: THREE.Vector3;
 	public distance: number;
 	public horizontalAngle: number;
 	public verticalAngle: number;
@@ -124,7 +123,7 @@ class Camera {
 	 *  @param {Vector3} p2 - The second position
 	 *  @returns {number}
 	 */
-	getHorizontalAngle(p1: Vector3, p2: Vector3): number {
+	getHorizontalAngle(p1: THREE.Vector3, p2: THREE.Vector3): number {
 		return (Math.atan2(p2.z - p1.z, p2.x - p1.x) * 180) / Math.PI;
 	}
 
@@ -134,7 +133,7 @@ class Camera {
 	 *  @param {Vector3} p2 - The second position
 	 *  @returns {number}
 	 */
-	getVerticalAngle(p1: Vector3, p2: Vector3): number {
+	getVerticalAngle(p1: THREE.Vector3, p2: THREE.Vector3): number {
 		let x = p2.x - p1.x;
 		let y = p2.y - p1.y;
 		let z = p2.z - p1.z;

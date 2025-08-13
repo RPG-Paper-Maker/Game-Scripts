@@ -22,8 +22,6 @@ import {
 	Portion,
 	Position,
 	ReactionInterpreter,
-	Vector2,
-	Vector3,
 } from '../Core';
 import { Datas, Manager, Scene, System } from '../index';
 import { Base } from './Base';
@@ -44,7 +42,7 @@ class Map extends Base {
 	public static allowMainMenu = true;
 	public static allowSaves = true;
 	public static autotileFrame = new Frame(0);
-	public static autotilesOffset: Vector2 = new Vector2();
+	public static autotilesOffset: THREE.Vector2 = new THREE.Vector2();
 
 	public id: number;
 	public mapFilename: string;
@@ -62,17 +60,17 @@ class Map extends Base {
 	public textureTileset: THREE.MeshPhongMaterial;
 	public texturesCharacters: THREE.MeshPhongMaterial[];
 	public collisions: number[][][][];
-	public previousCameraPosition: Vector3;
+	public previousCameraPosition: THREE.Vector3;
 	public portionsObjectsUpdated: boolean;
 	public heroOrientation: Enum.Orientation;
 	public previousWeatherPoints: THREE.Points = null;
 	public previousWeatherVelocities: number[];
 	public previousWeatherRotationsAngle: number[];
-	public previousWeatherRotationsPoint: Vector3[];
+	public previousWeatherRotationsPoint: THREE.Vector3[];
 	public weatherPoints: THREE.Points = null;
 	public weatherVelocities: number[];
 	public weatherRotationsAngle: number[];
-	public weatherRotationsPoint: Vector3[];
+	public weatherRotationsPoint: THREE.Vector3[];
 	public sunLight: THREE.DirectionalLight;
 	public overflowSprites: globalThis.Map<string, Set<string>> = new globalThis.Map();
 	public overflowMountains: globalThis.Map<string, Set<string>> = new globalThis.Map();
@@ -725,9 +723,9 @@ class Map extends Base {
 
 	/**
 	 *  Get the hero position according to battle map.
-	 *  @returns {Vector3}
+	 *  @returns {THREE.Vector3}
 	 */
-	getHeroPosition(): Vector3 {
+	getHeroPosition(): THREE.Vector3 {
 		return this.isBattleMap ? Game.current.heroBattle.position : Game.current.hero.position;
 	}
 
@@ -822,7 +820,7 @@ class Map extends Base {
 			points: THREE.Points,
 			velocities: number[],
 			rotationsAngle: number[],
-			rotationsPoints: Vector3[];
+			rotationsPoints: THREE.Vector3[];
 		if (current) {
 			options = Game.current.currentWeatherOptions;
 		} else {
@@ -950,7 +948,7 @@ class Map extends Base {
 			points: THREE.Points,
 			velocities: number[],
 			rotationsAngle: number[],
-			rotationsPoints: Vector3[];
+			rotationsPoints: THREE.Vector3[];
 		if (current) {
 			options = Game.current.currentWeatherOptions;
 			points = this.weatherPoints;
@@ -972,10 +970,10 @@ class Map extends Base {
 		const initialYRotation = Interpreter.evaluate(options.initialYRotation);
 		const portionsRay = options.portionsRay;
 		const positionAttribute = points.geometry.getAttribute('position');
-		const yAxis = new Vector3(0, 1, 0);
+		const yAxis = new THREE.Vector3(0, 1, 0);
 		const particlesNumber = Math.round(options.particlesNumber);
 		points.geometry.drawRange.count = particlesNumber;
-		let y: number, v: Vector3;
+		let y: number, v: THREE.Vector3;
 		for (let i = 0; i < particlesNumber; i++) {
 			y = positionAttribute.getY(i);
 			if (
@@ -991,7 +989,7 @@ class Map extends Base {
 				positionAttribute.setZ(i, this.getWeatherPosition(portionsRay));
 			}
 			y -= Scene.Map.current.camera.target.position.y - points.position.y;
-			v = new Vector3(
+			v = new THREE.Vector3(
 				positionAttribute.getX(i) - (Scene.Map.current.camera.target.position.x - points.position.x),
 				y,
 				positionAttribute.getZ(i) - (Scene.Map.current.camera.target.position.z - points.position.z)
@@ -1080,7 +1078,7 @@ class Map extends Base {
 		}
 
 		// Getting the Y angle of the camera
-		let vector = new Vector3();
+		let vector = new THREE.Vector3();
 		this.camera.getThreeCamera().getWorldDirection(vector);
 		let angle = Math.atan2(vector.x, vector.z) + Math.PI;
 
@@ -1129,7 +1127,7 @@ class Map extends Base {
 			pointer.setY(-pointer.y);
 			this.updateCameraHiding(pointer);
 			if (this.camera.isHiding()) {
-				this.updateCameraHiding(new Vector2(0, 0));
+				this.updateCameraHiding(new THREE.Vector2(0, 0));
 				this.camera.update();
 			}
 			let opacity = 1;

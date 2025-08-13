@@ -12,7 +12,6 @@
 import * as THREE from 'three';
 import { Mathf } from '../Common';
 import { CustomGeometry } from './CustomGeometry';
-import { Vector3 } from './Vector3';
 
 /**
  *  The geometry used to apply vertices + indices + uvs.
@@ -59,7 +58,7 @@ export class CustomGeometryFace extends CustomGeometry {
 	 *  @param {THREE.Vector3} axis
 	 *  @param {THREE.Vector3} center
 	 */
-	rotate(angle: number, axis: Vector3) {
+	rotate(angle: number, axis: THREE.Vector3) {
 		const a = angle - this.currentAngle;
 		if (a === 0) {
 			return;

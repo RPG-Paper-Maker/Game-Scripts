@@ -16,8 +16,6 @@ import { CustomGeometry } from './CustomGeometry';
 import { CustomGeometryFace } from './CustomGeometryFace';
 import { MapElement, StructMapElementCollision } from './MapElement';
 import { Position } from './Position';
-import { Vector2 } from './Vector2';
-import { Vector3 } from './Vector3';
 import ElementMapKind = Enum.ElementMapKind;
 
 /** @class
@@ -28,14 +26,14 @@ import ElementMapKind = Enum.ElementMapKind;
  */
 class Sprite extends MapElement {
 	public static MODEL = [
-		new Vector3(-0.5, 1.0, 0.0),
-		new Vector3(0.5, 1.0, 0.0),
-		new Vector3(0.5, 0.0, 0.0),
-		new Vector3(-0.5, 0.0, 0.0),
+		new THREE.Vector3(-0.5, 1.0, 0.0),
+		new THREE.Vector3(0.5, 1.0, 0.0),
+		new THREE.Vector3(0.5, 0.0, 0.0),
+		new THREE.Vector3(-0.5, 0.0, 0.0),
 	];
-	public static Y_AXIS = new Vector3(0, 1, 0);
-	public static X_AXIS = new Vector3(1, 0, 0);
-	public static Z_AXIS = new Vector3(0, 0, 1);
+	public static Y_AXIS = new THREE.Vector3(0, 1, 0);
+	public static X_AXIS = new THREE.Vector3(1, 0, 0);
+	public static Z_AXIS = new THREE.Vector3(0, 0, 1);
 
 	public kind: ElementMapKind;
 	public textureRect: number[];
@@ -65,12 +63,18 @@ class Sprite extends MapElement {
 	/**
 	 *  Rotate a vertex around a specified center.
 	 *  @static
-	 *  @param {Vector3} vec - The vertex to rotate
-	 *  @param {Vector3} center - The center to rotate around
+	 *  @param {THREE.Vector3} vec - The vertex to rotate
+	 *  @param {THREE.Vector3} center - The center to rotate around
 	 *  @param {number} angle - The angle in degree
-	 *  @param {Vector3} axis - The vector axis
+	 *  @param {THREE.Vector3} axis - The vector axis
 	 */
-	static rotateVertex(vec: Vector3, center: Vector3, angle: number, axis: Vector3, isDegree: boolean = true) {
+	static rotateVertex(
+		vec: THREE.Vector3,
+		center: THREE.Vector3,
+		angle: number,
+		axis: THREE.Vector3,
+		isDegree: boolean = true
+	) {
 		vec.sub(center);
 		vec.applyAxisAngle(axis, isDegree ? (angle * Math.PI) / 180.0 : angle);
 		vec.add(center);
@@ -78,22 +82,22 @@ class Sprite extends MapElement {
 
 	/** Rotate the four vertices of a sprite around a specified center.
 	 *   @static
-	 *   @param {Vector3} vecA - The A vertex to rotate
-	 *   @param {Vector3} vecB - The B vertex to rotate
-	 *   @param {Vector3} vecC - The C vertex to rotate
-	 *   @param {Vector3} vecD - The D vertex to rotate
-	 *   @param {Vector3} center - The center to rotate around
+	 *   @param {THREE.Vector3} vecA - The A vertex to rotate
+	 *   @param {THREE.Vector3} vecB - The B vertex to rotate
+	 *   @param {THREE.Vector3} vecC - The C vertex to rotate
+	 *   @param {THREE.Vector3} vecD - The D vertex to rotate
+	 *   @param {THREE.Vector3} center - The center to rotate around
 	 *   @param {number} angle - The angle in degree
-	 *   @param {Vector3} axis - The vector axis
+	 *   @param {THREE.Vector3} axis - The vector axis
 	 */
 	static rotateSprite(
-		vecA: Vector3,
-		vecB: Vector3,
-		vecC: Vector3,
-		vecD: Vector3,
-		center: Vector3,
+		vecA: THREE.Vector3,
+		vecB: THREE.Vector3,
+		vecC: THREE.Vector3,
+		vecD: THREE.Vector3,
+		center: THREE.Vector3,
 		angle: number,
-		axis: Vector3
+		axis: THREE.Vector3
 	) {
 		Mathf.rotateVertex(vecA, center, angle, axis);
 		Mathf.rotateVertex(vecB, center, angle, axis);
@@ -125,25 +129,25 @@ class Sprite extends MapElement {
 	 *  Add a static sprite to the geometry.
 	 *  @static
 	 *  @param {THREE.Geometry} geometry - The geometry
-	 *  @param {Vector3} vecA - The A vertex
-	 *  @param {Vector3} vecB - The B vertex
-	 *  @param {Vector3} vecC - The C vertex
-	 *  @param {Vector3} vecD - The D vertex
-	 *  @param {Vector2} texA- The texture face A
-	 *  @param {Vector2} texB - The texture face B
+	 *  @param {THREE.Vector3} vecA - The A vertex
+	 *  @param {THREE.Vector3} vecB - The B vertex
+	 *  @param {THREE.Vector3} vecC - The C vertex
+	 *  @param {THREE.Vector3} vecD - The D vertex
+	 *  @param {THREE.Vector2} texA- The texture face A
+	 *  @param {THREE.Vector2} texB - The texture face B
 	 *  @param {number} count - The faces count
 	 *  @returns {number}
 	 */
 	static addStaticSpriteToGeometry(
 		geometry: CustomGeometry,
-		vecA: Core.Vector3,
-		vecB: Vector3,
-		vecC: Vector3,
-		vecD: Vector3,
-		texA: Vector2,
-		texB: Vector2,
-		texC: Vector2,
-		texD: Vector2,
+		vecA: THREE.Vector3,
+		vecB: THREE.Vector3,
+		vecC: THREE.Vector3,
+		vecD: THREE.Vector3,
+		texA: THREE.Vector2,
+		texB: THREE.Vector2,
+		texC: THREE.Vector2,
+		texD: THREE.Vector2,
 		count: number
 	): number {
 		geometry.pushQuadVertices(vecA, vecB, vecC, vecD);
@@ -188,7 +192,7 @@ class Sprite extends MapElement {
 	 *  @param {number[]} position - The position
 	 *  @param {number} count - The faces count
 	 *  @param {boolean} tileset - Indicate if the texture is tileset
-	 *  @param {Vector3} localPosition - The local position
+	 *  @param {THREE.Vector3} localPosition - The local position
 	 *  @returns {any[]}
 	 */
 	updateGeometry(
@@ -198,15 +202,15 @@ class Sprite extends MapElement {
 		position: Position,
 		count: number,
 		tileset: boolean,
-		localPosition: Vector3
+		localPosition: THREE.Vector3
 	): [number, StructMapElementCollision[]] {
 		let vecA = Sprite.MODEL[0].clone();
 		let vecB = Sprite.MODEL[1].clone();
 		let vecC = Sprite.MODEL[2].clone();
 		let vecD = Sprite.MODEL[3].clone();
-		let center = new Vector3();
-		let pos = new Vector3();
-		let size = new Vector3(
+		let center = new THREE.Vector3();
+		let pos = new THREE.Vector3();
+		let size = new THREE.Vector3(
 			this.textureRect[2] * Datas.Systems.SQUARE_SIZE * position.scaleX,
 			this.textureRect[3] * Datas.Systems.SQUARE_SIZE * position.scaleY,
 			1.0
@@ -222,7 +226,7 @@ class Sprite extends MapElement {
 			center.add(localPosition);
 			pos.add(localPosition);
 		} else {
-			localPosition = tileset ? position.toVector3() : new Vector3();
+			localPosition = tileset ? position.toVector3() : new THREE.Vector3();
 		}
 
 		// Getting UV coordinates
@@ -236,10 +240,10 @@ class Sprite extends MapElement {
 		y += coefY;
 		w -= coefX * 2;
 		h -= coefY * 2;
-		let texA = new Vector2();
-		let texB = new Vector2();
-		let texC = new Vector2();
-		let texD = new Vector2();
+		let texA = new THREE.Vector2();
+		let texB = new THREE.Vector2();
+		let texC = new THREE.Vector2();
+		let texD = new THREE.Vector2();
 		CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, x, y, w, h);
 
 		// Collision

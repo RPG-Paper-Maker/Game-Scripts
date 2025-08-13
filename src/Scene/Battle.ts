@@ -9,20 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import * as THREE from 'three';
 import { Datas, Graphic, Manager, Scene, System } from '..';
 import { Enum } from '../Common';
-import {
-	Animation,
-	Battler,
-	Camera,
-	Game,
-	Item,
-	Player,
-	ReactionInterpreter,
-	Vector3,
-	WindowBox,
-	WindowChoices,
-} from '../Core';
+import { Animation, Battler, Camera, Game, Item, Player, ReactionInterpreter, WindowBox, WindowChoices } from '../Core';
 import { Map } from './Map';
 import CharacterKind = Enum.CharacterKind;
 import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
@@ -111,9 +101,6 @@ class Battle extends Map {
 	public listSkills: Graphic.Skill[];
 	public listItems: Graphic.Item[];
 	public effects: System.Effect[];
-
-	//Command
-	public battleCommandKind: EffectSpecialActionKind;
 
 	//Battle Information
 	public graphicPlayers: Graphic.Player[][];
@@ -464,7 +451,7 @@ class Battle extends Map {
 		super.update();
 
 		// Y angle
-		let vector = new Vector3();
+		let vector = new THREE.Vector3();
 		this.camera.getThreeCamera().getWorldDirection(vector);
 		let angle = Math.atan2(vector.x, vector.z) + (180 * Math.PI) / 180.0;
 

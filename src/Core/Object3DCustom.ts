@@ -9,13 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import * as THREE from 'three';
 import { Enum, Mathf } from '../Common';
 import { Datas, System } from '../index';
 import { CustomGeometry } from './CustomGeometry';
 import { StructMapElementCollision } from './MapElement';
 import { Object3D } from './Object3D';
 import { Position } from './Position';
-import { Vector3 } from './Vector3';
 import CustomShapeKind = Enum.CustomShapeKind;
 import ObjectCollisionKind = Enum.ObjectCollisionKind;
 
@@ -65,7 +65,7 @@ class Object3DCustom extends Object3D {
 	 *  Get the center vector.
 	 *  @returns {Vector3}
 	 */
-	getCenterVector(): Vector3 {
+	getCenterVector(): THREE.Vector3 {
 		return Datas.Shapes.get(Enum.CustomShapeKind.OBJ, this.datas.objID).geometry.center.clone();
 	}
 
@@ -83,10 +83,10 @@ class Object3DCustom extends Object3D {
 		let vertices = modelGeometry.vertices;
 		let uvs = modelGeometry.uvs;
 		let scale = this.datas.scale;
-		let scaleVec = new Vector3(scale * position.scaleX, scale * position.scaleY, scale * position.scaleZ);
-		const center = new Vector3();
+		let scaleVec = new THREE.Vector3(scale * position.scaleX, scale * position.scaleY, scale * position.scaleZ);
+		const center = new THREE.Vector3();
 		center.multiply(scaleVec);
-		let vecA: Vector3, vecB: Vector3, vecC: Vector3;
+		let vecA: THREE.Vector3, vecB: THREE.Vector3, vecC: THREE.Vector3;
 		for (let i = 0, l = modelGeometry.vertices.length; i < l; i += 3) {
 			vecA = vertices[i].clone();
 			vecB = vertices[i + 1].clone();

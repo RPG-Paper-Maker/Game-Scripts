@@ -17,7 +17,6 @@ import { CustomGeometry } from './CustomGeometry';
 import { MapElement, StructMapElementCollision } from './MapElement';
 import { Position } from './Position';
 import { Sprite } from './Sprite';
-import { Vector2 } from './Vector2';
 
 /** @class
  *  A land in the map.
@@ -112,10 +111,10 @@ class Land extends MapElement {
 		y += coefY;
 		w -= coefX * 2;
 		h -= coefY * 2;
-		let texA = new Vector2();
-		let texB = new Vector2();
-		let texC = new Vector2();
-		let texD = new Vector2();
+		let texA = new THREE.Vector2();
+		let texB = new THREE.Vector2();
+		let texC = new THREE.Vector2();
+		let texD = new THREE.Vector2();
 		CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, x, y, w, h);
 		geometry.pushQuadUVs(texA, texB, texC, texD);
 

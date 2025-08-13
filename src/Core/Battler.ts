@@ -23,8 +23,6 @@ import { Position } from './Position';
 import { Rectangle } from './Rectangle';
 import { Sprite } from './Sprite';
 import { Status } from './Status';
-import { Vector2 } from './Vector2';
-import { Vector3 } from './Vector3';
 
 /** @class
  *  A battler in a battle (ally or ennemy).
@@ -40,12 +38,12 @@ class Battler {
 	public player: Player;
 	public isEnemy: boolean;
 	public initialPosition: Position;
-	public position: Vector3;
-	public arrowPosition: Vector2;
-	public damagePosition: Vector2;
-	public topPosition: Vector2;
-	public midPosition: Vector2;
-	public botPosition: Vector2;
+	public position: THREE.Vector3;
+	public arrowPosition: THREE.Vector2;
+	public damagePosition: THREE.Vector2;
+	public topPosition: THREE.Vector2;
+	public midPosition: THREE.Vector2;
+	public botPosition: THREE.Vector2;
 	public active: boolean;
 	public frame: Frame;
 	public frameAttacking: Frame;
@@ -69,10 +67,10 @@ class Battler {
 	public timerMove: number;
 	public timeDamage: number;
 	public mesh: THREE.Mesh;
-	public topLeftPosition: Vector3;
-	public botRightPosition: Vector3;
-	public upPosition: Vector3;
-	public halfPosition: Vector3;
+	public topLeftPosition: THREE.Vector3;
+	public botRightPosition: THREE.Vector3;
+	public upPosition: THREE.Vector3;
+	public halfPosition: THREE.Vector3;
 	public rect: Rectangle = new Rectangle();
 	public moving: boolean;
 	public attacking: boolean;
@@ -89,7 +87,7 @@ class Battler {
 	public lastTarget: Battler = null;
 	public hidden: boolean = false;
 
-	constructor(player: Player, isEnemy: boolean = false, position?: Position, vect?: Vector3, camera?: Camera) {
+	constructor(player: Player, isEnemy: boolean = false, position?: Position, vect?: THREE.Vector3, camera?: Camera) {
 		this.player = player;
 		this.isEnemy = isEnemy;
 		this.initialPosition = position;
@@ -169,22 +167,22 @@ class Battler {
 			this.mesh.receiveShadow = true;
 			this.mesh.castShadow = true;
 			this.mesh.customDepthMaterial = material.userData.customDepthMaterial;
-			this.topLeftPosition = new Vector3(
+			this.topLeftPosition = new THREE.Vector3(
 				this.position.x - (this.width / 2) * Datas.Systems.SQUARE_SIZE,
 				this.position.y + this.height * Datas.Systems.SQUARE_SIZE,
 				this.position.z
 			);
-			this.botRightPosition = new Vector3(
+			this.botRightPosition = new THREE.Vector3(
 				this.position.x + (this.width / 2) * Datas.Systems.SQUARE_SIZE,
 				this.position.y,
 				this.position.z
 			);
-			this.upPosition = new Vector3(
+			this.upPosition = new THREE.Vector3(
 				this.position.x,
 				this.position.y + this.height * Datas.Systems.SQUARE_SIZE,
 				this.position.z
 			);
-			this.halfPosition = new Vector3(
+			this.halfPosition = new THREE.Vector3(
 				this.position.x,
 				this.position.y + (this.height * Datas.Systems.SQUARE_SIZE) / 2,
 				this.position.z
@@ -520,10 +518,10 @@ class Battler {
 			let y = this.step * h;
 
 			// Update geometry
-			let texA = new Vector2();
-			let texB = new Vector2();
-			let texC = new Vector2();
-			let texD = new Vector2();
+			let texA = new THREE.Vector2();
+			let texB = new THREE.Vector2();
+			let texC = new THREE.Vector2();
+			let texD = new THREE.Vector2();
 			CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, x, y, w, h);
 
 			// Update geometry

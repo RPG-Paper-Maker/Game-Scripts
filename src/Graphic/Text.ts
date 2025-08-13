@@ -9,12 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Utils, Constants, ScreenResolution, Platform } from "../Common";
+import { Constants, Enum, Platform, ScreenResolution, Utils } from '../Common';
+import { Datas, System } from '../index';
+import { Stack } from '../Manager';
+import { Base } from './Base';
 import Align = Enum.Align;
 import AlignVertical = Enum.AlignVertical;
-import { Stack } from "../Manager";
-import { Base } from "./Base";
-import { Datas, System } from "../index";
 
 /** @class
  *  A class for all the texts to display in HUD.
@@ -30,7 +30,7 @@ import { Datas, System } from "../index";
  *  The font height used for the text
  *  @param {string} [opts.fontName=RPM.defaultValue(RPM.datasGame.System.dbOptions.vtFont, - RPM.fontName)]
  *  The font name used for the text
- *  @param {AlignVertical} [opts.verticalAlign=AlignVertical.Center] - Vertical 
+ *  @param {AlignVertical} [opts.verticalAlign=AlignVertical.Center] - Vertical
  *  alignement of the text
  *  @param {SystemColor} [opts.color=RPM.defaultValue(RPM.datasGame.System.dbOptions.vtcText]
  *  The color used for the text
@@ -42,247 +42,250 @@ import { Datas, System } from "../index";
  *  The stroke color of the text
  */
 class Text extends Base {
+	public text: string;
+	public lines: string[];
+	public align: Align;
+	public fontSize: number;
+	public oFontSize: number;
+	public fontName: string;
+	public verticalAlign: AlignVertical;
+	public color: System.Color;
+	public bold: boolean;
+	public italic: boolean;
+	public backColor: System.Color;
+	public strokeColor: System.Color;
+	public font: string;
+	public textWidth: number;
+	public textHeight: number;
+	public lastW: number = 0;
+	public zoom: number = 1;
 
-    public text: string;
-    public lines: string[];
-    public align: Align;
-    public fontSize: number;
-    public oFontSize: number;
-    public fontName: string;
-    public verticalAlign: AlignVertical;
-    public color: System.Color;
-    public bold: boolean;
-    public italic: boolean;
-    public backColor: System.Color;
-    public strokeColor: System.Color;
-    public font: string;
-    public textWidth: number;
-    public textHeight: number;
-    public datas: any;
-    public lastW: number = 0;
-    public zoom: number = 1;
+	constructor(
+		text = '',
+		{
+			x = 0,
+			y = 0,
+			w = 0,
+			h = 0,
+			align = Align.Left,
+			fontSize = Utils.defaultValue(Datas.Systems.dbOptions.v_tSize, Constants.DEFAULT_FONT_SIZE),
+			fontName = Utils.defaultValue(Datas.Systems.dbOptions.v_tFont, Constants.DEFAULT_FONT_NAME),
+			verticalAlign = AlignVertical.Center,
+			color = Utils.defaultValue(Datas.Systems.dbOptions.v_tcText, System.Color.WHITE),
+			bold = false,
+			italic = false,
+			backColor = Utils.defaultValue(Datas.Systems.dbOptions.v_tcBackground, null),
+			strokeColor = Utils.defaultValue(Datas.Systems.dbOptions.tOutline, false)
+				? Utils.defaultValue(Datas.Systems.dbOptions.v_tcOutline, null)
+				: null,
+		} = {}
+	) {
+		super(x, y, w, h);
 
-    constructor(text = '', { x = 0, y = 0, w = 0, h = 0, align = Align.Left, 
-        fontSize = Utils.defaultValue(Datas.Systems.dbOptions.v_tSize, Constants
-        .DEFAULT_FONT_SIZE), fontName = Utils.defaultValue(Datas.Systems
-        .dbOptions.v_tFont, Constants.DEFAULT_FONT_NAME), verticalAlign = 
-        AlignVertical.Center, color = Utils.defaultValue(Datas.Systems.dbOptions
-        .v_tcText, System.Color.WHITE), bold = false, italic = false, backColor 
-        = Utils.defaultValue(Datas.Systems.dbOptions.v_tcBackground, null), 
-        strokeColor = Utils.defaultValue(Datas.Systems.dbOptions.tOutline, false
-        ) ? Utils.defaultValue(Datas.Systems.dbOptions.v_tcOutline, null) : null
-        } = {})
-    {
-        super(x, y, w, h);
+		this.align = align;
+		this.fontName = fontName;
+		this.verticalAlign = verticalAlign;
+		this.color = color;
+		this.bold = bold;
+		this.italic = italic;
+		this.backColor = backColor;
+		this.strokeColor = strokeColor;
+		this.setFontSize(fontSize);
+		this.setText(Utils.defaultValue(text, ''));
+	}
 
-        this.align = align;
-        this.fontName = fontName;
-        this.verticalAlign = verticalAlign;
-        this.color = color;
-        this.bold = bold;
-        this.italic = italic;
-        this.backColor = backColor;
-        this.strokeColor = strokeColor;
-        this.setFontSize(fontSize);
-        this.setText(Utils.defaultValue(text, ''));
-    }
+	wrapText(maxWidth: number) {
+		let text = this.text.replace('\\n', Constants.STRING_NEW_LINE);
+		let lines = text.split(Constants.STRING_NEW_LINE);
+		let words: string[] = [];
+		let i: number, j: number, l: number, m: number, tempWords: string[];
+		for (i = 0, l = lines.length; i < l; i++) {
+			tempWords = lines[i].split(' ');
+			for (j = 0, m = tempWords.length; j < m; j++) {
+				words.push(tempWords[j]);
+			}
+			if (i < l - 1) {
+				words.push(Constants.STRING_NEW_LINE);
+			}
+		}
+		this.lines = [];
+		let currentLine = words[0];
+		for (let i = 1, l = words.length; i < l; i++) {
+			let word = words[i];
+			if (word === Constants.STRING_NEW_LINE) {
+				this.lines.push(currentLine);
+				currentLine = words[++i];
+				continue;
+			}
+			let width = Platform.ctx.measureText(currentLine + ' ' + word).width + (this.strokeColor === null ? 0 : 2);
+			if (width < maxWidth) {
+				currentLine += ' ' + word;
+			} else {
+				this.lines.push(currentLine);
+				currentLine = word;
+			}
+		}
+		this.lines.push(currentLine);
+		this.measureText();
+	}
 
-    wrapText(maxWidth: number) {
-        let text = this.text.replace('\\n', Constants.STRING_NEW_LINE);
-        let lines = text.split(Constants.STRING_NEW_LINE);
-        let words: string[] = [];
-        let i: number, j: number, l: number, m: number, tempWords: string[];
-        for (i = 0, l = lines.length; i < l; i++) {
-            tempWords = lines[i].split(' ');
-            for (j = 0, m = tempWords.length; j < m; j++) {
-                words.push(tempWords[j]);
-            }
-            if (i < l - 1) {
-                words.push(Constants.STRING_NEW_LINE);
-            }
-        }
-        this.lines = [];
-        let currentLine = words[0];
-        for (let i = 1, l = words.length; i < l; i++) {
-            let word = words[i];
-            if (word === Constants.STRING_NEW_LINE) {
-                this.lines.push(currentLine);
-                currentLine = words[++i];
-                continue;
-            }
-            let width = Platform.ctx.measureText(currentLine + ' ' + word)
-                .width + (this.strokeColor === null ? 0 : 2);
-            if (width < maxWidth) {
-                currentLine += " " + word;
-            } else {
-                this.lines.push(currentLine);
-                currentLine = word;
-            }
-        }
-        this.lines.push(currentLine);
-        this.measureText();
-    }
+	/**
+	 *  Set the font size and the final font.
+	 *  @param {number} fontSize - The new font size
+	 */
+	setFontSize(fontSize: number) {
+		this.oFontSize = fontSize;
+		this.fontSize = ScreenResolution.getScreenMinXY(fontSize);
+		this.updateFont();
+	}
 
-    /** 
-     *  Set the font size and the final font.
-     *  @param {number} fontSize - The new font size
-     */
-    setFontSize(fontSize: number) {
-        this.oFontSize = fontSize;
-        this.fontSize = ScreenResolution.getScreenMinXY(fontSize);
-        this.updateFont();
-    }
+	/**
+	 *  Set the final font.
+	 */
+	updateFont() {
+		this.font = Utils.createFont(this.fontSize, this.fontName, this.bold, this.italic);
+	}
 
-    /** 
-     *  Set the final font.
-     */
-    updateFont() {
-        this.font = Utils.createFont(this.fontSize, this.fontName, this.bold, this.italic);
-    }
+	/**
+	 *  Set the current displayed text.
+	 *  @param {string} text - The new text
+	 */
+	setText(text: string) {
+		text += ''; // Be sure that it's string type
+		if (this.text !== text) {
+			this.text = text;
+			this.lines = this.text.split(Constants.STRING_NEW_LINE);
+			this.measureText();
+			Stack.requestPaintHUD = true;
+		}
+	}
 
-    /** 
-     *  Set the current displayed text.
-     *  @param {string} text - The new text
-     */
-    setText(text: string) {
-        text += ""; // Be sure that it's string type
-        if (this.text !== text) {
-            this.text = text;
-            this.lines = this.text.split(Constants.STRING_NEW_LINE);
-            this.measureText();
-            Stack.requestPaintHUD = true;
-        }
-    }
+	/**
+	 *  Update the context font with resizing.
+	 */
+	updateContextFont() {
+		Platform.ctx.font = this.font;
+	}
 
-    /** 
-     *  Update the context font with resizing.
-     */
-    updateContextFont() {
-        Platform.ctx.font = this.font;
-    }
+	/**
+	 *  Measure text width and stock results in the instance.
+	 */
+	measureText() {
+		this.updateContextFont();
+		this.textWidth = 0;
+		let l = this.lines.length;
+		let size: number;
+		for (let i = 0; i < l; i++) {
+			size =
+				Platform.ctx.measureText(this.lines[i]).width +
+				(this.strokeColor === null ? 0 : ScreenResolution.getScreenMinXY(2));
+			if (size > this.textWidth) {
+				this.textWidth = size;
+			}
+		}
+		this.textHeight = this.fontSize * 2 * l;
+	}
 
-    /** 
-     *  Measure text width and stock results in the instance.
-     */
-    measureText() {
-        this.updateContextFont();
-        this.textWidth = 0;
-        let l = this.lines.length;
-        let size: number;
-        for (let i = 0; i < l; i++) {
-            size = Platform.ctx.measureText(this.lines[i]).width + (this
-                .strokeColor === null ? 0 : ScreenResolution.getScreenMinXY(2));
-            if (size > this.textWidth) {
-                this.textWidth = size;
-            }
-        }
-        this.textHeight = this.fontSize * 2 * l;
-    }
+	/**
+	 *  Drawing the text in choice box.
+	 *  @param {number} [x=this.x] - The x position to draw graphic
+	 *  @param {number} [y=this.y] - The y position to draw graphic
+	 *  @param {number} [w=this.w] - The width dimention to draw graphic
+	 *  @param {number} [h=this.h] - The height dimention to draw graphic
+	 */
+	drawChoice(x: number = this.x, y: number = this.y, w: number = this.w, h: number = this.h): void {
+		// Correcting x and y according to alignment
+		let xBack = x;
+		if (this.zoom !== 1) {
+			this.fontSize *= this.zoom;
+			this.updateFont();
+			this.measureText();
+		}
+		// Wrap text if != 0
+		if (this.lastW !== w && w !== 0) {
+			this.lastW = w;
+			this.updateContextFont();
+			this.wrapText(w);
+		}
+		let textWidth = this.textWidth;
+		let textHeight = this.fontSize + ScreenResolution.getScreenMinXY(this.strokeColor === null ? 0 : 2);
+		switch (this.align) {
+			case Align.Left:
+				x += ScreenResolution.getScreenMinXY(1);
+				break;
+			case Align.Right:
+				x += w - ScreenResolution.getScreenMinXY(1);
+				xBack = x - textWidth;
+				break;
+			case Align.Center:
+				x += w / 2;
+				xBack = x - textWidth / 2;
+				break;
+		}
+		switch (this.verticalAlign) {
+			case AlignVertical.Bot:
+				y += this.fontSize / 3 + h;
+				break;
+			case AlignVertical.Top:
+				y += this.fontSize;
+				break;
+			case AlignVertical.Center:
+				y += this.fontSize / 3 + h / 2;
+				break;
+		}
 
-    /** 
-     *  Drawing the text in choice box.
-     *  @param {number} [x=this.x] - The x position to draw graphic
-     *  @param {number} [y=this.y] - The y position to draw graphic
-     *  @param {number} [w=this.w] - The width dimention to draw graphic
-     *  @param {number} [h=this.h] - The height dimention to draw graphic
-     */
-    drawChoice(x: number = this.x, y: number = this.y, w: number = this.w, h:
-        number = this.h): void
-    {
-        // Correcting x and y according to alignment
-        let xBack = x;
-        if (this.zoom !== 1) {
-            this.fontSize *= this.zoom;
-            this.updateFont();
-            this.measureText();
-        }
-        // Wrap text if != 0
-        if (this.lastW !== w && w !== 0) {
-            this.lastW = w;
-            this.updateContextFont();
-            this.wrapText(w);
-        }
-        let textWidth = this.textWidth;
-        let textHeight = this.fontSize + ScreenResolution.getScreenMinXY(this
-            .strokeColor === null ? 0 : 2);
-        switch(this.align) {
-        case Align.Left:
-            x += ScreenResolution.getScreenMinXY(1);
-            break;
-        case Align.Right:
-            x += w - ScreenResolution.getScreenMinXY(1);
-            xBack = x - textWidth;
-            break;
-        case Align.Center:
-            x += (w / 2);
-            xBack = x - (textWidth / 2);
-            break;
-        }
-        switch(this.verticalAlign) {
-        case AlignVertical.Bot:
-            y += (this.fontSize / 3) + h;
-            break;
-        case AlignVertical.Top:
-            y += this.fontSize;
-            break;
-        case AlignVertical.Center:
-            y += (this.fontSize / 3) + (h / 2);
-            break;
-        }
+		// Draw background color
+		if (this.backColor !== null) {
+			Platform.ctx.fillStyle = this.backColor.rgb;
+			Platform.ctx.fillRect(xBack, y - textHeight, textWidth, textHeight);
+		}
 
-        // Draw background color
-        if (this.backColor !== null) {
-            Platform.ctx.fillStyle = this.backColor.rgb;
-            Platform.ctx.fillRect(xBack, y - textHeight, textWidth, textHeight);
-        }
+		// Set context options
+		Platform.ctx.font = this.font;
+		Platform.ctx.textAlign = <CanvasTextAlign>this.align;
+		let lineHeight = this.fontSize * 2;
+		let i: number,
+			l = this.lines.length;
 
-        // Set context options
-        Platform.ctx.font = this.font;
-        Platform.ctx.textAlign = <CanvasTextAlign> this.align;
-        let lineHeight = this.fontSize * 2;
-        let i: number, l = this.lines.length;
+		// Stroke text
+		let yOffset: number;
+		if (this.strokeColor !== null) {
+			Platform.ctx.strokeStyle = this.strokeColor.rgb;
+			yOffset = 0;
+			for (i = 0; i < l; i++) {
+				Platform.ctx.strokeText(this.lines[i], x - 1, y - 1 + yOffset);
+				Platform.ctx.strokeText(this.lines[i], x - 1, y + 1 + yOffset);
+				Platform.ctx.strokeText(this.lines[i], x + 1, y - 1 + yOffset);
+				Platform.ctx.strokeText(this.lines[i], x + 1, y + 1 + yOffset);
+				yOffset += lineHeight;
+			}
+		}
 
-        // Stroke text
-        let yOffset: number;
-        if (this.strokeColor !== null) {
-            Platform.ctx.strokeStyle = this.strokeColor.rgb;
-            yOffset = 0;
-            for (i = 0; i < l; i++) {
-                Platform.ctx.strokeText(this.lines[i], x - 1, y - 1 + yOffset);
-                Platform.ctx.strokeText(this.lines[i], x - 1, y  + 1 + yOffset);
-                Platform.ctx.strokeText(this.lines[i], x + 1, y - 1 + yOffset);
-                Platform.ctx.strokeText(this.lines[i], x + 1, y + 1 + yOffset);
-                yOffset += lineHeight;
-            }
-        }
+		// Drawing the text
+		Platform.ctx.fillStyle = this.color.rgb;
+		yOffset = 0;
+		for (i = 0; i < l; i++) {
+			Platform.ctx.fillText(this.lines[i], x, y + yOffset);
+			yOffset += lineHeight;
+		}
 
-        // Drawing the text
-        Platform.ctx.fillStyle = this.color.rgb;
-        yOffset = 0;
-        for (i = 0; i < l; i++) {
-            Platform.ctx.fillText(this.lines[i], x, y + yOffset);
-            yOffset += lineHeight;
-        }
+		// Fix font back
+		if (this.zoom !== 1) {
+			this.setFontSize(this.oFontSize);
+			this.measureText();
+		}
+	}
 
-        // Fix font back
-        if (this.zoom !== 1) {
-            this.setFontSize(this.oFontSize);
-            this.measureText();
-        }
-    }
-
-    /** 
-     *  Drawing the text in box (duplicate of drawChoice).
-     *  @param {number} [x=this.oX] - The x position to draw graphic
-     *  @param {number} [y=this.oY] - The y position to draw graphic
-     *  @param {number} [w=this.oW] - The width dimention to draw graphic
-     *  @param {number} [h=this.oH] - The height dimention to draw graphic
-     */
-    draw(x: number = this.x, y: number = this.y, w: number = this.w, h: 
-        number = this.h)
-    {
-        this.drawChoice(x, y, w, h);
-    }
+	/**
+	 *  Drawing the text in box (duplicate of drawChoice).
+	 *  @param {number} [x=this.oX] - The x position to draw graphic
+	 *  @param {number} [y=this.oY] - The y position to draw graphic
+	 *  @param {number} [w=this.oW] - The width dimention to draw graphic
+	 *  @param {number} [h=this.oH] - The height dimention to draw graphic
+	 */
+	draw(x: number = this.x, y: number = this.y, w: number = this.w, h: number = this.h) {
+		this.drawChoice(x, y, w, h);
+	}
 }
 
-export { Text }
+export { Text };

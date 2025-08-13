@@ -10,7 +10,6 @@
 */
 
 import * as THREE from 'three';
-import { Vector2, Vector3 } from '../Core';
 
 /**
  * The static class for Math related function.
@@ -362,7 +361,7 @@ class Mathf {
 	 *  @param {number} y2 - The y bottom point of the rectangle
 	 *  @returns {boolean}
 	 */
-	static isPointOnRectangle(p: Vector2, x1: number, x2: number, y1: number, y2: number): boolean {
+	static isPointOnRectangle(p: THREE.Vector2, x1: number, x2: number, y1: number, y2: number): boolean {
 		return p.x >= x1 && p.x <= x2 && p.y >= y1 && p.y <= y2;
 	}
 
@@ -375,7 +374,7 @@ class Mathf {
 	 *  @param {Vector2} p2 - One of the point of the triangle
 	 *  @returns {boolean}
 	 */
-	static isPointOnTriangle(p: Vector2, p0: Vector2, p1: Vector2, p2: Vector2): boolean {
+	static isPointOnTriangle(p: THREE.Vector2, p0: THREE.Vector2, p1: THREE.Vector2, p2: THREE.Vector2): boolean {
 		let a = (1 / 2) * (-p1.y * p2.x + p0.y * (-p1.x + p2.x) + p0.x * (p1.y - p2.y) + p1.x * p2.y);
 		let sign = a < 0 ? -1 : 1;
 		let s = (p0.y * p2.x - p0.x * p2.y + (p2.y - p0.y) * p.x + (p0.x - p2.x) * p.y) * sign;
@@ -390,7 +389,7 @@ class Mathf {
 	 *  @param {Vector3} v
 	 *  @returns {number}
 	 */
-	static orthogonalProjection(u: Vector3, v: Vector3): number {
+	static orthogonalProjection(u: THREE.Vector3, v: THREE.Vector3): number {
 		let lu = u.length();
 		let lv = v.length();
 		let dot = u.dot(v);
@@ -481,7 +480,13 @@ class Mathf {
 		return degrees * (Math.PI / 180);
 	}
 
-	static rotateVertex(vec: Vector3, center: Vector3, angle: number, axis: Vector3, isDegree: boolean = true) {
+	static rotateVertex(
+		vec: THREE.Vector3,
+		center: THREE.Vector3,
+		angle: number,
+		axis: THREE.Vector3,
+		isDegree: boolean = true
+	) {
 		vec.sub(center);
 		vec.applyAxisAngle(axis, isDegree ? (angle * Math.PI) / 180.0 : angle);
 		vec.add(center);

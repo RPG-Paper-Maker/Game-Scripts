@@ -13,7 +13,6 @@ import * as THREE from 'three';
 import { Constants, Mathf } from '../Common';
 import { Datas } from '../index';
 import { Portion } from './Portion';
-import { Vector3 } from './Vector3';
 
 /** @class
  *  The data class for position.
@@ -103,7 +102,7 @@ class Position extends Portion {
 	 *  @param {Vector3} position
 	 *  @returns {Position}
 	 */
-	static createFromVector3(position: Vector3): Position {
+	static createFromVector3(position: THREE.Vector3): Position {
 		return new Position(
 			Math.floor(position.x / Datas.Systems.SQUARE_SIZE),
 			Math.floor(position.y / Datas.Systems.SQUARE_SIZE),
@@ -171,8 +170,8 @@ class Position extends Portion {
 	 *  Transform a position to a Vector3.
 	 *  @returns {Vector3}
 	 */
-	toVector3(center: boolean = true): Vector3 {
-		return new Vector3(
+	toVector3(center: boolean = true): THREE.Vector3 {
+		return new THREE.Vector3(
 			this.x * Datas.Systems.SQUARE_SIZE + (center ? (this.centerX / 100) * Datas.Systems.SQUARE_SIZE : 0),
 			this.y * Datas.Systems.SQUARE_SIZE + (this.yPixels * Datas.Systems.SQUARE_SIZE) / 100,
 			this.z * Datas.Systems.SQUARE_SIZE + (center ? (this.centerZ / 100) * Datas.Systems.SQUARE_SIZE : 0)
@@ -191,8 +190,8 @@ class Position extends Portion {
 	 *  Transform a position to a scaling Vector3.
 	 *  @returns {Vector3}
 	 */
-	toScaleVector(): Vector3 {
-		return new Vector3(this.scaleX, this.scaleY, this.scaleZ);
+	toScaleVector(): THREE.Vector3 {
+		return new THREE.Vector3(this.scaleX, this.scaleY, this.scaleZ);
 	}
 
 	/**

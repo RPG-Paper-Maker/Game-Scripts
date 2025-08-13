@@ -9,16 +9,16 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Player } from './Player';
+import * as THREE from 'three';
+import { Constants, Enum, Paths, Platform, Utils } from '../Common';
 import { Datas, Manager, Scene, System } from '../index';
-import { Item } from './Item';
 import { Chrono } from './Chrono';
+import { Item } from './Item';
 import { MapObject } from './MapObject';
-import { Paths, Constants, Utils, IO, Enum, Platform } from '../Common';
+import { Player } from './Player';
+import { Portion } from './Portion';
 import GroupKind = Enum.GroupKind;
 import CharacterKind = Enum.CharacterKind;
-import { Portion } from './Portion';
-import { Vector3 } from './Vector3';
 
 /** @class
  *  All the global informations of a particular game.
@@ -272,7 +272,7 @@ class Game {
 			objectMapMinMout: Function;
 		objectMap = objectMap = async (t: number[]) => {
 			let obj = (await MapObject.searchOutMap(t[0])).object;
-			obj.position = new Vector3(t[1], t[2], t[3]);
+			obj.position = new THREE.Vector3(t[1], t[2], t[3]);
 			obj.previousPosition = obj.position;
 			return obj;
 		};

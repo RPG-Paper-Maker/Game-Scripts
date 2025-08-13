@@ -30,7 +30,6 @@ import { Position } from './Position';
 import { Sprite } from './Sprite';
 import { SpriteWall } from './SpriteWall';
 import { TextureBundle } from './TextureBundle';
-import { Vector3 } from './Vector3';
 import ElementMapKind = Enum.ElementMapKind;
 import ShapeKind = Enum.ShapeKind;
 
@@ -253,7 +252,7 @@ class MapPortion {
 			let s: Record<string, any>,
 				position: Position,
 				sprite: Sprite,
-				localPosition: Vector3,
+				localPosition: THREE.Vector3,
 				collisions: StructMapElementCollision[],
 				resultUpdate: [number, StructMapElementCollision[]];
 			for (let i = 0, l = json.length; i < l; i++) {
@@ -546,7 +545,7 @@ class MapPortion {
 			object: System.MapObject,
 			id: number,
 			index: number,
-			localPosition: Vector3,
+			localPosition: THREE.Vector3,
 			mapObject: MapObject;
 		for (i = 0, l = json.length; i < l; i++) {
 			jsonObject = json[i];
@@ -670,7 +669,7 @@ class MapPortion {
 			position: Position,
 			jsonObjectValue: Record<string, any>,
 			object: System.MapObject,
-			localPosition: Vector3,
+			localPosition: THREE.Vector3,
 			mapObject: MapObject;
 		for (let i = 0, l = json.length; i < l; i++) {
 			jsonObject = json[i];

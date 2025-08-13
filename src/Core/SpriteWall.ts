@@ -9,15 +9,14 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import * as THREE from 'three';
+import { Enum } from '../Common';
+import { Datas } from '../index';
+import { CustomGeometry } from './CustomGeometry';
 import { MapElement, StructMapElementCollision } from './MapElement';
 import { Position } from './Position';
-import { Datas } from '../index';
-import { Enum } from '../Common';
-import PictureKind = Enum.PictureKind;
 import { Sprite } from './Sprite';
-import { Vector3 } from './Vector3';
-import { Vector2 } from './Vector2';
-import { CustomGeometry } from './CustomGeometry';
+import PictureKind = Enum.PictureKind;
 
 /** @class
  *  A sprite in the map.
@@ -65,12 +64,12 @@ class SpriteWall extends MapElement {
 		pictureID: number,
 		count: number
 	): [number, StructMapElementCollision[]] {
-		let vecA = new Vector3(-0.5, 1.0, 0.0);
-		let vecB = new Vector3(0.5, 1.0, 0.0);
-		let vecC = new Vector3(0.5, 0.0, 0.0);
-		let vecD = new Vector3(-0.5, 0.0, 0.0);
-		let center = new Vector3();
-		let size = new Vector3(Datas.Systems.SQUARE_SIZE, height, 0);
+		let vecA = new THREE.Vector3(-0.5, 1.0, 0.0);
+		let vecB = new THREE.Vector3(0.5, 1.0, 0.0);
+		let vecC = new THREE.Vector3(0.5, 0.0, 0.0);
+		let vecD = new THREE.Vector3(-0.5, 0.0, 0.0);
+		let center = new THREE.Vector3();
+		let size = new THREE.Vector3(Datas.Systems.SQUARE_SIZE, height, 0);
 		let angle = position.angleY;
 		let localPosition = position.toVector3();
 
@@ -99,10 +98,10 @@ class SpriteWall extends MapElement {
 		y += coefY;
 		w -= coefX * 2;
 		h -= coefY * 2;
-		let texA = new Vector2();
-		let texB = new Vector2();
-		let texC = new Vector2();
-		let texD = new Vector2();
+		let texA = new THREE.Vector2();
+		let texB = new THREE.Vector2();
+		let texC = new THREE.Vector2();
+		let texD = new THREE.Vector2();
 		CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, x, y, w, h);
 
 		// Collision

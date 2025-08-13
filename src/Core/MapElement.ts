@@ -9,18 +9,17 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import * as THREE from 'three';
 import { Enum, Utils } from '../Common';
-import ElementMapKind = Enum.ElementMapKind;
-import { Position } from './Position';
-import { Datas } from '../index';
 import { CollisionSquare } from './CollisionSquare';
-import { Vector3 } from './Vector3';
+import { Position } from './Position';
+import ElementMapKind = Enum.ElementMapKind;
 
 interface StructMapElementCollision {
 	b?: number[];
 	p?: Position;
-	l?: Vector3;
-	c?: Vector3;
+	l?: THREE.Vector3;
+	c?: THREE.Vector3;
 	cs?: CollisionSquare;
 	w?: number;
 	h?: number;
@@ -68,4 +67,4 @@ class MapElement {
 	}
 }
 
-export { StructMapElementCollision, MapElement };
+export { MapElement, StructMapElementCollision };

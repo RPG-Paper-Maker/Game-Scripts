@@ -9,9 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import * as THREE from 'three';
 import { Enum, Inputs, Mathf, Platform, Utils } from '../Common';
-import { Game, MapObject, ReactionInterpreter, StructSearchResult, Vector3 } from '../Core';
-import { Core, Datas, EventCommand, Manager, Scene, System } from '../index';
+import { Game, MapObject, ReactionInterpreter, StructSearchResult } from '../Core';
+import { Datas, EventCommand, Manager, Scene, System } from '../index';
 import { Base } from './Base';
 import CommandMoveKind = Enum.CommandMoveKind;
 import Orientation = Enum.Orientation;
@@ -698,9 +699,9 @@ class MoveObject extends Base {
 		if (object) {
 			if (currentState.currentTime === -1) {
 				currentState.currentTime = 0;
-				currentState.startJump = new Vector3(object.position.x, object.position.y, object.position.z);
+				currentState.startJump = new THREE.Vector3(object.position.x, object.position.y, object.position.z);
 				let square = parameters.square ? Datas.Systems.SQUARE_SIZE : 1;
-				currentState.endJump = new Vector3(
+				currentState.endJump = new THREE.Vector3(
 					parameters.x.getValue() * square + currentState.startJump.x,
 					parameters.y.getValue() * square + parameters.yPlus.getValue() + currentState.startJump.y,
 					parameters.z.getValue() * square + currentState.startJump.z

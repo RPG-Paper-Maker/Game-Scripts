@@ -11,8 +11,6 @@
 
 import * as THREE from 'three';
 import { Mathf } from '../Common';
-import { Vector2 } from './Vector2';
-import { Vector3 } from './Vector3';
 
 /**
  *  The geometry used to apply vertices + indices + uvs.
@@ -41,14 +39,14 @@ export class CustomGeometry extends THREE.BufferGeometry {
 		let w = width / 2;
 		let h = height / 2;
 		let d = depth / 2;
-		let vecA = new Vector3(-w, -h, -d);
-		let vecB = new Vector3(w, -h, -d);
-		let vecC = new Vector3(w, -h, d);
-		let vecD = new Vector3(-w, -h, d);
-		let vecE = new Vector3(-w, h, -d);
-		let vecF = new Vector3(w, h, -d);
-		let vecG = new Vector3(w, h, d);
-		let vecH = new Vector3(-w, h, d);
+		let vecA = new THREE.Vector3(-w, -h, -d);
+		let vecB = new THREE.Vector3(w, -h, -d);
+		let vecC = new THREE.Vector3(w, -h, d);
+		let vecD = new THREE.Vector3(-w, -h, d);
+		let vecE = new THREE.Vector3(-w, h, -d);
+		let vecF = new THREE.Vector3(w, h, -d);
+		let vecG = new THREE.Vector3(w, h, d);
+		let vecH = new THREE.Vector3(-w, h, d);
 		geometry.pushQuadVertices(vecA, vecB, vecC, vecD);
 		geometry.pushQuadVertices(vecE, vecF, vecG, vecH);
 		geometry.pushQuadVertices(vecE, vecH, vecD, vecA);
@@ -74,10 +72,10 @@ export class CustomGeometry extends THREE.BufferGeometry {
 	 *  @param {number} h
 	 */
 	static uvsQuadToTex(
-		texA: Vector2,
-		texB: Vector2,
-		texC: Vector2,
-		texD: Vector2,
+		texA: THREE.Vector2,
+		texB: THREE.Vector2,
+		texC: THREE.Vector2,
+		texD: THREE.Vector2,
 		x: number,
 		y: number,
 		w: number,
@@ -148,7 +146,7 @@ export class CustomGeometry extends THREE.BufferGeometry {
 	 *  @param {THREE.Vector3} axis
 	 *  @param {THREE.Vector3} center
 	 */
-	rotate(angle: number, axis: Vector3, center: Vector3) {
+	rotate(angle: number, axis: THREE.Vector3, center: THREE.Vector3) {
 		const vertices = this.getVertices();
 		let vertex = new THREE.Vector3();
 		for (let i = 0, l = vertices.length; i < l; i += 3) {
@@ -166,7 +164,7 @@ export class CustomGeometry extends THREE.BufferGeometry {
 	 *  @param {THREE.Vector3} axis
 	 *  @param {THREE.Vector3} center
 	 */
-	rotateFromEuler(euler: THREE.Euler, center: Vector3) {
+	rotateFromEuler(euler: THREE.Euler, center: THREE.Vector3) {
 		const vertices = this.getVertices();
 		let vertex = new THREE.Vector3();
 		for (let i = 0, l = vertices.length; i < l; i += 3) {
@@ -184,7 +182,7 @@ export class CustomGeometry extends THREE.BufferGeometry {
 	 *  @param {Core.Vector3} vecB
 	 *  @param {Core.Vector3} vecC
 	 */
-	pushTriangleVertices(vecA: Vector3, vecB: Vector3, vecC: Vector3) {
+	pushTriangleVertices(vecA: THREE.Vector3, vecB: THREE.Vector3, vecC: THREE.Vector3) {
 		this.b_vertices.push(vecA.x, vecA.y, vecA.z);
 		this.b_vertices.push(vecB.x, vecB.y, vecB.z);
 		this.b_vertices.push(vecC.x, vecC.y, vecC.z);
@@ -205,7 +203,7 @@ export class CustomGeometry extends THREE.BufferGeometry {
 	 *  @param {Core.Vector2} texC
 	 *  @param {Core.Vector2} texD
 	 */
-	pushTriangleUVs(texA: Vector2, texB: Vector2, texC: Vector2) {
+	pushTriangleUVs(texA: THREE.Vector2, texB: THREE.Vector2, texC: THREE.Vector2) {
 		this.b_uvs.push(texA.x, texA.y);
 		this.b_uvs.push(texB.x, texB.y);
 		this.b_uvs.push(texC.x, texC.y);
@@ -218,7 +216,7 @@ export class CustomGeometry extends THREE.BufferGeometry {
 	 *  @param {Core.Vector3} vecC
 	 *  @param {Core.Vector3} vecD
 	 */
-	pushQuadVertices(vecA: Vector3, vecB: Vector3, vecC: Vector3, vecD: Vector3) {
+	pushQuadVertices(vecA: THREE.Vector3, vecB: THREE.Vector3, vecC: THREE.Vector3, vecD: THREE.Vector3) {
 		this.b_vertices.push(vecA.x, vecA.y, vecA.z);
 		this.b_vertices.push(vecB.x, vecB.y, vecB.z);
 		this.b_vertices.push(vecC.x, vecC.y, vecC.z);
@@ -241,7 +239,7 @@ export class CustomGeometry extends THREE.BufferGeometry {
 	 *  @param {Core.Vector2} texC
 	 *  @param {Core.Vector2} texD
 	 */
-	pushQuadUVs(texA: Vector2, texB: Vector2, texC: Vector2, texD: Vector2) {
+	pushQuadUVs(texA: THREE.Vector2, texB: THREE.Vector2, texC: THREE.Vector2, texD: THREE.Vector2) {
 		this.b_uvs.push(texA.x, texA.y);
 		this.b_uvs.push(texB.x, texB.y);
 		this.b_uvs.push(texC.x, texC.y);

@@ -9,8 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import * as THREE from 'three';
 import { Enum, Platform, Utils } from '../Common';
-import { Game, ReactionInterpreter, Vector2, Vector3 } from '../Core';
+import { Game, ReactionInterpreter } from '../Core';
 import { StructIterator } from '../EventCommand';
 import { Datas, System } from '../index';
 import DynamicValueKind = Enum.DynamicValueKind;
@@ -443,9 +444,9 @@ class DynamicValue extends System.Base {
 				}
 				return this.customList;
 			case DynamicValueKind.Vector2:
-				return new Vector2(this.x.getValue(), this.y.getValue());
+				return new THREE.Vector2(this.x.getValue(), this.y.getValue());
 			case DynamicValueKind.Vector3:
-				return new Vector3(this.x.getValue(), this.y.getValue(), this.z.getValue());
+				return new THREE.Vector3(this.x.getValue(), this.y.getValue(), this.z.getValue());
 			case DynamicValueKind.Bars:
 				return Datas.Pictures.get(Enum.PictureKind.Bars, this.value);
 			case DynamicValueKind.Icons:

@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { Paths, Platform, ScreenResolution, Utils } from '../Common';
-import { Camera, Vector2, Vector3 } from '../Core';
+import { Camera } from '../Core';
 import { Datas, System } from '../index';
 import { Stack } from './Stack';
 
@@ -237,13 +237,13 @@ class GL {
 	 *  @param {THREE.Camera} camera - The three.js camera
 	 *  @returns {Vector2}
 	 */
-	static toScreenPosition(vector: Vector3, camera: THREE.Camera): Vector2 {
+	static toScreenPosition(vector: THREE.Vector3, camera: THREE.Camera): THREE.Vector2 {
 		let widthHalf = ScreenResolution.CANVAS_WIDTH / 2;
 		let heightHalf = ScreenResolution.CANVAS_HEIGHT / 2;
 		let position = vector.clone();
 		camera.updateMatrixWorld(true);
 		position.project(camera);
-		return new Vector2(position.x * widthHalf + widthHalf, -(position.y * heightHalf) + heightHalf);
+		return new THREE.Vector2(position.x * widthHalf + widthHalf, -(position.y * heightHalf) + heightHalf);
 	}
 }
 

@@ -50,7 +50,6 @@ export class Main {
 	 * @memberof Main
 	 */
 	static async load() {
-		console.log('loading');
 		await Datas.Languages.read();
 		await Datas.Settings.read();
 		await Datas.Systems.read();

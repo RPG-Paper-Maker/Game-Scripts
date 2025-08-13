@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { Constants, ScreenResolution, Utils } from '../Common';
-import { Camera, Vector3 } from '../Core';
+import { Camera } from '../Core';
 import { Datas } from '../index';
 import { Base } from './Base';
 import { DynamicValue } from './DynamicValue';
@@ -90,7 +90,7 @@ class CameraProperties extends Base {
 		}
 		camera.horizontalAngle = this.horizontalAngle.getValue();
 		camera.verticalAngle = this.verticalAngle.getValue();
-		camera.targetPosition = new Vector3();
+		camera.targetPosition = new THREE.Vector3();
 		let x = this.targetOffsetX.getValue();
 		if (this.isSquareTargetOffsetX) {
 			x *= Datas.Systems.SQUARE_SIZE;
@@ -103,7 +103,7 @@ class CameraProperties extends Base {
 		if (this.isSquareTargetOffsetZ) {
 			z *= Datas.Systems.SQUARE_SIZE;
 		}
-		camera.targetOffset = new Vector3(x, y, z);
+		camera.targetOffset = new THREE.Vector3(x, y, z);
 	}
 }
 

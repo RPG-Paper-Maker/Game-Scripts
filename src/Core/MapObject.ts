@@ -23,8 +23,6 @@ import { Object3DCustom } from './Object3DCustom';
 import { Portion } from './Portion';
 import { Position } from './Position';
 import { Sprite } from './Sprite';
-import { Vector2 } from './Vector2';
-import { Vector3 } from './Vector3';
 import Orientation = Enum.Orientation;
 import ElementMapKind = Enum.ElementMapKind;
 import PictureKind = Enum.PictureKind;
@@ -50,10 +48,10 @@ class MapObject {
 
 	public id: number;
 	public system: System.MapObject;
-	public position: Vector3;
+	public position: THREE.Vector3;
 	public isHero: boolean;
 	public movingState: Record<string, any>;
-	public previousPosition: Vector3;
+	public previousPosition: THREE.Vector3;
 	public mesh: THREE.Mesh<CustomGeometry, THREE.MeshPhongMaterial>;
 	public meshBoundingBox: THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]>[];
 	public currentBoundingBox: THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]>;
@@ -85,8 +83,8 @@ class MapObject {
 	public currentState: System.State;
 	public currentStateInstance: Record<string, any>;
 	public removed: boolean;
-	public upPosition: Vector3;
-	public halfPosition: Vector3;
+	public upPosition: THREE.Vector3;
+	public halfPosition: THREE.Vector3;
 	public currentOrientationStop: boolean;
 	public isOrientationStopWalk: boolean = false;
 	public currentOrientationClimbing: boolean;
@@ -95,7 +93,7 @@ class MapObject {
 	public currentAngle: THREE.Vector3 = new THREE.Vector3();
 	public currentScale: THREE.Vector3 = new THREE.Vector3();
 
-	constructor(system: System.MapObject, position?: Vector3, isHero: boolean = false) {
+	constructor(system: System.MapObject, position?: THREE.Vector3, isHero: boolean = false) {
 		this.system = system;
 		this.id = system.id;
 		this.position = position;
@@ -704,8 +702,12 @@ class MapObject {
 	 *  @param {number} angle - The angle
 	 *  @returns {Vector3}
 	 */
-	getFuturPosition(orientation: Orientation, distance: number, angle: number): [Vector3, boolean, Enum.Orientation] {
-		let position = new Vector3(this.previousPosition.x, this.previousPosition.y, this.previousPosition.z);
+	getFuturPosition(
+		orientation: Orientation,
+		distance: number,
+		angle: number
+	): [THREE.Vector3, boolean, Enum.Orientation] {
+		let position = new THREE.Vector3(this.previousPosition.x, this.previousPosition.y, this.previousPosition.z);
 
 		// The speed depends on the time elapsed since the last update
 		let w = Scene.Map.current.mapProperties.length * Datas.Systems.SQUARE_SIZE;
@@ -883,7 +885,7 @@ class MapObject {
 	 *  Only updates the bounding box mesh position.
 	 *  @param {Vector3} position - Position to update
 	 */
-	updateBB(position: Vector3) {
+	updateBB(position: THREE.Vector3) {
 		if (
 			this.currentStateInstance.graphicKind !== ElementMapKind.Object3D &&
 			this.currentStateInstance.graphicID !== 0
@@ -966,7 +968,7 @@ class MapObject {
 	 *  Only updates the bounding box mesh position.
 	 *  @param {Vector3} position - Position to update
 	 */
-	updateBBPosition(position: Vector3) {
+	updateBBPosition(position: THREE.Vector3) {
 		if (this.meshBoundingBox) {
 			for (let i = 0, l = this.meshBoundingBox.length; i < l; i++) {
 				this.updateMeshBBPosition(this.meshBoundingBox[i], this.boundingBoxSettings.b[i], position);
@@ -978,7 +980,7 @@ class MapObject {
 	 *  Only updates the current bounding box mesh position.
 	 *  @param {Vector3} position - Position to update
 	 */
-	updateMeshBBPosition(mesh: THREE.Mesh, bbSettings: number[], position: Vector3) {
+	updateMeshBBPosition(mesh: THREE.Mesh, bbSettings: number[], position: THREE.Vector3) {
 		if (
 			this.currentStateInstance.graphicKind === ElementMapKind.SpritesFix ||
 			this.currentStateInstance.graphicKind === ElementMapKind.Object3D
@@ -1088,7 +1090,7 @@ class MapObject {
 	 *  Teleport the object.
 	 *  @param {Vector3} position - Position to teleport
 	 */
-	teleport(position: Vector3) {
+	teleport(position: THREE.Vector3) {
 		if (this.removed) {
 			return;
 		}
@@ -1121,7 +1123,7 @@ class MapObject {
 	 *  @param {number} finalTime - The total final time for complete jump animation
 	 *  @returns {number}
 	 */
-	jump(start: Vector3, end: Vector3, peak: number, currentTime: number, finalTime: number): number {
+	jump(start: THREE.Vector3, end: THREE.Vector3, peak: number, currentTime: number, finalTime: number): number {
 		if (this.removed) {
 			return finalTime;
 		}
@@ -1423,12 +1425,12 @@ class MapObject {
 		// Positions
 		if (this.position) {
 			this.previousPosition = this.position;
-			this.upPosition = new Vector3(
+			this.upPosition = new THREE.Vector3(
 				this.position.x,
 				this.position.y + this.height * Datas.Systems.SQUARE_SIZE,
 				this.position.z
 			);
-			this.halfPosition = new Vector3(
+			this.halfPosition = new THREE.Vector3(
 				this.position.x,
 				this.position.y + (this.height * Datas.Systems.SQUARE_SIZE) / 2,
 				this.position.z
@@ -1550,10 +1552,10 @@ class MapObject {
 				y += coefY;
 				w -= coefX * 2;
 				h -= coefY * 2;
-				let texA = new Vector2();
-				let texB = new Vector2();
-				let texC = new Vector2();
-				let texD = new Vector2();
+				let texA = new THREE.Vector2();
+				let texB = new THREE.Vector2();
+				let texC = new THREE.Vector2();
+				let texD = new THREE.Vector2();
 				CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, x, y, w, h);
 
 				// Update geometry
@@ -1609,7 +1611,11 @@ class MapObject {
 	 *  @param {Vector3} position
 	 *  @returns {Enum.Orientation}
 	 */
-	getOrientationBetweenPosition(position: Vector3, force: boolean = false, front: boolean = false): Enum.Orientation {
+	getOrientationBetweenPosition(
+		position: THREE.Vector3,
+		force: boolean = false,
+		front: boolean = false
+	): Enum.Orientation {
 		let x = Math.abs(position.x - this.position.x);
 		let z = Math.abs(position.z - this.position.z);
 		let orientation = this.orientationEye;
@@ -1652,7 +1658,7 @@ class MapObject {
 	/**
 	 *  Get all the squares positions where you need to check collision.
 	 */
-	getSquaresBB(direction: Vector3 = new Vector3()): [number, number, number, number, number, number] {
+	getSquaresBB(direction: THREE.Vector3 = new THREE.Vector3()): [number, number, number, number, number, number] {
 		let startI: number, endI: number, startJ: number, endJ: number, startK: number, endK: number;
 		if (direction.x > 0) {
 			startI = 0;

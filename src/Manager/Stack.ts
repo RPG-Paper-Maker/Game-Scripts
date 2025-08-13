@@ -298,7 +298,6 @@ class Stack {
 	 */
 	static drawHUD() {
 		if (this.requestPaintHUD) {
-			console.log(this.isLoading());
 			if (this.isLoading() && this.sceneLoading) {
 				this.loadingDelay += this.elapsedTime;
 				if (this.loadingDelay >= Scene.Loading.MIN_DELAY) {

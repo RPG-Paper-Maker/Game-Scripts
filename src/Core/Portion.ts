@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import * as THREE from 'three';
 import { Constants } from '../Common';
 import { Datas } from '../index';
-import { Vector3 } from './index';
 
 /** @class
  *  The data class for portion.
@@ -46,7 +46,7 @@ class Portion {
 	 *   @param {number[]} p - The array position
 	 *   @returns {number[]}
 	 */
-	static createFromVector3(position: Vector3): Portion {
+	static createFromVector3(position: THREE.Vector3): Portion {
 		return new Portion(
 			Math.floor(position.x / Datas.Systems.SQUARE_SIZE / Constants.PORTION_SIZE),
 			Math.floor(position.y / Datas.Systems.SQUARE_SIZE / Constants.PORTION_SIZE),
