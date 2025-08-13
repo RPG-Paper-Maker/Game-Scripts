@@ -5,13 +5,12 @@
 	"author": "Wano",
 	"type": "module",
 	"scripts": {
-		"watch": "nodemon -e ts --watch ./src/**/* --exec npm run start",
 		"start": "node scripts/build.mjs && electron ./main.js --dev",
 		"electron": "electron ./main.js --dev",
-		"copy-project": "node scripts/copyProject.mjs",
-		"doc": "webdoc -R README.md",
+		"copy-project": "node scripts/copy-project.mjs",
 		"update-packages": "ncu -u",
-		"clear-packages": "rm -rf node_modules && rm package-lock.json && npm install"
+		"clear-packages": "rm -rf node_modules && rm package-lock.json && npm install",
+		"push-build": "bash scripts/push-build.sh"
 	},
 	"devDependencies": {
 		"@types/howler": "^2.2.12",

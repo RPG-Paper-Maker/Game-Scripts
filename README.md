@@ -1,20 +1,28 @@
 # Game-Scripts
 
-Game and scripts used for RPG Paper Maker
+Original TS code used for RPG Paper Maker Core code.
 
-## How to install
+## How to build the project
 
-This is using electron.js framework.
+### Pre-requirements
 
-Use:
+-   [Node.js](https://nodejs.org/en)
+-   IDE: we recommend you to use [Visual Studio Code](https://code.visualstudio.com/)
+-   For Windows users only: we recommend to use [Git for Windows](https://gitforwindows.org/) and use GIT BASH functionnality to run all the next following commands (right click in desired folder and click on Git Bash). You can also use default Windows PowerShell.
 
-    npm install
+### Build
 
-Wait for the complete install with this command.
+Install node dependencies:
+
+```bash
+npm install
+```
 
 You also need to have a project to test. You can run this command to automaticaly copy the `project-without-name` project folder you have in `pathToYourDocuments/RPG Paper Maker Games`:
 
-    npm run copyProject
+```bash
+npm run copy-project
+```
 
 You can change the project at anytime by reusing this command.
 
@@ -22,7 +30,17 @@ You can change the project at anytime by reusing this command.
 
 Just use this command:
 
-    npm run start
+```bash
+npm start
+```
+
+## Game script build
+
+`npm start` will compile ts code and create complete the build/scripts folder. You can copy this content to [https://github.com/RPG-Paper-Maker/Game-Scripts-Build](https://github.com/RPG-Paper-Maker/Game-Scripts-Build) and push to game scripts thanks to the command:
+
+```bash
+npm run push-build
+```
 
 ## How to contribute
 
@@ -75,23 +93,3 @@ It's split into 9 modules:
     > The module who hold all the windows related class.
 -   Datas
     > The module who hold all the datas.
-
-## Usages
-
-The RPM corescript is Typescript based but has compiled javascript so can be still used
-here's an example of plugin file.
-Note : still in dev.
-
-```ts
-import { Management, Game } from 'rpm';
-import PluginManager = Management.PluginManager;
-// global in module are private to the file so it's fine to do this.
-const parameters = PluginManager.fetch('MyAwesomePlugin');
-
-export class MyCustomClass extends Game.Base {
-	// ETC
-	constructor() {
-		super();
-	}
-}
-```
