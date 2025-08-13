@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
-import path from 'path';
 import os from 'os';
+import path from 'path';
 
 async function copyDir(src, dest) {
 	await fs.mkdir(dest, { recursive: true });
@@ -9,7 +9,6 @@ async function copyDir(src, dest) {
 	for (let entry of entries) {
 		let srcPath = path.join(src, entry.name);
 		let destPath = path.join(dest, entry.name);
-
 		entry.isDirectory() ? await copyDir(srcPath, destPath) : await fs.copyFile(srcPath, destPath);
 	}
 }
@@ -24,16 +23,9 @@ async function exists(path) {
 }
 
 (async function () {
-	const BUILD_DIR = './Content';
+	const BUILD_DIR = './build';
 	const DOCUMENTS_FOLDER = path.join(os.homedir(), 'Documents');
-	const CONTENT_FOLDER = path.join(
-		DOCUMENTS_FOLDER,
-		'RPG Paper Maker Games',
-		'project-without-name',
-		'resources',
-		'app',
-		'Content'
-	);
+	const CONTENT_FOLDER = path.join(DOCUMENTS_FOLDER, 'RPG Paper Maker Games', 'project-without-name');
 
 	try {
 		if (await exists(BUILD_DIR)) {

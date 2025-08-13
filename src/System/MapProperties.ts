@@ -9,10 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import * as THREE from 'three';
 import { Constants, Enum, Mathf, Utils } from '../Common';
 import { Game, Position } from '../Core';
 import { MapObject } from '../Core/MapObject';
-import { THREE } from '../Globals';
 import { Datas, Manager, Scene, System } from '../index';
 import { Base } from './Base';
 import { CameraProperties } from './CameraProperties';

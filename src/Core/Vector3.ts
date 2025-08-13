@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { THREE } from '../Globals';
+import * as THREE from 'three';
 
 /**
  * The data class who hold 3D coordinates.

@@ -10,7 +10,6 @@
 */
 
 import { Enum } from '../Common';
-import { Howl } from '../Globals';
 import { Datas, System } from '../index';
 import { ProgressionTable } from '../System';
 import SongKind = Enum.SongKind;

@@ -9,22 +9,22 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { THREE } from '../Globals';
-import { Player } from './Player';
-import { Enum, Interpreter, Mathf } from '../Common';
-import { Frame } from './Frame';
-import { ProgressionTable } from '../System';
-import { Manager, Datas, Scene, Graphic } from '../index';
-import { Camera } from './Camera';
-import { Sprite } from './Sprite';
-import { Position } from './Position';
+import * as THREE from 'three';
 import { MeshPhongMaterial } from 'three';
-import { Vector3 } from './Vector3';
-import { Vector2 } from './Vector2';
-import { Status } from './Status';
+import { Enum, Interpreter } from '../Common';
+import { ProgressionTable } from '../System';
+import { Datas, Graphic, Manager, Scene } from '../index';
 import { Animation } from './Animation';
+import { Camera } from './Camera';
 import { CustomGeometry } from './CustomGeometry';
+import { Frame } from './Frame';
+import { Player } from './Player';
+import { Position } from './Position';
 import { Rectangle } from './Rectangle';
+import { Sprite } from './Sprite';
+import { Status } from './Status';
+import { Vector2 } from './Vector2';
+import { Vector3 } from './Vector3';
 
 /** @class
  *  A battler in a battle (ally or ennemy).

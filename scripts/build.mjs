@@ -1,5 +1,5 @@
-import fs from 'fs/promises';
 import { exec } from 'child_process';
+import fs from 'fs/promises';
 import path from 'path';
 
 function runCommand(command, args = []) {
@@ -70,9 +70,9 @@ async function modifyImports(dir) {
 }
 
 (async function () {
-	const BUILD_DIR = './Content';
+	const BUILD_DIR = './build';
 	const SRC_DIR = './src';
-	const SYSTEM_DIR = `${BUILD_DIR}/Scripts/System`;
+	const SYSTEM_DIR = `${BUILD_DIR}/Scripts`;
 	const startTime = Date.now();
 
 	try {
@@ -81,15 +81,10 @@ async function modifyImports(dir) {
 				recursive: true,
 			});
 		}
-
-		if (process.env.CI || process.env.PRODUCTION) {
-			await runCommand('npx', ['tsc']);
-		} else {
-			await runCommand('npx', ['tsc', '--incremental']);
-		}
-
+		await runCommand('npx', ['tsc']);
 		modifyImports(SYSTEM_DIR);
-		await fs.copyFile(`${SRC_DIR}/Definitions.d.ts`, `${SYSTEM_DIR}/Definitions.d.ts`);
+		await fs.cp('src/Libs', 'build/Scripts/Libs', { recursive: true });
+		await fs.cp('src/Shaders', 'build/Scripts/Shaders', { recursive: true });
 		const endTime = Date.now() - startTime;
 		console.log(`Compilation completed in ${Math.floor(endTime / 1000)} seconds`);
 	} catch (error) {

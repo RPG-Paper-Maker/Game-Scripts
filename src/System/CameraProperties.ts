@@ -9,12 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from './Base';
-import { DynamicValue } from './DynamicValue';
-import { Utils, ScreenResolution, Constants } from '../Common';
-import { THREE } from '../Globals';
+import * as THREE from 'three';
+import { Constants, ScreenResolution, Utils } from '../Common';
 import { Camera, Vector3 } from '../Core';
 import { Datas } from '../index';
+import { Base } from './Base';
+import { DynamicValue } from './DynamicValue';
 
 /** @class
  *  A camera properties of the game.

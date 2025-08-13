@@ -9,13 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { TextureBundle } from './TextureBundle';
-import { THREE } from '../Globals';
-import { Autotile } from './Autotile';
-import { Position } from './Position';
-import { StructMapElementCollision } from './MapElement';
+import * as THREE from 'three';
 import { Manager } from '../index';
+import { Autotile } from './Autotile';
 import { CustomGeometry } from './CustomGeometry';
+import { StructMapElementCollision } from './MapElement';
+import { Position } from './Position';
+import { TextureBundle } from './TextureBundle';
 
 /** @class
  *  Autotiles grouped with the same textures.

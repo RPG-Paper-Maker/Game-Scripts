@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import * as THREE from 'three';
 import { Mathf } from '../Common';
-import { THREE } from '../Globals';
 import { Vector2 } from './Vector2';
 import { Vector3 } from './Vector3';
 

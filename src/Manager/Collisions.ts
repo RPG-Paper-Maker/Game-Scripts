@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import * as THREE from 'three';
 import { Constants, Enum, Mathf } from '../Common';
 import {
 	CollisionSquare,
@@ -23,7 +24,6 @@ import {
 	Vector2,
 	Vector3,
 } from '../Core';
-import { THREE } from '../Globals';
 import { Datas, Manager, Scene, System } from '../index';
 import ElementMapKind = Enum.ElementMapKind;
 

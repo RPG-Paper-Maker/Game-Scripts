@@ -1,11 +1,3 @@
 node_modules
-*-lock.json
-*.lock
-.VSCodeCounter/*
-.vscode/*
-Content
 log.txt
-.idea
 build
-
-RNA/ACTM.js

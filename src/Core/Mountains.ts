@@ -9,13 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { THREE } from '../Globals';
-import { TextureBundle } from './TextureBundle';
-import { Mountain } from './Mountain';
-import { StructMapElementCollision } from './MapElement';
-import { Position } from './Position';
+import * as THREE from 'three';
 import { Manager } from '../index';
 import { CustomGeometry } from './CustomGeometry';
+import { StructMapElementCollision } from './MapElement';
+import { Mountain } from './Mountain';
+import { Position } from './Position';
+import { TextureBundle } from './TextureBundle';
 
 /** @class
  *  The wrapper class for handle mountains sharing the same texture.

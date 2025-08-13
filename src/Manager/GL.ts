@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import * as THREE from 'three';
 import { Paths, Platform, ScreenResolution, Utils } from '../Common';
 import { Camera, Vector2, Vector3 } from '../Core';
-import { THREE } from '../Globals';
 import { Datas, System } from '../index';
 import { Stack } from './Stack';
 

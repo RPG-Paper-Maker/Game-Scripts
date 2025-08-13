@@ -9,8 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Platform, Paths, Enum } from '../Common';
-import { System, Datas, Manager } from '../index';
+import * as THREE from 'three';
+import { Enum, Paths, Platform } from '../Common';
+import { Datas, Manager, System } from '../index';
 import PictureKind = Enum.PictureKind;
 
 /** @class

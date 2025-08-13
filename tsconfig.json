@@ -4,21 +4,20 @@
     "module": "esNext",
     "moduleResolution": "node",
     "lib": [
-      "ES6",
-      "ES5",
-      "ES2015.Iterable",
-      "DOM",
-      "DOM.Iterable"
+      "dom",
+      "dom.iterable",
+      "esnext"
     ],
-    "declaration": true,
     "noEmit": false,
     "strict": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "Content/Scripts/System"
+    "outDir": "build/Scripts"
   },
   "include": [
-    "./src/**/*.ts"
+    "./src/**/*.ts",
   ],
+  "exclude": ["node_modules"],
+  "types": ["howler"]
 }

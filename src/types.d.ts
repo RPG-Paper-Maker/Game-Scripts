@@ -9,9 +9,4 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { HOWLER_TYPE } from './Definitions';
-
-import THREE from 'three';
-export { THREE };
-const { Howl } = require('./Content/Scripts/Libs/howler.js');
-export { Howl };
+declare const Howl: typeof import('hower');

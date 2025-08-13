@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import * as THREE from 'three';
 import { Constants, Enum, Paths, Platform, Utils } from '../Common';
 import { Autotiles, Game, Picture2D, TextureBundle } from '../Core';
-import { THREE } from '../Globals';
 import { Datas, Manager, Scene, System } from '../index';
 
 /** @class

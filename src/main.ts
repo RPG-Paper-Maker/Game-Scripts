@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { THREE } from './Globals';
+import * as THREE from 'three';
+import { Inputs, Platform, Utils } from './Common';
 import { Datas, Manager } from './index';
-import { Utils, Platform, Inputs } from './Common';
 
 /**
  * The main class who boot and loop everything's
@@ -50,6 +50,7 @@ export class Main {
 	 * @memberof Main
 	 */
 	static async load() {
+		console.log('loading');
 		await Datas.Languages.read();
 		await Datas.Settings.read();
 		await Datas.Systems.read();

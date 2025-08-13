@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import * as THREE from 'three';
 import { MapObject, Player } from '../Core';
-import { Howl, THREE } from '../Globals';
 import { Common, Core, Datas, EventCommand, Graphic, Main, Manager, Scene, System } from '../index';
 
 /**

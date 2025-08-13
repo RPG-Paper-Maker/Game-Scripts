@@ -9,10 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from './Base';
-import { System, Core } from '../index';
-import { THREE } from '../Globals';
+import * as THREE from 'three';
 import { Vector3 } from '../Core';
+import { System } from '../index';
+import { Base } from './Base';
 
 /** @class
  *  The system color class.

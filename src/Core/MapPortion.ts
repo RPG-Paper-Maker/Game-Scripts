@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import * as THREE from 'three';
 import { Constants, Enum } from '../Common';
-import { THREE } from '../Globals';
 import { Datas, Manager, Scene, System } from '../index';
 import { Autotile } from './Autotile';
 import { Autotiles } from './Autotiles';

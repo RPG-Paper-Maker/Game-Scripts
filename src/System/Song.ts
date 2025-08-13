@@ -10,7 +10,6 @@
 */
 
 import { Constants, Enum, Paths, Platform, Utils } from '../Common';
-import { Howl } from '../Globals';
 import { Datas } from '../index';
 import { Base } from './Base';
 import SongKind = Enum.SongKind;

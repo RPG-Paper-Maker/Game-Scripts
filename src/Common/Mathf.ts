@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import * as THREE from 'three';
 import { Vector2, Vector3 } from '../Core';
-import { THREE } from '../Globals';
 
 /**
  * The static class for Math related function.

@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import * as THREE from 'three';
 import { Constants, Enum, Paths, Platform, Utils } from '../Common';
 import { CustomGeometry, Vector2, Vector3 } from '../Core';
-import { THREE } from '../Globals';
 import { Datas, Manager } from '../index';
 import { Base } from './Base';
 import CustomShapeKind = Enum.CustomShapeKind;

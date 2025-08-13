@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import * as THREE from 'three';
 import { Enum, Mathf, ScreenResolution } from '../Common';
 import { Datas, Manager, Scene, System } from '../index';
 import { MapObject } from './MapObject';

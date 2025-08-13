@@ -9,10 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { THREE } from '../Globals';
+import * as THREE from 'three';
+import { Enum, Utils } from '../Common';
+import { Datas, Manager } from '../index';
 import { Base } from './Base';
-import { Utils, Enum } from '../Common';
-import { Manager, Datas } from '../index';
 import PictureKind = Enum.PictureKind;
 
 /** @class

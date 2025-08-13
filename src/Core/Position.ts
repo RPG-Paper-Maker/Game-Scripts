@@ -9,10 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { THREE } from '../Globals';
-import { Portion } from './Portion';
+import * as THREE from 'three';
 import { Constants, Mathf } from '../Common';
 import { Datas } from '../index';
+import { Portion } from './Portion';
 import { Vector3 } from './Vector3';
 
 /** @class

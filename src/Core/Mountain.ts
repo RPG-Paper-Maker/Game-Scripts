@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import * as THREE from 'three';
 import { Utils } from '../Common';
 import { Core, Datas, System } from '../index';
 import { CustomGeometry } from './CustomGeometry';

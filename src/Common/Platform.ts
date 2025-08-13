@@ -10,11 +10,6 @@
 */
 
 import { Constants, IO } from './index';
-const electron = require('electron');
-const remote = electron.remote;
-const ipc = electron.ipcRenderer;
-const ElectronScreen = remote.screen;
-const app = remote.app;
 
 let firstError = true;
 
@@ -24,14 +19,13 @@ let firstError = true;
  * @class Platform
  */
 class Platform {
-	public static readonly ROOT_DIRECTORY: any = `${app.getAppPath()}/Content/`;
+	public static readonly ROOT_DIRECTORY: any = './build/';
 	public static readonly IS_DESKTOP = false;
-	public static readonly screen: any = ElectronScreen.getPrimaryDisplay();
-	public static readonly screenWidth: number = Platform.screen.bounds.width;
-	public static readonly screenHeight: number = Platform.screen.bounds.height;
+	public static readonly screenWidth: number = window.screen.width;
+	public static readonly screenHeight: number = window.screen.height;
 	public static readonly DESKTOP: boolean = true;
 	public static readonly WEB_DEV: boolean = false;
-	public static readonly MODE_TEST = remote.getGlobal('modeTest');
+	public static readonly MODE_TEST: string | undefined = undefined;
 	public static readonly MODE_TEST_BATTLE_TROOP = 'battleTroop';
 	public static readonly MODE_TEST_SHOW_TEXT_PREVIEW = 'showTextPreview';
 	public static canvas3D: any = document.getElementById('three-d');
@@ -59,7 +53,7 @@ class Platform {
 	 *  @param {string} title - The title to display
 	 */
 	static setWindowTitle = function (title: string) {
-		ipc.send('change-window-title', title);
+		window.ipcRenderer.send('change-window-title', title);
 	};
 
 	/**
@@ -70,7 +64,7 @@ class Platform {
 	 *  @param {boolean} f - Indicate if the window is fullscreen
 	 */
 	static setWindowSize = function (w: number, h: number, f: boolean) {
-		ipc.send('change-window-size', w, h, f);
+		window.ipcRenderer.send('change-window-size', w, h, f);
 	};
 
 	/**
@@ -148,9 +142,9 @@ class Platform {
 	static showErrorMessage(msg: string, displayDialog: boolean = true) {
 		if (firstError) {
 			firstError = false;
-			ipc.send('window-error', msg);
+			window.ipcRenderer.send('window-error', msg);
 			if (displayDialog) {
-				ipc.send('dialog-error-message', msg);
+				window.ipcRenderer.send('dialog-error-message', msg);
 			}
 			throw new Error(msg);
 		}
@@ -162,10 +156,7 @@ class Platform {
 	 *  @returns {boolean}
 	 */
 	static isModeTestNormal(): boolean {
-		return (
-			Platform.MODE_TEST !== Platform.MODE_TEST_BATTLE_TROOP &&
-			Platform.MODE_TEST !== Platform.MODE_TEST_SHOW_TEXT_PREVIEW
-		);
+		return true;
 	}
 }
 
