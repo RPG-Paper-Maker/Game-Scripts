@@ -56,7 +56,7 @@ class SaveLoadGame extends Base {
         this.windowChoicesSlots = new WindowChoices(10, 100, 100, 50, this
             .gamesDatas, {
                 nbItemsMax: 6,
-                padding: WindowBox.NONE_PADDING
+                padding: [-15, -15, -15, -15]
             }
         );
         this.windowBot = new WindowBox(20, ScreenResolution.SCREEN_Y - 50, 

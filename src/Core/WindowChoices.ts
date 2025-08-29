@@ -532,7 +532,7 @@ class WindowChoices extends Bitmap {
         this.isMouseInArrowDown = false;
         this.isMouseInArrowUp = false;
         // If inside the main window
-        if (this.currentSelectedIndex !== -1 && this.isInside(x, y)) {
+		if (this.currentSelectedIndex !== -1 && this.isInside(ScreenResolution.getScreenXReverse(x), ScreenResolution.getScreenYReverse(y))) {
             let index: number;
             // Check which window
             if (this.orientation === OrientationWindow.Horizontal) {
@@ -616,8 +616,7 @@ class WindowChoices extends Bitmap {
         let index: number;
         for (let i = 0; i < this.size; i++) {
             index = i + this.currentSelectedIndex - offset;
-            this.listWindows[index].draw(true, this.listWindows[i]
-                .windowDimension, this.listWindows[i].contentDimension);
+            this.listWindows[index].draw(true, this.listWindows[i].windowDimension, this.listWindows[i].contentDimension);
         }
 
         // Draw arrows
@@ -628,8 +627,7 @@ class WindowChoices extends Bitmap {
         if (this.currentSelectedIndex - offset > 0) {
             ws.drawArrowUp(arrowX, this.oY - arrowHeight - 1);
         }
-        if (this.currentSelectedIndex - offset < this.listWindows.length - this
-            .nbItemsMax) {
+        if (this.currentSelectedIndex - offset < this.listWindows.length - this.nbItemsMax) {
             ws.drawArrowDown(arrowX, this.oY + this.oH + 1);
         }
     }

@@ -185,7 +185,7 @@ class MapPortion {
         if (!geometry.isEmpty()) {
             geometry.updateAttributes();
             this.staticFloorsMesh = new THREE.Mesh(geometry, material);
-            this.staticFloorsMesh.renderOrder = 0;
+            this.staticFloorsMesh.renderOrder = -1;
             if (Scene.Map.current.mapProperties.isSunLight) {
                 this.staticFloorsMesh.receiveShadow = true;
                 this.staticFloorsMesh.castShadow = true;
@@ -321,7 +321,7 @@ class MapPortion {
         if (!staticGeometry.isEmpty()) {
             staticGeometry.updateAttributes();
             this.staticSpritesMesh = new THREE.Mesh(staticGeometry, material);
-            this.staticSpritesMesh.renderOrder = 999;
+            this.staticSpritesMesh.renderOrder = -1;
             if (Scene.Map.current.mapProperties.isSunLight) {
                 this.staticSpritesMesh.receiveShadow = true;
                 this.staticSpritesMesh.castShadow = true;
@@ -332,7 +332,7 @@ class MapPortion {
         if (!faceGeometry.isEmpty()) {
             faceGeometry.updateAttributes();
             this.faceSpritesMesh = new THREE.Mesh(faceGeometry, material);
-            this.faceSpritesMesh.renderOrder = 999;
+            this.faceSpritesMesh.renderOrder = -1;
             if (Scene.Map.current.mapProperties.isSunLight) {
                 this.faceSpritesMesh.castShadow = true;
                 this.faceSpritesMesh.receiveShadow = true;
@@ -584,7 +584,7 @@ class MapPortion {
                     geometry.updateAttributes();
                     mesh = new THREE.Mesh(geometry, obj.material);
                     this.staticObjects3DList.push(mesh);
-                    mesh.renderOrder = 999;
+                    mesh.renderOrder = -1;
                     if (Scene.Map.current.mapProperties.isSunLight) {
                         mesh.receiveShadow = true;
                         mesh.castShadow = true;

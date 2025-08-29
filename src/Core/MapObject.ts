@@ -545,7 +545,7 @@ class MapObject {
             this.frame.value = this.currentStateInstance.indexX >= Datas.Systems
                 .FRAMES ? Datas.Systems.FRAMES - 1 : this.currentStateInstance
                 .indexX;
-            this.orientationEye = this.currentStateInstance.indexY;
+            this.orientationEye = this.currentStateInstance.setWithCamera ? this.currentStateInstance.indexY : Mathf.mod(Scene.Map.current.orientation + this.currentStateInstance.indexY - 2, 4);
             this.updateOrientation();
             let result: [CustomGeometry, [number, StructMapElementCollision[]]];
             let positionTranformation = Position.createFromVector3(this.position);
@@ -629,7 +629,7 @@ class MapObject {
             }
             this.mesh.position.set(this.position.x, this.position.y, this
                 .position.z);
-            this.mesh.renderOrder = 9999;
+            this.mesh.renderOrder = -1;
             this.boundingBoxSettings = objCollision[1][0];
             if (this.boundingBoxSettings) {
                 if (this.currentStateInstance.graphicID === 0) {

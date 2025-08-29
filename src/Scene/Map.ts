@@ -901,7 +901,7 @@ class Map extends Base {
         points.position.set(Scene.Map.current.camera.target.position.x, Scene
             .Map.current.camera.target.position.y, Scene.Map.current.camera.target
             .position.z)
-        points.renderOrder = 1000;
+        points.renderOrder = -1;
         this.scene.add(points);
         if (current) {
             this.weatherPoints = points;
@@ -1112,7 +1112,7 @@ class Map extends Base {
         super.update();
 
         // Update camera hiding
-        if (Datas.Systems.moveCameraOnBlockView.getValue()) {
+        if (Game.current !== null && Datas.Systems.moveCameraOnBlockView.getValue()) {
             this.camera.forceNoHide = false;
             this.camera.hidingDistance = -1;
             let pointer = Manager.GL.toScreenPosition(this.camera.target.position
@@ -1259,10 +1259,7 @@ class Map extends Base {
     onMouseUp(x: number, y: number) {
         if (!this.loading) {
             if (!ReactionInterpreter.blockingHero && !this.isBattleMap) {
-                Manager.Events.sendEvent(null, 2, 0, true, 6, [null, System
-                    .DynamicValue.createNumber(x), System.DynamicValue
-                    .createNumber(y), System.DynamicValue.createSwitch(Inputs
-                    .mouseLeftPressed)], true, false);
+                Manager.Events.sendEvent(null, 2, 0, true, 6, [null, System.DynamicValue.createSwitch(Inputs.mouseLeftPressed)], true, false);
             }
             super.onMouseUp(x, y);
         }

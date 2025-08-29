@@ -153,9 +153,9 @@ class Land extends MapElement {
                     p: position,
                     l: localPosition,
                     b: [
-                        a + rect[0] + Datas.Systems.SQUARE_SIZE / 2,
+                        a + rect[0] + rect[2] / 2,
                         b + 0.5,
-                        c + rect[1] + Datas.Systems.SQUARE_SIZE / 2,
+                        c + rect[1] + rect[3] / 2,
                         rect[2],
                         rect[3],
                         1,

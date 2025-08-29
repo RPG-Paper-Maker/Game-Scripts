@@ -583,6 +583,8 @@ class Battle extends Map {
                     break;
             }
         }
+		this.sceneMap.camera.distance = this.mapCameraDistance;
+		this.sceneMap.camera.update();
     }
 
     /** 

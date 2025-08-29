@@ -105,7 +105,7 @@ class Player extends Base {
             }
         }
         for (graphic of this.listStatistics) {
-            graphic.maxStatNamesLength = this.maxStatNamesLength;
+            graphic.maxStatNamesLength = this.maxStatNamesLength / ScreenResolution.getScreenMinXY(1);
         }
 
         // Faceset
@@ -235,22 +235,17 @@ class Player extends Base {
         let hBattler = this.battler.h / Datas.Systems.battlersColumns;
         let owBattler = this.battler.oW / Datas.Systems.battlersFrames;
         let ohBattler = this.battler.oH / Datas.Systems.battlersColumns;
-        this.battlerRect.setCoords(x, y + yOffset - (hBattler * coef) - 
-            ScreenResolution.getScreenMinXY(15), wBattler * coef, hBattler * coef);
-        this.battler.draw({ x: this.battlerRect.x, y: this.battlerRect.y, w: 
-            owBattler * coef, h: ohBattler * coef, sx: this.battlerFrame.value * owBattler, 
-            sy: 0, sw: owBattler, sh: ohBattler });
+        this.battlerRect.setCoords(x, y + yOffset - ScreenResolution.getScreenY(ohBattler * coef) - ScreenResolution.getScreenMinXY(15), wBattler * coef, hBattler * coef);
+        this.battler.draw({ x: this.battlerRect.x, y: this.battlerRect.y, w: owBattler * coef, h: ohBattler * coef, sx: this.battlerFrame.value * owBattler, sy: 0, sw: owBattler, sh: ohBattler });
 
         // Stats
         let xOffset = this.graphicName.textWidth;
         if (this.graphicStatShort) {
-            this.graphicStatShort.draw(x, y + yOffset - ScreenResolution
-                .getScreenMinXY(15), 0, 0);
+            this.graphicStatShort.draw(x, y + yOffset - ScreenResolution.getScreenMinXY(15), 0, 0);
         }
         if (this.displayNameLevel) {
             this.graphicName.draw(x, y + yOffset, 0, 0);
-            xOffset = this.graphicName.textWidth + ScreenResolution
-                .getScreenMinXY(Constants.MEDIUM_SPACE);
+            xOffset = this.graphicName.textWidth + ScreenResolution.getScreenMinXY(Constants.MEDIUM_SPACE);
             this.graphicLevelName.draw(x + xOffset, y + yOffset, 0, 0);
             xOffset += this.graphicLevelName.textWidth;
             this.graphicLevel.draw(x + xOffset, y + yOffset, 0, 0);
@@ -279,15 +274,21 @@ class Player extends Base {
         let ohBattler = this.battler.oH / Datas.Systems.battlersColumns;
 
         // Battler
-        this.battler.draw({ x: x + (ScreenResolution.getScreenMinXY(80) - 
-            (wBattler * coef)) / 2, y: y, w: owBattler * coef, h: ohBattler 
-            * coef, sx: this.battlerFrame.value * owBattler, sy: 0, sw: owBattler, 
-            sh: ohBattler });
+		this.battler.draw(
+		{
+			x: x + (80 - ScreenResolution.getScreenXReverse(owBattler * coef)) / 2,
+			y: y,
+			w: owBattler * coef,
+			h: ohBattler * coef,
+			sx: this.battlerFrame.value * owBattler,
+			sy: 0,
+			sw: owBattler,
+			sh: ohBattler
+		});
 
         // Stats
         this.graphicName.draw(xCharacter, yName, 0, 0);
-        let xLevelName = xCharacter + this.graphicName.textWidth + ScreenResolution
-            .getScreenMinXY(Constants.MEDIUM_SPACE);
+        let xLevelName = xCharacter + this.graphicName.textWidth + ScreenResolution.getScreenMinXY(Constants.MEDIUM_SPACE);
         this.graphicLevelName.draw(xLevelName, yName, 0, 0);
         let xLevel = xLevelName + this.graphicLevelName.textWidth;
         this.graphicLevel.draw(xLevel, yName, 0, 0);
@@ -308,9 +309,7 @@ class Player extends Base {
 
         // Level up
         if (this.player.levelingUp) {
-            this.graphicLevelUp.draw(xLevel + this.graphicLevel.textWidth + 
-                ScreenResolution.getScreenMinXY(Constants.MEDIUM_SPACE), yName, 
-                0, 0);
+            this.graphicLevelUp.draw(xLevel + this.graphicLevel.textWidth + ScreenResolution.getScreenMinXY(Constants.MEDIUM_SPACE), yName, 0, 0);
         }
 
         let yClass = yName + ScreenResolution.getScreenMinXY(15);
@@ -318,9 +317,7 @@ class Player extends Base {
         let yExp = yClass + ScreenResolution.getScreenMinXY(29);
         if (this.graphicExpName !== null) {
             this.graphicExpName.draw(xCharacter, yExp, 0, 0);
-            this.graphicExp.draw(xCharacter + this.graphicExpName.textWidth + 
-                ScreenResolution.getScreenMinXY(Constants.MEDIUM_SPACE), yExp, 
-                0, 0);
+            this.graphicExp.draw(xCharacter + this.graphicExpName.textWidth + ScreenResolution.getScreenMinXY(Constants.MEDIUM_SPACE), yExp, 0, 0);
         }
     }
 
@@ -334,12 +331,10 @@ class Player extends Base {
     draw(x: number, y: number, w: number, h: number) {
         let wName = this.graphicName.textWidth;
         let wLevelName = this.graphicLevelName.textWidth;
-        let xLevelName = x + wName + ScreenResolution.getScreenMinXY(Constants
-            .MEDIUM_SPACE);
+        let xLevelName = x + wName + ScreenResolution.getScreenMinXY(Constants.MEDIUM_SPACE);
         let xLevel = xLevelName + wLevelName;
         let firstLineLength = xLevel + this.graphicLevel.textWidth;
-        let xOffset = this.reverse ? ScreenResolution.getScreenMinXY(Datas.Systems
-            .facesetScalingWidth) : 0;
+        let xOffset = this.reverse ? ScreenResolution.getScreenMinXY(Datas.Systems.facesetScalingWidth) : 0;
         
         // Name, level, status
         let yName = y + ScreenResolution.getScreenMinXY(10);
@@ -358,11 +353,15 @@ class Player extends Base {
         }
 
         // Faceset
-        this.faceset.draw({ sx: this.player.getFacesetIndexX() * Datas.Systems
-            .facesetsSize, sy: this.player.getFacesetIndexY() * Datas.Systems
-            .facesetsSize, sw: Datas.Systems.facesetsSize, sh: Datas.Systems
-            .facesetsSize, w: Datas.Systems.facesetScalingWidth, h: Datas.Systems
-            .facesetScalingHeight });
+		this.faceset.draw(
+		{
+			sx: this.player.getFacesetIndexX() * Datas.Systems.facesetsSize,
+			sy: this.player.getFacesetIndexY() * Datas.Systems.facesetsSize,
+			sw: Datas.Systems.facesetsSize,
+			sh: Datas.Systems.facesetsSize,
+			w: Datas.Systems.facesetScalingWidth,
+			h: Datas.Systems.facesetScalingHeight
+		});
     }
 }
 
