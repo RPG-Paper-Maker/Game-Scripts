@@ -42,7 +42,7 @@ class TroopMonster extends Base {
 		this.isSpecificPosition = Utils.defaultValue(json.isSpecificPosition, false);
 		this.specificPosition = System.DynamicValue.readOrDefaultMessage(
 			json.specificPosition,
-			'new Core.Vector3(0,0,0)'
+			'new THREE.Vector3(0,0,0)'
 		);
 	}
 }

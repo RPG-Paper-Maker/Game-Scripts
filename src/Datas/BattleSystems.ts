@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Platform, Paths, Utils, Enum } from '../Common';
-import { System, Datas } from '../index';
+import { Enum, Paths, Platform, Utils } from '../Common';
+import { Datas, System } from '../index';
 import SongKind = Enum.SongKind;
 
 /** @class
@@ -150,19 +150,19 @@ class BattleSystems {
 		this.formulaCrit = System.DynamicValue.readOrDefaultMessage(json.fc);
 		this.heroesBattlersCenterOffset = System.DynamicValue.readOrDefaultMessage(
 			json.heroesBattlersCenterOffset,
-			'new Core.Vector3(2 * Datas.Systems.SQUARE_SIZE, 0, -Datas.Systems.SQUARE_SIZE)'
+			'new THREE.Vector3(2 * Datas.Systems.SQUARE_SIZE, 0, -Datas.Systems.SQUARE_SIZE)'
 		);
 		this.heroesBattlersOffset = System.DynamicValue.readOrDefaultMessage(
 			json.heroesBattlersOffset,
-			'new Core.Vector3(i * Datas.Systems.SQUARE_SIZE / 2, 0, i * Datas.Systems.SQUARE_SIZE)'
+			'new THREE.Vector3(i * Datas.Systems.SQUARE_SIZE / 2, 0, i * Datas.Systems.SQUARE_SIZE)'
 		);
 		this.troopsBattlersCenterOffset = System.DynamicValue.readOrDefaultMessage(
 			json.troopsBattlersCenterOffset,
-			'new Core.Vector3(-2 * Datas.Systems.SQUARE_SIZE, 0, -Datas.Systems.SQUARE_SIZE)'
+			'new THREE.Vector3(-2 * Datas.Systems.SQUARE_SIZE, 0, -Datas.Systems.SQUARE_SIZE)'
 		);
 		this.troopsBattlersOffset = System.DynamicValue.readOrDefaultMessage(
 			json.troopsBattlersOffset,
-			'new Core.Vector3(-i * Datas.Systems.SQUARE_SIZE * 3 / 4, 0, i * Datas.Systems.SQUARE_SIZE)'
+			'new THREE.Vector3(-i * Datas.Systems.SQUARE_SIZE * 3 / 4, 0, i * Datas.Systems.SQUARE_SIZE)'
 		);
 
 		// Musics

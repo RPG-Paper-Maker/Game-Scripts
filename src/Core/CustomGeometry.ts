@@ -178,9 +178,9 @@ export class CustomGeometry extends THREE.BufferGeometry {
 
 	/**
 	 *  Push vertices for triangle geometries.
-	 *  @param {Core.Vector3} vecA
-	 *  @param {Core.Vector3} vecB
-	 *  @param {Core.Vector3} vecC
+	 *  @param {THREE.Vector3} vecA
+	 *  @param {THREE.Vector3} vecB
+	 *  @param {THREE.Vector3} vecC
 	 */
 	pushTriangleVertices(vecA: THREE.Vector3, vecB: THREE.Vector3, vecC: THREE.Vector3) {
 		this.b_vertices.push(vecA.x, vecA.y, vecA.z);
@@ -211,10 +211,10 @@ export class CustomGeometry extends THREE.BufferGeometry {
 
 	/**
 	 *  Push vertices for quad geometries.
-	 *  @param {Core.Vector3} vecA
-	 *  @param {Core.Vector3} vecB
-	 *  @param {Core.Vector3} vecC
-	 *  @param {Core.Vector3} vecD
+	 *  @param {THREE.Vector3} vecA
+	 *  @param {THREE.Vector3} vecB
+	 *  @param {THREE.Vector3} vecC
+	 *  @param {THREE.Vector3} vecD
 	 */
 	pushQuadVertices(vecA: THREE.Vector3, vecB: THREE.Vector3, vecC: THREE.Vector3, vecD: THREE.Vector3) {
 		this.b_vertices.push(vecA.x, vecA.y, vecA.z);
