@@ -84,8 +84,7 @@ class TextIcon extends Base {
      *  @returns {number}
      */
     getWidth(): number {
-        return ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize) + this
-            .space + this.graphicText.textWidth;
+        return ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize) + this.space + this.graphicText.textWidth;
     }
 
     /** 

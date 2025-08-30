@@ -504,7 +504,7 @@ class Message extends Graphic.Base {
                         offsetX = 0;
                         break;
                     case Align.Center:
-                        offsetX = (w - this.totalWidths[j]) / 2;
+						offsetX = (w - this.totalWidths[j] - (this.faceset.empty ? 0 : ScreenResolution.getScreenX(Datas.Systems.facesetScalingWidth))) / 2;
                         break;
                     case Align.Right:
                         offsetX = w - this.totalWidths[j];

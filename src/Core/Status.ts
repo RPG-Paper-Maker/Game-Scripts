@@ -58,8 +58,7 @@ class Status {
         let totalWidth = l * ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize);
         let s: Status;
         if (l > 1) {
-            totalWidth += (l - 1) * ScreenResolution.getScreenMinXY(Constants
-                .MEDIUM_SPACE);
+            totalWidth += (l - 1) * ScreenResolution.getScreenMinXY(Constants.MEDIUM_SPACE);
         }
         let xOffset: number = 0;
         switch (align) {
@@ -74,10 +73,10 @@ class Status {
         for (let i = 0, l = statusList.length; i < l; i++) {
             s = statusList[i];
             xOffset += ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize);
-            s.draw(x - totalWidth + xOffset + ScreenResolution.getScreenMinXY(i 
-                * Constants.MEDIUM_SPACE) - ScreenResolution.getScreenMinXY(Datas
-                .Systems.iconsSize), y - ScreenResolution.getScreenMinXY(Datas
-                .Systems.iconsSize));
+            s.draw(
+				x - totalWidth + xOffset + ScreenResolution.getScreenMinXY(i * Constants.MEDIUM_SPACE) - ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize),
+				y - ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize)
+			);
         }
     }
 
@@ -123,11 +122,17 @@ class Status {
      *  @param {number} y - The y position
      */
     draw(x: number, y: number) {
-        this.picture.draw({ x: x, y: y, sx: this.system.pictureIndexX * Datas
-            .Systems.iconsSize, sy: this.system.pictureIndexY * Datas.Systems
-            .iconsSize, sw: Datas.Systems.iconsSize, sh: Datas.Systems.iconsSize,
-            w: ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize), h: 
-            ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize) });
+        this.picture.draw(
+		{
+			x: x,
+			y: y,
+			sx: this.system.pictureIndexX * Datas.Systems.iconsSize,
+			sy: this.system.pictureIndexY * Datas.Systems.iconsSize,
+			sw: Datas.Systems.iconsSize,
+			sh: Datas.Systems.iconsSize,
+            w: Datas.Systems.iconsSize,
+			h: Datas.Systems.iconsSize
+		});
     }
 }
 

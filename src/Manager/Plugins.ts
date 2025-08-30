@@ -10,12 +10,10 @@
 import { IO, Paths, Constants, Utils } from "../Common";
 import { System } from "../index";
 
-type ClassMethod<T extends NewableFunction,M extends keyof T["prototype"]> = (this:T["prototype"], ...args:Parameters<T["prototype"][M]>) => ReturnType<T["prototype"][M]> 
-
 /** @class
  *  The class who handles plugins of RPG Paper Maker.
  *  @static
- *  @author Nio Kasgami, Wano, Trico Everfire
+ *  @author Nio Kasgami, Wano
  */
 class Plugins {
 
@@ -184,6 +182,8 @@ class Plugins {
         */
     }
 
+
+
     /**
      *  @static
      *  @usage This function is used to inject/overwrite original class methods and variables.
@@ -195,8 +195,8 @@ class Plugins {
      *  @param overwrite (METHODS ONLY) Should call original method's code or overwrite original method. (DEFAULT: false)
      *  @param loadBefore (METHODS ONLY) Should original method's code be executed before or after your code (NOTE: This is obviously disabled if param overwrite is set to true.) (DEFAULT: true)
      */
-    static inject<T extends NewableFunction, M extends keyof T, LT extends keyof T["prototype"], CXT = ClassMethod<T,LT>, TR = string, LM = NewableFunction>(
-        classObject: T, prototypeName: LT | TR | M, prototype:CXT 
+    static inject<T extends NewableFunction, M extends keyof T, LT extends keyof T["prototype"], TR = string, LM = NewableFunction>(
+        classObject: T, prototypeName: LT | TR | M, prototype:T["prototype"][LT] 
         | T[M] | LM, staticType :boolean = false, overwrite: boolean = false, 
         loadOriginalBefore: boolean = true) {
         let TheAnyPrototype:any = prototype; //force any type, system will not accept otherwise!

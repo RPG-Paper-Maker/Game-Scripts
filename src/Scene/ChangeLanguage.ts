@@ -133,6 +133,8 @@ class ChangeLanguage extends Base {
                         .listOrder[this.windowChoicesMain.currentSelectedIndex]);
                     Manager.Stack.translateAll();
                     this.step = 0;
+					this.createWindowBoxLanguage();
+					this.createWindowBoxTop();
                     Manager.Stack.requestPaintHUD = true;
                     return true;
                 },
@@ -211,11 +213,10 @@ class ChangeLanguage extends Base {
         switch (this.step) {
             case 0:
                 this.windowChoicesMain.onKeyPressed(key, this);
-                if (Datas.Keyboards.checkActionMenu(key)) {
+                if (Datas.Keyboards.checkActionMenu(key))
                     this.action();
-                } else if (Datas.Keyboards.checkCancelMenu) {
+                else if (Datas.Keyboards.checkCancelMenu(key))
                     this.cancel();
-                }
                 break;
             case 1:
                 this.windowChoicesConfirm.onKeyPressed(key, this);

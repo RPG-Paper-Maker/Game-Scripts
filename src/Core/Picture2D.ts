@@ -189,14 +189,10 @@ class Picture2D extends Bitmap {
     {
         if (!this.empty && this.loaded && sw > 0 && sh > 0) {
             // Default values
-            x = x === null ? this.x : (positionResize ? ScreenResolution
-                .getScreenX(x) : x);
-            y = y === null ? this.y : (positionResize ? ScreenResolution
-                .getScreenY(y) : y);
-            w = w === null ? this.w * this.zoom : (this.stretch ? ScreenResolution
-                .getScreenX(w) : ScreenResolution.getScreenMinXY(w));
-            h = h === null ? this.h * this.zoom : (this.stretch ? ScreenResolution
-                .getScreenY(h) : ScreenResolution.getScreenMinXY(h));
+			x = x === null ? (this.stretch ? ScreenResolution.getScreenX(this.oX) : this.x) : (positionResize ? ScreenResolution.getScreenX(x) : x);
+			y = y === null ? (this.stretch ? ScreenResolution.getScreenY(this.oY) : this.y) : (positionResize ? ScreenResolution.getScreenY(y) : y);
+			w = w === null ? (this.stretch ? ScreenResolution.getScreenX(this.oW * this.zoom) : this.oW * this.zoom) : ScreenResolution.getScreenMinXY(w);
+			h = h === null ? (this.stretch ? ScreenResolution.getScreenY(this.oH * this.zoom) : this.oH * this.zoom) : ScreenResolution.getScreenMinXY(h);
 
             // Draw the image according to all parameters
             let angle = this.angle * Math.PI / 180;
