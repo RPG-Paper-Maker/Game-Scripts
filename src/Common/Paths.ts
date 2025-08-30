@@ -36,7 +36,7 @@ class Paths {
 	public static readonly FILE_TROOPS = Platform.ROOT_DIRECTORY + 'troops.json';
 	public static readonly FILE_BATTLE_SYSTEM = Platform.ROOT_DIRECTORY + 'battleSystem.json';
 	public static readonly FILE_TITLE_SCREEN_GAME_OVER = Platform.ROOT_DIRECTORY + 'titlescreenGameover.json';
-	public static readonly FILE_KEYBOARD = Platform.ROOT_DIRECTORY + 'keyBoard.json';
+	public static readonly FILE_KEYBOARD = Platform.ROOT_DIRECTORY + 'keyboard.json';
 	public static readonly FILE_SYSTEM = Platform.ROOT_DIRECTORY + 'system.json';
 	public static readonly FILE_CLASSES = Platform.ROOT_DIRECTORY + 'classes.json';
 	public static readonly FILE_TILESETS = Platform.ROOT_DIRECTORY + 'tilesets.json';
