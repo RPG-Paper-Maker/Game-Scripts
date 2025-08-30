@@ -132,6 +132,8 @@ class ShowText extends Base {
         }
         (<Graphic.Text> this.windowInterlocutor.content).setText(this
             .interlocutor.getValue());
+		this.windowMain.updateDimensions();
+		this.windowMain.content.update();
         return 0;
     }
 

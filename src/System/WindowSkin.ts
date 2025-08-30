@@ -91,11 +91,12 @@ class WindowSkin extends System.Base {
      *  @param {number} [h=r[3]] - The h target
      *  @param {number} [zoom=1.0] - The zoom to apply of target size
      */
-    drawElement(r: number[], x: number, y: number, w: number = r[2], h: number = 
-        r[3], zoom: number = 1.0, positionResize: boolean = true)
+    drawElement(r: number[], x: number, y: number, w: number = r[2], h: number = r[3], zoom: number = 1.0, positionResize: boolean = true)
     {
-        this.picture.draw({ x: x, y: y, w: w * zoom, h: h * zoom, sx: r[0], sy: 
-            r[1], sw: r[2], sh: r[3], positionResize: positionResize });
+		const wr = ScreenResolution.getDoubleScreenX(1);
+		const hr = ScreenResolution.getDoubleScreenY(1);
+		const m = Math.min(wr, hr);
+		this.picture.draw({ x: x, y: y, w: w * zoom * wr / m, h: h * zoom * hr / m, sx: r[0], sy: r[1], sw: r[2], sh: r[3], positionResize: positionResize });
     }
 
     /** 
@@ -119,10 +120,12 @@ class WindowSkin extends System.Base {
                 }
             }
         } else {
-            this.drawElement(background, rect[0] + this.borderTopLeft[2], rect[1
-                ] + this.borderTopLeft[3], rect[2] - this.borderTopLeft[2] - 
-                this.borderBotRight[2], rect[3] - this.borderTopLeft[3] - this
-                .borderBotRight[3]);
+			this.drawElement(background,
+				rect[0] + this.borderTopLeft[2],
+				rect[1] + this.borderTopLeft[3],
+				rect[2] - this.borderTopLeft[2] - this.borderBotRight[2],
+				rect[3] - this.borderTopLeft[3] - this.borderBotRight[3]
+			);
         }
     }
 

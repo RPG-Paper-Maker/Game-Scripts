@@ -437,14 +437,15 @@ class DynamicValue extends System.Base {
                 }
                 return this.customStructure;
             case DynamicValueKind.CustomList:
-                if (deep) {
-                    let list = [];
-                    for (let v of this.customList) {
-                        list.push(v.getValue(forceVariable, true));
-                    }
-                    return list;
-                }
-                return this.customList;
+				this.value = this.value.replace(/{"id":0,"isList":true,"list":/g, "");
+				this.value = this.value.replace(/{"id":0,"isProperty":false,"name":"","value":{/g, "");
+				this.value = this.value.replace(/,"k":47,"v":null/g, "");
+				this.value = this.value.replace(/"k":\d*,"v":/g, "");
+				this.value = this.value.replace(/"customList":/g, "");
+				this.value = this.value.replace(/,"name":""}/g, "");
+				this.value = this.value.replace(/}},/g, ",");
+				this.value = this.value.replace(/}}]/g, "]");
+				return JSON.parse(this.value);
             case DynamicValueKind.Vector2:
                 return new Vector2(this.x.getValue(), this.y.getValue());
             case DynamicValueKind.Vector3:

@@ -191,11 +191,10 @@ class Text extends Base {
     {
         // Correcting x and y according to alignment
         let xBack = x;
-        if (this.zoom !== 1) {
-            this.fontSize *= this.zoom;
-            this.updateFont();
-            this.measureText();
-        }
+		this.fontSize *= this.zoom;
+		this.updateFont();
+		this.measureText();
+
         // Wrap text if != 0
         if (this.lastW !== w && w !== 0) {
             this.lastW = w;
@@ -248,10 +247,10 @@ class Text extends Base {
             Platform.ctx.strokeStyle = this.strokeColor.rgb;
             yOffset = 0;
             for (i = 0; i < l; i++) {
-                Platform.ctx.strokeText(this.lines[i], x - 1, y - 1 + yOffset);
-                Platform.ctx.strokeText(this.lines[i], x - 1, y  + 1 + yOffset);
-                Platform.ctx.strokeText(this.lines[i], x + 1, y - 1 + yOffset);
-                Platform.ctx.strokeText(this.lines[i], x + 1, y + 1 + yOffset);
+				Platform.ctx.strokeText(this.lines[i], (x - 1), (y - 1 + yOffset));
+				Platform.ctx.strokeText(this.lines[i], (x - 1), (y + 1 + yOffset));
+				Platform.ctx.strokeText(this.lines[i], (x + 1), (y - 1 + yOffset));
+				Platform.ctx.strokeText(this.lines[i], (x + 1), (y + 1 + yOffset));
                 yOffset += lineHeight;
             }
         }
@@ -265,10 +264,8 @@ class Text extends Base {
         }
 
         // Fix font back
-        if (this.zoom !== 1) {
-            this.setFontSize(this.oFontSize);
-            this.measureText();
-        }
+		this.setFontSize(this.oFontSize);
+		this.measureText();
     }
 
     /** 
