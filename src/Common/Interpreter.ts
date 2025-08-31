@@ -65,42 +65,48 @@ class Interpreter {
 		if (formula === null) {
 			return defaultValue;
 		}
-		return new Function(
-			'Common',
-			'Core',
-			'Datas',
-			'EventCommand',
-			'Graphic',
-			'Manager',
-			'Scene',
-			'System',
-			'Main',
-			'THREE',
-			'Howl',
-			'u',
-			't',
-			'damage',
-			'$object',
-			additionalName,
-			(addReturn ? 'return ' : '') + formula
-		)(
-			this.common,
-			this.core,
-			this.datas,
-			this.eventCommand,
-			this.graphic,
-			this.manager,
-			this.scene,
-			this.system,
-			this.main,
-			this.three,
-			this.howl,
-			user,
-			target,
-			damage,
-			thisObject,
-			additionalValue
-		);
+		try {
+			return new Function(
+				'Common',
+				'Core',
+				'Datas',
+				'EventCommand',
+				'Graphic',
+				'Manager',
+				'Scene',
+				'System',
+				'Main',
+				'THREE',
+				'Howl',
+				'u',
+				't',
+				'damage',
+				'$object',
+				additionalName,
+				(addReturn ? 'return ' : '') + formula
+			)(
+				this.common,
+				this.core,
+				this.datas,
+				this.eventCommand,
+				this.graphic,
+				this.manager,
+				this.scene,
+				this.system,
+				this.main,
+				this.three,
+				this.howl,
+				user,
+				target,
+				damage,
+				thisObject,
+				additionalValue
+			);
+		} catch (e) {
+			console.error('Error while interpreting the script: ' + formula);
+			console.error(e);
+			return null;
+		}
 	}
 }
 
