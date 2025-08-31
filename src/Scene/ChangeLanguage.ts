@@ -231,7 +231,7 @@ class ChangeLanguage extends Base {
 				this.windowChoicesMain.onKeyPressed(key, this);
 				if (Datas.Keyboards.checkActionMenu(key)) {
 					this.action();
-				} else if (Datas.Keyboards.checkCancelMenu) {
+				} else if (Datas.Keyboards.checkCancelMenu(key)) {
 					this.cancel();
 				}
 				break;
