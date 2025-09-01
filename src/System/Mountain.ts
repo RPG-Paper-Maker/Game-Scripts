@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2023 Wano
+    RPG Paper Maker Copyright (C) 2017-2025 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -9,52 +9,50 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Utils } from "../Common";
+import { Enum, Utils } from '../Common';
+import { SpecialElement } from './SpecialElement';
 import MountainCollisionKind = Enum.MountainCollisionKind;
-import { SpecialElement } from "./SpecialElement";
 
 /** @class
  *  A mountain of the game.
  *  @extends System.SpecialElement
- *  @param {Record<string, any>} - [json=undefined] Json object describing the 
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  mountain
  */
 class Mountain extends SpecialElement {
+	public id: number;
+	public collisionKind: number;
 
-    public id: number;
-    public collisionKind: number;
+	constructor(json?: Record<string, any>) {
+		super(json);
+	}
 
-    constructor(json?: Record<string, any>) {
-        super(json);
-    }
+	/**
+	 *  Read the JSON associated to the mountain.
+	 *  @param {Record<string, any>} - json Json object describing the mountain
+	 */
+	read(json: Record<string, any>) {
+		super.read(json);
 
-    /** 
-     *  Read the JSON associated to the mountain.
-     *  @param {Record<string, any>} - json Json object describing the mountain
-     */
-    read(json: Record<string, any>) {
-        super.read(json);
+		this.id = json.id;
+		this.collisionKind = Utils.defaultValue(json.mck, MountainCollisionKind.Default);
+	}
 
-        this.id = json.id;
-        this.collisionKind = Utils.defaultValue(json.mck, MountainCollisionKind
-            .Default);
-    }
+	/**
+	 *  Check if the collision is always forced.
+	 *  @returns {boolean}
+	 */
+	forceAlways(): boolean {
+		return this.collisionKind === MountainCollisionKind.Always;
+	}
 
-    /** 
-     *  Check if the collision is always forced.
-     *  @returns {boolean}
-     */
-    forceAlways(): boolean {
-        return this.collisionKind === MountainCollisionKind.Always;
-    }
-
-    /** 
-     *  Check if the collision is never forced
-     *  @returns {boolean}
-     */
-    forceNever(): boolean {
-        return this.collisionKind === MountainCollisionKind.Never;
-    }
+	/**
+	 *  Check if the collision is never forced
+	 *  @returns {boolean}
+	 */
+	forceNever(): boolean {
+		return this.collisionKind === MountainCollisionKind.Never;
+	}
 }
 
-export { Mountain }
+export { Mountain };

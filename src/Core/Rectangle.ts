@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2023 Wano
+    RPG Paper Maker Copyright (C) 2017-2025 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Anchor2D } from "./Anchor2D";
+import { Anchor2D } from './Anchor2D';
 
 /** @class
  *  The data class for anchors.
@@ -24,102 +24,100 @@ import { Anchor2D } from "./Anchor2D";
  *  @param {number} [height=1]
  */
 class Rectangle {
+	public x: number;
+	public y: number;
+	public width: number;
+	public height: number;
+	public anchor: Anchor2D;
 
-    public x: number;
-    public y: number;
-    public width: number;
-    public height: number;
-    public anchor: Anchor2D
+	constructor(x = 0, y = 0, width = 1, height = 1) {
+		this.setCoords(x, y, width, height);
+		const anchorX = Anchor2D.MIDDLE_BOTTOM.x;
+		const anchorY = Anchor2D.MIDDLE_BOTTOM.y;
+		this.anchor = new Anchor2D(anchorX, anchorY);
+	}
 
-    constructor(x = 0, y = 0, width = 1, height = 1) {
-        this.setCoords(x, y, width, height);
-        const anchorX = Anchor2D.MIDDLE_BOTTOM.x;
-        const anchorY = Anchor2D.MIDDLE_BOTTOM.y;
-        this.anchor = new Anchor2D(anchorX, anchorY);
-    }
+	/**
+	 *  Create a rectangle from an array.
+	 *  @static
+	 *  @param {number[]} array
+	 */
+	static createFromArray(array: number[]): Rectangle {
+		return new Rectangle(array[0], array[1], array[2], array[3]);
+	}
 
-    /**
-     *  Create a rectangle from an array.
-     *  @static
-     *  @param {number[]} array
-     */
-    static createFromArray(array: number[]): Rectangle {
-        return new Rectangle(array[0], array[1], array[2], array[3]);
-    }
+	/**
+	 *  Move rectangle to x, y.
+	 *  @param {number} x
+	 *  @param {number} y
+	 */
+	public move(x: number, y: number) {
+		this.x = x + this.width * this.anchor.x;
+		this.y = y + this.height * this.anchor.y;
+	}
 
-    /**
-     *  Move rectangle to x, y.
-     *  @param {number} x
-     *  @param {number} y
-     */
-    public move(x: number, y: number) {
-        this.x = x + (this.width * this.anchor.x);
-        this.y = y + (this.height * this.anchor.y);
-    }
+	/**
+	 *  Resize rectangle with width and height value.
+	 *  @param {number} width
+	 *  @param {number} height
+	 */
+	public resize(width: number, height: number) {
+		this.width = width;
+		this.height = height;
+	}
 
-    /**
-     *  Resize rectangle with width and height value.
-     *  @param {number} width
-     *  @param {number} height
-     */
-    public resize(width: number, height: number) {
-        this.width = width;
-        this.height = height;
-    }
+	/**
+	 *  Move and resize rectangle.
+	 *  @param {number} x
+	 *  @param {number} y
+	 *  @param {number} width
+	 *  @param {number} height
+	 */
+	public set(x: number, y: number, width: number, height: number) {
+		this.move(x, y);
+		this.resize(width, height);
+	}
 
-    /**
-     *  Move and resize rectangle.
-     *  @param {number} x
-     *  @param {number} y
-     *  @param {number} width
-     *  @param {number} height
-     */
-    public set(x: number, y: number, width: number, height: number) {
-        this.move(x, y);
-        this.resize(width, height);
-    }
+	/**
+	 *  Set rectangle coords.
+	 *  @param {number} x
+	 *  @param {number} y
+	 *  @param {number} width
+	 *  @param {number} height
+	 */
+	public setCoords(x: number, y: number, width: number, height: number) {
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+	}
 
-    /**
-     *  Set rectangle coords.
-     *  @param {number} x
-     *  @param {number} y
-     *  @param {number} width
-     *  @param {number} height
-     */
-    public setCoords(x: number, y: number, width: number, height: number) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-    }
+	/**
+	 *  Set the anchor x, y.
+	 *  @param {number} x
+	 *  @param {number} y
+	 */
+	public setAnchor(x: number, y: number) {
+		this.anchor.set({ x, y });
+	}
 
-    /**
-     *  Set the anchor x, y.
-     *  @param {number} x
-     *  @param {number} y
-     */
-    public setAnchor(x: number, y: number) {
-        this.anchor.set({x, y});
-    }
+	/**
+	 *  Preset anchor.
+	 *  @param {{ x: - number, y: number }} anchorPreset
+	 */
+	public presetAnchor(anchorPreset: { x: number; y: number }) {
+		this.anchor.set(anchorPreset);
+	}
 
-    /**
-     *  Preset anchor.
-     *  @param {{ x: - number, y: number }} anchorPreset
-     */
-    public presetAnchor(anchorPreset: { x: number, y: number }) {
-        this.anchor.set(anchorPreset);
-    }
-
-    /**
-     *  Check if x and y are inside the rectangle.
-     *  @param {number} x
-     *  @param {number} y
-     *  @returns {boolean}
-     */
-    isInside(x: number, y: number): boolean {
-        return x >= this.x && x <= (this.x + this.width) && y >= this.y && (y <= 
-            this.y + this.height);
-    }
+	/**
+	 *  Check if x and y are inside the rectangle.
+	 *  @param {number} x
+	 *  @param {number} y
+	 *  @returns {boolean}
+	 */
+	isInside(x: number, y: number): boolean {
+		return x >= this.x && x <= this.x + this.width && y >= this.y && y <= this.y + this.height;
+	}
 }
 
-export { Rectangle }
+export { Rectangle };

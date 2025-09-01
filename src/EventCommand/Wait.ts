@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2023 Wano
+    RPG Paper Maker Copyright (C) 2017-2025 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from "./Base";
-import { System } from "../index";
-import { MapObject } from "../Core";
+import { MapObject } from '../Core';
+import { System } from '../index';
+import { Base } from './Base';
 
 /** @class
  *  An event command for displaying text.
@@ -19,43 +19,38 @@ import { MapObject } from "../Core";
  *  @param {any[]} command - Direct JSON command to parse
  */
 class Wait extends Base {
+	public milliseconds: System.DynamicValue;
 
-    public milliseconds: System.DynamicValue;
+	constructor(command: any[]) {
+		super();
 
-    constructor(command: any[]) {
-        super();
+		let iterator = {
+			i: 0,
+		};
+		this.milliseconds = System.DynamicValue.createValueCommand(command, iterator);
+	}
 
-        let iterator = {
-            i: 0
-        }
-        this.milliseconds = System.DynamicValue.createValueCommand(command, 
-            iterator);
-    }
+	/**
+	 *  Initialize the current state.
+	 *  @returns {Record<string, any>} The current state
+	 */
+	initialize(): Record<string, any> {
+		return {
+			milliseconds: this.milliseconds.getValue() * 1000,
+			currentTime: new Date().getTime(),
+		};
+	}
 
-    /** 
-     *  Initialize the current state.
-     *  @returns {Record<string, any>} The current state
-     */
-    initialize(): Record<string, any> {
-        return {
-            milliseconds: this.milliseconds.getValue() * 1000,
-            currentTime: new Date().getTime()
-        }
-    }
-
-    /** 
-     *  Update and check if the event is finished
-     *  @param {Record<string, any>} - currentState The current state of the event
-     *  @param {MapObject} object - The current object reacting
-     *  @param {number} state - The state ID
-     *  @returns {number} The number of node to pass
-     */
-    update(currentState: Record<string, any>, object: MapObject, state: number): 
-        number
-    {
-        return (currentState.currentTime + currentState.milliseconds <= new
-            Date().getTime()) ? 1 : 0;
-    }
+	/**
+	 *  Update and check if the event is finished
+	 *  @param {Record<string, any>} - currentState The current state of the event
+	 *  @param {MapObject} object - The current object reacting
+	 *  @param {number} state - The state ID
+	 *  @returns {number} The number of node to pass
+	 */
+	update(currentState: Record<string, any>, object: MapObject, state: number): number {
+		return currentState.currentTime + currentState.milliseconds <= new Date().getTime() ? 1 : 0;
+	}
 }
 
-export { Wait }
+export { Wait };

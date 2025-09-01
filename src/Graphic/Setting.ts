@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2023 Wano
+    RPG Paper Maker Copyright (C) 2017-2025 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -9,68 +9,64 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from "./Base";
-import { Enum } from "../Common";
+import { Enum } from '../Common';
+import { Datas, Graphic } from '../index';
+import { Base } from './Base';
 import TitleSettingKind = Enum.TitleSettingKind;
 import Align = Enum.Align;
-import { Datas, Graphic } from "../index";
 
 /** @class
  *  A class for all settings to display in screen.
  *  @extends Graphic.Base
- *  @param {number} id - 
+ *  @param {number} id -
  */
 class Setting extends Base {
+	public graphicRight: Graphic.Text;
+	public graphicTextLeft: Graphic.Text;
+	public graphicTextInformation: Graphic.Text;
 
-    public graphicRight: Graphic.Text;
-    public graphicTextLeft: Graphic.Text;
-    public graphicTextInformation: Graphic.Text;
+	constructor(id: number) {
+		super();
 
-    constructor(id: number) {
-        super();
+		let textLeft: string, textInformation: string;
+		switch (id) {
+			case TitleSettingKind.KeyboardAssigment:
+				textLeft = Datas.Languages.extras.keyboardAssignment.name();
+				textInformation = Datas.Languages.extras.keyboardAssignmentDescription.name();
+				this.graphicRight = new Graphic.Text('...', { align: Align.Center });
+				break;
+			case TitleSettingKind.Language:
+				textLeft = Datas.Languages.extras.language.name();
+				textInformation = Datas.Languages.extras.languageDescription.name();
+				this.graphicRight = new Graphic.Text('...', { align: Align.Center });
+				break;
+		}
+		this.graphicTextLeft = new Graphic.Text(textLeft);
+		this.graphicTextInformation = new Graphic.Text(textInformation, { align: Align.Center });
+	}
 
-        let textLeft: string,textInformation: string;
-        switch (id) {
-            case TitleSettingKind.KeyboardAssigment:
-                textLeft = Datas.Languages.extras.keyboardAssignment.name();
-                textInformation = Datas.Languages.extras.keyboardAssignmentDescription.name();
-                this.graphicRight = new Graphic.Text("...", { align: Align
-                    .Center });
-                break;
-            case TitleSettingKind.Language:
-                textLeft = Datas.Languages.extras.language.name();
-                textInformation = Datas.Languages.extras.languageDescription.name();
-                this.graphicRight = new Graphic.Text("...", { align: Align
-                    .Center });
-                break;
-        }
-        this.graphicTextLeft = new Graphic.Text(textLeft);
-        this.graphicTextInformation = new Graphic.Text(textInformation, { align:
-            Align.Center });
-    }
-    
-    /** 
-     *  Drawing the choice.
-     *  @param {number} x - The x position to draw graphic
-     *  @param {number} y - The y position to draw graphic
-     *  @param {number} w - The width dimention to draw graphic
-     *  @param {number} h - The height dimention to draw graphic
-    */
-    drawChoice(x: number, y: number, w: number, h: number) {
-        this.graphicTextLeft.draw(x, y, w, h);
-        this.graphicRight.draw(x + (w / 2), y, w / 2, h);
-    }
+	/**
+	 *  Drawing the choice.
+	 *  @param {number} x - The x position to draw graphic
+	 *  @param {number} y - The y position to draw graphic
+	 *  @param {number} w - The width dimention to draw graphic
+	 *  @param {number} h - The height dimention to draw graphic
+	 */
+	drawChoice(x: number, y: number, w: number, h: number) {
+		this.graphicTextLeft.draw(x, y, w, h);
+		this.graphicRight.draw(x + w / 2, y, w / 2, h);
+	}
 
-    /** 
-     *  Drawing the settings informations.
-     *  @param {number} x - The x position to draw graphic
-     *  @param {number} y - The y position to draw graphic
-     *  @param {number} w - The width dimention to draw graphic
-     *  @param {number} h - The height dimention to draw graphic
-    */
-    draw(x: number, y: number, w: number, h: number) {
-        this.graphicTextInformation.draw(x, y, w, h);
-    }
+	/**
+	 *  Drawing the settings informations.
+	 *  @param {number} x - The x position to draw graphic
+	 *  @param {number} y - The y position to draw graphic
+	 *  @param {number} w - The width dimention to draw graphic
+	 *  @param {number} h - The height dimention to draw graphic
+	 */
+	draw(x: number, y: number, w: number, h: number) {
+		this.graphicTextInformation.draw(x, y, w, h);
+	}
 }
 
-export { Setting }
+export { Setting };

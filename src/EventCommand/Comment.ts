@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2023 Wano
+    RPG Paper Maker Copyright (C) 2017-2025 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from "./Base";
+import { Base } from './Base';
 
 /** @class
  *  An event command for a comment (ignored).
@@ -17,9 +17,9 @@ import { Base } from "./Base";
  *  @param {any[]} command - Direct JSON command to parse
  */
 class Comment extends Base {
-    constructor(command: any[]) {
-        super();
-    }    
+	constructor(command: any[]) {
+		super();
+	}
 }
 
-export { Comment }
+export { Comment };

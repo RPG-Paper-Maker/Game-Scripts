@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2023 Wano
+    RPG Paper Maker Copyright (C) 2017-2025 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -9,10 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { MapObject, Portion, Game } from '../Core';
 import { Enum } from '../Common';
+import { Game, MapObject, Portion } from '../Core';
+import { Datas, EventCommand, Manager, Scene, System } from '../index';
 import EventCommandKind = Enum.EventCommandKind;
-import { EventCommand, System, Manager, Datas, Scene } from '../index';
 
 /** @class
  *  A static class for some events functions.

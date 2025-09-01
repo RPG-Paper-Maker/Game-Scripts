@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2023 Wano
+    RPG Paper Maker Copyright (C) 2017-2025 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from "./Base";
-import { Graphic, System, Core, Datas } from "../index";
-import { Enum } from "../Common";
+import { Enum } from '../Common';
+import { Core, Datas, Graphic, System } from '../index';
+import { Base } from './Base';
 import Align = Enum.Align;
 
 /** @class
@@ -20,46 +20,43 @@ import Align = Enum.Align;
  *  @param {Skill} skill - The current selected skill
  */
 class Skill extends Base {
+	public system: System.Skill;
+	public graphicName: Graphic.TextIcon;
+	public graphicCost: Graphic.Text;
+	public graphicInformations: Graphic.SkillItem;
 
-    public system: System.Skill;
-    public graphicName: Graphic.TextIcon;
-    public graphicCost: Graphic.Text;
-    public graphicInformations: Graphic.SkillItem;
+	constructor(skill: Core.Skill) {
+		super();
 
-    constructor(skill: Core.Skill) {
-        super();
+		this.system = Datas.Skills.get(skill.id);
+		this.graphicName = Graphic.TextIcon.createFromSystem(this.system.name(), this.system);
+		this.graphicCost = new Graphic.Text(this.system.getCostString(), { align: Align.Right });
+		this.graphicInformations = new Graphic.SkillItem(this.system);
+	}
 
-        this.system = Datas.Skills.get(skill.id);
-        this.graphicName = Graphic.TextIcon.createFromSystem(this.system.name(), 
-            this.system);
-        this.graphicCost = new Graphic.Text(this.system.getCostString(), { align
-            : Align.Right });
-        this.graphicInformations = new Graphic.SkillItem(this.system);
-    }
+	/**
+	 *  Drawing the skill in choice box.
+	 *  @param {number} x - The x position to draw graphic
+	 *  @param {number} y - The y position to draw graphic
+	 *  @param {number} w - The width dimention to draw graphic
+	 *  @param {number} h - The height dimention to draw graphic
+	 */
+	drawChoice(x: number, y: number, w: number, h: number) {
+		this.graphicName.draw(x, y, w, h);
+		this.graphicCost.draw(x, y, w, h);
+	}
 
-    /** 
-     *  Drawing the skill in choice box.
-     *  @param {number} x - The x position to draw graphic
-     *  @param {number} y - The y position to draw graphic
-     *  @param {number} w - The width dimention to draw graphic
-     *  @param {number} h - The height dimention to draw graphic
-     */
-    drawChoice(x: number, y: number, w: number, h: number) {
-        this.graphicName.draw(x, y, w, h);
-        this.graphicCost.draw(x, y, w, h);
-    }
-
-    /** 
-     *  Drawing the skill description.
-     *  @param {number} x - The x position to draw graphic
-     *  @param {number} y - The y position to draw graphic
-     *  @param {number} w - The width dimention to draw graphic
-     *  @param {number} h - The height dimention to draw graphic
-     */
-    draw(x: number, y: number, w: number, h: number) {
-        this.graphicInformations.draw(x, y, w, h);
-        this.graphicCost.draw(x, y, w, 0);
-    }
+	/**
+	 *  Drawing the skill description.
+	 *  @param {number} x - The x position to draw graphic
+	 *  @param {number} y - The y position to draw graphic
+	 *  @param {number} w - The width dimention to draw graphic
+	 *  @param {number} h - The height dimention to draw graphic
+	 */
+	draw(x: number, y: number, w: number, h: number) {
+		this.graphicInformations.draw(x, y, w, h);
+		this.graphicCost.draw(x, y, w, 0);
+	}
 }
 
-export { Skill }
+export { Skill };

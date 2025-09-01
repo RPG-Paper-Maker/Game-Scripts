@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2023 Wano
+    RPG Paper Maker Copyright (C) 2017-2025 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -9,35 +9,33 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Icon } from "./Icon";
-import { DynamicValue } from "./DynamicValue";
-import { Utils } from "../Common";
+import { Utils } from '../Common';
+import { DynamicValue } from './DynamicValue';
+import { Icon } from './Icon';
 
 /** @class
  *  An element of the game.
  *  @extends System.Base
- *  @param {Record<string, any>} - [json=undefined] Json object describing the 
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  element
  */
 class Element extends Icon {
+	public efficiency: DynamicValue[];
 
-    public efficiency: DynamicValue[];
+	constructor(json?: Record<string, any>) {
+		super(json);
+	}
 
-    constructor(json?: Record<string, any>) {
-        super(json);
-    }
+	/**
+	 *  Read the JSON associated to the element
+	 *  @param {Record<string, any>} - json Json object describing the element
+	 */
+	read(json: Record<string, any>) {
+		super.read(json);
 
-    /** 
-     *  Read the JSON associated to the element
-     *  @param {Record<string, any>} - json Json object describing the element
-     */
-    read(json: Record<string, any>) {
-        super.read(json);
-
-        this.efficiency = [];
-        Utils.readJSONSystemList({ list: json.e, listHash: this.efficiency, 
-            cons: DynamicValue });
-    }
+		this.efficiency = [];
+		Utils.readJSONSystemList({ list: json.e, listHash: this.efficiency, cons: DynamicValue });
+	}
 }
 
-export { Element }
+export { Element };

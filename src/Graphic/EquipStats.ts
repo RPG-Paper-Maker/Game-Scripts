@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2023 Wano
+    RPG Paper Maker Copyright (C) 2017-2025 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -9,10 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from "./Base";
-import { Player } from "../Core";
-import { System, Graphic, Datas } from "../index";
-import { Constants, ScreenResolution, Utils } from "../Common";
+import { Constants, ScreenResolution, Utils } from '../Common';
+import { Player } from '../Core';
+import { Datas, Graphic, System } from '../index';
+import { Base } from './Base';
 
 /** @class
  *  The graphic displaying all the stats modifications in the equip menu.
@@ -23,125 +23,121 @@ import { Constants, ScreenResolution, Utils } from "../Common";
  *  not trying to equip something
  */
 class EquipStats extends Base {
+	public isChanging: boolean;
+	public listStatsNames: Graphic.Text[];
+	public listStats: Graphic.Text[];
+	public listNewStats: Graphic.Text[];
+	public nameLength: number;
+	public valueLength: number;
+	public graphicArrow: Graphic.Text;
+	public displayAll: boolean;
 
-    public isChanging: boolean;
-    public listStatsNames: Graphic.Text[];
-    public listStats: Graphic.Text[];
-    public listNewStats: Graphic.Text[];
-    public nameLength: number;
-    public valueLength: number;
-    public graphicArrow: Graphic.Text;
-    public displayAll: boolean;
+	constructor(gamePlayer: Player, newValues: number[], displayAll: boolean = true) {
+		super();
 
-    constructor(gamePlayer: Player, newValues: number[], displayAll: boolean = true) {
-        super();
+		this.isChanging = newValues.length !== 0;
+		this.displayAll = displayAll;
 
-        this.isChanging = newValues.length !== 0;
-        this.displayAll = displayAll;
+		// All the graphics
+		this.listStatsNames = new Array();
+		this.listStats = new Array();
+		this.listNewStats = new Array();
+		let maxLength = 0;
+		let maxLengthValue = 0;
+		let id: number,
+			statistic: System.Statistic,
+			graphicName: Graphic.Text,
+			txt: string,
+			graphicValue: Graphic.Text,
+			baseValue: number,
+			newValue: number;
+		for (let i = 0, j = 0, l = Datas.BattleSystems.statisticsOrder.length; i < l; i++) {
+			id = Datas.BattleSystems.statisticsOrder[i];
+			if (id !== Datas.BattleSystems.idLevelStatistic && id !== Datas.BattleSystems.idExpStatistic) {
+				statistic = Datas.BattleSystems.getStatistic(id);
+				if (statistic.isRes) {
+					continue;
+				}
+				// Value of the stat
+				baseValue = gamePlayer[statistic.abbreviation];
+				txt = Utils.numToString(baseValue);
+				if (!statistic.isFix) {
+					baseValue = gamePlayer[statistic.getMaxAbbreviation()];
+					txt += Constants.STRING_SLASH + baseValue;
+				}
+				newValue = newValues[id];
+				if (this.isChanging && !this.displayAll && baseValue === newValue) {
+					continue;
+				}
 
-        // All the graphics
-        this.listStatsNames = new Array;
-        this.listStats = new Array;
-        this.listNewStats = new Array;
-        let maxLength = 0;
-        let maxLengthValue = 0;
-        let id: number, statistic: System.Statistic, graphicName: Graphic.Text, 
-            txt: string, graphicValue: Graphic.Text, baseValue: number, newValue: number;
-        for (let i = 0, j = 0, l = Datas.BattleSystems.statisticsOrder.length; i 
-            < l; i++)
-        {
-            id = Datas.BattleSystems.statisticsOrder[i];
-            if (id !== Datas.BattleSystems.idLevelStatistic && id !== Datas
-                .BattleSystems.idExpStatistic)
-            {
-                statistic = Datas.BattleSystems.getStatistic(id);
-                if (statistic.isRes) {
-                    continue;
-                }
-                // Value of the stat
-                baseValue = gamePlayer[statistic.abbreviation];
-                txt = Utils.numToString(baseValue);
-                if (!statistic.isFix) {
-                    baseValue = gamePlayer[statistic.getMaxAbbreviation()]
-                    txt += Constants.STRING_SLASH + baseValue;
-                }
-                newValue = newValues[id];
-                if (this.isChanging && !this.displayAll && baseValue === newValue) {
-                    continue;
-                }
+				// Name of the stat
+				graphicName = new Graphic.Text(statistic.name() + Constants.STRING_COLON);
+				maxLength = Math.max(graphicName.textWidth, maxLength);
+				this.listStatsNames.push(graphicName);
 
-                // Name of the stat
-                graphicName = new Graphic.Text(statistic.name() + Constants
-                    .STRING_COLON);
-                maxLength = Math.max(graphicName.textWidth, maxLength);
-                this.listStatsNames.push(graphicName);
+				// Value and new value
+				graphicValue = new Graphic.Text(txt);
+				maxLengthValue = Math.max(graphicValue.textWidth, maxLengthValue);
+				this.listStats.push(graphicValue);
+				if (this.isChanging) {
+					txt = statistic.isFix
+						? Utils.numToString(newValue)
+						: Math.min(gamePlayer[statistic.abbreviation], newValue) + Constants.STRING_SLASH + newValue;
+					graphicValue = new Graphic.Text(txt);
+					if (newValue > baseValue) {
+						graphicValue.color = System.Color.GREEN;
+					} else if (newValue < baseValue) {
+						graphicValue.color = System.Color.RED;
+					}
+					this.listNewStats.push(graphicValue);
+				}
+				j++;
+			}
+		}
 
-                // Value and new value
-                graphicValue = new Graphic.Text(txt);
-                maxLengthValue = Math.max(graphicValue.textWidth, maxLengthValue);
-                this.listStats.push(graphicValue);
-                if (this.isChanging) {
-                    txt = statistic.isFix ? Utils.numToString(newValue) : Math
-                        .min(gamePlayer[statistic.abbreviation], newValue) + 
-                        Constants.STRING_SLASH + newValue;
-                    graphicValue = new Graphic.Text(txt);
-                    if (newValue > baseValue) {
-                        graphicValue.color = System.Color.GREEN;
-                    } else if (newValue < baseValue) {
-                        graphicValue.color = System.Color.RED;
-                    }
-                    this.listNewStats.push(graphicValue);
-                }
-                j++;
-            }
-        }
+		// Lengths
+		this.nameLength = maxLength;
+		this.valueLength = maxLengthValue;
 
-        // Lengths
-        this.nameLength = maxLength;
-        this.valueLength = maxLengthValue;
+		// Arrow
+		this.graphicArrow = new Graphic.Text('->');
+	}
 
-        // Arrow
-        this.graphicArrow = new Graphic.Text("->");
-    }
+	/**
+	 *  Drawing the statistics modifications.
+	 *  @param {number} x - The x position to draw graphic
+	 *  @param {number} y - The y position to draw graphic
+	 *  @param {number} w - The width dimention to draw graphic
+	 *  @param {number} h - The height dimention to draw graphic
+	 */
+	drawChoice(x: number, y: number, w: number, h: number) {
+		let xStats = x + ScreenResolution.getScreenMinXY(Constants.LARGE_SPACE);
+		let yStats = y + ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE);
+		let yStat: number, xStat: number;
+		for (let i = 0, l = this.listStatsNames.length; i < l; i++) {
+			yStat = yStats + i * ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE);
+			this.listStatsNames[i].draw(xStats, yStat, 0, 0);
+			xStat = xStats + this.nameLength + ScreenResolution.getScreenMinXY(Constants.LARGE_SPACE);
+			this.listStats[i].draw(xStat, yStat, 0, 0);
+			if (this.isChanging) {
+				xStat += this.valueLength + ScreenResolution.getScreenMinXY(Constants.LARGE_SPACE);
+				this.graphicArrow.draw(xStat, yStat, 0, 0);
+				xStat += this.graphicArrow.textWidth + ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE);
+				this.listNewStats[i].draw(xStat, yStat, 0, 0);
+			}
+		}
+	}
 
-    /** 
-     *  Drawing the statistics modifications.
-     *  @param {number} x - The x position to draw graphic
-     *  @param {number} y - The y position to draw graphic
-     *  @param {number} w - The width dimention to draw graphic
-     *  @param {number} h - The height dimention to draw graphic
-    */
-    drawChoice(x: number, y: number, w: number, h: number) {
-        let xStats = x + ScreenResolution.getScreenMinXY(Constants.LARGE_SPACE);
-        let yStats = y + ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE);
-        let yStat: number, xStat: number;
-        for (let i = 0, l = this.listStatsNames.length; i < l; i++) {
-            yStat = yStats + (i * ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE));
-            this.listStatsNames[i].draw(xStats, yStat, 0, 0);
-            xStat = xStats + this.nameLength + ScreenResolution.getScreenMinXY(
-                Constants.LARGE_SPACE);
-            this.listStats[i].draw(xStat, yStat, 0, 0);
-            if (this.isChanging) {
-                xStat += this.valueLength + ScreenResolution.getScreenMinXY(
-                    Constants.LARGE_SPACE);
-                this.graphicArrow.draw(xStat, yStat, 0, 0);
-                xStat += this.graphicArrow.textWidth + ScreenResolution
-                    .getScreenMinXY(Constants.HUGE_SPACE);
-                this.listNewStats[i].draw(xStat, yStat, 0, 0);
-            }
-        }
-    }
-
-    /** 
-     *  Drawing the statistics modifications.
-     *  @param {number} x - The x position to draw graphic
-     *  @param {number} y - The y position to draw graphic
-     *  @param {number} w - The width dimention to draw graphic
-     *  @param {number} h - The height dimention to draw graphic
-    */
-    draw(x: number, y: number, w: number, h: number) {
-        this.drawChoice(x, y, w, h);
-    }
+	/**
+	 *  Drawing the statistics modifications.
+	 *  @param {number} x - The x position to draw graphic
+	 *  @param {number} y - The y position to draw graphic
+	 *  @param {number} w - The width dimention to draw graphic
+	 *  @param {number} h - The height dimention to draw graphic
+	 */
+	draw(x: number, y: number, w: number, h: number) {
+		this.drawChoice(x, y, w, h);
+	}
 }
 
-export { EquipStats }
+export { EquipStats };

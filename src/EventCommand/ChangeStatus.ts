@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2023 Wano
+    RPG Paper Maker Copyright (C) 2017-2025 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -9,84 +9,78 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from "./Base";
-import { System } from "../index";
-import { MapObject, Game } from "../Core";
-import { Player } from "../Core";
+import { Game, MapObject, Player } from '../Core';
+import { System } from '../index';
+import { Base } from './Base';
 
 /** @class
  *  An event command for changing status.
  *  @extends EventCommand.Base
  */
 class ChangeStatus extends Base {
+	public selection: number;
+	public heInstanceID: System.DynamicValue;
+	public groupIndex: number;
+	public operation: number;
+	public statusID: System.DynamicValue;
 
-    public selection: number;
-    public heInstanceID: System.DynamicValue;
-    public groupIndex: number;
-    public operation: number;
-    public statusID: System.DynamicValue;
+	constructor(command: any[]) {
+		super();
 
-    constructor(command: any[]) {
-        super();
+		var iterator = {
+			i: 0,
+		};
 
-        var iterator = {
-            i: 0
-        }
-    
-        // Selection
-        this.selection = command[iterator.i++];
-        switch (this.selection) {
-            case 0:
-                this.heInstanceID = System.DynamicValue.createValueCommand(
-                    command, iterator);
-                break;
-            case 1:
-                this.groupIndex = command[iterator.i++];
-                break;
-        }
-        
-        // Operation
-        this.operation = command[iterator.i++];
+		// Selection
+		this.selection = command[iterator.i++];
+		switch (this.selection) {
+			case 0:
+				this.heInstanceID = System.DynamicValue.createValueCommand(command, iterator);
+				break;
+			case 1:
+				this.groupIndex = command[iterator.i++];
+				break;
+		}
 
-        // Status
-        this.statusID = System.DynamicValue.createValueCommand(command, iterator);
-    }
+		// Operation
+		this.operation = command[iterator.i++];
 
-    /** 
-     *  Update and check if the event is finished.
-     *  @param {Record<string, any>} - currentState The current state of the event
-     *  @param {MapObject} object - The current object reacting
-     *  @param {number} state - The state ID
-     *  @returns {number} The number of node to pass
-    */
-    update(currentState: Record<string, any>, object: MapObject, state: number): 
-        number
-    {
-        let statusID = this.statusID.getValue();
-        let targets: Player[];
-        switch (this.selection) {
-            case 0:
-                targets = [Game.current.getHeroByInstanceID(this.heInstanceID
-                    .getValue())];
-                break;
-            case 1:
-                targets = Game.current.getTeam(this.groupIndex);
-                break;
-        }
-        let target: Player;
-        for (let i = 0, l = targets.length; i < l; i++) {
-            target = targets[i];
-            switch (this.operation) {
-                case 0:
-                    target.addStatus(statusID);
-                    break;
-                case 1:
-                    target.removeStatus(statusID);
-                    break;
-            }
-        }
-        return 1;
-    }
+		// Status
+		this.statusID = System.DynamicValue.createValueCommand(command, iterator);
+	}
+
+	/**
+	 *  Update and check if the event is finished.
+	 *  @param {Record<string, any>} - currentState The current state of the event
+	 *  @param {MapObject} object - The current object reacting
+	 *  @param {number} state - The state ID
+	 *  @returns {number} The number of node to pass
+	 */
+	update(currentState: Record<string, any>, object: MapObject, state: number): number {
+		let statusID = this.statusID.getValue();
+		let targets: Player[];
+		switch (this.selection) {
+			case 0:
+				targets = [Game.current.getHeroByInstanceID(this.heInstanceID.getValue())];
+				break;
+			case 1:
+				targets = Game.current.getTeam(this.groupIndex);
+				break;
+		}
+		let target: Player;
+		for (let i = 0, l = targets.length; i < l; i++) {
+			target = targets[i];
+			switch (this.operation) {
+				case 0:
+					target.addStatus(statusID);
+					break;
+				case 1:
+					target.removeStatus(statusID);
+					break;
+			}
+		}
+		return 1;
+	}
 }
 
-export { ChangeStatus }
+export { ChangeStatus };

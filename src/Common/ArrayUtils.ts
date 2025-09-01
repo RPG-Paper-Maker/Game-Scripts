@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2023 Wano
+    RPG Paper Maker Copyright (C) 2017-2025 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -10,22 +10,21 @@
 */
 
 class ArrayUtils {
+	constructor() {
+		throw new Error('This is a static class!');
+	}
 
-    constructor() {
-        throw new Error("This is a static class!");
-    }
+	static removeAt(array: any[], index: number) {
+		array.splice(index, 1);
+	}
 
-    static removeAt(array: any[], index: number) {
-        array.splice(index, 1);
-    }
+	static removeElement<T>(array: T[], value: T) {
+		this.removeAt(array, array.indexOf(value));
+	}
 
-    static removeElement<T>(array: T[], value: T) {
-        this.removeAt(array, array.indexOf(value));
-    }
-
-    static insert(array: any[], index: number, value: any) {
-        array.splice(index, 0, value);
-    }
+	static insert(array: any[], index: number, value: any) {
+		array.splice(index, 0, value);
+	}
 }
 
-export { ArrayUtils }
+export { ArrayUtils };

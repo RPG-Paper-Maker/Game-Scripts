@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2023 Wano
+    RPG Paper Maker Copyright (C) 2017-2025 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -9,10 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from './Base';
-import { System, Manager, Scene } from '../index';
-import { MapObject, Game } from '../Core';
 import { Mathf, Utils } from '../Common';
+import { Game, MapObject } from '../Core';
+import { Scene, System } from '../index';
+import { Base } from './Base';
 
 /** @class
  *  An event command for changing a property value.

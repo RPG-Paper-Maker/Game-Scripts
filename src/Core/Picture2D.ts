@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2023 Wano
+    RPG Paper Maker Copyright (C) 2017-2025 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -9,11 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { System, Datas } from "../index";
-import { Enum, ScreenResolution, Utils, Platform } from "../Common";
+import { Enum, Platform, ScreenResolution } from '../Common';
+import { Datas, System } from '../index';
+import { Stack } from '../Manager';
+import { Bitmap } from './Bitmap';
 import PictureKind = Enum.PictureKind;
-import { Stack } from "../Manager";
-import { Bitmap } from "./Bitmap";
 
 /** @class
  *   A class for pictures drawable in HUD.
@@ -25,224 +25,265 @@ import { Bitmap } from "./Bitmap";
  *   @param {number} [h=0] - Coords of the bitmap
  */
 class Picture2D extends Bitmap {
+	public zoom: number;
+	public opacity: number;
+	public angle: number;
+	public cover: boolean;
+	public stretch: boolean;
+	public path: string;
+	public loaded: boolean;
+	public empty: boolean;
+	public image: HTMLImageElement;
+	public centered: boolean;
+	public reverse: boolean;
+	public sx: number;
+	public sy: number;
 
-    public zoom: number;
-    public opacity: number;
-    public angle: number;
-    public cover: boolean;
-    public stretch: boolean;
-    public path: string;
-    public loaded: boolean;
-    public empty: boolean;
-    public image: HTMLImageElement;
-    public centered: boolean;
-    public reverse: boolean;
-    public sx: number;
-    public sy: number;
+	constructor(
+		path: string = '',
+		{
+			x = 0,
+			y = 0,
+			w = 0,
+			h = 0,
+			zoom = 1.0,
+			opacity = 1.0,
+			angle = 0.0,
+			cover = false,
+			stretch = false,
+			sx = 0,
+			sy = 0,
+		} = {}
+	) {
+		super(x, y, w, h);
 
-    constructor(path: string = "", { x = 0, y = 0, w = 0, h = 0, zoom = 1.0, 
-        opacity = 1.0, angle = 0.0, cover = false, stretch = false, sx = 0, sy = 0 } 
-        = {})
-    {
-        super(x, y, w, h);
+		this.zoom = zoom;
+		this.opacity = opacity;
+		this.angle = angle;
+		this.cover = cover;
+		this.stretch = stretch;
+		this.sx = sx;
+		this.sy = sy;
+		if (path) {
+			this.path = path;
+			this.loaded = false;
+			this.empty = false;
+		} else {
+			this.empty = true;
+		}
+	}
 
-        this.zoom = zoom;
-        this.opacity = opacity;
-        this.angle = angle;
-        this.cover = cover;
-        this.stretch = stretch;
-        this.sx = sx;
-        this.sy = sy;
-        if (path) {
-            this.path = path;
-            this.loaded = false;
-            this.empty = false;
-        } else {
-            this.empty = true;
-        }
-    }
+	/**
+	 *  Create a picture and then load it
+	 *  @static
+	 *  @param {System.Picture} picture - The picture to load
+	 */
+	static async create(
+		picture: System.Picture,
+		opts: {
+			x?: number;
+			y?: number;
+			w?: number;
+			h?: number;
+			zoom?: number;
+			opacity?: number;
+			angle?: number;
+			cover?: boolean;
+			stretch?: boolean;
+		} = {}
+	) {
+		let pic = picture ? new Picture2D(picture.getPath(), opts) : new Picture2D();
+		await pic.load();
+		return pic;
+	}
 
-    /** 
-     *  Create a picture and then load it
-     *  @static
-     *  @param {System.Picture} picture - The picture to load
-     */
-    static async create(picture: System.Picture, opts: { x?: number, y?: number, 
-        w?: number, h?: number, zoom?: number, opacity?: number, angle?: number, 
-        cover?: boolean, stretch?: boolean } = {})
-    {
-        let pic = picture ? new Picture2D(picture.getPath(), opts) : new
-            Picture2D();
-        await pic.load();
-        return pic;
-    }
+	/*
+	 *  Create a picture from kind and id and then load it
+	 *  @static
+	 *  @param {number} id - The picture id to load
+	 *  @param {PictureKind} kind - The picture kind to load
+	 *  @param {number} x - The x position
+	 *  @param {number} y - The y position
+	 *  @param {number} w - The w size
+	 *  @param {number} h - The h size
+	 */
+	/**
+	 * Create a picture from kind and id and then load it
+	 *
+	 * @static
+	 * @param {number} id - The picture id to load
+	 * @param {PictureKind} kind - The picture kind to load
+	 * @param {pictureOptions} [opts={}]
+	 * @return {*}
+	 * @memberof Picture2D
+	 */
+	static async createWithID(id: number, kind: PictureKind, opts: pictureOptions = {}) {
+		return await Picture2D.create(Datas.Pictures.get(kind, id), opts);
+	}
 
-    /*
-     *  Create a picture from kind and id and then load it
-     *  @static
-     *  @param {number} id - The picture id to load
-     *  @param {PictureKind} kind - The picture kind to load
-     *  @param {number} x - The x position
-     *  @param {number} y - The y position
-     *  @param {number} w - The w size
-     *  @param {number} h - The h size
-     */
-    /**
-     * Create a picture from kind and id and then load it
-     *
-     * @static
-     * @param {number} id - The picture id to load
-     * @param {PictureKind} kind - The picture kind to load
-     * @param {pictureOptions} [opts={}]
-     * @return {*} 
-     * @memberof Picture2D
-     */
-    static async createWithID(id: number, kind: PictureKind, opts: pictureOptions = {})
-    {
-        return (await Picture2D.create(Datas.Pictures.get(kind, id), opts));
-    }
+	/**
+	 *  Load the image.
+	 *  @static
+	 *  @param {string} path - The image path
+	 *  @returns {Promise<HTMLImageElement>}
+	 */
+	static async loadImage(path: string): Promise<HTMLImageElement> {
+		return await new Promise((resolve, reject) => {
+			let image: any = new Image();
+			image.onload = () => {
+				resolve(image);
+			};
+			image.onerror = () => {
+				image.width = 0;
+				image.height = 0;
+				resolve(image);
+			};
+			image.src = path;
+		});
+	}
 
-    /** 
-     *  Load the image.
-     *  @static
-     *  @param {string} path - The image path
-     *  @returns {Promise<HTMLImageElement>}
-     */
-    static async loadImage(path: string): Promise<HTMLImageElement> {
-        return (await new Promise((resolve, reject) => {
-            let image: any = new Image()
-            image.onload = () => {
-                resolve(image);
-            }
-            image.onerror = () => {
-                image.width = 0;
-                image.height = 0;
-                resolve(image);
-            }
-            image.src = path;
-        }));
-    }
+	/**
+	 *  Load the picture and then check.
+	 *  @async
+	 */
+	async load() {
+		if (this.path) {
+			// Try loading
+			this.image = await Picture2D.loadImage(this.path);
+			this.empty = this.image.width == 0;
 
-    /** 
-     *  Load the picture and then check.
-     *  @async
-     */
-    async load() {
-        if (this.path) {
-            // Try loading
-            this.image = await Picture2D.loadImage(this.path);
-            this.empty = this.image.width == 0;
+			// If not empty, configure bitmap size
+			if (!this.empty) {
+				this.oW = this.image.width;
+				this.oH = this.image.height;
+				if (this.cover) {
+					this.w = ScreenResolution.CANVAS_WIDTH;
+					this.h = ScreenResolution.CANVAS_HEIGHT;
+				} else if (this.stretch) {
+					this.w = ScreenResolution.getScreenX(this.image.width);
+					this.h = ScreenResolution.getScreenY(this.image.height);
+				} else {
+					this.w = ScreenResolution.getScreenMinXY(this.image.width);
+					this.h = ScreenResolution.getScreenMinXY(this.image.height);
+				}
+				Stack.requestPaintHUD = true;
+				this.loaded = true;
+			}
+		}
+	}
 
-            // If not empty, configure bitmap size
-            if (!this.empty) {
-                this.oW = this.image.width;
-                this.oH = this.image.height;
-                if (this.cover) {
-                    this.w = ScreenResolution.CANVAS_WIDTH;
-                    this.h = ScreenResolution.CANVAS_HEIGHT;
-                } else if (this.stretch) {
-                    this.w = ScreenResolution.getScreenX(this.image.width);
-                    this.h = ScreenResolution.getScreenY(this.image.height);
-                } else {
-                    this.w = ScreenResolution.getScreenMinXY(this.image.width);
-                    this.h = ScreenResolution.getScreenMinXY(this.image.height);
-                }
-                Stack.requestPaintHUD = true;
-                this.loaded = true;
-            }
-        }
-    }
+	/**
+	 *  Create a copy of a picture2D.
+	 *  @returns {Picture2D}
+	 */
+	createCopy(): Picture2D {
+		let picture = new Picture2D();
+		picture.empty = this.empty;
+		picture.path = this.path;
+		picture.image = this.image;
+		picture.loaded = true;
+		picture.stretch = false;
+		picture.setW(picture.image.width, true);
+		picture.setH(picture.image.height, true);
+		return picture;
+	}
 
-    /** 
-     *  Create a copy of a picture2D.
-     *  @returns {Picture2D}
-     */
-    createCopy(): Picture2D {
-        let picture = new Picture2D();
-        picture.empty = this.empty;
-        picture.path = this.path;
-        picture.image = this.image;
-        picture.loaded = true;
-        picture.stretch = false;
-        picture.setW(picture.image.width, true);
-        picture.setH(picture.image.height, true);
-        return picture;
-    }
+	/**
+	 *  Draw the picture on HUD
+	 *  @param {number} [x=undefined] - The x position
+	 *  @param {number} [y=undefined] - The y position
+	 *  @param {number} [w=undefined] - The w position
+	 *  @param {number} [h=undefined] - The h position
+	 *  @param {number} [sx=0] - The source x position
+	 *  @param {number} [sy=0] - The source x position
+	 *  @param {number} [sw=this.oW] - The source width size
+	 *  @param {number} [sh=this.oH] - The source height size
+	 *  @param {boolean} [positionResize=true] - Indicate if the position resize
+	 *  (screen resolution)
+	 */
+	draw({
+		x = null,
+		y = null,
+		w = null,
+		h = null,
+		sx = this.sx,
+		sy = this.sy,
+		sw = this.oW,
+		sh = this.oH,
+		positionResize = false,
+	}: {
+		x?: number;
+		y?: number;
+		w?: number;
+		h?: number;
+		sx?: number;
+		sy?: number;
+		sw?: number;
+		sh?: number;
+		positionResize?: boolean;
+	} = {}) {
+		if (!this.empty && this.loaded && sw > 0 && sh > 0) {
+			// Default values
+			x = x === null ? this.x : positionResize ? ScreenResolution.getScreenX(x) : x;
+			y = y === null ? this.y : positionResize ? ScreenResolution.getScreenY(y) : y;
+			w =
+				w === null
+					? this.w * this.zoom
+					: this.stretch
+					? ScreenResolution.getScreenX(w)
+					: ScreenResolution.getScreenMinXY(w);
+			h =
+				h === null
+					? this.h * this.zoom
+					: this.stretch
+					? ScreenResolution.getScreenY(h)
+					: ScreenResolution.getScreenMinXY(h);
 
-    /** 
-     *  Draw the picture on HUD
-     *  @param {number} [x=undefined] - The x position
-     *  @param {number} [y=undefined] - The y position
-     *  @param {number} [w=undefined] - The w position
-     *  @param {number} [h=undefined] - The h position
-     *  @param {number} [sx=0] - The source x position
-     *  @param {number} [sy=0] - The source x position
-     *  @param {number} [sw=this.oW] - The source width size
-     *  @param {number} [sh=this.oH] - The source height size
-     *  @param {boolean} [positionResize=true] - Indicate if the position resize
-     *  (screen resolution)
-     */
-    draw({ x = null, y = null, w = null, h = null, sx = this.sx, sy = this.sy, 
-        sw = this.oW, sh = this.oH, positionResize = false }: { x?: number, y?: 
-        number, w?: number, h?: number, sx?: number, sy?: number, sw?: number, 
-        sh?: number, positionResize?: boolean} = {})
-    {
-        if (!this.empty && this.loaded && sw > 0 && sh > 0) {
-            // Default values
-            x = x === null ? this.x : (positionResize ? ScreenResolution
-                .getScreenX(x) : x);
-            y = y === null ? this.y : (positionResize ? ScreenResolution
-                .getScreenY(y) : y);
-            w = w === null ? this.w * this.zoom : (this.stretch ? ScreenResolution
-                .getScreenX(w) : ScreenResolution.getScreenMinXY(w));
-            h = h === null ? this.h * this.zoom : (this.stretch ? ScreenResolution
-                .getScreenY(h) : ScreenResolution.getScreenMinXY(h));
-
-            // Draw the image according to all parameters
-            let angle = this.angle * Math.PI / 180;
-            Platform.ctx.save();
-            Platform.ctx.globalAlpha = this.opacity;
-            if (!this.centered) {
-                if (this.reverse) {
-                    Platform.ctx.scale(-1, 1);
-                    Platform.ctx.translate(-x - w, y);
-                } else {
-                    Platform.ctx.translate(x, y);
-                }
-            }
-            if (angle !== 0) {
-                if (this.centered) {
-                    Platform.ctx.translate(x, y);
-                }
-                Platform.ctx.rotate(angle);
-                if (this.centered) {
-                    Platform.ctx.translate(-x, -y);
-                }
-            }
-            if (this.centered) {
-                if (this.reverse) {
-                    Platform.ctx.scale(-1, 1);
-                    Platform.ctx.translate(-x - (w / 2), y - (h / 2));
-                } else {
-                    Platform.ctx.translate(x - (w / 2), y - (h / 2));
-                }
-            }
-            Platform.ctx.drawImage(this.image, sx, sy, sw, sh, 0, 0, w, h);
-            Platform.ctx.globalAlpha = 1.0;
-            Platform.ctx.restore();
-        }
-    }
+			// Draw the image according to all parameters
+			let angle = (this.angle * Math.PI) / 180;
+			Platform.ctx.save();
+			Platform.ctx.globalAlpha = this.opacity;
+			if (!this.centered) {
+				if (this.reverse) {
+					Platform.ctx.scale(-1, 1);
+					Platform.ctx.translate(-x - w, y);
+				} else {
+					Platform.ctx.translate(x, y);
+				}
+			}
+			if (angle !== 0) {
+				if (this.centered) {
+					Platform.ctx.translate(x, y);
+				}
+				Platform.ctx.rotate(angle);
+				if (this.centered) {
+					Platform.ctx.translate(-x, -y);
+				}
+			}
+			if (this.centered) {
+				if (this.reverse) {
+					Platform.ctx.scale(-1, 1);
+					Platform.ctx.translate(-x - w / 2, y - h / 2);
+				} else {
+					Platform.ctx.translate(x - w / 2, y - h / 2);
+				}
+			}
+			Platform.ctx.drawImage(this.image, sx, sy, sw, sh, 0, 0, w, h);
+			Platform.ctx.globalAlpha = 1.0;
+			Platform.ctx.restore();
+		}
+	}
 }
 interface pictureOptions {
-     x?: number, 
-     y?: number, 
-     w?: number, 
-     h?: number, 
-     zoom?: number, 
-     opacity?: number, 
-     angle?: number, 
-     cover?: boolean, 
-     stretch?: boolean
+	x?: number;
+	y?: number;
+	w?: number;
+	h?: number;
+	zoom?: number;
+	opacity?: number;
+	angle?: number;
+	cover?: boolean;
+	stretch?: boolean;
 }
 
-export { Picture2D }
+export { Picture2D };

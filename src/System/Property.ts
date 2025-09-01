@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2023 Wano
+    RPG Paper Maker Copyright (C) 2017-2025 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -9,32 +9,31 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from "./Base";
-import { System } from "../index";
+import { System } from '../index';
+import { Base } from './Base';
 
 /** @class
  *  A property of an object.
  *  @extends System.Base
- *  @param {Record<string, any>} - [json=undefined] Json object describing the 
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  property
  */
 class Property extends Base {
+	public id: number;
+	public initialValue: System.DynamicValue;
 
-    public id: number;
-    public initialValue: System.DynamicValue;
+	constructor(json?: Record<string, any>) {
+		super(json);
+	}
 
-    constructor(json?: Record<string, any>) {
-        super(json);
-    }
-
-    /** 
-     *  Read the JSON associated to the property.
-     *  @param {Record<string, any>} - json Json object describing the property
-     */
-    read(json: Record<string, any>) {
-        this.id = json.id;
-        this.initialValue = System.DynamicValue.readOrNone(json.iv);
-    }
+	/**
+	 *  Read the JSON associated to the property.
+	 *  @param {Record<string, any>} - json Json object describing the property
+	 */
+	read(json: Record<string, any>) {
+		this.id = json.id;
+		this.initialValue = System.DynamicValue.readOrNone(json.iv);
+	}
 }
 
-export { Property }
+export { Property };

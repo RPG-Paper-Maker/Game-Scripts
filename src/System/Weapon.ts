@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2023 Wano
+    RPG Paper Maker Copyright (C) 2017-2025 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -9,45 +9,44 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Armor } from "./Armor";
-import { Datas, System } from "../index";
-import { Enum } from "../Common";
+import { Enum } from '../Common';
+import { Datas, System } from '../index';
+import { Armor } from './Armor';
 
 /** @class
  *  A weapon of the game.
  *  @extends System.Armor
- *  @param {Record<string, any>} - [json=undefined] Json object describing the 
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  weapon
  */
 class Weapon extends Armor {
+	constructor(json?: Record<string, any>) {
+		super(json);
+	}
 
-    constructor(json?: Record<string, any>) {
-        super(json);
-    }
+	/**
+	 *  Read the JSON associated to the weapon.
+	 *  @param {Record<string, any>} - json Json object describing the weapon
+	 */
+	read(json: Record<string, any>) {
+		super.read(json);
+	}
 
-    /** 
-     *  Read the JSON associated to the weapon.
-     *  @param {Record<string, any>} - json Json object describing the weapon
-     */
-    read(json: Record<string, any>) {
-        super.read(json);
-    }
-    
-    /** 
-     *  Get the weapon kind.
-     *  @returns {System/WeaponArmorKind}
-     */
-    getType(): System.WeaponArmorKind {
-        return Datas.BattleSystems.getWeaponKind(this.type);
-    }
+	/**
+	 *  Get the weapon kind.
+	 *  @returns {System/WeaponArmorKind}
+	 */
+	getType(): System.WeaponArmorKind {
+		return Datas.BattleSystems.getWeaponKind(this.type);
+	}
 
-    /** 
-     *  Get the item kind.
-     *  @returns {Enum.ItemKind}
-     */
-    getKind(): Enum.ItemKind {
-        return Enum.ItemKind.Weapon;
-    }
+	/**
+	 *  Get the item kind.
+	 *  @returns {Enum.ItemKind}
+	 */
+	getKind(): Enum.ItemKind {
+		return Enum.ItemKind.Weapon;
+	}
 }
 
-export { Weapon }
+export { Weapon };

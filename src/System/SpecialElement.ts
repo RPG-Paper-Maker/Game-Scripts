@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2023 Wano
+    RPG Paper Maker Copyright (C) 2017-2025 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -9,31 +9,30 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from "./Base";
-import { Utils } from "../Common";
+import { Utils } from '../Common';
+import { Base } from './Base';
 
 /** @class
  *  A special element (autotile, wall, object3D, mountain) of the game.
  *  @extends System.Base
- *  @param {Record<string, any>} - [json=undefined] Json object describing the 
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  special element
  */
 class SpecialElement extends Base {
+	public pictureID: number;
 
-    public pictureID: number;
+	constructor(json?: Record<string, any>) {
+		super(json);
+	}
 
-    constructor(json?: Record<string, any>) {
-        super(json);
-    }
-
-    /**
-     *  Read the JSON associated to the special element.
-     *  @param {Record<string, any>} - json Json object describing the special 
-     *  element
-     */
-    read(json: Record<string, any>) {
-        this.pictureID = Utils.defaultValue(json.pic, -1);
-    }
+	/**
+	 *  Read the JSON associated to the special element.
+	 *  @param {Record<string, any>} - json Json object describing the special
+	 *  element
+	 */
+	read(json: Record<string, any>) {
+		this.pictureID = Utils.defaultValue(json.pic, -1);
+	}
 }
 
-export { SpecialElement }
+export { SpecialElement };

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2023 Wano
+    RPG Paper Maker Copyright (C) 2017-2025 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from "./Base";
-import { System, Scene } from "../index";
-import { MapObject } from "../Core";
+import { MapObject } from '../Core';
+import { Scene, System } from '../index';
+import { Base } from './Base';
 
 /** @class
  *  An event command for allowing forbidding main menu.
@@ -19,31 +19,28 @@ import { MapObject } from "../Core";
  *  @param {any[]} command - Direct JSON command to parse
  */
 class AllowForbidMainMenu extends Base {
-    
-    public allow: System.DynamicValue;
+	public allow: System.DynamicValue;
 
-    constructor(command: any[]) {
-        super();
+	constructor(command: any[]) {
+		super();
 
-        let iterator = {
-            i: 0
-        };
-        this.allow = System.DynamicValue.createValueCommand(command, iterator);
-    }
+		let iterator = {
+			i: 0,
+		};
+		this.allow = System.DynamicValue.createValueCommand(command, iterator);
+	}
 
-    /** 
-     *  Update and check if the event is finished.
-     *  @param {Record<string, any>} - currentState The current state of the event
-     *  @param {MapObject} object - The current object reacting
-     *  @param {number} state - The state ID
-     *  @returns {number} The number of node to pass
-    */
-    update(currentState: Record<string, any>, object: MapObject, state: number): 
-        number
-    {
-        Scene.Map.allowMainMenu = this.allow.getValue();
-        return 1;
-    }
+	/**
+	 *  Update and check if the event is finished.
+	 *  @param {Record<string, any>} - currentState The current state of the event
+	 *  @param {MapObject} object - The current object reacting
+	 *  @param {number} state - The state ID
+	 *  @returns {number} The number of node to pass
+	 */
+	update(currentState: Record<string, any>, object: MapObject, state: number): number {
+		Scene.Map.allowMainMenu = this.allow.getValue();
+		return 1;
+	}
 }
 
-export { AllowForbidMainMenu }
+export { AllowForbidMainMenu };

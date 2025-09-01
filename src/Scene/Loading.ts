@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2023 Wano
+    RPG Paper Maker Copyright (C) 2017-2025 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -9,31 +9,36 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum } from "../Common";
+import { Enum } from '../Common';
+import { Datas, Graphic, Scene } from '../index';
 import Align = Enum.Align;
-import { Scene, Graphic, Datas } from "../index";
 
 /** @class
-*   A scene for the loading.
-*   @extends SceneGame
-*/
+ *   A scene for the loading.
+ *   @extends SceneGame
+ */
 class Loading extends Scene.Base {
-    public static readonly MIN_DELAY: number = 100;
+	public static readonly MIN_DELAY: number = 100;
 
-    public text: Graphic.Text;
+	public text: Graphic.Text;
 
-    constructor() {
-        super(false);
-        
-        this.text = new Graphic.Text(Datas.Languages.extras.loading.name(), { align: 
-            Align.Right, x: 590, y: 450, w: 40, h: 20 });
-    }
+	constructor() {
+		super(false);
 
-    /** Draw the HUD scene
-    */
-    drawHUD() {
-        this.text.draw();
-    }
+		this.text = new Graphic.Text(Datas.Languages.extras.loading.name(), {
+			align: Align.Right,
+			x: 590,
+			y: 450,
+			w: 40,
+			h: 20,
+		});
+	}
+
+	/** Draw the HUD scene
+	 */
+	drawHUD() {
+		this.text.draw();
+	}
 }
 
-export { Loading }
+export { Loading };

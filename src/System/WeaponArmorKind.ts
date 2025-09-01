@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2023 Wano
+    RPG Paper Maker Copyright (C) 2017-2025 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -9,32 +9,31 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Translatable } from "./Translatable";
+import { Translatable } from './Translatable';
 
 /** @class
  *  A weapon/armor kind of the game.
  *  @extends System.Translatable
- *  @param {Record<string, any>} - [json=undefined] Json object describing the 
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  weapon / armor kind
  */
 class WeaponArmorKind extends Translatable {
+	public equipments: boolean[];
 
-    public equipments: boolean[];
+	constructor(json?: Record<string, any>) {
+		super(json);
+	}
 
-    constructor(json?: Record<string, any>) {
-        super(json);
-    }
-
-    /** 
-     *  Read the JSON associated to the weapon / armor kind.
-     *  @param {Record<string, any>} - json Json object describing the weapon / 
-     *  armor kind
-     */
-    read(json: Record<string, any>) {
-        super.read(json);
-        this.equipments = json.equipment;
-        this.equipments.unshift(false);
-    }
+	/**
+	 *  Read the JSON associated to the weapon / armor kind.
+	 *  @param {Record<string, any>} - json Json object describing the weapon /
+	 *  armor kind
+	 */
+	read(json: Record<string, any>) {
+		super.read(json);
+		this.equipments = json.equipment;
+		this.equipments.unshift(false);
+	}
 }
 
-export { WeaponArmorKind }
+export { WeaponArmorKind };

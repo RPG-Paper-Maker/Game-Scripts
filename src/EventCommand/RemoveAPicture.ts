@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2023 Wano
+    RPG Paper Maker Copyright (C) 2017-2025 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Base } from "./Base";
-import { System, Manager } from "../index";
-import { MapObject } from "../Core";
+import { MapObject } from '../Core';
+import { Manager, System } from '../index';
+import { Base } from './Base';
 
 /** @class
  *  An event command for removing a picture.
@@ -19,38 +19,35 @@ import { MapObject } from "../Core";
  *  @param {any[]} command - Direct JSON command to parse
  */
 class RemoveAPicture extends Base {
-    
-    public index: System.DynamicValue;
+	public index: System.DynamicValue;
 
-    constructor(command: any[]) {
-        super();
+	constructor(command: any[]) {
+		super();
 
-        let iterator = {
-            i: 0
-        }
-        this.index = System.DynamicValue.createValueCommand(command, iterator);
-    }
+		let iterator = {
+			i: 0,
+		};
+		this.index = System.DynamicValue.createValueCommand(command, iterator);
+	}
 
-    /** 
-     *  Update and check if the event is finished.
-     *  @param {Record<string, any>} - currentState The current state of the event
-     *  @param {MapObject} object - The current object reacting
-     *  @param {number} state - The state ID
-     *  @returns {number} The number of node to pass
-     */
-    update(currentState: Record<string, any>, object: MapObject, state: number): 
-        number
-    {
-        let currentIndex = this.index.getValue();
-        for (let i = 0, l = Manager.Stack.displayedPictures.length; i < l; i++) {
-            if (currentIndex === Manager.Stack.displayedPictures[i][0]) {
-                Manager.Stack.displayedPictures.splice(i, 1);
-                break;
-            }
-        }
-        Manager.Stack.requestPaintHUD = true;
-        return 1;
-    }
+	/**
+	 *  Update and check if the event is finished.
+	 *  @param {Record<string, any>} - currentState The current state of the event
+	 *  @param {MapObject} object - The current object reacting
+	 *  @param {number} state - The state ID
+	 *  @returns {number} The number of node to pass
+	 */
+	update(currentState: Record<string, any>, object: MapObject, state: number): number {
+		let currentIndex = this.index.getValue();
+		for (let i = 0, l = Manager.Stack.displayedPictures.length; i < l; i++) {
+			if (currentIndex === Manager.Stack.displayedPictures[i][0]) {
+				Manager.Stack.displayedPictures.splice(i, 1);
+				break;
+			}
+		}
+		Manager.Stack.requestPaintHUD = true;
+		return 1;
+	}
 }
 
-export { RemoveAPicture }
+export { RemoveAPicture };

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2023 Wano
+    RPG Paper Maker Copyright (C) 2017-2025 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -14,12 +14,11 @@
  *  @param {number} id - The ID of the skill
  */
 class Skill {
+	public id: number;
 
-    public id: number;
-
-    constructor(id: number) {
-        this.id = id;
-    }
+	constructor(id: number) {
+		this.id = id;
+	}
 }
 
-export { Skill }
+export { Skill };
